@@ -40,9 +40,9 @@
 
 		  this.element.append( this.context.canvas );
 		  
-      this.element.bind( "mousemove.fastlane", jQuery.proxy( this._mousemove, this ) );
-      this.element.bind( "mousedown.fastlane mouseup.fastlane", jQuery.proxy( this._mouseupdown, this ) );
-      this.element.bind( "mouseenter.fastlane mouseleave.fastlane", jQuery.proxy( this._hover, this ) );
+      this.element.bind( "mousemove.track", jQuery.proxy( this._mousemove, this ) );
+      this.element.bind( "mousedown.track mouseup.track", jQuery.proxy( this._mouseupdown, this ) );
+      this.element.bind( "mouseenter.track mouseleave.track", jQuery.proxy( this._hover, this ) );
 
       this._draw();
 		},
@@ -55,12 +55,16 @@
       }
     },
 
-
+    // Contains any range that overlaps the current view window
+    _inView: [],
+  
     // Contains an array of range objects
     ranges: [],
 
     _Range: function( props, parent ){
+
       $.extend(this, props);
+
       this.parent = parent;
 
       this.thumb = {
@@ -74,25 +78,28 @@
       
       this.draw = function(){
       
-        var x   = this.parent.width / parent.options.duration * this.inPoint,
-            rw  = this.parent.width / parent.options.duration * (this.outPoint-this.inPoint),
+        this.xl=0;
+        this.xr=0;
+        this.hovered = false;
+        
+        var x   = this.xl = this.parent.width / parent.options.duration * this.inPoint,
+            rw  = this.xr = this.parent.width / parent.options.duration * (this.outPoint-this.inPoint),
             h = this.parent.height,
             c = this.parent.context;
-            
-            console.log(c.createLinearGradient(0,0,0,100),h);
-        
+
         // BackGround
         var grad = c.createLinearGradient(0,0,0,h);
         grad.addColorStop(0,'rgba( 255, 255, 0, 0.5 )');
         grad.addColorStop(1,'rgba( 255, 255, 0, 0.5 )');
         c.fillStyle = grad;
         c.fillRect(x, 0, rw, h);
+                
 
         // Glass Highlight
         c.fillStyle = 'rgba(255,255,255,.25)';
         c.fillRect(x, 0, rw, h/2);
 
-        if( 1==1 ){
+        if( this.hovered ){
           // Thumb Style Left      
           c.fillStyle = 'rgba(255,255,255,.5)';
           c.fillRect(x, 0, 11, h);
@@ -149,10 +156,12 @@
         c.fillRect(x, 0, rw, bw);
         c.fillRect(x, 0, bw, h);
   */
-
         };
         
-  //      console.log( this );
+      // console.log( this );
+  
+      this.parent._inView[ 0 ] = this;
+  
       return this;
     },
 
@@ -177,13 +186,30 @@
       grad.addColorStop(1,'rgba(100,100,100,1)');
       c.fillStyle = grad;
       c.fillRect(0,0,w,h);
+      
+      
     },
 
     _mousemove: function(e){
       this.mouse.x = e.offsetX;
       this.mouse.y = e.offsetY;
-      console.log( this.mouse.x, this.mouse.y, this.mouse.down );
-      this._draw.call(this);
+      
+      for(var i=0, l=this._inView.length; i< l; i++){
+        var iv = this._inView[i];
+        if( iv.xl < this.mouse.x && iv.xr > this.mouse.x ){
+          if(!iv.hovered){
+            this._draw();
+            iv.hovered = true;
+            iv.draw();
+          }
+        }else{
+          if(iv.hovered){
+            this._draw();
+            iv.hovered = false;
+            iv.draw()s;
+          }
+        }
+      }
     },
     
     _mouseupdown: function(e){
