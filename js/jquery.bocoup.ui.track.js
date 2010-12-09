@@ -64,7 +64,7 @@
     _Range: function( props, parent ){
 
       $.extend(this, props);
-
+      
       this.parent = parent;
 
       this.thumb = {
@@ -83,9 +83,11 @@
       this.draw = function(){
         
         var x   = this.xl = this.parent.width / parent.options.duration * this.inPoint,
-            rw  = this.xr = this.parent.width / parent.options.duration * (this.outPoint-this.inPoint),
-            h = this.parent.height,
-            c = this.parent.context;
+            rw  = this.parent.width / parent.options.duration * (this.outPoint-this.inPoint),
+            h   = this.parent.height,
+            c   = this.parent.context;
+
+        this.xr = x +rw;
 
 
         if( !this.hovered ){
@@ -209,7 +211,7 @@
       this.mouse.x = e.offsetX;
       this.mouse.y = e.offsetY;
 
-      this._draw.call(this);
+      this._draw();
 
       for(var i=0, l=this._inView.length; i< l; i++){
         var iv = this._inView[i];
