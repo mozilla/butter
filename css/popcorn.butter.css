@@ -1,0 +1,25 @@
+body{
+  font-family:verdana;
+  font-size:80%;
+}
+
+video{
+  border:1px solid black;
+  width:640px;
+  margin:10px auto;
+  display:block;
+}
+
+.track1{
+/*
+  background:url(transparency.gif);
+*/
+  border:1px solid black;
+  width:640px;
+  height:50px;
+  margin:0 auto;
+}
+
+canvas{
+/*  border:2px solid red;*/
+}

@@ -1,0 +1,222 @@
+(function($){
+
+	$.widget("bocoup.track", {
+
+		options: {
+		},
+
+		_init: function(){
+		
+		  console.log( this.options );
+		  
+		  function newCanvas(w, h){
+  		  var canvas, context;
+  		  canvas = document.createElement('canvas');
+  		  canvas.width = w;
+  		  canvas.height = h;
+        context = canvas.getContext('2d');
+        return context;
+		  };		  
+		  
+		  $.extend(this, {
+		    context: newCanvas( this.element.width(), this.element.height() ),
+		    scrubBar: { position: 0, width: 3 },
+		    mouse: { x: 0, y:0, down: false, lastX:0, lastY:0 }
+      });
+
+		  $.extend(this.options, {
+		    style: {
+		      outerBar: {
+            lineWidth: 1,
+            strokeStyle: "#888"
+          },
+          playBar: {
+            lineWidth: 1,
+            strokeStyle: "#f00"
+          }
+        }
+      });
+
+      
+
+		  this.element.append( this.context.canvas );
+		  
+      this.element.bind( "mousemove.fastlane", jQuery.proxy( this._mousemove, this ) );
+      this.element.bind( "mousedown.fastlane mouseup.fastlane", jQuery.proxy( this._mouseupdown, this ) );
+      this.element.bind( "mouseenter.fastlane mouseleave.fastlane", jQuery.proxy( this._hover, this ) );
+      
+   
+      this._draw();
+      
+		},
+    _playbar: {},
+
+    _style: function( styleObj ){
+      for(var property in styleObj){
+        this.context[property] = styleObj[property];
+      }
+    },
+
+
+    // Contains an array of range objects
+    ranges: [],
+
+    _Range: function( props ){
+      $.extend(this, props);
+
+      this.thumb = {
+        left: {
+          hidden:false
+        },
+        right: {
+          hidden:false
+        }
+      };
+      
+      console.log( this );
+      return this;
+    },
+   
+    _draw: function(){
+      var c = this.context,
+          e = c.canvas,
+          w = e.width,
+          h = e.height;
+      
+      c.mozImageSmoothingEnabled = false;
+      
+      c.clearRect(0,0,w,h);      
+
+      var grad = c.createLinearGradient(0,0,0,h);
+      grad.addColorStop(0,'rgba(100,100,100,1)');
+      grad.addColorStop(0.5,'rgba(0,0,0,1)');      
+      grad.addColorStop(1,'rgba(100,100,100,1)');
+      c.fillStyle = grad;
+      c.fillRect(0,0,w,h);
+      
+      var aRange = new this._Range({ inPoint: 10, outPoint: 50 });
+
+      var x   = w / this.options.duration * aRange.inPoint,
+          rw  = w / this.options.duration * (aRange.outPoint-aRange.inPoint);
+      
+      console.log( this.mouse.x );
+      
+      // BackGround
+      var grad = c.createLinearGradient(0,0,0,h);
+      grad.addColorStop(0,'rgba( 255, 255, 0, 0.5 )');
+      grad.addColorStop(1,'rgba( 255, 255, 0, 0.5 )');
+      c.fillStyle = grad;
+      c.fillRect(x, 0, rw, h);
+
+      // Glass Highlight
+      c.fillStyle = 'rgba(255,255,255,.25)';
+      c.fillRect(x, 0, rw, h/2);
+
+      if( 1==1 ){
+        // Thumb Style Left      
+        c.fillStyle = 'rgba(255,255,255,.5)';
+        c.fillRect(x, 0, 11, h);
+        c.lineWidth = .5;     
+        c.fillStyle = 'rgba(50,50,0,.5)';
+        c.fillRect(x+4, 15, 1, 20);
+        c.fillRect(x+6, 15, 1, 20);
+        c.fillStyle='rgba(255,255,255,1)';
+        c.fillRect(x, 0, 1, h);
+        c.fillStyle='rgba(255,255,255,0.5)';
+        c.fillRect(x+10, 0, 1, h);
+
+        // Thumb Style Right
+        c.fillStyle = 'rgba(255,255,255,.5)';
+        c.fillRect(x+rw-11, 0, 11, h);
+        c.fillStyle = 'rgba(50,50,0,.7)';
+        c.fillRect(rw+x-5, 15, 1, 20);
+        c.fillRect(rw+x-7, 15, 1, 20);
+        c.fillStyle='rgba(255,255,255,0.5)';
+        c.fillRect(rw+x-11, 0, 1, h);
+        c.fillStyle='rgba(255,255,255,1)';
+        c.fillRect(rw+x-1, 0, 1, h);
+      }else{
+        // Thumb Style Left      
+        c.fillStyle = 'rgba(255,255,255,.25)';
+        c.fillRect(x, 0, 11, h);
+        c.lineWidth = .5;     
+        c.fillStyle = 'rgba(50,50,0,.35)';
+        c.fillRect(x+4, 15, 1, 20);
+        c.fillRect(x+6, 15, 1, 20);
+        c.fillStyle='rgba(255,255,255,0.5)';
+        c.fillRect(x, 0, 1, h);
+        c.fillStyle='rgba(255,255,255,0.25)';
+        c.fillRect(x+10, 0, 1, h);
+
+        // Thumb Style Right
+        c.fillStyle = 'rgba(255,255,255,.25)';
+        c.fillRect(x+rw-11, 0, 11, h);
+        c.fillStyle = 'rgba(50,50,0,.35)';
+        c.fillRect(rw+x-5, 15, 1, 20);
+        c.fillRect(rw+x-7, 15, 1, 20);
+        c.fillStyle='rgba(255,255,255,0.25)';
+        c.fillRect(rw+x-11, 0, 1, h);
+        c.fillStyle='rgba(255,255,255,.5)';
+        c.fillRect(rw+x-1, 0, 1, h);
+      }
+              
+      // Border Style
+/*      var bw = 1;
+      c.fillStyle = "rgba(0,0,0,1)";
+      c.fillRect(x, h-bw, rw, bw);
+      c.fillRect(x+rw-bw, 0, bw, h);
+      c.fillStyle = "rgba(255,255,255,1)";
+      c.fillRect(x, 0, rw, bw);
+      c.fillRect(x, 0, bw, h);
+*/
+
+    },
+
+    _mousemove: function(e){
+      this.mouse.x = e.offsetX;
+      this.mouse.y = e.offsetY;
+      console.log( this.mouse.x, this.mouse.y, this.mouse.down );
+      this._draw.call(this);
+    },
+    
+    _mouseupdown: function(e){
+      if(e.type==='mousedown'){
+        this.mouse.down = true;
+      }else if(e.type==='mouseup'){
+        this.mouse.down = false;
+      }
+    },
+
+    _hover: function( e ){
+      if(e.type==='mouseenter'){
+        this.element.css({ color: this.options.color });
+      }else if(e.type==='mouseleave'){
+        this.element.css({ color: 'black' });  
+      }
+		},
+
+    		
+		myPublicMethod: function(){
+		},
+
+		_setOption: function(){
+		},
+
+		destroy: function(){
+		},
+
+		option: function(){
+		},
+
+		setData: function(){
+    },
+
+		enable: function(){
+    },
+
+		disable: function(){
+    }
+
+	});
+
+})(jQuery);
