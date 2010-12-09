@@ -17,7 +17,7 @@
 		  };		  
 		  
 		  this.width = this.element.width();
-		  this.height=  this.element.height();
+		  this.height = this.element.height();
 		  
 		  $.extend(this, {
 		    context   : newCanvas( this.width, this.height ),
@@ -39,7 +39,7 @@
       });
 
 		  this.element.append( this.context.canvas );
-		  
+
       this.element.bind( "mousemove.track", jQuery.proxy( this._mousemove, this ) );
       this.element.bind( "mousedown.track mouseup.track", jQuery.proxy( this._mouseupdown, this ) );
       this.element.bind( "mouseenter.track mouseleave.track", jQuery.proxy( this._hover, this ) );
@@ -73,37 +73,39 @@
         },
         right: {
           hidden:false
-        }     
+        }
       };
-      
+
+      this.xl=0;
+      this.xr=0;
+      this.hovered = true;
+     
       this.draw = function(){
-      
-        this.xl=0;
-        this.xr=0;
-        this.hovered = false;
         
         var x   = this.xl = this.parent.width / parent.options.duration * this.inPoint,
             rw  = this.xr = this.parent.width / parent.options.duration * (this.outPoint-this.inPoint),
             h = this.parent.height,
             c = this.parent.context;
 
-        // BackGround
-        var grad = c.createLinearGradient(0,0,0,h);
-        grad.addColorStop(0,'rgba( 255, 255, 0, 0.5 )');
-        grad.addColorStop(1,'rgba( 255, 255, 0, 0.5 )');
-        c.fillStyle = grad;
-        c.fillRect(x, 0, rw, h);
-                
 
-        // Glass Highlight
-        c.fillStyle = 'rgba(255,255,255,.25)';
-        c.fillRect(x, 0, rw, h/2);
+        if( !this.hovered ){
+          document.body.style.cursor='move';
 
-        if( this.hovered ){
+          // BackGround
+          var grad = c.createLinearGradient(0,0,0,h);
+          grad.addColorStop(0,'rgba( 255, 255, 0, 0.5 )');
+          grad.addColorStop(1,'rgba( 255, 255, 0, 0.5 )');
+          c.fillStyle = grad;
+          c.fillRect(x, 0, rw, h);
+                  
+          // Glass Highlight
+          c.fillStyle = 'rgba(255,255,255,.25)';
+          c.fillRect(x, 0, rw, h/2);
+        
           // Thumb Style Left      
           c.fillStyle = 'rgba(255,255,255,.5)';
           c.fillRect(x, 0, 11, h);
-          c.lineWidth = .5;     
+          c.lineWidth = .5;
           c.fillStyle = 'rgba(50,50,0,.5)';
           c.fillRect(x+4, 15, 1, 20);
           c.fillRect(x+6, 15, 1, 20);
@@ -122,7 +124,22 @@
           c.fillRect(rw+x-11, 0, 1, h);
           c.fillStyle='rgba(255,255,255,1)';
           c.fillRect(rw+x-1, 0, 1, h);
+        
         }else{
+          document.body.style.cursor='auto';
+          //document.body.style.cursor='e-resize';
+
+          // BackGround
+          var grad = c.createLinearGradient(0,0,0,h);
+          grad.addColorStop(0,'rgba( 255, 255, 0, 0.3 )');
+          grad.addColorStop(1,'rgba( 255, 255, 0, 0.3 )');
+          c.fillStyle = grad;
+          c.fillRect(x, 0, rw, h);
+                  
+          // Glass Highlight
+          c.fillStyle = 'rgba(255,255,255,.15)';
+          c.fillRect(x, 0, rw, h/2);
+        
           // Thumb Style Left      
           c.fillStyle = 'rgba(255,255,255,.25)';
           c.fillRect(x, 0, 11, h);
@@ -145,17 +162,19 @@
           c.fillRect(rw+x-11, 0, 1, h);
           c.fillStyle='rgba(255,255,255,.5)';
           c.fillRect(rw+x-1, 0, 1, h);
+        
         }
                 
         // Border Style
-  /*      var bw = 1;
+        /*
+        var bw = 1;
         c.fillStyle = "rgba(0,0,0,1)";
         c.fillRect(x, h-bw, rw, bw);
         c.fillRect(x+rw-bw, 0, bw, h);
         c.fillStyle = "rgba(255,255,255,1)";
         c.fillRect(x, 0, rw, bw);
         c.fillRect(x, 0, bw, h);
-  */
+        */
         };
         
       // console.log( this );
@@ -176,42 +195,34 @@
           w = e.width,
           h = e.height;
       
-      c.mozImageSmoothingEnabled = false;
-      
-      c.clearRect(0,0,w,h);
-
+      //c.mozImageSmoothingEnabled = false;
+      //c.clearRect(0, 0, w, h);
       var grad = c.createLinearGradient(0,0,0,h);
-      grad.addColorStop(0,'rgba(100,100,100,1)');
-      grad.addColorStop(0.5,'rgba(0,0,0,1)');      
-      grad.addColorStop(1,'rgba(100,100,100,1)');
+      grad.addColorStop(0,'#666');
+      grad.addColorStop(0.5,'#000');
+      grad.addColorStop(1,'#666');
       c.fillStyle = grad;
       c.fillRect(0,0,w,h);
-      
-      
     },
 
     _mousemove: function(e){
       this.mouse.x = e.offsetX;
       this.mouse.y = e.offsetY;
-      
+
+      this._draw.call(this);
+
       for(var i=0, l=this._inView.length; i< l; i++){
         var iv = this._inView[i];
         if( iv.xl < this.mouse.x && iv.xr > this.mouse.x ){
-          if(!iv.hovered){
-            this._draw();
-            iv.hovered = true;
-            iv.draw();
-          }
+          iv.hovered = false;
         }else{
-          if(iv.hovered){
-            this._draw();
-            iv.hovered = false;
-            iv.draw()s;
-          }
+          iv.hovered = true;
         }
+        iv.draw();
       }
+      
     },
-    
+
     _mouseupdown: function(e){
       if(e.type==='mousedown'){
         this.mouse.down = true;
@@ -228,7 +239,6 @@
       }
 		},
 
-    		
 		myPublicMethod: function(){
 		},
 
