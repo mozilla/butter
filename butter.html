@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <head>
   <title>Butter - a visual timeline editor for Popcorn.js</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
@@ -7,23 +8,30 @@
   <script src="js/jquery.bocoup.ui.track.js" type="text/javascript"></script>
   <link href="css/popcorn.butter.css" rel="stylesheet" type="text/css"></script>
 </head>
+
 <body>
-
   <video id="tron-video" src="vid/tron.ogv" width="640" height="360"></video>
-
-  <div class="track1"></div>
-
+  <div class="track1" style="width:640px;height:50px;" ></div>
 </body>
 
 <script type="text/javascript">
 $(function(){
 
-  $(".track1").track({
+  var track1 = $('.track1').track({
     target  : $('#tron-video'),
     duration: 100 // seconds
   });
+  
+  var aRange = track1.track('addRange', {
+    inPoint: 10,
+    outPoint: 50
+  });
+  
+  aRange.draw();
+  
+//  track1._draw();
+  
 
 });
 </script>
 
-</body>
