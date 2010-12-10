@@ -62,9 +62,7 @@
     ranges: [],
 
     _Range: function( props, parent ){
-
-      $.extend(this, props);
-      
+      $.extend(this, props);      
       this.parent = parent;
 
       this.thumb = {
@@ -92,7 +90,7 @@
 
         if( !this.hovered ){
           document.body.style.cursor='move';
-
+        
           // BackGround
           var grad = c.createLinearGradient(0,0,0,h);
           grad.addColorStop(0,'rgba( 255, 255, 0, 0.5 )');
@@ -208,13 +206,20 @@
     },
 
     _mousemove: function(e){
-      this.mouse.x = e.offsetX;
-      this.mouse.y = e.offsetY;
+      var  e = e.originalEvent;
 
       this._draw();
 
+      var scrollX = (window.scrollX !== null && typeof window.scrollX !== 'undefined') ? window.scrollX : window.pageXOffset;
+      var scrollY = (window.scrollY !== null && typeof window.scrollY !== 'undefined') ? window.scrollY : window.pageYOffset;
+      console.log(this.element);
+
+      this.mouse.x = e.clientX - this.element[0].offsetLeft + scrollX;
+      this.mouse.y = e.clientY - this.element[0].offsetTop + scrollY;
+
       for(var i=0, l=this._inView.length; i< l; i++){
         var iv = this._inView[i];
+        console.log(this.mouse.x, this.mouse.y, iv.xl, iv.xr );
         if( iv.xl < this.mouse.x && iv.xr > this.mouse.x ){
           iv.hovered = false;
         }else{
@@ -222,7 +227,8 @@
         }
         iv.draw();
       }
-      
+
+    
     },
 
     _mouseupdown: function(e){
@@ -234,6 +240,7 @@
     },
 
     _hover: function( e ){
+      console.log(e );
       if(e.type==='mouseenter'){
         this.element.css({ color: this.options.color });
       }else if(e.type==='mouseleave'){
