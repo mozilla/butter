@@ -20,6 +20,12 @@ video{
   margin-bottom:0px;  
 }
 
+.track{
+  width:640px;
+  height:30px;
+}
+
+
 .track1{
 /*
   background:url(transparency.gif);
