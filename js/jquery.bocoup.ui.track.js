@@ -1,4 +1,104 @@
+/*
+  jquery.bocoup.ui.track 
+*/
 (function($){
+
+  function Range( props, parent ){
+//      console.log(parent.options); 
+      $.extend(this, props);
+      this.parent = parent;
+
+      this.thumb = {
+        left: {
+          hidden:false
+        },
+        right: {
+          hidden:false
+        }
+      };
+
+      this.oxl=0;
+      this.oxr=0;
+
+      this.xl=0;
+      this.xr=0;
+
+      this.hovered = true;
+     
+      this.draw();
+
+      //this.parent._inView.push( this );
+
+      //console.log( this.popcornRange.sort(this) );
+  
+      return this;
+  };
+
+  Range.prototype.draw = function range_draw(){
+
+        var x   = this.xl = this.oxl + (this.parent.width / this.parent.options.duration * this.inPoint),
+            rw  = this.parent.width / this.parent.options.duration * (this.outPoint-this.inPoint),
+            h   = this.parent.height,
+            c   = this.parent.context;
+
+        this.xr = x + rw;
+
+        if( this.hovered ){
+          //document.body.style.cursor='e-resize';
+          var grad = c.createLinearGradient(0,0,0,h);
+          grad.addColorStop(0,'rgba( 255, 255, 0, 0.3 )');
+          grad.addColorStop(1,'rgba( 255, 255, 0, 0.3 )');
+          c.fillStyle = grad;
+          c.fillRect(x, 1.5, rw, h-1.5);
+          c.fillStyle = 'rgba(255,255,255,.125)';
+          c.fillRect(x, 0, rw, h/2);          
+          c.lineWidth=0.5;
+          c.fillStyle='#FF0';          
+          c.fillRect(x, 3, 1, h-5);
+          c.fillRect(x+rw-1, 3, 1, h-5);
+        }else{
+          document.body.style.cursor='move';
+          // BackGround
+
+          c.fillStyle = '#000';
+          c.fillRect(x, 1.5, rw, h-1.5);
+                  
+          // Glass Highlight
+          c.fillStyle = 'rgba(255,255,255,.5)';
+          c.fillRect(x, 1, rw, h/3);          
+          c.fillStyle='#FF0';
+          c.fillRect(x, 0, 1, h);
+          c.fillRect(x+rw-1, 0, 1, h);
+          c.fillRect(x, h-1.5, rw, 2);
+          c.fillRect(x, 0, rw, 1);
+        
+        }
+  };
+  
+  Range.prototype.add = function range_add(){  
+  };
+
+
+
+
+
+
+
+
+  function Style(props){
+    $.extend(this, props);
+    return this;
+  };
+
+  Style.prototype.render = function(){
+  };
+
+
+  
+
+
+
+
 
 	$.widget("bocoup.track", {
 
@@ -6,6 +106,19 @@
 		},
 
 		_init: function(){
+
+      // Contains any range that overlaps the current view window
+      this._inView=[];
+
+      this.hovering = null;
+
+      this._loadedmetadata= function(e){
+        this.options.duration = e.currentTarget.duration;
+      };
+		
+      this._playBar= {
+        position: 30
+      };
 		
 		  function newCanvas(w, h){
   		  var canvas, context;
@@ -14,11 +127,12 @@
   		  canvas.height = h;
         context = canvas.getContext('2d');
         return context;
-		  };		  
+		  };
 		  
 		  this.width = this.element.width();
 		  this.height = this.element.height();
-		  
+
+	 
 		  $.extend(this, {
 		    context   : newCanvas( this.width, this.height ),
 		    scrubBar  : { position: 0, width: 3 },
@@ -27,6 +141,8 @@
 
 		  $.extend(this.options, {
 		    style: {
+		      range: new Style({
+		      }),
 		      outerBar: {
             lineWidth: 1,
             strokeStyle: "#888"
@@ -40,14 +156,15 @@
 
 		  this.element.append( this.context.canvas );
 
+      this.options.target.bind( "timeupdate.track", jQuery.proxy( this._timeupdate, this ) );
+      this.options.target.bind( "loadedmetadata.track", jQuery.proxy( this._loadedmetadata, this ) );
+      
       this.element.bind( "mousemove.track", jQuery.proxy( this._mousemove, this ) );
       this.element.bind( "mousedown.track mouseup.track", jQuery.proxy( this._mouseupdown, this ) );
       this.element.bind( "mouseenter.track mouseleave.track", jQuery.proxy( this._hover, this ) );
-
       this._draw();
 		},
-		
-    _playbar: {},
+
 
     _style: function( styleObj ){
       for(var property in styleObj){
@@ -55,137 +172,13 @@
       }
     },
 
-    // Contains any range that overlaps the current view window
-    _inView: [],
-  
+ 
     // Contains an array of range objects
     ranges: [],
 
-    _Range: function( props, parent ){
-      $.extend(this, props);      
-      this.parent = parent;
-
-      this.thumb = {
-        left: {
-          hidden:false
-        },
-        right: {
-          hidden:false
-        }
-      };
-
-      this.xl=0;
-      this.xr=0;
-      this.hovered = true;
-     
-      this.draw = function(){
-        
-        var x   = this.xl = this.parent.width / parent.options.duration * this.inPoint,
-            rw  = this.parent.width / parent.options.duration * (this.outPoint-this.inPoint),
-            h   = this.parent.height,
-            c   = this.parent.context;
-
-        this.xr = x +rw;
-
-
-        if( !this.hovered ){
-          document.body.style.cursor='move';
-        
-          // BackGround
-          var grad = c.createLinearGradient(0,0,0,h);
-          grad.addColorStop(0,'rgba( 255, 255, 0, 0.5 )');
-          grad.addColorStop(1,'rgba( 255, 255, 0, 0.5 )');
-          c.fillStyle = grad;
-          c.fillRect(x, 0, rw, h);
-                  
-          // Glass Highlight
-          c.fillStyle = 'rgba(255,255,255,.25)';
-          c.fillRect(x, 0, rw, h/2);
-        
-          // Thumb Style Left      
-          c.fillStyle = 'rgba(255,255,255,.5)';
-          c.fillRect(x, 0, 11, h);
-          c.lineWidth = .5;
-          c.fillStyle = 'rgba(50,50,0,.5)';
-          c.fillRect(x+4, 15, 1, 20);
-          c.fillRect(x+6, 15, 1, 20);
-          c.fillStyle='rgba(255,255,255,1)';
-          c.fillRect(x, 0, 1, h);
-          c.fillStyle='rgba(255,255,255,0.5)';
-          c.fillRect(x+10, 0, 1, h);
-
-          // Thumb Style Right
-          c.fillStyle = 'rgba(255,255,255,.5)';
-          c.fillRect(x+rw-11, 0, 11, h);
-          c.fillStyle = 'rgba(50,50,0,.7)';
-          c.fillRect(rw+x-5, 15, 1, 20);
-          c.fillRect(rw+x-7, 15, 1, 20);
-          c.fillStyle='rgba(255,255,255,0.5)';
-          c.fillRect(rw+x-11, 0, 1, h);
-          c.fillStyle='rgba(255,255,255,1)';
-          c.fillRect(rw+x-1, 0, 1, h);
-        
-        }else{
-          document.body.style.cursor='auto';
-          //document.body.style.cursor='e-resize';
-
-          // BackGround
-          var grad = c.createLinearGradient(0,0,0,h);
-          grad.addColorStop(0,'rgba( 255, 255, 0, 0.3 )');
-          grad.addColorStop(1,'rgba( 255, 255, 0, 0.3 )');
-          c.fillStyle = grad;
-          c.fillRect(x, 0, rw, h);
-                  
-          // Glass Highlight
-          c.fillStyle = 'rgba(255,255,255,.15)';
-          c.fillRect(x, 0, rw, h/2);
-        
-          // Thumb Style Left      
-          c.fillStyle = 'rgba(255,255,255,.25)';
-          c.fillRect(x, 0, 11, h);
-          c.lineWidth = .5;     
-          c.fillStyle = 'rgba(50,50,0,.35)';
-          c.fillRect(x+4, 15, 1, 20);
-          c.fillRect(x+6, 15, 1, 20);
-          c.fillStyle='rgba(255,255,255,0.5)';
-          c.fillRect(x, 0, 1, h);
-          c.fillStyle='rgba(255,255,255,0.25)';
-          c.fillRect(x+10, 0, 1, h);
-
-          // Thumb Style Right
-          c.fillStyle = 'rgba(255,255,255,.25)';
-          c.fillRect(x+rw-11, 0, 11, h);
-          c.fillStyle = 'rgba(50,50,0,.35)';
-          c.fillRect(rw+x-5, 15, 1, 20);
-          c.fillRect(rw+x-7, 15, 1, 20);
-          c.fillStyle='rgba(255,255,255,0.25)';
-          c.fillRect(rw+x-11, 0, 1, h);
-          c.fillStyle='rgba(255,255,255,.5)';
-          c.fillRect(rw+x-1, 0, 1, h);
-        
-        }
-                
-        // Border Style
-        /*
-        var bw = 1;
-        c.fillStyle = "rgba(0,0,0,1)";
-        c.fillRect(x, h-bw, rw, bw);
-        c.fillRect(x+rw-bw, 0, bw, h);
-        c.fillStyle = "rgba(255,255,255,1)";
-        c.fillRect(x, 0, rw, bw);
-        c.fillRect(x, 0, bw, h);
-        */
-        };
-        
-      // console.log( this );
-  
-      this.parent._inView[ 0 ] = this;
-  
-      return this;
-    },
-
+    
     addRange: function( props ){
-      return new this._Range( props, this );
+      return this._inView.push(new Range( props, this ));
     },
 
    
@@ -194,57 +187,100 @@
           e = c.canvas,
           w = e.width,
           h = e.height;
-      
-      //c.mozImageSmoothingEnabled = false;
-      //c.clearRect(0, 0, w, h);
+
       var grad = c.createLinearGradient(0,0,0,h);
-      grad.addColorStop(0,'#666');
+      grad.addColorStop(0,'#555');
       grad.addColorStop(0.5,'#000');
-      grad.addColorStop(1,'#666');
+      grad.addColorStop(1,'#555');
       c.fillStyle = grad;
       c.fillRect(0,0,w,h);
+
+      c.strokeStyle = "#000";
+      c.lineWidth = 5;
+      c.strokeRect(1.5,1.5,w-1.5,h-1.5);
+
+      for(var i=0, l=this._inView.length; i< l; i++){
+        var iv = this._inView[i];
+        iv.draw();
+      }
+
+      var pos = this.width / this.options.duration * this._playBar.position;
+      c.fillStyle="#F00";
+      c.fillRect(pos, 0, 1.5, h);
+    },
+
+    _timeupdate: function(e){
+      this._playBar.position = e.currentTarget.currentTime;
+      var pos = this.width / this.options.duration * this._playBar.position,
+          c = this.context;
+      this._draw();
     },
 
     _mousemove: function(e){
       var  e = e.originalEvent;
-
-      this._draw();
+      
 
       var scrollX = (window.scrollX !== null && typeof window.scrollX !== 'undefined') ? window.scrollX : window.pageXOffset;
       var scrollY = (window.scrollY !== null && typeof window.scrollY !== 'undefined') ? window.scrollY : window.pageYOffset;
-      console.log(this.element);
-
       this.mouse.x = e.clientX - this.element[0].offsetLeft + scrollX;
       this.mouse.y = e.clientY - this.element[0].offsetTop + scrollY;
-
-      for(var i=0, l=this._inView.length; i< l; i++){
-        var iv = this._inView[i];
-        console.log(this.mouse.x, this.mouse.y, iv.xl, iv.xr );
-        if( iv.xl < this.mouse.x && iv.xr > this.mouse.x ){
-          iv.hovered = false;
-        }else{
-          iv.hovered = true;
+      
+      //iv.draw();
+        
+      if(!this.mouse.down){
+        this.mouse.hovering = null;
+        for(var i=0, l=this._inView.length; i< l; i++){
+          var iv = this._inView[i];
+          if( iv.xl < this.mouse.x && iv.xr > this.mouse.x ){
+            if ( iv.hovered == true ){
+              iv.hovered = false;
+              this.mouse.hovering = iv;
+              this._draw();
+            }
+            this.mouse.hovering = iv;
+          }else{
+            if ( iv.hovered == false ){
+              iv.hovered = true;
+              this._draw();
+            }
+          }
         }
-        iv.draw();
+      }
+      if(this.mouse.hovering && this.mouse.down){
+        var diff = this.mouse.hovering.outPoint - this.mouse.hovering.inPoint;
+        this.mouse.hovering.inPoint = this.mouse.x / this.width * this.options.duration;
+        this.mouse.hovering.outPoint =  this.mouse.hovering.inPoint + diff;
+        this.mouse.hovering.popcornRange.start = this.mouse.hovering.inPoint ;
+        this.mouse.hovering.popcornRange.end = this.mouse.hovering.outPoint ;        
+        this._draw();
       }
 
-    
     },
 
     _mouseupdown: function(e){
       if(e.type==='mousedown'){
+
         this.mouse.down = true;
+        
       }else if(e.type==='mouseup'){
-        this.mouse.down = false;
+
+        if(this.mouse.hovering && this.mouse.down ){
+          console.log(this, e);
+          this.mouse.down = false;
+          this.mouse.hovering = null;
+        }
+          
       }
     },
 
     _hover: function( e ){
-      console.log(e );
+
       if(e.type==='mouseenter'){
-        this.element.css({ color: this.options.color });
+//        this._draw();
       }else if(e.type==='mouseleave'){
-        this.element.css({ color: 'black' });  
+        this.mouse.down = false;
+        this.mouse.hovering = null;
+//      this._draw();
       }
 		},
 

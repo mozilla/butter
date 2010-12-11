@@ -1,0 +1,33 @@
+body{
+  font-family:verdana;
+  font-size:80%;
+}
+
+video{
+  border:1px solid black;
+  width:640px;
+  margin:10px auto;
+  display:block;
+}
+
+#tracks{
+  width:640px;
+  margin:0 auto;
+  overflow:hidden;  
+}
+
+#tracks div{
+  margin-bottom:0px;  
+}
+
+.track1{
+/*
+  background:url(transparency.gif);
+*/
+}
+
+canvas{
+/*  border:2px solid red;*/
+}
+
+#image-container{position:fixed;top:0;left:0;border:1px dotted red;}
