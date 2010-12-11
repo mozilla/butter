@@ -29,7 +29,7 @@
 
       //this.parent._inView.push( this );
 
-      //console.log( this.popcornRange.sort(this) );
+      //1console.log( this.popcornRange.sort(this) );
   
       return this;
   };
@@ -219,7 +219,6 @@
     _mousemove: function(e){
       var  e = e.originalEvent;
       
-
       var scrollX = (window.scrollX !== null && typeof window.scrollX !== 'undefined') ? window.scrollX : window.pageXOffset;
       var scrollY = (window.scrollY !== null && typeof window.scrollY !== 'undefined') ? window.scrollY : window.pageYOffset;
       this.mouse.x = e.clientX - this.element[0].offsetLeft + scrollX;
@@ -238,6 +237,7 @@
               this._draw();
             }
             this.mouse.hovering = iv;
+            this.mouse.hovering.grabX = this.mouse.x - this.mouse.hovering.xl + 1
           }else{
             if ( iv.hovered == false ){
               iv.hovered = true;
@@ -248,7 +248,7 @@
       }
       if(this.mouse.hovering && this.mouse.down){
         var diff = this.mouse.hovering.outPoint - this.mouse.hovering.inPoint;
-        this.mouse.hovering.inPoint = this.mouse.x / this.width * this.options.duration;
+        this.mouse.hovering.inPoint = (this.mouse.x-this.mouse.hovering.grabX) / this.width * this.options.duration;
         this.mouse.hovering.outPoint =  this.mouse.hovering.inPoint + diff;
         this.mouse.hovering.popcornRange.start = this.mouse.hovering.inPoint ;
         this.mouse.hovering.popcornRange.end = this.mouse.hovering.outPoint ;        
@@ -260,8 +260,7 @@
     _mouseupdown: function(e){
       if(e.type==='mousedown'){
 
-        this.mouse.down = true;
-        
+        this.mouse.down = true;        
       }else if(e.type==='mouseup'){
 
         if(this.mouse.hovering && this.mouse.down ){
