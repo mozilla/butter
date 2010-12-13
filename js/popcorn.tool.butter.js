@@ -14,9 +14,16 @@ $(function(){
       target  : 'image-container',
       src     : 'http://upload.wikimedia.org/wikipedia/en/0/06/MMPR_Logo.png'
     })
+    .image({
+      start   : 29,
+      end     : 29.25,
+      target  : 'image-container',
+      src     : 'http://upload.wikimedia.org/wikipedia/en/0/06/MMPR_Logo.png'
+    })
+
     .text({
       start   : 9,
-      end     : 11,
+      end     : 22,
       target  : 'text-container',
       text     : 'testing'
     })

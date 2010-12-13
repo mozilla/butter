@@ -4,100 +4,52 @@
 (function($){
 
   function Range( props, parent ){
-//      console.log(parent.options); 
-      $.extend(this, props);
-      this.parent = parent;
-
-      this.thumb = {
-        left: {
-          hidden:false
-        },
-        right: {
-          hidden:false
-        }
-      };
-
-      this.oxl=0;
-      this.oxr=0;
-
-      this.xl=0;
-      this.xr=0;
-
-      this.hovered = true;
-     
-      this.draw();
-
-      //this.parent._inView.push( this );
-
-      //1console.log( this.popcornRange.sort(this) );
-  
-      return this;
-  };
-
-  Range.prototype.draw = function range_draw(){
-
-        var x   = this.xl = this.oxl + (this.parent.width / this.parent.options.duration * this.inPoint),
-            rw  = this.parent.width / this.parent.options.duration * (this.outPoint-this.inPoint),
-            h   = this.parent.height,
-            c   = this.parent.context;
-
-        this.xr = x + rw;
-
-        if( this.hovered ){
-          //document.body.style.cursor='e-resize';
-          var grad = c.createLinearGradient(0,0,0,h);
-          grad.addColorStop(0,'rgba( 255, 255, 0, 0.3 )');
-          grad.addColorStop(1,'rgba( 255, 255, 0, 0.3 )');
-          c.fillStyle = grad;
-          c.fillRect(x, 1.5, rw, h-1.5);
-          c.fillStyle = 'rgba(255,255,255,.125)';
-          c.fillRect(x, 0, rw, h/2);          
-          c.lineWidth=0.5;
-          c.fillStyle='#FF0';          
-          c.fillRect(x, 3, 1, h-5);
-          c.fillRect(x+rw-1, 3, 1, h-5);
-        }else{
-          document.body.style.cursor='move';
-          // BackGround
-
-          c.fillStyle = '#000';
-          c.fillRect(x, 1.5, rw, h-1.5);
-                  
-          // Glass Highlight
-          c.fillStyle = 'rgba(255,255,255,.5)';
-          c.fillRect(x, 1, rw, h/3);          
-          c.fillStyle='#FF0';
-          c.fillRect(x, 0, 1, h);
-          c.fillRect(x+rw-1, 0, 1, h);
-          c.fillRect(x, h-1.5, rw, 2);
-          c.fillRect(x, 0, rw, 1);
-        
-        }
-  };
-  
-  Range.prototype.add = function range_add(){  
-  };
-
-
-
-
-
-
-
-
-  function Style(props){
     $.extend(this, props);
+    this.parent = parent;
+    this.oxl=0;
+    this.oxr=0;
+    this.xl=0;
+    this.xr=0;
+    this.hovered = false;     
+    this.draw();
+    //this.parent._inView.push( this );
+    //console.log( this.popcornRange.sort(this) );  
     return this;
   };
 
-  Style.prototype.render = function(){
+  Range.prototype.draw = function range_draw( leftThumb, rightThumb ){
+    var x   = this.xl = this.oxl + (this.parent.width / this.parent.options.duration * this.inPoint),
+        rw  = this.parent.width / this.parent.options.duration * (this.outPoint-this.inPoint),
+        h   = this.parent.height,
+        c   = this.parent.context;
+
+    this.xr = x + rw;
+
+    var mouseX = this.parent.mouseX;
+
+    if( this.hovered ){
+      styles.range.hover( c, x, null, rw, h );
+      console.log(leftThumb);
+      if(leftThumb){
+//        styles.thumb.left.hover( c, x, null, rw, h );
+      }else{
+        styles.thumb.left.default( c, x, null, rw, h );
+      }
+      if(rightThumb){
+//        styles.thumb.left.hover( c, x, null, rw, h );
+      }else{
+        styles.thumb.right.default( c, x, null, rw, h );
+      }
+      
+    }else{
+      styles.range.default( c, x, null, rw, h );     
+    }
   };
 
-
   
-
-
-
+  
+  Range.prototype.add = function range_add(){  
+  };
 
 
 	$.widget("bocoup.track", {
@@ -132,7 +84,6 @@
 		  this.width = this.element.width();
 		  this.height = this.element.height();
 
-	 
 		  $.extend(this, {
 		    context   : newCanvas( this.width, this.height ),
 		    scrubBar  : { position: 0, width: 3 },
@@ -141,8 +92,6 @@
 
 		  $.extend(this.options, {
 		    style: {
-		      range: new Style({
-		      }),
 		      outerBar: {
             lineWidth: 1,
             strokeStyle: "#888"
@@ -230,17 +179,23 @@
         this.mouse.hovering = null;
         for(var i=0, l=this._inView.length; i< l; i++){
           var iv = this._inView[i];
-          if( iv.xl < this.mouse.x && iv.xr > this.mouse.x ){
-            if ( iv.hovered == true ){
-              iv.hovered = false;
-              this.mouse.hovering = iv;
-              this._draw();
-            }
-            this.mouse.hovering = iv;
-            this.mouse.hovering.grabX = this.mouse.x - this.mouse.hovering.xl + 1
-          }else{
+          if( iv.xl <= this.mouse.x && iv.xr >= this.mouse.x ){
             if ( iv.hovered == false ){
               iv.hovered = true;
+              this.mouse.hovering = iv;
+            }
+            this.mouse.hovering = iv;
+            this.mouse.hovering.grabX = this.mouse.x - this.mouse.hovering.xl + 1;
+
+            if( this.mouse.x >= this.xl && this.mouse.x <= this.xl + 8 ){
+              this._draw(true);
+            }else{
+              this._draw();
+            }
+            
+          }else{
+            if ( iv.hovered == true ){
+              iv.hovered = false;
               this._draw();
             }
           }
@@ -305,5 +260,123 @@
     }
 
 	});
+
+  var styles = {
+    range: {
+      default: function( c, x, y, w, h ){
+        //document.body.style.cursor='e-resize';
+        var grad = c.createLinearGradient(0,0,0,h);
+        grad.addColorStop(0,'rgba( 255, 255, 0, 0.3 )');
+        grad.addColorStop(1,'rgba( 255, 255, 0, 0.3 )');
+        c.fillStyle = grad;
+        c.fillRect(x, 1.5, w, h-1.5);
+        c.fillStyle = 'rgba(255,255,255,.125)';
+        c.fillRect(x, 0, w, h/2);          
+        c.lineWidth=0.5;
+        c.fillStyle='#FF0';          
+        c.fillRect(x, 3, 1, h-5);
+        c.fillRect(x+w-1, 3, 1, h-5);
+
+      },
+      hover: function( c, x, y, w, h ){
+          document.body.style.cursor='move';
+          c.fillStyle = '#FF0';
+          c.fillRect(x, 1.5, w, h-1.5);          
+          var grad = c.createLinearGradient(0,0,0,h);
+          grad.addColorStop(0,'rgba(255,255,255,.7)');
+          grad.addColorStop(1,'rgba(0,0,0,.25)');
+          c.fillStyle = grad;
+          c.fillRect(x,0, w, h);
+          c.fillStyle='#FF0';
+          c.fillRect(x, 0, 1, h);
+          c.fillRect(x+w-1, 0, 1, h);
+          c.fillRect(x, h-1.5, w, 2);
+          c.fillRect(x, 0, w, 1);
+      }
+    },
+    thumb: {
+      left: {
+        default: function( c, x, y, w, h ){
+          var grad = c.createLinearGradient(0,0,0,h);
+          c.fillStyle = '#880';
+          c.fillRect(x, 0, 8, h);
+          c.lineWidth=0.5;
+          c.strokeStyle="#000";
+          c.fillStyle = '#440';
+          c.fillRect(x+6,0,1,h);
+          c.beginPath();
+            c.moveTo(x+1,20);
+            c.lineTo(x+5,25);
+            c.lineTo(x+5,15);
+            c.lineTo(x+1,20);
+          c.closePath();
+          c.fill();
+          c.stroke();
+          c.beginPath();
+            c.moveTo(x+1,10);
+            c.lineTo(x+5,15);
+            c.lineTo(x+5,5);
+            c.lineTo(x+1,10);
+          c.closePath();
+          c.fill();
+          c.stroke();
+        },
+        hover: function( c, x, y, w, h ){
+          var grad = c.createLinearGradient(0,0,0,h);
+          c.fillStyle = '#FF0';
+          c.fillRect(x, 0, 8, h);
+          c.lineWidth=0.5;
+          c.strokeStyle="#000";
+          c.fillStyle = '#440';
+          c.fillRect(x+6,0,1,h);
+          c.beginPath();
+            c.moveTo(x+1,20);
+            c.lineTo(x+5,25);
+            c.lineTo(x+5,15);
+            c.lineTo(x+1,20);
+          c.closePath();
+          c.fill();
+          c.stroke();
+          c.beginPath();
+            c.moveTo(x+1,10);
+            c.lineTo(x+5,15);
+            c.lineTo(x+5,5);
+            c.lineTo(x+1,10);
+          c.closePath();
+          c.fill();
+          c.stroke();
+        }
+      },
+      right: {
+        default: function( c, x, y, w, h ){
+          var grad = c.createLinearGradient(0,0,0,h);
+          c.fillStyle = '#880';
+          c.fillRect(x+w-8, 0, 8, h);
+          c.lineWidth=0.5;
+          c.strokeStyle='#000';
+          c.fillStyle='#440';
+          c.fillRect(x+w-8,0,1,h);
+          c.beginPath();
+            c.moveTo(x+w-1,20);
+            c.lineTo(x+w-5,25);
+            c.lineTo(x+w-5,15);
+            c.lineTo(x+w-1,20);
+          c.closePath();
+          c.fill();
+          c.stroke();
+          c.beginPath();
+            c.moveTo(x+w-1,10);
+            c.lineTo(x+w-5,15);
+            c.lineTo(x+w-5,5);
+            c.lineTo(x+w-1,10);
+          c.closePath();
+          c.fill();
+          c.stroke();
+        }
+      },      
+    }
+  };
+
+
 
 })(jQuery);

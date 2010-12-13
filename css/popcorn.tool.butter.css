@@ -11,18 +11,16 @@ video{
 }
 
 #tracks{
+  border:1px solid black;
   width:640px;
   margin:0 auto;
   overflow:hidden;  
 }
 
-#tracks div{
-  margin-bottom:0px;  
-}
-
 .track{
   width:640px;
   height:30px;
+  margin-bottom:0px;
 }
 
 
