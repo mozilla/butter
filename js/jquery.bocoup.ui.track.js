@@ -173,7 +173,6 @@
         for(var i=0, l=this._inView.length; i< l; i++){
           var iv = this._inView[i];
           if( iv.xl <= this.mouse.x && iv.xr >= this.mouse.x ){
-
             if ( iv.hovered == false ){
               iv.hovered = true;
               this.mouse.hovering = iv;
@@ -208,41 +207,33 @@
       var rxx;
       if( this.mouse.down ){
         if(this.mouse.hovering){
-          if( this.mouse.x >= iv.xl && this.mouse.x <= iv.xl + 8 ){
-            document.body.style.cursor='w-resize';
-            thumbLeft = true;
-            console.log(1);
-            
-          }else if( this.mouse.x >= iv.xr-8 && this.mouse.x <= iv.xr ){
-            this.inRightResize = true;
-            console.log(2);
-            rxx = iv.xr - this.mouse.x;
-            document.body.style.cursor='w-resize';
-          }else if(this.mouse.x >= iv.xl+8 && this.mouse.x <= iv.xr - 8 && !this.inRightResize){
+          if( this.mouse.x >= iv.xl && this.mouse.x <= iv.xl + 8 && !this.inLeftResize){
+            this.inLeftResize = true;
+            this.inRightResize = false;
+          }else if( this.mouse.x >= iv.xr-8 && this.mouse.x <= iv.xr && !this.inRightResize ){
+            this.inLeftResize = false;
+            this.inRightResize = true;          
+          }else if(this.mouse.x >= iv.xl+8 && this.mouse.x <= iv.xr - 8 && !this.inRightResize  && !this.inRightResize){
+            this.inLeftResize = false;
+            this.inRightResize = false;
             var diff = this.mouse.hovering.outPoint - this.mouse.hovering.inPoint;
             this.mouse.hovering.inPoint = (this.mouse.x-this.mouse.hovering.grabX) / this.width * this.options.duration;
-            this.mouse.hovering.outPoint =  this.mouse.hovering.inPoint + diff;
+            this.mouse.hovering.outPoint = this.mouse.hovering.inPoint + diff;
             this.mouse.hovering.popcornTrackEvent.start = this.mouse.hovering.inPoint ;
             this.mouse.hovering.popcornTrackEvent.end = this.mouse.hovering.outPoint ;
             document.body.style.cursor='move';
-          }  
+          }
 
           if( this.inRightResize ){
-    //            console.log(2);
             thumbRight = true;
+            document.body.style.cursor='e-resize';
+            this.mouse.hovering.outPoint = this.options.duration / this.width * (this.mouse.x+4);
+            this.mouse.hovering.popcornTrackEvent.end = this.mouse.hovering.outPoint;
+          }else if( this.inLeftResize ){
+            thumbLeft = true;
             document.body.style.cursor='w-resize';
-            mouseDiff = this.mouse.x - this.mouse.lastX;
-//            console.log(mouseDiff);
-//            var outPixel = iv.xr,
-//                grabX = this.mouse.x - outPixel;
-//            console.log([outPixel, grabX, outPixel - grabX]);
-            //var  gx = this.mouse.hovering.grabX - this.mouse.x;
-//            var gx = this.mouse.hovering.grabX-iv.xr;
-            
-            if(mouseDiff>0){
-             // this.mouse.hovering.outPoint = this.options.duration / this.width * (rxx + );
-            }
-
+            this.mouse.hovering.inPoint = this.options.duration / this.width * (this.mouse.x-4);
+            this.mouse.hovering.popcornTrackEvent.start = this.mouse.hovering.inPoint;
           }
 
           this._draw(thumbLeft, thumbRight);
@@ -256,7 +247,9 @@
 
         this.mouse.down = true;        
       }else if(e.type==='mouseup'){
-
+        this.inRightResize = false;
+        this.inLeftResize = false;
+        console.log(4);
         if(this.mouse.hovering && this.mouse.down ){
           console.log(this, e);
           this.mouse.down = false;
@@ -267,12 +260,14 @@
     },
 
     _hover: function( e ){
-
       if(e.type==='mouseenter'){
 //        this._draw();
       }else if(e.type==='mouseleave'){
-        this.mouse.down = false;
-        this.mouse.hovering = null;
+        //this.mouse.down = false;
+        //this.mouse.hovering = null;
+        this.inRightResize = false;
+        this.inLeftResize = false;
+//        console.log('mouse left');
 //      this._draw();
       }
 		},
