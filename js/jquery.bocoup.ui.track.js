@@ -3,6 +3,14 @@
 */
 (function($){
 
+  var auto    = 100,
+      eResize = 101,
+      wResize = 102,
+      drag    = 103
+      ;
+
+  var trackCount = -1;
+
   function TrackEvent( props, parent ){
     $.extend(this, props);
     this.parent = parent;
@@ -48,8 +56,10 @@
 
 		_init: function(){
 
+      this.index = trackCount++;
+
       // Contains any trackEvent that overlaps the current view window
-      this._inView=[];
+      this._inView = [];
 
       this.hovering = null;
 
@@ -57,7 +67,7 @@
         this.options.duration = e.currentTarget.duration;
       };
 		
-      this._playBar= {
+      this._playBar = {
         position: 30
       };
 		
@@ -76,7 +86,7 @@
 		  $.extend(this, {
 		    context   : newCanvas( this.width, this.height ),
 		    scrubBar  : { position: 0, width: 3 },
-		    mouse     : { x: 0, y:0, down: false, lastX:0, lastY:0 }
+		    mouse     : { x: 0, y:0, down: false, lastX:0, lastY:0, mode:auto }
       });
 
 		  $.extend(this.options, {
@@ -155,7 +165,7 @@
     },
 
     _mousemove: function(e){
-      var  e = e.originalEvent;
+      var e = e.originalEvent;
       this.mouse.lastX = this.mouse.x;
       this.mouse.lastY = this.mouse.y;
       
@@ -188,10 +198,7 @@
               thumbRight = true;
             }else{
               document.body.style.cursor='move';
-            }  
-
-            this._draw(thumbLeft, thumbRight);
-            
+            }
           }else{
             if ( iv.hovered == true ){
               iv.hovered = false;
@@ -200,75 +207,78 @@
           }
         }
         if(!this.mouse.hovering){
+          this.mouse.mode = auto;
           document.body.style.cursor='auto';
+          return;
         }
       }
+      
       var iv = this.mouse.hovering;
-      var rxx;
+      console.log( iv );
+
       if( this.mouse.down ){
-        if(this.mouse.hovering){
-          if( this.mouse.x >= iv.xl && this.mouse.x <= iv.xl + 8 && !this.inLeftResize){
-            this.inLeftResize = true;
-            this.inRightResize = false;
-          }else if( this.mouse.x >= iv.xr-8 && this.mouse.x <= iv.xr && !this.inRightResize ){
-            this.inLeftResize = false;
-            this.inRightResize = true;          
-          }else if(this.mouse.x >= iv.xl+8 && this.mouse.x <= iv.xr - 8 && !this.inRightResize  && !this.inRightResize){
-            this.inLeftResize = false;
-            this.inRightResize = false;
-            var diff = this.mouse.hovering.outPoint - this.mouse.hovering.inPoint;
-            this.mouse.hovering.inPoint = (this.mouse.x-this.mouse.hovering.grabX) / this.width * this.options.duration;
-            this.mouse.hovering.outPoint = this.mouse.hovering.inPoint + diff;
-            this.mouse.hovering.popcornTrackEvent.start = this.mouse.hovering.inPoint ;
-            this.mouse.hovering.popcornTrackEvent.end = this.mouse.hovering.outPoint ;
-            document.body.style.cursor='move';
-          }
 
-          if( this.inRightResize ){
-            thumbRight = true;
-            document.body.style.cursor='e-resize';
-            this.mouse.hovering.outPoint = this.options.duration / this.width * (this.mouse.x+4);
-            this.mouse.hovering.popcornTrackEvent.end = this.mouse.hovering.outPoint;
-          }else if( this.inLeftResize ){
-            thumbLeft = true;
-            document.body.style.cursor='w-resize';
-            this.mouse.hovering.inPoint = this.options.duration / this.width * (this.mouse.x-4);
-            this.mouse.hovering.popcornTrackEvent.start = this.mouse.hovering.inPoint;
+        if( this.mouse.mode === auto && this.mouse.hovering ){
+          if( this.mouse.x >= iv.xl && this.mouse.x <= iv.xl + 8 ){
+            this.mouse.mode = wResize;
+          }else if( this.mouse.x >= iv.xr-8 && this.mouse.x <= iv.xr ){
+            this.mouse.mode = eResize;
+          }else if( this.mouse.x >= iv.xl+8 && this.mouse.x <= iv.xr - 8 ){
+            this.mouse.mode = drag;
           }
-
-          this._draw(thumbLeft, thumbRight);
         }
+        
+        thumbLeft = thumbRight = false;
+        
+        if( this.mouse.mode === eResize ){
+          thumbRight = true;
+          document.body.style.cursor='e-resize';
+          this.mouse.hovering.outPoint = this.options.duration / this.width * (this.mouse.x+4);
+          this.mouse.hovering.popcornTrackEvent.end = this.mouse.hovering.outPoint;
+        }else if( this.mouse.mode === wResize ){
+          thumbLeft = true;
+          document.body.style.cursor='w-resize';
+          this.mouse.hovering.inPoint = this.options.duration / this.width * (this.mouse.x-4);
+          this.mouse.hovering.popcornTrackEvent.start = this.mouse.hovering.inPoint;
+        }else if( this.mouse.mode === drag ){
+          document.body.style.cursor='move';
+          var diff = this.mouse.hovering.outPoint - this.mouse.hovering.inPoint;
+          this.mouse.hovering.inPoint = (this.mouse.x-this.mouse.hovering.grabX) / this.width * this.options.duration;
+          this.mouse.hovering.outPoint = this.mouse.hovering.inPoint + diff;
+          this.mouse.hovering.popcornTrackEvent.start = this.mouse.hovering.inPoint ;
+          this.mouse.hovering.popcornTrackEvent.end = this.mouse.hovering.outPoint ;
+        }
+
       }
+
+      console.log( this.mouse.mode, this.mouse.hovering, this.mouse.down );
+
+      this._draw(thumbLeft, thumbRight);
 
     },
 
     _mouseupdown: function(e){
       if(e.type==='mousedown'){
-
         this.mouse.down = true;        
       }else if(e.type==='mouseup'){
-        this.inRightResize = false;
-        this.inLeftResize = false;
-        console.log(4);
+        this.mouse.mode = auto;
         if(this.mouse.hovering && this.mouse.down ){
-          console.log(this, e);
           this.mouse.down = false;
           this.mouse.hovering = null;
         }
-          
+        this._draw();
       }
     },
 
     _hover: function( e ){
       if(e.type==='mouseenter'){
-//        this._draw();
-      }else if(e.type==='mouseleave'){
-        //this.mouse.down = false;
-        //this.mouse.hovering = null;
-        this.inRightResize = false;
-        this.inLeftResize = false;
-//        console.log('mouse left');
-//      this._draw();
+        this._draw();
+      }else if( e.type==='mouseleave' ){
+        if( this.mouse.hovering ){
+          this.mouse.hovering.hovered = false;
+          //this.mouse.hovering = null;
+        }
+        this._draw();
       }
 		},
 
