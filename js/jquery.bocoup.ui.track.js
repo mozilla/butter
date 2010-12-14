@@ -1,7 +1,7 @@
 /*
   jquery.bocoup.ui.track 
 */
-(function($){
+(function($,global){
 
   var auto    = 100,
       eResize = 101,
@@ -360,4 +360,4 @@
 
 
 
-})(jQuery);
+})(jQuery,document);
