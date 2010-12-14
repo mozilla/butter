@@ -174,9 +174,7 @@
       this.mouse.x = e.clientX - this.element[0].offsetLeft + scrollX;
       this.mouse.y = e.clientY - this.element[0].offsetTop + scrollY;
       
-      //iv.draw();
-
-      var thumbLeft=null, thumbRight=null;
+      var thumbLeft = thumbRight = false;
         
       if(!this.mouse.down){
         this.mouse.hovering = null;
@@ -202,6 +200,7 @@
           }else{
             if ( iv.hovered == true ){
               iv.hovered = false;
+              this.mouse.hovering = null;
               this._draw();
             }
           }
@@ -214,10 +213,9 @@
       }
       
       var iv = this.mouse.hovering;
-      console.log( iv );
 
       if( this.mouse.down ){
-
+              
         if( this.mouse.mode === auto && this.mouse.hovering ){
           if( this.mouse.x >= iv.xl && this.mouse.x <= iv.xl + 8 ){
             this.mouse.mode = wResize;
@@ -259,11 +257,13 @@
 
     _mouseupdown: function(e){
       if(e.type==='mousedown'){
-        this.mouse.down = true;        
+        
+        this.mouse.down = true;
+        
       }else if(e.type==='mouseup'){
+        this.mouse.down = false;
         this.mouse.mode = auto;
         if(this.mouse.hovering && this.mouse.down ){
-          this.mouse.down = false;
           this.mouse.hovering = null;
         }
         this._draw();
