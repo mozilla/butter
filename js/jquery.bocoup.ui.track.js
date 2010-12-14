@@ -3,7 +3,7 @@
 */
 (function($){
 
-  function Range( props, parent ){
+  function TrackEvent( props, parent ){
     $.extend(this, props);
     this.parent = parent;
     this.oxl=0;
@@ -13,11 +13,11 @@
     this.hovered = false;     
     this.draw();
     //this.parent._inView.push( this );
-    //console.log( this.popcornRange.sort(this) );  
+    //console.log( this.popcornTrackEvent.sort(this) );  
     return this;
   };
 
-  Range.prototype.draw = function range_draw( leftThumb, rightThumb ){
+  TrackEvent.prototype.draw = function trackEvent_draw( thumbLeft, thumbRight ){
     var x   = this.xl = this.oxl + (this.parent.width / this.parent.options.duration * this.inPoint),
         rw  = this.parent.width / this.parent.options.duration * (this.outPoint-this.inPoint),
         h   = this.parent.height,
@@ -25,30 +25,19 @@
 
     this.xr = x + rw;
 
-    var mouseX = this.parent.mouseX;
-
+    //var mouseX = this.parent.mouseX;         
     if( this.hovered ){
-      styles.range.hover( c, x, null, rw, h );
-      console.log(leftThumb);
-      if(leftThumb){
-//        styles.thumb.left.hover( c, x, null, rw, h );
-      }else{
+      styles.trackEvent.hover( c, x, null, rw, h );
+      if( thumbLeft ){
         styles.thumb.left.default( c, x, null, rw, h );
       }
-      if(rightThumb){
-//        styles.thumb.left.hover( c, x, null, rw, h );
-      }else{
+      if( thumbRight ){
         styles.thumb.right.default( c, x, null, rw, h );
       }
-      
     }else{
-      styles.range.default( c, x, null, rw, h );     
+      styles.trackEvent.default( c, x, null, rw, h );
     }
-  };
-
-  
-  
-  Range.prototype.add = function range_add(){  
+    
   };
 
 
@@ -59,7 +48,7 @@
 
 		_init: function(){
 
-      // Contains any range that overlaps the current view window
+      // Contains any trackEvent that overlaps the current view window
       this._inView=[];
 
       this.hovering = null;
@@ -122,16 +111,16 @@
     },
 
  
-    // Contains an array of range objects
-    ranges: [],
+    // Contains an array of trackEvent objects
+    trackEvents: [],
 
     
-    addRange: function( props ){
-      return this._inView.push(new Range( props, this ));
+    addTrackEvent: function( props ){
+      return this._inView.push(new TrackEvent( props, this ));
     },
 
    
-    _draw: function(){
+    _draw: function( thumbLeft, thumbRight ){
       var c = this.context,
           e = c.canvas,
           w = e.width,
@@ -150,7 +139,7 @@
 
       for(var i=0, l=this._inView.length; i< l; i++){
         var iv = this._inView[i];
-        iv.draw();
+        iv.draw( thumbLeft, thumbRight );
       }
 
       var pos = this.width / this.options.duration * this._playBar.position;
@@ -167,6 +156,8 @@
 
     _mousemove: function(e){
       var  e = e.originalEvent;
+      this.mouse.lastX = this.mouse.x;
+      this.mouse.lastY = this.mouse.y;
       
       var scrollX = (window.scrollX !== null && typeof window.scrollX !== 'undefined') ? window.scrollX : window.pageXOffset;
       var scrollY = (window.scrollY !== null && typeof window.scrollY !== 'undefined') ? window.scrollY : window.pageYOffset;
@@ -174,24 +165,33 @@
       this.mouse.y = e.clientY - this.element[0].offsetTop + scrollY;
       
       //iv.draw();
+
+      var thumbLeft=null, thumbRight=null;
         
       if(!this.mouse.down){
         this.mouse.hovering = null;
         for(var i=0, l=this._inView.length; i< l; i++){
           var iv = this._inView[i];
           if( iv.xl <= this.mouse.x && iv.xr >= this.mouse.x ){
+
             if ( iv.hovered == false ){
               iv.hovered = true;
               this.mouse.hovering = iv;
             }
             this.mouse.hovering = iv;
             this.mouse.hovering.grabX = this.mouse.x - this.mouse.hovering.xl + 1;
-
-            if( this.mouse.x >= this.xl && this.mouse.x <= this.xl + 8 ){
-              this._draw(true);
+            
+            if( this.mouse.x >= iv.xl && this.mouse.x <= iv.xl + 8 ){
+              document.body.style.cursor='w-resize';
+              thumbLeft = true;
+            }else if( this.mouse.x >= iv.xr-8 && this.mouse.x <= iv.xr ){
+              document.body.style.cursor='e-resize';
+              thumbRight = true;
             }else{
-              this._draw();
-            }
+              document.body.style.cursor='move';
+            }  
+
+            this._draw(thumbLeft, thumbRight);
             
           }else{
             if ( iv.hovered == true ){
@@ -200,14 +200,53 @@
             }
           }
         }
+        if(!this.mouse.hovering){
+          document.body.style.cursor='auto';
+        }
       }
-      if(this.mouse.hovering && this.mouse.down){
-        var diff = this.mouse.hovering.outPoint - this.mouse.hovering.inPoint;
-        this.mouse.hovering.inPoint = (this.mouse.x-this.mouse.hovering.grabX) / this.width * this.options.duration;
-        this.mouse.hovering.outPoint =  this.mouse.hovering.inPoint + diff;
-        this.mouse.hovering.popcornRange.start = this.mouse.hovering.inPoint ;
-        this.mouse.hovering.popcornRange.end = this.mouse.hovering.outPoint ;        
-        this._draw();
+      var iv = this.mouse.hovering;
+      var rxx;
+      if( this.mouse.down ){
+        if(this.mouse.hovering){
+          if( this.mouse.x >= iv.xl && this.mouse.x <= iv.xl + 8 ){
+            document.body.style.cursor='w-resize';
+            thumbLeft = true;
+            console.log(1);
+            
+          }else if( this.mouse.x >= iv.xr-8 && this.mouse.x <= iv.xr ){
+            this.inRightResize = true;
+            console.log(2);
+            rxx = iv.xr - this.mouse.x;
+            document.body.style.cursor='w-resize';
+          }else if(this.mouse.x >= iv.xl+8 && this.mouse.x <= iv.xr - 8 && !this.inRightResize){
+            var diff = this.mouse.hovering.outPoint - this.mouse.hovering.inPoint;
+            this.mouse.hovering.inPoint = (this.mouse.x-this.mouse.hovering.grabX) / this.width * this.options.duration;
+            this.mouse.hovering.outPoint =  this.mouse.hovering.inPoint + diff;
+            this.mouse.hovering.popcornTrackEvent.start = this.mouse.hovering.inPoint ;
+            this.mouse.hovering.popcornTrackEvent.end = this.mouse.hovering.outPoint ;
+            document.body.style.cursor='move';
+          }  
+
+          if( this.inRightResize ){
+    //            console.log(2);
+            thumbRight = true;
+            document.body.style.cursor='w-resize';
+            mouseDiff = this.mouse.x - this.mouse.lastX;
+//            console.log(mouseDiff);
+//            var outPixel = iv.xr,
+//                grabX = this.mouse.x - outPixel;
+//            console.log([outPixel, grabX, outPixel - grabX]);
+            //var  gx = this.mouse.hovering.grabX - this.mouse.x;
+//            var gx = this.mouse.hovering.grabX-iv.xr;
+            
+            if(mouseDiff>0){
+              this.mouse.hovering.outPoint = this.options.duration / this.width * (rxx + );
+            }
+
+          }
+
+          this._draw(thumbLeft, thumbRight);
+        }
       }
 
     },
@@ -262,7 +301,7 @@
 	});
 
   var styles = {
-    range: {
+    trackEvent: {
       default: function( c, x, y, w, h ){
         //document.body.style.cursor='e-resize';
         var grad = c.createLinearGradient(0,0,0,h);
@@ -279,7 +318,7 @@
 
       },
       hover: function( c, x, y, w, h ){
-          document.body.style.cursor='move';
+          //document.body.style.cursor='move';
           c.fillStyle = '#FF0';
           c.fillRect(x, 1.5, w, h-1.5);          
           var grad = c.createLinearGradient(0,0,0,h);
@@ -297,83 +336,20 @@
     thumb: {
       left: {
         default: function( c, x, y, w, h ){
-          var grad = c.createLinearGradient(0,0,0,h);
           c.fillStyle = '#880';
           c.fillRect(x, 0, 8, h);
-          c.lineWidth=0.5;
-          c.strokeStyle="#000";
-          c.fillStyle = '#440';
-          c.fillRect(x+6,0,1,h);
-          c.beginPath();
-            c.moveTo(x+1,20);
-            c.lineTo(x+5,25);
-            c.lineTo(x+5,15);
-            c.lineTo(x+1,20);
-          c.closePath();
-          c.fill();
-          c.stroke();
-          c.beginPath();
-            c.moveTo(x+1,10);
-            c.lineTo(x+5,15);
-            c.lineTo(x+5,5);
-            c.lineTo(x+1,10);
-          c.closePath();
-          c.fill();
-          c.stroke();
-        },
-        hover: function( c, x, y, w, h ){
-          var grad = c.createLinearGradient(0,0,0,h);
           c.fillStyle = '#FF0';
-          c.fillRect(x, 0, 8, h);
-          c.lineWidth=0.5;
-          c.strokeStyle="#000";
-          c.fillStyle = '#440';
-          c.fillRect(x+6,0,1,h);
-          c.beginPath();
-            c.moveTo(x+1,20);
-            c.lineTo(x+5,25);
-            c.lineTo(x+5,15);
-            c.lineTo(x+1,20);
-          c.closePath();
-          c.fill();
-          c.stroke();
-          c.beginPath();
-            c.moveTo(x+1,10);
-            c.lineTo(x+5,15);
-            c.lineTo(x+5,5);
-            c.lineTo(x+1,10);
-          c.closePath();
-          c.fill();
-          c.stroke();
+          c.fillRect(x, 0, 1, h);
         }
       },
       right: {
         default: function( c, x, y, w, h ){
-          var grad = c.createLinearGradient(0,0,0,h);
           c.fillStyle = '#880';
-          c.fillRect(x+w-8, 0, 8, h);
-          c.lineWidth=0.5;
-          c.strokeStyle='#000';
-          c.fillStyle='#440';
-          c.fillRect(x+w-8,0,1,h);
-          c.beginPath();
-            c.moveTo(x+w-1,20);
-            c.lineTo(x+w-5,25);
-            c.lineTo(x+w-5,15);
-            c.lineTo(x+w-1,20);
-          c.closePath();
-          c.fill();
-          c.stroke();
-          c.beginPath();
-            c.moveTo(x+w-1,10);
-            c.lineTo(x+w-5,15);
-            c.lineTo(x+w-5,5);
-            c.lineTo(x+w-1,10);
-          c.closePath();
-          c.fill();
-          c.stroke();
+          c.fillRect(x+w-9, 0, 8, h);
+          c.fillStyle = '#FF0';
+          c.fillRect(x+w-1, 0, 1, h);
         }
-      },      
+      }
     }
   };
 

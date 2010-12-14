@@ -7,7 +7,7 @@
   slice = Array.prototype.slice,
 
   //  ID string matching
-  rIdExp  = /^(#([\w\-\_\.]+))$/,
+  rIdExp  = /^(#([\w\-\_\.]+))$/, 
 
   //  Declare a pseudo-private constructor
   //  This constructor returns the instance object.    
@@ -34,7 +34,7 @@
       
       this.data = {
         events: {},
-        ranges: {
+        tracks: {
           byStart: [{start: -1, end: -1}],
           byEnd:   [{start: -1, end: -1}],
           startIndex: 0,
@@ -50,52 +50,52 @@
           // this is so we do not fall off either end
 
           var videoDurationPlus = that.video.duration + 1;
-          Popcorn.addRange(that, {start: videoDurationPlus, end: videoDurationPlus});
+          Popcorn.addTrack(that, {start: videoDurationPlus, end: videoDurationPlus});
           
           that.video.addEventListener( "timeupdate", function( event ) {
 
             var currentTime    = this.currentTime,
-                previousTime   = that.data.ranges.previousUpdateTime
-                ranges         = that.data.ranges,
-                rangesByEnd    = ranges.byEnd,
-                rangesByStart  = ranges.byStart;
+                previousTime   = that.data.tracks.previousUpdateTime
+                tracks         = that.data.tracks,
+                tracksByEnd    = tracks.byEnd,
+                tracksByStart  = tracks.byStart;
 
             // Playbar advancing
             if (previousTime < currentTime) {
 
-              while (rangesByEnd[ranges.endIndex].end <= currentTime) {
-                if (rangesByEnd[ranges.endIndex].running === true) {
-                  rangesByEnd[ranges.endIndex].running = false;
-                  rangesByEnd[ranges.endIndex].natives.end.call(that, event, rangesByEnd[ranges.endIndex]);
+              while (tracksByEnd[tracks.endIndex].end <= currentTime) {
+                if (tracksByEnd[tracks.endIndex].running === true) {
+                  tracksByEnd[tracks.endIndex].running = false;
+                  tracksByEnd[tracks.endIndex].natives.end.call(that, event, tracksByEnd[tracks.endIndex]);
                 }
-                ranges.endIndex++;
+                tracks.endIndex++;
               }
               
-              while (rangesByStart[ranges.startIndex].start <= currentTime) {
-                if (rangesByStart[ranges.startIndex].end > currentTime && rangesByStart[ranges.startIndex].running === false) {
-                  rangesByStart[ranges.startIndex].running = true;
-                  rangesByStart[ranges.startIndex].natives.start.call(that, event, rangesByStart[ranges.startIndex]);
+              while (tracksByStart[tracks.startIndex].start <= currentTime) {
+                if (tracksByStart[tracks.startIndex].end > currentTime && tracksByStart[tracks.startIndex].running === false) {
+                  tracksByStart[tracks.startIndex].running = true;
+                  tracksByStart[tracks.startIndex].natives.start.call(that, event, tracksByStart[tracks.startIndex]);
                 }
-                ranges.startIndex++;
+                tracks.startIndex++;
               }
 
             // Playbar receding
             } else if (previousTime > currentTime) {
 
-              while (rangesByStart[ranges.startIndex].start > currentTime) {
-                if (rangesByStart[ranges.startIndex].running === true) {
-                  rangesByStart[ranges.startIndex].running = false;
-                  rangesByStart[ranges.startIndex].natives.end.call(that, event, rangesByStart[ranges.startIndex]);
+              while (tracksByStart[tracks.startIndex].start > currentTime) {
+                if (tracksByStart[tracks.startIndex].running === true) {
+                  tracksByStart[tracks.startIndex].running = false;
+                  tracksByStart[tracks.startIndex].natives.end.call(that, event, tracksByStart[tracks.startIndex]);
                 }
-                ranges.startIndex--;
+                tracks.startIndex--;
               }
               
-              while (rangesByEnd[ranges.endIndex].end > currentTime) {
-                if (rangesByEnd[ranges.endIndex].start <= currentTime && rangesByEnd[ranges.endIndex].running === false) {
-                  rangesByEnd[ranges.endIndex].running = true;
-                  rangesByEnd[ranges.endIndex].natives.start.call(that, event, rangesByEnd[ranges.endIndex]);
+              while (tracksByEnd[tracks.endIndex].end > currentTime) {
+                if (tracksByEnd[tracks.endIndex].start <= currentTime && tracksByEnd[tracks.endIndex].running === false) {
+                  tracksByEnd[tracks.endIndex].running = true;
+                  tracksByEnd[tracks.endIndex].natives.start.call(that, event, tracksByEnd[tracks.endIndex]);
                 }
-                ranges.endIndex--;
+                tracks.endIndex--;
               }
             } else {
               // When user seeks, currentTime can be equal to previousTime on the
@@ -104,7 +104,7 @@
               // happens in both Chrome and Firefox.
             }
 
-            ranges.previousUpdateTime = currentTime;
+            tracks.previousUpdateTime = currentTime;
           }, false);
         } else {
           setTimeout(function() {
@@ -155,23 +155,18 @@
     return dest;      
   };
 
-  Popcorn.addRange = function( obj, range ) {
+  Popcorn.addTrack = function( obj, track ) {
+    console.log(obj);
     // Store this definition in an array sorted by times
-    obj.data.ranges.byStart.push( range );
-    obj.data.ranges.byEnd.push( range );
-    range.sort = this.sortRanges;
-    range.sort(obj);
-    return range;
-  };
-
-  Popcorn.sortRanges = function( obj ){
-    obj.data.ranges.byStart.sort( function( a, b ){
+    obj.data.tracks.byStart.push( track );
+    obj.data.tracks.byEnd.push( track );
+    obj.data.tracks.byStart.sort( function( a, b ){
       return ( a.start - b.start );
     });
-    obj.data.ranges.byEnd.sort( function( a, b ){
+    obj.data.tracks.byEnd.sort( function( a, b ){
       return ( a.end - b.end );
-    });  
-  }
+    });
+  };
 
   // A Few reusable utils, memoized onto Popcorn
   Popcorn.extend( Popcorn, {
@@ -388,7 +383,7 @@
       special: {
         // handles timeline controllers
         play: function () {
-          //  renders all of the interally stored range commands
+          //  renders all of the interally stored track commands
         }
       }
     }
@@ -459,7 +454,9 @@
           setup._setup.call(self, options);
         }
         
-        var range = Popcorn.addRange( this, options );
+
+        Popcorn.addTrack( this, options );
+
         
         //  Future support for plugin event definitions 
         //  for all of the native events
@@ -471,12 +468,8 @@
           }
           
         }, this);
-
-        if ( options.returnRange === true ){
-          return range;
-        } else {
-          return this;
-        }
+        
+        return this;
       };
     }
     

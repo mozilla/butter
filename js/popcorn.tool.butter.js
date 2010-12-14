@@ -39,15 +39,15 @@ $(function(){
     duration: 100
   });
 
-  var rangesByStart = p.data.ranges.byStart, i_range, type;
+  var trackEventsByStart = p.data.tracks.byStart, i_trackEvent, type;
 
-  for(var i=1, l=rangesByStart.length; i< l; i++){
-    i_range = rangesByStart[i];
-    type = i_range.natives.type;
+  for(var i=1, l=trackEventsByStart.length; i< l; i++){
+    i_trackEvent = trackEventsByStart[i];
+    type = i_trackEvent.natives.type;
     if( type === "image" ) {
-      track1.track('addRange', {inPoint: i_range.start, outPoint: i_range.end, popcornRange: i_range, popcorn: p });
+      track1.track('addTrackEvent', {inPoint: i_trackEvent.start, outPoint: i_trackEvent.end, popcornTrackEvent: i_trackEvent, popcorn: p });
     } else if( type === "text" ) {
-      track2.track('addRange', {inPoint: i_range.start, outPoint: i_range.end, popcornRange: i_range, popcorn: p });
+      track2.track('addTrackEvent', {inPoint: i_trackEvent.start, outPoint: i_trackEvent.end, popcornTrackEvent: i_trackEvent, popcorn: p });
     }
   }
 
