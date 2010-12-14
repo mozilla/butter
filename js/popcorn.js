@@ -6,6 +6,9 @@
   hasOwn = Object.prototype.hasOwnProperty, 
   slice = Array.prototype.slice,
 
+  // intentionally left undefined
+  undef,
+
   //  ID string matching
   rIdExp  = /^(#([\w\-\_\.]+))$/, 
 
@@ -34,7 +37,7 @@
       
       this.data = {
         events: {},
-        tracks: {
+        trackEvents: {
           byStart: [{start: -1, end: -1}],
           byEnd:   [{start: -1, end: -1}],
           startIndex: 0,
@@ -43,57 +46,60 @@
         }
       };
       
-      var isReady = function(that) {
+      var isReady = function( that ) {
 
-        if (that.video.readyState >= 3) {
+        if ( that.video.readyState >= 3 ) {
           // adding padding to the front and end of the arrays
           // this is so we do not fall off either end
 
           var videoDurationPlus = that.video.duration + 1;
-          Popcorn.addTrack(that, {start: videoDurationPlus, end: videoDurationPlus});
+          Popcorn.addTrackEvent( that, {
+            start: videoDurationPlus,
+            end: videoDurationPlus
+          });
           
           that.video.addEventListener( "timeupdate", function( event ) {
 
             var currentTime    = this.currentTime,
-                previousTime   = that.data.tracks.previousUpdateTime
-                tracks         = that.data.tracks,
+                previousTime   = that.data.trackEvents.previousUpdateTime
+                tracks         = that.data.trackEvents,
                 tracksByEnd    = tracks.byEnd,
                 tracksByStart  = tracks.byStart;
 
             // Playbar advancing
-            if (previousTime < currentTime) {
+            if ( previousTime < currentTime ) {
 
-              while (tracksByEnd[tracks.endIndex].end <= currentTime) {
-                if (tracksByEnd[tracks.endIndex].running === true) {
+              while ( tracksByEnd[tracks.endIndex] && tracksByEnd[tracks.endIndex].end <= currentTime ) {
+                if ( tracksByEnd[tracks.endIndex].running === true ) {
                   tracksByEnd[tracks.endIndex].running = false;
-                  tracksByEnd[tracks.endIndex].natives.end.call(that, event, tracksByEnd[tracks.endIndex]);
+                  tracksByEnd[tracks.endIndex].natives.end.call( that, event, tracksByEnd[tracks.endIndex] );
                 }
                 tracks.endIndex++;
               }
               
-              while (tracksByStart[tracks.startIndex].start <= currentTime) {
-                if (tracksByStart[tracks.startIndex].end > currentTime && tracksByStart[tracks.startIndex].running === false) {
+              while ( tracksByStart[tracks.startIndex] && tracksByStart[tracks.startIndex].start <= currentTime ) {
+                if ( tracksByStart[tracks.startIndex].end > currentTime && tracksByStart[tracks.startIndex].running === false ) {
                   tracksByStart[tracks.startIndex].running = true;
-                  tracksByStart[tracks.startIndex].natives.start.call(that, event, tracksByStart[tracks.startIndex]);
+                  tracksByStart[tracks.startIndex].natives.start.call( that, event, tracksByStart[tracks.startIndex] );
                 }
                 tracks.startIndex++;
               }
 
             // Playbar receding
-            } else if (previousTime > currentTime) {
+            } else if ( previousTime > currentTime ) {
 
-              while (tracksByStart[tracks.startIndex].start > currentTime) {
-                if (tracksByStart[tracks.startIndex].running === true) {
+              while ( tracksByStart[tracks.startIndex] && tracksByStart[tracks.startIndex].start > currentTime ) {
+                if ( tracksByStart[tracks.startIndex].running === true ) {
                   tracksByStart[tracks.startIndex].running = false;
-                  tracksByStart[tracks.startIndex].natives.end.call(that, event, tracksByStart[tracks.startIndex]);
+                  tracksByStart[tracks.startIndex].natives.end.call( that, event, tracksByStart[tracks.startIndex] );
                 }
                 tracks.startIndex--;
               }
               
-              while (tracksByEnd[tracks.endIndex].end > currentTime) {
-                if (tracksByEnd[tracks.endIndex].start <= currentTime && tracksByEnd[tracks.endIndex].running === false) {
+              while ( tracksByEnd[tracks.endIndex] && tracksByEnd[tracks.endIndex].end > currentTime ) {
+                if ( tracksByEnd[tracks.endIndex].start <= currentTime && tracksByEnd[tracks.endIndex].running === false ) {
                   tracksByEnd[tracks.endIndex].running = true;
-                  tracksByEnd[tracks.endIndex].natives.start.call(that, event, tracksByEnd[tracks.endIndex]);
+                  tracksByEnd[tracks.endIndex].natives.start.call( that, event, tracksByEnd[tracks.endIndex] );
                 }
                 tracks.endIndex--;
               }
@@ -107,13 +113,13 @@
             tracks.previousUpdateTime = currentTime;
           }, false);
         } else {
-          setTimeout(function() {
-            isReady(that);
+          setTimeout( function() {
+            isReady( that );
           }, 1);
         }
       };
 
-      isReady(this);
+      isReady( this );
 
       return this;
     }
@@ -155,15 +161,14 @@
     return dest;      
   };
 
-  Popcorn.addTrack = function( obj, track ) {
-    console.log(obj);
+  Popcorn.addTrackEvent = function( obj, track ) {
     // Store this definition in an array sorted by times
-    obj.data.tracks.byStart.push( track );
-    obj.data.tracks.byEnd.push( track );
-    obj.data.tracks.byStart.sort( function( a, b ){
+    obj.data.trackEvents.byStart.push( track );
+    obj.data.trackEvents.byEnd.push( track );
+    obj.data.trackEvents.byStart.sort( function( a, b ){
       return ( a.start - b.start );
     });
-    obj.data.tracks.byEnd.sort( function( a, b ){
+    obj.data.trackEvents.byEnd.sort( function( a, b ){
       return ( a.end - b.end );
     });
   };
@@ -258,6 +263,42 @@
       
       
       
+      return this;
+    },
+    removePlugin: function( name ) {
+
+      var byStart = this.data.trackEvents.byStart, 
+          byEnd = this.data.trackEvents.byEnd;        
+  
+      this[name] = undef;
+  
+      // remove plugin reference from registry
+      for ( var i = 0, rl = Popcorn.registry.length; i < rl; i++ ) {
+        if ( Popcorn.registry[i].type === name ) {
+          Popcorn.registry.splice(i, 1);
+          break; // plugin found, stop checking
+        }
+      }
+
+      // remove all trackEvents
+      for ( var i = 0, sl = byStart.length; i < sl; i++ ) {
+        if ( byStart[i] && byStart[i].natives && byStart[i].natives.type === name ) {
+          byStart.splice( i, 1 );
+          i--; sl--; // update for loop if something removed, but keep checking
+          if ( this.data.trackEvents.startIndex <= i ) {
+            this.data.trackEvents.startIndex--; // write test for this
+          }
+        }
+      }
+      for ( var i = 0, el = byEnd.length; i < el; i++ ) {
+        if ( byEnd[i] && byEnd[i].natives && byEnd[i].natives.type === name ) {
+          byEnd.splice( i, 1 );
+          i--; el--; // update for loop if something removed, but keep checking
+          if ( this.data.trackEvents.endIndex <= i ) {
+            this.data.trackEvents.endIndex--; // write test for this
+          }
+        }
+      }
       return this;
     }
   });
@@ -357,7 +398,6 @@
           this.video.addEventListener( type, function( event ) {
             
             Popcorn.forEach( self.data.events[type], function ( obj, key ) {
-
               if ( typeof obj === "function" ) {
                 obj.call(self, event);
               }
@@ -415,7 +455,7 @@
     var natives = Popcorn.events.all, 
 
         reserved = [ "start", "end"], 
-        plugin = {},
+        plugin = {type: name},
         pluginFn, 
         setup;
     
@@ -455,7 +495,7 @@
         }
         
 
-        Popcorn.addTrack( this, options );
+        Popcorn.addTrackEvent( this, options );
 
         
         //  Future support for plugin event definitions 

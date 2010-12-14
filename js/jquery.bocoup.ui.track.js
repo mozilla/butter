@@ -240,7 +240,7 @@
 //            var gx = this.mouse.hovering.grabX-iv.xr;
             
             if(mouseDiff>0){
-              this.mouse.hovering.outPoint = this.options.duration / this.width * (rxx + );
+             // this.mouse.hovering.outPoint = this.options.duration / this.width * (rxx + );
             }
 
           }

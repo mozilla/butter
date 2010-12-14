@@ -39,7 +39,7 @@ $(function(){
     duration: 100
   });
 
-  var trackEventsByStart = p.data.tracks.byStart, i_trackEvent, type;
+  var trackEventsByStart = p.data.trackEvents.byStart, i_trackEvent, type;
 
   for(var i=1, l=trackEventsByStart.length; i< l; i++){
     i_trackEvent = trackEventsByStart[i];
