@@ -53,7 +53,8 @@
     eventEditor.find('button.Apply').click(function(){ editEventApply(); });
     eventEditor.find('button.Cancel').click(function(){ editEventCancel(); });
 
-    var selectedEvent = null;
+    var selectedEvent = null,
+        lastSelectedEvent = null;
 
     var editEventOK = function(){
       editEventApply();
@@ -89,7 +90,7 @@
       try{ eventEditor.dialog('close'); }
       catch(e){ if(console && console.log){ console.log(e); } }
       
-      selectedEvent = this;
+      selectedEvent = this;      
 
       var manifest    = selectedEvent.popcornEvent.natives.manifest,
           about       = manifest.about,
@@ -119,7 +120,10 @@
         if( !selectedEvent.previousValues ){ selectedEvent.previousValues = {}; }
         
         selectedEvent.manifestElems[i] = elem;
-        selectedEvent.previousValues[i] = selectedEvent.popcornEvent[i];
+        
+        if(lastSelectedEvent != selectedEvent){
+          selectedEvent.previousValues[i] = selectedEvent.popcornEvent[i];
+        }
         
         if(elemType === 'input'){
           label = $('<label/>').attr('for', elemLabel).text(elemLabel);
@@ -128,6 +132,8 @@
           label.appendTo(optionsTab);
         }
       }
+
+      lastSelectedEvent = this;
 
       eventEditor.dialog({ title:'Edit ' + cap(this.type) + ' Event' });
     };
