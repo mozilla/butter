@@ -61,7 +61,7 @@
           that.video.addEventListener( "timeupdate", function( event ) {
 
             var currentTime    = this.currentTime,
-                previousTime   = that.data.trackEvents.previousUpdateTime
+                previousTime   = that.data.trackEvents.previousUpdateTime, 
                 tracks         = that.data.trackEvents,
                 tracksByEnd    = tracks.byEnd,
                 tracksByStart  = tracks.byStart;
@@ -175,9 +175,9 @@
 
   // A Few reusable utils, memoized onto Popcorn
   Popcorn.extend( Popcorn, {
-  	error: function( msg ) {
-	  	throw msg;
-  	},
+    error: function( msg ) {
+      throw msg;
+    },
     guid: function() {
       return +new Date() + Math.floor(Math.random()*11);
     }, 
