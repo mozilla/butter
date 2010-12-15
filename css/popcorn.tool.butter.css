@@ -1,7 +1,11 @@
 body{
   font-family:verdana;
   font-size:80%;
+  margin:0;
 }
+
+#container:{}
+
 
 video{
   border:1px solid black;
@@ -23,6 +27,28 @@ video{
   margin-bottom:0px;
 }
 
+#head{
+  margin:0;
+  padding:0;
+  height:70px;
+  overflow:hidden;
+  background: -webkit-gradient(
+      linear,
+      left bottom,
+      left top,
+      color-stop(0., rgb(64,64,64)),
+      color-stop(0.76, rgb(128,128,128))
+  );
+  background: -moz-linear-gradient(
+      center bottom,
+      rgb(64,64,64) 0%,
+      rgb(128,128,128) 100%
+  );
+}
+
+#head #info{margin:2px 0 0 10px;padding:0;}
+#head h1, #head h2{margin:0;padding:0;}
+#head img.logo{width:64px; height:64px;float:left;margin:0 10px 0 0;}
 
 .track1{
 /*
@@ -35,3 +61,7 @@ canvas{
 }
 
 #image-container{position:fixed;top:0;left:0;border:1px dotted red;}
+
+#event-editor .edit-buttons{text-align:right;margin:10px 0;}
+#event-editor label{display:block;text-align:right;margin-bottom:2px;}
+#event-editor label input{width:150px;margin-left:10px;}

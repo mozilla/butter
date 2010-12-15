@@ -270,7 +270,7 @@
       var byStart = this.data.trackEvents.byStart, 
           byEnd = this.data.trackEvents.byEnd;        
   
-      this[name] = undef;
+      delete Popcorn.p[ name ];
   
       // remove plugin reference from registry
       for ( var i = 0, rl = Popcorn.registry.length; i < rl; i++ ) {
@@ -435,7 +435,7 @@
   });  
   
   Popcorn.protect = {
-    natives: "load play pause currentTime playbackRate mute volume duration".toLowerCase().split(/\s+/)
+    natives: "load play pause currentTime playbackRate mute volume duration removePlugin roundTime trigger listen unlisten".toLowerCase().split(/\s+/)
   };
   
   //  Plugins are registered 
