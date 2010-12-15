@@ -48,23 +48,28 @@
     eventEditor.tabs();
     eventEditor.css({display:'none'});
 
+    var selectedEvent = null;
+
+    var editTrackOK = function(self){        
+      selectedEvent.popcornTrackEvent.start = selectedEvent.inPoint = eventEditor.find('input[name$="in"]').val();
+      selectedEvent.popcornTrackEvent.out = selectedEvent.outPoint = eventEditor.find('input[name$="out"]').val();        
+      selectedEvent.popcornTrackEvent.src = eventEditor.find('input[name$="src"]').val();
+      selectedEvent.parent._draw();
+      eventEditor.dialog('close');
+    };
+
+    eventEditor.find('button.OK').click(function(){ editTrackOK(); });
+
     var editTrackEventCallback = function editTrackEventCallback(){
       try{ 
         eventEditor.dialog('close');
       }catch(e){ console.log(e); }
-      var self = this;
+      selectedEvent = this;
       eventEditor.attr('title', 'Edit ' + cap(this.type) + ' Event');
       eventEditor.find('input[name$="in"]').val(this.inPoint);
       eventEditor.find('input[name$="out"]').val(this.outPoint);
       eventEditor.find('input[name$="src"]').val(this.popcornTrackEvent.src||this.popcornTrackEvent.text);
       eventEditor.dialog();
-      eventEditor.find('button.OK').click(function(){
-        self.popcornTrackEvent.start = self.inPoint = eventEditor.find('input[name$="in"]').val();
-        self.popcornTrackEvent.out = self.outPoint = eventEditor.find('input[name$="out"]').val();        
-        self.popcornTrackEvent.src = eventEditor.find('input[name$="src"]').val();
-        self.parent._draw();
-        eventEditor.dialog('close');
-      });
     };
 
     var trackEventsByStart = p.data.trackEvents.byStart, i_trackEvent, type;
