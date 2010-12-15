@@ -44,29 +44,45 @@
       return aString.charAt(0).toUpperCase() + aString.slice(1);
     };
 
+    //// EVENT EDITOR //////////////////////////////////////////////////////////
+
     eventEditor = $('#event-editor');
     eventEditor.tabs();
     eventEditor.css({display:'none'});
+    eventEditor.find('button.OK').click(function(){ editEventOK(); });
+    eventEditor.find('button.Apply').click(function(){ editEventApply(); });
+    eventEditor.find('button.Cancel').click(function(){ editEventCancel(); });
 
     var selectedEvent = null;
 
-    var editTrackOK = function(self){
-      var popcornEvent = selectedEvent.popcornEvent,
-          manifest = popcornEvent.natives.manifest; 
-          
-      for( var i in manifest.options ){
-        popcornEvent[i] = selectedEvent.manifestElems[i].val();
-      }
-
-      selectedEvent.inPoint = popcornEvent.start;
-      selectedEvent.outPoint = popcornEvent.end;
-
-      selectedEvent.parent._draw();
-
+    var editEventOK = function(){
+      editEventApply();
       eventEditor.dialog('close');
     };
 
-    eventEditor.find('button.OK').click(function(){ editTrackOK(); });
+    var editEventApply = function(){
+      var popcornEvent = selectedEvent.popcornEvent,
+          manifest = popcornEvent.natives.manifest;
+      for( var i in manifest.options ){
+        popcornEvent[i] = selectedEvent.manifestElems[i].val();
+      }
+      selectedEvent.inPoint = popcornEvent.start;
+      selectedEvent.outPoint = popcornEvent.end;
+      selectedEvent.parent._draw();
+    };
+
+    var editEventCancel = function(){
+      var popcornEvent = selectedEvent.popcornEvent;
+      for( var i in selectedEvent.previousValues ){
+        popcornEvent[i] = selectedEvent.previousValues[i];
+      }
+      selectedEvent.inPoint = popcornEvent.start;
+      selectedEvent.outPoint = popcornEvent.end;
+      selectedEvent.parent._draw();
+      eventEditor.dialog('close');
+    };
+
+   
 
     var editTrackEventCallback = function editTrackEventCallback(){
 
@@ -80,7 +96,6 @@
           aboutTab    = eventEditor.find('.about'),
           options     = manifest.options,
           optionsTab  = eventEditor.find('.options'),
-
           elemType,
           input,
           label,
@@ -101,7 +116,10 @@
         ;
         elem = $('<'+elemType+'/>');
         if( !selectedEvent.manifestElems ){ selectedEvent.manifestElems = {}; }
+        if( !selectedEvent.previousValues ){ selectedEvent.previousValues = {}; }
+        
         selectedEvent.manifestElems[i] = elem;
+        selectedEvent.previousValues[i] = selectedEvent.popcornEvent[i];
         
         if(elemType === 'input'){
           label = $('<label/>').attr('for', elemLabel).text(elemLabel);
@@ -109,11 +127,15 @@
           elem.appendTo(label);
           label.appendTo(optionsTab);
         }
-      }       
+      }
 
       eventEditor.dialog({ title:'Edit ' + cap(this.type) + ' Event' });
-
     };
+
+
+
+
+
 
     var trackEventsByStart = p.data.trackEvents.byStart, i_trackEvent, type;
 
