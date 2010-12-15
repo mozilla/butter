@@ -113,17 +113,14 @@
       this._draw();
 		},
 
-
     _style: function( styleObj ){
       for(var property in styleObj){
         this.context[property] = styleObj[property];
       }
     },
-
  
     // Contains an array of trackEvent objects
     trackEvents: [],
-
     
     addTrackEvent: function( props ){
       return this._inView.push(new TrackEvent( props, this ));
@@ -249,7 +246,7 @@
 
       }
 
-      console.log( this.mouse.mode, this.mouse.hovering, this.mouse.down );
+//      console.log( this.mouse.mode, this.mouse.hovering, this.mouse.down );
 
       this._draw(thumbLeft, thumbRight);
 
@@ -261,11 +258,12 @@
         this.mouse.down = true;
         
       }else if(e.type==='mouseup'){
-        this.mouse.down = false;
         this.mouse.mode = auto;
         if(this.mouse.hovering && this.mouse.down ){
+          this.mouse.hovering.editEvent();
           this.mouse.hovering = null;
         }
+        this.mouse.down = false;
         this._draw();
       }
     },

@@ -8,6 +8,16 @@
     
     return {
 
+      manifest: {
+        about:{
+          name: "Popcorn Image Plugin",
+          version: "0.1",
+          author: "Alistair MacDonald",
+          website: "http://bocoup.com"
+        },
+        uibindings:{}
+      },
+
       start: function(event, options){
       
         container = document.getElementById(options.target);
