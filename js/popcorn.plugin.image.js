@@ -10,12 +10,18 @@
 
       manifest: {
         about:{
-          name: "Popcorn Image Plugin",
-          version: "0.1",
-          author: "Alistair MacDonald",
-          website: "http://bocoup.com"
+          name    : "Popcorn Image Plugin",
+          version : "0.1",
+          author  : "Alistair MacDonald",
+          website : "http://bocoup.com"
         },
-        uibindings:{}
+        options:{
+          start   : {elem:'input', type:'text', label:'In'},
+          end     : {elem:'input', type:'text', label:'Out'},
+          alt     : {elem:'input', type:'text', label:'Alt'},
+          title   : {elem:'input', type:'text', label:'Title'},
+          src     : {elem:'input', type:'text', label:'Src'}
+        }
       },
 
       start: function(event, options){

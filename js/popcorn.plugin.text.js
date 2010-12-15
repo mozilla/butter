@@ -15,8 +15,12 @@
           author: "Alistair MacDonald",
           website: "http://bocoup.com"
         },
-        uibindings:{}        
-      },    
+        options:{
+          start   : {elem:'input', type:'text', label:'In'},
+          end     : {elem:'input', type:'text', label:'Out'},
+          text    : {elem:'input', type:'text', label:'Text'}
+        }
+      },
 
       start: function(event, options){
         container = document.getElementById(options.target);

@@ -21,7 +21,7 @@
     this.hovered = false;     
     this.draw();
     //this.parent._inView.push( this );
-    //console.log( this.popcornTrackEvent.sort(this) );  
+    //console.log( this.popcornEvent.sort(this) );  
     return this;
   };
 
@@ -229,19 +229,19 @@
           thumbRight = true;
           document.body.style.cursor='e-resize';
           this.mouse.hovering.outPoint = this.options.duration / this.width * (this.mouse.x+4);
-          this.mouse.hovering.popcornTrackEvent.end = this.mouse.hovering.outPoint;
+          this.mouse.hovering.popcornEvent.end = this.mouse.hovering.outPoint;
         }else if( this.mouse.mode === wResize ){
           thumbLeft = true;
           document.body.style.cursor='w-resize';
           this.mouse.hovering.inPoint = this.options.duration / this.width * (this.mouse.x-4);
-          this.mouse.hovering.popcornTrackEvent.start = this.mouse.hovering.inPoint;
+          this.mouse.hovering.popcornEvent.start = this.mouse.hovering.inPoint;
         }else if( this.mouse.mode === drag ){
           document.body.style.cursor='move';
           var diff = this.mouse.hovering.outPoint - this.mouse.hovering.inPoint;
           this.mouse.hovering.inPoint = (this.mouse.x-this.mouse.hovering.grabX) / this.width * this.options.duration;
           this.mouse.hovering.outPoint = this.mouse.hovering.inPoint + diff;
-          this.mouse.hovering.popcornTrackEvent.start = this.mouse.hovering.inPoint ;
-          this.mouse.hovering.popcornTrackEvent.end = this.mouse.hovering.outPoint ;
+          this.mouse.hovering.popcornEvent.start = this.mouse.hovering.inPoint ;
+          this.mouse.hovering.popcornEvent.end = this.mouse.hovering.outPoint ;
         }
 
       }
