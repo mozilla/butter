@@ -21,6 +21,12 @@
         target  : 'image-container',
         src     : 'http://upload.wikimedia.org/wikipedia/en/0/06/MMPR_Logo.png'
       })
+      .image({
+        start   : 54,
+        end     : 100,
+        target  : 'image-container',
+        src     : 'http://upload.wikimedia.org/wikipedia/en/0/06/MMPR_Logo.png'
+      })
 
       .text({
         start   : 9,
@@ -40,6 +46,16 @@
       duration: 100
     });
 
+    var zoomBar = $('.zoomBar').track({
+      duration     : 100,
+      mode         : 'smartZoom',
+      linkedTracks : [ track1, track2 ]
+    });
+
+
+
+
+
     var cap = function( aString ){
       return aString.charAt(0).toUpperCase() + aString.slice(1);
     };
@@ -49,9 +65,9 @@
     eventEditor = $('#event-editor');
     eventEditor.tabs();
     eventEditor.css({display:'none'});
-    eventEditor.find('button.OK').click(function(){ editEventOK(); });
-    eventEditor.find('button.Apply').click(function(){ editEventApply(); });
-    eventEditor.find('button.Cancel').click(function(){ editEventCancel(); });
+    //eventEditor.find('button.OK').click(function(){ editEventOK(); });
+    //eventEditor.find('button.Apply').click(function(){ editEventApply(); });
+    //eventEditor.find('button.Cancel').click(function(){ editEventCancel(); });
 
     var selectedEvent = null,
         lastSelectedEvent = null;
@@ -82,7 +98,6 @@
       selectedEvent.parent._draw();
       eventEditor.dialog('close');
     };
-
    
 
     var editTrackEventCallback = function editTrackEventCallback(){
@@ -135,11 +150,16 @@
 
       lastSelectedEvent = this;
 
-      eventEditor.dialog({ title:'Edit ' + cap(this.type) + ' Event' });
+      eventEditor.dialog({
+        title: 'Edit ' + cap(this.type) + ' Event',
+        buttons: {
+          //'Delete': editEventDelete,
+          'OK'    : editEventOK,
+          'Apply' : editEventApply,
+          'Cancel': editEventCancel
+        }
+      });
     };
-
-
-
 
 
 

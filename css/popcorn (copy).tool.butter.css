@@ -1,0 +1,150 @@
+body{
+  font-family:verdana;
+  font-size:80%;
+  margin:0;
+}
+
+#container:{}
+
+video{
+  border:1px solid black;
+  width:640px;
+  margin:10px auto;
+  display:block;
+}
+
+#tracks{
+  border:1px solid black;
+  width:640px;
+  margin:0 auto;
+  overflow:hidden;  
+}
+
+.track{
+  width:640px;
+  height:30px;
+  margin-bottom:0px;
+}
+
+#head{
+  margin:0;
+  padding:0;
+  height:70px;
+  overflow:hidden;
+  background: -webkit-gradient(
+      linear,
+      left bottom,
+      left top,
+      color-stop(0., rgb(64,64,64)),
+      color-stop(0.76, rgb(128,128,128))
+  );
+  background: -moz-linear-gradient(
+      center bottom,
+      rgb(64,64,64) 0%,
+      rgb(128,128,128) 100%
+  );
+}
+
+#head #info{margin:2px 0 0 10px;padding:0;}
+#head h1, #head h2{margin:0;padding:0;}
+#head img.logo{width:64px; height:64px;float:left;margin:0 10px 0 0;}
+
+.track1{
+/*
+  background:url(transparency.gif);
+*/
+}
+
+canvas{
+/*  border:2px solid red;*/
+}
+
+#image-container{position:fixed;top:0;left:0;border:1px dotted red;}
+
+#event-editor .edit-buttons{text-align:right;margin:10px 0;}
+#event-editor label{display:block;text-align:right;margin-bottom:2px;}
+
+.ui-dialog{
+  background-image: url('../img/metal.jpg')!important; /* fallback */
+  
+}
+
+#event-editor{
+  background-image: -webkit-gradient(linear,left bottom,right top,
+    color-stop(0,     rgba(200,200,200,0.80)),
+    color-stop(0.25,  rgba(200,200,200,0.50)),
+    color-stop(0.5,   rgba(255,255,255,0.80)),
+    color-stop(0.75,  rgba(200,200,200,0.50)),
+    color-stop(1,     rgba(200,200,200,0.80))
+
+)}
+
+
+.options{
+   background-image: -webkit-gradient(linear,left bottom,left top,
+    color-stop(0,     rgba(0,0,0,.25)),
+    color-stop(1,   rgba(200,200,200,0))
+   )!important;
+  border:1px solid #AAA!important;
+  border-radius:6px!important;
+}
+
+#event-editor label  input{
+  width:175px;margin-left:10px;
+  border:1px solid #AAA;
+  border-radius:6px;
+  opacity:0.7;
+  color:#222;
+  font-size:12px!important;
+  padding:5px;
+  background:
+    -webkit-gradient(linear,left top,left bottom,
+      color-stop(0,     rgba(200,200,200,0.80)),
+      color-stop(0.5,  rgba(200,200,200,0.70)),
+      color-stop(1,   rgba(255,255,255,0.90)),
+    );
+  
+}
+
+#event-editor label  input:hover, #event-editor label input:focus{
+  opacity:1;
+  border:1px solid #0AF;
+  -moz-box-shadow: 10px 10px 5px rgba(0,0,0,0.5);
+  -webkit-box-shadow: -4px 4px 4px rgba(0,0,0,.125);
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(128,192,255,0.5)), to(rgba(192,224,255,0.5))) ;
+  color:#08F;
+  position:relative;
+  left:2px;
+  top:-2px;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
