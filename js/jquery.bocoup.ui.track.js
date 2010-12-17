@@ -18,7 +18,7 @@
     this.oxr=0;
     this.xl=0;
     this.xr=0;
-    this.hovered = false;     
+    this.hovered = false;
     this.draw();
     //this.parent._inView.push( this );
     //console.log( this.popcornEvent.sort(this) );  
@@ -30,6 +30,14 @@
         rw  = this.parent.width / this.parent.options.duration * (this.outPoint-this.inPoint),
         h   = this.parent.height,
         c   = this.parent.context;
+//    x -= ((this.parent.width / this.parent.options.duration) * this.parent.zoomWindow.offsetX) || 0;
+//        x = ((this.parent.width / this.parent.options.duration) * (this.inPoint-this.parent.zoomWindow.offsetX));
+         // * this.parent.zoomWindow.width;
+//          rw -= ((this.parent.width / this.parent.options.duration) * this.parent.zoomWindow.offsetX)
+    
+
+    x = x * 100/this.parent.zoomWindow.width-(100/this.parent.zoomWindow.offsetX);
+    rw = rw *(100/this.parent.zoomWindow.width);
 
     this.xr = x + rw;
 
@@ -84,9 +92,10 @@
 		  this.height = this.element.height();
 
 		  $.extend(this, {
-		    context   : newCanvas( this.width, this.height ),
-		    scrubBar  : { position: 0, width: 3 },
-		    mouse     : { x: 0, y:0, down: false, lastX:0, lastY:0, mode:auto }
+		    context     : newCanvas( this.width, this.height ),
+		    scrubBar    : { position: 0, width: 3 },
+		    mouse       : { x: 0, y:0, down: false, lastX:0, lastY:0, mode:auto },
+		    zoomWindow  : { offsetX:0, width:100 }
       });
 
 		  $.extend(this.options, {
@@ -100,17 +109,30 @@
             strokeStyle: "#f00"
           }
         }
-      });
+      });      
 
+      if( this.options.mode == 'smartZoom' ){
+        this._inView.push(new TrackEvent({
+          inPoint   : 0,
+          outPoint  : 100,
+          duration  : 100
+        }, this ));
+      }
+      
 		  this.element.append( this.context.canvas );
 
-      this.options.target.bind( "timeupdate.track", jQuery.proxy( this._timeupdate, this ) );
-      this.options.target.bind( "loadedmetadata.track", jQuery.proxy( this._loadedmetadata, this ) );
-      
+      if( this.options.target ){
+        this.options.target.bind( "timeupdate.track", jQuery.proxy( this._timeupdate, this ) );
+        this.options.target.bind( "loadedmetadata.track", jQuery.proxy( this._loadedmetadata, this ) );
+      }
+
       this.element.bind( "mousemove.track", jQuery.proxy( this._mousemove, this ) );
       this.element.bind( "mousedown.track mouseup.track", jQuery.proxy( this._mouseupdown, this ) );
       this.element.bind( "mouseenter.track mouseleave.track", jQuery.proxy( this._hover, this ) );
       this._draw();
+      
+      return this;
+      
 		},
 
     _style: function( styleObj ){
@@ -126,6 +148,12 @@
       return this._inView.push(new TrackEvent( props, this ));
     },
 
+    zoom: function( props ){
+      this.zoomWindow.offsetX = props.offsetX;
+      this.zoomWindow.width = props.width;
+      //this.options.duration = this.options.width;
+      this._draw();
+    },
    
     _draw: function( thumbLeft, thumbRight ){
       var c = this.context,
@@ -229,19 +257,52 @@
           thumbRight = true;
           document.body.style.cursor='e-resize';
           this.mouse.hovering.outPoint = this.options.duration / this.width * (this.mouse.x+4);
-          this.mouse.hovering.popcornEvent.end = this.mouse.hovering.outPoint;
+          if(this.options.mode != 'smartZoom'){
+            this.mouse.hovering.popcornEvent.end = this.mouse.hovering.outPoint;
+          }else{
+
+            var linkedTracks = this.options.linkedTracks;              
+            for(var j in linkedTracks){
+              linkedTracks[j].track( 'zoom', {
+                offsetX: this.mouse.hovering.inPoint,
+                width: this.mouse.hovering.outPoint - this.mouse.hovering.inPoint,
+              });
+            }
+          }
         }else if( this.mouse.mode === wResize ){
           thumbLeft = true;
           document.body.style.cursor='w-resize';
-          this.mouse.hovering.inPoint = this.options.duration / this.width * (this.mouse.x-4);
-          this.mouse.hovering.popcornEvent.start = this.mouse.hovering.inPoint;
+            this.mouse.hovering.inPoint = this.options.duration / this.width * (this.mouse.x-4);
+            if(this.options.mode != 'smartZoom'){
+              this.mouse.hovering.popcornEvent.start = this.mouse.hovering.inPoint;
+            }else{
+              var linkedTracks = this.options.linkedTracks;              
+              for(var j in linkedTracks){
+                linkedTracks[j].track( 'zoom', {
+                  offsetX: this.mouse.hovering.inPoint,
+                  width: this.mouse.hovering.outPoint - this.mouse.hovering.inPoint,
+                });
+              }
+            }
         }else if( this.mouse.mode === drag ){
           document.body.style.cursor='move';
           var diff = this.mouse.hovering.outPoint - this.mouse.hovering.inPoint;
           this.mouse.hovering.inPoint = (this.mouse.x-this.mouse.hovering.grabX) / this.width * this.options.duration;
           this.mouse.hovering.outPoint = this.mouse.hovering.inPoint + diff;
-          this.mouse.hovering.popcornEvent.start = this.mouse.hovering.inPoint ;
-          this.mouse.hovering.popcornEvent.end = this.mouse.hovering.outPoint ;
+          if(this.options.mode != 'smartZoom'){
+            this.mouse.hovering.popcornEvent.start = this.mouse.hovering.inPoint ;
+            this.mouse.hovering.popcornEvent.end = this.mouse.hovering.outPoint ;
+          }else{
+
+            var linkedTracks = this.options.linkedTracks;              
+            for(var j in linkedTracks){
+              linkedTracks[j].track( 'zoom', {
+                offsetX: this.mouse.hovering.inPoint,
+                width: this.mouse.hovering.outPoint - this.mouse.hovering.inPoint,
+              });
+            }
+            
+          }
         }
 
       }
@@ -260,7 +321,9 @@
       }else if(e.type==='mouseup'){
         this.mouse.mode = auto;
         if(this.mouse.hovering && this.mouse.down ){
-          this.mouse.hovering.editEvent();
+          if(this.options.mode !== 'smartZoom'){
+            this.mouse.hovering.editEvent();
+          }
           this.mouse.hovering = null;
         }
         this.mouse.down = false;

@@ -6,7 +6,6 @@ body{
 
 #container:{}
 
-
 video{
   border:1px solid black;
   width:640px;
@@ -64,8 +63,21 @@ canvas{
 
 #event-editor .edit-buttons{text-align:right;margin:10px 0;}
 #event-editor label{display:block;text-align:right;margin-bottom:2px;}
-#event-editor label input{width:175px;margin-left:10px;}
 
+
+#event-editor label  input{
+  width:175px;margin-left:10px;
+  border:1px solid #CCC;
+  border-radius:6px;
+  font-size:12px!important;
+  padding:5px;
+  background:
+    -linear-gradient(left, #DDD, #FFF)
+  ;
+  background:  
+  -webkit-gradient(linear, left top, left bottom, from(#DDD), to(#FFF))
+  ;
+}
 
 
 
