@@ -29,29 +29,32 @@
     var x   = this.xl = this.oxl + (this.parent.width / this.parent.options.duration * this.inPoint),
         rw  = this.parent.width / this.parent.options.duration * (this.outPoint-this.inPoint),
         h   = this.parent.height,
-        c   = this.parent.context;
-//    x -= ((this.parent.width / this.parent.options.duration) * this.parent.zoomWindow.offsetX) || 0;
-//        x = ((this.parent.width / this.parent.options.duration) * (this.inPoint-this.parent.zoomWindow.offsetX));
-         // * this.parent.zoomWindow.width;
-//          rw -= ((this.parent.width / this.parent.options.duration) * this.parent.zoomWindow.offsetX)
-    
+        c   = this.parent.context,
+        typ;
 
-    x = x * 100/this.parent.zoomWindow.width-(100/this.parent.zoomWindow.offsetX);
-    rw = rw *(100/this.parent.zoomWindow.width);
+     x = x * 100/this.parent.zoomWindow.width-(this.parent.zoomWindow.offsetX*100);
+     rw = rw * 100/this.parent.zoomWindow.width;
 
     this.xr = x + rw;
 
     //var mouseX = this.parent.mouseX;         
+
+    if(this.parent.options.mode=='smartZoom'){
+      typ='zoomEvent';
+    }else{
+      typ='trackEvent';
+    }
+    
     if( this.hovered ){
-      styles.trackEvent.hover( c, x, null, rw, h );
+      styles[typ].hover( c, x, null, rw, h );
       if( thumbLeft ){
-        styles.thumb.left.default( c, x, null, rw, h );
+        styles[typ].thumb.left.default( c, x, null, rw, h );
       }
       if( thumbRight ){
-        styles.thumb.right.default( c, x, null, rw, h );
+        styles[typ].thumb.right.default( c, x, null, rw, h );
       }
     }else{
-      styles.trackEvent.default( c, x, null, rw, h );
+      styles[typ].default( c, x, null, rw, h );
     }
     
   };
@@ -397,26 +400,77 @@
           c.fillRect(x+w-1, 0, 1, h);
           c.fillRect(x, h-1.5, w, 2);
           c.fillRect(x, 0, w, 1);
+      },
+      thumb: {
+        left: {
+          default: function( c, x, y, w, h ){
+            c.fillStyle = '#880';
+            c.fillRect(x, 0, 8, h);
+            c.fillStyle = '#FF0';
+            c.fillRect(x, 0, 1, h);
+          }
+        },
+        right: {
+          default: function( c, x, y, w, h ){
+            c.fillStyle = '#880';
+            c.fillRect(x+w-9, 0, 8, h);
+            c.fillStyle = '#FF0';
+            c.fillRect(x+w-1, 0, 1, h);
+          }
+        }
       }
     },
-    thumb: {
-      left: {
-        default: function( c, x, y, w, h ){
-          c.fillStyle = '#880';
-          c.fillRect(x, 0, 8, h);
-          c.fillStyle = '#FF0';
-          c.fillRect(x, 0, 1, h);
-        }
+    zoomEvent: {
+      default: function( c, x, y, w, h ){
+        //document.body.style.cursor='e-resize';
+        var grad = c.createLinearGradient(0,0,0,h);
+        grad.addColorStop(0,'rgba( 128, 255, 0, 0.3 )');
+        grad.addColorStop(1,'rgba( 128, 255, 0, 0.3 )');
+        c.fillStyle = grad;
+        c.fillRect(x, 1.5, w, h-1.5);
+        c.fillStyle = 'rgba(255,255,255,.125)';
+        c.fillRect(x, 0, w, h/2);          
+        c.lineWidth=0.5;
+        c.fillStyle='#AF0';          
+        c.fillRect(x, 3, 1, h-5);
+        c.fillRect(x+w-1, 3, 1, h-5);
+
       },
-      right: {
-        default: function( c, x, y, w, h ){
-          c.fillStyle = '#880';
-          c.fillRect(x+w-9, 0, 8, h);
-          c.fillStyle = '#FF0';
+      hover: function( c, x, y, w, h ){
+          //document.body.style.cursor='move';
+          c.fillStyle = '#AF0';
+          c.fillRect(x, 1.5, w, h-1.5);          
+          var grad = c.createLinearGradient(0,0,0,h);
+          grad.addColorStop(0,'rgba(128,255,0,.7)');
+          grad.addColorStop(1,'rgba(0,0,0,.25)');
+          c.fillStyle = grad;
+          c.fillRect(x,0, w, h);
+          c.fillStyle='#AF0';
+          c.fillRect(x, 0, 1, h);
           c.fillRect(x+w-1, 0, 1, h);
+          c.fillRect(x, h-1.5, w, 2);
+          c.fillRect(x, 0, w, 1);
+      },
+      thumb: {
+        left: {
+          default: function( c, x, y, w, h ){
+            c.fillStyle = '#480';
+            c.fillRect(x, 0, 16, h);
+            c.fillStyle = '#AF0';
+            c.fillRect(x, 0, 4, h);
+          }
+        },
+        right: {
+          default: function( c, x, y, w, h ){
+            c.fillStyle = '#480';
+            c.fillRect(x+w-17, 0, 16, h);
+            c.fillStyle = '#AF0';
+            c.fillRect(x+w-4, 0, 4, h);
+          }
         }
       }
-    }
+    }   
+
   };
 
 
