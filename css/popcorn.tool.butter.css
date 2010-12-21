@@ -4,24 +4,35 @@ body{
   margin:0;
 }
 
-#container:{}
+#container:{
+  width: 1090px;
+  margin:10px auto;
+}
+
+#page {
+  width: 1090px;
+  margin:10px auto;
+}
 
 video{
   border:1px solid black;
-  width:480px;
-  margin:10px auto;
+  width:530px;
+  height: 299px;
+  /*margin:10px auto;*/
+  /*margin:10px 10px;*/
   display:block;
 }
 
-#tracks, #ui-plugin-tools{
+#ui-tracks, #ui-plugin-tools{
   /*border:1px solid black;*/
-  width:480px;
-  margin:0 auto;
+  width:530px;
+  /*margin:0 auto;*/
+  /*margin:10px 10px;*/
   overflow:hidden;  
 }
 
-.track{
-  width:480px;
+.track {
+  width:530px;
   height:30px;
   margin-bottom:1px;
 }
@@ -35,13 +46,13 @@ video{
       linear,
       left bottom,
       left top,
-      color-stop(0., rgb(64,64,64)),
-      color-stop(0.76, rgb(128,128,128))
+      color-stop(0.76, rgb(255,255,255)),
+      color-stop(0, rgb(204,204,204))
   );
   background: -moz-linear-gradient(
       center bottom,
-      rgb(64,64,64) 0%,
-      rgb(128,128,128) 100%
+      rgb(204,204,204) 0%,
+      rgb(255,255,255) 76%
   );
 }
 
@@ -61,11 +72,19 @@ canvas{
 
 #image-container{position:fixed;top:0;left:0;border:1px dotted red;}
 
-#event-editor .edit-buttons{text-align:right;margin:10px 0;}
-#event-editor label{display:block;text-align:right;margin-bottom:2px;}
+/*#ui-track-event-editor .edit-buttons { text-align:right;margin:10px 0;}*/
+#ui-track-event-editor {
+
+}
+
+#ui-video-track-editor {
+  width: 530px;
+}
+
+#ui-track-event-editor label{display:block;text-align:right;margin-bottom:2px;}
 
 
-#event-editor label  input{
+#ui-track-event-editor label  input{
   width:175px;margin-left:10px;
   border:1px solid #CCC;
   border-radius:6px;
@@ -83,10 +102,24 @@ canvas{
 
 
 
+.ui-pane {
+  width: 530px;
+  float: left;
+  /*border:1px solid;*/
+}
+
+.ui-right {
+  float: right;
+}
 
 
-
-
+.ui-plugin-pane {
+  width: 256px; 
+  height: 256px; 
+  border: 1px solid #b6b6b6;
+  float: left;
+  margin-right: 5px;
+}
 
 
 

@@ -17,7 +17,7 @@
   <script src="popcorn-js/popcorn.js"></script>
   <script src="popcorn-js/plugins/footnote/popcorn.footnote.js"></script>
   <script src="popcorn-js/plugins/webpage/popcorn.webpage.js"></script>
-  <script src="popcorn-js/plugins/googlemap/popcorn.googlemap.js"></script>
+  
   
   
   
@@ -30,72 +30,84 @@
 <body>
   <div id="container">
 
-  <div id="head">
-    <div id="info">
-      <img class="logo" src="img/butter-popcorn-js-logo.png" title="Butter" alt="Butter Logo" />
-      <h1>Butter<h1>
-      <h2>Visual editor for Popcorn.js</h2>
-    </div>
-  </div>
-
-  <div id="page" />
-
-    <video id="video"
-      controls preload="none" 
-      poster="vid/power-rangers.png"> 
-    
-      <source id="mp4"
-        src="vid/power-rangers.mp4"
-        type="video/mp4; codecs='avc1, mp4a'">
-    
-      <source id="ogv"
-        src="vid/power-rangers.ogv"
-        type="video/ogg; codecs='theora, vorbis'"> 
-    
-      <p>Your browser does not support the HTML5 Video element.</p>
-    
-    </video> 
-    
-    <div id="ui-plugin-tools">
-      
-      <select id="ui-plugin-select">
-        <option>Select...</option>
-      </select>
-      
-      <button id="ui-addtrackevent-button">Add Track Event</button>
-      
+    <div id="head">
+      <div id="info">
+        <img class="logo" src="img/butter-popcorn-js-logo.png" title="Butter" alt="Butter Logo" />
+        <h1>Butter<h1>
+        <h2>Visual editor for Popcorn.js</h2>
+      </div>
     </div>
 
+    <div id="page">
 
-<!--
-      <div class="track track1"></div>
-      <div class="track track2"></div>
 
--->
-    <div id="tracks">
-      <div class="track zoom"></div>
-    </div>
-    
-    <div id="image-container"></div>
-    <div id="text-container"></div>  
+      <div id="ui-video-track-editor" class="ui-pane">
 
-    <div id="event-editor" title="Edit Track Event">
-      <ul>
-        <li><a href="#tabs-1">Options</a></li>
-        <li><a href="#tabs-3">About</a></li>
-      </ul>
-      <div id="tabs-1" class="options">
-        <div class="inner">
+        <video id='video'style="display:" 
+          controls 
+          poster="http://media.w3.org/2010/05/sintel/poster.png"> 
+
+          <source id='mp4'
+            src="http://media.w3.org/2010/05/sintel/trailer.mp4"
+            type='video/mp4; codecs="avc1, mp4a"'> 
+
+          <source id='ogv'
+            src="http://media.w3.org/2010/05/sintel/trailer.ogv"
+            type='video/ogg; codecs="theora, vorbis"'> 
+
+          <p>Your user agent does not support the HTML5 Video element.</p> 
+
+        </video>   
+
+        <div id="ui-plugin-tools">
+
+          <select id="ui-plugin-select">
+            <option>Select...</option>
+          </select>
+
+          <button id="ui-addtrackevent-button">Add Track Event</button>
+
+        </div>
+
+
+        <!--
+        <div class="track track1"></div>
+        <div class="track track2"></div>
+
+        -->
+        <div id="ui-tracks">
+          <div class="track zoom"></div>
         </div>
       </div>
-      <div id="tabs-3" class="about">
-        <h3>About</h3>
+      <div id="ui-track-preview" class="ui-pane ui-right">
+
+        <div id="webpage" class="ui-plugin-pane"></div>
+        <div id="footnote" class="ui-plugin-pane"></div>  
+
+      </div>
+      
+      
+    </div>
+  </div>
+  
+
+  <!-- track event editor dialog -->
+
+  <div id="ui-track-event-editor" title="Edit Track Event">
+    <ul>
+      <li><a href="#tabs-1">Options</a></li>
+      <li><a href="#tabs-3">About</a></li>
+    </ul>
+    <div id="tabs-1" class="options">
+      <div class="inner">
       </div>
     </div>
-
-
-  </div>
-  </div>
+    <div id="tabs-3" class="about">
+      <h3>About</h3>
+    </div>
+  </div>  
+  
+  
 </body>
 </html>
 

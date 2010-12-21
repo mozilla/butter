@@ -1,7 +1,7 @@
 /*
   jquery.bocoup.ui.track 
 */
-(function($,global){
+(function($,global ) {
 
   var auto    = 100,
       eResize = 101,
@@ -11,7 +11,7 @@
 
   var trackCount = -1;
 
-  function TrackEvent( props, parent ){
+  function TrackEvent( props, parent ) {
     $.extend(this, props);
     this.parent = parent;
     this.oxl=0;
@@ -25,7 +25,7 @@
     return this;
   };
 
-  TrackEvent.prototype.draw = function trackEvent_draw( thumbLeft, thumbRight ){
+  TrackEvent.prototype.draw = function trackEvent_draw( thumbLeft, thumbRight ) {
     var x   = this.xl = this.oxl + (this.parent.width / this.parent.options.duration * this.inPoint),
         rw  = this.parent.width / this.parent.options.duration * (this.outPoint-this.inPoint),
         h   = this.parent.height,
@@ -38,34 +38,48 @@
     this.xr = x + rw;
 
     //var mouseX = this.parent.mouseX;         
-
-    if(this.parent.options.mode=='smartZoom'){
-      typ='zoomEvent';
-    }else{
-      typ='trackEvent';
-    }
     
-    if( this.hovered ){
-      styles[typ].hover( c, x, null, rw, h );
-      if( thumbLeft ){
-        styles[typ].thumb.left.default( c, x, null, rw, h );
+    
+    
+    type = ( this.parent.options.mode === 'smartZoom' ) ? 'zoomEvent' : 'trackEvent';
+    
+    /*
+    //( this.parent.options.mode === 'smartZoom' && ( type = 'zoomEvent' ) ) || ( type = 'trackEvent' );
+    if ( this.parent.options.mode=='smartZoom' ) {
+      type = 'zoomEvent';
+    } else {
+      type = 'trackEvent';
+    }
+    console.log(type);
+    */
+    
+    
+    
+    if ( this.hovered ) {
+    
+      styles[type].hover( c, x, null, rw, h );
+      
+      if ( thumbLeft ) {
+        styles[type].thumb.left.default( c, x, null, rw, h );
       }
-      if( thumbRight ){
-        styles[typ].thumb.right.default( c, x, null, rw, h );
+      
+      if ( thumbRight ) {
+        styles[type].thumb.right.default( c, x, null, rw, h );
       }
+      
     }else{
-      styles[typ].default( c, x, null, rw, h );
+      styles[type].default( c, x, null, rw, h );
     }
     
   };
 
 
-  $.widget("bocoup.track", {
+  $.widget("butter.track", {
 
     options: {
     },
 
-    _init: function(){
+    _init: function( ) {
 
       this.index = trackCount++;
 
@@ -74,7 +88,7 @@
 
       this.hovering = null;
 
-      this._loadedmetadata= function(e){
+      this._loadedmetadata = function( e ) {
         this.options.duration = e.currentTarget.duration;
       };
     
@@ -82,7 +96,7 @@
         position: 30
       };
     
-      function newCanvas(w, h){
+      function newCanvas( w, h ) {
         var canvas, context;
         canvas = document.createElement('canvas');
         canvas.width = w;
@@ -94,6 +108,7 @@
       this.width = this.element.width();
       this.height = this.element.height();
 
+  console.log(this.width, this.height);
       $.extend(this, {
         context     : newCanvas( this.width, this.height ),
         scrubBar    : { position: 0, width: 3 },
@@ -114,7 +129,7 @@
         }
       });      
 
-      if( this.options.mode == 'smartZoom' ){
+      if ( this.options.mode == 'smartZoom' ) {
         this._inView.push(new TrackEvent({
           inPoint   : 0,
           outPoint  : 100,
@@ -124,7 +139,7 @@
       
       this.element.append( this.context.canvas );
 
-      if( this.options.target ){
+      if ( this.options.target ) {
         this.options.target.bind( "timeupdate.track", jQuery.proxy( this._timeupdate, this ) );
         this.options.target.bind( "loadedmetadata.track", jQuery.proxy( this._loadedmetadata, this ) );
       }
@@ -138,8 +153,8 @@
       
     },
 
-    _style: function( styleObj ){
-      for(var property in styleObj){
+    _style: function( styleObj ) {
+      for(var property in styleObj ) {
         this.context[property] = styleObj[property];
       }
     },
@@ -147,18 +162,18 @@
     // Contains an array of trackEvent objects
     trackEvents: [],
     
-    addTrackEvent: function( props ){
+    addTrackEvent: function( props ) {
       return this._inView.push(new TrackEvent( props, this ));
     },
 
-    zoom: function( props ){
+    zoom: function( props ) {
       this.zoomWindow.offsetX = props.offsetX;
       this.zoomWindow.width = props.width;
       //this.options.duration = this.options.width;
       this._draw();
     },
    
-    _draw: function( thumbLeft, thumbRight ){
+    _draw: function( thumbLeft, thumbRight ) {
       
       $(document).trigger("drawStart.track");
     
@@ -181,7 +196,7 @@
       c.lineWidth = 0;
       c.strokeRect(0.5,0.5,w-1,h-1);
 
-      for(var i=0, l=this._inView.length; i< l; i++){
+      for(var i=0, l=this._inView.length; i< l; i++ ) {
         var iv = this._inView[i];
         iv.draw( thumbLeft, thumbRight );
       }
@@ -193,14 +208,14 @@
       $(document).trigger("drawComplete.track");
     },
 
-    _timeupdate: function(e){
+    _timeupdate: function(e ) {
       this._playBar.position = e.currentTarget.currentTime;
       var pos = this.width / this.options.duration * this._playBar.position,
           c = this.context;
       this._draw();
     },
 
-    _mousemove: function(e){
+    _mousemove: function(e ) {
       var e = e.originalEvent;
       this.mouse.lastX = this.mouse.x;
       this.mouse.lastY = this.mouse.y;
@@ -212,36 +227,36 @@
       
       var thumbLeft = thumbRight = false;
         
-      if(!this.mouse.down){
+      if ( !this.mouse.down ) {
         this.mouse.hovering = null;
-        for(var i=0, l=this._inView.length; i< l; i++){
+        for(var i=0, l=this._inView.length; i< l; i++ ) {
           var iv = this._inView[i];
-          if( iv.xl <= this.mouse.x && iv.xr >= this.mouse.x ){
-            if ( iv.hovered == false ){
+          if ( iv.xl <= this.mouse.x && iv.xr >= this.mouse.x ) {
+            if ( iv.hovered == false ) {
               iv.hovered = true;
               this.mouse.hovering = iv;
             }
             this.mouse.hovering = iv;
             this.mouse.hovering.grabX = this.mouse.x - this.mouse.hovering.xl + 1;
             
-            if( this.mouse.x >= iv.xl && this.mouse.x <= iv.xl + 8 ){
+            if ( this.mouse.x >= iv.xl && this.mouse.x <= iv.xl + 8 ) {
               document.body.style.cursor='w-resize';
               thumbLeft = true;
-            }else if( this.mouse.x >= iv.xr-8 && this.mouse.x <= iv.xr ){
+            }else if ( this.mouse.x >= iv.xr-8 && this.mouse.x <= iv.xr ) {
               document.body.style.cursor='e-resize';
               thumbRight = true;
             }else{
               document.body.style.cursor='move';
             }
           }else{
-            if ( iv.hovered == true ){
+            if ( iv.hovered == true ) {
               iv.hovered = false;
               this.mouse.hovering = null;
               this._draw();
             }
           }
         }
-        if(!this.mouse.hovering){
+        if ( !this.mouse.hovering ) {
           this.mouse.mode = auto;
           document.body.style.cursor='auto';
           return;
@@ -250,63 +265,63 @@
       
       var iv = this.mouse.hovering;
 
-      if( this.mouse.down ){
+      if ( this.mouse.down ) {
               
-        if( this.mouse.mode === auto && this.mouse.hovering ){
-          if( this.mouse.x >= iv.xl && this.mouse.x <= iv.xl + 8 ){
+        if ( this.mouse.mode === auto && this.mouse.hovering ) {
+          if ( this.mouse.x >= iv.xl && this.mouse.x <= iv.xl + 8 ) {
             this.mouse.mode = wResize;
-          }else if( this.mouse.x >= iv.xr-8 && this.mouse.x <= iv.xr ){
+          }else if ( this.mouse.x >= iv.xr-8 && this.mouse.x <= iv.xr ) {
             this.mouse.mode = eResize;
-          }else if( this.mouse.x >= iv.xl+8 && this.mouse.x <= iv.xr - 8 ){
+          }else if ( this.mouse.x >= iv.xl+8 && this.mouse.x <= iv.xr - 8 ) {
             this.mouse.mode = drag;
           }
         }
         
         thumbLeft = thumbRight = false;
         
-        if( this.mouse.mode === eResize ){
+        if ( this.mouse.mode === eResize ) {
           thumbRight = true;
           document.body.style.cursor='e-resize';
           this.mouse.hovering.outPoint = this.options.duration / this.width * (this.mouse.x+4);
-          if(this.options.mode != 'smartZoom'){
+          if ( this.options.mode != 'smartZoom' ) {
             this.mouse.hovering.popcornEvent.end = this.mouse.hovering.outPoint;
           }else{
 
             var linkedTracks = this.options.linkedTracks;              
-            for(var j in linkedTracks){
+            for(var j in linkedTracks ) {
               linkedTracks[j].track( 'zoom', {
                 offsetX: this.mouse.hovering.inPoint,
                 width: this.mouse.hovering.outPoint - this.mouse.hovering.inPoint,
               });
             }
           }
-        }else if( this.mouse.mode === wResize ){
+        }else if ( this.mouse.mode === wResize ) {
           thumbLeft = true;
           document.body.style.cursor='w-resize';
             this.mouse.hovering.inPoint = this.options.duration / this.width * (this.mouse.x-4);
-            if(this.options.mode != 'smartZoom'){
+            if ( this.options.mode != 'smartZoom' ) {
               this.mouse.hovering.popcornEvent.start = this.mouse.hovering.inPoint;
             }else{
               var linkedTracks = this.options.linkedTracks;              
-              for(var j in linkedTracks){
+              for(var j in linkedTracks ) {
                 linkedTracks[j].track( 'zoom', {
                   offsetX: this.mouse.hovering.inPoint,
                   width: this.mouse.hovering.outPoint - this.mouse.hovering.inPoint,
                 });
               }
             }
-        }else if( this.mouse.mode === drag ){
+        }else if ( this.mouse.mode === drag ) {
           document.body.style.cursor='move';
           var diff = this.mouse.hovering.outPoint - this.mouse.hovering.inPoint;
           this.mouse.hovering.inPoint = (this.mouse.x-this.mouse.hovering.grabX) / this.width * this.options.duration;
           this.mouse.hovering.outPoint = this.mouse.hovering.inPoint + diff;
-          if(this.options.mode != 'smartZoom'){
+          if ( this.options.mode != 'smartZoom' ) {
             this.mouse.hovering.popcornEvent.start = this.mouse.hovering.inPoint ;
             this.mouse.hovering.popcornEvent.end = this.mouse.hovering.outPoint ;
           }else{
 
             var linkedTracks = this.options.linkedTracks;              
-            for(var j in linkedTracks){
+            for(var j in linkedTracks ) {
               linkedTracks[j].track( 'zoom', {
                 offsetX: this.mouse.hovering.inPoint,
                 width: this.mouse.hovering.outPoint - this.mouse.hovering.inPoint,
@@ -324,15 +339,15 @@
 
     },
 
-    _mouseupdown: function(e){
-      if(e.type==='mousedown'){
+    _mouseupdown: function(e ) {
+      if ( e.type==='mousedown' ) {
         
         this.mouse.down = true;
         
-      }else if(e.type==='mouseup'){
+      }else if ( e.type==='mouseup' ) {
         this.mouse.mode = auto;
-        if(this.mouse.hovering && this.mouse.down ){
-          if(this.options.mode !== 'smartZoom'){
+        if ( this.mouse.hovering && this.mouse.down ) {
+          if ( this.options.mode !== 'smartZoom' ) {
             this.mouse.hovering.editEvent();
           }
           this.mouse.hovering = null;
@@ -342,11 +357,11 @@
       }
     },
 
-    _hover: function( e ){
-      if(e.type==='mouseenter'){
+    _hover: function( e ) {
+      if ( e.type==='mouseenter' ) {
         this._draw();
-      }else if( e.type==='mouseleave' ){
-        if( this.mouse.hovering ){
+      }else if ( e.type==='mouseleave' ) {
+        if ( this.mouse.hovering ) {
           this.mouse.hovering.hovered = false;
           //this.mouse.hovering = null;
         }
@@ -354,32 +369,32 @@
       }
     },
 
-    myPublicMethod: function(){
+    myPublicMethod: function( ) {
     },
 
-    _setOption: function(){
+    _setOption: function( ) {
     },
 
-    destroy: function(){
+    destroy: function( ) {
     },
 
-    option: function(){
+    option: function( ) {
     },
 
-    setData: function(){
+    setData: function( ) {
     },
 
-    enable: function(){
+    enable: function( ) {
     },
 
-    disable: function(){
+    disable: function( ) {
     }
 
   });
 
   var styles = {
     trackEvent: {
-      default: function( c, x, y, w, h ){
+      default: function( c, x, y, w, h ) {
         //document.body.style.cursor='e-resize';
         var grad = c.createLinearGradient(0,0,0,h);
         grad.addColorStop(0,'rgba( 255, 255, 0, 0.3 )');
@@ -394,7 +409,7 @@
         c.fillRect(x+w-1, 3, 1, h-5);
 
       },
-      hover: function( c, x, y, w, h ){
+      hover: function( c, x, y, w, h ) {
           //document.body.style.cursor='move';
           c.fillStyle = '#FF0';
           c.fillRect(x, 1.5, w, h-1.5);          
@@ -411,7 +426,7 @@
       },
       thumb: {
         left: {
-          default: function( c, x, y, w, h ){
+          default: function( c, x, y, w, h ) {
             c.fillStyle = '#880';
             c.fillRect(x, 0, 8, h);
             c.fillStyle = '#FF0';
@@ -419,7 +434,7 @@
           }
         },
         right: {
-          default: function( c, x, y, w, h ){
+          default: function( c, x, y, w, h ) {
             c.fillStyle = '#880';
             c.fillRect(x+w-9, 0, 8, h);
             c.fillStyle = '#FF0';
@@ -429,7 +444,7 @@
       }
     },
     zoomEvent: {
-      default: function( c, x, y, w, h ){
+      default: function( c, x, y, w, h ) {
         //document.body.style.cursor='e-resize';
         var grad = c.createLinearGradient(0,0,0,h);
         grad.addColorStop(0,'rgba( 128, 255, 0, 0.3 )');
@@ -444,7 +459,7 @@
         c.fillRect(x+w-1, 3, 1, h-5);
 
       },
-      hover: function( c, x, y, w, h ){
+      hover: function( c, x, y, w, h ) {
           //document.body.style.cursor='move';
           c.fillStyle = '#AF0';
           c.fillRect(x, 1.5, w, h-1.5);          
@@ -461,7 +476,7 @@
       },
       thumb: {
         left: {
-          default: function( c, x, y, w, h ){
+          default: function( c, x, y, w, h ) {
             c.fillStyle = '#480';
             c.fillRect(x, 0, 16, h);
             c.fillStyle = '#AF0';
@@ -469,7 +484,7 @@
           }
         },
         right: {
-          default: function( c, x, y, w, h ){
+          default: function( c, x, y, w, h ) {
             c.fillStyle = '#480';
             c.fillRect(x+w-17, 0, 16, h);
             c.fillStyle = '#AF0';

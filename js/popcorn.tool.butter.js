@@ -9,20 +9,20 @@
   
   $(function( ) { 
     
-    var $popcorn = Popcorn('#video'), 
+    var $popcorn = Popcorn("#video"), 
         
-        $pluginSelect = $('#ui-plugin-select'), 
-        $addTrackButton = $('#ui-addtrackevent-button'), 
+        $pluginSelect = $("#ui-plugin-select"), 
+        $addTrackButton = $("#ui-addtrackevent-button"), 
 
-        $editor = $("#event-editor"),
+        $editor = $("#ui-track-event-editor"),
 
-        $tracks = $("#tracks").children("div.track:not(.zoom)"),
+        $tracks = $("#ui-tracks").children("div.track:not(.zoom)"),
 
         selectedEvent = null,
         lastSelectedEvent = null;
         
     
-    $('button').button();
+    $("button").button();
     
     /*
     var p = Popcorn('#video')
@@ -90,7 +90,7 @@
         
       });
       
-      console.log(startWith);
+      console.log("startWith", startWith);
       
       //startWith
 
@@ -109,7 +109,7 @@
         
         className: "track track" + ( $tracks.length + 1 )
         
-      }).prependTo( "#tracks" );
+      }).prependTo( "#ui-tracks" );
       
       //  convert the placeholder into a track, with a track event
       $track.track({
@@ -117,12 +117,16 @@
         duration: 100
       })
       .track( 'addTrackEvent', {
-        inPoint           : 5,
+        inPoint           : 0,
         outPoint          : 10,
         type              : $pluginSelect.children(':selected').val(),
         popcornEvent      : trackEvents[ trackEvents.length - 1 ],
         popcorn           : $popcorn,
-        editEvent         : function( ) {  editTrackEventCallback.call(this); }
+        editEvent         : function() {  
+        
+          editTrackEventCallback.call(this); 
+        
+        }
       });
 
     });
@@ -150,8 +154,10 @@
       var popcornEvent = selectedEvent.popcornEvent,
           manifest = popcornEvent.natives.manifest;
           
-      for( var i in manifest.options  ) { 
-        popcornEvent[i] = selectedEvent.manifestElems[i].val();
+      for( var i in manifest.options ) { 
+        if ( typeof manifest.options[i] === "object" ) {
+          popcornEvent[i] = selectedEvent.manifestElems[i].val();
+        }
       }
       selectedEvent.inPoint = popcornEvent.start;
       selectedEvent.outPoint = popcornEvent.end;
@@ -160,7 +166,7 @@
 
     var editEventCancel = function( ) { 
       var popcornEvent = selectedEvent.popcornEvent;
-      for( var i in selectedEvent.previousValues  ) { 
+      for( var i in selectedEvent.previousValues ) { 
         popcornEvent[i] = selectedEvent.previousValues[i];
       }
       selectedEvent.inPoint = popcornEvent.start;
@@ -170,7 +176,7 @@
     };
    
 
-    var editTrackEventCallback = function editTrackEventCallback( ) { 
+    var editTrackEventCallback = function ( ) { 
 
       //try{ $editor.dialog("close"); }
       //catch(e ) {  if ( console && console.log ) {  console.log(e); } }
@@ -193,46 +199,52 @@
       aboutTab.children("*").remove(); // Rick, not sure if this is good practice here. Any ideas?
       
       $("<h3/>").text(about.name).appendTo(aboutTab),
-      $("<p/>").html("<b>Version:</b> "+about.version).appendTo(aboutTab);
-      $("<p/>").html("<b>Author:</b> "+about.author).appendTo(aboutTab);
-      $("<a/>").html('<b>Website:</b> <a href="'+about.website+'">'+about.website+'</a>').appendTo(aboutTab);
+      $("<p/>").html("<label>Version:</label> "+about.version).appendTo(aboutTab);
+      $("<p/>").html("<label>Author:</label> "+about.author).appendTo(aboutTab);
+      $("<a/>").html('<label>Website:</label> <a href="'+about.website+'">'+about.website+'</a>').appendTo(aboutTab);
       
       optionsTab.children("*").remove(); // Rick, not sure if this is good practice here. Any ideas?
       
       
-      for(var i in options ) { 
-        var opt = options[i],
-            elemType = opt.elem,
-            elemLabel = opt.label
-        ;
-        elem = $("<"+elemType+"/>");
+      for ( var i in options ) { 
         
-        if (  !selectedEvent.manifestElems  ) {  
-          selectedEvent.manifestElems = {}; 
-        }
-        
-        if (  !selectedEvent.previousValues  ) {  
-          selectedEvent.previousValues = {}; 
-        }
-        
-        selectedEvent.manifestElems[i] = elem;
-        
-        if ( lastSelectedEvent != selectedEvent ) { 
-          selectedEvent.previousValues[i] = selectedEvent.popcornEvent[i];
-        }
-        
-        if ( elemType === "input" ) { 
-          label = $("<label/>").attr('for', elemLabel).text(elemLabel);
-          elem.val( selectedEvent.popcornEvent[i] );
-          elem.appendTo(label);
-          label.appendTo(optionsTab);
+        if ( typeof options[i] === "object" ) {
+      
+          var opt = options[i],
+              elemType = opt.elem,
+              elemLabel = opt.label
+          ;
+          
+          elem = $("<"+elemType+"/>");
+          
+          if ( !selectedEvent.manifestElems ) {  
+            selectedEvent.manifestElems = {}; 
+          }
+
+          if ( !selectedEvent.previousValues ) {  
+            selectedEvent.previousValues = {}; 
+          }
+
+          selectedEvent.manifestElems[i] = elem;
+
+          if ( lastSelectedEvent != selectedEvent ) { 
+            selectedEvent.previousValues[i] = selectedEvent.popcornEvent[i];
+          }
+
+          if ( elemType === "input" ) { 
+            label = $("<label/>").attr('for', elemLabel).text(elemLabel);
+            elem.val( selectedEvent.popcornEvent[i] );
+            elem.appendTo(label);
+            label.appendTo(optionsTab);
+          }
         }
       }
 
       lastSelectedEvent = this;
 
       $editor.dialog({
-        title: 'Edit ' + /*_( this.type ).capitalize()*/ + ' Event',
+        width: "400px", 
+        title: 'Edit ' + _( this.type ).capitalize() +  ' Event',
         buttons: {
           //'Delete': editEventDelete,
           'Cancel': editEventCancel,
@@ -251,7 +263,7 @@
       i_trackEvent = trackEventsByStart[i];
       type = i_trackEvent.natives.type;
 
-      if (  type === "image" ) {
+      if ( type === "image" ) {
 
         track1.track( 'addTrackEvent', {
             inPoint           : i_trackEvent.start,
@@ -262,7 +274,7 @@
             editEvent         : function( ) {  editTrackEventCallback.call(this); }
         });
 
-      } else if (  type === "text" ) {
+      } else if ( type === "text" ) {
 
         track2.track('addTrackEvent', {
           inPoint             : i_trackEvent.start,
