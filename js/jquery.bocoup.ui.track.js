@@ -60,12 +60,12 @@
   };
 
 
-	$.widget("bocoup.track", {
+  $.widget("bocoup.track", {
 
-		options: {
-		},
+    options: {
+    },
 
-		_init: function(){
+    _init: function(){
 
       this.index = trackCount++;
 
@@ -77,33 +77,33 @@
       this._loadedmetadata= function(e){
         this.options.duration = e.currentTarget.duration;
       };
-		
+    
       this._playBar = {
         position: 30
       };
-		
-		  function newCanvas(w, h){
-  		  var canvas, context;
-  		  canvas = document.createElement('canvas');
-  		  canvas.width = w;
-  		  canvas.height = h;
+    
+      function newCanvas(w, h){
+        var canvas, context;
+        canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
         context = canvas.getContext('2d');
         return context;
-		  };
-		  
-		  this.width = this.element.width();
-		  this.height = this.element.height();
+      };
+      
+      this.width = this.element.width();
+      this.height = this.element.height();
 
-		  $.extend(this, {
-		    context     : newCanvas( this.width, this.height ),
-		    scrubBar    : { position: 0, width: 3 },
-		    mouse       : { x: 0, y:0, down: false, lastX:0, lastY:0, mode:auto },
-		    zoomWindow  : { offsetX:0, width:100 }
+      $.extend(this, {
+        context     : newCanvas( this.width, this.height ),
+        scrubBar    : { position: 0, width: 3 },
+        mouse       : { x: 0, y:0, down: false, lastX:0, lastY:0, mode:auto },
+        zoomWindow  : { offsetX:0, width:100 }
       });
 
-		  $.extend(this.options, {
-		    style: {
-		      outerBar: {
+      $.extend(this.options, {
+        style: {
+          outerBar: {
             lineWidth: 1,
             strokeStyle: "#888"
           },
@@ -122,7 +122,7 @@
         }, this ));
       }
       
-		  this.element.append( this.context.canvas );
+      this.element.append( this.context.canvas );
 
       if( this.options.target ){
         this.options.target.bind( "timeupdate.track", jQuery.proxy( this._timeupdate, this ) );
@@ -136,7 +136,7 @@
       
       return this;
       
-		},
+    },
 
     _style: function( styleObj ){
       for(var property in styleObj){
@@ -159,21 +159,27 @@
     },
    
     _draw: function( thumbLeft, thumbRight ){
+      
+      $(document).trigger("drawStart.track");
+    
       var c = this.context,
           e = c.canvas,
           w = e.width,
           h = e.height;
 
       var grad = c.createLinearGradient(0,0,0,h);
-      grad.addColorStop(0,'#555');
-      grad.addColorStop(0.5,'#000');
-      grad.addColorStop(1,'#555');
+      
+      grad.addColorStop(0,'#fff');
+      grad.addColorStop(1,'#B6B6B6');
+      //grad.addColorStop(1,'#eee');
+      
+      
       c.fillStyle = grad;
       c.fillRect(0,0,w,h);
 
-      c.strokeStyle = "#000";
-      c.lineWidth = 5;
-      c.strokeRect(1.5,1.5,w-1.5,h-1.5);
+      c.strokeStyle = "#9D9D9D";
+      c.lineWidth = 0;
+      c.strokeRect(0.5,0.5,w-1,h-1);
 
       for(var i=0, l=this._inView.length; i< l; i++){
         var iv = this._inView[i];
@@ -183,6 +189,8 @@
       var pos = this.width / this.options.duration * this._playBar.position;
       c.fillStyle="#F00";
       c.fillRect(pos, 0, 1.5, h);
+      
+      $(document).trigger("drawComplete.track");
     },
 
     _timeupdate: function(e){
@@ -344,30 +352,30 @@
         }
         this._draw();
       }
-		},
-
-		myPublicMethod: function(){
-		},
-
-		_setOption: function(){
-		},
-
-		destroy: function(){
-		},
-
-		option: function(){
-		},
-
-		setData: function(){
     },
 
-		enable: function(){
+    myPublicMethod: function(){
     },
 
-		disable: function(){
+    _setOption: function(){
+    },
+
+    destroy: function(){
+    },
+
+    option: function(){
+    },
+
+    setData: function(){
+    },
+
+    enable: function(){
+    },
+
+    disable: function(){
     }
 
-	});
+  });
 
   var styles = {
     trackEvent: {

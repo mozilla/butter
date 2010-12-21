@@ -466,6 +466,8 @@
       /*if ( !( "timeupdate" in setup ) ) {
         setup.timeupdate = Popcorn.nop;
       }*/        
+      
+      console.log(options);
 
       pluginFn  = function ( options ) {
         
@@ -477,6 +479,8 @@
         options.natives = setup;
         options.natives.type = name;
         options.running = false;
+        
+        
 
         //  Checks for expected properties
         if ( !( "start" in options ) ) {
