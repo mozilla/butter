@@ -40,52 +40,71 @@
 
     <div id="page">
 
-
-      <div id="ui-video-track-editor" class="ui-pane">
-
-        <video id='video'style="display:" 
-          controls 
-          poster="http://media.w3.org/2010/05/sintel/poster.png"> 
-
-          <source id='mp4'
-            src="http://media.w3.org/2010/05/sintel/trailer.mp4"
-            type='video/mp4; codecs="avc1, mp4a"'> 
-
-          <source id='ogv'
-            src="http://media.w3.org/2010/05/sintel/trailer.ogv"
-            type='video/ogg; codecs="theora, vorbis"'> 
-
-          <p>Your user agent does not support the HTML5 Video element.</p> 
-
-        </video>   
-
-        <div id="ui-plugin-tools">
-
-          <select id="ui-plugin-select">
-            <option>Select...</option>
-          </select>
-
-          <button id="ui-addtrackevent-button">Add Track Event</button>
-
-        </div>
-
-
-        <!--
-        <div class="track track1"></div>
-        <div class="track track2"></div>
-
-        -->
-        <div id="ui-tracks">
-          <div class="track zoom"></div>
-        </div>
-      </div>
-      <div id="ui-track-preview" class="ui-pane ui-right">
-
-        <div id="webpage" class="ui-plugin-pane"></div>
-        <div id="footnote" class="ui-plugin-pane"></div>  
-
-      </div>
+      <div id="ui-butter">
       
+        <div class="ui-left-pane ui-pane">
+          <video id='video' 
+            controls 
+            poster="http://media.w3.org/2010/05/sintel/poster.png"> 
+
+            <source id='mp4'
+              src="http://media.w3.org/2010/05/sintel/trailer.mp4"
+              type='video/mp4; codecs="avc1, mp4a"'> 
+
+            <source id='ogv'
+              src="http://media.w3.org/2010/05/sintel/trailer.ogv"
+              type='video/ogg; codecs="theora, vorbis"'> 
+
+            <p>Your user agent does not support the HTML5 Video element.</p> 
+
+          </video>   
+        </div>
+      
+        <div class="ui-center-pane ui-pane">
+
+          <div id="webpage" class="ui-plugin-pane"></div>
+          <div id="footnote" class="ui-plugin-pane"></div>  
+
+        </div>
+
+        <div class="ui-right-pane ui-pane">
+
+          <div id="ui-tools-accordion">
+            <h3><a href="#">Plugins</a></h3>
+            <div>
+              <select id="ui-plugin-select">
+                <option>Select...</option>
+              </select>
+              
+              <button id="ui-addtrackevent-button">Add Track Event</button>
+              
+              
+            </div>
+            <h3><a href="#">Templates</a></h3>
+            <div>
+              <p>nothing yet</p>
+            </div>
+            <h3><a href="#">Cue Points</a></h3>
+            <div>
+              <p>nothing yet</p>
+            </div>
+            <h3><a href="#">Data View</a></h3>
+            <div>
+              <p>nothing yet</p>
+            </div>
+          </div>          
+          
+
+        </div>
+        
+      </div>      
+
+      
+      <hr class="space">
+
+      <div id="ui-tracks">
+        <div class="track zoom"></div>
+      </div>         
       
     </div>
   </div>

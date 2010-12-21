@@ -24,6 +24,8 @@
     
     $("button").button();
     
+    $("#ui-tools-accordion").accordion();
+    
     /*
     var p = Popcorn('#video')
       .image({

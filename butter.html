@@ -30,48 +30,53 @@
   </div>
 
   <div id="page" />
+    
+    <div id="ui-butter">
+      <video id='video'
+        controls preload='none' 
+        poster="vid/power-rangers.png"> 
 
-    <video id='video'
-      controls preload='none' 
-      poster="vid/power-rangers.png"> 
-    
-      <source id='mp4'
-        src="vid/power-rangers.mp4"
-        type="video/mp4; codecs='avc1, mp4a'">
-    
-      <source id='ogv'
-        src="vid/power-rangers.ogv"
-        type='video/ogg; codecs="theora, vorbis"'> 
-    
-      <p>Your browser does not support the HTML5 Video element.</p>
-    
-    </video> 
+        <source id='mp4'
+          src="vid/power-rangers.mp4"
+          type="video/mp4; codecs='avc1, mp4a'">
 
-    <div id="tracks">
-      <div class="track track1"></div>
-      <div class="track track2"></div>
-      <div class="track zoomBar"></div>
+        <source id='ogv'
+          src="vid/power-rangers.ogv"
+          type='video/ogg; codecs="theora, vorbis"'> 
+
+        <p>Your browser does not support the HTML5 Video element.</p>
+
+      </video> 
+
+
+      <div id="image-container"></div>
+      <div id="text-container"></div>  
+
+      <div id="event-editor" title="Edit Track Event">
+        <ul>
+          <li><a href="#tabs-1">Options</a></li>
+          <li><a href="#tabs-3">About</a></li>
+        </ul>
+        <div id="tabs-1" class="options">
+          <div class="inner">
+          </div>
+        </div>
+        <div id="tabs-3" class="about">
+          <h3>About</h3>
+        </div>
+      </div>
+
+    
+      <div id="tracks">
+        <div class="track track1"></div>
+        <div class="track track2"></div>
+        <div class="track zoomBar"></div>
+      </div>
+    
+    
     </div>
-    
-    <div id="image-container"></div>
-    <div id="text-container"></div>  
-
-	  <div id="event-editor" title="Edit Track Event">
-		  <ul>
-			  <li><a href="#tabs-1">Options</a></li>
-			  <li><a href="#tabs-3">About</a></li>
-		  </ul>
-		  <div id="tabs-1" class="options">
-		    <div class="inner">
-		    </div>
-		  </div>
-		  <div id="tabs-3" class="about">
-		    <h3>About</h3>
-		  </div>
-	  </div>
-
-
   </div>
+  
   </div>
 </body>
 </html>

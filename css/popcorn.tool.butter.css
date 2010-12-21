@@ -16,23 +16,25 @@ body{
 
 video{
   border:1px solid black;
-  width:530px;
+  width:350px;
   height: 299px;
   /*margin:10px auto;*/
   /*margin:10px 10px;*/
   display:block;
 }
 
-#ui-tracks, #ui-plugin-tools{
+#ui-tracks{
   /*border:1px solid black;*/
-  width:530px;
+  width:1090px;
   /*margin:0 auto;*/
-  /*margin:10px 10px;*/
+  margin:10px 0px;
   overflow:hidden;  
 }
 
+/*, #ui-plugin-tools*/
+
 .track {
-  width:530px;
+  width:1090px;
   height:30px;
   margin-bottom:1px;
 }
@@ -78,7 +80,7 @@ canvas{
 }
 
 #ui-video-track-editor {
-  width: 530px;
+  
 }
 
 #ui-track-event-editor label{display:block;text-align:right;margin-bottom:2px;}
@@ -98,13 +100,30 @@ canvas{
   ;
 }
 
+#ui-tools-accordion {
+  height: 300px;
+}
 
 
+.ui-left-pane {
+  width: 350px;
+  float:left;
+}
 
+.ui-center-pane {
+  width: 410px;
+  float:left;
+}
+
+
+.ui-right-pane {
+  width: 300px;
+  float:left;
+}
 
 .ui-pane {
-  width: 530px;
-  float: left;
+  
+  margin: 0 10px 0 0;
   /*border:1px solid;*/
 }
 
@@ -114,13 +133,17 @@ canvas{
 
 
 .ui-plugin-pane {
-  width: 256px; 
-  height: 256px; 
-  border: 1px solid #b6b6b6;
   float: left;
+  width: 170px; 
+  height: 170px; 
+  border: 1px solid #b6b6b6;
+  
   margin-right: 5px;
 }
 
+
+hr {background:#ddd;color:#ddd;clear:both;float:none;width:100%;height:.1em;margin:0 0 1.45em;border:none;}
+hr.space {background: transparent;color:transparent;visibility:hidden;}
 
 
 
