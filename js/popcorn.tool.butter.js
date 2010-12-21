@@ -13,13 +13,13 @@
         
         $pluginSelect = $("#ui-plugin-select"), 
         $addTrackButton = $("#ui-addtrackevent-button"), 
-
         $editor = $("#ui-track-event-editor"),
-
         $tracks = $("#ui-tracks").children("div.track:not(.zoom)"),
 
         selectedEvent = null,
-        lastSelectedEvent = null;
+        lastSelectedEvent = null, 
+        
+        activeTracks = {};
         
     
     $("button").button();
@@ -75,6 +75,7 @@
     $addTrackButton.bind( "click", function () {
       
       var $track, lastEventId, trackEvents, 
+          trackType = $pluginSelect.children(':selected').val(), 
           startWith = {
             start   : 5,
             end     : 10,
@@ -84,18 +85,20 @@
       
       // add better checks for this...
       
+      
+      //console.log(Popcorn.manifest[ $pluginSelect.children(':selected').val() ].options);
+      
+      
       _.extend( startWith, {
         
-        target: Popcorn.manifest[ $pluginSelect.children(':selected').val() ].options.target
+        target: Popcorn.manifest[ trackType ].options.target
         
       });
       
-      console.log("startWith", startWith);
+      //console.log("startWith", startWith);
       
-      //startWith
-
       //  create an empty track event
-      $popcorn[ $pluginSelect.children(':selected').val() ]({
+      $popcorn[ trackType ]({
         start   : 5,
         end     : 10,
         src     : ''
@@ -104,22 +107,35 @@
       lastEventId = $popcorn.getLastTrackEventId();
       trackEvents = $popcorn.getTrackEvents();
       
-      //  draw a new track placeholder
-      $track = $("<div/>", {
-        
-        className: "track track" + ( $tracks.length + 1 )
-        
-      }).prependTo( "#ui-tracks" );
       
-      //  convert the placeholder into a track, with a track event
-      $track.track({
-        target  : $('#video'),
-        duration: 100
-      })
-      .track( 'addTrackEvent', {
+      
+      if ( !activeTracks[ trackType ] ) {
+        //  draw a new track placeholder
+        $track = $("<div/>", {
+
+          className: "track track" + ( $tracks.length + 1 )
+
+        }).prependTo( "#ui-tracks" );
+
+        //  convert the placeholder into a track, with a track event
+        $track.track({
+          target: $('#video'),
+          duration: $popcorn.duration()
+        });
+        
+        activeTracks[ trackType ] = $track;
+        
+      } else {
+        
+        $track = activeTracks[ trackType ];
+      
+      }
+      
+      
+      $track.track( 'addTrackEvent', {
         inPoint           : 0,
         outPoint          : 10,
-        type              : $pluginSelect.children(':selected').val(),
+        type              : trackType,
         popcornEvent      : trackEvents[ trackEvents.length - 1 ],
         popcorn           : $popcorn,
         editEvent         : function() {  
@@ -244,7 +260,7 @@
 
       $editor.dialog({
         width: "400px", 
-        title: 'Edit ' + _( this.type ).capitalize() +  ' Event',
+        title: 'Edit ' + _( this.type ).capitalize(),
         buttons: {
           //'Delete': editEventDelete,
           'Cancel': editEventCancel,

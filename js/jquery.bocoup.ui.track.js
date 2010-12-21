@@ -43,17 +43,6 @@
     
     type = ( this.parent.options.mode === 'smartZoom' ) ? 'zoomEvent' : 'trackEvent';
     
-    /*
-    //( this.parent.options.mode === 'smartZoom' && ( type = 'zoomEvent' ) ) || ( type = 'trackEvent' );
-    if ( this.parent.options.mode=='smartZoom' ) {
-      type = 'zoomEvent';
-    } else {
-      type = 'trackEvent';
-    }
-    console.log(type);
-    */
-    
-    
     
     if ( this.hovered ) {
     
@@ -93,7 +82,7 @@
       };
     
       this._playBar = {
-        position: 30
+        position: 0
       };
     
       function newCanvas( w, h ) {
@@ -108,7 +97,7 @@
       this.width = this.element.width();
       this.height = this.element.height();
 
-  console.log(this.width, this.height);
+      //console.log(this.width, this.height);
       $.extend(this, {
         context     : newCanvas( this.width, this.height ),
         scrubBar    : { position: 0, width: 3 },
@@ -154,8 +143,8 @@
     },
 
     _style: function( styleObj ) {
-      for(var property in styleObj ) {
-        this.context[property] = styleObj[property];
+      for ( var prop in styleObj ) {
+        this.context[prop] = styleObj[prop];
       }
     },
  
@@ -202,6 +191,7 @@
       }
 
       var pos = this.width / this.options.duration * this._playBar.position;
+      
       c.fillStyle="#F00";
       c.fillRect(pos, 0, 1.5, h);
       

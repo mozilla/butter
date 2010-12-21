@@ -371,7 +371,7 @@
  *
  * http://docs.jquery.com/UI/Autocomplete#theming
  */
-.ui-autocomplete { position: absolute; z-index: 2 !important; cursor: default; background: #FFFFFF; border: 0px none !important; padding: 0px !important; -moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px; -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); }	
+.ui-autocomplete { position: absolute; z-index: 2 !important; cursor: default; background: #FFFFFF; border: 0px none !important; padding: 0px !important; -moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px; -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); } 
 .ui-autocomplete-loading { background: white url('images/ui-anim_basic_16x16.gif') right center no-repeat; }
 /* workarounds */
 * html .ui-autocomplete { width:1px; } /* without this, the menu expands to 100% in IE6 */
@@ -386,39 +386,39 @@
  * http://docs.jquery.com/UI/Menu#theming
  */
 .ui-menu {
-	list-style:none;
-	padding: 2px;
-	margin: 0;
-	display:block;
-	float: left;
+  list-style:none;
+  padding: 2px;
+  margin: 0;
+  display:block;
+  float: left;
 }
 .ui-menu .ui-menu {
-	margin-top: -3px;
+  margin-top: -3px;
 }
 .ui-menu .ui-menu-item {
-	margin:0;
-	padding: 0;
-	zoom: 1;
-	float: left;
-	clear: left;
-	width: 100%;
+  margin:0;
+  padding: 0;
+  zoom: 1;
+  float: left;
+  clear: left;
+  width: 100%;
 }
 .ui-menu .ui-menu-item a {
-	text-decoration:none;
-	display:block;
-	border: 0px none;
-	padding:.2em .4em;
-	line-height:1.5;
-	-moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px;
-	zoom:1;
+  text-decoration:none;
+  display:block;
+  border: 0px none;
+  padding:.2em .4em;
+  line-height:1.5;
+  -moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px;
+  zoom:1;
 }
 .ui-menu .ui-menu-item a.ui-state-hover,
 .ui-menu .ui-menu-item a.ui-state-active {
-	background: #5f83b9;
-	color: #FFFFFF;
-	text-shadow: 0px 1px 1px #234386;
-	font-weight: normal;
-	margin: -1px;
+  background: #5f83b9;
+  color: #FFFFFF;
+  text-shadow: 0px 1px 1px #234386;
+  font-weight: normal;
+  margin: -1px;
 }
 
 /*
@@ -502,6 +502,11 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-dialog .ui-dialog-buttonpane button { float: right; margin: .5em .4em .5em 0; cursor: pointer; padding: .2em .6em .3em .6em; line-height: 1.4em; width:auto; overflow:visible; background: transparent !important; border: 0px none; }
 .ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
 .ui-draggable .ui-dialog-titlebar { cursor: move; }
+
+/* custom */
+.ui-dialog .ui-dialog-buttonpane button { float: right; margin: .5em .4em .5em 0; cursor: pointer; padding: .2em .3em .3em .3em; line-height: 1.4em; width:auto; overflow:visible; background: transparent !important; border: 0px none; }
+
+
 
 /*
  * jQuery UI Slider @VERSION
