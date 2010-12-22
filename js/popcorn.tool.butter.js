@@ -15,6 +15,7 @@
         $pluginSelectList = $("#ui-plugin-select-list"), 
         $addTrackButton = $("#ui-addtrackevent-button"), 
         $editor = $("#ui-track-event-editor"),
+        $uitracks = $("#ui-tracks"), 
         $tracks = $("#ui-tracks").children("div.track:not(.zoom)"),
 
         selectedEvent = null,
@@ -25,7 +26,11 @@
     
     $("button").button();
     
-    $("#ui-tools-accordion").accordion();
+    $("#ui-tools-accordion,#ui-track-details").accordion();
+
+  
+
+    
     
     /*
     var p = Popcorn('#video')
@@ -65,7 +70,7 @@
       this.addTrackEvent = function () {
 
         var $track, lastEventId, trackEvents, 
-            trackType = $(this).attr('id'), 
+            trackType = $(this).attr("id"), 
             startWith = {
               start: 5,
               end: 10,
@@ -97,8 +102,9 @@
 
           //  draw a new track placeholder
           $track = $("<div/>", {
-
-            className: "track track" + ( $tracks.length + 1 )
+            
+            "title": trackType, 
+            className: "span-21 last track track" + ( $tracks.length + 1 )
 
           }).prependTo( "#ui-tracks" );
 
@@ -107,7 +113,13 @@
             target: $('#video'),
             duration: $popcorn.duration()
           });
-
+          
+          /*
+          $track.tooltip({
+            offset: "15 15"
+          });
+          */
+          
           //  cache the track widget
           activeTracks[ trackType ] = $track;
 
@@ -127,7 +139,7 @@
           popcorn           : $popcorn,
           editEvent         : function() {  
 
-            editTrackEvent.call(this); 
+            TrackEditor.editTrackEvent.call(this); 
 
           }
         });
@@ -251,16 +263,49 @@
     
     //  Load plugins to ui-plugin-select 
     _.each( Popcorn.registry, function ( plugin, v ) {
-
+      
+      
+      // todo: convert to templates
       var $li = $("<li/>", {
         
         id: plugin.type, 
-        text: _( plugin.type ).capitalize()
+        className: "span-4 select-li clickable",
+        html: "<h3><img class='icon' src='img/dummy.png'> " + _( plugin.type ).capitalize() + "</h3>"
         
       }).appendTo( "#ui-plugin-select-list" );      
-      
-      
-      $li.bind( "click", TrackEditor.addTrackEvent );
+
+    });
+
+    $pluginSelectList.delegate( "li", "click", function (event) {
+
+      TrackEditor.addTrackEvent.call(this, event);
+
+    });
+    
+
+    // this is awful  
+    $("#ui-plugin-select-list li")
+      .hover(function () {
+        $(this).animate({ backgroundColor: "#ffff7e" }, 200);
+      }, 
+      function () {
+        $(this).animate({ backgroundColor: "#FFFFFF" }, 200);
+    });  
+    
+    
+    $uitracks.disableSelection();
+    
+    $("#ui-scrubber").draggable({ 
+      axis: "x", 
+      drag: function (event, ui) {
+        
+        var scrubPosition = ui.offset.left - $uitracks.position().left, 
+            updateTo = $popcorn.duration() / $uitracks.width() * scrubPosition;
+        
+        
+        
+        $popcorn.currentTime( updateTo );
+      }
     });
     
     

@@ -1,17 +1,13 @@
-/*
+
 $(function () {
   
   
   
   //  Select a track event type
-  $('#ui-plugin-select').val( "footnote" ).trigger("change");
+  $('#ui-plugin-select-list li').eq(0).trigger("click");
   
-  //  Click to add a track event
-  setTimeout(function () {
-    $("#ui-addtrackevent-button").trigger("click");
-  }, 250);
+
 
 
 
 });
-*/

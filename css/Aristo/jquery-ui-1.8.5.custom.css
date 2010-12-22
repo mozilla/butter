@@ -357,7 +357,8 @@
 .ui-accordion .ui-accordion-header a { display: block; font-size: 12px; padding: .5em .5em .5em .7em; font-weight: bold; color:#4f4f4f; text-shadow: 0px 1px 0px rgba(255,255,255,0.7); }
 .ui-accordion-icons .ui-accordion-header a { padding-left: 24px; }
 .ui-accordion .ui-accordion-header .ui-icon { position: absolute; left: .5em; top: 50%; margin-top: -7px; }
-.ui-accordion .ui-accordion-content { background: #f8fcfe; padding: 1em 2.2em; border-top: 0; margin-top: -2px; position: relative; top: 1px; margin-bottom: 2px; overflow: auto; display: none; zoom: 1; font-size: 11px; border-color: #749aaf; }
+/*.ui-accordion .ui-accordion-content { background: #f8fcfe; padding: 1em 1em; border-top: 0; margin-top: -2px; position: relative; top: 1px; margin-bottom: 2px; overflow: auto; display: none; zoom: 1; font-size: 11px; border-color: #749aaf; }*/
+.ui-accordion .ui-accordion-content { background: #fff; padding: 1em 1em; border-top: 0; margin-top: -2px; position: relative; top: 1px; margin-bottom: 2px; overflow: auto; display: none; zoom: 1; font-size: 11px; border-color: #749aaf; }
 .ui-accordion .ui-accordion-content-active { display: block; }
 .ui-accordion .ui-accordion-header, .ui-accordion .ui-accordion-content { -moz-border-radius: 0px; -webkit-border-radius: 0px; border-radius: 0px; }
 .ui-accordion .ui-state-active {  }
@@ -647,3 +648,6 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  */
 .ui-progressbar { height: 12px; text-align: left; background: url(images/progress_bar.gif) 0px -14px repeat-x; }
 .ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; background: url(images/progress_bar.gif) 0px 0px repeat-x; }
+
+
+

@@ -117,6 +117,8 @@
           }
         }
       });      
+      
+      
 
       if ( this.options.mode == 'smartZoom' ) {
         this._inView.push(new TrackEvent({
@@ -190,10 +192,11 @@
         iv.draw( thumbLeft, thumbRight );
       }
 
-      var pos = this.width / this.options.duration * this._playBar.position;
+      //var pos = this.width / this.options.duration * this._playBar.position;
       
-      c.fillStyle="#F00";
-      c.fillRect(pos, 0, 1.5, h);
+      //c.fillStyle = "#F00";
+      //c.fillRect(pos, 0, 1.5, h);
+            
       
       $(document).trigger("drawComplete.track");
     },
@@ -206,6 +209,7 @@
     },
 
     _mousemove: function(e ) {
+      
       var e = e.originalEvent;
       this.mouse.lastX = this.mouse.x;
       this.mouse.lastY = this.mouse.y;
@@ -330,14 +334,21 @@
     },
 
     _mouseupdown: function(e ) {
-      if ( e.type==='mousedown' ) {
+    
+      
+      if ( e.type === "mousedown" ) {
         
         this.mouse.down = true;
         
-      }else if ( e.type==='mouseup' ) {
+        return;
+      }
+      
+      
+      if ( e.type === "mouseup" ) {
+      
         this.mouse.mode = auto;
         if ( this.mouse.hovering && this.mouse.down ) {
-          if ( this.options.mode !== 'smartZoom' ) {
+          if ( this.options.mode !== "smartZoom" ) {
             this.mouse.hovering.editEvent();
           }
           this.mouse.hovering = null;
@@ -348,13 +359,23 @@
     },
 
     _hover: function( e ) {
-      if ( e.type==='mouseenter' ) {
-        this._draw();
-      }else if ( e.type==='mouseleave' ) {
+      
+      //console.log(e);
+    
+      if ( e.type === "mouseenter" ) {
+        
+        //this._draw();
+        
+        return;
+      }
+      
+      if ( e.type === "mouseleave" ) {
         if ( this.mouse.hovering ) {
           this.mouse.hovering.hovered = false;
-          //this.mouse.hovering = null;
         }
+        
+        document.body.style.cursor='auto';
+        
         this._draw();
       }
     },
