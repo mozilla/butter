@@ -305,6 +305,9 @@
     });
     
     
+    $("body").disableSelection();
+    
+    
   });
 
 })(jQuery, _);
