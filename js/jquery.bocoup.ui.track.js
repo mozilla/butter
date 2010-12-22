@@ -192,11 +192,14 @@
         iv.draw( thumbLeft, thumbRight );
       }
 
-      //var pos = this.width / this.options.duration * this._playBar.position;
+      var pos = this.width / this.options.duration * this._playBar.position;
       
       //c.fillStyle = "#F00";
       //c.fillRect(pos, 0, 1.5, h);
-            
+      
+      $("#ui-scrubber").css({
+        left: pos + $("#ui-tracks").position().left
+      });
       
       $(document).trigger("drawComplete.track");
     },
