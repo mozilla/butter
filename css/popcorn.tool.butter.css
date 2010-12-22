@@ -1,5 +1,6 @@
 body {
   -webkit-user-select: none;
+  -moz-user-select: none;
 
 }
 
@@ -15,10 +16,11 @@ video {
 
 #ui-tracks{
   /*border:1px solid black;*/
-  width:790px;
+  height:300px;
+  width:830px;
   /*margin:0 auto;*/
   /*margin:10px 0px;*/
-  overflow:hidden;  
+  overflow-y:scroll;  
 }
 
 /*, #ui-plugin-tools*/
@@ -26,7 +28,9 @@ video {
 .track {
   width:790px;
   height:36px;
-  margin-bottom:1px;
+  bottom:0px;
+  position:relative;
+  /*margin-bottom:1px;*/
 }
 
 #head{

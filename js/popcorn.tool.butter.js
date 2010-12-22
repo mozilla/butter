@@ -17,6 +17,7 @@
         $editor = $("#ui-track-event-editor"),
         $uitracks = $("#ui-tracks"), 
         $tracks = $("#ui-tracks").children("div.track:not(.zoom)"),
+        $scrubber = $("#ui-scrubber"), 
 
         selectedEvent = null,
         lastSelectedEvent = null, 
@@ -294,15 +295,13 @@
     
     $uitracks.disableSelection();
     
-    $("#ui-scrubber").draggable({ 
+    $scrubber.draggable({ 
       axis: "x", 
       containment: "#ui-tracks",  
       drag: function (event, ui) {
         
         var scrubPosition = ui.offset.left - $uitracks.position().left, 
             updateTo = $popcorn.duration() / $uitracks.width() * scrubPosition;
-        
-        
         
         $popcorn.currentTime( updateTo );
       }
@@ -315,7 +314,7 @@
     $(document).bind( "addTrackComplete.track" , function () {
       
       
-      $("#ui-scrubber").css({
+      $scrubber.css({
         height: $uitracks.height()
       })
     });
