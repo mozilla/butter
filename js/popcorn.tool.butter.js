@@ -98,7 +98,7 @@
 
         //  check for existing tracks of this type
         //  if no existing tracks, create them
-        if ( !activeTracks[ trackType ] ) {
+        //if ( !activeTracks[ trackType ] ) {
 
           //  draw a new track placeholder
           $track = $("<div/>", {
@@ -118,14 +118,14 @@
           $track.prepend('<span class="track-label">'+trackType+'</span>');
           
           //  cache the track widget
-          activeTracks[ trackType ] = $track;
+          //activeTracks[ trackType ] = $track;
 
-        } else {
+        //} else {
 
           //  if a track of this type exists
-          $track = activeTracks[ trackType ];
+          //$track = activeTracks[ trackType ];
 
-        }
+        //}
 
 
         $track.track( 'addTrackEvent', {
@@ -140,6 +140,9 @@
 
           }
         });
+        
+        
+        $(document).trigger( "addTrackComplete.track" );
 
       };
 
@@ -293,6 +296,7 @@
     
     $("#ui-scrubber").draggable({ 
       axis: "x", 
+      containment: "#ui-tracks",  
       drag: function (event, ui) {
         
         var scrubPosition = ui.offset.left - $uitracks.position().left, 
@@ -307,6 +311,14 @@
     
     $("body").disableSelection();
     
+    
+    $(document).bind( "addTrackComplete.track" , function () {
+      
+      
+      $("#ui-scrubber").css({
+        height: $uitracks.height()
+      })
+    });
     
   });
 
