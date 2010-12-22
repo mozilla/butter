@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Butter Layout</title>
+
+    
+
+
+    <link href="css/screen-orig.css" rel="stylesheet"  type="text/css" media="screen, projection">
+    <link href="css/print.css" rel="stylesheet"  type="text/css" media="print">
+    
+    
+    <link href="css/popcorn.tool.butter.css" rel="stylesheet" type="text/css">
+    <link href="css/Aristo/jquery-ui-1.8.5.custom.css" rel="stylesheet" type="text/css">
+    
+
+    
+    
+    
+    
+    
+    
+    <script src="js/underscore.min.js"></script>
+    
+    <!--
+    <script src="js/labjs/LAB.js"></script>
+    <script>
+      
+      $LAB.script("js/jquery.js").wait()
+            .script("js/jquery-ui.min.js").wait()
+            .script("js/jquery.bocoup.ui.track.js")
+          .script("popcorn-js/popcorn.js").wait()
+            .script("popcorn-js/plugins/footnote/popcorn.footnote.js")
+            .script("popcorn-js/plugins/webpage/popcorn.webpage.js")
+            .script("js/popcorn.tool.butter.js");
+            //.script("js/popcorn.tool.butter-ui-test.js")
+            
+    
+    </script>
+    -->
+
+    <script src="js/underscore.min.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+
+    <script src="js/jquery.bocoup.ui.track.js"></script>
+
+    <script src="popcorn-js/popcorn.js"></script>
+    <script src="popcorn-js/plugins/footnote/popcorn.footnote.js"></script>
+    <script src="popcorn-js/plugins/webpage/popcorn.webpage.js"></script>
+    <script src="js/popcorn.tool.butter.js"></script>
+
+
+    <script src="js/popcorn.tool.butter-ui-test.js" ></script>  
+
+
+
+
+
+
+  </head>
+  <body>
+  
+  
+    <div class="container showgrid">
+    
+      <div id="head">
+        <img class="logo" src="img/butter.png" title="Butter" alt="Butter Logo">
+        
+        <h1>Butter</h1>
+      </div>    
+      
+      <hr class="space" >
+      
+      
+      <div id="ui-video-editor" class="span-26">
+        
+        
+        <!-- left pane -->
+        <div id="ui-panel-video" class="span-9">
+        
+          <video id='video' 
+            controls 
+            poster="http://media.w3.org/2010/05/sintel/poster.png"> 
+
+            <source id='mp4'
+              src="http://media.w3.org/2010/05/sintel/trailer.mp4"
+              type='video/mp4; codecs="avc1, mp4a"'> 
+
+            <source id='ogv'
+              src="http://media.w3.org/2010/05/sintel/trailer.ogv"
+              type='video/ogg; codecs="theora, vorbis"'> 
+
+            <p>Your user agent does not support the HTML5 Video element.</p> 
+
+          </video>   
+          
+        </div>           
+        
+        <!-- center pane -->
+        
+        <div id="ui-panel-preview" class="span-12">
+          
+          
+          <div id="webpage" class="ui-plugin-pane span-6"></div>
+          <div id="footnote" class="ui-plugin-pane span-6 last"></div>  
+
+        </div>        
+        
+        <!-- right pane -->
+        
+        <div id="ui-panel-preview" class="span-5 last">
+
+          <div id="ui-tools-accordion">
+            <h3><a href="#">Plugins</a></h3>
+            <div>
+              
+              
+                <ul id="ui-plugin-select-list" class="select-ul">
+                </ul>
+
+
+
+
+              <!--
+              <select id="ui-plugin-select">
+                <option>Select...</option>
+              </select>
+
+              <button id="ui-addtrackevent-button">Add Track Event</button>
+              -->
+              
+            </div>
+            <h3><a href="#">Templates</a></h3>
+            <div>
+              <p>nothing yet</p>
+            </div>
+            <h3><a href="#">Cue Points</a></h3>
+            <div>
+              <p>nothing yet</p>
+            </div>
+            <h3><a href="#">Data View</a></h3>
+            <div>
+              <p>nothing yet</p>
+            </div>
+          </div>           
+        
+        
+        </div>
+      
+      </div>
+      <!-- ui-video-editor -->
+      
+      <hr class="space">
+      
+      <div class="span-21">
+        
+        <div id="ui-scrubber"></div>
+        
+        <div id="ui-tracks">
+        
+        
+          <div class="track zoom"></div>
+        </div>       
+      
+        
+      
+      </div>
+      <div class="span-5 last">
+        
+        <div id="ui-track-details">
+          <h3><a href="#">Edit</a></h3>
+          <div>
+
+
+
+          </div>
+        </div>     
+
+      
+      
+      </div>
+    
+    
+    
+    </div>
+
+
+    <div id="ui-track-event-editor" title="Edit Track Event">
+      <ul>
+        <li><a href="#tabs-1">Options</a></li>
+        <li><a href="#tabs-3">About</a></li>
+      </ul>
+      <div id="tabs-1" class="options">
+        <div class="inner">
+        </div>
+      </div>
+      <div id="tabs-3" class="about">
+        <h3>About</h3>
+      </div>
+    </div>  
+
+  </body>
+</html>

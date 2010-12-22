@@ -113,12 +113,9 @@
             target: $('#video'),
             duration: $popcorn.duration()
           });
+
           
-          /*
-          $track.tooltip({
-            offset: "15 15"
-          });
-          */
+          $track.prepend('<span class="track-label">'+trackType+'</span>');
           
           //  cache the track widget
           activeTracks[ trackType ] = $track;
@@ -153,8 +150,7 @@
 
         selectedEvent = this;    
 
-        console.log(this);
-
+        
         var manifest    = selectedEvent.popcornEvent.natives.manifest,
             about       = manifest.about,
             aboutTab    = $editor.find(".about"),
