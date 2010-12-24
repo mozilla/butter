@@ -27,28 +27,27 @@
    *
    */
   Popcorn.plugin( "webpage" , (function(){
-      
-    var exists, iframe, temp;
-    iframe  = document.createElement( 'iframe' ),
-    iframe.setAttribute('width', "100%");
-    iframe.setAttribute('height', "100%");
-    
-    
+     
     return {
       manifest: {
         about:{
           name: "Popcorn Webpage Plugin",
           version: "0.1",
-          author: "Anna Sobiepanek",
-          website: ""
+          author: "@annasob",
+          website: "annasob.wordpress.com"
         },
-        options: {
-          start   : { elem:'input', type:'text', label:'In' },
-          end     : { elem:'input', type:'text', label:'Out' },
-          src    : { elem:'input', type:'text', label:'Url' }, 
-          target  : 'image-container'
+        options:{
+          id     : {elem:'input', type:'text', label:'Id'},
+          start  : {elem:'input', type:'text', label:'In'},
+          end    : {elem:'input', type:'text', label:'Out'},
+          src    : {elem:'input', type:'text', label:'Src'},
+          target : 'iframe-container'
         }
-      },        
+      },
+      _setup : function( options ) {
+
+        
+      },
       /**
        * @member webpage 
        * The start function will be executed when the currentTime 
@@ -56,10 +55,18 @@
        * options variable
        */
       start: function(event, options){
-        temp    = document.getElementById( options.target || "webpage" );
-        iframe.id  = options.id;
-        iframe.src = options.src;
-        temp.appendChild(iframe);
+        options.target    = document.getElementById( options.target );
+        // make an iframe 
+        options._iframe  = document.createElement( 'iframe' ),
+        options._iframe.setAttribute('width', "100%");
+        options._iframe.setAttribute('height', "100%");
+        options._iframe.id  = options.id;
+        options._iframe.src = options.src;
+        options._iframe.style.display = 'none';
+        // add the hidden iframe to the DON
+        options.target.appendChild(options._iframe);      
+        // make the iframe visible
+        options._iframe.style.display = 'inline';
       },
       /**
        * @member webpage 
@@ -68,7 +75,8 @@
        * options variable
        */
       end: function(event, options){
-        temp.removeChild(iframe);
+        // make the iframe invisible
+        options._iframe.style.display = 'none';
       }
       
     };

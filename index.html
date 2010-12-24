@@ -12,34 +12,30 @@
     <link href="css/print.css" rel="stylesheet"  type="text/css" media="print">
     
     
-    <link href="css/popcorn.tool.butter.css" rel="stylesheet" type="text/css">
+    
     <link href="css/Aristo/jquery-ui-1.8.5.custom.css" rel="stylesheet" type="text/css">
     
-
+    <link href="css/popcorn.tool.butter.css" rel="stylesheet"  type="text/css" media="screen, projection">
     
     
-    
-    
-    
-    
+    <!--    
     <script src="js/underscore.min.js"></script>
-    
-    <!--
     <script src="js/labjs/LAB.js"></script>
     <script>
       
-      $LAB.script("js/jquery.js").wait()
-            .script("js/jquery-ui.min.js").wait()
+      $LAB.script("js/jquery.js")
+            .script("js/jquery-ui.min.js")
             .script("js/jquery.bocoup.ui.track.js")
           .script("popcorn-js/popcorn.js").wait()
             .script("popcorn-js/plugins/footnote/popcorn.footnote.js")
             .script("popcorn-js/plugins/webpage/popcorn.webpage.js")
-            .script("js/popcorn.tool.butter.js");
-            //.script("js/popcorn.tool.butter-ui-test.js")
+            .script("js/popcorn.tool.butter.js")
+            .script("js/popcorn.tool.butter-ui-test.js")
             
     
     </script>
     -->
+    
 
     <script src="js/underscore.min.js"></script>
     <script src="js/jquery.js"></script>
@@ -50,12 +46,13 @@
     <script src="popcorn-js/popcorn.js"></script>
     <script src="popcorn-js/plugins/footnote/popcorn.footnote.js"></script>
     <script src="popcorn-js/plugins/webpage/popcorn.webpage.js"></script>
+    <script src="popcorn-js/plugins/googlemap/popcorn.googlemap.js"></script>
     <script src="js/popcorn.tool.butter.js"></script>
 
 
     <script src="js/popcorn.tool.butter-ui-test.js" ></script>  
 
-
+    
 
 
 
@@ -80,9 +77,9 @@
         
         <!-- left pane -->
         <div id="ui-panel-video" class="span-9">
-        
+          
+          
           <video id='video' 
-            controls 
             poster="http://media.w3.org/2010/05/sintel/poster.png"> 
 
             <source id='mp4'
@@ -97,6 +94,49 @@
 
           </video>   
           
+          <!--
+          <video id='video' 
+            controls 
+            poster=""> 
+            
+            <source id='ogv'
+              src="http://webmademovies.etherworks.ca/popcorndemo/wmmjuly6.ogv"
+              type='video/ogg; codecs="theora, vorbis"'> 
+
+            <p>Your user agent does not support the HTML5 Video element.</p> 
+
+          </video>   
+          -->
+          
+          
+          <div id="ui-video-controls" class="span-9 last">
+            <button>
+              <span data-control="play" class="ui-icon ui-icon-play"></span>
+            </button>
+            <button>
+              <span data-control="pause" class="ui-icon ui-icon-pause"></span>
+            </button>
+            <button>
+              <span data-control="seek" data-opt="first" class="ui-icon ui-icon-seek-first"></span>
+            </button>
+            <button>
+              <span data-control="seek" data-opt="prev" class="ui-icon ui-icon-seek-prev"></span>
+            </button>
+            <button>
+              <span data-control="seek" data-opt="next" class="ui-icon ui-icon-seek-next"></span>
+            </button>
+            <button>
+              <span data-control="seek" data-opt="end" class="ui-icon ui-icon-seek-end"></span>
+            </button>
+            
+            <input type="text" id="current-time" name="current-time" class="video-prop small-input text-right" value="" />
+
+            <button>
+              <span data-control="seek" data-opt="linked:current-time"  class="ui-icon ui-icon-circle-arrow-e"></span>
+            </button>
+                        
+          </div>
+
         </div>           
         
         <!-- center pane -->
@@ -104,8 +144,11 @@
         <div id="ui-panel-preview" class="span-12">
           
           
-          <div id="webpage" class="ui-plugin-pane span-6"></div>
-          <div id="footnote" class="ui-plugin-pane span-6 last"></div>  
+          <div id="iframe-container" class="ui-plugin-pane span-12 last" style="height:125px"></div>
+          <hr class="space">
+          <div id="map-container" class="ui-plugin-pane span-12 last" style="height:125px"></div>
+          <hr class="space">
+          <div id="footnote-container" class="ui-plugin-pane span-12 last" style="height:52px"></div>  
 
         </div>        
         
@@ -143,7 +186,7 @@
             </div>
             <h3><a href="#">Data View</a></h3>
             <div>
-              <p>nothing yet</p>
+              <textarea id="data-view" style="width:150px;height:150px"></textarea>
             </div>
           </div>           
         
@@ -157,13 +200,18 @@
       
       <div class="span-21">
         
-        <div id="ui-scrubber"></div>
+        
+        <div id="ui-scrubber-handle">
+          <div id="ui-scrubber"></div>
+        </div>
         
         
         
         <div id="ui-tracks">
-          <div class="track zoom"></div>
+          
         </div>       
+        
+        <!-- <div class="track zoom"></div> -->
       
         
       
@@ -173,7 +221,7 @@
         <div id="ui-track-details">
           <h3><a href="#">Edit</a></h3>
           <div>
-
+            
 
 
           </div>

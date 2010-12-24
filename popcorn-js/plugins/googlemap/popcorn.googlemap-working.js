@@ -41,11 +41,11 @@ var googleCallback;
           author: "@annasob",
           website: "annasob.wordpress.com"
         },
-        options:{
+        options: {
           start    : {elem:'input', type:'text', label:'In'},
           end      : {elem:'input', type:'text', label:'Out'},
           target   : 'map-container',
-          type     : {elem:'input', type:'text', label:'Type'},/*{elem:'select', type:'text', label:'Type'},*/
+          type     : {elem:'input', type:'text', label:'type'},/*{elem:'select', type:'text', label:'Type'},*/
           zoom     : {elem:'input', type:'text', label:'Zoom'},
           lat      : {elem:'input', type:'text', label:'Lat'},
           long     : {elem:'input', type:'text', label:'Long'},
@@ -53,6 +53,15 @@ var googleCallback;
         }
       },
       _setup : function( options ) {
+      
+        console.log(options);
+      
+        if ( !options.target ) {
+          return;
+        }
+        
+        console.log(_mapFired);
+        
         // insert google api script once
         if (!_mapFired) {
           _mapFired = true;
@@ -62,26 +71,27 @@ var googleCallback;
          
           script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=googleCallback";
           script.type = "text/javascript";
-          head.insertBefore( script, head.firstChild ); 
+          head.insertBefore( script, head.firstChild );
         }
         // callback function fires when the script is run
         googleCallback = function() {
+          window.google = window.google || {};
+          google.maps   = google.maps || {};
           _mapLoaded    = true;
         };
         // If there is no lat/long, and there is location, geocode the location
         // you can only do this once google.maps exists
         // however geocode takes a while so loop this function until lat/long is defined.
         var isGeoReady = function() {
-        
           if ( !_mapLoaded && !options.lat) {
             setTimeout(function () {
               isGeoReady();
             }, 13);
           } else {
-            //console.log(options.location = "Boston,MA");
-            
             if (options.location) {
               var geocoder = new google.maps.Geocoder();
+              
+              
               geocoder.geocode({ 'address': options.location}, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                   options.lat  = results[0].geometry.location.wa;
@@ -92,6 +102,7 @@ var googleCallback;
           }
         };
         isGeoReady();
+        options.target  = document.getElementById(options.target);
         // create a new div this way anything in the target div
         // will stay intack 
         options._newdiv              = document.createElement('div');
@@ -99,9 +110,11 @@ var googleCallback;
         options._newdiv.style.width  = "100%";
         options._newdiv.style.height = "100%";
         i++;
-        if (document.getElementById(options.target)) {
-          document.getElementById(options.target).appendChild(options._newdiv);
-        }
+        options.target.appendChild(options._newdiv);
+        
+        console.log(options._newdiv);
+        
+        /**/
       },
       /**
        * @member webpage 
@@ -110,24 +123,32 @@ var googleCallback;
        * options variable
        */
       start: function(event, options){
+      
+        console.log(options);
         // dont do anything if the information didn't come back from google map
         var isReady = function () {
           
-          if ( !google.maps || !options.lat) {
+          
+          console.log(google.maps);
+          
+          if ( !google.maps ) {
             setTimeout(function () {
               isReady();
             }, 13);
           } else {
              
-            if(options._map){
-              options._map.getDiv().style.display = 'block';
+            console.log(options._newdiv);
+            if(options._newdiv){
+              options._newdiv.getDiv().style.display = 'block';
             } else {
               var location = new google.maps.LatLng(options.lat, options.long);
-              options._map = new google.maps.Map(options._newdiv, {mapTypeId: google.maps.MapTypeId[options.type] || google.maps.MapTypeId.HYBRID });      
+              
+              
+              options._newdiv = new google.maps.Map(options._newdiv, {mapTypeId: google.maps.MapTypeId[options.type] || google.maps.MapTypeId.HYBRID });      
             }
             // reset the location and zoom just in case the user plaid with the map
-            options._map.setCenter(location);
-            options._map.setZoom(options.zoom || 0);
+            options._newdiv.setCenter(location);
+            options._newdiv.setZoom(options.zoom || 0);
           }
         };
         
@@ -142,8 +163,10 @@ var googleCallback;
       end: function(event, options){
         // if the map exists hide it do not delete the map just in 
         // case the user seeks back to time b/w start and end
-        if (options._map) {
-          options._map.getDiv().style.display = 'none';          
+        if (options._newdiv) {
+          options._newdiv.getDiv().style.display = 'none';
+          //options._newdiv = null;
+          
         }
       }
       

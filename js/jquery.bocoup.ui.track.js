@@ -197,7 +197,9 @@
       //c.fillStyle = "#F00";
       //c.fillRect(pos, 0, 1.5, h);
       
-      $("#ui-scrubber").css({
+      
+      
+      $("#ui-scrubber-handle").css({
         left: pos + $("#ui-tracks").position().left
       });
       
@@ -213,6 +215,7 @@
 
     _mousemove: function(e ) {
       
+      //console.log(e);
       var e = e.originalEvent;
       this.mouse.lastX = this.mouse.x;
       this.mouse.lastY = this.mouse.y;
@@ -330,7 +333,7 @@
 
       }
 
-//      console.log( this.mouse.mode, this.mouse.hovering, this.mouse.down );
+      //console.log( this.mouse.mode, this.mouse.hovering, this.mouse.down );
 
       this._draw(thumbLeft, thumbRight);
 
@@ -367,7 +370,7 @@
     
       if ( e.type === "mouseenter" ) {
         
-        //this._draw();
+        this._draw();
         
         return;
       }
@@ -409,12 +412,22 @@
   var styles = {
     trackEvent: {
       default: function( c, x, y, w, h ) {
+        //  `x` seems to come up as NaN occassionally
+        
+        //console.log( c, x, y, w, h );
+        //console.log(isNaN(x));
+        if ( isNaN(x) ) {
+          return;
+        }      
+      
         //document.body.style.cursor='e-resize';
         var grad = c.createLinearGradient(0,0,0,h);
         grad.addColorStop(0,'rgba( 255, 255, 0, 0.3 )');
         grad.addColorStop(1,'rgba( 255, 255, 0, 0.3 )');
         c.fillStyle = grad;
+        
         c.fillRect(x, 1.5, w, h-1.5);
+        
         c.fillStyle = 'rgba(255,255,255,.125)';
         c.fillRect(x, 0, w, h/2);          
         c.lineWidth=0.5;
@@ -424,19 +437,23 @@
 
       },
       hover: function( c, x, y, w, h ) {
-          //document.body.style.cursor='move';
-          c.fillStyle = '#FF0';
-          c.fillRect(x, 1.5, w, h-1.5);          
-          var grad = c.createLinearGradient(0,0,0,h);
-          grad.addColorStop(0,'rgba(255,255,255,.7)');
-          grad.addColorStop(1,'rgba(0,0,0,.25)');
-          c.fillStyle = grad;
-          c.fillRect(x,0, w, h);
-          c.fillStyle='#FF0';
-          c.fillRect(x, 0, 1, h);
-          c.fillRect(x+w-1, 0, 1, h);
-          c.fillRect(x, h-1.5, w, 2);
-          c.fillRect(x, 0, w, 1);
+        //  `x` seems to come up as NaN occassionally
+        if ( isNaN(x) ) {
+          return;
+        }      
+        //document.body.style.cursor='move';
+        c.fillStyle = '#FF0';
+        c.fillRect(x, 1.5, w, h-1.5);          
+        var grad = c.createLinearGradient(0,0,0,h);
+        grad.addColorStop(0,'rgba(255,255,255,.7)');
+        grad.addColorStop(1,'rgba(0,0,0,.25)');
+        c.fillStyle = grad;
+        c.fillRect(x,0, w, h);
+        c.fillStyle='#FF0';
+        c.fillRect(x, 0, 1, h);
+        c.fillRect(x+w-1, 0, 1, h);
+        c.fillRect(x, h-1.5, w, 2);
+        c.fillRect(x, 0, w, 1);
       },
       thumb: {
         left: {

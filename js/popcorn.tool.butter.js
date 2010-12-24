@@ -1,8 +1,35 @@
 (function($, _ ) { 
 
   _.mixin({
-    capitalize : function(string) {
+    capitalize : function( string ) {
       return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();
+    },
+    camel: function( string ) {
+      return string.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace('-','');});
+    },
+    pad: function( number ) {
+
+      return ( number < 10 ? '0' : '' ) + number;
+
+    },
+    smpteToSeconds: function( smpte ) {
+      var t = smpte.split(":");
+
+      if ( t.length === 1 ) {
+        return parseFloat(t[0], 10);
+      } 
+
+      if (t.length === 2) {
+        return parseFloat(t[0], 10) + parseFloat(t[1] / 12, 10);
+      } 
+
+      if (t.length === 3) {
+        return parseInt(t[0] * 60, 10) + parseFloat(t[1], 10) + parseFloat(t[2] / 12, 10);
+      } 
+
+      if (t.length === 4) {
+        return parseInt(t[0] * 3600, 10) + parseInt(t[1] * 60, 10) + parseFloat(t[2], 10) + parseFloat(t[3] / 12, 10);
+      }
     }
   });
   
@@ -15,9 +42,11 @@
         $pluginSelectList = $("#ui-plugin-select-list"), 
         $addTrackButton = $("#ui-addtrackevent-button"), 
         $editor = $("#ui-track-event-editor"),
+        $editorPane = $("#ui-event-editor"),
         $uitracks = $("#ui-tracks"), 
         $tracks = $("#ui-tracks").children("div.track:not(.zoom)"),
         $scrubber = $("#ui-scrubber"), 
+        $scrubberHandle = $("#ui-scrubber-handle"),
 
         selectedEvent = null,
         lastSelectedEvent = null, 
@@ -72,10 +101,10 @@
 
         var $track, lastEventId, trackEvents, 
             trackType = $(this).attr("id"), 
+            trackManifest = Popcorn.manifest[ trackType ], 
             startWith = {
-              start: 5,
-              end: 10,
-              src: ''
+              start: 2,
+              end: 10
             };
 
 
@@ -86,20 +115,28 @@
           target: Popcorn.manifest[ trackType ].options.target
 
         });
+        
+        
+        _.forEach( trackManifest.options, function ( obj, key ) {
+          if ( !( key in startWith ) ) {
+            startWith[ key ] = "";
+          }
+        });
+        
+        //console.log("startWith", startWith);
 
         //  create an empty track event
-        $popcorn[ trackType ]({
-          start   : 0,
-          end     : 10,
-          src     : ''
-        });
+        $popcorn[ trackType ]( startWith );
 
+        
         lastEventId = $popcorn.getLastTrackEventId();
         trackEvents = $popcorn.getTrackEvents();
-
+        
+        
+        // uncomment for multiple events per track
         //  check for existing tracks of this type
         //  if no existing tracks, create them
-        //if ( !activeTracks[ trackType ] ) {
+        if ( !activeTracks[ trackType ] ) {
 
           //  draw a new track placeholder
           $track = $("<div/>", {
@@ -116,42 +153,65 @@
           });
 
           
-          $track.prepend('<span class="track-label">'+trackType+'</span>');
+          $track.prepend('<span class="large track-label large" >' + _( trackType ).capitalize() + '</span>');
           
           //  cache the track widget
-          //activeTracks[ trackType ] = $track;
+          activeTracks[ trackType ] = $track;
 
-        //} else {
+        } else {
 
           //  if a track of this type exists
-          //$track = activeTracks[ trackType ];
+          $track = activeTracks[ trackType ];
 
-        //}
-
+        }
+        
+        var _trackEvent = trackEvents[ trackEvents.length - 1 ];
 
         $track.track( 'addTrackEvent', {
-          inPoint           : 0,
-          outPoint          : 10,
+          inPoint           : startWith.start,
+          outPoint          : startWith.end,
           type              : trackType,
-          popcornEvent      : trackEvents[ trackEvents.length - 1 ],
+          popcornEvent      : _trackEvent,
           popcorn           : $popcorn,
           editEvent         : function() {  
-
+            
+           //console.log("TrackEvent clicked");
+            
+            
             TrackEditor.editTrackEvent.call(this); 
 
           }
         });
         
+        $editor.dialog({
+          width: "400px",
+          autoOpen: false,
+          title: 'Edit ' + _( this.type ).capitalize(),
+          buttons: {
+            //'Delete': editEventDelete,
+            'Cancel': TrackEditor.editEventCancel,
+            'OK'    : function () {
+              
+              TrackEditor.editEventApply.call(_trackEvent); 
+              
+              $(this).dialog("close");
+            },
+            'Apply' : TrackEditor.editEventApply
+          }
+        });        
         
         $(document).trigger( "addTrackComplete.track" );
 
       };
 
       this.editTrackEvent = function() { 
-
-        //try{ $editor.dialog("close"); }
-        //catch(e ) {  if ( console && console.log ) {  console.log(e); } }
-
+        
+        
+        
+        try{ $editor.dialog("close"); }
+        catch(e ) {  if ( console && console.log ) {  console.log(e); } }
+        
+        // `this` will actually refer to the context set when the function is called.
         selectedEvent = this;    
 
         
@@ -165,7 +225,9 @@
             label,
             opt
         ;
-
+        
+        //console.log(manifest);
+        
         aboutTab.children("*").remove(); // Rick, not sure if this is good practice here. Any ideas?
 
         $("<h3/>").text(about.name).appendTo(aboutTab),
@@ -211,16 +273,8 @@
 
         lastSelectedEvent = this;
 
-        $editor.dialog({
-          width: "400px", 
-          title: 'Edit ' + _( this.type ).capitalize(),
-          buttons: {
-            //'Delete': editEventDelete,
-            'Cancel': TrackEditor.editEventCancel,
-            'OK'    : TrackEditor.editEventOK,
-            'Apply' : TrackEditor.editEventApply
-          }
-        });
+        
+        $editor.dialog("open");
       };    
 
       this.editEventOK = function( ) { 
@@ -229,9 +283,16 @@
       };
 
       this.editEventApply = function( ) { 
+      
+        
+        //console.log("selectedEvent", selectedEvent);
+      
         var popcornEvent = selectedEvent.popcornEvent,
             manifest = popcornEvent.natives.manifest;
-
+        
+        //console.log("manifest", manifest);
+        //console.log("popcornEvent", popcornEvent);
+        
         for( var i in manifest.options ) { 
           if ( typeof manifest.options[i] === "object" ) {
             popcornEvent[i] = selectedEvent.manifestElems[i].val();
@@ -240,8 +301,14 @@
         selectedEvent.inPoint = popcornEvent.start;
         selectedEvent.outPoint = popcornEvent.end;
         selectedEvent.parent._draw();
+        
+        
+        // TODO:  move out to own function
+        // $("#data-view").val( JSON.stringify( $popcorn.data.trackEvents ) );
       };
 
+      
+      
       this.editEventCancel = function( ) { 
         var popcornEvent = selectedEvent.popcornEvent;
         for( var i in selectedEvent.previousValues ) { 
@@ -258,7 +325,6 @@
 
     $editor.tabs();
     $editor.css({display:"none"});
-    
     
     
     //  Load plugins to ui-plugin-select 
@@ -295,10 +361,11 @@
     
     $uitracks.disableSelection();
     
-    $scrubber.draggable({ 
+    $scrubberHandle.draggable({ 
       axis: "x", 
       containment: "#ui-tracks",  
       drag: function (event, ui) {
+        
         
         var scrubPosition = ui.offset.left - $uitracks.position().left, 
             updateTo = $popcorn.duration() / $uitracks.width() * scrubPosition;
@@ -306,6 +373,7 @@
         $popcorn.currentTime( updateTo );
       }
     });
+
     
     
     $("body").disableSelection();
@@ -313,12 +381,119 @@
     
     $(document).bind( "addTrackComplete.track" , function () {
       
+      //console.log('addTrackComplete');
       
-      $scrubber.css({
+      $("#ui-scrubber,#ui-scrubber-handle").css({
         height: $uitracks.height()
       })
     });
     
+    
+    
+    var formats = {
+      
+      currentTime: function( float ) {
+        
+        var mm  = (""+float).split(".")[1] ;
+        
+        return  _( Math.floor( float / 3600 ) ).pad() + ":" + 
+                  _( Math.floor( float / 60 ) ).pad() + ":" + 
+                    _( Math.floor( float % 60 ) ).pad() + ":" +
+                      _( ( mm || "" ).substr(0,2) ).pad().substr(0,2);// + float.split(".")[1]/1000
+      }
+    
+    };
+    
+    $popcorn.listen( "timeupdate", function () {
+      $(".video-prop").val(function () {
+        
+        var $this = $(this), 
+            prop  = _(this.id).camel(), 
+            val = $popcorn[ prop ]();
+        
+        return  formats[ prop ]( val );
+      
+      });
+    });
+    
+    $(".video-prop").bind( "blur", function () {
+      
+      //$popcorn.trigger( "timeupdate" );
+    
+    });
+    
+    
+    
+    
+    // movie into track editor object, fix redundancies
+    var controls = {
+      
+      play: function () {
+        
+        $popcorn.video.play();
+      }, 
+      pause: function () {
+        
+        $popcorn.video.pause();
+      }, 
+      seek: function ( option ) {
+      
+        var seekTo;
+        
+        if ( option.indexOf(":") > -1 ) {
+          
+          var $input = $("#" + ( option.split(":")[1] || "" ) );
+          
+          seekTo = _( $input.val() ).smpteToSeconds();
+        }
+        
+
+        if ( option === "first" ) {
+          seekTo = 0;
+        }
+
+        if ( option === "prev" ) {
+          seekTo = $popcorn.video.currentTime - 0.10;
+        }
+
+        if ( option === "next" ) {
+          seekTo = $popcorn.video.currentTime + 0.10
+        }
+
+        if ( option === "end" ) {
+          seekTo = $popcorn.video.duration;
+        }        
+        
+        
+        if ( seekTo > $popcorn.video.duration ) {
+          seekTo = $popcorn.video.duration;
+        }
+
+        if ( seekTo < 0 ) {
+          seekTo = 0;
+        }        
+        
+        $popcorn.video.currentTime = seekTo;
+        
+      }       
+    };
+    
+    
+    
+    $("#ui-video-controls button").bind( "click", function ( event ) {
+      
+      // was elegant, now its not. needs to be fixed
+      var $this = $(this).children("span").children("span");
+      
+      
+      controls[ $this.attr("data-control") ]( $this.attr("data-opt") );
+
+    });
+    
+    
+    
+    
+    window.$popcorn = $popcorn;
   });
 
 })(jQuery, _);

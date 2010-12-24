@@ -8,7 +8,8 @@ body {
 video {
   /*border:1px solid black;*/
   width:350px;
-  /*height: 299px;*/
+  height: 300px;
+  background: #000;
   /*margin:10px auto;*/
   /*margin:10px 10px;*/
   /*display:block;*/
@@ -110,44 +111,13 @@ canvas{
 .enter{background-color: "#FFCC11";}
 .leave{background-color: "#FFFFFF";}
 
-/*
-.ui-left-pane {
-  width: 350px;
-  float:left;
-}
-
-.ui-center-pane {
-  width: 410px;
-  float:left;
-}
 
 
-.ui-right-pane {
-  width: 300px;
-  float:left;
-}
 
-
-.ui-pane {
-  
-  margin: 0 10px 0 0;
-
-}
-
-.ui-right {
-  float: right;
-}
-
-*/
 .ui-plugin-pane {
   float: left;
-  
   height: 180px; 
-  /*border-right: 1px solid #b6b6b6;*/
-  
   background: #b6b6b6;
-  
-  
 }
 
 #ui-tools-accordion div {
@@ -155,18 +125,63 @@ canvas{
   overflow-y:scroll;
 }
 
-#ui-scrubber {
-  background:red;
-  width:10px;
+#ui-scrubber-handle{
+  
+  border: 1px 0 1px 0 solid red;
+  
+  width:11px;
   height:100px;
   position: absolute;
-  z-index:999;
+  z-index:9999;
+  cursor:move;
+}
+
+#ui-scrubber {
+  background:red;
+  width:1px;
+  height:100px;
+  position: absolute;
+  z-index:9998;
   cursor:move;
 }
 
 
 .track-label {
-z-index:999;position:absolute;
+  z-index:999;
+  position:absolute;
+  padding: .05em 0 0 1em;
+  
 }
 
 
+#ui-video-editor{
+height: 345px;
+}
+
+
+#ui-video-controls .ui-button-text-only .ui-button-text {
+padding: 3px 5px;
+}
+
+
+
+/* garbage, needs help */
+
+.small-input {
+  margin-top:-10px;
+  vertical-align:top;
+  height:20px;
+  width: 100px;
+}
+
+.text-right {
+margin-top:-10px;
+vertical-align:top;
+height:20px;
+width: 100px;
+text-align:center;  
+}
+
+#ui-event-editor {
+  height:300px;
+}
