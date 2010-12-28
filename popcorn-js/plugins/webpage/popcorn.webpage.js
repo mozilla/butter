@@ -37,7 +37,7 @@
           website: "annasob.wordpress.com"
         },
         options:{
-          id     : {elem:'input', type:'text', label:'Id'},
+          //id     : {elem:'input', type:'text', label:'Id'},
           start  : {elem:'input', type:'text', label:'In'},
           end    : {elem:'input', type:'text', label:'Out'},
           src    : {elem:'input', type:'text', label:'Src'},
@@ -45,7 +45,16 @@
         }
       },
       _setup : function( options ) {
-
+        options.target    = document.getElementById( options.target );
+        // make an iframe 
+        options._iframe  = document.createElement( 'iframe' ),
+        options._iframe.setAttribute('width', "100%");
+        options._iframe.setAttribute('height', "100%");
+        //options._iframe.id  = options.id;
+        options._iframe.src = options.src;
+        options._iframe.style.display = 'none';
+        // add the hidden iframe to the DON
+        options.target.appendChild(options._iframe);
         
       },
       /**
@@ -55,16 +64,6 @@
        * options variable
        */
       start: function(event, options){
-        options.target    = document.getElementById( options.target );
-        // make an iframe 
-        options._iframe  = document.createElement( 'iframe' ),
-        options._iframe.setAttribute('width', "100%");
-        options._iframe.setAttribute('height', "100%");
-        options._iframe.id  = options.id;
-        options._iframe.src = options.src;
-        options._iframe.style.display = 'none';
-        // add the hidden iframe to the DON
-        options.target.appendChild(options._iframe);      
         // make the iframe visible
         options._iframe.style.display = 'inline';
       },

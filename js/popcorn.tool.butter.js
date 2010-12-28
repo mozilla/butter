@@ -1,17 +1,19 @@
-(function($, _ ) { 
+(function( window, document, $, _, Popcorn ) { 
 
   _.mixin({
+    //  Capitalize the first letter of the string
     capitalize : function( string ) {
       return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();
     },
+    // Camel-cases a dashed string
     camel: function( string ) {
       return string.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace('-','');});
     },
+    //  Zero pads a number
     pad: function( number ) {
-
       return ( number < 10 ? '0' : '' ) + number;
-
     },
+    // Convert an SMPTE timestamp to seconds
     smpteToSeconds: function( smpte ) {
       var t = smpte.split(":");
 
@@ -32,20 +34,36 @@
       }
     }
   });
+
+  //  Reusable Hash Tables
   
+  
+  var formats = {
+
+    currentTime: function( float ) {
+
+      var mm  = (""+float).split(".")[1] ;
+
+      return  _( Math.floor( float / 3600 ) ).pad() + ":" + 
+                _( Math.floor( float / 60 ) ).pad() + ":" + 
+                  _( Math.floor( float % 60 ) ).pad() + ":" +
+                    _( ( mm || "" ).substr(0,2) ).pad().substr(0,2);// + float.split(".")[1]/1000
+    }
+  };  
   
   $(function( ) { 
     
     var $popcorn = Popcorn("#video"), 
-        
-        $pluginSelect = $("#ui-plugin-select"), 
+        $body = $("body"), 
+        $doc = $(document), 
+        //$pluginSelect = $("#ui-plugin-select"), 
         $pluginSelectList = $("#ui-plugin-select-list"), 
-        $addTrackButton = $("#ui-addtrackevent-button"), 
+        //$addTrackButton = $("#ui-addtrackevent-button"), 
         $editor = $("#ui-track-event-editor"),
-        $editorPane = $("#ui-event-editor"),
+        //$editorPane = $("#ui-event-editor"),
         $uitracks = $("#ui-tracks"), 
         $tracks = $("#ui-tracks").children("div.track:not(.zoom)"),
-        $scrubber = $("#ui-scrubber"), 
+        //$scrubber = $("#ui-scrubber"), 
         $scrubberHandle = $("#ui-scrubber-handle"),
 
         selectedEvent = null,
@@ -58,10 +76,6 @@
     
     $("#ui-tools-accordion,#ui-track-details").accordion();
 
-  
-
-    
-    
     /*
     var p = Popcorn('#video')
       .image({
@@ -97,20 +111,28 @@
 
     var TrackEditor = new function () {
     
-      this.addTrackEvent = function () {
+      this.addTrackEvent = function() {
 
-        var $track, lastEventId, trackEvents, 
-            trackType = $(this).attr("id"), 
+        var $track, lastEventId, trackEvents, settings = {}, 
+            trackType = this.id, 
             trackManifest = Popcorn.manifest[ trackType ], 
             startWith = {
               start: 2,
               end: 10
             };
-
-
+        
+        
+        arguments.length && ( settings = arguments[0] );
+        
+        
+        if ( settings.currentTarget ) {
+          settings  = {};
+        }
+        
+        
         // add better checks for this...
 
-        _.extend( startWith, {
+        _.extend( startWith, settings, {
 
           target: Popcorn.manifest[ trackType ].options.target
 
@@ -122,6 +144,8 @@
             startWith[ key ] = "";
           }
         });
+        
+        
         
         //console.log("startWith", startWith);
 
@@ -166,6 +190,12 @@
         }
         
         var _trackEvent = trackEvents[ trackEvents.length - 1 ];
+        
+        $track.track( 'killTrackEvent', {
+          _id: this._id
+        
+        });
+        
 
         $track.track( 'addTrackEvent', {
           inPoint           : startWith.start,
@@ -173,12 +203,13 @@
           type              : trackType,
           popcornEvent      : _trackEvent,
           popcorn           : $popcorn,
+          _id               : lastEventId, 
           editEvent         : function() {  
             
            //console.log("TrackEvent clicked");
             
             
-            TrackEditor.editTrackEvent.call(this); 
+            TrackEditor.drawTrackEditor.call(this); 
 
           }
         });
@@ -186,7 +217,7 @@
         $editor.dialog({
           width: "400px",
           autoOpen: false,
-          title: 'Edit ' + _( this.type ).capitalize(),
+          title: 'Edit ' + _( trackType ).capitalize(),
           buttons: {
             //'Delete': editEventDelete,
             'Cancel': TrackEditor.editEventCancel,
@@ -200,12 +231,15 @@
           }
         });        
         
-        $(document).trigger( "addTrackComplete.track" );
+        $doc.trigger( "addTrackComplete.track" );
 
       };
 
-      this.editTrackEvent = function() { 
+      this.drawTrackEditor = function() { 
         
+        
+        
+        // THIS FUNCTION IS NOT ACTUALLY EDITTING, BUT CREATING THE EDITOR DIALOG
         
         
         try{ $editor.dialog("close"); }
@@ -220,17 +254,16 @@
             aboutTab    = $editor.find(".about"),
             options     = manifest.options,
             optionsTab  = $editor.find(".options"),
-            elemType,
+            
             input,
-            label,
-            opt
+            label
         ;
         
         //console.log(manifest);
         
         aboutTab.children("*").remove(); // Rick, not sure if this is good practice here. Any ideas?
 
-        $("<h3/>").text(about.name).appendTo(aboutTab),
+        $("<h3/>").text(about.name).appendTo(aboutTab);
         $("<p/>").html("<label>Version:</label> "+about.version).appendTo(aboutTab);
         $("<p/>").html("<label>Author:</label> "+about.author).appendTo(aboutTab);
         $("<a/>").html('<label>Website:</label> <a href="'+about.website+'">'+about.website+'</a>').appendTo(aboutTab);
@@ -244,7 +277,8 @@
 
             var opt = options[i],
                 elemType = opt.elem,
-                elemLabel = opt.label;
+                elemLabel = opt.label, 
+                elem;
 
             elem = $("<"+elemType+"/>");
 
@@ -277,29 +311,43 @@
         $editor.dialog("open");
       };    
 
-      this.editEventOK = function( ) { 
-        TrackEditor.editEventApply();
-        $editor.dialog("close");
-      };
-
-      this.editEventApply = function( ) { 
+      this.editEventApply = function() { 
       
         
-        //console.log("selectedEvent", selectedEvent);
+        console.log("selectedEvent", selectedEvent);
+        
+        
+        console.log("selectedEvent.type", selectedEvent.type); // <--- use to call plugin FN
       
         var popcornEvent = selectedEvent.popcornEvent,
             manifest = popcornEvent.natives.manifest;
         
-        //console.log("manifest", manifest);
-        //console.log("popcornEvent", popcornEvent);
+        console.log("manifest", manifest);
+        console.log("popcornEvent", popcornEvent);
         
         for( var i in manifest.options ) { 
           if ( typeof manifest.options[i] === "object" ) {
             popcornEvent[i] = selectedEvent.manifestElems[i].val();
           }
         }
+        
+        $popcorn.removeTrackEvent( selectedEvent._id );
+        
+        
+        console.log(popcornEvent);
+       
+        TrackEditor.addTrackEvent.call({ id: selectedEvent.type, _id: selectedEvent._id }, popcornEvent);
+        
+        
+       
+        //selectedEvent.type
+        
+        
+        
         selectedEvent.inPoint = popcornEvent.start;
         selectedEvent.outPoint = popcornEvent.end;
+        
+        
         selectedEvent.parent._draw();
         
         
@@ -311,15 +359,26 @@
       
       this.editEventCancel = function( ) { 
         var popcornEvent = selectedEvent.popcornEvent;
+        
         for( var i in selectedEvent.previousValues ) { 
-          popcornEvent[i] = selectedEvent.previousValues[i];
+          if ( i ) {
+            popcornEvent[i] = selectedEvent.previousValues[i];
+          }
         }
         selectedEvent.inPoint = popcornEvent.start;
         selectedEvent.outPoint = popcornEvent.end;
         selectedEvent.parent._draw();
         $editor.dialog("close");
       };
-    }   
+      
+      
+      this.editEventOK = function() { 
+        TrackEditor.editEventApply();
+        $editor.dialog("close");
+      };
+      
+      
+    };   
 
     // to do: rewire all refs to .natives.manifest
 
@@ -327,7 +386,7 @@
     $editor.css({display:"none"});
     
     
-    //  Load plugins to ui-plugin-select 
+    //  Load plugins to ui-plugin-select-list
     _.each( Popcorn.registry, function ( plugin, v ) {
       
       
@@ -341,6 +400,7 @@
       }).appendTo( "#ui-plugin-select-list" );      
 
     });
+
 
     $pluginSelectList.delegate( "li", "click", function (event) {
 
@@ -359,13 +419,12 @@
     });  
     
     
-    $uitracks.disableSelection();
+    
     
     $scrubberHandle.draggable({ 
       axis: "x", 
       containment: "#ui-tracks",  
       drag: function (event, ui) {
-        
         
         var scrubPosition = ui.offset.left - $uitracks.position().left, 
             updateTo = $popcorn.duration() / $uitracks.width() * scrubPosition;
@@ -376,33 +435,22 @@
 
     
     
-    $("body").disableSelection();
+    $body.disableSelection();
+    $uitracks.disableSelection();
     
     
-    $(document).bind( "addTrackComplete.track" , function () {
+    $doc.bind( "addTrackComplete.track" , function( event ) {
       
-      //console.log('addTrackComplete');
+      console.log("addTrackComplete.track");
+      
+      console.log( event );
       
       $("#ui-scrubber,#ui-scrubber-handle").css({
         height: $uitracks.height()
-      })
+      });
     });
     
-    
-    
-    var formats = {
-      
-      currentTime: function( float ) {
-        
-        var mm  = (""+float).split(".")[1] ;
-        
-        return  _( Math.floor( float / 3600 ) ).pad() + ":" + 
-                  _( Math.floor( float / 60 ) ).pad() + ":" + 
-                    _( Math.floor( float % 60 ) ).pad() + ":" +
-                      _( ( mm || "" ).substr(0,2) ).pad().substr(0,2);// + float.split(".")[1]/1000
-      }
-    
-    };
+
     
     $popcorn.listen( "timeupdate", function () {
       $(".video-prop").val(function () {
@@ -457,7 +505,7 @@
         }
 
         if ( option === "next" ) {
-          seekTo = $popcorn.video.currentTime + 0.10
+          seekTo = $popcorn.video.currentTime + 0.10;
         }
 
         if ( option === "end" ) {
@@ -496,5 +544,5 @@
     window.$popcorn = $popcorn;
   });
 
-})(jQuery, _);
+})( this, this.document, this.jQuery, this._, this.Popcorn );
 //  Pass ref to jQuery and Underscore.js

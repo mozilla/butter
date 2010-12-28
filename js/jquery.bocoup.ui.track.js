@@ -22,10 +22,14 @@
     this.draw();
     //this.parent._inView.push( this );
     //console.log( this.popcornEvent.sort(this) );  
+    
+    
+    
     return this;
   };
 
-  TrackEvent.prototype.draw = function trackEvent_draw( thumbLeft, thumbRight ) {
+  TrackEvent.prototype.draw = function( thumbLeft, thumbRight ) {
+  
     var x   = this.xl = this.oxl + (this.parent.width / this.parent.options.duration * this.inPoint),
         rw  = this.parent.width / this.parent.options.duration * (this.outPoint-this.inPoint),
         h   = this.parent.height,
@@ -153,8 +157,29 @@
     // Contains an array of trackEvent objects
     trackEvents: [],
     
+    
+    killTrackEvent: function ( props ) {
+
+      var ret = [];
+      
+      console.log('killTrackEvent...', props, props._id);
+      
+      _.forEach( this._inView, function ( track ) {
+        if ( track._id !== props._id ) {
+          ret.push(track);
+        }
+      });
+      
+      
+      this._inView  = ret;
+    
+    },
+    
     addTrackEvent: function( props ) {
-      return this._inView.push(new TrackEvent( props, this ));
+    
+      console.log('addTrackEvent...', props);
+      
+      return this._inView.push( new TrackEvent( props, this ) );
     },
 
     zoom: function( props ) {

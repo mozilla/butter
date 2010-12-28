@@ -45,7 +45,7 @@ var googleCallback;
           start    : {elem:'input', type:'text', label:'In'},
           end      : {elem:'input', type:'text', label:'Out'},
           target   : 'map-container',
-          type     : {elem:'input', type:'text', label:'Type'},/*{elem:'select', type:'text', label:'Type'},*/
+          type     : {elem:'select', type:'text', label:'Type'},
           zoom     : {elem:'input', type:'text', label:'Zoom'},
           lat      : {elem:'input', type:'text', label:'Lat'},
           long     : {elem:'input', type:'text', label:'Long'},
@@ -72,14 +72,11 @@ var googleCallback;
         // you can only do this once google.maps exists
         // however geocode takes a while so loop this function until lat/long is defined.
         var isGeoReady = function() {
-        
           if ( !_mapLoaded && !options.lat) {
             setTimeout(function () {
               isGeoReady();
             }, 13);
           } else {
-            //console.log(options.location = "Boston,MA");
-            
             if (options.location) {
               var geocoder = new google.maps.Geocoder();
               geocoder.geocode({ 'address': options.location}, function(results, status) {

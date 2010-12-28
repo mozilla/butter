@@ -42,14 +42,12 @@
     },
     _setup: function(options) {
     
-      /*
+      console.log(options);
       options._container = document.createElement( 'div' );
       options._container.style.display = "none";
       options._container.innerHTML  = options.text;
       options.target =  document.getElementById( options.target );
       options.target.appendChild( options._container );
-      
-      */
     },
     /**
      * @member footnote 
@@ -57,17 +55,7 @@
      * of the video  reaches the start time provided by the 
      * options variable
      */
-    start: function(event, options) {
-      
-      
-      // should check if a footnote area exists, 
-      // create a new one if nec. give it an id to ref in end
-      options._container = document.createElement( 'div' );
-      options._container.style.display = "none";
-      options._container.innerHTML  = options.text;
-      
-      options.target =  document.getElementById( options.target );
-      options.target.appendChild( options._container );
+    start: function(event, options){
       options._container.style.display = "inline";
     },
     /**
