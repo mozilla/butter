@@ -26,8 +26,8 @@ $(function () {
         "http://media.w3.org/2010/05/sintel/trailer.ogv",
         "http://media.w3.org/2010/05/bunny/trailer.ogv",
         "http://media.w3.org/2010/05/video/movie_300.ogv",
-        "http://dl.dropbox.com/u/3531958/CIMG1253.ogv",
-        "http://dl.dropbox.com/u/3531958/CIMG1258.ogv"
+        "http://dl.dropbox.com/u/3531958/CIMG1253.ogv"
+        
       ];
 
   

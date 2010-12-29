@@ -13,9 +13,9 @@
     pad: function( number ) {
       return ( number < 10 ? '0' : '' ) + number;
     },
-    fifth: function( number ) {
+    fourth: function( number ) {
       
-      return ( Math.round(number * 5) / 5).toFixed(2);
+      return ( Math.round(number * 4) / 4).toFixed(2);
     },
     // Convert an SMPTE timestamp to seconds
     smpteToSeconds: function( smpte ) {
@@ -202,10 +202,11 @@
                     prop = _(this.id).camel(), 
                     val = $popcorn[ prop ]();
 
-                return  formats[ prop ]( _(val).fifth() ) ;
+                return  formats[ prop ]( _(val).fourth() ) ;
 
               });
               
+              //  console.log("timeupdate");
               //  Update the scrubber handle position              
               $("#ui-scrubber-handle").css({
                 left: ( increment * $popcorn.video.currentTime ) + $timeline.position().left
@@ -274,16 +275,16 @@
               
               //  Secondary ticks
               for ( var f = 0; f < 4; f++ ) {
-                context.moveTo( posOffset + ( f * increment ), 15);
-                context.lineTo( posOffset + ( f * increment ), 20);                
+                context.moveTo( posOffset + ( f * increment ) -1, 15);
+                context.lineTo( posOffset + ( f * increment ) -1, 20);                
               }
               
 
             } else {
               
               // Primary ticks
-              context.moveTo( i * tick/2, 10);
-              context.lineTo( i * tick/2, 20);
+              context.moveTo( i * tick/2 -1, 10);
+              context.lineTo( i * tick/2 -1, 20);
             
             }
 
@@ -681,7 +682,7 @@
             tolerance = ( $popcorn.video.duration / $tracktime.width() ) / 4;
             
         
-        $popcorn.currentTime( _( updateTo ).fifth() );
+        $popcorn.currentTime( _( updateTo ).fourth() );
       }
     });
 
@@ -744,16 +745,16 @@
 
         if ( option === "prev" ) {
           
-          //console.log( _($popcorn.video.currentTime).fifth() );
+          //console.log( _($popcorn.video.currentTime).fourth() );
           
-          seekTo = _($popcorn.video.currentTime - 0.2).fifth();
+          seekTo = _($popcorn.video.currentTime - 0.25).fourth();
         }
 
         if ( option === "next" ) {
           
-          //console.log(_($popcorn.video.currentTime).fifth());
+          //console.log(_($popcorn.video.currentTime).fourth());
         
-          seekTo = _($popcorn.video.currentTime + 0.2).fifth();
+          seekTo = _($popcorn.video.currentTime + 0.25).fourth();
         }
 
         if ( option === "end" ) {
