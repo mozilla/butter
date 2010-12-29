@@ -6,24 +6,25 @@
   var auto    = 100,
       eResize = 101,
       wResize = 102,
-      drag    = 103
+      drag    = 103, 
+      scrubberpos = 0
       ;
 
   var trackCount = -1;
 
   function TrackEvent( props, parent ) {
+    
+    //console.log("TrackEvent",props, this);
+    
     $.extend(this, props);
+    
     this.parent = parent;
-    this.oxl=0;
-    this.oxr=0;
-    this.xl=0;
-    this.xr=0;
+    this.oxl = 0;
+    this.oxr = 0;
+    this.xl = 0;
+    this.xr = 0;
     this.hovered = false;
     this.draw();
-    //this.parent._inView.push( this );
-    //console.log( this.popcornEvent.sort(this) );  
-    
-    
     
     return this;
   };
@@ -36,15 +37,13 @@
         c   = this.parent.context,
         typ;
 
-     x = x * 100/this.parent.zoomWindow.width-(this.parent.zoomWindow.offsetX*100);
-     rw = rw * 100/this.parent.zoomWindow.width;
+    x = x * 100/this.parent.zoomWindow.width-(this.parent.zoomWindow.offsetX*100);
+    rw = rw * 100/this.parent.zoomWindow.width;
 
     this.xr = x + rw;
 
     //var mouseX = this.parent.mouseX;         
-    
-    
-    
+
     type = ( this.parent.options.mode === 'smartZoom' ) ? 'zoomEvent' : 'trackEvent';
     
     
@@ -153,16 +152,12 @@
         this.context[prop] = styleObj[prop];
       }
     },
- 
-    // Contains an array of trackEvent objects
-    trackEvents: [],
     
     
     killTrackEvent: function ( props ) {
 
       var ret = [];
       
-      console.log('killTrackEvent...', props, props._id);
       
       _.forEach( this._inView, function ( track ) {
         if ( track._id !== props._id ) {
@@ -177,7 +172,7 @@
     
     addTrackEvent: function( props ) {
     
-      console.log('addTrackEvent...', props);
+      //console.log('addTrackEvent...', props);
       
       return this._inView.push( new TrackEvent( props, this ) );
     },
@@ -217,28 +212,30 @@
         iv.draw( thumbLeft, thumbRight );
       }
 
-      var pos = this.width / this.options.duration * this._playBar.position;
+      //var pos = this.width / this.options.duration * this._playBar.position;
       
-      //c.fillStyle = "#F00";
-      //c.fillRect(pos, 0, 1.5, h);
+      ////c.fillStyle = "#F00";
+      ////c.fillRect(pos, 0, 1.5, h);
       
+      //if ( scrubberpos === 0 || pos > 0 ) {
+      //  scrubberpos = pos;
+      //}
       
-      
-      $("#ui-scrubber-handle").css({
-        left: pos + $("#ui-tracks").position().left
-      });
+      //$("#ui-scrubber-handle").css({
+      //  left: scrubberpos + $("#ui-tracks").position().left
+      //});
       
       $(document).trigger("drawComplete.track");
     },
 
-    _timeupdate: function(e ) {
+    _timeupdate: function( e ) {
       this._playBar.position = e.currentTarget.currentTime;
       var pos = this.width / this.options.duration * this._playBar.position,
           c = this.context;
       this._draw();
     },
 
-    _mousemove: function(e ) {
+    _mousemove: function( e ) {
       
       //console.log(e);
       var e = e.originalEvent;
@@ -247,6 +244,8 @@
       
       var scrollX = (window.scrollX !== null && typeof window.scrollX !== 'undefined') ? window.scrollX : window.pageXOffset;
       var scrollY = (window.scrollY !== null && typeof window.scrollY !== 'undefined') ? window.scrollY : window.pageYOffset;
+      
+      
       this.mouse.x = e.clientX - this.element[0].offsetLeft + scrollX;
       this.mouse.y = e.clientY - this.element[0].offsetTop + scrollY;
       
@@ -369,6 +368,7 @@
       
       if ( e.type === "mousedown" ) {
         
+        //console.log("mousedown");
         this.mouse.down = true;
         
         return;
@@ -377,11 +377,15 @@
       
       if ( e.type === "mouseup" ) {
       
+        //console.log("mouseup");
         this.mouse.mode = auto;
+        
         if ( this.mouse.hovering && this.mouse.down ) {
+          
           if ( this.options.mode !== "smartZoom" ) {
             this.mouse.hovering.editEvent();
           }
+          
           this.mouse.hovering = null;
         }
         this.mouse.down = false;
@@ -394,6 +398,7 @@
       //console.log(e);
     
       if ( e.type === "mouseenter" ) {
+        
         
         this._draw();
         

@@ -57,7 +57,7 @@
     
     
     <script src="js/popcorn.tool.butter.js"></script>
-    <script src="js/popcorn.tool.butter-ui-test.js" ></script>  
+    <script src="js/popcorn.tool.butter-ui-test.js" ></script>
 
     
 
@@ -71,9 +71,24 @@
     <div class="container showgrid">
     
       <div id="head">
-        <img class="logo" src="img/butter.png" title="Butter" alt="Butter Logo">
         
-        <h1>Butter</h1>
+        <div class="span-5" >
+          <img class="logo" src="img/video.png" title="Butter" alt="Butter Logo">
+        
+          <h2>Butter</h2>
+        </div>
+        
+        <div class="span-8">
+          
+          <input type="text" id="io-video-url" name="io-video-url" class="text ui-menu-entity" value="http://media.w3.org/2010/05/sintel/trailer.ogv" > 
+          
+        </div>
+        <div class="span-13 last" >
+          
+          <a href="" class="ui-menu-controls" data-control="load" >Load</a>
+
+        </div>
+        
       </div>    
       
       <hr class="space" >
@@ -85,18 +100,20 @@
         <!-- left pane -->
         <div id="ui-panel-video" class="span-9">
           
-          
-          <video id='video' 
-            poster="http://media.w3.org/2010/05/sintel/poster.png"> 
-
-            <source id='mp4'
+          <!-- poster="http://media.w3.org/2010/05/sintel/poster.png" -->
+          <video id="video">
+            
+            
+            <!--
+            <source id="mp4"
               src="http://media.w3.org/2010/05/sintel/trailer.mp4"
               type='video/mp4; codecs="avc1, mp4a"'> 
 
-            <source id='ogv'
+            <source id="ogv"
               src="http://media.w3.org/2010/05/sintel/trailer.ogv"
               type='video/ogg; codecs="theora, vorbis"'> 
-
+            -->
+            
             <p>Your user agent does not support the HTML5 Video element.</p> 
 
           </video>   
@@ -136,7 +153,7 @@
               <span data-control="seek" data-opt="end" class="ui-icon ui-icon-seek-end"></span>
             </button>
             
-            <input type="text" id="current-time" name="current-time" class="video-prop small-input text-right" value="" />
+            <input type="text" id="current-time" name="current-time" class="ui-video-property small-input text-right" value="" />
 
             <button>
               <span data-control="seek" data-opt="linked:current-time"  class="ui-icon ui-icon-circle-arrow-e"></span>
@@ -213,9 +230,11 @@
         </div>
         
         
+        <div id="ui-tracks-time">
+          <!--<canvas id="ui-tracks-time-canvas" width="800" height="20"></canvas>-->
+        </div>
         
         <div id="ui-tracks">
-          
         </div>       
         
         <!-- <div class="track zoom"></div> -->
@@ -227,7 +246,7 @@
         
         <div id="ui-track-details">
           <h3><a href="#">Edit</a></h3>
-          <div>
+          <div id="ui-editor-form">
             
 
 

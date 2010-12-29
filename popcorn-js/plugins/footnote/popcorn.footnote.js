@@ -41,13 +41,18 @@
       }
     },
     _setup: function(options) {
-    
-      console.log(options);
+      
       options._container = document.createElement( 'div' );
       options._container.style.display = "none";
-      options._container.innerHTML  = options.text;
-      options.target =  document.getElementById( options.target );
-      options.target.appendChild( options._container );
+      
+      
+      //options._container.innerHTML  = options.text;
+      //options.target =  document.getElementById( options.target );
+      //options.target.appendChild( options._container );
+
+      if (document.getElementById(options.target)) {
+        document.getElementById(options.target).appendChild(options._container);
+      }      
     },
     /**
      * @member footnote 
@@ -56,6 +61,9 @@
      * options variable
      */
     start: function(event, options){
+    
+      
+      options._container.innerHTML = options.text;
       options._container.style.display = "inline";
     },
     /**
