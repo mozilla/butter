@@ -25,7 +25,9 @@ $(function () {
   var videos = [
         "http://media.w3.org/2010/05/sintel/trailer.ogv",
         "http://media.w3.org/2010/05/bunny/trailer.ogv",
-        "http://media.w3.org/2010/05/video/movie_300.ogv"
+        "http://media.w3.org/2010/05/video/movie_300.ogv",
+        "http://dl.dropbox.com/u/3531958/CIMG1253.ogv",
+        "http://dl.dropbox.com/u/3531958/CIMG1258.ogv"
       ];
 
   
@@ -37,7 +39,7 @@ $(function () {
     
     
     
-    $("#io-video-url").val( videos[ Math.floor( Math.random() * 3 ) ] );
+    $("#io-video-url").val( videos[ Math.floor( Math.random() * videos.length ) ] );
   
   }, 500 );
   
@@ -47,7 +49,7 @@ $(function () {
   
   crand = function () {
     
-    $("#io-video-url").val( videos[ Math.floor( Math.random() * 3 ) ] );
+    $("#io-video-url").val( videos[ Math.floor( Math.random() * videos.length ) ] );
     
   };
   
