@@ -80,7 +80,7 @@
         
         <div class="span-8">
           
-          <input type="text" id="io-video-url" name="io-video-url" class="text ui-menu-entity" value="http://media.w3.org/2010/05/sintel/trailer.ogv" > 
+          <input placeholder="Video Url" type="text" id="io-video-url" name="io-video-url" class="text ui-menu-entity" value="http://media.w3.org/2010/05/sintel/trailer.ogv" > 
           
         </div>
         <div class="span-13 last" >
@@ -88,11 +88,14 @@
           <button class="ui-menu-controls" data-control="load" >Load</button>
           
           
-          to test run: <a href="javascript:cload();">cload()</a> (may need loading message?)
           
           
-          <button class="ui-menuset"  data-control="">Options</button> 
-          <ul> 
+          
+          <button class="ui-menuset"  data-control="">My Movies</button> 
+          <ul id="ui-user-videos" class="select-ul"> 
+            
+            
+            <!--
             <li><a href="#">Option 1</a></li> 
             <li><a href="#">Option 2</a></li> 
             <li><a href="#">Option 3</a></li> 
@@ -101,7 +104,10 @@
             <li><a href="#">Option 6</a></li> 
             <li><a href="#">Option 7</a></li> 
             <li><a href="#">Option 8</a></li> 
-          </ul>           
+            -->
+          </ul>     
+          
+          to test run: <a href="javascript:cload();">cload()</a> (may need loading message?)
 
         </div>
         
@@ -169,7 +175,7 @@
               <span data-control="seek" data-opt="end" class="ui-icon ui-icon-seek-end"></span>
             </button>
             
-            <input type="text" id="current-time" name="current-time" class="ui-video-property small-input text-right" value="" />
+            <input type="text" id="io-current-time" name="io-current-time" class="ui-video-property small-input text-right" value="" />
 
             <button>
               <span data-control="seek" data-opt="linked:current-time"  class="ui-icon ui-icon-circle-arrow-e"></span>
@@ -198,10 +204,29 @@
           
           
           <div id="ui-accordion-templates"  class="ui-accordion-panel">
+
+            <h3><a href="#">Meta</a></h3>
+            <div>
+              
+              <input placeholder="Title" type="text" id="io-video-title" name="io-video-title" class="text"  style="width:150px;" value="" />
+              
+              <textarea placeholder="Description" id="io-video-description" style="width:150px;height:75px"  class="text"></textarea>
+              
+              <button class="ui-menu-controls" data-control="save" >Save</button>
+              
+            </div>
+
+          
             <h3><a href="#">Templates</a></h3>
             <div>
               <p>nothing yet</p>
             </div>
+
+            <h3><a href="#">Themes</a></h3>
+            <div>
+              <p>nothing yet</p>
+            </div>
+
           </div>     
 
         </div> 

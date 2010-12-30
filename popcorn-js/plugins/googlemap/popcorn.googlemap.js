@@ -91,13 +91,13 @@ var googleCallback;
         isGeoReady();
         // create a new div this way anything in the target div
         // will stay intack 
-        options._newdiv              = document.createElement('div');
-        options._newdiv.id           = "actualmap"+i;
-        options._newdiv.style.width  = "100%";
-        options._newdiv.style.height = "100%";
+        options._container              = document.createElement('div');
+        options._container.id           = "actualmap"+i;
+        options._container.style.width  = "100%";
+        options._container.style.height = "100%";
         i++;
         if (document.getElementById(options.target)) {
-          document.getElementById(options.target).appendChild(options._newdiv);
+          document.getElementById(options.target).appendChild(options._container);
         }
       },
       /**
@@ -124,7 +124,7 @@ var googleCallback;
               options._map.getDiv().style.display = 'block';
             } else {
               var location = new google.maps.LatLng(options.lat, options.long);
-              options._map = new google.maps.Map(options._newdiv, {mapTypeId: google.maps.MapTypeId[options.type] || google.maps.MapTypeId.HYBRID });      
+              options._map = new google.maps.Map(options._container, {mapTypeId: google.maps.MapTypeId[options.type] || google.maps.MapTypeId.HYBRID });      
             }
             // reset the location and zoom just in case the user plaid with the map
             options._map.setCenter(location);

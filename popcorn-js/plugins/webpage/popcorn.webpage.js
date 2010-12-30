@@ -47,17 +47,17 @@
       _setup : function( options ) {
         
         // make an iframe 
-        options._iframe  = document.createElement( 'iframe' ),
-        options._iframe.setAttribute('width', "100%");
-        options._iframe.setAttribute('height', "100%");
-        //options._iframe.id  = options.id;
+        options._container  = document.createElement( 'iframe' ),
+        options._container.setAttribute('width', "100%");
+        options._container.setAttribute('height', "100%");
+        //options._container.id  = options.id;
 
-        options._iframe.style.display = 'none';
+        options._container.style.display = 'none';
         // add the hidden iframe to the DON
         
         
         if (document.getElementById(options.target)) {
-          document.getElementById(options.target).appendChild(options._iframe);
+          document.getElementById(options.target).appendChild(options._container);
         }           
         
       },
@@ -70,8 +70,8 @@
       start: function(event, options){
         // make the iframe visible
         
-        options._iframe.src = options.src;
-        options._iframe.style.display = 'inline';
+        options._container.src = options.src;
+        options._container.style.display = 'inline';
       },
       /**
        * @member webpage 
@@ -81,7 +81,7 @@
        */
       end: function(event, options){
         // make the iframe invisible
-        options._iframe.style.display = 'none';
+        options._container.style.display = 'none';
       }
       
     };

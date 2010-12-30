@@ -38,7 +38,9 @@ $(function () {
     
     
     
-    $("#io-video-url").val( videos[ Math.floor( Math.random() * videos.length ) ] );
+    //$("#io-video-url").val( videos[ Math.floor( Math.random() * videos.length ) ] );
+    
+    cload();
   
   }, 500 );
   
@@ -56,7 +58,36 @@ $(function () {
     crand();
     
     $('[ data-control="load"]').trigger("click");
+    
+    
+    var ary = $("#io-video-url").val().split("/"), 
+        str = ary[ ary.length-2 ] + " " + ary[ ary.length-1 ];
+        
+    
+    
+    $("#io-video-title").val( str );
+    $("#io-video-description").val( ary.join(" ") );
+    
+  };
+  
+  
+  if ( localStorage.length ) {
+  
+    //localStorage.removeItem('3531958-cimg1253-ogv');
+    //localStorage.removeItem('bunny-trailer-ogv');
+    //localStorage.removeItem('sintel-trailer-ogv');
+
+    for ( var prop in localStorage ) {
+      if ( prop.indexOf("_") === 0 ) {
+        localStorage.removeItem( prop );
+      }
+    }    
   }
+  
+  //console.log(localStorage);  
+  
+  
+  
     
 
 });

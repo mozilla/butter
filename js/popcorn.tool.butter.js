@@ -9,6 +9,10 @@
     camel: function( string ) {
       return string.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace('-','');});
     },
+    //  Create a slug string, ex: 'This is a test' > "this-is-a-test"
+    slug: function(str) {
+      return str.toLowerCase().match(/[a-z0-9]+/ig).join('-');
+    },
     //  Zero pads a number
     pad: function( number ) {
       return ( number < 10 ? '0' : '' ) + number;
@@ -42,7 +46,7 @@
   //  Reusable Hash Tables
   
   
-  var formats = {
+  var formatMaps = {
 
     currentTime: function( float ) {
       
@@ -67,8 +71,167 @@
     
     mp4: 'video/mp4; codecs="avc1, mp4a"',
     ogv: 'video/ogg; codecs="theora, vorbis"'
-    
   };  
+  
+
+  //  Storage object constructor
+
+  function TrackStore( title, desc, remote ) {
+    
+    this.title = title || null;
+    this.description = desc || null;
+    this.remote = remote || null;
+    this.data = null;
+
+    return this;
+  }
+  
+  TrackStore.properties = [ "title", "description", "remote" ];
+
+  _.each( TrackStore.properties, function ( key ) {
+
+    TrackStore.prototype[ _( key ).capitalize() ] = function( val ) {
+      return ( !val && this[ key ] ) || ( this[ key ] = val );
+    };
+
+  });
+
+  // serialize, create, read, update, delete
+  
+  TrackStore.prototype.prepare = function( from ) {
+    
+    //  `from` references a {$p}.data.trackEvents.byStart object
+    var ret = {}, 
+        sizeof = _.size( from ),
+        iter = 0;
+    
+    //  Serialize the string properties
+    _.each( TrackStore.properties, function( key ) {
+      
+      ret[ key ] = this[ _( key ).capitalize() ]();
+    
+    }, this);
+    
+    
+    //  Placeholder for the track event data
+    ret[ "data" ] = [];//{ foo: "bar" };
+    
+    
+    
+    _.each( from, function( key, val, i ) {
+      
+      //  Ignore the dummy events at begining and end
+      if ( iter > 0 && iter < sizeof - 1 ) {
+      
+        var event = {}, 
+            temp = {},
+            plugin = key._natives.type, 
+            manifest = key._natives.manifest.options;
+        
+        
+        //console.log(manifest);
+        _.each( key, function( prop, eventKey ) {
+          
+          
+          //  ignore internally set properties
+          if ( eventKey.indexOf("_") !== 0 && !!prop ) {
+            
+            temp[ eventKey ] = prop;
+            
+          }
+          
+        });
+        
+        event[ plugin ] = temp;
+        
+        //console.log("event", event);
+        
+        ret[ "data" ].push( event );
+        
+        //console.log(ret[ "data" ]);
+      }
+      
+      iter++;
+    });
+    
+    //  Return prepared data as object
+    return ret;
+  };
+  
+  TrackStore.prototype.serialize = function( from ) {
+    
+    // stringify a prepared track event object
+    return JSON.stringify( this.prepare( from ) );
+  };
+  
+  TrackStore.prototype.slug = function() {
+    return this.title.toLowerCase().match(/[a-z0-9]+/ig).join('-');
+  };
+
+  TrackStore.prototype.parse = function( slug ) {
+    return JSON.parse( this.read( slug ) );
+  };  
+
+  TrackStore.prototype.create = function( slug, from ) {
+    
+    //  If slug is not a string, shift the arguments
+    !_.isString( slug ) && ( from = slug, slug = this.slug() );
+    
+    
+    console.log( slug, from );
+    
+    
+    var serial = this.serialize( from );
+    
+    localStorage.setItem( 
+      //  Label stored data
+      slug,  
+      //  Stringified video and track data
+      serial
+    );
+    
+    return {
+      slug: slug, 
+      serial: serial
+    };
+  };
+  
+  TrackStore.prototype.read = function( slug ) {
+    return localStorage.getItem( slug ) || null;
+  };
+
+  TrackStore.prototype.update = function( slug, from ) {
+    return this.create( slug, from );
+  };  
+  
+  TrackStore.prototype.delete = function( slug ) {
+    return localStorage.removeItem( slug );
+  };
+  
+  //  toArray stored as expando - not instance specific
+  TrackStore.toObject = function() {
+    var obj = {}, 
+        data = localStorage;
+    
+    for ( var prop in data ) {
+      if ( _.isString( prop ) ) {
+        obj[ prop ] = new Function( "return " + data[ prop ] )();
+      }
+    }
+    
+    return obj;
+  };
+  
+  
+
+  //var foo = new TrackStore( "a title", "a description" );
+  //console.log(foo);
+  //console.log( foo.Title() );
+  //console.log( foo.Description() );
+  //console.log( foo.serialize() );
+
+
+  
   
   $(function( ) { 
     
@@ -84,11 +247,13 @@
         $tracks = $("#ui-tracks").children("div.track:not(.zoom)"),
         $tracktime = $("#ui-tracks-time"), 
         $scrubberHandle = $("#ui-scrubber-handle"),
-        $currenttime = $("#current-time"), 
+        $currenttime = $("#io-current-time"), 
         $menucontrols = $(".ui-menu-controls"), // change to id?
         
         $videocontrols = $("#ui-video-controls"), 
         $ioVideoUrl = $("#io-video-url"), 
+        
+        $uservideos = $("#ui-user-videos"),
         
         //$scrubber = $("#ui-scrubber"), 
         //$pluginSelect = $("#ui-plugin-select"), 
@@ -97,7 +262,8 @@
 
         selectedEvent = null,
         lastSelectedEvent = null, 
-        activeTracks = {};
+        activeTracks = {}, 
+        trackStore;
         
         
         
@@ -140,7 +306,7 @@
         return false;
       }
 
-      $menu.menu("deactivate").show().css({top:0, left:0, width: $(this).width() }).position({
+      $menu.menu("deactivate").show().css({top:0, left:0 }).position({
         my: "left top",
         at: "left bottom",
         of: this
@@ -154,10 +320,70 @@
     
     });
     
+    
+    
+    //  Create my movies list
+    
+    _.each( TrackStore.toObject() , function( data, prop ) {
+      
+      var $li = $("<li/>", {
+        
+        html: '<h4><img class="icon" src="img/dummy.png">' + data.title + '</h4>',
+        className: "span-4 select-li clickable"
+      
+      }).appendTo( "#ui-user-videos" );
+      
+      
+      $li.bind( "click", function( event ) {
+        
+        var $this = $(this),
+            trackEvents = data.data;
+        
+        
+        // TODO: write function that accepts the data object
+        
+        //    function will:
+        
+        //    load video from data.remote
+        
+        //    set $("#oi-video-title").val() with  data.title
+        
+        //    set $("#oi-video-description").val() with data.description
+        
+        //    set $("#oi-video-url").val() with data.remote
+        
+        // AFTER the video is loaded in:
+        
+        //    a simulation of plugin calls will occur
+        
+        //    this will rebuild the visual track events on the stage
+        
+       
+       console.log(data.data);
 
+      
+      });
+    
+    });
+    
+    
+    //  Storage logic module
+    var TrackMeta   = ( function () {
+      
+      
+      
+      return {
+        
+        
+    
+      
+      };
+      
+    })();
+    
 
-
-    var TrackEditor = ( function () {
+    //  Editor logic module
+    var TrackEditor = ( function (window) {
       
       
       return {
@@ -233,7 +459,7 @@
         loadVideoFromUrl: function() {
           
           
-          this.loading( true );
+          //this.loading( true );
           
           
           
@@ -248,7 +474,7 @@
           //  Create a new source element and append to the video element
           var $source = $("<source/>", {
             
-            type: formats[ type ],
+            type: formatMaps[ type ],
             src: url
           
           }).appendTo( "video" );
@@ -293,10 +519,10 @@
               $currenttime.val(function () {
 
                 var $this = $(this), 
-                    prop = _(this.id).camel(), 
+                    prop = _( this.id.replace("io-", "") ).camel(), 
                     val = $popcorn[ prop ]();
 
-                return  formats[ prop ]( _(val).fourth() ) ;
+                return  formatMaps[ prop ]( _(val).fourth() ) ;
 
               });
               
@@ -308,6 +534,15 @@
                 ( increment * $popcorn.video.currentTime ) + $timeline.position().left
               );
               
+
+
+
+
+              
+
+              
+
+
 
             });          
           });
@@ -406,10 +641,10 @@
         }   
       };
       
-    })();
+    })(window);
     
-    
-    var TrackEvents = ( function () {
+    //  Event editing logic module
+    var TrackEvents = ( function (window) {
       
       
       return {
@@ -551,7 +786,7 @@
           selectedEvent = this;    
 
 
-          var manifest    = selectedEvent.popcornEvent.natives.manifest,
+          var manifest    = selectedEvent.popcornEvent._natives.manifest,
               about       = manifest.about,
               aboutTab    = $editor.find(".about"),
               options     = manifest.options,
@@ -648,7 +883,7 @@
           //console.log("selectedEvent.type", selectedEvent.type); // <--- use to call plugin FN
 
           var popcornEvent = selectedEvent.popcornEvent,
-              manifest = popcornEvent.natives.manifest;
+              manifest = popcornEvent._natives.manifest;
 
           //console.log("manifest", manifest);
           //console.log("popcornEvent", popcornEvent);
@@ -689,10 +924,10 @@
           
           });
           
-          //console.log(selectedEvent.popcornEvent.natives._setup(selectedEvent.popcornEvent) );
+          //console.log(selectedEvent.popcornEvent._natives._setup(selectedEvent.popcornEvent) );
           
           //  Recall _setup with new data
-          selectedEvent.popcornEvent.natives._setup(selectedEvent.popcornEvent)
+          selectedEvent.popcornEvent._natives._setup(selectedEvent.popcornEvent)
         
           selectedEvent.parent._draw();
 
@@ -723,7 +958,7 @@
         }
       };
     
-    })();
+    })(window);
     
     
     
@@ -741,7 +976,7 @@
     
     
 
-    // to do: rewire all refs to .natives.manifest
+    // to do: rewire all refs to ._natives.manifest
 
     $editor.tabs();
     $editor.css({display:"none"});
@@ -776,7 +1011,7 @@
     
 
     // this is awful  
-    $("#ui-plugin-select-list li")
+    $("#ui-user-videos li, #ui-plugin-select-list li")
       .hover(function () {
         $(this).animate({ backgroundColor: "#ffff7e" }, 200);
       }, 
@@ -847,6 +1082,69 @@
         TrackEditor.loadVideoFromUrl();
       
       }, 
+      save: function () {
+        
+        // get slug from #io-title
+        
+        // get remote from #io-video-url
+        
+        // get title from #io-video-title
+        
+        // get desc from #io-video-description
+        
+        
+        
+        // get trackstore by slug or create new trackstore
+        
+        
+        var store = trackStore || new TrackStore(), 
+            title = $("#io-video-title").val(), 
+            desc = $("#io-video-description").val(), 
+            remote = $("#io-video-url").val(),
+            slug;
+            
+        
+        if ( !title ) {
+          
+          console.log("error: requires title");
+          
+          return;
+        }
+        
+        slug = _( title ).slug();
+        
+        
+        store.Title( title );
+        store.Description( desc );
+        store.Remote( remote );
+        
+        
+        
+        //console.log( store );
+        
+        
+        if ( !store.read( slug ) ) {
+          
+          //console.log("trackstore does not exist, create");
+          
+          store.create( $popcorn.data.trackEvents.byStart );
+          
+          //console.log(localStorage);
+          
+          return;
+        }
+        
+        
+        //console.log("trackstore exists, update");
+        
+        store.update( slug, $popcorn.data.trackEvents.byStart );
+        
+        
+        console.log( "SAVED: " );
+        console.log(JSON.parse( localStorage.getItem(slug) ));
+        
+      }, 
+      
       play: function () {
         
         $popcorn.video.play();
@@ -934,7 +1232,7 @@
     $currenttime.bind( "keydown", function ( event ) {
 
       if ( event.which === 13 ) {
-        $('#current-time').next().trigger("click");          
+        $('#io-current-time').next().trigger("click");          
       }
       
       if ( event.which === 39 ) {

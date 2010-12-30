@@ -204,9 +204,7 @@ text-align:center;
   height:300px;
 }
 
-.hide {
-  display:none;
-}
-.show {
-  display:;
+#ui-user-videos li{
+  width: 98%;
+  margin: 5px 0 5px 5px;
 }
