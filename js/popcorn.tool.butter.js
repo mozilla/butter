@@ -43,7 +43,7 @@
     }
   });
 
-  //  Reusable Hash Tables
+  //  Random key=>val/method maps
   
   
   var formatMaps = {
@@ -96,7 +96,6 @@
 
   });
 
-  // serialize, create, read, update, delete
   
   TrackStore.prototype.prepare = function( from ) {
     
@@ -144,11 +143,8 @@
         
         event[ plugin ] = temp;
         
-        //console.log("event", event);
-        
         ret[ "data" ].push( event );
         
-        //console.log(ret[ "data" ]);
       }
       
       iter++;
@@ -176,9 +172,6 @@
     
     //  If slug is not a string, shift the arguments
     !_.isString( slug ) && ( from = slug, slug = this.slug() );
-    
-    
-    console.log( slug, from );
     
     
     var serial = this.serialize( from );
@@ -284,7 +277,7 @@
               
               $(this).hide();
               
-              console.log( ui );
+             //console.log( ui );
             
             },
             input: $(this)      
@@ -362,7 +355,7 @@
         
         // TrackEvents.addTrackEvent.call(this, event);
        
-       console.log(data.data);
+      //console.log(data.data);
 
       
       });
@@ -529,7 +522,7 @@
 
               });
               
-              //  console.log("timeupdate");
+              // //console.log("timeupdate");
               //  Update the scrubber handle position              
               
               
@@ -1109,7 +1102,7 @@
         
         if ( !title ) {
           
-          console.log("error: requires title");
+         //console.log("error: requires title");
           
           return;
         }
@@ -1143,8 +1136,8 @@
         store.update( slug, $popcorn.data.trackEvents.byStart );
         
         
-        console.log( "SAVED: " );
-        console.log(JSON.parse( localStorage.getItem(slug) ));
+       //console.log( "SAVED: " );
+       //console.log(JSON.parse( localStorage.getItem(slug) ));
         
       }, 
       
