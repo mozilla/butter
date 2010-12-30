@@ -3,9 +3,9 @@
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Butter Layout</title>
+    <title>Butter</title>
 
-    
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"  />     
 
 
     <link href="css/screen-orig.css" rel="stylesheet"  type="text/css" media="screen, projection">
@@ -88,7 +88,7 @@
           <a href="" class="ui-menu-controls" data-control="load" >Load</a>
           
           
-          run: <a href="javascript:cload();">cload()</a>
+          to test run: <a href="javascript:cload();">cload()</a> (may need loading message?)
           
         </div>
         
@@ -181,44 +181,17 @@
         
         <!-- right pane -->
         
-        <div id="ui-panel-preview" class="span-5 last">
-
-          <div id="ui-tools-accordion">
-            <h3><a href="#">Plugins</a></h3>
-            <div>
-              
-              
-                <ul id="ui-plugin-select-list" class="select-ul">
-                </ul>
-
-
-
-
-              <!--
-              <select id="ui-plugin-select">
-                <option>Select...</option>
-              </select>
-
-              <button id="ui-addtrackevent-button">Add Track Event</button>
-              -->
-              
-            </div>
+        <div id="ui-panel-templates" class="span-5 last">
+          
+          
+          <div id="ui-accordion-templates"  class="ui-accordion-panel">
             <h3><a href="#">Templates</a></h3>
             <div>
               <p>nothing yet</p>
             </div>
-            <h3><a href="#">Cue Points</a></h3>
-            <div>
-              <p>nothing yet</p>
-            </div>
-            <h3><a href="#">Data View</a></h3>
-            <div>
-              <textarea id="data-view" style="width:150px;height:150px"></textarea>
-            </div>
-          </div>           
-        
-        
-        </div>
+          </div>     
+
+        </div> 
       
       </div>
       <!-- ui-video-editor -->
@@ -245,19 +218,32 @@
         
       
       </div>
-      <div class="span-5 last">
-        
-        <div id="ui-track-details">
-          <h3><a href="#">Edit</a></h3>
-          <div id="ui-editor-form">
-            
 
+      <!-- plugins panel -->
+      
+      <div id="ui-panel-plugins" class="span-5 last">
+
+        <div id="ui-accordion-tools" class="ui-accordion-panel">
+          <h3><a href="#">Plugins</a></h3>
+          <div>
+
+            <ul id="ui-plugin-select-list" class="select-ul">
+            </ul>
 
           </div>
-        </div>     
 
-      
-      
+          <h3><a href="#">Cue Points</a></h3>
+          <div>
+            <p>nothing yet</p>
+          </div>
+
+          <h3><a href="#">Data View</a></h3>
+          <div>
+            <textarea id="data-view" style="width:150px;height:150px"></textarea>
+          </div>
+        </div>           
+
+
       </div>
     
     

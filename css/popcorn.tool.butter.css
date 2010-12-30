@@ -133,6 +133,11 @@ canvas{
   background: #b6b6b6;
 }
 
+.ui-accordion-panel div {
+  height: 200px;
+  overflow-y:scroll;
+}
+
 #ui-tools-accordion div {
   height: 180px;
   overflow-y:scroll;

@@ -104,7 +104,7 @@
     
     $("button,.ui-menu-controls").button();
     
-    $("#ui-tools-accordion,#ui-track-details").accordion();
+    $(".ui-accordion-panel").accordion();
 
 
     var TrackEditor = ( function () {
@@ -116,7 +116,7 @@
         videoReady: function( $p, callback ) {
           
           //  Create an interval to check the readyState of the video
-          var readyState = setInterval(function () {
+          var onReadyInterval = setInterval(function () {
             
             //  readyState has been satisfied
             if ( $p.video.readyState === 4 ) {
@@ -126,7 +126,7 @@
               callback && callback();
               
               //  clear the interval
-              clearInterval( readyState );
+              clearInterval( onReadyInterval );
             }
 
           }, 13);          
@@ -135,19 +135,57 @@
         }, 
         timeLineReady: function( $p, callback ) {
           
-          //  Ensure the video timeline is ready
-          TrackEditor.videoReady($p, function () {
+          var onReady = _.bind( function () {
             
             //  When ready, draw the timeline
-            TrackEditor.drawTimeLine( $p.duration() );
+            this.drawTimeLine( $p.duration() );
 
             //  execute callback if one was given
             callback && callback();
 
-          });
+          }, this);
+          
+          
+          //  Ensure the video timeline is ready
+          this.videoReady($p,  onReady);
         }, 
         
+        loading: function( toggle ) {
+          
+          
+          /*
+          if ( toggle ) {
+            var $loading = $("<div/>", {
+
+              className: "container", 
+              id: "ui-loading ui-widget-overlay",
+              html: "<h1>FUCK</h2>"
+            }).appendTo("body");
+            
+            $loading.css({
+              zIndex: 999, 
+              position: "fixed", 
+              left: $(".container").offset().left, 
+              top: $(".container").offset().top, 
+              background: "#222d3f",  
+              opacity: .70, 
+              filter: "Alpha(Opacity=70)", 
+              height: "100%"
+            });
+            
+            return;
+          }
+          
+          //$("#ui-loading").remove();
+          
+          */
+        }, 
         loadVideoFromUrl: function() {
+          
+          
+          this.loading( true );
+          
+          
           
           var url = $ioVideoUrl.val(), 
               tokens = url.split("."), 
@@ -171,8 +209,12 @@
           //  When new video and timeline are ready
           self.timeLineReady( $popcorn, function () {
             
+            self.loading( false );
+            
             //  Store refs to timeline canvas    
             var $timeline = $("#ui-tracks-time-canvas"), 
+                $track = $(".track"), 
+                $plugins = $(".ui-plugin-pane"),
                 increment = $timeline.width() / $popcorn.video.duration;
             
             
@@ -182,14 +224,14 @@
             }
             
             //  Check for existing tracks and remove them, do not use cached reference
-            if ( $(".track").length ) {
-              $(".track").remove();
+            if ( $track.length ) {
+              $track.remove();
             }
             
             
             //  Check for existing elements inside the plugin panes
-            if ( $(".ui-plugin-pane").children().length ) {
-              $(".ui-plugin-pane").children().remove();
+            if ( $plugins.children().length ) {
+              $plugins.children().remove();
             }
             
             
@@ -232,7 +274,7 @@
             
             //  Update the scrubber handle position              
             $scrubberHandle.css({
-              left: position
+              left: position - 1
             });
           
           }
@@ -264,8 +306,8 @@
         
         drawTimeLine: function( duration ) {
 
-          TrackEditor.deleteCanvas( "ui-tracks-time", "ui-tracks-time-canvas" );
-          TrackEditor.drawCanvas( "ui-tracks-time", "ui-tracks-time-canvas", 800, 20 );
+          this.deleteCanvas( "ui-tracks-time", "ui-tracks-time-canvas" );
+          this.drawCanvas( "ui-tracks-time", "ui-tracks-time-canvas", 800, 20 );
 
           var context = document.getElementById("ui-tracks-time-canvas").getContext('2d'),
               tick = ( ( context.canvas.width-10 ) / duration ), 
@@ -279,7 +321,7 @@
           for ( var i = 0, t = 0; i < duration * 2; i++ ) {
 
             if ( i >= 10 ) {
-              offset = 4;
+              offset = 6;
             }
 
             context.lineWidth = 1;
@@ -356,7 +398,7 @@
             }
           });
 
-          console.log(startWith);
+          
           //  Call the plugin to create an empty track event
           $popcorn[ trackType ]( startWith );
 
@@ -424,6 +466,7 @@
 
           $editor.dialog({
             width: "400px",
+            //modal: true, 
             autoOpen: false,
             title: 'Edit ' + _( trackType ).capitalize(),
             buttons: {
@@ -673,7 +716,7 @@
     $pluginSelectList.delegate( "li", "click", function (event) {
 
       
-      console.log(this, event);  
+      //console.log(this, event);  
       
       TrackEvents.addTrackEvent.call(this, event);
 
