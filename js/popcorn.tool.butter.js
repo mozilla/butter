@@ -358,6 +358,9 @@
         
         //    this will rebuild the visual track events on the stage
         
+        
+        
+        // TrackEvents.addTrackEvent.call(this, event);
        
        console.log(data.data);
 
