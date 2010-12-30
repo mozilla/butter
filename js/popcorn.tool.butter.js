@@ -89,6 +89,8 @@
         
         $videocontrols = $("#ui-video-controls"), 
         
+        $ioVideoUrl = $("#io-video-url"), 
+        
         //$scrubber = $("#ui-scrubber"), 
         //$pluginSelect = $("#ui-plugin-select"), 
         //$addTrackButton = $("#ui-addtrackevent-button"), 
@@ -147,10 +149,10 @@
         
         loadVideoFromUrl: function() {
           
-          var url = $("#io-video-url").val(), 
+          var url = $ioVideoUrl.val(), 
               tokens = url.split("."), 
-              type = tokens[ tokens.length - 1 ];
-            
+              type = tokens[ tokens.length - 1 ], 
+              self = this;
           
           //  Remove previously created video sources
           $video.children("source").remove();
@@ -167,7 +169,7 @@
           $popcorn = Popcorn("#video");
 
           //  When new video and timeline are ready
-          TrackEditor.timeLineReady( $popcorn, function () {
+          self.timeLineReady( $popcorn, function () {
             
             //  Store refs to timeline canvas    
             var $timeline = $("#ui-tracks-time-canvas"), 
@@ -208,13 +210,32 @@
               
               //  console.log("timeupdate");
               //  Update the scrubber handle position              
-              $("#ui-scrubber-handle").css({
-                left: ( increment * $popcorn.video.currentTime ) + $timeline.position().left
-              });
+              
+              
+              self.setScrubberPosition(  
+                ( increment * $popcorn.video.currentTime ) + $timeline.position().left
+              );
+              
 
             });          
           });
                 
+        
+        },
+        
+        isScrubbing: false, 
+        
+        setScrubberPosition: function( position ) {
+          
+          //  Throttle scrubber position update
+          if ( !this.isScrubbing ) {
+            
+            //  Update the scrubber handle position              
+            $scrubberHandle.css({
+              left: position
+            });
+          
+          }
         
         }, 
         
@@ -614,7 +635,11 @@
     
     
     
-    $("#io-video-url").bind( "change", TrackEditor.loadVideoFromUrl ).trigger("change")
+    $ioVideoUrl.bind( "change", function( event ) {
+      
+      TrackEditor.loadVideoFromUrl();
+    
+    }).trigger("change");
     
     
     
@@ -684,6 +709,16 @@
         
         $popcorn.currentTime( _( updateTo ).fourth() );
       }
+    }).bind( "mousedown mouseup", function( event ) {
+      
+      TrackEditor.isScrubbing = false;
+      
+      if ( event.type === "mousedown" ) {
+      
+        TrackEditor.isScrubbing = true;
+        
+      }
+
     });
 
     
