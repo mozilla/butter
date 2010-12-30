@@ -85,10 +85,9 @@
         $tracktime = $("#ui-tracks-time"), 
         $scrubberHandle = $("#ui-scrubber-handle"),
         $currenttime = $("#current-time"), 
-        $menucontrols = $(".ui-menu-controls"), 
+        $menucontrols = $(".ui-menu-controls"), // change to id?
         
         $videocontrols = $("#ui-video-controls"), 
-        
         $ioVideoUrl = $("#io-video-url"), 
         
         //$scrubber = $("#ui-scrubber"), 
@@ -98,13 +97,64 @@
 
         selectedEvent = null,
         lastSelectedEvent = null, 
-        
         activeTracks = {};
         
-    
+        
+        
+    //  Decorate UI buttons
     $("button,.ui-menu-controls").button();
     
+    //  Render accordion panels
     $(".ui-accordion-panel").accordion();
+    
+    //  Render menusets ( create with: button + ul ) 
+    $(".ui-menuset").each( function () {
+      
+      $(this)
+        .next("ul")
+          .menu({      
+
+            select: function(event, ui) {
+              
+              $(this).hide();
+              
+              console.log( ui );
+            
+            },
+            input: $(this)      
+
+          })
+          .css({
+            position: "absolute", 
+            zIndex: 999
+          })
+          .hide();
+    
+    }).bind( "click", function () {
+      
+      var $menu = $(this).next("ul");
+      
+      if ( $menu.is(":visible") ) {
+        $menu.hide();
+        
+        return false;
+      }
+
+      $menu.menu("deactivate").show().css({top:0, left:0, width: $(this).width() }).position({
+        my: "left top",
+        at: "left bottom",
+        of: this
+      });
+      
+      $(document).one("click", function() {
+        $menu.hide();
+      });
+      
+      return false;
+    
+    });
+    
+
 
 
     var TrackEditor = ( function () {
@@ -873,8 +923,9 @@
       
       var $this = $(this);
       
-      controls[ $this.attr("data-control") ]();
-    
+      if ( !!$this.attr("data-control") ) {
+        controls[ $this.attr("data-control") ]();
+      }
     
     });
     

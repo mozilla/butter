@@ -38,7 +38,7 @@ video {
   margin:0;
   padding:0;
   height:50px;
-  overflow:hidden;
+  /*overflow:hidden;*/
   background: -webkit-gradient(
       linear,
       left bottom,
@@ -202,4 +202,11 @@ text-align:center;
 
 #ui-event-editor {
   height:300px;
+}
+
+.hide {
+  display:none;
+}
+.show {
+  display:;
 }
