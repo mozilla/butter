@@ -196,22 +196,10 @@
     return obj;
   };
   
-  
-  
-
-  
+  //  Expose TrackStore as a global constructor  
   window.TrackStore = TrackStore;
 
-
-
-
 })(window, document, $, _, Popcorn);
-
-
-
-
-
-
 
 
 
@@ -343,10 +331,6 @@
       return false;
     
     });
-    
-    
-    
-
     
     //  Storage logic module
     var TrackMeta   = ( function() {
@@ -1389,15 +1373,20 @@
 
     //  TODO: Revise
     $ioCurrentTime.bind( "keydown", function( event ) {
-
+      
+      //  Enter
       if ( event.which === 13 ) {
         $('#io-current-time').next().trigger("click");          
       }
       
+      
+      //  Arrow right
       if ( event.which === 39 ) {
         $('[data-opt="next"]').parents("button").trigger("click");
       }
       
+      
+      //  Arrow left
       if ( event.which === 37 ) {
         $('[data-opt="prev"]').parents("button").trigger("click");
       }
