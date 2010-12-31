@@ -337,8 +337,13 @@
         }else if ( this.mouse.mode === drag ) {
           document.body.style.cursor='move';
           var diff = this.mouse.hovering.outPoint - this.mouse.hovering.inPoint;
+          
           this.mouse.hovering.inPoint = (this.mouse.x-this.mouse.hovering.grabX) / this.width * this.options.duration;
           this.mouse.hovering.outPoint = this.mouse.hovering.inPoint + diff;
+          
+         //console.log("drag");
+          
+          
           if ( this.options.mode != 'smartZoom' ) {
             this.mouse.hovering.popcornEvent.start = this.mouse.hovering.inPoint ;
             this.mouse.hovering.popcornEvent.end = this.mouse.hovering.outPoint ;
@@ -368,21 +373,28 @@
       
       if ( e.type === "mousedown" ) {
         
-        //console.log("mousedown");
+       //console.log("mousedown");
         this.mouse.down = true;
+        
+        
         
         return;
       }
       
       
+      
       if ( e.type === "mouseup" ) {
       
         //console.log("mouseup");
-        this.mouse.mode = auto;
+        //this.mouse.mode = auto;
         
         if ( this.mouse.hovering && this.mouse.down ) {
           
           if ( this.options.mode !== "smartZoom" ) {
+            
+           //console.log(this.options.mode);
+           //console.log(this.mouse.mode);
+          
             this.mouse.hovering.editEvent();
           }
           

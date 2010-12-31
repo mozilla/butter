@@ -1,5 +1,7 @@
-(function( window, document, $, _, Popcorn ) { 
-
+(function( _ ) { 
+  
+  //  Mixin any random, misc functions
+  
   _.mixin({
     //  Capitalize the first letter of the string
     capitalize : function( string ) {
@@ -42,39 +44,14 @@
       }
     }
   });
-
-  //  Random key=>val/method maps
   
-  
-  var formatMaps = {
+})(_);
 
-    currentTime: function( float ) {
-      
-      
-      var mm  = (""+ Math.round(float*100)/100 ).split(".")[1], 
-          ss  = ( mm || "" );
-      
-      // this is awful.
-      if ( ss.length === 1 ) {
-        ss = ss + "0";
-      }
-      // this is awful.
-      if ( !ss ) {
-        ss = "00";
-      }
-       
-      return  _( Math.floor( float / 3600 ) ).pad() + ":" + 
-                _( Math.floor( float / 60 ) ).pad() + ":" + 
-                  _( Math.floor( float % 60 ) ).pad() + ":" +
-                    ( ss === "0" ? "00" : ss );// + float.split(".")[1]/1000
-    }, 
-    
-    mp4: 'video/mp4; codecs="avc1, mp4a"',
-    ogv: 'video/ogg; codecs="theora, vorbis"'
-  };  
-  
 
-  //  Storage object constructor
+
+(function( window, document, $, _, Popcorn ) { 
+
+  //  TrackStore: Storage object constructor
 
   function TrackStore( title, desc, remote ) {
     
@@ -88,7 +65,7 @@
   
   TrackStore.properties = [ "title", "description", "remote" ];
 
-  _.each( TrackStore.properties, function ( key ) {
+  _.each( TrackStore.properties, function( key ) {
 
     TrackStore.prototype[ _( key ).capitalize() ] = function( val ) {
       return ( !val && this[ key ] ) || ( this[ key ] = val );
@@ -116,7 +93,7 @@
     ret[ "data" ] = [];//{ foo: "bar" };
     
     
-    
+    //  Iterate current track event data
     _.each( from, function( key, val, i ) {
       
       //  Ignore the dummy events at begining and end
@@ -201,31 +178,78 @@
     return localStorage.removeItem( slug );
   };
   
-  //  toArray stored as expando - not instance specific
-  TrackStore.toObject = function() {
-    var obj = {}, 
-        data = localStorage;
+  
+  //  Utility Functions
+  
+
+  TrackStore.getStorageAsObject = function() {
+    var i = -1, 
+        len = localStorage.length,
+        obj = {};
+
+    while ( ++i < len ) { 
+      var key = localStorage.key( i ); 
+      
+      obj[ key ] = new Function( "return " + localStorage.getItem( key ) )();
     
-    for ( var prop in data ) {
-      if ( _.isString( prop ) ) {
-        obj[ prop ] = new Function( "return " + data[ prop ] )();
-      }
     }
-    
     return obj;
   };
   
   
-
-  //var foo = new TrackStore( "a title", "a description" );
-  //console.log(foo);
-  //console.log( foo.Title() );
-  //console.log( foo.Description() );
-  //console.log( foo.serialize() );
-
+  
 
   
+  window.TrackStore = TrackStore;
+
+
+
+
+})(window, document, $, _, Popcorn);
+
+
+
+
+
+
+
+
+
+
+
+(function( window, document, $, _, Popcorn ) { 
+
+  //  Random key=>val/method maps
   
+  
+  var formatMaps = {
+
+    currentTime: function( float ) {
+      
+      
+      var mm  = (""+ Math.round(float*100)/100 ).split(".")[1], 
+          ss  = ( mm || "" );
+      
+      // this is awful.
+      if ( ss.length === 1 ) {
+        ss = ss + "0";
+      }
+      // this is awful.
+      if ( !ss ) {
+        ss = "00";
+      }
+       
+      return  _( Math.floor( float / 3600 ) ).pad() + ":" + 
+                _( Math.floor( float / 60 ) ).pad() + ":" + 
+                  _( Math.floor( float % 60 ) ).pad() + ":" +
+                    ( ss === "0" ? "00" : ss );// + float.split(".")[1]/1000
+    }, 
+    
+    mp4: 'video/mp4; codecs="avc1, mp4a"',
+    ogv: 'video/ogg; codecs="theora, vorbis"'
+  };  
+  
+
   $(function( ) { 
     
     var $popcorn, 
@@ -234,19 +258,27 @@
         $video = $("video"), 
 
         $pluginSelectList = $("#ui-plugin-select-list"), 
+        $uservideoslist = $("#ui-user-videos"), 
         $editor = $("#ui-track-event-editor"),
         
+        $trackeditting = $("#ui-track-editting"), 
         $uitracks = $("#ui-tracks"), 
         $tracks = $("#ui-tracks").children("div.track:not(.zoom)"),
         $tracktime = $("#ui-tracks-time"), 
         $scrubberHandle = $("#ui-scrubber-handle"),
-        $currenttime = $("#io-current-time"), 
+        
+        $scrubber = $("#ui-scrubber,#ui-scrubber-handle"), 
+        
         $menucontrols = $(".ui-menu-controls"), // change to id?
         
         $videocontrols = $("#ui-video-controls"), 
-        $ioVideoUrl = $("#io-video-url"), 
-        
         $uservideos = $("#ui-user-videos"),
+        
+
+        $ioCurrentTime = $("#io-current-time"), 
+        $ioVideoUrl = $("#io-video-url"), 
+        $ioVideoTitle = $("#io-video-title"),
+        $ioVideoDesc = $("#io-video-description"),
         
         //$scrubber = $("#ui-scrubber"), 
         //$pluginSelect = $("#ui-plugin-select"), 
@@ -258,8 +290,7 @@
         activeTracks = {}, 
         trackStore;
         
-        
-        
+
     //  Decorate UI buttons
     $("button,.ui-menu-controls").button();
     
@@ -267,7 +298,7 @@
     $(".ui-accordion-panel").accordion();
     
     //  Render menusets ( create with: button + ul ) 
-    $(".ui-menuset").each( function () {
+    $(".ui-menuset").each( function() {
       
       $(this)
         .next("ul")
@@ -289,7 +320,7 @@
           })
           .hide();
     
-    }).bind( "click", function () {
+    }).bind( "click", function() {
       
       var $menu = $(this).next("ul");
       
@@ -305,7 +336,7 @@
         of: this
       });
       
-      $(document).one("click", function() {
+      $doc.one( "click", function() {
         $menu.hide();
       });
       
@@ -315,71 +346,129 @@
     
     
     
-    //  Create my movies list
-    
-    _.each( TrackStore.toObject() , function( data, prop ) {
-      
-      var $li = $("<li/>", {
-        
-        html: '<h4><img class="icon" src="img/dummy.png">' + data.title + '</h4>',
-        className: "span-4 select-li clickable"
-      
-      }).appendTo( "#ui-user-videos" );
-      
-      
-      $li.bind( "click", function( event ) {
-        
-        var $this = $(this),
-            trackEvents = data.data;
-        
-        
-        // TODO: write function that accepts the data object
-        
-        //    function will:
-        
-        //    load video from data.remote
-        
-        //    set $("#oi-video-title").val() with  data.title
-        
-        //    set $("#oi-video-description").val() with data.description
-        
-        //    set $("#oi-video-url").val() with data.remote
-        
-        // AFTER the video is loaded in:
-        
-        //    a simulation of plugin calls will occur
-        
-        //    this will rebuild the visual track events on the stage
-        
-        
-        
-        // TrackEvents.addTrackEvent.call(this, event);
-       
-      //console.log(data.data);
 
-      
-      });
-    
-    });
-    
     
     //  Storage logic module
-    var TrackMeta   = ( function () {
+    var TrackMeta   = ( function() {
       
       
       
       return {
-        
-        
-    
       
+        
+        project: {
+          
+          unload: function() {
+          
+            
+            // unload the project
+            
+            
+          },
+        
+          load: function( tracks, project ) {
+        
+            // TODO: write function that accepts the data object
+
+            //    function will:
+
+            //    load video from data.remote
+
+
+            // AFTER the video is loaded in:
+
+            //    a simulation of plugin calls will occur
+
+            //    this will rebuild the visual track events on the stage
+
+            
+            $ioVideoUrl.val( project.remote );
+            $ioVideoTitle.val( project.title );
+            $ioVideoDesc.val( project.description );
+            
+            TrackEditor.loadVideoFromUrl( function () {
+            
+              _.each( tracks, function( trackDataObj ) {
+
+                _.each( trackDataObj, function( data, key ) {
+
+                  var options = _.extend( {}, { id: key }, data );  
+
+
+                  //console.log("options", options);
+                  TrackEvents.addTrackEvent.call( options, options );
+
+                });
+
+              });              
+            
+            });
+          }
+        }, 
+      
+      
+      
+        menu: {
+        
+          unload: function() {
+            
+            if ( $("#ui-user-videos li").length ) {
+              $("#ui-user-videos li").remove();
+            }
+
+            //console.log($("#ui-user-videos li"));
+          },
+
+          load: function() {
+            
+            //  Unload current menu state
+            this.unload();
+
+            var storedMovies = TrackStore.getStorageAsObject();
+
+            if ( _.size( storedMovies ) > 0 ) {
+
+              _.each( TrackStore.getStorageAsObject() , function( data, prop ) {
+
+                var $li = $("<li/>", {
+
+                  html: '<h4><img class="icon" src="img/dummy.png">' + data.title + '</h4>',
+                  className: "span-4 select-li clickable"
+
+                }).appendTo( "#ui-user-videos" );
+                
+                
+                //console.log(data);
+                
+                $li.data( "track",  data.data );
+                $li.data( "project",  data );
+
+              });        
+
+            } else {
+
+              var $li = $("<li/>", {
+
+                html: '<h4><em class="quiet">Empty</em></h4>',
+                className: "span-4"
+
+              }).appendTo( "#ui-user-videos" );          
+              
+            }
+          }        
+        }
       };
       
     })();
     
+    window.TrackMeta = TrackMeta;
+    
+    TrackMeta.menu.load();
+    
+    
 
     //  Editor logic module
-    var TrackEditor = ( function (window) {
+    var TrackEditor = ( function(window) {
       
       
       return {
@@ -388,7 +477,7 @@
         videoReady: function( $p, callback ) {
           
           //  Create an interval to check the readyState of the video
-          var onReadyInterval = setInterval(function () {
+          var onReadyInterval = setInterval(function() {
             
             //  readyState has been satisfied
             if ( $p.video.readyState === 4 ) {
@@ -396,6 +485,9 @@
               
               //  execute callback if one was given
               callback && callback();
+              
+              
+              $doc.trigger( "videoReady" );
               
               //  clear the interval
               clearInterval( onReadyInterval );
@@ -407,13 +499,16 @@
         }, 
         timeLineReady: function( $p, callback ) {
           
-          var onReady = _.bind( function () {
+          var onReady = _.bind( function() {
             
             //  When ready, draw the timeline
             this.drawTimeLine( $p.duration() );
 
             //  execute callback if one was given
             callback && callback();
+            
+            
+            $doc.trigger( "timelineReady" );
 
           }, this);
           
@@ -452,7 +547,7 @@
           
           */
         }, 
-        loadVideoFromUrl: function() {
+        loadVideoFromUrl: function( callback ) {
           
           
           //this.loading( true );
@@ -479,21 +574,20 @@
           $popcorn = Popcorn("#video");
 
           //  When new video and timeline are ready
-          self.timeLineReady( $popcorn, function () {
-            
-            self.loading( false );
+          self.timeLineReady( $popcorn, function() {
             
             //  Store refs to timeline canvas    
-            var $timeline = $("#ui-tracks-time-canvas"), 
+            var $tracktimecanvas = $("#ui-tracks-time-canvas"), 
                 $track = $(".track"), 
                 $plugins = $(".ui-plugin-pane"),
-                increment = $timeline.width() / $popcorn.video.duration;
+                increment = Math.round( $tracktimecanvas.width() / $popcorn.video.duration );
+                
             
-            
-            
+            //  Empty active track cache
             if ( _.size( activeTracks ) ) {
               activeTracks = {};
             }
+            
             
             //  Check for existing tracks and remove them, do not use cached reference
             if ( $track.length ) {
@@ -507,12 +601,48 @@
             }
             
             
+            //  Destroy scrubber draggable
+            $scrubberHandle.draggable("destroy");
+            
+            
+            //  Create scrubber draggable
+            $scrubberHandle.draggable({ 
+              axis: "x", 
+              containment: "#ui-tracks-time-canvas",  
+              grid: [ increment / 4, 0],
+              //distance: increment / 4 / 2, 
+              start: function() {
+                TrackEditor.isScrubbing = true;
+              }, 
+              stop: function() {
+                TrackEditor.isScrubbing = false;
+              }, 
+              drag: function( event, ui ) {
+                
+                var scrubPosition = ui.offset.left  - $tracktimecanvas.position().left, 
+                    updateTo = $popcorn.video.duration / $tracktimecanvas.width() * scrubPosition, 
+                    quarterTime = _( updateTo ).fourth();
+
+                //  Force the time to be in quarters of a second
+                $popcorn.currentTime( quarterTime );
+
+                self.setScrubberPosition(  
+                  ( increment / 4 * quarterTime ) + $tracktimecanvas.position().left,
+                  {
+                    increments: increment, 
+                    current: quarterTime
+                  }
+                );                
+                
+              }
+            });
+            
             //  Listen on timeupdates
-            $popcorn.listen( "timeupdate", function () {
+            $popcorn.listen( "timeupdate", function() {
               
               
               //  Updates the currenttime display
-              $currenttime.val(function () {
+              $ioCurrentTime.val(function() {
 
                 var $this = $(this), 
                     prop = _( this.id.replace("io-", "") ).camel(), 
@@ -522,42 +652,70 @@
 
               });
               
-              // //console.log("timeupdate");
+
               //  Update the scrubber handle position              
+
+              var quarterTime = _( $popcorn.video.currentTime ).fourth();
               
               
               self.setScrubberPosition(  
-                ( increment * $popcorn.video.currentTime ) + $timeline.position().left
+                ( increment * quarterTime ) + $tracktimecanvas.position().left, 
+                {
+                  increments: increment, 
+                  current: quarterTime
+                }
               );
               
-
-
-
-
-              
-
-              
-
-
-
-            });          
+            });   
+            
+            
+            
+            //  If a callback was provided, fire now
+            
+            callback && callback();
+            
           });
                 
         
         },
         
         isScrubbing: false, 
+        inProgress: false,
         
         setScrubberPosition: function( position ) {
+          
+          var state, product, offset = 1;
+          
+          if ( arguments.length === 2 ) {
+            state = arguments[1];
+            
+            //  Scrubber seems to get off position 
+            //  every 3rd second in the timeline
+            
+            product = Math.round( state.current / 3 );
+            
+            //  If the product is meaningful, we'll use it
+            if ( product > 0 ) {
+              
+              offset += product + product%2  ;
+              
+            }
+            
+          }
+          
+          //console.log(state.increments);
           
           //  Throttle scrubber position update
           if ( !this.isScrubbing ) {
             
             //  Update the scrubber handle position              
+            var fixPosition = Math.floor( position - offset );
+            
             $scrubberHandle.css({
-              left: position - 1
+              left: position - offset
             });
-          
+            
+            
           }
         
         }, 
@@ -579,6 +737,7 @@
           canvas.id = id;
           canvas.width = width;
           canvas.height = height;
+          //canvas.style.marginLeft = "3px";
           
           document.getElementById(parent).appendChild(canvas);
           
@@ -588,14 +747,17 @@
         drawTimeLine: function( duration ) {
 
           this.deleteCanvas( "ui-tracks-time", "ui-tracks-time-canvas" );
-          this.drawCanvas( "ui-tracks-time", "ui-tracks-time-canvas", 800, 20 );
-
+          this.drawCanvas( "ui-tracks-time", "ui-tracks-time-canvas", 800, 25 );
+          
+          duration = Math.floor( duration );
+          
           var context = document.getElementById("ui-tracks-time-canvas").getContext('2d'),
-              tick = ( ( context.canvas.width-10 ) / duration ), 
-              durationFloor = Math.floor(duration), 
+              tick = Math.floor( 800 / duration ), 
+              durationCeil = Math.ceil(duration), 
               increment = tick/4, 
               offset = 2;
 
+          
           context.font = "10px courier";
           context.fillStyle = "#000";
           
@@ -611,7 +773,7 @@
             if ( i%2 || i === 0 ) {
               t++;
               
-              if ( t <= durationFloor ) {
+              if ( t <= durationCeil ) {
                 context.fillText( t , t * tick - offset, 7);
               }
 
@@ -619,16 +781,16 @@
               
               //  Secondary ticks
               for ( var f = 0; f < 4; f++ ) {
-                context.moveTo( posOffset + ( f * increment ) -1, 15);
-                context.lineTo( posOffset + ( f * increment ) -1, 20);                
+                context.moveTo( posOffset + ( f * increment ), 20);
+                context.lineTo( posOffset + ( f * increment ), 25);                
               }
               
 
             } else {
               
               // Primary ticks
-              context.moveTo( i * tick/2 -1, 10);
-              context.lineTo( i * tick/2 -1, 20);
+              context.moveTo( i * tick/2, 10);
+              context.lineTo( i * tick/2, 25);
             
             }
 
@@ -640,7 +802,7 @@
     })(window);
     
     //  Event editing logic module
-    var TrackEvents = ( function (window) {
+    var TrackEvents = ( function(window) {
       
       
       return {
@@ -654,6 +816,7 @@
                 start: 2,
                 end: 10
               };
+              
 
 
           arguments.length && ( settings = arguments[0] );
@@ -673,12 +836,15 @@
           });
 
           //  Explicitly augment the starting object with all manifest props
-          _.forEach( trackManifest.options, function ( obj, key ) {
+          _.forEach( trackManifest.options, function( obj, key ) {
             if ( !( key in startWith ) ) {
+             //console.log("missing");
               startWith[ key ] = "";
             }
           });
-
+          
+          //console.log("trackType", trackType);
+          //console.log("startWith", startWith);
           
           //  Call the plugin to create an empty track event
           $popcorn[ trackType ]( startWith );
@@ -746,14 +912,16 @@
           });
 
           $editor.dialog({
-            width: "400px",
-            //modal: true, 
+            //width: "300px",
+            //position: [ $("#ui-panel-plugins").offset().left, $("#ui-panel-plugins").offset().top ],
+            
             autoOpen: false,
             title: 'Edit ' + _( trackType ).capitalize(),
+            
             buttons: {
               //'Delete': editEventDelete,
               'Cancel': TrackEvents.editEventCancel,
-              'OK'    : function () {
+              'OK'    : function() {
 
                 TrackEvents.editEventApply.call(trackEvent); 
 
@@ -794,16 +962,19 @@
 
           //console.log(manifest);
 
-          aboutTab.children("*").remove(); // Rick, not sure if this is good practice here. Any ideas?
+          //aboutTab.children("*").remove(); // Rick, not sure if this is good practice here. Any ideas?
 
-          $("<h3/>").text(about.name).appendTo(aboutTab);
-          $("<p/>").html("<label>Version:</label> "+about.version).appendTo(aboutTab);
-          $("<p/>").html("<label>Author:</label> "+about.author).appendTo(aboutTab);
-          $("<a/>").html('<label>Website:</label> <a href="'+about.website+'">'+about.website+'</a>').appendTo(aboutTab);
+          //$("<h3/>").text(about.name).appendTo(aboutTab);
+          //$("<p/>").html("<label>Version:</label> "+about.version).appendTo(aboutTab);
+          //$("<p/>").html("<label>Author:</label> "+about.author).appendTo(aboutTab);
+          //$("<a/>").html('<label>Website:</label> <a href="'+about.website+'">'+about.website+'</a>').appendTo(aboutTab);
 
-          optionsTab.children("*").remove(); // Rick, not sure if this is good practice here. Any ideas?
+          //optionsTab.children("*").remove(); // Rick, not sure if this is good practice here. Any ideas?
 
          //console.log(manifest);
+         
+         
+         $("#ui-track-event-editor").children("*").remove();
 
           if ( !selectedEvent.manifestElems ) {  
             selectedEvent.manifestElems = {}; 
@@ -858,7 +1029,7 @@
               }
 
               elem.appendTo(label);
-              label.appendTo(optionsTab);
+              label.appendTo( "#ui-track-event-editor" );
               
 
               
@@ -912,7 +1083,7 @@
           
           // check for empty stuff
           
-          $("#" + selectedEvent.popcornEvent.target).children().each(function () {
+          $("#" + selectedEvent.popcornEvent.target).children().each(function() {
             
             if ( $(this).html() === "" ) {
               $(this).remove();
@@ -958,12 +1129,11 @@
     
     
     
-    
+    /*
     $ioVideoUrl.bind( "change", function( event ) {
-      
       TrackEditor.loadVideoFromUrl();
-    
-    }).trigger("change");
+    });
+    */
     
     
     
@@ -979,7 +1149,7 @@
     
     
     //  Load plugins to ui-plugin-select-list
-    _.each( Popcorn.registry, function ( plugin, v ) {
+    _.each( Popcorn.registry, function( plugin, v ) {
       
       
       // todo: convert to templates
@@ -994,7 +1164,7 @@
     });
 
 
-    $pluginSelectList.delegate( "li", "click", function (event) {
+    $pluginSelectList.delegate( "li", "click", function( event ) {
 
       
       //console.log(this, event);  
@@ -1005,50 +1175,43 @@
     
     });
     
+    
+    
+    
+    
+    
+    
+    $uservideoslist.delegate( "li", "click", function( event ) {
+      
+      var $this = $(this),
+          trackEvents = $this.data( "track" ), 
+          projectData = $this.data( "project" );
+
+      
+      TrackMeta.project.load( trackEvents, projectData );
+  
+
+    });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     // this is awful  
     $("#ui-user-videos li, #ui-plugin-select-list li")
-      .hover(function () {
+      .hover(function() {
         $(this).animate({ backgroundColor: "#ffff7e" }, 200);
       }, 
-      function () {
+      function() {
         $(this).animate({ backgroundColor: "#FFFFFF" }, 200);
     });  
-    
-    
-    
-    
-    $scrubberHandle.draggable({ 
-      axis: "x", 
-      containment: "#ui-tracks",  
-      drag: function (event, ui) {
-          
-        //console.log($tracktime.position().left);
-        
-        
-        var scrubPosition = ( ui.offset.left + 5 ) - $tracktime.position().left, 
-            updateTo = $popcorn.video.duration / $tracktime.width() * scrubPosition, 
-            tolerance = ( $popcorn.video.duration / $tracktime.width() ) / 4;
-            
-        
-        $popcorn.currentTime( _( updateTo ).fourth() );
-      }
-    }).bind( "mousedown mouseup", function( event ) {
-      
-      TrackEditor.isScrubbing = false;
-      
-      if ( event.type === "mousedown" ) {
-      
-        TrackEditor.isScrubbing = true;
-        
-      }
-
-    });
-
-    
-    
-    $body.disableSelection();
-    $uitracks.disableSelection();
     
     
     $doc.bind( "addTrackComplete.track" , function( event ) {
@@ -1056,12 +1219,19 @@
       //console.log("addTrackComplete.track");
       //console.log( event );
       
-      $("#ui-scrubber,#ui-scrubber-handle").css({
-        height: $uitracks.height()
+      $scrubber.css({
+        height: $trackeditting.height()
       });
     });
     
-
+    $doc.bind( "timelineReady videoReady", function( event ) {
+      
+      $scrubber.css({
+        height: $trackeditting.height()
+      });        
+      
+      // console.log( event.type );
+    });
     
 
     
@@ -1073,12 +1243,19 @@
     
     var controls = {
       
-      load: function () {
+      load: function() {
       
         TrackEditor.loadVideoFromUrl();
       
       }, 
-      save: function () {
+      
+      delete: function() {
+        
+        console.log(trackStore);
+      
+      }, 
+      
+      save: function() {
         
         // get slug from #io-title
         
@@ -1094,9 +1271,9 @@
         
         
         var store = trackStore || new TrackStore(), 
-            title = $("#io-video-title").val(), 
-            desc = $("#io-video-description").val(), 
-            remote = $("#io-video-url").val(),
+            title = $ioVideoTitle.val(), 
+            desc = $ioVideoDesc.val(), 
+            remote = $ioVideoUrl.val(),
             slug;
             
         
@@ -1116,40 +1293,29 @@
         
         
         
-        //console.log( store );
-        
-        
         if ( !store.read( slug ) ) {
-          
-          //console.log("trackstore does not exist, create");
           
           store.create( $popcorn.data.trackEvents.byStart );
           
-          //console.log(localStorage);
-          
-          return;
+        } else {
+        
+          store.update( slug, $popcorn.data.trackEvents.byStart );
+        
         }
         
-        
-        //console.log("trackstore exists, update");
-        
-        store.update( slug, $popcorn.data.trackEvents.byStart );
-        
-        
-       //console.log( "SAVED: " );
-       //console.log(JSON.parse( localStorage.getItem(slug) ));
+        TrackMeta.menu.load();
         
       }, 
       
-      play: function () {
+      play: function() {
         
         $popcorn.video.play();
       }, 
-      pause: function () {
+      pause: function() {
         
         $popcorn.video.pause();
       }, 
-      seek: function ( option ) {
+      seek: function( option ) {
       
         //var seekTo;
         
@@ -1199,18 +1365,6 @@
     
     
 
-    
-    $videocontrols.children("button").bind( "click", function ( event ) {
-      
-      // was elegant, now its not. needs to be fixed
-      var $this = $(this).children("span").children("span");
-      
-      
-      controls[ $this.attr("data-control") ]( $this.attr("data-opt") );
-
-    });
-    
-    
     $menucontrols.bind( "click", function( event ) {
       
       event.preventDefault();
@@ -1222,10 +1376,19 @@
       }
     
     });
-    
+
+    $videocontrols.children("button").bind( "click", function( event ) {
+      
+      // was elegant, now its not. needs to be fixed
+      var $this = $(this).children("span").children("span");
+      
+      
+      controls[ $this.attr("data-control") ]( $this.attr("data-opt") );
+
+    });    
 
     //  TODO: Revise
-    $currenttime.bind( "keydown", function ( event ) {
+    $ioCurrentTime.bind( "keydown", function( event ) {
 
       if ( event.which === 13 ) {
         $('#io-current-time').next().trigger("click");          

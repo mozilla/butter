@@ -16,7 +16,9 @@ video {
 }
 
 #ui-tracks{
-  /*border:1px solid black;*/
+  border:1px solid #AAA;
+  
+  background: #eee; 
   height:300px;
   width:830px;
   /*margin:0 auto;*/
@@ -27,7 +29,7 @@ video {
 /*, #ui-plugin-tools*/
 
 .track {
-  width:790px;
+  width:800px;
   height:36px;
   bottom:0px;
   position:relative;
@@ -63,7 +65,7 @@ video {
   float:left;
 }
 .ui-menu-controls {
-  margin:5px 2px 0 5px;
+  margin: 5px 2px 0 0px;
 }
 
 #ui-tracks-time {
@@ -82,30 +84,32 @@ canvas{
 
 #image-container{position:fixed;top:0;left:0;border:1px dotted red;}
 
-/*#ui-track-event-editor .edit-buttons { text-align:right;margin:10px 0;}*/
 #ui-track-event-editor {
-
 }
 
 #ui-video-track-editor {
-  
 }
 
-#ui-track-event-editor label{display:block;text-align:right;margin-bottom:2px;}
-
+#ui-track-event-editor label{
+  display:block;
+  text-align:right;
+  margin-bottom:2px;
+}
 
 #ui-track-event-editor label  input{
-  width:175px;margin-left:10px;
+  width:150px;margin-left:10px;
   border:1px solid #CCC;
   border-radius:6px;
   font-size:12px!important;
   padding:5px;
+  /*
   background:
     -linear-gradient(left, #DDD, #FFF)
   ;
   background:  
   -webkit-gradient(linear, left top, left bottom, from(#DDD), to(#FFF))
   ;
+  */
 }
 
 #ui-tools-accordion {
@@ -130,7 +134,7 @@ canvas{
 .ui-plugin-pane {
   float: left;
   height: 180px; 
-  background: #b6b6b6;
+  background: #EEE;
 }
 
 .ui-accordion-panel div {
@@ -151,7 +155,7 @@ canvas{
   height:100px;
   position: absolute;
   z-index:9999;
-  cursor:move;
+  cursor:e-resize;
 }
 
 #ui-scrubber {
@@ -160,7 +164,7 @@ canvas{
   height:100px;
   position: absolute;
   z-index:9998;
-  cursor:move;
+  cursor:e-resize;
 }
 
 
@@ -205,6 +209,14 @@ text-align:center;
 }
 
 #ui-user-videos li{
-  width: 98%;
+  min-width: 200px;
   margin: 5px 0 5px 5px;
+}
+
+
+
+.medium {font-size:1.2em;line-height:1.25em;margin-bottom:1em;}
+
+.marginleft{
+  margin-left:5px;
 }
