@@ -1404,20 +1404,10 @@
           trackEvents = $this.data( "track" ), 
           projectData = $this.data( "project" );
 
-      
-      TrackMeta.project.load( trackEvents, projectData );
-  
-
+      if ( projectData ) {
+        TrackMeta.project.load( trackEvents, projectData );
+      }
     });
-    
-    
-
-    
-    
-    
-    
-    
-    
     
 
     // this is awful  
@@ -1642,7 +1632,6 @@
       // was elegant, now its not. needs to be fixed
       var $this = $(this).children("span").children("span");
       
-      
       controls[ $this.attr("data-control") ]( $this.attr("data-opt") );
 
     });    
@@ -1668,9 +1657,6 @@
       }
       
     });
-    
-    
-    
     
     
     window.$popcorn = $popcorn;
