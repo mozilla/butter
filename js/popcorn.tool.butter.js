@@ -1445,7 +1445,11 @@
         seekTo = 0;
         volumeTo = 0;
         
-        TrackEditor.loadVideoFromUrl();
+        
+        //  TODO: update to validate as url;
+        if ( !!$ioVideoUrl.val() ) {
+          TrackEditor.loadVideoFromUrl();
+        }
       
       }, 
       
