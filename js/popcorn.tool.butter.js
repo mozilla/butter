@@ -630,6 +630,9 @@
                 increment = Math.round( $tracktimecanvas.width() / $popcorn.video.duration );
                 
             
+            //$ioVideoTitle.val("");
+            //$ioVideoDesc.val("");
+            
             //  Empty active track cache
             if ( _.size( activeTracks ) ) {
               activeTracks = {};
