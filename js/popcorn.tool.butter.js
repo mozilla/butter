@@ -582,7 +582,9 @@
               self = this;
           
           
-          
+          $ioVideoTitle.val("");
+          $ioVideoDesc.val("");
+
           //  Remove previously created video sources
           if ( $("video").length ) {
             $("video").remove();
@@ -630,7 +632,7 @@
                 increment = Math.round( $tracktimecanvas.width() / $popcorn.video.duration );
                 
             
-            //$ioVideoTitle.val("");
+            $ioVideoTitle.val("");
             //$ioVideoDesc.val("");
             
             //  Empty active track cache
