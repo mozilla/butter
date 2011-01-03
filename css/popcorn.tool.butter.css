@@ -15,7 +15,7 @@ video {
   /*display:block;*/
 }
 
-#ui-loading-html, #ui-export-html, #ui-start-over {
+#ui-loading-html, #ui-export-html, #ui-start-html {
 position: absolute;
 z-index:9996;
 } 
@@ -24,9 +24,6 @@ z-index:9996;
 position: absolute;
 z-index:9995;
 }
-
-
-
 
 #ui-tracks{
   border:1px solid #AAA;
@@ -152,7 +149,7 @@ canvas{
 }
 
 .ui-accordion-panel div {
-  height: 210px;
+  height: 250px;
   overflow-y:scroll;
 }
 

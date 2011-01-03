@@ -411,6 +411,7 @@
     
       if ( e.type === "mouseenter" ) {
         
+        //console.log(e, this);
         
         this._draw();
         

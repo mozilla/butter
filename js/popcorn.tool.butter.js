@@ -385,9 +385,11 @@
     });
     
     
-    //  Start with overlay screens hidden
+    //  Start with overlay scenes hidden
     $exportready.hide();
     $loadready.hide();
+    
+    //  Uncomment to start with new video prompt scene
     $startready.hide();
         
     
