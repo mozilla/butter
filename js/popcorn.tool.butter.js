@@ -853,7 +853,41 @@
       
       
       return {
-      
+        
+        getTrackEventById: function( id ) {
+          
+          if ( !$popcorn.data ) {
+            return {};
+          }
+          
+          var events = Popcorn.getTrackEvents( $popcorn ), 
+              ret; 
+              
+          _.each( events, function( data, key ) {
+            
+            if ( data._id === id ) {
+              ret = data;
+              return;
+            }
+          
+          });
+          
+          return ret;
+        
+        }, 
+        
+        destroyTrackEvent: function( $track, $popcorn, id ) {
+
+          //  Remove the track event from the tracks ui cache
+          $track.track( 'killTrackEvent', {
+            _id: id
+          });
+
+
+          //  Remove the track event from Popcorn cache
+          $popcorn.removeTrackEvent( id );
+
+        },
         addTrackEvent: function() {
           
           if ( !$popcorn || !$popcorn.data ) {
@@ -913,7 +947,7 @@
           
           
           //  Capture this track event
-          trackEvent = trackEvents[ trackEvents.length - 1 ];
+          trackEvent = TrackEvents.getTrackEventById(lastEventId)
 
           
           //  Check for existing tracks of this type
@@ -924,7 +958,7 @@
             $track = $("<div/>", {
 
               "title": trackType, 
-              className: "span-21 last track track" + ( $tracks.length + 1 )
+              className: "span-21 last track track" + _.size( activeTracks )
 
             }).prependTo( "#ui-tracks" );
 
@@ -946,8 +980,7 @@
             $track = activeTracks[ trackType ];
 
           }
-          
-          
+
           //  TODO: when a track of this type already exists... 
           //  ensure we need to actually make "track" into something
           
@@ -962,13 +995,8 @@
             editEvent         : function( event ) {  
 
               //console.log("TrackEvent clicked");
-
-
-              //console.log("event", event, event.shiftKey);
-              
               if ( !event.shiftKey ) {
-              
-              
+                
                 $editor.dialog({
                   //width: "300px",
                   //position: [ $("#ui-panel-plugins").offset().left, $("#ui-panel-plugins").offset().top ],
@@ -980,39 +1008,26 @@
                     //'Delete': editEventDelete,
                     'Cancel': TrackEvents.editEventCancel,
                     'OK'    : function() {
-
-                      TrackEvents.editEventApply.call(trackEvent); 
-
+                      
+                      TrackEvents.editEventApply.call( trackEvent );
+                      
                       $(this).dialog("close");
                     },
                     'Apply' : TrackEvents.editEventApply
                   }
                 });               
 
-                TrackEvents.drawTrackEvents.call(this); 
+                TrackEvents.drawTrackEvents.call( this ); 
               
               } else {
                 
                 //  If the shift key was held down when the track event was clicked.
                 
-                
-                $track.track( 'killTrackEvent', {
-                  _id: lastEventId
-                });
-                
-                $popcorn.removeTrackEvent( lastEventId );
-                
-                //TrackEvents.deleteTrackEvent.call(this); 
-                
-                
-                
-                //console.log(.clearRect(0,0,canvas.width,canvas.height));
-              
+                TrackEvents.destroyTrackEvent( $track, $popcorn, lastEventId );
+
+                $doc.trigger( "removeTrackComplete", { type: trackType } );
               
               }
-              
-              
-              
             }
           });
 
@@ -1022,14 +1037,7 @@
 
         },
         
-        deleteTrackEvent: function () {
-          
-          
-          selectedEvent = this;
-          
-          selectedEvent
-        
-        }, 
+
         
         drawTrackEvents: function() { 
 
@@ -1045,7 +1053,11 @@
           selectedEvent = this;    
           
           
-          console.log(this, selectedEvent);
+          //console.log(this, selectedEvent);
+          
+         //console.log( $(selectedEvent.parent.element).attr("title") );
+         //console.log(selectedEvent.type);
+          
 
           var manifest    = selectedEvent.popcornEvent._natives.manifest,
               about       = manifest.about,
@@ -1068,10 +1080,10 @@
 
           //optionsTab.children("*").remove(); // Rick, not sure if this is good practice here. Any ideas?
 
-         //console.log(manifest);
+          //console.log(manifest);
          
          
-         $("#ui-track-event-editor").children("*").remove();
+          $("#ui-track-event-editor").children("*").remove();
 
           if ( !selectedEvent.manifestElems ) {  
             selectedEvent.manifestElems = {}; 
@@ -1096,8 +1108,11 @@
 
 
               selectedEvent.manifestElems[i] = elem;
-
-              if ( lastSelectedEvent != selectedEvent ) { 
+              
+             //console.log(lastSelectedEvent);
+              
+              
+              if ( _.isNull(lastSelectedEvent) || lastSelectedEvent != selectedEvent ) { 
                 selectedEvent.previousValues[i] = selectedEvent.popcornEvent[i];
               }
 
@@ -1467,6 +1482,30 @@
         height: $trackeditting.height()
       });
     });
+    
+    
+    $doc.bind( "removeTrackComplete", function( event, data ) {
+      
+      var events = Popcorn.getTrackEvents( $popcorn ), 
+          type = data.type, 
+          count = 0, 
+          ret; 
+
+      _.each( events, function( data, key ) {
+        if ( data._id.indexOf( type ) === 0 ) {
+          count++;
+          return;
+        }
+      });
+      
+      if ( !count ) {
+        $('div[title="'+type+'"]').remove();
+        
+        delete activeTracks[ type ];
+      }
+      
+    });
+    
     
 
     //  Updating the scrubber height

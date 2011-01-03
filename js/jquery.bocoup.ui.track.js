@@ -160,7 +160,7 @@
 
       var ret = [];
       
-      console.log("this._inView", this._inView);
+      //console.log("this._inView", this._inView);
       
       _.each( this._inView, function ( track, key ) {
         
@@ -172,7 +172,7 @@
       });
       
       
-      console.log("post this._inView", this._inView, ret);
+     //console.log("post this._inView", this._inView, ret);
       this._inView  = ret;
     
     },

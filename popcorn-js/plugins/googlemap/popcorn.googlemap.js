@@ -147,11 +147,19 @@ var googleCallback;
        * options variable
        */
       end: function(event, options){
+        var $children = document.getElementById(options.target).children;
+
+        if ( !!$children.length ) {
+          Array.prototype.forEach.call( $children, function( obj, key) {
+              obj.style.display = "none";
+          });    
+        }        
+
         // if the map exists hide it do not delete the map just in 
         // case the user seeks back to time b/w start and end
         if (options._map) {
           options._map.getDiv().style.display = 'none';          
-        }
+        }        
       }
       
     };

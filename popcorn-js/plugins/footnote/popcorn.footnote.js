@@ -73,6 +73,15 @@
      * options variable
      */
     end: function(event, options){
+      var $children = document.getElementById(options.target).children;
+
+      if ( !!$children.length ) {
+        Array.prototype.forEach.call( $children, function( obj, key) {
+            obj.style.display = "none";
+        });    
+      }
+
+
       options._container.style.display = "none";
     }
    
