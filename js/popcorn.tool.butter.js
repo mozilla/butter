@@ -21,7 +21,7 @@
     },
     fourth: function( number ) {
       
-      return ( Math.round(number * 4) / 4).toFixed(2);
+      return ( Math.ceil(number * 4) / 4).toFixed(2);
     },
     // Convert an SMPTE timestamp to seconds
     smpteToSeconds: function( smpte ) {
@@ -182,10 +182,7 @@
     return localStorage.removeItem( slug );
   };
   
-  
   //  Utility Functions
-  
-
   TrackStore.getStorageAsObject = function() {
     var i = -1, 
         len = localStorage.length,
@@ -269,7 +266,7 @@
         $uservideos = $("#ui-user-videos"),
         $exporttolist = $("#ui-export-to"), 
         
-
+        //  io- prefix ids map to inputs elements 
         $ioCurrentTime = $("#io-current-time"), 
         $ioVideoUrl = $("#io-video-url"), 
         $ioVideoTitle = $("#io-video-title"),
@@ -277,22 +274,22 @@
         $ioVideoData = $("#io-video-data"), 
         $ioExport = $("#io-export"),
         
-        //$scrubber = $("#ui-scrubber"), 
-        //$pluginSelect = $("#ui-plugin-select"), 
-        //$addTrackButton = $("#ui-addtrackevent-button"), 
-        //$editorPane = $("#ui-event-editor"),
-        
-        $exportready = $(".ui-export-ready"),
+        //  -ready suffix class has 2 matching elements
         $loadready = $(".ui-load-ready"),
+        $exportready = $(".ui-export-ready"),
+        $startready = $(".ui-start-ready"),
         
-        $uiLoadingIcon = $("#ui-loading-icon"),
+        //  
+        $uiLoadingHtml = $("#ui-loading-html"),
+        $uiExportHtml = $("#ui-export-html"),
+        $uiStartHtml = $("#ui-start-html"),
         
+       
         selectedEvent = null,
         lastSelectedEvent = null, 
         activeTracks = {}, 
         trackStore;
-        
-
+    
     //  Decorate UI buttons
     $("button,.ui-menu-controls").button();
     
@@ -302,6 +299,7 @@
     //  Render menusets ( create with: button + ul ) 
     $(".ui-menuset").each( function() {
       
+      //  Find sibling ul to create menu pane
       $(this)
         .next("ul")
           .menu({      
@@ -310,8 +308,6 @@
               
               $(this).hide();
               
-             //console.log( ui );
-            
             },
             input: $(this)      
 
@@ -349,23 +345,50 @@
       return false;
     
     });
+
     
-    //  Set placement of loading icon
-    $("#ui-loading-icon").css({
-      left: ( $body.width() / 2 ) - 64,
-      top: ( $body.height() / 2 )
-    });
+    //  Cache body dimensions
+    $body.dims = {
+      width: $body.width(),
+      height: $body.height(),
+    };
     
 
-    $("#ui-export-html").css({
-      left: ( $body.width() / 2 ) - $("#ui-export-html").width() / 2,
-      top: ( $body.height() / 2 ) - $("#ui-export-html").height() / 2
-    });
+    //  Varying width listener
+    $win.bind( "load resize", function () {
 
+      $body.dims = {
+        width: $body.width(),
+        height: $body.height(),
+      };
+
+      //  Set placement of loading icon
+      $uiLoadingHtml.css({
+        left: ( $body.dims.width / 2 ) - 64,
+        top: ( $body.dims.height / 2 )
+      });
+
+
+      $uiExportHtml.css({
+        left: ( $body.dims.width / 2 ) - $uiExportHtml.width() / 2,
+        top: ( $body.dims.height / 2 ) - $uiExportHtml.height() / 2
+      });
+
+      $uiStartHtml.css({
+        left: ( $body.dims.width / 2 ) - $uiStartHtml.width() / 2,
+        top: ( $body.dims.height / 2 ) - $uiStartHtml.height() / 2
+      });    
+    
+      $(".ui-menuset ~ ul").hide().css({top:0, left:0 });
+    
+    
+    });
+    
     
     //  Start with overlay screens hidden
     $exportready.hide();
     $loadready.hide();
+    $startready.hide();
         
     
     //  Storage logic module
@@ -824,7 +847,12 @@
       return {
       
         addTrackEvent: function() {
-
+          
+          if ( !$popcorn || !$popcorn.data ) {
+            //  TODO: USER ERROR MESSAGE
+            return;
+          }
+          
           var $track, lastEventId, trackEvents, trackEvent, settings = {}, 
               trackType = this.id, 
               trackManifest = Popcorn.manifest[ trackType ], 
@@ -833,7 +861,6 @@
                 end: 10
               };
               
-
 
           arguments.length && ( settings = arguments[0] );
 
@@ -1196,6 +1223,13 @@
     //  Export options list event
     $exporttolist.delegate( "li", "click", function () {
       
+      
+      if ( !$popcorn || !$popcorn.data ) {
+        //  TODO: USER ERROR MESSAGE
+        return;
+      }
+      
+      
       var $this = $(this),
           type = $this.data( "type" ), 
           $exports = $('[data-export="true"]'),
@@ -1456,21 +1490,17 @@
       delete: function() {
         
         //console.log(trackStore);
+        
+        alert("NOT IMPLEMENTED")
       
       }, 
       
       save: function() {
         
-        // get slug from #io-title
-        
-        // get remote from #io-video-url
-        
-        // get title from #io-video-title
-        
-        // get desc from #io-video-description
-        
-        // get trackstore by slug or create new trackstore
-        
+        if ( !$popcorn || !$popcorn.data ) {
+          //  TODO: USER ERROR MESSAGE
+          return;
+        }        
         
         var store = trackStore || new TrackStore(), 
             title = $ioVideoTitle.val(), 
@@ -1480,11 +1510,10 @@
             
         
         if ( !title ) {
-          
-         //console.log("error: requires title");
-          
+          //  TODO: USER ERROR MESSAGE
           return;
         }
+        
         
         slug = _( title ).slug();
         

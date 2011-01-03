@@ -15,25 +15,18 @@ video {
   /*display:block;*/
 }
 
-#ui-loading-icon {
+#ui-loading-html, #ui-export-html, #ui-start-over {
 position: absolute;
 z-index:9996;
 } 
 
-#ui-loading-over{
+#ui-loading-over, #ui-export-over, #ui-start-over {
 position: absolute;
 z-index:9995;
 }
 
-#ui-export-html {
-position: absolute;
-z-index:9996;
-} 
 
-#ui-export-over{
-position: absolute;
-z-index:9995;
-}
+
 
 #ui-tracks{
   border:1px solid #AAA;
@@ -159,7 +152,7 @@ canvas{
 }
 
 .ui-accordion-panel div {
-  height: 200px;
+  height: 210px;
   overflow-y:scroll;
 }
 
@@ -240,4 +233,14 @@ text-align:center;
   margin-left:5px;
 }
 
+.is-menu {
+  position: "absolute", 
+  zIndex: 999;
+}
 
+.hide {
+  display: none;
+}
+.show {
+  display: ;
+}

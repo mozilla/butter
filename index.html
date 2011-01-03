@@ -56,15 +56,9 @@
     <script src="js/popcorn.tool.butter.js"></script>
     <!--<script src="js/popcorn.tool.butter-ui-test.js" ></script>-->
 
-    
-
-
-
-
   </head>
   <body>
-  
-    
+
     <!--
     <div id="ui-test-stuff">
       <ul>
@@ -74,20 +68,28 @@
     </div>
     -->
     
-    
-    <div id="ui-loading-icon" class="ui-load-ready"><img src="img/loading.gif"></div>
+    <!-- Overlay Scenes -->
+    <div id="ui-loading-html" class="ui-load-ready"><img src="img/loading.gif"></div>
     <div id="ui-loading-over" class="ui-widget-overlay ui-load-ready"></div>
     
     
     <div id="ui-export-html" class="ui-export-ready"><textarea id="io-export" name="io-export" style="width:1320px;height:700px;"></textarea></div>
     <div id="ui-export-over" class="ui-widget-overlay ui-export-ready"></div>
     
-  
+
+    <div id="ui-start-html" class="ui-start-ready">
+      <div class="span-10 ui-widget ui-widget-content">
+        Foo
+      </div>
+    </div>
+    <div id="ui-start-over" class="ui-widget-overlay ui-start-ready"></div>
+
+    <!-- Main Scene -->
     <div class="container">
     
       <div id="head">
         
-        <div class="span-5" >
+        <div class="span-5">
           <img class="logo" src="img/video.png" title="Butter" alt="Butter Logo">
         
           <h2>Butter</h2>
@@ -101,27 +103,22 @@
         </div>
         <div id="ui-top-menu" class="span-13 last" >
           
+          <button class="ui-menu-controls marginleft" data-control="load" >Load</button>
+
+          <button class="ui-menuset"  data-control="">My Movies</button> 
+            <ul id="ui-user-videos" class="select-ul is-menu"> 
+            </ul>     
+
+
+          <button class="ui-menuset"  data-control="">Export To</button> 
+            <ul id="ui-export-to" class="select-ul is-menu"> 
+
+            </ul>               
           
-
-            <button class="ui-menu-controls marginleft" data-control="load" >Load</button>
-
-            <button class="ui-menuset"  data-control="">My Movies</button> 
-              <ul id="ui-user-videos" class="select-ul"> 
-              </ul>     
-          
-            
-            <button class="ui-menuset"  data-control="">Export To</button> 
-              <ul id="ui-export-to" class="select-ul"> 
-
-              </ul>               
-          
-
         </div>
-        
       </div>    
       
       <hr class="space" >
-      
       
       <div id="ui-video-editor" class="span-26">
         
@@ -238,7 +235,7 @@
 
         <div id="ui-accordion-tools" class="ui-accordion-panel">
 
-          <h3><a href="#">Meta</a></h3>
+          <h3><a href="#">Save As</a></h3>
           <div>
 
             <input placeholder="Title" type="text" id="io-video-title" name="io-video-title" class="text"  style="width:150px;" value="" />
@@ -252,7 +249,7 @@
 
           </div>
         
-          <h3><a href="#">Plugins</a></h3>
+          <h3><a href="#">Add Commands</a></h3>
           <div>
 
             <ul id="ui-plugin-select-list" class="select-ul">
@@ -267,12 +264,12 @@
           <div>
             <p>nothing yet</p>
           </div>
-          -->
-          
           <h3><a href="#">Data View</a></h3>
           <div>
             <textarea id="io-video-data" name="io-video-data" style="width:150px;height:150px"></textarea>
           </div>
+          -->
+          
         </div>           
 
 
