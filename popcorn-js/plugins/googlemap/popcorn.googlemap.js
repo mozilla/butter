@@ -93,7 +93,7 @@ var googleCallback;
         // create a new div this way anything in the target div
         // will stay intack 
         options._container              = document.createElement('div');
-        options._container.id           = "actualmap"+i;
+        options._container.id           = "actualmap" + i;
         options._container.style.width  = "100%";
         options._container.style.height = "100%";
         i++;
@@ -121,15 +121,20 @@ var googleCallback;
             }, 13);
           } else {
              
-            if(options._map){
+            if ( options._map ){
+              
               options._map.getDiv().style.display = 'block';
+              
+              google.maps.event.trigger( options._map, 'resize');
+              
             } else {
+            
               var location = new google.maps.LatLng(options.lat, options.long);
               options._map = new google.maps.Map(options._container, {mapTypeId: google.maps.MapTypeId[options.type] || google.maps.MapTypeId.HYBRID });      
             }
             // reset the location and zoom just in case the user plaid with the map
-            options._map.setCenter(location);
-            options._map.setZoom(options.zoom || 0);
+            options._map.setCenter( location );
+            options._map.setZoom( options.zoom || 5 );
           }
         };
         

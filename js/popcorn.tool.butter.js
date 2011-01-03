@@ -1419,7 +1419,10 @@
       var tempStore = new TrackStore();
       
       $ioVideoData.val( tempStore.serialize( $popcorn.data.trackEvents.byStart ) );
-    
+      
+      
+      controls.seek( "first" );
+      
     });
     
     

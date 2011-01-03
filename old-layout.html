@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Butter</title>
+
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"  />     
+
+
+    <link href="css/screen-orig.css" rel="stylesheet"  type="text/css" media="screen, projection">
+    <link href="css/print.css" rel="stylesheet"  type="text/css" media="print">
+    <link href="css/Aristo/jquery-ui-1.8.5.custom.css" rel="stylesheet" type="text/css">
+    <link href="css/popcorn.tool.butter.css" rel="stylesheet"  type="text/css" media="screen, projection">
+    
+    
+    
+    <!--    
+    <script src="js/underscore.min.js"></script>
+    <script src="js/labjs/LAB.js"></script>
+    <script>
+      
+      $LAB.script("js/jquery.js")
+            .script("js/jquery-ui.min.js")
+            .script("js/jquery.bocoup.ui.track.js")
+          .script("popcorn-js/popcorn.js").wait()
+            .script("popcorn-js/plugins/footnote/popcorn.footnote.js")
+            .script("popcorn-js/plugins/webpage/popcorn.webpage.js")
+            .script("js/popcorn.tool.butter.js")
+            .script("js/popcorn.tool.butter-ui-test.js")
+            
+    
+    </script>
+    -->
+    
+
+    <script src="js/underscore.min.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+
+    <script src="js/jquery.bocoup.ui.track.js"></script>
+
+    <script src="popcorn-js/popcorn.js"></script>
+
+
+    <!--<script src="popcorn-js/plugins/flickr/popcorn.flickr.js"></script>-->
+    <script src="popcorn-js/plugins/footnote/popcorn.footnote.js"></script>
+    <script src="popcorn-js/plugins/googlemap/popcorn.googlemap.js"></script>
+    <!--<script src="popcorn-js/plugins/image/popcorn.image.js"></script>-->
+    <!--<script src="popcorn-js/plugins/twitter/popcorn.twitter.js"></script>-->
+    <script src="popcorn-js/plugins/webpage/popcorn.webpage.js"></script>
+    <!--<script src="popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"></script>-->
+    
+    
+    
+    <script src="js/popcorn.tool.butter.js"></script>
+    <script src="js/popcorn.tool.butter-ui-test.js" ></script>
+
+    
+
+
+
+
+  </head>
+  <body>
+  
+    
+    <div id="ui-test-stuff">
+      
+      <ul>
+        <li class="medium"><a href="javascript:cload();">load remote video</a> </li>
+        <li class="medium"><a href="javascript:localStorage.clear();">clear storage</a> </li>
+      </ul>
+    
+    <!--
+    <a href="http://media.w3.org/2010/05/sintel/trailer.ogv">sintel</a>
+    <a href="http://media.w3.org/2010/05/bunny/trailer.ogv">bunny</a>
+    -->
+    
+    </div>
+    
+    
+    <div id="ui-loading-icon" class="ui-load-ready"><img src="img/loading.gif"></div>
+    <div id="ui-loading-over" class="ui-widget-overlay ui-load-ready"></div>
+  
+    <div class="container">
+    
+      <div id="head">
+        
+        <div class="span-5" >
+          <img class="logo" src="img/video.png" title="Butter" alt="Butter Logo">
+        
+          <h2>Butter</h2>
+        </div>
+        
+        <div class="span-8">
+          
+          <input placeholder="Video Url" type="text" id="io-video-url" name="io-video-url" class="text ui-menu-entity" value=""> 
+          <!--http://media.w3.org/2010/05/sintel/trailer.ogv-->
+          
+        </div>
+        <div id="ui-top-menu" class="span-13 last" >
+          
+          
+
+            <button class="ui-menu-controls marginleft" data-control="load" >Load</button>
+
+            <button class="ui-menuset"  data-control="">My Movies</button> 
+              <ul id="ui-user-videos" class="select-ul"> 
+              </ul>     
+          
+          
+          
+
+        </div>
+        
+      </div>    
+      
+      <hr class="space" >
+      
+      
+      <div id="ui-video-editor" class="span-26">
+        
+        
+        <!-- left pane -->
+        <div id="ui-panel-video" class="span-9">
+          
+          <!-- poster="http://media.w3.org/2010/05/sintel/poster.png" -->
+          <video id="video">
+            
+            
+            <!--
+            <source id="mp4"
+              src="http://media.w3.org/2010/05/sintel/trailer.mp4"
+              type='video/mp4; codecs="avc1, mp4a"'> 
+
+            <source id="ogv"
+              src="http://media.w3.org/2010/05/sintel/trailer.ogv"
+              type='video/ogg; codecs="theora, vorbis"'> 
+            -->
+            
+            <p>Your user agent does not support the HTML5 Video element.</p> 
+
+          </video>   
+          
+          <!--
+          <video id='video' 
+            controls 
+            poster=""> 
+            
+            <source id='ogv'
+              src="http://webmademovies.etherworks.ca/popcorndemo/wmmjuly6.ogv"
+              type='video/ogg; codecs="theora, vorbis"'> 
+
+            <p>Your user agent does not support the HTML5 Video element.</p> 
+
+          </video>   
+          -->
+          
+          
+          <div id="ui-video-controls" class="span-9 last">
+            <button>
+              <span data-control="play" class="ui-icon ui-icon-play"></span>
+            </button>
+            <button>
+              <span data-control="pause" class="ui-icon ui-icon-pause"></span>
+            </button>
+            <button>
+              <span data-control="seek" data-opt="first" class="ui-icon ui-icon-seek-first"></span>
+            </button>
+            <button>
+              <span data-control="seek" data-opt="prev" class="ui-icon ui-icon-seek-prev"></span>
+            </button>
+            <button>
+              <span data-control="seek" data-opt="next" class="ui-icon ui-icon-seek-next"></span>
+            </button>
+            <button>
+              <span data-control="seek" data-opt="end" class="ui-icon ui-icon-seek-end"></span>
+            </button>
+            
+            <input type="text" id="io-current-time" name="io-current-time" class="ui-video-property small-input text-center" value="" />
+            
+            
+            <!--
+            <button>
+              <span data-control="seek" data-opt="linked:current-time"  class="ui-icon ui-icon-circle-arrow-e"></span>
+            </button>
+            -->
+           
+                        
+          </div>
+
+        </div>           
+        
+        <!-- center pane -->
+        
+        <div id="ui-panel-preview" class="span-12">
+          
+          
+          <div id="iframe-container" class="ui-plugin-pane span-12 last" style="height:125px"></div>
+          <hr class="space">
+          <div id="map-container" class="ui-plugin-pane span-12 last" style="height:125px"></div>
+          <hr class="space">
+          <div id="footnote-container" class="ui-plugin-pane span-12 last" style="height:52px"></div>  
+
+        </div>        
+        
+        <!-- right pane -->
+        
+        <div id="ui-panel-templates" class="span-5 last">
+          
+          
+          <div id="ui-accordion-templates"  class="ui-accordion-panel">
+
+            <h3><a href="#">Meta</a></h3>
+            <div>
+              
+              <input placeholder="Title" type="text" id="io-video-title" name="io-video-title" class="text"  style="width:150px;" value="" />
+              
+              <textarea placeholder="Description" id="io-video-description" style="width:150px;height:85px"  class="text"></textarea>
+              
+              
+                <button class="ui-menu-controls" data-control="save" >Save</button>
+                <button class="ui-menu-controls" data-control="delete" >Delete</button>
+              
+              
+            </div>
+
+            
+            
+            <!--
+            <h3><a href="#">Templates</a></h3>
+            <div>
+              <p>Coming Soon</p>
+            </div>
+
+            <h3><a href="#">Themes</a></h3>
+            <div>
+              <p>Coming Soon</p>
+            </div>
+            -->
+          </div>     
+
+        </div> 
+      
+      </div>
+      <!-- ui-video-editor -->
+      
+      <hr class="space">
+      
+      <div id="ui-track-editting" class="span-21">
+        
+        
+        <div id="ui-scrubber-handle">
+          <div id="ui-scrubber"></div>
+        </div>
+        
+        
+        <div id="ui-tracks-time">
+          <!--<canvas id="ui-tracks-time-canvas" width="800" height="20"></canvas>-->
+        </div>
+        
+        <div id="ui-tracks">
+        </div>       
+        
+        <!-- <div class="track zoom"></div> -->
+      
+        
+      
+      </div>
+
+      <!-- plugins panel -->
+      
+      <div id="ui-panel-plugins" class="span-5 last">
+
+        <div id="ui-accordion-tools" class="ui-accordion-panel">
+          <h3><a href="#">Plugins</a></h3>
+          <div>
+
+            <ul id="ui-plugin-select-list" class="select-ul">
+            </ul>
+
+          </div>
+
+          <h3><a href="#">Cue Points</a></h3>
+          <div>
+            <p>nothing yet</p>
+          </div>
+
+          <h3><a href="#">Data View</a></h3>
+          <div>
+            <textarea id="data-view" style="width:150px;height:150px"></textarea>
+          </div>
+        </div>           
+
+
+      </div>
+    
+    
+    
+    </div>
+    
+    
+    <!--<div class="ui-widget ui-widget-content">hi</div>-->
+    
+    
+
+
+    <div id="ui-track-event-editor" title="Edit Track Event">
+      <!-- reusable -->
+    </div>
+
+
+  </body>
+</html>

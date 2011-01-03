@@ -176,7 +176,7 @@ canvas{
   height:100px;
   position: absolute;
   z-index:9994;
-  cursor:e-resize;
+  cursor:col-resize;
 }
 
 #ui-scrubber {
@@ -185,7 +185,7 @@ canvas{
   height:100px;
   position: absolute;
   z-index:9998;
-  cursor:e-resize;
+  cursor:col-resize;
 }
 
 
