@@ -31,18 +31,11 @@ $(function () {
         
       ];
 
-  
-  
-  
-  
-  
   setTimeout(function () {
     
     cload();
   
   }, 500 );
-  
-
   
   //  console callable
   

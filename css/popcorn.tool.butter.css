@@ -42,14 +42,15 @@ z-index:9995;
   height:300px;
   width:830px;
   /*margin:0 auto;*/
-  /*margin:10px 0px;*/
-  overflow-y:scroll;  
+  /*margin:10px 0px;
+  overflow-y:scroll;
+  */
 }
 
 /*, #ui-plugin-tools*/
 
 .track {
-  width:800px;
+  width:830px;
   height:36px;
   bottom:0px;
   position:relative;

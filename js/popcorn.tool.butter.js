@@ -241,40 +241,14 @@
     ogv: 'video/ogg; codecs="theora, vorbis"'
   };  
   
-  
-  //  Horrible, but Firefox doesn't handle videos correctly
-  //  Lifted from jQuery
-  Popcorn.agent = (function( ua ) {
-
-    // Useragent RegExp
-    var 
-    rchrome = /(chrome)[ \/]([\w.]+)/,
-    rwebkit = /(webkit)[ \/]([\w.]+)/,
-    ropera = /(opera)(?:.*version)?[ \/]([\w.]+)/,
-    rmsie = /(msie) ([\w.]+)/,
-    rmozilla = /(mozilla)(?:.*? rv:([\w.]+))?/;
-    
-    ua = ua.toLowerCase();
-
-    var match = rchrome.exec( ua ) || 
-      rwebkit.exec( ua ) ||
-      ropera.exec( ua ) ||
-      rmsie.exec( ua ) ||
-      ua.indexOf("compatible") < 0 && rmozilla.exec( ua ) ||
-      [];
-
-    return { browser: match[1] || "", version: match[2] || "0" };
-  
-  })( navigator.userAgent );
-
-  
-  
 
   $(function() { 
     
     var $popcorn, 
-        $body = $("body"), 
         $doc = $(document),
+        $win = $(window),
+        $body = $("body"), 
+
         $video = $("video"), 
 
         $pluginSelectList = $("#ui-plugin-select-list"), 
@@ -309,8 +283,8 @@
         //$editorPane = $("#ui-event-editor"),
         
         $exportready = $(".ui-export-ready"),
-        
         $loadready = $(".ui-load-ready"),
+        
         $uiLoadingIcon = $("#ui-loading-icon"),
         
         selectedEvent = null,
@@ -389,17 +363,16 @@
     });
 
     
+    //  Start with overlay screens hidden
     $exportready.hide();
+    $loadready.hide();
         
     
     //  Storage logic module
     var TrackMeta   = ( function() {
       
-      
-      
       return {
       
-        
         project: {
           
           unload: function() {
@@ -449,8 +422,6 @@
             });
           }
         }, 
-      
-      
       
         menu: {
         
@@ -607,16 +578,11 @@
           
           var networkReadyInterval = setInterval( function () {
             
-            //console.log("hi",  $popcorn.video.currentSrc === url, $popcorn.video.currentSrc, url);
-            //if ( Popcorn.agent.browser === "mozilla" && $popcorn.video.currentSrc === url ) {
-            
+            //  Firefox is an idiot
             if ( $popcorn.video.currentSrc === url ) {
               self.timeLineReady( $popcorn, timeLineReadyFn );
               clearInterval( networkReadyInterval );
             }
-            
-            //self.timeLineReady( $popcorn, timeLineReadyFn );
-            //clearInterval( networkReadyInterval );
             
           }, 13);
           
@@ -704,7 +670,6 @@
               
 
               //  Update the scrubber handle position              
-
               var quarterTime = _( $popcorn.video.currentTime ).fourth();
               
               
@@ -723,9 +688,7 @@
             $popcorn.trigger( "timeupdate" );
             
             
-            
             //  If a callback was provided, fire now
-            
             callback && callback();
             
           };
@@ -769,7 +732,6 @@
               left: position - offset
             });
             
-            
           }
         
         }, 
@@ -801,12 +763,12 @@
         drawTimeLine: function( duration ) {
 
           this.deleteCanvas( "ui-tracks-time", "ui-tracks-time-canvas" );
-          this.drawCanvas( "ui-tracks-time", "ui-tracks-time-canvas", 800, 25 );
+          this.drawCanvas( "ui-tracks-time", "ui-tracks-time-canvas", 830, 25 );
           
           duration = Math.floor( duration );
           
           var context = document.getElementById("ui-tracks-time-canvas").getContext('2d'),
-              tick = Math.floor( 800 / duration ), 
+              tick = Math.floor( 830 / duration ), 
               durationCeil = Math.ceil(duration), 
               increment = tick/4, 
               offset = 2;
@@ -1089,8 +1051,6 @@
               elem.appendTo(label);
               label.appendTo( "#ui-track-event-editor" );
               
-
-              
             }
           }
 
@@ -1152,7 +1112,7 @@
           //console.log(selectedEvent.popcornEvent._natives._setup(selectedEvent.popcornEvent) );
           
           //  Recall _setup with new data
-          selectedEvent.popcornEvent._natives._setup(selectedEvent.popcornEvent);
+          selectedEvent.popcornEvent._natives._setup( selectedEvent.popcornEvent );
         
           selectedEvent.parent._draw();
 
@@ -1163,7 +1123,7 @@
         }, 
         
         
-        editEventCancel: function( ) { 
+        editEventCancel: function() { 
           var popcornEvent = selectedEvent.popcornEvent;
 
           for( var i in selectedEvent.previousValues ) { 
@@ -1187,21 +1147,12 @@
     })(window);
     
     
-    
     /*
     $ioVideoUrl.bind( "change", function( event ) {
       TrackEditor.loadVideoFromUrl();
     });
     */
-    
-    
-    
-    
-    
-    
-    
 
-    // to do: rewire all refs to ._natives.manifest
 
     $editor.tabs();
     $editor.css({display:"none"});
@@ -1210,8 +1161,7 @@
     //  Load plugins to ui-plugin-select-list
     _.each( Popcorn.registry, function( plugin, v ) {
       
-      
-      // todo: convert to templates
+      // TODO: convert to templates
       var $li = $("<li/>", {
         
         id: plugin.type, 
@@ -1224,7 +1174,7 @@
 
 
 
-    //[ "Complete HTML", "Embedded HTML" ]
+    //  Render Export menu
     _.each( [ "Preview HTML", "Embeddable HTML" ], function ( key ) {
       
       var 
@@ -1236,9 +1186,7 @@
 
       }).appendTo( "#ui-export-to" );
 
-
       $li.data( "type",  type );
-
     });
 
     
@@ -1420,6 +1368,13 @@
     });  
     
     
+    //  When the window is resized, fire a timeupdate 
+    //  to reset the scrubber position
+    $win.bind( "resize", function( event ) {
+      $popcorn.trigger( "timeupdate" );
+    });
+    
+    
     //  Updating the scrubber height - DEPRECATE.
     $doc.bind( "addTrackComplete" , function( event ) {
 
@@ -1428,6 +1383,7 @@
       });
     });
     
+
     //  Updating the scrubber height
     $doc.bind( "timelineReady videoReady", function( event ) {
       $scrubber.css({
@@ -1435,6 +1391,7 @@
       });        
     });
     
+
     //  Toggling the loading progress screen
     $doc.bind( "videoLoadStart videoLoadComplete", function( event ) {
       
@@ -1446,12 +1403,9 @@
       $loadready.hide();
     
     });
+
     
-    
-    $("#ui-export-over").click(function() {
-      $exportready.hide();
-    });
-    
+    //  Show export screen
     $doc.bind( "exportReady", function() {
       
       $exportready.show();
@@ -1460,13 +1414,19 @@
     
     
     //  Update data view textarea
-    $doc.bind( "videoEditComplete", function() {
+    $doc.bind( "videoEditComplete addTrackComplete", function() {
       
       var tempStore = new TrackStore();
       
       $ioVideoData.val( tempStore.serialize( $popcorn.data.trackEvents.byStart ) );
     
     });
+    
+    
+    //  Close export screen
+    $("#ui-export-over").click(function() {
+      $exportready.hide();
+    });    
 
     
     
@@ -1501,8 +1461,6 @@
         // get title from #io-video-title
         
         // get desc from #io-video-description
-        
-        
         
         // get trackstore by slug or create new trackstore
         
