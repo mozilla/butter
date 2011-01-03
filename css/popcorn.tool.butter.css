@@ -15,6 +15,26 @@ video {
   /*display:block;*/
 }
 
+#ui-loading-icon {
+position: absolute;
+z-index:9996;
+} 
+
+#ui-loading-over{
+position: absolute;
+z-index:9995;
+}
+
+#ui-export-html {
+position: absolute;
+z-index:9996;
+} 
+
+#ui-export-over{
+position: absolute;
+z-index:9995;
+}
+
 #ui-tracks{
   border:1px solid #AAA;
   
@@ -154,7 +174,7 @@ canvas{
   width:11px;
   height:100px;
   position: absolute;
-  z-index:9999;
+  z-index:9994;
   cursor:e-resize;
 }
 
@@ -189,28 +209,26 @@ padding: 3px 5px;
 
 /* garbage, needs help */
 
-.small-input {
-  margin-top:-10px;
+input[type="text"].small-input {
+  margin:0;
   vertical-align:top;
   height:20px;
-  width: 100px;
+  width: 75px;
 }
 
-.text-right {
-margin-top:-10px;
-vertical-align:top;
-height:20px;
-width: 100px;
+.text-center {
 text-align:center;  
 }
+
+
 
 #ui-event-editor {
   height:300px;
 }
 
-#ui-user-videos li{
+#ui-user-videos li, #ui-export-to li{
   min-width: 200px;
-  margin: 5px 0 5px 5px;
+  margin: 5px 0 5px 0;
 }
 
 
@@ -220,3 +238,5 @@ text-align:center;
 .marginleft{
   margin-left:5px;
 }
+
+

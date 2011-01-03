@@ -113,5 +113,12 @@ $(function () {
 
 
   $("#io-video-url").trigger("change");
+
+
+  $(document).bind( "videoReady timelineReady", function ( event ) {
+    //console.log( event.type );
+  });
+
+
   
 });

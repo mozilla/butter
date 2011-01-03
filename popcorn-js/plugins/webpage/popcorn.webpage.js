@@ -58,6 +58,8 @@
         
         if (document.getElementById(options.target)) {
           document.getElementById(options.target).appendChild(options._container);
+          
+          options._container.src = options.src;
         }           
         
       },
@@ -70,7 +72,7 @@
       start: function(event, options){
         // make the iframe visible
         
-        options._container.src = options.src;
+        
         options._container.style.display = 'inline';
       },
       /**
