@@ -496,7 +496,8 @@
     if ( track._natives ) {
       // supports user defined track event id
       track._id = !track.id ? Popcorn.guid( track._natives.type ) : track.id;
-
+      
+      //track.id = track._id;
       //  Push track event ids into the history
       obj.data.history.push( track._id );      
     }
@@ -675,6 +676,7 @@
         
         //  Future support for plugin event definitions 
         //  for all of the native events
+        /*
         Popcorn.forEach( setup, function ( callback, type ) {
         
           if ( type !== "type" ) {
@@ -686,6 +688,7 @@
           }
           
         }, this);
+        */
         
         return this;
       };

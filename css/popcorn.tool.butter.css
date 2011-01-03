@@ -149,7 +149,7 @@ canvas{
 }
 
 .ui-accordion-panel div {
-  height: 250px;
+  height: 220px;
   overflow-y:scroll;
 }
 
@@ -188,7 +188,7 @@ canvas{
 
 
 #ui-video-editor{
-height: 345px;
+height: 330px;
 }
 
 
@@ -241,3 +241,8 @@ text-align:center;
 .show {
   display: ;
 }
+
+
+
+hr.space {background:#fff;color:#fff;visibility:hidden;margin:0 0 0.5em;}
+

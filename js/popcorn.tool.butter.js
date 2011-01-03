@@ -294,7 +294,7 @@
     $("button,.ui-menu-controls").button();
     
     //  Render accordion panels
-    $(".ui-accordion-panel").accordion();
+    $(".ui-accordion-panel").accordion().css("marginTop", "-1px");
     
     //  Render menusets ( create with: button + ul ) 
     $(".ui-menuset").each( function() {
@@ -380,6 +380,11 @@
       });    
     
       $(".ui-menuset ~ ul").hide().css({top:0, left:0 });
+    
+
+      $scrubber.css({
+        height: $trackeditting.height()
+      });
     
     
     });
@@ -473,7 +478,8 @@
                 var $li = $("<li/>", {
 
                   html: '<h4><img class="icon" src="img/dummy.png">' + data.title + '</h4>',
-                  className: "span-4 select-li clickable"
+                  className: "span-4 select-li clickable", 
+                  "data-slug" : prop
 
                 }).appendTo( "#ui-user-videos" );
                 
@@ -871,8 +877,7 @@
           if ( settings.currentTarget ) {
             settings  = {};
           }
-
-
+          
           //  Compile a starting point
           _.extend( startWith, settings, {
 
@@ -891,6 +896,10 @@
           //console.log("trackType", trackType);
           //console.log("startWith", startWith);
           
+          //  Reset startWith.id, allow Popcorn to create unique IDs
+          startWith.id = false;
+          
+          
           //  Call the plugin to create an empty track event
           $popcorn[ trackType ]( startWith );
 
@@ -901,8 +910,8 @@
           
           //  Obtain all current track events
           trackEvents = $popcorn.getTrackEvents();
-
-
+          
+          
           //  Capture this track event
           trackEvent = trackEvents[ trackEvents.length - 1 ];
 
@@ -938,6 +947,10 @@
 
           }
           
+          
+          //  TODO: when a track of this type already exists... 
+          //  ensure we need to actually make "track" into something
+          
 
           $track.track( 'addTrackEvent', {
             inPoint           : startWith.start,
@@ -946,35 +959,60 @@
             popcornEvent      : trackEvent,
             popcorn           : $popcorn,
             _id               : lastEventId, 
-            editEvent         : function() {  
+            editEvent         : function( event ) {  
 
               //console.log("TrackEvent clicked");
 
 
+              //console.log("event", event, event.shiftKey);
+              
+              if ( !event.shiftKey ) {
               
               
-              $editor.dialog({
-                //width: "300px",
-                //position: [ $("#ui-panel-plugins").offset().left, $("#ui-panel-plugins").offset().top ],
+                $editor.dialog({
+                  //width: "300px",
+                  //position: [ $("#ui-panel-plugins").offset().left, $("#ui-panel-plugins").offset().top ],
 
-                autoOpen: false,
-                title: 'Edit ' + _( trackType ).capitalize(),
+                  autoOpen: false,
+                  title: 'Edit ' + _( trackType ).capitalize(),
 
-                buttons: {
-                  //'Delete': editEventDelete,
-                  'Cancel': TrackEvents.editEventCancel,
-                  'OK'    : function() {
+                  buttons: {
+                    //'Delete': editEventDelete,
+                    'Cancel': TrackEvents.editEventCancel,
+                    'OK'    : function() {
 
-                    TrackEvents.editEventApply.call(trackEvent); 
+                      TrackEvents.editEventApply.call(trackEvent); 
 
-                    $(this).dialog("close");
-                  },
-                  'Apply' : TrackEvents.editEventApply
-                }
-              });               
+                      $(this).dialog("close");
+                    },
+                    'Apply' : TrackEvents.editEventApply
+                  }
+                });               
+
+                TrackEvents.drawTrackEvents.call(this); 
               
-              TrackEvents.drawTrackEvents.call(this); 
-
+              } else {
+                
+                //  If the shift key was held down when the track event was clicked.
+                
+                
+                $track.track( 'killTrackEvent', {
+                  _id: lastEventId
+                });
+                
+                $popcorn.removeTrackEvent( lastEventId );
+                
+                //TrackEvents.deleteTrackEvent.call(this); 
+                
+                
+                
+                //console.log(.clearRect(0,0,canvas.width,canvas.height));
+              
+              
+              }
+              
+              
+              
             }
           });
 
@@ -984,6 +1022,14 @@
 
         },
         
+        deleteTrackEvent: function () {
+          
+          
+          selectedEvent = this;
+          
+          selectedEvent
+        
+        }, 
         
         drawTrackEvents: function() { 
 
@@ -997,7 +1043,9 @@
 
           // `this` will actually refer to the context set when the function is called.
           selectedEvent = this;    
-
+          
+          
+          console.log(this, selectedEvent);
 
           var manifest    = selectedEvent.popcornEvent._natives.manifest,
               about       = manifest.about,
@@ -1049,9 +1097,9 @@
 
               selectedEvent.manifestElems[i] = elem;
 
-              //if ( lastSelectedEvent != selectedEvent ) { 
+              if ( lastSelectedEvent != selectedEvent ) { 
                 selectedEvent.previousValues[i] = selectedEvent.popcornEvent[i];
-              //}
+              }
 
               label = $("<label/>").attr('for', elemLabel).text(elemLabel);   
               
@@ -1116,12 +1164,6 @@
             }
           }
 
-          //$popcorn.removeTrackEvent( selectedEvent._id );
-          //console.log(popcornEvent);
-          //TrackEvents.addTrackEvent.call({ id: selectedEvent.type, _id: selectedEvent._id }, popcornEvent);
-
-
-
           //selectedEvent.type
 
           selectedEvent.inPoint = popcornEvent.start;
@@ -1137,8 +1179,6 @@
             }
           
           });
-          
-          //console.log(selectedEvent.popcornEvent._natives._setup(selectedEvent.popcornEvent) );
           
           //  Recall _setup with new data
           selectedEvent.popcornEvent._natives._setup( selectedEvent.popcornEvent );
@@ -1271,29 +1311,36 @@
             html = '';
         
         //  Remove unwanted content
-        $clone.children("#ui-video-controls").remove();
+        $clone.children("#ui-video-controls,hr").remove();
         
         //  Restore controls        
-        if ( $clone.children("video") ) {
-          $clone.children("video").attr("controls", true);
+        if ( $clone.children("video").length ) {
+        
+          var $videoDiv = $("<div/>", { className: "butter-video-player" } ),
+              $videoClone = $clone.children("video").clone();
+          
+              $videoClone.attr("controls", "controls");
+              
+          $videoDiv.append( $videoClone );        
+              
+          $clone.children("video").replaceWith( $videoDiv );
+         
+         
+          //html = $.trim( $clone.html() );
+          
+          compile += '<div class="butter-video">' + $.trim( $clone.html() ) + '</div>';
         }
         
-        //  Set dims
-        dims.width += width;
-        dims.height += height;
         
-        //  Remove class's from children
-        $children = $clone.children().map( function( iter, elem ) {
-          this.className = null;
+        if ( $clone.children(".ui-plugin-pane").length ) {
           
-          //  TODO: REMOVE 
-          this.style.float = "left";
-          return this;
-        });
-        
-        html = $.trim( $clone.html() );
-        
-        compile += '<div style="display:inline;width:' + width + 'px;height:' + height + 'px;">' + html + '</div>';
+          $clone.children(".ui-plugin-pane").each(function () {
+
+            $(this).attr("class", "butter-plugin").removeAttr("style").children().remove();
+          });
+          
+          compile += '<div class="butter-plugins">' + $.trim( $clone.html() ) + '</div>';
+        }
         
       });
       
@@ -1325,7 +1372,9 @@
       exports.scripts += '\n<script>' + playbackAry.join('\n') + '</script>';
       
       //  Wrap html export
-      exports.html = '<div style="width:' + dims.width + 'px;height:' + dims.height + 'px;">' + compile + '</div>';
+      //  TODO: inject theme ID HERE
+      exports.html = '<div class="butter-player">' + compile + '</div>';
+      
       
       //  Compile all `exports`
       _.each( exports, function ( fragment, key) {
@@ -1462,6 +1511,20 @@
     });
     
     
+
+    //  Keylistener for track delete    
+    $doc.bind( "videoEditComplete addTrackComplete", function() {
+      
+      var tempStore = new TrackStore();
+      
+      $ioVideoData.val( tempStore.serialize( $popcorn.data.trackEvents.byStart ) );
+      
+      
+      controls.seek( "first" );
+      
+    });    
+    
+    
     //  Close export screen
     $("#ui-export-over").click(function() {
       $exportready.hide();
@@ -1539,6 +1602,10 @@
         //trackStore  = 
         
         TrackMeta.menu.load();
+        
+        
+        $("#ui-user-videos li[data-slug='"+ slug +"']").trigger( "click" );
+        
         
       }, 
       

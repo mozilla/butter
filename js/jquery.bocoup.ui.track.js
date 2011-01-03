@@ -141,11 +141,13 @@
       this.element.bind( "mousemove.track", jQuery.proxy( this._mousemove, this ) );
       this.element.bind( "mousedown.track mouseup.track", jQuery.proxy( this._mouseupdown, this ) );
       this.element.bind( "mouseenter.track mouseleave.track", jQuery.proxy( this._hover, this ) );
+      
       this._draw();
       
       return this;
       
     },
+
 
     _style: function( styleObj ) {
       for ( var prop in styleObj ) {
@@ -158,14 +160,19 @@
 
       var ret = [];
       
+      console.log("this._inView", this._inView);
       
-      _.forEach( this._inView, function ( track ) {
+      _.each( this._inView, function ( track, key ) {
+        
+        //console.log(track, key);
+        
         if ( track._id !== props._id ) {
           ret.push(track);
         }
       });
       
       
+      console.log("post this._inView", this._inView, ret);
       this._inView  = ret;
     
     },
@@ -373,10 +380,22 @@
       
       if ( e.type === "mousedown" ) {
         
-       //console.log("mousedown");
+        
         this.mouse.down = true;
         
+        /*
+        if ( e.shiftKey ) {
+          
+          console.log("DELETE");
+          
+          console.log(this);
+          
+          //this.context.clearRect(0,0,canvas.width,canvas.height)
+          
+          this.context.clearRect(0,0,0,0);
         
+        }
+        */
         
         return;
       }
@@ -395,7 +414,7 @@
            //console.log(this.options.mode);
            //console.log(this.mouse.mode);
           
-            this.mouse.hovering.editEvent();
+            this.mouse.hovering.editEvent( e );
           }
           
           this.mouse.hovering = null;
