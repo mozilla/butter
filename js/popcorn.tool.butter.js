@@ -960,7 +960,7 @@
               "title": trackType, 
               className: "span-21 last track track" + _.size( activeTracks )
 
-            }).prependTo( "#ui-tracks" );
+            }).insertAfter( "#ui-tracks-time" ); //"#ui-tracks"
 
             //  Convert the placeholder into a track, with a track event
             $track.track({
@@ -1187,6 +1187,7 @@
           
           // check for empty stuff
           
+          //console.log($("#" + selectedEvent.popcornEvent.target).children());
           $("#" + selectedEvent.popcornEvent.target).children().each(function() {
             
             if ( $(this).html() === "" ) {
@@ -1195,8 +1196,13 @@
           
           });
           
+          //console.log(selectedEvent.popcornEvent._container );
+          
           //  Recall _setup with new data
           selectedEvent.popcornEvent._natives._setup( selectedEvent.popcornEvent );
+          
+          selectedEvent.popcornEvent._natives.start(null, selectedEvent.popcornEvent);
+          
         
           selectedEvent.parent._draw();
 
@@ -1350,8 +1356,14 @@
         if ( $clone.children(".ui-plugin-pane").length ) {
           
           $clone.children(".ui-plugin-pane").each(function () {
-
+            
+            
+            // NOTE: instead of removing the children created, we can possibly keep them 
+            //        this may solve the many-plugins issue
+            
+            
             $(this).attr("class", "butter-plugin").removeAttr("style").children().remove();
+            
           });
           
           compile += '<div class="butter-plugins">' + $.trim( $clone.html() ) + '</div>';
@@ -1538,31 +1550,17 @@
     
     
     //  Update data view textarea
-    $doc.bind( "videoEditComplete addTrackComplete", function() {
+    $doc.bind( "videoEditComplete addTrackComplete", function( event, data ) {
       
       var tempStore = new TrackStore();
       
       $ioVideoData.val( tempStore.serialize( $popcorn.data.trackEvents.byStart ) );
       
       
-      controls.seek( "first" );
+      //controls.seek( "first" );
       
     });
-    
-    
 
-    //  Keylistener for track delete    
-    $doc.bind( "videoEditComplete addTrackComplete", function() {
-      
-      var tempStore = new TrackStore();
-      
-      $ioVideoData.val( tempStore.serialize( $popcorn.data.trackEvents.byStart ) );
-      
-      
-      controls.seek( "first" );
-      
-    });    
-    
     
     //  Close export screen
     $("#ui-export-over").click(function() {
@@ -1723,6 +1721,12 @@
       
       var $this = $(this);
       
+          
+      if ( !$popcorn || !$popcorn.data ) {
+        //  TODO: USER ERROR MESSAGE
+        return;
+      }
+      
       if ( !!$this.attr("data-control") ) {
         controls[ $this.attr("data-control") ]();
       }
@@ -1733,6 +1737,11 @@
       
       // was elegant, now its not. needs to be fixed
       var $this = $(this).children("span").children("span");
+
+      if ( !$popcorn || !$popcorn.data ) {
+        //  TODO: USER ERROR MESSAGE
+        return;
+      }      
       
       controls[ $this.attr("data-control") ]( $this.attr("data-opt") );
 

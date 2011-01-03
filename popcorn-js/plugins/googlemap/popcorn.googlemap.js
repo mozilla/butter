@@ -94,9 +94,10 @@ var googleCallback;
         // will stay intack 
         options._container              = document.createElement('div');
         options._container.id           = "actualmap" + i;
-        options._container.style.width  = "100%";
-        options._container.style.height = "100%";
+        options._container.style.width  = "50%";
+        options._container.style.height = "50%";
         i++;
+        
         if (document.getElementById(options.target)) {
           document.getElementById(options.target).appendChild(options._container);
         }
@@ -147,6 +148,7 @@ var googleCallback;
        * options variable
        */
       end: function(event, options){
+        /*
         var $children = document.getElementById(options.target).children;
 
         if ( !!$children.length ) {
@@ -154,7 +156,7 @@ var googleCallback;
               obj.style.display = "none";
           });    
         }        
-
+        */
         // if the map exists hide it do not delete the map just in 
         // case the user seeks back to time b/w start and end
         if (options._map) {

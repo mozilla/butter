@@ -29,12 +29,13 @@ z-index:9995;
   border:1px solid #AAA;
   
   background: #eee; 
-  height:300px;
+  height:330px;
   width:830px;
   /*margin:0 auto;*/
   /*margin:10px 0px;
   overflow-y:scroll;
   */
+  overflow-x:scroll;
 }
 
 /*, #ui-plugin-tools*/

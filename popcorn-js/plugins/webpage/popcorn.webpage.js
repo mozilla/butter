@@ -47,19 +47,24 @@
       _setup : function( options ) {
         
         // make an iframe 
-        options._container  = document.createElement( 'iframe' ),
-        options._container.setAttribute('width', "100%");
-        options._container.setAttribute('height', "100%");
-        //options._container.id  = options.id;
+        options._container  = document.createElement( 'div' );
+        
+        options._iframe  = document.createElement( 'iframe' );
+        options._iframe.setAttribute('width', "50%"); //100%
+        options._iframe.setAttribute('height', "50%"); //100%
+        
 
         options._container.style.display = 'none';
-        // add the hidden iframe to the DON
         
+        
+
         
         if (document.getElementById(options.target)) {
-          document.getElementById(options.target).appendChild(options._container);
           
-          options._container.src = options.src;
+          options._container.appendChild(options._iframe);
+          
+          document.getElementById(options.target).appendChild(options._container);
+
         }           
         
       },
@@ -72,7 +77,8 @@
       start: function(event, options){
         // make the iframe visible
         
-        
+        //console.log(options._iframe);
+        options._iframe.src = options.src;
         options._container.style.display = 'inline';
       },
       /**
