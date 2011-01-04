@@ -717,20 +717,15 @@
               );
               
               
-
-              //  scroll as needed  
-              $("#ui-tracks").bind( "scroll", function ( event ) { console.log(event) });
-
-
-              if ( quarterTime > duration / 2 ) {
-                
+              if ( quarterTime > $popcorn.video.duration / 2 ) {              
+              
                 $("#ui-tracks").trigger( "scroll" );
               
               }
               
-            
-            
             });   
+            
+            
             
             
             //  Trigger timeupdate to initialize the current time display
@@ -871,6 +866,15 @@
       };
       
     })(window);
+    
+    
+    
+    //  scroll as needed  
+    //$("#ui-tracks").bind( "scroll", function ( event ) { console.log(event) });
+
+    
+    
+    
     
     //  Event editing logic module
     var TrackEvents = ( function(window) {
