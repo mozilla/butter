@@ -143,7 +143,7 @@
               <span data-control="seek" data-opt="next" class="ui-icon ui-icon-seek-next"></span>
             </button>
             <button>
-              <span data-control="seek" data-opt="end" class="ui-icon ui-icon-seek-end"></span>
+              <span data-control="seek" data-opt="last" class="ui-icon ui-icon-seek-end"></span>
             </button>
             
             <input type="text" id="io-current-time" name="io-current-time" class="ui-video-property small-input text-center" value="" />
@@ -202,13 +202,14 @@
       <div id="ui-track-editting" class="span-21">
         
         
-        <div id="ui-scrubber-handle">
-          <div id="ui-scrubber"></div>
-        </div>
+
         
         
         
         <div id="ui-tracks">
+          <div id="ui-scrubber-handle">
+            <div id="ui-scrubber"></div>
+          </div>        
           <div id="ui-tracks-time">
             <canvas id="ui-tracks-time-canvas" width="800" height="25"></canvas>
           </div>

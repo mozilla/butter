@@ -166,7 +166,7 @@ canvas{
   width:11px;
   height:100px;
   position: absolute;
-  z-index:9994;
+  z-index:994;
   cursor:col-resize;
 }
 
@@ -175,7 +175,7 @@ canvas{
   width:1px;
   height:100px;
   position: absolute;
-  z-index:9998;
+  z-index:995;
   cursor:col-resize;
 }
 

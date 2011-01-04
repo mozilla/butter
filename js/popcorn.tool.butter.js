@@ -541,7 +541,12 @@
       return {
       
         timeLineWidth: 0, 
-        timeLineIncrement: 0, 
+        increment: 0, 
+
+        
+        isScrubbing: false, 
+        inProgress: false,
+        
         
         videoReady: function( $p, callback ) {
           
@@ -686,8 +691,15 @@
             
             //  Create scrubber draggable
             $scrubberHandle.draggable({ 
+            
+              scroll: true, 
+              scrollSensitivity: 50, 
+              scrollSpeed: 200, 
+              
+              
               axis: "x", 
-              containment: "#ui-tracks-time-canvas",  
+              containment: "#ui-track-editting",  
+              
               grid: [ increment / 8, 0 ],
               //distance: increment / 4 / 2, 
               start: function() {
@@ -703,8 +715,11 @@
                     quarterTime = _( updateTo ).fourth();
 
                 //  Force the time to be in quarters of a second
-                $popcorn.currentTime( quarterTime );
+                $popcorn.video.currentTime = quarterTime;
+                
 
+                //TrackEditor.isScrubbing = true;
+                /*
                 self.setScrubberPosition(  
                   ( increment / 4 * quarterTime ) + $tracktimecanvas.position().left,
                   {
@@ -712,7 +727,7 @@
                     current: quarterTime
                   }
                 );                
-                
+                */
               }
             });
             
@@ -736,24 +751,40 @@
               var quarterTime = _( $popcorn.video.currentTime ).fourth();
               
               
-              self.setScrubberPosition(  
-                ( increment * quarterTime ) + $tracktimecanvas.position().left, 
-                {
-                  increments: increment, 
-                  current: quarterTime
+              var isReadyInterval = setInterval(function() {
+                
+                if ( $popcorn.video.readyState >= 3 ) {
+
+                  self.setScrubberPosition(  
+                    ( increment * quarterTime ) + $tracktimecanvas.position().left, 
+                    {
+                      increments: increment, 
+                      current: quarterTime
+                    }
+                  );                
+
+                  TrackEditor.inProgress = false;
+                  clearInterval( isReadyInterval );
                 }
-              );
+
+              }, 13);
               
+
               
-              if ( quarterTime > $popcorn.video.duration / 2 ) {              
-              
-                $("#ui-tracks").trigger( "scroll" );
-              
-              }
-              
+              $doc.trigger( "seekComplete", {
+                type: "update", 
+                time: quarterTime, 
+                increment: increment, 
+                special: function () {
+                  
+                 //console.log("special function");
+                }
+              });
+
+              //if ( quarterTime > $popcorn.video.duration / 2 ) {              
+              //  $("#ui-tracks").trigger( "scroll" );
+              //}
             });   
-            
-            
             
             
             //  Trigger timeupdate to initialize the current time display
@@ -767,9 +798,7 @@
                 
         
         },
-        
-        isScrubbing: false, 
-        inProgress: false,
+
         
         setScrubberPosition: function( position ) {
           
@@ -847,16 +876,17 @@
               increment = tick/4, 
               offset = 2, 
               primary = 0, 
-              secondary = 0, 
+              secondary = 0,
+              third = 0, 
               posOffset;
 
-          TrackEditor.timeLineIncrement = increment;
+          TrackEditor.increment = increment;
           
           context.font = "10px courier";
           context.fillStyle = "#000";
           context.lineWidth = 1;
           
-          for ( var i = 0, t = 0; i < durationCeil * 2; i++ ) {
+          for ( ; primary < durationCeil * 2; primary++ ) {
 
             if ( primary >= 10 ) {
               offset = 6;
@@ -867,10 +897,10 @@
 
             if ( primary % 2 || primary === 0 ) {
 
-              t++;
+              third++;
               
-              if ( t <= durationCeil ) {
-                context.fillText( t , t * tick - offset, 9);
+              if ( third <= durationCeil ) {
+                context.fillText( third , third * tick - offset, 9);
               }
 
               posOffset = primary * tick/2;
@@ -1021,7 +1051,7 @@
 
             }).insertAfter( "#ui-tracks-time" ); //"#ui-tracks"
             
-            console.log(TrackEditor.timeLineWidth);
+           
             $track.width( TrackEditor.timeLineWidth );
 
             //  Convert the placeholder into a track, with a track event
@@ -1060,12 +1090,8 @@
               if ( !event.shiftKey ) {
                 
                 $editor.dialog({
-                  //width: "300px",
-                  //position: [ $("#ui-panel-plugins").offset().left, $("#ui-panel-plugins").offset().top ],
-
                   autoOpen: false,
                   title: 'Edit ' + _( trackType ).capitalize(),
-
                   buttons: {
                     //'Delete': editEventDelete,
                     'Cancel': TrackEvents.editEventCancel,
@@ -1614,6 +1640,24 @@
     });
     
     
+    $doc.bind( "seekComplete", function( event, options ) {
+
+      //console.log(options);
+
+      options.special &&  options.special();
+      
+      if ( options.type === "last" ) {
+        $("#ui-tracks").scrollLeft( $("#ui-tracks-time-canvas").width() );
+      }
+      
+      if ( options.type === "first" ) {
+        $("#ui-tracks").scrollLeft( 0 );
+      }
+      
+
+    }); 
+    
+    
     //  Update data view textarea
     $doc.bind( "videoEditComplete addTrackComplete", function( event, data ) {
       
@@ -1647,7 +1691,6 @@
         volumeTo = 0;
         
         
-        console.log($ioVideoUrl.val());
         //  TODO: update to validate as url;
         if ( !!$ioVideoUrl.val() ) {
           TrackEditor.loadVideoFromUrl();
@@ -1749,20 +1792,28 @@
         
         if ( option === "first" ) {
           seekTo = 0;
+          
+          $doc.trigger("seeked", "first");
         }
 
         if ( option === "prev" ) {
           
           seekTo = _($popcorn.video.currentTime - 0.25).fourth();
+          
+          $doc.trigger("seeked", "prev");
         }
 
         if ( option === "next" ) {
           
           seekTo = _($popcorn.video.currentTime + 0.25).fourth();
+          
+          $doc.trigger("seeked", "next");
         }
 
-        if ( option === "end" ) {
+        if ( option === "last" ) {
           seekTo = $popcorn.video.duration;
+          
+          $doc.trigger("seeked", "last");
         }        
         
         
@@ -1774,7 +1825,25 @@
           seekTo = 0;
         }        
         
+        
+        //  Update current time
         $popcorn.video.currentTime = seekTo;
+        
+        
+        //  Watch for readiness
+        var isReadyInterval = setInterval(function() {
+          
+          if ( $popcorn.video.readyState >= 3 ) {
+          
+            $doc.trigger( "seekComplete", {
+              type: option, 
+              time: seekTo
+            });
+            
+            clearInterval( isReadyInterval );
+          }
+        
+        }, 1);
         
       }       
     };

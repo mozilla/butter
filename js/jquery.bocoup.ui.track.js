@@ -30,7 +30,9 @@
   };
 
   TrackEvent.prototype.draw = function( thumbLeft, thumbRight ) {
-  
+    
+    
+    
     var x   = this.xl = this.oxl + (this.parent.width / this.parent.options.duration * this.inPoint),
         rw  = this.parent.width / this.parent.options.duration * (this.outPoint-this.inPoint),
         h   = this.parent.height,
@@ -249,12 +251,18 @@
       this.mouse.lastX = this.mouse.x;
       this.mouse.lastY = this.mouse.y;
       
+      
+      
       var scrollX = (window.scrollX !== null && typeof window.scrollX !== 'undefined') ? window.scrollX : window.pageXOffset;
       var scrollY = (window.scrollY !== null && typeof window.scrollY !== 'undefined') ? window.scrollY : window.pageYOffset;
       
       
       this.mouse.x = e.clientX - this.element[0].offsetLeft + scrollX;
       this.mouse.y = e.clientY - this.element[0].offsetTop + scrollY;
+      
+      //console.log(e.clientX, e.clientY);
+      //console.log(this.mouse.x);
+      //console.log(this.mouse.y);
       
       var thumbLeft = thumbRight = false;
         
