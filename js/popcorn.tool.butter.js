@@ -1291,7 +1291,7 @@
           //  Recall _setup with new data
           selectedEvent.popcornEvent._natives._setup( selectedEvent.popcornEvent );
           
-          //selectedEvent.popcornEvent._natives.start(null, selectedEvent.popcornEvent);
+          selectedEvent.popcornEvent._natives.start( null, selectedEvent.popcornEvent );
           
         
           selectedEvent.parent._draw();
@@ -1467,7 +1467,9 @@
           serialized = tempStore.serialize( $popcorn.data.trackEvents.byStart ), 
           deserial = JSON.parse( serialized ), 
           methods = [];
-
+      
+      
+      
       //  Build playback JS string
       _.each( deserial.data, function( obj, key ) {
         _.each( obj, function( data, dataKey ) {
@@ -1482,6 +1484,20 @@
           methods.push( dataKey + "(" + JSON.stringify( temp ) + ")" );
         });
       });
+      
+      
+      //  If no mthods were compiled, then there are no tracks and 
+      //  hence, nothing to preview. Doing so will throw an exception
+      if ( !methods.length ) {
+        
+        
+        $doc.trigger( "applicationError", {
+          type: "Stage Empty",
+          message: "I cannot export your movie - the stage is totes empty!"
+        });        
+
+        return;
+      }
       
       //  Attach playback string commands
       playbackAry[ 1 ] += "." + methods.join(".") + ";";
@@ -1499,41 +1515,138 @@
         compiled += fragment;
       });
       
-      //  Render embedded html fragmant output
-      if ( type === "embeddable" ) {
-        
-        if ( !$("#io-export").length ) {
-          
-          $ioExport = $("<textarea/>").width($("#ui-preview-frame").width()).height($("#ui-preview-frame").height());
-        
-          $("#ui-preview-frame").replaceWith( $ioExport );
-        }
-      
-        $ioExport.val( compiled );
-      } 
-      
-      //  Render preview frame
-      if ( type === "preview" ) {
-      
-        var $iframe = $("<iframe/>", { id: "ui-preview-frame" }).width($ioExport.width()).height($ioExport.height());
 
-        $ioExport.replaceWith($iframe);
-
-        var iframe = $("#ui-preview-frame")[0],
-            iframeDoc = ( iframe.contentWindow ) ? 
-                            iframe.contentWindow : 
-                            (iframe.contentDocument.document) ? 
-                              iframe.contentDocument.document : 
-                                iframe.contentDocument;
-
-        iframeDoc.document.open();
-        iframeDoc.document.write(compiled);
-        iframeDoc.document.close();        
-      }
+      $doc.trigger( "exportReady", {
+        type: type,
+        content: compiled
+      });
       
-      $doc.trigger( "exportReady" );
+      
     });
     
+    $doc.bind( "applicationError", function( event, options ) {
+      
+      $("<div/>", {
+        id: "ui-error-rendered", 
+        html: options.message
+      
+      }).appendTo( "#ui-application-error" );
+      
+      $("#ui-application-error").dialog({
+        modal: true, 
+        width: 300, 
+        height: 200, 
+        autoOpen: true,
+        title: _( options.type ).capitalize(), 
+        buttons: {
+          
+          'Close': function () {
+            
+            $(this).dialog( "close" );
+            
+            $("#ui-error-rendered").remove();
+          
+          }
+        }        
+      });    
+    
+    });
+    
+    
+    
+    var TrackExport = (function (window) {
+      
+      return {
+      
+        typemap: {
+          
+          "preview" : "iframe", 
+          "embeddable" : "textarea"
+          
+        }, 
+        export: function( options ) {
+          
+          
+          this.render[ this.typemap[ options.type ] ](
+            options.parent,
+            options.content
+          );
+        
+        
+        }, 
+        render: {
+          
+          iframe: function( $parent, compiled ) {
+          
+            var $iframe = $("<iframe/>", { id: "ui-preview-rendered" }).width($parent.width()-100).height($parent.height()-100), 
+                iframe, iframeDoc;
+
+            $parent.html( $iframe );
+
+            iframe = $("#ui-preview-rendered")[0];
+            iframeDoc = ( iframe.contentWindow ) ? 
+                          iframe.contentWindow : 
+                          (iframe.contentDocument.document) ? 
+                            iframe.contentDocument.document : 
+                              iframe.contentDocument;
+
+            iframeDoc.document.open();
+            iframeDoc.document.write(compiled);
+            iframeDoc.document.close();             
+            
+          }, 
+          textarea: function ( $parent, compiled ) {
+            
+            var $textarea = $("<textarea/>", { id: "ui-preview-rendered" }).width($parent.width()-100).height($parent.height()-100);
+            
+            
+            $textarea.val( compiled );
+            
+            $parent.html( $textarea );
+          
+          }
+        
+        }
+      };
+    
+    })(window)
+    
+
+    //  Show export screen
+    $doc.bind( "exportReady", function( event, options ) {
+      
+      //$exportready.show();
+      
+      var $div = $("#ui-preview-viewer").dialog({
+        modal: true, 
+        width: $body.width() - 50, 
+        height: $body.height() - 50, 
+        autoOpen: true,
+        title: _( options.type ).capitalize(), 
+        buttons: {
+          
+          'Close': function () {
+            
+            $(this).dialog( "close" );
+            
+            $("#ui-preview-rendered").remove();
+          
+          }
+        }        
+      });
+      
+      _.extend( options, {
+        
+        parent: $div
+      
+      });
+      
+      
+      TrackExport.export(options);
+      
+    
+    });
+
     
     // ^^^^^^^^^^^^^^^^^^^ THIS IS THE WORST CODE EVER.
     
@@ -1632,12 +1745,7 @@
     });
 
     
-    //  Show export screen
-    $doc.bind( "exportReady", function() {
-      
-      $exportready.show();
-    
-    });
+
     
     
     $doc.bind( "seekComplete", function( event, options ) {

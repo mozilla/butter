@@ -81,12 +81,12 @@ var googleCallback;
             if ( options.location && ( !options.lat || !options.long) ) {
               
               var geocoder = new google.maps.Geocoder();
+              
               geocoder.geocode({ 'address': options.location}, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                 
-                  console.log(results[0].geometry.location);
-                  options.lat  = results[0].geometry.location.xa;
-                  options.long = results[0].geometry.location.za; 
+                  options.lat  = results[0].geometry.location.lat();
+                  options.long = results[0].geometry.location.lng();
                 } 
               });
             }
