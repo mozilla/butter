@@ -658,7 +658,7 @@
                 increment = Math.round( $tracktimecanvas.width() / $popcorn.video.duration );
                 
             
-            $ioVideoTitle.val("");
+            //$ioVideoTitle.val("");
             //$ioVideoDesc.val("");
             
             //  Empty active track cache
@@ -1759,11 +1759,6 @@
       var $this = $(this);
       
           
-      if ( !$popcorn || !$popcorn.data ) {
-        //  TODO: USER ERROR MESSAGE
-        return;
-      }
-      
       if ( !!$this.attr("data-control") ) {
         controls[ $this.attr("data-control") ]();
       }

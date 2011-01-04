@@ -46,9 +46,9 @@ $(function () {
   };
   
   cload = function () {
-    crand();
+    //crand();
     
-    $('[ data-control="load"]').trigger("click");
+    $('[data-control="load"]').trigger("click");
     
     
     var ary = $("#io-video-url").val().split("/"), 
@@ -105,7 +105,7 @@ $(function () {
     
 
 
-  $("#io-video-url").trigger("change");
+  $("#io-video-url").val("http://dl.dropbox.com/u/3531958/sintel.ogv");//.trigger("change");
 
 
   $(document).bind( "videoReady timelineReady", function ( event ) {
