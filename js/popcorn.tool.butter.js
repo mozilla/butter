@@ -1291,7 +1291,7 @@
           //  Recall _setup with new data
           selectedEvent.popcornEvent._natives._setup( selectedEvent.popcornEvent );
           
-          selectedEvent.popcornEvent._natives.start(null, selectedEvent.popcornEvent);
+          //selectedEvent.popcornEvent._natives.start(null, selectedEvent.popcornEvent);
           
         
           selectedEvent.parent._draw();

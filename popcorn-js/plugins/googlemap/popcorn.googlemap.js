@@ -78,12 +78,15 @@ var googleCallback;
             }, 13);
           } else {
             
-            if ( options.location && ( !options.lat && ! options.long) ) {
+            if ( options.location && ( !options.lat || !options.long) ) {
+              
               var geocoder = new google.maps.Geocoder();
               geocoder.geocode({ 'address': options.location}, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
-                  options.lat  = results[0].geometry.location.wa;
-                  options.long = results[0].geometry.location.ya; 
+                
+                  console.log(results[0].geometry.location);
+                  options.lat  = results[0].geometry.location.xa;
+                  options.long = results[0].geometry.location.za; 
                 } 
               });
             }
@@ -111,7 +114,7 @@ var googleCallback;
       start: function(event, options){
       
         
-        //console.log(options._map);
+        
       
         // dont do anything if the information didn't come back from google map
         var isReady = function () {
@@ -126,7 +129,7 @@ var googleCallback;
               
               options._map.getDiv().style.display = 'block';
               
-              google.maps.event.trigger( options._map, 'resize');
+              //google.maps.event.trigger( options._map, 'resize');
               
             } else {
             
