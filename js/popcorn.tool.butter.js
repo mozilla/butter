@@ -19,28 +19,31 @@
     pad: function( number ) {
       return ( number < 10 ? '0' : '' ) + number;
     },
+    fract: function( number, fract ) {
+      return ( Math.round(number * fract) / fract );
+    },
+    //  
     fourth: function( number ) {
-      
-      return ( Math.ceil(number * 4) / 4).toFixed(2);
+      return _( number ).fract( 4 );
     },
     // Convert an SMPTE timestamp to seconds
     smpteToSeconds: function( smpte ) {
       var t = smpte.split(":");
 
       if ( t.length === 1 ) {
-        return parseFloat(t[0], 10);
+        return parseFloat( t[0], 10 );
       } 
 
       if (t.length === 2) {
-        return parseFloat(t[0], 10) + parseFloat(t[1] / 12, 10);
+        return parseFloat( t[0], 10 ) + parseFloat( t[1] / 12, 10 );
       } 
 
       if (t.length === 3) {
-        return parseInt(t[0] * 60, 10) + parseFloat(t[1], 10) + parseFloat(t[2] / 12, 10);
+        return parseInt( t[0] * 60, 10 ) + parseFloat( t[1], 10 ) + parseFloat( t[2] / 12, 10 );
       } 
 
       if (t.length === 4) {
-        return parseInt(t[0] * 3600, 10) + parseInt(t[1] * 60, 10) + parseFloat(t[2], 10) + parseFloat(t[3] / 12, 10);
+        return parseInt( t[0] * 3600, 10 ) + parseInt( t[1] * 60, 10 ) + parseFloat( t[2], 10 ) + parseFloat( t[3] / 12, 10 );
       }
     }
   });
@@ -65,6 +68,8 @@
   
   TrackStore.properties = [ "title", "description", "remote" ];
 
+
+  //  Property getter/setter factory
   _.each( TrackStore.properties, function( key ) {
 
     TrackStore.prototype[ _( key ).capitalize() ] = function( val ) {
@@ -138,7 +143,7 @@
   };
   
   TrackStore.prototype.slug = function() {
-    return this.title.toLowerCase().match(/[a-z0-9]+/ig).join('-');
+    return ( this.title || "" ).toLowerCase().match(/[a-z0-9]+/ig).join('-');
   };
 
   TrackStore.prototype.parse = function( slug ) {
@@ -178,7 +183,7 @@
     return this.create( slug, from );
   };  
   
-  TrackStore.prototype.delete = function( slug ) {
+  TrackStore.prototype.remove = function( slug ) {
     return localStorage.removeItem( slug );
   };
   
@@ -186,10 +191,11 @@
   TrackStore.getStorageAsObject = function() {
     var i = -1, 
         len = localStorage.length,
-        obj = {};
+        obj = {}, 
+        key;
 
     while ( ++i < len ) { 
-      var key = localStorage.key( i ); 
+      key = localStorage.key( i ); 
       
       obj[ key ] = new Function( "return " + localStorage.getItem( key ) )();
     
@@ -247,6 +253,7 @@
         $body = $("body"), 
 
         $video = $("video"), 
+        $source = $("source"),
 
         $pluginSelectList = $("#ui-plugin-select-list"), 
         $uservideoslist = $("#ui-user-videos"), 
@@ -288,7 +295,18 @@
         selectedEvent = null,
         lastSelectedEvent = null, 
         activeTracks = {}, 
-        trackStore;
+        trackStore, 
+        
+        
+        // Constructors
+        TrackEditor, 
+        TrackMeta, 
+        TrackEvents
+        
+        
+        ;
+        
+        
     
     //  Decorate UI buttons
     $("button,.ui-menu-controls").button();
@@ -350,7 +368,7 @@
     //  Cache body dimensions
     $body.dims = {
       width: $body.width(),
-      height: $body.height(),
+      height: $body.height()
     };
     
 
@@ -359,7 +377,7 @@
 
       $body.dims = {
         width: $body.width(),
-        height: $body.height(),
+        height: $body.height()
       };
 
       //  Set placement of loading icon
@@ -399,7 +417,7 @@
         
     
     //  Storage logic module
-    var TrackMeta   = ( function() {
+    TrackMeta   = ( function() {
       
       return {
       
@@ -427,6 +445,8 @@
             //    a simulation of plugin calls will occur
 
             //    this will rebuild the visual track events on the stage
+            
+           //console.log(project);
 
             
             $ioVideoUrl.val( project.remote );
@@ -469,13 +489,14 @@
             //  Unload current menu state
             this.unload();
 
-            var storedMovies = TrackStore.getStorageAsObject();
+            var storedMovies = TrackStore.getStorageAsObject(),
+                $li;
 
             if ( _.size( storedMovies ) > 0 ) {
 
               _.each( TrackStore.getStorageAsObject() , function( data, prop ) {
 
-                var $li = $("<li/>", {
+                $li = $("<li/>", {
 
                   html: '<h4><img class="icon" src="img/dummy.png">' + data.title + '</h4>',
                   className: "span-4 select-li clickable", 
@@ -493,7 +514,7 @@
 
             } else {
 
-              var $li = $("<li/>", {
+              $li = $("<li/>", {
 
                 html: '<h4><em class="quiet">Empty</em></h4>',
                 className: "span-4"
@@ -514,7 +535,7 @@
     
 
     //  Editor logic module
-    var TrackEditor = ( function(window) {
+    TrackEditor = ( function(window) {
       
       
       return {
@@ -579,11 +600,16 @@
           var url = $ioVideoUrl.val(), 
               tokens = url.split("."), 
               type = tokens[ tokens.length - 1 ], 
-              self = this;
+              self = this, 
+              
+              //  Ready state vars
+              netReadyInt, 
+              timelineReadyFn
+              ;
           
           
-          $ioVideoTitle.val("");
-          $ioVideoDesc.val("");
+          //$ioVideoTitle.val("");
+          //$ioVideoDesc.val("");
 
           //  Remove previously created video sources
           if ( $("video").length ) {
@@ -598,7 +624,7 @@
           
           
           //  Create a new source element and append to the video element
-          var $source = $("<source/>", {
+          $source = $("<source/>", {
             
             type: formatMaps[ type ],
             src: url
@@ -609,19 +635,19 @@
           $popcorn = Popcorn("#video");
           
           
-          var networkReadyInterval = setInterval( function () {
+          netReadyInt = setInterval( function () {
             
             //  Firefox is an idiot
             if ( $popcorn.video.currentSrc === url ) {
-              self.timeLineReady( $popcorn, timeLineReadyFn );
-              clearInterval( networkReadyInterval );
+              self.timeLineReady( $popcorn, timelineReadyFn );
+              clearInterval( netReadyInt );
             }
             
           }, 13);
           
           
           //  When new video and timeline are ready
-          var timeLineReadyFn = function() {
+          timelineReadyFn = function() {
             
             window.$popcorn = $popcorn;
             
@@ -737,7 +763,7 @@
         
         setScrubberPosition: function( position ) {
           
-          var state, product, offset = 1;
+          var offset = 1, fixPosition, state, product;
           
           if ( arguments.length === 2 ) {
             state = arguments[1];
@@ -762,7 +788,7 @@
           if ( !this.isScrubbing ) {
             
             //  Update the scrubber handle position              
-            var fixPosition = Math.floor( position - offset );
+            fixPosition = Math.floor( position - offset );
             
             $scrubberHandle.css({
               left: position - offset
@@ -789,7 +815,7 @@
           canvas.id = id;
           canvas.width = width;
           canvas.height = height;
-          //canvas.style.marginLeft = "3px";
+          
           
           document.getElementById(parent).appendChild(canvas);
           
@@ -807,42 +833,45 @@
               tick = Math.floor( 830 / duration ), 
               durationCeil = Math.ceil(duration), 
               increment = tick/4, 
-              offset = 2;
+              offset = 2, 
+              primary = 0, 
+              secondary = 0, 
+              posOffset;
 
           
           context.font = "10px courier";
           context.fillStyle = "#000";
           
-          for ( var i = 0, t = 0; i < duration * 2; i++ ) {
+          for ( primary = 0, t = 0; primary < duration * 2; primary++ ) {
 
-            if ( i >= 10 ) {
+            if ( primary >= 10 ) {
               offset = 6;
             }
 
             context.lineWidth = 1;
             context.beginPath();
 
-            if ( i%2 || i === 0 ) {
+            if ( primary % 2 || primary === 0 ) {
               t++;
               
               if ( t <= durationCeil ) {
                 context.fillText( t , t * tick - offset, 9);
               }
 
-              var posOffset = i * tick/2;
+              posOffset = primary * tick/2;
               
               //  Secondary ticks
-              for ( var f = 0; f < 4; f++ ) {
-                context.moveTo( posOffset + ( f * increment ), 20);
-                context.lineTo( posOffset + ( f * increment ), 25);                
+              for ( secondary = 0; secondary < 4; secondary++ ) {
+                context.moveTo( posOffset + ( secondary * increment ), 20);
+                context.lineTo( posOffset + ( secondary * increment ), 25);                
               }
               
 
             } else {
               
               // Primary ticks
-              context.moveTo( i * tick/2, 10);
-              context.lineTo( i * tick/2, 25);
+              context.moveTo( primary * tick/2, 10 );
+              context.lineTo( primary * tick/2, 25);
             
             }
 
@@ -854,7 +883,7 @@
     })(window);
     
     //  Event editing logic module
-    var TrackEvents = ( function(window) {
+    TrackEvents = ( function(window) {
       
       
       return {
@@ -909,7 +938,7 @@
               };
               
 
-          arguments.length && ( settings = arguments[0] );
+          arguments.length && ( settings = arguments[0] );// && _;
 
           
           //  In case settings is an event object
@@ -1071,7 +1100,8 @@
               optionsTab  = $editor.find(".options"),
 
               input,
-              label
+              label,
+              prop
           ;
 
           //console.log(manifest);
@@ -1098,11 +1128,11 @@
             selectedEvent.previousValues = {}; 
           }
 
-          for ( var i in options ) { 
+          for ( prop in options ) { 
 
-            if ( typeof options[i] === "object" ) {
+            if ( typeof options[ prop ] === "object" ) {
 
-              var opt = options[i],
+              var opt = options[ prop ],
                   elemType = opt.elem,
                   elemLabel = opt.label, 
                   elem;
@@ -1112,21 +1142,22 @@
                       });
 
 
-              selectedEvent.manifestElems[i] = elem;
+              selectedEvent.manifestElems[ prop ] = elem;
               
              //console.log(lastSelectedEvent);
               
               
               if ( _.isNull(lastSelectedEvent) || lastSelectedEvent != selectedEvent ) { 
-                selectedEvent.previousValues[i] = selectedEvent.popcornEvent[i];
+                selectedEvent.previousValues[ prop ] = selectedEvent.popcornEvent[ prop ];
               }
 
               label = $("<label/>").attr('for', elemLabel).text(elemLabel);   
               
               
               if ( elemType === "input" ) { 
-                
-                elem.val( selectedEvent.popcornEvent[i] );
+
+                elem.val( selectedEvent.popcornEvent[ prop ] );
+
               }
               
               if ( elemType === "select" ) {
@@ -1141,8 +1172,7 @@
                   }).appendTo( elem );
                 
                 });
-                
-              
+
               }
 
               elem.appendTo(label);
@@ -1165,21 +1195,22 @@
           //console.log("selectedEvent.type", selectedEvent.type); // <--- use to call plugin FN
 
           var popcornEvent = selectedEvent.popcornEvent,
-              manifest = popcornEvent._natives.manifest;
+              manifest = popcornEvent._natives.manifest, 
+              prop;
 
           //console.log("manifest", manifest);
           //console.log("popcornEvent", popcornEvent);
 
-          for( var i in manifest.options ) { 
-            if ( typeof manifest.options[i] === "object" ) {
+          for( prop in manifest.options ) { 
+            if ( typeof manifest.options[ prop ] === "object" ) {
               
-              var _val = selectedEvent.manifestElems[i].val();
+              var _val = selectedEvent.manifestElems[ prop ].val();
             
-              popcornEvent[i] = _val;
+              popcornEvent[ prop ] = _val;
               
               
-              if ( !!_val && ["start","end"].indexOf(i) === -1 && !isNaN( _val )  ) {
-                popcornEvent[i] = +_val;
+              if ( !!_val && ["start","end"].indexOf(prop) === -1 && !isNaN( _val )  ) {
+                popcornEvent[ prop ] = +_val;
               }
             }
           }
@@ -1219,11 +1250,12 @@
         
         
         editEventCancel: function() { 
-          var popcornEvent = selectedEvent.popcornEvent;
+          var popcornEvent = selectedEvent.popcornEvent, 
+              prop;
 
-          for( var i in selectedEvent.previousValues ) { 
-            if ( i ) {
-              popcornEvent[i] = selectedEvent.previousValues[i];
+          for( prop in selectedEvent.previousValues ) { 
+            if ( prop ) {
+              popcornEvent[ prop ] = selectedEvent.previousValues[ prop ];
             }
           }
           selectedEvent.inPoint = popcornEvent.start;
@@ -1594,7 +1626,7 @@
       
       }, 
       
-      delete: function() {
+      remove: function() {
         
         //console.log(trackStore);
         
