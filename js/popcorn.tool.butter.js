@@ -291,7 +291,7 @@
         $uiExportHtml = $("#ui-export-html"),
         $uiStartHtml = $("#ui-start-html"),
         
-       
+        
         selectedEvent = null,
         lastSelectedEvent = null, 
         activeTracks = {}, 
@@ -439,7 +439,6 @@
 
             //    load video from data.remote
 
-
             // AFTER the video is loaded in:
 
             //    a simulation of plugin calls will occur
@@ -494,7 +493,7 @@
 
             if ( _.size( storedMovies ) > 0 ) {
 
-              _.each( TrackStore.getStorageAsObject() , function( data, prop ) {
+              _.each( TrackStore.getStorageAsObject(), function( data, prop ) {
 
                 $li = $("<li/>", {
 
@@ -538,8 +537,11 @@
     TrackEditor = ( function(window) {
       
       
+      
       return {
-        
+      
+        timeLineWidth: 0, 
+        timeLineIncrement: 0, 
         
         videoReady: function( $p, callback ) {
           
@@ -657,7 +659,6 @@
                 $plugins = $(".ui-plugin-pane"),
                 increment = Math.round( $tracktimecanvas.width() / $popcorn.video.duration );
                 
-            
             //$ioVideoTitle.val("");
             //$ioVideoDesc.val("");
             
@@ -687,7 +688,7 @@
             $scrubberHandle.draggable({ 
               axis: "x", 
               containment: "#ui-tracks-time-canvas",  
-              grid: [ increment / 8, 0],
+              grid: [ increment / 8, 0 ],
               //distance: increment / 4 / 2, 
               start: function() {
                 TrackEditor.isScrubbing = true;
@@ -743,7 +744,16 @@
                 }
               );
               
+              
+              if ( quarterTime > $popcorn.video.duration / 2 ) {              
+              
+                $("#ui-tracks").trigger( "scroll" );
+              
+              }
+              
             });   
+            
+            
             
             
             //  Trigger timeupdate to initialize the current time display
@@ -816,21 +826,23 @@
           canvas.width = width;
           canvas.height = height;
           
-          
           document.getElementById(parent).appendChild(canvas);
           
           return canvas;
         }, 
         
         drawTimeLine: function( duration ) {
+        
+        
+          TrackEditor.timeLineWidth = Math.ceil( Math.ceil( duration ) / 30 ) * 800;
+          
 
           this.deleteCanvas( "ui-tracks-time", "ui-tracks-time-canvas" );
-          this.drawCanvas( "ui-tracks-time", "ui-tracks-time-canvas", 830, 25 );
+          this.drawCanvas( "ui-tracks-time", "ui-tracks-time-canvas", TrackEditor.timeLineWidth, 25 );
           
-          duration = Math.floor( duration );
-          
+
           var context = document.getElementById("ui-tracks-time-canvas").getContext('2d'),
-              tick = Math.floor( 830 / duration ), 
+              tick = TrackEditor.timeLineWidth / duration,
               durationCeil = Math.ceil(duration), 
               increment = tick/4, 
               offset = 2, 
@@ -838,11 +850,13 @@
               secondary = 0, 
               posOffset;
 
+          TrackEditor.timeLineIncrement = increment;
           
           context.font = "10px courier";
           context.fillStyle = "#000";
+          context.lineWidth = 1;
           
-          for ( primary = 0, t = 0; primary < duration * 2; primary++ ) {
+          for ( var i = 0, t = 0; i < durationCeil * 2; i++ ) {
 
             if ( primary >= 10 ) {
               offset = 6;
@@ -852,6 +866,7 @@
             context.beginPath();
 
             if ( primary % 2 || primary === 0 ) {
+
               t++;
               
               if ( t <= durationCeil ) {
@@ -859,6 +874,7 @@
               }
 
               posOffset = primary * tick/2;
+
               
               //  Secondary ticks
               for ( secondary = 0; secondary < 4; secondary++ ) {
@@ -872,7 +888,7 @@
               // Primary ticks
               context.moveTo( primary * tick/2, 10 );
               context.lineTo( primary * tick/2, 25);
-            
+
             }
 
             context.stroke();
@@ -881,6 +897,15 @@
       };
       
     })(window);
+    
+    
+    
+    //  scroll as needed  
+    //$("#ui-tracks").bind( "scroll", function ( event ) { console.log(event) });
+
+    
+    
+    
     
     //  Event editing logic module
     TrackEvents = ( function(window) {
@@ -995,6 +1020,9 @@
               className: "span-21 last track track" + _.size( activeTracks )
 
             }).insertAfter( "#ui-tracks-time" ); //"#ui-tracks"
+            
+            console.log(TrackEditor.timeLineWidth);
+            $track.width( TrackEditor.timeLineWidth );
 
             //  Convert the placeholder into a track, with a track event
             $track.track({
@@ -1619,6 +1647,7 @@
         volumeTo = 0;
         
         
+        console.log($ioVideoUrl.val());
         //  TODO: update to validate as url;
         if ( !!$ioVideoUrl.val() ) {
           TrackEditor.loadVideoFromUrl();
@@ -1758,7 +1787,7 @@
       
       var $this = $(this);
       
-          
+
       if ( !!$this.attr("data-control") ) {
         controls[ $this.attr("data-control") ]();
       }
