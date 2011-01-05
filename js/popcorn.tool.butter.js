@@ -110,9 +110,7 @@
             manifest = key._natives.manifest.options;
         
         
-        //console.log(manifest);
         _.each( key, function( prop, eventKey ) {
-          
           
           //  ignore internally set properties
           if ( eventKey.indexOf("_") !== 0 && !!prop ) {
@@ -241,7 +239,9 @@
     }, 
     
     mp4: 'video/mp4; codecs="avc1, mp4a"',
-    ogv: 'video/ogg; codecs="theora, vorbis"'
+    ogv: 'video/ogg; codecs="theora, vorbis"', 
+    
+    accepts: [ ".ogv", ".mp4", ".webm" ]
   };  
   
 
@@ -298,10 +298,11 @@
         trackStore, 
         
         
-        // Constructors
+        // Modules
         TrackEditor, 
         TrackMeta, 
-        TrackEvents
+        TrackEvents, 
+        TrackExport
         
         
         ;
@@ -412,9 +413,6 @@
     $exportready.hide();
     $loadready.hide();
     
-    //  Uncomment to start with new video prompt scene
-    $startready.hide();
-        
     
     //  Storage logic module
     TrackMeta   = ( function() {
@@ -433,21 +431,6 @@
         
           load: function( tracks, project ) {
         
-            // TODO: write function that accepts the data object
-
-            //    function will:
-
-            //    load video from data.remote
-
-            // AFTER the video is loaded in:
-
-            //    a simulation of plugin calls will occur
-
-            //    this will rebuild the visual track events on the stage
-            
-           //console.log(project);
-
-            
             $ioVideoUrl.val( project.remote );
             $ioVideoTitle.val( project.title );
             $ioVideoDesc.val( project.description );
@@ -459,9 +442,7 @@
                 _.each( trackDataObj, function( data, key ) {
 
                   var options = _.extend( {}, { id: key }, data );  
-
-
-                  //console.log("options", options);
+                  
                   TrackEvents.addTrackEvent.call( options, options );
 
                 });
@@ -479,18 +460,17 @@
             if ( $("#ui-user-videos li").length ) {
               $("#ui-user-videos li").remove();
             }
-
-            //console.log($("#ui-user-videos li"));
           },
 
-          load: function() {
+          load: function( selector ) {
             
             //  Unload current menu state
             this.unload();
 
             var storedMovies = TrackStore.getStorageAsObject(),
                 $li;
-
+                
+                
             if ( _.size( storedMovies ) > 0 ) {
 
               _.each( TrackStore.getStorageAsObject(), function( data, prop ) {
@@ -501,7 +481,7 @@
                   className: "span-4 select-li clickable", 
                   "data-slug" : prop
 
-                }).appendTo( "#ui-user-videos" );
+                }).appendTo( selector );
                 
                 
                 //console.log(data);
@@ -518,7 +498,7 @@
                 html: '<h4><em class="quiet">Empty</em></h4>',
                 className: "span-4"
 
-              }).appendTo( "#ui-user-videos" );          
+              }).appendTo( selector );          
               
             }
           }        
@@ -529,7 +509,18 @@
     
     window.TrackMeta = TrackMeta;
     
-    TrackMeta.menu.load();
+    
+    TrackMeta.menu.load( "#ui-user-videos" );
+    
+    
+    //  #8043415 
+    //  TrackMeta.menu.load( selector );
+    
+    //  Uncomment to start with new video prompt scene
+    $startready.hide();
+
+
+    
     
     
 
@@ -798,7 +789,19 @@
                 
         
         },
+        
+        
+        isScrubberWithin: function( trackEvent ) {          
+          
+          var realLeft = ( $scrubberHandle.position().left - $trackeditting.position().left ) - 1, 
+              sIncrement = TrackEditor.increment * 4,
+              posInTime = realLeft / sIncrement;
+              
+          
+          return ( posInTime >= trackEvent.start && 
+                    posInTime <= trackEvent.end );
 
+        },
         
         setScrubberPosition: function( position ) {
           
@@ -965,22 +968,33 @@
         
         }, 
         
-        destroyTrackEvent: function( $track, $popcorn, id ) {
-
+        destroyTrackEvent: function( $track, $popcorn, id, trackType ) {
+          
           //  Remove the track event from the tracks ui cache
-          $track.track( 'killTrackEvent', {
+          $track.track( "killTrackEvent", {
             _id: id
           });
 
 
           //  Remove the track event from Popcorn cache
           $popcorn.removeTrackEvent( id );
+          
+          
+          //  Fire event if track removed successfully
+          if ( $popcorn.data.history.indexOf( id ) === -1 ) {
+            $doc.trigger( "removeTrackComplete", { type: trackType } );
+          }
 
         },
-        addTrackEvent: function() {
+        addTrackEvent: function( type ) {
           
           if ( !$popcorn || !$popcorn.data ) {
-            //  TODO: USER ERROR MESSAGE
+
+            $doc.trigger( "applicationError", {
+              type: "No Video Loaded",
+              message: "I cannot add a Track Event - there is no movie loaded."
+            });        
+
             return;
           }
           
@@ -1056,7 +1070,7 @@
 
             //  Convert the placeholder into a track, with a track event
             $track.track({
-              target: $('#video'),
+              target: $("#video"),
               duration: $popcorn.video.duration
             });
 
@@ -1076,8 +1090,7 @@
           //  TODO: when a track of this type already exists... 
           //  ensure we need to actually make "track" into something
           
-
-          $track.track( 'addTrackEvent', {
+          $track.track( "addTrackEvent", {
             inPoint           : startWith.start,
             outPoint          : startWith.end,
             type              : trackType,
@@ -1091,17 +1104,23 @@
                 
                 $editor.dialog({
                   autoOpen: false,
-                  title: 'Edit ' + _( trackType ).capitalize(),
+                  title: "Edit " + _( trackType ).capitalize(),
                   buttons: {
-                    //'Delete': editEventDelete,
-                    'Cancel': TrackEvents.editEventCancel,
-                    'OK'    : function() {
+                    
+                    //  TODO
+                    //"Delete": editEventDelete,
+                    
+                    "Cancel": TrackEvents.editEventCancel,
+                    "OK"    : function() {
                       
-                      TrackEvents.editEventApply.call( trackEvent );
+                      TrackEvents.editEventApply.call( trackEvent, $track, $popcorn, lastEventId, trackType );
                       
                       $(this).dialog("close");
                     },
-                    'Apply' : TrackEvents.editEventApply
+                    "Apply" : function() {
+                      
+                      TrackEvents.editEventApply.call( trackEvent, $track, $popcorn, lastEventId, trackType );
+                    }
                   }
                 });               
 
@@ -1111,21 +1130,37 @@
                 
                 //  If the shift key was held down when the track event was clicked.
                 
-                TrackEvents.destroyTrackEvent( $track, $popcorn, lastEventId );
-
-                $doc.trigger( "removeTrackComplete", { type: trackType } );
-              
+                
+                $doc.trigger( "applicationNotice", {
+                  
+                  message: 'Are you sure you want to remove this Track Event? <br><br> <hr class="space">' +
+                            'This action is permanent and cannot be undone.', 
+                  
+                  callback: function () {
+                    
+                    //  Remove the track when user selects "ok"
+                    TrackEvents.destroyTrackEvent( $track, $popcorn, lastEventId, trackType );
+                    
+                    
+                  }
+                });
+                
               }
             }
           });
 
-       
-
-          $doc.trigger( "addTrackComplete" );
-
+          
+          if ( !type ) {
+            
+            $doc.trigger( "addTrackComplete" );
+            return;
+          }
+          
+          
+          $doc.trigger( type + "Complete" );
+          
+          
         },
-        
-
         
         drawTrackEvents: function() { 
 
@@ -1140,13 +1175,6 @@
           // `this` will actually refer to the context set when the function is called.
           selectedEvent = this;    
           
-          
-          //console.log(this, selectedEvent);
-          
-         //console.log( $(selectedEvent.parent.element).attr("title") );
-         //console.log(selectedEvent.type);
-          
-
           var manifest    = selectedEvent.popcornEvent._natives.manifest,
               about       = manifest.about,
               aboutTab    = $editor.find(".about"),
@@ -1205,7 +1233,7 @@
                 selectedEvent.previousValues[ prop ] = selectedEvent.popcornEvent[ prop ];
               }
 
-              label = $("<label/>").attr('for', elemLabel).text(elemLabel);   
+              label = $("<label/>").attr("for", elemLabel).text(elemLabel);   
               
               
               if ( elemType === "input" ) { 
@@ -1242,18 +1270,12 @@
         },
         
         
-        editEventApply: function() { 
-
-
-          //console.log("selectedEvent", selectedEvent);
-          //console.log("selectedEvent.type", selectedEvent.type); // <--- use to call plugin FN
+        editEventApply: function( $track, $p, id, trackType ) { 
 
           var popcornEvent = selectedEvent.popcornEvent,
               manifest = popcornEvent._natives.manifest, 
-              prop;
-
-          //console.log("manifest", manifest);
-          //console.log("popcornEvent", popcornEvent);
+              rebuiltEvent = {}, 
+              prop, refEvent;
 
           for( prop in manifest.options ) { 
             if ( typeof manifest.options[ prop ] === "object" ) {
@@ -1262,8 +1284,78 @@
             
               popcornEvent[ prop ] = _val;
               
+              if ( !!_val && [ "start", "end" ].indexOf(prop) === -1 && !isNaN( _val )  ) {
+                popcornEvent[ prop ] = +_val;
+              }
+            }
+          }
+
+          selectedEvent.inPoint = popcornEvent.start;
+          selectedEvent.outPoint = popcornEvent.end;          
+          
+          //  Save a ref to the latest track event data
+          //  selectedEvent.popcornEvent
+          
+          refEvent = selectedEvent.popcornEvent;
+          
+          _.each( refEvent, function( eventProp, eventKey ) {
+            if ( eventKey.indexOf("_") !== 0 && !!eventProp ) {
+              rebuiltEvent[ eventKey ] = eventProp;
+            }
+          });
+          
+          //console.log("rebuildEvent", rebuiltEvent);
+          //console.log( $track, $popcorn, id, trackType );
+          
+          _.extend( rebuiltEvent, {
+            
+            id: trackType
+          
+          });
+          
+          
+          //TrackEvents.destroyTrackEvent( $track, $p, id, trackType )
+          $track.track( "killTrackEvent", {
+            _id: id
+          });
+          //  Remove the track event from Popcorn cache
+          $popcorn.removeTrackEvent( id );
+          
+
+          $( refEvent._container ).remove();
+          
+          
+          TrackEvents.addTrackEvent.call( rebuiltEvent, rebuiltEvent );
+          
+          
+          //  find scrubber
+          
+          // if scrubber is over event, refire start
+          
+          
+          
+          if ( TrackEditor.isScrubberWithin( refEvent ) ) {
+            
+            var lastId = $popcorn.getLastTrackEventId(), 
+                newTrackEvent = TrackEvents.getTrackEventById(lastId);
+            
+            newTrackEvent._natives.start( null, newTrackEvent );
+          
+          }
+          
+          
+
+          
+          //$doc.trigger( "videoEditComplete" );
+          /*
+          for( prop in manifest.options ) { 
+            if ( typeof manifest.options[ prop ] === "object" ) {
               
-              if ( !!_val && ["start","end"].indexOf(prop) === -1 && !isNaN( _val )  ) {
+              var _val = selectedEvent.manifestElems[ prop ].val();
+            
+              popcornEvent[ prop ] = _val;
+              
+              if ( !!_val && [ "start", "end" ].indexOf(prop) === -1 && !isNaN( _val )  ) {
                 popcornEvent[ prop ] = +_val;
               }
             }
@@ -1295,9 +1387,9 @@
           
         
           selectedEvent.parent._draw();
-
+          */
           
-          $doc.trigger( "videoEditComplete" );
+          
           // TODO:  move out to own function
           // $("#video-data").val( JSON.stringify( $popcorn.data.trackEvents ) );
         }, 
@@ -1379,7 +1471,12 @@
       
       
       if ( !$popcorn || !$popcorn.data ) {
-        //  TODO: USER ERROR MESSAGE
+
+        $doc.trigger( "applicationError", {
+          type: "No Video Loaded",
+          message: "I cannot export your movie - there is no video loaded."
+        });        
+
         return;
       }
       
@@ -1490,7 +1587,6 @@
       //  hence, nothing to preview. Doing so will throw an exception
       if ( !methods.length ) {
         
-        
         $doc.trigger( "applicationError", {
           type: "Stage Empty",
           message: "I cannot export your movie - the stage is totes empty!"
@@ -1524,37 +1620,65 @@
       
     });
     
-    $doc.bind( "applicationError", function( event, options ) {
+    $doc.bind( "applicationError applicationNotice applicationAlert", function( event, options ) {
       
+      var defaultHandler = function() {
+
+        $(this).dialog( "close" );
+
+        $("#ui-error-rendered").remove();
+
+      }, 
+      buttons = {
+        "Close": defaultHandler
+      };
+      
+      
+      if ( event.type === "applicationNotice" ) {
+        
+        buttons = {
+          "Cancel": defaultHandler, 
+          "Ok": function() {
+            
+            //  If a callback specified, execute
+            options.callback && options.callback();
+            
+            //  Run default handler to clean and close
+            defaultHandler.call( this );
+          }
+        };
+        
+        
+        if ( !options.type ) {
+          options.type = "Confirm";
+        }
+        
+      }
+      
+
       $("<div/>", {
         id: "ui-error-rendered", 
         html: options.message
       
       }).appendTo( "#ui-application-error" );
       
+
       $("#ui-application-error").dialog({
-        modal: true, 
+        
+        title: options.type, 
+        height: !!options.message ? 200 : 0, 
+        buttons: buttons, 
+        
         width: 300, 
-        height: 200, 
-        autoOpen: true,
-        title: _( options.type ).capitalize(), 
-        buttons: {
-          
-          'Close': function () {
-            
-            $(this).dialog( "close" );
-            
-            $("#ui-error-rendered").remove();
-          
-          }
-        }        
+        modal: true, 
+        autoOpen: true
+               
       });    
-    
     });
     
     
     
-    var TrackExport = (function (window) {
+    TrackExport = (function (window) {
       
       return {
       
@@ -1566,12 +1690,10 @@
         }, 
         export: function( options ) {
           
-          
           this.render[ this.typemap[ options.type ] ](
             options.parent,
             options.content
           );
-        
         
         }, 
         render: {
@@ -1586,7 +1708,7 @@
             iframe = $("#ui-preview-rendered")[0];
             iframeDoc = ( iframe.contentWindow ) ? 
                           iframe.contentWindow : 
-                          (iframe.contentDocument.document) ? 
+                          ( iframe.contentDocument.document ) ? 
                             iframe.contentDocument.document : 
                               iframe.contentDocument;
 
@@ -1599,13 +1721,11 @@
             
             var $textarea = $("<textarea/>", { id: "ui-preview-rendered" }).width($parent.width()-100).height($parent.height()-100);
             
-            
             $textarea.val( compiled );
             
             $parent.html( $textarea );
           
           }
-        
         }
       };
     
@@ -1720,6 +1840,12 @@
         delete activeTracks[ type ];
       }
       
+      //  Complete with saving
+      if ( !!$ioVideoTitle.val() ) {
+        
+        controls.save();
+
+      }
     });
     
     
@@ -1798,12 +1924,22 @@
         seekTo = 0;
         volumeTo = 0;
         
+        //  If no remote url given, stop immediately
+        if ( !$ioVideoUrl.val() ) {
         
-        //  TODO: update to validate as url;
-        if ( !!$ioVideoUrl.val() ) {
-          TrackEditor.loadVideoFromUrl();
+          $doc.trigger( "applicationError", {
+            type: "No Video Loaded",
+            message: "Please provide a valid movie url. ("+ formatMaps.accepts.join(", ") +") "
+          });        
+          
+          return;
         }
-      
+        
+        //  TODO: really validate urls
+        
+        //  If all passes, continue to load a movie from
+        //  a specified URL.
+        TrackEditor.loadVideoFromUrl();
       }, 
       
       remove: function() {
@@ -1817,7 +1953,12 @@
       save: function() {
         
         if ( !$popcorn || !$popcorn.data ) {
-          //  TODO: USER ERROR MESSAGE
+
+          $doc.trigger( "applicationError", {
+            type: "No Video Loaded",
+            message: "I cannot add a Track Event - there is no movie loaded."
+          });       
+
           return;
         }        
         
@@ -1829,7 +1970,12 @@
             
         
         if ( !title ) {
-          //  TODO: USER ERROR MESSAGE
+
+          $doc.trigger( "applicationError", {
+            type: "No Title",
+            message: "You will need to add a title in order to save your project."
+          });       
+
           return;
         }
         
@@ -1855,7 +2001,7 @@
         
         //trackStore  = 
         
-        TrackMeta.menu.load();
+        TrackMeta.menu.load( "#ui-user-videos" );
         
         
         $("#ui-user-videos li[data-slug='"+ slug +"']").trigger( "click" );
@@ -1977,7 +2123,12 @@
       var $this = $(this).children("span").children("span");
 
       if ( !$popcorn || !$popcorn.data ) {
-        //  TODO: USER ERROR MESSAGE
+
+        $doc.trigger( "applicationError", {
+          type: "No Video Loaded",
+          message: "I cannot " + $this.attr("data-control") + " - there is no video loaded"
+        });       
+
         return;
       }      
       
