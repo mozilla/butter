@@ -283,13 +283,12 @@
         
         //  -ready suffix class has 2 matching elements
         $loadready = $(".ui-load-ready"),
-        $exportready = $(".ui-export-ready"),
-        $startready = $(".ui-start-ready"),
+
         
         //  
         $uiLoadingHtml = $("#ui-loading-html"),
-        $uiExportHtml = $("#ui-export-html"),
-        $uiStartHtml = $("#ui-start-html"),
+        $uiStartScreen = $("#ui-start-screen"), 
+        $uiStartList = $("#ui-start-screen-list"), 
         
         
         selectedEvent = null,
@@ -388,16 +387,6 @@
       });
 
 
-      $uiExportHtml.css({
-        left: ( $body.dims.width / 2 ) - $uiExportHtml.width() / 2,
-        top: ( $body.dims.height / 2 ) - $uiExportHtml.height() / 2
-      });
-
-      $uiStartHtml.css({
-        left: ( $body.dims.width / 2 ) - $uiStartHtml.width() / 2,
-        top: ( $body.dims.height / 2 ) - $uiStartHtml.height() / 2
-      });    
-    
       $(".ui-menuset ~ ul").hide().css({top:0, left:0 });
     
 
@@ -410,7 +399,6 @@
     
     
     //  Start with overlay scenes hidden
-    $exportready.hide();
     $loadready.hide();
     
     
@@ -455,17 +443,19 @@
       
         menu: {
         
-          unload: function() {
+          unload: function( selector ) {
             
-            if ( $("#ui-user-videos li").length ) {
-              $("#ui-user-videos li").remove();
+            var $list = $( selector + " li");
+            
+            if ( $list.length ) {
+              $list.remove();
             }
           },
 
           load: function( selector ) {
             
             //  Unload current menu state
-            this.unload();
+            this.unload( selector );
 
             var storedMovies = TrackStore.getStorageAsObject(),
                 $li;
@@ -514,10 +504,29 @@
     
     
     //  #8043415 
-    //  TrackMeta.menu.load( selector );
+    TrackMeta.menu.load( "#ui-start-screen-list" );
     
-    //  Uncomment to start with new video prompt scene
-    $startready.hide();
+    
+    $uiStartScreen.dialog({
+      
+      modal: true, 
+      autoOpen: true, 
+      width: 400, 
+      height: 400,
+      buttons: {
+
+        "Start": function() {
+
+          $(this).dialog( "close" );
+
+        }
+      }
+    });
+    
+    
+    
+    
+
 
 
     //  Editor logic module
@@ -1726,17 +1735,26 @@
     
     
     //  User video list event
-    $uservideoslist.delegate( "li", "click", function( event ) {
+    $("#ui-start-screen-list, #ui-user-videos").delegate( "li", "click", function( event ) {
       
       var $this = $(this),
           trackEvents = $this.data( "track" ), 
           projectData = $this.data( "project" );
-
+      
       if ( projectData ) {
         TrackMeta.project.load( trackEvents, projectData );
       }
+      
+      
+      if ( $this.parents("#ui-start-screen-list").length ) {
+        
+        $("#ui-start-screen").dialog( "close" );
+      
+      }
+      
+      
     });
-    
+
 
     // this is awful  
     $("#ui-export-to li, #ui-user-videos li, #ui-plugin-select-list li")
@@ -1847,14 +1865,6 @@
       //controls.seek( "first" );
       
     });
-
-    
-    //  Close export screen
-    $("#ui-export-over").click(function() {
-      $exportready.hide();
-    });    
-
-    
     
     
     // movie into track editor object, fix redundancies
