@@ -508,27 +508,25 @@
     
     
     $uiStartScreen.dialog({
-      
       modal: true, 
       autoOpen: true, 
       width: 400, 
       height: 400,
       buttons: {
-
         "Start": function() {
+          var $this = $(this),
+              value = $this
+                .children('input')
+                .dialog( "close" )
+                .val();
 
-          $(this).dialog( "close" );
-
+          $ioVideoUrl.val( value )
+          $('[data-control="load"]').trigger( "click" )
         }
       }
     });
     
     
-    
-    
-
-
-
     //  Editor logic module
     TrackEditor = ( function(window) {
       
@@ -1440,17 +1438,17 @@
           $html = $exports.filter("div"), 
           $scripts = $exports.filter("script"),
           exports = {
-            open: '<!doctype html><html>',
-            head: '<head>',
-            meta: '<title>'+ $ioVideoTitle.val() +'</title>', 
-            css: '<style>body {background:#ffffff}video {width:350px;height: 300px;background: #000;}</style>',
+            open: '<!doctype html>\n<html>',
+            head: '<head>\n',
+            meta: '<title>'+ $ioVideoTitle.val() +'</title>\n', 
+            css: '<style>body {background:#ffffff}video {width:350px;height: 300px;background: #000;}</style>\n',
             scripts: '',
-            body: '</head><body>',
+            body: '\n</head>\n<body>\n',
             html: '', 
-            close:'</body></html>'
+            close:'\n</body>\n</html>\n'
           }, 
           compile = '', 
-          playbackAry = [ '$(function () { ', 'var $p = Popcorn("#video")', '//$p.play();', '});' ],
+          playbackAry = [ '$(function () { ', '  var $p = Popcorn("#video")', '  //uncomment to auto play', '  //$p.play();', '});\n' ],
           compiled = '',
           dims = {
             width: 0,
@@ -1459,7 +1457,7 @@
       
       //  Compile scripts
       $scripts.each(function( iter, script ) {
-        exports.scripts += '<script src="' + script.src + '"></script>';
+        exports.scripts += '<script src="' + script.src + '"></script>\n';
       });
       
       //  Compile html
@@ -1507,7 +1505,7 @@
             
           });
           
-          compile += '<div class="butter-plugins">' + $.trim( $clone.html() ) + '</div>';
+          compile += '<div class="butter-plugins">' + $.trim( $clone.html() ) + '</div>\n';
         }
         
       });
