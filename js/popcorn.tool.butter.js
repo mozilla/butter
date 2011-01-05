@@ -520,10 +520,6 @@
     $startready.hide();
 
 
-    
-    
-    
-
     //  Editor logic module
     TrackEditor = ( function(window) {
       
@@ -1303,10 +1299,9 @@
               rebuiltEvent[ eventKey ] = eventProp;
             }
           });
+
           
-          //console.log("rebuildEvent", rebuiltEvent);
-          //console.log( $track, $popcorn, id, trackType );
-          
+          //  Re-assign id back to rebuiltEvent
           _.extend( rebuiltEvent, {
             
             id: trackType
@@ -1321,77 +1316,26 @@
           //  Remove the track event from Popcorn cache
           $popcorn.removeTrackEvent( id );
           
-
+          
           $( refEvent._container ).remove();
           
           
           TrackEvents.addTrackEvent.call( rebuiltEvent, rebuiltEvent );
           
           
-          //  find scrubber
-          
-          // if scrubber is over event, refire start
-          
-          
-          
+          //  If the scrubber is currently over the track event being editted
+          //  "pre fire" the plugin start to update the preview pane display
           if ( TrackEditor.isScrubberWithin( refEvent ) ) {
             
             var lastId = $popcorn.getLastTrackEventId(), 
-                newTrackEvent = TrackEvents.getTrackEventById(lastId);
+                newTrackEvent = TrackEvents.getTrackEventById( lastId );
             
             newTrackEvent._natives.start( null, newTrackEvent );
           
           }
           
-          
+          $doc.trigger( "videoEditComplete" );
 
-          
-          //$doc.trigger( "videoEditComplete" );
-          /*
-          for( prop in manifest.options ) { 
-            if ( typeof manifest.options[ prop ] === "object" ) {
-              
-              var _val = selectedEvent.manifestElems[ prop ].val();
-            
-              popcornEvent[ prop ] = _val;
-              
-              if ( !!_val && [ "start", "end" ].indexOf(prop) === -1 && !isNaN( _val )  ) {
-                popcornEvent[ prop ] = +_val;
-              }
-            }
-          }
-
-          //selectedEvent.type
-
-          selectedEvent.inPoint = popcornEvent.start;
-          selectedEvent.outPoint = popcornEvent.end;
-          
-          
-          // check for empty stuff
-          
-          //console.log($("#" + selectedEvent.popcornEvent.target).children());
-          $("#" + selectedEvent.popcornEvent.target).children().each(function() {
-            
-            if ( $(this).html() === "" ) {
-              $(this).remove();
-            }
-          
-          });
-          
-          //console.log(selectedEvent.popcornEvent._container );
-          
-          //  Recall _setup with new data
-          selectedEvent.popcornEvent._natives._setup( selectedEvent.popcornEvent );
-          
-          selectedEvent.popcornEvent._natives.start( null, selectedEvent.popcornEvent );
-          
-        
-          selectedEvent.parent._draw();
-          */
-          
-          
-          // TODO:  move out to own function
-          // $("#video-data").val( JSON.stringify( $popcorn.data.trackEvents ) );
         }, 
         
         
