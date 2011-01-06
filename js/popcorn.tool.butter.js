@@ -938,14 +938,6 @@
     })(window);
     
     
-    
-    //  scroll as needed  
-    //$("#ui-tracks").bind( "scroll", function ( event ) { console.log(event) });
-
-    
-    
-    
-    
     //  Event editing logic module
     TrackEvents = ( function(window) {
       
@@ -1031,14 +1023,11 @@
           //  Explicitly augment the starting object with all manifest props
           _.forEach( trackManifest.options, function( obj, key ) {
             if ( !( key in startWith ) ) {
-             //console.log("missing");
               startWith[ key ] = "";
             }
           });
           
-          //console.log("trackType", trackType);
-          //console.log("startWith", startWith);
-          
+
           //  Reset startWith.id, allow Popcorn to create unique IDs
           startWith.id = false;
           
@@ -1372,13 +1361,6 @@
       };
     
     })(window);
-    
-    
-    /*
-    $ioVideoUrl.bind( "change", function( event ) {
-      TrackEditor.loadVideoFromUrl();
-    });
-    */
 
 
     $editor.tabs();
@@ -1461,9 +1443,6 @@
       
       //  Compile scripts
       $scripts.each(function( iter, script ) {
-        
-        //https://github.com/annasob/popcorn-js/blob/0.2/plugins/googleMap/popcorn.googleMap.js
-        //https://github.com/annasob/popcorn-js/blob/0.2/
         
         var sourceUri = script.src;
         
@@ -1864,8 +1843,6 @@
     
     $doc.bind( "seekComplete", function( event, options ) {
 
-      //console.log(options);
-
       options.special &&  options.special();
       
       if ( options.type === "last" ) {
@@ -1875,8 +1852,6 @@
       if ( options.type === "first" ) {
         $("#ui-tracks").scrollLeft( 0 );
       }
-      
-
     }); 
     
     
@@ -1886,9 +1861,6 @@
       var tempStore = new TrackStore();
       
       $ioVideoData.val( tempStore.serialize( $popcorn.data.trackEvents.byStart ) );
-      
-      
-      //controls.seek( "first" );
       
     });
     
