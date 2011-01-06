@@ -301,8 +301,11 @@
         TrackEditor, 
         TrackMeta, 
         TrackEvents, 
-        TrackExport
+        TrackExport, 
         
+        //  Constants
+        
+        REMOTE_POPCORN_URL = "https://github.com/annasob/popcorn-js/raw/0.2"
         
         ;
         
@@ -1453,11 +1456,29 @@
           dims = {
             width: 0,
             height: 0
-          };
+          }, 
+          stripAttrs = [ "style", "width", "height" ];
       
       //  Compile scripts
       $scripts.each(function( iter, script ) {
-        exports.scripts += '<script src="' + script.src + '"></script>\n';
+        
+        //https://github.com/annasob/popcorn-js/blob/0.2/plugins/googleMap/popcorn.googleMap.js
+        //https://github.com/annasob/popcorn-js/blob/0.2/
+        
+        var sourceUri = script.src;
+        
+        //if ( /popcorn-js/.test( sourceUri ) ) {
+        //  var temp = sourceUri.split("popcorn-js")[1];
+        //  sourceUri = REMOTE_POPCORN_URL + temp;
+        //}
+        
+        
+        // THIS IS A SERIOUS WTF WORKAROUND - THE LIVE GOOGLEMAPS PLUGIN THROWS ERRORS
+        if ( /plugins/.test( sourceUri ) ) {
+          sourceUri = sourceUri.replace("plugins", "plugins-playback");
+        }
+        
+        exports.scripts += '<script src="' + sourceUri + '"></script>\n';
       });
       
       //  Compile html
@@ -1500,8 +1521,15 @@
             // NOTE: instead of removing the children created, we can possibly keep them 
             //        this may solve the many-plugins issue
             
+            var $this = $(this);
             
-            $(this).attr("class", "butter-plugin").removeAttr("style").children().remove();
+            $this.attr("class", "butter-plugin").children().remove();
+            
+            _.each( stripAttrs, function ( key ) {
+              
+              $this.removeAttr( key );
+            
+            });
             
           });
           

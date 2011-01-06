@@ -1,41 +1,25 @@
 <!doctype html>
 <html><head>
-<title>Bocoup</title>
-<style>
-body {background:#ffffff}
-#video {width:350px;height: 300px;background: #000;}
-.butter-plugin {float: left; width: 200px; height: 200px;}
-#iframe-container { width: 950px;}
-#map-container {}
-#footnote-container{}
-</style>
+<title>Brendan Eich Rules, Ok?</title>
+<style>body {background:#ffffff}video {width:350px;height: 300px;background: #000;}</style>
 <script src="http://localhost/butter/js/jquery.js"></script>
 <script src="http://localhost/butter/popcorn-js/popcorn.js"></script>
-<script src="http://localhost/butter/popcorn-js/plugins/footnote/popcorn.footnote.js"></script>
-<script src="http://localhost/butter/popcorn-js/plugins/googlemap/popcorn.googlemap.js"></script>
-<script src="http://localhost/butter/popcorn-js/plugins/webpage/popcorn.webpage.js"></script>
+<script src="http://localhost/butter/popcorn-js/plugins-playback/googleMap/popcorn.googleMap.js"></script>
+<script src="http://localhost/butter/popcorn-js/plugins-playback/footnote/popcorn.footnote.js"></script>
+<script src="http://localhost/butter/popcorn-js/plugins-playback/webpage/popcorn.webpage.js"></script>
 
 <script>$(function () { 
-  var $p = Popcorn("#video").webpage({"id":"webpage","start":0,"end":10,"target":"iframe-container","src":"http://bocoup.com"}).googleMap({"id":"googleMap","start":0,"end":10,"target":"map-container","type":"ROADMAP","zoom":11,"location":"bocoup","lat":53.704,"long":-2.199}).footnote({"id":"footnote","start":0,"end":10,"target":"footnote-container","text":"bocoup is in boston!"});
+  var $p = Popcorn("#video").footnote({"id":"footnote","start":0.08393001556396495,"end":14.652299880981445,"target":"footnote-container","text":"I INVENTED JAVASCRIPT"}).webpage({"id":"webpage","start":0.10271501541137706,"end":8.102715015411377,"target":"iframe-container","src":"http://aminutewithbrendan.com"}).googleMap({"id":"googleMap","start":0.27178001403808605,"end":8.271780014038086,"target":"map-container","type":"ROADMAP","zoom":10,"lat":37.7749295,"long":-122.4194155,"location":"San Francisco, CA"});
   //uncomment to auto play
   //$p.play();
 });
 </script>
 </head>
 <body>
-<div class="butter-player">
-  <div class="butter-video">
-    <div class="butter-video-player">
-      <video id="video" controls="">
-        <source type="video/ogg; codecs=&quot;theora, vorbis&quot;" src="http://dl.dropbox.com/u/3531958/crockford.ogv">
-      </video>
-    </div>
-  </div>
-  <div class="butter-plugins">
-    <div id="iframe-container" class="butter-plugin"></div>
-    <div id="map-container" class="butter-plugin"></div>
-    <div id="footnote-container" class="butter-plugin"></div>
-  </div>
+<div class="butter-player"><div class="butter-video"><div class="butter-video-player"><video id="video" controls=""><source type="video/ogg; codecs=&quot;theora, vorbis&quot;" src="http://dl.dropbox.com/u/3531958/eich.ogv"></video></div></div><div class="butter-plugins"><div id="iframe-container" class="butter-plugin"></div>
+          <div id="map-container" class="butter-plugin"></div>
+          
+          <div id="footnote-container" class="butter-plugin"></div></div>
 </div>
 </body>
 </html>
