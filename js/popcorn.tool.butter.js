@@ -1424,7 +1424,7 @@
           $scripts = $exports.filter("script"),
           exports = {
             open: '<!doctype html>\n<html>',
-            head: '<head>\n',
+            head: '\n<head>\n',
             meta: '<title>'+ $ioVideoTitle.val() +'</title>\n', 
             css: '<link rel="stylesheet" href="' + location.href + 'themes/fullpage/theme.css" type="text/css" media="screen">\n',
             scripts: '',
@@ -1482,13 +1482,13 @@
               $videoClone.attr("controls", "controls");
               
           $videoDiv
-            .append( '\n<h1>' + $ioVideoTitle.val() + '</h1>\n')
+            .append( '\n        <h1>' + $ioVideoTitle.val() + '</h1>\n        ')
             .append( $videoClone )
-            .append('\n<p>' + $ioVideoDesc.val() + '</p>\n');
+            .append('\n        <p>' + $ioVideoDesc.val() + '</p>\n      ');
 
           $clone.children("video").replaceWith( $videoDiv );
 
-          compile += '\n<div class="butter-video">\n' + $.trim( $clone.html() ) + '\n</div>\n';
+          compile += '\n    <div class="butter-video">\n      ' + $.trim( $clone.html() ) + '\n    </div>\n  ';
         }
         
         
@@ -1512,7 +1512,7 @@
             
           });
           
-          compile += '\n<div class="butter-plugins">\n' + $.trim( $clone.html() ) + '\n</div>\n';
+          compile += '\n    <div class="butter-plugins">\n       ' + $clone.html() + '\n    </div>\n';
         }
         
       });
@@ -1561,7 +1561,7 @@
       
       //  Wrap html export
       //  TODO: inject theme ID HERE
-      exports.html = '<div class="butter-player">' + compile + '</div>';
+      exports.html = ' <div class="butter-player">' + compile + '  </div>';
       
       
       //  Compile all `exports`
