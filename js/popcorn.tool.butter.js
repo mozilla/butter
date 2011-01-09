@@ -1414,34 +1414,31 @@
     });
 
     //  Render layout menu
-    _.each( [ "Wide", "Narrow" ], function ( key ) {
-      var type = key.replace(/\s/, '').toLowerCase(), 
-      $li = $("<li/>", {
-
-        html: '<h4><img class="icon" src="img/dummy.png">' + key + '</h4>',
-        className: "select-li clickable" + ( $layoutlist.attr( "data-layout" ) == type ? " active" : "")
-
-      }).appendTo( $layoutlist );
-
-      $li.data( "type",  type );
+    $.getJSON('layouts/layouts.json', function( response ){
+      _.each( response.layouts, function ( key ) {
+        var type = key.replace(/\s/, '').toLowerCase(), 
+        $li = $("<li/>", {
+          html: '<h4><img class="icon" src="img/dummy.png">' + key + '</h4>',
+          className: "select-li clickable" + ( $layoutlist.attr( "data-layout" ) == type ? " active" : "")
+        }).appendTo( $layoutlist );
+        $li.data( "type",  type );
+      });
     });
 
     //  Render theme menu
-    _.each( [ "Clean", "Red Fire" ], function ( key ) {
-      var type = key.replace(/\s/, '').toLowerCase(), 
-      $li = $("<li/>", {
-
-        html: '<h4><img class="icon" src="img/dummy.png">' + key + '</h4>',
-        className: "select-li clickable" + ( $themelist.attr( "data-theme" ) == type ? " active" : "")
-
-      }).appendTo( $themelist );
-
-      $li.data( "type",  type );
-    });
+    $.getJSON('themes/themes.json', function( response ){
+      _.each( response.themes, function ( key ) {
+        var type = key.replace(/\s/, '').toLowerCase(), 
+        $li = $("<li/>", {
+          html: '<h4><img class="icon" src="img/dummy.png">' + key + '</h4>',
+          className: "select-li clickable" + ( $themelist.attr( "data-theme" ) == type ? " active" : "")
+        }).appendTo( $themelist );
+        $li.data( "type",  type );
+      });
+    })
 
     //  Render Export menu
-    _.each( [ "Full Page", "Embeddable Fragment", "Preview" ], function ( key ) {
-      
+    _.each( [ "Full Page", "Embeddable Fragment", "Preview" ], function ( key ) {      
       var type = key.split(/\s/)[0].toLowerCase(), 
       $li = $("<li/>", {
 
