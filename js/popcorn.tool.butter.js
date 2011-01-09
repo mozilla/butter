@@ -518,11 +518,9 @@
       buttons: {
         "Start": function() {
           var $this = $(this),
-              value = $this
-                .children( "input" )
-                .val();
+              value = $this.children( "input" ).val();
               
-              $this.dialog( "close" )
+          $this.dialog( "close" );
               
           $ioVideoUrl.val( value )
           $('[data-control="load"]').trigger( "click" )
