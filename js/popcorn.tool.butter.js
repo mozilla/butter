@@ -519,10 +519,11 @@
         "Start": function() {
           var $this = $(this),
               value = $this
-                .children('input')
-                .dialog( "close" )
+                .children( "input" )
                 .val();
-
+              
+              $this.dialog( "close" )
+              
           $ioVideoUrl.val( value )
           $('[data-control="load"]').trigger( "click" )
         }
