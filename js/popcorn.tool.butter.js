@@ -535,24 +535,23 @@
     TrackMeta.menu.load( "#ui-start-screen-list" );
     
     
-    //  commented for dev by boaz
-    // $uiStartScreen.dialog({
-    //   modal: true, 
-    //   autoOpen: true, 
-    //   width: 400, 
-    //   height: 400,
-    //   buttons: {
-    //     "Start": function() {
-    //       var $this = $(this),
-    //           value = $this.children( "input" ).val();
-    //           
-    //       $this.dialog( "close" );
-    //           
-    //       $ioVideoUrl.val( value )
-    //       $('[data-control="load"]').trigger( "click" )
-    //     }
-    //   }
-    // });
+    $uiStartScreen.dialog({
+      modal: true, 
+      autoOpen: true, 
+      width: 400, 
+      height: 400,
+      buttons: {
+        "Start": function() {
+          var $this = $(this),
+              value = $this.children( "input" ).val();
+              
+          $this.dialog( "close" );
+              
+          $ioVideoUrl.val( value )
+          $('[data-control="load"]').trigger( "click" )
+        }
+      }
+    });
     
     
     //  Editor logic module
