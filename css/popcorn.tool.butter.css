@@ -249,3 +249,11 @@ hr.space {background:#fff;color:#fff;visibility:hidden;margin:0 0 0.5em;}
 h4 img {
   margin-right: 10px;
 }
+
+input.text, input.title {
+  padding: 9px 8px 8px 8px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;  
+}
