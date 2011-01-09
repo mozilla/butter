@@ -1391,14 +1391,15 @@
 
 
     //  Render Export menu
-    _.each( [ "Preview HTML", "Embeddable HTML" ], function ( key ) {
+    // was _.each( [ "Preview HTML", "Embeddable HTML" ], function ( key ) {
+    _.each( [ "Full Page", "Embeddable Fragment", "Preview" ], function ( key ) {
       
       var 
       type = key.split(/\s/)[0].toLowerCase(), 
       $li = $("<li/>", {
 
-        html: '<h4><img class="icon" src="img/dummy.png">' + key + '</h4>',
-        className: "span-4 select-li clickable"
+        html: '<h4><img class="icon" src="img/' + type + '.png">' + key + '</h4>',
+        className: "select-li clickable"
 
       }).appendTo( "#ui-export-to" );
 
@@ -1514,9 +1515,6 @@
             _.each( stripAttrs, function ( key ) {
               
               $this.removeAttr( key );
-              
-              console.log($this)
-              console.log(key)
             
             });
             
@@ -1574,11 +1572,15 @@
       exports.html = ' <div class="butter-player">' + compile + '  </div>';
       
       
-      //  Compile all `exports`
-      _.each( exports, function ( fragment, key) {
-        compiled += fragment;
-      });
-      
+      if( type == 'full' ) {
+        //  Compile all `exports`
+        _.each( exports, function ( fragment, key) {
+          compiled += fragment;
+        });        
+      } else {
+        //  Only compile fragment
+        compiled = exports.scripts + '\n' + exports.css + exports.html;
+      }
 
       $doc.trigger( "exportReady", {
         type: type,
@@ -1653,7 +1655,8 @@
         typemap: {
           
           "preview" : "iframe", 
-          "embeddable" : "textarea"
+          "embeddable" : "textarea",
+          "full" : "textarea"
           
         }, 
         export: function( options ) {
@@ -1773,12 +1776,15 @@
 
     // this is awful  
     $("#ui-export-to li, #ui-user-videos li, #ui-plugin-select-list li")
-      .hover(function() {
-        $(this).animate({ backgroundColor: "#ffff7e" }, 200);
-      }, 
-      function() {
-        $(this).animate({ backgroundColor: "#FFFFFF" }, 200);
-    });  
+      .css({
+        cursor: 'pointer'
+      });
+    //   .hover(function() {
+    //     $(this).animate({ backgroundColor: "#ffff7e" }, 200);
+    //   }, 
+    //   function() {
+    //     $(this).animate({ backgroundColor: "#FFFFFF" }, 200);
+    // });  
     
     
     //  When the window is resized, fire a timeupdate 

@@ -1,9 +1,7 @@
 body {
   -webkit-user-select: none;
   -moz-user-select: none;
-
 }
-
 
 video {
   /*border:1px solid black;*/
@@ -223,8 +221,6 @@ text-align:center;
   margin: 5px 0 5px 0;
 }
 
-
-
 .medium {font-size:1.2em;line-height:1.25em;margin-bottom:1em;}
 
 .marginleft{
@@ -234,6 +230,7 @@ text-align:center;
 .is-menu {
   position: "absolute", 
   zIndex: 999;
+  padding:5px;
 }
 
 .hide {
