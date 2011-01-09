@@ -1,0 +1,12 @@
+body {background:#ffffff}
+video {float:left; width:290px;height: 200px;background: #000; margin: 50px 5px;}
+.butter-plugin {float:left; width: 290px; height:300px; border: 1px solid #c2c2c2; padding: 40px 5px 5px 5px; margin: 5px;}
+#iframe-container {
+  background: url('img/logo_iframe.png') no-repeat center 10px;
+}
+#map-container {
+  background: url('img/logo_maps.gif') no-repeat center 10px;  
+}
+#footnote-container {
+  background: url('img/logo_footnote.png') no-repeat center 10px;
+}
