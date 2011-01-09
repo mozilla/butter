@@ -1482,9 +1482,9 @@
               $videoClone.attr("controls", "controls");
               
           $videoDiv
-            .append( '\n        <h1>' + $ioVideoTitle.val() + '</h1>\n        ')
+            .append( '\n        <h1 id="videoTitle">' + $ioVideoTitle.val() + '</h1>\n        ')
             .append( $videoClone )
-            .append('\n        <p>' + $ioVideoDesc.val() + '</p>\n      ');
+            .append('\n        <p id="videoDescription">' + $ioVideoDesc.val() + '</p>\n      ');
 
           $clone.children("video").replaceWith( $videoDiv );
 
@@ -1507,6 +1507,9 @@
             _.each( stripAttrs, function ( key ) {
               
               $this.removeAttr( key );
+              
+              console.log($this)
+              console.log(key)
             
             });
             
