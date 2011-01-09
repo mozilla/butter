@@ -744,10 +744,9 @@
               
 
               //  Update the scrubber handle position              
-              var quarterTime = _( $popcorn.video.currentTime ).fourth();
-              
-              
-              var isReadyInterval = setInterval(function() {
+              var quarterTime = _( $popcorn.video.currentTime ).fourth(), 
+              //  Create ready state check interval              
+              isReadyInterval = setInterval(function() {
                 
                 if ( $popcorn.video.readyState >= 3 ) {
 
@@ -758,6 +757,12 @@
                       current: quarterTime
                     }
                   );                
+                  
+                  //  #8402231
+                  if ( $scrubberHandle.position().left >= $uitracks.position().left + $uitracks.width() ) {
+                    $uitracks.scrollLeft( $tracktimecanvas.width() ); //stable
+                  }
+                  
 
                   TrackEditor.inProgress = false;
                   clearInterval( isReadyInterval );
@@ -772,11 +777,14 @@
                 time: quarterTime, 
                 increment: increment, 
                 special: function () {
-                  
                  //console.log("special function");
                 }
               });
-
+              
+              
+              
+              
+              
               //if ( quarterTime > $popcorn.video.duration / 2 ) {              
               //  $("#ui-tracks").trigger( "scroll" );
               //}
