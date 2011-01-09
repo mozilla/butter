@@ -1376,13 +1376,14 @@
     
     //  Load plugins to ui-plugin-select-list
     _.each( Popcorn.registry, function( plugin, v ) {
-      
+      console.log(plugin)
+      console.log(v)
       // TODO: convert to templates
       var $li = $("<li/>", {
         
         id: plugin.type, 
         className: "span-4 select-li clickable",
-        html: "<h3><img class='icon' src='img/dummy.png'> " + _( plugin.type ).capitalize() + "</h3>"
+        html: "<h3><img class='icon' src='img/" + plugin.type.split(/\s/)[0].toLowerCase() + ".png'> " + _( plugin.type ).capitalize() + "</h3>"
         
       }).appendTo( "#ui-plugin-select-list" );      
 

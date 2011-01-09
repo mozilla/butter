@@ -240,7 +240,8 @@ text-align:center;
   display: ;
 }
 
-
-
 hr.space {background:#fff;color:#fff;visibility:hidden;margin:0 0 0.5em;}
 
+#ui-plugin-select-list li{
+  margin-bottom:10px;
+}
