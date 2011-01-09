@@ -1,6 +1,7 @@
 body {
   -webkit-user-select: none;
   -moz-user-select: none;
+  padding-bottom: 20px;
 }
 
 video {
@@ -16,6 +17,8 @@ video {
 #ui-loading-html, #ui-export-html, #ui-start-html {
 position: absolute;
 z-index:9996;
+color:#fff;
+text-align:center;
 } 
 
 #ui-loading-over, #ui-export-over, #ui-start-over {
@@ -68,9 +71,11 @@ z-index:9995;
 #head #info{margin:2px 0 0 10px;padding:0;}
 #head h1, #head h2{margin:0;padding:0;}
 #head img.logo{float:left;margin:5px;}
-
 #head div {margin:5px 0 0 0;}
 
+h4 {
+  margin-bottom: 0px;
+}
 .ui-menu-entity {
   float:left;
 }
@@ -252,6 +257,23 @@ h4 img {
 
 input.text, input.title {
   padding: 9px 8px 8px 8px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;  
+}
+
+.is-menu li {
+  padding: 5px 20px 5px 5px;
+  cursor: pointer;
+  margin: 0px 0px 10px 0px;
+}
+
+.is-menu li:hover, .active {
+  padding: 4px 19px 4px 4px !important;
+  background: red;
+  background: #EEE;
+  border: 1px solid #DDD;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   -o-border-radius: 3px;

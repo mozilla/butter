@@ -37,7 +37,7 @@
     <script src="popcorn-js/plugins/googleMap/popcorn.googleMap.js" data-export="true"></script>
     <script src="popcorn-js/plugins/footnote/popcorn.footnote.js" data-export="true"></script>
     <script src="popcorn-js/plugins/webpage/popcorn.webpage.js" data-export="true"></script>
-    
+
     <!--<script src="popcorn-js/plugins/flickr/popcorn.flickr.js" data-export="true"></script>-->
     <!--<script src="popcorn-js/plugins/image/popcorn.image.js" data-export="true"></script>-->
     <!--<script src="popcorn-js/plugins/twitter/popcorn.twitter.js" data-export="true"></script>-->
@@ -55,31 +55,38 @@
     </div>
     -->
     <!-- Overlay Scenes -->
-    <div id="ui-loading-html" class="ui-load-ready"><img src="img/loading.gif"></div>
+    <div id="ui-loading-html" class="ui-load-ready"><img src="img/loading.gif"> <p>This may take a moment if your video is loading over the internet</p></div>
     <div id="ui-loading-over" class="ui-widget-overlay ui-load-ready"></div>
-    
+
     <!-- Main Scene -->
     <div class="container">
-      
+
       <div id="head">
-        
+
         <div class="span-26 last">
           <img class="logo" src="img/video.png" title="Butter" alt="Butter Logo">
-          
-          
+
+
           <input placeholder="Video Url" type="text" id="io-video-url" name="io-video-url" class="text ui-menu-entity" value=""> 
-          
-          <!--http://dl.dropbox.com/u/3531958/sintel.ogv-->
-          <!--http://media.w3.org/2010/05/sintel/trailer.ogv-->
-          
+
+          <!-- test video: http://media.w3.org/2010/05/sintel/trailer.ogv -->
+
           <button class="ui-menu-controls marginleft" data-control="load" >Create New Movie</button>
-          
+
           <button class="ui-menuset"  data-control="">My Movies</button> 
-          <ul id="ui-user-videos" class="select-ul is-menu"> 
-          </ul>     
-            
-          <button class="ui-menuset"  data-control="">Export Movie</button> 
-          <ul id="ui-export-to" class="select-ul is-menu"> 
+          <ul id="ui-user-videos" class="select-ul is-menu">
+          </ul>
+
+          <button class="ui-menuset">Layout</button> 
+          <ul id="ui-layout" class="select-ul is-menu"  data-layout="wide"> <!-- start out with a default layout in data-layout -->
+          </ul>
+
+          <button class="ui-menuset">Theme</button> 
+          <ul id="ui-theme" class="select-ul is-menu" data-theme="clean"> <!-- start out with a default theme in data-theme -->
+          </ul>
+
+          <button class="ui-menuset">Export Movie</button> 
+          <ul id="ui-export-to" class="select-ul is-menu">
           </ul>
         </div>
       </div>

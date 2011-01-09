@@ -56,17 +56,19 @@
 
   //  TrackStore: Storage object constructor
 
-  function TrackStore( title, desc, remote ) {
+  function TrackStore( title, desc, remote, theme, layout ) {
     
     this.title = title || null;
     this.description = desc || null;
     this.remote = remote || null;
+    this.theme = theme | null;
+    this.layout = layout | null;
     this.data = null;
 
     return this;
   }
   
-  TrackStore.properties = [ "title", "description", "remote" ];
+  TrackStore.properties = [ "title", "description", "remote", "theme", "layout" ];
 
 
   //  Property getter/setter factory
@@ -258,6 +260,7 @@
         $pluginSelectList = $("#ui-plugin-select-list"), 
         $uservideoslist = $("#ui-user-videos"), 
         $editor = $("#ui-track-event-editor"),
+        $panelpreview = $("#ui-panel-preview"),
         
         $trackeditting = $("#ui-track-editting"), 
         $uitracks = $("#ui-tracks"), 
@@ -271,6 +274,8 @@
         
         $videocontrols = $("#ui-video-controls"), 
         $uservideos = $("#ui-user-videos"),
+        $themelist = $("#ui-theme"), 
+        $layoutlist = $("#ui-layout"), 
         $exporttolist = $("#ui-export-to"), 
         
         //  io- prefix ids map to inputs elements 
@@ -386,7 +391,8 @@
       //  Set placement of loading icon
       $uiLoadingHtml.css({
         left: ( $body.dims.width / 2 ) - 64,
-        top: ( $body.dims.height / 2 )
+        top: ( $body.dims.height / 2 ) - 120,
+        width: 130
       });
 
 
@@ -425,6 +431,28 @@
             $ioVideoUrl.val( project.remote );
             $ioVideoTitle.val( project.title );
             $ioVideoDesc.val( project.description );
+
+            $layoutlist
+                .children()
+                .removeClass( "active" )
+                .each( function( index, elem ) {
+                  var $elem = $( elem );
+                  if ( $elem.text().replace(/\s/, '').toLowerCase() == project.layout ){
+                    $elem.addClass( "active" );
+                    $layoutlist.attr( "data-layout", project.layout )
+                  }
+                });
+
+            $themelist
+              .children()
+              .removeClass( "active" )
+              .each( function( index, elem ) {
+                var $elem = $( elem );
+                if ( $elem.text().replace(/\s/, '').toLowerCase() == project.theme ){
+                  $elem.addClass( "active" );
+                  $themelist.attr( "data-theme", project.theme )
+                }
+              });
             
             TrackEditor.loadVideoFromUrl( function () {
             
@@ -471,7 +499,7 @@
                 $li = $("<li/>", {
 
                   html: '<h4><img class="icon" src="img/dummy.png">' + data.title + '</h4>',
-                  className: "span-4 select-li clickable", 
+                  className: "select-li clickable", 
                   "data-slug" : prop
 
                 }).appendTo( selector );
@@ -482,15 +510,12 @@
                 $li.data( "track",  data.data );
                 $li.data( "project",  data );
 
-              });        
+              });
 
             } else {
 
               $li = $("<li/>", {
-
-                html: '<h4><em class="quiet">Empty</em></h4>',
-                className: "span-4"
-
+                html: '<h4><em class="quiet">You have no saved movies</em></h4>'
               }).appendTo( selector );          
               
             }
@@ -510,23 +535,24 @@
     TrackMeta.menu.load( "#ui-start-screen-list" );
     
     
-    $uiStartScreen.dialog({
-      modal: true, 
-      autoOpen: true, 
-      width: 400, 
-      height: 400,
-      buttons: {
-        "Start": function() {
-          var $this = $(this),
-              value = $this.children( "input" ).val();
-              
-          $this.dialog( "close" );
-              
-          $ioVideoUrl.val( value )
-          $('[data-control="load"]').trigger( "click" )
-        }
-      }
-    });
+    //  commented for dev by boaz
+    // $uiStartScreen.dialog({
+    //   modal: true, 
+    //   autoOpen: true, 
+    //   width: 400, 
+    //   height: 400,
+    //   buttons: {
+    //     "Start": function() {
+    //       var $this = $(this),
+    //           value = $this.children( "input" ).val();
+    //           
+    //       $this.dialog( "close" );
+    //           
+    //       $ioVideoUrl.val( value )
+    //       $('[data-control="load"]').trigger( "click" )
+    //     }
+    //   }
+    // });
     
     
     //  Editor logic module
@@ -1387,14 +1413,36 @@
 
     });
 
+    //  Render layout menu
+    _.each( [ "Wide", "Narrow" ], function ( key ) {
+      var type = key.replace(/\s/, '').toLowerCase(), 
+      $li = $("<li/>", {
 
+        html: '<h4><img class="icon" src="img/dummy.png">' + key + '</h4>',
+        className: "select-li clickable" + ( $layoutlist.attr( "data-layout" ) == type ? " active" : "")
+
+      }).appendTo( $layoutlist );
+
+      $li.data( "type",  type );
+    });
+
+    //  Render theme menu
+    _.each( [ "Clean", "Red Fire" ], function ( key ) {
+      var type = key.replace(/\s/, '').toLowerCase(), 
+      $li = $("<li/>", {
+
+        html: '<h4><img class="icon" src="img/dummy.png">' + key + '</h4>',
+        className: "select-li clickable" + ( $themelist.attr( "data-theme" ) == type ? " active" : "")
+
+      }).appendTo( $themelist );
+
+      $li.data( "type",  type );
+    });
 
     //  Render Export menu
-    // was _.each( [ "Preview HTML", "Embeddable HTML" ], function ( key ) {
     _.each( [ "Full Page", "Embeddable Fragment", "Preview" ], function ( key ) {
       
-      var 
-      type = key.split(/\s/)[0].toLowerCase(), 
+      var type = key.split(/\s/)[0].toLowerCase(), 
       $li = $("<li/>", {
 
         html: '<h4><img class="icon" src="img/' + type + '.png">' + key + '</h4>',
@@ -1404,9 +1452,35 @@
 
       $li.data( "type",  type );
     });
+    
 
+    //  Bind layout picker
+    $layoutlist.delegate( "li", "click", function () {
+      var $this = $( this );
+      $this
+        .toggleClass( "active" )
+        .parents( ".is-menu" )
+        .attr('data-layout', $(this).data( "type" ) )
+
+      $this
+        .siblings()
+        .removeClass('active');
+    });
+
+    //  Bind theme picker
+    $themelist.delegate( "li", "click", function () {
+      var $this = $( this );
+      $this
+        .toggleClass( "active" )
+        .parents( ".is-menu" )
+        .attr('data-theme', $(this).data( "type" ) )
+
+      $this
+        .siblings()
+        .removeClass('active');
+    });
     
-    
+
     //  THIS IS THE WORST CODE EVER.
     //  TODO: MOVE OUT TO FUNCTION DECLARATION - MAJOR ABSTRACTION
     //  Export options list event
@@ -1423,9 +1497,10 @@
         return;
       }
       
-      
       var $this = $(this),
           type = $this.data( "type" ), 
+          theme = $themelist.attr( "data-theme" ),
+          layout = $layoutlist.attr( "data-layout" ),
           $exports = $('[data-export="true"]'),
           $html = $exports.filter("div"), 
           $scripts = $exports.filter("script"),
@@ -1433,7 +1508,8 @@
             open: '<!doctype html>\n<html>',
             head: '\n<head>\n',
             meta: '<title>'+ $ioVideoTitle.val() +'</title>\n', 
-            css: '<link rel="stylesheet" href="' + location.href + 'themes/fullpage/theme.css" type="text/css" media="screen">\n',
+            theme: '<link rel="stylesheet" href="' + location.href + 'themes/' + theme + '/theme.css" type="text/css" media="screen">\n',
+            layout: '<link rel="stylesheet" href="' + location.href + 'layouts/' + layout + '/layout.css" type="text/css" media="screen">\n',
             scripts: '',
             body: '\n</head>\n<body>\n',
             html: '', 
@@ -1447,7 +1523,7 @@
             height: 0
           }, 
           stripAttrs = [ "style", "width", "height" ];
-      
+
       //  Compile scripts
       $scripts.each(function( iter, script ) {
         
@@ -1578,7 +1654,7 @@
         });        
       } else {
         //  Only compile fragment
-        compiled = exports.scripts + '\n' + exports.css + exports.html;
+        compiled = exports.scripts + '\n' + exports.theme + '\n' + exports.layout + '\n' + exports.html;
       }
 
       $doc.trigger( "exportReady", {
@@ -1771,19 +1847,6 @@
       
       
     });
-
-
-    // this is awful  
-    $("#ui-export-to li, #ui-user-videos li, #ui-plugin-select-list li")
-      .css({
-        cursor: 'pointer'
-      });
-    //   .hover(function() {
-    //     $(this).animate({ backgroundColor: "#ffff7e" }, 200);
-    //   }, 
-    //   function() {
-    //     $(this).animate({ backgroundColor: "#FFFFFF" }, 200);
-    // });  
     
     
     //  When the window is resized, fire a timeupdate 
@@ -1933,6 +1996,8 @@
             title = $ioVideoTitle.val(), 
             desc = $ioVideoDesc.val(), 
             remote = $ioVideoUrl.val(),
+            theme = $themelist.attr( "data-theme" ),
+            layout = $layoutlist.attr( "data-layout" ),
             slug;
             
         
@@ -1953,6 +2018,8 @@
         store.Title( title );
         store.Description( desc );
         store.Remote( remote );
+        store.Theme( theme );
+        store.Layout( layout );
         
         
         

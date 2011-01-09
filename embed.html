@@ -1,8 +1,9 @@
 <!doctype html>
 <html>
 <head>
-<title>the Sintel movie</title>
-<link rel="stylesheet" href="http://localhost/butter/themes/fullpage/theme.css" type="text/css" media="screen">
+<title>working sintel</title>
+<link rel="stylesheet" href="http://localhost/butter/themes/redfire/theme.css" type="text/css" media="screen">
+<link rel="stylesheet" href="http://localhost/butter/layouts/wide/layout.css" type="text/css" media="screen">
 <script src="http://localhost/butter/js/jquery.js"></script>
 <script src="http://localhost/butter/popcorn-js/popcorn.js"></script>
 <script src="http://localhost/butter/popcorn-js/plugins-playback/googleMap/popcorn.googleMap.js"></script>
@@ -10,7 +11,7 @@
 <script src="http://localhost/butter/popcorn-js/plugins-playback/webpage/popcorn.webpage.js"></script>
 
 <script>$(function () { 
-  var $p = Popcorn("#video").webpage({"id":"webpage","start":-0.03265625,"end":9.967343749999996,"target":"iframe-container","src":"http://bocoup.com"}).footnote({"id":"footnote","start":-0.03265625,"end":9.90203125,"target":"footnote-container","text":"Bocoup is a JavaScript Company"}).googleMap({"id":"googleMap","start":-0.03265625,"end":9.96734375,"target":"map-container","type":"ROADMAP","zoom":11,"location":"Boston MA","lat":42.3584308,"long":-71.0597732});
+  var $p = Popcorn("#video").googleMap({"id":"googleMap","start":0,"end":50,"target":"map-container","type":"ROADMAP","zoom":12,"location":"boston","lat":42.3584308,"long":-71.0597732}).webpage({"id":"webpage","start":0.7264062500000003,"end":8.72640625,"target":"iframe-container","src":"http://bocoup.com"}).footnote({"id":"footnote","start":2,"end":10,"target":"footnote-container","text":"im a foot note"}).footnote({"id":"footnote","start":2,"end":10,"target":"footnote-container","text":"im a foot note"}).webpage({"id":"webpage","start":11.078437500000001,"end":19.078437499999993,"target":"iframe-container","src":"http://bocoup.com"}).footnote({"id":"footnote","start":12.809218750000001,"end":40.80921875,"target":"footnote-container","text":"I'm a second foot note"});
   //uncomment to auto play
   //$p.play();
 });
@@ -20,9 +21,9 @@
  <div class="butter-player">
     <div class="butter-video">
       <div class="butter-video-player">
-        <h1 id="videoTitle">the Sintel movie</h1>
-        <video id="video" controls=""><source type="video/ogg; codecs=&quot;theora, vorbis&quot;" src="http://dl.dropbox.com/u/3531958/sintel.ogv"></video>
-        <p id="videoDescription">This is my description</p>
+        <h1 id="videoTitle">working sintel</h1>
+        <video id="video" controls=""><source type="video/ogg; codecs=&quot;theora, vorbis&quot;" src="http://media.w3.org/2010/05/sintel/trailer.ogv"></video>
+        <p id="videoDescription">This time, we won't rely on rick's dropbox</p>
       </div>
     </div>
   
