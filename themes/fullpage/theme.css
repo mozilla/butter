@@ -1,9 +1,14 @@
-body {background-color: #fff; font-family:sans-serif;margin:0px;}
-.butter-video {float:left; width:35%; padding:1%; margin: 1%; border: 1px solid #c2c2c2;}
-#videoTitle {}
+/* Layout */
+.butter-video {float:left; width:35%; padding:1%; margin: 1%;}
 #video { width: 100%;}
+.butter-plugin {float:right; width: 16%; height:320px;  padding: 40px 1% 1% 1%; margin: 1%;}
+
+/* Theme */
+body {background-color: #fff; font-family:sans-serif;margin:0px;}
+.butter-video {border: 1px solid #c2c2c2;}
+#videoTitle {}
 #videoDescription {}
-.butter-plugin {float:right; width: 16%; height:300px; border: 1px solid #c2c2c2; padding: 40px 1% 1% 1%; margin: 1%;}
+.butter-plugin {border: 1px solid #c2c2c2;}
 #iframe-container {background: url('img/logo_iframe.png') no-repeat center 10px;}
 #iframe-container iframe {border: none;}
 #map-container {background: url('img/logo_maps.gif') no-repeat center 10px;}
