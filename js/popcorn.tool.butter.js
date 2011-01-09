@@ -1639,14 +1639,14 @@
       exports.html = ' <div class="butter-player">' + compile + '  </div>';
       
       
-      if( type == 'full' ) {
+      if( type == "full" ) {
         //  Compile all `exports`
         _.each( exports, function ( fragment, key) {
           compiled += fragment;
         });        
       } else {
         //  Only compile fragment
-        compiled = exports.scripts + '\n' + exports.theme + '\n' + exports.layout + '\n' + exports.html;
+        compiled = exports.scripts + "\n" + exports.theme + "\n" + exports.layout + "\n" + exports.html;
       }
 
       $doc.trigger( "exportReady", {
