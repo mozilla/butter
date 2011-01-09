@@ -1426,7 +1426,7 @@
             open: '<!doctype html>\n<html>',
             head: '<head>\n',
             meta: '<title>'+ $ioVideoTitle.val() +'</title>\n', 
-            css: '<style>body {background:#ffffff}video {width:350px;height: 300px;background: #000;}</style>\n',
+            css: '<link rel="stylesheet" href="' + location.href + 'themes/fullpage/theme.css" type="text/css" media="screen">\n',
             scripts: '',
             body: '\n</head>\n<body>\n',
             html: '', 
@@ -1481,14 +1481,14 @@
           
               $videoClone.attr("controls", "controls");
               
-          $videoDiv.append( $videoClone );        
-              
+          $videoDiv
+            .append( '\n<h1>' + $ioVideoTitle.val() + '</h1>\n')
+            .append( $videoClone )
+            .append('\n<p>' + $ioVideoDesc.val() + '</p>\n');
+
           $clone.children("video").replaceWith( $videoDiv );
-         
-         
-          //html = $.trim( $clone.html() );
-          
-          compile += '<div class="butter-video">' + $.trim( $clone.html() ) + '</div>';
+
+          compile += '\n<div class="butter-video">\n' + $.trim( $clone.html() ) + '\n</div>\n';
         }
         
         
@@ -1512,7 +1512,7 @@
             
           });
           
-          compile += '<div class="butter-plugins">' + $.trim( $clone.html() ) + '</div>\n';
+          compile += '\n<div class="butter-plugins">\n' + $.trim( $clone.html() ) + '\n</div>\n';
         }
         
       });

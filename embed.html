@@ -1,9 +1,7 @@
 <!doctype html>
 <html><head>
 <title>the Sintel movie</title>
-<style>
-</style>
-<link rel="stylesheet" href="themes/fullpage/theme.css" type="text/css" media="screen" title="no title" charset="utf-8">
+<link rel="stylesheet" href="http://localhost/butter/themes/fullpage/theme.css" type="text/css" media="screen">
 <script src="http://localhost/butter/js/jquery.js"></script>
 <script src="http://localhost/butter/popcorn-js/popcorn.js"></script>
 <script src="http://localhost/butter/popcorn-js/plugins-playback/googleMap/popcorn.googleMap.js"></script>
@@ -18,20 +16,21 @@
 </script>
 </head>
 <body>
-
-<div class="butter-player"><div class="butter-video">
-  <div class="butter-video-player">
-    <video id="video" controls="">
-      <source type="video/ogg; codecs=&quot;theora, vorbis&quot;" src="http://dl.dropbox.com/u/3531958/sintel.ogv">
-    </video>
-  </div>
+<div class="butter-player">
+<div class="butter-video">
+<div class="butter-video-player">
+<h1>the Sintel movie</h1>
+<video id="video" controls=""><source type="video/ogg; codecs=&quot;theora, vorbis&quot;" src="http://dl.dropbox.com/u/3531958/sintel.ogv"></video>
+<p>This is my description</p>
+</div>
 </div>
 
 <div class="butter-plugins">
-  <div id="iframe-container" class="butter-plugin"></div>
-  <div id="map-container" class="butter-plugin"></div>
-  <div id="footnote-container" class="butter-plugin"></div></div>
+<div id="iframe-container" class="butter-plugin"></div>
+          <div id="map-container" class="butter-plugin"></div>
+          
+          <div id="footnote-container" class="butter-plugin"></div>
 </div>
-
+</div>
 </body>
 </html>
