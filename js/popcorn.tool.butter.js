@@ -1376,8 +1376,6 @@
     
     //  Load plugins to ui-plugin-select-list
     _.each( Popcorn.registry, function( plugin, v ) {
-      console.log(plugin)
-      console.log(v)
       // TODO: convert to templates
       var $li = $("<li/>", {
         
