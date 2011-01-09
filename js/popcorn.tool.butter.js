@@ -1453,26 +1453,22 @@
     //  Bind layout picker
     $layoutlist.delegate( "li", "click", function () {
       var $this = $( this );
-      $this
-        .toggleClass( "active" )
+      $this.toggleClass( "active" )
         .parents( ".is-menu" )
-        .attr('data-layout', $(this).data( "type" ) )
+        .attr('data-layout', $(this).data( "type" ) );
 
-      $this
-        .siblings()
+      $this.siblings()
         .removeClass('active');
     });
 
     //  Bind theme picker
     $themelist.delegate( "li", "click", function () {
       var $this = $( this );
-      $this
-        .toggleClass( "active" )
+      $this.toggleClass( "active" )
         .parents( ".is-menu" )
-        .attr('data-theme', $(this).data( "type" ) )
+        .attr('data-theme', $(this).data( "type" ) );
 
-      $this
-        .siblings()
+      $this.siblings()
         .removeClass('active');
     });
     
