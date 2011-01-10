@@ -1,5 +1,6 @@
 /*
  * Butter Application butter.application.js
+ * Version 0.1.0
  *
  * Developed by Bocoup on behalf of the Mozilla Foundation
  * Copyright (c) 2011 Bocoup, LLC
