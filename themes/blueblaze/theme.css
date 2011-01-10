@@ -1,0 +1,45 @@
+body {
+  font-family:sans-serif;
+  margin:0px;
+  background-color:#BF413B;
+  background-image : -moz-radial-gradient(top, #4294e0, #2b557c);
+  background-image : -webkit-gradient(radial, center center, 10, center center, 600, from(#4294e0), to(#2b557c), color-stop(0%, #4294e0));
+  height: 600px;
+}
+.butter-video {
+  background-color: #2b557c;
+  background-image: -moz-linear-gradient(top, #2b557c, #1b456c);
+  background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #2b557c),color-stop(1, #1b456c));
+  -webkit-box-shadow: 0px 0px 4px #1b456c ;
+  -moz-box-shadow: 0px 0px 4px #1b456c ;
+  box-shadow: 0px 0px 4px #1b456c ;
+  -webkit-border-top-left-radius: 12px;
+  -webkit-border-top-right-radius: 12px;
+  -moz-border-radius-topleft: 12px;
+  -moz-border-radius-topright: 12px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+#videoTitle {
+  color: #ccf;
+  text-shadow: -1px 0px 1px #000;
+  margin: 0px 0px 0px 0px;
+}
+#videoDescription {
+  color:#fff;
+}
+.butter-plugin {
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  -o-border-radius: 12px;
+  border-radius: 12px;  
+  -webkit-box-shadow: 1px 1px 14px #1b456c inset;
+}
+#iframe-container {background:#4294e0 url('img/webpage.png') no-repeat 10px 10px; }
+#iframe-container iframe {border: none;}
+#map-container {background:#4294e0 url('img/googlemap.png') no-repeat 10px 10px;}
+#footnote-container {background:#4294e0 url('img/footnote.png') no-repeat 10px 10px;}
+#flickr-container {background:#4294e0 url('img/flickr.png') no-repeat 10px 10px;}
+#image-container {background:#4294e0 url('img/image.png') no-repeat 10px 10px;}
+#twitter-container {background:#4294e0 url('img/twitter.png') no-repeat 10px 10px;}
+#wiki-container {background:#4294e0 url('img/wikipedia.png') no-repeat 10px 10px;}

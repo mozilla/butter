@@ -1,0 +1,282 @@
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  padding-bottom: 20px;
+}
+
+video {
+  /*border:1px solid black;*/
+  width:350px;
+  height: 300px;
+  background: #000;
+  /*margin:10px auto;*/
+  /*margin:10px 10px;*/
+  /*display:block;*/
+}
+
+#ui-loading-html, #ui-export-html, #ui-start-html {
+position: absolute;
+z-index:9996;
+color:#fff;
+text-align:center;
+} 
+
+#ui-loading-over, #ui-export-over, #ui-start-over {
+position: absolute;
+z-index:9995;
+}
+
+#ui-tracks{
+  border:1px solid #AAA;
+  
+  background: #eee; 
+  height:330px;
+  width:830px;
+  /*margin:0 auto;*/
+  /*margin:10px 0px;
+  overflow-y:scroll;
+  */
+  overflow-x:scroll;
+}
+
+/*, #ui-plugin-tools*/
+
+.track {
+  width:830px;
+  height:36px;
+  bottom:0px;
+  position:relative;
+  /*margin-bottom:1px;*/
+}
+
+#head{
+  margin:0;
+  padding:0;
+  height:50px;
+  /*overflow:hidden;*/
+  background: -webkit-gradient(
+      linear,
+      left bottom,
+      left top,
+      color-stop(0.76, rgb(255,255,255)),
+      color-stop(0, rgb(204,204,204))
+  );
+  background: -moz-linear-gradient(
+      center bottom,
+      rgb(204,204,204) 0%,
+      rgb(255,255,255) 76%
+  );
+}
+
+#head #info{margin:2px 0 0 10px;padding:0;}
+#head h1, #head h2{margin:0;padding:0;}
+#head img.logo{float:left;margin:5px;}
+#head div {margin:5px 0 0 0;}
+
+h4 {
+  margin-bottom: 0px;
+}
+.ui-menu-entity {
+  float:left;
+}
+.ui-menu-controls {
+  margin: 5px 2px 0 0px;
+}
+
+#ui-tracks-time {
+  width:800px;
+}
+
+.track1{
+/*
+  background:url(transparency.gif);
+*/
+}
+
+canvas{
+/*  border:2px solid red;*/
+}
+
+
+
+#ui-track-event-editor {
+}
+
+#ui-video-track-editor {
+}
+
+#ui-track-event-editor label{
+  display:block;
+  text-align:right;
+  margin-bottom:2px;
+}
+
+#ui-track-event-editor label  input{
+  width:150px;margin-left:10px;
+  border:1px solid #CCC;
+  border-radius:6px;
+  font-size:12px!important;
+  padding:5px;
+  /*
+  background:
+    -linear-gradient(left, #DDD, #FFF)
+  ;
+  background:  
+  -webkit-gradient(linear, left top, left bottom, from(#DDD), to(#FFF))
+  ;
+  */
+}
+
+#ui-tools-accordion {
+  /*height: 300px;*/
+}
+
+.select-ul{margin-left:0;padding-left:0;}
+.select-li{padding:.1em;list-style-type:none}
+.select-li h3 { margin-bottom: 0; }
+
+
+.icon{vertical-align: middle;}
+
+.clickable{cursor:pointer;}
+
+.enter{background-color: "#FFCC11";}
+.leave{background-color: "#FFFFFF";}
+
+
+
+
+.ui-plugin-pane {
+  float: left;
+  height: 180px; 
+  background: #EEE;
+  overflow: auto;
+}
+
+.ui-accordion-panel div {
+  height: 220px;
+  overflow-y:scroll;
+}
+
+#ui-tools-accordion div {
+  height: 180px;
+  overflow-y:scroll;
+}
+
+#ui-scrubber-handle{
+  
+  /*border: 1px 0 1px 0 solid red;*/
+  
+  width:11px;
+  height:100px;
+  position: absolute;
+  z-index:994;
+  cursor:col-resize;
+}
+
+#ui-scrubber {
+  background:red;
+  width:1px;
+  height:100px;
+  position: absolute;
+  z-index:995;
+  cursor:col-resize;
+}
+
+
+.track-label {
+  z-index:999;
+  position:absolute;
+  padding: .05em 0 0 1em;
+  
+}
+
+
+#ui-video-editor{
+height: 330px;
+}
+
+
+#ui-video-controls .ui-button-text-only .ui-button-text {
+padding: 3px 5px;
+}
+
+
+
+/* garbage, needs help */
+
+input[type="text"].small-input {
+  margin:0;
+  vertical-align:top;
+  height:20px;
+  width: 75px;
+}
+
+.text-center {
+text-align:center;  
+}
+
+
+
+#ui-event-editor {
+  height:300px;
+}
+
+#ui-user-videos li, #ui-export-to li{
+  min-width: 200px;
+  margin: 5px 0 5px 0;
+}
+
+.medium {font-size:1.2em;line-height:1.25em;margin-bottom:1em;}
+
+.marginleft{
+  margin-left:5px;
+}
+
+.is-menu {
+  position: "absolute", 
+  zIndex: 999;
+  padding:5px;
+}
+
+.hide {
+  display: none;
+}
+.show {
+  display: ;
+}
+
+hr.space {background:#fff;color:#fff;visibility:hidden;margin:0 0 0.5em;}
+
+#ui-plugin-select-list li{
+  margin-bottom:10px;
+}
+
+h4 img {
+  margin-right: 10px;
+}
+
+input.text, input.title {
+  padding: 9px 8px 8px 8px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;  
+}
+
+.is-menu li {
+  padding: 5px 20px 5px 5px;
+  cursor: pointer;
+  margin: 0px 0px 10px 0px;
+}
+
+.is-menu li:hover, .active {
+  padding: 4px 19px 4px 4px !important;
+  background: red;
+  background: #EEE;
+  border: 1px solid #DDD;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;  
+}
