@@ -1,17 +1,20 @@
 <!doctype html>
 <html>
 <head>
-<title>My Presentation</title>
+<title>Kitchen Sink</title>
 <link rel="stylesheet" href="http://localhost/butter/themes/clean/theme.css" type="text/css" media="screen">
-<link rel="stylesheet" href="http://localhost/butter/layouts/fullscreensingleplugin/layout.css" type="text/css" media="screen">
+<link rel="stylesheet" href="http://localhost/butter/layouts/wide/layout.css" type="text/css" media="screen">
 <script src="http://localhost/butter/js/jquery.js"></script>
 <script src="http://localhost/butter/popcorn-js/popcorn.js"></script>
 <script src="http://localhost/butter/popcorn-js/plugins-playback/googleMap/popcorn.googleMap.js"></script>
 <script src="http://localhost/butter/popcorn-js/plugins-playback/footnote/popcorn.footnote.js"></script>
 <script src="http://localhost/butter/popcorn-js/plugins-playback/webpage/popcorn.webpage.js"></script>
+<script src="http://localhost/butter/popcorn-js/plugins-playback/flickr/popcorn.flickr.js"></script>
+<script src="http://localhost/butter/popcorn-js/plugins-playback/image/popcorn.image.js"></script>
+<script src="http://localhost/butter/popcorn-js/plugins-playback/wikipedia/popcorn.wikipedia.js"></script>
 
 <script>$(function () { 
-  var $p = Popcorn("#video").webpage({"id":"webpage","start":-0.06531250000000186,"end":59.66624999999998,"target":"iframe-container","src":"http://bocoup.com"});
+  var $p = Popcorn("#video").wikipedia({"id":"wikipedia","start":0.10593750000000024,"end":8.105937499999994,"target":"wiki-container","lang":"en","title":"Kant","numOfWords":200}).footnote({"id":"footnote","start":0.22859374999999998,"end":10,"target":"footnote-container","text":"im a footie"}).webpage({"id":"webpage","start":0.8570312500000001,"end":8.857031249999999,"target":"iframe-container","src":"http://bocoup.com"}).image({"id":"image","start":1.1835937500000002,"end":9.18359375,"target":"image-container","href":"http://boazsender.com","src":"http://boazsender.com/boazsender.jpg"}).googleMap({"id":"googleMap","start":1.9346875000000003,"end":9.9346875,"target":"map-container","type":"ROADMAP","location":"boston","lat":42.3584308,"long":-71.0597732}).flickr({"id":"flickr","start":2.620468750000001,"end":10.620468749999999,"target":"flickr-container","userid":"rj3","height":20,"width":20,"numberofimages":10});
   //uncomment to auto play
   //$p.play();
 });
@@ -21,16 +24,25 @@
  <div class="butter-player">
     <div class="butter-video">
       <div class="butter-video-player">
-        <h1 id="videoTitle">My Presentation</h1>
+        <h1 id="videoTitle">Kitchen Sink</h1>
         <video id="video" controls=""><source type="video/ogg; codecs=&quot;theora, vorbis&quot;" src="http://media.w3.org/2010/05/sintel/trailer.ogv"></video>
-        <p id="videoDescription">This is a presentation</p>
+        <p id="videoDescription">These are all the plugins so far!</p>
       </div>
     </div>
   
     <div class="butter-plugins">
        
+          <div id="flickr-container" class="butter-plugin"></div>
           <div id="iframe-container" class="butter-plugin"></div>
-                
+          <div id="map-container" class="butter-plugin"></div>
+          
+          <div id="image-container" class="butter-plugin"></div>
+          <div id="twitter-container" class="butter-plugin"></div>
+          <div id="wiki-container" class="butter-plugin"></div>
+          
+          
+          <div id="footnote-container" class="butter-plugin"></div>  
+        
     </div>
   </div>
 </body>
