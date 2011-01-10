@@ -10,9 +10,13 @@
  *
  */
 
-(function( _ ) { 
+(function( global, _ ) { 
   
   //  Mixin any random, misc functions
+  
+  var parseFloat = global.parseFloat, 
+      parseInt = global.parseInt;
+  
   
   _.mixin({
     //  Capitalize the first letter of the string
@@ -60,7 +64,7 @@
     }
   });
   
-})(_);
+})( window, _);
 
 
 
@@ -270,13 +274,13 @@
         $source = $("source"),
 
         $pluginSelectList = $("#ui-plugin-select-list"), 
-        $uservideoslist = $("#ui-user-videos"), 
+        
         $editor = $("#ui-track-event-editor"),
-        $panelpreview = $("#ui-panel-preview"),
+        
         
         $trackeditting = $("#ui-track-editting"), 
         $uitracks = $("#ui-tracks"), 
-        $tracks = $("#ui-tracks").children("div.track:not(.zoom)"),
+        
         $tracktime = $("#ui-tracks-time"), 
         $scrubberHandle = $("#ui-scrubber-handle"),
         
@@ -285,7 +289,7 @@
         $menucontrols = $(".ui-menu-controls"), // change to id?
         
         $videocontrols = $("#ui-video-controls"), 
-        $uservideos = $("#ui-user-videos"),
+        
         $themelist = $("#ui-theme"), 
         $layoutlist = $("#ui-layout"), 
         $exporttolist = $("#ui-export-to"), 
@@ -296,7 +300,6 @@
         $ioVideoTitle = $("#io-video-title"),
         $ioVideoDesc = $("#io-video-description"),
         $ioVideoData = $("#io-video-data"), 
-        $ioExport = $("#io-export"),
         
         //  -ready suffix class has 2 matching elements
         $loadready = $(".ui-load-ready"),
@@ -305,7 +308,7 @@
         //  
         $uiLoadingHtml = $("#ui-loading-html"),
         $uiStartScreen = $("#ui-start-screen"), 
-        $uiStartList = $("#ui-start-screen-list"), 
+        
         
         
         selectedEvent = null,
@@ -318,13 +321,7 @@
         TrackEditor, 
         TrackMeta, 
         TrackEvents, 
-        TrackExport, 
-        
-        //  Constants
-        
-        REMOTE_POPCORN_URL = "https://github.com/annasob/popcorn-js/raw/0.2"
-        
-        ;
+        TrackExport;
         
         
     
@@ -441,17 +438,15 @@
           load: function( tracks, project ) {
         
             $ioVideoUrl.val( project.remote );
-            $ioVideoTitle.val( project.title );
-            $ioVideoDesc.val( project.description );
 
             $layoutlist
                 .children()
                 .removeClass( "active" )
                 .each( function( index, elem ) {
                   var $elem = $( elem );
-                  if ( $elem.text().replace(/\s/g, "").toLowerCase() == project.layout ){
+                  if ( $elem.text().replace(/\s/g, "").toLowerCase() === project.layout ){
                     $elem.addClass( "active" );
-                    $layoutlist.attr( "data-layout", project.layout )
+                    $layoutlist.attr( "data-layout", project.layout );
                   }
                 });
 
@@ -460,9 +455,9 @@
               .removeClass( "active" )
               .each( function( index, elem ) {
                 var $elem = $( elem );
-                if ( $elem.text().replace(/\s/g, '').toLowerCase() == project.theme ){
+                if ( $elem.text().replace(/\s/g, '').toLowerCase() === project.theme ){
                   $elem.addClass( "active" );
-                  $themelist.attr( "data-theme", project.theme )
+                  $themelist.attr( "data-theme", project.theme );
                 }
               });
             
@@ -478,7 +473,13 @@
 
                 });
 
-              });              
+              });
+              
+              
+              //  Load meta data
+              $ioVideoTitle.val( project.title );
+              $ioVideoDesc.val( project.description );
+              
             
             });
           }
@@ -517,8 +518,7 @@
                 }).appendTo( selector );
                 
                 
-                //console.log(data);
-                
+                //  Store track and project data for later access
                 $li.data( "track",  data.data );
                 $li.data( "project",  data );
 
@@ -559,8 +559,8 @@
               
           $this.dialog( "close" );
               
-          $ioVideoUrl.val( value )
-          $('[data-control="load"]').trigger( "click" )
+          $ioVideoUrl.val( value );
+          $('[data-control="load"]').trigger( "click" );
         }
       }
     });
@@ -569,17 +569,12 @@
     //  Editor logic module
     TrackEditor = ( function(window) {
       
-      
-      
       return {
       
         timeLineWidth: 0, 
         increment: 0, 
-
-        
         isScrubbing: false, 
         inProgress: false,
-        
         
         videoReady: function( $p, callback ) {
           
@@ -591,10 +586,7 @@
             //  4 is preferrable, but FF reports 3
             //  Firefox gotcha: ready does not mean it knows the duration
             if ( $p.video.readyState >= 3 && !isNaN( $p.video.duration )  ) {
-            
-              //console.log($p.video.currentSrc);
-              //console.log("REALLY READY", $p.video.readyState, $p.video.duration);
-              
+
               //  execute callback if one was given
               callback && callback();
               
@@ -608,9 +600,8 @@
             }
 
           }, 13);          
-        
-        
         }, 
+        
         timeLineReady: function( $p, callback ) {
           
           var onReady = _.bind( function() {
@@ -621,11 +612,9 @@
             //  execute callback if one was given
             callback && callback();
             
-            
             $doc.trigger( "timelineReady" );
 
           }, this);
-          
           
           //  Ensure the video timeline is ready
           this.videoReady($p,  onReady);
@@ -642,15 +631,13 @@
               type = tokens[ tokens.length - 1 ], 
               self = this, 
               
-              //  Ready state vars
+              
+              
+              //  Ready state
               netReadyInt, 
-              timelineReadyFn
-              ;
+              timelineReadyFn;
           
           
-          //$ioVideoTitle.val("");
-          //$ioVideoDesc.val("");
-
           //  Remove previously created video sources
           if ( $("video").length ) {
             $("video").remove();
@@ -674,7 +661,7 @@
           //  Store the new Popcorn object in the cache reference
           $popcorn = Popcorn("#video");
           
-          
+          //  Ensure that the network is ready
           netReadyInt = setInterval( function () {
             
             //  Firefox is an idiot
@@ -697,8 +684,10 @@
                 $plugins = $(".ui-plugin-pane"),
                 increment = Math.round( $tracktimecanvas.width() / $popcorn.video.duration );
                 
-            //$ioVideoTitle.val("");
-            //$ioVideoDesc.val("");
+            
+            $ioVideoTitle.val("");
+            $ioVideoDesc.val("");
+            
             
             //  Empty active track cache
             if ( _.size( activeTracks ) ) {
@@ -750,17 +739,6 @@
                 //  Force the time to be in quarters of a second
                 $popcorn.video.currentTime = quarterTime;
                 
-
-                //TrackEditor.isScrubbing = true;
-                /*
-                self.setScrubberPosition(  
-                  ( increment / 4 * quarterTime ) + $tracktimecanvas.position().left,
-                  {
-                    increments: increment, 
-                    current: quarterTime
-                  }
-                );                
-                */
               }
             });
             
@@ -818,13 +796,6 @@
                 }
               });
               
-              
-              
-              
-              
-              //if ( quarterTime > $popcorn.video.duration / 2 ) {              
-              //  $("#ui-tracks").trigger( "scroll" );
-              //}
             });   
             
             
@@ -836,10 +807,8 @@
             callback && callback();
             
           };
-                
-        
+
         },
-        
         
         isScrubberWithin: function( trackEvent ) {          
           
@@ -874,8 +843,7 @@
             
           }
           
-          //console.log(state.increments);
-          
+
           //  Throttle scrubber position update
           if ( !this.isScrubbing ) {
             
@@ -1090,7 +1058,7 @@
           
           
           //  Capture this track event
-          trackEvent = TrackEvents.getTrackEventById(lastEventId)
+          trackEvent = TrackEvents.getTrackEventById(lastEventId);
 
           
           //  Check for existing tracks of this type
@@ -1217,15 +1185,14 @@
           selectedEvent = this;    
           
           var manifest    = selectedEvent.popcornEvent._natives.manifest,
-              about       = manifest.about,
-              aboutTab    = $editor.find(".about"),
+              //about       = manifest.about,
+              //aboutTab    = $editor.find(".about"),
               options     = manifest.options,
-              optionsTab  = $editor.find(".options"),
+              //optionsTab  = $editor.find(".options"),
 
-              input,
+              //input,
               label,
-              prop
-          ;
+              prop;
 
           //console.log(manifest);
 
@@ -1270,7 +1237,7 @@
              //console.log(lastSelectedEvent);
               
               
-              if ( _.isNull(lastSelectedEvent) || lastSelectedEvent != selectedEvent ) { 
+              if ( _.isNull(lastSelectedEvent) || lastSelectedEvent !== selectedEvent ) { 
                 selectedEvent.previousValues[ prop ] = selectedEvent.popcornEvent[ prop ];
               }
 
@@ -1316,12 +1283,12 @@
           var popcornEvent = selectedEvent.popcornEvent,
               manifest = popcornEvent._natives.manifest, 
               rebuiltEvent = {}, 
-              prop, refEvent;
+              prop, refEvent, _val;
 
           for( prop in manifest.options ) { 
             if ( typeof manifest.options[ prop ] === "object" ) {
               
-              var _val = selectedEvent.manifestElems[ prop ].val();
+              _val = selectedEvent.manifestElems[ prop ].val();
             
               popcornEvent[ prop ] = _val;
               
@@ -1432,7 +1399,7 @@
         var type = key.replace(/\s/g, '').toLowerCase(), 
         $li = $("<li/>", {
           html: '<h4><img class="icon" src="img/dummy.png">' + key + '</h4>',
-          className: "select-li clickable" + ( $layoutlist.attr( "data-layout" ) == type ? " active" : "")
+          className: "select-li clickable" + ( $layoutlist.attr( "data-layout" ) === type ? " active" : "")
         }).appendTo( $layoutlist );
         $li.data( "type",  type );
       });
@@ -1444,11 +1411,11 @@
         var type = key.replace(/\s/g, '').toLowerCase(), 
         $li = $("<li/>", {
           html: '<h4><img class="icon" src="img/dummy.png">' + key + '</h4>',
-          className: "select-li clickable" + ( $themelist.attr( "data-theme" ) == type ? " active" : "")
+          className: "select-li clickable" + ( $themelist.attr( "data-theme" ) === type ? " active" : "")
         }).appendTo( $themelist );
         $li.data( "type",  type );
       });
-    })
+    });
 
     //  Render Export menu
     _.each( [ "Full Page", "Embeddable Fragment", "Preview" ], function ( key ) {      
@@ -1509,7 +1476,6 @@
           layout = $layoutlist.attr( "data-layout" ),
           $exports = $('[data-export="true"]'),
           $html = $exports.filter("div"), 
-          $scripts = $exports.filter("script"),
           exports = {
             open: '<!doctype html>\n<html>',
             head: '\n<head>\n',
@@ -1531,15 +1497,6 @@
           stripAttrs = [ "style", "width", "height" ];
 
       //  Compile scripts
-      //$scripts.each(function( iter, script ) {
-        
-      //  var sourceUri = script.src;
-        
-        //if ( /popcorn-js/.test( sourceUri ) ) {
-        //  var temp = sourceUri.split("popcorn-js")[1];
-        //  sourceUri = REMOTE_POPCORN_URL + temp;
-        //}
-      
       //  TODO: generate this from loaded plugins      
       _.each( [
           "js/jquery.js", 
@@ -1552,14 +1509,13 @@
           "popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"      
         ], function( sourceUri ) { 
         
-        console.log(sourceUri);
         
         // THIS IS A SERIOUS WTF WORKAROUND - THE LIVE GOOGLEMAPS PLUGIN THROWS ERRORS
         if ( /plugins/.test( sourceUri ) ) {
           sourceUri = sourceUri.replace("plugins", "plugins-playback");
         }
         
-        exports.scripts += '<script src="' + sourceUri + '"></script>\n';
+        exports.scripts += '<script src="' + location.href + sourceUri + '"></script>\n';
       });
 
       
@@ -1673,7 +1629,7 @@
       exports.html = ' <div class="butter-player">' + compile + '  </div>';
       
       
-      if( type == "full" ) {
+      if( type === "full" ) {
         //  Compile all `exports`
         _.each( exports, function ( fragment, key) {
           compiled += fragment;
@@ -1998,8 +1954,7 @@
       remove: function() {
         
         //console.log(trackStore);
-        
-        alert("NOT IMPLEMENTED")
+        //alert("NOT IMPLEMENTED")
       
       }, 
       

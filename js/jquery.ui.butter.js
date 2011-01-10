@@ -10,22 +10,136 @@
  *
  */
 
-(function($,global ) {
+(function( global, document, jQuery, _, Popcorn ) { 
 
   var auto    = 100,
       eResize = 101,
       wResize = 102,
       drag    = 103, 
-      scrubberpos = 0
-      ;
+      
+      trackCount = -1,
+      styles = {
+        trackEvent: {
+          defaults: function( c, x, y, w, h ) {
+            //  `x` seems to come up as NaN occassionally
 
-  var trackCount = -1;
+            //console.log( c, x, y, w, h );
+            //console.log(isNaN(x));
+            if ( isNaN(x) ) {
+              return;
+            }      
+
+            //document.body.style.cursor='e-resize';
+            var grad = c.createLinearGradient(0,0,0,h);
+            grad.addColorStop(0,'rgba( 255, 255, 0, 0.3 )');
+            grad.addColorStop(1,'rgba( 255, 255, 0, 0.3 )');
+            c.fillStyle = grad;
+
+            c.fillRect(x, 1.5, w, h-1.5);
+
+            c.fillStyle = 'rgba(255,255,255,.125)';
+            c.fillRect(x, 0, w, h/2);          
+            c.lineWidth=0.5;
+            c.fillStyle='#FF0';          
+            c.fillRect(x, 3, 1, h-5);
+            c.fillRect(x+w-1, 3, 1, h-5);
+
+          },
+          hover: function( c, x, y, w, h ) {
+            //  `x` seems to come up as NaN occassionally
+            if ( isNaN(x) ) {
+              return;
+            }      
+            //document.body.style.cursor='move';
+            c.fillStyle = '#FF0';
+            c.fillRect(x, 1.5, w, h-1.5);          
+            var grad = c.createLinearGradient(0,0,0,h);
+            grad.addColorStop(0,'rgba(255,255,255,.7)');
+            grad.addColorStop(1,'rgba(0,0,0,.25)');
+            c.fillStyle = grad;
+            c.fillRect(x,0, w, h);
+            c.fillStyle='#FF0';
+            c.fillRect(x, 0, 1, h);
+            c.fillRect(x+w-1, 0, 1, h);
+            c.fillRect(x, h-1.5, w, 2);
+            c.fillRect(x, 0, w, 1);
+          },
+          thumb: {
+            left: {
+              defaults: function( c, x, y, w, h ) {
+                c.fillStyle = '#880';
+                c.fillRect(x, 0, 8, h);
+                c.fillStyle = '#FF0';
+                c.fillRect(x, 0, 1, h);
+              }
+            },
+            right: {
+              defaults: function( c, x, y, w, h ) {
+                c.fillStyle = '#880';
+                c.fillRect(x+w-9, 0, 8, h);
+                c.fillStyle = '#FF0';
+                c.fillRect(x+w-1, 0, 1, h);
+              }
+            }
+          }
+        },
+        zoomEvent: {
+          defaults: function( c, x, y, w, h ) {
+            //document.body.style.cursor='e-resize';
+            var grad = c.createLinearGradient(0,0,0,h);
+            grad.addColorStop(0,'rgba( 128, 255, 0, 0.3 )');
+            grad.addColorStop(1,'rgba( 128, 255, 0, 0.3 )');
+            c.fillStyle = grad;
+            c.fillRect(x, 1.5, w, h-1.5);
+            c.fillStyle = 'rgba(255,255,255,.125)';
+            c.fillRect(x, 0, w, h/2);          
+            c.lineWidth=0.5;
+            c.fillStyle='#AF0';          
+            c.fillRect(x, 3, 1, h-5);
+            c.fillRect(x+w-1, 3, 1, h-5);
+
+          },
+          hover: function( c, x, y, w, h ) {
+              //document.body.style.cursor='move';
+              c.fillStyle = '#AF0';
+              c.fillRect(x, 1.5, w, h-1.5);          
+              var grad = c.createLinearGradient(0,0,0,h);
+              grad.addColorStop(0,'rgba(128,255,0,.7)');
+              grad.addColorStop(1,'rgba(0,0,0,.25)');
+              c.fillStyle = grad;
+              c.fillRect(x,0, w, h);
+              c.fillStyle='#AF0';
+              c.fillRect(x, 0, 1, h);
+              c.fillRect(x+w-1, 0, 1, h);
+              c.fillRect(x, h-1.5, w, 2);
+              c.fillRect(x, 0, w, 1);
+          },
+          thumb: {
+            left: {
+              defaults: function( c, x, y, w, h ) {
+                c.fillStyle = '#480';
+                c.fillRect(x, 0, 16, h);
+                c.fillStyle = '#AF0';
+                c.fillRect(x, 0, 4, h);
+              }
+            },
+            right: {
+              defaults: function( c, x, y, w, h ) {
+                c.fillStyle = '#480';
+                c.fillRect(x+w-17, 0, 16, h);
+                c.fillStyle = '#AF0';
+                c.fillRect(x+w-4, 0, 4, h);
+              }
+            }
+          }
+        }   
+      };      
 
   function TrackEvent( props, parent ) {
     
     //console.log("TrackEvent",props, this);
     
-    $.extend(this, props);
+    jQuery.extend(this, props);
     
     this.parent = parent;
     this.oxl = 0;
@@ -36,7 +150,7 @@
     this.draw();
     
     return this;
-  };
+  }
 
   TrackEvent.prototype.draw = function( thumbLeft, thumbRight ) {
     
@@ -46,7 +160,7 @@
         rw  = this.parent.width / this.parent.options.duration * (this.outPoint-this.inPoint),
         h   = this.parent.height,
         c   = this.parent.context,
-        typ;
+        type;
 
     x = x * 100/this.parent.zoomWindow.width-(this.parent.zoomWindow.offsetX*100);
     rw = rw * 100/this.parent.zoomWindow.width;
@@ -63,21 +177,21 @@
       styles[type].hover( c, x, null, rw, h );
       
       if ( thumbLeft ) {
-        styles[type].thumb.left.default( c, x, null, rw, h );
+        styles[type].thumb.left.defaults( c, x, null, rw, h );
       }
       
       if ( thumbRight ) {
-        styles[type].thumb.right.default( c, x, null, rw, h );
+        styles[type].thumb.right.defaults( c, x, null, rw, h );
       }
       
     }else{
-      styles[type].default( c, x, null, rw, h );
+      styles[type].defaults( c, x, null, rw, h );
     }
     
   };
 
 
-  $.widget("butter.track", {
+  jQuery.widget("butter.track", {
 
     options: {
     },
@@ -106,20 +220,20 @@
         canvas.height = h;
         context = canvas.getContext('2d');
         return context;
-      };
+      }
       
       this.width = this.element.width();
       this.height = this.element.height();
 
       //console.log(this.width, this.height);
-      $.extend(this, {
+      jQuery.extend(this, {
         context     : newCanvas( this.width, this.height ),
         scrubBar    : { position: 0, width: 3 },
         mouse       : { x: 0, y:0, down: false, lastX:0, lastY:0, mode:auto },
         zoomWindow  : { offsetX:0, width:100 }
       });
 
-      $.extend(this.options, {
+      jQuery.extend(this.options, {
         style: {
           outerBar: {
             lineWidth: 1,
@@ -134,7 +248,7 @@
       
       
 
-      if ( this.options.mode == 'smartZoom' ) {
+      if ( this.options.mode === 'smartZoom' ) {
         this._inView.push(new TrackEvent({
           inPoint   : 0,
           outPoint  : 100,
@@ -161,7 +275,9 @@
 
 
     _style: function( styleObj ) {
-      for ( var prop in styleObj ) {
+      var prop;
+    
+      for ( prop in styleObj ) {
         this.context[prop] = styleObj[prop];
       }
     },
@@ -204,14 +320,16 @@
    
     _draw: function( thumbLeft, thumbRight ) {
       
-      $(document).trigger("drawStart.track");
+      jQuery(document).trigger("drawStart.track");
     
       var c = this.context,
           e = c.canvas,
           w = e.width,
-          h = e.height;
-
-      var grad = c.createLinearGradient(0,0,0,h);
+          h = e.height,
+          grad = c.createLinearGradient(0,0,0,h), 
+          i = 0, 
+          len = this._inView.length, 
+          iv;
       
       grad.addColorStop(0,'#fff');
       grad.addColorStop(1,'#B6B6B6');
@@ -225,45 +343,41 @@
       c.lineWidth = 0;
       c.strokeRect(0.5,0.5,w-1,h-1);
 
-      for(var i=0, l=this._inView.length; i< l; i++ ) {
-        var iv = this._inView[i];
+      for( ; i < len; i++ ) {
+        
+        iv = this._inView[i];
+        
         iv.draw( thumbLeft, thumbRight );
       }
 
-      //var pos = this.width / this.options.duration * this._playBar.position;
       
-      ////c.fillStyle = "#F00";
-      ////c.fillRect(pos, 0, 1.5, h);
-      
-      //if ( scrubberpos === 0 || pos > 0 ) {
-      //  scrubberpos = pos;
-      //}
-      
-      //$("#ui-scrubber-handle").css({
-      //  left: scrubberpos + $("#ui-tracks").position().left
-      //});
-      
-      $(document).trigger("drawComplete.track");
+      jQuery(document).trigger("drawComplete.track");
     },
 
     _timeupdate: function( e ) {
       this._playBar.position = e.currentTarget.currentTime;
-      var pos = this.width / this.options.duration * this._playBar.position,
-          c = this.context;
+
+      
       this._draw();
     },
 
     _mousemove: function( e ) {
       
       //console.log(e);
-      var e = e.originalEvent;
+      
+      e = e.originalEvent;
+      
       this.mouse.lastX = this.mouse.x;
       this.mouse.lastY = this.mouse.y;
       
       
       
-      var scrollX = (window.scrollX !== null && typeof window.scrollX !== 'undefined') ? window.scrollX : window.pageXOffset;
-      var scrollY = (window.scrollY !== null && typeof window.scrollY !== 'undefined') ? window.scrollY : window.pageYOffset;
+      var scrollX = (global.scrollX !== null && typeof global.scrollX !== 'undefined') ? global.scrollX : global.pageXOffset, 
+          scrollY = (global.scrollY !== null && typeof global.scrollY !== 'undefined') ? global.scrollY : global.pageYOffset,
+          thumbLeft, thumbRight, 
+          i = 0, 
+          len = this._inView.length, 
+          iv, linkedTracks, j, diff;
       
       
       this.mouse.x = e.clientX - this.element[0].offsetLeft + scrollX;
@@ -273,14 +387,16 @@
       //console.log(this.mouse.x);
       //console.log(this.mouse.y);
       
-      var thumbLeft = thumbRight = false;
+      thumbLeft = thumbRight = false;
         
       if ( !this.mouse.down ) {
         this.mouse.hovering = null;
-        for(var i=0, l=this._inView.length; i< l; i++ ) {
-          var iv = this._inView[i];
+        for( ; i< len; i++ ) {
+          
+          iv = this._inView[i];
+          
           if ( iv.xl <= this.mouse.x && iv.xr >= this.mouse.x ) {
-            if ( iv.hovered == false ) {
+            if ( !iv.hovered ) {
               iv.hovered = true;
               this.mouse.hovering = iv;
             }
@@ -297,7 +413,7 @@
               document.body.style.cursor='move';
             }
           }else{
-            if ( iv.hovered == true ) {
+            if ( iv.hovered ) {
               iv.hovered = false;
               this.mouse.hovering = null;
               this._draw();
@@ -311,7 +427,7 @@
         }
       }
       
-      var iv = this.mouse.hovering;
+      iv = this.mouse.hovering;
 
       if ( this.mouse.down ) {
               
@@ -331,15 +447,17 @@
           thumbRight = true;
           document.body.style.cursor='e-resize';
           this.mouse.hovering.outPoint = this.options.duration / this.width * (this.mouse.x+4);
-          if ( this.options.mode != 'smartZoom' ) {
+          if ( this.options.mode !== 'smartZoom' ) {
             this.mouse.hovering.popcornEvent.end = this.mouse.hovering.outPoint;
           }else{
 
-            var linkedTracks = this.options.linkedTracks;              
-            for(var j in linkedTracks ) {
+            linkedTracks = this.options.linkedTracks;              
+            
+            for( j in linkedTracks ) {
+            
               linkedTracks[j].track( 'zoom', {
                 offsetX: this.mouse.hovering.inPoint,
-                width: this.mouse.hovering.outPoint - this.mouse.hovering.inPoint,
+                width: this.mouse.hovering.outPoint - this.mouse.hovering.inPoint
               });
             }
           }
@@ -347,20 +465,23 @@
           thumbLeft = true;
           document.body.style.cursor='w-resize';
             this.mouse.hovering.inPoint = this.options.duration / this.width * (this.mouse.x-4);
-            if ( this.options.mode != 'smartZoom' ) {
+            if ( this.options.mode !== 'smartZoom' ) {
               this.mouse.hovering.popcornEvent.start = this.mouse.hovering.inPoint;
             }else{
-              var linkedTracks = this.options.linkedTracks;              
-              for(var j in linkedTracks ) {
+              
+              linkedTracks = this.options.linkedTracks;              
+              
+              for( j in linkedTracks ) {
                 linkedTracks[j].track( 'zoom', {
                   offsetX: this.mouse.hovering.inPoint,
-                  width: this.mouse.hovering.outPoint - this.mouse.hovering.inPoint,
+                  width: this.mouse.hovering.outPoint - this.mouse.hovering.inPoint
                 });
               }
             }
         }else if ( this.mouse.mode === drag ) {
           document.body.style.cursor='move';
-          var diff = this.mouse.hovering.outPoint - this.mouse.hovering.inPoint;
+          
+          diff = this.mouse.hovering.outPoint - this.mouse.hovering.inPoint;
           
           this.mouse.hovering.inPoint = (this.mouse.x-this.mouse.hovering.grabX) / this.width * this.options.duration;
           this.mouse.hovering.outPoint = this.mouse.hovering.inPoint + diff;
@@ -368,16 +489,17 @@
          //console.log("drag");
           
           
-          if ( this.options.mode != 'smartZoom' ) {
+          if ( this.options.mode !== 'smartZoom' ) {
             this.mouse.hovering.popcornEvent.start = this.mouse.hovering.inPoint ;
             this.mouse.hovering.popcornEvent.end = this.mouse.hovering.outPoint ;
           }else{
 
-            var linkedTracks = this.options.linkedTracks;              
-            for(var j in linkedTracks ) {
+            linkedTracks = this.options.linkedTracks;              
+            
+            for( j in linkedTracks ) {
               linkedTracks[j].track( 'zoom', {
                 offsetX: this.mouse.hovering.inPoint,
-                width: this.mouse.hovering.outPoint - this.mouse.hovering.inPoint,
+                width: this.mouse.hovering.outPoint - this.mouse.hovering.inPoint
               });
             }
             
@@ -488,124 +610,6 @@
 
   });
 
-  var styles = {
-    trackEvent: {
-      default: function( c, x, y, w, h ) {
-        //  `x` seems to come up as NaN occassionally
-        
-        //console.log( c, x, y, w, h );
-        //console.log(isNaN(x));
-        if ( isNaN(x) ) {
-          return;
-        }      
-      
-        //document.body.style.cursor='e-resize';
-        var grad = c.createLinearGradient(0,0,0,h);
-        grad.addColorStop(0,'rgba( 255, 255, 0, 0.3 )');
-        grad.addColorStop(1,'rgba( 255, 255, 0, 0.3 )');
-        c.fillStyle = grad;
-        
-        c.fillRect(x, 1.5, w, h-1.5);
-        
-        c.fillStyle = 'rgba(255,255,255,.125)';
-        c.fillRect(x, 0, w, h/2);          
-        c.lineWidth=0.5;
-        c.fillStyle='#FF0';          
-        c.fillRect(x, 3, 1, h-5);
-        c.fillRect(x+w-1, 3, 1, h-5);
 
-      },
-      hover: function( c, x, y, w, h ) {
-        //  `x` seems to come up as NaN occassionally
-        if ( isNaN(x) ) {
-          return;
-        }      
-        //document.body.style.cursor='move';
-        c.fillStyle = '#FF0';
-        c.fillRect(x, 1.5, w, h-1.5);          
-        var grad = c.createLinearGradient(0,0,0,h);
-        grad.addColorStop(0,'rgba(255,255,255,.7)');
-        grad.addColorStop(1,'rgba(0,0,0,.25)');
-        c.fillStyle = grad;
-        c.fillRect(x,0, w, h);
-        c.fillStyle='#FF0';
-        c.fillRect(x, 0, 1, h);
-        c.fillRect(x+w-1, 0, 1, h);
-        c.fillRect(x, h-1.5, w, 2);
-        c.fillRect(x, 0, w, 1);
-      },
-      thumb: {
-        left: {
-          default: function( c, x, y, w, h ) {
-            c.fillStyle = '#880';
-            c.fillRect(x, 0, 8, h);
-            c.fillStyle = '#FF0';
-            c.fillRect(x, 0, 1, h);
-          }
-        },
-        right: {
-          default: function( c, x, y, w, h ) {
-            c.fillStyle = '#880';
-            c.fillRect(x+w-9, 0, 8, h);
-            c.fillStyle = '#FF0';
-            c.fillRect(x+w-1, 0, 1, h);
-          }
-        }
-      }
-    },
-    zoomEvent: {
-      default: function( c, x, y, w, h ) {
-        //document.body.style.cursor='e-resize';
-        var grad = c.createLinearGradient(0,0,0,h);
-        grad.addColorStop(0,'rgba( 128, 255, 0, 0.3 )');
-        grad.addColorStop(1,'rgba( 128, 255, 0, 0.3 )');
-        c.fillStyle = grad;
-        c.fillRect(x, 1.5, w, h-1.5);
-        c.fillStyle = 'rgba(255,255,255,.125)';
-        c.fillRect(x, 0, w, h/2);          
-        c.lineWidth=0.5;
-        c.fillStyle='#AF0';          
-        c.fillRect(x, 3, 1, h-5);
-        c.fillRect(x+w-1, 3, 1, h-5);
+}( this, this.document, this.jQuery, this._, this.Popcorn ));
 
-      },
-      hover: function( c, x, y, w, h ) {
-          //document.body.style.cursor='move';
-          c.fillStyle = '#AF0';
-          c.fillRect(x, 1.5, w, h-1.5);          
-          var grad = c.createLinearGradient(0,0,0,h);
-          grad.addColorStop(0,'rgba(128,255,0,.7)');
-          grad.addColorStop(1,'rgba(0,0,0,.25)');
-          c.fillStyle = grad;
-          c.fillRect(x,0, w, h);
-          c.fillStyle='#AF0';
-          c.fillRect(x, 0, 1, h);
-          c.fillRect(x+w-1, 0, 1, h);
-          c.fillRect(x, h-1.5, w, 2);
-          c.fillRect(x, 0, w, 1);
-      },
-      thumb: {
-        left: {
-          default: function( c, x, y, w, h ) {
-            c.fillStyle = '#480';
-            c.fillRect(x, 0, 16, h);
-            c.fillStyle = '#AF0';
-            c.fillRect(x, 0, 4, h);
-          }
-        },
-        right: {
-          default: function( c, x, y, w, h ) {
-            c.fillStyle = '#480';
-            c.fillRect(x+w-17, 0, 16, h);
-            c.fillStyle = '#AF0';
-            c.fillRect(x+w-4, 0, 4, h);
-          }
-        }
-      }
-    }   
-
-  };
-
-
-
-})(jQuery,document);

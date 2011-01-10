@@ -97,8 +97,8 @@ var googleCallback;
         // will stay intack 
         options._container              = document.createElement('div');
         options._container.id           = "actualmap" + i;
-        options._container.style.width  = "50%";
-        options._container.style.height = "50%";
+        options._container.style.width  = "100%";
+        options._container.style.height = "100%";
         i++;
         
         if (document.getElementById(options.target)) {

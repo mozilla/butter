@@ -50,8 +50,8 @@
         options._container  = document.createElement( 'div' );
         
         options._iframe  = document.createElement( 'iframe' );
-        options._iframe.setAttribute('width', "50%"); //100%
-        options._iframe.setAttribute('height', "50%"); //100%
+        options._iframe.setAttribute('width', "100%"); //100%
+        options._iframe.setAttribute('height', "100%"); //100%
         
 
         options._container.style.display = 'none';
