@@ -1,20 +1,21 @@
 <!doctype html>
 <html>
 <head>
-<title>My Presentation</title>
-<link rel="stylesheet" href="http://localhost/butter/themes/clean/theme.css" type="text/css" media="screen">
-<link rel="stylesheet" href="http://localhost/butter/layouts/fullscreensingleplugin/layout.css" type="text/css" media="screen">
-<script src="http://localhost/butter/js/jquery.js"></script>
-<script src="http://localhost/butter/popcorn-js/popcorn.js"></script>
-<script src="http://localhost/butter/popcorn-js/plugins-playback/googleMap/popcorn.googleMap.js"></script>
-<script src="http://localhost/butter/popcorn-js/plugins-playback/footnote/popcorn.footnote.js"></script>
-<script src="http://localhost/butter/popcorn-js/plugins-playback/webpage/popcorn.webpage.js"></script>
-<script src="http://localhost/butter/popcorn-js/plugins-playback/flickr/popcorn.flickr.js"></script>
-<script src="http://localhost/butter/popcorn-js/plugins-playback/image/popcorn.image.js"></script>
-<script src="http://localhost/butter/popcorn-js/plugins-playback/wikipedia/popcorn.wikipedia.js"></script>
+<title>Massedonia!</title>
+<link rel="stylesheet" href="http://code.bocoup.com/butter/latest/themes/clean/theme.css" type="text/css" media="screen">
+<link rel="stylesheet" href="http://code.bocoup.com/butter/latest/layouts/wide/layout.css" type="text/css" media="screen">
+<script src="http://code.bocoup.com/butter/latest/js/jquery.js"></script>
+<script src="http://code.bocoup.com/butter/latest/popcorn-js/popcorn.js"></script>
+<script src="http://code.bocoup.com/butter/latest/popcorn-js/plugins-playback/googleMap/popcorn.googleMap.js"></script>
+<script src="http://code.bocoup.com/butter/latest/popcorn-js/plugins-playback/footnote/popcorn.footnote.js"></script>
+<script src="http://code.bocoup.com/butter/latest/popcorn-js/plugins-playback/webpage/popcorn.webpage.js"></script>
+<script src="http://code.bocoup.com/butter/latest/popcorn-js/plugins-playback/flickr/popcorn.flickr.js"></script>
+<script src="http://code.bocoup.com/butter/latest/popcorn-js/plugins-playback/image/popcorn.image.js"></script>
+<script src="http://code.bocoup.com/butter/latest/popcorn-js/plugins-playback/wikipedia/popcorn.wikipedia.js"></script>
 
-<script>$(function () { 
-  var $p = Popcorn("#video").webpage({"id":"webpage","start":-0.06531250000000186,"end":59.66624999999998,"target":"iframe-container","src":"http://bocoup.com"});
+<script>
+$(function () { 
+  var $p = Popcorn("#video").wikipedia({"id":"wikipedia","start":2,"end":10,"target":"wiki-container","lang":"en","title":"masedonia","numOfWords":200}).image({"id":"image","start":2,"end":10,"target":"image-container","src":"http://boazsender.com/boaz-sender.jpg"}).flickr({"id":"flickr","start":2,"end":10,"target":"flickr-container","userid":"8395214@N06","width":"10px","numberofimages":8}).webpage({"id":"webpage","start":2,"end":10,"target":"iframe-container","src":"http://google.com/?q=massedonia"}).footnote({"id":"footnote","start":2,"end":10,"target":"footnote-container","text":"I'm frum Massedonia"}).googleMap({"id":"googleMap","start":2,"end":10,"target":"map-container","type":"ROADMAP","zoom":10,"location":"boston","lat":42.3584308,"long":-71.0597732});
   //uncomment to auto play
   //$p.play();
 });
@@ -24,24 +25,23 @@
  <div class="butter-player">
     <div class="butter-video">
       <div class="butter-video-player">
-        <h1 id="videoTitle">My Presentation</h1>
-        <video id="video" controls=""><source type="video/ogg; codecs=&quot;theora, vorbis&quot;" src="http://media.w3.org/2010/05/sintel/trailer.ogv"></video>
-        <p id="videoDescription">This is a presentation</p>
+        <h1 id="videoTitle">Massedonia!</h1>
+        <video id="video" controls=""><source type="video/ogg; codecs=&quot;theora, vorbis&quot;" src="http://videos.mozilla.org/serv/webmademovies/Gorjan-03web.ogv"></video>
+        <p id="videoDescription">This is in a foreign language</p>
       </div>
     </div>
   
     <div class="butter-plugins">
        
-          
+          <div id="flickr-container" data-plugin="flickr" class="butter-plugin"></div>
           <div id="iframe-container" data-plugin="webpage" class="butter-plugin"></div>
+          <div id="map-container" data-plugin="googleMap" class="butter-plugin"></div>
           
+          <div id="image-container" data-plugin="image" class="butter-plugin"></div>
           
+          <div id="wiki-container" data-plugin="wikipedia" class="butter-plugin"></div>
           
-          
-          
-          
-          
-            
+          <div id="footnote-container" data-plugin="footnote" class="butter-plugin"></div>  
         
     </div>
   </div>
