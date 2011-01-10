@@ -437,7 +437,7 @@
                 .removeClass( "active" )
                 .each( function( index, elem ) {
                   var $elem = $( elem );
-                  if ( $elem.text().replace(/\s/, "").toLowerCase() == project.layout ){
+                  if ( $elem.text().replace(/\s/g, "").toLowerCase() == project.layout ){
                     $elem.addClass( "active" );
                     $layoutlist.attr( "data-layout", project.layout )
                   }
@@ -448,7 +448,7 @@
               .removeClass( "active" )
               .each( function( index, elem ) {
                 var $elem = $( elem );
-                if ( $elem.text().replace(/\s/, '').toLowerCase() == project.theme ){
+                if ( $elem.text().replace(/\s/g, '').toLowerCase() == project.theme ){
                   $elem.addClass( "active" );
                   $themelist.attr( "data-theme", project.theme )
                 }
@@ -1743,7 +1743,7 @@
           
           iframe: function( $parent, compiled ) {
           
-            var $iframe = $("<iframe/>", { id: "ui-preview-rendered" }).width($parent.width()-100).height($parent.height()-100), 
+            var $iframe = $("<iframe/>", { id: "ui-preview-rendered" }).width("100%").height($parent.height()-100), 
                 iframe, iframeDoc;
 
             $parent.html( $iframe );
