@@ -1489,7 +1489,7 @@
 
         return;
       }
-      console.log($layoutlist.attr( "data-layout" ))
+
       var $this = $(this),
           type = $this.data( "type" ), 
           theme = $themelist.attr( "data-theme" ),
