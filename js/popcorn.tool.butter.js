@@ -880,6 +880,7 @@
         
         deleteCanvas: function( parent, id ) {
           
+          //  TODO: change to jQuery API
           var canvas = document.getElementById(id);
           
           if ( canvas ) {
@@ -890,6 +891,7 @@
         
         drawCanvas: function( parent, id, width, height ) {
           
+          //  TODO: change to jQuery API
           var canvas = document.createElement("canvas");
           
           canvas.id = id;
@@ -2133,6 +2135,15 @@
       }       
     };
     
+    
+    $tracktime.bind( "click", function( event ) {
+      
+      var $this = $(this);
+      
+      console.log(event);
+
+
+    });
     
 
     $menucontrols.bind( "click", function( event ) {
