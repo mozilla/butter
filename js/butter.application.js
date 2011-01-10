@@ -1,3 +1,14 @@
+/*
+ * Butter Application butter.application.js
+ *
+ * Developed by Bocoup on behalf of the Mozilla Foundation
+ * Copyright (c) 2011 Bocoup, LLC
+ * Authors: Rick Waldron, Alistair McDonald, Boaz Sender
+ * Dual licensed under the MIT and GPL licenses.
+ * http://code.bocoup.com/license/
+ *
+ */
+
 (function( _ ) { 
   
   //  Mixin any random, misc functions

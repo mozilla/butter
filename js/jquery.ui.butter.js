@@ -1,6 +1,14 @@
 /*
-  jquery.bocoup.ui.track 
-*/
+ * Butter Track Widgter jquery.ui.butter.js
+ *
+ * Developed by Bocoup on behalf of the Mozilla Foundation
+ * Copyright (c) 2011 Bocoup, LLC
+ * Authors: Alistair McDonald
+ * Dual licensed under the MIT and GPL licenses.
+ * http://code.bocoup.com/license/
+ *
+ */
+
 (function($,global ) {
 
   var auto    = 100,
