@@ -1531,15 +1531,28 @@
           stripAttrs = [ "style", "width", "height" ];
 
       //  Compile scripts
-      $scripts.each(function( iter, script ) {
+      //$scripts.each(function( iter, script ) {
         
-        var sourceUri = script.src;
+      //  var sourceUri = script.src;
         
         //if ( /popcorn-js/.test( sourceUri ) ) {
         //  var temp = sourceUri.split("popcorn-js")[1];
         //  sourceUri = REMOTE_POPCORN_URL + temp;
         //}
+      
+      //  TODO: generate this from loaded plugins      
+      _.each( [
+          "js/jquery.js", 
+          "popcorn-js/popcorn.js", 
+          "popcorn-js/plugins/googleMap/popcorn.googleMap.js", 
+          "popcorn-js/plugins/footnote/popcorn.footnote.js", 
+          "popcorn-js/plugins/webpage/popcorn.webpage.js", 
+          "popcorn-js/plugins/flickr/popcorn.flickr.js", 
+          "popcorn-js/plugins/image/popcorn.image.js", 
+          "popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"      
+        ], function( sourceUri ) { 
         
+        console.log(sourceUri);
         
         // THIS IS A SERIOUS WTF WORKAROUND - THE LIVE GOOGLEMAPS PLUGIN THROWS ERRORS
         if ( /plugins/.test( sourceUri ) ) {
