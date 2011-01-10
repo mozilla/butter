@@ -1,9 +1,9 @@
 <!doctype html>
 <html>
 <head>
-<title>The sintel</title>
-<link rel="stylesheet" href="http://localhost/butter/themes/blueblaze/theme.css" type="text/css" media="screen">
-<link rel="stylesheet" href="http://localhost/butter/layouts/narrow/layout.css" type="text/css" media="screen">
+<title>My Presentation</title>
+<link rel="stylesheet" href="http://localhost/butter/themes/clean/theme.css" type="text/css" media="screen">
+<link rel="stylesheet" href="http://localhost/butter/layouts/fullscreensingleplugin/layout.css" type="text/css" media="screen">
 <script src="http://localhost/butter/js/jquery.js"></script>
 <script src="http://localhost/butter/popcorn-js/popcorn.js"></script>
 <script src="http://localhost/butter/popcorn-js/plugins-playback/googleMap/popcorn.googleMap.js"></script>
@@ -11,7 +11,7 @@
 <script src="http://localhost/butter/popcorn-js/plugins-playback/webpage/popcorn.webpage.js"></script>
 
 <script>$(function () { 
-  var $p = Popcorn("#video").webpage({"id":"webpage","start":0,"end":100,"target":"iframe-container","src":"http://bocoup.com"}).googleMap({"id":"googleMap","start":0,"end":10,"target":"map-container","type":"ROADMAP","zoom":12,"location":"boston","lat":42.3584308,"long":-71.0597732}).footnote({"id":"footnote","start":0,"end":10,"target":"footnote-container","text":"A wonderful footnote."});
+  var $p = Popcorn("#video").webpage({"id":"webpage","start":-0.06531250000000186,"end":59.66624999999998,"target":"iframe-container","src":"http://bocoup.com"});
   //uncomment to auto play
   //$p.play();
 });
@@ -21,23 +21,16 @@
  <div class="butter-player">
     <div class="butter-video">
       <div class="butter-video-player">
-        <h1 id="videoTitle">The sintel</h1>
-        <video id="video" controls=""><source type="video/ogg; codecs=&quot;theora, vorbis&quot;" src="http://dl.dropbox.com/u/3531958/sintel.ogv"></video>
-        <p id="videoDescription">The sintel descriptions!</p>
+        <h1 id="videoTitle">My Presentation</h1>
+        <video id="video" controls=""><source type="video/ogg; codecs=&quot;theora, vorbis&quot;" src="http://media.w3.org/2010/05/sintel/trailer.ogv"></video>
+        <p id="videoDescription">This is a presentation</p>
       </div>
     </div>
   
     <div class="butter-plugins">
        
           <div id="iframe-container" class="butter-plugin"></div>
-          <div id="map-container" class="butter-plugin"></div>
-          
-          <div id="footnote-container" class="butter-plugin"></div>  
-          <div id="flickr-container" class="butter-plugin"></div>  
-          <div id="wikipedia-container" class="butter-plugin"></div>  
-          <div id="twitter-container" class="butter-plugin"></div>  
-          <div id="image-container" class="butter-plugin"></div>  
-        
+                
     </div>
   </div>
 </body>

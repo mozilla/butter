@@ -1415,7 +1415,7 @@
     //  Render layout menu
     $.getJSON('layouts/layouts.json', function( response ){
       _.each( response.layouts, function ( key ) {
-        var type = key.replace(/\s/, '').toLowerCase(), 
+        var type = key.replace(/\s/g, '').toLowerCase(), 
         $li = $("<li/>", {
           html: '<h4><img class="icon" src="img/dummy.png">' + key + '</h4>',
           className: "select-li clickable" + ( $layoutlist.attr( "data-layout" ) == type ? " active" : "")
@@ -1427,7 +1427,7 @@
     //  Render theme menu
     $.getJSON('themes/themes.json', function( response ){
       _.each( response.themes, function ( key ) {
-        var type = key.replace(/\s/, '').toLowerCase(), 
+        var type = key.replace(/\s/g, '').toLowerCase(), 
         $li = $("<li/>", {
           html: '<h4><img class="icon" src="img/dummy.png">' + key + '</h4>',
           className: "select-li clickable" + ( $themelist.attr( "data-theme" ) == type ? " active" : "")
@@ -1488,7 +1488,7 @@
 
         return;
       }
-      
+      console.log($layoutlist.attr( "data-layout" ))
       var $this = $(this),
           type = $this.data( "type" ), 
           theme = $themelist.attr( "data-theme" ),

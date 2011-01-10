@@ -1,5 +1,5 @@
-body {background-color: #ff0000; font-family:sans-serif;margin:0px;padding-bottom:20px;}
-.butter-video {border: 1px solid #c2c2c2;}
+body {background-color: #fff; font-family:sans-serif;margin:0px;padding-bottom:20px;}
+.butter-video {border: 1px solid #c2c2c2;background:#fff;}
 #videoTitle {}
 #videoDescription {}
 .butter-plugin {border: 1px solid #c2c2c2;}
