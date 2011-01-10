@@ -880,6 +880,7 @@
         
         deleteCanvas: function( parent, id ) {
           
+          //  TODO: change to jQuery API
           var canvas = document.getElementById(id);
           
           if ( canvas ) {
@@ -890,6 +891,7 @@
         
         drawCanvas: function( parent, id, width, height ) {
           
+          //  TODO: change to jQuery API
           var canvas = document.createElement("canvas");
           
           canvas.id = id;
@@ -968,7 +970,6 @@
       };
       
     })(window);
-    
     
     //  Event editing logic module
     TrackEvents = ( function(window) {
@@ -2133,6 +2134,19 @@
       }       
     };
     
+    
+    $tracktime.bind( "click", function( event ) {
+      
+      if ( !$popcorn.video ) {
+        return;
+      }
+      
+      var $this = $(this), 
+          increment = Math.round( $("#ui-tracks-time-canvas").width() / $popcorn.video.duration ), 
+          quarterTime = _( event.offsetX / increment ).fourth();
+      
+      $popcorn.video.currentTime = quarterTime;      
+    });
     
 
     $menucontrols.bind( "click", function( event ) {
