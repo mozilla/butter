@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+
 <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
     <!--
+    
       BBBBBBBBBBBBBBBBB                            tttt               tttt                                                  
       B::::::::::::::::B                        ttt:::t            ttt:::t                                                  
       B::::::BBBBBB:::::B                       t:::::t            t:::::t                                                  
@@ -26,64 +27,55 @@
     -->
 
     <title>Butter</title>
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"  />     
 
-    <!-- All me stail shits-->    
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"  />     
     <link href="css/screen.css" rel="stylesheet"  type="text/css" media="screen, projection">
     <link href="css/print.css" rel="stylesheet"  type="text/css" media="print">
     <link href="css/Aristo/jquery-ui-1.8.5.custom.css" rel="stylesheet" type="text/css">
     <link href="css/butter.application.css" rel="stylesheet"  type="text/css" media="screen, projection">
-
-    <!-- Fave Libs and extensions-->    
+    
     <script src="js/underscore.min.js"></script>
     <script src="js/jquery.js" data-export="true"></script>
     <script src="js/jquery-ui.min.js"></script>
     <script src="js/jquery.ui.butter.js"></script>
-
-    <!-- Popcorn plugins -->
     <script src="popcorn-js/popcorn.js" data-export="true"></script>
     <script src="popcorn-js/plugins/googleMap/popcorn.googleMap.js" data-export="true"></script>
     <script src="popcorn-js/plugins/footnote/popcorn.footnote.js" data-export="true"></script>
     <script src="popcorn-js/plugins/webpage/popcorn.webpage.js" data-export="true"></script>
+
     <script src="popcorn-js/plugins/flickr/popcorn.flickr.js" data-export="true"></script>
     <script src="popcorn-js/plugins/image/popcorn.image.js" data-export="true"></script>
+    <!--<script src="popcorn-js/plugins/twitter/popcorn.twitter.js" data-export="true"></script>-->
     <script src="popcorn-js/plugins/wikipedia/popcorn.wikipedia.js" data-export="true"></script>
-
-    <!-- The juice-->
+    
+    
     <script src="js/butter.application.js"></script>
-    
-    <!--
-    <script src="js/underscore.min.js"></script>
-    <script src="js/labjs/LAB.js"></script>
-    <script>
-      
-      $LAB.script("js/jquery.js")
-            .script("js/jquery-ui.min.js")
-            .script("js/jquery.bocoup.ui.track.js")
-          .script("popcorn-js/popcorn.js").wait()
-            .script("popcorn-js/plugins/footnote/popcorn.footnote.js")
-            .script("popcorn-js/plugins/webpage/popcorn.webpage.js")
-            .script("js/butter.application.js")
-            
-    
-    </script>
-    -->
-    
   </head>
   <body>
-    <!-- Overlay Scenes -->
-    <div id="ui-loading-html" class="ui-load-ready">
-      <img src="img/loading.gif">
-      <p>This may take a moment if your video is loading over the internet</p>
+    <!--
+    <div id="ui-test-stuff">
+      <ul>
+        <li class="medium"><a href="javascript:cload();">load remote video</a> </li>
+        <li class="medium"><a href="javascript:localStorage.clear();">clear storage</a> </li>
+      </ul>
     </div>
+    -->
+    <!-- Overlay Scenes -->
+    <div id="ui-loading-html" class="ui-load-ready"><img src="img/loading.gif"> <p>This may take a moment if your video is loading over the internet</p></div>
     <div id="ui-loading-over" class="ui-widget-overlay ui-load-ready"></div>
 
     <!-- Main Scene -->
     <div class="container">
+
       <div id="head">
+
         <div class="span-26 last">
           <img class="logo" src="img/video.png" title="Butter" alt="Butter Logo">
+
+
           <input placeholder="Video Url" type="text" id="io-video-url" name="io-video-url" class="text ui-menu-entity" value=""> 
+
+          <!-- test video: http://media.w3.org/2010/05/sintel/trailer.ogv -->
 
           <button class="ui-menu-controls marginleft" data-control="load" >Create New Movie</button>
 
@@ -92,13 +84,11 @@
           </ul>
 
           <button class="ui-menuset">Layout</button> 
-          <!-- start out with a default layout in data-layout -->
-          <ul id="ui-layout" class="select-ul is-menu"  data-layout="wide">
+          <ul id="ui-layout" class="select-ul is-menu"  data-layout="wide"> <!-- start out with a default layout in data-layout -->
           </ul>
 
           <button class="ui-menuset">Theme</button> 
-          <!-- start out with a default theme in data-theme -->
-          <ul id="ui-theme" class="select-ul is-menu" data-theme="clean">
+          <ul id="ui-theme" class="select-ul is-menu" data-theme="clean"> <!-- start out with a default theme in data-theme -->
           </ul>
 
           <button class="ui-menuset">Export Movie</button> 
@@ -142,6 +132,11 @@
             <button>
               <span data-control="volume" data-opt="up" class="ui-icon ui-icon-volume-on"></span>
             </button>            
+            <!--
+            <button>
+              <span data-control="seek" data-opt="linked:current-time"  class="ui-icon ui-icon-circle-arrow-e"></span>
+            </button>
+            -->
           </div>
         </div>
         
@@ -155,13 +150,22 @@
           <div id="image-container" data-plugin="image" class="ui-plugin-pane span-6" style="height:120px;width:220px"></div>
           <div id="twitter-container" data-plugin="twitter" class="ui-plugin-pane span-6" style="height:120px;width:220px"></div>
           <div id="wiki-container" data-plugin="wikipedia" class="ui-plugin-pane span-5 last" style="height:120px;width:210px"></div>
+          
           <hr class="space">
           <div id="footnote-container" data-plugin="footnote" class="ui-plugin-pane span-17 last" style="height:52px;width:670px;"></div>  
         </div>
+        
+        <!-- right pane 
+        <div id="ui-panel-templates" class="span-5 last">
+          <div id="ui-accordion-templates"  class="ui-accordion-panel">
+          </div>
+        </div>
+        -->
       </div>
-
       <!-- ui-video-editor -->
+      
       <hr class="space">
+      
       <div id="ui-track-editting" class="span-21">
         <div id="ui-tracks">
           <div id="ui-scrubber-handle">
@@ -171,9 +175,11 @@
             <canvas id="ui-tracks-time-canvas" width="800" height="25"></canvas>
           </div>
         </div>
+        <!-- <div class="track zoom"></div> -->
       </div>
-
+      
       <!-- plugins panel -->
+      
       <div id="ui-panel-plugins" class="span-5 last">
         <div id="ui-accordion-tools" class="ui-accordion-panel">
           
@@ -184,13 +190,13 @@
             <button class="ui-menu-controls" data-control="save" >Save</button>
             <button class="ui-menu-controls" data-control="delete" >Delete</button>
           </div>
-
+          
           <h3><a href="#">Add Popcorn Data</a></h3>
           <div>
             <ul id="ui-plugin-select-list" class="select-ul">
             </ul>
           </div>
-
+          
           <h3><a href="#">Help</a></h3>
           <div>
             <ul>
@@ -198,7 +204,10 @@
             </ul>
           </div>
           <!--
-          comingsoon ;)
+          <h3><a href="#">Cue Points</a></h3>
+          <div>
+            <p>nothing yet</p>
+          </div>
           <h3><a href="#">Data View</a></h3>
           <div>
             <textarea id="io-video-data" name="io-video-data" style="width:150px;height:150px"></textarea>
@@ -207,7 +216,7 @@
         </div>
       </div>
     </div>
-
+    
     <!-- Dialogs -->
     <div id="ui-track-event-editor" title="Edit Track Event">
       <!-- reusable -->
@@ -221,7 +230,9 @@
     <div id="ui-start-screen" title="Your Movies:">
       <h2>Your Movies</h2>
       <ul id="ui-start-screen-list"></ul>
+
       <hr class="space"/>
+
       <h2>Create a New Movie</h2>
       <input placeholder="Video Url" type="text" class="text ui-menu-entity" value=""> 
     </div>
