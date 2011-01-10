@@ -971,7 +971,6 @@
       
     })(window);
     
-    
     //  Event editing logic module
     TrackEvents = ( function(window) {
       
@@ -2138,11 +2137,15 @@
     
     $tracktime.bind( "click", function( event ) {
       
-      var $this = $(this);
+      if ( !$popcorn.video ) {
+        return;
+      }
       
-      console.log(event);
-
-
+      var $this = $(this), 
+          increment = Math.round( $("#ui-tracks-time-canvas").width() / $popcorn.video.duration ), 
+          quarterTime = _( event.offsetX / increment ).fourth();
+      
+      $popcorn.video.currentTime = quarterTime;      
     });
     
 
