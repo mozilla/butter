@@ -1143,11 +1143,12 @@
                       TrackEvents.editEventApply.call( trackEvent, $track, $popcorn, lastEventId, trackType );
                       
                       $(this).dialog("close");
-                    },
-                    "Apply" : function() {
-                      
-                      TrackEvents.editEventApply.call( trackEvent, $track, $popcorn, lastEventId, trackType );
                     }
+                    
+                    //,
+                    //"Apply" : function() {
+                    //  TrackEvents.editEventApply.call( trackEvent, $track, $popcorn, lastEventId, trackType );
+                    //}
                   }
                 });               
 

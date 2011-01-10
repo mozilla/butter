@@ -97,7 +97,7 @@ canvas{
 /*  border:2px solid red;*/
 }
 
-#image-container{position:fixed;top:0;left:0;border:1px dotted red;}
+
 
 #ui-track-event-editor {
 }
@@ -150,6 +150,7 @@ canvas{
   float: left;
   height: 180px; 
   background: #EEE;
+  overflow: scroll;
 }
 
 .ui-accordion-panel div {

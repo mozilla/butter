@@ -3,13 +3,13 @@
 (function (Popcorn) {
   
   /**
-   * Flickr popcorn plug-in 
-   * Appends a users Flickr images to an element on the page.
+   * flickr popcorn plug-in 
+   * Appends a users flickr images to an element on the page.
    * Options parameter will need a start, end, target and userid.
    * Optional parameters are numberofimages, height, width, padding, and border
    * Start is the time that you want this plug-in to execute
    * End is the time that you want this plug-in to stop executing
-   * Userid is the id of who's Flickr images you wish to show
+   * Userid is the id of who's flickr images you wish to show
    * Target is the id of the document element that the images are
    *  appended to, this target element must exist on the DOM
    * Numberofimages specify the number of images to retreive from flickr, defaults to 8
@@ -39,7 +39,7 @@
 
       manifest: {
         about:{
-          name:    "Popcorn Flickr Plugin",
+          name:    "Popcorn flickr Plugin",
           version: "0.1",
           author:  "Scott Downe",
           website: "http://scottdowne.wordpress.com/"
@@ -47,8 +47,8 @@
         options:{
           start   : {elem:'input', type:'number', label:'In'},
           end     : {elem:'input', type:'number', label:'Out'},
-          userid  : {elem:'input', type:'text',   label:'Source'},
-          target  :  'Flickr-container',
+          userid  : {elem:'input', type:'text',   label:'Source(userid)'},
+          target  :  'flickr-container',
           height  : {elem:'input', type:'text', label:'Height'},
           width   : {elem:'input', type:'text', label:'Width'},
           padding : {elem:'input', type:'text', label:'Padding'},
@@ -58,9 +58,9 @@
       },
 
       _setup: function( options ) {
-        options.container = document.createElement( 'div' );
-        options.container.style.display = "none";
-        document.getElementById( options.target ).appendChild( options.container );
+        options._container = document.createElement( 'div' );
+        options._container.style.display = "none";
+        document.getElementById( options.target ).appendChild( options._container );
         var height  = options.height || "50px",
             width   = options.width || "50px",
             count   = options.numberofimages || 4,
@@ -68,7 +68,7 @@
             border  = options.border || "0px";
 
         $.getJSON( "http://api.flickr.com/services/feeds/photos_public.gne?id=" + options.userid + "&lang=en-us&format=json&jsoncallback=?", function( data ){
-          options.container.innerHTML = "<p style='padding:" + padding + ";'>" + data.title + "<p/>";
+          options._container.innerHTML = "<p style='padding:" + padding + ";'>" + data.title + "<p/>";
           $.each( data.items, function( i, item ) {
             if ( i < count ) {
               var link = document.createElement('a');
@@ -81,7 +81,7 @@
               image.setAttribute( 'style', 'border:' + border + ';padding:' + padding );
               link.appendChild( image );
               
-              options.container.appendChild( link );
+              options._container.appendChild( link );
             } else {
               return false;
             }
@@ -89,22 +89,22 @@
         });
       },
       /**
-       * @member Flickr 
+       * @member flickr 
        * The start function will be executed when the currentTime 
        * of the video  reaches the start time provided by the 
        * options variable
        */
       start: function( event, options ) {
-        options.container.style.display = "inline";
+        options._container.style.display = "inline";
       },
       /**
-       * @member Flickr 
+       * @member flickr 
        * The end function will be executed when the currentTime 
        * of the video  reaches the end time provided by the 
        * options variable
        */
       end: function( event, options ) {
-        options.container.style.display = "none";
+        options._container.style.display = "none";
       }
     });
 
