@@ -260,7 +260,12 @@
     ogv: 'video/ogg; codecs="theora, vorbis"', 
     
     accepts: [ ".ogv", ".mp4", ".webm" ]
-  };  
+  }, 
+  
+  setInterval = global.setInterval, 
+  setTimeout = global.setTimeout,
+  clearInterval = global.clearInterval, 
+  clearTimeout = global.clearTimeout;  
   
 
   $(function() { 
@@ -272,22 +277,17 @@
 
         $video = $("video"), 
         $source = $("source"),
-
+        
         $pluginSelectList = $("#ui-plugin-select-list"), 
-        
         $editor = $("#ui-track-event-editor"),
-        
         
         $trackeditting = $("#ui-track-editting"), 
         $uitracks = $("#ui-tracks"), 
-        
         $tracktime = $("#ui-tracks-time"), 
         $scrubberHandle = $("#ui-scrubber-handle"),
-        
         $scrubber = $("#ui-scrubber,#ui-scrubber-handle"), 
         
         $menucontrols = $(".ui-menu-controls"), // change to id?
-        
         $videocontrols = $("#ui-video-controls"), 
         
         $themelist = $("#ui-theme"), 
@@ -309,6 +309,7 @@
         $uiLoadingHtml = $("#ui-loading-html"),
         $uiStartScreen = $("#ui-start-screen"), 
         
+        $uiApplicationMsg = $("#ui-application-error"), 
         
         
         selectedEvent = null,
@@ -1656,7 +1657,7 @@
         //  Cleanup
         $("#ui-error-rendered").remove();
         
-        $("#ui-application-error").empty();
+        $uiApplicationMsg.empty();
 
       }, 
       buttons = {
@@ -1685,7 +1686,7 @@
       }
       
       //  Remove previous html
-      //$("#ui-application-error").empty();
+      $uiApplicationMsg.empty();
       
 
       $("<div/>", {
@@ -1694,7 +1695,7 @@
       }).appendTo( "#ui-application-error" );
       
 
-      $("#ui-application-error").dialog({
+      $uiApplicationMsg.dialog({
         
         title: options.type, 
         height: !!options.message ? 200 : 0, 
