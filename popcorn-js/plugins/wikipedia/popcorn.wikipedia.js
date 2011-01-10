@@ -44,7 +44,7 @@ var wikiCallback;
         start      : {elem:'input', type:'text', label:'In'},
         end        : {elem:'input', type:'text', label:'Out'},
         lang       : {elem:'input', type:'text', label:'Language'},
-        src        : {elem:'input', type:'text', label:'Src'},
+        src        : {elem:'input', type:'text', label:'Url'},
         title      : {elem:'input', type:'text', label:'Title'},
         numOfWords : {elem:'input', type:'text', label:'Num Of Words'},
         target     : 'wiki-container'
@@ -64,16 +64,19 @@ var wikiCallback;
       var  _text, _guid = Popcorn.guid(); 
       
       // if the user didn't specify a language default to english
-      if (typeof options.lang === 'undefined') { options.lang ="en"; }
+      
+      options.lang  = options.lang || "en";
+      
       // if the user didn't specify number of words to use default to 200 
       options.numOfWords  = options.numOfWords || 200;
-      // replace the user specified target with the actual DOM element
-      options.target      = document.getElementById( options.target );
+
+
       
       // wiki global callback function with a unique id
       // function gets the needed information from wikipedia
       // and stores it by appending values to the options object
-      window["wikiCallback"+ _guid]  = function (data) { 
+      window["wikiCallback"+ _guid ]  = function (data) { 
+        
         options._link = document.createElement('a');
         options._link.setAttribute('href', options.src);
         options._link.setAttribute('target', '_blank');
@@ -90,10 +93,25 @@ var wikiCallback;
       };
       
       var head   = document.getElementsByTagName("head")[0];
-      var script = document.createElement("script");
-      script.src = "http://"+options.lang+".wikipedia.org/w/api.php?action=parse&props=text&page=" + ( options.title || options.src.slice(options.src.lastIndexOf("/")+1)) + "&format=json&callback=wikiCallback"+ _guid;
+      var script = document.createElement("script"), 
+          request = ( options.title || options.src.slice(options.src.lastIndexOf("/")+1));
+      
+      if ( !request ) {
+        return;
+      }
+      
+      script.src = "http://"+options.lang+".wikipedia.org/w/api.php?action=parse&props=text&page=" + request + "&format=json&callback=wikiCallback"+ _guid;
+      
+      //console.log(script.src);
 
       head.insertBefore( script, head.firstChild );        
+
+      options._container              = document.createElement('div');
+
+      if (document.getElementById(options.target)) {
+        document.getElementById(options.target).appendChild(options._container);
+      }   
+      
     },
     /**
      * @member wikipedia 
@@ -112,8 +130,11 @@ var wikiCallback;
         } else {
       
           if (options._link && options._desc) {
-            options.target.appendChild(options._link);
-            options.target.appendChild(options._desc);
+          
+       
+         
+            options._container.appendChild(options._link);
+            options._container.appendChild(options._desc);
             options._added = true;
           }
         }
@@ -131,8 +152,8 @@ var wikiCallback;
       // ensure that the data was actually added to the 
       // DOM before removal
       if (options._added) {
-        options.target.removeChild(options._link);
-        options.target.removeChild(options._desc);
+        options._container.removeChild(options._link);
+        options._container.removeChild(options._desc);
       }
     }
      

@@ -41,8 +41,8 @@
         options:{
           start   : {elem:'input', type:'number', label:'In'},
           end     : {elem:'input', type:'number', label:'Out'},
-          src     : {elem:'input', type:'text',   label:'Source'},
-          target  : 'Twitter-container',
+          src     : {elem:'input', type:'text',   label:'User to follow'},
+          target  : 'twitter-container',
           height  : {elem:'input', type:'number', label:'Height'},
           width   : {elem:'input', type:'number', label:'Width'}
         }
@@ -51,10 +51,14 @@
       _setup: function( options ) {
 
         // setup widget div that is unique per track
-        options.container = document.createElement( 'div' ); // create the div to store the widget
-        options.container.setAttribute('id', Popcorn.guid()); // use this id to connect it to the widget
-        options.container.style.display = "none"; // display none by default
-        document.getElementById( options.target ).appendChild( options.container ); // add the widget's div to the target div
+        options._container = document.createElement( 'div' ); // create the div to store the widget
+        options._container.setAttribute('id', Popcorn.guid()); // use this id to connect it to the widget
+        options._container.style.display = "none"; // display none by default
+        document.getElementById( options.target ).appendChild( options._container ); // add the widget's div to the target div
+        
+        if (document.getElementById(options.target)) {
+          document.getElementById(options.target).appendChild(options._container);
+        }         
 
         // setup info for the widget
         var src     = options.src || "",
@@ -64,7 +68,7 @@
             hash    = /^#/.test( src ),
             widgetOptions = {
               version: 2,
-              id: options.container.getAttribute( 'id' ),  // use this id to connect it to the div
+              id: options._container.getAttribute( 'id' ),  // use this id to connect it to the div
               rpp: 30,
               width: width,
               height: height,
@@ -117,7 +121,7 @@
        * options variable
        */
       start: function( event, options ) {
-        options.container.style.display = "inline";
+        options._container.style.display = "inline";
       },
 
       /**
@@ -127,7 +131,7 @@
        * options variable
        */
       end: function( event, options ) {
-        options.container.style.display = "none";
+        options._container.style.display = "none";
       }
     });
 

@@ -150,7 +150,7 @@ canvas{
   float: left;
   height: 180px; 
   background: #EEE;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .ui-accordion-panel div {
