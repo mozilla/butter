@@ -36,9 +36,9 @@ body {
   border-radius: 12px;  
   -webkit-box-shadow: 1px 1px 14px #1b456c inset;
 }
-#iframe-container {background:#4294e0 url('img/logo_iframe.png') no-repeat center 10px;}
+#iframe-container {background:#4294e0 url('img/logo_iframe.png') no-repeat 10px 10px; }
 #iframe-container iframe {border: none;}
-#map-container {background:#4294e0 url('img/logo_maps.gif') no-repeat center 10px;}
-#footnote-container {background:#4294e0 url('img/logo_footnote.png') no-repeat center 10px;}
+#map-container {background:#4294e0 url('img/logo_maps.png') no-repeat 10px 10px;}
+#footnote-container {background:#4294e0 url('img/logo_footnote.png') no-repeat 10px 10px;}
 
 
