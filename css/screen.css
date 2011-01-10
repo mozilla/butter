@@ -106,11 +106,6 @@ form.inline p {margin-bottom:0;}
 /* grid.css */
 .container {width:1030px;margin:0 auto;}
 .showgrid {background:url(src/grid.png);}
-.wireframe {
-/*background:url(http://gyazo.com/66f0e2698df7ca446e37f42ed1886b63.png);*/
-
-};
-
 .column, .span-1, .span-2, .span-3, .span-4, .span-5, .span-6, .span-7, .span-8, .span-9, .span-10, .span-11, .span-12, .span-13, .span-14, .span-15, .span-16, .span-17, .span-18, .span-19, .span-20, .span-21, .span-22, .span-23, .span-24, .span-25, .span-26, .span-27, .span-28 {float:left;margin-right:10px;}
 .last {margin-right:0;}
 .span-1 {width:30px;}
@@ -136,16 +131,9 @@ form.inline p {margin-bottom:0;}
 .span-21 {width:830px;}
 .span-22 {width:870px;}
 .span-23 {width:910px;}
-/*.span-24 {width:950px;margin-right:0;}*/
 .span-24 {width:950px;}
 .span-25 {width:990px;}
 .span-26 {width:1030px;margin-right:0;}
-
-
-
-
-
-
 
 input.span-1, textarea.span-1, input.span-2, textarea.span-2, input.span-3, textarea.span-3, input.span-4, textarea.span-4, input.span-5, textarea.span-5, input.span-6, textarea.span-6, input.span-7, textarea.span-7, input.span-8, textarea.span-8, input.span-9, textarea.span-9, input.span-10, textarea.span-10, input.span-11, textarea.span-11, input.span-12, textarea.span-12, input.span-13, textarea.span-13, input.span-14, textarea.span-14, input.span-15, textarea.span-15, input.span-16, textarea.span-16, input.span-17, textarea.span-17, input.span-18, textarea.span-18, input.span-19, textarea.span-19, input.span-20, textarea.span-20, input.span-21, textarea.span-21, input.span-22, textarea.span-22, input.span-23, textarea.span-23, input.span-24, textarea.span-24 {border-left-width:1px;border-right-width:1px;padding-left:5px;padding-right:5px;}
 input.span-1, textarea.span-1 {width:18px;}
