@@ -9,15 +9,15 @@
     },
     // Camel-cases a dashed string
     camel: function( string ) {
-      return string.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace('-','');});
+      return string.replace(/(\-[a-z])/g, function($1){return $1.toUpperCase().replace("-","");});
     },
-    //  Create a slug string, ex: 'This is a test' > "this-is-a-test"
+    //  Create a slug string, ex: "This is a test" > "this-is-a-test"
     slug: function(str) {
-      return str.toLowerCase().match(/[a-z0-9]+/ig).join('-');
+      return str.toLowerCase().match(/[a-z0-9]+/ig).join("-");
     },
     //  Zero pads a number
     pad: function( number ) {
-      return ( number < 10 ? '0' : '' ) + number;
+      return ( number < 10 ? "0" : "" ) + number;
     },
     fract: function( number, fract ) {
       return ( Math.round(number * fract) / fract );
@@ -61,8 +61,8 @@
     this.title = title || null;
     this.description = desc || null;
     this.remote = remote || null;
-    this.theme = theme | null;
-    this.layout = layout | null;
+    this.theme = theme || null;
+    this.layout = layout || null;
     this.data = null;
 
     return this;
@@ -143,7 +143,7 @@
   };
   
   TrackStore.prototype.slug = function() {
-    return ( this.title || "" ).toLowerCase().match(/[a-z0-9]+/ig).join('-');
+    return ( this.title || "" ).toLowerCase().match(/[a-z0-9]+/ig).join("-");
   };
 
   TrackStore.prototype.parse = function( slug ) {
@@ -437,7 +437,7 @@
                 .removeClass( "active" )
                 .each( function( index, elem ) {
                   var $elem = $( elem );
-                  if ( $elem.text().replace(/\s/, '').toLowerCase() == project.layout ){
+                  if ( $elem.text().replace(/\s/, "").toLowerCase() == project.layout ){
                     $elem.addClass( "active" );
                     $layoutlist.attr( "data-layout", project.layout )
                   }
@@ -1535,6 +1535,45 @@
         
         exports.scripts += '<script src="' + sourceUri + '"></script>\n';
       });
+
+      
+      //  Declare instance of the track store
+      var tempStore = new TrackStore(), 
+          serialized = tempStore.serialize( $popcorn.data.trackEvents.byStart ), 
+          deserial = JSON.parse( serialized ), 
+          methods = [], panels = [];
+      
+      
+      
+      //  Build playback JS string
+      _.each( deserial.data, function( obj, key ) {
+        _.each( obj, function( data, dataKey ) {
+          var dataObj = _.extend( {}, { id: dataKey }, data ), 
+              temp = {};
+
+          //  Check each value and fix numbers          
+          _.each( dataObj, function( subVal, subKey ) {
+            temp[ subKey ] = !isNaN( +subVal ) ? +subVal : subVal;
+          });
+          
+          methods.push( dataKey + "(" + JSON.stringify( temp ) + ")" );
+          panels.push( dataKey );
+          
+        });
+      });
+      
+      
+      //  If no mthods were compiled, then there are no tracks and 
+      //  hence, nothing to preview. Doing so will throw an exception
+      if ( !methods.length ) {
+        
+        $doc.trigger( "applicationError", {
+          type: "Stage Empty",
+          message: "I cannot export your movie - the stage is totes empty!"
+        });        
+
+        return;
+      }
       
       //  Compile html
       $html.each( function( iter, elem ) {
@@ -1546,7 +1585,7 @@
             $children,
             html = '';
         
-        //  Remove unwanted content
+        //  Remove unwanted nodes
         $clone.children("#ui-video-controls,hr").remove();
         
         //  Restore controls        
@@ -1571,21 +1610,24 @@
         if ( $clone.children(".ui-plugin-pane").length ) {
           
           $clone.children(".ui-plugin-pane").each(function () {
-            
-            
-            // NOTE: instead of removing the children created, we can possibly keep them 
-            //        this may solve the many-plugins issue
-            
+
             var $this = $(this);
             
+            //  If the plugin pane is not actually in the movie, remove it
+            if ( !_.contains( panels, $this.data("plugin") ) ) {
+              var ref = $this.data("plugin");
+
+              $clone.children('[data-plugin="' + ref + '"]').remove();
+              return;
+            }
+            
+            //  Remove any unwanted child nodes            
             $this.attr("class", "butter-plugin").children().remove();
             
+            //  Strip out all defined attributes             
             _.each( stripAttrs, function ( key ) {
-              
               $this.removeAttr( key );
-            
             });
-            
           });
           
           compile += '\n    <div class="butter-plugins">\n       ' + $clone.html() + '\n    </div>\n';
@@ -1593,41 +1635,6 @@
         
       });
       
-      
-      var tempStore = new TrackStore(), 
-          serialized = tempStore.serialize( $popcorn.data.trackEvents.byStart ), 
-          deserial = JSON.parse( serialized ), 
-          methods = [];
-      
-      
-      
-      //  Build playback JS string
-      _.each( deserial.data, function( obj, key ) {
-        _.each( obj, function( data, dataKey ) {
-          var dataObj = _.extend( {}, { id: dataKey }, data ), 
-              temp = {};
-
-          //  Check each value and fix numbers          
-          _.each( dataObj, function( subVal, subKey ) {
-            temp[ subKey ] = !isNaN( +subVal ) ? +subVal : subVal;
-          });
-          
-          methods.push( dataKey + "(" + JSON.stringify( temp ) + ")" );
-        });
-      });
-      
-      
-      //  If no mthods were compiled, then there are no tracks and 
-      //  hence, nothing to preview. Doing so will throw an exception
-      if ( !methods.length ) {
-        
-        $doc.trigger( "applicationError", {
-          type: "Stage Empty",
-          message: "I cannot export your movie - the stage is totes empty!"
-        });        
-
-        return;
-      }
       
       //  Attach playback string commands
       playbackAry[ 1 ] += "." + methods.join(".") + ";";
@@ -1690,14 +1697,12 @@
         if ( !options.type ) {
           options.type = "Confirm";
         }
-        
       }
       
 
       $("<div/>", {
         id: "ui-error-rendered", 
         html: options.message
-      
       }).appendTo( "#ui-application-error" );
       
 
@@ -1713,7 +1718,6 @@
                
       });    
     });
-    
     
     
     TrackExport = (function (window) {
