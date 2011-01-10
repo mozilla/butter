@@ -61,8 +61,8 @@
     this.title = title || null;
     this.description = desc || null;
     this.remote = remote || null;
-    this.theme = theme | null;
-    this.layout = layout | null;
+    this.theme = theme || null;
+    this.layout = layout || null;
     this.data = null;
 
     return this;
