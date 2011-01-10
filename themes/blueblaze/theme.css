@@ -7,7 +7,6 @@ body {
   height: 600px;
 }
 .butter-video {
-  min-height: 1200px;
   background-color: #2b557c;
   background-image: -moz-linear-gradient(top, #2b557c, #1b456c);
   background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #2b557c),color-stop(1, #1b456c));
