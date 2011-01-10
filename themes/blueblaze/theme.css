@@ -7,7 +7,7 @@ body {
   height: 600px;
 }
 .butter-video {
-  min-height: 800px;
+  min-height: 1200px;
   background-color: #2b557c;
   background-image: -moz-linear-gradient(top, #2b557c, #1b456c);
   background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #2b557c),color-stop(1, #1b456c));
@@ -36,9 +36,11 @@ body {
   border-radius: 12px;  
   -webkit-box-shadow: 1px 1px 14px #1b456c inset;
 }
-#iframe-container {background:#4294e0 url('img/logo_iframe.png') no-repeat 10px 10px; }
+#iframe-container {background:#4294e0 url('img/webpage.png') no-repeat 10px 10px; }
 #iframe-container iframe {border: none;}
-#map-container {background:#4294e0 url('img/logo_maps.png') no-repeat 10px 10px;}
-#footnote-container {background:#4294e0 url('img/logo_footnote.png') no-repeat 10px 10px;}
-
-
+#map-container {background:#4294e0 url('img/googlemap.png') no-repeat 10px 10px;}
+#footnote-container {background:#4294e0 url('img/footnote.png') no-repeat 10px 10px;}
+#flickr-container {background:#4294e0 url('img/flickr.png') no-repeat 10px 10px;}
+#image-container {background:#4294e0 url('img/image.png') no-repeat 10px 10px;}
+#twitter-container {background:#4294e0 url('img/twitter.png') no-repeat 10px 10px;}
+#wikipedia-container {background:#4294e0 url('img/wikipedia.png') no-repeat 10px 10px;}
