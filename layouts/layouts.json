@@ -1,6 +1,7 @@
 {
     "layouts": [
         "Wide",
-        "Narrow"
+        "Narrow",
+        "Full Screen Single Plugin"
     ]
 }
