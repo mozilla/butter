@@ -68,7 +68,7 @@
 
 
 
-(function( window, document, $, _, Popcorn ) { 
+(function( global, document, $, _, Popcorn ) { 
 
   //  TrackStore: Storage object constructor
 
@@ -220,7 +220,7 @@
   };
   
   //  Expose TrackStore as a global constructor  
-  window.TrackStore = TrackStore;
+  global.TrackStore = TrackStore;
 
 })(window, document, $, _, Popcorn);
 
@@ -228,7 +228,7 @@
 
 
 
-(function( window, document, $, _, Popcorn ) { 
+(function( global, document, $, _, Popcorn ) { 
 
   //  Random key=>val/method maps
   
@@ -267,7 +267,7 @@
     
     var $popcorn, 
         $doc = $(document),
-        $win = $(window),
+        $win = $(global),
         $body = $("body"), 
 
         $video = $("video"), 
@@ -537,7 +537,7 @@
       
     })();
     
-    window.TrackMeta = TrackMeta;
+    global.TrackMeta = TrackMeta;
     
     
     TrackMeta.menu.load( "#ui-user-videos" );
@@ -567,7 +567,7 @@
     
     
     //  Editor logic module
-    TrackEditor = ( function(window) {
+    TrackEditor = ( function(global) {
       
       return {
       
@@ -676,7 +676,7 @@
           //  When new video and timeline are ready
           timelineReadyFn = function() {
             
-            window.$popcorn = $popcorn;
+            global.$popcorn = $popcorn;
             
             //  Store refs to timeline canvas    
             var $tracktimecanvas = $("#ui-tracks-time-canvas"), 
@@ -949,10 +949,10 @@
         }   
       };
       
-    })(window);
+    })(global);
     
     //  Event editing logic module
-    TrackEvents = ( function(window) {
+    TrackEvents = ( function(global) {
       
       
       return {
@@ -1373,7 +1373,7 @@
         }
       };
     
-    })(window);
+    })(global);
 
 
     $editor.tabs();
@@ -1652,8 +1652,11 @@
       var defaultHandler = function() {
 
         $(this).dialog( "close" );
-
+        
+        //  Cleanup
         $("#ui-error-rendered").remove();
+        
+        $("#ui-application-error").empty();
 
       }, 
       buttons = {
@@ -1681,6 +1684,9 @@
         }
       }
       
+      //  Remove previous html
+      //$("#ui-application-error").empty();
+      
 
       $("<div/>", {
         id: "ui-error-rendered", 
@@ -1702,7 +1708,7 @@
     });
     
     
-    TrackExport = (function (window) {
+    TrackExport = (function (global) {
       
       return {
       
@@ -1754,7 +1760,7 @@
         }
       };
     
-    })(window)
+    })(global)
     
 
     //  Show export screen
@@ -1924,20 +1930,24 @@
     
     // movie into track editor object, fix redundancies
     
-    var seekTo = 0, volumeTo = 0;
-    
-    var controls = {
+    var seekTo = 0, 
+    volumeTo = 0, 
+    controls = {
       
       load: function() {
         
         seekTo = 0;
         volumeTo = 0;
         
+        var videoUri = $ioVideoUrl.val(), 
+            raccepts = /(.ogv)|(.mp4)|(.webm)/gi;
+
+        
         //  If no remote url given, stop immediately
-        if ( !$ioVideoUrl.val() ) {
+        if ( !videoUri || !raccepts.test( videoUri ) ) {
         
           $doc.trigger( "applicationError", {
-            type: "No Video Loaded",
+            type: !raccepts.test( videoUri ) ? "Invalid Movie Url" : "No Video Loaded",
             message: "Please provide a valid movie url. ("+ formatMaps.accepts.join(", ") +") "
           });        
           
@@ -2184,7 +2194,7 @@
     });
     
     
-    window.$popcorn = $popcorn;
+    global.$popcorn = $popcorn;
   });
 
 })( this, this.document, this.jQuery, this._, this.Popcorn );
