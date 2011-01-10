@@ -39,27 +39,30 @@
           start :  {elem:'input', type:'number', label:'In'},
           end :    {elem:'input', type:'number', label:'Out'},
           href :   {elem:'input', type:'text',   label:'Link URL'},
-          target : 'Image-container',
+          target : 'image-container',
           src :    {elem:'input', type:'text',   label:'Source URL'}
         }
       },
 
       _setup: function( options ) {
 
-        options.link = document.createElement( 'a' );
-        options.link.style.display = "none"; // display none by default
+        options._container = document.createElement( 'a' );
+        options._container.style.display = "none"; // display none by default
+        
         if ( options.href ) {
-          options.link.href = options.href;
+          options._container.href = options.href;
         }
-        options.link.target = "_blank";
+        options._container.target = "_blank";
 
-        document.getElementById( options.target ).appendChild( options.link ); // add the widget's div to the target div
-
+        if (document.getElementById(options.target)) {
+          document.getElementById(options.target).appendChild(options._container);
+        }      
+        
         var img = document.createElement( 'img' );
         img.src = options.src;
         img.style.borderStyle = "none"; // borders look really bad, if someone wants it they can put it on their div target
 
-        options.link.appendChild( img );
+        options._container.appendChild( img );
         
       },
 
@@ -70,7 +73,7 @@
        * options variable
        */
       start: function( event, options ) {
-        options.link.style.display = "inline";
+        options._container.style.display = "inline";
       },
       /**
        * @member image 
@@ -79,7 +82,7 @@
        * options variable
        */
       end: function( event, options ) {
-        options.link.style.display = "none";
+        options._container.style.display = "none";
       }
           
   });
