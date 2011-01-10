@@ -1470,7 +1470,18 @@
 
         return;
       }
-
+      var locationHref = location.href, 
+          isPath = locationHref[locationHref.length - 1] === "/", 
+          locationAry;
+      
+      if ( !isPath ) {
+        
+        locationAry = locationHref.split("/");
+        locationHref = "//" + locationAry.slice(2, locationAry.length -1 ).join("/") + "/";
+         
+      }
+          
+      
       var $this = $(this),
           type = $this.data( "type" ), 
           theme = $themelist.attr( "data-theme" ),
@@ -1481,8 +1492,8 @@
             open: '<!doctype html>\n<html>',
             head: '\n<head>\n',
             meta: '<title>'+ $ioVideoTitle.val() +'</title>\n', 
-            theme: '<link rel="stylesheet" href="' + location.href + 'themes/' + theme + '/theme.css" type="text/css" media="screen">\n',
-            layout: '<link rel="stylesheet" href="' + location.href + 'layouts/' + layout + '/layout.css" type="text/css" media="screen">\n',
+            theme: '<link rel="stylesheet" href="' + locationHref + 'themes/' + theme + '/theme.css" type="text/css" media="screen">\n',
+            layout: '<link rel="stylesheet" href="' + locationHref + 'layouts/' + layout + '/layout.css" type="text/css" media="screen">\n',
             scripts: '',
             body: '\n</head>\n<body>\n',
             html: '', 
@@ -1516,7 +1527,7 @@
           sourceUri = sourceUri.replace("plugins", "plugins-playback");
         }
         
-        exports.scripts += '<script src="' + location.href + sourceUri + '"></script>\n';
+        exports.scripts += '<script src="' + locationHref + sourceUri + '"></script>\n';
       });
 
       
