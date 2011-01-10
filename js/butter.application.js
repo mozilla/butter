@@ -230,10 +230,10 @@
   
   var formatMaps = {
 
-    currentTime: function( float ) {
+    currentTime: function( time ) {
       
       
-      var mm  = (""+ Math.round(float*100)/100 ).split(".")[1], 
+      var mm  = (""+ Math.round(time*100)/100 ).split(".")[1], 
           ss  = ( mm || "" );
       
       // this is awful.
@@ -245,10 +245,10 @@
         ss = "00";
       }
        
-      return  _( Math.floor( float / 3600 ) ).pad() + ":" + 
-                _( Math.floor( float / 60 ) ).pad() + ":" + 
-                  _( Math.floor( float % 60 ) ).pad() + ":" +
-                    ( ss === "0" ? "00" : ss );// + float.split(".")[1]/1000
+      return  _( Math.floor( time / 3600 ) ).pad() + ":" + 
+                _( Math.floor( time / 60 ) ).pad() + ":" + 
+                  _( Math.floor( time % 60 ) ).pad() + ":" +
+                    ( ss === "0" ? "00" : ss );
     }, 
     
     mp4: 'video/mp4; codecs="avc1, mp4a"',
@@ -1743,7 +1743,7 @@
           "full" : "textarea"
           
         }, 
-        export: function( options ) {
+        exports: function( options ) {
           
           this.render[ this.typemap[ options.type ] ](
             options.parent,
@@ -1817,7 +1817,7 @@
       });
       
       
-      TrackExport.export(options);
+      TrackExport.exports(options);
       
     
     });
