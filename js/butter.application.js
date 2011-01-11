@@ -1513,7 +1513,7 @@
       _.each( [
           "js/jquery.js", 
           "popcorn-js/popcorn.js", 
-          "popcorn-js/plugins/googleMap/popcorn.googleMap.js", 
+          "popcorn-js/plugins/googlemap/popcorn.googlemap.js", 
           "popcorn-js/plugins/footnote/popcorn.footnote.js", 
           "popcorn-js/plugins/webpage/popcorn.webpage.js", 
           "popcorn-js/plugins/flickr/popcorn.flickr.js", 
