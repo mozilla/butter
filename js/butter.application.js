@@ -1518,7 +1518,8 @@
           "popcorn-js/plugins/webpage/popcorn.webpage.js", 
           "popcorn-js/plugins/flickr/popcorn.flickr.js", 
           "popcorn-js/plugins/image/popcorn.image.js", 
-          "popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"      
+          "popcorn-js/plugins/wikipedia/popcorn.wikipedia.js",
+          "popcorn-js/plugins/twitter/popcorn.twitter.js"
         ], function( sourceUri ) { 
         
         
