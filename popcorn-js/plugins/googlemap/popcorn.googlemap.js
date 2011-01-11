@@ -29,7 +29,7 @@ var googleCallback;
         } )
    *
    */
-  Popcorn.plugin( "googleMap" , (function(){
+  Popcorn.plugin( "googlemap" , (function(){
       
     var newdiv, i = 1, _mapFired = false, _mapLoaded = false;
     
