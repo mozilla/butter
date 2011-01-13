@@ -467,8 +467,8 @@
               _.each( tracks, function( trackDataObj ) {
 
                 _.each( trackDataObj, function( data, key ) {
-                
-                  var options = _.extend( {}, { id: key.toLowerCase() }, data );  
+
+                  var options = _.extend( {}, { id: key }, data );  
                   
                   TrackEvents.addTrackEvent.call( options, options );
 
@@ -1190,17 +1190,22 @@
               //aboutTab    = $editor.find(".about"),
               options     = manifest.options,
               //optionsTab  = $editor.find(".options"),
+
               //input,
               label,
               prop;
 
           //console.log(manifest);
+
           //aboutTab.children("*").remove(); // Rick, not sure if this is good practice here. Any ideas?
+
           //$("<h3/>").text(about.name).appendTo(aboutTab);
           //$("<p/>").html("<label>Version:</label> "+about.version).appendTo(aboutTab);
           //$("<p/>").html("<label>Author:</label> "+about.author).appendTo(aboutTab);
           //$("<a/>").html('<label>Website:</label> <a href="'+about.website+'">'+about.website+'</a>').appendTo(aboutTab);
+
           //optionsTab.children("*").remove(); // Rick, not sure if this is good practice here. Any ideas?
+
           //console.log(manifest);
          
          
@@ -1467,7 +1472,6 @@
       }
       var locationHref = location.href, 
           isPath = locationHref[locationHref.length - 1] === "/", 
-          pluginsPath = "popcorn-js/plugins", 
           locationAry;
       
       if ( !isPath ) {
@@ -1495,10 +1499,8 @@
             html: '', 
             close:'\n</body>\n</html>\n'
           }, 
-          
-          playbackAry = [ '$(function () { ', '  var $p = Popcorn("#video")', '  //uncomment to auto play', '  //$p.play();', '});\n' ],
-          
           compile = '', 
+          playbackAry = [ '$(function () { ', '  var $p = Popcorn("#video")', '  //uncomment to auto play', '  //$p.play();', '});\n' ],
           compiled = '',
           dims = {
             width: 0,
@@ -1508,29 +1510,26 @@
 
       //  Compile scripts
       //  TODO: generate this from loaded plugins      
-      
-
       _.each( [
           "js/jquery.js", 
           "popcorn-js/popcorn.js", 
+          "popcorn-js/plugins/googleMap/popcorn.googleMap.js", 
+          "popcorn-js/plugins/footnote/popcorn.footnote.js", 
+          "popcorn-js/plugins/webpage/popcorn.webpage.js", 
+          "popcorn-js/plugins/flickr/popcorn.flickr.js", 
+          "popcorn-js/plugins/image/popcorn.image.js", 
+          "popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"      
         ], function( sourceUri ) { 
         
+        
         // THIS IS A SERIOUS WTF WORKAROUND - THE LIVE GOOGLEMAPS PLUGIN THROWS ERRORS
-        //if ( /plugins/.test( sourceUri ) ) {
-        //  sourceUri = sourceUri.replace("plugins", "plugins-playback");
-        //}
+        if ( /plugins/.test( sourceUri ) ) {
+          sourceUri = sourceUri.replace("plugins", "plugins-playback");
+        }
         
         exports.scripts += '<script src="' + locationHref + sourceUri + '"></script>\n';
       });
 
-      //  Export all of the plugins in the registry
-      //  TODO: only load nec. plugins
-      _.each( Popcorn.registry, function( plugin, v ) {      
-        
-        exports.scripts += '<script src="' + locationHref + "popcorn-js/plugins-playback/" + plugin.type + "/popcorn." + plugin.type + '.js"></script>\n';
-        
-      });
-      
       
       //  Declare instance of the track store
       var tempStore = new TrackStore(), 
@@ -1587,10 +1586,9 @@
         if ( $clone.children("video").length ) {
         
           var $videoDiv = $("<div/>", { className: "butter-video-player" } ),
-
               $videoClone = $clone.children("video").clone();
+          
               $videoClone.attr("controls", "controls");
-              
               
           $videoDiv
             .append( '\n        <h1 id="videoTitle">' + $ioVideoTitle.val() + '</h1>\n        ')
@@ -1609,7 +1607,6 @@
 
             var $this = $(this);
             
-
             //  If the plugin pane is not actually in the movie, remove it
             if ( !_.contains( panels, $this.data("plugin") ) ) {
               var ref = $this.data("plugin");
@@ -1629,6 +1626,7 @@
           
           compile += '\n    <div class="butter-plugins">\n       ' + $clone.html() + '\n    </div>\n';
         }
+        
       });
       
       
@@ -1642,30 +1640,23 @@
       //  TODO: inject theme ID HERE
       exports.html = ' <div class="butter-player">' + compile + '  </div>';
       
-      //  TODO: move to top
-      var fragments = ["scripts", "theme", "layout", "html" ];
       
-      //  Compile all `exports`
-      _.each( exports, function ( fragment, key ) {
+      if( type === "full" ) {
+        //  Compile all `exports`
+        _.each( exports, function ( fragment, key) {
+          compiled += fragment;
+        });        
+      } else {
+        //  Only compile fragment
+        compiled = exports.scripts + "\n" + exports.theme + "\n" + exports.layout + "\n" + exports.html;
+      }
 
-        
-        //  Check if this export is partial
-        if ( type !== "full" && fragments.indexOf( key ) === -1 ) {
-          
-          //  Return from iterator callback if `key` not in partial 
-          return;
-        }
-        
-        //  Concatenate fragment
-        compiled += fragment;
-
-      });   
-
-      //  Trigger `exportReady`; send type and compiled code 
       $doc.trigger( "exportReady", {
         type: type,
         content: compiled
       });
+      
+      
     });
     
     $doc.bind( "applicationError applicationNotice applicationAlert", function( event, options ) {
@@ -1699,7 +1690,7 @@
           }
         };
         
-        //  If no option type, ensure a default
+        
         if ( !options.type ) {
           options.type = "Confirm";
         }
@@ -1801,7 +1792,6 @@
             
             $(this).dialog( "close" );
             
-            $("#ui-preview-rendered").parent().empty();
             $("#ui-preview-rendered").remove();
           
           }
