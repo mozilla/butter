@@ -409,9 +409,7 @@
       $(".ui-menuset ~ ul").hide().css({top:0, left:0 });
     
 
-      $scrubber.css({
-        height: $trackeditting.height()
-      });
+      TrackEditor.setScrubberHeight();
     
     
     });
@@ -764,6 +762,9 @@
               //  Create ready state check interval              
               isReadyInterval = setInterval(function() {
                 
+                //console.log( "$tracktimecanvas.position().left", $tracktimecanvas.position().left);
+                //console.log("$uitracks.position().left", $uitracks.position().left);
+                
                 if ( $popcorn.video.readyState >= 3 ) {
 
                   self.setScrubberPosition(  
@@ -776,7 +777,11 @@
                   
                   //  #8402231
                   if ( $scrubberHandle.position().left >= $uitracks.position().left + $uitracks.width() ) {
-                    $uitracks.scrollLeft( $tracktimecanvas.width() ); //stable
+                    //$uitracks.scrollLeft( $tracktimecanvas.width() ); //stable
+                    
+                    $uitracks.animate({
+                      scrollLeft: "+=" + $tracktimecanvas.width()
+                    }, "slow");
                   }
                   
 
@@ -823,6 +828,14 @@
 
         },
         
+        setScrubberHeight: function( height ) {
+          
+          $scrubber.css({
+            height: height || ( $trackeditting.height() - 20 ) 
+          });        
+        
+        },
+        
         setScrubberPosition: function( position ) {
           
           var offset = 1, fixPosition, state, product;
@@ -851,9 +864,14 @@
             //  Update the scrubber handle position              
             fixPosition = Math.floor( position - offset );
             
-            $scrubberHandle.css({
+            //$scrubberHandle.css({
+            //  left: position - offset
+            //});
+            
+            //  Makes scrubber UI movement smoother
+            $scrubberHandle.animate({
               left: position - offset
-            });
+            }, "fast");            
             
           }
         
@@ -1869,9 +1887,8 @@
     //  Updating the scrubber height - DEPRECATE.
     $doc.bind( "addTrackComplete" , function( event ) {
 
-      $scrubber.css({
-        height: $trackeditting.height()
-      });
+      TrackEditor.setScrubberHeight();
+      
     });
     
     
@@ -1907,9 +1924,9 @@
 
     //  Updating the scrubber height
     $doc.bind( "timelineReady videoReady", function( event ) {
-      $scrubber.css({
-        height: $trackeditting.height()
-      });        
+
+      TrackEditor.setScrubberHeight();
+    
     });
     
 
@@ -2164,6 +2181,60 @@
     });
     
 
+
+    var message = $('<div id="m" />').css({
+        top: 0,
+        left: 0,
+        height: 30,
+        lineHeight: '30px',
+        padding: '0 10px',
+        background: 'black',
+        border: '1px solid yellow',
+        color: 'yellow',
+        opacity: 0, 
+        zIndex: 999999, 
+        position: "fixed"
+    }).hide().appendTo("#ui-tracks");
+
+
+    $uitracks.bind( "scrollstart", function(){
+        
+      //console.log("scrollstart");
+
+    });
+
+    $uitracks.bind( "scrollstop", function(e){
+    
+      //console.log("scrollstop");
+      
+      if ( !$popcorn.video ) {
+        return;
+      }    
+      
+      var increment = Math.round( $("#ui-tracks-time-canvas").width() / $popcorn.video.duration ), 
+          scrubberTime = 0, 
+          timeDistance = 0,
+          quarterTime = 0;
+
+      //  The scrubber handle may have been moved, we must account for this
+      if ( $scrubberHandle.position().left > $trackeditting.position().left ) {
+
+        scrubberTime = ( $scrubberHandle.position().left - $trackeditting.position().left ) / increment;
+
+      }
+          
+      //  Calculate distance scrolled by baseline editting area left - scrolling area left / increment = time
+      timeDistance = ( $trackeditting.position().left - $("#ui-tracks-time-canvas").position().left )  / increment;
+      
+      //  Get the quarterTime and pad with a 1/4 of a sec      
+      quarterTime = _( timeDistance ).fourth() + 0.25;
+      
+      //  Update currentTime to trigger scrubber position update
+      $popcorn.video.currentTime = quarterTime + ( scrubberTime || 0 );      
+
+    });
+
+    
     $menucontrols.bind( "click", function( event ) {
       
       event.preventDefault();
