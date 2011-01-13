@@ -1732,7 +1732,14 @@
         
         width: 300, 
         modal: true, 
-        autoOpen: true
+        autoOpen: true, 
+        
+        beforeClose: function() {
+          
+          defaultHandler.call(this);
+          
+        }
+        
                
       });    
     });
@@ -1798,15 +1805,24 @@
       
       //$exportready.show();
       
+      
+      
       var $div = $("#ui-preview-viewer").dialog({
         modal: true, 
         width: $body.width() - 50, 
         height: $body.height() - 50, 
         autoOpen: true,
         title: _( options.type ).capitalize(), 
+        
+        beforeClose: function() {
+          
+          $("#ui-preview-viewer").empty();
+          $("#ui-preview-rendered").remove();
+        
+        }, 
         buttons: {
           
-          'Close': function () {
+          'Close': function() {
             
             $(this).dialog( "close" );
             
