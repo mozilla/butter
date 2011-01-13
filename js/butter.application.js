@@ -864,14 +864,15 @@
             //  Update the scrubber handle position              
             fixPosition = Math.floor( position - offset );
             
-            //$scrubberHandle.css({
-            //  left: position - offset
-            //});
+            $scrubberHandle.css({
+              left: position - offset
+            });
             
             //  Makes scrubber UI movement smoother
-            $scrubberHandle.animate({
-              left: position - offset
-            }, "fast");            
+            //  CHOKES IN FIREFOX
+            //$scrubberHandle.animate({
+            //  left: position - offset
+            //}, "fast");            
             
           }
         
