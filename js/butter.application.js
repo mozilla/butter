@@ -2188,7 +2188,7 @@
     });
     
 
-
+    /*
     var message = $('<div id="m" />').css({
         top: 0,
         left: 0,
@@ -2202,7 +2202,7 @@
         zIndex: 999999, 
         position: "fixed"
     }).hide().appendTo("#ui-tracks");
-
+    */
 
     $uitracks.bind( "scrollstart", function(){
         
