@@ -289,3 +289,9 @@ input.text, input.title {
   -o-border-radius: 3px;
   border-radius: 3px;  
 }
+
+
+#ui-project-list {
+  height: 135px;
+  overflow-y:scroll;
+}

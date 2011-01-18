@@ -18,6 +18,12 @@
       drag    = 103, 
       
       trackCount = -1,
+      
+      lastMouseDown = {
+        x: 0, 
+        y: 0
+      },
+      
       styles = {
         trackEvent: {
           defaults: function( c, x, y, w, h ) {
@@ -436,12 +442,57 @@
             this.mouse.mode = wResize;
           }else if ( this.mouse.x >= iv.xr-8 && this.mouse.x <= iv.xr ) {
             this.mouse.mode = eResize;
-          }else if ( this.mouse.x >= iv.xl+8 && this.mouse.x <= iv.xr - 8 ) {
+          
+          } else if ( this.mouse.x >= iv.xl+8 && this.mouse.x <= iv.xr - 8 ) {
+          
+            //console.log("this.mouse.x", this.mouse.x);
+            //console.log("iv", iv);
+            //console.log("iv.xl", iv.xl);
+            //console.log("dragset");
+            
             this.mouse.mode = drag;
           }
         }
         
         thumbLeft = thumbRight = false;
+        
+        if ( [ eResize, wResize ].indexOf( this.mouse.mode ) > -1 ) {
+          
+          //console.log("dragging handles");
+          //console.log(this.mouse.hovering.xl, this.mouse.hovering.xr);
+          
+          var cancelDrag = false;
+          
+          if ( this.mouse.hovering.xl + 20 > this.mouse.hovering.xr ) {
+          
+            this.mouse.hovering.popcornEvent.start = this.mouse.hovering.inPoint - 2 ;  
+            
+            cancelDrag = true;
+          }
+
+
+          if ( this.mouse.hovering.xr - 20 < this.mouse.hovering.xl ) {
+            this.mouse.hovering.popcornEvent.end = this.mouse.hovering.outPoint + 2 ;          
+            
+            cancelDrag = true;
+          }
+
+          
+          if ( this.mouse.lastX  < this.mouse.hovering.xl && this.mouse.mode === 102 ) {
+            cancelDrag = false;            
+          }
+          
+          if ( this.mouse.lastX  > this.mouse.hovering.xr && this.mouse.mode === 101 ) {
+            cancelDrag = false;    
+          }
+          
+          if ( cancelDrag ) {
+            this._draw(thumbLeft, thumbRight);
+            
+            return;
+          }
+        }
+        
         
         if ( this.mouse.mode === eResize ) {
           thumbRight = true;
@@ -486,12 +537,14 @@
           this.mouse.hovering.inPoint = (this.mouse.x-this.mouse.hovering.grabX) / this.width * this.options.duration;
           this.mouse.hovering.outPoint = this.mouse.hovering.inPoint + diff;
           
-         //console.log("drag");
-          
-          
+                   
           if ( this.options.mode !== 'smartZoom' ) {
+            
+            
             this.mouse.hovering.popcornEvent.start = this.mouse.hovering.inPoint ;
             this.mouse.hovering.popcornEvent.end = this.mouse.hovering.outPoint ;
+            
+            
           }else{
 
             linkedTracks = this.options.linkedTracks;              
@@ -522,19 +575,9 @@
         
         this.mouse.down = true;
         
-        /*
-        if ( e.shiftKey ) {
-          
-          console.log("DELETE");
-          
-          console.log(this);
-          
-          //this.context.clearRect(0,0,canvas.width,canvas.height)
-          
-          this.context.clearRect(0,0,0,0);
         
-        }
-        */
+        $.extend( lastMouseDown, { x: e.pageX, y: e.pageY });
+        
         
         return;
       }
@@ -550,10 +593,19 @@
           
           if ( this.options.mode !== "smartZoom" ) {
             
-           //console.log(this.options.mode);
-           //console.log(this.mouse.mode);
-          
-            this.mouse.hovering.editEvent( e );
+            //console.log("lastMouseDown", lastMouseDown, { x: e.pageX, y: e.pageY });
+            
+            //  If mouse hasnt moved, fire edit event (will open edit dialog)
+            if ( lastMouseDown.x === e.pageX ) {
+              
+              this.mouse.hovering.editEvent( e );
+              
+            } else {
+             
+              //  Placeholder for future ondrag
+              //this.mouse.hovering.editEvent( e );
+              
+            }
           }
           
           this.mouse.hovering = null;

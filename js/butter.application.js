@@ -162,10 +162,6 @@
     return ( this.title || "" ).toLowerCase().match(/[a-z0-9]+/ig).join("-");
   };
 
-  TrackStore.prototype.parse = function( slug ) {
-    return JSON.parse( this.read( slug ) );
-  };  
-
   TrackStore.prototype.create = function( slug, from ) {
     
     //  If slug is not a string, shift the arguments
@@ -175,24 +171,60 @@
       slug = this.slug();
     }
     
+    var prepared = this.prepare( from ), 
+        stored = TrackStore.getStorageAsObject( TrackStore.NS ),
+        projects = {
+          projects: {}
+        }, 
+        entry = {};
     
-    var serial = this.serialize( from );
+    
+   //console.log("slug, from", slug, from);
+    
+    
+    
+    //  Create new storage entry    
+    entry[ slug ] = prepared;
+    
+   //console.log("prepared", prepared);
+    
+   //console.log("entry", entry);
+    
+    //  Rebuild storage object
+    _.extend( projects.projects, stored.projects, entry );
+    
+    
+   //console.log("projects.projects", projects.projects);
+    
+    //return;
     
     localStorage.setItem( 
-      //  Label stored data
-      slug,  
+      //  Namespace stored data
+      TrackStore.NS,  
       //  Stringified video and track data
-      serial
+      JSON.stringify( projects )
     );
     
     return {
       slug: slug, 
-      serial: serial
+      serial: JSON.stringify( prepared )
     };
   };
   
   TrackStore.prototype.read = function( slug ) {
-    return localStorage.getItem( slug ) || null;
+    
+    var stored = TrackStore.getStorageAsObject();
+    
+    //console.log("stored", stored);
+    //console.log("stored.projects", stored.projects);
+    //console.log("stored.projects[ slug ]", stored.projects[ slug ]);
+    
+    //console.log(stored);
+    //console.trace();
+    
+    //return stored.projects[ slug ] || ;
+    
+    return false;
   };
 
   TrackStore.prototype.update = function( slug, from ) {
@@ -200,24 +232,76 @@
   };  
   
   TrackStore.prototype.remove = function( slug ) {
-    return localStorage.removeItem( slug );
+    
+    var stored = TrackStore.getStorageAsObject();
+    
+    if ( stored.projects[ slug ] ) {
+      
+      delete stored.projects[ slug ];
+    
+    }        
+
+    localStorage.setItem( 
+      //  Namespace stored data
+      TrackStore.NS,  
+      //  Stringified video and track data
+      JSON.stringify( stored )
+    );
   };
   
   //  Utility Functions
-  TrackStore.getStorageAsObject = function() {
+  
+  
+  TrackStore.getStorageAsObject = function( prop ) {
+    
+    prop = prop || TrackStore.NS;
+    
+    if ( !prop ) {
+      //throw msg;
+      return false;
+    }
+
     var i = -1, 
-        len = localStorage.length,
+        storedStr = localStorage.getItem( prop ),
+        storedObj = new Function( "return " + storedStr )(), 
+        len = _.size( storedObj ),
+        
         obj = {}, 
         key;
-
+    
+    //console.log("storedStr", storedStr);
+    //console.log("storedObj", storedObj);
+    
+    
+    if ( !!storedStr ) {
+      return storedObj || null;
+    }
+    
+    /*
     while ( ++i < len ) { 
       key = localStorage.key( i ); 
       
       obj[ key ] = new Function( "return " + localStorage.getItem( key ) )();
     
     }
+    
     return obj;
+    */
+    
+    return {};
   };
+  
+  TrackStore.getStorageByProperty = function( prop ) {
+  
+    var storage = TrackStore.getStorageAsObject( TrackStore.NS );
+    
+    return ( storage && storage[ prop ] ) || null;
+  }
+  
+  TrackStore.NS = null;
+
+  
+  
   
   //  Expose TrackStore as a global constructor  
   global.TrackStore = TrackStore;
@@ -231,6 +315,18 @@
 (function( global, document, $, _, Popcorn ) { 
 
   //  Random key=>val/method maps
+  
+  //  TODO: refactor for reusability.
+  //  Setup data store
+  if ( !localStorage.getItem( "Butter" ) ) {
+   //console.log("reset");
+    //  Initialize Butter storage
+    localStorage.setItem( "Butter", "" );
+  }
+  
+  //  Initialize TrackStore.NS (namespace)
+  TrackStore.NS = "Butter";
+  
   
   
   var formatMaps = {
@@ -435,6 +531,8 @@
           },
         
           load: function( tracks, project ) {
+          
+         //console.log(project);
         
             $ioVideoUrl.val( project.remote );
 
@@ -500,13 +598,17 @@
             //  Unload current menu state
             this.unload( selector );
 
-            var storedMovies = TrackStore.getStorageAsObject(),
+            var stored = TrackStore.getStorageAsObject( TrackStore.NS ),
+                projects = stored.projects || false, 
                 $li;
                 
                 
-            if ( _.size( storedMovies ) > 0 ) {
+           //console.log(projects);
+                
+            
+            if ( projects ) {
 
-              _.each( TrackStore.getStorageAsObject(), function( data, prop ) {
+              _.each( projects, function( data, prop ) {
 
                 $li = $("<li/>", {
 
@@ -550,7 +652,7 @@
       modal: true, 
       autoOpen: true, 
       width: 400, 
-      height: 400,
+      height: 435,
       buttons: {
         "Start": function() {
           var $this = $(this),
@@ -1265,8 +1367,16 @@
               
               
               if ( elemType === "input" ) { 
-
-                elem.val( selectedEvent.popcornEvent[ prop ] );
+                
+                var rounded = selectedEvent.popcornEvent[ prop ];
+                
+                //  Round displayed times to nearest quarter of a second
+                if ( _.isNumber( +rounded ) && [ "start", "end" ].indexOf( prop ) > -1 ) {
+                  
+                  rounded = _( +rounded ).fourth();
+                }
+                
+                elem.val( rounded );
 
               }
               
@@ -2060,12 +2170,16 @@
         
         
         
+        
         if ( !store.read( slug ) ) {
           
+         //console.log("creating....");
+
           store.create( $popcorn.data.trackEvents.byStart );
           
         } else {
-        
+          
+         //console.log("updating....");
           store.update( slug, $popcorn.data.trackEvents.byStart );
         
         }
