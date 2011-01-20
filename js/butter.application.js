@@ -1063,7 +1063,7 @@
               
               if ( seconds <= durationCeil ) {
                 
-                context.fillText( _( seconds ).secondsToSMPTE() , seconds * tick - offset, 9);
+                context.fillText( _( seconds ).secondsToSMPTE() , seconds * tick - offset, 9 );
               }
 
               
@@ -1072,8 +1072,8 @@
               
               //  Secondary ticks
               for ( secondary = 0; secondary < 4; secondary++ ) {
-                context.moveTo( posOffset + ( secondary * increment ), 20);
-                context.lineTo( posOffset + ( secondary * increment ), 25);                
+                context.moveTo( posOffset + ( secondary * increment ), 20 );
+                context.lineTo( posOffset + ( secondary * increment ), 25 );                
               }
               
 
@@ -1081,7 +1081,7 @@
               
               // Primary ticks
               context.moveTo( primary * tick/2, 10 );
-              context.lineTo( primary * tick/2, 25);
+              context.lineTo( primary * tick/2, 25 );
 
             }
 
@@ -1138,6 +1138,7 @@
           }
 
         },
+        
         addTrackEvent: function( type ) {
           
           if ( !$popcorn || !$popcorn.data ) {
@@ -1153,11 +1154,22 @@
           var $track, lastEventId, trackEvents, trackEvent, settings = {}, 
               trackType = this.id, 
               trackManifest = Popcorn.manifest[ trackType ], 
+              
+              currentPlayHeadTime = _( $popcorn.video.currentTime ).fourth(), 
               startWith = {
-                start: 2,
-                end: 10
+              
+                //  Drop new track event at playhead
+                start: currentPlayHeadTime,
+                
+                //  
+                end: currentPlayHeadTime + 8
               };
               
+              
+          //  GET PLAYHEAD POSITION AS SECONDS
+          
+          console.log(_( $popcorn.video.currentTime ).fourth() );
+          
 
           arguments.length && ( settings = arguments[0] );// && _;
 
