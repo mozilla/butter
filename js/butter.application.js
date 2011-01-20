@@ -195,24 +195,13 @@
         entry = {};
     
     
-   //console.log("slug, from", slug, from);
-    
-    
-    
     //  Create new storage entry    
     entry[ slug ] = prepared;
     
-   //console.log("prepared", prepared);
-    
-   //console.log("entry", entry);
-    
+
     //  Rebuild storage object
     _.extend( projects.projects, stored.projects, entry );
     
-    
-   //console.log("projects.projects", projects.projects);
-    
-    //return;
     
     localStorage.setItem( 
       //  Namespace stored data
@@ -1168,9 +1157,6 @@
               
           //  GET PLAYHEAD POSITION AS SECONDS
           
-          console.log(_( $popcorn.video.currentTime ).fourth() );
-          
-
           arguments.length && ( settings = arguments[0] );// && _;
 
           
@@ -2331,29 +2317,12 @@
       
       $popcorn.video.currentTime = quarterTime;      
     });
-    
 
-    /*
-    var message = $('<div id="m" />').css({
-        top: 0,
-        left: 0,
-        height: 30,
-        lineHeight: '30px',
-        padding: '0 10px',
-        background: 'black',
-        border: '1px solid yellow',
-        color: 'yellow',
-        opacity: 0, 
-        zIndex: 999999, 
-        position: "fixed"
-    }).hide().appendTo("#ui-tracks");
-    */
 
-    $uitracks.bind( "scrollstart", function(){
-        
+
+    //$uitracks.bind( "scrollstart", function(){
       //console.log("scrollstart");
-
-    });
+    //});
 
     $uitracks.bind( "scrollstop", function(e){
     
@@ -2424,18 +2393,17 @@
       
       //  Enter
       if ( event.which === 13 ) {
-        $('#io-current-time').next().trigger("click");          
+        controls.seek( "seek:io-current-time" );
       }
       
-      
       //  Arrow right
-      if ( event.which === 39 ) {
+      if ( event.which === 39 && event.shiftKey ) {
         $('[data-opt="next"]').parents("button").trigger("click");
       }
       
       
       //  Arrow left
-      if ( event.which === 37 ) {
+      if ( event.which === 37 && event.shiftKey ) {
         $('[data-opt="prev"]').parents("button").trigger("click");
       }
       
