@@ -61,6 +61,22 @@
       if (t.length === 4) {
         return parseInt( t[0] * 3600, 10 ) + parseInt( t[1] * 60, 10 ) + parseFloat( t[2], 10 ) + parseFloat( t[3] / 12, 10 );
       }
+    }, 
+    secondsToSMPTE: function( time ) {
+
+      var timeStamp = new Date( 1970,0,1 ), 
+          seconds;
+
+      timeStamp.setSeconds( time );
+
+      seconds = timeStamp.toTimeString().substr( 0, 8 )
+
+      if ( seconds > 86399 )  {
+
+        seconds = Math.floor( (timeStamp - Date.parse("1/1/70") ) / 3600000) + seconds.substr(2);
+
+      }
+      return seconds;
     }
   });
   
@@ -1023,7 +1039,7 @@
               offset = 2, 
               primary = 0, 
               secondary = 0,
-              third = 0, 
+              seconds = 0, 
               posOffset;
 
           TrackEditor.increment = increment;
@@ -1034,22 +1050,24 @@
           
           for ( ; primary < durationCeil * 2; primary++ ) {
 
-            if ( primary >= 10 ) {
-              offset = 6;
-            }
+            //if ( primary >= 10 ) {
+            offset = 25;
+            //}
 
             context.lineWidth = 1;
             context.beginPath();
 
             if ( primary % 2 || primary === 0 ) {
 
-              third++;
+              seconds++;
               
-              if ( third <= durationCeil ) {
-                context.fillText( third , third * tick - offset, 9);
+              if ( seconds <= durationCeil ) {
+                
+                context.fillText( _( seconds ).secondsToSMPTE() , seconds * tick - offset, 9);
               }
 
-              posOffset = primary * tick/2;
+              
+              posOffset = primary * tick / 2;
 
               
               //  Secondary ticks
