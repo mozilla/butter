@@ -1008,7 +1008,8 @@
         drawTimeLine: function( duration ) {
         
         
-          TrackEditor.timeLineWidth = Math.ceil( Math.ceil( duration ) / 30 ) * 800;
+          //TrackEditor.timeLineWidth = Math.ceil( Math.ceil( duration ) / 30 ) * 800;
+          TrackEditor.timeLineWidth = Math.ceil( Math.ceil( duration ) / 30 ) * 1600;
           
 
           this.deleteCanvas( "ui-tracks-time", "ui-tracks-time-canvas" );
