@@ -2393,7 +2393,7 @@
       
       //  Enter
       if ( event.which === 13 ) {
-        controls.seek( "seek:io-current-time" );
+        //controls.seek( "seek:io-current-time" );
       }
       
       //  Arrow right
