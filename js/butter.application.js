@@ -236,7 +236,7 @@
     return this.create( slug, from );
   };  
   
-  TrackStore.prototype.remove = function( slug ) {
+  TrackStore.prototype.remove = function( slug, callback ) {
     
     var stored = TrackStore.getStorageAsObject();
     
@@ -252,10 +252,19 @@
       //  Stringified video and track data
       JSON.stringify( stored )
     );
+    
+    
+    callback && callback.call( null, stored );
+    
   };
   
   //  Utility Functions
+  TrackStore.deleteProject = function( id ) {
+    
+    
   
+  
+  };
   
   TrackStore.getStorageAsObject = function( prop ) {
     
@@ -726,6 +735,34 @@
           this.videoReady($p,  onReady);
         },
         
+        unload: {
+          
+          video: function() {
+          
+            //  Remove previously created video sources
+            if ( $("video").length ) {
+              $("video").remove();
+            }
+
+            $video = $( "<video/>", {
+
+              id: "video"
+
+            }).prependTo( "#ui-panel-video" );          
+          
+          }, 
+          
+          workspace: function() {
+          
+          }, 
+          
+          timescale: function() {
+            TrackEditor.deleteCanvas( "ui-tracks-time", "ui-tracks-time-canvas" );            
+          }
+        
+        
+        }, 
+        
         loadVideoFromUrl: function( callback ) {
           
           
@@ -744,17 +781,8 @@
               timelineReadyFn;
           
           
-          //  Remove previously created video sources
-          if ( $("video").length ) {
-            $("video").remove();
-          }
-          
-          $video = $( "<video/>", {
-            
-            id: "video"
-          
-          }).prependTo( "#ui-panel-video" );
-          
+          this.unload.video();
+
           
           //  Create a new source element and append to the video element
           $source = $("<source/>", {
@@ -1659,12 +1687,13 @@
       _.each( [
           "js/jquery.js", 
           "popcorn-js/popcorn.js", 
-          "popcorn-js/plugins/googleMap/popcorn.googleMap.js", 
+          "popcorn-js/plugins/googlemap/popcorn.googlemap.js", 
           "popcorn-js/plugins/footnote/popcorn.footnote.js", 
           "popcorn-js/plugins/webpage/popcorn.webpage.js", 
           "popcorn-js/plugins/flickr/popcorn.flickr.js", 
           "popcorn-js/plugins/image/popcorn.image.js", 
-          "popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"      
+          "popcorn-js/plugins/wikipedia/popcorn.wikipedia.js", 
+          "popcorn-js/plugins/twitter/popcorn.twitter.js"
         ], function( sourceUri ) { 
         
         
@@ -2136,14 +2165,29 @@
         //  a specified URL.
         TrackEditor.loadVideoFromUrl();
       }, 
-      
+
       remove: function() {
+
+        var store = trackStore || new TrackStore(), 
+            title = $ioVideoTitle.val(), 
+            slug = _( title ).slug();
         
-        //console.log(trackStore);
-        //alert("NOT IMPLEMENTED")
-      
-      }, 
-      
+        
+        store.remove( slug, function () {
+        
+          
+          //  Reload the menu
+          TrackMeta.menu.load( "#ui-user-videos" );
+
+
+          controls.load(); 
+        
+        });
+        
+        
+        
+        
+      },
       save: function() {
         
         if ( !$popcorn || !$popcorn.data ) {

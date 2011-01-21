@@ -29,7 +29,7 @@ var googleCallback;
         } )
    *
    */
-  Popcorn.plugin( "googleMap" , (function(){
+  Popcorn.plugin( "googlemap" , (function(){
       
     var newdiv, i = 1, _mapFired = false, _mapLoaded = false;
     
@@ -48,7 +48,7 @@ var googleCallback;
           type     : {elem:'select', options:['ROADMAP','SATELLITE', 'HYBRID', 'TERRAIN'], label:'Type'},
           zoom     : {elem:'input', type:'text', label:'Zoom'},
           lat      : {elem:'input', type:'text', label:'Lat'},
-          long     : {elem:'input', type:'text', label:'Long'},
+          lng     : {elem:'input', type:'text', label:'Long'},
           location : {elem:'input', type:'text', label:'Location'}
         }
       },
@@ -78,7 +78,7 @@ var googleCallback;
             }, 13);
           } else {
             
-            if ( options.location && ( !options.lat || !options.long) ) {
+            if ( options.location && ( !options.lat || !options.lng) ) {
               
               var geocoder = new google.maps.Geocoder();
               
@@ -86,7 +86,7 @@ var googleCallback;
                 if (status === google.maps.GeocoderStatus.OK) {
                 
                   options.lat  = results[0].geometry.location.lat();
-                  options.long = results[0].geometry.location.lng();
+                  options.lng = results[0].geometry.location.lng();
                 } 
               });
             }
@@ -133,7 +133,7 @@ var googleCallback;
               
             } else {
             
-              var location = new google.maps.LatLng(options.lat, options.long);
+              var location = new google.maps.LatLng(options.lat, options.lng);
               options._map = new google.maps.Map(options._container, {mapTypeId: google.maps.MapTypeId[options.type] || google.maps.MapTypeId.HYBRID });      
             }
             // reset the location and zoom just in case the user plaid with the map
