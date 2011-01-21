@@ -1151,7 +1151,10 @@
           
           //  Fire event if track removed successfully
           if ( $popcorn.data.history.indexOf( id ) === -1 ) {
-            $doc.trigger( "removeTrackComplete", { type: trackType } );
+            $doc.trigger( "removeTrackComplete", { 
+              type: trackType, 
+              supress: true
+            });
           }
 
         },
@@ -1712,7 +1715,7 @@
           deserial = JSON.parse( serialized ), 
           methods = [], panels = [];
       
-      
+      //console.log(serialized);
       
       //  Build playback JS string
       _.each( deserial.data, function( obj, key ) {
@@ -1838,7 +1841,7 @@
       
       var defaultHandler = function() {
 
-        $(this).dialog( "close" );
+        $uiApplicationMsg.dialog( "close" );
         
         //  Cleanup
         $("#ui-error-rendered").remove();
@@ -1856,12 +1859,15 @@
         buttons = {
           "Cancel": defaultHandler, 
           "Ok": function() {
-            
+
             //  If a callback specified, execute
             options.callback && options.callback();
             
+            //$uiApplicationMsg.dialog( "close" );
+            
             //  Run default handler to clean and close
             defaultHandler.call( this );
+            
           }
         };
         
@@ -1893,7 +1899,7 @@
         
         beforeClose: function() {
           
-          defaultHandler.call(this);
+          //defaultHandler.call(this);
           
         }
         
@@ -2077,6 +2083,10 @@
       
       //  Complete with saving
       if ( !!$ioVideoTitle.val() ) {
+      
+        if ( data.suppress ) {
+          return;
+        }
         
         controls.save();
 
