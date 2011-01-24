@@ -368,8 +368,12 @@
     
     mp4: 'video/mp4; codecs="avc1, mp4a"',
     ogv: 'video/ogg; codecs="theora, vorbis"', 
+    mov: 'video/mp4', 
+    m4v: 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"', 
     
-    accepts: [ ".ogv", ".mp4", ".webm" ]
+    
+    
+    accepts: [ ".ogv", ".mp4", ".mov", ".webm", ".m4v" ]
   }, 
   
   setInterval = global.setInterval, 
@@ -695,7 +699,6 @@
           
           //  Create an interval to check the readyState of the video
           var onReadyInterval = setInterval(function() {
-            
             
             //  readyState has been satisfied, 
             //  4 is preferrable, but FF reports 3
@@ -2155,7 +2158,7 @@
         volumeTo = 0;
         
         var videoUri = $ioVideoUrl.val(), 
-            raccepts = /(.ogv)|(.mp4)|(.webm)/gi;
+            raccepts = /(.ogv)|(.mp4)|(.webm)|(.mov)|(.m4v)/gi;
 
         
         //  If no remote url given, stop immediately
