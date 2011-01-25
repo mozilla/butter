@@ -69,7 +69,7 @@
 
       timeStamp.setSeconds( time );
 
-      seconds = timeStamp.toTimeString().substr( 0, 8 )
+      seconds = timeStamp.toTimeString().substr( 0, 8 );
 
       if ( seconds > 86399 )  {
 
@@ -217,18 +217,8 @@
   };
   
   TrackStore.prototype.read = function( slug ) {
-    
-    var stored = TrackStore.getStorageAsObject();
-    
-    //console.log("stored", stored);
-    //console.log("stored.projects", stored.projects);
-    //console.log("stored.projects[ slug ]", stored.projects[ slug ]);
-    
-    //console.log(stored);
-    //console.trace();
-    
-    //return stored.projects[ slug ] || ;
-    
+    //var stored = TrackStore.getStorageAsObject();
+    //  NOT IMPLEMENTED
     return false;
   };
 
@@ -275,33 +265,13 @@
       return false;
     }
 
-    var i = -1, 
-        storedStr = localStorage.getItem( prop ),
-        storedObj = new Function( "return " + storedStr )(), 
-        len = _.size( storedObj ),
+    var storedStr = localStorage.getItem( prop ),
+        storedObj = new Function( "return " + storedStr )();
         
-        obj = {}, 
-        key;
-    
-    //console.log("storedStr", storedStr);
-    //console.log("storedObj", storedObj);
-    
-    
     if ( !!storedStr ) {
       return storedObj || null;
     }
-    
-    /*
-    while ( ++i < len ) { 
-      key = localStorage.key( i ); 
-      
-      obj[ key ] = new Function( "return " + localStorage.getItem( key ) )();
-    
-    }
-    
-    return obj;
-    */
-    
+
     return {};
   };
   
@@ -310,12 +280,10 @@
     var storage = TrackStore.getStorageAsObject( TrackStore.NS );
     
     return ( storage && storage[ prop ] ) || null;
-  }
+  };
   
   TrackStore.NS = null;
 
-  
-  
   
   //  Expose TrackStore as a global constructor  
   global.TrackStore = TrackStore;
@@ -333,7 +301,7 @@
   //  TODO: refactor for reusability.
   //  Setup data store
   if ( !localStorage.getItem( "Butter" ) ) {
-   //console.log("reset");
+    //console.log("reset");
     //  Initialize Butter storage
     localStorage.setItem( "Butter", "" );
   }
@@ -376,12 +344,14 @@
     accepts: [ ".ogv", ".mp4", ".mov", ".webm", ".m4v" ]
   }, 
   
+  //  Cached global methods
   setInterval = global.setInterval, 
   setTimeout = global.setTimeout,
   clearInterval = global.clearInterval, 
   clearTimeout = global.clearTimeout;  
   
-
+  
+  //  DOM ready block
   $(function() { 
     
     var $popcorn, 
@@ -666,26 +636,8 @@
     TrackMeta.menu.load( "#ui-start-screen-list" );
     
     
-    $uiStartScreen.dialog({
-      modal: true, 
-      autoOpen: true, 
-      width: 400, 
-      height: 435,
-      buttons: {
-        "Start": function() {
-          var $this = $(this),
-              value = $this.children( "input" ).val();
-              
-          $this.dialog( "close" );
-              
-          $ioVideoUrl.val( value );
-          $('[data-control="load"]').trigger( "click" );
-        }
-      }
-    });
+    //  TrackEditor Module - define
     
-    
-    //  Editor logic module
     TrackEditor = ( function(global) {
       
       return {
@@ -790,7 +742,7 @@
           //  Create a new source element and append to the video element
           $source = $("<source/>", {
             
-            type: formatMaps[ type ],
+            //type: formatMaps[ type ],
             src: url
           
           }).prependTo( "#video" );
@@ -801,10 +753,13 @@
           //  Ensure that the network is ready
           netReadyInt = setInterval( function () {
             
+           
             //  Firefox is an idiot
             if ( $popcorn.video.currentSrc === url ) {
+           
               self.timeLineReady( $popcorn, timelineReadyFn );
               clearInterval( netReadyInt );
+           
             }
             
           }, 13);
@@ -1112,7 +1067,10 @@
       
     })(global);
     
-    //  Event editing logic module
+    
+    //   TrackEvents Module - define
+    
+    
     TrackEvents = ( function(global) {
       
       
@@ -1351,8 +1309,13 @@
           // THIS FUNCTION IS NOT ACTUALLY EDITTING, BUT CREATING THE EDITOR DIALOG
 
 
-          try{ $editor.dialog("close"); }
-          catch(e ) {  if ( console && console.log ) {  console.log(e); } }
+          try{ 
+            
+            $editor.dialog("close"); 
+          
+          } catch( e ) {  
+            // supress
+          }
 
           // `this` will actually refer to the context set when the function is called.
           selectedEvent = this;    
@@ -1555,7 +1518,302 @@
       };
     
     })(global);
+    
+    //   TrackExport Module
 
+    TrackExport = (function (global) {
+      
+      return {
+      
+        typemap: {
+          
+          "preview" : "iframe", 
+          "embeddable" : "textarea",
+          "full" : "textarea"
+          
+        }, 
+        exports: function( options ) {
+          
+          this.render[ this.typemap[ options.type ] ](
+            options.parent,
+            options.content
+          );
+        
+        }, 
+        render: {
+          
+          iframe: function( $parent, compiled ) {
+          
+            var $iframe = $("<iframe/>", { id: "ui-preview-rendered" }).width("100%").height($parent.height()-100), 
+                iframe, iframeDoc;
+
+            $parent.html( $iframe );
+
+            iframe = $("#ui-preview-rendered")[0];
+            iframeDoc = ( iframe.contentWindow ) ? 
+                          iframe.contentWindow : 
+                          ( iframe.contentDocument.document ) ? 
+                            iframe.contentDocument.document : 
+                              iframe.contentDocument;
+
+            iframeDoc.document.open();
+            iframeDoc.document.write(compiled);
+            iframeDoc.document.close();             
+            
+          }, 
+          textarea: function ( $parent, compiled ) {
+            
+            var $textarea = $("<textarea/>", { id: "ui-preview-rendered" }).width($parent.width()-100).height($parent.height()-100);
+            
+            $textarea.val( compiled );
+            
+            $parent.html( $textarea );
+          
+          }
+        }
+      };
+    
+    })(global);
+    
+
+    
+    
+    var seekTo = 0, 
+    volumeTo = 0, 
+    controls = {
+      
+      load: function() {
+        
+        seekTo = 0;
+        volumeTo = 0;
+        
+        var videoUri = $ioVideoUrl.val(), 
+            raccepts = /(.ogv)|(.mp4)|(.webm)|(.mov)|(.m4v)/gi;
+
+        
+        //  If no remote url given, stop immediately
+        //if ( !videoUri || !raccepts.test( videoUri ) ) {
+        if ( !videoUri ) {
+        
+          $doc.trigger( "applicationError", {
+            type: !raccepts.test( videoUri ) ? "Invalid Movie Url" : "No Video Loaded",
+            message: "Please provide a valid movie url. ("+ formatMaps.accepts.join(", ") +") "
+          });        
+          
+          return;
+        }
+        
+        //  TODO: really validate urls
+        
+        //  If all passes, continue to load a movie from
+        //  a specified URL.
+        TrackEditor.loadVideoFromUrl();
+      }, 
+
+      remove: function() {
+
+        var store = trackStore || new TrackStore(), 
+            title = $ioVideoTitle.val(), 
+            slug = _( title ).slug();
+        
+        
+        store.remove( slug, function () {
+        
+          
+          //  Reload the menu
+          TrackMeta.menu.load( "#ui-user-videos" );
+
+
+          controls.load(); 
+        
+        });
+        
+        
+        
+        
+      },
+      save: function() {
+        
+        if ( !$popcorn || !$popcorn.data ) {
+
+          $doc.trigger( "applicationError", {
+            type: "No Video Loaded",
+            message: "I cannot add a Track Event - there is no movie loaded."
+          });       
+
+          return;
+        }        
+        
+        var store = trackStore || new TrackStore(), 
+            title = $ioVideoTitle.val(), 
+            desc = $ioVideoDesc.val(), 
+            remote = $ioVideoUrl.val(),
+            theme = $themelist.attr( "data-theme" ),
+            layout = $layoutlist.attr( "data-layout" ),
+            slug;
+            
+        
+        if ( !title ) {
+
+          $doc.trigger( "applicationError", {
+            type: "No Title",
+            message: "You will need to add a title in order to save your project."
+          });       
+
+          return;
+        }
+        
+        
+        slug = _( title ).slug();
+        
+        
+        store.Title( title );
+        store.Description( desc );
+        store.Remote( remote );
+        store.Theme( theme );
+        store.Layout( layout );
+        
+        
+        
+        
+        if ( !store.read( slug ) ) {
+          
+         //console.log("creating....");
+
+          store.create( $popcorn.data.trackEvents.byStart );
+          
+        } else {
+          
+         //console.log("updating....");
+          store.update( slug, $popcorn.data.trackEvents.byStart );
+        
+        }
+        
+        //trackStore  = 
+        
+        TrackMeta.menu.load( "#ui-user-videos" );
+        
+        
+        $("#ui-user-videos li[data-slug='"+ slug +"']").trigger( "click" );
+        
+        
+      }, 
+      
+      play: function() {
+        
+        $popcorn.video.play();
+      }, 
+
+      pause: function() {
+        
+        $popcorn.video.pause();
+      }, 
+
+      volume: function( option ) {
+        
+
+        if ( option === "up" ) {
+          volumeTo = $popcorn.video.volume + 0.1;
+        }
+        
+        if ( option === "down" ) {
+          volumeTo = $popcorn.video.volume - 0.1;
+        }
+        
+        $popcorn.video.volume = volumeTo;
+        
+      },
+      seek: function( option ) {
+      
+        if ( option.indexOf(":") > -1 ) {
+          
+          var $input = $("#" + ( option.split(":")[1] || "" ) );
+          
+          seekTo = _( $input.val() ).smpteToSeconds();
+        }
+        
+        //  TODO: DRY out
+        
+        if ( option === "first" ) {
+          seekTo = 0;
+          
+          $doc.trigger("seeked", "first");
+        }
+
+        if ( option === "prev" ) {
+          
+          seekTo = _($popcorn.video.currentTime - 0.25).fourth();
+          
+          $doc.trigger("seeked", "prev");
+        }
+
+        if ( option === "next" ) {
+          
+          seekTo = _($popcorn.video.currentTime + 0.25).fourth();
+          
+          $doc.trigger("seeked", "next");
+        }
+
+        if ( option === "last" ) {
+          seekTo = $popcorn.video.duration;
+          
+          $doc.trigger("seeked", "last");
+        }        
+        
+        
+        if ( seekTo > $popcorn.video.duration ) {
+          seekTo = $popcorn.video.duration;
+        }
+
+        if ( seekTo < 0 ) {
+          seekTo = 0;
+        }        
+        
+        
+        //  Update current time
+        $popcorn.video.currentTime = seekTo;
+        
+        
+        //  Watch for readiness
+        var isReadyInterval = setInterval(function() {
+          
+          if ( $popcorn.video.readyState >= 3 ) {
+          
+            $doc.trigger( "seekComplete", {
+              type: option, 
+              time: seekTo
+            });
+            
+            clearInterval( isReadyInterval );
+          }
+        
+        }, 1);
+        
+      }       
+    };    
+    
+    
+    //  UI Logic
+    
+
+    $uiStartScreen.dialog({
+      modal: true, 
+      autoOpen: true, 
+      width: 400, 
+      height: 435,
+      buttons: {
+        "Start": function() {
+          var $this = $(this),
+              value = $this.children( "input" ).val();
+              
+          $this.dialog( "close" );
+              
+          $ioVideoUrl.val( value );
+          $('[data-control="load"]').trigger( "click" );
+        }
+      }
+    });
+    
 
     $editor.tabs();
     $editor.css({display:"none"});
@@ -1682,14 +1940,11 @@
           compile = '', 
           playbackAry = [ '$(function () { ', '  var $p = Popcorn("#video")', '  //uncomment to auto play', '  //$p.play();', '});\n' ],
           compiled = '',
-          dims = {
-            width: 0,
-            height: 0
-          }, 
           stripAttrs = [ "style", "width", "height" ];
 
       //  Compile scripts
-      //  TODO: generate this from loaded plugins      
+      //  TODO: generate this from loaded plugins
+      //  this is really awful
       _.each( [
           "js/jquery.js", 
           "popcorn-js/popcorn.js", 
@@ -1911,61 +2166,6 @@
     });
     
     
-    TrackExport = (function (global) {
-      
-      return {
-      
-        typemap: {
-          
-          "preview" : "iframe", 
-          "embeddable" : "textarea",
-          "full" : "textarea"
-          
-        }, 
-        exports: function( options ) {
-          
-          this.render[ this.typemap[ options.type ] ](
-            options.parent,
-            options.content
-          );
-        
-        }, 
-        render: {
-          
-          iframe: function( $parent, compiled ) {
-          
-            var $iframe = $("<iframe/>", { id: "ui-preview-rendered" }).width("100%").height($parent.height()-100), 
-                iframe, iframeDoc;
-
-            $parent.html( $iframe );
-
-            iframe = $("#ui-preview-rendered")[0];
-            iframeDoc = ( iframe.contentWindow ) ? 
-                          iframe.contentWindow : 
-                          ( iframe.contentDocument.document ) ? 
-                            iframe.contentDocument.document : 
-                              iframe.contentDocument;
-
-            iframeDoc.document.open();
-            iframeDoc.document.write(compiled);
-            iframeDoc.document.close();             
-            
-          }, 
-          textarea: function ( $parent, compiled ) {
-            
-            var $textarea = $("<textarea/>", { id: "ui-preview-rendered" }).width($parent.width()-100).height($parent.height()-100);
-            
-            $textarea.val( compiled );
-            
-            $parent.html( $textarea );
-          
-          }
-        }
-      };
-    
-    })(global)
-    
-
     //  Show export screen
     $doc.bind( "exportReady", function( event, options ) {
       
@@ -2146,220 +2346,7 @@
     });
     
     
-    // movie into track editor object, fix redundancies
-    
-    var seekTo = 0, 
-    volumeTo = 0, 
-    controls = {
-      
-      load: function() {
-        
-        seekTo = 0;
-        volumeTo = 0;
-        
-        var videoUri = $ioVideoUrl.val(), 
-            raccepts = /(.ogv)|(.mp4)|(.webm)|(.mov)|(.m4v)/gi;
 
-        
-        //  If no remote url given, stop immediately
-        if ( !videoUri || !raccepts.test( videoUri ) ) {
-        
-          $doc.trigger( "applicationError", {
-            type: !raccepts.test( videoUri ) ? "Invalid Movie Url" : "No Video Loaded",
-            message: "Please provide a valid movie url. ("+ formatMaps.accepts.join(", ") +") "
-          });        
-          
-          return;
-        }
-        
-        //  TODO: really validate urls
-        
-        //  If all passes, continue to load a movie from
-        //  a specified URL.
-        TrackEditor.loadVideoFromUrl();
-      }, 
-
-      remove: function() {
-
-        var store = trackStore || new TrackStore(), 
-            title = $ioVideoTitle.val(), 
-            slug = _( title ).slug();
-        
-        
-        store.remove( slug, function () {
-        
-          
-          //  Reload the menu
-          TrackMeta.menu.load( "#ui-user-videos" );
-
-
-          controls.load(); 
-        
-        });
-        
-        
-        
-        
-      },
-      save: function() {
-        
-        if ( !$popcorn || !$popcorn.data ) {
-
-          $doc.trigger( "applicationError", {
-            type: "No Video Loaded",
-            message: "I cannot add a Track Event - there is no movie loaded."
-          });       
-
-          return;
-        }        
-        
-        var store = trackStore || new TrackStore(), 
-            title = $ioVideoTitle.val(), 
-            desc = $ioVideoDesc.val(), 
-            remote = $ioVideoUrl.val(),
-            theme = $themelist.attr( "data-theme" ),
-            layout = $layoutlist.attr( "data-layout" ),
-            slug;
-            
-        
-        if ( !title ) {
-
-          $doc.trigger( "applicationError", {
-            type: "No Title",
-            message: "You will need to add a title in order to save your project."
-          });       
-
-          return;
-        }
-        
-        
-        slug = _( title ).slug();
-        
-        
-        store.Title( title );
-        store.Description( desc );
-        store.Remote( remote );
-        store.Theme( theme );
-        store.Layout( layout );
-        
-        
-        
-        
-        if ( !store.read( slug ) ) {
-          
-         //console.log("creating....");
-
-          store.create( $popcorn.data.trackEvents.byStart );
-          
-        } else {
-          
-         //console.log("updating....");
-          store.update( slug, $popcorn.data.trackEvents.byStart );
-        
-        }
-        
-        //trackStore  = 
-        
-        TrackMeta.menu.load( "#ui-user-videos" );
-        
-        
-        $("#ui-user-videos li[data-slug='"+ slug +"']").trigger( "click" );
-        
-        
-      }, 
-      
-      play: function() {
-        
-        $popcorn.video.play();
-      }, 
-
-      pause: function() {
-        
-        $popcorn.video.pause();
-      }, 
-
-      volume: function( option ) {
-        
-
-        if ( option === "up" ) {
-          volumeTo = $popcorn.video.volume + 0.1;
-        }
-        
-        if ( option === "down" ) {
-          volumeTo = $popcorn.video.volume - 0.1;
-        }
-        
-        $popcorn.video.volume = volumeTo;
-        
-      },
-      seek: function( option ) {
-      
-        if ( option.indexOf(":") > -1 ) {
-          
-          var $input = $("#" + ( option.split(":")[1] || "" ) );
-          
-          seekTo = _( $input.val() ).smpteToSeconds();
-        }
-        
-        //  TODO: DRY out
-        
-        if ( option === "first" ) {
-          seekTo = 0;
-          
-          $doc.trigger("seeked", "first");
-        }
-
-        if ( option === "prev" ) {
-          
-          seekTo = _($popcorn.video.currentTime - 0.25).fourth();
-          
-          $doc.trigger("seeked", "prev");
-        }
-
-        if ( option === "next" ) {
-          
-          seekTo = _($popcorn.video.currentTime + 0.25).fourth();
-          
-          $doc.trigger("seeked", "next");
-        }
-
-        if ( option === "last" ) {
-          seekTo = $popcorn.video.duration;
-          
-          $doc.trigger("seeked", "last");
-        }        
-        
-        
-        if ( seekTo > $popcorn.video.duration ) {
-          seekTo = $popcorn.video.duration;
-        }
-
-        if ( seekTo < 0 ) {
-          seekTo = 0;
-        }        
-        
-        
-        //  Update current time
-        $popcorn.video.currentTime = seekTo;
-        
-        
-        //  Watch for readiness
-        var isReadyInterval = setInterval(function() {
-          
-          if ( $popcorn.video.readyState >= 3 ) {
-          
-            $doc.trigger( "seekComplete", {
-              type: option, 
-              time: seekTo
-            });
-            
-            clearInterval( isReadyInterval );
-          }
-        
-        }, 1);
-        
-      }       
-    };
     
     
     $tracktime.bind( "click", function( event ) {
@@ -2449,9 +2436,9 @@
     $ioCurrentTime.bind( "keydown", function( event ) {
       
       //  Enter
-      if ( event.which === 13 ) {
+      //if ( event.which === 13 ) {
         //controls.seek( "seek:io-current-time" );
-      }
+      //}
       
       //  Arrow right
       if ( event.which === 39 && event.shiftKey ) {
