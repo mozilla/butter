@@ -667,9 +667,10 @@
             //  readyState has been satisfied, 
             //  4 is preferrable, but FF reports 3
             //  Firefox gotcha: ready does not mean it knows the duration
-            console.log($p.video.duration);
-            
             if ( $p.video.readyState >= 3 && !isNaN( $p.video.duration )  ) {
+            
+              
+              console.log("$p.video.readyState >= 3 && $p.video.duration", $p.video.duration);            
 
               //  execute callback if one was given
               callback && callback();
@@ -689,6 +690,9 @@
         timeLineReady: function( $p, callback ) {
           
           var onReady = _.bind( function() {
+            
+            console.log( "this.drawTimeLine( $p.video.duration )");
+            
             
             //  When ready, draw the timeline
             this.drawTimeLine( $p.video.duration );
@@ -1043,6 +1047,8 @@
           
           document.getElementById(parent).appendChild(canvas);
           
+          //console.log(canvas);
+          
           return canvas;
         }, 
         
@@ -1052,6 +1058,16 @@
           //TrackEditor.timeLineWidth = Math.ceil( Math.ceil( duration ) / 30 ) * 800;
           TrackEditor.timeLineWidth = Math.ceil( Math.ceil( duration ) / 30 ) * 1600;
           
+          
+          if ( TrackEditor.timeLineWidth > 32767 ) {
+            
+            TrackEditor.timeLineWidth = 32767;
+          
+          }
+          
+          
+          console.log("TrackEditor.timeLineWidth", TrackEditor.timeLineWidth);
+          
 
           this.deleteCanvas( "ui-tracks-time", "ui-tracks-time-canvas" );
           this.drawCanvas( "ui-tracks-time", "ui-tracks-time-canvas", TrackEditor.timeLineWidth, 25 );
@@ -1060,6 +1076,8 @@
           var context = document.getElementById("ui-tracks-time-canvas").getContext('2d'),
               tick = TrackEditor.timeLineWidth / duration,
               durationCeil = Math.ceil(duration), 
+              durationRange = durationCeil * 2, 
+              
               increment = tick/4, 
               offset = 2, 
               primary = 0, 
@@ -1073,7 +1091,10 @@
           context.fillStyle = "#000";
           context.lineWidth = 1;
           
-          for ( ; primary < durationCeil * 2; primary++ ) {
+          //console.log("durationRange", durationRange);
+          //console.log("tick", tick);
+          
+          for ( ; primary < durationRange; primary++ ) {
 
             //if ( primary >= 10 ) {
             offset = 25;
@@ -1089,6 +1110,8 @@
               if ( seconds <= durationCeil ) {
                 
                 context.fillText( _( seconds ).secondsToSMPTE() , seconds * tick - offset, 9 );
+                
+                //console.log(_( seconds ).secondsToSMPTE());
               }
 
               
@@ -1097,16 +1120,19 @@
               
               //  Secondary ticks
               for ( secondary = 0; secondary < 4; secondary++ ) {
+              
                 context.moveTo( posOffset + ( secondary * increment ), 20 );
-                context.lineTo( posOffset + ( secondary * increment ), 25 );                
+                context.lineTo( posOffset + ( secondary * increment ), 25 );        
+                
               }
               
 
             } else {
               
+              
               // Primary ticks
-              context.moveTo( primary * tick/2, 10 );
-              context.lineTo( primary * tick/2, 25 );
+              context.moveTo( primary * tick / 2, 10 );
+              context.lineTo( primary * tick / 2, 25 );
 
             }
 
@@ -1856,6 +1882,32 @@
       autoOpen: true, 
       width: 400, 
       height: 435,
+      open: function() {
+        
+        var $this = $(this),
+            value = $this.children( "input" ).val();
+            
+        
+        $this.children("input").trigger("focus");
+        
+          $doc.one( "keydown", function( event ) {
+          
+            if ( event.which === 13 ) {
+              
+              $this.dialog( "close" );
+
+              $ioVideoUrl.val( value );
+              
+              $('[data-control="load"]').trigger( "click" );
+
+            }
+          
+          });
+        
+        
+        
+        
+      }, 
       buttons: {
         "Start": function() {
           var $this = $(this),
@@ -1886,6 +1938,8 @@
       }).appendTo( "#ui-plugin-select-list" );      
 
     });
+
+    //  TODO: DRYOUT LAYOUT/THEME MENU BUILDING CODE  
 
     //  Render layout menu
     $.getJSON('layouts/layouts.json', function( response ){
@@ -1947,7 +2001,6 @@
         .removeClass('active');
     });
     
-
     //  THIS IS THE WORST CODE EVER.
     //  TODO: MOVE OUT TO FUNCTION DECLARATION - MAJOR ABSTRACTION
     //  Export options list event
@@ -2548,7 +2601,7 @@
       }
       
     });
-    
+
     
     global.$popcorn = $popcorn;
   });
