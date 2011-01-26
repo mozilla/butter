@@ -48,10 +48,26 @@
     <script src="js/jquery.ui.butter.min.js"></script>
     <script src="js/jquery.scrolling-events.js"></script>
     
+    
+    <!-- Initially at bottom of document, however causes FOUC -->
+    
+    <!-- Popcorn plugins -->
+    <script src="popcorn-js/popcorn.js"></script>
+    <script src="popcorn-js/plugins/googlemap/popcorn.googlemap.js"></script>
+    <script src="popcorn-js/plugins/footnote/popcorn.footnote.js"></script>
+    <script src="popcorn-js/plugins/webpage/popcorn.webpage.js"></script>
+    <script src="popcorn-js/plugins/flickr/popcorn.flickr.js"></script>
+    <script src="popcorn-js/plugins/image/popcorn.image.js"></script>
+    <script src="popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"></script>
+    <script src="popcorn-js/plugins/twitter/popcorn.twitter.js"></script>
+
+    <!-- The juice-->
+    <script src="js/butter.application.js"></script>    
+    
   </head>
   <body>
     <!-- Overlay Scenes -->
-    <div id="ui-loading-html" class="ui-load-ready">
+    <div id="ui-loading-html" class="ui-load-ready hide">
       <img src="img/loading.gif">
       <p>This may take a moment if your video is loading over the internet</p>
     </div>
@@ -62,7 +78,9 @@
       <header>
         <div class="span-26 last">
           <img class="logo" src="img/video.png" title="Butter" alt="Butter Logo">
-          <input placeholder="Video Url" type="text" id="io-video-url" name="io-video-url" class="text ui-menu-entity" value="http://popcornjs.org/tryme.ogv"> 
+          <input placeholder="Video Url" type="text" id="io-video-url" name="io-video-url" class="text ui-menu-entity" value="http://dl.dropbox.com/u/3531958/stateofhtml5.ogv"> 
+          
+          <!-- http://popcornjs.org/tryme.ogv -->
 
           <button class="ui-menu-controls marginleft" data-control="load" >Create New Movie</button>
 
@@ -206,7 +224,9 @@
       </div>
       <hr class="space"/>
       <h2>Create a New Movie</h2>
-      <input placeholder="Video Url" type="text" class="text ui-menu-entity" value="http://popcornjs.org/tryme.ogv"> 
+      <input placeholder="Video Url" type="text" class="text ui-menu-entity" value="http://dl.dropbox.com/u/3531958/stateofhtml5.ogv"> 
+      
+      <!-- http://popcornjs.org/tryme.ogv -->
     </div>
     
     <footer class="container">
@@ -230,20 +250,6 @@
       </a>
     </footer>
     
-
-
-    <!-- Popcorn plugins -->
-    <script src="popcorn-js/popcorn.js"></script>
-    <script src="popcorn-js/plugins/googlemap/popcorn.googlemap.js"></script>
-    <script src="popcorn-js/plugins/footnote/popcorn.footnote.js"></script>
-    <script src="popcorn-js/plugins/webpage/popcorn.webpage.js"></script>
-    <script src="popcorn-js/plugins/flickr/popcorn.flickr.js"></script>
-    <script src="popcorn-js/plugins/image/popcorn.image.js"></script>
-    <script src="popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"></script>
-    <script src="popcorn-js/plugins/twitter/popcorn.twitter.js"></script>
-
-    <!-- The juice-->
-    <script src="js/butter.application.js"></script>
 
     
   </body>

@@ -391,8 +391,10 @@
         
         //  
         $uiLoadingHtml = $("#ui-loading-html"),
-        $uiStartScreen = $("#ui-start-screen"), 
+        $uiLoadingOrigMsg = $uiLoadingHtml.find("p").text(), 
         
+
+        $uiStartScreen = $("#ui-start-screen"), 
         $uiApplicationMsg = $("#ui-application-error"), 
         
         
@@ -408,7 +410,8 @@
         TrackEvents, 
         TrackExport;
         
-        
+    //  Start with overlay scenes hidden
+    $loadready.hide();
     
     //  Decorate UI buttons
     $("button,.ui-menu-controls").button();
@@ -495,15 +498,13 @@
 
       TrackEditor.setScrubberHeight();
     
-    
     });
     
     
-    //  Start with overlay scenes hidden
-    $loadready.hide();
+
+    //   TrackMeta Module - define
     
     
-    //  Storage logic module
     TrackMeta   = ( function() {
       
       return {
@@ -513,14 +514,15 @@
           unload: function() {
           
             
-            // unload the project
+            //  unload the project
+            //  NOT IMPLEMENTED
             
             
           },
         
           load: function( tracks, project ) {
           
-         //console.log(project);
+            //console.log(project);
         
             $ioVideoUrl.val( project.remote );
 
@@ -548,18 +550,7 @@
             
             TrackEditor.loadVideoFromUrl( function () {
             
-              _.each( tracks, function( trackDataObj ) {
-
-                _.each( trackDataObj, function( data, key ) {
-
-                  var options = _.extend( {}, { id: key }, data );  
-                  
-                  TrackEvents.addTrackEvent.call( options, options );
-
-                });
-
-              });
-              
+              TrackMeta.project.loadWorkspace( tracks );
               
               //  Load meta data
               $ioVideoTitle.val( project.title );
@@ -567,7 +558,25 @@
               
             
             });
+          }, 
+          
+          loadWorkspace: function( tracks ) {
+
+            _.each( tracks, function( trackDataObj ) {
+
+              _.each( trackDataObj, function( data, key ) {
+
+                var options = _.extend( {}, { id: key }, data );  
+
+                TrackEvents.addTrackEvent.call( options, options );
+
+              });
+
+            });          
+          
           }
+          
+          
         }, 
       
         menu: {
@@ -626,18 +635,21 @@
       
     })();
     
+    
+    //  Allow TrackMeta to be globally accessible
     global.TrackMeta = TrackMeta;
     
     
+    //  Load the workspace menu
     TrackMeta.menu.load( "#ui-user-videos" );
     
     
-    //  #8043415 
+    //  Load the start screen menu - #8043415 
     TrackMeta.menu.load( "#ui-start-screen-list" );
     
     
-    //  TrackEditor Module - define
-    
+    //  TrackEditor Module - organizes all track event editting logic
+
     TrackEditor = ( function(global) {
       
       return {
@@ -655,6 +667,8 @@
             //  readyState has been satisfied, 
             //  4 is preferrable, but FF reports 3
             //  Firefox gotcha: ready does not mean it knows the duration
+            console.log($p.video.duration);
+            
             if ( $p.video.readyState >= 3 && !isNaN( $p.video.duration )  ) {
 
               //  execute callback if one was given
@@ -825,7 +839,7 @@
               drag: function( event, ui ) {
                 
                 var scrubPosition = ui.offset.left  - $tracktimecanvas.position().left, 
-                    updateTo = $popcorn.video.duration / $tracktimecanvas.width() * scrubPosition, 
+                    updateTo = $popcorn.video.duration / $tracktimecanvas.innerWidth() * scrubPosition, 
                     quarterTime = _( updateTo ).fourth();
 
                 //  Force the time to be in quarters of a second
@@ -836,7 +850,6 @@
             
             //  Listen on timeupdates
             $popcorn.listen( "timeupdate", function() {
-              
               
               //  Updates the currenttime display
               $ioCurrentTime.val(function() {
@@ -849,41 +862,76 @@
 
               });
               
+              if ( $popcorn.video.currentTime > 0 ) {
 
-              //  Update the scrubber handle position              
-              var quarterTime = _( $popcorn.video.currentTime ).fourth(), 
-              //  Create ready state check interval              
-              isReadyInterval = setInterval(function() {
-                
-                //console.log( "$tracktimecanvas.position().left", $tracktimecanvas.position().left);
-                //console.log("$uitracks.position().left", $uitracks.position().left);
-                
-                if ( $popcorn.video.readyState >= 3 ) {
+                //  Update the scrubber handle position              
+                var quarterTime = _( $popcorn.video.currentTime ).fourth(), 
+                //  Create ready state check interval              
+                isReadyInterval = setInterval(function() {
 
-                  self.setScrubberPosition(  
-                    ( increment * quarterTime ) + $tracktimecanvas.position().left, 
-                    {
-                      increments: increment, 
-                      current: quarterTime
+                  //console.log( "$tracktimecanvas.position().left", $tracktimecanvas.position().left);
+                  //console.log("$uitracks.position().left", $uitracks.position().left);
+
+                  var horizIncrement = ( $uitracks.innerWidth() / 4 );
+
+
+                  if ( $popcorn.video.readyState >= 3 ) {
+
+                    self.setScrubberPosition(  
+                      ( increment * quarterTime ) + $tracktimecanvas.position().left + 2, 
+                      {
+                        increments: increment, 
+                        current: quarterTime
+                      }
+                    );                
+
+                    //console.log(increment, quarterTime, Math.round( $uitracks.width() / 2 ));
+                    //  #8402231
+                    if ( $scrubberHandle.position().left + quarterTime >= $uitracks.position().left + $uitracks.innerWidth() ) {
+                    //if ( $scrubberHandle.position().left > $uitracks.position().left + Math.round( horizIncrement * 3 ) ) {
+
+                      //$uitracks.scrollLeft( $tracktimecanvas.innerWidth() ); //stable
+
+                      //$uitracks.scrollLeft( 
+                      //  $uitracks.scrollLeft() + 30
+                      //);
+
+
+                      if ( !$("#ui-tracks:animated").length ) {
+
+                        //$uitracks.stop();
+
+                        //  This needs improvement
+                        $uitracks.animate({
+
+                          scrollLeft: "+=" + Math.round( $tracktimecanvas.innerWidth() / 8 )
+
+                        }, "slow", function () {
+                          
+                          quarterTime = Math.ceil( quarterTime );
+                          
+                          self.setScrubberPosition(  
+                            ( increment * quarterTime ) + $tracktimecanvas.position().left + 2, 
+                            {
+                              increments: increment, 
+                              current: quarterTime
+                            }
+                          );                
+                        
+                        
+                        }); // 600
+
+                      }
                     }
-                  );                
-                  
-                  //  #8402231
-                  if ( $scrubberHandle.position().left >= $uitracks.position().left + $uitracks.width() ) {
-                    //$uitracks.scrollLeft( $tracktimecanvas.width() ); //stable
-                    
-                    $uitracks.animate({
-                      scrollLeft: "+=" + $tracktimecanvas.width()
-                    }, "slow");
+
+
+                    TrackEditor.inProgress = false;
+                    clearInterval( isReadyInterval );
                   }
-                  
 
-                  TrackEditor.inProgress = false;
-                  clearInterval( isReadyInterval );
-                }
-
-              }, 13);
+                }, 1 );
               
+              }
 
               
               $doc.trigger( "seekComplete", {
@@ -929,46 +977,48 @@
         
         },
         
-        setScrubberPosition: function( position ) {
+        setScrubberPosition: function( position, state ) {
           
-          var offset = 1, fixPosition, state, product;
-          
-          if ( arguments.length === 2 ) {
-            state = arguments[1];
-            
-            //  Scrubber seems to get off position 
-            //  every 3rd second in the timeline
-            
-            product = Math.round( state.current / 3 );
-            
-            //  If the product is meaningful, we'll use it
-            if ( product > 0 ) {
-              
-              offset += product + product%2  ;
-              
-            }
-            
-          }
-          
+          var offset = 1, 
+              fixPosition;
+
 
           //  Throttle scrubber position update
           if ( !this.isScrubbing ) {
             
             //  Update the scrubber handle position              
-            fixPosition = Math.floor( position - offset );
+            fixPosition = Math.ceil( 
+              
+              position + offset
             
-            $scrubberHandle.css({
-              left: position - offset
-            });
+            );
             
-            //  Makes scrubber UI movement smoother
-            //  CHOKES IN FIREFOX
-            //$scrubberHandle.animate({
-            //  left: position - offset
-            //}, "fast");            
             
+            TrackEditor.moveScrubberToPosition( fixPosition );
+
           }
+        }, 
         
+        moveScrubberToPosition: function( moveTo ) {
+
+          if ( moveTo === $("#ui-tracks-time").position().left ) {
+          
+            $scrubberHandle.css({
+              left: moveTo //position - offset
+            });
+
+          } else {
+
+            //  Stepping
+            $scrubberHandle.css({
+              left: moveTo //position - offset
+            });
+
+            //  Smooth Animation - CHOKES IN FIREFOX
+            //$scrubberHandle.animate({
+            //  left: moveTo
+            //}, "fast");            
+          }            
         }, 
         
         deleteCanvas: function( parent, id ) {
@@ -1689,12 +1739,17 @@
         
         }
         
-        //trackStore  = 
         
+        //  Reload/update menu
         TrackMeta.menu.load( "#ui-user-videos" );
         
         
-        $("#ui-user-videos li[data-slug='"+ slug +"']").trigger( "click" );
+        //  Reload/update project
+        $("#ui-user-videos li[data-slug='"+ slug +"']").trigger( "click", {
+          
+          special: "Saving your project"
+        
+        });
         
         
       }, 
@@ -2095,6 +2150,17 @@
       
     });
     
+    
+    //  Application wide data store
+    $doc.data( "current", {
+      
+      tracks: {}, 
+      project: {}
+    
+    });
+    
+    
+    
     $doc.bind( "applicationError applicationNotice applicationAlert", function( event, options ) {
       
       var defaultHandler = function() {
@@ -2225,14 +2291,31 @@
     
     
     //  User video list event
-    $("#ui-start-screen-list, #ui-user-videos").delegate( "li", "click", function( event ) {
+    $("#ui-start-screen-list, #ui-user-videos").delegate( "li", "click", function( event, options ) {
+    
+      if ( options && options.special ) {
+        
+        
+        $uiLoadingHtml.find("p").text( options.special );
+        
+        
+      }
       
       var $this = $(this),
           trackEvents = $this.data( "track" ), 
           projectData = $this.data( "project" );
       
       if ( projectData ) {
+        
+        //  Load track and project data
         TrackMeta.project.load( trackEvents, projectData );
+        
+        //  Store currently active project
+        $doc.data( "current", {
+          tracks: trackEvents, 
+          project: projectData
+        
+        });      
       }
       
       
@@ -2241,7 +2324,6 @@
         $("#ui-start-screen").dialog( "close" );
       
       }
-      
       
     });
     
@@ -2309,25 +2391,29 @@
     //  Toggling the loading progress screen
     $doc.bind( "videoLoadStart videoLoadComplete", function( event ) {
       
+      //  Display load-ready screen for `videoLoadStart` events
       if ( event.type === "videoLoadStart" ) {
         $loadready.show();
         return;
       }
       
+      //  Always default to hide the load-ready screen
       $loadready.hide();
+      
+      //  Restore special messages to default text
+      $uiLoadingHtml.find("p").text( $uiLoadingOrigMsg );
+      
     
     });
 
-    
 
-    
-    
+    //  Listen for seekComplete events to adjust the track event workspace scrolling
     $doc.bind( "seekComplete", function( event, options ) {
 
       options.special &&  options.special();
       
       if ( options.type === "last" ) {
-        $("#ui-tracks").scrollLeft( $("#ui-tracks-time-canvas").width() );
+        $("#ui-tracks").scrollLeft( $("#ui-tracks-time-canvas").innerWidth() );
       }
       
       if ( options.type === "first" ) {
@@ -2339,16 +2425,13 @@
     //  Update data view textarea
     $doc.bind( "videoEditComplete addTrackComplete", function( event, data ) {
       
-      var tempStore = new TrackStore();
-      
-      $ioVideoData.val( tempStore.serialize( $popcorn.data.trackEvents.byStart ) );
+      //var tempStore = new TrackStore();
+      //$ioVideoData.val( tempStore.serialize( $popcorn.data.trackEvents.byStart ) );
       
     });
     
     
-
-    
-    
+    //  Listen for clicks on the timescale display
     $tracktime.bind( "click", function( event ) {
       
       if ( !$popcorn.video ) {
@@ -2356,31 +2439,34 @@
       }
       
       var $this = $(this), 
-          increment = Math.round( $("#ui-tracks-time-canvas").width() / $popcorn.video.duration ), 
+          increment = Math.round( $("#ui-tracks-time-canvas").innerWidth() / $popcorn.video.duration ), 
           quarterTime = _( event.offsetX / increment ).fourth();
       
-      $popcorn.video.currentTime = quarterTime;      
+      
+      $popcorn.video.currentTime = quarterTime;
+      
+      
+      $uitracks.trigger( "scrollstop" );
+      
+      
     });
 
-
-
-    //$uitracks.bind( "scrollstart", function(){
-      //console.log("scrollstart");
-    //});
-
-    $uitracks.bind( "scrollstop", function(e){
     
-      //console.log("scrollstop");
+    //  Listen for scrolling on the track event workspace
+    $uitracks.bind( "scrollstop", function( event ) {
       
+      
+      //  If no video is loaded, early return
       if ( !$popcorn.video ) {
         return;
       }    
       
-      var increment = Math.round( $("#ui-tracks-time-canvas").width() / $popcorn.video.duration ), 
+      var increment = Math.round( $("#ui-tracks-time-canvas").innerWidth() / $popcorn.video.duration ), 
           scrubberTime = 0, 
           timeDistance = 0,
           quarterTime = 0;
-
+        
+      console.log(increment);
       //  The scrubber handle may have been moved, we must account for this
       if ( $scrubberHandle.position().left > $trackeditting.position().left ) {
 
@@ -2392,11 +2478,22 @@
       timeDistance = ( $trackeditting.position().left - $("#ui-tracks-time-canvas").position().left )  / increment;
       
       //  Get the quarterTime and pad with a 1/4 of a sec      
-      quarterTime = _( timeDistance ).fourth() + 0.25;
+      //_( timeDistance ).fourth() + 0.25;
+      quarterTime = timeDistance;
       
       //  Update currentTime to trigger scrubber position update
-      $popcorn.video.currentTime = quarterTime + ( scrubberTime || 0 );      
-
+      //_( quarterTime + ( scrubberTime || 0 ) ).fourth() ;      
+      $popcorn.video.currentTime = Math.round( quarterTime + ( scrubberTime || 0 ) );
+      
+      setTimeout(function() {
+        
+        $scrubberHandle.css("left", ( $scrubberHandle.position().left + 4 ) + "px");
+        
+        //console.log($scrubberHandle.position().left, $scrubberHandle.css("left"));
+        //console.log("fix the fucking position");
+      
+      }, 100);
+      
     });
 
     
@@ -2406,7 +2503,6 @@
       
       var $this = $(this);
       
-
       if ( !!$this.attr("data-control") ) {
         controls[ $this.attr("data-control") ]();
       }
