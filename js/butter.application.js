@@ -664,6 +664,8 @@
           //  Create an interval to check the readyState of the video
           var onReadyInterval = setInterval(function() {
             
+            // console.log($p.video.readyState);
+            
             //  readyState has been satisfied, 
             //  4 is preferrable, but FF reports 3
             //  Firefox gotcha: ready does not mean it knows the duration
@@ -671,7 +673,7 @@
             if ( $p.video.readyState >= 2 && !isNaN( $p.video.duration )  ) {
             
               
-              console.log("$p.video.readyState >= 2 && $p.video.duration", $p.video.duration);            
+            //console.log("$p.video.readyState >= 2 && $p.video.duration", $p.video.duration);            
 
               //  execute callback if one was given
               callback && callback();
@@ -692,7 +694,7 @@
           
           var onReady = _.bind( function() {
             
-            console.log( "this.drawTimeLine( $p.video.duration )");
+          //console.log( "this.drawTimeLine( $p.video.duration )");
             
             
             //  When ready, draw the timeline
@@ -1067,7 +1069,7 @@
           }
           
           
-          console.log("TrackEditor.timeLineWidth", TrackEditor.timeLineWidth);
+        //console.log("TrackEditor.timeLineWidth", TrackEditor.timeLineWidth);
           
 
           this.deleteCanvas( "ui-tracks-time", "ui-tracks-time-canvas" );
@@ -2521,7 +2523,7 @@
           timeDistance = 0,
           quarterTime = 0;
         
-      console.log(increment);
+    //console.log(increment);
       //  The scrubber handle may have been moved, we must account for this
       if ( $scrubberHandle.position().left > $trackeditting.position().left ) {
 
