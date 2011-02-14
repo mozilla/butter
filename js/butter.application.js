@@ -667,10 +667,11 @@
             //  readyState has been satisfied, 
             //  4 is preferrable, but FF reports 3
             //  Firefox gotcha: ready does not mean it knows the duration
-            if ( $p.video.readyState >= 3 && !isNaN( $p.video.duration )  ) {
+            //if ( $p.video.readyState >= 3 && !isNaN( $p.video.duration )  ) {
+            if ( $p.video.readyState >= 2 && !isNaN( $p.video.duration )  ) {
             
               
-              console.log("$p.video.readyState >= 3 && $p.video.duration", $p.video.duration);            
+              console.log("$p.video.readyState >= 2 && $p.video.duration", $p.video.duration);            
 
               //  execute callback if one was given
               callback && callback();
@@ -878,8 +879,8 @@
 
                   var horizIncrement = ( $uitracks.innerWidth() / 4 );
 
-
-                  if ( $popcorn.video.readyState >= 3 ) {
+                  //if ( $popcorn.video.readyState >= 3 ) {
+                  if ( $popcorn.video.readyState >= 2 ) {
 
                     self.setScrubberPosition(  
                       ( increment * quarterTime ) + $tracktimecanvas.position().left + 2, 
@@ -1858,7 +1859,8 @@
         //  Watch for readiness
         var isReadyInterval = setInterval(function() {
           
-          if ( $popcorn.video.readyState >= 3 ) {
+          //if ( $popcorn.video.readyState >= 3 ) {
+          if ( $popcorn.video.readyState >= 2 ) {
           
             $doc.trigger( "seekComplete", {
               type: option, 
