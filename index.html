@@ -48,9 +48,12 @@
     <script src="js/jquery.ui.butter.min.js"></script>
     <script src="js/jquery.scrolling-events.js"></script>
     
+    
+    <!-- Initially at bottom of document, however causes FOUC -->
+    
     <!-- Popcorn plugins -->
     <script src="popcorn-js/popcorn.js"></script>
-    <script src="popcorn-js/plugins/googleMap/popcorn.googleMap.js"></script>
+    <script src="popcorn-js/plugins/googlemap/popcorn.googlemap.js"></script>
     <script src="popcorn-js/plugins/footnote/popcorn.footnote.js"></script>
     <script src="popcorn-js/plugins/webpage/popcorn.webpage.js"></script>
     <script src="popcorn-js/plugins/flickr/popcorn.flickr.js"></script>
@@ -59,11 +62,12 @@
     <script src="popcorn-js/plugins/twitter/popcorn.twitter.js"></script>
 
     <!-- The juice-->
-    <script src="js/butter.application.js"></script>
+    <script src="js/butter.application.js"></script>    
+    
   </head>
   <body>
     <!-- Overlay Scenes -->
-    <div id="ui-loading-html" class="ui-load-ready">
+    <div id="ui-loading-html" class="ui-load-ready hide">
       <img src="img/loading.gif">
       <p>This may take a moment if your video is loading over the internet</p>
     </div>
@@ -74,7 +78,9 @@
       <header>
         <div class="span-26 last">
           <img class="logo" src="img/video.png" title="Butter" alt="Butter Logo">
-          <input placeholder="Video Url" type="text" id="io-video-url" name="io-video-url" class="text ui-menu-entity" value="http://popcornjs.org/tryme.ogv"> 
+          <input placeholder="Video Url" type="text" id="io-video-url" name="io-video-url" class="text ui-menu-entity" value="http://dl.dropbox.com/u/3531958/stateofhtml5.ogv"> 
+          
+          <!-- http://popcornjs.org/tryme.ogv -->
 
           <button class="ui-menu-controls marginleft" data-control="load" >Create New Movie</button>
 
@@ -103,7 +109,7 @@
       <div id="ui-video-editor" class="span-26">
         <!-- left pane -->
         <div id="ui-panel-video" class="span-9" data-export="true">
-          <video id="video">
+          <video id="video" preload="auto" autobuffer>
             <p>Your user agent does not support the HTML5 Video element.</p> 
           </video>   
           
@@ -141,7 +147,7 @@
         <div id="ui-panel-preview" class="span-17 last" data-export="true">
           <div id="flickr-container" data-plugin="flickr" class="ui-plugin-pane span-6" style="height:120px;width:220px"></div>
           <div id="iframe-container" data-plugin="webpage" class="ui-plugin-pane span-6" style="height:120px;width:220px"></div>
-          <div id="map-container" data-plugin="googleMap" class="ui-plugin-pane span-5 last" style="height:120px;width:210px"></div>
+          <div id="map-container" data-plugin="googlemap" class="ui-plugin-pane span-5 last" style="height:120px;width:210px"></div>
           <hr class="space">
           <div id="image-container" data-plugin="image" class="ui-plugin-pane span-6" style="height:120px;width:220px"></div>
           <div id="twitter-container" data-plugin="twitter" class="ui-plugin-pane span-6" style="height:120px;width:220px"></div>
@@ -173,7 +179,7 @@
             <input placeholder="Title" type="text" id="io-video-title" name="io-video-title" class="text"  style="width:150px;" value="" />
             <textarea placeholder="Description" id="io-video-description" style="width:150px;height:85px"  class="text"></textarea>
             <button class="ui-menu-controls" data-control="save" >Save</button>
-            <button class="ui-menu-controls" data-control="delete" >Delete</button>
+            <button class="ui-menu-controls" data-control="remove" >Delete</button>
           </div>
 
           <h3><a href="#">Add Popcorn Data</a></h3>
@@ -186,6 +192,8 @@
           <div>
             <ul>
               <li>[ Shift + Click ] on a track event to Delete it.</li>
+              
+              <li>[ Shift + Right or Left ] in the time display to jump to the next frame.</li>
             </ul>
           </div>
           <!--
@@ -217,6 +225,8 @@
       <hr class="space"/>
       <h2>Create a New Movie</h2>
       <input placeholder="Video Url" type="text" class="text ui-menu-entity" value="http://popcornjs.org/tryme.ogv"> 
+      
+      <!-- http://popcornjs.org/tryme.ogv -->
     </div>
     
     <footer class="container">
@@ -239,5 +249,8 @@
         <img height="40px" src="http://s3.mt-cdn.net/_images/partnerlogos/mt-120x60-lt__69262f3.png">
       </a>
     </footer>
+    
+
+    
   </body>
 </html>

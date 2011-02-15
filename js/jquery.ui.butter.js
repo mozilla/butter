@@ -293,27 +293,21 @@
 
       var ret = [];
       
-      //console.log("this._inView", this._inView);
-      
       _.each( this._inView, function ( track, key ) {
-        
-        //console.log(track, key);
         
         if ( track._id !== props._id ) {
           ret.push(track);
         }
+        
       });
       
       
-     //console.log("post this._inView", this._inView, ret);
       this._inView  = ret;
     
     },
     
     addTrackEvent: function( props ) {
     
-      //console.log('addTrackEvent...', props);
-      
       return this._inView.push( new TrackEvent( props, this ) );
     },
 
@@ -361,9 +355,9 @@
     },
 
     _timeupdate: function( e ) {
+    
+      console.log("timeupdate");    
       this._playBar.position = e.currentTarget.currentTime;
-
-      
       this._draw();
     },
 
@@ -567,8 +561,9 @@
 
     },
 
-    _mouseupdown: function(e ) {
-    
+    _mouseupdown: function( e ) {
+      
+      console.log(event);
       
       if ( e.type === "mousedown" ) {
         
