@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../src/butter.js"></script>
+    <script type="text/javascript">
+
+      var b = new Butter();
+
+      var l = function () {
+        console.log('hi!');
+      };
+
+      b.listen('hi', l);
+
+      b.listen('bye', function () {
+        console.log('bye!');
+      });
+
+      b.trigger('hi');
+      b.unlisten('hi', l);
+      b.trigger('hi');
+      b.trigger('bye');
+      b.unlisten('bye');
+      b.trigger('bye');
+
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
