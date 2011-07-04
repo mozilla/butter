@@ -40,7 +40,7 @@ THE SOFTWARE.
 
     this.getId = function () {
       return id;
-    };
+    }; //getId
 
     this.getTrackEvent = function ( trackId ) {
       for ( var i=0, l=trackEvents.length; i<l; ++i) {
@@ -69,7 +69,7 @@ THE SOFTWARE.
     this.addTrackEvent = function ( trackEvent ) {
       trackEvents.push( trackEvent );
     }; //addTrackEvent
-  };
+  }; //Track
 
   /****************************************************************************
    * TrackEvent
@@ -80,11 +80,16 @@ THE SOFTWARE.
 
     options = options || {};
     this.name = options.name || 'Track' + Date.now();
+    this.start = options.start || 0;
+    this.end = options.end || 0;
+    this.type = options.type;
+    this.popcornEvent = options.popcornEvent;
 
     this.getId = function () {
       return id;
-    };
-  };
+    }; //getId
+
+  }; //TrackEvent
 
   /****************************************************************************
    * Butter
@@ -100,6 +105,9 @@ THE SOFTWARE.
 
     this.id = "Butter" + numButters++;
 
+    /****************************************************************
+     * Event methods
+     ****************************************************************/
     //trigger - Triggers an event indicating a change of state in the core
     this.trigger = function ( name, options ) {
       if ( events[ name ] ) {
@@ -131,15 +139,21 @@ THE SOFTWARE.
       } //if
     }; //unlisten
 
+    /****************************************************************
+     * TrackEvent methods
+     ****************************************************************/
     //addTrackEvent - Creates a new Track Event
     this.addTrackEvent = function ( track, trackEvent ) {
       if ( typeof(track) === "string" ) {
         track = that.getTrack( track );
       } //if
-      if ( !(options instanceof TrackEvent) ) {
-        trackEvent = new TrackEvent( trackEvent );
+      if ( track ) {
+        if ( !(trackEvent instanceof TrackEvent) ) {
+          trackEvent = new TrackEvent( trackEvent );
+        } //if
+        return track.addTrackEvent( trackEvent );
       } //if
-      track.addTrackEvent( trackEvent );
+      return undefined;
     }; //addTrackEvents
 
     //getTrackEvents - Get a list of Track Events
@@ -158,13 +172,25 @@ THE SOFTWARE.
       track.getTrackEvent( trackEventId );
     }; //getTrackEvent
 
+    //removeTrackEvent - Remove a Track Event
+    this.removeTrackEvent = function ( track, trackEvent ) {
+      if ( !(track instanceof Track) ) {
+        track = that.getTrack( track );
+      } //if
+      track.removeTrackEvent( trackEvent );
+    };
+
+    /****************************************************************
+     * Track methods
+     ****************************************************************/
     //addTrack - Creates a new Track
     this.addTrack = function ( track ) {
-      if ( !(options instanceof Track) ) {
+      if ( !(track instanceof Track) ) {
         track = new Track( track );
       } //if
       tracksByName[ track.name ] = track;
       tracks.push( track );
+      return track;
     }; //addTrack
 
     //getTracks - Get a list of Tracks
@@ -188,14 +214,6 @@ THE SOFTWARE.
       return undefined;
     }; //getTrack
 
-    //removeTrackEvent - Remove a Track Event
-    this.removeTrackEvent = function ( track, trackEvent ) {
-      if ( !(options instanceof Track) ) {
-        track = that.getTrack( track );
-      } //if
-      track.removeTrack( trackEvent );
-    };
-
     //removeTrack - Remove a Track
     this.removeTrack = function ( track ) {
       if ( typeof(track) === "string" ) {
@@ -209,26 +227,9 @@ THE SOFTWARE.
       return track;
     };
 
-    //import - Import project data
-    this.importProject = function () {
-    };
-
-    //export - Export project data
-    this.exportProject = function () {
-    };
-
-    //play - Play the media
-    this.play = function () {
-    };
-
-    //pause - Pause the media
-    this.pause = function () {
-    };
-
-    //currentTime - Gets and Sets the media's current time.
-    this.currentTime = function () {
-    };
-
+    /****************************************************************
+     * Target methods
+     ****************************************************************/
     //addTarget - add a target object
     this.addTarget = function () {
     };
@@ -249,12 +250,46 @@ THE SOFTWARE.
     this.getTarget = function () {
     };
 
+    //setSelectedTarget - set a track's target
+    this.setSelectedTarget = function () {
+    };
+
+    //getSelectedTarget - get a track's target
+    this.getSelectedTarget = function () {
+    };
+
+    /****************************************************************
+     * Project methods
+     ****************************************************************/
+    //import - Import project data
+    this.importProject = function () {
+    };
+
+    //export - Export project data
+    this.exportProject = function () {
+    };
+
     //setProjectDetails - set the details of the project
     this.setProjectDetails = function () {
     };
 
     //getProjectDetails - get the projects details
     this.getProjectDetails = function () {
+    };
+
+    /****************************************************************
+     * Media methods
+     ****************************************************************/
+    //play - Play the media
+    this.play = function () {
+    };
+
+    //pause - Pause the media
+    this.pause = function () {
+    };
+
+    //currentTime - Gets and Sets the media's current time.
+    this.currentTime = function () {
     };
 
     //getMedia - get the media's information
@@ -265,19 +300,14 @@ THE SOFTWARE.
     this.setMedia = function () {
     };
 
-    //setSelectedTarget - set a track's target
-    this.setSelectedTarget = function () {
-    };
-
-    //getSelectedTarget - get a track's target
-    this.getSelectedTarget = function () {
-    };
-
+    /****************************************************************
+     * Init Modules for this instance
+     ****************************************************************/
     for ( var moduleName in modules ) {
       modules[moduleName].setup && modules[moduleName].setup.call(this);
     } //for
 
-  };
+  }; //Butter
 
   Butter.getScriptLocation = function () {
     var scripts = document.querySelectorAll( "script" );
