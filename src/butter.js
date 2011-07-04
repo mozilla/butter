@@ -1,4 +1,5 @@
-/*
+/**********************************************************************************
+
 Copyright (C) 2011 by Mozilla Foundation
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,18 +19,18 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-*/
+
+**********************************************************************************/
 
 (function ( window, document, undefined ) {
 
-  var Module = function ( options ) {
-    options = options || {};
-    this.setup = options.setup || function () {};
-  };
+  var modules = {};
 
+  /****************************************************************************
+   * Track
+   ****************************************************************************/
   var numTracks = 0;
   var Track = function ( options ) {
-
     var trackEvents = [];
 
     options = options || {};
@@ -39,22 +40,26 @@ THE SOFTWARE.
     this.getTrackEvents = function () {
       return trackEvents;
     };
-
   };
 
+  /****************************************************************************
+   * TrackEvent
+   ****************************************************************************/
   var numTrackEvents = 0;
   var TrackEvent = function ( options ) {
-
     options = options || {};
     this.id = numTrackEvents++;
     this.name = options.name || 'Track' + Date.now();
-
   };
 
+  /****************************************************************************
+   * Butter
+   ****************************************************************************/
   var Butter = function ( options ) {
 
     var events = {},
-        tracks = {};
+        tracks = {},
+        that = this;
 
     //trigger - Triggers an event indicating a change of state in the core
     this.trigger = function ( name, options ) {
@@ -87,18 +92,15 @@ THE SOFTWARE.
       } //if
     };
 
-    //registerModule - Registers a Module into the Butter core
-    this.registerModule = function ( moduleOptions ) {
-      var module = new Module ( moduleOptions );
-      return module;
-    };
-
     //addTrackEvent - Creates a new Track Event
-    this.addTrackEvent = function ( options ) {
-      if ( options instanceof TrackEvent ) {
-      }
-      else {
+    this.addTrackEvent = function ( track, trackEvent ) {
+      if ( typeof(track) === "string" ) {
+        track = that.getTrack( track );
       } //if
+      if ( !(options instanceof TrackEvent) ) {
+        trackEvent = new TrackEvent( trackEvent );
+      } //if
+      track.addTrackEvent( trackEvent );
     };
 
     //getTrackEvents - Get a list of Track Events
@@ -130,11 +132,15 @@ THE SOFTWARE.
 
     //getTrack - Get a Track by its id
     this.getTrack = function ( name ) {
-      tracks[ name ] && return tracks[ name ];
+      if ( tracks[ name ] ) {
+         return tracks[ name ];
+      } //if
 
       for ( var track in tracks ) {
         if ( tracks.hasOwnProperty( track ) ) {
-          tracks.id === name && return tracks[track];
+          if ( tracks.id === name ) {
+            return tracks[track];
+          } //if
         } //if
       } //for
 
@@ -223,8 +229,32 @@ THE SOFTWARE.
 
   };
 
-  Butter.Module = Module;
-  Butter.prototype.constructor = Butter;
+  Butter.getScriptLocation = function () {
+    var scripts = document.querySelectorAll( "script" );
+    for (var i=0; i<scripts.length; ++i) {
+      var pos = scripts[i].src.lastIndexOf('butter.js');
+      if ( pos > -1 ) {
+        return scripts[i].src.substr(0, pos) + "/";
+      } //if
+    } //for
+  };
+
+  //registerModule - Registers a Module into the Butter core
+  Butter.registerModule = Butter.prototype.registerModule = function ( name, module ) {
+    modules[ name ] = module;
+    if ( module.extend ) {
+      Butter.extendAPI( module.extend );
+    } //if
+  };
+
+  Butter.extendAPI = function ( functions ) {
+    for ( var fn in functions ) {
+      if ( functions.hasOwnProperty( fn ) ) {
+        Butter.prototype[ fn ] = functions[ fn ];
+      } //if
+    } //for
+  };
+
   Butter.Track = Track;
   Butter.TrackEvent = TrackEvent;
 
