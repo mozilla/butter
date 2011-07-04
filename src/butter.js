@@ -31,15 +31,44 @@ THE SOFTWARE.
    ****************************************************************************/
   var numTracks = 0;
   var Track = function ( options ) {
-    var trackEvents = [];
+    var trackEvents = [],
+        id = numTracks++,
+        that = this;
 
     options = options || {};
-    this.id = numTracks++;
     this.name = options.name || 'Track' + Date.now();
+
+    this.getId = function () {
+      return id;
+    };
+
+    this.getTrackEvent = function ( trackId ) {
+      for ( var i=0, l=trackEvents.length; i<l; ++i) {
+        if ( trackEvents[i].id === trackId || trackEvents[i].name === trackId ) {
+          return trackEvents[i];
+        } //if
+      } //for
+    }; //getTrackEvent
 
     this.getTrackEvents = function () {
       return trackEvents;
-    };
+    }; //getTrackEvents
+
+    this.removeTrackEvent = function ( trackEvent ) {
+      if ( typeof(trackEvent) === "string" ) {
+        trackEvent = that.getTrackEvent( trackEvent );
+      } //if
+
+      var idx = trackEvents.indexOf( trackEvent );
+
+      if ( idx > -1 ) {
+        trackEvents.splice( idx, 1 );
+      } //if
+    }; //removeTrackEvent
+
+    this.addTrackEvent = function ( trackEvent ) {
+      trackEvents.push( trackEvent );
+    }; //addTrackEvent
   };
 
   /****************************************************************************
@@ -47,28 +76,38 @@ THE SOFTWARE.
    ****************************************************************************/
   var numTrackEvents = 0;
   var TrackEvent = function ( options ) {
+    var id = numTrackEvents++;
+
     options = options || {};
-    this.id = numTrackEvents++;
     this.name = options.name || 'Track' + Date.now();
+
+    this.getId = function () {
+      return id;
+    };
   };
 
   /****************************************************************************
    * Butter
    ****************************************************************************/
+  var numButters = 0;
   var Butter = function ( options ) {
 
     var events = {},
-        tracks = {},
+        tracksByName = {},
+        tracks = [],
+        targets = {},
         that = this;
+
+    this.id = "Butter" + numButters++;
 
     //trigger - Triggers an event indicating a change of state in the core
     this.trigger = function ( name, options ) {
       if ( events[ name ] ) {
         for (var i=0, l=events[ name ].length; i<l; ++i) {
-          events[ name ][ i ]( options );
+          events[ name ][ i ].call( that, options );
         } //for
       } //if
-    };
+    }; //trigger
 
     //listen - Listen for events triggered by the core
     this.listen = function ( name, handler ) {
@@ -76,7 +115,7 @@ THE SOFTWARE.
         events[ name ] = [];
       } //if
       events[ name ].push( handler );
-    };
+    }; //listen
 
     //unlisten - Stops listen for events triggered by the core
     this.unlisten = function ( name, handler ) {
@@ -90,7 +129,7 @@ THE SOFTWARE.
           events[ name ] = [];
         } //if
       } //if
-    };
+    }; //unlisten
 
     //addTrackEvent - Creates a new Track Event
     this.addTrackEvent = function ( track, trackEvent ) {
@@ -101,66 +140,73 @@ THE SOFTWARE.
         trackEvent = new TrackEvent( trackEvent );
       } //if
       track.addTrackEvent( trackEvent );
-    };
+    }; //addTrackEvents
 
     //getTrackEvents - Get a list of Track Events
     this.getTrackEvents = function () {
       var trackEvents = {};
-      for ( var track in tracks ) {
-        if ( tracks.hasOwnProperty(track) ) {
-          trackEvents[track] = tracks[track].getTrackEvents();
-        } //if
+      for ( var i=0, l=tracks.length; i<l; ++i ) {
+        var track = tracks[i];
+        trackEvents[track.name] = track.getTrackEvents();
       } //for
-    };
+    }; //getTrackEvents
 
-    //getTrackEvent - Get a Track Event by its id
-    this.getTrackEvent = function () {
-    };
+    this.getTrackEvent = function ( track, trackEventId ) {
+      if ( typeof(track) === "string" ) {
+        track = that.getTrack( track );
+      } //if
+      track.getTrackEvent( trackEventId );
+    }; //getTrackEvent
 
     //addTrack - Creates a new Track
-    this.addTrack = function ( options ) {
-      if ( options instanceof TrackEvent ) {
-      }
-      else {
+    this.addTrack = function ( track ) {
+      if ( !(options instanceof Track) ) {
+        track = new Track( track );
       } //if
-    };
+      tracksByName[ track.name ] = track;
+      tracks.push( track );
+    }; //addTrack
 
     //getTracks - Get a list of Tracks
     this.getTracks = function () {
       return tracks;
-    };
+    }; //getTracks
 
     //getTrack - Get a Track by its id
     this.getTrack = function ( name ) {
-      if ( tracks[ name ] ) {
-         return tracks[ name ];
+      var track = tracksByName[ name ];
+      if ( track ) {
+         return track;
       } //if
 
-      for ( var track in tracks ) {
-        if ( tracks.hasOwnProperty( track ) ) {
-          if ( tracks.id === name ) {
-            return tracks[track];
-          } //if
+      for ( var i=0, l=tracks.length; i<l; ++i ) {
+        if ( tracks[i].id === name ) {
+          return tracks[i];
         } //if
       } //for
 
       return undefined;
-    };
-
-    //editTrackEvent - Edit Track Event data
-    this.editTrackEvent = function () {
-    };
-
-    //editTrack - Edit Track data
-    this.editTrack = function () {
-    };
+    }; //getTrack
 
     //removeTrackEvent - Remove a Track Event
-    this.removeTrackEvent = function () {
+    this.removeTrackEvent = function ( track, trackEvent ) {
+      if ( !(options instanceof Track) ) {
+        track = that.getTrack( track );
+      } //if
+      track.removeTrack( trackEvent );
     };
 
     //removeTrack - Remove a Track
-    this.removeTrack = function () {
+    this.removeTrack = function ( track ) {
+      if ( typeof(track) === "string" ) {
+        track = that.getTrack( track );
+      } //if
+      var idx = tracks.indexOf( track );
+      if ( idx > -1 ) {
+        tracks.splice( idx, 1 );
+        delete tracksByName[ track.name ];
+      } //if
+      return track;
     };
 
     //import - Import project data
@@ -226,6 +272,10 @@ THE SOFTWARE.
     //getSelectedTarget - get a track's target
     this.getSelectedTarget = function () {
     };
+
+    for ( var moduleName in modules ) {
+      modules[moduleName].setup && modules[moduleName].setup.call(this);
+    } //for
 
   };
 

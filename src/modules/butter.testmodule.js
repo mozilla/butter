@@ -3,6 +3,13 @@
 
   Butter.registerModule( "test", {
 
+    setup: function () {
+      console.log("Instance:", this.id);
+      this.listen("test", function ( event ) {
+        console.log("Test event fired:", event);
+      });
+    },
+
     extend: {
 
       openTest: function () {
@@ -24,9 +31,10 @@
 
       speakTest: function () {
         if (testWindow && testDiv) {
-          testDiv.innerHTML += Math.random() > 0.5 ? "Boop! " : "Beep! ";
+          var which = Math.random() > 0.5 ? "Boop! " : "Beep! ";
+          testDiv.innerHTML += which;
+          this.trigger("test", which);
         } //if
-
       },
 
     }, //extend
