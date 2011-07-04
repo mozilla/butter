@@ -17,6 +17,10 @@
           editorTarget.style.visibility = attr;
         }
       },
+      
+      useCustomEditor = function() {
+        //use a custom editor
+      },
       // call when no custom editor markup/source has been provided
       constructDefaultEditor = function( trackEvent, manifest ) {
 
