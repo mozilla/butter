@@ -3,21 +3,18 @@
   Author: Christopher De Cairos
 **/
 
-(function( Butter ) {
+(function( window, document, undefined, Butter ) {
 
-  Butter.registerModule( "eventeditor", function( options ) {
-
-    var EventEditor = function( options ) {
-
-      var editorTarget = options.target && document.getElementById( options.target ) || document.createElement( "div" ),
-
+  Butter.registerModule( "eventeditor", (function() {
+    var editorTarget,
+      
       toggleVisibility = function( attr ) {
 
         if ( editorTarget && attr ) {
           editorTarget.style.visibility = attr;
         }
       },
-      
+
       useCustomEditor = function() {
         //use a custom editor
       },
@@ -50,7 +47,7 @@
 
             if ( elemType === "input" ) {
 
-              var rounded = trackEvent[ prop ];
+              var rounded = trackEvent.options[ prop ];
 
               //  Round displayed times to nearest quarter of a second
               if ( typeof +rounded === "number" && [ "start", "end" ].indexOf( prop ) > -1 ) {
@@ -119,6 +116,9 @@
 
       beginEditing = function( trackEvent, manifest ) {
 
+        //console.log("beginEditing");
+        //console.log(trackEvent);
+        //console.log(manifest);
         manifest = manifest || {};
 
         if ( !manifest ) {
@@ -135,27 +135,36 @@
         }
 
       };
+  
+    return { 
+      setup: function() {
+    
+        this.listen ( "trackeventremoved", function( trackEvent ) {
 
-      Butter.listen ( "trackeventremoved", function( trackEvent ) {
+          closeEditor();
+        });
 
-        closeEditor();
-      });
+        this.listen ( "trackeventchanged", function( trackEvent ) {
 
-      Butter.listen ( "trackeventchanged", function( trackEvent ) {
+          updateTrackData( trackEvent );
+        });
 
-        updateTrackData( trackEvent );
-      });
+        this.listen ( "editTrackEvent", function( options ) {
 
-      Butter.listen ( "editTrackEvent", function( trackEvent, manifest ) {
+          beginEditing( options.trackEvent, options.manifest );
+        });
 
-        beginEditing( trackEvent, manifest );
-      });
+      },
+      extend: {
+        
+        setEditorTarget: function( target ) {
+          if (target) {
+            editorTarget = document.getElementById( target );
+          }
+        }
+      }
+    }
+  })());
 
-    };
-
-    return new EventEditor();
-
-  });
-
-}( Butter ));
+})( window, document, undefined, Butter );
 

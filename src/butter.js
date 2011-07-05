@@ -79,6 +79,7 @@ THE SOFTWARE.
     var id = numTrackEvents++;
 
     options = options || {};
+    this.options = options;
     this.name = options.name || 'Track' + Date.now();
 
     this.getId = function () {

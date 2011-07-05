@@ -4,10 +4,35 @@
     <script src="butter.eventeditor.js" ></script>
     <script type="text/javascript" >
      
+     window.addEventListener("DOMContentLoaded", function(){
         var b = new Butter();
+        window.b = b;
+        b.setEditorTarget( "butter-editor-target" );
+        var te = new Butter.TrackEvent({ start: 0, end: 5, text: "hello world" });
+        //console.log(te);
+        b.trigger("editTrackEvent", {trackEvent: te, manifest: 
+          { options: { start: {
+              elem: "input", 
+              type: "text", 
+              label: "In" 
+            },
+            end: { 
+              elem: "input", 
+              type: "text", 
+              label: "Out" 
+            },
+            text: { 
+              elem: "input", 
+              type: "text", 
+              label: "text" 
+            }
+          } }
+       });
+     }, false);
    
     </script>
   </head>
   <body>
+  <div id="butter-editor-target"></div>
 </body>
 </html>
