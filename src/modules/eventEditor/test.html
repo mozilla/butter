@@ -7,32 +7,105 @@
      window.addEventListener("DOMContentLoaded", function(){
         var b = new Butter();
         window.b = b;
-        b.eventeditor( {target: "butter-editor-target" } );
+        var iframe = document.createElement("iframe");
+        iframe.style.visibility = "hidden";
+        iframe.style.width = "250px";
+        var div = document.getElementById("butter-editor-target");
+        div.appendChild( iframe );
+        
+        b.eventeditor( {target: iframe } );
         var te = new Butter.TrackEvent({ popcornEvent: { text:"hello world", start: 67.237868, end: 567.675675 } } );
-        //console.log(te);
-        b.trigger("editTrackEvent", {trackEvent: te, manifest: 
-          { options: { start: {
-              elem: "input", 
-              type: "text", 
-              label: "In" 
-            },
-            end: { 
-              elem: "input", 
-              type: "text", 
-              label: "Out" 
-            },
-            text: { 
-              elem: "input", 
-              type: "text", 
-              label: "text" 
+     
+        var open = document.getElementById( "openBtn" );
+        open.addEventListener( "click", function(){
+        b.trigger("editTrackEvent", { trackEvent: te, 
+          manifest: { 
+            options: { 
+              start: {
+                elem: "input", 
+                type: "text", 
+                label: "In" 
+              },
+              end: {
+                elem: "input", 
+                type: "text", 
+                label: "Out" 
+              },
+              text: { 
+                elem: "input", 
+                type: "text", 
+                label: "text" 
+              },
+              
             }
+            /*,
+            customEditor: function( trackEvent, manifest, editorTarget ) {
+                console.log("this is a custom editor");
+                var options = manifest.options,
+                  prop,
+                  opt,
+                  elemType,
+                  elemLabel,
+                  elem,
+                  label;
+
+                //set-up UI:
+                for ( prop in options ) {
+
+                  opt = options[ prop ];
+                  if ( typeof opt === "object" && prop !== "target-object" ) {
+
+                    elemType = opt.elem;
+                    elemLabel = opt.label;
+
+                    elem = document.createElement( elemType );
+                    elem.setAttribute( "className", "butter-editor-element" );
+
+                    label = document.createElement( "label" );
+                    label.innerHTML = elemLabel;
+                    label.setAttribute( "for", elemLabel );
+                    label.setAttribute( "text", elemLabel );
+
+                    if ( elemType === "input" ) {
+
+                      var attr = trackEvent.popcornEvent[ prop ];
+
+                      //  Round displayed times to nearest quarter of a second
+                      if ( typeof +attr === "number" && [ "start", "end" ].indexOf( prop ) > -1 ) {
+
+                        attr = Math.round( attr * 4 ) / 4;
+                      }
+
+                      elem.setAttribute( "value", attr );
+                    }
+
+                    if ( elemType === "select" ) {
+
+                      opt.options.forEach( function( type ) {
+
+                        var selectItem = document.createElement( "option" );
+                        selectItem.setAttribute( "value", type );
+                        selectItem.setAttribute( "text", type.charAt( 0 ).toUpperCase() + type.substring( 1 ).toLowerCase() );
+                        elem.appendChild( selectItem );
+                      });
+                    }
+
+                    label.appendChild( elem );
+                    editorTarget.appendChild( label );
+
+                  }
+                }
+                
+              }*/
           } }
-       });
+       );
+       }, false);
      }, false);
    
     </script>
   </head>
   <body>
-  <div id="butter-editor-target"></div>
+  <input id="openBtn" type="button" value="Open Editor" ></input>
+  <div id="butter-editor-target" style="width: 240px"></div>
 </body>
 </html>

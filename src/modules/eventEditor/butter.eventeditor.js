@@ -7,16 +7,20 @@
 
   Butter.registerModule( "eventeditor", (function() {
     var editorTarget,
+      targetType;
       
       toggleVisibility = function( attr ) {
 
-        if ( editorTarget && attr ) {
+        if ( editorTarget && editorTarget.style && attr ) {
           editorTarget.style.visibility = attr;
+        } else if ( editorTarget && editorTarget.frameElement && attr ) {
+          editorTarget.frameElement.style.visibility = attr;
         }
       },
 
-      useCustomEditor = function() {
+      useCustomEditor = function( trackEvent, manifest ) {
         //use a custom editor
+        typeof manifest.customEditor === "function" && manifest.customEditor( trackEvent, manifest, editorTarget );
       },
       
       // call when no custom editor markup/source has been provided
@@ -28,7 +32,9 @@
           elemType,
           elemLabel,
           elem,
-          label;
+          label,
+          attr,
+          fragment = document.createDocumentFragment();
 
         //set-up UI:
         for ( prop in options ) {
@@ -49,7 +55,7 @@
 
             if ( elemType === "input" ) {
 
-              var attr = trackEvent.popcornEvent[ prop ];
+              attr = trackEvent.popcornEvent[ prop ];
 
               //  Round displayed times to nearest quarter of a second
               if ( typeof +attr === "number" && [ "start", "end" ].indexOf( prop ) > -1 ) {
@@ -72,18 +78,26 @@
             }
 
             label.appendChild( elem );
-            editorTarget.appendChild( label );
-
-            toggleVisibility( "visible" );
-
+            fragment.appendChild( label );
           }
         }
-
-        //when submit is pressed, call applyChanges( newTrackEvent );
-
-        //if delete pressed call deleteTrack( TrackEvent );
-
-        //if cancel pressed call cancelEdit();
+        
+        
+        openBtn = document.createElement ("input");
+        openBtn.type = "button";
+        openBtn.addEventListener( "click", closeEditor, false );
+        openBtn.value = "Close";
+        fragment.appendChild( openBtn );
+        
+        if ( targetType === "element" ) {
+          
+          editorTarget.appendChild( fragment );
+        } else if ( targetType === "iframe" ) {
+        
+          editorTarget.document.body.appendChild( fragment );
+        }
+        
+        toggleVisibility( "visible" );
       },
 
       cancelEdit = function() {
@@ -98,10 +112,20 @@
       },
 
       closeEditor = function() {
-
-        while ( editorTarget.firstChild ) {
-          editorTarget.removeChild( editorTarget.firstChild );
+        if ( targetType === "element" ) {
+          while ( editorTarget.firstChild ) {
+            editorTarget.removeChild( editorTarget.firstChild );
+          }
+        } else if ( targetType === "iframe" ){
+        
+          var ifrm = editorTarget.document.body;
+          while ( ifrm.firstChild ) {
+        
+            ifrm.removeChild( ifrm.firstChild );
+          }
         }
+        
+        
 
         toggleVisibility( "hidden" );
       },
@@ -117,10 +141,8 @@
       },
 
       beginEditing = function( trackEvent, manifest ) {
-
-        manifest = manifest || {};
         
-        if ( !manifest || !editorTarget ) {
+        if (  !trackEvent || !manifest ) {
 
           return;
         }
@@ -130,15 +152,25 @@
           constructDefaultEditor( trackEvent, manifest );
         } else {
 
-          useCustomEditor()
+          useCustomEditor( trackEvent, manifest );
         }
 
       };
   
     return { 
       setup: function( options ) {
-      
-        editorTarget = document.getElementById( options.target || "default-editor-target" );
+         
+        var target = options.target || {};
+         
+        if ( target.nodeName && target.nodeName === "IFRAME" ) {
+        
+          editorTarget = (target.contentWindow) ? target.contentWindow : (target.contentDocument.document) ? target.contentDocument.document : target.contentDocument;;
+          targetType = "iframe"
+        } else {
+        
+          editorTarget = document.getElementById( options.target || "default-editor-target" );
+          targetType = "element";
+        }
     
         this.listen ( "trackeventremoved", function( trackEvent ) {
 
