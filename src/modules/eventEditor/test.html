@@ -7,8 +7,8 @@
      window.addEventListener("DOMContentLoaded", function(){
         var b = new Butter();
         window.b = b;
-        b.setEditorTarget( "butter-editor-target" );
-        var te = new Butter.TrackEvent({ start: 0, end: 5, text: "hello world" });
+        b.eventeditor( {target: "butter-editor-target" } );
+        var te = new Butter.TrackEvent({ start: 0, end: 5, : "hello world" });
         //console.log(te);
         b.trigger("editTrackEvent", {trackEvent: te, manifest: 
           { options: { start: {

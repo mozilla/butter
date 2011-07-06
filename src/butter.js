@@ -78,11 +78,11 @@ THE SOFTWARE.
    ****************************************************************************/
   var numTrackEvents = 0;
   var TrackEvent = function ( options ) {
-    var id = numTrackEvents++;
-
+    var id = numTrackEvents++,
+    name = options.name || 'Track' + Date.now();
+      
     options = options || {};
-    this.options = options;
-    var name = options.name || 'Track' + Date.now();
+    
     this.start = options.start || 0;
     this.end = options.end || 0;
     this.type = options.type;

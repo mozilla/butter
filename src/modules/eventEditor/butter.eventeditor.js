@@ -18,6 +18,7 @@
       useCustomEditor = function() {
         //use a custom editor
       },
+      
       // call when no custom editor markup/source has been provided
       constructDefaultEditor = function( trackEvent, manifest ) {
 
@@ -48,7 +49,7 @@
 
             if ( elemType === "input" ) {
 
-              var rounded = trackEvent.options[ prop ];
+              var rounded = trackEvent[ prop ];
 
               //  Round displayed times to nearest quarter of a second
               if ( typeof +rounded === "number" && [ "start", "end" ].indexOf( prop ) > -1 ) {
@@ -117,12 +118,9 @@
 
       beginEditing = function( trackEvent, manifest ) {
 
-        //console.log("beginEditing");
-        //console.log(trackEvent);
-        //console.log(manifest);
         manifest = manifest || {};
-
-        if ( !manifest ) {
+        
+        if ( !manifest || !editorTarget ) {
 
           return;
         }
@@ -138,7 +136,9 @@
       };
   
     return { 
-      setup: function() {
+      setup: function( options ) {
+      
+        editorTarget = document.getElementById( options.target || "default-editor-target" );
     
         this.listen ( "trackeventremoved", function( trackEvent ) {
 
