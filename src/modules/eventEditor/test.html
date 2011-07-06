@@ -8,7 +8,7 @@
         var b = new Butter();
         window.b = b;
         b.eventeditor( {target: "butter-editor-target" } );
-        var te = new Butter.TrackEvent({ start: 0, end: 5, : "hello world" });
+        var te = new Butter.TrackEvent({ popcornEvent: { text:"hello world", start: 67.237868, end: 567.675675 } } );
         //console.log(te);
         b.trigger("editTrackEvent", {trackEvent: te, manifest: 
           { options: { start: {

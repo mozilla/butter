@@ -49,15 +49,15 @@
 
             if ( elemType === "input" ) {
 
-              var rounded = trackEvent[ prop ];
+              var attr = trackEvent.popcornEvent[ prop ];
 
               //  Round displayed times to nearest quarter of a second
-              if ( typeof +rounded === "number" && [ "start", "end" ].indexOf( prop ) > -1 ) {
+              if ( typeof +attr === "number" && [ "start", "end" ].indexOf( prop ) > -1 ) {
 
-                rounded = Math.round( rounded * 4 ) / 4;
+                attr = Math.round( attr * 4 ) / 4;
               }
 
-              elem.setAttribute( "value", rounded );
+              elem.setAttribute( "value", attr );
             }
 
             if ( elemType === "select" ) {
@@ -155,14 +155,6 @@
           beginEditing( options.trackEvent, options.manifest );
         });
 
-      },
-      extend: {
-        
-        setEditorTarget: function( target ) {
-          if (target) {
-            editorTarget = document.getElementById( target );
-          }
-        }
       }
     }
   })());
