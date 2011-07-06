@@ -24,8 +24,6 @@ THE SOFTWARE.
 
 (function ( window, document, undefined ) {
 
-  var modules = {};
-
   /****************************************************************************
    * Track
    ****************************************************************************/
@@ -348,13 +346,6 @@ THE SOFTWARE.
     this.setMedia = function () {
     };
 
-    /****************************************************************
-     * Init Modules for this instance
-     ****************************************************************/
-    for ( var moduleName in modules ) {
-      modules[moduleName].setup && modules[moduleName].setup.call(this);
-    } //for
-
   }; //Butter
 
   Butter.getScriptLocation = function () {
@@ -369,7 +360,9 @@ THE SOFTWARE.
 
   //registerModule - Registers a Module into the Butter core
   Butter.registerModule = Butter.prototype.registerModule = function ( name, module ) {
-    modules[ name ] = module;
+    Butter.prototype[name] = function(options) {
+      module.setup && module.setup.call(this, options);
+    };
     if ( module.extend ) {
       Butter.extendAPI( module.extend );
     } //if
