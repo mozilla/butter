@@ -36,15 +36,19 @@ THE SOFTWARE.
         that = this;
 
     options = options || {};
-    this.name = options.name || 'Track' + Date.now();
+    var name = options.name || 'Track' + Date.now();
+
+    this.getName = function () {
+      return name;
+    }; //getName
 
     this.getId = function () {
       return id;
-    };
+    }; //getId
 
     this.getTrackEvent = function ( trackId ) {
       for ( var i=0, l=trackEvents.length; i<l; ++i) {
-        if ( trackEvents[i].id === trackId || trackEvents[i].name === trackId ) {
+        if ( trackEvents[i].getId() === trackId || trackEvents[i].getName() === trackId ) {
           return trackEvents[i];
         } //if
       } //for
@@ -69,7 +73,7 @@ THE SOFTWARE.
     this.addTrackEvent = function ( trackEvent ) {
       trackEvents.push( trackEvent );
     }; //addTrackEvent
-  };
+  }; //Track
 
   /****************************************************************************
    * TrackEvent
@@ -80,12 +84,41 @@ THE SOFTWARE.
 
     options = options || {};
     this.options = options;
-    this.name = options.name || 'Track' + Date.now();
+    var name = options.name || 'Track' + Date.now();
+    this.start = options.start || 0;
+    this.end = options.end || 0;
+    this.type = options.type;
+    this.popcornEvent = options.popcornEvent;
+
+    this.getName = function () {
+      return name;
+    };
 
     this.getId = function () {
       return id;
-    };
-  };
+    }; //getId
+
+  }; //TrackEvent
+
+  /****************************************************************************
+   * Target 
+   ****************************************************************************/
+  var numTargets = 0;
+  var Target = function ( options ) {
+    var id = numTargets++;
+
+    options = options || {};
+    var name = options.name || "Target" + Date.now();
+    this.object = options.object;
+
+    this.getName = function () {
+      return name;
+    }; //getName
+
+    this.getId = function () {
+      return id;
+    }; //getId
+  }; //Target
 
   /****************************************************************************
    * Butter
@@ -96,11 +129,15 @@ THE SOFTWARE.
     var events = {},
         tracksByName = {},
         tracks = [],
-        targets = {},
+        targets = [],
+        targetsByName = {},
         that = this;
 
     this.id = "Butter" + numButters++;
 
+    /****************************************************************
+     * Event methods
+     ****************************************************************/
     //trigger - Triggers an event indicating a change of state in the core
     this.trigger = function ( name, options ) {
       if ( events[ name ] ) {
@@ -132,15 +169,23 @@ THE SOFTWARE.
       } //if
     }; //unlisten
 
+    /****************************************************************
+     * TrackEvent methods
+     ****************************************************************/
     //addTrackEvent - Creates a new Track Event
     this.addTrackEvent = function ( track, trackEvent ) {
       if ( typeof(track) === "string" ) {
         track = that.getTrack( track );
       } //if
-      if ( !(options instanceof TrackEvent) ) {
-        trackEvent = new TrackEvent( trackEvent );
+      if ( track ) {
+        if ( !(trackEvent instanceof TrackEvent) ) {
+          trackEvent = new TrackEvent( trackEvent );
+        } //if
+        track.addTrackEvent( trackEvent );
+        that.trigger("trackeventadded", trackEvent);
+        return trackEvent;
       } //if
-      track.addTrackEvent( trackEvent );
+      return undefined;
     }; //addTrackEvents
 
     //getTrackEvents - Get a list of Track Events
@@ -148,7 +193,7 @@ THE SOFTWARE.
       var trackEvents = {};
       for ( var i=0, l=tracks.length; i<l; ++i ) {
         var track = tracks[i];
-        trackEvents[track.name] = track.getTrackEvents();
+        trackEvents[ track.getName() ] = track.getTrackEvents();
       } //for
     }; //getTrackEvents
 
@@ -159,13 +204,27 @@ THE SOFTWARE.
       track.getTrackEvent( trackEventId );
     }; //getTrackEvent
 
+    //removeTrackEvent - Remove a Track Event
+    this.removeTrackEvent = function ( track, trackEvent ) {
+      if ( !(track instanceof Track) ) {
+        track = that.getTrack( track );
+      } //if
+      track.removeTrackEvent( trackEvent );
+      that.trigger( "trackeventremoved", trackEvent );
+    };
+
+    /****************************************************************
+     * Track methods
+     ****************************************************************/
     //addTrack - Creates a new Track
     this.addTrack = function ( track ) {
-      if ( !(options instanceof Track) ) {
+      if ( !(track instanceof Track) ) {
         track = new Track( track );
       } //if
-      tracksByName[ track.name ] = track;
+      tracksByName[ track.getName() ] = track;
       tracks.push( track );
+      that.trigger( "trackadded", track );
+      return track;
     }; //addTrack
 
     //getTracks - Get a list of Tracks
@@ -189,14 +248,6 @@ THE SOFTWARE.
       return undefined;
     }; //getTrack
 
-    //removeTrackEvent - Remove a Track Event
-    this.removeTrackEvent = function ( track, trackEvent ) {
-      if ( !(options instanceof Track) ) {
-        track = that.getTrack( track );
-      } //if
-      track.removeTrack( trackEvent );
-    };
-
     //removeTrack - Remove a Track
     this.removeTrack = function ( track ) {
       if ( typeof(track) === "string" ) {
@@ -205,19 +256,79 @@ THE SOFTWARE.
       var idx = tracks.indexOf( track );
       if ( idx > -1 ) {
         tracks.splice( idx, 1 );
-        delete tracksByName[ track.name ];
+        delete tracksByName[ track.getName() ];
+        that.trigger( "trackremoved", track );
+        return track;
       } //if
-      return track;
+      return undefined;    
     };
 
+    /****************************************************************
+     * Target methods
+     ****************************************************************/
+    //addTarget - add a target object
+    this.addTarget = function ( target ) {
+      if ( !(target instanceof Target) ) {
+        target = new Target( target );
+      } //if
+
+      targetsByName[ target.getName() ] = target;
+      targets.push( target );
+
+      that.trigger( "targetadded", target );
+
+      return target;
+    };
+
+    //removeTarget - remove a target object
+    this.removeTarget = function ( target ) {
+      if ( typeof(target) === "string" ) {
+        target = that.getTarget( target );
+      } //if
+      var idx = targets.indexOf( target );
+      if ( idx > -1 ) {
+        targets.splice( idx, 1 );
+        delete targets[ target.getName() ]; 
+        that.trigger( "targetremoved", target );
+        return target;
+      } //if
+      return undefined;
+    };
+
+    //getTargets - get a list of targets objects
+    this.getTargets = function () {
+      return targets;
+    };
+
+    //getTarget - get a target object by its id
+    this.getTarget = function ( name ) {
+      return targetsByName[ name ];
+    };
+
+    /****************************************************************
+     * Project methods
+     ****************************************************************/
     //import - Import project data
-    this.importProject = function () {
+    this.importProject = function ( projectData ) {
     };
 
     //export - Export project data
     this.exportProject = function () {
+      var projectData;
+      return projectData;
     };
 
+    //setProjectDetails - set the details of the project
+    this.setProjectDetails = function () {
+    };
+
+    //getProjectDetails - get the projects details
+    this.getProjectDetails = function () {
+    };
+
+    /****************************************************************
+     * Media methods
+     ****************************************************************/
     //play - Play the media
     this.play = function () {
     };
@@ -230,34 +341,6 @@ THE SOFTWARE.
     this.currentTime = function () {
     };
 
-    //addTarget - add a target object
-    this.addTarget = function () {
-    };
-
-    //removeTarget - remove a target object
-    this.removeTarget = function () {
-    };
-
-    //editTarget - edits a targets data object
-    this.editTarget = function () {
-    };
-
-    //getTargets - get a list of targets objects
-    this.getTargets = function () {
-    };
-
-    //getTarget - get a target object by its id
-    this.getTarget = function () {
-    };
-
-    //setProjectDetails - set the details of the project
-    this.setProjectDetails = function () {
-    };
-
-    //getProjectDetails - get the projects details
-    this.getProjectDetails = function () {
-    };
-
     //getMedia - get the media's information
     this.getMedia = function () {
     };
@@ -266,19 +349,14 @@ THE SOFTWARE.
     this.setMedia = function () {
     };
 
-    //setSelectedTarget - set a track's target
-    this.setSelectedTarget = function () {
-    };
-
-    //getSelectedTarget - get a track's target
-    this.getSelectedTarget = function () {
-    };
-
+    /****************************************************************
+     * Init Modules for this instance
+     ****************************************************************/
     for ( var moduleName in modules ) {
       modules[moduleName].setup && modules[moduleName].setup.call(this);
     } //for
 
-  };
+  }; //Butter
 
   Butter.getScriptLocation = function () {
     var scripts = document.querySelectorAll( "script" );
@@ -308,6 +386,7 @@ THE SOFTWARE.
 
   Butter.Track = Track;
   Butter.TrackEvent = TrackEvent;
+  Butter.Target = Target;
 
   window.Butter = Butter;
 
