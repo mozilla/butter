@@ -42,6 +42,7 @@
             elem.setAttribute( "className", "butter-editor-element" );
 
             label = document.createElement( "label" );
+            label.innerHTML = elemLabel;
             label.setAttribute( "for", elemLabel );
             label.setAttribute( "text", elemLabel );
 
