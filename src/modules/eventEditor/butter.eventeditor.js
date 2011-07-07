@@ -27,7 +27,7 @@ THE SOFTWARE.
   Butter.registerModule( "eventeditor", (function() {
   
     var editorTarget,
-      targetType;
+      targetType,
       
       toggleVisibility = function( attr ) {
 
@@ -45,7 +45,7 @@ THE SOFTWARE.
           manifest: manifest || {}, 
           target: editorTarget || {}, 
           callback: function( trackEvent ){
-            updateTrackData( trackEvent );
+            applyChanges( trackEvent );
           }
         });
       },
@@ -77,7 +77,7 @@ THE SOFTWARE.
 
         //set-up UI:
         
-        clearEditor();
+        clearTarget();
         
         for ( prop in options ) {
 
@@ -89,11 +89,13 @@ THE SOFTWARE.
 
             elem = document.createElement( elemType );
             elem.setAttribute( "className", "butter-editor-element" );
+            elem.setAttribute( "id", elemLabel + "-input-element" );
 
             label = document.createElement( "label" );
             label.innerHTML = elemLabel;
             label.setAttribute( "for", elemLabel );
             label.setAttribute( "text", elemLabel );
+            label.setAttribute( "className", "butter-editor-label butter-editor-element" );
 
             if ( elemType === "input" ) {
 
@@ -129,7 +131,7 @@ THE SOFTWARE.
         openBtn = document.createElement ("input");
         openBtn.type = "button";
         openBtn.addEventListener( "click", function() {
-          clearEditor();
+          clearTarget();
           toggleVisibility( "hidden" );
         }, false );
         openBtn.value = "Close";
@@ -148,7 +150,7 @@ THE SOFTWARE.
 
       cancelEdit = function() {
 
-        clearEditor();
+        clearTarget();
         toggleVisibility( "hidden" );
       },
 
@@ -158,7 +160,7 @@ THE SOFTWARE.
         closeEditor();
       },
 
-      clearEditor = function() {
+      clearTarget = function() {
         if ( targetType === "element" ) {
           while ( editorTarget.firstChild ) {
             editorTarget.removeChild( editorTarget.firstChild );
@@ -176,6 +178,7 @@ THE SOFTWARE.
 
       updateTrackData = function( trackEvent ) {
         // update information in the editor if a track changes on the timeline.
+        
       },
 
       applyChanges = function( trackEvent ) {
