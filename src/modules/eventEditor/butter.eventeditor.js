@@ -1,11 +1,31 @@
-/**
-  Butter.js Event Editor Module API
-  Author: Christopher De Cairos
-**/
+/**********************************************************************************
+
+Copyright (C) 2011 by Mozilla Foundation
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+**********************************************************************************/
 
 (function( window, document, undefined, Butter ) {
 
   Butter.registerModule( "eventeditor", (function() {
+  
     var editorTarget,
       targetType;
       
@@ -20,7 +40,14 @@
 
       useCustomEditor = function( trackEvent, manifest ) {
         //use a custom editor
-        typeof manifest.customEditor === "function" && manifest.customEditor( trackEvent, manifest, editorTarget );
+        typeof manifest.customEditor === "function" && manifest.customEditor({ 
+          trackEvent: trackEvent || {}, 
+          manifest: manifest || {}, 
+          target: editorTarget || {}, 
+          callback: function( trackEvent ){
+            updateTrackData( trackEvent );
+          }
+        });
       },
       
       // call when no custom editor markup/source has been provided
@@ -34,9 +61,24 @@
           elem,
           label,
           attr,
-          fragment = document.createDocumentFragment();
+          surroundingDiv = document.createElement("div"),
+          style = surroundingDiv.style;
+          
+        style[ "margin" ] = "0.5em 0 0";
+        style[ "padding" ] = "0.3em 1em 0.5em 0.4em";  
+        style[ "background" ] = "none repeat scroll 0 0 #FFFFFF";
+        style[ "border" ] = "1px solid #DDDDDD";
+        style[ "color" ] = "#333333";
+        style[ "backgroundImage" ] = "none";
+        style[ "borderWidth" ] = "1px 0 0";
+        style[ "textAlign" ] = "left";
+        style[ "verticalAlign" ] = "baseline";
+        style[ "lineHeight" ] = "1.5";
 
         //set-up UI:
+        
+        clearEditor();
+        
         for ( prop in options ) {
 
           opt = options[ prop ];
@@ -78,23 +120,27 @@
             }
 
             label.appendChild( elem );
-            fragment.appendChild( label );
+            surroundingDiv.appendChild( label );
+            surroundingDiv.appendChild( document.createElement("br"));
           }
         }
         
         
         openBtn = document.createElement ("input");
         openBtn.type = "button";
-        openBtn.addEventListener( "click", closeEditor, false );
+        openBtn.addEventListener( "click", function() {
+          clearEditor();
+          toggleVisibility( "hidden" );
+        }, false );
         openBtn.value = "Close";
-        fragment.appendChild( openBtn );
+        surroundingDiv.appendChild( openBtn );
         
         if ( targetType === "element" ) {
           
-          editorTarget.appendChild( fragment );
+          editorTarget.appendChild( surroundingDiv );
         } else if ( targetType === "iframe" ) {
         
-          editorTarget.document.body.appendChild( fragment );
+          editorTarget.document.body.appendChild( surroundingDiv );
         }
         
         toggleVisibility( "visible" );
@@ -102,7 +148,8 @@
 
       cancelEdit = function() {
 
-        closeEditor();
+        clearEditor();
+        toggleVisibility( "hidden" );
       },
 
       deleteTrack =  function( trackEvent ) {
@@ -111,7 +158,7 @@
         closeEditor();
       },
 
-      closeEditor = function() {
+      clearEditor = function() {
         if ( targetType === "element" ) {
           while ( editorTarget.firstChild ) {
             editorTarget.removeChild( editorTarget.firstChild );
@@ -124,10 +171,7 @@
             ifrm.removeChild( ifrm.firstChild );
           }
         }
-        
-        
 
-        toggleVisibility( "hidden" );
       },
 
       updateTrackData = function( trackEvent ) {
@@ -171,22 +215,25 @@
           editorTarget = document.getElementById( options.target || "default-editor-target" );
           targetType = "element";
         }
-    
-        this.listen ( "trackeventremoved", function( trackEvent ) {
 
-          closeEditor();
-        });
-
-        this.listen ( "trackeventchanged", function( trackEvent ) {
-
+      },
+      
+      extend: {
+        
+        editTrackEvent: function( options ) {
+           
+           beginEditing( options.trackEvent, options.manifest );
+        },
+        
+        updateEditor: function( trackEvent ) {
+        
           updateTrackData( trackEvent );
-        });
-
-        this.listen ( "editTrackEvent", function( options ) {
-
-          beginEditing( options.trackEvent, options.manifest );
-        });
-
+        },
+        
+        closeEditor: function() {
+        
+          closeEditor();
+        }
       }
     }
   })());

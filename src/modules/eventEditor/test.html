@@ -4,22 +4,12 @@
     <script src="butter.eventeditor.js" ></script>
     <script type="text/javascript" >
      
-     window.addEventListener("DOMContentLoaded", function(){
+    window.addEventListener("DOMContentLoaded", function(){
         var b = new Butter();
-        window.b = b;
-        var iframe = document.createElement("iframe");
-        iframe.style.visibility = "hidden";
-        iframe.style.width = "250px";
-        var div = document.getElementById("butter-editor-target");
-        div.appendChild( iframe );
-        
-        b.eventeditor( {target: iframe } );
-        var te = new Butter.TrackEvent({ popcornEvent: { text:"hello world", start: 67.237868, end: 567.675675 } } );
-     
-        var open = document.getElementById( "openBtn" );
-        open.addEventListener( "click", function(){
-        b.trigger("editTrackEvent", { trackEvent: te, 
-          manifest: { 
+        b.eventeditor( {target: "butter-editor-target" } );
+        var te1 = new Butter.TrackEvent({ popcornEvent: { text:"hello world 1", start: 67.237868, end: 567.675675 } } ),
+          te2 = new Butter.TrackEvent({ popcornEvent: { words:"hello world 2", begin: 12, stop: 13.555 } } );
+          m1 = { 
             options: { 
               start: {
                 elem: "input", 
@@ -35,77 +25,55 @@
                 elem: "input", 
                 type: "text", 
                 label: "text" 
+              }
+            },
+            customEditor: function( options ) {
+              console.log( "This is a function that can contain custom editor code. Below is the options object passed into it with a callback:");
+              console.log( options );
+            }
+          },
+          m2 = { 
+            options: { 
+              begin: {
+                elem: "input", 
+                type: "text", 
+                label: "Begin" 
+              },
+              stop: {
+                elem: "input", 
+                type: "text", 
+                label: "Stop" 
+              },
+              words: { 
+                elem: "input", 
+                type: "text", 
+                label: "Words" 
               },
               
             }
-            /*,
-            customEditor: function( trackEvent, manifest, editorTarget ) {
-                console.log("this is a custom editor");
-                var options = manifest.options,
-                  prop,
-                  opt,
-                  elemType,
-                  elemLabel,
-                  elem,
-                  label;
-
-                //set-up UI:
-                for ( prop in options ) {
-
-                  opt = options[ prop ];
-                  if ( typeof opt === "object" && prop !== "target-object" ) {
-
-                    elemType = opt.elem;
-                    elemLabel = opt.label;
-
-                    elem = document.createElement( elemType );
-                    elem.setAttribute( "className", "butter-editor-element" );
-
-                    label = document.createElement( "label" );
-                    label.innerHTML = elemLabel;
-                    label.setAttribute( "for", elemLabel );
-                    label.setAttribute( "text", elemLabel );
-
-                    if ( elemType === "input" ) {
-
-                      var attr = trackEvent.popcornEvent[ prop ];
-
-                      //  Round displayed times to nearest quarter of a second
-                      if ( typeof +attr === "number" && [ "start", "end" ].indexOf( prop ) > -1 ) {
-
-                        attr = Math.round( attr * 4 ) / 4;
-                      }
-
-                      elem.setAttribute( "value", attr );
-                    }
-
-                    if ( elemType === "select" ) {
-
-                      opt.options.forEach( function( type ) {
-
-                        var selectItem = document.createElement( "option" );
-                        selectItem.setAttribute( "value", type );
-                        selectItem.setAttribute( "text", type.charAt( 0 ).toUpperCase() + type.substring( 1 ).toLowerCase() );
-                        elem.appendChild( selectItem );
-                      });
-                    }
-
-                    label.appendChild( elem );
-                    editorTarget.appendChild( label );
-
-                  }
-                }
-                
-              }*/
-          } }
-       );
-       }, false);
-     }, false);
+            
+          };
+          
+        var open = document.getElementById( "openBtn1" );
+        open.addEventListener( "click", function(){
+          b.editTrackEvent( { trackEvent: te1, 
+            manifest: m1 }
+          );
+        }, false);
+        open = document.getElementById( "openBtn2" );
+        open.addEventListener( "click", function(){
+          b.editTrackEvent( { trackEvent: te2, 
+            manifest: m2 }
+          );
+        }, false);
+        window.b = b;
+    }, false);
    
     </script>
   </head>
   <body>
-  <input id="openBtn" type="button" value="Open Editor" ></input>
-  <div id="butter-editor-target" style="width: 240px"></div>
+  <input id="openBtn1" type="button" value="TrackEvent w/ Custom Editor function (see console)" ></input>
+  <input id="openBtn2" type="button" value="TrackEvent using Default Editor" ></input>
+  <div id="butter-editor-target" style="width: 300px; height: 300px"></div>
 </body>
 </html>
