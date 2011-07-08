@@ -60,9 +60,7 @@ THE SOFTWARE.
       if ( typeof(trackEvent) === "string" ) {
         trackEvent = that.getTrackEvent( trackEvent );
       } //if
-
       var idx = trackEvents.indexOf( trackEvent );
-
       if ( idx > -1 ) {
         trackEvents.splice( idx, 1 );
       } //if
@@ -83,6 +81,7 @@ THE SOFTWARE.
       
     options = options || {};
     
+    this.attributes = options.attributes || {};
     this.start = options.start || 0;
     this.end = options.end || 0;
     this.type = options.type;
@@ -130,6 +129,8 @@ THE SOFTWARE.
         targets = [],
         targetsByName = {},
         that = this;
+     
+    window.evt = events;
 
     this.id = "Butter" + numButters++;
 
@@ -193,6 +194,7 @@ THE SOFTWARE.
         var track = tracks[i];
         trackEvents[ track.getName() ] = track.getTrackEvents();
       } //for
+      return trackEvents;
     }; //getTrackEvents
 
     this.getTrackEvent = function ( track, trackEventId ) {

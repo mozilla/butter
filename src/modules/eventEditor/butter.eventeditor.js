@@ -40,12 +40,14 @@ THE SOFTWARE.
 
       useCustomEditor = function( trackEvent, manifest ) {
         //use a custom editor
-        typeof manifest.customEditor === "function" && manifest.customEditor({ 
+        var butter = this;
+        toggleVisibility( "visible" );
+        typeof manifest.customEditor === "function" && manifest.customEditor.call( this, { 
           trackEvent: trackEvent || {}, 
           manifest: manifest || {}, 
           target: editorTarget || {}, 
-          callback: function( trackEvent ){
-            applyChanges( trackEvent );
+          callback: function( trackEvent, attributes ){
+            applyChanges.call( butter, trackEvent, attributes );
           }
         });
       },
@@ -64,16 +66,16 @@ THE SOFTWARE.
           surroundingDiv = document.createElement("div"),
           style = surroundingDiv.style;
           
-        style[ "margin" ] = "0.5em 0 0";
-        style[ "padding" ] = "0.3em 1em 0.5em 0.4em";  
-        style[ "background" ] = "none repeat scroll 0 0 #FFFFFF";
-        style[ "border" ] = "1px solid #DDDDDD";
-        style[ "color" ] = "#333333";
-        style[ "backgroundImage" ] = "none";
-        style[ "borderWidth" ] = "1px 0 0";
-        style[ "textAlign" ] = "left";
-        style[ "verticalAlign" ] = "baseline";
-        style[ "lineHeight" ] = "1.5";
+        style.margin = "0.5em 0 0";
+        style.padding = "0.3em 1em 0.5em 0.4em";  
+        style.background = "none repeat scroll 0 0 #FFFFFF";
+        style.border = "1px solid #DDDDDD";
+        style.color = "#333333";
+        style.backgroundImage = "none";
+        style.borderWidth = "1px 0 0";
+        style.textAlign = "left";
+        style.verticalAlign = "baseline";
+        style.lineHeight = "1.5";
 
         //set-up UI:
         
@@ -157,7 +159,6 @@ THE SOFTWARE.
       deleteTrack =  function( trackEvent ) {
 
         Butter.removeTrackEvent( trackEvent );
-        closeEditor();
       },
 
       clearTarget = function() {
@@ -178,13 +179,20 @@ THE SOFTWARE.
 
       updateTrackData = function( trackEvent ) {
         // update information in the editor if a track changes on the timeline.
-        
+        return undefined;
       },
 
-      applyChanges = function( trackEvent ) {
-
-        Butter.trackEventChanged( trackEvent );
-        closeEditor();
+      applyChanges = function( trackEvent, attributes ) {
+      
+        //this.removeTrackEvent( trackEvent );
+        trackEvent.attributes = attributes;
+        //this.addTrackEvent( trackEvent );
+        clearTarget();
+        toggleVisibility("hidden");
+        
+        alert( "Information recieved from the custom Editor: \n\n Latitude: " + trackEvent.popcornEvent.lat + "\n Longitude: " + 
+          trackEvent.popcornEvent.lng + "\n Map Type: " + trackEvent.popcornEvent.type +
+          "\n Zoom: " + trackEvent.popcornEvent.zoom + "\n yay :)" );
       },
 
       beginEditing = function( trackEvent, manifest ) {
@@ -196,10 +204,10 @@ THE SOFTWARE.
 
         if ( !manifest.customEditor ) {
 
-          constructDefaultEditor( trackEvent, manifest );
+          constructDefaultEditor.call( this, trackEvent, manifest );
         } else {
 
-          useCustomEditor( trackEvent, manifest );
+          useCustomEditor.call( this, trackEvent, manifest );
         }
 
       };
@@ -225,17 +233,12 @@ THE SOFTWARE.
         
         editTrackEvent: function( options ) {
            
-           beginEditing( options.trackEvent, options.manifest );
+           beginEditing.call( this, options.trackEvent, options.manifest );
         },
         
         updateEditor: function( trackEvent ) {
         
-          updateTrackData( trackEvent );
-        },
-        
-        closeEditor: function() {
-        
-          closeEditor();
+          updateTrackData.call( this, trackEvent );
         }
       }
     }
