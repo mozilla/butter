@@ -38,6 +38,8 @@
       b.addTrackEvent("Track2", trackEvent2);
       track1.addTrackEvent(trackEvent1);
 
+      console.log("TrackEvent knows its Track:", trackEvent1.track.getName());
+
       console.log("Added Track Events");
       writeTracks();
 
