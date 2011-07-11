@@ -88,10 +88,13 @@ window.addEventListener("DOMContentLoaded", function(){
       newdiv = document.createElement("div");
       newdiv.id = "actualmap" + i;
       newdiv.style.width = "100%";
-      newdiv.style.height = "100%";
+      newdiv.style.height = "85%";
       i++;
 
-      options.target.appendChild(newdiv);
+      options.target.appendChild && options.target.appendChild( newdiv ) || 
+        options.target.document && options.target.document.body && 
+        options.target.document.body.appendChild && 
+        options.target.document.body.appendChild( newdiv );
 
       // ensure that google maps and its functions are loaded
       // before setting up the map parameters

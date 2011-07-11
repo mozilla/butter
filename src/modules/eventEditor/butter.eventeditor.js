@@ -39,6 +39,7 @@ THE SOFTWARE.
       },
 
       useCustomEditor = function( trackEvent, manifest ) {
+        
         //use a custom editor
         var butter = this;
         toggleVisibility( "visible" );
@@ -76,9 +77,8 @@ THE SOFTWARE.
         style.textAlign = "left";
         style.verticalAlign = "baseline";
         style.lineHeight = "1.5";
-
-        //set-up UI:
         
+        //clear editor target
         clearTarget();
         
         for ( prop in options ) {
@@ -113,14 +113,23 @@ THE SOFTWARE.
             }
 
             if ( elemType === "select" ) {
-
-              opt.options.forEach( function( type ) {
+              attr = trackEvent.popcornEvent[ prop ];
+              elem.style.width = "150px"
+              var populate = function( type ) {
 
                 var selectItem = document.createElement( "option" );
-                selectItem.setAttribute( "value", type );
-                selectItem.setAttribute( "text", type.charAt( 0 ).toUpperCase() + type.substring( 1 ).toLowerCase() );
+                selectItem.value = type;
+                selectItem.text = type.charAt( 0 ).toUpperCase() + type.substring( 1 ).toLowerCase();
                 elem.appendChild( selectItem );
-              });
+              };
+              
+              opt.options.forEach( populate );
+              for (var i = 0, l = elem.options.length; i < l; i ++ ) {
+                if ( elem.options[ i ].value === attr ) {
+                  elem.options.selectedIndex = i;
+                  i = l;
+                }
+              }
             }
 
             label.appendChild( elem );
@@ -215,15 +224,27 @@ THE SOFTWARE.
     return { 
       setup: function( options ) {
          
-        var target = options.target || {};
-         
+        var target;
+        
+        if ( options.target && typeof options.target === "string" ) {
+        
+          target = document.getElementById( options.target || "butter-editor-target" ) || {};
+        } else if ( options.target ) {
+        
+          target = options.target;
+        } else {
+        
+          throw ( "ERROR - setup: options.target invalid" );
+        }
+        
+        editorTarget = ((target.contentWindow) ? target.contentWindow : (target.contentDocument && target.contentDocument.document) ? target.contentDocument.document : target.contentDocument) || target; 
+        
         if ( target.nodeName && target.nodeName === "IFRAME" ) {
         
-          editorTarget = (target.contentWindow) ? target.contentWindow : (target.contentDocument.document) ? target.contentDocument.document : target.contentDocument;;
           targetType = "iframe"
         } else {
         
-          editorTarget = document.getElementById( options.target || "default-editor-target" );
+          editorTarget = target;
           targetType = "element";
         }
 
