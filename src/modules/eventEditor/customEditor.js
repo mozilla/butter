@@ -33,7 +33,7 @@ loadMaps = function () {
 window.addEventListener("DOMContentLoaded", function(){
   var b = new Butter();
   b.eventeditor( {target: "butter-editor-target" } );
-  var te1 = new Butter.TrackEvent({ start: 67.237868, end: 567.675675, popcornEvent: { type:"ROADMAP", start: 67.237868, end: 567.675675, zoom: 8, lat: "43", lng: "-80" } } ),
+  var te1 = new Butter.TrackEvent({ start: 67.237868, end: 567.675675, popcornOptions: { type:"ROADMAP", start: 67.237868, end: 567.675675, zoom: 8, location: "Toronto" } } ),
   m1 = { 
     options: {
       start: {
@@ -101,25 +101,25 @@ window.addEventListener("DOMContentLoaded", function(){
       var isMapReady = function () {
         if (_mapLoaded) {
           //console.log (options.trackEvent.popcornEvent.location);
-          if (options.trackEvent.popcornEvent.location) {
+          if (options.trackEvent.popcornOptions.location) {
             // calls an anonymous google function called on separate thread
             geocoder.geocode({
-              "address": options.trackEvent.popcornEvent.location
+              "address": options.trackEvent.popcornOptions.location
             }, function (results, status) {
               if (status === google.maps.GeocoderStatus.OK) {
-                options.trackEvent.popcornEvent.lat = results[0].geometry.location.lat();
-                options.trackEvent.popcornEvent.lng = results[0].geometry.location.lng();
-                location = new google.maps.LatLng(options.trackEvent.popcornEvent.lat, options.trackEvent.popcornEvent.lng);
+                options.trackEvent.popcornOptions.lat = results[0].geometry.location.lat();
+                options.trackEvent.popcornOptions.lng = results[0].geometry.location.lng();
+                location = new google.maps.LatLng(options.trackEvent.popcornOptions.lat, options.trackEvent.popcornOptions.lng);
                 map = new google.maps.Map(newdiv, {
-                  mapTypeId: google.maps.MapTypeId[options.trackEvent.popcornEvent.type] || google.maps.MapTypeId.HYBRID
+                  mapTypeId: google.maps.MapTypeId[options.trackEvent.popcornOptions.type] || google.maps.MapTypeId.HYBRID
                 });
                 map.getDiv().style.display = "block";
               }
             });
           } else {
-            location = new google.maps.LatLng(options.trackEvent.popcornEvent.lat, options.trackEvent.popcornEvent.lng);
+            location = new google.maps.LatLng(options.trackEvent.popcornOptions.lat, options.trackEvent.popcornOptions.lng);
             map = new google.maps.Map(newdiv, {
-              mapTypeId: google.maps.MapTypeId[options.trackEvent.popcornEvent.type] || google.maps.MapTypeId.HYBRID
+              mapTypeId: google.maps.MapTypeId[options.trackEvent.popcornOptions.type] || google.maps.MapTypeId.HYBRID
             });
             map.getDiv().style.display = "block";
           }
@@ -133,32 +133,32 @@ window.addEventListener("DOMContentLoaded", function(){
               map.setCenter( location );
 
               // make sure options.zoom is a number
-              if ( options.trackEvent.popcornEvent.zoom && typeof options.trackEvent.popcornEvent.zoom !== "number" ) {
-                options.trackEvent.popcornEvent.zoom = +options.trackEvent.popcornEvent.zoom;
+              if ( options.trackEvent.popcornOptions.zoom && typeof options.trackEvent.popcornOptions.zoom !== "number" ) {
+                options.trackEvent.popcornOptions.zoom = +options.trackEvent.popcornOptions.zoom;
               }
 
-              options.trackEvent.popcornEvent.zoom = options.trackEvent.popcornEvent.zoom || 8; // default to 8
+              options.trackEvent.popcornOptions.zoom = options.trackEvent.popcornOptions.zoom || 8; // default to 8
 
-              map.setZoom( options.trackEvent.popcornEvent.zoom );
+              map.setZoom( options.trackEvent.popcornOptions.zoom );
               
               var parent = map.getDiv().parentNode,
                 submit = document.createElement("input");
               
-              submit.value = "Submit Location Data";
+              submit.value = "Submit Data to Event Editor Module";
               submit.type = "button";
               submit.addEventListener( "click", function() {
                 var latlng = map.getCenter(),
                 
-                attributes = {
+                popcornOptions = {
                   zoom: map.getZoom(),
                   lat: latlng.Ja,
                   lng: latlng.Ka,
                   type: map.getMapTypeId().toUpperCase(),
-                  start: options.trackEvent.popcornEvent.start,
-                  end: options.trackEvent.popcornEvent.end
+                  start: options.trackEvent.popcornOptions.start,
+                  end: options.trackEvent.popcornOptions.end
                 };
                 
-                options.callback( options.trackEvent, attributes );
+                options.callback( options.trackEvent, popcornOptions );
                 
               }, false );
               parent.appendChild( submit);
@@ -183,14 +183,15 @@ window.addEventListener("DOMContentLoaded", function(){
       isMapReady();
       }
     };
+    te1.popcornEvent = {};
+    te1.popcornEvent._natives = {};
+    te1.popcornEvent._natives.manifest = m1;
   
   b.addTrackEvent( b.addTrack( new Butter.Track()), te1);
   
   var open = document.getElementById( "openBtn1" );
   open.addEventListener( "click", function(){
-    b.editTrackEvent( { trackEvent: te1, 
-      manifest: m1 }
-    );
+    b.editTrackEvent( { trackEvent: te1 } );
   }, false);
   window.b = b;
 }, false);

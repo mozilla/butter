@@ -38,25 +38,26 @@ THE SOFTWARE.
         }
       },
 
-      useCustomEditor = function( trackEvent, manifest ) {
+      useCustomEditor = function( trackEvent ) {
         
         //use a custom editor
-        var butter = this;
+        var butter = this,
+          editor = trackEvent.popcornEvent._natives.manifest.customEditor;
+        clearTarget();
         toggleVisibility( "visible" );
-        typeof manifest.customEditor === "function" && manifest.customEditor.call( this, { 
-          trackEvent: trackEvent || {}, 
-          manifest: manifest || {}, 
+        typeof editor === "function" && editor.call( this, { 
+          trackEvent: trackEvent || {},
           target: editorTarget || {}, 
-          callback: function( trackEvent, attributes ){
-            applyChanges.call( butter, trackEvent, attributes );
+          callback: function( trackEvent, popcornOptions ){
+            applyChanges.call( butter, trackEvent, popcornOptions );
           }
         });
       },
       
       // call when no custom editor markup/source has been provided
-      constructDefaultEditor = function( trackEvent, manifest ) {
+      constructDefaultEditor = function( trackEvent ) {
 
-        var options = manifest.options,
+        var options = trackEvent.popcornEvent._natives.manifest.options,
           prop,
           opt,
           elemType,
@@ -101,7 +102,7 @@ THE SOFTWARE.
 
             if ( elemType === "input" ) {
 
-              attr = trackEvent.popcornEvent[ prop ];
+              attr = trackEvent.popcornOptions[ prop ] || "";
 
               //  Round displayed times to nearest quarter of a second
               if ( typeof +attr === "number" && [ "start", "end" ].indexOf( prop ) > -1 ) {
@@ -113,7 +114,7 @@ THE SOFTWARE.
             }
 
             if ( elemType === "select" ) {
-              attr = trackEvent.popcornEvent[ prop ];
+              attr = trackEvent.popcornOptions[ prop ];
               elem.style.width = "150px"
               var populate = function( type ) {
 
@@ -191,32 +192,35 @@ THE SOFTWARE.
         return undefined;
       },
 
-      applyChanges = function( trackEvent, attributes ) {
+      applyChanges = function( trackEvent, popcornOptions ) {
       
-        //this.removeTrackEvent( trackEvent );
-        trackEvent.attributes = attributes;
-        //this.addTrackEvent( trackEvent );
+
+        // trackEvent is the original TrackEvent
+        // popcornOptions is the new popcorn options data from the custom editor.
+        // 
+        // 
+        
         clearTarget();
         toggleVisibility("hidden");
         
-        alert( "Information recieved from the custom Editor: \n\n Latitude: " + trackEvent.popcornEvent.lat + "\n Longitude: " + 
-          trackEvent.popcornEvent.lng + "\n Map Type: " + trackEvent.popcornEvent.type +
-          "\n Zoom: " + trackEvent.popcornEvent.zoom + "\n yay :)" );
+        alert( "Information recieved from the custom Editor: \n\n Latitude: " + popcornOptions.lat + "\n Longitude: " + 
+          popcornOptions.lng + "\n Map Type: " + popcornOptions.type +
+          "\n Zoom: " + popcornOptions.zoom );
       },
 
-      beginEditing = function( trackEvent, manifest ) {
+      beginEditing = function( trackEvent ) {
         
-        if (  !trackEvent || !manifest ) {
+        if (  !trackEvent ) {
 
           return;
         }
 
-        if ( !manifest.customEditor ) {
+        if ( !trackEvent.popcornEvent._natives.manifest.customEditor ) {
 
-          constructDefaultEditor.call( this, trackEvent, manifest );
+          constructDefaultEditor.call( this, trackEvent );
         } else {
 
-          useCustomEditor.call( this, trackEvent, manifest );
+          useCustomEditor.call( this, trackEvent );
         }
 
       };
@@ -234,7 +238,7 @@ THE SOFTWARE.
           target = options.target;
         } else {
         
-          throw ( "ERROR - setup: options.target invalid" );
+          throw new Error( "ERROR - setup: options.target invalid" );
         }
         
         editorTarget = ((target.contentWindow) ? target.contentWindow : (target.contentDocument && target.contentDocument.document) ? target.contentDocument.document : target.contentDocument) || target; 
@@ -254,7 +258,7 @@ THE SOFTWARE.
         
         editTrackEvent: function( options ) {
            
-           beginEditing.call( this, options.trackEvent, options.manifest );
+           beginEditing.call( this, options.trackEvent );
         },
         
         updateEditor: function( trackEvent ) {

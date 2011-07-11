@@ -7,37 +7,8 @@
     window.addEventListener("DOMContentLoaded", function(){
         var b = new Butter();
         b.eventeditor( {target: "butter-editor-target" } );
-        var te1 = new Butter.TrackEvent({ popcornEvent: { text:"hello world 1", start: 67.237868, end: 567.675675, ddl: "OPTION 4" } } ),
-          te2 = new Butter.TrackEvent({ popcornEvent: { words:"hello world 2", begin: 12, stop: 13.555, ddl: "OPTION 2" } } );
-          m1 = { 
-            options: { 
-              start: {
-                elem: "input", 
-                type: "text", 
-                label: "In" 
-              },
-              end: {
-                elem: "input", 
-                type: "text", 
-                label: "Out" 
-              },
-              text: { 
-                elem: "input", 
-                type: "text", 
-                label: "Text" 
-              },
-              ddl: {
-                elem: "select",
-                options: ["OPTION 1", "OPTION 2", "OPTION 3", "OPTION 4", "OPTION 5"],
-                label: "DropDown"
-              }
-            },
-            customEditor: function( options ) {
-              console.log( "This is a function that can contain custom editor code. Below is the options object passed into it with a callback:");
-              console.log( options );
-            }
-          },
-          m2 = { 
+        var te = new Butter.TrackEvent({ popcornOptions: { words:"hello world 2", begin: 12, stop: 13.555, ddl: "OPTION 2" } } ),
+          m = { 
             options: { 
               begin: {
                 elem: "input", 
@@ -62,18 +33,16 @@
             }
             
           };
-          
-        var open = document.getElementById( "openBtn1" );
+        
+        te.popcornEvent = {};
+        te.popcornEvent._natives = {};
+        te.popcornEvent._natives.manifest = m;
+        
+        console.log( te);
+        
+        var open = document.getElementById( "openBtn" );
         open.addEventListener( "click", function(){
-          b.editTrackEvent( { trackEvent: te1, 
-            manifest: m1 }
-          );
-        }, false);
-        open = document.getElementById( "openBtn2" );
-        open.addEventListener( "click", function(){
-          b.editTrackEvent( { trackEvent: te2, 
-            manifest: m2 }
-          );
+          b.editTrackEvent( { trackEvent: te } );
         }, false);
         window.b = b;
     }, false);
@@ -81,8 +50,7 @@
     </script>
   </head>
   <body>
-  <input id="openBtn1" type="button" value="TrackEvent w/ Custom Editor function (see console)" ></input>
-  <input id="openBtn2" type="button" value="TrackEvent using Default Editor" ></input>
+  <input id="openBtn" type="button" value="Edit TrackEvent Using Default Editor" ></input>
   <div id="butter-editor-target" style="width: 300px; height: 300px"></div>
 </body>
 </html>
