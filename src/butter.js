@@ -67,11 +67,13 @@ THE SOFTWARE.
 
       if ( idx > -1 ) {
         trackEvents.splice( idx, 1 );
+        trackEvent.track = undefined;
       } //if
     }; //removeTrackEvent
 
     this.addTrackEvent = function ( trackEvent ) {
       trackEvents.push( trackEvent );
+      trackEvent.track = that;
     }; //addTrackEvent
   }; //Track
 
@@ -83,11 +85,13 @@ THE SOFTWARE.
     var id = numTrackEvents++;
 
     options = options || {};
-    var name = options.name || 'Track' + Date.now();
+    var name = options.name || 'Track' + id + Date.now();
     this.start = options.start || 0;
     this.end = options.end || 0;
     this.type = options.type;
+    this.popcornOptions = options.popcornOptions;
     this.popcornEvent = options.popcornEvent;
+    this.track = options.track;
 
     this.getName = function () {
       return name;
