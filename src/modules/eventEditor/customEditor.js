@@ -189,9 +189,12 @@ window.addEventListener("DOMContentLoaded", function(){
   
   b.addTrackEvent( b.addTrack( new Butter.Track()), te1);
   
+  
+  
   var open = document.getElementById( "openBtn1" );
   open.addEventListener( "click", function(){
-    b.editTrackEvent( { trackEvent: te1 } );
+    //console.log( b.getTracks()[0].getTrackEvents());
+    b.editTrackEvent( b.getTracks()[0].getTrackEvents()[0] );
   }, false);
   window.b = b;
 }, false);

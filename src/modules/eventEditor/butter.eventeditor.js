@@ -193,15 +193,17 @@ THE SOFTWARE.
       },
 
       applyChanges = function( trackEvent, popcornOptions ) {
-      
-
-        // trackEvent is the original TrackEvent
-        // popcornOptions is the new popcorn options data from the custom editor.
-        // 
-        // 
+        
+        var newEvent = {};
+        
+        this.extendObj( newEvent, trackEvent );
+        newEvent.popcornOptions = popcornOptions;
+        
+        this.removeTrackEvent( trackEvent.track, trackEvent );
+        this.addTrackEvent( newEvent.track, newEvent );
         
         clearTarget();
-        toggleVisibility("hidden");
+        toggleVisibility( "hidden" );
         
         alert( "Information recieved from the custom Editor: \n\n Latitude: " + popcornOptions.lat + "\n Longitude: " + 
           popcornOptions.lng + "\n Map Type: " + popcornOptions.type +
@@ -210,7 +212,7 @@ THE SOFTWARE.
 
       beginEditing = function( trackEvent ) {
         
-        if (  !trackEvent ) {
+        if ( !trackEvent ) {
 
           return;
         }
@@ -256,14 +258,24 @@ THE SOFTWARE.
       
       extend: {
         
-        editTrackEvent: function( options ) {
+        editTrackEvent: function( trackEvent ) {
            
-           beginEditing.call( this, options.trackEvent );
+           beginEditing.call( this, trackEvent );
         },
         
         updateEditor: function( trackEvent ) {
         
           updateTrackData.call( this, trackEvent );
+        },
+        
+        extendObj: function( obj ) {
+          var dest = obj, src = [].slice.call( arguments, 1 );
+
+          src.forEach( function( copy ) {
+            for ( var prop in copy ) {
+              dest[ prop ] = copy[ prop ];
+            }
+          });
         }
       }
     }
