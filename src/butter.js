@@ -82,12 +82,8 @@ THE SOFTWARE.
     name = options.name || 'Track' + Date.now();
       
     options = options || {};
-<<<<<<< HEAD
-    
-    this.attributes = options.attributes || {};
-=======
+
     var name = options.name || 'Track' + id + Date.now();
->>>>>>> 638ccf2544c362962488fbf12e103a6483573893
     this.start = options.start || 0;
     this.end = options.end || 0;
     this.type = options.type;
