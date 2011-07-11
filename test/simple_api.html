@@ -5,6 +5,11 @@
 
       var b = new Butter();
 
+      b.addMedia(new Butter.Media());
+      var otherMedia = b.addMedia(new Butter.Media({name: "MediaFoo"}));
+
+      otherMedia.addTrack({name: "OtherTrack"});
+
       function writeTracks() {
         var tracks = b.getTracks();
         for (var i=0; i<tracks.length; ++i) {
@@ -57,6 +62,13 @@
       b.removeTarget("Target1");
       b.removeTarget(target2);
       writeTargets();
+
+      console.log("Switching Media");
+      var m = b.setMedia("MediaFoo");
+      console.log(m.getName());
+      writeTracks();
+
+      console.log("Done");
 
     </script>
   </head>
