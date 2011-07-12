@@ -24,6 +24,8 @@ THE SOFTWARE.
 
 (function ( window, document, undefined ) {
 
+  var modules = {};
+
   /****************************************************************************
    * Track
    ****************************************************************************/
@@ -60,16 +62,16 @@ THE SOFTWARE.
       if ( typeof(trackEvent) === "string" ) {
         trackEvent = that.getTrackEvent( trackEvent );
       } //if
+
       var idx = trackEvents.indexOf( trackEvent );
+
       if ( idx > -1 ) {
         trackEvents.splice( idx, 1 );
-        trackEvent.track = undefined;
       } //if
     }; //removeTrackEvent
 
     this.addTrackEvent = function ( trackEvent ) {
       trackEvents.push( trackEvent );
-      trackEvent.track = that;
     }; //addTrackEvent
   }; //Track
 
@@ -78,18 +80,14 @@ THE SOFTWARE.
    ****************************************************************************/
   var numTrackEvents = 0;
   var TrackEvent = function ( options ) {
-    var id = numTrackEvents++,
-    name = options.name || 'Track' + Date.now();
-      
-    options = options || {};
+    var id = numTrackEvents++;
 
-    var name = options.name || 'Track' + id + Date.now();
+    options = options || {};
+    var name = options.name || 'Track' + Date.now();
     this.start = options.start || 0;
     this.end = options.end || 0;
     this.type = options.type;
-    this.popcornOptions = options.popcornOptions;
     this.popcornEvent = options.popcornEvent;
-    this.track = options.track;
 
     this.getName = function () {
       return name;
@@ -133,8 +131,6 @@ THE SOFTWARE.
         targets = [],
         targetsByName = {},
         that = this;
-     
-    window.evt = events;
 
     this.id = "Butter" + numButters++;
 
@@ -198,7 +194,6 @@ THE SOFTWARE.
         var track = tracks[i];
         trackEvents[ track.getName() ] = track.getTrackEvents();
       } //for
-      return trackEvents;
     }; //getTrackEvents
 
     this.getTrackEvent = function ( track, trackEventId ) {
@@ -353,6 +348,13 @@ THE SOFTWARE.
     this.setMedia = function () {
     };
 
+    /****************************************************************
+     * Init Modules for this instance
+     ****************************************************************/
+    for ( var moduleName in modules ) {
+      modules[moduleName].setup && modules[moduleName].setup.call(this);
+    } //for
+
   }; //Butter
 
   Butter.getScriptLocation = function () {
@@ -367,9 +369,7 @@ THE SOFTWARE.
 
   //registerModule - Registers a Module into the Butter core
   Butter.registerModule = Butter.prototype.registerModule = function ( name, module ) {
-    Butter.prototype[name] = function(options) {
-      module.setup && module.setup.call(this, options);
-    };
+    modules[ name ] = module;
     if ( module.extend ) {
       Butter.extendAPI( module.extend );
     } //if
@@ -390,3 +390,4 @@ THE SOFTWARE.
   window.Butter = Butter;
 
 })( window, document, undefined );
+
