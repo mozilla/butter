@@ -3,9 +3,9 @@ var i = 1,
   _mapFired = false,
   _mapLoaded = false,
   geocoder, loadMaps;
-//google api callback 
+//google api callback
 googleCallback = function (data) {
-  // ensure all of the maps functions needed are loaded 
+  // ensure all of the maps functions needed are loaded
   // before setting _maploaded to true
   if (typeof google !== "undefined" && google.maps && google.maps.Geocoder && google.maps.LatLng) {
     geocoder = new google.maps.Geocoder();
@@ -34,7 +34,7 @@ window.addEventListener("DOMContentLoaded", function(){
   var b = new Butter();
   b.eventeditor( {target: "butter-editor-target" } );
   var te1 = new Butter.TrackEvent({ start: 67.237868, end: 567.675675, popcornOptions: { type:"ROADMAP", start: 67.237868, end: 567.675675, zoom: 8, location: "Toronto" } } ),
-  m1 = { 
+  m1 = {
     options: {
       start: {
         elem: "input",
@@ -91,9 +91,9 @@ window.addEventListener("DOMContentLoaded", function(){
       newdiv.style.height = "85%";
       i++;
 
-      options.target.appendChild && options.target.appendChild( newdiv ) || 
-        options.target.document && options.target.document.body && 
-        options.target.document.body.appendChild && 
+      options.target.appendChild && options.target.appendChild( newdiv ) ||
+        options.target.document && options.target.document.body &&
+        options.target.document.body.appendChild &&
         options.target.document.body.appendChild( newdiv );
 
       // ensure that google maps and its functions are loaded
@@ -123,7 +123,7 @@ window.addEventListener("DOMContentLoaded", function(){
             });
             map.getDiv().style.display = "block";
           }
-      
+
           var show = function() {
             if ( map ) {
               //console.log (map);
@@ -140,15 +140,15 @@ window.addEventListener("DOMContentLoaded", function(){
               options.trackEvent.popcornOptions.zoom = options.trackEvent.popcornOptions.zoom || 8; // default to 8
 
               map.setZoom( options.trackEvent.popcornOptions.zoom );
-              
+
               var parent = map.getDiv().parentNode,
                 submit = document.createElement("input");
-              
+
               submit.value = "Submit Data to Event Editor Module";
               submit.type = "button";
               submit.addEventListener( "click", function() {
                 var latlng = map.getCenter(),
-                
+
                 popcornOptions = {
                   zoom: map.getZoom(),
                   lat: latlng.Ja,
@@ -157,22 +157,22 @@ window.addEventListener("DOMContentLoaded", function(){
                   start: options.trackEvent.popcornOptions.start,
                   end: options.trackEvent.popcornOptions.end
                 };
-                
-                options.callback( options.trackEvent, popcornOptions );
-                
+
+                options.okay( options.trackEvent, popcornOptions );
+
               }, false );
               parent.appendChild( submit);
-              
-              
+
+
             } else {
               setTimeout(function() {
                 show();
               }, 5);
             }
           };
-          
+
           show();
-              
+
         } else {
             setTimeout(function () {
               isMapReady();
@@ -186,11 +186,11 @@ window.addEventListener("DOMContentLoaded", function(){
     te1.popcornEvent = {};
     te1.popcornEvent._natives = {};
     te1.popcornEvent._natives.manifest = m1;
-  
+
   b.addTrackEvent( b.addTrack( new Butter.Track()), te1);
-  
-  
-  
+
+
+
   var open = document.getElementById( "openBtn1" );
   open.addEventListener( "click", function(){
     //console.log( b.getTracks()[0].getTrackEvents());
