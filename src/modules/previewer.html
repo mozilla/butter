@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../butter.js"></script>
+    <script type="text/javascript" src="previewer.js"></script>
+    <script type="text/javascript">
+
+      var butter = new Butter(),
+          ready = false, ok,
+          DOMContent;
+
+      butter.setMedia( "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" );
+      
+      document.addEventListener('DOMContentLoaded', function (e) {
+
+        butter.build( "notIframe", function() {
+          ready = true;
+        } );
+
+        ok = function() {
+
+          if ( !ready ) {
+            setTimeout( function() {
+              ok();
+            }, 10 );
+          } else {
+   
+            DOMContent = butter.getDOMDB();
+            console.log( DOMContent );
+            butter.buildPopcorn( DOMContent[ DOMContent.length - 1 ] );
+          }
+        }
+
+        ok();
+
+      }, false);
+
+      var addTrack = function( type ) {
+    
+        var track = butter.getTracks()[ 0 ] || butter.addTrack( new Butter.Track() );
+        butter.addTrackEvent( track, new Butter.TrackEvent({
+          start: 1, end: 100, type: type, popcornEvent: {
+            start: 1,
+            end: 10,
+            text: "ITS WORKING",
+            target: DOMContent[ 2 ]
+          }
+        }) );
+      }
+
+    var addTrack2 = function( type ) {
+    
+        var track = butter.getTracks()[ 0 ] || butter.addTrack( new Butter.Track() );
+        butter.addTrackEvent( track, new Butter.TrackEvent({
+          start: 1, end: 100, type: type, popcornEvent: {
+            start: 1,
+            end: 20,
+            src: "https://www.drumbeat.org/media//images/drumbeat-logo-splash.png",
+            target: DOMContent[ 2 ]
+          }
+        }) );
+      }
+
+    </script>
+  </head>
+  <body>
+<form method="post" action="">
+    <iframe id="notIframe" style="width:500px;height:500px" src="layout.html"></iframe>
+    <button id="btn" onClick="addTrack( 'footnote' );"> Click to add a footnote </butter>
+    <button id="btn" onClick="addTrack2( 'image' );"> Click to add an image </butter>
+  </body>
+</html>
