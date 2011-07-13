@@ -3,7 +3,8 @@
   var popcorn, trackEvents,
     urlRegex, videoURL,
     layout, DOMDB,
-    iframe, popcornString;
+    iframe, popcornString,
+    butterIds;
 
   Butter.registerModule( "previewer", {
 
@@ -13,6 +14,7 @@
       urlRegex = /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)(youtu|vimeo|soundcloud|baseplayer)/;
       layout = "../../../layout.html";
       DOMDB = { target: [], media: [] };
+      butterIds = {};
     }, // setup
 
     extend: {
@@ -120,7 +122,9 @@
       // a local version of popcorn
       buildPopcorn: function( videoTarget ) {
         
-        videoURL = this.getMedia();
+        console.log(this.getCurrentMedia());
+        videoURL = this.getCurrentMedia().getMedia();
+        console.log(videoURL);
         
         // create a string that will create an instance of popcorn with the proper video source
         popcornString = "document.addEventListener('DOMContentLoaded', function () {\n";        
@@ -215,7 +219,7 @@
         doc.head.appendChild( popcornScript );
         
         // create a new head element with our new data
-        iframeHead = "<head>\n<script src='http://popcornjs.org/code/dist/popcorn-complete.js'>" + 
+        iframeHead = "<head>\n<script src='http://dl.dropbox.com/u/3531958/popcorn.complete.debug.js'>" + 
           "</script>\n<script>\n" + popcornString + "</script>\n</head>\n";
 
         // recreate the body as well
@@ -227,7 +231,7 @@
         doc.close();
 
         // listen for a trackeventadded
-        this.listen( "trackeventadded", function(e) {
+        this.listen( "trackeventadded", function( e ) {
 
           // ensure our global iframe version of popcorn is their
           var popcornReady = function( e ) {
@@ -243,14 +247,16 @@
               var framePopcorn = iframe.contentWindow.popcorn;
 
               // add track events to our local version
-              popcorn[ e.type ]( e.popcornEvent );
-
+              popcorn[ e.type ]( e.popcornOptions );
+              
               // force a timeupdate, so new events get recognized
               framePopcorn.video.currentTime += 0.0001;
 
               // add track events to the iframe verison of popcorn
-              framePopcorn[ e.type ]( e.popcornEvent );
+              framePopcorn[ e.type ]( e.popcornOptions );
 
+              butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
+              console.log(butterIds);
               // store a reference to track events
               trackEvents = popcorn.getTrackEvents();
             } // else
@@ -258,6 +264,11 @@
 
           popcornReady( e );
         } ); // listener
+
+        this.listen( "trackeventremoved", function( e ) {
+          console.log(e.getId());
+          iframe.contentWindow.popcorn.removeTrackEvent( butterIds[ e.getId ] );
+        } );
 
       } // fillIframe
     }, // exnteds

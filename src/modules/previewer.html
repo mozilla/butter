@@ -7,11 +7,13 @@
       var butter = new Butter(),
           ready = false, ok,
           DOMContent;
-
-      butter.setMedia( "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" );
+      
+      butter.addMedia( "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" );
+      butter.getCurrentMedia().setMedia( "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" );
       
       document.addEventListener('DOMContentLoaded', function (e) {
 
+        butter.previewer();
         butter.build( "notIframe", function() {
           ready = true;
         } );
@@ -23,7 +25,7 @@
               ok();
             }, 10 );
           } else {
-          
+
             DOMContent = butter.getDOMDB();
             console.log(DOMContent);
             butter.buildPopcorn( "videoz" );
@@ -38,7 +40,7 @@
         
         var track = butter.getTracks()[ 0 ] || butter.addTrack( new Butter.Track() );
         butter.addTrackEvent( track, new Butter.TrackEvent({
-          start: 1, end: 100, type: type, popcornEvent: {
+          start: 1, end: 100, type: type, popcornOptions: {
             start: 1,
             end: 10,
             text: "ITS WORKING",
@@ -51,7 +53,7 @@
     
         var track = butter.getTracks()[ 0 ] || butter.addTrack( new Butter.Track() );
         butter.addTrackEvent( track, new Butter.TrackEvent({
-          start: 1, end: 100, type: type, popcornEvent: {
+          start: 1, end: 100, type: type, popcornOptions: {
             start: 1,
             end: 20,
             src: "https://www.drumbeat.org/media//images/drumbeat-logo-splash.png",
