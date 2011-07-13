@@ -370,8 +370,10 @@ THE SOFTWARE.
 
   //registerModule - Registers a Module into the Butter core
   Butter.registerModule = Butter.prototype.registerModule = function ( name, module ) {
-    Butter.prototype[ name ] = function( options ) {
-      module.setup && module.setup.call( this, options );
+
+    Butter.prototype[name] = function(options) {
+      module.setup && module.setup.call(this, options);
+      return this;
     };
     if ( module.extend ) {
       Butter.extendAPI( module.extend );
