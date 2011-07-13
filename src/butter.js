@@ -85,11 +85,12 @@ THE SOFTWARE.
     options = options || {};
     var name = options.name || 'Track' + Date.now();
     this.start = options.start || 0;
-    this.popcornOptions = options.popcornOptions;
     this.end = options.end || 0;
     this.type = options.type;
+    this.popcornOptions = options.popcornOptions;
     this.popcornEvent = options.popcornEvent;
-
+    this.track = options.track;
+    
     this.getName = function () {
       return name;
     };
