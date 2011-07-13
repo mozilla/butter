@@ -15,24 +15,9 @@
 
         butter.previewer();
         butter.build( "notIframe", function() {
-          ready = true;
+          DOMContent = butter.getDOMDB();
+          butter.buildPopcorn( "videoz" );
         } );
-
-        ok = function() {
-
-          if ( !ready ) {
-            setTimeout( function() {
-              ok();
-            }, 10 );
-          } else {
-
-            DOMContent = butter.getDOMDB();
-            console.log(DOMContent);
-            butter.buildPopcorn( "videoz" );
-          }
-        }
-
-        ok();
 
       }, false);
 
