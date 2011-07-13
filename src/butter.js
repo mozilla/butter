@@ -85,6 +85,7 @@ THE SOFTWARE.
     options = options || {};
     var name = options.name || 'Track' + Date.now();
     this.start = options.start || 0;
+    this.popcornOptions = options.popcornOptions;
     this.end = options.end || 0;
     this.type = options.type;
     this.popcornEvent = options.popcornEvent;
@@ -369,7 +370,9 @@ THE SOFTWARE.
 
   //registerModule - Registers a Module into the Butter core
   Butter.registerModule = Butter.prototype.registerModule = function ( name, module ) {
-    modules[ name ] = module;
+    Butter.prototype[ name ] = function( options ) {
+      module.setup && module.setup.call( this, options );
+    };
     if ( module.extend ) {
       Butter.extendAPI( module.extend );
     } //if

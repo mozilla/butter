@@ -100,7 +100,6 @@ window.addEventListener("DOMContentLoaded", function(){
       // before setting up the map parameters
       var isMapReady = function () {
         if (_mapLoaded) {
-          //console.log (options.trackEvent.popcornEvent.location);
           if (options.trackEvent.popcornOptions.location) {
             // calls an anonymous google function called on separate thread
             geocoder.geocode({
@@ -126,7 +125,6 @@ window.addEventListener("DOMContentLoaded", function(){
 
           var show = function() {
             if ( map ) {
-              //console.log (map);
               map.getDiv().style.display = "block";
               // reset the location and zoom just in case the user plaid with the map
               google.maps.event.trigger(map, 'resize');
@@ -193,7 +191,6 @@ window.addEventListener("DOMContentLoaded", function(){
 
   var open = document.getElementById( "openBtn1" );
   open.addEventListener( "click", function(){
-    //console.log( b.getTracks()[0].getTrackEvents());
     b.editTrackEvent( b.getTracks()[0].getTrackEvents()[0] );
   }, false);
   window.b = b;
