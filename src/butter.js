@@ -196,22 +196,57 @@ THE SOFTWARE.
         var track = tracks[i];
         trackEvents[ track.getName() ] = track.getTrackEvents();
       } //for
+      return trackEvents;
     }; //getTrackEvents
 
-    this.getTrackEvent = function ( track, trackEventId ) {
-      if ( typeof(track) === "string" ) {
-        track = that.getTrack( track );
+    this.getTrackEvent = function ( track, trackEvent ) {
+      if ( track && trackEvent ) {
+        if ( typeof(track) === "string" ) {
+          track = that.getTrack( track );
+        } //if
+        return track.getTrackEvent( trackEvent );
+      }
+      else {
+        var events = that.getTrackEvents();
+        for ( var trackName in events ) {
+          for ( var i=0, l=events[ trackName ].length; i<l; ++i ) {
+            if ( events[ trackName ][ i ].getName() === track ) {
+              return events[ trackName ][ i ];
+            }
+          }
+        } //for
       } //if
-      track.getTrackEvent( trackEventId );
     }; //getTrackEvent
 
     //removeTrackEvent - Remove a Track Event
     this.removeTrackEvent = function ( track, trackEvent ) {
-      if ( !(track instanceof Track) ) {
-        track = that.getTrack( track );
+
+      // one param given
+      if ( !trackEvent ) {
+        if ( track instanceof TrackEvent ) {
+          trackEvent = track;
+          track = trackEvent.track;
+        }
+        else if ( typeof(track) === "string" ) {
+          trackEvent = that.getTrackEvent( track );
+          track = trackEvent.track;
+        }
+        else {
+          throw new Error("Invalid parameters for removeTrackEvent");
+        }
       } //if
+
+      if ( typeof( track ) === "string") {
+        track = that.getTrack( track );
+      }
+
+      if ( typeof( trackEvent ) === "string" ) {
+        trackEvent = track.getTrackEvent( trackEvent );
+      }
+
       track.removeTrackEvent( trackEvent );
       that.trigger( "trackeventremoved", trackEvent );
+      return trackEvent;
     };
 
     /****************************************************************
