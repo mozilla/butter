@@ -37,14 +37,14 @@
     var addTrack2 = function( type ) {
     
         var track = butter.getTracks()[ 0 ] || butter.addTrack( new Butter.Track() );
-        butter.addTrackEvent( track, new Butter.TrackEvent({
+        console.log(butter.addTrackEvent( track, new Butter.TrackEvent({
           start: 1, end: 100, type: type, popcornOptions: {
             start: 1,
             end: 20,
             src: "https://www.drumbeat.org/media//images/drumbeat-logo-splash.png",
             target: DOMContent.target[ 2 ]
           }
-        }) );
+        }) ));
       }
 
     </script>

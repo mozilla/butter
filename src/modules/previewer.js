@@ -243,22 +243,23 @@
                 popcornReady( e );
               }, 10 );
             } else {
-
+              
               var framePopcorn = iframe.contentWindow.popcorn;
 
-              // add track events to our local version
-              popcorn[ e.type ]( e.popcornOptions );
+              e.popcornOptions.start = e.popcornOptions.start || e.start;
+              e.popcornOptions.end = e.popcornOptions.end || e.end;
               
               // force a timeupdate, so new events get recognized
               framePopcorn.video.currentTime += 0.0001;
 
               // add track events to the iframe verison of popcorn
-              framePopcorn[ e.type ]( e.popcornOptions );
-
+              framePopcorn[ e.type ]( iframe.contentWindow.Popcorn.extend( {}, e.popcornOptions ) );
               butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
-              console.log(butterIds);
+
+              e.popcornEvent = framePopcorn.getTrackEvent( butterIds[ e.getId() ] );
+
               // store a reference to track events
-              trackEvents = popcorn.getTrackEvents();
+              trackEvents = framePopcorn.getTrackEvents();
             } // else
           } // function
 
@@ -267,7 +268,7 @@
 
         this.listen( "trackeventremoved", function( e ) {
           console.log(e.getId());
-          iframe.contentWindow.popcorn.removeTrackEvent( butterIds[ e.getId ] );
+          iframe.contentWindow.popcorn.removeTrackEvent( butterIds[ e.getId() ] );
         } );
 
       } // fillIframe
