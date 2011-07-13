@@ -23,10 +23,10 @@
               ok();
             }, 10 );
           } else {
-   
+          
             DOMContent = butter.getDOMDB();
-            console.log( DOMContent );
-            butter.buildPopcorn( DOMContent[ DOMContent.length - 1 ] );
+            console.log(DOMContent);
+            butter.buildPopcorn( "videoz" );
           }
         }
 
@@ -35,14 +35,14 @@
       }, false);
 
       var addTrack = function( type ) {
-    
+        
         var track = butter.getTracks()[ 0 ] || butter.addTrack( new Butter.Track() );
         butter.addTrackEvent( track, new Butter.TrackEvent({
           start: 1, end: 100, type: type, popcornEvent: {
             start: 1,
             end: 10,
             text: "ITS WORKING",
-            target: DOMContent[ 2 ]
+            target: DOMContent.target[ 2 ]
           }
         }) );
       }
@@ -55,7 +55,7 @@
             start: 1,
             end: 20,
             src: "https://www.drumbeat.org/media//images/drumbeat-logo-splash.png",
-            target: DOMContent[ 2 ]
+            target: DOMContent.target[ 2 ]
           }
         }) );
       }
@@ -63,7 +63,6 @@
     </script>
   </head>
   <body>
-<form method="post" action="">
     <iframe id="notIframe" style="width:500px;height:500px" src="layout.html"></iframe>
     <button id="btn" onClick="addTrack( 'footnote' );"> Click to add a footnote </butter>
     <button id="btn" onClick="addTrack2( 'image' );"> Click to add an image </butter>
