@@ -29,7 +29,7 @@
             start: 1,
             end: 10,
             text: "ITS WORKING",
-            target: DOMContent.target[ 2 ]
+            target: DOMContent.target[ 0 ]
           }
         }) );
       }
@@ -42,7 +42,7 @@
             start: 1,
             end: 20,
             src: "https://www.drumbeat.org/media//images/drumbeat-logo-splash.png",
-            target: DOMContent.target[ 2 ]
+            target: DOMContent.target[ 0 ]
           }
         }) ));
       }
@@ -50,7 +50,7 @@
     </script>
   </head>
   <body>
-    <iframe id="notIframe" style="width:500px;height:500px" src="layout.html"></iframe>
+    <iframe id="notIframe" style="width:100%;height:500px" src="layout.html"></iframe>
     <button id="btn" onClick="addTrack( 'footnote' );"> Click to add a footnote </butter>
     <button id="btn" onClick="addTrack2( 'image' );"> Click to add an image </butter>
   </body>
