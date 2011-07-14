@@ -11,7 +11,7 @@
       butter.addMedia( "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" );
       butter.getCurrentMedia().setMedia( "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" );
       
-      document.addEventListener('DOMContentLoaded', function (e) {
+      document.addEventListener( 'DOMContentLoaded', function ( e ) {
 
         butter.previewer();
         butter.build( "notIframe", function() {
@@ -24,7 +24,7 @@
       var addTrack = function( type ) {
         
         var track = butter.getTracks()[ 0 ] || butter.addTrack( new Butter.Track() );
-        butter.addTrackEvent( track, new Butter.TrackEvent({
+        butter.addTrackEvent( track, new Butter.TrackEvent( {
           start: 1, end: 100, type: type, popcornOptions: {
             start: 1,
             end: 10,
@@ -37,14 +37,14 @@
     var addTrack2 = function( type ) {
     
         var track = butter.getTracks()[ 0 ] || butter.addTrack( new Butter.Track() );
-        console.log(butter.addTrackEvent( track, new Butter.TrackEvent({
+        butter.addTrackEvent( track, new Butter.TrackEvent( {
           start: 1, end: 100, type: type, popcornOptions: {
             start: 1,
             end: 20,
-            src: "https://www.drumbeat.org/media//images/drumbeat-logo-splash.png",
+            src: "http://images.wikia.com/starwars/images/0/06/Anakin_podracer.jpg",
             target: DOMContent.target[ 0 ]
           }
-        }) ));
+        } ) );
       }
 
     </script>
