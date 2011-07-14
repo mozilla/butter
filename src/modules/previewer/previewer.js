@@ -251,9 +251,6 @@
             } else {
               
               var framePopcorn = iframe.contentWindow.popcorn;
-
-              e.popcornOptions.start = e.popcornOptions.start || e.start;
-              e.popcornOptions.end = e.popcornOptions.end || e.end;
               
               // force a timeupdate, so new events get recognized
               framePopcorn.video.currentTime += 0.0001;
@@ -280,6 +277,10 @@
 
         this.listen( "mediachanged", function( e ) {
           that.buildPopcorn( e.getName() );
+        } );
+
+        this.listen( "timeupdate", function( e ) {
+          //iframe.contentWindow.popcorn.video.currentTime = e; 
         } );
 
       } // fillIframe
