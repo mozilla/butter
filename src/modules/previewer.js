@@ -2,69 +2,64 @@
 
   var popcorn, trackEvents,
     urlRegex, videoURL,
-    layout, DOMDB,
-    iframe, popcornString,
-    butterIds;
+    DOMDB, iframe, iframeBody,
+    popcornString, butterIds;
 
   Butter.registerModule( "previewer", {
 
-    // setup function used to set default values
-    setup: function() {
+    // setup function used to set default values, as well as setting up the iframe
+    setup: function( options, target, callback ) {
       
       urlRegex = /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)(youtu|vimeo|soundcloud|baseplayer)/;
-      layout = "../../../layout.html";
+      layout = options.layout;
       DOMDB = { target: [], media: [] };
       butterIds = {};
+
+      var that = this,
+          targetSrc = document.getElementById( options.target );
+
+        // check if target is a div or iframe
+      if ( targetSrc.tagName === "DIV" ) {
+
+        target = document.getElementById( options.target );
+
+        // force iframe to fill parent and set source
+        iframe = document.createElement( "IFRAME" );
+        iframe.src = layout;
+        iframe.width = target.style.width;
+        iframe.height = target.style.height;
+        target.appendChild( iframe );
+
+        // begin scraping once iframe has loaded, remove listener when complete
+        iframe.addEventListener( "load", function (e) {
+          that.scraper( iframe, options.callback );
+          this.removeEventListener( "load", arguments.callee, false );
+        }, false);
+
+      } else if ( targetSrc.tagName === "IFRAME" ) {
+
+        iframe = targetSrc;
+        iframe.src = options.layout;
+
+        targetSrc.addEventListener( "load", function (e) {
+          that.scraper( iframe, options.callback );
+          this.removeEventListener( "load", arguments.callee, false );
+        }, false);
+      } // else
     }, // setup
 
     extend: {
-
-      // build function used setup iframe and start DOM scraping
-      build: function( target, callback ) {
-        
-        var that = this,
-            targetSrc = document.getElementById( target );
-
-        // check if target is a div or iframe
-        if ( targetSrc.tagName === "DIV" ) {
-
-          target = document.getElementById( target );
-
-          // force iframe to fill parent and set source
-          iframe = document.createElement( "IFRAME" );
-          iframe.src = layout;
-          iframe.width = target.style.width;
-          iframe.height = target.style.height;
-
-          target.appendChild( iframe );
-
-          // begin scraping once iframe has loaded, remove listener when complete
-          iframe.addEventListener( "load", function (e) {
-            that.scraper( iframe, callback );
-            this.removeEventListener( "load", arguments.callee, false );
-          }, false);
-
-        } else if ( targetSrc.tagName === "IFRAME" ) {
-
-          iframe = targetSrc;
-          targetSrc.addEventListener( "load", function (e) {
-            that.scraper( targetSrc, callback );
-            this.removeEventListener( "load", arguments.callee, false );
-          }, false);
-        } // else
-      }, // build
-
-      // getDOMDB helper function, just returns the DOMDB
-      getDOMDB: function() {
-        return DOMDB;
-      }, // getDOMDB
 
       // scraper function that scrapes all DOM elements of the given layout,
       // only scrapes elements with the butter-data attribute
       scraper: function( iframe, callback ) {
 
         // obtain a reference to the iframes body
-        var body = iframe.contentWindow.document.getElementsByTagName( "BODY" );
+        var body = iframe.contentWindow.document.getElementsByTagName( "BODY" ),
+            that = this;
+
+        // store original iframeBody incase we rebuild
+        iframeBody = "<body>" + iframe.contentWindow.document.body.innerHTML + "</body>\n";
 
         // function to ensure body is actually there
         var ensureLoaded = function() {
@@ -101,11 +96,18 @@
             }, false );
             
             // if DOM element has an data-butter tag that is equal to target or media,
-            // add it to their repsective arrays in the DOMDB
+            // add it to butters target list with a respective type
             if( children[ i ].getAttribute( "data-butter" ) === "target" ) {
-              DOMDB.target.push( children[ i ].id );
+              that.addTarget( { 
+                name: children[ i ].id, 
+                type: "target"
+              } );
             } else if( children[ i ].getAttribute( "data-butter" ) === "media" ) {
-              DOMDB.media.push( children[ i ].id );
+              that.addMedia( { 
+                name: children[ i ].id, 
+                media: "http://videos-cdn.mozilla.net/serv/webmademovies" + 
+                  "/Moz_Doc_0329_GetInvolved_ST.webm" 
+              } );
             } // else
 
             // ensure we get every child, search recursively
@@ -121,10 +123,10 @@
       // buildPopcorn function, builds an instance of popcorn in the iframe and also
       // a local version of popcorn
       buildPopcorn: function( videoTarget ) {
-        
-        console.log(this.getCurrentMedia());
+
         videoURL = this.getCurrentMedia().getMedia();
-        console.log(videoURL);
+        
+        iframe.contentWindow.document.body.innerHTML = iframeBody;
         
         // create a string that will create an instance of popcorn with the proper video source
         popcornString = "document.addEventListener('DOMContentLoaded', function () {\n";        
@@ -133,7 +135,6 @@
             players = [];
 
         players[ "youtu" ] = function() {
-          console.log("HERE");
           popcornString += "popcorn = Popcorn( Popcorn.youtube( '" + videoTarget + "', '" +
             videoURL + "', {\n" + 
             "width: 430, height: 300\n" + 
@@ -209,7 +210,7 @@
       // which is mostly managing track events added by the user
       fillIframe: function() {
         
-        var popcornScript, iframeHead, iframeBody,
+        var popcornScript, iframeHead, body
             that = this, doc = iframe.contentWindow.document;
 
         // create a script within the iframe and populate it with our popcornString
@@ -219,15 +220,15 @@
         doc.head.appendChild( popcornScript );
         
         // create a new head element with our new data
-        iframeHead = "<head>\n<script src='http://dl.dropbox.com/u/3531958/popcorn.complete.debug.js'>" + 
+        iframeHead = "<head>\n<script src='http://popcornjs.org/code/dist/popcorn-complete.js'>" + 
           "</script>\n<script>\n" + popcornString + "</script>\n</head>\n";
-
-        // recreate the body as well
-        iframeBody =  "<body>" + doc.body.innerHTML + "</body>\n";
+        
+        // create a new body element with our new data
+        body = doc.body.innerHTML;
 
         // open, write our changes to the iframe, and close it
         doc.open();
-        doc.write( "<html>\n" + iframeHead + iframeBody + "\n</html>" );
+        doc.write( "<html>\n" + iframeHead + body + "\n</html>" );
         doc.close();
 
         // listen for a trackeventadded
@@ -253,7 +254,9 @@
               framePopcorn.video.currentTime += 0.0001;
 
               // add track events to the iframe verison of popcorn
-              framePopcorn[ e.type ]( iframe.contentWindow.Popcorn.extend( {}, e.popcornOptions ) );
+              framePopcorn[ e.type ]( iframe.contentWindow.Popcorn.extend( {},
+                e.popcornOptions ) );
+
               butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
 
               e.popcornEvent = framePopcorn.getTrackEvent( butterIds[ e.getId() ] );
@@ -267,8 +270,11 @@
         } ); // listener
 
         this.listen( "trackeventremoved", function( e ) {
-          console.log(e.getId());
           iframe.contentWindow.popcorn.removeTrackEvent( butterIds[ e.getId() ] );
+        } );
+
+        this.listen( "mediachanged", function( e ) {
+          that.buildPopcorn( e.getName() );
         } );
 
       } // fillIframe

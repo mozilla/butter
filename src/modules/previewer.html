@@ -8,18 +8,17 @@
           ready = false, ok,
           DOMContent;
       
-      butter.addMedia( "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" );
-      butter.getCurrentMedia().setMedia( "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" );
-      
       document.addEventListener( 'DOMContentLoaded', function ( e ) {
 
-        butter.previewer();
-        butter.build( "notIframe", function() {
-          DOMContent = butter.getDOMDB();
-          butter.buildPopcorn( "videoz" );
+        butter.previewer( {
+          layout: "layout.html",
+          target: "notIframe",
+          callback: function() {
+            butter.buildPopcorn( "videoz" );
+          }
         } );
 
-      }, false);
+      }, false );
 
       var addTrack = function( type ) {
         
@@ -29,7 +28,7 @@
             start: 1,
             end: 10,
             text: "ITS WORKING",
-            target: DOMContent.target[ 0 ]
+            target: butter.getTargets()[ 0 ].getName()
           }
         }) );
       }
@@ -41,17 +40,27 @@
           start: 1, end: 100, type: type, popcornOptions: {
             start: 1,
             end: 20,
-            src: "http://images.wikia.com/starwars/images/0/06/Anakin_podracer.jpg",
-            target: DOMContent.target[ 0 ]
+            src: "https://www.drumbeat.org/media//images/drumbeat-logo-splash.png",
+            target: butter.getTargets()[ 0 ].getName()
           }
         } ) );
       }
 
+    var changeMedia = function() {
+      var media = butter.addMedia( { 
+                name: "videoz", 
+                media: "http://clips.vorwaerts-gmbh.de/VfE.ogv" 
+              } );
+      butter.setMedia( media );
+
+    }
+
     </script>
   </head>
   <body>
-    <iframe id="notIframe" style="width:100%;height:500px" src="layout.html"></iframe>
+    <iframe id="notIframe" style="width:100%;height:500px"></iframe>
     <button id="btn" onClick="addTrack( 'footnote' );"> Click to add a footnote </butter>
     <button id="btn" onClick="addTrack2( 'image' );"> Click to add an image </butter>
+    <button id="btn" onClick="changeMedia();"> Click to change media </butter>
   </body>
 </html>
