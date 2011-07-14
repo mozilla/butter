@@ -70,8 +70,12 @@ THE SOFTWARE.
     }; //removeTrackEvent
 
     this.addTrackEvent = function ( trackEvent ) {
+      if ( !( trackEvent instanceof TrackEvent ) ) {
+        trackEvent = new TrackEvent( trackEvent );
+      } //if
       trackEvents.push( trackEvent );
       trackEvent.track = that;
+      return trackEvent;
     }; //addTrackEvent
   }; //Track
 
@@ -130,9 +134,18 @@ THE SOFTWARE.
 
     var tracksByName = {},
         tracks = [],
-        id = numMedia++;
-        name = options.name || "Media" + id + Date.now();
+        id = numMedia++,
+        name = options.name || "Media" + id + Date.now(),
+        media = options.media,
         that = this;
+
+    this.setMedia = function ( mediaElement ) {
+      media = mediaElement;
+    };
+
+    this.getMedia = function () {
+      return media;
+    };
 
     this.getName = function () {
       return name;
@@ -162,7 +175,6 @@ THE SOFTWARE.
       } //if
 
       for ( var i=0, l=tracks.length; i<l; ++i ) {
-        console.log(tracks[i].getName(), name );
         if ( tracks[i].getName() === name ) {
           return tracks[i];
         } //if
@@ -258,8 +270,10 @@ THE SOFTWARE.
         track.addTrackEvent( trackEvent );
         that.trigger( "trackeventadded", trackEvent );
         return trackEvent;
+      }
+      else {
+        throw new Error("No valid track specified");
       } //if
-      return undefined;
     }; //addTrackEvents
 
     //getTrackEvents - Get a list of Track Events
@@ -274,22 +288,54 @@ THE SOFTWARE.
       return trackEvents;
     }; //getTrackEvents
 
-    this.getTrackEvent = function ( track, trackEventId ) {
-      checkMedia();
-      if ( typeof(track) === "string" ) {
-        track = that.getTrack( track );
+    this.getTrackEvent = function ( track, trackEvent ) {
+      if ( track && trackEvent ) {
+        if ( typeof(track) === "string" ) {
+          track = that.getTrack( track );
+        } //if
+        return track.getTrackEvent( trackEvent );
+      }
+      else {
+        var events = that.getTrackEvents();
+        for ( var trackName in events ) {
+          var t = events[ trackName ];
+          for ( var i=0, l=t.length; i<l; ++i ) {
+            if ( t[ i ].getName() === track ) {
+              return t[ i ];
+            }
+          }
+        } //for
       } //if
-      return track.getTrackEvent( trackEventId );
     }; //getTrackEvent
 
     //removeTrackEvent - Remove a Track Event
     this.removeTrackEvent = function ( track, trackEvent ) {
-      checkMedia();
-      if ( !(track instanceof Track) ) {
-        track = that.getTrack( track );
+      // one param given
+      if ( !trackEvent ) {
+        if ( track instanceof TrackEvent ) {
+          trackEvent = track;
+          track = trackEvent.track;
+        }
+        else if ( typeof(track) === "string" ) {
+          trackEvent = that.getTrackEvent( track );
+          track = trackEvent.track;
+        }
+        else {
+          throw new Error("Invalid parameters for removeTrackEvent");
+        }
       } //if
+
+      if ( typeof( track ) === "string") {
+        track = that.getTrack( track );
+      }
+
+      if ( typeof( trackEvent ) === "string" ) {
+        trackEvent = track.getTrackEvent( trackEvent );
+      }
+
+      track.removeTrackEvent( trackEvent );
       that.trigger( "trackeventremoved", trackEvent );
-      return track.removeTrackEvent( trackEvent );
+      return trackEvent;
     };
 
     /****************************************************************
@@ -389,14 +435,32 @@ THE SOFTWARE.
      ****************************************************************/
     //play - Play the media
     this.play = function () {
+      checkMedia();
     };
 
     //pause - Pause the media
     this.pause = function () {
+      checkMedia();
     };
 
     //currentTime - Gets and Sets the media's current time.
-    this.currentTime = function () {
+    this.currentTime = function ( time ) {
+      checkMedia();
+
+      // need to get/set the video element dynamically
+      var video = document.getElementById( "video" );
+
+      if ( time !== undefined) {
+
+        video.currentTime = time;
+      }
+
+      return video.currentTime;
+    };
+
+    //getAllMedia - returns all stored media objects
+    this.getAllMedia = function () {
+      return medias;
     };
 
     //getMedia - get the media's information
@@ -434,8 +498,16 @@ THE SOFTWARE.
 
     //addMedia - add a media object
     this.addMedia = function ( media ) {
+
+      if ( !( media instanceof Media ) ) {
+        media = new Media( media );
+      } //if
+
+      var mediaName = media.getName();
       medias.push( media );
-      mediaByName[ media.getName() ] = media;
+      mediaByName[ mediaName ] = media;
+
+
       if ( !currentMedia ) {
         that.setMedia( media );
       } //if
@@ -453,9 +525,12 @@ THE SOFTWARE.
       if ( idx > -1 ) {
         medias.splice( idx, 1 );
         delete mediaByName[ media.getName() ];
+        that.trigger( "mediaremoved", media );
+        if ( media === currentMedia ) {
+          currentMedia = undefined;
+        } //if
         return media;
       } //if
-      that.trigger( "mediaremoved", media );
       return undefined;    
     };
 
@@ -498,3 +573,4 @@ THE SOFTWARE.
   window.Butter = Butter;
 
 })( window, document, undefined );
+
