@@ -109,7 +109,7 @@ THE SOFTWARE.
     var id = numTargets++;
 
     options = options || {};
-    var name = options.name || "Target" + Date.now();
+    var name = options.name || "Target" + id + Date.now();
     this.object = options.object;
 
     this.getName = function () {
@@ -122,19 +122,91 @@ THE SOFTWARE.
   }; //Target
 
   /****************************************************************************
+   * Media
+   ****************************************************************************/
+  var numMedia = 0;
+  var Media = function ( options ) {
+    options = options || {};
+
+    var tracksByName = {},
+        tracks = [],
+        id = numMedia++;
+        name = options.name || "Media" + id + Date.now();
+        that = this;
+
+    this.getName = function () {
+      return name;
+    };
+
+    this.getId = function () {
+      return id;
+    };
+
+    this.getTracks = function () {
+      return tracks;
+    };
+
+    this.addTrack = function ( track ) {
+      if ( !(track instanceof Track) ) {
+        track = new Track( track );
+      } //if
+      tracksByName[ track.getName() ] = track;
+      tracks.push( track );
+      return track;
+    }; //addTrack
+
+    this.getTrack = function ( name ) {
+      var track = tracksByName[ name ];
+      if ( track ) {
+         return track;
+      } //if
+
+      for ( var i=0, l=tracks.length; i<l; ++i ) {
+        console.log(tracks[i].getName(), name );
+        if ( tracks[i].getName() === name ) {
+          return tracks[i];
+        } //if
+      } //for
+
+      return undefined;
+    }; //getTrack
+
+    this.removeTrack = function ( track ) {
+      if ( typeof(track) === "string" ) {
+        track = that.getTrack( track );
+      } //if
+      var idx = tracks.indexOf( track );
+      if ( idx > -1 ) {
+        tracks.splice( idx, 1 );
+        delete tracksByName[ track.getName() ];
+        return track;
+      } //if
+      return undefined;    
+    }; //removeTrack
+
+  }; //Media
+
+  /****************************************************************************
    * Butter
    ****************************************************************************/
   var numButters = 0;
   var Butter = function ( options ) {
 
     var events = {},
-        tracksByName = {},
-        tracks = [],
+        medias = [],
+        mediaByName = {},
+        currentMedia,
         targets = [],
         targetsByName = {},
         that = this;
 
     this.id = "Butter" + numButters++;
+
+    function checkMedia() {
+      if ( !currentMedia ) {
+        throw new Error("No media object is selected");
+      } //if
+    }
 
     /****************************************************************
      * Event methods
@@ -175,15 +247,16 @@ THE SOFTWARE.
      ****************************************************************/
     //addTrackEvent - Creates a new Track Event
     this.addTrackEvent = function ( track, trackEvent ) {
+      checkMedia();
       if ( typeof(track) === "string" ) {
-        track = that.getTrack( track );
+        track = currentMedia.getTrack( track );
       } //if
       if ( track ) {
         if ( !(trackEvent instanceof TrackEvent) ) {
           trackEvent = new TrackEvent( trackEvent );
         } //if
         track.addTrackEvent( trackEvent );
-        that.trigger("trackeventadded", trackEvent);
+        that.trigger( "trackeventadded", trackEvent );
         return trackEvent;
       } //if
       return undefined;
@@ -191,27 +264,32 @@ THE SOFTWARE.
 
     //getTrackEvents - Get a list of Track Events
     this.getTrackEvents = function () {
+      checkMedia();
+      var tracks = currentMedia.getTracks();
       var trackEvents = {};
       for ( var i=0, l=tracks.length; i<l; ++i ) {
         var track = tracks[i];
         trackEvents[ track.getName() ] = track.getTrackEvents();
       } //for
+      return trackEvents;
     }; //getTrackEvents
 
     this.getTrackEvent = function ( track, trackEventId ) {
+      checkMedia();
       if ( typeof(track) === "string" ) {
         track = that.getTrack( track );
       } //if
-      track.getTrackEvent( trackEventId );
+      return track.getTrackEvent( trackEventId );
     }; //getTrackEvent
 
     //removeTrackEvent - Remove a Track Event
     this.removeTrackEvent = function ( track, trackEvent ) {
+      checkMedia();
       if ( !(track instanceof Track) ) {
         track = that.getTrack( track );
       } //if
-      track.removeTrackEvent( trackEvent );
       that.trigger( "trackeventremoved", trackEvent );
+      return track.removeTrackEvent( trackEvent );
     };
 
     /****************************************************************
@@ -219,49 +297,28 @@ THE SOFTWARE.
      ****************************************************************/
     //addTrack - Creates a new Track
     this.addTrack = function ( track ) {
-      if ( !(track instanceof Track) ) {
-        track = new Track( track );
-      } //if
-      tracksByName[ track.getName() ] = track;
-      tracks.push( track );
+      checkMedia();
       that.trigger( "trackadded", track );
-      return track;
+      return currentMedia.addTrack( track );
     }; //addTrack
 
     //getTracks - Get a list of Tracks
     this.getTracks = function () {
-      return tracks;
+      checkMedia();
+      return currentMedia.getTracks();
     }; //getTracks
 
     //getTrack - Get a Track by its id
     this.getTrack = function ( name ) {
-      var track = tracksByName[ name ];
-      if ( track ) {
-         return track;
-      } //if
-
-      for ( var i=0, l=tracks.length; i<l; ++i ) {
-        if ( tracks[i].id === name ) {
-          return tracks[i];
-        } //if
-      } //for
-
-      return undefined;
+      checkMedia();
+      return currentMedia.getTrack( name );
     }; //getTrack
 
     //removeTrack - Remove a Track
     this.removeTrack = function ( track ) {
-      if ( typeof(track) === "string" ) {
-        track = that.getTrack( track );
-      } //if
-      var idx = tracks.indexOf( track );
-      if ( idx > -1 ) {
-        tracks.splice( idx, 1 );
-        delete tracksByName[ track.getName() ];
-        that.trigger( "trackremoved", track );
-        return track;
-      } //if
-      return undefined;    
+      checkMedia();
+      that.trigger( "trackremoved", track );
+      return currentMedia.removeTrack( track );
     };
 
     /****************************************************************
@@ -343,11 +400,63 @@ THE SOFTWARE.
     };
 
     //getMedia - get the media's information
-    this.getMedia = function () {
+    this.getMedia = function ( media ) {
+      if ( mediaByName[ media ] ) {
+        return mediaByName[ media ];
+      }
+
+      for ( var i=0,l=medias.length; i<l; ++i ) {
+        if ( medias[i].getName() === media ) {
+          return medias[i];
+        }
+      }
+
+      return undefined;
+    };
+
+    //getCurrentMedia - returns the current media object
+    this.getCurrentMedia = function () {
+      return currentMedia;
     };
 
     //setMedia - set the media's information
-    this.setMedia = function () {
+    this.setMedia = function ( media ) {
+      if ( typeof( media ) === "string" ) {
+        media = that.getMedia( media );
+      } //if
+
+      if ( media && medias.indexOf( media ) > -1 ) {
+        currentMedia = media;
+        that.trigger( "mediachanged", media );
+        return currentMedia;
+      } //if
+    };
+
+    //addMedia - add a media object
+    this.addMedia = function ( media ) {
+      medias.push( media );
+      mediaByName[ media.getName() ] = media;
+      if ( !currentMedia ) {
+        that.setMedia( media );
+      } //if
+      that.trigger( "mediaadded", media );
+      return media;
+    };
+
+    //removeMedia - forget a media object
+    this.removeMedia = function ( media ) {
+      if ( typeof( media ) === "string" ) {
+        media = that.getMedia( media );
+      } //if
+
+      var idx = medias.indexOf( media );
+      if ( idx > -1 ) {
+        medias.splice( idx, 1 );
+        delete mediaByName[ media.getName() ];
+        return media;
+      } //if
+      that.trigger( "mediaremoved", media );
+      return undefined;    
     };
 
   }; //Butter
@@ -381,6 +490,7 @@ THE SOFTWARE.
     } //for
   };
 
+  Butter.Media = Media;
   Butter.Track = Track;
   Butter.TrackEvent = TrackEvent;
   Butter.Target = Target;
