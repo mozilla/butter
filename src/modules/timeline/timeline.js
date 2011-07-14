@@ -87,8 +87,8 @@ Butter.registerModule( "timeline", {
         // setup for createTrackEvent()
         } else {
 
-          var start = trackEventObj.start,
-              end = trackEventObj.end,
+          var start = trackEventObj.popcornOptions.start,
+              end = trackEventObj.popcornOptions.end,
               width = ( end - start ) / options.duration * track.getElement().offsetWidth,
               left = start / options.duration * track.getElement().offsetWidth;
 
@@ -100,8 +100,8 @@ Butter.registerModule( "timeline", {
 
         var trackLinerTrack = track;
 
-        trackEventObj.options.start = trackEventObj.element.offsetLeft / container.offsetWidth * options.duration;
-        trackEventObj.options.end = ( trackEventObj.element.offsetLeft + trackEventObj.element.offsetWidth ) / container.offsetWidth * options.duration;
+        trackEventObj.options.popcornOptions.start = trackEventObj.element.offsetLeft / container.offsetWidth * options.duration;
+        trackEventObj.options.popcornOptions.end = ( trackEventObj.element.offsetLeft + trackEventObj.element.offsetWidth ) / container.offsetWidth * options.duration;
 
         // if the track is not registered in butter
         // remove it, and call b.addTrack
