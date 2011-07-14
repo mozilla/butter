@@ -136,6 +136,7 @@
             players = [];
 
         players[ "youtu" ] = function() {
+          iframe.contentWindow.document.getElementById( videoTarget ).innerHTML = "";
           popcornString += "popcorn = Popcorn( Popcorn.youtube( '" + videoTarget + "', '" +
             videoURL + "', {\n" + 
             "width: 430, height: 300\n" + 
@@ -143,6 +144,7 @@
         };
 
         players[ "vimeo " ] = function() {
+          iframe.contentWindow.document.getElementById( videoTarget ).innerHTML = "";
           popcornString += "popcorn = Popcorn( Popcorn.vimeo( '" + videoTarget + "', '" +
           videoURL + "', {\n" +
             "css: {\n" +
@@ -153,11 +155,13 @@
         };
 
         players[ "soundcloud" ] = function() {
+          iframe.contentWindow.document.getElementById( videoTarget ).innerHTML = "";
           popcornString += "popcorn = Popcorn( Popcorn.soundcloud( '" + videoTarget + "'," +
           " '" + videoURL + "' ) );\n";
         };
 
         players[ "baseplayer" ] = function() {
+          iframe.contentWindow.document.getElementById( videoTarget ).innerHTML = "";
           popcornString += "popcorn = Popcorn( Popcorn.baseplayer( '" + videoTarget + "' ) );\n";
         };
 

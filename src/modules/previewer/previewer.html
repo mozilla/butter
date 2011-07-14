@@ -13,10 +13,9 @@
         butter.previewer( {
           layout: "layout.html",
           target: "notIframe",
-          media: "http://videos-cdn.mozilla.net/serv/webmademovies" + 
-                  "/Moz_Doc_0329_GetInvolved_ST.webm",
+          media: "http://www.youtube.com/watch?v=xyd4oM3fMO4",
           callback: function() {
-            butter.buildPopcorn( "videoz" );
+            butter.buildPopcorn( "outerVideo" );
           }
         } );
 
@@ -64,5 +63,8 @@
     <button id="btn" onClick="addTrack( 'footnote' );"> Click to add a footnote </butter>
     <button id="btn" onClick="addTrack2( 'image' );"> Click to add an image </butter>
     <button id="btn" onClick="changeMedia();"> Click to change media </butter>
+    <div>
+    <textbox ></textbox>
+    </div>
   </body>
 </html>
