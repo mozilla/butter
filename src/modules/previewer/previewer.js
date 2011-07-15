@@ -285,7 +285,7 @@
                 popcornReady( e );
               }, 10 );
             } else {
-              
+
               // force a timeupdate, so new events get recognized
               framePopcorn.video.currentTime += 0.0001;
 
@@ -295,7 +295,7 @@
 
               butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
 
-              e.popcornEvent = framePopcorn.getTrackEvent( butterIds[ e.getId() ] );
+              e.manifest = framePopcorn.getTrackEvent( butterIds[ e.getId() ] )._natives.manifest;
 
               // store a reference to track events
               trackEvents = framePopcorn.getTrackEvents();
