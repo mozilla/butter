@@ -249,6 +249,7 @@ Butter.registerModule( "timeline", {
 
       var trackLinerTrackEvent = trackLinerTrackEvents[ trackEvent.getId() ],
           trackLinerTrack = trackLine.getTrack( trackLinerTrackEvent.trackId );
+      lastTrack = trackLinerTrack;
       trackLinerTrack && trackLinerTrack.removeTrackEvent( trackLinerTrackEvent.element.id );
       delete butterTrackEvents[ trackLinerTrackEvent.element.id ];
       delete trackLinerTrackEvents[ trackEvent.getId() ];
