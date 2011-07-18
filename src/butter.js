@@ -523,6 +523,15 @@ THE SOFTWARE.
     } //for
   };
 
+  Butter.extend = function ( obj /* , extra arguments ... */) {
+    var dest = obj, src = [].slice.call( arguments, 1 );
+    src.forEach( function( copy ) {
+      for ( var prop in copy ) {
+        dest[ prop ] = copy[ prop ];
+      }
+    });
+  };
+
   Butter.Media = Media;
   Butter.Track = Track;
   Butter.TrackEvent = TrackEvent;
