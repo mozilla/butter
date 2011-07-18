@@ -136,12 +136,19 @@ THE SOFTWARE.
         tracks = [],
         id = numMedia++,
         name = options.name || "Media" + id + Date.now(),
-        media = options.media,
+        media,
         that = this;
 
     this.setMedia = function ( mediaElement ) {
-      media = mediaElement;
+      if ( typeof( mediaElement ) === "string" ) {
+        media = document.getElementById( "mediaElement" );
+      }
+      else {
+        media = mediaElement;
+      } //if
     };
+
+    options.media && this.setMedia( options.media );
 
     this.getMedia = function () {
       return media;
