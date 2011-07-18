@@ -289,6 +289,7 @@ THE SOFTWARE.
     }; //getTrackEvents
 
     this.getTrackEvent = function ( track, trackEvent ) {
+      checkMedia();
       if ( track && trackEvent ) {
         if ( typeof(track) === "string" ) {
           track = that.getTrack( track );
@@ -310,6 +311,8 @@ THE SOFTWARE.
 
     //removeTrackEvent - Remove a Track Event
     this.removeTrackEvent = function ( track, trackEvent ) {
+      checkMedia();
+
       // one param given
       if ( !trackEvent ) {
         if ( track instanceof TrackEvent ) {
@@ -553,6 +556,15 @@ THE SOFTWARE.
         Butter.prototype[ fn ] = functions[ fn ];
       } //if
     } //for
+  };
+
+  Butter.extend = function ( obj /* , extra arguments ... */) {
+    var dest = obj, src = [].slice.call( arguments, 1 );
+    src.forEach( function( copy ) {
+      for ( var prop in copy ) {
+        dest[ prop ] = copy[ prop ];
+      }
+    });
   };
 
   Butter.Media = Media;
