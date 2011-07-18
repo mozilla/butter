@@ -165,11 +165,12 @@ THE SOFTWARE.
 
     this.setMedia = function ( mediaElement ) {
       if ( typeof( mediaElement ) === "string" ) {
-        media = document.getElementById( "mediaElement" );
+        media = document.getElementById( mediaElement );
       }
       else {
         media = mediaElement;
       } //if
+      butter && butter.trigger( "mediacontentchanged", that );
     };
 
     options.media && this.setMedia( options.media );

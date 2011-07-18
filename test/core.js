@@ -26,8 +26,8 @@
     ok( m1.getMedia() === document.getElementById('audio-test'), "Media element is correct" );
   });
 
-  test( "Add, retrieve, and remove Media object", function () {
-    expect(14);
+  test( "Add, retrieve, use, and remove Media object", function () {
+    expect(15);
 
     var mediaState = 0;
 
@@ -43,7 +43,7 @@
       mediaState = [0, media];
     });
 
-    var m1 = new Butter.Media( { name: "Media 1", media: document.getElementById('audio-test') } );
+    var m1 = new Butter.Media( { name: "Media 1", media: "blank" } );
     butter.addMedia( m1 );
     ok( butter.getMedia("Media 1") === m1 && m1.getName() === "Media 1", "Method 1 object stored and retrieved" );
     ok( mediaState[0] === 1 && mediaState[1] === m1, "mediaadded event received" );
@@ -59,6 +59,14 @@
     butter.setMedia( m1 );
     ok( butter.getCurrentMedia() === m1, "Current media is Media 1 again" );
     ok( mediaState[0] === 2 && mediaState[1] === m1, "mediachanged event received" );
+
+    
+    var mediaContent = m1.getMedia();
+    butter.listen( "mediacontentchanged", function ( media ) {
+      mediaContent = media.getMedia();
+    });
+    m1.setMedia( "audio-test" );
+    ok( mediaContent === document.getElementById( "audio-test" ), "Media content changed properly" );
 
     butter.removeMedia( m2 );
     ok( mediaState[0] === 0 && mediaState[1] === m2, "mediaremoved event received" );
