@@ -514,8 +514,8 @@ THE SOFTWARE.
   //registerModule - Registers a Module into the Butter core
   Butter.registerModule = Butter.prototype.registerModule = function ( name, module ) {
 
-    Butter.prototype[name] = function(options) {
-      module.setup && module.setup.call(this, options);
+    Butter.prototype[name] = function( options ) {
+      module.setup && module.setup.call( this, options );
       return this;
     };
     if ( module.extend ) {
@@ -526,6 +526,7 @@ THE SOFTWARE.
   Butter.extendAPI = function ( functions ) {
     for ( var fn in functions ) {
       if ( functions.hasOwnProperty( fn ) ) {
+        Butter[fn] = functions[ fn ];
         Butter.prototype[ fn ] = functions[ fn ];
       } //if
     } //for

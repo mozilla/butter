@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script type="text/javascript" src="../../../src/modules/butter.comm.js"></script>
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function (e) {
+
+        var butter = new Butter();
+
+        var client = new Butter.CommClient("test-client", function ( message ) {
+          document.body.appendChild(document.createTextNode(message));
+          document.body.appendChild(document.createElement('br'));
+          client.send( message + Math.random(), "foo" );
+        });
+
+      }, false);
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

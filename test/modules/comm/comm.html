@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script type="text/javascript" src="../../../src/modules/butter.comm.js"></script>
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function (e) {
+
+        var butter = new Butter();
+
+        var i=0;
+
+        var server = new Butter.CommServer();
+
+        var iframe = document.createElement('iframe');
+        iframe.setAttribute('src', "comm2.html");
+
+        server.bindFrame("test", iframe, function (e) {
+          server.listen("test", "foo", function ( message ) {
+            document.body.appendChild(document.createElement('br'));
+            document.body.appendChild(document.createTextNode(message));
+            ++i;
+            if ( i>10 ) {
+              server.forget("test", "foo");
+            }
+            setTimeout( function () {server.send("test", "bar");}, 1000 );
+          });
+          server.send("test", "boop");
+        });
+
+        document.body.appendChild(iframe);
+
+      }, false);
+
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
