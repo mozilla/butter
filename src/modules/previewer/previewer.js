@@ -4,13 +4,15 @@
     urlRegex, videoURL,
     DOMDB, iframe, iframeBody,
     popcornString, butterId,
-    userSetMedia, videoString;
+    userSetMedia, videoString,
+    popcornURL;
 
   Butter.registerModule( "previewer", {
 
     // setup function used to set default values, as well as setting up the iframe
-    setup: function( options, target, callback ) {
+    setup: function( options ) {
       
+      popcornURL = options.popcornURL || "http://popcornjs.org/code/dist/popcorn-complete.js";
       urlRegex = /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)(youtu|vimeo|soundcloud|baseplayer)/;
       layout = options.layout;
       DOMDB = { target: [], media: [] };
@@ -85,17 +87,6 @@
 
           // loop for every child of the body
           for( var i = 0; i < children.length; i++ ) {
-                        
-            // this is highlighting stuff, needs some work
-            children[ i ].addEventListener( "mouseover", function ( e ) {
-              this.oldColor = this.style.backgroundColor;
-              this.style.backgroundColor = "#EEB4B4";
-            }, false );
-
-            // more highlighting
-            children[ i ].addEventListener( "mouseout", function ( e ) {
-              this.style.backgroundColor = this.oldColor;
-            }, false );
             
             // if DOM element has an data-butter tag that is equal to target or media,
             // add it to butters target list with a respective type
@@ -126,7 +117,10 @@
       buildPopcorn: function( videoTarget ) {
 
         videoURL = this.getCurrentMedia().getMedia();
-        
+
+        // default to first butter-media tagged object if none is specified
+        videoTarget = videoTarget || this.getAllMedia()[ 0 ].getName();
+
         iframe.contentWindow.document.body.innerHTML = iframeBody;
         
         // create a string that will create an instance of popcorn with the proper video source
@@ -286,12 +280,19 @@
               }, 10 );
             } else {
 
+              
+
               // force a timeupdate, so new events get recognized
-              framePopcorn.video.currentTime += 0.0001;
+              //framePopcorn.video.currentTime += 0.0001;
 
               // add track events to the iframe verison of popcorn
               framePopcorn[ e.type ]( iframe.contentWindow.Popcorn.extend( {},
                 e.popcornOptions ) );
+
+            if ( framePopcorn.video.currentTime >= e.popcornOptions.start ) {
+              framePopcorn.data.trackRefs[ framePopcorn.getLastTrackEventId() ]._running === true;
+              framePopcorn.data.trackRefs[ framePopcorn.getLastTrackEventId() ]._natives.start  ( null,  framePopcorn.data.trackRefs[ framePopcorn.getLastTrackEventId() ] );
+            }
 
               butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
 
