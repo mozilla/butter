@@ -31,6 +31,7 @@ THE SOFTWARE.
   var Track = function ( options ) {
     var trackEvents = [],
         id = numTracks++,
+        butter = undefined,
         that = this;
 
     options = options || {};
@@ -66,13 +67,26 @@ THE SOFTWARE.
       if ( idx > -1 ) {
         trackEvents.splice( idx, 1 );
         trackEvent.track = undefined;
+        trackEvent.setButter( undefined );
+        butter.trigger( "trackeventremoved", trackEvent );
       } //if
     }; //removeTrackEvent
 
     this.addTrackEvent = function ( trackEvent ) {
       trackEvents.push( trackEvent );
       trackEvent.track = that;
+      trackEvent.setButter( butter );
+      butter.trigger( "trackeventadded", trackEvent );
     }; //addTrackEvent
+
+    this.setButter = function ( b ) {
+      butter = b;
+    };
+
+    this.getButter = function ()  {
+      return butter;
+    };
+
   }; //Track
 
   /****************************************************************************
@@ -80,7 +94,8 @@ THE SOFTWARE.
    ****************************************************************************/
   var numTrackEvents = 0;
   var TrackEvent = function ( options ) {
-    var id = numTrackEvents++;
+    var id = numTrackEvents++,
+        butter = undefined;
 
     options = options || {};
     var name = options.name || 'Track' + id + Date.now();
@@ -98,6 +113,14 @@ THE SOFTWARE.
     this.getId = function () {
       return id;
     }; //getId
+
+    this.setButter = function ( b ) {
+      butter = b;
+    };
+
+    this.getButter = function ()  {
+      return butter;
+    };
 
   }; //TrackEvent
 
@@ -132,6 +155,7 @@ THE SOFTWARE.
         tracks = [],
         id = numMedia++;
         name = options.name || "Media" + id + Date.now();
+        butter = undefined,
         that = this;
 
     this.getName = function () {
@@ -146,12 +170,22 @@ THE SOFTWARE.
       return tracks;
     };
 
+    this.setButter = function ( b ) {
+      butter = b;
+    };
+
+    this.getButter = function ()  {
+      return butter;
+    };
+
     this.addTrack = function ( track ) {
       if ( !(track instanceof Track) ) {
         track = new Track( track );
       } //if
       tracksByName[ track.getName() ] = track;
       tracks.push( track );
+      track.setButter( butter );
+      butter.trigger( "trackadded", track );
       return track;
     }; //addTrack
 
@@ -178,7 +212,9 @@ THE SOFTWARE.
       var idx = tracks.indexOf( track );
       if ( idx > -1 ) {
         tracks.splice( idx, 1 );
+        track.setButter( undefined );
         delete tracksByName[ track.getName() ];
+        butter.trigger( "trackremoved", track );
         return track;
       } //if
       return undefined;    
@@ -256,7 +292,6 @@ THE SOFTWARE.
           trackEvent = new TrackEvent( trackEvent );
         } //if
         track.addTrackEvent( trackEvent );
-        that.trigger( "trackeventadded", trackEvent );
         return trackEvent;
       } //if
       return undefined;
@@ -321,7 +356,6 @@ THE SOFTWARE.
       }
 
       track.removeTrackEvent( trackEvent );
-      that.trigger( "trackeventremoved", trackEvent );
       return trackEvent;
     };
 
@@ -331,7 +365,6 @@ THE SOFTWARE.
     //addTrack - Creates a new Track
     this.addTrack = function ( track ) {
       checkMedia();
-      that.trigger( "trackadded", track );
       return currentMedia.addTrack( track );
     }; //addTrack
 
@@ -350,7 +383,6 @@ THE SOFTWARE.
     //removeTrack - Remove a Track
     this.removeTrack = function ( track ) {
       checkMedia();
-      that.trigger( "trackremoved", track );
       return currentMedia.removeTrack( track );
     };
 
@@ -366,7 +398,7 @@ THE SOFTWARE.
       targetsByName[ target.getName() ] = target;
       targets.push( target );
 
-      that.trigger( "targetadded", target );
+      butter.trigger( "targetadded", target );
 
       return target;
     };
@@ -380,7 +412,7 @@ THE SOFTWARE.
       if ( idx > -1 ) {
         targets.splice( idx, 1 );
         delete targets[ target.getName() ]; 
-        that.trigger( "targetremoved", target );
+        butter.trigger( "targetremoved", target );
         return target;
       } //if
       return undefined;
@@ -472,6 +504,7 @@ THE SOFTWARE.
       if ( !currentMedia ) {
         that.setMedia( media );
       } //if
+      media.setButter( that );
       that.trigger( "mediaadded", media );
       return media;
     };
@@ -485,6 +518,7 @@ THE SOFTWARE.
       var idx = medias.indexOf( media );
       if ( idx > -1 ) {
         medias.splice( idx, 1 );
+        media.setButter( undefined );
         delete mediaByName[ media.getName() ];
         return media;
       } //if
