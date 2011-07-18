@@ -110,7 +110,6 @@
               client.postMessage( JSON.stringify( { type: type, message: message } ), "*" );
             } //if
             
-            console.log("messsage sent");
           }; //send
 
           client.addEventListener( "message", function (e) {

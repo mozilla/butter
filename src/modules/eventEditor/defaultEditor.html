@@ -3,21 +3,19 @@
     <script type="text/javascript" src="../../../src/butter.js"></script>
     <script type="text/javascript" src="../butter.comm.js"></script>
     <script type="text/javascript">
-    
+      (function(){
+      var client,
+        butter,
+        targets = {};
         document.addEventListener('DOMContentLoaded', function (e) {
 
-        var butter = new Butter();
+        butter = new Butter();
 
-        var client = new Butter.CommClient("defaultEditor", function ( message ) {
-          console.log(message);
-          document.body.appendChild(document.createTextNode(message.type));
-          document.body.appendChild(document.createElement('br'));
-          //client.send( message + Math.random(), "foo" );
-          
-        });
-        
-        client.listen("test", function( message ) {
-          console.log(message);
+        client = new Butter.CommClient( "defaultEditor" );
+
+        client.listen( "edittrackevent", function( message ) {
+          targets = message.targets;
+          constructDefaultEditor ( message.trackEvent );
         });
 
       }, false);
@@ -38,9 +36,6 @@
           butter = this;
           
         surroundingDiv.setAttribute( "class", "butter-eventeditor" );
-
-        //clear editor target
-        clearTarget();
 
         for ( prop in options ) {
 
@@ -94,7 +89,7 @@
           }
         }
         var target = document.createElement( "select" ),
-          DOMTargets = butter.getTargets(),
+          DOMTargets = targets,
           dt,
           optionElement;
           
@@ -133,7 +128,6 @@
           value: "Cancel",
           callback: function() {
             clearTarget();
-            setVisibility( "hidden" );
             butter.trigger( "trackeditclosed" );
           }
         });
@@ -143,11 +137,11 @@
           value: "Okay",
           callback: function() {
             var newTrackEventOptions = compileOptions( elements );
-            applyChanges.call( butter, trackEvent, newTrackEventOptions );
-            clearTarget();
-            setVisibility( "hidden" );
-            butter.trigger( "trackeditclosed" );
-            butter.trigger( "trackeventedited" );
+            client.send( newTrackEventOptions, "trackeventedited" );
+            //window.close();
+            //clearTarget();
+            //butter.trigger( "trackeditclosed" );
+            //butter.trigger( "trackeventedited" );
           }
         });
         surroundingDiv.appendChild( btn );
@@ -155,9 +149,9 @@
         btn = createDefaultButton({
           value: "Apply",
           callback: function() {
-            var newTrackEventOptions = compileOptions( elements );
-            trackEvent = applyChanges.call( butter, trackEvent, newTrackEventOptions );
-            butter.trigger( "trackeventedited" );
+            //var newTrackEventOptions = compileOptions( elements );
+            //trackEvent = applyChanges.call( butter, trackEvent, newTrackEventOptions );
+            //butter.trigger( "trackeventedited" );
           }
         });
         surroundingDiv.appendChild( btn );
@@ -165,17 +159,15 @@
         btn = createDefaultButton({
           value: "Delete",
           callback: function() {
-            butter.removeTrackEvent( trackEvent.track, trackEvent );
-            clearTarget();
-            setVisibility( "hidden" );
-            butter.trigger( "trackeditclosed" );
+            //butter.removeTrackEvent( trackEvent.track, trackEvent );
+            //clearTarget();
+            //butter.trigger( "trackeditclosed" );
           }
         });
         surroundingDiv.appendChild( btn );
 
         document.body.appendChild( surroundingDiv );
         
-        setVisibility( "visible" );
       },
 
       compileOptions = function( elements ) {
@@ -214,7 +206,7 @@
         btn.value = settings.value || "";
         return btn;
       };
-
+    })()
     </script>
   </head>
   <body>

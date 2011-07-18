@@ -73,18 +73,17 @@ THE SOFTWARE.
 
       // call when no custom editor markup/source has been provided
       constructDefaultEditor = function( trackEvent ) {
-        var w = window.open("defaultEditor.html", "", "width=400,height=400");
+        var editorWindow = window.open("defaultEditor.html", "", "width=400,height=400"),
+          butter = this;
         
-        w.addEventListener( "load",function(){
-        commServer.bindClientWindow( "defaultEditor", w, function(e) {
-         //do something
-        });
-          commServer.send("defaultEditor", "This is a test", "test");
+        editorWindow.addEventListener( "load", function() {
+          commServer.bindClientWindow( "defaultEditor", editorWindow );
+          commServer.listen( "defaultEditor", "trackeventedited", function( newOptions ){
+            trackEvent.popcornOptions = newOptions;
+            editorWindow.close();
+          });
+          commServer.send( "defaultEditor", { trackEvent: trackEvent, targets: butter.getTargets() }, "edittrackevent");
         }, false);
-        
-        
-        console.log("before test");
-        
         
       },
 
