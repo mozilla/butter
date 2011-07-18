@@ -27,7 +27,7 @@ THE SOFTWARE.
   Butter.registerModule( "eventeditor", (function() {
 
     var editorTarget,
-      targetType,
+      binding,
       commServer,
 
       setVisibility = function( attr ) {
@@ -73,26 +73,35 @@ THE SOFTWARE.
 
       // call when no custom editor markup/source has been provided
       constructDefaultEditor = function( trackEvent ) {
-        var editorWindow = window.open("defaultEditor.html", "", "width=400,height=400"),
-          butter = this;
-        
-        editorWindow.addEventListener( "load", function() {
-          commServer.bindClientWindow( "defaultEditor", editorWindow );
+      
+        var editorWindow,
+          butter = this
+          editorSrc = "defaultEditor.html";
+          
+        if ( binding === "bindClientWindow" ) {
+          editorWindow = window.open( editorSrc, "", "width=400,height=400" );
+        } else if ( binding === "bindFrame" ) {
+          editorWindow = document.createElement( "iframe" );
+          editorWindow.src = editorSrc;
+          editorTarget.appendChild( editorWindow );
+        }
+
+        commServer[ binding ]( "defaultEditor", editorWindow, function() { 
           commServer.listen( "defaultEditor", "trackeventedited", function( newOptions ){
             trackEvent.popcornOptions = newOptions;
             editorWindow.close();
           });
           commServer.send( "defaultEditor", { trackEvent: trackEvent, targets: butter.getTargets() }, "edittrackevent");
-        }, false);
+        });
         
       },
 
       clearTarget = function() {
-        if ( targetType === "element" ) {
+        if ( binding === "element" ) {
           while ( editorTarget.firstChild ) {
             editorTarget.removeChild( editorTarget.firstChild );
           }
-        } else if ( targetType === "iframe" ){
+        } else if ( binding === "iframe" ){
 
           var ifrm = editorTarget.document.body;
           while ( ifrm.firstChild ) {
@@ -141,28 +150,20 @@ THE SOFTWARE.
     return {
       setup: function( options ) {
 
-        var target;
-
         if ( options.target && typeof options.target === "string" ) {
 
-          target = document.getElementById( options.target || "butter-editor-target" ) || {};
+          editorTarget = document.getElementById( options.target || "butter-editor-target" ) || {};
         } else if ( options.target ) {
 
-          target = options.target;
-        } else {
-
-          throw new Error( "ERROR - setup: options.target invalid" );
+          editorTarget = options.target;
         }
 
-        editorTarget = ((target.contentWindow) ? target.contentWindow : (target.contentDocument && target.contentDocument.document) ? target.contentDocument.document : target.contentDocument) || target;
+        if ( editorTarget ) {
 
-        if ( target.nodeName && target.nodeName === "IFRAME" ) {
-
-          targetType = "iframe"
+          binding = "bindFrame"
         } else {
 
-          editorTarget = target;
-          targetType = "element";
+          binding = "bindClientWindow";
         }
         
         commServer = new Butter.CommServer();
