@@ -7,6 +7,7 @@
     window.addEventListener("DOMContentLoaded", function(){
         var b = new Butter();
         b.eventeditor( {target: "butter-editor-target" } );
+        b.addMedia( new Butter.Media() );
 
         var telist = document.getElementById( "telist" );
 
@@ -59,7 +60,8 @@
               }
 
             };
-
+          
+          te.track = tr;
           te.popcornEvent = {};
           te.popcornEvent._natives = {};
           te.popcornEvent._natives.manifest = m;
@@ -81,6 +83,7 @@
 
         open.addEventListener( "click", function() {
           if ( telist.firstChild ) {
+            var c = b.getTracks()[0];
             b.editTrackEvent( b.getTracks()[0].getTrackEvent( +telist.options[ telist.selectedIndex ].value ));
           }
         }, false);
