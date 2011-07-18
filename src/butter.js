@@ -157,8 +157,8 @@ THE SOFTWARE.
 
     var tracksByName = {},
         tracks = [],
-        id = numMedia++;
-        name = options.name || "Media" + id + Date.now();
+        id = numMedia++,
+        name = options.name || "Media" + id + Date.now(),
         butter = undefined,
         media = options.media,
         that = this;
@@ -550,12 +550,12 @@ THE SOFTWARE.
       var idx = medias.indexOf( media );
       if ( idx > -1 ) {
         medias.splice( idx, 1 );
-        media.setButter( undefined );
         delete mediaByName[ media.getName() ];
-        that.trigger( "mediaremoved", media );
+        media.setButter( undefined );
         if ( media === currentMedia ) {
           currentMedia = undefined;
         } //if
+        that.trigger( "mediaremoved", media );
         return media;
       } //if
       return undefined;    
