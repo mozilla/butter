@@ -13,7 +13,14 @@
 
         window.addEventListener('message', function (e) {
           if ( e.source !== window ) {
-            onmessage && onmessage( e.data );
+            var data = JSON.parse( e.data );
+            if ( data.type && listeners[ data.type ] ) {
+              var list = listeners[ data.type ];
+              for ( var i=0; i<list.length; ++i ) {
+                list[i]( data.message );
+              } //for
+            } //if
+            onmessage && onmessage( data );
           } //if
         }, false);
 
@@ -46,10 +53,10 @@
 
         this.send = function ( message, type ) {
           if ( !type ) {
-            postMessage( message, "*" );
+            postMessage( JSON.stringify( message ), "*" );
           }
           else {
-            postMessage( { type: type, message: message }, "*" );
+            postMessage( JSON.stringify( { type: type, message: message } ), "*" );
           } //if
         };
 
@@ -97,22 +104,25 @@
 
           this.send = function ( message, type ) {
             if ( !type ) {
-              client.postMessage( message, "*" );
+              client.postMessage( JSON.stringify( message ), "*" );
             }
             else {
-              client.postMessage( { type: type, message: message }, "*" );
+              client.postMessage( JSON.stringify( { type: type, message: message } ), "*" );
             } //if
+            
+            console.log("messsage sent");
           }; //send
 
           client.addEventListener( "message", function (e) {
             if ( e.source === client ) {
-              if ( e.data.type && listeners[ e.data.type ] ) {
-                var list = listeners[ e.data.type ];
+              var data = JSON.parse( e.data );
+              if ( data.type && listeners[ data.type ] ) {
+                var list = listeners[ data.type ];
                 for ( var i=0; i<list.length; ++i ) {
-                  list[i]( e.data.message );
+                  list[i]( data.message );
                 } //for
               } //if
-              callback && callback( e.data );
+              callback && callback( data );
             } //if
           }, false );
 
