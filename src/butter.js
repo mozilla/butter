@@ -75,11 +75,9 @@ THE SOFTWARE.
         trackEvent = new TrackEvent( trackEvent );
       } //if
       trackEvents.push( trackEvent );
-<<<<<<< HEAD
-=======
+
       trackEvent.track = that;
       return trackEvent;
->>>>>>> f267181c317079a4058460493821bfa308b1d34f
     }; //addTrackEvent
   }; //Track
 
@@ -315,10 +313,7 @@ THE SOFTWARE.
 
     //removeTrackEvent - Remove a Track Event
     this.removeTrackEvent = function ( track, trackEvent ) {
-<<<<<<< HEAD
-      checkMedia();
-=======
->>>>>>> f267181c317079a4058460493821bfa308b1d34f
+
       // one param given
       if ( !trackEvent ) {
         if ( track instanceof TrackEvent ) {
