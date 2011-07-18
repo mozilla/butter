@@ -42,7 +42,7 @@ THE SOFTWARE.
 
         //use a custom editor
         var butter = this,
-          editor = trackEvent.popcornEvent._natives.manifest.customEditor;
+          editor = trackEvent.popcornEvent._natives.manifest.customEditor || trackEvent.customEditor;
         clearTarget();
         toggleVisibility( "visible" );
         typeof editor === "function" && editor.call( this, {
@@ -63,7 +63,7 @@ THE SOFTWARE.
             toggleVisibility("hidden");
           },
           remove: function( trackEvent ) {
-            deleteTrackEvent.call( butter, trackEvent );
+            butter.removeTrackEvent( trackEvent.track, trackEvent );
             clearTarget();
             toggleVisibility( "hidden" );
           }
@@ -82,21 +82,11 @@ THE SOFTWARE.
           label,
           attr,
           surroundingDiv = document.createElement("div"),
-          style = surroundingDiv.style,
           btn,
           elements = {},
           butter = this;
-
-        style.margin = "0.5em 0 0";
-        style.padding = "0.3em 1em 0.5em 0.4em";
-        style.background = "none repeat scroll 0 0 #FFFFFF";
-        style.border = "1px solid #DDDDDD";
-        style.color = "#333333";
-        style.backgroundImage = "none";
-        style.borderWidth = "1px 0 0";
-        style.textAlign = "left";
-        style.verticalAlign = "baseline";
-        style.lineHeight = "1.5";
+          
+        surroundingDiv.setAttribute( "class", "butter-eventeditor" );
 
         //clear editor target
         clearTarget();
@@ -110,14 +100,10 @@ THE SOFTWARE.
             elemLabel = opt.label;
 
             elem = document.createElement( elemType );
-            elem.setAttribute( "className", "butter-editor-element" );
-            elem.setAttribute( "id", elemLabel + "-input-element" );
+            elem.setAttribute( "className", "butter-eventeditor-" + elemType + "-element" );
+            elem.setAttribute( "id", elemLabel + "-" + elemType + "-element" );
 
-            label = document.createElement( "label" );
-            label.innerHTML = elemLabel;
-            label.setAttribute( "for", elemLabel );
-            label.setAttribute( "text", elemLabel );
-            label.setAttribute( "className", "butter-editor-label butter-editor-element" );
+            label = createLabel ( { innerHTML: elemLabel, attributes: { "for": elemLabel, "text": elemLabel } } );
 
             elements[ prop ] = elem;
 
@@ -132,11 +118,8 @@ THE SOFTWARE.
               }
 
               elem.setAttribute( "value", attr );
-            }
-
-            if ( elemType === "select" ) {
+            } else if ( elemType === "select" ) {
               attr = trackEvent.popcornOptions[ prop ];
-              elem.style.width = "150px"
               var populate = function( type ) {
 
                 var selectItem = document.createElement( "option" );
@@ -159,13 +142,48 @@ THE SOFTWARE.
             surroundingDiv.appendChild( document.createElement("br"));
           }
         }
-
+        var target = document.createElement( "select" ),
+          DOMTargets = butter.getTargets(),
+          dt,
+          optionElement;
+          
+        target.id = "target-select";
+        label = createLabel ( { innerHTML: "Target Container", attributes: { "for": "target-select", "text": "Targer Container" } } );
+        
+        optionElement = document.createElement( "option" );
+        optionElement.value = null;
+        optionElement.text = "Default Target";
+        target.appendChild( optionElement );
+        
+        for ( var i = 0, l = DOMTargets.length; i < l; i++ ) {
+          dt = DOMTargets[ i ];
+          optionElement = document.createElement( "option" );
+          optionElement.value = optionElement.text = dt.getName();
+          target.appendChild( optionElement );
+        }
+        
+        label.appendChild( target );
+        
+        attr = trackEvent.popcornOptions[ "target" ] || "";
+        
+        for (var i = 0, l = target.options.length; i < l; i ++ ) {
+          if (target.options[ i ].value === attr ) {
+            target.options.selectedIndex = i;
+            i = l;
+          }
+        }
+        
+        elements[ "target" ] = target;
+        
+        surroundingDiv.appendChild( label );
+        surroundingDiv.appendChild( document.createElement( "br" ) );
 
         btn = createDefaultButton({
           value: "Cancel",
           callback: function() {
             clearTarget();
             toggleVisibility( "hidden" );
+            butter.trigger( "trackeditclosed" );
           }
         });
         surroundingDiv.appendChild( btn );
@@ -177,6 +195,8 @@ THE SOFTWARE.
             applyChanges.call( butter, trackEvent, newTrackEventOptions );
             clearTarget();
             toggleVisibility( "hidden" );
+            butter.trigger( "trackeditclosed" );
+            butter.trigger( "trackeventedited" );
           }
         });
         surroundingDiv.appendChild( btn );
@@ -186,6 +206,7 @@ THE SOFTWARE.
           callback: function() {
             var newTrackEventOptions = compileOptions( elements );
             trackEvent = applyChanges.call( butter, trackEvent, newTrackEventOptions );
+            butter.trigger( "trackeventedited" );
           }
         });
         surroundingDiv.appendChild( btn );
@@ -193,9 +214,10 @@ THE SOFTWARE.
         btn = createDefaultButton({
           value: "Delete",
           callback: function() {
-            deleteTrackEvent.call( butter, trackEvent );
+            butter.removeTrackEvent( trackEvent.track, trackEvent );
             clearTarget();
             toggleVisibility( "hidden" );
+            butter.trigger( "trackeditclosed" );
           }
         });
         surroundingDiv.appendChild( btn );
@@ -219,23 +241,33 @@ THE SOFTWARE.
         for ( prop in elements ) {
           elem = elements[ prop ];
           if ( elements.hasOwnProperty( prop ) && typeof elem === "object" ) {
-            if ( elem.type === "select" ) {
-              newOptions[ prop ] = elem.selectedValue;
-            } else {
-              newOptions[ prop ] = elem.value;
-            }
+            newOptions[ prop ] = elem.value;
           }
         }
 
         return newOptions;
       },
+      
+      createLabel = function( settings ){
+        var label = document.createElement( "label" ),
+          prop,
+          attr = settings.attributes;
+        label.innerHTML = settings.innerHTML;
+        for ( prop in attr ) {
+          if ( attr.hasOwnProperty( prop ) ) {
+            label.setAttribute ( prop, attr[ prop ] );
+          }
+        }
+        label.setAttribute( "className", "butter-eventeditor-label" );
+        return label;
+      },
 
       createDefaultButton = function( settings ){
-          var btn = document.createElement( "input" );
-          btn.type = "button";
-          btn.addEventListener( "click", settings.callback || function() {}, false);
-          btn.value = settings.value || "";
-          return btn;
+        var btn = document.createElement( "input" );
+        btn.type = "button";
+        btn.addEventListener( "click", settings.callback || function() {}, false);
+        btn.value = settings.value || "";
+        return btn;
       },
 
       clearTarget = function() {
@@ -279,20 +311,15 @@ THE SOFTWARE.
           return;
         }
 
-        if ( !trackEvent.popcornEvent._natives.manifest.customEditor ) {
-
-          constructDefaultEditor.call( this, trackEvent );
+        if ( trackEvent.popcornEvent._natives.manifest.customEditor || trackEvent.customEditor ) {
+          
+          useCustomEditor.call( this, trackEvent );
         } else {
 
-          useCustomEditor.call( this, trackEvent );
+          constructDefaultEditor.call( this, trackEvent );
         }
 
-      },
-
-      deleteTrackEvent = function( trackEvent ){
-
-        this.removeTrackEvent( trackEvent.track, trackEvent );
-      };
+      }
 
     return {
       setup: function( options ) {
@@ -326,12 +353,13 @@ THE SOFTWARE.
       extend: {
 
         editTrackEvent: function( trackEvent ) {
-
+        
+           this.trigger( "trackeditstarted" );
            beginEditing.call( this, trackEvent );
         },
 
         updateEditor: function( trackEvent ) {
-
+          
           updateTrackData.call( this, trackEvent );
         },
 
