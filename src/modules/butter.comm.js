@@ -130,7 +130,14 @@
         this.bindFrame = function ( name, frame, readyCallback, messageCallback ) {
           frame.addEventListener( "load", function (e) {
             that.bindClientWindow( name, frame.contentWindow, messageCallback );
-            readyCallback( e );
+            readyCallback && readyCallback( e );
+          }, false );
+        };
+
+        this.bindWindow = function ( name, win, readyCallback, messageCallback ) {
+          win.addEventListener( "load", function (e) {
+            that.bindClientWindow( name, win, messageCallback );
+            readyCallback && readyCallback( e );
           }, false );
         };
 

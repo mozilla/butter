@@ -8,14 +8,17 @@
 
       var client = new Butter.CommClient( "test-client", function ( message ) {
         client.send( "general message received" );
+        document.body.appendChild( document.createTextNode( message ) );
       });
 
-      client.listen( "test1", function () {
+      client.listen( "test1", function ( message ) {
         client.send( "test1 received", "test1" );
+        document.body.appendChild( document.createTextNode( message ) );
       });
 
-      client.listen( "test2", function () {
+      client.listen( "test2", function ( message ) {
         client.send( "test2 received", "test2" );
+        document.body.appendChild( document.createTextNode( message ) );
       });
 
     </script>
