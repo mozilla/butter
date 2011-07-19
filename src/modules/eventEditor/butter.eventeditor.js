@@ -12,19 +12,27 @@
      
       var editorWindow,
         butter = this
-        editorSrc =  customEditors[ trackEvent.type ] || trackEvent.manifest.customEditor || defaultEditor;
+        editorSrc =  customEditors[ trackEvent.type ] || trackEvent.manifest.customEditor || defaultEditor,
+        updateEditor = function( trackEvent ){
+          commServer.send( "editorCommLink", trackEvent.popcornOptions, "updatetrackevent" );
+        };
         
       editorTarget && clearTarget()
         
       if ( binding === "bindWindow" ) {
         editorWindow = window.open( editorSrc, "", "width=400,height=400" );
+        editorWindow.addEventListener( "unload", function() {
+          butter.unlisten ( "trackeventupdated", updateEditor );
+          butter.trigger( "trackeditforcedclosed" );
+        }, false );
       } else if ( binding === "bindFrame" ) {
         editorWindow = document.createElement( "iframe" );
         editorWindow.src = editorSrc;
         editorTarget.appendChild( editorWindow );
       }
-
-      commServer[ binding ]( "editorCommLink", editorWindow, function() {
+      
+      commServer[ binding ]( "editorCommLink", editorWindow, function() {      
+        butter.listen( /*scott may change this event >>*/"trackeventupdated", updateEditor );
         butter.listen( "targetadded", function() {
           commServer.send( "editorCommLink", butter.getTargets(), "updatedomtargets" );
         });
@@ -32,6 +40,7 @@
           trackEvent.popcornOptions = newOptions;
           editorWindow.close && editorWindow.close();
           editorWindow && editorWindow.parentNode && removeChild( editorWindow );
+          butter.unlisten ( "trackeventupdated", updateEditor );
           butter.trigger( "trackeditclosed" );
           butter.trigger( "trackeventedited" );
         });
@@ -43,11 +52,13 @@
           butter.removeTrackEvent( trackEvent );
           editorWindow.close && editorWindow.close();
           editorWindow && editorWindow.parentNode && removeChild( editorWindow );
+          butter.unlisten ( "trackeventupdated", updateEditor );
           butter.trigger( "trackeditclosed" );
         });
         commServer.listen( "editorCommLink", "cancelclicked", function() {
           editorWindow.close && editorWindow.close();
           editorWindow && editorWindow.parentNode && removeChild( editorWindow );
+          butter.unlisten ( "trackeventupdated", updateEditor );
           butter.trigger( "trackeditclosed" );
         });
         commServer.send( "editorCommLink", { trackEvent: trackEvent, targets: butter.getTargets() }, "edittrackevent");
