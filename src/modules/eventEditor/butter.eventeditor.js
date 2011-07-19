@@ -3,14 +3,16 @@
   Butter.registerModule( "eventeditor", (function() {
 
     var editorTarget,
+        defaultEditor,
         binding,
         commServer,
+        customEditors = {},
     
     constructEditor = function( trackEvent ) {
      
       var editorWindow,
         butter = this
-        editorSrc = trackEvent.manifest.customEditor || "defaultEditor.html";
+        editorSrc =  customEditors[ trackEvent.type ] || trackEvent.manifest.customEditor || defaultEditor;
         
       editorTarget && clearTarget()
         
@@ -85,6 +87,8 @@
           binding = "bindWindow";
         }
         
+        defaultEditor = options.defaultEditor || "defaultEditor.html";
+        
         commServer = new Butter.CommServer();
       },
 
@@ -96,10 +100,19 @@
            constructEditor.call( this, trackEvent );
         },
 
-        updateEditor: function( trackEvent ) {
+        //updateEditor: function( trackEvent ) {
           
-          updateTrackData.call( this, trackEvent );
-        }
+        //  updateTrackData.call( this, trackEvent );
+        //},
+        
+        addCustomEditor: function( editorSource, pluginType ) {
+          
+          if ( !pluginType || !editorSource ) {
+            return;
+          }
+          
+          customEditors[ pluginType ] = editorSource;
+        } 
       }
     }
   })());

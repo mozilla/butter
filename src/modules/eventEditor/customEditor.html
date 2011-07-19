@@ -43,6 +43,7 @@
         client = new Butter.CommClient( "customEditorDemo" );
 
         client.listen( "edittrackevent", function( message ) {
+          console.log(message);
           construct ( message.trackEvent );
         });
 
@@ -122,8 +123,8 @@
 
                   popcornOptions = {
                     zoom: map.getZoom(),
-                    lat: latlng.Ja,
-                    lng: latlng.Ka,
+                    lat: latlng.lat(),
+                    lng: latlng.lng(),
                     type: map.getMapTypeId().toUpperCase(),
                     start: trackEvent.popcornOptions.start,
                     end: trackEvent.popcornOptions.end
