@@ -71,10 +71,10 @@
     
       setup: function( options ) {
 
-        if ( options.target && typeof options.target === "string" ) {
+        if ( options && options.target && typeof options.target === "string" ) {
 
           editorTarget = document.getElementById( options.target ) || {};
-        } else if ( options.target ) {
+        } else if ( options && options.target ) {
 
           editorTarget = options.target;
         }
@@ -87,7 +87,7 @@
           binding = "bindWindow";
         }
         
-        defaultEditor = options.defaultEditor || "defaultEditor.html";
+        defaultEditor = options && options.defaultEditor || "defaultEditor.html";
         
         commServer = new Butter.CommServer();
       },
