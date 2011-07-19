@@ -32,7 +32,7 @@
       }
       
       commServer[ binding ]( "editorCommLink", editorWindow, function() {      
-        butter.listen( /*scott may change this event >>*/"trackeventupdated", updateEditor );
+        butter.listen( "trackeventupdated", updateEditor );
         butter.listen( "targetadded", function() {
           commServer.send( "editorCommLink", butter.getTargets(), "updatedomtargets" );
         });
@@ -42,11 +42,11 @@
           editorWindow && editorWindow.parentNode && removeChild( editorWindow );
           butter.unlisten ( "trackeventupdated", updateEditor );
           butter.trigger( "trackeditclosed" );
-          butter.trigger( "trackeventedited" );
+          butter.trigger( "trackeventupdated" );
         });
         commServer.listen( "editorCommLink", "applyclicked", function( newOptions ) {
           trackEvent.popcornOptions = newOptions;
-          butter.trigger( "trackeventedited" );
+          butter.trigger( "trackeventupdated" );
         });
         commServer.listen( "editorCommLink", "deleteclicked", function() {
           butter.removeTrackEvent( trackEvent );
@@ -71,11 +71,6 @@
       while ( editorTarget.firstChild ) {
         editorTarget.removeChild( editorTarget.firstChild );
       }
-    },
-
-    updateTrackData = function( trackEvent ) {
-      // update information in the editor if a track changes on the timeline.
-      return false;
     }
 
     return {
@@ -110,11 +105,6 @@
            this.trigger( "trackeditstarted" );
            constructEditor.call( this, trackEvent );
         },
-
-        //updateEditor: function( trackEvent ) {
-          
-        //  updateTrackData.call( this, trackEvent );
-        //},
         
         addCustomEditor: function( editorSource, pluginType ) {
           
