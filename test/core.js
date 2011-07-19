@@ -1,12 +1,50 @@
 /*global text,expect,ok,module,notEqual,Butter,test,window*/
 (function (window, document, undefined, Butter) {
 
-  module("Media", {
-    setup: function () {
-    },
-    teardown: function () {
-    }
+  module( "Event Handling" );
+
+  test( "Simple event handling", function () {
+    expect( 3 );
+
+    var butter = new Butter();
+    var received = false;
+
+    var testFn = function ( event ) {
+      received = event;
+    };
+
+    butter.listen( "testevent", testFn );
+    butter.trigger( "testevent", { test: true } );
+    ok( received && received.test === true, "Event handler triggered and received event object" );
+    received = false;
+    butter.unlisten( "testevent" );
+    butter.trigger( "testevent", { test: true } );
+    ok( received === false, "Stop listening for event (general)" );
+    butter.listen( "testevent", testFn );
+    butter.unlisten( "testevent", testFn );
+    butter.trigger( "testevent", { test: true } );
+    ok( received === false, "Stop listening for event (specific)" );
   });
+
+  test( "Domain event handling", function () {
+    expect( 3 );
+    var butter = new Butter();
+    var received = {};
+    butter.listen( "testevent", function ( event ) {
+      received.test = event.test;
+    });
+    butter.listen( "testevent", function ( event ) {
+      received.domain = event.test;
+    }, "testdomain" );
+    butter.trigger( "testevent", { test: true } );
+    ok( received && received.test === true && !received.domain, "Default domain triggered and received event object" );
+    received = {};
+    butter.trigger( "testevent", { test: true }, "testdomain" );
+    ok( received && received.domain === true, "Test domain triggered and received event object" );
+    ok( received && received.test === true, "Default domain triggered and received event object" );
+  });
+
+  module( "Core Object Functionality" );
 
   test( "No media check", function () {
     expect(1);
