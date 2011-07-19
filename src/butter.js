@@ -225,16 +225,21 @@ THE SOFTWARE.
      ****************************************************************/
     //trigger - Triggers an event indicating a change of state in the core
     this.trigger = function ( name, options, domain ) {
+      var eventObj = {
+        type: name,
+        domain: domain,
+        data: options
+      };
       if ( events[ name ] ) {
         for (var i=0, l=events[ name ].length; i<l; ++i) {
-          events[ name ][ i ].call( that, options, domain );
+          events[ name ][ i ].call( that, eventObj, domain );
         } //for
       } //if
       if ( domain ) {
         name = name + domain;
         if ( events[ name ] ) {
           for (var i=0, l=events[ name ].length; i<l; ++i) {
-            events[ name ][ i ].call( that, options, domain );
+            events[ name ][ i ].call( that, eventObj, domain );
           } //for
         } //if
       } //if

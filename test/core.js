@@ -10,15 +10,15 @@
     var received = false;
 
     var testFn = function ( event ) {
-      received = event;
+      received = event.data;
     };
 
     butter.listen( "testevent", testFn );
-    butter.trigger( "testevent", { test: true } );
-    ok( received && received.test === true, "Event handler triggered and received event object" );
+    butter.trigger( "testevent", true );
+    ok( received && received === true, "Event handler triggered and received event object" );
     received = false;
     butter.unlisten( "testevent" );
-    butter.trigger( "testevent", { test: true } );
+    butter.trigger( "testevent", true );
     ok( received === false, "Stop listening for event (general)" );
     butter.listen( "testevent", testFn );
     butter.unlisten( "testevent", testFn );
@@ -31,17 +31,17 @@
     var butter = new Butter();
     var received = {};
     butter.listen( "testevent", function ( event ) {
-      received.test = event.test;
+      received.data = event.data;
     });
     butter.listen( "testevent", function ( event ) {
-      received.domain = event.test;
+      received.domain = event.domain;
     }, "testdomain" );
-    butter.trigger( "testevent", { test: true } );
-    ok( received && received.test === true && !received.domain, "Default domain triggered and received event object" );
+    butter.trigger( "testevent", true );
+    ok( received && received.data === true && !received.domain, "Default domain triggered and received event object" );
     received = {};
-    butter.trigger( "testevent", { test: true }, "testdomain" );
-    ok( received && received.domain === true, "Test domain triggered and received event object" );
-    ok( received && received.test === true, "Default domain triggered and received event object" );
+    butter.trigger( "testevent", true, "testdomain" );
+    ok( received && received.domain === "testdomain", "Test domain triggered and received event object" );
+    ok( received && received.data === true, "Default domain triggered and received event object" );
   });
 
   module( "Core Object Functionality" );
