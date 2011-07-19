@@ -7,7 +7,7 @@
 
     window.addEventListener("DOMContentLoaded", function(){
         var b = new Butter();
-        b.eventeditor( {} );
+        b.eventeditor( { /*target: "butter-editor-target"*/ } );
         b.addMedia( new Butter.Media() );
 
         var telist = document.getElementById( "telist" );
@@ -63,9 +63,7 @@
             };
           
           te.track = tr;
-          te.popcornEvent = {};
-          te.popcornEvent._natives = {};
-          te.popcornEvent._natives.manifest = m;
+          te.manifest = m;
 
           return te;
         }

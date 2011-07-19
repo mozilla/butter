@@ -1,158 +1,77 @@
-/**********************************************************************************
-
-Copyright (C) 2011 by Mozilla Foundation
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-**********************************************************************************/
-
 (function( window, document, undefined, Butter ) {
 
   Butter.registerModule( "eventeditor", (function() {
 
     var editorTarget,
-      binding,
-      commServer,
-
-      setVisibility = function( attr ) {
-
-        if ( editorTarget && editorTarget.style && attr ) {
-          editorTarget.style.visibility = attr;
-        } else if ( editorTarget && editorTarget.frameElement && attr ) {
-          editorTarget.frameElement.style.visibility = attr;
-        }
-      },
-
-      useCustomEditor = function( trackEvent ) {
-
-        //use a custom editor
-        var butter = this,
-          editor = trackEvent.popcornEvent._natives.manifest.customEditor || trackEvent.customEditor;
-        clearTarget();
-        setVisibility( "visible" );
-        typeof editor === "function" && editor.call( this, {
-          trackEvent: trackEvent || {},
-          target: editorTarget || {},
-          okay: function( trackEvent, popcornOptions ){
-            applyChanges.call( butter, trackEvent, popcornOptions );
-            clearTarget();
-            setVisibility( "hidden" );
-          },
-          apply: function( trackEvent, popcornOptions, updateRemote ) {
-            trackEvent = applyChanges( butter, trackEvent, popcornOptions );
-            //update remote passes the reference to the latest trackEvent object back to the editor
-            updateRemote && updateRemote( trackEvent );
-          },
-          cancel: function() {
-            clearTarget();
-            setVisibility("hidden");
-          },
-          remove: function( trackEvent ) {
-            butter.removeTrackEvent( trackEvent.track, trackEvent );
-            clearTarget();
-            setVisibility( "hidden" );
-          }
-        });
-      },
-
-      // call when no custom editor markup/source has been provided
-      constructDefaultEditor = function( trackEvent ) {
-      
-        var editorWindow,
-          butter = this
-          editorSrc = "defaultEditor.html";
-          
-        if ( binding === "bindClientWindow" ) {
-          editorWindow = window.open( editorSrc, "", "width=400,height=400" );
-        } else if ( binding === "bindFrame" ) {
-          editorWindow = document.createElement( "iframe" );
-          editorWindow.src = editorSrc;
-          editorTarget.appendChild( editorWindow );
-        }
-
-        commServer[ binding ]( "defaultEditor", editorWindow, function() { 
-          commServer.listen( "defaultEditor", "trackeventedited", function( newOptions ){
-            trackEvent.popcornOptions = newOptions;
-            editorWindow.close();
-          });
-          commServer.send( "defaultEditor", { trackEvent: trackEvent, targets: butter.getTargets() }, "edittrackevent");
-        });
+        binding,
+        commServer,
+    
+    constructEditor = function( trackEvent ) {
+     
+      var editorWindow,
+        butter = this
+        editorSrc = trackEvent.manifest.customEditor || "defaultEditor.html";
         
-      },
-
-      clearTarget = function() {
-        if ( binding === "element" ) {
-          while ( editorTarget.firstChild ) {
-            editorTarget.removeChild( editorTarget.firstChild );
-          }
-        } else if ( binding === "iframe" ){
-
-          var ifrm = editorTarget.document.body;
-          while ( ifrm.firstChild ) {
-
-            ifrm.removeChild( ifrm.firstChild );
-          }
-        }
-
-      },
-
-      updateTrackData = function( trackEvent ) {
-        // update information in the editor if a track changes on the timeline.
-        return false;
-      },
-
-      applyChanges = function( trackEvent, popcornOptions ) {
-
-        var newEvent = {};
-
-        this.extendObj( newEvent, trackEvent );
-        newEvent.popcornOptions = popcornOptions;
-
-        this.removeTrackEvent( trackEvent.track, trackEvent );
-
-        return this.addTrackEvent( newEvent.track, newEvent );
-
-      },
-
-      beginEditing = function( trackEvent ) {
-
-        if ( !trackEvent ) {
-
-          return;
-        }
-
-        if ( trackEvent.popcornEvent._natives.manifest.customEditor || trackEvent.customEditor ) {
-          
-          useCustomEditor.call( this, trackEvent );
-        } else {
-
-          constructDefaultEditor.call( this, trackEvent );
-        }
-
+      editorTarget && clearTarget()
+        
+      if ( binding === "bindWindow" ) {
+        editorWindow = window.open( editorSrc, "", "width=400,height=400" );
+      } else if ( binding === "bindFrame" ) {
+        editorWindow = document.createElement( "iframe" );
+        editorWindow.src = editorSrc;
+        editorTarget.appendChild( editorWindow );
       }
 
+      commServer[ binding ]( "editorCommLink", editorWindow, function() {
+        butter.listen( "targetadded", function() {
+          commServer.send( "editorCommLink", butter.getTargets(), "updatedomtargets" );
+        });
+        commServer.listen( "editorCommLink", "okayclicked", function( newOptions ){
+          trackEvent.popcornOptions = newOptions;
+          editorWindow.close && editorWindow.close();
+          editorWindow && editorWindow.parentNode && removeChild( editorWindow );
+          butter.trigger( "trackeditclosed" );
+          butter.trigger( "trackeventedited" );
+        });
+        commServer.listen( "editorCommLink", "applyclicked", function( newOptions ) {
+          trackEvent.popcornOptions = newOptions;
+          butter.trigger( "trackeventedited" );
+        });
+        commServer.listen( "editorCommLink", "deleteclicked", function() {
+          butter.removeTrackEvent( trackEvent );
+          editorWindow.close && editorWindow.close();
+          editorWindow && editorWindow.parentNode && removeChild( editorWindow );
+          butter.trigger( "trackeditclosed" );
+        });
+        commServer.listen( "editorCommLink", "cancelclicked", function() {
+          editorWindow.close && editorWindow.close();
+          editorWindow && editorWindow.parentNode && removeChild( editorWindow );
+          butter.trigger( "trackeditclosed" );
+        });
+        commServer.send( "editorCommLink", { trackEvent: trackEvent, targets: butter.getTargets() }, "edittrackevent");
+      });
+      
+    },
+
+    clearTarget = function() {
+
+      while ( editorTarget.firstChild ) {
+        editorTarget.removeChild( editorTarget.firstChild );
+      }
+    },
+
+    updateTrackData = function( trackEvent ) {
+      // update information in the editor if a track changes on the timeline.
+      return false;
+    }
+
     return {
+    
       setup: function( options ) {
 
         if ( options.target && typeof options.target === "string" ) {
 
-          editorTarget = document.getElementById( options.target || "butter-editor-target" ) || {};
+          editorTarget = document.getElementById( options.target ) || {};
         } else if ( options.target ) {
 
           editorTarget = options.target;
@@ -163,7 +82,7 @@ THE SOFTWARE.
           binding = "bindFrame"
         } else {
 
-          binding = "bindClientWindow";
+          binding = "bindWindow";
         }
         
         commServer = new Butter.CommServer();
@@ -174,22 +93,12 @@ THE SOFTWARE.
         editTrackEvent: function( trackEvent ) {
         
            this.trigger( "trackeditstarted" );
-           beginEditing.call( this, trackEvent );
+           constructEditor.call( this, trackEvent );
         },
 
         updateEditor: function( trackEvent ) {
           
           updateTrackData.call( this, trackEvent );
-        },
-
-        extendObj: function( obj ) {
-          var dest = obj, src = [].slice.call( arguments, 1 );
-
-          src.forEach( function( copy ) {
-            for ( var prop in copy ) {
-              dest[ prop ] = copy[ prop ];
-            }
-          });
         }
       }
     }

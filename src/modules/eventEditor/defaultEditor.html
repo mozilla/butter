@@ -17,12 +17,16 @@
           targets = message.targets;
           constructDefaultEditor ( message.trackEvent );
         });
+        
+        client.listen( "updatedomtargets", function( message ) {
+          targets = message;
+        });
 
       }, false);
 
       var constructDefaultEditor = function( trackEvent ) {
 
-        var options = trackEvent.popcornEvent._natives.manifest.options,
+        var options = trackEvent.manifest.options,
           prop,
           opt,
           elemType,
@@ -32,8 +36,7 @@
           attr,
           surroundingDiv = document.createElement("div"),
           btn,
-          elements = {},
-          butter = this;
+          elements = {};
           
         surroundingDiv.setAttribute( "class", "butter-eventeditor" );
 
@@ -127,8 +130,7 @@
         btn = createDefaultButton({
           value: "Cancel",
           callback: function() {
-            clearTarget();
-            butter.trigger( "trackeditclosed" );
+            client.send( "", "cancelclicked" );
           }
         });
         surroundingDiv.appendChild( btn );
@@ -136,12 +138,7 @@
         btn = createDefaultButton({
           value: "Okay",
           callback: function() {
-            var newTrackEventOptions = compileOptions( elements );
-            client.send( newTrackEventOptions, "trackeventedited" );
-            //window.close();
-            //clearTarget();
-            //butter.trigger( "trackeditclosed" );
-            //butter.trigger( "trackeventedited" );
+            client.send( compileOptions( elements ), "okayclicked" );
           }
         });
         surroundingDiv.appendChild( btn );
@@ -149,9 +146,7 @@
         btn = createDefaultButton({
           value: "Apply",
           callback: function() {
-            //var newTrackEventOptions = compileOptions( elements );
-            //trackEvent = applyChanges.call( butter, trackEvent, newTrackEventOptions );
-            //butter.trigger( "trackeventedited" );
+            client.send( compileOptions( elements ), "applyclicked" ); 
           }
         });
         surroundingDiv.appendChild( btn );
@@ -159,9 +154,7 @@
         btn = createDefaultButton({
           value: "Delete",
           callback: function() {
-            //butter.removeTrackEvent( trackEvent.track, trackEvent );
-            //clearTarget();
-            //butter.trigger( "trackeditclosed" );
+            client.send( "", "deleteclicked" );
           }
         });
         surroundingDiv.appendChild( btn );
