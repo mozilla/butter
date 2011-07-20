@@ -134,7 +134,7 @@ Butter.registerModule( "timeline", {
     scrubber.style.position = "absolute";
     scrubber.style.top = "0";
     scrubber.style.left = "0";
-    scrubber.style.zIndex = "9000";
+    scrubber.style.zIndex = scrubber.style.zIndex + 1;
     scrubber.style.backgroundColor = "red";
 
     var timeline = document.createElement( "canvas" );
@@ -175,7 +175,7 @@ Butter.registerModule( "timeline", {
     userInteract.style.left = "0";
     userInteract.style.height = timeline.style.height;
     userInteract.style.width = "100%";
-    userInteract.style.zIndex = "9001";
+    userInteract.style.zIndex = scrubber.style.zIndex + 1;
     container.style.MozUserSelect = "none";
     container.style.webkitUserSelect = "none";
     container.style.oUserSelect = "none";
@@ -238,6 +238,14 @@ Butter.registerModule( "timeline", {
     });
 
     this.listen( "trackadded", function( track ) {
+
+      var trackLinerTrack = trackLine.createTrack();
+      trackLinerTracks[ track.getId() ] = trackLinerTrack;
+      lastTrack = trackLinerTrack;
+      butterTracks[ trackLinerTrack.id() ] = track;
+    });
+
+    this.listen( "trackremoved", function( track ) {
 
       var trackLinerTrack = trackLine.createTrack();
       trackLinerTracks[ track.getId() ] = trackLinerTrack;
