@@ -225,13 +225,6 @@ Butter.registerModule( "timeline", {
     container.appendChild( timeline );
     container.appendChild( tracks );
 
-    this.listen( "trackeventadded", function( trackEvent ) {
-
-      var trackLinerTrackEvent = lastTrack.createTrackEvent( "butterapp", trackEvent );
-      trackLinerTrackEvents[ trackEvent.getId() ] = trackLinerTrackEvent;
-      butterTrackEvents[ trackLinerTrackEvent.element.id ] = trackEvent;
-    });
-
     this.listen( "timeupdate", function() {
 
       scrubber.style.left = b.currentTime() / options.duration * container.offsetWidth;
@@ -247,10 +240,24 @@ Butter.registerModule( "timeline", {
 
     this.listen( "trackremoved", function( track ) {
 
-      var trackLinerTrack = trackLine.createTrack();
-      trackLinerTracks[ track.getId() ] = trackLinerTrack;
-      lastTrack = trackLinerTrack;
-      butterTracks[ trackLinerTrack.id() ] = track;
+      var trackLinerTrack = trackLinerTracks[ track.getId() ],
+          trackEvents = trackLinerTrack.getTrackEvents(),
+          trackEvent;
+      for ( trackEvent in trackEvents ) {
+        if ( trackEvents.hasOwnProperty( trackEvent ) ) {
+          b.removeTrackEvent( track, butterTrackEvents[ trackEvents[ trackEvent ].element.id ] );
+        }
+      }
+      trackLine.removeTrack( trackLinerTrack );
+      delete butterTracks[ trackLinerTrack.id() ];
+      delete trackLinerTracks[ track.getId() ];
+    });
+
+    this.listen( "trackeventadded", function( trackEvent ) {
+
+      var trackLinerTrackEvent = lastTrack.createTrackEvent( "butterapp", trackEvent );
+      trackLinerTrackEvents[ trackEvent.getId() ] = trackLinerTrackEvent;
+      butterTrackEvents[ trackLinerTrackEvent.element.id ] = trackEvent;
     });
 
     this.listen( "trackeventremoved", function( trackEvent ) {
