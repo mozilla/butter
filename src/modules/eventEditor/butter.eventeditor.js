@@ -30,14 +30,15 @@ THE SOFTWARE.
         defaultEditor,
         binding,
         commServer,
-        customEditors = {},
         editorHeight,
         editorWidth,
+        targetWindow,
+        customEditors = {},
     
     constructEditor = function( trackEvent ) {
      
       var editorWindow,
-        butter = this
+        butter = this,
         editorSrc =  customEditors[ trackEvent.type ] || trackEvent.manifest.customEditor || defaultEditor,
         updateEditor = function( trackEvent ){
           commServer.send( "editorCommLink", trackEvent.popcornOptions, "updatetrackevent" );
@@ -46,7 +47,8 @@ THE SOFTWARE.
       editorTarget && clearTarget();
         
       if ( binding === "bindWindow" ) {
-        editorWindow = window.open( editorSrc, "", "width=" + editorWidth + ",height=" + editorHeight + ",menubar=no,toolbar=no,location=no,status=no" );
+        editorWindow = targetWindow || window.open( "", "", "width=" + editorWidth + ",height=" + editorHeight + ",menubar=no,toolbar=no,location=no,status=no" );
+        editorWindow.location.href = editorSrc;
         setupServer();
         editorWindow.addEventListener( "unload", function() {
           butter.unlisten ( "trackeventupdated", updateEditor );
@@ -112,16 +114,19 @@ THE SOFTWARE.
         
           editorWidth = options.editorWidth || 400;
           editorHeight = options.editorHeight || 400;
-        } 
-        
-        if ( options && options.target && typeof options.target === "string" ) {
 
-          editorTarget = document.getElementById( options.target ) || {};
-        } else if ( options && options.target ) {
+          if ( options.target && typeof options.target === "string" ) {
 
-          editorTarget = options.target;
+            editorTarget = document.getElementById( options.target ) || {};
+          } else if ( options.target ) {
+
+            editorTarget = options.target;
+          }
+          
+          if ( options.targetWindow ){
+            targetWindow = options.targetWindow;
+          }
         }
-
         if ( editorTarget ) {
 
           binding = "bindFrame"
