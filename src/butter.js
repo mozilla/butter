@@ -314,6 +314,8 @@ THE SOFTWARE.
     //removeTrackEvent - Remove a Track Event
     this.removeTrackEvent = function ( track, trackEvent ) {
 
+      checkMedia();
+
       // one param given
       if ( !trackEvent ) {
         if ( track instanceof TrackEvent ) {
