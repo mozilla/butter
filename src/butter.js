@@ -183,7 +183,7 @@ THE SOFTWARE.
       return undefined;
     }; //getTrack
 
-    this.removeTrack = function ( track ) {
+    this.removeTrack = function ( track, keepEvents ) {
       if ( typeof(track) === "string" ) {
         track = that.getTrack( track );
       } //if
@@ -191,6 +191,14 @@ THE SOFTWARE.
       if ( idx > -1 ) {
         tracks.splice( idx, 1 );
         delete tracksByName[ track.getName() ];
+
+        if ( !keepEvents ) {
+          var events = track.getTrackEvents();
+          for ( var i=0, l=events.length; i<l; ++i ) {
+            track.removeTrackEvent( events[i] );
+          } //for
+        } //if
+
         return track;
       } //if
       return undefined;    
@@ -364,10 +372,10 @@ THE SOFTWARE.
     }; //getTrack
 
     //removeTrack - Remove a Track
-    this.removeTrack = function ( track ) {
+    this.removeTrack = function ( track, keepEvents ) {
       checkMedia();
       that.trigger( "trackremoved", track );
-      return currentMedia.removeTrack( track );
+      return currentMedia.removeTrack( track, keepEvents );
     };
 
     /****************************************************************

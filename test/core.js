@@ -151,4 +151,30 @@
 
   });
 
+  test( "Remove track deep (trackEvent) removal", function () {
+
+    expect( 4 );
+
+    var butter = new Butter();
+    butter.addMedia();
+
+    var t1 = butter.addTrack();
+    var te = butter.addTrackEvent( t1, {} );
+
+    ok( t1.getTrackEvents().length === 1, "Track event stored" );
+
+    butter.removeTrack( t1 );
+
+    ok( t1.getTrackEvents().length === 0, "Track event removed indirectly" );
+
+    butter.addTrack( t1 );
+    butter.addTrackEvent( t1, {} );
+
+    ok( t1.getTrackEvents().length === 1, "Track event stored again" );
+
+    butter.removeTrack( t1, true );
+
+    ok( t1.getTrackEvents().length === 1, "Track event still stored" );
+  });
+
 })(window, document, undefined, Butter);
