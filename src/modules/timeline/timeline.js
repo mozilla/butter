@@ -150,7 +150,7 @@ Butter.registerModule( "timeline", {
         lastTimeDisplayed = -textWidth / 2;
 
     // translate will make the time ticks thin
-    //context.translate( 0.5, 0.5 );
+    context.translate( 0.5, 0.5 );
     context.beginPath();
 
     for ( var i = 1, l = options.duration * 4; i < l; i++ ) {
