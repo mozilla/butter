@@ -269,6 +269,18 @@ Butter.registerModule( "timeline", {
       delete butterTrackEvents[ trackLinerTrackEvent.element.id ];
       delete trackLinerTrackEvents[ trackEvent.getId() ];
     });
+
+    this.listen( "mediaadded", function( trackEvent ) {
+
+    });
+
+    this.listen( "mediachanged", function( trackEvent ) {
+
+    });
+
+    this.listen( "mediaremoved", function( trackEvent ) {
+
+    });
   }
 });
 
