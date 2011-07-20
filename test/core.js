@@ -1,12 +1,7 @@
 /*global text,expect,ok,module,notEqual,Butter,test,window*/
 (function (window, document, undefined, Butter) {
 
-  module("Media", {
-    setup: function () {
-    },
-    teardown: function () {
-    }
-  });
+  module( "Media" );
 
   test( "No media check", function () {
     expect(1);
@@ -53,6 +48,29 @@
     ok( butter.getAllMedia().length === 0, "There are no Media" );
   });
 
+  test("Media objects have their own tracks", function () {
+    var butter = new Butter();
+    var m1 = butter.addMedia();
+    var m2 = butter.addMedia();
+
+    butter.addTrack( { name:"Track 1" } );
+
+    butter.setMedia( m2 );
+
+    butter.addTrack( { name:"Track 2" } );
+
+    butter.setMedia( m1 );
+    ok( butter.getTrack( "Track 1" ) !== undefined, "Track 1 is on Media 1");
+    ok( butter.getTrack( "Track 2" ) === undefined, "Track 2 is not on Media 1");
+
+    butter.setMedia( m2 );
+    ok( butter.getTrack( "Track 1" ) === undefined, "Track 1 is not on Media 1");
+    ok( butter.getTrack( "Track 2" ) !== undefined, "Track 2 is on Media 1");
+
+  });
+
+  module( "Track" );
+
   test( "Create Track object", function () {
     expect(1);
 
@@ -84,6 +102,8 @@
 
     ok( butter.getTracks().length === 0, "There are no Tracks" );
   });
+
+  module( "TrackEvent" );
 
   test("Create TrackEvent object", function () {
     expect(1);
@@ -127,27 +147,6 @@
     for ( var track in tracks ) {
       ok( tracks[ track ].length === 0, "No TrackEvents remain" );  
     }
-
-  });
-
-  test("Media objects have their own tracks", function () {
-    var butter = new Butter();
-    var m1 = butter.addMedia();
-    var m2 = butter.addMedia();
-
-    butter.addTrack( { name:"Track 1" } );
-
-    butter.setMedia( m2 );
-
-    butter.addTrack( { name:"Track 2" } );
-
-    butter.setMedia( m1 );
-    ok( butter.getTrack( "Track 1" ) !== undefined, "Track 1 is on Media 1");
-    ok( butter.getTrack( "Track 2" ) === undefined, "Track 2 is not on Media 1");
-
-    butter.setMedia( m2 );
-    ok( butter.getTrack( "Track 1" ) === undefined, "Track 1 is not on Media 1");
-    ok( butter.getTrack( "Track 2" ) !== undefined, "Track 2 is on Media 1");
 
   });
 
