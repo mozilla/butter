@@ -1,12 +1,7 @@
 /*global text,expect,ok,module,notEqual,Butter,test,window*/
 (function (window, document, undefined, Butter) {
 
-  module("Media", {
-    setup: function () {
-    },
-    teardown: function () {
-    }
-  });
+  module( "Media" );
 
   test( "No media check", function () {
     expect(1);
@@ -27,13 +22,21 @@
   });
 
   test( "Add, retrieve, and remove Media object", function () {
-    expect(8);
+    expect(9);
 
     var butter = new Butter();
+    var mediaEventState;
 
     var m1 = new Butter.Media( { name: "Media 1", media: document.getElementById('audio-test') } );
+    butter.listen("mediaadded", function () {
+      mediaEventState = 0;
+    });
+    butter.listen("mediachanged", function () {
+      mediaEventState = 1;
+    });
     butter.addMedia( m1 );
     ok( butter.getMedia("Media 1") === m1 && m1.getName() === "Media 1", "Method 1 object stored and retrieved" );
+    ok( mediaEventState === 1, "Media events received in correct order" );
 
     var m2 = butter.addMedia( { name: "Media 2", media: document.getElementById('audio-test') } );
     ok( butter.getMedia("Media 2") === m2 && m2.getName() === "Media 2", "Method 2 object stored and retrieved" );
@@ -52,6 +55,29 @@
 
     ok( butter.getAllMedia().length === 0, "There are no Media" );
   });
+
+  test("Media objects have their own tracks", function () {
+    var butter = new Butter();
+    var m1 = butter.addMedia();
+    var m2 = butter.addMedia();
+
+    butter.addTrack( { name:"Track 1" } );
+
+    butter.setMedia( m2 );
+
+    butter.addTrack( { name:"Track 2" } );
+
+    butter.setMedia( m1 );
+    ok( butter.getTrack( "Track 1" ) !== undefined, "Track 1 is on Media 1");
+    ok( butter.getTrack( "Track 2" ) === undefined, "Track 2 is not on Media 1");
+
+    butter.setMedia( m2 );
+    ok( butter.getTrack( "Track 1" ) === undefined, "Track 1 is not on Media 1");
+    ok( butter.getTrack( "Track 2" ) !== undefined, "Track 2 is on Media 1");
+
+  });
+
+  module( "Track" );
 
   test( "Create Track object", function () {
     expect(1);
@@ -84,6 +110,8 @@
 
     ok( butter.getTracks().length === 0, "There are no Tracks" );
   });
+
+  module( "TrackEvent" );
 
   test("Create TrackEvent object", function () {
     expect(1);
@@ -127,27 +155,6 @@
     for ( var track in tracks ) {
       ok( tracks[ track ].length === 0, "No TrackEvents remain" );  
     }
-
-  });
-
-  test("Media objects have their own tracks", function () {
-    var butter = new Butter();
-    var m1 = butter.addMedia();
-    var m2 = butter.addMedia();
-
-    butter.addTrack( { name:"Track 1" } );
-
-    butter.setMedia( m2 );
-
-    butter.addTrack( { name:"Track 2" } );
-
-    butter.setMedia( m1 );
-    ok( butter.getTrack( "Track 1" ) !== undefined, "Track 1 is on Media 1");
-    ok( butter.getTrack( "Track 2" ) === undefined, "Track 2 is not on Media 1");
-
-    butter.setMedia( m2 );
-    ok( butter.getTrack( "Track 1" ) === undefined, "Track 1 is not on Media 1");
-    ok( butter.getTrack( "Track 2" ) !== undefined, "Track 2 is on Media 1");
 
   });
 
