@@ -450,8 +450,18 @@ THE SOFTWARE.
     };
 
     //currentTime - Gets and Sets the media's current time.
-    this.currentTime = function () {
+    this.currentTime = function ( time ) {
       checkMedia();
+
+      // need to get/set the video element dynamically
+      var video = document.getElementById( "video" );
+
+      if ( time !== undefined ) {
+
+        video.currentTime = time;
+      }
+
+      return video.currentTime;
     };
 
     //getAllMedia - returns all stored media objects
