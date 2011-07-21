@@ -54,89 +54,94 @@ Butter.registerModule( "timeline", {
       this.container.style.oUserSelect = "none";
       this.container.style.userSelect = "none";
 
+      target.appendChild( this.container );
+
       this.tracks = document.createElement( "div" );
       this.tracks.style.width = "100%";
 
-      this.trackLine = new TrackLiner({
-        element: this.tracks,
-        dynamicTrackCreation: true,
-        scale: 1,
-        duration: options.duration, // to do. get this from the media
-        restrictToKnownPlugins: true
-      });
+      this.init = function() {
 
-      this.lastTrack;
-      this.butterTracks = {};
-      this.trackLinerTracks = {};
-      this.butterTrackEvents = {};
-      this.trackLinerTrackEvents = {};
+        this.duration = media.getDuration();
 
-      target.appendChild( this.container );
+        this.trackLine = new TrackLiner({
+          element: this.tracks,
+          dynamicTrackCreation: true,
+          scale: 1,
+          duration: this.duration, // to do. get this from the media
+          restrictToKnownPlugins: true
+        });
 
-      this.timeline = document.createElement( "canvas" );
-      this.timeline.style.height = "25px";
-      this.timeline.style.width = this.container.offsetWidth + "px";
-      this.timeline.height = "25";
-      this.timeline.width = this.container.offsetWidth;
+        this.lastTrack;
+        this.butterTracks = {};
+        this.trackLinerTracks = {};
+        this.butterTrackEvents = {};
+        this.trackLinerTrackEvents = {};
 
-      this.scrubber = document.createElement( "div" );
-      this.scrubber.style.height = "100%";
-      this.scrubber.style.width = "1px";
-      this.scrubber.style.position = "absolute";
-      this.scrubber.style.top = "0";
-      this.scrubber.style.left = "0";
-      this.scrubber.style.zIndex = this.timeline.style.zIndex + 1;
-      this.scrubber.style.backgroundColor = "red";
+        this.timeline = document.createElement( "canvas" );
+        this.timeline.style.height = "25px";
+        this.timeline.style.width = this.container.offsetWidth + "px";
+        this.timeline.height = "25";
+        this.timeline.width = this.container.offsetWidth;
 
-      this.userInteract = document.createElement( "div" );
-      this.userInteract.style.position = "absolute";
-      this.userInteract.style.top = "0";
-      this.userInteract.style.left = "0";
-      this.userInteract.style.height = this.timeline.style.height;
-      this.userInteract.style.width = "100%";
-      this.userInteract.style.zIndex = this.scrubber.style.zIndex + 1;
+        this.scrubber = document.createElement( "div" );
+        this.scrubber.style.height = "100%";
+        this.scrubber.style.width = "1px";
+        this.scrubber.style.position = "absolute";
+        this.scrubber.style.top = "0";
+        this.scrubber.style.left = "0";
+        this.scrubber.style.zIndex = this.timeline.style.zIndex + 1;
+        this.scrubber.style.backgroundColor = "red";
 
-      this.userInteract.addEventListener( "mousemove", function( event ) {
+        this.userInteract = document.createElement( "div" );
+        this.userInteract.style.position = "absolute";
+        this.userInteract.style.top = "0";
+        this.userInteract.style.left = "0";
+        this.userInteract.style.height = this.timeline.style.height;
+        this.userInteract.style.width = "100%";
+        this.userInteract.style.zIndex = this.scrubber.style.zIndex + 1;
 
-        self.scrollLeft = event.rangeParent.scrollLeft;
-      }, false );
-      this.userInteract.addEventListener( "mousedown", function( event ) {
+        this.userInteract.addEventListener( "mousemove", function( event ) {
 
-        scrubberClicked = true;
-        self.scrubber.style.left = ( event.pageX - ( self.container.offsetLeft - event.rangeParent.scrollLeft ) );
-        b.currentTime( ( event.pageX - ( self.container.offsetLeft - scrollLeft ) + self.container.scrollLeft ) / self.container.offsetWidth * options.duration ); // options.duration is broken
-      }, false );
+          self.scrollLeft = event.rangeParent.scrollLeft;
+        }, false );
+        this.userInteract.addEventListener( "mousedown", function( event ) {
 
-      this.container.appendChild( this.scrubber );
-      this.container.appendChild( this.userInteract );
-      this.container.appendChild( this.timeline );
-      this.container.appendChild( this.tracks );
+          scrubberClicked = true;
+          self.scrubber.style.left = ( event.pageX - ( self.container.offsetLeft - event.rangeParent.scrollLeft ) );
+          b.currentTime( ( event.pageX - ( self.container.offsetLeft - scrollLeft ) + self.container.scrollLeft ) / self.container.offsetWidth * this.duration );
+        }, false );
 
-      var context = this.timeline.getContext( "2d" ),
-          inc = this.container.offsetWidth / options.duration / 4, // options.duration is going to be broken
-          heights = [ 10, 4, 7, 4 ],
-          textWidth = context.measureText( secondsToSMPTE( 5 ) ).width,
-          lastTimeDisplayed = -textWidth / 2;
+        this.container.appendChild( this.scrubber );
+        this.container.appendChild( this.userInteract );
+        this.container.appendChild( this.timeline );
+        this.container.appendChild( this.tracks );
 
-      // translate will make the time ticks thin
-      context.translate( 0.5, 0.5 );
-      context.beginPath();
+        var context = this.timeline.getContext( "2d" ),
+            inc = this.container.offsetWidth / this.duration / 4,
+            heights = [ 10, 4, 7, 4 ],
+            textWidth = context.measureText( secondsToSMPTE( 5 ) ).width,
+            lastTimeDisplayed = -textWidth / 2;
 
-      for ( var i = 1, l = options.duration * 4; i < l; i++ ) {
+        // translate will make the time ticks thin
+        context.translate( 0.5, 0.5 );
+        context.beginPath();
 
-        var position = i * inc;
+        for ( var i = 1, l = this.duration * 4; i < l; i++ ) {
 
-        context.moveTo( -~position, 0 );
-        context.lineTo( -~position, heights[ i % 4 ] );
+          var position = i * inc;
 
-        if ( i % 4 === 0 && ( position - lastTimeDisplayed ) > textWidth ) {
+          context.moveTo( -~position, 0 );
+          context.lineTo( -~position, heights[ i % 4 ] );
 
-          lastTimeDisplayed = position;
-          context.fillText( secondsToSMPTE( i / 4 ), -~position - ( textWidth / 2 ), 21 );
+          if ( i % 4 === 0 && ( position - lastTimeDisplayed ) > textWidth ) {
+
+            lastTimeDisplayed = position;
+            context.fillText( secondsToSMPTE( i / 4 ), -~position - ( textWidth / 2 ), 21 );
+          }
         }
-      }
-      context.stroke();
-      context.closePath();
+        context.stroke();
+        context.closePath();
+      };
 
       this.hide = function() {
 
@@ -174,7 +179,7 @@ Butter.registerModule( "timeline", {
           }
           currentMediaInstance.lastTrack = trackLinerTrack;
 
-          var start = trackEventObj.left / currentMediaInstance.container.offsetWidth * options.duration,
+          var start = trackEventObj.left / currentMediaInstance.container.offsetWidth * currentMediaInstance.duration,
               end = start + 4;
 
           b.addTrackEvent( currentMediaInstance.butterTracks[ currentMediaInstance.lastTrack.id() ], new Butter.TrackEvent({ popcornOptions: {start: start, end: end }, type: ui.draggable[ 0 ].id }) );
@@ -183,8 +188,8 @@ Butter.registerModule( "timeline", {
 
           var start = trackEventObj.popcornOptions.start,
               end = trackEventObj.popcornOptions.end,
-              width = ( end - start ) / options.duration * track.getElement().offsetWidth,
-              left = start / options.duration * track.getElement().offsetWidth;
+              width = ( end - start ) / currentMediaInstance.duration * track.getElement().offsetWidth,
+              left = start / currentMediaInstance.duration * track.getElement().offsetWidth;
 
           return { left: left, innerHTML: trackEventObj.type, width: width };
         }
@@ -194,8 +199,8 @@ Butter.registerModule( "timeline", {
 
         var trackLinerTrack = track;
 
-        trackEventObj.options.popcornOptions.start = trackEventObj.element.offsetLeft / currentMediaInstance.container.offsetWidth * options.duration;
-        trackEventObj.options.popcornOptions.end = ( trackEventObj.element.offsetLeft + trackEventObj.element.offsetWidth ) / currentMediaInstance.container.offsetWidth * options.duration;
+        trackEventObj.options.popcornOptions.start = trackEventObj.element.offsetLeft / currentMediaInstance.container.offsetWidth * currentMediaInstance.duration;
+        trackEventObj.options.popcornOptions.end = ( trackEventObj.element.offsetLeft + trackEventObj.element.offsetWidth ) / currentMediaInstance.container.offsetWidth * currentMediaInstance.duration;
 
         // if the track is not registered in butter
         // remove it, and call b.addTrack
@@ -227,7 +232,7 @@ Butter.registerModule( "timeline", {
         if ( event.pageX > ( currentMediaInstance.container.offsetLeft - scrollLeft ) && event.pageX < ( ( currentMediaInstance.container.offsetLeft - scrollLeft ) + currentMediaInstance.container.offsetWidth ) ) {
 
           currentMediaInstance.scrubber.style.left = ( event.pageX - ( currentMediaInstance.container.offsetLeft - scrollLeft ) );
-          b.currentTime( ( event.pageX - ( currentMediaInstance.container.offsetLeft - scrollLeft ) + currentMediaInstance.container.scrollLeft ) / currentMediaInstance.container.offsetWidth * options.duration ); // options.duration is gone
+          b.currentTime( ( event.pageX - ( currentMediaInstance.container.offsetLeft - scrollLeft ) + currentMediaInstance.container.scrollLeft ) / currentMediaInstance.container.offsetWidth * currentMediaInstance.duration );
         } else {
 
           if ( event.pageX <= ( currentMediaInstance.container.offsetLeft - scrollLeft ) ) {
@@ -237,7 +242,7 @@ Butter.registerModule( "timeline", {
           } else {
 
             currentMediaInstance.scrubber.style.left = currentMediaInstance.container.offsetWidth;
-            b.currentTime( options.duration ); // options.duration is gone
+            b.currentTime( currentMediaInstance.duration );
           }
         }
       }
@@ -249,7 +254,7 @@ Butter.registerModule( "timeline", {
 
     this.listen( "timeupdate", function() {
 
-      currentMediaInstance.scrubber.style.left = b.currentTime() / options.duration * currentMediaInstance.container.offsetWidth; // options.duration is gone
+      currentMediaInstance.scrubber.style.left = b.currentTime() / currentMediaInstance.duration * currentMediaInstance.container.offsetWidth;
     });
 
     this.listen( "trackadded", function( track ) {
@@ -297,11 +302,16 @@ Butter.registerModule( "timeline", {
       mediaInstances[ media.getId() ] = new MediaInstance( media );
     });
 
+    this.listen( "mediaready", function( media ) {
+
+      mediaInstances[ media.getId() ].init();
+    });
+
     this.listen( "mediachanged", function( media ) {
 
       currentMediaInstance && currentMediaInstance.hide();
       currentMediaInstance = mediaInstances[ media.getId() ];
-      currentMediaInstance.show();
+      currentMediaInstance && currentMediaInstance.show();
     });
 
     this.listen( "mediaremoved", function( media ) {
