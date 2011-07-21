@@ -500,11 +500,10 @@ THE SOFTWARE.
       medias.push( media );
       mediaByName[ mediaName ] = media;
 
-
+      that.trigger( "mediaadded", media );
       if ( !currentMedia ) {
         that.setMedia( media );
       } //if
-      that.trigger( "mediaadded", media );
       return media;
     };
 

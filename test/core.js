@@ -22,13 +22,21 @@
   });
 
   test( "Add, retrieve, and remove Media object", function () {
-    expect(8);
+    expect(9);
 
     var butter = new Butter();
+    var mediaEventState;
 
     var m1 = new Butter.Media( { name: "Media 1", media: document.getElementById('audio-test') } );
+    butter.listen("mediaadded", function () {
+      mediaEventState = 0;
+    });
+    butter.listen("mediachanged", function () {
+      mediaEventState = 1;
+    });
     butter.addMedia( m1 );
     ok( butter.getMedia("Media 1") === m1 && m1.getName() === "Media 1", "Method 1 object stored and retrieved" );
+    ok( mediaEventState === 1, "Media events received in correct order" );
 
     var m2 = butter.addMedia( { name: "Media 2", media: document.getElementById('audio-test') } );
     ok( butter.getMedia("Media 2") === m2 && m2.getName() === "Media 2", "Method 2 object stored and retrieved" );
