@@ -51,7 +51,7 @@
   test( "setEditorDims( dims )", function() {
     var b = new Butter();
     expect( 6 );
-    b.eventeditor( { defaultEditor: "./../../../src/modules/eventEditor/defaultEditor.html" } );
+    b.eventeditor( { defaultEditor: "./../../../src/modules/eventeditor/defaultEditor.html" } );
      
     ok( !( b.setEditorDims() ) , "setEditorDims returns false with invalid param" );
     ok( !( b.setEditorDims( {} ) ), "setEditorDims returns false with invalid param" );
@@ -66,7 +66,7 @@
     var b = new Butter(),
       sde;
     expect( 5 );
-    b.eventeditor( { defaultEditor: "./../../../src/modules/eventEditor/defaultEditor.html" } );
+    b.eventeditor( { defaultEditor: "./../../../src/modules/eventeditor/defaultEditor.html" } );
     sde = b.setDefaultEditor;
     
     ok ( !sde(), "returns false without a param" );
@@ -79,7 +79,7 @@
   test( "changeEditorTarget( newTarget, type )", function() {
     var b = new Butter(),
       wind;
-    b.eventeditor( { defaultEditor: "./../../../src/modules/eventEditor/defaultEditor.html" } );
+    b.eventeditor( { defaultEditor: "./../../../src/modules/eventeditor/defaultEditor.html" } );
     expect(7);
     
     ok( b.changeEditorTarget(), "set to use new window when no params specified" );
@@ -96,7 +96,7 @@
   test( "addCustomEditor( editorSource, pluginType )", function() {
     var b = new Butter();
     expect( 4 );
-    b.eventeditor( { defaultEditor: "./../../../src/modules/eventEditor/defaultEditor.html" } );
+    b.eventeditor( { defaultEditor: "./../../../src/modules/eventeditor/defaultEditor.html" } );
     
     ok( !b.addCustomEditor(), "returns false if no params provided");
     ok( !b.addCustomEditor( "URL.HTML" ), "returns false if only one param provided");
@@ -107,7 +107,7 @@
   test( "removeCustomEditor( editorSource, pluginType )", function() {
     var b = new Butter();
     expect( 4 );
-    b.eventeditor( { defaultEditor: "./../../../src/modules/eventEditor/defaultEditor.html" } );
+    b.eventeditor( { defaultEditor: "./../../../src/modules/eventeditor/defaultEditor.html" } );
     
     ok( !b.removeCustomEditor(), "returns false if no params provided");
     ok( !b.removeCustomEditor( "URL.HTML" ), "returns false if only one param provided");
@@ -117,7 +117,7 @@
   
   test( "editTrackEvent( trackEvent )", function() {
     var b = new Butter();
-    b.eventeditor( { defaultEditor: "./../../../src/modules/eventEditor/defaultEditor.html" } );
+    b.eventeditor( { defaultEditor: "./../../../src/modules/eventeditor/defaultEditor.html" } );
     
     expect( 2 );
     
