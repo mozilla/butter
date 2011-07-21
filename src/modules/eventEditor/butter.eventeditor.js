@@ -34,41 +34,44 @@ THE SOFTWARE.
         editorWidth,
         targetWindow,
         customEditors = {},
-    
+
     constructEditor = function( trackEvent ) {
-     
+
       var editorWindow,
         butter = this,
         editorSrc =  customEditors[ trackEvent.type ] || trackEvent.manifest.customEditor || defaultEditor,
         updateEditor = function( trackEvent ){
           commServer.send( "editorCommLink", trackEvent.popcornOptions, "updatetrackevent" );
         };
-        
+
       editorTarget && clearTarget();
-        
+
       if ( binding === "bindWindow" ) {
-        editorWindow = targetWindow || window.open( "", "", "width=" + editorWidth + ",height=" + editorHeight + ",menubar=no,toolbar=no,location=no,status=no" );
-        editorWindow.location.href = editorSrc;
+        
+        editorWindow = targetWindow || window.open( editorSrc, "", "width=" + editorWidth + ",height=" + editorHeight + ",menubar=no,toolbar=no,location=no,status=no" );
         setupServer();
-        editorWindow.addEventListener( "unload", function() {
+        editorWindow.addEventListener( "beforeunload", function() {
           butter.unlisten ( "trackeventupdated", updateEditor );
           butter.trigger( "trackeditforcedclosed" );
         }, false );
       } else if ( binding === "bindFrame" ) {
-        
+
         editorWindow = document.createElement( "iframe" );
         setupServer();
         editorWindow.src = editorSrc;
         editorTarget.appendChild( editorWindow );
       }
-      
+
       function setupServer() {
-        commServer[ binding ]( "editorCommLink", editorWindow, function() {      
+        
+        commServer[ binding ]( "editorCommLink", editorWindow, function() {
+          
           butter.listen( "trackeventupdated", updateEditor );
           butter.listen( "targetadded", function() {
             commServer.send( "editorCommLink", butter.getTargets(), "updatedomtargets" );
           });
           commServer.listen( "editorCommLink", "okayclicked", function( newOptions ){
+            
             trackEvent.popcornOptions = newOptions;
             editorWindow.close && editorWindow.close();
             editorWindow && editorWindow.parentNode && editorWindow.parentNode.removeChild( editorWindow );
@@ -77,10 +80,12 @@ THE SOFTWARE.
             butter.trigger( "trackeventupdated", trackEvent );
           });
           commServer.listen( "editorCommLink", "applyclicked", function( newOptions ) {
+           
             trackEvent.popcornOptions = newOptions;
             butter.trigger( "trackeventupdated", trackEvent );
           });
           commServer.listen( "editorCommLink", "deleteclicked", function() {
+            
             butter.removeTrackEvent( trackEvent );
             editorWindow.close && editorWindow.close();
             editorWindow && editorWindow.parentNode && editorWindow.parentNode.removeChild( editorWindow );
@@ -88,6 +93,7 @@ THE SOFTWARE.
             butter.trigger( "trackeditclosed" );
           });
           commServer.listen( "editorCommLink", "cancelclicked", function() {
+            
             editorWindow.close && editorWindow.close();
             editorWindow && editorWindow.parentNode && editorWindow.parentNode.removeChild( editorWindow );
             butter.unlisten ( "trackeventupdated", updateEditor );
@@ -96,7 +102,7 @@ THE SOFTWARE.
           commServer.send( "editorCommLink", { trackEvent: trackEvent, targets: butter.getTargets() }, "edittrackevent");
         });
       }
-      
+
     },
 
     clearTarget = function() {
@@ -104,58 +110,106 @@ THE SOFTWARE.
       while ( editorTarget.firstChild ) {
         editorTarget.removeChild( editorTarget.firstChild );
       }
-    }
+    },
 
-    return {
-    
-      setup: function( options ) {
+    setTarget = function( newTarget, type ) {
+      
+      var setTheTarget = {
 
-        if ( options ) { 
-        
-          editorWidth = options.editorWidth || 400;
-          editorHeight = options.editorHeight || 400;
-
-          if ( options.target && typeof options.target === "string" ) {
+        "domtarget": function( targ ) {
+          if ( typeof options.target === "string" ) {
 
             editorTarget = document.getElementById( options.target ) || {};
           } else if ( options.target ) {
 
             editorTarget = options.target;
           }
-          
+        },
+
+        "window": function( targ ) {
           if ( options.targetWindow ){
             targetWindow = options.targetWindow;
           }
         }
-        if ( editorTarget ) {
 
-          binding = "bindFrame"
-        } else {
+      };
 
-          binding = "bindWindow";
+      setTheTarget[ isWindow ]( newTarget );
+
+    };
+
+    return {
+
+      setup: function( options ) {
+
+        if ( !options ) {
+
+          throw new Error( "Invalid Argument" );
         }
-        
-        defaultEditor = options && options.defaultEditor || "defaultEditor.html";
-        
+
+        editorWidth = options.editorWidth || 400;
+        editorHeight = options.editorHeight || 400;
+
+        ( options.target && setTarget( options.target, "domtarget" ) ) || ( options.targetWindow && setTarget( options.targetWindow, "window" ) );
+
+        binding = editorTarget ? "bindFrame" : "bindWindow";
+
+        defaultEditor = options.defaultEditor || "defaultEditor.html";
+
         commServer = new Butter.CommServer();
       },
 
       extend: {
 
         editTrackEvent: function( trackEvent ) {
-        
+
            this.trigger( "trackeditstarted" );
            constructEditor.call( this, trackEvent );
         },
-        
+
         addCustomEditor: function( editorSource, pluginType ) {
-          
+
           if ( !pluginType || !editorSource ) {
             return;
           }
-          
+
           customEditors[ pluginType ] = editorSource;
-        } 
+        },
+
+        changeTarget: function( newTarget, type ) {
+          
+          var types = [ "domtarget", "window" ],
+            lowerCaseType;
+
+          if ( !newTarget || !type || types.indexOf( lowerCaseType = type.toLowerCase() ) === -1 ) {
+            
+            return false;
+          }
+
+          setTarget( newTarget, lowerCaseType );
+        },
+        
+        setDefaultEditor = function( newEditor ) {
+          if ( !newEditor || typeof newEditor !== "string" ) {
+            
+            return;
+          }
+          
+          defaultEditor = newEditor;
+        },
+        
+        setEditorDims = function ( dims ) {
+          
+          if ( !dims ) {
+          
+            return;
+          }
+          
+          editorWidth = dims.width || editorWidth;
+          editorHeight = dims.Width || editorHeight;
+          
+        }
+        
       }
     }
   })());
