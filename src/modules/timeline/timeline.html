@@ -34,8 +34,6 @@
 
       document.addEventListener( "DOMContentLoaded", function() {
 
-        b.addMedia({ name: "video", media: "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" });
-
         var timeLineContainer = document.createElement( "div" );
         timeLineContainer.style.width = "1000px";
         var pluginTrayContainer = document.createElement( "div" );
@@ -43,6 +41,9 @@
         document.body.appendChild( timeLineContainer );
         b.timeline({ target: timeLineContainer, duration: 52.25 });
         new pluginTray({ target: pluginTrayContainer, plugins: [ "footnote", "subtitle" ] }).addPlugin( "sugar" );
+
+        b.addMedia({ name: "video", media: "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" });
+        b.addMedia({ name: "video", media: "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" });
 
         document.getElementById( "video" ).addEventListener( "timeupdate", function() {
           b.trigger( "timeupdate", {} );

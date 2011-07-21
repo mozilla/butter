@@ -510,12 +510,8 @@ THE SOFTWARE.
       medias.push( media );
       mediaByName[ mediaName ] = media;
 
-
-      if ( !currentMedia ) {
-        that.setMedia( media );
-      } //if
       that.trigger( "mediaadded", media );
-      return media;
+      return that.setMedia( media );
     };
 
     //removeMedia - forget a media object
