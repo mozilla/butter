@@ -24,6 +24,8 @@ THE SOFTWARE.
 
 (function ( window, document, undefined ) {
 
+  var modules = {};
+
   /****************************************************************************
    * Track
    ****************************************************************************/
@@ -65,7 +67,6 @@ THE SOFTWARE.
 
       if ( idx > -1 ) {
         trackEvents.splice( idx, 1 );
-        trackEvent.track = undefined;
       } //if
     }; //removeTrackEvent
 
@@ -74,6 +75,7 @@ THE SOFTWARE.
         trackEvent = new TrackEvent( trackEvent );
       } //if
       trackEvents.push( trackEvent );
+
       trackEvent.track = that;
       return trackEvent;
     }; //addTrackEvent
@@ -87,14 +89,14 @@ THE SOFTWARE.
     var id = numTrackEvents++;
 
     options = options || {};
-    var name = options.name || 'Track' + id + Date.now();
+    var name = options.name || 'Track' + Date.now();
     this.start = options.start || 0;
     this.end = options.end || 0;
     this.type = options.type;
     this.popcornOptions = options.popcornOptions;
     this.popcornEvent = options.popcornEvent;
     this.track = options.track;
-
+    
     this.getName = function () {
       return name;
     };
@@ -311,6 +313,7 @@ THE SOFTWARE.
 
     //removeTrackEvent - Remove a Track Event
     this.removeTrackEvent = function ( track, trackEvent ) {
+
       checkMedia();
 
       // one param given
@@ -526,6 +529,13 @@ THE SOFTWARE.
       return undefined;    
     };
 
+    /****************************************************************
+     * Init Modules for this instance
+     ****************************************************************/
+    for ( var moduleName in modules ) {
+      modules[moduleName].setup && modules[moduleName].setup.call(this);
+    } //for
+
   }; //Butter
 
   Butter.getScriptLocation = function () {
@@ -540,8 +550,9 @@ THE SOFTWARE.
 
   //registerModule - Registers a Module into the Butter core
   Butter.registerModule = Butter.prototype.registerModule = function ( name, module ) {
-    Butter.prototype[name] = function(options) {
-      module.setup && module.setup.call(this, options);
+
+    Butter.prototype[name] = function( options ) {
+      module.setup && module.setup.call( this, options );
       return this;
     };
     if ( module.extend ) {
@@ -552,6 +563,7 @@ THE SOFTWARE.
   Butter.extendAPI = function ( functions ) {
     for ( var fn in functions ) {
       if ( functions.hasOwnProperty( fn ) ) {
+        Butter[fn] = functions[ fn ];
         Butter.prototype[ fn ] = functions[ fn ];
       } //if
     } //for
@@ -574,3 +586,4 @@ THE SOFTWARE.
   window.Butter = Butter;
 
 })( window, document, undefined );
+
