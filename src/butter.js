@@ -453,7 +453,7 @@ THE SOFTWARE.
       // need to get/set the video element dynamically
       var video = document.getElementById( "video" );
 
-      if ( time !== undefined) {
+      if ( time !== undefined ) {
 
         video.currentTime = time;
       }

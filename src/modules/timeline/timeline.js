@@ -102,7 +102,7 @@ Butter.registerModule( "timeline", {
 
         this.userInteract.addEventListener( "mousemove", function( event ) {
 
-          self.scrollLeft = event.rangeParent.scrollLeft;
+          scrollLeft = event.rangeParent.scrollLeft;
         }, false );
         this.userInteract.addEventListener( "mousedown", function( event ) {
 

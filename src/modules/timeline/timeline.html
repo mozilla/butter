@@ -34,11 +34,16 @@
 
       document.addEventListener( "DOMContentLoaded", function() {
 
+        var viewPort = document.createElement( "div" );
+        viewPort.style.width = "1000px";
+        viewPort.style.height = "200px";
+        viewPort.style.overflow = "auto";
         var timeLineContainer = document.createElement( "div" );
-        timeLineContainer.style.width = "1000px";
+        timeLineContainer.style.width = "3000px";
         var pluginTrayContainer = document.createElement( "div" );
         document.body.appendChild( pluginTrayContainer );
-        document.body.appendChild( timeLineContainer );
+        viewPort.appendChild( timeLineContainer );
+        document.body.appendChild( viewPort );
         b.timeline({ target: timeLineContainer });
         new pluginTray({ target: pluginTrayContainer, plugins: [ "footnote", "subtitle" ] }).addPlugin( "sugar" );
 
@@ -50,7 +55,7 @@
 
         var media2 = b.addMedia({ name: "video2", media: "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" });
         media2.getDuration = function() {
-          return 152.25;
+          return 178;
         };
         b.trigger( "mediaready", media2 );
 
@@ -72,7 +77,7 @@
     </script>
   </head>
   <body>
-    <video style="width: 1000px;" id="video" controls src="http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm"></video>
+    <video preload style="width: 1000px;" id="video" controls src="http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm"></video>
     <div>- Drag these elements -</div>
     <button id="set1">set media 1</button>
     <button id="set2">set media 2</button>
