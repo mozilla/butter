@@ -176,7 +176,7 @@ THE SOFTWARE.
           customEditors[ pluginType ] = editorSource;
         },
 
-        changeTarget: function( newTarget, type ) {
+        changeEditorTarget: function( newTarget, type ) {
           
           var types = [ "domtarget", "window" ],
             lowerCaseType;
