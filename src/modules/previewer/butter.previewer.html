@@ -13,7 +13,7 @@
         butter.previewer( {
           layout: "layout.html",
           target: "notIframe",
-          popcornURL: "http://popcornjs.org/code/dist/popcorn-complete.js",
+          popcornURL: "popcorn-complete.js",
           media: "http://www.youtube.com/watch?v=xyd4oM3fMO4",
           callback: function() {
             butter.buildPopcorn( "outerVideo" );
@@ -35,6 +35,8 @@
         } ) );
       }
 
+      
+
     var addTrack2 = function( type ) {
     
         var track = butter.getTracks()[ 0 ] || butter.addTrack( new Butter.Track() );
@@ -49,10 +51,12 @@
       }
 
     var changeMedia = function() {
+      butter.unlisten( "trackeventadded", butter.teAdded );
       var media = butter.addMedia( { 
-                name: "videoz", 
+                name: "outerVideo", 
                 media: "http://clips.vorwaerts-gmbh.de/VfE.ogv" 
               } );
+      
       butter.setMedia( media );
 
     }
