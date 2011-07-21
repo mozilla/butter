@@ -189,7 +189,7 @@ THE SOFTWARE.
           setTarget( newTarget, lowerCaseType );
         },
         
-        setDefaultEditor = function( newEditor ) {
+        setDefaultEditor: function( newEditor ) {
           if ( !newEditor || typeof newEditor !== "string" ) {
             
             return;
@@ -198,7 +198,7 @@ THE SOFTWARE.
           defaultEditor = newEditor;
         },
         
-        setEditorDims = function ( dims ) {
+        setEditorDims: function ( dims ) {
           
           if ( !dims ) {
           
