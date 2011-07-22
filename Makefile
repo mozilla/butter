@@ -11,12 +11,14 @@ EXTERNAL_DIR := $(SRC_DIR)/external
 JS_LIBS := \
   $(EXTERNAL_DIR)/jquery/jquery.js \
   $(EXTERNAL_DIR)/jquery-ui/jquery-ui.min.js \
+  $(EXTERNAL_DIR)/popcorn/popcorn-complete.js \
   $(EXTERNAL_DIR)/trackLiner/trackLiner.js
 
 JS_SRCS := \
   $(SOURCE_DIR)/butter.js \
   $(MODULES_DIR)/butter.comm.js \
   $(MODULES_DIR)/eventeditor/butter.eventeditor.js \
+  $(MODULES_DIR)/previewer/butter.previewer.js \
   $(MODULES_DIR)/timeline/butter.timeline.js \
   $(MODULES_DIR)/butter.testmodule.js
 
