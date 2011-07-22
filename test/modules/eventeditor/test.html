@@ -1,13 +1,13 @@
 <html>
   <head>
     <script type="text/javascript" src="../../../src/butter.js" ></script>
-    <script type="text/javascript" src="../../../src/modules/eventEditor/butter.eventeditor.js" ></script>
+    <script type="text/javascript" src="../../../src/modules/eventeditor/butter.eventeditor.js" ></script>
     <script type="text/javascript" src="../../../src/modules/butter.comm.js"></script>
     <script type="text/javascript" >
 
     window.addEventListener("DOMContentLoaded", function(){
         var b = new Butter();
-        b.eventeditor( { defaultEditor: "./../../../src/modules/eventEditor/defaultEditor.html" } );
+        b.eventeditor( { defaultEditor: "./../../../src/modules/eventeditor/defaultEditor.html" } );
         b.addMedia( new Butter.Media() );
 
         var telist = document.getElementById( "telist" );
