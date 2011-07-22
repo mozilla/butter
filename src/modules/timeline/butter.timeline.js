@@ -71,7 +71,7 @@ Butter.registerModule( "timeline", {
           restrictToKnownPlugins: true
         });
 
-        this.lastTrack;
+        //this.lastTrack;
         this.butterTracks = {};
         this.trackLinerTracks = {};
         this.butterTrackEvents = {};

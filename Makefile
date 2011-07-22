@@ -3,10 +3,12 @@ BUTTER := butter
 SRC_DIR := .
 DIST_DIR := $(SRC_DIR)/dist
 BUTTER_DIST := $(DIST_DIR)/$(BUTTER).js
+BUTTER_MIN := $(DIST_DIR)/$(BUTTER).min.js
 BUTTER_CSS_DIST := $(DIST_DIR)/$(BUTTER).css
 SOURCE_DIR := $(SRC_DIR)/src
 MODULES_DIR := $(SOURCE_DIR)/modules
 EXTERNAL_DIR := $(SRC_DIR)/external
+TOOLS_DIR := $(SRC_DIR)/tools
 
 JS_LIBS := \
   $(EXTERNAL_DIR)/jquery/jquery.js \
@@ -26,8 +28,17 @@ CSS_SRCS := \
   $(EXTERNAL_DIR)/jquery-ui/jquery-ui-1.8.5.custom.css \
   $(EXTERNAL_DIR)/trackLiner/trackLiner.css
 
-all: $(DIST_DIR) $(BUTTER_DIST)
+compile = java -jar $(TOOLS_DIR)/closure/compiler.jar \
+                    $(shell for js in $(JS_SRCS) ; do echo --js $$js ; done) \
+	                  --compilation_level SIMPLE_OPTIMIZATIONS \
+	                  --js_output_file $(1)
+
+all: $(DIST_DIR) $(BUTTER_DIST) $(BUTTER_MIN)
 	@@echo "Finished, see $(DIST_DIR)"
+
+$(BUTTER_MIN): $(DIST_DIR) $(BUTTER_DIST)
+	@@echo "Building $(BUTTER_MIN)"
+	@@$(call compile,$(BUTTER_MIN))
 
 $(BUTTER_DIST): $(DIST_DIR) $(JS_SRCS) $(CSS_SRCS)
 	@@echo "Building $(BUTTER_DIST)"

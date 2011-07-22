@@ -345,7 +345,7 @@
         } );
 
       } // fillIframe
-    }, // exnteds
+    } // exnteds
     
   });
 })(window, document, undefined, Butter);
