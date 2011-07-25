@@ -314,11 +314,8 @@
           var videoReady = function() {
 
             if( framePopcorn.media.readyState >= 2 || framePopcorn.media.duration > 0 ) {
-              var media = that.getCurrentMedia();
-              media.getDuration = function() {
-                return framePopcorn.media.duration;
-              };
-              that.trigger( "videoReady", media );
+              that.duration = framePopcorn.media.duration;
+              that.trigger( "videoReady", that.getCurrentMedia() );
             } else {
               setTimeout( function() {
                 videoReady( framePopcorn );
@@ -335,19 +332,19 @@
           
             if( !popcorns[ that.getCurrentMedia().getId() ] ) {
                 popcorns[ that.getCurrentMedia().getId() ] = framePopcorn;
-              } else {
-                framePopcorn = popcorns[ that.getCurrentMedia().getId() ]; 
-              }
+            } else {
+              framePopcorn = popcorns[ that.getCurrentMedia().getId() ]; 
+            }
 
-              // add track events to the iframe verison of popcorn
-              framePopcorn[ e.type ]( iframe.contentWindow.Popcorn.extend( {},
-                e.popcornOptions ) );
-              
-              butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
+            // add track events to the iframe verison of popcorn
+            framePopcorn[ e.type ]( iframe.contentWindow.Popcorn.extend( {},
+              e.popcornOptions ) );
+            
+            butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
 
-              e.manifest = framePopcorn.getTrackEvent( butterIds[ e.getId() ] )._natives.manifest;
+            e.manifest = framePopcorn.getTrackEvent( butterIds[ e.getId() ] )._natives.manifest;
 
-              callback && callback();
+            callback && callback();
           } );
         }
 
@@ -364,6 +361,7 @@
 
         this.listen( "timeupdate", function( e ) {
           iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].video.currentTime = e; 
+          that.currentTime = iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].video.currentTime;
         } );
 
       } // fillIframe
