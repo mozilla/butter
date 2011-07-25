@@ -1,0 +1,100 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../../../src/butter.js" ></script>
+    <script type="text/javascript" src="../../../src/modules/eventeditor/butter.eventeditor.js" ></script>
+    <script type="text/javascript" src="../../../src/modules/butter.comm.js"></script>
+    <script type="text/javascript" >
+
+    window.addEventListener("DOMContentLoaded", function(){
+        var b = new Butter();
+        b.eventeditor( { defaultEditor: "./../../../src/modules/eventeditor/defaultEditor.html" } );
+        b.addMedia( new Butter.Media() );
+
+        var telist = document.getElementById( "telist" );
+
+        var populateList = function(){
+          while ( telist.firstChild ) {
+            telist.removeChild( telist.firstChild );
+          }
+
+          var tracklist = b.getTracks();
+
+          for ( var i = 0, l = tracklist.length; i < l; i++ ) {
+            var trackEvents = tracklist[ i ].getTrackEvents();
+            for ( var j = 0, m = trackEvents.length; j < m; j++ ) {
+              telist.appendChild((function(){
+                var option = document.createElement( "option" )
+                option.value = option.text = trackEvents[ j ].getId();
+                return option;
+              })());
+            }
+          }
+        };
+
+        b.listen( "trackeventadded", populateList );
+        b.listen( "trackeventremoved", populateList );
+
+        var getTe = function(){
+          var te = new Butter.TrackEvent({ popcornOptions: { text:"hello world 2", start: 12, end: 13.555, ddl: "OPTION 2" } } ),
+            m = {
+              options: {
+                start: {
+                  elem: "input",
+                  type: "text",
+                  label: "Start"
+                },
+                end: {
+                  elem: "input",
+                  type: "text",
+                  label: "End"
+                },
+                text: {
+                  elem: "input",
+                  type: "text",
+                  label: "Text"
+                },
+                ddl: {
+                  elem: "select",
+                  options: ["OPTION 1", "OPTION 2", "OPTION 3", "OPTION 4", "OPTION 5"],
+                  label: "DropDown"
+                }
+              }
+
+            };
+          
+          te.track = tr;
+          te.manifest = m;
+
+          return te;
+        }
+
+        //console.log( te);
+        tr = new Butter.Track();
+        b.addTrack( tr );
+        //b.addTrackEvent( b.addTrack( tr ), getTe() );
+
+        var addte = document.getElementById( "addBtn" );
+        addte.addEventListener( "click", function() {
+          b.addTrackEvent ( tr, getTe() );
+        }, false );
+
+        var open = document.getElementById( "openBtn" );
+
+        open.addEventListener( "click", function() {
+          if ( telist.firstChild ) {
+            var c = b.getTracks()[0];
+            b.editTrackEvent( b.getTracks()[0].getTrackEvent( +telist.options[ telist.selectedIndex ].value ));
+          }
+        }, false);
+        window.b = b;
+    }, false);
+
+    </script>
+  </head>
+  <body>
+  <input id="addBtn" type="button" value="Add a TrackEvent" ></input>
+  <label>TrackEvents:<select id="telist" style="width: 150px"></select></label>
+  <input id="openBtn" type="button" value="Edit Selected TrackEvent Using Default Editor" ></input>
+  <div id="butter-editor-target" style="width: 300px; height: 300px"></div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <script src="../../../external/jquery/jquery.js"></script>
+    <script src="../../../external/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../../../external/trackLiner/trackLiner.js"></script>
+    <link href="../../../external/trackLiner/trackLiner.css" rel="stylesheet" type="text/css" >
+    <link href="../../../external/jquery-ui/jquery-ui-1.8.5.custom.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="../../butter.js"></script>
+    <script type="text/javascript" src="butter.timeline.js"></script>
+    <script type="text/javascript">
+
+      var b = new Butter();
+
+      var pluginTray = function( options ) {
+
+        options = options || {};
+        var container = document.getElementById( options.target ) || options.target;
+
+        this.addPlugin = function( type ) {
+
+          var pluginElement = document.createElement( "span" );
+          pluginElement.innerHTML = type + " ";
+          pluginElement.id = type;
+          pluginElement.setAttribute( "data-trackliner-type", "butterapp" );
+          $( pluginElement ).draggable({ helper: "clone", appendTo: "body", zIndex: 9001, revert: true, revertDuration: 0 });
+          container.appendChild( pluginElement );
+        };
+
+        for ( var i = 0, l = options.plugins.length; i < l; i++ ) {
+
+          this.addPlugin( options.plugins[ i ] );
+        }
+      };
+
+      document.addEventListener( "DOMContentLoaded", function() {
+
+        var viewPort = document.createElement( "div" );
+        viewPort.style.width = "1000px";
+        viewPort.style.height = "200px";
+        viewPort.style.overflow = "auto";
+        var timeLineContainer = document.createElement( "div" );
+        timeLineContainer.style.width = "3000px";
+        var pluginTrayContainer = document.createElement( "div" );
+        document.body.appendChild( pluginTrayContainer );
+        viewPort.appendChild( timeLineContainer );
+        document.body.appendChild( viewPort );
+        b.timeline({ target: timeLineContainer });
+        new pluginTray({ target: pluginTrayContainer, plugins: [ "footnote", "subtitle" ] }).addPlugin( "sugar" );
+
+        var media1 = b.addMedia({ name: "video1", media: "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" });
+        media1.getDuration = function() {
+          return 52.25;
+        };
+        b.trigger( "mediaready", media1 );
+
+        var media2 = b.addMedia({ name: "video2", media: "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" });
+        media2.getDuration = function() {
+          return 178;
+        };
+        b.trigger( "mediaready", media2 );
+
+        document.getElementById( "video" ).addEventListener( "timeupdate", function() {
+
+          b.trigger( "timeupdate", {} );
+        }, false );
+
+        document.getElementById( "set1" ).addEventListener( "click", function() {
+
+          b.setMedia( media1 );
+        }, false );
+        document.getElementById( "set2" ).addEventListener( "click", function() {
+
+          b.setMedia( media2 );
+        }, false );
+      }, false );
+
+    </script>
+  </head>
+  <body>
+    <video preload style="width: 1000px;" id="video" controls src="http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm"></video>
+    <div>- Drag these elements -</div>
+    <button id="set1">set media 1</button>
+    <button id="set2">set media 2</button>
+  </body>
+</html>
+
