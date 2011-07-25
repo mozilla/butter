@@ -164,15 +164,12 @@ THE SOFTWARE.
         name = options.name || "Media" + id + Date.now(),
         media,
         butter = undefined,
+        currentTime = 0,
+        duration = 0,
         that = this;
 
     this.setMedia = function ( mediaElement ) {
-      if ( typeof( mediaElement ) === "string" ) {
-        media = document.getElementById( mediaElement );
-      }
-      else {
-        media = mediaElement;
-      } //if
+      media = mediaElement;
       butter && butter.trigger( "mediacontentchanged", that );
     };
 
@@ -209,7 +206,7 @@ THE SOFTWARE.
       tracksByName[ track.getName() ] = track;
       tracks.push( track );
       track.setButter( butter );
-      butter.trigger( "trackadded", track );
+      butter && butter.trigger( "trackadded", track );
       return track;
     }; //addTrack
 
@@ -237,11 +234,27 @@ THE SOFTWARE.
         tracks.splice( idx, 1 );
         track.setButter( undefined );
         delete tracksByName[ track.getName() ];
-        butter.trigger( "trackremoved", track );
+        butter && butter.trigger( "trackremoved", track );
         return track;
       } //if
       return undefined;    
     }; //removeTrack
+
+    this.currentTime = function ( time ) {
+      if ( time ) {
+        currentTime = time;
+        butter && butter.trigger("mediatimeupdate", that);
+      } //if
+      return currentTime;
+    }; //currentTime
+
+    this.duration = function ( time ) {
+      if ( time ) {
+        duration = time;
+        butter && butter.trigger("mediadurationchanged", that);
+      }
+      return duration;
+    }; //duration
 
   }; //Media
 
@@ -480,29 +493,16 @@ THE SOFTWARE.
     /****************************************************************
      * Media methods
      ****************************************************************/
-    //play - Play the media
-    this.play = function () {
-      checkMedia();
-    };
-
-    //pause - Pause the media
-    this.pause = function () {
-      checkMedia();
-    };
-
     //currentTime - Gets and Sets the media's current time.
     this.currentTime = function ( time ) {
       checkMedia();
+      return currentMedia.currentTime( time );
+    };
 
-      // need to get/set the video element dynamically
-      var video = document.getElementById( "video" );
-
-      if ( time !== undefined ) {
-
-        video.currentTime = time;
-      }
-
-      return video.currentTime;
+    //duration - Gets and Sets the media's duration.
+    this.duration = function ( time ) {
+      checkMedia();
+      return currentMedia.duration( time );
     };
 
     //getAllMedia - returns all stored media objects

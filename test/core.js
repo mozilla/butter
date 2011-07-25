@@ -67,7 +67,7 @@
       mediaContent = media.getMedia();
     });
     m1.setMedia( "audio-test" );
-    ok( mediaContent === document.getElementById( "audio-test" ), "Media content changed properly" );
+    ok( mediaContent === "audio-test", "Media content changed properly" );
 
     butter.removeMedia( m2 );
     ok( mediaState[0] === 0 && mediaState[1] === m2, "mediaremoved event received" );
@@ -98,7 +98,34 @@
     butter.setMedia( m2 );
     ok( butter.getTrack( "Track 1" ) === undefined, "Track 1 is not on Media 1");
     ok( butter.getTrack( "Track 2" ) !== undefined, "Track 2 is on Media 1");
+  });
 
+  test("Simple Media functionality", function () {
+    expect(6);
+
+    var butter = new Butter();
+    var m1 = butter.addMedia({media:"test"});
+
+    var state = [0, 0];
+    butter.listen("mediatimeupdate", function () {
+      state[0] = 1;
+    });
+    butter.listen("mediadurationchanged", function () {
+      state[1] = 1;
+    });
+
+    m1.duration(2);
+    ok(m1.duration() === 2, "duration is correct");
+    m1.currentTime(1);
+    ok(m1.currentTime() === 1, "currentTime is correct");
+    ok(state[0] === 1 && state[1] === 1, "events fired");
+
+    state = [0, 0];
+    butter.duration(5);
+    ok(butter.duration() === 5, "duration is correct");
+    butter.currentTime(2);
+    ok(butter.currentTime() === 2, "currentTime is correct");
+    ok(state[0] === 1 && state[1] === 1, "events fired");
   });
 
   module( "Track" );
