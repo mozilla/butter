@@ -271,16 +271,31 @@ THE SOFTWARE.
      * Event methods
      ****************************************************************/
     //trigger - Triggers an event indicating a change of state in the core
-    this.trigger = function ( name, options ) {
+    this.trigger = function ( name, options, domain ) {
+      var eventObj = {
+        type: name,
+        domain: domain,
+        data: options
+      };
       if ( events[ name ] ) {
         for (var i=0, l=events[ name ].length; i<l; ++i) {
-          events[ name ][ i ].call( that, options );
+          events[ name ][ i ].call( that, eventObj, domain );
         } //for
+      } //if
+      if ( domain ) {
+        name = name + domain;
+        if ( events[ name ] ) {
+          for (var i=0, l=events[ name ].length; i<l; ++i) {
+            events[ name ][ i ].call( that, eventObj, domain );
+          } //for
+        } //if
       } //if
     }; //trigger
 
     //listen - Listen for events triggered by the core
-    this.listen = function ( name, handler ) {
+    this.listen = function ( name, handler, domain ) {
+      domain = domain || "";
+      name = name + domain;
       if ( !events[ name ] ) {
         events[ name ] = [];
       } //if
@@ -288,7 +303,9 @@ THE SOFTWARE.
     }; //listen
 
     //unlisten - Stops listen for events triggered by the core
-    this.unlisten = function ( name, handler ) {
+    this.unlisten = function ( name, handler, domain ) {
+      domain = domain || "";
+      name = name + domain;
       var handlerList = events[ name ];
       if ( handlerList ) {
         if ( handler ) {

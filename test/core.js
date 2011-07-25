@@ -2,6 +2,50 @@
 (function (window, document, undefined, Butter) {
 
   module( "Media" );
+  module( "Event Handling" );
+
+  test( "Simple event handling", function () {
+    expect( 3 );
+
+    var butter = new Butter();
+    var received = false;
+
+    var testFn = function ( event ) {
+      received = event.data;
+    };
+
+    butter.listen( "testevent", testFn );
+    butter.trigger( "testevent", true );
+    ok( received && received === true, "Event handler triggered and received event object" );
+    received = false;
+    butter.unlisten( "testevent" );
+    butter.trigger( "testevent", true );
+    ok( received === false, "Stop listening for event (general)" );
+    butter.listen( "testevent", testFn );
+    butter.unlisten( "testevent", testFn );
+    butter.trigger( "testevent", { test: true } );
+    ok( received === false, "Stop listening for event (specific)" );
+  });
+
+  test( "Domain event handling", function () {
+    expect( 3 );
+    var butter = new Butter();
+    var received = {};
+    butter.listen( "testevent", function ( event ) {
+      received.data = event.data;
+    });
+    butter.listen( "testevent", function ( event ) {
+      received.domain = event.domain;
+    }, "testdomain" );
+    butter.trigger( "testevent", true );
+    ok( received && received.data === true && !received.domain, "Default domain triggered and received event object" );
+    received = {};
+    butter.trigger( "testevent", true, "testdomain" );
+    ok( received && received.domain === "testdomain", "Test domain triggered and received event object" );
+    ok( received && received.data === true, "Default domain triggered and received event object" );
+  });
+
+  module( "Core Object Functionality" );
 
   test( "No media check", function () {
     expect(1);
