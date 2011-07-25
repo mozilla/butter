@@ -296,38 +296,60 @@
         doc.write( "<html>\n" + iframeHead + body + "\n</html>" );
         doc.close();
 
-      this.teAdded = function( e ) {
-        var that = this;
-        // ensure our global iframe version of popcorn is their
-        var popcornReady = function( e ) {
-          
+        var popcornReady = function( e, callback2 ) {
+            
           var framePopcorn = iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ];
 
           if ( !framePopcorn ) {
             setTimeout( function() {
-              popcornReady( e );
+              popcornReady( e, callback2 );
             }, 10 );
           } else {
-            if( !popcorns[ that.getCurrentMedia().getId() ] ) {
-              popcorns[ that.getCurrentMedia().getId() ] = framePopcorn;
+            callback2 && callback2( framePopcorn );
+          } // else  
+        }
+
+        popcornReady( null, function( framePopcorn ) {
+    
+          var videoReady = function() {
+
+            if( framePopcorn.media.readyState >= 2 || framePopcorn.media.duration > 0 ) {
+              var media = that.getCurrentMedia();
+              media.getDuration = function() {
+                return framePopcorn.media.duration;
+              };
+              that.trigger( "videoReady", media );
             } else {
-              framePopcorn = popcorns[ that.getCurrentMedia().getId() ]; 
+              setTimeout( function() {
+                videoReady( framePopcorn );
+              }, 10);
             }
+          }
+          videoReady( framePopcorn );
+        } );
 
-            // add track events to the iframe verison of popcorn
-            framePopcorn[ e.type ]( iframe.contentWindow.Popcorn.extend( {},
-              e.popcornOptions ) );
-            
-            butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
+        this.teAdded = function( e ) {
+          var that = this;
 
-            e.manifest = framePopcorn.getTrackEvent( butterIds[ e.getId() ] )._natives.manifest;
+          popcornReady( e, function( framePopcorn ) { 
+          
+            if( !popcorns[ that.getCurrentMedia().getId() ] ) {
+                popcorns[ that.getCurrentMedia().getId() ] = framePopcorn;
+              } else {
+                framePopcorn = popcorns[ that.getCurrentMedia().getId() ]; 
+              }
 
-            callback && callback();
-          } // else
-        } // function
+              // add track events to the iframe verison of popcorn
+              framePopcorn[ e.type ]( iframe.contentWindow.Popcorn.extend( {},
+                e.popcornOptions ) );
+              
+              butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
 
-        popcornReady( e );
-      }
+              e.manifest = framePopcorn.getTrackEvent( butterIds[ e.getId() ] )._natives.manifest;
+
+              callback && callback();
+          } );
+        }
 
         // listen for a trackeventadded
         this.listen( "trackeventadded", this.teAdded ); // listener
@@ -341,7 +363,7 @@
         } );
 
         this.listen( "timeupdate", function( e ) {
-          //iframe.contentWindow.popcorn.video.currentTime = e; 
+          iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].video.currentTime = e; 
         } );
 
       } // fillIframe
