@@ -24,6 +24,8 @@ THE SOFTWARE.
 
 (function ( window, document, undefined ) {
 
+  var modules = {};
+
   /****************************************************************************
    * Track
    ****************************************************************************/
@@ -31,6 +33,7 @@ THE SOFTWARE.
   var Track = function ( options ) {
     var trackEvents = [],
         id = numTracks++,
+        butter = undefined,
         that = this;
 
     options = options || {};
@@ -66,6 +69,8 @@ THE SOFTWARE.
       if ( idx > -1 ) {
         trackEvents.splice( idx, 1 );
         trackEvent.track = undefined;
+        trackEvent.setButter( undefined );
+        butter.trigger( "trackeventremoved", trackEvent );
       } //if
     }; //removeTrackEvent
 
@@ -74,9 +79,21 @@ THE SOFTWARE.
         trackEvent = new TrackEvent( trackEvent );
       } //if
       trackEvents.push( trackEvent );
+
       trackEvent.track = that;
+      trackEvent.setButter( butter );
+      butter.trigger( "trackeventadded", trackEvent );
       return trackEvent;
     }; //addTrackEvent
+
+    this.setButter = function ( b ) {
+      butter = b;
+    };
+
+    this.getButter = function ()  {
+      return butter;
+    };
+
   }; //Track
 
   /****************************************************************************
@@ -84,17 +101,18 @@ THE SOFTWARE.
    ****************************************************************************/
   var numTrackEvents = 0;
   var TrackEvent = function ( options ) {
-    var id = numTrackEvents++;
+    var id = numTrackEvents++,
+        butter = undefined;
 
     options = options || {};
-    var name = options.name || 'Track' + id + Date.now();
+    var name = options.name || 'Track' + Date.now();
     this.start = options.start || 0;
     this.end = options.end || 0;
     this.type = options.type;
     this.popcornOptions = options.popcornOptions;
     this.popcornEvent = options.popcornEvent;
     this.track = options.track;
-
+    
     this.getName = function () {
       return name;
     };
@@ -102,6 +120,14 @@ THE SOFTWARE.
     this.getId = function () {
       return id;
     }; //getId
+
+    this.setButter = function ( b ) {
+      butter = b;
+    };
+
+    this.getButter = function ()  {
+      return butter;
+    };
 
   }; //TrackEvent
 
@@ -136,12 +162,21 @@ THE SOFTWARE.
         tracks = [],
         id = numMedia++,
         name = options.name || "Media" + id + Date.now(),
-        media = options.media,
+        media,
+        butter = undefined,
         that = this;
 
     this.setMedia = function ( mediaElement ) {
-      media = mediaElement;
+      if ( typeof( mediaElement ) === "string" ) {
+        media = document.getElementById( mediaElement );
+      }
+      else {
+        media = mediaElement;
+      } //if
+      butter && butter.trigger( "mediacontentchanged", that );
     };
+
+    options.media && this.setMedia( options.media );
 
     this.getMedia = function () {
       return media;
@@ -159,12 +194,22 @@ THE SOFTWARE.
       return tracks;
     };
 
+    this.setButter = function ( b ) {
+      butter = b;
+    };
+
+    this.getButter = function ()  {
+      return butter;
+    };
+
     this.addTrack = function ( track ) {
       if ( !(track instanceof Track) ) {
         track = new Track( track );
       } //if
       tracksByName[ track.getName() ] = track;
       tracks.push( track );
+      track.setButter( butter );
+      butter.trigger( "trackadded", track );
       return track;
     }; //addTrack
 
@@ -190,7 +235,9 @@ THE SOFTWARE.
       var idx = tracks.indexOf( track );
       if ( idx > -1 ) {
         tracks.splice( idx, 1 );
+        track.setButter( undefined );
         delete tracksByName[ track.getName() ];
+        butter.trigger( "trackremoved", track );
         return track;
       } //if
       return undefined;    
@@ -268,7 +315,6 @@ THE SOFTWARE.
           trackEvent = new TrackEvent( trackEvent );
         } //if
         track.addTrackEvent( trackEvent );
-        that.trigger( "trackeventadded", trackEvent );
         return trackEvent;
       }
       else {
@@ -311,6 +357,7 @@ THE SOFTWARE.
 
     //removeTrackEvent - Remove a Track Event
     this.removeTrackEvent = function ( track, trackEvent ) {
+
       checkMedia();
 
       // one param given
@@ -337,7 +384,6 @@ THE SOFTWARE.
       }
 
       track.removeTrackEvent( trackEvent );
-      that.trigger( "trackeventremoved", trackEvent );
       return trackEvent;
     };
 
@@ -347,7 +393,6 @@ THE SOFTWARE.
     //addTrack - Creates a new Track
     this.addTrack = function ( track ) {
       checkMedia();
-      that.trigger( "trackadded", track );
       return currentMedia.addTrack( track );
     }; //addTrack
 
@@ -366,7 +411,6 @@ THE SOFTWARE.
     //removeTrack - Remove a Track
     this.removeTrack = function ( track ) {
       checkMedia();
-      that.trigger( "trackremoved", track );
       return currentMedia.removeTrack( track );
     };
 
@@ -382,7 +426,7 @@ THE SOFTWARE.
       targetsByName[ target.getName() ] = target;
       targets.push( target );
 
-      that.trigger( "targetadded", target );
+      butter.trigger( "targetadded", target );
 
       return target;
     };
@@ -396,7 +440,7 @@ THE SOFTWARE.
       if ( idx > -1 ) {
         targets.splice( idx, 1 );
         delete targets[ target.getName() ]; 
-        that.trigger( "targetremoved", target );
+        butter.trigger( "targetremoved", target );
         return target;
       } //if
       return undefined;
@@ -447,8 +491,18 @@ THE SOFTWARE.
     };
 
     //currentTime - Gets and Sets the media's current time.
-    this.currentTime = function () {
+    this.currentTime = function ( time ) {
       checkMedia();
+
+      // need to get/set the video element dynamically
+      var video = document.getElementById( "video" );
+
+      if ( time !== undefined ) {
+
+        video.currentTime = time;
+      }
+
+      return video.currentTime;
     };
 
     //getAllMedia - returns all stored media objects
@@ -500,11 +554,11 @@ THE SOFTWARE.
       medias.push( media );
       mediaByName[ mediaName ] = media;
 
-
+      media.setButter( that );
+      that.trigger( "mediaadded", media );
       if ( !currentMedia ) {
         that.setMedia( media );
       } //if
-      that.trigger( "mediaadded", media );
       return media;
     };
 
@@ -518,14 +572,22 @@ THE SOFTWARE.
       if ( idx > -1 ) {
         medias.splice( idx, 1 );
         delete mediaByName[ media.getName() ];
-        that.trigger( "mediaremoved", media );
+        media.setButter( undefined );
         if ( media === currentMedia ) {
           currentMedia = undefined;
         } //if
+        that.trigger( "mediaremoved", media );
         return media;
       } //if
       return undefined;    
     };
+
+    /****************************************************************
+     * Init Modules for this instance
+     ****************************************************************/
+    for ( var moduleName in modules ) {
+      modules[moduleName].setup && modules[moduleName].setup.call(this);
+    } //for
 
   }; //Butter
 
@@ -541,8 +603,9 @@ THE SOFTWARE.
 
   //registerModule - Registers a Module into the Butter core
   Butter.registerModule = Butter.prototype.registerModule = function ( name, module ) {
-    Butter.prototype[name] = function(options) {
-      module.setup && module.setup.call(this, options);
+
+    Butter.prototype[name] = function( options ) {
+      module.setup && module.setup.call( this, options );
       return this;
     };
     if ( module.extend ) {
@@ -553,6 +616,7 @@ THE SOFTWARE.
   Butter.extendAPI = function ( functions ) {
     for ( var fn in functions ) {
       if ( functions.hasOwnProperty( fn ) ) {
+        Butter[fn] = functions[ fn ];
         Butter.prototype[ fn ] = functions[ fn ];
       } //if
     } //for
@@ -575,3 +639,4 @@ THE SOFTWARE.
   window.Butter = Butter;
 
 })( window, document, undefined );
+

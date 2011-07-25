@@ -1,0 +1,23 @@
+.trackliner-track {
+  background-image: -moz-linear-gradient(top,  #eee,  #999);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#999));
+  height: 36px;
+  position: relative;
+}
+
+.trackliner-event {
+  background-image: -moz-linear-gradient(top,  #ff0,  #660);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#ff0), to(#660));
+  opacity: 0.5;
+  height: 100%;
+  position: absolute;
+  cursor: move;
+  width: 100px;
+  top: 0px;
+}
+
+.trackliner-event-selected {
+  background-image: -moz-linear-gradient(top,  #0f0,  #060);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#0f0), to(#060));
+}
+

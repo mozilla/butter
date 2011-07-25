@@ -308,8 +308,6 @@
               popcornReady( e );
             }, 10 );
           } else {
-            console.log(e.getId());
-            console.log("ONLY ONCE");
             if( !popcorns[ that.getCurrentMedia().getId() ] ) {
               popcorns[ that.getCurrentMedia().getId() ] = framePopcorn;
             } else {
