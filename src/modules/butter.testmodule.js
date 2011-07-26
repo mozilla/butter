@@ -35,9 +35,9 @@
           testDiv.innerHTML += which;
           this.trigger("test", which);
         } //if
-      },
+      }
 
-    }, //extend
+    } //extend
 
   });
 })(window, document, undefined, Butter);
