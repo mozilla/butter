@@ -210,11 +210,11 @@ Butter.registerModule( "timeline", {
 
           b.addTrack( new Butter.Track() );
           trackLinerTrack = currentMediaInstance.lastTrack;
+          trackLinerTrack.addTrackEvent( trackEventObj );
         }
         currentMediaInstance.lastTrack = trackLinerTrack;
 
-        b.addTrackEvent( currentMediaInstance.butterTracks[ trackLinerTrack.id() ], new Butter.TrackEvent( trackEventObj.options ) );
-        b.removeTrackEvent( currentMediaInstance.butterTracks[ trackLinerTrack.id() ], trackEventObj.options );
+        b.trigger( "trackeventupdated", trackEventObj.options );
       },
       // called when a track event is clicked
       click: function ( track, trackEventObj, event, ui ) {},
@@ -317,6 +317,17 @@ Butter.registerModule( "timeline", {
     this.listen( "mediaremoved", function( media ) {
 
       delete mediaInstances[ media.getId() ];
+    });
+
+    this.listen( "trackeventupdated", function( trackEvent ) {
+
+      var trackLinerTrackEvent = currentMediaInstance.trackLinerTrackEvents[ trackEvent.getId() ];
+          trackLinerTrack = currentMediaInstance.trackLine.getTrack( trackLinerTrackEvent.trackId );
+      delete currentMediaInstance.butterTrackEvents[ trackLinerTrackEvent.element.id ];
+      trackLinerTrack.removeTrackEvent( trackLinerTrackEvent.element.id );
+      trackLinerTrackEvent = trackLinerTrack.createTrackEvent( "butterapp", trackEvent );
+      currentMediaInstance.butterTrackEvents[ trackLinerTrackEvent.element.id ] = trackEvent;
+      currentMediaInstance.trackLinerTrackEvents[ trackEvent.getId() ] = trackLinerTrackEvent;
     });
   }
 });
