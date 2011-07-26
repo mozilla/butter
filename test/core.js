@@ -235,7 +235,7 @@
 
   test( "Remove/Add Track events for constituent TrackEvents", function () {
 
-    expect( 3 );
+    expect( 4 );
 
     var butter = new Butter();
     butter.addMedia();
@@ -264,6 +264,8 @@
     butter.addTrack( t1 );
 
     ok( state === te, "Track event added again" );
+
+    ok( t1.getTrackEvents().length === 1, "Track event stored" );
 
   });
 
