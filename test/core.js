@@ -239,4 +239,61 @@
 
   });
 
+  test("Media objects have their own tracks", function () {
+    var butter = new Butter();
+    var m1 = butter.addMedia();
+    var m2 = butter.addMedia();
+
+    butter.addTrack( { name:"Track 1" } );
+
+    butter.setMedia( m2 );
+
+    butter.addTrack( { name:"Track 2" } );
+
+    butter.setMedia( m1 );
+    ok( butter.getTrack( "Track 1" ) !== undefined, "Track 1 is on Media 1");
+    ok( butter.getTrack( "Track 2" ) === undefined, "Track 2 is not on Media 1");
+
+    butter.setMedia( m2 );
+    ok( butter.getTrack( "Track 1" ) === undefined, "Track 1 is not on Media 1");
+    ok( butter.getTrack( "Track 2" ) !== undefined, "Track 2 is on Media 1");
+
+  });
+
+  test( "Remove/Add Track events for constituent TrackEvents", function () {
+
+    expect( 4 );
+
+    var butter = new Butter();
+    butter.addMedia();
+
+    var t1 = butter.addTrack();
+    var te = butter.addTrackEvent( t1, {} );
+
+    var state = undefined;
+
+    butter.listen('trackeventremoved', function ( trackEvent ) {
+      state = trackEvent;
+    });
+
+    butter.listen('trackeventadded', function ( trackEvent ) {
+      state = trackEvent;
+    });
+
+    ok( t1.getTrackEvents().length === 1, "Track event stored" );
+
+    butter.removeTrack( t1 );
+
+    ok( state === te, "Track event removal event" );
+
+    state = undefined;
+
+    butter.addTrack( t1 );
+
+    ok( state === te, "Track event added again" );
+
+    ok( t1.getTrackEvents().length === 1, "Track event stored" );
+
+  });
+
 })(window, document, undefined, Butter);

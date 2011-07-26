@@ -206,6 +206,10 @@ THE SOFTWARE.
       tracksByName[ track.getName() ] = track;
       tracks.push( track );
       track.setButter( butter );
+      var events = track.getTrackEvents();
+      for ( var i=0, l=events.length; i<l; ++i ) {
+        butter.trigger( "trackeventadded", events[i] );
+      } //for
       butter && butter.trigger( "trackadded", track );
       return track;
     }; //addTrack
@@ -234,6 +238,10 @@ THE SOFTWARE.
         tracks.splice( idx, 1 );
         track.setButter( undefined );
         delete tracksByName[ track.getName() ];
+        var events = track.getTrackEvents();
+        for ( var i=0, l=events.length; i<l; ++i ) {
+          butter.trigger( "trackeventremoved", events[i] );
+        } //for
         butter && butter.trigger( "trackremoved", track );
         return track;
       } //if
