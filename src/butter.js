@@ -464,7 +464,7 @@ THE SOFTWARE.
       targetsByName[ target.getName() ] = target;
       targets.push( target );
 
-      butter.trigger( "targetadded", target );
+      that.trigger( "targetadded", target );
 
       return target;
     };
@@ -478,7 +478,7 @@ THE SOFTWARE.
       if ( idx > -1 ) {
         targets.splice( idx, 1 );
         delete targets[ target.getName() ]; 
-        butter.trigger( "targetremoved", target );
+        that.trigger( "targetremoved", target );
         return target;
       } //if
       return undefined;
