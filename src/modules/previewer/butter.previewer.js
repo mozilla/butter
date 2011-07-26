@@ -340,6 +340,8 @@
 
           popcornReady( e, function( framePopcorn ) { 
           
+            iframe.contentWindow.popcorn.removeTrackEvent( butterIds[ e.data.getId() ] );
+
             if( !popcorns[ that.getCurrentMedia().getId() ] ) {
                 popcorns[ that.getCurrentMedia().getId() ] = framePopcorn;
             } else {
@@ -360,7 +362,6 @@
 
         // listen for a trackeventadded
         this.listen( "trackeventupdated", function ( e ) {
-          iframe.contentWindow.popcorn.removeTrackEvent( butterIds[ e.data.getId() ] );
           this.teAdded( e ); 
         }); // listener
 
