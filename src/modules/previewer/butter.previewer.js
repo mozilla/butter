@@ -268,6 +268,10 @@
         return popcornz;
 
       },
+
+      getRegistry: function() {
+        return iframe.contentWindow.Popcorn.registry;
+      },
     
       // fillIframe function used to populate the iframe with changes made by the user,
       // which is mostly managing track events added by the user
@@ -316,6 +320,11 @@
             if( framePopcorn.media.readyState >= 2 || framePopcorn.media.duration > 0 ) {
               that.duration( framePopcorn.media.duration );
               that.trigger( "videoReady", that.getCurrentMedia() );
+              framePopcorn.media.addEventListener( "timeupdate", function(){
+
+                that.currentTime( framePopcorn.media.currentTime );
+                that.trigger( "timeupdate", that.getCurrentMedia() );                
+              },false);
             } else {
               setTimeout( function() {
                 videoReady( framePopcorn );
