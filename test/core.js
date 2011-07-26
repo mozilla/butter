@@ -1,7 +1,50 @@
 /*global text,expect,ok,module,notEqual,Butter,test,window*/
 (function (window, document, undefined, Butter) {
 
-  module( "Media" );
+  module( "Event Handling" );
+
+  test( "Simple event handling", function () {
+    expect( 3 );
+
+    var butter = new Butter();
+    var received = false;
+
+    var testFn = function ( event ) {
+      received = event.data;
+    };
+
+    butter.listen( "testevent", testFn );
+    butter.trigger( "testevent", true );
+    ok( received && received === true, "Event handler triggered and received event object" );
+    received = false;
+    butter.unlisten( "testevent" );
+    butter.trigger( "testevent", true );
+    ok( received === false, "Stop listening for event (general)" );
+    butter.listen( "testevent", testFn );
+    butter.unlisten( "testevent", testFn );
+    butter.trigger( "testevent", { test: true } );
+    ok( received === false, "Stop listening for event (specific)" );
+  });
+
+  test( "Domain event handling", function () {
+    expect( 3 );
+    var butter = new Butter();
+    var received = {};
+    butter.listen( "testevent", function ( event ) {
+      received.data = event.data;
+    });
+    butter.listen( "testevent", function ( event ) {
+      received.domain = event.domain;
+    }, "testdomain" );
+    butter.trigger( "testevent", true );
+    ok( received && received.data === true && !received.domain, "Default domain triggered and received event object" );
+    received = {};
+    butter.trigger( "testevent", true, "testdomain" );
+    ok( received && received.domain === "testdomain", "Test domain triggered and received event object" );
+    ok( received && received.data === true, "Default domain triggered and received event object" );
+  });
+
+  module( "Core Object Functionality" );
 
   test( "No media check", function () {
     expect(1);
@@ -33,14 +76,14 @@
 
     butter.listen("mediaadded", function ( media ) {
       mediaEventState--;
-      mediaState = [1, media];
+      mediaState = [1, media.data];
     });
     butter.listen("mediachanged", function ( media ) {
       mediaEventState *= 2;
-      mediaState = [2, media];
+      mediaState = [2, media.data];
     });
     butter.listen( "mediaremoved", function ( media ) {
-      mediaState = [0, media];
+      mediaState = [0, media.data];
     });
 
     butter.addMedia( m1 );
@@ -64,7 +107,7 @@
     
     var mediaContent = m1.getMedia();
     butter.listen( "mediacontentchanged", function ( media ) {
-      mediaContent = media.getMedia();
+      mediaContent = media.data.getMedia();
     });
     m1.setMedia( "audio-test" );
     ok( mediaContent === "audio-test", "Media content changed properly" );
@@ -149,10 +192,10 @@
     var m = butter.addMedia();
 
     butter.listen( "trackadded", function ( track ) {
-      trackState = [1, track];
+      trackState = [1, track.data];
     });
     butter.listen( "trackremoved", function ( track ) {
-      trackState = [0, track];
+      trackState = [0, track.data];
     });
 
     var t1 = new Butter.Track( { name: "Track 1" } );
@@ -194,10 +237,10 @@
     var t = butter.addTrack();
 
     butter.listen( "trackeventadded", function ( trackEvent ) {
-      eventState = [1, trackEvent];
+      eventState = [1, trackEvent.data];
     });
     butter.listen( "trackeventremoved", function ( trackEvent ) {
-      eventState = [0, trackEvent];
+      eventState = [0, trackEvent.data];
     });
 
     var te1 = new Butter.TrackEvent( { name: "TrackEvent 1", start: 0, end: 1 } );
@@ -273,11 +316,11 @@
     var state = undefined;
 
     butter.listen('trackeventremoved', function ( trackEvent ) {
-      state = trackEvent;
+      state = trackEvent.data;
     });
 
     butter.listen('trackeventadded', function ( trackEvent ) {
-      state = trackEvent;
+      state = trackEvent.data;
     });
 
     ok( t1.getTrackEvents().length === 1, "Track event stored" );
