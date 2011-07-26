@@ -359,7 +359,10 @@
         }
 
         // listen for a trackeventadded
-        this.listen( "trackeventupdated", this.teAdded ); // listener
+        this.listen( "trackeventupdated", function ( e ) {
+          iframe.contentWindow.popcorn.removeTrackEvent( butterIds[ e.data.getId() ] );
+          this.teAdded( e ); 
+        }); // listener
 
         this.listen( "trackeventremoved", function( e ) {
           iframe.contentWindow.popcorn.removeTrackEvent( butterIds[ e.data.getId() ] );
