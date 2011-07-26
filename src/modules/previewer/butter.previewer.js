@@ -314,7 +314,7 @@
           var videoReady = function() {
 
             if( framePopcorn.media.readyState >= 2 || framePopcorn.media.duration > 0 ) {
-              that.duration = framePopcorn.media.duration;
+              that.duration( framePopcorn.media.duration );
               that.trigger( "videoReady", that.getCurrentMedia() );
             } else {
               setTimeout( function() {
@@ -361,7 +361,7 @@
 
         this.listen( "timeupdate", function( e ) {
           iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].video.currentTime = e; 
-          that.currentTime = iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].video.currentTime;
+          that.currentTime( iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].video.currentTime );
         } );
 
       } // fillIframe
