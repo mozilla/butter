@@ -359,7 +359,7 @@
         }
 
         // listen for a trackeventadded
-        this.listen( "trackeventadded", this.teAdded ); // listener
+        this.listen( "trackeventupdated", this.teAdded ); // listener
 
         this.listen( "trackeventremoved", function( e ) {
           iframe.contentWindow.popcorn.removeTrackEvent( butterIds[ e.data.getId() ] );
@@ -367,11 +367,6 @@
 
         this.listen( "mediachanged", function( e ) {
           that.buildPopcorn( e.data.getName() );
-        } );
-
-        this.listen( "timeupdate", function( e ) {
-          iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].video.currentTime = e.data; 
-          that.currentTime( iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].video.currentTime );
         } );
 
       } // fillIframe
