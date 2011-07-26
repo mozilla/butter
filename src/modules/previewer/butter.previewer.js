@@ -325,8 +325,8 @@
           videoReady( framePopcorn );
         } );
 
-        this.teAdded = function( e ) {
-          var that = this;
+        this.teAdded = function( event ) {
+          var that = this, e = event.data;
 
           popcornReady( e, function( framePopcorn ) { 
           
@@ -352,15 +352,15 @@
         this.listen( "trackeventadded", this.teAdded ); // listener
 
         this.listen( "trackeventremoved", function( e ) {
-          iframe.contentWindow.popcorn.removeTrackEvent( butterIds[ e.getId() ] );
+          iframe.contentWindow.popcorn.removeTrackEvent( butterIds[ e.data.getId() ] );
         } );
 
         this.listen( "mediachanged", function( e ) {
-          that.buildPopcorn( e.getName() );
+          that.buildPopcorn( e.data.getName() );
         } );
 
         this.listen( "timeupdate", function( e ) {
-          iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].video.currentTime = e; 
+          iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].video.currentTime = e.data; 
           that.currentTime( iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].video.currentTime );
         } );
 

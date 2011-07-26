@@ -41,7 +41,7 @@ THE SOFTWARE.
         butter = this,
         editorSrc =  customEditors[ trackEvent.type ] || trackEvent.manifest.customEditor || defaultEditor,
         updateEditor = function( trackEvent ){
-          commServer.send( "editorCommLink", trackEvent.popcornOptions, "updatetrackevent" );
+          commServer.send( "editorCommLink", trackEvent.data.popcornOptions, "updatetrackevent" );
         };
 
       editorTarget && clearTarget();
