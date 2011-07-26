@@ -319,7 +319,8 @@
 
             if( framePopcorn.media.readyState >= 2 || framePopcorn.media.duration > 0 ) {
               that.duration( framePopcorn.media.duration );
-              that.trigger( "videoReady", that.getCurrentMedia() );
+              
+              that.trigger( "mediaready", that.getCurrentMedia() );
               framePopcorn.media.addEventListener( "timeupdate", function(){
 
                 that.currentTime( framePopcorn.media.currentTime );
