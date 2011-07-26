@@ -61,7 +61,7 @@ Butter.registerModule( "timeline", {
 
       this.init = function() {
 
-        this.duration = media.getDuration();
+        this.duration = b.duration();
 
         this.trackLine = new TrackLiner({
           element: this.tracks,
