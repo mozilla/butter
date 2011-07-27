@@ -321,11 +321,12 @@
               that.duration( framePopcorn.media.duration );
               
               that.trigger( "mediaready", that.getCurrentMedia() );
-              framePopcorn.media.addEventListener( "timeupdate", function(){
+              framePopcorn.media.addEventListener( "timeupdate", function() {
 
                 that.currentTime( framePopcorn.media.currentTime );
                 that.trigger( "timeupdate", that.getCurrentMedia() );                
               },false);
+              callback && callback();
             } else {
               setTimeout( function() {
                 videoReady( framePopcorn );
@@ -340,10 +341,36 @@
 
           popcornReady( e, function( framePopcorn ) { 
           
-            iframe.contentWindow.popcorn.removeTrackEvent( butterIds[ e.data.getId() ] );
-
             if( !popcorns[ that.getCurrentMedia().getId() ] ) {
                 popcorns[ that.getCurrentMedia().getId() ] = framePopcorn;
+            } else {
+              framePopcorn = popcorns[ that.getCurrentMedia().getId() ]; 
+            }
+
+            framePopcorn.removeTrackEvent( butterIds[ e.getId() ] );
+
+            // add track events to the iframe verison of popcorn
+            framePopcorn[ e.type ]( iframe.contentWindow.Popcorn.extend( {},
+              e.popcornOptions ) );
+            
+            butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
+
+            e.manifest = framePopcorn.getTrackEvent( butterIds[ e.getId() ] )._natives.manifest;
+
+          } );
+        }
+
+        // listen for a trackeventadded
+        this.listen( "trackeventupdated", function ( e ) {
+          this.teAdded( e ); 
+        }); // listener
+
+        this.listen( "trackeventadded", function ( e ) {
+          e = e.data;
+          popcornReady( e, function( framePopcorn ) { 
+
+            if( !popcorns[ that.getCurrentMedia().getId() ] ) {
+              popcorns[ that.getCurrentMedia().getId() ] = framePopcorn;
             } else {
               framePopcorn = popcorns[ that.getCurrentMedia().getId() ]; 
             }
@@ -355,18 +382,11 @@
             butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
 
             e.manifest = framePopcorn.getTrackEvent( butterIds[ e.getId() ] )._natives.manifest;
-
-            callback && callback();
           } );
-        }
-
-        // listen for a trackeventadded
-        this.listen( "trackeventupdated", function ( e ) {
-          this.teAdded( e ); 
         }); // listener
 
         this.listen( "trackeventremoved", function( e ) {
-          iframe.contentWindow.popcorn.removeTrackEvent( butterIds[ e.data.getId() ] );
+          iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].removeTrackEvent( butterIds[ e.data.getId() ] );
         } );
 
         this.listen( "mediachanged", function( e ) {
