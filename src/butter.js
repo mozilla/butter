@@ -248,10 +248,10 @@ THE SOFTWARE.
       return undefined;    
     }; //removeTrack
 
-    this.currentTime = function ( time ) {
+    this.currentTime = function ( time, domain ) {
       if ( time ) {
         currentTime = time;
-        butter && butter.trigger("mediatimeupdate", that);
+        butter && butter.trigger("mediatimeupdate", that, domain);
       } //if
       return currentTime;
     }; //currentTime
@@ -519,9 +519,9 @@ THE SOFTWARE.
      * Media methods
      ****************************************************************/
     //currentTime - Gets and Sets the media's current time.
-    this.currentTime = function ( time ) {
+    this.currentTime = function ( time, domain ) {
       checkMedia();
-      return currentMedia.currentTime( time );
+      return currentMedia.currentTime( time, domain );
     };
 
     //duration - Gets and Sets the media's duration.
