@@ -63,15 +63,16 @@
       scraper: function( iframe, callback ) {
 
         // obtain a reference to the iframes body
-        var body = iframe.contentWindow.document.getElementsByTagName( "BODY" ) || iframe.contentDocument.parentWindow.document.getElementsByTagName( "BODY" ),
+        var doc = ( iframe.contentWindow || iframe.contentDocument ).document;
+        var body = doc.getElementsByTagName( "BODY" );
             that = this;
-        
-        Butter.extend( originalHead, iframe.contentWindow.document.head || iframe.contentDocument.parentWindow.document.head );
+
+        Butter.extend( originalHead, ( iframe.contentWindow || iframe.contentDocument ).document.head );
 
         //originalHead = iframe.contentWindow.document.head;
 
         // store original iframeBody incase we rebuild
-        var ifrmBody = iframe.contentWindow.document || iframe.contentDocument.parentWindow.document;
+        var ifrmBody = ( iframe.contentWindow || iframe.contentDocument ).document;
         iframeBody = "<body>" + ifrmBody.body.innerHTML + "</body>\n";
 
         // function to ensure body is actually there
@@ -130,9 +131,7 @@
         // default to first butter-media tagged object if none is specified
         videoTarget = videoTarget || this.getAllMedia()[ 0 ].getName();
 
-        var bpIframe = iframe.contentWindow.document || 
-            iframe.contentDocument.parentWindow.document;
-            bpIframe.body.innerHTML = iframeBody;
+        var bpIframe = ( iframe.contentWindow || iframe.contentDocument ).document;
         
         // create a string that will create an instance of popcorn with the proper video source
         popcornString = "document.addEventListener('DOMContentLoaded', function () {\n";        
@@ -273,8 +272,7 @@
       },
 
       getRegistry: function() {
-        var ifrme = iframe.contentWindow || 
-            iframe.contentDocument.parentWindow;
+        var ifrme = iframe.contentWindow || iframe.contentDocument;
         return ifrme.Popcorn.registry;
       },
     
@@ -283,7 +281,7 @@
       fillIframe: function( callback ) {
         
         var popcornScript, iframeHead, body,
-            that = this, doc = iframe.contentWindow.document || iframe.contentDocument.parentWindow.document; 
+            that = this, doc = ( iframe.contentWindow || iframe.contentDocument ).document;
 
         // create a script within the iframe and populate it with our popcornString
         popcornScript = doc.createElement( "script" );
@@ -307,9 +305,9 @@
 
         var popcornReady = function( e, callback2 ) {
 
-          var popcornIframe = iframe.contentWindow || iframe.contentDocument.parentWindow;
+          var popcornIframe = iframe.contentWindow || iframe.contentDocument;
           var framePopcorn = popcornIframe[ "popcorn" + that.getCurrentMedia().getId() ];
-
+          
           if ( !framePopcorn ) {
             setTimeout( function() {
               popcornReady( e, callback2 );
@@ -328,9 +326,9 @@
               
               that.trigger( "mediaready", that.getCurrentMedia() );
               framePopcorn.media.addEventListener( "timeupdate", function() {
-
+                
                 that.currentTime( framePopcorn.media.currentTime );
-                that.trigger( "mediatimeupdate", that.getCurrentMedia(), "previewer" );                
+                that.trigger( "mediatimeupdate", that.getCurrentMedia() );                
               },false);
               callback && callback();
             } else {
@@ -346,8 +344,6 @@
           var that = this, e = event.data;
 
           popcornReady( e, function( framePopcorn ) { 
-          
-            var ifrme = iframe.contentWindow || iframe.contentDocument.parentWindow
 
             if( !popcorns[ that.getCurrentMedia().getId() ] ) {
                 popcorns[ that.getCurrentMedia().getId() ] = framePopcorn;
@@ -358,7 +354,7 @@
             framePopcorn.removeTrackEvent( butterIds[ e.getId() ] );
 
             // add track events to the iframe verison of popcorn
-            framePopcorn[ e.type ]( ifrme.Popcorn.extend( {},
+            framePopcorn[ e.type ]( ( iframe.contentWindow || iframe.contentDocument.parentWindow ).Popcorn.extend( {},
               e.popcornOptions ) );
             
             butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
@@ -376,8 +372,6 @@
         this.listen( "trackeventadded", function ( e ) {
           e = e.data;
           popcornReady( e, function( framePopcorn ) {
-            
-            var ifrme = iframe.contentWindow || iframe.contentDocument.parentWindow
 
             if( !popcorns[ that.getCurrentMedia().getId() ] ) {
               popcorns[ that.getCurrentMedia().getId() ] = framePopcorn;
@@ -386,7 +380,7 @@
             }
 
             // add track events to the iframe verison of popcorn
-            framePopcorn[ e.type ]( ifrme.Popcorn.extend( {},
+            framePopcorn[ e.type ]( ( iframe.contentWindow || iframe.contentDocument ).Popcorn.extend( {},
               e.popcornOptions ) );
             
             butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
@@ -396,7 +390,7 @@
         }); // listener
 
         this.listen( "trackeventremoved", function( e ) {
-          var ifrme = iframe.contentWindow || iframe.contentDocument.parentWindow
+          var ifrme = iframe.contentWindow || iframe.contentDocument;
           ifrme[ "popcorn" + that.getCurrentMedia().getId() ].removeTrackEvent( butterIds[ e.data.getId() ] );
         } );
 
@@ -407,7 +401,7 @@
         this.listen( "mediatimeupdate", function( event ) {
         
           if ( event.domain === "previewer" ) {
-            iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].currentTime( e.data.currentTime() );
+            iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].currentTime( event.data.currentTime() );
           }
         } );
 
