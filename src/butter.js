@@ -164,15 +164,12 @@ THE SOFTWARE.
         name = options.name || "Media" + id + Date.now(),
         media,
         butter = undefined,
+        currentTime = 0,
+        duration = 0,
         that = this;
 
     this.setMedia = function ( mediaElement ) {
-      if ( typeof( mediaElement ) === "string" ) {
-        media = document.getElementById( mediaElement );
-      }
-      else {
-        media = mediaElement;
-      } //if
+      media = mediaElement;
       butter && butter.trigger( "mediacontentchanged", that );
     };
 
@@ -209,7 +206,11 @@ THE SOFTWARE.
       tracksByName[ track.getName() ] = track;
       tracks.push( track );
       track.setButter( butter );
-      butter.trigger( "trackadded", track );
+      var events = track.getTrackEvents();
+      for ( var i=0, l=events.length; i<l; ++i ) {
+        butter.trigger( "trackeventadded", events[i] );
+      } //for
+      butter && butter.trigger( "trackadded", track );
       return track;
     }; //addTrack
 
@@ -237,11 +238,31 @@ THE SOFTWARE.
         tracks.splice( idx, 1 );
         track.setButter( undefined );
         delete tracksByName[ track.getName() ];
-        butter.trigger( "trackremoved", track );
+        var events = track.getTrackEvents();
+        for ( var i=0, l=events.length; i<l; ++i ) {
+          butter.trigger( "trackeventremoved", events[i] );
+        } //for
+        butter && butter.trigger( "trackremoved", track );
         return track;
       } //if
       return undefined;    
     }; //removeTrack
+
+    this.currentTime = function ( time ) {
+      if ( time ) {
+        currentTime = time;
+        butter && butter.trigger("mediatimeupdate", that);
+      } //if
+      return currentTime;
+    }; //currentTime
+
+    this.duration = function ( time ) {
+      if ( time ) {
+        duration = time;
+        butter && butter.trigger("mediadurationchanged", that);
+      }
+      return duration;
+    }; //duration
 
   }; //Media
 
@@ -443,7 +464,7 @@ THE SOFTWARE.
       targetsByName[ target.getName() ] = target;
       targets.push( target );
 
-      butter.trigger( "targetadded", target );
+      that.trigger( "targetadded", target );
 
       return target;
     };
@@ -457,7 +478,7 @@ THE SOFTWARE.
       if ( idx > -1 ) {
         targets.splice( idx, 1 );
         delete targets[ target.getName() ]; 
-        butter.trigger( "targetremoved", target );
+        that.trigger( "targetremoved", target );
         return target;
       } //if
       return undefined;
@@ -497,29 +518,16 @@ THE SOFTWARE.
     /****************************************************************
      * Media methods
      ****************************************************************/
-    //play - Play the media
-    this.play = function () {
-      checkMedia();
-    };
-
-    //pause - Pause the media
-    this.pause = function () {
-      checkMedia();
-    };
-
     //currentTime - Gets and Sets the media's current time.
     this.currentTime = function ( time ) {
       checkMedia();
+      return currentMedia.currentTime( time );
+    };
 
-      // need to get/set the video element dynamically
-      var video = document.getElementById( "video" );
-
-      if ( time !== undefined ) {
-
-        video.currentTime = time;
-      }
-
-      return video.currentTime;
+    //duration - Gets and Sets the media's duration.
+    this.duration = function ( time ) {
+      checkMedia();
+      return currentMedia.duration( time );
     };
 
     //getAllMedia - returns all stored media objects

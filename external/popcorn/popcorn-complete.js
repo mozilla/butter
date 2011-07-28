@@ -714,6 +714,14 @@
       }
     }
 
+    if ( track.start <= obj.media.currentTime && track.end >= obj.media.currentTime ) {
+      track.startIndex = idx + 1;
+    }
+
+    if ( obj.media.currentTime >= track.end ) {
+      track.startIndex = idx + 1;
+    }
+
     // Store references to user added trackevents in ref table
     if ( track._id ) {
       Popcorn.addTrackEvent.ref( obj, track );
@@ -833,18 +841,17 @@
     return obj.data.history[ obj.data.history.length - 1 ];
   };
 
-Popcorn.timeUpdate = function( that, event ) {
+  Popcorn.timeUpdate = function( that, event ) {
 
     var currentTime    = that.media.currentTime,
         previousTime   = that.data.trackEvents.previousUpdateTime,
         tracks         = that.data.trackEvents,
         tracksByEnd    = tracks.byEnd,
-        tracksByStart  = tracks.byStart;
+        tracksByStart  = tracks.byStart,
 
-        //  Playbar advancing
-    if ( previousTime < currentTime ) {
+    checkTrackEvents = function() {
 
-      while ( tracksByEnd[ tracks.endIndex ] && tracksByEnd[ tracks.endIndex ].end <= currentTime ) {
+       while ( tracksByEnd[ tracks.endIndex ] && tracksByEnd[ tracks.endIndex ].end <= currentTime ) {
         //  If plugin does not exist on this instance, remove it
         if ( !tracksByEnd[ tracks.endIndex ]._natives || !!that[ tracksByEnd[ tracks.endIndex ]._natives.type ] ) {
           if ( tracksByEnd[ tracks.endIndex ]._running === true ) {
@@ -875,8 +882,14 @@ Popcorn.timeUpdate = function( that, event ) {
           Popcorn.removeTrackEvent( that, tracksByStart[ tracks.startIndex ]._id );
           return;
         }
-      }
+      } 
+    }
 
+
+    //  Playbar advancing
+    if ( previousTime < currentTime ) {
+
+      checkTrackEvents();
     // Playbar receding
     } else if ( previousTime > currentTime ) {
 
@@ -914,27 +927,8 @@ Popcorn.timeUpdate = function( that, event ) {
       }
     // time bar is not moving ( video is paused )
     } else if ( previousTime === currentTime ) {
-
-      // Dont advance the endIndex, instead advance a copy of it
-      var endIndex = tracks.endIndex;
-
-      while ( tracksByEnd[ endIndex ] && tracksByEnd[ endIndex ].end > currentTime ) {
-        // if plugin does not exist on this instance, remove it
-        if ( !tracksByEnd[ endIndex ]._natives || !!that[ tracksByEnd[ endIndex ]._natives.type ] ) {
-          if ( tracksByEnd[ endIndex ].start <= currentTime &&
-              tracksByEnd[ endIndex ]._running === false  &&
-              that.data.disabled.indexOf( tracksByEnd[ endIndex ]._natives.type ) === -1 ) {
-
-              tracksByEnd[ endIndex ]._running = true;
-              tracksByEnd[ endIndex ]._natives.start.call( that, event, tracksByEnd[tracks.endIndex] );
-            }
-            endIndex--;
-          } else {
-            // remove track event
-            Popcorn.removeTrackEvent( that, tracksByEnd[ endIndex ]._id );
-            return;
-          } 
-      }
+     
+     checkTrackEvents();
     }
 
     tracks.previousUpdateTime = currentTime;

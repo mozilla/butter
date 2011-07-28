@@ -41,7 +41,7 @@ THE SOFTWARE.
         butter = this,
         editorSrc =  customEditors[ trackEvent.type ] || trackEvent.manifest.customEditor || defaultEditor,
         updateEditor = function( trackEvent ){
-          commServer.send( "editorCommLink", trackEvent.popcornOptions, "updatetrackevent" );
+          commServer.send( "editorCommLink", trackEvent.data.popcornOptions, "updatetrackevent" );
         };
 
       editorTarget && clearTarget();
@@ -99,7 +99,13 @@ THE SOFTWARE.
             butter.unlisten ( "trackeventupdated", updateEditor );
             butter.trigger( "trackeditclosed" );
           });
-          commServer.send( "editorCommLink", { trackEvent: trackEvent, targets: butter.getTargets() }, "edittrackevent");
+
+          var targetCollection = butter.getTargets(), targetArray = [];
+          for ( var i=0, l=targetCollection.length; i<l; ++i ) {
+            targetArray.push( [ targetCollection[ i ].getName(), targetCollection[ i ].getId() ] );
+          }
+          
+          commServer.send( "editorCommLink", { trackEvent: trackEvent, targets: targetArray }, "edittrackevent");
         });
       }
 

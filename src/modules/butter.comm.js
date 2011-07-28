@@ -159,7 +159,7 @@
 
       } //CommServer
 
-    }, //extend
+    } //extend
 
   });
 })(window, document, undefined, Butter);

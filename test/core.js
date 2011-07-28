@@ -77,14 +77,14 @@
 
     butter.listen("mediaadded", function ( media ) {
       mediaEventState--;
-      mediaState = [1, media];
+      mediaState = [1, media.data];
     });
     butter.listen("mediachanged", function ( media ) {
       mediaEventState *= 2;
-      mediaState = [2, media];
+      mediaState = [2, media.data];
     });
     butter.listen( "mediaremoved", function ( media ) {
-      mediaState = [0, media];
+      mediaState = [0, media.data];
     });
 
     butter.addMedia( m1 );
@@ -108,10 +108,10 @@
     
     var mediaContent = m1.getMedia();
     butter.listen( "mediacontentchanged", function ( media ) {
-      mediaContent = media.getMedia();
+      mediaContent = media.data.getMedia();
     });
     m1.setMedia( "audio-test" );
-    ok( mediaContent === document.getElementById( "audio-test" ), "Media content changed properly" );
+    ok( mediaContent === "audio-test", "Media content changed properly" );
 
     butter.removeMedia( m2 );
     ok( mediaState[0] === 0 && mediaState[1] === m2, "mediaremoved event received" );
@@ -142,7 +142,34 @@
     butter.setMedia( m2 );
     ok( butter.getTrack( "Track 1" ) === undefined, "Track 1 is not on Media 1");
     ok( butter.getTrack( "Track 2" ) !== undefined, "Track 2 is on Media 1");
+  });
 
+  test("Simple Media functionality", function () {
+    expect(6);
+
+    var butter = new Butter();
+    var m1 = butter.addMedia({media:"test"});
+
+    var state = [0, 0];
+    butter.listen("mediatimeupdate", function () {
+      state[0] = 1;
+    });
+    butter.listen("mediadurationchanged", function () {
+      state[1] = 1;
+    });
+
+    m1.duration(2);
+    ok(m1.duration() === 2, "duration is correct");
+    m1.currentTime(1);
+    ok(m1.currentTime() === 1, "currentTime is correct");
+    ok(state[0] === 1 && state[1] === 1, "events fired");
+
+    state = [0, 0];
+    butter.duration(5);
+    ok(butter.duration() === 5, "duration is correct");
+    butter.currentTime(2);
+    ok(butter.currentTime() === 2, "currentTime is correct");
+    ok(state[0] === 1 && state[1] === 1, "events fired");
   });
 
   module( "Track" );
@@ -166,10 +193,10 @@
     var m = butter.addMedia();
 
     butter.listen( "trackadded", function ( track ) {
-      trackState = [1, track];
+      trackState = [1, track.data];
     });
     butter.listen( "trackremoved", function ( track ) {
-      trackState = [0, track];
+      trackState = [0, track.data];
     });
 
     var t1 = new Butter.Track( { name: "Track 1" } );
@@ -211,10 +238,10 @@
     var t = butter.addTrack();
 
     butter.listen( "trackeventadded", function ( trackEvent ) {
-      eventState = [1, trackEvent];
+      eventState = [1, trackEvent.data];
     });
     butter.listen( "trackeventremoved", function ( trackEvent ) {
-      eventState = [0, trackEvent];
+      eventState = [0, trackEvent.data];
     });
 
     var te1 = new Butter.TrackEvent( { name: "TrackEvent 1", start: 0, end: 1 } );
@@ -253,6 +280,63 @@
     for ( var track in tracks ) {
       ok( tracks[ track ].length === 0, "No TrackEvents remain" );  
     }
+
+  });
+
+  test("Media objects have their own tracks", function () {
+    var butter = new Butter();
+    var m1 = butter.addMedia();
+    var m2 = butter.addMedia();
+
+    butter.addTrack( { name:"Track 1" } );
+
+    butter.setMedia( m2 );
+
+    butter.addTrack( { name:"Track 2" } );
+
+    butter.setMedia( m1 );
+    ok( butter.getTrack( "Track 1" ) !== undefined, "Track 1 is on Media 1");
+    ok( butter.getTrack( "Track 2" ) === undefined, "Track 2 is not on Media 1");
+
+    butter.setMedia( m2 );
+    ok( butter.getTrack( "Track 1" ) === undefined, "Track 1 is not on Media 1");
+    ok( butter.getTrack( "Track 2" ) !== undefined, "Track 2 is on Media 1");
+
+  });
+
+  test( "Remove/Add Track events for constituent TrackEvents", function () {
+
+    expect( 4 );
+
+    var butter = new Butter();
+    butter.addMedia();
+
+    var t1 = butter.addTrack();
+    var te = butter.addTrackEvent( t1, {} );
+
+    var state = undefined;
+
+    butter.listen('trackeventremoved', function ( trackEvent ) {
+      state = trackEvent.data;
+    });
+
+    butter.listen('trackeventadded', function ( trackEvent ) {
+      state = trackEvent.data;
+    });
+
+    ok( t1.getTrackEvents().length === 1, "Track event stored" );
+
+    butter.removeTrack( t1 );
+
+    ok( state === te, "Track event removal event" );
+
+    state = undefined;
+
+    butter.addTrack( t1 );
+
+    ok( state === te, "Track event added again" );
+
+    ok( t1.getTrackEvents().length === 1, "Track event stored" );
 
   });
 

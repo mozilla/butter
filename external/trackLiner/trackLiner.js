@@ -349,7 +349,7 @@ element.style.position = options.position ? options.position : 'absolute';
         width: width,
         innerHTML: options.label || '',
         classes: options.classes || '',
-        css: options.css,
+        css: options.css
       };
     },
     moved: function (track, trackEventObj, event, ui) {
@@ -364,7 +364,7 @@ element.style.position = options.position ? options.position : 'absolute';
     },
     deselect: function (track, trackEventObj, event) {
       $(trackEventObj.element).removeClass('trackliner-event-selected');
-    },
+    }
   });
 
 }(window));
