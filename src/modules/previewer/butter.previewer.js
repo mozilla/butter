@@ -330,7 +330,7 @@
               framePopcorn.media.addEventListener( "timeupdate", function() {
 
                 that.currentTime( framePopcorn.media.currentTime );
-                that.trigger( "timeupdate", that.getCurrentMedia() );                
+                that.trigger( "mediatimeupdate", that.getCurrentMedia(), "previewer" );                
               },false);
               callback && callback();
             } else {
@@ -404,8 +404,11 @@
           that.buildPopcorn( e.data.getName() );
         } );
 
-        this.listen( "timeupdate", function( e ) {
-          
+        this.listen( "mediatimeupdate", function( event ) {
+        
+          if ( event.domain === "previewer" ) {
+            iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].currentTime( e.data.currentTime() );
+          }
         } );
 
       } // fillIframe
