@@ -129,7 +129,7 @@
         videoURL = this.getCurrentMedia().getMedia();
 
         // default to first butter-media tagged object if none is specified
-        videoTarget = videoTarget || this.getAllMedia()[ 0 ].getName();
+        videoTarget = videoTarget.getName() || this.getAllMedia()[ 0 ].getName();
 
         var bpIframe = ( iframe.contentWindow || iframe.contentDocument ).document;
         
