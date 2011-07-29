@@ -129,7 +129,7 @@
         videoURL = this.getCurrentMedia().getMedia();
 
         // default to first butter-media tagged object if none is specified
-        videoTarget = videoTarget.getName() || this.getAllMedia()[ 0 ].getName();
+        videoTarget = videoTarget.getName();
 
         var bpIframe = ( iframe.contentWindow || iframe.contentDocument ).document;
         
@@ -395,7 +395,7 @@
         } );
 
         this.listen( "mediachanged", function( e ) {
-          that.buildPopcorn( e.data.getName() );
+          that.buildPopcorn( butter.getAllMedia()[ 0 ] );
         } );
 
         this.listen( "mediatimeupdate", function( event ) {
