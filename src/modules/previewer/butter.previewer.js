@@ -127,7 +127,7 @@
       buildPopcorn: function( videoTarget, callback ) {
 
         videoURL = this.getCurrentMedia().getMedia();
-        console.log("VIDJA TARGET", videoTarget.getMedia());
+
         // default to first butter-media tagged object if none is specified
         videoTarget = videoTarget.getName();
 
@@ -172,7 +172,7 @@
         players[ undefined ] = function() {
           var src = document.createElement( "source" ),
               video = document.createElement( "video" );
-              src.src = videoURL;
+          src.src = videoURL;
 
           video.style.width = videoTarget.width;
           video.style.height = videoTarget.height;
