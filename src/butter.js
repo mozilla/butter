@@ -162,21 +162,29 @@ THE SOFTWARE.
         tracks = [],
         id = numMedia++,
         name = options.name || "Media" + id + Date.now(),
-        media,
+        url,
+        target,
         butter = undefined,
         currentTime = 0,
         duration = 0,
         that = this;
 
-    this.setMedia = function ( mediaElement ) {
-      media = mediaElement;
+    this.getUrl = function () {
+      return url;
+    };
+
+    this.getTarget = function () {
+      return target;
+    };
+
+    this.setUrl = function ( newUrl ) {
+      url = newUrl;
       butter && butter.trigger( "mediacontentchanged", that );
     };
 
-    options.media && this.setMedia( options.media );
-
-    this.getMedia = function () {
-      return media;
+    this.setTarget = function ( newTarget ) {
+      target = newTarget;
+      butter && butter.trigger( "mediatargetchanged", that );
     };
 
     this.getName = function () {
@@ -263,6 +271,9 @@ THE SOFTWARE.
       }
       return duration;
     }; //duration
+
+    options.url && this.setUrl( options.url );
+    options.target && this.setTarget( options.target );
 
   }; //Media
 
