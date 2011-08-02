@@ -177,13 +177,13 @@ THE SOFTWARE.
       return target;
     };
 
-    this.setUrl = function ( v ) {
-      url = v;
+    this.setUrl = function ( newUrl ) {
+      url = newUrl;
       butter && butter.trigger( "mediacontentchanged", that );
     };
 
-    this.setTarget = function ( v ) {
-      target = v;
+    this.setTarget = function ( newTarget ) {
+      target = newTarget;
       butter && butter.trigger( "mediatargetchanged", that );
     };
 
