@@ -345,4 +345,19 @@
 
   });
 
+  test(" Import/Export", function () {
+    var butter = new Butter();
+    var m1 = butter.addMedia({ url:'www.test-url-1.com', target:'test-target-1' });
+    var m2 = butter.addMedia({ url:'www.test-url-2.com', target:'test-target-2' });
+    var t1 = butter.addTrack();
+    var t2 = butter.addTrack();
+    butter.setMedia( m2 );
+    var t3 = butter.addTrack();
+    var t4 = butter.addTrack();
+
+    butter.setProjectDetails( 'test-key', 'test-value' );
+
+    console.log(butter.exportProject());
+  });
+
 })(window, document, undefined, Butter);

@@ -289,6 +289,7 @@ THE SOFTWARE.
         currentMedia,
         targets = [],
         targetsByName = {},
+        projectDetails = {},
         that = this;
 
     this.id = "Butter" + numButters++;
@@ -514,16 +515,47 @@ THE SOFTWARE.
 
     //export - Export project data
     this.exportProject = function () {
-      var projectData;
+      var exportMedia = [];
+      for ( var m=0, lm=medias.length; m<lm; ++m ) {
+        var exportTracks = [], media = medias[m], mediaTracks = media.getTracks();
+        for ( var t=0, lt=mediaTracks.length; t<lt; ++t ) {
+          var exportTrackEvents = [], track = mediaTracks[t], trackEvents = track.getTrackEvents();
+          for ( var te, lte=trackEvents.length; te<lte; ++te ) {
+            exportTrackEvents.push( trackEvents[ trackEvents[ te ] ] );
+          }
+          exportTracks.push({
+            name: track.getName(),
+            trackEvents: exportTrackEvents
+          });
+        }
+        exportMedia.push({
+          name: media.getName(),
+          url: media.getUrl(),
+          target: media.getTarget(),
+          tracks: exportTracks,
+        });
+      }
+      var projectData = {
+        project: projectDetails,
+        targets: 
+        media: exportMedia,
+      };
       return projectData;
     };
 
     //setProjectDetails - set the details of the project
-    this.setProjectDetails = function () {
+    this.setProjectDetails = function ( key, value ) {
+      projectDetails[ key ] = value;
     };
 
     //getProjectDetails - get the projects details
-    this.getProjectDetails = function () {
+    this.getProjectDetails = function ( key ) {
+      if ( key ) {
+        return projectDetails[ key ];
+      }
+      else {
+        return projectDetails;
+      }
     };
 
     /****************************************************************
