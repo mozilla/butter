@@ -107,8 +107,8 @@
               } );
             } else if( children[ i ].getAttribute( "data-butter" ) === "media" ) {
               that.addMedia( { 
-                name: children[ i ].id, 
-                media: userSetMedia
+                target: children[ i ].id, 
+                url: userSetMedia
               } );
             } // else
 
@@ -124,15 +124,17 @@
 
       // buildPopcorn function, builds an instance of popcorn in the iframe and also
       // a local version of popcorn
-      buildPopcorn: function( videoTarget, callback ) {
-
-        videoURL = this.getCurrentMedia().getMedia();
-
-        // default to first butter-media tagged object if none is specified
-        videoTarget = videoTarget.getName();
+      buildPopcorn: function( media, callback ) {
+        console.log(media.getUrl());
+        videoURL = this.getCurrentMedia().getUrl();
 
         var bpIframe = ( iframe.contentWindow || iframe.contentDocument ).document;
         
+        // default to first butter-media tagged object if none is specified
+        videoTarget = this.getCurrentMedia().getTarget();
+
+        bpIframe.getElementById( videoTarget ).innerHTML = "";
+
         // create a string that will create an instance of popcorn with the proper video source
         popcornString = "document.addEventListener('DOMContentLoaded', function () {\n";        
 
@@ -192,6 +194,7 @@
         players[ regexResult[ 1 ] ]();
 
         for( video in videoString ) {
+          console.log(videoString[ video] );
           popcornString += videoString[ video ];    
         }
 
