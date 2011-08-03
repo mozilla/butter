@@ -19,7 +19,6 @@
 
             butter.buildPopcorn( butter.getAllMedia()[ 0 ], function() {
               var registry = butter.getRegistry();
-              console.log(registry);
             } );
           }
         } );
@@ -42,9 +41,7 @@
       
 
     var addTrack2 = function() {
-        console.log( track.getTrackEvent( 0 ) );
-        track.removeTrackEvent( track.getTrackEvent( 0 ) );
-        console.log( track.getTrackEvent( 0 ) );
+        track.removeTrackEvent( track.getTrackEvents( )[ 0 ] );
       }
 
     var changeMedia = function() {

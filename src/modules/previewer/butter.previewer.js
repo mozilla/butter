@@ -125,13 +125,13 @@
       // buildPopcorn function, builds an instance of popcorn in the iframe and also
       // a local version of popcorn
       buildPopcorn: function( media, callback ) {
-        console.log(media.getUrl());
-        videoURL = this.getCurrentMedia().getUrl();
+
+        videoURL = media.getUrl();
 
         var bpIframe = ( iframe.contentWindow || iframe.contentDocument ).document;
         
         // default to first butter-media tagged object if none is specified
-        videoTarget = this.getCurrentMedia().getTarget();
+        videoTarget = media.getTarget();
 
         bpIframe.getElementById( videoTarget ).innerHTML = "";
 
@@ -194,7 +194,6 @@
         players[ regexResult[ 1 ] ]();
 
         for( video in videoString ) {
-          console.log(videoString[ video] );
           popcornString += videoString[ video ];    
         }
 
@@ -357,8 +356,7 @@
             framePopcorn.removeTrackEvent( butterIds[ e.getId() ] );
 
             // add track events to the iframe verison of popcorn
-            framePopcorn[ e.type ]( ( iframe.contentWindow || iframe.contentDocument.parentWindow ).Popcorn.extend( {},
-              e.popcornOptions ) );
+            framePopcorn[ e.type ]( ( iframe.contentWindow || iframe.contentDocument.parentWindow ).Popcorn.extend( {}, e.popcornOptions ) );
             
             butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
 
@@ -398,7 +396,7 @@
         } );
 
         this.listen( "mediachanged", function( e ) {
-          that.buildPopcorn( butter.getAllMedia()[ 0 ] );
+          that.buildPopcorn( butter.getCurrentMedia() );
         } );
 
         this.listen( "mediatimeupdate", function( event ) {
