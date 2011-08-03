@@ -175,7 +175,7 @@
           var src = document.createElement( "source" ),
               video = document.createElement( "video" );
           src.src = videoURL;
-          console.log(videoTarget);
+
           video.style.width = bpIframe.getElementById( videoTarget ).style.width;
           video.style.height = bpIframe.getElementById( videoTarget ).style.height;
           video.appendChild( src );
