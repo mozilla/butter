@@ -3,13 +3,6 @@
 
   module ( "Editor Setup" );
   
-  test( "Check Existence", function() {
-    var b = new Butter();
-    expect(2);
-    ok( b.eventeditor, "editor setup method exists" );
-    ok( typeof b.eventeditor === "function", "butter.eventeditor() is a function" );
-  });
-  
   test( "Setup method", function() {
     var b = new Butter();
     expect(3);
@@ -40,6 +33,7 @@
       method;
       
     expect( methodNames.length * 2 );
+    b.eventeditor( { defaultEditor: "./../../../src/modules/eventeditor/defaultEditor.html" } );
     
     for ( var i = 0, l = methodNames.length; i < l; i++ ) {
       method = methodNames[i];
@@ -112,7 +106,7 @@
     ok( !b.removeCustomEditor(), "returns false if no params provided");
     ok( !b.removeCustomEditor( "URL.HTML" ), "returns false if only one param provided");
     ok( !b.removeCustomEditor( undefined , ""), "returns false if first param is undefined");
-    ok( b.removeCustomEditor( "URL.HTML", "SOME-PLUGIN-TYPE"), "Sets the editor source for a plug-in type");
+    ok( !b.removeCustomEditor( "URL.HTML", "SOME-PLUGIN-TYPE"), "Sets the editor source for a plug-in type");
   });
   
   test( "editTrackEvent( trackEvent )", function() {

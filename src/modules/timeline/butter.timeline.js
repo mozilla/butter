@@ -1,5 +1,6 @@
-Butter.registerModule( "timeline", {
-  setup: function( options ) {
+(function ( window, document, Butter, undefined ) {
+
+  Butter.registerModule( "timeline", function ( options ) {
 
     // Convert an SMPTE timestamp to seconds
     var smpteToSeconds = function( smpte ) {
@@ -20,8 +21,9 @@ Butter.registerModule( "timeline", {
       if (t.length === 4) {
         return parseInt( t[0] * 3600, 10 ) + parseInt( t[1] * 60, 10 ) + parseFloat( t[2], 10 ) + parseFloat( t[3] / 12, 10 );
       }
-    },
-    secondsToSMPTE = function( time ) {
+    }; //smpteToSeconds
+
+    var secondsToSMPTE = function( time ) {
 
       var timeStamp = new Date( 1970,0,1 ),
           seconds;
@@ -36,7 +38,7 @@ Butter.registerModule( "timeline", {
 
       }
       return seconds;
-    };
+    }; //secondsToSMPTE
 
     var scrubberClicked = false,
         scrollLeft = 0;
@@ -334,6 +336,6 @@ Butter.registerModule( "timeline", {
       currentMediaInstance.butterTrackEvents[ trackLinerTrackEvent.element.id ] = trackEvent;
       currentMediaInstance.trackLinerTrackEvents[ trackEvent.getId() ] = trackLinerTrackEvent;
     });
-  }
-});
+  });
 
+})( window, window.document, Butter );

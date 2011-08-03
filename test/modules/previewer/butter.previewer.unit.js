@@ -30,7 +30,7 @@
           ok( layoutSrc.split("/")[ layoutSrc.split("/").length - 1 ] === "layout.html", "Iframes source is layout.html" );
           ok( butter.getTargets().length === 1, "Targets successfully scraped" );
           ok( butter.getTargets()[ 0 ].getName() === "div2", "Targets getName function working" );
-          ok( butter.getAllMedia().length === 2, "Media targets successfully scraped" );
+          ok( butter.getAllMedia().length === 1, "Media targets successfully scraped" );
           ok( butter.getAllMedia()[ 0 ].getName() === "outerVideo", "Media targets getName function working" );
           ok( butter.getAllMedia()[ 0 ].getMedia() === "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm", "Media targets getMedia function working" );
           butter.buildPopcorn( "videoz", function() {

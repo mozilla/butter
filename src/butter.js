@@ -618,12 +618,18 @@ THE SOFTWARE.
       return undefined;    
     };
 
+    this.extend = function () {
+      Butter.extend( that, [].slice.call( arguments, 1 ) );
+    };
+
     /****************************************************************
      * Init Modules for this instance
      ****************************************************************/
+    /*
     for ( var moduleName in modules ) {
       modules[moduleName].setup && modules[moduleName].setup.call(this);
     } //for
+    */
 
   }; //Butter
 
@@ -641,7 +647,7 @@ THE SOFTWARE.
   Butter.registerModule = Butter.prototype.registerModule = function ( name, module ) {
 
     Butter.prototype[name] = function( options ) {
-      module.setup && module.setup.call( this, options );
+      module.call( this, options );
       return this;
     };
     if ( module.extend ) {

@@ -1,4 +1,4 @@
-(function (window, document, undefined, Butter) {
+(function (window, document, Butter, undefined) {
 
   Butter.registerModule( "comm", {
 
@@ -162,4 +162,4 @@
     } //extend
 
   });
-})(window, document, undefined, Butter);
+})(window, document, Butter);
