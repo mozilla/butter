@@ -19,7 +19,6 @@
 
             butter.buildPopcorn( butter.getAllMedia()[ 0 ], function() {
               var registry = butter.getRegistry();
-              console.log(registry);
             } );
           }
         } );
@@ -42,7 +41,7 @@
       
 
     var addTrack2 = function() {
-        track.removeTrackEvent( track.getTrackEvents()[ 0 ] );
+        track.removeTrackEvent( track.getTrackEvents( )[ 0 ] );
       }
 
     var changeMedia = function() {
@@ -51,9 +50,8 @@
                 target: "outerVideo", 
                 url: "http://clips.vorwaerts-gmbh.de/VfE.ogv" 
               } );
-      
-      butter.setMedia( media );
 
+      butter.setMedia( media );
     }
 
     </script>

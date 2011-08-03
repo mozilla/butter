@@ -125,13 +125,17 @@
       // buildPopcorn function, builds an instance of popcorn in the iframe and also
       // a local version of popcorn
       buildPopcorn: function( media, callback ) {
-        videoURL = media.getUrl();
 
         // default to first butter-media tagged object if none is specified
-        videoTarget = media.getTarget();
+        videoURL = media.getUrl();
 
         var bpIframe = ( iframe.contentWindow || iframe.contentDocument ).document;
         
+        // default to first butter-media tagged object if none is specified
+        videoTarget = media.getTarget();
+
+        bpIframe.getElementById( videoTarget ).innerHTML = "";
+
         // create a string that will create an instance of popcorn with the proper video source
         popcornString = "document.addEventListener('DOMContentLoaded', function () {\n";        
 
@@ -173,12 +177,11 @@
               video = document.createElement( "video" );
           src.src = videoURL;
 
-          video.style.width = videoTarget.width;
-          video.style.height = videoTarget.height;
+          video.style.width = bpIframe.getElementById( videoTarget ).style.width;
+          video.style.height = bpIframe.getElementById( videoTarget ).style.height;
           video.appendChild( src );
           video.controls = true;
           video.id = videoTarget + "-butter";
-          
           
           bpIframe.getElementById( videoTarget ).appendChild( video );
 
@@ -353,8 +356,7 @@
             framePopcorn.removeTrackEvent( butterIds[ e.getId() ] );
 
             // add track events to the iframe verison of popcorn
-            framePopcorn[ e.type ]( ( iframe.contentWindow || iframe.contentDocument.parentWindow ).Popcorn.extend( {},
-              e.popcornOptions ) );
+            framePopcorn[ e.type ]( ( iframe.contentWindow || iframe.contentDocument.parentWindow ).Popcorn.extend( {}, e.popcornOptions ) );
             
             butterIds[ e.getId() ] = framePopcorn.getLastTrackEventId();
 
@@ -394,8 +396,7 @@
         } );
 
         this.listen( "mediachanged", function( e ) {
-          console.log(e.data.getUrl());
-          that.buildPopcorn( e.data );
+          that.buildPopcorn( butter.getCurrentMedia() );
         } );
 
         this.listen( "mediatimeupdate", function( event ) {
