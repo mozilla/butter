@@ -175,13 +175,12 @@
           var src = document.createElement( "source" ),
               video = document.createElement( "video" );
           src.src = videoURL;
-
-          video.style.width = videoTarget.width;
-          video.style.height = videoTarget.height;
+          console.log(videoTarget);
+          video.style.width = bpIframe.getElementById( videoTarget ).style.width;
+          video.style.height = bpIframe.getElementById( videoTarget ).style.height;
           video.appendChild( src );
           video.controls = true;
           video.id = videoTarget + "-butter";
-          
           
           bpIframe.getElementById( videoTarget ).appendChild( video );
 
