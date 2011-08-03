@@ -82,16 +82,47 @@ THE SOFTWARE.
 
       trackEvent.track = that;
       trackEvent.setButter( butter );
-      butter.trigger( "trackeventadded", trackEvent );
       return trackEvent;
     }; //addTrackEvent
 
     this.setButter = function ( b ) {
       butter = b;
+      if ( butter ) {
+        butter.trigger( "trackadded", that );
+        var events = that.getTrackEvents();
+        for ( var i=0, l=events.length; i<l; ++i ) {
+          events[i].setButter( butter );
+        } //for
+      }
     };
 
     this.getButter = function ()  {
       return butter;
+    };
+
+    this.import = function ( importData ) {
+      if ( importData.name ) {
+        name = importData.name;
+      }
+      if ( importData.trackEvents ) {
+        var importTrackEvents = importData.trackEvents;
+        for ( var i=0, l=importTrackEvents.length; i<l; ++i ) {
+          var newTrackEvent = new TrackEvent();
+          newTrackEvent.import( importTrackEvents[ i ] );
+          that.addTrackEvent( newTrackEvent );
+        }
+      }
+    };
+
+    this.export = function () {
+      var exportTrackEvents = [];
+      for ( var i=0, l=trackEvents.length; i<l; ++i ) {
+        exportTrackEvents.push( trackEvents[ i ].export() );
+      }
+      return {
+        name: name,
+        trackEvents: exportTrackEvents
+      };
     };
 
   }; //Track
@@ -102,7 +133,8 @@ THE SOFTWARE.
   var numTrackEvents = 0;
   var TrackEvent = function ( options ) {
     var id = numTrackEvents++,
-        butter = undefined;
+        butter = undefined,
+        that = this;
 
     options = options || {};
     var name = options.name || 'Track' + Date.now();
@@ -123,10 +155,32 @@ THE SOFTWARE.
 
     this.setButter = function ( b ) {
       butter = b;
+      butter && butter.trigger( "trackeventadded", that );
     };
 
     this.getButter = function ()  {
       return butter;
+    };
+
+    this.import = function ( importData ) {
+      this.start = importData.start || 0;
+      this.end = importData.end || 0;
+      this.type = importData.type;
+      if ( importData.name ) {
+        name = importData.name;
+      }
+      this.popcornOptions = importData.popcornOptions;
+    };
+
+    this.export = function () {
+      return {
+        start: this.start,
+        end: this.end,
+        type: this.type,
+        popcornOptions: this.popcornOptions,
+        track: this.track ? this.track.getName() : undefined,
+        name: name
+      };
     };
 
   }; //TrackEvent
@@ -149,6 +203,27 @@ THE SOFTWARE.
     this.getId = function () {
       return id;
     }; //getId
+
+    this.import = function ( importData ) {
+      if ( importData.name ) {
+        name = importData.name
+      }
+      this.object = importData.object
+    };
+
+    this.export = function () {
+      var obj;
+      try {
+        obj = JSON.stringify( this.object );
+      }
+      catch ( e ) {
+        obj = this.object.toString();
+      }
+      return {
+        name: name,
+        object: obj
+      };
+    };
   }; //Target
 
   /****************************************************************************
@@ -201,6 +276,13 @@ THE SOFTWARE.
 
     this.setButter = function ( b ) {
       butter = b;
+      if ( butter ) {
+        butter.trigger( "mediaadded", that );
+        var tracks = that.getTracks();
+        for ( var i=0, l=tracks.length; i<l; ++i ) {
+          tracks[i].setButter( butter );
+        } //for
+      }
     };
 
     this.getButter = function ()  {
@@ -214,11 +296,6 @@ THE SOFTWARE.
       tracksByName[ track.getName() ] = track;
       tracks.push( track );
       track.setButter( butter );
-      var events = track.getTrackEvents();
-      for ( var i=0, l=events.length; i<l; ++i ) {
-        butter.trigger( "trackeventadded", events[i] );
-      } //for
-      butter && butter.trigger( "trackadded", track );
       return track;
     }; //addTrack
 
@@ -271,6 +348,38 @@ THE SOFTWARE.
       }
       return duration;
     }; //duration
+
+    this.import = function ( importData ) {
+      if ( importData.name ) {
+        name = importData.name;
+      }
+
+      importData.target && that.setTarget( importData.target );
+      importData.url && that.setUrl( importData.url );
+
+      if ( importData.tracks ) {
+        var importTracks = importData.tracks;
+        for ( var i=0, l=importTracks.length; i<l; ++i ) {
+          var newTrack = new Track();
+          newTrack.import( importTracks[ i ] );
+          that.addTrack( newTrack );
+        }
+      }
+    };
+
+    this.export = function () {
+      var exportTracks = [];
+      for ( var i=0, l=tracks.length; i<l; ++i ) {
+        exportTracks.push( tracks[ i ].export() );
+      }
+      return {
+        name: name,
+        url: url,
+        target: target,
+        duration: duration,
+        tracks: exportTracks,
+      };
+    };
 
     options.url && this.setUrl( options.url );
     options.target && this.setTarget( options.target );
@@ -497,8 +606,17 @@ THE SOFTWARE.
     };
 
     //getTargets - get a list of targets objects
-    this.getTargets = function () {
-      return targets;
+    this.getTargets = function ( serialize ) {
+      if ( serialize ) {
+        var sTargets = [];
+        for ( var i=0, l=targets.length; i<l; ++i ) {
+          sTargets.push( targets[i].export() );
+        } 
+        return sTargets;
+      }
+      else {
+        return targets;
+      }
     };
 
     //getTarget - get a target object by its id
@@ -511,33 +629,32 @@ THE SOFTWARE.
      ****************************************************************/
     //import - Import project data
     this.importProject = function ( projectData ) {
+      projectDetails = projectData.project;
+      if ( projectData.targets ) {
+        for ( var i=0, l=projectData.targets.length; i<l; ++i ) {
+          var t = new Target();
+          t.import( projectData.targets[ i ] );
+          that.addTarget( t );
+        }
+      }
+      if ( projectData.media ) {
+        for ( var i=0, l=projectData.media.length; i<l; ++i ) {
+          var m = new Media();
+          m.import( projectData.media[ i ] );
+          that.addMedia( m );
+        }
+      }
     };
 
     //export - Export project data
     this.exportProject = function () {
       var exportMedia = [];
       for ( var m=0, lm=medias.length; m<lm; ++m ) {
-        var exportTracks = [], media = medias[m], mediaTracks = media.getTracks();
-        for ( var t=0, lt=mediaTracks.length; t<lt; ++t ) {
-          var exportTrackEvents = [], track = mediaTracks[t], trackEvents = track.getTrackEvents();
-          for ( var te, lte=trackEvents.length; te<lte; ++te ) {
-            exportTrackEvents.push( trackEvents[ trackEvents[ te ] ] );
-          }
-          exportTracks.push({
-            name: track.getName(),
-            trackEvents: exportTrackEvents
-          });
-        }
-        exportMedia.push({
-          name: media.getName(),
-          url: media.getUrl(),
-          target: media.getTarget(),
-          tracks: exportTracks,
-        });
+        exportMedia.push( medias[ m ].export() );
       }
       var projectData = {
         project: projectDetails,
-        targets: 
+        targets: that.getTargets( true ),
         media: exportMedia,
       };
       return projectData;
@@ -623,7 +740,6 @@ THE SOFTWARE.
       mediaByName[ mediaName ] = media;
 
       media.setButter( that );
-      that.trigger( "mediaadded", media );
       if ( !currentMedia ) {
         that.setMedia( media );
       } //if
