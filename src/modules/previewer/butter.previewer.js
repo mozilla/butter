@@ -107,8 +107,8 @@
               } );
             } else if( children[ i ].getAttribute( "data-butter" ) === "media" ) {
               that.addMedia( { 
-                name: children[ i ].id, 
-                media: userSetMedia
+                target: children[ i ].id, 
+                url: userSetMedia
               } );
             } // else
 
@@ -124,12 +124,11 @@
 
       // buildPopcorn function, builds an instance of popcorn in the iframe and also
       // a local version of popcorn
-      buildPopcorn: function( videoTarget, callback ) {
-
-        videoURL = this.getCurrentMedia().getMedia();
+      buildPopcorn: function( media, callback ) {
+        videoURL = media.getUrl();
 
         // default to first butter-media tagged object if none is specified
-        videoTarget = videoTarget.getName();
+        videoTarget = media.getTarget();
 
         var bpIframe = ( iframe.contentWindow || iframe.contentDocument ).document;
         
@@ -395,15 +394,14 @@
         } );
 
         this.listen( "mediachanged", function( e ) {
-          that.buildPopcorn( butter.getAllMedia()[ 0 ] );
+          console.log(e.data.getUrl());
+          that.buildPopcorn( e.data );
         } );
 
         this.listen( "mediatimeupdate", function( event ) {
         
-          if ( event.domain === "previewer" ) {
             iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].currentTime( event.data.currentTime() );
-          }
-        } );
+        }, "timeline" );
 
       } // fillIframe
     } // exnteds

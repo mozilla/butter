@@ -42,16 +42,14 @@
       
 
     var addTrack2 = function() {
-        console.log( track.getTrackEvent( 0 ) );
-        track.removeTrackEvent( track.getTrackEvent( 0 ) );
-        console.log( track.getTrackEvent( 0 ) );
+        track.removeTrackEvent( track.getTrackEvents()[ 0 ] );
       }
 
     var changeMedia = function() {
       butter.unlisten( "trackeventadded", butter.teAdded );
       var media = butter.addMedia( { 
-                name: "outerVideo", 
-                media: "http://clips.vorwaerts-gmbh.de/VfE.ogv" 
+                target: "outerVideo", 
+                url: "http://clips.vorwaerts-gmbh.de/VfE.ogv" 
               } );
       
       butter.setMedia( media );
