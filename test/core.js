@@ -59,20 +59,20 @@
 
   test( "Create Media object", function () {
     expect(2);
-    var m1 = new Butter.Media( { name: "Media 1", media: document.getElementById('audio-test') } );
+    var m1 = new Butter.Media( { name: "Media 1", target: 'audio-test', url: 'www.google.ca' } );
     ok( m1.getName() === "Media 1", "Name is correct" );
-    ok( m1.getMedia() === document.getElementById('audio-test'), "Media element is correct" );
+    ok( m1.getTarget() === 'audio-test' && m1.getUrl() === 'www.google.ca', "Media storage is correct" );
   });
 
   test( "Add, retrieve, use, and remove Media object", function () {
-    expect(15);
+    expect(16);
 
     var mediaState = 0;
 
     var butter = new Butter();
     var mediaEventState = 0;
 
-    var m1 = new Butter.Media( { name: "Media 1", media: document.getElementById('audio-test') } );
+    var m1 = new Butter.Media( { name: "Media 1", target: 'audio-test', url: 'www.google.ca' } );
 
     butter.listen("mediaadded", function ( media ) {
       mediaEventState--;
@@ -105,12 +105,18 @@
     ok( mediaState[0] === 2 && mediaState[1] === m1, "mediachanged event received" );
 
     
-    var mediaContent = m1.getMedia();
-    butter.listen( "mediacontentchanged", function ( media ) {
-      mediaContent = media.data.getMedia();
+    var mediaContent = m1.getUrl();
+    var mediaTarget = m1.getTarget();
+    butter.listen( "mediacontentchanged", function ( e ) {
+      mediaContent = e.data.getUrl();
     });
-    m1.setMedia( "audio-test" );
-    ok( mediaContent === "audio-test", "Media content changed properly" );
+    butter.listen( "mediatargetchanged", function ( e ) {
+      mediaTarget = e.data.getTarget();
+    });
+    m1.setTarget( "audio-foo" );
+    m1.setUrl( "www.mozilla.org" );
+    ok( mediaTarget === "audio-foo", "Media target changed properly" );
+    ok( mediaContent === "www.mozilla.org", "Media content changed properly" );
 
     butter.removeMedia( m2 );
     ok( mediaState[0] === 0 && mediaState[1] === m2, "mediaremoved event received" );
