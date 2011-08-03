@@ -406,10 +406,9 @@
 
         this.listen( "mediatimeupdate", function( event ) {
         
-          if ( event.domain === "previewer" ) {
-            iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].currentTime( e.data.currentTime() );
+            iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].currentTim
           }
-        } );
+        }, "timeline" );
 
       } // fillIframe
     } // exnteds
