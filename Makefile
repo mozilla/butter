@@ -25,6 +25,7 @@ JS_LIBS := \
 JS_SRCS := \
   $(SOURCE_DIR)/butter.js \
   $(MODULES_DIR)/butter.comm.js \
+  $(MODULES_DIR)/plugintray/butter.plugintray.js \
   $(MODULES_DIR)/eventeditor/butter.eventeditor.js \
   $(MODULES_DIR)/previewer/butter.previewer.js \
   $(MODULES_DIR)/timeline/butter.timeline.js
