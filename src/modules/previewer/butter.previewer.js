@@ -143,7 +143,7 @@
 
         players[ "youtu" ] = function() {
           bpIframe.getElementById( videoTarget ).innerHTML = "";
-          videoString[ that.getCurrentMedia().getId() ] = "popcorn" + that.getCurrentMedia().getId() + " = Popcorn( Popcorn.youtube( '" + videoTarget + "', '" +
+          videoString[ media.getId() ] = "popcorn" + media.getId() + " = Popcorn( Popcorn.youtube( '" + videoTarget + "', '" +
             videoURL + "', {\n" + 
             "width: 430, height: 300\n" + 
           "} ) );\n";
@@ -151,7 +151,7 @@
 
         players[ "vimeo " ] = function() {
           bpIframe.getElementById( videoTarget ).innerHTML = "";
-          videoString[ that.getCurrentMedia().getId() ] = "popcorn" + that.getCurrentMedia().getId() + " = Popcorn( Popcorn.vimeo( '" + videoTarget + "', '" +
+          videoString[ media.getId() ] = "popcorn" + media.getId() + " = Popcorn( Popcorn.vimeo( '" + videoTarget + "', '" +
           videoURL + "', {\n" +
             "css: {\n" +
               "width: '430px',\n" +
@@ -162,18 +162,18 @@
 
         players[ "soundcloud" ] = function() {
           bpIframe.getElementById( videoTarget ).innerHTML = "";
-          videoString[ that.getCurrentMedia().getId() ] = "popcorn" + that.getCurrentMedia().getId() + " = Popcorn( Popcorn.soundcloud( '" + videoTarget + "'," +
+          videoString[ media.getId() ] = "popcorn" + media.getId() + " = Popcorn( Popcorn.soundcloud( '" + videoTarget + "'," +
           " '" + videoURL + "' ) );\n";
         };
 
         players[ "baseplayer" ] = function() {
           bpIframe.getElementById( videoTarget ).innerHTML = "";
-          videoString[ that.getCurrentMedia().getId() ] = "popcorn" + that.getCurrentMedia().getId() + " = Popcorn( Popcorn.baseplayer( '" + videoTarget + "' ) );\n";
+          videoString[ media.getId() ] = "popcorn" + media.getId() + " = Popcorn( Popcorn.baseplayer( '" + videoTarget + "' ) );\n";
         };
 
         players[ undefined ] = function() {
-          var src = document.createElement( "source" ),
-              video = document.createElement( "video" );
+          var src = bpIframe.createElement( "source" ),
+              video = bpIframe.createElement( "video" );
           src.src = videoURL;
 
           video.style.width = bpIframe.getElementById( videoTarget ).style.width;
@@ -186,7 +186,7 @@
 
           var vidId = "#" + video.id;      
 
-          videoString[ that.getCurrentMedia().getId() ] = "popcorn" + that.getCurrentMedia().getId() + " = Popcorn( '" + vidId + "');\n";
+          videoString[ media.getId() ] = "popcorn" + media.getId() + " = Popcorn( '" + vidId + "');\n";
         }; 
 
         // call certain player function depending on the regexResult
