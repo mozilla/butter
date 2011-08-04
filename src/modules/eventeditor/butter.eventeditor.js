@@ -57,6 +57,8 @@ THE SOFTWARE.
       } else if ( binding === "bindFrame" ) {
 
         editorWindow = document.createElement( "iframe" );
+        editorWindow.style.width = editorWidth;
+        editorWindow.style.height = editorHeight;
         setupServer();
         editorWindow.src = editorSrc;
         editorTarget.appendChild( editorWindow );
@@ -238,5 +240,6 @@ THE SOFTWARE.
     }; //setEditorDims
 
   }); //eventeditor
+
 })( window, window.document, Butter );
 

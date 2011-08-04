@@ -82,16 +82,47 @@ THE SOFTWARE.
 
       trackEvent.track = that;
       trackEvent.setButter( butter );
-      butter.trigger( "trackeventadded", trackEvent );
       return trackEvent;
     }; //addTrackEvent
 
     this.setButter = function ( b ) {
       butter = b;
+      if ( butter ) {
+        butter.trigger( "trackadded", that );
+        var events = that.getTrackEvents();
+        for ( var i=0, l=events.length; i<l; ++i ) {
+          events[i].setButter( butter );
+        } //for
+      }
     };
 
     this.getButter = function ()  {
       return butter;
+    };
+
+    this.importJSON = function ( importData ) {
+      if ( importData.name ) {
+        name = importData.name;
+      }
+      if ( importData.trackEvents ) {
+        var importTrackEvents = importData.trackEvents;
+        for ( var i=0, l=importTrackEvents.length; i<l; ++i ) {
+          var newTrackEvent = new TrackEvent();
+          newTrackEvent.importJSON( importTrackEvents[ i ] );
+          that.addTrackEvent( newTrackEvent );
+        }
+      }
+    };
+
+    this.exportJSON = function () {
+      var exportJSONTrackEvents = [];
+      for ( var i=0, l=trackEvents.length; i<l; ++i ) {
+        exportJSONTrackEvents.push( trackEvents[ i ].exportJSON() );
+      }
+      return {
+        name: name,
+        trackEvents: exportJSONTrackEvents
+      };
     };
 
   }; //Track
@@ -102,7 +133,8 @@ THE SOFTWARE.
   var numTrackEvents = 0;
   var TrackEvent = function ( options ) {
     var id = numTrackEvents++,
-        butter = undefined;
+        butter = undefined,
+        that = this;
 
     options = options || {};
     var name = options.name || 'Track' + Date.now();
@@ -123,10 +155,32 @@ THE SOFTWARE.
 
     this.setButter = function ( b ) {
       butter = b;
+      butter && butter.trigger( "trackeventadded", that );
     };
 
     this.getButter = function ()  {
       return butter;
+    };
+
+    this.importJSON = function ( importData ) {
+      this.start = importData.start || 0;
+      this.end = importData.end || 0;
+      this.type = importData.type;
+      if ( importData.name ) {
+        name = importData.name;
+      }
+      this.popcornOptions = importData.popcornOptions;
+    };
+
+    this.exportJSON = function () {
+      return {
+        start: this.start,
+        end: this.end,
+        type: this.type,
+        popcornOptions: this.popcornOptions,
+        track: this.track ? this.track.getName() : undefined,
+        name: name
+      };
     };
 
   }; //TrackEvent
@@ -149,6 +203,27 @@ THE SOFTWARE.
     this.getId = function () {
       return id;
     }; //getId
+
+    this.importJSON = function ( importData ) {
+      if ( importData.name ) {
+        name = importData.name
+      }
+      this.object = importData.object
+    };
+
+    this.exportJSON = function () {
+      var obj;
+      try {
+        obj = JSON.stringify( this.object );
+      }
+      catch ( e ) {
+        obj = this.object.toString();
+      }
+      return {
+        name: name,
+        object: obj
+      };
+    };
   }; //Target
 
   /****************************************************************************
@@ -201,6 +276,13 @@ THE SOFTWARE.
 
     this.setButter = function ( b ) {
       butter = b;
+      if ( butter ) {
+        butter.trigger( "mediaadded", that );
+        var tracks = that.getTracks();
+        for ( var i=0, l=tracks.length; i<l; ++i ) {
+          tracks[i].setButter( butter );
+        } //for
+      }
     };
 
     this.getButter = function ()  {
@@ -214,11 +296,6 @@ THE SOFTWARE.
       tracksByName[ track.getName() ] = track;
       tracks.push( track );
       track.setButter( butter );
-      var events = track.getTrackEvents();
-      for ( var i=0, l=events.length; i<l; ++i ) {
-        butter.trigger( "trackeventadded", events[i] );
-      } //for
-      butter && butter.trigger( "trackadded", track );
       return track;
     }; //addTrack
 
@@ -256,7 +333,7 @@ THE SOFTWARE.
       return undefined;    
     }; //removeTrack
 
-    this.currentTime = function ( time ) {
+    this.currentTime = function ( time) {
       if ( time ) {
         currentTime = time;
         butter && butter.trigger("mediatimeupdate", that);
@@ -271,6 +348,38 @@ THE SOFTWARE.
       }
       return duration;
     }; //duration
+
+    this.importJSON = function ( importData ) {
+      if ( importData.name ) {
+        name = importData.name;
+      }
+
+      importData.target && that.setTarget( importData.target );
+      importData.url && that.setUrl( importData.url );
+
+      if ( importData.tracks ) {
+        var importTracks = importData.tracks;
+        for ( var i=0, l=importTracks.length; i<l; ++i ) {
+          var newTrack = new Track();
+          newTrack.importJSON( importTracks[ i ] );
+          that.addTrack( newTrack );
+        }
+      }
+    };
+
+    this.exportJSON = function () {
+      var exportJSONTracks = [];
+      for ( var i=0, l=tracks.length; i<l; ++i ) {
+        exportJSONTracks.push( tracks[ i ].exportJSON() );
+      }
+      return {
+        name: name,
+        url: url,
+        target: target,
+        duration: duration,
+        tracks: exportJSONTracks
+      };
+    };
 
     options.url && this.setUrl( options.url );
     options.target && this.setTarget( options.target );
@@ -289,6 +398,7 @@ THE SOFTWARE.
         currentMedia,
         targets = [],
         targetsByName = {},
+        projectDetails = {},
         that = this;
 
     this.id = "Butter" + numButters++;
@@ -496,8 +606,17 @@ THE SOFTWARE.
     };
 
     //getTargets - get a list of targets objects
-    this.getTargets = function () {
-      return targets;
+    this.getTargets = function ( serialize ) {
+      if ( serialize ) {
+        var sTargets = [];
+        for ( var i=0, l=targets.length; i<l; ++i ) {
+          sTargets.push( targets[i].exportJSON() );
+        } 
+        return sTargets;
+      }
+      else {
+        return targets;
+      }
     };
 
     //getTarget - get a target object by its id
@@ -508,22 +627,52 @@ THE SOFTWARE.
     /****************************************************************
      * Project methods
      ****************************************************************/
-    //import - Import project data
+    //importProject - Import project data
     this.importProject = function ( projectData ) {
+      projectDetails = projectData.project;
+      if ( projectData.targets ) {
+        for ( var i=0, l=projectData.targets.length; i<l; ++i ) {
+          var t = new Target();
+          t.importJSON( projectData.targets[ i ] );
+          that.addTarget( t );
+        }
+      }
+      if ( projectData.media ) {
+        for ( var i=0, l=projectData.media.length; i<l; ++i ) {
+          var m = new Media();
+          m.importJSON( projectData.media[ i ] );
+          that.addMedia( m );
+        }
+      }
     };
 
-    //export - Export project data
+    //exportProject - Export project data
     this.exportProject = function () {
-      var projectData;
+      var exportJSONMedia = [];
+      for ( var m=0, lm=medias.length; m<lm; ++m ) {
+        exportJSONMedia.push( medias[ m ].exportJSON() );
+      }
+      var projectData = {
+        project: projectDetails,
+        targets: that.getTargets( true ),
+        media: exportJSONMedia
+      };
       return projectData;
     };
 
     //setProjectDetails - set the details of the project
-    this.setProjectDetails = function () {
+    this.setProjectDetails = function ( key, value ) {
+      projectDetails[ key ] = value;
     };
 
     //getProjectDetails - get the projects details
-    this.getProjectDetails = function () {
+    this.getProjectDetails = function ( key ) {
+      if ( key ) {
+        return projectDetails[ key ];
+      }
+      else {
+        return projectDetails;
+      }
     };
 
     /****************************************************************
@@ -591,7 +740,6 @@ THE SOFTWARE.
       mediaByName[ mediaName ] = media;
 
       media.setButter( that );
-      that.trigger( "mediaadded", media );
       if ( !currentMedia ) {
         that.setMedia( media );
       } //if

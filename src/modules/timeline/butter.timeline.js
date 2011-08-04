@@ -247,6 +247,7 @@
             b.currentTime( currentMediaInstance.duration );
           }
         }
+        b.trigger( "mediatimeupdate", b, "previewer" );
       }
     }, false );
     document.addEventListener( "mouseup", function() {
@@ -254,7 +255,7 @@
       scrubberClicked = false;
     }, false );
 
-    this.listen( "timeupdate", function() {
+    this.listen( "mediatimeupdate", function( event ) {
 
       currentMediaInstance.scrubber.style.left = b.currentTime() / currentMediaInstance.duration * currentMediaInstance.container.offsetWidth;
     });

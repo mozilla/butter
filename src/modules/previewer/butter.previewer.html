@@ -6,7 +6,7 @@
 
       var butter = new Butter(),
           ready = false, ok,
-          DOMContent;
+          DOMContent, track;
       
       document.addEventListener( 'DOMContentLoaded', function ( e ) {
 
@@ -16,9 +16,9 @@
           popcornURL: "",
           media: "http://www.youtube.com/watch?v=xyd4oM3fMO4",
           callback: function() {
-            butter.buildPopcorn( "outerVideo", function() {
+
+            butter.buildPopcorn( butter.getAllMedia()[ 0 ], function() {
               var registry = butter.getRegistry();
-              console.log(registry);
             } );
           }
         } );
@@ -26,8 +26,8 @@
       }, false );
 
       var addTrack = function( type ) {
-        
-        var track = butter.getTracks()[ 0 ] || butter.addTrack( new Butter.Track() );
+
+        track = butter.getTracks()[ 0 ] || butter.addTrack( new Butter.Track() );
         butter.addTrackEvent( track, new Butter.TrackEvent( {
           start: 1, end: 100, type: type, popcornOptions: {
             start: 1,
@@ -40,28 +40,18 @@
 
       
 
-    var addTrack2 = function( type ) {
-    
-        var track = butter.getTracks()[ 0 ] || butter.addTrack( new Butter.Track() );
-        butter.addTrackEvent( track, new Butter.TrackEvent( {
-          start: 1, end: 100, type: type, popcornOptions: {
-            start: 1,
-            end: 20,
-            src: "https://www.drumbeat.org/media//images/drumbeat-logo-splash.png",
-            target: butter.getTargets()[ 0 ].getName()
-          }
-        } ) );
+    var addTrack2 = function() {
+        track.removeTrackEvent( track.getTrackEvent( 0 ) );
       }
 
     var changeMedia = function() {
       butter.unlisten( "trackeventadded", butter.teAdded );
       var media = butter.addMedia( { 
-                name: "outerVideo", 
-                media: "http://clips.vorwaerts-gmbh.de/VfE.ogv" 
+                target: "outerVideo", 
+                url: "http://clips.vorwaerts-gmbh.de/VfE.ogv" 
               } );
-      
-      butter.setMedia( media );
 
+      butter.setMedia( media );
     }
 
     </script>
@@ -69,7 +59,7 @@
   <body>
     <iframe id="notIframe" style="width:100%;height:500px"></iframe>
     <button id="btn" onClick="addTrack( 'footnote' );"> Click to add a footnote </butter>
-    <button id="btn" onClick="addTrack2( 'image' );"> Click to add an image </butter>
+    <button id="btn" onClick="addTrack2();"> Click to remove a footnote </butter>
     <button id="btn" onClick="changeMedia();"> Click to change media </butter>
     <div>
     <textbox ></textbox>
