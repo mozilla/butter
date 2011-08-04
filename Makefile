@@ -13,6 +13,9 @@ MODULES_DIR := $(SOURCE_DIR)/modules
 EXTERNAL_DIR := $(SRC_DIR)/external
 TOOLS_DIR := $(SRC_DIR)/tools
 
+MISC_LIBS := \
+  $(MODULES_DIR)/eventeditor/defaultEditor.html
+
 JS_LIBS := \
   $(EXTERNAL_DIR)/jquery/jquery.js \
   $(EXTERNAL_DIR)/jquery-ui/jquery-ui.min.js \
@@ -24,15 +27,14 @@ JS_SRCS := \
   $(MODULES_DIR)/butter.comm.js \
   $(MODULES_DIR)/eventeditor/butter.eventeditor.js \
   $(MODULES_DIR)/previewer/butter.previewer.js \
-  $(MODULES_DIR)/timeline/butter.timeline.js \
-  $(MODULES_DIR)/butter.testmodule.js
+  $(MODULES_DIR)/timeline/butter.timeline.js
 
 CSS_SRCS := \
   $(EXTERNAL_DIR)/jquery-ui/jquery-ui-1.8.5.custom.css \
   $(EXTERNAL_DIR)/trackLiner/trackLiner.css
 
 compile = java -jar $(TOOLS_DIR)/closure/compiler.jar \
-                    --js $(BUTTER_DIST) \
+                    $(shell for js in $(JS_SRCS) ; do echo --js $$js ; done) \
 	                  --compilation_level SIMPLE_OPTIMIZATIONS \
 	                  --js_output_file $(1)
 
@@ -56,6 +58,7 @@ $(BUTTER_DIST): $(DIST_DIR)
 	@@echo "Building $(BUTTER_DIST)"
 	@@cp $(CSS_SRCS) $(DIST_CSS_DIR)
 	@@cp $(JS_LIBS) $(DIST_LIB_DIR)
+	@@cp $(MISC_LIBS) $(DIST_LIB_DIR)
 	@@cat $(JS_SRCS) > $(BUTTER_DIST)
 
 $(DIST_DIR):

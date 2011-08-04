@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 **********************************************************************************/
 
-(function( window, document, undefined, Butter ) {
+(function( window, document, Butter, undefined ) {
 
   Butter.registerModule( "eventeditor", (function() {
 
@@ -57,6 +57,8 @@ THE SOFTWARE.
       } else if ( binding === "bindFrame" ) {
 
         editorWindow = document.createElement( "iframe" );
+        editorWindow.style.width = editorWidth;
+        editorWindow.style.height = editorHeight;
         setupServer();
         editorWindow.src = editorSrc;
         editorTarget.appendChild( editorWindow );
@@ -244,5 +246,4 @@ THE SOFTWARE.
     }
   })());
 
-})( window, document, undefined, Butter );
-
+})( window, window.document, Butter );
