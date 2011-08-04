@@ -346,7 +346,7 @@
   });
 
   test( "Target serialization", function () {
-    expect(6);
+    expect(5);
 
     var butter = new Butter();
     butter.addMedia();
@@ -357,11 +357,65 @@
     var sTargs = butter.getTargets( true );
     var targs = butter.getTargets();
     ok( sTargs[0].name === targs[0].getName(), "simple target name" ); 
-    ok( sTargs[0].id === targs[0].getId(), "simple target id" );
     ok( sTargs[1].name === targs[1].getName(), "second target name" ); 
     ok( JSON.parse(sTargs[0].object) === targs[0].object, "simple target object" );
     ok( JSON.parse(sTargs[1].object).foo === 'bar', "less simple target object" );
     ok( sTargs[2].object !== undefined, "complicated target object" );
+  });
+
+  test(" Import/Export", function () {
+    expect( 13 );
+
+    var butter = new Butter();
+    var m1 = butter.addMedia({ url:'www.test-url-1.com', target:'test-target-1' });
+    var m2 = butter.addMedia({ url:'www.test-url-2.com', target:'test-target-2' });
+    var t1 = butter.addTrack();
+    var t2 = butter.addTrack();
+    butter.setMedia( m2 );
+    var t3 = butter.addTrack();
+    var t4 = butter.addTrack();
+
+    var te1 = t4.addTrackEvent({ start: 2, end: 6 });
+
+    butter.setProjectDetails( 'test-key', 'test-value' );
+
+    butter.addTarget({ object: 'beep' });
+
+    var exported = butter.exportProject();
+
+    var secondButter = new Butter();
+    var teEvents = 0, tEvents = 0, mEvents = 0;
+    secondButter.listen( "mediaadded", function () {
+      mEvents++;
+    });
+    secondButter.listen( "trackadded", function () {
+      tEvents++;
+    });
+    secondButter.listen( "trackeventadded", function () {
+      teEvents++;
+    });
+
+    secondButter.importProject( exported );
+    var allMedia = secondButter.getAllMedia();
+    ok( allMedia.length === 2, "right number of media objects" );
+    ok( allMedia[0].getUrl() === 'www.test-url-1.com', "media 1 url is correct" );
+    ok( allMedia[0].getTarget() === 'test-target-1', "media 1 target is correct" );
+    ok( allMedia[1].getUrl() === 'www.test-url-2.com', "media 2 url is correct" );
+    ok( allMedia[1].getTarget() === 'test-target-2', "media 2 target is correct" );
+
+    ok( allMedia[0].getTracks().length === 2, "media 1 has right number of tracks" );
+    ok( allMedia[1].getTracks().length === 2, "media 2 has right number of tracks" );
+
+    ok( allMedia[1].getTracks()[1].getTrackEvents()[0].end === 6, "trackevent is correct" );
+
+    ok( butter.getProjectDetails( 'test-key' ) === 'test-value', "project details are correct" );
+
+    ok( butter.getTargets()[0].object === 'beep', "target is correct" );
+
+    ok( teEvents === 1, "one trackeventadded events" );
+    ok( tEvents === 4, "four trackadded events" );
+    ok( mEvents === 2, "two mediaadded events" );
+
   });
 
 })(window, document, undefined, Butter);
