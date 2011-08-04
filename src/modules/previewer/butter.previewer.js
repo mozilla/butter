@@ -174,6 +174,7 @@
         players[ undefined ] = function() {
           var src = bpIframe.createElement( "source" ),
               video = bpIframe.createElement( "video" );
+
           src.src = videoURL;
 
           video.style.width = bpIframe.getElementById( videoTarget ).style.width;
@@ -371,7 +372,7 @@
 
         this.listen( "trackeventadded", function ( e ) {
           e = e.data;
-          console.log(media.getId());
+
           popcornReady( e, function( framePopcorn ) {
 
             if( !popcorns[ media.getId() ] ) {
