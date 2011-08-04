@@ -70,7 +70,7 @@ THE SOFTWARE.
 
           butter.listen( "trackeventupdated", updateEditor );
           butter.listen( "targetadded", function() {
-            commServer.send( "editorCommLink", butter.getTargets(), "updatedomtargets" );
+            commServer.send( "editorCommLink", butter.getTargets(), "domtargetsupdated" );
           });
           commServer.listen( "editorCommLink", "okayclicked", function( newOptions ){
 

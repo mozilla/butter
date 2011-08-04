@@ -18,7 +18,7 @@
           constructDefaultEditor ( message.trackEvent );
         });
         
-        client.listen( "updatedomtargets", function( message ) {
+        client.listen( "domtargetsupdated", function( message ) {
           targets = message;
         });
 
