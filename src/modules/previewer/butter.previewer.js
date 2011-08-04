@@ -396,7 +396,7 @@
         } );
 
         this.listen( "mediachanged", function( e ) {
-          that.buildPopcorn( butter.getCurrentMedia() );
+          that.buildPopcorn( that.getCurrentMedia() );
         } );
 
         this.listen( "mediatimeupdate", function( event ) {
