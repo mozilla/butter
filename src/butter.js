@@ -496,8 +496,28 @@ THE SOFTWARE.
     };
 
     //getTargets - get a list of targets objects
-    this.getTargets = function () {
-      return targets;
+    this.getTargets = function ( serialize ) {
+      if ( serialize ) {
+        var sTargets = [];
+        for ( var i=0, l=targets.length; i<l; ++i ) {
+          var obj = targets[i].object;
+          try {
+            obj = JSON.stringify( obj );
+          }
+          catch ( e ) {
+            obj = obj.toString();
+          }
+          sTargets.push({
+            name: targets[i].getName(),
+            id: targets[i].getId(),
+            object: obj,
+          });
+        } 
+        return sTargets;
+      }
+      else {
+        return targets;
+      }
     };
 
     //getTarget - get a target object by its id

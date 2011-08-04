@@ -345,4 +345,23 @@
 
   });
 
+  test( "Target serialization", function () {
+    expect(6);
+
+    var butter = new Butter();
+    butter.addMedia();
+    butter.addTarget({ name:'T1', object: 'FunFunFun!' });
+    butter.addTarget({ name:'T2', object: {foo: 'bar'} });
+    butter.addTarget({ name:'T3', object: document.createElement('div') });
+    
+    var sTargs = butter.getTargets( true );
+    var targs = butter.getTargets();
+    ok( sTargs[0].name === targs[0].getName(), "simple target name" ); 
+    ok( sTargs[0].id === targs[0].getId(), "simple target id" );
+    ok( sTargs[1].name === targs[1].getName(), "second target name" ); 
+    ok( JSON.parse(sTargs[0].object) === targs[0].object, "simple target object" );
+    ok( JSON.parse(sTargs[1].object).foo === 'bar', "less simple target object" );
+    ok( sTargs[2].object !== undefined, "complicated target object" );
+  });
+
 })(window, document, undefined, Butter);
