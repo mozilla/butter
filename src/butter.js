@@ -510,7 +510,7 @@ THE SOFTWARE.
           sTargets.push({
             name: targets[i].getName(),
             id: targets[i].getId(),
-            object: obj,
+            object: obj
           });
         } 
         return sTargets;

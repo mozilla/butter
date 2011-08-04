@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 **********************************************************************************/
 
-(function( window, document, undefined, Butter ) {
+(function( window, document, Butter, undefined ) {
 
   Butter.registerModule( "eventeditor", (function() {
 
@@ -246,3 +246,4 @@ THE SOFTWARE.
     }
   })());
 
+})( window, window.document, Butter );
