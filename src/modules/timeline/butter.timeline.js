@@ -302,6 +302,8 @@ Butter.registerModule( "timeline", {
       delete currentMediaInstance.trackLinerTrackEvents[ trackEvent.getId() ];
     });
 
+    var butter = this;
+
     this.listen( "mediaadded", function( event ) {
 
       mediaInstances[ event.data.getId() ] = new MediaInstance( event.data );
@@ -310,6 +312,7 @@ Butter.registerModule( "timeline", {
     this.listen( "mediaready", function( event ) {
 
       mediaInstances[ event.data.getId() ].init();
+      butter.trigger( "timelineready", {}, "timeline" );
     });
 
     this.listen( "mediachanged", function( event ) {
@@ -317,6 +320,7 @@ Butter.registerModule( "timeline", {
       currentMediaInstance && currentMediaInstance.hide();
       currentMediaInstance = mediaInstances[ event.data.getId() ];
       currentMediaInstance && currentMediaInstance.show();
+      butter.trigger( "timelineready", {}, "timeline" );
     });
 
     this.listen( "mediaremoved", function( event ) {

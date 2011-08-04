@@ -45,6 +45,9 @@
         viewPort.appendChild( timeLineContainer );
         document.body.appendChild( viewPort );
         b.timeline({ target: timeLineContainer });
+        b.listen( "timelineready", function () {
+          console.log("timeline ready!");
+        });
         new pluginTray({ target: pluginTrayContainer, plugins: [ "footnote", "subtitle" ] }).addPlugin( "sugar" );
 
         var media1 = b.addMedia({ name: "video1", media: "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm" });

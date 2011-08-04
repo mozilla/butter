@@ -9,7 +9,7 @@
     <script type="text/javascript" >
       document.addEventListener("DOMContentLoaded", function() {
         var b = new Butter();
-        b.plugintray( { target: "plugin-tray-div" } );
+        b.plugintray( { target: "plugin-tray-div", pattern: '<li><a href="#" title="$type"><span></span>$type</a></li>' } );
         b.addPlugin( { type: "footnote" } );
         b.addPlugin( { type: "googlemap" } );
         b.addPlugin( { type: "nonsense" } );
@@ -17,6 +17,6 @@
     </script>
   </head>
   <body>
-    <div id="plugin-tray-div"></div>
+    <ul id="plugin-tray-div"></ul>
   </body>
 </html>
