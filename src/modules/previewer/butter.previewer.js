@@ -144,7 +144,7 @@
 
         players[ "youtu" ] = function() {
           bpIframe.getElementById( videoTarget ).innerHTML = "";
-          videoString[ that.getCurrentMedia().getId() ] = "popcorn" + that.getCurrentMedia().getId() + " = Popcorn( Popcorn.youtube( '" + videoTarget + "', '" +
+          videoString[ media.getId() ] = "popcorn" + media.getId() + " = Popcorn( Popcorn.youtube( '" + videoTarget + "', '" +
             videoURL + "', {\n" + 
             "width: 430, height: 300\n" + 
           "} ) );\n";
@@ -152,7 +152,7 @@
 
         players[ "vimeo " ] = function() {
           bpIframe.getElementById( videoTarget ).innerHTML = "";
-          videoString[ that.getCurrentMedia().getId() ] = "popcorn" + that.getCurrentMedia().getId() + " = Popcorn( Popcorn.vimeo( '" + videoTarget + "', '" +
+          videoString[ media.getId() ] = "popcorn" + media.getId() + " = Popcorn( Popcorn.vimeo( '" + videoTarget + "', '" +
           videoURL + "', {\n" +
             "css: {\n" +
               "width: '430px',\n" +
@@ -163,13 +163,13 @@
 
         players[ "soundcloud" ] = function() {
           bpIframe.getElementById( videoTarget ).innerHTML = "";
-          videoString[ that.getCurrentMedia().getId() ] = "popcorn" + that.getCurrentMedia().getId() + " = Popcorn( Popcorn.soundcloud( '" + videoTarget + "'," +
+          videoString[ media.getId() ] = "popcorn" + media.getId() + " = Popcorn( Popcorn.soundcloud( '" + videoTarget + "'," +
           " '" + videoURL + "' ) );\n";
         };
 
         players[ "baseplayer" ] = function() {
           bpIframe.getElementById( videoTarget ).innerHTML = "";
-          videoString[ that.getCurrentMedia().getId() ] = "popcorn" + that.getCurrentMedia().getId() + " = Popcorn( Popcorn.baseplayer( '" + videoTarget + "' ) );\n";
+          videoString[ media.getId() ] = "popcorn" + media.getId() + " = Popcorn( Popcorn.baseplayer( '" + videoTarget + "' ) );\n";
         };
 
         players[ undefined ] = function() {
@@ -188,7 +188,7 @@
 
           var vidId = "#" + video.id;      
 
-          videoString[ that.getCurrentMedia().getId() ] = "popcorn" + that.getCurrentMedia().getId() + " = Popcorn( '" + vidId + "');\n";
+          videoString[ media.getId() ] = "popcorn" + media.getId() + " = Popcorn( '" + vidId + "');\n";
         }; 
 
         // call certain player function depending on the regexResult
@@ -232,7 +232,7 @@
 
         popcornString += "}, false);";  
 
-        this.fillIframe( callback );
+        this.fillIframe( media, callback );
       },
 
       getPopcorn: function( callback ) {
@@ -281,7 +281,7 @@
     
       // fillIframe function used to populate the iframe with changes made by the user,
       // which is mostly managing track events added by the user
-      fillIframe: function( callback ) {
+      fillIframe: function( media, callback ) {
         
         var popcornScript, iframeHead, body,
             that = this, doc = ( iframe.contentWindow || iframe.contentDocument ).document;
@@ -309,7 +309,7 @@
         var popcornReady = function( e, callback2 ) {
 
           var popcornIframe = iframe.contentWindow || iframe.contentDocument;
-          var framePopcorn = popcornIframe[ "popcorn" + that.getCurrentMedia().getId() ];
+          var framePopcorn = popcornIframe[ "popcorn" + media.getId() ];
           
           if ( !framePopcorn ) {
             setTimeout( function() {
@@ -327,11 +327,11 @@
             if( framePopcorn.media.readyState >= 2 || framePopcorn.media.duration > 0 ) {
               that.duration( framePopcorn.media.duration );
               
-              that.trigger( "mediaready", that.getCurrentMedia() );
+              that.trigger( "mediaready", media );
               framePopcorn.media.addEventListener( "timeupdate", function() {
                 
                 that.currentTime( framePopcorn.media.currentTime );
-                that.trigger( "mediatimeupdate", that.getCurrentMedia() );                
+                that.trigger( "mediatimeupdate", media );                
               },false);
               callback && callback();
             } else {
@@ -348,10 +348,10 @@
 
           popcornReady( e, function( framePopcorn ) { 
 
-            if( !popcorns[ that.getCurrentMedia().getId() ] ) {
-                popcorns[ that.getCurrentMedia().getId() ] = framePopcorn;
+            if( !popcorns[ media.getId() ] ) {
+                popcorns[ media.getId() ] = framePopcorn;
             } else {
-              framePopcorn = popcorns[ that.getCurrentMedia().getId() ]; 
+              framePopcorn = popcorns[ media.getId() ]; 
             }
 
             framePopcorn.removeTrackEvent( butterIds[ e.getId() ] );
@@ -375,10 +375,10 @@
           e = e.data;
           popcornReady( e, function( framePopcorn ) {
 
-            if( !popcorns[ that.getCurrentMedia().getId() ] ) {
-              popcorns[ that.getCurrentMedia().getId() ] = framePopcorn;
+            if( !popcorns[ media.getId() ] ) {
+              popcorns[ media.getId() ] = framePopcorn;
             } else {
-              framePopcorn = popcorns[ that.getCurrentMedia().getId() ]; 
+              framePopcorn = popcorns[ media.getId() ]; 
             }
 
             // add track events to the iframe verison of popcorn
@@ -393,7 +393,7 @@
 
         this.listen( "trackeventremoved", function( e ) {
           var ifrme = iframe.contentWindow || iframe.contentDocument;
-          ifrme[ "popcorn" + that.getCurrentMedia().getId() ].removeTrackEvent( butterIds[ e.data.getId() ] );
+          ifrme[ "popcorn" + media.getId() ].removeTrackEvent( butterIds[ e.data.getId() ] );
         } );
 
         this.listen( "mediachanged", function( e ) {
@@ -402,7 +402,7 @@
 
         this.listen( "mediatimeupdate", function( event ) {
         
-            iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].currentTime( event.data.currentTime() );
+            iframe.contentWindow[ "popcorn" + media.getId() ].currentTime( event.data.currentTime() );
         }, "timeline" );
 
       } // fillIframe
