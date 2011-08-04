@@ -100,7 +100,7 @@ THE SOFTWARE.
       return butter;
     };
 
-    this.import = function ( importData ) {
+    this.importJSON = function ( importData ) {
       if ( importData.name ) {
         name = importData.name;
       }
@@ -108,20 +108,20 @@ THE SOFTWARE.
         var importTrackEvents = importData.trackEvents;
         for ( var i=0, l=importTrackEvents.length; i<l; ++i ) {
           var newTrackEvent = new TrackEvent();
-          newTrackEvent.import( importTrackEvents[ i ] );
+          newTrackEvent.importJSON( importTrackEvents[ i ] );
           that.addTrackEvent( newTrackEvent );
         }
       }
     };
 
-    this.export = function () {
-      var exportTrackEvents = [];
+    this.exportJSON = function () {
+      var exportJSONTrackEvents = [];
       for ( var i=0, l=trackEvents.length; i<l; ++i ) {
-        exportTrackEvents.push( trackEvents[ i ].export() );
+        exportJSONTrackEvents.push( trackEvents[ i ].exportJSON() );
       }
       return {
         name: name,
-        trackEvents: exportTrackEvents
+        trackEvents: exportJSONTrackEvents
       };
     };
 
@@ -162,7 +162,7 @@ THE SOFTWARE.
       return butter;
     };
 
-    this.import = function ( importData ) {
+    this.importJSON = function ( importData ) {
       this.start = importData.start || 0;
       this.end = importData.end || 0;
       this.type = importData.type;
@@ -172,7 +172,7 @@ THE SOFTWARE.
       this.popcornOptions = importData.popcornOptions;
     };
 
-    this.export = function () {
+    this.exportJSON = function () {
       return {
         start: this.start,
         end: this.end,
@@ -204,14 +204,14 @@ THE SOFTWARE.
       return id;
     }; //getId
 
-    this.import = function ( importData ) {
+    this.importJSON = function ( importData ) {
       if ( importData.name ) {
         name = importData.name
       }
       this.object = importData.object
     };
 
-    this.export = function () {
+    this.exportJSON = function () {
       var obj;
       try {
         obj = JSON.stringify( this.object );
@@ -349,7 +349,7 @@ THE SOFTWARE.
       return duration;
     }; //duration
 
-    this.import = function ( importData ) {
+    this.importJSON = function ( importData ) {
       if ( importData.name ) {
         name = importData.name;
       }
@@ -361,23 +361,23 @@ THE SOFTWARE.
         var importTracks = importData.tracks;
         for ( var i=0, l=importTracks.length; i<l; ++i ) {
           var newTrack = new Track();
-          newTrack.import( importTracks[ i ] );
+          newTrack.importJSON( importTracks[ i ] );
           that.addTrack( newTrack );
         }
       }
     };
 
-    this.export = function () {
-      var exportTracks = [];
+    this.exportJSON = function () {
+      var exportJSONTracks = [];
       for ( var i=0, l=tracks.length; i<l; ++i ) {
-        exportTracks.push( tracks[ i ].export() );
+        exportJSONTracks.push( tracks[ i ].exportJSON() );
       }
       return {
         name: name,
         url: url,
         target: target,
         duration: duration,
-        tracks: exportTracks,
+        tracks: exportJSONTracks
       };
     };
 
@@ -610,7 +610,7 @@ THE SOFTWARE.
       if ( serialize ) {
         var sTargets = [];
         for ( var i=0, l=targets.length; i<l; ++i ) {
-          sTargets.push( targets[i].export() );
+          sTargets.push( targets[i].exportJSON() );
         } 
         return sTargets;
       }
@@ -627,35 +627,35 @@ THE SOFTWARE.
     /****************************************************************
      * Project methods
      ****************************************************************/
-    //import - Import project data
+    //importProject - Import project data
     this.importProject = function ( projectData ) {
       projectDetails = projectData.project;
       if ( projectData.targets ) {
         for ( var i=0, l=projectData.targets.length; i<l; ++i ) {
           var t = new Target();
-          t.import( projectData.targets[ i ] );
+          t.importJSON( projectData.targets[ i ] );
           that.addTarget( t );
         }
       }
       if ( projectData.media ) {
         for ( var i=0, l=projectData.media.length; i<l; ++i ) {
           var m = new Media();
-          m.import( projectData.media[ i ] );
+          m.importJSON( projectData.media[ i ] );
           that.addMedia( m );
         }
       }
     };
 
-    //export - Export project data
+    //exportProject - Export project data
     this.exportProject = function () {
-      var exportMedia = [];
+      var exportJSONMedia = [];
       for ( var m=0, lm=medias.length; m<lm; ++m ) {
-        exportMedia.push( medias[ m ].export() );
+        exportJSONMedia.push( medias[ m ].exportJSON() );
       }
       var projectData = {
         project: projectDetails,
         targets: that.getTargets( true ),
-        media: exportMedia,
+        media: exportJSONMedia
       };
       return projectData;
     };
