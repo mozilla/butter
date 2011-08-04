@@ -18,7 +18,6 @@
           callback: function() {
             butter.buildPopcorn( "outerVideo", function() {
               var registry = butter.getRegistry();
-              console.log(registry);
             } );
           }
         } );
@@ -41,9 +40,7 @@
       
 
     var addTrack2 = function() {
-        console.log( track.getTrackEvent( 0 ) );
         track.removeTrackEvent( track.getTrackEvent( 0 ) );
-        console.log( track.getTrackEvent( 0 ) );
       }
 
     var changeMedia = function() {

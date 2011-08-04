@@ -170,8 +170,8 @@
         };
 
         players[ undefined ] = function() {
-          var src = document.createElement( "source" ),
-          video = document.createElement( "video" );
+          var src = bpIframe.createElement( "source" ),
+          video = bpIframe.createElement( "video" );
           src.src = videoURL;
 
           video.style.width = videoTarget.width;
