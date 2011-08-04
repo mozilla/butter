@@ -230,7 +230,7 @@
 
         popcornString += "}, false);";  
 
-        this.fillIframe( callback );
+        this.fillIframe( media, callback );
       },
 
       getPopcorn: function( callback ) {
@@ -279,7 +279,7 @@
     
       // fillIframe function used to populate the iframe with changes made by the user,
       // which is mostly managing track events added by the user
-      fillIframe: function( callback ) {
+      fillIframe: function( media, callback ) {
         
         var popcornScript, iframeHead, body,
             that = this, doc = ( iframe.contentWindow || iframe.contentDocument ).document;
@@ -307,7 +307,7 @@
         var popcornReady = function( e, callback2 ) {
 
           var popcornIframe = iframe.contentWindow || iframe.contentDocument;
-          var framePopcorn = popcornIframe[ "popcorn" + that.getCurrentMedia().getId() ];
+          var framePopcorn = popcornIframe[ "popcorn" + media.getId() ];
           
           if ( !framePopcorn ) {
             setTimeout( function() {
@@ -325,11 +325,11 @@
             if( framePopcorn.media.readyState >= 2 || framePopcorn.media.duration > 0 ) {
               that.duration( framePopcorn.media.duration );
               
-              that.trigger( "mediaready", that.getCurrentMedia() );
+              that.trigger( "mediaready", media );
               framePopcorn.media.addEventListener( "timeupdate", function() {
                 
                 that.currentTime( framePopcorn.media.currentTime );
-                that.trigger( "mediatimeupdate", that.getCurrentMedia() );                
+                that.trigger( "mediatimeupdate", media );                
               },false);
               callback && callback();
             } else {
@@ -346,10 +346,10 @@
 
           popcornReady( e, function( framePopcorn ) { 
 
-            if( !popcorns[ that.getCurrentMedia().getId() ] ) {
-                popcorns[ that.getCurrentMedia().getId() ] = framePopcorn;
+            if( !popcorns[ media.getId() ] ) {
+                popcorns[ media.getId() ] = framePopcorn;
             } else {
-              framePopcorn = popcorns[ that.getCurrentMedia().getId() ]; 
+              framePopcorn = popcorns[ media.getId() ]; 
             }
 
             framePopcorn.removeTrackEvent( butterIds[ e.getId() ] );
@@ -371,12 +371,13 @@
 
         this.listen( "trackeventadded", function ( e ) {
           e = e.data;
+          console.log(media.getId());
           popcornReady( e, function( framePopcorn ) {
 
-            if( !popcorns[ that.getCurrentMedia().getId() ] ) {
-              popcorns[ that.getCurrentMedia().getId() ] = framePopcorn;
+            if( !popcorns[ media.getId() ] ) {
+              popcorns[ media.getId() ] = framePopcorn;
             } else {
-              framePopcorn = popcorns[ that.getCurrentMedia().getId() ]; 
+              framePopcorn = popcorns[ media.getId() ]; 
             }
 
             // add track events to the iframe verison of popcorn
@@ -391,7 +392,7 @@
 
         this.listen( "trackeventremoved", function( e ) {
           var ifrme = iframe.contentWindow || iframe.contentDocument;
-          ifrme[ "popcorn" + that.getCurrentMedia().getId() ].removeTrackEvent( butterIds[ e.data.getId() ] );
+          ifrme[ "popcorn" + media.getId() ].removeTrackEvent( butterIds[ e.data.getId() ] );
         } );
 
         this.listen( "mediachanged", function( e ) {
@@ -401,7 +402,7 @@
         this.listen( "mediatimeupdate", function( event ) {
         
           if ( event.domain === "previewer" ) {
-            iframe.contentWindow[ "popcorn" + that.getCurrentMedia().getId() ].currentTime( event.data.currentTime() );
+            iframe.contentWindow[ "popcorn" + media.getId() ].currentTime( event.data.currentTime() );
           }
         } );
 
