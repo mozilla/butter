@@ -81,7 +81,7 @@ THE SOFTWARE.
       trackEvents.push( trackEvent );
 
       trackEvent.track = that;
-      trackEvent.setButter( butter );
+      butter && trackEvent.setButter( butter );
       return trackEvent;
     }; //addTrackEvent
 
@@ -295,7 +295,7 @@ THE SOFTWARE.
       } //if
       tracksByName[ track.getName() ] = track;
       tracks.push( track );
-      track.setButter( butter );
+      butter && track.setButter( butter );
       return track;
     }; //addTrack
 

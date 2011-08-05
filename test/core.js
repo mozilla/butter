@@ -346,6 +346,25 @@
 
   });
 
+  test( "Strange usage (setButter shortcutting)", function () {
+    expect(0);
+    var butter = new Butter(),
+        eventsFired = 0;
+    butter.listen( "trackeventadded", function () { eventsFired++ } );
+    butter.listen( "trackadded", function () { eventsFired++ } );
+    butter.listen( "mediaadded", function () { eventsFired++ } );
+
+    var m = new Butter.Media();
+    var t = new Butter.Track();
+    var te = new Butter.TrackEvent();
+
+    t.addTrackEvent( te );
+    m.addTrack( t );
+    butter.addMedia( m );
+
+    ok( eventsFired === 3, "events fired correctly" );
+  });
+
   test( "Target serialization", function () {
     expect(5);
 
