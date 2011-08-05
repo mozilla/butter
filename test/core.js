@@ -1,6 +1,7 @@
 /*global text,expect,ok,module,notEqual,Butter,test,window*/
 (function (window, document, undefined, Butter) {
 
+  module( "Media" );
   module( "Event Handling" );
 
   test( "Simple event handling", function () {
