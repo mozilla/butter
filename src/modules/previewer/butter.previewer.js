@@ -125,7 +125,8 @@
       // buildPopcorn function, builds an instance of popcorn in the iframe and also
       // a local version of popcorn
       buildPopcorn: function( media, callback ) {
-
+        var that = this;
+        // default to first butter-media tagged object if none is specified
         videoURL = media.getUrl();
 
         var bpIframe = ( iframe.contentWindow || iframe.contentDocument ).document;
@@ -182,8 +183,9 @@
           video.appendChild( src );
           video.controls = true;
           video.id = videoTarget + "-butter";
-          
+
           bpIframe.getElementById( videoTarget ).appendChild( video );
+
 
           var vidId = "#" + video.id;      
 
@@ -402,9 +404,7 @@
 
         this.listen( "mediatimeupdate", function( event ) {
         
-          if ( event.domain === "previewer" ) {
             iframe.contentWindow[ "popcorn" + media.getId() ].currentTime( event.data.currentTime() );
-          }
         }, "timeline" );
 
       } // fillIframe
