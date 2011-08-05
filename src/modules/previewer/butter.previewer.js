@@ -402,9 +402,7 @@
 
         this.listen( "mediatimeupdate", function( event ) {
         
-          if ( event.domain === "previewer" ) {
             iframe.contentWindow[ "popcorn" + media.getId() ].currentTime( event.data.currentTime() );
-          }
         }, "timeline" );
 
       } // fillIframe
