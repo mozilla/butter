@@ -28,10 +28,12 @@ THE SOFTWARE.
     
     var plugins = [],
         numPlugins = 0,
-        container;
+        container,
+        pattern;
     
     var Plugin = function ( options ) {
       var id = numPlugins++,
+          that = this,
           butter = undefined;
 
       options = options || {};
@@ -54,6 +56,23 @@ THE SOFTWARE.
         return butter;
       };
 
+      this.createElement = function ( pattern ) {
+        var pluginElement;
+        if ( !pattern ) {
+          pluginElement = document.createElement( "span" );
+          pluginElement.innerHTML = that.type + " ";
+        }
+        else {
+          var patternInstance = pattern.replace( /\$type/g, that.type );
+          var $pluginElement = $( patternInstance );
+          pluginElement = $pluginElement[ 0 ];
+        }
+        pluginElement.id = that.type;
+        pluginElement.setAttribute( "data-trackliner-type", "butterapp" );
+        $( pluginElement ).draggable({ helper: "clone", appendTo: "body", zIndex: 9001, revert: true, revertDuration: 0 });
+        return pluginElement;
+      };
+
     };
 
     return {
@@ -61,6 +80,7 @@ THE SOFTWARE.
       setup: function( options ) {
         options = options || {};
         container = document.getElementById( options.target ) || options.target;
+        pattern = options.pattern;
       },
 
       extend: {
@@ -75,12 +95,7 @@ THE SOFTWARE.
           plugin.setButter( this );
           this.trigger( "pluginadded", plugin );
           
-          var pluginElement = document.createElement( "span" );
-          pluginElement.innerHTML = plugin.type + " ";
-          pluginElement.id = plugin.type;
-          pluginElement.setAttribute( "data-trackliner-type", "butterapp" );
-          $( pluginElement ).draggable({ helper: "clone", appendTo: "body", zIndex: 9001, revert: true, revertDuration: 0 });
-          container.appendChild( pluginElement );
+          container.appendChild( plugin.createElement( pattern ) );
           
           return plugin;
         },
