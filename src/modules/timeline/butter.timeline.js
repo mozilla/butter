@@ -36,6 +36,16 @@ Butter.registerModule( "timeline", {
 
       }
       return seconds;
+    },
+    findAbsolutePosition = function( obj ) {
+	    var curleft = curtop = 0;
+	    if ( obj.offsetParent ) {
+		    do {
+			    curleft += obj.offsetLeft;
+			    curtop += obj.offsetTop;
+		    } while ( obj = obj.offsetParent );
+	    }
+	    return [ curleft, curtop ];
     };
 
     var scrubberClicked = false,
@@ -48,6 +58,7 @@ Butter.registerModule( "timeline", {
 
       this.container = document.createElement( "div" );
       this.container.style.width = "100%";
+      this.container.style.height = "100%";
       this.container.style.position = "relative";
       this.container.style.MozUserSelect = "none";
       this.container.style.webkitUserSelect = "none";
@@ -58,10 +69,11 @@ Butter.registerModule( "timeline", {
 
       this.tracks = document.createElement( "div" );
       this.tracks.style.width = "100%";
+      this.tracks.style.height = "100%";
 
       this.init = function() {
 
-        this.duration = b.duration();
+        this.duration = media.duration();
 
         this.trackLine = new TrackLiner({
           element: this.tracks,
@@ -87,15 +99,15 @@ Butter.registerModule( "timeline", {
         this.scrubber.style.height = "100%";
         this.scrubber.style.width = "1px";
         this.scrubber.style.position = "absolute";
-        this.scrubber.style.top = "0";
-        this.scrubber.style.left = "0";
+        this.scrubber.style.top = "0px";
+        this.scrubber.style.left = "0px";
         this.scrubber.style.zIndex = this.timeline.style.zIndex + 1;
         this.scrubber.style.backgroundColor = "red";
 
         this.userInteract = document.createElement( "div" );
         this.userInteract.style.position = "absolute";
-        this.userInteract.style.top = "0";
-        this.userInteract.style.left = "0";
+        this.userInteract.style.top = "0px";
+        this.userInteract.style.left = "0px";
         this.userInteract.style.height = this.timeline.style.height;
         this.userInteract.style.width = "100%";
         this.userInteract.style.zIndex = this.scrubber.style.zIndex + 1;
@@ -107,8 +119,8 @@ Butter.registerModule( "timeline", {
         this.userInteract.addEventListener( "mousedown", function( event ) {
 
           scrubberClicked = true;
-          self.scrubber.style.left = ( event.pageX - ( self.container.offsetLeft - event.rangeParent.scrollLeft ) );
-          b.currentTime( ( event.pageX - ( self.container.offsetLeft - scrollLeft ) + self.container.scrollLeft ) / self.container.offsetWidth * this.duration );
+          b.currentTime( ( ( event.pageX - ( self.container.offsetLeft - scrollLeft ) + self.container.scrollLeft ) - findAbsolutePosition( self.container )[ 0 ] ) / self.container.offsetWidth * self.duration );
+          b.trigger( "mediatimeupdate", b, "timeline" );
         }, false );
 
         this.container.appendChild( this.scrubber );
@@ -229,23 +241,23 @@ Butter.registerModule( "timeline", {
 
       if ( scrubberClicked ) {
 
-        if ( event.pageX > ( currentMediaInstance.container.offsetLeft - scrollLeft ) && event.pageX < ( ( currentMediaInstance.container.offsetLeft - scrollLeft ) + currentMediaInstance.container.offsetWidth ) ) {
+        if ( event.pageX - findAbsolutePosition( currentMediaInstance.container )[ 0 ] > ( currentMediaInstance.container.offsetLeft - scrollLeft ) && event.pageX - findAbsolutePosition( currentMediaInstance.container )[ 0 ] < ( ( currentMediaInstance.container.offsetLeft - scrollLeft ) + currentMediaInstance.container.offsetWidth ) ) {
 
-          currentMediaInstance.scrubber.style.left = ( event.pageX - ( currentMediaInstance.container.offsetLeft - scrollLeft ) );
-          b.currentTime( ( event.pageX - ( currentMediaInstance.container.offsetLeft - scrollLeft ) + currentMediaInstance.container.scrollLeft ) / currentMediaInstance.container.offsetWidth * currentMediaInstance.duration );
+          //currentMediaInstance.scrubber.style.left = ( event.pageX - ( currentMediaInstance.container.offsetLeft - scrollLeft ) ) + "px";
+          b.currentTime( ( ( event.pageX - ( currentMediaInstance.container.offsetLeft - scrollLeft ) + currentMediaInstance.container.scrollLeft ) - findAbsolutePosition( currentMediaInstance.container )[ 0 ] ) / currentMediaInstance.container.offsetWidth * currentMediaInstance.duration );
         } else {
 
-          if ( event.pageX <= ( currentMediaInstance.container.offsetLeft - scrollLeft ) ) {
+          if ( event.pageX - findAbsolutePosition( currentMediaInstance.container )[ 0 ] <= ( currentMediaInstance.container.offsetLeft - scrollLeft ) ) {
 
-            currentMediaInstance.scrubber.style.left = 0;
+            //currentMediaInstance.scrubber.style.left = "0px";
             b.currentTime( 0 );
           } else {
 
-            currentMediaInstance.scrubber.style.left = currentMediaInstance.container.offsetWidth;
+            //currentMediaInstance.scrubber.style.left = currentMediaInstance.container.offsetWidth - 30 + "px";
             b.currentTime( currentMediaInstance.duration );
           }
         }
-        b.trigger( "mediatimeupdate", b, "previewer" );
+        b.trigger( "mediatimeupdate", b, "timeline" );
       }
     }, false );
     document.addEventListener( "mouseup", function() {
@@ -255,7 +267,7 @@ Butter.registerModule( "timeline", {
 
     this.listen( "mediatimeupdate", function( event ) {
 
-      currentMediaInstance.scrubber.style.left = b.currentTime() / currentMediaInstance.duration * currentMediaInstance.container.offsetWidth;
+      currentMediaInstance.scrubber.style.left = b.currentTime() / currentMediaInstance.duration * ( currentMediaInstance.container.offsetWidth ) + "px";
     });
 
     this.listen( "trackadded", function( event ) {
@@ -302,6 +314,8 @@ Butter.registerModule( "timeline", {
       delete currentMediaInstance.trackLinerTrackEvents[ trackEvent.getId() ];
     });
 
+    var butter = this;
+
     this.listen( "mediaadded", function( event ) {
 
       mediaInstances[ event.data.getId() ] = new MediaInstance( event.data );
@@ -310,6 +324,7 @@ Butter.registerModule( "timeline", {
     this.listen( "mediaready", function( event ) {
 
       mediaInstances[ event.data.getId() ].init();
+      butter.trigger( "timelineready", {}, "timeline" );
     });
 
     this.listen( "mediachanged", function( event ) {
@@ -317,6 +332,7 @@ Butter.registerModule( "timeline", {
       currentMediaInstance && currentMediaInstance.hide();
       currentMediaInstance = mediaInstances[ event.data.getId() ];
       currentMediaInstance && currentMediaInstance.show();
+      butter.trigger( "timelineready", {}, "timeline" );
     });
 
     this.listen( "mediaremoved", function( event ) {
