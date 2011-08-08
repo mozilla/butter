@@ -3,7 +3,7 @@
 
   Butter.registerModule( "test", {
 
-    setup: function () {
+    setup: function ( butter ) {
       console.log("Instance:", this.id);
       this.listen("test", function ( event ) {
         console.log("Test event fired:", event);

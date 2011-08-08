@@ -24,8 +24,7 @@ THE SOFTWARE.
 
 (function( window, document, Butter, undefined ) {
 
-  Butter.registerModule( "eventeditor", (function() {
-
+  Butter.registerModule( "eventeditor", function ( options ) {
     var editorTarget,
         defaultEditor,
         binding,
@@ -34,8 +33,9 @@ THE SOFTWARE.
         editorWidth,
         targetWindow,
         customEditors = {},
+        butter = this;
 
-    constructEditor = function( trackEvent ) {
+    function constructEditor( trackEvent ) {
 
       var editorWindow,
         butter = this,
@@ -111,16 +111,16 @@ THE SOFTWARE.
         });
       }
 
-    },
+    } //constructEditor
 
-    clearTarget = function() {
+    function clearTarget() {
 
       while ( editorTarget.firstChild ) {
         editorTarget.removeChild( editorTarget.firstChild );
       }
-    },
+    } //clearTarget
 
-    setTarget = function( newTarget, type ) {
+    function setTarget( newTarget, type ) {
 
       var setTheTarget = {
 
@@ -144,106 +144,102 @@ THE SOFTWARE.
 
       return setTheTarget[ type ]( newTarget );
 
-    };
+    } //setTarget
 
-    return {
-
-      setup: function( options ) {
-
-        if ( !options || typeof options !== "object" ) {
-          throw new Error( "Invalid Argument" );
-        }
-
-        editorWidth = options.editorWidth || 400;
-        editorHeight = options.editorHeight || 400;
-
-        ( options.target && setTarget( options.target, "domtarget" ) ) || ( options.targetWindow && setTarget( options.targetWindow, "window" ) );
-
-        binding = editorTarget ? "bindFrame" : "bindWindow";
-
-        defaultEditor = options.defaultEditor || "defaultEditor.html";
-
-        commServer = new Butter.CommServer();
-      },
-
-      extend: {
-
-        editTrackEvent: function( trackEvent ) {
-           
-          if ( !trackEvent || !( trackEvent instanceof Butter.TrackEvent ) ) {
-            return false;
-          }
-          
-          this.trigger( "trackeditstarted" );
-          constructEditor.call( this, trackEvent );
-          return true;
-        },
-
-        addCustomEditor: function( editorSource, pluginType ) {
-
-          if ( !pluginType || !editorSource ) {
-            return false;
-          }
-
-          return customEditors[ pluginType ] = editorSource;
-        },
-        
-        removeCustomEditor: function( editorSource, pluginType ) {
-          if ( !pluginType || !editorSource ) {
-            return false;
-          }
-          
-          var oldSource = customEditors[ pluginType ];
-          
-          customEditors[ pluginType ] = undefined;
-          return oldSource;
-        },
-
-        changeEditorTarget: function( newTarget, type ) {
-
-          var types = [ "domtarget", "window" ],
-            lowerCaseType;
-          
-          //will target a new Window
-          if ( !newTarget ) {
-            editorTarget = undefined;
-            binding = "bindWindow";
-            return true;
-          }
-    
-          if ( !type || types.indexOf( lowerCaseType = type.toLowerCase() ) === -1 ) {
-
-            return false;
-          }
-
-          return setTarget( newTarget, lowerCaseType );
-        },
-
-        setDefaultEditor: function( newEditor ) {
-          if ( !newEditor || typeof newEditor !== "string" ) {
-
-            return false;
-          }
-
-          defaultEditor = newEditor;
-
-          return defaultEditor;
-        },
-
-        setEditorDims: function ( dims ) {
-
-          if ( !dims || ( !dims.height && !dims.width ) ) {
-
-            return false;
-          }
-
-          editorWidth = dims.width || editorWidth;
-          editorHeight = dims.height || editorHeight;
-
-          return dims;
-        }
-      }
+    if ( !options || typeof options !== "object" ) {
+      throw new Error( "Invalid Argument" );
     }
-  })());
+
+    editorWidth = options.editorWidth || 400;
+    editorHeight = options.editorHeight || 400;
+
+    ( options.target && setTarget( options.target, "domtarget" ) ) || ( options.targetWindow && setTarget( options.targetWindow, "window" ) );
+
+    binding = editorTarget ? "bindFrame" : "bindWindow";
+
+    defaultEditor = options.defaultEditor || "defaultEditor.html";
+
+    commServer = new Butter.CommServer();
+
+    /************************
+     * instance methods
+     ************************/
+    this.editTrackEvent = function( trackEvent ) {
+             
+      if ( !trackEvent || !( trackEvent instanceof Butter.TrackEvent ) ) {
+        return false;
+      }
+      
+      this.trigger( "trackeditstarted" );
+      constructEditor.call( this, trackEvent );
+      return true;
+    }; //editTrackEvent
+
+    this.addCustomEditor = function( editorSource, pluginType ) {
+
+      if ( !pluginType || !editorSource ) {
+        return false;
+      }
+
+      return customEditors[ pluginType ] = editorSource;
+    }; //addCustomEditor
+          
+    this.removeCustomEditor = function( editorSource, pluginType ) {
+      if ( !pluginType || !editorSource ) {
+        return false;
+      }
+      
+      var oldSource = customEditors[ pluginType ];
+      
+      customEditors[ pluginType ] = undefined;
+      return oldSource;
+    }; //removeCustomEditor
+
+    this.changeEditorTarget = function( newTarget, type ) {
+
+      var types = [ "domtarget", "window" ],
+        lowerCaseType;
+      
+      //will target a new Window
+      if ( !newTarget ) {
+        editorTarget = undefined;
+        binding = "bindWindow";
+        return true;
+      }
+
+      if ( !type || types.indexOf( lowerCaseType = type.toLowerCase() ) === -1 ) {
+
+        return false;
+      }
+
+      return setTarget( newTarget, lowerCaseType );
+    }; //changeEditorTarget
+
+    this.setDefaultEditor = function( newEditor ) {
+      if ( !newEditor || typeof newEditor !== "string" ) {
+
+        return false;
+      }
+
+      defaultEditor = newEditor;
+
+      return defaultEditor;
+    }; //setDefaultEditor
+
+    this.setEditorDims = function ( dims ) {
+
+      if ( !dims || ( !dims.height && !dims.width ) ) {
+
+        return false;
+      }
+
+      editorWidth = dims.width || editorWidth;
+      editorHeight = dims.height || editorHeight;
+
+      return dims;
+    }; //setEditorDims
+
+  }); //eventeditor
 
 })( window, window.document, Butter );
+

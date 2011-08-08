@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 (function( window, document, undefined, Butter ) {
 
-  Butter.registerModule( "plugintray", (function() {
+  Butter.registerModule( "plugintray", function ( options ) {
     
     var plugins = [],
         numPlugins = 0,
@@ -75,37 +75,35 @@ THE SOFTWARE.
 
     };
 
-    return {
+    options = options || {};
+    container = document.getElementById( options.target ) || options.target;
+    pattern = options.pattern;
 
-      setup: function( options ) {
-        options = options || {};
-        container = document.getElementById( options.target ) || options.target;
-        pattern = options.pattern;
-      },
+    this.addPlugin = function( plugin ) {
 
-      extend: {
+      if ( !( plugin instanceof Plugin ) ) {
+        plugin = new Plugin( plugin );
+      } //if
+      plugins.push( plugin );
 
-        addPlugin: function( plugin ) {
-
-          if ( !( plugin instanceof Plugin ) ) {
-            plugin = new Plugin( plugin );
-          } //if
-          plugins.push( plugin );
-
-          plugin.setButter( this );
-          this.trigger( "pluginadded", plugin );
-          
-          container.appendChild( plugin.createElement( pattern ) );
-          
-          return plugin;
-        },
+      plugin.setButter( this );
+      this.trigger( "pluginadded", plugin );
+      
+      var pluginElement = document.createElement( "span" );
+      pluginElement.innerHTML = plugin.type + " ";
+      pluginElement.id = plugin.type;
+      pluginElement.setAttribute( "data-trackliner-type", "butterapp" );
+      $( pluginElement ).draggable({ helper: "clone", appendTo: "body", zIndex: 9001, revert: true, revertDuration: 0 });
+      container.appendChild( pluginElement );
+      
+      return plugin;
+    }; //addPlugin
         
-        getPlugins: function () {
-          return plugins;
-        }
-      }
-    }
-  })());
+    this.getPlugins = function () {
+      return plugins;
+    }; //getPlugins
+
+  }); //plugintray
 
 })( window, document, undefined, Butter );
 
