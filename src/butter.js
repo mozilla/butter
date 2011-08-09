@@ -676,17 +676,17 @@ THE SOFTWARE.
     };
     
     this.clearProject = function() {
-      var allTracks = getTracks(),
-      allTargets = getTargets(),
-      allMedias = getAllmedias();
+      var allTracks = that.getTracks(),
+      allTargets = that.getTargets(),
+      allMedias = that.getAllmedias();
       for ( var i = 0, l = allTracks.length; i < l; i++ ) {
-        removeTrack( allTracks[ i ] );
+        that.removeTrack( allTracks[ i ] );
       }
       for ( var i = 0, l = allTargets.length; i < l; i++ ) {
-        removeTarget( allTargets[ i ] );
+        that.removeTarget( allTargets[ i ] );
       }
       for ( var i = 0, l = allMedias.length; i < l; i++ ) {
-        removeMedia( allMedias[ i ] );
+        that.removeMedia( allMedias[ i ] );
       }
     };
 
