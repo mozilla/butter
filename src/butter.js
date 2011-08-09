@@ -674,6 +674,21 @@ THE SOFTWARE.
         return projectDetails;
       }
     };
+    
+    this.clearProject = function() {
+      var allTracks = getTracks(),
+      allTargets = getTargets(),
+      allMedias = getAllmedias();
+      for ( var i = 0, l = allTracks.length; i < l; i++ ) {
+        removeTrack( allTracks[ i ] );
+      }
+      for ( var i = 0, l = allTargets.length; i < l; i++ ) {
+        removeTarget( allTargets[ i ] );
+      }
+      for ( var i = 0, l = allMedias.length; i < l; i++ ) {
+        removeMedia( allMedias[ i ] );
+      }
+    };
 
     /****************************************************************
      * Media methods
