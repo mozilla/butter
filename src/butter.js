@@ -678,7 +678,7 @@ THE SOFTWARE.
     this.clearProject = function() {
       var allTracks = that.getTracks(),
       allTargets = that.getTargets(),
-      allMedias = that.getAllmedias();
+      allMedias = that.getAllMedia();
       for ( var i = 0, l = allTracks.length; i < l; i++ ) {
         that.removeTrack( allTracks[ i ] );
       }
