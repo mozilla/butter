@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Plugin Tray Module</title>
+    <script type="text/javascript" src="../../../external/jquery/jquery.js"></script>
+    <script type="text/javascript" src="../../../external/jquery-ui/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script type="text/javascript" src="../../../src/modules/plugintray/butter.plugintray.js"></script>
+    <script type="text/javascript" >
+      document.addEventListener("DOMContentLoaded", function() {
+        var b = new Butter();
+        b.plugintray( { target: "plugin-tray-div", pattern: '<li><a href="#" title="$type"><span></span>$type</a></li>' } );
+        b.addPlugin( { type: "footnote" } );
+        b.addPlugin( { type: "googlemap" } );
+        b.addPlugin( { type: "nonsense" } );
+      }, false );
+    </script>
+  </head>
+  <body>
+    <ul id="plugin-tray-div"></ul>
+  </body>
+</html>

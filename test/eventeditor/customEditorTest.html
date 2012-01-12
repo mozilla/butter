@@ -1,0 +1,77 @@
+<html>
+  <head>
+    <script src="../../../src/butter.js" ></script>
+    <script type="text/javascript" src="../../../src/modules/butter.comm.js"></script>
+    <script src="../../../src/modules/eventeditor/butter.eventeditor.js" ></script>   
+    
+    <script type="text/javascript" >
+      var b = new Butter();
+      b.eventeditor();
+      var media = b.addMedia( new Butter.Media() );
+      var te1 = new Butter.TrackEvent({ type: "testEvent", start: 67.237868, end: 567.675675, popcornOptions: { type:"ROADMAP", start: 67.237868, end: 567.675675, zoom: 8, location: "Toronto" } } ),
+      m1 = {
+        options: {
+          start: {
+            elem: "input",
+            type: "text",
+            label: "In"
+          },
+          end: {
+            elem: "input",
+            type: "text",
+            label: "Out"
+          },
+          target: "map-container",
+          type: {
+            elem: "select",
+            options: ["ROADMAP", "SATELLITE", "STREETVIEW", "HYBRID", "TERRAIN"],
+            label: "Type"
+          },
+          zoom: {
+            elem: "input",
+            type: "text",
+            label: "Zoom"
+          },
+          lat: {
+            elem: "input",
+            type: "text",
+            label: "Lat"
+          },
+          lng: {
+            elem: "input",
+            type: "text",
+            label: "Lng"
+          },
+          location: {
+            elem: "input",
+            type: "text",
+            label: "Location"
+          }
+        }//,
+        //customEditor: "customEditor.html"
+      };
+      media.registry = {
+        "testEvent": m1
+      };
+      te1.manifest = m1;
+
+      b.addTrackEvent( b.addTrack( new Butter.Track() ), te1);
+      b.addEditor("customEditor.html","testEvent","window");
+
+      
+      document.addEventListener( "DOMContentLoaded", function() {
+        var open = document.getElementById( "openBtn1" );
+        open.addEventListener( "click", function(){
+          b.editTrackEvent( b.tracks[0].trackEvents[0] );
+        }, false);
+      }, false);
+      window.b = b;
+    </script>
+  </head>
+  <body>
+  <input id="openBtn1" type="button" value="Custom Editor function" ></input>
+  <br />
+
+  <p id="butter-editor-target" style="width: 300px; height: 300px; visibility: hidden"></p>
+</body>
+</html>

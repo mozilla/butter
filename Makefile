@@ -1,74 +1,58 @@
+#############################################################################################
+# NOTES:
+#
+# This Makefile assumes that you have the following installed, setup:
+#
+#  * node: http://nodejs.org
+#  * Unixy shell (use msys on Windows)
+#
+#############################################################################################
 
-BUTTER := butter
-SRC_DIR := .
-DIST_DIR := $(SRC_DIR)/dist
-DIST_LIB_DIR := $(DIST_DIR)/lib
-DIST_CSS_DIR := $(DIST_DIR)/css
-BUTTER_DIST := $(DIST_DIR)/$(BUTTER).js
-BUTTER_MIN := $(DIST_DIR)/$(BUTTER).min.js
-BUTTER_HEAVY := $(DIST_DIR)/$(BUTTER).heavy.js
-BUTTER_HEAVY_CSS := $(DIST_DIR)/$(BUTTER).heavy.css
-SOURCE_DIR := $(SRC_DIR)/src
-MODULES_DIR := $(SOURCE_DIR)/modules
-EXTERNAL_DIR := $(SRC_DIR)/external
-TOOLS_DIR := $(SRC_DIR)/tools
+SRC_DIR := ./src
+DIST_DIR := ./dist
+BUTTER_SRC := $(SRC_DIR)/butter.js
+EVENTEDITOR_SRC := $(SRC_DIR)/eventeditor
+EVENTEDITOR_DIST_DIR := $(EVENTEDITOR_SRC)/dist
+EVENTEDITOR_DIST := $(EVENTEDITOR_DIST_DIR)/butter.editors.js
+EVENTEDITOR_MIN := $(EVENTEDITOR_DIST_DIR)/butter.editors.min.js
+PREVIEWER_SRC := $(SRC_DIR)/previewer
+PREVIEWER_DIST_DIR := $(PREVIEWER_SRC)/dist
+PREVIEWER_DIST := $(PREVIEWER_DIST_DIR)/butter.previewer.js
+PREVIEWER_MIN := $(PREVIEWER_DIST_DIR)/butter.previewer.min.js
+BUTTER_DIST := $(DIST_DIR)/butter.js
+BUTTER_MIN := $(DIST_DIR)/butter.min.js
+TOOLS_DIR := ./tools
 
-MISC_LIBS := \
-  $(MODULES_DIR)/eventeditor/defaultEditor.html
+compile = node $(TOOLS_DIR)/node_modules/uglify-js/bin/uglifyjs -o $(1) $(BUTTER_DIST)
 
-JS_LIBS := \
-  $(EXTERNAL_DIR)/jquery/jquery.js \
-  $(EXTERNAL_DIR)/jquery-ui/jquery-ui.min.js \
-  $(EXTERNAL_DIR)/popcorn/popcorn-complete.js \
-  $(EXTERNAL_DIR)/trackLiner/trackLiner.js
-
-JS_SRCS := \
-  $(SOURCE_DIR)/butter.js \
-  $(MODULES_DIR)/butter.comm.js \
-  $(MODULES_DIR)/plugintray/butter.plugintray.js \
-  $(MODULES_DIR)/eventeditor/butter.eventeditor.js \
-  $(MODULES_DIR)/previewer/butter.previewer.js \
-  $(MODULES_DIR)/timeline/butter.timeline.js
-
-CSS_SRCS := \
-  $(EXTERNAL_DIR)/jquery-ui/jquery-ui-1.8.5.custom.css \
-  $(EXTERNAL_DIR)/trackLiner/trackLiner.css
-
-compile = java -jar $(TOOLS_DIR)/closure/compiler.jar \
-                    $(shell for js in $(JS_SRCS) ; do echo --js $$js ; done) \
-	                  --compilation_level SIMPLE_OPTIMIZATIONS \
-	                  --js_output_file $(1)
-
-all: $(DIST_DIR) $(BUTTER_DIST) $(BUTTER_MIN) $(BUTTER_HEAVY)
+all: $(DIST_DIR) $(BUTTER_DIST) $(BUTTER_MIN) $(EVENTEDITOR_DIST) $(PREVIEWER_DIST)
 	@@echo "Finished, see $(DIST_DIR)"
-
-$(BUTTER_HEAVY_CSS):
-	@@echo "Building $(BUTTER_HEAVY_CSS)"
-	@@cat $(CSS_SRCS) >> $(BUTTER_HEAVY_CSS)
-
-$(BUTTER_HEAVY): $(DIST_DIR) $(BUTTER_DIST) $(BUTTER_MIN) $(BUTTER_HEAVY_CSS)
-	@@echo "Building $(BUTTER_HEAVY)"
-	@@cat $(JS_LIBS) > $(BUTTER_HEAVY)
-	@@cat $(BUTTER_MIN) >> $(BUTTER_HEAVY)
-
-$(BUTTER_MIN): $(DIST_DIR) $(BUTTER_DIST)
-	@@echo "Building $(BUTTER_MIN)"
-	@@$(call compile,$(BUTTER_MIN))
-
-$(BUTTER_DIST): $(DIST_DIR)
-	@@echo "Building $(BUTTER_DIST)"
-	@@cp $(CSS_SRCS) $(DIST_CSS_DIR)
-	@@cp $(JS_LIBS) $(DIST_LIB_DIR)
-	@@cp $(MISC_LIBS) $(DIST_LIB_DIR)
-	@@cat $(JS_SRCS) > $(BUTTER_DIST)
 
 $(DIST_DIR):
 	@@echo "Creating $(DIST_DIR)"
 	@@mkdir $(DIST_DIR)
-	@@echo "Creating $(DIST_LIB_DIR)"
-	@@mkdir $(DIST_LIB_DIR)
-	@@echo "Creating $(DIST_CSS_DIR)"
-	@@mkdir $(DIST_CSS_DIR)
+
+$(BUTTER_DIST): $(DIST_DIR) $(BUTTER_SRC)
+	@@echo "Building $(BUTTERR_DIST)"
+	@@node $(TOOLS_DIR)/r.js -o $(TOOLS_DIR)/build.js
+
+$(BUTTER_MIN): $(DIST_DIR) $(BUTTER_SRC)
+	@@echo "Building $(BUTTER_MIN)"
+	@@$(call compile,$(BUTTER_MIN))
+
+$(EVENTEDITOR_DIST): $(DIST_DIR) $(EVENTEDITOR_SRC)
+	@@echo "Recursively Making Eventeditor"
+	@@cd $(EVENTEDITOR_SRC); $(MAKE)
+	@@cp $(EVENTEDITOR_DIST) $(DIST_DIR)
+	@@cp $(EVENTEDITOR_MIN) $(DIST_DIR)
+
+$(PREVIEWER_DIST): $(DIST_DIR) $(PREVIEWER_SRC)
+	@@echo "Recursively Making Previewer"
+	@@cd $(PREVIEWER_SRC); $(MAKE)
+	@@cp $(PREVIEWER_DIST) $(DIST_DIR)
+	@@cp $(PREVIEWER_MIN) $(DIST_DIR)
 
 clean:
 	@@rm -fr $(DIST_DIR)
+	@@rm -fr $(EVENTEDITOR_DIST_DIR)
+	@@rm -fr $(PREVIEWER_DIST_DIR)

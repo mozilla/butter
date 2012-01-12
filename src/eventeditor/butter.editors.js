@@ -17,17 +17,6 @@
         return true;
     }
 
-    var Butter = function() {
-      if ( !Butter.__waiting ) {
-        Butter.__waiting = [];
-      } //if
-      Butter.__waiting.push( arguments );
-    };
-
-    if ( !window.Butter ) {
-      window.Butter = Butter;
-    } //if
-
     if ( has( 'source-config' ) ) {
         // Get the location of the butter source.
         // The last script tag should be the butter source
@@ -39,25 +28,31 @@
         path.pop();
         path = path.join( '/' ) + '/';
 
-        if ( !window.require ) {
-          document.write( '<script src="' + path + '../external/require/require.js"></' + 'script>' );
-        } //if
+        document.write( '<script src="' + path + '../../external/require/require.js"></' + 'script>' );
 
-        // Set up paths to find scripts.
         document.write('<script>' + 
           '(function(){' + 
           'var ctx = require.config({ ' + 
-            'baseUrl: "' + path + '",' +
-            'context: "butter",' +
+            'baseUrl: "' + path + '../",' +
+            'context: "butter.eventeditor",' +
             'paths: {' +
-              'trackLiner: "' + path + '../external/trackLiner",' +
-              'butter: "' + path + '"' +
               // Paths are relative to baseUrl; Notice the commas!
             '}' +
           '});' +
-          'ctx(["butter-main"])' + 
+          'ctx(["eventeditor/main"])' + 
           '})()' +
         '</script>');
     }
+
+    var ButterEditor = function() {
+      if ( !ButterEditor.__waiting ) {
+        ButterEditor.__waiting = [];
+      } //if
+      ButterEditor.__waiting.push( arguments );
+    }; //ButterTemplate
+
+    if ( !window.ButterEditor) {
+      window.ButterEditor = ButterEditor;
+    } //if
 
 }());

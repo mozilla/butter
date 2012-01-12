@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../../butter.js"></script>
+    <script type="text/javascript" src="butter.previewer.js"></script>
+    <script type="text/javascript">
+
+      var butter = new Butter(),
+          ready = false, ok,
+          DOMContent, track;
+      
+      document.addEventListener( 'DOMContentLoaded', function ( e ) {
+
+        butter.previewer( {
+          layout: "layout.html",
+          target: "notIframe",
+          popcornURL: "",
+          media: "http://www.youtube.com/watch?v=xyd4oM3fMO4",
+          callback: function() {
+
+            butter.buildPopcorn( butter.getAllMedia()[ 0 ], function() {
+              var registry = butter.getRegistry();
+            } );
+          }
+        } );
+
+      }, false );
+
+      var addTrack = function( type ) {
+
+        track = butter.getTracks()[ 0 ] || butter.addTrack( new Butter.Track() );
+        butter.addTrackEvent( track, new Butter.TrackEvent( {
+          start: 1, end: 100, type: type, popcornOptions: {
+            start: 1,
+            end: 10,
+            text: "ITS WORKING",
+            target: butter.getTargets()[ 0 ].getName()
+          }
+        } ) );
+      }
+
+      
+
+    var addTrack2 = function() {
+        track.removeTrackEvent( track.getTrackEvent( 0 ) );
+      }
+
+    var changeMedia = function() {
+      butter.unlisten( "trackeventadded", butter.teAdded );
+      var media = butter.addMedia( { 
+                target: "outerVideo", 
+                url: "http://clips.vorwaerts-gmbh.de/VfE.ogv" 
+              } );
+
+      butter.setMedia( media );
+    }
+
+    </script>
+  </head>
+  <body>
+    <iframe id="notIframe" style="width:100%;height:500px"></iframe>
+    <button id="btn" onClick="addTrack( 'footnote' );"> Click to add a footnote </butter>
+    <button id="btn" onClick="addTrack2();"> Click to remove a footnote </butter>
+    <button id="btn" onClick="changeMedia();"> Click to change media </butter>
+    <div>
+    <textbox ></textbox>
+    </div>
+  </body>
+</html>

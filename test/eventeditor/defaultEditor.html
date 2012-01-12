@@ -1,0 +1,213 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script type="text/javascript" src="../butter.comm.js"></script>
+    <script type="text/javascript">
+      (function(){
+      var client,
+        butter,
+        targets = {};
+        
+      document.addEventListener('DOMContentLoaded', function (e) {
+
+        butter = new Butter();
+
+        client = new Butter.CommClient( "defaultEditor" );
+
+        client.listen( "edittrackevent", function( message ) {
+          targets = message.targets;
+          constructDefaultEditor ( message.trackEvent );
+        });
+        
+        client.listen( "domtargetsupdated", function( message ) {
+          targets = message;
+        });
+
+      }, false);
+
+      var constructDefaultEditor = function( trackEvent ) {
+
+        var options = trackEvent.manifest.options,
+          prop,
+          opt,
+          elemType,
+          elemLabel,
+          elem,
+          label,
+          attr,
+          surroundingDiv = document.createElement("div"),
+          btn,
+          elements = {};
+          
+        surroundingDiv.setAttribute( "class", "butter-eventeditor" );
+
+        for ( prop in options ) {
+
+          opt = options[ prop ];
+          if ( typeof opt === "object" && prop !== "target-object" ) {
+
+            elemType = opt.elem;
+            elemLabel = opt.label;
+
+            elem = document.createElement( elemType );
+            elem.setAttribute( "className", "butter-eventeditor-" + elemType + "-element" );
+            elem.setAttribute( "id", elemLabel + "-" + elemType + "-element" );
+
+            label = createLabel ( { innerHTML: elemLabel, attributes: { "for": elemLabel, "text": elemLabel } } );
+
+            elements[ prop ] = elem;
+            console( options );
+
+            if ( elemType === "input" ) {
+
+              attr = trackEvent.popcornOptions[ prop ] || "";
+
+              //  Round displayed times to nearest quarter of a second
+              if ( typeof +attr === "number" && [ "start", "end" ].indexOf( prop ) > -1 ) {
+
+                attr = Math.round( attr * 4 ) / 4;
+              }
+
+              elem.setAttribute( "value", attr );
+
+              if ( options.default ) {
+                elem.value = options.default;
+              }
+            } else if ( elemType === "select" ) {
+              attr = trackEvent.popcornOptions[ prop ];
+              var populate = function( type ) {
+
+                var selectItem = document.createElement( "option" );
+                selectItem.value = type;
+                selectItem.text = type.charAt( 0 ).toUpperCase() + type.substring( 1 ).toLowerCase();
+                elem.appendChild( selectItem );
+              };
+
+              opt.options.forEach( populate );
+              for (var i = 0, l = elem.options.length; i < l; i ++ ) {
+                if ( elem.options[ i ].value === attr ) {
+                  elem.options.selectedIndex = i;
+                  i = l;
+                }
+              }
+            }
+
+            label.appendChild( elem );
+            surroundingDiv.appendChild( label );
+            surroundingDiv.appendChild( document.createElement("br"));
+          }
+        }
+        var target = document.createElement( "select" ),
+          DOMTargets = targets,
+          dt,
+          optionElement;
+          
+        target.id = "target-select";
+        label = createLabel ( { innerHTML: "Target Container", attributes: { "for": "target-select", "text": "Targer Container" } } );
+        
+        optionElement = document.createElement( "option" );
+        optionElement.value = null;
+        optionElement.text = "Default Target";
+        target.appendChild( optionElement );
+        
+        for ( var i = 0, l = DOMTargets.length; i < l; i++ ) {
+          dt = DOMTargets[ i ];
+          optionElement = document.createElement( "option" );
+          optionElement.value = optionElement.text = dt.getName();
+          target.appendChild( optionElement );
+        }
+        
+        label.appendChild( target );
+        
+        attr = trackEvent.popcornOptions[ "target" ] || "";
+        
+        for (var i = 0, l = target.options.length; i < l; i ++ ) {
+          if (target.options[ i ].value === attr ) {
+            target.options.selectedIndex = i;
+            i = l;
+          }
+        }
+        
+        elements[ "target" ] = target;
+        
+        surroundingDiv.appendChild( label );
+        surroundingDiv.appendChild( document.createElement( "br" ) );
+
+        btn = createDefaultButton({
+          value: "Cancel",
+          callback: function() {
+            client.send( "", "cancelclicked" );
+          }
+        });
+        surroundingDiv.appendChild( btn );
+
+        btn = createDefaultButton({
+          value: "Okay",
+          callback: function() {
+            client.send( compileOptions( elements ), "okayclicked" );
+          }
+        });
+        surroundingDiv.appendChild( btn );
+
+        btn = createDefaultButton({
+          value: "Apply",
+          callback: function() {
+            client.send( compileOptions( elements ), "applyclicked" ); 
+          }
+        });
+        surroundingDiv.appendChild( btn );
+
+        btn = createDefaultButton({
+          value: "Delete",
+          callback: function() {
+            client.send( "", "deleteclicked" );
+          }
+        });
+        surroundingDiv.appendChild( btn );
+
+        document.body.appendChild( surroundingDiv );
+        
+      },
+
+      compileOptions = function( elements ) {
+
+        var newOptions = {},
+          prop;
+
+        for ( prop in elements ) {
+          elem = elements[ prop ];
+          if ( elements.hasOwnProperty( prop ) && typeof elem === "object" ) {
+            newOptions[ prop ] = elem.value;
+          }
+        }
+
+        return newOptions;
+      },
+      
+      createLabel = function( settings ){
+        var label = document.createElement( "label" ),
+          prop,
+          attr = settings.attributes;
+        label.innerHTML = settings.innerHTML;
+        for ( prop in attr ) {
+          if ( attr.hasOwnProperty( prop ) ) {
+            label.setAttribute ( prop, attr[ prop ] );
+          }
+        }
+        label.setAttribute( "className", "butter-eventeditor-label" );
+        return label;
+      },
+
+      createDefaultButton = function( settings ){
+        var btn = document.createElement( "input" );
+        btn.type = "button";
+        btn.addEventListener( "click", settings.callback || function() {}, false);
+        btn.value = settings.value || "";
+        return btn;
+      };
+    })()
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <script src="../../lib/popcorn/popcorn.js"></script>
+    <script src="../../lib/popcorn/popcorn.youtube.js"></script>
+    <script src="../../lib/popcorn/popcorn.vimeo.js"></script>
+    <script src="../../lib/popcorn/popcorn.soundcloud.js"></script>
+    <script src="../../lib/popcorn/popcorn.image.js"></script>
+    <script src="../../lib/popcorn/popcorn.footnote.js"></script>
+    <script src="../../lib/popcorn/popcorn.twitter.js"></script>
+    <script src="../../lib/popcorn/popcorn.subtitle.js"></script>
+    <script src="../../lib/popcorn/popcorn.attribution.js"></script>
+    <script src="../../lib/popcorn/popcorn.flickr.js"></script>
+    <script src="../../lib/popcorn/popcorn.webpage.js"></script>
+    <script src="../../lib/popcorn/popcorn.wikipedia.js"></script>
+    <script src="../../lib/popcorn/popcorn.googlemap.js"></script>
+    <script src="../../src/previewer/butter.previewer.js"></script>
+  </head>
+  <style>
+    video, div {
+      float: left;
+      display: inline;
+    }
+
+    .content-div {
+      width: 200px;
+      height: 200px;
+      border: 1px solid #000;
+    }
+
+    #main {
+      min-width: 300px;
+      min-height: 200px;
+    }
+  </style>
+  <body>
+    <div id="main" data-butter="media"></div>
+    <div class="content-div" data-butter="target" id="sample-div-1"></div>
+    <div class="content-div" data-butter="target" id="sample-div-2"></div>
+  </body>
+</html>
