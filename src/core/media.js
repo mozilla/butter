@@ -24,111 +24,41 @@ THE SOFTWARE.
 
 (function() {
   define( [
-      "core/logger", 
-      "core/eventmanager", 
-      "core/track" ], 
-    function( Logger, EventManager, Track ) {
+            "core/logger", 
+            "core/eventmanager", 
+            "core/track"
+          ], 
+          function( Logger, EventManager, Track ){
 
-    var Media = function ( options ) {
-      options = options || {};
+    var __guid = 0;
 
-      var tracks = [],
-          id = "Media" + Media.guid++,
-          logger = new Logger( id ),
-          em = new EventManager( { logger: logger } ),
-          name = options.name || id + Date.now(),
-          url,
-          target,
-          registry,
-          currentTime = 0,
-          duration = 0,
-          that = this;
+    var Media = function ( mediaOptions ) {
+      mediaOptions = mediaOptions || {};
 
-      em.apply( "Media", this );
+      var _tracks = [],
+          _id = "Media" + __guid++,
+          _logger = new Logger( _id ),
+          _em = new EventManager( { logger: _logger } ),
+          _name = mediaOptions.name || _id + Date.now(),
+          _url,
+          _target,
+          _registry,
+          _currentTime = 0,
+          _duration = 0,
+          _this = this;
 
-      Object.defineProperty( this, "url", {
-        get: function() {
-          return url;
-        },
-        set: function( val ) {
-          if ( url !== val ) {
-            url = val;
-            em.dispatch( "mediacontentchanged", that );
-          }
-        }
-      });
-
-      Object.defineProperty( this, "target", {
-        get: function() {
-          return target;
-        },
-        set: function( val ) {
-          if ( target !== val ) {
-            target = val;
-            em.dispatch( "mediatargetchanged", that );
-          }
-        }
-      });
-
-      Object.defineProperty( this, "name", {
-        get: function() {
-          return name;
-        }
-      });
-
-      Object.defineProperty( this, "id", {
-        get: function() {
-          return id;
-        }
-      });
-
-      Object.defineProperty( this, "tracks", {
-        get: function() {
-          return tracks;
-        }
-      });
-
-      Object.defineProperty( this, "currentTime", {
-        get: function() {
-          return currentTime;
-        },
-        set: function( time ) {
-          if ( time !== undefined ) {
-            currentTime = time;
-            if ( currentTime < 0 ) {
-              currentTime = 0;
-            }
-            if ( currentTime > duration ) {
-              currentTime = duration;
-            } //if
-            em.dispatch( "mediatimeupdate", that );
-          } //if
-        }
-      });
-
-      Object.defineProperty( this, "duration", {
-        get: function() {
-          return duration;
-        },
-        set: function( time ) {
-          if ( time ) {
-            duration = time;
-            logger.log( "duration changed to " + duration );
-            em.dispatch( "mediadurationchanged", that );
-          }
-        }
-      });
+      _em.apply( "Media", this );
 
       this.addTrack = function ( track ) {
         if ( !( track instanceof Track ) ) {
           track = new Track( track );
         } //if
-        tracks.push( track );
-        track.listen( "tracktargetchanged", em.repeat );
-        track.listen( "trackeventadded", em.repeat );
-        track.listen( "trackeventremoved", em.repeat );
-        track.listen( "trackeventupdated", em.repeat );
-        em.dispatch( "trackadded", track );
+        _tracks.push( track );
+        track.listen( "tracktargetchanged", _em.repeat );
+        track.listen( "trackeventadded", _em.repeat );
+        track.listen( "trackeventremoved", _em.repeat );
+        track.listen( "trackeventupdated", _em.repeat );
+        _em.dispatch( "trackadded", track );
         var trackEvents = track.trackEvents;
         if ( trackEvents.length > 0 ) {
           for ( var i=0, l=trackEvents.length; i<l; ++i ) {
@@ -139,11 +69,11 @@ THE SOFTWARE.
       }; //addTrack
 
       this.getTrack = function ( track ) {
-        for ( var i=0, l=tracks.length; i<l; ++i ) {
-          if (  ( track.id !== undefined && tracks[ i ].id === track.id ) ||
-                ( track.name && tracks[ i ].name === track.name ) ||
-                tracks[ i ] === track ) {
-            return tracks[ i ];
+        for ( var i=0, l=_tracks.length; i<l; ++i ) {
+          if (  ( track.id !== undefined && _tracks[ i ].id === track.id ) ||
+                ( track.name && _tracks[ i ].name === track.name ) ||
+                _tracks[ i ] === track ) {
+            return _tracks[ i ];
           } //if
         } //for
         return undefined;
@@ -151,84 +81,158 @@ THE SOFTWARE.
 
       this.removeTrack = function ( track ) {
         if ( typeof(track) === "string" ) {
-          track = that.getTrack( { name: track } );
+          track = _this.getTrack( { name: track } );
         } //if
-        var idx = tracks.indexOf( track );
+        var idx = _tracks.indexOf( track );
         if ( idx > -1 ) {
-          tracks.splice( idx, 1 );
+          _tracks.splice( idx, 1 );
           var events = track.trackEvents;
           for ( var i=0, l=events.length; i<l; ++i ) {
-            em.dispatch( "trackeventremoved", events[i] );
+            _em.dispatch( "trackeventremoved", events[i] );
           } //for
-          track.unlisten( "tracktargetchanged", em.repeat );
-          track.unlisten( "trackeventadded", em.repeat );
-          track.unlisten( "trackeventremoved", em.repeat );
-          track.unlisten( "trackeventupdated", em.repeat );
-          em.dispatch( "trackremoved", track );
+          track.unlisten( "tracktargetchanged", _em.repeat );
+          track.unlisten( "trackeventadded", _em.repeat );
+          track.unlisten( "trackeventremoved", _em.repeat );
+          track.unlisten( "trackeventupdated", _em.repeat );
+          _em.dispatch( "trackremoved", track );
           return track;
         } //if
         return undefined;    
       }; //removeTrack
 
+      this.getManifest = function( name ) {
+        return _registry[ name ];
+      }; //getManifest
 
-      Object.defineProperty( this, "json", {
-        get: function() {
-          var exportJSONTracks = [];
-          for ( var i=0, l=tracks.length; i<l; ++i ) {
-            exportJSONTracks.push( tracks[ i ].json );
-          }
-          return {
-            id: id,
-            name: name,
-            url: url,
-            target: target,
-            duration: duration,
-            tracks: exportJSONTracks
-          };
-        },
-        set: function( importData ) {
-          if ( importData.name ) {
-            name = importData.name;
-          }
-          if ( importData.target ) {
-            that.target = importData.target;
-          }
-          if ( importData.url ) {
-            that.url = importData.url;
-          }
-          if ( importData.tracks ) {
-            var importTracks = importData.tracks;
-            for ( var i=0, l=importTracks.length; i<l; ++i ) {
-              var newTrack = new Track();
-              newTrack.json = importTracks[ i ];
-              that.addTrack( newTrack );
+      Object.defineProperties( this, {
+        url: {
+          get: function() {
+            return _url;
+          },
+          set: function( val ) {
+            if ( _url !== val ) {
+              _url = val;
+              _em.dispatch( "mediacontentchanged", _this );
             }
-          }
-        }
-      }); //json
-
-      Object.defineProperty( this, "registry", {
-        get: function() {
-          return registry;
+          },
+          enumerable: true
         },
-        set: function( val ) {
-          registry = val;
+        target: {
+          get: function() {
+            return _target;
+          },
+          set: function( val ) {
+            if ( _target !== val ) {
+              _target = val;
+              _em.dispatch( "mediatargetchanged", _this );
+            }
+          },
+          enumerable: true
+        },
+        name: {
+          get: function() {
+            return _name;
+          },
+          enumerable: true
+        },
+        id: {
+          get: function() {
+            return _id;
+          },
+          enumerable: true
+        },
+        tracks: {
+          get: function() {
+            return _tracks;
+          },
+          enumerable: true
+        },
+        currentTime: {
+          get: function() {
+            return _currentTime;
+          },
+          set: function( time ) {
+            if ( time !== undefined ) {
+              _currentTime = time;
+              if ( _currentTime < 0 ) {
+                _currentTime = 0;
+              }
+              if ( _currentTime > _duration ) {
+                _currentTime = _duration;
+              } //if
+              _em.dispatch( "mediatimeupdate", _this );
+            } //if
+          },
+          enumerable: true
+        },
+        duration: {
+          get: function() {
+            return _duration;
+          },
+          set: function( time ) {
+            if ( time ) {
+              _duration = time;
+              _logger.log( "duration changed to " + _duration );
+              _em.dispatch( "mediadurationchanged", _this );
+            }
+          },
+          enumerable: true
+        },
+        json: {
+          get: function() {
+            var exportJSONTracks = [];
+            for ( var i=0, l=_tracks.length; i<l; ++i ) {
+              exportJSONTracks.push( _tracks[ i ].json );
+            }
+            return {
+              id: _id,
+              name: _name,
+              url: _url,
+              target: _target,
+              duration: _duration,
+              tracks: exportJSONTracks
+            };
+          },
+          set: function( importData ) {
+            if ( importData.name ) {
+              _name = importData.name;
+            }
+            if ( importData.target ) {
+              _this.target = importData.target;
+            }
+            if ( importData.url ) {
+              _this.url = importData.url;
+            }
+            if ( importData.tracks ) {
+              var importTracks = importData.tracks;
+              for ( var i=0, l=importTracks.length; i<l; ++i ) {
+                var newTrack = new Track();
+                newTrack.json = importTracks[ i ];
+                _this.addTrack( newTrack );
+              }
+            }
+          },
+          enumerable: true
+        },
+        registry: {
+          get: function() {
+            return _registry;
+          },
+          set: function( val ) {
+            _registry = val;
+          },
+          enumerable: true
         }
       });
 
-      this.getManifest = function( name ) {
-        return registry[ name ];
-      }; //getManifest
-
-      if ( options.url ) {
-        this.url = options.url;
+      if ( mediaOptions.url ) {
+        this.url = mediaOptions.url;
       }
-      if ( options.target ) {
-        this.target = options.target;
+      if ( mediaOptions.target ) {
+        this.target = mediaOptions.target;
       }
 
     }; //Media
-    Media.guid = 0;
 
     return Media;
 

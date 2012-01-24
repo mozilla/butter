@@ -26,38 +26,38 @@ THE SOFTWARE.
 
   define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
-    var PluginManager = function( butter, options ) {
+    var PluginManager = function( butter, moduleOptions ) {
 
-      var plugins = [],
-          numPlugins = 0,
-          container,
-          pluginElementPrefix = "butter-plugin-",
-          pattern;
+      var __plugins = [],
+          __container,
+          __pluginElementPrefix = "butter-plugin-",
+          __pattern;
       
-      var Plugin = function ( options ) {
-        var id = numPlugins++,
-            that = this;
+      var Plugin = function ( pluginOptions ) {
+        pluginOptions = pluginOptions || {};
 
-        options = options || {};
-        var name = options.name || 'Plugin' + Date.now();
-        this.type = options.type;
+        var _id = "plugin" + plugins.length,
+            _this = this;
+            _name = pluginOptions.name || 'Plugin' + Date.now();
+
+        this.type = pluginOptions.type;
         this.element = undefined;
 
-        Object.defineProperty( this, "id", { get: function() { return id; } } );
-        Object.defineProperty( this, "name", { get: function() { return name; } } );
+        Object.defineProperty( this, "id", { get: function() { return _id; } } );
+        Object.defineProperty( this, "name", { get: function() { return _name; } } );
         
         this.createElement = function ( pattern ) {
           var pluginElement;
           if ( !pattern ) {
             pluginElement = document.createElement( "span" );
-            pluginElement.innerHTML = that.type + " ";
+            pluginElement.innerHTML = _this.type + " ";
           }
           else {
-            var patternInstance = pattern.replace( /\$type/g, that.type );
+            var patternInstance = pattern.replace( /\$type/g, _this.type );
             var $pluginElement = $( patternInstance );
             pluginElement = $pluginElement[ 0 ];
           }
-          pluginElement.id = pluginElementPrefix + that.type;
+          pluginElement.id = __pluginElementPrefix + _this.type;
           $( pluginElement ).draggable({ helper: "clone", appendTo: "body", zIndex: 9001, revert: true, revertDuration: 0 });
           this.element = pluginElement;
           return pluginElement;
@@ -65,9 +65,8 @@ THE SOFTWARE.
 
       }; //Plugin
 
-      options = options || {};
-      container = document.getElementById( options.target ) || options.target;
-      pattern = options.pattern;
+      __container = document.getElementById( pluginOptions.target ) || pluginOptions.target;
+      __pattern = pluginOptions.pattern;
 
       this.add = function( plugin ) {
 
@@ -78,7 +77,7 @@ THE SOFTWARE.
 
         butter.dispatch( "pluginadded", plugin );
 
-        container.appendChild( plugin.createElement( pattern ) );
+        __container.appendChild( plugin.createElement( __pattern ) );
         
         return plugin;
       }; //add
@@ -92,7 +91,7 @@ THE SOFTWARE.
       this.clear = function () {
         while ( plugins.length > 0 ) {
           var plugin = plugins.pop();
-          container.removeChild( plugin.element );
+          __container.removeChild( plugin.element );
           butter.dispatch( "pluginremoved", plugin );
         }
       }; //clear
@@ -107,18 +106,13 @@ THE SOFTWARE.
 
       Object.defineProperty( this, "pluginElementPrefix", {
         get: function() {
-          return pluginElementPrefix;
+          return __pluginElementPrefix;
         }
       });
 
     }; //PluginManager
 
-    return {
-      name: "pluginmanager",
-      init: function( butter, options ) {
-        return new PluginManager( butter, options );
-      } //init
-    };
+    return PluginManager;
 
   }); //define
 

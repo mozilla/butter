@@ -106,12 +106,7 @@ THE SOFTWARE.
 
     }; //TrackEditor
 
-    return {
-      name: "trackeditor",
-      init: function( butter, options ) {
-        return new TrackEditor( butter, options );
-      } //init
-    };
+    return TrackEditor;
 
   });
 }());

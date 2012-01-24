@@ -337,12 +337,7 @@
     }; //Previewer
     Previewer.guid = 0;
 
-    return {
-      name: "previewer",
-      init: function( butter, options ) {
-        return new Previewer( butter, options );
-      } //init
-    };
+    return Previewer;
 
   }); //define
 

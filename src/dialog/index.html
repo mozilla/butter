@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+  <head>
+    <title>dialog.js</title>
+    <script src="loader.js"></script>
+    <script>
+      (function(){
+        function changeValue( val ){
+          document.getElementById( "submit-value" ).innerHTML = val;
+        } //changeValue
+
+        document.addEventListener( "DOMContentLoaded", function( e ){
+
+          dialog(function( context ){
+
+            context.add( "test-iframe", {
+              type: "iframe",
+              modal: true,
+              template: "dialog-template",
+              url: "test.html"
+            });
+
+            context.add( "test-window", {
+              type: "window",
+              modal: true,
+              url: "test.html"
+            });
+
+            document.getElementById( "iframe-normal-btn" ).addEventListener( "click", function ( e ){
+              var interval;
+              function sendUpdate(){
+                context.send( "test-iframe", "test" );
+                console.log( "iframe update" );
+              } //sendUpdate
+              context.open( "test-iframe", {
+                open: function( e ){ interval = setInterval( sendUpdate, 300 ); console.log(e.type);},
+                submit: function( e ){ changeValue( e.data.test ); console.log(e.type);},
+                cancel: function( e ){ changeValue( "cancelled!" ); console.log(e.type);},
+                error: function( e ){ changeValue( "error! " + e.data.type + e.data.message ); console.log(e.type);},
+                close: function( e ){ clearInterval( interval ); console.log(e.type);}
+              });
+            }, false );
+
+            document.getElementById( "window-normal-btn" ).addEventListener( "click", function ( e ){
+              var interval;
+              function sendUpdate(){
+                context.send( "test-window", "test" );
+                console.log( "window update" );
+              } //sendUpdate
+              context.open( "test-window", {
+                open: function( e ){ interval = setInterval( sendUpdate, 300 ); console.log(e.type);},
+                submit: function( e ){ changeValue( e.data.test ); console.log(e.type);},
+                cancel: function( e ){ changeValue( "cancelled!" ); console.log(e.type);},
+                error: function( e ){ changeValue( "error! " + e.data.type + e.data.message ); console.log(e.type);},
+                close: function( e ){ clearInterval( interval ); console.log(e.type);}
+              });
+            }, false );
+
+          });
+        }, false );
+      })();
+    </script>
+    <style>
+      .dialog-template {
+        width: 300px;
+        height: 300px;
+        border-radius: 15px;
+        background-image: linear-gradient(bottom, rgb(77,77,77) 8%, rgb(179,179,179) 54%, rgb(199,199,199) 77%);
+        background-image: -o-linear-gradient(bottom, rgb(77,77,77) 8%, rgb(179,179,179) 54%, rgb(199,199,199) 77%);
+        background-image: -moz-linear-gradient(bottom, rgb(77,77,77) 8%, rgb(179,179,179) 54%, rgb(199,199,199) 77%);
+        background-image: -webkit-linear-gradient(bottom, rgb(77,77,77) 8%, rgb(179,179,179) 54%, rgb(199,199,199) 77%);
+        background-image: -ms-linear-gradient(bottom, rgb(77,77,77) 8%, rgb(179,179,179) 54%, rgb(199,199,199) 77%);
+        background-image: -webkit-gradient(
+          linear,
+          left bottom,
+          left top,
+          color-stop(0.08, rgb(77,77,77)),
+          color-stop(0.54, rgb(179,179,179)),
+          color-stop(0.77, rgb(199,199,199))
+        );
+        -webkit-box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.3);
+        box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+      .dialog-template .dialog-header {
+        width: 100%;
+        position: relative;
+        top: 0px;
+        color: #fff;
+        font: 12pt helvetica, sans;
+        height: 2em;
+        -webkit-box-shadow: 0px 2px 5px 5px rgba(0, 0, 0, 0.5);
+        -moz-box-shadow: 0px 2px 5px 5px rgba(0, 0, 0, 0.5);
+        box-shadow: 0px 2px 3px 5px rgba(0, 0, 0, 0.5);
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        background-image: linear-gradient(bottom, rgb(81,127,184) 36%, rgb(37,42,143) 68%, rgb(11,31,135) 84%);
+        background-image: -o-linear-gradient(bottom, rgb(81,127,184) 36%, rgb(37,42,143) 68%, rgb(11,31,135) 84%);
+        background-image: -moz-linear-gradient(bottom, rgb(81,127,184) 36%, rgb(37,42,143) 68%, rgb(11,31,135) 84%);
+        background-image: -webkit-linear-gradient(bottom, rgb(81,127,184) 36%, rgb(37,42,143) 68%, rgb(11,31,135) 84%);
+        background-image: -ms-linear-gradient(bottom, rgb(81,127,184) 36%, rgb(37,42,143) 68%, rgb(11,31,135) 84%);
+        background-image: -webkit-gradient(
+          linear,
+          left bottom,
+          left top,
+          color-stop(0.36, rgb(81,127,184)),
+          color-stop(0.68, rgb(37,42,143)),
+          color-stop(0.84, rgb(11,31,135))
+        );
+        cursor: pointer;
+      }
+      .dialog-template .dialog-header .dialog-title {
+        position: relative;
+        top: 7px;
+        left: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <input id="iframe-normal-btn" type="button" value="IFRAME" />
+    <input id="window-normal-btn" type="button" value="WINDOW" />
+    <div id="dialog-template" dialog-template>
+      <div class="dialog-header"><span class="dialog-title">Dialog</span></div>
+      <div dialog-content></div>
+    </div>
+    <div>Submit Value:<div id="submit-value"></div>
+  </body>
+</html>
