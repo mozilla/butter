@@ -11,7 +11,8 @@
           _type,
           _interruptLoad = false,
           _mediaLoadAttempts = 0,
-          _this = this;
+          _this = this,
+          _popcornTarget;
 
       this.setupPopcornHandlers = function() {
         _popcorn.media.addEventListener( "timeupdate", function() {
@@ -43,7 +44,7 @@
         } //if
       }; //clear
 
-      function prepare() {
+      function prepare( callback ) {
 
         function timeoutWrapper( e ){
           _interruptLoad = true;
@@ -57,18 +58,21 @@
 
         function popcornSuccess( e ){
           _mediaObject.dispatch( "mediaprepared" );
+          callback && callback();
         } //popcornSuccess
 
         findMediaType();
         prepareMedia( failureWrapper );
 
-        try {
-          createPopcorn( generatePopcornString() );
-          waitForPopcorn( popcornSuccess, timeoutWrapper, 100 );
+        if( !_popcorn ) {
+          try {
+            createPopcorn( generatePopcornString() );
+            waitForPopcorn( popcornSuccess, timeoutWrapper, 100 );
+          }
+          catch( e ) {
+            failureWrapper( e );
+          } //try
         }
-        catch( e ) {
-          failureWrapper( e );
-        } //try
       }; //prepare
 
       function prepareMedia( onError ){
@@ -87,6 +91,7 @@
             if ( !video.id || video.id === "" ) {
               video.id = "butter-media-element-" + _mediaObject.id;
             }
+            _popcornTarget = video.id;
             video.setAttribute( "autobuffer", "true" );
             video.setAttribute( "preload", "auto" );
 
@@ -106,6 +111,7 @@
             mediaElement.addEventListener( "error", onError );
             mediaElement.src = _mediaObject.url;
             mediaElement.load();
+            _popcornTarget = mediaElement.id;
             return mediaElement;
           } //if
         } //if _type
@@ -122,34 +128,32 @@
         return _type;
       } //findMediaType
 
-      function generatePopcornString() {
-        var popcornString = "";
+      function generatePopcornString( method ) {
+        var popcornString = "",
+            popcornOptions = "";
 
-        options = options || {};
-
-        var popcornOptions = "";
         if ( _mediaObject.popcornOptions ) {
           popcornOptions = ", " + JSON.stringify( _mediaObject.popcornOptions );
         } //if
 
         var players = {
           "youtu": function() {
-            return "var popcorn = Popcorn.youtube( '" + _mediaObject.target + "', '" +
+            return "var popcorn = Popcorn.youtube( '" + _popcornTarget + "', '" +
               _mediaObject.url + "'" + popcornOptions + " );\n";
           },
           "vimeo": function() {
-            return "var popcorn = Popcorn.vimeo( '" + _mediaObject.target + "', '" +
+            return "var popcorn = Popcorn.vimeo( '" + _popcornTarget + "', '" +
             _mediaObject.url + "'" + popcornOptions + " );\n";
           },
           "soundcloud": function() {
-            return "var popcorn = Popcorn( Popcorn.soundcloud( '" + _mediaObject.target + "'," +
+            return "var popcorn = Popcorn( Popcorn.soundcloud( '" + _popcornTarget + "'," +
             " '" + _mediaObject.url + "') );\n";
           },
           "baseplayer": function() {
-            return "var popcorn = Popcorn( Popcorn.baseplayer( '#" + _mediaObject.target + "'" + popcornOptions + " ) );\n";
+            return "var popcorn = Popcorn( Popcorn.baseplayer( '#" + _popcornTarget + "'" + popcornOptions + " ) );\n";
           },
           "object": function() {
-            return "var popcorn = Popcorn( '#" + _mediaObject.target + "'" + popcornOptions + ");\n";
+            return "var popcorn = Popcorn( '#" + _popcornTarget + "'" + popcornOptions + ");\n";
           }
         };
 
@@ -175,7 +179,7 @@
           } //if trackEvents
         } //if popcorn
 
-        var method = options.method || "inline";
+        method = method || "inline";
 
         if ( method === "event" ) {
           popcornString = "\ndocument.addEventListener('DOMContentLoaded',function(e){\n" + popcornString;
@@ -238,7 +242,7 @@
       }; //waitForPopcorn
 
       function onMediaContentChanged( e ) {
-        var container = _mediaObject.target;
+        var container = document.getElementById( _mediaObject.target );
 
         while( container.firstChild ) {
           container.removeChild( container.firstChild );
@@ -249,7 +253,22 @@
           container.src = "";
         } //if
 
-        prepare();
+        _popcorn.destroy();
+        _popcorn = undefined;
+
+        for( var i=0, l=Popcorn.instances.length; i<l; i++ ) {
+          if( Popcorn.instances[ i ] && Popcorn.instances[ i ].isDestroyed ) {
+            Popcorn.instances.splice( i, 1 );
+          }
+        }
+        
+        prepare(function() {
+          for( t in _mediaObject.tracks ) {
+            for( te in t.trackEvents ) {
+              _popcorn.addTrackEvent( te.popcornOptions );
+            }
+          } 
+        });
       } //onMediaContentChanged
 
       function onTrackEventAdded( e ){
@@ -282,6 +301,7 @@
           configurable: false
         }
       });
+      prepare();
     }; //Media
 
     return Media;

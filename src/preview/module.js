@@ -3,13 +3,14 @@
   define( [ "core/logger", "core/eventmanager", "./page", "./media" ], function( Logger, EventManager, Page, Media ) {
 
     var __guid = 0;
-
+ 
     var Previewer = function( butter, options ) {
 
       var _id = __guid++,
           _logger = new Logger( _id ),
           _media = [],
-          _that = this;
+          _that = this,
+          _page = new Page();
 
         _logger.log( "Starting" );
 
@@ -41,6 +42,31 @@
             } //if
           } //for
         }; //waitForMedia
+
+        this.prepare = function( callback ) {
+
+          var scrapedObject = _page.scrape(),
+              targets = scrapedObject.target,
+              medias = scrapedObject.media;
+
+          _page.preparePopcorn(function() {
+            for( var i = 0, l = targets.length; i < l; i++ ) {
+              butter.addTarget({ object: targets[ i ].id });
+            }
+            for( var i = 0, l = medias.length; i < l; i++ ) {
+              var url = "";
+              if( ["VIDEO", "AUDIO" ].indexOf( medias[ i ].nodeName ) > -1 ) {
+                url = medias[ i ].currentSrc;
+              } else {
+                url = medias[ i ].getAttribute( "data-butter-source" );
+              }
+              butter.addMedia({ target: medias[ i ].id, url: url });
+            }
+
+            callback && callback();
+            butter.dispatch( "previewready" );
+          });
+        };
     }; //Previewer
 
     return Previewer;
