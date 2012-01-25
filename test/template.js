@@ -1,11 +1,14 @@
 document.addEventListener( "DOMContentLoaded", function( e ){
   Butter({
     modules: {
+      preview: {
+      },
       timeline: {
       }
     },
     ready: function( butter ){
-      butter.addMedia({});
+      var media = butter.addMedia({});
+      console.log( media.json );
     } 
   }); //Butter
 }, false );

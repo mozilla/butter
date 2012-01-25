@@ -4,94 +4,99 @@
 
   define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
-    var Media = function ( mediaData ) {
-      var that = this;
-      this.url = mediaData.url;
-      this.target = mediaData.target;
-      this.id = mediaData.id;
-      this.duration = 0;
-      this.popcorn = undefined;
-      this.type = undefined;
-      this.mediaElement = undefined;
+    var Media = function ( mediaObject ) {
 
-      var _interruptLoad = false
-          _mediaLoadAttempts = 0;
+      var _mediaObject = mediaObject,
+          _popcorn,
+          _type,
+          _interruptLoad = false,
+          _mediaLoadAttempts = 0,
+          _this = this;
+
+      this.setupPopcornHandlers = function() {
+        _popcorn.media.addEventListener( "timeupdate", function() {
+          _mediaObject.currentTime = _popcorn.media.currentTime;
+        },false);
+        _popcorn.media.addEventListener( "pause", function() {
+          _mediaObject.paused = true;
+        }, false);
+        _popcorn.media.addEventListener( "playing", function() {
+          _mediaObject.paused = false;
+        }, false);
+      }; //setupPopcornHandlers
+
       this.interruptLoad = function() {
         _interruptLoad = true;
       }; //interrupt
 
-      this.waitForMedia = function() {
+      this.wait = function() {
         _mediaLoadAttempts = 0;
-      }; //waitForMedia
+      }; //wait
 
       this.clear = function() {
-        that.clearPopcorn();
-        that.destroyPopcorn();
-        if ( that.target ) {
-          document.getElementById( that.target ).innerHTML = "";
+        if( _popcorn ){
+          _popcorn.destroy();
+          _popcorn = undefined;
+        } //if
+        if( _mediaObject.target ){
+          document.getElementById( _mediaObject.target ).innerHTML = "";
         } //if
       }; //clear
 
-      this.prepare = function( prepareOptions ) {
-        var onSuccess = prepareOptions.success || function() {},
-            onError = prepareOptions.error || function() {},
-            onTimeout = prepareOptions.timeout || onError,
-            popcornOptions = prepareOptions.popcornOptions;
+      function prepare() {
 
-        function timeoutWrapper( e ) {
+        function timeoutWrapper( e ){
           _interruptLoad = true;
-          onTimeout( e );
+          _mediaObject.dispatch( "mediatimeout" );
         } //timeoutWrapper
 
-        function failureWrapper( e ) {
+        function failureWrapper( e ){
           _interruptLoad = true;
-          onError( e );
+          _mediaObject.dispatch( "mediafailed" );
         } //failureWrapper
-        
-        function popcornSuccess( popcorn ) {
-          onSuccess({
-            popcorn: popcorn
-          });
+
+        function popcornSuccess( e ){
+          _mediaObject.dispatch( "mediaprepared" );
         } //popcornSuccess
 
-        that.prepareMedia( that.findMediaType(), failureWrapper );
+        findMediaType();
+        prepareMedia( failureWrapper );
+
         try {
-          that.createPopcorn( that.generatePopcornString( { options: popcornOptions } ) );
-          that.waitForPopcorn( popcornSuccess, timeoutWrapper, 100 );
+          createPopcorn( generatePopcornString() );
+          waitForPopcorn( popcornSuccess, timeoutWrapper, 100 );
         }
         catch( e ) {
           failureWrapper( e );
         } //try
       }; //prepare
 
-      this.prepareMedia = function( type, onError ) {
-        if ( type === "object" ) {
-          var mediaElement = document.getElementById( that.target );
+      function prepareMedia( onError ){
+        var mediaElement = document.getElementById( _mediaObject.target );
+        if ( _type === "object" ) {
           if (  !mediaElement || [ 'AUDIO', 'VIDEO' ].indexOf( mediaElement.nodeName ) === -1 ) {
             var video = document.createElement( "video" ),
                 src = document.createElement( "source" );
 
             src.addEventListener( "error", onError );
-            src.src = that.url;
-            video.style.width = document.getElementById( that.target ).style.width;
-            video.style.height = document.getElementById( that.target ).style.height;
+            src.src = _mediaObject.url;
+            video.style.width = document.getElementById( _mediaObject.target ).style.width;
+            video.style.height = document.getElementById( _mediaObject.target ).style.height;
             video.appendChild( src );
             video.controls = true;
             if ( !video.id || video.id === "" ) {
-              video.id = "butter-media-element-" + that.id;
+              video.id = "butter-media-element-" + _mediaObject.id;
             }
             video.setAttribute( "autobuffer", "true" );
             video.setAttribute( "preload", "auto" );
 
-            document.getElementById( that.target ).appendChild( video );
-            that.mediaElement = video;
+            document.getElementById( _mediaObject.target ).appendChild( video );
             return video;
           }
           else {
             if ( !mediaElement.id || mediaElement.id === "" ) {
-              mediaElement.id = "butter-media-element-" + that.id;
+              mediaElement.id = "butter-media-element-" + _mediaObject.id;
             } //if
-            that.mediaElement = mediaElement;
             mediaElement.pause();
             mediaElement.src = "";
             while ( mediaElement.firstChild ) {
@@ -99,88 +104,60 @@
             } //while
             mediaElement.removeAttribute( "src" );
             mediaElement.addEventListener( "error", onError );
-            mediaElement.src = that.url;
+            mediaElement.src = _mediaObject.url;
             mediaElement.load();
-            //}
             return mediaElement;
           } //if
-        }
-      }; //prepareMedia
+        } //if _type
+      } //prepareMedia
 
-      function findNode( id, rootNode ) {
-        var children = rootNode.childNodes;
-        for ( var i=0, l=children.length; i<l; ++i ) {
-          if ( children[ i ].id === id ) {
-            return children [ i ];
-          }
-          else {
-            var node = findNode( id, children[ i ] );
-            if ( node ) {
-              return node;
-            } //if
-          } //if
-        } //for
-      } //findNode
-
-      this.alterMediaHTML = function( rootNode ) {
-        var targetElement = findNode( that.target, rootNode );
-        if ( that.type === "object" ) {
-          var parentNode = targetElement.parentNode,
-              newNode = document.getElementById( that.target ).cloneNode( true );
-          parentNode.removeChild( targetElement );
-          parentNode.appendChild( newNode );
-        } //if
-      }; //getMediaHTML
-
-      this.findMediaType = function() {
-        var regexResult = urlRegex.exec( that.url )
+      function findMediaType(){
+        var regexResult = urlRegex.exec( _mediaObject.url )
         if ( regexResult ) {
-          that.type = regexResult[ 1 ];
+          _type = regexResult[ 1 ];
         }
         else {
-           that.type = "object";
+          _type = "object";
         }
-        return that.type;
-      }; //findMediaType
+        return _type;
+      } //findMediaType
 
-      this.generatePopcornString = function( options ) {
-        var type = that.type || that.findMediaType();
-            popcornString = "";
+      function generatePopcornString() {
+        var popcornString = "";
 
         options = options || {};
 
-        var popcornOptions = ""
-        if ( options.options ) {
-          popcornOptions = ", " + JSON.stringify( options.options );
+        var popcornOptions = "";
+        if ( _mediaObject.popcornOptions ) {
+          popcornOptions = ", " + JSON.stringify( _mediaObject.popcornOptions );
         } //if
-
 
         var players = {
           "youtu": function() {
-            return "var popcorn = Popcorn.youtube( '" + that.target + "', '" +
-              that.url + "'" + popcornOptions + " );\n";
+            return "var popcorn = Popcorn.youtube( '" + _mediaObject.target + "', '" +
+              _mediaObject.url + "'" + popcornOptions + " );\n";
           },
           "vimeo": function() {
-            return "var popcorn = Popcorn.vimeo( '" + that.target + "', '" +
-            that.url + "'" + popcornOptions + " );\n";
+            return "var popcorn = Popcorn.vimeo( '" + _mediaObject.target + "', '" +
+            _mediaObject.url + "'" + popcornOptions + " );\n";
           },
           "soundcloud": function() {
-            return "var popcorn = Popcorn( Popcorn.soundcloud( '" + that.target + "'," +
-            " '" + that.url + "') );\n";
+            return "var popcorn = Popcorn( Popcorn.soundcloud( '" + _mediaObject.target + "'," +
+            " '" + _mediaObject.url + "') );\n";
           },
           "baseplayer": function() {
-            return "var popcorn = Popcorn( Popcorn.baseplayer( '#" + that.target + "'" + popcornOptions + " ) );\n";
+            return "var popcorn = Popcorn( Popcorn.baseplayer( '#" + _mediaObject.target + "'" + popcornOptions + " ) );\n";
           },
           "object": function() {
-            return "var popcorn = Popcorn( '#" + that.mediaElement.id + "'" + popcornOptions + ");\n";
+            return "var popcorn = Popcorn( '#" + _mediaObject.target + "'" + popcornOptions + ");\n";
           }
         };
 
         // call certain player function depending on the regexResult
-        popcornString += players[ type ]();
+        popcornString += players[ _type ]();
 
-        if ( that.popcorn ) {
-          var trackEvents = that.popcorn.getTrackEvents();
+        if ( _popcorn ) {
+          var trackEvents = _popcorn.getTrackEvents();
           if ( trackEvents ) {
             for ( var i=0, l=trackEvents.length; i<l; ++i ) {
               var popcornOptions = trackEvents[ i ]._natives.manifest.options;
@@ -211,47 +188,20 @@
         return popcornString;
       }; //generatePopcornString
 
-      this.play = function( message ) {
-        that.popcorn.play();
-      };
-
-      this.pause = function( message ) {
-        that.popcorn.pause();
-      };
-
-      this.mute = function( message ) {
-        that.popcorn.mute( message );
-      };
-
-      this.clearPopcorn = function() {
-        if ( that.popcorn ) {
-          that.popcorn.destroy();
-          that.popcorn = undefined;
-        } //if
-      }; //clearPopcorn
-
-      this.createPopcorn = function( popcornString ) {
+      function createPopcorn( popcornString ){
         var popcornFunction = new Function( "", popcornString );
             popcorn = popcornFunction();
         if ( !popcorn ) {
-          var popcornScript = that.popcornScript = document.createElement( "script" );
+          var popcornScript = _popcornScript = document.createElement( "script" );
           popcornScript.innerHTML = popcornString;
           document.head.appendChild( popcornScript );
           popcorn = window.Popcorn.instances[ window.Popcorn.instances.length - 1 ];
         }
-        that.popcorn = popcorn;
-        that.Popcorn = window.Popcorn;
+        _popcorn = popcorn;
       }; //createPopcorn
 
-      this.destroyPopcorn = function() {
-        if ( that.popcornScript ) {
-          document.head.removeChild( that.popcornScript );
-        }
-        that.popcornScript = undefined;
-      }; //destroyPopcorn
-
-      this.waitForPopcorn = function( callback, timeoutCallback, tries ) {
-        var popcorn = that.popcorn;
+      function waitForPopcorn( callback, timeoutCallback, tries ){
+        var popcorn = _popcorn;
 
         _mediaLoadAttempts = 0;
         _interruptLoad = false;
@@ -267,17 +217,17 @@
             return;
           } //if
           if ( popcorn.media.readyState >= 2 && popcorn.duration() > 0 ) {
-            if ( that.type === "youtu" ) {
-              that.duration = popcorn.duration();
+            if ( _type === "youtu" ) {
+              _mediaObject.duration = popcorn.duration();
               setTimeout( function() {
                 popcorn.pause();
               }, 1000 );
             }
-            else if ( that.type === "vimeo" || that.type === "soundcloud" ) {
-              that.duration = popcorn.duration();
+            else if ( _type === "vimeo" || _type === "soundcloud" ) {
+              _mediaObject.duration = popcorn.duration();
             }
             else {
-              that.duration = popcorn.media.duration;
+              _mediaObject.duration = popcorn.media.duration;
             } //if
             callback( popcorn );
           } else {
@@ -287,10 +237,54 @@
         checkMedia();
       }; //waitForPopcorn
 
+      function onMediaContentChanged( e ) {
+        var container = _mediaObject.target;
+
+        while( container.firstChild ) {
+          container.removeChild( container.firstChild );
+        } //while
+
+        if ( [ "AUDIO", "VIDEO" ].indexOf( container.nodeName ) > -1 ) {
+          container.currentSrc = "";
+          container.src = "";
+        } //if
+
+        prepare();
+      } //onMediaContentChanged
+
+      function onTrackEventAdded( e ){
+        e.data.popcornEvent = _popcorn.getLastTrackEventId();
+      } //onTrackEventAdded
+
+      function onTrackEventUpdated( e ){
+        if( e.data.popcornEvent ){
+          _popcorn.removeTrackEvent( e.data.popcornEvent );
+        }
+        _popcorn[ e.data.type ]( e.data.popcornOptions );
+        e.data.popcornEvent = _popcorn.getLastTrackEventId();
+      } //onTrackEventUpdated
+
+      function onTrackEventRemoved( e ){
+        if( e.data.popcornEvent ){
+          _popcorn.removeTrackEvent( e.data.popcornEvent );
+        }
+      } //onTrackEventRemoved
+
+      _mediaObject.listen( "mediacontentchanged", onMediaContentChanged );
+      _mediaObject.listen( "trackeventadded", onTrackEventAdded );
+      _mediaObject.listen( "trackeventremoved", onTrackEventRemoved );
+      _mediaObject.listen( "trackeventupdated", onTrackEventUpdated );
+
+      Object.defineProperties( this, {
+        media: {
+          get: function(){ return _mediaObject; },
+          enumerable: true,
+          configurable: false
+        }
+      });
     }; //Media
 
     return Media;
 
   }); //define
-
 })();
