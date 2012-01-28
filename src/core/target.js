@@ -28,9 +28,7 @@ THE SOFTWARE.
     var Target = function ( options ) {
       var id = Target.guid++,
           logger = new Logger( id ),
-          em = new EventManager( { logger: logger } );
-
-      em.apply( "Target", this );
+          em = new EventManager( this );
 
       options = options || {};
       var name = options.name || "Target" + id + Date.now();

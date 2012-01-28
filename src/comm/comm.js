@@ -14,10 +14,8 @@
 
       var id = CommClient.guid++,
           logger = new Logger( id ),
-          em = new EventManager( { logger: logger } ),
+          em = new EventManager( this ),
           that = this;
-
-      em.apply( "CommClient", this );
 
       window.addEventListener('message', function ( e ) {
         var data = parseEvent( e, window );
@@ -59,20 +57,16 @@
       var id = CommServer.guid++,
           clients = {},
           logger = new Logger( id ),
-          em = new EventManager( { logger: logger } ),
+          em = new EventManager( this ),
           that = this;
-
-      em.apply( "CommServer", this );
 
       var Client = function( name, client, callback ) {
 
         var id = Client.guid++,
             clientWindow = client,
             logger = new Logger( id ),
-            em = new EventManager( { logger: logger } ),
+            em = new EventManager( this ),
             that = this;
-
-        em.apply( "Client", this );
 
         this.getName = function () {
           return name;

@@ -22,119 +22,96 @@ THE SOFTWARE.
 
 **********************************************************************************/
 
-(function() {
-  define( [ "core/logger" ], function( Logger ) {
+define( [], function(){
 
-    var EventManager = function( emOptions ) {
+  var EventManager = function( object ) {
+    var _listeners = [],
+        _target = this,
+        _this = this;
 
-      var listeners = {},
-          related = {},
-          id = "EventManager" + EventManager.guid++,
-          logger = emOptions.logger || new Logger( id ),
-          targetName = id,
-          that = this;
-      
-      this.listen = function( type, listener, relatedObject ) {
-        if ( type && listener ) {
-          if ( !listeners[ type ] ) {
-            listeners[ type ] = [];
+    this.repeat = function( object, events ){
+      for( var i=0; i<events.length; ++i ){
+        object.listen( events[ i ], _this.dispatch );
+      } //for
+    }; //repeat
+
+    this.unrepeat = function( object, events ){
+      for( var i=0; i<events.length; ++i ){
+        object.unlisten( events[ i ], _this.dispatch );
+      } //for
+    }; //unrepeat
+
+    this.dispatch = function( eventName, eventData ) {
+      var e;
+      if( typeof( eventName ) !== "object" ){
+        e = {
+          type: eventName + "",
+          target: _target,
+          data: eventData,
+        };
+      }
+      else {
+        e = eventName;
+        eventName = e.type;
+      } //if
+      e.currentTarget = _target;
+      if( _listeners[ eventName ] ) {
+        var theseListeners = _listeners[ eventName ].slice();
+        for( var i=0, l=theseListeners.length; i<l; ++i ){
+          theseListeners[ i ]( e );
+        } //for
+      } //if
+    }; //dispatch
+
+    this.listen = function( eventName, listener ) {
+      if( typeof( eventName ) === "object" ){
+        for( var i in eventName ){
+          if( eventName.hasOwnProperty( i ) ){
+            _this.listen( i, eventName[ i ] );
           } //if
-          listeners[ type ].push( listener );
-          if ( relatedObject ) {
-            if ( !related[ relatedObject ] ) {
-              related[ relatedObject ] = [];
-            } //if
-            related[ relatedObject ].push( listener );
-          } //if
+        } //for
+      }
+      else {
+        if ( !_listeners[ eventName ] ) {
+          _listeners[ eventName ] = [];
         }
-        else {
-          logger.error( "type and listener required to listen for event." );
-        } //if
-      }; //listen
+        _listeners[ eventName ].push( listener );
+      } //if
+    }; //listen
 
-      this.unlisten = function( type, listener ) {
-        if ( type && listener ) {
-          var theseListeners = listeners[ type ];
-          if ( theseListeners ) {
+    this.unlisten = function( eventName, listener ) {
+      if( typeof( eventName ) === "object" ){
+        for( var i in eventName ){
+          if( eventName.hasOwnProperty( i ) ){
+            _this.unlisten( i, eventName[ i ] );
+          } //if
+        } //for
+      }
+      else {
+        var theseListeners = _listeners[ eventName ];
+        if ( theseListeners ) {
+          if ( listener ) {
             var idx = theseListeners.indexOf( listener );
             if ( idx > -1 ) {
               theseListeners.splice( idx, 1 );
             } //if
-          } //if
-        }
-        else if ( type ) {
-          if ( listeners[ type ] ) {
-            listeners[ type ] = [];
-          } //if
-        }
-        else {
-          logger.error( "type and listener required to unlisten for event" );
+          }
+          else {
+            _listeners[ eventName ] = [];
+          }
         } //if
-      }; //unlisten
+      } //if
+    }; //unlisten
 
-      this.unlistenByType = function( type, relatedObject ) {
-        var relatedListeners = related[ relatedObject ];
-        for ( var i=0, l=relatedListeners; i<l; ++i ) {
-          that.unlisten( type, relatedListeners[ i ] );
-        } //for
-        delete related[ relatedObject ];
-      }; //unlistenByType
+    if( object ) {
+      object.listen = _this.listen;
+      object.unlisten = _this.unlisten;
+      object.dispatch = _this.dispatch;
+      _target = object;
+    } //if
 
-      this.dispatch = function( typeOrEvent, data, domain ) {
-        var type,
-            preparedEvent,
-            varType = typeof( typeOrEvent );
-        if ( varType === "object" ) {
-          type = typeOrEvent.type;
-          preparedEvent = typeOrEvent;
-          preparedEvent.currentTarget = target || that;
-        }
-        else if ( varType === "string" ) {
-          type = typeOrEvent;
-        } //if
+  }; //EventManager
 
-        if ( type ) {
-          var theseListeners;
-          //copy the listeners to make sure they're all called
-          if ( listeners[ type ] ) {
-            theseListeners = [];
-            for ( var i=0, l=listeners[ type ].length; i<l; ++i ) {
-              theseListeners.push( listeners[ type ][ i ] );
-            } //for
-            var e = preparedEvent || {
-              currentTarget: target || that,
-              target: target || that,
-              domain: domain || targetName,
-              type: type,
-              data: data
-            };
-            for ( var i=0, l=theseListeners.length; i<l; ++i ) {
-              theseListeners[ i ]( e );
-            } //for
-          } //if
-        }
-        else {
-          logger.error( "type required to dispatch event" );
-        } //if
-      }; //dispatch
+  return EventManager;
 
-      this.apply = function( name, to ) {
-        to.listen = that.listen;
-        to.unlisten = that.unlisten;
-        to.dispatch = that.dispatch;
-        targetName = name;
-        target = to;
-      }; //apply
-
-      this.repeat = function( e ) {
-        that.dispatch( e );
-      }; //repeat
-
-    }; //EventManager
-    EventManager.guid = 0;
-
-    return EventManager;
-
-  }); //define
-
-})();
+});

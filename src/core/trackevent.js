@@ -1,105 +1,90 @@
-(function() {
-  define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
+define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventManager, util ) {
 
-    var TrackEvent = function ( options ) {
+  var __guid = 0;
 
-      options = options || {};
+  var TrackEvent = function ( options ) {
 
-      var that = this,
-          id = "TrackEvent" + TrackEvent.guid++,
-          name = options.name || 'Track' + Date.now(),
-          logger = new Logger( id ),
-          em = new EventManager( { logger: logger } ),
-          track,
-          type = options.type,
-          properties = [],
-          popcornOptions = options.popcornOptions || {
-            start: that.start,
-            end: that.end
-          };
+    options = options || {};
 
-      em.apply( "TrackEvent", this );
+    var _this = this,
+        _id = "TrackEvent" + __guid++,
+        _name = options.name || _id,
+        _logger = new Logger( _id ),
+        _em = new EventManager( this ),
+        _track,
+        _type = options.type,
+        _properties = [],
+        _popcornOptions = options.popcornOptions || {
+          start: _this.start,
+          end: _this.end
+        };
 
-      this.update = function( updateOptions ) {
-        for ( var prop in updateOptions ) {
-          if ( updateOptions.hasOwnProperty( prop ) ) {
-            popcornOptions[ prop ] = updateOptions[ prop ];
-          } //if
-        } //for
-        em.dispatch( "trackeventupdated", that );
-      }; //update
+    this.update = function( updateOptions ) {
+      for ( var prop in updateOptions ) {
+        if ( updateOptions.hasOwnProperty( prop ) ) {
+          _popcornOptions[ prop ] = updateOptions[ prop ];
+        } //if
+      } //for
+      _em.dispatch( "trackeventupdated", _this );
+    }; //update
 
-      function clone( obj ) {
-        var newObj = {};
-        for ( var prop in obj ) {
-          if ( obj.hasOwnProperty( prop ) ) {
-            newObj[ prop ] = obj[ prop ];
-          } //if
-        } //for
-        return newObj;
-      } //clone
-
-      Object.defineProperty( this, "popcornOptions", {
+    Object.defineProperties( this, {
+      popcornOptions: {
         enumerable: true,
         get: function() {
-          return clone( popcornOptions );
+          return util.clone( _popcornOptions );
         }
-      });
-
-      Object.defineProperty( this, "type", {
+      },
+      type: {
         enumerable: true,
         get: function() {
-          return type;
+          return _type;
         }
-      });
-
-      Object.defineProperty( this, "track", {
+      },
+      track: {
+        enumerable: true,
         get: function() {
-          return track;
+          return _track;
         },
         set: function( val ) {
-          track = val;
-          em.dispatch( "trackeventtrackchanged", that );
+          _track = val;
+          _em.dispatch( "trackeventtrackchanged", _this );
         }
-      });
-
-      Object.defineProperty( this, "name", {
+      },
+      name: {
+        enumerable: true,
         get: function() {
-          return name;
+          return _name;
         }
-      });
-
-      Object.defineProperty( this, "id", {
+      },
+      id: {
+        enumerable: true,
         get: function() {
-          return id;
+          return _id;
         }
-      });
-
-      Object.defineProperty( this, "json", {
+      },
+      json: {
         get: function() {
           return {
-            id: id,
-            type: this.type,
-            popcornOptions: clone ( popcornOptions ),
-            track: this.track ? this.track.name : undefined,
-            name: name
+            id: _id,
+            type: _type,
+            popcornOptions: util.clone( _popcornOptions ),
+            track: _track ? _track.name : undefined,
+            name: _name
           };
         },
         set: function( importData ) {
-
-          type = popcornOptions.type = importData.type;
+          _type = _popcornOptions.type = importData.type;
           if ( importData.name ) {
-            name = importData.name;
+            _name = importData.name;
           }
-          popcornOptions = importData.popcornOptions;
+          _popcornOptions = importData.popcornOptions;
         }
-      });
+      }
+    }); //properties
+  }; //TrackEvent
 
-    }; //TrackEvent
-    TrackEvent.guid = 0;
+  return TrackEvent;
 
-    return TrackEvent;
+}); //define
 
-  }); //define
-
-})();

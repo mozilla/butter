@@ -22,60 +22,61 @@ THE SOFTWARE.
 
 **********************************************************************************/
 
-(function() {
-  define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Logger, EventManager, TrackEvent ) {
+define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Logger, EventManager, TrackEvent ) {
 
-    var Track = function ( options ) {
-      options = options || {};
+  var __guid = 0;
 
-      var trackEvents = [],
-          id = "Track" + Track.guid++,
-          target = options.target,
-          logger = new Logger( id ),
-          em = new EventManager( { logger: logger } ),
-          that = this;
+  var Track = function( options ){
+    options = options || {};
 
-      options = options || {};
-      var name = options.name || 'Track' + Date.now();
+    var _trackEvents = [],
+        _id = "Track" + __guid++,
+        _target = options.target,
+        _logger = new Logger( _id ),
+        _em = new EventManager( this ),
+        _name = options.name || _id,
+        _this = this;
 
-      em.apply( "Track", this );
-
-      Object.defineProperty( this, "target", {
+    Object.defineProperties( this, {
+      target: {
+        enumerable: true,
         get: function() {
-          return target;
+          return _target;
         },
         set: function( val ) {
-          target = val;
-          em.dispatch( "tracktargetchanged", that );
-          for( var i=0, l=trackEvents.length; i<l; i++ ) {
-            trackEvents[ i ].target = val;
-            trackEvents[ i ].update({ target: val });
+          _target = val;
+          _em.dispatch( "tracktargetchanged", _this );
+          for( var i=0, l=_trackEvents.length; i<l; i++ ) {
+            _trackEvents[ i ].target = val;
+            _trackEvents[ i ].update({ target: val });
           } //for
-          logger.log( "target changed: " + val );
+          _logger.log( "target changed: " + val );
         }
-      }); //target
-
-      Object.defineProperty( this, "name", {
+      },
+      name: {
+        enumerable: true,
+        configurable: false,
         get: function() {
-          return name;
+          return _name;
         }
-      }); //name
-
-      Object.defineProperty( this, "id", {
+      },
+      id: {
+        enumerable: true,
+        configurable: false,
         get: function() {
-          return id;
+          return _id;
         }
-      }); //id
-
-      Object.defineProperty( this, "json", {
+      },
+      json: {
+        enumerable: true,
         get: function() {
           var exportJSONTrackEvents = [];
-          for ( var i=0, l=trackEvents.length; i<l; ++i ) {
+          for ( var i=0, l=_trackEvents.length; i<l; ++i ) {
             exportJSONTrackEvents.push( trackEvents[ i ].json );
           }
           return {
-            name: name,
-            id: id,
+            name: _name,
+            id: _id,
             trackEvents: exportJSONTrackEvents
           };
         },
@@ -88,62 +89,64 @@ THE SOFTWARE.
             for ( var i=0, l=importTrackEvents.length; i<l; ++i ) {
               var newTrackEvent = new TrackEvent();
               newTrackEvent.json = importTrackEvents[ i ];
-              that.addTrackEvent( newTrackEvent );
+              _this.addTrackEvent( newTrackEvent );
             }
           }
         }
-      }); //json
-
-      this.getTrackEvent = function ( trackEvent ) {
-        for ( var i=0, l=trackEvents.length; i<l; ++i) {
-          if (  ( trackEvent.id !== undefined && trackEvents[ i ].id === trackEvent.id ) || 
-                ( trackEvent.name && trackEvents[ i ].name === trackEvent.name ) ||
-                trackEvents[ i ].name === trackEvent ) {
-            return trackEvents[i];
-          } //if
-        } //for
-      }; //getTrackEvent
-
-      Object.defineProperty( this, "trackEvents", {
+      },
+      trackEvents: {
+        enumerable: true,
+        configurable: false,
         get: function() {
-          return trackEvents;
+          return _trackEvents;
         }
-      }); //trackEvents
+      }
+    });
 
-      this.addTrackEvent = function ( trackEvent ) {
-        if ( !( trackEvent instanceof TrackEvent ) ) {
-          trackEvent = new TrackEvent( trackEvent );
+    this.getTrackEvent = function( trackEvent ){
+      for ( var i=0, l=trackEvents.length; i<l; ++i) {
+        if (  ( trackEvent.id !== undefined && trackEvents[ i ].id === trackEvent.id ) || 
+              ( trackEvent.name && trackEvents[ i ].name === trackEvent.name ) ||
+              trackEvents[ i ].name === trackEvent ) {
+          return trackEvents[i];
         } //if
-        if ( target ) {
-          trackEvents.target = target;
-        } //if
-        trackEvents.push( trackEvent );
-        trackEvent.track = that;
-        trackEvent.listen( "trackeventupdated", em.repeat );
-        em.dispatch( "trackeventadded", trackEvent );
-        return trackEvent;
-      }; //addTrackEvent
+      } //for
+    }; //getTrackEvent
 
-      this.removeTrackEvent = function( trackEvent ) {
-        if ( typeof(trackEvent) === "string" ) {
-          trackEvent = that.getTrackEvent( trackEvent );
-        } //if
+    this.addTrackEvent = function ( trackEvent ){
+      if( !( trackEvent instanceof TrackEvent ) ){
+        trackEvent = new TrackEvent( trackEvent );
+      } //if
+      if( _target ){
+        _trackEvents.target = _target;
+      } //if
+      _trackEvents.push( trackEvent );
+      trackEvent.track = _this;
+      _em.repeat( trackEvent, [
+        "trackeventupdated"
+      ]);
+      _em.dispatch( "trackeventadded", trackEvent );
+      return trackEvent;
+    }; //addTrackEvent
 
-        var idx = trackEvents.indexOf( trackEvent );
+    this.removeTrackEvent = function( trackEvent ){
+      if ( typeof( trackEvent ) === "string" ) {
+        trackEvent = _this.getTrackEvent( trackEvent );
+      } //if
+      var idx = _trackEvents.indexOf( trackEvent );
+      if ( idx > -1 ) {
+        _trackEvents.splice( idx, 1 );
+        trackEvent.track = undefined;
+        _em.unrepeat( trackEvents, [
+          "trackeventupdated"
+        ]);
+        _em.dispatch( "trackeventremoved", trackEvent );
+      } //if
 
-        if ( idx > -1 ) {
-          trackEvents.splice( idx, 1 );
-          trackEvent.track = undefined;
-          trackEvent.unlisten( "trackeventupdated", em.repeat );
-          em.dispatch( "trackeventremoved", trackEvent );
-        } //if
+    }; //removeEvent
 
-      }; //removeEvent
+  }; //Track
 
-    }; //Track
-    Track.guid = 0;
+  return Track;
 
-    return Track;
-
-  }); //define
-})();
+}); //define

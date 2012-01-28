@@ -58,6 +58,7 @@
 
         function popcornSuccess( e ){
           _mediaObject.dispatch( "mediaprepared" );
+          _mediaObject.dispatch( "mediaready" );
           callback && callback();
         } //popcornSuccess
 

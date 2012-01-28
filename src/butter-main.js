@@ -78,10 +78,8 @@ THE SOFTWARE.
           _targets = [],
           _id = "Butter" + __guid++,
           _logger = new Logger( _id ),
-          _em = new EventManager( { logger: _logger } ),
+          _em = new EventManager( this ),
           _this = this;
-
-      _em.apply( "Butter", this );
 
       function checkMedia() {
         if ( !currentMedia ) {
@@ -261,17 +259,19 @@ THE SOFTWARE.
         var mediaName = media.name;
         _media.push( media );
 
-        media.listen( "mediacontentchanged", _em.repeat );
-        media.listen( "mediadurationchanged", _em.repeat );
-        media.listen( "mediatargetchanged", _em.repeat );
-        media.listen( "mediatimeupdate", _em.repeat );
-        media.listen( "mediaready", _em.repeat );
-        media.listen( "trackadded", _em.repeat );
-        media.listen( "trackremoved", _em.repeat );
-        media.listen( "tracktargetchanged", _em.repeat );
-        media.listen( "trackeventadded", _em.repeat );
-        media.listen( "trackeventremoved", _em.repeat );
-        media.listen( "trackeventupdated", _em.repeat );
+        _em.repeat( media, [
+          "mediacontentchanged",
+          "mediadurationchanged",
+          "mediatargetchanged",
+          "mediatimeupdate",
+          "mediaready",
+          "trackadded",
+          "trackremoved",
+          "tracktargetchanged",
+          "trackeventadded",
+          "trackeventremoved",
+          "trackeventupdated",
+        ]);
 
         if ( media.tracks.length > 0 ) {
           for ( var ti=0, tl=media.tracks.length; ti<tl; ++ti ) {
@@ -302,20 +302,22 @@ THE SOFTWARE.
         var idx = _media.indexOf( media );
         if ( idx > -1 ) {
           _media.splice( idx, 1 );
-          media.unlisten( "mediacontentchanged", _em.repeat );
-          media.unlisten( "mediadurationchanged", _em.repeat );
-          media.unlisten( "mediatargetchanged", _em.repeat );
-          media.unlisten( "mediatimeupdate", _em.repeat );
-          media.unlisten( "mediaready", _em.repeat );
-          media.unlisten( "trackadded", _em.repeat );
-          media.unlisten( "trackremoved", _em.repeat );
-          media.unlisten( "tracktargetchanged", _em.repeat );
-          media.unlisten( "trackeventadded", _em.repeat );
-          media.unlisten( "trackeventremoved", _em.repeat );
-          media.unlisten( "trackeventupdated", _em.repeat );
+          _em.unrepeat( media, [
+            "mediacontentchanged",
+            "mediadurationchanged",
+            "mediatargetchanged",
+            "mediatimeupdate",
+            "mediaready",
+            "trackadded",
+            "trackremoved",
+            "tracktargetchanged",
+            "trackeventadded",
+            "trackeventremoved",
+            "trackeventupdated",
+          ]);
           var tracks = media.tracks;
           for ( var i=0, l=tracks.length; i<l; ++i ) {
-            _em.dispatch( "trackremoved", tracks[i] );
+            _em.dispatch( "trackremoved", tracks[ i ] );
           } //for
           if ( media === _currentMedia ) {
             _currentMedia = undefined;
@@ -329,24 +331,6 @@ THE SOFTWARE.
       this.extend = function(){
         Butter.extend( _this, [].slice.call( arguments, 1 ) );
       };
-
-      if ( butterOptions.ready ) {
-        _em.listen( "ready", function( e ){
-          butterOptions.ready( e.data );
-        });
-      } //if
-
-      if( butterOptions.modules ){
-        for( var moduleName in butterOptions.modules ){
-          if( moduleName in __modules ){
-            _this[ moduleName ] = new __modules[ moduleName ]( _this, butterOptions.modules[ moduleName ] );
-          } //if
-        } //for
-        _em.dispatch( "ready", _this );
-      }
-      else {
-        _em.dispatch( "ready", _this );
-      } //if
 
       /****************************************************************
        * Properties
@@ -427,6 +411,24 @@ THE SOFTWARE.
           enumerable: true
         }
       });
+
+      if ( butterOptions.ready ) {
+        _em.listen( "ready", function( e ){
+          butterOptions.ready( e.data );
+        });
+      } //if
+
+      if( butterOptions.modules ){
+        for( var moduleName in butterOptions.modules ){
+          if( moduleName in __modules ){
+            _this[ moduleName ] = new __modules[ moduleName ]( _this, butterOptions.modules[ moduleName ] );
+          } //if
+        } //for
+        _em.dispatch( "ready", _this );
+      }
+      else {
+        _em.dispatch( "ready", _this );
+      } //if
 
     }; //Butter
 

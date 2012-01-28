@@ -1,0 +1,204 @@
+/**********************************************************************************
+
+Copyright (C) 2012 by Mozilla Foundation
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+**********************************************************************************/
+
+#butter-timeline {
+  position: fixed;
+  z-index: 2147483647;
+  bottom: 0px;
+  left: 0px;
+  width: 80%;
+  height: 300px;
+  border: 1px solid #000;
+  background-image: url( "assets/bg.jpg" );
+}
+
+#butter-timeline-status-bar {
+  box-shadow: inset 0 1px 0 #5d5d5d;
+  moz-box-shadow: inset 0 1px 0 #5d5d5d;
+  o-box-shadow: inset 0 1px 0 #5d5d5d;
+  webkit-box-shadow: inset 0 1px 0 #5d5d5d;
+  background-image: -moz-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% );
+  background-image: -webkit-gradient( linear, left bottom, left top, color-stop( 0, #2c2c2c ), color-stop( 1, #4c4c4c ) );
+  position: absolute;
+  height: 40px;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  border-bottom: 1px solid #000;
+}
+
+#butter-timeline-status-bar div {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+#butter-timeline-status-bar div div {
+  border-radius: 5px;
+  moz-border-radius: 5px;
+  o-border-radius: 5px;
+  webkit-border-radius: 5px;
+  background: #111;
+  float: left;
+  margin: 5px 0 0 5px;
+  padding: 8px 35px 5px 10px;
+  position: relative;
+  vertical-align: baseline;
+  border-image: initial;
+  float: left;
+  display: inline-block;
+  max-width: 200px;
+  overflow: hidden;
+  -moz-transition: width 0.5s;
+  -webkit-transition: width 0.5s;
+  transition: width 0.5s;
+  -moz-transition: max-width 0.5s;
+  -webkit-transition: max-width 0.5s;
+  transition: max-width 0.5s;
+}
+
+#butter-timeline-status-bar div div:hover {
+  max-width: 300px;
+  width: 300px;
+  background: #000;
+}
+
+#butter-timeline-status-bar div div .media-url {
+  white-space: nowrap;
+  background: transparent;
+  font-size: .8em;
+  margin: 0;
+  outline: none;
+  padding: 0;
+  text-decoration: none;
+  vertical-align: baseline;
+  color: #ddd;
+  max-width: 180px;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  cursor: pointer;
+  -moz-box-shadow:    none;
+  -webkit-box-shadow: none;
+  box-shadow:         none;
+}
+
+#butter-timeline-status-bar div div .media-url:hover {
+  max-width: 280px;
+  width: 280px;
+}
+
+#butter-timeline .butter-timeline-media {
+  width: 100%;
+  height: 250px;
+  position: absolute;
+  top: 50px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+#butter-timeline .butter-timeline-tracks {
+  width: 100%;
+  height: 100%;
+  height: 260px;
+}
+
+#butter-timeline .butter-timeline-tracks .trackliner-root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+} 
+
+#butter-timeline .butter-timeline-tracks .trackliner-container {
+  margin: 5px 10px 0px 10px;
+  height: 100%;
+  padding: 8px 30px 8px 8px;
+  position: relative;
+  box-shadow: inset 0 0 6px #131313;
+  webkit-box-shadow: inset 0 0 6px #131313;
+  moz-box-shadow: inset 0 0 6px #131313;
+  o-box-shadow: inset 0 0 6px #131313;
+  border: 1px solid #2B2B2B;
+  border-image: initial;
+  border-radius: 5px;
+  moz-border-radius: 5px;
+  o-border-radius: 5px;
+  webkit-border-radius: 5px;
+  overflow: hidden;
+  background: transparent;
+  font-size: 100%;
+  outline: none;
+}
+
+#butter-timeline .butter-timeline-tracks .trackliner-event {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  o-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  border-radius: 5px;
+  moz-border-radius: 5px;
+  o-border-radius: 5px;
+  webkit-border-radius: 5px;
+  background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(255,255,51)), color-stop(1, rgb(140,215,90)) );
+  background-image: -moz-linear-gradient( center bottom, rgb(255,255,0) 0%, rgb(200,200,0) 100% );
+  font: normal 10px/25px Arial, Helvetica, sans-serif;
+  text-align: center;
+  text-transform: uppercase;
+  color: #333;
+  cursor: move;
+  overflow: hidden;
+  display: block;
+  height: 25px;
+  line-height: 25px;
+  opacity: 0.8;
+  position: absolute;
+}
+
+#butter-timeline .butter-timeline-tracks .trackliner-track {
+  width: 100%;
+  box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
+  border-radius: 6px;
+  moz-border-radius: 6px;
+  o-border-radius: 6px;
+  webkit-border-radius: 6px;
+  border: 1px solid #111111 !important;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: transparent;
+  background-image: url( "assets/track-bg.png" );
+  background-origin: padding-box;
+  background-position: 0 0;
+  background-repeat: repeat;
+  background-size: auto auto;
+  height: 25px;
+  margin-bottom: 6px;
+  position: relative;
+}
+
+#butter-timeline .butter-timeline-tracks .trackliner-track .track-title {
+  position: absolute;
+  left: 5px;
+  top: 50%;
+}

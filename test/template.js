@@ -7,13 +7,26 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       }
     },
     ready: function( butter ){
-      //var media = butter.addMedia({});
       butter.preview.prepare(function() {
-       
-        console.log( butter );
-        butter.media[ 0 ].url = "http://download.blender.org/peach/trailer/trailer_400p.ogg"
+        var media = butter.media[ 0 ];
+
+        var count = 0;
+        media.listen( "mediaready", function( e ){
+          var track = media.addTrack( "Track1" ),
+              event = track.addTrackEvent({
+                type: "text",
+                popcornOptions: {
+                  start: 1,
+                  end: 9,
+                  text: "test"
+                }
+              });
+          event.update({
+            start: 2,
+            end: 5 
+          });
+        });
       });
-      console.log( butter.exportProject() );
     } 
   }); //Butter
 }, false );

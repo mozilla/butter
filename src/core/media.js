@@ -38,8 +38,8 @@ THE SOFTWARE.
       var _tracks = [],
           _id = "Media" + __guid++,
           _logger = new Logger( _id ),
-          _em = new EventManager( { logger: _logger } ),
-          _name = mediaOptions.name || _id + Date.now(),
+          _em = new EventManager( this ),
+          _name = mediaOptions.name || _id,
           _url,
           _target,
           _registry,
@@ -47,17 +47,17 @@ THE SOFTWARE.
           _duration = 0,
           _this = this;
 
-      _em.apply( "Media", this );
-
       this.addTrack = function ( track ) {
         if ( !( track instanceof Track ) ) {
           track = new Track( track );
         } //if
         _tracks.push( track );
-        track.listen( "tracktargetchanged", _em.repeat );
-        track.listen( "trackeventadded", _em.repeat );
-        track.listen( "trackeventremoved", _em.repeat );
-        track.listen( "trackeventupdated", _em.repeat );
+        _em.repeat( track, [
+          "tracktargetchanged",
+          "trackeventadded",
+          "trackeventremoved",
+          "trackeventupdated"
+        ]);
         _em.dispatch( "trackadded", track );
         var trackEvents = track.trackEvents;
         if ( trackEvents.length > 0 ) {
@@ -90,10 +90,12 @@ THE SOFTWARE.
           for ( var i=0, l=events.length; i<l; ++i ) {
             _em.dispatch( "trackeventremoved", events[i] );
           } //for
-          track.unlisten( "tracktargetchanged", _em.repeat );
-          track.unlisten( "trackeventadded", _em.repeat );
-          track.unlisten( "trackeventremoved", _em.repeat );
-          track.unlisten( "trackeventupdated", _em.repeat );
+          _em.unrepeat( track, [
+            "tracktargetchanged",
+            "trackeventadded",
+            "trackeventremoved",
+            "trackeventupdated"
+          ]);
           _em.dispatch( "trackremoved", track );
           return track;
         } //if

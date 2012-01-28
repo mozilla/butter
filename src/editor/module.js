@@ -35,11 +35,9 @@ THE SOFTWARE.
       var _editors = {},
           _comm = new Comm.CommServer(),
           _logger = new Logger( "EventEditor" ),
-          _em = new EventManager( { logger: _logger } ),
+          _em = new EventManager( this ),
           _editorGuid = 0,
           _this = this;
-
-      _em.apply( "EventEditor", this );
 
       var Editor = function ( options ) {
         var _target = options.target,
