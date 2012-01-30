@@ -233,6 +233,7 @@
             else {
               _mediaObject.duration = popcorn.media.duration;
             } //if
+            _mediaObject.dispatch( "mediaready" );
             callback( popcorn );
           } else {
             setTimeout( checkMedia, 100 );

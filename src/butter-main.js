@@ -84,14 +84,14 @@ THE SOFTWARE.
       _em.apply( "Butter", this );
 
       function checkMedia() {
-        if ( !currentMedia ) {
+        if ( !_currentMedia ) {
           throw new Error("No media object is selected");
         } //if
       }
 
       this.getManifest = function ( name ) {
         checkMedia();
-        return currentMedia.getManifest( name );
+        return _currentMedia.getManifest( name );
       }; //getManifest
 
       /****************************************************************
@@ -100,20 +100,20 @@ THE SOFTWARE.
       //addTrack - Creates a new Track
       this.addTrack = function ( track ) {
         checkMedia();
-        return currentMedia.addTrack( track );
+        return _currentMedia.addTrack( track );
       }; //addTrack
 
       
       //getTrack - Get a Track by its id
       this.getTrack = function ( name ) {
         checkMedia();
-        return currentMedia.getTrack( name );
+        return _currentMedia.getTrack( name );
       }; //getTrack
-
+       
       //removeTrack - Remove a Track
       this.removeTrack = function ( track ) {
         checkMedia();
-        return currentMedia.removeTrack( track );
+        return _currentMedia.removeTrack( track );
       };
 
       /****************************************************************

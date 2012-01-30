@@ -3,6 +3,8 @@
 <head>
     <title>Basic template</title>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <script src="../external/jquery/jquery.js" /></script>
+    <script src="../external/jquery-ui/jquery-ui.min.js" /></script>
     <script src="../src/butter.js" /></script>
     <script type="text/javascript" src="template.js"></script>
     <style>
@@ -28,19 +30,12 @@
     </style>
 </head>
 <body>
-  <div id="main2" data-butter="media" data-butter-source="http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv"></div>
-  <div id="main3" data-butter="media" data-butter-source="http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv"></div>
     <video id="main" data-butter="media">
       <source src="http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv" />
     </video>
-
-    <div class="container-div">
-        <div class="content-div" data-butter="target" id="Area1"></div>
-        <p>Area 1</p>
-    </div>
-    <div class="container-div">
-        <div class="content-div" data-butter="target" id="Area2"></div>
-        <p>Area 2</p>
-    </div>
+    <div id="plugin-tray"></div>
+  <div id="target-div"></div>
+  <button id="removePlugin">Remove Plugin</button>
+  <textarea id="pluginName"></textarea>
 </body>
 </html>
