@@ -28,7 +28,7 @@ define( [
           "core/trackevent",
           "core/track",
           "core/eventmanager",
-          "./trackliner",
+          "./trackliner/trackliner",
           "./track",
         ],
         function(
@@ -38,7 +38,13 @@ define( [
           Track, 
           EventManager,
           TrackLiner,
-          TrackMap ){
+          TrackView ){
+
+  function ScrollBarV(){
+  } //ScrollBarV
+
+  function ScrollBarH(){
+  } //ScrollBarH
 
   function MediaInstance( media ){
     var _this = this,
@@ -56,13 +62,42 @@ define( [
     _tracksContainer.className = "butter-timeline-tracks";
     _tracksContainer.id = "butter-timeline-tracks-" + media.id;
 
+    //var _vScrollBar = new ScrollBarV( _
+    
+
+    function onTrackEventRequested( e ){
+      var newTrack = e.currentTarget,
+          eventId = e.data.event,
+          newStart = e.data.start,
+          trackEvent;
+
+      //try to remove the trackevent from all known tracks
+      for( var tId in _tracks ){
+        if( _tracks.hasOwnProperty( tId ) ){
+          trackEvent = trackEvent || _tracks[ tId ].track.removeTrackEvent( eventId );
+        } //if
+      } //for
+
+      var corn = trackEvent.popcornOptions,
+          newEnd = corn.end - corn.start + newStart;
+
+      //then, add it to the correct one
+      if( trackEvent ){
+        newTrack.track.addTrackEvent( trackEvent );
+      } //if
+
+      trackEvent.update( { start: newStart, end: newEnd } );
+    } //onTrackEventRequested
+
     function addTrack( bTrack ){
       var track;
       track = _tracks[ bTrack.id ];
       if( !track ){
-        track = new TrackMap( _media, bTrack, _trackliner );
+        track = new TrackView( _media, bTrack, _trackliner );
+        _tracks[ bTrack.id ] = track;
         track.zoom = _zoom;
       } //if
+      track.listen( "trackeventrequested", onTrackEventRequested );
     } //addTrack
 
     _media.listen( "mediaready", function(){
@@ -86,6 +121,7 @@ define( [
       _media.listen( "trackremoved", function( event ){
         if( event.target !== "timeline" ){
           var bTrack = event.data;
+          _tracks[ bTrack.id ].view.unlisten( "trackeventrequested", onTrackEventRequested );
           _tracks[ bTrack.id ].destroy();
           delete _tracks[ bTrack.id ];
         } //if
@@ -96,16 +132,14 @@ define( [
         if( fromUI ){
           var tlTrack = event.data.track;
           bTrack = new Track();
-          _tracks[ bTrack.id ] = new TrackMap( _media, bTrack, _trackliner, tlTrack );
+          _tracks[ bTrack.id ] = new TrackView( _media, bTrack, _trackliner, tlTrack );
           _media.addTrack( bTrack );
         } //if
       }); //trackadded
 
-      _trackliner.listen( "trackremoved", function( event ){
-        _media.removeTrack( event.data.track );
-      }); //trackremoved
-
       _container.appendChild( _tracksContainer );
+      _trackliner.zoom = _zoom;
+      _trackliner.duration = _media.duration;
       _initialized = true;
       _em.dispatch( "ready" );
 
@@ -131,11 +165,9 @@ define( [
         },
         set: function( val ){
           _zoom = val;
-          for( var t in _tracks ){
-            if( _tracks.hasOwnProperty( t ) ){
-              _tracks[ t ].zoom = _zoom;
-            } //if
-          } //for
+          if( _trackliner ){
+            _trackliner.zoom = _zoom;
+          }
         }
       },
       element: {

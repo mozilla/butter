@@ -21,6 +21,19 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                   text: "test"
                 }
               });
+          media.addTrack( "Track" + Math.random() );
+          media.addTrack( "Track" + Math.random() );
+          media.addTrack( "Track" + Math.random() );
+          media.addTrack( "Track" + Math.random() );
+          media.addTrack( "Track" + Math.random() );
+          media.addTrack( "Track" + Math.random() );
+          media.addTrack( "Track" + Math.random() );
+          media.addTrack( "Track" + Math.random() );
+          media.addTrack( "Track" + Math.random() );
+          media.addTrack( "Track" + Math.random() );
+          media.addTrack( "Track" + Math.random() );
+          media.addTrack( "Track" + Math.random() );
+          media.addTrack( "Track" + Math.random() );
           event.update({
             start: 2,
             end: 5 

@@ -24,15 +24,13 @@ THE SOFTWARE.
 
 define( [
           "core/logger", 
-          "core/trackevent", 
           "./status-bar",
-          "./media-instance",
+          "./media",
         ], 
         function( 
           Logger, 
-          TrackEvent, 
           StatusBar,
-          MediaInstance ){
+          Media ){
 
   var Timeline = function( butter, options ){
 
@@ -43,8 +41,8 @@ define( [
 
     var _statusBar = new StatusBar( butter, _target );
 
-    var _mediaInstances = {},
-        _currentMediaInstance;
+    var _media = {},
+        _currentMedia;
 
     this.findAbsolutePosition = function( obj ){
       var curleft = curtop = 0;
@@ -100,32 +98,32 @@ define( [
 
     butter.listen( "mediaadded", function( event ){
       var mediaObject = event.data,
-          mediaInstance = new MediaInstance( mediaObject );
+          media = new Media( mediaObject );
 
-      _mediaInstances[ mediaObject.id ] = mediaInstance;
-      _target.appendChild( mediaInstance.element );
+      _media[ mediaObject.id ] = media;
+      _target.appendChild( media.element );
 
-      function mediaInstanceReady( e ){
+      function mediaReady( e ){
         butter.dispatch( "timelineready" );
-      } //mediaInstanceReady
+      } //mediaReady
 
       function mediaChanged( event ){
-        if ( _currentMediaInstance !== _mediaInstances[ event.data.id ] ){
-          _currentMediaInstance && _currentMediaInstance.hide();
-          _currentMediaInstance = _mediaInstances[ event.data.id ];
-          _currentMediaInstance && _currentMediaInstance.show();
+        if ( _currentMedia !== _media[ event.data.id ] ){
+          _currentMedia && _currentMedia.hide();
+          _currentMedia = _media[ event.data.id ];
+          _currentMedia && _currentMedia.show();
           butter.dispatch( "timelineready" );
         }
       }
     
       function mediaRemoved( event ){
         var mediaObject = event.data;
-        if( _mediaInstances[ mediaObject.id ] ){
-          _mediaInstances[ mediaObject.id ].destroy();
+        if( _media[ mediaObject.id ] ){
+          _media[ mediaObject.id ].destroy();
         }
-        delete _mediaInstances[ mediaObject.id ];
-        if( _currentMediaInstance && ( mediaObject.id === _currentMediaInstance.media.id ) ){
-          _currentMediaInstance = undefined;
+        delete _media[ mediaObject.id ];
+        if( _currentMedia && ( mediaObject.id === _currentMedia.media.id ) ){
+          _currentMedia = undefined;
         }
         butter.unlisten( "mediachanged", mediaChanged );
         butter.unlisten( "mediaremoved", mediaRemoved );
@@ -137,10 +135,10 @@ define( [
 
     this.currentTimeInPixels = function( pixel ){
       if( pixel != null ){
-        butter.currentTime = pixel / _currentMediaInstance.container.offsetWidth * _currentMediaInstance.duration;
-        butter.dispatch( "mediatimeupdate", _currentMediaInstance.media, "timeline" );
+        butter.currentTime = pixel / _currentMedia.container.offsetWidth * _currentMedia.duration;
+        butter.dispatch( "mediatimeupdate", _currentMedia.media, "timeline" );
       } //if
-      return butter.currentTime / _currentMediaInstance.duration * ( _currentMediaInstance.container.offsetWidth );
+      return butter.currentTime / _currentMedia.duration * ( _currentMedia.container.offsetWidth );
     }; //currentTimeInPixels
 
 /*
@@ -156,14 +154,14 @@ define( [
         currentZoom--;
       }
       _target.style.width = originalWidth * currentZoom + "px";
-      for( var i in _currentMediaInstance.trackLinerTrackEvents ){
-        trackLinerEvent = _currentMediaInstance.trackLinerTrackEvents[ i ];
-        butterTrackEvent = _currentMediaInstance.butterTrackEvents[ trackLinerEvent.element.id ];
+      for( var i in _currentMedia.trackLinerTrackEvents ){
+        trackLinerEvent = _currentMedia.trackLinerTrackEvents[ i ];
+        butterTrackEvent = _currentMedia.butterTrackEvents[ trackLinerEvent.element.id ];
         corn = butterTrackEvent.popcornOptions,
         start = corn.start;
         end = corn.end;
-        trackLinerEvent.element.style.width = Math.max( 3, ( end - start ) / _currentMediaInstance.duration * _target.offsetWidth ) + "px";
-        trackLinerEvent.element.style.left = start / _currentMediaInstance.duration * _target.offsetWidth + "px";
+        trackLinerEvent.element.style.width = Math.max( 3, ( end - start ) / _currentMedia.duration * _target.offsetWidth ) + "px";
+        trackLinerEvent.element.style.left = start / _currentMedia.duration * _target.offsetWidth + "px";
       }
       return currentZoom;
     }; //zoom

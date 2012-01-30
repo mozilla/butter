@@ -22,13 +22,14 @@ THE SOFTWARE.
 
 **********************************************************************************/
 
-define( [ "core/trackevent", "./trackevent" ], function( TrackEvent, TrackEventMap ) {
+define( [ "core/trackevent", "core/eventmanager", "./trackevent" ], function( TrackEvent, EventManager, TrackEventView ) {
 
   function Track( media, bTrack, trackliner, tlTrack ){
     var _media = media,
         _trackliner = trackliner,
         _bTrack = bTrack,
         _tlTrack = tlTrack,
+        _em = new EventManager( this ),
         _events = {},
         _this = this;
 
@@ -38,13 +39,13 @@ define( [ "core/trackevent", "./trackevent" ], function( TrackEvent, TrackEventM
     } //if
 
     function onDurationChanged( e ){
-      _tlTrack.length = _media.duration;
     } //onDurationChanged
     onDurationChanged();
     _media.listen( "mediadurationchanged", onDurationChanged );
 
     function removeTrackEvent( bEvent ){
       _events[ bEvent.id ].destroy();
+      _tlTrack.removeTrackEvent( _events[ bEvent.id ].view.id );
       delete _events[ bEvent.id ];
     } //removeTrackEvent
 
@@ -54,8 +55,7 @@ define( [ "core/trackevent", "./trackevent" ], function( TrackEvent, TrackEventM
         end: bEvent.popcornOptions.end,
         text: bEvent.type
       });
-      tlEvent.zoom = _tlTrack.zoom;
-      _events[ bEvent.id ] = new TrackEventMap( _media, bEvent, tlEvent, _trackliner );
+      _events[ bEvent.id ] = new TrackEventView( _media, bEvent, tlEvent, _trackliner );
     } //addTrackEvent
 
     this.destroy = function(){
@@ -72,9 +72,9 @@ define( [ "core/trackevent", "./trackevent" ], function( TrackEvent, TrackEventM
     });
 
     _bTrack.listen( "trackeventremoved", function( e ){
-      if( _events[ e.data ] ){
+      if( _events[ e.data.id ] ){
         removeTrackEvent( e.data );
-      }
+      } //if
     });
 
     _trackliner.listen( "trackupdated", function( event ){
@@ -85,6 +85,15 @@ define( [ "core/trackevent", "./trackevent" ], function( TrackEvent, TrackEventM
     });
 
     _tlTrack.listen( "trackeventrequested", function( e ){
+      var element = e.data.ui.draggable[ 0 ],
+          left = element.offsetLeft,
+          id = element.getAttribute( "butter-trackevent-id" )
+          trackRect = _tlTrack.element.getBoundingClientRect();
+      _em.dispatch( "trackeventrequested", {
+        event: id,
+        start: left / trackRect.width * _media.duration
+      });
+/*
       var _tlTrack = e.data.track,
           _bTrack = __bTracks[ _tlTrack.id ],
           _tlTrackEvent = e.data.trackEvent,
@@ -101,10 +110,11 @@ define( [ "core/trackevent", "./trackevent" ], function( TrackEvent, TrackEventM
           type: type
         });
         // make a function for this
-        __tlTrackEvents[ _bTrackEvent.id ] = _tlTrackEvent;
-        __bTrackEvents[ _tlTrackEvent.element.id ] = _bTrackEvent;
+        _tlTrackEvents[ _bTrackEvent.id ] = _tlTrackEvent;
+        _bTrackEvents[ _tlTrackEvent.element.id ] = _bTrackEvent;
         _bTrack.addTrackEvent( _bTrackEvent );
       }
+*/
     });
 
     _tlTrack.listen( "trackeventadded", function( e ){
@@ -113,18 +123,29 @@ define( [ "core/trackevent", "./trackevent" ], function( TrackEvent, TrackEventM
     _tlTrack.listen( "trackeventremoved", function( e ){
     });
 
+    _trackliner.listen( "trackremoved", function( e ){
+    });
+
     var trackEvents = _bTrack.trackEvents;
     for( var i=0; i<trackEvents.length; ++i ){
       var bEvent = trackEvents[ i ];
       addTrackEvent( bEvent, bEvent.popcornOptions );
     } //for
 
-    Object.defineProperty( this, "zoom", {
-      get: function(){
-        return _tlTrack.zoom;
+    Object.defineProperties( this, {
+      track: {
+        enumerable: true,
+        configurable: false,
+        get: function() {
+          return _bTrack;
+        }
       },
-      set: function( val ){
-        _tlTrack.zoom = val;
+      view: {
+        enumerable: true,
+        configurable: false,
+        get: function() {
+          return _tlTrack;
+        }
       }
     });
 

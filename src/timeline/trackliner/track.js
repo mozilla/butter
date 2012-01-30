@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 **********************************************************************************/
 
-define( [ "core/logger", "core/eventmanager", "./trackliner-trackevent" ], function( Logger, EventManager, TrackEvent ){
+define( [ "core/logger", "core/eventmanager", "./trackevent" ], function( Logger, EventManager, TrackEvent ){
 
   var __guid = 0;
 
@@ -33,7 +33,7 @@ define( [ "core/logger", "core/eventmanager", "./trackliner-trackevent" ], funct
         _this = this,
         _eventManager = new EventManager( this ),
         _element = document.createElement( "div" ),
-        _length = 1,
+        _duration = 1,
         _zoom = 1;
 
     _element.className = "trackliner-track";
@@ -46,25 +46,19 @@ define( [ "core/logger", "core/eventmanager", "./trackliner-trackevent" ], funct
         var eventId = ui.draggable[ 0 ].id,
             parentId = ui.draggable[ 0 ].parentNode.id;
 
-        if( _id !== parentId ){
-          _this.removeTrackEvent( eventId );
-        }
-        else if( !_events[ eventId ] ){
+        // we only care about it if it's not already on this track
+        if( !_events[ eventId ] ){
           _eventManager.dispatch( "trackeventrequested", {
             event: event,
             ui: ui
           });
         } //if
-/*
-          var rect = _element.getBoundingClientRect();
-          track.addTrackEvent( track.createTrackEvent({
-              left: ( e.clientX - rect.left ),
-              width: 50,
-              innerHTML: ui.draggable[ 0 ].innerHTML
-            }, true ));
-*/
       }
     });
+
+    function resetContainer(){
+      _element.style.width = ( _duration * _zoom ) + "px";
+    } //resetContainer
 
     Object.defineProperties( this, {
       element: {
@@ -88,7 +82,7 @@ define( [ "core/logger", "core/eventmanager", "./trackliner-trackevent" ], funct
         },
         set: function( val ){
           _zoom = val;
-          _this.length = _length;
+          resetContainer();
           for( var e in _events ){
             if( _events.hasOwnProperty( e ) ){
               _events[ e ].zoom = val;
@@ -96,17 +90,17 @@ define( [ "core/logger", "core/eventmanager", "./trackliner-trackevent" ], funct
           } //for
         }
       },
-      length: {
+      duration: {
         enumerable: true,
         get: function(){
-          return _length;
+          return _duration;
         },
         set: function( val ){
-          _length = val;
-          _element.style.width = ( _length * _zoom ) + "px";
+          _duration = val;
+          resetContainer();
           for( var e in _events ){
             if( _events.hasOwnProperty( e ) ){
-              _events[ e ].length = _length;
+              _events[ e ].duration = _duration;
             } //if
           } //for
         }
@@ -122,15 +116,13 @@ define( [ "core/logger", "core/eventmanager", "./trackliner-trackevent" ], funct
     this.addTrackEvent = function( trackEvent, ui ) {
       _events[ trackEvent.element.id ] = trackEvent;
       _element.appendChild( trackEvent.element );
+      trackEvent.activate();
       trackEvent.trackId = _id;
       ui = ui || false;
-      _eventManager.dispatch( "trackeventadded", {
-        track: _this,
-        trackEvent: trackEvent,
-        ui: ui
-      });
+      trackEvent.duration = _duration;
+      trackEvent.zoom = _zoom;
       return trackEvent;
-    };
+    }; //addTrackEvent
 
     this.updateTrackEvent = function( trackEvent, options ) {
       trackEvent.update( options );
@@ -143,9 +135,8 @@ define( [ "core/logger", "core/eventmanager", "./trackliner-trackevent" ], funct
 
     this.removeTrackEvent = function( id ) {
       var trackEvent = _events[ id ];
-      delete events[ id ];
       _element.removeChild( trackEvent.element );
-      _eventManager.dispatch( "trackeventremoved", trackEvent );
+      delete _events[ id ];
       return trackEvent;
     }; //removeTrackEvent
 

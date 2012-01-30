@@ -103,15 +103,21 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
       }
     });
 
-    this.getTrackEvent = function( trackEvent ){
-      for ( var i=0, l=trackEvents.length; i<l; ++i) {
-        if (  ( trackEvent.id !== undefined && trackEvents[ i ].id === trackEvent.id ) || 
-              ( trackEvent.name && trackEvents[ i ].name === trackEvent.name ) ||
-              trackEvents[ i ].name === trackEvent ) {
-          return trackEvents[i];
+    this.getTrackEventById = function( id ){
+      for ( var i=0, l=_trackEvents.length; i<l; ++i) {
+        if( _trackEvents[ i ].id === id ) {
+          return _trackEvents[ i ];
         } //if
       } //for
-    }; //getTrackEvent
+    }; //getTrackEventById
+
+    this.getTrackEventByName = function( name ){
+      for ( var i=0, l=_trackEvents.length; i<l; ++i) {
+        if( _trackEvents[ i ].name === name ) {
+          return _trackEvents[ i ];
+        } //if
+      } //for
+    }; //getTrackEventByName
 
     this.addTrackEvent = function ( trackEvent ){
       if( !( trackEvent instanceof TrackEvent ) ){
@@ -125,22 +131,25 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
       _em.repeat( trackEvent, [
         "trackeventupdated"
       ]);
+      trackEvent.track = _this;
       _em.dispatch( "trackeventadded", trackEvent );
       return trackEvent;
     }; //addTrackEvent
 
     this.removeTrackEvent = function( trackEvent ){
       if ( typeof( trackEvent ) === "string" ) {
-        trackEvent = _this.getTrackEvent( trackEvent );
+        trackEvent = _this.getTrackEventById( trackEvent );
       } //if
       var idx = _trackEvents.indexOf( trackEvent );
       if ( idx > -1 ) {
         _trackEvents.splice( idx, 1 );
         trackEvent.track = undefined;
-        _em.unrepeat( trackEvents, [
+        _em.unrepeat( trackEvent, [
           "trackeventupdated"
         ]);
+        trackEvent.track = undefined;
         _em.dispatch( "trackeventremoved", trackEvent );
+        return trackEvent;
       } //if
 
     }; //removeEvent

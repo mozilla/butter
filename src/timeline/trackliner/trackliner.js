@@ -1,4 +1,4 @@
-define( [ "core/logger", "core/eventmanager", "./trackliner-track" ], function( Logger, EventManager, Track ){
+define( [ "core/logger", "core/eventmanager", "./track" ], function( Logger, EventManager, Track ){
 
   var TrackLiner = function( tlOptions ) {
 
@@ -12,6 +12,8 @@ define( [ "core/logger", "core/eventmanager", "./trackliner-track" ], function( 
         _parent = document.createElement( "div" ),
         _container = document.createElement( "div" ),
         _eventManager = new EventManager( this ),
+        _zoom = 1,
+        _duration = 0,
         _this = this;
 
     if( typeof( tlOptions ) === "string" ){
@@ -103,7 +105,8 @@ define( [ "core/logger", "core/eventmanager", "./trackliner-track" ], function( 
     this.addTrack = function( track ){
       _container.appendChild( track.element );
       _tracks[ track.element.id ] = track;
-
+      track.zoom = _zoom;
+      track.duration = _duration;
     }; //addTrack
 
     this.removeTrack = function( track ) {
@@ -126,6 +129,40 @@ define( [ "core/logger", "core/eventmanager", "./trackliner-track" ], function( 
       } //for
       return _this;
     }; //deselectOthers
+
+    function resetContainer() {
+      _container.style.width = _duration * _zoom + "px";
+      _parent.style.width = _duration * _zoom + "px";
+    } //resetContainer
+
+    Object.defineProperties( this, {
+      zoom: {
+        enumerable: true,
+        get: function(){ return _zoom; },
+        set: function( val ){
+          _zoom = val;
+          for( var t in _tracks ){
+            if( _tracks.hasOwnProperty( t ) ){
+              _tracks[ t ].zoom = _zoom;
+            } //if
+          } //for
+          resetContainer();
+        }
+      },
+      duration: {
+        enumerable: true,
+        get: function(){ return _duration; },
+        set: function( val ){
+          _duration = val;
+          for( var t in _tracks ){
+            if( _tracks.hasOwnProperty( t ) ){
+              _tracks[ t ].duration = _duration;
+            } //if
+          } //for
+          resetContainer();
+        }
+      }
+    });
 
   }; //TrackLiner
 

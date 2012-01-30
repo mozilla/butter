@@ -29,13 +29,15 @@ define( [], function() {
         _media = media,
         _bEvent = bEvent,
         _tlEvent = tlEvent,
-        _zoom = 100,
         _this = this;
 
     function onDurationChanged( e ){
     } //onDurationChanged
     onDurationChanged();
     _media.listen( "mediadurationchanged", onDurationChanged );
+
+    tlEvent.element.setAttribute( "butter-trackevent-type", bEvent.type );
+    tlEvent.element.setAttribute( "butter-trackevent-id", bEvent.id );
 
     _bEvent.listen( "trackeventupdated", function( e ){
       _tlEvent.update( _bEvent.popcornOptions );
@@ -63,12 +65,19 @@ define( [], function() {
 */
     });
 
+    this.destroy = function() {
+    }; //destroy
+
     Object.defineProperties( this, {
-      duration: {
-        get: function(){ return _media.duration; },
-        set: function( val ){
-          _media.duration = val;
-        }
+      view: {
+        enumerable: true,
+        configurable: false,
+        get: function(){ return _tlEvent; }
+      },
+      trackEvent: {
+        enumerable: true,
+        configurable: false,
+        get: function(){ return _bEvent; }
       }
     });
 
