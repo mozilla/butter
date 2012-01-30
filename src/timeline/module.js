@@ -165,11 +165,6 @@ THE SOFTWARE.
             scale: 1,
             duration: this.duration
           });
-
-          this.trackLine.listen( "pluginremoved", function( event ) {
-            var type = event.data.type;
-            var trackEvents = _currentMediaInstance.butterTrackEvents;
-          });
           this.trackLine.listen( "trackupdated", function( event ) {
             var track = event.data.track,
                 index = event.data.index;

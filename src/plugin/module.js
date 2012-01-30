@@ -37,8 +37,8 @@ THE SOFTWARE.
         pluginOptions = pluginOptions || {};
 
         var _id = "plugin" + __plugins.length,
-            _this = this;
-            _name = pluginOptions.name || 'Plugin' + Date.now();
+            _this = this,
+            _name = pluginOptions.name || 'Plugin' + Date.now(),
             _path = pluginOptions.path;
 
         this.type = pluginOptions.type;

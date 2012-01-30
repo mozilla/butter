@@ -50,9 +50,6 @@ THE SOFTWARE.
           target = document.getElementById( track.target );
         });
 
-        butter.listen( "pluginremoved", function( event ) {
-        }); //pluginremoved
-        
         this.close = function() {
         }; //close
 
