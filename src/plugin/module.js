@@ -106,7 +106,7 @@ THE SOFTWARE.
 
         __container.appendChild( plugin.createElement( __pattern ) );
 
-        if( _path ) {
+        if( plugin._path ) {
           var head = document.getElementsByTagName( "HEAD" )[ 0 ],
               script = document.createElement( "script" );
           

@@ -36,7 +36,10 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           butter.plugin.add({ name: "footnote", type: "footnote", path: "../external/popcorn-js/plugins/footnote/popcorn.footnote.js" });
           butter.tracks[ 0 ].addTrackEvent({ name: "TrackEvent 1", type: "notfootnote" });
           butter.tracks[ 0 ].addTrackEvent({ name: "TrackEvent 1", type: "footnote" });
-          butter.track.Editor( butter.getTrack({ name: "Track 1" }));
+          if ( count === 0 ) {
+            butter.track.Editor( track );
+            count++;
+          }
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );
