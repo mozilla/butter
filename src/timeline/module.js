@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 define( [
           "core/logger", 
-          "./status-bar",
+          "status/module",
           "./media",
         ], 
         function( 
@@ -34,14 +34,9 @@ define( [
 
   var Timeline = function( butter, options ){
 
-    var _target = document.createElement( "div" );
-    _target.id = "butter-timeline";
-    _target.className = "butter-timeline";
-    document.body.appendChild( _target );
-
-    var _statusBar = new StatusBar( butter, _target );
-
-    var _media = {},
+    var _target = butter.createTimeline(),
+        _statusBar = new StatusBar( butter, _target ),
+        _media = {},
         _currentMedia;
 
     this.findAbsolutePosition = function( obj ){

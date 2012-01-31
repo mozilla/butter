@@ -101,7 +101,15 @@ THE SOFTWARE.
         return _currentMedia.addTrack( track );
       }; //addTrack
 
-      
+      //creatTimeline - Creates the timeline element on the page
+      this.createTimeline = function() {
+        var target = document.createElement( "div" );
+        target.id = "butter-timeline";
+        target.className = "butter-timeline";
+        document.body.appendChild( target );
+        return target;
+      }; //createTimeline
+
       //getTrack - Get a Track by its id
       this.getTrack = function ( name ) {
         checkMedia();
