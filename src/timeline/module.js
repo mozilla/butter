@@ -25,11 +25,13 @@ THE SOFTWARE.
 define( [
           "core/logger", 
           "status/module",
+          "./toggler",
           "./media",
         ], 
         function( 
           Logger, 
           StatusBar,
+          Toggler,
           Media ){
 
   var Timeline = function( butter, options ){
@@ -37,6 +39,7 @@ define( [
     var _target = butter.createTimeline(),
         _statusBar = new StatusBar( butter, _target ),
         _media = {},
+        _toggler = new Toggler( butter, _target );
         _currentMedia;
 
     this.findAbsolutePosition = function( obj ){

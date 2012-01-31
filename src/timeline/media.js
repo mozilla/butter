@@ -137,8 +137,8 @@ define( [
       _container.appendChild( _tracksContainer );
       _root.appendChild( _container );
 
-      //var _vScrollBar = new Scrollbars.Vertical( _trackliner
-      var _hScrollBar = new Scrollbars.Horizontal( _container, _tracksContainer );
+      _hScrollBar = new Scrollbars.Horizontal( _container, _tracksContainer ),
+      _hScrollBar = new Scrollbars.Vertical( _container, _tracksContainer ),
 
       _trackliner.zoom = _zoom;
       _trackliner.duration = _media.duration;
@@ -195,7 +195,7 @@ define( [
       }
     });
 
-    _this.zoom = 100;
+    _this.zoom = 200;
 
   } //MediaInstance
 

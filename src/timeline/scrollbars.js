@@ -24,22 +24,110 @@ THE SOFTWARE.
 
 define( [], function(){
 
-  function Vertical( ){
-  } //Vertical
+  const SCROLL_FACTOR = 5;
 
-  function Horizontal( parentElement, controlElement ){
+  function Vertical( parentElement, controlElement ){
     var _element = document.createElement( "div" ),
-        _handle = document.createElement( "div" )
+        _handle = document.createElement( "div" ),
         _parent = parentElement,
         _control = controlElement,
+        _elementHeight,
+        _controlHeight,
+        _handleHeight,
+        _mousePos = 0,
         _this = this;
 
-    _element.className = "butter-timeline-scroll-h";
+    _element.className = "butter-timeline-scroll butter-timeline-scroll-v";
     _handle.className = "butter-timeline-scroll-handle";
 
     _element.appendChild( _handle );
     _parent.appendChild( _element );
-    
+
+    function setup(){
+      _elementHeight = _element.getBoundingClientRect().height;
+      _controlHeight = _control.getBoundingClientRect().height;
+      _handleHeight = Math.min( _elementHeight, _controlHeight / SCROLL_FACTOR );
+      _handle.style.height = _handleHeight + "px";
+    } //setup
+
+    function onMouseUp(){
+      window.removeEventListener( "mouseup", onMouseUp, false );
+      window.removeEventListener( "mousemove", onMouseMove, false );
+      _handle.addEventListener( "mousedown", onMouseDown, false );
+    } //onMouseUp
+
+    function onMouseMove( e ){
+      var diff = e.pageY - _mousePos;
+      diff = Math.max( 0, Math.min( diff, _elementHeight - _handleHeight ) );
+      _handle.style.top = diff + "px";
+      var p = _handle.offsetTop / ( _elementHeight - _handleHeight );
+      _control.scrollTop = ( _control.scrollHeight - _elementHeight ) * p;
+    } //onMouseMove
+
+    function onMouseDown( e ){
+      var handleY = _handle.offsetTop;
+      _mousePos = e.pageY - handleY;
+      window.addEventListener( "mouseup", onMouseUp, false );
+      window.addEventListener( "mousemove", onMouseMove, false );
+      _handle.removeEventListener( "mousedown", onMouseDown, false );
+    } //onMouseDown
+
+    _control.addEventListener( "resize", setup, false );
+    _handle.addEventListener( "mousedown", onMouseDown, false );
+    setup();
+
+  } //Vertical
+
+  function Horizontal( parentElement, controlElement ){
+    var _element = document.createElement( "div" ),
+        _handle = document.createElement( "div" ),
+        _parent = parentElement,
+        _control = controlElement,
+        _elementWidth,
+        _controlWidth,
+        _handleWidth,
+        _mousePos = 0,
+        _this = this;
+
+    _element.className = "butter-timeline-scroll butter-timeline-scroll-h";
+    _handle.className = "butter-timeline-scroll-handle";
+
+    _element.appendChild( _handle );
+    _parent.appendChild( _element );
+
+    function setup(){
+      _elementWidth = _element.getBoundingClientRect().width;
+      _controlWidth = _control.getBoundingClientRect().width;
+      _handleWidth = Math.min( _elementWidth, _controlWidth / SCROLL_FACTOR );
+      _handle.style.width = _handleWidth + "px";
+    } //setup
+
+    function onMouseUp(){
+      window.removeEventListener( "mouseup", onMouseUp, false );
+      window.removeEventListener( "mousemove", onMouseMove, false );
+      _handle.addEventListener( "mousedown", onMouseDown, false );
+    } //onMouseUp
+
+    function onMouseMove( e ){
+      var diff = e.pageX - _mousePos;
+      diff = Math.max( 0, Math.min( diff, _elementWidth - _handleWidth ) );
+      _handle.style.left = diff + "px";
+      var p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
+      _control.scrollLeft = ( _control.scrollWidth - _elementWidth ) * p;
+    } //onMouseMove
+
+    function onMouseDown( e ){
+      var handleX = _handle.offsetLeft;
+      _mousePos = e.pageX - handleX;
+      window.addEventListener( "mouseup", onMouseUp, false );
+      window.addEventListener( "mousemove", onMouseMove, false );
+      _handle.removeEventListener( "mousedown", onMouseDown, false );
+    } //onMouseDown
+
+    _control.addEventListener( "resize", setup, false );
+    _handle.addEventListener( "mousedown", onMouseDown, false );
+    setup();
+
   } //Horizontal
 
   return {
