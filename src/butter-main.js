@@ -38,7 +38,8 @@ THE SOFTWARE.
             "track/module",
             "plugin/module",
             "timeline/module",
-            "dialog/module"
+            "dialog/module",
+            "ui/module"
           ],
           function( 
             require, 
@@ -54,7 +55,8 @@ THE SOFTWARE.
             TrackModule,
             PluginModule,
             TimelineModule,
-            DialogModule
+            DialogModule,
+            UIModule
   ){
 
     var __modules = {
@@ -63,7 +65,8 @@ THE SOFTWARE.
       track: TrackModule,
       timeline: TimelineModule,
       plugin: PluginModule,
-      preview: PreviewModule
+      preview: PreviewModule,
+      ui: UIModule
     };
 
     var __guid = 0;
@@ -100,15 +103,6 @@ THE SOFTWARE.
         checkMedia();
         return _currentMedia.addTrack( track );
       }; //addTrack
-
-      //creatTimeline - Creates the timeline element on the page
-      this.createTimeline = function() {
-        var target = document.createElement( "div" );
-        target.id = "butter-timeline";
-        target.className = "butter-timeline";
-        document.body.appendChild( target );
-        return target;
-      }; //createTimeline
 
       //getTrack - Get a Track by its id
       this.getTrack = function ( name ) {
@@ -426,12 +420,24 @@ THE SOFTWARE.
         });
       } //if
 
-      if( butterOptions.modules ){
-        for( var moduleName in butterOptions.modules ){
-          if( moduleName in __modules ){
-            _this[ moduleName ] = new __modules[ moduleName ]( _this, butterOptions.modules[ moduleName ] );
-          } //if
-        } //for
+      if( butterOptions.config && typeof( butterOptions.config ) === "string" ){
+        var xhr = new XMLHttpRequest();
+        if( xhr.overrideMimeType ){
+          // Firefox generates a misleading "syntax" error if we don't have this line.
+          xhr.overrideMimeType( "application/json" );
+        }
+        xhr.open( "GET", butterOptions.config, false );
+        xhr.send( null );
+
+        if ( xhr.status === 200 || xhr.status === 0 ) {
+          var config = JSON.parse( xhr.responseText ),
+              modules = config.modules;
+          for( var moduleName in modules ){
+            if( modules.hasOwnProperty( moduleName ) && moduleName in __modules ){
+              _this[ moduleName ] = new __modules[ moduleName ]( _this, modules[ moduleName ] );
+            } //if
+          } //for
+        }
         _em.dispatch( "ready", _this );
       }
       else {

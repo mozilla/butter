@@ -21,25 +21,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 **********************************************************************************/
+
 define( [], function(){
-  return function( butter, parentElement ){
-    var _butter = butter,
-        _parent = parentElement,
-        _element = document.createElement( "div" ),
-        _state = false;
 
-    _element.id = "butter-timeline-toggle";
-    _parent.appendChild( _element );
+  var StatusBar = function( butter, parentElement ){
+    var _rootElement = document.createElement( "div" ),
+        _list = document.createElement( "div" ),
+        _media = {};
 
-    _element.addEventListener( "click", function( e ){
-      _state = !_state;
-      if( _state ){
-        _parent.setAttribute( "butter-timeline-toggle-state", true );
-      }
-      else {
-        _parent.setAttribute( "butter-timeline-toggle-state", false );
-      } //if
-    }, false );
+    _rootElement.id = "butter-timeline-status-bar";
+    _rootElement.appendChild( _list );
+    parentElement.appendChild( _rootElement );
 
-  };
-});
+    butter.listen( "mediachanged", function( e ){
+    });
+
+    butter.listen( "mediaadded", function( e ){
+      var item = document.createElement( "div" ),
+          text = document.createElement( "div" );
+      _list.appendChild( item );
+      item.appendChild( text );
+      text.className = "media-url";
+      text.innerHTML = e.data.url;
+      _media[ e.data.id ] = item;
+    });
+
+    butter.listen( "mediaremoved", function( e ){
+    });
+
+  }; //StatusBar
+
+  return StatusBar;
+}); //define
+
