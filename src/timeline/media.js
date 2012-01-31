@@ -31,6 +31,7 @@ define( [
           "./trackliner/trackliner",
           "./track",
           "./scrollbars",
+          "./timebar"
         ],
         function(
           $,
@@ -40,7 +41,8 @@ define( [
           EventManager,
           TrackLiner,
           TrackView,
-          Scrollbars ){
+          Scrollbars,
+          TimeBar ){
 
   function MediaInstance( media ){
     var _this = this,
@@ -54,6 +56,7 @@ define( [
         _initialized = false,
         _hScrollBar,
         _vScrollBar,
+        _timebar = new TimeBar( _root, _media, _tracksContainer ),
         _zoom = 1;
 
     _root.className = "butter-timeline-media";
@@ -142,6 +145,9 @@ define( [
 
       _trackliner.zoom = _zoom;
       _trackliner.duration = _media.duration;
+
+      _timebar.update( _zoom );
+
       _initialized = true;
       _em.dispatch( "ready" );
 
@@ -169,6 +175,7 @@ define( [
           _zoom = val;
           if( _trackliner ){
             _trackliner.zoom = _zoom;
+            _timebar.update( _zoom );
           }
         }
       },

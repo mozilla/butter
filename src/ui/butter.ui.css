@@ -36,6 +36,62 @@ THE SOFTWARE.
   transition: bottom 0.5s;
 }
 
+#butter-timeline .butter-timebar {
+  position: absolute;
+  height: 30px;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+}
+
+#butter-timeline .butter-timebar-scrubber-container {
+  background: #222;
+  border-radius: 15px;
+  position: absolute;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  top: 0px;
+  width: 100px;
+  height: 7px;
+  left: 0;
+}
+
+#butter-timeline .butter-timebar-scrubber-node {
+  border: 2px solid #bbb;
+  background: #fff;
+  width: 10px;
+  height: 10px;
+  border-radius: 20px;
+  position: absolute;
+  left: 0px;
+  margin-left: -5px;
+  margin-top: -2px;
+  cursor: pointer;
+}
+
+#butter-timeline .butter-timebar-scrubber-line {
+  background: rgba( 200, 0, 0,  0.7);
+  position: absolute;
+  top: 12px;
+  left: 3px;
+  width: 4px;
+  height: 210px;
+  cursor: pointer;
+}
+
+#butter-timeline .butter-timebar-canvas-container {
+  position: absolute;
+  left: 0px;
+  top: 13px;
+  height: 27px;
+  overflow: hidden;
+}
+
+#butter-timeline .butter-timebar canvas {
+  height: 27px;
+}
 
 #butter-timeline[ butter-ui-hidden="true" ] {
   bottom: -260px;
@@ -158,7 +214,7 @@ THE SOFTWARE.
 #butter-timeline .butter-timeline-media-container {
   position: absolute;
   width: 100%;
-  top: 20px;
+  top: 40px;
 }
 
 #butter-timeline .butter-timeline-scroll {
@@ -205,8 +261,7 @@ THE SOFTWARE.
 
 #butter-timeline .butter-timeline-tracks {
   width: 100%;
-  height: 200px;
-  bottom: 20px;
+  height: 180px;
   overflow: hidden;
   box-shadow: inset 0 0 6px #131313;
   webkit-box-shadow: inset 0 0 6px #131313;
