@@ -161,6 +161,20 @@ define( [ "core/logger", "core/eventmanager", "./track" ], function( Logger, Eve
           } //for
           resetContainer();
         }
+      },
+      vScroll: {
+        enumerable: true,
+        get: function(){ return _root.scrollTop; },
+        set: function( val ){
+          _root.scrollTop = _root.scrollHeight * val;
+        }
+      },
+      hScroll: {
+        enumerable: true,
+        get: function(){ return _root.scrollLeft; },
+        set: function( val ){
+          _root.scrollLeft = _root.scrollWidth * val;
+        }
       }
     });
 

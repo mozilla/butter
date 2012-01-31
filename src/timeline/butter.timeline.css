@@ -27,16 +27,10 @@ THE SOFTWARE.
   z-index: 2147483647;
   bottom: 0px;
   left: 0px;
-  width: 80%;
+  width: 100%;
   height: 300px;
   border: 1px solid #000;
   background-image: url( "assets/bg.jpg" );
-}
-
-#butter-timeline .scrollbar-h {
-}
-
-#butter-timeline .scrollbar-v {
 }
 
 #butter-timeline-status-bar {
@@ -115,9 +109,10 @@ THE SOFTWARE.
 }
 
 #butter-timeline .butter-timeline-media {
-  width: 100%;
-  height: 250px;
   position: absolute;
+  right: 10%;
+  width: 80%;
+  height: 250px;
   top: 50px;
   -moz-user-select: none;
   -webkit-user-select: none;
@@ -125,11 +120,24 @@ THE SOFTWARE.
   user-sele4ct: none;
 }
 
+#butter-timeline .butter-timeline-media-container {
+  position: absolute;
+  width: 100%;
+  top: 20px;
+}
+
+#butter-timeline .butter-timeline-scroll-h {
+  background: #222;
+  border-radius: 15px;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  height: 10px;
+}
+
 #butter-timeline .butter-timeline-tracks {
   width: 87%;
   height: 200px;
-  position: absolute;
-  right: 20px;
   bottom: 20px;
   overflow: hidden;
   box-shadow: inset 0 0 6px #131313;
@@ -254,4 +262,5 @@ THE SOFTWARE.
   background: linear-gradient(top, #00ff00 0%,#00c100 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ff00', endColorstr='#00c100',GradientType=0 ); /* IE6-9 */
 }
+
 

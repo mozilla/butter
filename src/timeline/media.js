@@ -30,6 +30,7 @@ define( [
           "core/eventmanager",
           "./trackliner/trackliner",
           "./track",
+          "./scrollbars",
         ],
         function(
           $,
@@ -38,32 +39,28 @@ define( [
           Track, 
           EventManager,
           TrackLiner,
-          TrackView ){
-
-  function ScrollBarV(){
-  } //ScrollBarV
-
-  function ScrollBarH(){
-  } //ScrollBarH
+          TrackView,
+          Scrollbars ){
 
   function MediaInstance( media ){
     var _this = this,
         _media = media,
         _em = new EventManager( this ),
+        _root = document.createElement( "div" ),
         _container = document.createElement( "div" ),
         _tracksContainer = document.createElement( "div" ),
         _trackliner,
         _tracks = {},
         _initialized = false,
+        _hScrollBar,
+        _vScrollBar,
         _zoom = 1;
 
-    _container.className = "butter-timeline-media";
-    _container.id = "butter-timeline-media-" + media.id;
+    _root.className = "butter-timeline-media";
+    _root.id = "butter-timeline-media-" + media.id;
+    _container.className = "butter-timeline-media-container";
     _tracksContainer.className = "butter-timeline-tracks";
     _tracksContainer.id = "butter-timeline-tracks-" + media.id;
-
-    //var _vScrollBar = new ScrollBarV( _
-    
 
     function onTrackEventRequested( e ){
       var newTrack = e.currentTarget,
@@ -138,6 +135,11 @@ define( [
       }); //trackadded
 
       _container.appendChild( _tracksContainer );
+      _root.appendChild( _container );
+
+      //var _vScrollBar = new Scrollbars.Vertical( _trackliner
+      var _hScrollBar = new Scrollbars.Horizontal( _container, _tracksContainer );
+
       _trackliner.zoom = _zoom;
       _trackliner.duration = _media.duration;
       _initialized = true;
@@ -146,15 +148,15 @@ define( [
     }); //mediaready
 
     this.destroy = function() {
-      _container.parentNode.removeChild( _container );
+      _root.parentNode.removeChild( _root );
     }; //destroy
 
     this.hide = function() {
-      _container.style.display = "none";
+      _root.style.display = "none";
     }; //hide
 
     this.show = function() {
-      _container.style.display = "block";
+      _root.style.display = "block";
     }; //show
 
     Object.defineProperties( this, {
@@ -174,7 +176,7 @@ define( [
         enumerable: true,
         configurable: false,
         get: function(){
-          return _container;
+          return _root;
         }
       },
       media: {
