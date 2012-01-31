@@ -31,7 +31,7 @@ THE SOFTWARE.
       var __plugins = [],
           __container,
           __pluginElementPrefix = "butter-plugin-",
-          __pattern = '<li class="$type_tool"><a href="#" title="$type"><span></span>$type</a></li>';
+          __pattern = '<li class="$type_tool ui-draggable"><a href="#" title="$type"><span></span>$type</a></li>';
 
       var Plugin = function ( pluginOptions ) {
         pluginOptions = pluginOptions || {};
@@ -94,9 +94,9 @@ THE SOFTWARE.
 
       __container = document.createElement( "div" );
       __container.id = "butter-plugin";
+      
       //__container.className = "viewport enable-scroll";
       document.getElementById( "butter-timeline" ).appendChild( __container );
-      __pattern = moduleOptions.pattern;
 
       this.add = function( plugin ) {
 

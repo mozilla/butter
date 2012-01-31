@@ -27,18 +27,9 @@ THE SOFTWARE.
   define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
     var TrackEditor = function( butter, options ) {
-      if ( !options ) {
-        throw new Error( "invalid arguments" );
-      }
-
-      if ( !options.target ) {
-        throw new Error( "must supply a target" );
-      }
-      var target = document.getElementById( options.target ) || options.target,
-          that = this;
 
       var Editor = function( track ) {
-        var target = document.getElementById( options.target ) || options.target,
+        var target = document.getElementById( "butter-plugin" ), 
             that = this;
         butter.listen( "trackremoved", function( event ) {
           if ( event.data === track ) {

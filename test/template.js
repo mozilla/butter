@@ -5,7 +5,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
   }, false);
 
   Butter({
-    config: "../../config/default.conf",
+    config: "../config/default.conf",
     ready: function( butter ){
       butter.preview.prepare(function() {
         var media = butter.media[ 0 ];
@@ -21,10 +21,9 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                   text: "test"
                 }
               });
-          //butter.plugin.add({ name: "footnote", type: "footnote", path: "../external/popcorn-js/plugins/footnote/popcorn.footnote.js" });
-          //butter.tracks[ 0 ].addTrackEvent({ name: "TrackEvent 1", type: "notfootnote" });
-          //butter.tracks[ 0 ].addTrackEvent({ name: "TrackEvent 1", type: "footnote" });
-          //butter.track.Editor( track );
+          butter.plugin.add({ name: "footnote", type: "footnote", path: "../external/popcorn-js/plugins/footnote/popcorn.footnote.js" });
+          butter.tracks[ 0 ].addTrackEvent({ name: "TrackEvent 1", type: "footnote" });
+          butter.track.Editor( track );
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );

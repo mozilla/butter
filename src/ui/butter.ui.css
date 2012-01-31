@@ -331,3 +331,23 @@ THE SOFTWARE.
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ff00', endColorstr='#00c100',GradientType=0 ); /* IE6-9 */
 }
 
+#butter-plugin {
+  border-radius: 6px;
+	moz-border-radius: 6px;
+	o-border-radius: 6px;
+	webkit-border-radius: 6px;
+  background-image: -moz-linear-gradient(center bottom,#6E6E6E 0,#7D7D7D 100%);
+	background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#6E6E6E),color-stop(1,#7D7D7D));
+	border: 1px solid #333;
+	box-shadow: 0 1px 0 #656565;
+	height: 175px;
+	moz-box-shadow: 0 1px 0 #656565;
+	o-box-shadow: 0 1px 0 #656565;
+	padding: 0;
+	position: absolute;
+	right: 20px;
+	top: 67px;
+	webkit-box-shadow: 0 1px 0 #656565;
+	width: 120px;
+}
+
