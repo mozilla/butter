@@ -25,11 +25,13 @@ THE SOFTWARE.
 define( [
           "core/logger", 
           "./status-bar",
+          "./toggler",
           "./media",
         ], 
         function( 
           Logger, 
           StatusBar,
+          Toggler,
           Media ){
 
   var Timeline = function( butter, options ){
@@ -39,7 +41,8 @@ define( [
     _target.className = "butter-timeline";
     document.body.appendChild( _target );
 
-    var _statusBar = new StatusBar( butter, _target );
+    var _statusBar = new StatusBar( butter, _target ),
+        _toggler = new Toggler( butter, _target );
 
     var _media = {},
         _currentMedia;

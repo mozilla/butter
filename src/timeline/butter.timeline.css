@@ -31,6 +31,37 @@ THE SOFTWARE.
   height: 300px;
   border: 1px solid #000;
   background-image: url( "assets/bg.jpg" );
+  -moz-transition: bottom 0.5s;
+  -webkit-transition: bottom 0.5s;
+  transition: bottom 0.5s;
+}
+
+
+#butter-timeline[ butter-timeline-toggle-state="true" ] {
+  bottom: -260px;
+}
+
+#butter-timeline-toggle {
+  height: 30px;
+  width: 50px;
+  background-image: url( "assets/bg.jpg" );
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  position: absolute;
+  top: -23px;
+  right: 80px;
+  box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
+  moz-box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
+  o-box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
+  webkit-box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
+}
+
+#butter-timeline-toggle:hover {
+  box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
+  moz-box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
+  o-box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
+  webkit-box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
+  cursor: pointer;
 }
 
 #butter-timeline-status-bar {
@@ -102,9 +133,9 @@ THE SOFTWARE.
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   cursor: pointer;
-  -moz-box-shadow:    none;
+  -moz-box-shadow: none;
   -webkit-box-shadow: none;
-  box-shadow:         none;
+  box-shadow: none;
 }
 
 #butter-timeline-status-bar div div .media-url:hover {
@@ -146,6 +177,11 @@ THE SOFTWARE.
   background: #333;
   min-width: 10px;
   border-radius: 15px;
+  box-shadow: inset 0 -1px 5px #000;
+  moz-box-shadow: inset 0 -1px 5px #000;
+  o-box-shadow: inset 0 -1px 5px #000;
+  webkit-box-shadow: inset 0 -1px 5px #000;
+
 }
 
 #butter-timeline .butter-timeline-scroll-handle:hover {
@@ -294,5 +330,4 @@ THE SOFTWARE.
   background: linear-gradient(top, #00ff00 0%,#00c100 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ff00', endColorstr='#00c100',GradientType=0 ); /* IE6-9 */
 }
-
 
