@@ -14,7 +14,7 @@
           _this = this,
           _popcornTarget;
 
-      this.setupPopcornHandlers = function() {
+      function setupPopcornHandlers() {
         _popcorn.media.addEventListener( "timeupdate", function() {
           _mediaObject.currentTime = _popcorn.media.currentTime;
         },false);
@@ -24,7 +24,7 @@
         _popcorn.media.addEventListener( "playing", function() {
           _mediaObject.paused = false;
         }, false);
-      }; //setupPopcornHandlers
+      } //setupPopcornHandlers
 
       this.interruptLoad = function() {
         _interruptLoad = true;
@@ -57,6 +57,7 @@
         } //failureWrapper
 
         function popcornSuccess( e ){
+           setupPopcornHandlers();
           _mediaObject.dispatch( "mediaprepared" );
           _mediaObject.dispatch( "mediaready" );
           callback && callback();
@@ -290,7 +291,12 @@
         }
       } //onTrackEventRemoved
 
+      function onMediaTimeUpdate( e ){
+        _popcorn.currentTime( _mediaObject.currentTime );
+      } //onMediaTimeUpdate
+
       _mediaObject.listen( "mediacontentchanged", onMediaContentChanged );
+      _mediaObject.listen( "mediatimeupdate", onMediaTimeUpdate );
       _mediaObject.listen( "trackeventadded", onTrackEventAdded );
       _mediaObject.listen( "trackeventremoved", onTrackEventRemoved );
       _mediaObject.listen( "trackeventupdated", onTrackEventUpdated );

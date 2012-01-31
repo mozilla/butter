@@ -134,7 +134,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       // set options if they exist
       options.height && (element.style.height = options.height);
       options.top && (element.style.top = options.top);
-      options.innerHTML && (element.innerHTML = options.text);
+      options.text && (element.innerHTML = options.text);
       element.style.position = options.position ? options.position : "absolute";
 
       // add css options if they exist

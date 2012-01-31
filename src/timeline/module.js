@@ -24,11 +24,13 @@ THE SOFTWARE.
 
 define( [
           "core/logger", 
-          "./media"
+          "./media",
+          "./timebar"
         ], 
         function( 
           Logger, 
-          Media ){
+          Media
+        ){
 
   var Timeline = function( butter, options ){
 
