@@ -1,0 +1,54 @@
+/**********************************************************************************
+
+Copyright (C) 2012 by Mozilla Foundation
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+**********************************************************************************/
+#butter-plugin {
+  border-radius: 6px;
+	moz-border-radius: 6px;
+	o-border-radius: 6px;
+	webkit-border-radius: 6px;
+  background-image: -moz-linear-gradient(center bottom,#6E6E6E 0,#7D7D7D 100%);
+	background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#6E6E6E),color-stop(1,#7D7D7D));
+	border: 1px solid #333;
+	box-shadow: 0 1px 0 #656565;
+	height: 175px;
+	moz-box-shadow: 0 1px 0 #656565;
+	o-box-shadow: 0 1px 0 #656565;
+	padding: 0;
+	position: absolute;
+	right: 20px;
+	top: 67px;
+	webkit-box-shadow: 0 1px 0 #656565;
+	width: 120px;
+}
+
+#butter-plugin .scrollbar {
+ right: 3px;
+ top: 37px;
+}
+
+#butter-plugin .viewport {
+  height: 127px;
+	margin: 38px 15px 0 4px;
+	width: auto;
+}
+

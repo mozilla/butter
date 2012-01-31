@@ -92,7 +92,10 @@ THE SOFTWARE.
 
       }; //Plugin
 
-      __container = document.getElementById( moduleOptions.target ) || moduleOptions.target;
+      __container = document.createElement( "div" );
+      __container.id = "butter-plugin";
+      //__container.className = "viewport enable-scroll";
+      document.getElementById( "butter-timeline" ).appendChild( __container );
       __pattern = moduleOptions.pattern;
 
       this.add = function( plugin ) {
