@@ -132,7 +132,7 @@ define( [ "core/logger", "core/eventmanager", "./track" ], function( Logger, Eve
 
     function resetContainer() {
       _container.style.width = _duration * _zoom + "px";
-      _parent.style.width = _duration * _zoom + "px";
+      //_parent.style.width = _duration * _zoom + "px";
     } //resetContainer
 
     Object.defineProperties( this, {
@@ -164,17 +164,26 @@ define( [ "core/logger", "core/eventmanager", "./track" ], function( Logger, Eve
       },
       vScroll: {
         enumerable: true,
-        get: function(){ return _root.scrollTop; },
+        get: function(){ return _parent.scrollTop / _parent.scrollHeight; },
         set: function( val ){
-          _root.scrollTop = _root.scrollHeight * val;
+          _parent.scrollTop = _parent.scrollHeight * val;
         }
       },
       hScroll: {
         enumerable: true,
-        get: function(){ return _root.scrollLeft; },
+        get: function(){
+          return _parent.scrollLeft / _parent.scrollWidth;
+        },
         set: function( val ){
-          _root.scrollLeft = _root.scrollWidth * val;
+          console.log( _parent.scrollWidth, val );
+          _parent.scrollLeft = _parent.scrollWidth * val;
         }
+      },
+      element: {
+        enumerable: true,
+        get: function(){
+          return _parent;
+        },
       }
     });
 

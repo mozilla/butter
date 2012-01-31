@@ -8,14 +8,14 @@ document.addEventListener( "DOMContentLoaded", function( e ){
     modules: {
       preview: {
       },
+      timeline: {
+      },
       plugin: {
         target: "plugin-tray",
         pattern: '<li class="$type_tool"><a href="#" title="$type"><span></span>$type</a></li>'
       },
       track: {
         target: "target-div"
-      },
-      trackliner: {
       }
     },
     ready: function( butter ){
@@ -33,10 +33,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                   text: "test"
                 }
               });
-          butter.plugin.add({ name: "footnote", type: "footnote", path: "../external/popcorn-js/plugins/footnote/popcorn.footnote.js" });
-          butter.tracks[ 0 ].addTrackEvent({ name: "TrackEvent 1", type: "notfootnote" });
-          butter.tracks[ 0 ].addTrackEvent({ name: "TrackEvent 1", type: "footnote" });
-          butter.track.Editor( butter.getTrack({ name: "Track 1" }));
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );
