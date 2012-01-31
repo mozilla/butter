@@ -38,8 +38,8 @@ define( [
 
     var _target = butter.createTimeline(),
         _statusBar = new StatusBar( butter, _target ),
+        _toggler = new Toggler( butter, _target ),
         _media = {},
-        _toggler = new Toggler( butter, _target );
         _currentMedia;
 
     this.findAbsolutePosition = function( obj ){
