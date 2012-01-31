@@ -65,13 +65,11 @@ THE SOFTWARE.
           } //while
         }; //clear
 
-        console.log( "THIS SHOULD ONLY HAPPEN ONCE" );
         Object.defineProperties( this, {
           track: {
             get: function() {
               return track;
-            },
-            configurable: true
+            }
           }, //track
           json: {
             get: function() {

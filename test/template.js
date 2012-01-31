@@ -15,7 +15,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       track: {
         target: "target-div"
       },
-      trackliner: {
+      timeline: {
       }
     },
     ready: function( butter ){
@@ -24,6 +24,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
         var count = 0;
         media.listen( "mediaready", function( e ){
+          console.log( e );
           var track = media.addTrack( "Track1" ),
               event = track.addTrackEvent({
                 type: "text",
@@ -36,10 +37,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           butter.plugin.add({ name: "footnote", type: "footnote", path: "../external/popcorn-js/plugins/footnote/popcorn.footnote.js" });
           butter.tracks[ 0 ].addTrackEvent({ name: "TrackEvent 1", type: "notfootnote" });
           butter.tracks[ 0 ].addTrackEvent({ name: "TrackEvent 1", type: "footnote" });
-          if ( count === 0 ) {
-            butter.track.Editor( track );
-            count++;
-          }
+          butter.track.Editor( track );
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );
