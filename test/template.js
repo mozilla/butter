@@ -11,7 +11,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       timeline: {
       },
       plugin: {
-        target: "plugin-tray",
         pattern: '<li class="$type_tool"><a href="#" title="$type"><span></span>$type</a></li>'
       },
       track: {
