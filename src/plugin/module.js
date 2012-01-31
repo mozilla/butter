@@ -31,8 +31,8 @@ THE SOFTWARE.
       var __plugins = [],
           __container,
           __pluginElementPrefix = "butter-plugin-",
-          __pattern;
-      
+          __pattern = '<li class="$type_tool"><a href="#" title="$type"><span></span>$type</a></li>';
+
       var Plugin = function ( pluginOptions ) {
         pluginOptions = pluginOptions || {};
 

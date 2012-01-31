@@ -24,22 +24,15 @@ THE SOFTWARE.
 
 define( [
           "core/logger", 
-          "status/module",
-          "./toggler",
-          "./media",
+          "./media"
         ], 
         function( 
           Logger, 
-          StatusBar,
-          Toggler,
           Media ){
 
   var Timeline = function( butter, options ){
 
-    var _target = butter.createTimeline(),
-        _statusBar = new StatusBar( butter, _target ),
-        _toggler = new Toggler( butter, _target ),
-        _media = {},
+    var _media = {},
         _currentMedia;
 
     this.findAbsolutePosition = function( obj ){
@@ -99,7 +92,7 @@ define( [
           media = new Media( mediaObject );
 
       _media[ mediaObject.id ] = media;
-      _target.appendChild( media.element );
+      butter.ui.element.appendChild( media.element );
 
       function mediaReady( e ){
         butter.dispatch( "timelineready" );

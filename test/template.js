@@ -5,25 +5,13 @@ document.addEventListener( "DOMContentLoaded", function( e ){
   }, false);
 
   Butter({
-    modules: {
-      preview: {
-      },
-      timeline: {
-      },
-      plugin: {
-        pattern: '<li class="$type_tool"><a href="#" title="$type"><span></span>$type</a></li>'
-      },
-      track: {
-        target: "target-div"
-      }
-    },
+    config: "../../config/default.conf",
     ready: function( butter ){
       butter.preview.prepare(function() {
         var media = butter.media[ 0 ];
 
         var count = 0;
         media.listen( "mediaready", function( e ){
-          console.log( e );
           var track = media.addTrack( "Track1" ),
               event = track.addTrackEvent({
                 type: "text",
@@ -33,10 +21,10 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                   text: "test"
                 }
               });
-          butter.plugin.add({ name: "footnote", type: "footnote", path: "../external/popcorn-js/plugins/footnote/popcorn.footnote.js" });
-          butter.tracks[ 0 ].addTrackEvent({ name: "TrackEvent 1", type: "notfootnote" });
-          butter.tracks[ 0 ].addTrackEvent({ name: "TrackEvent 1", type: "footnote" });
-          butter.track.Editor( track );
+          //butter.plugin.add({ name: "footnote", type: "footnote", path: "../external/popcorn-js/plugins/footnote/popcorn.footnote.js" });
+          //butter.tracks[ 0 ].addTrackEvent({ name: "TrackEvent 1", type: "notfootnote" });
+          //butter.tracks[ 0 ].addTrackEvent({ name: "TrackEvent 1", type: "footnote" });
+          //butter.track.Editor( track );
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );

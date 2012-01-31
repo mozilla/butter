@@ -37,7 +37,7 @@ THE SOFTWARE.
 }
 
 
-#butter-timeline[ butter-timeline-toggle-state="true" ] {
+#butter-timeline[ butter-ui-hidden="true" ] {
   bottom: -260px;
 }
 
