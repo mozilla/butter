@@ -36,16 +36,43 @@ THE SOFTWARE.
       var Plugin = function ( pluginOptions ) {
         pluginOptions = pluginOptions || {};
 
-        var _id = "plugin" + plugins.length,
-            _this = this;
-            _name = pluginOptions.name || 'Plugin' + Date.now();
+        var _id = "plugin" + __plugins.length,
+            _this = this,
+            _name = pluginOptions.name || 'Plugin' + Date.now(),
+            _path = pluginOptions.path;
 
         this.type = pluginOptions.type;
         this.element = undefined;
 
-        Object.defineProperty( this, "id", { get: function() { return _id; } } );
-        Object.defineProperty( this, "name", { get: function() { return _name; } } );
-        
+        Object.defineProperties( this, { 
+          plugins: {
+            get: function() {
+              return __plugins;
+            }
+          }, //plugins
+          pluginElementPrefix: {
+            get: function() {
+              return __pluginElementPrefix;
+            }
+          }, //pluginElementPrefix
+          id: {
+            get: function() {
+              return _id;
+            }
+          }, //id
+          name: {
+            get: function() {
+              return _name;
+            }
+          }, //name
+          path: {
+            get: function() {
+              return _path;
+            }
+          } //path
+        }); //defineProperties
+
+
         this.createElement = function ( pattern ) {
           var pluginElement;
           if ( !pattern ) {
@@ -65,56 +92,86 @@ THE SOFTWARE.
 
       }; //Plugin
 
-      __container = document.getElementById( pluginOptions.target ) || pluginOptions.target;
-      __pattern = pluginOptions.pattern;
+      __container = document.getElementById( moduleOptions.target ) || moduleOptions.target;
+      __pattern = moduleOptions.pattern;
 
       this.add = function( plugin ) {
 
         if ( !( plugin instanceof Plugin ) ) {
           plugin = new Plugin( plugin );
         } //if
-        plugins.push( plugin );
+        __plugins.push( plugin );
 
         butter.dispatch( "pluginadded", plugin );
 
         __container.appendChild( plugin.createElement( __pattern ) );
+
+        if( _path ) {
+          var head = document.getElementsByTagName( "HEAD" )[ 0 ],
+              script = document.createElement( "script" );
+          
+          script.src = _path;
+          head.appendChild( script );
+        }
         
         return plugin;
       }; //add
 
-      Object.defineProperty( this, "plugins", {
-        get: function() {
-          return plugins;
+      this.remove = function( plugin ) {
+
+        if( typeof plugin === "string" ) {
+          plugin = this.get( plugin );
+          if( !plugin ) {
+            return;
+          }
         }
-      }); //plugins
+
+        for( var i =0,l = __plugins.length; i < l; i++ ) {
+          if( __plugins[ i ].name === plugin.name ) {
+            var tracks = butter.tracks;
+            for( var i = 0, l = tracks.length; i < l; i++ ) {
+              var trackEvents = tracks[ i ].trackEvents;
+              for( var k = 0, ln = trackEvents.length - 1; ln >= k; ln-- ) {
+                if( trackEvents[ ln ].type === plugin.name ) {
+                  tracks[ i ].removeTrackEvent( trackEvents[ ln ] );
+                } //if
+              } //for
+            } //for
+
+            __plugins.splice( i, 1 );
+            l--;
+            __container.removeChild( plugin.element );
+
+            var head = document.getElementsByTagName( "HEAD" )[ 0 ];
+            for( var i = 0, l = head.children.length; i < l; i++ ) {
+              if( head.children[ i ].getAttribute( "src" ) === plugin.path ) {
+                head.removeChild( head.children[ i ] );
+              }
+            }
+
+            butter.dispatch( "pluginremoved", plugin );
+          }
+        }
+      };
 
       this.clear = function () {
         while ( plugins.length > 0 ) {
-          var plugin = plugins.pop();
+          var plugin = __plugins.pop();
           __container.removeChild( plugin.element );
           butter.dispatch( "pluginremoved", plugin );
         }
       }; //clear
 
       this.get = function( name ) {
-        for ( var i=0, l=plugins.length; i<l; ++i ) {
-          if ( plugins[ i ].name === name ) {
-            return plugins[ i ];
+        for ( var i=0, l=__plugins.length; i<l; ++i ) {
+          if ( __plugins[ i ].name === name ) {
+            return __plugins[ i ];
           } //if
         } //for
       }; //get
-
-      Object.defineProperty( this, "pluginElementPrefix", {
-        get: function() {
-          return __pluginElementPrefix;
-        }
-      });
-
     }; //PluginManager
 
     return PluginManager;
 
   }); //define
-
 })();
-
