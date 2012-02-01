@@ -85,7 +85,7 @@ THE SOFTWARE.
             pluginElement = $pluginElement[ 0 ];
           }
           pluginElement.id = __pluginElementPrefix + _this.type;
-          $( pluginElement ).draggable({ helper: "clone", appendTo: "body", zIndex: 9001, revert: true, revertDuration: 0 });
+          $( pluginElement ).draggable({ helper: "clone", appendTo: "body", zIndex: 9999999999, revert: true, revertDuration: 0 });
           this.element = pluginElement;
           return pluginElement;
         }; //createElement

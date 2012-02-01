@@ -87,11 +87,27 @@ define( [ "core/trackevent", "core/eventmanager", "./trackevent" ], function( Tr
     _tlTrack.listen( "trackeventrequested", function( e ){
       var element = e.data.ui.draggable[ 0 ],
           left = element.offsetLeft,
-          id = element.getAttribute( "butter-trackevent-id" )
+          start,
+          id = element.getAttribute( "butter-trackevent-id" );
+          left = id ? left : e.data.event.clientX;
           trackRect = _tlTrack.element.getBoundingClientRect();
+
+          start = left / trackRect.width * _media.duration;
+          if( !id ) {
+            _bTrack.addTrackEvent({
+              popcornOptions: {
+                start: start,
+                end: start + 1
+              },
+              type: element.id.split( "-" )[ 2 ],
+            });
+            start = start - 1;
+            id = _bTrack.trackEvents[ _bTrack.trackEvents.length - 1 ].id;
+          }
+
       _em.dispatch( "trackeventrequested", {
         event: id,
-        start: left / trackRect.width * _media.duration
+        start: start
       });
 /*
       var _tlTrack = e.data.track,

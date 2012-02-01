@@ -281,7 +281,11 @@
         if( e.data.popcornEvent ){
           _popcorn.removeTrackEvent( e.data.popcornEvent );
         }
-        _popcorn[ e.data.type ]( e.data.popcornOptions );
+        console.log( _popcorn, e, e.data, e.data.type, e.data.popcornOptions );
+        if( !e.data.type )
+          _popcorn[ "footnote" ]( e.data.popcornOptions );
+        else
+          _popcorn[ e.data.type ]( e.data.popcornOptions );
         e.data.popcornEvent = _popcorn.getLastTrackEventId();
       } //onTrackEventUpdated
 

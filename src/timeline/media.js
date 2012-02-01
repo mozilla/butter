@@ -69,7 +69,10 @@ define( [
       var newTrack = e.currentTarget,
           eventId = e.data.event,
           newStart = e.data.start,
+          corn,
+          newEnd,
           trackEvent;
+      console.log( e, e.data.type );
 
       //try to remove the trackevent from all known tracks
       for( var tId in _tracks ){
@@ -78,13 +81,11 @@ define( [
         } //if
       } //for
 
-      var corn = trackEvent.popcornOptions,
-          newEnd = corn.end - corn.start + newStart;
+      corn = trackEvent.popcornOptions;
 
       //then, add it to the correct one
-      if( trackEvent ){
-        newTrack.track.addTrackEvent( trackEvent );
-      } //if
+      newEnd = corn.end - corn.start + newStart;
+      newTrack.track.addTrackEvent( trackEvent );
 
       trackEvent.update( { start: newStart, end: newEnd } );
     } //onTrackEventRequested
