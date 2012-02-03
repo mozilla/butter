@@ -414,7 +414,7 @@ THE SOFTWARE.
         }
       });
 
-      Butter.instances.push(this);
+      Butter.instances.push( this );
 
       if ( butterOptions.ready ) {
         _em.listen( "ready", function( e ){
