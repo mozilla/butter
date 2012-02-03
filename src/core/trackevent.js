@@ -64,6 +64,7 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
         }
       },
       json: {
+        enumerable: true,
         get: function() {
           return {
             id: _id,
