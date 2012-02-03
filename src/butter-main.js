@@ -414,6 +414,8 @@ THE SOFTWARE.
         }
       });
 
+      Butter.instances.push(this);
+
       if ( butterOptions.ready ) {
         _em.listen( "ready", function( e ){
           butterOptions.ready( e.data );
@@ -452,6 +454,7 @@ THE SOFTWARE.
     Butter.Target = Target;
     Butter.Logger = Logger;
     Butter.EventManager = EventManager;
+    Butter.instances = [];
 
     if ( window.Butter.__waiting ) {
       for ( var i=0, l=window.Butter.__waiting.length; i<l; ++i ) {

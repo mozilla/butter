@@ -72,7 +72,7 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
         get: function() {
           var exportJSONTrackEvents = [];
           for ( var i=0, l=_trackEvents.length; i<l; ++i ) {
-            exportJSONTrackEvents.push( trackEvents[ i ].json );
+            exportJSONTrackEvents.push( _trackEvents[ i ].json );
           }
           return {
             name: _name,
