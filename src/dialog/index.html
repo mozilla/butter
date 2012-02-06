@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>dialog.js</title>
-    <script src="loader.js"></script>
+    <script src="../butter.js"></script>
     <script>
       (function(){
         function changeValue( val ){
@@ -11,51 +11,58 @@
 
         document.addEventListener( "DOMContentLoaded", function( e ){
 
-          dialog(function( context ){
+          var butter = Butter({
+            config: {
+              modules: {
+                eventManager: true,
+                dialog: true
+              }
+            },
+            ready: function( butter ) {
 
-            context.add( "test-iframe", {
-              type: "iframe",
-              modal: true,
-              template: "dialog-template",
-              url: "test.html"
-            });
+                butter.dialog.add( "test-iframe", {
+                  type: "iframe",
+                  modal: true,
+                  template: "dialog-template",
+                  url: "test.html"
+                });
 
-            context.add( "test-window", {
-              type: "window",
-              modal: true,
-              url: "test.html"
-            });
+                butter.dialog.add( "test-window", {
+                  type: "window",
+                  modal: true,
+                  url: "test.html"
+                });
 
-            document.getElementById( "iframe-normal-btn" ).addEventListener( "click", function ( e ){
-              var interval;
-              function sendUpdate(){
-                context.send( "test-iframe", "test" );
-                console.log( "iframe update" );
-              } //sendUpdate
-              context.open( "test-iframe", {
-                open: function( e ){ interval = setInterval( sendUpdate, 300 ); console.log(e.type);},
-                submit: function( e ){ changeValue( e.data.test ); console.log(e.type);},
-                cancel: function( e ){ changeValue( "cancelled!" ); console.log(e.type);},
-                error: function( e ){ changeValue( "error! " + e.data.type + e.data.message ); console.log(e.type);},
-                close: function( e ){ clearInterval( interval ); console.log(e.type);}
-              });
-            }, false );
+                document.getElementById( "iframe-normal-btn" ).addEventListener( "click", function ( e ){
+                  var interval;
+                  function sendUpdate(){
+                    butter.dialog.send( "test-iframe", "test" );
+                    console.log( "iframe update" );
+                  } //sendUpdate
+                  butter.dialog.open( "test-iframe", {
+                    open: function( e ){ interval = setInterval( sendUpdate, 300 ); console.log(e.type);},
+                    submit: function( e ){ changeValue( e.data.test ); console.log(e.type);},
+                    cancel: function( e ){ changeValue( "cancelled!" ); console.log(e.type);},
+                    error: function( e ){ changeValue( "error! " + e.data.type + e.data.message ); console.log(e.type);},
+                    close: function( e ){ clearInterval( interval ); console.log(e.type);}
+                  });
+                }, false );
 
-            document.getElementById( "window-normal-btn" ).addEventListener( "click", function ( e ){
-              var interval;
-              function sendUpdate(){
-                context.send( "test-window", "test" );
-                console.log( "window update" );
-              } //sendUpdate
-              context.open( "test-window", {
-                open: function( e ){ interval = setInterval( sendUpdate, 300 ); console.log(e.type);},
-                submit: function( e ){ changeValue( e.data.test ); console.log(e.type);},
-                cancel: function( e ){ changeValue( "cancelled!" ); console.log(e.type);},
-                error: function( e ){ changeValue( "error! " + e.data.type + e.data.message ); console.log(e.type);},
-                close: function( e ){ clearInterval( interval ); console.log(e.type);}
-              });
-            }, false );
-
+                document.getElementById( "window-normal-btn" ).addEventListener( "click", function ( e ){
+                  var interval;
+                  function sendUpdate(){
+                    butter.dialog.send( "test-window", "test" );
+                    console.log( "window update" );
+                  } //sendUpdate
+                  butter.dialog.open( "test-window", {
+                    open: function( e ){ interval = setInterval( sendUpdate, 300 ); console.log(e.type);},
+                    submit: function( e ){ changeValue( e.data.test ); console.log(e.type);},
+                    cancel: function( e ){ changeValue( "cancelled!" ); console.log(e.type);},
+                    error: function( e ){ changeValue( "error! " + e.data.type + e.data.message ); console.log(e.type);},
+                    close: function( e ){ clearInterval( interval ); console.log(e.type);}
+                  });
+                }, false );
+            }
           });
         }, false );
       })();
