@@ -47,6 +47,7 @@ define( [ "./util", "./base-dialog", "./comm", "./event-manager" ], function( ut
       _currentTemplate = _this.template.createInstance();
       _currentTemplate.insertContent( iframe );
       _currentTemplate.attach( background );
+      $( _currentTemplate.element ).draggable();
       util.css( iframe, "width", util.css( _currentTemplate.element, "width" ) );
       util.css( iframe, "height", util.css( _currentTemplate.element, "height" ) );
       util.css( iframe, "border", "none" );

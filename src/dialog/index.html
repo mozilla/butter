@@ -12,12 +12,7 @@
         document.addEventListener( "DOMContentLoaded", function( e ){
 
           var butter = Butter({
-            config: {
-              modules: {
-                eventManager: true,
-                dialog: true
-              }
-            },
+            config: "default.conf",
             ready: function( butter ) {
 
                 butter.dialog.add( "test-iframe", {
