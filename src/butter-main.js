@@ -239,13 +239,15 @@ THE SOFTWARE.
       /****************************************************************
        * Media methods
        ****************************************************************/
-      //getMedia - get the media's information
-      this.getMedia = function ( media ) {
-        for ( var i=0,l=_media.length; i<l; ++i ) {
-          if (  ( media.id !== undefined && _media[ i ].id === media.id ) ||
-                ( media.name && _media[ i ].name === media.name ) ||
-                ( media.target && _media[ i ].target === media.target ) ||
-                _media[ i ].name === media ) {
+      //getMedia - get the media's information based on a valid type
+      // if type is invalid, return undefined
+      this.getMediaByType = function ( type, val ) {
+       if( !_media[ 0 ].hasOwnProperty( type ) ) {
+         return undefined;
+       }
+
+       for( var i = 0, l = _media.length; i < l; i++ ) {
+          if ( _media[ i ][ type ] === val ) {
             return _media[ i ];
           }
         }
