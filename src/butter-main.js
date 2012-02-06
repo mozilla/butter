@@ -62,7 +62,9 @@ THE SOFTWARE.
     var __modules = {
       dialog: DialogModule,
       editor: EditorModule,
+      eventManager: EventManager,
       track: TrackModule,
+      dialog: DialogModule,
       timeline: TimelineModule,
       plugin: PluginModule,
       preview: PreviewModule,
