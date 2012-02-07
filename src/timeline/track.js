@@ -91,7 +91,6 @@ define( [ "core/trackevent", "core/eventmanager", "./trackevent" ], function( Tr
           id = element.getAttribute( "butter-trackevent-id" );
           left = id ? left : e.data.event.clientX;
           trackRect = _tlTrack.element.getBoundingClientRect();
-          console.log( "BRUN THRO THA FIUA" );
 
           start = left / trackRect.width * _media.duration;
           if( !id ) {

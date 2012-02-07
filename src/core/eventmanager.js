@@ -29,7 +29,6 @@ define( [], function(){
         _target = this,
         _this = this;
 
-console.log( object );
     this.repeat = function( object, events ){
       for( var i=0; i<events.length; ++i ){
         object.listen( events[ i ], _this.dispatch );
