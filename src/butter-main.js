@@ -201,7 +201,7 @@ THE SOFTWARE.
           for ( var i=0, l=projectData.media.length; i<l; ++i ) {
 
             var mediaData = projectData.media[ i ],
-                m = _this.getMedia( { target: mediaData.target } );
+                m = _this.getMediaByType( "target", mediaData.target );
 
             if ( !m ) {
               m = new Media();
@@ -241,13 +241,11 @@ THE SOFTWARE.
       /****************************************************************
        * Media methods
        ****************************************************************/
-      //getMedia - get the media's information
-      this.getMedia = function ( media ) {
-        for ( var i=0,l=_media.length; i<l; ++i ) {
-          if (  ( media.id !== undefined && _media[ i ].id === media.id ) ||
-                ( media.name && _media[ i ].name === media.name ) ||
-                ( media.target && _media[ i ].target === media.target ) ||
-                _media[ i ].name === media ) {
+      //getMediaByType - get the media's information based on a valid type
+      // if type is invalid, return undefined
+      this.getMediaByType = function ( type, val ) {
+       for( var i = 0, l = _media.length; i < l; i++ ) {
+          if ( _media[ i ][ type ] === val ) {
             return _media[ i ];
           }
         }
@@ -300,7 +298,7 @@ THE SOFTWARE.
       //removeMedia - forget a media object
       this.removeMedia = function ( media ) {
         if ( typeof( media ) === "string" ) {
-          media = _this.getMedia( media );
+          media = _this.getMediaByType( "id", media.id );
         } //if
 
         var idx = _media.indexOf( media );
@@ -402,7 +400,7 @@ THE SOFTWARE.
           },
           set: function( media ) {
             if ( typeof( media ) === "string" ) {
-              media = _this.getMedia( media );
+              media = _this.getMediaByType( "id", media.id );
             } //if
 
             if ( media && _media.indexOf( media ) > -1 ) {
