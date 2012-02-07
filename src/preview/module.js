@@ -14,6 +14,18 @@
 
         _logger.log( "Starting" );
 
+        _page.listen( "trackeventrequested", function( event ) {
+          var te = butter.tracks[ 0 ].addTrackEvent({
+            type: event.data.ui.draggable[ 0 ].id.split( "-" )[ 2 ], 
+            popcornOptions: {
+              start: ( butter.currentTime ) > butter.duration - 1 ? butter.duration - 1 : butter.currentTime,
+              end: ( butter.currentTime + 1 ) > butter.duration ? butter.duration : butter.currentTime + 1,
+              target: event.data.event.target.id
+            }
+          });
+          te.update();
+        });
+
         function onMediaAdded( e ) {
           _media.push( new Media( e.data ) );
         } //onMediaAdded
