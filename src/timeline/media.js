@@ -72,7 +72,6 @@ define( [
           corn,
           newEnd,
           trackEvent;
-      console.log( e, e.data.type );
 
       //try to remove the trackevent from all known tracks
       for( var tId in _tracks ){

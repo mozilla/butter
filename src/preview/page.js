@@ -3,6 +3,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
   var POPCORN_URL = "../external/popcorn-js/popcorn.js",
 
   Page = function() {
+    
     this.scrape = function() {
       var medias = [], targets = [];
 
@@ -18,6 +19,20 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           // add it to butters target list with a respective type
           if ( thisChild.getAttribute ) {
             if( thisChild.getAttribute( "data-butter" ) === "target" ) {
+              $( thisChild ).droppable({
+                greedy: true,
+                drop: function( event, ui ) {
+
+                  console.log( butter.tracks[ 0 ] );
+                  var _eventManager = new EventManager( butter.tracks[ 0 ] );
+                  console.log( _eventManager );
+                  // we only care about it if it's not already on this track
+                  _eventManager.dispatch( "trackeventrequested", {
+                    event: event,
+                    ui: ui
+                  });
+                }
+              });
               targets.push( thisChild );
             }
             else if( thisChild.getAttribute( "data-butter" ) === "media" ) {
