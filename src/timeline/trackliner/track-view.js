@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 **********************************************************************************/
 
-define( [ "core/logger", "core/eventmanager", "./trackevent" ], function( Logger, EventManager, TrackEvent ){
+define( [ "core/logger", "core/eventmanager", "./trackevent-view" ], function( Logger, EventManager, TrackEventView ){
 
   var __guid = 0;
 
@@ -108,7 +108,7 @@ define( [ "core/logger", "core/eventmanager", "./trackevent" ], function( Logger
     });
 
     this.createTrackEvent = function( inputOptions, ui ) {
-      var trackEvent = new TrackEvent( inputOptions, ui );
+      var trackEvent = new TrackEventView( inputOptions, ui );
       _this.addTrackEvent( trackEvent, ui );
       return trackEvent;
     }; //createTrackEvent

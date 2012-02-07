@@ -29,7 +29,7 @@ define( [
           "core/track",
           "core/eventmanager",
           "./trackliner/trackliner",
-          "./track",
+          "./track-controller",
           "./scrollbars",
           "./timebar"
         ],
@@ -40,7 +40,7 @@ define( [
           Track, 
           EventManager,
           TrackLiner,
-          TrackView,
+          TrackController,
           Scrollbars,
           TimeBar ){
 
@@ -94,7 +94,7 @@ define( [
       var track;
       track = _tracks[ bTrack.id ];
       if( !track ){
-        track = new TrackView( _media, bTrack, _trackliner );
+        track = new TrackController( _media, bTrack, _trackliner );
         _tracks[ bTrack.id ] = track;
         track.zoom = _zoom;
       } //if
@@ -133,7 +133,7 @@ define( [
         if( fromUI ){
           var tlTrack = event.data.track;
           bTrack = new Track();
-          _tracks[ bTrack.id ] = new TrackView( _media, bTrack, _trackliner, tlTrack );
+          _tracks[ bTrack.id ] = new TrackController( _media, bTrack, _trackliner, tlTrack );
           _media.addTrack( bTrack );
         } //if
       }); //trackadded

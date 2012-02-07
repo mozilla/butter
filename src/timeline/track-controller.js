@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 **********************************************************************************/
 
-define( [ "core/trackevent", "core/eventmanager", "./trackevent" ], function( TrackEvent, EventManager, TrackEventView ) {
+define( [ "core/trackevent", "core/eventmanager", "./trackevent-controller" ], function( TrackEvent, EventManager, TrackEventController ) {
 
   function Track( media, bTrack, trackliner, tlTrack ){
     var _media = media,
@@ -55,7 +55,7 @@ define( [ "core/trackevent", "core/eventmanager", "./trackevent" ], function( Tr
         end: bEvent.popcornOptions.end,
         text: bEvent.type
       });
-      _events[ bEvent.id ] = new TrackEventView( _media, bEvent, tlEvent, _trackliner );
+      _events[ bEvent.id ] = new TrackEventController( _media, bEvent, tlEvent, _trackliner );
     } //addTrackEvent
 
     this.destroy = function(){
