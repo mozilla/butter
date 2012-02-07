@@ -16,16 +16,16 @@
           _popcornTarget;
 
       function setupPopcornHandlers() {
-        _popcorn.media.addEventListener( "timeupdate", function() {
+        _popcorn.listen( "timeupdate", function() {
           _popcornCurrentTime = _popcorn.currentTime();
           _mediaObject.currentTime = _popcornCurrentTime;
-        },false);
-        _popcorn.media.addEventListener( "pause", function() {
+        });
+        _popcorn.listen( "pause", function() {
           _mediaObject.paused = true;
-        }, false);
-        _popcorn.media.addEventListener( "playing", function() {
+        });
+        _popcorn.listen( "playing", function() {
           _mediaObject.paused = false;
-        }, false);
+        });
       } //setupPopcornHandlers
 
       this.interruptLoad = function() {
@@ -235,7 +235,7 @@
               _mediaObject.duration = popcorn.duration();
             }
             else {
-              _mediaObject.duration = popcorn.media.duration;
+              _mediaObject.duration = popcorn.duration();
             } //if
             callback( popcorn );
           } else {
