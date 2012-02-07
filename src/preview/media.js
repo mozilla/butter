@@ -8,6 +8,7 @@
 
       var _mediaObject = mediaObject,
           _popcorn,
+          _popcornCurrentTime,
           _type,
           _interruptLoad = false,
           _mediaLoadAttempts = 0,
@@ -15,15 +16,16 @@
           _popcornTarget;
 
       function setupPopcornHandlers() {
-        _popcorn.media.addEventListener( "timeupdate", function() {
-          _mediaObject.currentTime = _popcorn.media.currentTime;
-        },false);
-        _popcorn.media.addEventListener( "pause", function() {
+        _popcorn.listen( "timeupdate", function() {
+          _popcornCurrentTime = _popcorn.currentTime();
+          _mediaObject.currentTime = _popcornCurrentTime;
+        });
+        _popcorn.listen( "pause", function() {
           _mediaObject.paused = true;
-        }, false);
-        _popcorn.media.addEventListener( "playing", function() {
+        });
+        _popcorn.listen( "playing", function() {
           _mediaObject.paused = false;
-        }, false);
+        });
       } //setupPopcornHandlers
 
       this.interruptLoad = function() {
@@ -233,7 +235,7 @@
               _mediaObject.duration = popcorn.duration();
             }
             else {
-              _mediaObject.duration = popcorn.media.duration;
+              _mediaObject.duration = popcorn.duration();
             } //if
             callback( popcorn );
           } else {
@@ -296,7 +298,10 @@
       } //onTrackEventRemoved
 
       function onMediaTimeUpdate( e ){
-        _popcorn.currentTime( _mediaObject.currentTime );
+        // protect against re-setting the current time if the event originated from popcorn
+        if( _mediaObject.currentTime !== _popcornCurrentTime ){
+          _popcorn.currentTime( _mediaObject.currentTime );
+        } //if
       } //onMediaTimeUpdate
 
       _mediaObject.listen( "mediacontentchanged", onMediaContentChanged );
