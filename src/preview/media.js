@@ -8,6 +8,7 @@
 
       var _mediaObject = mediaObject,
           _popcorn,
+          _popcornCurrentTime,
           _type,
           _interruptLoad = false,
           _mediaLoadAttempts = 0,
@@ -16,7 +17,8 @@
 
       function setupPopcornHandlers() {
         _popcorn.media.addEventListener( "timeupdate", function() {
-          _mediaObject.currentTime = _popcorn.media.currentTime;
+          _popcornCurrentTime = _popcorn.currentTime();
+          _mediaObject.currentTime = _popcornCurrentTime;
         },false);
         _popcorn.media.addEventListener( "pause", function() {
           _mediaObject.paused = true;
@@ -296,7 +298,10 @@
       } //onTrackEventRemoved
 
       function onMediaTimeUpdate( e ){
-        _popcorn.currentTime( _mediaObject.currentTime );
+        // protect against re-setting the current time if the event originated from popcorn
+        if( _mediaObject.currentTime !== _popcornCurrentTime ){
+          _popcorn.currentTime( _mediaObject.currentTime );
+        } //if
       } //onMediaTimeUpdate
 
       _mediaObject.listen( "mediacontentchanged", onMediaContentChanged );
