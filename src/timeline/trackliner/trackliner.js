@@ -1,4 +1,4 @@
-define( [ "core/logger", "core/eventmanager", "./track" ], function( Logger, EventManager, Track ){
+define( [ "core/logger", "core/eventmanager", "./track-view" ], function( Logger, EventManager, TrackView ){
 
   var TrackLiner = function( tlOptions ) {
 
@@ -80,7 +80,7 @@ define( [ "core/logger", "core/eventmanager", "./track" ], function( Logger, Eve
     }; //clear
 
     this.createTrack = function( name ) {
-      var track = new Track(),
+      var track = new TrackView(),
           element = track.element;
       if ( name ) {
         var titleElement = document.createElement( "span" );
