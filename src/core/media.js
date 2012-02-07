@@ -40,6 +40,7 @@ THE SOFTWARE.
           _logger = new Logger( _id ),
           _em = new EventManager( this ),
           _name = mediaOptions.name || _id,
+          _paused = true,
           _url,
           _target,
           _registry,
@@ -224,6 +225,23 @@ THE SOFTWARE.
             _registry = val;
           },
           enumerable: true
+        },
+        paused: {
+          enumerable: true,
+          get: function() {
+            return _paused;
+          },
+          set: function( val ) {
+            if( val !== _paused ){
+              _paused = val;
+              if( _paused ){
+                _em.dispatch( "mediapaused" ); 
+              }
+              else {
+                _em.dispatch( "mediaplaying" ); 
+              } //if
+            } //if
+          }
         }
       });
 
