@@ -4,6 +4,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
   Page = function() {
     
+    var _eventManager = new EventManager( this );
+
     this.scrape = function() {
       var medias = [], targets = [];
 
@@ -23,9 +25,6 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
                 greedy: true,
                 drop: function( event, ui ) {
 
-                  console.log( butter.tracks[ 0 ] );
-                  var _eventManager = new EventManager( butter.tracks[ 0 ] );
-                  console.log( _eventManager );
                   // we only care about it if it's not already on this track
                   _eventManager.dispatch( "trackeventrequested", {
                     event: event,
