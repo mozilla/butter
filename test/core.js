@@ -17,7 +17,7 @@
 
     butter.listen( "testevent", testFn );
     butter.dispatch( "testevent", true );
-    ok( received && received === true, "Event handler dispatched and received event object" );
+    ok( received === true, "Event handler dispatched and received event object" );
     received = false;
     butter.unlisten( "testevent", testFn );
     butter.dispatch( "testevent", true );
@@ -69,11 +69,11 @@
     butter.addMedia( m1 );
 
     ok( mediaEventState === -2, "Media events received in correct order" );
-    ok( butter.getMedia( "Media 1" ) === m1 && m1.name === "Media 1", "Method 1 object stored and retrieved" );
+    ok( butter.getMediaByType( "Media 1" ) === m1 && m1.name === "Media 1", "Method 1 object stored and retrieved" );
 
     var m2 = butter.addMedia( { name: "Media 2", media: document.getElementById('audio-test') } );
 
-    ok( butter.getMedia( "Media 2" ) === m2 && m2.name === "Media 2", "Method 2 object stored and retrieved" );
+    ok( butter.getMediaByType( "Media 2" ) === m2 && m2.name === "Media 2", "Method 2 object stored and retrieved" );
     ok( mediaState[0] === 1 && mediaState[1] === m2, "mediaadded event received" );
 
     ok( butter.currentMedia === m1, "Current media is Media 1" );
@@ -102,8 +102,8 @@
     butter.removeMedia( "Media 1" );
     ok( mediaState[0] === 0 && mediaState[1] === m1, "mediaremoved event received" );
 
-    ok( butter.getMedia("Media 1") === undefined, "Media 1 doesn't exist" );
-    ok( butter.getMedia("Media 2") === undefined, "Media 2 doesn't exist" );
+    ok( butter.getMediaByType("Media 1") === undefined, "Media 1 doesn't exist" );
+    ok( butter.getMediaByType("Media 2") === undefined, "Media 2 doesn't exist" );
 
     ok( butter.media.length === 0, "There are no Media" );
   });
@@ -219,8 +219,8 @@
 
   test("Create TrackEvent object", function () {
     expect(1);
-    var te1 = new Butter.TrackEvent( { name: "TrackEvent 1", start: 0, end: 1 } );
-    ok( te1.name === "TrackEvent 1" && te1.start === 0 && te1.end === 1, "TrackEvent is setup correctly");
+    var te1 = new Butter.TrackEvent( { name: "TrackEvent 1", popcornOptions: { start: 0, end: 1 } });
+    ok( te1.name === "TrackEvent 1" && te1.popcornOptions.start ===  0 && te1.popcornOptions.end === 1, "TrackEvent name is setup correctly");
   });
 
   test("Add, retrieve, and remove TrackEvent", function () {
@@ -231,7 +231,6 @@
     var butter = new Butter();
 
     var m = butter.addMedia();
-    var t = butter.addTrack();
 
     butter.listen( "trackeventadded", function ( trackEvent ) {
       eventState = [1, trackEvent.data];
@@ -241,38 +240,38 @@
     });
 
     var te1 = new Butter.TrackEvent( { name: "TrackEvent 1", start: 0, end: 1 } );
-    butter.addTrackEvent( t, te1 );
+    butter.addTrack( te1 );
     ok( eventState[0] === 1 && eventState[1] === te1, "trackeventadded event received" );
 
-    var te2 = butter.addTrackEvent( t, { name: "TrackEvent 2", start: 1, end: 2 } );
+    var te2 = butter.addTrack( { name: "TrackEvent 2", start: 1, end: 2 } );
     ok( eventState[0] === 1 && eventState[1] === te2, "trackeventadded event received" );
 
-    var te3 = t.addTrackEvent( { name: "TrackEvent 3", start: 2, end: 3 } );
+    var te3 = butter.addTrack( { name: "TrackEvent 3", start: 2, end: 3 } );
     ok( eventState[0] === 1 && eventState[1] === te3, "trackeventadded event received" );
 
-    var te4 = t.addTrackEvent( new Butter.TrackEvent( { name: "TrackEvent 4", start: 3, end: 4 } ) );
+    var te4 = butter.addTrack( new Butter.TrackEvent( { name: "TrackEvent 4", start: 3, end: 4 } ) );
     ok( eventState[0] === 1 && eventState[1] === te4, "trackeventadded event received" );
 
-    ok( te1 === butter.getTrackEvent( "TrackEvent 1" ), "TrackEvent method 1 is correct" );
-    ok( te2 === butter.getTrackEvent( "TrackEvent 2" ), "TrackEvent method 2 is correct" );
-    ok( te3 === butter.getTrackEvent( "TrackEvent 3" ), "TrackEvent method 3 is correct" );
-    ok( te4 === butter.getTrackEvent( "TrackEvent 4" ), "TrackEvent method 4 is correct" );
+    ok( te1 === butter.getTrack( "TrackEvent 1" ), "TrackEvent method 1 is correct" );
+    ok( te2 === butter.getTrack( "TrackEvent 2" ), "TrackEvent method 2 is correct" );
+    ok( te3 === butter.getTrack( "TrackEvent 3" ), "TrackEvent method 3 is correct" );
+    ok( te4 === butter.getTrack( "TrackEvent 4" ), "TrackEvent method 4 is correct" );
 
-    butter.removeTrackEvent( "TrackEvent 1" );
+    butter.removeTrack( "TrackEvent 1" );
     ok( eventState[0] === 0 && eventState[1] === te1, "trackeventremoved event received" );
-    butter.removeTrackEvent( te2 );
+    butter.removeTrack( te2 );
     ok( eventState[0] === 0 && eventState[1] === te2, "trackeventremoved event received" );
-    t.removeTrackEvent( te3 );
+    butter.removeTrack( te3 );
     ok( eventState[0] === 0 && eventState[1] === te3, "trackeventremoved event received" );
-    t.removeTrackEvent( "TrackEvent 4" );
+    butter.removeTrack( "TrackEvent 4" );
     ok( eventState[0] === 0 && eventState[1] === te4, "trackeventremoved event received" );
 
-    ok( butter.getTrackEvent( "TrackEvent 1" ) === undefined, "TrackEvent 1 doesn't exist" );
-    ok( butter.getTrackEvent( "TrackEvent 2" ) === undefined, "TrackEvent 2 doesn't exist" );
-    ok( butter.getTrackEvent( "TrackEvent 3" ) === undefined, "TrackEvent 3 doesn't exist" );
-    ok( butter.getTrackEvent( "TrackEvent 4" ) === undefined, "TrackEvent 4 doesn't exist" );
+    ok( butter.getTrack( "TrackEvent 1" ) === undefined, "TrackEvent 1 doesn't exist" );
+    ok( butter.getTrack( "TrackEvent 2" ) === undefined, "TrackEvent 2 doesn't exist" );
+    ok( butter.getTrack( "TrackEvent 3" ) === undefined, "TrackEvent 3 doesn't exist" );
+    ok( butter.getTrack( "TrackEvent 4" ) === undefined, "TrackEvent 4 doesn't exist" );
 
-    var tracks = butter.trackEvents;
+    var tracks = butter.tracks;
     for ( var track in tracks ) {
       ok( tracks[ track ].length === 0, "No TrackEvents remain" );  
     }
@@ -311,7 +310,7 @@
     butter.addMedia();
 
     var t1 = butter.addTrack();
-    var te = butter.addTrackEvent( t1, {} );
+    var te = butter.addTrack( t1, {} );
 
     var state = undefined;
 
@@ -390,7 +389,7 @@
 
     var te1 = t4.addTrackEvent({ start: 2, end: 6 });
 
-    butter.setProjectDetails( 'test-key', 'test-value' );
+    butter.importProject( 'test-key', 'test-value' );
 
     butter.addTarget({ object: 'beep' });
 
@@ -419,9 +418,9 @@
     ok( allMedia[0].tracks.length === 2, "media 1 has right number of tracks" );
     ok( allMedia[1].tracks.length === 2, "media 2 has right number of tracks" );
 
-    ok( allMedia[1].tracks[1].trackEvents[0].end === 6, "trackevent is correct" );
+    ok( allMedia[1].tracks[0].end === 6, "trackevent is correct" );
 
-    ok( butter.getProjectDetails( 'test-key' ) === 'test-value', "project details are correct" );
+    ok( butter.exportProject( 'test-key' ) === 'test-value', "project details are correct" );
 
     ok( butter.targets[0].object === 'beep', "target is correct" );
 
