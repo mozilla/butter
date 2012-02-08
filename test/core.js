@@ -310,7 +310,7 @@
     butter.addMedia();
 
     var t1 = butter.addTrack();
-    var te = butter.addTrack( t1, {} );
+    var te = t1.addTrackEvent( t1 );
 
     var state = undefined;
 
