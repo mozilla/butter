@@ -28,6 +28,8 @@ THE SOFTWARE.
 
     var PluginManager = function( butter, moduleOptions ) {
 
+      var __butter = butter;
+
       var __plugins = [],
           __container,
           __pluginElementPrefix = "butter-plugin-",
@@ -105,8 +107,6 @@ THE SOFTWARE.
         } //if
         __plugins.push( plugin );
 
-        butter.dispatch( "pluginadded", plugin );
-
         __container.appendChild( plugin.createElement( __pattern ) );
 
         if( plugin._path ) {
@@ -116,7 +116,9 @@ THE SOFTWARE.
           script.src = _path;
           head.appendChild( script );
         }
-        
+
+        __butter.dispatch( "pluginadded", plugin );
+
         return plugin;
       }; //add
 
