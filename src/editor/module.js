@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 (function() {
 
-  define( [ "core/logger", "core/eventmanager", "core/trackevent", "comm/comm" ], function( Logger, EventManager, TrackEvent, Comm ) {
+  define( [ "core/logger", "core/eventmanager", "core/trackevent", "core/comm" ], function( Logger, EventManager, TrackEvent, Comm ) {
 
     var __editorGuid = 0;
 
@@ -33,7 +33,7 @@ THE SOFTWARE.
       options = options || {};
 
       var _editors = {},
-          _comm = new Comm.CommServer(),
+          //_comm = new Comm.CommServer(),
           _logger = new Logger( "EventEditor" ),
           _em = new EventManager( this ),
           _editorGuid = 0,
@@ -68,13 +68,13 @@ THE SOFTWARE.
               "id": e.data.id, 
               "options": e.data.popcornOptions
             };
-            _comm.send( _editorLinkName, sendObj, "trackeventupdated" );
+           // _comm.send( _editorLinkName, sendObj, "trackeventupdated" );
           };
           var checkRemoved = function( e ) {
-            _comm.send( _editorLinkName, e.data.id, "trackeventremoved" );
+            //_comm.send( _editorLinkName, e.data.id, "trackeventremoved" );
           };
           var targetAdded = function( e ) {
-            _comm.send( _editorLinkName, butter.targets, "domtargetsupdated" );
+            //_comm.send( _editorLinkName, butter.targets, "domtargetsupdated" );
           };
           var clientDimsUpdated = function( e ) {
             var dims = e.data;
@@ -87,12 +87,12 @@ THE SOFTWARE.
             butter.unlisten( "targetadded", targetAdded );
             butter.unlisten( "trackeventremoved", checkRemoved );
             butter.unlisten( "clientdimsupdated", clientDimsUpdated );
-            _comm.unlisten( _editorLinkName, "okayclicked" );
-            _comm.unlisten( _editorLinkName, "applyclicked" );
-            _comm.unlisten( _editorLinkName, "deleteclicked" );
-            _comm.unlisten( _editorLinkName, "cancelclicked" );
-            _comm.unlisten( _editorLinkName, "clientdimsupdated" );
-            _comm.destroy( _editorLinkName );
+            //_comm.unlisten( _editorLinkName, "okayclicked" );
+            //_comm.unlisten( _editorLinkName, "applyclicked" );
+            //_comm.unlisten( _editorLinkName, "deleteclicked" );
+            //_comm.unlisten( _editorLinkName, "cancelclicked" );
+            //_comm.unlisten( _editorLinkName, "clientdimsupdated" );
+            //_comm.destroy( _editorLinkName );
           };
 
           function filterKnownFields( fields ) {
@@ -114,7 +114,7 @@ THE SOFTWARE.
             var succeeded = false;
 
             var binding = bindingType === "window" ? "bindWindow" : "bindFrame";
-            _comm[ binding ]( _editorLinkName, _targetWindow, function() {
+            /*_comm[ binding ]( _editorLinkName, _targetWindow, function() {
               butter.listen( "trackeventupdated", updateEditor );
               butter.listen( "targetadded", targetAdded );
               butter.listen( "trackeventremoved", checkRemoved );
@@ -151,9 +151,9 @@ THE SOFTWARE.
                 undoListeners();
                 _targetWindow = undefined;
                 _em.dispatch( "trackeditclosed", _this );
-              });
+              });*/
 
-              _comm.listen( _editorLinkName, "cancelclicked", function() {
+              /*_comm.listen( _editorLinkName, "cancelclicked", function() {
                 if ( _targetWindow.close ) {
                   _targetWindow.close();
                 }
@@ -163,32 +163,32 @@ THE SOFTWARE.
                 undoListeners();
                 _targetWindow = undefined;
                 _em.dispatch( "trackeditclosed", _this );
-              });
+              });*/
 
             });
 
-            _comm.listen( _editorLinkName, "ready", editorReady );
-            _comm.listen( _editorLinkName, "clientdimsupdated", clientDimsUpdated );
+            //_comm.listen( _editorLinkName, "ready", editorReady );
+            //_comm.listen( _editorLinkName, "clientdimsupdated", clientDimsUpdated );
 
             var checkEditorInterval;
             function editorReady() {
               succeeded = true;
               _em.dispatch( "trackeditstarted", _this );
-              _comm.unlisten( _editorLinkName, "ready", editorReady );
+              //_comm.unlisten( _editorLinkName, "ready", editorReady );
               clearInterval( checkEditorInterval );
               var targetCollection = butter.targets, targetArray = [];
               for ( var i=0, l=targetCollection.length; i<l; ++i ) {
                 targetArray.push( [ targetCollection[ i ].name, targetCollection[ i ].id ] );
               }
               trackEvent.manifest = butter.getManifest( trackEvent.type );
-              _comm.send( _editorLinkName, {
+              /*_comm.send( _editorLinkName, {
                 "trackEvent": trackEvent, 
                 "targets": targetArray,
                 "id": trackEvent.id
-              }, "edittrackevent");
+              }, "edittrackevent");*/
             }
             checkEditorInterval = setInterval( function() {
-              _comm.send( _editorLinkName, "ready", "ready" );
+              //_comm.send( _editorLinkName, "ready", "ready" );
             }, 500 );
             setTimeout( function() {
               clearInterval( checkEditorInterval );
@@ -317,8 +317,5 @@ THE SOFTWARE.
     }; //EventEditor
 
     return EventEditor;
-
   }); //define
-
 })();
-

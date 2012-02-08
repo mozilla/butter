@@ -32,7 +32,6 @@ THE SOFTWARE.
             "core/trackevent",
             "core/target",
             "core/media",
-            "comm/comm",
             "editor/module",
             "preview/module",
             "track/module",
@@ -49,7 +48,6 @@ THE SOFTWARE.
             TrackEvent, 
             Target, 
             Media, 
-            Comm,
             EditorModule,
             PreviewModule,
             TrackModule,
@@ -273,6 +271,7 @@ THE SOFTWARE.
           "trackeventadded",
           "trackeventremoved",
           "trackeventupdated",
+          "trackeventeditrequested"
         ]);
 
         if ( media.tracks.length > 0 ) {
@@ -316,6 +315,7 @@ THE SOFTWARE.
             "trackeventadded",
             "trackeventremoved",
             "trackeventupdated",
+            "trackeventeditrequested"
           ]);
           var tracks = media.tracks;
           for ( var i=0, l=tracks.length; i<l; ++i ) {

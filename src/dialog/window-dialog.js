@@ -1,4 +1,4 @@
-define( [ "./util", "./base-dialog", "./comm", "./event-manager" ], function( util, BaseDialog, Comm, EventManager ){
+define( [ "./util", "./base-dialog", "core/comm", "./event-manager" ], function( util, BaseDialog, Comm, EventManager ){
 
   const DEFAULT_WINDOW_WIDTH = 640;
   const DEFAULT_WINDOW_HEIGHT = 479;

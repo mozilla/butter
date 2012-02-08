@@ -1,4 +1,4 @@
-define( [ "./util", "./base-dialog", "./comm", "./event-manager" ], function( util, BaseDialog, Comm, EventManager ){
+define( [ "./util", "./base-dialog", "core/comm", "./event-manager" ], function( util, BaseDialog, Comm, EventManager ){
 
   var IFRAMEDialog = function( context, dialogOptions ) {
     dialogOptions = dialogOptions || {};
