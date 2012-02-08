@@ -93,21 +93,14 @@ define( [ "core/trackevent", "core/eventmanager", "./trackevent-controller" ], f
           trackRect = _tlTrack.element.getBoundingClientRect();
 
           start = left / trackRect.width * _media.duration;
-          if( !id ) {
-            _bTrack.addTrackEvent({
-              popcornOptions: {
-                start: start,
-                end: start + 1
-              },
-              type: element.id.split( "-" )[ 2 ],
-            });
-            start = start - 1;
-            id = _bTrack.trackEvents[ _bTrack.trackEvents.length - 1 ].id;
-          }
+          /*if( !id ) {
+                      }*/
 
       _em.dispatch( "trackeventrequested", {
         event: id,
-        start: start
+        start: start,
+        track: _bTrack,
+        id: element.id.split( "-" )[ 2 ]
       });
 /*
       var _tlTrack = e.data.track,

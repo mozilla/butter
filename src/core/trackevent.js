@@ -18,6 +18,7 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
           start: _this.start,
           end: _this.end
         };
+console.log( _this.start, _this.end );
 
     this.update = function( updateOptions ) {
       for ( var prop in updateOptions ) {

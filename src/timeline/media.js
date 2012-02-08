@@ -80,12 +80,24 @@ define( [
         } //if
       } //for
 
-      corn = trackEvent.popcornOptions;
+      if( trackEvent ) {
+        corn = trackEvent.popcornOptions;
+        //then, add it to the correct one
+        newEnd = corn.end - corn.start + newStart;
+        newTrack.track.addTrackEvent( trackEvent );
 
-      //then, add it to the correct one
-      newEnd = corn.end - corn.start + newStart;
-      newTrack.track.addTrackEvent( trackEvent );
-
+        trackEvent.update( { start: newStart, end: newEnd } );
+      } else {
+        trackEvent = e.data.track.addTrackEvent({
+          popcornOptions: {
+            start: e.data.start,
+            end: e.data.start + 1
+          },
+          type: e.data.id
+        });
+        newStart = e.data.start - 1;
+        newEnd = e.data.start + 1;
+      }
       trackEvent.update( { start: newStart, end: newEnd } );
     } //onTrackEventRequested
 
