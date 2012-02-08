@@ -32,6 +32,7 @@ THE SOFTWARE.
 
       var __plugins = [],
           __container,
+          __this = this,
           __pluginElementPrefix = "butter-plugin-",
           __pattern = '<li class="$type_tool ui-draggable"><a href="#" title="$type"><span></span>$type</a></li>';
 
@@ -41,10 +42,18 @@ THE SOFTWARE.
         var _id = "plugin" + __plugins.length,
             _this = this,
             _name = pluginOptions.name || 'Plugin' + Date.now(),
-            _path = pluginOptions.path;
+            _path = pluginOptions.path,
+            _manifest = {},
+            _type = pluginOptions.type,
+            _element;
 
-        this.type = pluginOptions.type;
-        this.element = undefined;
+        if( _path ) {
+          var head = document.getElementsByTagName( "HEAD" )[ 0 ],
+              script = document.createElement( "script" );
+          
+          script.src = _path;
+          head.appendChild( script );
+        }
 
         Object.defineProperties( this, { 
           plugins: {
@@ -71,7 +80,20 @@ THE SOFTWARE.
             get: function() {
               return _path;
             }
-          } //path
+          }, //path
+          manifest: {
+            get: function() {
+              return _manifest;
+            },
+            set: function( manifest ) {
+              _manifest = manifest;
+            }
+          }, //manifest
+          type: {
+            get: function() {
+              return _type;
+            }
+          }
         }); //defineProperties
 
 
@@ -100,26 +122,39 @@ THE SOFTWARE.
       //__container.className = "viewport enable-scroll";
       document.getElementById( "butter-timeline" ).appendChild( __container );
 
-      this.add = function( plugin ) {
+      this.add = function( plugin, cb ) {
 
-        if ( !( plugin instanceof Plugin ) ) {
-          plugin = new Plugin( plugin );
-        } //if
-        __plugins.push( plugin );
+        if( plugin instanceof Array ) {
+          var counter = 0;
+          for( var i = 0, l = plugin.length; i < l; i++ ) {
+            __this.add( plugin[ i ], function() {
+              if( ++counter === plugin.length ) {
+                console.log( "HUAAA" );
+                cb && cb();
+              }
+            });
+          }
+        } else {
 
-        __container.appendChild( plugin.createElement( __pattern ) );
+          if ( !( plugin instanceof Plugin ) ) {
+            plugin = new Plugin( plugin );
+            var interval = setInterval(function( e ) {
+              if( !Popcorn.manifest[ plugin.type ]) {
+                return;
+              }
+              plugin.manifest = Popcorn.manifest[ plugin.type ];
+              clearInterval( interval );
+              cb && cb();
+            }, 100);
+          } //if
+          __plugins.push( plugin );
 
-        if( plugin._path ) {
-          var head = document.getElementsByTagName( "HEAD" )[ 0 ],
-              script = document.createElement( "script" );
-          
-          script.src = _path;
-          head.appendChild( script );
+          __container.appendChild( plugin.createElement( __pattern ) );
+
+          __butter.dispatch( "pluginadded", plugin );
+
+          return plugin;
         }
-
-        __butter.dispatch( "pluginadded", plugin );
-
-        return plugin;
       }; //add
 
       this.remove = function( plugin ) {

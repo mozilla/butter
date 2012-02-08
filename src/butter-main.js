@@ -58,7 +58,6 @@ THE SOFTWARE.
   ){
 
     var __modules = {
-      dialog: DialogModule,
       editor: EditorModule,
       eventManager: EventManager,
       track: TrackModule,
@@ -69,6 +68,7 @@ THE SOFTWARE.
       ui: UIModule
     };
 
+    console.log( DialogModule );
     var __guid = 0;
 
     var Butter = function( butterOptions ){

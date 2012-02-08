@@ -58,7 +58,7 @@ define( [], function() {
     });
 
     _tlEvent.listen( "trackeventdoubleclicked", function( e ){
-      _bEvent.dispatch( "trackeventeditrequested" );
+      _bEvent.dispatch( "trackeventeditrequested", e );
     });
 
     this.destroy = function() {

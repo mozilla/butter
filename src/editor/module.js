@@ -55,6 +55,7 @@ THE SOFTWARE.
         if ( !_editors[ type ] ) {
           type = "default";
         } //if
+
         var editor = _editors[ type ];
         editor.open( trackEvent );
         return editor;
@@ -75,11 +76,14 @@ THE SOFTWARE.
         }
         var oldSource = _editors[ type ];
         _editors[ type ] = undefined;
-        return oldSource;
+       return oldSource;
       }; //remove
 
       var defaultEditor = options.defaultEditor || DEFAULT_EDITOR;
-      _this.add( defaultEditor, "default" );
+
+      butter.listen( "ready", function( e ) {
+        _this.add( defaultEditor, "default" );
+      });
 
       butter.listen( "trackeventeditrequested", function( e ){
         _this.edit( e.target );

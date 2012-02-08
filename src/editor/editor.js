@@ -48,8 +48,25 @@ define( [ "core/eventmanager" ], function( EventManager ) {
       url: _source
     });
 
+    
+
     this.open = function( trackEvent ) {
-console.log("open!");
+      butter.dialog.open( _dialogName, {
+        open: function( e ) {
+          var targets = [];
+          for( var i = 0, l = butter.targets.length; i < l; i++ ) {
+            targets.push( butter.targets[ i ].object );
+          }
+          butter.dialog.send( _dialogName, "trackeventdata", {
+            manifest: butter.plugin.get( trackEvent.type ).manifest,
+            popcornOptions: trackEvent.popcornOptions,
+            targets: targets
+          });
+        },
+        submit: function( e ) {
+          trackEvent.update( e.data );
+        }
+      });
 /*
       var updateEditor = function( e ){
         var sendObj = {

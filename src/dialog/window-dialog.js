@@ -75,9 +75,9 @@ define( [ "./util", "./base-dialog", "core/comm", "./event-manager" ], function(
         _currentComm.listen( "cancel", onCancel );
         _currentComm.listen( "close", onClose );
         _windowStatusInterval = setInterval( checkWindowStatus, 300 );
+        _em.dispatch( "open" );
+        _baseDialog.open();
       });
-      _baseDialog.open();
-      _em.dispatch( "open" );
     }; //open
 
     this.close = function(){
