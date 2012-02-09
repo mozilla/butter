@@ -297,9 +297,6 @@ THE SOFTWARE.
 
       //removeMedia - forget a media object
       this.removeMedia = function ( media ) {
-        if ( typeof( media ) === "string" ) {
-          media = _this.getMediaByType( "id", media.id );
-        } //if
 
         var idx = _media.indexOf( media );
         if ( idx > -1 ) {
