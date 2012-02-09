@@ -54,11 +54,13 @@ THE SOFTWARE.
             },
             pause: function(){
               clearInterval( _mediaUpdateInterval );
+              _em.dispatch( "mediapause" );
             },
             playing: function(){
               _mediaUpdateInterval = setInterval( function(){
                 _currentTime = _popcorn.currentTime;
               }, 10 );
+              _em.dispatch( "mediaplaying" );
             },
             timeout: function(){
             },
@@ -75,6 +77,17 @@ THE SOFTWARE.
           }),
           _this = this;
 
+      function onTrackEventAdded( e ){
+        var newTrack = e.target,
+            trackEvent = e.data;
+        _popcorn.updateEvent( trackEvent );
+      } //onTrackEventAdded
+
+      function onTrackEventUpdated( e ){
+        var trackEvent = e.target;
+        _popcorn.updateEvent( trackEvent );
+      } //onTrackEventUpdated
+
       this.addTrack = function ( track ) {
         if ( !( track instanceof Track ) ) {
           track = new Track( track );
@@ -87,6 +100,9 @@ THE SOFTWARE.
           "trackeventupdated",
           "trackeventeditrequested"
         ]);
+        track.popcorn = _popcorn;
+        track.listen( "trackeventadded", onTrackEventAdded );
+        track.listen( "trackeventupdated", onTrackEventUpdated );
         _em.dispatch( "trackadded", track );
         var trackEvents = track.trackEvents;
         if ( trackEvents.length > 0 ) {
@@ -126,6 +142,8 @@ THE SOFTWARE.
             "trackeventupdated",
             "trackeventeditrequested"
           ]);
+          track.unlisten( "trackeventadded", onTrackEventAdded );
+          track.unlisten( "trackeventupdated", onTrackEventUpdated );
           _em.dispatch( "trackremoved", track );
           return track;
         } //if
@@ -141,6 +159,14 @@ THE SOFTWARE.
           _popcorn.prepare( _url, _target );
         } //if
       } //setupContent
+
+      this.pause = function(){
+        _popcorn.pause();
+      }; //pause
+
+      this.play = function(){
+        _popcorn.play();
+      } //play
 
       Object.defineProperties( this, {
         url: {
@@ -202,6 +228,7 @@ THE SOFTWARE.
               if ( _currentTime > _duration ) {
                 _currentTime = _duration;
               } //if
+              _popcorn.currentTime = _currentTime;
               _em.dispatch( "mediatimeupdate", _this );
             } //if
           },
@@ -269,6 +296,15 @@ THE SOFTWARE.
           enumerable: true,
           get: function(){
             return _popcorn;
+          }
+        },
+        paused: {
+          enumerable: true,
+          get: function(){
+            return _popcorn.paused;
+          },
+          set: function( val ){
+            _popcorn.paused = val;
           }
         }
       });

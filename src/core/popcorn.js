@@ -15,6 +15,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _target = options.target && options.setup.target,
         _popcorn,
         _popcornTarget,
+        _butterEventMap = {},
         _mediaLoadAttempts = 0,
         _interruptLoad = false,
         _this = this;
@@ -38,6 +39,17 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     this.wait = function() {
       _mediaLoadAttempts = 0;
     }; //wait
+
+    this.updateEvent = function( trackEvent ){
+      var options = trackEvent.popcornOptions,
+          butterId = trackEvent.id,
+          popcornId = _butterEventMap[ butterId ];
+      if( popcornId && Popcorn.getTrackEvent( _popcorn, popcornId ) ){
+        _popcorn.removeTrackEvent( popcornId );
+      } //if
+      _popcorn[ trackEvent.type ]( options );
+      _butterEventMap[ butterId ] = Popcorn.getLastTrackEventId( _popcorn );
+    }; //updateEvent
 
     this.prepare = function( url, target, popcornOptions ){
       function timeoutWrapper( e ){
@@ -226,6 +238,14 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       checkMedia();
     }; //waitForPopcorn
 
+    this.play = function(){
+      _popcorn.play();
+    }; //play
+
+    this.pause = function(){
+      _popcorn.pause();
+    }; //pause
+
     this.clear = function( target ) {
       var container = document.getElementById( target );
       while( container.firstChild ) {
@@ -242,18 +262,38 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
     Object.defineProperties( this, {
       currentTime: {
+        enumerable: true,
+        set: function( val ){
+          _popcorn.currentTime( val );
+        },
         get: function(){
           return _popcorn.currentTime();
         }
       },
       duration: {
+        enumerable: true,
         get: function(){
           return _popcorn.duration();
         }
       },
       popcorn: {
+        enumerable: true,
         get: function(){
           return _popcorn;
+        }
+      },
+      paused: {
+        enumerable: true,
+        get: function(){
+          _popcorn.paused();
+        }, 
+        set: function( val ){
+          if( val ){
+            _popcorn.pause();
+          }
+          else {
+            _popcorn.play();
+          } //if
         }
       }
     });
