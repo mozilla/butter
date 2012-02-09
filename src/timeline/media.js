@@ -68,7 +68,7 @@ define( [
     function onTrackEventRequested( e ){
       var newTrack = e.currentTarget,
           eventId = e.data.event,
-          newStart = e.data.start,
+          newStart = Number( e.data.start ),
           corn,
           newEnd,
           trackEvent;
@@ -76,7 +76,11 @@ define( [
       //try to remove the trackevent from all known tracks
       for( var tId in _tracks ){
         if( _tracks.hasOwnProperty( tId ) ){
-          trackEvent = trackEvent || _tracks[ tId ].track.removeTrackEvent( eventId );
+          trackEvent = _tracks[ tId ].track.getTrackEventById( eventId );
+          if( trackEvent ){
+            _tracks[ tId ].track.removeTrackEvent( trackEvent );
+            break;
+          } //if
         } //if
       } //for
 
@@ -90,15 +94,12 @@ define( [
       } else {
         trackEvent = e.data.track.addTrackEvent({
           popcornOptions: {
-            start: e.data.start,
-            end: e.data.start + 1
+            start: newStart,
+            end: newStart + 1
           },
-          type: e.data.id
+          type: e.data.type
         });
-        newStart = e.data.start - 1;
-        newEnd = e.data.start + 1;
       }
-      trackEvent.update( { start: newStart, end: newEnd } );
     } //onTrackEventRequested
 
     function addTrack( bTrack ){

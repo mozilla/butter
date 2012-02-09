@@ -68,7 +68,6 @@ THE SOFTWARE.
       ui: UIModule
     };
 
-    console.log( DialogModule );
     var __guid = 0;
 
     var Butter = function( butterOptions ){

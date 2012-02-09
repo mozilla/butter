@@ -45,10 +45,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
               name: "TrackEvent 1",
               type: "footnote" 
             });
-            event.update({
-              start: 2,
-              end: 5 
-            });
           });
         });
       });

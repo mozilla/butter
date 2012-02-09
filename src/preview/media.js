@@ -276,17 +276,16 @@
       } //onMediaContentChanged
 
       function onTrackEventAdded( e ){
+        _popcorn[ e.data.type ]( e.data.popcornOptions );
         e.data.popcornEvent = _popcorn.getLastTrackEventId();
       } //onTrackEventAdded
 
       function onTrackEventUpdated( e ){
-        console.log( "BEFORE: ", _popcorn.getTrackEvents().length );
         if( e.data.popcornEvent ){
           _popcorn.removeTrackEvent( e.data.popcornEvent );
         }
         _popcorn[ e.data.type ]( e.data.popcornOptions );
         e.data.popcornEvent = _popcorn.getLastTrackEventId();
-        console.log( "AFTER: ", _popcorn.getTrackEvents().length);
       } //onTrackEventUpdated
 
       function onTrackEventRemoved( e ){

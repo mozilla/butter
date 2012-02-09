@@ -129,7 +129,6 @@ THE SOFTWARE.
           for( var i = 0, l = plugin.length; i < l; i++ ) {
             __this.add( plugin[ i ], function() {
               if( ++counter === plugin.length ) {
-                console.log( "HUAAA" );
                 cb && cb();
               }
             });
