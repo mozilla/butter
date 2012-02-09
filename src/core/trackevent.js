@@ -44,16 +44,6 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
           return _type;
         }
       },
-      track: {
-        enumerable: true,
-        get: function() {
-          return _track;
-        },
-        set: function( val ) {
-          _track = val;
-          _em.dispatch( "trackeventtrackchanged", _this );
-        }
-      },
       name: {
         enumerable: true,
         get: function() {
@@ -84,8 +74,18 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
           }
           _popcornOptions = importData.popcornOptions;
         }
+      },
+      track: {
+        get: function(){
+          return _track;
+        },
+        set: function( val ){
+          _track = val;
+          _popcorn = _track.popcorn;
+        }
       }
     }); //properties
+
   }; //TrackEvent
 
   return TrackEvent;
