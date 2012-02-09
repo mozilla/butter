@@ -51,7 +51,11 @@ define( [], function(){
         };
       }
       else {
-        e = eventName;
+        e = {
+          type: eventName.type,
+          target: eventName.target,
+          data: eventName.data
+        };
         eventName = e.type;
       } //if
       e.currentTarget = _target;

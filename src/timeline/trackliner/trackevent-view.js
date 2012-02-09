@@ -32,8 +32,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _element,
         _zoom = 1,
         _duration = 1,
-        _start,
-        _end,
+        _start = inputOptions.start || 0,
+        _end = inputOptions.end || _start + 1,
         _type = inputOptions.type,
         _selected = false,
         _this = this;
@@ -46,8 +46,9 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     this.update = function( options ){
       options = options || {};
       _element.style.top = "0px";
-      _this.start = options.start || _start;
-      _this.end = options.end || _end;
+      _start = options.start || _start;
+      _end = options.end || _end;
+      resetContainer();
     }; //update
 
     Object.defineProperties( this, {
@@ -108,7 +109,6 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           return _element.getBoundingClientRect().width / _zoom;
         },
         set: function( val ){
-          _end = _start + val;
           _element.style.width = ( val * _zoom ) + "px";
         }
       },
@@ -203,9 +203,6 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       } //if
 
     }; //activate
-
-    _this.start = inputOptions.start;
-    _this.end = inputOptions.end;
 
   } //TrackEvent
 

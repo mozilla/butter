@@ -15,6 +15,16 @@
         _logger.log( "Starting" );
 
         _page.listen( "trackeventrequested", function( event ) {
+          var type = event.data.ui.draggable[ 0 ].id;
+          if( type ){
+            type = type.split( "-" );
+            if( type.length !== 2 ){
+              return;
+            }
+            else {
+              type = type[ 2 ];
+            } //if
+          } //if 
           var te = butter.tracks[ 0 ].addTrackEvent({
             type: event.data.ui.draggable[ 0 ].id.split( "-" )[ 2 ], 
             popcornOptions: {
