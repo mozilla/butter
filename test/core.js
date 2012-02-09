@@ -302,7 +302,7 @@
     butter.addMedia();
 
     var t1 = butter.addTrack();
-    var te = t1.addTrackEvent( t1 );
+    var te = t1.addTrackEvent( new Butter.TrackEvent( { name: "TrackEvent 3", start: 2, end: 3 } ) );
 
     var state = undefined;
 
