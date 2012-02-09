@@ -31,7 +31,8 @@ define( [
           "./trackliner/trackliner",
           "./track-controller",
           "./scrollbars",
-          "./timebar"
+          "./timebar",
+          "./zoombar"
         ],
         function(
           $,
@@ -42,7 +43,10 @@ define( [
           TrackLiner,
           TrackController,
           Scrollbars,
-          TimeBar ){
+          TimeBar,
+          ZoomBar ){
+
+  const ZOOM_FACTOR = 100;
 
   function MediaInstance( media ){
     var _this = this,
@@ -57,6 +61,7 @@ define( [
         _hScrollBar,
         _vScrollBar,
         _timebar = new TimeBar( _root, _media, _tracksContainer ),
+        _zoombar = new ZoomBar( _root, zoomCallback ),
         _zoom = 1;
 
     _root.className = "butter-timeline-media";
@@ -64,6 +69,15 @@ define( [
     _container.className = "butter-timeline-media-container";
     _tracksContainer.className = "butter-timeline-tracks";
     _tracksContainer.id = "butter-timeline-tracks-" + media.id;
+
+    function zoomCallback( zoomLevel ){
+      var nextZoom = ( 1 + zoomLevel ) * ZOOM_FACTOR;
+      if( nextZoom !== _zoom ){
+        _zoom = nextZoom;
+        _trackliner.zoom = _zoom;
+        updateUI();
+      } //if
+    } //zoomCallback
 
     function onTrackEventRequested( e ){
       var newTrack = e.currentTarget,
@@ -101,6 +115,9 @@ define( [
     } //addTrack
 
     _media.listen( "mediaready", function(){
+      _zoom = 100;
+      _zoombar.update( 0 );
+
       var tracks = _media.tracks;
 
       _trackliner = new TrackLiner({
@@ -141,12 +158,12 @@ define( [
       _root.appendChild( _container );
 
       _hScrollBar = new Scrollbars.Horizontal( _container, _tracksContainer ),
-      _hScrollBar = new Scrollbars.Vertical( _container, _tracksContainer ),
+      _vScrollBar = new Scrollbars.Vertical( _container, _tracksContainer ),
 
       _trackliner.zoom = _zoom;
       _trackliner.duration = _media.duration;
 
-      _timebar.update( _zoom );
+      updateUI();
 
       _initialized = true;
       _em.dispatch( "ready" );
@@ -165,6 +182,17 @@ define( [
       _root.style.display = "block";
     }; //show
 
+    function updateUI() {
+      if( _trackliner ){
+        console.log( _zoom );
+        _trackliner.zoom = _zoom;
+        _timebar.update( _zoom );
+        _hScrollBar.update();
+        _vScrollBar.update();
+        _zoombar.update();
+      } //if
+    } //updateUI
+
     Object.defineProperties( this, {
       zoom: {
         enumerable: true,
@@ -173,10 +201,7 @@ define( [
         },
         set: function( val ){
           _zoom = val;
-          if( _trackliner ){
-            _trackliner.zoom = _zoom;
-            _timebar.update( _zoom );
-          }
+          updateUI();
         }
       },
       element: {
@@ -201,8 +226,6 @@ define( [
         }
       }
     });
-
-    _this.zoom = 200;
 
   } //MediaInstance
 

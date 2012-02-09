@@ -24,8 +24,6 @@ THE SOFTWARE.
 
 define( [], function(){
 
-  const SCROLL_FACTOR = 5;
-
   function Vertical( parentElement, controlElement ){
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
@@ -46,7 +44,7 @@ define( [], function(){
     function setup(){
       _elementHeight = _element.getBoundingClientRect().height;
       _controlHeight = _control.getBoundingClientRect().height;
-      _handleHeight = Math.min( _elementHeight, _controlHeight / SCROLL_FACTOR );
+      _handleHeight = Math.min( _elementHeight, _elementHeight - ( _control.scrollHeight - _controlHeight ) );
       _handle.style.height = _handleHeight + "px";
     } //setup
 
@@ -72,8 +70,12 @@ define( [], function(){
       _handle.removeEventListener( "mousedown", onMouseDown, false );
     } //onMouseDown
 
+    this.update = function(){
+    }; //update
+
     _control.addEventListener( "resize", setup, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
+
     setup();
 
   } //Vertical
@@ -98,7 +100,7 @@ define( [], function(){
     function setup(){
       _elementWidth = _element.getBoundingClientRect().width;
       _controlWidth = _control.getBoundingClientRect().width;
-      _handleWidth = Math.min( _elementWidth, _controlWidth / SCROLL_FACTOR );
+      _handleWidth = Math.min( _elementWidth, _elementWidth - ( _control.scrollWidth - _controlWidth ) );
       _handle.style.width = _handleWidth + "px";
     } //setup
 
@@ -126,6 +128,11 @@ define( [], function(){
 
     _control.addEventListener( "resize", setup, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
+
+    this.update = function(){
+      setup();
+    }; //update
+
     setup();
 
   } //Horizontal
