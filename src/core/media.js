@@ -26,9 +26,10 @@ THE SOFTWARE.
   define( [
             "core/logger", 
             "core/eventmanager", 
-            "core/track"
+            "core/track",
+            "core/popcorn"
           ], 
-          function( Logger, EventManager, Track ){
+          function( Logger, EventManager, Track, PopcornWrapper ){
 
     var __guid = 0;
 
@@ -40,11 +41,38 @@ THE SOFTWARE.
           _logger = new Logger( _id ),
           _em = new EventManager( this ),
           _name = mediaOptions.name || _id,
-          _url,
-          _target,
+          _url = mediaOptions.url,
+          _target = mediaOptions.target,
           _registry,
           _currentTime = 0,
           _duration = 0,
+          _popcornOptions = mediaOptions.popcornOptions,
+          _mediaUpdateInterval,
+          _popcorn = new PopcornWrapper( _id, {
+            timeupdate: function(){
+              _this.currentTime = _popcorn.currentTime;
+            },
+            pause: function(){
+              clearInterval( _mediaUpdateInterval );
+            },
+            playing: function(){
+              _mediaUpdateInterval = setInterval( function(){
+                _currentTime = _popcorn.currentTime;
+              }, 10 );
+            },
+            timeout: function(){
+            },
+            prepare: function(){
+              _this.duration = _popcorn.duration;
+              _em.dispatch( "mediaready" );
+            },
+            fail: function(){
+            },
+            setup: {
+              target: _target,
+              url: _url
+            }
+          }),
           _this = this;
 
       this.addTrack = function ( track ) {
@@ -106,6 +134,12 @@ THE SOFTWARE.
         return _registry[ name ];
       }; //getManifest
 
+      function setupContent(){
+        if( _url && _target ){
+          _popcorn.prepare( _url, _target );
+        } //if
+      } //setupContent
+
       Object.defineProperties( this, {
         url: {
           get: function() {
@@ -114,6 +148,8 @@ THE SOFTWARE.
           set: function( val ) {
             if ( _url !== val ) {
               _url = val;
+              _popcorn.clear();
+              setupContent();
               _em.dispatch( "mediacontentchanged", _this );
             }
           },
@@ -126,6 +162,8 @@ THE SOFTWARE.
           set: function( val ) {
             if ( _target !== val ) {
               _target = val;
+              _popcorn.clear();
+              setupContent();
               _em.dispatch( "mediatargetchanged", _this );
             }
           },
@@ -224,15 +262,16 @@ THE SOFTWARE.
             _registry = val;
           },
           enumerable: true
+        },
+        popcorn: {
+          enumerable: true,
+          get: function(){
+            return _popcorn;
+          }
         }
       });
 
-      if ( mediaOptions.url ) {
-        this.url = mediaOptions.url;
-      }
-      if ( mediaOptions.target ) {
-        this.target = mediaOptions.target;
-      }
+      setupContent();
 
     }; //Media
 

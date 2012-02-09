@@ -35,9 +35,27 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
         _logger = new Logger( _id ),
         _em = new EventManager( this ),
         _name = options.name || _id,
+        _media,
+        _popcorn,
         _this = this;
 
     Object.defineProperties( this, {
+      popcorn: {
+        enumerable: true,
+        get: function(){
+          return _popcorn;
+        }
+      },
+      media: {
+        enumerable: true,
+        get: function(){
+          return _media;
+        },
+        set: function( val ){
+          _media = val;
+          _popcorn = _media.popcorn;
+        }
+      },
       target: {
         enumerable: true,
         get: function() {
