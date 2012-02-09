@@ -48,8 +48,6 @@ define( [ "core/eventmanager" ], function( EventManager ) {
       url: _source
     });
 
-    
-
     this.open = function( trackEvent ) {
       butter.dialog.open( _dialogName, {
         open: function( e ) {
@@ -58,7 +56,7 @@ define( [ "core/eventmanager" ], function( EventManager ) {
             targets.push( butter.targets[ i ].object );
           }
           butter.dialog.send( _dialogName, "trackeventdata", {
-            manifest: butter.plugin.get( trackEvent.type ).manifest,
+            manifest: Popcorn.manifest[ trackEvent.type ],
             popcornOptions: trackEvent.popcornOptions,
             targets: targets
           });
