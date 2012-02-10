@@ -46,9 +46,11 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
     }, false );
 
     this.update = function( zoom ) {
-      var width = _tracksContainer.scrollWidth;
+      var tracklinerContainer = _tracksContainer.firstChild,
+          tracklinerWidth = tracklinerContainer.getBoundingClientRect().width;
 
-      _canvasContainer.style.width = _parent.offsetWidth + "px";
+      var width = Math.min( tracklinerWidth, _tracksContainer.scrollWidth );
+
       _canvas.style.width = width + "px";
 
       var context = _canvas.getContext( "2d" );
