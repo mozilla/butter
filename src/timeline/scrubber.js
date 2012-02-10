@@ -89,7 +89,12 @@ define( [], function(){
 
     this.update = function( zoom ){
       _zoom = zoom;
+
+      var tracklinerContainer = _tracksContainer.firstChild,
+          tracklinerWidth = tracklinerContainer.getBoundingClientRect().width;
+
       _width = _parent.getBoundingClientRect().width;
+      _width = Math.min( _width, tracklinerWidth );
       _container.style.width = _width + "px";
       setNodePosition();
     }; //update

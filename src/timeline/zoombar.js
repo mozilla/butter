@@ -30,31 +30,46 @@ define( [], function(){
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
         _rect,
+        _mousePos,
+        _handleWidth,
+        _elementWidth,
         _this = this;
-
-    $( _handle ).draggable({
-      axis: "x",
-      containment: "parent",
-      drag: function( e, ui ){
-        zoomCallback( _handle.offsetLeft / _rect.width  );
-      },
-      stop: function( e, ui ){
-        zoomCallback( _handle.offsetLeft / _rect.width  );
-      }
-    });
 
     _element.className = "butter-timeline-zoombar butter-timeline-scroll";
     _handle.className = "butter-timeline-scroll-handle";
 
-    _handle.setAttribute( "draggable", true );
-    
     _element.appendChild( _handle );
     rootElement.appendChild( _element );
+
+    function onMouseUp(){
+      window.removeEventListener( "mouseup", onMouseUp, false );
+      window.removeEventListener( "mousemove", onMouseMove, false );
+      _handle.addEventListener( "mousedown", onMouseDown, false );
+      zoomCallback( _handle.offsetLeft / _rect.width  );
+    } //onMouseUp
+
+    function onMouseMove( e ){
+      var diff = e.pageX - _mousePos;
+      diff = Math.max( 0, Math.min( diff, _elementWidth - _handleWidth ) );
+      _handle.style.left = diff + "px";
+      zoomCallback( _handle.offsetLeft / _rect.width  );
+    } //onMouseMove
+
+    function onMouseDown( e ){
+      var handleX = _handle.offsetLeft;
+      _mousePos = e.pageX - handleX;
+      window.addEventListener( "mouseup", onMouseUp, false );
+      window.addEventListener( "mousemove", onMouseMove, false );
+      _handle.removeEventListener( "mousedown", onMouseDown, false );
+    } //onMouseDown
+
+    _handle.addEventListener( "mousedown", onMouseDown, false );
 
     this.update = function( level ) {
       _rect = _element.getBoundingClientRect();
       _handle.style.width = ( _rect.width / ZOOM_LEVELS ) + "px";
-      $( _handle ).draggable( "option", "grid", [ Math.floor( _rect.width/ZOOM_LEVELS ), 0 ] );
+      _handleWidth = ( _rect.width / ZOOM_LEVELS );
+      _elementWidth = _rect.width; 
       if( level !== undefined ){
         _handle.style.left = ( level * _rect.width / ZOOM_LEVELS ) + "px";
       } //if
