@@ -15,9 +15,12 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
         _type = options.type,
         _properties = [],
         _popcornOptions = options.popcornOptions || {
-          start: _this.start,
-          end: _this.end
+          start: 0,
+          end: 1
         };
+
+    _popcornOptions.start = _popcornOptions.start || _popcornOptions.start || 0;
+    _popcornOptions.end = _popcornOptions.end || _popcornOptions.start + 1;
 
     this.update = function( updateOptions ) {
       for ( var prop in updateOptions ) {

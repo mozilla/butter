@@ -56,7 +56,8 @@ THE SOFTWARE.
           "tracktargetchanged",
           "trackeventadded",
           "trackeventremoved",
-          "trackeventupdated"
+          "trackeventupdated",
+          "trackeventeditrequested"
         ]);
         _em.dispatch( "trackadded", track );
         var trackEvents = track.trackEvents;
@@ -94,7 +95,8 @@ THE SOFTWARE.
             "tracktargetchanged",
             "trackeventadded",
             "trackeventremoved",
-            "trackeventupdated"
+            "trackeventupdated",
+            "trackeventeditrequested"
           ]);
           _em.dispatch( "trackremoved", track );
           return track;

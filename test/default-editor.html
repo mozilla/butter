@@ -1,0 +1,90 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
+    <script type="text/javascript">
+      (function(){
+        var _comm = new Comm(),
+            _counter = 0,
+            _manifest = {};
+
+        document.addEventListener( "DOMContentLoaded", function( e ){
+          var okButton = document.getElementById( "ok" ),
+              cancelButton = document.getElementById( "cancel" );
+
+          okButton.addEventListener( "click", function( e ){
+            
+            var popcornOptions = {};
+            for( var item in _manifest ) {
+              popcornOptions[ item ] = document.getElementById( item ).value;
+            }
+            _comm.send( "submit", popcornOptions);
+            _comm.send( "close" );
+          }, false );
+
+          cancelButton.addEventListener( "click", function( e ){
+            _comm.send( "cancel" );
+          }, false );
+
+          _comm.listen( "trackeventdata", function( e ) {
+            var popcornOptions = e.data.popcornOptions,
+                targets = e.data.targets,
+                medias = e.data.medias;
+
+            _manifest = e.data.manifest.options;
+
+            for( var item in _manifest ) {
+              var row = document.createElement( "TR" ),
+                  col1 = document.createElement( "TD" ),
+                  col2 = document.createElement( "TD" ),
+                  elem = _manifest[ item ].elem;
+
+                  col1.innerHTML = "<b>" + (!_manifest[ item ].label ? item : _manifest[ item ].label) + "</b>";
+
+                  if( item === "target" ) {
+                    var select = document.createElement( "SELECT" );
+                    select.id = "target";
+
+                    for( var i = 0, l = targets.length; i < l; i++ ) {
+                      var option = document.createElement( "OPTION" );
+                      option.value = targets[ i ];
+                      option.innerHTML = targets[ i ];
+                      select.appendChild( option );
+                      if( popcornOptions.target === targets[ i ] ) {
+                        select.value = targets[ i ];
+                      }
+                    }
+                    var option = document.createElement( "OPTION" );
+                    option.value = "Media Element";
+                    option.innerHTML =  "Media Element";
+                    select.appendChild( option );
+                    if( popcornOptions.target === "Media Element" ) {
+                        select.value = "Media Element";
+                    }
+                    col2.appendChild( select );
+                  } else {
+                    col2.innerHTML = "<" + elem + " id='" + item + 
+                    "' style='width:100%' value='" + popcornOptions[ item ] + "'></" + elem + ">";
+                  }
+
+                  row.appendChild( col1 );
+                  row.appendChild( col2 );
+                  document.getElementById( "table" ).appendChild( row );
+            }
+          });
+
+          _comm.listen( "test", function( e ){
+            ++_counter;
+            document.getElementById( "counter" ).innerHTML = _counter;
+          });
+
+        }, false );
+      })();
+    </script>
+  </head>
+  <body>
+    <table id="table">
+    </table>
+    <button id="ok">Ok</button>
+    <button id="cancel">Cancel</button>
+  </body>
+</html>

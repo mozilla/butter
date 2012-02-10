@@ -1,4 +1,4 @@
-define( [ "./event-manager" ], function( EventManager ){
+define( [ "./eventmanager" ], function( EventManager ){
 
   var __context = 1;
 
