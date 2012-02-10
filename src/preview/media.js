@@ -276,6 +276,7 @@
       } //onMediaContentChanged
 
       function onTrackEventAdded( e ){
+        _popcorn[ e.data.type ]( e.data.popcornOptions );
         e.data.popcornEvent = _popcorn.getLastTrackEventId();
       } //onTrackEventAdded
 
@@ -283,11 +284,7 @@
         if( e.data.popcornEvent ){
           _popcorn.removeTrackEvent( e.data.popcornEvent );
         }
-        console.log( _popcorn, e, e.data, e.data.type, e.data.popcornOptions );
-        if( !e.data.type )
-          _popcorn[ "footnote" ]( e.data.popcornOptions );
-        else
-          _popcorn[ e.data.type ]( e.data.popcornOptions );
+        _popcorn[ e.data.type ]( e.data.popcornOptions );
         e.data.popcornEvent = _popcorn.getLastTrackEventId();
       } //onTrackEventUpdated
 

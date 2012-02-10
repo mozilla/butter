@@ -8,7 +8,6 @@
 
       var _id = __guid++,
           _logger = new Logger( _id ),
-          _media = [],
           _that = this,
           _page = new Page();
 

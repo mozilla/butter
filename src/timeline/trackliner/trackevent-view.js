@@ -27,6 +27,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
   var __guid = 0;
 
   function TrackEvent( inputOptions, ui ){
+
     var _id = "trackEvent" + __guid++,
         _eventManager = new EventManager( this ),
         _element,
@@ -177,7 +178,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           zIndex: 9001,
           scroll: true,
           // this is when an event stops being dragged
-          start: function ( event, ui ) {},
+          start: function ( event, ui ) {
+          },
           stop: movedCallback
         }).resizable({ 
           autoHide: false, 
@@ -203,6 +205,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       } //if
 
     }; //activate
+
+    resetContainer();
 
   } //TrackEvent
 

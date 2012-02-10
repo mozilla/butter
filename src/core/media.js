@@ -97,7 +97,8 @@ THE SOFTWARE.
           "tracktargetchanged",
           "trackeventadded",
           "trackeventremoved",
-          "trackeventupdated"
+          "trackeventupdated",
+          "trackeventeditrequested"
         ]);
         track.popcorn = _popcorn;
         track.listen( "trackeventadded", onTrackEventAdded );
@@ -138,7 +139,8 @@ THE SOFTWARE.
             "tracktargetchanged",
             "trackeventadded",
             "trackeventremoved",
-            "trackeventupdated"
+            "trackeventupdated",
+            "trackeventeditrequested"
           ]);
           track.unlisten( "trackeventadded", onTrackEventAdded );
           track.unlisten( "trackeventupdated", onTrackEventUpdated );

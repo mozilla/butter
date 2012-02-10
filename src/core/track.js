@@ -129,7 +129,8 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
       _trackEvents.push( trackEvent );
       trackEvent.track = _this;
       _em.repeat( trackEvent, [
-        "trackeventupdated"
+        "trackeventupdated",
+        "trackeventeditrequested"
       ]);
       trackEvent.track = _this;
       _em.dispatch( "trackeventadded", trackEvent );
@@ -137,15 +138,13 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
     }; //addTrackEvent
 
     this.removeTrackEvent = function( trackEvent ){
-      if ( typeof( trackEvent ) === "string" ) {
-        trackEvent = _this.getTrackEventById( trackEvent );
-      } //if
       var idx = _trackEvents.indexOf( trackEvent );
       if ( idx > -1 ) {
         _trackEvents.splice( idx, 1 );
         trackEvent.track = undefined;
         _em.unrepeat( trackEvent, [
-          "trackeventupdated"
+          "trackeventupdated",
+          "trackeventeditrequested"
         ]);
         trackEvent.track = undefined;
         _em.dispatch( "trackeventremoved", trackEvent );

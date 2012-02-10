@@ -14,6 +14,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _url = options.setup && options.setup.url,
         _target = options.target && options.setup.target,
         _popcorn,
+        _mediaType,
         _popcornTarget,
         _butterEventMap = {},
         _mediaLoadAttempts = 0,
@@ -44,11 +45,11 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       var options = trackEvent.popcornOptions,
           butterId = trackEvent.id,
           popcornId = _butterEventMap[ butterId ];
-      if( popcornId && Popcorn.getTrackEvent( _popcorn, popcornId ) ){
+      if( popcornId && _popcorn.getTrackEvent( popcornId ) ){
         _popcorn.removeTrackEvent( popcornId );
       } //if
       _popcorn[ trackEvent.type ]( options );
-      _butterEventMap[ butterId ] = Popcorn.getLastTrackEventId( _popcorn );
+      _butterEventMap[ butterId ] = _popcorn.getLastTrackEventId();
     }; //updateEvent
 
     this.prepare = function( url, target, popcornOptions ){
@@ -64,7 +65,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
          addPopcornHandlers();
         _onPrepare( e );
       } //popcornSuccess
-      findMediaType();
+      findMediaType( url );
       prepareMedia( url, target, failureWrapper );
       if( !_popcorn ) {
         try {
@@ -79,7 +80,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
     function prepareMedia( url, target, onError ){
       var mediaElement = document.getElementById( target );
-      if ( _type === "object" ) {
+      if ( _mediaType === "object" ) {
         if (  !mediaElement || [ 'AUDIO', 'VIDEO' ].indexOf( mediaElement.nodeName ) === -1 ) {
           var video = document.createElement( "video" ),
               src = document.createElement( "source" );
@@ -116,18 +117,18 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           _popcornTarget = mediaElement.id;
           return mediaElement;
         } //if
-      } //if _type
+      } //if _mediaType
     } //prepareMedia
 
     function findMediaType( url ){
       var regexResult = urlRegex.exec( url )
       if ( regexResult ) {
-        _type = regexResult[ 1 ];
+        _mediaType = regexResult[ 1 ];
       }
       else {
-        _type = "object";
+        _mediaType = "object";
       }
-      return _type;
+      return _mediaType;
     } //findMediaType
 
     function generatePopcornString( popcornOptions, url, target, method ) {
@@ -160,7 +161,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       };
 
       // call certain player function depending on the regexResult
-      popcornString += players[ _type ]();
+      popcornString += players[ _mediaType ]();
 
       if ( _popcorn ) {
         var trackEvents = _popcorn.getTrackEvents();
@@ -221,12 +222,12 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           return;
         } //if
         if ( _popcorn.media.readyState >= 2 && _popcorn.duration() > 0 ) {
-          if ( _type === "youtu" ) {
+          if ( _mediaType === "youtu" ) {
             setTimeout( function() {
               _popcorn.pause();
             }, 1000 );
           }
-          else if ( _type === "vimeo" || _type === "soundcloud" ) {
+          else if ( _mediaType === "vimeo" || _mediaType === "soundcloud" ) {
           }
           else {
           } //if

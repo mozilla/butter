@@ -22,6 +22,16 @@ THE SOFTWARE.
 
 **********************************************************************************/
 
+#butter-timeline, #butter-timeline * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
 #butter-timeline {
   position: fixed;
   z-index: 2147483647;
@@ -405,4 +415,3 @@ THE SOFTWARE.
 	webkit-box-shadow: 0 1px 0 #656565;
 	width: 120px;
 }
-

@@ -54,7 +54,6 @@ THE SOFTWARE.
   ){
 
     var __modules = {
-      dialog: DialogModule,
       editor: EditorModule,
       eventManager: EventManager,
       track: TrackModule,
@@ -246,6 +245,7 @@ THE SOFTWARE.
           "trackeventadded",
           "trackeventremoved",
           "trackeventupdated",
+          "trackeventeditrequested"
         ]);
 
         if ( media.tracks.length > 0 ) {
@@ -289,6 +289,7 @@ THE SOFTWARE.
             "trackeventadded",
             "trackeventremoved",
             "trackeventupdated",
+            "trackeventeditrequested"
           ]);
           var tracks = media.tracks;
           for ( var i=0, l=tracks.length; i<l; ++i ) {
