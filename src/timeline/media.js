@@ -197,7 +197,6 @@ define( [
 
     function updateUI() {
       if( _trackliner ){
-        console.log( _zoom );
         _trackliner.zoom = _zoom;
         _timebar.update( _zoom );
         _hScrollBar.update();

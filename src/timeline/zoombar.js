@@ -54,7 +54,7 @@ define( [], function(){
     this.update = function( level ) {
       _rect = _element.getBoundingClientRect();
       _handle.style.width = ( _rect.width / ZOOM_LEVELS ) + "px";
-      $( _handle ).draggable( "option", "grid", [ _rect.width/ZOOM_LEVELS - 1, 0 ] );
+      $( _handle ).draggable( "option", "grid", [ Math.floor( _rect.width/ZOOM_LEVELS ), 0 ] );
       if( level !== undefined ){
         _handle.style.left = ( level * _rect.width / ZOOM_LEVELS ) + "px";
       } //if
