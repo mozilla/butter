@@ -100,8 +100,10 @@ define( [], function(){
     function setup(){
       _elementWidth = _element.getBoundingClientRect().width;
       _controlWidth = _control.getBoundingClientRect().width;
-      _handleWidth = Math.min( _elementWidth, _elementWidth - ( _control.scrollWidth - _controlWidth ) );
+      _handleWidth = Math.max( 20, Math.min( _elementWidth, _elementWidth - ( _control.scrollWidth - _controlWidth ) ) );
       _handle.style.width = _handleWidth + "px";
+      var p = _control.scrollLeft / ( _control.scrollWidth - _elementWidth );
+      _handle.style.left = p * ( _elementWidth - _handleWidth ) + "px";
     } //setup
 
     function onMouseUp(){
