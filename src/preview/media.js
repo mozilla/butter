@@ -15,6 +15,19 @@
           _this = this,
           _popcornTarget;
 
+      Object.defineProperties( _mediaObject, {
+        exactCurrentTime: {
+          enumerable: true,
+          configurable: false,
+          get: function(){
+            if( _popcorn ){
+              return _popcorn.media.currentTime;
+            } //if
+            return 0;
+          }
+        }
+      });
+
       function setupPopcornHandlers() {
         _popcorn.listen( "timeupdate", function() {
           _popcornCurrentTime = _popcorn.currentTime();
