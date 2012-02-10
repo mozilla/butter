@@ -50,7 +50,8 @@ THE SOFTWARE.
           _mediaUpdateInterval,
           _popcorn = new PopcornWrapper( _id, {
             timeupdate: function(){
-              _this.currentTime = _popcorn.currentTime;
+              _currentTime = _popcorn.currentTime;
+              _em.dispatch( "mediatimeupdate", _this );
             },
             pause: function(){
               clearInterval( _mediaUpdateInterval );
