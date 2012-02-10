@@ -88,26 +88,22 @@ define( [ "core/trackevent", "core/eventmanager", "./trackevent-controller" ], f
       var element = e.data.ui.draggable[ 0 ],
           left = element.offsetLeft,
           start,
-          id = element.getAttribute( "butter-trackevent-id" );
-          left = id ? left : e.data.event.clientX;
-          trackRect = _tlTrack.element.getBoundingClientRect();
+          id = element.getAttribute( "butter-trackevent-id" ),
+          trackRect = _tlTrack.element.getBoundingClientRect(),
+          left = id ? left : ( e.data.event.clientX - trackRect.left );
 
-          start = left / trackRect.width * _media.duration;
-          if( !id ) {
-            _bTrack.addTrackEvent({
-              popcornOptions: {
-                start: start,
-                end: start + 1
-              },
-              type: element.id.split( "-" )[ 2 ],
-            });
-            start = start - 1;
-            id = _bTrack.trackEvents[ _bTrack.trackEvents.length - 1 ].id;
-          }
+      start = left / trackRect.width * _media.duration;
+
+      var type = element.id.split( "-" );
+      if( type.length === 3 ){
+        type = type[ 2 ];
+      } //if
 
       _em.dispatch( "trackeventrequested", {
         event: id,
-        start: start
+        start: start,
+        track: _bTrack,
+        type: type
       });
 /*
       var _tlTrack = e.data.track,

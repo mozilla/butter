@@ -58,11 +58,7 @@ define( [], function() {
     });
 
     _tlEvent.listen( "trackeventdoubleclicked", function( e ){
-/*
-      if( butter.eventeditor ){
-        butter.eventeditor.editTrackEvent( butterTrackEvent );
-      }
-*/
+      _bEvent.dispatch( "trackeventeditrequested", e );
     });
 
     this.destroy = function() {

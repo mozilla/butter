@@ -27,13 +27,14 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
   var __guid = 0;
 
   function TrackEvent( inputOptions, ui ){
+
     var _id = "trackEvent" + __guid++,
         _eventManager = new EventManager( this ),
         _element,
         _zoom = 1,
         _duration = 1,
-        _start,
-        _end,
+        _start = inputOptions.start || 0,
+        _end = inputOptions.end || _start + 1,
         _type = inputOptions.type,
         _selected = false,
         _this = this;
@@ -108,7 +109,6 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           return _element.getBoundingClientRect().width / _zoom;
         },
         set: function( val ){
-          _end = _start + val;
           _element.style.width = ( val * _zoom ) + "px";
         }
       },
@@ -177,7 +177,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           zIndex: 9001,
           scroll: true,
           // this is when an event stops being dragged
-          start: function ( event, ui ) {},
+          start: function ( event, ui ) {
+          },
           stop: movedCallback
         }).resizable({ 
           autoHide: false, 
@@ -204,8 +205,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
     }; //activate
 
-    _this.start = inputOptions.start;
-    _this.end = inputOptions.end;
+    resetContainer();
 
   } //TrackEvent
 

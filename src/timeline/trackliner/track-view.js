@@ -117,7 +117,6 @@ define( [ "core/logger", "core/eventmanager", "./trackevent-view" ], function( L
       _events[ trackEvent.element.id ] = trackEvent;
       _element.appendChild( trackEvent.element );
       trackEvent.activate();
-      trackEvent.trackId = _id;
       ui = ui || false;
       trackEvent.duration = _duration;
       trackEvent.zoom = _zoom;
@@ -140,9 +139,6 @@ define( [ "core/logger", "core/eventmanager", "./trackevent-view" ], function( L
       return trackEvent;
     }; //removeTrackEvent
 
-    this.toString = function() {
-      return trackId;
-    }; //toString
   }; //Track
 
   return Track;

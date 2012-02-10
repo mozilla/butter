@@ -12,18 +12,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
         var count = 0;
         media.listen( "mediaready", function( e ){
-          var track = media.addTrack( "Track1" ),
-              event = track.addTrackEvent({
-                type: "text",
-                popcornOptions: {
-                  start: 1,
-                  end: 9,
-                  text: "test"
-                }
-              });
-          butter.plugin.add({ name: "footnote", type: "footnote", path: "../external/popcorn-js/plugins/footnote/popcorn.footnote.js" });
-          butter.tracks[ 0 ].addTrackEvent({ name: "TrackEvent 1", type: "footnote" });
-          butter.track.Editor( track );
+
+          var track = media.addTrack( "Track1" );
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );
@@ -37,9 +27,24 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );
-          event.update({
-            start: 2,
-            end: 5 
+
+          butter.plugin.add([
+            { name: "footnote", type: "footnote", path: "../external/popcorn-js/plugins/footnote/popcorn.footnote.js" },
+            { name: "image", type: "image", path: "../external/popcorn-js/plugins/image/popcorn.image.js" }], function( e ) {
+
+            var event = track.addTrackEvent({
+              type: "text",
+              popcornOptions: {
+                start: 1,
+                end: 9,
+                text: "test"
+              }
+            });
+
+            butter.tracks[ 0 ].addTrackEvent({ 
+              name: "TrackEvent 1",
+              type: "footnote" 
+            });
           });
         });
       });

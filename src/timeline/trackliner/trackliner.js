@@ -175,7 +175,6 @@ define( [ "core/logger", "core/eventmanager", "./track-view" ], function( Logger
           return _parent.scrollLeft / _parent.scrollWidth;
         },
         set: function( val ){
-          console.log( _parent.scrollWidth, val );
           _parent.scrollLeft = _parent.scrollWidth * val;
         }
       },
