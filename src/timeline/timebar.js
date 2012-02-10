@@ -48,7 +48,6 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
     this.update = function( zoom ) {
       var width = _tracksContainer.scrollWidth;
 
-      //_canvasContainer.style.width = _parent.offsetWidth + "px";
       _canvas.style.width = width + "px";
 
       var context = _canvas.getContext( "2d" );
