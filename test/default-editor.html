@@ -29,6 +29,8 @@
           document.addEventListener( "keydown", function( e ) {
             if( e.keyCode === 13 ) {
               okPressed( e );
+            } else if( e.keyCode === 27 ) {
+              cancelPressed( e );
             }
           }, false);
           okButton.addEventListener( "click", okPressed, false );
