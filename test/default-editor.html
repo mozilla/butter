@@ -9,21 +9,30 @@
 
         document.addEventListener( "DOMContentLoaded", function( e ){
           var okButton = document.getElementById( "ok" ),
-              cancelButton = document.getElementById( "cancel" );
+              cancelButton = document.getElementById( "cancel" ),
+              okPressed,
+              cancelPressed;
 
-          okButton.addEventListener( "click", function( e ){
-            
+          okPressed = function( e ) {
             var popcornOptions = {};
             for( var item in _manifest ) {
               popcornOptions[ item ] = document.getElementById( item ).value;
             }
             _comm.send( "submit", popcornOptions);
             _comm.send( "close" );
-          }, false );
+          };
 
-          cancelButton.addEventListener( "click", function( e ){
+          cancelPressed = function( e ) {
             _comm.send( "cancel" );
-          }, false );
+          };
+
+          document.addEventListener( "keydown", function( e ) {
+            if( e.keyCode === 13 ) {
+              okPressed( e );
+            }
+          }, false);
+          okButton.addEventListener( "click", okPressed, false );
+          cancelButton.addEventListener( "click", cancelPressed, false );
 
           _comm.listen( "trackeventdata", function( e ) {
             var popcornOptions = e.data.popcornOptions,
