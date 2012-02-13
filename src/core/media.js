@@ -27,7 +27,7 @@ THE SOFTWARE.
             "core/logger", 
             "core/eventmanager", 
             "core/track",
-            "core/popcorn"
+            "core/popcorn-wrapper"
           ], 
           function( Logger, EventManager, Track, PopcornWrapper ){
 
@@ -48,9 +48,9 @@ THE SOFTWARE.
           _duration = 0,
           _popcornOptions = mediaOptions.popcornOptions,
           _mediaUpdateInterval,
-          _popcorn = new PopcornWrapper( _id, {
+          _popcornWrapper = new PopcornWrapper( _id, {
             timeupdate: function(){
-              _currentTime = _popcorn.currentTime;
+              _currentTime = _popcornWrapper.currentTime;
               _em.dispatch( "mediatimeupdate", _this );
             },
             pause: function(){
@@ -59,14 +59,14 @@ THE SOFTWARE.
             },
             playing: function(){
               _mediaUpdateInterval = setInterval( function(){
-                _currentTime = _popcorn.currentTime;
+                _currentTime = _popcornWrapper.currentTime;
               }, 10 );
               _em.dispatch( "mediaplaying" );
             },
             timeout: function(){
             },
             prepare: function(){
-              _this.duration = _popcorn.duration;
+              _this.duration = _popcornWrapper.duration;
               _em.dispatch( "mediaready" );
             },
             fail: function(){
@@ -81,12 +81,12 @@ THE SOFTWARE.
       function onTrackEventAdded( e ){
         var newTrack = e.target,
             trackEvent = e.data;
-        _popcorn.updateEvent( trackEvent );
+        _popcornWrapper.updateEvent( trackEvent );
       } //onTrackEventAdded
 
       function onTrackEventUpdated( e ){
         var trackEvent = e.target;
-        _popcorn.updateEvent( trackEvent );
+        _popcornWrapper.updateEvent( trackEvent );
       } //onTrackEventUpdated
 
       this.addTrack = function ( track ) {
@@ -101,7 +101,7 @@ THE SOFTWARE.
           "trackeventupdated",
           "trackeventeditrequested"
         ]);
-        track.popcorn = _popcorn;
+        track.popcorn = _popcornWrapper;
         track.listen( "trackeventadded", onTrackEventAdded );
         track.listen( "trackeventupdated", onTrackEventUpdated );
         _em.dispatch( "trackadded", track );
@@ -157,16 +157,16 @@ THE SOFTWARE.
 
       function setupContent(){
         if( _url && _target ){
-          _popcorn.prepare( _url, _target );
+          _popcornWrapper.prepare( _url, _target );
         } //if
       } //setupContent
 
       this.pause = function(){
-        _popcorn.pause();
+        _popcornWrapper.pause();
       }; //pause
 
       this.play = function(){
-        _popcorn.play();
+        _popcornWrapper.play();
       } //play
 
       Object.defineProperties( this, {
@@ -177,7 +177,7 @@ THE SOFTWARE.
           set: function( val ) {
             if ( _url !== val ) {
               _url = val;
-              _popcorn.clear();
+              _popcornWrapper.clear();
               setupContent();
               _em.dispatch( "mediacontentchanged", _this );
             }
@@ -191,7 +191,7 @@ THE SOFTWARE.
           set: function( val ) {
             if ( _target !== val ) {
               _target = val;
-              _popcorn.clear();
+              _popcornWrapper.clear();
               setupContent();
               _em.dispatch( "mediatargetchanged", _this );
             }
@@ -229,7 +229,7 @@ THE SOFTWARE.
               if ( _currentTime > _duration ) {
                 _currentTime = _duration;
               } //if
-              _popcorn.currentTime = _currentTime;
+              _popcornWrapper.currentTime = _currentTime;
               _em.dispatch( "mediatimeupdate", _this );
             } //if
           },
@@ -296,16 +296,16 @@ THE SOFTWARE.
         popcorn: {
           enumerable: true,
           get: function(){
-            return _popcorn;
+            return _popcornWrapper;
           }
         },
         paused: {
           enumerable: true,
           get: function(){
-            return _popcorn.paused;
+            return _popcornWrapper.paused;
           },
           set: function( val ){
-            _popcorn.paused = val;
+            _popcornWrapper.paused = val;
           }
         }
       });
