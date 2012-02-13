@@ -28,8 +28,6 @@ THE SOFTWARE.
             "require",
             "core/logger",
             "core/eventmanager",
-            "core/track",
-            "core/trackevent",
             "core/target",
             "core/media",
             "editor/module",
@@ -44,8 +42,6 @@ THE SOFTWARE.
             require, 
             Logger, 
             EventManager, 
-            Track, 
-            TrackEvent, 
             Target, 
             Media, 
             EditorModule,
@@ -93,27 +89,6 @@ THE SOFTWARE.
         checkMedia();
         return _currentMedia.getManifest( name );
       }; //getManifest
-
-      /****************************************************************
-       * Track methods
-       ****************************************************************/
-      //addTrack - Creates a new Track
-      this.addTrack = function ( track ) {
-        checkMedia();
-        return _currentMedia.addTrack( track );
-      }; //addTrack
-
-      //getTrack - Get a Track by its id
-      this.getTrack = function ( name ) {
-        checkMedia();
-        return _currentMedia.getTrack( name );
-      }; //getTrack
-       
-      //removeTrack - Remove a Track
-      this.removeTrack = function ( track ) {
-        checkMedia();
-        return _currentMedia.removeTrack( track );
-      };
 
       /****************************************************************
        * Target methods
@@ -233,7 +208,7 @@ THE SOFTWARE.
         while ( _media.length > 0 ) {
           _this.removeMedia( _media[ 0 ] );
         }
-      };
+      }; //clearProject
 
       /****************************************************************
        * Media methods
@@ -247,7 +222,7 @@ THE SOFTWARE.
           }
         }
         return undefined;
-      };
+      }; //getMediaByType
 
       //addMedia - add a media object
       this.addMedia = function ( media ) {
@@ -444,10 +419,6 @@ THE SOFTWARE.
 
     }; //Butter
 
-    Butter.Media = Media;
-    Butter.Track = Track;
-    Butter.TrackEvent = TrackEvent;
-    Butter.Target = Target;
     Butter.Logger = Logger;
     Butter.EventManager = EventManager;
     Butter.instances = [];

@@ -19,7 +19,11 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
           end: 1
         };
 
-    _popcornOptions.start = _popcornOptions.start || _popcornOptions.start || 0;
+    if( !_type ){
+      throw new Error( "TrackEvent must have a type." );
+    } //if
+
+    _popcornOptions.start = _popcornOptions.start || 0;
     _popcornOptions.end = _popcornOptions.end || _popcornOptions.start + 1;
 
     this.update = function( updateOptions ) {
@@ -42,16 +46,6 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
         enumerable: true,
         get: function() {
           return _type;
-        }
-      },
-      track: {
-        enumerable: true,
-        get: function() {
-          return _track;
-        },
-        set: function( val ) {
-          _track = val;
-          _em.dispatch( "trackeventtrackchanged", _this );
         }
       },
       name: {
@@ -84,8 +78,9 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
           }
           _popcornOptions = importData.popcornOptions;
         }
-      }
+      },
     }); //properties
+
   }; //TrackEvent
 
   return TrackEvent;
