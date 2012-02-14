@@ -98,7 +98,8 @@ THE SOFTWARE.
 
 
         this.createElement = function ( pattern ) {
-          var pluginElement;
+          var pluginElement,
+              helper;
           if ( !pattern ) {
             pluginElement = document.createElement( "span" );
             pluginElement.innerHTML = _this.type + " ";
@@ -109,14 +110,15 @@ THE SOFTWARE.
             pluginElement = $pluginElement[ 0 ];
           }
           pluginElement.id = __pluginElementPrefix + _this.type;
+          helper = $( document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" ) );
           $( pluginElement ).draggable({
             helper: function() {
-              var helper = $( document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" ) ),
-                  helperClone = helper.clone();
+              var helperClone = helper.clone();
               helperClone.css( "display", "inline" );
               return helperClone[0];
             },
             appendTo: "body",
+            cursorAt: { right: parseInt( helper.css( "width" ) ) / 2, bottom: parseInt( helper.css( "height" ) ) / 2 },
             zIndex: 9999999999,
             revert: true,
             revertDuration: 0
