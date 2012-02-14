@@ -32,7 +32,6 @@ THE SOFTWARE.
             "core/trackevent",
             "core/target",
             "core/media",
-            "comm/comm",
             "editor/module",
             "preview/module",
             "track/module",
@@ -49,7 +48,6 @@ THE SOFTWARE.
             TrackEvent, 
             Target, 
             Media, 
-            Comm,
             EditorModule,
             PreviewModule,
             TrackModule,
@@ -60,7 +58,6 @@ THE SOFTWARE.
   ){
 
     var __modules = {
-      dialog: DialogModule,
       editor: EditorModule,
       eventManager: EventManager,
       track: TrackModule,
@@ -273,6 +270,7 @@ THE SOFTWARE.
           "trackeventadded",
           "trackeventremoved",
           "trackeventupdated",
+          "trackeventeditrequested"
         ]);
 
         if ( media.tracks.length > 0 ) {
@@ -297,9 +295,6 @@ THE SOFTWARE.
 
       //removeMedia - forget a media object
       this.removeMedia = function ( media ) {
-        if ( typeof( media ) === "string" ) {
-          media = _this.getMediaByType( "id", media.id );
-        } //if
 
         var idx = _media.indexOf( media );
         if ( idx > -1 ) {
@@ -316,6 +311,7 @@ THE SOFTWARE.
             "trackeventadded",
             "trackeventremoved",
             "trackeventupdated",
+            "trackeventeditrequested"
           ]);
           var tracks = media.tracks;
           for ( var i=0, l=tracks.length; i<l; ++i ) {

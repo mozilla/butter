@@ -5,6 +5,7 @@ var Comm = function(){
       _this = this;
 
   root.addEventListener( "message", function( e ){
+
     if( e.source !== root && typeof e.data === "object" ){
       if( !_context || _context === e.data.context ){
         if( e.data.type === "ping" ){
