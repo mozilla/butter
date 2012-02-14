@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 (function () {
 
-  define( [ 
+  define( [
             "require",
             "core/logger",
             "core/eventmanager",
@@ -38,12 +38,14 @@ THE SOFTWARE.
             "dialog/module",
             "ui/module"
           ],
-          function( 
-            require, 
-            Logger, 
-            EventManager, 
-            Target, 
-            Media, 
+          function(
+            require,
+            Logger,
+            EventManager,
+            Track,
+            TrackEvent,
+            Target,
+            Media,
             EditorModule,
             PreviewModule,
             TrackModule,
@@ -89,6 +91,27 @@ THE SOFTWARE.
         checkMedia();
         return _currentMedia.getManifest( name );
       }; //getManifest
+
+      /****************************************************************
+       * Track methods
+       ****************************************************************/
+      //addTrack - Creates a new Track
+      this.addTrack = function ( track ) {
+        checkMedia();
+        return _currentMedia.addTrack( track );
+      }; //addTrack
+
+      //getTrack - Get a Track by its id
+      this.getTrack = function ( name ) {
+        checkMedia();
+        return _currentMedia.getTrack( name );
+      }; //getTrack
+
+      //removeTrack - Remove a Track
+      this.removeTrack = function ( track ) {
+        checkMedia();
+        return _currentMedia.removeTrack( track );
+      };
 
       /****************************************************************
        * Target methods
@@ -404,12 +427,24 @@ THE SOFTWARE.
 
         if ( xhr.status === 200 || xhr.status === 0 ) {
           var config = JSON.parse( xhr.responseText ),
-              modules = config.modules;
+              modules = config.modules,
+              icons = config.icons,
+              img;
           for( var moduleName in modules ){
             if( modules.hasOwnProperty( moduleName ) && moduleName in __modules ){
               _this[ moduleName ] = new __modules[ moduleName ]( _this, modules[ moduleName ] );
             } //if
           } //for
+          for( var identifier in icons ) {
+            if( icons.hasOwnProperty( identifier ) ) {
+              img = document.createElement( "img" );
+              img.src = icons[ identifier ];
+              img.id = identifier + "-icon";
+              img.style.display = "none";
+              //this is probably not ideal...
+              document.body.appendChild( img );
+            }
+          }
         }
         _em.dispatch( "ready", _this );
       }
