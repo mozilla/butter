@@ -47,8 +47,9 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     this.update = function( options ){
       options = options || {};
       _element.style.top = "0px";
-      _this.start = options.start || _start;
-      _this.end = options.end || _end;
+      _start = options.start || _start;
+      _end = options.end || _end;
+      resetContainer();
     }; //update
 
     Object.defineProperties( this, {

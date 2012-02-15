@@ -23,6 +23,9 @@
  **********************************************************************************/
 
 define( [], function(){
+
+  const CHECK_MEDIA_INTERVAL = 50;
+
   return function( parentElement, media, tracksContainer ){
     var _container = document.createElement( "div" ),
         _node = document.createElement( "div" ),
@@ -32,6 +35,7 @@ define( [], function(){
         _media = media,
         _mousePos,
         _zoom = 1,
+        _mediaCheckInterval,
         _width,
         _this = this;
 
@@ -45,7 +49,8 @@ define( [], function(){
 
     function setNodePosition(){
       var duration = _media.duration,
-          pos = _media.currentTime / duration * _tracksContainer.scrollWidth;
+          currentTime = _media.currentTime,
+          pos = currentTime / duration * _tracksContainer.scrollWidth;
 
       if( pos < _tracksContainer.scrollLeft || pos > _tracksContainer.offsetWidth + _tracksContainer.scrollLeft ){
         _node.style.display = "none";
@@ -88,5 +93,17 @@ define( [], function(){
       _container.style.width = _width + "px";
       setNodePosition();
     }; //update
+
+    function checkMedia(){
+      setNodePosition();
+    } //checkMedia
+
+    _media.listen( "mediaplaying", function( e ){
+      _checkMediaInterval = setInterval( checkMedia, CHECK_MEDIA_INTERVAL );
+    });
+
+    _media.listen( "mediapause", function( e ){
+      clearInterval( _checkMediaInterval );
+    });
   };
 });
