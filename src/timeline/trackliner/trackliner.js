@@ -132,7 +132,7 @@ define( [ "core/logger", "core/eventmanager", "./track-view" ], function( Logger
 
     function resetContainer() {
       _container.style.width = _duration * _zoom + "px";
-      //_parent.style.width = _duration * _zoom + "px";
+      _parent.style.width = _duration * _zoom + "px";
     } //resetContainer
 
     Object.defineProperties( this, {

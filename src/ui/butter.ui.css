@@ -50,8 +50,8 @@ THE SOFTWARE.
   position: absolute;
   height: 30px;
   top: 0px;
-  left: 0px;
-  width: 100%;
+  left: 20%;
+  width: 80%;
 }
 
 #butter-timeline .butter-timebar-scrubber-container {
@@ -97,6 +97,7 @@ THE SOFTWARE.
   top: 13px;
   height: 27px;
   overflow: hidden;
+  width: 100%;
 }
 
 #butter-timeline .butter-timebar canvas {
@@ -211,8 +212,7 @@ THE SOFTWARE.
 
 #butter-timeline .butter-timeline-media {
   position: absolute;
-  right: 10%;
-  width: 80%;
+  width: 85%;
   height: 250px;
   top: 50px;
   -moz-user-select: none;
@@ -225,6 +225,8 @@ THE SOFTWARE.
   position: absolute;
   width: 100%;
   top: 40px;
+  width: 80%;
+  left: 20%;
 }
 
 #butter-timeline .butter-timeline-scroll {
@@ -414,4 +416,12 @@ THE SOFTWARE.
 	top: 67px;
 	webkit-box-shadow: 0 1px 0 #656565;
 	width: 120px;
+}
+
+.butter-timeline-zoombar {
+  position: absolute;
+  left: 100px;
+  bottom: 14px;
+  width: 100px;
+  height: 10px;
 }
