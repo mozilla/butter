@@ -1,8 +1,30 @@
 <html>
   <head>
     <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
+    <style>
+      .error {
+        border: 1px solid red;
+      }
+      .messageColor {
+        color: rgb(255,0,0);
+      }
+      .hideMessage {
+        display: none;
+      }
+    </style>
     <script type="text/javascript">
       (function(){
+
+        function addClass( elem, name ) {
+          if( elem.className.search(name) === -1 ) {
+            elem.className += " " + name;
+          }
+        }
+
+        function removeClass( elem, className ) {
+          elem.className = elem.className.replace( className, "" );
+        }
+
         var _comm = new Comm(),
             _counter = 0,
             _manifest = {},
@@ -11,31 +33,39 @@
         function setError( data ) {
           var elem = document.getElementById( data.field + "-error" );
           elem.innerHTML = data.message;
-          document.getElementById( data.field ).style.border = "1px solid red";
-          elem.style.display = "";
+          removeClass( elem, "hideMessage" );
+          addClass( document.getElementById( data.field ), "error" );
         }
         
         function validate() {
           var ok = true;
           if( isNaN(_popcornOptions.start) ) {
+            var message = "Start must be a number";
+            _comm.send( "error", {
+              message: message
+            });
             setError({
-              message: "Start must be a number",
+              message: message,
               field: "start"
             });
             ok = false;
           } else {
-            document.getElementById( "start-error" ).style.display = "none";
-            document.getElementById( "start" ).style.border = "";
+            addClass( document.getElementById( "start-error" ), "hideMessage" );
+            removeClass( document.getElementById( "start" ), "error" );
           }
           if( isNaN(_popcornOptions.end) ) {
+            var message = "End must be a number";
+            _comm.send( "error", {
+              message: message
+            });
             setError({
-              message: "End must be a number",
+              message: message,
               field: "end"
             });
             ok = false;
           } else {
-            document.getElementById( "end-error" ).style.display = "none";
-            document.getElementById( "end" ).style.border = "";
+            addClass( document.getElementById( "end-error" ), "hideMessage" );
+            removeClass( document.getElementById( "end" ), "error" );
           }
 
           return ok;
@@ -100,7 +130,7 @@
                   } else {
                     col2.innerHTML = "<" + elem + " id='" + item + 
                     "' style='width:100%' value='" + _popcornOptions[ item ] + "'></" + elem + ">";
-                    col2.innerHTML += "</br><div id='" + item + "-error' style='display:none;color:red;'></div>";
+                    col2.innerHTML += "</br><div id='" + item + "-error' class='hideMessage messageColor'></div>";
                   }
 
                   row.appendChild( col1 );

@@ -63,6 +63,13 @@ define( [ "core/eventmanager" ], function( EventManager ) {
         },
         submit: function( e ) {
           trackEvent.update( e.data );
+        },
+        error: function( e ) {
+          // this stops the event from being thrown to the dialog's
+          // window as opposed to the main apps console
+          setTimeout(function() {
+            throw new Error( e.data.data.message );
+          }, 1);
         }
       });
     }; //open
