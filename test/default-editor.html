@@ -1,11 +1,75 @@
 <html>
   <head>
     <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
+    <style>
+      .error {
+        border: 1px solid red;
+      }
+      .messageColor {
+        color: rgb(255,0,0);
+      }
+      .hideMessage {
+        display: none;
+      }
+    </style>
     <script type="text/javascript">
       (function(){
+
+        function addClass( elem, name ) {
+          if( elem.className.search(name) === -1 ) {
+            elem.className += " " + name;
+          }
+        }
+
+        function removeClass( elem, className ) {
+          elem.className = elem.className.replace( className, "" );
+        }
+
         var _comm = new Comm(),
             _counter = 0,
-            _manifest = {};
+            _manifest = {},
+            _popcornOptions = {};
+
+        function setError( data ) {
+          var elem = document.getElementById( data.field + "-error" );
+          elem.innerHTML = data.message;
+          removeClass( elem, "hideMessage" );
+          addClass( document.getElementById( data.field ), "error" );
+        }
+        
+        function validate() {
+          var ok = true;
+          if( isNaN(_popcornOptions.start) ) {
+            var message = "Start must be a number";
+            _comm.send( "error", {
+              message: message
+            });
+            setError({
+              message: message,
+              field: "start"
+            });
+            ok = false;
+          } else {
+            addClass( document.getElementById( "start-error" ), "hideMessage" );
+            removeClass( document.getElementById( "start" ), "error" );
+          }
+          if( isNaN(_popcornOptions.end) ) {
+            var message = "End must be a number";
+            _comm.send( "error", {
+              message: message
+            });
+            setError({
+              message: message,
+              field: "end"
+            });
+            ok = false;
+          } else {
+            addClass( document.getElementById( "end-error" ), "hideMessage" );
+            removeClass( document.getElementById( "end" ), "error" );
+          }
+
+          return ok;
+        }
 
         document.addEventListener( "DOMContentLoaded", function( e ){
           var okButton = document.getElementById( "ok" ),
@@ -13,12 +77,14 @@
 
           okButton.addEventListener( "click", function( e ){
             
-            var popcornOptions = {};
             for( var item in _manifest ) {
-              popcornOptions[ item ] = document.getElementById( item ).value;
+              _popcornOptions[ item ] = document.getElementById( item ).value;
             }
-            _comm.send( "submit", popcornOptions);
-            _comm.send( "close" );
+            
+            if( validate() ) {
+              _comm.send( "submit", _popcornOptions );
+              _comm.send( "close" );
+            }
           }, false );
 
           cancelButton.addEventListener( "click", function( e ){
@@ -26,7 +92,7 @@
           }, false );
 
           _comm.listen( "trackeventdata", function( e ) {
-            var popcornOptions = e.data.popcornOptions,
+            var _popcornOptions = e.data.popcornOptions,
                 targets = e.data.targets,
                 medias = e.data.medias;
 
@@ -49,7 +115,7 @@
                       option.value = targets[ i ];
                       option.innerHTML = targets[ i ];
                       select.appendChild( option );
-                      if( popcornOptions.target === targets[ i ] ) {
+                      if( _popcornOptions.target === targets[ i ] ) {
                         select.value = targets[ i ];
                       }
                     }
@@ -57,13 +123,14 @@
                     option.value = "Media Element";
                     option.innerHTML =  "Media Element";
                     select.appendChild( option );
-                    if( popcornOptions.target === "Media Element" ) {
+                    if( _popcornOptions.target === "Media Element" ) {
                         select.value = "Media Element";
                     }
                     col2.appendChild( select );
                   } else {
                     col2.innerHTML = "<" + elem + " id='" + item + 
-                    "' style='width:100%' value='" + popcornOptions[ item ] + "'></" + elem + ">";
+                    "' style='width:100%' value='" + _popcornOptions[ item ] + "'></" + elem + ">";
+                    col2.innerHTML += "</br><div id='" + item + "-error' class='hideMessage messageColor'></div>";
                   }
 
                   row.appendChild( col1 );
@@ -71,12 +138,6 @@
                   document.getElementById( "table" ).appendChild( row );
             }
           });
-
-          _comm.listen( "test", function( e ){
-            ++_counter;
-            document.getElementById( "counter" ).innerHTML = _counter;
-          });
-
         }, false );
       })();
     </script>
