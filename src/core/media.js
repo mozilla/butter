@@ -26,9 +26,10 @@ THE SOFTWARE.
   define( [
             "core/logger", 
             "core/eventmanager", 
-            "core/track"
+            "core/track",
+            "core/popcorn-wrapper"
           ], 
-          function( Logger, EventManager, Track ){
+          function( Logger, EventManager, Track, PopcornWrapper ){
 
     var __guid = 0;
 
@@ -40,12 +41,53 @@ THE SOFTWARE.
           _logger = new Logger( _id ),
           _em = new EventManager( this ),
           _name = mediaOptions.name || _id,
-          _url,
-          _target,
+          _url = mediaOptions.url,
+          _target = mediaOptions.target,
           _registry,
           _currentTime = 0,
           _duration = 0,
+          _popcornOptions = mediaOptions.popcornOptions,
+          _mediaUpdateInterval,
+          _popcornWrapper = new PopcornWrapper( _id, {
+            timeupdate: function(){
+              _currentTime = _popcornWrapper.currentTime;
+              _em.dispatch( "mediatimeupdate", _this );
+            },
+            pause: function(){
+              clearInterval( _mediaUpdateInterval );
+              _em.dispatch( "mediapause" );
+            },
+            playing: function(){
+              _mediaUpdateInterval = setInterval( function(){
+                _currentTime = _popcornWrapper.currentTime;
+              }, 10 );
+              _em.dispatch( "mediaplaying" );
+            },
+            timeout: function(){
+            },
+            prepare: function(){
+              _this.duration = _popcornWrapper.duration;
+              _em.dispatch( "mediaready" );
+            },
+            fail: function(){
+            },
+            setup: {
+              target: _target,
+              url: _url
+            }
+          }),
           _this = this;
+
+      function onTrackEventAdded( e ){
+        var newTrack = e.target,
+            trackEvent = e.data;
+        _popcornWrapper.updateEvent( trackEvent );
+      } //onTrackEventAdded
+
+      function onTrackEventUpdated( e ){
+        var trackEvent = e.target;
+        _popcornWrapper.updateEvent( trackEvent );
+      } //onTrackEventUpdated
 
       this.addTrack = function ( track ) {
         if ( !( track instanceof Track ) ) {
@@ -59,6 +101,9 @@ THE SOFTWARE.
           "trackeventupdated",
           "trackeventeditrequested"
         ]);
+        track.popcorn = _popcornWrapper;
+        track.listen( "trackeventadded", onTrackEventAdded );
+        track.listen( "trackeventupdated", onTrackEventUpdated );
         _em.dispatch( "trackadded", track );
         var trackEvents = track.trackEvents;
         if ( trackEvents.length > 0 ) {
@@ -98,6 +143,8 @@ THE SOFTWARE.
             "trackeventupdated",
             "trackeventeditrequested"
           ]);
+          track.unlisten( "trackeventadded", onTrackEventAdded );
+          track.unlisten( "trackeventupdated", onTrackEventUpdated );
           _em.dispatch( "trackremoved", track );
           return track;
         } //if
@@ -108,6 +155,20 @@ THE SOFTWARE.
         return _registry[ name ];
       }; //getManifest
 
+      function setupContent(){
+        if( _url && _target ){
+          _popcornWrapper.prepare( _url, _target );
+        } //if
+      } //setupContent
+
+      this.pause = function(){
+        _popcornWrapper.pause();
+      }; //pause
+
+      this.play = function(){
+        _popcornWrapper.play();
+      } //play
+
       Object.defineProperties( this, {
         url: {
           get: function() {
@@ -116,6 +177,8 @@ THE SOFTWARE.
           set: function( val ) {
             if ( _url !== val ) {
               _url = val;
+              _popcornWrapper.clear();
+              setupContent();
               _em.dispatch( "mediacontentchanged", _this );
             }
           },
@@ -128,6 +191,8 @@ THE SOFTWARE.
           set: function( val ) {
             if ( _target !== val ) {
               _target = val;
+              _popcornWrapper.clear();
+              setupContent();
               _em.dispatch( "mediatargetchanged", _this );
             }
           },
@@ -164,6 +229,7 @@ THE SOFTWARE.
               if ( _currentTime > _duration ) {
                 _currentTime = _duration;
               } //if
+              _popcornWrapper.currentTime = _currentTime;
               _em.dispatch( "mediatimeupdate", _this );
             } //if
           },
@@ -226,15 +292,25 @@ THE SOFTWARE.
             _registry = val;
           },
           enumerable: true
+        },
+        popcorn: {
+          enumerable: true,
+          get: function(){
+            return _popcornWrapper;
+          }
+        },
+        paused: {
+          enumerable: true,
+          get: function(){
+            return _popcornWrapper.paused;
+          },
+          set: function( val ){
+            _popcornWrapper.paused = val;
+          }
         }
       });
 
-      if ( mediaOptions.url ) {
-        this.url = mediaOptions.url;
-      }
-      if ( mediaOptions.target ) {
-        this.target = mediaOptions.target;
-      }
+      setupContent();
 
     }; //Media
 

@@ -4,6 +4,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
     butter.plugin.remove( document.getElementById( "pluginName" ).value );
   }, false);
 
+
   Butter({
     config: "../config/default.conf",
     ready: function( butter ){
@@ -30,21 +31,28 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
           butter.plugin.add([
             { name: "footnote", type: "footnote", path: "../external/popcorn-js/plugins/footnote/popcorn.footnote.js" },
+            { name: "attribution", type: "attribution", path: "../external/popcorn-js/plugins/attribution/popcorn.attribution.js" },
             { name: "image", type: "image", path: "../external/popcorn-js/plugins/image/popcorn.image.js" }], function( e ) {
 
             var event = track.addTrackEvent({
               type: "text",
               popcornOptions: {
-                start: 1,
-                end: 9,
-                text: "test"
+                start: 0,
+                end: 3,
+                text: "test",
+                target: "Area1"
               }
             });
 
-            butter.tracks[ 0 ].addTrackEvent({ 
-              name: "TrackEvent 1",
-              type: "footnote" 
+            butter.tracks[ 2 ].addTrackEvent({ 
+              type: "footnote",
+              popcornOptions: {
+                start: 1,
+                end: 2,
+                target: "Area2"
+              }
             });
+
           });
         });
       });
