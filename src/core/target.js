@@ -48,13 +48,7 @@ THE SOFTWARE.
 
       Object.defineProperty( this, "json", {
         get: function() {
-          var obj;
-          try {
-            obj = JSON.stringify( this.object.id );
-          }
-          catch ( e ) {
-            obj = this.object.id.toString();
-          }
+          var obj = this.object.id ? this.object.id.toString() : "";
           return {
             id: id,
             name: name,
@@ -63,9 +57,9 @@ THE SOFTWARE.
         },
         set: function( importData ) {
           if ( importData.name ) {
-            name = importData.name
+            name = importData.name;
           }
-          this.object = document.getElementById( importData.object )
+          this.object = document.getElementById( importData.object );
         }
       });
     }; //Target
