@@ -135,7 +135,7 @@ THE SOFTWARE.
       //removeTarget - remove a target object
       this.removeTarget = function ( target ) {
         if ( typeof(target) === "string" ) {
-          target = _this.getTarget( "id", target );
+          target = _this.getTargetByType( "id", target );
         } //if
         var idx = _targets.indexOf( target );
         if ( idx > -1 ) {
