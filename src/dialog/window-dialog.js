@@ -28,7 +28,7 @@ define( [ "./util", "./base-dialog", "core/comm", "./event-manager" ], function(
         ];
 
     function onSubmit( e ){
-      _em.dispatch( e.type, e.data.data );
+      _em.dispatch( e.type, e.data );
     } //onSubmit
 
     function onCancel( e ){
@@ -89,7 +89,7 @@ define( [ "./util", "./base-dialog", "core/comm", "./event-manager" ], function(
         _currentComm.send( type, data );
       } //if
     }; //send
-    
+
   }; //WindowDialog
 
   return WindowDialog;
