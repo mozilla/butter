@@ -55,6 +55,7 @@ define( [], function(){
     } //onMouseUp
 
     function onMouseMove( e ){
+      e.stopPropagation(); 
       var diff = e.pageY - _mousePos;
       diff = Math.max( 0, Math.min( diff, _elementHeight - _handleHeight ) );
       _handle.style.top = diff + "px";
@@ -66,6 +67,7 @@ define( [], function(){
     } //onMouseMove
 
     function onMouseDown( e ){
+      e.stopPropagation(); 
       var handleY = _handle.offsetTop;
       _mousePos = e.pageY - handleY;
       window.addEventListener( "mouseup", onMouseUp, false );
@@ -75,6 +77,27 @@ define( [], function(){
 
     this.update = function(){
     }; //update
+
+    _element.addEventListener( "click", function( e ) {
+      // bail early if this event is coming from the handle
+      if( e.srcElement.className.search( "butter-timeline-scroll-handle" ) === 0 ) {
+        return;
+      }
+
+      var posY = e.pageY,
+          handleRect = _handle.getBoundingClientRect(),
+          elementRect = _element.getBoundingClientRect(),
+          p;
+
+      if( posY > handleRect.top ) {
+        _handle.style.top = ( ( posY - elementRect.top ) - _handleHeight ) + "px"; 
+      } else {
+        _handle.style.top = posY - elementRect.top + "px"; 
+      }
+
+      p = _handle.offsetTop / ( _elementHeight - _handleHeight );
+      _control.scrollTop = ( _control.scrollHeight - _elementHeight ) * p;
+    }, false);
 
     _control.addEventListener( "resize", setup, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
@@ -119,6 +142,7 @@ define( [], function(){
     } //onMouseUp
 
     function onMouseMove( e ){
+      e.stopPropagation(); 
       var diff = e.pageX - _mousePos;
       diff = Math.max( 0, Math.min( diff, _elementWidth - _handleWidth ) );
       _handle.style.left = diff + "px";
@@ -127,12 +151,34 @@ define( [], function(){
     } //onMouseMove
 
     function onMouseDown( e ){
+      e.stopPropagation(); 
       var handleX = _handle.offsetLeft;
       _mousePos = e.pageX - handleX;
       window.addEventListener( "mouseup", onMouseUp, false );
       window.addEventListener( "mousemove", onMouseMove, false );
       _handle.removeEventListener( "mousedown", onMouseDown, false );
     } //onMouseDown
+
+    _element.addEventListener( "click", function( e ) {
+      // bail early if this event is coming from the handle
+      if( e.srcElement.className.search( "butter-timeline-scroll-handle" ) === 0 ) {
+        return;
+      }
+
+      var posX = e.pageX,
+          handleRect = _handle.getBoundingClientRect(),
+          elementRect = _element.getBoundingClientRect(),
+          p;
+
+      if( posX > handleRect.right ) {
+        _handle.style.left = ( ( posX - elementRect.left ) - _handleWidth ) + "px"; 
+      } else {
+        _handle.style.left = posX - elementRect.left + "px"; 
+      }
+      
+      p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
+      _control.scrollLeft = ( _control.scrollWidth - _elementWidth ) * p;
+    }, false);
 
     _control.addEventListener( "resize", setup, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
