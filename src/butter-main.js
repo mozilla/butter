@@ -418,7 +418,8 @@ THE SOFTWARE.
               img.src = icons[ identifier ];
               img.id = identifier + "-icon";
               img.style.display = "none";
-              //this is probably not ideal...
+              // @secretrobotron: just attach this to the body hidden for now,
+              //                  so that it preloads if necessary
               document.body.appendChild( img );
             }
           }

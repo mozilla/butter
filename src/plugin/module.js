@@ -113,9 +113,14 @@ THE SOFTWARE.
           helper = $( document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" ) );
           $( pluginElement ).draggable({
             helper: function() {
-              var helperClone = helper.clone();
-              helperClone.css( "display", "inline" );
-              return helperClone[0];
+              var $div = $( "<div></div>" );
+              $div.css({
+                "background-image": "url('"+ helper[ 0 ].src +"')",
+                "display": "inline",
+                "width": helper.width() + "px",
+                "height": helper.height() + "px"
+              });
+              return $div;
             },
             appendTo: "body",
             cursorAt: { right: parseInt( helper.css( "width" ) ) / 2, bottom: parseInt( helper.css( "height" ) ) / 2 },
