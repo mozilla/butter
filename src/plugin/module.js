@@ -50,12 +50,12 @@ THE SOFTWARE.
         if( _path ) {
           var head = document.getElementsByTagName( "HEAD" )[ 0 ],
               script = document.createElement( "script" );
-          
+
           script.src = _path;
           head.appendChild( script );
         }
 
-        Object.defineProperties( this, { 
+        Object.defineProperties( this, {
           plugins: {
             get: function() {
               return __plugins;
@@ -98,7 +98,8 @@ THE SOFTWARE.
 
 
         this.createElement = function ( pattern ) {
-          var pluginElement;
+          var pluginElement,
+              helper;
           if ( !pattern ) {
             pluginElement = document.createElement( "span" );
             pluginElement.innerHTML = _this.type + " ";
@@ -109,7 +110,19 @@ THE SOFTWARE.
             pluginElement = $pluginElement[ 0 ];
           }
           pluginElement.id = __pluginElementPrefix + _this.type;
-          $( pluginElement ).draggable({ helper: "clone", appendTo: "body", zIndex: 9999999999, revert: true, revertDuration: 0 });
+          helper = $( document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" ) );
+          $( pluginElement ).draggable({
+            helper: function() {
+              var helperClone = helper.clone();
+              helperClone.css( "display", "inline" );
+              return helperClone[0];
+            },
+            appendTo: "body",
+            cursorAt: { right: parseInt( helper.css( "width" ) ) / 2, bottom: parseInt( helper.css( "height" ) ) / 2 },
+            zIndex: 9999999999,
+            revert: true,
+            revertDuration: 0
+          });
           this.element = pluginElement;
           return pluginElement;
         }; //createElement
@@ -118,7 +131,7 @@ THE SOFTWARE.
 
       __container = document.createElement( "div" );
       __container.id = "butter-plugin";
-      
+
       //__container.className = "viewport enable-scroll";
       document.getElementById( "butter-timeline" ).appendChild( __container );
 
