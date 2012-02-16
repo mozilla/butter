@@ -16,7 +16,7 @@ define( [ "./eventmanager" ], function( EventManager ){
           _ponged = true;
         }
         else {
-          _this.dispatch( e.data.type, e.data );
+          _this.dispatch( e.data.type, e.data.data );
         } //if
       } //if
     }, false );
