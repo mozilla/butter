@@ -27,6 +27,7 @@ define( [], function(){
 
   return function( rootElement, zoomCallback ){
 
+    console.log( rootElement, zoomCallback );
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
         _rect,
@@ -75,6 +76,15 @@ define( [], function(){
       } //if
     }; //setup
 
+    _element.addEventListener( "click", function( e ) {
+      var newPos = e.pageX - _element.offsetLeft;
+      if( newPos + _handleWidth > ( _elementWidth - _handleWidth) ) {
+        _handle.style.left = ( _elementWidth - _handleWidth ) + "px"; 
+      } else {
+        _handle.style.left = newPos + "px"; 
+      }
+      onMouseMove( e );
+    }, false);
     _element.addEventListener( "resize", function( e ){
       _this.update();
     }, false );
