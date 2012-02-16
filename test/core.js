@@ -363,8 +363,8 @@
     var targs = butter.targets;
     ok( sTargs[ 0 ].name === targs[ 0 ].name, "simple target name" );
     ok( sTargs[ 1 ].name === targs[ 1 ].name, "second target name" );
-    ok( JSON.parse( sTargs[ 0 ].object ) === targs[ 0 ].object, "simple target object" );
-    ok( JSON.parse( sTargs[ 1 ].object ).foo === "bar", "less simple target object" );
+    ok( JSON.parse( sTargs[ 0 ].object.id ) === targs[ 0 ].object.id, "simple target object" );
+    ok( JSON.parse( sTargs[ 1 ].object.id ).foo === "bar", "less simple target object" );
     ok( sTargs[ 2 ].object !== undefined, "complicated target object" );
   });
 
