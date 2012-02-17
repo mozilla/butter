@@ -73,6 +73,16 @@ define( [], function(){
     this.update = function(){
     }; //update
 
+    _element.addEventListener( "click", function( e ) {
+      var newPos = ( e.pageY - _element.getBoundingClientRect().top ),
+          diff = Math.max( 0, Math.min( newPos, _elementHeight - _handleHeight ) ),
+          p;
+
+      _handle.style.top = diff + "px"; 
+      p = _handle.offsetTop / ( _elementHeight - _handleHeight );
+      _control.scrollTop = ( _control.scrollHeight - _elementHeight ) * p;
+    }, false);
+
     _control.addEventListener( "resize", setup, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
 
@@ -115,7 +125,6 @@ define( [], function(){
     function onMouseMove( e ){
       var diff = e.pageX - _mousePos;
       diff = Math.max( 0, Math.min( diff, _elementWidth - _handleWidth ) );
-      console.log( diff );
       _handle.style.left = diff + "px";
       var p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
       _control.scrollLeft = ( _control.scrollWidth - _elementWidth ) * p;
