@@ -102,7 +102,13 @@ define( [], function(){
       _controlWidth = _control.getBoundingClientRect().width;
       _handleWidth = Math.max( 20, Math.min( _elementWidth, _elementWidth - ( _control.scrollWidth - _controlWidth ) ) );
       _handle.style.width = _handleWidth + "px";
-      var p = _control.scrollLeft / ( _control.scrollWidth - _elementWidth );
+      var p;
+      if( _control.scrollWidth - _elementWidth > 0 ){
+        p = _control.scrollLeft / ( _control.scrollWidth - _elementWidth );
+      }
+      else {
+        p = 0;
+      } //if
       _handle.style.left = p * ( _elementWidth - _handleWidth ) + "px";
     } //setup
 
