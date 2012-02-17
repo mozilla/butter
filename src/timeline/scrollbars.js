@@ -58,7 +58,10 @@ define( [], function(){
       var diff = e.pageY - _mousePos;
       diff = Math.max( 0, Math.min( diff, _elementHeight - _handleHeight ) );
       _handle.style.top = diff + "px";
-      var p = _handle.offsetTop / ( _elementHeight - _handleHeight );
+      var p = 0;
+      if( _elementHeight - _handleHeight > 0 ){
+        p = _handle.offsetTop / ( _elementHeight - _handleHeight );
+      } //if
       _control.scrollTop = ( _control.scrollHeight - _elementHeight ) * p;
     } //onMouseMove
 
@@ -102,7 +105,10 @@ define( [], function(){
       _controlWidth = _control.getBoundingClientRect().width;
       _handleWidth = Math.max( 20, Math.min( _elementWidth, _elementWidth - ( _control.scrollWidth - _controlWidth ) ) );
       _handle.style.width = _handleWidth + "px";
-      var p = _control.scrollLeft / ( _control.scrollWidth - _elementWidth );
+      var p = 0;
+      if( _control.scrollWidth - _elementWidth > 0 ){
+        p = _control.scrollLeft / ( _control.scrollWidth - _elementWidth );
+      } //if
       _handle.style.left = p * ( _elementWidth - _handleWidth ) + "px";
     } //setup
 
