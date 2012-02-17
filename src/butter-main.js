@@ -110,7 +110,7 @@ THE SOFTWARE.
       //removeTarget - remove a target object
       this.removeTarget = function ( target ) {
         if ( typeof(target) === "string" ) {
-          target = _this.getTarget( target );
+          target = _this.getTargetByType( "id", target );
         } //if
         var idx = _targets.indexOf( target );
         if ( idx > -1 ) {
@@ -131,18 +131,17 @@ THE SOFTWARE.
         return sTargets;
       }; //serializeTargets
 
-      //getTarget - get a target object by its id
-      this.getTarget = function ( target ) {
-        for ( var i=0; i<_targets.length; ++i ) {
-          if (  ( target.id !== undefined && _targets[ i ].id === target.id ) ||
-                ( target.name && _targets[ i ].name === target.name ) ||
-                _targets[ i ].name === target ) {
+      //getTargetByType - get the target's information based on a valid type
+      // if type is invalid, return undefined
+      this.getTargetByType = function( type, val ) {
+        for( var i = 0, l = _targets.length; i < l; i++ ) {
+          if ( _targets[ i ][ type ] === val ) {
             return _targets[ i ];
           }
         }
         return undefined;
-      }; //getTaget
-
+      }; //getTargetByType
+      
       /****************************************************************
        * Project methods
        ****************************************************************/
