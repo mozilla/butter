@@ -6,12 +6,10 @@
  
     var Previewer = function( butter, options ) {
 
-      var _id = __guid++,
+      var _id = "Previewer" + __guid++,
           _logger = new Logger( _id ),
           _that = this,
           _page = new Page();
-
-        _logger.log( "Starting" );
 
         _page.listen( "trackeventrequested", function( event ) {
           var type = event.data.ui.draggable[ 0 ].id;
