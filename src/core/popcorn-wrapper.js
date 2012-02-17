@@ -83,13 +83,9 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       } //if
     }; //prepare
 
-    function prepareMedia( url, target, onError ){
-      var mediaElement;
-      if( typeof( target ) === "string" ){
-        mediaElement = document.getElementById( target );
-      }
-      else { 
-        mediaElement = target;
+    function prepareMedia( url, mediaElement, onError ){
+      if( typeof( mediaElement ) === "string" ){
+        mediaElement = document.getElementById( mediaElement );
       } //if
       if( !mediaElement ){
         _logger.log( "Warning: tried to prepare media with null target." );
@@ -262,13 +258,9 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       _popcorn.pause();
     }; //pause
 
-    this.clear = function( target ) {
-      var container;
-      if( typeof( target ) === "string" ){
-        container = document.getElementById( target );
-      }
-      else {
-        container = target;
+    this.clear = function( container ) {
+      if( typeof( container ) === "string" ){
+        container = document.getElementById( container );
       } //if
       if( !container ){
         _logger.log( "Warning: tried to clear media with null target." );
