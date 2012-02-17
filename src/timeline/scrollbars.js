@@ -115,6 +115,7 @@ define( [], function(){
     function onMouseMove( e ){
       var diff = e.pageX - _mousePos;
       diff = Math.max( 0, Math.min( diff, _elementWidth - _handleWidth ) );
+      console.log( diff );
       _handle.style.left = diff + "px";
       var p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
       _control.scrollLeft = ( _control.scrollWidth - _elementWidth ) * p;
@@ -127,6 +128,16 @@ define( [], function(){
       window.addEventListener( "mousemove", onMouseMove, false );
       _handle.removeEventListener( "mousedown", onMouseDown, false );
     } //onMouseDown
+
+    _element.addEventListener( "click", function( e ) {
+      var newPos = ( e.pageX - _element.offsetLeft ) - _handleWidth,
+          diff = Math.max( 0, Math.min( newPos, _elementWidth - _handleWidth ) ),
+          p;
+
+      _handle.style.left = diff + "px"; 
+      p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
+      _control.scrollLeft = ( _control.scrollWidth - _elementWidth ) * p;
+    }, false);
 
     _control.addEventListener( "resize", setup, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );

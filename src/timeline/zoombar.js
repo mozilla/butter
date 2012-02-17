@@ -77,14 +77,15 @@ define( [], function(){
     }; //setup
 
     _element.addEventListener( "click", function( e ) {
-      var newPos = e.pageX - _element.offsetLeft;
-      if( newPos + _handleWidth > ( _elementWidth - _handleWidth) ) {
+      var newPos = ( e.pageX - _element.offsetLeft ) - _handleWidth;
+      if( newPos > ( _elementWidth ) ) {
         _handle.style.left = ( _elementWidth - _handleWidth ) + "px"; 
       } else {
         _handle.style.left = newPos + "px"; 
       }
       onMouseMove( e );
     }, false);
+
     _element.addEventListener( "resize", function( e ){
       _this.update();
     }, false );
