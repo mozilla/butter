@@ -17,6 +17,9 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
         _popcornOptions = options.popcornOptions || {
           start: 0,
           end: 1
+        },
+        _round = function( number, numberOfDecimalPlaces ) {
+          return Math.round( number * ( Math.pow( 10, numberOfDecimalPlaces ) ) ) / Math.pow( 10, numberOfDecimalPlaces );
         };
 
     if( !_type ){
@@ -24,7 +27,9 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
     } //if
 
     _popcornOptions.start = _popcornOptions.start || 0;
+    _popcornOptions.start = _round( _popcornOptions.start, 3 );
     _popcornOptions.end = _popcornOptions.end || _popcornOptions.start + 1;
+    _popcornOptions.end = _round( _popcornOptions.end, 3 );
 
     this.update = function( updateOptions ) {
       for ( var prop in updateOptions ) {
@@ -32,6 +37,12 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
           _popcornOptions[ prop ] = updateOptions[ prop ];
         } //if
       } //for
+      if ( _popcornOptions.start ) {
+        _popcornOptions.start = _round( _popcornOptions.start, 3 );
+      }
+      if ( _popcornOptions.end ) {
+        _popcornOptions.end = _round( _popcornOptions.end, 3 );
+      }
       _em.dispatch( "trackeventupdated", _this );
     }; //update
 
