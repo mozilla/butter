@@ -9,7 +9,7 @@ define( [ "./util", "./base-dialog", "core/comm", "./event-manager" ], function(
     if( !dialogOptions.url ){
       throw new Error( "IFRAME dialog requires a url." );
     } //if
-
+    window.onbeforeunload = onClose; 
     var _this = this,
         _baseDialog = new BaseDialog( context, dialogOptions, _this ),
         _url = dialogOptions.url,
