@@ -66,7 +66,13 @@ THE SOFTWARE.
 
     var __guid = 0;
 
-    var Butter = function( butterOptions ){
+    var __instances = [];
+
+    var Butter = function( options ){
+      return new ButterInit( options );
+    }; //Butter
+
+    function ButterInit( butterOptions ){
 
       butterOptions = butterOptions || {};
 
@@ -307,7 +313,7 @@ THE SOFTWARE.
       /****************************************************************
        * Properties
        ****************************************************************/
-      Object.defineProperties( this, {
+      Object.defineProperties( _this, {
         id: {
           get: function(){ return _id; },
           enumerable: true
@@ -384,7 +390,7 @@ THE SOFTWARE.
         }
       });
 
-      Butter.instances.push( this );
+      __instances.push( this );
 
       if ( butterOptions.ready ) {
         _em.listen( "ready", function( e ){
@@ -429,11 +435,9 @@ THE SOFTWARE.
         _em.dispatch( "ready", _this );
       } //if
 
-    }; //Butter
+    }; //ButterInit
 
-    Butter.Logger = Logger;
-    Butter.EventManager = EventManager;
-    Butter.instances = [];
+    Butter.instances = __instances;
 
     if ( window.Butter.__waiting ) {
       for ( var i=0, l=window.Butter.__waiting.length; i<l; ++i ) {

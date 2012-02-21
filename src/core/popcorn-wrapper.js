@@ -5,6 +5,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
   return function ( mediaId, options ){
 
     var _id = mediaId,
+        _logger = new Logger( _id + "::PopcornWrapper" ),
         _onTimeUpdate = options.timeupdate || function(){},
         _onPause = options.pause || function(){},
         _onPlaying = options.playing || function(){},
@@ -45,11 +46,15 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       var options = trackEvent.popcornOptions,
           butterId = trackEvent.id,
           popcornId = _butterEventMap[ butterId ];
-      if( popcornId && _popcorn.getTrackEvent( popcornId ) ){
-        _popcorn.removeTrackEvent( popcornId );
+      if( _popcorn ){
+        if( popcornId && _popcorn.getTrackEvent( popcornId ) ){
+          _popcorn.removeTrackEvent( popcornId );
+        } //if
+        if( _popcorn[ trackEvent.type ] ){
+          _popcorn[ trackEvent.type ]( options );
+          _butterEventMap[ butterId ] = _popcorn.getLastTrackEventId();
+        } //if
       } //if
-      _popcorn[ trackEvent.type ]( options );
-      _butterEventMap[ butterId ] = _popcorn.getLastTrackEventId();
     }; //updateEvent
 
     this.prepare = function( url, target, popcornOptions ){
@@ -78,17 +83,23 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       } //if
     }; //prepare
 
-    function prepareMedia( url, target, onError ){
-      var mediaElement = document.getElementById( target );
-      if ( _mediaType === "object" ) {
-        if (  !mediaElement || [ 'AUDIO', 'VIDEO' ].indexOf( mediaElement.nodeName ) === -1 ) {
+    function prepareMedia( url, mediaElement, onError ){
+      if( typeof( mediaElement ) === "string" ){
+        mediaElement = document.getElementById( mediaElement );
+      } //if
+      if( !mediaElement ){
+        _logger.log( "Warning: tried to prepare media with null target." );
+        return;
+      } //if
+      if( _mediaType === "object" ){
+        if ( [ 'AUDIO', 'VIDEO' ].indexOf( mediaElement.nodeName ) === -1 ){
           var video = document.createElement( "video" ),
               src = document.createElement( "source" );
 
           src.addEventListener( "error", onError );
           src.src = url;
-          video.style.width = document.getElementById( target ).style.width;
-          video.style.height = document.getElementById( target ).style.height;
+          video.style.width = mediaElement.style.width;
+          video.style.height = mediaElement.style.height;
           video.appendChild( src );
           video.controls = true;
           if ( !video.id || video.id === "" ) {
@@ -98,7 +109,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           video.setAttribute( "autobuffer", "true" );
           video.setAttribute( "preload", "auto" );
 
-          document.getElementById( target ).appendChild( video );
+          mediaElement.appendChild( video );
           return video;
         }
         else {
@@ -247,8 +258,14 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       _popcorn.pause();
     }; //pause
 
-    this.clear = function( target ) {
-      var container = document.getElementById( target );
+    this.clear = function( container ) {
+      if( typeof( container ) === "string" ){
+        container = document.getElementById( container );
+      } //if
+      if( !container ){
+        _logger.log( "Warning: tried to clear media with null target." );
+        return;
+      } //if
       while( container.firstChild ) {
         container.removeChild( container.firstChild );
       } //while
@@ -256,25 +273,35 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         container.currentSrc = "";
         container.src = "";
       } //if
-      removePopcornHandlers();
-      _popcorn.destroy();
-      _popcorn = undefined;
+      if( _popcorn ){
+        removePopcornHandlers();
+        _popcorn.destroy();
+        _popcorn = undefined;
+      } //if
     }; //setMediaContent
 
     Object.defineProperties( this, {
       currentTime: {
         enumerable: true,
         set: function( val ){
-          _popcorn.currentTime( val );
+          if( _popcorn ){
+            _popcorn.currentTime( val );
+          } //if
         },
         get: function(){
-          return _popcorn.currentTime();
+          if( _popcorn ){
+            return _popcorn.currentTime();
+          }
+          return 0;
         }
       },
       duration: {
         enumerable: true,
         get: function(){
-          return _popcorn.duration();
+          if( _popcorn ){
+            return _popcorn.duration();
+          } //if
+          return 0;
         }
       },
       popcorn: {
@@ -286,18 +313,23 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       paused: {
         enumerable: true,
         get: function(){
-          _popcorn.paused();
+          if( _popcorn ){
+            return _popcorn.paused();
+          } //if
+          return true;
         }, 
         set: function( val ){
-          if( val ){
-            _popcorn.pause();
-          }
-          else {
-            _popcorn.play();
+          if( _popcorn ){
+            if( val ){
+              _popcorn.pause();
+            }
+            else {
+              _popcorn.play();
+            } //if
           } //if
         }
-      }
-    });
+      } //paused
+    }); //properties
 
   }; //PopcornWrapper
 
