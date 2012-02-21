@@ -1,6 +1,6 @@
 /*global text,expect,ok,module,notEqual,test,window*/
 
-(function (window, document, undefined ) {
+(function(window, document, undefined ){
 
   function createButter( callback ){
 
@@ -18,13 +18,13 @@
   module( "Media" );
   module( "Event Handling" );
 
-  test( "Simple event handling", function () {
+  test( "Simple event handling", function(){
     expect( 2 );
 
     createButter( function( butter ){
 
       var received = false,
-          testFn = function ( event ) {
+          testFn = function( event ){
             received = event.data;
           };
 
@@ -42,7 +42,7 @@
 
   module( "Core Object Functionality" );
 
-  test( "Create Media object", function () {
+  test( "Create Media object", function(){
     expect( 2 );
 
     createButter( function( butter ){
@@ -53,7 +53,7 @@
     });
   });
 
-  test( "Add, retrieve, use, and remove Media object", function () {
+  test( "Add, retrieve, use, and remove Media object", function(){
     expect( 16 );
 
     createButter( function( butter ){
@@ -63,15 +63,15 @@
           mediaContent,
           mediaTarget;
 
-      butter.listen("mediaadded", function ( media ) {
+      butter.listen("mediaadded", function( media ){
         mediaEventState--;
         mediaState = [ 1, media.data ];
       });
-      butter.listen("mediachanged", function ( media ) {
+      butter.listen("mediachanged", function( media ){
         mediaEventState *= 2;
         mediaState = [ 2, media.data ];
       });
-      butter.listen( "mediaremoved", function ( media ) {
+      butter.listen( "mediaremoved", function( media ){
         mediaState = [ 0, media.data ];
       });
 
@@ -98,10 +98,10 @@
       mediaContent = m1.url;
       mediaTarget = m1.target;
 
-      butter.listen( "mediacontentchanged", function ( e ) {
+      butter.listen( "mediacontentchanged", function( e ){
         mediaContent = e.data.url;
       });
-      butter.listen( "mediatargetchanged", function ( e ) {
+      butter.listen( "mediatargetchanged", function( e ){
         mediaTarget = e.data.target;
       });
 
@@ -127,7 +127,7 @@
     });
   });
 
-  test("Media objects have their own tracks", function () {
+  test( "Media objects have their own tracks", function(){
     expect( 4 );
     createButter( function( butter ){
 
@@ -149,7 +149,7 @@
     });
   });
 
-  test("Simple Media functionality", function () {
+  test( "Simple Media functionality", function(){
     expect( 6 );
 
     createButter( function( butter ){
@@ -157,10 +157,10 @@
       var m1 = butter.addMedia( { media: "test" } ),
           state = [ 0, 0 ];
 
-      butter.listen( "mediatimeupdate", function ( media ) {
+      butter.listen( "mediatimeupdate", function( media ){
         state[ 0 ] = 1;
       });
-      butter.listen( "mediadurationchanged", function ( media ) {
+      butter.listen( "mediadurationchanged", function( media ){
         state[ 1 ] = 1;
       });
 
@@ -181,7 +181,7 @@
 
   module( "Track" );
 
-  test( "Create Track object", function () {
+  test( "Create Track object", function(){
     expect( 1 );
 
     createButter( function( butter ){
@@ -191,7 +191,7 @@
     });
   });
 
-  test( "Add, retrieve, and remove Track", function () {
+  test( "Add, retrieve, and remove Track", function(){
     expect( 10 );
 
     createButter( function( butter ){
@@ -202,10 +202,10 @@
           t2,
           t3;
 
-      butter.listen( "trackadded", function ( track ) {
+      butter.listen( "trackadded", function( track ){
         trackState = [ 1, track.data ];
       });
-      butter.listen( "trackremoved", function ( track ) {
+      butter.listen( "trackremoved", function( track ){
         trackState = [ 0, track.data ];
       });
 
@@ -241,7 +241,7 @@
 
   module( "TrackEvent" );
 
-  test("Create TrackEvent object", function () {
+  test( "Create TrackEvent object", function(){
     expect( 1 );
     createButter( function( butter ){
       var m = butter.addMedia(),
@@ -251,7 +251,7 @@
     });
   });
 
-  test("Add, retrieve, and remove TrackEvent", function () {
+  test( "Add, retrieve, and remove TrackEvent", function(){
     expect( 13 );
 
     createButter( function( butter ){
@@ -260,10 +260,10 @@
           m = butter.addMedia(),
           t = m.addTrack();
 
-      butter.listen( "trackeventadded", function ( trackEvent ) {
+      butter.listen( "trackeventadded", function( trackEvent ){
         eventState = [ 1, trackEvent.data ];
       });
-      butter.listen( "trackeventremoved", function ( trackEvent ) {
+      butter.listen( "trackeventremoved", function( trackEvent ){
         eventState = [ 0, trackEvent.data ];
       });
 
@@ -300,7 +300,7 @@
 
   });
 
-  test("Media objects have their own tracks", function () {
+  test( "Media objects have their own tracks", function(){
     expect( 4 );
 
     createButter( function( butter ){
@@ -324,7 +324,7 @@
 
   });
 
-  test( "Remove/Add Track events for constituent TrackEvents", function () {
+  test( "Remove/Add Track events for constituent TrackEvents", function(){
 
     expect( 4 );
 
@@ -340,11 +340,11 @@
       te = t1.addTrackEvent({ name: "TrackEvent 3", type: "test", start: 2, end: 3 } ),
       state = undefined;
 
-      butter.listen( "trackeventremoved", function ( trackEvent ) {
+      butter.listen( "trackeventremoved", function( trackEvent ){
         state = trackEvent.data;
       } );
 
-      butter.listen( "trackeventadded", function ( trackEvent ) {
+      butter.listen( "trackeventadded", function( trackEvent ){
         state = trackEvent.data;
       } );
 
@@ -363,14 +363,14 @@
 
   });
 
-  test( "Strange usage (setButter shortcutting)", function () {
+  test( "Strange usage (setButter shortcutting)", function(){
     expect( 1 );
 
     createButter( function( butter ){
 
-      butter.listen( "trackeventadded", function () { eventsFired++ } );
-      butter.listen( "trackadded", function () { eventsFired++ } );
-      butter.listen( "mediaadded", function () { eventsFired++ } );
+      butter.listen( "trackeventadded", function(){ eventsFired++ } );
+      butter.listen( "trackadded", function(){ eventsFired++ } );
+      butter.listen( "mediaadded", function(){ eventsFired++ } );
 
       var eventsFired = 0,
           m = butter.addMedia(),
@@ -382,7 +382,7 @@
     });
   });
 
-  test( "Target serialization", function () {
+  test( "Target serialization", function(){
     expect(5);
 
     createButter( function( butter ){
@@ -403,7 +403,7 @@
     });
   });
 
-  test(" Import/Export", function () {
+  test( "Import/Export", function(){
     expect( 12 );
 
     var m1,
@@ -439,13 +439,13 @@
           config: "../config/default.conf",
           ready: function( secondButter ){
             teEvents = tEvents = mEvents = 0;
-            secondButter.listen( "mediaadded", function () {
+            secondButter.listen( "mediaadded", function(){
               mEvents++;
             });
-            secondButter.listen( "trackadded", function () {
+            secondButter.listen( "trackadded", function(){
               tEvents++;
             });
-            secondButter.listen( "trackeventadded", function () {
+            secondButter.listen( "trackeventadded", function(){
               teEvents++;
             });
 
