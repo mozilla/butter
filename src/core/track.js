@@ -26,7 +26,7 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
 
   var __guid = 0;
 
-  var Track = function( popcorn, options ){
+  var Track = function( options ){
     options = options || {};
 
     var _trackEvents = [],

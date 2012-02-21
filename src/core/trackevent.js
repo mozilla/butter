@@ -20,7 +20,7 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
         };
 
     if( !_type ){
-      throw new Error( "TrackEvent must have a type." );
+      _logger.log( "Warning: " + _id + " has no type." );
     } //if
 
     _popcornOptions.start = _popcornOptions.start || 0;

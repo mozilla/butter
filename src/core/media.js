@@ -126,9 +126,6 @@ THE SOFTWARE.
       }; //getTrack
 
       this.removeTrack = function ( track ) {
-        if ( typeof(track) === "string" ) {
-          track = _this.getTrack( { name: track } );
-        } //if
         var idx = _tracks.indexOf( track );
         if ( idx > -1 ) {
           _tracks.splice( idx, 1 );
@@ -148,7 +145,6 @@ THE SOFTWARE.
           _em.dispatch( "trackremoved", track );
           return track;
         } //if
-        return undefined;    
       }; //removeTrack
 
       this.getManifest = function( name ) {
@@ -177,7 +173,7 @@ THE SOFTWARE.
           set: function( val ) {
             if ( _url !== val ) {
               _url = val;
-              _popcornWrapper.clear();
+              _popcornWrapper.clear( _target );
               setupContent();
               _em.dispatch( "mediacontentchanged", _this );
             }
@@ -190,8 +186,8 @@ THE SOFTWARE.
           },
           set: function( val ) {
             if ( _target !== val ) {
+              _popcornWrapper.clear( _target );
               _target = val;
-              _popcornWrapper.clear();
               setupContent();
               _em.dispatch( "mediatargetchanged", _this );
             }
