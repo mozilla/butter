@@ -47,9 +47,9 @@
 
     createButter( function( butter ){
 
-      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "www.google.ca" } );
+      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv" } );
       ok( m1.name === "Media 1", "Name is correct" );
-      ok( m1.target === "audio-test" && m1.url === "www.google.ca", "Media storage is correct" );
+      ok( m1.target === "audio-test" && m1.url === "http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv", "Media storage is correct" );
     });
   });
 
@@ -75,7 +75,7 @@
         mediaState = [ 0, media.data ];
       });
 
-      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "www.google.ca" } ),
+      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv" } ),
           m2;
 
       ok( mediaEventState === -2, "Media events received in correct order" );
@@ -382,24 +382,75 @@
     });
   });
 
+  test( "Target creation and removal", function() {
+    expect( 24 );
+
+    createButter(function( butter ) {
+
+      var targets,
+          elem = document.createElement( "div" );
+
+      elem.id = "targetID";
+      document.body.appendChild( elem );
+
+      equals( typeof butter.getTargetByType, "function", "butter instance has the getTargetByType function" ); 
+      equals( typeof butter.addTarget, "function", "butter instance has the addTarget function" ); 
+      equals( typeof butter.removeTarget, "function", "butter instance has the removeTarget function" ); 
+      equals( typeof butter.targets, "object", "butter instance has a targets array" );
+
+      butter.addTarget({ name: "Target 2" });
+      butter.addTarget({ object: "targetID" });
+      butter.addTarget();
+
+      targets = butter.targets;
+      equals( targets.length, 3, "targets array has 3 items ( 3 targets )" );
+
+      for( var i = 0, l = targets.length; i < l; i++ ) {
+        equals( targets[ i ].id, i, "Target " + (i + 1) + " has the correct id" );
+      }
+
+      equals( targets[ 0 ].name, "Target 2", "Target 2 has the correct name" ); 
+      equals( typeof targets[ 1 ].object, "object", "Target 3 object exists" );
+      equals( targets[ 1 ].object.id, "targetID", "Target 3 object.id is correct" );
+      ok( targets[ 2 ], "empty target is acceptable" );
+
+      equals( butter.getTargetByType( "name", "Target 2" ).name, targets[ 0 ].name, "getting target by name works properly" );
+      equals( butter.getTargetByType( "id", 2 ).id, targets[ 2 ].id, "getting target by id works properly" );
+      equals( butter.getTargetByType( "object", targets[ 1 ].object ).object, targets[ 1 ].object, "getting target by object works properly" );
+
+      for( var i = targets.length, l = 0; i > l; i-- ) {
+        var targs = butter.targets;
+        equals( targs.length, i, "Before removal: " + i + " targets" ); 
+        butter.removeTarget( targs[ i - 1 ] );
+        ok( !targs[ i - 1], "Target " + (i - 1) + " no longer exists" );
+        equals( targs.length, i - 1, "After removal: " + (i - 1) + " targets" ); 
+      }
+    });
+  });
   test( "Target serialization", function(){
-    expect(5);
+    expect(4);
 
     createButter( function( butter ){
 
+      var tempElement = document.createElement( "div" ),
+          sTargs,
+          targs;
+
+      tempElement.id = "targetID";
+      document.body.appendChild( tempElement );
       butter.addMedia();
-      butter.addTarget( { name:"T1", object: "FunFunFun!" } );
-      butter.addTarget( { name:"T2", object: { foo: "bar" } } );
-      butter.addTarget( { name:"T3", object: document.createElement( "div" ) } );
+      butter.addTarget( { name:"T1" } );
+      butter.addTarget( { name:"T2", object: "targetID" } );
 
-      var sTargs = butter.serializeTargets();
-      var targs = butter.targets;
-      ok( sTargs[ 0 ].name === targs[ 0 ].name, "simple target name" );
-      ok( sTargs[ 1 ].name === targs[ 1 ].name, "second target name" );
-      ok( JSON.parse( sTargs[ 0 ].object ) === targs[ 0 ].object, "simple target object" );
-      ok( JSON.parse( sTargs[ 1 ].object ).foo === "bar", "less simple target object" );
-      ok( sTargs[ 2 ].object !== undefined, "complicated target object" );
+      sTargs = butter.serializeTargets();
+      targs = butter.targets;
+      ok( sTargs[ 0 ].name === targs[ 0 ].name, "first target name is correct" );
+      ok( sTargs[ 1 ].name === targs[ 1 ].name, "second target name is correct" );
+      ok( sTargs[ 0 ].object === "", "serialized target defaults safely to empty string" );
+      ok( sTargs[ 1 ].object === "targetID", "serialized target return's correct element ID" );
 
+      document.body.removeChild( tempElement );
+      delete tempElement;
     });
   });
 
@@ -432,7 +483,7 @@
         t3 = m2.addTrack();
         t4 = m2.addTrack();
         te1 = t4.addTrackEvent( { popcornOptions: { start: 2, end: 6 }, type: "test" } );
-        butter.addTarget( { object: "beep" } );
+        butter.addTarget( { name: "beep" } );
         exported = butter.exportProject();
 
         Butter({
@@ -461,7 +512,7 @@
             ok( allMedia[ 1 ].tracks.length === 2, "media 2 has right number of tracks" );
             ok( allMedia[ 1 ].tracks[ 1 ].trackEvents[ 0 ].popcornOptions.end === 6, "trackevent is correct" );
 
-            ok( butter.targets[ 0 ].object === "beep", "target is correct" );
+            ok( butter.targets[ 0 ].name === "beep", "target is correct" );
 
             ok( teEvents === 1, "one trackeventadded events" );
             ok( tEvents === 4, "four trackadded events" );

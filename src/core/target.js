@@ -62,15 +62,7 @@ THE SOFTWARE.
           if ( importData.name ) {
             name = importData.name;
           }
-<<<<<<< HEAD
-<<<<<<< HEAD
           this.object = document.getElementById( importData.object );
-=======
-          this.object = document.getElementById( importData.object )
->>>>>>> 64ac6c5... [#368] Changed from target.object being an id to target.object being the html element
-=======
-          this.object = document.getElementById( importData.object );
->>>>>>> ce511cb... [#368] Fixed some styling issues, removed try catch, added some error checking
         }
       });
     }; //Target
