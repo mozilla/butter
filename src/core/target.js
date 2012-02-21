@@ -48,7 +48,10 @@ THE SOFTWARE.
 
       Object.defineProperty( this, "json", {
         get: function() {
-          var obj = this.object.id ? this.object.id.toString() : "";
+          var obj = "";
+          if( this.object && this.object.id ) {
+            obj = this.object.id.toString();
+          }
           return {
             id: id,
             name: name,
