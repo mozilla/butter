@@ -55,7 +55,6 @@ define( [], function(){
     } //onMouseUp
 
     function onMouseMove( e ){
-      e.stopPropagation(); 
       var diff = e.pageY - _mousePos;
       diff = Math.max( 0, Math.min( diff, _elementHeight - _handleHeight ) );
       _handle.style.top = diff + "px";
@@ -67,7 +66,6 @@ define( [], function(){
     } //onMouseMove
 
     function onMouseDown( e ){
-      e.stopPropagation(); 
       var handleY = _handle.offsetTop;
       _mousePos = e.pageY - handleY;
       window.addEventListener( "mouseup", onMouseUp, false );
@@ -142,7 +140,6 @@ define( [], function(){
     } //onMouseUp
 
     function onMouseMove( e ){
-      e.stopPropagation(); 
       var diff = e.pageX - _mousePos;
       diff = Math.max( 0, Math.min( diff, _elementWidth - _handleWidth ) );
       _handle.style.left = diff + "px";
@@ -151,7 +148,6 @@ define( [], function(){
     } //onMouseMove
 
     function onMouseDown( e ){
-      e.stopPropagation(); 
       var handleX = _handle.offsetLeft;
       _mousePos = e.pageX - handleX;
       window.addEventListener( "mouseup", onMouseUp, false );
