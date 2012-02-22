@@ -35,10 +35,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             { name: "subtitle", type: "subtitle", path: "../external/popcorn-js/plugins/subtitle/popcorn.subtitle.js" }
             ], function( e ) {
 
-            $.get("../nativeEarthProject.json", function( data ) {
-              butter.importProject(data.project);
-            });
-
             var event = track.addTrackEvent({
               type: "text",
               popcornOptions: {
