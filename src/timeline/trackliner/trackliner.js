@@ -88,7 +88,7 @@ define( [ "core/logger", "core/eventmanager", "./track-view" ], function( Logger
         element.appendChild( titleElement );
       } //if
       return _tracks[ element.id ] = track;
-    };
+    }; //createTrack
 
     Object.defineProperties( this, {
       tracks: {
@@ -101,6 +101,13 @@ define( [ "core/logger", "core/eventmanager", "./track-view" ], function( Logger
     this.getTrack = function( id ){
       return _tracks[ id ];
     }; //getTrack
+
+    this.setTrackOrder = function( track, order ){
+      if( _container.childNodes[ order ]  !== track.element ){
+        var other = _container.childNodes[ order ];
+        _container.insertBefore( track.element, other );
+      } //if
+    }; //setTrackOrder
 
     this.addTrack = function( track ){
       _container.appendChild( track.element );

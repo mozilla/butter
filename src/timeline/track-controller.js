@@ -62,6 +62,10 @@ define( [ "core/trackevent", "core/eventmanager", "./trackevent-controller" ], f
       _trackliner.removeTrack( _tlTrack );
     }; //destroy
 
+    _bTrack.listen( "trackorderchanged", function( e ){
+      _trackliner.setTrackOrder( _tlTrack, e.data );
+    });
+
     _bTrack.listen( "trackeventadded", function( e ){
       var bEvent = e.data,
           tlEvent = _events[ bEvent.id ];
