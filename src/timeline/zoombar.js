@@ -27,6 +27,7 @@ define( [], function(){
 
   return function( rootElement, zoomCallback ){
 
+    console.log( rootElement, zoomCallback );
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
         _rect,
@@ -74,6 +75,26 @@ define( [], function(){
         _handle.style.left = ( level * _rect.width / ZOOM_LEVELS ) + "px";
       } //if
     }; //setup
+
+    _element.addEventListener( "click", function( e ) {
+      // bail early if this event is coming from the handle
+      if( e.srcElement.className.search( "butter-timeline-scroll-handle" ) === 0 ) {
+        return;
+      }
+
+      var posX = e.pageX,
+          handleRect = _handle.getBoundingClientRect(),
+          elementRect = _element.getBoundingClientRect(),
+          p;
+
+      if( posX > handleRect.right ) {
+        _handle.style.left = ( ( posX - elementRect.left ) - _handleWidth ) + "px"; 
+      } else {
+        _handle.style.left = posX - elementRect.left + "px"; 
+      }
+      
+      onMouseMove( e );
+    }, false);
 
     _element.addEventListener( "resize", function( e ){
       _this.update();
