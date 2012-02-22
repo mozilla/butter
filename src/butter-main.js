@@ -165,12 +165,10 @@ THE SOFTWARE.
             }
 
             if ( !t ) {
-              t = new Target();
-              t.json = projectData.targets[ i ];
-              _this.addTarget( t );
+              _this.addTarget( targetData );
             }
             else {
-              t.json = projectData.targets[ i ];
+              t.json = targetData;
             }
           }
         }
@@ -182,11 +180,11 @@ THE SOFTWARE.
 
             if ( !m ) {
               m = new Media();
-              m.json = projectData.media[ i ];
+              m.json = mediaData;
               _this.addMedia( m );
             }
             else {
-              m.json = projectData.media[ i ];
+              m.json = mediaData;
             }
 
           } //for

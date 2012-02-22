@@ -272,9 +272,9 @@ THE SOFTWARE.
             if ( importData.tracks ) {
               var importTracks = importData.tracks;
               for ( var i=0, l=importTracks.length; i<l; ++i ) {
-                var newTrack = new Track();
-                newTrack.json = importTracks[ i ];
-                _this.addTrack( newTrack );
+                var track = new Track();
+                track.json = importTracks[ i ];
+                _this.addTrack( track );
               }
             }
           },
