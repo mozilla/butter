@@ -32,7 +32,7 @@ THE SOFTWARE.
 
       options = options || {};
       var name = options.name || "Target" + id + Date.now();
-      this.object = options.object;
+      this.object = document.getElementById( options.object );
 
       Object.defineProperty( this, "name", {
         get: function() {
@@ -48,12 +48,9 @@ THE SOFTWARE.
 
       Object.defineProperty( this, "json", {
         get: function() {
-          var obj;
-          try {
-            obj = JSON.stringify( this.object );
-          }
-          catch ( e ) {
-            obj = this.object.toString();
+          var obj = "";
+          if( this.object && this.object.id ) {
+            obj = this.object.id.toString();
           }
           return {
             id: id,
@@ -63,9 +60,9 @@ THE SOFTWARE.
         },
         set: function( importData ) {
           if ( importData.name ) {
-            name = importData.name
+            name = importData.name;
           }
-          this.object = importData.object
+          this.object = document.getElementById( importData.object );
         }
       });
     }; //Target
