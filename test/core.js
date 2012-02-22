@@ -449,7 +449,6 @@
               teEvents++;
             });
 
-            console.log( exported );
             secondButter.importProject( exported );
             allMedia = secondButter.media;
 
@@ -459,7 +458,6 @@
             ok( allMedia[ 1 ].url === "www.test-url-2.com", "media 2 url is correct" );
             ok( allMedia[ 1 ].target === "test-target-2", "media 2 target is correct" );
 
-            console.log( allMedia[ 0 ].tracks, "ASDASD" );
             ok( allMedia[ 0 ].tracks.length === 2, "media 1 has right number of tracks" );
             ok( allMedia[ 1 ].tracks.length === 2, "media 2 has right number of tracks" );
             ok( allMedia[ 1 ].tracks[ 1 ].trackEvents[ 0 ].popcornOptions.end === 6, "trackevent is correct" );
