@@ -32,7 +32,8 @@ define( [
           "./track-controller",
           "./scrollbars",
           "./timebar",
-          "./zoombar"
+          "./zoombar",
+          "./trackhandles"
         ],
         function(
           $,
@@ -44,7 +45,8 @@ define( [
           TrackController,
           Scrollbars,
           TimeBar,
-          ZoomBar ){
+          ZoomBar,
+          TrackHandles ){
 
   const ZOOM_FACTOR = 100;
 
@@ -62,6 +64,7 @@ define( [
         _vScrollBar,
         _timebar = new TimeBar( _root, _media, _tracksContainer ),
         _zoombar = new ZoomBar( _root, zoomCallback ),
+        _trackHandles = new TrackHandles( _media, _root, _tracksContainer ),
         _zoom = 1;
 
     _root.className = "butter-timeline-media";
@@ -121,6 +124,7 @@ define( [
       track = _tracks[ bTrack.id ];
       if( !track ){
         track = new TrackController( _media, bTrack, _trackliner );
+        bTrack.order = Object.keys( _tracks ).length;
         _tracks[ bTrack.id ] = track;
         track.zoom = _zoom;
       } //if
@@ -202,6 +206,7 @@ define( [
         _hScrollBar.update();
         _vScrollBar.update();
         _zoombar.update();
+        _trackHandles.update();
       } //if
     } //updateUI
 

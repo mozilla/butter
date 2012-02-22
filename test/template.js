@@ -17,17 +17,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           var track = media.addTrack( "Track1" );
           media.addTrack( "Track" + Math.random() );
           media.addTrack( "Track" + Math.random() );
-          media.addTrack( "Track" + Math.random() );
-          media.addTrack( "Track" + Math.random() );
-          media.addTrack( "Track" + Math.random() );
-          media.addTrack( "Track" + Math.random() );
-          media.addTrack( "Track" + Math.random() );
-          media.addTrack( "Track" + Math.random() );
-          media.addTrack( "Track" + Math.random() );
-          media.addTrack( "Track" + Math.random() );
-          media.addTrack( "Track" + Math.random() );
-          media.addTrack( "Track" + Math.random() );
-          media.addTrack( "Track" + Math.random() );
 
           butter.plugin.add([
             { name: "footnote", type: "footnote", path: "../external/popcorn-js/plugins/footnote/popcorn.footnote.js" },
