@@ -27,7 +27,6 @@ define( [], function(){
 
   return function( rootElement, zoomCallback ){
 
-    console.log( rootElement, zoomCallback );
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
         _rect,
