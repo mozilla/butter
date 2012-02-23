@@ -56,8 +56,8 @@ THE SOFTWARE.
               unmuted: function(){
                 _em.dispatch( "mediaunmuted", _this );
               },
-              volumechanged: function(){
-                _em.dispatch( "mediavolumechanged", _popcornWrapper.volume );
+              volumechange: function(){
+                _em.dispatch( "mediavolumechange", _popcornWrapper.volume );
               },
               timeupdate: function(){
                 _currentTime = _popcornWrapper.currentTime;

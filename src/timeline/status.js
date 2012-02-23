@@ -105,6 +105,10 @@ define( [], function(){
       _muteButton.state = true;
     });
 
+    _media.listen( "mediavolumechange", function( e ){
+      _muteButton.state = !_media.muted;
+    });
+
     _media.listen( "mediaplaying", function( e ){
       _playButton.state = false;
     });
