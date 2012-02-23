@@ -399,7 +399,7 @@
       equals( typeof butter.targets, "object", "butter instance has a targets array" );
 
       butter.addTarget({ name: "Target 2" });
-      butter.addTarget({ elementID: "targetID" });
+      butter.addTarget({ element: "targetID" });
       butter.addTarget();
 
       targets = butter.targets;
@@ -410,13 +410,13 @@
       }
 
       equals( targets[ 0 ].name, "Target 2", "Target 2 has the correct name" ); 
-      equals( typeof targets[ 1 ].elementID, "string", "Target 3 elementID exists" );
-      equals( targets[ 1 ].elementID, "targetID", "Target 3 elementID is correct" );
+      equals( typeof targets[ 1 ].element, "object", "Target 3 element exists" );
+      equals( targets[ 1 ].element.id, "targetID", "Target 3 element is correct" );
       ok( targets[ 2 ], "empty target is acceptable" );
 
       equals( butter.getTargetByType( "name", "Target 2" ).name, targets[ 0 ].name, "getting target by name works properly" );
       equals( butter.getTargetByType( "id", 2 ).id, targets[ 2 ].id, "getting target by id works properly" );
-      equals( butter.getTargetByType( "elementID", targets[ 1 ].elementID).elementID, targets[ 1 ].elementID, "getting target by elementID works properly" );
+      equals( butter.getTargetByType( "element", targets[ 1 ].element).element, targets[ 1 ].element, "getting target by element works properly" );
 
       for( var i = targets.length, l = 0; i > l; i-- ) {
         var targs = butter.targets;
@@ -440,14 +440,14 @@
       document.body.appendChild( tempElement );
       butter.addMedia();
       butter.addTarget( { name:"T1" } );
-      butter.addTarget( { name:"T2", elementID: "targetID" } );
+      butter.addTarget( { name:"T2", element: "targetID" } );
 
       sTargs = butter.serializeTargets();
       targs = butter.targets;
       ok( sTargs[ 0 ].name === targs[ 0 ].name, "first target name is correct" );
       ok( sTargs[ 1 ].name === targs[ 1 ].name, "second target name is correct" );
-      ok( sTargs[ 0 ].elementID === "", "serialized target defaults safely to empty string" );
-      ok( sTargs[ 1 ].elementID === "targetID", "serialized target return's correct element ID" );
+      ok( sTargs[ 0 ].element === "", "serialized target defaults safely to empty string" );
+      ok( sTargs[ 1 ].element === "targetID", "serialized target return's correct element ID" );
 
       document.body.removeChild( tempElement );
       delete tempElement;
