@@ -33,6 +33,7 @@ define( [
           "./scrollbars",
           "./timebar",
           "./zoombar",
+          "./status",
           "./trackhandles"
         ],
         function(
@@ -46,6 +47,7 @@ define( [
           Scrollbars,
           TimeBar,
           ZoomBar,
+          Status,
           TrackHandles ){
 
   const ZOOM_FACTOR = 100;
@@ -64,6 +66,7 @@ define( [
         _vScrollBar,
         _timebar = new TimeBar( _root, _media, _tracksContainer ),
         _zoombar = new ZoomBar( _root, zoomCallback ),
+        _status = new Status( _root, _media ),
         _trackHandles = new TrackHandles( _media, _root, _tracksContainer ),
         _zoom = 1;
 

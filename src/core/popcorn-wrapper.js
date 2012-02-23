@@ -6,10 +6,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
     var _id = mediaId,
         _logger = new Logger( _id + "::PopcornWrapper" ),
-        _onTimeUpdate = options.timeupdate || function(){},
-        _onPause = options.pause || function(){},
-        _onPlaying = options.playing || function(){},
-        _onTimeout = options.timeout || function(){},
+        _popcornEvents = options.popcornEvents || {},
         _onPrepare = options.prepare || function(){},
         _onFail = options.fail || function(){},
         _url = options.setup && options.setup.url,
@@ -23,15 +20,15 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _this = this;
 
     function addPopcornHandlers(){
-      _popcorn.listen( "timeupdate", _onTimeUpdate );
-      _popcorn.listen( "pause", _onPause );
-      _popcorn.listen( "playing", _onPlaying );
+      for( var eventName in _popcornEvents ){
+        _popcorn.listen( eventName, _popcornEvents[ eventName ] );
+      } //for
     } //addPopcornHandlers
 
     function removePopcornHandlers(){
-      _popcorn.unlisten( "timeupdate", _onTimeUpdate );
-      _popcorn.unlisten( "pause", _onPause );
-      _popcorn.unlisten( "playing", _onPlaying );
+      for( var eventName in _popcornEvents ){
+        _popcorn.unlisten( eventName, _popcornEvents[ eventName ] );
+      } //for
     } //removePopcornHandlers
 
     this.interruptLoad = function(){
@@ -281,6 +278,39 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     }; //setMediaContent
 
     Object.defineProperties( this, {
+      volume: {
+        enumerable: true,
+        set: function( val ){
+          if( _popcorn ){
+            _popcorn.volume( val );
+          } //if
+        },
+        get: function(){
+          if( _popcorn ){
+            return _popcorn.volume();
+          }
+          return false;
+        }
+      },
+      muted: {
+        enumerable: true,
+        set: function( val ){
+          if( _popcorn ){
+            if( val ){
+              _popcorn.mute();
+            }
+            else {
+              _popcorn.unmute();
+            } //if
+          } //if
+        },
+        get: function(){
+          if( _popcorn ){
+            return _popcorn.muted();
+          }
+          return false;
+        }
+      },
       currentTime: {
         enumerable: true,
         set: function( val ){
