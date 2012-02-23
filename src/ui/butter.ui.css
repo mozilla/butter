@@ -127,6 +127,17 @@ THE SOFTWARE.
   webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 1px #131313;
 }
 
+#butter-timeline .butter-timebar-scrubber-container .fill-bar {
+  background: none repeat scroll 0 0 rgba( 200, 200, 140, 0.2 );
+  border-radius: 15px 15px 15px 15px;
+  height: 4px;
+  left: 2px;
+  margin-top: 2px;
+  position: absolute;
+  top: 0;
+  width: 0px;
+}
+
 #butter-timeline .butter-timebar-scrubber-node {
   border: 2px solid #bbb;
   background: #fff;

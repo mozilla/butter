@@ -76,7 +76,7 @@ define( [], function(){
     this.update = function(){
     }; //update
 
-    _control.addEventListener( "resize", setup, false );
+    window.addEventListener( "resize", setup, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
 
     setup();
@@ -134,7 +134,7 @@ define( [], function(){
       _handle.removeEventListener( "mousedown", onMouseDown, false );
     } //onMouseDown
 
-    _control.addEventListener( "resize", setup, false );
+    window.addEventListener( "resize", setup, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
 
     this.update = function(){

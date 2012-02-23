@@ -115,6 +115,10 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       _scrubber.update( zoom );
     }; //update
 
+    this.destroy = function(){
+      _scrubber.destroy();
+    }; //destroy
+
   };
 
 });

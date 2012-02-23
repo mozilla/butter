@@ -189,6 +189,7 @@ define( [
 
     this.destroy = function() {
       _root.parentNode.removeChild( _root );
+      _timebar.destroy();
     }; //destroy
 
     this.hide = function() {
