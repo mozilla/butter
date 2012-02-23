@@ -47,9 +47,9 @@
 
     createButter( function( butter ){
 
-      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv" } );
+      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../resources/atultroll.webm" } );
       ok( m1.name === "Media 1", "Name is correct" );
-      ok( m1.target === "audio-test" && m1.url === "http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv", "Media storage is correct" );
+      ok( m1.target === "audio-test" && m1.url === "../resources/atultroll.webm", "Media storage is correct" );
     });
   });
 
@@ -75,7 +75,7 @@
         mediaState = [ 0, media.data ];
       });
 
-      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv" } ),
+      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../resources/atultroll.webm" } ),
           m2;
 
       ok( mediaEventState === -2, "Media events received in correct order" );
@@ -399,7 +399,7 @@
       equals( typeof butter.targets, "object", "butter instance has a targets array" );
 
       butter.addTarget({ name: "Target 2" });
-      butter.addTarget({ object: "targetID" });
+      butter.addTarget({ elementID: "targetID" });
       butter.addTarget();
 
       targets = butter.targets;
@@ -410,13 +410,13 @@
       }
 
       equals( targets[ 0 ].name, "Target 2", "Target 2 has the correct name" ); 
-      equals( typeof targets[ 1 ].object, "object", "Target 3 object exists" );
-      equals( targets[ 1 ].object.id, "targetID", "Target 3 object.id is correct" );
+      equals( typeof targets[ 1 ].elementID, "string", "Target 3 elementID exists" );
+      equals( targets[ 1 ].elementID, "targetID", "Target 3 elementID is correct" );
       ok( targets[ 2 ], "empty target is acceptable" );
 
       equals( butter.getTargetByType( "name", "Target 2" ).name, targets[ 0 ].name, "getting target by name works properly" );
       equals( butter.getTargetByType( "id", 2 ).id, targets[ 2 ].id, "getting target by id works properly" );
-      equals( butter.getTargetByType( "object", targets[ 1 ].object ).object, targets[ 1 ].object, "getting target by object works properly" );
+      equals( butter.getTargetByType( "elementID", targets[ 1 ].elementID).elementID, targets[ 1 ].elementID, "getting target by elementID works properly" );
 
       for( var i = targets.length, l = 0; i > l; i-- ) {
         var targs = butter.targets;
@@ -440,14 +440,14 @@
       document.body.appendChild( tempElement );
       butter.addMedia();
       butter.addTarget( { name:"T1" } );
-      butter.addTarget( { name:"T2", object: "targetID" } );
+      butter.addTarget( { name:"T2", elementID: "targetID" } );
 
       sTargs = butter.serializeTargets();
       targs = butter.targets;
       ok( sTargs[ 0 ].name === targs[ 0 ].name, "first target name is correct" );
       ok( sTargs[ 1 ].name === targs[ 1 ].name, "second target name is correct" );
-      ok( sTargs[ 0 ].object === "", "serialized target defaults safely to empty string" );
-      ok( sTargs[ 1 ].object === "targetID", "serialized target return's correct element ID" );
+      ok( sTargs[ 0 ].elementID === "", "serialized target defaults safely to empty string" );
+      ok( sTargs[ 1 ].elementID === "targetID", "serialized target return's correct element ID" );
 
       document.body.removeChild( tempElement );
       delete tempElement;

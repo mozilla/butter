@@ -53,7 +53,7 @@ define( [ "core/eventmanager" ], function( EventManager ) {
         open: function( e ) {
           var targets = [];
           for( var i = 0, l = butter.targets.length; i < l; i++ ) {
-            targets.push( butter.targets[ i ].object.id );
+            targets.push( butter.targets[ i ].elementID );
           }
           butter.dialog.send( _dialogName, "trackeventdata", {
             manifest: Popcorn.manifest[ trackEvent.type ],
