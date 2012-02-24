@@ -38,7 +38,8 @@ define( [], function(){
         _mediaCheckInterval,
         _width,
         _this = this,
-        _isPlaying;
+        _isPlaying = false,
+        _isScrubbing = false;
 
     _container.className = "butter-timebar-scrubber-container";
     _node.className = "butter-timebar-scrubber-node";
@@ -68,10 +69,10 @@ define( [], function(){
 
     function onMouseUp( e ){
       if( _isPlaying ){
-        _media.play();  
+        _media.play();
+        _isScrubbing =  false;  
       }
 
-      _node.addEventListener( "mousedown", onMouseDown, false );
       window.removeEventListener( "mouseup", onMouseUp, false );
       window.removeEventListener( "mousemove", onMouseMove, false );
     } //onMouseUp
@@ -88,6 +89,7 @@ define( [], function(){
 
       if( _isPlaying ){
         _media.pause();
+        _isScrubbing = true;
       }
 
       _node.removeEventListener( "mousedown", onMouseDown, false );
@@ -125,7 +127,9 @@ define( [], function(){
     });
 
     _media.listen( "mediapause", function( e ){
-      _isPlaying = false;
+      if( !_isScrubbing )
+        _isPlaying = false;
+      
       clearInterval( _checkMediaInterval );
     });
   };
