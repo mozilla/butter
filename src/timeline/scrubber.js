@@ -37,7 +37,9 @@ define( [], function(){
         _zoom = 1,
         _mediaCheckInterval,
         _width,
-        _this = this;
+        _this = this,
+        _isPlaying = false,
+        _isScrubbing = false;
 
     _container.className = "butter-timebar-scrubber-container";
     _node.className = "butter-timebar-scrubber-node";
@@ -66,7 +68,11 @@ define( [], function(){
     }, false );
 
     function onMouseUp( e ){
-      _node.addEventListener( "mousedown", onMouseDown, false );
+      if( _isPlaying ){
+        _media.play();
+        _isScrubbing = false;  
+      }
+
       window.removeEventListener( "mouseup", onMouseUp, false );
       window.removeEventListener( "mousemove", onMouseMove, false );
     } //onMouseUp
@@ -79,12 +85,16 @@ define( [], function(){
     } //onMouseMove
 
     function onMouseDown( e ){
-      if( e.button === 0 ){
-        _mousePos = e.pageX - _node.offsetLeft;
-        _node.removeEventListener( "mousedown", onMouseDown, false );
-        window.addEventListener( "mousemove", onMouseMove, false );
-        window.addEventListener( "mouseup", onMouseUp, false );
-      } //if
+      _mousePos = e.pageX - _node.offsetLeft;
+
+      if( _isPlaying ){
+        _media.pause();
+        _isScrubbing = true;
+      }
+
+      _node.removeEventListener( "mousedown", onMouseDown, false );
+      window.addEventListener( "mousemove", onMouseMove, false );
+      window.addEventListener( "mouseup", onMouseUp, false );
     } //onMouesDown
 
     _node.addEventListener( "mousedown", onMouseDown, false );
@@ -112,10 +122,15 @@ define( [], function(){
     } //checkMedia
 
     _media.listen( "mediaplaying", function( e ){
+      _isPlaying = true;
       _checkMediaInterval = setInterval( checkMedia, CHECK_MEDIA_INTERVAL );
     });
 
     _media.listen( "mediapause", function( e ){
+      if( !_isScrubbing ){
+        _isPlaying = false;
+      }
+      
       clearInterval( _checkMediaInterval );
     });
   };
