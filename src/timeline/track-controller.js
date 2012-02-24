@@ -24,13 +24,14 @@ THE SOFTWARE.
 
 define( [ "core/trackevent", "core/eventmanager", "./trackevent-controller" ], function( TrackEvent, EventManager, TrackEventController ) {
 
-  function Track( media, bTrack, trackliner, tlTrack ){
+  function Track( media, bTrack, trackliner, tlTrack, options ){
     var _media = media,
         _trackliner = trackliner,
         _bTrack = bTrack,
         _tlTrack = tlTrack,
         _em = new EventManager( this ),
         _events = {},
+        _onMouseDown = options.mousedown,
         _this = this;
 
     if( !_tlTrack ){
@@ -49,18 +50,38 @@ define( [ "core/trackevent", "core/eventmanager", "./trackevent-controller" ], f
       delete _events[ bEvent.id ];
     } //removeTrackEvent
 
+    this.deselectEvents = function( except ){
+      for( var e in _events ){
+        if( _events.hasOwnProperty( e ) ){
+          if( _events[ e ].trackEvent !== except ){
+            _events[ e ].trackEvent.selected = false;
+          } //if
+        } //if
+      } //for
+    }; //deselectEvents
+
     function addTrackEvent( bEvent ){
       var tlEvent = _tlTrack.createTrackEvent({
         start: bEvent.popcornOptions.start,
         end: bEvent.popcornOptions.end,
         text: bEvent.type
       });
-      _events[ bEvent.id ] = new TrackEventController( _media, bEvent, tlEvent, _trackliner );
+      _events[ bEvent.id ] = new TrackEventController( _media, bEvent, tlEvent, _trackliner, {
+        mousedown: _onMouseDown
+      });
     } //addTrackEvent
 
     this.destroy = function(){
       _trackliner.removeTrack( _tlTrack );
     }; //destroy
+
+    this.getTrackEventById = function( id ){
+      for( var e in _events ){
+        if( _events.hasOwnProperty( e ) && _events[ e ].trackEvent.id === id ){
+          return _events[ e ];
+        } //if
+      } //for
+    }; //getTrackEventById
 
     _bTrack.listen( "trackeventadded", function( e ){
       var bEvent = e.data,
@@ -105,28 +126,7 @@ define( [ "core/trackevent", "core/eventmanager", "./trackevent-controller" ], f
         track: _bTrack,
         type: type
       });
-/*
-      var _tlTrack = e.data.track,
-          _bTrack = __bTracks[ _tlTrack.id ],
-          _tlTrackEvent = e.data.trackEvent,
-          _bTrackEvent = __bTrackEvents[ _tlTrackEvent.element.id ],
-          name = e.data.name;
-      if( !_bTrackEvent ){
-        var start = _tlTrackEvent.options.left / _container.offsetWidth * _media.duration,
-            end = start + ( _tlTrackEvent.options.width / _container.offsetWidth * _media.duration ),
-            type = e.data.trackEvent.element.children[ 0 ].title || e.data.trackEvent.options.innerHTML;
-        _bTrackEvent = new TrackEvent({
-          popcornOptions: {
-            start: start,
-            end: end },
-          type: type
-        });
-        // make a function for this
-        _tlTrackEvents[ _bTrackEvent.id ] = _tlTrackEvent;
-        _bTrackEvents[ _tlTrackEvent.element.id ] = _bTrackEvent;
-        _bTrack.addTrackEvent( _bTrackEvent );
-      }
-*/
+
     });
 
     _tlTrack.listen( "trackeventadded", function( e ){

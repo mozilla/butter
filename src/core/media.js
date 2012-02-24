@@ -99,6 +99,8 @@ THE SOFTWARE.
           "trackeventadded",
           "trackeventremoved",
           "trackeventupdated",
+          "trackeventselected",
+          "trackeventdeselected",
           "trackeventeditrequested"
         ]);
         track.popcorn = _popcornWrapper;
@@ -138,6 +140,8 @@ THE SOFTWARE.
             "trackeventadded",
             "trackeventremoved",
             "trackeventupdated",
+            "trackeventselected",
+            "trackeventdeselected",
             "trackeventeditrequested"
           ]);
           track.unlisten( "trackeventadded", onTrackEventAdded );

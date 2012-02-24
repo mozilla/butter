@@ -130,6 +130,8 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
       trackEvent.track = _this;
       _em.repeat( trackEvent, [
         "trackeventupdated",
+        "trackeventselected",
+        "trackeventdeselected",
         "trackeventeditrequested"
       ]);
       trackEvent.track = _this;
@@ -144,6 +146,8 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
         trackEvent.track = undefined;
         _em.unrepeat( trackEvent, [
           "trackeventupdated",
+          "trackeventselected",
+          "trackeventdeselected",
           "trackeventeditrequested"
         ]);
         trackEvent.track = undefined;
