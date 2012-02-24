@@ -196,18 +196,13 @@ THE SOFTWARE.
   text-decoration: none;
   vertical-align: baseline;
   color: #ddd;
-  max-width: 180px;
+  max-width: 90%;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   cursor: pointer;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
-}
-
-#butter-timeline-status-bar div div .media-url:hover {
-  max-width: 280px;
-  width: 280px;
 }
 
 #butter-timeline .butter-timeline-media {
