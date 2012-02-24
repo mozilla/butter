@@ -25,51 +25,70 @@ THE SOFTWARE.
 (function() {
   define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
+    var __guid = 0;
+
     var Target = function ( options ) {
-      var id = Target.guid++,
-          logger = new Logger( id ),
-          em = new EventManager( this );
-
       options = options || {};
-      var name = options.name || "Target" + id + Date.now();
-      this.object = options.object;
 
-      Object.defineProperty( this, "name", {
-        get: function() {
-          return name;
-        },
-      });
+      var _id = __guid++,
+          _logger = new Logger( _id ),
+          _em = new EventManager( this ),
+          _name = options.name || "Target" + _id,
+          _element = options.element,
+          _this = this;
 
-      Object.defineProperty( this, "id", {
-        get: function() {
-          return id;
-        },
-      });
+      if( typeof( _element ) === "string" ){
+        _element = document.getElementById( _element );
+      } //if
 
-      Object.defineProperty( this, "json", {
-        get: function() {
-          var obj;
-          try {
-            obj = JSON.stringify( this.object );
+      if( !_element ){
+        _logger.log( "Warning: Target element is null." );
+      } //if
+
+      Object.defineProperties( this, {
+        name: {
+          enumerable: true,
+          get: function(){
+            return _name;
           }
-          catch ( e ) {
-            obj = this.object.toString();
-          }
-          return {
-            id: id,
-            name: name,
-            object: obj
-          };
         },
-        set: function( importData ) {
-          if ( importData.name ) {
-            name = importData.name
+        id: {
+          enumerable: true,
+          get: function(){
+            return _id;
           }
-          this.object = importData.object
+        },
+        element: {
+          enumerable: true,
+          get: function(){
+            return _element;
+          }
+        },
+        json: {
+          enumerable: true,
+          get: function(){
+            var elem = "";
+            if( _element && _element.id ){
+              elem = _element.id; 
+            } //if
+            return {
+              id: _id,
+              name: _name,
+              element: elem 
+            };
+          },
+          set: function( importData ){
+            if( importData.name ){
+              name = importData.name;
+            } //if
+            if( importData.element ){
+              _element = document.getElementById( importData.element );
+            } //if
+          }
         }
       });
+
     }; //Target
-    Target.guid = 0;
 
     return Target;
 
