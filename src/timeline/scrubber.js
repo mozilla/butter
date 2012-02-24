@@ -79,10 +79,12 @@ define( [], function(){
     } //onMouseMove
 
     function onMouseDown( e ){
-      _mousePos = e.pageX - _node.offsetLeft;
-      _node.removeEventListener( "mousedown", onMouseDown, false );
-      window.addEventListener( "mousemove", onMouseMove, false );
-      window.addEventListener( "mouseup", onMouseUp, false );
+      if( e.button === 0 ){
+        _mousePos = e.pageX - _node.offsetLeft;
+        _node.removeEventListener( "mousedown", onMouseDown, false );
+        window.addEventListener( "mousemove", onMouseMove, false );
+        window.addEventListener( "mouseup", onMouseUp, false );
+      } //if
     } //onMouesDown
 
     _node.addEventListener( "mousedown", onMouseDown, false );
