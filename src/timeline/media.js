@@ -56,7 +56,7 @@ define( [
     var _this = this,
         _media = media,
         _em = new EventManager( this ),
-        _root = document.createElement( "div" ),
+        _rootElement = document.createElement( "div" ),
         _container = document.createElement( "div" ),
         _tracksContainer = document.createElement( "div" ),
         _trackliner,
@@ -64,17 +64,17 @@ define( [
         _initialized = false,
         _hScrollBar,
         _vScrollBar,
-        _timebar = new TimeBar( _root, _media, _tracksContainer ),
-        _zoombar = new ZoomBar( _root, zoomCallback ),
-        _status = new Status( _root, _media ),
-        _trackHandles = new TrackHandles( _media, _root, _tracksContainer ),
+        _timebar = new TimeBar( _media, _tracksContainer ),
+        _zoombar = new ZoomBar(  zoomCallback ),
+        _status = new Status( _media ),
+        _trackHandles = new TrackHandles( _media, _tracksContainer ),
         _zoom = 1;
 
-    _root.className = "butter-timeline-media";
-    _root.id = "butter-timeline-media-" + media.id;
-    _container.className = "butter-timeline-media-container";
-    _tracksContainer.className = "butter-timeline-tracks";
-    _tracksContainer.id = "butter-timeline-tracks-" + media.id;
+    _rootElement.className = "media-instance";
+    _rootElement.id = "media-instance" + media.id;
+    _container.className = "media-container";
+    _tracksContainer.className = "tracks-container";
+    _tracksContainer.id = "tracks-container-" + media.id;
 
     function zoomCallback( zoomLevel ){
       var nextZoom = ( 1 + zoomLevel ) * ZOOM_FACTOR;
@@ -174,11 +174,18 @@ define( [
         } //if
       }); //trackadded
 
-      _container.appendChild( _tracksContainer );
-      _root.appendChild( _container );
+      _hScrollBar = new Scrollbars.Horizontal( _tracksContainer ),
+      _vScrollBar = new Scrollbars.Vertical( _tracksContainer ),
 
-      _hScrollBar = new Scrollbars.Horizontal( _container, _tracksContainer ),
-      _vScrollBar = new Scrollbars.Vertical( _container, _tracksContainer ),
+      _container.appendChild( _tracksContainer );
+      _container.appendChild( _hScrollBar.element );
+      _container.appendChild( _vScrollBar.element );
+      _container.appendChild( _timebar.element );
+      _container.appendChild( _status.statusElement );
+      _container.appendChild( _status.muteElement );
+      _rootElement.appendChild( _trackHandles.element );
+      _rootElement.appendChild( _zoombar.element );
+      _rootElement.appendChild( _container );
 
       _trackliner.zoom = _zoom;
       _trackliner.duration = _media.duration;
@@ -191,16 +198,16 @@ define( [
     }); //mediaready
 
     this.destroy = function() {
-      _root.parentNode.removeChild( _root );
+      _rootElement.parentNode.removeChild( _rootElement );
       _timebar.destroy();
     }; //destroy
 
     this.hide = function() {
-      _root.style.display = "none";
+      _rootElement.style.display = "none";
     }; //hide
 
     this.show = function() {
-      _root.style.display = "block";
+      _rootElement.style.display = "block";
     }; //show
 
     function updateUI() {
@@ -229,7 +236,7 @@ define( [
         enumerable: true,
         configurable: false,
         get: function(){
-          return _root;
+          return _rootElement;
         }
       },
       media: {

@@ -46,27 +46,12 @@ THE SOFTWARE.
   transition: bottom 0.5s;
 }
 
-#butter-timeline .handle-container {
-  position: absolute;
-  height: 180px;
-  width: 8.5%;
-  left: 1%;
-  top: 40px;
-  border: 1px solid #2B2B2B;
-  border-image: initial;
-  border-radius: 5px;
-  moz-border-radius: 5px;
-  o-border-radius: 5px;
-  webkit-border-radius: 5px;
-  overflow: hidden;
-}
-
 #butter-timeline .status-container {
   position: absolute;
-  width: 100%;
+  width: 100px;
   height: 40px;
-  top: 0px;
-  left: 2px;
+  top: -45px;
+  left: -115px;
 }
 
 #butter-timeline .status-button div {
@@ -74,17 +59,41 @@ THE SOFTWARE.
   cursor: pointer;
 }
 
-#butter-timeline .status-container .duration-container {
+#butter-timeline .status-container .time-container {
   position: absolute;
+  top: 4px;
   left: 20px;
-  width: .8%;
-  height: 20px;
+  width: 80px;
+  height: 15px;
   background-image: url( "assets/status-bg.png" );
+  color: #999999;
+  font-size: 11px;
+  text-align: center;
+  box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
+  border-radius: 20px 20px 20px 20px;
+  padding: 2px;
+}
+
+#butter-timeline .status-container .time-container input {
+  background: transparent;
+  color: rgb( 200, 200, 180 );
+  border: none;
+  width: 65px;
+  padding-left: 10px;
+  height: 13px;
+  font-size: 90%;
+}
+
+#butter-timeline .status-container .time-container input:focus {
+  -moz-user-select: text;
+  -webkit-user-select: text;
+  -o-user-select: text;
+  user-select: text;
 }
 
 #butter-timeline .status-container .play-button-container {
   position: absolute;
-  left: 10px;
+  left: 2px;
   width: 24px;
   height: 24px;
   background-image: url( "assets/status-bg.png" );
@@ -122,7 +131,7 @@ THE SOFTWARE.
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d1be70', endColorstr='#ad9b4c',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-timeline .status-container .status-button-icon {
+#butter-timeline .status-button-icon {
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;
@@ -147,10 +156,10 @@ THE SOFTWARE.
   background-position: -320px -19px;
 }
 
-
-#butter-timeline .status-container .mute-button-container {
+#butter-timeline .mute-button-container {
   position: absolute;
-  right: -40px;
+  top: -40px;
+  right: -30px;
   width: 17px;
   height: 17px;
   background-image: url( "assets/status-bg.png" );
@@ -163,7 +172,7 @@ THE SOFTWARE.
   padding: 3px;
 }
 
-#butter-timeline .status-container .mute-button-container .status-button {
+#butter-timeline .mute-button-container .status-button {
   width: 17px;
   height: 17px;
   border-radius: 20px 20px 20px 20px;
@@ -177,7 +186,7 @@ THE SOFTWARE.
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b4b4b4', endColorstr='#777777',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-timeline .status-container .mute-button-container .status-button:hover {
+#butter-timeline .mute-button-container .status-button:hover {
   background: #b4b4b4; /* Old browsers */
   background: -moz-linear-gradient(top, #b4b4b4 0, #969696 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#b4b4b4), color-stop(100%,#969696)); /* Chrome,Safari4+ */
@@ -188,7 +197,7 @@ THE SOFTWARE.
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b4b4b4', endColorstr='#969696',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-timeline .status-container .mute-button-container .status-button[mouse-state="depressed"] {
+#butter-timeline .mute-button-container .status-button[mouse-state="depressed"] {
   background: #959595; /* Old browsers */
   background: -moz-linear-gradient(top, #959595 0, #cccccc 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#959595), color-stop(100%,#cccccc)); /* Chrome,Safari4+ */
@@ -199,15 +208,30 @@ THE SOFTWARE.
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#959595', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-timeline .status-container .mute-button-container .status-button-icon {
+#butter-timeline .mute-button-container .status-button-icon {
   background-position: -109px -141px;
 }
 
-#butter-timeline .status-container .mute-button-container .status-button-icon[state="true"] {
+#butter-timeline .mute-button-container .status-button-icon[state="true"] {
   background-position: -109px -157px;
 }
 
-#butter-timeline .handle-container .handle-list {
+#butter-timeline .track-handle-container {
+  position: absolute;
+  height: 185px;
+  width: 100px;
+  left: 5px;
+  bottom: 18px;
+  border: 1px solid #2B2B2B;
+  border-image: initial;
+  border-radius: 5px;
+  moz-border-radius: 5px;
+  o-border-radius: 5px;
+  webkit-border-radius: 5px;
+  overflow: hidden;
+}
+
+#butter-timeline .track-handle-container .handle-list {
   width: 100%;
   padding: 5%;
   width: 95%;
@@ -215,11 +239,11 @@ THE SOFTWARE.
   padding-bottom: 7px;
 }
 
-#butter-timeline .handle-container .handle-list .placeholder {
+#butter-timeline .track-handle-container .handle-list .placeholder {
   background: rgba( 0, 0, 0, 0.3 );
 }
 
-#butter-timeline .handle-container .handle-list div {
+#butter-timeline .track-handle-container .handle-list div {
   cursor: pointer;
   width: 95%;
   box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
@@ -245,16 +269,16 @@ THE SOFTWARE.
   text-align: center;
 }
 
-#butter-timeline .butter-timebar {
+#butter-timeline .time-bar {
   position: absolute;
+  top: -45px;
+  width: 100%;
   height: 30px;
-  top: 0px;
-  left: 10%;
-  width: 90%;
 }
 
-#butter-timeline .butter-timebar-scrubber-container {
-  background-image: url( "assets/track-bg.png" );
+#butter-timeline .time-bar-scrubber-container {
+  z-index: 2147483647;
+  background-image: url( "assets/status-bg.png" );
   border-radius: 15px;
   position: absolute;
   -moz-user-select: none;
@@ -262,7 +286,7 @@ THE SOFTWARE.
   -o-user-select: none;
   user-select: none;
   top: 0px;
-  width: 100px;
+  width: 100%;
   height: 7px;
   left: 0;
   box-shadow: 0 1px 0 #737373,inset 0 1px 1px #131313;
@@ -273,7 +297,7 @@ THE SOFTWARE.
   webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 1px #131313;
 }
 
-#butter-timeline .butter-timebar-scrubber-container .fill-bar {
+#butter-timeline .time-bar-scrubber-container .fill-bar {
   background: none repeat scroll 0 0 rgba( 200, 200, 140, 0.2 );
   border-radius: 15px 15px 15px 15px;
   height: 4px;
@@ -284,7 +308,7 @@ THE SOFTWARE.
   width: 0px;
 }
 
-#butter-timeline .butter-timebar-scrubber-node {
+#butter-timeline .time-bar-scrubber-node {
   border: 2px solid #bbb;
   background: #fff;
   width: 10px;
@@ -297,18 +321,18 @@ THE SOFTWARE.
   cursor: pointer;
 }
 
-#butter-timeline .butter-timebar-scrubber-line {
+#butter-timeline .time-bar-scrubber-line {
   background: rgba( 200, 0, 0,  0.7);
   position: absolute;
   top: 12px;
   left: 3px;
   width: 4px;
-  height: 210px;
+  height: 220px;
   cursor: pointer;
   z-index: 2147483647;
 }
 
-#butter-timeline .butter-timebar-canvas-container {
+#butter-timeline .time-bar-canvas-container {
   position: absolute;
   left: 0px;
   top: 13px;
@@ -317,7 +341,7 @@ THE SOFTWARE.
   width: 100%;
 }
 
-#butter-timeline .butter-timebar canvas {
+#butter-timeline .time-bar canvas {
   height: 27px;
 }
 
@@ -348,7 +372,7 @@ THE SOFTWARE.
   cursor: pointer;
 }
 
-#butter-timeline-status-bar {
+#butter-status-bar {
   box-shadow: inset 0 1px 0 #5d5d5d;
   moz-box-shadow: inset 0 1px 0 #5d5d5d;
   o-box-shadow: inset 0 1px 0 #5d5d5d;
@@ -367,13 +391,13 @@ THE SOFTWARE.
   user-select: none;
 }
 
-#butter-timeline-status-bar div {
+#butter-status-bar div {
   margin: 0;
   padding: 0;
   width: 100%;
 }
 
-#butter-timeline-status-bar div div {
+#butter-status-bar div div {
   border-radius: 5px;
   moz-border-radius: 5px;
   o-border-radius: 5px;
@@ -397,13 +421,13 @@ THE SOFTWARE.
   transition: max-width 0.5s;
 }
 
-#butter-timeline-status-bar div div:hover {
+#butter-status-bar div div:hover {
   max-width: 300px;
   width: 300px;
   background: #000;
 }
 
-#butter-timeline-status-bar div div .media-url {
+#butter-status-bar div div .media-url {
   white-space: nowrap;
   background: transparent;
   font-size: .8em;
@@ -422,41 +446,40 @@ THE SOFTWARE.
   box-shadow: none;
 }
 
-#butter-timeline-status-bar div div .media-url:hover {
+#butter-status-bar div div .media-url:hover {
   max-width: 280px;
   width: 280px;
 }
 
-#butter-timeline .butter-timeline-media {
-  position: absolute;
-  width: 85%;
-  height: 250px;
-  top: 50px;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-}
-
-#butter-timeline .butter-timeline-media-container {
-  position: absolute;
-  width: 100%;
+#butter-timeline .media-instance {
+  height: 260px;
+  padding: 0 150px 0 115px;
+  position: relative;
   top: 40px;
-  width: 90%;
-  left: 10%;
 }
 
-#butter-timeline .butter-timeline-scroll {
+#butter-timeline .media-container {
+  position: relative;
+  top: 55px;
+  padding: 0;
+  margin: 0;
+  height: 185px;
+}
+
+#butter-timeline .scroll-bar {
   background: #222;
   border-radius: 15px;
   position: absolute;
+	box-shadow: 0 1px 0 #656565;
+	moz-box-shadow: 0 1px 0 #656565;
+	o-box-shadow: 0 1px 0 #656565;
   -moz-user-select: none;
   -webkit-user-select: none;
   -o-user-select: none;
   user-select: none;
 }
 
-#butter-timeline .butter-timeline-scroll-handle {
+#butter-timeline .scroll-handle {
   height: 100%;
   position: absolute;
   background: #333;
@@ -469,28 +492,28 @@ THE SOFTWARE.
 
 }
 
-#butter-timeline .butter-timeline-scroll-handle:hover {
+#butter-timeline .scroll-handle:hover {
   background: #345;
   cursor: pointer;
 }
 
-#butter-timeline .butter-timeline-scroll-h {
-  bottom: -14px;
+#butter-timeline .scroll-bar-h {
+  bottom: -15px;
   width: 100%;
   height: 10px;
   left: 0;
 }
 
-#butter-timeline .butter-timeline-scroll-v {
-  right: -14px;
+#butter-timeline .scroll-bar-v {
+  right: -16px;
   width: 10px;
   height: 100%;
   top: 0;
 }
 
-#butter-timeline .butter-timeline-tracks {
+#butter-timeline .tracks-container {
   width: 100%;
-  height: 180px;
+  height: 100%;
   overflow: hidden;
   box-shadow: inset 0 0 6px #131313;
   webkit-box-shadow: inset 0 0 6px #131313;
@@ -504,14 +527,14 @@ THE SOFTWARE.
   webkit-border-radius: 5px;
 }
 
-#butter-timeline .butter-timeline-tracks .trackliner-root {
+#butter-timeline .tracks-container .trackliner-root {
   width: 100%;
   height: 210px;
   padding: 0px 0px 0px 0px;
   margin: 0px 0px 0px 0px;
 } 
 
-#butter-timeline .butter-timeline-tracks .trackliner-container {
+#butter-timeline .tracks-container .trackliner-container {
   width: 100%;
   position: relative;
   background: transparent;
@@ -521,7 +544,7 @@ THE SOFTWARE.
   padding-bottom: 7px;
 }
 
-#butter-timeline .butter-timeline-tracks .trackliner-event {
+#butter-timeline .tracks-container .trackliner-event {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
   moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
   o-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -545,7 +568,7 @@ THE SOFTWARE.
   position: absolute;
 }
 
-#butter-timeline .butter-timeline-tracks .trackliner-track {
+#butter-timeline .tracks-container .trackliner-track {
   width: 100%;
   box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
   border-radius: 6px;
@@ -566,7 +589,7 @@ THE SOFTWARE.
   position: relative;
 }
 
-#butter-timeline .butter-timeline-tracks .trackliner-track .track-title {
+#butter-timeline .tracks-container .trackliner-track .track-title {
   position: absolute;
   left: 5px;
   top: 50%;
@@ -615,30 +638,32 @@ THE SOFTWARE.
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ff00', endColorstr='#00c100',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-plugin {
+#butter-timeline #butter-plugin {
+  z-index: 2147483647;
   border-radius: 6px;
 	moz-border-radius: 6px;
 	o-border-radius: 6px;
 	webkit-border-radius: 6px;
+  font-size: 80%;
   background-image: -moz-linear-gradient(center bottom,#6E6E6E 0,#7D7D7D 100%);
 	background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#6E6E6E),color-stop(1,#7D7D7D));
 	border: 1px solid #333;
 	box-shadow: 0 1px 0 #656565;
-	height: 180px;
 	moz-box-shadow: 0 1px 0 #656565;
 	o-box-shadow: 0 1px 0 #656565;
-	padding: 0;
+	padding: 3px;
 	position: absolute;
-	right: 20px;
-	top: 89px;
+	right: 10px;
+	top: 92px;
+	height: 180px;
 	webkit-box-shadow: 0 1px 0 #656565;
-	width: 120px;
+	width: 100px;
 }
 
-.butter-timeline-zoombar {
+#butter-timeline .zoom-bar {
   position: absolute;
-  left: 1%;
-  bottom: 14px;
-  width: 8.5%;
+  left: 5px;
+  bottom: 5px;
+  width: 102px;
   height: 10px;
 }

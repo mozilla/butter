@@ -1,19 +1,17 @@
 define( [], function(){
 
-  return function( media, rootElement, friendContainer ){
+  return function( media, friendContainer ){
 
-    var _root = rootElement,
-        _media = media,
+    var _media = media,
         _container = document.createElement( "div" ),
         _list = document.createElement( "div" ),
         _tracks = {},
         _this = this;
 
-    _container.className = "handle-container";
+    _container.className = "track-handle-container";
     _list.className = "handle-list";
 
     _container.appendChild( _list );
-    _root.appendChild( _container );
 
     $( _list ).sortable({
       axis: "y",
@@ -46,7 +44,7 @@ define( [], function(){
       var trackId = e.data.id,
           trackDiv = document.createElement( "div" );
       trackDiv.className = "track-handle";
-      trackDiv.id = "butter-timeline-track-handle-" + trackId;
+      trackDiv.id = "track-handle-" + trackId;
       trackDiv.appendChild( document.createTextNode( e.data.name ) );
       _list.appendChild( trackDiv );
       _tracks[ trackId ] = {
@@ -68,10 +66,18 @@ define( [], function(){
 
     this.update = function(){
       _container.scrollTop = friendContainer.scrollTop;
-      _container.style.height = friendContainer.getBoundingClientRect().height + "px";
     }; //update
 
     _this.update();
+
+    Object.defineProperties( this, {
+      element: {
+        enumerable: true,
+        get: function(){
+          return _container;
+        }
+      }
+    });
 
   }; //TrackHandles
 

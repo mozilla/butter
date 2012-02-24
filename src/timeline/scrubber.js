@@ -44,9 +44,9 @@ define( [], function(){
         _lastScroll = -1,
         _this = this;
 
-    _container.className = "butter-timebar-scrubber-container";
-    _node.className = "butter-timebar-scrubber-node";
-    _line.className = "butter-timebar-scrubber-line";
+    _container.className = "time-bar-scrubber-container";
+    _node.className = "time-bar-scrubber-node";
+    _line.className = "time-bar-scrubber-line";
     _fill.className = "fill-bar";
 
     _node.appendChild( _line );

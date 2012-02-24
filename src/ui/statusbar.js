@@ -29,7 +29,7 @@ define( [], function(){
         _list = document.createElement( "div" ),
         _media = {};
 
-    _rootElement.id = "butter-timeline-status-bar";
+    _rootElement.id = "butter-status-bar";
     _rootElement.appendChild( _list );
     parentElement.appendChild( _rootElement );
 

@@ -25,7 +25,7 @@ THE SOFTWARE.
 define( [], function(){
   const ZOOM_LEVELS = 6;
 
-  return function( rootElement, zoomCallback ){
+  return function( zoomCallback ){
 
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
@@ -35,11 +35,10 @@ define( [], function(){
         _elementWidth,
         _this = this;
 
-    _element.className = "butter-timeline-zoombar butter-timeline-scroll";
-    _handle.className = "butter-timeline-scroll-handle";
+    _element.className = "zoom-bar scroll-bar";
+    _handle.className = "scroll-handle";
 
     _element.appendChild( _handle );
-    rootElement.appendChild( _element );
 
     function onMouseUp(){
       window.removeEventListener( "mouseup", onMouseUp, false );
@@ -79,5 +78,14 @@ define( [], function(){
       _this.update();
     }, false );
 
-  };
+    Object.defineProperties( this, {
+      element: {
+        enumerable: true,
+        get: function(){
+          return _element;
+        }
+      }
+    });
+
+  }; //ZoomBar
 });
