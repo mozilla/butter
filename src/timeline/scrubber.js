@@ -127,8 +127,9 @@ define( [], function(){
     });
 
     _media.listen( "mediapause", function( e ){
-      if( !_isScrubbing )
+      if( !_isScrubbing ){
         _isPlaying = false;
+      }
       
       clearInterval( _checkMediaInterval );
     });
