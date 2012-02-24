@@ -49,6 +49,11 @@ define( [ "core/eventmanager" ], function( EventManager ) {
     });
 
     this.open = function( trackEvent ) {
+
+      function onTrackEventUpdated( e ){
+        butter.dialog.send( _dialogName, "trackeventupdated", trackEvent.popcornOptions );
+      } //onTrackEventUpdated
+
       butter.dialog.open( _dialogName, {
         open: function( e ) {
           var targets = [];
@@ -60,9 +65,13 @@ define( [ "core/eventmanager" ], function( EventManager ) {
             popcornOptions: trackEvent.popcornOptions,
             targets: targets
           });
+          trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
         },
         submit: function( e ) {
           trackEvent.update( e.data );
+        },
+        close: function( e ){
+          trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
         }
       });
     }; //open

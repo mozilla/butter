@@ -5,6 +5,7 @@
       (function(){
         var _comm = new Comm(),
             _counter = 0,
+            
             _manifest = {};
 
         document.addEventListener( "DOMContentLoaded", function( e ){
@@ -36,7 +37,14 @@
           okButton.addEventListener( "click", okPressed, false );
           cancelButton.addEventListener( "click", cancelPressed, false );
 
-          _comm.listen( "trackeventdata", function( e ) {
+          _comm.listen( "trackeventupdated", function( e ){
+            for( var item in _manifest ){
+              var element = document.getElementById( item );
+              element.value = e.data[ item ];
+            } //for
+          });
+
+          _comm.listen( "trackeventdata", function( e ){
             var popcornOptions = e.data.popcornOptions,
                 targets = e.data.targets,
                 medias = e.data.medias;
