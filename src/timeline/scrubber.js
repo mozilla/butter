@@ -70,7 +70,7 @@ define( [], function(){
     function onMouseUp( e ){
       if( _isPlaying ){
         _media.play();
-        _isScrubbing =  false;  
+        _isScrubbing = false;  
       }
 
       window.removeEventListener( "mouseup", onMouseUp, false );
