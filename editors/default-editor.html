@@ -14,12 +14,16 @@
               okPressed,
               cancelPressed;
 
-          okPressed = function( e ) {
+          function sendData(){
             var popcornOptions = {};
             for( var item in _manifest ) {
               popcornOptions[ item ] = document.getElementById( item ).value;
             }
             _comm.send( "submit", popcornOptions);
+          } //sendData
+
+          okPressed = function( e ) {
+            sendData();
             _comm.send( "close" );
           };
 
@@ -80,9 +84,15 @@
                         select.value = "Media Element";
                     }
                     col2.appendChild( select );
+
+                    select.addEventListener( "change", sendData, false );
                   } else {
-                    col2.innerHTML = "<" + elem + " id='" + item + 
-                    "' style='width:100%' value='" + popcornOptions[ item ] + "'></" + elem + ">";
+                    var newItem = document.createElement( elem );
+                    newItem.id = item;
+                    newItem.style.width = "100%";
+                    newItem.value = popcornOptions[ item ];
+                    col2.appendChild( newItem );
+                    newItem.addEventListener( "change", sendData, false );
                   }
 
                   row.appendChild( col1 );
