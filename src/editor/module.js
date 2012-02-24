@@ -35,24 +35,25 @@ THE SOFTWARE.
             EventManager, 
             TrackEvent,
             Editor
-          ) {
+          ){
 
-    var EventEditor = function( butter, options ) {
+    return function( butter, options ){
 
       options = options || {};
 
       var _editors = {},
           _logger = new Logger( "EventEditor" ),
+          _defaultEditor = options.default || DEFAULT_EDITOR,
           _em = new EventManager( this ),
           _this = this;
 
-      this.edit = function( trackEvent ) {
-        if ( !trackEvent || !( trackEvent instanceof TrackEvent ) ) {
+      this.edit = function( trackEvent ){
+        if ( !trackEvent || !( trackEvent instanceof TrackEvent ) ){
           throw new Error( "Can't editor undefined trackEvent" );
         } //if
 
         var type = trackEvent.type;
-        if ( !_editors[ type ] ) {
+        if ( !_editors[ type ] ){
           type = "default";
         } //if
 
@@ -61,7 +62,7 @@ THE SOFTWARE.
         return editor;
       }; //edit
 
-      this.add = function( source, type, frameType ) {
+      this.add = function( source, type, frameType ){
         if ( !type || !source ) {
           throw new Error( "Can't create an editor without a plugin type and editor source" );
         } //if
@@ -70,7 +71,7 @@ THE SOFTWARE.
         return editor;
       }; //add
             
-      this.remove = function( type ) {
+      this.remove = function( type ){
         if ( !type ) {
           return;
         }
@@ -79,10 +80,8 @@ THE SOFTWARE.
        return oldSource;
       }; //remove
 
-      var defaultEditor = options.defaultEditor || DEFAULT_EDITOR;
-
-      butter.listen( "ready", function( e ) {
-        _this.add( defaultEditor, "default" );
+      butter.listen( "ready", function( e ){
+        _this.add( _defaultEditor, "default" );
       });
 
       butter.listen( "trackeventeditrequested", function( e ){
@@ -91,6 +90,5 @@ THE SOFTWARE.
 
     }; //EventEditor
 
-    return EventEditor;
   }); //define
 })();
