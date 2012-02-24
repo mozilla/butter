@@ -181,8 +181,8 @@ THE SOFTWARE.
 }
 
 #butter-timeline-status-bar div div:hover {
-  max-width: 300px;
-  width: 300px;
+  max-width: 400px;
+  width: 400px;
   background: #000;
 }
 
@@ -196,7 +196,7 @@ THE SOFTWARE.
   text-decoration: none;
   vertical-align: baseline;
   color: #ddd;
-  max-width: 90%;
+  max-width: 97%;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   cursor: pointer;
