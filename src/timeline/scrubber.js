@@ -84,7 +84,7 @@ define( [], function(){
       _media.currentTime = ( diff + _tracksContainer.scrollLeft ) / _tracksContainer.scrollWidth * _media.duration;
     } //onMouseMove
 
-    function onMouseDown( e ){
+    function onScrubberMouseDown( e ){
       _mousePos = e.pageX - _node.offsetLeft;
 
       if( _isPlaying ){
@@ -92,18 +92,20 @@ define( [], function(){
         _isScrubbing = true;
       }
 
-      _node.removeEventListener( "mousedown", onMouseDown, false );
+      _node.removeEventListener( "mousedown", onScrubberMouseDown, false );
       window.addEventListener( "mousemove", onMouseMove, false );
       window.addEventListener( "mouseup", onMouseUp, false );
     } //onMouesDown
 
-    _node.addEventListener( "mousedown", onMouseDown, false );
-    _container.addEventListener( "mousedown", function( e ){
+    var onMouseDown = this.onMouseDown = function( e ){
       var pos = e.pageX - _container.getBoundingClientRect().left;
       _media.currentTime = ( pos + _tracksContainer.scrollLeft ) / _tracksContainer.scrollWidth * _media.duration;
       setNodePosition();
-      onMouseDown( e );
-    }, false );
+      onScrubberMouseDown( e );
+    }; //onMouseDown
+
+    _node.addEventListener( "mousedown", onScrubberMouseDown, false );
+    _container.addEventListener( "mousedown", onMouseDown, false );
 
     this.update = function( zoom ){
       _zoom = zoom;
