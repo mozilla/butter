@@ -24,10 +24,9 @@ THE SOFTWARE.
 
 define( [], function(){
 
-  function Vertical( parentElement, controlElement ){
+  function Vertical( controlElement ){
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
-        _parent = parentElement,
         _control = controlElement,
         _elementHeight,
         _controlHeight,
@@ -35,11 +34,10 @@ define( [], function(){
         _mousePos = 0,
         _this = this;
 
-    _element.className = "butter-timeline-scroll butter-timeline-scroll-v";
-    _handle.className = "butter-timeline-scroll-handle";
+    _element.className = "scroll-bar scroll-bar-v";
+    _handle.className = "scroll-handle";
 
     _element.appendChild( _handle );
-    _parent.appendChild( _element );
 
     function setup(){
       _elementHeight = _element.getBoundingClientRect().height;
@@ -76,11 +74,12 @@ define( [], function(){
     } //onMouseDown
 
     this.update = function(){
+      setup();
     }; //update
 
     _element.addEventListener( "click", function( e ) {
       // bail early if this event is coming from the handle
-      if( e.srcElement.className.search( "butter-timeline-scroll-handle" ) === 0 ) {
+      if( e.srcElement === _handle || e.button > 0 ) {
         return;
       }
 
@@ -99,17 +98,25 @@ define( [], function(){
       _control.scrollTop = ( _control.scrollHeight - _elementHeight ) * p;
     }, false);
 
-    _control.addEventListener( "resize", setup, false );
+    window.addEventListener( "resize", setup, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
 
     setup();
 
+    Object.defineProperties( this, {
+      element: {
+        enumerable: true,
+        get: function(){
+          return _element;
+        }
+      }
+    });
+
   } //Vertical
 
-  function Horizontal( parentElement, controlElement ){
+  function Horizontal( controlElement ){
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
-        _parent = parentElement,
         _control = controlElement,
         _elementWidth,
         _controlWidth,
@@ -117,11 +124,10 @@ define( [], function(){
         _mousePos = 0,
         _this = this;
 
-    _element.className = "butter-timeline-scroll butter-timeline-scroll-h";
-    _handle.className = "butter-timeline-scroll-handle";
+    _element.className = "scroll-bar scroll-bar-h";
+    _handle.className = "scroll-handle";
 
     _element.appendChild( _handle );
-    _parent.appendChild( _element );
 
     function setup(){
       _elementWidth = _element.getBoundingClientRect().width;
@@ -161,7 +167,7 @@ define( [], function(){
 
     _element.addEventListener( "click", function( e ) {
       // bail early if this event is coming from the handle
-      if( e.srcElement.className.search( "butter-timeline-scroll-handle" ) === 0 ) {
+      if( e.srcElement === _handle || e.button > 0 ) {
         return;
       }
 
@@ -180,7 +186,7 @@ define( [], function(){
       _control.scrollLeft = ( _control.scrollWidth - _elementWidth ) * p;
     }, false);
 
-    _control.addEventListener( "resize", setup, false );
+    window.addEventListener( "resize", setup, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
 
     this.update = function(){
@@ -188,6 +194,15 @@ define( [], function(){
     }; //update
 
     setup();
+
+    Object.defineProperties( this, {
+      element: {
+        enumerable: true,
+        get: function(){
+          return _element;
+        }
+      }
+    });
 
   } //Horizontal
 

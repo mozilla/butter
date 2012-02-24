@@ -35,15 +35,26 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
         _logger = new Logger( _id ),
         _em = new EventManager( this ),
         _name = options.name || _id,
+        _order = options.order || 0,
         _this = this;
 
     Object.defineProperties( this, {
+      order: {
+        enumerable: true,
+        get: function(){
+          return _order;
+        },
+        set: function( val ){
+          _order = val;
+          _em.dispatch( "trackorderchanged", _order );
+        }
+      },
       target: {
         enumerable: true,
-        get: function() {
+        get: function(){
           return _target;
         },
-        set: function( val ) {
+        set: function( val ){
           _target = val;
           _em.dispatch( "tracktargetchanged", _this );
           for( var i=0, l=_trackEvents.length; i<l; i++ ) {
@@ -56,20 +67,20 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
       name: {
         enumerable: true,
         configurable: false,
-        get: function() {
+        get: function(){
           return _name;
         }
       },
       id: {
         enumerable: true,
         configurable: false,
-        get: function() {
+        get: function(){
           return _id;
         }
       },
       json: {
         enumerable: true,
-        get: function() {
+        get: function(){
           var exportJSONTrackEvents = [];
           for ( var i=0, l=_trackEvents.length; i<l; ++i ) {
             exportJSONTrackEvents.push( _trackEvents[ i ].json );
@@ -80,13 +91,13 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
             trackEvents: exportJSONTrackEvents
           };
         },
-        set: function( importData ) {
-          if ( importData.name ) {
+        set: function( importData ){
+          if( importData.name ){
             name = importData.name;
           }
-          if ( importData.trackEvents ) {
+          if( importData.trackEvents ){
             var importTrackEvents = importData.trackEvents;
-            for ( var i=0, l=importTrackEvents.length; i<l; ++i ) {
+            for( var i=0, l=importTrackEvents.length; i<l; ++i ){
               var newTrackEvent = new TrackEvent();
               newTrackEvent.json = importTrackEvents[ i ];
               _this.addTrackEvent( newTrackEvent );
@@ -97,7 +108,7 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
       trackEvents: {
         enumerable: true,
         configurable: false,
-        get: function() {
+        get: function(){
           return _trackEvents;
         }
       }

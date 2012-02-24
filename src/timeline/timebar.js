@@ -24,22 +24,20 @@
 
 define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
-  return function( parentElement, media, tracksContainer ){ 
+  return function( media, tracksContainer ){ 
 
     var _element = document.createElement( "div" ),
         _canvas = document.createElement( "canvas" ),
         _canvasContainer = document.createElement( "div" ),
-        _parent = parentElement,
         _media = media,
         _tracksContainer = tracksContainer,
         _scrubber = new Scrubber( _element, _media, _tracksContainer ),
         _this = this;
 
-    _element.className = "butter-timebar";
-    _canvasContainer.className = "butter-timebar-canvas-container";
+    _element.className = "time-bar";
+    _canvasContainer.className = "time-bar-canvas-container";
     _canvasContainer.appendChild( _canvas );
     _element.appendChild( _canvasContainer );
-    _parent.appendChild( _element );
 
     _tracksContainer.addEventListener( "scroll", function( e ){
       _canvasContainer.scrollLeft = _tracksContainer.scrollLeft;
@@ -117,6 +115,20 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       _scrubber.update( zoom );
     }; //update
 
-  };
+    this.destroy = function(){
+      _scrubber.destroy();
+    }; //destroy
+
+
+    Object.defineProperties( this, {
+      element: {
+        enumerable: true,
+        get: function(){
+          return _element;
+        }
+      }
+    });
+
+  }; //TimeBar
 
 });

@@ -49,21 +49,32 @@ THE SOFTWARE.
           _popcornOptions = mediaOptions.popcornOptions,
           _mediaUpdateInterval,
           _popcornWrapper = new PopcornWrapper( _id, {
-            timeupdate: function(){
-              _currentTime = _popcornWrapper.currentTime;
-              _em.dispatch( "mediatimeupdate", _this );
-            },
-            pause: function(){
-              clearInterval( _mediaUpdateInterval );
-              _em.dispatch( "mediapause" );
-            },
-            playing: function(){
-              _mediaUpdateInterval = setInterval( function(){
+            popcornEvents: {
+              muted: function(){
+                _em.dispatch( "mediamuted", _this );
+              },
+              unmuted: function(){
+                _em.dispatch( "mediaunmuted", _this );
+              },
+              volumechange: function(){
+                _em.dispatch( "mediavolumechange", _popcornWrapper.volume );
+              },
+              timeupdate: function(){
                 _currentTime = _popcornWrapper.currentTime;
-              }, 10 );
-              _em.dispatch( "mediaplaying" );
-            },
-            timeout: function(){
+                _em.dispatch( "mediatimeupdate", _this );
+              },
+              pause: function(){
+                clearInterval( _mediaUpdateInterval );
+                _em.dispatch( "mediapause" );
+              },
+              playing: function(){
+                _mediaUpdateInterval = setInterval( function(){
+                  _currentTime = _popcornWrapper.currentTime;
+                }, 10 );
+                _em.dispatch( "mediaplaying" );
+              },
+              timeout: function(){
+              }
             },
             prepare: function(){
               _this.duration = _popcornWrapper.duration;
@@ -194,35 +205,44 @@ THE SOFTWARE.
           },
           enumerable: true
         },
+        muted: {
+          enumerable: true,
+          get: function(){
+            return _popcornWrapper.muted;
+          },
+          set: function( val ){
+            _popcornWrapper.muted = val;
+          }
+        },
         name: {
-          get: function() {
+          get: function(){
             return _name;
           },
           enumerable: true
         },
         id: {
-          get: function() {
+          get: function(){
             return _id;
           },
           enumerable: true
         },
         tracks: {
-          get: function() {
+          get: function(){
             return _tracks;
           },
           enumerable: true
         },
         currentTime: {
-          get: function() {
+          get: function(){
             return _currentTime;
           },
-          set: function( time ) {
-            if ( time !== undefined ) {
+          set: function( time ){
+            if( time !== undefined ){
               _currentTime = time;
-              if ( _currentTime < 0 ) {
+              if( _currentTime < 0 ){
                 _currentTime = 0;
               }
-              if ( _currentTime > _duration ) {
+              if( _currentTime > _duration ){
                 _currentTime = _duration;
               } //if
               _popcornWrapper.currentTime = _currentTime;
@@ -232,11 +252,11 @@ THE SOFTWARE.
           enumerable: true
         },
         duration: {
-          get: function() {
+          get: function(){
             return _duration;
           },
-          set: function( time ) {
-            if ( time ) {
+          set: function( time ){
+            if( time ){
               _duration = time;
               _logger.log( "duration changed to " + _duration );
               _em.dispatch( "mediadurationchanged", _this );
@@ -245,9 +265,9 @@ THE SOFTWARE.
           enumerable: true
         },
         json: {
-          get: function() {
+          get: function(){
             var exportJSONTracks = [];
-            for ( var i=0, l=_tracks.length; i<l; ++i ) {
+            for( var i=0, l=_tracks.length; i<l; ++i ){
               exportJSONTracks.push( _tracks[ i ].json );
             }
             return {
@@ -259,19 +279,19 @@ THE SOFTWARE.
               tracks: exportJSONTracks
             };
           },
-          set: function( importData ) {
-            if ( importData.name ) {
+          set: function( importData ){
+            if( importData.name ) {
               _name = importData.name;
             }
-            if ( importData.target ) {
+            if( importData.target ){
               _this.target = importData.target;
             }
-            if ( importData.url ) {
+            if( importData.url ){
               _this.url = importData.url;
             }
-            if ( importData.tracks ) {
+            if( importData.tracks ){
               var importTracks = importData.tracks;
-              for ( var i=0, l=importTracks.length; i<l; ++i ) {
+              for( var i=0, l=importTracks.length; i<l; ++i ){
                 var newTrack = new Track();
                 newTrack.json = importTracks[ i ];
                 _this.addTrack( newTrack );
@@ -281,10 +301,10 @@ THE SOFTWARE.
           enumerable: true
         },
         registry: {
-          get: function() {
+          get: function(){
             return _registry;
           },
-          set: function( val ) {
+          set: function( val ){
             _registry = val;
           },
           enumerable: true
@@ -302,6 +322,15 @@ THE SOFTWARE.
           },
           set: function( val ){
             _popcornWrapper.paused = val;
+          }
+        },
+        volume: {
+          enumerable: true,
+          get: function(){
+            return _popcornWrapper.volume;
+          },
+          set: function( val ){
+            _popcornWrapper.volume = val;
           }
         }
       });
