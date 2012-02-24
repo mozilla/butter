@@ -56,11 +56,13 @@ define( [], function(){
     } //onMouseMove
 
     function onMouseDown( e ){
-      var handleX = _handle.offsetLeft;
-      _mousePos = e.pageX - handleX;
-      window.addEventListener( "mouseup", onMouseUp, false );
-      window.addEventListener( "mousemove", onMouseMove, false );
-      _handle.removeEventListener( "mousedown", onMouseDown, false );
+      if( e.button === 0 ){
+        var handleX = _handle.offsetLeft;
+        _mousePos = e.pageX - handleX;
+        window.addEventListener( "mouseup", onMouseUp, false );
+        window.addEventListener( "mousemove", onMouseMove, false );
+        _handle.removeEventListener( "mousedown", onMouseDown, false );
+      } //if
     } //onMouseDown
 
     _handle.addEventListener( "mousedown", onMouseDown, false );

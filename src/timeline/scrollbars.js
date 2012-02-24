@@ -66,11 +66,13 @@ define( [], function(){
     } //onMouseMove
 
     function onMouseDown( e ){
-      var handleY = _handle.offsetTop;
-      _mousePos = e.pageY - handleY;
-      window.addEventListener( "mouseup", onMouseUp, false );
-      window.addEventListener( "mousemove", onMouseMove, false );
-      _handle.removeEventListener( "mousedown", onMouseDown, false );
+      if( e.button === 0 ){
+        var handleY = _handle.offsetTop;
+        _mousePos = e.pageY - handleY;
+        window.addEventListener( "mouseup", onMouseUp, false );
+        window.addEventListener( "mousemove", onMouseMove, false );
+        _handle.removeEventListener( "mousedown", onMouseDown, false );
+      } //if
     } //onMouseDown
 
     this.update = function(){
@@ -127,11 +129,13 @@ define( [], function(){
     } //onMouseMove
 
     function onMouseDown( e ){
-      var handleX = _handle.offsetLeft;
-      _mousePos = e.pageX - handleX;
-      window.addEventListener( "mouseup", onMouseUp, false );
-      window.addEventListener( "mousemove", onMouseMove, false );
-      _handle.removeEventListener( "mousedown", onMouseDown, false );
+      if( e.button === 0 ){
+        var handleX = _handle.offsetLeft;
+        _mousePos = e.pageX - handleX;
+        window.addEventListener( "mouseup", onMouseUp, false );
+        window.addEventListener( "mousemove", onMouseMove, false );
+        _handle.removeEventListener( "mousedown", onMouseDown, false );
+      } //if
     } //onMouseDown
 
     _control.addEventListener( "resize", setup, false );
