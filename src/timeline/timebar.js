@@ -45,6 +45,8 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       _canvasContainer.scrollLeft = _tracksContainer.scrollLeft;
     }, false );
 
+    _canvas.addEventListener( "mousedown", _scrubber.onMouseDown, false );
+
     this.update = function( zoom ) {
       var tracklinerContainer = _tracksContainer.firstChild,
           tracklinerWidth = tracklinerContainer.getBoundingClientRect().width;
