@@ -29,7 +29,7 @@ define( [], function() {
         _media = media,
         _bEvent = bEvent,
         _tlEvent = tlEvent,
-        _onSelect = options.select || function(){},
+        _onMouseDown = options.mousedown, 
         _this = this;
 
     function onDurationChanged( e ){
@@ -54,9 +54,16 @@ define( [], function() {
       } //if
     });
 
-    _tlEvent.listen( "trackeventclicked", function( e ){
+    _bEvent.listen( "trackeventselected", function( e ){
       _tlEvent.selected = true;
-      _onSelect({ trackEvent: _bEvent, originalEvent: e.data });
+    });
+
+    _bEvent.listen( "trackeventdeselected", function( e ){
+      _tlEvent.selected = false;
+    });
+
+    _tlEvent.listen( "trackeventmousedown", function( e ){
+      _onMouseDown({ trackEvent: _bEvent, originalEvent: e.data });
     });
 
     _tlEvent.listen( "trackeventdoubleclicked", function( e ){
@@ -78,6 +85,10 @@ define( [], function() {
         get: function(){ return _bEvent; }
       }
     });
+
+    if( _bEvent.selected ){
+      _tlEvent.selected = true;
+    } //if
 
   } //TrackEvent
 

@@ -17,7 +17,8 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
         _popcornOptions = options.popcornOptions || {
           start: 0,
           end: 1
-        };
+        },
+        _selected = false;
 
     if( !_type ){
       _logger.log( "Warning: " + _id + " has no type." );
@@ -38,31 +39,48 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
     Object.defineProperties( this, {
       popcornOptions: {
         enumerable: true,
-        get: function() {
+        get: function(){
           return util.clone( _popcornOptions );
         }
       },
       type: {
         enumerable: true,
-        get: function() {
+        get: function(){
           return _type;
         }
       },
       name: {
         enumerable: true,
-        get: function() {
+        get: function(){
           return _name;
         }
       },
       id: {
         enumerable: true,
-        get: function() {
+        get: function(){
           return _id;
+        }
+      },
+      selected: {
+        enumerable: true,
+        get: function(){
+          return _selected;
+        },
+        set: function( val ){
+          if( val !== _selected ){
+            _selected = val;
+            if( _selected ){
+              _em.dispatch( "trackeventselected" );
+            }
+            else {
+              _em.dispatch( "trackeventdeselected" );
+            } //if
+          } //if
         }
       },
       json: {
         enumerable: true,
-        get: function() {
+        get: function(){
           return {
             id: _id,
             type: _type,
@@ -71,9 +89,9 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
             name: _name
           };
         },
-        set: function( importData ) {
+        set: function( importData ){
           _type = _popcornOptions.type = importData.type;
-          if ( importData.name ) {
+          if( importData.name ){
             _name = importData.name;
           }
           _popcornOptions = importData.popcornOptions;
