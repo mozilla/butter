@@ -33,7 +33,7 @@
           ok( butter.getTargets().length === 1, "Targets successfully scraped" );
           ok( butter.getTargets()[ 0 ].getName() === "div2", "Targets getName function working" );
           ok( butter.getAllMedia().length === 1, "Media targets successfully scraped" );
-          ok( butter.getAllMedia()[ 0 ].getTarget() === "outerVideo", "Media targets getTarget function working" );
+          ok( butter.getAllMedia()[ 0 ].getTarget( "id", "outerVideo" ) === "outerVideo", "Media targets getTarget function working" );
           ok( butter.getAllMedia()[ 0 ].getUrl() === "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved_ST.webm", "Media targets getUrl function working" );
           butter.buildPopcorn( butter.getAllMedia()[ 0 ], function() {
             test( "Popcorn functionality", function() {

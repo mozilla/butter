@@ -47,8 +47,8 @@
         ok( butter.media.length === 1, "1 media" );
         ok( butter.media[ 0 ].url === "../sample.oga", "media url is correct" );
         ok( butter.targets.length === 2, "2 targets" );
-        ok( butter.getTarget({ name: "sample-div-1" }), "target1 is correct" );
-        ok( butter.getTarget({ name: "sample-div-2" }), "target2 is correct" );
+        ok( butter.getTargetByType( "name", "sample-div-1" ), "target1 is correct" );
+        ok( butter.getTargetByType( "name", "sample-div-2" ), "target2 is correct" );
       }
     });
   });
