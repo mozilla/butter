@@ -160,14 +160,15 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     }, false);
 
     function select( e ){
-      _this.deselectOthers();
       _selected = true;
-      eventManager.dispatch( "trackeventselecteded", _this );
+      _eventManager.dispatch( "trackeventselecteded", e );
+      _element.setAttribute( "selected", true );
     } //select
 
     function deselect( e ) {
       _selected = false;
-      eventManager.dispatch( "trackeventdeselecteded", _this );
+      _eventManager.dispatch( "trackeventdeselecteded", _this );
+      _element.removeAttribute( "selected" );
     } //deselect
 
     var handles;

@@ -57,6 +57,7 @@ define( [
         _tracksContainer = document.createElement( "div" ),
         _trackliner,
         _tracks = {},
+        _selectedTracks = [],
         _initialized = false,
         _hScrollBar,
         _vScrollBar,
@@ -116,11 +117,30 @@ define( [
       }
     } //onTrackEventRequested
 
+    function onTrackEventSelected( e ){
+      var trackEvent = e.trackEvent,
+          originalEvent = e.originalEvent;
+
+      if( !originalEvent.shiftKey ){
+        for( var t in _tracks ){
+          if( _tracks.hasOwnProperty( t ) ){
+            _tracks[ t ].deselectEvents( trackEvent );
+          } //if
+        } //for
+        _selectedEvents = [ trackEvent ];
+      }
+      else {
+        _selectedEvents.push( trackEvent );
+      } //if
+    } //onTrackEventSelected
+
     function addTrack( bTrack ){
       var track;
       track = _tracks[ bTrack.id ];
       if( !track ){
-        track = new TrackController( _media, bTrack, _trackliner );
+        track = new TrackController( _media, bTrack, _trackliner, null, {
+          select: onTrackEventSelected
+        });
         _tracks[ bTrack.id ] = track;
         track.zoom = _zoom;
       } //if
@@ -162,7 +182,9 @@ define( [
         if( fromUI ){
           var tlTrack = event.data.track;
           bTrack = new Track();
-          _tracks[ bTrack.id ] = new TrackController( _media, bTrack, _trackliner, tlTrack );
+          _tracks[ bTrack.id ] = new TrackController( _media, bTrack, _trackliner, tlTrack, {
+            select: onTrackEventSelected
+          });
           _media.addTrack( bTrack );
         } //if
       }); //trackadded

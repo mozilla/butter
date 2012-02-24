@@ -24,13 +24,14 @@ THE SOFTWARE.
 
 define( [ "core/trackevent", "core/eventmanager", "./trackevent-controller" ], function( TrackEvent, EventManager, TrackEventController ) {
 
-  function Track( media, bTrack, trackliner, tlTrack ){
+  function Track( media, bTrack, trackliner, tlTrack, options ){
     var _media = media,
         _trackliner = trackliner,
         _bTrack = bTrack,
         _tlTrack = tlTrack,
         _em = new EventManager( this ),
         _events = {},
+        _onSelect = options.select || function(){},
         _this = this;
 
     if( !_tlTrack ){
@@ -49,13 +50,25 @@ define( [ "core/trackevent", "core/eventmanager", "./trackevent-controller" ], f
       delete _events[ bEvent.id ];
     } //removeTrackEvent
 
+    this.deselectEvents = function( except ){
+      for( var e in _events ){
+        if( _events.hasOwnProperty( e ) ){
+          if( _events[ e ].trackEvent !== except ){
+            _events[ e ].view.selected = false;
+          } //if
+        } //if
+      } //for
+    }; //deselectEvents
+
     function addTrackEvent( bEvent ){
       var tlEvent = _tlTrack.createTrackEvent({
         start: bEvent.popcornOptions.start,
         end: bEvent.popcornOptions.end,
         text: bEvent.type
       });
-      _events[ bEvent.id ] = new TrackEventController( _media, bEvent, tlEvent, _trackliner );
+      _events[ bEvent.id ] = new TrackEventController( _media, bEvent, tlEvent, _trackliner, {
+        select: _onSelect
+      });
     } //addTrackEvent
 
     this.destroy = function(){
