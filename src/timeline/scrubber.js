@@ -86,6 +86,12 @@ define( [], function(){
     } //onMouesDown
 
     _node.addEventListener( "mousedown", onMouseDown, false );
+    _container.addEventListener( "mousedown", function( e ){
+      var pos = e.pageX - _container.getBoundingClientRect().left;
+      _media.currentTime = ( pos + _tracksContainer.scrollLeft ) / _tracksContainer.scrollWidth * _media.duration;
+      setNodePosition();
+      onMouseDown( e );
+    }, false );
 
     this.update = function( zoom ){
       _zoom = zoom;
