@@ -42,6 +42,16 @@ define( [
     var _media = {},
         _currentMedia;
 
+    if( butter.ui ){
+      butter.ui.listen( "uivisibilitychanged", function( e ){
+        for( var m in _media ){
+          if( _media.hasOwnProperty( m ) ){
+            _media[ m ].shrunken = !e.data;
+          } //if
+        } //for
+      });
+    } //if
+
     this.findAbsolutePosition = function( obj ){
       var curleft = curtop = 0;
       if( obj.offsetParent ) {
