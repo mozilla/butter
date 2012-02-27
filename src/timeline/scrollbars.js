@@ -84,16 +84,26 @@ define( [], function(){
       setup();
     }; //update
 
-    _control.addEventListener( "mousewheel", function( e ){
-      if( !e.shiftKey ){
-        if( e.wheelDelta < 0 ){
+    function scroll( metaKey, direction ){
+      if( !metaKey ){
+        if( direction < 0 ){
           _control.scrollTop += MOUSE_WHEEL_SCROLL_DIST;
         }
         else {
           _control.scrollTop -= MOUSE_WHEEL_SCROLL_DIST;
         } //if
-        setup();
       } //if
+      setup();
+    } //scroll
+
+    // for webkit and IE
+    _control.addEventListener( "mousewheel", function( e ){
+      scroll( e.altKey, e.wheelDelta );
+    }, false );
+
+    // for Gecko specifically ... *sigh*
+    _control.addEventListener( "DOMMouseScroll", function( e ){
+      scroll( e.altKey, -e.detail );
     }, false );
 
     _element.addEventListener( "click", function( e ) {
@@ -184,16 +194,26 @@ define( [], function(){
       } //if
     } //onMouseDown
 
-    _control.addEventListener( "mousewheel", function( e ){
-      if( e.shiftKey ){
-        if( e.wheelDelta < 0 ){
+    function scroll( metaKey, direction ){
+      if( metaKey ){
+        if( direction < 0 ){
           _control.scrollLeft += MOUSE_WHEEL_SCROLL_DIST;
         }
         else {
           _control.scrollLeft -= MOUSE_WHEEL_SCROLL_DIST;
         } //if
-        setup();
       } //if
+      setup();
+    } //scroll
+
+    // for webkit and IE
+    _control.addEventListener( "mousewheel", function( e ){
+      scroll( e.altKey, e.wheelDelta );
+    }, false );
+
+    // for Gecko specifically ... *sigh*
+    _control.addEventListener( "DOMMouseScroll", function( e ){
+      scroll( e.altKey, -e.detail );
     }, false );
 
     _element.addEventListener( "click", function( e ) {
