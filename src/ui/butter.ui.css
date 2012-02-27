@@ -589,6 +589,29 @@ THE SOFTWARE.
   position: relative;
 }
 
+#butter-timeline .tracks-container .trackliner-track[selected="true"] {
+  box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 ),
+              2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              2px -2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px -2px 2px rgba( 65, 80, 215, 0.8 );
+  moz-box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 ),
+              2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              2px -2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px -2px 2px rgba( 65, 80, 215, 0.8 );
+  o-box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 ),
+              2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              2px -2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px -2px 2px rgba( 65, 80, 215, 0.8 );
+  webkit-box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 ),
+              2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              2px -2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px -2px 2px rgba( 65, 80, 215, 0.8 );
+}
+
 #butter-timeline .tracks-container .trackliner-track .track-title {
   position: absolute;
   left: 5px;
