@@ -34,6 +34,18 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
     _popcornOptions.end = _round( _popcornOptions.end, NUMBER_OF_DECIMAL_PLACES );
 
     this.update = function( updateOptions ) {
+      var errorMessage;
+      if ( updateOptions.start >= _round( butter.duration, NUMBER_OF_DECIMAL_PLACES ) ) {
+        errorMessage = "The in time cannot be greater than or equal to the duration of the video, which is " + _round( butter.duration, NUMBER_OF_DECIMAL_PLACES ) + " seconds.";
+        _em.dispatch( "trackeventupdatefailed", errorMessage );
+        return;
+      } //if
+      if ( updateOptions.end > _round( butter.duration, NUMBER_OF_DECIMAL_PLACES ) ) {
+        errorMessage = "The out time cannot be greater than the duration of the video, which is " + _round( butter.duration, NUMBER_OF_DECIMAL_PLACES ) + " seconds.";
+        _em.dispatch( "trackeventupdatefailed", errorMessage );
+        return;
+      } //if
+
       for ( var prop in updateOptions ) {
         if ( updateOptions.hasOwnProperty( prop ) ) {
           _popcornOptions[ prop ] = updateOptions[ prop ];

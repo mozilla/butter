@@ -78,6 +78,10 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ],
         } //if
       } //blinkTarget
 
+      function onTrackEventUpdateFailed( e ) {
+        butter.dialog.send( _dialogName, "trackeventupdatefailed", e.data );
+      } //onTrackEventUpdateFailed
+
       _dialog.open({
         open: function( e ) {
           var targets = [],
@@ -98,6 +102,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ],
           _currentTarget = corn.target; 
           blinkTarget();
           trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
+          trackEvent.listen( "trackeventupdatefailed", onTrackEventUpdateFailed );
         },
         submit: function( e ) {
           if( e.data.target !== _currentTarget ){
@@ -108,6 +113,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ],
         },
         close: function( e ){
           trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
+          trackEvent.unlisten( "trackeventupdatefailed", onTrackEventUpdateFailed );
         }
       });
     }; //open
