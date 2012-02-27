@@ -24,7 +24,7 @@
 
 define( [], function(){
 
-  const CHECK_MEDIA_INTERVAL = 50;
+  var CHECK_MEDIA_INTERVAL = 50;
 
   return function( parentElement, media, tracksContainer ){
     var _container = document.createElement( "div" ),

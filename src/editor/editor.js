@@ -24,8 +24,8 @@ THE SOFTWARE.
 
 define( [ "core/eventmanager" ], function( EventManager ) {
 
-  const DEFAULT_DIMS = [ 400, 400 ];
-  const DEFAULT_FRAME_TYPE = "window";
+  var DEFAULT_DIMS = [ 400, 400 ],
+      DEFAULT_FRAME_TYPE = "window";
 
   var __guid = 0;
 

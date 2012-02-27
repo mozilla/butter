@@ -1,7 +1,7 @@
 define( [ "./util", "./base-dialog", "core/comm", "./event-manager" ], function( util, BaseDialog, Comm, EventManager ){
 
-  const DEFAULT_WINDOW_WIDTH = 640;
-  const DEFAULT_WINDOW_HEIGHT = 479;
+  var DEFAULT_WINDOW_WIDTH = 640,
+      DEFAULT_WINDOW_HEIGHT = 479;
 
   var WindowDialog = function( context, dialogOptions ) {
     dialogOptions = dialogOptions || {};

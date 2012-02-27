@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 (function() {
 
-  const DEFAULT_EDITOR = "default-editor.html";
+  var DEFAULT_EDITOR = "default-editor.html";
 
   define( [ "core/logger", 
             "core/eventmanager", 
