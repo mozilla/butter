@@ -438,6 +438,10 @@ THE SOFTWARE.
     }; //ButterInit
 
     Butter.instances = __instances;
+    Butter.numberOfDecimalPlaces = 3;
+    Butter.round = function( number ) {
+      return Math.round( number * ( Math.pow( 10, Butter.numberOfDecimalPlaces ) ) ) / Math.pow( 10, Butter.numberOfDecimalPlaces );
+    };
 
     if ( window.Butter.__waiting ) {
       for ( var i=0, l=window.Butter.__waiting.length; i<l; ++i ) {

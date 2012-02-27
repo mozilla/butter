@@ -90,7 +90,12 @@
                     var newItem = document.createElement( elem );
                     newItem.id = item;
                     newItem.style.width = "100%";
-                    newItem.value = popcornOptions[ item ];
+                    if ( item === "start" || item === "end" ) {
+                      newItem.value = popcornOptions[ item ].toFixed( 3 );
+                    }
+                    else {
+                      newItem.value = popcornOptions[ item ];
+                    }
                     col2.appendChild( newItem );
                     newItem.addEventListener( "change", sendData, false );
                   }

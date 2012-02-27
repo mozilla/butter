@@ -1,7 +1,6 @@
 define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventManager, util ) {
 
-  var NUMBER_OF_DECIMAL_PLACES = 3,
-      __guid = 0;
+  var __guid = 0;
 
   var TrackEvent = function ( options ) {
 
@@ -19,19 +18,16 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
           start: 0,
           end: 1
         },
-        _selected = false,
-        _round = function( number, numberOfDecimalPlaces ) {
-          return Math.round( number * ( Math.pow( 10, numberOfDecimalPlaces ) ) ) / Math.pow( 10, numberOfDecimalPlaces );
-        };
+        _selected = false;
 
     if( !_type ){
       _logger.log( "Warning: " + _id + " has no type." );
     } //if
 
     _popcornOptions.start = _popcornOptions.start || 0;
-    _popcornOptions.start = _round( _popcornOptions.start, NUMBER_OF_DECIMAL_PLACES );
+    _popcornOptions.start = Butter.round( _popcornOptions.start );
     _popcornOptions.end = _popcornOptions.end || _popcornOptions.start + 1;
-    _popcornOptions.end = _round( _popcornOptions.end, NUMBER_OF_DECIMAL_PLACES );
+    _popcornOptions.end = Butter.round( _popcornOptions.end );
 
     this.update = function( updateOptions ) {
       for ( var prop in updateOptions ) {
@@ -40,10 +36,10 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
         } //if
       } //for
       if ( _popcornOptions.start ) {
-        _popcornOptions.start = _round( _popcornOptions.start, NUMBER_OF_DECIMAL_PLACES );
+        _popcornOptions.start = Butter.round( _popcornOptions.start );
       }
       if ( _popcornOptions.end ) {
-        _popcornOptions.end = _round( _popcornOptions.end, NUMBER_OF_DECIMAL_PLACES );
+        _popcornOptions.end = Butter.round( _popcornOptions.end );
       }
       _em.dispatch( "trackeventupdated", _this );
     }; //update
