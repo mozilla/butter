@@ -65,6 +65,7 @@ define( [
         _initialized = false,
         _hScrollBar,
         _vScrollBar,
+        _shrunken = false,
         _timebar = new TimeBar( _media, _tracksContainer ),
         _zoombar = new ZoomBar(  zoomCallback ),
         _status = new Status( _media ),
@@ -289,6 +290,19 @@ define( [
         configurable: false,
         get: function(){
           return _initialized;
+        }
+      },
+      shrunken: {
+        enumerable: true,
+        configurable: false,
+        get: function(){
+          return _shrunken;
+        },
+        set: function( val ){
+          if( val !== _shrunken ){
+            _shrunken = val;
+            
+          } //if
         }
       }
     });
