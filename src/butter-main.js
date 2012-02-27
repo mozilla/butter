@@ -30,6 +30,7 @@ THE SOFTWARE.
             "core/eventmanager",
             "core/target",
             "core/media",
+            "io/cornfield",
             "editor/module",
             "preview/module",
             "track/module",
@@ -44,6 +45,7 @@ THE SOFTWARE.
             EventManager,
             Target,
             Media,
+            CornfieldModule,
             EditorModule,
             PreviewModule,
             TrackModule,
@@ -61,7 +63,8 @@ THE SOFTWARE.
       timeline: TimelineModule,
       plugin: PluginModule,
       preview: PreviewModule,
-      ui: UIModule
+      ui: UIModule,
+      cornfield: CornfieldModule
     };
 
     var __guid = 0;
@@ -214,6 +217,26 @@ THE SOFTWARE.
           _this.removeMedia( _media[ 0 ] );
         }
       }; //clearProject
+
+      this.authorize = function() {
+        _this.cornfield.authorize();
+      };
+
+      this.whoami = function() {
+        _this.cornfield.whoami();
+      }
+
+      this.ls = function(callback) {
+        _this.cornfield.ls(callback);
+      }
+
+      this.pull = function(name, callback) {
+        _this.cornfield.pull(name, callback);
+      }
+
+      this.push = function(name, data, callback) {
+        _this.cornfield.push(name, data, callback);
+      }
 
       /****************************************************************
        * Media methods

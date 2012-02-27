@@ -4,7 +4,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
     butter.plugin.remove( document.getElementById( "pluginName" ).value );
   }, false);
 
-
   Butter({
     config: "../config/default.conf",
     ready: function( butter ){
@@ -44,6 +43,41 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
           });
         });
+
+        document.getElementById('login').addEventListener('click', function() {
+          butter.authorize();
+        }, false);
+
+        document.getElementById('ls').addEventListener('click', function() {
+          butter.ls(function(files) {
+            console.log(files);
+            files = files.filenames;
+            var dropdown = document.getElementById("projectnames");
+            dropdown.options.length = 0;
+            for (var f in files) {
+              dropdown.options[dropdown.options.length] = new Option(files[f], files[f]);
+            }
+          });
+        }, false);
+
+        document.getElementById('loadfile').addEventListener('click', function() {
+          var dropdown = document.getElementById("projectnames"),
+              name = dropdown.options[dropdown.selectedIndex].value;
+
+          butter.pull(name, function(file) {
+            document.getElementById('loadfiledata').value = file;
+          });
+        }, false);
+
+        document.getElementById('push').addEventListener('click', function() {
+          var name = document.getElementById('saveprojectname').value,
+              data = document.getElementById('savefiledata').value;
+
+          butter.push(name, data, function(res) {
+            console.log(res);
+          });
+        }, false);
+
       });
       window.butter = butter;
     } 
