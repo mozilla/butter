@@ -574,7 +574,7 @@ THE SOFTWARE.
   moz-border-radius: 6px;
   o-border-radius: 6px;
   webkit-border-radius: 6px;
-  border: 1px solid #111111 !important;
+  /*border: 1px solid #111111 !important;*/
   background-attachment: scroll;
   background-clip: border-box;
   background-color: transparent;
@@ -586,6 +586,11 @@ THE SOFTWARE.
   height: 25px;
   margin-bottom: 6px;
   position: relative;
+  box-shadow: inset 0 0px 0 #000000,
+              2px 2px 0px #000000,
+              -2px 2px 0px #000000,
+              2px -2px 0px #000000,
+              -2px -2px 0px #000000;
 }
 
 #butter-timeline .tracks-container .trackliner-track[selected="true"] {
