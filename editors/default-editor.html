@@ -51,7 +51,12 @@
           _comm.listen( "trackeventdata", function( e ){
             var popcornOptions = e.data.popcornOptions,
                 targets = e.data.targets,
-                medias = e.data.medias;
+                media = e.data.media,
+                mediaName = "Current Media Element";
+
+            if( media && media.name && media.target ){
+              mediaName += " (\"" + media.name + "\": " + media.target + ")";
+            } //if
 
             _manifest = e.data.manifest.options;
 
@@ -77,11 +82,11 @@
                       }
                     }
                     var option = document.createElement( "OPTION" );
-                    option.value = "Media Element";
-                    option.innerHTML =  "Media Element";
+                    option.value = mediaName;
+                    option.innerHTML =  mediaName;
                     select.appendChild( option );
-                    if( popcornOptions.target === "Media Element" ) {
-                        select.value = "Media Element";
+                    if( popcornOptions.target === mediaName ) {
+                        select.value = mediaName;
                     }
                     col2.appendChild( select );
 
