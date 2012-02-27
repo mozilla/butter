@@ -106,7 +106,7 @@ THE SOFTWARE.
               element = e.data.ui.draggable[ 0 ],
               type = element.id.split( "-" ),
               target = e.data.target,
-              start = media.currentTime + 1 < media.duration ? media.currentTime + 1 : media.duration - 1,
+              start = media.currentTime + 1 < media.duration ? media.currentTime : media.duration - 1,
               end = start + 1;
 
           if( type.length === 3 ){
@@ -129,7 +129,6 @@ THE SOFTWARE.
               target: target.element.id
             }
           });
-          console.log( start, end );
         }
         else {
           _logger.log( "Warning: No media to add dropped trackevent." );
