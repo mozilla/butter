@@ -78,13 +78,13 @@ define( [], function(){
       setup();
     }; //update
 
-    function setHandlePosition() {
-      _handle.style.top = (_elementHeight - _handleHeight) *
-        (_control.scrollTop / (_control.scrollHeight - _elementHeight)) + "px";
-    }
+    function setHandlePosition(){
+      _handle.style.top = ( _elementHeight - _handleHeight ) *
+        ( _control.scrollTop / (_control.scrollHeight - _elementHeight )) + "px";
+    };
 
-    _control.addEventListener( "mousewheel", function(e) {
-      if (e.wheelDeltaY) {
+    _control.addEventListener( "mousewheel", function( e ){
+      if( e.wheelDeltaY ){
         _control.scrollTop -= e.wheelDeltaY;
         setHandlePosition();
         e.preventDefault();
@@ -92,9 +92,9 @@ define( [], function(){
     }, false );
 
     // For Firefox
-    _control.addEventListener( "DOMMouseScroll", function(e) {
-      if (e.axis === e.VERTICAL_AXIS) {
-        _control.scrollTop += e.detail;
+    _control.addEventListener( "DOMMouseScroll", function( e ){
+      if( e.axis === e.VERTICAL_AXIS && !e.shiftKey ){
+        _control.scrollTop += e.detail * 2;
         setHandlePosition();
         e.preventDefault();
       }
@@ -184,13 +184,13 @@ define( [], function(){
       } //if
     } //onMouseDown
 
-    function setHandlePosition() {
-      return _handle.style.left = (_elementWidth - _handleWidth) *
-        (_control.scrollLeft / (_control.scrollWidth - _elementWidth)) + "px";
-    }
+    function setHandlePosition(){
+      return _handle.style.left = ( _elementWidth - _handleWidth ) *
+        ( _control.scrollLeft / ( _control.scrollWidth - _elementWidth )) + "px";
+    };
 
-    _control.addEventListener( "mousewheel", function(e) {
-      if (e.wheelDeltaX) {
+    _control.addEventListener( "mousewheel", function( e ){
+      if( e.wheelDeltaX ){
         _control.scrollLeft -= e.wheelDeltaX;
         setHandlePosition();
         e.preventDefault();
@@ -198,9 +198,9 @@ define( [], function(){
     }, false );
 
     // For Firefox
-    _control.addEventListener( "DOMMouseScroll", function(e) {
-      if (e.axis === e.HORIZONTAL_AXIS) {
-        _control.scrollLeft += e.detail;
+    _control.addEventListener( "DOMMouseScroll", function( e ){
+      if( e.axis === e.HORIZONTAL_AXIS || ( e.axis === e.VERTICAL_AXIS && e.shiftKey )){
+        _control.scrollLeft += e.detail * 2;
         setHandlePosition();
         e.preventDefault();
       }
