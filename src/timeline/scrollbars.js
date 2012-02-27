@@ -24,6 +24,8 @@ THE SOFTWARE.
 
 define( [], function(){
 
+  const MOUSE_WHEEL_SCROLL_DIST = 10;
+
   function Vertical( controlElement ){
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
@@ -44,6 +46,11 @@ define( [], function(){
       _controlHeight = _control.getBoundingClientRect().height;
       _handleHeight = Math.min( _elementHeight, _elementHeight - ( _control.scrollHeight - _controlHeight ) );
       _handle.style.height = _handleHeight + "px";
+      var p = 0;
+      if( _control.scrollHeight - _elementHeight > 0 ){
+        p = _control.scrollTop / ( _control.scrollHeight - _elementHeight );
+      } //if
+      _handle.style.top = p * ( _elementHeight - _handleHeight ) + "px";
     } //setup
 
     function onMouseUp(){
@@ -76,6 +83,18 @@ define( [], function(){
     this.update = function(){
       setup();
     }; //update
+
+    _control.addEventListener( "mousewheel", function( e ){
+      if( !e.shiftKey ){
+        if( e.wheelDelta < 0 ){
+          _control.scrollTop += MOUSE_WHEEL_SCROLL_DIST;
+        }
+        else {
+          _control.scrollTop -= MOUSE_WHEEL_SCROLL_DIST;
+        } //if
+        setup();
+      } //if
+    }, false );
 
     _element.addEventListener( "click", function( e ) {
       // bail early if this event is coming from the handle
@@ -164,6 +183,18 @@ define( [], function(){
         _handle.removeEventListener( "mousedown", onMouseDown, false );
       } //if
     } //onMouseDown
+
+    _control.addEventListener( "mousewheel", function( e ){
+      if( e.shiftKey ){
+        if( e.wheelDelta < 0 ){
+          _control.scrollLeft += MOUSE_WHEEL_SCROLL_DIST;
+        }
+        else {
+          _control.scrollLeft -= MOUSE_WHEEL_SCROLL_DIST;
+        } //if
+        setup();
+      } //if
+    }, false );
 
     _element.addEventListener( "click", function( e ) {
       // bail early if this event is coming from the handle
