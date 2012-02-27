@@ -30,8 +30,8 @@ THE SOFTWARE.
             "core/eventmanager",
             "core/target",
             "core/media",
+            "core/page",
             "editor/module",
-            "preview/module",
             "track/module",
             "plugin/module",
             "timeline/module",
@@ -44,8 +44,8 @@ THE SOFTWARE.
             EventManager,
             Target,
             Media,
+            Page,
             EditorModule,
-            PreviewModule,
             TrackModule,
             PluginModule,
             TimelineModule,
@@ -60,9 +60,8 @@ THE SOFTWARE.
       dialog: DialogModule,
       timeline: TimelineModule,
       plugin: PluginModule,
-      preview: PreviewModule,
       ui: UIModule
-    };
+    }; //modules
 
     var __guid = 0;
 
@@ -83,13 +82,14 @@ THE SOFTWARE.
           _id = "Butter" + __guid++,
           _logger = new Logger( _id ),
           _em = new EventManager( this ),
+          _page = new Page(),
           _this = this;
 
       function checkMedia() {
         if ( !_currentMedia ) {
           throw new Error("No media object is selected");
         } //if
-      }
+      } //checkMedia
 
       this.getManifest = function ( name ) {
         checkMedia();
@@ -99,17 +99,52 @@ THE SOFTWARE.
       /****************************************************************
        * Target methods
        ****************************************************************/
+      function targetTrackEventRequested( e ){
+        if( _currentMedia ){
+          var track,
+              media = _currentMedia,
+              element = e.data.ui.draggable[ 0 ],
+              type = element.id.split( "-" ),
+              target = e.data.target,
+              start = media.currentTime + 1 < media.duration ? media.currentTime + 1 : media.duration - 1,
+              end = start + 1;
+
+          if( type.length === 3 ){
+            type = type[ 2 ];
+          }
+          else{
+            _logger.log( "Invalid trackevent type requested." );
+            type = null;
+          } //if
+
+          if( _currentMedia.tracks.length === 0 ){
+            _currentMedia.addTrack();
+          } //if
+          track = _currentMedia.tracks[ 0 ];
+          track.addTrackEvent({
+            type: type,
+            popcornOptions: {
+              start: start,
+              end: end,
+              target: target.element.id
+            }
+          });
+          console.log( start, end );
+        }
+        else {
+          _logger.log( "Warning: No media to add dropped trackevent." );
+        } //if
+      } //targetTrackEventRequested
+      
       //addTarget - add a target object
       this.addTarget = function ( target ) {
         if ( !(target instanceof Target ) ) {
           target = new Target( target );
         } //if
-
         _targets.push( target );
-
+        target.listen( "trackeventrequested", targetTrackEventRequested );
         _logger.log( "Target added: " + target.name );
         _em.dispatch( "targetadded", target );
-
         return target;
       }; //addTarget
 
@@ -120,6 +155,7 @@ THE SOFTWARE.
         } //if
         var idx = _targets.indexOf( target );
         if ( idx > -1 ) {
+          target.unlisten( "trackeventrequested", targetTrackEventRequested );
           _targets.splice( idx, 1 );
           delete _targets[ target.name ];
           _em.dispatch( "targetremoved", target );
@@ -324,18 +360,6 @@ THE SOFTWARE.
           },
           enumerable: true
         },
-        trackEvents: {
-          get: function() {
-            checkMedia();
-            var tracks = _currentMedia.tracks, trackEvents = {};
-            for ( var i=0, l=tracks.length; i<l; ++i ) {
-              var track = tracks[i];
-              trackEvents[ track.name ] = track.trackEvents;
-            } //for
-            return trackEvents;
-          },
-          enumerable: true
-        },
         targets: {
           get: function() {
             return _targets;
@@ -390,9 +414,55 @@ THE SOFTWARE.
         }
       });
 
+      var preparePage = this.preparePage = function( callback ){
+        var scrapedObject = _page.scrape(),
+            targets = scrapedObject.target,
+            medias = scrapedObject.media;
+
+        _page.preparePopcorn(function() {
+          var i, j, il, jl, url;
+          for( i = 0, il = targets.length; i < il; ++i ) {
+            if( _targets.length > 0 ){
+              for( j = 0, jl = _targets.length; j < jl; ++j ){
+                // don't add the same target twice
+                if( _targets[ j ].id !== targets[ i ].id ){
+                  _this.addTarget({ element: targets[ i ].id });
+                } //if
+              } //for j
+            }
+            else{
+              _this.addTarget({ element: targets[ i ].id });
+            } //if
+          } //for i
+          for( i = 0, il = medias.length; i < il; i++ ) {
+            url = "";
+            if( ["VIDEO", "AUDIO" ].indexOf( medias[ i ].nodeName ) > -1 ) {
+              url = medias[ i ].currentSrc;
+            } else {
+              url = medias[ i ].getAttribute( "data-butter-source" );
+            }
+            if( _media.length > 0 ){
+              for( j = 0, jl = _media.length; j < jl; ++j ){
+                if( _media[ j ].id !== medias[ i ].id && _media[ j ].url !== url ){
+                  _this.addMedia({ target: medias[ i ].id, url: url });
+                } //if
+              } //for
+            }
+            else{
+              _this.addMedia({ target: medias[ i ].id, url: url });
+            } //if
+          } //for
+
+          if( callback ){
+            callback();
+          } //if
+          _em.dispatch( "pageready" );
+        });
+      }; //preparePage
+
       __instances.push( this );
 
-      if ( butterOptions.ready ) {
+      if( butterOptions.ready ){
         _em.listen( "ready", function( e ){
           butterOptions.ready( e.data );
         });
@@ -407,7 +477,7 @@ THE SOFTWARE.
         xhr.open( "GET", butterOptions.config, false );
         xhr.send( null );
 
-        if ( xhr.status === 200 || xhr.status === 0 ) {
+        if( xhr.status === 200 || xhr.status === 0 ){
           var config = JSON.parse( xhr.responseText ),
               modules = config.modules,
               icons = config.icons,
@@ -417,8 +487,8 @@ THE SOFTWARE.
               _this[ moduleName ] = new __modules[ moduleName ]( _this, modules[ moduleName ] );
             } //if
           } //for
-          for( var identifier in icons ) {
-            if( icons.hasOwnProperty( identifier ) ) {
+          for( var identifier in icons ){
+            if( icons.hasOwnProperty( identifier ) ){
               img = document.createElement( "img" );
               img.src = icons[ identifier ];
               img.id = identifier + "-icon";
@@ -426,13 +496,18 @@ THE SOFTWARE.
               // @secretrobotron: just attach this to the body hidden for now,
               //                  so that it preloads if necessary
               document.body.appendChild( img );
-            }
-          }
-        }
-        _em.dispatch( "ready", _this );
+            } //if
+          } //for
+        } //if
+        
+        preparePage(function(){
+          _em.dispatch( "ready", _this );
+        });
       }
       else {
-        _em.dispatch( "ready", _this );
+        preparePage(function(){
+          _em.dispatch( "ready", _this );
+        });
       } //if
 
     }; //ButterInit
