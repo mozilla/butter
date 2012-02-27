@@ -2,12 +2,14 @@
 
 (function(window, document, undefined ){
 
+  QUnit.config.testTimeout = 20000;
+
   function createButter( callback ){
+    stop();
 
     Butter({
       config: "../config/default.conf",
       ready: function( butter ){
-        stop();
         callback( butter );
         start();
       }
@@ -47,9 +49,9 @@
 
     createButter( function( butter ){
 
-      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../resources/atultroll.webm" } );
+      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv" } );
       ok( m1.name === "Media 1", "Name is correct" );
-      ok( m1.target === "audio-test" && m1.url === "../resources/atultroll.webm", "Media storage is correct" );
+      ok( m1.target === "audio-test" && m1.url === "http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv", "Media storage is correct" );
     });
   });
 
@@ -75,7 +77,7 @@
         mediaState = [ 0, media.data ];
       });
 
-      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../resources/atultroll.webm" } ),
+      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv" } ),
           m2;
 
       ok( mediaEventState === -2, "Media events received in correct order" );
