@@ -32,10 +32,25 @@ define( [
           Media
         ){
 
+  var unwantedKeyPressElements = [
+    "TEXTAREA",
+    "INPUT"
+  ];
+
   var Timeline = function( butter, options ){
 
     var _media = {},
         _currentMedia;
+
+    if( butter.ui ){
+      butter.ui.listen( "uivisibilitychanged", function( e ){
+        for( var m in _media ){
+          if( _media.hasOwnProperty( m ) ){
+            _media[ m ].shrunken = !e.data;
+          } //if
+        } //for
+      });
+    } //if
 
     this.findAbsolutePosition = function( obj ){
       var curleft = curtop = 0;
@@ -134,31 +149,12 @@ define( [
       return butter.currentTime / _currentMedia.duration * ( _currentMedia.container.offsetWidth );
     }; //currentTimeInPixels
 
-/*
-    this.zoom = function( detail ){
-      if( originalWidth === 0 ){
-        //in case target is invisible or something first
-        originalWidth = _target.offsetWidth;
-      }
-      if( detail < 0 && currentZoom < 6 ){
-        currentZoom++;
-      }
-       else if ( detail > 0 && currentZoom > 1 ){
-        currentZoom--;
-      }
-      _target.style.width = originalWidth * currentZoom + "px";
-      for( var i in _currentMedia.trackLinerTrackEvents ){
-        trackLinerEvent = _currentMedia.trackLinerTrackEvents[ i ];
-        butterTrackEvent = _currentMedia.butterTrackEvents[ trackLinerEvent.element.id ];
-        corn = butterTrackEvent.popcornOptions,
-        start = corn.start;
-        end = corn.end;
-        trackLinerEvent.element.style.width = Math.max( 3, ( end - start ) / _currentMedia.duration * _target.offsetWidth ) + "px";
-        trackLinerEvent.element.style.left = start / _currentMedia.duration * _target.offsetWidth + "px";
-      }
-      return currentZoom;
-    }; //zoom
-*/
+    window.addEventListener( "keypress", function( e ){
+      if( e.which === 32 && unwantedKeyPressElements.indexOf( e.target.nodeName ) === -1 ){
+        butter.currentMedia.paused = !butter.currentMedia.paused;
+      } //if
+    }, false );
+
     Object.defineProperties( this, {
       zoom: {
         get: function(){

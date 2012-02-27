@@ -27,6 +27,7 @@ define( [], function(){
   var StatusBar = function( butter, parentElement ){
     var _rootElement = document.createElement( "div" ),
         _list = document.createElement( "div" ),
+        _visible = true,
         _media = {};
 
     _rootElement.id = "butter-status-bar";
@@ -47,6 +48,21 @@ define( [], function(){
     });
 
     butter.listen( "mediaremoved", function( e ){
+    });
+
+    Object.defineProperties( this, {
+      visible: {
+        enumerable: true,
+        get: function(){
+          return _visible;
+        },
+        set: function( val ){
+          if( val !== _visible ){
+            _visible = val;
+            _list.style.visibility = _visible ? "visible" : "hidden";
+          } //if
+        }
+      }
     });
 
   }; //StatusBar

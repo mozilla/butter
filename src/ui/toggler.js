@@ -26,9 +26,10 @@ define( [], function(){
     var _butter = butter,
         _parent = parentElement,
         _element = document.createElement( "div" ),
-        _state = false;
+        _img = document.createElement( "div" );
 
-    _element.id = "butter-timeline-toggle";
+    _element.id = "toggle-button";
+    _element.appendChild( _img );
     _parent.appendChild( _element );
 
     _element.addEventListener( "click", function( e ){
