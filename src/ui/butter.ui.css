@@ -422,8 +422,8 @@ THE SOFTWARE.
 }
 
 #butter-status-bar div div:hover {
-  max-width: 300px;
-  width: 300px;
+  max-width: 400px;
+  width: 400px;
   background: #000;
 }
 
@@ -437,7 +437,7 @@ THE SOFTWARE.
   text-decoration: none;
   vertical-align: baseline;
   color: #ddd;
-  max-width: 180px;
+  max-width: 97%;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   cursor: pointer;
@@ -446,16 +446,15 @@ THE SOFTWARE.
   box-shadow: none;
 }
 
-#butter-status-bar div div .media-url:hover {
-  max-width: 280px;
-  width: 280px;
-}
-
 #butter-timeline .media-instance {
   height: 260px;
   padding: 0 150px 0 115px;
   position: relative;
   top: 40px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
 }
 
 #butter-timeline .media-container {
@@ -587,6 +586,29 @@ THE SOFTWARE.
   height: 25px;
   margin-bottom: 6px;
   position: relative;
+}
+
+#butter-timeline .tracks-container .trackliner-track[selected="true"] {
+  box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 ),
+              2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              2px -2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px -2px 2px rgba( 65, 80, 215, 0.8 );
+  moz-box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 ),
+              2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              2px -2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px -2px 2px rgba( 65, 80, 215, 0.8 );
+  o-box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 ),
+              2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              2px -2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px -2px 2px rgba( 65, 80, 215, 0.8 );
+  webkit-box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 ),
+              2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px 2px 2px rgba( 65, 80, 215, 0.8 ),
+              2px -2px 2px rgba( 65, 80, 215, 0.8 ),
+              -2px -2px 2px rgba( 65, 80, 215, 0.8 );
 }
 
 #butter-timeline .tracks-container .trackliner-track .track-title {

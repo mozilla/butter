@@ -151,8 +151,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     _element = inputOptions.element || createEventElement( inputOptions );
     _element.id = _id;
     _this.update( inputOptions );
-    _element.addEventListener( "click", function ( e ) {
-      _eventManager.dispatch( "trackeventclicked", e );
+    _element.addEventListener( "mousedown", function ( e ) {
+      _eventManager.dispatch( "trackeventmousedown", e );
     }, false);
 
     _element.addEventListener( "dblclick", function ( e ) {
@@ -160,14 +160,13 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     }, false);
 
     function select( e ){
-      _this.deselectOthers();
       _selected = true;
-      eventManager.dispatch( "trackeventselecteded", _this );
+      _element.setAttribute( "selected", true );
     } //select
 
     function deselect( e ) {
       _selected = false;
-      eventManager.dispatch( "trackeventdeselecteded", _this );
+      _element.removeAttribute( "selected" );
     } //deselect
 
     var handles;

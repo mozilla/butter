@@ -24,11 +24,12 @@ THE SOFTWARE.
 
 define( [], function() {
 
-  function TrackEvent( media, bEvent, tlEvent, trackliner ){
+  function TrackEvent( media, bEvent, tlEvent, trackliner, options ){
     var _trackliner = trackliner,
         _media = media,
         _bEvent = bEvent,
         _tlEvent = tlEvent,
+        _onMouseDown = options.mousedown, 
         _this = this;
 
     function onDurationChanged( e ){
@@ -36,8 +37,8 @@ define( [], function() {
     onDurationChanged();
     _media.listen( "mediadurationchanged", onDurationChanged );
 
-    tlEvent.element.setAttribute( "butter-trackevent-type", bEvent.type );
-    tlEvent.element.setAttribute( "butter-trackevent-id", bEvent.id );
+    _tlEvent.element.setAttribute( "butter-trackevent-type", bEvent.type );
+    _tlEvent.element.setAttribute( "butter-trackevent-id", bEvent.id );
 
     _bEvent.listen( "trackeventupdated", function( e ){
       _tlEvent.update( _bEvent.popcornOptions );
@@ -53,8 +54,16 @@ define( [], function() {
       } //if
     });
 
-    _tlEvent.listen( "trackeventclicked", function( e ){
-      //butter.targettedEvent = _bEvent;
+    _bEvent.listen( "trackeventselected", function( e ){
+      _tlEvent.selected = true;
+    });
+
+    _bEvent.listen( "trackeventdeselected", function( e ){
+      _tlEvent.selected = false;
+    });
+
+    _tlEvent.listen( "trackeventmousedown", function( e ){
+      _onMouseDown({ trackEvent: _bEvent, originalEvent: e.data });
     });
 
     _tlEvent.listen( "trackeventdoubleclicked", function( e ){
@@ -76,6 +85,10 @@ define( [], function() {
         get: function(){ return _bEvent; }
       }
     });
+
+    if( _bEvent.selected ){
+      _tlEvent.selected = true;
+    } //if
 
   } //TrackEvent
 

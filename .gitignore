@@ -3,3 +3,12 @@
 dist
 .DS_Store
 *.bak
+*.webm
+*.mov
+*.avi
+*.ogg
+*.ogv
+*.oga
+*.mp4
+*.wav
+*.mp3
