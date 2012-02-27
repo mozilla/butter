@@ -128,7 +128,7 @@ define( [], function(){
 
     var onMouseDown = this.onMouseDown = function( e ){
       var pos = e.pageX - _container.getBoundingClientRect().left;
-      _media.currentTime = ( pos + _tracksContainer.scrollLeft ) / _tracksContainer.scrollWidth * _media.duration;
+      _media.currentTime = ( pos + _tracksContainer.scrollLeft ) / _tracklinerWidth * _media.duration;
       setNodePosition();
       onScrubberMouseDown( e );
     }; //onMouseDown
