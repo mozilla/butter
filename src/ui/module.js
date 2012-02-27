@@ -22,13 +22,14 @@ THE SOFTWARE.
 
 **********************************************************************************/
 
-define( [ "./statusbar", "./toggler" ], function( StatusBar, Toggler ){
+define( [ "core/eventmanager", "./statusbar", "./toggler" ], function( EventManager, StatusBar, Toggler ){
 
   return function( butter, options ){
 
     var _element = document.createElement( "div" ),
         _statusBar = new StatusBar( butter, _element ),
         _toggler = new Toggler( butter, _element ),
+        _em = new EventManager( this ),
         _state = true;
 
     _element.id = "butter-timeline";
@@ -49,12 +50,18 @@ define( [ "./statusbar", "./toggler" ], function( StatusBar, Toggler ){
           return _state;
         },
         set: function( val ){
-          _state = val;
-          if( _state ){
-            _element.setAttribute( "butter-ui-hidden", false );
-          }
-          else {
-            _element.setAttribute( "butter-ui-hidden", true );
+          if( _state !== val ){
+            _state = val;
+            if( _state ){
+              _element.setAttribute( "ui-state", "visible" );
+              _em.dispatch( "uivisibilitychanged", true );
+              _statusBar.visible = true;
+            }
+            else {
+              _element.setAttribute( "ui-state", "hidden" );
+              _em.dispatch( "uivisibilitychanged", false );
+              _statusBar.visible = false;
+            } //if
           } //if
         }
       }
