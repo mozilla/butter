@@ -1,8 +1,7 @@
 define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventManager, util ) {
 
-  const NUMBER_OF_DECIMAL_PLACES = 3;
-
-  var __guid = 0;
+  var NUMBER_OF_DECIMAL_PLACES = 3,
+      __guid = 0;
 
   var TrackEvent = function ( options ) {
 
