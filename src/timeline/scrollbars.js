@@ -79,8 +79,12 @@ define( [], function(){
     }; //update
 
     function setHandlePosition(){
-      _handle.style.top = ( _elementHeight - _handleHeight ) *
-        ( _control.scrollTop / (_control.scrollHeight - _elementHeight )) + "px";
+      if( _control.scrollTop - _elementHeight > 0 ) {
+        _handle.style.top = ( _elementHeight - _handleHeight ) *
+          ( _control.scrollTop / (_control.scrollHeight - _elementHeight )) + "px";
+      }else{
+        _handle.style.top = "0px";
+      }
     };
 
     _control.addEventListener( "mousewheel", function( e ){
@@ -185,8 +189,12 @@ define( [], function(){
     } //onMouseDown
 
     function setHandlePosition(){
-      return _handle.style.left = ( _elementWidth - _handleWidth ) *
-        ( _control.scrollLeft / ( _control.scrollWidth - _elementWidth )) + "px";
+      if( _control.scrollWidth - _elementWidth > 0 ) {
+        _handle.style.left = ( _elementWidth - _handleWidth ) *
+          ( _control.scrollLeft / ( _control.scrollWidth - _elementWidth )) + "px";
+      }else{
+        _handle.style.left = "0px";
+      }
     };
 
     _control.addEventListener( "mousewheel", function( e ){
