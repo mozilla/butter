@@ -58,9 +58,6 @@ define( [], function(){
 
       menuDiv.className = "menu";
       deleteButton.className = "delete";
-      //editButton.className = "edit";
-
-      //menuDiv.appendChild( editButton );
       menuDiv.appendChild( deleteButton );
 
       _menus.push( menuDiv );

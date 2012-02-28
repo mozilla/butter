@@ -343,36 +343,29 @@ THE SOFTWARE.
   width: 0px;
   height: 28px;
   top: -1px;
-  left: -5px;
-  border-radius: 6px;
+  left: 0px;
   z-index: +1;
-  background: rgba( 100, 10, 10, 0.7 );
-  overflow: hidden;
-  visibility: hidden;
-  width: 23px;
+  background: rgba( 100, 100, 100, 0.5 );
+  border-radius: 7px;
+  -moz-transition: width 0.1s;
+  -webkit-transition: width 0.1s;
+  transition: width 0.1s;
 }
 
 #butter-timeline .track-handle-container .handle-list .track-handle:hover .menu {
-  visibility: visible;
+  width: 20px;
 }
 
-#butter-timeline .track-handle-container .handle-list .track-handle .menu .edit {
-  position: absolute;
-  right: 15px;
-  top: 5px;
-  background-image: url( "assets/buttons.png" );
-  background-position: -285px 0;
-  cursor: pointer;
-  width: 15px;
-  height: 10px;
+#butter-timeline .track-handle-container .handle-list .track-handle .menu:hover {
+  background: rgba( 100, 100, 100, 0.8 );
 }
 
 #butter-timeline .track-handle-container .handle-list .track-handle .menu .delete {
   position: absolute;
-  right: 0px;
-  top: 5px;
+  right: 3px;
+  top: 8px;
   background-image: url( "assets/buttons.png" );
-  background-position: -302px 0;
+  background-position: -143px -144px;
   cursor: pointer;
   width: 15px;
   height: 10px;

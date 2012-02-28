@@ -155,6 +155,14 @@ define( [
       } //if
     }, false );
 
+    butter.listen( "ready", function(){
+      butter.dialog.add( "delete-track-confirmation", {
+        type: "iframe",
+        modal: true,
+        url: "../editors/delete-track.html"
+      });
+    });
+
     Object.defineProperties( this, {
       zoom: {
         get: function(){
