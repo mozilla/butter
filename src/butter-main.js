@@ -30,6 +30,7 @@ THE SOFTWARE.
             "core/eventmanager",
             "core/target",
             "core/media",
+            "io/cornfield",
             "editor/module",
             "preview/module",
             "track/module",
@@ -44,6 +45,7 @@ THE SOFTWARE.
             EventManager,
             Target,
             Media,
+            CornfieldModule,
             EditorModule,
             PreviewModule,
             TrackModule,
@@ -61,7 +63,8 @@ THE SOFTWARE.
       timeline: TimelineModule,
       plugin: PluginModule,
       preview: PreviewModule,
-      ui: UIModule
+      ui: UIModule,
+      cornfield: CornfieldModule
     };
 
     var __guid = 0;
