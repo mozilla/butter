@@ -227,8 +227,6 @@ define( [], function(){
 
       if( posX > handleRect.right ) {
         _handle.style.left = ( ( posX - elementRect.left ) - _handleWidth ) + "px"; 
-      } else {
-        _handle.style.left = posX - elementRect.left + "px"; 
       }
       
       p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
