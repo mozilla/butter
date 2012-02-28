@@ -50,7 +50,7 @@ define( [
           Status,
           TrackHandles ){
 
-  const ZOOM_FACTOR = 100;
+  var ZOOM_FACTOR = 100;
 
   function MediaInstance( media ){
     var _this = this,
