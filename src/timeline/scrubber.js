@@ -24,7 +24,7 @@
 
 define( [], function(){
 
-  const CHECK_MEDIA_INTERVAL = 50;
+  var CHECK_MEDIA_INTERVAL = 50;
 
   return function( parentElement, media, tracksContainer ){
     var _container = document.createElement( "div" ),
@@ -128,7 +128,7 @@ define( [], function(){
 
     var onMouseDown = this.onMouseDown = function( e ){
       var pos = e.pageX - _container.getBoundingClientRect().left;
-      _media.currentTime = ( pos + _tracksContainer.scrollLeft ) / _tracksContainer.scrollWidth * _media.duration;
+      _media.currentTime = ( pos + _tracksContainer.scrollLeft ) / _tracklinerWidth * _media.duration;
       setNodePosition();
       onScrubberMouseDown( e );
     }; //onMouseDown
