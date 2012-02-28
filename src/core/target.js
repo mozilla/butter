@@ -35,7 +35,7 @@ THE SOFTWARE.
           _em = new EventManager( this ),
           _name = options.name || "Target" + _id,
           _element = options.element,
-          _highlight = false,
+          _blinkInterval = -1,
           _highlightElement = document.createElement( "div" ),
           _highlightDims = {},
           _highlightInterval = -1,
@@ -96,14 +96,15 @@ THE SOFTWARE.
       checkPosition();
 
       function highlight( state ){
-        if( state !== undefined ){
-          _highlight = state;
-        } //if
-        if( _highlight ){
+        clearInterval( _blinkInterval );
+        clearInterval( _highlightInterval );
+        _blinkInterval = -1;
+        if( state ){
           if( _highlightInterval === -1 ){
             _highlightInterval = setInterval( checkPosition, 10 );
           } //if
           _highlightElement.style.visibility = "visible";
+          _highlightElement.removeAttribute( "blink" );
           checkPosition();
         }
         else {
@@ -114,6 +115,20 @@ THE SOFTWARE.
           _highlightElement.style.visibility = "hidden";
         } //if
       } //highlight
+
+      _this.blink = function(){
+        if( _blinkInterval === -1 ){
+          _blinkInterval = setInterval( checkPosition, 100 );
+          _highlightElement.setAttribute( "blink", "true" );
+          _highlightElement.style.visibility = "visible";
+          setTimeout(function(){
+            clearInterval( _blinkInterval );
+            _blinkInterval = -1;
+            _highlightElement.removeAttribute( "blink" );
+            _highlightElement.style.visibility = "hidden";
+          }, 1500 );
+        } //if
+      }; //blink
 
       Object.defineProperties( this, {
         name: {
@@ -128,6 +143,14 @@ THE SOFTWARE.
             return _id;
           }
         },
+        elementID: {
+          enumerable: true,
+          get: function(){
+            if( _element ){
+              return _element.id;
+            } //if
+          }
+        },
         element: {
           enumerable: true,
           get: function(){
@@ -137,7 +160,7 @@ THE SOFTWARE.
         highlight: {
           enumerable: true,
           get: function(){
-            return _highlight;
+            return _hightlightInterval !== -1;
           },
           set: function( val ){
             highlight( val );

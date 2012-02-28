@@ -52,7 +52,7 @@ define( [
 
   var ZOOM_FACTOR = 100;
 
-  function MediaInstance( media ){
+  function MediaInstance( butter, media ){
     var _this = this,
         _media = media,
         _em = new EventManager( this ),
@@ -136,7 +136,16 @@ define( [
 
     function onTrackEventMouseDown( e ){
       var trackEvent = e.trackEvent,
+          corn = trackEvent.popcornOptions,
           originalEvent = e.originalEvent;
+
+      if( originalEvent.ctrlKey && corn.target ){
+        var target = butter.getTargetByType( "elementID", corn.target )
+        if( target ){
+          target.blink();
+        } //if
+        return;
+      } //if
 
       if( trackEvent.selected === true && originalEvent.shiftKey && _selectedTracks.length > 1 ){
         trackEvent.selected = false;
