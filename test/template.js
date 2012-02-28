@@ -31,8 +31,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
           butter.plugin.add([
             { name: "footnote", type: "footnote", path: "../external/popcorn-js/plugins/footnote/popcorn.footnote.js" },
-            { name: "wikipedia", type: "wikipedia", path: "../external/popcorn-js/plugins/wikipedia/popcorn.wikipedia.js" },
-            { name: "subtitle", type: "subtitle", path: "../external/popcorn-js/plugins/subtitle/popcorn.subtitle.js" }
+            { name: "attribution", type: "attribution", path: "../external/popcorn-js/plugins/attribution/popcorn.attribution.js" },
+            { name: "image", type: "image", path: "../external/popcorn-js/plugins/image/popcorn.image.js" }
             ], function( e ) {
 
             var event = track.addTrackEvent({
