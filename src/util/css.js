@@ -1,6 +1,6 @@
 define( [], function(){
 
-  var util = {
+  return {
     addClass: function( obj, className ){
       var classes = obj.className.split( " " );
       for( var i=0, l=classes.length; i<l; ++i ){
@@ -27,5 +27,4 @@ define( [], function(){
     }
   }; //util
 
-  return util;
 });

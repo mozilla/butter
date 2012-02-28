@@ -35,7 +35,6 @@ THE SOFTWARE.
             "track/module",
             "plugin/module",
             "timeline/module",
-            "dialog/module",
             "ui/module"
           ],
           function(
@@ -49,7 +48,6 @@ THE SOFTWARE.
             TrackModule,
             PluginModule,
             TimelineModule,
-            DialogModule,
             UIModule
   ){
 
@@ -57,7 +55,6 @@ THE SOFTWARE.
       editor: EditorModule,
       eventManager: EventManager,
       track: TrackModule,
-      dialog: DialogModule,
       timeline: TimelineModule,
       plugin: PluginModule,
       preview: PreviewModule,
