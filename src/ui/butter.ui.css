@@ -345,11 +345,11 @@ THE SOFTWARE.
   height: 27px;
 }
 
-#butter-timeline[ butter-ui-hidden="true" ] {
+#butter-timeline[ ui-state="hidden" ] {
   bottom: -260px;
 }
 
-#butter-timeline-toggle {
+#butter-timeline #toggle-button {
   height: 30px;
   width: 50px;
   background-image: url( "assets/bg.jpg" );
@@ -364,12 +364,26 @@ THE SOFTWARE.
   webkit-box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
 }
 
-#butter-timeline-toggle:hover {
+#butter-timeline #toggle-button:hover {
   box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
   moz-box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
   o-box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
   webkit-box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
   cursor: pointer;
+}
+
+#butter-timeline #toggle-button div {
+  background-image: url("assets/buttons.png");
+  background-position: -255px 10px;
+  width: 15px;
+  height: 20px;
+  background-clip: content-box;
+  background-repeat: no-repeat;
+  margin: 0 18px 0 18px;
+}
+
+#butter-timeline[ ui-state="hidden" ] #toggle-button div {
+  background-position: -255px -7px;
 }
 
 #butter-status-bar {
@@ -455,6 +469,13 @@ THE SOFTWARE.
   -webkit-user-select: none;
   -o-user-select: none;
   user-select: none;
+  -moz-transition: top 0.5s;
+  -webkit-transition: top 0.5s;
+  transition: top 0.5s;
+}
+
+#butter-timeline[ ui-state="hidden" ] .media-instance {
+  top: -7px;
 }
 
 #butter-timeline .media-container {

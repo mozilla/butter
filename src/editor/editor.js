@@ -24,8 +24,8 @@ THE SOFTWARE.
 
 define( [ "core/eventmanager" ], function( EventManager ) {
 
-  const DEFAULT_DIMS = [ 400, 400 ];
-  const DEFAULT_FRAME_TYPE = "window";
+  var DEFAULT_DIMS = [ 400, 400 ],
+      DEFAULT_FRAME_TYPE = "window";
 
   var __guid = 0;
 
@@ -56,14 +56,19 @@ define( [ "core/eventmanager" ], function( EventManager ) {
 
       butter.dialog.open( _dialogName, {
         open: function( e ) {
-          var targets = [];
+          var targets = [],
+              media = {
+                name: butter.currentMedia.name,
+                target: butter.currentMedia.target
+              };
           for( var i = 0, l = butter.targets.length; i < l; i++ ) {
-            targets.push( butter.targets[ i ].elementID );
+            targets.push( butter.targets[ i ].element.id );
           }
           butter.dialog.send( _dialogName, "trackeventdata", {
             manifest: Popcorn.manifest[ trackEvent.type ],
             popcornOptions: trackEvent.popcornOptions,
-            targets: targets
+            targets: targets,
+            media: media
           });
           trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
         },

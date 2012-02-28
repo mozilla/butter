@@ -1,7 +1,7 @@
 define( [ "./util", "./event-manager" ] , function( util, EventManager ){
 
-  const MAX_DIALOGS = 1000;
-  const MIN_Z_INDEX = 2147483647 - MAX_DIALOGS;
+  var MAX_DIALOGS = 1000,
+      MIN_Z_INDEX = 2147483647 - MAX_DIALOGS;
 
   var Layer = function( dialog, zIndex ) {
 

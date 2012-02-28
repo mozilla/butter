@@ -44,6 +44,7 @@ define( [], function(){
       _controlHeight = _control.getBoundingClientRect().height;
       _handleHeight = Math.min( _elementHeight, _elementHeight - ( _control.scrollHeight - _controlHeight ) );
       _handle.style.height = _handleHeight + "px";
+      setHandlePosition();
     } //setup
 
     function onMouseUp(){
@@ -76,6 +77,32 @@ define( [], function(){
     this.update = function(){
       setup();
     }; //update
+
+    function setHandlePosition(){
+      if( _control.scrollTop - _elementHeight > 0 ) {
+        _handle.style.top = ( _elementHeight - _handleHeight ) *
+          ( _control.scrollTop / (_control.scrollHeight - _elementHeight )) + "px";
+      }else{
+        _handle.style.top = "0px";
+      }
+    };
+
+    _control.addEventListener( "mousewheel", function( e ){
+      if( e.wheelDeltaY ){
+        _control.scrollTop -= e.wheelDeltaY;
+        setHandlePosition();
+        e.preventDefault();
+      }
+    }, false );
+
+    // For Firefox
+    _control.addEventListener( "DOMMouseScroll", function( e ){
+      if( e.axis === e.VERTICAL_AXIS && !e.shiftKey ){
+        _control.scrollTop += e.detail * 2;
+        setHandlePosition();
+        e.preventDefault();
+      }
+    }, false );
 
     _element.addEventListener( "click", function( e ) {
       // bail early if this event is coming from the handle
@@ -134,11 +161,7 @@ define( [], function(){
       _controlWidth = _control.getBoundingClientRect().width;
       _handleWidth = Math.max( 20, Math.min( _elementWidth, _elementWidth - ( _control.scrollWidth - _controlWidth ) ) );
       _handle.style.width = _handleWidth + "px";
-      var p = 0;
-      if( _control.scrollWidth - _elementWidth > 0 ){
-        p = _control.scrollLeft / ( _control.scrollWidth - _elementWidth );
-      } //if
-      _handle.style.left = p * ( _elementWidth - _handleWidth ) + "px";
+      setHandlePosition();
     } //setup
 
     function onMouseUp(){
@@ -164,6 +187,32 @@ define( [], function(){
         _handle.removeEventListener( "mousedown", onMouseDown, false );
       } //if
     } //onMouseDown
+
+    function setHandlePosition(){
+      if( _control.scrollWidth - _elementWidth > 0 ) {
+        _handle.style.left = ( _elementWidth - _handleWidth ) *
+          ( _control.scrollLeft / ( _control.scrollWidth - _elementWidth )) + "px";
+      }else{
+        _handle.style.left = "0px";
+      }
+    };
+
+    _control.addEventListener( "mousewheel", function( e ){
+      if( e.wheelDeltaX ){
+        _control.scrollLeft -= e.wheelDeltaX;
+        setHandlePosition();
+        e.preventDefault();
+      }
+    }, false );
+
+    // For Firefox
+    _control.addEventListener( "DOMMouseScroll", function( e ){
+      if( e.axis === e.HORIZONTAL_AXIS || ( e.axis === e.VERTICAL_AXIS && e.shiftKey )){
+        _control.scrollLeft += e.detail * 2;
+        setHandlePosition();
+        e.preventDefault();
+      }
+    }, false );
 
     _element.addEventListener( "click", function( e ) {
       // bail early if this event is coming from the handle

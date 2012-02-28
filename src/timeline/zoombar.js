@@ -23,7 +23,7 @@ THE SOFTWARE.
 **********************************************************************************/
 
 define( [], function(){
-  const ZOOM_LEVELS = 6;
+  var ZOOM_LEVELS = 6;
 
   return function( zoomCallback ){
 
