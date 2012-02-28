@@ -26,6 +26,48 @@ THE SOFTWARE.
 
   define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
+    var __numStyleSheets,
+        __trackEventCSSRules = {},
+        __cssRuleProperty = "butter-trackevent-type",
+        __cssRulePrefix = "#butter-timeline .trackliner-event",
+        __newStyleSheet = document.createElement( "style" );
+
+    __newStyleSheet.type = "text/css";
+    __newStyleSheet.media = "screen";
+
+    function findTrackEventCSSRules(){
+      var sheets = document.styleSheets;
+      __numStyleSheets = sheets.length;
+      for( var i=0; i<sheets.length; ++i ){
+        var sheet = sheets[ i ];
+        if( sheet.href && sheet.href.indexOf( "jquery" ) > -1 ){
+          continue;
+        } //if
+        for( var j=0, l=sheet.rules.length; j<l; ++j ){
+          var rule = sheet.rules[ j ],
+              text = rule.selectorText,
+              idx = text.indexOf( __cssRuleProperty );
+          if( idx > -1 ){
+            var eIdx = text.indexOf( '"', idx + __cssRuleProperty.length + 2 ),
+                name = text.substring( idx + __cssRuleProperty.length + 2, eIdx );
+            __trackEventCSSRules[ name ] = rule;
+          } //if
+        } //for
+      } //for
+    } //findTrackEventCSSRules
+
+    function createStyleForType( type ){
+      var startColor = "#c9c900",
+          endColor = "#101010";
+      var styleContent = __newStyleSheet.innerHTML;
+      styleContent +=__cssRulePrefix + "[" + __cssRuleProperty + "=\"" + type + "\"]{";
+      styleContent += "background: -moz-linear-gradient(top, "+ startColor + " 0%, " + endColor + " 100% );";
+      styleContent += "background: -webkit-gradient(linear, left top, left bottom, color-stop(0%," + startColor + "), color-stop(100%," + endColor + "));"; 
+      styleContent += "background: linear-gradient(top, "+ startColor + " 0%, " + endColor + " 100% );";
+      styleContent += "}";
+      __newStyleSheet.innerHTML = styleContent;
+    } //createStyleForType
+
     var PluginManager = function( butter, moduleOptions ) {
 
       var __butter = butter;
@@ -35,6 +77,11 @@ THE SOFTWARE.
           __this = this,
           __pluginElementPrefix = "butter-plugin-",
           __pattern = '<li class="$type_tool ui-draggable"><a href="#" title="$type"><span></span>$type</a></li>';
+
+      if( __numStyleSheets !== document.styleSheets.length ){
+        findTrackEventCSSRules();
+      } //if
+      document.head.appendChild( __newStyleSheet );
 
       var Plugin = function ( pluginOptions ) {
         pluginOptions = pluginOptions || {};
@@ -47,13 +94,17 @@ THE SOFTWARE.
             _type = pluginOptions.type,
             _element;
 
+        if( !__trackEventCSSRules[ _type ] ){
+          createStyleForType( _type );
+        } //if
+
         if( _path ) {
           var head = document.getElementsByTagName( "HEAD" )[ 0 ],
               script = document.createElement( "script" );
 
           script.src = _path;
           head.appendChild( script );
-        }
+        } //if
 
         Object.defineProperties( this, {
           plugins: {

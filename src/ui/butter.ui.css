@@ -681,7 +681,7 @@ THE SOFTWARE.
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ff00', endColorstr='#00c100',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-timeline .trackliner-event[butter-trackevent-type="image"] {
+#butter-timeline .trackliner-event[butter-trackevent-type="image2"] {
   background: #ff9900; /* Old browsers */
   background: -moz-linear-gradient(top, #ff9900 0%, #c87800 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff9900), color-stop(100%,#c87800)); /* Chrome,Safari4+ */
@@ -692,7 +692,7 @@ THE SOFTWARE.
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff9900', endColorstr='#c87800',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-timeline .trackliner-event[butter-trackevent-type="attribution"] {
+#butter-timeline .trackliner-event[butter-trackevent-type="attribution2"] {
   background: #0099ff; /* Old browsers */
   background: -moz-linear-gradient(top, #0099ff 0%, #0078c8 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0099ff), color-stop(100%,#0078c8)); /* Chrome,Safari4+ */
