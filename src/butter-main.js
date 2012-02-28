@@ -218,26 +218,6 @@ THE SOFTWARE.
         }
       }; //clearProject
 
-      this.authorize = function() {
-        _this.cornfield.authorize();
-      };
-
-      this.whoami = function() {
-        _this.cornfield.whoami();
-      }
-
-      this.ls = function(callback) {
-        _this.cornfield.ls(callback);
-      }
-
-      this.pull = function(name, callback) {
-        _this.cornfield.pull(name, callback);
-      }
-
-      this.push = function(name, data, callback) {
-        _this.cornfield.push(name, data, callback);
-      }
-
       /****************************************************************
        * Media methods
        ****************************************************************/

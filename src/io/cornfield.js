@@ -41,7 +41,7 @@ THE SOFTWARE.
     }
 
     var Cornfield = function( butter, config ) {
-console.log(config);
+
       var email = "",
           server = config.server,
           verifier = server + "/browserid/verify";
@@ -73,7 +73,7 @@ console.log(config);
       };
 
       this.ls = function(callback) {
-        XHR.get(audience() + ":8888/files", function() {
+        XHR.get(server + "/files", function() {
           if (this.readyState === 4 && this.response) {
             var response = JSON.parse(this.response);
             callback(response);
@@ -82,7 +82,7 @@ console.log(config);
       };
 
       this.pull = function(name, callback) {
-        XHR.get(audience() + ":8888/files/" + name, function() {
+        XHR.get(server + "/files/" + name, function() {
           if (this.readyState === 4 && this.response) {
             callback(this.response);
           }
@@ -90,7 +90,7 @@ console.log(config);
       };
 
       this.push = function(name, data, callback) {
-        XHR.put(audience() + ":8888/files/" + name, data, function() {
+        XHR.put(server + "/files/" + name, data, function() {
           if (this.readyState === 4 && this.response) {
             callback(this.response);
           }
