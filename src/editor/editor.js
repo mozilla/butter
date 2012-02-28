@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 **********************************************************************************/
 
-define( [ "core/eventmanager" ], function( EventManager ) {
+define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ], function( EventManager, IFRAMEDialog, WindowDialog ) {
 
   const DEFAULT_DIMS = [ 400, 400 ];
   const DEFAULT_FRAME_TYPE = "window";
@@ -34,33 +34,44 @@ define( [ "core/eventmanager" ], function( EventManager ) {
         _frameType = frameType || DEFAULT_FRAME_TYPE,
         _source = source,
         _type = type,
-        _dialogName = "editor-" + type + _id,
         _dims = DEFAULT_DIMS.slice(),
         _em = new EventManager( "Editor-" + _type ),
+        _dialog,
+        _dialogOptions = {
+          type: _frameType,
+          modal: "behind-timeline",
+          url: source,
+        },
         _this = this;
 
     _dims[ 0 ] = options.width || _dims[ 0 ];
     _dims[ 1 ] = options.height || _dims[ 1 ];
 
-    butter.dialog.add( _dialogName, {
-      type: _frameType,
-      modal: true,
-      url: _source
-    });
-
     this.open = function( trackEvent ) {
+      if( !_dialog ){
+        if( _frameType === "iframe" ){
+          _dialog = new IFRAMEDialog( _dialogOptions );
+        }
+        else{
+          _dialog = new WindowDialog( _dialogOptions );
+        } //if
+      } //if
+
+      if( !_dialog.closed ){
+        return;
+      } //if
 
       function onTrackEventUpdated( e ){
-        butter.dialog.send( _dialogName, "trackeventupdated", trackEvent.popcornOptions );
+        _dialog.send( "trackeventupdated", trackEvent.popcornOptions );
       } //onTrackEventUpdated
 
-      butter.dialog.open( _dialogName, {
+      _dialog.open({
         open: function( e ) {
           var targets = [];
           for( var i = 0, l = butter.targets.length; i < l; i++ ) {
             targets.push( butter.targets[ i ].element.id );
           }
-          butter.dialog.send( _dialogName, "trackeventdata", {
+          _dialog.send( "trackeventdata", {
             manifest: Popcorn.manifest[ trackEvent.type ],
             popcornOptions: trackEvent.popcornOptions,
             targets: targets
