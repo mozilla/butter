@@ -83,7 +83,6 @@ define( [
 
     this.open = function( listeners ){
       if( _this.modal ){
-        console.log(2);
         _modalLayer = new Modal( _this.modal );
       } //if
       for( e in listeners ){

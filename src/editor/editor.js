@@ -48,7 +48,6 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ],
     _dims[ 1 ] = options.height || _dims[ 1 ];
 
     this.open = function( trackEvent ) {
-
       if( !_dialog ){
         if( _frameType === "iframe" ){
           _dialog = new IFRAMEDialog( _dialogOptions );
@@ -56,6 +55,10 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ],
         else{
           _dialog = new WindowDialog( _dialogOptions );
         } //if
+      } //if
+
+      if( !_dialog.closed ){
+        return;
       } //if
 
       function onTrackEventUpdated( e ){
