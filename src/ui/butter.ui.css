@@ -582,7 +582,8 @@ THE SOFTWARE.
   cursor: move;
   overflow: hidden;
   display: block;
-  height: 25px;
+  height: 24px;
+  margin-top: 1px;
   line-height: 25px;
   opacity: 0.8;
   position: absolute;
@@ -609,19 +610,19 @@ THE SOFTWARE.
   box-shadow: inset 2px 1.2px 1px rgba(0,0,0,0.8), 
               inset -1px 1.2px 1px rgba(0,0,0,0.8),
               inset 0px -1px .5px rgba(255,255,255,0.1), 
-              inset 0px -1px 1px rgba(0,0,0,0.8);
+              inset 0px -1px 1px rgba(100,100,100,0.8);
   moz-box-shadow: inset 2px 1.2px 1px rgba(0,0,0,0.8), 
               inset -1px 1.2px 1px rgba(0,0,0,0.8),
               inset 0px -1px .5px rgba(255,255,255,0.1), 
-              inset 0px -1px 1px rgba(0,0,0,0.8);
+              inset 0px -1px 1px rgba(100,100,100,0.8);
   o-box-shadow: inset 2px 1.2px 1px rgba(0,0,0,0.8), 
               inset -1px 1.2px 1px rgba(0,0,0,0.8),
               inset 0px -1px .5px rgba(255,255,255,0.1), 
-              inset 0px -1px 1px rgba(0,0,0,0.8);
+              inset 0px -1px 1px rgba(100,100,100,0.8);
   webkit-box-shadow: inset 2px 1.2px 1px rgba(0,0,0,0.8), 
               inset -1px 1.2px 1px rgba(0,0,0,0.8),
               inset 0px -1px .5px rgba(255,255,255,0.1), 
-              inset 0px -1px 1px rgba(0,0,0,0.8);
+              inset 0px -1px 1px rgba(100,100,100,0.8);
 }
 
 #butter-timeline .tracks-container .trackliner-track[selected="true"] {
