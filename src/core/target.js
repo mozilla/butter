@@ -23,7 +23,7 @@ THE SOFTWARE.
 **********************************************************************************/
 
 (function() {
-  define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
+  define( [ "core/logger", "core/eventmanager", "ui/page-element" ], function( Logger, EventManager, PageElement ) {
 
     var __guid = 0;
 
@@ -35,36 +35,8 @@ THE SOFTWARE.
           _em = new EventManager( this ),
           _name = options.name || "Target" + _id,
           _element = options.element,
-          _blinkInterval = -1,
-          _highlightElement = document.createElement( "div" ),
-          _highlightDims = {},
-          _highlightInterval = -1,
+          _pageElement,
           _this = this;
-
-      _highlightElement.className = "butter-target-highlight";
-      _highlightElement.style.visibility = "hidden";
-      document.body.appendChild( _highlightElement );
-
-      function checkPosition(){
-        var ePos = _element.getBoundingClientRect();
-        if( ePos.left !== _highlightDims.left ){
-          _highlightDims.left = ePos.left;
-          _highlightElement.style.left = ePos.left + "px";
-        } //if
-        if( ePos.top !== _highlightDims.top ){
-          _highlightDims.top = ePos.top;
-          _highlightElement.style.top = ePos.top + "px";
-        } //if
-        if( ePos.width !== _highlightDims.width ){
-          _highlightDims.width = ePos.width;
-          _highlightElement.style.width = ePos.width + "px";
-        } //if
-        if( ePos.height !== _highlightDims.height ){
-          _highlightDims.height = ePos.height;
-          _highlightElement.style.height = ePos.height + "px";
-        } //if
-        _highlightDims = ePos;
-      } //checkPosition
 
       if( typeof( _element ) === "string" ){
         _element = document.getElementById( _element );
@@ -74,63 +46,27 @@ THE SOFTWARE.
         _logger.log( "Warning: Target element is null." );
       }
       else {
-        $( _element ).droppable({
-          greedy: true,
-          over: function( event, ui ){
-            highlight( true );
-          },
-          out: function( event, ui ){
-            highlight( false );
-          },
+        _pageElement = new PageElement( _element, {
           drop: function( event, ui ){
-            highlight( false );
             _em.dispatch( "trackeventrequested", {
               event: event,
               target: _this,
               ui: ui
             });
           }
+        },
+        {
+          highlightClass: "butter-target-highlight"
         });
       } //if
 
-      checkPosition();
-
-      function highlight( state ){
-        clearInterval( _blinkInterval );
-        clearInterval( _highlightInterval );
-        _blinkInterval = -1;
-        if( state ){
-          if( _highlightInterval === -1 ){
-            _highlightInterval = setInterval( checkPosition, 10 );
-          } //if
-          _highlightElement.style.visibility = "visible";
-          _highlightElement.removeAttribute( "blink" );
-          checkPosition();
-        }
-        else {
-          if( _highlightInterval !== -1 ){
-            clearInterval( _highlightInterval );
-          } //if
-          _highlightInterval = -1;
-          _highlightElement.style.visibility = "hidden";
-        } //if
-      } //highlight
-
-      _this.blink = function(){
-        if( _blinkInterval === -1 ){
-          _blinkInterval = setInterval( checkPosition, 100 );
-          _highlightElement.setAttribute( "blink", "true" );
-          _highlightElement.style.visibility = "visible";
-          setTimeout(function(){
-            clearInterval( _blinkInterval );
-            _blinkInterval = -1;
-            _highlightElement.removeAttribute( "blink" );
-            _highlightElement.style.visibility = "hidden";
-          }, 1500 );
-        } //if
-      }; //blink
-
       Object.defineProperties( this, {
+        view: {
+          enumerable: true,
+          get: function(){
+            return _pageElement;
+          }
+        },
         name: {
           enumerable: true,
           get: function(){
@@ -155,15 +91,6 @@ THE SOFTWARE.
           enumerable: true,
           get: function(){
             return _element;
-          }
-        },
-        highlight: {
-          enumerable: true,
-          get: function(){
-            return _hightlightInterval !== -1;
-          },
-          set: function( val ){
-            highlight( val );
           }
         },
         json: {

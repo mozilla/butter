@@ -46,21 +46,25 @@ THE SOFTWARE.
   transition: bottom 0.5s;
 }
 
-.butter-target-highlight {
+.butter-highlight {
   position: absolute;
-  background-color: rgba( 170, 170, 10, 0.4 );
   z-index: 2100000000;
+  opacity: 1;
 }
 
-.butter-target-highlight[ blink="true" ]{
+.butter-highlight[ blink="true" ]{
   -moz-transition: opacity 1.5s;
   -webkit-transition: opacity 1.5s;
   transition: opacity 1.5s;
   opacity: 0;
 }
 
+.butter-target-highlight {
+  background-color: rgba( 170, 170, 10, 0.4 );
+}
+
 .butter-media-highlight {
-  opacity: 1;
+  background-color: rgba( 10, 170, 170, 0.4 );
 }
 
 #butter-timeline .status-container {

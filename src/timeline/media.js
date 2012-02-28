@@ -140,11 +140,16 @@ define( [
           originalEvent = e.originalEvent;
 
       if( originalEvent.ctrlKey && corn.target ){
-        var target = butter.getTargetByType( "elementID", corn.target )
-        if( target ){
-          target.blink();
+        if( corn.target !== "Media Element" ){
+          var target = butter.getTargetByType( "elementID", corn.target )
+          if( target ){
+            target.view.blink();
+          } //if
+          return;
+        }
+        else {
+          _media.view.blink();
         } //if
-        return;
       } //if
 
       if( trackEvent.selected === true && originalEvent.shiftKey && _selectedTracks.length > 1 ){
