@@ -7,44 +7,24 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     var _eventManager = new EventManager( this );
 
     this.scrape = function() {
-      var medias = [], targets = [];
+      var rootNode = document.body,
+          targets = rootNode.querySelectorAll("*[data-butter='target']"),
+          medias = rootNode.querySelectorAll("*[data-butter='media']");
 
-      function scrapeChildren( rootNode ) {
-        var children = rootNode.children;
+      // Once #389 lands this can disappear and we can simply return the result of the two querySelectorAll results
+      for( var i = 0, il = targets.length; i < il; i++ ) {
+        $( targets[ i ] ).droppable({
+          greedy: true,
+          drop: function( event, ui ) {
 
-        for( var i=0; i<children.length; i++ ) {
-          var thisChild = children[ i ];
-          if ( !thisChild ) {
-            continue;
+            // we only care about it if it's not already on this track
+            _eventManager.dispatch( "trackeventrequested", {
+              event: event,
+              ui: ui
+            });
           }
-          // if DOM element has an data-butter tag that is equal to target or media,
-          // add it to butters target list with a respective type
-          if ( thisChild.getAttribute ) {
-            if( thisChild.getAttribute( "data-butter" ) === "target" ) {
-              $( thisChild ).droppable({
-                greedy: true,
-                drop: function( event, ui ) {
-
-                  // we only care about it if it's not already on this track
-                  _eventManager.dispatch( "trackeventrequested", {
-                    event: event,
-                    ui: ui
-                  });
-                }
-              });
-              targets.push( thisChild );
-            }
-            else if( thisChild.getAttribute( "data-butter" ) === "media" ) {
-              medias.push( thisChild ); 
-            } // else
-          } //if
-          if ( thisChild.children && thisChild.children.length > 0 ) {
-            scrapeChildren( thisChild );
-          } // if
-        } // for
-      } //scrapeChildren
-
-      scrapeChildren( document.body );
+        });
+      }
 
       return {
         media: medias,
