@@ -21,17 +21,6 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           // add it to butters target list with a respective type
           if ( thisChild.getAttribute ) {
             if( thisChild.getAttribute( "data-butter" ) === "target" ) {
-              $( thisChild ).droppable({
-                greedy: true,
-                drop: function( event, ui ) {
-
-                  // we only care about it if it's not already on this track
-                  _eventManager.dispatch( "trackeventrequested", {
-                    event: event,
-                    ui: ui
-                  });
-                }
-              });
               targets.push( thisChild );
             }
             else if( thisChild.getAttribute( "data-butter" ) === "media" ) {
