@@ -43,6 +43,18 @@ THE SOFTWARE.
 
       if( !_element ){
         _logger.log( "Warning: Target element is null." );
+      }
+      else {
+        $( _element ).droppable({
+          greedy: true,
+          drop: function( event, ui ) {
+            _em.dispatch( "trackeventrequested", {
+              event: event,
+              target: _this,
+              ui: ui
+            });
+          }
+        });
       } //if
 
       Object.defineProperties( this, {
