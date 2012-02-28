@@ -46,6 +46,16 @@ THE SOFTWARE.
   transition: bottom 0.5s;
 }
 
+.butter-target-highlight {
+  position: absolute;
+  background-color: rgba( 170, 170, 10, 0.4 );
+  z-index: 2100000000;
+}
+
+.butter-media-highlight {
+  
+}
+
 #butter-timeline .status-container {
   position: absolute;
   width: 100px;

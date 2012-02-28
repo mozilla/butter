@@ -35,7 +35,36 @@ THE SOFTWARE.
           _em = new EventManager( this ),
           _name = options.name || "Target" + _id,
           _element = options.element,
+          _highlight = false,
+          _highlightElement = document.createElement( "div" ),
+          _highlightDims = {},
+          _highlightInterval = -1,
           _this = this;
+
+      _highlightElement.className = "butter-target-highlight";
+      _highlightElement.style.visibility = "hidden";
+      document.body.appendChild( _highlightElement );
+
+      function checkPosition(){
+        var ePos = _element.getBoundingClientRect();
+        if( ePos.left !== _highlightDims.left ){
+          _highlightDims.left = ePos.left;
+          _highlightElement.style.left = ePos.left + "px";
+        } //if
+        if( ePos.top !== _highlightDims.top ){
+          _highlightDims.top = ePos.top;
+          _highlightElement.style.top = ePos.top + "px";
+        } //if
+        if( ePos.width !== _highlightDims.width ){
+          _highlightDims.width = ePos.width;
+          _highlightElement.style.width = ePos.width + "px";
+        } //if
+        if( ePos.height !== _highlightDims.height ){
+          _highlightDims.height = ePos.height;
+          _highlightElement.style.height = ePos.height + "px";
+        } //if
+        _highlightDims = ePos;
+      } //checkPosition
 
       if( typeof( _element ) === "string" ){
         _element = document.getElementById( _element );
@@ -47,7 +76,14 @@ THE SOFTWARE.
       else {
         $( _element ).droppable({
           greedy: true,
-          drop: function( event, ui ) {
+          over: function( event, ui ){
+            highlight( true );
+          },
+          out: function( event, ui ){
+            highlight( false );
+          },
+          drop: function( event, ui ){
+            highlight( false );
             _em.dispatch( "trackeventrequested", {
               event: event,
               target: _this,
@@ -56,6 +92,28 @@ THE SOFTWARE.
           }
         });
       } //if
+
+      checkPosition();
+
+      function highlight( state ){
+        if( state !== undefined ){
+          _highlight = state;
+        } //if
+        if( _highlight ){
+          if( _highlightInterval === -1 ){
+            _highlightInterval = setInterval( checkPosition, 10 );
+          } //if
+          _highlightElement.style.visibility = "visible";
+          checkPosition();
+        }
+        else {
+          if( _highlightInterval !== -1 ){
+            clearInterval( _highlightInterval );
+          } //if
+          _highlightInterval = -1;
+          _highlightElement.style.visibility = "hidden";
+        } //if
+      } //highlight
 
       Object.defineProperties( this, {
         name: {
@@ -74,6 +132,15 @@ THE SOFTWARE.
           enumerable: true,
           get: function(){
             return _element;
+          }
+        },
+        highlight: {
+          enumerable: true,
+          get: function(){
+            return _highlight;
+          },
+          set: function( val ){
+            highlight( val );
           }
         },
         json: {
