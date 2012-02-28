@@ -504,6 +504,7 @@
 
             secondButter.importProject( exported );
             allMedia = secondButter.media;
+
             ok( allMedia.length === 2, "right number of media objects" );
             ok( allMedia[ 0 ].url === "www.test-url-1.com", "media 1 url is correct" );
             ok( allMedia[ 0 ].target === "test-target-1", "media 1 target is correct" );
