@@ -35,6 +35,29 @@ THE SOFTWARE.
     __newStyleSheet.type = "text/css";
     __newStyleSheet.media = "screen";
 
+    function colourHashFromType( type ){
+      var hue = 0, saturation = 0, lightness = 0, srcString = type;
+
+      // very simple hashing function
+      while( srcString.length < 9 ){
+        srcString += type;
+      } //while
+      hue = ( srcString.charCodeAt( 0 ) + srcString.charCodeAt( 3 ) + srcString.charCodeAt( 6 ) ) % ( ( srcString.charCodeAt( 8) * 5 ) % 360 );
+      saturation = ( ( srcString.charCodeAt( 0 ) + srcString.charCodeAt( 2 ) + srcString.charCodeAt( 4 ) + srcString.charCodeAt( 6 ) ) % 100 ) * .05 + 95;
+      lightness = ( ( srcString.charCodeAt( 1 ) + srcString.charCodeAt( 3 ) + srcString.charCodeAt( 5 ) + srcString.charCodeAt( 7 ) ) % 100 ) * .20 + 40;
+
+      // bump up reds because they're hard to see
+      if( hue < 20 || hue > 340 ){
+        lightness += 10;
+      } //if
+
+      return {
+        h: hue,
+        s: saturation,
+        l: lightness
+      };
+    } //colourHashFromType
+
     function findTrackEventCSSRules(){
       var sheets = document.styleSheets;
       __numStyleSheets = sheets.length;
@@ -57,14 +80,10 @@ THE SOFTWARE.
     } //findTrackEventCSSRules
 
     function createStyleForType( type ){
-      var startColor = "hsla( 240, 100%, 80%, 1.0 )",
-          endColor = "hsla( 240, 100%, 20%, 1.0 )";
-
-      var styleContent = __newStyleSheet.innerHTML;
+      var styleContent = __newStyleSheet.innerHTML,
+          hash = colourHashFromType( type );
       styleContent +=__cssRulePrefix + "[" + __cssRuleProperty + "=\"" + type + "\"]{";
-      styleContent += "background: -moz-linear-gradient(top, "+ startColor + " 0%, " + endColor + " 100% );";
-      styleContent += "background: -webkit-gradient(linear, left top, left bottom, color-stop(0%," + startColor + "), color-stop(100%," + endColor + "));"; 
-      styleContent += "background: linear-gradient(top, "+ startColor + " 0%, " + endColor + " 100% );";
+      styleContent += "background: hsl( " + hash.h + ", " + hash.s + "%, " + hash.l + "% )";
       styleContent += "}";
       __newStyleSheet.innerHTML = styleContent;
     } //createStyleForType
