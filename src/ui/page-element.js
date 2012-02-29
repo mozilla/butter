@@ -79,6 +79,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     } //highlight
 
     _highlightElement.className = "butter-highlight ";
+    _highlightElement.setAttribute( "butter-exclude", "true" );
     if( _options.highlightClass ){
       _highlightElement.className += _options.highlightClass;
     } //if
@@ -100,6 +101,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
     if( _element ){
       document.body.appendChild( _highlightElement );
+
+      _element.setAttribute( "butter-clean", "true" );
 
       $( _element ).droppable({
         greedy: true,

@@ -45,21 +45,27 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       var html = document.createElement( "html" ),
           head = document.getElementsByTagName( "head" )[ 0 ].cloneNode( true ),
           body = document.getElementsByTagName( "body" )[ 0 ].cloneNode( true );
+      var toClean, toExclude;
 
-      for( var i=head.childNodes.length - 1; i>=0; --i ){
-        var node = head.childNodes[ i ];
-        if( node.getAttribute && 
-            ( node.getAttribute( "data-butter-exclude" ) === "true" ||
-              node.getAttribute( "data-requiremodule" ) !== null ) ){
-          head.removeChild( node );
-        } //if
+      toExclude = Array.prototype.slice.call( head.querySelectorAll( "*[butter-exclude]" ) );
+      toExclude = toExclude.concat( Array.prototype.slice.call( head.querySelectorAll( "*[data-requiremodule]" ) ) );
+      for( var i=0, l=toExclude.length; i<l; ++i ){
+        var node = toExclude[ i ];
+        node.parentNode.removeChild( node );
       } //for
 
-      for( var i=body.childNodes.length - 1; i>=0; --i ){
-        var node = body.childNodes[ i ];
-        if( node.id && node.id.indexOf( "butter-" ) > -1 ){
-          body.removeChild( node );
-        } //if
+      toClean = body.querySelectorAll( "*[butter-clean=\"true\"]" );
+      for( var i=0, l=toClean.length; i<l; ++i ){
+        var node = toClean[ i ];
+        node.removeAttribute( "butter-clean" );
+        node.removeAttribute( "data-butter" );
+        node.className = node.className.replace( /ui-droppable/g, "" );
+      } //for
+
+      toExclude = body.querySelectorAll( "*[butter-exclude=\"true\"]" );
+      for( var i=0, l=toExclude.length; i<l; ++i ){
+        var node = toExclude[ i ];
+        node.parentNode.removeChild( node );
       } //for
 
       html.appendChild( head );

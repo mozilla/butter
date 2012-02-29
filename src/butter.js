@@ -40,11 +40,11 @@
         path = path.join( '/' ) + '/';
 
         if ( !window.require ) {
-          document.write( '<script src="' + path + '../external/require/require.js"></' + 'script>' );
+          document.write( '<script butter-exclude="true" src="' + path + '../external/require/require.js"></' + 'script>' );
         } //if
 
         // Set up paths to find scripts.
-        document.write('<script>' + 
+        document.write('<script butter-exclude="true">' + 
           '(function(){' + 
           'var ctx = require.config({ ' + 
             'baseUrl: "' + path + '",' +
