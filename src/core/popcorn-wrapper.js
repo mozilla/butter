@@ -55,7 +55,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     }; //updateEvent
 
     this.destroyEvent = function( trackEvent ){
-       var options = trackEvent.popcornOptions,
+      var options = trackEvent.popcornOptions,
           butterId = trackEvent.id,
           popcornId = _butterEventMap[ butterId ];
       if( _popcorn ){
