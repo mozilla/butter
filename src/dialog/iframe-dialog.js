@@ -11,7 +11,7 @@ define( [
     if( !dialogOptions.url ){
       throw new Error( "IFRAME dialog requires a url." );
     } //if
-
+    window.addEventListener( "beforeunload",  onClose, false); 
     var _this = this,
         _url = dialogOptions.url,
         _em = new EventManager( _this ),
