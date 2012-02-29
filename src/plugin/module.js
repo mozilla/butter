@@ -51,6 +51,11 @@ THE SOFTWARE.
         lightness += 10;
       } //if
 
+      // dial back blue/greens a bit
+      if( hue > 160 && hue < 200 ){
+        lightness -= 10;
+      } //if
+
       return {
         h: hue,
         s: saturation,
