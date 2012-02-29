@@ -115,13 +115,12 @@ define( [], function(){
           elementRect = _element.getBoundingClientRect(),
           p;
 
-      if( posY > handleRect.top && posY > handleRect.bottom ) {
+      if( posY > handleRect.bottom ) {
         _handle.style.top = ( ( posY - elementRect.top ) - _handleHeight ) + "px";
-        console.log(_handle.style.top); 
       } else if( posY < handleRect.top ) {
-        _handle.style.top = posY - elementRect.top + "px"; 
+        _handle.style.top = posY - elementRect.top + "px";
       }
-      
+
       p = _handle.offsetTop / ( _elementHeight - _handleHeight );
       _control.scrollTop = ( _control.scrollHeight - _elementHeight ) * p;
     }, false);
@@ -227,12 +226,12 @@ define( [], function(){
           p;
 
       if( posX > handleRect.right ) {
-        _handle.style.left = ( ( posX - elementRect.left ) - _handleWidth ) + "px"; 
-      } 
-      else if( posX < handleRect.left ) {
-        _handle.style.left = posX - elementRect.left + "px"; 
+        _handle.style.left = ( ( posX - elementRect.left ) - _handleWidth ) + "px";
       }
-      
+      else if( posX < handleRect.left ) {
+        _handle.style.left = posX - elementRect.left + "px";
+      }
+
       p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
       _control.scrollLeft = ( _control.scrollWidth - _elementWidth ) * p;
     }, false);
