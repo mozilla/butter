@@ -57,8 +57,9 @@ THE SOFTWARE.
     } //findTrackEventCSSRules
 
     function createStyleForType( type ){
-      var startColor = "#c9c900",
-          endColor = "#101010";
+      var startColor = "hsla( 240, 100%, 80%, 1.0 )",
+          endColor = "hsla( 240, 100%, 20%, 1.0 )";
+
       var styleContent = __newStyleSheet.innerHTML;
       styleContent +=__cssRulePrefix + "[" + __cssRuleProperty + "=\"" + type + "\"]{";
       styleContent += "background: -moz-linear-gradient(top, "+ startColor + " 0%, " + endColor + " 100% );";
