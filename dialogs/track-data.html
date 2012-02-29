@@ -1,0 +1,78 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
+    <script type="text/javascript">
+      (function(){
+
+        var _comm = new Comm();
+
+        document.addEventListener( "DOMContentLoaded", function( e ){
+          var closeButton = document.getElementById( "close" ),
+              trackName = document.getElementById( "track-name" ),
+              trackData = document.getElementById( "track-data" );
+
+          function closePressed( e ){
+            _comm.send( "close" );
+          } //cancelPressed
+
+          document.addEventListener( "keypress", function( e ) {
+            if( e.currentTarget.nodeName !== "TEXTAREA" && [ 13, 27 ].indexOf( e.keyCode ) > -1 ){
+              closePressed( e );
+            } //if
+          }, false);
+
+          closeButton.addEventListener( "click", closePressed, false );
+
+          _comm.listen( "trackdata", function( e ){
+            trackName.innerHTML = e.data.name;
+            trackData.value = JSON.stringify( e.data );
+            closeButton.removeAttribute( "disabled" );
+          });
+        }, false );
+      })();
+    </script>
+    <style>
+      html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #container {
+        height: 100%;
+        width: 100%;
+      }
+
+      #track-data {
+        width: 90%;
+        height: 70%;
+        margin-top: 5%;
+        margin-left: 5%;
+        resize: none;
+      }
+
+      button {
+        font-size: 120%;
+      }
+
+      h1 {
+        height: 3%;
+        margin: 0;
+      }
+
+      #buttons {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <h1>Data for <span id="track-name"></span></h1>
+      <textarea readonly id="track-data">Please wait...</textarea>
+      <div id="buttons">
+        <button disabled id="close">Close</button>
+      </div>
+    </div>
+  </body>
+</html>

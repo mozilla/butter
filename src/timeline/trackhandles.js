@@ -88,6 +88,20 @@ define( [
         dialog.open();
       }, false );
 
+      trackDiv.addEventListener( "dblclick", function( e ){
+         var dialog = new IFrameDialog({
+          type: "iframe",
+          modal: true,
+          url: "../dialogs/track-data.html",
+          events: {
+            open: function( e ){
+              dialog.send( "trackdata", track.json );
+            }
+          }
+        });
+        dialog.open();
+      }, false );
+
       _menus.push( menuDiv );
 
       trackDiv.className = "track-handle";
