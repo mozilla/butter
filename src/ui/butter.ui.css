@@ -221,7 +221,7 @@ THE SOFTWARE.
   height: 185px;
   width: 100px;
   left: 5px;
-  bottom: 18px;
+  bottom: 18.8px;
   border: 1px solid #2B2B2B;
   border-image: initial;
   border-radius: 5px;
@@ -251,20 +251,22 @@ THE SOFTWARE.
   moz-border-radius: 6px;
   o-border-radius: 6px;
   webkit-border-radius: 6px;
-  border: 1px solid #111111 !important;
+  /*border: 1px solid #111111 !important;*/
   margin-bottom: 6px;
   position: relative;
   background-image: -moz-linear-gradient(center bottom,#1c1c1c 0,#2a2a2a 100%);
   background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#1c1c1c),color-stop(1,#2a2a2a));
-  border: 1px solid #111!important;
+  /*border: 1px solid #111!important; */
   color: #666;
   font: 10px/25px Arial,Helvetica,sans-serif;
-  height: 25px;
+  height: 28px;
   margin-bottom: 6px;
+  /*
   box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
   moz-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
   o-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
   webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
+  */
   text-transform: uppercase;
   text-align: center;
 }
@@ -605,8 +607,9 @@ THE SOFTWARE.
   background-repeat: repeat;
   background-size: auto auto;
   height: 28px;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
   position: relative;
+  /*
   box-shadow: inset 2px 1.2px 1px rgba(0,0,0,0.8), 
               inset -1px 1.2px 1px rgba(0,0,0,0.8),
               inset 0px -1px .5px rgba(255,255,255,0.1), 
@@ -623,6 +626,7 @@ THE SOFTWARE.
               inset -1px 1.2px 1px rgba(0,0,0,0.8),
               inset 0px -1px .5px rgba(255,255,255,0.1), 
               inset 0px -1px 1px rgba(100,100,100,0.8);
+  */
 }
 
 #butter-timeline .tracks-container .trackliner-track[selected="true"] {
@@ -722,7 +726,7 @@ THE SOFTWARE.
 #butter-timeline .zoom-bar {
   position: absolute;
   left: 5px;
-  bottom: 5px;
+  bottom: 5.6px;
   width: 102px;
   height: 10px;
 }
