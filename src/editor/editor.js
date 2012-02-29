@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 **********************************************************************************/
 
-define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ], function( EventManager, IFRAMEDialog, WindowDialog ) {
+define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ], function( EventManager, IFrameDialog, WindowDialog ) {
 
   const DEFAULT_DIMS = [ 400, 400 ];
   const DEFAULT_FRAME_TYPE = "window";
@@ -50,7 +50,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ],
     this.open = function( trackEvent ) {
       if( !_dialog ){
         if( _frameType === "iframe" ){
-          _dialog = new IFRAMEDialog( _dialogOptions );
+          _dialog = new IFrameDialog( _dialogOptions );
         }
         else{
           _dialog = new WindowDialog( _dialogOptions );

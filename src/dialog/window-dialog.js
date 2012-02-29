@@ -13,7 +13,7 @@ define( [
     dialogOptions = dialogOptions || {};
 
     if( !dialogOptions.url ){
-      throw new Error( "IFRAME dialog requires a url." );
+      throw new Error( "Window dialog requires a url." );
     } //if
 
     var _this = this,
@@ -73,7 +73,7 @@ define( [
         _em.unlisten( e, _listeners[ e ] );
       } //for
       _em.dispatch( "close" );
-    } //close
+    }; //close
 
     function checkWindowStatus(){
       if( _window && _window.closed === true ) {

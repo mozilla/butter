@@ -48,7 +48,7 @@ define( [
         _em.unlisten( e, _listeners[ e ] );
       } //for
       _em.dispatch( "close" );
-    } //close
+    }; //close
 
     this.open = function( listeners ){
       if( _this.modal ){
@@ -97,7 +97,6 @@ define( [
       }
     });
 
-  }; //IFRAMEDialog
+  }; //IFrameDialog
 
-  return IFRAMEDialog;
 });
