@@ -481,7 +481,7 @@ THE SOFTWARE.
 }
 
 #butter-timeline .scroll-handle {
-  height: 100%;
+  height: 95%;
   position: absolute;
   background: #999;
   min-width: 10px;
@@ -490,7 +490,6 @@ THE SOFTWARE.
   moz-box-shadow: inset 0 -1px 1px #000;
   o-box-shadow: inset 0 -1px 1px #000;
   webkit-box-shadow: inset 0 -1px 1px #000;
-
 }
 
 #butter-timeline .scroll-handle:hover {
