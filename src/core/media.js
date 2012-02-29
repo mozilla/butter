@@ -170,7 +170,7 @@ THE SOFTWARE.
 
       function setupContent(){
         if( _url && _target ){
-          _popcornWrapper.prepare( _url, _target );
+          _popcornWrapper.prepare( _url, _target, _popcornOptions );
         } //if
         if( _pageElement ){
           _pageElement.destroy();
@@ -358,6 +358,12 @@ THE SOFTWARE.
           enumerable: true,
           get: function(){
             return _pageElement;
+          }
+        },
+        popcornString: {
+          enumerable: true,
+          get: function(){
+            return _popcornWrapper.generatePopcornString( _popcornOptions, _url, _target );
           }
         }
       });

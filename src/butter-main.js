@@ -94,7 +94,11 @@ THE SOFTWARE.
       }; //getManifest
 
       this.getHTML = function(){
-        return _page.getHTML();
+        var media = [];
+        for( var i=0; i<_media.length; ++i ){
+          media.push( _media[ i ].popcornString );
+        } //for
+        return _page.getHTML( media );
       }; //getHTML
 
       function trackEventRequested( e, media, target ){

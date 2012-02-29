@@ -41,7 +41,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       } //if
     }; // preparePopcorn
 
-    this.getHTML = function(){
+    this.getHTML = function( popcornStrings ){
       var html = document.createElement( "html" ),
           head = document.getElementsByTagName( "head" )[ 0 ].cloneNode( true ),
           body = document.getElementsByTagName( "body" )[ 0 ].cloneNode( true );
@@ -70,6 +70,15 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
       html.appendChild( head );
       html.appendChild( body );
+
+      if( popcornStrings ){
+        for( var i=0; i<popcornStrings.length; ++i ){
+          var script = document.createElement( "script" );
+          script.type = "text/javascript";
+          script.innerHTML = "(function(){\n" + popcornStrings[ i ] + "\n}());";
+          body.appendChild( script );
+        } //for
+      } //if
 
       return "<html>" + html.innerHTML + "</html>";
     }; //getHTML
