@@ -46,35 +46,35 @@ THE SOFTWARE.
           server = config.server,
           verifier = server + "/browserid/verify";
 
-      this.authorize = function() {
+      this.authorize = function(callback) {
         navigator.id.get(function(assertion) {
           if (assertion) {
-            console.log("Successfully logged in to BrowserID");
-
             XHR.post(verifier,
               { audience: audience(), assertion: assertion },
               function() {
-                if (this.readyState === 4 && this.response) {
+                if (this.readyState === 4) {
                   var response = JSON.parse(this.response);
                   if (response.status === "okay") {
                     email = response.email;
-                    console.log("Successfully logged in to cornfield with id " + email);
+                    callback(email);
+                  } else {
+                    callback(undefined);
                   }
                 }
               });
           } else {
-            console.error("Failed to login to BrowserID");
+            callback(undefined);
           }
         });
       };
 
-      this.whoami = function() {
+      this.user = function() {
         return email;
       };
 
-      this.ls = function(callback) {
+      this.list = function(callback) {
         XHR.get(server + "/files", function() {
-          if (this.readyState === 4 && this.response) {
+          if (this.readyState === 4) {
             var response = JSON.parse(this.response);
             callback(response);
           }
@@ -83,16 +83,18 @@ THE SOFTWARE.
 
       this.pull = function(name, callback) {
         XHR.get(server + "/files/" + name, function() {
-          if (this.readyState === 4 && this.response) {
-            callback(this.response);
+          if (this.readyState === 4) {
+            var response = JSON.parse(this.response);
+            callback(response);
           }
         });
       };
 
       this.push = function(name, data, callback) {
         XHR.put(server + "/files/" + name, data, function() {
-          if (this.readyState === 4 && this.response) {
-            callback(this.response);
+          if (this.readyState === 4) {
+            var response = JSON.parse(this.response);
+            callback(response);
           }
         });
       };
