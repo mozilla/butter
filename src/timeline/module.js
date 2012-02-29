@@ -24,15 +24,14 @@ THE SOFTWARE.
 
 define( [
           "core/logger", 
-          "./media",
-          "./timebar"
+          "./media"
         ], 
         function( 
           Logger, 
           Media
         ){
 
-  var unwantedKeyPressElements = [
+  var __unwantedKeyPressElements = [
     "TEXTAREA",
     "INPUT"
   ];
@@ -150,18 +149,10 @@ define( [
     }; //currentTimeInPixels
 
     window.addEventListener( "keypress", function( e ){
-      if( e.which === 32 && unwantedKeyPressElements.indexOf( e.target.nodeName ) === -1 ){
+      if( e.which === 32 && __unwantedKeyPressElements.indexOf( e.target.nodeName ) === -1 ){
         butter.currentMedia.paused = !butter.currentMedia.paused;
       } //if
     }, false );
-
-    butter.listen( "ready", function(){
-      butter.dialog.add( "delete-track-confirmation", {
-        type: "iframe",
-        modal: true,
-        url: "../editors/delete-track.html"
-      });
-    });
 
     Object.defineProperties( this, {
       zoom: {

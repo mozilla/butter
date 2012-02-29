@@ -40,6 +40,15 @@ THE SOFTWARE.
   height: 0px;
 }
 
+#butter-modal-container .layer iframe {
+  width: 60%;
+  height: 60%;
+  margin: 5% 20%;
+  background-color: #fff;
+  border: 10px solid #000;
+  border-radius: 20px;
+}
+
 #butter-modal-container .layer[ state="behind-timeline" ] {
   z-index: 2139000000;
 }

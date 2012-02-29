@@ -12,7 +12,6 @@
 
           function okPressed( e ){
             _comm.send( "submit", true );
-            _comm.send( "close" );
           } //okPressed
 
           function cancelPressed( e ){
@@ -32,6 +31,8 @@
 
           _comm.listen( "trackdata", function( e ){
             trackName.appendChild( document.createTextNode( e.data ) );
+            okButton.removeAttribute( "disabled" );
+            cancelButton.removeAttribute( "disabled" );
           });
 
           _comm.listen( "test", function( e ){
@@ -42,10 +43,65 @@
         }, false );
       })();
     </script>
+    <style>
+      html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #container {
+        height: 100%;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-box-pack: center;
+        -webkit-box-align: center;
+         
+        display: -moz-box;
+        -moz-box-orient: vertical;
+        -moz-box-pack: center;
+        -moz-box-align: center;
+          
+        display: box;
+        box-orient: vertical;
+        box-pack: center;
+        box-align: center;
+      }
+
+      h1 {
+        display: -webkit-box;
+        -webkit-box-orient: horizontal;
+        -webkit-box-pack: center;
+        -webkit-box-align: center;
+         
+        display: -moz-box;
+        -moz-box-orient: horizontal;
+        -moz-box-pack: center;
+        -moz-box-align: center;
+          
+        display: box;
+        box-orient: horizontal;
+        box-pack: center;
+        box-align: center;
+      }
+
+      button {
+        font-size: 120%;
+      }
+
+      #buttons {
+        text-align: center;
+      }
+    </style>
   </head>
   <body>
-    <h1>Are you sure you want to delete <span id="track-name"></span>?</h1>
-    <button id="yes">Yes</button>
-    <button id="no">No</button>
+    <div id="container">
+      <h1>Are you sure you want to delete <span id="track-name"></span>?</h1>
+      <div id="buttons">
+        <button disabled id="yes">Yes</button>
+        <button disabled id="no">No</button>
+      </div>
+    </div>
   </body>
 </html>

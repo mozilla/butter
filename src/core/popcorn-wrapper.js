@@ -54,6 +54,18 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       } //if
     }; //updateEvent
 
+    this.destroyEvent = function( trackEvent ){
+       var options = trackEvent.popcornOptions,
+          butterId = trackEvent.id,
+          popcornId = _butterEventMap[ butterId ];
+      if( _popcorn ){
+        if( popcornId && _popcorn.getTrackEvent( popcornId ) ){
+          _popcorn.removeTrackEvent( popcornId );
+        } //if
+        delete _butterEventMap[ butterId ];
+      } //if
+    }; //destroyEvent
+
     this.prepare = function( url, target, popcornOptions ){
       function timeoutWrapper( e ){
         _interruptLoad = true;
