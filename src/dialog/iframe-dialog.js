@@ -11,7 +11,7 @@ define( [
     if( !dialogOptions.url ){
       throw new Error( "IFRAME dialog requires a url." );
     } //if
-    window.addEventListener( "beforeunload",  onClose, false); 
+
     var _this = this,
         _url = dialogOptions.url,
         _em = new EventManager( _this ),
@@ -35,6 +35,7 @@ define( [
     } //onCancel
 
     this.close = function(){
+      _parent.removeChild( _iframe );
       if( _modalLayer ){
         _modalLayer.destroy();
         _modalLayer = undefined;
@@ -44,6 +45,7 @@ define( [
       _comm.unlisten( "close", _this.close );
       _comm.destroy();
       _open = false;
+      window.removeEventListener( "beforeunload",  _this.close, false); 
       for( var e in _listeners ){
         _em.unlisten( e, _listeners[ e ] );
       } //for
@@ -51,13 +53,17 @@ define( [
     }; //close
 
     this.open = function( listeners ){
+      if( _open ){
+        return;
+      } //if
       if( _this.modal ){
         _modalLayer = new Modal( _this.modal );
       } //if
       for( e in listeners ){
         _listeners[ e ] = listeners[ e ];
       } //for
-      _parent = _parent || document.body;
+      var defaultParent = _modalLayer ? _modalLayer.element : document.body;
+      _parent = _parent || defaultParent;
       _iframe = document.createElement( "iframe" );
       _iframe.src = _url;
       _iframe.addEventListener( "load", function( e ){
@@ -65,6 +71,7 @@ define( [
           _comm.listen( "submit", onSubmit );
           _comm.listen( "cancel", onCancel );
           _comm.listen( "close", _this.close );
+          window.addEventListener( "beforeunload",  _this.close, false); 
           for( var e in _listeners ){
             _em.listen( e, _listeners[ e ] );
           } //for
