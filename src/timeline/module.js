@@ -106,7 +106,7 @@ define( [
 
     butter.listen( "mediaadded", function( event ){
       var mediaObject = event.data,
-          media = new Media( mediaObject );
+          media = new Media( butter, mediaObject );
 
       _media[ mediaObject.id ] = media;
       butter.ui.element.appendChild( media.element );
