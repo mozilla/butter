@@ -78,7 +78,7 @@ define( [], function(){
 
     _element.addEventListener( "click", function( e ) {
       // bail early if this event is coming from the handle
-      if( e.srcElement.className.search( "butter-timeline-scroll-handle" ) === 0 ) {
+      if( e.srcElement === _handle ) {
         return;
       }
 
