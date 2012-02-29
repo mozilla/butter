@@ -1,8 +1,8 @@
 define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
-  var POPCORN_URL = "../external/popcorn-js/popcorn.js",
+  var POPCORN_URL = "../external/popcorn-js/popcorn.js";
 
-  Page = function() {
+  return function() {
     
     var _eventManager = new EventManager( this );
 
@@ -40,6 +40,33 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         readyCallback();
       } //if
     }; // preparePopcorn
+
+    this.getHTML = function(){
+      var html = document.createElement( "html" ),
+          head = document.getElementsByTagName( "head" )[ 0 ].cloneNode( true ),
+          body = document.getElementsByTagName( "body" )[ 0 ].cloneNode( true );
+
+      for( var i=head.childNodes.length - 1; i>=0; --i ){
+        var node = head.childNodes[ i ];
+        if( node.getAttribute && 
+            ( node.getAttribute( "data-butter-exclude" ) === "true" ||
+              node.getAttribute( "data-requiremodule" ) !== null ) ){
+          head.removeChild( node );
+        } //if
+      } //for
+
+      for( var i=body.childNodes.length - 1; i>=0; --i ){
+        var node = body.childNodes[ i ];
+        if( node.id && node.id.indexOf( "butter-" ) > -1 ){
+          body.removeChild( node );
+        } //if
+      } //for
+
+      html.appendChild( head );
+      html.appendChild( body );
+
+      return "<html>" + html.innerHTML + "</html>";
+    }; //getHTML
+
   }; // page
-  return Page;
 });

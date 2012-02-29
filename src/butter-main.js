@@ -93,6 +93,10 @@ THE SOFTWARE.
         return _currentMedia.getManifest( name );
       }; //getManifest
 
+      this.getHTML = function(){
+        return _page.getHTML();
+      }; //getHTML
+
       function trackEventRequested( e, media, target ){
           var track,
               element = e.data.ui.draggable[ 0 ],
