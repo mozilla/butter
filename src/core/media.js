@@ -27,9 +27,10 @@ THE SOFTWARE.
             "core/logger", 
             "core/eventmanager", 
             "core/track",
-            "core/popcorn-wrapper"
+            "core/popcorn-wrapper",
+            "ui/page-element"
           ], 
-          function( Logger, EventManager, Track, PopcornWrapper ){
+          function( Logger, EventManager, Track, PopcornWrapper, PageElement ){
 
     var __guid = 0;
 
@@ -43,6 +44,7 @@ THE SOFTWARE.
           _name = mediaOptions.name || _id,
           _url = mediaOptions.url,
           _target = mediaOptions.target,
+          _pageElement,
           _registry,
           _currentTime = 0,
           _duration = 0,
@@ -170,6 +172,21 @@ THE SOFTWARE.
         if( _url && _target ){
           _popcornWrapper.prepare( _url, _target );
         } //if
+        if( _pageElement ){
+          _pageElement.destroy();
+        } //if
+        _pageElement = new PageElement( _target, {
+          drop: function( event, ui ){
+            _em.dispatch( "trackeventrequested", {
+              event: event,
+              target: _this,
+              ui: ui
+            });
+          }
+        },
+        {
+          highlightClass: "butter-media-highlight"
+        });
       } //setupContent
 
       this.pause = function(){
@@ -335,6 +352,12 @@ THE SOFTWARE.
           },
           set: function( val ){
             _popcornWrapper.volume = val;
+          }
+        },
+        view: {
+          enumerable: true,
+          get: function(){
+            return _pageElement;
           }
         }
       });
