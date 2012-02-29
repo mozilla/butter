@@ -1,5 +1,10 @@
 <html>
   <head>
+    <style>
+      p#message {
+        color: #FF0000;
+      }
+    </style>
     <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
     <script type="text/javascript">
       (function(){
@@ -19,12 +24,12 @@
             for( var item in _manifest ) {
               popcornOptions[ item ] = document.getElementById( item ).value;
             }
+            document.getElementById( "message" ).innerHTML = "";
             _comm.send( "submit", popcornOptions);
           } //sendData
 
           okPressed = function( e ) {
             sendData();
-            _comm.send( "close" );
           };
 
           cancelPressed = function( e ) {
@@ -46,6 +51,11 @@
               var element = document.getElementById( item );
               element.value = e.data[ item ];
             } //for
+            _comm.send( "close" );
+          });
+
+          _comm.listen( "trackeventupdatefailed", function( e ) {
+            document.getElementById( "message" ).innerHTML = e.data;
           });
 
           _comm.listen( "trackeventdata", function( e ){
@@ -120,5 +130,6 @@
     </table>
     <button id="ok">Ok</button>
     <button id="cancel">Cancel</button>
+    <p id="message"></p>
   </body>
 </html>

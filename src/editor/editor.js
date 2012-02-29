@@ -54,6 +54,10 @@ define( [ "core/eventmanager" ], function( EventManager ) {
         butter.dialog.send( _dialogName, "trackeventupdated", trackEvent.popcornOptions );
       } //onTrackEventUpdated
 
+      function onTrackEventUpdateFailed( e ) {
+        butter.dialog.send( _dialogName, "trackeventupdatefailed", e.data );
+      } //onTrackEventUpdateFailed
+
       butter.dialog.open( _dialogName, {
         open: function( e ) {
           var targets = [],
@@ -71,12 +75,14 @@ define( [ "core/eventmanager" ], function( EventManager ) {
             media: media
           });
           trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
+          trackEvent.listen( "trackeventupdatefailed", onTrackEventUpdateFailed );
         },
         submit: function( e ) {
           trackEvent.update( e.data );
         },
         close: function( e ){
           trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
+          trackEvent.unlisten( "trackeventupdatefailed", onTrackEventUpdateFailed );
         }
       });
     }; //open
