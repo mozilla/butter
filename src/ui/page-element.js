@@ -78,6 +78,12 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       } //if
     } //highlight
 
+    this.destroy = function(){
+      if( _highlightElement.parentNode ){
+        _highlightElement.parentNode.removeChild( _highlightElement );
+      } //if
+    }; //destroy
+
     _highlightElement.className = "butter-highlight ";
     if( _options.highlightClass ){
       _highlightElement.className += _options.highlightClass;

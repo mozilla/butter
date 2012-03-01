@@ -80,7 +80,11 @@ THE SOFTWARE.
           _logger = new Logger( _id ),
           _em = new EventManager( this ),
           _page = new Page(),
-          _config = butterOptions.config,
+          _config = {
+            modules: {},
+            ui: {},
+            icons: {}
+          },
           _this = this;
 
       function checkMedia() {
@@ -354,6 +358,12 @@ THE SOFTWARE.
        * Properties
        ****************************************************************/
       Object.defineProperties( _this, {
+        config: {
+          enumerable: true,
+          get: function(){
+            return _config;
+          }
+        },
         id: {
           get: function(){ return _id; },
           enumerable: true
@@ -473,10 +483,6 @@ THE SOFTWARE.
       } //if
 
       function readConfig(){
-        _config.modules = _config.modules || {};
-        _config.ui = _config.ui || {};
-        _config.icons = _config.icons || {};
-
         var modules = _config.modules,
             icons = _config.icons,
             img;
@@ -523,15 +529,6 @@ THE SOFTWARE.
         _config = butterOptions.config;
         readConfig();
       } //if
-
-      Object.defineProperties( this, {
-        config: {
-          enumerable: true,
-          get: function(){
-            return _config;
-          }
-        }
-      });
 
     }; //ButterInit
 
