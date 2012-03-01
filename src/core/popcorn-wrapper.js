@@ -151,7 +151,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       return _mediaType;
     } //findMediaType
 
-    function generatePopcornString( popcornOptions, url, target, method ) {
+    var generatePopcornString = this.generatePopcornString = function( popcornOptions, url, target, method ){
       var popcornString = "",
           popcornOptions = "";
 
