@@ -77,6 +77,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       } //timeoutWrapper
       function failureWrapper( e ){
         _interruptLoad = true;
+        _logger.log( e );
         _onFail( e );
       } //failureWrapper
       function popcornSuccess( e ){
@@ -165,22 +166,22 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
       var players = {
         "youtu": function() {
-          return "var popcorn = Popcorn.youtube( '" + _popcornTarget + "', '" +
+          return "var popcorn = Popcorn.youtube( '" + target + "', '" +
             url + "'" + popcornOptions + " );\n";
         },
         "vimeo": function() {
-          return "var popcorn = Popcorn.vimeo( '" + _popcornTarget + "', '" +
+          return "var popcorn = Popcorn.vimeo( '" + target + "', '" +
           url + "'" + popcornOptions + " );\n";
         },
         "soundcloud": function() {
-          return "var popcorn = Popcorn( Popcorn.soundcloud( '" + _popcornTarget + "'," +
+          return "var popcorn = Popcorn( Popcorn.soundcloud( '" + target + "'," +
           " '" + url + "') );\n";
         },
         "baseplayer": function() {
-          return "var popcorn = Popcorn( Popcorn.baseplayer( '#" + _popcornTarget + "'" + popcornOptions + " ) );\n";
+          return "var popcorn = Popcorn( Popcorn.baseplayer( '#" + target + "'" + popcornOptions + " ) );\n";
         },
         "object": function() {
-          return "var popcorn = Popcorn( '#" + _popcornTarget + "'" + popcornOptions + ");\n";
+          return "var popcorn = Popcorn( '#" + target + "'" + popcornOptions + ");\n";
         }
       };
 
