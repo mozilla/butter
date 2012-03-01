@@ -82,7 +82,7 @@ define( [
 
     function checkWindowStatus(){
       if( _window && _window.closed === true ) {
-        close();
+        _this.close();
       } //if
     } //checkWindowStatus
 
