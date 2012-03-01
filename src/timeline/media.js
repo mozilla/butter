@@ -94,11 +94,6 @@ define( [
           newEnd,
           trackEvent;
 
-      var defaultTarget = butter.defaultTarget;
-      if( !defaultTarget && butter.targets.length > 0 ){
-        defaultTarget = butter.targets[ 0 ];
-      } //if
-
       //try to remove the trackevent from all known tracks
       for( var tId in _tracks ){
         if( _tracks.hasOwnProperty( tId ) ){
@@ -112,14 +107,20 @@ define( [
 
       if( trackEvent ) {
         corn = trackEvent.popcornOptions;
+
         //then, add it to the correct one
         newEnd = corn.end - corn.start + newStart;
         newTrack.addTrackEvent( trackEvent );
 
-        trackEvent.update( { start: newStart, end: newEnd, popcornOptions: {
-          target: defaultTarget.elementID
-        } } );
-      } else {
+        trackEvent.update( { start: newStart, end: newEnd } );
+      }
+      else{
+
+        var defaultTarget = butter.defaultTarget;
+        if( !defaultTarget && butter.targets.length > 0 ){
+          defaultTarget = butter.targets[ 0 ];
+        } //if
+
         trackEvent = newTrack.addTrackEvent({
           popcornOptions: {
             start: newStart,
@@ -128,11 +129,13 @@ define( [
           },
           type: type
         });
+
+        if( defaultTarget ){
+          defaultTarget.view.blink();
+        } //if
+
       } //if
 
-      if( defaultTarget ){
-        defaultTarget.view.blink();
-      } //if
     } //fabricateTrackEvent
 
     function onTrackEventRequested( e ){
