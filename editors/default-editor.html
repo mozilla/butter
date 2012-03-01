@@ -57,7 +57,7 @@
 
           _comm.listen( "trackeventupdatefailed", function( e ) {
             if( e.data.error === "trackeventupdate::invalidtime" ){
-              document.getElementById( "message" ).innerHTML = "You've entered an invalid start or end time. Please verify that they are both greater than 0 and less than the duration of the media.";
+              document.getElementById( "message" ).innerHTML = "You've entered an invalid start or end time. Please verify that they are both greater than 0, the end time is equal to or less than the media's duration, and that the start time is less than the end time.";
             } //if
           });
 
