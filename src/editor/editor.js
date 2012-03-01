@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 **********************************************************************************/
 
-define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "util/time" ], function( EventManager, TimeUtil ) {
+define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "util/time" ], function( EventManager, IFrameDialog, WindowDialog, TimeUtil ) {
 
   var DEFAULT_DIMS = [ 400, 400 ],
       DEFAULT_FRAME_TYPE = "window";
@@ -79,7 +79,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
       } //blinkTarget
 
       function onTrackEventUpdateFailed( e ) {
-        butter.dialog.send( _dialogName, "trackeventupdatefailed", e.data );
+        _dialog.send( "trackeventupdatefailed", e.data );
       } //onTrackEventUpdateFailed
 
       _dialog.open({
