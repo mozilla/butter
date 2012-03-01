@@ -1,4 +1,4 @@
-define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventManager, util ) {
+define( [ "./logger", "./eventmanager", "util/lang", "util/time" ], function( Logger, EventManager, util, time ) {
 
   var __guid = 0;
 
@@ -25,9 +25,9 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
     } //if
 
     _popcornOptions.start = _popcornOptions.start || 0;
-    _popcornOptions.start = Butter.round( _popcornOptions.start );
+    _popcornOptions.start = time.round( _popcornOptions.start );
     _popcornOptions.end = _popcornOptions.end || _popcornOptions.start + 1;
-    _popcornOptions.end = Butter.round( _popcornOptions.end );
+    _popcornOptions.end = time.round( _popcornOptions.end );
 
     this.update = function( updateOptions ) {
       for ( var prop in updateOptions ) {
@@ -36,10 +36,10 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
         } //if
       } //for
       if ( _popcornOptions.start ) {
-        _popcornOptions.start = Butter.round( _popcornOptions.start );
+        _popcornOptions.start = time.round( _popcornOptions.start );
       }
       if ( _popcornOptions.end ) {
-        _popcornOptions.end = Butter.round( _popcornOptions.end );
+        _popcornOptions.end = time.round( _popcornOptions.end );
       }
       _em.dispatch( "trackeventupdated", _this );
     }; //update
