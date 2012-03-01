@@ -59,7 +59,14 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         var node = toClean[ i ];
         node.removeAttribute( "butter-clean" );
         node.removeAttribute( "data-butter" );
-        node.className = node.className.replace( /ui-droppable/g, "" );
+
+        // obviously, classList is preferred (https://developer.mozilla.org/en/DOM/element.classList)
+        if( node.classList ){
+          node.classList.remove( "ui-droppable" );
+        }
+        else{
+          node.className = node.className.replace( /ui-droppable/g, "" );
+        } //if
       } //for
 
       toExclude = body.querySelectorAll( "*[butter-exclude=\"true\"]" );
