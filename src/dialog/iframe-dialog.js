@@ -88,6 +88,12 @@ define( [
         });
       }, false );
       _parent.appendChild( _iframe );
+
+      // need to wait an event-loop cycle to apply this class
+      // ow, opacity transition fails to render
+      setTimeout( function(){
+        _iframe.className += " fade-in";
+      }, 10 );
     }; //open
 
     this.send = function( type, data ){
