@@ -17,18 +17,21 @@
               okPressed,
               cancelPressed;
 
-          function sendData(){
+          function sendData( alsoClose ){
+            alsoClose = !!alsoClose; 
             var popcornOptions = {};
             for( var item in _manifest ) {
               popcornOptions[ item ] = document.getElementById( item ).value;
             }
             document.getElementById( "message" ).innerHTML = "";
-            _comm.send( "submit", popcornOptions );
+            _comm.send( "submit", {
+              eventData: popcornOptions,
+              alsoClose: alsoClose
+            });
           } //sendData
 
           okPressed = function( e ) {
-            sendData();
-            _comm.send( "close" );
+            sendData( true );
           }; //okPressed
 
           cancelPressed = function( e ) {
@@ -100,14 +103,18 @@
                     }
                     col2.appendChild( select );
 
-                    select.addEventListener( "change", sendData, false );
+                    select.addEventListener( "change", function( e ){
+                      sendData( false );
+                    }, false );
                   } else {
                     var newItem = document.createElement( elem );
                     newItem.id = item;
                     newItem.style.width = "100%";
                     newItem.value = popcornOptions[ item ];
                     col2.appendChild( newItem );
-                    newItem.addEventListener( "change", sendData, false );
+                    newItem.addEventListener( "change", function( e ){
+                      sendData( false );
+                    }, false );
                   }
 
                   row.appendChild( col1 );

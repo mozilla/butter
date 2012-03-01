@@ -1,7 +1,6 @@
 define( [ "./logger", "./eventmanager", "util/lang", "util/time" ], function( Logger, EventManager, LangUtil, TimeUtil ) {
 
-  var NUMBER_OF_DECIMAL_PLACES = 3,
-      __guid = 0;
+  var __guid = 0;
 
   var TrackEvent = function ( options ) {
 

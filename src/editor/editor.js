@@ -78,12 +78,12 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
         } //if
       } //blinkTarget
 
-      function onTrackEventUpdateFailed( e ) {
+      function onTrackEventUpdateFailed( e ){
         _dialog.send( "trackeventupdatefailed", e.data );
       } //onTrackEventUpdateFailed
 
       _dialog.open({
-        open: function( e ) {
+        open: function( e ){
           var targets = [],
               media = {
                 name: butter.currentMedia.name,
@@ -104,24 +104,29 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
           trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
           trackEvent.listen( "trackeventupdatefailed", onTrackEventUpdateFailed );
         },
-        submit: function( e ) {
-          var duration = TimeUtil.roundTime( butter.currentMedia.duration );
-          if( e.data &&
-              ( e.data.start < 0 ||
-                e.data.end > duration ||
-                e.data.start > e.data.end ) ){
+        submit: function( e ){
+          var duration = TimeUtil.roundTime( butter.currentMedia.duration ),
+              popcornData = e.data.eventData,
+              alsoClose = e.data.alsoClose;
+          if( popcornData &&
+              ( popcornData.start < 0 ||
+                popcornData.end > duration ||
+                popcornData.start >= popcornData.end ) ){
             trackEvent.dispatch( "trackeventupdatefailed", {
               error: "trackeventupdate::invalidtime",
               message: "Invalid start/end times.",
-              attemptedData: e.data
+              attemptedData: popcornData
             });
           }
           else{
-            if( e.data.target !== _currentTarget ){
-              _currentTarget = e.data.target;
+            if( popcornData.target !== _currentTarget ){
+              _currentTarget = popcornData.target;
               blinkTarget();
             } //if
-            trackEvent.update( e.data );
+            trackEvent.update( popcornData );
+            if( alsoClose ){
+              _dialog.close();
+            } //if
           } //if
         },
         close: function( e ){

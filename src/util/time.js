@@ -4,11 +4,11 @@ define( [], function(){
 
   function roundTime( time ){
     return Math.round( time * ( Math.pow( 10, __timeAccuracy ) ) ) / Math.pow( 10, __timeAccuracy );
-  } //round
+  } //roundTime
 
   var utils = {
     roundTime: roundTime
-  };
+  }; //utils
 
   Object.defineProperties( utils, {
     timeAccuracy: {
