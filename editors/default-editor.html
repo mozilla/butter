@@ -28,11 +28,12 @@
 
           okPressed = function( e ) {
             sendData();
-          };
+            _comm.send( "close" );
+          }; //okPressed
 
           cancelPressed = function( e ) {
             _comm.send( "cancel" );
-          };
+          }; //cancelPressed
 
           document.addEventListener( "keydown", function( e ) {
             if( e.keyCode === 13 ) {
@@ -49,7 +50,6 @@
               var element = document.getElementById( item );
               element.value = e.data[ item ];
             } //for
-            _comm.send( "close" );
           });
 
           _comm.listen( "trackeventupdatefailed", function( e ) {
