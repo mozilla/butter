@@ -184,11 +184,13 @@ THE SOFTWARE.
         } //if
         _pageElement = new PageElement( _target, {
           drop: function( event, ui ){
-            _em.dispatch( "trackeventrequested", {
-              event: event,
-              target: _this,
-              ui: ui
-            });
+            if( event.currentTarget === _this ) {
+              _em.dispatch( "trackeventrequested", {
+                event: event,
+                target: _this,
+                ui: ui
+              });
+            }//if
           }
         },
         {
