@@ -310,12 +310,10 @@ THE SOFTWARE.
   font: 10px/25px Arial,Helvetica,sans-serif;
   height: 28px;
   margin-bottom: 6px;
-  
-  box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  moz-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  o-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  
+  box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 0px 10px 1px rgba( 160, 160, 160, 0.1 ), 0px -1px 1px #101010;
+  moz-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 0px 10px 1px rgba( 160, 160, 160, 0.1 ), 0px -1px 1px #101010;
+  o-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 0px 10px 1px rgba( 160, 160, 160, 0.1 ), 0px -1px 1px #101010;
+  webkit-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 0px 10px 1px rgba( 160, 160, 160, 0.1 ), 0px -1px 1px #101010; 
   text-transform: uppercase;
   text-align: center;
   overflow: hidden;
@@ -719,10 +717,10 @@ THE SOFTWARE.
   height: 28px;
   margin-bottom: 6px;
   position: relative;
-  box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  moz-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  o-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
+  box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000;
+  moz-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000;
+  o-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000;
+  webkit-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000;
 }
 
 #butter-timeline .tracks-container .trackliner-event[selected="true"] {
