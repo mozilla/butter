@@ -47,7 +47,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           body = document.getElementsByTagName( "body" )[ 0 ].cloneNode( true );
       var toClean, toExclude;
 
-      toExclude = Array.prototype.slice.call( head.querySelectorAll( "*[butter-exclude]" ) );
+      toExclude = Array.prototype.slice.call( head.querySelectorAll( "*[data-butter-exclude]" ) );
       toExclude = toExclude.concat( Array.prototype.slice.call( head.querySelectorAll( "*[data-requiremodule]" ) ) );
       for( var i=0, l=toExclude.length; i<l; ++i ){
         var node = toExclude[ i ];
@@ -69,7 +69,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         } //if
       } //for
 
-      toExclude = body.querySelectorAll( "*[butter-exclude=\"true\"]" );
+      toExclude = body.querySelectorAll( "*[data-butter-exclude]" );
       for( var i=0, l=toExclude.length; i<l; ++i ){
         var node = toExclude[ i ];
         node.parentNode.removeChild( node );

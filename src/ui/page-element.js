@@ -79,7 +79,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     } //highlight
 
     _highlightElement.className = "butter-highlight ";
-    _highlightElement.setAttribute( "butter-exclude", "true" );
+    _highlightElement.setAttribute( "data-butter-exclude", "true" );
     if( _options.highlightClass ){
       _highlightElement.className += _options.highlightClass;
     } //if

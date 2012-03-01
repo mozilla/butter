@@ -33,7 +33,7 @@ define( [ "core/eventmanager", "./statusbar", "./toggler" ], function( EventMana
         _state = true;
 
     _element.id = "butter-timeline";
-    _element.setAttribute( "butter-exclude", "true" );
+    _element.setAttribute( "data-butter-exclude", "true" );
     _element.className = "butter-timeline";
     document.body.appendChild( _element );
 
