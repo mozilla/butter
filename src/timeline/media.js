@@ -1,26 +1,6 @@
-/**********************************************************************************
-
-Copyright (C) 2012 by Mozilla Foundation
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-**********************************************************************************/
+/* This Source Code Form is subject to the terms of the MIT license
+ * If a copy of the MIT license was not distributed with this file, you can
+ * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [
           "external/jquery/jquery",
@@ -94,11 +74,6 @@ define( [
           newEnd,
           trackEvent;
 
-      var defaultTarget = butter.defaultTarget;
-      if( !defaultTarget && butter.targets.length > 0 ){
-        defaultTarget = butter.targets[ 0 ];
-      } //if
-
       //try to remove the trackevent from all known tracks
       for( var tId in _tracks ){
         if( _tracks.hasOwnProperty( tId ) ){
@@ -112,14 +87,20 @@ define( [
 
       if( trackEvent ) {
         corn = trackEvent.popcornOptions;
+
         //then, add it to the correct one
         newEnd = corn.end - corn.start + newStart;
         newTrack.addTrackEvent( trackEvent );
 
-        trackEvent.update( { start: newStart, end: newEnd, popcornOptions: {
-          target: defaultTarget.elementID
-        } } );
-      } else {
+        trackEvent.update( { start: newStart, end: newEnd } );
+      }
+      else{
+
+        var defaultTarget = butter.defaultTarget;
+        if( !defaultTarget && butter.targets.length > 0 ){
+          defaultTarget = butter.targets[ 0 ];
+        } //if
+
         trackEvent = newTrack.addTrackEvent({
           popcornOptions: {
             start: newStart,
@@ -128,11 +109,13 @@ define( [
           },
           type: type
         });
+
+        if( defaultTarget ){
+          defaultTarget.view.blink();
+        } //if
+
       } //if
 
-      if( defaultTarget ){
-        defaultTarget.view.blink();
-      } //if
     } //fabricateTrackEvent
 
     function onTrackEventRequested( e ){

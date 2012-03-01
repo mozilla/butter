@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the MIT license
+ * If a copy of the MIT license was not distributed with this file, you can
+ * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
+
 define( [
           "core/comm", 
           "core/eventmanager",
@@ -78,7 +82,7 @@ define( [
 
     function checkWindowStatus(){
       if( _window && _window.closed === true ) {
-        close();
+        _this.close();
       } //if
     } //checkWindowStatus
 
