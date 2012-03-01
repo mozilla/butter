@@ -481,10 +481,23 @@ THE SOFTWARE.
 }
 
 #butter-timeline .scroll-handle {
-  height: 100%;
+  height: 8px;
+  top: 1px;
   position: absolute;
   background: #777;
-  min-width: 10px;
+  border-radius: 15px;
+  box-shadow: inset 0 -1px 1px #000;
+  moz-box-shadow: inset 0 -1px 1px #000;
+  o-box-shadow: inset 0 -1px 1px #000;
+  webkit-box-shadow: inset 0 -1px 1px #000;
+
+}
+
+#butter-timeline .scroll-bar-v .scroll-handle {
+  width: 8px;
+  left: 1px;
+  position: absolute;
+  background: #777;
   border-radius: 15px;
   box-shadow: inset 0 -1px 1px #000;
   moz-box-shadow: inset 0 -1px 1px #000;
