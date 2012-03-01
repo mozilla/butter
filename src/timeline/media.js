@@ -94,6 +94,11 @@ define( [
           newEnd,
           trackEvent;
 
+      var defaultTarget = butter.defaultTarget;
+      if( !defaultTarget && butter.targets.length > 0 ){
+        defaultTarget = butter.targets[ 0 ];
+      } //if
+
       //try to remove the trackevent from all known tracks
       for( var tId in _tracks ){
         if( _tracks.hasOwnProperty( tId ) ){
@@ -111,15 +116,22 @@ define( [
         newEnd = corn.end - corn.start + newStart;
         newTrack.addTrackEvent( trackEvent );
 
-        trackEvent.update( { start: newStart, end: newEnd } );
+        trackEvent.update( { start: newStart, end: newEnd, popcornOptions: {
+          target: defaultTarget.elementID
+        } } );
       } else {
         trackEvent = newTrack.addTrackEvent({
           popcornOptions: {
             start: newStart,
-            end: newStart + 1
+            end: newStart + 1,
+            target: defaultTarget.elementID
           },
           type: type
         });
+      } //if
+
+      if( defaultTarget ){
+        defaultTarget.view.blink();
       } //if
     } //fabricateTrackEvent
 
@@ -135,20 +147,24 @@ define( [
       _selectedTracks.splice( _selectedTracks.indexOf( e.target ), 1 );
     });
 
+    function blinkTarget( target ){
+      if( target !== "Media Element" ){
+        var target = butter.getTargetByType( "elementID", target );
+        if( target ){
+          target.view.blink();
+        } //if
+      }
+      else {
+        _media.view.blink();
+      } //if
+    } //blinkTarget
+
     function onTrackEventMouseOver( e ){
       var trackEvent = e.trackEvent,
           corn = trackEvent.popcornOptions;
 
       if( corn.target ){
-        if( corn.target !== "Media Element" ){
-          var target = butter.getTargetByType( "elementID", corn.target )
-          if( target ){
-            target.view.blink();
-          } //if
-        }
-        else {
-          _media.view.blink();
-        } //if
+        blinkTarget( corn.target );
       } //if
     } //onTrackEventMouseOver
 
@@ -161,15 +177,7 @@ define( [
           originalEvent = e.originalEvent;
 
       if( _trackEventHighlight === "click" && corn.target ){
-        if( corn.target !== "Media Element" ){
-          var target = butter.getTargetByType( "elementID", corn.target )
-          if( target ){
-            target.view.blink();
-          } //if
-        }
-        else {
-          _media.view.blink();
-        } //if
+        blinkTarget( corn.target );
       } //if
 
       if( trackEvent.selected === true && originalEvent.shiftKey && _selectedTracks.length > 1 ){

@@ -85,6 +85,7 @@ THE SOFTWARE.
             ui: {},
             icons: {}
           },
+          _defaultTarget,
           _this = this;
 
       function checkMedia() {
@@ -160,6 +161,9 @@ THE SOFTWARE.
         target.listen( "trackeventrequested", targetTrackEventRequested );
         _logger.log( "Target added: " + target.name );
         _em.dispatch( "targetadded", target );
+        if( target.isDefault ){
+          _defaultTarget = target;
+        } //if
         return target;
       }; //addTarget
 
@@ -174,6 +178,9 @@ THE SOFTWARE.
           _targets.splice( idx, 1 );
           delete _targets[ target.name ];
           _em.dispatch( "targetremoved", target );
+          if( _defaultTarget === target ){
+            _defaultTarget = undefined;
+          } //if
           return target;
         } //if
         return undefined;
@@ -366,6 +373,12 @@ THE SOFTWARE.
        * Properties
        ****************************************************************/
       Object.defineProperties( _this, {
+        defaultTarget: {
+          enumerable: true,
+          get: function(){
+            return _defaultTarget;
+          }
+        },
         config: {
           enumerable: true,
           get: function(){

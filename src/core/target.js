@@ -93,6 +93,15 @@ THE SOFTWARE.
             return _element;
           }
         },
+        isDefault: {
+          enumerable: true,
+          get: function(){
+            if( _element && _element.hasAttribute( "data-butter-default" ) ){
+              return true;
+            } //if
+            return false;
+          }
+        },
         json: {
           enumerable: true,
           get: function(){
