@@ -1,10 +1,5 @@
 document.addEventListener( "DOMContentLoaded", function( e ){
 
-  document.getElementById( "removePlugin" ).addEventListener( "click", function( e ) {
-    butter.plugin.remove( document.getElementById( "pluginName" ).value );
-  }, false);
-
-
   Butter({
     config: "../config/default.conf",
     ready: function( butter ){
