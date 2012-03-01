@@ -1,5 +1,9 @@
 /*global text,expect,ok,module,notEqual,test,window*/
 
+/* This Source Code Form is subject to the terms of the MIT license
+ * If a copy of the MIT license was not distributed with this file, you can
+ * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
+
 ( function ( window, document, undefined ){
 
   QUnit.config.reorder = false;
@@ -62,7 +66,6 @@
 
           butter.cornfield.list(function(res){
             ok(res, 'The file list response has data');
-            console.log(res);
             equal(res.error, 'okay', 'File list status is "okay"');
             ok(res.filenames, 'There is a list of filenames');
             equal(res.filenames.indexOf(filename), -1, filename + ' is not present in the file list');

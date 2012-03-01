@@ -1,57 +1,36 @@
-/**********************************************************************************
+/* This Source Code Form is subject to the terms of the MIT license
+ * If a copy of the MIT license was not distributed with this file, you can
+ * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-Copyright (C) 2012 by Mozilla Foundation
+define(['util/xhr'], function(XHR) {
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+  function audience() {
+    return location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" );
+  }
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+  function parameterize(data) {
+    var s = [];
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-**********************************************************************************/
-
-(function() {
-
-  define(['util/xhr'], function(XHR) {
-
-    function audience() {
-      return location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" );
+    for (var key in data) {
+      s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(data[key]);
     }
 
-    function parameterize(data) {
-      var s = [];
-      
-      for (var key in data) {
-        s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(data[key]);
-      }
+    return s.join("&").replace("/%20/g", "+");
+  }
 
-      return s.join("&").replace("/%20/g", "+");
-    }
+  var Cornfield = function( butter, config ) {
 
-    var Cornfield = function( butter, config ) {
+    var email = "",
+        server = config.server;
 
-      var email = "",
-          server = config.server;
-
-      this.login = function(callback) {
-        navigator.id.get(function(assertion) {
-          if (assertion) {
-            XHR.post(server + "/browserid/verify",
-              { audience: audience(), assertion: assertion },
-              function() {
-                if (this.readyState === 4) {
+    this.login = function(callback) {
+      navigator.id.get(function(assertion) {
+        if (assertion) {
+          XHR.post(server + "/browserid/verify",
+            { audience: audience(), assertion: assertion },
+            function() {
+              if (this.readyState === 4) {
+                try {
                   var response = JSON.parse(this.response);
                   if (response.status === "okay") {
                     email = response.email;
@@ -59,54 +38,69 @@ THE SOFTWARE.
                   } else {
                     callback(undefined);
                   }
+                } catch (err) {
+                  callback({ error: "an unknown error occured" });
                 }
-              });
-          } else {
-            callback(undefined);
-          }
-        });
-      };
-
-      this.user = function() {
-        return email;
-      };
-
-      this.logout = function(callback) {
-        XHR.get(server + "/browserid/logout", function() {
-          if (this.readyState === 4) {
-            var response = JSON.parse(this.response);
-            callback(response);
-          }
-        });
-      }
-
-      this.list = function(callback) {
-        XHR.get(server + "/files", function() {
-          if (this.readyState === 4) {
-            var response = JSON.parse(this.response);
-            callback(response);
-          }
-        });
-      };
-
-      this.pull = function(name, callback) {
-        XHR.get(server + "/files/" + name, function() {
-          if (this.readyState === 4) {
-            callback(this.response);
-          }
-        });
-      };
-
-      this.push = function(name, data, callback) {
-        XHR.put(server + "/files/" + name, data, function() {
-          if (this.readyState === 4) {
-            var response = JSON.parse(this.response);
-            callback(response);
-          }
-        });
-      };
+              }
+            });
+        } else {
+          callback(undefined);
+        }
+      });
     };
 
-    return Cornfield;
-  });
-}());
+    this.user = function() {
+      return email;
+    };
+
+    this.logout = function(callback) {
+      XHR.get(server + "/browserid/logout", function() {
+        if (this.readyState === 4) {
+          try {
+            var response = JSON.parse(this.response);
+            callback(response);
+          } catch (err) {
+            callback({ error: "an unknown error occured" });
+          }
+        }
+      });
+    }
+
+    this.list = function(callback) {
+      XHR.get(server + "/files", function() {
+        if (this.readyState === 4) {
+          try {
+            var response = JSON.parse(this.response);
+            callback(response);
+          } catch (err) {
+            callback({ error: "an unknown error occured" });
+          }
+        }
+      });
+    };
+
+    // XXX I need to figure out a better API for this
+    this.pull = function(name, callback) {
+      XHR.get(server + "/files/" + name, function() {
+        if (this.readyState === 4) {
+          callback(this.response);
+        }
+      });
+    };
+
+    this.push = function(name, data, callback) {
+      XHR.put(server + "/files/" + name, data, function() {
+        if (this.readyState === 4) {
+          try {
+            var response = JSON.parse(this.response);
+            callback(response);
+          } catch (err) {
+            callback({ error: "an unknown error occured" });
+          }
+        }
+      });
+    };
+  };
+
+  return Cornfield;
+});
