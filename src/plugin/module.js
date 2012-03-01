@@ -71,8 +71,8 @@ THE SOFTWARE.
         if( sheet.href && sheet.href.indexOf( "jquery" ) > -1 ){
           continue;
         } //if
-        for( var j=0, l=sheet.rules.length; j<l; ++j ){
-          var rule = sheet.rules[ j ],
+        for( var j=0, l=sheet.cssRules.length; j<l; ++j ){
+          var rule = sheet.cssRules[ j ],
               text = rule.selectorText,
               idx = text.indexOf( __cssRuleProperty );
           if( idx > -1 ){
