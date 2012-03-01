@@ -29,7 +29,9 @@ define( [], function() {
         _media = media,
         _bEvent = bEvent,
         _tlEvent = tlEvent,
-        _onMouseDown = options.mousedown, 
+        _onMouseDown = options.mousedown || function(){}, 
+        _onMouseOver = options.mouseover || function(){}, 
+        _onMouseOut = options.mouseout || function(){}, 
         _this = this;
 
     function onDurationChanged( e ){
@@ -64,6 +66,14 @@ define( [], function() {
 
     _tlEvent.listen( "trackeventmousedown", function( e ){
       _onMouseDown({ trackEvent: _bEvent, originalEvent: e.data });
+    });
+
+    _tlEvent.listen( "trackeventmouseover", function( e ){
+      _onMouseOver({ trackEvent: _bEvent, originalEvent: e.data });
+    });
+
+    _tlEvent.listen( "trackeventmouseout", function( e ){
+      _onMouseOut({ trackEvent: _bEvent, originalEvent: e.data });
     });
 
     _tlEvent.listen( "trackeventdoubleclicked", function( e ){

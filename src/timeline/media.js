@@ -70,6 +70,7 @@ define( [
         _zoombar = new ZoomBar(  zoomCallback ),
         _status = new Status( _media ),
         _trackHandles = new TrackHandles( _media, _tracksContainer ),
+        _trackEventHighlight = butter.config.ui.trackEventHighlight || "click",
         _zoom = 1;
 
     _rootElement.className = "media-instance";
@@ -134,18 +135,37 @@ define( [
       _selectedTracks.splice( _selectedTracks.indexOf( e.target ), 1 );
     });
 
-    function onTrackEventMouseDown( e ){
+    function onTrackEventMouseOver( e ){
       var trackEvent = e.trackEvent,
-          corn = trackEvent.popcornOptions,
-          originalEvent = e.originalEvent;
+          corn = trackEvent.popcornOptions;
 
-      if( originalEvent.ctrlKey && corn.target ){
+      if( corn.target ){
         if( corn.target !== "Media Element" ){
           var target = butter.getTargetByType( "elementID", corn.target )
           if( target ){
             target.view.blink();
           } //if
-          return;
+        }
+        else {
+          _media.view.blink();
+        } //if
+      } //if
+    } //onTrackEventMouseOver
+
+    function onTrackEventMouseOut( e ){
+    } //onTrackEventMouseOut
+
+    function onTrackEventMouseDown( e ){
+      var trackEvent = e.trackEvent,
+          corn = trackEvent.popcornOptions,
+          originalEvent = e.originalEvent;
+
+      if( _trackEventHighlight === "click" && corn.target ){
+        if( corn.target !== "Media Element" ){
+          var target = butter.getTargetByType( "elementID", corn.target )
+          if( target ){
+            target.view.blink();
+          } //if
         }
         else {
           _media.view.blink();
@@ -176,7 +196,9 @@ define( [
       track = _tracks[ bTrack.id ];
       if( !track ){
         track = new TrackController( _media, bTrack, _trackliner, null, {
-          mousedown: onTrackEventMouseDown
+          mousedown: onTrackEventMouseDown,
+          mouseover: _trackEventHighlight === "hover" ? onTrackEventMouseOver : undefined,
+          mouseout: onTrackEventMouseOut === "hover" ? onTrackEventMouseOut: undefined
         });
         bTrack.order = Object.keys( _tracks ).length;
         _tracks[ bTrack.id ] = track;

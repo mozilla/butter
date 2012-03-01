@@ -80,6 +80,7 @@ THE SOFTWARE.
           _logger = new Logger( _id ),
           _em = new EventManager( this ),
           _page = new Page(),
+          _config = butterOptions.config,
           _this = this;
 
       function checkMedia() {
@@ -471,6 +472,36 @@ THE SOFTWARE.
         });
       } //if
 
+      function readConfig(){
+        _config.modules = _config.modules || {};
+        _config.ui = _config.ui || {};
+        _config.icons = _config.icons || {};
+
+        var modules = _config.modules,
+            icons = _config.icons,
+            img;
+        for( var moduleName in modules ){
+          if( modules.hasOwnProperty( moduleName ) && moduleName in __modules ){
+            _this[ moduleName ] = new __modules[ moduleName ]( _this, modules[ moduleName ] );
+          } //if
+        } //for
+        for( var identifier in icons ){
+          if( icons.hasOwnProperty( identifier ) ){
+            img = document.createElement( "img" );
+            img.src = icons[ identifier ];
+            img.id = identifier + "-icon";
+            img.style.display = "none";
+            // @secretrobotron: just attach this to the body hidden for now,
+            //                  so that it preloads if necessary
+            document.body.appendChild( img );
+          } //if
+        } //for
+
+        preparePage(function(){
+          _em.dispatch( "ready", _this );
+        });
+      } //readConfig
+
       if( butterOptions.config && typeof( butterOptions.config ) === "string" ){
         var xhr = new XMLHttpRequest();
         if( xhr.overrideMimeType ){
@@ -481,37 +512,26 @@ THE SOFTWARE.
         xhr.send( null );
 
         if( xhr.status === 200 || xhr.status === 0 ){
-          var config = JSON.parse( xhr.responseText ),
-              modules = config.modules,
-              icons = config.icons,
-              img;
-          for( var moduleName in modules ){
-            if( modules.hasOwnProperty( moduleName ) && moduleName in __modules ){
-              _this[ moduleName ] = new __modules[ moduleName ]( _this, modules[ moduleName ] );
-            } //if
-          } //for
-          for( var identifier in icons ){
-            if( icons.hasOwnProperty( identifier ) ){
-              img = document.createElement( "img" );
-              img.src = icons[ identifier ];
-              img.id = identifier + "-icon";
-              img.style.display = "none";
-              // @secretrobotron: just attach this to the body hidden for now,
-              //                  so that it preloads if necessary
-              document.body.appendChild( img );
-            } //if
-          } //for
+          _config = JSON.parse( xhr.responseText ),
+          readConfig();
+        }
+        else{
+          _em.dispatch( "configerror", _this );
         } //if
-        
-        preparePage(function(){
-          _em.dispatch( "ready", _this );
-        });
       }
       else {
-        preparePage(function(){
-          _em.dispatch( "ready", _this );
-        });
+        _config = butterOptions.config;
+        readConfig();
       } //if
+
+      Object.defineProperties( this, {
+        config: {
+          enumerable: true,
+          get: function(){
+            return _config;
+          }
+        }
+      });
 
     }; //ButterInit
 
