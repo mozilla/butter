@@ -4,8 +4,6 @@
     <script type="text/javascript">
       (function(){
         var _comm = new Comm(),
-            _counter = 0,
-            
             _manifest = {};
 
         document.addEventListener( "DOMContentLoaded", function( e ){
@@ -104,11 +102,6 @@
                   row.appendChild( col2 );
                   document.getElementById( "table" ).appendChild( row );
             }
-          });
-
-          _comm.listen( "test", function( e ){
-            ++_counter;
-            document.getElementById( "counter" ).innerHTML = _counter;
           });
 
         }, false );

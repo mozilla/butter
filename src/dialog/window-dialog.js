@@ -15,7 +15,7 @@ define( [
     if( !dialogOptions.url ){
       throw new Error( "Window dialog requires a url." );
     } //if
-    window.addEventListener( "beforeunload",  onClose, false); 
+
     var _this = this,
         _url = dialogOptions.url,
         _em = new EventManager( _this ),
@@ -67,6 +67,7 @@ define( [
         _window.close();
       } //if
       clearInterval( _statusInterval );
+      window.removeEventListener( "beforeunload",  _this.close, false); 
       _comm = _window = undefined;
       _open = false;
       for( var e in _listeners ){
@@ -89,6 +90,7 @@ define( [
         _listeners[ e ] = listeners[ e ];
       } //for
       _window = window.open( _url, "dialog-window:" + _url, _features.join( "," ) );
+      window.addEventListener( "beforeunload",  _this.close, false); 
       _comm = new Comm( _window, function(){
         _comm.listen( "error", onError );
         _comm.listen( "submit", onSubmit );

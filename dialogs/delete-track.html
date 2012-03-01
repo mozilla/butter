@@ -1,0 +1,102 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
+    <script type="text/javascript">
+      (function(){
+        var _comm = new Comm();
+
+        document.addEventListener( "DOMContentLoaded", function( e ){
+          var okButton = document.getElementById( "yes" ),
+              cancelButton = document.getElementById( "no" ),
+              trackName = document.getElementById( "track-name" );
+
+          function okPressed( e ){
+            _comm.send( "submit", true );
+          } //okPressed
+
+          function cancelPressed( e ){
+            _comm.send( "cancel" );
+          } //cancelPressed
+
+          document.addEventListener( "keypress", function( e ) {
+            if( e.keyCode === 13 ) {
+              okPressed( e );
+            } else if( e.keyCode === 27 ) {
+              cancelPressed( e );
+            }
+          }, false);
+
+          okButton.addEventListener( "click", okPressed, false );
+          cancelButton.addEventListener( "click", cancelPressed, false );
+
+          _comm.listen( "trackdata", function( e ){
+            trackName.appendChild( document.createTextNode( e.data ) );
+            okButton.removeAttribute( "disabled" );
+            cancelButton.removeAttribute( "disabled" );
+          });
+
+        }, false );
+      }());
+    </script>
+    <style>
+      html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #container {
+        height: 100%;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-box-pack: center;
+        -webkit-box-align: center;
+         
+        display: -moz-box;
+        -moz-box-orient: vertical;
+        -moz-box-pack: center;
+        -moz-box-align: center;
+          
+        display: box;
+        box-orient: vertical;
+        box-pack: center;
+        box-align: center;
+      }
+
+      h1 {
+        display: -webkit-box;
+        -webkit-box-orient: horizontal;
+        -webkit-box-pack: center;
+        -webkit-box-align: center;
+         
+        display: -moz-box;
+        -moz-box-orient: horizontal;
+        -moz-box-pack: center;
+        -moz-box-align: center;
+          
+        display: box;
+        box-orient: horizontal;
+        box-pack: center;
+        box-align: center;
+      }
+
+      button {
+        font-size: 120%;
+      }
+
+      #buttons {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <h1>Are you sure you want to delete <span id="track-name"></span>?</h1>
+      <div id="buttons">
+        <button disabled id="yes">Yes</button>
+        <button disabled id="no">No</button>
+      </div>
+    </div>
+  </body>
+</html>

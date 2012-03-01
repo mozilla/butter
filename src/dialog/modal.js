@@ -25,6 +25,15 @@ define( [], function(){
       __container.removeChild( _element );
     }; //destroy
 
+    Object.defineProperties( this, {
+      element: {
+        enumerable: true,
+        get: function(){
+          return _element;
+        }
+      }
+    });
+
   }; //Modal
 
 });

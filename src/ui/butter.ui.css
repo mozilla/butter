@@ -40,6 +40,15 @@ THE SOFTWARE.
   height: 0px;
 }
 
+#butter-modal-container .layer iframe {
+  width: 60%;
+  height: 60%;
+  margin: 5% 20%;
+  background-color: #fff;
+  border: 10px solid #000;
+  border-radius: 20px;
+}
+
 #butter-modal-container .layer[ state="behind-timeline" ] {
   z-index: 2139000000;
 }
@@ -285,8 +294,7 @@ THE SOFTWARE.
 #butter-timeline .track-handle-container .handle-list .placeholder {
   background: rgba( 0, 0, 0, 0.3 );
 }
-
-#butter-timeline .track-handle-container .handle-list div {
+#butter-timeline .track-handle-container .handle-list .track-handle {
   cursor: pointer;
   width: 95%;
   box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
@@ -294,12 +302,11 @@ THE SOFTWARE.
   moz-border-radius: 6px;
   o-border-radius: 6px;
   webkit-border-radius: 6px;
-  border: 1px solid #111111 !important;
   margin-bottom: 6px;
   position: relative;
   background-image: -moz-linear-gradient(center bottom,#1c1c1c 0,#2a2a2a 100%);
   background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#1c1c1c),color-stop(1,#2a2a2a));
-  border: 1px solid #111!important;
+  border: 1px solid #111;
   color: #666;
   font: 10px/25px Arial,Helvetica,sans-serif;
   height: 25px;
@@ -310,6 +317,67 @@ THE SOFTWARE.
   webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
   text-transform: uppercase;
   text-align: center;
+  overflow: hidden;
+}
+
+#butter-timeline .track-handle-container .handle-list .placeholder {
+  width: 95%;
+  box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
+  border-radius: 6px;
+  moz-border-radius: 6px;
+  o-border-radius: 6px;
+  webkit-border-radius: 6px;
+  margin-bottom: 6px;
+  position: relative;
+  border: 1px solid #111;
+  color: #666;
+  height: 25px;
+  margin-bottom: 6px;
+  box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
+  moz-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
+  o-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
+  webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
+  text-transform: uppercase;
+  text-align: center;
+  overflow: hidden;
+}
+
+#butter-timeline .track-handle-container .handle-list .track-handle:hover {
+  background-image: -moz-linear-gradient(center bottom,#0c0c0c 0,#2a2a2a 100%);
+  background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#0c0c0c),color-stop(1,#2a2a2a));
+}
+
+#butter-timeline .track-handle-container .handle-list .track-handle .menu {
+  position: absolute;
+  width: 0px;
+  height: 28px;
+  top: -1px;
+  left: 0px;
+  z-index: +1;
+  background: rgba( 100, 100, 100, 0.5 );
+  border-radius: 7px;
+  -moz-transition: width 0.1s;
+  -webkit-transition: width 0.1s;
+  transition: width 0.1s;
+}
+
+#butter-timeline .track-handle-container .handle-list .track-handle:hover .menu {
+  width: 20px;
+}
+
+#butter-timeline .track-handle-container .handle-list .track-handle .menu:hover {
+  background: rgba( 100, 100, 100, 0.8 );
+}
+
+#butter-timeline .track-handle-container .handle-list .track-handle .menu .delete {
+  position: absolute;
+  right: 3px;
+  top: 8px;
+  background-image: url( "assets/buttons.png" );
+  background-position: -143px -144px;
+  cursor: pointer;
+  width: 15px;
+  height: 10px;
 }
 
 #butter-timeline .time-bar {
