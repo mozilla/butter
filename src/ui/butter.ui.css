@@ -38,19 +38,19 @@ THE SOFTWARE.
   bottom: 0px;
   left: 0px;
   width: 100%;
-  height: 300px;
+  height: 210px;
   border: 1px solid #000;
   background-image: url( "assets/bg.jpg" );
-  -moz-transition: bottom 0.5s;
-  -webkit-transition: bottom 0.5s;
-  transition: bottom 0.5s;
+  -moz-transition: bottom 0.35s;
+  -webkit-transition: bottom 0.35s;
+  transition: bottom 0.35s;
 }
 
 #butter-timeline .status-container {
   position: absolute;
   width: 100px;
   height: 40px;
-  top: -45px;
+  top: -50px;
   left: -115px;
 }
 
@@ -158,7 +158,7 @@ THE SOFTWARE.
 
 #butter-timeline .mute-button-container {
   position: absolute;
-  top: -40px;
+  top: -50px;
   right: -30px;
   width: 17px;
   height: 17px;
@@ -218,16 +218,11 @@ THE SOFTWARE.
 
 #butter-timeline .track-handle-container {
   position: absolute;
-  height: 185px;
-  width: 100px;
+  height: 140px;
+  width: 110px;
   left: 5px;
+  top: 55px;
   bottom: 18px;
-  border: 1px solid #2B2B2B;
-  border-image: initial;
-  border-radius: 5px;
-  moz-border-radius: 5px;
-  o-border-radius: 5px;
-  webkit-border-radius: 5px;
   overflow: hidden;
 }
 
@@ -327,7 +322,7 @@ THE SOFTWARE.
   top: 12px;
   left: 3px;
   width: 4px;
-  height: 220px;
+  height: 170px;
   cursor: pointer;
   z-index: 2147483647;
 }
@@ -346,7 +341,7 @@ THE SOFTWARE.
 }
 
 #butter-timeline[ butter-ui-hidden="true" ] {
-  bottom: -260px;
+  bottom: -160px;
 }
 
 #butter-timeline-toggle {
@@ -381,7 +376,7 @@ THE SOFTWARE.
   background-image: -moz-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% );
   background-image: -webkit-gradient( linear, left bottom, left top, color-stop( 0, #2c2c2c ), color-stop( 1, #4c4c4c ) );
   position: absolute;
-  height: 40px;
+  height: 50px;
   top: 0px;
   left: 0px;
   width: 100%;
@@ -393,12 +388,14 @@ THE SOFTWARE.
 }
 
 #butter-status-bar div {
+  display: none;
   margin: 0;
   padding: 0;
   width: 100%;
 }
 
 #butter-status-bar div div {
+  display: none;
   border-radius: 5px;
   moz-border-radius: 5px;
   o-border-radius: 5px;
@@ -423,15 +420,18 @@ THE SOFTWARE.
 }
 
 #butter-status-bar div div:hover {
+  display: none;
   max-width: 300px;
   width: 300px;
   background: #000;
 }
 
 #butter-status-bar div div .media-url {
+  display: none;
   white-space: nowrap;
   background: transparent;
   font-size: .8em;
+  float:right;
   margin: 0;
   outline: none;
   padding: 0;
@@ -453,10 +453,10 @@ THE SOFTWARE.
 }
 
 #butter-timeline .media-instance {
-  height: 260px;
+  height: 190px;
   padding: 0 150px 0 115px;
   position: relative;
-  top: 40px;
+  top: 0px;
 }
 
 #butter-timeline .media-container {
@@ -464,7 +464,7 @@ THE SOFTWARE.
   top: 55px;
   padding: 0;
   margin: 0;
-  height: 185px;
+  height: 135px;
 }
 
 #butter-timeline .scroll-bar {
@@ -483,7 +483,7 @@ THE SOFTWARE.
 #butter-timeline .scroll-handle {
   height: 100%;
   position: absolute;
-  background: #999;
+  background: #777;
   min-width: 10px;
   border-radius: 15px;
   box-shadow: inset 0 -1px 1px #000;
@@ -530,7 +530,7 @@ THE SOFTWARE.
 
 #butter-timeline .tracks-container .trackliner-root {
   width: 100%;
-  height: 210px;
+  height: 135px;
   padding: 0px 0px 0px 0px;
   margin: 0px 0px 0px 0px;
 } 
@@ -655,16 +655,16 @@ THE SOFTWARE.
 	padding: 3px;
 	position: absolute;
 	right: 10px;
-	top: 92px;
-	height: 180px;
+	top: 55px;
+	height: 140px;
 	webkit-box-shadow: 0 1px 0 #656565;
 	width: 100px;
 }
 
 #butter-timeline .zoom-bar {
   position: absolute;
-  left: 5px;
-  bottom: 5px;
-  width: 102px;
+  top: 195px;
+  left: 10px;
+  width: 100px;
   height: 10px;
 }
