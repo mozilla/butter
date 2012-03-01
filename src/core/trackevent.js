@@ -1,4 +1,4 @@
-define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventManager, util ) {
+define( [ "./logger", "./eventmanager", "util/lang", "util/time" ], function( Logger, EventManager, LangUtil, TimeUtil ) {
 
   var NUMBER_OF_DECIMAL_PLACES = 3,
       __guid = 0;
@@ -19,19 +19,16 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
           start: 0,
           end: 1
         },
-        _selected = false,
-        _round = function( number, numberOfDecimalPlaces ) {
-          return Math.round( number * ( Math.pow( 10, numberOfDecimalPlaces ) ) ) / Math.pow( 10, numberOfDecimalPlaces );
-        };
+        _selected = false;
 
     if( !_type ){
       _logger.log( "Warning: " + _id + " has no type." );
     } //if
 
     _popcornOptions.start = _popcornOptions.start || 0;
-    _popcornOptions.start = _round( _popcornOptions.start, NUMBER_OF_DECIMAL_PLACES );
+    _popcornOptions.start = TimeUtil.roundTime( _popcornOptions.start );
     _popcornOptions.end = _popcornOptions.end || _popcornOptions.start + 1;
-    _popcornOptions.end = _round( _popcornOptions.end, NUMBER_OF_DECIMAL_PLACES );
+    _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
 
     this.update = function( updateOptions ) {
       for ( var prop in updateOptions ) {
@@ -40,10 +37,10 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
         } //if
       } //for
       if ( _popcornOptions.start ) {
-        _popcornOptions.start = _round( _popcornOptions.start, NUMBER_OF_DECIMAL_PLACES );
+        _popcornOptions.start = TimeUtil.roundTime( _popcornOptions.start );
       }
       if ( _popcornOptions.end ) {
-        _popcornOptions.end = _round( _popcornOptions.end, NUMBER_OF_DECIMAL_PLACES );
+        _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
       }
       _em.dispatch( "trackeventupdated", _this );
     }; //update
@@ -52,7 +49,7 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
       popcornOptions: {
         enumerable: true,
         get: function(){
-          return util.clone( _popcornOptions );
+          return LangUtil.clone( _popcornOptions );
         }
       },
       type: {
@@ -96,7 +93,7 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
           return {
             id: _id,
             type: _type,
-            popcornOptions: util.clone( _popcornOptions ),
+            popcornOptions: LangUtil.clone( _popcornOptions ),
             track: _track ? _track.name : undefined,
             name: _name
           };

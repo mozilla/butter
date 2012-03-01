@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 **********************************************************************************/
 
-define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ], function( EventManager, IFrameDialog, WindowDialog ) {
+define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "util/time" ], function( EventManager, IFrameDialog, WindowDialog, TimeUtil ) {
 
   var DEFAULT_DIMS = [ 400, 400 ],
       DEFAULT_FRAME_TYPE = "window";
@@ -78,6 +78,10 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ],
         } //if
       } //blinkTarget
 
+      function onTrackEventUpdateFailed( e ) {
+        _dialog.send( "trackeventupdatefailed", e.data );
+      } //onTrackEventUpdateFailed
+
       _dialog.open({
         open: function( e ) {
           var targets = [],
@@ -98,16 +102,31 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ],
           _currentTarget = corn.target; 
           blinkTarget();
           trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
+          trackEvent.listen( "trackeventupdatefailed", onTrackEventUpdateFailed );
         },
         submit: function( e ) {
-          if( e.data.target !== _currentTarget ){
-            _currentTarget = e.data.target;
-            blinkTarget();
+          var duration = TimeUtil.roundTime( butter.currentMedia.duration );
+          if( e.data &&
+              ( e.data.start < 0 ||
+                e.data.end > duration ||
+                e.data.start > e.data.end ) ){
+            trackEvent.dispatch( "trackeventupdatefailed", {
+              error: "trackeventupdate::invalidtime",
+              message: "Invalid start/end times.",
+              attemptedData: e.data
+            });
+          }
+          else{
+            if( e.data.target !== _currentTarget ){
+              _currentTarget = e.data.target;
+              blinkTarget();
+            } //if
+            trackEvent.update( e.data );
           } //if
-          trackEvent.update( e.data );
         },
         close: function( e ){
           trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
+          trackEvent.unlisten( "trackeventupdatefailed", onTrackEventUpdateFailed );
         }
       });
     }; //open

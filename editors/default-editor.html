@@ -1,5 +1,10 @@
 <html>
   <head>
+    <style>
+      p#message {
+        color: #FF0000;
+      }
+    </style>
     <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
     <script type="text/javascript">
       (function(){
@@ -17,17 +22,18 @@
             for( var item in _manifest ) {
               popcornOptions[ item ] = document.getElementById( item ).value;
             }
-            _comm.send( "submit", popcornOptions);
+            document.getElementById( "message" ).innerHTML = "";
+            _comm.send( "submit", popcornOptions );
           } //sendData
 
           okPressed = function( e ) {
             sendData();
             _comm.send( "close" );
-          };
+          }; //okPressed
 
           cancelPressed = function( e ) {
             _comm.send( "cancel" );
-          };
+          }; //cancelPressed
 
           document.addEventListener( "keydown", function( e ) {
             if( e.keyCode === 13 ) {
@@ -44,6 +50,12 @@
               var element = document.getElementById( item );
               element.value = e.data[ item ];
             } //for
+          });
+
+          _comm.listen( "trackeventupdatefailed", function( e ) {
+            if( e.data.error === "trackeventupdate::invalidtime" ){
+              document.getElementById( "message" ).innerHTML = "You've entered an invalid start or end time. Please verify that they are both greater than 0 and less than the duration of the media.";
+            } //if
           });
 
           _comm.listen( "trackeventdata", function( e ){
@@ -113,5 +125,6 @@
     </table>
     <button id="ok">Ok</button>
     <button id="cancel">Cancel</button>
+    <p id="message"></p>
   </body>
 </html>
