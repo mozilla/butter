@@ -273,7 +273,7 @@ THE SOFTWARE.
   height: 185px;
   width: 100px;
   left: 5px;
-  bottom: 18px;
+  bottom: 18.8px;
   border: 1px solid #2B2B2B;
   border-image: initial;
   border-radius: 5px;
@@ -306,15 +306,14 @@ THE SOFTWARE.
   position: relative;
   background-image: -moz-linear-gradient(center bottom,#1c1c1c 0,#2a2a2a 100%);
   background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#1c1c1c),color-stop(1,#2a2a2a));
-  border: 1px solid #111;
   color: #666;
   font: 10px/25px Arial,Helvetica,sans-serif;
-  height: 25px;
+  height: 28px;
   margin-bottom: 6px;
-  box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  moz-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  o-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
+  box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 0px 10px 1px rgba( 160, 160, 160, 0.1 ), 1px -1px 1px #101010, -1px -1px 1px #101010;
+  moz-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 0px 10px 1px rgba( 160, 160, 160, 0.1 ), 1px -1px 1px #101010, -1px -1px 1px #101010;
+  o-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 0px 10px 1px rgba( 160, 160, 160, 0.1 ), 1px -1px 1px #101010, -1px -1px 1px #101010;
+  webkit-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 0px 10px 1px rgba( 160, 160, 160, 0.1 ), 1px -1px 1px #101010, -1px -1px 1px #101010;
   text-transform: uppercase;
   text-align: center;
   overflow: hidden;
@@ -693,7 +692,8 @@ THE SOFTWARE.
   cursor: move;
   overflow: hidden;
   display: block;
-  height: 25px;
+  height: 27px;
+  margin-top: 1px;
   line-height: 25px;
   opacity: 0.8;
   position: absolute;
@@ -706,7 +706,6 @@ THE SOFTWARE.
   moz-border-radius: 6px;
   o-border-radius: 6px;
   webkit-border-radius: 6px;
-  border: 1px solid #111111 !important;
   background-attachment: scroll;
   background-clip: border-box;
   background-color: transparent;
@@ -715,9 +714,13 @@ THE SOFTWARE.
   background-position: 0 0;
   background-repeat: repeat;
   background-size: auto auto;
-  height: 25px;
+  height: 28px;
   margin-bottom: 6px;
   position: relative;
+  box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6);
+  moz-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6);
+  o-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6);
+  webkit-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6);
 }
 
 #butter-timeline .tracks-container .trackliner-event[selected="true"] {
@@ -840,7 +843,7 @@ THE SOFTWARE.
 #butter-timeline .zoom-bar {
   position: absolute;
   left: 5px;
-  bottom: 5px;
+  bottom: 5.6px;
   width: 102px;
   height: 10px;
 }
