@@ -310,12 +310,12 @@ THE SOFTWARE.
   font: 10px/25px Arial,Helvetica,sans-serif;
   height: 28px;
   margin-bottom: 6px;
-  /*
+  
   box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
   moz-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
   o-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
   webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  */
+  
   text-transform: uppercase;
   text-align: center;
   overflow: hidden;
@@ -719,24 +719,10 @@ THE SOFTWARE.
   height: 28px;
   margin-bottom: 6px;
   position: relative;
-  /*
-  box-shadow: inset 2px 1.2px 1px rgba(0,0,0,0.8), 
-              inset -1px 1.2px 1px rgba(0,0,0,0.8),
-              inset 0px -1px .5px rgba(255,255,255,0.1), 
-              inset 0px -1px 1px rgba(100,100,100,0.8);
-  moz-box-shadow: inset 2px 1.2px 1px rgba(0,0,0,0.8), 
-              inset -1px 1.2px 1px rgba(0,0,0,0.8),
-              inset 0px -1px .5px rgba(255,255,255,0.1), 
-              inset 0px -1px 1px rgba(100,100,100,0.8);
-  o-box-shadow: inset 2px 1.2px 1px rgba(0,0,0,0.8), 
-              inset -1px 1.2px 1px rgba(0,0,0,0.8),
-              inset 0px -1px .5px rgba(255,255,255,0.1), 
-              inset 0px -1px 1px rgba(100,100,100,0.8);
-  webkit-box-shadow: inset 2px 1.2px 1px rgba(0,0,0,0.8), 
-              inset -1px 1.2px 1px rgba(0,0,0,0.8),
-              inset 0px -1px .5px rgba(255,255,255,0.1), 
-              inset 0px -1px 1px rgba(100,100,100,0.8);
-  */
+  box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
+  moz-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
+  o-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
+  webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
 }
 
 #butter-timeline .tracks-container .trackliner-event[selected="true"] {
