@@ -93,6 +93,14 @@ THE SOFTWARE.
         return _currentMedia.getManifest( name );
       }; //getManifest
 
+      this.getHTML = function(){
+        var media = [];
+        for( var i=0; i<_media.length; ++i ){
+          media.push( _media[ i ].popcornString );
+        } //for
+        return _page.getHTML( media );
+      }; //getHTML
+
       function trackEventRequested( e, media, target ){
           var track,
               element = e.data.ui.draggable[ 0 ],
@@ -496,6 +504,7 @@ THE SOFTWARE.
               img.src = icons[ identifier ];
               img.id = identifier + "-icon";
               img.style.display = "none";
+              img.setAttribute( "data-butter-exclude", "true" );
               // @secretrobotron: just attach this to the body hidden for now,
               //                  so that it preloads if necessary
               document.body.appendChild( img );
