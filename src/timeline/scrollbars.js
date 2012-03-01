@@ -79,7 +79,7 @@ define( [], function(){
     }; //update
 
     function setHandlePosition(){
-      if( _control.scrollTop - _elementHeight > 0 ) {
+      if( _control.scrollHeight - _elementHeight > 0 ) {
         _handle.style.top = ( _elementHeight - _handleHeight ) *
           ( _control.scrollTop / (_control.scrollHeight - _elementHeight )) + "px";
       }else{
