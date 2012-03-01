@@ -26,6 +26,73 @@ THE SOFTWARE.
 
   define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
+    var __numStyleSheets,
+        __trackEventCSSRules = {},
+        __cssRuleProperty = "butter-trackevent-type",
+        __cssRulePrefix = "#butter-timeline .trackliner-event",
+        __newStyleSheet = document.createElement( "style" );
+
+    __newStyleSheet.type = "text/css";
+    __newStyleSheet.media = "screen";
+
+    function colourHashFromType( type ){
+      var hue = 0, saturation = 0, lightness = 0, srcString = type;
+
+      // very simple hashing function
+      while( srcString.length < 9 ){
+        srcString += type;
+      } //while
+      hue = ( srcString.charCodeAt( 0 ) + srcString.charCodeAt( 3 ) + srcString.charCodeAt( 6 ) ) % ( ( srcString.charCodeAt( 8) * 5 ) % 360 );
+      saturation = ( ( srcString.charCodeAt( 0 ) + srcString.charCodeAt( 2 ) + srcString.charCodeAt( 4 ) + srcString.charCodeAt( 6 ) ) % 100 ) * .05 + 95;
+      lightness = ( ( srcString.charCodeAt( 1 ) + srcString.charCodeAt( 3 ) + srcString.charCodeAt( 5 ) + srcString.charCodeAt( 7 ) ) % 100 ) * .20 + 40;
+
+      // bump up reds because they're hard to see
+      if( hue < 20 || hue > 340 ){
+        lightness += 10;
+      } //if
+
+      // dial back blue/greens a bit
+      if( hue > 160 && hue < 200 ){
+        lightness -= 10;
+      } //if
+
+      return {
+        h: hue,
+        s: saturation,
+        l: lightness
+      };
+    } //colourHashFromType
+
+    function findTrackEventCSSRules(){
+      var sheets = document.styleSheets;
+      __numStyleSheets = sheets.length;
+      for( var i=0; i<sheets.length; ++i ){
+        var sheet = sheets[ i ];
+        if( sheet.href && sheet.href.indexOf( "jquery" ) > -1 ){
+          continue;
+        } //if
+        for( var j=0, l=sheet.cssRules.length; j<l; ++j ){
+          var rule = sheet.cssRules[ j ],
+              text = rule.selectorText,
+              idx = text.indexOf( __cssRuleProperty );
+          if( idx > -1 ){
+            var eIdx = text.indexOf( '"', idx + __cssRuleProperty.length + 2 ),
+                name = text.substring( idx + __cssRuleProperty.length + 2, eIdx );
+            __trackEventCSSRules[ name ] = rule;
+          } //if
+        } //for
+      } //for
+    } //findTrackEventCSSRules
+
+    function createStyleForType( type ){
+      var styleContent = __newStyleSheet.innerHTML,
+          hash = colourHashFromType( type );
+      styleContent +=__cssRulePrefix + "[" + __cssRuleProperty + "=\"" + type + "\"]{";
+      styleContent += "background: hsl( " + hash.h + ", " + hash.s + "%, " + hash.l + "% )";
+      styleContent += "}";
+      __newStyleSheet.innerHTML = styleContent;
+    } //createStyleForType
+
     var PluginManager = function( butter, moduleOptions ) {
 
       var __butter = butter;
@@ -35,6 +102,11 @@ THE SOFTWARE.
           __this = this,
           __pluginElementPrefix = "butter-plugin-",
           __pattern = '<li class="$type_tool ui-draggable"><a href="#" title="$type"><span></span>$type</a></li>';
+
+      if( __numStyleSheets !== document.styleSheets.length ){
+        findTrackEventCSSRules();
+      } //if
+      document.head.appendChild( __newStyleSheet );
 
       var Plugin = function ( pluginOptions ) {
         pluginOptions = pluginOptions || {};
@@ -47,13 +119,17 @@ THE SOFTWARE.
             _type = pluginOptions.type,
             _element;
 
+        if( !__trackEventCSSRules[ _type ] ){
+          createStyleForType( _type );
+        } //if
+
         if( _path ) {
           var head = document.getElementsByTagName( "HEAD" )[ 0 ],
               script = document.createElement( "script" );
 
           script.src = _path;
           head.appendChild( script );
-        }
+        } //if
 
         Object.defineProperties( this, {
           plugins: {

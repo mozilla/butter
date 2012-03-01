@@ -27,9 +27,10 @@ THE SOFTWARE.
             "core/logger", 
             "core/eventmanager", 
             "core/track",
-            "core/popcorn-wrapper"
+            "core/popcorn-wrapper",
+            "ui/page-element"
           ], 
-          function( Logger, EventManager, Track, PopcornWrapper ){
+          function( Logger, EventManager, Track, PopcornWrapper, PageElement ){
 
     var __guid = 0;
 
@@ -43,6 +44,7 @@ THE SOFTWARE.
           _name = mediaOptions.name || _id,
           _url = mediaOptions.url,
           _target = mediaOptions.target,
+          _pageElement,
           _registry,
           _currentTime = 0,
           _duration = 0,
@@ -100,6 +102,11 @@ THE SOFTWARE.
         _popcornWrapper.updateEvent( trackEvent );
       } //onTrackEventUpdated
 
+      function onTrackEventRemoved( e ){
+        var trackEvent = e.data;
+        _popcornWrapper.destroyEvent( trackEvent );
+      } //onTrackEventRemoved
+
       this.addTrack = function ( track ) {
         if ( !( track instanceof Track ) ) {
           track = new Track( track );
@@ -117,6 +124,7 @@ THE SOFTWARE.
         track.popcorn = _popcornWrapper;
         track.listen( "trackeventadded", onTrackEventAdded );
         track.listen( "trackeventupdated", onTrackEventUpdated );
+        track.listen( "trackeventremoved", onTrackEventRemoved );
         _em.dispatch( "trackadded", track );
         var trackEvents = track.trackEvents;
         if ( trackEvents.length > 0 ) {
@@ -144,7 +152,7 @@ THE SOFTWARE.
           _tracks.splice( idx, 1 );
           var events = track.trackEvents;
           for ( var i=0, l=events.length; i<l; ++i ) {
-            _em.dispatch( "trackeventremoved", events[i] );
+            track.dispatch( "trackeventremoved", events[ i ] );
           } //for
           _em.unrepeat( track, [
             "tracktargetchanged",
@@ -157,6 +165,7 @@ THE SOFTWARE.
           ]);
           track.unlisten( "trackeventadded", onTrackEventAdded );
           track.unlisten( "trackeventupdated", onTrackEventUpdated );
+          track.unlisten( "trackeventremoved", onTrackEventRemoved );
           _em.dispatch( "trackremoved", track );
           return track;
         } //if
@@ -170,6 +179,21 @@ THE SOFTWARE.
         if( _url && _target ){
           _popcornWrapper.prepare( _url, _target );
         } //if
+        if( _pageElement ){
+          _pageElement.destroy();
+        } //if
+        _pageElement = new PageElement( _target, {
+          drop: function( event, ui ){
+            _em.dispatch( "trackeventrequested", {
+              event: event,
+              target: _this,
+              ui: ui
+            });
+          }
+        },
+        {
+          highlightClass: "butter-media-highlight"
+        });
       } //setupContent
 
       this.pause = function(){
@@ -335,6 +359,12 @@ THE SOFTWARE.
           },
           set: function( val ){
             _popcornWrapper.volume = val;
+          }
+        },
+        view: {
+          enumerable: true,
+          get: function(){
+            return _pageElement;
           }
         }
       });

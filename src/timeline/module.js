@@ -24,15 +24,14 @@ THE SOFTWARE.
 
 define( [
           "core/logger", 
-          "./media",
-          "./timebar"
+          "./media"
         ], 
         function( 
           Logger, 
           Media
         ){
 
-  var unwantedKeyPressElements = [
+  var __unwantedKeyPressElements = [
     "TEXTAREA",
     "INPUT"
   ];
@@ -106,7 +105,7 @@ define( [
 
     butter.listen( "mediaadded", function( event ){
       var mediaObject = event.data,
-          media = new Media( mediaObject );
+          media = new Media( butter, mediaObject );
 
       _media[ mediaObject.id ] = media;
       butter.ui.element.appendChild( media.element );
@@ -150,7 +149,7 @@ define( [
     }; //currentTimeInPixels
 
     window.addEventListener( "keypress", function( e ){
-      if( e.which === 32 && unwantedKeyPressElements.indexOf( e.target.nodeName ) === -1 ){
+      if( e.which === 32 && __unwantedKeyPressElements.indexOf( e.target.nodeName ) === -1 ){
         butter.currentMedia.paused = !butter.currentMedia.paused;
       } //if
     }, false );

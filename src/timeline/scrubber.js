@@ -43,7 +43,7 @@ define( [], function(){
         _isPlaying = false,
         _isScrubbing = false,
         _lastTime = -1,
-        _lastScroll = -1,
+        _lastScroll = _tracksContainer.scrollLeft,
         _this = this;
 
     _container.className = "time-bar-scrubber-container";

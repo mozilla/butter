@@ -35,7 +35,6 @@ THE SOFTWARE.
             "track/module",
             "plugin/module",
             "timeline/module",
-            "dialog/module",
             "ui/module"
           ],
           function(
@@ -49,7 +48,6 @@ THE SOFTWARE.
             TrackModule,
             PluginModule,
             TimelineModule,
-            DialogModule,
             UIModule
   ){
 
@@ -57,7 +55,6 @@ THE SOFTWARE.
       editor: EditorModule,
       eventManager: EventManager,
       track: TrackModule,
-      dialog: DialogModule,
       timeline: TimelineModule,
       plugin: PluginModule,
       ui: UIModule
@@ -96,16 +93,10 @@ THE SOFTWARE.
         return _currentMedia.getManifest( name );
       }; //getManifest
 
-      /****************************************************************
-       * Target methods
-       ****************************************************************/
-      function targetTrackEventRequested( e ){
-        if( _currentMedia ){
+      function trackEventRequested( e, media, target ){
           var track,
-              media = _currentMedia,
               element = e.data.ui.draggable[ 0 ],
               type = element.id.split( "-" ),
-              target = e.data.target,
               start = media.currentTime + 1 < media.duration ? media.currentTime : media.duration - 1,
               end = start + 1;
 
@@ -117,24 +108,36 @@ THE SOFTWARE.
             type = null;
           } //if
 
-          if( _currentMedia.tracks.length === 0 ){
-            _currentMedia.addTrack();
+          if( media.tracks.length === 0 ){
+            media.addTrack();
           } //if
-          track = _currentMedia.tracks[ 0 ];
+          track = media.tracks[ 0 ];
           track.addTrackEvent({
             type: type,
             popcornOptions: {
               start: start,
               end: end,
-              target: target.element.id
+              target: target
             }
           });
+      } //trackEventRequested
+
+      function targetTrackEventRequested( e ){
+        if( _currentMedia ){
+          trackEventRequested( e, _currentMedia, e.target.elementID );
         }
         else {
           _logger.log( "Warning: No media to add dropped trackevent." );
         } //if
       } //targetTrackEventRequested
-      
+
+      function mediaTrackEventRequested( e ){
+        trackEventRequested( e, e.target, "Media Element" );
+      } //mediaTrackEventRequested
+
+       /****************************************************************
+       * Target methods
+       ****************************************************************/
       //addTarget - add a target object
       this.addTarget = function ( target ) {
         if ( !(target instanceof Target ) ) {
@@ -200,12 +203,10 @@ THE SOFTWARE.
             }
 
             if ( !t ) {
-              t = new Target();
-              t.json = projectData.targets[ i ];
-              _this.addTarget( t );
+              _this.addTarget( targetData );
             }
             else {
-              t.json = projectData.targets[ i ];
+              t.json = targetData;
             }
           }
         }
@@ -217,11 +218,11 @@ THE SOFTWARE.
 
             if ( !m ) {
               m = new Media();
-              m.json = projectData.media[ i ];
+              m.json = mediaData;
               _this.addMedia( m );
             }
             else {
-              m.json = projectData.media[ i ];
+              m.json = mediaData;
             }
 
           } //for
@@ -301,6 +302,8 @@ THE SOFTWARE.
           } //for
         } //if
 
+        media.listen( "trackeventrequested", mediaTrackEventRequested );
+
         _em.dispatch( "mediaadded", media );
         if ( !_currentMedia ) {
           _this.currentMedia = media;
@@ -335,6 +338,7 @@ THE SOFTWARE.
           if ( media === _currentMedia ) {
             _currentMedia = undefined;
           } //if
+          media.unlisten( "trackeventrequested", mediaTrackEventRequested );
           _em.dispatch( "mediaremoved", media );
           return media;
         } //if

@@ -1,6 +1,11 @@
-define( [ "./util", "./base-dialog", "core/comm", "./event-manager" ], function( util, BaseDialog, Comm, EventManager ){
+define( [
+          "core/comm", 
+          "core/eventmanager",
+          "dialog/modal"
+        ], 
+        function( Comm, EventManager, Modal ){
 
-  var IFRAMEDialog = function( context, dialogOptions ) {
+  return function( dialogOptions ) {
     dialogOptions = dialogOptions || {};
 
     if( !dialogOptions.url ){
@@ -8,15 +13,17 @@ define( [ "./util", "./base-dialog", "core/comm", "./event-manager" ], function(
     } //if
 
     var _this = this,
-        _baseDialog = new BaseDialog( context, dialogOptions, _this ),
         _url = dialogOptions.url,
         _em = new EventManager( _this ),
-        _currentComm,
-        _currentTemplate;
+        _parent = dialogOptions.parent,
+        _open = false,
+        _iframe,
+        _commQueue = [],
+        _comm,
+        _modalLayer,
+        _listeners = dialogOptions.events || {};
 
-    if( !_this.template ){
-      throw new Error( "Template required to build iframe dialog." );
-    } //if
+    this.modal = dialogOptions.modal;
 
     function onSubmit( e ){
       _em.dispatch( e.type, e.data );
@@ -27,54 +34,76 @@ define( [ "./util", "./base-dialog", "core/comm", "./event-manager" ], function(
       close();
     } //onCancel
 
-    function onClose( e ){
-      close();
-    } //onClose
-
-    function close(){
-      _currentComm.unlisten( "submit", onSubmit );
-      _currentComm.unlisten( "cancel", onCancel );
-      _currentComm.unlisten( "close", onClose );
-      _currentComm.destroy();
-      _currentTemplate.destroy();
-      _baseDialog.close();
-      _em.dispatch( "close" );
-      _currentComm = _currentTemplate = undefined;
-    } //close
-
-    this.open = function( background ){
-      var iframe = document.createElement( "iframe" );
-      _currentTemplate = _this.template.createInstance();
-      _currentTemplate.insertContent( iframe );
-      _currentTemplate.attach( background );
-      $( _currentTemplate.element ).draggable();
-      util.css( iframe, "width", util.css( _currentTemplate.element, "width" ) );
-      util.css( iframe, "height", util.css( _currentTemplate.element, "height" ) );
-      util.css( iframe, "border", "none" );
-      iframe.src = _url;
-      iframe.addEventListener( "load", function( e ){
-        _currentComm = new Comm( iframe.contentWindow, function(){
-          _currentTemplate.show();
-          _currentComm.listen( "submit", onSubmit );
-          _currentComm.listen( "cancel", onCancel );
-          _currentComm.listen( "close", onClose );
-        });
-      }, false );
-      _baseDialog.open();
-      _em.dispatch( "open" );
-    }; //open
-
     this.close = function(){
-      close();
+      _parent.removeChild( _iframe );
+      if( _modalLayer ){
+        _modalLayer.destroy();
+        _modalLayer = undefined;
+      } //if
+      _comm.unlisten( "submit", onSubmit );
+      _comm.unlisten( "cancel", onCancel );
+      _comm.unlisten( "close", _this.close );
+      _comm.destroy();
+      _open = false;
+      window.removeEventListener( "beforeunload",  _this.close, false); 
+      for( var e in _listeners ){
+        _em.unlisten( e, _listeners[ e ] );
+      } //for
+      _em.dispatch( "close" );
     }; //close
 
+    this.open = function( listeners ){
+      if( _open ){
+        return;
+      } //if
+      if( _this.modal ){
+        _modalLayer = new Modal( _this.modal );
+      } //if
+      for( e in listeners ){
+        _listeners[ e ] = listeners[ e ];
+      } //for
+      var defaultParent = _modalLayer ? _modalLayer.element : document.body;
+      _parent = _parent || defaultParent;
+      _iframe = document.createElement( "iframe" );
+      _iframe.src = _url;
+      _iframe.addEventListener( "load", function( e ){
+        _comm = new Comm( _iframe.contentWindow, function(){
+          _comm.listen( "submit", onSubmit );
+          _comm.listen( "cancel", onCancel );
+          _comm.listen( "close", _this.close );
+          window.addEventListener( "beforeunload",  _this.close, false); 
+          for( var e in _listeners ){
+            _em.listen( e, _listeners[ e ] );
+          } //for
+          while( _commQueue.length > 0 ){
+            var popped = _commQueue.pop();
+            _this.send( popped.type, popped.data );
+          } //while
+          _open = true;
+          _em.dispatch( "open" );
+        });
+      }, false );
+      _parent.appendChild( _iframe );
+    }; //open
+
     this.send = function( type, data ){
-      if( _currentComm ){
-        _currentComm.send( type, data );
+      if( _comm ){
+        _comm.send( type, data );
+      }
+      else {
+        _commQueue.push({ type: type, data: data });
       } //if
     }; //send
 
-  }; //IFRAMEDialog
+    Object.defineProperties( this, {
+      closed: {
+        enumerable: true,
+        get: function(){
+          return !_open;
+        }
+      }
+    });
 
-  return IFRAMEDialog;
+  }; //IFrameDialog
+
 });

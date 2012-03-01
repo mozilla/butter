@@ -23,7 +23,7 @@ THE SOFTWARE.
 **********************************************************************************/
 
 (function() {
-  define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
+  define( [ "core/logger", "core/eventmanager", "ui/page-element" ], function( Logger, EventManager, PageElement ) {
 
     var __guid = 0;
 
@@ -35,6 +35,7 @@ THE SOFTWARE.
           _em = new EventManager( this ),
           _name = options.name || "Target" + _id,
           _element = options.element,
+          _pageElement,
           _this = this;
 
       if( typeof( _element ) === "string" ){
@@ -45,19 +46,27 @@ THE SOFTWARE.
         _logger.log( "Warning: Target element is null." );
       }
       else {
-        $( _element ).droppable({
-          greedy: true,
-          drop: function( event, ui ) {
+        _pageElement = new PageElement( _element, {
+          drop: function( event, ui ){
             _em.dispatch( "trackeventrequested", {
               event: event,
               target: _this,
               ui: ui
             });
           }
+        },
+        {
+          highlightClass: "butter-target-highlight"
         });
       } //if
 
       Object.defineProperties( this, {
+        view: {
+          enumerable: true,
+          get: function(){
+            return _pageElement;
+          }
+        },
         name: {
           enumerable: true,
           get: function(){
@@ -68,6 +77,14 @@ THE SOFTWARE.
           enumerable: true,
           get: function(){
             return _id;
+          }
+        },
+        elementID: {
+          enumerable: true,
+          get: function(){
+            if( _element ){
+              return _element.id;
+            } //if
           }
         },
         element: {

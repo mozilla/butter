@@ -52,7 +52,7 @@ define( [
 
   var ZOOM_FACTOR = 100;
 
-  function MediaInstance( media ){
+  function MediaInstance( butter, media ){
     var _this = this,
         _media = media,
         _em = new EventManager( this ),
@@ -87,10 +87,8 @@ define( [
       } //if
     } //zoomCallback
 
-    function onTrackEventRequested( e ){
-      var newTrack = e.currentTarget,
-          eventId = e.data.event,
-          newStart = Number( e.data.start ),
+    function fabricateTrackEvent( newTrack, eventId, start, type ){
+      var newStart = Number( start ),
           corn,
           newEnd,
           trackEvent;
@@ -110,20 +108,22 @@ define( [
         corn = trackEvent.popcornOptions;
         //then, add it to the correct one
         newEnd = corn.end - corn.start + newStart;
-        newTrack.track.addTrackEvent( trackEvent );
+        newTrack.addTrackEvent( trackEvent );
 
         trackEvent.update( { start: newStart, end: newEnd } );
       } else {
-        newTrack = e.data.track;
         trackEvent = newTrack.addTrackEvent({
           popcornOptions: {
             start: newStart,
             end: newStart + 1
           },
-          type: e.data.type
+          type: type
         });
       } //if
+    } //fabricateTrackEvent
 
+    function onTrackEventRequested( e ){
+      fabricateTrackEvent( e.data.track, e.data.event, e.data.start, e.data.type );
     } //onTrackEventRequested
 
     _media.listen( "trackeventselected", function( e ){
@@ -136,7 +136,21 @@ define( [
 
     function onTrackEventMouseDown( e ){
       var trackEvent = e.trackEvent,
+          corn = trackEvent.popcornOptions,
           originalEvent = e.originalEvent;
+
+      if( originalEvent.ctrlKey && corn.target ){
+        if( corn.target !== "Media Element" ){
+          var target = butter.getTargetByType( "elementID", corn.target )
+          if( target ){
+            target.view.blink();
+          } //if
+          return;
+        }
+        else {
+          _media.view.blink();
+        } //if
+      } //if
 
       if( trackEvent.selected === true && originalEvent.shiftKey && _selectedTracks.length > 1 ){
         trackEvent.selected = false;
@@ -201,16 +215,23 @@ define( [
         } //if
       });
 
-      _trackliner.listen( "trackadded", function( event ){
-        var fromUI = event.data;
-        if( fromUI ){
-          var tlTrack = event.data.track;
-          bTrack = new Track();
-          _tracks[ bTrack.id ] = new TrackController( _media, bTrack, _trackliner, tlTrack, {
-            mousedown: onTrackEventMouseDown
-          });
-          _media.addTrack( bTrack );
+      _trackliner.listen( "trackrequested", function( e ){
+        var element = e.data.ui.draggable[ 0 ],
+            left = element.offsetLeft,
+            start,
+            id = element.getAttribute( "butter-trackevent-id" ),
+            trackRect = _trackliner.element.getBoundingClientRect(),
+            left = id ? left : ( e.data.event.clientX - trackRect.left );
+
+        start = left / trackRect.width * _media.duration;
+
+        var type = element.id.split( "-" );
+        if( type.length === 3 ){
+          type = type[ 2 ];
         } //if
+
+        var track = _media.addTrack();
+        fabricateTrackEvent( track, id, start, type );
       }); //trackadded
 
       _hScrollBar = new Scrollbars.Horizontal( _tracksContainer ),
