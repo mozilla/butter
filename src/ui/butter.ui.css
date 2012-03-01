@@ -47,9 +47,17 @@ THE SOFTWARE.
   background-color: #fff;
   border: 10px solid #000;
   border-radius: 20px;
+  opacity: 0;
 }
 
-#butter-modal-container .layer[ state="behind-timeline" ] {
+#butter-modal-container .layer.fade-in, #butter-modal-container .layer iframe.fade-in {
+  opacity: 1;
+  -moz-transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+}
+
+#butter-modal-container .layer.behind-timeline {
   z-index: 2139000000;
 }
 
@@ -61,6 +69,7 @@ THE SOFTWARE.
   height: 100%;
   background: rgba( 0, 0, 0, 0.7 );
   position: fixed;
+  opacity: 0;
 }
 
 #butter-timeline {
