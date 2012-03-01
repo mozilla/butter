@@ -34,6 +34,7 @@ THE SOFTWARE.
 
     __newStyleSheet.type = "text/css";
     __newStyleSheet.media = "screen";
+    __newStyleSheet.setAttribute( "data-butter-exclude", "true" );
 
     function colourHashFromType( type ){
       var hue = 0, saturation = 0, lightness = 0, srcString = type;
