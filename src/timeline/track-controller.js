@@ -32,6 +32,8 @@ define( [ "core/trackevent", "core/eventmanager", "./trackevent-controller" ], f
         _em = new EventManager( this ),
         _events = {},
         _onMouseDown = options.mousedown,
+        _onMouseOver = options.mouseover,
+        _onMouseOut = options.mouseout,
         _this = this;
 
     if( !_tlTrack ){
@@ -67,7 +69,9 @@ define( [ "core/trackevent", "core/eventmanager", "./trackevent-controller" ], f
         text: bEvent.type
       });
       _events[ bEvent.id ] = new TrackEventController( _media, bEvent, tlEvent, _trackliner, {
-        mousedown: _onMouseDown
+        mousedown: _onMouseDown,
+        mouseover: _onMouseOver,
+        mouseout: _onMouseOut
       });
     } //addTrackEvent
 

@@ -151,9 +151,16 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     _element = inputOptions.element || createEventElement( inputOptions );
     _element.id = _id;
     _this.update( inputOptions );
+
     _element.addEventListener( "mousedown", function ( e ) {
       _eventManager.dispatch( "trackeventmousedown", e );
     }, false);
+    _element.addEventListener( "mouseover", function ( e ) {
+      _eventManager.dispatch( "trackeventmouseover", e );
+    }, false );
+    _element.addEventListener( "mouseout", function ( e ) {
+      _eventManager.dispatch( "trackeventmouseout", e );
+    }, false );
 
     _element.addEventListener( "dblclick", function ( e ) {
       _eventManager.dispatch( "trackeventdoubleclicked", e );
