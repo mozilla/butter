@@ -191,8 +191,6 @@ define( [
       } //if
     } //onTrackEventSelected
 
-    alert( _trackEventHighlight );
-
     function addTrack( bTrack ){
       var track;
       track = _tracks[ bTrack.id ];
