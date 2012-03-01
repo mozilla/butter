@@ -107,6 +107,7 @@ define( [ "./logger", "./eventmanager", "util/lang" ], function( Logger, EventMa
             _name = importData.name;
           }
           _popcornOptions = importData.popcornOptions;
+          _em.dispatch( "trackeventupdated", _this );
         }
       },
     }); //properties

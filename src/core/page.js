@@ -7,33 +7,9 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     var _eventManager = new EventManager( this );
 
     this.scrape = function() {
-      var medias = [], targets = [];
-
-      function scrapeChildren( rootNode ) {
-        var children = rootNode.children;
-
-        for( var i=0; i<children.length; i++ ) {
-          var thisChild = children[ i ];
-          if ( !thisChild ) {
-            continue;
-          }
-          // if DOM element has an data-butter tag that is equal to target or media,
-          // add it to butters target list with a respective type
-          if ( thisChild.getAttribute ) {
-            if( thisChild.getAttribute( "data-butter" ) === "target" ) {
-              targets.push( thisChild );
-            }
-            else if( thisChild.getAttribute( "data-butter" ) === "media" ) {
-              medias.push( thisChild ); 
-            } // else
-          } //if
-          if ( thisChild.children && thisChild.children.length > 0 ) {
-            scrapeChildren( thisChild );
-          } // if
-        } // for
-      } //scrapeChildren
-
-      scrapeChildren( document.body );
+      var rootNode = document.body,
+          targets = rootNode.querySelectorAll("*[data-butter='target']"),
+          medias = rootNode.querySelectorAll("*[data-butter='media']");
 
       return {
         media: medias,

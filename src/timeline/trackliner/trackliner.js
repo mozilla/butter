@@ -29,16 +29,7 @@ define( [ "core/logger", "core/eventmanager", "./track-view" ], function( Logger
     _parent.className = "trackliner-root";
     _container.className = "trackliner-container";
 
-    $( _container ).sortable({
-      containment: "parent",
-      tolerance: "pointer",
-      update: function( event, ui ) {
-        _eventManager.dispatch( "trackupdated", {
-          track: _this.getTrack( ui.item[ 0 ].id ),
-          index: ui.item.index()
-        });
-      }
-    }).droppable({
+    $( _container ).droppable({
       greedy: true
     });
 
@@ -62,11 +53,7 @@ define( [ "core/logger", "core/eventmanager", "./track-view" ], function( Logger
     $( _parent ).droppable({
       // this is dropping an event on empty space
       drop: function( event, ui ) {
-        if ( dynamicTrackCreation && ui.draggable[ 0 ].className.indexOf( "ui-draggable" ) > -1 ) {
-          var newTrack = _this.createTrack();
-          _this.addTrack( newTrack );
-          trackEventDropped( newTrack, event, ui );
-        } //if
+        _eventManager.dispatch( "trackrequested", { event: event, ui: ui } );
       } 
     }); //droppable
 
@@ -167,6 +154,12 @@ define( [ "core/logger", "core/eventmanager", "./track-view" ], function( Logger
             } //if
           } //for
           resetContainer();
+        }
+      },
+      element: {
+        enumerable: true,
+        get: function(){
+          return _parent;
         }
       },
       vScroll: {

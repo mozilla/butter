@@ -1,22 +1,30 @@
-define( [ "./util", "./base-dialog", "core/comm", "./event-manager" ], function( util, BaseDialog, Comm, EventManager ){
+define( [
+          "core/comm", 
+          "core/eventmanager",
+          "dialog/modal"
+        ], 
+        function( Comm, EventManager, Modal ){
 
   var DEFAULT_WINDOW_WIDTH = 640,
-      DEFAULT_WINDOW_HEIGHT = 479;
+      DEFAULT_WINDOW_HEIGHT = 479,
+      WINDOW_CHECK_INTERVAL = 300;
 
-  var WindowDialog = function( context, dialogOptions ) {
+  return function( dialogOptions ) {
     dialogOptions = dialogOptions || {};
 
     if( !dialogOptions.url ){
-      throw new Error( "IFRAME dialog requires a url." );
+      throw new Error( "Window dialog requires a url." );
     } //if
 
     var _this = this,
-        _baseDialog = new BaseDialog( context, dialogOptions, _this ),
         _url = dialogOptions.url,
         _em = new EventManager( _this ),
-        _currentComm,
-        _currentWindow,
-        _windowStatusInterval,
+        _comm,
+        _window,
+        _modalLayer,
+        _statusInterval,
+        _commQueue = [],
+        _open = false,
         _features = [
           "width=" + ( dialogOptions.width || DEFAULT_WINDOW_WIDTH ),
           "height=" + ( dialogOptions.height || DEFAULT_WINDOW_HEIGHT ),
@@ -25,7 +33,10 @@ define( [ "./util", "./base-dialog", "core/comm", "./event-manager" ], function(
           "titlebar=yes",
           "location=no",
           "resizable=yes"
-        ];
+        ],
+        _listeners = dialogOptions.events || {};
+
+    _this.modal = dialogOptions.modal;
 
     function onSubmit( e ){
       _em.dispatch( e.type, e.data );
@@ -33,62 +44,88 @@ define( [ "./util", "./base-dialog", "core/comm", "./event-manager" ], function(
 
     function onCancel( e ){
       _em.dispatch( e.type, e.data );
-      close();
+      _this.close();
     } //onCancel
-
-    function onClose( e ){
-      close();
-    } //onClose
 
     function onError( e ){
       if( e.data.type === "connectionclosed" ){
-        close();
+        _this.close();
       } //if
-      _em.dispatch( e.type, e.data );
+      _em.dispatch( "error", e.data );
     } //onError
 
-    function close(){
-      _currentComm.unlisten( "submit", onSubmit );
-      _currentComm.unlisten( "cancel", onCancel );
-      _currentComm.unlisten( "close", onClose );
-      _currentComm.destroy();
-      _baseDialog.close();
-      _em.dispatch( "close" );
-      if( _currentWindow.close ){
-        _currentWindow.close();
+    this.close = function(){
+      if( _modalLayer ){
+        _modalLayer.destroy();
+        _modalLayer = undefined;
       } //if
-      clearInterval( _windowStatusInterval );
-      _currentComm = _currentWindow = undefined;
-    } //close
+      _comm.unlisten( "submit", onSubmit );
+      _comm.unlisten( "cancel", onCancel );
+      _comm.unlisten( "close", _this.close );
+      _comm.destroy();
+      if( _window.close ){
+        _window.close();
+      } //if
+      clearInterval( _statusInterval );
+      window.removeEventListener( "beforeunload",  _this.close, false); 
+      _comm = _window = undefined;
+      _open = false;
+      for( var e in _listeners ){
+        _em.unlisten( e, _listeners[ e ] );
+      } //for
+      _em.dispatch( "close" );
+    }; //close
 
     function checkWindowStatus(){
-      if( _currentWindow && _currentWindow.closed === true ) {
+      if( _window && _window.closed === true ) {
         close();
       } //if
     } //checkWindowStatus
 
-    this.open = function( background ){
-      _currentWindow = window.open( _url, "dialog-window:" + _url, _features.join( "," ) );
-      _currentComm = new Comm( _currentWindow, function(){
-        _currentComm.listen( "error", onError );
-        _currentComm.listen( "submit", onSubmit );
-        _currentComm.listen( "cancel", onCancel );
-        _currentComm.listen( "close", onClose );
-        _windowStatusInterval = setInterval( checkWindowStatus, 300 );
+    this.open = function( listeners ){
+      if( _this.modal ){
+        _modalLayer = new Modal( _this.modal );
+      } //if
+      for( e in listeners ){
+        _listeners[ e ] = listeners[ e ];
+      } //for
+      _window = window.open( _url, "dialog-window:" + _url, _features.join( "," ) );
+      window.addEventListener( "beforeunload",  _this.close, false); 
+      _comm = new Comm( _window, function(){
+        _comm.listen( "error", onError );
+        _comm.listen( "submit", onSubmit );
+        _comm.listen( "cancel", onCancel );
+        _comm.listen( "close", _this.close );
+        for( var e in _listeners ){
+          _em.listen( e, _listeners[ e ] );
+        } //for
+        _statusInterval = setInterval( checkWindowStatus, WINDOW_CHECK_INTERVAL );
+        while( _commQueue.length > 0 ){
+          var popped = _commQueue.pop();
+          _this.send( popped.type, popped.data );
+        } //while
+        _open = true;
         _em.dispatch( "open" );
-        _baseDialog.open();
       });
     }; //open
 
-    this.close = function(){
-      close();
-    }; //close
-
     this.send = function( type, data ){
-      if( _currentComm ){
-        _currentComm.send( type, data );
+      if( _comm ){
+        _comm.send( type, data );
+      }
+      else {
+        _commQueue.push({ type: type, data: data });
       } //if
     }; //send
+
+    Object.defineProperties( this, {
+      closed: {
+        enumerable: true,
+        get: function(){
+          return !_open;
+        }
+      }
+    });
 
   }; //WindowDialog
 

@@ -35,7 +35,6 @@ THE SOFTWARE.
             "track/module",
             "plugin/module",
             "timeline/module",
-            "dialog/module",
             "ui/module"
           ],
           function(
@@ -49,7 +48,6 @@ THE SOFTWARE.
             TrackModule,
             PluginModule,
             TimelineModule,
-            DialogModule,
             UIModule
   ){
 
@@ -57,7 +55,6 @@ THE SOFTWARE.
       editor: EditorModule,
       eventManager: EventManager,
       track: TrackModule,
-      dialog: DialogModule,
       timeline: TimelineModule,
       plugin: PluginModule,
       ui: UIModule
@@ -83,6 +80,7 @@ THE SOFTWARE.
           _logger = new Logger( _id ),
           _em = new EventManager( this ),
           _page = new Page(),
+          _config = butterOptions.config,
           _this = this;
 
       function checkMedia() {
@@ -96,16 +94,10 @@ THE SOFTWARE.
         return _currentMedia.getManifest( name );
       }; //getManifest
 
-      /****************************************************************
-       * Target methods
-       ****************************************************************/
-      function targetTrackEventRequested( e ){
-        if( _currentMedia ){
+      function trackEventRequested( e, media, target ){
           var track,
-              media = _currentMedia,
               element = e.data.ui.draggable[ 0 ],
               type = element.id.split( "-" ),
-              target = e.data.target,
               start = media.currentTime + 1 < media.duration ? media.currentTime : media.duration - 1,
               end = start + 1;
 
@@ -117,24 +109,36 @@ THE SOFTWARE.
             type = null;
           } //if
 
-          if( _currentMedia.tracks.length === 0 ){
-            _currentMedia.addTrack();
+          if( media.tracks.length === 0 ){
+            media.addTrack();
           } //if
-          track = _currentMedia.tracks[ 0 ];
+          track = media.tracks[ 0 ];
           track.addTrackEvent({
             type: type,
             popcornOptions: {
               start: start,
               end: end,
-              target: target.element.id
+              target: target
             }
           });
+      } //trackEventRequested
+
+      function targetTrackEventRequested( e ){
+        if( _currentMedia ){
+          trackEventRequested( e, _currentMedia, e.target.elementID );
         }
         else {
           _logger.log( "Warning: No media to add dropped trackevent." );
         } //if
       } //targetTrackEventRequested
-      
+
+      function mediaTrackEventRequested( e ){
+        trackEventRequested( e, e.target, "Media Element" );
+      } //mediaTrackEventRequested
+
+       /****************************************************************
+       * Target methods
+       ****************************************************************/
       //addTarget - add a target object
       this.addTarget = function ( target ) {
         if ( !(target instanceof Target ) ) {
@@ -200,12 +204,10 @@ THE SOFTWARE.
             }
 
             if ( !t ) {
-              t = new Target();
-              t.json = projectData.targets[ i ];
-              _this.addTarget( t );
+              _this.addTarget( targetData );
             }
             else {
-              t.json = projectData.targets[ i ];
+              t.json = targetData;
             }
           }
         }
@@ -217,11 +219,11 @@ THE SOFTWARE.
 
             if ( !m ) {
               m = new Media();
-              m.json = projectData.media[ i ];
+              m.json = mediaData;
               _this.addMedia( m );
             }
             else {
-              m.json = projectData.media[ i ];
+              m.json = mediaData;
             }
 
           } //for
@@ -301,6 +303,8 @@ THE SOFTWARE.
           } //for
         } //if
 
+        media.listen( "trackeventrequested", mediaTrackEventRequested );
+
         _em.dispatch( "mediaadded", media );
         if ( !_currentMedia ) {
           _this.currentMedia = media;
@@ -335,6 +339,7 @@ THE SOFTWARE.
           if ( media === _currentMedia ) {
             _currentMedia = undefined;
           } //if
+          media.unlisten( "trackeventrequested", mediaTrackEventRequested );
           _em.dispatch( "mediaremoved", media );
           return media;
         } //if
@@ -467,6 +472,36 @@ THE SOFTWARE.
         });
       } //if
 
+      function readConfig(){
+        _config.modules = _config.modules || {};
+        _config.ui = _config.ui || {};
+        _config.icons = _config.icons || {};
+
+        var modules = _config.modules,
+            icons = _config.icons,
+            img;
+        for( var moduleName in modules ){
+          if( modules.hasOwnProperty( moduleName ) && moduleName in __modules ){
+            _this[ moduleName ] = new __modules[ moduleName ]( _this, modules[ moduleName ] );
+          } //if
+        } //for
+        for( var identifier in icons ){
+          if( icons.hasOwnProperty( identifier ) ){
+            img = document.createElement( "img" );
+            img.src = icons[ identifier ];
+            img.id = identifier + "-icon";
+            img.style.display = "none";
+            // @secretrobotron: just attach this to the body hidden for now,
+            //                  so that it preloads if necessary
+            document.body.appendChild( img );
+          } //if
+        } //for
+
+        preparePage(function(){
+          _em.dispatch( "ready", _this );
+        });
+      } //readConfig
+
       if( butterOptions.config && typeof( butterOptions.config ) === "string" ){
         var xhr = new XMLHttpRequest();
         if( xhr.overrideMimeType ){
@@ -477,37 +512,26 @@ THE SOFTWARE.
         xhr.send( null );
 
         if( xhr.status === 200 || xhr.status === 0 ){
-          var config = JSON.parse( xhr.responseText ),
-              modules = config.modules,
-              icons = config.icons,
-              img;
-          for( var moduleName in modules ){
-            if( modules.hasOwnProperty( moduleName ) && moduleName in __modules ){
-              _this[ moduleName ] = new __modules[ moduleName ]( _this, modules[ moduleName ] );
-            } //if
-          } //for
-          for( var identifier in icons ){
-            if( icons.hasOwnProperty( identifier ) ){
-              img = document.createElement( "img" );
-              img.src = icons[ identifier ];
-              img.id = identifier + "-icon";
-              img.style.display = "none";
-              // @secretrobotron: just attach this to the body hidden for now,
-              //                  so that it preloads if necessary
-              document.body.appendChild( img );
-            } //if
-          } //for
+          _config = JSON.parse( xhr.responseText ),
+          readConfig();
+        }
+        else{
+          _em.dispatch( "configerror", _this );
         } //if
-        
-        preparePage(function(){
-          _em.dispatch( "ready", _this );
-        });
       }
       else {
-        preparePage(function(){
-          _em.dispatch( "ready", _this );
-        });
+        _config = butterOptions.config;
+        readConfig();
       } //if
+
+      Object.defineProperties( this, {
+        config: {
+          enumerable: true,
+          get: function(){
+            return _config;
+          }
+        }
+      });
 
     }; //ButterInit
 
