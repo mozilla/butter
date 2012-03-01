@@ -34,10 +34,8 @@ define(['util/xhr'], function(XHR) {
                   var response = JSON.parse(this.response);
                   if (response.status === "okay") {
                     email = response.email;
-                    callback(response);
-                  } else {
-                    callback(undefined);
                   }
+                  callback(response);
                 } catch (err) {
                   callback({ error: "an unknown error occured" });
                 }
