@@ -42,6 +42,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ],
           modal: "behind-timeline",
           url: source,
         },
+        _currentTarget,
         _this = this;
 
     _dims[ 0 ] = options.width || _dims[ 0 ];
@@ -65,6 +66,18 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ],
         _dialog.send( "trackeventupdated", trackEvent.popcornOptions );
       } //onTrackEventUpdated
 
+      function blinkTarget(){
+        if( _currentTarget === "Media Element" ){
+          butter.currentMedia.view.blink();
+        }
+        else{
+          var target = butter.getTargetByType( "elementID", _currentTarget );
+          if( target ){
+            target.view.blink();
+          } //if
+        } //if
+      } //blinkTarget
+
       _dialog.open({
         open: function( e ) {
           var targets = [],
@@ -75,15 +88,22 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ],
           for( var i = 0, l = butter.targets.length; i < l; i++ ) {
             targets.push( butter.targets[ i ].element.id );
           }
+          var corn = trackEvent.popcornOptions;
           _dialog.send( "trackeventdata", {
             manifest: Popcorn.manifest[ trackEvent.type ],
-            popcornOptions: trackEvent.popcornOptions,
+            popcornOptions: corn,
             targets: targets,
             media: media
           });
+          _currentTarget = corn.target; 
+          blinkTarget();
           trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
         },
         submit: function( e ) {
+          if( e.data.target !== _currentTarget ){
+            _currentTarget = e.data.target;
+            blinkTarget();
+          } //if
           trackEvent.update( e.data );
         },
         close: function( e ){
