@@ -113,7 +113,7 @@ THE SOFTWARE.
 
 #butter-timeline .status-container .time-container {
   position: absolute;
-  top: 4px;
+  top: 5px;
   left: 20px;
   width: 80px;
   height: 15px;
@@ -381,7 +381,7 @@ THE SOFTWARE.
 
 #butter-timeline .time-bar {
   position: absolute;
-  top: -45px;
+  top: -36px;
   width: 100%;
   height: 30px;
 }
@@ -467,11 +467,12 @@ THE SOFTWARE.
   border-top-left-radius: 15px;
   position: absolute;
   top: -23px;
-  right: 80px;
+  right: 10px;
   box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
   moz-box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
   o-box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
   webkit-box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
+  z-index: -1;
 }
 
 #butter-timeline #toggle-button:hover {
@@ -501,6 +502,7 @@ THE SOFTWARE.
   moz-box-shadow: inset 0 1px 0 #5d5d5d;
   o-box-shadow: inset 0 1px 0 #5d5d5d;
   webkit-box-shadow: inset 0 1px 0 #5d5d5d;
+  font-family: Arial,Helvetica,sans-serif;
   background-image: -moz-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% );
   background-image: -webkit-gradient( linear, left bottom, left top, color-stop( 0, #2c2c2c ), color-stop( 1, #4c4c4c ) );
   position: absolute;
@@ -610,20 +612,35 @@ THE SOFTWARE.
 }
 
 #butter-timeline .scroll-handle {
-  height: 100%;
+  height: 90%;
   position: absolute;
-  background: #333;
+  top: 1px;
+  background: #999;
   min-width: 10px;
   border-radius: 15px;
-  box-shadow: inset 0 -1px 5px #000;
-  moz-box-shadow: inset 0 -1px 5px #000;
-  o-box-shadow: inset 0 -1px 5px #000;
-  webkit-box-shadow: inset 0 -1px 5px #000;
-
+  box-shadow: inset 0 -1px 1px #000;
+  moz-box-shadow: inset 0 -1px 1px #000;
+  o-box-shadow: inset 0 -1px 1px #000;
+  webkit-box-shadow: inset 0 -1px 1px #000;
 }
 
+/* for later on
+#butter-timeline .scroll-handle-v {
+  width: 90%;
+  position: absolute;
+  left: 1px;
+  background: #999;
+  min-height: 10px;
+  border-radius: 15px;
+  box-shadow: inset 0 -1px 1px #000;
+  moz-box-shadow: inset 0 -1px 1px #000;
+  o-box-shadow: inset 0 -1px 1px #000;
+  webkit-box-shadow: inset 0 -1px 1px #000;
+}
+*/
+
 #butter-timeline .scroll-handle:hover {
-  background: #345;
+  background: #fff;
   cursor: pointer;
 }
 
@@ -824,8 +841,9 @@ THE SOFTWARE.
 	moz-border-radius: 6px;
 	o-border-radius: 6px;
 	webkit-border-radius: 6px;
-  font-size: 80%;
-  background-image: -moz-linear-gradient(center bottom,#6E6E6E 0,#7D7D7D 100%);
+    font-size: 80%;
+    font-family: Arial,Helvetica,sans-serif;
+    background-image: -moz-linear-gradient(center bottom,#6E6E6E 0,#7D7D7D 100%);
 	background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#6E6E6E),color-stop(1,#7D7D7D));
 	border: 1px solid #333;
 	box-shadow: 0 1px 0 #656565;
