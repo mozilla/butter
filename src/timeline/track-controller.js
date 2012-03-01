@@ -97,7 +97,6 @@ define( [ "core/trackevent", "core/eventmanager", "./trackevent-controller" ], f
       if( !tlEvent ){
         addTrackEvent( bEvent );
       }
-      //butter.targettedEvent = _bTrackEvent;
     });
 
     _bTrack.listen( "trackeventremoved", function( e ){
