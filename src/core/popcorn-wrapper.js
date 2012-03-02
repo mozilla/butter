@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the MIT license
+ * If a copy of the MIT license was not distributed with this file, you can
+ * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
+
 define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
   var urlRegex = /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)(youtu|vimeo|soundcloud|baseplayer)/;
@@ -73,6 +77,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       } //timeoutWrapper
       function failureWrapper( e ){
         _interruptLoad = true;
+        _logger.log( e );
         _onFail( e );
       } //failureWrapper
       function popcornSuccess( e ){
@@ -161,22 +166,22 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
       var players = {
         "youtu": function() {
-          return "var popcorn = Popcorn.youtube( '" + _popcornTarget + "', '" +
+          return "var popcorn = Popcorn.youtube( '" + target + "', '" +
             url + "'" + popcornOptions + " );\n";
         },
         "vimeo": function() {
-          return "var popcorn = Popcorn.vimeo( '" + _popcornTarget + "', '" +
+          return "var popcorn = Popcorn.vimeo( '" + target + "', '" +
           url + "'" + popcornOptions + " );\n";
         },
         "soundcloud": function() {
-          return "var popcorn = Popcorn( Popcorn.soundcloud( '" + _popcornTarget + "'," +
+          return "var popcorn = Popcorn( Popcorn.soundcloud( '" + target + "'," +
           " '" + url + "') );\n";
         },
         "baseplayer": function() {
-          return "var popcorn = Popcorn( Popcorn.baseplayer( '#" + _popcornTarget + "'" + popcornOptions + " ) );\n";
+          return "var popcorn = Popcorn( Popcorn.baseplayer( '#" + target + "'" + popcornOptions + " ) );\n";
         },
         "object": function() {
-          return "var popcorn = Popcorn( '#" + _popcornTarget + "'" + popcornOptions + ");\n";
+          return "var popcorn = Popcorn( '#" + target + "'" + popcornOptions + ");\n";
         }
       };
 
