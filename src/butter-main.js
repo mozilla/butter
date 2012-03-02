@@ -11,6 +11,7 @@
             "core/target",
             "core/media",
             "core/page",
+            "io/cornfield",
             "editor/module",
             "track/module",
             "plugin/module",
@@ -24,6 +25,7 @@
             Target,
             Media,
             Page,
+            CornfieldModule,
             EditorModule,
             TrackModule,
             PluginModule,
@@ -38,6 +40,7 @@
       timeline: TimelineModule,
       plugin: PluginModule,
       ui: UIModule
+      cornfield: CornfieldModule
     }; //modules
 
     var __guid = 0;
