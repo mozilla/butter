@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ], function( EventManager, IFrameDialog, WindowDialog ) {
+define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "util/time" ], function( EventManager, IFrameDialog, WindowDialog, TimeUtil ) {
 
   var DEFAULT_DIMS = [ 400, 400 ],
       DEFAULT_FRAME_TYPE = "window";
@@ -58,8 +58,12 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ],
         } //if
       } //blinkTarget
 
+      function onTrackEventUpdateFailed( e ){
+        _dialog.send( "trackeventupdatefailed", e.data );
+      } //onTrackEventUpdateFailed
+
       _dialog.open({
-        open: function( e ) {
+        open: function( e ){
           var targets = [],
               media = {
                 name: butter.currentMedia.name,
@@ -78,16 +82,41 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog" ],
           _currentTarget = corn.target; 
           blinkTarget();
           trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
+          trackEvent.listen( "trackeventupdatefailed", onTrackEventUpdateFailed );
         },
-        submit: function( e ) {
-          if( e.data.target !== _currentTarget ){
-            _currentTarget = e.data.target;
-            blinkTarget();
+        submit: function( e ){
+          var duration = TimeUtil.roundTime( butter.currentMedia.duration ),
+              popcornData = e.data.eventData,
+              alsoClose = e.data.alsoClose;
+          if( popcornData ){
+            popcornData.start = Number( popcornData.start );
+            popcornData.end = Number( popcornData.end );
+            if( isNaN( popcornData.start ) ||
+                isNaN( popcornData.end ) ||
+                popcornData.start < 0 ||
+                popcornData.end > duration ||
+                popcornData.start >= popcornData.end ){
+              trackEvent.dispatch( "trackeventupdatefailed", {
+                error: "trackeventupdate::invalidtime",
+                message: "Invalid start/end times.",
+                attemptedData: popcornData
+              });
+            }
+            else{
+              if( popcornData.target !== _currentTarget ){
+                _currentTarget = popcornData.target;
+                blinkTarget();
+              } //if
+              trackEvent.update( popcornData );
+              if( alsoClose ){
+                _dialog.close();
+              } //if
+            } //if
           } //if
-          trackEvent.update( e.data );
         },
         close: function( e ){
           trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
+          trackEvent.unlisten( "trackeventupdatefailed", onTrackEventUpdateFailed );
         }
       });
     }; //open
