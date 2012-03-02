@@ -39,7 +39,7 @@
       track: TrackModule,
       timeline: TimelineModule,
       plugin: PluginModule,
-      ui: UIModule
+      ui: UIModule,
       cornfield: CornfieldModule
     }; //modules
 
