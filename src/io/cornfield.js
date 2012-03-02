@@ -8,16 +8,6 @@ define(['util/xhr'], function(XHR) {
     return location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" );
   }
 
-  function parameterize(data) {
-    var s = [];
-
-    for (var key in data) {
-      s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(data[key]);
-    }
-
-    return s.join("&").replace("/%20/g", "+");
-  }
-
   var Cornfield = function( butter, config ) {
 
     var email = "",
