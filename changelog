@@ -1,0 +1,94 @@
+0.2 Release - March 1, 2012
+
+337 Ability to login/save/load from a cornfield server
+390 Setting trackEvent out time > video duration causes issues
+268 Fade in of modal dialogues far too slow
+332 Ensure all player types work
+427 Better UX for highlighting elements
+446 Warning when closing a window dialog manually
+428 Change per-file licenses
+395 Butter readme should include info on submodules
+454 Flash target on click, not hover
+438 Tray UI should be no bigger than is necessary to accomodate 4 tracks
+256 Timecodes should round to 3 decimal places
+449	<style> needs to be removed for getHTML
+444 Rogue Track Events appear after moving a track event
+452 Template has unneeded html elements
+375 Push butter up to mozilla's github account
+451 Hovering over new track event does not blink it's default target
+391 Creating a new trackEvent should provide a default target
+448 Target should blink once when a track event is created
+298 Have templates show their ID in the editor view
+447 unit tests have errors
+401 Timeline tracks allow track events to be position at -0.01 seconds
+211 previewer should provide a getHTML function
+440 Scrolling Horizontally does not move the vertical scrollbar
+277 We lost different colours for plugins
+388 Track Editor UI
+416 Red "X" for deleting tracks
+248 Need to close editor windows
+420 Dialog module cleanup
+413 Clicking on handle makes it jump forward
+425 Polling scrubber spins too often at start
+319 Ability to have a UI cue for currently edited element
+423 Shouldn't be able to re-order tracks from within trackliner.
+424 Zoombar is broken (exception)
+280 "Media element" is confusing name for a target
+392 importProject is slightly broken
+418 Get rid of old and busted scraper code
+366 Move code for making targets droppable into core/target
+410 Change all occurrences of const to var
+389 Calling preview explicitly shouldn't be necessary
+351 Timeline scrolling should be triggered by mouse wheel
+384 Test template file should not create default trackEvents or too many tracks
+409 Dragging scrubber is off by some factor of the timelines duration
+255 When collapsing timeline, playhead and play button should remain
+411 spacebar for play/pause missing from new tray
+405 Remove css that causes timeline media div to grow/shrink
+237 Ability to seek
+289 Mute button doesn't mute.
+372 Default editor needs a better home
+399 Track Event Selection
+381 Add Tracks UI segment
+368 Target object's id should reflect the element's id
+397 Add play/pause and mute buttons.
+335 Click on timeline to move playhead
+254 Much confusion re: "Apply" and "OK"
+400 Moving the playhead/scrubber while playing should mimic HTML5 behaviour
+382 Right-click on slider doesn't let go on mouse up
+186 Event editor should update when track events are moved
+370 Click on scrollbars to move timeline
+386 I cloned the latest Butter repo - no events appear on timeline
+234 EventEditor chops "http:" off of webpage plugin src.
+266 plugins should default to a target, not media element
+305 Timeline changes from editors are slow to update in Chrome
+294 Error checking only works when creating new project
+275 Hard to use apostrophes
+283 In edit track dialogue, buttons are weird
+270 edge grabbers for events should be larger and more obvious
+349 Extra default editor
+257 Add .DS_Store to .gitignore
+369 Draggable issues in Chrome
+377 Fix Failing Core Tests
+376 Upgrade libs
+367 getTarget should be changed to match getMedia
+378 Timeline zooming still causing resize issue in Chrome
+239 Escape key should dismiss dialog windows
+334 Add helper to event draggables
+374 Dialog module has some poor naming conventions
+311 Make zoom match timeline style
+26 Timeline should be zoomable
+86 hitting enter to accept plugin/track changes
+350 core/media.js should access Popcorn directly
+192 Editor dialogs should be non-modal
+331 Crash on loading editor for certain plugins (base.manifest)
+345 Get playhead to follow currentTime of video
+346 Editors to use dialog module (and work at all)
+236 Fix Failing Core Tests
+264 Ugly scrollbars on timeline
+333 Target-droppable events
+336 Currentime looping causes video jitter
+235 We need better names for track.js/trackevent.js
+282 Editor dialogues should be draggable
+263 Passing no Arguments into butter.getMedia throws an Exception
+216 When butter finds data-butter="media", should check if target is a <video>
