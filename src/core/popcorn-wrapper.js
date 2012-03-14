@@ -280,17 +280,22 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _logger.log( "Warning: tried to clear media with null target." );
         return;
       } //if
+      if( _popcorn ){
+        try{
+          removePopcornHandlers();
+          _popcorn.destroy();
+          _popcorn = undefined;
+        }
+        catch( e ){
+          _logger.log( "WARNING: Popcorn did NOT get destroyed properly: \n" + e.message + "\n" + e.stack );
+        } //try
+      } //if
       while( container.firstChild ) {
         container.removeChild( container.firstChild );
       } //while
       if ( [ "AUDIO", "VIDEO" ].indexOf( container.nodeName ) > -1 ) {
         container.currentSrc = "";
         container.src = "";
-      } //if
-      if( _popcorn ){
-        removePopcornHandlers();
-        _popcorn.destroy();
-        _popcorn = undefined;
       } //if
     }; //setMediaContent
 

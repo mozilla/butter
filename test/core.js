@@ -115,9 +115,9 @@
       targetDiv.style.display = "none";
       targetDiv.id = "audio-foo";
       document.body.appendChild( targetDiv );
-      //m1.target = targetDiv;
+      m1.target = targetDiv;
       m1.url = "www.mozilla.org";
-      //ok( mediaTarget.id === "audio-foo", "Media target changed properly" );
+      ok( mediaTarget.id === "audio-foo", "Media target changed properly" );
       ok( mediaContent === "www.mozilla.org", "Media content changed properly" );
 
       butter.removeMedia( m2 );
