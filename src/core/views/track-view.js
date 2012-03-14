@@ -15,6 +15,7 @@ define( [ "core/logger",
   return function( track ){
 
     var _id = "TrackView" + __guid++,
+        _track = track,
         _this = this,
         _trackEvents = [],
         _trackEventElements = [],
@@ -43,6 +44,7 @@ define( [ "core/logger",
           start = left / trackRect.width * _duration;
           _em.dispatch( "plugindropped", {
             start: start,
+            track: _track,
             type: ui.draggable[ 0 ].getAttribute( "data-butter-plugin-type" )
           });
         }
@@ -52,6 +54,7 @@ define( [ "core/logger",
             start = left / trackRect.width * _duration;
             _em.dispatch( "trackeventdropped", {
               start: start,
+              track: _track,
               trackEvent: $( ui.draggable ).data( "trackevent-id" )
             });
           }

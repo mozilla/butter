@@ -13,9 +13,9 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _element,
         _zoom = 1,
         _duration = 1,
+        _type = type,
         _start = inputOptions.start || 0,
         _end = inputOptions.end || _start + 1,
-        _type = trackEvent.type,
         _selected = false,
         _parent,
         _handles,
@@ -170,7 +170,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
     _element = document.createElement( "div" );
     _element.className = "butter-track-event";
-    _element.appendChild( document.createTextNode( type ) );
+    _element.appendChild( document.createTextNode( _type ) );
+    _element.setAttribute( "data-butter-trackevent-type", _type );
 
     _element.id = _id;
     _this.update( inputOptions );

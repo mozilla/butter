@@ -68,60 +68,6 @@ define( [
       } //if
     } //zoomCallback
 
-    function fabricateTrackEvent( newTrack, eventId, start, type ){
-      var newStart = Number( start ),
-          corn,
-          newEnd,
-          trackEvent;
-
-      //try to remove the trackevent from all known tracks
-      for( var tId in _tracks ){
-        if( _tracks.hasOwnProperty( tId ) ){
-          trackEvent = _tracks[ tId ].track.getTrackEventById( eventId );
-          if( trackEvent ){
-            _tracks[ tId ].track.removeTrackEvent( trackEvent );
-            break;
-          } //if
-        } //if
-      } //for
-
-      if( trackEvent ) {
-        corn = trackEvent.popcornOptions;
-
-        //then, add it to the correct one
-        newEnd = corn.end - corn.start + newStart;
-        newTrack.addTrackEvent( trackEvent );
-
-        trackEvent.update( { start: newStart, end: newEnd } );
-      }
-      else{
-
-        var defaultTarget = butter.defaultTarget;
-        if( !defaultTarget && butter.targets.length > 0 ){
-          defaultTarget = butter.targets[ 0 ];
-        } //if
-
-        trackEvent = newTrack.addTrackEvent({
-          popcornOptions: {
-            start: newStart,
-            end: newStart + 1,
-            target: defaultTarget.elementID
-          },
-          type: type
-        });
-
-        if( defaultTarget ){
-          defaultTarget.view.blink();
-        } //if
-
-      } //if
-
-    } //fabricateTrackEvent
-
-    function onTrackEventRequested( e ){
-      fabricateTrackEvent( e.data.track, e.data.event, e.data.start, e.data.type );
-    } //onTrackEventRequested
-
     _media.listen( "trackeventselected", function( e ){
       _selectedTracks.push( e.target );
     });
@@ -251,7 +197,33 @@ define( [
     }); //mediaready
 
     function onPluginDropped( e ){
-      console.log( e );
+
+      var type = e.data.type,
+          track = e.data.track,
+          start = e.data.start;
+
+      if( start + 1 > _media.duration ){
+          start = _media.duration - 1;
+      } //if
+
+      var defaultTarget = butter.defaultTarget;
+      if( !defaultTarget && butter.targets.length > 0 ){
+        defaultTarget = butter.targets[ 0 ];
+      } //if
+
+      var trackEvent = track.addTrackEvent({
+        popcornOptions: {
+          start: start,
+          end: start + 1,
+          target: defaultTarget.elementID
+        },
+        type: type
+      });
+
+      if( defaultTarget ){
+        defaultTarget.view.blink();
+      } //if
+
     } //onPluginDropped
 
     function onTrackEventDropped( e ){
@@ -267,7 +239,7 @@ define( [
 
       trackEvent.update( corn );
 
-      e.target.addTrackEvent( trackEvent );
+      e.data.track.addTrackEvent( trackEvent );
     } //onTrackEventDropped
 
 
