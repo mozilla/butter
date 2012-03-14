@@ -164,6 +164,15 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         popcornOptions = ", " + JSON.stringify( popcornOptions );
       } //if
 
+      if( typeof( target ) !== "string" ){
+        if( target.id ){
+          target = target.id;
+        }
+        else{
+          _logger.log( "WARNING: Unexpected non-string Popcorn target: " + target );
+        }
+      } //if
+
       var players = {
         "youtu": function() {
           return "var popcorn = Popcorn.youtube( '" + target + "', '" +
@@ -184,7 +193,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           return "var popcorn = Popcorn( '#" + target + "'" + popcornOptions + ");\n";
         }
       };
-
+      
       // call certain player function depending on the regexResult
       popcornString += players[ _mediaType ]();
 
