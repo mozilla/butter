@@ -4,12 +4,19 @@
 
 define( [], function(){
 
-  function Vertical( controlElement ){
+  var VERTICAL_SIZE_REDUCTION_FACTOR = 3;
+
+  function Vertical( tracksContainer ){
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
-        _control = controlElement,
+        _tracksContainer = tracksContainer,
+        _containerParent = tracksContainer.element,
+        _containerChild = tracksContainer.container,
         _elementHeight,
-        _controlHeight,
+        _parentHeight,
+        _childHeight,
+        _scrollHeight,
+        _handleHeight,        
         _handleHeight,
         _mousePos = 0,
         _this = this;
@@ -20,9 +27,12 @@ define( [], function(){
     _element.appendChild( _handle );
 
     function setup(){
+      _parentHeight = _containerParent.getBoundingClientRect().height;
+      _childHeight = _containerChild.getBoundingClientRect().height;
       _elementHeight = _element.getBoundingClientRect().height;
-      _controlHeight = _control.getBoundingClientRect().height;
-      _handleHeight = Math.min( _elementHeight, _elementHeight - ( _control.scrollHeight - _controlHeight ) );
+      _scrollHeight = _containerChild.scrollHeight;
+      _handleHeight = _elementHeight - ( _scrollHeight - _parentHeight ) / VERTICAL_SIZE_REDUCTION_FACTOR;
+      _handleHeight = Math.max( 20, Math.min( _elementHeight, _handleHeight ) );
       _handle.style.height = _handleHeight + "px";
       setHandlePosition();
     } //setup
@@ -37,11 +47,8 @@ define( [], function(){
       var diff = e.pageY - _mousePos;
       diff = Math.max( 0, Math.min( diff, _elementHeight - _handleHeight ) );
       _handle.style.top = diff + "px";
-      var p = 0;
-      if( _elementHeight - _handleHeight > 0 ){
-        p = _handle.offsetTop / ( _elementHeight - _handleHeight );
-      } //if
-      _control.scrollTop = ( _control.scrollHeight - _elementHeight ) * p;
+      var p = _handle.offsetTop / ( _elementHeight - _handleHeight );
+      _containerParent.scrollTop = ( _scrollHeight - _elementHeight ) * p;
     } //onMouseMove
 
     function onMouseDown( e ){
@@ -59,26 +66,26 @@ define( [], function(){
     }; //update
 
     function setHandlePosition(){
-      if( _control.scrollHeight - _elementHeight > 0 ) {
+      if( _containerChild.scrollHeight - _elementHeight > 0 ) {
         _handle.style.top = ( _elementHeight - _handleHeight ) *
-          ( _control.scrollTop / (_control.scrollHeight - _elementHeight )) + "px";
+          ( _containerParent.scrollTop / ( _containerChild.scrollHeight - _elementHeight ) ) + "px";
       }else{
         _handle.style.top = "0px";
       }
     };
 
-    _control.addEventListener( "mousewheel", function( e ){
+    _containerChild.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaY ){
-        _control.scrollTop -= e.wheelDeltaY;
+        _containerParent.scrollTop -= e.wheelDeltaY;
         setHandlePosition();
         e.preventDefault();
       }
     }, false );
 
     // For Firefox
-    _control.addEventListener( "DOMMouseScroll", function( e ){
+    _containerChild.addEventListener( "DOMMouseScroll", function( e ){
       if( e.axis === e.VERTICAL_AXIS && !e.shiftKey ){
-        _control.scrollTop += e.detail * 2;
+        _containerChild.scrollTop += e.detail * 2;
         setHandlePosition();
         e.preventDefault();
       }
@@ -102,7 +109,7 @@ define( [], function(){
       }
 
       p = _handle.offsetTop / ( _elementHeight - _handleHeight );
-      _control.scrollTop = ( _control.scrollHeight - _elementHeight ) * p;
+      _containerParent.scrollTop = ( _scrollHeight - _elementHeight ) * p;
     }, false);
 
     window.addEventListener( "resize", setup, false );
@@ -121,12 +128,16 @@ define( [], function(){
 
   } //Vertical
 
-  function Horizontal( controlElement ){
+  function Horizontal( tracksContainer ){
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
-        _control = controlElement,
+        _tracksContainer = tracksContainer,
+        _containerParent = tracksContainer.element,
+        _containerChild = tracksContainer.container,
         _elementWidth,
-        _controlWidth,
+        _parentWidth,
+        _childWidth,
+        _scrollWidth,
         _handleWidth,
         _mousePos = 0,
         _this = this;
@@ -137,9 +148,12 @@ define( [], function(){
     _element.appendChild( _handle );
 
     function setup(){
+      _parentWidth = _containerParent.getBoundingClientRect().width;
+      _childWidth = _containerChild.getBoundingClientRect().width;
       _elementWidth = _element.getBoundingClientRect().width;
-      _controlWidth = _control.getBoundingClientRect().width;
-      _handleWidth = Math.max( 20, Math.min( _elementWidth, _elementWidth - ( _control.scrollWidth - _controlWidth ) ) );
+      _scrollWidth = _containerChild.scrollWidth;
+      _handleWidth = _elementWidth - ( _scrollWidth - _parentWidth );
+      _handleWidth = Math.max( 20, Math.min( _elementWidth, _handleWidth ) );
       _handle.style.width = _handleWidth + "px";
       setHandlePosition();
     } //setup
@@ -155,7 +169,7 @@ define( [], function(){
       diff = Math.max( 0, Math.min( diff, _elementWidth - _handleWidth ) );
       _handle.style.left = diff + "px";
       var p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
-      _control.scrollLeft = ( _control.scrollWidth - _elementWidth ) * p;
+      _containerParent.scrollLeft = ( _scrollWidth - _elementWidth ) * p;
     } //onMouseMove
 
     function onMouseDown( e ){
@@ -169,26 +183,26 @@ define( [], function(){
     } //onMouseDown
 
     function setHandlePosition(){
-      if( _control.scrollWidth - _elementWidth > 0 ) {
+      if( _scrollWidth - _elementWidth > 0 ) {
         _handle.style.left = ( _elementWidth - _handleWidth ) *
-          ( _control.scrollLeft / ( _control.scrollWidth - _elementWidth )) + "px";
+          ( _containerParent.scrollLeft / ( _scrollWidth - _elementWidth )) + "px";
       }else{
         _handle.style.left = "0px";
       }
     };
 
-    _control.addEventListener( "mousewheel", function( e ){
+    _containerChild.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaX ){
-        _control.scrollLeft -= e.wheelDeltaX;
+        _containerParent.scrollLeft -= e.wheelDeltaX;
         setHandlePosition();
         e.preventDefault();
       }
     }, false );
 
     // For Firefox
-    _control.addEventListener( "DOMMouseScroll", function( e ){
+    _containerChild.addEventListener( "DOMMouseScroll", function( e ){
       if( e.axis === e.HORIZONTAL_AXIS || ( e.axis === e.VERTICAL_AXIS && e.shiftKey )){
-        _control.scrollLeft += e.detail * 2;
+        _containerParent.scrollLeft += e.detail * 2;
         setHandlePosition();
         e.preventDefault();
       }
@@ -213,7 +227,7 @@ define( [], function(){
       }
 
       p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
-      _control.scrollLeft = ( _control.scrollWidth - _elementWidth ) * p;
+      _containerParent.scrollLeft = ( _scrollWidth - _elementWidth ) * p;
     }, false);
 
     window.addEventListener( "resize", setup, false );

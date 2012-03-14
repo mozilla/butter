@@ -19,17 +19,16 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
     _canvasContainer.appendChild( _canvas );
     _element.appendChild( _canvasContainer );
 
-    _tracksContainer.addEventListener( "scroll", function( e ){
-      _canvasContainer.scrollLeft = _tracksContainer.scrollLeft;
+    _tracksContainer.element.addEventListener( "scroll", function( e ){
+      _canvasContainer.scrollLeft = _tracksContainer.element.scrollLeft;
     }, false );
 
     _canvas.addEventListener( "mousedown", _scrubber.onMouseDown, false );
 
     this.update = function( zoom ) {
-      var tracklinerContainer = _tracksContainer.firstChild,
-          tracklinerWidth = tracklinerContainer.getBoundingClientRect().width;
+      var tracksContainerWidth = tracksContainer.container.getBoundingClientRect().width;
 
-      var width = Math.min( tracklinerWidth, _tracksContainer.scrollWidth );
+      var width = Math.min( tracksContainerWidth, _tracksContainer.container.scrollWidth );
 
       _canvas.style.width = width + "px";
 
