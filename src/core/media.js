@@ -118,7 +118,7 @@
 
       this.getTrackById = function( id ){
         for( var i=0, l=_tracks.length; i<l; ++i ){
-          if( _tracks[ i ].id === track.id ){
+          if( _tracks[ i ].id === id ){
             return _tracks[ i ];
           } //if
         } //for

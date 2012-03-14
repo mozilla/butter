@@ -202,8 +202,49 @@ define( [
       _rootElement.appendChild( _zoombar.element );
       _rootElement.appendChild( _container );
 
-      updateUI();
+      _media.listen( "trackeventadded", function( e ){
+        var trackEvent = e.data;
+        trackEvent.view.listen( "trackeventmousedown", onTrackEventMouseDown );
+        if( _trackEventHighlight === "hover" ){
+          trackEvent.view.listen( "trackeventmouseover", onTrackEventMouseOver );
+          trackEvent.view.listen( "trackeventmouseout", onTrackEventMouseOut );
+        } //if
+      });
 
+      _media.listen( "trackeventremoved", function( e ){
+        var trackEvent = e.data;
+        trackEvent.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
+        if( _trackEventHighlight === "hover" ){
+          trackEvent.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
+          trackEvent.view.unlisten( "trackeventmouseout", onTrackEventMouseOut );
+        } //if
+      });
+
+      _media.listen( "trackadded", function( e ){
+        _vScrollBar.update();
+        var track = e.data;
+        track.view.listen( "plugindropped", onPluginDropped );
+        track.view.listen( "trackeventdropped", onTrackEventDropped );
+        track.view.listen( "trackeventmousedown", onTrackEventMouseDown );
+        if( _trackEventHighlight === "hover" ){
+          track.view.listen( "trackeventmouseover", onTrackEventMouseOver );
+          track.view.listen( "trackeventmouseout", onTrackEventMouseOut );
+        } //if
+      });
+
+      _media.listen( "trackremoved", function( e ){
+        _vScrollBar.update();
+        var track = e.data;
+        track.view.unlisten( "plugindropped", onPluginDropped );
+        track.view.unlisten( "trackeventdropped", onTrackEventDropped );
+        track.view.listen( "trackeventmousedown", onTrackEventMouseDown );
+        if( _trackEventHighlight === "hover" ){
+          track.view.listen( "trackeventmouseover", onTrackEventMouseOver );
+          track.view.listen( "trackeventmouseout", onTrackEventMouseOut );
+        } //if
+      });
+
+      updateUI();
       _initialized = true;
       _em.dispatch( "ready" );
 
@@ -229,47 +270,6 @@ define( [
       e.target.addTrackEvent( trackEvent );
     } //onTrackEventDropped
 
-    _media.listen( "trackeventadded", function( e ){
-      var trackEvent = e.data;
-      trackEvent.view.listen( "trackeventmousedown", onTrackEventMouseDown );
-      if( _trackEventHighlight === "hover" ){
-        trackEvent.view.listen( "trackeventmouseover", onTrackEventMouseOver );
-        trackEvent.view.listen( "trackeventmouseout", onTrackEventMouseOut );
-      } //if
-    });
-
-    _media.listen( "trackeventremoved", function( e ){
-      var trackEvent = e.data;
-      trackEvent.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
-      if( _trackEventHighlight === "hover" ){
-        trackEvent.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
-        trackEvent.view.unlisten( "trackeventmouseout", onTrackEventMouseOut );
-      } //if
-    });
-
-    _media.listen( "trackadded", function( e ){
-      _vScrollBar.update();
-      var track = e.data;
-      track.view.listen( "plugindropped", onPluginDropped );
-      track.view.listen( "trackeventdropped", onTrackEventDropped );
-      track.view.listen( "trackeventmousedown", onTrackEventMouseDown );
-      if( _trackEventHighlight === "hover" ){
-        track.view.listen( "trackeventmouseover", onTrackEventMouseOver );
-        track.view.listen( "trackeventmouseout", onTrackEventMouseOut );
-      } //if
-    });
-
-    _media.listen( "trackremoved", function( e ){
-      _vScrollBar.update();
-      var track = e.data;
-      track.view.unlisten( "plugindropped", onPluginDropped );
-      track.view.unlisten( "trackeventdropped", onTrackEventDropped );
-      track.view.listen( "trackeventmousedown", onTrackEventMouseDown );
-      if( _trackEventHighlight === "hover" ){
-        track.view.listen( "trackeventmouseover", onTrackEventMouseOver );
-        track.view.listen( "trackeventmouseout", onTrackEventMouseOut );
-      } //if
-    });
 
     this.destroy = function() {
       _rootElement.parentNode.removeChild( _rootElement );

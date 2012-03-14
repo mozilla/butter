@@ -47,7 +47,10 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       resetContainer();
       var tracks = _media.tracks;
       for( var i=0, il=tracks.length; i<il; ++i ){
-        tracks[ i ].view.duration = _media.duration;
+        var trackView = tracks[ i ].view;
+        _container.appendChild( trackView.element );
+        trackView.duration = _media.duration;
+        trackView.zoom = _zoom;
       } //for
     });
 
