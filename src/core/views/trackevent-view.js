@@ -125,7 +125,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
             $( _element ).draggable({
               containment: _parent.element.parentNode,
-              zIndex: 9001,
+              // highest possible zIndex inside of 32 bits
+              zIndex: 2147483647,
               scroll: true,
               // this is when an event stops being dragged
               start: function ( event, ui ) {

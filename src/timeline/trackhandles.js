@@ -32,23 +32,27 @@ define( [
         } //for
       },
       change: function( e, ui ){
+        var draggingIndex = ui.placeholder.index(),
+            orderedTracks = [];
 
-        var draggingIndex = ui.placeholder.index();
-
-        var orderedTracks = [];
         for( var i=0, l=_list.childNodes.length; i<l; ++i ){
-          if( _list.childNodes[ i ] !== ui.item[ 0 ] ){
-            if( _list.childNodes[ i ] === ui.placeholder[ 0 ] ){
+
+          var childNode = _list.childNodes[ i ];
+
+          if( childNode !== ui.item[ 0 ] ){
+
+            if( childNode === ui.placeholder[ 0 ] ){
               orderedTracks.push( _tracks[ ui.item[ 0 ].getAttribute( "data-butter-track-id" ) ].track );
             }
             else{
-              orderedTracks.push( _tracks[ _list.childNodes[ i ].getAttribute( "data-butter-track-id" ) ].track );
+              orderedTracks.push( _tracks[ childNode.getAttribute( "data-butter-track-id" ) ].track );
             } //if
+
           } //if
+
         } //for
 
         orderChangedCallback( orderedTracks );
-
       }, //change
       stop: function(){
         for( var i=0, l=_menus.length; i<l; ++i ){

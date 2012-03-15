@@ -28,7 +28,8 @@ define( [
           Status,
           TrackHandles ){
 
-  var ZOOM_FACTOR = 100;
+  var INITIAL_ZOOM = 100,
+      ZOOM_FACTOR = 100;
 
   function MediaInstance( butter, media ){
     var _this = this,
@@ -49,7 +50,7 @@ define( [
         _status = new Status( _media ),
         _trackHandles = new TrackHandles( _media, _tracksContainer, onTrackOrderChanged ),
         _trackEventHighlight = butter.config.ui.trackEventHighlight || "click",
-        _zoom = 100;
+        _zoom = INITIAL_ZOOM;
 
     _rootElement.className = "media-instance";
     _rootElement.id = "media-instance" + media.id;
