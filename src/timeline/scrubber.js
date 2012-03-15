@@ -4,7 +4,10 @@
 
 define( [], function(){
 
-  var CHECK_MEDIA_INTERVAL = 50;
+  var CHECK_MEDIA_INTERVAL = 50,
+      SCROLL_INTERVAL = 16,
+      SCROLL_DISTANCE = 100,
+      MOUSE_SCRUBBER_PIXEL_WINDOW = 3;
 
   return function( parentElement, media, tracksContainer, hScrollbar ){
     var _container = document.createElement( "div" ),
@@ -15,8 +18,11 @@ define( [], function(){
         _tracksContainerWidth,
         _element = parentElement,
         _media = media,
-        _mousePos,
+        _mouseDownPos,
+        _currentMousePos,
         _zoom = 1,
+        _scrollInterval = -1,
+        _rect,
         _mediaCheckInterval,
         _width,
         _isPlaying = false,
@@ -82,19 +88,68 @@ define( [], function(){
         _isScrubbing = false;  
       }
 
+      clearInterval( _scrollInterval );
+      _scrollInterval = -1;
+
       window.removeEventListener( "mouseup", onMouseUp, false );
       window.removeEventListener( "mousemove", onMouseMove, false );
     } //onMouseUp
 
-    function onMouseMove( e ){
-      var diff = e.pageX - _mousePos;
+    function scrollTracksContainer( direction ){
+      if( direction === "right" ){
+        _scrollInterval = setInterval(function(){
+          if( _currentMousePos < _rect.right - MOUSE_SCRUBBER_PIXEL_WINDOW ){
+            clearInterval( _scrollInterval );
+            _scrollInterval = -1;
+          }
+          else{
+            _currentMousePos += SCROLL_DISTANCE;
+            _tracksContainer.scrollLeft += SCROLL_DISTANCE;
+            evalMousePosition();
+            setNodePosition();
+          }
+        }, SCROLL_INTERVAL );
+      }
+      else{
+        _scrollInterval = setInterval(function(){
+          if( _currentMousePos > _rect.left + MOUSE_SCRUBBER_PIXEL_WINDOW ){
+            clearInterval( _scrollInterval );
+            _scrollInterval = -1;
+          }
+          else{
+            _currentMousePos -= SCROLL_DISTANCE;
+            _tracksContainer.scrollLeft -= SCROLL_DISTANCE;
+            evalMousePosition();
+            setNodePosition();
+          }
+        }, SCROLL_INTERVAL );
+      }
+    } //scrollTracksContainer
+
+    function evalMousePosition(){
+      var diff = _currentMousePos - _mouseDownPos;
       diff = Math.max( 0, Math.min( diff, _width ) );
       _media.currentTime = ( diff + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration;
+    } //evalMousePosition
+
+    function onMouseMove( e ){
+      _currentMousePos = e.pageX;
+
+      if( _scrollInterval === -1 ){
+        if( _currentMousePos > _rect.right - MOUSE_SCRUBBER_PIXEL_WINDOW ){
+          scrollTracksContainer( "right" );
+        }
+        else if( _currentMousePos < _rect.left + MOUSE_SCRUBBER_PIXEL_WINDOW ){
+          scrollTracksContainer( "left" );
+        } //if
+      } //if
+
+      evalMousePosition();
       setNodePosition();
     } //onMouseMove
 
     function onScrubberMouseDown( e ){
-      _mousePos = e.pageX - _node.offsetLeft;
+      _mouseDownPos = e.pageX - _node.offsetLeft;
 
       if( _isPlaying ){
         _media.pause();
@@ -122,6 +177,7 @@ define( [], function(){
       _width = _element.getBoundingClientRect().width;
       _width = Math.min( _width, _tracksContainerWidth );
       _container.style.width = _width + "px";
+      _rect = _container.getBoundingClientRect();
       setNodePosition();
     }; //update
 
