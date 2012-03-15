@@ -4,7 +4,7 @@
 
 define( [ "core/eventmanager", "./statusbar", "./toggler" ], function( EventManager, StatusBar, Toggler ){
 
-  return function( butter, options ){
+  function UI( butter, options ){
 
     var _element = document.createElement( "div" ),
         _statusBar = new StatusBar( butter, _element ),
@@ -48,6 +48,10 @@ define( [ "core/eventmanager", "./statusbar", "./toggler" ], function( EventMana
       }
     });
 
-  };
+   }; //UI
+
+   UI.__moduleName = "ui";
+
+   return UI;
 
 });

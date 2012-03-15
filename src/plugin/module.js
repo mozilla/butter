@@ -194,8 +194,11 @@
       __container = document.createElement( "div" );
       __container.id = "butter-plugin";
 
-      //__container.className = "viewport enable-scroll";
-      document.getElementById( "butter-timeline" ).appendChild( __container );
+      this._start = function(){
+        if( butter.ui ){
+          butter.ui.element.appendChild( __container );
+        } //if
+      }; //start
 
       this.add = function( plugin, cb ) {
 
@@ -284,6 +287,8 @@
         } //for
       }; //get
     }; //PluginManager
+
+    PluginManager.__moduleName = "plugin";
 
     return PluginManager;
 

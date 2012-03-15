@@ -5,47 +5,24 @@
 (function () {
 
   define( [
-            "require",
-            "core/logger",
-            "core/eventmanager",
-            "core/target",
-            "core/media",
-            "core/page",
-            "io/cornfield",
-            "editor/module",
-            "track/module",
-            "plugin/module",
-            "timeline/module",
-            "ui/module"
+            "./core/logger",
+            "./core/eventmanager",
+            "./core/target",
+            "./core/media",
+            "./core/page",
+            "./modules"
           ],
           function(
-            require,
             Logger,
             EventManager,
             Target,
             Media,
             Page,
-            CornfieldModule,
-            EditorModule,
-            TrackModule,
-            PluginModule,
-            TimelineModule,
-            UIModule
-  ){
+            Modules
+          ){
 
-    var __modules = {
-      editor: EditorModule,
-      eventManager: EventManager,
-      track: TrackModule,
-      timeline: TimelineModule,
-      plugin: PluginModule,
-      ui: UIModule,
-      cornfield: CornfieldModule
-    }; //modules
-
-    var __guid = 0;
-
-    var __instances = [];
+    var __guid = 0,
+        __instances = [];
 
     var Butter = function( options ){
       return new ButterInit( options );
@@ -64,7 +41,6 @@
           _em = new EventManager( this ),
           _page = new Page(),
           _config = {
-            modules: {},
             ui: {},
             icons: {}
           },
@@ -487,14 +463,9 @@
       } //if
 
       function readConfig(){
-        var modules = _config.modules,
-            icons = _config.icons,
+        var icons = _config.icons,
             img;
-        for( var moduleName in modules ){
-          if( modules.hasOwnProperty( moduleName ) && moduleName in __modules ){
-            _this[ moduleName ] = new __modules[ moduleName ]( _this, modules[ moduleName ] );
-          } //if
-        } //for
+
         for( var identifier in icons ){
           if( icons.hasOwnProperty( identifier ) ){
             img = document.createElement( "img" );
@@ -507,6 +478,8 @@
             document.body.appendChild( img );
           } //if
         } //for
+
+        Modules( _this, _config );
 
         preparePage(function(){
           _em.dispatch( "ready", _this );
@@ -523,7 +496,12 @@
         xhr.send( null );
 
         if( xhr.status === 200 || xhr.status === 0 ){
-          _config = JSON.parse( xhr.responseText ),
+          try{
+            _config = JSON.parse( xhr.responseText );
+          }
+          catch( e ){
+            throw new Error( "Butter config file not formatted properly." );
+          }
           readConfig();
         }
         else{

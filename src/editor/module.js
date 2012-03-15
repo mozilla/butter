@@ -17,7 +17,7 @@
             Editor
           ){
 
-    return function( butter, options ){
+    function EventEditor( butter, options ){
 
       options = options || {};
 
@@ -60,15 +60,19 @@
        return oldSource;
       }; //remove
 
-      butter.listen( "ready", function( e ){
+      this._start = function(){
         _this.add( _defaultEditor, "default" );
-      });
+      }; //start
 
       butter.listen( "trackeventeditrequested", function( e ){
         _this.edit( e.target );
       });
 
-    }; //EventEditor
+    }; //Editor
+
+    EventEditor.__moduleName = "editor";
+
+    return EventEditor;
 
   }); //define
 })();
