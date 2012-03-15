@@ -84,8 +84,11 @@
                   elem = _manifest[ item ].elem;
 
               var itemLabel = _manifest[ item ].label || item;
-              if( [ "start", "end", "in", "out" ].indexOf( itemLabel.toLowerCase() ) > -1 ){
-                itemLabel += " (s)";
+              if( itemLabel === "In" ){
+                itemLabel = "Start Time";
+              }
+              else if( itemLabel === "Out" ){
+                itemLabel = "End Time";
               } //if
 
               col1.innerHTML = "<b>" + itemLabel + "</b>";
