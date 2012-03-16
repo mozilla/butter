@@ -6,7 +6,7 @@ define( [], function(){
 
   var CHECK_MEDIA_INTERVAL = 50,
       SCROLL_INTERVAL = 16,
-      SCROLL_DISTANCE = 100,
+      SCROLL_DISTANCE = 20,
       MOUSE_SCRUBBER_PIXEL_WINDOW = 3;
 
   return function( parentElement, media, tracksContainer, hScrollbar ){
