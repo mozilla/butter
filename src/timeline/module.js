@@ -147,6 +147,8 @@ define( [
 
   }; //Timeline
 
+  Timeline.__moduleName = "timeline";
+
   return Timeline;
 }); //define
 
