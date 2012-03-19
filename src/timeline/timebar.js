@@ -4,14 +4,16 @@
 
 define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
-  return function( media, tracksContainer ){ 
+  var CANVAS_CONTAINER_PADDING = 5;
+
+  return function( butter, media, tracksContainer ){ 
 
     var _element = document.createElement( "div" ),
         _canvas = document.createElement( "canvas" ),
         _canvasContainer = document.createElement( "div" ),
         _media = media,
         _tracksContainer = tracksContainer,
-        _scrubber = new Scrubber( _element, _media, _tracksContainer ),
+        _scrubber = new Scrubber( butter, _element, _media, _tracksContainer ),
         _this = this;
 
     _element.className = "time-bar";
@@ -26,9 +28,11 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
     _canvas.addEventListener( "mousedown", _scrubber.onMouseDown, false );
 
     this.update = function( zoom ) {
-      var tracksContainerWidth = tracksContainer.container.getBoundingClientRect().width;
+      var tracksContainerWidth = tracksContainer.container.getBoundingClientRect().width,
+          width = Math.min( tracksContainerWidth, _tracksContainer.container.scrollWidth ),
+          containerWidth = Math.min( width, _tracksContainer.container.offsetWidth - CANVAS_CONTAINER_PADDING );
 
-      var width = Math.min( tracksContainerWidth, _tracksContainer.container.scrollWidth );
+      _canvasContainer.style.width = containerWidth + "px";
 
       _canvas.style.width = width + "px";
 
@@ -91,7 +95,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       context.stroke();
       context.closePath();
 
-      _scrubber.update( zoom );
+      _scrubber.update( containerWidth, zoom );
     }; //update
 
     this.destroy = function(){

@@ -6,7 +6,7 @@ define( [], function(){
 
   var CHECK_MEDIA_INTERVAL = 50;
 
-  return function( parentElement, media, tracksContainer ){
+  return function( butter, parentElement, media, tracksContainer ){
     var _container = document.createElement( "div" ),
         _node = document.createElement( "div" ),
         _line = document.createElement( "div" ),
@@ -34,6 +34,15 @@ define( [], function(){
     _container.appendChild( _fill );
     _container.appendChild( _node );
     _element.appendChild( _container );
+
+    butter.ui.listen( "contentstatechanged", function( e ){
+      if( e.data !== "timeline" ){
+        _line.setAttribute( "data-butter-shortened", true );
+      }
+      else{
+        _line.removeAttribute( "data-butter-shortened" );
+      }
+    });
 
     function setNodePosition(){
       var duration = _media.duration,
@@ -116,11 +125,9 @@ define( [], function(){
     _node.addEventListener( "mousedown", onScrubberMouseDown, false );
     _container.addEventListener( "mousedown", onMouseDown, false );
 
-    this.update = function( zoom ){
+    this.update = function( containerWidth, zoom ){
       _zoom = zoom || _zoom;
-      _tracksContainerWidth = _tracksContainer.container.getBoundingClientRect().width;
-      _width = _element.getBoundingClientRect().width;
-      _width = Math.min( _width, _tracksContainerWidth );
+      _width = containerWidth;
       _container.style.width = _width + "px";
       setNodePosition();
     }; //update
