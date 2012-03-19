@@ -73,6 +73,19 @@
       });
 
       this._start = function(){
+        var parentElement = document.createElement( "div" );
+        parentElement.id = "butter-editor";
+
+        butter.ui.addToArea( "main", "editor", parentElement );
+        butter.ui.listen( "contentstatechanged", function( e ){
+          if( e.data !== "editor" ){
+            parentElement.style.display = "none";
+          }
+          else{
+            parentElement.style.display = "block";
+          }
+        });
+
         _this.add( _defaultEditor, "default" );
       }; //start
 

@@ -5,7 +5,7 @@
 define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "util/time" ], function( EventManager, IFrameDialog, WindowDialog, TimeUtil ) {
 
   var DEFAULT_DIMS = [ 400, 400 ],
-      DEFAULT_FRAME_TYPE = "window";
+      DEFAULT_FRAME_TYPE = "iframe";
 
   var __guid = 0;
 
@@ -21,6 +21,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
           type: _frameType,
           modal: "behind-timeline",
           url: source,
+          parent: butter.ui.areas.main.items.editor
         },
         _currentTarget,
         _this = this;
@@ -29,12 +30,18 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
     _dims[ 1 ] = options.height || _dims[ 1 ];
 
     this.open = function( trackEvent ) {
+      if( _frameType === "iframe" ){
+        if( butter.ui.contentState !== "editor" ){
+          butter.ui.pushContentState( "editor" );
+        }
+      }
+
       if( !_dialog ){
-        if( _frameType === "iframe" ){
-          _dialog = new IFrameDialog( _dialogOptions );
+        if( _frameType === "window" ){
+          _dialog = new WindowDialog( _dialogOptions );
         }
         else{
-          _dialog = new WindowDialog( _dialogOptions );
+          _dialog = new IFrameDialog( _dialogOptions );
         } //if
       } //if
 
@@ -118,6 +125,11 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
         close: function( e ){
           trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
           trackEvent.unlisten( "trackeventupdatefailed", onTrackEventUpdateFailed );
+          if( _frameType === "iframe" ){
+            if( butter.ui.contentState === "editor" ){
+              butter.ui.popContentState( "editor" );
+            }
+          }
         }
       });
     }; //open

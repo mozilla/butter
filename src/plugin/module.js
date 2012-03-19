@@ -159,7 +159,7 @@
 
       this._start = function(){
         if( butter.ui ){
-          butter.ui.element.appendChild( __container );
+          butter.ui.addToArea( "main", "plugin", __container );
         } //if
       }; //start
 

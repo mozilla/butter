@@ -38,6 +38,7 @@ define( [
         _tracksContainer = new TrackContainer( media ),
         _rootElement = document.createElement( "div" ),
         _container = document.createElement( "div" ),
+        _mediaStatusContainer = document.createElement( "div" ),
         _trackliner,
         _tracks = {},
         _selectedTracks = [],
@@ -45,7 +46,7 @@ define( [
         _hScrollBar = new Scrollbars.Horizontal( _tracksContainer ),
         _vScrollBar = new Scrollbars.Vertical( _tracksContainer ),
         _shrunken = false,
-        _timebar = new TimeBar( _media, _tracksContainer, _hScrollBar ),
+        _timebar = new TimeBar( butter, _media, _tracksContainer, _hScrollBar ),
         _zoombar = new ZoomBar( zoomCallback ),
         _status = new Status( _media ),
         _trackHandles = new TrackHandles( _media, _tracksContainer, onTrackOrderChanged ),
@@ -60,6 +61,8 @@ define( [
     function onTrackOrderChanged( orderedTracks ){
       _tracksContainer.orderTracks( orderedTracks );
     } //onTrackOrderChanged
+
+    _mediaStatusContainer.className = "media-status-container";
 
     function zoomCallback( zoomLevel ){
       var nextZoom = ( 1 + zoomLevel ) * ZOOM_FACTOR;
@@ -151,9 +154,10 @@ define( [
       _container.appendChild( _tracksContainer.element );
       _container.appendChild( _hScrollBar.element );
       _container.appendChild( _vScrollBar.element );
-      _container.appendChild( _timebar.element );
-      _container.appendChild( _status.statusElement );
-      _container.appendChild( _status.muteElement );
+      _mediaStatusContainer.appendChild( _timebar.element );
+      _mediaStatusContainer.appendChild( _status.statusElement );
+      _mediaStatusContainer.appendChild( _status.muteElement );
+      butter.ui.areas.statusbar.element.appendChild( _mediaStatusContainer );
       _rootElement.appendChild( _trackHandles.element );
       _rootElement.appendChild( _zoombar.element );
       _rootElement.appendChild( _container );
