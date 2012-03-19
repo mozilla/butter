@@ -90,5 +90,7 @@ define(['util/xhr'], function(XHR) {
     };
   };
 
+  Cornfield.__moduleName = "cornfield";
+
   return Cornfield;
 });
