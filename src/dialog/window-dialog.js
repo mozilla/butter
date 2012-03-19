@@ -113,6 +113,10 @@ define( [
       });
     }; //open
 
+    this.focus = function() {
+      _window.focus();
+    } //focus
+
     this.send = function( type, data ){
       if( _comm ){
         _comm.send( type, data );
