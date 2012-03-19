@@ -6,8 +6,7 @@
 
   define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
-    var __numStyleSheets,
-        __trackEventCSSRules = {},
+    var __trackEventCSSRules = {},
         __cssRuleProperty = "butter-trackevent-type",
         __cssRulePrefix = "#butter-timeline .trackliner-event",
         __newStyleSheet = document.createElement( "style" );
@@ -44,27 +43,6 @@
       };
     } //colourHashFromType
 
-    function findTrackEventCSSRules(){
-      var sheets = document.styleSheets;
-      __numStyleSheets = sheets.length;
-      for( var i=0; i<sheets.length; ++i ){
-        var sheet = sheets[ i ];
-        if( sheet.href && sheet.href.indexOf( "jquery" ) > -1 ){
-          continue;
-        } //if
-        for( var j=0, l=sheet.cssRules.length; j<l; ++j ){
-          var rule = sheet.cssRules[ j ],
-              text = rule.selectorText,
-              idx = text.indexOf( __cssRuleProperty );
-          if( idx > -1 ){
-            var eIdx = text.indexOf( '"', idx + __cssRuleProperty.length + 2 ),
-                name = text.substring( idx + __cssRuleProperty.length + 2, eIdx );
-            __trackEventCSSRules[ name ] = rule;
-          } //if
-        } //for
-      } //for
-    } //findTrackEventCSSRules
-
     function createStyleForType( type ){
       var styleContent = __newStyleSheet.innerHTML,
           hash = colourHashFromType( type );
@@ -84,9 +62,6 @@
           __pluginElementPrefix = "butter-plugin-",
           __pattern = '<li class="$type_tool ui-draggable"><a href="#" title="$type"><span></span>$type</a></li>';
 
-      if( __numStyleSheets !== document.styleSheets.length ){
-        findTrackEventCSSRules();
-      } //if
       document.head.appendChild( __newStyleSheet );
 
       var Plugin = function ( pluginOptions ) {
