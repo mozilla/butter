@@ -2,7 +2,18 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Logger, EventManager, TrackEvent ) {
+define( [
+          "./logger",
+          "./eventmanager",
+          "./trackevent",
+          "./views/track-view"
+        ],
+        function(
+          Logger,
+          EventManager,
+          TrackEvent,
+          TrackView
+        ){
 
   var __guid = 0;
 
@@ -16,9 +27,17 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
         _em = new EventManager( this ),
         _name = options.name || _id,
         _order = options.order || 0,
+        _view = new TrackView( this ),
         _this = this;
 
     Object.defineProperties( this, {
+      view: {
+        enumerable: true,
+        configurable: false,
+        get: function(){
+          return _view;
+        }
+      },
       order: {
         enumerable: true,
         get: function(){
@@ -125,6 +144,7 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
         "trackeventdeselected",
         "trackeventeditrequested"
       ]);
+      _view.addTrackEvent( trackEvent );
       trackEvent.track = _this;
       _em.dispatch( "trackeventadded", trackEvent );
       return trackEvent;
@@ -141,12 +161,21 @@ define( [ "core/logger", "core/eventmanager", "core/trackevent" ], function( Log
           "trackeventdeselected",
           "trackeventeditrequested"
         ]);
+        _view.removeTrackEvent( trackEvent );
         trackEvent.track = undefined;
         _em.dispatch( "trackeventremoved", trackEvent );
         return trackEvent;
       } //if
 
     }; //removeEvent
+
+    this.deselectEvents = function( except ){
+      for( var i=0, l=_trackEvents.length; i<l; ++i ){
+        if( _trackEvents[ i ] !== except ){
+          _trackEvents[ i ].selected = false;
+        } //if
+      } //for
+    }; //deselectEvents
 
   }; //Track
 

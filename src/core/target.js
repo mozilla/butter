@@ -10,10 +10,10 @@
     var Target = function ( options ) {
       options = options || {};
 
-      var _id = __guid++,
+      var _id = "Target" + __guid++,
           _logger = new Logger( _id ),
           _em = new EventManager( this ),
-          _name = options.name || "Target" + _id,
+          _name = options.name || _id,
           _element = options.element,
           _pageElement,
           _this = this;

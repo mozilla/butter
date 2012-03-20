@@ -7,7 +7,7 @@ define( [
         ], 
         function( IFrameDialog ){
 
-  return function( media, friendContainer ){
+  return function( media, tracksContainer, orderChangedCallback ){
 
     var _media = media,
         _container = document.createElement( "div" ),
@@ -32,22 +32,27 @@ define( [
         } //for
       },
       change: function( e, ui ){
+        var draggingIndex = ui.placeholder.index(),
+            orderedTracks = [];
 
-        var draggingIndex = ui.placeholder.index();
+        for( var i=0, l=_list.childNodes.length; i<l; ++i ){
 
-        for( var id in _tracks ){
-          var track = _tracks[ id ],
-              element = track.element,
-              elementIndex = $( element ).index();
+          var childNode = _list.childNodes[ i ];
 
-          if( element === ui.item[ 0 ] ){
-            track.track.order = draggingIndex - 1;
-          }
-          else {
-            track.track.order = elementIndex - 1;
+          if( childNode !== ui.item[ 0 ] ){
+
+            if( childNode === ui.placeholder[ 0 ] ){
+              orderedTracks.push( _tracks[ ui.item[ 0 ].getAttribute( "data-butter-track-id" ) ].track );
+            }
+            else{
+              orderedTracks.push( _tracks[ childNode.getAttribute( "data-butter-track-id" ) ].track );
+            } //if
+
           } //if
+
         } //for
 
+        orderChangedCallback( orderedTracks );
       }, //change
       stop: function(){
         for( var i=0, l=_menus.length; i<l; ++i ){
@@ -110,6 +115,7 @@ define( [
 
       trackDiv.className = "track-handle";
       trackDiv.id = "track-handle-" + trackId;
+      trackDiv.setAttribute( "data-butter-track-id", trackId );
       trackDiv.appendChild( document.createTextNode( trackName ) );
       trackDiv.appendChild( menuDiv );
 
@@ -130,12 +136,12 @@ define( [
       delete _tracks[ trackId ];
     });
 
-    friendContainer.addEventListener( "scroll", function( e ){
-      _container.scrollTop = friendContainer.scrollTop;
+    tracksContainer.element.addEventListener( "scroll", function( e ){
+      _container.scrollTop = tracksContainer.element.scrollTop;
     }, false );
 
     this.update = function(){
-      _container.scrollTop = friendContainer.scrollTop;
+      _container.scrollTop = tracksContainer.element.scrollTop;
     }; //update
 
     _this.update();
