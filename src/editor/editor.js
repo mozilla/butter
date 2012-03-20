@@ -39,6 +39,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
       } //if
 
       if( !_dialog.closed ){
+        _dialog.focus();
         return;
       } //if
 
