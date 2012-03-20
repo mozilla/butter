@@ -21,12 +21,12 @@
 }
 
 #butter-modal-container .layer iframe {
-  width: 60%;
-  height: 60%;
-  margin: 5% 20%;
-  background-color: #fff;
-  border: 10px solid #000;
-  border-radius: 20px;
+  min-width: 400px;
+  min-height: 150px;
+  margin: 20% 35%;
+  background-color: #3E3E3E;
+  border: 1px solid #fff;
+  border-radius: 10px;
   opacity: 0;
 }
 

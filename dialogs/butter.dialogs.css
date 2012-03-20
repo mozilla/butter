@@ -1,0 +1,111 @@
+html, body {
+	height: 100%;
+	width: 100%;
+    margin: 0;
+    padding: 0;
+}
+@font-face {
+  font-family: 'BebasRegular';
+  src: url('../src/ui/fonts/BEBAS___-webfont.eot');
+  src: url('../src/ui/fonts/BEBAS___-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../src/ui/fonts/BEBAS___-webfont.woff') format('woff'),
+       url('../src/ui/fonts/BEBAS___-webfont.ttf') format('truetype'),
+       url('../src/ui/fonts/BEBAS___-webfont.svg#BebasRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* MetaWebPro font family licensed from fontshop.com. WOFF-FTW! */
+@font-face {
+   font-family: 'MetaBold';
+   src: url('http://www.mozilla.org/img/fonts/MetaWebPro-Bold.eot');
+   src: local('☺'), url('http://www.mozilla.org/img/fonts/MetaWebPro-Bold.woff') format('woff');
+   font-weight: bold;
+}
+h1 {
+  font-family: 'MetaBold';
+  color: #fff;
+  font-size: 21px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+button, a.button {
+  font-family: 'BebasRegular';
+  font-size: 22px;
+  display: inline-block;
+  width: 100px;
+  height: 30px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+button:hover, a.button:hover {
+}
+#close {
+ width: 300px;
+ background-image: -moz-linear-gradient(center bottom,#667 0,#D3D3D3 100%);
+ background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#667),color-stop(1,#D3D3D3));
+ }
+#close:hover {
+ background-image: -moz-linear-gradient(center bottom,#667 0,#DFDFDF 100%);
+ background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#667),color-stop(1,#666));
+ }
+#no {
+ background-image: -moz-linear-gradient(center bottom,#667 0,#D3D3D3 100%);
+ background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#667),color-stop(1,#D3D3D3));
+ }
+#no:hover {
+ background-image: -moz-linear-gradient(center bottom,#667 0,#DFDFDF 100%);
+ background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#667),color-stop(1,#666));
+ }
+#yes {
+  background: #D1BE70;
+  background: -moz-linear-gradient(top, #D1BE70 0%, #A08546 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#A08546));
+  background: -webkit-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: -o-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: -ms-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: linear-gradient(top, #D1BE70);
+  box-shadow: none;
+}
+#yes:hover {
+  background: #D1BE70;
+  background: -moz-linear-gradient(top, #D1BE70 0%, #AD9B4C 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#AD9B4C));
+  background: -webkit-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: -o-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: -ms-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+}
+#buttons {
+	margin: 0px auto;
+}
+#track-data {
+	width: 300px;
+	min-height: 50px;
+}
+#container {
+	height: 100%;
+	width: 100%;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-box-pack: center;
+	-webkit-box-align: center;
+	display: -moz-box;
+	-moz-box-orient: vertical;
+	-moz-box-pack: center;
+	-moz-box-align: center; 
+	display: box;
+	box-orient: vertical;
+	box-pack: center;
+	box-align: center;
+}
+.center {
+	margin: 0px auto;
+}
+ 
+ 
+ 
+ 

@@ -4,6 +4,7 @@
 
 <html>
   <head>
+    <link rel="stylesheet" href="butter.dialogs.css" />
     <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
     <script type="text/javascript">
       (function(){
@@ -35,47 +36,15 @@
         }, false );
       }());
     </script>
-    <style>
-      html, body {
-        height: 100%;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-      }
-
-      #container {
-        height: 100%;
-        width: 100%;
-      }
-
-      #track-data {
-        width: 90%;
-        height: 70%;
-        margin-top: 5%;
-        margin-left: 5%;
-        resize: none;
-      }
-
-      button {
-        font-size: 120%;
-      }
-
-      h1 {
-        height: 3%;
-        margin: 0;
-      }
-
-      #buttons {
-        text-align: center;
-      }
-    </style>
   </head>
   <body>
     <div id="container">
+    <div class="center">
       <h1>Data for <span id="track-name"></span></h1>
       <textarea readonly id="track-data">Please wait...</textarea>
       <div id="buttons">
         <button disabled id="close">Close</button>
+        </div>
       </div>
     </div>
   </body>

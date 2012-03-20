@@ -10,6 +10,8 @@
     <script type="text/javascript" src="template.js" data-butter-exclude /></script>
     <link rel="stylesheet" href="../external/jquery-ui/jquery-ui-1.8.5.custom.css" />
     <link rel="stylesheet" href="../src/ui/butter.ui.css" data-butter-exclude />
+     <link rel="stylesheet" href="main.css">
+
     <style>
         #main, .content-div {
           float: left;
@@ -33,6 +35,17 @@
     </style>
 </head>
 <body>
+    <header>
+      <img src="images/drop.png" class="drop"><a href="#"><h1>Popcorn Maker</h1></a>
+      <div class="editor-actions">
+          <button id="new">New</button>
+          <button id="save">Save</button>
+          <button id="load">Load</button>
+          <button id="share">Share</button> 
+          <button id="auth">ben@mozillafoundation.org</button> |
+          <button id="auth-out">Logout</button>
+      </div>
+    </header>
     <video id="main" data-butter="media" controls >
       <source src="http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv" />
     </video>
