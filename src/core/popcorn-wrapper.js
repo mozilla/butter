@@ -25,13 +25,13 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
     function addPopcornHandlers(){
       for( var eventName in _popcornEvents ){
-        _popcorn.listen( eventName, _popcornEvents[ eventName ] );
+        _popcorn.on( eventName, _popcornEvents[ eventName ] );
       } //for
     } //addPopcornHandlers
 
     function removePopcornHandlers(){
       for( var eventName in _popcornEvents ){
-        _popcorn.unlisten( eventName, _popcornEvents[ eventName ] );
+        _popcorn.off( eventName, _popcornEvents[ eventName ] );
       } //for
     } //removePopcornHandlers
 
