@@ -45,11 +45,13 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
 
     this.pushContentState = function( state ){
       _contentState.push( state );
+      _element.setAttribute( "data-butter-content-state", _this.contentState );
       _em.dispatch( "contentstatechanged", _this.contentState );
     };
 
     this.popContentState = function(){
       var oldState = _contentState.pop();
+      _element.setAttribute( "data-butter-content-state", _this.contentState );
       _em.dispatch( "contentstatechanged", _this.contentState );
       return oldState;
     };
