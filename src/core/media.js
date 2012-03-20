@@ -201,15 +201,6 @@
           enumerable: true,
           get: function(){
             return _view;
-          },
-          set: function( newView ){
-            if( _view ){
-              //unlisten to view
-            }
-            _view = newView
-            if( _view ){
-              //listen to new view
-            }
           }
         },
         url: {
