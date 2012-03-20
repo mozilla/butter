@@ -128,6 +128,7 @@ define( [], function(){
     this.update = function( containerWidth, zoom ){
       _zoom = zoom || _zoom;
       _width = containerWidth;
+      _tracksContainerWidth = _tracksContainer.element.getBoundingClientRect().width;
       _container.style.width = _width + "px";
       setNodePosition();
     }; //update
