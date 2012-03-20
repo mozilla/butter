@@ -7,8 +7,8 @@
   define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
     var __trackEventCSSRules = {},
-        __cssRuleProperty = "butter-trackevent-type",
-        __cssRulePrefix = "#butter-timeline .trackliner-event",
+        __cssRuleProperty = "data-butter-trackevent-type",
+        __cssRulePrefix = "#butter-timeline .butter-track-event",
         __newStyleSheet = document.createElement( "style" );
 
     __newStyleSheet.type = "text/css";
@@ -143,6 +143,7 @@
           }
           pluginElement.id = __pluginElementPrefix + _this.type;
           helper = $( document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" ) );
+          pluginElement.setAttribute( "data-butter-plugin-type", _this.type );
           $( pluginElement ).draggable({
             helper: function() {
               var $div = $( "<div></div>" );
@@ -159,7 +160,7 @@
             zIndex: 9999999999,
             revert: true,
             revertDuration: 0
-          });
+          }).data( "draggable-type", "plugin" );
           this.element = pluginElement;
           return pluginElement;
         }; //createElement

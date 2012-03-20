@@ -29,7 +29,7 @@
 
       this.edit = function( trackEvent ){
         if ( !trackEvent || !( trackEvent instanceof TrackEvent ) ){
-          throw new Error( "Can't editor undefined trackEvent" );
+          throw new Error( "trackEvent must be valid to start an editor." );
         } //if
 
         var type = trackEvent.type;
@@ -59,6 +59,18 @@
         _editors[ type ] = undefined;
        return oldSource;
       }; //remove
+
+      function trackEventDoubleClicked( e ){
+        _this.edit( e.target.trackEvent );
+      } //trackEventDoubleClicked
+
+      butter.listen( "trackeventadded", function( e ){
+        e.data.view.listen( "trackeventdoubleclicked", trackEventDoubleClicked, false );
+      });
+
+      butter.listen( "trackeventremoved", function( e ){
+        e.data.view.unlisten( "trackeventdoubleclicked", trackEventDoubleClicked, false );
+      });
 
       this._start = function(){
         _this.add( _defaultEditor, "default" );

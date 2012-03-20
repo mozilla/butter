@@ -12,9 +12,8 @@ define( [], function(){
         _line = document.createElement( "div" ),
         _fill = document.createElement( "div" ),
         _tracksContainer = tracksContainer,
-        _tracklinerContainer = _tracksContainer.firstChild,
-        _tracklinerWidth,
-        _parent = parentElement,
+        _tracksContainerWidth,
+        _element = parentElement,
         _media = media,
         _mousePos,
         _zoom = 1,
@@ -23,7 +22,7 @@ define( [], function(){
         _isPlaying = false,
         _isScrubbing = false,
         _lastTime = -1,
-        _lastScroll = _tracksContainer.scrollLeft,
+        _lastScroll = _tracksContainer.element.scrollLeft,
         _this = this;
 
     _container.className = "time-bar-scrubber-container";
@@ -34,20 +33,21 @@ define( [], function(){
     _node.appendChild( _line );
     _container.appendChild( _fill );
     _container.appendChild( _node );
-    _parent.appendChild( _container );
+    _element.appendChild( _container );
 
     function setNodePosition(){
       var duration = _media.duration,
-          currentTime = _media.currentTime;
+          currentTime = _media.currentTime,
+          scrollLeft = _tracksContainer.element.scrollLeft;
 
       // if we can avoid re-setting position and visibility, then do so
-      if( _lastTime !== currentTime || _lastScroll !== _tracksContainer.scrollLeft ){
-        var pos = currentTime / duration * _tracklinerWidth,
-            adjustedPos = pos - _tracksContainer.scrollLeft;
+      if( _lastTime !== currentTime || _lastScroll !== scrollLeft ){
+        var pos = currentTime / duration * _tracksContainerWidth,
+            adjustedPos = pos - scrollLeft;
 
         _lastTime = currentTime;
 
-        if( pos < _tracksContainer.scrollLeft || pos > _width + _tracksContainer.scrollLeft ){
+        if( pos <  scrollLeft || pos > _width + scrollLeft ){
           _node.style.display = "none";
         }
         else {
@@ -55,11 +55,11 @@ define( [], function(){
           _node.style.display = "block";
         } //if
 
-        if( pos < _tracksContainer.scrollLeft ){
+        if( pos < scrollLeft ){
           _fill.style.display = "none";
         }
         else {
-          if( pos > _width + _tracksContainer.scrollLeft ){
+          if( pos > _width + scrollLeft ){
             _fill.style.width = ( _width - 2 ) + "px";
           }
           else {
@@ -72,7 +72,7 @@ define( [], function(){
 
     } //setNodePosition
 
-    _tracksContainer.addEventListener( "scroll", function( e ){
+    _tracksContainer.container.addEventListener( "scroll", function( e ){
       setNodePosition();
     }, false );
 
@@ -89,7 +89,7 @@ define( [], function(){
     function onMouseMove( e ){
       var diff = e.pageX - _mousePos;
       diff = Math.max( 0, Math.min( diff, _width ) );
-      _media.currentTime = ( diff + _tracksContainer.scrollLeft ) / _tracklinerWidth * _media.duration;
+      _media.currentTime = ( diff + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration;
       setNodePosition();
     } //onMouseMove
 
@@ -108,7 +108,7 @@ define( [], function(){
 
     var onMouseDown = this.onMouseDown = function( e ){
       var pos = e.pageX - _container.getBoundingClientRect().left;
-      _media.currentTime = ( pos + _tracksContainer.scrollLeft ) / _tracklinerWidth * _media.duration;
+      _media.currentTime = ( pos + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration;
       setNodePosition();
       onScrubberMouseDown( e );
     }; //onMouseDown
@@ -118,10 +118,9 @@ define( [], function(){
 
     this.update = function( zoom ){
       _zoom = zoom || _zoom;
-      _tracklinerContainer = _tracksContainer.firstChild;
-      _tracklinerWidth = _tracklinerContainer.getBoundingClientRect().width;
-      _width = _parent.getBoundingClientRect().width;
-      _width = Math.min( _width, _tracklinerWidth );
+      _tracksContainerWidth = _tracksContainer.container.getBoundingClientRect().width;
+      _width = _element.getBoundingClientRect().width;
+      _width = Math.min( _width, _tracksContainerWidth );
       _container.style.width = _width + "px";
       setNodePosition();
     }; //update

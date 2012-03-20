@@ -30,6 +30,7 @@
           _duration = 0,
           _popcornOptions = mediaOptions.popcornOptions,
           _mediaUpdateInterval,
+          _view,
           _popcornWrapper = new PopcornWrapper( _id, {
             popcornEvents: {
               muted: function(){
@@ -115,16 +116,13 @@
         return track;
       }; //addTrack
 
-      this.getTrack = function ( track ) {
-        for ( var i=0, l=_tracks.length; i<l; ++i ) {
-          if (  ( track.id !== undefined && _tracks[ i ].id === track.id ) ||
-                ( track.name && _tracks[ i ].name === track.name ) ||
-                _tracks[ i ] === track ) {
+      this.getTrackById = function( id ){
+        for( var i=0, l=_tracks.length; i<l; ++i ){
+          if( _tracks[ i ].id === id ){
             return _tracks[ i ];
           } //if
         } //for
-        return undefined;
-      }; //getTrack
+      }; //getTrackById
 
       this.removeTrack = function ( track ) {
         var idx = _tracks.indexOf( track );
@@ -150,6 +148,18 @@
           return track;
         } //if
       }; //removeTrack
+
+      this.findTrackWithTrackEventId = function( id ){
+        for( var i=0, l=_tracks.length; i<l; ++i ){
+          var te = _tracks[ i ].getTrackEventById( id );
+          if( te ){
+            return {
+              track: _tracks[ i ],
+              trackEvent: te
+            };
+          }
+        } //for
+      }; //findTrackWithTrackEventId
 
       this.getManifest = function( name ) {
         return _registry[ name ];
@@ -187,6 +197,12 @@
       } //play
 
       Object.defineProperties( this, {
+        view: {
+          enumerable: true,
+          get: function(){
+            return _view;
+          }
+        },
         url: {
           get: function() {
             return _url;
