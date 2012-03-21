@@ -27,11 +27,10 @@
       }
       else {
         _pageElement = new PageElement( _element, {
-          drop: function( event, ui ){
+          drop: function( element ){
             _em.dispatch( "trackeventrequested", {
-              event: event,
+              element: element,
               target: _this,
-              ui: ui
             });
           }
         },

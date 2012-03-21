@@ -3,11 +3,13 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [ "core/logger",
-          "core/eventmanager"
+          "core/eventmanager",
+          "util/dragndrop"
         ],
         function(
           Logger,
-          EventManager
+          EventManager,
+          DragNDrop
         ){
 
   var __guid = 0;
@@ -27,12 +29,9 @@ define( [ "core/logger",
     _element.className = "butter-track";
     _element.id = _id;
 
-    $( _element ).droppable({ 
-      greedy: true,
-      // this is dropping an event on a track
-      drop: function( event, ui ) {
-        var dropped = ui.draggable[ 0 ],
-            draggableType = $( ui.draggable ).data( "draggable-type" );
+    DragNDrop.droppable( _element, {
+      drop: function( dropped ) {
+        var draggableType = dropped.getAttribute( "data-butter-draggable-type" );
 
         var start,
             left,
@@ -45,17 +44,17 @@ define( [ "core/logger",
           _em.dispatch( "plugindropped", {
             start: start,
             track: _track,
-            type: ui.draggable[ 0 ].getAttribute( "data-butter-plugin-type" )
+            type: dropped.getAttribute( "data-butter-plugin-type" )
           });
         }
         else if( draggableType === "trackevent" ) {
-          if( ui.draggable[ 0 ].parentNode !== _element ){
+          if( dropped.parentNode !== _element ){
             left = dropped.offsetLeft;
             start = left / trackRect.width * _duration;
             _em.dispatch( "trackeventdropped", {
               start: start,
               track: _track,
-              trackEvent: $( ui.draggable ).data( "trackevent-id" )
+              trackEvent: dropped.getAttribute( "data-butter-trackevent-id" )
             });
           }
         } //if
