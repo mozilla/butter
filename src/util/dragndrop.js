@@ -43,6 +43,8 @@ define([], function(){
         _onStart = options.start || function(){},
         _onStop = options.stop || function(){},
         _updateInterval = -1,
+        _scroll = options.scroll,
+        _scrollRect,
         _elementRect;
 
     _leftHandle.className = "handle left-handle";
@@ -118,12 +120,23 @@ define([], function(){
           return;
         }
 
+        if( _scroll ){
+          newW += _scroll.scrollLeft;
+          _scrollRect = _scroll.getBoundingClientRect();
+
+          if( originalPosition + newW > _scrollRect.width + SCROLL_WINDOW ){
+            _scroll.scrollLeft += DEFAULT_SCROLL_AMOUNT;
+            newW += DEFAULT_SCROLL_AMOUNT;
+          }
+        }
+
         if( newW > element.offsetParent.offsetWidth - originalPosition ){
           newW = element.offsetParent.offsetWidth - originalPosition;
         }
 
         element.style.width = newW + "px";
         _elementRect = element.getBoundingClientRect();
+
       }
 
       function onMouseUp( e ){
