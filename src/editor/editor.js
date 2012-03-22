@@ -21,7 +21,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
           type: _frameType,
           modal: "behind-timeline",
           url: source,
-          parent: butter.ui.areas.main.items.editor
+          parent: butter.ui.areas.main.items.editorContainer
         },
         _currentTarget,
         _this = this;

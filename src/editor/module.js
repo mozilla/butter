@@ -76,13 +76,24 @@
         var parentElement = document.createElement( "div" );
         parentElement.id = "butter-editor";
 
+        container = document.createElement( "div" );
+        container.id = "butter-editor-container";
+        parentElement.appendChild( container );
+
         butter.ui.addToArea( "main", "editor", parentElement );
+        butter.ui.addToArea( "main", "editorContainer", container );
         butter.ui.listen( "contentstatechanged", function( e ){
           if( e.data !== "editor" ){
-            parentElement.style.display = "none";
+            parentElement.classList.remove( "fade-in" );
+            setTimeout(function(){
+              parentElement.style.display = "none";
+            }, 500);
           }
           else{
             parentElement.style.display = "block";
+            setTimeout(function(){
+              parentElement.classList.add( "fade-in" );
+            }, 0);
           }
         });
 

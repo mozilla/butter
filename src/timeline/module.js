@@ -29,11 +29,9 @@ define( [
       butter.ui.pushContentState( "timeline" );
       butter.ui.listen( "contentstatechanged", function( e ){
         if( e.data !== "timeline" ){
-          //_parentElement.style.display = "none";
           _parentElement.setAttribute( "data-butter-disabled", true );
         }
         else{
-          //_parentElement.style.display = "block";
           _parentElement.removeAttribute( "data-butter-disabled" );
         }
       });

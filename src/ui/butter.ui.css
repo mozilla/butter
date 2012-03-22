@@ -95,6 +95,21 @@
   top: 53px;
   left: 0px;
   z-index: 2140000002;
+  background-image: url( "assets/bg.jpg" );
+  -moz-transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+  opacity: 0;
+}
+
+#butter-editor-container{
+  height: 150px;
+  padding: 0 150px 0 0;
+  position: relative;
+}
+
+#butter-editor.fade-in {
+  opacity: 1;
 }
 
 #butter-editor iframe {
@@ -113,7 +128,6 @@
 }
 
 #butter-timeline[ data-butter-disabled ] {
-  opacity: 0.3;
 }
 
 #butter-tray .status-container {

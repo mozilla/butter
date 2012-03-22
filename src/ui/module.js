@@ -28,7 +28,9 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
 
     this.addToArea = function( area, name, childElement ){
       if( _areas[ area ] && !_areas[ area ].items[ name ] ){
-        _areas[ area ].element.appendChild( childElement );
+        if( !childElement.parentNode ){
+          _areas[ area ].element.appendChild( childElement );
+        }
         _areas[ area ].items[ name ] = childElement;
       }
       else{
@@ -38,7 +40,10 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
 
     this.removeFromArea = function( area, name ){
       if( _areas[ area ] && _areas[ area ].items[ name ] ){
-        _areas[ area ].element.removeChild( _areas[ area ][ name ] );
+        var element = _areas[ area ].items[ name ];
+        if( element.parentNode === _areas[ area ].element ){
+          _areas[ area ].element.removeChild( element );
+        }
         delete _areas[ area ].items[ name ];
       }
     };
