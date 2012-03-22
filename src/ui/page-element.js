@@ -91,8 +91,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
       _element.setAttribute( "butter-clean", "true" );
 
       DragNDrop.droppable( _element, {
-        over: function( element ){
-          if( element.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
+        over: function( dragElement ){
+          if( dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
             return;
           }
           highlight( true );
@@ -100,8 +100,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
             _events.over();
           } //if
         }, //over
-        out: function( element ){
-          if( element.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
+        out: function( dragElement ){
+          if( dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
             return;
           }
           highlight( false );
@@ -109,13 +109,13 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
             _events.out();
           } //if
         }, //out
-        drop: function( element ){
-          if( element.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
+        drop: function( dragElement ){
+          if( dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
             return;
           }
           highlight( false );
           if( _events.drop ){
-            _events.drop( element );
+            _events.drop( dragElement );
           } //if
         } //drop
       });

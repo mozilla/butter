@@ -701,7 +701,6 @@
 
 #butter-timeline .tracks-container .butter-track {
   width: 100%;
-  box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
   border-radius: 6px;
   moz-border-radius: 6px;
   o-border-radius: 6px;
@@ -721,6 +720,13 @@
   moz-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6);
   o-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6);
   webkit-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6);
+}
+
+#butter-timeline .tracks-container .butter-track.draggable-hover {
+  box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6), inset 0 0px 10px #3355ee, inset 1px 1px 10px #3355ee;
+  moz-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6), inset 0 0px 10px #1122cc;
+  o-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6), inset 0 0px 10px #1122cc;
+  webkit-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6), inset 0 0px 10px #3355cc;
 }
 
 #butter-timeline .tracks-container .butter-track-event[selected="true"] {

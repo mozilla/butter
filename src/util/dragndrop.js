@@ -13,6 +13,10 @@ define([], function(){
   var __droppables = [],
       __helpers = [];
 
+  // for what seems like a bug in chrome. :/
+  // dataTransfer.getData seems to report nothing
+  var __currentDraggingElement;
+
   function __getWindowRect(){
     return {
       top: 0,
@@ -32,8 +36,15 @@ define([], function(){
   }
 
   function __drag( element, elementRect, mousePos ){
+    var coveredDroppable;
     for( var i=__droppables.length - 1; i>=0; --i ){
-      __droppables[ i ].drag( element, elementRect, mousePos );
+      if( !coveredDroppable && __droppables[ i ].drag( element, elementRect, mousePos ) ){
+        __droppables[ i ].remember( element );
+        coveredDroppable = __droppables[ i ];
+      }
+      else{
+        __droppables[ i ].forget();
+      }
     }
   }
 
@@ -184,6 +195,7 @@ define([], function(){
     element.setAttribute( "draggable", true );
 
     element.addEventListener( "dragstart", function( e ){
+      __currentDraggingElement = element;
       e.dataTransfer.effectAllowed = "all";
       e.dataTransfer.setData( "text", _id );
       if( _image ){
@@ -194,6 +206,7 @@ define([], function(){
     });
 
     element.addEventListener( "dragend", function( e ){
+      __currentDraggingElement = null;
     });
 
     element.addEventListener( "drop", function( e ){
@@ -206,12 +219,21 @@ define([], function(){
         _onDrop = options.drop || function(){},
         _onOver = options.over || function(){},
         _onOut = options.out || function(){},
+        _mousePos,
         _zIndex,
         _draggedElement;
 
     element.addEventListener( "drop", function( e ){
+      e.preventDefault();
       e.stopPropagation();
-      _onDrop( __helpers[ e.dataTransfer.getData( "text" ) ] );
+      if( _hoverClass ){
+        element.classList.remove( _hoverClass );
+      }
+      var transferData = e.dataTransfer.getData( "text" ),
+          helper = __helpers[ transferData ] || __currentDraggingElement;
+      if( helper ){
+        _onDrop( helper, [ e.clientX, e.clientY ] );
+      }
       return false;
     }, false );
 
@@ -222,42 +244,74 @@ define([], function(){
 
     element.addEventListener( "dragenter", function( e ){
       element.classList.add( _hoverClass );
-      _onOver( __helpers[ e.dataTransfer.getData( "text" ) ] );
+      if( _hoverClass ){
+        element.classList.add( _hoverClass );
+      }
+      var transferData = e.dataTransfer.getData( "text" ),
+          helper = __helpers[ transferData ] || __currentDraggingElement;
+      if( helper ){
+        _onOver( helper, [ e.clientX, e.clientY ] );
+      }
     }, false );
 
     element.addEventListener( "dragleave", function( e ){
       element.classList.remove( _hoverClass );
-      _onOut(__helpers[ e.dataTransfer.getData( "text" ) ] );
+      var transferData = e.dataTransfer.getData( "text" ),
+          helper = __helpers[ transferData ] || __currentDraggingElement;
+      if( helper ){
+        _onOut( helper, [ e.clientX, e.clientY ] );
+      }
+    }, false );
+
+    window.addEventListener( "mousemove", function( e ){
+      _mousePos = [ e.clientX, e.clientY ];
     }, false );
 
     __droppables.push({
-      drop: function(){
-        element.classList.remove( _hoverClass );
-
-        if( _draggedElement ){
-          _onDrop( _draggedElement );
-          return true;
+      remember: function( dragElement ){
+        if( !_draggedElement ){
+          element.classList.add( _hoverClass );
+          _draggedElement = dragElement;
+          _onOver( _draggedElement );
         }
-        return false;
       },
-      drag: function( dragElement, dragElementRect, mousePos ){
-        var rect = element.getBoundingClientRect();
-        if(     mousePos[ 0 ] < rect.right 
-            &&  mousePos[ 0 ] > rect.left
-            &&  mousePos[ 1 ] > rect.top
-            &&  mousePos[ 1 ] < rect.bottom ){
-
-          if( !_draggedElement ){
-            element.classList.add( _hoverClass );
-            _draggedElement = dragElement;
-            _onOver( _draggedElement );
-          }
-        }
-        else if( _draggedElement ){
+      forget: function(){
+        if( _draggedElement ){
           element.classList.remove( _hoverClass );
           _onOut( _draggedElement );
           _draggedElement = null;
         }
+      },
+      drop: function(){
+        element.classList.remove( _hoverClass );
+
+        if( _draggedElement ){
+          _onDrop( _draggedElement, _mousePos );
+          _draggedElement = null;
+          return true;
+        }
+        _draggedElement = null;
+        return false;
+      },
+      drag: function( dragElement, dragElementRect, mousePos ){
+        var rect = element.getBoundingClientRect();
+
+        var maxL = Math.max( dragElementRect.left, rect.left ),
+            maxT = Math.max( dragElementRect.top, rect.top ),
+            minR = Math.min( dragElementRect.right, rect.right ),
+            minB = Math.min( dragElementRect.bottom, rect.bottom );
+
+        if( minR < maxL || minB < maxT ){
+          return false;
+        }
+
+        var overlapDims = [ minR - maxL, minB - maxT ];
+
+        if( overlapDims[ 0 ] * overlapDims[ 1 ] / 2 > dragElementRect.width * dragElementRect.height / 4 ){
+          return true;
+        }
+
+        return false;
       }
     });
   }

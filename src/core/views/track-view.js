@@ -30,16 +30,18 @@ define( [ "core/logger",
     _element.id = _id;
 
     DragNDrop.droppable( _element, {
-      drop: function( dropped ) {
-        var draggableType = dropped.getAttribute( "data-butter-draggable-type" );
+      hoverClass: "draggable-hover",
+      drop: function( dropped, mousePosition ) {
 
+        var draggableType = dropped.getAttribute( "data-butter-draggable-type" );
+        
         var start,
             left,
             trackRect = _element.getBoundingClientRect();
 
         if( draggableType === "plugin" ){
           var type = dropped.getAttribute( "data-butter-plugin-type" );
-          left = event.clientX - trackRect.left;
+          left = mousePosition[ 0 ] - trackRect.left;
           start = left / trackRect.width * _duration;
           _em.dispatch( "plugindropped", {
             start: start,
