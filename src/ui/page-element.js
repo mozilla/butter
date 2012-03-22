@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
+define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logger, EventManager, DragNDrop ) {
   
   return function( element, events, options ){
 
@@ -90,24 +90,32 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
       _element.setAttribute( "butter-clean", "true" );
 
-      $( _element ).droppable({
-        greedy: true,
-        over: function( event, ui ){
+      DragNDrop.droppable( _element, {
+        over: function( dragElement ){
+          if( dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
+            return;
+          }
           highlight( true );
           if( _events.over ){
-            _events.over( event, ui );
+            _events.over();
           } //if
         }, //over
-        out: function( event, ui ){
+        out: function( dragElement ){
+          if( dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
+            return;
+          }
           highlight( false );
           if( _events.out ){
-            _events.out( event, ui );
+            _events.out();
           } //if
         }, //out
-        drop: function( event, ui ){
+        drop: function( dragElement ){
+          if( dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
+            return;
+          }
           highlight( false );
           if( _events.drop ){
-            _events.drop( event, ui );
+            _events.drop( dragElement );
           } //if
         } //drop
       });

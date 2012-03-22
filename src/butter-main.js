@@ -68,7 +68,7 @@
 
       function trackEventRequested( e, media, target ){
           var track,
-              element = e.data.ui.draggable[ 0 ],
+              element = e.data.element,
               type = element.id.split( "-" ),
               start = media.currentTime + 1 < media.duration ? media.currentTime : media.duration - 1,
               end = start + 1;
@@ -78,7 +78,7 @@
           }
           else{
             _logger.log( "Invalid trackevent type requested." );
-            type = null;
+            return;
           } //if
 
           if( media.tracks.length === 0 ){

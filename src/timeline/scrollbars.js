@@ -74,6 +74,10 @@ define( [], function(){
       }
     };
 
+    _containerParent.addEventListener( "scroll", function( e ){
+      setHandlePosition();
+    }, false );
+
     _containerChild.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaY ){
         _containerParent.scrollTop -= e.wheelDeltaY;
@@ -190,6 +194,10 @@ define( [], function(){
         _handle.style.left = "0px";
       }
     };
+
+    _containerParent.addEventListener( "scroll", function( e ){
+      setHandlePosition();
+    }, false );
 
     _containerChild.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaX ){
