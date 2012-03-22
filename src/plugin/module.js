@@ -4,7 +4,7 @@
 
 (function() {
 
-  define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
+  define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logger, EventManager, DragNDrop ) {
 
     var __trackEventCSSRules = {},
         __cssRuleProperty = "data-butter-trackevent-type",
@@ -60,7 +60,7 @@
           __container,
           __this = this,
           __pluginElementPrefix = "butter-plugin-",
-          __pattern = '<li class="$type_tool ui-draggable"><a href="#" title="$type"><span></span>$type</a></li>';
+          __pattern = '<li class="$type_tool">$type</li>';
 
       document.head.appendChild( __newStyleSheet );
 
@@ -142,32 +142,19 @@
             pluginElement = $pluginElement[ 0 ];
           }
           pluginElement.id = __pluginElementPrefix + _this.type;
-          helper = $( document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" ) );
+          helper = document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" );
           pluginElement.setAttribute( "data-butter-plugin-type", _this.type );
-          $( pluginElement ).draggable({
-            helper: function() {
-              var $div = $( "<div></div>" );
-              $div.css({
-                "background-image": "url('"+ helper[ 0 ].src +"')",
-                "display": "inline",
-                "width": helper.width() + "px",
-                "height": helper.height() + "px"
-              });
-              return $div;
-            },
-            appendTo: "body",
-            cursorAt: { right: parseInt( helper.css( "width" ) ) / 2, bottom: parseInt( helper.css( "height" ) ) / 2 },
-            zIndex: 9999999999,
-            revert: true,
-            revertDuration: 0
-          }).data( "draggable-type", "plugin" );
+          pluginElement.setAttribute( "data-butter-draggable-type", "plugin" );
+          DragNDrop.helper( pluginElement, {
+            image: helper
+          });
           this.element = pluginElement;
           return pluginElement;
         }; //createElement
 
       }; //Plugin
 
-      __container = document.createElement( "div" );
+      __container = document.createElement( "ul" );
       __container.id = "butter-plugin";
 
       this._start = function(){

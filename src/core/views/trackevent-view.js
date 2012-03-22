@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ){
+define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logger, EventManager, DragNDrop ){
   
   var __guid = 0;
 
@@ -123,26 +123,22 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           _parent = val;
           if( _parent && !_handles ){
 
-            $( _element ).draggable({
+            DragNDrop.draggable( _element, {
               containment: _parent.element.parentNode,
-              // highest possible zIndex inside of 32 bits
-              zIndex: 2147483647,
-              scroll: true,
-              // this is when an event stops being dragged
-              start: function ( event, ui ) {
-              },
+              scroll: _parent.element.parentNode.parentNode,
               stop: movedCallback
-            }).resizable({ 
-              autoHide: false, 
-              containment: "parent", 
-              handles: "e, w", 
-              scroll: false,
-              stop: movedCallback
-            })
-            .data( "draggable-type", "trackevent" )
-            .data( "trackevent-id", trackEvent.id );
+            });
 
-            _handles = _element.querySelectorAll( ".ui-resizable-handle" );
+            _element.setAttribute( "data-butter-draggable-type", "trackevent" );
+            _element.setAttribute( "data-butter-trackevent-id", trackEvent.id );
+
+            DragNDrop.resizable( _element, {
+              containment: _parent.element.parentNode,
+              scroll: _parent.element.parentNode.parentNode,
+              stop: movedCallback
+            });
+
+            _handles = _element.querySelectorAll( ".handle" );
             function toggleHandles( state ){
               _handles[ 0 ].style.visibility = state ? "visible" : "hidden";
               _handles[ 1 ].style.visibility = state ? "visible" : "hidden";
@@ -161,12 +157,12 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       }
     });
 
-    function movedCallback( event, ui ) {
+    function movedCallback() {
       _element.style.top = "0px";
       var rect = _element.getClientRects()[ 0 ];
       _start = _element.offsetLeft / _zoom;
       _end = _start + rect.width / _zoom;
-      _eventManager.dispatch( "trackeventviewupdated", ui );
+      _eventManager.dispatch( "trackeventviewupdated" );
     } //movedCallback
 
     _element = document.createElement( "div" );
