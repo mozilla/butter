@@ -78,7 +78,7 @@
           }
           else{
             _logger.log( "Invalid trackevent type requested." );
-            type = null;
+            return;
           } //if
 
           if( media.tracks.length === 0 ){

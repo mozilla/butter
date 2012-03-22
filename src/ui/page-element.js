@@ -91,19 +91,28 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
       _element.setAttribute( "butter-clean", "true" );
 
       DragNDrop.droppable( _element, {
-        over: function( e ){
+        over: function( element ){
+          if( element.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
+            return;
+          }
           highlight( true );
           if( _events.over ){
             _events.over();
           } //if
         }, //over
-        out: function( e ){
+        out: function( element ){
+          if( element.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
+            return;
+          }
           highlight( false );
           if( _events.out ){
             _events.out();
           } //if
         }, //out
         drop: function( element ){
+          if( element.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
+            return;
+          }
           highlight( false );
           if( _events.drop ){
             _events.drop( element );

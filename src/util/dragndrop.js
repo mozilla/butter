@@ -56,7 +56,8 @@ define([], function(){
     function onLeftMouseDown( e ){
       e.stopPropagation();
 
-      var originalPosition = element.offsetLeft,
+      var originalRect = element.getBoundingClientRect(),
+          originalPosition = element.offsetLeft,
           originalWidth = element.offsetWidth,
           mouseDownPosition = e.clientX,
           mousePosition,
@@ -69,6 +70,15 @@ define([], function(){
 
         if( newW < MIN_WIDTH ){
           return;
+        }
+
+        if( _scroll && _scroll.scrollLeft > 0 ){
+          if( originalRect.left + diff < _scrollRect.left - SCROLL_WINDOW ){
+            _scroll.scrollLeft -= DEFAULT_SCROLL_AMOUNT;
+            newX -= DEFAULT_SCROLL_AMOUNT;
+            newW += DEFAULT_SCROLL_AMOUNT;
+            mouseDownPosition += DEFAULT_SCROLL_AMOUNT;
+          }
         }
 
         if( newX < 0 ){
@@ -98,6 +108,7 @@ define([], function(){
 
       _elementRect = element.getBoundingClientRect();
       mouseOffset = e.clientX - _elementRect.left;
+      _scrollRect = _scroll.getBoundingClientRect();
 
       window.addEventListener( "mousemove", onMouseMove, false );
       window.addEventListener( "mouseup", onMouseUp, false );
@@ -120,23 +131,19 @@ define([], function(){
           return;
         }
 
-        if( _scroll ){
-          newW += _scroll.scrollLeft;
-          _scrollRect = _scroll.getBoundingClientRect();
-
-          if( originalPosition + newW > _scrollRect.width + SCROLL_WINDOW ){
+        if( _scroll && _scroll.scrollLeft < _scroll.scrollWidth - _scrollRect.width ){
+          if( mousePosition > _scrollRect.right + SCROLL_WINDOW ){
             _scroll.scrollLeft += DEFAULT_SCROLL_AMOUNT;
-            newW += DEFAULT_SCROLL_AMOUNT;
+            mouseDownPosition -= DEFAULT_SCROLL_AMOUNT;
           }
         }
-
-        if( newW > element.offsetParent.offsetWidth - originalPosition ){
+        
+        if( newW + originalPosition > element.offsetParent.offsetWidth ){
           newW = element.offsetParent.offsetWidth - originalPosition;
         }
 
         element.style.width = newW + "px";
         _elementRect = element.getBoundingClientRect();
-
       }
 
       function onMouseUp( e ){
@@ -155,14 +162,17 @@ define([], function(){
       }
 
       _elementRect = element.getBoundingClientRect();
+      if( _scroll ){
+        _scrollRect = _scroll.getBoundingClientRect();
+      }
       mouseOffset = e.clientX - _elementRect.left;
 
       window.addEventListener( "mousemove", onMouseMove, false );
       window.addEventListener( "mouseup", onMouseUp, false );
     }
+
     _leftHandle.addEventListener( "mousedown", onLeftMouseDown, false );
     _rightHandle.addEventListener( "mousedown", onRightMouseDown, false );
-
   }
 
   function Helper( element, options ){
@@ -196,11 +206,12 @@ define([], function(){
         _onDrop = options.drop || function(){},
         _onOver = options.over || function(){},
         _onOut = options.out || function(){},
+        _zIndex,
         _draggedElement;
 
     element.addEventListener( "drop", function( e ){
       e.stopPropagation();
-      _onDrop( __helpers[ e.dataTransfer.getData( "text" ) ]);
+      _onDrop( __helpers[ e.dataTransfer.getData( "text" ) ] );
       return false;
     }, false );
 
@@ -211,12 +222,12 @@ define([], function(){
 
     element.addEventListener( "dragenter", function( e ){
       element.classList.add( _hoverClass );
-      _onOver( e );
+      _onOver( __helpers[ e.dataTransfer.getData( "text" ) ] );
     }, false );
 
     element.addEventListener( "dragleave", function( e ){
       element.classList.remove( _hoverClass );
-      _onOut( e );
+      _onOut(__helpers[ e.dataTransfer.getData( "text" ) ] );
     }, false );
 
     __droppables.push({
@@ -239,13 +250,13 @@ define([], function(){
           if( !_draggedElement ){
             element.classList.add( _hoverClass );
             _draggedElement = dragElement;
-            _onOver();
+            _onOver( _draggedElement );
           }
         }
         else if( _draggedElement ){
           element.classList.remove( _hoverClass );
+          _onOut( _draggedElement );
           _draggedElement = null;
-          _onOut();
         }
       }
     });
@@ -272,10 +283,11 @@ define([], function(){
 
     function update(){
       updatePosition();
-      checkContainment();
       if( _scroll ){
         checkScroll();
       }
+      checkContainment();
+      __drag( element, _elementRect, _mousePos );
     }
 
     function updateRects(){
@@ -313,7 +325,6 @@ define([], function(){
         element.style.left = element.offsetLeft - _scrollAmount + "px";
         updateRects();
       }
-      __drag( element, _elementRect, _mousePos );
     }
 
     function onMouseDown( e ){
