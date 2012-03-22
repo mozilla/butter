@@ -1,0 +1,31 @@
+<!--  This Source Code Form is subject to the terms of the MIT license
+      If a copy of the MIT license was not distributed with this file, you can
+      obtain one at http://www.mozillapopcorn.org/butter-license.txt -->
+
+<html>
+  <head>
+    <link rel="stylesheet" href="butter.dialogs.css" />
+    <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
+    <script type="text/javascript"></script>
+  </head>
+  <body>
+  <img class="close-x" src="../src/ui/assets/close-button.png">
+    <div id="container">
+    <div class="center">
+      <h1>Share <span id="project-name"></span></h1>
+      <div id="published-url"><a href="#">http://</a></div>
+      <div id="buttons">
+      <div class="share_instruction">Click "publish" to generate a link to your project.</div>
+      <!-- change state of instruction
+      <div class="share_instruction">Here's a link to your published project. Share away!</div> --!>
+
+        <button disabled id="publish">Publish</button>
+        <!-- change state of Publish button to let user revoke publish status
+        <button disabled id="unpublish">Un-Publish</button> --!>
+        <button disabled id="get-html">Get HTML</button>
+        <button disabled id="get-json">Get JSON</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

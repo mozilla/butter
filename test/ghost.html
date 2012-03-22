@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic template</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <script src="../external/jquery/jquery.js" /></script>
+    <script src="../external/jquery-ui/jquery-ui.min.js" /></script>
+    <script src="../src/butter.js" /></script>
+    <script src="http://cdn.popcornjs.org/code/dist/popcorn.js" /></script>
+    <script type="text/javascript" src="template.js"></script>
+<script>
+ document.addEventListener('DOMContentLoaded', function(){
+    var v = document.getElementById('main');
+    var canvas = document.getElementById('c');
+    var context = canvas.getContext('2d');
+
+    var cw = Math.floor(canvas.clientWidth / 50);
+    var ch = Math.floor(canvas.clientHeight / 50);
+    canvas.width = 5;
+    canvas.height = 5;
+
+    v.addEventListener('play', function(){
+        draw(this,context,cw,ch);
+    },false);
+
+},false);
+
+function draw(v,c,w,h) {
+    if(v.paused || v.ended) return false;
+    c.drawImage(v,0,0,w,h);
+    setTimeout(draw,20,v,c,w,h);
+}
+</script>
+
+    <link rel="stylesheet" href="../external/jquery-ui/jquery-ui-1.8.5.custom.css" />
+    <link rel="stylesheet" href="../src/ui/butter.ui.css" />
+    <style>
+        #main, .content-div {
+            float: left;
+        }
+        .content-div {
+            min-width: 200px;
+            min-height: 200px;
+            margin: 5px;
+        }
+        .container-div {
+            float: left;
+            text-align: center;
+            font-family: helvetica;
+            font-style: bold;
+        }
+        #main {
+            min-width: 300px;
+            min-height: 200px;
+        }
+        #Area1 {
+        font-size:30px;
+        color:#FF0000;
+        font-weight:bold;
+        font-family:Courier New, Courier, mono;
+        }
+        #Area2 {
+        font-size:50px;
+        color:green;
+        font-weight:italic;
+        font-family:Times New Roman;
+        }
+		#Area3 {
+        font-size:70px;
+        color:#00FFEA;
+        font-weight:bold;
+        font-family:Arial;
+        }
+        #Area4 {
+        font-size:90px;
+        color:#F39D2D;
+        font-weight:italic;
+        font-family:Geneva;
+        z-index: 2;
+        }
+        #Big {
+        font-size:140px;
+        color:#FF3D46;
+        font-weight:bold;
+        font-family:Helvetica;
+        }
+        #Banner {
+        width:100%;
+        color:black;
+        }
+        #c {
+    	position: absolute;
+		z-index:-2;
+    	top: 0;
+    	bottom: 0;
+    	left: 0;
+    	right: 0;
+    	width: 100%;
+    	height: 100%;
+		}
+    </style>
+</head>
+<body>
+<canvas id=c></canvas>
+<img src="http://videos-cdn.mozilla.net/serv/webmademovies/popcorn2.png" style="position: absolute; right: 10px">
+    <video id="main" data-butter="media" controls >
+      <source src="http://videos-cdn.mozilla.net/serv/webmademovies/ray.webm" />
+    </video>
+    <div class="container-div">
+        <div class="content-div" data-butter="target" id="Area1"></div>
+        <p>1</p>
+    </div>
+    <div class="container-div">
+        <div class="content-div" data-butter="target" id="Area2"></div>
+        <p>2</p>
+    </div>
+        <div class="container-div">
+        <div class="content-div" data-butter="target" id="Area3"></div>
+        <p>3</p>
+    </div>
+    <div class="container-div">
+        <div class="content-div" data-butter="target" id="Area4"></div>
+        <p>4</p>
+    </div>
+    <div class="container-div" style="position: relative">
+        <div class="content-div" data-butter="target" id="Big" style="position: relative; width:1200px; height: 300px; margin: 0px auto;"></div>
+        <p>Big</p>
+    </div>
+    <div id="target-div"></div>
+        <button id="removePlugin" style="display:none">Remove Plugin</button>
+    <textarea id="pluginName" style="display:none"></textarea>
+
+</body>
+</html>
