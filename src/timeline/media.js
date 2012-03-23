@@ -42,11 +42,11 @@ define( [
         _tracks = {},
         _selectedTracks = [],
         _initialized = false,
-        _hScrollBar,
-        _vScrollBar,
+        _hScrollBar = new Scrollbars.Horizontal( _tracksContainer ),
+        _vScrollBar = new Scrollbars.Vertical( _tracksContainer ),
         _shrunken = false,
-        _timebar = new TimeBar( _media, _tracksContainer ),
-        _zoombar = new ZoomBar(  zoomCallback ),
+        _timebar = new TimeBar( _media, _tracksContainer, _hScrollBar ),
+        _zoombar = new ZoomBar( zoomCallback ),
         _status = new Status( _media ),
         _trackHandles = new TrackHandles( _media, _tracksContainer, onTrackOrderChanged ),
         _trackEventHighlight = butter.config.ui.trackEventHighlight || "click",
@@ -136,8 +136,6 @@ define( [
       _tracksContainer.zoom = _zoom;
 
       var tracks = _media.tracks;
-      _hScrollBar = new Scrollbars.Horizontal( _tracksContainer ),
-      _vScrollBar = new Scrollbars.Vertical( _tracksContainer ),
 
       _container.appendChild( _tracksContainer.element );
       _container.appendChild( _hScrollBar.element );
