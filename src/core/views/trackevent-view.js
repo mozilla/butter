@@ -29,10 +29,10 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     this.update = function( options ){
       options = options || {};
       _element.style.top = "0px";
-      if( !isNaN( Number( options.start ) ) ){
+      if( options.start != null ){
         _start = options.start;
       }
-      if( !isNaN( Number( options.end ) ) ){
+      if( options.end != null ){
         _end = options.end;
       }
       resetContainer();
