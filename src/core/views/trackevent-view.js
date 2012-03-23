@@ -143,24 +143,36 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
             _element.setAttribute( "data-butter-draggable-type", "trackevent" );
             _element.setAttribute( "data-butter-trackevent-id", trackEvent.id );
 
-            DragNDrop.resizable( _element, {
-              containment: _parent.element.parentNode,
-              scroll: _parent.element.parentNode.parentNode,
-              stop: movedCallback
-            });
+            if( _parent.element && _parent.element.parentNode && _parent.element.parentNode.parentNode ){
+
+              DragNDrop.draggable( _element, {
+                containment: _parent.element.parentNode,
+                scroll: _parent.element.parentNode.parentNode,
+                stop: movedCallback
+              });
+
+              DragNDrop.resizable( _element, {
+                containment: _parent.element.parentNode,
+                scroll: _parent.element.parentNode.parentNode,
+                stop: movedCallback
+              });
+
+            }
 
             _handles = _element.querySelectorAll( ".handle" );
-            function toggleHandles( state ){
-              _handles[ 0 ].style.visibility = state ? "visible" : "hidden";
-              _handles[ 1 ].style.visibility = state ? "visible" : "hidden";
-            } //toggleHandles
-            _element.addEventListener( "mouseover", function( e ){
-              toggleHandles( true );
-            }, false );
-            _element.addEventListener( "mouseout", function( e ){
+            if( _handles && _handles.length === 2 ){
+              function toggleHandles( state ){
+                _handles[ 0 ].style.visibility = state ? "visible" : "hidden";
+                _handles[ 1 ].style.visibility = state ? "visible" : "hidden";
+              } //toggleHandles
+              _element.addEventListener( "mouseover", function( e ){
+                toggleHandles( true );
+              }, false );
+              _element.addEventListener( "mouseout", function( e ){
+                toggleHandles( false );
+              }, false );
               toggleHandles( false );
-            }, false );
-            toggleHandles( false );
+            }
 
             resetContainer();
           } //if
