@@ -6,7 +6,7 @@ define( [], function(){
 
   var CHECK_MEDIA_INTERVAL = 50;
 
-  return function( parentElement, media, tracksContainer ){
+  return function( parentElement, media, tracksContainer, hScrollbar ){
     var _container = document.createElement( "div" ),
         _node = document.createElement( "div" ),
         _line = document.createElement( "div" ),
@@ -23,6 +23,7 @@ define( [], function(){
         _isScrubbing = false,
         _lastTime = -1,
         _lastScroll = _tracksContainer.element.scrollLeft,
+        _lastZoom = -1,
         _this = this;
 
     _container.className = "time-bar-scrubber-container";
@@ -41,11 +42,9 @@ define( [], function(){
           scrollLeft = _tracksContainer.element.scrollLeft;
 
       // if we can avoid re-setting position and visibility, then do so
-      if( _lastTime !== currentTime || _lastScroll !== scrollLeft ){
+      if( _lastTime !== currentTime || _lastScroll !== scrollLeft || _lastZoom !== _zoom ){
         var pos = currentTime / duration * _tracksContainerWidth,
             adjustedPos = pos - scrollLeft;
-
-        _lastTime = currentTime;
 
         if( pos <  scrollLeft || pos > _width + scrollLeft ){
           _node.style.display = "none";
@@ -70,11 +69,12 @@ define( [], function(){
 
       } //if
 
+      _lastTime = currentTime;
+      _lastScroll = scrollLeft;
+
     } //setNodePosition
 
-    _tracksContainer.container.addEventListener( "scroll", function( e ){
-      setNodePosition();
-    }, false );
+    hScrollbar.listen( "scroll", setNodePosition );
 
     function onMouseUp( e ){
       if( _isPlaying ){
