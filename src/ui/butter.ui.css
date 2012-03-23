@@ -269,19 +269,17 @@
 }
 
 #butter-timeline .track-handle-container .handle-list {
-  width: 100%;
+  position: relative;
+  width: 110px;
   padding: 5%;
-  width: 95%;
+  width: 90%;
   padding-top: 7px;
   padding-bottom: 7px;
 }
 
-#butter-timeline .track-handle-container .handle-list .placeholder {
-  background: rgba( 0, 0, 0, 0.3 );
-}
 #butter-timeline .track-handle-container .handle-list .track-handle {
   cursor: pointer;
-  width: 95%;
+  width: 95px;
   box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
   border-radius: 6px;
   moz-border-radius: 6px;
@@ -305,30 +303,12 @@
 }
 
 #butter-timeline .track-handle-container .handle-list .placeholder {
-  width: 95%;
-  box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
-  border-radius: 6px;
-  moz-border-radius: 6px;
-  o-border-radius: 6px;
-  webkit-border-radius: 6px;
-  margin-bottom: 6px;
-  position: relative;
-  border: 1px solid #111;
-  color: #666;
-  height: 25px;
-  margin-bottom: 6px;
-  box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  moz-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  o-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141;
-  text-transform: uppercase;
-  text-align: center;
-  overflow: hidden;
-}
-
-#butter-timeline .track-handle-container .handle-list .track-handle:hover {
-  background-image: -moz-linear-gradient(center bottom,#0c0c0c 0,#2a2a2a 100%);
-  background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#0c0c0c),color-stop(1,#2a2a2a));
+  width: 95px;
+  box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  moz-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  o-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  background: transparent;
 }
 
 #butter-timeline .track-handle-container .handle-list .track-handle .menu {

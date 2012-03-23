@@ -137,6 +137,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
                 _eventManager.dispatch( "trackeventdragstopped" );
                 movedCallback();
               }
+              revert: true
             });
 
             _element.setAttribute( "data-butter-draggable-type", "trackevent" );
