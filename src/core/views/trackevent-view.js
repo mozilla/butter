@@ -126,7 +126,13 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
             DragNDrop.draggable( _element, {
               containment: _parent.element.parentNode,
               scroll: _parent.element.parentNode.parentNode,
-              stop: movedCallback
+              start: function(){
+                _eventManager.dispatch( "trackeventdragstarted" );
+              },
+              stop: function(){
+                _eventManager.dispatch( "trackeventdragstopped" );
+                movedCallback();
+              }
             });
 
             _element.setAttribute( "data-butter-draggable-type", "trackevent" );
@@ -175,6 +181,9 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
 
     _element.addEventListener( "mousedown", function ( e ) {
       _eventManager.dispatch( "trackeventmousedown", { originalEvent: e, trackEvent: trackEvent } );
+    }, false);
+    _element.addEventListener( "mouseup", function ( e ) {
+      _eventManager.dispatch( "trackeventmouseup", { originalEvent: e, trackEvent: trackEvent } );
     }, false);
     _element.addEventListener( "mouseover", function ( e ) {
       _eventManager.dispatch( "trackeventmouseover", { originalEvent: e, trackEvent: trackEvent } );

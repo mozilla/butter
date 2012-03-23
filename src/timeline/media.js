@@ -50,6 +50,7 @@ define( [
         _status = new Status( _media ),
         _trackHandles = new TrackHandles( _media, _tracksContainer, onTrackOrderChanged ),
         _trackEventHighlight = butter.config.ui.trackEventHighlight || "click",
+        _currentMouseDownTrackEvent,
         _zoom = INITIAL_ZOOM;
 
     _rootElement.className = "media-instance";
@@ -99,16 +100,26 @@ define( [
     } //onTrackEventMouseOver
 
     function onTrackEventMouseOut( e ){
-    } //onTrackEventMouseOut
+    }
+
+    function onTrackEventMouseUp( e ){
+      if( _currentMouseDownTrackEvent && _trackEventHighlight === "click" ){
+        var corn = _currentMouseDownTrackEvent.popcornOptions;
+        if( corn.target ){
+          blinkTarget( corn.target );
+        }
+      }
+    }
+
+    function onTrackEventDragStarted( e ){
+      _currentMouseDownTrackEvent = null;
+    }
 
     function onTrackEventMouseDown( e ){
       var trackEvent = e.data.trackEvent,
-          corn = trackEvent.popcornOptions,
           originalEvent = e.data.originalEvent;
 
-      if( _trackEventHighlight === "click" && corn.target ){
-        blinkTarget( corn.target );
-      } //if
+      _currentMouseDownTrackEvent = trackEvent;
 
       if( trackEvent.selected === true && originalEvent.shiftKey && _selectedTracks.length > 1 ){
         trackEvent.selected = false;
@@ -151,6 +162,8 @@ define( [
 
       _media.listen( "trackeventadded", function( e ){
         var trackEvent = e.data;
+        trackEvent.view.listen( "trackeventdragstarted", onTrackEventDragStarted );
+        trackEvent.view.listen( "trackeventmouseup", onTrackEventMouseUp );
         trackEvent.view.listen( "trackeventmousedown", onTrackEventMouseDown );
         if( _trackEventHighlight === "hover" ){
           trackEvent.view.listen( "trackeventmouseover", onTrackEventMouseOver );
@@ -160,6 +173,8 @@ define( [
 
       _media.listen( "trackeventremoved", function( e ){
         var trackEvent = e.data;
+        trackEvent.view.unlisten( "trackeventdragstarted", onTrackEventDragStarted );
+        trackEvent.view.unlisten( "trackeventmouseup", onTrackEventMouseUp );
         trackEvent.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
         if( _trackEventHighlight === "hover" ){
           trackEvent.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
