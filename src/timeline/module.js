@@ -44,43 +44,49 @@ define( [
     }; //findAbsolutePosition
 
     this.moveFrameLeft = function( event ){
-      if( butter.targettedEvent ) {
-        event.preventDefault();
-        var cornOptions = butter.targettedEvent.popcornOptions,
-            inc = event.shiftKey ? 2.5 : 0.25;
-        if( cornOptions.start > inc ) {
-          cornOptions.start -= inc;
+      for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+        if( butter.selectedEvents[ i ] ) {
+          event.preventDefault();
+          var cornOptions = butter.selectedEvents[ i ].popcornOptions,
+              inc = event.shiftKey ? 2.5 : 0.25;
           if( !event.ctrlKey && !event.metaKey ) {
+            if( cornOptions.start > inc ) {
+              cornOptions.start -= inc;
+              cornOptions.end -= inc;
+            } else {
+              cornOptions.end = cornOptions.end - cornOptions.start;
+              cornOptions.start = 0;
+            } // if
+          } else if ( cornOptions.end - cornOptions.start > inc ) {
             cornOptions.end -= inc;
-          }
-        } else {
-          if( !event.ctrlKey ) {
-            cornOptions.end = cornOptions.end - cornOptions.start;
-          }
-          cornOptions.start = 0;
-        }
-        butter.targettedEvent.update( cornOptions );
-      }
+          } else {
+            cornOptions.end = cornOptions.start + 0.25;
+          } // if
+          butter.selectedEvents[ i ].update( cornOptions );
+        } // if
+      } // for
     }; //moveFrameLeft
 
     this.moveFrameRight = function( event ){
-      if( butter.targettedEvent ) {
-        event.preventDefault();
-        var cornOptions = butter.targettedEvent.popcornOptions,
-            inc = event.shiftKey ? 2.5 : 0.25;
-        if( cornOptions.end < butter.duration - inc ) {
-          cornOptions.end += inc;
-          if( !event.ctrlKey && !event.metaKey ) {
-            cornOptions.start += inc;
+      for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+        if( butter.selectedEvents[ i ] ) {
+          event.preventDefault();
+          var cornOptions = butter.selectedEvents[ i ].popcornOptions,
+              inc = event.shiftKey ? 2.5 : 0.25;
+          if( cornOptions.end < butter.duration - inc ) {
+            cornOptions.end += inc;
+            if( !event.ctrlKey && !event.metaKey ) {
+              cornOptions.start += inc;
+            }
+          } else {
+            if( !event.ctrlKey && !event.metaKey ) {
+              cornOptions.start += butter.duration - cornOptions.end;
+            }
+            cornOptions.end = butter.duration;
           }
-        } else {
-          if( !event.ctrlKey ) {
-            cornOptions.start += butter.duration - cornOptions.end;
-          }
-          cornOptions.end = butter.duration;
-        }
-        butter.targettedEvent.update( cornOptions );
-      }
+          butter.selectedEvents[ i ].update( cornOptions );
+        } // if
+      } // for
     }; //moveFrameRight
 
     butter.listen( "mediaadded", function( event ){
@@ -128,10 +134,70 @@ define( [
       return butter.currentTime / _currentMedia.duration * ( _currentMedia.container.offsetWidth );
     }; //currentTimeInPixels
 
-    window.addEventListener( "keypress", function( e ){
-      if( e.which === 32 && __unwantedKeyPressElements.indexOf( e.target.nodeName ) === -1 ){
+    var processKey = {
+      32: function( e ) { // space key
         butter.currentMedia.paused = !butter.currentMedia.paused;
-      } //if
+      },
+      37: function( e ) { // left key
+        if( butter.selectedEvents.length ) {
+          butter.timeline.moveFrameLeft( e );
+        } else {
+          butter.currentTime -= e.shiftKey ? 2.5 : 0.25;
+        }
+      },
+      38: function( e ) { // up key
+        var track,
+            trackEvent,
+            nextTrack;
+        for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+          trackEvent = butter.selectedEvents[ i ];
+          track = trackEvent.track;
+          nextTrack = butter.tracks[ butter.tracks.indexOf( track ) - 1 ]
+          if( nextTrack ) {
+            track.removeTrackEvent( trackEvent );
+            nextTrack.addTrackEvent( trackEvent );
+          } // if
+        } // for
+      },
+      39: function( e ) { // right key
+        if( butter.selectedEvents.length ) {
+          butter.timeline.moveFrameRight( e );
+        } else {
+          butter.currentTime += e.shiftKey ? 2.5 : 0.25;
+        }
+      },
+      40: function( e ) { // down key
+        var track,
+            trackEvent,
+            nextTrack;
+        for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+          trackEvent = butter.selectedEvents[ i ];
+          track = trackEvent.track;
+          nextTrack = butter.tracks[ butter.tracks.indexOf( track ) + 1 ]
+          if( nextTrack ) {
+            track.removeTrackEvent( trackEvent );
+            nextTrack.addTrackEvent( trackEvent );
+          } // if
+        } // for
+      },
+      27: function( e ) { // esc key
+        for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+          butter.selectedEvents[ i ].selected = false;
+        } // for
+        butter.selectedEvents = [];
+      },
+      46: function( e ) { // del key
+        for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+          butter.selectedEvents[ i ].track.removeTrackEvent( butter.selectedEvents[ i ] );
+        } // for
+      }
+    };
+
+    window.addEventListener( "keypress", function( e ){
+      var key = e.which || e.keyCode;
+      if( processKey[ key ] && __unwantedKeyPressElements.indexOf( e.target.nodeName ) === -1 ){
+        processKey[ key ]( e );
+      } // if
     }, false );
 
     Object.defineProperties( this, {
@@ -151,4 +217,3 @@ define( [
 
   return Timeline;
 }); //define
-
