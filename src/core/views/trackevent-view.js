@@ -29,8 +29,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
     this.update = function( options ){
       options = options || {};
       _element.style.top = "0px";
-      _start = options.start || _start;
-      _end = options.end || _end;
+      if( options.start != null ){
+        _start = options.start;
+      }
+      if( options.end != null ){
+        _end = options.end;
+      }
       resetContainer();
     }; //update
 
