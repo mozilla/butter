@@ -53,6 +53,7 @@ define( [
         _currentMouseDownTrackEvent,
         _zoom = INITIAL_ZOOM;
 
+    butter.selectedEvents = [];
     _rootElement.className = "media-instance";
     _rootElement.id = "media-instance" + media.id;
     _container.className = "media-container";
@@ -133,10 +134,10 @@ define( [
               tracks[ t ].deselectEvents( trackEvent );
             } //if
           } //for
-          _selectedEvents = [ trackEvent ];
+          butter.selectedEvents = [ trackEvent ];
         }
         else {
-          _selectedEvents.push( trackEvent );
+          butter.selectedEvents.push( trackEvent );
         } //if
       } //if
     } //onTrackEventSelected
