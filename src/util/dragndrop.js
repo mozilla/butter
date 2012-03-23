@@ -607,7 +607,7 @@ define([], function(){
     };
 
     _instance.removeItem = function( item ){
-      _elements.splice( _element.indexOf( item ), 1 );
+      _elements.splice( _elements.indexOf( item ), 1 );
       item.removeEventListener( "mousedown", onElementMouseDown, false );
     }
 
