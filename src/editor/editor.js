@@ -87,33 +87,13 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
         },
         submit: function( e ){
           var duration = TimeUtil.roundTime( butter.currentMedia.duration ),
-              popcornData = e.data.eventData,
-              alsoClose = e.data.alsoClose;
-          if( popcornData ){
-            popcornData.start = Number( popcornData.start );
-            popcornData.end = Number( popcornData.end );
-            if( isNaN( popcornData.start ) ||
-                isNaN( popcornData.end ) ||
-                popcornData.start < 0 ||
-                popcornData.end > duration ||
-                popcornData.start >= popcornData.end ){
-              trackEvent.dispatch( "trackeventupdatefailed", {
-                error: "trackeventupdate::invalidtime",
-                message: "Invalid start/end times.",
-                attemptedData: popcornData
-              });
-            }
-            else{
-              if( popcornData.target !== _currentTarget ){
-                _currentTarget = popcornData.target;
-                blinkTarget();
-              } //if
-              trackEvent.update( popcornData );
-              if( alsoClose ){
-                _dialog.close();
-              } //if
-            } //if
+              popcornData = e.data.eventData;
+
+          if( popcornData.target !== _currentTarget ){
+            _currentTarget = popcornData.target;
+            blinkTarget();
           } //if
+          trackEvent.update( popcornData, duration );
         },
         close: function( e ){
           trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );

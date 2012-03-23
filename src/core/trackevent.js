@@ -47,7 +47,23 @@ define( [
     _popcornOptions.end = _popcornOptions.end || _popcornOptions.start + 1;
     _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
 
-    this.update = function( updateOptions ) {
+    this.update = function( updateOptions, duration ) {
+      updateOptions.start = +updateOptions.start;
+      updateOptions.end = +updateOptions.end;
+      if( ( updateOptions.start != updateOptions.start ) ||
+          ( updateOptions.end != updateOptions.end ) ||
+          updateOptions.start < 0 ||
+          updateOptions.end > duration ||
+          updateOptions.start >= updateOptions.end ){
+        _this.dispatch( "trackeventupdatefailed", {
+          error: "trackeventupdate::invalidtime",
+          message: "Invalid start/end times.",
+          mediaDuration: duration,
+          attemptedData: updateOptions
+        });
+        return;
+      } //if
+
       for ( var prop in updateOptions ) {
         if ( updateOptions.hasOwnProperty( prop ) ) {
           _popcornOptions[ prop ] = updateOptions[ prop ];
@@ -55,10 +71,10 @@ define( [
       } //for
       if ( _popcornOptions.start ) {
         _popcornOptions.start = TimeUtil.roundTime( _popcornOptions.start );
-      }
+      } //if
       if ( _popcornOptions.end ) {
         _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
-      }
+      } //if
       _em.dispatch( "trackeventupdated", _this );
 
       _view.update( _popcornOptions );

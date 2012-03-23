@@ -21,16 +21,14 @@
               okPressed,
               cancelPressed;
 
-          function sendData( alsoClose ){
-            alsoClose = !!alsoClose; 
+          function sendData(){
             var popcornOptions = {};
             for( var item in _manifest ) {
               popcornOptions[ item ] = document.getElementById( item ).value;
             }
             document.getElementById( "message" ).innerHTML = "";
             _comm.send( "submit", {
-              eventData: popcornOptions,
-              alsoClose: alsoClose
+              eventData: popcornOptions
             });
           } //sendData
 
@@ -57,6 +55,7 @@
               var element = document.getElementById( item );
               element.value = e.data[ item ];
             } //for
+            _comm.send( "close" );
           });
 
           _comm.listen( "trackeventupdatefailed", function( e ) {
