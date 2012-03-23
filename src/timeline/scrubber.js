@@ -104,7 +104,7 @@ define( [], function(){
           }
           else{
             _currentMousePos += SCROLL_DISTANCE;
-            _tracksContainer.scrollLeft += SCROLL_DISTANCE;
+            _tracksContainer.element.scrollLeft += SCROLL_DISTANCE;
             evalMousePosition();
             setNodePosition();
           }
@@ -118,7 +118,7 @@ define( [], function(){
           }
           else{
             _currentMousePos -= SCROLL_DISTANCE;
-            _tracksContainer.scrollLeft -= SCROLL_DISTANCE;
+            _tracksContainer.element.scrollLeft -= SCROLL_DISTANCE;
             evalMousePosition();
             setNodePosition();
           }
