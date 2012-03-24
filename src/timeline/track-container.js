@@ -18,6 +18,10 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     _element.className = "tracks-container-wrapper";
     _container.className = "tracks-container";
 
+    _container.addEventListener( "mousedown", function( e ){
+      _this.deselectOthers();
+    }, false );
+
     this.orderTracks = function( orderedTracks ){
       for( var i=0, l=orderedTracks.length; i<l; ++i ){
         var trackElement = orderedTracks[ i ].view.element;
@@ -28,14 +32,10 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     }; //orderTracks
 
     this.deselectOthers = function() {
-      for ( var j in _tracks ) {
-        var events = _tracks[ j ].trackEvents;
-        for ( var i in events ) {
-          if ( events[ i ].selected ) {
-            events[ i ].selected = false;
-          } //if
-        } //for
-      } //for
+      for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+        butter.selectedEvents[ i ].selected = false;
+      } // for
+      butter.selectedEvents = [];
       return _this;
     }; //deselectOthers
 

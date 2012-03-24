@@ -186,15 +186,20 @@ define( [
         } // for
         butter.selectedEvents = [];
       },
-      46: function( e ) { // del key
-        for( var i = 0; i < butter.selectedEvents.length; i++ ) {
-          butter.selectedEvents[ i ].track.removeTrackEvent( butter.selectedEvents[ i ] );
-        } // for
+      8: function( e ) { // del key
+        if( butter.selectedEvents.length ) {
+          e.preventDefault();
+          for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+            butter.selectedEvents[ i ].track.removeTrackEvent( butter.selectedEvents[ i ] );
+          } // for
+        } // if
       }
     };
 
     window.addEventListener( "keypress", function( e ){
       var key = e.which || e.keyCode;
+      // this allows backspace and del to do the same thing on windows and mac keyboards
+      key = key === 46 ? 8 : key;
       if( processKey[ key ] && __unwantedKeyPressElements.indexOf( e.target.nodeName ) === -1 ){
         processKey[ key ]( e );
       } // if
