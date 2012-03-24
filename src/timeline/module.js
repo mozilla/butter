@@ -134,17 +134,50 @@ define( [
       return butter.currentTime / _currentMedia.duration * ( _currentMedia.container.offsetWidth );
     }; //currentTimeInPixels
 
+    var orderedTrackEvents = butter.orderedTrackEvent = [];
+
+    butter.listen( "trackeventadded", function( e ) {
+      var trackEvent = e.data,
+          index = 0;
+      if( orderedTrackEvents.indexOf( trackEvent ) === -1 ){
+        while( orderedTrackEvents[ index ] && orderedTrackEvents[ index ].popcornOptions.start <= trackEvent.popcornOptions.start ){
+          index++;
+        } // while
+        orderedTrackEvents.splice( index, 0, trackEvent );
+      } // if
+    }); // listen
+
+    butter.listen( "trackeventremoved", function( e ) {
+      var index = orderedTrackEvents.indexOf( e.data );
+      if( index > -1 ){
+        orderedTrackEvents.splice( index, 1 );
+      } // if
+    }); // listen
+
+    butter.listen( "trackeventupdated", function( e ) {
+      var trackEvent = e.target,
+          index = orderedTrackEvents.indexOf( trackEvent );
+      if( index > -1 ){
+        orderedTrackEvents.splice( index, 1 );
+      } // if
+      index = 0;
+      while( orderedTrackEvents[ index ] && orderedTrackEvents[ index ].popcornOptions.start <= trackEvent.popcornOptions.start ){
+        index++;
+      } // while
+      orderedTrackEvents.splice( index, 0, trackEvent );
+    }); // listen
+
     var processKey = {
       32: function( e ) { // space key
         butter.currentMedia.paused = !butter.currentMedia.paused;
-      },
+      }, // space key
       37: function( e ) { // left key
         if( butter.selectedEvents.length ) {
           butter.timeline.moveFrameLeft( e );
         } else {
           butter.currentTime -= e.shiftKey ? 2.5 : 0.25;
-        }
-      },
+        } // if
+      }, // left key
       38: function( e ) { // up key
         var track,
             trackEvent,
@@ -158,14 +191,14 @@ define( [
             nextTrack.addTrackEvent( trackEvent );
           } // if
         } // for
-      },
+      }, // up key
       39: function( e ) { // right key
         if( butter.selectedEvents.length ) {
           butter.timeline.moveFrameRight( e );
         } else {
           butter.currentTime += e.shiftKey ? 2.5 : 0.25;
-        }
-      },
+        } // if
+      }, // right key
       40: function( e ) { // down key
         var track,
             trackEvent,
@@ -179,13 +212,13 @@ define( [
             nextTrack.addTrackEvent( trackEvent );
           } // if
         } // for
-      },
+      }, // down key
       27: function( e ) { // esc key
         for( var i = 0; i < butter.selectedEvents.length; i++ ) {
           butter.selectedEvents[ i ].selected = false;
         } // for
         butter.selectedEvents = [];
-      },
+      }, // esc key
       8: function( e ) { // del key
         if( butter.selectedEvents.length ) {
           e.preventDefault();
@@ -193,7 +226,30 @@ define( [
             butter.selectedEvents[ i ].track.removeTrackEvent( butter.selectedEvents[ i ] );
           } // for
         } // if
-      }
+      }, // del key
+      9: function( e ) { // tab key
+        if( butter.selectedEvents.length <= 1 ){
+          e.preventDefault();
+          var index = 0,
+              direction = e.shiftKey ? -1 : 1;
+          if( orderedTrackEvents.indexOf( butter.selectedEvents[ 0 ] ) > -1 ){
+            index = orderedTrackEvents.indexOf( butter.selectedEvents[ 0 ] );
+            if( orderedTrackEvents[ index+direction ] ){
+              index+=direction;
+            } else if( !e.shiftKey ){
+              index = 0;
+            } else {
+              index = orderedTrackEvents.length - 1;
+            } // if
+          } // if
+          for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+            butter.selectedEvents[ i ].selected = false;
+          } // for
+          butter.selectedEvents = [];
+          orderedTrackEvents[ index ].selected = true;
+          butter.selectedEvents.push( orderedTrackEvents[ index ] );
+        } // if
+      } // tab key
     };
 
     window.addEventListener( "keypress", function( e ){

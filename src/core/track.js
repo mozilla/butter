@@ -137,7 +137,6 @@ define( [
         _trackEvents.target = _target;
       } //if
       _trackEvents.push( trackEvent );
-      trackEvent.track = _this;
       _em.repeat( trackEvent, [
         "trackeventupdated",
         "trackeventselected",
