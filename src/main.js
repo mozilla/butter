@@ -16,7 +16,9 @@
             "./modules",
             "./dependencies",
             "ui/ui",
-            "util/xhr"
+            "util/xhr",
+            "./core/undomanager",
+            "./modules"
           ],
           function(
             EventManagerWrapper,
@@ -27,7 +29,9 @@
             Modules,
             Dependencies,
             UI,
-            XHR
+            XHR,
+            UndoManager,
+            Modules
           ){
 
     var __guid = 0,
@@ -48,6 +52,7 @@
           _id = "Butter" + __guid++,
           _logger = new Logger( _id ),
           _page,
+          _undoManager = UndoManager.getInstance(),
           _config = {
             ui: {},
             icons: {},
@@ -78,6 +83,39 @@
           throw new Error("No media object is selected");
         } //if
       } //checkMedia
+
+      function addTrackEventCommand ( options ){
+        var track = options.track,
+            trackEvent;
+
+        return {
+          execute: function(){
+            trackEvent = track.addTrackEvent({
+              type: options.type,
+              popcornOptions: options.popcornOptions
+            });
+            return trackEvent;
+          },
+          undo: function(){
+            track.removeTrackEvent( trackEvent );
+          }
+        };
+      };
+
+      document.addEventListener( "keydown", function( e ){
+        if ( e.ctrlKey && e.shiftKey && e.keyCode === 90 ){
+          _undoManager.canRedo() && _undoManager.redo();
+        }
+        else if ( e.ctrlKey && e.keyCode === 90 ){
+          _undoManager.canUndo() && _undoManager.undo();
+        }
+      });
+
+      this.addTrackEvent = function( options ){
+        var commandAddTrackEvent = addTrackEventCommand( options );
+        _undoManager.register( commandAddTrackEvent );
+        return commandAddTrackEvent.execute();
+      }
 
       this.getManifest = function ( name ) {
         checkMedia();
