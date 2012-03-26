@@ -4,14 +4,14 @@
 
 define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
-  return function( media, tracksContainer ){ 
+  return function( media, tracksContainer, hScrollbar ){ 
 
     var _element = document.createElement( "div" ),
         _canvas = document.createElement( "canvas" ),
         _canvasContainer = document.createElement( "div" ),
         _media = media,
         _tracksContainer = tracksContainer,
-        _scrubber = new Scrubber( _element, _media, _tracksContainer ),
+        _scrubber = new Scrubber( _element, _media, _tracksContainer, hScrollbar ),
         _this = this;
 
     _element.className = "time-bar";
