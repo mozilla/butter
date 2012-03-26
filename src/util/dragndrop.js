@@ -17,6 +17,28 @@ define([], function(){
   // dataTransfer.getData seems to report nothing
   var __currentDraggingElement;
 
+  var __nullRect = {
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0
+  };
+
+  function getPaddingRect( element ){
+    var style = getComputedStyle( element ),
+          top = style.getPropertyValue( "padding-top" ),
+          left = style.getPropertyValue( "padding-left" ),
+          bottom = style.getPropertyValue( "padding-bottom" ),
+          right = style.getPropertyValue( "padding-right" );
+
+      return {
+        top: Number(top.substring( 0, top.indexOf( "px" ) ) ),
+        left: Number(left.substring( 0, left.indexOf( "px" ) ) ),
+        bottom: Number(bottom.substring( 0, bottom.indexOf( "px" ) ) ),
+        right: Number(right.substring( 0, right.indexOf( "px" ) ) ),
+      };
+  }
+
   function __getWindowRect(){
     return {
       top: 0,
@@ -38,7 +60,7 @@ define([], function(){
   function __drag( element, elementRect, mousePos ){
     var coveredDroppable;
     for( var i=__droppables.length - 1; i>=0; --i ){
-      if( !coveredDroppable && __droppables[ i ].drag( element, elementRect, mousePos ) ){
+      if( element !== __droppables[ i ].element && !coveredDroppable && __droppables[ i ].drag( element, elementRect, mousePos ) ){
         __droppables[ i ].remember( element );
         coveredDroppable = __droppables[ i ];
       }
@@ -268,6 +290,7 @@ define([], function(){
     }, false );
 
     __droppables.push({
+      element: element,
       remember: function( dragElement ){
         if( !_draggedElement ){
           element.classList.add( _hoverClass );
@@ -322,6 +345,7 @@ define([], function(){
     var _containment = options.containment,
         _scroll = options.scroll,
         _axis = options.axis,
+        _revert = options.revert,
         _mouseOffset,
         _mousePos,
         _elementRect,
@@ -333,7 +357,12 @@ define([], function(){
         _updateInterval = -1,
         _onStart = options.start || function(){},
         _onStop = options.stop || function(){ return false; },
-        _originalPosition;
+        _originalPosition,
+        _containmentPadding = __nullRect;
+
+    if( _containment ){
+      _containmentPadding = getPaddingRect( _containment );
+    }
 
     function update(){
       updatePosition();
@@ -401,7 +430,7 @@ define([], function(){
       clearInterval( _updateInterval );
       _updateInterval = -1;
       _onStop();
-      if( !__drop() ){
+      if( !__drop() && _revert ){
         element.style.left = _originalPosition[ 0 ] + "px";
         element.style.top = _originalPosition[ 1 ] + "px";
       }
@@ -422,7 +451,7 @@ define([], function(){
           y = _containmentRect.bottom - _elementRect.height;
         }
         //TODO: Scrolling for Y
-        element.style.top = ( y - _offsetParentRect.top ) + "px";
+        element.style.top = ( y - _offsetParentRect.top - _containmentPadding.top ) + "px";
       }
 
       if( !_axis || _axis.indexOf( "x" ) > -1 ){
@@ -440,7 +469,7 @@ define([], function(){
         else if( r > _containmentRect.right ){
           x = _containmentRect.right - _elementRect.width;
         }
-        element.style.left = ( x - _offsetParentRect.left ) + "px";
+        element.style.left = ( x - _offsetParentRect.left - _containmentPadding.left ) + "px";
       }
 
       _elementRect = element.getBoundingClientRect();
@@ -463,11 +492,135 @@ define([], function(){
     element.addEventListener( "mousedown", onMouseDown, false );
   }
 
+  function Sortable( parentElement, options ){
+
+    var _onChange = options.change || function(){},
+        _elements = [],
+        _instance = {},
+        _mouseDownPosition,
+        _draggingElement,
+        _draggingOriginalPosition,
+        _moved,
+        _hoverElement,
+        _placeHolder;
+
+    function createPlaceholder( victim ){
+      var placeholder = victim.cloneNode( false );
+      placeholder.classList.add( "placeholder" );
+      parentElement.replaceChild( placeholder, victim );
+      return placeholder;
+    }
+
+    function positionElement( diff ){
+      _draggingElement.style.top = _draggingOriginalPosition - diff + "px";
+    }
+
+    function onElementMouseMove( e ){
+      if( !_moved ){
+        _moved = true;
+        _placeHolder = createPlaceholder( _draggingElement );
+        parentElement.appendChild( _draggingElement );
+        _draggingElement.style.position = "absolute";
+        _draggingElement.style.zIndex = MAXIMUM_Z_INDEX;
+        positionElement( 0 );
+      }
+      else{
+        var diff = _mouseDownPosition - e.clientY;
+        positionElement( diff );
+        var dragElementRect = _draggingElement.getBoundingClientRect();
+        for( var i=_elements.length - 1; i>=0; --i ){
+          var element = _elements[ i ];
+
+          if( element === _draggingElement ){
+            continue;
+          }
+
+          var rect = element.getBoundingClientRect();
+
+          var maxL = Math.max( dragElementRect.left, rect.left ),
+              maxT = Math.max( dragElementRect.top, rect.top ),
+              minR = Math.min( dragElementRect.right, rect.right ),
+              minB = Math.min( dragElementRect.bottom, rect.bottom );
+
+          if( minR < maxL || minB < maxT ){
+            continue;
+          }
+
+          var overlapDims = [ minR - maxL, minB - maxT ];
+
+          if( overlapDims[ 0 ] * overlapDims[ 1 ] / 2 > dragElementRect.width * dragElementRect.height / 4 ){
+            _hoverElement = element;
+            var newPlaceHolder = createPlaceholder( _hoverElement );
+            parentElement.replaceChild( _hoverElement, _placeHolder );
+            _placeHolder = newPlaceHolder;
+            var orderedElements = [],
+                childNodes = parentElement.childNodes;
+            for( var j=0, l=childNodes.length; j<l; ++j ){
+              var child = childNodes[ j ];
+              if( child !== _draggingElement ){
+                if( child !== _placeHolder ){
+                  orderedElements.push( child );
+                }
+                else{
+                  orderedElements.push( _draggingElement );
+                }
+              }
+            }
+            _onChange( orderedElements );
+          }
+        }
+      }
+    }
+
+    function onElementMouseDown( e ){
+      if( e.which !== 1 ){
+        return;
+      }
+      _moved = false;
+      _draggingElement = e.target;
+      _draggingOriginalPosition = _draggingElement.offsetTop;
+      var style = getComputedStyle( _draggingElement );
+      _oldZIndex = style.getPropertyValue( "z-index" );
+      _oldPositionStyle = style.getPropertyValue( "position" );
+      _mouseDownPosition = e.clientY;
+      window.addEventListener( "mouseup", onElementMouseUp, false );
+      window.addEventListener( "mousemove", onElementMouseMove, false );
+    }
+
+    function onElementMouseUp( e ){
+      _draggingElement.style.zIndex = _oldZIndex;
+      window.removeEventListener( "mouseup", onElementMouseUp, false );
+      window.removeEventListener( "mousemove", onElementMouseMove, false );
+      _moved = false;
+      if( _placeHolder ){
+        _draggingElement.style.zIndex = "";
+        _draggingElement.style.position = "";
+        _draggingElement.style.top = "";
+        parentElement.replaceChild( _draggingElement, _placeHolder );
+        _placeHolder = null;
+      }
+      
+    }
+
+    _instance.addItem = function( item ){
+      _elements.push( item );
+      item.addEventListener( "mousedown", onElementMouseDown, false );
+    };
+
+    _instance.removeItem = function( item ){
+      _elements.splice( _elements.indexOf( item ), 1 );
+      item.removeEventListener( "mousedown", onElementMouseDown, false );
+    }
+
+    return _instance;
+  }
+
   return {
     draggable: Draggable,
     droppable: Droppable,
     helper: Helper,
-    resizable: Resizable
+    resizable: Resizable,
+    sortable: Sortable
   };
 
 });

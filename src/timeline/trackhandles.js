@@ -3,61 +3,34 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [
-          "dialog/iframe-dialog"
+          "dialog/iframe-dialog",
+          "util/dragndrop"
         ], 
-        function( IFrameDialog ){
+        function( IFrameDialog, DragNDrop ){
 
   return function( media, tracksContainer, orderChangedCallback ){
 
     var _media = media,
         _container = document.createElement( "div" ),
-        _list = document.createElement( "div" ),
+        _droppableContainer = document.createElement( "div" ),
+        _listElement = document.createElement( "div" ),
         _tracks = {},
         _menus = [],
         _this = this;
 
     _container.className = "track-handle-container";
-    _list.className = "handle-list";
+    _listElement.className = "handle-list";
 
-    _container.appendChild( _list );
+    _container.appendChild( _listElement );
 
-    $( _list ).sortable({
-      axis: "y",
-      placeholder: "placeholder",
-      start: function( e, ui ){
-        // put this first to make ordering sane
-        _list.insertBefore( ui.item[ 0 ], _list.firstChild );
-        for( var i=0, l=_menus.length; i<l; ++i ){
-          _menus[ i ].style.display = "none";
-        } //for
-      },
-      change: function( e, ui ){
-        var draggingIndex = ui.placeholder.index(),
-            orderedTracks = [];
-
-        for( var i=0, l=_list.childNodes.length; i<l; ++i ){
-
-          var childNode = _list.childNodes[ i ];
-
-          if( childNode !== ui.item[ 0 ] ){
-
-            if( childNode === ui.placeholder[ 0 ] ){
-              orderedTracks.push( _tracks[ ui.item[ 0 ].getAttribute( "data-butter-track-id" ) ].track );
-            }
-            else{
-              orderedTracks.push( _tracks[ childNode.getAttribute( "data-butter-track-id" ) ].track );
-            } //if
-
-          } //if
-
-        } //for
-
+    var _sortable = DragNDrop.sortable( _listElement, {
+      change: function( elements ){
+        var orderedTracks = [];
+        for( var i=0, l=elements.length; i<l; ++i ){
+          var id = elements[ i ].getAttribute( "data-butter-track-id" );
+          orderedTracks.push( _tracks[ id ].track );
+        }
         orderChangedCallback( orderedTracks );
-      }, //change
-      stop: function(){
-        for( var i=0, l=_menus.length; i<l; ++i ){
-          _menus[ i ].style.display = "block";
-        } //for
       }
     });
 
@@ -119,7 +92,9 @@ define( [
       trackDiv.appendChild( document.createTextNode( trackName ) );
       trackDiv.appendChild( menuDiv );
 
-      _list.appendChild( trackDiv );
+      _sortable.addItem( trackDiv );
+
+      _listElement.appendChild( trackDiv );
 
       _tracks[ trackId ] = {
         id: trackId,
@@ -131,7 +106,8 @@ define( [
 
     _media.listen( "trackremoved", function( e ){
       var trackId = e.data.id;
-      _list.removeChild( _tracks[ trackId ].element );
+      _listElement.removeChild( _tracks[ trackId ].element );
+      _sortable.removeItem( _tracks[ trackId ].element );
       _menus.splice( _menus.indexOf( _tracks[ trackId ].menu ), 1 );
       delete _tracks[ trackId ];
     });
