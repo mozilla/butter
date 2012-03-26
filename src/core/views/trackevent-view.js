@@ -136,7 +136,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
               stop: function(){
                 _eventManager.dispatch( "trackeventdragstopped" );
                 movedCallback();
-              }
+              },
               revert: true
             });
 
