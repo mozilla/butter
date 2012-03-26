@@ -553,12 +553,13 @@ define([], function(){
             var newPlaceHolder = createPlaceholder( _hoverElement );
             parentElement.replaceChild( _hoverElement, _placeHolder );
             _placeHolder = newPlaceHolder;
-            var orderedElements = [];
-            for( var j=0, l=parentElement.childNodes.length; j<l; ++j ){
-              var child = parentElement.childNodes[ j ];
+            var orderedElements = [],
+                childNodes = parentElement.childNodes;
+            for( var j=0, l=childNodes.length; j<l; ++j ){
+              var child = childNodes[ j ];
               if( child !== _draggingElement ){
                 if( child !== _placeHolder ){
-                  orderedElements.push( parentElement.childNodes[ j ] );
+                  orderedElements.push( childNodes[ j ] );
                 }
                 else{
                   orderedElements.push( _draggingElement );
