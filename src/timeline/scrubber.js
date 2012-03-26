@@ -52,7 +52,7 @@ define( [], function(){
         var pos = currentTime / duration * _tracksContainerWidth,
             adjustedPos = pos - scrollLeft;
 
-        if( pos <  scrollLeft || pos > _width + scrollLeft ){
+        if( pos <  scrollLeft || Math.floor( pos ) > _width + scrollLeft ){
           _node.style.display = "none";
         }
         else {
