@@ -559,7 +559,7 @@ define([], function(){
               var child = childNodes[ j ];
               if( child !== _draggingElement ){
                 if( child !== _placeHolder ){
-                  orderedElements.push( childNodes[ j ] );
+                  orderedElements.push( child );
                 }
                 else{
                   orderedElements.push( _draggingElement );
