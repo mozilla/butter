@@ -70,6 +70,7 @@
   position: absolute;
   z-index: 2100000000;
   opacity: 1;
+  pointer-events: none;
 }
 
 .butter-highlight[ blink="true" ]{
@@ -643,7 +644,7 @@
   top: 0;
 }
 
-#butter-timeline .tracks-container {
+#butter-timeline .tracks-container-wrapper {
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -659,24 +660,17 @@
   webkit-border-radius: 5px;
 }
 
-#butter-timeline .tracks-container .trackliner-root {
-  width: 100%;
-  height: 135px;
-  padding: 0px 0px 0px 0px;
-  margin: 0px 0px 0px 0px;
-} 
-
-#butter-timeline .tracks-container .trackliner-container {
+#butter-timeline .tracks-container-wrapper .tracks-container {
   width: 100%;
   position: relative;
   background: transparent;
   font-size: 100%;
   outline: none;
   padding-top: 7px;
-  padding-bottom: 7px;
+  padding-bottom: 3px;
 }
 
-#butter-timeline .tracks-container .trackliner-event {
+#butter-timeline .tracks-container .butter-track-event {
   box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 );
   moz-box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 );
   o-box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 );
@@ -685,6 +679,10 @@
   moz-border-radius: 5px;
   o-border-radius: 5px;
   webkit-border-radius: 5px;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
   background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(255,255,51)), color-stop(1, rgb(140,215,90)) );
   background-image: -moz-linear-gradient( center bottom, rgb(255,255,0) 0%, rgb(200,200,0) 100% );
   font: normal 10px/25px Arial, Helvetica, sans-serif;
@@ -701,9 +699,8 @@
   position: absolute;
 }
 
-#butter-timeline .tracks-container .trackliner-track {
+#butter-timeline .tracks-container .butter-track {
   width: 100%;
-  box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
   border-radius: 6px;
   moz-border-radius: 6px;
   o-border-radius: 6px;
@@ -725,7 +722,14 @@
   webkit-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6);
 }
 
-#butter-timeline .tracks-container .trackliner-event[selected="true"] {
+#butter-timeline .tracks-container .butter-track.draggable-hover {
+  box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6), inset 0 0px 10px #3355ee, inset 1px 1px 10px #3355ee;
+  moz-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6), inset 0 0px 10px #1122cc;
+  o-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6), inset 0 0px 10px #1122cc;
+  webkit-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0px -1px 1px rgba(0,0,0,0.6), inset 0 0px 10px #3355cc;
+}
+
+#butter-timeline .tracks-container .butter-track-event[selected="true"] {
   box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 ),
               2px 2px 2px rgba( 65, 80, 215, 0.8 ),
               -2px 2px 2px rgba( 65, 80, 215, 0.8 ),
@@ -748,13 +752,13 @@
               -2px -2px 2px rgba( 65, 80, 215, 0.8 );
 }
 
-#butter-timeline .tracks-container .trackliner-track .track-title {
+#butter-timeline .tracks-container .butter-track .track-title {
   position: absolute;
   left: 5px;
   top: 50%;
 }
 
-#butter-timeline .trackliner-event .ui-resizable-handle {
+#butter-timeline .butter-track-event .handle {
   position: absolute;
   height: 100%;
   min-width: 15px;
@@ -762,17 +766,23 @@
   background-color: rgba( 255, 255, 255, 0.5 );
 }
 
-#butter-timeline .trackliner-event .ui-resizable-handle:hover {
+#butter-timeline .butter-track-event .handle:hover {
 }
 
-#butter-timeline .trackliner-event .ui-resizable-e {
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
+#butter-timeline .butter-track-event .left-handle {
+  border-top-left-radius: 6px;
+  border-bottom-left-radius: 6px;
+  left: 0px;
+  top: 0px;
+  cursor: w-resize;
 }
 
-#butter-timeline .trackliner-event .ui-resizable-w {
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+#butter-timeline .butter-track-event .right-handle {
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
+  right: 0px;
+  top: 0px;
+  cursor: e-resize;
 }
 
 #butter-timeline #butter-plugin {
@@ -795,6 +805,12 @@
 	height: 140px;
 	webkit-box-shadow: 0 1px 0 #656565;
 	width: 100px;
+  margin: 0;
+}
+
+#butter-plugin li {
+  list-style-type: none;
+  cursor: pointer;
 }
 
 #butter-timeline .zoom-bar {

@@ -2,7 +2,20 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "./logger", "./eventmanager", "util/lang", "util/time" ], function( Logger, EventManager, LangUtil, TimeUtil ) {
+define( [
+          "./logger", 
+          "./eventmanager",
+          "util/lang",
+          "util/time",
+          "./views/trackevent-view"
+        ],
+        function( 
+          Logger, 
+          EventManager, 
+          LangUtil, 
+          TimeUtil,
+          TrackEventView
+        ){
 
   var __guid = 0;
 
@@ -16,12 +29,13 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time" ], function( Lo
         _logger = new Logger( _id ),
         _em = new EventManager( this ),
         _track,
-        _type = options.type,
+        _type = options.type + "",
         _properties = [],
         _popcornOptions = options.popcornOptions || {
           start: 0,
           end: 1
         },
+        _view = new TrackEventView( this, _type, _popcornOptions ),
         _selected = false;
 
     if( !_type ){
@@ -39,16 +53,31 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time" ], function( Lo
           _popcornOptions[ prop ] = updateOptions[ prop ];
         } //if
       } //for
-      if ( _popcornOptions.start ) {
+      if ( _popcornOptions.start != null ) {
         _popcornOptions.start = TimeUtil.roundTime( _popcornOptions.start );
       }
-      if ( _popcornOptions.end ) {
+      if ( _popcornOptions.end != null ) {
         _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
       }
       _em.dispatch( "trackeventupdated", _this );
+
+      _view.update( _popcornOptions );
     }; //update
 
+    _view.listen( "trackeventviewupdated", function( e ){
+      _popcornOptions.start = _view.start;
+      _popcornOptions.end = _view.end;
+      _em.dispatch( "trackeventupdated" );
+    });
+
     Object.defineProperties( this, {
+      view: {
+        enumerable: true,
+        configurable: false,
+        get: function(){
+          return _view;
+        }
+      },
       popcornOptions: {
         enumerable: true,
         get: function(){
@@ -81,6 +110,7 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time" ], function( Lo
         set: function( val ){
           if( val !== _selected ){
             _selected = val;
+            _view.selected = _selected;
             if( _selected ){
               _em.dispatch( "trackeventselected" );
             }
