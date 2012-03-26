@@ -30,7 +30,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
     this.update = function( zoom ) {
       var tracksContainerWidth = tracksContainer.container.getBoundingClientRect().width,
           width = Math.min( tracksContainerWidth, _tracksContainer.container.scrollWidth ),
-          containerWidth = Math.min( width, _tracksContainer.container.offsetWidth - CANVAS_CONTAINER_PADDING );
+          containerWidth = Math.min( width, _tracksContainer.element.offsetWidth - CANVAS_CONTAINER_PADDING );
 
       _canvasContainer.style.width = containerWidth + "px";
 

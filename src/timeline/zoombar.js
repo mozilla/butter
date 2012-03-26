@@ -55,7 +55,7 @@ define( [], function(){
       if( level !== undefined ){
         _handle.style.left = ( level * _rect.width / ZOOM_LEVELS ) + "px";
       } //if
-    }; //setup
+    };
 
     _element.addEventListener( "click", function( e ) {
       // bail early if this event is coming from the handle

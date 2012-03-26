@@ -58,6 +58,7 @@ define( [], function(){
 
       // if we can avoid re-setting position and visibility, then do so
       if( _lastTime !== currentTime || _lastScroll !== scrollLeft || _lastZoom !== _zoom ){
+
         var pos = currentTime / duration * _tracksContainerWidth,
             adjustedPos = pos - scrollLeft;
 
@@ -86,6 +87,7 @@ define( [], function(){
 
       _lastTime = currentTime;
       _lastScroll = scrollLeft;
+      _lastZoom = _zoom;
 
     } //setNodePosition
 
@@ -183,7 +185,7 @@ define( [], function(){
     this.update = function( containerWidth, zoom ){
       _zoom = zoom || _zoom;
       _width = containerWidth;
-      _tracksContainerWidth = _tracksContainer.element.getBoundingClientRect().width;
+      _tracksContainerWidth = _tracksContainer.container.getBoundingClientRect().width;
       _container.style.width = _width + "px";
       _rect = _container.getBoundingClientRect();
       setNodePosition();
