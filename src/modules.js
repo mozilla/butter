@@ -15,9 +15,10 @@ define(
 
   var moduleList = Array.prototype.slice.apply( arguments );
 
-  return function( butter, config ){
+  return function( butter, config, onReady ){
 
-    var modules = [];
+    var modules = [],
+        readyModules = 0;
 
     for( var i=0; i<moduleList.length; ++i ){
       var name = moduleList[ i ].__moduleName;
@@ -25,11 +26,29 @@ define(
       modules.push( butter[ name ] );
     } //for
 
-    for( var i=0; i<modules.length; ++i ){
-      if( modules[ i ]._start ){
-        modules[ i ]._start();
-      } //if
-    } //for
+    return {
+      ready: function( onReady ){
+        function onModuleReady(){
+          readyModules++;
+          if( readyModules === modules.length ){
+            onReady();
+          }
+        }
+
+        for( var i=0; i<modules.length; ++i ){
+          if( modules[ i ]._start ){
+            modules[ i ]._start( onModuleReady );
+          }
+          else{
+            readyModules++;
+          } //if
+        } //for
+
+        if( readyModules === modules.length ){
+          onReady();
+        }
+      }
+    };
 
   };
 

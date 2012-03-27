@@ -12,7 +12,7 @@
     stop();
 
     Butter({
-      config: "../config/default.conf",
+      config: "../config/test.conf",
       ready: function( butter ){
         callback( butter );
         start();
@@ -479,7 +479,7 @@
     stop();
 
     Butter({
-      config: "../config/default.conf",
+      config: "../config/test.conf",
       ready: function( butter ){
         m1 = butter.addMedia( { url:"www.test-url-1.com", target:"test-target-1" } );
         m2 = butter.addMedia( { url:"www.test-url-2.com", target:"test-target-2" } );
@@ -493,7 +493,7 @@
         exported = butter.exportProject();
 
         Butter({
-          config: "../config/default.conf",
+          config: "../config/test.conf",
           ready: function( secondButter ){
             teEvents = tEvents = mEvents = 0;
             secondButter.listen( "mediaadded", function(){
