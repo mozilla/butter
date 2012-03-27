@@ -21,6 +21,11 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
         _handles,
         _this = this;
 
+    function toggleHandles( state ){
+      _handles[ 0 ].style.visibility = state ? "visible" : "hidden";
+      _handles[ 1 ].style.visibility = state ? "visible" : "hidden";
+    } //toggleHandles
+
     function resetContainer(){
       _element.style.left = ( _start / _duration * _zoom ) + "px";
       _element.style.width = ( ( _end - _start ) / _duration * _zoom ) + "px";
@@ -161,10 +166,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
 
             _handles = _element.querySelectorAll( ".handle" );
             if( _handles && _handles.length === 2 ){
-              function toggleHandles( state ){
-                _handles[ 0 ].style.visibility = state ? "visible" : "hidden";
-                _handles[ 1 ].style.visibility = state ? "visible" : "hidden";
-              } //toggleHandles
               _element.addEventListener( "mouseover", function( e ){
                 toggleHandles( true );
               }, false );
