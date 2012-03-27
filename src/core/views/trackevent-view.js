@@ -147,6 +147,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
                 revert: true
               });
 
+              DragNDrop.resizable( _element, {
+                containment: _parent.element.parentNode,
+                scroll: _parent.element.parentNode.parentNode,
+                stop: movedCallback
+              });
+
               _element.setAttribute( "data-butter-draggable-type", "trackevent" );
               _element.setAttribute( "data-butter-trackevent-id", trackEvent.id );
 
