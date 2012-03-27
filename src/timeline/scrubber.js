@@ -9,7 +9,7 @@ define( [], function(){
       SCROLL_DISTANCE = 20,
       MOUSE_SCRUBBER_PIXEL_WINDOW = 3;
 
-  return function( parentElement, media, tracksContainer, hScrollbar ){
+  return function( butter, parentElement, media, tracksContainer, hScrollbar ){
     var _container = document.createElement( "div" ),
         _node = document.createElement( "div" ),
         _line = document.createElement( "div" ),
@@ -42,6 +42,15 @@ define( [], function(){
     _container.appendChild( _node );
     _element.appendChild( _container );
 
+    butter.ui.listen( "contentstatechanged", function( e ){
+      if( e.data !== "timeline" ){
+        _line.setAttribute( "data-butter-shortened", true );
+      }
+      else{
+        _line.removeAttribute( "data-butter-shortened" );
+      }
+    });
+
     function setNodePosition(){
       var duration = _media.duration,
           currentTime = _media.currentTime,
@@ -49,6 +58,7 @@ define( [], function(){
 
       // if we can avoid re-setting position and visibility, then do so
       if( _lastTime !== currentTime || _lastScroll !== scrollLeft || _lastZoom !== _zoom ){
+
         var pos = currentTime / duration * _tracksContainerWidth,
             adjustedPos = pos - scrollLeft;
 
@@ -77,6 +87,7 @@ define( [], function(){
 
       _lastTime = currentTime;
       _lastScroll = scrollLeft;
+      _lastZoom = _zoom;
 
     } //setNodePosition
 
@@ -171,11 +182,10 @@ define( [], function(){
     _node.addEventListener( "mousedown", onScrubberMouseDown, false );
     _container.addEventListener( "mousedown", onMouseDown, false );
 
-    this.update = function( zoom ){
+    this.update = function( containerWidth, zoom ){
       _zoom = zoom || _zoom;
+      _width = containerWidth;
       _tracksContainerWidth = _tracksContainer.container.getBoundingClientRect().width;
-      _width = _element.getBoundingClientRect().width;
-      _width = Math.min( _width, _tracksContainerWidth );
       _container.style.width = _width + "px";
       _rect = _container.getBoundingClientRect();
       setNodePosition();
