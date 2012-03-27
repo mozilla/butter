@@ -40,13 +40,23 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
           textWidth = context.measureText( util.secondsToSMPTE( 5 ) ).width,
           padding = 20,
           lastPosition = 0,
-          lastTimeDisplayed = -( ( textWidth + padding ) / 2 );
+          lastTimeDisplayed = -( ( textWidth + padding ) / 2 ),
+          start = _tracksContainer.element.scrollLeft / inc,
+          end = ( _tracksContainer.element.scrollLeft + containerWidth ) / inc;
 
       context.clearRect ( 0, 0, _canvas.width, _canvas.height );
       context.translate( -_tracksContainer.element.scrollLeft, 0 );
       context.beginPath();
 
       for ( var i = 1, l = _media.duration + 1; i < l; i++ ) {
+
+        // If the current time is not in the viewport, just skip it
+        if ( i + 1 < start ) {
+          continue;
+        }
+        if ( i - 1 > end ) {
+          break;
+        }
 
         var position = i * inc;
         var spaceBetween = -~( position ) - -~( lastPosition );
