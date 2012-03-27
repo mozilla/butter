@@ -19,7 +19,23 @@ define( [
   var Timeline = function( butter, options ){
 
     var _media = {},
-        _currentMedia;
+        _currentMedia,
+        _parentElement = document.createElement( "div" );
+
+    _parentElement.id = "butter-timeline";
+
+    this._start = function(){
+      butter.ui.addToArea( "main", "timeline", _parentElement );
+      butter.ui.pushContentState( "timeline" );
+      butter.ui.listen( "contentstatechanged", function( e ){
+        if( e.data !== "timeline" ){
+          _parentElement.setAttribute( "data-butter-disabled", true );
+        }
+        else{
+          _parentElement.removeAttribute( "data-butter-disabled" );
+        }
+      });
+    };
 
     if( butter.ui ){
       butter.ui.listen( "uivisibilitychanged", function( e ){
@@ -88,7 +104,7 @@ define( [
           media = new Media( butter, mediaObject );
 
       _media[ mediaObject.id ] = media;
-      butter.ui.element.appendChild( media.element );
+      _parentElement.appendChild( media.element );
 
       function mediaReady( e ){
         butter.dispatch( "timelineready" );

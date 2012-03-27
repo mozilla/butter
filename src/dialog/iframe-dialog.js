@@ -35,7 +35,7 @@ define( [
 
     function onCancel( e ){
       _em.dispatch( e.type, e.data );
-      close();
+      _this.close();
     } //onCancel
 
     this.close = function(){
@@ -49,11 +49,14 @@ define( [
       _comm.unlisten( "close", _this.close );
       _comm.destroy();
       _open = false;
-      window.removeEventListener( "beforeunload",  _this.close, false); 
+      window.removeEventListener( "beforeunload",  _this.close, false);
       for( var e in _listeners ){
-        _em.unlisten( e, _listeners[ e ] );
+        if( e !== "close" ){
+          _em.unlisten( e, _listeners[ e ] );
+        }
       } //for
       _em.dispatch( "close" );
+      _em.unlisten( "close", _listeners.close );
     }; //close
 
     this.open = function( listeners ){
@@ -75,7 +78,7 @@ define( [
           _comm.listen( "submit", onSubmit );
           _comm.listen( "cancel", onCancel );
           _comm.listen( "close", _this.close );
-          window.addEventListener( "beforeunload",  _this.close, false); 
+          window.addEventListener( "beforeunload",  _this.close, false );
           for( var e in _listeners ){
             _em.listen( e, _listeners[ e ] );
           } //for

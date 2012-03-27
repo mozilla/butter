@@ -159,7 +159,15 @@
 
       this._start = function(){
         if( butter.ui ){
-          butter.ui.element.appendChild( __container );
+          butter.ui.addToArea( "main", "plugin", __container );
+          butter.ui.listen( "contentstatechanged", function( e ){
+            if( e.data !== "timeline" ){
+              //__container.style.display = "none";
+            }
+            else{
+              //__container.style.display = "block";
+            }
+          });
         } //if
       }; //start
 

@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-#butter-timeline, #butter-timeline * {
+#butter-tray, #butter-tray * {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -52,7 +52,7 @@
   opacity: 0;
 }
 
-#butter-timeline {
+#butter-tray {
   position: fixed;
   z-index: 2140000000;
   bottom: 0px;
@@ -88,20 +88,62 @@
   background-color: rgba( 10, 170, 170, 0.4 );
 }
 
-#butter-timeline .status-container {
+#butter-editor {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 53px;
+  left: 0px;
+  z-index: 2140000002;
+  background-image: url( "assets/bg.jpg" );
+  -moz-transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+  opacity: 0;
+}
+
+#butter-editor-container{
+  height: 150px;
+  padding: 0 150px 0 0;
+  position: relative;
+}
+
+#butter-editor.fade-in {
+  opacity: 1;
+}
+
+#butter-editor iframe {
+  width: 100%;
+  height: 100%;
+  border: 0px;
+}
+
+#butter-timeline {
+  position: absolute;
+  width: 100%;
+  height: 160px;
+  bottom: 0px;
+  left: 0px;
+  z-index: 2140000001;
+}
+
+#butter-timeline[ data-butter-disabled ] {
+}
+
+#butter-tray .status-container {
   position: absolute;
   width: 100px;
   height: 40px;
-  top: -50px;
-  left: -115px;
+  top: 5px;
+  left: 0px;
 }
 
-#butter-timeline .status-button div {
+#butter-tray .status-button div {
   background-image: url( "assets/buttons.png" );
   cursor: pointer;
 }
 
-#butter-timeline .status-container .time-container {
+#butter-status-bar .status-container .time-container {
   position: absolute;
   top: 4px;
   left: 20px;
@@ -116,7 +158,7 @@
   padding: 2px;
 }
 
-#butter-timeline .status-container .time-container input {
+#butter-status-bar .status-container .time-container input {
   background: transparent;
   color: rgb( 200, 200, 180 );
   border: none;
@@ -126,14 +168,14 @@
   font-size: 90%;
 }
 
-#butter-timeline .status-container .time-container input:focus {
+#butter-status-bar .status-container .time-container input:focus {
   -moz-user-select: text;
   -webkit-user-select: text;
   -o-user-select: text;
   user-select: text;
 }
 
-#butter-timeline .status-container .play-button-container {
+#butter-status-bar .status-container .play-button-container {
   position: absolute;
   left: 2px;
   width: 24px;
@@ -148,7 +190,7 @@
   padding: 3px;
 }
 
-#butter-timeline .status-container .play-button-container .status-button {
+#butter-status-bar .status-container .play-button-container .status-button {
   width: 24px;
   height: 24px;
   border-radius: 20px 20px 20px 20px;
@@ -162,7 +204,7 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d1be70', endColorstr='#a08546',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-timeline .status-container .play-button-container .status-button:hover {
+#butter-status-bar .status-container .play-button-container .status-button:hover {
   background: #d1be70; /* Old browsers */
   background: -moz-linear-gradient(top, #d1be70 0%, #ad9b4c 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d1be70), color-stop(100%,#ad9b4c)); /* Chrome,Safari4+ */
@@ -173,13 +215,13 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d1be70', endColorstr='#ad9b4c',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-timeline .status-button-icon {
+#butter-tray .status-button-icon {
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;
 }
 
-#butter-timeline .status-container .play-button-container .status-button[mouse-state="depressed"]{
+#butter-tray .status-container .play-button-container .status-button[mouse-state="depressed"]{
   background: #bdaa5c; /* Old browsers */
   background: -moz-linear-gradient(top, #bdaa5c 0, #e0d299 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#bdaa5c), color-stop(100%,#e0d299)); /* Chrome,Safari4+ */
@@ -190,18 +232,18 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bdaa5c', endColorstr='#e0d299',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-timeline .status-container .play-button-container .status-button-icon {
+#butter-tray .status-container .play-button-container .status-button-icon {
   background-position: -321px 7px;
 }
 
-#butter-timeline .status-container .play-button-container .status-button-icon[state="true"] {
+#butter-tray .status-container .play-button-container .status-button-icon[state="true"] {
   background-position: -320px -19px;
 }
 
-#butter-timeline .mute-button-container {
+#butter-status-bar .mute-button-container {
   position: absolute;
-  top: -50px;
-  right: -30px;
+  top: 5px;
+  right: 120px;
   width: 17px;
   height: 17px;
   background-image: url( "assets/status-bg.png" );
@@ -214,7 +256,7 @@
   padding: 3px;
 }
 
-#butter-timeline .mute-button-container .status-button {
+#butter-status-bar .mute-button-container .status-button {
   width: 17px;
   height: 17px;
   border-radius: 20px 20px 20px 20px;
@@ -228,7 +270,7 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b4b4b4', endColorstr='#777777',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-timeline .mute-button-container .status-button:hover {
+#butter-status-bar .mute-button-container .status-button:hover {
   background: #b4b4b4; /* Old browsers */
   background: -moz-linear-gradient(top, #b4b4b4 0, #969696 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#b4b4b4), color-stop(100%,#969696)); /* Chrome,Safari4+ */
@@ -239,7 +281,7 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b4b4b4', endColorstr='#969696',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-timeline .mute-button-container .status-button[mouse-state="depressed"] {
+#butter-status-bar .mute-button-container .status-button[mouse-state="depressed"] {
   background: #959595; /* Old browsers */
   background: -moz-linear-gradient(top, #959595 0, #cccccc 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#959595), color-stop(100%,#cccccc)); /* Chrome,Safari4+ */
@@ -250,11 +292,11 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#959595', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-timeline .mute-button-container .status-button-icon {
+#butter-status-bar .mute-button-container .status-button-icon {
   background-position: -109px -141px;
 }
 
-#butter-timeline .mute-button-container .status-button-icon[state="true"] {
+#butter-status-bar .mute-button-container .status-button-icon[state="true"] {
   background-position: -109px -157px;
 }
 
@@ -263,7 +305,7 @@
   height: 140px;
   width: 110px;
   left: 5px;
-  top: 55px;
+  top: 8px;
   bottom: 18px;
   overflow: hidden;
 }
@@ -344,15 +386,21 @@
   height: 10px;
 }
 
-#butter-timeline .time-bar {
+#butter-status-bar .media-status-container {
+  height: 30px;
+  padding: 0 150px 0 115px;
+  position: relative;
+}
+
+#butter-status-bar .time-bar {
   position: absolute;
-  top: -45px;
+  top: 10px;
   width: 100%;
   height: 30px;
 }
 
-#butter-timeline .time-bar-scrubber-container {
-  z-index: 2140000000;
+#butter-status-bar .time-bar-scrubber-container {
+  z-index: 2140000010;
   background-image: url( "assets/status-bg.png" );
   border-radius: 15px;
   position: absolute;
@@ -372,7 +420,7 @@
   webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 1px #131313;
 }
 
-#butter-timeline .time-bar-scrubber-container .fill-bar {
+#butter-status-bar .time-bar-scrubber-container .fill-bar {
   background: none repeat scroll 0 0 rgba( 200, 200, 140, 0.2 );
   border-radius: 15px 15px 15px 15px;
   height: 4px;
@@ -383,7 +431,7 @@
   width: 0px;
 }
 
-#butter-timeline .time-bar-scrubber-node {
+#butter-status-bar .time-bar-scrubber-node {
   border: 2px solid #bbb;
   background: #fff;
   width: 10px;
@@ -396,7 +444,7 @@
   cursor: pointer;
 }
 
-#butter-timeline .time-bar-scrubber-line {
+#butter-status-bar .time-bar-scrubber-line {
   background: rgba( 200, 0, 0,  0.7);
   position: absolute;
   top: 12px;
@@ -407,7 +455,13 @@
   z-index: 2140000000;
 }
 
-#butter-timeline .time-bar-canvas-container {
+#butter-status-bar .time-bar-scrubber-line[data-butter-shortened] {
+  height: 20px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+#butter-status-bar .time-bar-canvas-container {
   position: absolute;
   left: 0px;
   top: 13px;
@@ -416,15 +470,15 @@
   width: 100%;
 }
 
-#butter-timeline .time-bar canvas {
+#butter-status-bar .time-bar canvas {
   height: 27px;
 }
 
-#butter-timeline[ ui-state="hidden" ] {
+#butter-tray[ ui-state="hidden" ] {
   bottom: -160px;
 }
 
-#butter-timeline #toggle-button {
+#butter-tray #toggle-button {
   height: 30px;
   width: 50px;
   background-image: url( "assets/bg.jpg" );
@@ -440,7 +494,7 @@
   z-index: -1;
 }
 
-#butter-timeline #toggle-button:hover {
+#butter-tray #toggle-button:hover {
   box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
   moz-box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
   o-box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
@@ -448,7 +502,7 @@
   cursor: pointer;
 }
 
-#butter-timeline #toggle-button div {
+#butter-tray #toggle-button div {
   background-image: url("assets/buttons.png");
   background-position: -255px 10px;
   width: 15px;
@@ -458,7 +512,7 @@
   margin: 0 18px 0 18px;
 }
 
-#butter-timeline[ ui-state="hidden" ] #toggle-button div {
+#butter-tray[ ui-state="hidden" ] #toggle-button div {
   background-position: -255px -7px;
 }
 
@@ -481,66 +535,6 @@
   user-select: none;
 }
 
-#butter-status-bar div {
-  display: none;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-
-#butter-status-bar div div {
-  display: none;
-  border-radius: 5px;
-  moz-border-radius: 5px;
-  o-border-radius: 5px;
-  webkit-border-radius: 5px;
-  background: #111;
-  float: left;
-  margin: 5px 0 0 5px;
-  padding: 8px 35px 5px 10px;
-  position: relative;
-  vertical-align: baseline;
-  border-image: initial;
-  float: left;
-  display: inline-block;
-  max-width: 200px;
-  overflow: hidden;
-  -moz-transition: width 0.5s;
-  -webkit-transition: width 0.5s;
-  transition: width 0.5s;
-  -moz-transition: max-width 0.5s;
-  -webkit-transition: max-width 0.5s;
-  transition: max-width 0.5s;
-}
-
-#butter-status-bar div div:hover {
-  display: none;
-  max-width: 300px;
-  width: 300px;
-  background: #000;
-}
-
-#butter-status-bar div div .media-url {
-  display: none;
-  white-space: nowrap;
-  background: transparent;
-  font-size: .8em;
-  float:right;
-  margin: 0;
-  outline: none;
-  padding: 0;
-  text-decoration: none;
-  vertical-align: baseline;
-  color: #ddd;
-  max-width: 97%;
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  cursor: pointer;
-  -moz-box-shadow: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
 #butter-timeline .media-instance {
   height: 190px;
   padding: 0 150px 0 115px;
@@ -554,13 +548,13 @@
   transition: top 0.5s;
 }
 
-#butter-timeline[ ui-state="hidden" ] .media-instance {
+#butter-tray[ ui-state="hidden" ] .media-instance {
   top: 0px;
 }
 
 #butter-timeline .media-container {
   position: relative;
-  top: 55px;
+  top: 5px;
   padding: 0;
   margin: 0;
   height: 135px;
@@ -765,8 +759,8 @@
   cursor: e-resize;
 }
 
-#butter-timeline #butter-plugin {
-  z-index: 2140000000;
+#butter-plugin {
+  z-index: 2140000003;
   border-radius: 6px;
 	moz-border-radius: 6px;
 	o-border-radius: 6px;
@@ -795,7 +789,7 @@
 
 #butter-timeline .zoom-bar {
   position: absolute;
-  top: 195px;
+  top: 140px;
   left: 10px;
   width: 100px;
   height: 10px;
