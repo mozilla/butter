@@ -138,8 +138,9 @@
           }
           else {
             var patternInstance = pattern.replace( /\$type/g, _this.type );
-            var $pluginElement = $( patternInstance );
-            pluginElement = $pluginElement[ 0 ];
+            var range = document.createRange();
+            range.selectNode( document.body.children[ 0 ] );
+            pluginElement = range.createContextualFragment( patternInstance ).childNodes[ 0 ];
           }
           pluginElement.id = __pluginElementPrefix + _this.type;
           helper = document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" );

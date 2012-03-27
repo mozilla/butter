@@ -19,8 +19,7 @@
     'eventeditor': 'src/eventeditor/',
     'trackeditor': 'src/trackeditor/',
     'pluginmanager': 'src/pluginmanager/',
-    'timeline': 'src/timeline/',
-    'trackLiner': 'external/trackLiner'
+    'timeline': 'src/timeline/'
   },
 
   // Use has branch trimming in the build to remove the document.write

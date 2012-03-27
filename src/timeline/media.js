@@ -3,8 +3,6 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [
-          "external/jquery/jquery",
-          "external/jquery-ui/jquery-ui.min",
           "core/trackevent",
           "core/track",
           "core/eventmanager",
@@ -16,8 +14,6 @@ define( [
           "./trackhandles"
         ],
         function(
-          $,
-          $ui,
           TrackEvent, 
           Track, 
           EventManager,
