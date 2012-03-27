@@ -4,7 +4,8 @@
 
 (function() {
 
-  var DEFAULT_EDITOR = "default-editor.html";
+  var DEFAULT_EDITOR = "default-editor.html",
+      ANIMATION_DURATION = 500;
 
   define( [ "core/logger", 
             "core/eventmanager", 
@@ -44,8 +45,21 @@
         } //if
 
         var editor = _editors[ type ];
-        editor.open( trackEvent );
-        return editor;
+        if( editor ){
+          if( editor.frame === "iframe" && butter.ui.contentState === "editor" ){
+            editor.close();
+            setTimeout(function(){
+              editor.open( trackEvent );
+            }, ANIMATION_DURATION + 10);
+          }
+          else{
+            editor.open( trackEvent );
+          }
+          return editor; 
+        }
+        else{
+          throw new Error( "Editor " + type + " not found." );
+        }
       }; //edit
 
       this.add = function( source, type, frameType ){
@@ -88,20 +102,22 @@
 
         butter.ui.addToArea( "main", "editor", parentElement );
         butter.ui.addToArea( "main", "editorContainer", container );
-        butter.ui.listen( "contentstatechanged", function( e ){
-          if( e.data !== "editor" ){
-            parentElement.classList.remove( "fade-in" );
-            setTimeout(function(){
-              parentElement.style.display = "none";
-            }, 500);
-          }
-          else{
+        butter.ui.registerStateToggleFunctions( "editor",
+          function(){
+            console.log("editor in");
             parentElement.style.display = "block";
             setTimeout(function(){
               parentElement.classList.add( "fade-in" );
             }, 0);
-          }
-        });
+          },
+          function(){
+            console.log("editor out");
+            setTimeout(function(){
+              parentElement.style.display = "none";
+              console.log("herp");
+            }, ANIMATION_DURATION);
+            parentElement.classList.remove( "fade-in" );
+          });
 
         _this.add( _defaultEditor, "default" );
 

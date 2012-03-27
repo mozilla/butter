@@ -102,14 +102,14 @@
   opacity: 0;
 }
 
+#butter-editor.fade-in {
+  opacity: 1;
+}
+
 #butter-editor-container{
   height: 150px;
   padding: 0 150px 0 0;
   position: relative;
-}
-
-#butter-editor.fade-in {
-  opacity: 1;
 }
 
 #butter-editor iframe {

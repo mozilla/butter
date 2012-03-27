@@ -27,14 +27,12 @@ define( [
     this._start = function( onModuleReady ){
       butter.ui.addToArea( "main", "timeline", _parentElement );
       butter.ui.pushContentState( "timeline" );
-      butter.ui.listen( "contentstatechanged", function( e ){
-        if( e.data !== "timeline" ){
-          _parentElement.setAttribute( "data-butter-disabled", true );
-        }
-        else{
+      butter.ui.registerStateToggleFunctions( "timeline", function(){
           _parentElement.removeAttribute( "data-butter-disabled" );
-        }
-      });
+        },
+        function(){
+          _parentElement.setAttribute( "data-butter-disabled", true );
+        });
       onModuleReady();
     };
 

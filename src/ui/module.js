@@ -35,6 +35,18 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
       document.body.appendChild( _element );
     }
 
+    this.registerStateToggleFunctions = function( state, on, off ){
+      _em.listen( "contentstatechanged", function( e ){
+        console.log( e.data.oldState, e.data.newState );
+        if( e.data.oldState === state ){
+          off( e );
+        }
+        if( e.data.newState === state ){
+          on( e );
+        }
+      });
+    }
+
     this.addToArea = function( area, name, childElement ){
       if( _areas[ area ] && !_areas[ area ].items[ name ] ){
         if( !childElement.parentNode ){
@@ -58,15 +70,22 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
     };
 
     this.pushContentState = function( state ){
+      var oldState = _this.contentState;
       _contentState.push( state );
       _element.setAttribute( "data-butter-content-state", _this.contentState );
-      _em.dispatch( "contentstatechanged", _this.contentState );
+      _em.dispatch( "contentstatechanged", {
+        oldState: oldState,
+        newState: _this.contentState
+      });
     };
 
     this.popContentState = function(){
       var oldState = _contentState.pop();
       _element.setAttribute( "data-butter-content-state", _this.contentState );
-      _em.dispatch( "contentstatechanged", _this.contentState );
+      _em.dispatch( "contentstatechanged", {
+        oldState: oldState,
+        newState: _this.contentState
+      });
       return oldState;
     };
 
