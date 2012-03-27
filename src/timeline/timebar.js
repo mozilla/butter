@@ -14,41 +14,36 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
         _media = media,
         _tracksContainer = tracksContainer,
         _scrubber = new Scrubber( butter, _element, _media, _tracksContainer, hScrollbar ),
-        _this = this;
+        _this = this,
+        _lastZoom;
 
     _element.className = "time-bar";
     _canvasContainer.className = "time-bar-canvas-container";
     _canvasContainer.appendChild( _canvas );
     _element.appendChild( _canvasContainer );
 
-    _tracksContainer.element.addEventListener( "scroll", function( e ){
-      _canvasContainer.scrollLeft = _tracksContainer.element.scrollLeft;
-    }, false );
-
     _canvas.addEventListener( "mousedown", _scrubber.onMouseDown, false );
 
-    this.update = function( zoom ) {
+    function drawTicks( zoom ) {
       var tracksContainerWidth = tracksContainer.container.getBoundingClientRect().width,
           width = Math.min( tracksContainerWidth, _tracksContainer.container.scrollWidth ),
           containerWidth = Math.min( width, _tracksContainer.element.offsetWidth - CANVAS_CONTAINER_PADDING );
 
       _canvasContainer.style.width = containerWidth + "px";
 
-      _canvas.style.width = width + "px";
-
       var context = _canvas.getContext( "2d" );
 
       _canvas.height = _canvas.offsetHeight;
-      _canvas.width = _canvas.offsetWidth;
+      _canvas.width = containerWidth;
 
-      var inc = _canvas.offsetWidth / _media.duration,
+      var inc = _tracksContainer.container.scrollWidth / _media.duration,
           textWidth = context.measureText( util.secondsToSMPTE( 5 ) ).width,
           padding = 20,
           lastPosition = 0,
           lastTimeDisplayed = -( ( textWidth + padding ) / 2 );
 
       context.clearRect ( 0, 0, _canvas.width, _canvas.height );
-
+      context.translate( -_tracksContainer.element.scrollLeft, 0 );
       context.beginPath();
 
       for ( var i = 1, l = _media.duration + 1; i < l; i++ ) {
@@ -93,15 +88,23 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       // stroke color
       context.strokeStyle = "#999999";
       context.stroke();
-      context.closePath();
+      context.translate( _tracksContainer.element.scrollLeft, 0 );
 
       _scrubber.update( containerWidth, zoom );
     }; //update
 
+    _tracksContainer.element.addEventListener( "scroll", function() {
+      drawTicks( _lastZoom );
+    }, false );
+
+    this.update = function( zoom ) {
+      _lastZoom = zoom;
+      drawTicks( zoom );
+    };
+
     this.destroy = function(){
       _scrubber.destroy();
     }; //destroy
-
 
     Object.defineProperties( this, {
       element: {
