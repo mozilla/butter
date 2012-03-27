@@ -52,7 +52,6 @@ define( [
         _trackEventHighlight = butter.config.ui.trackEventHighlight || "click",
         _zoom = INITIAL_ZOOM;
 
-    butter.selectedEvents = [];
     _rootElement.className = "media-instance";
     _rootElement.id = "media-instance" + media.id;
     _container.className = "media-container";
