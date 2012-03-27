@@ -132,28 +132,19 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
           _parent = val;
           if( _parent && !_handles ){
 
-            DragNDrop.draggable( _element, {
-              containment: _parent.element.parentNode,
-              scroll: _parent.element.parentNode.parentNode,
-              start: function(){
-                _eventManager.dispatch( "trackeventdragstarted" );
-              },
-              stop: function(){
-                _eventManager.dispatch( "trackeventdragstopped" );
-                movedCallback();
-              },
-              revert: true
-            });
-
-            _element.setAttribute( "data-butter-draggable-type", "trackevent" );
-            _element.setAttribute( "data-butter-trackevent-id", trackEvent.id );
-
             if( _parent.element && _parent.element.parentNode && _parent.element.parentNode.parentNode ){
 
               DragNDrop.draggable( _element, {
                 containment: _parent.element.parentNode,
                 scroll: _parent.element.parentNode.parentNode,
-                stop: movedCallback
+                start: function(){
+                  _eventManager.dispatch( "trackeventdragstarted" );
+                },
+                stop: function(){
+                  _eventManager.dispatch( "trackeventdragstopped" );
+                  movedCallback();
+                },
+                revert: true
               });
 
               DragNDrop.resizable( _element, {
@@ -161,6 +152,9 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
                 scroll: _parent.element.parentNode.parentNode,
                 stop: movedCallback
               });
+
+              _element.setAttribute( "data-butter-draggable-type", "trackevent" );
+              _element.setAttribute( "data-butter-trackevent-id", trackEvent.id );
 
             }
 
