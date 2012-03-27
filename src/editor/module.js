@@ -72,7 +72,7 @@
         e.data.view.unlisten( "trackeventdoubleclicked", trackEventDoubleClicked, false );
       });
 
-      this._start = function(){
+      this._start = function( onModuleReady ){
         var parentElement = document.createElement( "div" );
         parentElement.id = "butter-editor";
 
@@ -98,6 +98,8 @@
         });
 
         _this.add( _defaultEditor, "default" );
+
+        onModuleReady();
       }; //start
 
       butter.listen( "trackeventeditrequested", function( e ){

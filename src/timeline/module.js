@@ -24,7 +24,7 @@ define( [
 
     _parentElement.id = "butter-timeline";
 
-    this._start = function(){
+    this._start = function( onModuleReady ){
       butter.ui.addToArea( "main", "timeline", _parentElement );
       butter.ui.pushContentState( "timeline" );
       butter.ui.listen( "contentstatechanged", function( e ){
@@ -35,6 +35,7 @@ define( [
           _parentElement.removeAttribute( "data-butter-disabled" );
         }
       });
+      onModuleReady();
     };
 
     if( butter.ui ){
