@@ -157,7 +157,7 @@
       __container = document.createElement( "ul" );
       __container.id = "butter-plugin";
 
-      this._start = function(){
+      this._start = function( onModuleReady ){
         if( butter.ui ){
           butter.ui.addToArea( "main", "plugin", __container );
           butter.ui.listen( "contentstatechanged", function( e ){
@@ -169,6 +169,12 @@
             }
           });
         } //if
+        if( moduleOptions && moduleOptions.plugins ){
+          __this.add( moduleOptions.plugins, onModuleReady )
+        }
+        else{
+          onModuleReady();
+        }
       }; //start
 
       this.add = function( plugin, cb ) {

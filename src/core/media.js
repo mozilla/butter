@@ -23,6 +23,7 @@
           _em = new EventManager( this ),
           _name = mediaOptions.name || _id,
           _url = mediaOptions.url,
+          _ready = false,
           _target = mediaOptions.target,
           _pageElement,
           _registry,
@@ -61,6 +62,7 @@
             },
             prepare: function(){
               _this.duration = _popcornWrapper.duration;
+              _ready = true;
               _em.dispatch( "mediaready" );
             },
             fail: function(){
@@ -188,6 +190,15 @@
         });
       } //setupContent
 
+      this.onReady = function( callback ){
+        if( _ready ){
+          callback();
+        }
+        else{
+          _em.listen( "mediaready", callback );
+        }
+      };
+
       this.pause = function(){
         _popcornWrapper.pause();
       }; //pause
@@ -238,6 +249,12 @@
           },
           set: function( val ){
             _popcornWrapper.muted = val;
+          }
+        },
+        ready:{
+          enumerable: true,
+          get: function(){
+            return _ready;
           }
         },
         name: {

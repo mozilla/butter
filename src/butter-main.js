@@ -479,11 +479,17 @@
           } //if
         } //for
 
-        Modules( _this, _config );
+        //prepare modules first
+        var moduleCollection = Modules( _this, _config );
 
+        //prepare the page next
         preparePage(function(){
-          _em.dispatch( "ready", _this );
+          moduleCollection.ready(function(){
+            //fire the ready event
+            _em.dispatch( "ready", _this );
+          });
         });
+      
       } //readConfig
 
       if( butterOptions.config && typeof( butterOptions.config ) === "string" ){

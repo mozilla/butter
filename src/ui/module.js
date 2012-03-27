@@ -24,7 +24,10 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
     _areas[ "statusbar" ].element.id = "butter-status-bar";
 
     _element.appendChild( _areas[ "statusbar" ].element );
-    document.body.appendChild( _element );
+
+    if( options.enabled !== false ){
+      document.body.appendChild( _element );
+    }
 
     this.addToArea = function( area, name, childElement ){
       if( _areas[ area ] && !_areas[ area ].items[ name ] ){
