@@ -147,7 +147,18 @@
           pluginElement.setAttribute( "data-butter-plugin-type", _this.type );
           pluginElement.setAttribute( "data-butter-draggable-type", "plugin" );
           DragNDrop.helper( pluginElement, {
-            image: helper
+            image: helper,
+            start: function(){
+              var targets = butter.targets,
+                  media = butter.currentMedia;
+              media.view.blink();
+              for( var i=0, l=targets.length; i<l; ++i ){
+                targets[ i ].view.blink();
+              }
+            },
+            stop: function(){
+              
+            }
           });
           this.element = pluginElement;
           return pluginElement;

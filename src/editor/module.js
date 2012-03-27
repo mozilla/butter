@@ -27,6 +27,12 @@
           _em = new EventManager( this ),
           _this = this;
 
+      butter.listen( "trackeventcreated", function( e ){
+        if( [ "target", "media" ].indexOf( e.data.by ) > -1 ){
+          _this.edit( e.data.trackEvent );
+        }
+      });
+
       this.edit = function( trackEvent ){
         if ( !trackEvent || !( trackEvent instanceof TrackEvent ) ){
           throw new Error( "trackEvent must be valid to start an editor." );

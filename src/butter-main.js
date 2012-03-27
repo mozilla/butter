@@ -67,37 +67,42 @@
       }; //getHTML
 
       function trackEventRequested( e, media, target ){
-          var track,
-              element = e.data.element,
-              type = element.id.split( "-" ),
-              start = media.currentTime + 1 < media.duration ? media.currentTime : media.duration - 1,
-              end = start + 1;
+        var track,
+            element = e.data.element,
+            type = element.id.split( "-" ),
+            start = media.currentTime + 1 < media.duration ? media.currentTime : media.duration - 1,
+            end = start + 1;
 
-          if( type.length === 3 ){
-            type = type[ 2 ];
+        if( type.length === 3 ){
+          type = type[ 2 ];
+        }
+        else{
+          _logger.log( "Invalid trackevent type requested." );
+          return;
+        } //if
+
+        if( media.tracks.length === 0 ){
+          media.addTrack();
+        } //if
+        track = media.tracks[ 0 ];
+        var trackEvent = track.addTrackEvent({
+          type: type,
+          popcornOptions: {
+            start: start,
+            end: end,
+            target: target
           }
-          else{
-            _logger.log( "Invalid trackevent type requested." );
-            return;
-          } //if
-
-          if( media.tracks.length === 0 ){
-            media.addTrack();
-          } //if
-          track = media.tracks[ 0 ];
-          track.addTrackEvent({
-            type: type,
-            popcornOptions: {
-              start: start,
-              end: end,
-              target: target
-            }
-          });
+        });
+        return trackEvent;
       } //trackEventRequested
 
       function targetTrackEventRequested( e ){
         if( _currentMedia ){
-          trackEventRequested( e, _currentMedia, e.target.elementID );
+          var trackEvent = trackEventRequested( e, _currentMedia, e.target.elementID );
+          _em.dispatch( "trackeventcreated", {
+            trackEvent: trackEvent,
+            by: "target"
+          });
         }
         else {
           _logger.log( "Warning: No media to add dropped trackevent." );
@@ -105,7 +110,11 @@
       } //targetTrackEventRequested
 
       function mediaTrackEventRequested( e ){
-        trackEventRequested( e, e.target, "Media Element" );
+        var trackEvent = trackEventRequested( e, e.target, "Media Element" );
+        _em.dispatch( "trackeventcreated", {
+          trackEvent: trackEvent,
+          by: "media"
+        });
       } //mediaTrackEventRequested
 
        /****************************************************************
