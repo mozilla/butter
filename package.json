@@ -44,7 +44,8 @@
   "dependencies": {
     "shelljs": "*",
     "jshint": "*",
-    "requirejs": "*"
+    "requirejs": "*",
+    "http-server": "*"
   },
   "license": "MIT",
   "engine": {

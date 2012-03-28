@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 var JSLINT = './node_modules/jshint/bin/hint',
-    RJS    = './node_modules/requirejs/bin/r.js';
+    RJS    = './node_modules/requirejs/bin/r.js',
+    HTTPD  = './node_modules/http-server/bin/http-server';
 
 require('shelljs/make');
 
@@ -40,8 +41,6 @@ target.build = function() {
 
 target.server = function() {
   echo('### Serving butter');
-  echo('Go to http://localhost:9999 in your web browser');
-  echo('Press Ctrl-C to stop');
 
-  exec('python -m SimpleHTTPServer 9999');
+  exec(HTTPD + ' -p 9999 -a 127.0.0.1', { async: true } );
 }
