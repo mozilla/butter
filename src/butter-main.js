@@ -69,14 +69,11 @@
       function trackEventRequested( e, media, target ){
         var track,
             element = e.data.element,
-            type = element.id.split( "-" ),
+            type = element.getAttribute( "data-butter-plugin-type" ),
             start = media.currentTime + 1 < media.duration ? media.currentTime : media.duration - 1,
             end = start + 1;
 
-        if( type.length === 3 ){
-          type = type[ 2 ];
-        }
-        else{
+        if( !type ){
           _logger.log( "Invalid trackevent type requested." );
           return;
         } //if

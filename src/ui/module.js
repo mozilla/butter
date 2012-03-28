@@ -65,6 +65,8 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
 
     _areas[ "main" ] = new Area( "butter-tray" );
 
+    this.contentStateLocked = false;
+
     var _element = _areas[ "main" ].element,
         _toggler = new Toggler( butter, _element );
 
@@ -94,16 +96,19 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
 
     this.registerStateToggleFunctions = function( state, events ){
       _em.listen( "contentstatechanged", function( e ){
-        if( e.oldState === state ){
+        if( e.data.oldState === state ){
           events.out( e );
         }
-        if( e.newState === state ){
+        if( e.data.newState === state ){
           events.in( e );
         }
       });
     }
 
     this.pushContentState = function( state ){
+      if( _this.contentStateLocked ){
+        return;
+      }
       var oldState = _this.contentState;
       _contentState.push( state );
       _element.setAttribute( "data-butter-content-state", _this.contentState );
@@ -119,8 +124,27 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
     };
 
     this.popContentState = function(){
+      if( _this.contentStateLocked ){
+        return;
+      }
       var oldState = _contentState.pop(),
           newState = _this.contentState;
+      _element.setAttribute( "data-butter-content-state", newState );
+      for( var a in _areas ){
+        if( _areas.hasOwnProperty( a ) ){
+          _areas[ a ].setContentState( newState );
+        }
+      }
+      _em.dispatch( "contentstatechanged", {
+        oldState: oldState,
+        newState: newState
+      });
+      return oldState;
+    };
+
+    this.setContentState = function( newState ){
+      var oldState = _contentState.pop();
+      _contentState = [ newState ];
       _element.setAttribute( "data-butter-content-state", newState );
       for( var a in _areas ){
         if( _areas.hasOwnProperty( a ) ){
