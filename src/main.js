@@ -104,10 +104,10 @@
 
       document.addEventListener( "keydown", function( e ){
         if ( e.ctrlKey && e.shiftKey && e.keyCode === 90 ){
-          _undoManager.canRedo() && _undoManager.redo();
+          _undoManager.redo();
         }
         else if ( e.ctrlKey && e.keyCode === 90 ){
-          _undoManager.canUndo() && _undoManager.undo();
+          _undoManager.undo();
         }
       });
 

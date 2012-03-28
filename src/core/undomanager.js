@@ -3,7 +3,7 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define(function(){
-  var _undoManager;
+  var __undoManager;
 
   function UndoManager(){
     var _undoStack = [],
@@ -13,6 +13,7 @@ define(function(){
       register: function( command ){
         if ( command.execute && command.undo ){
           _undoStack.push( command );
+          _redoStack.length = 0;
         } //if
       }, //register
       canUndo: function(){
@@ -44,10 +45,10 @@ define(function(){
 
   return {
     getInstance: function(){
-      if ( !_undoManager ){
-        _undoManager = new UndoManager();
+      if ( !__undoManager ){
+        __undoManager = new UndoManager();
       } //if
-      return _undoManager;
+      return __undoManager;
     } //getInstance
   };
 });
