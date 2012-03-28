@@ -19,12 +19,9 @@ target.submodules = function() {
 target.lint = function() {
   echo('### Linting JS files');
 
-  var files = '';
-  for (file in find('src')) {
-    if (file.match(/\.js$/)) {
-      files = files + file + ' ';
-    }
-  }
+  var files = find('src').filter( function( file ) {
+    return file.match(/\.js$/);
+  }).join(" ");
 
   exec(JSLINT + ' ' + files);
 }
