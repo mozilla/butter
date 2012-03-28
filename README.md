@@ -3,10 +3,16 @@ Butter
 
 An SDK for authoring Popcorn projects.
 
-Environment Setup
----
+Prerequisites
+-------------
 
-1. Clone this repo
-2. Run this command: `git submodule update --init --recursive`
-3. Run a webserver ( `python2 -m SimpleHTTPServer 9999` is a simple shortcut )
-4. Visit `/test/template.html` to see an example, or `/test/index.html`to run tests.
+* node v0.6 or higher
+* npm (comes with node v0.6 installer)
+
+Environment Setup
+-----------------
+
+1. `git clone https://github.com/mozilla/butter.git`
+2. `cd butter`
+3. `npm install`
+4. `node make server`
