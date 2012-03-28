@@ -21,37 +21,45 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
     _canvasContainer.appendChild( _canvas );
     _element.appendChild( _canvasContainer );
 
-    _tracksContainer.element.addEventListener( "scroll", function( e ){
-      _canvasContainer.scrollLeft = _tracksContainer.element.scrollLeft;
-    }, false );
-
     _canvas.addEventListener( "mousedown", _scrubber.onMouseDown, false );
 
-    this.update = function( zoom ) {
+    function drawTicks( zoom ) {
       var tracksContainerWidth = tracksContainer.container.getBoundingClientRect().width,
           width = Math.min( tracksContainerWidth, _tracksContainer.container.scrollWidth ),
           containerWidth = Math.min( width, _tracksContainer.element.offsetWidth - CANVAS_CONTAINER_PADDING );
 
       _canvasContainer.style.width = containerWidth + "px";
 
-      _canvas.style.width = width + "px";
-
       var context = _canvas.getContext( "2d" );
 
-      _canvas.height = _canvas.offsetHeight;
-      _canvas.width = _canvas.offsetWidth;
+      if ( _canvas.height != _canvas.offsetHeight ) {
+        _canvas.height = _canvas.offsetHeight;
+      }
+      if ( _canvas.width != containerWidth ) {
+        _canvas.width = containerWidth;
+      }
 
-      var inc = _canvas.offsetWidth / _media.duration,
+      var inc = _tracksContainer.container.scrollWidth / _media.duration,
           textWidth = context.measureText( util.secondsToSMPTE( 5 ) ).width,
           padding = 20,
           lastPosition = 0,
-          lastTimeDisplayed = -( ( textWidth + padding ) / 2 );
+          lastTimeDisplayed = -( ( textWidth + padding ) / 2 ),
+          start = _tracksContainer.element.scrollLeft / inc,
+          end = ( _tracksContainer.element.scrollLeft + containerWidth ) / inc;
 
       context.clearRect ( 0, 0, _canvas.width, _canvas.height );
-
+      context.translate( -_tracksContainer.element.scrollLeft, 0 );
       context.beginPath();
 
       for ( var i = 1, l = _media.duration + 1; i < l; i++ ) {
+
+        // If the current time is not in the viewport, just skip it
+        if ( i + 1 < start ) {
+          continue;
+        }
+        if ( i - 1 > end ) {
+          break;
+        }
 
         var position = i * inc;
         var spaceBetween = -~( position ) - -~( lastPosition );
@@ -93,15 +101,22 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       // stroke color
       context.strokeStyle = "#999999";
       context.stroke();
-      context.closePath();
+      context.translate( _tracksContainer.element.scrollLeft, 0 );
 
       _scrubber.update( containerWidth, zoom );
     }; //update
 
+    _tracksContainer.element.addEventListener( "scroll", function() {
+      drawTicks();
+    }, false );
+
+    this.update = function( zoom ) {
+      drawTicks( zoom );
+    };
+
     this.destroy = function(){
       _scrubber.destroy();
     }; //destroy
-
 
     Object.defineProperties( this, {
       element: {
