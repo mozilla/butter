@@ -14,8 +14,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
         _media = media,
         _tracksContainer = tracksContainer,
         _scrubber = new Scrubber( butter, _element, _media, _tracksContainer, hScrollbar ),
-        _this = this,
-        _lastZoom;
+        _this = this;
 
     _element.className = "time-bar";
     _canvasContainer.className = "time-bar-canvas-container";
@@ -108,11 +107,10 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
     }; //update
 
     _tracksContainer.element.addEventListener( "scroll", function() {
-      drawTicks( _lastZoom );
+      drawTicks();
     }, false );
 
     this.update = function( zoom ) {
-      _lastZoom = zoom;
       drawTicks( zoom );
     };
 
