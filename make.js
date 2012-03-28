@@ -45,7 +45,7 @@ target.server = function() {
         app = express.createServer();
 
   app.use(express.static(__dirname));
-  app.use(express.directory(__dirname));
+  app.use(express.directory(__dirname, { icons: true }));
 
   app.listen(9999, '127.0.0.1', function() {
     var addy = app.address();
