@@ -26,6 +26,8 @@ define( [
     _parentElement.id = "butter-timeline";
     _addTrackButton.id = "add-track";
 
+    _parentElement.classList.add( "fadable" );
+
     _addTrackButton.innerHTML = "+Track";
 
     _addTrackButton.addEventListener( "click", function( e ){
@@ -33,15 +35,39 @@ define( [
     }, false );
 
     this._start = function( onModuleReady ){
-      butter.ui.addToArea( "work", "timeline", _parentElement );
-      butter.ui.addToArea( "tools", "add-track", _addTrackButton );
-      butter.ui.pushContentState( "timeline" );
-      butter.ui.registerStateToggleFunctions( "timeline", function(){
+      butter.ui.areas[ "work" ].addComponent( _parentElement, {
+        states: [ "timeline" ],
+        in: function(){
+          _parentElement.style.display = "block";
+          setTimeout(function(){
+            _parentElement.style.opacity = "1";
+          }, 0);
+        },
+        inComplete: function(){
+
+        },
+        out: function(){
+          _parentElement.style.opacity = "0";
+        },
+        outComplete: function(){
+          _parentElement.style.display = "none";
+        }
+      });
+
+      butter.ui.areas[ "tools" ].addComponent( _addTrackButton, {
+
+      });
+
+      butter.ui.registerStateToggleFunctions( "timeline", {
+        in: function(){
           _parentElement.removeAttribute( "data-butter-disabled" );
         },
-        function(){
+        out: function(){
           _parentElement.setAttribute( "data-butter-disabled", true );
-        });
+        }
+      });
+
+      butter.ui.pushContentState( "timeline" );
       onModuleReady();
     };
 

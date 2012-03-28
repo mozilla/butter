@@ -12,6 +12,12 @@
   user-select: none;
 }
 
+#butter-tray .fadable {
+  -moz-transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+}
+
 #butter-modal-container {
   position: fixed;
   top: 0px;
@@ -96,14 +102,7 @@
   left: 0px;
   z-index: 2140000002;
   background-image: url( "assets/bg.jpg" );
-  -moz-transition: opacity 0.5s;
-  -webkit-transition: opacity 0.5s;
-  transition: opacity 0.5s;
   opacity: 0;
-}
-
-#butter-editor.fade-in {
-  opacity: 1;
 }
 
 #butter-editor #editor-container{
@@ -302,12 +301,18 @@
 
 #butter-timeline .track-handle-container {
   position: absolute;
-  height: 140px;
-  width: 110px;
+  height: 133px;
+  width: 105px;
   left: 5px;
   top: 8px;
   bottom: 18px;
   overflow: hidden;
+  box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  moz-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  o-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  overflow: hidden;
+  border-radius: 5px;
 }
 
 #butter-timeline .track-handle-container .handle-list {
@@ -849,7 +854,7 @@
 
 #butter-timeline .zoom-bar {
   position: absolute;
-  top: 140px;
+  top: 145px;
   left: 10px;
   width: 100px;
   height: 10px;

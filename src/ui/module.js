@@ -8,26 +8,51 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
 
   function Area( id, element ){
     var _em = new EventManager( this ),
+        _element,
         _components = [],
         _this = this;
 
-    this.element = element || document.createElement( "div" );
+    this.element = _element = element || document.createElement( "div" );
+    _element.id = id;
     this.items = {};
 
-    this.addComponent = function( component ){
+    this.addComponent = function( element, options ){
+      var component = new Component( element, options );
       _components.push( component );
+      _element.appendChild( component.element );
     };
 
     this.setContentState = function( state ){
-
+      for( var i=0, l=_components.length; i<l; ++i ){
+        _components[ i ].setState( state );
+      }
     };
   }
 
   function Component( element, options ){
+    options = options || {};
     var _element = element,
         _onTransitionIn = options.in || function(){},
+        _onTransitionInComplete = options.inComplete || function(){},
         _onTransitionOut = options.out || function(){},
-        _events = events || {};
+        _onTransitionOutComplete = options.outComplete || function(){},
+        _validStates = options.states || [],
+        _enabled = false;
+
+    this.element = element;
+
+    this.setState = function( state ){
+      if( ( !_validStates || _validStates.indexOf( state ) > -1 ) && !_enabled ){
+        _enabled = true;
+        _onTransitionIn();
+        setTimeout( _onTransitionInComplete, TRANSITION_DURATION );
+      }
+      else if( _enabled ){
+        _onTransitionOut();
+        setTimeout( _onTransitionOutComplete, TRANSITION_DURATION );
+        _enabled = false;
+      }
+    };
   }
 
   function UI( butter, options ){
@@ -67,32 +92,26 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
       document.body.appendChild( _element );
     }
 
-    this.addToArea = function( area, name, childElement ){
-      if( _areas[ area ] && !_areas[ area ].items[ name ] ){
-        if( !childElement.parentNode ){
-          _areas[ area ].element.appendChild( childElement );
+    this.registerStateToggleFunctions = function( state, events ){
+      _em.listen( "contentstatechanged", function( e ){
+        if( e.oldState === state ){
+          events.out( e );
         }
-        _areas[ area ].items[ name ] = childElement;
-      }
-      else{
-        throw new Error( "UI Component " + name + " already exists on " + area + "." );
-      }
-    };
-
-    this.removeFromArea = function( area, name ){
-      if( _areas[ area ] && _areas[ area ].items[ name ] ){
-        var element = _areas[ area ].items[ name ];
-        if( element.parentNode === _areas[ area ].element ){
-          _areas[ area ].element.removeChild( element );
+        if( e.newState === state ){
+          events.in( e );
         }
-        delete _areas[ area ].items[ name ];
-      }
-    };
+      });
+    }
 
     this.pushContentState = function( state ){
       var oldState = _this.contentState;
       _contentState.push( state );
       _element.setAttribute( "data-butter-content-state", _this.contentState );
+      for( var a in _areas ){
+        if( _areas.hasOwnProperty( a ) ){
+          _areas[ a ].setContentState( state );
+        }
+      }
       _em.dispatch( "contentstatechanged", {
         oldState: oldState,
         newState: _this.contentState
@@ -100,11 +119,17 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
     };
 
     this.popContentState = function(){
-      var oldState = _contentState.pop();
-      _element.setAttribute( "data-butter-content-state", _this.contentState );
+      var oldState = _contentState.pop(),
+          newState = _this.contentState;
+      _element.setAttribute( "data-butter-content-state", newState );
+      for( var a in _areas ){
+        if( _areas.hasOwnProperty( a ) ){
+          _areas[ a ].setContentState( newState );
+        }
+      }
       _em.dispatch( "contentstatechanged", {
         oldState: oldState,
-        newState: _this.contentState
+        newState: newState
       });
       return oldState;
     };
@@ -154,6 +179,8 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
         }
       }
     });
+
+    this.TRANSITION_DURATION = TRANSITION_DURATION;
 
    } //UI
 

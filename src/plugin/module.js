@@ -175,9 +175,10 @@
 
       this._start = function( onModuleReady ){
         if( butter.ui ){
-          butter.ui.addToArea( "tools", "plugin", __container );
-          butter.ui.addToArea( "tools", "add-popcorn", __addPopcornButton );
-        } //if
+          butter.ui.areas[ "tools" ].addComponent( __container );
+          butter.ui.areas[ "tools" ].addComponent( __addPopcornButton );
+        }
+        
         if( moduleOptions && moduleOptions.plugins ){
           __this.add( moduleOptions.plugins, onModuleReady );
         }

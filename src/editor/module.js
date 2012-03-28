@@ -4,8 +4,7 @@
 
 (function() {
 
-  var DEFAULT_EDITOR = "default-editor.html",
-      ANIMATION_DURATION = 500;
+  var DEFAULT_EDITOR = "default-editor.html";
 
   define( [ "core/logger", 
             "core/eventmanager", 
@@ -51,7 +50,7 @@
             editor.close();
             setTimeout(function(){
               editor.open( trackEvent );
-            }, ANIMATION_DURATION + 10);
+            }, butter.ui.TRANSITION_DURATION + 10);
           }
           else{
             editor.open( trackEvent );
@@ -100,20 +99,28 @@
         _editorContainer.id = "editor-container";
         parentElement.appendChild( _editorContainer );
 
-        butter.ui.addToArea( "work", "editor", parentElement );
-        butter.ui.registerStateToggleFunctions( "editor",
-          function(){
+        parentElement.classList.add( "fadable" );
+
+        butter.ui.areas[ "work" ].addComponent( parentElement, {
+          states: [ "editor" ],
+          in: function(){
             parentElement.style.display = "block";
             setTimeout(function(){
-              parentElement.classList.add( "fade-in" );
+              parentElement.style.opacity = "1";
             }, 0);
           },
-          function(){
-            setTimeout(function(){
-              parentElement.style.display = "none";
-            }, ANIMATION_DURATION);
-            parentElement.classList.remove( "fade-in" );
-          });
+          inComplete: function(){
+
+          },
+          out: function(){
+            parentElement.style.opacity = "0";
+          },
+          outComplete: function(){
+            parentElement.style.display = "none";
+          }
+        });
+
+        parentElement.style.display = "none";
 
         _this.add( _defaultEditor, "default" );
 
