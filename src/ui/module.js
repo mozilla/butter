@@ -37,7 +37,6 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
 
     this.registerStateToggleFunctions = function( state, on, off ){
       _em.listen( "contentstatechanged", function( e ){
-        console.log( e.data.oldState, e.data.newState );
         if( e.data.oldState === state ){
           off( e );
         }

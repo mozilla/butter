@@ -104,17 +104,14 @@
         butter.ui.addToArea( "main", "editorContainer", container );
         butter.ui.registerStateToggleFunctions( "editor",
           function(){
-            console.log("editor in");
             parentElement.style.display = "block";
             setTimeout(function(){
               parentElement.classList.add( "fade-in" );
             }, 0);
           },
           function(){
-            console.log("editor out");
             setTimeout(function(){
               parentElement.style.display = "none";
-              console.log("herp");
             }, ANIMATION_DURATION);
             parentElement.classList.remove( "fade-in" );
           });

@@ -7,8 +7,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
   var DEFAULT_DIMS = [ 400, 400 ],
       DEFAULT_FRAME_TYPE = "iframe";
 
-  var __guid = 0,
-      __currentIframeEditor;
+  var __guid = 0;
 
   function Editor( butter, source, type, frameType, options ) {
     var _id = __guid++,
@@ -55,9 +54,6 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
         if( butter.ui.contentState !== "editor" ){
           butter.ui.pushContentState( "editor" );
         }
-        if( __currentIframeEditor ){
-          __currentIframeEditor.close( true );
-        }
       }
 
       if( !_dialog ){
@@ -66,7 +62,6 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
         }
         else{
           _dialog = new IFrameDialog( _dialogOptions );
-          __currentIframeEditor = _this;
         } //if
       } //if
 
@@ -152,8 +147,8 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
     }; //open
 
     this.close = function(){
-      if( _currentTrackEvent ){
-        onClose();
+      if( _currentTrackEvent && _dialog ){
+        _dialog.close();
       }
     };
 

@@ -42,14 +42,12 @@ define( [], function(){
     _container.appendChild( _node );
     _element.appendChild( _container );
 
-    butter.ui.listen( "contentstatechanged", function( e ){
-      if( e.data !== "timeline" ){
-        _line.setAttribute( "data-butter-shortened", true );
-      }
-      else{
+    butter.ui.registerStateToggleFunctions( "timeline", function(){
         _line.removeAttribute( "data-butter-shortened" );
-      }
-    });
+      },
+      function(){
+        _line.setAttribute( "data-butter-shortened", true );
+      });
 
     function setNodePosition(){
       var duration = _media.duration,
