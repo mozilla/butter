@@ -33,8 +33,12 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
       var context = _canvas.getContext( "2d" );
 
-      _canvas.height = _canvas.offsetHeight;
-      _canvas.width = containerWidth;
+      if ( _canvas.height != _canvas.offsetHeight ) {
+        _canvas.height = _canvas.offsetHeight;
+      }
+      if ( _canvas.width != containerWidth ) {
+        _canvas.width = containerWidth;
+      }
 
       var inc = _tracksContainer.container.scrollWidth / _media.duration,
           textWidth = context.measureText( util.secondsToSMPTE( 5 ) ).width,
