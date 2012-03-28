@@ -4,46 +4,67 @@
 
 define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
 
+  var TRANSITION_DURATION = 500;
+
+  function Area( id, element ){
+    var _em = new EventManager( this ),
+        _components = [],
+        _this = this;
+
+    this.element = element || document.createElement( "div" );
+    this.items = {};
+
+    this.addComponent = function( component ){
+      _components.push( component );
+    };
+
+    this.setContentState = function( state ){
+
+    };
+  }
+
+  function Component( element, options ){
+    var _element = element,
+        _onTransitionIn = options.in || function(){},
+        _onTransitionOut = options.out || function(){},
+        _events = events || {};
+  }
+
   function UI( butter, options ){
 
-    var _element = document.createElement( "div" ),
-        _toggler = new Toggler( butter, _element ),
-        _em = new EventManager( this ),
+    var _em = new EventManager( this ),
         _areas = {},
         _contentState = [],
         _state = true,
         _this = this;
 
-    _element.id = "butter-tray";
+    _areas[ "main" ] = new Area( "butter-tray" );
+
+    var _element = _areas[ "main" ].element,
+        _toggler = new Toggler( butter, _element );
+
     _element.setAttribute( "data-butter-exclude", "true" );
     _element.className = "butter-tray";
 
-    _areas.main = {
-      element: _element,
-      items: {}
-    };
-    _areas.statusbar = {
-      element: document.createElement( "div" ),
-      items: {}
-    };
+    function createArea( id ){
+      var area = {
+        element: document.createElement( "div" ),
+        items: {}
+      }
+      area.element.id = id;
+      return area;
+    }
 
-    _areas.statusbar.element.id = "butter-status-bar";
+    _areas.work = new Area( "work" );
+    _areas.statusbar = new Area( "status-bar" );
+    _areas.tools = new Area( "tools" );
 
-    _element.appendChild( _areas.statusbar.element );
+    _element.appendChild( _areas[ "statusbar" ].element );
+    _element.appendChild( _areas[ "work" ].element );
+    _element.appendChild( _areas[ "tools" ].element );
 
     if( options.enabled !== false ){
       document.body.appendChild( _element );
-    }
-
-    this.registerStateToggleFunctions = function( state, on, off ){
-      _em.listen( "contentstatechanged", function( e ){
-        if( e.data.oldState === state ){
-          off( e );
-        }
-        if( e.data.newState === state ){
-          on( e );
-        }
-      });
     }
 
     this.addToArea = function( area, name, childElement ){

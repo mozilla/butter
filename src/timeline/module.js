@@ -20,12 +20,21 @@ define( [
 
     var _media = {},
         _currentMedia,
-        _parentElement = document.createElement( "div" );
+        _parentElement = document.createElement( "div" ),
+        _addTrackButton = document.createElement( "button" );
 
     _parentElement.id = "butter-timeline";
+    _addTrackButton.id = "add-track";
+
+    _addTrackButton.innerHTML = "+Track";
+
+    _addTrackButton.addEventListener( "click", function( e ){
+      butter.currentMedia.addTrack();
+    }, false );
 
     this._start = function( onModuleReady ){
-      butter.ui.addToArea( "main", "timeline", _parentElement );
+      butter.ui.addToArea( "work", "timeline", _parentElement );
+      butter.ui.addToArea( "tools", "add-track", _addTrackButton );
       butter.ui.pushContentState( "timeline" );
       butter.ui.registerStateToggleFunctions( "timeline", function(){
           _parentElement.removeAttribute( "data-butter-disabled" );

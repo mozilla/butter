@@ -26,6 +26,7 @@
           _logger = new Logger( "EventEditor" ),
           _defaultEditor = options[ "default" ] || DEFAULT_EDITOR,
           _em = new EventManager( this ),
+          _editorContainer,
           _this = this;
 
       butter.listen( "trackeventcreated", function( e ){
@@ -66,8 +67,7 @@
         if ( !type || !source ) {
           throw new Error( "Can't create an editor without a plugin type and editor source" );
         } //if
-        var editor = _editors[ type ] = new Editor( butter, source, type, frameType, {
-        });
+        var editor = _editors[ type ] = new Editor( butter, source, type, frameType, _editorContainer );
         return editor;
       }; //add
             
@@ -96,12 +96,11 @@
         var parentElement = document.createElement( "div" );
         parentElement.id = "butter-editor";
 
-        container = document.createElement( "div" );
-        container.id = "butter-editor-container";
-        parentElement.appendChild( container );
+        _editorContainer = document.createElement( "div" );
+        _editorContainer.id = "editor-container";
+        parentElement.appendChild( _editorContainer );
 
-        butter.ui.addToArea( "main", "editor", parentElement );
-        butter.ui.addToArea( "main", "editorContainer", container );
+        butter.ui.addToArea( "work", "editor", parentElement );
         butter.ui.registerStateToggleFunctions( "editor",
           function(){
             parentElement.style.display = "block";

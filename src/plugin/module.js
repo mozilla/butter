@@ -57,10 +57,17 @@
       var __butter = butter;
 
       var __plugins = [],
-          __container,
+          __container = document.createElement( "ul" ),
+          __addPopcornButton = document.createElement( "button" ),
+          __addPopcornButton,
           __this = this,
           __pluginElementPrefix = "butter-plugin-",
           __pattern = '<li class="$type_tool">$type</li>';
+
+      __container.id = "butter-plugin";
+      __addPopcornButton.id = "add-popcorn";
+
+      __addPopcornButton.innerHTML = "+Popcorn";
 
       document.head.appendChild( __newStyleSheet );
 
@@ -166,12 +173,10 @@
 
       }; //Plugin
 
-      __container = document.createElement( "ul" );
-      __container.id = "butter-plugin";
-
       this._start = function( onModuleReady ){
         if( butter.ui ){
-          butter.ui.addToArea( "main", "plugin", __container );
+          butter.ui.addToArea( "tools", "plugin", __container );
+          butter.ui.addToArea( "tools", "add-popcorn", __addPopcornButton );
         } //if
         if( moduleOptions && moduleOptions.plugins ){
           __this.add( moduleOptions.plugins, onModuleReady );

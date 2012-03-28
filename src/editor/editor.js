@@ -9,7 +9,9 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
 
   var __guid = 0;
 
-  function Editor( butter, source, type, frameType, options ) {
+  function Editor( butter, source, type, frameType, parentElement, options ){
+    options = options || {};
+
     var _id = __guid++,
         _frameType = frameType || DEFAULT_FRAME_TYPE,
         _source = source,
@@ -21,7 +23,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
           type: _frameType,
           modal: "behind-timeline",
           url: source,
-          parent: butter.ui.areas.main.items.editorContainer
+          parent: parentElement
         },
         _currentTarget,
         _currentTrackEvent,
