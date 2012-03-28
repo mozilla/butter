@@ -3,8 +3,8 @@ Butter
 
 An SDK for authoring Popcorn projects.
 
-Prerequisites
--------------
+Build Prerequisites
+-------------------
 
 * node v0.6 or higher
 * npm (comes with node v0.6 installer)

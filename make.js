@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
 var JSLINT = './node_modules/jshint/bin/hint',
-    RJS    = './node_modules/requirejs/bin/r.js',
-    HTTPD  = './node_modules/http-server/bin/http-server';
+    RJS    = './node_modules/requirejs/bin/r.js';
 
 require('shelljs/make');
 
@@ -42,5 +41,15 @@ target.build = function() {
 target.server = function() {
   echo('### Serving butter');
 
-  exec(HTTPD + ' -p 9999 -a 127.0.0.1', { async: true } );
+  const express = require('express'),
+        app = express.createServer();
+
+  app.use(express.static(__dirname));
+  app.use(express.directory(__dirname));
+
+  app.listen(9999, '127.0.0.1', function() {
+    var addy = app.address();
+    console.log('Server started on http://' + addy.address + ':' + addy.port);
+    console.log('Press Ctrl+C to stop');
+  });
 }

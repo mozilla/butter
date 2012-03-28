@@ -45,7 +45,7 @@
     "shelljs": "*",
     "jshint": "*",
     "requirejs": "*",
-    "http-server": "*"
+    "express": "*"
   },
   "license": "MIT",
   "engine": {
