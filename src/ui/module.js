@@ -83,13 +83,14 @@ define( [ "core/eventmanager", "./statusbar", "./toggler" ], function( EventMana
         butter.currentMedia.paused = !butter.currentMedia.paused;
       }, // space key
       37: function( e ) { // left key
+        var inc = e.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL;
         if( butter.selectedEvents.length ) {
           e.preventDefault();
           for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
-            butter.selectedEvents[ i ].moveFrameLeft( e.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL, e.ctrlKey || e.metaKey );
+            butter.selectedEvents[ i ].moveFrameLeft( inc, e.ctrlKey || e.metaKey );
           } // for
         } else {
-          butter.currentTime -= e.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL;
+          butter.currentTime -= inc;
         } // if
       }, // left key
       38: function( e ) { // up key
