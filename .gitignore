@@ -12,3 +12,4 @@ dist
 *.mp4
 *.wav
 *.mp3
+node_modules

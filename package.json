@@ -1,0 +1,54 @@
+{
+  "name": "butter",
+  "version": "0.3.0a1",
+  "author": "The Mozilla Popcorn Team <web-made-movies-working@googlegroups.com>",
+  "description": "The Popcorn authoring tool",
+  "contributors": [
+    {
+      "name": "Bobby Richter",
+      "email": "secretrobotron@gmail.com"
+    },
+    {
+      "name": "David Seifried",
+      "email": "david.c.seifried@gmail.com"
+    },
+    {
+      "name": "Christopher De Cairos",
+      "email": "chris@chrisdecairos.ca"
+    },
+    {
+      "name": "Matthew Schranz",
+      "email": "schranz.m@gmail.com"
+    },
+    {
+      "name": "Jon Buckley",
+      "email": "jon@jbuckley.ca"
+    },
+    {
+      "name": "Scott Downe",
+      "email": "scott.downe@gmail.com"
+    },
+    {
+      "name": "Mohammed Buttu",
+      "email": "mohammedbuttu@gmail.com"
+    },
+    {
+      "name": "Ben Moskowitz",
+      "email": "benrito@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mozilla/butter.git"
+  },
+  "dependencies": {
+    "shelljs": "*",
+    "jshint": "*",
+    "requirejs": "*",
+    "express": "*"
+  },
+  "license": "MIT",
+  "engine": {
+    "node": ">=0.6"
+  }
+}
