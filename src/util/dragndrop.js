@@ -129,6 +129,7 @@ define([], function(){
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
         _updateInterval = -1;
+        _onStop();
       }
 
       function onMouseMove( e ){
@@ -184,6 +185,7 @@ define([], function(){
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
         _updateInterval = -1;
+        _onStop();
       }
 
       function onMouseMove( e ){
