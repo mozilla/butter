@@ -91,6 +91,9 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
           blinkTarget();
           trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
           trackEvent.listen( "trackeventupdatefailed", onTrackEventUpdateFailed );
+          if( _frameType === "iframe" ){
+            _dialog.iframe.focus();
+          }
         },
         submit: function( e ){
           var duration = TimeUtil.roundTime( butter.currentMedia.duration ),
