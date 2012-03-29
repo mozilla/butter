@@ -84,11 +84,22 @@
         } //if
       } //checkMedia
 
-      function addTrackEventCommand ( options ){
-        var track = options.track,
-            trackEvent;
-
+      function makeCommand( command ) {
         return {
+          execute: function(){
+            command.execute();
+            _undoManager.register({
+              execute: command.execute,
+              undo: command.undo
+            });
+          }
+        };
+      }; //makeCommand
+
+      function addTrackEventCommand( options ) {
+        var track = options.track, trackEvent;
+
+        return makeCommand({
           execute: function(){
             trackEvent = track.addTrackEvent({
               type: options.type,
@@ -99,8 +110,12 @@
           undo: function(){
             track.removeTrackEvent( trackEvent );
           }
-        };
-      };
+        });
+      }; //addTrackEventCommand
+
+      this.addTrackEvent = function( options ){
+        return addTrackEventCommand( options ).execute();
+      }; //addTrackEvent
 
       document.addEventListener( "keydown", function( e ){
         if ( e.ctrlKey && e.shiftKey && e.keyCode === 90 ){
@@ -109,13 +124,7 @@
         else if ( e.ctrlKey && e.keyCode === 90 ){
           _undoManager.undo();
         }
-      });
-
-      this.addTrackEvent = function( options ){
-        var commandAddTrackEvent = addTrackEventCommand( options );
-        _undoManager.register( commandAddTrackEvent );
-        return commandAddTrackEvent.execute();
-      }
+      }); //addEventListener
 
       this.getManifest = function ( name ) {
         checkMedia();
