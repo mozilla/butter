@@ -7,7 +7,7 @@ require('shelljs/make');
 
 target.all = function() {
   target.submodules();
-  target.lint();
+  target.check();
   target.build();
 };
 
