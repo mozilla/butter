@@ -158,12 +158,12 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
     var generatePopcornString = this.generatePopcornString = function( popcornOptions, url, target, method ){
       var popcornString = "";
-      popcornOptions = "";
 
-      // This code is actually useless at the moment
       if ( popcornOptions ) {
         popcornOptions = ", " + JSON.stringify( popcornOptions );
-      } //if
+      } else {
+        popcornOptions = "";
+      }
 
       if( typeof( target ) !== "string" ){
         if( target.id ){

@@ -18,8 +18,14 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
     _element.setAttribute( "data-butter-exclude", "true" );
     _element.className = "butter-tray";
 
-    _areas.main = { element: _element, items: {} };
-    _areas.statusbar = { element: document.createElement( "div" ), items: {} };
+    _areas.main = {
+      element: _element,
+      items: {}
+    };
+    _areas.statusbar = {
+      element: document.createElement( "div" ),
+      items: {}
+    };
 
     _areas.statusbar.element.id = "butter-status-bar";
 

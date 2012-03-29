@@ -181,11 +181,14 @@
       this.add = function( plugin, cb ) {
 
         if( plugin instanceof Array ) {
-          var counter = 0, i = 0, l = 0, check = function() {
-            if ( ++counter === plugin.length && cb ) {
-              cb();
-            }
-          };
+          var counter = 0,
+              i = 0,
+              l = 0,
+              check = function() {
+                if ( ++counter === plugin.length && cb ) {
+                  cb();
+                }
+              };
         
           for( i = 0, l = plugin.length; i < l; i++ ) {
             __this.add( plugin[ i ], check );
