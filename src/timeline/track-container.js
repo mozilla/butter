@@ -127,17 +127,11 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           _element.scrollLeft = _element.scrollWidth * val;
         }
       },
-      element: {
-        enumerable: true,
-        get: function(){
-          return _element;
-        },
-      },
       container: {
         enumerable: true,
         get: function(){
-          return _container
-        },
+          return _container;
+        }
       }
     });
 

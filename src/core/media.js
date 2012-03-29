@@ -205,15 +205,9 @@
 
       this.play = function(){
         _popcornWrapper.play();
-      } //play
+      };
 
       Object.defineProperties( this, {
-        view: {
-          enumerable: true,
-          get: function(){
-            return _view;
-          }
-        },
         url: {
           get: function() {
             return _url;

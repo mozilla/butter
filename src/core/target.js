@@ -30,7 +30,7 @@
           drop: function( element ){
             _em.dispatch( "trackeventrequested", {
               element: element,
-              target: _this,
+              target: _this
             });
           }
         },

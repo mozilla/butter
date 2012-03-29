@@ -53,10 +53,10 @@ define( [
           _popcornOptions[ prop ] = updateOptions[ prop ];
         } //if
       } //for
-      if ( _popcornOptions.start != null ) {
+      if ( _popcornOptions.start !== null ) {
         _popcornOptions.start = TimeUtil.roundTime( _popcornOptions.start );
       }
-      if ( _popcornOptions.end != null ) {
+      if ( _popcornOptions.end !== null ) {
         _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
       }
       _em.dispatch( "trackeventupdated", _this );
@@ -139,7 +139,7 @@ define( [
           _popcornOptions = importData.popcornOptions;
           _em.dispatch( "trackeventupdated", _this );
         }
-      },
+      }
     }); //properties
 
   }; //TrackEvent

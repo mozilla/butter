@@ -34,10 +34,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
     this.update = function( options ){
       options = options || {};
       _element.style.top = "0px";
-      if( options.start != null ){
+      if ( options.start !== null ) {
         _start = options.start;
       }
-      if( options.end != null ){
+      if ( options.end !== null ) {
         _end = options.end;
       }
       resetContainer();
@@ -53,14 +53,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
       element: {
         enumerable: true,
         get: function(){ return _element; }
-      },
-      duration: {
-        enumerable: true,
-        get: function(){ return _duration; },
-        set: function( val ){
-          _duration = val;
-          resetContainer();
-        }
       },
       start: {
         enumerable: true,

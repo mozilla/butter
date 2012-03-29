@@ -90,7 +90,7 @@ define( [
       if( _this.modal ){
         _modalLayer = new Modal( _this.modal );
       } //if
-      for( e in listeners ){
+      for ( var e in listeners ) {
         _listeners[ e ] = listeners[ e ];
       } //for
       _window = window.open( _url, "dialog-window:" + _url, _features.join( "," ) );
@@ -115,7 +115,7 @@ define( [
 
     this.focus = function() {
       _window.focus();
-    } //focus
+    };
 
     this.send = function( type, data ){
       if( _comm ){
@@ -137,5 +137,4 @@ define( [
 
   }; //WindowDialog
 
-  return WindowDialog;
 });

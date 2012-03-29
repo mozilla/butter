@@ -49,12 +49,14 @@ define( [
     } //if
 
     this.findAbsolutePosition = function( obj ){
-      var curleft = curtop = 0;
+      var curleft = 0,
+          curtop = 0;
+
       if( obj.offsetParent ) {
         do {
           curleft += obj.offsetLeft;
           curtop += obj.offsetTop;
-        } while ( obj = obj.offsetParent );
+        } while ( ( obj = obj.offsetParent ) );
       }
       //returns an array
       return [ curleft, curtop ];
@@ -113,9 +115,13 @@ define( [
 
       function mediaChanged( event ){
         if ( _currentMedia !== _media[ event.data.id ] ){
-          _currentMedia && _currentMedia.hide();
+          if ( _currentMedia ) {
+            _currentMedia.hide();
+          }
           _currentMedia = _media[ event.data.id ];
-          _currentMedia && _currentMedia.show();
+          if ( _currentMedia ) {
+            _currentMedia.show();
+          }
           butter.dispatch( "timelineready" );
         }
       }
@@ -138,7 +144,7 @@ define( [
     });
 
     this.currentTimeInPixels = function( pixel ){
-      if( pixel != null ){
+      if( pixel !== null ){
         butter.currentTime = pixel / _currentMedia.container.offsetWidth * _currentMedia.duration;
         butter.dispatch( "mediatimeupdate", _currentMedia.media, "timeline" );
       } //if

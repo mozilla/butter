@@ -146,7 +146,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     } //prepareMedia
 
     function findMediaType( url ){
-      var regexResult = urlRegex.exec( url )
+      var regexResult = urlRegex.exec( url );
       if ( regexResult ) {
         _mediaType = regexResult[ 1 ];
       }
@@ -157,9 +157,10 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     } //findMediaType
 
     var generatePopcornString = this.generatePopcornString = function( popcornOptions, url, target, method ){
-      var popcornString = "",
-          popcornOptions = "";
+      var popcornString = "";
+      popcornOptions = "";
 
+      // This code is actually useless at the moment
       if ( popcornOptions ) {
         popcornOptions = ", " + JSON.stringify( popcornOptions );
       } //if
@@ -201,7 +202,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         var trackEvents = _popcorn.getTrackEvents();
         if ( trackEvents ) {
           for ( var i=0, l=trackEvents.length; i<l; ++i ) {
-            var popcornOptions = trackEvents[ i ]._natives.manifest.options;
+            popcornOptions = trackEvents[ i ]._natives.manifest.options;
             popcornString += "popcorn." + trackEvents[ i ]._natives.type + "({";
             for ( var option in popcornOptions ) {
               if ( popcornOptions.hasOwnProperty( option ) ) {
@@ -233,13 +234,13 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       var popcornFunction = new Function( "", popcornString );
           popcorn = popcornFunction();
       if ( !popcorn ) {
-        var popcornScript = _popcornScript = document.createElement( "script" );
+        var popcornScript = document.createElement( "script" );
         popcornScript.innerHTML = popcornString;
         document.head.appendChild( popcornScript );
         popcorn = window.Popcorn.instances[ window.Popcorn.instances.length - 1 ];
       }
       _popcorn = popcorn;
-    }; //createPopcorn
+    }
 
     function waitForPopcorn( callback, timeoutCallback, tries ){
       _mediaLoadAttempts = 0;
@@ -269,9 +270,9 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         } else {
           setTimeout( checkMedia, 100 );
         } //if
-      }
+      };
       checkMedia();
-    }; //waitForPopcorn
+    }
 
     this.play = function(){
       _popcorn.play();

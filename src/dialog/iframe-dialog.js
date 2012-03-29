@@ -66,7 +66,7 @@ define( [
       if( _this.modal ){
         _modalLayer = new Modal( _this.modal );
       } //if
-      for( e in listeners ){
+      for ( var e in listeners ) {
         _listeners[ e ] = listeners[ e ];
       } //for
       var defaultParent = _modalLayer ? _modalLayer.element : document.body;

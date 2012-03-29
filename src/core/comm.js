@@ -10,7 +10,7 @@ define( [ "./eventmanager" ], function( EventManager ){
     var _this = this,
         _em = new EventManager( _this ),
         _readyInterval,
-        _context = __context++
+        _context = __context++,
         _destroyed = false,
         _ponged = false;
 

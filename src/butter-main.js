@@ -170,8 +170,10 @@
        ****************************************************************/
       //importProject - Import project data
       this.importProject = function ( projectData ) {
+        var i;
+
         if ( projectData.targets ) {
-          for ( var i=0, l=projectData.targets.length; i<l; ++i ) {
+          for ( i = 0, l=projectData.targets.length; i<l; ++i ) {
 
             var t, targets = _this.targets, targetData = projectData.targets[ i ];
             for ( var k=0, j=targets.length; k<j; ++k ) {
@@ -190,7 +192,7 @@
           }
         }
         if ( projectData.media ) {
-          for ( var i=0, l=projectData.media.length; i<l; ++i ) {
+          for ( i = 0, l=projectData.media.length; i<l; ++i ) {
 
             var mediaData = projectData.media[ i ],
                 m = _this.getMediaByType( "target", mediaData.target );
@@ -519,7 +521,7 @@
         readConfig();
       } //if
 
-    }; //ButterInit
+    }
 
     Butter.instances = __instances;
 

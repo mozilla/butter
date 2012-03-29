@@ -7,7 +7,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
   return function( element, events, options ){
 
     var _element = typeof( element ) === "string" ? document.getElementById( element ) : element,
-        _highlightElement = document.createElement( "div" ),
         _blinkInterval = -1,
         _highlightElement = document.createElement( "div" ),
         _highlightDims = {},

@@ -23,8 +23,8 @@
         srcString += type;
       } //while
       hue = ( srcString.charCodeAt( 0 ) + srcString.charCodeAt( 3 ) + srcString.charCodeAt( 6 ) ) % ( ( srcString.charCodeAt( 8) * 5 ) % 360 );
-      saturation = ( ( srcString.charCodeAt( 0 ) + srcString.charCodeAt( 2 ) + srcString.charCodeAt( 4 ) + srcString.charCodeAt( 6 ) ) % 100 ) * .05 + 95;
-      lightness = ( ( srcString.charCodeAt( 1 ) + srcString.charCodeAt( 3 ) + srcString.charCodeAt( 5 ) + srcString.charCodeAt( 7 ) ) % 100 ) * .20 + 40;
+      saturation = ( ( srcString.charCodeAt( 0 ) + srcString.charCodeAt( 2 ) + srcString.charCodeAt( 4 ) + srcString.charCodeAt( 6 ) ) % 100 ) * 0.05 + 95;
+      lightness = ( ( srcString.charCodeAt( 1 ) + srcString.charCodeAt( 3 ) + srcString.charCodeAt( 5 ) + srcString.charCodeAt( 7 ) ) % 100 ) * 0.20 + 40;
 
       // bump up reds because they're hard to see
       if( hue < 20 || hue > 340 ){
@@ -171,7 +171,7 @@
           });
         } //if
         if( moduleOptions && moduleOptions.plugins ){
-          __this.add( moduleOptions.plugins, onModuleReady )
+          __this.add( moduleOptions.plugins, onModuleReady );
         }
         else{
           onModuleReady();
@@ -181,13 +181,14 @@
       this.add = function( plugin, cb ) {
 
         if( plugin instanceof Array ) {
-          var counter = 0;
-          for( var i = 0, l = plugin.length; i < l; i++ ) {
-            __this.add( plugin[ i ], function() {
-              if( ++counter === plugin.length ) {
-                cb && cb();
-              }
-            });
+          var counter = 0, i = 0, l = 0, check = function() {
+            if ( ++counter === plugin.length && cb ) {
+              cb();
+            }
+          };
+        
+          for( i = 0, l = plugin.length; i < l; i++ ) {
+            __this.add( plugin[ i ], check );
           }
         } else {
 
@@ -199,7 +200,9 @@
               }
               plugin.manifest = Popcorn.manifest[ plugin.type ];
               clearInterval( interval );
-              cb && cb();
+              if ( cb ) {
+                cb();
+              }
             }, 100);
           } //if
           __plugins.push( plugin );
@@ -221,10 +224,12 @@
           }
         }
 
-        for( var i =0,l = __plugins.length; i < l; i++ ) {
+        var i, l;
+
+        for ( i = 0, l = __plugins.length; i < l; i++ ) {
           if( __plugins[ i ].name === plugin.name ) {
             var tracks = butter.tracks;
-            for( var i = 0, l = tracks.length; i < l; i++ ) {
+            for ( i = 0, l = tracks.length; i < l; i++ ) {
               var trackEvents = tracks[ i ].trackEvents;
               for( var k = 0, ln = trackEvents.length - 1; ln >= k; ln-- ) {
                 if( trackEvents[ ln ].type === plugin.name ) {
@@ -238,7 +243,7 @@
             __container.removeChild( plugin.element );
 
             var head = document.getElementsByTagName( "HEAD" )[ 0 ];
-            for( var i = 0, l = head.children.length; i < l; i++ ) {
+            for ( i = 0, l = head.children.length; i < l; i++ ) {
               if( head.children[ i ].getAttribute( "src" ) === plugin.path ) {
                 head.removeChild( head.children[ i ] );
               }
