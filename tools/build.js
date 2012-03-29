@@ -5,22 +5,7 @@
  */
 ({
   // Where to find the module names listed below.
-  baseUrl: '../',
-
-  // Where to find modules that are outside of src.
-  // This setup assumes CubicVR.js is the built output,
-  // so this build file assumes make has already run in CubicVR.js
-  paths: {
-    'butter': 'src/butter',
-    'butter-main': 'src/butter-main',
-    'core': 'src/core',
-    'comm': 'src/comm',
-    'previewer': 'src/previewer',
-    'eventeditor': 'src/eventeditor/',
-    'trackeditor': 'src/trackeditor/',
-    'pluginmanager': 'src/pluginmanager/',
-    'timeline': 'src/timeline/'
-  },
+  baseUrl: '../src',
 
   // Use has branch trimming in the build to remove the document.write
   // code in src/butter.js after a minification is done.
@@ -28,16 +13,11 @@
     'source-config': false
   },
 
-  // Do not minify with the requirejs optimizer, to allow shipping
-  // a non-minified and minified version. The Makefile will do the
-  // minification.
-  optimize: 'none',
-
   // Target the AMD loader shim as the main module to optimize,
   // so it shows up first in the built file,
   // since the butter modules use the define/require APIs that the almond
   // provides. Path is relative to baseUrl.
-  name: 'tools/almond',
+  name: '../tools/almond',
 
   // Files to include along with almond. Their nested dependencies will also be
   // included. Subsystems are listed explicitly because butter-src.js does not
@@ -49,12 +29,17 @@
             'butter-main'
            ],
 
-  // Wraps the built file in a closure and exports butter as a global.
+  // Wraps Butter in a closure and adds license information
   wrap: {
-    startFile: 'wrap.start',
-    endFile: 'wrap.end'
+    startFile: '../tools/wrap.start',
+    endFile: '../tools/wrap.end'
   },
 
-  // The built butter.js file for use by web sites.
-  out: '../dist/butter.js'
+  // The built butter.min.js file for use by web sites.
+  out: '../dist/butter.js',
+
+  // Do not minify with the requirejs optimizer, to allow shipping
+  // a non-minified and minified version. The Makefile will do the
+  // minification.
+  optimize: 'none'
 })
