@@ -8,15 +8,20 @@ require('shelljs/make');
 target.all = function() {
   target.submodules();
   target.lint();
-}
+  target.build();
+};
 
 target.submodules = function() {
   echo('### Updating git submodules');
 
   exec('git submodule update --init --recursive');
-}
+};
 
-target.lint = function() {
+target.check = function() {
+  target['check-lint']();
+};
+
+target['check-lint'] = function() {
   echo('### Linting JS files');
 
   var files = find('src').filter( function( file ) {
@@ -24,7 +29,7 @@ target.lint = function() {
   }).join(" ");
 
   exec(JSLINT + ' ' + files);
-}
+};
 
 target.build = function() {
   echo('### Building butter');
@@ -33,7 +38,7 @@ target.build = function() {
   mkdir('-p', 'dist');
   exec(RJS + ' -o tools/build.js');
   exec(RJS + ' -o tools/build.optimized.js');
-}
+};
 
 target.server = function() {
   echo('### Serving butter');
@@ -49,4 +54,4 @@ target.server = function() {
     console.log('Server started on http://' + addy.address + ':' + addy.port);
     console.log('Press Ctrl+C to stop');
   });
-}
+};
