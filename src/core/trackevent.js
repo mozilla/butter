@@ -64,6 +64,40 @@ define( [
       _view.update( _popcornOptions );
     }; //update
 
+    this.moveFrameLeft = function( inc, metaKey ){
+      if( !metaKey ) {
+        if( _popcornOptions.start > inc ) {
+          _popcornOptions.start -= inc;
+          _popcornOptions.end -= inc;
+        } else {
+          _popcornOptions.end = _popcornOptions.end - _popcornOptions.start;
+          _popcornOptions.start = 0;
+        } // if
+      } else if ( _popcornOptions.end - _popcornOptions.start > inc ) {
+        _popcornOptions.end -= inc;
+      } else {
+        _popcornOptions.end = _popcornOptions.start;
+      } // if
+      _em.dispatch( "trackeventupdated", _this );
+      _view.update( _popcornOptions );
+    }; //moveFrameLeft
+
+    this.moveFrameRight = function( inc, metaKey ){
+      if( _popcornOptions.end < butter.duration - inc ) {
+        _popcornOptions.end += inc;
+        if( !metaKey ) {
+          _popcornOptions.start += inc;
+        }
+      } else {
+        if( !metaKey ) {
+          _popcornOptions.start += butter.duration - _popcornOptions.end;
+        }
+        _popcornOptions.end = butter.duration;
+      }
+      _em.dispatch( "trackeventupdated", _this );
+      _view.update( _popcornOptions );
+    }; //moveFrameRight
+
     _view.listen( "trackeventviewupdated", function( e ){
       _popcornOptions.start = _view.start;
       _popcornOptions.end = _view.end;

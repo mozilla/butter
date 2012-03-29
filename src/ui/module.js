@@ -10,7 +10,7 @@ define( [ "core/eventmanager", "./statusbar", "./toggler" ], function( EventMana
   ];
 
   var NUDGE_INCREMENT_SMALL = 0.25,
-      NUDGE_INCREMENT_LARGE = 2.5;
+      NUDGE_INCREMENT_LARGE = 1;
 
   function UI( butter, options ){
 
@@ -57,48 +57,6 @@ define( [ "core/eventmanager", "./statusbar", "./toggler" ], function( EventMana
       }
     });
 
-    this.moveFrameLeft = function( event ){
-      for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
-        event.preventDefault();
-        var cornOptions = butter.selectedEvents[ i ].popcornOptions,
-            inc = event.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL;
-        if( !event.ctrlKey && !event.metaKey ) {
-          if( cornOptions.start > inc ) {
-            cornOptions.start -= inc;
-            cornOptions.end -= inc;
-          } else {
-            cornOptions.end = cornOptions.end - cornOptions.start;
-            cornOptions.start = 0;
-          } // if
-        } else if ( cornOptions.end - cornOptions.start > inc ) {
-          cornOptions.end -= inc;
-        } else {
-          cornOptions.end = cornOptions.start + NUDGE_INCREMENT_SMALL;
-        } // if
-        butter.selectedEvents[ i ].update( cornOptions );
-      } // for
-    }; //moveFrameLeft
-
-    this.moveFrameRight = function( event ){
-      for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
-        event.preventDefault();
-        var cornOptions = butter.selectedEvents[ i ].popcornOptions,
-            inc = event.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL;
-        if( cornOptions.end < butter.duration - inc ) {
-          cornOptions.end += inc;
-          if( !event.ctrlKey && !event.metaKey ) {
-            cornOptions.start += inc;
-          }
-        } else {
-          if( !event.ctrlKey && !event.metaKey ) {
-            cornOptions.start += butter.duration - cornOptions.end;
-          }
-          cornOptions.end = butter.duration;
-        }
-        butter.selectedEvents[ i ].update( cornOptions );
-      } // for
-    }; //moveFrameRight
-
     var orderedTrackEvents = butter.orderedTrackEvent = [],
         sortTrackEvents = function( a, b ) {
           return a.popcornOptions.start > b .popcornOptions.start;
@@ -126,7 +84,10 @@ define( [ "core/eventmanager", "./statusbar", "./toggler" ], function( EventMana
       }, // space key
       37: function( e ) { // left key
         if( butter.selectedEvents.length ) {
-          _this.moveFrameLeft( e );
+          e.preventDefault();
+          for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
+            butter.selectedEvents[ i ].moveFrameLeft( e.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL, e.ctrlKey || e.metaKey );
+          } // for
         } else {
           butter.currentTime -= e.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL;
         } // if
@@ -146,10 +107,14 @@ define( [ "core/eventmanager", "./statusbar", "./toggler" ], function( EventMana
         } // for
       }, // up key
       39: function( e ) { // right key
+        e.preventDefault();
+        var inc = e.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL;
         if( butter.selectedEvents.length ) {
-          _this.moveFrameRight( e );
+          for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
+            butter.selectedEvents[ i ].moveFrameRight( inc, e.ctrlKey || e.metaKey );
+          } // for
         } else {
-          butter.currentTime += e.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL;
+          butter.currentTime += inc;
         } // if
       }, // right key
       40: function( e ) { // down key
