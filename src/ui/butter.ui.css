@@ -76,6 +76,50 @@
   transition: opacity 0.5s;
 }
 
+.butter-media-properties {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  z-index: 2139000000;
+  background-color: rgba( 20, 20, 80, 0.8 );
+  background-image: url( "../../resources/popcorn-icon.png" );
+  background-position: top-left;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+  -moz-transition: opacity 0.5s, width 0.5s, height 0.5s;
+  -webkit-transition: opacity 0.5s, width 0.5s, height 0.5s;
+  transition: opacity 0.5s, width 0.5s, height 0.5s;
+  -moz-transition-delay: 0.5s;
+  -webkit-transition-delay: 0.5s;
+  transition-delay: 0.5s;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.butter-media-properties .container {
+  width: 250px;
+  height: 100px;
+  min-width: 250px;
+  min-height: 250px;
+  position: absolute;
+  text-align: center;
+  color: #fff;
+}
+
+.butter-media-properties:hover {
+  opacity: 1.0;
+  width: 250px;
+  height: 100px;
+}
+
+.butter-media-properties h3, .butter-media-properties h5 {
+  margin: 3px;
+}
+
+.butter-media-properties .url {
+  width: 80%;
+}
+
 #butter-modal-container {
   position: fixed;
   top: 0px;

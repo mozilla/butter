@@ -8,9 +8,9 @@
             "core/eventmanager", 
             "core/track",
             "core/popcorn-wrapper",
-            "ui/page-element"
+            "core/views/media-view"
           ], 
-          function( Logger, EventManager, Track, PopcornWrapper, PageElement ){
+          function( Logger, EventManager, Track, PopcornWrapper, MediaView ){
 
     var __guid = 0;
 
@@ -25,12 +25,14 @@
           _url = mediaOptions.url,
           _ready = false,
           _target = mediaOptions.target,
-          _pageElement,
           _registry,
           _currentTime = 0,
           _duration = 0,
           _popcornOptions = mediaOptions.popcornOptions,
           _mediaUpdateInterval,
+          _view = new MediaView( this, {
+            onDropped: onDroppedOnView
+          }),
           _popcornWrapper = new PopcornWrapper( _id, {
             popcornEvents: {
               muted: function(){
@@ -91,6 +93,13 @@
           _this.removeTrack( _tracks[ 0 ] );
         }
       };
+
+      function onDroppedOnView( e ){
+        _em.dispatch( "trackeventrequested", {
+          event: e,
+          target: _media
+        });
+      }
 
       function onTrackEventAdded( e ){
         var newTrack = e.target,
@@ -190,21 +199,8 @@
         if( _url && _target ){
           _popcornWrapper.prepare( _url, _target, _popcornOptions );
         } //if
-        if( _pageElement ){
-          _pageElement.destroy();
-        } //if
-        _pageElement = new PageElement( _target, {
-          drop: function( element ){
-            _em.dispatch( "trackeventrequested", {
-              element: element,
-              target: _this
-            });
-          }
-        },
-        {
-          highlightClass: "butter-media-highlight"
-        });
-      } //setupContent
+        _view.update();
+      }
 
       this.onReady = function( callback ){
         if( _ready ){
