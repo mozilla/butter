@@ -109,6 +109,12 @@ define( [
     }; //send
 
     Object.defineProperties( this, {
+      iframe: {
+        enumerable: true,
+        get: function(){
+          return _iframe;
+        }
+      },
       closed: {
         enumerable: true,
         get: function(){
