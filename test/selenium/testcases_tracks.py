@@ -2,25 +2,25 @@ from selenium import selenium
 import unittest, time, re, sys
 
 sys.path.append( "../../../../content/" );
-import btv
+import testvars
 
-global testvars
-testvars = btv.ButterTestVariables
+global btv
+btv = testvars.ButterTestVariables
 
 class testcase_TrackDrop(unittest.TestCase):
 
     def setUp( self ):
       self.verificationErrors = []
-      self.selenium = selenium( testvars["Host"],
-                                testvars["Port"],
-                                testvars["Browser"],
-                                testvars["Grid"]
+      self.selenium = selenium( btv["Host"],
+                                btv["Port"],
+                                btv["Browser"],
+                                btv["Grid"]
                                 )
       self.selenium.start()
 
     def test_case(self):
         sel = self.selenium
-        sel.open(testvars["ButterTestPage"])
+        sel.open(btv["ButterTestPage"])
         sel.set_speed( 500 )
         sel.wait_for_page_to_load("7500")
         for i in range(60):
@@ -43,16 +43,16 @@ class testcase_TrackDrop(unittest.TestCase):
 class testcase_DeleteTrack(unittest.TestCase):
     def setUp(self):
       self.verificationErrors = []
-      self.selenium = selenium( testvars["Host"],
-                                testvars["Port"],
-                                testvars["Browser"],
-                                testvars["Grid"]
+      self.selenium = selenium( btv["Host"],
+                                btv["Port"],
+                                btv["Browser"],
+                                btv["Grid"]
                                 )
       self.selenium.start()
 
     def test_delete_track(self):
         sel = self.selenium
-        sel.open(testvars["ButterTestPage"])
+        sel.open(btv["ButterTestPage"])
         sel.wait_for_page_to_load("7500")
         for i in range(60):
             try:
