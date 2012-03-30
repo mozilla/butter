@@ -74,6 +74,10 @@
           }),
           _this = this;
 
+      this.destroy = function(){
+        _popcornWrapper.unbind();
+      };
+
       function onTrackEventAdded( e ){
         var newTrack = e.target,
             trackEvent = e.data;

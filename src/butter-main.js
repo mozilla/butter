@@ -224,14 +224,15 @@
         return projectData;
       };
 
-      this.clearProject = function() {
-        while ( _targets.length > 0 ) {
+      this.clearProject = function(){
+        while( _targets.length > 0 ){
           _this.removeTarget( _targets[ 0 ] );
         }
-        while ( _media.length > 0 ) {
+        while( _media.length > 0 ){
+          _media[ 0 ].destroy();
           _this.removeMedia( _media[ 0 ] );
         }
-      }; //clearProject
+      };
 
       /****************************************************************
        * Media methods
