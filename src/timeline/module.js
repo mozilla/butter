@@ -143,14 +143,6 @@ define( [
       butter.listen( "mediaremoved", mediaRemoved );
     });
 
-    this.currentTimeInPixels = function( pixel ){
-      if( pixel !== null ){
-        butter.currentTime = pixel / _currentMedia.container.offsetWidth * _currentMedia.duration;
-        butter.dispatch( "mediatimeupdate", _currentMedia.media, "timeline" );
-      } //if
-      return butter.currentTime / _currentMedia.duration * ( _currentMedia.container.offsetWidth );
-    }; //currentTimeInPixels
-
     window.addEventListener( "keypress", function( e ){
       if( e.which === 32 && __unwantedKeyPressElements.indexOf( e.target.nodeName ) === -1 ){
         butter.currentMedia.paused = !butter.currentMedia.paused;

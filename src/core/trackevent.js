@@ -53,10 +53,10 @@ define( [
           _popcornOptions[ prop ] = updateOptions[ prop ];
         } //if
       } //for
-      if ( _popcornOptions.start !== null ) {
+      if ( isNaN( _popcornOptions.start ) ) {
         _popcornOptions.start = TimeUtil.roundTime( _popcornOptions.start );
       }
-      if ( _popcornOptions.end !== null ) {
+      if ( isNaN(_popcornOptions.end ) ) {
         _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
       }
       _em.dispatch( "trackeventupdated", _this );
