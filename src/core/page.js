@@ -4,7 +4,8 @@
 
 define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
-  var POPCORN_URL = "../external/popcorn-js/popcorn.js";
+  var POPCORN_URL = "../external/popcorn-js/popcorn.js",
+      PLAYER_URL = "../external/popcorn-js/modules/player/popcorn.player.js";
 
   return function() {
     
@@ -23,26 +24,49 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
     this.preparePopcorn = function( readyCallback ) {
 
-      function isPopcornReady() {
+      function addScript( url ) {
+        var script = document.createElement( "script" );
+        script.src = url;
+        document.head.appendChild( script );
+      }
+
+      function isPopcornReady( cb ) {
         if ( !window.Popcorn ) {
           setTimeout( function() {
-            isPopcornReady();
-          }, 1000 );
+            isPopcornReady( cb );
+          }, 100 );
         }
         else {
-          readyCallback();
+          cb();
         } //if
       } //isPopcornReady
 
-      if ( !window.Popcorn ) {
-        var popcornSourceScript = document.createElement( "script" );
-        popcornSourceScript.src = POPCORN_URL;
-        document.head.appendChild( popcornSourceScript );
-        isPopcornReady();
+      function isPlayerReady() {
+        if ( !window.Popcorn.player ) {
+          setTimeout( function() {
+            isPlayerReady();
+          }, 100 );
+        }
+        else {
+          readyCallback();
+        }
       }
-      else {
-        readyCallback();
-      } //if
+
+      function checkPlayer() {
+        if( !window.Popcorn.player ) {
+          addScript( PLAYER_URL );
+          isPlayerReady();
+        } else {
+          readyCallback();
+        }
+      }
+
+      if ( !window.Popcorn ) {
+        addScript( POPCORN_URL );
+        isPopcornReady( checkPlayer );
+      } else {
+        checkPlayer();
+      }
     }; // preparePopcorn
 
     this.getHTML = function( popcornStrings ){
