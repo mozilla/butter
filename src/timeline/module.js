@@ -13,7 +13,9 @@ define( [
 
   var __unwantedKeyPressElements = [
     "TEXTAREA",
-    "INPUT"
+    "INPUT",
+    "VIDEO",
+    "AUDIO"
   ];
 
   var Timeline = function( butter, options ){
@@ -178,7 +180,12 @@ define( [
 
     window.addEventListener( "keypress", function( e ){
       if( e.which === 32 && __unwantedKeyPressElements.indexOf( e.target.nodeName ) === -1 ){
-        butter.currentMedia.paused = !butter.currentMedia.paused;
+        if( butter.currentMedia.ended ){
+          butter.currentMedia.paused = false;
+        }
+        else{
+          butter.currentMedia.paused = !butter.currentMedia.paused;
+        }
       } //if
     }, false );
 
