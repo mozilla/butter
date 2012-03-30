@@ -259,6 +259,7 @@ define( [
 
     this.destroy = function() {
       _rootElement.parentNode.removeChild( _rootElement );
+      butter.ui.areas.statusbar.element.removeChild( _mediaStatusContainer );
       _timebar.destroy();
     }; //destroy
 

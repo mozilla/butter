@@ -76,6 +76,16 @@
           }),
           _this = this;
 
+      this.destroy = function(){
+        _popcornWrapper.unbind();
+      };
+
+      this.clear = function(){
+        while( _tracks.length > 0 ){
+          _this.removeTrack( _tracks[ 0 ] );
+        }
+      };
+
       function onTrackEventAdded( e ){
         var newTrack = e.target,
             trackEvent = e.data;
