@@ -23,6 +23,17 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _interruptLoad = false,
         _this = this;
 
+    this.unbind = function(){
+      try{
+        removePopcornHandlers();
+        _popcorn.destroy();
+        _popcorn = undefined;
+      }
+      catch( e ){
+        _logger.log( "WARNING: Popcorn did NOT get destroyed properly: \n" + e.message + "\n" + e.stack );
+      } //try
+    };
+
     function addPopcornHandlers(){
       for( var eventName in _popcornEvents ){
         _popcorn.on( eventName, _popcornEvents[ eventName ] );
