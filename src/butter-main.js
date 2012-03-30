@@ -45,7 +45,7 @@
             icons: {}
           },
           _defaultTarget,
-          _this = this
+          _this = this,
           _selectedEvents = [];
 
       function checkMedia() {
@@ -414,7 +414,8 @@
           set: function(selectedEvents) {
             _selectedEvents = selectedEvents;
             return _selectedEvents;
-          }
+          },
+          enumerable: true
         }
       });
 
