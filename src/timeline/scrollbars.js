@@ -79,7 +79,7 @@ define( [ "core/eventmanager" ], function( EventManager ){
       setHandlePosition();
     }, false );
 
-    _containerChild.addEventListener( "mousewheel", function( e ){
+    _containerParent.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaY ){
         _containerParent.scrollTop -= e.wheelDeltaY;
         setHandlePosition();
@@ -88,9 +88,9 @@ define( [ "core/eventmanager" ], function( EventManager ){
     }, false );
 
     // For Firefox
-    _containerChild.addEventListener( "DOMMouseScroll", function( e ){
+    _containerParent.addEventListener( "DOMMouseScroll", function( e ){
       if( e.axis === e.VERTICAL_AXIS && !e.shiftKey ){
-        _containerChild.scrollTop += e.detail * 2;
+        _containerParent.scrollTop += e.detail * 2;
         setHandlePosition();
         e.preventDefault();
       }
