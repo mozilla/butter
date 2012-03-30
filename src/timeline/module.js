@@ -148,7 +148,6 @@ define( [
     window.addEventListener( "keypress", function( e ){
       if( e.which === 32 && __unwantedKeyPressElements.indexOf( e.target.nodeName ) === -1 ){
         if( butter.currentMedia.ended ){
-          console.log( "ended" );
           butter.currentMedia.paused = false;
         }
         else{
