@@ -34,10 +34,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
     this.update = function( options ){
       options = options || {};
       _element.style.top = "0px";
-      if ( isNaN( options.start ) ) {
+      if ( !isNaN( options.start ) ) {
         _start = options.start;
       }
-      if ( isNaN( options.end ) ) {
+      if ( !isNaN( options.end ) ) {
         _end = options.end;
       }
       resetContainer();
