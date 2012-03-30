@@ -35,7 +35,7 @@ define([], function(){
         top: Number(top.substring( 0, top.indexOf( "px" ) ) ),
         left: Number(left.substring( 0, left.indexOf( "px" ) ) ),
         bottom: Number(bottom.substring( 0, bottom.indexOf( "px" ) ) ),
-        right: Number(right.substring( 0, right.indexOf( "px" ) ) ),
+        right: Number(right.substring( 0, right.indexOf( "px" ) ) )
       };
   }
 
@@ -612,7 +612,7 @@ define([], function(){
     _instance.removeItem = function( item ){
       _elements.splice( _elements.indexOf( item ), 1 );
       item.removeEventListener( "mousedown", onElementMouseDown, false );
-    }
+    };
 
     return _instance;
   }
