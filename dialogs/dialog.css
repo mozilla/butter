@@ -1,0 +1,59 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.hbox {
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  -webkit-box-align: stretch;
+
+  display: -moz-box;
+  -moz-box-orient: horizontal;
+  -moz-box-align: stretch;
+
+  display: box;
+  box-orient: horizontal;
+  box-align: stretch;
+}
+
+.vbox {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-box-align: stretch;
+
+  display: -moz-box;
+  -moz-box-orient: vertical;
+  -moz-box-align: stretch;
+
+  display: box;
+  box-orient: vertical;
+  box-align: stretch;
+}
+
+.center {
+        -webkit-box-pack: center;
+        -moz-box-pack: center;
+        box-pack: center;
+}
+
+#container {
+  width: 100%;
+  height: 100%;
+}
+
+#buttons {
+  width: 100%;
+  margin: 5px;
+}
+
+h1 {
+  margin-bottom: 5px;
+}
+
+button {
+  font-size: 120%;
+  margin: 0 5px 0 5px;
+}

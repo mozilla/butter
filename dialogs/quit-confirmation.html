@@ -11,8 +11,7 @@
 
         document.addEventListener( "DOMContentLoaded", function( e ){
           var okButton = document.getElementById( "yes" ),
-              cancelButton = document.getElementById( "no" ),
-              trackName = document.getElementById( "track-name" );
+              cancelButton = document.getElementById( "no" );
 
           function okPressed( e ){
             _comm.send( "submit", true );
@@ -33,12 +32,6 @@
           okButton.addEventListener( "click", okPressed, false );
           cancelButton.addEventListener( "click", cancelPressed, false );
 
-          _comm.listen( "trackdata", function( e ){
-            trackName.appendChild( document.createTextNode( e.data ) );
-            okButton.removeAttribute( "disabled" );
-            cancelButton.removeAttribute( "disabled" );
-          });
-
         }, false );
       }());
     </script>
@@ -47,10 +40,10 @@
   <body>
     <div id="container" class="hbox center">
       <div class="vbox center">
-        <h1>Are you sure you want to delete <span id="track-name"></span>?</h1>
+        <h1>Are you sure you want to leave?</h1>
         <div id="buttons" class="hbox center">
-          <button disabled id="yes">Yes</button>
-          <button disabled id="no">No</button>
+          <button id="yes">Yes</button>
+          <button id="no">No</button>
         </div>
       </div>
     </div>

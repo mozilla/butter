@@ -84,16 +84,17 @@
 }
 @font-face {
   font-family: 'BebasRegular';
-  src: url('fonts/BEBAS___-webfont.eot');
-  src: url('fonts/BEBAS___-webfont.eot?#iefix') format('embedded-opentype'),
-       url('fonts/BEBAS___-webfont.woff') format('woff'),
-       url('fonts/BEBAS___-webfont.ttf') format('truetype'),
-       url('fonts/BEBAS___-webfont.svg#BebasRegular') format('svg');
+  src: url('assets/fonts/BEBAS___-webfont.eot');
+  src: url('assets/fonts/BEBAS___-webfont.eot?#iefix') format('embedded-opentype'),
+       url('assets/fonts/BEBAS___-webfont.woff') format('woff'),
+       url('assets/fonts/BEBAS___-webfont.ttf') format('truetype'),
+       url('assets/fonts/BEBAS___-webfont.svg#BebasRegular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 
 #butter-header {
+  z-index: 2140000000;
   position: fixed;
   width: 100%;
   left: 0px;

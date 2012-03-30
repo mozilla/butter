@@ -10,34 +10,19 @@
         var _comm = new Comm();
 
         document.addEventListener( "DOMContentLoaded", function( e ){
-          var okButton = document.getElementById( "yes" ),
-              cancelButton = document.getElementById( "no" ),
-              trackName = document.getElementById( "track-name" );
+          var okButton = document.getElementById( "ok" );
 
           function okPressed( e ){
-            _comm.send( "submit", true );
-          } //okPressed
-
-          function cancelPressed( e ){
-            _comm.send( "cancel" );
-          } //cancelPressed
+            _comm.send( "cancel", true );
+          }
 
           document.addEventListener( "keypress", function( e ) {
-            if( e.keyCode === 13 ) {
+            if( e.keyCode === 13 || e.keyCode === 27 ) {
               okPressed( e );
-            } else if( e.keyCode === 27 ) {
-              cancelPressed( e );
             }
           }, false);
 
           okButton.addEventListener( "click", okPressed, false );
-          cancelButton.addEventListener( "click", cancelPressed, false );
-
-          _comm.listen( "trackdata", function( e ){
-            trackName.appendChild( document.createTextNode( e.data ) );
-            okButton.removeAttribute( "disabled" );
-            cancelButton.removeAttribute( "disabled" );
-          });
 
         }, false );
       }());
@@ -47,10 +32,9 @@
   <body>
     <div id="container" class="hbox center">
       <div class="vbox center">
-        <h1>Are you sure you want to delete <span id="track-name"></span>?</h1>
+        <h1>There was an error logging in. Please try again.</h1>
         <div id="buttons" class="hbox center">
-          <button disabled id="yes">Yes</button>
-          <button disabled id="no">No</button>
+          <button id="ok">Ok</button>
         </div>
       </div>
     </div>
