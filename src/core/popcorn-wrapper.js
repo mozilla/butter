@@ -144,13 +144,17 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       }
 
       if( typeof( target ) !== "string" ){
-        if( target.id ){
+        if( target && target.id ){
           target = target.id;
         }
         else{
           _logger.log( "WARNING: Unexpected non-string Popcorn target: " + target );
         }
       } //if
+
+      if( !_mediaType ){
+        throw new Error( "Media type not generated yet. Please specify a url for media objects before generating a popcorn string." );
+      }
 
       function constructPlayer( type ){
         var script,

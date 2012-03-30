@@ -402,6 +402,17 @@
             return _pageElement;
           }
         },
+        popcornOptions: {
+          enumerable: true,
+          get: function(){
+            return _popcornOptions;
+          },
+          set: function( val ){
+            _popcornOptions = val;
+            _em.dispatch( "mediapopcornsettingschanged", _this );
+            setupContent();
+          }
+        },
         popcornString: {
           enumerable: true,
           get: function(){
