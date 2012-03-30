@@ -141,8 +141,9 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         }
       } //if
 
-      function constructPlayerString( type ){
-        var script;
+      function constructPlayer( type ){
+        var script,
+            targetElement = document.getElementById( target );
 
         if( type === "baseplayer" ) {
           _playerReady = true;
@@ -161,9 +162,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
             type = "youtube";
           }
 
-          if( [ "VIDEO", "AUDIO" ].indexOf( target.nodeName ) === -1 ) {
-            var targetElement = document.getElementById( target ),
-                parentNode = targetElement.parentNode,
+          if( [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) !== -1 ) {
+            var parentNode = targetElement.parentNode,
                 newElement = document.createElement( "div" );
 
             newElement.id = targetElement.id;
@@ -187,7 +187,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       }
 
       // call certain player function depending on the regexResult
-      popcornString += constructPlayerString( _mediaType );
+      popcornString += constructPlayer( _mediaType );
 
       if ( _popcorn ) {
         var trackEvents = _popcorn.getTrackEvents();
