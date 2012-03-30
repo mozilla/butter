@@ -322,6 +322,7 @@
   width: 90%;
   padding-top: 7px;
   padding-bottom: 7px;
+  padding-bottom: 35px;
 }
 
 #butter-timeline .track-handle-container .handle-list .track-handle {
@@ -646,7 +647,7 @@
   font-size: 100%;
   outline: none;
   padding-top: 7px;
-  padding-bottom: 3px;
+  padding-bottom: 35px;
 }
 
 #butter-timeline .tracks-container .butter-track-event {
@@ -832,7 +833,7 @@
   moz-border-radius: 6px;
   o-border-radius: 6px;
   webkit-border-radius: 6px;
-  font-size: 10px;
+  font-size: 75%;
   background-image: -moz-linear-gradient(center bottom,#4A6B2D 0,#80BA4E 100%);
   background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#4A6B2D),color-stop(1,#80BA4E));
   border: 1px solid #333;
@@ -841,12 +842,13 @@
   o-box-shadow: 0 1px 0 #656565;
   padding: 3px;
   webkit-box-shadow: 0 1px 0 #656565;
-  width: 60px;
+  width: 123px;
   margin: 0;
   color: #eee;
   position: absolute;
   top: 127px;
   cursor: pointer;
+  height: 24px;
 }
 
 #butter-tray #add-popcorn.add-popcorn-done {
@@ -878,12 +880,11 @@
   o-box-shadow: 0 1px 0 #656565;
   padding: 3px;
   webkit-box-shadow: 0 1px 0 #656565;
-  width: 60px;
+  width: 100px;
   margin: 0;
   color: #eee;
   position: absolute;
-  top: 127px;
-  left: 61px;
+  left: 3px;
   cursor: pointer;
 }
 

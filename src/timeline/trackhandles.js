@@ -8,12 +8,14 @@ define( [
         ], 
         function( IFrameDialog, DragNDrop ){
 
-  return function( media, tracksContainer, orderChangedCallback ){
+  var ADD_TRACK_BUTTON_Y_ADJUSTMENT = 35;
+
+  return function( butter, media, tracksContainer, orderChangedCallback ){
 
     var _media = media,
         _container = document.createElement( "div" ),
-        _droppableContainer = document.createElement( "div" ),
         _listElement = document.createElement( "div" ),
+        _addTrackButton = document.createElement( "button" ),
         _tracks = {},
         _menus = [],
         _this = this;
@@ -22,6 +24,15 @@ define( [
     _listElement.className = "handle-list";
 
     _container.appendChild( _listElement );
+
+    _addTrackButton.id = "add-track";
+    _addTrackButton.innerHTML = "+Track";
+
+    _container.appendChild( _addTrackButton );
+
+    _addTrackButton.addEventListener( "click", function( e ){
+      butter.currentMedia.addTrack();
+    }, false );
 
     var _sortable = DragNDrop.sortable( _listElement, {
       change: function( elements ){
@@ -102,6 +113,8 @@ define( [
         element: trackDiv,
         menu: menuDiv
       };
+
+      _addTrackButton.style.top = _listElement.offsetHeight - ADD_TRACK_BUTTON_Y_ADJUSTMENT + "px";
     });
 
     _media.listen( "trackremoved", function( e ){
