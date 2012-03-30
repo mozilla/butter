@@ -59,6 +59,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       _container.appendChild( trackView.element );
       trackView.duration = _media.duration;
       trackView.zoom = _zoom;
+      trackView.parent = _this;
     });
 
     _media.listen( "trackremoved", function( e ){

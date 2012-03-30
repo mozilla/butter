@@ -137,6 +137,8 @@ define( [
             _name = importData.name;
           }
           _popcornOptions = importData.popcornOptions;
+          _view.type = _type;
+          _view.update( _popcornOptions );
           _em.dispatch( "trackeventupdated", _this );
         }
       }
