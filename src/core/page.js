@@ -48,19 +48,19 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     this.getHTML = function( popcornStrings ){
       var html = document.createElement( "html" ),
           head = document.getElementsByTagName( "head" )[ 0 ].cloneNode( true ),
-          body = document.getElementsByTagName( "body" )[ 0 ].cloneNode( true );
-      var toClean, toExclude;
+          body = document.getElementsByTagName( "body" )[ 0 ].cloneNode( true ),
+          i, toClean, toExclude, node;
 
       toExclude = Array.prototype.slice.call( head.querySelectorAll( "*[data-butter-exclude]" ) );
       toExclude = toExclude.concat( Array.prototype.slice.call( head.querySelectorAll( "*[data-requiremodule]" ) ) );
-      for( var i=0, l=toExclude.length; i<l; ++i ){
-        var node = toExclude[ i ];
+      for ( i = 0, l = toExclude.length; i < l; ++i ) {
+        node = toExclude[ i ];
         node.parentNode.removeChild( node );
       } //for
 
       toClean = body.querySelectorAll( "*[butter-clean=\"true\"]" );
-      for( var i=0, l=toClean.length; i<l; ++i ){
-        var node = toClean[ i ];
+      for ( i = 0, l = toClean.length; i < l; ++i ) {
+        node = toClean[ i ];
         node.removeAttribute( "butter-clean" );
         node.removeAttribute( "data-butter" );
 
@@ -74,8 +74,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       } //for
 
       toExclude = body.querySelectorAll( "*[data-butter-exclude]" );
-      for( var i=0, l=toExclude.length; i<l; ++i ){
-        var node = toExclude[ i ];
+      for ( i = 0, l = toExclude.length; i < l; ++i ) {
+        node = toExclude[ i ];
         node.parentNode.removeChild( node );
       } //for
 
@@ -83,7 +83,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       html.appendChild( body );
 
       if( popcornStrings ){
-        for( var i=0; i<popcornStrings.length; ++i ){
+        for ( i = 0; i < popcornStrings.length; ++i ) {
           var script = document.createElement( "script" );
           script.type = "text/javascript";
           script.innerHTML = "(function(){\n" + popcornStrings[ i ] + "\n}());";

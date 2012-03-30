@@ -18,12 +18,18 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
     _element.setAttribute( "data-butter-exclude", "true" );
     _element.className = "butter-tray";
 
-    _areas[ "main" ] = { element: _element, items: {} };
-    _areas[ "statusbar" ] = { element: document.createElement( "div" ), items: {} };
+    _areas.main = {
+      element: _element,
+      items: {}
+    };
+    _areas.statusbar = {
+      element: document.createElement( "div" ),
+      items: {}
+    };
 
-    _areas[ "statusbar" ].element.id = "butter-status-bar";
+    _areas.statusbar.element.id = "butter-status-bar";
 
-    _element.appendChild( _areas[ "statusbar" ].element );
+    _element.appendChild( _areas.statusbar.element );
 
     if( options.enabled !== false ){
       document.body.appendChild( _element );
@@ -110,7 +116,7 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
       }
     });
 
-   }; //UI
+   } //UI
 
    UI.__moduleName = "ui";
 

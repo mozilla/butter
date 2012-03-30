@@ -27,7 +27,7 @@ define( [], function(){
         e = {
           type: eventName + "",
           target: _target,
-          data: eventData,
+          data: eventData
         };
       }
       else {

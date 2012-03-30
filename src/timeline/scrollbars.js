@@ -17,7 +17,6 @@ define( [ "core/eventmanager" ], function( EventManager ){
         _childHeight,
         _scrollHeight,
         _handleHeight,
-        _handleHeight,
         _mousePos = 0,
         _em = new EventManager( this ),
         _this = this;
@@ -74,7 +73,7 @@ define( [ "core/eventmanager" ], function( EventManager ){
       }else{
         _handle.style.top = "0px";
       }
-    };
+    }
 
     _containerParent.addEventListener( "scroll", function( e ){
       setHandlePosition();
@@ -197,7 +196,7 @@ define( [ "core/eventmanager" ], function( EventManager ){
       }else{
         _handle.style.left = "0px";
       }
-    };
+    }
 
     _containerParent.addEventListener( "scroll", function( e ){
       setHandlePosition();

@@ -52,7 +52,7 @@ define(['util/xhr'], function(XHR) {
           }
         }
       });
-    }
+    };
 
     this.list = function(callback) {
       XHR.get(server + "/files", function() {

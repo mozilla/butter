@@ -23,7 +23,7 @@
 
       var _editors = {},
           _logger = new Logger( "EventEditor" ),
-          _defaultEditor = options.default || DEFAULT_EDITOR,
+          _defaultEditor = options[ "default" ] || DEFAULT_EDITOR,
           _em = new EventManager( this ),
           _this = this;
 
@@ -106,7 +106,7 @@
         _this.edit( e.target );
       });
 
-    }; //Editor
+    }
 
     EventEditor.__moduleName = "editor";
 

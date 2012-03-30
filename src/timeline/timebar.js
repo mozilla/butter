@@ -62,7 +62,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
         }
 
         var position = i * inc;
-        var spaceBetween = -~( position ) - -~( lastPosition );
+        var spaceBetween = -~( position ) + ~( lastPosition );
 
         // ensure there is enough space to draw a seconds tick
         if ( spaceBetween > 3 ) {
@@ -104,7 +104,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       context.translate( _tracksContainer.element.scrollLeft, 0 );
 
       _scrubber.update( containerWidth, zoom );
-    }; //update
+    }
 
     _tracksContainer.element.addEventListener( "scroll", function() {
       drawTicks();

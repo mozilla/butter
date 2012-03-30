@@ -40,7 +40,7 @@
         xhr.onreadystatechange = callback;
         xhr.send(parameterize({data: data}));
       }
-    }
+    };
 
     return XHR;
 
