@@ -94,6 +94,7 @@
         if ( !( track instanceof Track ) ) {
           track = new Track( track );
         } //if
+        track._media = _this;
         _tracks.push( track );
         _em.repeat( track, [
           "tracktargetchanged",
@@ -147,6 +148,7 @@
           track.unlisten( "trackeventupdated", onTrackEventUpdated );
           track.unlisten( "trackeventremoved", onTrackEventRemoved );
           _em.dispatch( "trackremoved", track );
+          track._media = null;
           return track;
         } //if
       }; //removeTrack

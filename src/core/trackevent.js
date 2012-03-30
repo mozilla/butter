@@ -38,6 +38,9 @@ define( [
         _view = new TrackEventView( this, _type, _popcornOptions ),
         _selected = false;
 
+    _this._track = null;
+    _this.popcornOptions = _popcornOptions;
+
     if( !_type ){
       _logger.log( "Warning: " + _id + " has no type." );
     } //if
@@ -62,6 +65,7 @@ define( [
       _em.dispatch( "trackeventupdated", _this );
 
       _view.update( _popcornOptions );
+      _this.popcornOptions = _popcornOptions;
     }; //update
 
     _view.listen( "trackeventviewupdated", function( e ){
@@ -76,12 +80,6 @@ define( [
         configurable: false,
         get: function(){
           return _view;
-        }
-      },
-      popcornOptions: {
-        enumerable: true,
-        get: function(){
-          return LangUtil.clone( _popcornOptions );
         }
       },
       type: {
