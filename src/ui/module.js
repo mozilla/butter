@@ -380,6 +380,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner" ], function( EventM
       _logoSpinner.hide();
       setTimeout( function(){
         _logoSpinner.stop();
+        logoContainer.style.display = "none";
       }, 500 );
       _this.visible = true;
       _toggler.visible = true;
