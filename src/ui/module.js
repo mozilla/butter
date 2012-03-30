@@ -57,7 +57,7 @@ define( [ "core/eventmanager", "./statusbar", "./toggler" ], function( EventMana
       }
     });
 
-    var orderedTrackEvents = butter.orderedTrackEvent = [],
+    var orderedTrackEvents = butter.orderedTrackEvents = [],
         sortTrackEvents = function( a, b ) {
           return a.popcornOptions.start > b .popcornOptions.start;
         };
@@ -76,6 +76,26 @@ define( [ "core/eventmanager", "./statusbar", "./toggler" ], function( EventMana
 
     butter.listen( "trackeventupdated", function( e ) {
       orderedTrackEvents.sort( sortTrackEvents );
+    }); // listen
+
+    var orderedTracks = butter.orderedTracks = [],
+        sortTracks = function( a, b ) {
+          return a.order > b.order;
+        };
+
+    butter.listen( "trackadded", function( e ) {
+      e.data.listen( "trackorderchanged", function( e ) {
+        orderedTracks.sort( sortTracks );
+      }); // listen
+      orderedTracks.push( e.data );
+      orderedTracks.sort( sortTracks );
+    }); // listen
+
+    butter.listen( "trackremoved", function( e ) {
+      var index = orderedTracks.indexOf( e.data );
+      if( index > -1 ){
+        orderedTracks.splice( index, 1 );
+      } // if
     }); // listen
 
     var processKey = {
@@ -100,7 +120,7 @@ define( [ "core/eventmanager", "./statusbar", "./toggler" ], function( EventMana
         for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
           trackEvent = butter.selectedEvents[ i ];
           track = trackEvent.track;
-          nextTrack = butter.tracks[ butter.tracks.indexOf( track ) - 1 ]
+          nextTrack = orderedTracks[ orderedTracks.indexOf( track ) - 1 ];
           if( nextTrack ) {
             track.removeTrackEvent( trackEvent );
             nextTrack.addTrackEvent( trackEvent );
@@ -122,10 +142,10 @@ define( [ "core/eventmanager", "./statusbar", "./toggler" ], function( EventMana
         var track,
             trackEvent,
             nextTrack;
-        for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+        for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
           trackEvent = butter.selectedEvents[ i ];
           track = trackEvent.track;
-          nextTrack = butter.tracks[ butter.tracks.indexOf( track ) + 1 ]
+          nextTrack = orderedTracks[ orderedTracks.indexOf( track ) + 1 ]
           if( nextTrack ) {
             track.removeTrackEvent( trackEvent );
             nextTrack.addTrackEvent( trackEvent );

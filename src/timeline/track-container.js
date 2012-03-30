@@ -26,6 +26,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       for( var i=0, l=orderedTracks.length; i<l; ++i ){
         var trackElement = orderedTracks[ i ].view.element;
         if( trackElement !== _container.childNodes[ i ] ){
+          orderedTracks[ i ].order = i;
           _container.insertBefore( trackElement, _container.childNodes[ i + 1 ] );
         } //if
       } //for
