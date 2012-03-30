@@ -153,7 +153,12 @@ define( [], function(){
     });
 
     _playButton = new Button( "play-button-container", function( e ){
-      _media.paused = !_media.paused;
+      if( _media.ended ){
+        _media.paused = false;
+      }
+      else{
+        _media.paused = !_media.paused;
+      }
     });
 
     _media.listen( "mediamuted", function( e ){
@@ -166,6 +171,10 @@ define( [], function(){
 
     _media.listen( "mediavolumechange", function( e ){
       _muteButton.state = !_media.muted;
+    });
+
+    _media.listen( "mediaended", function( e ){
+      _playButton.state = true;
     });
 
     _media.listen( "mediaplaying", function( e ){

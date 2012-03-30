@@ -27,6 +27,7 @@
           _target = mediaOptions.target,
           _pageElement,
           _registry,
+          _ended = false,
           _currentTime = 0,
           _duration = 0,
           _popcornOptions = mediaOptions.popcornOptions,
@@ -44,6 +45,7 @@
                 _em.dispatch( "mediavolumechange", _popcornWrapper.volume );
               },
               timeupdate: function(){
+                _ended = false;
                 _currentTime = _popcornWrapper.currentTime;
                 _em.dispatch( "mediatimeupdate", _this );
               },
@@ -52,12 +54,17 @@
                 _em.dispatch( "mediapause" );
               },
               playing: function(){
+                _ended = false;
                 _mediaUpdateInterval = setInterval( function(){
                   _currentTime = _popcornWrapper.currentTime;
                 }, 10 );
                 _em.dispatch( "mediaplaying" );
               },
               timeout: function(){
+              },
+              ended: function(){
+                _ended = true;
+                _em.dispatch( "mediaended" );
               }
             },
             prepare: function(){
@@ -208,7 +215,14 @@
       };
 
       Object.defineProperties( this, {
+        ended: {
+          enumerable: true,
+          get: function(){
+            return _ended;
+          }
+        },
         url: {
+          enumerable: true,
           get: function() {
             return _url;
           },
