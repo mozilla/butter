@@ -45,7 +45,8 @@
             icons: {}
           },
           _defaultTarget,
-          _this = this;
+          _this = this,
+          _selectedEvents = [];
 
       function checkMedia() {
         if ( !_currentMedia ) {
@@ -413,6 +414,15 @@
               _em.dispatch( "mediachanged", media );
               return _currentMedia;
             } //if
+          },
+          enumerable: true
+        },
+        selectedEvents: {
+          get: function() {
+            return _selectedEvents;
+          },
+          set: function(selectedEvents) {
+            _selectedEvents = selectedEvents;
           },
           enumerable: true
         }

@@ -132,10 +132,10 @@ define( [
               tracks[ t ].deselectEvents( trackEvent );
             } //if
           } //for
-          _selectedEvents = [ trackEvent ];
+          butter.selectedEvents = [ trackEvent ];
         }
         else {
-          _selectedEvents.push( trackEvent );
+          butter.selectedEvents.push( trackEvent );
         } //if
       } //if
     } //onTrackEventSelected
@@ -259,7 +259,9 @@ define( [
 
     this.destroy = function() {
       _rootElement.parentNode.removeChild( _rootElement );
-      butter.ui.areas.statusbar.element.removeChild( _mediaStatusContainer );
+      if( _mediaStatusContainer.parentNode ){
+        butter.ui.areas.statusbar.element.removeChild( _mediaStatusContainer );
+      }
       _timebar.destroy();
     }; //destroy
 

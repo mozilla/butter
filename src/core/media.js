@@ -106,6 +106,7 @@
         if ( !( track instanceof Track ) ) {
           track = new Track( track );
         } //if
+        track.order = _tracks.length;
         _tracks.push( track );
         _em.repeat( track, [
           "tracktargetchanged",

@@ -55,6 +55,16 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
     };
   }
 
+  var __unwantedKeyPressElements = [
+    "TEXTAREA",
+    "INPUT",
+    "VIDEO",
+    "AUDIO"
+  ];
+
+  var NUDGE_INCREMENT_SMALL = 0.25,
+      NUDGE_INCREMENT_LARGE = 1;
+
   function UI( butter, options ){
 
     var _em = new EventManager( this ),
@@ -204,12 +214,161 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
       }
     });
 
+    var orderedTrackEvents = butter.orderedTrackEvents = [],
+        sortTrackEvents = function( a, b ) {
+          return a.popcornOptions.start > b .popcornOptions.start;
+        };
+
+    butter.listen( "trackeventadded", function( e ) {
+      orderedTrackEvents.push( e.data );
+      orderedTrackEvents.sort( sortTrackEvents );
+    }); // listen
+
+    butter.listen( "trackeventremoved", function( e ) {
+      var index = orderedTrackEvents.indexOf( e.data );
+      if( index > -1 ){
+        orderedTrackEvents.splice( index, 1 );
+      } // if
+    }); // listen
+
+    butter.listen( "trackeventupdated", function( e ) {
+      orderedTrackEvents.sort( sortTrackEvents );
+    }); // listen
+
+    var orderedTracks = butter.orderedTracks = [],
+        sortTracks = function( a, b ) {
+          return a.order > b.order;
+        };
+
+    butter.listen( "trackadded", function( e ) {
+      e.data.listen( "trackorderchanged", function( e ) {
+        orderedTracks.sort( sortTracks );
+      }); // listen
+      orderedTracks.push( e.data );
+      orderedTracks.sort( sortTracks );
+    }); // listen
+
+    butter.listen( "trackremoved", function( e ) {
+      var index = orderedTracks.indexOf( e.data );
+      if( index > -1 ){
+        orderedTracks.splice( index, 1 );
+      } // if
+    }); // listen
+
+    var processKey = {
+      32: function( e ) { // space key
+        if( butter.currentMedia.ended ){
+          butter.currentMedia.paused = false;
+        }
+        else{
+          butter.currentMedia.paused = !butter.currentMedia.paused;
+        }
+      }, // space key
+      37: function( e ) { // left key
+        var inc = e.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL;
+        if( butter.selectedEvents.length ) {
+          e.preventDefault();
+          for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
+            butter.selectedEvents[ i ].moveFrameLeft( inc, e.ctrlKey || e.metaKey );
+          } // for
+        } else {
+          butter.currentTime -= inc;
+        } // if
+      }, // left key
+      38: function( e ) { // up key
+        var track,
+            trackEvent,
+            nextTrack;
+        for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
+          trackEvent = butter.selectedEvents[ i ];
+          track = trackEvent.track;
+          nextTrack = orderedTracks[ orderedTracks.indexOf( track ) - 1 ];
+          if( nextTrack ) {
+            track.removeTrackEvent( trackEvent );
+            nextTrack.addTrackEvent( trackEvent );
+          } // if
+        } // for
+      }, // up key
+      39: function( e ) { // right key
+        e.preventDefault();
+        var inc = e.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL;
+        if( butter.selectedEvents.length ) {
+          for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
+            butter.selectedEvents[ i ].moveFrameRight( inc, e.ctrlKey || e.metaKey );
+          } // for
+        } else {
+          butter.currentTime += inc;
+        } // if
+      }, // right key
+      40: function( e ) { // down key
+        var track,
+            trackEvent,
+            nextTrack;
+        for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
+          trackEvent = butter.selectedEvents[ i ];
+          track = trackEvent.track;
+          nextTrack = orderedTracks[ orderedTracks.indexOf( track ) + 1 ]
+          if( nextTrack ) {
+            track.removeTrackEvent( trackEvent );
+            nextTrack.addTrackEvent( trackEvent );
+          } // if
+        } // for
+      }, // down key
+      27: function( e ) { // esc key
+        for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+          butter.selectedEvents[ i ].selected = false;
+        } // for
+        butter.selectedEvents = [];
+      }, // esc key
+      8: function( e ) { // del key
+        if( butter.selectedEvents.length ) {
+          e.preventDefault();
+          for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+            butter.selectedEvents[ i ].track.removeTrackEvent( butter.selectedEvents[ i ] );
+          } // for
+          butter.selectedEvents = [];
+        } // if
+      }, // del key
+      9: function( e ) { // tab key
+        if( orderedTrackEvents.length && butter.selectedEvents.length <= 1 ){
+          e.preventDefault();
+          var index = 0,
+              direction = e.shiftKey ? -1 : 1;
+          if( orderedTrackEvents.indexOf( butter.selectedEvents[ 0 ] ) > -1 ){
+            index = orderedTrackEvents.indexOf( butter.selectedEvents[ 0 ] );
+            if( orderedTrackEvents[ index+direction ] ){
+              index+=direction;
+            } else if( !e.shiftKey ){
+              index = 0;
+            } else {
+              index = orderedTrackEvents.length - 1;
+            } // if
+          } // if
+          for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+            butter.selectedEvents[ i ].selected = false;
+          } // for
+          butter.selectedEvents = [];
+          orderedTrackEvents[ index ].selected = true;
+          butter.selectedEvents.push( orderedTrackEvents[ index ] );
+        } // if
+      } // tab key
+    };
+
+    window.addEventListener( "keydown", function( e ){
+      var key = e.which || e.keyCode;
+      // this allows backspace and del to do the same thing on windows and mac keyboards
+      key = key === 46 ? 8 : key;
+      if( processKey[ key ] && __unwantedKeyPressElements.indexOf( e.target.nodeName ) === -1 ){
+        processKey[ key ]( e );
+      } // if
+    }, false );
+
     this.TRANSITION_DURATION = TRANSITION_DURATION;
 
-   } //UI
+  }
 
-   UI.__moduleName = "ui";
+  UI.__moduleName = "ui";
 
-   return UI;
+  return UI;
 
 });

@@ -11,13 +11,6 @@ define( [
           Media
         ){
 
-  var __unwantedKeyPressElements = [
-    "TEXTAREA",
-    "INPUT",
-    "VIDEO",
-    "AUDIO"
-  ];
-
   var Timeline = function( butter, options ){
 
     var _media = {},
@@ -97,46 +90,6 @@ define( [
       return [ curleft, curtop ];
     }; //findAbsolutePosition
 
-    this.moveFrameLeft = function( event ){
-      if( butter.targettedEvent ) {
-        event.preventDefault();
-        var cornOptions = butter.targettedEvent.popcornOptions,
-            inc = event.shiftKey ? 2.5 : 0.25;
-        if( cornOptions.start > inc ) {
-          cornOptions.start -= inc;
-          if( !event.ctrlKey && !event.metaKey ) {
-            cornOptions.end -= inc;
-          }
-        } else {
-          if( !event.ctrlKey ) {
-            cornOptions.end = cornOptions.end - cornOptions.start;
-          }
-          cornOptions.start = 0;
-        }
-        butter.targettedEvent.update( cornOptions );
-      }
-    }; //moveFrameLeft
-
-    this.moveFrameRight = function( event ){
-      if( butter.targettedEvent ) {
-        event.preventDefault();
-        var cornOptions = butter.targettedEvent.popcornOptions,
-            inc = event.shiftKey ? 2.5 : 0.25;
-        if( cornOptions.end < butter.duration - inc ) {
-          cornOptions.end += inc;
-          if( !event.ctrlKey && !event.metaKey ) {
-            cornOptions.start += inc;
-          }
-        } else {
-          if( !event.ctrlKey ) {
-            cornOptions.start += butter.duration - cornOptions.end;
-          }
-          cornOptions.end = butter.duration;
-        }
-        butter.targettedEvent.update( cornOptions );
-      }
-    }; //moveFrameRight
-
     butter.listen( "mediaadded", function( event ){
       var mediaObject = event.data,
           media = new Media( butter, mediaObject );
@@ -178,17 +131,6 @@ define( [
       butter.listen( "mediaremoved", mediaRemoved );
     });
 
-    window.addEventListener( "keypress", function( e ){
-      if( e.which === 32 && __unwantedKeyPressElements.indexOf( e.target.nodeName ) === -1 ){
-        if( butter.currentMedia.ended ){
-          butter.currentMedia.paused = false;
-        }
-        else{
-          butter.currentMedia.paused = !butter.currentMedia.paused;
-        }
-      } //if
-    }, false );
-
     Object.defineProperties( this, {
       zoom: {
         get: function(){
@@ -206,4 +148,3 @@ define( [
 
   return Timeline;
 }); //define
-
