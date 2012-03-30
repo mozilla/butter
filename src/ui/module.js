@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
+define( [ "core/eventmanager", "./toggler", "./header" ], function( EventManager, Toggler, Header ){
 
   function UI( butter, options ){
 
@@ -114,6 +114,10 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
           } //if
         }
       }
+    });
+
+    butter.listen( "ready", function( e ){
+      Header( butter );
     });
 
    } //UI
