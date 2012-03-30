@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
+define( [ "core/eventmanager", "./toggler", "./context-button" ], function( EventManager, Toggler, ContextButton ){
 
   var TRANSITION_DURATION = 500;
 
@@ -205,6 +205,10 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
     });
 
     this.TRANSITION_DURATION = TRANSITION_DURATION;
+
+    butter.listen( "ready", function( e ){
+      ContextButton( butter );
+    });
 
    } //UI
 

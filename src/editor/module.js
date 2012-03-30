@@ -26,13 +26,32 @@
           _defaultEditor = options[ "default" ] || DEFAULT_EDITOR,
           _em = new EventManager( this ),
           _editorContainer,
+          _openEditor,
           _this = this;
 
       butter.listen( "trackeventcreated", function( e ){
-        if( [ "target", "media" ].indexOf( e.data.by ) > -1 ){
+        if( [ "target", "media" ].indexOf( e.data.by ) > -1 && butter.ui.contentState === "timeline" ){
           _this.edit( e.data.trackEvent );
         }
       });
+
+      function editorClosed( e ){
+        if( _openEditor.frame === "iframe" ){
+          if( butter.ui.contentState === "editor" ){
+            butter.ui.popContentState( "editor" );
+          }
+        }
+        _openEditor.unlisten( "close", editorClosed );
+        _openEditor = null;
+      }
+
+      function editorOpened( e ){
+        if( _openEditor.frame === "iframe" ){
+          if( butter.ui.contentState !== "editor" ){
+            butter.ui.pushContentState( "editor" );
+          }
+        }
+      }
 
       this.edit = function( trackEvent ){
         if ( !trackEvent || !( trackEvent instanceof TrackEvent ) ){
@@ -43,22 +62,17 @@
         if ( !_editors[ type ] ){
           type = "default";
         } //if
-
-        var editor = _editors[ type ];
-        if( editor ){
-          if( editor.frame === "iframe" && butter.ui.contentState === "editor" ){
-            editor.close();
-            setTimeout(function(){
-              editor.open( trackEvent );
-            }, butter.ui.TRANSITION_DURATION + 10);
+        if( !_openEditor ){
+          var editor = _editors[ type ];
+          if( editor ){
+            _openEditor = editor;
+            editor.listen( "open", editorOpened );
+            editor.open( trackEvent );
+            editor.listen( "close", editorClosed );
           }
           else{
-            editor.open( trackEvent );
+            throw new Error( "Editor " + type + " not found." );
           }
-          return editor; 
-        }
-        else{
-          throw new Error( "Editor " + type + " not found." );
         }
       }; //edit
 
@@ -113,6 +127,9 @@
 
           },
           transitionOut: function(){
+            if( _openEditor ){
+              _openEditor.close();
+            }
             parentElement.style.opacity = "0";
           },
           transitionOutComplete: function(){
