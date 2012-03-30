@@ -141,7 +141,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         }
       } //if
 
-      var players = function( type ){
+      function constructPlayerString( type ){
         var script;
 
         if( type === "baseplayer" ) {
@@ -161,6 +161,16 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
             type = "youtube";
           }
 
+          if( [ "VIDEO", "AUDIO" ].indexOf( target.nodeName ) === -1 ) {
+            var targetElement = document.getElementById( target ),
+                parentNode = targetElement.parentNode,
+                newElement = document.createElement( "div" );
+
+            newElement.id = targetElement.id;
+            newElement.style.cssText = getComputedStyle( targetElement ).cssText;
+            parentNode.replaceChild( newElement, targetElement );
+          }
+
           script = document.createElement( "script" );
           script.src = "../external/popcorn-js/players/" + type + "/popcorn." + type + ".js";
           document.head.appendChild( script );
@@ -174,10 +184,10 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           }, 100 );
         }
         return "var popcorn = Popcorn.smart( '#" + target + "', '" + url + "' );\n";
-      };
+      }
 
       // call certain player function depending on the regexResult
-      popcornString += players( _mediaType );
+      popcornString += constructPlayerString( _mediaType );
 
       if ( _popcorn ) {
         var trackEvents = _popcorn.getTrackEvents();
