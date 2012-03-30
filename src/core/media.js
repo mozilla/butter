@@ -57,6 +57,9 @@
                 _em.dispatch( "mediaplaying" );
               },
               timeout: function(){
+              },
+              ended: function(){
+                _em.dispatch( "mediaended" );
               }
             },
             prepare: function(){
@@ -204,7 +207,17 @@
       };
 
       Object.defineProperties( this, {
+        ended: {
+          enumerable: true,
+          get: function(){
+            if( _popcornWrapper.popcorn ){
+              return _popcornWrapper.popcorn.ended();
+            }
+            return false;
+          }
+        },
         url: {
+          enumerable: true,
           get: function() {
             return _url;
           },
