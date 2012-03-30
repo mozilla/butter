@@ -164,6 +164,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           script = document.createElement( "script" );
           script.src = "../external/popcorn-js/players/" + type + "/popcorn." + type + ".js";
           document.head.appendChild( script );
+
           setTimeout(function() {
             if( !window.Popcorn[ type ] ) {
               this();
