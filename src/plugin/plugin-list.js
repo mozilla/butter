@@ -5,48 +5,13 @@
 define( [ "util/dragndrop" ], function( DragNDrop ){
 	
 	return function( butter ){
-    var _addPopcornButton = document.createElement( "button" ),
-        _parentElement = document.createElement( "div" ),
+    var _parentElement = document.createElement( "div" ),
         _containerElement = document.createElement( "div" );
 
     _parentElement.id = "plugin-list";
     _containerElement.className = "container";
 
     _parentElement.appendChild( _containerElement );
-
-    _addPopcornButton.id = "add-popcorn";
-    _addPopcornButton.innerHTML = "+Popcorn";
-
-    _addPopcornButton.addEventListener( "click", function(){
-      if( butter.ui.contentState !== "add-popcorn" ){
-        butter.ui.setContentState( "add-popcorn" );
-        butter.ui.contentStateLocked = true;
-      }
-      else{
-        butter.ui.contentStateLocked = false;
-        butter.ui.setContentState( "timeline" );
-      }
-    }, false );
-
-    butter.ui.areas.tools.addComponent( _addPopcornButton, {
-      states: [ "add-popcorn" ],
-      transitionIn: function(){
-        _addPopcornButton.setAttribute( "disabled", true );
-        _addPopcornButton.innerHTML = "Done";
-        _addPopcornButton.classList.add( "add-popcorn-done" );
-      },
-      transitionInComplete: function(){
-        _addPopcornButton.removeAttribute( "disabled" );
-      },
-      transitionOut: function(){
-        _addPopcornButton.setAttribute( "disabled", true );
-        _addPopcornButton.innerHTML = "+Popcorn";
-        _addPopcornButton.classList.remove( "add-popcorn-done" );
-      },
-      transitionOutComplete: function(){
-        _addPopcornButton.removeAttribute( "disabled" );
-      }
-    });
 
     butter.ui.areas.work.addComponent( _parentElement, {
       states: [ "add-popcorn" ],
