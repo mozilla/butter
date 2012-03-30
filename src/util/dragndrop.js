@@ -208,6 +208,15 @@ define([], function(){
 
     _leftHandle.addEventListener( "mousedown", onLeftMouseDown, false );
     _rightHandle.addEventListener( "mousedown", onRightMouseDown, false );
+
+    return {
+      destroy: function(){
+        _leftHandle.removeEventListener( "mousedown", onLeftMouseDown, false );
+        _rightHandle.removeEventListener( "mousedown", onRightMouseDown, false );
+        element.removeChild( _leftHandle );
+        element.removeChild( _rightHandle );
+      }
+    };
   }
 
   function Helper( element, options ){
@@ -492,6 +501,12 @@ define([], function(){
     }
 
     element.addEventListener( "mousedown", onMouseDown, false );
+
+    return {
+      destroy: function(){
+        element.removeEventListener( "mousedown", onMouseDown, false );
+      }
+    };
   }
 
   function Sortable( parentElement, options ){

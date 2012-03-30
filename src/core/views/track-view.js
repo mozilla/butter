@@ -24,6 +24,7 @@ define( [ "core/logger",
         _em = new EventManager( this ),
         _element = document.createElement( "div" ),
         _duration = 1,
+        _parent,
         _zoom = 1;
 
     _element.className = "butter-track";
@@ -100,6 +101,18 @@ define( [ "core/logger",
             _trackEvents[ i ].duration = _duration;
           } //for
         }
+      },
+      parent: {
+        enumerable: true,
+        get: function(){
+          return _parent;
+        },
+        set: function( val ){
+          _parent = val;
+          for( var i=0, l=_trackEvents.length; i<l; ++i ){
+            _trackEvents[ i ].parent = _this;
+          } //for
+        }
       }
     });
 
@@ -110,7 +123,7 @@ define( [ "core/logger",
       _trackEventElements.push( trackEvent.view.element );
       trackEvent.view.zoom = _zoom;
       trackEvent.view.duration = _duration;
-      trackEvent.view.parent = this;
+      trackEvent.view.parent = _this;
       _em.repeat( trackEvent, [
         "trackeventmousedown",
         "trackeventmouseover",
@@ -123,7 +136,7 @@ define( [ "core/logger",
       _element.removeChild( trackEventElement );
       _trackEvents.splice( _trackEvents.indexOf( trackEvent.view ), 1 );
       _trackEventElements.splice( _trackEvents.indexOf( trackEvent.view.element ), 1 );
-      trackEvent.view.parent = undefined;
+      trackEvent.view.parent = null;
       _em.unrepeat( trackEvent, [
         "trackeventmousedown",
         "trackeventmouseover",

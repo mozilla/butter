@@ -10,7 +10,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
 
     var _id = "TrackEventView" + __guid++,
         _eventManager = new EventManager( this ),
-        _element,
+        _element = document.createElement( "div" ),
         _zoom = 1,
         _duration = 1,
         _type = type,
@@ -19,7 +19,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
         _selected = false,
         _parent,
         _handles,
+        _typeElement = document.createElement( "div" ),
+        _draggable,
+        _resizable,
         _this = this;
+
+    _element.appendChild( _typeElement );
 
     function toggleHandles( state ){
       _handles[ 0 ].style.visibility = state ? "visible" : "hidden";
@@ -70,11 +75,13 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
           resetContainer();
         }
       },
-      text: {
+      type: {
         enumerable: true,
-        get: function(){ return _element.innerHTML; },
+        get: function(){ return _type; },
         set: function( val ){
-          _element.innerHTML = text;
+          _type = val;
+          _typeElement.innerHTML = _type;
+          _element.setAttribute( "data-butter-trackevent-type", _type );
         }
       },
       selected: {
@@ -122,11 +129,24 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
         },
         set: function( val ){
           _parent = val;
-          if( _parent && !_handles ){
+
+          if( _draggable ){
+            _draggable.destroy();
+            _draggable = null;
+          }
+
+          if( _resizable ){
+            toggleHandles( false );
+            _resizable.destroy();
+            _resizable = null;
+            _handles = null;
+          }
+
+          if( _parent ){
 
             if( _parent.element && _parent.element.parentNode && _parent.element.parentNode.parentNode ){
 
-              DragNDrop.draggable( _element, {
+              _draggable = DragNDrop.draggable( _element, {
                 containment: _parent.element.parentNode,
                 scroll: _parent.element.parentNode.parentNode,
                 start: function(){
@@ -139,7 +159,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
                 revert: true
               });
 
-              DragNDrop.resizable( _element, {
+              _resizable = DragNDrop.resizable( _element, {
                 containment: _parent.element.parentNode,
                 scroll: _parent.element.parentNode.parentNode,
                 stop: movedCallback
@@ -148,17 +168,19 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
               _element.setAttribute( "data-butter-draggable-type", "trackevent" );
               _element.setAttribute( "data-butter-trackevent-id", trackEvent.id );
 
-            }
+              if( !_handles ){
+                _handles = _element.querySelectorAll( ".handle" );
+                if( _handles && _handles.length === 2 ){
+                  _element.addEventListener( "mouseover", function( e ){
+                    toggleHandles( true );
+                  }, false );
+                  _element.addEventListener( "mouseout", function( e ){
+                    toggleHandles( false );
+                  }, false );
+                  toggleHandles( false );
+                }
+              }
 
-            _handles = _element.querySelectorAll( ".handle" );
-            if( _handles && _handles.length === 2 ){
-              _element.addEventListener( "mouseover", function( e ){
-                toggleHandles( true );
-              }, false );
-              _element.addEventListener( "mouseout", function( e ){
-                toggleHandles( false );
-              }, false );
-              toggleHandles( false );
             }
 
             resetContainer();
@@ -175,10 +197,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
       _eventManager.dispatch( "trackeventviewupdated" );
     } //movedCallback
 
-    _element = document.createElement( "div" );
     _element.className = "butter-track-event";
-    _element.appendChild( document.createTextNode( _type ) );
-    _element.setAttribute( "data-butter-trackevent-type", _type );
+    _this.type = _type;
 
     _element.id = _id;
     _this.update( inputOptions );
