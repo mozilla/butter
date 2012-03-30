@@ -64,20 +64,59 @@ define( [
             },
             cancel: function( e ){
               dialog.close();
+            },
+            trackupdated: function( e ) {
+              dialog.send( "trackupdated", { success: false });
             }
           }
         });
+        dialog.trackupdated = function( e ) {
+          console.log( "called", e );
+        };
         dialog.open();
       }, false );
 
       trackDiv.addEventListener( "dblclick", function( e ){
-         var dialog = new IFrameDialog({
+        var dialog = new IFrameDialog({
           type: "iframe",
           modal: true,
           url: "../dialogs/track-data.html",
           events: {
             open: function( e ){
               dialog.send( "trackdata", track.json );
+              var comm = dialog.comm;
+              // listen for trackupdated from the dialog
+              comm.listen( "trackupdated", function( e ) {
+                // wrap in a try catch so we know right away about any malformed JSON
+                try {
+                  var tracks = _media.tracks,
+                      track,
+                      i,
+                      l,
+                      trackEvents,
+                      trackData = JSON.parse( e.data ),
+                      trackDataEvents = trackData.trackEvents;
+
+                  // find the correct track
+                  for( i = 0, l = tracks.length; i < l; i++ ) {
+                    if ( trackData.id === tracks[ i ].id ) {
+                      track = tracks[ i ];
+                    }
+                  }
+
+                  // update every trackevent with it's new data
+                  for( i = 0, l = trackDataEvents.length; i < l; i++ ) {
+                    var trackevent = trackDataEvents[ i ],
+                        te = track.getTrackEventById( trackevent.id );
+                    te.update( trackevent.popcornOptions );
+                  }
+                  // let the dialog know things went well
+                  dialog.send( "trackupdated", true );
+                } catch ( error ) {
+                  // inform the dialog about the issue
+                  dialog.send( "trackupdated", false );
+                }
+              });
             }
           }
         });

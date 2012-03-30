@@ -120,9 +120,13 @@ define( [
         get: function(){
           return !_open;
         }
+      },
+      comm: {
+        enumerable: true,
+        get: function() {
+          return _comm;
+        }
       }
     });
-
   }; //IFrameDialog
-
 });
