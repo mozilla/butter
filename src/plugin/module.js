@@ -4,7 +4,7 @@
 
 (function() {
 
-  define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logger, EventManager, DragNDrop ) {
+  define( [ "core/logger", "core/eventmanager", "util/dragndrop", "./plugin-list", "./plugin" ], function( Logger, EventManager, DragNDrop, PluginList, Plugin ) {
 
     var __trackEventCSSRules = {},
         __cssRuleProperty = "data-butter-trackevent-type",
@@ -54,124 +54,22 @@
 
     var PluginManager = function( butter, moduleOptions ) {
 
-      var __butter = butter;
+      var _plugins = [],
+          _container = document.createElement( "ul" ),
+          _this = this,
+          _pattern = '<li class="$type_tool">$type</li>';
 
-      var __plugins = [],
-          __container,
-          __this = this,
-          __pluginElementPrefix = "butter-plugin-",
-          __pattern = '<li class="$type_tool">$type</li>';
+      _container.id = "butter-plugin";
 
       document.head.appendChild( __newStyleSheet );
 
-      var Plugin = function ( pluginOptions ) {
-        pluginOptions = pluginOptions || {};
-
-        var _id = "plugin" + __plugins.length,
-            _this = this,
-            _name = pluginOptions.name || 'Plugin' + Date.now(),
-            _path = pluginOptions.path,
-            _manifest = {},
-            _type = pluginOptions.type,
-            _element;
-
-        if( !__trackEventCSSRules[ _type ] ){
-          createStyleForType( _type );
-        } //if
-
-        if( _path ) {
-          var head = document.getElementsByTagName( "HEAD" )[ 0 ],
-              script = document.createElement( "script" );
-
-          script.src = _path;
-          head.appendChild( script );
-        } //if
-
-        Object.defineProperties( this, {
-          plugins: {
-            get: function() {
-              return __plugins;
-            }
-          }, //plugins
-          pluginElementPrefix: {
-            get: function() {
-              return __pluginElementPrefix;
-            }
-          }, //pluginElementPrefix
-          id: {
-            get: function() {
-              return _id;
-            }
-          }, //id
-          name: {
-            get: function() {
-              return _name;
-            }
-          }, //name
-          path: {
-            get: function() {
-              return _path;
-            }
-          }, //path
-          manifest: {
-            get: function() {
-              return _manifest;
-            },
-            set: function( manifest ) {
-              _manifest = manifest;
-            }
-          }, //manifest
-          type: {
-            get: function() {
-              return _type;
-            }
-          }
-        }); //defineProperties
-
-
-        this.createElement = function ( pattern ) {
-          var pluginElement,
-              helper;
-          if ( !pattern ) {
-            pluginElement = document.createElement( "span" );
-            pluginElement.innerHTML = _this.type + " ";
-          }
-          else {
-            var patternInstance = pattern.replace( /\$type/g, _this.type );
-            var range = document.createRange();
-            range.selectNode( document.body.children[ 0 ] );
-            pluginElement = range.createContextualFragment( patternInstance ).childNodes[ 0 ];
-          }
-          pluginElement.id = __pluginElementPrefix + _this.type;
-          helper = document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" );
-          pluginElement.setAttribute( "data-butter-plugin-type", _this.type );
-          pluginElement.setAttribute( "data-butter-draggable-type", "plugin" );
-          DragNDrop.helper( pluginElement, {
-            image: helper
-          });
-          this.element = pluginElement;
-          return pluginElement;
-        }; //createElement
-
-      }; //Plugin
-
-      __container = document.createElement( "ul" );
-      __container.id = "butter-plugin";
-
       this._start = function( onModuleReady ){
         if( butter.ui ){
-          butter.ui.addToArea( "main", "plugin", __container );
-          butter.ui.listen( "contentstatechanged", function( e ){
-            if( e.data !== "timeline" ){
-              //__container.style.display = "none";
-            }
-            else{
-              //__container.style.display = "block";
-            }
-          });
-        } //if
+          butter.ui.areas.tools.addComponent( _container );
+          PluginList( butter );
+        }
         if( moduleOptions && moduleOptions.plugins ){
-          __this.add( moduleOptions.plugins, onModuleReady );
+          _this.add( moduleOptions.plugins, onModuleReady );
         }
         else{
           onModuleReady();
@@ -191,31 +89,35 @@
               };
         
           for( i = 0, l = plugin.length; i < l; i++ ) {
-            __this.add( plugin[ i ], check );
+            _this.add( plugin[ i ], check );
           }
         } else {
+          if( !__trackEventCSSRules[ plugin.type ] ){
+            createStyleForType( plugin.type );
+          }
 
-          if ( !( plugin instanceof Plugin ) ) {
-            plugin = new Plugin( plugin );
-            var interval = setInterval(function( e ) {
-              if( !Popcorn.manifest[ plugin.type ]) {
-                return;
-              }
-              plugin.manifest = Popcorn.manifest[ plugin.type ];
-              clearInterval( interval );
-              if ( cb ) {
-                cb();
-              }
-            }, 100);
-          } //if
-          __plugins.push( plugin );
+          plugin = new Plugin( _plugins.length, plugin );
+          
+          var interval = setInterval(function( e ) {
+            if( !Popcorn.manifest[ plugin.type ]) {
+              return;
+            }
+            plugin.manifest = Popcorn.manifest[ plugin.type ];
+            clearInterval( interval );
+            if( cb ){
+              cb();
+            }
+          }, 100);
 
-          __container.appendChild( plugin.createElement( __pattern ) );
-
-          __butter.dispatch( "pluginadded", plugin );
+          _plugins.push( plugin );
+          _container.appendChild( plugin.createElement( _pattern ) );
+          butter.dispatch( "pluginadded", plugin );
 
           return plugin;
+
         }
+
+        return plugin;
       }; //add
 
       this.remove = function( plugin ) {
@@ -229,8 +131,8 @@
 
         var i, l;
 
-        for ( i = 0, l = __plugins.length; i < l; i++ ) {
-          if( __plugins[ i ].name === plugin.name ) {
+        for ( i = 0, l = _plugins.length; i < l; i++ ) {
+          if( _plugins[ i ].name === plugin.name ) {
             var tracks = butter.tracks;
             for ( i = 0, l = tracks.length; i < l; i++ ) {
               var trackEvents = tracks[ i ].trackEvents;
@@ -241,9 +143,9 @@
               } //for
             } //for
 
-            __plugins.splice( i, 1 );
+            _plugins.splice( i, 1 );
             l--;
-            __container.removeChild( plugin.element );
+            _container.removeChild( plugin.element );
 
             var head = document.getElementsByTagName( "HEAD" )[ 0 ];
             for ( i = 0, l = head.children.length; i < l; i++ ) {
@@ -259,16 +161,16 @@
 
       this.clear = function () {
         while ( plugins.length > 0 ) {
-          var plugin = __plugins.pop();
-          __container.removeChild( plugin.element );
+          var plugin = _plugins.pop();
+          _container.removeChild( plugin.element );
           butter.dispatch( "pluginremoved", plugin );
         }
       }; //clear
 
       this.get = function( name ) {
-        for ( var i=0, l=__plugins.length; i<l; ++i ) {
-          if ( __plugins[ i ].name === name ) {
-            return __plugins[ i ];
+        for ( var i=0, l=_plugins.length; i<l; ++i ) {
+          if ( _plugins[ i ].name === name ) {
+            return _plugins[ i ];
           } //if
         } //for
       }; //get

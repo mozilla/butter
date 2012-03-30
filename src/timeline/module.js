@@ -20,21 +20,54 @@ define( [
 
     var _media = {},
         _currentMedia,
-        _parentElement = document.createElement( "div" );
+        _parentElement = document.createElement( "div" ),
+        _addTrackButton = document.createElement( "button" );
 
     _parentElement.id = "butter-timeline";
+    _addTrackButton.id = "add-track";
+
+    _parentElement.classList.add( "fadable" );
+
+    _addTrackButton.innerHTML = "+Track";
+
+    _addTrackButton.addEventListener( "click", function( e ){
+      butter.currentMedia.addTrack();
+    }, false );
 
     this._start = function( onModuleReady ){
-      butter.ui.addToArea( "main", "timeline", _parentElement );
-      butter.ui.pushContentState( "timeline" );
-      butter.ui.listen( "contentstatechanged", function( e ){
-        if( e.data !== "timeline" ){
-          _parentElement.setAttribute( "data-butter-disabled", true );
-        }
-        else{
-          _parentElement.removeAttribute( "data-butter-disabled" );
+      butter.ui.areas.work.addComponent( _parentElement, {
+        states: [ "timeline" ],
+        transitionIn: function(){
+          _parentElement.style.display = "block";
+          setTimeout(function(){
+            _parentElement.style.opacity = "1";
+          }, 0);
+        },
+        transitionInComplete: function(){
+
+        },
+        transitionOut: function(){
+          _parentElement.style.opacity = "0";
+        },
+        transitionOutComplete: function(){
+          _parentElement.style.display = "none";
         }
       });
+
+      butter.ui.areas.tools.addComponent( _addTrackButton, {
+
+      });
+
+      butter.ui.registerStateToggleFunctions( "timeline", {
+        transitionIn: function(){
+          _parentElement.removeAttribute( "data-butter-disabled" );
+        },
+        transitionOut: function(){
+          _parentElement.setAttribute( "data-butter-disabled", true );
+        }
+      });
+
+      butter.ui.pushContentState( "timeline" );
       onModuleReady();
     };
 

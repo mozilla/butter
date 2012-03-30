@@ -78,8 +78,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
         setTimeout(function(){
           clearInterval( _blinkInterval );
           _blinkInterval = -1;
-          _highlightElement.removeAttribute( "blink" );
-          _highlightElement.style.visibility = "hidden";
+          if( _highlightInterval === -1 ){
+            _highlightElement.removeAttribute( "blink" );
+            _highlightElement.style.visibility = "hidden";
+          }
         }, 1500 );
       } //if
     }; //blink

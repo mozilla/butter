@@ -12,6 +12,12 @@
   user-select: none;
 }
 
+#butter-tray .fadable {
+  -moz-transition: opacity 0.5s;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+}
+
 #butter-modal-container {
   position: fixed;
   top: 0px;
@@ -92,27 +98,20 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  top: 53px;
+  top: 0px;
   left: 0px;
   z-index: 2140000002;
   background-image: url( "assets/bg.jpg" );
-  -moz-transition: opacity 0.5s;
-  -webkit-transition: opacity 0.5s;
-  transition: opacity 0.5s;
   opacity: 0;
 }
 
-#butter-editor-container{
+#butter-editor #editor-container{
   height: 150px;
   padding: 0 150px 0 0;
   position: relative;
 }
 
-#butter-editor.fade-in {
-  opacity: 1;
-}
-
-#butter-editor iframe {
+#butter-editor #editor-container iframe {
   width: 100%;
   height: 100%;
   border: 0px;
@@ -143,7 +142,7 @@
   cursor: pointer;
 }
 
-#butter-status-bar .status-container .time-container {
+#status-bar .status-container .time-container {
   position: absolute;
   top: 4px;
   left: 20px;
@@ -158,7 +157,7 @@
   padding: 2px;
 }
 
-#butter-status-bar .status-container .time-container input {
+#status-bar .status-container .time-container input {
   background: transparent;
   color: rgb( 200, 200, 180 );
   border: none;
@@ -168,14 +167,14 @@
   font-size: 90%;
 }
 
-#butter-status-bar .status-container .time-container input:focus {
+#status-bar .status-container .time-container input:focus {
   -moz-user-select: text;
   -webkit-user-select: text;
   -o-user-select: text;
   user-select: text;
 }
 
-#butter-status-bar .status-container .play-button-container {
+#status-bar .status-container .play-button-container {
   position: absolute;
   left: 2px;
   width: 24px;
@@ -190,7 +189,7 @@
   padding: 3px;
 }
 
-#butter-status-bar .status-container .play-button-container .status-button {
+#status-bar .status-container .play-button-container .status-button {
   width: 24px;
   height: 24px;
   border-radius: 20px 20px 20px 20px;
@@ -204,7 +203,7 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d1be70', endColorstr='#a08546',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-status-bar .status-container .play-button-container .status-button:hover {
+#status-bar .status-container .play-button-container .status-button:hover {
   background: #d1be70; /* Old browsers */
   background: -moz-linear-gradient(top, #d1be70 0%, #ad9b4c 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d1be70), color-stop(100%,#ad9b4c)); /* Chrome,Safari4+ */
@@ -240,7 +239,7 @@
   background-position: -320px -19px;
 }
 
-#butter-status-bar .mute-button-container {
+#status-bar .mute-button-container {
   position: absolute;
   top: 5px;
   right: 120px;
@@ -256,7 +255,7 @@
   padding: 3px;
 }
 
-#butter-status-bar .mute-button-container .status-button {
+#status-bar .mute-button-container .status-button {
   width: 17px;
   height: 17px;
   border-radius: 20px 20px 20px 20px;
@@ -270,7 +269,7 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b4b4b4', endColorstr='#777777',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-status-bar .mute-button-container .status-button:hover {
+#status-bar .mute-button-container .status-button:hover {
   background: #b4b4b4; /* Old browsers */
   background: -moz-linear-gradient(top, #b4b4b4 0, #969696 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#b4b4b4), color-stop(100%,#969696)); /* Chrome,Safari4+ */
@@ -281,7 +280,7 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b4b4b4', endColorstr='#969696',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-status-bar .mute-button-container .status-button[mouse-state="depressed"] {
+#status-bar .mute-button-container .status-button[mouse-state="depressed"] {
   background: #959595; /* Old browsers */
   background: -moz-linear-gradient(top, #959595 0, #cccccc 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0,#959595), color-stop(100%,#cccccc)); /* Chrome,Safari4+ */
@@ -292,22 +291,28 @@
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#959595', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
 }
 
-#butter-status-bar .mute-button-container .status-button-icon {
+#status-bar .mute-button-container .status-button-icon {
   background-position: -109px -141px;
 }
 
-#butter-status-bar .mute-button-container .status-button-icon[state="true"] {
+#status-bar .mute-button-container .status-button-icon[state="true"] {
   background-position: -109px -157px;
 }
 
 #butter-timeline .track-handle-container {
   position: absolute;
-  height: 140px;
-  width: 110px;
+  height: 133px;
+  width: 105px;
   left: 5px;
   top: 8px;
   bottom: 18px;
   overflow: hidden;
+  box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  moz-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  o-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  overflow: hidden;
+  border-radius: 5px;
 }
 
 #butter-timeline .track-handle-container .handle-list {
@@ -386,20 +391,20 @@
   height: 10px;
 }
 
-#butter-status-bar .media-status-container {
+#status-bar .media-status-container {
   height: 30px;
   padding: 0 150px 0 115px;
   position: relative;
 }
 
-#butter-status-bar .time-bar {
+#status-bar .time-bar {
   position: absolute;
   top: 10px;
   width: 100%;
   height: 30px;
 }
 
-#butter-status-bar .time-bar-scrubber-container {
+#status-bar .time-bar-scrubber-container {
   z-index: 2140000010;
   background-image: url( "assets/status-bg.png" );
   border-radius: 15px;
@@ -420,7 +425,7 @@
   webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 1px #131313;
 }
 
-#butter-status-bar .time-bar-scrubber-container .fill-bar {
+#status-bar .time-bar-scrubber-container .fill-bar {
   background: none repeat scroll 0 0 rgba( 200, 200, 140, 0.2 );
   border-radius: 15px 15px 15px 15px;
   height: 4px;
@@ -431,7 +436,7 @@
   width: 0px;
 }
 
-#butter-status-bar .time-bar-scrubber-node {
+#status-bar .time-bar-scrubber-node {
   border: 2px solid #bbb;
   background: #fff;
   width: 10px;
@@ -444,7 +449,7 @@
   cursor: pointer;
 }
 
-#butter-status-bar .time-bar-scrubber-line {
+#status-bar .time-bar-scrubber-line {
   background: rgba( 200, 0, 0,  0.7);
   position: absolute;
   top: 12px;
@@ -455,13 +460,13 @@
   z-index: 2140000000;
 }
 
-#butter-status-bar .time-bar-scrubber-line[data-butter-shortened] {
+#status-bar .time-bar-scrubber-line[data-butter-shortened] {
   height: 20px;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
 }
 
-#butter-status-bar .time-bar-canvas-container {
+#status-bar .time-bar-canvas-container {
   position: absolute;
   left: 0px;
   top: 13px;
@@ -470,7 +475,7 @@
   width: 100%;
 }
 
-#butter-status-bar .time-bar canvas {
+#status-bar .time-bar canvas {
   height: 27px;
 }
 
@@ -516,7 +521,7 @@
   background-position: -255px -7px;
 }
 
-#butter-status-bar {
+#status-bar {
   box-shadow: inset 0 1px 0 #5d5d5d;
   moz-box-shadow: inset 0 1px 0 #5d5d5d;
   o-box-shadow: inset 0 1px 0 #5d5d5d;
@@ -759,8 +764,46 @@
   cursor: e-resize;
 }
 
-#butter-plugin {
+#tools {
   z-index: 2140000003;
+  position: absolute;
+  right: 10px;
+  top: 55px;
+  width: 120px;
+  height: 150px;
+}
+
+#work {
+  padding: 0px 150px 0 0px;
+  position: relative;
+  height: 160px;
+  top: 50px;
+}
+
+#butter-tray #plugin-list {
+  position: relative;
+  top: 5px;
+  left: 5px;
+  height: 150px;
+  z-index: 2140000002;
+  background-image: url( "assets/bg.jpg" );
+  opacity: 0;
+  border-radius: 5px;
+  box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  moz-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  o-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+  webkit-box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
+}
+
+#butter-tray #plugin-list .container {
+  padding: 5px;
+}
+
+#butter-tray #plugin-list .container div {
+  cursor: pointer;
+}
+
+#butter-tray #butter-plugin {
   border-radius: 6px;
 	moz-border-radius: 6px;
 	o-border-radius: 6px;
@@ -773,23 +816,85 @@
 	moz-box-shadow: 0 1px 0 #656565;
 	o-box-shadow: 0 1px 0 #656565;
 	padding: 3px;
-	position: absolute;
-	right: 10px;
-	top: 55px;
-	height: 140px;
+	height: 115px;
 	webkit-box-shadow: 0 1px 0 #656565;
-	width: 100px;
+	width: 115px;
   margin: 0;
 }
 
-#butter-plugin li {
+#butter-tray #butter-plugin li {
   list-style-type: none;
   cursor: pointer;
 }
 
+#butter-tray #add-popcorn {
+  border-radius: 6px;
+  moz-border-radius: 6px;
+  o-border-radius: 6px;
+  webkit-border-radius: 6px;
+  font-size: 10px;
+  background-image: -moz-linear-gradient(center bottom,#4A6B2D 0,#80BA4E 100%);
+  background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#4A6B2D),color-stop(1,#80BA4E));
+  border: 1px solid #333;
+  box-shadow: 0 1px 0 #656565;
+  moz-box-shadow: 0 1px 0 #656565;
+  o-box-shadow: 0 1px 0 #656565;
+  padding: 3px;
+  webkit-box-shadow: 0 1px 0 #656565;
+  width: 60px;
+  margin: 0;
+  color: #eee;
+  position: absolute;
+  top: 127px;
+  cursor: pointer;
+}
+
+#butter-tray #add-popcorn.add-popcorn-done {
+  background-image: -moz-linear-gradient(top,  #6b90ff 0%, #3f4593 100%); /* FF3.6+ */
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6b90ff), color-stop(100%,#3f4593)); /* Chrome,Safari4+ */
+}
+
+#butter-tray #add-popcorn.add-popcorn-done:active {
+  background: -moz-linear-gradient(top,  #3f4593 0%, #6b90ff 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3f4593), color-stop(100%,#6b90ff)); /* Chrome,Safari4+ */
+}
+
+#butter-tray #add-popcorn:active {
+  background-image: -moz-linear-gradient(top, #4a6b2d 0%, #80ba4e 100%); /* FF3.6+ */
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4a6b2d), color-stop(100%,#80ba4e)); /* Chrome,Safari4+ */
+}
+
+#butter-tray #add-track {
+  border-radius: 6px;
+  moz-border-radius: 6px;
+  o-border-radius: 6px;
+  webkit-border-radius: 6px;
+  font-size: 10px;
+  background-image: -moz-linear-gradient(top, #ba644e 0%, #6b392d 100%); /* FF3.6+ */
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ba644e), color-stop(100%,#6b392d)); /* Chrome,Safari4+ */
+  border: 1px solid #333;
+  box-shadow: 0 1px 0 #656565;
+  moz-box-shadow: 0 1px 0 #656565;
+  o-box-shadow: 0 1px 0 #656565;
+  padding: 3px;
+  webkit-box-shadow: 0 1px 0 #656565;
+  width: 60px;
+  margin: 0;
+  color: #eee;
+  position: absolute;
+  top: 127px;
+  left: 61px;
+  cursor: pointer;
+}
+
+#butter-tray #add-track:active {
+  background-image: -moz-linear-gradient(top, #6b392d 0%, #ba644e 100%); /* FF3.6+ */
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6b392d), color-stop(100%,#ba644e)); /* Chrome,Safari4+ */
+}
+
 #butter-timeline .zoom-bar {
   position: absolute;
-  top: 140px;
+  top: 145px;
   left: 10px;
   width: 100px;
   height: 10px;

@@ -25,7 +25,14 @@
           _logger = new Logger( "EventEditor" ),
           _defaultEditor = options[ "default" ] || DEFAULT_EDITOR,
           _em = new EventManager( this ),
+          _editorContainer,
           _this = this;
+
+      butter.listen( "trackeventcreated", function( e ){
+        if( [ "target", "media" ].indexOf( e.data.by ) > -1 ){
+          _this.edit( e.data.trackEvent );
+        }
+      });
 
       this.edit = function( trackEvent ){
         if ( !trackEvent || !( trackEvent instanceof TrackEvent ) ){
@@ -38,16 +45,28 @@
         } //if
 
         var editor = _editors[ type ];
-        editor.open( trackEvent );
-        return editor;
+        if( editor ){
+          if( editor.frame === "iframe" && butter.ui.contentState === "editor" ){
+            editor.close();
+            setTimeout(function(){
+              editor.open( trackEvent );
+            }, butter.ui.TRANSITION_DURATION + 10);
+          }
+          else{
+            editor.open( trackEvent );
+          }
+          return editor; 
+        }
+        else{
+          throw new Error( "Editor " + type + " not found." );
+        }
       }; //edit
 
       this.add = function( source, type, frameType ){
         if ( !type || !source ) {
           throw new Error( "Can't create an editor without a plugin type and editor source" );
         } //if
-        var editor = _editors[ type ] = new Editor( butter, source, type, frameType, {
-        });
+        var editor = _editors[ type ] = new Editor( butter, source, type, frameType, _editorContainer );
         return editor;
       }; //add
             
@@ -76,26 +95,32 @@
         var parentElement = document.createElement( "div" );
         parentElement.id = "butter-editor";
 
-        container = document.createElement( "div" );
-        container.id = "butter-editor-container";
-        parentElement.appendChild( container );
+        _editorContainer = document.createElement( "div" );
+        _editorContainer.id = "editor-container";
+        parentElement.appendChild( _editorContainer );
 
-        butter.ui.addToArea( "main", "editor", parentElement );
-        butter.ui.addToArea( "main", "editorContainer", container );
-        butter.ui.listen( "contentstatechanged", function( e ){
-          if( e.data !== "editor" ){
-            parentElement.classList.remove( "fade-in" );
-            setTimeout(function(){
-              parentElement.style.display = "none";
-            }, 500);
-          }
-          else{
+        parentElement.classList.add( "fadable" );
+
+        butter.ui.areas.work.addComponent( parentElement, {
+          states: [ "editor" ],
+          transitionIn: function(){
             parentElement.style.display = "block";
             setTimeout(function(){
-              parentElement.classList.add( "fade-in" );
+              parentElement.style.opacity = "1";
             }, 0);
+          },
+          transitionInComplete: function(){
+
+          },
+          transitionOut: function(){
+            parentElement.style.opacity = "0";
+          },
+          transitionOutComplete: function(){
+            parentElement.style.display = "none";
           }
         });
+
+        parentElement.style.display = "none";
 
         _this.add( _defaultEditor, "default" );
 

@@ -9,7 +9,9 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
 
   var __guid = 0;
 
-  function Editor( butter, source, type, frameType, options ) {
+  function Editor( butter, source, type, frameType, parentElement, options ){
+    options = options || {};
+
     var _id = __guid++,
         _frameType = frameType || DEFAULT_FRAME_TYPE,
         _source = source,
@@ -21,13 +23,33 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
           type: _frameType,
           modal: "behind-timeline",
           url: source,
-          parent: butter.ui.areas.main.items.editorContainer
+          parent: parentElement
         },
         _currentTarget,
+        _currentTrackEvent,
         _this = this;
 
     _dims[ 0 ] = options.width || _dims[ 0 ];
     _dims[ 1 ] = options.height || _dims[ 1 ];
+
+    function onTrackEventUpdated( e ){
+      _dialog.send( "trackeventupdated", _currentTrackEvent.popcornOptions );
+    } //onTrackEventUpdated
+
+    function onTrackEventUpdateFailed( e ){
+      _dialog.send( "trackeventupdatefailed", e.data );
+    } //onTrackEventUpdateFailed
+
+    function onClose(){
+      _dialog = null;
+      _currentTrackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
+      _currentTrackEvent.unlisten( "trackeventupdatefailed", onTrackEventUpdateFailed );
+      if( _frameType === "iframe" ){
+        if( butter.ui.contentState === "editor" ){
+          butter.ui.popContentState( "editor" );
+        }
+      }
+    }
 
     this.open = function( trackEvent ) {
       if( _frameType === "iframe" ){
@@ -45,14 +67,11 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
         } //if
       } //if
 
-      if( !_dialog.closed ){
+      if( !_dialog.closed && _dialog.focus ){
         _dialog.focus();
         return;
       } //if
 
-      function onTrackEventUpdated( e ){
-        _dialog.send( "trackeventupdated", trackEvent.popcornOptions );
-      } //onTrackEventUpdated
 
       function blinkTarget(){
         if( _currentTarget === "Media Element" ){
@@ -66,9 +85,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
         } //if
       } //blinkTarget
 
-      function onTrackEventUpdateFailed( e ){
-        _dialog.send( "trackeventupdatefailed", e.data );
-      } //onTrackEventUpdateFailed
+      _currentTrackEvent = trackEvent;
 
       _dialog.open({
         open: function( e ){
@@ -126,36 +143,42 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
           } //if
         },
         close: function( e ){
-          trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
-          trackEvent.unlisten( "trackeventupdatefailed", onTrackEventUpdateFailed );
-          if( _frameType === "iframe" ){
-            if( butter.ui.contentState === "editor" ){
-              butter.ui.popContentState( "editor" );
-            }
-          }
+          onClose();
         }
       });
     }; //open
 
+    this.close = function(){
+      if( _currentTrackEvent && _dialog ){
+        _dialog.close();
+      }
+    };
+
     Object.defineProperties( _this, {
+      isOpen: {
+        enumerable: true,
+        get: function(){
+          return !!_dialog;
+        }
+      },
       type: {
         enumerable: true,
-        get: function() {
+        get: function(){
           return _type;
         }
       },
       frame: {
         enumerable: true,
-        get: function() {
-          return _frameType === "window";
+        get: function(){
+          return _frameType;
         }
       },
       size: {
         enumerable: true,
-        get: function() {
+        get: function(){
           return { width: _dims[ 0 ], height: _dims[ 1 ] };
         },
-        set: function( val ) {
+        set: function( val ){
           val = val || {};
           _dims[ 0 ] = val.width || _dims[ 0 ];
           _dims[ 1 ] = val.height || _dims[ 1 ];

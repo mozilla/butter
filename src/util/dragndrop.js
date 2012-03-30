@@ -221,6 +221,8 @@ define([], function(){
 
   function Helper( element, options ){
     var _image = options.image,
+        _onStart = options.start || function(){},
+        _onStop = options.stop || function(){},
         _id = __helpers.length;
 
     __helpers[ _id ] = element;
@@ -236,10 +238,12 @@ define([], function(){
         img.src = _image.src;
         e.dataTransfer.setDragImage( img, img.width / 2, img.height / 2 );
       }
+      _onStart();
     });
 
     element.addEventListener( "dragend", function( e ){
       __currentDraggingElement = null;
+      _onStop();
     });
 
     element.addEventListener( "drop", function( e ){
