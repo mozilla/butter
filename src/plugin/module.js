@@ -65,11 +65,11 @@
 
       this._start = function( onModuleReady ){
         if( butter.ui ){
-          butter.ui.areas[ "tools" ].addComponent( _container );
+          butter.ui.areas.tools.addComponent( _container );
           PluginList( butter );
         }
         if( moduleOptions && moduleOptions.plugins ){
-          _this.add( moduleOptions.plugins, onModuleReady )
+          _this.add( moduleOptions.plugins, onModuleReady );
         }
         else{
           onModuleReady();
@@ -104,7 +104,9 @@
             }
             plugin.manifest = Popcorn.manifest[ plugin.type ];
             clearInterval( interval );
-            cb && cb();
+            if( cb ){
+              cb();
+            }
           }, 100);
 
           _plugins.push( plugin );

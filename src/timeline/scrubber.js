@@ -43,10 +43,10 @@ define( [], function(){
     _element.appendChild( _container );
 
     butter.ui.registerStateToggleFunctions( "timeline", {
-      in: function(){
+      transitionIn: function(){
         _line.removeAttribute( "data-butter-shortened" );
       },
-      out: function(){
+      transitionOut: function(){
         _line.setAttribute( "data-butter-shortened", true );
       }
     });

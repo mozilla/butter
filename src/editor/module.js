@@ -101,21 +101,21 @@
 
         parentElement.classList.add( "fadable" );
 
-        butter.ui.areas[ "work" ].addComponent( parentElement, {
+        butter.ui.areas.work.addComponent( parentElement, {
           states: [ "editor" ],
-          in: function(){
+          transitionIn: function(){
             parentElement.style.display = "block";
             setTimeout(function(){
               parentElement.style.opacity = "1";
             }, 0);
           },
-          inComplete: function(){
+          transitionInComplete: function(){
 
           },
-          out: function(){
+          transitionOut: function(){
             parentElement.style.opacity = "0";
           },
-          outComplete: function(){
+          transitionOutComplete: function(){
             parentElement.style.display = "none";
           }
         });

@@ -32,10 +32,10 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
   function Component( element, options ){
     options = options || {};
     var _element = element,
-        _onTransitionIn = options.in || function(){},
-        _onTransitionInComplete = options.inComplete || function(){},
-        _onTransitionOut = options.out || function(){},
-        _onTransitionOutComplete = options.outComplete || function(){},
+        _onTransitionIn = options.transitionIn || function(){},
+        _onTransitionInComplete = options.transitionInComplete || function(){},
+        _onTransitionOut = options.transitionOut || function(){},
+        _onTransitionOutComplete = options.transitionOutComplete || function(){},
         _validStates = options.states || [],
         _enabled = false;
 
@@ -63,11 +63,11 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
         _state = true,
         _this = this;
 
-    _areas[ "main" ] = new Area( "butter-tray" );
+    _areas.main = new Area( "butter-tray" );
 
     this.contentStateLocked = false;
 
-    var _element = _areas[ "main" ].element,
+    var _element = _areas.main.element,
         _toggler = new Toggler( butter, _element );
 
     _element.setAttribute( "data-butter-exclude", "true" );
@@ -77,7 +77,7 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
       var area = {
         element: document.createElement( "div" ),
         items: {}
-      }
+      };
       area.element.id = id;
       return area;
     }
@@ -86,9 +86,9 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
     _areas.statusbar = new Area( "status-bar" );
     _areas.tools = new Area( "tools" );
 
-    _element.appendChild( _areas[ "statusbar" ].element );
-    _element.appendChild( _areas[ "work" ].element );
-    _element.appendChild( _areas[ "tools" ].element );
+    _element.appendChild( _areas.statusbar.element );
+    _element.appendChild( _areas.work.element );
+    _element.appendChild( _areas.tools.element );
 
     if( options.enabled !== false ){
       document.body.appendChild( _element );
@@ -97,13 +97,13 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
     this.registerStateToggleFunctions = function( state, events ){
       _em.listen( "contentstatechanged", function( e ){
         if( e.data.oldState === state ){
-          events.out( e );
+          events.transitionOut( e );
         }
         if( e.data.newState === state ){
-          events.in( e );
+          events.transitionIn( e );
         }
       });
-    }
+    };
 
     this.pushContentState = function( state ){
       if( _this.contentStateLocked ){

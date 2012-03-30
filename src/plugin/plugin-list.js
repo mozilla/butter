@@ -28,41 +28,41 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
       }
     }, false );
 
-    butter.ui.areas[ "tools" ].addComponent( _addPopcornButton, {
+    butter.ui.areas.tools.addComponent( _addPopcornButton, {
       states: [ "add-popcorn" ],
-      in: function(){
+      transitionIn: function(){
         _addPopcornButton.setAttribute( "disabled", true );
         _addPopcornButton.innerHTML = "Done";
         _addPopcornButton.classList.add( "add-popcorn-done" );
       },
-      inComplete: function(){
+      transitionInComplete: function(){
         _addPopcornButton.removeAttribute( "disabled" );
       },
-      out: function(){
+      transitionOut: function(){
         _addPopcornButton.setAttribute( "disabled", true );
         _addPopcornButton.innerHTML = "+Popcorn";
         _addPopcornButton.classList.remove( "add-popcorn-done" );
       },
-      outComplete: function(){
+      transitionOutComplete: function(){
         _addPopcornButton.removeAttribute( "disabled" );
       }
     });
 
-    butter.ui.areas[ "work" ].addComponent( _parentElement, {
+    butter.ui.areas.work.addComponent( _parentElement, {
       states: [ "add-popcorn" ],
-      in: function(){
+      transitionIn: function(){
         _parentElement.style.display = "block";
         setTimeout(function(){
           _parentElement.style.opacity = "1";
         }, 0);
       },
-      out: function(){
+      transitionOut: function(){
         _parentElement.style.opacity = "0";
       },
-      inComplete: function(){
+      transitionInComplete: function(){
 
       },
-      outComplete: function(){
+      transitionOutComplete: function(){
         _parentElement.style.display = "none";
       }
     });

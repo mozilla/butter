@@ -35,34 +35,34 @@ define( [
     }, false );
 
     this._start = function( onModuleReady ){
-      butter.ui.areas[ "work" ].addComponent( _parentElement, {
+      butter.ui.areas.work.addComponent( _parentElement, {
         states: [ "timeline" ],
-        in: function(){
+        transitionIn: function(){
           _parentElement.style.display = "block";
           setTimeout(function(){
             _parentElement.style.opacity = "1";
           }, 0);
         },
-        inComplete: function(){
+        transitionInComplete: function(){
 
         },
-        out: function(){
+        transitionOut: function(){
           _parentElement.style.opacity = "0";
         },
-        outComplete: function(){
+        transitionOutComplete: function(){
           _parentElement.style.display = "none";
         }
       });
 
-      butter.ui.areas[ "tools" ].addComponent( _addTrackButton, {
+      butter.ui.areas.tools.addComponent( _addTrackButton, {
 
       });
 
       butter.ui.registerStateToggleFunctions( "timeline", {
-        in: function(){
+        transitionIn: function(){
           _parentElement.removeAttribute( "data-butter-disabled" );
         },
-        out: function(){
+        transitionOut: function(){
           _parentElement.setAttribute( "data-butter-disabled", true );
         }
       });
