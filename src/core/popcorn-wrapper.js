@@ -83,7 +83,6 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       } //failureWrapper
       function popcornSuccess( e ){
          addPopcornHandlers();
-         console.log(_onPrepare);
         _onPrepare( e );
       } //popcornSuccess
       findMediaType( url );
