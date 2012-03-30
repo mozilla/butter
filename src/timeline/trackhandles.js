@@ -123,6 +123,7 @@ define( [
       _sortable.removeItem( _tracks[ trackId ].element );
       _menus.splice( _menus.indexOf( _tracks[ trackId ].menu ), 1 );
       delete _tracks[ trackId ];
+      _addTrackButton.style.top = _listElement.offsetHeight - ADD_TRACK_BUTTON_Y_ADJUSTMENT + "px";
     });
 
     tracksContainer.element.addEventListener( "scroll", function( e ){
