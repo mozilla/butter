@@ -528,10 +528,45 @@
             start();
           }
         });
-
       }
     });
-
   });
+  module( "Player tests" );
+  // Make sure HTML5 audio/video, youtube, and vimeo work
+  asyncTest( "Test basic player support", function() {
+    var expected = 7;
 
+    expect( expected );
+    Butter({
+      config: "../config/default.conf",
+      ready: function( butter ){
+        var mediaURLS = [ "http://www.youtube.com/watch?v=7glrZ4e4wYU",
+            "http://vimeo.com/30619461",
+            "../external/popcorn-js/test/italia.ogg" ],
+            index = 0,
+            count = 0;
+
+        function plus() {
+          if( ++count === expected ) {
+            butter.unlisten( "mediaready", mediaReady );
+            start();
+          }
+        }
+
+        equals( butter.currentMedia, undefined, "Initially there is no media" );
+        plus();
+
+        function mediaReady() {
+          ok( true, "Media changed triggered" + mediaURLS[ index ] );
+          plus();
+          equals( butter.currentMedia.url, mediaURLS[ index ], "The currentMedia's url is equal to the one that has been set" );
+          plus();
+          butter.currentMedia = butter.addMedia({ url: mediaURLS[ ++index ], target: "mediaDiv" });
+        }
+
+        butter.listen( "mediaready", mediaReady );
+        butter.addMedia({ url: mediaURLS[ index ], target: "mediaDiv" });
+      }
+    });
+  });
 })(window, window.document );

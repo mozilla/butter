@@ -65,6 +65,12 @@
             prepare: function(){
               _this.duration = _popcornWrapper.duration;
               _ready = true;
+              for( var i = 0, l = _tracks.length; i < l; i++ ) {
+                var te = _tracks[ i ].trackEvents;
+                for( var j = 0, k = te.length; j < k; j++ ) {
+                  _popcornWrapper.updateEvent( te[ j ] );
+                }
+              }
               _em.dispatch( "mediaready" );
             },
             fail: function(){
