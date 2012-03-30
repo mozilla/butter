@@ -10,7 +10,7 @@ define(['util/xhr'], function(XHR) {
 
   var Cornfield = function( butter, config ) {
 
-    var email = "",
+    var email = null,
         server = config.server;
 
     this.login = function(callback) {
@@ -43,6 +43,7 @@ define(['util/xhr'], function(XHR) {
 
     this.logout = function(callback) {
       XHR.get(server + "/browserid/logout", function() {
+        email = null;
         if (this.readyState === 4) {
           try {
             var response = JSON.parse(this.response);

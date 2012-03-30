@@ -47,6 +47,10 @@
           _defaultTarget,
           _this = this;
 
+      this.project = {
+        name: null
+      };
+
       function checkMedia() {
         if ( !_currentMedia ) {
           throw new Error("No media object is selected");
