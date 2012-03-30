@@ -20,25 +20,16 @@
       "get": function(url, callback) {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url, true);
-        xhr.withCredentials = "true";
         xhr.onreadystatechange = callback;
         xhr.send(null);
       },
       "post": function(url, data, callback) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
-        xhr.withCredentials = "true";
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = callback;
+        console.log(data);
         xhr.send(parameterize(data));
-      },
-      "put": function(url, data, callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("PUT", url, true);
-        xhr.withCredentials = "true";
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = callback;
-        xhr.send(parameterize({data: data}));
+        console.log(parameterize(data));
       }
     };
 
