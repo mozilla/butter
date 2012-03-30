@@ -31,7 +31,6 @@
           _duration = 0,
           _popcornOptions = mediaOptions.popcornOptions,
           _mediaUpdateInterval,
-          _view,
           _popcornWrapper = new PopcornWrapper( _id, {
             popcornEvents: {
               muted: function(){
@@ -175,14 +174,11 @@
           _pageElement.destroy();
         } //if
         _pageElement = new PageElement( _target, {
-          drop: function( event, ui ){
-            if( event.currentTarget === _this ) {
-              _em.dispatch( "trackeventrequested", {
-                event: event,
-                target: _this,
-                ui: ui
-              });
-            }//if
+          drop: function( element ){
+            _em.dispatch( "trackeventrequested", {
+              element: element,
+              target: _this
+            });
           }
         },
         {
