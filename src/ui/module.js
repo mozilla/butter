@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
+define( [ "core/eventmanager", "./toggler", "./logo-spinner" ], function( EventManager, Toggler, LogoSpinner ){
 
   var TRANSITION_DURATION = 500;
 
@@ -71,6 +71,7 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
         _areas = {},
         _contentState = [],
         _state = true,
+        _logoSpinner,
         _this = this;
 
     _areas.main = new Area( "butter-tray" );
@@ -95,6 +96,11 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
     _areas.work = new Area( "work" );
     _areas.statusbar = new Area( "status-bar" );
     _areas.tools = new Area( "tools" );
+
+    var logoContainer = document.createElement( "div" );
+    logoContainer.id = "butter-loading-container";
+    _logoSpinner = LogoSpinner( logoContainer );
+    _element.appendChild( logoContainer );
 
     _element.appendChild( _areas.statusbar.element );
     _element.appendChild( _areas.work.element );
@@ -364,6 +370,21 @@ define( [ "core/eventmanager", "./toggler" ], function( EventManager, Toggler ){
     }, false );
 
     this.TRANSITION_DURATION = TRANSITION_DURATION;
+
+    _toggler.visible = false;
+    _this.visible = false;
+
+    _logoSpinner.start();
+
+    butter.listen( "ready", function(){
+      _logoSpinner.hide();
+      setTimeout( function(){
+        _logoSpinner.stop();
+        logoContainer.style.display = "none";
+      }, 500 );
+      _this.visible = true;
+      _toggler.visible = true;
+    });
 
   }
 
