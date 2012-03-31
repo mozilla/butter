@@ -531,7 +531,7 @@
       }
     });
   });
-  module( "Player tests" );
+  /*module( "Player tests" );
   // Make sure HTML5 audio/video, youtube, and vimeo work
   asyncTest( "Test basic player support", function() {
     var expected = 7;
@@ -566,6 +566,31 @@
 
         butter.listen( "mediaready", mediaReady );
         butter.addMedia({ url: mediaURLS[ index ], target: "mediaDiv" });
+      }
+    });
+  });*/
+
+  module( "Exported HTML" );
+  test( "exported HTML is properly escaped", function() {
+    expect( 1 );
+    createButter( function( butter ){
+    var m1 = butter.addMedia( { url:"www.test-url-1.com", target:"test-target-1" } );
+        m2 = butter.addMedia( { url:"www.test-url-2.com", target:"test-target-2" } );
+        t1 = m1.addTrack();
+        t2 = m1.addTrack();
+        butter.currentMedia = m2;
+        t3 = m2.addTrack();
+        t4 = m2.addTrack();
+        te1 = t4.addTrackEvent( { popcornOptions: { start: 2, end: 6 }, type: "footnote", text: String( "this'" + 'should"' + '""""""b"e' + "f'i'ne") } );
+        butter.addTarget( { name: "beep" } );
+
+      try {
+        var html = document.createElement( "html" );
+        html.innerHTML = butter.getHTML();
+        console.log( html );
+        ok( true, "String escaping in exported HTML is fine" );
+      } catch( e ) {
+        ok( false, "String escaping in exported HTML has issues" );
       }
     });
   });
