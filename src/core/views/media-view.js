@@ -23,28 +23,59 @@ define( [ "ui/page-element" ], function( PageElement ){
     var title = document.createElement( "h3" );
     title.innerHTML = "Timeline Media";
     var subtitle = document.createElement( "h5" );
-    subtitle.innerHTML = "&#10003;HTML5 &#10003;Youtube &#10003;Vimeo"
+    subtitle.innerHTML = "&#10003;HTML5 &#10003;Youtube &#10003;Vimeo";
     var container = document.createElement( "container" );
     container.className = "container";
     var changeButton = document.createElement( "button" );
     changeButton.innerHTML = "Change";
+    var loadingContainer = document.createElement( "div" );
+    loadingContainer.className = "loading-container";
     container.appendChild( title );
     container.appendChild( subtitle );
     container.appendChild( urlTextbox );
     container.appendChild( changeButton );
+
     _propertiesElement.appendChild( container );
 
-    changeButton.addEventListener( "click", function( e ){
-      media.url = urlTextbox.value;
+    function showError( state, message ){
+      if( state ){
+        subtitle.innerHTML = message;
+      }
+      else{
+        subtitle.innerHTML = "&#10003;HTML5 &#10003;Youtube &#10003;Vimeo";
+      }
+    }
+
+    function changeUrl(){
+      if( urlTextbox.value.replace( /\s/g, "" ) !== "" ){
+        media.url = urlTextbox.value;
+      }
+      else{
+        showError( true, "Your URL must not be blank:" );
+      }
+    }
+
+    urlTextbox.addEventListener( "keypress", function( e ){
+      if( e.which === 13 ){
+        changeUrl();
+      }
     }, false );
+    changeButton.addEventListener( "click", changeUrl, false );
 
     media.listen( "mediacontentchanged", function( e ){
       urlTextbox.value = media.url;
+      showError( false );
       changeButton.setAttribute( "disabled", true );
     });
 
+    media.listen( "mediafailed", function( e ){
+      showError( true, "Media failed to load. Check your URL:" );
+      changeButton.removeAttribute( "disabled" );
+    });
+
     media.listen( "mediaready", function( e ){
-      changeButton.removeAttribute( "disabled", true );
+      showError( false );
+      changeButton.removeAttribute( "disabled" );
     });
 
     this.update = function(){

@@ -13,6 +13,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _popcornEvents = options.popcornEvents || {},
         _onPrepare = options.prepare || function(){},
         _onFail = options.fail || function(){},
+        _onTimeout = options.timeout || function(){},
         _url = options.setup && options.setup.url,
         _target = options.target && options.setup.target,
         _popcorn,
@@ -113,7 +114,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
               }, 100 );
             } else {
               createPopcorn( popcornString );
-              waitForPopcorn( popcornSuccess, timeoutWrapper, 100 );
+              waitForPopcorn( popcornSuccess, failureWrapper, timeoutWrapper, 100 );
             }
           })();
         }
@@ -244,7 +245,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       _popcorn = popcorn;
     }; //createPopcorn
 
-    function waitForPopcorn( callback, timeoutCallback, tries ){
+    function waitForPopcorn( callback, errorCallback, timeoutCallback, tries ){
       _mediaLoadAttempts = 0;
       _interruptLoad = false;
 
@@ -258,7 +259,10 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         if ( _interruptLoad ) {
           return;
         } //if
-        if ( _popcorn.media.readyState >= 2 && _popcorn.duration() > 0 ) {
+        if( _popcorn.media.error ){
+          errorCallback();
+        }
+        if( _popcorn.media.readyState >= 2 && _popcorn.duration() > 0 ){
           callback();
         } else {
           setTimeout( checkMedia, 100 );

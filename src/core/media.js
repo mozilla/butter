@@ -59,6 +59,8 @@
                 _em.dispatch( "mediaplaying" );
               },
               timeout: function(){
+                console.log("timeout!");
+                _em.dispatch( "mediafailed", "timeout" );
               },
               ended: function(){
                 _em.dispatch( "mediaended" );
@@ -75,7 +77,8 @@
               }
               _em.dispatch( "mediaready" );
             },
-            fail: function(){
+            fail: function( e ){
+              _em.dispatch( "mediafailed", "error" );
             },
             setup: {
               target: _target,
