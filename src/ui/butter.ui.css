@@ -96,11 +96,20 @@
   border-radius: 10px;
 }
 
+.butter-media-properties .loading-container {
+  position: absolute;
+  z-index: 2140000001;
+  right: 1px;
+  bottom: 1px;
+  width: 30px;
+  height: 30px;
+}
+
 .butter-media-properties .container {
   width: 250px;
   height: 100px;
   min-width: 250px;
-  min-height: 250px;
+  min-height: 100px;
   position: absolute;
   text-align: center;
   color: #fff;

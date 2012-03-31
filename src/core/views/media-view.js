@@ -1,10 +1,11 @@
-define( [ "ui/page-element" ], function( PageElement ){
+define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpinner ){
   
   return function( media, options ){
     var _media = media,
         _pageElement,
         _onDropped = options.onDropped || function(){},
         _propertiesElement = document.createElement( "div" ),
+        _logoSpinner,
         _this = this;
 
     _propertiesElement.className = "butter-media-properties";
@@ -30,10 +31,14 @@ define( [ "ui/page-element" ], function( PageElement ){
     changeButton.innerHTML = "Change";
     var loadingContainer = document.createElement( "div" );
     loadingContainer.className = "loading-container";
+
+    _logoSpinner = LogoSpinner( loadingContainer );
+
     container.appendChild( title );
     container.appendChild( subtitle );
     container.appendChild( urlTextbox );
     container.appendChild( changeButton );
+    container.appendChild( loadingContainer );
 
     _propertiesElement.appendChild( container );
 
@@ -62,20 +67,26 @@ define( [ "ui/page-element" ], function( PageElement ){
     }, false );
     changeButton.addEventListener( "click", changeUrl, false );
 
+    _logoSpinner.start();
+    changeButton.setAttribute( "disabled", true );
+
     media.listen( "mediacontentchanged", function( e ){
       urlTextbox.value = media.url;
       showError( false );
       changeButton.setAttribute( "disabled", true );
+      _logoSpinner.start();
     });
 
     media.listen( "mediafailed", function( e ){
       showError( true, "Media failed to load. Check your URL:" );
       changeButton.removeAttribute( "disabled" );
+      _logoSpinner.stop();
     });
 
     media.listen( "mediaready", function( e ){
       showError( false );
       changeButton.removeAttribute( "disabled" );
+      _logoSpinner.stop();
     });
 
     this.update = function(){
