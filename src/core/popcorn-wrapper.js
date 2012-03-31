@@ -243,7 +243,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         popcorn = window.Popcorn.instances[ window.Popcorn.instances.length - 1 ];
       }
       _popcorn = popcorn;
-    }; //createPopcorn
+    }
 
     function waitForPopcorn( callback, errorCallback, timeoutCallback, tries ){
       _mediaLoadAttempts = 0;

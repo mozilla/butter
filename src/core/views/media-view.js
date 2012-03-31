@@ -120,7 +120,7 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
         }
         _propertiesElement.style.left = _pageElement.element.style.left;
         _propertiesElement.style.top = _pageElement.element.style.top;
-      };
+      }
     };
 
   };

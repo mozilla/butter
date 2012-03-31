@@ -244,8 +244,7 @@
               setupContent();
               _em.dispatch( "mediacontentchanged", _this );
             }
-          },
-          enumerable: true
+          }
         },
         target: {
           get: function() {
