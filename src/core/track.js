@@ -30,6 +30,8 @@ define( [
         _view = new TrackView( this ),
         _this = this;
 
+    _this._media = null;
+
     Object.defineProperties( this, {
       view: {
         enumerable: true,
@@ -134,8 +136,9 @@ define( [
         trackEvent = new TrackEvent( trackEvent );
       } //if
       if( _target ){
-        _trackEvents.target = _target;
+        trackEvent.target = _target;
       } //if
+      trackEvent._track = _this;
       _trackEvents.push( trackEvent );
       trackEvent.track = _this;
       _em.repeat( trackEvent, [
@@ -154,7 +157,6 @@ define( [
       var idx = _trackEvents.indexOf( trackEvent );
       if ( idx > -1 ) {
         _trackEvents.splice( idx, 1 );
-        trackEvent.track = undefined;
         _em.unrepeat( trackEvent, [
           "trackeventupdated",
           "trackeventselected",
@@ -162,7 +164,7 @@ define( [
           "trackeventeditrequested"
         ]);
         _view.removeTrackEvent( trackEvent );
-        trackEvent.track = undefined;
+        trackEvent._track = null;
         _em.dispatch( "trackeventremoved", trackEvent );
         return trackEvent;
       } //if
