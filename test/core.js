@@ -538,7 +538,7 @@
 
     expect( expected );
     Butter({
-      config: "../config/default.conf",
+      config: "../config/test.conf",
       ready: function( butter ){
         var mediaURLS = [ "http://www.youtube.com/watch?v=7glrZ4e4wYU",
             "http://vimeo.com/30619461",
@@ -575,17 +575,17 @@
     createButter(function( butter ) {
       var m = butter.addMedia({
         name: "Media 1",
-        target: "test",
+        target: "test-target-1",
         url: "http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv",
         popcornOptions: {
           foo: 2
         }
       });
-      ok( m.popcornString.indexOf( "Popcorn( '#test', {\"foo\":2})" ) > -1, "Popcorn string contained specified popcornOptions." );
+      ok( m.popcornString.indexOf( "{\"foo\":2}" ) > -1, "Popcorn string contained specified popcornOptions." );
       m.popcornOptions = {
         bar: 3
       };
-      ok( m.popcornString.indexOf( "Popcorn( '#test', {\"bar\":3})" ) > -1, "Popcorn string contained changed popcornOptions." );
+      ok( m.popcornString.indexOf( "{\"bar\":3}" ) > -1, "Popcorn string contained specified popcornOptions again." );
     });
   });
 

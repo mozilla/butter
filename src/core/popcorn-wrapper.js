@@ -6,6 +6,10 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
   var urlRegex = /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)(youtu|vimeo|soundcloud|baseplayer)/;
 
+  var STATUS_INTERVAL = 100,
+      PLAYER_WAIT_DURATION = 10000,
+      MEDIA_WAIT_DURATION = 10000;
+
   return function ( mediaId, options ){
 
     var _id = mediaId,
@@ -13,6 +17,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _popcornEvents = options.popcornEvents || {},
         _onPrepare = options.prepare || function(){},
         _onFail = options.fail || function(){},
+        _onPlayerTypeRequired = options.playerTypeRequired || function(){},
+        _onTimeout = options.timeout || function(){},
         _url = options.setup && options.setup.url,
         _target = options.target && options.setup.target,
         _popcorn,
@@ -83,50 +89,54 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     }; //destroyEvent
 
     this.prepare = function( url, target, popcornOptions ){
+
       function timeoutWrapper( e ){
         _interruptLoad = true;
         _onTimeout( e );
-      } //timeoutWrapper
+      }
+
+      function mediaTimeoutWrapper( e ){
+        _interruptLoad = true;
+        _onTimeout( e );
+      }
+
       function failureWrapper( e ){
         _interruptLoad = true;
         _logger.log( e );
         _onFail( e );
-      } //failureWrapper
-      function popcornSuccess( e ){
-         addPopcornHandlers();
-        _onPrepare( e );
-      } //popcornSuccess
+      }
+
       findMediaType( url );
 
       if( !target ){
         _logger.log( "Warning: tried to prepare media with null target." );
         return;
-      } //if
+      }
 
       if( !_popcorn ) {
         try {
-          var popcornString = generatePopcornString( popcornOptions, url, target );
-          (function isPlayerReady() {
-            if ( !_playerReady ) {
-              setTimeout(function() {
-                isPlayerReady();
-              }, 100 );
-            } else {
-              createPopcorn( popcornString );
-              waitForPopcorn( popcornSuccess, timeoutWrapper, 100 );
-            }
-          })();
+          waitForPopcorn( function(){
+            constructPlayer( target );
+            createPopcorn( generatePopcornString( popcornOptions, url, target ) );
+            addPopcornHandlers();
+            waitForMedia( _onPrepare, mediaTimeoutWrapper );
+          }, timeoutWrapper );
         }
         catch( e ) {
           failureWrapper( e );
-        } //try
-      } //if
-    }; //prepare
+        }
+      }
+
+    };
 
     function findMediaType( url ){
       var regexResult = urlRegex.exec( url );
       if ( regexResult ) {
         _mediaType = regexResult[ 1 ];
+        // our regex only handles youtu ( incase the url looks something like youtu.be )
+        if ( _mediaType === "youtu" ) {
+          _mediaType = "youtube";
+        }
       }
       else {
         _mediaType = "object";
@@ -134,13 +144,29 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       return _mediaType;
     } //findMediaType
 
+    function constructPlayer( target ){
+      var script,
+          targetElement = document.getElementById( target );
+
+      if( _mediaType !== "object" && targetElement ) {
+        if( [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) !== -1 ) {
+          var parentNode = targetElement.parentNode,
+              newElement = document.createElement( "div" );
+
+          newElement.id = targetElement.id;
+          newElement.style.cssText = getComputedStyle( targetElement ).cssText;
+          parentNode.replaceChild( newElement, targetElement );
+        }
+      }
+    }
+
     var generatePopcornString = this.generatePopcornString = function( popcornOptions, url, target, method ){
       var popcornString = "";
 
       if ( popcornOptions ) {
         popcornOptions = ", " + JSON.stringify( popcornOptions );
       } else {
-        popcornOptions = "";
+        popcornOptions = ", {}";
       }
 
       if( typeof( target ) !== "string" ){
@@ -156,53 +182,14 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         throw new Error( "Media type not generated yet. Please specify a url for media objects before generating a popcorn string." );
       }
 
-      function constructPlayer( type ){
-        var script,
-            targetElement = document.getElementById( target );
 
-        if( type === "baseplayer" ) {
-          _playerReady = true;
-          Popcorn.player( "baseplayer" );
-          return "Popcorn.player( 'baseplayer' );\n" +
-                 "var popcorn = Popcorn.baseplayer( '#" + target + "', " + popcornOptions + " );\n";
-        }
-
-        if( type === "object" ) {
-          _playerReady = true;
-        } else {
-          _playerReady = false;
-
-          // our regex only handles youtu ( incase the url looks something like youtu.be )
-          if ( type === "youtu" ) {
-            type = "youtube";
-          }
-
-          if( [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) !== -1 ) {
-            var parentNode = targetElement.parentNode,
-                newElement = document.createElement( "div" );
-
-            newElement.id = targetElement.id;
-            newElement.style.cssText = getComputedStyle( targetElement ).cssText;
-            parentNode.replaceChild( newElement, targetElement );
-          }
-
-          script = document.createElement( "script" );
-          script.src = "../external/popcorn-js/players/" + type + "/popcorn." + type + ".js";
-          document.head.appendChild( script );
-
-          setTimeout(function() {
-            if( !window.Popcorn[ type ] ) {
-              this();
-            } else {
-              _playerReady = true;
-            }
-          }, 100 );
-        }
-        return "var popcorn = Popcorn.smart( '#" + target + "', '" + url + "' );\n";
+      if( _mediaType === "baseplayer" ) {
+        popcornString +=  "Popcorn.player( 'baseplayer' );\n" +
+                          "var popcorn = Popcorn.baseplayer( '#" + target + "', " + popcornOptions + " );\n";
       }
-
-      // call certain player function depending on the regexResult
-      popcornString += constructPlayer( _mediaType );
+      else{
+        popcornString += "var popcorn = Popcorn.smart( '#" + target + "', '" + url + "'" + popcornOptions + " );\n";
+      }
 
       if ( _popcorn ) {
         var trackEvents = _popcorn.getTrackEvents();
@@ -213,11 +200,11 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
             for ( var option in popcornOptions ) {
               if ( popcornOptions.hasOwnProperty( option ) ) {
                 popcornString += "\n" + option + ":'" + trackEvents[ i ][ option ] + "',";
-              } //if
-            } //for
+              }
+            }
             if ( popcornString[ popcornString.length - 1 ] === "," ) {
               popcornString = popcornString.substring( 0, popcornString.length - 1 );
-            } //if
+            }
             popcornString += "});\n";
           } //for trackEvents
         } //if trackEvents
@@ -234,7 +221,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       } //if
 
       return popcornString;
-    }; //generatePopcornString
+    };
 
     function createPopcorn( popcornString ){
       var popcornFunction = new Function( "", popcornString );
@@ -246,38 +233,57 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         popcorn = window.Popcorn.instances[ window.Popcorn.instances.length - 1 ];
       }
       _popcorn = popcorn;
-    }; //createPopcorn
+    };
 
-    function waitForPopcorn( callback, timeoutCallback, tries ){
-      _mediaLoadAttempts = 0;
-      _interruptLoad = false;
-
-      var checkMedia = function() {
-        ++_mediaLoadAttempts;
-        if ( tries !== undefined && _mediaLoadAttempts === tries ) {
-          if ( timeoutCallback ) {
-            timeoutCallback();
-          } //if
-        } //if
-        if ( _interruptLoad ) {
+    function checkTimeoutLoop( checkFunction, readyCallback, timeoutCallback, timeoutDuration ){
+      var stop = false,
+          ready = false;
+      function doCheck(){
+        if ( stop ) {
           return;
-        } //if
-        if ( _popcorn.media.readyState >= 2 && _popcorn.duration() > 0 ) {
-          callback();
-        } else {
-          setTimeout( checkMedia, 100 );
-        } //if
-      };
-      checkMedia();
+        }
+        if ( checkFunction() ) {
+          ready = true;
+          readyCallback();
+        }
+        else {
+          setTimeout( doCheck, STATUS_INTERVAL );
+        }
+      }
+      setTimeout(function(){
+        if ( !ready ) {
+          stop = true;
+          timeoutCallback();
+        }
+      }, MEDIA_WAIT_DURATION );
+      doCheck();
+    }
+
+    function waitForMedia( readyCallback, timeoutCallback ){
+      checkTimeoutLoop(function(){
+        return ( _popcorn.media.readyState >= 2 && _popcorn.duration() > 0 );
+      }, readyCallback, timeoutCallback, MEDIA_WAIT_DURATION );
+    }
+
+    function waitForPopcorn( readyCallback, timeoutCallback ){
+      if( _mediaType !== "object" ){
+        _onPlayerTypeRequired( _mediaType );
+        checkTimeoutLoop(function(){
+          return ( !!window.Popcorn[ _mediaType ] );
+        }, readyCallback, timeoutCallback, PLAYER_WAIT_DURATION );
+      }
+      else{
+        readyCallback();
+      }
     }
 
     this.play = function(){
       _popcorn.play();
-    }; //play
+    };
 
     this.pause = function(){
       _popcorn.pause();
-    }; //pause
+    };
 
     this.clear = function( container ) {
       if( typeof( container ) === "string" ){
@@ -304,7 +310,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         container.currentSrc = "";
         container.src = "";
       } //if
-    }; //setMediaContent
+    };
 
     Object.defineProperties( this, {
       volume: {
@@ -388,8 +394,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           } //if
         }
       } //paused
-    }); //properties
+    });
 
-  }; //PopcornWrapper
+  };
 
-}); //define
+});

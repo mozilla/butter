@@ -57,6 +57,7 @@
                 _em.dispatch( "mediaplaying" );
               },
               timeout: function(){
+                _em.dispatch( "mediatimeout" );
               },
               ended: function(){
                 _em.dispatch( "mediaended" );
@@ -74,6 +75,9 @@
               _em.dispatch( "mediaready" );
             },
             fail: function(){
+            },
+            playerTypeRequired: function( type ){
+              _em.dispatch( "mediaplayertyperequired", type );
             },
             setup: {
               target: _target,
@@ -206,12 +210,18 @@
         });
       } //setupContent
 
+      this.setupContent = setupContent;
+
       this.onReady = function( callback ){
+        function onReady( e ){
+          callback( e );
+          _em.unlisten( "mediaready", onReady );
+        }
         if( _ready ){
           callback();
         }
         else{
-          _em.listen( "mediaready", callback );
+          _em.listen( "mediaready", onReady );
         }
       };
 
@@ -420,8 +430,6 @@
           }
         }
       });
-
-      setupContent();
 
     }; //Media
 
