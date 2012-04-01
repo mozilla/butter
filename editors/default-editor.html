@@ -83,47 +83,55 @@
                   col2 = document.createElement( "TD" ),
                   elem = _manifest[ item ].elem;
 
-                  col1.innerHTML = "<b>" + (!_manifest[ item ].label ? item : _manifest[ item ].label) + "</b>";
+              var itemLabel = _manifest[ item ].label || item;
+              if( itemLabel === "In" ){
+                itemLabel = "Start (seconds)";
+              }
+              else if( itemLabel === "Out" ){
+                itemLabel = "End (seconds)";
+              } //if
 
-                  if( item === "target" ) {
-                    var select = document.createElement( "SELECT" );
-                    select.id = "target";
+              col1.innerHTML = "<b>" + itemLabel + "</b>";
 
-                    for( var i = 0, l = targets.length; i < l; i++ ) {
-                      var option = document.createElement( "OPTION" );
-                      option.value = targets[ i ];
-                      option.innerHTML = targets[ i ];
-                      select.appendChild( option );
-                      if( popcornOptions.target === targets[ i ] ) {
-                        select.value = targets[ i ];
-                      }
-                    }
-                    var option = document.createElement( "OPTION" );
-                    option.value = "Media Element";
-                    option.innerHTML =  mediaName;
-                    select.appendChild( option );
-                    if( popcornOptions.target === "Media Element" ) {
-                        select.value = "Media Element";
-                    }
-                    col2.appendChild( select );
+              if( item === "target" ) {
+                var select = document.createElement( "SELECT" );
+                select.id = "target";
 
-                    select.addEventListener( "change", function( e ){
-                      sendData( false );
-                    }, false );
-                  } else {
-                    var newItem = document.createElement( elem );
-                    newItem.id = item;
-                    newItem.style.width = "100%";
-                    newItem.value = popcornOptions[ item ];
-                    col2.appendChild( newItem );
-                    newItem.addEventListener( "change", function( e ){
-                      sendData( false );
-                    }, false );
+                for( var i = 0, l = targets.length; i < l; i++ ) {
+                  var option = document.createElement( "OPTION" );
+                  option.value = targets[ i ];
+                  option.innerHTML = targets[ i ];
+                  select.appendChild( option );
+                  if( popcornOptions.target === targets[ i ] ) {
+                    select.value = targets[ i ];
                   }
+                }
+                var option = document.createElement( "OPTION" );
+                option.value = "Media Element";
+                option.innerHTML =  mediaName;
+                select.appendChild( option );
+                if( popcornOptions.target === "Media Element" ) {
+                    select.value = "Media Element";
+                }
+                col2.appendChild( select );
 
-                  row.appendChild( col1 );
-                  row.appendChild( col2 );
-                  document.getElementById( "table" ).appendChild( row );
+                select.addEventListener( "change", function( e ){
+                  sendData( false );
+                }, false );
+              } else {
+                var newItem = document.createElement( elem );
+                newItem.id = item;
+                newItem.style.width = "100%";
+                newItem.value = popcornOptions[ item ];
+                col2.appendChild( newItem );
+                newItem.addEventListener( "change", function( e ){
+                  sendData( false );
+                }, false );
+              }
+
+              row.appendChild( col1 );
+              row.appendChild( col2 );
+              document.getElementById( "table" ).appendChild( row );
             }
           });
 
