@@ -45,7 +45,7 @@ define( [
         _timebar = new TimeBar( butter, _media, _tracksContainer, _hScrollBar ),
         _zoombar = new ZoomBar( zoomCallback ),
         _status = new Status( _media ),
-        _trackHandles = new TrackHandles( _media, _tracksContainer, onTrackOrderChanged ),
+        _trackHandles = new TrackHandles( butter, _media, _tracksContainer, onTrackOrderChanged ),
         _trackEventHighlight = butter.config.ui.trackEventHighlight || "click",
         _currentMouseDownTrackEvent,
         _zoom = INITIAL_ZOOM;

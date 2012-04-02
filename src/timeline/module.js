@@ -15,19 +15,11 @@ define( [
 
     var _media = {},
         _currentMedia,
-        _parentElement = document.createElement( "div" ),
-        _addTrackButton = document.createElement( "button" );
+        _parentElement = document.createElement( "div" );
 
     _parentElement.id = "butter-timeline";
-    _addTrackButton.id = "add-track";
 
     _parentElement.classList.add( "fadable" );
-
-    _addTrackButton.innerHTML = "+Track";
-
-    _addTrackButton.addEventListener( "click", function( e ){
-      butter.currentMedia.addTrack();
-    }, false );
 
     this._start = function( onModuleReady ){
       butter.ui.areas.work.addComponent( _parentElement, {
@@ -47,10 +39,6 @@ define( [
         transitionOutComplete: function(){
           _parentElement.style.display = "none";
         }
-      });
-
-      butter.ui.areas.tools.addComponent( _addTrackButton, {
-
       });
 
       butter.ui.registerStateToggleFunctions( "timeline", {
