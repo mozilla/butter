@@ -313,7 +313,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner" ], function( EventM
         for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
           trackEvent = butter.selectedEvents[ i ];
           track = trackEvent.track;
-          nextTrack = orderedTracks[ orderedTracks.indexOf( track ) + 1 ]
+          nextTrack = orderedTracks[ orderedTracks.indexOf( track ) + 1 ];
           if( nextTrack ) {
             track.removeTrackEvent( trackEvent );
             nextTrack.addTrackEvent( trackEvent );
