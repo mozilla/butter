@@ -37,6 +37,10 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _playerReady = false,
         _this = this;
 
+    function encodeString( string ) {
+      return String( string ).replace(/['\\"]/g, "\\$&");
+    }
+
     /* Destroy popcorn bindings specfically without touching other discovered
      * settings
      */
@@ -257,7 +261,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
             popcornString += "popcorn." + trackEvents[ i ]._natives.type + "({";
             for ( var option in popcornOptions ) {
               if ( popcornOptions.hasOwnProperty( option ) ) {
-                popcornString += "\n" + option + ":'" + trackEvents[ i ][ option ] + "',";
+                popcornString += "\n" + option + ":'" + encodeString( trackEvents[ i ][ option ] ) + "',";
               }
             }
             if ( popcornString[ popcornString.length - 1 ] === "," ) {

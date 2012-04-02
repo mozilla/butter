@@ -7,6 +7,7 @@
 (function(window, document, undefined ){
 
   QUnit.config.testTimeout = 20000;
+  QUnit.config.reorder = false;
 
   function createButter( callback ){
     stop();
@@ -586,6 +587,27 @@
         bar: 3
       };
       ok( m.popcornString.indexOf( "{\"bar\":3}" ) > -1, "Popcorn string contained specified popcornOptions again." );
+    });
+  });
+
+  module( "Exported HTML" );
+  asyncTest( "exported HTML is properly escaped", function() {
+    expect( 1 );
+    createButter( function( butter ){
+      var m1 = butter.addMedia( { url:"../external/popcorn-js/test/trailer.ogv", target:"mediaDiv" } );
+
+      butter.listen( "mediaready", function( e ) {
+        t1 = m1.addTrack();
+        var messedUpString = "this'" + 'should"' + '""""""b"e' + "f'i'ne";
+        te1 = t1.addTrackEvent( { popcornOptions: { start: 0, end: 6, text: messedUpString, target: "stringSanity" }, type: "footnote" } );
+        butter.addTarget( { name: "beep" } );
+
+        var func = Function( "", m1.popcornString );
+            pop = func();
+
+        equals( document.getElementById( "stringSanity" ).children[ 0 ].innerHTML, messedUpString, "String escaping in exported HTML is fine" );
+        start();
+      });
     });
   });
 
