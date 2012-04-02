@@ -17,7 +17,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
         _source = source,
         _type = type,
         _dims = DEFAULT_DIMS.slice(),
-        _em = new EventManager( "Editor-" + _type ),
+        _em = new EventManager( this ),
         _dialog,
         _dialogOptions = {
           type: _frameType,
@@ -44,20 +44,10 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
       _dialog = null;
       _currentTrackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
       _currentTrackEvent.unlisten( "trackeventupdatefailed", onTrackEventUpdateFailed );
-      if( _frameType === "iframe" ){
-        if( butter.ui.contentState === "editor" ){
-          butter.ui.popContentState( "editor" );
-        }
-      }
+      _em.dispatch( "close" );
     }
 
     this.open = function( trackEvent ) {
-      if( _frameType === "iframe" ){
-        if( butter.ui.contentState !== "editor" ){
-          butter.ui.pushContentState( "editor" );
-        }
-      }
-
       if( !_dialog ){
         if( _frameType === "window" ){
           _dialog = new WindowDialog( _dialogOptions );
@@ -111,6 +101,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
           if( _frameType === "iframe" ){
             _dialog.iframe.focus();
           }
+          _em.dispatch( "open" );
         },
         submit: function( e ){
           var duration = TimeUtil.roundTime( butter.currentMedia.duration ),

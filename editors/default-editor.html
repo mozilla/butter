@@ -16,10 +16,6 @@
             _manifest = {};
 
         document.addEventListener( "DOMContentLoaded", function( e ){
-          var okButton = document.getElementById( "ok" ),
-              cancelButton = document.getElementById( "cancel" ),
-              okPressed,
-              cancelPressed;
 
           function sendData( alsoClose ){
             alsoClose = !!alsoClose; 
@@ -34,13 +30,13 @@
             });
           } //sendData
 
-          okPressed = function( e ) {
+          function okPressed( e ) {
             sendData( true );
-          }; //okPressed
+          }
 
-          cancelPressed = function( e ) {
+          function cancelPressed( e ) {
             _comm.send( "cancel" );
-          }; //cancelPressed
+          }
 
           document.addEventListener( "keydown", function( e ) {
             if( e.keyCode === 13 ) {
@@ -49,8 +45,6 @@
               cancelPressed( e );
             }
           }, false);
-          okButton.addEventListener( "click", okPressed, false );
-          cancelButton.addEventListener( "click", cancelPressed, false );
 
           _comm.listen( "trackeventupdated", function( e ){
             for( var item in _manifest ){
@@ -142,8 +136,6 @@
   <body>
     <table id="table">
     </table>
-    <button id="ok">Ok</button>
-    <button id="cancel">Cancel</button>
     <p id="message"></p>
   </body>
 </html>

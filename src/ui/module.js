@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "./toggler", "./logo-spinner" ], function( EventManager, Toggler, LogoSpinner ){
+define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button" ], function( EventManager, Toggler, LogoSpinner, ContextButton ){
 
   var TRANSITION_DURATION = 500;
 
@@ -384,6 +384,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner" ], function( EventM
       }, 500 );
       _this.visible = true;
       _toggler.visible = true;
+      ContextButton( butter );
     });
 
   }
