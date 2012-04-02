@@ -74,6 +74,7 @@
   -moz-transition: opacity 0.5s;
   -webkit-transition: opacity 0.5s;
   transition: opacity 0.5s;
+}
 
 /* MetaWebPro font family licensed from fontshop.com. WOFF-FTW! */
 @font-face {

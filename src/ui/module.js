@@ -385,7 +385,9 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
       _this.visible = true;
       _toggler.visible = true;
       ContextButton( butter );
-      Header( butter );
+      if( options.enabled !== false ){
+        Header( butter );
+      }
     });
 
    } //UI
