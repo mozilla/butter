@@ -3,7 +3,8 @@ console.log( __dirname );
 const express = require('express'),
       fs = require('fs'),
       app = express.createServer(),
-      CONFIG = require('config');
+      CONFIG = require('config'),
+      TEMPLATES_DIR = CONFIG.templates.root;
 
 var mongoose = require('mongoose'),
     db = mongoose.connect('mongodb://localhost/test'),
@@ -71,6 +72,22 @@ app.get('/projects', function(req, res) {
   });
 });
 
+app.get('/load/:user/:id', function(req, res){
+  var email = req.params.user,
+      id = req.params.id;
+
+  UserModel.findOne( { email: email }, function( err, doc ) {
+    for( var i=0; i<doc.projects.length; ++i ){
+      if( String( doc.projects[ i ]._id ) === id ){
+        res.send( doc.projects[ i ].html, { 'Content-Type': 'text/html' }, 201);
+        return;
+      }  
+    }
+    res.send(404);    
+  });
+  
+});
+
 app.get('/project/:id?', function(req, res) {
   var email = req.session.email,
       id = req.params.id;
@@ -80,10 +97,15 @@ app.get('/project/:id?', function(req, res) {
     return;
   }
 
-  res.sendfile(storage + email + '/' + name, function(err) {
-    if (err) {
-      res.json({ error: 'file not found' }, 404);
+  UserModel.findOne( { email: email }, function( err, doc ) {
+    for( var i=0; i<doc.projects.length; ++i ){
+      if( String( doc.projects[ i ]._id ) === id ){
+        returnVal = { error: "okay", project: doc.projects[ i ].data };
+        res.json( returnVal );
+        return;
+      }
     }
+    res.json( { error: "project not found" } );
   });
 });
 
@@ -130,14 +152,14 @@ app.post('/project/:id?', function( req, res ) {
       var proj = new ProjectModel({
         name: req.body.name,
         html: req.body.html,
-        data: req.body.data
+        data: JSON.stringify( req.body.data )
       });
       doc.projects.push( proj );
     }
     else{
       proj.name = req.body.name;
       proj.html = req.body.html;
-      proj.data = req.body.data;
+      proj.data = JSON.stringify( req.body.data );
     }
     
     doc.save();

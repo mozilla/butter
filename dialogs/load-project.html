@@ -1,0 +1,74 @@
+<!--  This Source Code Form is subject to the terms of the MIT license
+      If a copy of the MIT license was not distributed with this file, you can
+      obtain one at http://www.mozillapopcorn.org/butter-license.txt -->
+
+<html>
+  <head>
+    <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
+    <script type="text/javascript">
+      (function(){
+        var _comm = new Comm();
+
+        document.addEventListener( "DOMContentLoaded", function( e ){
+          var okButton = document.getElementById( "yes" ),
+              cancelButton = document.getElementById( "no" ),
+              list = document.getElementById( "project-list" );
+
+          function okPressed( e ){
+            _comm.send( "submit", list.value );
+          } //okPressed
+
+          function cancelPressed( e ){
+            _comm.send( "cancel" );
+          } //cancelPressed
+
+          document.addEventListener( "keypress", function( e ) {
+            if( e.keyCode === 13 ) {
+              okPressed( e );
+            } else if( e.keyCode === 27 ) {
+              cancelPressed( e );
+            }
+          }, false);
+
+          _comm.listen( "list", function( e ){
+            for( var i=0; i<e.data.length; ++i ){
+              var option = document.createElement( "option" );
+              option.value = e.data[ i ].id;
+              option.innerHTML = e.data[ i ].name;
+              list.appendChild( option );
+            }
+            okButton.removeAttribute( "disabled" );
+            cancelButton.removeAttribute( "disabled" );
+          });
+
+          okButton.addEventListener( "click", okPressed, false );
+          cancelButton.addEventListener( "click", cancelPressed, false );
+
+        }, false );
+      }());
+    </script>
+    <link rel="stylesheet" href="dialog.css" />
+    <style>
+      #better {
+        display: none;
+        color: #fb1121;
+      }
+      #project-list {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container" class="hbox center">
+      <div class="vbox center">
+        <h1>Please choose a project from the list below:</h1>
+        <select id="project-list">
+        </select>
+        <div id="buttons" class="hbox center">
+          <button disabled id="yes">Ok</button>
+          <button disabled id="no">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

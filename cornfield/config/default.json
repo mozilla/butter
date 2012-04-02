@@ -8,5 +8,8 @@
   },
   "session" : {
     "secret": "thisisareallyreallylongsecrettoencryptcookies"
+  },
+  "templates": {
+    "root": "../templates"
   }
 }

@@ -68,11 +68,20 @@ define(['util/xhr'], function(XHR) {
       });
     };
 
+    this.refreshLoad = function( id ) {
+      window.location = server + "/load/" + id;
+    };
+
     // XXX I need to figure out a better API for this
-    this.load = function(name, callback) {
-      XHR.get(server + "/project/" + name, function() {
+    this.load = function(id, callback) {
+      XHR.get(server + "/project/" + id, function() {
         if (this.readyState === 4) {
-          callback(this.response);
+          try {
+            var response = JSON.parse(this.response);
+            callback(response);
+          } catch (err) {
+            callback({ error: "an unknown error occured" });
+          }
         }
       });
     };

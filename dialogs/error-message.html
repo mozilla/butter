@@ -10,7 +10,8 @@
         var _comm = new Comm();
 
         document.addEventListener( "DOMContentLoaded", function( e ){
-          var okButton = document.getElementById( "yes" );
+          var okButton = document.getElementById( "yes" ),
+              message = document.getElementById( "message" );
 
           function okPressed( e ){
             _comm.send( "cancel" );
@@ -23,6 +24,11 @@
               okPressed( e );
             }
           }, false);
+
+          _comm.listen( "message", function( e ){
+            message.innerHTML = e.data;
+            okButton.removeAttribute( "disabled" );
+          });
 
           okButton.addEventListener( "click", okPressed, false );
 
@@ -43,7 +49,7 @@
   <body>
     <div id="container" class="hbox center">
       <div class="vbox center">
-        <h1>There was a problem saving your project. Please try again.</h1>
+        <h1><span id="message"></span></h1>
         <div id="buttons" class="hbox center">
           <button disabled id="yes">Ok</button>
         </div>

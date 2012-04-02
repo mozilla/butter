@@ -210,6 +210,7 @@
             }
           }
         }
+        console.log( projectData.media );
         if ( projectData.media ) {
           for ( i = 0, l = projectData.media.length; i < l; ++i ) {
 
