@@ -52,10 +52,13 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       if( !butter.cornfield.user() ){
         butter.cornfield.login(function( response ){
           if( response.status === "okay" ){
-            authButton.innerHTML = response.email;
-            saveButton.style.display = oldDisplayProperty;
-            loadButton.style.display = oldDisplayProperty;
-            shareButton.style.display = oldDisplayProperty;
+            var email = response.email;
+            butter.cornfield.list(function( listResponse ) {
+              authButton.innerHTML = email;
+              saveButton.style.display = oldDisplayProperty;
+              loadButton.style.display = oldDisplayProperty;
+              shareButton.style.display = oldDisplayProperty;
+            });
           }
           else{
             var dialog = new IFrameDialog({
@@ -90,9 +93,30 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
     shareButton.style.display = "none";
 
     saveButton.addEventListener( "click", function( e ){
+      function error(){
+        var dialog = new IFrameDialog({
+          type: "iframe",
+          modal: true,
+          url: "../dialogs/save-error.html",
+          events: {
+            cancel: function( e ){
+              dialog.close();
+            }
+          }
+        });
+        dialog.open();
+      }
+
       function doSave(){
-        butter.cornfield.push( butter.project.name, butter.exportProject, function( e ){
-          console.log( e );
+        butter.project.html = butter.getHTML();
+        butter.project.data = butter.exportProject();
+        var saveString = JSON.stringify( butter.project );
+        butter.cornfield.saveas( butter.project._id, saveString, function( e ){
+          if( e.error !== "okay" || !e.project || !e.project._id ){
+            error();
+            return;
+          }
+          butter.project.id = e.project._id;
         });
       }
 
@@ -120,6 +144,11 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       else{
         doSave();
       }
+    }, false );
+
+    loadButton.addEventListener( "click", function( e ){
+      butter.cornfield.list(function( listResponse ) {
+      });
     }, false );
 
     function setup(){

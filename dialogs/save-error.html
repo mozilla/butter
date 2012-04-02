@@ -10,40 +10,21 @@
         var _comm = new Comm();
 
         document.addEventListener( "DOMContentLoaded", function( e ){
-          var okButton = document.getElementById( "yes" ),
-              cancelButton = document.getElementById( "no" ),
-              nameInput = document.getElementById( "name-input" );
+          var okButton = document.getElementById( "yes" );
 
           function okPressed( e ){
-            if( nameInput.value.replace( /\s/g, "" ) !== "" ){
-              _comm.send( "submit", nameInput.value );  
-            }
-            else{
-              document.getElementById( "better" ).style.display = "inline";
-            }
-            
-          } //okPressed
-
-          function cancelPressed( e ){
             _comm.send( "cancel" );
-          } //cancelPressed
+          }
 
           document.addEventListener( "keypress", function( e ) {
             if( e.keyCode === 13 ) {
               okPressed( e );
             } else if( e.keyCode === 27 ) {
-              cancelPressed( e );
+              okPressed( e );
             }
           }, false);
 
-          _comm.listen( "name", function( e ){
-            nameInput.value = e.data || "";
-            okButton.removeAttribute( "disabled" );
-            cancelButton.removeAttribute( "disabled" );
-          });
-
           okButton.addEventListener( "click", okPressed, false );
-          cancelButton.addEventListener( "click", cancelPressed, false );
 
         }, false );
       }());
@@ -62,11 +43,9 @@
   <body>
     <div id="container" class="hbox center">
       <div class="vbox center">
-        <h1>Please give your project a<span id="better"> better</span> name:</h1>
-        <input type="text" id="name-input" />
+        <h1>There was a problem saving your project. Please try again.</h1>
         <div id="buttons" class="hbox center">
           <button disabled id="yes">Ok</button>
-          <button disabled id="no">Cancel</button>
         </div>
       </div>
     </div>

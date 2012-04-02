@@ -14,6 +14,11 @@
     return s.join("&").replace("/%20/g", "+");
   }
 
+  var __types = {
+    form: "application/x-www-form-urlencoded",
+    json: "application/json"
+  };
+
   define( [], function() {
 
     var XHR = {
@@ -23,14 +28,23 @@
         xhr.onreadystatechange = callback;
         xhr.send(null);
       },
-      "post": function(url, data, callback) {
+      "post": function(url, data, callback, type) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        console.log(data);
-        xhr.send(parameterize(data));
-        console.log(parameterize(data));
-      }
+        xhr.onreadystatechange = callback;
+        if( !type || type === "form" ){
+          xhr.setRequestHeader("Content-Type", __types[ "form" ]);
+          xhr.send(parameterize(data));
+        }
+        else if( __types[ type ] ){
+          xhr.setRequestHeader("Content-Type", __types[ type ]);
+          xhr.send(data);
+        }
+        else{
+          xhr.setRequestHeader("Content-Type", "text/plain");
+          xhr.send(data);
+        }
+      },
     };
 
     return XHR;

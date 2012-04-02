@@ -22,7 +22,6 @@ var mongoose = require('mongoose'),
     }),
     UserModel = mongoose.model( 'User', User );
 
-
 app.use(express.logger(CONFIG.logger))
   .use(express.bodyParser())
   .use(express.cookieParser())
@@ -33,7 +32,7 @@ app.use(express.logger(CONFIG.logger))
 require('express-browserid').plugAll(app);
 
 app.get('/projects', function(req, res) {
-  var email = "jon@jbuckley.ca"; // req.session.email
+  var email = req.session.email;
 
   if (!email) {
     res.json({ error: 'unauthorized' }, 403);
@@ -73,7 +72,7 @@ app.get('/projects', function(req, res) {
 });
 
 app.get('/project/:id?', function(req, res) {
-  var email = "jon@jbuckley.ca", // req.session.email
+  var email = req.session.email,
       id = req.params.id;
 
   if (!email) {
@@ -89,7 +88,7 @@ app.get('/project/:id?', function(req, res) {
 });
 
 app.post('/project/:id?', function( req, res ) {
-  var email = "jon@jbuckley.ca", // req.session.email
+  var email = req.session.email,
       id = req.params.id;
   
   if ( !email ) {
@@ -97,27 +96,55 @@ app.post('/project/:id?', function( req, res ) {
     return;
   }
 
+  if( !req.body ){
+    res.json( {error: 'no project data received' }, 500 );
+    return;
+  }
+
+
   UserModel.findOne( { email: email }, function( err, doc ) {
-    // No previous id, so this is a new project
-    if ( !id ) {
-      var obj = {
+
+    if( err ){
+      res.json( {error: 'internal db error' }, 500 );
+      return;
+    }
+
+    if( !doc ){
+      doc = new UserModel({
+        email: email
+      });
+    }
+
+    var proj;
+    for( var i=0, l=doc.projects.length; i<l; ++i ){
+      if( doc.projects[ i ]._id === req.body.id ){
+        proj = doc.projects[ i ]; 
+      }
+    }
+
+    if( !proj ){
+      if( req.body.id ){
+        res.json( {error: 'id specified but not found. data corruption or haxxors.'}, 500 );
+        return;
+      }
+      var proj = new ProjectModel({
         name: req.body.name,
         html: req.body.html,
         data: req.body.data
-      }
-console.log(req.body);
-      /*doc.projects.push( obj );
-      doc.save( function( err ) {
-        if ( err ) {
-          console.log( err );
-        }
-      });*/
-      res.json({ error: 'okay' });
-      
-      return;
+      });
+      doc.projects.push( proj );
+    }
+    else{
+      proj.name = req.body.name;
+      proj.html = req.body.html;
+      proj.data = req.body.data;
     }
     
-    
+    doc.save();
+
+    res.json({ error: 'okay', project: proj });
+    return;
+
   });
 });
 

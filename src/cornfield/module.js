@@ -91,7 +91,7 @@ define(['util/xhr'], function(XHR) {
     };
 
     this.saveas = function(id, data, callback) {
-      XHR.post(server + "/project/" + name, data, function() {
+      XHR.post(server + "/project/" + id, data, function() {
         if (this.readyState === 4) {
           try {
             var response = JSON.parse(this.response);
@@ -100,7 +100,7 @@ define(['util/xhr'], function(XHR) {
             callback({ error: "an unknown error occured" });
           }
         }
-      });
+      }, "json" );
     };
   };
 

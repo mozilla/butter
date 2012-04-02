@@ -49,7 +49,10 @@
           _selectedEvents = [];
 
       this.project = {
-        name: null
+        id: null,
+        name: null,
+        data: null,
+        html: null
       };
 
       function checkMedia() {
