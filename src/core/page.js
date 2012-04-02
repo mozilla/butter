@@ -4,8 +4,10 @@
 
 define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
-  var POPCORN_URL = "../external/popcorn-js/popcorn.js",
-      PLAYER_URL = "../external/popcorn-js/modules/player/popcorn.player.js";
+  var POPCORN_BASE_URL = "../external/popcorn-js/",
+      POPCORN_URL = POPCORN_BASE_URL + "popcorn.js",
+      PLAYER_URL = POPCORN_BASE_URL + "modules/player/popcorn.player.js",
+      PLAYER_TYPE_URL = POPCORN_BASE_URL + "players/{type}/popcorn.{type}.js";
 
   return function() {
     
@@ -68,6 +70,14 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         checkPlayer();
       }
     }; // preparePopcorn
+
+    this.addPlayerType = function( type ){
+      if( !Popcorn[ type ] ){
+        var script = document.createElement( "script" );
+        script.src = PLAYER_TYPE_URL.replace( /\{type\}/g, type );
+        document.head.appendChild( script );
+      }
+    };
 
     this.getHTML = function( popcornStrings ){
       var html = document.createElement( "html" ),
