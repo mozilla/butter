@@ -6,17 +6,16 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
 
     _rootElement.id = "butter-header";
 
-    _rootElement.innerHTML = '\
-      <div class="drop"></div><h1>Popcorn Maker</h1>\
-      <div class="editor-actions">\
-          <button id="new">New</button>\
-          <button id="save">Save</button>\
-          <button id="load">Load</button>\
-          <button id="share">Share</button>\
-          <button id="auth">Login</button> |\
-          <button id="auth-out">Logout</button>\
-      </div>\
-    ';
+    _rootElement.innerHTML = '' +
+      '<div class="drop"></div><h1>Popcorn Maker</h1>' +
+      '<div class="editor-actions">' +
+      '    <button id="new">New</button>' +
+      '    <button id="save">Save</button>' +
+      '    <button id="load">Load</button>' +
+      '    <button id="share">Share</button>' +
+      '    <button id="auth">Login</button> |' + 
+      '    <button id="auth-out">Logout</button>' +
+      '</div>';
 
     _rootElement.setAttribute( "data-butter-exclude", true );
 
