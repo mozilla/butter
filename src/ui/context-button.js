@@ -36,7 +36,5 @@ define([], function(){
         _button.removeAttribute( "disabled" );
       }
     });
-
   };
-
 });
