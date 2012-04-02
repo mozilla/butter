@@ -25,9 +25,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _this = this;
 
     function encodeString( string ) {
-      return String( string )
-             .replace(/"/g, "\\" + '\"' )
-             .replace(/'/g, "\\" + "\'" );
+      return String( string ).replace(/['\\"]/g, "\\$&");
     }
 
     this.unbind = function(){
