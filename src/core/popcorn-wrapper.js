@@ -85,7 +85,6 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     this.prepare = function( url, target, popcornOptions ){
       function timeoutWrapper( e ){
         _interruptLoad = true;
-        _onTimeout( e );
       } //timeoutWrapper
       function failureWrapper( e ){
         _interruptLoad = true;
@@ -186,13 +185,15 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           script.src = "../external/popcorn-js/players/" + type + "/popcorn." + type + ".js";
           document.head.appendChild( script );
 
-          setTimeout(function() {
-            if( !window.Popcorn[ type ] ) {
-              this();
-            } else {
-              _playerReady = true;
-            }
-          }, 100 );
+          var isPlayerReady = (function() {
+            setTimeout(function() {
+              if( !window.Popcorn[ type ] ) {
+                isPlayerReady();
+              } else {
+                _playerReady = true;
+              }
+            }, 100 );
+          })();
         }
         return "var popcorn = Popcorn.smart( '#" + target + "', '" + url + "' );\n";
       }
@@ -245,12 +246,11 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     }; //createPopcorn
 
     function waitForPopcorn( callback, timeoutCallback, tries ){
-      _mediaLoadAttempts = 0;
       _interruptLoad = false;
 
-      var checkMedia = function() {
-        ++_mediaLoadAttempts;
-        if ( tries !== undefined && _mediaLoadAttempts === tries ) {
+      var checkMedia = function( attempts ) {
+        attempts++;
+        if ( tries !== undefined && attempts === tries ) {
           if ( timeoutCallback ) {
             timeoutCallback();
           } //if
@@ -261,10 +261,14 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         if ( _popcorn.media.readyState >= 2 && _popcorn.duration() > 0 ) {
           callback();
         } else {
-          setTimeout( checkMedia, 100 );
+          setTimeout( function() {
+            checkMedia( attempts );
+          }, 100 );
         } //if
       };
-      checkMedia();
+      // pass in a value to get incremented so multiple setTimeouts arn't increasing the same value
+      // this only seems to be an issue for tests, but lets be safe
+      checkMedia( 0 );
     }
 
     this.play = function(){
