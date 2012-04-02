@@ -57,6 +57,7 @@
                 _em.dispatch( "mediaplaying" );
               },
               timeout: function(){
+                _em.dispatch( "mediatimeout" );
               },
               ended: function(){
                 _em.dispatch( "mediaended" );
@@ -74,6 +75,9 @@
               _em.dispatch( "mediaready" );
             },
             fail: function(){
+            },
+            playerTypeRequired: function( type ){
+              _em.dispatch( "mediaplayertyperequired", type );
             },
             setup: {
               target: _target,
@@ -208,12 +212,18 @@
         });
       } //setupContent
 
+      this.setupContent = setupContent;
+
       this.onReady = function( callback ){
+        function onReady( e ){
+          callback( e );
+          _em.unlisten( "mediaready", onReady );
+        }
         if( _ready ){
           callback();
         }
         else{
-          _em.listen( "mediaready", callback );
+          _em.listen( "mediaready", onReady );
         }
       };
 
@@ -247,8 +257,7 @@
               setupContent();
               _em.dispatch( "mediacontentchanged", _this );
             }
-          },
-          enumerable: true
+          }
         },
         target: {
           get: function() {
@@ -404,6 +413,17 @@
             return _pageElement;
           }
         },
+        popcornOptions: {
+          enumerable: true,
+          get: function(){
+            return _popcornOptions;
+          },
+          set: function( val ){
+            _popcornOptions = val;
+            _em.dispatch( "mediapopcornsettingschanged", _this );
+            setupContent();
+          }
+        },
         popcornString: {
           enumerable: true,
           get: function(){
@@ -411,8 +431,6 @@
           }
         }
       });
-
-      setupContent();
 
     }; //Media
 

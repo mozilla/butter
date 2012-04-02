@@ -107,13 +107,17 @@
         } //if
       } //targetTrackEventRequested
 
+      function mediaPlayerTypeRequired( e ){
+        _page.addPlayerType( e.data );
+      }
+
       function mediaTrackEventRequested( e ){
         var trackEvent = trackEventRequested( e, e.target, "Media Element" );
         _em.dispatch( "trackeventcreated", {
           trackEvent: trackEvent,
           by: "media"
         });
-      } //mediaTrackEventRequested
+      }
 
        /****************************************************************
        * Target methods
@@ -293,11 +297,13 @@
         } //if
 
         media.listen( "trackeventrequested", mediaTrackEventRequested );
+        media.listen( "mediaplayertyperequired", mediaPlayerTypeRequired );
 
         _em.dispatch( "mediaadded", media );
         if ( !_currentMedia ) {
           _this.currentMedia = media;
         } //if
+        media.setupContent();
         return media;
       }; //addMedia
 
@@ -328,7 +334,10 @@
           if ( media === _currentMedia ) {
             _currentMedia = undefined;
           } //if
+
           media.unlisten( "trackeventrequested", mediaTrackEventRequested );
+          media.unlisten( "mediaplayertyperequired", mediaPlayerTypeRequired );
+
           _em.dispatch( "mediaremoved", media );
           return media;
         } //if
