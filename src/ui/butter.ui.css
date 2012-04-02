@@ -81,26 +81,23 @@
   width: 32px;
   height: 32px;
   z-index: 2139000000;
-  background-color: rgba( 20, 20, 80, 0.8 );
-  background-image: url( "../../resources/popcorn-icon.png" );
-  background-position: top-left;
-  background-repeat: no-repeat;
-  opacity: 0.5;
-  -moz-transition: opacity 0.5s, width 0.5s, height 0.5s;
-  -webkit-transition: opacity 0.5s, width 0.5s, height 0.5s;
-  transition: opacity 0.5s, width 0.5s, height 0.5s;
-  -moz-transition-delay: 0.5s;
-  -webkit-transition-delay: 0.5s;
-  transition-delay: 0.5s;
+  font-family: Verdana, sans-serif;
+  border: 2px solid #fff;
+  background-color: #131313;
+  background-image: -moz-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% );
+  background-image: -webkit-gradient( linear, left bottom, left top, color-stop( 0, #2c2c2c ), color-stop( 1, #4c4c4c ) );
+  -moz-transition: opacity 0.5s, width 0.25s, height 0.25s;
+  -webkit-transition: opacity 0.5s, width 0.25s, height 0.25s;
+  transition: opacity 0.5s, width 0.25s, height 0.25s;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .butter-media-properties .loading-container {
   position: absolute;
   z-index: 2140000001;
-  right: 1px;
-  bottom: 1px;
+  left: 1px;
+  top: 1px;
   width: 30px;
   height: 30px;
 }
