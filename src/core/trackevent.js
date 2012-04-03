@@ -71,13 +71,9 @@ define( [
       else {
         if( _track && _track._media ){
           var media = _track._media;
-          if( newStart && newStart > media.duration ){
-            failed = "invalidtime";
-          }
-          else if( newEnd && newEnd > media.duration ){
-            failed = "invalidtime";
-          }
-          else if( newStart && newStart < 0 ){
+          if( newStart && newStart > media.duration ||
+              newEnd && newEnd > media.duration ||
+              newStart && newStart < 0 ){
             failed = "invalidtime";
           }
         }
