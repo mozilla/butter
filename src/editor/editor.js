@@ -118,6 +118,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
               trackEvent.dispatch( "trackeventupdatefailed", {
                 error: "trackeventupdate::invalidtime",
                 message: "Invalid start/end times.",
+                mediaDuration: duration,
                 attemptedData: popcornData
               });
             }
