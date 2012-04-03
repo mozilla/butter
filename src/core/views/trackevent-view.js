@@ -36,6 +36,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
       _element.style.width = ( ( _end - _start ) / _duration * _zoom ) + "px";
     } //resetContainer
 
+    this.setToolTip = function( title ){
+      _element.title = title;
+    };
+
     this.update = function( options ){
       options = options || {};
       _element.style.top = "0px";

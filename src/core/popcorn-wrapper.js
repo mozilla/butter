@@ -99,6 +99,16 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           _popcorn[ trackEvent.type ]( options );
           // store a local reference to the newly created trackevent
           _butterEventMap[ butterId ] = _popcorn.getLastTrackEventId();
+
+          if( trackEvent.view ){
+            var popcornEvent = _popcorn.getTrackEvent( _butterEventMap[ butterId ] );
+            if( popcornEvent.toString ){
+              trackEvent.view.setToolTip( popcornEvent.toString() );
+            }
+            else{
+              trackEvent.view.setToolTip( JSON.stringify( options ) );
+            }
+          }
         } //if
       } //if
     }; //updateEvent
