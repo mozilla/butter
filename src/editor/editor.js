@@ -32,8 +32,21 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
     _dims[ 0 ] = options.width || _dims[ 0 ];
     _dims[ 1 ] = options.height || _dims[ 1 ];
 
+    function blinkTarget(){
+      if( _currentTarget === "Media Element" ){
+        butter.currentMedia.view.blink();
+      }
+      else{
+        var target = butter.getTargetByType( "elementID", _currentTarget );
+        if( target ){
+          target.view.blink();
+        } //if
+      } //if
+    }
+
     function onTrackEventUpdated( e ){
-      if( _currentTrackEvent.popcornOptions.target !== _currentTarget ){
+      var popcornData = _currentTrackEvent.popcornOptions;
+      if( popcornData.target !== _currentTarget ){
         _currentTarget = popcornData.target;
         blinkTarget();
       } //if
@@ -65,19 +78,6 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
         _dialog.focus();
         return;
       } //if
-
-
-      function blinkTarget(){
-        if( _currentTarget === "Media Element" ){
-          butter.currentMedia.view.blink();
-        }
-        else{
-          var target = butter.getTargetByType( "elementID", _currentTarget );
-          if( target ){
-            target.view.blink();
-          } //if
-        } //if
-      } //blinkTarget
 
       _currentTrackEvent = trackEvent;
 
