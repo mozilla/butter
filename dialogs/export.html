@@ -12,8 +12,11 @@
 
         document.addEventListener( "DOMContentLoaded", function( e ){
           var closeButton = document.getElementById( "close" ),
+              jsonButton = document.getElementById( "json-button" ),
+              htmlButton = document.getElementById( "html-button" ),
               jsonExport = document.getElementById( "json-export" ),
-              htmlExport = document.getElementById( "html-export" );
+              htmlExport = document.getElementById( "html-export" ),
+              title = document.getElementById( "title" );
 
           function closePressed( e ){
             _comm.send( "close" );
@@ -24,6 +27,20 @@
               closePressed( e );
             } //if
           }, false);
+
+          jsonButton.addEventListener( "click", function( e ){
+            title.innerHTML = "Project JSON Data";
+            htmlExport.style.display = "none";
+            jsonExport.style.display = "block";
+          }, false );
+
+          htmlButton.addEventListener( "click", function( e ){
+            title.innerHTML = "HTML Export";
+            htmlExport.style.display = "block";
+            jsonExport.style.display = "none";
+          }, false );
+
+          title.innerHTML = "HTML Export";
 
           closeButton.addEventListener( "click", closePressed, false );
 
@@ -38,20 +55,18 @@
     <link rel="stylesheet" href="dialog.css" />
     <style>
       #text-container textarea {
-        width: 90%;
-        height: 70%;
-        margin-top: 5%;
-        margin-left: 5%;
+        width: 100%;
+        height: 100%;
         resize: none;
         position: absolute;
         top: 0px;
         left: 0px;
+        min-width: 500px;
+        min-height: 300px;
       }
 
       #text-container{
         position: relative;
-        width: 100%;
-        height: 100%;
         min-width: 500px;
         min-height: 300px;
       }
@@ -59,17 +74,27 @@
       h1 {
         text-align: center;
       }
+
+      #close{
+        margin-left: 30px;
+      }
+
+      #json-export {
+        display: none;
+      }
     </style>
   </head>
   <body>
     <div id="container" class="hbox center">
       <div class="hbox vbox center">
-        <h1>Data for <span id="track-name"></span></h1>
+        <h1><span id="title"></span></h1>
         <div id="text-container">
           <textarea readonly id="json-export">Please wait...</textarea>
           <textarea readonly id="html-export">Please wait...</textarea>
         </div>
         <div id="buttons" class="hbox center">
+          <button disabled id="json-button">Get JSON</button>
+          <button disabled id="html-button">Get HTML</button>
           <button disabled id="close">Close</button>
         </div>
       </div>
