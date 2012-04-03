@@ -11,46 +11,47 @@
 
         document.addEventListener( "DOMContentLoaded", function( e ){
           var okButton = document.getElementById( "yes" ),
-              cancelButton = document.getElementById( "no" ),
-              trackName = document.getElementById( "track-name" );
+              message = document.getElementById( "message" );
 
           function okPressed( e ){
-            _comm.send( "submit", true );
-          } //okPressed
-
-          function cancelPressed( e ){
             _comm.send( "cancel" );
-          } //cancelPressed
+          }
 
           document.addEventListener( "keypress", function( e ) {
             if( e.keyCode === 13 ) {
               okPressed( e );
             } else if( e.keyCode === 27 ) {
-              cancelPressed( e );
+              okPressed( e );
             }
           }, false);
 
-          okButton.addEventListener( "click", okPressed, false );
-          cancelButton.addEventListener( "click", cancelPressed, false );
-
-          _comm.listen( "trackdata", function( e ){
-            trackName.appendChild( document.createTextNode( e.data ) );
+          _comm.listen( "message", function( e ){
+            message.innerHTML = e.data;
             okButton.removeAttribute( "disabled" );
-            cancelButton.removeAttribute( "disabled" );
           });
+
+          okButton.addEventListener( "click", okPressed, false );
 
         }, false );
       }());
     </script>
     <link rel="stylesheet" href="dialog.css" />
+    <style>
+      #better {
+        display: none;
+        color: #fb1121;
+      }
+      #name-input {
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
     <div id="container" class="hbox center">
       <div class="vbox center">
-        <h1>Are you sure you want to delete <span id="track-name"></span>?</h1>
+        <h1><span id="message"></span></h1>
         <div id="buttons" class="hbox center">
-          <button disabled id="yes">Yes</button>
-          <button disabled id="no">No</button>
+          <button disabled id="yes">Ok</button>
         </div>
       </div>
     </div>

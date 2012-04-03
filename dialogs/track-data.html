@@ -35,19 +35,8 @@
         }, false );
       }());
     </script>
+    <link rel="stylesheet" href="dialog.css" />
     <style>
-      html, body {
-        height: 100%;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-      }
-
-      #container {
-        height: 100%;
-        width: 100%;
-      }
-
       #track-data {
         width: 90%;
         height: 70%;
@@ -55,27 +44,16 @@
         margin-left: 5%;
         resize: none;
       }
-
-      button {
-        font-size: 120%;
-      }
-
-      h1 {
-        height: 3%;
-        margin: 0;
-      }
-
-      #buttons {
-        text-align: center;
-      }
     </style>
   </head>
   <body>
-    <div id="container">
-      <h1>Data for <span id="track-name"></span></h1>
-      <textarea readonly id="track-data">Please wait...</textarea>
-      <div id="buttons">
-        <button disabled id="close">Close</button>
+    <div id="container" class="hbox center">
+      <div class="hbox vbox center">
+        <h1>Data for <span id="track-name"></span></h1>
+        <textarea readonly id="track-data">Please wait...</textarea>
+        <div id="buttons" class="hbox center">
+          <button disabled id="close">Close</button>
+        </div>
       </div>
     </div>
   </body>
