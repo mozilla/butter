@@ -180,7 +180,7 @@ define( [
         } //if
       });
 
-      _media.listen( "trackadded", function( e ){
+      function onTrackAdded( e ){
         _vScrollBar.update();
         var track = e.data;
         track.view.listen( "plugindropped", onPluginDropped );
@@ -190,7 +190,16 @@ define( [
           track.view.listen( "trackeventmouseover", onTrackEventMouseOver );
           track.view.listen( "trackeventmouseout", onTrackEventMouseOut );
         } //if
-      });
+      }
+      
+      var existingTracks = _media.tracks;
+      for( var i=0; i<existingTracks.length; ++i ){
+        onTrackAdded({
+          data: existingTracks[ i ]
+        })
+      }
+
+      _media.listen( "trackadded", onTrackAdded );
 
       _media.listen( "trackremoved", function( e ){
         _vScrollBar.update();
