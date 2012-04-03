@@ -9,7 +9,8 @@
   "session" : {
     "secret": "thisisareallyreallylongsecrettoencryptcookies"
   },
-  "templates": {
-    "root": "../templates"
+  "dirs": {
+    "templates": "../templates",
+    "publish": "view"
   }
 }
