@@ -151,7 +151,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       butter.cornfield.list(function( listResponse ) {
         if( listResponse.error !== "okay" ){
           showErrorDialog( "There was an error loading your projects. Please try again." );
-          return
+          return;
         }
         else{
           var dialog = new IFrameDialog({
