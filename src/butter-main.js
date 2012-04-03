@@ -5,7 +5,7 @@
 (function () {
 
   var DEFAULT_TRACKEVENT_DURATION = 1,
-      DEFAULT_TRACKEVENT_OFFSET = 0.05;
+      DEFAULT_TRACKEVENT_OFFSET = 0.01;
 
   define( [
             "./core/logger",
@@ -74,7 +74,7 @@
         var track,
             element = e.data.element,
             type = element.getAttribute( "data-butter-plugin-type" ),
-            start = media.currentTime - DEFAULT_TRACKEVENT_OFFSET,
+            start = media.currentTime,
             end;
 
         if( start > media.duration ){
@@ -108,8 +108,13 @@
             target: target
           }
         });
+
+        if( media.currentTime < media.duration - DEFAULT_TRACKEVENT_OFFSET ){
+          media.currentTime += DEFAULT_TRACKEVENT_OFFSET;
+        }
+
         return trackEvent;
-      } //trackEventRequested
+      }
 
       function targetTrackEventRequested( e ){
         if( _currentMedia ){
