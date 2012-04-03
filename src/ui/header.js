@@ -32,11 +32,11 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
 
     document.body.insertBefore( _rootElement, document.body.firstChild );
 
-    _newButton = document.getElementById( "butter-header-new" ),
-    _saveButton = document.getElementById( "butter-header-save" ),
-    _loadButton = document.getElementById( "butter-header-load" ),
-    _shareButton = document.getElementById( "butter-header-share" ),
-    _authButton = document.getElementById( "butter-header-auth" ),
+    _newButton = document.getElementById( "butter-header-new" );
+    _saveButton = document.getElementById( "butter-header-save" );
+    _loadButton = document.getElementById( "butter-header-load" );
+    _shareButton = document.getElementById( "butter-header-share" );
+    _authButton = document.getElementById( "butter-header-auth" );
     _logoutButton = document.getElementById( "butter-header-auth-out" );
 
     var _oldDisplayProperty = _logoutButton.style.display;
