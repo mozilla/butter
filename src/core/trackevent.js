@@ -50,30 +50,26 @@ define( [
     _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
 
     this.update = function( updateOptions ) {
-      var failed = false;
-
-      var oldStart = _popcornOptions.start,
-          oldEnd = _popcornOptions.end,
-          newStart,
-          newEnd;
-
+      var failed = false,
+          newStart = _popcornOptions.start,
+          newEnd = _popcornOptions.end;
 
       if ( !isNaN( updateOptions.start ) ) {
         newStart = TimeUtil.roundTime( updateOptions.start );
       }
-      if ( !isNaN(updateOptions.end ) ) {
+      if ( !isNaN( updateOptions.end ) ) {
         newEnd = TimeUtil.roundTime( updateOptions.end );
       }
 
-      if ( newStart && newEnd && newStart > newEnd ){
+      if ( newStart >= newEnd ){
         failed = "invalidtime";
       }
       else {
         if( _track && _track._media ){
           var media = _track._media;
-          if( newStart && newStart > media.duration ||
-              newEnd && newEnd > media.duration ||
-              newStart && newStart < 0 ){
+          if( ( newStart > media.duration ) ||
+              ( newEnd > media.duration ) ||
+              ( newStart < 0 ) ) {
             failed = "invalidtime";
           }
         }
