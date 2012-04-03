@@ -49,6 +49,19 @@ define(['util/xhr'], function(XHR) {
       return email;
     };
 
+    this.publish = function(id, callback) {
+      XHR.post(server + "/publish/" + id, function() {
+        if (this.readyState === 4) {
+          try {
+            var response = JSON.parse(this.response);
+            callback(response);
+          } catch (err) {
+            callback({ error: "an unknown error occured" });
+          }
+        }
+      });
+    };
+
     this.logout = function(callback) {
       XHR.get(server + "/browserid/logout", function() {
         email = null;

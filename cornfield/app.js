@@ -42,8 +42,8 @@ app.use(express.logger(CONFIG.logger))
 
 require('express-browserid').plugAll(app);
 
-app.get('/publish/:id', function(req, res) {
-  var email = req.session.email || "secretrobotron@gmail.com",
+app.post('/publish/:id', function(req, res) {
+  var email = req.session.email,
       id = req.params.id;
 
   if (!email) {

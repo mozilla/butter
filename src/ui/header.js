@@ -146,8 +146,38 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
     }
 
     _shareButton.addEventListener( "click", function( e ){
-      function prepare(){
+      function publish(){
+        butter.cornfield.publish( butter.project.id, function( e ){
+          if( e.error !== "okay" ){
+            showErrorDialog( "There was a problem saving your project. Please try again." );
+            return;
+          }
+          else{
+            var dialog = new IFrameDialog({
+              type: "iframe",
+              modal: true,
+              url: "../dialogs/share.html",
+              events: {
+                open: function( e ){
+                  dialog.send( "url", e.url );
+                },
+                cancel: function( e ){
+                  dialog.close();
+                }
+              }
+            });
+            dialog.open();
+          }
+        });
+      }
 
+      function prepare(){
+        if( butter.project.id ){
+          publish();
+        }
+        else{
+          doSave( publish );
+        }
       }
 
       if( !butter.cornfield.user() ){
@@ -158,53 +188,56 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       }
     }, false );
 
-    _saveButton.addEventListener( "click", function( e ){
+    function doSave( callback ){
 
-      function doSave(){
+      function execute(){
         butter.project.html = butter.getHTML();
         butter.project.data = butter.exportProject();
         var saveString = JSON.stringify( butter.project );
-        butter.cornfield.saveas( butter.project._id, saveString, function( e ){
+        butter.cornfield.saveas( butter.project.id, saveString, function( e ){
           if( e.error !== "okay" || !e.project || !e.project._id ){
             showErrorDialog( "There was a problem saving your project. Please try again." );
             return;
           }
           butter.project.id = e.project._id;
+          if( callback ){
+            callback();
+          }
         });
       }
 
-      function prepare() {
-        if( !butter.project.name ){
-          var dialog = new IFrameDialog({
-            type: "iframe",
-            modal: true,
-            url: "../dialogs/save-as.html",
-            events: {
-              open: function( e ){
-                dialog.send( "name", null );
-              },
-              submit: function( e ){
-                butter.project.name = e.data;
-                dialog.close();
-                doSave();
-              },
-              cancel: function( e ){
-                dialog.close();
-              }
+      if( !butter.project.name ){
+        var dialog = new IFrameDialog({
+          type: "iframe",
+          modal: true,
+          url: "../dialogs/save-as.html",
+          events: {
+            open: function( e ){
+              dialog.send( "name", null );
+            },
+            submit: function( e ){
+              butter.project.name = e.data;
+              dialog.close();
+              execute();
+            },
+            cancel: function( e ){
+              dialog.close();
             }
-          });
-          dialog.open();
-        }
-        else{
-          doSave();
-        }
-      }
-
-      if( !butter.cornfield.user() ){
-        doAuth( prepare );
+          }
+        });
+        dialog.open();
       }
       else{
-        prepare();
+        execute();
+      }
+    }
+
+    _saveButton.addEventListener( "click", function( e ){
+      if( !butter.cornfield.user() ){
+        doAuth( doSave );
+      }
+      else{
+        doSave();
       }
     }, false );
 
