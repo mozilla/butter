@@ -33,6 +33,10 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
     _dims[ 1 ] = options.height || _dims[ 1 ];
 
     function onTrackEventUpdated( e ){
+      if( _currentTrackEvent.popcornOptions.target !== _currentTarget ){
+        _currentTarget = popcornData.target;
+        blinkTarget();
+      } //if
       _dialog.send( "trackeventupdated", _currentTrackEvent.popcornOptions );
     } //onTrackEventUpdated
 
@@ -108,28 +112,9 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
               popcornData = e.data.eventData,
               alsoClose = e.data.alsoClose;
           if( popcornData ){
-            popcornData.start = Number( popcornData.start );
-            popcornData.end = Number( popcornData.end );
-            if( isNaN( popcornData.start ) ||
-                isNaN( popcornData.end ) ||
-                popcornData.start < 0 ||
-                popcornData.end > duration ||
-                popcornData.start >= popcornData.end ){
-              trackEvent.dispatch( "trackeventupdatefailed", {
-                error: "trackeventupdate::invalidtime",
-                message: "Invalid start/end times.",
-                attemptedData: popcornData
-              });
-            }
-            else{
-              if( popcornData.target !== _currentTarget ){
-                _currentTarget = popcornData.target;
-                blinkTarget();
-              } //if
-              trackEvent.update( popcornData );
-              if( alsoClose ){
-                _dialog.close();
-              } //if
+            trackEvent.update( popcornData );
+            if( alsoClose ){
+              _dialog.close();
             } //if
           } //if
         },
