@@ -4,6 +4,9 @@
 
 (function () {
 
+  var DEFAULT_TRACKEVENT_DURATION = 1,
+      DEFAULT_TRACKEVENT_OFFSET = 0.01;
+
   define( [
             "./core/logger",
             "./core/eventmanager",
@@ -71,8 +74,22 @@
         var track,
             element = e.data.element,
             type = element.getAttribute( "data-butter-plugin-type" ),
-            start = media.currentTime + 1 < media.duration ? media.currentTime : media.duration - 1,
-            end = start + 1;
+            start = media.currentTime,
+            end;
+
+        if( start > media.duration ){
+          start = media.duration - DEFAULT_TRACKEVENT_DURATION;
+        }
+
+        if( start < 0 ){
+          start = 0;
+        }
+
+        end = start + DEFAULT_TRACKEVENT_DURATION;
+
+        if( end > media.duration ){
+          end = media.duration;
+        }
 
         if( !type ){
           _logger.log( "Invalid trackevent type requested." );
@@ -91,8 +108,13 @@
             target: target
           }
         });
+
+        if( media.currentTime < media.duration - DEFAULT_TRACKEVENT_OFFSET ){
+          media.currentTime += DEFAULT_TRACKEVENT_OFFSET;
+        }
+
         return trackEvent;
-      } //trackEventRequested
+      }
 
       function targetTrackEventRequested( e ){
         if( _currentMedia ){
