@@ -30,6 +30,7 @@ define( [], function(){
         _lastTime = -1,
         _lastScroll = _tracksContainer.element.scrollLeft,
         _lastZoom = -1,
+        _lineWidth = 0,
         _this = this;
 
     _container.className = "time-bar-scrubber-container";
@@ -62,7 +63,7 @@ define( [], function(){
         var pos = currentTime / duration * _tracksContainerWidth,
             adjustedPos = pos - scrollLeft;
 
-        if( pos <  scrollLeft || Math.floor( pos ) > _width + scrollLeft ){
+        if( pos <  scrollLeft || Math.floor( pos ) - _lineWidth > _width + scrollLeft ){
           _node.style.display = "none";
         }
         else {
@@ -96,7 +97,7 @@ define( [], function(){
     function onMouseUp( e ){
       if( _isPlaying ){
         _media.play();
-        _isScrubbing = false;  
+        _isScrubbing = false;
       }
 
       clearInterval( _scrollInterval );
@@ -188,6 +189,7 @@ define( [], function(){
       _tracksContainerWidth = _tracksContainer.container.getBoundingClientRect().width;
       _container.style.width = _width + "px";
       _rect = _container.getBoundingClientRect();
+      _lineWidth = _line.clientWidth;
       setNodePosition();
     }; //update
 
