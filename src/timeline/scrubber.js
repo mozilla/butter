@@ -62,7 +62,7 @@ define( [], function(){
         var pos = currentTime / duration * _tracksContainerWidth,
             adjustedPos = pos - scrollLeft;
 
-        if( pos <  scrollLeft || Math.floor( pos ) > _width + scrollLeft ){
+        if( pos <  scrollLeft || Math.floor( pos ) - _line.clientWidth > _width + scrollLeft ){
           _node.style.display = "none";
         }
         else {
@@ -96,7 +96,7 @@ define( [], function(){
     function onMouseUp( e ){
       if( _isPlaying ){
         _media.play();
-        _isScrubbing = false;  
+        _isScrubbing = false;
       }
 
       clearInterval( _scrollInterval );
