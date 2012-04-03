@@ -129,7 +129,7 @@ define( [
                 dialog.send( "trackupdated", true );
               } catch ( error ) {
                 // inform the dialog about the issue
-                throw( error );
+                console.log( error );
                 dialog.send( "trackupdated", false );
               }
             }
