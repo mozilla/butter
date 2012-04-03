@@ -4,7 +4,21 @@
 
 (function() {
 
-  define( [ "core/logger", "core/eventmanager", "util/dragndrop", "./plugin-list", "./plugin" ], function( Logger, EventManager, DragNDrop, PluginList, Plugin ) {
+  define( [ "core/logger",
+            "core/eventmanager",
+            "util/dragndrop",
+            "util/scrollbars",
+            "./plugin-list",
+            "./plugin"
+          ], 
+          function(
+            Logger,
+            EventManager,
+            DragNDrop,
+            Scrollbars,
+            PluginList,
+            Plugin
+          ) {
 
     var __trackEventCSSRules = {},
         __cssRuleProperty = "data-butter-trackevent-type",
@@ -55,11 +69,22 @@
     var PluginManager = function( butter, moduleOptions ) {
 
       var _plugins = [],
-          _container = document.createElement( "ul" ),
+          _container = document.createElement( "div" ),
+          _listContainer = document.createElement( "div" ),
           _this = this,
-          _pattern = '<li class="$type_tool">$type</li>';
+          _pattern = '<div class="list-item $type_tool">$type</div>';
 
       _container.id = "butter-plugin";
+      _listContainer.className = "list";
+
+      var title = document.createElement( "div" );
+      title.className = "title";
+      title.innerHTML = "<span>My Events</span>";
+      _container.appendChild( title );
+      _container.appendChild( _listContainer );
+
+      var _scrollbar = new Scrollbars.Vertical( _container, _listContainer );
+      _container.appendChild( _scrollbar.element );
 
       document.head.appendChild( __newStyleSheet );
 
@@ -110,12 +135,11 @@
           }, 100);
 
           _plugins.push( plugin );
-          _container.appendChild( plugin.createElement( _pattern ) );
+          _listContainer.appendChild( plugin.createElement( _pattern ) );
           butter.dispatch( "pluginadded", plugin );
-
-          return plugin;
-
         }
+
+        _scrollbar.update();
 
         return plugin;
       }; //add
@@ -145,7 +169,7 @@
 
             _plugins.splice( i, 1 );
             l--;
-            _container.removeChild( plugin.element );
+            _listContainer.removeChild( plugin.element );
 
             var head = document.getElementsByTagName( "HEAD" )[ 0 ];
             for ( i = 0, l = head.children.length; i < l; i++ ) {
@@ -157,12 +181,14 @@
             butter.dispatch( "pluginremoved", plugin );
           }
         }
+
+        _scrollbar.update();
       };
 
       this.clear = function () {
         while ( plugins.length > 0 ) {
           var plugin = _plugins.pop();
-          _container.removeChild( plugin.element );
+          _listContainer.removeChild( plugin.element );
           butter.dispatch( "pluginremoved", plugin );
         }
       }; //clear
