@@ -76,6 +76,56 @@
   transition: opacity 0.5s;
 }
 
+.butter-media-properties {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  z-index: 2139000000;
+  font-family: Verdana, sans-serif;
+  border: 2px solid #fff;
+  background-color: #131313;
+  background-image: -moz-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% );
+  background-image: -webkit-gradient( linear, left bottom, left top, color-stop( 0, #2c2c2c ), color-stop( 1, #4c4c4c ) );
+  -moz-transition: opacity 0.5s, width 0.25s, height 0.25s;
+  -webkit-transition: opacity 0.5s, width 0.25s, height 0.25s;
+  transition: opacity 0.5s, width 0.25s, height 0.25s;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.butter-media-properties .loading-container {
+  position: absolute;
+  z-index: 2140000001;
+  left: 1px;
+  top: 1px;
+  width: 30px;
+  height: 30px;
+}
+
+.butter-media-properties .container {
+  width: 250px;
+  height: 100px;
+  min-width: 250px;
+  min-height: 100px;
+  position: absolute;
+  text-align: center;
+  color: #fff;
+}
+
+.butter-media-properties:hover {
+  opacity: 1.0;
+  width: 250px;
+  height: 100px;
+}
+
+.butter-media-properties h3, .butter-media-properties h5 {
+  margin: 3px;
+}
+
+.butter-media-properties .url {
+  width: 80%;
+}
+
 #butter-modal-container {
   position: fixed;
   top: 0px;

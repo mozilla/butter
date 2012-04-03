@@ -124,6 +124,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
     } //if
 
     Object.defineProperties( this, {
+      element: {
+        enumerable: true,
+        get: function(){
+          return _element;
+        }
+      },
       highlight: {
         enumerable: true,
         get: function(){
