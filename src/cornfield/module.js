@@ -14,7 +14,7 @@ define(['util/xhr'], function(XHR) {
         server = config.server,
         authType = config.authType || "browserid";
 
-    if( authType === "browserid" ){
+    if( authType === "browserid" && !navigator.id ){
       var script = document.createElement( "script" );
       script.src = "https://browserid.org/include.js";
       script.type = "text/javascript";
