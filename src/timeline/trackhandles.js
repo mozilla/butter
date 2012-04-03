@@ -45,7 +45,14 @@ define( [
       }
     });
 
-    _media.listen( "trackadded", function( e ){
+    var existingTracks = media.tracks;
+    for( var i=0; i<existingTracks.length; ++i ){
+      onTrackAdded({
+        data: existingTracks[ i ]
+      });
+    }
+
+    function onTrackAdded( e ){
       var track = e.data,
           trackId = track.id,
           trackName = track.name,
@@ -115,7 +122,9 @@ define( [
       };
 
       _addTrackButton.style.top = _listElement.offsetHeight - ADD_TRACK_BUTTON_Y_ADJUSTMENT + "px";
-    });
+    }
+
+    _media.listen( "trackadded", onTrackAdded );
 
     _media.listen( "trackremoved", function( e ){
       var trackId = e.data.id;
@@ -132,6 +141,7 @@ define( [
 
     this.update = function(){
       _container.scrollTop = tracksContainer.element.scrollTop;
+      _addTrackButton.style.top = _listElement.offsetHeight - ADD_TRACK_BUTTON_Y_ADJUSTMENT + "px";
     }; //update
 
     _this.update();

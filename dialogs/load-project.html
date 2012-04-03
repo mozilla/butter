@@ -12,10 +12,10 @@
         document.addEventListener( "DOMContentLoaded", function( e ){
           var okButton = document.getElementById( "yes" ),
               cancelButton = document.getElementById( "no" ),
-              trackName = document.getElementById( "track-name" );
+              list = document.getElementById( "project-list" );
 
           function okPressed( e ){
-            _comm.send( "submit", true );
+            _comm.send( "submit", list.value );
           } //okPressed
 
           function cancelPressed( e ){
@@ -30,27 +30,43 @@
             }
           }, false);
 
-          okButton.addEventListener( "click", okPressed, false );
-          cancelButton.addEventListener( "click", cancelPressed, false );
-
-          _comm.listen( "trackdata", function( e ){
-            trackName.appendChild( document.createTextNode( e.data ) );
+          _comm.listen( "list", function( e ){
+            for( var i=0; i<e.data.length; ++i ){
+              var option = document.createElement( "option" );
+              option.value = e.data[ i ].id;
+              option.innerHTML = e.data[ i ].name;
+              list.appendChild( option );
+            }
             okButton.removeAttribute( "disabled" );
             cancelButton.removeAttribute( "disabled" );
           });
+
+          okButton.addEventListener( "click", okPressed, false );
+          cancelButton.addEventListener( "click", cancelPressed, false );
 
         }, false );
       }());
     </script>
     <link rel="stylesheet" href="dialog.css" />
+    <style>
+      #better {
+        display: none;
+        color: #fb1121;
+      }
+      #project-list {
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
     <div id="container" class="hbox center">
       <div class="vbox center">
-        <h1>Are you sure you want to delete <span id="track-name"></span>?</h1>
+        <h1>Please choose a project from the list below:</h1>
+        <select id="project-list">
+        </select>
         <div id="buttons" class="hbox center">
-          <button disabled id="yes">Yes</button>
-          <button disabled id="no">No</button>
+          <button disabled id="yes">Ok</button>
+          <button disabled id="no">Cancel</button>
         </div>
       </div>
     </div>

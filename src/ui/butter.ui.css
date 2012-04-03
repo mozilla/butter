@@ -12,6 +12,10 @@
   user-select: none;
 }
 
+.butter-header-spacing {
+  padding-top: 35px;
+}
+
 @-webkit-keyframes spin {
   0%   { -webkit-transform:rotate(0deg); }
   100% { -webkit-transform:rotate(360deg); }
@@ -74,6 +78,201 @@
   -moz-transition: opacity 0.5s;
   -webkit-transition: opacity 0.5s;
   transition: opacity 0.5s;
+}
+
+/* MetaWebPro font family licensed from fontshop.com. WOFF-FTW! */
+@font-face {
+   font-family: 'MetaBold';
+   src: url('http://www.mozilla.org/img/fonts/MetaWebPro-Bold.eot');
+   src: local('☺'), url('http://www.mozilla.org/img/fonts/MetaWebPro-Bold.woff') format('woff');
+   font-weight: bold;
+}
+@font-face {
+  font-family: 'BebasRegular';
+  src: url('assets/fonts/BEBAS___-webfont.eot');
+  src: url('assets/fonts/BEBAS___-webfont.eot?#iefix') format('embedded-opentype'),
+       url('assets/fonts/BEBAS___-webfont.woff') format('woff'),
+       url('assets/fonts/BEBAS___-webfont.ttf') format('truetype'),
+       url('assets/fonts/BEBAS___-webfont.svg#BebasRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+#butter-header {
+  z-index: 2140000000;
+  position: fixed;
+  width: 100%;
+  left: 0px;
+  top: 0px;
+  height: 35px;
+  color: #fff;
+  background-image: -moz-linear-gradient( center bottom, #2C2C2C 0, #4C4C4C 100% );
+  background-image: -webkit-gradient( linear, left bottom, left top, color-stop( 0, #2C2C2C ), color-stop( 1, #4C4C4C ) );
+  display: block;
+}
+
+#butter-header h1 {
+  font-family: 'MetaBold';
+  color: #fff;
+  font-size: 21px;
+  position: absolute;
+  left: 40px;
+  top: 0px;
+  margin: 0px;
+}
+
+#butter-header a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#butter-header h1 span.logo {
+  font-family: 'MetaBold';
+  font-size: 50px;
+  padding-right: 10px;
+  color: white;
+}
+
+#butter-header div.editor-actions {
+  position: absolute;
+  right: 20px;
+  top: 8px;
+}
+
+#butter-header button, #butter-header a.button {
+  font-family: 'BebasRegular';
+  font-size: 12px;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+#butter-header-new {
+ background-image: -moz-linear-gradient(center bottom,#667 0,#D3D3D3 100%);
+ background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#667),color-stop(1,#D3D3D3));
+}
+
+#butter-header-new:hover {
+ background-image: -moz-linear-gradient(center bottom,#667 0,#666 100%);
+ background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#667),color-stop(1,#666));
+}
+
+#butter-header-save {
+  background: #D1BE70;
+  background: -moz-linear-gradient(top, #D1BE70 0%, #A08546 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#A08546));
+  background: -webkit-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: -o-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: -ms-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: linear-gradient(top, #D1BE70);
+  box-shadow: none;
+}
+
+#butter-header-save:hover {
+  background: #D1BE70;
+  background: -moz-linear-gradient(top, #D1BE70 0%, #AD9B4C 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#AD9B4C));
+  background: -webkit-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: -o-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: -ms-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+ }
+
+#butter-header-load {
+  background: #D1BE70;
+  background: -moz-linear-gradient(top, #D1BE70 0%, #A08546 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#A08546));
+  background: -webkit-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: -o-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: -ms-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: linear-gradient(top, #D1BE70);
+  box-shadow: none;
+}
+
+#butter-header-load:hover {
+  background: #D1BE70;
+  background: -moz-linear-gradient(top, #D1BE70 0%, #AD9B4C 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#AD9B4C));
+  background: -webkit-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: -o-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: -ms-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+ }
+
+#butter-header-share {
+  width: 100px !important;
+  background: #D1BE70;
+  background: -moz-linear-gradient(top, #26B5D8 0%, #2B86D4 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#26B5D8), color-stop(100%,#2B86D4));
+  background: -webkit-linear-gradient(top, #26B5D8 0%,#2B86D4 100%);
+  background: -o-linear-gradient(top, #26B5D8 0%,#2B86D4 100%);
+  background: -ms-linear-gradient(top, #26B5D8 0%,#2B86D4 100%);
+  background: linear-gradient(top, #2B86D4);
+  box-shadow: none;
+}
+
+#butter-header-share:hover {
+  background: #D1BE70;
+  background: -moz-linear-gradient(top, #26B5D8 0%, #29B4D6 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#29B4D6));
+  background: -webkit-linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
+  background: -o-linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
+  background: -ms-linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
+  background: linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
+}
+
+#butter-header-auth {
+  font-family: verdana;
+  border-radius: 0px !important;
+  background-color: transparent !important;
+  margin-left: 10px;
+  text-align: left;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+#butter-header-auth:hover {
+  color: #D3D3D3;
+}
+
+#butter-header-auth-in {
+  font-family: verdana;
+  border-radius: 0px !important;
+  background-color: transparent !important;
+  text-align: left;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+#butter-header-auth-in:hover {
+  color: #D3D3D3;
+}
+
+#butter-header-auth-out {
+  font-family: verdana;
+  border-radius: 0px !important;
+  background-color: transparent !important;
+  text-align: left;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+
+#butter-header-auth-out:hover {
+  color: #D3D3D3;
+}
+
+#butter-header .logo-drop {
+  background-size: cover;
+  background-image: url( "assets/drop.png" );
+  position: absolute;
+  left: 10px;
+  top: 4px;
+  width: 23px;
+  height: 23px;
 }
 
 #butter-modal-container {
