@@ -32,7 +32,24 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
     _dims[ 0 ] = options.width || _dims[ 0 ];
     _dims[ 1 ] = options.height || _dims[ 1 ];
 
+    function blinkTarget(){
+      if( _currentTarget === "Media Element" ){
+        butter.currentMedia.view.blink();
+      }
+      else{
+        var target = butter.getTargetByType( "elementID", _currentTarget );
+        if( target ){
+          target.view.blink();
+        } //if
+      } //if
+    }
+
     function onTrackEventUpdated( e ){
+      var popcornData = _currentTrackEvent.popcornOptions;
+      if( popcornData.target !== _currentTarget ){
+        _currentTarget = popcornData.target;
+        blinkTarget();
+      } //if
       _dialog.send( "trackeventupdated", _currentTrackEvent.popcornOptions );
     } //onTrackEventUpdated
 
@@ -61,19 +78,6 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
         _dialog.focus();
         return;
       } //if
-
-
-      function blinkTarget(){
-        if( _currentTarget === "Media Element" ){
-          butter.currentMedia.view.blink();
-        }
-        else{
-          var target = butter.getTargetByType( "elementID", _currentTarget );
-          if( target ){
-            target.view.blink();
-          } //if
-        } //if
-      } //blinkTarget
 
       _currentTrackEvent = trackEvent;
 
@@ -108,28 +112,9 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
               popcornData = e.data.eventData,
               alsoClose = e.data.alsoClose;
           if( popcornData ){
-            popcornData.start = Number( popcornData.start );
-            popcornData.end = Number( popcornData.end );
-            if( isNaN( popcornData.start ) ||
-                isNaN( popcornData.end ) ||
-                popcornData.start < 0 ||
-                popcornData.end > duration ||
-                popcornData.start >= popcornData.end ){
-              trackEvent.dispatch( "trackeventupdatefailed", {
-                error: "trackeventupdate::invalidtime",
-                message: "Invalid start/end times.",
-                attemptedData: popcornData
-              });
-            }
-            else{
-              if( popcornData.target !== _currentTarget ){
-                _currentTarget = popcornData.target;
-                blinkTarget();
-              } //if
-              trackEvent.update( popcornData );
-              if( alsoClose ){
-                _dialog.close();
-              } //if
+            trackEvent.update( popcornData );
+            if( alsoClose ){
+              _dialog.close();
             } //if
           } //if
         },

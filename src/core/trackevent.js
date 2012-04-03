@@ -38,7 +38,6 @@ define( [
         _view = new TrackEventView( this, _type, _popcornOptions ),
         _selected = false;
 
-    _this._track = null;
     _this.popcornOptions = _popcornOptions;
 
     if( !_type ){
@@ -51,21 +50,51 @@ define( [
     _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
 
     this.update = function( updateOptions ) {
-      for ( var prop in updateOptions ) {
-        if ( updateOptions.hasOwnProperty( prop ) ) {
-          _popcornOptions[ prop ] = updateOptions[ prop ];
-        } //if
-      } //for
-      if ( !isNaN( _popcornOptions.start ) ) {
-        _popcornOptions.start = TimeUtil.roundTime( _popcornOptions.start );
-      }
-      if ( !isNaN(_popcornOptions.end ) ) {
-        _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
-      }
-      _em.dispatch( "trackeventupdated", _this );
+      var failed = false,
+          newStart = _popcornOptions.start,
+          newEnd = _popcornOptions.end;
 
-      _view.update( _popcornOptions );
-      _this.popcornOptions = _popcornOptions;
+      if ( !isNaN( updateOptions.start ) ) {
+        newStart = TimeUtil.roundTime( updateOptions.start );
+      }
+      if ( !isNaN( updateOptions.end ) ) {
+        newEnd = TimeUtil.roundTime( updateOptions.end );
+      }
+
+      if ( newStart >= newEnd ){
+        failed = "invalidtime";
+      }
+      else {
+        if( _track && _track._media ){
+          var media = _track._media;
+          if( ( newStart > media.duration ) ||
+              ( newEnd > media.duration ) ||
+              ( newStart < 0 ) ) {
+            failed = "invalidtime";
+          }
+        }
+      }
+
+      if( failed ){
+        _em.dispatch( "trackeventupdatefailed", failed );
+      }
+      else{
+        _view.update( _popcornOptions );
+        _this.popcornOptions = _popcornOptions;
+        for ( var prop in updateOptions ) {
+          if ( updateOptions.hasOwnProperty( prop ) ) {
+            _popcornOptions[ prop ] = updateOptions[ prop ];
+          } //if
+        } //for
+        if( newStart ){
+          _popcornOptions.start = newStart;          
+        }
+        if( newEnd ){
+          _popcornOptions.end = newEnd;
+        }
+        _em.dispatch( "trackeventupdated", _this );
+      }
+
     }; //update
 
     this.moveFrameLeft = function( inc, metaKey ){
@@ -109,6 +138,16 @@ define( [
     });
 
     Object.defineProperties( this, {
+      _track: {
+        enumerable: true,
+        get: function(){
+          return _track;
+        },
+        set: function( val ){
+          _track = val;
+          _this.update( _popcornOptions );
+        }
+      },
       view: {
         enumerable: true,
         configurable: false,
