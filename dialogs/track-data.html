@@ -35,7 +35,7 @@
                 errorMessage.innerHTML = "Invalid JSON";
               }
             });
-            _comm.send( "trackupdated", trackData.value );
+            _comm.send( "submit", trackData.value );
           }
 
           okButton.addEventListener( "click", okPressed, false );

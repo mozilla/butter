@@ -82,41 +82,56 @@ define( [
           modal: true,
           url: "../dialogs/track-data.html",
           events: {
-            open: function( e ){
+            open: function( e ) {
               dialog.send( "trackdata", track.json );
-              var comm = dialog.comm;
-              // listen for trackupdated from the dialog
-              comm.listen( "trackupdated", function( e ) {
-                // wrap in a try catch so we know right away about any malformed JSON
-                try {
-                  var tracks = _media.tracks,
-                      track,
-                      i,
-                      l,
-                      trackEvents,
-                      trackData = JSON.parse( e.data ),
-                      trackDataEvents = trackData.trackEvents;
+            },
+            submit: function( e ) {
+              // wrap in a try catch so we know right away about any malformed JSON
+              try {
+                var trackData = JSON.parse( e.data ),
+                    trackEvents = track.trackEvents,
+                    trackDataEvents = trackData.trackEvents,
+                    dontRemove = {},
+                    toAdd = [],
+                    i,
+                    l;
 
-                  // find the correct track
-                  for( i = 0, l = tracks.length; i < l; i++ ) {
-                    if ( trackData.id === tracks[ i ].id ) {
-                      track = tracks[ i ];
-                    }
-                  }
+                // update every trackevent with it's new data
+                for ( i = 0, l = trackDataEvents.length; i < l; i++ ) {
+                  var teData = trackDataEvents[ i ],
+                      te = track.getTrackEventById( teData.id );
 
-                  // update every trackevent with it's new data
-                  for( i = 0, l = trackDataEvents.length; i < l; i++ ) {
-                    var trackevent = trackDataEvents[ i ],
-                        te = track.getTrackEventById( trackevent.id );
-                    te.update( trackevent.popcornOptions );
+                  // check to see if the current track event exists already
+                  if ( te ) {
+                    te.update( teData.popcornOptions );
+                    /* remove it from our reference to the array of track events so we know
+                     * which ones to remove later
+                     */
+                    dontRemove[ teData.id ] = teData;
+                  // if we couldn't find the track event, it must be a new one
+                  } else {
+                    toAdd.push( { type: teData.type, popcornOptions: teData.popcornOptions } );
                   }
-                  // let the dialog know things went well
-                  dialog.send( "trackupdated", true );
-                } catch ( error ) {
-                  // inform the dialog about the issue
-                  dialog.send( "trackupdated", false );
                 }
-              });
+
+                // remove all trackEvents that wern't updated
+                for ( i = trackEvents.length, l = 0; i >= l; i-- ) {
+                  if ( trackEvents[ i ] && !dontRemove[ trackEvents[ i ].id ] ) {
+                    track.removeTrackEvent( trackEvents[ i ] );
+                  }
+                }
+
+                // add all the trackEvents that didn't exist so far
+                for ( i = 0, l = toAdd.length; i < l; i++ ) {
+                  track.addTrackEvent( toAdd[ i ] );
+                }
+                // let the dialog know things went well
+                dialog.send( "trackupdated", true );
+              } catch ( error ) {
+                // inform the dialog about the issue
+                throw( error );
+                dialog.send( "trackupdated", false );
+              }
             }
           }
         });
