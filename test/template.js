@@ -9,8 +9,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         var track = media.addTrack( "Track1" );
         media.addTrack( "Track" + Math.random() );
         media.addTrack( "Track" + Math.random() );
-        media.addTrack( "Track" + Math.random() );
-        media.addTrack( "Track" + Math.random() );
 
         var event = track.addTrackEvent({
           type: "text",
@@ -30,6 +28,10 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             target: "Area2"
           }
         });
+
+        var exported = butter.exportProject();
+        butter.clearProject();
+        butter.importProject( exported );
       }
 
       media.onReady( start );

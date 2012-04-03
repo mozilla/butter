@@ -55,13 +55,22 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       } //for
     });
 
-    _media.listen( "trackadded", function( e ){
+    function onTrackAdded( e ){
       var trackView = e.data.view;
       _container.appendChild( trackView.element );
       trackView.duration = _media.duration;
       trackView.zoom = _zoom;
       trackView.parent = _this;
-    });
+    }
+
+    var existingTracks = _media.tracks;
+    for( var i=0; i<existingTracks.length; ++i ){
+      onTrackAdded({
+        data: existingTracks[ i ]
+      });
+    }
+
+    _media.listen( "trackadded", onTrackAdded );
 
     _media.listen( "trackremoved", function( e ){
       var trackView = e.data.view;
