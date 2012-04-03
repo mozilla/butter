@@ -53,53 +53,53 @@ define( [
       var failed = false;
 
       var oldStart = _popcornOptions.start,
-          oldEnd = _popcornOptions.end;
+          oldEnd = _popcornOptions.end,
+          newStart,
+          newEnd;
 
-      for ( var prop in updateOptions ) {
-        if ( updateOptions.hasOwnProperty( prop ) ) {
-          _popcornOptions[ prop ] = updateOptions[ prop ];
-        } //if
-      } //for
 
       if ( !isNaN( updateOptions.start ) ) {
-        _popcornOptions.start = TimeUtil.roundTime( updateOptions.start );
+        newStart = TimeUtil.roundTime( updateOptions.start );
       }
       if ( !isNaN(updateOptions.end ) ) {
-        _popcornOptions.end = TimeUtil.roundTime( updateOptions.end );
+        newEnd = TimeUtil.roundTime( updateOptions.end );
       }
 
-      if ( _popcornOptions.start >= _popcornOptions.end ){
-        _popcornOptions.start = oldStart;
-        _popcornOptions.end = oldEnd;
+      if ( newStart && newEnd && newStart > newEnd ){
         failed = "invalidtime";
       }
-
-      if( _track && _track._media ){
-        var media = _track._media;
-        if( _popcornOptions.start > media.duration ){
-          _popcornOptions.start = oldStart;
-          _popcornOptions.end = oldEnd;
-          failed = "invalidtime";
-        }
-        else if( _popcornOptions.end > media.duration ){
-          _popcornOptions.start = oldStart;
-          _popcornOptions.end = oldEnd;
-          failed = "invalidtime";
-        }
-        else if( _popcornOptions.start < 0 ){
-          _popcornOptions.start = oldStart;
-          _popcornOptions.end = oldEnd;
-          failed = "invalidtime";
+      else {
+        if( _track && _track._media ){
+          var media = _track._media;
+          if( newStart && newStart > media.duration ){
+            failed = "invalidtime";
+          }
+          else if( newEnd && newEnd > media.duration ){
+            failed = "invalidtime";
+          }
+          else if( newStart && newStart < 0 ){
+            failed = "invalidtime";
+          }
         }
       }
-      
-      _view.update( _popcornOptions );
-      _this.popcornOptions = _popcornOptions;
 
       if( failed ){
         _em.dispatch( "trackeventupdatefailed", failed );
       }
       else{
+        _view.update( _popcornOptions );
+        _this.popcornOptions = _popcornOptions;
+        for ( var prop in updateOptions ) {
+          if ( updateOptions.hasOwnProperty( prop ) ) {
+            _popcornOptions[ prop ] = updateOptions[ prop ];
+          } //if
+        } //for
+        if( newStart ){
+          _popcornOptions.start = newStart;          
+        }
+        if( newEnd ){
+          _popcornOptions.end = newEnd;
+        }
         _em.dispatch( "trackeventupdated", _this );
       }
 
