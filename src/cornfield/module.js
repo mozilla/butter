@@ -50,7 +50,7 @@ define(['util/xhr'], function(XHR) {
     };
 
     this.publish = function(id, callback) {
-      XHR.post(server + "/publish/" + id, function() {
+      XHR.post(server + "/publish/" + id, null, function() {
         if (this.readyState === 4) {
           try {
             var response = JSON.parse(this.response);

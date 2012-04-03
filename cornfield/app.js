@@ -6,7 +6,8 @@ const express = require('express'),
       app = express.createServer(),
       CONFIG = require('config'),
       TEMPLATES_DIR =  CONFIG.dirs.templates,
-      PUBLISH_DIR = CONFIG.dirs.publish;
+      PUBLISH_DIR = CONFIG.dirs.publish,
+      PUBLISH_PREFIX = CONFIG.dirs.publishPrefix;
 
 console.log( "Templates Dir:", TEMPLATES_DIR );
 console.log( "Publish Dir:", PUBLISH_DIR );
@@ -65,7 +66,7 @@ app.post('/publish/:id', function(req, res) {
     for ( var i=0; i<doc.projects.length; ++i ) {
       if ( String( doc.projects[ i ]._id ) === id ) {
         var projectPath = PUBLISH_DIR + "/" + id + ".html",
-            url = PUBLISH_DIR + "/" + id + ".html",
+            url = PUBLISH_PREFIX + PUBLISH_DIR + "/" + id + ".html",
             data = doc.projects[ i ].html;
 
         fs.writeFile( projectPath, data, function(){

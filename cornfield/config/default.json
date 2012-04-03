@@ -11,6 +11,7 @@
   },
   "dirs": {
     "templates": "../templates",
-    "publish": "view"
+    "publish": "view",
+    "publishPrefix": "http://localhost:8888/cornfield/"
   }
 }

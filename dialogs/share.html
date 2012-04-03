@@ -25,7 +25,7 @@
             }
           }, false);
 
-          _comm.listen( "name", function( e ){
+          _comm.listen( "url", function( e ){
             url.innerHTML = e.data;
             url.href = e.data;
             okButton.removeAttribute( "disabled" );
@@ -37,6 +37,10 @@
     </script>
     <link rel="stylesheet" href="dialog.css" />
     <style>
+      h1{
+        width: 100%;
+        text-align: center;
+      }
       #better {
         display: none;
         color: #fb1121;

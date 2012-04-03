@@ -153,13 +153,14 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
             return;
           }
           else{
+            var url = e.url;
             var dialog = new IFrameDialog({
               type: "iframe",
               modal: true,
               url: "../dialogs/share.html",
               events: {
                 open: function( e ){
-                  dialog.send( "url", e.url );
+                  dialog.send( "url", url );
                 },
                 cancel: function( e ){
                   dialog.close();
