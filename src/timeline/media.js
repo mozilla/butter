@@ -196,7 +196,7 @@ define( [
       for( var i=0; i<existingTracks.length; ++i ){
         onTrackAdded({
           data: existingTracks[ i ]
-        })
+        });
       }
 
       _media.listen( "trackadded", onTrackAdded );

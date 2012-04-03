@@ -49,7 +49,7 @@ define( [
     for( var i=0; i<existingTracks.length; ++i ){
       onTrackAdded({
         data: existingTracks[ i ]
-      })
+      });
     }
 
     function onTrackAdded( e ){
