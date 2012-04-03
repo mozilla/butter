@@ -119,8 +119,6 @@ define( [
           return _trackEvents[ i ];
         } //if
       } //for
-
-      return undefined;
     }; //getTrackEventById
 
     this.getTrackEventByName = function( name ){

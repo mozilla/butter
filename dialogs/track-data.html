@@ -48,6 +48,7 @@
             trackName.innerHTML = e.data.name;
             trackData.value = JSON.stringify( e.data );
             closeButton.removeAttribute( "disabled" );
+            okButton.removeAttribute( "disabled" );
           });
         }, false );
       }());
@@ -98,7 +99,7 @@
       <textarea id="track-data">Please wait...</textarea>
       <div id="error"></div>
       <div id="buttons">
-        <button id="ok">Ok</button>
+        <button disabled id="ok">Ok</button>
         <button disabled id="close">Close</button>
       </div>
     </div>
