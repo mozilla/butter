@@ -11,7 +11,15 @@ define(['util/xhr'], function(XHR) {
   var Cornfield = function( butter, config ) {
 
     var email = "",
-        server = config.server;
+        server = config.server,
+        authType = config.authType || "browserid";
+
+    if( authType === "browserid" && !navigator.id ){
+      var script = document.createElement( "script" );
+      script.src = "https://browserid.org/include.js";
+      script.type = "text/javascript";
+      document.head.appendChild( script );
+    }
 
     this.login = function(callback) {
       navigator.id.get(function(assertion) {
