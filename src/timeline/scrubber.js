@@ -30,7 +30,7 @@ define( [], function(){
         _lastTime = -1,
         _lastScroll = _tracksContainer.element.scrollLeft,
         _lastZoom = -1,
-        _lineWidth,
+        _lineWidth = 0,
         _this = this;
 
     _container.className = "time-bar-scrubber-container";
