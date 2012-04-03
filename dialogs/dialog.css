@@ -34,9 +34,9 @@ html, body {
 }
 
 .center {
-        -webkit-box-pack: center;
-        -moz-box-pack: center;
-        box-pack: center;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  box-pack: center;
 }
 
 #container {

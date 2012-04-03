@@ -11,26 +11,26 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
     var title = options.title || "Butter";
 
     _rootElement.innerHTML = '' +
-      '<div class="drop"></div><h1>' + title + '</h1>' +
+      '<div class="logo-drop"></div><h1>' + title + '</h1>' +
       '<div class="editor-actions">' +
-      '    <button id="new">New</button>' +
-      '    <button id="save">Save</button>' +
-      '    <button id="load">Load</button>' +
-      '    <button id="share">Share</button>' +
-      '    <button id="auth">Login</button> |' + 
-      '    <button id="auth-out">Logout</button>' +
+      '    <button id="butter-header-new">New</button>' +
+      '    <button id="butter-header-save">Save</button>' +
+      '    <button id="butter-header-load">Load</button>' +
+      '    <button id="butter-header-share">Share</button>' +
+      '    <button id="butter-header-auth">Login</button> |' + 
+      '    <button id="butter-header-auth-out">Logout</button>' +
       '</div>';
 
     _rootElement.setAttribute( "data-butter-exclude", true );
 
     document.body.insertBefore( _rootElement, document.body.firstChild );
 
-    var newButton = _rootElement.querySelectorAll( "#new" )[ 0 ],
-        saveButton = _rootElement.querySelectorAll( "#save" )[ 0 ],
-        loadButton = _rootElement.querySelectorAll( "#load" )[ 0 ],
-        shareButton = _rootElement.querySelectorAll( "#share" )[ 0 ],
-        authButton = _rootElement.querySelectorAll( "#auth" )[ 0 ],
-        logoutButton = _rootElement.querySelectorAll( "#auth-out" )[ 0 ];
+    var newButton = document.getElementById( "butter-header-new" ),
+        saveButton = document.getElementById( "butter-header-save" ),
+        loadButton = document.getElementById( "butter-header-load" ),
+        shareButton = document.getElementById( "butter-header-share" ),
+        authButton = document.getElementById( "butter-header-auth" ),
+        logoutButton = document.getElementById( "butter-header-auth-out" );
 
     var oldDisplayProperty = saveButton.style.display;
 
