@@ -6,9 +6,13 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
 
     options = options || {};
 
-    var _rootElement = document.createElement( "header" );
-
-    _rootElement.id = "butter-header";
+    var _rootElement = document.createElement( "div" ),
+        _newButton,
+        _saveButton,
+        _loadButton,
+        _shareButton,
+        _authButton,
+        _logoutButton;
 
     var title = options.title || "Butter";
 
@@ -24,28 +28,27 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       '</div>';
 
     _rootElement.setAttribute( "data-butter-exclude", true );
+    _rootElement.id = "butter-header";
 
     document.body.insertBefore( _rootElement, document.body.firstChild );
 
-    document.body.classList.add( "butter-header-spacing" );
+    _newButton = document.getElementById( "butter-header-new" ),
+    _saveButton = document.getElementById( "butter-header-save" ),
+    _loadButton = document.getElementById( "butter-header-load" ),
+    _shareButton = document.getElementById( "butter-header-share" ),
+    _authButton = document.getElementById( "butter-header-auth" ),
+    _logoutButton = document.getElementById( "butter-header-auth-out" );
 
-    var newButton = document.getElementById( "butter-header-new" ),
-        saveButton = document.getElementById( "butter-header-save" ),
-        loadButton = document.getElementById( "butter-header-load" ),
-        shareButton = document.getElementById( "butter-header-share" ),
-        authButton = document.getElementById( "butter-header-auth" ),
-        logoutButton = document.getElementById( "butter-header-auth-out" );
-
-    var _oldDisplayProperty = logoutButton.style.display;
-    logoutButton.style.display = "none";
+    var _oldDisplayProperty = _logoutButton.style.display;
+    _logoutButton.style.display = "none";
 
     function doAuth( successCallback, errorCallback ){
       butter.cornfield.login(function( response ){
         if( response.status === "okay" ){
           var email = response.email;
           butter.cornfield.list(function( listResponse ) {
-            authButton.innerHTML = email;
-            logoutButton.style.display = _oldDisplayProperty;
+            _authButton.innerHTML = email;
+            _logoutButton.style.display = _oldDisplayProperty;
             if( successCallback ){
               successCallback();
             }
@@ -60,7 +63,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       });      
     }
 
-    newButton.addEventListener( "click", function( e ){
+    _newButton.addEventListener( "click", function( e ){
       var dialog = new IFrameDialog({
         type: "iframe",
         modal: true,
@@ -78,17 +81,17 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       dialog.open();
     }, false );
 
-    authButton.addEventListener( "click", function( e ){
+    _authButton.addEventListener( "click", function( e ){
       if( !butter.cornfield.user() ){
         doAuth();
       }
     }, false );
 
-    logoutButton.addEventListener( "click", function( e ){
+    _logoutButton.addEventListener( "click", function( e ){
       if( butter.cornfield.user() ){
         butter.cornfield.logout(function( response ){
-          logoutButton.style.display = "none";
-          authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
+          _logoutButton.style.display = "none";
+          _authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
         });
       }
     });
@@ -113,7 +116,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       dialog.open();
     }
 
-    shareButton.addEventListener( "click", function( e ){
+    _shareButton.addEventListener( "click", function( e ){
       function prepare(){
 
       }
@@ -126,7 +129,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       }
     }, false );
 
-    saveButton.addEventListener( "click", function( e ){
+    _saveButton.addEventListener( "click", function( e ){
 
       function doSave(){
         butter.project.html = butter.getHTML();
@@ -176,7 +179,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       }
     }, false );
 
-    loadButton.addEventListener( "click", function( e ){
+    _loadButton.addEventListener( "click", function( e ){
       function prepare(){
         butter.cornfield.list(function( listResponse ) {
           if( listResponse.error !== "okay" ){
