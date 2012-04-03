@@ -1,5 +1,7 @@
 define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
   
+  var DEFAULT_AUTH_BUTTON_TEXT = "Login / Sign Up";
+
   return function( butter, options ){
 
     options = options || {};
@@ -17,13 +19,15 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       '    <button id="butter-header-save">Save</button>' +
       '    <button id="butter-header-load">Load</button>' +
       '    <button id="butter-header-share">Share</button>' +
-      '    <button id="butter-header-auth">Login</button> |' + 
+      '    <button id="butter-header-auth">' + DEFAULT_AUTH_BUTTON_TEXT + '</button>' + 
       '    <button id="butter-header-auth-out">Logout</button>' +
       '</div>';
 
     _rootElement.setAttribute( "data-butter-exclude", true );
 
     document.body.insertBefore( _rootElement, document.body.firstChild );
+
+    document.body.classList.add( "butter-header-spacing" );
 
     var newButton = document.getElementById( "butter-header-new" ),
         saveButton = document.getElementById( "butter-header-save" ),
@@ -32,7 +36,29 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
         authButton = document.getElementById( "butter-header-auth" ),
         logoutButton = document.getElementById( "butter-header-auth-out" );
 
-    var oldDisplayProperty = saveButton.style.display;
+    var _oldDisplayProperty = logoutButton.style.display;
+    logoutButton.style.display = "none";
+
+    function doAuth( successCallback, errorCallback ){
+      butter.cornfield.login(function( response ){
+        if( response.status === "okay" ){
+          var email = response.email;
+          butter.cornfield.list(function( listResponse ) {
+            authButton.innerHTML = email;
+            logoutButton.style.display = _oldDisplayProperty;
+            if( successCallback ){
+              successCallback();
+            }
+          });
+        }
+        else{
+          showErrorDialog( "There was an error logging in. Please try again." );
+          if( errorCallback ){
+            errorCallback();
+          }
+        }
+      });      
+    }
 
     newButton.addEventListener( "click", function( e ){
       var dialog = new IFrameDialog({
@@ -54,37 +80,18 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
 
     authButton.addEventListener( "click", function( e ){
       if( !butter.cornfield.user() ){
-        butter.cornfield.login(function( response ){
-          if( response.status === "okay" ){
-            var email = response.email;
-            butter.cornfield.list(function( listResponse ) {
-              authButton.innerHTML = email;
-              saveButton.style.display = oldDisplayProperty;
-              loadButton.style.display = oldDisplayProperty;
-              shareButton.style.display = oldDisplayProperty;
-            });
-          }
-          else{
-            showErrorDialog( "There was an error logging in. Please try again." );
-          }
-        });
+        doAuth();
       }
     }, false );
 
     logoutButton.addEventListener( "click", function( e ){
       if( butter.cornfield.user() ){
         butter.cornfield.logout(function( response ){
-          authButton.innerHTML = "Login";
-          saveButton.style.display = "none";
-          loadButton.style.display = "none";
-          shareButton.style.display = "none";
+          logoutButton.style.display = "none";
+          authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
         });
       }
     });
-
-    saveButton.style.display = "none";
-    loadButton.style.display = "none";
-    shareButton.style.display = "none";
 
     function showErrorDialog( message, callback ){
       var dialog = new IFrameDialog({
@@ -106,6 +113,19 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       dialog.open();
     }
 
+    shareButton.addEventListener( "click", function( e ){
+      function prepare(){
+
+      }
+
+      if( !butter.cornfield.user() ){
+        doAuth( prepare );
+      }
+      else{
+        prepare();
+      }
+    }, false );
+
     saveButton.addEventListener( "click", function( e ){
 
       function doSave(){
@@ -121,66 +141,20 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
         });
       }
 
-      if( !butter.project.name ){
-        var dialog = new IFrameDialog({
-          type: "iframe",
-          modal: true,
-          url: "../dialogs/save-as.html",
-          events: {
-            open: function( e ){
-              dialog.send( "name", null );
-            },
-            submit: function( e ){
-              butter.project.name = e.data;
-              dialog.close();
-              doSave();
-            },
-            cancel: function( e ){
-              dialog.close();
-            }
-          }
-        });
-        dialog.open();
-      }
-      else{
-        doSave();
-      }
-    }, false );
-
-    loadButton.addEventListener( "click", function( e ){
-      butter.cornfield.list(function( listResponse ) {
-        if( listResponse.error !== "okay" ){
-          showErrorDialog( "There was an error loading your projects. Please try again." );
-          return;
-        }
-        else{
+      function prepare() {
+        if( !butter.project.name ){
           var dialog = new IFrameDialog({
             type: "iframe",
             modal: true,
-            url: "../dialogs/load-project.html",
+            url: "../dialogs/save-as.html",
             events: {
               open: function( e ){
-                dialog.send( "list", listResponse.projects );
+                dialog.send( "name", null );
               },
               submit: function( e ){
+                butter.project.name = e.data;
                 dialog.close();
-                butter.cornfield.load( e.data, function( e ){
-                  if( e.error === "okay" ){
-                    var projectData;
-                    try{
-                      projectData = JSON.parse( e.project );
-                    }
-                    catch( e ){
-                      showErrorDialog( "Your project could not be loaded. Please try another." );
-                      return;
-                    }
-                    butter.clearProject();
-                    butter.importProject( projectData );
-                  }
-                  else{
-                    showErrorDialog( "Your project could not be loaded. Please try another." );
-                  }
-                });
+                doSave();
               },
               cancel: function( e ){
                 dialog.close();
@@ -189,7 +163,71 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
           });
           dialog.open();
         }
-      });
+        else{
+          doSave();
+        }
+      }
+
+      if( !butter.cornfield.user() ){
+        doAuth( prepare );
+      }
+      else{
+        prepare();
+      }
+    }, false );
+
+    loadButton.addEventListener( "click", function( e ){
+      function prepare(){
+        butter.cornfield.list(function( listResponse ) {
+          if( listResponse.error !== "okay" ){
+            showErrorDialog( "There was an error loading your projects. Please try again." );
+            return;
+          }
+          else{
+            var dialog = new IFrameDialog({
+              type: "iframe",
+              modal: true,
+              url: "../dialogs/load-project.html",
+              events: {
+                open: function( e ){
+                  dialog.send( "list", listResponse.projects );
+                },
+                submit: function( e ){
+                  dialog.close();
+                  butter.cornfield.load( e.data, function( e ){
+                    if( e.error === "okay" ){
+                      var projectData;
+                      try{
+                        projectData = JSON.parse( e.project );
+                      }
+                      catch( e ){
+                        showErrorDialog( "Your project could not be loaded. Please try another." );
+                        return;
+                      }
+                      butter.clearProject();
+                      butter.importProject( projectData );
+                    }
+                    else{
+                      showErrorDialog( "Your project could not be loaded. Please try another." );
+                    }
+                  });
+                },
+                cancel: function( e ){
+                  dialog.close();
+                }
+              }
+            });
+            dialog.open();
+          }
+        });
+      }
+
+      if( !butter.cornfield.user() ){
+        doAuth( prepare );
+      }
+      else{
+        prepare();
+      }
     }, false );
 
     function setup(){

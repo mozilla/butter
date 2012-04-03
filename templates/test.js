@@ -32,11 +32,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             target: "Area2"
           }
         });
-
-        setTimeout( function(){
-          butter.clearProject();
-          butter.importProject( __project );
-        }, 3000);
       }
 
       media.onReady( start );
