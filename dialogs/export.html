@@ -1,0 +1,78 @@
+<!--  This Source Code Form is subject to the terms of the MIT license
+      If a copy of the MIT license was not distributed with this file, you can
+      obtain one at http://www.mozillapopcorn.org/butter-license.txt -->
+
+<html>
+  <head>
+    <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
+    <script type="text/javascript">
+      (function(){
+
+        var _comm = new Comm();
+
+        document.addEventListener( "DOMContentLoaded", function( e ){
+          var closeButton = document.getElementById( "close" ),
+              jsonExport = document.getElementById( "json-export" ),
+              htmlExport = document.getElementById( "html-export" );
+
+          function closePressed( e ){
+            _comm.send( "close" );
+          } //cancelPressed
+
+          document.addEventListener( "keypress", function( e ) {
+            if( e.currentTarget.nodeName !== "TEXTAREA" && [ 13, 27 ].indexOf( e.keyCode ) > -1 ){
+              closePressed( e );
+            } //if
+          }, false);
+
+          closeButton.addEventListener( "click", closePressed, false );
+
+          _comm.listen( "export", function( e ){
+            jsonExport.value = e.data.json;
+            htmlExport.value = e.data.html;
+            closeButton.removeAttribute( "disabled" );
+          });
+        }, false );
+      }());
+    </script>
+    <link rel="stylesheet" href="dialog.css" />
+    <style>
+      #text-container textarea {
+        width: 90%;
+        height: 70%;
+        margin-top: 5%;
+        margin-left: 5%;
+        resize: none;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+      }
+
+      #text-container{
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-width: 500px;
+        min-height: 300px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container" class="hbox center">
+      <div class="hbox vbox center">
+        <h1>Data for <span id="track-name"></span></h1>
+        <div id="text-container">
+          <textarea readonly id="json-export">Please wait...</textarea>
+          <textarea readonly id="html-export">Please wait...</textarea>
+        </div>
+        <div id="buttons" class="hbox center">
+          <button disabled id="close">Close</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

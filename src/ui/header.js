@@ -12,6 +12,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
         _loadButton,
         _shareButton,
         _authButton,
+        _exportButton,
         _logoutButton;
 
     var title = options.title || "Butter";
@@ -22,6 +23,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       '    <button id="butter-header-new">New</button>' +
       '    <button id="butter-header-save">Save</button>' +
       '    <button id="butter-header-load">Load</button>' +
+      '    <button id="butter-header-export">Export</button>' +
       '    <button id="butter-header-share">Share</button>' +
       '    <button id="butter-header-auth">' + DEFAULT_AUTH_BUTTON_TEXT + '</button>' + 
       '    <button id="butter-header-auth-out">Logout</button>' +
@@ -37,7 +39,10 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
     _loadButton = document.getElementById( "butter-header-load" );
     _shareButton = document.getElementById( "butter-header-share" );
     _authButton = document.getElementById( "butter-header-auth" );
+    _exportButton = document.getElementById( "butter-header-export" );
     _logoutButton = document.getElementById( "butter-header-auth-out" );
+
+    document.body.classList.add( "butter-header-spacing" );
 
     var _oldDisplayProperty = _logoutButton.style.display;
     _logoutButton.style.display = "none";
@@ -62,6 +67,30 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
         }
       });      
     }
+
+    _exportButton.addEventListener( "click", function( e ){
+
+      var exportPackage = {
+        html: butter.getHTML(),
+        json: butter.exportProject()
+      }
+
+      var dialog = new IFrameDialog({
+        type: "iframe",
+        modal: true,
+        url: "../dialogs/export.html",
+        events: {
+          open: function(){
+            dialog.send( "export", exportPackage );
+          },
+          cancel: function( e ){
+            dialog.close();
+          }
+        }
+      });
+      dialog.open();      
+
+    }, false );
 
     _newButton.addEventListener( "click", function( e ){
       var dialog = new IFrameDialog({
