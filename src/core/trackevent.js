@@ -92,7 +92,7 @@ define( [
           failed = "invalidtime";
         }
       }
-      console.log( _popcornOptions );
+      
       _view.update( _popcornOptions );
       _this.popcornOptions = _popcornOptions;
 
