@@ -122,7 +122,5 @@ define( [
         }
       }
     });
-
   }; //IFrameDialog
-
 });
