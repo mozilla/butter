@@ -254,25 +254,24 @@
 }
 
 #butter-header-export {
-  background: #c22f02; /* Old browsers */
-  background: -moz-linear-gradient(top,  #c22f02 0%, #c42f02 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c22f02), color-stop(100%,#c42f02)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  #c22f02 0%,#c42f02 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  #c22f02 0%,#c42f02 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  #c22f02 0%,#c42f02 100%); /* IE10+ */
-  background: linear-gradient(top,  #c22f02 0%,#c42f02 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c22f02', endColorstr='#c42f02',GradientType=0 ); /* IE6-9 */
+  background: #D1BE70;
+  background: -moz-linear-gradient(top, #D1BE70 0%, #A08546 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#A08546));
+  background: -webkit-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: -o-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: -ms-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: linear-gradient(top, #D1BE70);
+  box-shadow: none;
 }
 
 #butter-header-export:hover {
-  background: #e23602; /* Old browsers */
-  background: -moz-linear-gradient(top,  #e23602 0%, #e43702 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e23602), color-stop(100%,#e43702)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  #e23602 0%,#e43702 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  #e23602 0%,#e43702 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  #e23602 0%,#e43702 100%); /* IE10+ */
-  background: linear-gradient(top,  #e23602 0%,#e43702 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e23602', endColorstr='#e43702',GradientType=0 ); /* IE6-9 */
+  background: #D1BE70;
+  background: -moz-linear-gradient(top, #D1BE70 0%, #AD9B4C 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#AD9B4C));
+  background: -webkit-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: -o-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: -ms-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
 }
 
 #butter-header-share {
