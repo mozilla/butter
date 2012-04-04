@@ -42,7 +42,7 @@
           _id = "Butter" + __guid++,
           _logger = new Logger( _id ),
           _em = new EventManager( this ),
-          _page = new Page(),
+          _page,
           _config = {
             ui: {},
             icons: {}
@@ -539,6 +539,8 @@
 
         //prepare modules first
         var moduleCollection = Modules( _this, _config );
+
+        _page = new Page( _config );
 
         //prepare the page next
         preparePage(function(){
