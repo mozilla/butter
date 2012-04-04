@@ -45,8 +45,15 @@
           closeButton.addEventListener( "click", closePressed, false );
 
           _comm.listen( "export", function( e ){
-            jsonExport.value = e.data.json;
+            try{
+              jsonExport.value = JSON.stringify( e.data.json );
+            }
+            catch( e ){
+              jsonExport.value = "There was an error trying to parse the JSON blob for this project. Please file a bug at https://webmademovies.lighthouseapp.com/projects/65733-butter/ and let us know.";
+            }
             htmlExport.value = e.data.html;
+            htmlButton.removeAttribute( "disabled" );
+            jsonButton.removeAttribute( "disabled" );
             closeButton.removeAttribute( "disabled" );
           });
         }, false );
