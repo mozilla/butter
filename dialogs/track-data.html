@@ -7,7 +7,7 @@
     <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
     <script type="text/javascript">
       (function(){
-
+        return;
         var _comm = new Comm();
 
         document.addEventListener( "DOMContentLoaded", function( e ){
@@ -53,33 +53,26 @@
         }, false );
       }());
     </script>
+    <script>
+      setTimeout(function(){
+        document.body.setAttribute("data-error", true);
+      }, 500);
+    </script>
     <link rel="stylesheet" href="dialog.css" />
     <style>
-      #track-data {
-        width: 90%;
-        height: 70%;
-        margin-top: 5%;
-        margin-left: 5%;
-        resize: none;
-      }
-
-      #error {
-        color: red;
-        font-size: 200%;
-      }
     </style>
   </head>
   <body>
+    <h1>Data for <span id="track-name"></span></h1>
     <div id="container" class="hbox center">
-      <div class="hbox vbox center">
-        <h1>Data for <span id="track-name"></span></h1>
-        <textarea readonly id="track-data">Please wait...</textarea>
-        <div id="error"></div>
-        <div id="buttons" class="hbox center">
-          <button disabled id="ok">Ok</button>
-          <button disabled id="close">Close</button>
-        </div>
+      <div id="content" class="vbox center">
+        <textarea class="main-textarea" readonly id="track-data">Please wait...</textarea>
       </div>
     </div>
+    <div id="error">Borp</div>
+    <div id="buttons" class="vbox center">
+      <button disabled id="ok">Ok</button>
+    </div>
+    <div id="close-button"></div>
   </body>
 </html>

@@ -1,8 +1,21 @@
+html {
+  background: #cccccc; /* Old browsers */
+  background: -moz-linear-gradient(top, #cccccc 0%, #878787 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cccccc), color-stop(100%,#878787)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #cccccc 0%,#878787 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #cccccc 0%,#878787 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #cccccc 0%,#878787 100%); /* IE10+ */
+  background: linear-gradient(top, #cccccc 0%,#878787 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#878787',GradientType=0 ); /* IE6-9 */
+}
+
 html, body {
-  height: 100%;
   width: 100%;
-  margin: 0;
-  padding: 0;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  max-height: 100%;
+  max-width: 100%;
 }
 
 .hbox {
@@ -33,6 +46,36 @@ html, body {
   box-align: stretch;
 }
 
+#close-button {
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  background-image: url( "assets/close-button.png" );
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 30px;
+  height: 30px;
+}
+
+#error {
+  display: none;
+  position: fixed;
+  width: 100%;
+  bottom: 40px;
+  height: 20px;
+  text-align: center;
+  color: #900;
+  font: 20px verdana;
+}
+
+body[data-error] #error {
+  display: block;
+}
+
+body[data-error] #container {
+  margin-bottom: 65px;
+}
+
 .center {
   -webkit-box-pack: center;
   -moz-box-pack: center;
@@ -40,17 +83,44 @@ html, body {
 }
 
 #container {
+  position: fixed;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 45px;
+  -moz-transition: margin-bottom 0.5s;
+  -webkit-transition: margin-bottom 0.5s;
+  transition: margin-bottom 0.5s;
+}
+
+#content {
   width: 100%;
   height: 100%;
 }
 
 #buttons {
+  position: fixed;
   width: 100%;
-  margin: 5px;
+  bottom: 0px;
+  height: 35px;
+  text-align: center;
+}
+
+.main-textarea {
+  width: 100%;
+  height: 100%;
+  resize: none;
 }
 
 h1 {
-  margin-bottom: 5px;
+  position: fixed;
+  height: 40px;
+  width: 100%;
+  margin: 0px;
+  text-align: center;
+  font: 35px verdana;
+  color: #fff;
 }
 
 button {
