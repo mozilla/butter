@@ -4,20 +4,34 @@
 
 (function() {
 
+  var __debug = true;
+
   define( [], function() {
 
-    return function( name ) {
+    function logger( name ) {
 
       this.log = function( message ) {
-        console.log( "[" + name + "] " + message );
+        if ( __debug ) {
+          console.log( "[" + name + "] " + message );
+        }
       }; //log
 
       this.error = function( message ) {
-        throw new Error( "[" + name + "]" + message ); 
+        if ( __debug ) {
+          throw new Error( "[" + name + "]" + message ); 
+        }
       }; //error
 
-    }; //Logger
+    } //Logger
 
+    logger.debug = function( value ) {
+      if ( value !== undefined ) {
+        __debug = value;
+      } else {
+        return __debug;
+      }
+    }
+
+    return logger;
   }); //define
-
 })();

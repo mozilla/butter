@@ -14,6 +14,7 @@
 
     Butter({
       config: "../config/test.conf",
+      debug: false,
       ready: function( butter ){
         callback( butter );
         start();
@@ -611,4 +612,27 @@
     });
   });
 
+  module( "Debug functionality" );
+  asyncTest( "Debug enables/disables logging", 4, function() {
+    createButter(function( butter ) {
+      var count = 0;
+      equals( butter.debug, false, "debugging is initially false, logging should be enabled" );
+      console.log = function() {
+        count++;
+      };
+      function ready() {
+        equals( count, 0, "No logging was done, debug is correctly suppressing events" );
+        butter.debug = true;
+        equals( butter.debug, true, "debug setter working correctly" );
+        butter.unlisten( "mediaready", ready );
+        butter.listen( "mediaready", function() {
+          equals( count, 1, "1 log was caught, events are being logged again" );
+          start();
+        });
+        butter.addMedia({ url: "../external/popcorn-js/test/trailer.ogv", target: "mediaDiv" });
+      }
+      butter.listen( "mediaready", ready );
+      butter.addMedia({ url: "../external/popcorn-js/test/trailer.ogv", target: "mediaDiv" });
+    });
+  });
 })(window, window.document );
