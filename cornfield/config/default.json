@@ -1,0 +1,15 @@
+{
+  "server" : {
+    "bindIP" : "127.0.0.1",
+    "bindPort" : "8888"
+  },
+  "logger" : {
+    "format" : "dev"
+  },
+  "session" : {
+    "secret": "thisisareallyreallylongsecrettoencryptcookies"
+  },
+  "templates": {
+    "root": "../templates"
+  }
+}

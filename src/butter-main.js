@@ -51,6 +51,13 @@
           _this = this,
           _selectedEvents = [];
 
+      this.project = {
+        id: null,
+        name: null,
+        data: null,
+        html: null
+      };
+
       function checkMedia() {
         if ( !_currentMedia ) {
           throw new Error("No media object is selected");

@@ -14,31 +14,36 @@
     return s.join("&").replace("/%20/g", "+");
   }
 
+  var __types = {
+    form: "application/x-www-form-urlencoded",
+    json: "application/json"
+  };
+
   define( [], function() {
 
     var XHR = {
       "get": function(url, callback) {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url, true);
-        xhr.withCredentials = "true";
         xhr.onreadystatechange = callback;
         xhr.send(null);
       },
-      "post": function(url, data, callback) {
+      "post": function(url, data, callback, type) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
-        xhr.withCredentials = "true";
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.onreadystatechange = callback;
-        xhr.send(parameterize(data));
-      },
-      "put": function(url, data, callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("PUT", url, true);
-        xhr.withCredentials = "true";
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = callback;
-        xhr.send(parameterize({data: data}));
+        if( !type || type === "form" ){
+          xhr.setRequestHeader("Content-Type", __types.form);
+          xhr.send(parameterize(data));
+        }
+        else if( __types[ type ] ){
+          xhr.setRequestHeader("Content-Type", __types[ type ]);
+          xhr.send(data);
+        }
+        else{
+          xhr.setRequestHeader("Content-Type", "text/plain");
+          xhr.send(data);
+        }
       }
     };
 

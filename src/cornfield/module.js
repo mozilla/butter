@@ -10,7 +10,7 @@ define(['util/xhr'], function(XHR) {
 
   var Cornfield = function( butter, config ) {
 
-    var email = "",
+    var email = null,
         server = config.server,
         authType = config.authType || "browserid";
 
@@ -51,6 +51,7 @@ define(['util/xhr'], function(XHR) {
 
     this.logout = function(callback) {
       XHR.get(server + "/browserid/logout", function() {
+        email = null;
         if (this.readyState === 4) {
           try {
             var response = JSON.parse(this.response);
@@ -63,7 +64,7 @@ define(['util/xhr'], function(XHR) {
     };
 
     this.list = function(callback) {
-      XHR.get(server + "/files", function() {
+      XHR.get(server + "/projects", function() {
         if (this.readyState === 4) {
           try {
             var response = JSON.parse(this.response);
@@ -73,19 +74,15 @@ define(['util/xhr'], function(XHR) {
           }
         }
       });
+    };
+
+    this.refreshLoad = function( id ) {
+      window.location = server + "/load/" + id;
     };
 
     // XXX I need to figure out a better API for this
-    this.pull = function(name, callback) {
-      XHR.get(server + "/files/" + name, function() {
-        if (this.readyState === 4) {
-          callback(this.response);
-        }
-      });
-    };
-
-    this.push = function(name, data, callback) {
-      XHR.put(server + "/files/" + name, data, function() {
+    this.load = function(id, callback) {
+      XHR.get(server + "/project/" + id, function() {
         if (this.readyState === 4) {
           try {
             var response = JSON.parse(this.response);
@@ -95,6 +92,32 @@ define(['util/xhr'], function(XHR) {
           }
         }
       });
+    };
+
+    this.save = function(data, callback) {
+      XHR.post(server + "/project/", data, function() {
+        if (this.readyState === 4) {
+          try {
+            var response = JSON.parse(this.response);
+            callback(response);
+          } catch (err) {
+            callback({ error: "an unknown error occured" });
+          }
+        }
+      });
+    };
+
+    this.saveas = function(id, data, callback) {
+      XHR.post(server + "/project/" + id, data, function() {
+        if (this.readyState === 4) {
+          try {
+            var response = JSON.parse(this.response);
+            callback(response);
+          } catch (err) {
+            callback({ error: "an unknown error occured" });
+          }
+        }
+      }, "json" );
     };
   };
 
