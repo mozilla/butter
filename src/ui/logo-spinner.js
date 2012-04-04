@@ -17,16 +17,17 @@ define([], function(){
     return {
       element: outerElement,
       start: function(){
+        outerElement.classList.remove( "fade-out" );
         innerElement.classList.add( "active" );
       },
-      stop: function(){
-        innerElement.classList.remove( "active" );
-      },
-      show: function(){
-        outerElement.classList.remove( "fade-out" );
-      },
-      hide: function(){
+      stop: function( callback ){
         outerElement.classList.add( "fade-out" );
+        setTimeout(function(){
+          innerElement.classList.remove( "active" );
+          if( callback ){
+            callback();
+          }
+        }, 500 );
       }
     };
 

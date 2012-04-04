@@ -374,14 +374,22 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     _toggler.visible = false;
     _this.visible = false;
 
-    _logoSpinner.start();
+    this.loadIndicator = {
+      start: function(){
+        _logoSpinner.start();
+        logoContainer.style.display = "block";
+      },
+      stop: function(){
+        _logoSpinner.stop(function(){
+          logoContainer.style.display = "none";
+        });
+      }
+    }
+    
+    _this.loadIndicator.start();
 
     butter.listen( "ready", function(){
-      _logoSpinner.hide();
-      setTimeout( function(){
-        _logoSpinner.stop();
-        logoContainer.style.display = "none";
-      }, 500 );
+      _this.loadIndicator.stop();
       _this.visible = true;
       _toggler.visible = true;
       ContextButton( butter );
