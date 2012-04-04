@@ -298,7 +298,7 @@
 }
 
 #butter-header-auth {
-  font-family: verdana;
+  font-family: verdana !important;
   border-radius: 0px !important;
   background-color: transparent !important;
   margin-left: 10px;
@@ -1153,8 +1153,8 @@
 
 #butter-tray #butter-plugin .list {
   position: relative;
-  top: 12px;
-  padding-left: 1px;
+  top: 18px;
+  padding-left: 5px;
   height: 105px;
   width: 100px;
   overflow: hidden;
