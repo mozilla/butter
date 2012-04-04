@@ -192,7 +192,8 @@
 #butter-header button, #butter-header a.button {
   font-family: 'BebasRegular';
   font-size: 12px;
-  display: inline-block;
+  float: left;
+  margin: 0 5px 0 0;
   text-align: center;
   text-decoration: none;
   border-radius: 5px;
