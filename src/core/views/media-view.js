@@ -11,14 +11,7 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
         _this = this;
 
     _propertiesElement.className = "butter-media-properties";
-
-    _propertiesElement.addEventListener( "mouseover", function( e ){
-
-    }, false );
-
-    _propertiesElement.addEventListener( "mouseout", function( e ){
-
-    }, false );
+    _propertiesElement.setAttribute( "data-butter-exclude", true );
 
     var urlTextbox = document.createElement( "input" );
     urlTextbox.type = "text";

@@ -1,0 +1,103 @@
+<!--  This Source Code Form is subject to the terms of the MIT license
+      If a copy of the MIT license was not distributed with this file, you can
+      obtain one at http://www.mozillapopcorn.org/butter-license.txt -->
+
+<html>
+  <head>
+    <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
+    <script type="text/javascript">
+      (function(){
+
+        var _comm = new Comm();
+
+        document.addEventListener( "DOMContentLoaded", function( e ){
+          var closeButton = document.getElementById( "close" ),
+              jsonButton = document.getElementById( "json-button" ),
+              htmlButton = document.getElementById( "html-button" ),
+              jsonExport = document.getElementById( "json-export" ),
+              htmlExport = document.getElementById( "html-export" ),
+              title = document.getElementById( "title" );
+
+          function closePressed( e ){
+            _comm.send( "close" );
+          } //cancelPressed
+
+          document.addEventListener( "keypress", function( e ) {
+            if( e.currentTarget.nodeName !== "TEXTAREA" && [ 13, 27 ].indexOf( e.keyCode ) > -1 ){
+              closePressed( e );
+            } //if
+          }, false);
+
+          jsonButton.addEventListener( "click", function( e ){
+            title.innerHTML = "Project JSON Data";
+            htmlExport.style.display = "none";
+            jsonExport.style.display = "block";
+          }, false );
+
+          htmlButton.addEventListener( "click", function( e ){
+            title.innerHTML = "HTML Export";
+            htmlExport.style.display = "block";
+            jsonExport.style.display = "none";
+          }, false );
+
+          title.innerHTML = "HTML Export";
+
+          closeButton.addEventListener( "click", closePressed, false );
+
+          _comm.listen( "export", function( e ){
+            jsonExport.value = e.data.json;
+            htmlExport.value = e.data.html;
+            closeButton.removeAttribute( "disabled" );
+          });
+        }, false );
+      }());
+    </script>
+    <link rel="stylesheet" href="dialog.css" />
+    <style>
+      #text-container textarea {
+        width: 100%;
+        height: 100%;
+        resize: none;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        min-width: 500px;
+        min-height: 300px;
+      }
+
+      #text-container{
+        position: relative;
+        min-width: 500px;
+        min-height: 300px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      #close{
+        margin-left: 30px;
+      }
+
+      #json-export {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container" class="hbox center">
+      <div class="hbox vbox center">
+        <h1><span id="title"></span></h1>
+        <div id="text-container">
+          <textarea readonly id="json-export">Please wait...</textarea>
+          <textarea readonly id="html-export">Please wait...</textarea>
+        </div>
+        <div id="buttons" class="hbox center">
+          <button disabled id="json-button">Get JSON</button>
+          <button disabled id="html-button">Get HTML</button>
+          <button disabled id="close">Close</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -9,7 +9,9 @@
   "session" : {
     "secret": "thisisareallyreallylongsecrettoencryptcookies"
   },
-  "templates": {
-    "root": "../templates"
+  "dirs": {
+    "templates": "../templates",
+    "publish": "view",
+    "publishPrefix": "http://localhost:8888/cornfield/"
   }
 }
