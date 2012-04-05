@@ -152,7 +152,6 @@ body[data-error] #container {
 }
 
 .button-blue {
-  width: 100px !important;
   background: #D1BE70;
   background: -moz-linear-gradient(top, #26B5D8 0%, #2B86D4 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#26B5D8), color-stop(100%,#2B86D4));
@@ -173,7 +172,6 @@ body[data-error] #container {
   background: linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
 }
 
-
 .main-textarea {
   width: 100%;
   height: 100%;
@@ -181,14 +179,20 @@ body[data-error] #container {
 }
 
 h1 {
-  position: fixed;
-  height: 40px;
-  width: 100%;
-  margin: 0px;
-  text-align: center;
   font: 35px 'MetaBold';
   color: #fff;
   line-height: 40px;
+  height: 40px;
+  width: 100%;
+  text-align: center;
+}
+
+body > h1 {
+  position: fixed;
+  margin: 0px;
+}
+
+#content > h1{
 }
 
 button {
@@ -203,4 +207,5 @@ button {
   color: white;
   font-family: 'BebasRegular';
   font-size: 18px;
+  min-width: 100px;
 }

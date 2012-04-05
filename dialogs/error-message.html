@@ -4,36 +4,18 @@
 
 <html>
   <head>
-    <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
+    <script type="text/javascript" src="dialog.js"></script>
     <script type="text/javascript">
-      (function(){
-        var _comm = new Comm();
+      Dialog.ready(function(){
+        var message = document.getElementById( "message" );
 
-        document.addEventListener( "DOMContentLoaded", function( e ){
-          var okButton = document.getElementById( "yes" ),
-              message = document.getElementById( "message" );
-
-          function okPressed( e ){
-            _comm.send( "cancel" );
-          }
-
-          document.addEventListener( "keypress", function( e ) {
-            if( e.keyCode === 13 ) {
-              okPressed( e );
-            } else if( e.keyCode === 27 ) {
-              okPressed( e );
-            }
-          }, false);
-
-          _comm.listen( "message", function( e ){
-            message.innerHTML = e.data;
-            okButton.removeAttribute( "disabled" );
-          });
-
-          okButton.addEventListener( "click", okPressed, false );
-
-        }, false );
-      }());
+        Dialog.wait( "message", function( e ){
+          message.innerHTML = e.data;
+          Dialog.enableCloseButton();
+          Dialog.assignEscapeKey( "close" );
+          Dialog.assignEnterKey( "ok" );
+        });
+      });
     </script>
     <link rel="stylesheet" href="dialog.css" />
     <style>
@@ -49,11 +31,9 @@
   <body>
     <div id="container" class="hbox center">
       <div class="vbox center">
-        <h1><span id="message"></span></h1>
-        <div id="buttons" class="hbox center">
-          <button disabled id="yes">Ok</button>
-        </div>
+        <h1><span id="message">Error</span></h1>
       </div>
     </div>
+    <div id="close-button"></div>
   </body>
 </html>

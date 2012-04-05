@@ -90,11 +90,15 @@
     unlisten: __comm.unlisten,
     send: __comm.send,
 
+    activity: function( activityName ){
+      __activities[ activityName ]();
+    },
+
     enableCloseButton: function(){
       var closeButton = document.getElementById( "close-button" );
       if( closeButton ){
         closeButton.addEventListener( "click", function( e ){
-          __comm.send( "cancel" );
+          Dialog.activity( "default-close" );
         }, false );
       }
     },
@@ -113,7 +117,7 @@
 
     assignEnterKey: function( activityName ){
       document.addEventListener( "keydown", function( e ){
-        if( __keyboardAvoidElements.indexOf( e.currentTarget.nodeName ) === -1 && ( e.which === 13 || e.keyCode === 13 ) ){
+        if( __keyboardAvoidElements.indexOf( e.target.nodeName ) === -1 && ( e.which === 13 || e.keyCode === 13 ) ){
           __activities[ activityName ]( e );
         }
       }, false );
@@ -121,7 +125,7 @@
 
     assignEscapeKey: function( activityName ){
       document.addEventListener( "keydown", function( e ){
-        if( __keyboardAvoidElements.indexOf( e.currentTarget.nodeName ) === -1 && ( e.which === 27 || e.keyCode === 27 ) ){
+        if( __keyboardAvoidElements.indexOf( e.target.nodeName ) === -1 && ( e.which === 27 || e.keyCode === 27 ) ){
           __activities[ activityName ]( e );
         }
       }, false );
@@ -162,5 +166,13 @@
     }
 
   };
+
+  Dialog.registerActivity( "default-close", function(){
+    Dialog.send( "close" );
+  });
+
+  Dialog.registerActivity( "default-ok", function(){
+    Dialog.send( "submit", true );
+  });
 
 }());

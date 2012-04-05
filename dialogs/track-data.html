@@ -13,7 +13,7 @@
         Dialog.registerActivity( "update", function( e ){
           Dialog.listen( "trackupdated", function( e ) {
             if ( e.data ) {
-              Dialog.send( "close" );
+              Dialog.activity( "default-close" );
             } else {
               Dialog.showError( "Invalid JSON" );
             }
@@ -29,8 +29,8 @@
           trackData.value = JSON.stringify( e.data );
           Dialog.enableCloseButton();
           Dialog.enableElements( "update" );
-          Dialog.assignEscapeKey( "close" );
-          Dialog.assignEnterKey( "close" );
+          Dialog.assignEscapeKey( "default-close" );
+          Dialog.assignEnterKey( "default-close" );
           trackData.removeAttribute( "readonly" );
           trackData.addEventListener( "keypress", function( e ) {
             Dialog.hideError();
