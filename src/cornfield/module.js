@@ -18,6 +18,7 @@ define(['util/xhr'], function(XHR) {
       var script = document.createElement( "script" );
       script.src = "https://browserid.org/include.js";
       script.type = "text/javascript";
+      script.setAttribute( "data-butter-exlude", true );
       document.head.appendChild( script );
     }
 
