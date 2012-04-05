@@ -73,7 +73,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       var exportPackage = {
         html: butter.getHTML(),
         json: butter.exportProject()
-      }
+      };
 
       var dialog = new IFrameDialog({
         type: "iframe",

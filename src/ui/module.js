@@ -387,7 +387,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
           logoContainer.style.display = "none";
         });
       }
-    }
+    };
     
     _this.loadIndicator.start();
 
