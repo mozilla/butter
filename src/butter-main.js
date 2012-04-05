@@ -51,6 +51,10 @@
           _this = this,
           _selectedEvents = [];
 
+      if ( butterOptions.debug !== undefined ) {
+        Logger.debug( butterOptions.debug );
+      }
+
       this.project = {
         id: null,
         name: null,
@@ -460,6 +464,15 @@
           },
           set: function(selectedEvents) {
             _selectedEvents = selectedEvents;
+          },
+          enumerable: true
+        },
+        debug: {
+          get: function() {
+            return Logger.debug();
+          },
+          set: function( value ) {
+            Logger.debug( value );
           },
           enumerable: true
         }
