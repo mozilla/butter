@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>currentDocument</key>
+	<string>templates/default.js</string>
+	<key>documents</key>
+	<array>
+		<dict>
+			<key>expanded</key>
+			<true/>
+			<key>name</key>
+			<string>butter</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string></string>
+		</dict>
+	</array>
+	<key>fileHierarchyDrawerWidth</key>
+	<integer>200</integer>
+	<key>metaData</key>
+	<dict>
+		<key>templates/default.js</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>23</integer>
+				<key>line</key>
+				<integer>13</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>templates/index.html</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>46</integer>
+				<key>line</key>
+				<integer>4</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+	</dict>
+	<key>openDocuments</key>
+	<array>
+		<string>templates/index.html</string>
+		<string>templates/default.js</string>
+	</array>
+	<key>showFileHierarchyDrawer</key>
+	<true/>
+	<key>windowFrame</key>
+	<string>{{61, 162}, {1063, 671}}</string>
+</dict>
+</plist>
