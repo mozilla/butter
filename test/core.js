@@ -615,8 +615,10 @@
   module( "Debug functionality" );
   asyncTest( "Debug enables/disables logging", 4, function() {
     createButter(function( butter ) {
-      var count = 0;
+      var count = 0,
+          oldLog;
       equals( butter.debug, false, "debugging is initially false, logging should be enabled" );
+      oldLog = console.log;
       console.log = function() {
         count++;
       };
@@ -628,6 +630,7 @@
         butter.listen( "mediaready", function() {
           equals( count, 1, "1 log was caught, events are being logged again" );
           start();
+          console.log = oldLog;
         });
         butter.addMedia({ url: "../external/popcorn-js/test/trailer.ogv", target: "mediaDiv" });
       }

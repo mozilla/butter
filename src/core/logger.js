@@ -30,7 +30,7 @@
       } else {
         return __debug;
       }
-    }
+    };
 
     return logger;
   }); //define
