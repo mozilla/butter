@@ -99,11 +99,16 @@
       }
     },
 
-    error: function( message ){
+    showError: function( message ){
       var element = document.getElementById( "error" );
       if( element ){
         element.innerHTML = message;
+        document.body.setAttribute( "data-error", true );
       }
+    },
+
+    hideError: function(){
+      document.body.removeAttribute( "data-error" );
     },
 
     assignEnterKey: function( activityName ){

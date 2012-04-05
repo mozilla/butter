@@ -10,12 +10,12 @@
         var trackName = document.getElementById( "track-name" ),
             trackData = document.getElementById( "track-data" );
 
-        Dialog.registerActivity( "ok", "ok", function( e ){
+        Dialog.registerActivity( "update", function( e ){
           Dialog.listen( "trackupdated", function( e ) {
             if ( e.data ) {
               Dialog.send( "close" );
             } else {
-              Dialog.error( "Invalid JSON" );
+              Dialog.showError( "Invalid JSON" );
             }
           });
           Dialog.send( "submit", trackData.value );
@@ -31,8 +31,9 @@
           Dialog.enableElements( "update" );
           Dialog.assignEscapeKey( "close" );
           Dialog.assignEnterKey( "close" );
-          trackData.addEventListener( "change", function( e ) {
-            errorMessage.innerHTML = "";
+          trackData.removeAttribute( "readonly" );
+          trackData.addEventListener( "keypress", function( e ) {
+            Dialog.hideError();
           }, false );
         });
 
@@ -51,7 +52,7 @@
     </div>
     <div id="error"></div>
     <div id="buttons" class="vbox center">
-      <button id="update">Update</button>
+      <button class="button-blue" id="update">Update</button>
     </div>
     <div id="close-button"></div>
   </body>
