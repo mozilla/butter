@@ -4,59 +4,39 @@
 
 <html>
   <head>
-    <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
+    <script type="text/javascript" src="dialog.js"></script>
     <script type="text/javascript">
-      (function(){
-        return;
-        var _comm = new Comm();
+      Dialog.ready(function(){
+        var trackName = document.getElementById( "track-name" ),
+            trackData = document.getElementById( "track-data" );
 
-        document.addEventListener( "DOMContentLoaded", function( e ){
-          var closeButton = document.getElementById( "close" ),
-              okButton = document.getElementById( "ok" ),
-              trackName = document.getElementById( "track-name" ),
-              errorMessage = document.getElementById( "error" ),
-              trackData = document.getElementById( "track-data" );
+        Dialog.registerActivity( "ok", "ok", function( e ){
+          Dialog.listen( "trackupdated", function( e ) {
+            if ( e.data ) {
+              Dialog.send( "close" );
+            } else {
+              Dialog.error( "Invalid JSON" );
+            }
+          });
+          Dialog.send( "submit", trackData.value );
+        });
 
-          function closePressed( e ){
-            _comm.send( "close" );
-          } //cancelPressed
+        Dialog.assignButton( "update", "update" );
+        Dialog.disableElements( "update" );
 
-          document.addEventListener( "keypress", function( e ) {
-            if( e.currentTarget.nodeName !== "TEXTAREA" && [ 13, 27 ].indexOf( e.keyCode ) > -1 ){
-              closePressed( e );
-            } //if
-          }, false);
-
-          function okPressed() {
-            _comm.listen( "trackupdated", function( e ) {
-              if ( e.data ) {
-                _comm.send( "close" );
-              } else {
-                errorMessage.innerHTML = "Invalid JSON";
-              }
-            });
-            _comm.send( "submit", trackData.value );
-          }
-
-          okButton.addEventListener( "click", okPressed, false );
-          closeButton.addEventListener( "click", closePressed, false );
-          trackData.addEventListener( "click", function( e ) {
+        Dialog.wait( "trackdata", function( e ){
+          trackName.innerHTML = e.data.name;
+          trackData.value = JSON.stringify( e.data );
+          Dialog.enableCloseButton();
+          Dialog.enableElements( "update" );
+          Dialog.assignEscapeKey( "close" );
+          Dialog.assignEnterKey( "close" );
+          trackData.addEventListener( "change", function( e ) {
             errorMessage.innerHTML = "";
           }, false );
+        });
 
-          _comm.listen( "trackdata", function( e ){
-            trackName.innerHTML = e.data.name;
-            trackData.value = JSON.stringify( e.data );
-            closeButton.removeAttribute( "disabled" );
-            okButton.removeAttribute( "disabled" );
-          });
-        }, false );
-      }());
-    </script>
-    <script>
-      setTimeout(function(){
-        document.body.setAttribute("data-error", true);
-      }, 500);
+      });
     </script>
     <link rel="stylesheet" href="dialog.css" />
     <style>
@@ -69,9 +49,9 @@
         <textarea class="main-textarea" readonly id="track-data">Please wait...</textarea>
       </div>
     </div>
-    <div id="error">Borp</div>
+    <div id="error"></div>
     <div id="buttons" class="vbox center">
-      <button disabled id="ok">Ok</button>
+      <button id="update">Update</button>
     </div>
     <div id="close-button"></div>
   </body>
