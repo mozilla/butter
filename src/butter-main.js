@@ -77,9 +77,8 @@
         return _page.getHTML( media );
       }; //getHTML
 
-      function trackEventRequested( e, media, target ){
+      function trackEventRequested( element, media, target ){
         var track,
-            element = e.data.element,
             type = element.getAttribute( "data-butter-plugin-type" ),
             start = media.currentTime,
             end;
@@ -125,7 +124,7 @@
 
       function targetTrackEventRequested( e ){
         if( _currentMedia ){
-          var trackEvent = trackEventRequested( e, _currentMedia, e.target.elementID );
+          var trackEvent = trackEventRequested( e.data.element, _currentMedia, e.target.elementID );
           _em.dispatch( "trackeventcreated", {
             trackEvent: trackEvent,
             by: "target"
@@ -141,7 +140,7 @@
       }
 
       function mediaTrackEventRequested( e ){
-        var trackEvent = trackEventRequested( e, e.target, "Media Element" );
+        var trackEvent = trackEventRequested( e.data, e.target, "Media Element" );
         _em.dispatch( "trackeventcreated", {
           trackEvent: trackEvent,
           by: "media"

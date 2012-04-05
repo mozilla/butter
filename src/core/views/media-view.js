@@ -84,6 +84,10 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
       _logoSpinner.stop();
     });
 
+    this.blink = function(){
+      _pageElement.blink();
+    };
+
     this.update = function(){
       urlTextbox.value = media.url;
 
@@ -99,10 +103,8 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
         out: function( event ){
           _draggingOver = false;
         },
-        drop: function( event ){
-          if( event.currentTarget === _media ) {
-            _onDropped( event );
-          }//if
+        drop: function( element ){
+          _onDropped( element );
         }
       },
       {

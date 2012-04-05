@@ -30,9 +30,7 @@
           _duration = 0,
           _popcornOptions = mediaOptions.popcornOptions,
           _mediaUpdateInterval,
-          _view = new MediaView( this, {
-            onDropped: onDroppedOnView
-          }),
+          _view,
           _popcornWrapper = new PopcornWrapper( _id, {
             popcornEvents: {
               muted: function(){
@@ -90,6 +88,12 @@
           }),
           _this = this;
 
+      this.createView = function(){
+        _view = new MediaView( this, {
+          onDropped: onDroppedOnView
+        });
+      };
+
       this.destroy = function(){
         _popcornWrapper.unbind();
       };
@@ -101,10 +105,7 @@
       };
 
       function onDroppedOnView( e ){
-        _em.dispatch( "trackeventrequested", {
-          event: e,
-          target: _media
-        });
+        _em.dispatch( "trackeventrequested", e );
       }
 
       function onTrackEventAdded( e ){
@@ -207,7 +208,9 @@
         if( _url && _target ){
           _popcornWrapper.prepare( _url, _target, _popcornOptions );
         } //if
-        _view.update();
+        if( _view ){
+          _view.update();
+        }
       }
 
       this.setupContent = setupContent;
@@ -408,7 +411,7 @@
         view: {
           enumerable: true,
           get: function(){
-            return _pageElement;
+            return _view;
           }
         },
         popcornOptions: {
