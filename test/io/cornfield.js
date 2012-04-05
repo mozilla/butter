@@ -16,7 +16,7 @@
           module( "Unauthenticated tests" );
 
           asyncTest("Sync API", 1, function() {
-            equal(butter.cornfield.user(), "", 'Username is ""');
+            equal(butter.cornfield.user(), null, 'Username is ""');
             start();
           });
 
@@ -100,7 +100,5 @@
           });
         }
     });
-
   }, false );
-
 }( window, window.document ));

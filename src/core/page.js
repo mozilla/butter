@@ -4,13 +4,13 @@
 
 define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
-  var POPCORN_BASE_URL = "../external/popcorn-js/",
-      POPCORN_URL = POPCORN_BASE_URL + "popcorn.js",
-      PLAYER_URL = POPCORN_BASE_URL + "modules/player/popcorn.player.js",
-      PLAYER_TYPE_URL = POPCORN_BASE_URL + "players/{type}/popcorn.{type}.js";
+  return function( config ) {
 
-  return function() {
-    
+    var POPCORN_BASE_URL = config.baseURL[ "popcorn-dir" ],
+        POPCORN_URL = POPCORN_BASE_URL + "popcorn.js",
+        PLAYER_URL = POPCORN_BASE_URL + "modules/player/popcorn.player.js",
+        PLAYER_TYPE_URL = POPCORN_BASE_URL + "players/{type}/popcorn.{type}.js";
+
     var _eventManager = new EventManager( this );
 
     this.scrape = function() {
