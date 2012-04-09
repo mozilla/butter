@@ -42,7 +42,7 @@
           _id = "Butter" + __guid++,
           _logger = new Logger( _id ),
           _em = new EventManager( this ),
-          _page = new Page(),
+          _page,
           _config = {
             ui: {},
             icons: {}
@@ -50,6 +50,10 @@
           _defaultTarget,
           _this = this,
           _selectedEvents = [];
+
+      if ( butterOptions.debug !== undefined ) {
+        Logger.debug( butterOptions.debug );
+      }
 
       this.project = {
         id: null,
@@ -77,9 +81,8 @@
         return _page.getHTML( media );
       }; //getHTML
 
-      function trackEventRequested( e, media, target ){
+      function trackEventRequested( element, media, target ){
         var track,
-            element = e.data.element,
             type = element.getAttribute( "data-butter-plugin-type" ),
             start = media.currentTime,
             end;
@@ -125,7 +128,7 @@
 
       function targetTrackEventRequested( e ){
         if( _currentMedia ){
-          var trackEvent = trackEventRequested( e, _currentMedia, e.target.elementID );
+          var trackEvent = trackEventRequested( e.data.element, _currentMedia, e.target.elementID );
           _em.dispatch( "trackeventcreated", {
             trackEvent: trackEvent,
             by: "target"
@@ -141,7 +144,7 @@
       }
 
       function mediaTrackEventRequested( e ){
-        var trackEvent = trackEventRequested( e, e.target, "Media Element" );
+        var trackEvent = trackEventRequested( e.data, e.target, "Media Element" );
         _em.dispatch( "trackeventcreated", {
           trackEvent: trackEvent,
           by: "media"
@@ -463,6 +466,15 @@
             _selectedEvents = selectedEvents;
           },
           enumerable: true
+        },
+        debug: {
+          get: function() {
+            return Logger.debug();
+          },
+          set: function( value ) {
+            Logger.debug( value );
+          },
+          enumerable: true
         }
       });
 
@@ -539,6 +551,8 @@
 
         //prepare modules first
         var moduleCollection = Modules( _this, _config );
+
+        _page = new Page( _config );
 
         //prepare the page next
         preparePage(function(){

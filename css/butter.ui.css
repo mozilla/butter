@@ -139,11 +139,11 @@
 }
 @font-face {
   font-family: 'BebasRegular';
-  src: url('assets/fonts/BEBAS___-webfont.eot');
-  src: url('assets/fonts/BEBAS___-webfont.eot?#iefix') format('embedded-opentype'),
-       url('assets/fonts/BEBAS___-webfont.woff') format('woff'),
-       url('assets/fonts/BEBAS___-webfont.ttf') format('truetype'),
-       url('assets/fonts/BEBAS___-webfont.svg#BebasRegular') format('svg');
+  src: url('../resources/fonts/BEBAS___-webfont.eot');
+  src: url('../resources/fonts/BEBAS___-webfont.eot?#iefix') format('embedded-opentype'),
+       url('../resources/fonts/BEBAS___-webfont.woff') format('woff'),
+       url('../resources/fonts/BEBAS___-webfont.ttf') format('truetype'),
+       url('../resources/fonts/BEBAS___-webfont.svg#BebasRegular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -192,7 +192,8 @@
 #butter-header button, #butter-header a.button {
   font-family: 'BebasRegular';
   font-size: 12px;
-  display: inline-block;
+  float: left;
+  margin: 0 5px 0 0;
   text-align: center;
   text-decoration: none;
   border-radius: 5px;
@@ -251,7 +252,28 @@
   background: -o-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
   background: -ms-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
   background: linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
- }
+}
+
+#butter-header-export {
+  background: #D1BE70;
+  background: -moz-linear-gradient(top, #D1BE70 0%, #A08546 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#A08546));
+  background: -webkit-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: -o-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: -ms-linear-gradient(top, #D1BE70 0%,#A08546 100%);
+  background: linear-gradient(top, #D1BE70);
+  box-shadow: none;
+}
+
+#butter-header-export:hover {
+  background: #D1BE70;
+  background: -moz-linear-gradient(top, #D1BE70 0%, #AD9B4C 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#AD9B4C));
+  background: -webkit-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: -o-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: -ms-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+  background: linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
+}
 
 #butter-header-share {
   width: 100px !important;
@@ -276,7 +298,7 @@
 }
 
 #butter-header-auth {
-  font-family: verdana;
+  font-family: verdana !important;
   border-radius: 0px !important;
   background-color: transparent !important;
   margin-left: 10px;
@@ -317,7 +339,7 @@
 
 #butter-header .logo-drop {
   background-size: cover;
-  background-image: url( "assets/drop.png" );
+  background-image: url( "../resources/drop.png" );
   position: absolute;
   left: 10px;
   top: 4px;
@@ -338,7 +360,7 @@
   height: 60%;
   margin: 5% 20%;
   background-color: #fff;
-  border: 10px solid #000;
+  border: 3px solid #fff;
   border-radius: 20px;
   opacity: 0;
 }
@@ -373,7 +395,7 @@
   width: 100%;
   height: 210px;
   border: 1px solid #000;
-  background-image: url( "assets/bg.jpg" );
+  background-image: url( "../resources/bg.jpg" );
   -moz-transition: bottom 0.35s;
   -webkit-transition: bottom 0.35s;
   transition: bottom 0.35s;
@@ -408,7 +430,7 @@
   top: 0px;
   left: 0px;
   z-index: 2140000002;
-  background-image: url( "assets/bg.jpg" );
+  background-image: url( "../resources/bg.jpg" );
   opacity: 0;
 }
 
@@ -445,7 +467,7 @@
 }
 
 #butter-tray .status-button div {
-  background-image: url( "assets/buttons.png" );
+  background-image: url( "../resources/buttons.png" );
   cursor: pointer;
 }
 
@@ -455,7 +477,7 @@
   left: 20px;
   width: 80px;
   height: 15px;
-  background-image: url( "assets/status-bg.png" );
+  background-image: url( "../resources/status-bg.png" );
   color: #999999;
   font-size: 11px;
   text-align: center;
@@ -486,7 +508,7 @@
   left: 2px;
   width: 24px;
   height: 24px;
-  background-image: url( "assets/status-bg.png" );
+  background-image: url( "../resources/status-bg.png" );
   color: #999999;
   font-size: 11px;
   line-height: 20px;
@@ -552,7 +574,7 @@
   right: 120px;
   width: 17px;
   height: 17px;
-  background-image: url( "assets/status-bg.png" );
+  background-image: url( "../resources/status-bg.png" );
   color: #999999;
   font-size: 11px;
   line-height: 20px;
@@ -692,7 +714,7 @@
   position: absolute;
   right: 3px;
   top: 8px;
-  background-image: url( "assets/buttons.png" );
+  background-image: url( "../resources/buttons.png" );
   background-position: -143px -144px;
   cursor: pointer;
   width: 15px;
@@ -714,7 +736,7 @@
 
 #status-bar .time-bar-scrubber-container {
   z-index: 2140000010;
-  background-image: url( "assets/status-bg.png" );
+  background-image: url( "../resources/status-bg.png" );
   border-radius: 15px;
   position: absolute;
   -moz-user-select: none;
@@ -794,7 +816,7 @@
 #butter-tray #toggle-button {
   height: 30px;
   width: 50px;
-  background-image: url( "assets/bg.jpg" );
+  background-image: url( "../resources/bg.jpg" );
   border-top-right-radius: 15px;
   border-top-left-radius: 15px;
   position: absolute;
@@ -816,7 +838,7 @@
 }
 
 #butter-tray #toggle-button div {
-  background-image: url("assets/buttons.png");
+  background-image: url("../resources/buttons.png");
   background-position: -255px 10px;
   width: 15px;
   height: 20px;
@@ -994,7 +1016,7 @@
   background-attachment: scroll;
   background-clip: border-box;
   background-color: transparent;
-  background-image: url( "assets/track-bg.png" );
+  background-image: url( "../resources/track-bg.png" );
   background-origin: padding-box;
   background-position: 0 0;
   background-repeat: repeat;
@@ -1093,7 +1115,7 @@
   left: 5px;
   height: 150px;
   z-index: 2140000002;
-  background-image: url( "assets/bg.jpg" );
+  background-image: url( "../resources/bg.jpg" );
   opacity: 0;
   border-radius: 5px;
   box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
@@ -1131,8 +1153,8 @@
 
 #butter-tray #butter-plugin .list {
   position: relative;
-  top: 12px;
-  padding-left: 1px;
+  top: 18px;
+  padding-left: 5px;
   height: 105px;
   width: 100px;
   overflow: hidden;

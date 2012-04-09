@@ -7,31 +7,34 @@
     <script type="text/javascript" src="dialog.js"></script>
     <script type="text/javascript">
       Dialog.ready(function(){
-        var message = document.getElementById( "message" );
+        var url = document.getElementById( "url-text" );
 
-        Dialog.wait( "message", function( e ){
-          message.innerHTML = e.data;
+        Dialog.wait( "url", function( e ){
+          var container = document.getElementById( "url" );
+          container.removeChild( container.querySelectorAll( "span" )[ 0 ] );
+          url.innerHTML = e.data;
+          url.href = e.data;
           Dialog.enableCloseButton();
-          Dialog.assignEscapeKey( "close" );
-          Dialog.assignEnterKey( "ok" );
+          Dialog.assignEscapeKey( "default-close" );
+          Dialog.assignEnterKey( "default-close" );
         });
       });
     </script>
     <link rel="stylesheet" href="dialog.css" />
     <style>
-      #better {
-        display: none;
-        color: #fb1121;
-      }
-      #name-input {
+      #url {
         width: 100%;
+        text-align: center;
+        color: #fff;
+        font: 15px 'MetaBold';
       }
     </style>
   </head>
   <body>
+    <h1>Share URL:</h1>
     <div id="container" class="hbox center">
-      <div class="vbox center">
-        <h1><span id="message">Error</span></h1>
+      <div id="content" class="vbox center">
+        <div id="url"><span>Please wait...</span><a target="_blank" href="#" id="url-text"></a></div>
       </div>
     </div>
     <div id="close-button"></div>

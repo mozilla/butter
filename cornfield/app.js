@@ -2,9 +2,24 @@ console.log( __dirname );
 
 const express = require('express'),
       fs = require('fs'),
+      path = require('path'),
       app = express.createServer(),
       CONFIG = require('config'),
-      TEMPLATES_DIR = CONFIG.templates.root;
+      TEMPLATES_DIR =  CONFIG.dirs.templates,
+      PUBLISH_DIR = CONFIG.dirs.publish,
+      PUBLISH_PREFIX = CONFIG.dirs.publishPrefix,
+      ENVIRONMENT = CONFIG.environment || {},
+      MODE = ENVIRONMENT.mode || "production";
+
+var   DEFAULT_USER = null;
+
+if( MODE === "development" ){
+  DEFAULT_USER = ENVIRONMENT.defaultUser;
+}
+
+console.log( "Environment: ", MODE );
+console.log( "Templates Dir:", TEMPLATES_DIR );
+console.log( "Publish Dir:", PUBLISH_DIR );
 
 var mongoose = require('mongoose'),
     db = mongoose.connect('mongodb://localhost/test'),
@@ -23,14 +38,62 @@ var mongoose = require('mongoose'),
     }),
     UserModel = mongoose.model( 'User', User );
 
+if ( !path.existsSync( PUBLISH_DIR ) ) {
+  fs.mkdirSync( PUBLISH_DIR );
+} 
+
 app.use(express.logger(CONFIG.logger))
   .use(express.bodyParser())
   .use(express.cookieParser())
   .use(express.session(CONFIG.session))
   .use(express.static( __dirname + '/..' ))
+  .use(express.static( PUBLISH_DIR ))
   .use(express.directory( __dirname + '/..', { icons: true } ) );
 
 require('express-browserid').plugAll(app);
+
+function publishRoute( req, res ){
+  var email = req.session.email || DEFAULT_USER,
+      id = req.params.id;
+
+  if (!email) {
+    res.json({ error: 'unauthorized' }, 403);
+    return;
+  }
+
+  UserModel.findOne( { email: email }, function( err, doc ) {
+    if ( err ) {
+      res.json({ error: 'internal db error' }, 500);
+      return;
+    }
+
+    if ( !doc ) {
+      res.json({ error: 'user not found' }, 500);
+      return;
+    }
+
+    for ( var i=0; i<doc.projects.length; ++i ) {
+      if ( String( doc.projects[ i ]._id ) === id ) {
+        var projectPath = PUBLISH_DIR + "/" + id + ".html",
+            url = PUBLISH_PREFIX + PUBLISH_DIR + "/" + id + ".html",
+            data = doc.projects[ i ].html;
+
+        fs.writeFile( projectPath, data, function(){
+          if( err ){
+            res.json({ error: 'internal file error' }, 500);
+            return;
+          }
+          res.json({ error: 'okay', url: url });
+        });
+      }  
+    }
+  });
+}
+
+if( MODE === "development" ){
+  app.get('/publish/:id', publishRoute );  
+}
+app.post('/publish/:id', publishRoute );
 
 app.get('/projects', function(req, res) {
   var email = req.session.email;

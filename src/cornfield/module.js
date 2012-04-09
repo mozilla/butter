@@ -18,6 +18,7 @@ define(['util/xhr'], function(XHR) {
       var script = document.createElement( "script" );
       script.src = "https://browserid.org/include.js";
       script.type = "text/javascript";
+      script.setAttribute( "data-butter-exlude", true );
       document.head.appendChild( script );
     }
 
@@ -47,6 +48,19 @@ define(['util/xhr'], function(XHR) {
 
     this.user = function() {
       return email;
+    };
+
+    this.publish = function(id, callback) {
+      XHR.post(server + "/publish/" + id, null, function() {
+        if (this.readyState === 4) {
+          try {
+            var response = JSON.parse(this.response);
+            callback(response);
+          } catch (err) {
+            callback({ error: "an unknown error occured" });
+          }
+        }
+      });
     };
 
     this.logout = function(callback) {
