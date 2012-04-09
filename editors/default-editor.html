@@ -13,24 +13,27 @@
       p#message {
         color: #FF0000;
       }
+      input[type="text"] {
+        width: 100%;
+      }
+      select {
+        width: 100%;
+      }
     </style>
     <script type="text/javascript" src="../src/dialog/dialog-comm.js"></script>
     <script type="text/javascript">
       (function(){
         var _comm = new Comm(),
-            _manifest = {};
+            _manifest = {},
+            _options = {};
 
         document.addEventListener( "DOMContentLoaded", function( e ){
 
           function sendData( alsoClose ){
             alsoClose = !!alsoClose; 
-            var popcornOptions = {};
-            for( var item in _manifest ) {
-              popcornOptions[ item ] = document.getElementById( item ).value;
-            }
             document.getElementById( "message" ).innerHTML = "";
             _comm.send( "submit", {
-              eventData: popcornOptions,
+              eventData: _options,
               alsoClose: alsoClose
             });
           } //sendData
@@ -43,6 +46,35 @@
             _comm.send( "cancel" );
           }
 
+          function createSelect( id, currentValue, options ){
+            var select = document.createElement( "SELECT" );
+            select.id = id;
+            for( var i = 0, l = options.length; i < l; i++ ) {
+              var option = document.createElement( "OPTION" );
+              option.value = options[ i ];
+              option.innerHTML = options[ i ];
+              select.appendChild( option );
+            }
+            select.value = currentValue;
+            select.addEventListener( "change", function( e ){
+              _options[ id ] = select.value;
+              sendData( false );
+            }, false );
+            return select;
+          }
+
+          function createText( id, currentValue ){
+            var newItem = document.createElement( "input" );
+            newItem.type = "text";
+            newItem.id = id;
+            newItem.value = currentValue;
+            newItem.addEventListener( "change", function( e ){
+              _options[ id ] = newItem.value;
+              sendData( false );
+            }, false );
+            return newItem;
+          }
+          
           document.addEventListener( "keydown", function( e ) {
             if( e.keyCode === 13 ) {
               okPressed( e );
@@ -93,41 +125,27 @@
               col1.innerHTML = "<b>" + itemLabel + "</b>";
 
               if( item === "target" ) {
-                var select = document.createElement( "SELECT" );
-                select.id = "target";
+                var currentTarget = popcornOptions.target;
 
-                for( var i = 0, l = targets.length; i < l; i++ ) {
-                  var option = document.createElement( "OPTION" );
-                  option.value = targets[ i ];
-                  option.innerHTML = targets[ i ];
-                  select.appendChild( option );
-                  if( popcornOptions.target === targets[ i ] ) {
-                    select.value = targets[ i ];
-                  }
-                }
-                var option = document.createElement( "OPTION" );
+                var select = createSelect( "target", currentTarget, targets ),
+                    option = document.createElement( "OPTION" );
+
                 option.value = "Media Element";
                 option.innerHTML =  mediaName;
                 select.appendChild( option );
-                if( popcornOptions.target === "Media Element" ) {
-                    select.value = "Media Element";
-                }
                 col2.appendChild( select );
-
-                select.addEventListener( "change", function( e ){
-                  sendData( false );
-                }, false );
+                select.value = popcornOptions.target;
+                _options[ item ] = popcornOptions[ item ];
               } else {
-                var newItem = document.createElement( elem );
-                newItem.id = item;
-                newItem.style.width = "100%";
-                newItem.value = popcornOptions[ item ];
-                col2.appendChild( newItem );
-                newItem.addEventListener( "change", function( e ){
-                  sendData( false );
-                }, false );
+                if( elem === "select" ){
+                  col2.appendChild( createSelect( item, popcornOptions[ item ], _manifest[ item ].options ) );
+                  _options[ item ] = popcornOptions[ item ];
+                }
+                else if( elem === "input" ){
+                  col2.appendChild( createText( item, popcornOptions[ item ] ) );
+                  _options[ item ] = popcornOptions[ item ];
+                }
               }
-
               row.appendChild( col1 );
               row.appendChild( col2 );
               document.getElementById( "table" ).appendChild( row );
