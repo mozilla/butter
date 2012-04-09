@@ -1,0 +1,85 @@
+		body {
+			background-color: rgba(128, 128, 128, 0.5);
+			font-family: arial;
+			color: black;
+			margin: 0;
+		}
+		
+		table.form {
+			border-collapse: collapse;
+			width: 100%;
+			font-size: 12px;
+			margin-bottom: 30px;
+		}
+		
+		table.form > tbody.form-header {
+			background-color: rgba(80, 80, 80, 0.5);
+			background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiPjxwb2x5Z29uIHBvaW50cz0iMCwwIDUwLDg2LjYgMTAwLDAiIGZpbGw9IiMzMzMiLz48L3N2Zz4%3D');
+			/*
+			<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100" height="100"><polygon points="0,0 50,86.6 100,0" fill="#333"/></svg>
+			*/
+			background-repeat: no-repeat;
+			-moz-background-size: 12px 12px;
+			background-size: 12px 12px;
+			background-position: 4px;
+			cursor: pointer;
+		}
+
+		table.form > tbody.form-header.collapse {
+			background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiPjxwb2x5Z29uIHBvaW50cz0iMCwwIDg2LjYsNTAgMCwxMDAiIGZpbGw9IiMzMzMiLz48L3N2Zz4%3D');
+			/*
+			<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="100" height="100"><polygon points="0,0 86.6,50 0,100" fill="#333"/></svg>
+			*/
+		}
+		
+		table.form > tbody.form-header.collapse + tbody {
+			display: none;
+		}
+
+		table.form th {
+			border: 1px solid #555;
+			font-weight: normal;
+			text-align: left;
+			padding: 0.25em 1% 0.25em 2em;
+		}
+
+		table.form td {
+			border: 1px solid #555;
+			padding: 0.25em 1%;
+		}
+		
+		#control-buttons {
+			position: fixed;
+			bottom: 0;
+			background-color: rgb(191, 191, 191);
+			width: 100%;
+		}
+		
+		#instructions {
+			background-color: rgba(255, 255, 255, 0.5);
+			padding: 2px;
+			font-size: 0.9em;
+			color: black;
+		}
+		
+		table.form td > input[type=text]:first-child,
+		table.form td > textarea:first-child {
+			width: 98%;
+		}
+		
+		table.form td > textarea {
+			height: 4em;
+		}
+		
+		input[type=range] {
+			width: 80%;
+		}
+		
+		input[type=text].small {
+			width: 40px;
+		}
+		
+		.invalid {
+			background-color: #f33;
+		}
+		
