@@ -79,8 +79,6 @@ define( [
         _em.dispatch( "trackeventupdatefailed", failed );
       }
       else{
-        _view.update( _popcornOptions );
-        _this.popcornOptions = _popcornOptions;
         for ( var prop in updateOptions ) {
           if ( updateOptions.hasOwnProperty( prop ) ) {
             _popcornOptions[ prop ] = updateOptions[ prop ];
@@ -92,6 +90,8 @@ define( [
         if( newEnd ){
           _popcornOptions.end = newEnd;
         }
+        _view.update( _popcornOptions );
+        _this.popcornOptions = _popcornOptions;
         _em.dispatch( "trackeventupdated", _this );
       }
 
