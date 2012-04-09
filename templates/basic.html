@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basic template</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
+    <script src="../src/butter.js" data-butter-exclude /></script>
+    <script type="text/javascript" src="basic.js" data-butter-exclude /></script>
+    <link rel="stylesheet" href="../css/butter.ui.css" data-butter-exclude />
+    <link href='http://fonts.googleapis.com/css?family=Asap:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <style>
+    body {
+      background: url(sand.png) repeat;
+    }
+    .wrapper {
+      position: relative;
+      width: 480px;
+      margin: 0 auto;
+    }
+
+    .container-div {
+      position: relative;
+      margin-top: 10px;
+      padding: 10px;
+      min-height:50px;
+            background: #EEE;
+    }
+    
+    .content-div {
+      min-height: 25px;
+      font-family: Asap, sans-serif;
+      color: #A16649;
+    }
+    
+    #Area1 {
+      padding-top: 5px;
+      font-size: 1.2e;
+      text-align: center;
+    }
+    #Area2 {
+      margin-bottom: 20px;
+      background: #000;
+      min-height: 300px;
+    }
+    
+    #main {
+      min-width: 300px;
+      min-height: 200px;
+      box-shadow: 0 2px 3px 3px rgba(0,0,0,.2);
+    }
+    
+    h1 {
+      font-size: 2.4em;
+      text-align: center;
+      font-family: Asap, sans-serif;
+      color: #ED8A30;
+      text-shadow: rgba(255,255,255,0.5) 0 -1px;
+
+    }
+    
+    .tooltip {
+      font-family: sans-serif;
+      font-size: .8em;
+      text-align: center;
+      position: absolute;
+      background: #ED8A30;
+      color: #FFF;
+      padding: 10px;
+      width: 100px;
+      top: -2px;
+      left: -120px;
+      opacity: 0;
+    }
+     
+    .container-div:hover .tooltip {
+      opacity: 1;
+    }
+    
+    
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+      <h1>Popcorn Sandbox</h1>
+      <video id="main" data-butter="media" controls src="http://videos.mozilla.org/serv/webmademovies/laylapop.ogv">
+      </video>
+    </div>
+    <div class="wrapper">
+      
+      <div class="container-div">
+        <p class="tooltip">My awesome text</p>
+        <div class="content-div" data-butter="target" id="Area1"></div>
+      </div>
+      <div class="container-div">
+        <p class="tooltip">My awesome images</p>
+        <div class="content-div" data-butter="target" id="Area2" data-butter-default ></div>
+      </div>
+      <div id="target-div"></div>
+    </div>
+</body>
+</html>
