@@ -47,7 +47,8 @@
     "requirejs": "*",
     "express": "*",
     "express-browserid": "*",
-    "config": "*"
+    "config": "*",
+    "mongoose": "*"
   },
   "license": "MIT",
   "engine": {
