@@ -55,9 +55,9 @@
 
     createButter( function( butter ){
 
-      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv" } );
+      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../external/popcorn-js/test/trailer.ogv" } );
       ok( m1.name === "Media 1", "Name is correct" );
-      ok( m1.target === "audio-test" && m1.url === "http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv", "Media storage is correct" );
+      ok( m1.target === "audio-test" && m1.url === "../external/popcorn-js/test/trailer.ogv", "Media storage is correct" );
     });
   });
 
@@ -83,7 +83,7 @@
         mediaState = [ 0, media.data ];
       });
 
-      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv" } ),
+      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../external/popcorn-js/test/trailer.ogv" } ),
           m2;
 
       ok( mediaEventState === -2, "Media events received in correct order" );
@@ -578,7 +578,7 @@
       var m = butter.addMedia({
         name: "Media 1",
         target: "test-target-1",
-        url: "http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv",
+        url: "../external/popcorn-js/test/trailer.ogv",
         popcornOptions: {
           foo: 2
         }
