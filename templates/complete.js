@@ -188,7 +188,17 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             target: "Area1"
           }
         });
-       
+  
+    butter.tracks[ 1 ].addTrackEvent({ 
+          type: "gml",
+          popcornOptions: {
+            start:0,
+            end: 1,
+            gmltag: "29582",
+			target: "Area2"
+          }
+        });
+
       }
 
       media.onReady( start );
