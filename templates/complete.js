@@ -30,7 +30,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
     
-    butter.tracks[ 1 ].addTrackEvent({ 
+        butter.tracks[ 1 ].addTrackEvent({ 
           type: "attribution",
           popcornOptions: {
             start: 2,
@@ -43,18 +43,18 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-    butter.tracks[ 1 ].addTrackEvent({ 
+        butter.tracks[ 1 ].addTrackEvent({ 
           type: "flickr",
           popcornOptions: {
             start: 3,
             end: 4  ,
-        userid: "35034346917@N01",
-      numberofimages: 10,
-      target: "Area2"
+            userid: "35034346917@N01",
+            numberofimages: 10,
+            target: "Area2"
           }
         });
 
-    butter.tracks[ 1 ].addTrackEvent({ 
+        butter.tracks[ 1 ].addTrackEvent({ 
           type: "googlefeed",
           popcornOptions: {
             start: 4,
@@ -66,19 +66,19 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-    butter.tracks[ 1 ].addTrackEvent({ 
+        butter.tracks[ 1 ].addTrackEvent({ 
           type: "googlemap",
           popcornOptions: {
             start: 5,
             end: 6,
-          type: "ROADMAP",
-      lat: 43.665429,
-      lng: -79.403323,
-      target: "Area2"
+            type: "ROADMAP",
+            lat: 43.665429,
+            lng: -79.403323,
+            target: "Area2"
           }
         });
 
-    butter.tracks[ 1 ].addTrackEvent({ 
+        butter.tracks[ 1 ].addTrackEvent({ 
           type: "image",
           popcornOptions: {
             start: 6,
@@ -88,7 +88,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-    butter.tracks[ 1 ].addTrackEvent({ 
+        butter.tracks[ 1 ].addTrackEvent({ 
           type: "lastfm",
           popcornOptions: {
             start: 7,
@@ -100,7 +100,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-    butter.tracks[ 1 ].addTrackEvent({ 
+        butter.tracks[ 1 ].addTrackEvent({ 
           type: "linkedin",
           popcornOptions: {
             start: 8,
@@ -114,7 +114,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-    butter.tracks[ 1 ].addTrackEvent({ 
+        butter.tracks[ 1 ].addTrackEvent({ 
           type: "lowerthird",
           popcornOptions: {
             start: 9,
@@ -125,7 +125,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-    butter.tracks[ 0 ].addTrackEvent({ 
+        butter.tracks[ 0 ].addTrackEvent({ 
           type: "subtitle",
           popcornOptions: {
             start:2,
@@ -135,7 +135,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-    butter.tracks[ 0 ].addTrackEvent({ 
+        butter.tracks[ 0 ].addTrackEvent({ 
           type: "tagthisperson",
           popcornOptions: {
             start:3,
@@ -146,7 +146,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-    butter.tracks[ 0 ].addTrackEvent({ 
+        butter.tracks[ 0 ].addTrackEvent({ 
           type: "processing",
           popcornOptions: {
             start:4,
@@ -156,7 +156,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-    butter.tracks[ 0 ].addTrackEvent({ 
+        butter.tracks[ 0 ].addTrackEvent({ 
           type: "webpage",
           popcornOptions: {
             start:5,
@@ -167,7 +167,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-    butter.tracks[ 0 ].addTrackEvent({ 
+        butter.tracks[ 0 ].addTrackEvent({ 
           type: "wikipedia",
           popcornOptions: {
             start:6,
@@ -178,7 +178,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-    butter.tracks[ 0 ].addTrackEvent({ 
+        butter.tracks[ 0 ].addTrackEvent({ 
           type: "wordriver",
           popcornOptions: {
             start:7,
@@ -189,13 +189,13 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
   
-    butter.tracks[ 1 ].addTrackEvent({ 
+        butter.tracks[ 1 ].addTrackEvent({ 
           type: "gml",
           popcornOptions: {
             start:0,
             end: 1,
             gmltag: "29582",
-			target: "Area2"
+            target: "Area2"
           }
         });
 
