@@ -15,7 +15,7 @@ var __project = {
     {
       id:"Media0",
       name:"Media0",
-      url:"http://videos-cdn.mozilla.net/serv/webmademovies/laylapop.ogv",
+      url:"../external/popcorn-js/test/trailer.ogv",
       target:"main",
       duration:9.916666,
       tracks: [
