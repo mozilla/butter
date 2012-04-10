@@ -218,7 +218,8 @@ app.post('/project/:id?', function( req, res ) {
 
     var proj;
     for( var i=0, l=doc.projects.length; i<l; ++i ){
-      if( doc.projects[ i ]._id === req.body.id ){
+      // purposeful lazy comparison here (String -> string)
+      if( doc.projects[ i ]._id == req.body.id ){
         proj = doc.projects[ i ]; 
       }
     }
