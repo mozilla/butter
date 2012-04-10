@@ -1179,6 +1179,7 @@
 
 #butter-tray #butter-plugin .list-item {
   font-family: Verdana;
+  color: #fff; !important
   list-style-type: none;
   cursor: pointer;
   font-size: 12px;
