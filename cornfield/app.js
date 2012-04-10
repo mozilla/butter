@@ -76,7 +76,7 @@ function publishRoute( req, res ){
     for ( var i=0; i<doc.projects.length; ++i ) {
       if ( String( doc.projects[ i ]._id ) === id ) {
         var projectPath = PUBLISH_DIR + "/" + id + ".html",
-            url = PUBLISH_PREFIX + PUBLISH_DIR + "/" + id + ".html",
+            url = PUBLISH_PREFIX + "/" + id + ".html",
             data = doc.projects[ i ].html;
 
         fs.writeFile( projectPath, data, function(){
