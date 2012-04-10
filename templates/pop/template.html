@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<!-- Set your own title here -->
+		<title>Popcorn.js Pop!</title>
+		<!--
+		The base tag makes all relative URLs point to Mozillas server where
+		all the extra scripts and images are hosted.
+
+		If you want to add any of your own files, either remove the base tag
+		and make sure all the scripts refer to the right absolute URLs, or
+		set your own references to be absolute URLs on your server.
+		-->
+		<!--
+		<base href="http://mozillapopcorn.org/maker/layouts/pop/"/>
+		-->
+		<script src="../../external/popcorn-js/popcorn.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../external/popcorn-js/modules/player/popcorn.player.js" type="text/javascript" charset="utf-8"></script>
+		
+		
+		<script src="../../src/butter.js" data-butter-exclude /></script>
+		<script type="text/javascript" src="plugins/popcorn.pop.js"></script>
+  	<script type="text/javascript" src="plugins/popcorn.words.js"></script>
+  	<script type="text/javascript" src="template.js"></script>
+  	<script data-butter="project-data" type="application/json"></script>
+
+    
+		<link rel="stylesheet" href="../../css/butter.ui.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<style type="text/css">
+		body {
+			background: none repeat scroll 0 0 #FFFFFF;
+			color: #333333;
+			font-family: Helvetica,Arial,sans-serif;
+			font-size: 12px;
+			margin: 0;
+			padding: 0;
+		}
+
+		.clearfix {
+			display: block;
+		}
+
+		/*
+			begin custom styles for Popcorn/Seriously
+		*/
+
+		#scale-buttons {
+			position: fixed;
+			right: 35px;
+			background-color: #eee;
+			padding: 20px;
+			z-index: 1000;
+		}
+
+		#video-container {
+			position: relative;
+			width: 768px;
+			margin: 1em auto;
+		}
+
+		#video-container .vjs-big-play-button,
+		#video-container .vjs-controls,
+		#video-container .vjs-styles-check {
+			z-index: 202;
+		}
+
+		#video-container .vjs-spinner {
+			z-index: 201;
+		}
+
+		/* disable full screen button */
+		#video-container .vjs-fullscreen-control {
+			display: none;
+		}
+		#video-container .vjs-volume-control {
+			right: 10px;
+		}
+		#video-container .vjs-time-control {
+			right: 65px;
+		}
+		#video-container .vjs-progress-control {
+			right: 140px;
+		}
+
+		#video-container .popcorn-words {
+			z-index: 250;
+		}
+
+		#video-container video {
+			display: block;
+			width: 100%;
+		}
+
+		#video-container {
+			font-size: 20px;
+			line-height: normal;
+		}
+
+		#video-container > div {
+			line-height: normal;
+		}
+
+		#pop-container > div {
+			/* default position */
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+		</style>
+	</head>
+	<body>
+		<div id="scale-buttons">
+			<button id="smaller">-</button>
+			<button id="actual-size">1x</button>
+			<button id="bigger">+</button>
+		</div>
+		<div id="video-container" class="video-js-box">
+			<video id="video" preload class="video-js" data-butter="media" controls src="http://videos.mozilla.org/serv/webmademovies/laylapop.ogv">
+			</video>
+			<div id="pop-container" data-butter="target"></div>
+		</div>
+	</body>
+
+    
+	<!--
+
+	Sound credits:
+	Pop #1 "MouthPop.wav"
+	Credit: Herbert Boland
+	URL: http://www.freesound.org/people/HerbertBoland/sounds/33369/
+	CC: By
+
+	Record Scratch #1 - "scratch23.wav"
+	Credit: JaZzy JunGgle
+	URL: http://www.freesound.org/people/junggle/sounds/29942/
+	CC:  Sample + By
+
+	Video Game Blip #1 - "bump.wav"
+	Credit: StaneStane
+	http://www.freesound.org/people/StaneStane/sounds/73562/
+	CC: By
+
+	Video Game Death #1 - "tape_slow9.wav"
+	Credit: zerolagtime
+	URL: http://www.freesound.org/people/zerolagtime/sounds/49246/
+	CC: By
+
+	-->
+</html>
