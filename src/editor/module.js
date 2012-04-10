@@ -4,8 +4,6 @@
 
 (function() {
 
-  var DEFAULT_EDITOR = "default-editor.html";
-
   define( [ "core/logger", 
             "core/eventmanager", 
             "core/trackevent",
@@ -17,13 +15,12 @@
             Editor
           ){
 
-    function EventEditor( butter, options ){
+    function EventEditor( butter, moduleOptions ){
 
-      options = options || {};
+      moduleOptions = moduleOptions || {};
 
       var _editors = {},
           _logger = new Logger( "EventEditor" ),
-          _defaultEditor = options[ "default" ] || DEFAULT_EDITOR,
           _em = new EventManager( this ),
           _editorContainer,
           _openEditor,
@@ -139,7 +136,11 @@
 
         parentElement.style.display = "none";
 
-        _this.add( _defaultEditor, "default" );
+        for( var editorName in moduleOptions ){
+          if( moduleOptions.hasOwnProperty( editorName ) ){
+            _this.add( moduleOptions[ editorName ], editorName );
+          }
+        }
 
         onModuleReady();
       }; //start
