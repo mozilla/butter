@@ -10,7 +10,8 @@ const express = require('express'),
       PUBLISH_PREFIX = CONFIG.dirs.publishPrefix,
       ENVIRONMENT = CONFIG.environment || {},
       MODE = ENVIRONMENT.mode || "production",
-      WWW_ROOT = CONFIG.dirs.wwwRoot || __dirname + "/..";
+      WWW_ROOT = CONFIG.dirs.wwwRoot || __dirname + "/..",
+      TEMPLATES = CONFIG.templates || {};
 
 var   DEFAULT_USER = null;
 
@@ -29,7 +30,8 @@ var mongoose = require('mongoose'),
     Project = new Schema({
       name: String,
       html: String,
-      data: String
+      data: String,
+      template: String
     }),
     ProjectModel = mongoose.model( 'Project', Project ),
     
@@ -78,6 +80,19 @@ function publishRoute( req, res ){
         var projectPath = PUBLISH_DIR + "/" + id + ".html",
             url = PUBLISH_PREFIX + "/" + id + ".html",
             data = doc.projects[ i ].html;
+
+        var template = TEMPLATES[ doc.projects[ i ].template ];
+        if( template ){
+          for( var r in template ){
+            if( template.hasOwnProperty( r ) ){
+              var regStr = r + "";
+              regStr = regStr.replace( /\./g, "\\." );
+              regStr = regStr.replace( /\//g, "\\/" );
+              var regex = new RegExp( regStr, "g" );
+              data = data.replace( regex, template[ r ] );
+            }
+          }
+        }
 
         fs.writeFile( projectPath, data, function(){
           if( err ){
@@ -216,16 +231,18 @@ app.post('/project/:id?', function( req, res ) {
       var proj = new ProjectModel({
         name: req.body.name,
         html: req.body.html,
+        template: req.body.template,
         data: JSON.stringify( req.body.data )
       });
       doc.projects.push( proj );
     }
     else{
+      proj.template = req.body.template;
       proj.name = req.body.name;
       proj.html = req.body.html;
       proj.data = JSON.stringify( req.body.data );
     }
-    
+
     doc.save();
 
     res.json({ error: 'okay', project: proj });

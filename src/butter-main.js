@@ -60,7 +60,8 @@
         id: null,
         name: null,
         data: null,
-        html: null
+        html: null,
+        template: null
       };
 
       function checkMedia() {
@@ -537,6 +538,8 @@
         var icons = _config.icons,
             img,
             resourcesDir = _config.dirs.resources || "";
+
+        _this.project.template = _config.name;
 
         for( var identifier in icons ){
           if( icons.hasOwnProperty( identifier ) ){
