@@ -401,6 +401,8 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
       }
     });
 
+    _this.dialogDir = butter.config.dirs.dialogs || "";
+
    } //UI
 
   UI.__moduleName = "ui";

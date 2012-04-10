@@ -6,7 +6,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
   return function( config ) {
 
-    var POPCORN_BASE_URL = config.baseURL[ "popcorn-dir" ],
+    var POPCORN_BASE_URL = config.dirs[ "popcorn-js" ],
         POPCORN_URL = POPCORN_BASE_URL + "popcorn.js",
         PLAYER_URL = POPCORN_BASE_URL + "modules/player/popcorn.player.js",
         PLAYER_TYPE_URL = POPCORN_BASE_URL + "players/{type}/popcorn.{type}.js";
