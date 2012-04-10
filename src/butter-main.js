@@ -515,7 +515,11 @@
               } //for
             }
             else{
-              _this.addMedia({ target: medias[ i ].id, url: url });
+              var mediaPopcornOptions;
+              if( _config.mediaDefaults ){
+                mediaPopcornOptions = _config.mediaDefaults;
+              }
+              _this.addMedia({ target: medias[ i ].id, url: url, popcornOptions: mediaPopcornOptions });
             } //if
           } //for
 
