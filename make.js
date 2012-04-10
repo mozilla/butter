@@ -43,15 +43,6 @@ target.build = function() {
 target.server = function() {
   echo('### Serving butter');
 
-  const express = require('express'),
-        app = express.createServer();
-
-  app.use(express.static(__dirname));
-  app.use(express.directory(__dirname, { icons: true }));
-
-  app.listen(9999, '127.0.0.1', function() {
-    var addy = app.address();
-    console.log('Server started on http://' + addy.address + ':' + addy.port);
-    console.log('Press Ctrl+C to stop');
-  });
+  cd('cornfield');
+  exec('node app.js', { async: true });
 };
