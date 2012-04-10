@@ -69,7 +69,7 @@ define( [
         var dialog = new IFrameDialog({
           type: "iframe",
           modal: true,
-          url: "../dialogs/delete-track.html",
+          url: butter.ui.dialogDir + "delete-track.html",
           events: {
             open: function( e ){
               dialog.send( "trackdata", trackName );
@@ -98,7 +98,7 @@ define( [
         var dialog = new IFrameDialog({
           type: "iframe",
           modal: true,
-          url: "../dialogs/track-data.html",
+          url: butter.ui.dialogDir + "track-data.html",
           events: {
             open: function( e ) {
               dialog.send( "trackdata", track.json );

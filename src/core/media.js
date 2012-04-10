@@ -12,6 +12,9 @@
           ], 
           function( Logger, EventManager, Track, PopcornWrapper, MediaView ){
 
+    var MEDIA_ELEMENT_SAFETY_POLL_INTERVAL = 500,
+        MEDIA_ELEMENT_SAFETY_POLL_ATTEMPTS = 10;
+
     var __guid = 0;
 
     var Media = function ( mediaOptions ) {
@@ -432,6 +435,25 @@
           }
         }
       });
+
+      // There is an edge-case where currentSrc isn't set yet, but everything else about the video is valid.
+      // So, here, we wait for it to be set.
+      var targetElement = document.getElementById( _target );
+      if( targetElement && [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) > -1 ) {
+        if( !targetElement.currentSrc && targetElement.getAttribute( "src" ) || targetElement.childNodes.length > 0 ){
+          var attempts = 0,
+              safetyInterval = setInterval(function(){
+            if( targetElement.currentSrc ){
+              _url = targetElement.currentSrc;
+              setupContent();
+              clearInterval( safetyInterval );
+            }
+            else if( attempts++ === MEDIA_ELEMENT_SAFETY_POLL_ATTEMPTS ){
+              clearInterval( safetyInterval );
+            }
+          }, MEDIA_ELEMENT_SAFETY_POLL_INTERVAL );
+        }
+      }
 
     }; //Media
 

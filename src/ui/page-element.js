@@ -2,60 +2,40 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logger, EventManager, DragNDrop ) {
+define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tracker" ], function( Logger, EventManager, DragNDrop, PositionTracker ) {
+
+  var __nullFunction = function(){};
   
   return function( element, events, options ){
 
     var _element = typeof( element ) === "string" ? document.getElementById( element ) : element,
-        _blinkInterval = -1,
         _highlightElement = document.createElement( "div" ),
-        _highlightDims = {},
-        _highlightInterval = -1,
         _events = events || {},
         _options = options || {},
+        _em = new EventManager( this ),
+        _blinkFunction,
+        _hilightFunction,
         _this = this;
 
-    function checkPosition(){
-      var ePos = _element.getBoundingClientRect();
-      if( ePos.left !== _highlightDims.left ){
-        _highlightDims.left = ePos.left;
-        _highlightElement.style.left = ePos.left + "px";
-      } //if
-      if( ePos.top !== _highlightDims.top ){
-        _highlightDims.top = ePos.top;
-        _highlightElement.style.top = ePos.top + "px";
-      } //if
-      if( ePos.width !== _highlightDims.width ){
-        _highlightDims.width = ePos.width;
-        _highlightElement.style.width = ePos.width + "px";
-      } //if
-      if( ePos.height !== _highlightDims.height ){
-        _highlightDims.height = ePos.height;
-        _highlightElement.style.height = ePos.height + "px";
-      } //if
-      _highlightDims = ePos;
-    } //checkPosition
+    PositionTracker( _element, function( rect ){
+      _highlightElement.style.left = rect.left + "px";
+      _highlightElement.style.top = rect.top + "px";
+      _highlightElement.style.width = rect.width + "px";
+      _highlightElement.style.height = rect.height + "px";
+      _em.dispatch( "moved", rect );
+    });
 
-    function highlight( state ){
-      clearInterval( _blinkInterval );
-      clearInterval( _highlightInterval );
-      _blinkInterval = -1;
+    this.highlight = _highlightFunction = function( state ){
       if( state ){
-        if( _highlightInterval === -1 ){
-          _highlightInterval = setInterval( checkPosition, 10 );
-        } //if
+        _this.blink = _blinkFunction;
         _highlightElement.style.visibility = "visible";
-        _highlightElement.removeAttribute( "blink" );
-        checkPosition();
+        _highlightElement.removeAttribute( "data-blink" );
       }
       else {
-        if( _highlightInterval !== -1 ){
-          clearInterval( _highlightInterval );
-        } //if
-        _highlightInterval = -1;
+        _this.blink = __nullFunction;
         _highlightElement.style.visibility = "hidden";
-      } //if
-    } //highlight
+      }
+    };
 
     this.destroy = function(){
       if( _highlightElement.parentNode ){
@@ -70,20 +50,17 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
     } //if
     _highlightElement.style.visibility = "hidden";
 
-    _this.blink = function(){
-      if( _blinkInterval === -1 ){
-        _blinkInterval = setInterval( checkPosition, 100 );
-        _highlightElement.setAttribute( "blink", "true" );
-        _highlightElement.style.visibility = "visible";
-        setTimeout(function(){
-          clearInterval( _blinkInterval );
-          _blinkInterval = -1;
-          if( _highlightInterval === -1 ){
-            _highlightElement.removeAttribute( "blink" );
-            _highlightElement.style.visibility = "hidden";
-          }
-        }, 1500 );
-      } //if
+    this.blink = _blinkFunction = function(){
+      _this.blink = __nullFunction;
+      _highlightElement.setAttribute( "data-blink", "true" );
+      _highlightElement.style.visibility = "visible";
+      setTimeout(function(){
+        if( _highlightElement.getAttribute( "data-blink" ) !== true ){
+          _highlightElement.removeAttribute( "data-blink" );
+          _highlightElement.style.visibility = "hidden";
+        }
+        _this.blink = _blinkFunction;
+      }, 1500 );
     }; //blink
 
     if( _element ){
@@ -96,7 +73,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
           if( dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
             return;
           }
-          highlight( true );
+          _this.highlight( true );
           if( _events.over ){
             _events.over();
           } //if
@@ -105,7 +82,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
           if( dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
             return;
           }
-          highlight( false );
+          _this.highlight( false );
           if( _events.out ){
             _events.out();
           } //if
@@ -114,7 +91,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
           if( dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
             return;
           }
-          highlight( false );
+          _this.highlight( false );
           if( _events.drop ){
             _events.drop( dragElement );
           } //if
@@ -128,15 +105,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
         enumerable: true,
         get: function(){
           return _element;
-        }
-      },
-      highlight: {
-        enumerable: true,
-        get: function(){
-          return _hightlightInterval !== -1;
-        },
-        set: function( val ){
-          highlight( val );
         }
       }
     });

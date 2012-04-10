@@ -45,7 +45,8 @@
           _page,
           _config = {
             ui: {},
-            icons: {}
+            icons: {},
+            dirs: {}
           },
           _defaultTarget,
           _this = this,
@@ -59,7 +60,8 @@
         id: null,
         name: null,
         data: null,
-        html: null
+        html: null,
+        template: null
       };
 
       function checkMedia() {
@@ -534,12 +536,15 @@
 
       function readConfig(){
         var icons = _config.icons,
-            img;
+            img,
+            resourcesDir = _config.dirs.resources || "";
+
+        _this.project.template = _config.name;
 
         for( var identifier in icons ){
           if( icons.hasOwnProperty( identifier ) ){
             img = document.createElement( "img" );
-            img.src = icons[ identifier ];
+            img.src = resourcesDir + icons[ identifier ];
             img.id = identifier + "-icon";
             img.style.display = "none";
             img.setAttribute( "data-butter-exclude", "true" );

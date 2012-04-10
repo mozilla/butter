@@ -408,7 +408,7 @@
   pointer-events: none;
 }
 
-.butter-highlight[ blink="true" ]{
+.butter-highlight[ data-blink="true" ]{
   -moz-transition: opacity 1.5s;
   -webkit-transition: opacity 1.5s;
   transition: opacity 1.5s;

@@ -88,6 +88,12 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
       _pageElement.blink();
     };
 
+    function pageElementMoved( e ){
+      var rect = e ? e.data : _pageElement.element.getBoundingClientRect();
+      _propertiesElement.style.left = rect.left + "px";
+      _propertiesElement.style.top = rect.top + "px";
+    }
+
     this.update = function(){
       urlTextbox.value = media.url;
 
@@ -115,8 +121,7 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
         if( !_propertiesElement.parentNode ){
           document.body.appendChild( _propertiesElement );
         }
-        _propertiesElement.style.left = _pageElement.element.style.left;
-        _propertiesElement.style.top = _pageElement.element.style.top;
+        _pageElement.listen( "moved", pageElementMoved );
       }
     };
 
