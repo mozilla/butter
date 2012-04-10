@@ -10,6 +10,7 @@
     "secret": "thisisareallyreallylongsecrettoencryptcookies"
   },
   "dirs": {
+    "wwwRoot": "../",
     "templates": "../templates",
     "publish": "view",
     "publishPrefix": "http://localhost:8888/cornfield/"
