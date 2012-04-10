@@ -238,6 +238,7 @@
 		
 
 		for (name in fields) {
+
 			field = fields[name];
 			
 			if (typeof field === 'string') {
@@ -276,19 +277,15 @@
 			this.fields[name] = field;
 		}
 
-		this.client = new ButterEditor.Comm.CommClient('defaultEditor');
+		this.client = new Comm();
 
-		this.client.listen('edittrackevent', function (e) {
+		this.client.listen('trackeventdata', function (e) {
 			var message = e.data,
           n, field, options;
 
-			that.id = message.id;
-			that.client.send( {
-				width: width || Math.max(document.body.offsetWidth, 400),
-				height: height || Math.max(Math.min(document.body.offsetHeight, 600), 300)
-			}, 'clientdimsupdated' );
+			//that.id = message.id;
 
-			options = message.trackEvent.popcornOptions;
+			options = message.popcornOptions;
 			for (n in that.fields) {
 				field = that.fields[n];
 				if (options[n] === undefined && field.defaultValue !== undefined) {
@@ -308,7 +305,7 @@
 			that.targetsUpdated(message.targets);
 
 			if (that.targets.length === 1) {
-				that.trackEvent.target = that.targets[0][0];
+				that.trackEvent.target = that.targets[0];
 			}
 
 			that.undoStack = [];
@@ -322,9 +319,10 @@
 
 			if (that.id === message.id) {
 				that.pushState();
-				that.trackEvent = message.options;
 
-				options = message.options;
+				that.trackEvent = message;
+
+				options = message;
 				for (n in that.fields) {
 					field = that.fields[n];
 					if (that.trackEvent[n] !== options[n]) {
@@ -339,18 +337,12 @@
 				that.updateForm();
 			}
 		});
-
-		this.client.listen( "domtargetsupdated", function( e ) {
-			that.targetsUpdated(e.data);
-		});
-
-		this.client.listen( "ready", function() {
-			that.client.send( "ready", "ready" );
-		});
 	}
 
 	EditorState.prototype.save = function () {
-		this.client.send( this.trackEvent, "applyclicked" );
+		this.client.send( "submit", {
+			eventData: this.trackEvent
+		});
 		this.lastStateSaved = clone(this.trackEvent);
 	};
 
@@ -381,7 +373,7 @@
 			fieldset.style.display = 'none';
 
 			if (targets.length) {
-				this.trackEvent.target = targets[0][0];
+				this.trackEvent.target = targets[0];
 			}
 		} else {
 			fieldset.style.display = '';
@@ -401,7 +393,7 @@
 			}
 
 			if (!this.trackEvent.target) {
-				this.trackEvent.target = targets[0][0];
+				this.trackEvent.target = targets[0];
 			}
 
 		}
