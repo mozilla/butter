@@ -78,7 +78,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       var dialog = new IFrameDialog({
         type: "iframe",
         modal: true,
-        url: "../dialogs/export.html",
+        url: butter.ui.dialogDir + "export.html",
         events: {
           open: function(){
             dialog.send( "export", exportPackage );
@@ -96,7 +96,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       var dialog = new IFrameDialog({
         type: "iframe",
         modal: true,
-        url: "../dialogs/quit-confirmation.html",
+        url: butter.ui.dialogDir + "quit-confirmation.html",
         events: {
           submit: function( e ){
             dialog.close();
@@ -129,7 +129,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       var dialog = new IFrameDialog({
         type: "iframe",
         modal: true,
-        url: "../dialogs/error-message.html",
+        url: butter.ui.dialogDir + "error-message.html",
         events: {
           open: function( e ){
             dialog.send( "message", message );
@@ -157,7 +157,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
             var dialog = new IFrameDialog({
               type: "iframe",
               modal: true,
-              url: "../dialogs/share.html",
+              url: butter.ui.dialogDir + "share.html",
               events: {
                 open: function( e ){
                   dialog.send( "url", url );
@@ -213,7 +213,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
         var dialog = new IFrameDialog({
           type: "iframe",
           modal: true,
-          url: "../dialogs/save-as.html",
+          url: butter.ui.dialogDir + "save-as.html",
           events: {
             open: function( e ){
               dialog.send( "name", null );
@@ -255,7 +255,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
             var dialog = new IFrameDialog({
               type: "iframe",
               modal: true,
-              url: "../dialogs/load-project.html",
+              url: butter.ui.dialogDir + "load-project.html",
               events: {
                 open: function( e ){
                   dialog.send( "list", listResponse.projects );
