@@ -1,4 +1,163 @@
-0.2 Release - March 1, 2012
+0.3 Release, "Breakfast Club" - April 10, 2012
+
+609 Add configuration that includes all plugins
+604 [Meta] Install 0.3 on mozillapopcorn.org/edge
+634 Need a way to set options on Popcorn
+639 Create music video template
+653 Saving doesn't work twice.
+652 Simple URL replacement in Cornfield
+650 Fix publish path
+648 Dialogs need relative paths
+647 Fix media element loading edgecase
+646 Give editors own comm lib
+643 Make cornfield's root file-serve path configurable
+637 Fix positioning of butter-media-highlight
+622 cornfield server should run by default, not simple node server
+641 Editor module should auto-add editors from config
+642 Update Popcorn submodule
+596 replace Layla as default video
+631 In-editor update of trackevent does not update the corresponding view
+621 Server needs mongoose to run
+626 Firefox textbox elements don't have proper height in dialogs
+557 Fix import in test/selenium/testcases_tracks.py
+616 Fix UI/Asset directory structure
+598 Ability to turn Logger off
+431 Common CSS for Dialogs
+615 Remove cornfield/publish.js from repo
+601 Test template exclude browser ID on publish
+610 Fix inline-block inconsistency with Google Chrome on header buttons
+611 Fix final lint errors
+597 Published projects don't work
+594 Bring cornfield tests back up to par
+603 Turn off Media UI when butter.ui is disabled
+600 src/core/trackevents.js is accessing butter when it doesn't exist
+602 Make export button yellow like the others
+320 Ability to import/export popcorn code per track
+605 Export buttons aren't enabled
+330 Implement publish project UI
+466 Save indicator
+563 Remove popcorn_outer.png
+536 UI for specifying/changing timeline media
+534 Name your project
+535 Implement load project uI
+537 Make Popcorn Maker header functional
+585 Header behavior tweaks
+584 After importing a project, trackevents aren't clickable.
+402 Plugin tray UI needs to be brought up to par
+529 Scrubber position resets to 0 if you attempt to drag it from the far right
+458 Protect from invalid times in trackevents
+436 have butter.io.cornfield write out a script tag to load BrowserID if it's not loaded
+358 Add tooltip to unreadable trackevent title
+579 Events are added 1 frame too early
+569 PopcornWrapper breaks tests
+583 Fix readme to indicate that --recursive clone is needed
+364 Change HTML Generation to use Double quotes rather than single
+242 generatePopcornString needs to pass options to Popcorn object
+543 "When the tray shows anything other than the timeline, ""Add Popcorn"" should be ""Done""
+581 have we removed the ability to delete a track?
+365 HTML Generation Moves Video Containing Element to Different Spot on Page
+544 Add Track button
+510 Remove reference to secretrobotron's github account
+462 Phantom tracks when moving an event over a droppable target
+276 in/out should indicate what they are measuring
+539 Vertical scroll in timeline area with mousewheel
+524 Refactor Media/Track/TrackEvent structure to be more light-weight
+457 Dynamically load popcorn players on-demand
+252 Don't let a user commit a blank field for timeline media change
+494 Pasting video URL should not fail when no HTTP
+437 Port all keyboard shortcuts from Popcorn Maker .1 into Butter
+467 Elegant load for tray
+482 clearProject should probably remove all tracks + trackEvents as well
+495 At the end of the timeline, play should restart video
+525 "Amalgamate ""cancel"" and ""ok"" buttons in default editor"
+530 DragNDrop on Media elements is broken
+460 "Create and implement UI for ""Add Popcorn"" button"
+552 importButter not recognizing event types/info
+489 default editor breaks with youtube player
+421 Fix linting errors
+329 Up/Down arrows should move to next/prev event
+514 resizing track events does not update start or end time
+432 Track events can't lose focus
+243 Create a rudimentary testing process
+443 Butter should always reliably load
+538 Confirm that single press of esc key dismisses event editors
+271 Weird design bug in chrome
+498 Tests fail first pass through on Chrome
+441 Scubber Line Behaviour erratic.
+553 `node make` doesn't work
+500 Start using selenium
+231 Replace Makefiles with shelljs
+492 Timebar canvas is too large
+301 Use the require order plugin
+527 Remove plugin addition from template.js
+485 trackevent timing buggy
+526 Tests broken as a result of merge
+506 Remove jquery and jquery-ui
+218 bodyReady crashes on SVG elements
+502 util/time doesn't have license header
+516 Fix tests after DragNDrop broke them
+481 uncaught typeError in Chrome only 
+461 Move editor dialogues to tray, create quick edit flow
+505 Replace $sortable
+94 Dragging the scrubber/a track event along the timeline does not force the timeline to scroll
+490 Zooming doesn't move the scrubber
+477 Dragging Footnote in template.html to the edge of track 2 causes it to disappear
+455 "Stop target from ""blinking"" if mouse is dragging something"
+342 We should roll out our own drag & drop
+404 Clean up start-up and organization of Butter
+262 Object has no method 'slider' issue still around
+314 Changes to track list UI
+133 "Make ""standard target"" default target"
+493 If a track event is double clicked and the editor is already opened, focus the editor.
+474 Update Popcorn.js to v1.2
+408 Attempt to clean up timeline module
+487 "Use ""on"" instead of ""listen"" for Popcorn interface"
+480 Get rid of Butter instancing
+488 Remove CSS checking in plugin module
+348 Fix module order dependency
+429 Style Guide for Source
+352 Performance when zooming/moving around on timeline is slow with numerous trackevents
+132 Footnote data stays in workspace preview too long
+130 """Subtitle-container"" is confusing"
+45 resizing page UI problem
+131 Export>Preview not working
+107 google maps exception in butter
+105 adding tracks doesn't fire timeupdate on youtube
+121 Image plugin broken on experimental branch
+134 Youtube doesn't export/preview
+104 Clicking New Project should re-open the start dialog
+102 Hide youtube's native flash controls and annotations by default
+96 Scrubber doesn't reset when time is reset
+139 You should be able to set the project title when you create it
+106 Youtube seek bar fires play
+127 Selection needs to be turned off for Chrome
+140 Track events broken in chrome
+64 Reassign track representation for manual track -> DOM assignment
+112 image and webpage refresh issue
+72 Show one object in preview window
+71 DOM Object database for tracks
+70 Enable the user of arbitrary player plugins
+63 Implement timeline using CSS
+118 Review - Import, Export, Load, Save, CSS, Player Plugins, DOM Database, Preview Isolation
+109 Wordriver plug-in start doesn't fire
+69 Click & Drag plugins to create events
+67 Project Details
+85 what to do on a refresh
+84 Remove butter.html
+97 $popcorn is undefined when resizing window
+92 Update AUTHORS
+90 Changing url for media needs to actually change the media
+66 Help Button
+88 Video continues to play when red timeline bar is held
+68 Remove accordion
+17 Play/Pause should be controllable with the space bar.
+35 Focus on one command at a time in preview pane
+18 Better handles on the timeline to grab each instance of a plugin
+49 UI Revamp
+36 Youtube support in Butter?
+22 Multiple timelines per plugin
+
+0.2 Release, "Ghostbusters" - March 1, 2012
 
 337 Ability to login/save/load from a cornfield server
 390 Setting trackEvent out time > video duration causes issues
@@ -11,7 +170,7 @@
 454 Flash target on click, not hover
 438 Tray UI should be no bigger than is necessary to accomodate 4 tracks
 256 Timecodes should round to 3 decimal places
-449	<style> needs to be removed for getHTML
+449 <style> needs to be removed for getHTML
 444 Rogue Track Events appear after moving a track event
 452 Template has unneeded html elements
 375 Push butter up to mozilla's github account
