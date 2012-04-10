@@ -9,7 +9,8 @@ const express = require('express'),
       PUBLISH_DIR = CONFIG.dirs.publish,
       PUBLISH_PREFIX = CONFIG.dirs.publishPrefix,
       ENVIRONMENT = CONFIG.environment || {},
-      MODE = ENVIRONMENT.mode || "production";
+      MODE = ENVIRONMENT.mode || "production",
+      WWW_ROOT = CONFIG.dirs.wwwRoot || __dirname + "/..";
 
 var   DEFAULT_USER = null;
 
@@ -46,9 +47,9 @@ app.use(express.logger(CONFIG.logger))
   .use(express.bodyParser())
   .use(express.cookieParser())
   .use(express.session(CONFIG.session))
-  .use(express.static( __dirname + '/..' ))
+  .use(express.static( WWW_ROOT ))
   .use(express.static( PUBLISH_DIR ))
-  .use(express.directory( __dirname + '/..', { icons: true } ) );
+  .use(express.directory( WWW_ROOT, { icons: true } ) );
 
 require('express-browserid').plugAll(app);
 
