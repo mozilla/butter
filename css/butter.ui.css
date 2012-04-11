@@ -1179,6 +1179,7 @@
 
 #butter-tray #butter-plugin .list-item {
   font-family: Verdana;
+  color: #fff;
   list-style-type: none;
   cursor: pointer;
   font-size: 12px;
@@ -1222,13 +1223,22 @@
 }
 
 #butter-tray #add-popcorn.add-popcorn-done {
-  background-image: -moz-linear-gradient(top,  #6b90ff 0%, #3f4593 100%); /* FF3.6+ */
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6b90ff), color-stop(100%,#3f4593)); /* Chrome,Safari4+ */
-}
+  background: #2B86D4;
+  background: -moz-linear-gradient(top, #26B5D8 0%, #2B86D4 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#26B5D8), color-stop(100%,#2B86D4));
+  background: -webkit-linear-gradient(top, #26B5D8 0%,#2B86D4 100%);
+  background: -o-linear-gradient(top, #26B5D8 0%,#2B86D4 100%);
+  background: -ms-linear-gradient(top, #26B5D8 0%,#2B86D4 100%);
+  background: linear-gradient(top, #2B86D4);}
 
 #butter-tray #add-popcorn.add-popcorn-done:active {
-  background: -moz-linear-gradient(top,  #3f4593 0%, #6b90ff 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3f4593), color-stop(100%,#6b90ff)); /* Chrome,Safari4+ */
+  background: #29B4D6;
+  background: -moz-linear-gradient(top, #26B5D8 0%, #29B4D6 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#26B5D8), color-stop(100%,#29B4D6));
+  background: -webkit-linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
+  background: -o-linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
+  background: -ms-linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
+  background: linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
 }
 
 #butter-tray #add-popcorn:active {
