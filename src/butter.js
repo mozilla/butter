@@ -59,7 +59,7 @@
               // Paths are relative to baseUrl; Notice the commas!
             '}' +
           '});' +
-          'ctx(["butter-main"])' + 
+          'ctx(["main"])' + 
           '})()' +
         '</script>');
     }
