@@ -1,7 +1,7 @@
 document.addEventListener( "DOMContentLoaded", function( e ){
 
   Butter({
-    config: "../config/default.conf",
+    config: "../config/basic.conf",
     ready: function( butter ){
       var media = butter.media[ 0 ];
 
@@ -11,7 +11,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         media.addTrack( "Track" + Math.random() );
 
         var event = track.addTrackEvent({
-          type: "text",
+          type: "footnote",
           popcornOptions: {
             start: 0,
             end: 2,
@@ -21,7 +21,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         });
         
          butter.tracks[ 0 ].addTrackEvent({ 
-            type: "text",
+            type: "footnote",
             popcornOptions: {
               start: 2,
               end: 5,
@@ -30,7 +30,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             }
           });
 
-        butter.tracks[ 2 ].addTrackEvent({ 
+        butter.tracks[ 1 ].addTrackEvent({ 
           type: "image",
           popcornOptions: {
             start: 1,
@@ -38,8 +38,28 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             src: "http://www.raiseakitten.com/wp-content/uploads/2012/03/kitten.jpg",
             target: "Area2"
           }
+          
         });
-
+        
+         butter.tracks[ 2 ].addTrackEvent({ 
+            type: "webpage",
+            popcornOptions: {
+              start: 3,
+              end: 5,
+              src:"http://www.popcornjs.org",
+              target: "Area2"
+            }
+          });
+          butter.tracks[ 2 ].addTrackEvent({ 
+              type: "wikipedia",
+              popcornOptions: {
+                start: 5,
+                end: 6,
+                src: "http://en.wikipedia.org/wiki/Cape_Town",
+                title: "Cape Town",
+                target: "Area2"
+              }
+            });
       }
 
       media.onReady( start );
