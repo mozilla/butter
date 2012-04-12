@@ -91,6 +91,9 @@
           }),
           _this = this;
 
+      this.popcornCallbacks = null;
+      this.popcornScripts = null;
+
       this.createView = function(){
         _view = new MediaView( this, {
           onDropped: onDroppedOnView
@@ -209,7 +212,7 @@
 
       function setupContent(){
         if( _url && _target ){
-          _popcornWrapper.prepare( _url, _target, _popcornOptions );
+          _popcornWrapper.prepare( _url, _target, _popcornOptions, _this.popcornCallbacks, _this.popcornScripts );
         } //if
         if( _view ){
           _view.update();
@@ -237,6 +240,12 @@
 
       this.play = function(){
         _popcornWrapper.play();
+      };
+
+      this.generatePopcornString = function( callbacks, scripts ){
+        callbacks = callbacks || _this.popcornCallbacks;
+        scripts = scripts || _this.popcornScripts;
+        return _popcornWrapper.generatePopcornString( _popcornOptions, _url, _target, null, callbacks, scripts );
       };
 
       Object.defineProperties( this, {
@@ -426,12 +435,6 @@
             _popcornOptions = val;
             _em.dispatch( "mediapopcornsettingschanged", _this );
             setupContent();
-          }
-        },
-        popcornString: {
-          enumerable: true,
-          get: function(){
-            return _popcornWrapper.generatePopcornString( _popcornOptions, _url, _target );
           }
         }
       });

@@ -13,7 +13,8 @@
             "./core/target",
             "./core/media",
             "./core/page",
-            "./modules"
+            "./modules",
+            "util/xhr"
           ],
           function(
             Logger,
@@ -21,7 +22,8 @@
             Target,
             Media,
             Page,
-            Modules
+            Modules,
+            XHR
           ){
 
     var __guid = 0,
@@ -50,7 +52,9 @@
           },
           _defaultTarget,
           _this = this,
-          _selectedEvents = [];
+          _selectedEvents = [],
+          _defaultPopcornScripts = {},
+          _defaultPopcornCallbacks = {};
 
       if ( butterOptions.debug !== undefined ) {
         Logger.debug( butterOptions.debug );
@@ -78,7 +82,7 @@
       this.getHTML = function(){
         var media = [];
         for( var i=0; i<_media.length; ++i ){
-          media.push( _media[ i ].popcornString );
+          media.push( _media[ i ].generatePopcornString() );
         } //for
         return _page.getHTML( media );
       }; //getHTML
@@ -298,6 +302,9 @@
         if ( !( media instanceof Media ) ) {
           media = new Media( media );
         } //if
+
+        media.popcornCallbacks = _defaultPopcornCallbacks;
+        media.popcornScripts = _defaultPopcornScripts;
 
         var mediaName = media.name;
         _media.push( media );
@@ -538,6 +545,73 @@
         });
       } //if
 
+      function preparePopcornScriptsAndCallbacks( readyCallback ){
+        var popcornConfig = _config.popcorn || {},
+            callbacks = popcornConfig.callbacks,
+            scripts = popcornConfig.scripts,
+            toLoad = [],
+            loaded = 0;
+
+        // wrap the load function to remember the script
+        function genLoadFunction( script ){
+          return function( e ){
+            // this = XMLHttpRequest object
+            if( this.readyState === 4 ){
+
+              // if the server sent back a bad response, record empty string and log error
+              if( this.status !== 200 ){
+                _defaultPopcornScripts[ script ] = "";
+                _logger.log( "WARNING: Trouble loading Popcorn script: " + this.response );
+              }
+              else{
+                // otherwise, store the response as text
+                _defaultPopcornScripts[ script ] = this.response;
+              }
+
+              // see if we can call the readyCallback yet
+              ++loaded;
+              if( loaded === toLoad.length ){
+                readyCallback();
+              }
+
+            }
+          }
+        }
+
+        _defaultPopcornCallbacks = callbacks;
+
+        for( var script in scripts ){
+          if( scripts.hasOwnProperty( script ) ){
+            var url = scripts[ script ],
+                probableElement = document.getElementById( url.substring( 1 ) );
+            // check to see if an element on the page contains the script we want
+            if( url.indexOf( "#" ) === 0 ){
+              if( probableElement ){
+                _defaultPopcornScripts[ script ] = probableElement.innerHTML;
+              }
+            }
+            else{
+              // if not, treat it as a url and try to load it
+              toLoad.push({
+                url: url,
+                onLoad: genLoadFunction( script )
+              });
+            }
+          }
+        }
+
+        // if there are scripts to load, load them
+        if( toLoad ){
+          for( var i = 0; i < toLoad.length; ++i ){
+            XHR.get( toLoad[ i ].url, toLoad[ i ].onLoad );
+          }
+        }
+        else{
+          // otherwise, call the ready callback right away
+          readyCallback();
+        }
+      }
+
       function readConfig(){
         var icons = _config.icons,
             img,
@@ -564,10 +638,12 @@
         _page = new Page( _config );
 
         //prepare the page next
-        preparePage(function(){
-          moduleCollection.ready(function(){
-            //fire the ready event
-            _em.dispatch( "ready", _this );
+        preparePopcornScriptsAndCallbacks(function(){
+          preparePage(function(){
+            moduleCollection.ready(function(){
+              //fire the ready event
+              _em.dispatch( "ready", _this );              
+            });
           });
         });
       
