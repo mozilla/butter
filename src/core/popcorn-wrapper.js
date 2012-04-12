@@ -274,7 +274,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       if( scripts.beforeEvents ){
         popcornString += scripts.beforeEvents + "\n";
       }
-      if( callbacks.init ){
+      if( callbacks.beforeEvents ){
         popcornString += callbacks.beforeEvents + "( popcorn );\n";
       }
 
@@ -304,7 +304,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       if( scripts.afterEvents ){
         popcornString += scripts.afterEvents + "\n";
       }
-      if( callbacks.init ){
+      if( callbacks.afterEvents ){
         popcornString += callbacks.afterEvents + "( popcorn );\n";
       }
 
