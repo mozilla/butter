@@ -52,7 +52,8 @@
     "express": "*",
     "express-browserid": "*",
     "config": "*",
-    "mongoose": "*"
+    "mongoose": "*",
+    "stylus": "*"
   },
   "license": "MIT",
   "engine": {

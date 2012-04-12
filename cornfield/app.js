@@ -4,6 +4,7 @@ const express = require('express'),
       fs = require('fs'),
       path = require('path'),
       app = express.createServer(),
+      stylus = require('stylus'),
       CONFIG = require('config'),
       TEMPLATES_DIR =  CONFIG.dirs.templates,
       PUBLISH_DIR = CONFIG.dirs.publish,
@@ -49,6 +50,9 @@ app.use(express.logger(CONFIG.logger))
   .use(express.bodyParser())
   .use(express.cookieParser())
   .use(express.session(CONFIG.session))
+  .use(stylus.middleware({
+    src: WWW_ROOT
+  }))
   .use(express.static( WWW_ROOT ))
   .use(express.static( PUBLISH_DIR ))
   .use(express.directory( WWW_ROOT, { icons: true } ) );

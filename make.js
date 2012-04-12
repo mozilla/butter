@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 var JSLINT = './node_modules/jshint/bin/hint',
-    RJS    = './node_modules/requirejs/bin/r.js';
+    RJS    = './node_modules/requirejs/bin/r.js',
+    STYLUS = './node_modules/stylus/bin/stylus';
 
 require('shelljs/make');
 
@@ -36,8 +37,12 @@ target.build = function() {
 
   rm('-rf', 'dist');
   mkdir('-p', 'dist');
+
   exec(RJS + ' -o tools/build.js');
   exec(RJS + ' -o tools/build.optimized.js');
+
+  exec(STYLUS + ' css');
+  cp('css/*.css', 'dist');
 };
 
 target.server = function() {
