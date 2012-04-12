@@ -80,10 +80,18 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     };
 
     this.getHTML = function( popcornStrings ){
-      var html = document.createElement( "html" ),
-          head = document.getElementsByTagName( "head" )[ 0 ].cloneNode( true ),
-          body = document.getElementsByTagName( "body" )[ 0 ].cloneNode( true ),
-          i, toClean, toExclude, node;
+      var html, head, body, i, toClean, toExclude, node;
+
+      html = document.createElement( "html" );
+
+      if( !_snapshot ){
+        head = document.getElementsByTagName( "head" )[ 0 ].cloneNode( true );
+        body = document.getElementsByTagName( "body" )[ 0 ].cloneNode( true );
+      }
+      else{
+        head = _snapshot.head.cloneNode( true );
+        body = _snapshot.body.cloneNode( true );
+      }          
 
       toExclude = Array.prototype.slice.call( head.querySelectorAll( "*[data-butter-exclude]" ) );
       toExclude = toExclude.concat( Array.prototype.slice.call( head.querySelectorAll( "*[data-requiremodule]" ) ) );
@@ -97,6 +105,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         node = toClean[ i ];
         node.removeAttribute( "butter-clean" );
         node.removeAttribute( "data-butter" );
+        node.removeAttribute( "data-butter-default" );
 
         // obviously, classList is preferred (https://developer.mozilla.org/en/DOM/element.classList)
         if( node.classList ){
@@ -127,6 +136,17 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
       return "<html>" + html.innerHTML + "</html>";
     }; //getHTML
+
+    this.snapshotHTML = function(){
+      _snapshot = {
+        head: document.getElementsByTagName( "head" )[ 0 ].cloneNode( true ),
+        body: document.getElementsByTagName( "body" )[ 0 ].cloneNode( true )
+      };
+    };
+
+    this.eraseSnapshot = function(){
+      _snapshot = null;
+    };
 
   }; // page
 });
