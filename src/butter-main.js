@@ -566,6 +566,11 @@
         //prepare the page next
         preparePage(function(){
           moduleCollection.ready(function(){
+
+            if( _config.snapshotHTMLOnReady ){
+              _page.snapshotHTML();
+            }
+
             //fire the ready event
             _em.dispatch( "ready", _this );
           });
@@ -599,6 +604,8 @@
         _config = butterOptions.config;
         readConfig();
       } //if
+
+      this.page = _page;
 
     }
 

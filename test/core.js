@@ -612,6 +612,30 @@
     });
   });
 
+  asyncTest( "Export HTML snapshotting", function() {
+    expect( 1 );
+    createButter( function( butter ){
+      var m1 = butter.addMedia( { url:"../external/popcorn-js/test/trailer.ogv", target:"mediaDiv" } );
+
+      butter.listen( "mediaready", function( e ) {
+        butter.page.snapshotHTML();
+
+        t1 = m1.addTrack();
+        te1 = t1.addTrackEvent({
+          popcornOptions: {
+            start: 0,
+            end: 6,
+            text: "OBVIOUS",
+            target: "stringSanity"
+          },
+          type: "footnote"
+        });
+
+        equals( butter.getHTML().match( "OBVIOUS" ).length, 1, "TrackEvent wasn't exported" );
+        start();
+      });
+    });
+  });
   module( "Debug functionality" );
   asyncTest( "Debug enables/disables logging", 4, function() {
     createButter(function( butter ) {
@@ -638,4 +662,5 @@
       butter.addMedia({ url: "../external/popcorn-js/test/trailer.ogv", target: "mediaDiv" });
     });
   });
+
 })(window, window.document );
