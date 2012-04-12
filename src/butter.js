@@ -21,7 +21,30 @@
         return true;
     }
 
-    var Butter = function() {
+    var scripts, path, Butter;
+
+    function deferRequire() {
+      var ctx;
+      if (window.require) {
+        // Set up paths to find scripts.
+        ctx = require.config({
+          baseUrl: path,
+          context: "butter",
+          paths: {
+            external: path + '../external',
+            butter: path
+            // Paths are relative to baseUrl; Notice the commas!
+          }
+        });
+        ctx(["butter-main"]);
+        return;
+      }
+
+      setTimeout(deferRequire, 10);
+    }
+
+
+    Butter = function() {
       if ( !Butter.__waiting ) {
         Butter.__waiting = [];
       } //if
@@ -37,7 +60,7 @@
         // The last script tag should be the butter source
         // tag since in dev, it will be a blocking script tag,
         // so latest tag is the one for this script.
-        var scripts = document.getElementsByTagName( 'script' ),
+        scripts = document.getElementsByTagName( 'script' );
         path = scripts[scripts.length - 1].src;
         path = path.split( '/' );
         path.pop();
@@ -47,21 +70,7 @@
           document.write( '<script data-butter-exclude="true" src="' + path + '../external/require/require.js"></' + 'script>' );
         } //if
 
-        // Set up paths to find scripts.
-        document.write('<script data-butter-exclude="true">' + 
-          '(function(){' + 
-          'var ctx = require.config({ ' + 
-            'baseUrl: "' + path + '",' +
-            'context: "butter",' +
-            'paths: {' +
-              'external: "' + path + '../external",' +
-              'butter: "' + path + '"' +
-              // Paths are relative to baseUrl; Notice the commas!
-            '}' +
-          '});' +
-          'ctx(["butter-main"])' + 
-          '})()' +
-        '</script>');
+        deferRequire();
     }
 
 }());

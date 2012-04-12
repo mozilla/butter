@@ -1,7 +1,7 @@
 {
   "server" : {
     "bindIP" : "127.0.0.1",
-    "bindPort" : "8888"
+    "bindPort" : "8889"
   },
   "logger" : {
     "format" : "dev"
