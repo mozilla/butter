@@ -11,6 +11,7 @@ define( [], function(){
     if( !__container ){
       __container = document.createElement( "div" );
       __container.id = "butter-modal-container";
+      __container.setAttribute( "data-butter-exclude", true );
       document.body.appendChild( __container );
     } //if
 
