@@ -78,7 +78,7 @@
       this.getHTML = function(){
         var media = [];
         for( var i=0; i<_media.length; ++i ){
-          media.push( _media[ i ].popcornString );
+          media.push( _media[ i ].generatePopcornString() );
         } //for
         return _page.getHTML( media );
       }; //getHTML
@@ -538,6 +538,20 @@
         });
       } //if
 
+      function preparePopcornScriptsAndCallbacks( readyCallback ){
+        var popcornConfig = _config.popcorn || {},
+            callbacks = popcornConfig.callbacks,
+            scripts = popcornConfig.scripts,
+            toLoad = Object.keys( scripts ).length;
+
+        if( toLoad > 0 ){
+          
+        }
+        else{
+          readyCallback();
+        }
+      }
+
       function readConfig(){
         var icons = _config.icons,
             img,
@@ -566,8 +580,10 @@
         //prepare the page next
         preparePage(function(){
           moduleCollection.ready(function(){
-            //fire the ready event
-            _em.dispatch( "ready", _this );
+            preparePopcornScriptsAndCallbacks(function(){
+              //fire the ready event
+              _em.dispatch( "ready", _this );              
+            });
           });
         });
       
