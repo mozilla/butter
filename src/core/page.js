@@ -140,7 +140,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     }; //getHTML
 
     /* Take a snapshot of the current DOM and store it.
-     * Mainly for use with generatePopcornString()
+     * Mainly for use with generatePopcornString() so as to not export unwanted DOM objects,
+     * a snapshot can be taken at any time (usually up to the template author).
      */
     this.snapshotHTML = function(){
       _snapshot = {
