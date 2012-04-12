@@ -26,7 +26,7 @@
   // not be found by the AST analysis done in the optimizer.
   include: [
             'butter',
-            'butter-main'
+            'main'
            ],
 
   // Wraps Butter in a closure and adds license information
