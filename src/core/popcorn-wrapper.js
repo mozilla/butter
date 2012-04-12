@@ -167,7 +167,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
             // construct the correct dom infrastructure if required
             constructPlayer( target );
             // generate a function which will create a popcorn instance when entered into the page
-            createPopcorn( generatePopcornString( popcornOptions, url, target, callbacks, scripts ) );
+            createPopcorn( generatePopcornString( popcornOptions, url, target, null, callbacks, scripts ) );
             // once popcorn is created, attach listeners to it to detect state
             addPopcornHandlers();
             // wait for the media to become available and notify the user, or timeout
@@ -226,6 +226,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
      * insert in a script tag).
      */
     var generatePopcornString = this.generatePopcornString = function( popcornOptions, url, target, method, callbacks, scripts ){
+
       callbacks = callbacks || {};
       scripts = scripts || {};
 
@@ -257,7 +258,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         popcornString += scripts.init + "\n";
       }
       if( callbacks.init ){
-        popcornString += callbacks.init + "\n";
+        popcornString += callbacks.init + "();\n";
       }
 
       // special case for basePlayer, since it doesn't require as much of a harness
@@ -274,7 +275,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         popcornString += scripts.beforeEvents + "\n";
       }
       if( callbacks.init ){
-        popcornString += callbacks.beforeEvents + "( popcorn )\n";
+        popcornString += callbacks.beforeEvents + "( popcorn );\n";
       }
 
       // if popcorn was built successful
@@ -304,7 +305,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         popcornString += scripts.afterEvents + "\n";
       }
       if( callbacks.init ){
-        popcornString += callbacks.afterEvents + "( popcorn )\n";
+        popcornString += callbacks.afterEvents + "( popcorn );\n";
       }
 
       // if the `method` var is blank, the user probably just wanted an inline function without an onLoad wrapper

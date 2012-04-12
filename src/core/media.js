@@ -245,7 +245,7 @@
       this.generatePopcornString = function( callbacks, scripts ){
         callbacks = callbacks || _this.popcornCallbacks;
         scripts = scripts || _this.popcornScripts;
-        return _popcornWrapper.generatePopcornString( _popcornOptions, _url, _target, callbacks, scripts );
+        return _popcornWrapper.generatePopcornString( _popcornOptions, _url, _target, null, callbacks, scripts );
       };
 
       Object.defineProperties( this, {
