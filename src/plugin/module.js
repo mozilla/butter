@@ -64,6 +64,7 @@
       styleContent += "background: hsl( " + hash.h + ", " + hash.s + "%, " + hash.l + "% )";
       styleContent += "}";
       __newStyleSheet.innerHTML = styleContent;
+      console.log(__newStyleSheet);
     } //createStyleForType
 
     var PluginManager = function( butter, moduleOptions ) {

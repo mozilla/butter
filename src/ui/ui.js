@@ -114,7 +114,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
       });
     }
 
-    this._start = function( onReady ){
+    this.load = function( onReady ){
       if( options.enabled !== false ){
         butter.loader.load([
           {

@@ -79,7 +79,6 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
     _this.update = function(){
       resetContainer();
-      console.log( _element.offsetWidth, _container.offsetWidth );
     };
 
     Object.defineProperties( this, {

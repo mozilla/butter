@@ -655,15 +655,17 @@
 
         _this.ui = new UI( _this, _config.ui );
 
-        //prepare the page next
-        preparePopcornScriptsAndCallbacks(function(){
-          preparePage(function(){
-            moduleCollection.ready(function(){
-              if( _config.snapshotHTMLOnReady ){
-                _page.snapshotHTML();
-              }
-              //fire the ready event
-              _em.dispatch( "ready", _this );              
+        _this.ui.load(function(){
+          //prepare the page next
+          preparePopcornScriptsAndCallbacks(function(){
+            preparePage(function(){
+              moduleCollection.ready(function(){
+                if( _config.snapshotHTMLOnReady ){
+                  _page.snapshotHTML();
+                }
+                //fire the ready event
+                _em.dispatch( "ready", _this );
+              });
             });
           });
         });
