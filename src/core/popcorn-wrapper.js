@@ -38,6 +38,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _this = this;
 
     function encodeString( string ) {
+      var data = JSON.stringify( string );
       return String( string ).replace(/['\\"]/g, "\\$&");
     }
 
@@ -260,6 +261,38 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         popcornString += "var popcorn = Popcorn.smart( '#" + target + "', '" + url + "'" + popcornOptions + " );\n";
       }
 
+      // create a string for each line of a popcorn plugin
+      function stringifyOption( option, trackevent ) {
+        var data = trackevent[ option ],
+            string, length;
+
+        if ( typeof data === "object" ) {
+          // if this is an array
+          if ( data.length ) {
+            length = data.length;
+            string = "\n[ ";
+            for ( var i = 0, l = length - 1; i < l; i++ ) {
+              string += "'" + encodeString( data[ i ] ) + "', ";
+            }
+            string += "'" + encodeString( data[ length - 1 ] ) + "' ],";
+          // if this is an object
+          } else {
+            for ( var prop in data ) {
+              string = "\n{";
+              if ( data.hasOwnProperty( prop ) ) {
+                string += stringifyOption( prop, data );
+              }
+              string += "\n},";
+            }
+            string = string.replace( /,$/, "" );
+          }
+        } else {
+          string = "\n" + option + ":'" + encodeString( data ) + "',";
+        }
+
+        return string;
+      }
+
       // if popcorn was built successful
       if ( _popcorn ) {
 
@@ -271,7 +304,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
             popcornString += "popcorn." + trackEvents[ i ]._natives.type + "({";
             for ( var option in popcornOptions ) {
               if ( popcornOptions.hasOwnProperty( option ) ) {
-                popcornString += "\n" + option + ":'" + encodeString( trackEvents[ i ][ option ] ) + "',";
+                popcornString += stringifyOption( option, trackEvents[ i ] );
               }
             }
             if ( popcornString[ popcornString.length - 1 ] === "," ) {
