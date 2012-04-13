@@ -565,7 +565,7 @@
 
         _page = new Page( _config );
 
-        _this.ui = new UI( _this, _config );
+        _this.ui = new UI( _this, _config.ui );
 
         //prepare the page next
         preparePage(function(){
