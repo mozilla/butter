@@ -19,8 +19,22 @@ Environment Setup
 
 When updating your repo, make sure to run `node make submodules` to update Butter's submodules.
 
+Running Butter
+--------------
+
+* To use butter be sure to start the node server by running `node make server`.
+* Navigate to http://localhost:8888/templates/test.html to begin using Butter
+Testing
+-------
+
+Before contributing a new patch be sure to run the following:
+
+* `node make check` to lint butter
+* run the qUnit tests in the test/ directory to be sure you nothing broke
+
 Contributing
 ------------
 
 * To file a bug or feature request, please use our issue-tracking lighthouse project: https://webmademovies.lighthouseapp.com/projects/65733-butter/
 * When contributing code, please issue a pull request on github, so that we can track changes with comments. Be sure to put a link to the pull request in any corresponding lighthouse tickets.
+* Be sure to change the ticket state on lighthouse to "peer-review-requested" and assign to to one of the core developers for review.
