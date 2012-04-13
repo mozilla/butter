@@ -49,11 +49,11 @@ define( [], function(){
 
     this.update = function( level ) {
       _rect = _element.getBoundingClientRect();
-      _handle.style.width = ( _rect.width / ZOOM_LEVELS ) + "px";
       _handleWidth = ( _rect.width / ZOOM_LEVELS );
+      _handle.style.width = _handleWidth + "px";
       _elementWidth = _rect.width; 
       if( level !== undefined ){
-        _handle.style.left = ( level * _rect.width / ZOOM_LEVELS ) + "px";
+        _handle.style.left = ( level * _handleWidth ) + "px";
       } //if
     };
 
