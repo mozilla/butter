@@ -8,8 +8,7 @@ define(
     "editor/module",
     "timeline/module",
     "cornfield/module",
-    "plugin/module",
-    "ui/module"
+    "plugin/module"
   ], 
   function(){
 
