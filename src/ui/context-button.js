@@ -1,10 +1,11 @@
 define([], function(){
-  
+
   return function( butter ){
     var _button = document.createElement( "button" );
 
     _button.id = "add-popcorn";
     _button.innerHTML = "+Popcorn";
+    _button.title = "Add a Popcorn Event to the timeline";
 
     _button.addEventListener( "click", function(){
       if( butter.ui.contentState === "timeline" ){

@@ -1,5 +1,5 @@
 define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
-  
+
   var DEFAULT_AUTH_BUTTON_TEXT = "Login / Sign Up";
 
   return function( butter, options ){
@@ -25,7 +25,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       '    <button id="butter-header-load">Load</button>' +
       '    <button id="butter-header-export">Export</button>' +
       '    <button id="butter-header-share">Share</button>' +
-      '    <button id="butter-header-auth">' + DEFAULT_AUTH_BUTTON_TEXT + '</button>' + 
+      '    <button id="butter-header-auth">' + DEFAULT_AUTH_BUTTON_TEXT + '</button>' +
       '    <button id="butter-header-auth-out">Logout</button>' +
       '</div>';
 
@@ -41,6 +41,14 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
     _authButton = document.getElementById( "butter-header-auth" );
     _exportButton = document.getElementById( "butter-header-export" );
     _logoutButton = document.getElementById( "butter-header-auth-out" );
+
+    _newButton.title = "Create a new project";
+    _saveButton.title = "Save your project";
+    _loadButton.title = "Load a saved project";
+    _shareButton.title = "Generate a link to share this project with your the world";
+    _exportButton.title = "View and copy the raw data for your project";
+    _authButton.title = "Login using BrowserID authentication";
+    _logoutButton.title = "Logout";
 
     document.body.classList.add( "butter-header-spacing" );
 
@@ -65,7 +73,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
             errorCallback();
           }
         }
-      });      
+      });
     }
 
     _exportButton.addEventListener( "click", function( e ){
@@ -88,7 +96,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
           }
         }
       });
-      dialog.open();      
+      dialog.open();
 
     }, false );
 

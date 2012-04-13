@@ -36,6 +36,7 @@ define( [], function(){
     _container.className = "time-bar-scrubber-container";
     _node.className = "time-bar-scrubber-node";
     _line.className = "time-bar-scrubber-line";
+    _node.title = _line.title = "Displays the media's current time. Drag to seek throught the media.";
     _fill.className = "fill-bar";
 
     _node.appendChild( _line );
