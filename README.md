@@ -12,7 +12,7 @@ Build Prerequisites
 Using Butter with Cornfield
 ---------------------------
 
-In order for Cornfield to operate correctly ( being able to save, load, and publish ) you will need to install mongodb. You can find a good guide to do so [here](http://www.mongodb.org/display/DOCS/Quickstart)
+In order for Cornfield to operate correctly ( being able to save, load, and publish ) you will need to install mongodb. You can find a good guide to do so [here](http://www.mongodb.org/display/DOCS/Quickstart). Before starting up you Cornfield server be sure that you have MongoDB running or else it will fail to start.
 
 Environment Setup
 -----------------
