@@ -9,6 +9,11 @@ Build Prerequisites
 * node v0.6 or higher
 * npm (comes with node v0.6 installer)
 
+Using Butter with Cornfield
+---------------------------
+
+In order for Cornfield to operate correctly ( being able to save, load, and publish ) you will need to install mongodb. You can find a good guide to do so [here](http://www.mongodb.org/display/DOCS/Quickstart)
+
 Environment Setup
 -----------------
 
