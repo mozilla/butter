@@ -33,6 +33,10 @@ Before contributing a new patch be sure to run the following:
 * `node make check` to lint butter
 * run the qUnit tests in the test/ directory to be sure you broke nothing
 
+Getting Involved
+----------------
+
+We have an active irc community on irc.mozilla.org in the #popcorn channel, as well as a mailing list that you can subscribe to https://groups.google.com/group/web-made-movies-working. Come say hi!
 Contributing
 ------------
 
