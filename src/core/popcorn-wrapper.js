@@ -37,10 +37,6 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _playerReady = false,
         _this = this;
 
-    function encodeString( string ) {
-      return String( string ).replace(/['\\"]/g, "\\$&");
-    }
-
     /* Destroy popcorn bindings specfically without touching other discovered
      * settings
      */
@@ -264,20 +260,33 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       if ( _popcorn ) {
 
         // gather and serialize existing trackevents
-        var trackEvents = _popcorn.getTrackEvents();
+        var trackEvents = _popcorn.getTrackEvents(),
+          trackEvent, optionString, saveOptions;
         if ( trackEvents ) {
           for ( var i=0, l=trackEvents.length; i<l; ++i ) {
-            popcornOptions = trackEvents[ i ]._natives.manifest.options;
-            popcornString += "popcorn." + trackEvents[ i ]._natives.type + "({";
+            trackEvent = trackEvents[ i ];
+            popcornOptions = trackEvent._natives.manifest.options;
+            saveOptions = {};
             for ( var option in popcornOptions ) {
               if ( popcornOptions.hasOwnProperty( option ) ) {
-                popcornString += "\n" + option + ":'" + encodeString( trackEvents[ i ][ option ] ) + "',";
+                if (trackEvent[ option ] !== undefined) {
+                  saveOptions[ option ] = trackEvent[ option ];
+                }
               }
             }
-            if ( popcornString[ popcornString.length - 1 ] === "," ) {
-              popcornString = popcornString.substring( 0, popcornString.length - 1 );
+
+            //stringify will throw an error on circular data structures
+            try {
+              //pretty print with 2 spaces per indent
+              optionString = JSON.stringify( saveOptions, null, 2 );
+            } catch ( jsonError ) {
+              optionString = false;
             }
-            popcornString += "});\n";
+            
+            if ( optionString ) {
+              popcornString += "popcorn." + trackEvents[ i ]._natives.type + "(" +
+                optionString + ");\n";
+            }
           } //for trackEvents
         } //if trackEvents
 
