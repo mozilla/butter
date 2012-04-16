@@ -13,7 +13,8 @@
             "./core/target",
             "./core/media",
             "./core/page",
-            "./modules"
+            "./modules",
+            "ui/ui"
           ],
           function(
             Logger,
@@ -21,7 +22,8 @@
             Target,
             Media,
             Page,
-            Modules
+            Modules,
+            UI
           ){
 
     var __guid = 0,
@@ -562,6 +564,8 @@
         var moduleCollection = Modules( _this, _config );
 
         _page = new Page( _config );
+
+        _this.ui = new UI( _this, _config.ui );
 
         //prepare the page next
         preparePage(function(){
