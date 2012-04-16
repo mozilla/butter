@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd ../
-DIRS=( src editors test templates )
+DIRS=( src editors test templates dialogs cornfield config )
 files=`find $DIRS -name '*.js'`
 touch tmp.txt
 for word in $files
