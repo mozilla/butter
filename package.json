@@ -1,6 +1,6 @@
 {
   "name": "butter",
-  "version": "0.3.0a1",
+  "version": "0.4.0",
   "author": "The Mozilla Popcorn Team <web-made-movies-working@googlegroups.com>",
   "description": "The Popcorn authoring tool",
   "contributors": [
@@ -46,14 +46,14 @@
     "url": "https://github.com/mozilla/butter.git"
   },
   "dependencies": {
-    "shelljs": "*",
-    "jshint": "*",
-    "requirejs": "*",
-    "express": "*",
-    "express-browserid": "*",
-    "config": "*",
-    "mongoose": "*",
-    "stylus": "*"
+    "shelljs": "0.0.x",
+    "jshint": "0.6.x",
+    "requirejs": "1.0.x",
+    "express": "2.5.x",
+    "express-browserid": "0.0.x",
+    "config": "0.4.x",
+    "mongoose": "2.5.x",
+    "stylus": "0.25.x"
   },
   "license": "MIT",
   "engine": {
