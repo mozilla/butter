@@ -14,6 +14,7 @@
             "./core/media",
             "./core/page",
             "./modules",
+            "ui/ui",
             "util/xhr"
           ],
           function(
@@ -23,6 +24,7 @@
             Media,
             Page,
             Modules,
+            UI,
             XHR
           ){
 
@@ -636,6 +638,8 @@
         var moduleCollection = Modules( _this, _config );
 
         _page = new Page( _config );
+
+        _this.ui = new UI( _this, _config.ui );
 
         //prepare the page next
         preparePopcornScriptsAndCallbacks(function(){
