@@ -281,6 +281,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
               optionString = JSON.stringify( saveOptions, null, 2 );
             } catch ( jsonError ) {
               optionString = false;
+              _logger.log( "WARNING: Unable to export event options: \n" + jsonError.message );
             }
             
             if ( optionString ) {
