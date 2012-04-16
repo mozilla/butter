@@ -15,10 +15,10 @@ target.all = function() {
 };
 
 target.clean = function() {
-  rm('-fr', 'dist');
+  rm('-fr', DIST_DIR);
 };
 
-target['dist_dir'] = function() {
+target.dist = function() {
   mkdir('-p', DIST_DIR);
 };
 
@@ -46,7 +46,7 @@ target.build = function() {
   echo('### Building butter');
 
   target.clean();
-  target['dist_dir']();
+  target.dist();
 
   exec(RJS + ' -o tools/build.js');
   exec(RJS + ' -o tools/build.optimized.js');
