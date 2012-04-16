@@ -11,7 +11,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         PLAYER_URL = POPCORN_BASE_URL + "modules/player/popcorn.player.js",
         PLAYER_TYPE_URL = POPCORN_BASE_URL + "players/{type}/popcorn.{type}.js";
 
-    var _eventManager = new EventManager( this );
+    var _eventManager = new EventManager( this ),
+        _snapshot;
 
     this.scrape = function() {
       var rootNode = document.body,

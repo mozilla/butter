@@ -545,7 +545,7 @@
         });
       } //if
 
-      function preparePopcornScriptsAndCallbacks( readyCallback ){
+      var preparePopcornScriptsAndCallbacks = this.preparePopcornScriptsAndCallbacks = function( readyCallback ){
         var popcornConfig = _config.popcorn || {},
             callbacks = popcornConfig.callbacks,
             scripts = popcornConfig.scripts,
@@ -570,7 +570,7 @@
 
               // see if we can call the readyCallback yet
               ++loaded;
-              if( loaded === toLoad.length ){
+              if( loaded === toLoad.length && readyCallback ){
                 readyCallback();
               }
 

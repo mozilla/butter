@@ -687,14 +687,17 @@
       var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../external/popcorn-js/test/trailer.ogv" } );
 
       m1.onReady(function(){
-        var exported = butter.getHTML();
-        ok( exported.indexOf( "inline test init from element" ) > -1, "found init script" );
-        ok( exported.indexOf( "inline test before" ) > -1, "found before script" );
-        ok( exported.indexOf( "inline test after" ) > -1, "found after script" );
-        ok( theZONE.indexOf( "i" ) > -1, "init callback called" );
-        ok( theZONE.indexOf( "b" ) > -1, "before callback called" );
-        ok( theZONE.indexOf( "a" ) > -1, "after callback called" );
-        start();
+        butter.preparePopcornScriptsAndCallbacks(function(){
+          document.head.removeChild( initScript );
+          var exported = butter.getHTML();
+          ok( exported.indexOf( "inline test init from element" ) > -1, "found init script" );
+          ok( exported.indexOf( "inline test before" ) > -1, "found before script" );
+          ok( exported.indexOf( "inline test after" ) > -1, "found after script" );
+          ok( theZONE.indexOf( "i" ) > -1, "init callback called" );
+          ok( theZONE.indexOf( "b" ) > -1, "before callback called" );
+          ok( theZONE.indexOf( "a" ) > -1, "after callback called" );
+          start();  
+        });
       });
 
     });
