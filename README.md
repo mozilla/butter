@@ -24,11 +24,19 @@ Environment Setup
 
 When updating your repo, make sure to run `node make submodules` to update Butter's submodules.
 
-Running Butter
---------------
+Running Butter (with cornfield)
+-------------------------------
 
 * To use butter be sure to start the node server by running `node make server`.
 * Navigate to http://localhost:8888/templates/test.html to begin using Butter
+
+Running Butter (without cornfield)
+----------------------------------
+
+* Be sure to have a webserver of some sort running and navigate to butter/templates/test.html ( keep in mind you will not be able to save and load projects )
+* Run `node make` to ensure all of the css has been compiled
+* If you do not have a webserver setup you can create a temporary one by running `python -m SimpleHTTPServer 8888` inside the root of your butter directory
+* Navigate to localhost:8888 to use butter
 
 Testing
 -------
