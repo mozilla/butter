@@ -22,12 +22,16 @@
 
         document.addEventListener( "DOMContentLoaded", function( e ){
 
-          function sendData( alsoClose ){
+          function sendData( alsoClose, popcornOptions ){
             alsoClose = !!alsoClose; 
-            var popcornOptions = {};
-            for( var item in _manifest ) {
-              popcornOptions[ item ] = document.getElementById( item ).value;
+            
+            if(popcornOptions === undefined) {
+              popcornOptions = {};
+              for( var item in _manifest ) {
+                popcornOptions[ item ] = document.getElementById( item ).value;
+              }
             }
+            
             document.getElementById( "message" ).innerHTML = "";
             _comm.send( "submit", {
               eventData: popcornOptions,
@@ -66,6 +70,7 @@
 
           _comm.listen( "trackeventdata", function( e ){
             var popcornOptions = e.data.popcornOptions,
+                saveOriginalOptions = popcornOptions, //For cancel
                 targets = e.data.targets,
                 media = e.data.media,
                 mediaName = "Current Media Element";
@@ -132,7 +137,44 @@
               row.appendChild( col2 );
               document.getElementById( "table" ).appendChild( row );
             }
+            //Done and cancel buttons
+            var cancelButton = document.createElement("button");
+            cancelButton.id = "editor-cancel-button";
+            cancelButton.className = "cancel-button";
+            cancelButton.innerHTML = "Cancel";
+            
+            var doneButton = document.createElement("button");
+            doneButton.id = "editor-done-button";
+            doneButton.className = "done-button";
+            doneButton.innerHTML = "Save and Close";
+            
+            document.getElementById( "button-container" ).appendChild( doneButton );
+            document.getElementById( "button-container" ).appendChild( cancelButton );
+  
+            //Add submit functionality to all buttons
+            (function(buttons) {
+              for(var b = 0; b < buttons.length; b++) {
+                if(hasClass(buttons[b], "done-button")) {
+                  buttons[b].addEventListener("click", function(e) {
+                    e.preventDefault();
+                    sendData(true);
+                  });
+                } else if(hasClass(buttons[b], "cancel-button")) {
+                   buttons[b].addEventListener("click", function(e) {
+                      e.preventDefault();
+                      sendData(true, saveOriginalOptions);
+                    });
+                }
+              }
+            })(document.querySelectorAll("button"));
+            
           });
+          
+          //Helper
+          function hasClass(element, aClass) {
+            var result = element.className.match(new RegExp('(\\s|^)'+ aClass +'(\\s|$)'));
+            return result;
+          }
 
         }, false );
       })();
@@ -141,6 +183,7 @@
   <body>
     <table id="table">
     </table>
+    <div id="button-container"></div>
     <p id="message"></p>
   </body>
 </html>
