@@ -25,7 +25,12 @@ console.log( "Templates Dir:", TEMPLATES_DIR );
 console.log( "Publish Dir:", PUBLISH_DIR );
 
 var mongoose = require('mongoose'),
-    db = mongoose.connect('mongodb://localhost/test'),
+    db = mongoose.connect('mongodb://localhost/test', function( err ) {
+        if ( err ) {
+          console.log( "COULD NOT CONNECT TO MONGODB! Make sure it is running!" );
+          throw err;
+        }
+    });
     Schema = mongoose.Schema,
     
     Project = new Schema({
