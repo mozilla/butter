@@ -6,6 +6,9 @@
 <html>
   <head>
     <style>
+      table#table tr  td:nth-child(2) * {
+        font-size: 0.9em;
+      }
       table {
         font-family: helvetica !important;
         color: #fff !important;
@@ -23,7 +26,7 @@
         document.addEventListener( "DOMContentLoaded", function( e ){
 
           function sendData( alsoClose ){
-            alsoClose = !!alsoClose; 
+            alsoClose = !!alsoClose;
             var popcornOptions = {};
             for( var item in _manifest ) {
               popcornOptions[ item ] = document.getElementById( item ).value;
