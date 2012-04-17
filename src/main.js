@@ -588,7 +588,7 @@
               }
 
             }
-          }
+          };
         }
 
         _defaultPopcornCallbacks = callbacks;
@@ -623,7 +623,7 @@
           // otherwise, call the ready callback right away
           readyCallback();
         }
-      }
+      };
 
       function readConfig(){
         var icons = _config.icons,

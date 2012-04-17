@@ -49,7 +49,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         type: "js",
         url: PLAYER_TYPE_URL.replace( /\{type\}/g, type ),
         check: function(){
-          !!Popcorn[ type ];
+          return !!Popcorn[ type ];
         }
       }, callback );
     };

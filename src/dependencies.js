@@ -8,7 +8,7 @@ define([], function(){
         "popcorn-js": "../external/popcorn-js",
         "css": "css"
       },
-      VAR_REGEX = /\{([\w-\._]+)\}/g,
+      VAR_REGEX = /\{([\w\-\._]+)\}/g,
       CSS_POLL_INTERVAL = 10;
 
   var DEFAULT_CHECK_FUNCTION = function(){
@@ -27,7 +27,7 @@ define([], function(){
       if( replaceVars ){
         for( var i = 0; i < replaceVars.length; ++i ){
           var rv = replaceVars[ i ],
-              varOnly = /\{([\w-\._]+)\}/g.exec( rv )[ 1 ],
+              varOnly = VAR_REGEX.exec( rv )[ 1 ],
               regex = new RegExp( rv, "g" ),
               replacement = _configDirs[ varOnly ] || DEFAULT_DIRS[ varOnly ] || "";
           url = url.replace( regex, replacement );
@@ -73,7 +73,7 @@ define([], function(){
         url = fixUrl( url );
         if( !checkFn() ){
           scriptElement = document.createElement( "link" );
-          scriptElement.rel = "stylesheet"
+          scriptElement.rel = "stylesheet";
           scriptElement.href = url;
           document.head.appendChild( scriptElement );
         }
@@ -88,36 +88,43 @@ define([], function(){
       }
     };
 
+    function generateLoaderCallback( items, callback ){
+      var loaded = 0;
+      return function(){
+        ++loaded;
+        if( loaded === items.length ){
+          if( callback ){
+            callback();
+          }
+        }
+      };
+    }
+
+    function generateNextFunction( items, callback ){
+      var index = 0;
+      function next(){
+        if( index === items.length ){
+          callback();
+        }
+        else{
+          Loader.load( items[ index++ ], next );
+        }
+      }
+      return next;
+    }
+
     var Loader = {
 
       load: function( items, callback, ordered ){
         if( items instanceof Array && items.length > 0 ){
-
+          var onLoad = generateLoaderCallback( items, callback );
           if( !ordered ){
-            var loaded = 0;
-            function onLoad(){
-              ++loaded;
-              if( loaded === items.length ){
-                if( callback ){
-                  callback();
-                }
-              }
-            }
-
             for( var i = 0; i < items.length; ++i ){
               Loader.load( items[ i ], onLoad );
             }
           }
           else {
-            var index = 0;
-            function next(){
-              if( index === items.length ){
-                callback();
-              }
-              else{
-                Loader.load( items[ index++ ], next );
-              }
-            }
+            var next = generateNextFunction( items, callback );
             next();
           }
 
