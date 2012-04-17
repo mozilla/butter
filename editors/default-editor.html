@@ -151,30 +151,28 @@
             document.getElementById( "button-container" ).appendChild( doneButton );
             document.getElementById( "button-container" ).appendChild( cancelButton );
   
-            //Add submit functionality to all buttons
+            //Add done functionality to buttons
             (function(buttons) {
               for(var b = 0; b < buttons.length; b++) {
-                if(hasClass(buttons[b], "done-button")) {
                   buttons[b].addEventListener("click", function(e) {
                     e.preventDefault();
                     sendData(true);
                   });
-                } else if(hasClass(buttons[b], "cancel-button")) {
-                   buttons[b].addEventListener("click", function(e) {
-                      e.preventDefault();
-                      sendData(true, saveOriginalOptions);
-                    });
-                }
               }
-            })(document.querySelectorAll("button"));
+            })(document.getElementsByClassName('done-button'));
+            
+            //Add cancel functionality to buttons
+            (function(buttons) {
+              for(var b = 0; b < buttons.length; b++) {
+                  buttons[b].addEventListener("click", function(e) {
+                    e.preventDefault();
+                    sendData(true, saveOriginalOptions);
+                  });
+              }
+            })(document.getElementsByClassName('cancel-button'));
+            
             
           });
-          
-          //Helper
-          function hasClass(element, aClass) {
-            var result = element.className.match(new RegExp('(\\s|^)'+ aClass +'(\\s|$)'));
-            return result;
-          }
 
         }, false );
       })();
