@@ -6,7 +6,7 @@ files=`find $DIRS -name '*.js'`
 touch tmp.txt
 for word in $files
 do
-  python tools/jsbeautifier.py -e -s 2 -j -o tmp.txt -e $word
+  python tools/jsbeautifier.py -s 2 -j -o tmp.txt --extra-expr-spacing=1 $word
   rm $word
   mv tmp.txt $word
   echo beautified $word
