@@ -2,11 +2,11 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "util/dragndrop" ], function( DragNDrop ){
-	
-	return function( butter ){
+define( [ "util/dragndrop" ], function( DragNDrop ) {
+
+  return function( butter ) {
     var _parentElement = document.createElement( "div" ),
-        _containerElement = document.createElement( "div" );
+      _containerElement = document.createElement( "div" );
 
     _parentElement.id = "plugin-list";
     _containerElement.className = "container";
@@ -15,51 +15,51 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
 
     butter.ui.areas.work.addComponent( _parentElement, {
       states: [ "add-popcorn" ],
-      transitionIn: function(){
+      transitionIn: function() {
         _parentElement.style.display = "block";
-        setTimeout(function(){
+        setTimeout( function() {
           _parentElement.style.opacity = "1";
-        }, 0);
+        }, 0 );
       },
-      transitionOut: function(){
+      transitionOut: function() {
         _parentElement.style.opacity = "0";
       },
-      transitionInComplete: function(){
+      transitionInComplete: function() {
 
       },
-      transitionOutComplete: function(){
+      transitionOutComplete: function() {
         _parentElement.style.display = "none";
       }
     });
 
-    butter.listen( "pluginadded", function( e ){
+    butter.listen( "pluginadded", function( e ) {
       var element = document.createElement( "div" );
       element.innerHTML = e.data.type;
 
       DragNDrop.helper( element, {
         image: e.data.helper,
-        start: function(){
+        start: function() {
           var targets = butter.targets,
-              media = butter.currentMedia;
+            media = butter.currentMedia;
           media.view.blink();
-          for( var i=0, l=targets.length; i<l; ++i ){
+          for ( var i = 0, l = targets.length; i < l; ++i ) {
             targets[ i ].view.blink();
           }
         },
-        stop: function(){
-          
+        stop: function() {
+
         }
       });
 
       element.setAttribute( "data-butter-plugin-type", e.data.type );
       element.setAttribute( "data-butter-draggable-type", "plugin" );
-      
+
       _containerElement.appendChild( element );
     });
 
     _parentElement.style.display = "none";
     _parentElement.classList.add( "fadable" );
 
-	};
+  };
 
 });

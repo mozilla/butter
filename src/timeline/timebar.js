@@ -6,15 +6,15 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
   var CANVAS_CONTAINER_PADDING = 5;
 
-  return function( butter, media, tracksContainer, hScrollbar ){ 
+  return function( butter, media, tracksContainer, hScrollbar ) {
 
     var _element = document.createElement( "div" ),
-        _canvas = document.createElement( "canvas" ),
-        _canvasContainer = document.createElement( "div" ),
-        _media = media,
-        _tracksContainer = tracksContainer,
-        _scrubber = new Scrubber( butter, _element, _media, _tracksContainer, hScrollbar ),
-        _this = this;
+      _canvas = document.createElement( "canvas" ),
+      _canvasContainer = document.createElement( "div" ),
+      _media = media,
+      _tracksContainer = tracksContainer,
+      _scrubber = new Scrubber( butter, _element, _media, _tracksContainer, hScrollbar ),
+      _this = this;
 
     _element.className = "time-bar";
     _canvasContainer.className = "time-bar-canvas-container";
@@ -25,8 +25,8 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
     function drawTicks( zoom ) {
       var tracksContainerWidth = tracksContainer.container.getBoundingClientRect().width,
-          width = Math.min( tracksContainerWidth, _tracksContainer.container.scrollWidth ),
-          containerWidth = Math.min( width, _tracksContainer.element.offsetWidth - CANVAS_CONTAINER_PADDING );
+        width = Math.min( tracksContainerWidth, _tracksContainer.container.scrollWidth ),
+        containerWidth = Math.min( width, _tracksContainer.element.offsetWidth - CANVAS_CONTAINER_PADDING );
 
       _canvasContainer.style.width = containerWidth + "px";
 
@@ -40,14 +40,14 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       }
 
       var inc = _tracksContainer.container.scrollWidth / _media.duration,
-          textWidth = context.measureText( util.secondsToSMPTE( 5 ) ).width,
-          padding = 20,
-          lastPosition = 0,
-          lastTimeDisplayed = -( ( textWidth + padding ) / 2 ),
-          start = _tracksContainer.element.scrollLeft / inc,
-          end = ( _tracksContainer.element.scrollLeft + containerWidth ) / inc;
+        textWidth = context.measureText( util.secondsToSMPTE( 5 )).width,
+        padding = 20,
+        lastPosition = 0,
+        lastTimeDisplayed = -( (textWidth + padding ) / 2 ),
+        start = _tracksContainer.element.scrollLeft / inc,
+        end = ( _tracksContainer.element.scrollLeft + containerWidth ) / inc;
 
-      context.clearRect ( 0, 0, _canvas.width, _canvas.height );
+      context.clearRect( 0, 0, _canvas.width, _canvas.height );
       context.translate( -_tracksContainer.element.scrollLeft, 0 );
       context.beginPath();
 
@@ -62,7 +62,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
         }
 
         var position = i * inc;
-        var spaceBetween = -~( position ) + ~( lastPosition );
+        var spaceBetween = -~ ( position ) + ~ ( lastPosition );
 
         // ensure there is enough space to draw a seconds tick
         if ( spaceBetween > 3 ) {
@@ -87,7 +87,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
           context.moveTo( -~position, 0 );
           context.lineTo( -~position, 10 );
 
-          if ( ( position - lastTimeDisplayed ) > textWidth + padding ) {
+          if ( (position - lastTimeDisplayed ) > textWidth + padding ) {
 
             lastTimeDisplayed = position;
             // text color
@@ -114,19 +114,17 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       drawTicks( zoom );
     };
 
-    this.destroy = function(){
+    this.destroy = function() {
       _scrubber.destroy();
-    }; //destroy
-
+    };
     Object.defineProperties( this, {
       element: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _element;
         }
       }
     });
 
-  }; //TimeBar
-
+  };
 });

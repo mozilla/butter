@@ -1,30 +1,30 @@
-define([], function(){
-  
-  return function( parentElement ){
+define( [  ], function() {
+
+  return function( parentElement ) {
 
     var outerElement = document.createElement( "div" ),
-        innerElement = document.createElement( "div" );
+      innerElement = document.createElement( "div" );
 
     outerElement.className = "butter-logo-spin-outer";
     innerElement.className = "butter-logo-spin-inner";
 
     outerElement.appendChild( innerElement );
 
-    if( parentElement ){
+    if ( parentElement ) {
       parentElement.appendChild( outerElement );
     }
 
     return {
       element: outerElement,
-      start: function(){
+      start: function() {
         outerElement.classList.remove( "fade-out" );
         innerElement.classList.add( "active" );
       },
-      stop: function( callback ){
+      stop: function( callback ) {
         outerElement.classList.add( "fade-out" );
-        setTimeout(function(){
+        setTimeout( function() {
           innerElement.classList.remove( "active" );
-          if( callback ){
+          if ( callback ) {
             callback();
           }
         }, 500 );

@@ -5,59 +5,55 @@
 define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "util/time" ], function( EventManager, IFrameDialog, WindowDialog, TimeUtil ) {
 
   var DEFAULT_DIMS = [ 400, 400 ],
-      DEFAULT_FRAME_TYPE = "iframe";
+    DEFAULT_FRAME_TYPE = "iframe";
 
   var __guid = 0;
 
-  function Editor( butter, source, type, frameType, parentElement, options ){
+  function Editor( butter, source, type, frameType, parentElement, options ) {
     options = options || {};
 
     var _id = __guid++,
-        _frameType = frameType || DEFAULT_FRAME_TYPE,
-        _source = source,
-        _type = type,
-        _dims = DEFAULT_DIMS.slice(),
-        _em = new EventManager( this ),
-        _dialog,
-        _dialogOptions = {
-          type: _frameType,
-          modal: "behind-timeline",
-          url: source,
-          parent: parentElement
-        },
-        _currentTarget,
-        _currentTrackEvent,
-        _this = this;
+      _frameType = frameType || DEFAULT_FRAME_TYPE,
+      _source = source,
+      _type = type,
+      _dims = DEFAULT_DIMS.slice(),
+      _em = new EventManager( this ),
+      _dialog, _dialogOptions = {
+        type: _frameType,
+        modal: "behind-timeline",
+        url: source,
+        parent: parentElement
+      },
+      _currentTarget, _currentTrackEvent, _this = this;
 
-    _dims[ 0 ] = options.width || _dims[ 0 ];
-    _dims[ 1 ] = options.height || _dims[ 1 ];
+    _dims[ 0] = options.width || _dims[0 ];
+    _dims[ 1] = options.height || _dims[1 ];
 
-    function blinkTarget(){
-      if( _currentTarget === "Media Element" ){
+    function blinkTarget() {
+      if ( _currentTarget === "Media Element" ) {
         butter.currentMedia.view.blink();
-      }
-      else{
+      } else {
         var target = butter.getTargetByType( "elementID", _currentTarget );
-        if( target ){
+        if ( target ) {
           target.view.blink();
-        } //if
-      } //if
+        }
+      }
     }
 
-    function onTrackEventUpdated( e ){
+    function onTrackEventUpdated( e ) {
       var popcornData = _currentTrackEvent.popcornOptions;
-      if( popcornData.target !== _currentTarget ){
+      if ( popcornData.target !== _currentTarget ) {
         _currentTarget = popcornData.target;
         blinkTarget();
-      } //if
+      }
       _dialog.send( "trackeventupdated", _currentTrackEvent.popcornOptions );
-    } //onTrackEventUpdated
+    }
 
-    function onTrackEventUpdateFailed( e ){
+    function onTrackEventUpdateFailed( e ) {
       _dialog.send( "trackeventupdatefailed", e.data );
-    } //onTrackEventUpdateFailed
+    }
 
-    function onClose(){
+    function onClose() {
       _dialog = null;
       _currentTrackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
       _currentTrackEvent.unlisten( "trackeventupdatefailed", onTrackEventUpdateFailed );
@@ -65,30 +61,27 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
     }
 
     this.open = function( trackEvent ) {
-      if( !_dialog ){
-        if( _frameType === "window" ){
+      if ( !_dialog ) {
+        if ( _frameType === "window" ) {
           _dialog = new WindowDialog( _dialogOptions );
-        }
-        else{
+        } else {
           _dialog = new IFrameDialog( _dialogOptions );
-        } //if
-      } //if
-
-      if( !_dialog.closed && _dialog.focus ){
+        }
+      }
+      if ( !_dialog.closed && _dialog.focus ) {
         _dialog.focus();
         return;
-      } //if
-
+      }
       _currentTrackEvent = trackEvent;
 
       _dialog.open({
-        open: function( e ){
-          var targets = [],
-              media = {
-                name: butter.currentMedia.name,
-                target: butter.currentMedia.target
-              };
-          for( var i = 0, l = butter.targets.length; i < l; i++ ) {
+        open: function( e ) {
+          var targets = [  ],
+            media = {
+              name: butter.currentMedia.name,
+              target: butter.currentMedia.target
+            };
+          for ( var i = 0, l = butter.targets.length; i < l; i++ ) {
             targets.push( butter.targets[ i ].element.id );
           }
           var corn = trackEvent.popcornOptions;
@@ -98,34 +91,33 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
             targets: targets,
             media: media
           });
-          _currentTarget = corn.target; 
+          _currentTarget = corn.target;
           blinkTarget();
           trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
           trackEvent.listen( "trackeventupdatefailed", onTrackEventUpdateFailed );
-          if( _frameType === "iframe" ){
+          if ( _frameType === "iframe" ) {
             _dialog.iframe.focus();
           }
           _em.dispatch( "open" );
         },
-        submit: function( e ){
+        submit: function( e ) {
           var duration = TimeUtil.roundTime( butter.currentMedia.duration ),
-              popcornData = e.data.eventData,
-              alsoClose = e.data.alsoClose;
-          if( popcornData ){
+            popcornData = e.data.eventData,
+            alsoClose = e.data.alsoClose;
+          if ( popcornData ) {
             trackEvent.update( popcornData );
-            if( alsoClose ){
+            if ( alsoClose ) {
               _dialog.close();
-            } //if
-          } //if
+            }
+          }
         },
-        close: function( e ){
+        close: function( e ) {
           onClose();
         }
       });
-    }; //open
-
-    this.close = function(){
-      if( _currentTrackEvent && _dialog ){
+    };
+    this.close = function() {
+      if ( _currentTrackEvent && _dialog ) {
         _dialog.close();
       }
     };
@@ -133,39 +125,39 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
     Object.defineProperties( _this, {
       isOpen: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return !!_dialog;
         }
       },
       type: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _type;
         }
       },
       frame: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _frameType;
         }
       },
       size: {
         enumerable: true,
-        get: function(){
-          return { width: _dims[ 0 ], height: _dims[ 1 ] };
+        get: function() {
+          return {
+            width: _dims[ 0 ],
+            height: _dims[ 1 ]
+          };
         },
-        set: function( val ){
+        set: function( val ) {
           val = val || {};
-          _dims[ 0 ] = val.width || _dims[ 0 ];
-          _dims[ 1 ] = val.height || _dims[ 1 ];
+          _dims[ 0] = val.width || _dims[0 ];
+          _dims[ 1] = val.height || _dims[1 ];
         }
       }
     });
 
-  } //Editor
-
+  }
   return Editor;
 
 });
-
-

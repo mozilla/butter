@@ -2,23 +2,19 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [
-          "dialog/iframe-dialog",
-          "util/dragndrop"
-        ], 
-        function( IFrameDialog, DragNDrop ){
+define( [ "dialog/iframe-dialog", "util/dragndrop" ], function( IFrameDialog, DragNDrop ) {
 
   var ADD_TRACK_BUTTON_Y_ADJUSTMENT = 35;
 
-  return function( butter, media, tracksContainer, orderChangedCallback ){
+  return function( butter, media, tracksContainer, orderChangedCallback ) {
 
     var _media = media,
-        _container = document.createElement( "div" ),
-        _listElement = document.createElement( "div" ),
-        _addTrackButton = document.createElement( "button" ),
-        _tracks = {},
-        _menus = [],
-        _this = this;
+      _container = document.createElement( "div" ),
+      _listElement = document.createElement( "div" ),
+      _addTrackButton = document.createElement( "button" ),
+      _tracks = {},
+      _menus = [  ],
+      _this = this;
 
     _container.className = "track-handle-container";
     _listElement.className = "handle-list";
@@ -30,14 +26,14 @@ define( [
 
     _container.appendChild( _addTrackButton );
 
-    _addTrackButton.addEventListener( "click", function( e ){
+    _addTrackButton.addEventListener( "click", function( e ) {
       butter.currentMedia.addTrack();
     }, false );
 
     var _sortable = DragNDrop.sortable( _listElement, {
-      change: function( elements ){
-        var orderedTracks = [];
-        for( var i=0, l=elements.length; i<l; ++i ){
+      change: function( elements ) {
+        var orderedTracks = [  ];
+        for ( var i = 0, l = elements.length; i < l; ++i ) {
           var id = elements[ i ].getAttribute( "data-butter-track-id" );
           orderedTracks.push( _tracks[ id ].track );
         }
@@ -46,45 +42,47 @@ define( [
     });
 
     var existingTracks = _media.tracks;
-    for( var i=0; i<existingTracks.length; ++i ){
+    for ( var i = 0; i < existingTracks.length; ++i ) {
       onTrackAdded({
         data: existingTracks[ i ]
       });
     }
 
-    function onTrackAdded( e ){
+    function onTrackAdded( e ) {
       var track = e.data,
-          trackId = track.id,
-          trackName = track.name,
-          trackDiv = document.createElement( "div" ),
-          menuDiv = document.createElement( "div" ),
-          deleteButton = document.createElement( "div" ),
-          editButton = document.createElement( "div" );
+        trackId = track.id,
+        trackName = track.name,
+        trackDiv = document.createElement( "div" ),
+        menuDiv = document.createElement( "div" ),
+        deleteButton = document.createElement( "div" ),
+        editButton = document.createElement( "div" );
 
       menuDiv.className = "menu";
       deleteButton.className = "delete";
       menuDiv.appendChild( deleteButton );
 
-      deleteButton.addEventListener( "click", function( e ){
+      deleteButton.addEventListener( "click", function( e ) {
         var dialog = new IFrameDialog({
           type: "iframe",
           modal: true,
           url: butter.ui.dialogDir + "delete-track.html",
           events: {
-            open: function( e ){
+            open: function( e ) {
               dialog.send( "trackdata", trackName );
             },
-            submit: function( e ){
-              if( e.data === true ){
+            submit: function( e ) {
+              if ( e.data === true ) {
                 media.removeTrack( track );
-              } //if
+              }
               dialog.close();
             },
-            cancel: function( e ){
+            cancel: function( e ) {
               dialog.close();
             },
             trackupdated: function( e ) {
-              dialog.send( "trackupdated", { success: false });
+              dialog.send( "trackupdated", {
+                success: false
+              });
             }
           }
         });
@@ -94,7 +92,7 @@ define( [
         dialog.open();
       }, false );
 
-      trackDiv.addEventListener( "dblclick", function( e ){
+      trackDiv.addEventListener( "dblclick", function( e ) {
         var dialog = new IFrameDialog({
           type: "iframe",
           modal: true,
@@ -107,17 +105,16 @@ define( [
               // wrap in a try catch so we know right away about any malformed JSON
               try {
                 var trackData = JSON.parse( e.data ),
-                    trackEvents = track.trackEvents,
-                    trackDataEvents = trackData.trackEvents,
-                    dontRemove = {},
-                    toAdd = [],
-                    i,
-                    l;
+                  trackEvents = track.trackEvents,
+                  trackDataEvents = trackData.trackEvents,
+                  dontRemove = {},
+                  toAdd = [  ],
+                  i, l;
 
                 // update every trackevent with it's new data
                 for ( i = 0, l = trackDataEvents.length; i < l; i++ ) {
                   var teData = trackDataEvents[ i ],
-                      te = track.getTrackEventById( teData.id );
+                    te = track.getTrackEventById( teData.id );
 
                   // check to see if the current track event exists already
                   if ( te ) {
@@ -126,15 +123,18 @@ define( [
                      * which ones to remove later
                      */
                     dontRemove[ teData.id ] = teData;
-                  // if we couldn't find the track event, it must be a new one
+                    // if we couldn't find the track event, it must be a new one
                   } else {
-                    toAdd.push( { type: teData.type, popcornOptions: teData.popcornOptions } );
+                    toAdd.push({
+                      type: teData.type,
+                      popcornOptions: teData.popcornOptions
+                    });
                   }
                 }
 
                 // remove all trackEvents that wern't updated
                 for ( i = trackEvents.length, l = 0; i >= l; i-- ) {
-                  if ( trackEvents[ i ] && !dontRemove[ trackEvents[ i ].id ] ) {
+                  if ( trackEvents[ i] && !dontRemove[trackEvents[i].id ] ) {
                     track.removeTrackEvent( trackEvents[ i ] );
                   }
                 }
@@ -161,7 +161,7 @@ define( [
       trackDiv.className = "track-handle";
       trackDiv.id = "track-handle-" + trackId;
       trackDiv.setAttribute( "data-butter-track-id", trackId );
-      trackDiv.appendChild( document.createTextNode( trackName ) );
+      trackDiv.appendChild( document.createTextNode( trackName ));
       trackDiv.appendChild( menuDiv );
 
       _sortable.addItem( trackDiv );
@@ -180,7 +180,7 @@ define( [
 
     _media.listen( "trackadded", onTrackAdded );
 
-    _media.listen( "trackremoved", function( e ){
+    _media.listen( "trackremoved", function( e ) {
       var trackId = e.data.id;
       _listElement.removeChild( _tracks[ trackId ].element );
       _sortable.removeItem( _tracks[ trackId ].element );
@@ -189,26 +189,24 @@ define( [
       _addTrackButton.style.top = _listElement.offsetHeight - ADD_TRACK_BUTTON_Y_ADJUSTMENT + "px";
     });
 
-    tracksContainer.element.addEventListener( "scroll", function( e ){
+    tracksContainer.element.addEventListener( "scroll", function( e ) {
       _container.scrollTop = tracksContainer.element.scrollTop;
     }, false );
 
-    this.update = function(){
+    this.update = function() {
       _container.scrollTop = tracksContainer.element.scrollTop;
       _addTrackButton.style.top = _listElement.offsetHeight - ADD_TRACK_BUTTON_Y_ADJUSTMENT + "px";
-    }; //update
-
+    };
     _this.update();
 
     Object.defineProperties( this, {
       element: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _container;
         }
       }
     });
 
-  }; //TrackHandles
-
+  };
 });

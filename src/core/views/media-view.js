@@ -1,14 +1,11 @@
-define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpinner ){
-  
+define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpinner ) {
+
   var DEFAULT_SUBTITLE = "&#10003; HTML5 &#10003; YouTube &#10003; Vimeo";
 
-  return function( media, options ){
+  return function( media, options ) {
     var _media = media,
-        _pageElement,
-        _onDropped = options.onDropped || function(){},
-        _propertiesElement = document.createElement( "div" ),
-        _logoSpinner,
-        _this = this;
+      _pageElement, _onDropped = options.onDropped ||
+    function() {}, _propertiesElement = document.createElement( "div" ), _logoSpinner, _this = this;
 
     _propertiesElement.className = "butter-media-properties";
     _propertiesElement.setAttribute( "data-butter-exclude", true );
@@ -37,26 +34,24 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
 
     _propertiesElement.appendChild( container );
 
-    function showError( state, message ){
-      if( state ){
+    function showError( state, message ) {
+      if ( state ) {
         subtitle.innerHTML = message;
-      }
-      else{
+      } else {
         subtitle.innerHTML = DEFAULT_SUBTITLE;
       }
     }
 
-    function changeUrl(){
-      if( urlTextbox.value.replace( /\s/g, "" ) !== "" ){
+    function changeUrl() {
+      if ( urlTextbox.value.replace( /\s/g, "" ) !== "" ) {
         media.url = urlTextbox.value;
-      }
-      else{
+      } else {
         showError( true, "Your URL must not be blank:" );
       }
     }
 
-    urlTextbox.addEventListener( "keypress", function( e ){
-      if( e.which === 13 ){
+    urlTextbox.addEventListener( "keypress", function( e ) {
+      if ( e.which === 13 ) {
         changeUrl();
       }
     }, false );
@@ -65,60 +60,59 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
     _logoSpinner.start();
     changeButton.setAttribute( "disabled", true );
 
-    media.listen( "mediacontentchanged", function( e ){
+    media.listen( "mediacontentchanged", function( e ) {
       urlTextbox.value = media.url;
       showError( false );
       changeButton.setAttribute( "disabled", true );
       _logoSpinner.start();
     });
 
-    media.listen( "mediafailed", function( e ){
+    media.listen( "mediafailed", function( e ) {
       showError( true, "Media failed to load. Check your URL:" );
       changeButton.removeAttribute( "disabled" );
       _logoSpinner.stop();
     });
 
-    media.listen( "mediaready", function( e ){
+    media.listen( "mediaready", function( e ) {
       showError( false );
       changeButton.removeAttribute( "disabled" );
       _logoSpinner.stop();
     });
 
-    this.blink = function(){
+    this.blink = function() {
       _pageElement.blink();
     };
 
-    function pageElementMoved( e ){
+    function pageElementMoved( e ) {
       var rect = e ? e.data : _pageElement.element.getBoundingClientRect();
       _propertiesElement.style.left = rect.left + "px";
       _propertiesElement.style.top = rect.top + "px";
     }
 
-    this.update = function(){
+    this.update = function() {
       urlTextbox.value = media.url;
 
       var targetElement = document.getElementById( _media.target );
 
-      if( _pageElement ){
+      if ( _pageElement ) {
         _pageElement.destroy();
-      } //if
+      }
       _pageElement = new PageElement( _media.target, {
-        over: function( event ){
+        over: function( event ) {
           _draggingOver = true;
         },
-        out: function( event ){
+        out: function( event ) {
           _draggingOver = false;
         },
-        drop: function( element ){
+        drop: function( element ) {
           _onDropped( element );
         }
-      },
-      {
+      }, {
         highlightClass: "butter-media-highlight"
       });
 
-      if( targetElement ){
-        if( !_propertiesElement.parentNode ){
+      if ( targetElement ) {
+        if ( !_propertiesElement.parentNode ) {
           document.body.appendChild( _propertiesElement );
         }
         _pageElement.listen( "moved", pageElementMoved );
