@@ -222,7 +222,14 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
      * insert in a script tag).
      */
     var generatePopcornString = this.generatePopcornString = function( popcornOptions, url, target, method ){
-      var popcornString = "";
+      var popcornString = "",
+          trackEvents,
+          trackEvent,
+          optionString,
+          saveOptions,
+          i,
+          l,
+          option;
 
       // prepare popcornOptions as a string
       if ( popcornOptions ) {
@@ -260,14 +267,13 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       if ( _popcorn ) {
 
         // gather and serialize existing trackevents
-        var trackEvents = _popcorn.getTrackEvents(),
-          trackEvent, optionString, saveOptions;
+        trackEvents = _popcorn.getTrackEvents();
         if ( trackEvents ) {
-          for ( var i=0, l=trackEvents.length; i<l; ++i ) {
+          for ( i=0, l=trackEvents.length; i<l; ++i ) {
             trackEvent = trackEvents[ i ];
             popcornOptions = trackEvent._natives.manifest.options;
             saveOptions = {};
-            for ( var option in popcornOptions ) {
+            for ( option in popcornOptions ) {
               if ( popcornOptions.hasOwnProperty( option ) ) {
                 if (trackEvent[ option ] !== undefined) {
                   saveOptions[ option ] = trackEvent[ option ];
