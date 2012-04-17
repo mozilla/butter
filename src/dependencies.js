@@ -50,10 +50,7 @@ define([], function(){
           scriptElement.onload = scriptElement.onreadystatechange = callback;
         }
         else{
-          // keep event-loop behaviour consistent
-          setTimeout(function(){
-            callback();  
-          }, 0);
+          callback();  
         }
       },
       css: function( url, exclude, callback, checkFn ){
@@ -81,7 +78,7 @@ define([], function(){
         var interval = setInterval(function(){
           if( checkFn() ){
             clearInterval( interval );
-            callback();  
+            callback();
           }
         }, CSS_POLL_INTERVAL );
 
