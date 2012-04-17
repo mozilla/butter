@@ -173,6 +173,7 @@ class Beautifier:
 
         # Words which always should start on a new line
         self.line_starters = 'continue,try,throw,return,var,if,switch,case,default,for,while,break,function'.split(',')
+        self.limited_line_starters = 'if,for,while,function'.split(',')
         self.set_mode('BLOCK')
 
         global parser_pos
@@ -651,7 +652,7 @@ class Beautifier:
         elif self.last_text in self.line_starters or self.last_text == 'catch':
             self.append(' ')
 
-        if self.opts.extra_expr_spacing and self.last_type in ['TK_START_EXPR', 'TK_WORD']:
+        if self.opts.extra_expr_spacing and self.last_type in ['TK_START_EXPR', 'TK_WORD'] and self.last_test in self.limited_line_starters:
             self.append(self.opts.extra_expr_spacing)
 
         self.append(token_text)
