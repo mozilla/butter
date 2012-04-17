@@ -8,7 +8,7 @@ define([], function(){
         "popcorn-js": "../external/popcorn-js",
         "css": "css"
       },
-      VAR_REGEX = /\{([\w\-\._]+)\}/g,
+      VAR_REGEX = /\{([\w\-\._]+)\}/,
       CSS_POLL_INTERVAL = 10;
 
   var DEFAULT_CHECK_FUNCTION = function(){
@@ -23,16 +23,16 @@ define([], function(){
     var _configDirs = config.dirs;
 
     function fixUrl( url ){
-      var replaceVars = url.match( VAR_REGEX );
-      if( replaceVars ){
-        for( var i = 0; i < replaceVars.length; ++i ){
-          var rv = replaceVars[ i ],
-              varOnly = VAR_REGEX.exec( rv )[ 1 ],
-              regex = new RegExp( rv, "g" ),
-              replacement = _configDirs[ varOnly ] || DEFAULT_DIRS[ varOnly ] || "";
-          url = url.replace( regex, replacement );
-        }
+      var match,
+          replacement;
+
+      while ( VAR_REGEX.test( url ) ) {
+        match = VAR_REGEX.exec( url );
+        replacement = _configDirs[ match[ 1 ] ] || DEFAULT_DIRS[ match[ 1 ] ] || "";
+        console.log( match, replacement );
+        url = url.replace( match[0], replacement );
       }
+
       return url.replace( "//", "/" );
     }
 
