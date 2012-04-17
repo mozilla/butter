@@ -263,6 +263,6 @@ app.post('/project/:id?', function( req, res ) {
 
 app.listen(CONFIG.server.bindPort, CONFIG.server.bindIP, function() {
   var addy = app.address();
-  console.log('Server started on http://' + addy.address + ':' + addy.port);
+  console.log('Server started on http://' + CONFIG.server.bindIP + ':' + CONFIG.server.bindPort);
   console.log('Press Ctrl+C to stop');
 });
