@@ -3,92 +3,87 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 
-define( [], function(){
+define ( [], function() {
   var ZOOM_LEVELS = 6;
 
-  return function( zoomCallback ){
+  return function( zoomCallback ) {
 
-    var _element = document.createElement( "div" ),
-        _handle = document.createElement( "div" ),
-        _rect,
-        _mousePos,
-        _handleWidth,
-        _elementWidth,
-        _this = this;
+    var _element = document.createElement ( "div" ),
+      _handle = document.createElement ( "div" ),
+      _rect, _mousePos, _handleWidth, _elementWidth, _this = this;
 
     _element.className = "zoom-bar scroll-bar";
     _handle.className = "scroll-handle";
 
-    _element.appendChild( _handle );
+    _element.appendChild ( _handle );
 
-    function onMouseUp(){
-      window.removeEventListener( "mouseup", onMouseUp, false );
-      window.removeEventListener( "mousemove", onMouseMove, false );
-      _handle.addEventListener( "mousedown", onMouseDown, false );
-      zoomCallback( _handle.offsetLeft / _rect.width  );
-    } //onMouseUp
+    function onMouseUp () {
+      window.removeEventListener ( "mouseup", onMouseUp, false );
+      window.removeEventListener ( "mousemove", onMouseMove, false );
+      _handle.addEventListener ( "mousedown", onMouseDown, false );
+      zoomCallback ( _handle.offsetLeft / _rect.width );
+    }
 
-    function onMouseMove( e ){
+    function onMouseMove ( e ) {
       var diff = e.pageX - _mousePos;
-      diff = Math.max( 0, Math.min( diff, _elementWidth - _handleWidth ) );
+      diff = Math.max ( 0, Math.min ( diff, _elementWidth - _handleWidth ) );
       _handle.style.left = diff + "px";
-      zoomCallback( _handle.offsetLeft / _rect.width  );
-    } //onMouseMove
+      zoomCallback ( _handle.offsetLeft / _rect.width );
+    }
 
-    function onMouseDown( e ){
-      if( e.button === 0 ){
+    function onMouseDown ( e ) {
+      if ( e.button === 0 ) {
         var handleX = _handle.offsetLeft;
         _mousePos = e.pageX - handleX;
-        window.addEventListener( "mouseup", onMouseUp, false );
-        window.addEventListener( "mousemove", onMouseMove, false );
-        _handle.removeEventListener( "mousedown", onMouseDown, false );
-      } //if
-    } //onMouseDown
-
-    _handle.addEventListener( "mousedown", onMouseDown, false );
+        window.addEventListener ( "mouseup", onMouseUp, false );
+        window.addEventListener ( "mousemove", onMouseMove, false );
+        _handle.removeEventListener ( "mousedown", onMouseDown, false );
+      }
+    }
+    _handle.addEventListener ( "mousedown", onMouseDown, false );
 
     this.update = function( level ) {
-      _rect = _element.getBoundingClientRect();
+      _rect = _element.getBoundingClientRect ();
       _handle.style.width = ( _rect.width / ZOOM_LEVELS ) + "px";
       _handleWidth = ( _rect.width / ZOOM_LEVELS );
-      _elementWidth = _rect.width; 
-      if( level !== undefined ){
+      _elementWidth = _rect.width;
+      if ( level !== undefined ) {
         _handle.style.left = ( level * _rect.width / ZOOM_LEVELS ) + "px";
-      } //if
+      }
     };
 
-    _element.addEventListener( "click", function( e ) {
+    _element.addEventListener ( "click", function( e ) {
       // bail early if this event is coming from the handle
-      if( e.srcElement === _handle ) {
+      if ( e.srcElement === _handle ) {
         return;
       }
 
       var posX = e.pageX,
-          handleRect = _handle.getBoundingClientRect(),
-          elementRect = _element.getBoundingClientRect(),
-          p;
+        handleRect = _handle.getBoundingClientRect (),
+        elementRect = _element.getBoundingClientRect (),
+        p;
 
-      if( posX > handleRect.right ) {
-        _handle.style.left = ( ( posX - elementRect.left ) - _handleWidth ) + "px"; 
+      if ( posX > handleRect.right ) {
+        _handle.style.left = ( ( posX - elementRect.left ) - _handleWidth ) + "px";
       } else {
-        _handle.style.left = posX - elementRect.left + "px"; 
+        _handle.style.left = posX - elementRect.left + "px";
       }
-      
-      onMouseMove( e );
-    }, false);
 
-    _element.addEventListener( "resize", function( e ){
-      _this.update();
+      onMouseMove ( e );
     }, false );
 
-    Object.defineProperties( this, {
+    _element.addEventListener ( "resize", function( e ) {
+      _this.update ();
+    }, false );
+
+    Object.defineProperties ( this, {
       element: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _element;
         }
       }
     });
 
-  }; //ZoomBar
+  };
 });

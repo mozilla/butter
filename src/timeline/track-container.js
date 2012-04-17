@@ -2,145 +2,145 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ){
+define ( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
-  return function( media ){
+  return function( media ) {
 
     var _media = media,
-        _zoom = 1,
-        _this = this;
+      _zoom = 1,
+      _this = this;
 
-    var _element = document.createElement( "div" ),
-        _container = document.createElement( "div" );
+    var _element = document.createElement ( "div" ),
+      _container = document.createElement ( "div" );
 
-    _element.appendChild( _container );
+    _element.appendChild ( _container );
 
     _element.className = "tracks-container-wrapper";
     _container.className = "tracks-container";
 
-    _container.addEventListener( "mousedown", function( e ){
-      _this.deselectOthers();
+    _container.addEventListener ( "mousedown", function( e ) {
+      _this.deselectOthers ();
     }, false );
 
-    this.orderTracks = function( orderedTracks ){
-      for( var i=0, l=orderedTracks.length; i<l; ++i ){
+    this.orderTracks = function( orderedTracks ) {
+      for ( var i = 0, l = orderedTracks.length; i < l; ++i ) {
         var trackElement = orderedTracks[ i ].view.element;
-        if( trackElement !== _container.childNodes[ i ] ){
+        if ( trackElement !== _container.childNodes[ i ] ) {
           orderedTracks[ i ].order = i;
-          _container.insertBefore( trackElement, _container.childNodes[ i + 1 ] );
-        } //if
-      } //for
-    }; //orderTracks
-
+          _container.insertBefore ( trackElement, _container.childNodes[ i + 1 ] );
+        }
+      }
+    };
     this.deselectOthers = function() {
-      for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+      for ( var i = 0; i < butter.selectedEvents.length; i++) {
         butter.selectedEvents[ i ].selected = false;
-      } // for
+      }
       butter.selectedEvents = [];
       return _this;
-    }; //deselectOthers
+    };
 
-    function resetContainer() {
+    function resetContainer () {
       _container.style.width = _media.duration * _zoom + "px";
-    } //resetContainer
-
-    _media.listen( "mediaready", function(){
-      resetContainer();
+    }
+    _media.listen ( "mediaready", function() {
+      resetContainer ();
       var tracks = _media.tracks;
-      for( var i=0, il=tracks.length; i<il; ++i ){
+      for ( var i = 0, il = tracks.length; i < il; ++i ) {
         var trackView = tracks[ i ].view;
-        _container.appendChild( trackView.element );
+        _container.appendChild ( trackView.element );
         trackView.duration = _media.duration;
         trackView.zoom = _zoom;
-      } //for
+      }
     });
 
-    function onTrackAdded( e ){
+    function onTrackAdded ( e ) {
       var trackView = e.data.view;
-      _container.appendChild( trackView.element );
+      _container.appendChild ( trackView.element );
       trackView.duration = _media.duration;
       trackView.zoom = _zoom;
       trackView.parent = _this;
     }
 
     var existingTracks = _media.tracks;
-    for( var i=0; i<existingTracks.length; ++i ){
-      onTrackAdded({
+    for ( var i = 0; i < existingTracks.length; ++i ) {
+      onTrackAdded ({
         data: existingTracks[ i ]
       });
     }
 
-    _media.listen( "trackadded", onTrackAdded );
+    _media.listen ( "trackadded", onTrackAdded );
 
-    _media.listen( "trackremoved", function( e ){
+    _media.listen ( "trackremoved", function( e ) {
       var trackView = e.data.view;
-      _container.removeChild( trackView.element );
+      _container.removeChild ( trackView.element );
     });
 
-    Object.defineProperties( this, {
+    Object.defineProperties ( this, {
       zoom: {
         enumerable: true,
-        get: function(){ return _zoom; },
-        set: function( val ){
+        get: function() {
+          return _zoom;
+        },
+        set: function( val ) {
           _zoom = val;
-          resetContainer();
+          resetContainer ();
           var tracks = _media.tracks;
-          for( var i=0, il=tracks.length; i<il; ++i ){
+          for ( var i = 0, il = tracks.length; i < il; ++i ) {
             tracks[ i ].view.zoom = _zoom;
-          } //for
+          }
         }
       },
       element: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _element;
         }
       },
       width: {
         enumerable: true,
-        get: function(){
-          return _element.getBoundingClientRect().width;
+        get: function() {
+          return _element.getBoundingClientRect ().width;
         }
       },
       height: {
         enumerable: true,
-        get: function(){
-          return _element.getBoundingClientRect().height;
+        get: function() {
+          return _element.getBoundingClientRect ().height;
         }
       },
       scrollWidth: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _element.scrollWidth;
         }
       },
       scrollHeight: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _element.scrollHeight;
         }
       },
       vScroll: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _element.scrollTop / _element.scrollHeight;
         },
-        set: function( val ){
+        set: function( val ) {
           _element.scrollTop = _element.scrollHeight * val;
         }
       },
       hScroll: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _element.scrollLeft / _element.scrollWidth;
         },
-        set: function( val ){
+        set: function( val ) {
           _element.scrollLeft = _element.scrollWidth * val;
         }
       },
       container: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _container;
         }
       }
@@ -149,4 +149,3 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
   };
 
 });
-

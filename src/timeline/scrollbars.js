@@ -2,269 +2,252 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager" ], function( EventManager ){
+define ( [ "core/eventmanager" ], function( EventManager ) {
 
   var VERTICAL_SIZE_REDUCTION_FACTOR = 3;
 
-  function Vertical( tracksContainer ){
-    var _element = document.createElement( "div" ),
-        _handle = document.createElement( "div" ),
-        _tracksContainer = tracksContainer,
-        _containerParent = tracksContainer.element,
-        _containerChild = tracksContainer.container,
-        _elementHeight,
-        _parentHeight,
-        _childHeight,
-        _scrollHeight,
-        _handleHeight,
-        _mousePos = 0,
-        _em = new EventManager( this ),
-        _this = this;
+  function Vertical ( tracksContainer ) {
+    var _element = document.createElement ( "div" ),
+      _handle = document.createElement ( "div" ),
+      _tracksContainer = tracksContainer,
+      _containerParent = tracksContainer.element,
+      _containerChild = tracksContainer.container,
+      _elementHeight, _parentHeight, _childHeight, _scrollHeight, _handleHeight, _mousePos = 0,
+      _em = new EventManager ( this ),
+      _this = this;
 
     _element.className = "scroll-bar scroll-bar-v";
     _handle.className = "scroll-handle";
 
-    _element.appendChild( _handle );
+    _element.appendChild ( _handle );
 
-    function setup(){
-      _parentHeight = _containerParent.getBoundingClientRect().height;
-      _childHeight = _containerChild.getBoundingClientRect().height;
-      _elementHeight = _element.getBoundingClientRect().height;
+    function setup () {
+      _parentHeight = _containerParent.getBoundingClientRect ().height;
+      _childHeight = _containerChild.getBoundingClientRect ().height;
+      _elementHeight = _element.getBoundingClientRect ().height;
       _scrollHeight = _containerChild.scrollHeight;
       _handleHeight = _elementHeight - ( _scrollHeight - _parentHeight ) / VERTICAL_SIZE_REDUCTION_FACTOR;
-      _handleHeight = Math.max( 20, Math.min( _elementHeight, _handleHeight ) );
+      _handleHeight = Math.max ( 20, Math.min ( _elementHeight, _handleHeight ) );
       _handle.style.height = _handleHeight + "px";
-      setHandlePosition();
-    } //setup
+      setHandlePosition ();
+    }
 
-    function onMouseUp(){
-      window.removeEventListener( "mouseup", onMouseUp, false );
-      window.removeEventListener( "mousemove", onMouseMove, false );
-      _handle.addEventListener( "mousedown", onMouseDown, false );
-    } //onMouseUp
+    function onMouseUp () {
+      window.removeEventListener ( "mouseup", onMouseUp, false );
+      window.removeEventListener ( "mousemove", onMouseMove, false );
+      _handle.addEventListener ( "mousedown", onMouseDown, false );
+    }
 
-    function onMouseMove( e ){
+    function onMouseMove ( e ) {
       var diff = e.pageY - _mousePos;
-      diff = Math.max( 0, Math.min( diff, _elementHeight - _handleHeight ) );
+      diff = Math.max ( 0, Math.min ( diff, _elementHeight - _handleHeight ) );
       _handle.style.top = diff + "px";
       var p = _handle.offsetTop / ( _elementHeight - _handleHeight );
       _containerParent.scrollTop = ( _scrollHeight - _elementHeight ) * p;
-      _em.dispatch( "scroll", _containerParent.scrollTop );
-    } //onMouseMove
+      _em.dispatch ( "scroll", _containerParent.scrollTop );
+    }
 
-    function onMouseDown( e ){
-      if( e.button === 0 ){
+    function onMouseDown ( e ) {
+      if ( e.button === 0 ) {
         var handleY = _handle.offsetTop;
         _mousePos = e.pageY - handleY;
-        window.addEventListener( "mouseup", onMouseUp, false );
-        window.addEventListener( "mousemove", onMouseMove, false );
-        _handle.removeEventListener( "mousedown", onMouseDown, false );
-      } //if
-    } //onMouseDown
+        window.addEventListener ( "mouseup", onMouseUp, false );
+        window.addEventListener ( "mousemove", onMouseMove, false );
+        _handle.removeEventListener ( "mousedown", onMouseDown, false );
+      }
+    }
+    this.update = function() {
+      setup ();
+    };
 
-    this.update = function(){
-      setup();
-    }; //update
-
-    function setHandlePosition(){
-      if( _containerChild.scrollHeight - _elementHeight > 0 ) {
-        _handle.style.top = ( _elementHeight - _handleHeight ) *
-          ( _containerParent.scrollTop / ( _containerChild.scrollHeight - _elementHeight ) ) + "px";
-      }else{
+    function setHandlePosition () {
+      if ( _containerChild.scrollHeight - _elementHeight > 0 ) {
+        _handle.style.top = ( _elementHeight - _handleHeight ) * ( _containerParent.scrollTop / ( _containerChild.scrollHeight - _elementHeight ) ) + "px";
+      } else {
         _handle.style.top = "0px";
       }
     }
 
-    _containerParent.addEventListener( "scroll", function( e ){
-      setHandlePosition();
+    _containerParent.addEventListener ( "scroll", function( e ) {
+      setHandlePosition ();
     }, false );
 
-    _containerParent.addEventListener( "mousewheel", function( e ){
-      if( e.wheelDeltaY ){
+    _containerParent.addEventListener ( "mousewheel", function( e ) {
+      if ( e.wheelDeltaY ) {
         _containerParent.scrollTop -= e.wheelDeltaY;
-        setHandlePosition();
-        e.preventDefault();
+        setHandlePosition ();
+        e.preventDefault ();
       }
     }, false );
 
     // For Firefox
-    _containerParent.addEventListener( "DOMMouseScroll", function( e ){
-      if( e.axis === e.VERTICAL_AXIS && !e.shiftKey ){
+    _containerParent.addEventListener ( "DOMMouseScroll", function( e ) {
+      if ( e.axis === e.VERTICAL_AXIS && !e.shiftKey ) {
         _containerParent.scrollTop += e.detail * 2;
-        setHandlePosition();
-        e.preventDefault();
+        setHandlePosition ();
+        e.preventDefault ();
       }
     }, false );
 
-    _element.addEventListener( "click", function( e ) {
+    _element.addEventListener ( "click", function( e ) {
       // bail early if this event is coming from the handle
-      if( e.srcElement === _handle || e.button > 0 ) {
+      if ( e.srcElement === _handle || e.button > 0 ) {
         return;
       }
 
       var posY = e.pageY,
-          handleRect = _handle.getBoundingClientRect(),
-          elementRect = _element.getBoundingClientRect(),
-          p;
+        handleRect = _handle.getBoundingClientRect (),
+        elementRect = _element.getBoundingClientRect (),
+        p;
 
-      if( posY > handleRect.bottom ) {
+      if ( posY > handleRect.bottom ) {
         _handle.style.top = ( ( posY - elementRect.top ) - _handleHeight ) + "px";
-      } else if( posY < handleRect.top ) {
+      } else if ( posY < handleRect.top ) {
         _handle.style.top = posY - elementRect.top + "px";
       }
 
       p = _handle.offsetTop / ( _elementHeight - _handleHeight );
       _containerParent.scrollTop = ( _scrollHeight - _elementHeight ) * p;
-    }, false);
+    }, false );
 
-    window.addEventListener( "resize", setup, false );
-    _handle.addEventListener( "mousedown", onMouseDown, false );
+    window.addEventListener ( "resize", setup, false );
+    _handle.addEventListener ( "mousedown", onMouseDown, false );
 
-    setup();
+    setup ();
 
-    Object.defineProperties( this, {
+    Object.defineProperties ( this, {
       element: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _element;
         }
       }
     });
 
-  } //Vertical
+  }
 
-  function Horizontal( tracksContainer ){
-    var _element = document.createElement( "div" ),
-        _handle = document.createElement( "div" ),
-        _tracksContainer = tracksContainer,
-        _containerParent = tracksContainer.element,
-        _containerChild = tracksContainer.container,
-        _elementWidth,
-        _parentWidth,
-        _childWidth,
-        _scrollWidth,
-        _handleWidth,
-        _mousePos = 0,
-        _em = new EventManager( this ),
-        _this = this;
+  function Horizontal ( tracksContainer ) {
+    var _element = document.createElement ( "div" ),
+      _handle = document.createElement ( "div" ),
+      _tracksContainer = tracksContainer,
+      _containerParent = tracksContainer.element,
+      _containerChild = tracksContainer.container,
+      _elementWidth, _parentWidth, _childWidth, _scrollWidth, _handleWidth, _mousePos = 0,
+      _em = new EventManager ( this ),
+      _this = this;
 
     _element.className = "scroll-bar scroll-bar-h";
     _handle.className = "scroll-handle";
 
-    _element.appendChild( _handle );
+    _element.appendChild ( _handle );
 
-    function setup(){
-      _parentWidth = _containerParent.getBoundingClientRect().width;
-      _childWidth = _containerChild.getBoundingClientRect().width;
-      _elementWidth = _element.getBoundingClientRect().width;
+    function setup () {
+      _parentWidth = _containerParent.getBoundingClientRect ().width;
+      _childWidth = _containerChild.getBoundingClientRect ().width;
+      _elementWidth = _element.getBoundingClientRect ().width;
       _scrollWidth = _containerChild.scrollWidth;
       _handleWidth = _elementWidth - ( _scrollWidth - _parentWidth );
-      _handleWidth = Math.max( 20, Math.min( _elementWidth, _handleWidth ) );
+      _handleWidth = Math.max ( 20, Math.min ( _elementWidth, _handleWidth ) );
       _handle.style.width = _handleWidth + "px";
-      setHandlePosition();
-    } //setup
+      setHandlePosition ();
+    }
 
-    function onMouseUp(){
-      window.removeEventListener( "mouseup", onMouseUp, false );
-      window.removeEventListener( "mousemove", onMouseMove, false );
-      _handle.addEventListener( "mousedown", onMouseDown, false );
-    } //onMouseUp
+    function onMouseUp () {
+      window.removeEventListener ( "mouseup", onMouseUp, false );
+      window.removeEventListener ( "mousemove", onMouseMove, false );
+      _handle.addEventListener ( "mousedown", onMouseDown, false );
+    }
 
-    function onMouseMove( e ){
+    function onMouseMove ( e ) {
       var diff = e.pageX - _mousePos;
-      diff = Math.max( 0, Math.min( diff, _elementWidth - _handleWidth ) );
+      diff = Math.max ( 0, Math.min ( diff, _elementWidth - _handleWidth ) );
       _handle.style.left = diff + "px";
       var p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
       _containerParent.scrollLeft = ( _scrollWidth - _elementWidth ) * p;
-      _em.dispatch( "scroll", _containerParent.scrollLeft );
-    } //onMouseMove
+      _em.dispatch ( "scroll", _containerParent.scrollLeft );
+    }
 
-    function onMouseDown( e ){
-      if( e.button === 0 ){
+    function onMouseDown ( e ) {
+      if ( e.button === 0 ) {
         var handleX = _handle.offsetLeft;
         _mousePos = e.pageX - handleX;
-        window.addEventListener( "mouseup", onMouseUp, false );
-        window.addEventListener( "mousemove", onMouseMove, false );
-        _handle.removeEventListener( "mousedown", onMouseDown, false );
-      } //if
-    } //onMouseDown
+        window.addEventListener ( "mouseup", onMouseUp, false );
+        window.addEventListener ( "mousemove", onMouseMove, false );
+        _handle.removeEventListener ( "mousedown", onMouseDown, false );
+      }
+    }
 
-    function setHandlePosition(){
-      if( _scrollWidth - _elementWidth > 0 ) {
-        _handle.style.left = ( _elementWidth - _handleWidth ) *
-          ( _containerParent.scrollLeft / ( _scrollWidth - _elementWidth )) + "px";
-      }else{
+    function setHandlePosition () {
+      if ( _scrollWidth - _elementWidth > 0 ) {
+        _handle.style.left = ( _elementWidth - _handleWidth ) * ( _containerParent.scrollLeft / ( _scrollWidth - _elementWidth ) ) + "px";
+      } else {
         _handle.style.left = "0px";
       }
     }
 
-    _containerParent.addEventListener( "scroll", function( e ){
-      setHandlePosition();
+    _containerParent.addEventListener ( "scroll", function( e ) {
+      setHandlePosition ();
     }, false );
 
-    _containerChild.addEventListener( "mousewheel", function( e ){
-      if( e.wheelDeltaX ){
+    _containerChild.addEventListener ( "mousewheel", function( e ) {
+      if ( e.wheelDeltaX ) {
         _containerParent.scrollLeft -= e.wheelDeltaX;
-        setHandlePosition();
-        e.preventDefault();
+        setHandlePosition ();
+        e.preventDefault ();
       }
     }, false );
 
     // For Firefox
-    _containerChild.addEventListener( "DOMMouseScroll", function( e ){
-      if( e.axis === e.HORIZONTAL_AXIS || ( e.axis === e.VERTICAL_AXIS && e.shiftKey )){
+    _containerChild.addEventListener ( "DOMMouseScroll", function( e ) {
+      if ( e.axis === e.HORIZONTAL_AXIS || ( e.axis === e.VERTICAL_AXIS && e.shiftKey ) ) {
         _containerParent.scrollLeft += e.detail * 2;
-        setHandlePosition();
-        e.preventDefault();
+        setHandlePosition ();
+        e.preventDefault ();
       }
     }, false );
 
-    _element.addEventListener( "click", function( e ) {
+    _element.addEventListener ( "click", function( e ) {
       // bail early if this event is coming from the handle
-      if( e.srcElement === _handle || e.button > 0 ) {
+      if ( e.srcElement === _handle || e.button > 0 ) {
         return;
       }
 
       var posX = e.pageX,
-          handleRect = _handle.getBoundingClientRect(),
-          elementRect = _element.getBoundingClientRect(),
-          p;
+        handleRect = _handle.getBoundingClientRect (),
+        elementRect = _element.getBoundingClientRect (),
+        p;
 
-      if( posX > handleRect.right ) {
+      if ( posX > handleRect.right ) {
         _handle.style.left = ( ( posX - elementRect.left ) - _handleWidth ) + "px";
-      }
-      else if( posX < handleRect.left ) {
+      } else if ( posX < handleRect.left ) {
         _handle.style.left = posX - elementRect.left + "px";
       }
 
       p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
       _containerParent.scrollLeft = ( _scrollWidth - _elementWidth ) * p;
-    }, false);
+    }, false );
 
-    window.addEventListener( "resize", setup, false );
-    _handle.addEventListener( "mousedown", onMouseDown, false );
+    window.addEventListener ( "resize", setup, false );
+    _handle.addEventListener ( "mousedown", onMouseDown, false );
 
-    this.update = function(){
-      setup();
-    }; //update
+    this.update = function() {
+      setup ();
+    };
+    setup ();
 
-    setup();
-
-    Object.defineProperties( this, {
+    Object.defineProperties ( this, {
       element: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _element;
         }
       }
     });
 
-  } //Horizontal
-
+  }
   return {
     Vertical: Vertical,
     Horizontal: Horizontal
   };
 
 }); //define
-

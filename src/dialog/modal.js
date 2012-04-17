@@ -2,48 +2,44 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [], function(){
+define ( [], function() {
 
   var __container;
 
-  return function( state ){
+  return function( state ) {
 
-    if( !__container ){
-      __container = document.createElement( "div" );
+    if (!__container ) {
+      __container = document.createElement ( "div" );
       __container.id = "butter-modal-container";
-      document.body.appendChild( __container );
-    } //if
-
-    var _element = document.createElement( "div" ),
-        _this = this;
+      document.body.appendChild ( __container );
+    }
+    var _element = document.createElement ( "div" ),
+      _this = this;
 
     _element.className = "layer";
 
-    if( state && typeof( state ) === "string" ){
+    if ( state && typeof ( state ) === "string" ) {
       _element.className += state;
-    } //if
-
-    __container.appendChild( _element );
+    }
+    __container.appendChild ( _element );
 
     // need to wait an event-loop cycle to apply this class
     // ow, opacity transition fails to render
-    setTimeout( function(){
+    setTimeout ( function() {
       _element.className += " fade-in";
     }, 10 );
 
-    this.destroy = function(){
-      __container.removeChild( _element );
-    }; //destroy
-
-    Object.defineProperties( this, {
+    this.destroy = function() {
+      __container.removeChild ( _element );
+    };
+    Object.defineProperties ( this, {
       element: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _element;
         }
       }
     });
 
-  }; //Modal
-
+  };
 });

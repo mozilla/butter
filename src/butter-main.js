@@ -2,58 +2,41 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-(function () {
+( function() {
 
   var DEFAULT_TRACKEVENT_DURATION = 1,
-      DEFAULT_TRACKEVENT_OFFSET = 0.01;
+    DEFAULT_TRACKEVENT_OFFSET = 0.01;
 
-  define( [
-            "./core/logger",
-            "./core/eventmanager",
-            "./core/target",
-            "./core/media",
-            "./core/page",
-            "./modules"
-          ],
-          function(
-            Logger,
-            EventManager,
-            Target,
-            Media,
-            Page,
-            Modules
-          ){
+  define ( [ "./core/logger", "./core/eventmanager", "./core/target", "./core/media", "./core/page", "./modules" ], function(
+  Logger, EventManager, Target, Media, Page, Modules ) {
 
     var __guid = 0,
-        __instances = [];
+      __instances = [];
 
-    var Butter = function( options ){
-      return new ButterInit( options );
-    }; //Butter
+    var Butter = function( options ) {
+        return new ButterInit ( options );
+      };
 
-    function ButterInit( butterOptions ){
+    function ButterInit ( butterOptions ) {
 
       butterOptions = butterOptions || {};
 
       var _events = {},
-          _media = [],
-          _currentMedia,
-          _targets = [],
-          _id = "Butter" + __guid++,
-          _logger = new Logger( _id ),
-          _em = new EventManager( this ),
-          _page,
-          _config = {
-            ui: {},
-            icons: {},
-            dirs: {}
-          },
-          _defaultTarget,
-          _this = this,
-          _selectedEvents = [];
+        _media = [],
+        _currentMedia, _targets = [],
+        _id = "Butter" + __guid++,
+        _logger = new Logger ( _id ),
+        _em = new EventManager ( this ),
+        _page, _config = {
+          ui: {},
+          icons: {},
+          dirs: {}
+        },
+        _defaultTarget, _this = this,
+        _selectedEvents = [];
 
       if ( butterOptions.debug !== undefined ) {
-        Logger.debug( butterOptions.debug );
+        Logger.debug ( butterOptions.debug );
       }
 
       this.project = {
@@ -64,55 +47,51 @@
         template: null
       };
 
-      function checkMedia() {
-        if ( !_currentMedia ) {
-          throw new Error("No media object is selected");
-        } //if
-      } //checkMedia
-
-      this.getManifest = function ( name ) {
-        checkMedia();
-        return _currentMedia.getManifest( name );
-      }; //getManifest
-
-      this.getHTML = function(){
+      function checkMedia () {
+        if (!_currentMedia ) {
+          throw new Error ( "No media object is selected" );
+        }
+      }
+      this.getManifest = function( name ) {
+        checkMedia ();
+        return _currentMedia.getManifest ( name );
+      };
+      this.getHTML = function() {
         var media = [];
-        for( var i=0; i<_media.length; ++i ){
-          media.push( _media[ i ].popcornString );
-        } //for
-        return _page.getHTML( media );
-      }; //getHTML
+        for ( var i = 0; i < _media.length; ++i ) {
+          media.push ( _media[ i ].popcornString );
+        }
+        return _page.getHTML ( media );
+      };
 
-      function trackEventRequested( element, media, target ){
-        var track,
-            type = element.getAttribute( "data-butter-plugin-type" ),
-            start = media.currentTime,
-            end;
+      function trackEventRequested ( element, media, target ) {
+        var track, type = element.getAttribute ( "data-butter-plugin-type" ),
+          start = media.currentTime,
+          end;
 
-        if( start > media.duration ){
+        if ( start > media.duration ) {
           start = media.duration - DEFAULT_TRACKEVENT_DURATION;
         }
 
-        if( start < 0 ){
+        if ( start < 0 ) {
           start = 0;
         }
 
         end = start + DEFAULT_TRACKEVENT_DURATION;
 
-        if( end > media.duration ){
+        if ( end > media.duration ) {
           end = media.duration;
         }
 
-        if( !type ){
-          _logger.log( "Invalid trackevent type requested." );
+        if (!type ) {
+          _logger.log ( "Invalid trackevent type requested." );
           return;
-        } //if
-
-        if( media.tracks.length === 0 ){
-          media.addTrack();
-        } //if
+        }
+        if ( media.tracks.length === 0 ) {
+          media.addTrack ();
+        }
         track = media.tracks[ 0 ];
-        var trackEvent = track.addTrackEvent({
+        var trackEvent = track.addTrackEvent ({
           type: type,
           popcornOptions: {
             start: start,
@@ -121,118 +100,112 @@
           }
         });
 
-        if( media.currentTime < media.duration - DEFAULT_TRACKEVENT_OFFSET ){
+        if ( media.currentTime < media.duration - DEFAULT_TRACKEVENT_OFFSET ) {
           media.currentTime += DEFAULT_TRACKEVENT_OFFSET;
         }
 
         return trackEvent;
       }
 
-      function targetTrackEventRequested( e ){
-        if( _currentMedia ){
-          var trackEvent = trackEventRequested( e.data.element, _currentMedia, e.target.elementID );
-          _em.dispatch( "trackeventcreated", {
+      function targetTrackEventRequested ( e ) {
+        if ( _currentMedia ) {
+          var trackEvent = trackEventRequested ( e.data.element, _currentMedia, e.target.elementID );
+          _em.dispatch ( "trackeventcreated", {
             trackEvent: trackEvent,
             by: "target"
           });
+        } else {
+          _logger.log ( "Warning: No media to add dropped trackevent." );
         }
-        else {
-          _logger.log( "Warning: No media to add dropped trackevent." );
-        } //if
-      } //targetTrackEventRequested
-
-      function mediaPlayerTypeRequired( e ){
-        _page.addPlayerType( e.data );
       }
 
-      function mediaTrackEventRequested( e ){
-        var trackEvent = trackEventRequested( e.data, e.target, "Media Element" );
-        _em.dispatch( "trackeventcreated", {
+      function mediaPlayerTypeRequired ( e ) {
+        _page.addPlayerType ( e.data );
+      }
+
+      function mediaTrackEventRequested ( e ) {
+        var trackEvent = trackEventRequested ( e.data, e.target, "Media Element" );
+        _em.dispatch ( "trackeventcreated", {
           trackEvent: trackEvent,
           by: "media"
         });
       }
 
-       /****************************************************************
+      /****************************************************************
        * Target methods
        ****************************************************************/
       //addTarget - add a target object
-      this.addTarget = function ( target ) {
-        if ( !(target instanceof Target ) ) {
-          target = new Target( target );
-        } //if
-        _targets.push( target );
-        target.listen( "trackeventrequested", targetTrackEventRequested );
-        _logger.log( "Target added: " + target.name );
-        _em.dispatch( "targetadded", target );
-        if( target.isDefault ){
+      this.addTarget = function( target ) {
+        if (!( target instanceof Target ) ) {
+          target = new Target ( target );
+        }
+        _targets.push ( target );
+        target.listen ( "trackeventrequested", targetTrackEventRequested );
+        _logger.log ( "Target added: " + target.name );
+        _em.dispatch ( "targetadded", target );
+        if ( target.isDefault ) {
           _defaultTarget = target;
-        } //if
+        }
         return target;
-      }; //addTarget
-
+      };
       //removeTarget - remove a target object
-      this.removeTarget = function ( target ) {
-        if ( typeof(target) === "string" ) {
-          target = _this.getTargetByType( "id", target );
-        } //if
-        var idx = _targets.indexOf( target );
+      this.removeTarget = function( target ) {
+        if ( typeof ( target ) === "string" ) {
+          target = _this.getTargetByType ( "id", target );
+        }
+        var idx = _targets.indexOf ( target );
         if ( idx > -1 ) {
-          target.unlisten( "trackeventrequested", targetTrackEventRequested );
-          _targets.splice( idx, 1 );
+          target.unlisten ( "trackeventrequested", targetTrackEventRequested );
+          _targets.splice ( idx, 1 );
           delete _targets[ target.name ];
-          _em.dispatch( "targetremoved", target );
-          if( _defaultTarget === target ){
+          _em.dispatch ( "targetremoved", target );
+          if ( _defaultTarget === target ) {
             _defaultTarget = undefined;
-          } //if
+          }
           return target;
-        } //if
+        }
         return undefined;
-      }; //removeTarget
-
+      };
       //serializeTargets - get a list of targets objects
-      this.serializeTargets = function () {
+      this.serializeTargets = function() {
         var sTargets = [];
-        for ( var i=0, l=_targets.length; i<l; ++i ) {
-          sTargets.push( _targets[ i ].json );
+        for ( var i = 0, l = _targets.length; i < l; ++i ) {
+          sTargets.push ( _targets[ i ].json );
         }
         return sTargets;
-      }; //serializeTargets
-
+      };
       //getTargetByType - get the target's information based on a valid type
       // if type is invalid, return undefined
       this.getTargetByType = function( type, val ) {
-        for( var i = 0, l = _targets.length; i < l; i++ ) {
+        for ( var i = 0, l = _targets.length; i < l; i++) {
           if ( _targets[ i ][ type ] === val ) {
             return _targets[ i ];
           }
         }
         return undefined;
-      }; //getTargetByType
-      
+      };
       /****************************************************************
        * Project methods
        ****************************************************************/
       //importProject - Import project data
-      this.importProject = function ( projectData ) {
-        var i,
-            l;
+      this.importProject = function( projectData ) {
+        var i, l;
 
         if ( projectData.targets ) {
           for ( i = 0, l = projectData.targets.length; i < l; ++i ) {
 
-            var t, targets = _this.targets, targetData = projectData.targets[ i ];
-            for ( var k=0, j=targets.length; k<j; ++k ) {
+            var t, targets = _this.targets,
+              targetData = projectData.targets[ i ];
+            for ( var k = 0, j = targets.length; k < j; ++k ) {
               if ( targets[ k ].name === targetData.name ) {
                 t = targets[ k ];
                 break;
               }
             }
 
-            if ( !t ) {
-              _this.addTarget( targetData );
-            }
-            else {
+            if (!t ) {
+              _this.addTarget ( targetData );
+            } else {
               t.json = targetData;
             }
           }
@@ -241,41 +214,39 @@
           for ( i = 0, l = projectData.media.length; i < l; ++i ) {
 
             var mediaData = projectData.media[ i ],
-                m = _this.getMediaByType( "target", mediaData.target );
+              m = _this.getMediaByType ( "target", mediaData.target );
 
-            if ( !m ) {
-              m = new Media();
+            if (!m ) {
+              m = new Media ();
               m.json = mediaData;
-              _this.addMedia( m );
-            }
-            else {
+              _this.addMedia ( m );
+            } else {
               m.json = mediaData;
             }
 
-          } //for
-        } //if projectData.media
-      }; //importProject
-
+          }
+        }
+      };
       //exportProject - Export project data
-      this.exportProject = function () {
+      this.exportProject = function() {
         var exportJSONMedia = [];
-        for ( var m=0, lm=_media.length; m<lm; ++m ) {
-          exportJSONMedia.push( _media[ m ].json );
+        for ( var m = 0, lm = _media.length; m < lm; ++m ) {
+          exportJSONMedia.push ( _media[ m ].json );
         }
         var projectData = {
-          targets: _this.serializeTargets(),
+          targets: _this.serializeTargets (),
           media: exportJSONMedia
         };
         return projectData;
       };
 
-      this.clearProject = function(){
-        while( _targets.length > 0 ){
-          _this.removeTarget( _targets[ 0 ] );
+      this.clearProject = function() {
+        while ( _targets.length > 0 ) {
+          _this.removeTarget ( _targets[ 0 ] );
         }
-        while( _media.length > 0 ){
-          _media[ 0 ].destroy();
-          _this.removeMedia( _media[ 0 ] );
+        while ( _media.length > 0 ) {
+          _media[ 0 ].destroy ();
+          _this.removeMedia ( _media[ 0 ] );
         }
       };
 
@@ -284,122 +255,92 @@
        ****************************************************************/
       //getMediaByType - get the media's information based on a valid type
       // if type is invalid, return undefined
-      this.getMediaByType = function ( type, val ) {
-       for( var i = 0, l = _media.length; i < l; i++ ) {
+      this.getMediaByType = function( type, val ) {
+        for ( var i = 0, l = _media.length; i < l; i++) {
           if ( _media[ i ][ type ] === val ) {
             return _media[ i ];
           }
         }
         return undefined;
-      }; //getMediaByType
-
+      };
       //addMedia - add a media object
-      this.addMedia = function ( media ) {
-        if ( !( media instanceof Media ) ) {
-          media = new Media( media );
-        } //if
-
+      this.addMedia = function( media ) {
+        if (!( media instanceof Media ) ) {
+          media = new Media ( media );
+        }
         var mediaName = media.name;
-        _media.push( media );
+        _media.push ( media );
 
-        _em.repeat( media, [
-          "mediacontentchanged",
-          "mediadurationchanged",
-          "mediatargetchanged",
-          "mediatimeupdate",
-          "mediaready",
-          "trackadded",
-          "trackremoved",
-          "tracktargetchanged",
-          "trackeventadded",
-          "trackeventremoved",
-          "trackeventupdated",
-          "trackeventeditrequested"
-        ]);
+        _em.repeat ( media, [ "mediacontentchanged", "mediadurationchanged", "mediatargetchanged", "mediatimeupdate", "mediaready", "trackadded", "trackremoved", "tracktargetchanged", "trackeventadded", "trackeventremoved", "trackeventupdated", "trackeventeditrequested" ] );
 
         if ( media.tracks.length > 0 ) {
-          for ( var ti=0, tl=media.tracks.length; ti<tl; ++ti ) {
+          for ( var ti = 0, tl = media.tracks.length; ti < tl; ++ti ) {
             var track = media.tracks[ ti ];
-                trackEvents = track.trackEvents;
-                media.dispatch( "trackadded", track );
+            trackEvents = track.trackEvents;
+            media.dispatch ( "trackadded", track );
             if ( trackEvents.length > 0 ) {
-              for ( var i=0, l=trackEvents.length; i<l; ++i ) {
-                track.dispatch( "trackeventadded", trackEvents[ i ] );
-              } //for
-            } //if
-          } //for
-        } //if
+              for ( var i = 0, l = trackEvents.length; i < l; ++i ) {
+                track.dispatch ( "trackeventadded", trackEvents[ i ] );
+              }
+            }
+          }
+        }
+        media.listen ( "trackeventrequested", mediaTrackEventRequested );
+        media.listen ( "mediaplayertyperequired", mediaPlayerTypeRequired );
 
-        media.listen( "trackeventrequested", mediaTrackEventRequested );
-        media.listen( "mediaplayertyperequired", mediaPlayerTypeRequired );
-
-        _em.dispatch( "mediaadded", media );
-        if ( !_currentMedia ) {
+        _em.dispatch ( "mediaadded", media );
+        if (!_currentMedia ) {
           _this.currentMedia = media;
-        } //if
-        media.setupContent();
+        }
+        media.setupContent ();
         return media;
-      }; //addMedia
-
+      };
       //removeMedia - forget a media object
-      this.removeMedia = function ( media ) {
+      this.removeMedia = function( media ) {
 
-        var idx = _media.indexOf( media );
+        var idx = _media.indexOf ( media );
         if ( idx > -1 ) {
-          _media.splice( idx, 1 );
-          _em.unrepeat( media, [
-            "mediacontentchanged",
-            "mediadurationchanged",
-            "mediatargetchanged",
-            "mediatimeupdate",
-            "mediaready",
-            "trackadded",
-            "trackremoved",
-            "tracktargetchanged",
-            "trackeventadded",
-            "trackeventremoved",
-            "trackeventupdated",
-            "trackeventeditrequested"
-          ]);
+          _media.splice ( idx, 1 );
+          _em.unrepeat ( media, [ "mediacontentchanged", "mediadurationchanged", "mediatargetchanged", "mediatimeupdate", "mediaready", "trackadded", "trackremoved", "tracktargetchanged", "trackeventadded", "trackeventremoved", "trackeventupdated", "trackeventeditrequested" ] );
           var tracks = media.tracks;
-          for ( var i=0, l=tracks.length; i<l; ++i ) {
-            _em.dispatch( "trackremoved", tracks[ i ] );
-          } //for
+          for ( var i = 0, l = tracks.length; i < l; ++i ) {
+            _em.dispatch ( "trackremoved", tracks[ i ] );
+          }
           if ( media === _currentMedia ) {
             _currentMedia = undefined;
-          } //if
+          }
+          media.unlisten ( "trackeventrequested", mediaTrackEventRequested );
+          media.unlisten ( "mediaplayertyperequired", mediaPlayerTypeRequired );
 
-          media.unlisten( "trackeventrequested", mediaTrackEventRequested );
-          media.unlisten( "mediaplayertyperequired", mediaPlayerTypeRequired );
-
-          _em.dispatch( "mediaremoved", media );
+          _em.dispatch ( "mediaremoved", media );
           return media;
-        } //if
+        }
         return undefined;
-      }; //removeMedia
-
-      this.extend = function(){
-        Butter.extend( _this, [].slice.call( arguments, 1 ) );
+      };
+      this.extend = function() {
+        Butter.extend ( _this, [].slice.call ( arguments, 1 ) );
       };
 
       /****************************************************************
        * Properties
        ****************************************************************/
-      Object.defineProperties( _this, {
+      Object.defineProperties ( _this, {
         defaultTarget: {
           enumerable: true,
-          get: function(){
+          get: function() {
             return _defaultTarget;
           }
         },
         config: {
           enumerable: true,
-          get: function(){
+          get: function() {
             return _config;
           }
         },
         id: {
-          get: function(){ return _id; },
+          get: function() {
+            return _id;
+          },
           enumerable: true
         },
         tracks: {
@@ -416,22 +357,22 @@
         },
         currentTime: {
           get: function() {
-            checkMedia();
+            checkMedia ();
             return _currentMedia.currentTime;
           },
           set: function( time ) {
-            checkMedia();
+            checkMedia ();
             _currentMedia.currentTime = time;
           },
           enumerable: true
         },
         duration: {
           get: function() {
-            checkMedia();
+            checkMedia ();
             return _currentMedia.duration;
           },
           set: function( time ) {
-            checkMedia();
+            checkMedia ();
             _currentMedia.duration = time;
           },
           enumerable: true
@@ -447,16 +388,15 @@
             return _currentMedia;
           },
           set: function( media ) {
-            if ( typeof( media ) === "string" ) {
-              media = _this.getMediaByType( "id", media.id );
-            } //if
-
-            if ( media && _media.indexOf( media ) > -1 ) {
+            if ( typeof ( media ) === "string" ) {
+              media = _this.getMediaByType ( "id", media.id );
+            }
+            if ( media && _media.indexOf ( media ) > -1 ) {
               _currentMedia = media;
-              _logger.log( "Media Changed: " + media.name );
-              _em.dispatch( "mediachanged", media );
+              _logger.log ( "Media Changed: " + media.name );
+              _em.dispatch ( "mediachanged", media );
               return _currentMedia;
-            } //if
+            }
           },
           enumerable: true
         },
@@ -464,155 +404,154 @@
           get: function() {
             return _selectedEvents;
           },
-          set: function(selectedEvents) {
+          set: function( selectedEvents ) {
             _selectedEvents = selectedEvents;
           },
           enumerable: true
         },
         debug: {
           get: function() {
-            return Logger.debug();
+            return Logger.debug ();
           },
           set: function( value ) {
-            Logger.debug( value );
+            Logger.debug ( value );
           },
           enumerable: true
         }
       });
 
-      var preparePage = this.preparePage = function( callback ){
-        var scrapedObject = _page.scrape(),
+      var preparePage = this.preparePage = function( callback ) {
+          var scrapedObject = _page.scrape (),
             targets = scrapedObject.target,
             medias = scrapedObject.media;
 
-        _page.preparePopcorn(function() {
-          var i, j, il, jl, url;
-          for( i = 0, il = targets.length; i < il; ++i ) {
-            if( _targets.length > 0 ){
-              for( j = 0, jl = _targets.length; j < jl; ++j ){
-                // don't add the same target twice
-                if( _targets[ j ].id !== targets[ i ].id ){
-                  _this.addTarget({ element: targets[ i ].id });
-                } //if
-              } //for j
-            }
-            else{
-              _this.addTarget({ element: targets[ i ].id });
-            } //if
-          } //for i
-          for( i = 0, il = medias.length; i < il; i++ ) {
-            url = "";
-            if( ["VIDEO", "AUDIO" ].indexOf( medias[ i ].nodeName ) > -1 ) {
-              url = medias[ i ].currentSrc;
-            } else {
-              url = medias[ i ].getAttribute( "data-butter-source" );
-            }
-            if( _media.length > 0 ){
-              for( j = 0, jl = _media.length; j < jl; ++j ){
-                if( _media[ j ].id !== medias[ i ].id && _media[ j ].url !== url ){
-                  _this.addMedia({ target: medias[ i ].id, url: url });
-                } //if
-              } //for
-            }
-            else{
-              var mediaPopcornOptions;
-              if( _config.mediaDefaults ){
-                mediaPopcornOptions = _config.mediaDefaults;
+          _page.preparePopcorn ( function() {
+            var i, j, il, jl, url;
+            for ( i = 0, il = targets.length; i < il; ++i ) {
+              if ( _targets.length > 0 ) {
+                for ( j = 0, jl = _targets.length; j < jl; ++j ) {
+                  // don't add the same target twice
+                  if ( _targets[ j ].id !== targets[ i ].id ) {
+                    _this.addTarget ({
+                      element: targets[ i ].id
+                    });
+                  }
+                }
+              } else {
+                _this.addTarget ({
+                  element: targets[ i ].id
+                });
               }
-              _this.addMedia({ target: medias[ i ].id, url: url, popcornOptions: mediaPopcornOptions });
-            } //if
-          } //for
+            }
+            for ( i = 0, il = medias.length; i < il; i++) {
+              url = "";
+              if ( [ "VIDEO", "AUDIO" ].indexOf ( medias[ i ].nodeName ) > -1 ) {
+                url = medias[ i ].currentSrc;
+              } else {
+                url = medias[ i ].getAttribute ( "data-butter-source" );
+              }
+              if ( _media.length > 0 ) {
+                for ( j = 0, jl = _media.length; j < jl; ++j ) {
+                  if ( _media[ j ].id !== medias[ i ].id && _media[ j ].url !== url ) {
+                    _this.addMedia ({
+                      target: medias[ i ].id,
+                      url: url
+                    });
+                  }
+                }
+              } else {
+                var mediaPopcornOptions;
+                if ( _config.mediaDefaults ) {
+                  mediaPopcornOptions = _config.mediaDefaults;
+                }
+                _this.addMedia ({
+                  target: medias[ i ].id,
+                  url: url,
+                  popcornOptions: mediaPopcornOptions
+                });
+              }
+            }
+            if ( callback ) {
+              callback ();
+            }
+            _em.dispatch ( "pageready" );
+          });
+        };
+      __instances.push ( this );
 
-          if( callback ){
-            callback();
-          } //if
-          _em.dispatch( "pageready" );
+      if ( butterOptions.ready ) {
+        _em.listen ( "ready", function( e ) {
+          butterOptions.ready ( e.data );
         });
-      }; //preparePage
+      }
 
-      __instances.push( this );
-
-      if( butterOptions.ready ){
-        _em.listen( "ready", function( e ){
-          butterOptions.ready( e.data );
-        });
-      } //if
-
-      function readConfig(){
+      function readConfig () {
         var icons = _config.icons,
-            img,
-            resourcesDir = _config.dirs.resources || "";
+          img, resourcesDir = _config.dirs.resources || "";
 
         _this.project.template = _config.name;
 
-        for( var identifier in icons ){
-          if( icons.hasOwnProperty( identifier ) ){
-            img = document.createElement( "img" );
+        for ( var identifier in icons ) {
+          if ( icons.hasOwnProperty ( identifier ) ) {
+            img = document.createElement ( "img" );
             img.src = resourcesDir + icons[ identifier ];
             img.id = identifier + "-icon";
             img.style.display = "none";
-            img.setAttribute( "data-butter-exclude", "true" );
+            img.setAttribute ( "data-butter-exclude", "true" );
             // @secretrobotron: just attach this to the body hidden for now,
             //                  so that it preloads if necessary
-            document.body.appendChild( img );
-          } //if
-        } //for
-
+            document.body.appendChild ( img );
+          }
+        }
         //prepare modules first
-        var moduleCollection = Modules( _this, _config );
+        var moduleCollection = Modules ( _this, _config );
 
-        _page = new Page( _config );
+        _page = new Page ( _config );
 
         //prepare the page next
-        preparePage(function(){
-          moduleCollection.ready(function(){
+        preparePage ( function() {
+          moduleCollection.ready ( function() {
             //fire the ready event
-            _em.dispatch( "ready", _this );
+            _em.dispatch ( "ready", _this );
           });
         });
-      
-      } //readConfig
 
-      if( butterOptions.config && typeof( butterOptions.config ) === "string" ){
-        var xhr = new XMLHttpRequest();
-        if( xhr.overrideMimeType ){
-          // Firefox generates a misleading "syntax" error if we don't have this line.
-          xhr.overrideMimeType( "application/json" );
-        }
-        xhr.open( "GET", butterOptions.config, false );
-        xhr.send( null );
-
-        if( xhr.status === 200 || xhr.status === 0 ){
-          try{
-            _config = JSON.parse( xhr.responseText );
-          }
-          catch( e ){
-            throw new Error( "Butter config file not formatted properly." );
-          }
-          readConfig();
-        }
-        else{
-          _em.dispatch( "configerror", _this );
-        } //if
       }
-      else {
-        _config = butterOptions.config;
-        readConfig();
-      } //if
+      if ( butterOptions.config && typeof ( butterOptions.config ) === "string" ) {
+        var xhr = new XMLHttpRequest ();
+        if ( xhr.overrideMimeType ) {
+          // Firefox generates a misleading "syntax" error if we don't have this line.
+          xhr.overrideMimeType ( "application/json" );
+        }
+        xhr.open ( "GET", butterOptions.config, false );
+        xhr.send ( null );
 
+        if ( xhr.status === 200 || xhr.status === 0 ) {
+          try {
+            _config = JSON.parse ( xhr.responseText );
+          } catch ( e ) {
+            throw new Error ( "Butter config file not formatted properly." );
+          }
+          readConfig ();
+        } else {
+          _em.dispatch ( "configerror", _this );
+        }
+      } else {
+        _config = butterOptions.config;
+        readConfig ();
+      }
     }
 
     Butter.instances = __instances;
 
     if ( window.Butter.__waiting ) {
-      for ( var i=0, l=window.Butter.__waiting.length; i<l; ++i ) {
-        Butter.apply( {}, window.Butter.__waiting[ i ] );
+      for ( var i = 0, l = window.Butter.__waiting.length; i < l; ++i ) {
+        Butter.apply ({}, window.Butter.__waiting[ i ] );
       }
       delete Butter._waiting;
-    } //if
+    }
     window.Butter = Butter;
     return Butter;
   });
 
 })();
-
