@@ -58,12 +58,12 @@
     } //colourHashFromType
 
     function createStyleForType( type ){
-      var styleContent = __newStyleSheet.innerHTML,
+      var styleContent = "",
           hash = colourHashFromType( type );
       styleContent +=__cssRulePrefix + "[" + __cssRuleProperty + "=\"" + type + "\"]{";
-      styleContent += "background: hsl( " + hash.h + ", " + hash.s + "%, " + hash.l + "% )";
+      styleContent += "background: hsl( " + hash.h + ", " + hash.s + "%, " + hash.l + "% );";
       styleContent += "}";
-      __newStyleSheet.innerHTML = styleContent;
+      __newStyleSheet.innerHTML = __newStyleSheet.innerHTML + styleContent;
     } //createStyleForType
 
     var PluginManager = function( butter, moduleOptions ) {
@@ -86,10 +86,9 @@
       var _scrollbar = new Scrollbars.Vertical( _container, _listContainer );
       _container.appendChild( _scrollbar.element );
 
-      document.head.appendChild( __newStyleSheet );
-
       this._start = function( onModuleReady ){
         if( butter.ui ){
+          document.head.appendChild( __newStyleSheet );
           butter.ui.areas.tools.addComponent( _container );
           PluginList( butter );
         }

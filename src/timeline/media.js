@@ -284,6 +284,7 @@ define( [
 
     function updateUI() {
       if( _media.duration ){
+        _tracksContainer.update();
         _timebar.update( _zoom );
         _hScrollBar.update();
         _vScrollBar.update();
@@ -291,6 +292,10 @@ define( [
         _trackHandles.update();
       } //if
     } //updateUI
+
+    butter.listen( "ready", function(){
+      updateUI();
+    });
 
     _tracksContainer.zoom = _zoom;
 
