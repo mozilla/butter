@@ -667,7 +667,7 @@
     });
   });
 
-  module( "Popcorn scripts and callbacks");
+  module( "Popcorn scripts and callbacks" );
   asyncTest( "Existence and execution", function(){
     expect( 6 );
 
@@ -702,4 +702,56 @@
 
     });
   });
+
+  module( "Dependency Loader" );
+  asyncTest( "Load test script", function(){
+    expect( 3 );
+    createButter( function( butter ){
+      butter.loader.load({
+        type: "js",
+        url: "test-script.js",
+        check: function(){
+          ok( true, "First check function was run." );
+          return !!window.__testScript;
+        }
+      }, function(){
+        butter.loader.load({
+          type: "js",
+          url: "test-script.js",
+          check: function(){
+            ok( true, "Second check function was run." );
+            return !!window.__testScript;
+          }
+        }, function(){
+          ok( window.__testScript.length === 1, "Test script loaded successfuly and only once." );
+          start();
+        });
+      });
+    });
+  });
+
+  asyncTest( "Load test CSS", function(){
+    expect( 2 );
+    createButter( function( butter ){
+      butter.loader.load({
+        type: "css",
+        url: "test-css.css"
+      }, function(){
+        butter.loader.load({
+          type: "js",
+          url: "test-script.css",
+          check: function(){
+            ok( true, "Second check function was run." );
+            return true;
+          }
+        }, function(){
+          var testDiv = document.getElementById( "css-test" ),
+              style = getComputedStyle( testDiv );
+          equals( style.getPropertyValue( "height" ), "100px", "Test css loaded and applied properties." );
+          start();
+        });
+      });
+    });
+  });
+
 })(window, window.document );

@@ -24,15 +24,15 @@ define([], function(){
 
     function fixUrl( url ){
       var replaceVars = url.match( VAR_REGEX );
-
-      for( var i = 0; i < replaceVars.length; ++i ){
-        var rv = replaceVars[ i ],
-            varOnly = /\{([\w-\._]+)\}/g.exec( rv )[ 1 ],
-            regex = new RegExp( rv, "g" ),
-            replacement = _configDirs[ varOnly ] || DEFAULT_DIRS[ varOnly ] || "";
-        url = url.replace( regex, replacement );
+      if( replaceVars ){
+        for( var i = 0; i < replaceVars.length; ++i ){
+          var rv = replaceVars[ i ],
+              varOnly = /\{([\w-\._]+)\}/g.exec( rv )[ 1 ],
+              regex = new RegExp( rv, "g" ),
+              replacement = _configDirs[ varOnly ] || DEFAULT_DIRS[ varOnly ] || "";
+          url = url.replace( regex, replacement );
+        }
       }
-
       return url.replace( "//", "/" );
     }
 
@@ -47,9 +47,7 @@ define([], function(){
           scriptElement.src = url;
           scriptElement.type = "text/javascript";
           document.head.appendChild( scriptElement );
-          scriptElement.onload = scriptElement.onreadystatechange = function(e){
-            callback();
-          };
+          scriptElement.onload = scriptElement.onreadystatechange = callback;
         }
         else{
           // keep event-loop behaviour consistent
