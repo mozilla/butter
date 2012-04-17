@@ -14,6 +14,7 @@
             "./core/media",
             "./core/page",
             "./modules",
+            "./dependencies",
             "ui/ui",
             "util/xhr"
           ],
@@ -24,6 +25,7 @@
             Media,
             Page,
             Modules,
+            Dependencies,
             UI,
             XHR
           ){
@@ -494,9 +496,8 @@
             targets = scrapedObject.target,
             medias = scrapedObject.media;
 
-        _page.preparePopcorn(function() {
+        _page.prepare(function() {
           var i, j, il, jl, url, oldTarget, oldMedia, mediaPopcornOptions;
-
           for( i = 0, il = targets.length; i < il; ++i ) {
             oldTarget = null;
             if( _targets.length > 0 ){
@@ -587,7 +588,7 @@
               }
 
             }
-          }
+          };
         }
 
         _defaultPopcornCallbacks = callbacks;
@@ -622,7 +623,7 @@
           // otherwise, call the ready callback right away
           readyCallback();
         }
-      }
+      };
 
       function readConfig(){
         var icons = _config.icons,
@@ -645,21 +646,26 @@
         } //for
 
         //prepare modules first
-        var moduleCollection = Modules( _this, _config );
+        var moduleCollection = Modules( _this, _config ),
+            loader = Dependencies( _config );
 
-        _page = new Page( _config );
+        _this.loader = loader;
+
+        _page = new Page( loader, _config );
 
         _this.ui = new UI( _this, _config.ui );
 
-        //prepare the page next
-        preparePopcornScriptsAndCallbacks(function(){
-          preparePage(function(){
-            moduleCollection.ready(function(){
-              if( _config.snapshotHTMLOnReady ){
-                _page.snapshotHTML();
-              }
-              //fire the ready event
-              _em.dispatch( "ready", _this );              
+        _this.ui.load(function(){
+          //prepare the page next
+          preparePopcornScriptsAndCallbacks(function(){
+            preparePage(function(){
+              moduleCollection.ready(function(){
+                if( _config.snapshotHTMLOnReady ){
+                  _page.snapshotHTML();
+                }
+                //fire the ready event
+                _em.dispatch( "ready", _this );
+              });
             });
           });
         });

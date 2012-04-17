@@ -4,12 +4,12 @@
 
 define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
-  return function( config ) {
+  return function( loader, config ) {
 
     var POPCORN_BASE_URL = config.dirs[ "popcorn-js" ],
-        POPCORN_URL = POPCORN_BASE_URL + "popcorn.js",
-        PLAYER_URL = POPCORN_BASE_URL + "modules/player/popcorn.player.js",
-        PLAYER_TYPE_URL = POPCORN_BASE_URL + "players/{type}/popcorn.{type}.js";
+        POPCORN_URL = "{popcorn-js}/popcorn.js",
+        PLAYER_URL = "{popcorn-js}/modules/player/popcorn.player.js",
+        PLAYER_TYPE_URL = "{popcorn-js}/players/{type}/popcorn.{type}.js";
 
     var _eventManager = new EventManager( this ),
         _snapshot;
@@ -25,59 +25,33 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       }; 
     }; // scrape
 
-    this.preparePopcorn = function( readyCallback ) {
-
-      function addScript( url ) {
-        var script = document.createElement( "script" );
-        script.src = url;
-        document.head.appendChild( script );
-      }
-
-      function isPopcornReady( cb ) {
-        if ( !window.Popcorn ) {
-          setTimeout( function() {
-            isPopcornReady( cb );
-          }, 100 );
+    this.prepare = function( readyCallback ){
+      loader.load([
+        {
+          type: "js",
+          url: "{popcorn-js}/popcorn.js",
+          check: function(){
+            return !!window.Popcorn;
+          }
+        },
+        {
+          type: "js",
+          url: "{popcorn-js}/modules/player/popcorn.player.js",
+          check: function(){
+            return !!window.Popcorn.player;
+          }
         }
-        else {
-          cb();
-        } //if
-      } //isPopcornReady
+      ], readyCallback, true );
+    };
 
-      function isPlayerReady() {
-        if ( !window.Popcorn.player ) {
-          setTimeout( function() {
-            isPlayerReady();
-          }, 100 );
+    this.addPlayerType = function( type, callback ){
+      loader.load({
+        type: "js",
+        url: PLAYER_TYPE_URL.replace( /\{type\}/g, type ),
+        check: function(){
+          return !!Popcorn[ type ];
         }
-        else {
-          readyCallback();
-        }
-      }
-
-      function checkPlayer() {
-        if( !window.Popcorn.player ) {
-          addScript( PLAYER_URL );
-          isPlayerReady();
-        } else {
-          readyCallback();
-        }
-      }
-
-      if ( !window.Popcorn ) {
-        addScript( POPCORN_URL );
-        isPopcornReady( checkPlayer );
-      } else {
-        checkPlayer();
-      }
-    }; // preparePopcorn
-
-    this.addPlayerType = function( type ){
-      if( !Popcorn[ type ] ){
-        var script = document.createElement( "script" );
-        script.src = PLAYER_TYPE_URL.replace( /\{type\}/g, type );
-        document.head.appendChild( script );
-      }
+      }, callback );
     };
 
     this.getHTML = function( popcornStrings ){

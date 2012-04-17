@@ -77,6 +77,10 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       _container.removeChild( trackView.element );
     });
 
+    _this.update = function(){
+      resetContainer();
+    };
+
     Object.defineProperties( this, {
       zoom: {
         enumerable: true,
