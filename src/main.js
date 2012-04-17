@@ -495,21 +495,28 @@
             medias = scrapedObject.media;
 
         _page.preparePopcorn(function() {
-          var i, j, il, jl, url;
+          var i, j, il, jl, url, oldTarget, oldMedia, mediaPopcornOptions;
+
           for( i = 0, il = targets.length; i < il; ++i ) {
+            oldTarget = null;
             if( _targets.length > 0 ){
               for( j = 0, jl = _targets.length; j < jl; ++j ){
                 // don't add the same target twice
-                if( _targets[ j ].id !== targets[ i ].id ){
-                  _this.addTarget({ element: targets[ i ].id });
+                if( _targets[ j ].id === targets[ i ].id ){
+                  oldTarget = _targets[ j ];
+                  break;
                 } //if
               } //for j
             }
-            else{
+
+            if( !oldTarget ){
               _this.addTarget({ element: targets[ i ].id });
-            } //if
-          } //for i
+            }
+          }
+
           for( i = 0, il = medias.length; i < il; i++ ) {
+            oldMedia = null;
+            mediaPopcornOptions = null;
             url = "";
             if( ["VIDEO", "AUDIO" ].indexOf( medias[ i ].nodeName ) > -1 ) {
               url = medias[ i ].currentSrc;
@@ -519,17 +526,20 @@
             if( _media.length > 0 ){
               for( j = 0, jl = _media.length; j < jl; ++j ){
                 if( _media[ j ].id !== medias[ i ].id && _media[ j ].url !== url ){
-                  _this.addMedia({ target: medias[ i ].id, url: url });
+                  oldMedia = _media[ j ];
+                  break;
                 } //if
               } //for
             }
             else{
-              var mediaPopcornOptions;
               if( _config.mediaDefaults ){
                 mediaPopcornOptions = _config.mediaDefaults;
               }
-              _this.addMedia({ target: medias[ i ].id, url: url, popcornOptions: mediaPopcornOptions });
             } //if
+
+            if( !oldMedia ){
+              _this.addMedia({ target: medias[ i ].id, url: url, popcornOptions: mediaPopcornOptions });
+            }
           } //for
 
           if( callback ){
