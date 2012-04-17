@@ -651,7 +651,7 @@ class Beautifier:
         elif self.last_text in self.line_starters or self.last_text == 'catch':
             self.append(' ')
 
-        if self.opts.extra_expr_spacing and self.last_type in ['TK_START_EXPR']:
+        if self.opts.extra_expr_spacing and self.last_type in ['TK_START_EXPR', 'TK_WORD']:
             self.append(self.opts.extra_expr_spacing)
 
         self.append(token_text)
@@ -878,6 +878,9 @@ class Beautifier:
         elif self.last_type == 'TK_WORD':
             self.append(' ')
 
+        if self.opts.extra_expr_spacing and self.last_type in ['TK_START_EXPR']:
+            self.append(self.opts.extra_expr_spacing)
+
         # Try to replace \x-encoded characters with their readable equivalent,
         # if it is possible (e.g. '\x41\x42\x43\x01' becomes 'ABC\x01').
         #token_text = token_text.decode('unicode_escape', 'ignore')
@@ -1059,7 +1062,7 @@ def main():
     argv = sys.argv[1:]
 
     try:
-        opts, args = getopt.getopt(argv, "s:c:o:djbkil:h", ['indent-size=','indent-char=','outfile=', 'disable-preserve-newlines',
+        opts, args = getopt.getopt(argv, "s:c:o:djbkile:h", ['indent-size=','indent-char=','outfile=', 'disable-preserve-newlines',
                                                           'jslint-happy', 'brace-style=', 'extra-expr-spacing=',
                                                           'keep-array-indentation', 'indent-level=', 'help',
                                                           'usage', 'stdin'])
