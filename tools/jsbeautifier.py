@@ -40,6 +40,7 @@ class BeautifierOptions:
         self.jslint_happy = False
         self.brace_style = 'collapse'
         self.keep_array_indentation = False
+        self.extra_expr_spacing = None
 
 
 
@@ -52,13 +53,15 @@ max_preserve_newlines = %d
 jslint_happy = %s
 brace_style = %s
 keep_array_indentation = %s
+extra_expr_spacing = %d
 """ % ( self.indent_size,
         self.indent_char,
         self.preserve_newlines,
         self.max_preserve_newlines,
         self.jslint_happy,
         self.brace_style,
-        self.keep_array_indentation
+        self.keep_array_indentation,
+        self.extra_expr_spacing
         )
 
 
@@ -119,6 +122,7 @@ Output options:
  -j,  --jslint-happy               more jslint-compatible output
  -b,  --brace-style=collapse       brace style (collapse, expand, end-expand)
  -k,  --keep-array-indentation     keep array indentation.
+ -e,  --extra-expr-spacing=NUMBER  insert extra spacing before and after expressions
  -o,  --outfile=FILE               specify a file to output to (default stdout)
 
 Rarely needed options:
@@ -647,6 +651,9 @@ class Beautifier:
         elif self.last_text in self.line_starters or self.last_text == 'catch':
             self.append(' ')
 
+        if self.opts.extra_expr_spacing and self.last_type in ['TK_START_EXPR']:
+            self.append(self.opts.extra_expr_spacing)
+
         self.append(token_text)
 
 
@@ -666,6 +673,10 @@ class Beautifier:
                         self.append(token_text)
                         return
         self.restore_mode()
+
+        if self.opts.extra_expr_spacing and self.last_type in ['TK_WORD', 'TK_STRING', 'TK_END_EXPR' ]:
+            self.append(self.opts.extra_expr_spacing)
+
         self.append(token_text)
 
 
@@ -833,6 +844,8 @@ class Beautifier:
         elif prefix == 'SPACE':
             self.append(' ')
 
+        if self.opts.extra_expr_spacing and self.last_type == 'TK_START_EXPR':
+            self.append(self.opts.extra_expr_spacing)
 
         self.append(token_text)
         self.last_word = token_text
@@ -1047,7 +1060,7 @@ def main():
 
     try:
         opts, args = getopt.getopt(argv, "s:c:o:djbkil:h", ['indent-size=','indent-char=','outfile=', 'disable-preserve-newlines',
-                                                          'jslint-happy', 'brace-style=',
+                                                          'jslint-happy', 'brace-style=', 'extra-expr-spacing=',
                                                           'keep-array-indentation', 'indent-level=', 'help',
                                                           'usage', 'stdin'])
     except getopt.GetoptError:
@@ -1060,7 +1073,6 @@ def main():
     outfile = 'stdout'
     if len(args) == 1:
         file = args[0]
-
     for opt, arg in opts:
         if opt in ('--keep-array-indentation', '-k'):
             js_options.keep_array_indentation = True
@@ -1076,6 +1088,11 @@ def main():
             js_options.jslint_happy = True
         elif opt in ('--brace-style', '-b'):
             js_options.brace_style = arg
+        elif opt in ('--extra-expr-spacing', '-e'):
+            try:
+                js_options.extra_expr_spacing = "".ljust(int(arg))
+            except ValueError:
+                return usage()
         elif opt in ('--stdin', '-i'):
             file = '-'
         elif opt in ('--help', '--usage', '--h'):
