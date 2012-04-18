@@ -492,7 +492,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           } //if
           return true;
         }, 
-        set: function( val ){ if( _popcorn ){
+        set: function( val ){
+          if( _popcorn ){
             if( val ){
               _popcorn.pause();
             }
