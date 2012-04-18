@@ -29,7 +29,6 @@ define([], function(){
       while ( VAR_REGEX.test( url ) ) {
         match = VAR_REGEX.exec( url );
         replacement = _configDirs[ match[ 1 ] ] || DEFAULT_DIRS[ match[ 1 ] ] || "";
-        console.log( match, replacement );
         url = url.replace( match[0], replacement );
       }
 
