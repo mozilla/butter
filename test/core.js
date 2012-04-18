@@ -703,6 +703,32 @@
     });
   });
 
+  asyncTest( "No scripts/callbacks", function(){
+    expect( 1 );
+    var succeeded = false;
+
+    setTimeout(function(){
+      if( !succeeded ){
+        ok( false, "Timeout! Ready not called. Script load skipping failed." );
+        start();
+      }
+    }, 2000);
+
+    Butter({
+      config: "../config/test-simple.conf",
+      debug: false,
+      ready: function( butter ){
+        console.log(5);
+        butter.preparePopcornScriptsAndCallbacks(function(){
+          succeeded = true;
+          console.log(6);
+          ok( true, "Ready called without any scripts/callbacks." );
+          start();  
+        });
+      }
+    });
+  });
+
   module( "Dependency Loader" );
   asyncTest( "Load test script", function(){
     expect( 3 );
