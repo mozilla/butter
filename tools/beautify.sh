@@ -1,8 +1,12 @@
 #!/bin/bash
 
 cd ../
-DIRS=( src editors test templates dialogs cornfield config )
-files=`find ${DIRS[*]} -name '*.js'`
+if [ -n "$1" ]; then
+  files=$1
+else
+  DIRS=( src editors test templates dialogs cornfield config )
+  files=`find ${DIRS[*]} -name '*.js'`
+fi
 touch tmp.txt
 for word in $files
 do
