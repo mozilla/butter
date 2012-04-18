@@ -42,7 +42,6 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
      */
     this.unbind = function(){
       try{
-        removePopcornHandlers();
         _popcorn.destroy();
         _popcorn = undefined;
       }
@@ -59,15 +58,6 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _popcorn.on( eventName, _popcornEvents[ eventName ] );
       } //for
     } //addPopcornHandlers
-
-    /* Remove any handlers that were defined in the options passed into
-     * popcorn wrapper. Events such as timeupdate, paused, etc
-     */
-    function removePopcornHandlers(){
-      for( var eventName in _popcornEvents ){
-        _popcorn.off( eventName, _popcornEvents[ eventName ] );
-      } //for
-    } //removePopcornHandlers
 
     // Cancel loading or preparing of media whilst attempting to setup
     this.interruptLoad = function(){
@@ -436,14 +426,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         return;
       } //if
       if( _popcorn ){
-        try{
-          removePopcornHandlers();
-          _popcorn.destroy();
-          _popcorn = undefined;
-        }
-        catch( e ){
-          _logger.log( "WARNING: Popcorn did NOT get destroyed properly: \n" + e.message + "\n" + e.stack );
-        } //try
+        _this.unbind(); 
       } //if
       while( container.firstChild ) {
         container.removeChild( container.firstChild );
