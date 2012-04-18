@@ -46,3 +46,9 @@ target.server = function() {
   cd('cornfield');
   exec('node app.js', { async: true });
 };
+
+target.beautify = function( a ) {
+  echo('### Beautifying butter');
+  cd('tools')
+  exec('./beautify.sh');
+};
