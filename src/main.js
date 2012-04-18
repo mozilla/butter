@@ -559,6 +559,7 @@
       } //if
 
       var preparePopcornScriptsAndCallbacks = this.preparePopcornScriptsAndCallbacks = function( readyCallback ){
+        console.log(3);
         var popcornConfig = _config.popcorn || {},
             callbacks = popcornConfig.callbacks,
             scripts = popcornConfig.scripts,
@@ -614,7 +615,7 @@
         }
 
         // if there are scripts to load, load them
-        if( toLoad ){
+        if( toLoad.length > 0 ){
           for( var i = 0; i < toLoad.length; ++i ){
             XHR.get( toLoad[ i ].url, toLoad[ i ].onLoad );
           }
