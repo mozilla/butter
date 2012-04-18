@@ -559,7 +559,6 @@
       } //if
 
       var preparePopcornScriptsAndCallbacks = this.preparePopcornScriptsAndCallbacks = function( readyCallback ){
-        console.log(3);
         var popcornConfig = _config.popcorn || {},
             callbacks = popcornConfig.callbacks,
             scripts = popcornConfig.scripts,

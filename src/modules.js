@@ -64,10 +64,6 @@ define(
             readyModules++;
           } //if
         } //for
-
-        if( readyModules === modules.length ){
-          onReady();
-        }
       }
     };
 
