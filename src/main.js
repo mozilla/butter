@@ -17,7 +17,7 @@
             "./dependencies",
             "ui/ui",
             "util/xhr",
-            "./core/undomanager",
+            "./core/commands",
             "./modules"
           ],
           function(
@@ -30,7 +30,7 @@
             Dependencies,
             UI,
             XHR,
-            UndoManager,
+            Commands,
             Modules
           ){
 
@@ -52,7 +52,6 @@
           _id = "Butter" + __guid++,
           _logger = new Logger( _id ),
           _page,
-          _undoManager = UndoManager.getInstance(),
           _config = {
             ui: {},
             icons: {},
@@ -83,48 +82,6 @@
           throw new Error("No media object is selected");
         } //if
       } //checkMedia
-
-      function makeCommand( command ) {
-        return {
-          execute: function(){
-            command.execute();
-            _undoManager.register({
-              execute: command.execute,
-              undo: command.undo
-            });
-          }
-        };
-      }; //makeCommand
-
-      function addTrackEventCommand( options ) {
-        var track = options.track, trackEvent;
-
-        return makeCommand({
-          execute: function(){
-            trackEvent = track.addTrackEvent({
-              type: options.type,
-              popcornOptions: options.popcornOptions
-            });
-            return trackEvent;
-          },
-          undo: function(){
-            track.removeTrackEvent( trackEvent );
-          }
-        });
-      }; //addTrackEventCommand
-
-      this.addTrackEvent = function( options ){
-        return addTrackEventCommand( options ).execute();
-      }; //addTrackEvent
-
-      document.addEventListener( "keydown", function( e ){
-        if ( e.ctrlKey && e.shiftKey && e.keyCode === 90 ){
-          _undoManager.redo();
-        }
-        else if ( e.ctrlKey && e.keyCode === 90 ){
-          _undoManager.undo();
-        }
-      }); //addEventListener
 
       this.getManifest = function ( name ) {
         checkMedia();
@@ -702,6 +659,8 @@
             document.body.appendChild( img );
           } //if
         } //for
+
+        Commands( _this );
 
         //prepare modules first
         var moduleCollection = Modules( _this, _config ),
