@@ -30,10 +30,6 @@ define( [ "./undomanager" ], function( UndoManager ){
       }
     }); //addEventListener
 
-    butter.addTrackEvent = function( options ){
-      return addTrackEventCommand( options ).execute();
-    }; //addTrackEvent
-
     function addTrackEventCommand( options ) {
       var track = options.track, trackEvent;
 
@@ -50,5 +46,29 @@ define( [ "./undomanager" ], function( UndoManager ){
         }
       });
     }; //addTrackEventCommand
+
+    function changeMediaUrlCommand( options ) {
+      var media = options.media,
+          oldUrl = media.url,
+          newUrl = options.newUrl;
+
+      return makeCommand({
+        execute: function(){
+          media.url = newUrl;
+        },
+        undo: function(){
+          console.log("old url = " + oldUrl);
+          media.url = oldUrl;
+        }
+      });
+    }; //changeMediaUrlCommand
+
+    butter.addTrackEvent = function( options ){
+      return addTrackEventCommand( options ).execute();
+    }; //addTrackEvent
+
+    butter.changeMediaUrl = function( options ) {
+      changeMediaUrlCommand( options ).execute();
+    }; //changeMediaUrl
   };
 });

@@ -113,7 +113,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     if( options.enabled !== false ){
       document.body.appendChild( _element );
       butter.listen( "mediaadded", function( e ){
-        e.data.createView();
+        e.data.createView( butter );
       });
     }
 

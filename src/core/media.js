@@ -103,8 +103,8 @@
       this.popcornCallbacks = null;
       this.popcornScripts = null;
 
-      this.createView = function(){
-        _view = new MediaView( this, {
+      this.createView = function( butter ){
+        _view = new MediaView( butter, this, {
           onDropped: onDroppedOnView
         });
       };
