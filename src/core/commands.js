@@ -47,7 +47,7 @@ define( [ "./undomanager" ], function( UndoManager ){
       });
     }; //addTrackEventCommand
 
-    function changeMediaUrlCommand( options ) {
+    function changeMediaUrlCommand( options ){
       var media = options.media,
           oldUrl = media.url,
           newUrl = options.newUrl;
@@ -63,12 +63,49 @@ define( [ "./undomanager" ], function( UndoManager ){
       });
     }; //changeMediaUrlCommand
 
+    function addTrackCommand( options ){
+      var media = options.media,
+      track;
+
+      return makeCommand({
+        execute: function() {
+          track = media.addTrack();
+        },
+        undo: function() {
+          media.removeTrack( track );
+        }
+      });
+    }; //addTrackCommand
+
+    function removeTrackCommand( options ){
+      var media = options.media,
+          track = options.track,
+          order = track.order;
+
+      return makeCommand({
+        execute: function() {
+          media.removeTrack( track );
+        },
+        undo: function() {
+          media.addTrack( track, order );
+        }
+      });
+    }; //addTrackCommand
+
     butter.addTrackEvent = function( options ){
       return addTrackEventCommand( options ).execute();
     }; //addTrackEvent
 
-    butter.changeMediaUrl = function( options ) {
+    butter.changeMediaUrl = function( options ){
       changeMediaUrlCommand( options ).execute();
     }; //changeMediaUrl
+
+    butter.addTrack = function( options ){
+      addTrackCommand( options ).execute();
+    }; //addTrack
+
+    butter.removeTrack = function( options ){
+      removeTrackCommand( options ).execute();
+    }; //removeTrack
   };
 });
