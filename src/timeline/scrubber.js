@@ -193,8 +193,6 @@ define( [], function(){
       setNodePosition();
     }; //update
 
-    window.addEventListener( "resize", _this.update, false );
-
     function checkMedia(){
       setNodePosition();
     } //checkMedia

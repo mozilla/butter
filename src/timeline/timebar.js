@@ -106,9 +106,9 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       _scrubber.update( containerWidth, zoom );
     }
 
-    _tracksContainer.element.addEventListener( "scroll", function() {
-      drawTicks();
-    }, false );
+    _tracksContainer.element.addEventListener( "scroll", drawTicks, false );
+
+    window.addEventListener( "resize", drawTicks, false );
 
     this.update = function( zoom ) {
       drawTicks( zoom );
