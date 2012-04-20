@@ -30,23 +30,6 @@ define( [ "./undomanager" ], function( UndoManager ){
       }
     }); //addEventListener
 
-    function addTrackEventCommand( options ) {
-      var track = options.track, trackEvent;
-
-      return makeCommand({
-        execute: function(){
-          trackEvent = track.addTrackEvent({
-            type: options.type,
-            popcornOptions: options.popcornOptions
-          });
-          return trackEvent;
-        },
-        undo: function(){
-          track.removeTrackEvent( trackEvent );
-        }
-      });
-    }; //addTrackEventCommand
-
     function changeMediaUrlCommand( options ){
       var media = options.media,
           oldUrl = media.url,
@@ -92,9 +75,53 @@ define( [ "./undomanager" ], function( UndoManager ){
       });
     }; //addTrackCommand
 
+    function addTrackEventCommand( options ) {
+      var track = options.track,
+                  trackEvent;
+
+      return makeCommand({
+        execute: function(){
+          if ( !trackEvent ) {
+            trackEvent = track.addTrackEvent({
+              type: options.type,
+              popcornOptions: options.popcornOptions
+            });
+          }
+          else {
+            track.addTrackEvent( trackEvent );
+          }
+
+          return trackEvent;
+        },
+        undo: function(){
+          track.removeTrackEvent( trackEvent );
+        }
+      });
+    }; //addTrackEventCommand
+
+    function removeTrackEventsCommand( trackEvents ) {
+
+      return makeCommand({
+        execute: function(){
+          for( var i = 0; i < trackEvents.length; i++ ) {
+            trackEvents[ i ].track.removeTrackEvent( trackEvents[ i ] );
+          } // for
+        },
+        undo: function(){
+          for( var i = 0; i < trackEvents.length; i++ ) {
+            trackEvents[ i ].track.addTrackEvent( trackEvents[ i ] );
+          } // for
+        }
+      });
+    }; //removeTrackEventsCommand
+
     butter.addTrackEvent = function( options ){
       return addTrackEventCommand( options ).execute();
     }; //addTrackEvent
+
+    butter.removeTrackEvents = function( trackEvents ){
+      removeTrackEventsCommand( trackEvents ).execute();
+    }; //removeTrackEvent
 
     butter.changeMediaUrl = function( options ){
       changeMediaUrlCommand( options ).execute();
