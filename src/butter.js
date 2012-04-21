@@ -44,24 +44,8 @@
         path = path.join( '/' ) + '/';
 
         if ( !window.require ) {
-          document.write( '<script data-butter-exclude="true" src="' + path + '../external/require/require.js"></' + 'script>' );
+          document.write( '<script data-main="' + path + 'config" data-butter-exclude="true" src="' + path + '../external/require/require.js"></' + 'script>' );
         } //if
-
-        // Set up paths to find scripts.
-        document.write('<script data-butter-exclude="true">' + 
-          '(function(){' + 
-          'var ctx = require.config({ ' + 
-            'baseUrl: "' + path + '",' +
-            'context: "butter",' +
-            'paths: {' +
-              'external: "' + path + '../external",' +
-              'butter: "' + path + '"' +
-              // Paths are relative to baseUrl; Notice the commas!
-            '}' +
-          '});' +
-          'ctx(["main"])' + 
-          '})()' +
-        '</script>');
     }
 
 }());
