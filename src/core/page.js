@@ -55,7 +55,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     };
 
     this.getHTML = function( popcornStrings ){
-      var html, head, body, i, toClean, toExclude, node;
+      var html, head, body, i, toClean, toExclude, node, base;
 
       //html tag to which body and head are appended below
       html = document.createElement( "html" );
@@ -98,6 +98,11 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         node = toExclude[ i ];
         node.parentNode.removeChild( node );
       } //for
+
+      // Add <base> tag, but only for export
+      base = document.createElement("base");
+      base.href = window.location.href.substring( 0, window.location.href.lastIndexOf( "/" ) + 1 );
+      head.insertBefore( base, base.firstChild );
 
       html.appendChild( head );
       html.appendChild( body );
