@@ -263,6 +263,7 @@ define([], function(){
     element.addEventListener( "drop", function( e ){
       e.preventDefault();
       e.stopPropagation();
+
       if( _hoverClass ){
         element.classList.remove( _hoverClass );
       }
@@ -271,17 +272,17 @@ define([], function(){
       if( helper ){
         _onDrop( helper, [ e.clientX, e.clientY ] );
       }
-      return false;
     }, false );
 
     element.addEventListener( "dragover", function( e ){
       e.preventDefault();
+      e.stopPropagation();
+
       e.dataTransfer.dropEffect = "copy";
     }, false );
 
     element.addEventListener( "dragenter", function( e ){
-      element.classList.add( _hoverClass );
-      if( _hoverClass ){
+      if( _hoverClass ) {
         element.classList.add( _hoverClass );
       }
       var transferData = e.dataTransfer.getData( "text" ),
@@ -292,7 +293,9 @@ define([], function(){
     }, false );
 
     element.addEventListener( "dragleave", function( e ){
-      element.classList.remove( _hoverClass );
+      if ( _hoverClass ) {
+        element.classList.remove( _hoverClass );
+      }
       var transferData = e.dataTransfer.getData( "text" ),
           helper = __helpers[ transferData ] || __currentDraggingElement;
       if( helper ){
