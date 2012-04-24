@@ -126,7 +126,14 @@
                 field = document.createElement( elem );
                 field.id = item;
                 field.style.width = "100%";
-                field.value = popcornOptions[ item ];
+                field.placeholder = "Empty";
+
+                // Don't print "undefined" or the like
+                var val = popcornOptions[ item ];
+                if ( val || val === 0 ) {
+                  field.value = val;
+                }
+
                 col2.appendChild( field );
                 field.addEventListener( "change", function( e ){
                   sendData( false );
