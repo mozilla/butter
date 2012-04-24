@@ -123,8 +123,15 @@
               } else {
                 var newItem = document.createElement( elem );
                 newItem.id = item;
+                newItem.placeholder = "Empty";
                 newItem.style.width = "100%";
-                newItem.value = popcornOptions[ item ];
+
+                // Don't print "undefined" or the like
+                var val = popcornOptions[ item ];
+                if ( val || val === 0 ) {
+                  newItem.value = val;
+                }
+
                 col2.appendChild( newItem );
                 newItem.addEventListener( "change", function( e ){
                   sendData( false );
