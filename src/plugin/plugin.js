@@ -6,6 +6,77 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
 
   var PLUGIN_ELEMENT_PREFIX = "butter-plugin-";
 
+  /*************************************************************************/
+  // Support createContextualFragment when missing (IE9)
+  if ( 'Range' in window &&
+       !Range.prototype.createContextualFragment ) {
+
+    // Implementation used under MIT License, http://code.google.com/p/rangy/
+    // Copyright (c) 2010 Tim Down
+
+    // Implementation as per HTML parsing spec, trusting in the browser's
+    // implementation of innerHTML. See discussion and base code for this
+    // implementation at issue 67. Spec:
+    // http://html5.org/specs/dom-parsing.html#extensions-to-the-range-interface
+    // Thanks to Aleks Williams.
+
+    Range.prototype.createContextualFragment = function( fragmentStr ) {
+      // "Let node the context object's start's node."
+      var node = this.startContainer,
+        doc = dom.getDocument(node);
+
+      // "If the context object's start's node is null, raise an INVALID_STATE_ERR
+      // exception and abort these steps."
+      if (!node) {
+        throw new DOMException( "INVALID_STATE_ERR" );
+      }
+
+      // "Let element be as follows, depending on node's interface:"
+      // Document, Document Fragment: null
+      var el = null;
+
+      // "Element: node"
+      if ( node.nodeType === 1 ) {
+        el = node;
+
+      // "Text, Comment: node's parentElement"
+      } else if ( dom.isCharacterDataNode( node ) ) {
+        el = dom.parentElement( node );
+      }
+
+      // "If either element is null or element's ownerDocument is an HTML document
+      // and element's local name is "html" and element's namespace is the HTML
+      // namespace"
+      if ( el === null ||
+           ( el.nodeName == "HTML" &&
+             dom.isHtmlNamespace( dom.getDocument( el ).documentElement ) &&
+             dom.isHtmlNamespace( el )
+           )
+         ) {
+        // "let element be a new Element with "body" as its local name and the HTML
+        // namespace as its namespace.""
+        el = doc.createElement( "body" );
+      } else {
+        el = el.cloneNode( false );
+      }
+
+      // "If the node's document is an HTML document: Invoke the HTML fragment parsing algorithm."
+      // "If the node's document is an XML document: Invoke the XML fragment parsing algorithm."
+      // "In either case, the algorithm must be invoked with fragment as the input
+      // and element as the context element."
+      el.innerHTML = fragmentStr;
+
+      // "If this raises an exception, then abort these steps. Otherwise, let new
+      // children be the nodes returned."
+
+      // "Let fragment be a new DocumentFragment."
+      // "Append all new children to fragment."
+      // "Return fragment."
+      return dom.fragmentFromNodeChildren( el );
+    };
+  }
+  /*************************************************************************/
+
   return function( id, pluginOptions ){
     pluginOptions = pluginOptions || {};
 
