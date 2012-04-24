@@ -20,6 +20,50 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
     // http://html5.org/specs/dom-parsing.html#extensions-to-the-range-interface
     // Thanks to Aleks Williams.
 
+    var dom = {
+      getDocument: function getDocument( node ) {
+        if ( node.nodeType === 9 ) {
+          return node;
+        } else if ( typeof node.ownerDocument !== "undefined" ) {
+          return node.ownerDocument;
+        } else if ( typeof node.document !== "undefined" ) {
+          return node.document;
+        } else if ( node.parentNode ) {
+          return this.getDocument( node.parentNode );
+        } else {
+          throw "No document found for node.";
+        }
+      },
+
+      isCharacterDataNode: function( node ) {
+        var t = node.nodeType;
+        // Text, CDataSection or Comment
+        return t === 3 || t === 4 || t === 8;
+      },
+
+      parentElement: function( node ) {
+        var parent = node.parentNode;
+        return parent.nodeType === 1 ? parent : null;
+      },
+
+      isHtmlNamespace: function( node ) {
+        // Opera 11 puts HTML elements in the null namespace,
+        // it seems, and IE 7 has undefined namespaceURI
+        var ns;
+        return typeof node.namespaceURI === "undefined" ||
+               ( ( ns = node.namespaceURI ) === null ||
+                 ns === "http://www.w3.org/1999/xhtml" );
+      },
+
+      fragmentFromNodeChildren: function( node ) {
+        var fragment = this.getDocument( node ).createDocumentFragment(), child;
+        while ( !!( child = node.firstChild ) ) {
+          fragment.appendChild(child);
+        }
+        return fragment;
+      }
+    };
+
     Range.prototype.createContextualFragment = function( fragmentStr ) {
       // "Let node the context object's start's node."
       var node = this.startContainer,
