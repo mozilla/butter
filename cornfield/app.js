@@ -14,7 +14,8 @@ const express = require('express'),
       WWW_ROOT = CONFIG.dirs.wwwRoot || __dirname + "/..",
       TEMPLATES = CONFIG.templates || {};
 
-var   DEFAULT_USER = null;
+var DEFAULT_USER = null,
+    canStoreData = true;
 
 if( MODE === "development" ){
   DEFAULT_USER = ENVIRONMENT.defaultUser;
@@ -26,10 +27,10 @@ console.log( "Publish Dir:", PUBLISH_DIR );
 
 var mongoose = require('mongoose'),
     db = mongoose.connect('mongodb://localhost/test', function( err ) {
-        if ( err ) {
-          console.log( "COULD NOT CONNECT TO MONGODB! Make sure it is running!" );
-          throw err;
-        }
+      if ( err ) {
+        console.error( "MongoDB: " + err + "\n  You will not be able to store any data." );
+        canStoreData = false;
+      }
     });
     Schema = mongoose.Schema,
     
@@ -70,6 +71,11 @@ function publishRoute( req, res ){
 
   if (!email) {
     res.json({ error: 'unauthorized' }, 403);
+    return;
+  }
+
+  if (!canStoreData) {
+    res.json({ error: 'storage service is not running' }, 500);
     return;
   }
 
@@ -128,6 +134,11 @@ app.get('/projects', function(req, res) {
     return;
   }
 
+  if (!canStoreData) {
+    res.json({ error: 'storage service is not running' }, 500);
+    return;
+  }
+
   UserModel.findOne( { email: email }, function( err, doc ) {
 
     // Add a user record if they've never logged in yet
@@ -164,6 +175,11 @@ app.get('/load/:user/:id', function(req, res){
   var email = req.params.user,
       id = req.params.id;
 
+  if (!canStoreData) {
+    res.json({ error: 'storage service is not running' }, 500);
+    return;
+  }
+
   UserModel.findOne( { email: email }, function( err, doc ) {
     for( var i=0; i<doc.projects.length; ++i ){
       if( String( doc.projects[ i ]._id ) === id ){
@@ -182,6 +198,11 @@ app.get('/project/:id?', function(req, res) {
 
   if (!email) {
     res.json({ error: 'unauthorized' }, 403);
+    return;
+  }
+
+  if (!canStoreData) {
+    res.json({ error: 'storage service is not running' }, 500);
     return;
   }
 
@@ -211,6 +232,10 @@ app.post('/project/:id?', function( req, res ) {
     return;
   }
 
+  if (!canStoreData) {
+    res.json({ error: 'storage service is not running' }, 500);
+    return;
+  }
 
   UserModel.findOne( { email: email }, function( err, doc ) {
 
@@ -263,6 +288,6 @@ app.post('/project/:id?', function( req, res ) {
 
 app.listen(CONFIG.server.bindPort, CONFIG.server.bindIP, function() {
   var addy = app.address();
-  console.log('Server started on http://' + CONFIG.server.bindIP + ':' + CONFIG.server.bindPort);
+  console.log('HTTP Server started on http://' + CONFIG.server.bindIP + ':' + CONFIG.server.bindPort);
   console.log('Press Ctrl+C to stop');
 });
