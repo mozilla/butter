@@ -71,7 +71,8 @@
             var popcornOptions = e.data.popcornOptions,
                 targets = e.data.targets,
                 media = e.data.media,
-                mediaName = "Current Media Element";
+                mediaName = "Current Media Element",
+                elemToFocus;
 
             if( media && media.name && media.target ){
               mediaName += " (\"" + media.name + "\": " + media.target + ")";
@@ -83,7 +84,8 @@
               var row = document.createElement( "TR" ),
                   col1 = document.createElement( "TD" ),
                   col2 = document.createElement( "TD" ),
-                  elem = _manifest[ item ].elem;
+                  elem = _manifest[ item ].elem,
+                  field;
 
               var itemLabel = _manifest[ item ].label || item;
               if( itemLabel === "In" ){
@@ -96,44 +98,52 @@
               col1.innerHTML = "<b>" + itemLabel + "</b>";
 
               if( item === "target" ) {
-                var select = document.createElement( "SELECT" );
-                select.id = "target";
+                field = document.createElement( "SELECT" );
+                field.id = "target";
 
                 for( var i = 0, l = targets.length; i < l; i++ ) {
                   var option = document.createElement( "OPTION" );
                   option.value = targets[ i ];
                   option.innerHTML = targets[ i ];
-                  select.appendChild( option );
+                  field.appendChild( option );
                   if( popcornOptions.target === targets[ i ] ) {
-                    select.value = targets[ i ];
+                    field.value = targets[ i ];
                   }
                 }
                 var option = document.createElement( "OPTION" );
                 option.value = "Media Element";
                 option.innerHTML =  mediaName;
-                select.appendChild( option );
+                field.appendChild( option );
                 if( popcornOptions.target === "Media Element" ) {
-                    select.value = "Media Element";
+                  field.value = "Media Element";
                 }
-                col2.appendChild( select );
+                col2.appendChild( field );
 
-                select.addEventListener( "change", function( e ){
+                field.addEventListener( "change", function( e ){
                   sendData( false );
                 }, false );
               } else {
-                var newItem = document.createElement( elem );
-                newItem.id = item;
-                newItem.style.width = "100%";
-                newItem.value = popcornOptions[ item ];
-                col2.appendChild( newItem );
-                newItem.addEventListener( "change", function( e ){
+                field = document.createElement( elem );
+                field.id = item;
+                field.style.width = "100%";
+                field.value = popcornOptions[ item ];
+                col2.appendChild( field );
+                field.addEventListener( "change", function( e ){
                   sendData( false );
                 }, false );
               }
 
+              // Remember first control added in editor so we can focus
+              elemToFocus = elemToFocus || field;
+
               row.appendChild( col1 );
               row.appendChild( col2 );
               document.getElementById( "table" ).appendChild( row );
+            }
+
+            // Focus the first element in the editor
+            if ( elemToFocus && elemToFocus.focus ) {
+              elemToFocus.focus();
             }
           });
 
