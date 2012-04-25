@@ -12,7 +12,7 @@
         Dialog.wait( "message", function( e ){
           message.innerHTML = e.data;
           Dialog.enableCloseButton();
-          Dialog.assignEscapeKey( "close" );
+          Dialog.assignEscapeKey( "default-close" );
           Dialog.assignEnterKey( "ok" );
         });
       });
