@@ -41,7 +41,6 @@ define( [ "core/logger",
             trackRect = _element.getBoundingClientRect();
 
         if( draggableType === "plugin" ){
-          var type = dropped.getAttribute( "data-butter-plugin-type" );
           left = mousePosition[ 0 ] - trackRect.left;
           start = left / trackRect.width * _duration;
           _em.dispatch( "plugindropped", {
