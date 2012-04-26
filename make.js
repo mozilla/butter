@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 var JSLINT = './node_modules/jshint/bin/hint',
-    RJS    = './node_modules/requirejs/bin/r.js';
+    RJS    = './node_modules/requirejs/bin/r.js',
+    BEAUTY = './tools/jsbeautifier.py',
+    BEAUTIFIER_TESTS = './test/beautifier/';
 
 require('shelljs/make');
 
@@ -51,4 +53,23 @@ target.beautify = function( a ) {
   echo('### Beautifying butter');
   cd('tools')
   exec('./beautify.sh');
+};
+
+target.test = function() {
+  var unbeautified = [ "test1.js", "test2.js", "test3.js" ],
+      beautified = [ "test1.expected.js", "test2.expected.js", "test3.expected.js" ],
+      result,
+      expected;
+
+  echo('### Testing Beautifier');
+  for( var i = 0, l = unbeautified.length; i < l; i++ ) {
+    result = exec('python ' + BEAUTY + ' -s 2 -j --extra-expr-spacing=1 ' + BEAUTIFIER_TESTS + unbeautified[ i ]);
+    expected = cat(BEAUTIFIER_TESTS + beautified[ i ]);
+    if( result.compare(expected) === 0 ) {
+      echo(unbeautified[ i ] + ' was beautified correctly');
+    } else {
+      echo(unbeautified[ i ] + ' was did not beautify correctly');
+      exec('git diff ' + unbeautified[ i ] + ' ' + beautified[ i ]);
+    }
+  }
 };
