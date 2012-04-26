@@ -38,7 +38,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           type: "js",
           url: "{popcorn-js}/modules/player/popcorn.player.js",
           check: function(){
-            return !!window.Popcorn.player;
+            return !!window.Popcorn && !!window.Popcorn.player;
           }
         }
       ], readyCallback, true );
