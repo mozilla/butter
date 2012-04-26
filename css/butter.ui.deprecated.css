@@ -630,10 +630,10 @@
 
 #butter-timeline .track-handle-container {
   position: absolute;
-  height: 133px;
+  height: 135px;
   width: 105px;
   left: 5px;
-  top: 8px;
+  top: 6px;
   bottom: 18px;
   overflow: hidden;
   box-shadow: 0 1px 0 #737373,inset 0 1px 0 #414141, 0 0 1px #000;
@@ -649,8 +649,7 @@
   width: 110px;
   padding: 5%;
   width: 90%;
-  padding-top: 7px;
-  padding-bottom: 7px;
+  padding-top: 9px;
   padding-bottom: 35px;
 }
 
