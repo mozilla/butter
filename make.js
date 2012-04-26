@@ -64,6 +64,10 @@ target.test = function() {
   echo('### Testing Beautifier');
   for( var i = 0, l = unbeautified.length; i < l; i++ ) {
     result = exec('python ' + BEAUTY + ' -s 2 -j --extra-expr-spacing=1 ' + BEAUTIFIER_TESTS + unbeautified[ i ]);
+    exec('touch tmp.txt');
+    exec('echo ' + result + ' > tmp.txt');
+    result = exec('bash tools/regex.sh tmp.txt');
+    rm('tmp.txt');
     expected = cat(BEAUTIFIER_TESTS + beautified[ i ]);
     if( result.compare(expected) === 0 ) {
       echo(unbeautified[ i ] + ' was beautified correctly');
