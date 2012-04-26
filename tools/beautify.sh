@@ -14,11 +14,5 @@ do
   rm $word
   mv tmp.txt $word
   echo beautified $word
-  # get rid of end of line comments
-  sed -i '' -E 's/(};?) (\/\/*.*)/\1/g' $word
-  # remove space after function and first round bracket
-  sed -i '' -E 's/function \(/function(/g' $word
-  # remove all end of line whitespace
-  sed -i '' -E 's/ +$//g' $word
-  echo regex ran on $word
+  `bash regex.sh ${word}`
 done
