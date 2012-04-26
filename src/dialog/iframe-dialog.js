@@ -95,6 +95,10 @@ define( [
             _this.send( popped.type, popped.data );
           } //while
           _open = true;
+          // Immediately set focus
+          setTimeout( function() {
+            _this.focus();
+          }, 0 );
           _em.dispatch( "open" );
         });
       }, false );
@@ -115,6 +119,10 @@ define( [
         _commQueue.push({ type: type, data: data });
       } //if
     }; //send
+
+    this.focus = function() {
+      _iframe.contentWindow.focus();
+    }; //focus
 
     Object.defineProperties( this, {
       iframe: {
