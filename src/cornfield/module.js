@@ -10,6 +10,10 @@ define(['util/xhr'], function(XHR) {
 
   var Cornfield = function( butter, config ) {
 
+    if( !config ){
+      return;
+    }
+
     var email = null,
         server = config.server,
         authType = config.authType || "browserid";
