@@ -39,24 +39,32 @@ define( [
     } //onCancel
 
     this.close = function(){
-      _parent.removeChild( _iframe );
-      if( _modalLayer ){
-        _modalLayer.destroy();
-        _modalLayer = undefined;
-      } //if
-      _comm.unlisten( "submit", onSubmit );
-      _comm.unlisten( "cancel", onCancel );
-      _comm.unlisten( "close", _this.close );
-      _comm.destroy();
-      _open = false;
-      window.removeEventListener( "beforeunload",  _this.close, false);
-      for( var e in _listeners ){
-        if( e !== "close" ){
-          _em.unlisten( e, _listeners[ e ] );
-        }
-      } //for
-      _em.dispatch( "close" );
-      _em.unlisten( "close", _listeners.close );
+      // Send a close message to the dialog first, then actually close the dialog.
+      // A setTimeout is used here to ensure that its associated function will be run 
+      // almost right after the postMessage happens. This ensures that messages get to
+      // their destination before we remove the dom element (which will basically ruin
+      // everything) by placing callbacks in the browser's event loop in the correct order.
+      _this.send( "close" );
+      setTimeout(function(){
+        _parent.removeChild( _iframe );
+        if( _modalLayer ){
+          _modalLayer.destroy();
+          _modalLayer = undefined;
+        } //if
+        _comm.unlisten( "submit", onSubmit );
+        _comm.unlisten( "cancel", onCancel );
+        _comm.unlisten( "close", _this.close );
+        _comm.destroy();
+        _open = false;
+        window.removeEventListener( "beforeunload",  _this.close, false);
+        for( var e in _listeners ){
+          if( e !== "close" ){
+            _em.unlisten( e, _listeners[ e ] );
+          }
+        } //for
+        _em.dispatch( "close" );
+        _em.unlisten( "close", _listeners.close );
+      }, 0);
     }; //close
 
     this.open = function( listeners ){
