@@ -45,7 +45,7 @@ define( [
       // their destination before we remove the dom element (which will basically ruin
       // everything) by placing callbacks in the browser's event loop in the correct order.
       _this.send( "close" );
-      setTimeout(function(){
+      setTimeout( function(){
         _parent.removeChild( _iframe );
         if( _modalLayer ){
           _modalLayer.destroy();
@@ -56,7 +56,7 @@ define( [
         _comm.unlisten( "close", _this.close );
         _comm.destroy();
         _open = false;
-        window.removeEventListener( "beforeunload",  _this.close, false);
+        window.removeEventListener( "beforeunload",  _this.close, false );
         for( var e in _listeners ){
           if( e !== "close" ){
             _em.unlisten( e, _listeners[ e ] );
@@ -64,7 +64,7 @@ define( [
         } //for
         _em.dispatch( "close" );
         _em.unlisten( "close", _listeners.close );
-      }, 0);
+      }, 0 );
     }; //close
 
     this.open = function( listeners ){

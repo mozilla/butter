@@ -65,7 +65,7 @@ define( [
       // their destination before we remove the dom element (which will basically ruin
       // everything) by placing callbacks in the browser's event loop in the correct order.
       _this.send( "close" );
-      setTimeout(function(){
+      setTimeout( function(){
         if( _modalLayer ){
           _modalLayer.destroy();
           _modalLayer = undefined;
@@ -78,7 +78,7 @@ define( [
           _window.close();
         } //if
         clearInterval( _statusInterval );
-        window.removeEventListener( "beforeunload",  _this.close, false); 
+        window.removeEventListener( "beforeunload",  _this.close, false ); 
         _comm = _window = undefined;
         _open = false;
         for( var e in _listeners ){
@@ -102,7 +102,7 @@ define( [
         _listeners[ e ] = listeners[ e ];
       } //for
       _window = window.open( _url, "dialog-window:" + _url, _features.join( "," ) );
-      window.addEventListener( "beforeunload",  _this.close, false); 
+      window.addEventListener( "beforeunload",  _this.close, false );
       _comm = new Comm( _window, function(){
         _comm.listen( "error", onError );
         _comm.listen( "submit", onSubmit );
