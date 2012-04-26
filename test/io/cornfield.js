@@ -12,7 +12,6 @@
     var b = new Butter({
       config: "../../config/cornfield-test.conf",
         ready: function( butter ){
-
           module( "Unauthenticated tests" );
 
           asyncTest("Sync API", 1, function() {
