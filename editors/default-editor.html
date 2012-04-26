@@ -54,6 +54,10 @@
             }
           }, false);
 
+          _comm.listen( "close", function( e ){
+            // use this to process something right before the editor closes
+          });
+
           _comm.listen( "trackeventupdated", function( e ){
             for( var item in _manifest ){
               var element = document.getElementById( item );

@@ -59,25 +59,33 @@ define( [
     } //onError
 
     this.close = function(){
-      if( _modalLayer ){
-        _modalLayer.destroy();
-        _modalLayer = undefined;
-      } //if
-      _comm.unlisten( "submit", onSubmit );
-      _comm.unlisten( "cancel", onCancel );
-      _comm.unlisten( "close", _this.close );
-      _comm.destroy();
-      if( _window.close ){
-        _window.close();
-      } //if
-      clearInterval( _statusInterval );
-      window.removeEventListener( "beforeunload",  _this.close, false); 
-      _comm = _window = undefined;
-      _open = false;
-      for( var e in _listeners ){
-        _em.unlisten( e, _listeners[ e ] );
-      } //for
-      _em.dispatch( "close" );
+      // Send a close message to the dialog first, then actually close the dialog.
+      // A setTimeout is used here to ensure that its associated function will be run 
+      // almost right after the postMessage happens. This ensures that messages get to
+      // their destination before we remove the dom element (which will basically ruin
+      // everything) by placing callbacks in the browser's event loop in the correct order.
+      _this.send( "close" );
+      setTimeout( function(){
+        if( _modalLayer ){
+          _modalLayer.destroy();
+          _modalLayer = undefined;
+        } //if
+        _comm.unlisten( "submit", onSubmit );
+        _comm.unlisten( "cancel", onCancel );
+        _comm.unlisten( "close", _this.close );
+        _comm.destroy();
+        if( _window.close ){
+          _window.close();
+        } //if
+        clearInterval( _statusInterval );
+        window.removeEventListener( "beforeunload",  _this.close, false ); 
+        _comm = _window = undefined;
+        _open = false;
+        for( var e in _listeners ){
+          _em.unlisten( e, _listeners[ e ] );
+        } //for
+        _em.dispatch( "close" );
+      }, 0 );
     }; //close
 
     function checkWindowStatus(){
@@ -94,7 +102,7 @@ define( [
         _listeners[ e ] = listeners[ e ];
       } //for
       _window = window.open( _url, "dialog-window:" + _url, _features.join( "," ) );
-      window.addEventListener( "beforeunload",  _this.close, false); 
+      window.addEventListener( "beforeunload",  _this.close, false );
       _comm = new Comm( _window, function(){
         _comm.listen( "error", onError );
         _comm.listen( "submit", onSubmit );
