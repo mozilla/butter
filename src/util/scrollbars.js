@@ -27,7 +27,7 @@ define( [ "core/eventmanager" ], function( EventManager ){
       _parentHeight = outerElement.getBoundingClientRect().height;
       _childHeight = innerElement.getBoundingClientRect().height;
       _elementHeight = _element.getBoundingClientRect().height;
-      _scrollHeight = innerElement.scrollHeight;
+      _scrollHeight = outerElement.scrollHeight;
       _handleHeight = _elementHeight - ( _scrollHeight - _parentHeight ) / VERTICAL_SIZE_REDUCTION_FACTOR;
       _handleHeight = Math.max( 20, Math.min( _elementHeight, _handleHeight ) );
       _handle.style.height = _handleHeight + "px";
@@ -41,12 +41,13 @@ define( [ "core/eventmanager" ], function( EventManager ){
     } //onMouseUp
 
     function onMouseMove( e ){
-      var diff = e.pageY - _mousePos;
-      diff = Math.max( 0, Math.min( diff, _elementHeight - _handleHeight ) );
+      var diff = e.pageY - _mousePos,
+          maxDiff = _elementHeight - _handleHeight;
+      diff = Math.max( 0, Math.min( diff, maxDiff ) );
+      var p = diff / maxDiff;
       _handle.style.top = diff + "px";
-      var p = _handle.offsetTop / ( _elementHeight - _handleHeight );
-      innerElement.scrollTop = ( _scrollHeight - _elementHeight ) * p;
-      _em.dispatch( "scroll", innerElement.scrollTop );
+      outerElement.scrollTop = ( _scrollHeight - _parentHeight ) * p;
+      _em.dispatch( "scroll", outerElement.scrollTop );
     } //onMouseMove
 
     function onMouseDown( e ){
@@ -66,7 +67,7 @@ define( [ "core/eventmanager" ], function( EventManager ){
     function setHandlePosition(){
       if( innerElement.scrollHeight - _elementHeight > 0 ) {
         _handle.style.top = ( _elementHeight - _handleHeight ) *
-          ( innerElement.scrollTop / ( innerElement.scrollHeight - _elementHeight ) ) + "px";
+          ( outerElement.scrollTop / ( outerElement.scrollHeight - _elementHeight ) ) + "px";
       }else{
         _handle.style.top = "0px";
       }

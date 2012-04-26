@@ -70,20 +70,23 @@
 
       var _plugins = [],
           _container = document.createElement( "div" ),
+          _listWrapper = document.createElement( "div" ),
           _listContainer = document.createElement( "div" ),
           _this = this,
           _pattern = '<div class="list-item $type_tool">$type</div>';
 
       _container.id = "butter-plugin";
       _listContainer.className = "list";
+      _listWrapper.className = "list-wrapper";
 
       var title = document.createElement( "div" );
       title.className = "title";
       title.innerHTML = "<span>My Events</span>";
       _container.appendChild( title );
-      _container.appendChild( _listContainer );
+      _listWrapper.appendChild( _listContainer );
+      _container.appendChild( _listWrapper );
 
-      var _scrollbar = new Scrollbars.Vertical( _container, _listContainer );
+      var _scrollbar = new Scrollbars.Vertical( _listWrapper, _listContainer );
       _container.appendChild( _scrollbar.element );
 
       this._start = function( onModuleReady ){
