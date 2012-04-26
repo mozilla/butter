@@ -6,10 +6,25 @@
 
   var __debug = true;
 
+  /**
+   * Module: Logger
+   * 
+   * Supplies customized logging functionality to Butter.
+   */
   define( [], function() {
 
+    /**
+     * Class: Logger
+     *
+     * Controls logging for a specific object instance.
+     *
+     * @param {String} name: Name of the object to report in the log.
+     */
     function logger( name ) {
 
+      /**
+       *
+       */
       this.log = function( message ) {
         if ( __debug ) {
           console.log( "[" + name + "] " + message );
