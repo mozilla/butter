@@ -102,9 +102,6 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
           blinkTarget();
           trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
           trackEvent.listen( "trackeventupdatefailed", onTrackEventUpdateFailed );
-          if( _frameType === "iframe" ){
-            _dialog.iframe.focus();
-          }
           _em.dispatch( "open" );
         },
         submit: function( e ){
