@@ -23,7 +23,11 @@
     function logger( name ) {
 
       /**
+       * Member: log
        *
+       * Logs a message to the console prefixed by the given name.
+       *
+       * @param {String} message: Contents of the log message
        */
       this.log = function( message ) {
         if ( __debug ) {
@@ -31,14 +35,28 @@
         }
       }; //log
 
+      /**
+       * Member: error
+       *
+       * Throws an error with the given message prefixed by the given name.
+       *
+       * @param {String} message: Contents of the error
+       */
       this.error = function( message ) {
         if ( __debug ) {
           throw new Error( "[" + name + "]" + message ); 
         }
       }; //error
 
-    } //Logger
+    }
 
+    /**
+     * Class Function: debug
+     *
+     * Effectively toggles the logger.
+     *
+     * @param {Boolean} value: State of the logger.
+     */
     logger.debug = function( value ) {
       if ( value !== undefined ) {
         __debug = value;
@@ -48,5 +66,5 @@
     };
 
     return logger;
-  }); //define
+  });
 })();
