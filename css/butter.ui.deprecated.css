@@ -1151,13 +1151,19 @@
   position: relative;
 }
 
-#butter-tray #butter-plugin .list {
+#butter-tray #butter-plugin .list-wrapper {
   position: relative;
   top: 18px;
   padding-left: 5px;
-  height: 105px;
+  height: 95px;
   width: 100px;
   overflow: hidden;
+}
+
+#butter-tray #butter-plugin .list {
+  position: relative;
+  padding-left: 5px;
+  width: 100px;
 }
 
 #butter-tray #butter-plugin .title {
