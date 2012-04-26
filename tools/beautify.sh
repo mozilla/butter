@@ -14,5 +14,5 @@ do
   rm $word
   mv tmp.txt $word
   echo beautified $word
-  `bash regex.sh ${word}`
+  bash tools/regex.sh $word
 done
