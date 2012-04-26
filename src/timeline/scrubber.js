@@ -55,7 +55,8 @@ define( [], function(){
     function setNodePosition(){
       var duration = _media.duration,
           currentTime = _media.currentTime,
-          scrollLeft = _tracksContainer.element.scrollLeft;
+          tracksElement = _tracksContainer.element,
+          scrollLeft = tracksElement.scrollLeft;
 
       // if we can avoid re-setting position and visibility, then do so
       if( _lastTime !== currentTime || _lastScroll !== scrollLeft || _lastZoom !== _zoom ){
@@ -63,7 +64,10 @@ define( [], function(){
         var pos = currentTime / duration * _tracksContainerWidth,
             adjustedPos = pos - scrollLeft;
 
-        if( pos <  scrollLeft || Math.floor( pos ) - _lineWidth > _width + scrollLeft ){
+        // If the node position is outside of the viewing window, hide it.
+        // Otherwise, show it and adjust its position.
+        // Note the use of clientWidth here to account for padding/margin width fuzziness.
+        if( pos < scrollLeft || pos - _lineWidth > _container.clientWidth + scrollLeft ){
           _node.style.display = "none";
         }
         else {
