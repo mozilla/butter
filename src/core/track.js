@@ -67,9 +67,12 @@ define( [
       },
       name: {
         enumerable: true,
-        configurable: false,
         get: function(){
           return _name;
+        },
+        set: function( name ) {
+          _name = name;
+          _em.dispatch( "tracknamechanged", _this );
         }
       },
       id: {
