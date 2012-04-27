@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
 var JSLINT = './node_modules/jshint/bin/hint',
-    RJS    = './node_modules/requirejs/bin/r.js',
-    BEAUTY = './tools/jsbeautifier.py',
-    BEAUTIFIER_TESTS = './test/beautifier/';
+    RJS    = './node_modules/requirejs/bin/r.js';
 
 require('shelljs/make');
 
@@ -56,24 +54,19 @@ target.beautify = function( a ) {
 };
 
 target.test = function() {
-  var unbeautified = [ "test1.js", "test2.js", "test3.js" ],
-      beautified = [ "test1.expected.js", "test2.expected.js", "test3.expected.js" ],
-      result,
-      expected;
+  var unbeautified = [ "if.js", "for.js", "while.js", "array.js", "function.js", "object.js", "comments.js", "eolspace.js" ],
+      beautified = [ "if.expected.js", "for.expected.js", "while.expected.js", "array.expected.js", "function.expected.js", "object.expected.js", "comments.expected.js", "eolspace.expected.js" ],
+      result;
 
   echo('### Testing Beautifier');
   for( var i = 0, l = unbeautified.length; i < l; i++ ) {
-    result = exec('python ' + BEAUTY + ' -s 2 -j --extra-expr-spacing=1 ' + BEAUTIFIER_TESTS + unbeautified[ i ]);
-    exec('touch tmp.txt');
-    exec('echo ' + result + ' > tmp.txt');
-    result = exec('bash tools/regex.sh tmp.txt');
+    result = exec('bash test/beautifier/test.sh ' + unbeautified[ i ] + ' ' + beautified[ i ]);
     rm('tmp.txt');
-    expected = cat(BEAUTIFIER_TESTS + beautified[ i ]);
-    if( result.compare(expected) === 0 ) {
+    // checking against a length of 1 because if the output is empty a newline character gets returned
+    if( result.output.length === 1 ) {
       echo(unbeautified[ i ] + ' was beautified correctly');
     } else {
-      echo(unbeautified[ i ] + ' was did not beautify correctly');
-      exec('git diff ' + unbeautified[ i ] + ' ' + beautified[ i ]);
+      echo(unbeautified[ i ] + ' did not beautify correctly');
     }
   }
 };
