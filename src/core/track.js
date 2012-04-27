@@ -94,7 +94,7 @@ define( [
         },
         set: function( importData ){
           if( importData.name ){
-            name = importData.name;
+            _name = importData.name;
           }
           if( importData.trackEvents ){
             var importTrackEvents = importData.trackEvents;
