@@ -102,7 +102,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       // Add <base> tag, but only for export
       base = document.createElement("base");
       base.href = window.location.href.substring( 0, window.location.href.lastIndexOf( "/" ) + 1 );
-      head.insertBefore( base, base.firstChild );
+      head.insertBefore( base, head.firstChild );
 
       html.appendChild( head );
       html.appendChild( body );
