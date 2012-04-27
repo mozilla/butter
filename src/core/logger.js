@@ -41,6 +41,7 @@
        * Throws an error with the given message prefixed by the given name.
        *
        * @param {String} message: Contents of the error
+       * @throws: Obligatory, since this is an error
        */
       this.error = function( message ) {
         if ( __debug ) {
