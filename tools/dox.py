@@ -8,12 +8,67 @@ import json
 # Tokenizer stolen from Einar Lielmanis et al.'s python version of jsbeautifier,
 # MIT licence, enjoy.
 
+def formatJSON(input):
+    if input == None:
+        return None
+    return json.dumps(input)
+
+def formatTXT(input):
+    if input == None:
+        return None
+    
+    def process_tree(subtree, tabs):
+        next_tabs = tabs + 1
+        output = ""
+        if subtree['name'] != None:
+            tab_str = ""
+            for i in range(0, tabs):
+                tab_str += "  "
+            output += tab_str
+            if subtree['type'] != None:
+                output += subtree['type'] + ": " + subtree['name'] + "\n"
+            else:
+                output += subtree['name'] + "\n"
+
+            if subtree['doc'] != None:
+                output += tab_str + subtree['doc'] + "\n"
+
+            if subtree['properties'] != None:
+                for prop in subtree['properties']:
+                    if 'name' in prop:
+                        output += tab_str + '@' + prop['type'] + ' ' + prop['name']
+                        if prop['data_type'] != None:
+                            output += " [" + prop['data_type'] + "]"
+                        if prop['description'] != None:
+                            output += ": " + prop['description'] + "\n"
+                    elif 'type' in prop:
+                        if prop['description'] != None:
+                            output += tab_str + '@' + prop['type'] + ": " + prop['description'] + "\n"
+                output += "\n"
+        else:
+            next_tabs = tabs
+
+        for c in subtree['children']:
+            output += process_tree(c, next_tabs)
+
+        return output
+
+    return process_tree(input, 0)
+
+
 __processors = {
-}
+    'json': formatJSON,
+    'txt': formatTXT
+};
 
 def process(string, opts = None):
     b = Dox()
-    return b.beautify(string, opts)
+    try:
+        processor = opts['processor']
+    except:
+        processor = formatJSON
+    
+    return processor(b.beautify(string, opts))
 
 
 def process_file(file_name, opts = None):
@@ -24,7 +79,13 @@ def process_file(file_name, opts = None):
         f = open(file_name)
 
     b = Dox()
-    return b.process(''.join(f.readlines()), opts)
+
+    try:
+        processor = opts['processor']
+    except:
+        processor = formatJSON
+
+    return processor(b.process(''.join(f.readlines()), opts))
 
 
 def usage():
@@ -52,15 +113,19 @@ Rarely needed options:
 """);
 
 
+class TreeProperties():
+    def __init__(self):
+        self.description = None
+        self.type = None
+        self.name = None
+        self.properties = []
+
 
 class Tree:
     def __init__(self, root=None):
         self.root = root
         self.children = []
-        self.description = None
-        self.type = None
-        self.name = None
-        self.properties = []
+        self.properties = TreeProperties()
 
     def clean(self):
         self.children = [child for child in self.children if not child.clean() ]
@@ -72,16 +137,18 @@ class Tree:
             if not child.null_check():
                 children_export.append(child.export())
 
+        p = self.properties
         return {
-            'name': self.name,
-            'type': self.type,
-            'properties': self.properties,
-            'doc': self.description,
+            'name': p.name,
+            'type': p.type,
+            'properties': p.properties,
+            'doc': p.description,
             'children': children_export
         }
 
     def null_check(self):
-        return len(self.children) == 0 and self.description == None and self.type == None and self.name == None and len(self.properties) == 0
+        p = self.properties
+        return len(self.children) == 0 and p.description == None and p.type == None and p.name == None and len(p.properties) == 0
 
 class Flags:
     def __init__(self):
@@ -115,6 +182,9 @@ class Dox:
 
 
         self.current_tree = Tree()
+        self.root_tree = self.current_tree
+
+        self.saved_properties = {}
 
         global parser_pos
         parser_pos = 0
@@ -162,13 +232,15 @@ class Dox:
             self.last_type = token_type
             self.last_text = token_text
 
-        self.current_tree.clean()
-        export_data = self.current_tree.export()
+        self.root_tree.clean()
+        export_data = self.root_tree.export()
 
-        if not self.opts['processor'] == None:
-            return self.opts.processor(export_data)
+        if self.root_tree.null_check():
+            export_data = None
 
-        return json.dumps(export_data)
+        print export_data
+
+        return export_data
 
 
     def get_next_token(self):
@@ -368,6 +440,13 @@ class Dox:
                 return c, 'TK_OPERATOR'
         return c, 'TK_UNKNOWN'
 
+    def push_tree(self):
+        new_tree = Tree(self.current_tree)
+        self.current_tree.children.append(new_tree)
+        self.current_tree = new_tree
+
+    def pop_tree(self):
+        self.current_tree = self.current_tree.root
 
     def handle_start_expr(self, token_text):
         pass
@@ -378,13 +457,12 @@ class Dox:
 
 
     def handle_start_block(self, token_text):
-        new_tree = Tree(self.current_tree)
-        self.current_tree.children.append(new_tree)
-        self.current_tree = new_tree
-
+        self.push_tree()
+        self.current_tree.properties = self.saved_properties
+        self.saved_properties = TreeProperties()
 
     def handle_end_block(self, token_text):
-        self.current_tree = self.current_tree.root
+        self.pop_tree()
 
 
     def handle_word(self, token_text):
@@ -408,10 +486,11 @@ class Dox:
 
 
     def handle_block_comment(self, token_text):
+        self.saved_properties = TreeProperties()
         result = re.search('\* ([A-Z]\w+):\s(\w+)', token_text)
         if result and result.group(1) and result.group(2):
-            self.current_tree.type = result.group(1)
-            self.current_tree.name = result.group(2)
+            self.saved_properties.type = result.group(1)
+            self.saved_properties.name = result.group(2)
         else:
             return
 
@@ -423,7 +502,7 @@ class Dox:
 
             m = re.search('@(\w+):\s(.+)', trimmed)
             if m:
-                self.current_tree.properties.append({
+                self.saved_properties.properties.append({
                     'type': m.group(1),
                     'description': m.group(2)
                 })
@@ -431,7 +510,7 @@ class Dox:
             else: 
                 m = re.search('@(\w+)\s(\w+):\s(.+)', trimmed)
                 if m:
-                    self.current_tree.properties.append({
+                    self.saved_properties.properties.append({
                         'type': m.group(1),
                         'name': m.group(2),
                         'description': m.group(3)
@@ -440,7 +519,7 @@ class Dox:
                 else:
                     m = re.search('@(\w+)\s\{(\w+)\}\s(\w+):\s(.+)', trimmed)
                     if m:
-                        self.current_tree.properties.append({
+                        self.saved_properties.properties.append({
                             'type': m.group(1),
                             'data_type': m.group(2),
                             'name': m.group(3),
@@ -451,7 +530,8 @@ class Dox:
 
             lines = lines[1:]
 
-        self.current_tree.description = '\n'.join(description)
+        self.saved_properties.description = '\n'.join(description)
+        
 
     def handle_inline_comment(self, token_text):
         pass
@@ -464,13 +544,12 @@ class Dox:
     def handle_unknown(self, token_text):
         pass
 
-
 def main():
 
     argv = sys.argv[1:]
 
     try:
-        opts, args = getopt.getopt(argv, "o:ip:h", ['outfile=', 'processor', 'help', 'usage', 'stdin'])
+        opts, args = getopt.getopt(argv, "o:t:i:h", ['outfile=', 'type=', 'help', 'usage', 'stdin'])
     except getopt.GetoptError:
         usage()
         sys.exit(2)
@@ -485,28 +564,32 @@ def main():
     if len(args) == 1:
         file = args[0]
 
+    options['processor'] = formatJSON
+
     for opt, arg in opts:
         if opt in ('--outfile', '-o'):
             outfile = arg
-        elif opt in ('--processor', '-p'):
+        elif opt in ('--type', '-t'):
             try:
-                options.processor = __processors[ arg ]
+                options['processor'] = __processors[ arg ]
             except KeyError:
                 pass
         elif opt in ('--stdin', '-i'):
-            file = '-'
+            file = arg
         elif opt in ('--help', '--usage', '--h'):
             return usage()
 
     if file == None:
         return usage()
     else:
-        if outfile == 'stdout':
-            print(process_file(file, options))
-        else:
-            f = open(outfile, 'w')
-            f.write(process_file(file, options) + '\n')
-            f.close()
+        output = process_file(file, options)
+        if output != None:
+            if outfile == 'stdout':
+                print(output)
+            else:
+                f = open(outfile, 'w')
+                f.write(output + '\n')
+                f.close()
 
 
 if __name__ == "__main__":
