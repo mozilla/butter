@@ -35,7 +35,7 @@ Running Butter (without cornfield)
 ----------------------------------
 
 * Be sure to have a webserver of some sort running and navigate to butter/templates/test.html ( keep in mind you will not be able to save and load projects )
-* Run `node make` to ensure all of the CSS has been compiled, since Stylud files are used in place of plain CSS
+* Run `node make` to ensure all of the CSS has been compiled, since Stylus files are used in place of plain CSS
 * If you do not have a webserver setup you can create a temporary one by running `python -m SimpleHTTPServer 8888` inside the root of your Butter directory
 * Navigate to localhost:8888 to use butter
 
