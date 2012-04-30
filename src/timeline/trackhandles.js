@@ -5,7 +5,7 @@
 define( [
           "dialog/iframe-dialog",
           "util/dragndrop"
-        ], 
+        ],
         function( IFrameDialog, DragNDrop ){
 
   var ADD_TRACK_BUTTON_Y_ADJUSTMENT = 35;
@@ -27,6 +27,7 @@ define( [
 
     _addTrackButton.id = "add-track";
     _addTrackButton.innerHTML = "+Track";
+    _addTrackButton.title = "Add a new Track for your events";
 
     _container.appendChild( _addTrackButton );
 
