@@ -59,10 +59,6 @@
                 }, 10 );
                 _em.dispatch( "mediaplaying" );
               },
-              timeout: function(){
-                _em.dispatch( "mediatimeout" );
-                _em.dispatch( "mediafailed", "timeout" );
-              },
               ended: function(){
                 _em.dispatch( "mediaended" );
               }
@@ -77,6 +73,10 @@
                 }
               }
               _em.dispatch( "mediaready" );
+            },
+            timeout: function(){
+              _em.dispatch( "mediatimeout" );
+              _em.dispatch( "mediafailed", "timeout" );
             },
             fail: function( e ){
               _em.dispatch( "mediafailed", "error" );
