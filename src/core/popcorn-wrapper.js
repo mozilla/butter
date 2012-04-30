@@ -23,6 +23,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _logger = new Logger( _id + "::PopcornWrapper" ),
         _popcornEvents = options.popcornEvents || {},
         _onPrepare = options.prepare || function(){},
+        _onConstructing = options.constructing || function(){},
         _onFail = options.fail || function(){},
         _onPlayerTypeRequired = options.playerTypeRequired || function(){},
         _onTimeout = options.timeout || function(){},
@@ -156,6 +157,9 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
             createPopcorn( generatePopcornString( popcornOptions, url, target, null, callbacks, scripts ) );
             // once popcorn is created, attach listeners to it to detect state
             addPopcornHandlers();
+            if( _onConstructing ){
+              _onConstructing();
+            }
             // wait for the media to become available and notify the user, or timeout
             waitForMedia( _onPrepare, timeoutWrapper );
           }, timeoutWrapper );
