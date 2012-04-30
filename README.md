@@ -29,14 +29,22 @@ Running Butter (with cornfield)
 
 * To use butter be sure to start the node server by running `node make server`.
 * Navigate to http://localhost:8888/templates/test.html to begin using Butter
+* Stylus files will be compiled at run-time through a node module, so no pre-compile of `butter.ui.css` is necessary
 
 Running Butter (without cornfield)
 ----------------------------------
 
 * Be sure to have a webserver of some sort running and navigate to butter/templates/test.html ( keep in mind you will not be able to save and load projects )
-* Run `node make` to ensure all of the css has been compiled
-* If you do not have a webserver setup you can create a temporary one by running `python -m SimpleHTTPServer 8888` inside the root of your butter directory
+* Run `node make` to ensure all of the CSS has been compiled, since Stylud files are used in place of plain CSS
+* If you do not have a webserver setup you can create a temporary one by running `python -m SimpleHTTPServer 8888` inside the root of your Butter directory
 * Navigate to localhost:8888 to use butter
+
+Packaging and Distributing Butter
+--------------------------------
+
+Running `node make package` will compile all the necessary files into the `dist` folder, including resources like editors and dialogs which comprise a complete running environment for Butter.
+
+The constituents of the `dist` folder are subsequently rolled into a zip file called `butter.zip` in the dist folder for an even easier distribution of the Butter environment.
 
 Testing
 -------
