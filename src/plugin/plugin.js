@@ -126,7 +126,7 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
 
     var _id = "plugin" + id,
         _this = this,
-        _name = pluginOptions.name || 'Plugin' + Date.now(),
+        _name = pluginOptions.type,
         _path = pluginOptions.path,
         _manifest = {},
         _type = pluginOptions.type,
@@ -182,6 +182,8 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
       }
     });
 
+    _helper = document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" );
+
     this.createElement = function ( pattern ) {
       var pluginElement;
       if ( !pattern ) {
@@ -195,7 +197,6 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
         pluginElement = range.createContextualFragment( patternInstance ).childNodes[ 0 ];
       }
       pluginElement.id = PLUGIN_ELEMENT_PREFIX + _this.type;
-      _helper = document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" );
       pluginElement.setAttribute( "data-butter-plugin-type", _this.type );
       pluginElement.setAttribute( "data-butter-draggable-type", "plugin" );
       DragNDrop.helper( pluginElement, {

@@ -137,7 +137,9 @@
           }, 100);
 
           _plugins.push( plugin );
-          _listContainer.appendChild( plugin.createElement( _pattern ) );
+          if( moduleOptions.defaults && moduleOptions.defaults.indexOf( plugin.type ) > -1 ){
+            _listContainer.appendChild( plugin.createElement( _pattern ) );  
+          }
           butter.dispatch( "pluginadded", plugin );
         }
 
@@ -202,6 +204,23 @@
           } //if
         } //for
       }; //get
+
+      DragNDrop.droppable( _container, {
+        drop: function( element ){
+          if( element.getAttribute( "data-butter-draggable-type" ) === "plugin" ){
+            var pluginType = element.getAttribute( "data-butter-plugin-type" ),
+                plugin = _this.get( pluginType );
+            if( plugin ){
+              for( var i=0; i<_listContainer.childNodes.length; ++i ){
+                if( _listContainer.childNodes[ i ].getAttribute( "data-butter-plugin-type" ) === pluginType ){
+                  return;
+                }  
+              }
+              _listContainer.appendChild( plugin.createElement( _pattern ) );  
+            }
+          }
+        }
+      });
     }; //PluginManager
 
     PluginManager.__moduleName = "plugin";
