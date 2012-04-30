@@ -39,8 +39,7 @@ target.docs = function() {
   });
 
   var docTypes = [
-    'txt',
-    'json',
+    'md'
   ];
 
   for (var i = files.length - 1; i >= 0; i--) {

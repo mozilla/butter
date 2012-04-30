@@ -237,7 +237,7 @@ class Dox:
         self.current_tree = Tree()
         self.root_tree = self.current_tree
 
-        self.saved_properties = {}
+        self.saved_properties = TreeProperties()
 
         global parser_pos
         parser_pos = 0
