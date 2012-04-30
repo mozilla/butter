@@ -13,6 +13,58 @@ def formatJSON(input):
         return None
     return json.dumps(input)
 
+def formatMD(input):
+    if input == None:
+        return None
+    
+    def process_tree(subtree, tabs):
+        next_tabs = tabs + 1
+        output = ""
+        if subtree['name'] != None:
+            tab_str = ""
+            for i in range(0, tabs):
+                tab_str += "#"
+
+            if subtree['type'] != None:
+                output += tab_str + ' ' + subtree['type'] + ": " + subtree['name'] + "\n"
+            else:
+                output += tab_str + ' ' + subtree['name'] + "\n"
+
+            if subtree['doc'] != None:
+                output += subtree['doc'] + "\n"
+
+            if subtree['properties'] != None:
+                output += "\n"
+
+                signature = 'Usage: __' + subtree['name'] + '('
+                params = ""
+                for prop in subtree['properties']:
+                    if 'name' in prop:
+                        output += '* __' + prop['type'] + '__ ' + prop['name']
+                        if prop['data_type'] != None:
+                            output += " _(" + prop['data_type'] + ")_"
+                        if prop['description'] != None:
+                            output += ": " + prop['description'] + "\n"
+                    elif 'type' in prop:
+                        if prop['description'] != None:
+                            output += '* __' + prop['type'] + "__: " + prop['description'] + "\n"
+
+                    if 'type' in prop:
+                        params += prop['type'] + ', '
+                signature += params[:-2] + ')__'
+
+                output += "\n" + signature + "\n"
+
+        else:
+            next_tabs = tabs
+
+        for c in subtree['children']:
+            output += process_tree(c, next_tabs)
+
+        return output
+
+    return process_tree(input, 1)
+
 def formatTXT(input):
     if input == None:
         return None
@@ -58,7 +110,8 @@ def formatTXT(input):
 
 __processors = {
     'json': formatJSON,
-    'txt': formatTXT
+    'txt': formatTXT,
+    'md': formatMD
 };
 
 def process(string, opts = None):
@@ -237,8 +290,6 @@ class Dox:
 
         if self.root_tree.null_check():
             export_data = None
-
-        print export_data
 
         return export_data
 
