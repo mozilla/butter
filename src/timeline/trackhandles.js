@@ -114,6 +114,7 @@ define( [
                     i,
                     l;
 
+                trackDiv.childNodes[ 0 ].textContent = track.name = trackData.name;
                 // update every trackevent with it's new data
                 for ( i = 0, l = trackDataEvents.length; i < l; i++ ) {
                   var teData = trackDataEvents[ i ],
