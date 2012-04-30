@@ -83,6 +83,10 @@ class Tree:
     def null_check(self):
         return len(self.children) == 0 and self.description == None and self.type == None and self.name == None and len(self.properties) == 0
 
+class Flags:
+    def __init__(self):
+        self.in_html_comment = False
+
 class Dox:
 
     def __init__(self, opts = None):
@@ -93,7 +97,7 @@ class Dox:
     def blank_state(self):
 
         # internal flags
-        self.flags = {}
+        self.flags = Flags()
         self.flag_store = []
 
 

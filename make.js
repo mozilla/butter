@@ -3,6 +3,7 @@
 var JSLINT = './node_modules/jshint/bin/hint',
     RJS    = './node_modules/requirejs/bin/r.js',
     STYLUS = './node_modules/stylus/bin/stylus',
+    DOX    = './tools/dox.py',
     DIST_DIR = 'dist',
     PACKAGE_NAME = 'butter';
 
@@ -26,6 +27,19 @@ target.submodules = function() {
   echo('### Updating git submodules');
 
   exec('git submodule update --init --recursive');
+};
+
+target.docs = function() {
+  echo('### Creating documentation from src...');
+
+  var files = find('src').filter( function( file ) {
+    return file.match(/\.js$/);
+  });
+
+  for (var i = files.length - 1; i >= 0; i--) {
+    echo('### Processing documentation for ' + files[i]);
+    exec('python ' + DOX + ' ' + files[i]);
+  };
 };
 
 target.check = function() {
