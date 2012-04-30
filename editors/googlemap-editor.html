@@ -189,6 +189,7 @@
         } else {
           streetView && streetView.setVisible( false );
           map.setMapTypeId( mode.toLowerCase() );
+          window.parent.google.maps.event.trigger( map, "resize" );
         }
       };
       
