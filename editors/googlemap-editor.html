@@ -7,7 +7,7 @@
 		<style type="text/css">
 		
 		#map {
-			width: 142px;
+			width: 542px;
 			height: 142px;
 			float: left;
 		}
@@ -68,7 +68,7 @@
 		(function() {
 			var trackEvent = {}, targets,
 				gmaps, geocoder,
-				map, latLng, marker, tempMarker,
+				map, latLng,
 				latLngTimeout, locationTimeout,
 				geocache = {},
 				elements = {},
@@ -90,8 +90,6 @@
 				if (loc.latLng) {
 					loc = loc.latLng;
 				}
-
-				tempMarker.setVisible(false);
 				
 				latLng = loc;
 				trackEvent.lat = loc.lat();
@@ -99,9 +97,6 @@
 
 				elements.lat.value = trackEvent.lat;
 				elements.lng.value = trackEvent.lng;
-
-				marker.setPosition(loc);
-				marker.setVisible(true);
 				
 				map.setCenter(loc);
 			}
@@ -112,10 +107,6 @@
           checkType( trackEvent.type );
 					latLng = results[0].geometry.location;
 					map.fitBounds(results[0].geometry.viewport);
-					
-					tempMarker.setPosition(latLng);
-					tempMarker.setTitle(results[0].formatted_address);
-					tempMarker.setVisible(true);
 				}
 
 				if (geocache[location]) {
@@ -132,7 +123,6 @@
 							}
 						}
 					);
-
 				}
 			}
 			
@@ -265,28 +255,12 @@
 				gmaps = window.parent.google.maps;
 				geocoder = new gmaps.Geocoder();
 				map = new gmaps.Map(document.getElementById('map'), {
-					zoom: trackEvent.zoom || 1,
+					zoom: trackEvent.zoom || 8,
+          disableDefaultUI: true,
+          zoomControl: true,
 					mapTypeId: gmaps.MapTypeId.ROADMAP
 				});
-				
-				marker = new gmaps.Marker({
-					map: map,
-					visible: true,
-					draggable: true,
-					icon: 'https://www.google.com/intl/en_ALL/mapfiles/marker_purple.png'
-				});
-				
-				tempMarker = new gmaps.Marker({
-					map: map,
-					visible: false,
-					draggable: true
-				});
-				
-				gmaps.event.addListener(marker, 'dragend', saveLocation);
-				gmaps.event.addListener(marker, 'click', saveLocation);
-				gmaps.event.addListener(tempMarker, 'dragend', saveLocation);
-				gmaps.event.addListener(tempMarker, 'click', saveLocation);
-				
+
 				if (trackEvent.lat != null && trackEvent.lng != null &&
             trackEvent.lat < -90 && trackEvent.lat > 90 &&
             trackEvent.lng < -180 && trackEvent.lng > 180) {
@@ -300,6 +274,7 @@
 					geocode(trackEvent.location);
 				} else {
 					latLng = new gmaps.LatLng(DEFAULT_LAT, DEFAULT_LNG);
+          window.parent.google.maps.event.trigger( map, "resize" );
 					map.setCenter(latLng);
 					saveLocation(latLng)
 				}
@@ -321,6 +296,7 @@
 					trackEvent.zoom = map.getZoom();
           trackEvent.lat = map.getCenter().lat();
           trackEvent.lng = map.getCenter().lng();
+          trackEvent.heading = map.streetView.getPov().heading;
 				}
 			}
 			
@@ -394,8 +370,6 @@
 					latLng = new gmaps.LatLng(trackEvent.lat, trackEvent.lng);
 
 					map.setCenter(latLng);
-					marker.setPosition(latLng);
-					marker.setVisible(true);
 				}
 
         if (map && trackEvent.zoom != null) {
@@ -419,6 +393,10 @@
           _manifest = e.data.manifest;
           targetsUpdated( e.data.targets );
           editTrackEvent( e.data.popcornOptions );
+
+          if ( e.data.popcornOptions.type !== "STREETVIEW" ) {
+            loadGoogleMaps();
+          }
         });
 
         // load google map script
