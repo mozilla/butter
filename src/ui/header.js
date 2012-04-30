@@ -1,6 +1,7 @@
 define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
 
-  var DEFAULT_AUTH_BUTTON_TEXT = "Login / Sign Up";
+  var DEFAULT_AUTH_BUTTON_TEXT = "Login / Sign Up",
+      DEFAULT_AUTH_BUTTON_TITLE = "Login using BrowserID authentication";
 
   return function( butter, options ){
 
@@ -45,10 +46,10 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
     _newButton.title = "Create a new project";
     _saveButton.title = "Save your project";
     _loadButton.title = "Load a saved project";
-    _shareButton.title = "Generate a link to share this project with your the world";
+    _shareButton.title = "Generate a link to share this project with the world";
     _exportButton.title = "View and copy the raw data for your project";
-    _authButton.title = "Login using BrowserID authentication";
     _logoutButton.title = "Logout";
+    _authButton.title = DEFAULT_AUTH_BUTTON_TITLE;
 
     document.body.classList.add( "butter-header-spacing" );
 
@@ -61,6 +62,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
           var email = response.email;
           butter.cornfield.list(function( listResponse ) {
             _authButton.innerHTML = email;
+            _authButton.title = "This is you!";
             _logoutButton.style.display = _oldDisplayProperty;
             if( successCallback ){
               successCallback();
@@ -129,6 +131,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
         butter.cornfield.logout(function( response ){
           _logoutButton.style.display = "none";
           _authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
+          _authButton.title = DEFAULT_AUTH_BUTTON_TITLE;
         });
       }
     });
