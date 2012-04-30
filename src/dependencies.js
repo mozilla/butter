@@ -48,7 +48,7 @@ define([], function(){
           document.head.appendChild( scriptElement );
           scriptElement.onload = scriptElement.onreadystatechange = callback;
         }
-        else{
+        else if( callback ){
           callback();  
         }
       },
@@ -77,7 +77,9 @@ define([], function(){
         var interval = setInterval(function(){
           if( checkFn() ){
             clearInterval( interval );
-            callback();
+            if( callback ){
+              callback();
+            }
           }
         }, CSS_POLL_INTERVAL );
 
