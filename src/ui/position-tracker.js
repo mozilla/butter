@@ -21,7 +21,7 @@ define([], function(){
       destroy: function(){
         clearInterval(interval);
       }
-    }
+    };
   };
 
 });

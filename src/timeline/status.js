@@ -4,7 +4,7 @@
 
 define( [], function(){
 
-  function Button( className, onClick ){
+  function Button( className, onClick, toolTip ){
     var _container = document.createElement( "div" ),
         _button = document.createElement( "div" ),
         _icon = document.createElement( "div" ),
@@ -12,6 +12,7 @@ define( [], function(){
 
     _container.className = className;
     _button.className = "status-button";
+    _button.title = toolTip || "";
     _icon.className = "status-button-icon";
 
     _container.appendChild( _button );
@@ -131,7 +132,7 @@ define( [], function(){
           return _container;
         }
       }
-    });   
+    });
 
   } //Time
 
@@ -147,10 +148,10 @@ define( [], function(){
     _statusContainer.className = "status-container";
 
     _time = new Time( _media );
-    
+
     _muteButton = new Button( "mute-button-container", function( e ){
       _media.muted = !_media.muted;
-    });
+    }, "Toggle volume on/off" );
 
     _playButton = new Button( "play-button-container", function( e ){
       if( _media.ended ){
@@ -159,7 +160,7 @@ define( [], function(){
       else{
         _media.paused = !_media.paused;
       }
-    });
+    }, "Play/Pause media");
 
     _media.listen( "mediamuted", function( e ){
       _muteButton.state = false;
@@ -208,7 +209,7 @@ define( [], function(){
         }
       }
     });
-    
+
   }; //Status
 
 });

@@ -67,9 +67,12 @@ define( [
       },
       name: {
         enumerable: true,
-        configurable: false,
         get: function(){
           return _name;
+        },
+        set: function( name ) {
+          _name = name;
+          _em.dispatch( "tracknamechanged", _this );
         }
       },
       id: {
@@ -94,7 +97,7 @@ define( [
         },
         set: function( importData ){
           if( importData.name ){
-            name = importData.name;
+            _name = importData.name;
           }
           if( importData.trackEvents ){
             var importTrackEvents = importData.trackEvents;

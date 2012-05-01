@@ -11,6 +11,7 @@ define( [], function(){
         _this = this;
 
     _element.id = "toggle-button";
+    _element.title = "Show/Hide Timeline";
     _element.appendChild( _img );
     _parent.appendChild( _element );
 
