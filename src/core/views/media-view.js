@@ -15,7 +15,7 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
 
     var editMessage = document.createElement( "p");
     editMessage.className = "edit-message";
-    editMessage.innerHTML = "Edit...";
+    editMessage.innerHTML = "Edit source...";
     _propertiesElement.appendChild(editMessage);
     var urlTextbox = document.createElement( "input" );
     urlTextbox.type = "text";
