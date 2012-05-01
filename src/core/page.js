@@ -82,7 +82,6 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         node = toClean[ i ];
 
         if ( node.getAttribute( "data-butter" ) === "media" ) {
-          console.log( node.parentNode,  );
           node.parentNode.replaceChild( document.getElementById( node.id ).cloneNode( true ), node );
         }
         node.removeAttribute( "butter-clean" );
