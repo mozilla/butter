@@ -72,11 +72,19 @@
                   _popcornWrapper.updateEvent( te[ j ] );
                 }
               }
+              if( _view ){
+                _view.update();
+              }
               _em.dispatch( "mediaready" );
             },
             timeout: function(){
               _em.dispatch( "mediatimeout" );
               _em.dispatch( "mediafailed", "timeout" );
+            },
+            constructing: function(){
+              if( _view ){
+                _view.update();
+              }
             },
             fail: function( e ){
               _em.dispatch( "mediafailed", "error" );

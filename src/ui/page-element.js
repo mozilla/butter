@@ -15,9 +15,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
         _em = new EventManager( this ),
         _blinkFunction,
         _hilightFunction,
+        _positionTracker,
         _this = this;
 
-    PositionTracker( _element, function( rect ){
+    _positionTracker = PositionTracker( _element, function( rect ){
       _highlightElement.style.left = rect.left + "px";
       _highlightElement.style.top = rect.top + "px";
       _highlightElement.style.width = rect.width + "px";
@@ -38,6 +39,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
     };
 
     this.destroy = function(){
+      _positionTracker.destroy();
       if( _highlightElement.parentNode ){
         _highlightElement.parentNode.removeChild( _highlightElement );
       } //if
