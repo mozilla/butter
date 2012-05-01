@@ -55,7 +55,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     };
 
     this.getHTML = function( popcornStrings ){
-      var html, head, body, i, toClean, toExclude, node, base;
+      var html, head, body, i, toClean, toExclude, node, newNode, base, mediaElements;
 
       //html tag to which body and head are appended below
       html = document.createElement( "html" );
@@ -75,17 +75,26 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       for ( i = 0, l = toExclude.length; i < l; ++i ) {
         node = toExclude[ i ];
         node.parentNode.removeChild( node );
-      } //for
+      }
+
+      mediaElements = body.querySelectorAll( "*[data-butter='media']" );
+
+      for ( i = 0, l = mediaElements.length; i < l; ++i ) {
+        node = mediaElements[ i ];
+        newNode = document.getElementById( node.id ).cloneNode( true );
+
+        if( [ "VIDEO", "AUDIO" ].indexOf( newNode.nodeName ) === -1 ){
+          newNode.innerHTML = "";
+        }
+      }
+      node.parentNode.replaceChild( newNode, node );
 
       toClean = body.querySelectorAll( "*[butter-clean=\"true\"]" );
       for ( i = 0, l = toClean.length; i < l; ++i ) {
         node = toClean[ i ];
 
-        if ( node.getAttribute( "data-butter" ) === "media" ) {
-          node.parentNode.replaceChild( document.getElementById( node.id ).cloneNode( true ), node );
-        }
         node.removeAttribute( "butter-clean" );
-        node.removeAttribute( "data-butter" );
+        node.removeAttribute( "`er" );
         node.removeAttribute( "data-butter-default" );
 
         // obviously, classList is preferred (https://developer.mozilla.org/en/DOM/element.classList)

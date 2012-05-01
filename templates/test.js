@@ -37,16 +37,3 @@ document.addEventListener( "DOMContentLoaded", function( e ){
     } 
   }); //Butter
 }, false );
-
-_testInitCallback = function(){
-  console.log( "init callback" );
-};
-
-_testBeforeCallback = function( popcorn ){
-  console.log( "before callback", popcorn );
-};
-
-_testAfterCallback = function( popcorn ){
-  console.log( "after callback", popcorn );
-};
-
