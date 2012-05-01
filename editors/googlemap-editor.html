@@ -148,21 +148,7 @@
           otherElement = elements[otherId];
           value = parseFloat(element.value);
 
-          if ( isNaN != null ) {
-
-            element.style.backgroundColor = '#f11';
-          } else if (value * compare > other * compare) {
-            element.style.backgroundColor = '#f11';
-            otherElement.style.backgroundColor = '#f11';
-
-            trackEvent[id] = value;
-
-          } else {
-            element.style.backgroundColor = '#f11';
-            otherElement.style.backgroundColor = '#f11';
-
-            trackEvent[id] = value;
-          }
+          element.style.backgroundColor = '#f11';
         }
 
         var checkType = function ( e ) {
