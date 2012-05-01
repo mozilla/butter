@@ -77,3 +77,27 @@ target.package = function() {
   cd(DIST_DIR)
   exec('zip -r ' + PACKAGE_NAME + '.zip ' + ls('.').join(' '));
 };
+
+target.beautify = function( a ) {
+  echo('### Beautifying butter');
+  cd('tools')
+  exec('./beautify.sh');
+};
+
+target.test = function() {
+  var unbeautified = [ "if.js", "for.js", "while.js", "array.js", "function.js", "object.js", "comments.js", "eolspace.js" ],
+      beautified = [ "if.expected.js", "for.expected.js", "while.expected.js", "array.expected.js", "function.expected.js", "object.expected.js", "comments.expected.js", "eolspace.expected.js" ],
+      result;
+
+  echo('### Testing Beautifier');
+  for( var i = 0, l = unbeautified.length; i < l; i++ ) {
+    result = exec('bash test/beautifier/test.sh ' + unbeautified[ i ] + ' ' + beautified[ i ]);
+    rm('tmp.txt');
+    // checking against a length of 1 because if the output is empty a newline character gets returned
+    if( result.output.length === 1 ) {
+      echo(unbeautified[ i ] + ' was beautified correctly');
+    } else {
+      echo(unbeautified[ i ] + ' did not beautify correctly');
+    }
+  }
+};
