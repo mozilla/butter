@@ -1,6 +1,6 @@
 define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpinner ){
   
-  var DEFAULT_SUBTITLE = "&#10003; HTML5 &#10003; YouTube &#10003; Vimeo";
+  var DEFAULT_SUBTITLE = "Supports HTML5 video, YouTube, and Vimeo";
 
   return function( media, options ){
     var _media = media,
@@ -13,27 +13,35 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
     _propertiesElement.className = "butter-media-properties";
     _propertiesElement.setAttribute( "data-butter-exclude", true );
 
+    var editMessage = document.createElement( "p");
+    editMessage.className = "edit-message";
+    editMessage.innerHTML = "Edit source...";
+    _propertiesElement.appendChild(editMessage);
     var urlTextbox = document.createElement( "input" );
     urlTextbox.type = "text";
     urlTextbox.className = "url";
     var title = document.createElement( "h3" );
-    title.innerHTML = "Timeline Media";
-    var subtitle = document.createElement( "h5" );
+    title.innerHTML = "Video/Audio URL";
+    var subtitle = document.createElement( "p" );
+    subtitle.className = "form-field-notes";
     subtitle.innerHTML = DEFAULT_SUBTITLE;
     var container = document.createElement( "container" );
     container.className = "container";
+    var innerContainer = document.createElement( "div" );
+    innerContainer.className = "inner-container";
     var changeButton = document.createElement( "button" );
-    changeButton.innerHTML = "Change";
+    changeButton.innerHTML = "Save";
     var loadingContainer = document.createElement( "div" );
     loadingContainer.className = "loading-container";
-
+  
     _logoSpinner = LogoSpinner( loadingContainer );
-
-    container.appendChild( title );
-    container.appendChild( subtitle );
-    container.appendChild( urlTextbox );
-    container.appendChild( changeButton );
-    container.appendChild( loadingContainer );
+    
+    innerContainer.appendChild( title );
+    innerContainer.appendChild( urlTextbox );
+    innerContainer.appendChild( subtitle );
+    innerContainer.appendChild( changeButton );
+    innerContainer.appendChild( loadingContainer );
+    container.appendChild( innerContainer );
 
     _propertiesElement.appendChild( container );
 
@@ -47,12 +55,23 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
     }
 
     function changeUrl(){
-      if( urlTextbox.value.replace( /\s/g, "" ) !== "" ){
+      if(testUrl(urlTextbox.value)){
+          subtitle.className = "form-field-notes form-ok";
+        subtitle.innerHTML = "URL changed.";
+        urlTextbox.className = "url form-ok";
         media.url = urlTextbox.value;
       }
       else{
-        showError( true, "Your URL must not be blank:" );
+        subtitle.className += " form-error";
+        urlTextbox.className += " form-error";
+        showError( true, "Not a valid URL. Use http://..." );
       }
+    }
+    
+    function testUrl(url) {
+      var test = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+      console.log(url.match(test));
+      return url.match(test);
     }
 
     urlTextbox.addEventListener( "keypress", function( e ){

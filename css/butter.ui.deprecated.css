@@ -82,10 +82,11 @@
 
 .butter-media-properties {
   position: absolute;
-  width: 32px;
+  width: 90px;
   height: 32px;
   z-index: 2139000000;
   font-family: Verdana, sans-serif;
+  font-size: 12px;
   border: 2px solid #fff;
   background-color: #131313;
   background-image: -moz-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% );
@@ -106,28 +107,63 @@
   height: 30px;
 }
 
+
 .butter-media-properties .container {
   width: 250px;
   height: 100px;
   min-width: 250px;
   min-height: 100px;
   position: absolute;
-  text-align: center;
   color: #fff;
 }
 
+/*Show and hide media settings on mouse-over */
+.butter-media-properties .inner-container {
+  display: none;
+  padding: 10px;
+}
+.butter-media-properties:hover .inner-container {  display: block; }
+.butter-media-properties:hover .edit-message { display: none; }
 .butter-media-properties:hover {
   opacity: 1.0;
   width: 250px;
   height: 100px;
 }
 
-.butter-media-properties h3, .butter-media-properties h5 {
-  margin: 3px;
+/* Media settings inner elements */
+.butter-media-properties .edit-message {
+  color: #FFF;
+  padding-top: 6px;
+  padding-left: 3px;
 }
-
+.butter-media-properties h3, .butter-media-properties p {
+  margin: 0;
+}
 .butter-media-properties .url {
-  width: 80%;
+  width: 224px;
+  border: 1px solid #333;
+  padding: 5px 3px;
+}
+.butter-media-properties button {
+  margin-top: .5em;
+  float: right;
+}
+.form-field-notes {
+  font-style: italic;
+  font-size: 80%;
+}
+p.form-error {
+  color: #FF0000 !important;
+  font-weight: 600;
+}
+p.form-ok {
+  color: #A0C549;
+}
+input.form-ok {
+  border: 1px solid #A0C549 !important;
+}
+input.form-error {
+  border: 1px solid red !important;
 }
 
 /* MetaWebPro font family licensed from fontshop.com. WOFF-FTW! */
