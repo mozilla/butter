@@ -69,8 +69,7 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
     }
     
     function testUrl(url) {
-      var test = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-      console.log(url.match(test));
+      var test = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
       return url.match(test);
     }
 
