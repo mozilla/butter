@@ -10,7 +10,6 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
 
     _parentElement.id = "plugin-list";
     _containerElement.className = "container";
-
     _parentElement.appendChild( _containerElement );
 
     butter.ui.areas.work.addComponent( _parentElement, {
@@ -34,10 +33,9 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
 
     butter.listen( "pluginadded", function( e ){
       var element = document.createElement( "div" );
-      element.innerHTML = e.data.type;
 
       DragNDrop.helper( element, {
-        image: e.data.helper,
+        //image: e.data.helper,
         start: function(){
           var targets = butter.targets,
               media = butter.currentMedia;
@@ -50,6 +48,15 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
           
         }
       });
+      element.icon = e.data.helper;
+      if(element.icon) {
+        element.icon.removeAttribute('id');
+        element.icon.removeAttribute('style');
+        element.appendChild(element.icon);
+      }
+      element.text = document.createElement("span");
+      element.text.innerHTML = e.data.type;
+      element.appendChild(element.text);
 
       element.setAttribute( "data-butter-plugin-type", e.data.type );
       element.setAttribute( "data-butter-draggable-type", "plugin" );
