@@ -94,7 +94,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         node = toClean[ i ];
 
         node.removeAttribute( "butter-clean" );
-        node.removeAttribute( "`er" );
+        node.removeAttribute( "data-butter" );
         node.removeAttribute( "data-butter-default" );
 
         // obviously, classList is preferred (https://developer.mozilla.org/en/DOM/element.classList)
