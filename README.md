@@ -65,3 +65,12 @@ Contributing
 * To file a bug or feature request, please use our issue-tracking lighthouse project: https://webmademovies.lighthouseapp.com/projects/65733-butter/
 * When contributing code, please issue a pull request on github, so that we can track changes with comments. Be sure to put a link to the pull request in any corresponding lighthouse tickets.
 * Be sure to change the ticket state on lighthouse to "peer-review-requested" and assign to to one of the [core developers](https://github.com/mozilla/butter/blob/master/package.json) for review
+
+Known Issues
+------------
+
+* Seeking in Youtube, Vimeo and Soundcloud using the butter UI may cause the video to pause.
+* Seeking in Vimeo using butter UI may cause the video to reset to second 0.
+* Youtube URL query string options like "&feature=youtu.be&t=2m1s" may cause issues. Example: http://www.youtube.com/watch?v=4LP6nDRbDOA&feature=youtu.be&t=2m1s
+* Soundcloud's playback position does not update visually while paused. Hitting play, it will fix its position.
+* Soundcloud will not respond to seeking until after it has been played once.
