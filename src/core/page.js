@@ -62,13 +62,13 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
       // if there is already a snapshot, clone it instead of cloning the current dom
       if( !_snapshot ){
-        head = document.getElementsByTagName( "head" )[ 0 ].cloneNode( true );
         body = document.getElementsByTagName( "body" )[ 0 ].cloneNode( true );
       }
       else {
-        head = _snapshot.head.cloneNode( true );
         body = _snapshot.body.cloneNode( true );
       }
+      
+      head = document.getElementsByTagName( "head" )[ 0 ].cloneNode( true );
 
       toExclude = Array.prototype.slice.call( head.querySelectorAll( "*[data-butter-exclude]" ) );
       toExclude = toExclude.concat( Array.prototype.slice.call( head.querySelectorAll( "*[data-requiremodule]" ) ) );
