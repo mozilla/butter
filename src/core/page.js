@@ -86,9 +86,10 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         if( [ "VIDEO", "AUDIO" ].indexOf( newNode.nodeName ) === -1 ){
           newNode.innerHTML = "";
         }
+        node.parentNode.replaceChild( newNode, node );
+        newNode.removeAttribute( "data-butter-source" );
       }
-      node.parentNode.replaceChild( newNode, node );
-
+  
       toClean = body.querySelectorAll( "*[butter-clean=\"true\"]" );
       for ( i = 0, l = toClean.length; i < l; ++i ) {
         node = toClean[ i ];
