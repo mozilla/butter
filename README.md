@@ -71,3 +71,5 @@ Known Issues
 
 * Seeking in Youtube and Soundcloud using the butter UI may cause the video to pause.
 * Youtube URL query string options like "&feature=youtu.be&t=2m1s" may cause issues. Example: http://www.youtube.com/watch?v=4LP6nDRbDOA&feature=youtu.be&t=2m1s
+* Soundcloud's playback position does not update visually while paused. Hitting play, it will fix its position.
+* Soundcloud will not respond to seeking until after it has been played once.
