@@ -286,8 +286,10 @@ app.post('/project/:id?', function( req, res ) {
   });
 });
 
-app.listen(CONFIG.server.bindPort, CONFIG.server.bindIP, function() {
+var port = process.env.PORT || CONFIG.server.bindPort;
+
+app.listen(port, CONFIG.server.bindIP, function() {
   var addy = app.address();
-  console.log('HTTP Server started on http://' + CONFIG.server.bindIP + ':' + CONFIG.server.bindPort);
+  console.log('HTTP Server started on http://' + CONFIG.server.bindIP + ':' + addy.port);
   console.log('Press Ctrl+C to stop');
 });
