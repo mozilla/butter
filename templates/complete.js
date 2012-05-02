@@ -152,7 +152,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             start:5,
             end: 6,
             id:"webpages-a",
-            src:"http://www.mozilla.org/",
+            src:"http://popcornjs.org/",
             target: "Area1"
           }
         });
@@ -193,7 +193,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
       media.onReady( start );
       
-      window.butter = butter;
     } 
   }); //Butter
 }, false );
