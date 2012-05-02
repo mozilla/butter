@@ -65,7 +65,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         head = document.getElementsByTagName( "head" )[ 0 ].cloneNode( true );
         body = document.getElementsByTagName( "body" )[ 0 ].cloneNode( true );
       }
-      else{
+      else {
         head = _snapshot.head.cloneNode( true );
         body = _snapshot.body.cloneNode( true );
       }
@@ -80,6 +80,10 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       toClean = body.querySelectorAll( "*[butter-clean=\"true\"]" );
       for ( i = 0, l = toClean.length; i < l; ++i ) {
         node = toClean[ i ];
+
+        if ( node.getAttribute( "data-butter" ) === "media" ) {
+          node.parentNode.replaceChild( document.getElementById( node.id ).cloneNode( true ), node );
+        }
         node.removeAttribute( "butter-clean" );
         node.removeAttribute( "data-butter" );
         node.removeAttribute( "data-butter-default" );
