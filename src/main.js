@@ -524,7 +524,7 @@
             if( mediaObj.getAttribute( "data-butter-source" ) ){
               url = mediaObj.getAttribute( "data-butter-source" );
             }
-            else if( ["VIDEO", "AUDIO" ].indexOf( mediaObj.nodeName ) > -1 ) {
+            else if( [ "VIDEO", "AUDIO" ].indexOf( mediaObj.nodeName ) > -1 ) {
               url = mediaObj.currentSrc;
             }
 

@@ -208,7 +208,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           newElement.id = targetElement.id;
           attributes = targetElement.attributes;
           if( attributes ){
-            for(var i = attributes.length - 1; i >= 0; i-- ) {
+            for( var i = attributes.length - 1; i >= 0; i-- ) {
               var name = attributes[ i ].nodeName;
               newElement.setAttribute( name, targetElement.getAttribute( name ) );
             }
