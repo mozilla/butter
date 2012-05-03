@@ -497,7 +497,7 @@
             medias = scrapedObject.media;
 
         _page.prepare(function() {
-          var i, j, il, jl, url, oldTarget, oldMedia, mediaPopcornOptions;
+          var i, j, il, jl, url, oldTarget, oldMedia, mediaPopcornOptions, mediaObj;
           for( i = 0, il = targets.length; i < il; ++i ) {
             oldTarget = null;
             if( _targets.length > 0 ){
@@ -519,11 +519,15 @@
             oldMedia = null;
             mediaPopcornOptions = null;
             url = "";
-            if( ["VIDEO", "AUDIO" ].indexOf( medias[ i ].nodeName ) > -1 ) {
-              url = medias[ i ].currentSrc;
-            } else {
-              url = medias[ i ].getAttribute( "data-butter-source" );
+            mediaObj = medias[ i ];
+
+            if( mediaObj.getAttribute( "data-butter-source" ) ){
+              url = mediaObj.getAttribute( "data-butter-source" );
             }
+            else if( [ "VIDEO", "AUDIO" ].indexOf( mediaObj.nodeName ) > -1 ) {
+              url = mediaObj.currentSrc;
+            }
+
             if( _media.length > 0 ){
               for( j = 0, jl = _media.length; j < jl; ++j ){
                 if( _media[ j ].id !== medias[ i ].id && _media[ j ].url !== url ){

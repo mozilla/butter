@@ -202,11 +202,22 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       if( _mediaType !== "object" && targetElement ) {
         if( [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) !== -1 ) {
           var parentNode = targetElement.parentNode,
-              newElement = document.createElement( "div" );
+              newElement = document.createElement( "div" ),
+              attributes;
 
           newElement.id = targetElement.id;
-          newElement.style.cssText = getComputedStyle( targetElement ).cssText;
+          attributes = targetElement.attributes;
+          if( attributes ){
+            for( var i = attributes.length - 1; i >= 0; i-- ) {
+              var name = attributes[ i ].nodeName;
+              newElement.setAttribute( name, targetElement.getAttribute( name ) );
+            }
+          }
+          if( targetElement.className ){
+            newElement.className = targetElement.className;
+          }
           parentNode.replaceChild( newElement, targetElement );
+          newElement.setAttribute( "data-butter", "media" );
         }
       }
     }
