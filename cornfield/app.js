@@ -11,7 +11,7 @@ const express = require('express'),
       PUBLISH_PREFIX = CONFIG.dirs.publishPrefix,
       ENVIRONMENT = CONFIG.environment || {},
       MODE = ENVIRONMENT.mode || "production",
-      WWW_ROOT = CONFIG.dirs.wwwRoot || __dirname + "/..",
+      WWW_ROOT = path.resolve(CONFIG.dirs.wwwRoot || __dirname + "/.."),
       TEMPLATES = CONFIG.templates || {};
 
 var DEFAULT_USER = null,
