@@ -1,16 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Manual Tests</title>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <title>Manual Tests</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <style type="text/css">
+    body {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      overflow: hidden;
+      height: 100%;
+      max-height: 100%;
+    }
+
+    #tests a {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 200px; /*Width of frame div*/
+      height: 100%;
+      overflow: hidden; /* hidden | scroll Disable scrollbars. Set to "scroll" to enable*/
+      background: rgb(61, 61, 61);
+      color: white;
+      font-family: "MetaBold";
+      font-size: 14px;
+      padding: 3px;
+    }
+
+    #butter-container {
+      position: fixed;
+      top: 0;
+      left: 200px; /*Set left value to WidthOfFrameDiv*/
+      right: 0;
+      bottom: 0;
+      overflow: auto;
+      background: #fff;
+    }
+
+    #butter {
+      position: absolute;
+      width: 100%;
+      height: 100%
+    }
+
+    * html body{ /*IE6 hack*/
+      padding: 0 0 0 200px; /*Set value to (0 0 0 WidthOfFrameDiv)*/
+    }
+
+    * html { /*IE6 hack*/
+      height: 100%;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-  <h1>Manual Tests</h1>
 
-  <ol>
-    <li><a href="test-youtube.html">Change Media to YouTube</a>
+  <div id="butter-container">
+    <iframe id="butter" name="butter-frame" frameborder="0" noresize="noresize" src="test-youtube.html"></iframe>
+  </div>
 
-  </ol>
+  <div id="tests">
+    <h1>Manual Tests</h1>
+    <ol>
+
+      <li><a href="test-youtube.html" target="butter-frame">Change Media to YouTube</a>
+
+    </ol>
+  </div>
 
 </body>
 </html>
