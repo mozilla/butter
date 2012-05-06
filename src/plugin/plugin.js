@@ -189,7 +189,6 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
       _helper.src = "../resources/popcorn-icon.png";
     }
 
-    console.log(_helper);
     this.createElement = function ( pattern ) {
       var pluginElement;
       if ( !pattern ) {
