@@ -182,11 +182,8 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
       }
     });
 
-    if ( document.getElementById( _this.type + "-icon" ) ) {
-      _helper = document.getElementById( _this.type + "-icon" ).cloneNode( false );
-    } else {
-      _helper = document.getElementById( "default-icon" ).cloneNode( false );
-    }
+    _helper = document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" );
+    if( _helper ) { _helper = _helper.cloneNode( false ); } 
 
     this.createElement = function ( pattern ) {
       var pluginElement;
