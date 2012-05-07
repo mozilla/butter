@@ -2,6 +2,11 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
+/**
+ * Module: Comm
+ * 
+ * Allows communication between entities through postMessage.
+ */
 define( [ "./eventmanager" ], function( EventManager ){
 
   var __context = 1;
