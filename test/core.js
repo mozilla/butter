@@ -668,7 +668,7 @@
       });
 
       butter.listen( "mediaready", function( e ) {
-        equals( /test text at end of body\s*<\/body>/.test( butter.getHTML() ), true, "Text appended to body is missing from exported HTML." );
+        equals( /test text at end of body\s*<\/body>/.test( butter.getHTML() ), true, "Text appended to body in getHTML event is included in exported HTML." );
         start();
       });
     })
