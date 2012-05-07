@@ -9,8 +9,7 @@ define( [ "./eventmanager" ], function( EventManager ){
   /**
    * Class: Comm
    *
-   * Lets entities communicate when communication restrictions exist
-   * by passing messages through postMessage.
+   * Lets entities communicate when communication restrictions exist by passing messages through postMessage.
    *
    * @param {Window} clientWindow: Window from/to which to send/receive messages
    * @param {Function} readyCallback: Function to be called when link is set up

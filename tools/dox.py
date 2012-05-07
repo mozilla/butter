@@ -20,40 +20,42 @@ def formatMD(input):
     def process_tree(subtree, tabs):
         next_tabs = tabs + 1
         output = ""
-        if subtree['name'] != None:
+        if 'name' in subtree and subtree['name'] != None:
             tab_str = ""
             for i in range(0, tabs):
                 tab_str += "#"
 
-            if subtree['type'] != None:
-                output += tab_str + ' ' + subtree['type'] + ": " + subtree['name'] + "\n"
+            if 'type' in subtree:
+                output += tab_str + ' ' + str(subtree['type']) + ": " + str(subtree['name']) + "\n"
             else:
-                output += tab_str + ' ' + subtree['name'] + "\n"
+                output += tab_str + ' ' + str(subtree['name']) + "\n"
 
-            if subtree['doc'] != None:
-                output += subtree['doc'] + "\n"
+            if 'doc' in subtree:
+                output += str(subtree['doc']) + "\n"
 
-            if subtree['properties'] != None:
+            if 'type' in subtree and not subtree['type'] in ["Module", "Property"   ] and 'properties' in subtree:
                 output += "\n"
 
-                signature = 'Usage: __' + subtree['name'] + '('
+                signature = 'Usage: __' + str(subtree['name']) + '('
                 params = ""
                 for prop in subtree['properties']:
                     if 'name' in prop:
-                        output += '* __' + prop['type'] + '__ ' + prop['name']
-                        if prop['data_type'] != None:
+                        output += '* __' + prop['type'] + '__ _' + prop['name'] + '_ '
+                        if 'data-type' in prop:
                             output += " _(" + prop['data_type'] + ")_"
-                        if prop['description'] != None:
+                        if 'description' in prop:
                             output += ": " + prop['description'] + "\n"
                     elif 'type' in prop:
-                        if prop['description'] != None:
+                        if 'description' in prop:
                             output += '* __' + prop['type'] + "__: " + prop['description'] + "\n"
 
-                    if 'type' in prop:
-                        params += prop['type'] + ', '
+                    if 'name' in prop:
+                        params += prop['name'] + ', '
                 signature += params[:-2] + ')__'
 
                 output += "\n" + signature + "\n"
+
+            output += "\n"
 
         else:
             next_tabs = tabs
