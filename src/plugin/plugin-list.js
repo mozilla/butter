@@ -33,8 +33,8 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
 
     butter.listen( "pluginadded", function( e ){
       var element = document.createElement( "div" ),
-      icon = e.data.helper,
-      text = document.createElement( "span" );
+          icon = e.data.helper,
+          text = document.createElement( "span" );
 
       DragNDrop.helper( element, {
         start: function(){
@@ -53,7 +53,7 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
       if( icon ) {
         icon.removeAttribute( "id" );
         icon.removeAttribute( "style" );
-        element.appendChild(icon);
+        element.appendChild( icon );
       }
 
       text.innerHTML = e.data.type;
