@@ -182,12 +182,7 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
       }
     });
 
-    _helper = document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" );
-    
-    if(!_helper) {
-      _helper = document.createElement("img");
-      _helper.src = "../resources/popcorn-icon.png";
-    }
+    _helper = document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" ).cloneNode( false );
 
     this.createElement = function ( pattern ) {
       var pluginElement;
