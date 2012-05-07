@@ -2,16 +2,18 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button", "./header" ], function( EventManager, Toggler, LogoSpinner, ContextButton, Header ){
+define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button", "./header" ],
+        function( EventManagerWrapper, Toggler, LogoSpinner, ContextButton, Header ){
 
   var TRANSITION_DURATION = 500,
       BUTTER_CSS_FILE = "{css}/butter.ui.css";
 
   function Area( id, element ){
-    var _em = new EventManager( this ),
-        _element,
+    var _element,
         _components = [],
         _this = this;
+
+    EventManagerWrapper( _this );
 
     this.element = _element = element || document.createElement( "div" );
     _element.id = id;
@@ -68,12 +70,13 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
 
   function UI( butter, options ){
 
-    var _em = new EventManager( this ),
-        _areas = {},
+    var _areas = {},
         _contentState = [],
         _state = true,
         _logoSpinner,
         _this = this;
+
+    EventManagerWrapper( _this );
 
     _areas.main = new Area( "butter-tray" );
 
@@ -129,7 +132,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     };
 
     this.registerStateToggleFunctions = function( state, events ){
-      _em.listen( "contentstatechanged", function( e ){
+      _this.listen( "contentstatechanged", function( e ){
         if( e.data.oldState === state ){
           events.transitionOut( e );
         }
@@ -151,7 +154,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
           _areas[ a ].setContentState( state );
         }
       }
-      _em.dispatch( "contentstatechanged", {
+      _this.dispatch( "contentstatechanged", {
         oldState: oldState,
         newState: _this.contentState
       });
@@ -169,7 +172,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
           _areas[ a ].setContentState( newState );
         }
       }
-      _em.dispatch( "contentstatechanged", {
+      _this.dispatch( "contentstatechanged", {
         oldState: oldState,
         newState: newState
       });
@@ -185,7 +188,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
           _areas[ a ].setContentState( newState );
         }
       }
-      _em.dispatch( "contentstatechanged", {
+      _this.dispatch( "contentstatechanged", {
         oldState: oldState,
         newState: newState
       });
@@ -227,11 +230,11 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
             _state = val;
             if( _state ){
               _element.setAttribute( "ui-state", "visible" );
-              _em.dispatch( "uivisibilitychanged", true );
+              _this.dispatch( "uivisibilitychanged", true );
             }
             else {
               _element.setAttribute( "ui-state", "hidden" );
-              _em.dispatch( "uivisibilitychanged", false );
+              _this.dispatch( "uivisibilitychanged", false );
             } //if
           } //if
         }

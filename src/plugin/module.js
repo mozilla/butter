@@ -5,15 +5,15 @@
 (function() {
 
   define( [ "core/logger",
-            "core/eventmanager",
+//            "core/eventmanager",
             "util/dragndrop",
             "util/scrollbars",
             "./plugin-list",
             "./plugin"
-          ], 
+          ],
           function(
             Logger,
-            EventManager,
+//            EventManagerWrapper,
             DragNDrop,
             Scrollbars,
             PluginList,

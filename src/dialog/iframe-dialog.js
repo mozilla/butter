@@ -3,11 +3,11 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [
-          "core/comm", 
+          "core/comm",
           "core/eventmanager",
           "dialog/modal"
-        ], 
-        function( Comm, EventManager, Modal ){
+        ],
+        function( Comm, EventManagerWrapper, Modal ){
 
   return function( dialogOptions ) {
     dialogOptions = dialogOptions || {};
@@ -18,7 +18,6 @@ define( [
 
     var _this = this,
         _url = dialogOptions.url,
-        _em = new EventManager( _this ),
         _parent = dialogOptions.parent,
         _open = false,
         _iframe,
@@ -27,14 +26,16 @@ define( [
         _modalLayer,
         _listeners = dialogOptions.events || {};
 
+    EventManagerWrapper( _this );
+
     this.modal = dialogOptions.modal;
 
     function onSubmit( e ){
-      _em.dispatch( e.type, e.data );
+      _this.dispatch( e.type, e.data );
     } //onSubmit
 
     function onCancel( e ){
-      _em.dispatch( e.type, e.data );
+      _this.dispatch( e.type, e.data );
       _this.close();
     } //onCancel
 
@@ -59,11 +60,11 @@ define( [
         window.removeEventListener( "beforeunload",  _this.close, false );
         for( var e in _listeners ){
           if( e !== "close" ){
-            _em.unlisten( e, _listeners[ e ] );
+            _this.unlisten( e, _listeners[ e ] );
           }
         } //for
-        _em.dispatch( "close" );
-        _em.unlisten( "close", _listeners.close );
+        _this.dispatch( "close" );
+        _this.unlisten( "close", _listeners.close );
       }, 0 );
     }; //close
 
@@ -88,7 +89,7 @@ define( [
           _comm.listen( "close", _this.close );
           window.addEventListener( "beforeunload",  _this.close, false );
           for( var e in _listeners ){
-            _em.listen( e, _listeners[ e ] );
+            _this.listen( e, _listeners[ e ] );
           } //for
           while( _commQueue.length > 0 ){
             var popped = _commQueue.pop();
@@ -99,7 +100,7 @@ define( [
           setTimeout( function() {
             _this.focus();
           }, 0 );
-          _em.dispatch( "open" );
+          _this.dispatch( "open" );
         });
       }, false );
       _parent.appendChild( _iframe );

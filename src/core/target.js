@@ -3,7 +3,8 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 (function() {
-  define( [ "core/logger", "core/eventmanager", "ui/page-element" ], function( Logger, EventManager, PageElement ) {
+  define( [ "core/logger", "core/eventmanager", "ui/page-element" ],
+          function( Logger, EventManagerWrapper, PageElement ) {
 
     var __guid = 0;
 
@@ -12,11 +13,12 @@
 
       var _id = "Target" + __guid++,
           _logger = new Logger( _id ),
-          _em = new EventManager( this ),
           _name = options.name || _id,
           _element = options.element,
           _pageElement,
           _this = this;
+
+      EventManagerWrapper( _this );
 
       if( typeof( _element ) === "string" ){
         _element = document.getElementById( _element );
@@ -28,7 +30,7 @@
       else {
         _pageElement = new PageElement( _element, {
           drop: function( element ){
-            _em.dispatch( "trackeventrequested", {
+            _this.dispatch( "trackeventrequested", {
               element: element,
               target: _this
             });

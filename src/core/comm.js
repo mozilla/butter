@@ -2,17 +2,18 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "./eventmanager" ], function( EventManager ){
+define( [ "./eventmanager" ], function( EventManagerWrapper ){
 
   var __context = 1;
 
   var Comm = function( clientWindow, readyCallback ) {
     var _this = this,
-        _em = new EventManager( _this ),
         _readyInterval,
         _context = __context++,
         _destroyed = false,
         _ponged = false;
+
+    EventManagerWrapper( _this );
 
     clientWindow.addEventListener( "message", function( e ){
       if( e.source === clientWindow && typeof e.data === "object" && e.data.context ){
@@ -42,7 +43,7 @@ define( [ "./eventmanager" ], function( EventManager ){
       setTimeout( checkPing, 1000 );
     } //ping
 
-    _em.listen( "ready", function( e ){
+    _this.listen( "ready", function( e ){
       clearInterval( _readyInterval );
       readyCallback();
       ping();
