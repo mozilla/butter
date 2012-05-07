@@ -38,7 +38,6 @@ define( [
         _trackliner,
         _tracks = {},
         _selectedTracks = [],
-        _initialized = false,
         _hScrollBar = new Scrollbars.Horizontal( _tracksContainer ),
         _vScrollBar = new Scrollbars.Vertical( _tracksContainer ),
         _shrunken = false,
@@ -140,12 +139,16 @@ define( [
       } //if
     } //onTrackEventSelected
 
-    _media.listen( "mediaready", function(){
+    function onMediaReady(){
       _zoombar.update( 0 );
-
       _tracksContainer.zoom = _zoom;
+      updateUI();
+      _em.dispatch( "ready" );
+    }
 
-      var tracks = _media.tracks;
+    function onMediaReadyFirst(){
+      _media.unlisten( "mediaready", onMediaReadyFirst );
+      _media.listen( "mediaready", onMediaReady );
 
       _container.appendChild( _tracksContainer.element );
       _container.appendChild( _hScrollBar.element );
@@ -213,11 +216,10 @@ define( [
         } //if
       });
 
-      updateUI();
-      _initialized = true;
-      _em.dispatch( "ready" );
+      onMediaReady();
+    }
 
-    }); //mediaready
+    _media.listen( "mediaready", onMediaReadyFirst );
 
     function onPluginDropped( e ){
 
@@ -322,13 +324,6 @@ define( [
         configurable: false,
         get: function(){
           return _media;
-        }
-      },
-      initialized: {
-        enumerable: true,
-        configurable: false,
-        get: function(){
-          return _initialized;
         }
       },
       shrunken: {
