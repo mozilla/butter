@@ -65,6 +65,7 @@ Contributing
 * To file a bug or feature request, please use our issue-tracking lighthouse project: https://webmademovies.lighthouseapp.com/projects/65733-butter/
 * When contributing code, please issue a pull request on github, so that we can track changes with comments. Be sure to put a link to the pull request in any corresponding lighthouse tickets.
 * Be sure to change the ticket state on lighthouse to "peer-review-requested" and assign to to one of the [core developers](https://github.com/mozilla/butter/blob/master/package.json) for review
+* We have a bot that can run tests on code within pull requests. Try typing `/botio check` for linting, `/botio preview` to run the server, or `/botio help` for a list of all commands.
 
 Known Issues
 ------------
