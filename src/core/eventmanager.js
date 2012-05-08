@@ -264,7 +264,7 @@ define( [], function(){
     };
 
     return object;
-  };
+  }
 
   return EventManagerWrapper;
 
