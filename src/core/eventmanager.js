@@ -5,7 +5,7 @@
 define( [], function(){
 
   /**
-   * EventManagerWrapper - a synchrnous event queue wrapper
+   * EventManagerWrapper - an event queue wrapper
    *
    * Takes an object `object` and extends it with methods necessary to
    * allow object to become an event source.  Other objects can register
@@ -21,17 +21,27 @@ define( [], function(){
    *    ...
    *    o.dispatch( "some-event", data );
    *
+   * By default, all event dispatching is done asynchronously, meaning
+   * calls to dispatch() return immediately, and callbacks are executed
+   * later.  It is also possible to force a synchronous, blocking call
+   * to dispatch() by passing `true` as the value of the optional third
+   * argument:
+   *
+   *    o.listen( "some-event", function handler(){...} );
+   *    o.dispatch( "some-event", data, true );
+   *    // the handler function will have executed by this point...
+   *
    * Event source objects wrapped with EventManagerWrapper have the
    * following methods attached:
    *
    * 1. object.listen( eventName, listener )
    *
    *    eventName [String] - the name of an event to listen for
-   *    listener  [Function] - a callback to execute
+   *    listener  [Function] - a callback function to execute
    *
    *    Register a new listener with the object.  The listener callback
    *    should accept an argument `e`, which is an event containing:
-   *    type, target, and data.
+   *    type [String], target [Object], and data [Object].
    *
    * 2. object.unlisten( eventName, listener )
    *
@@ -43,21 +53,25 @@ define( [], function(){
    *    a previous call to listen.  If you supply no listener argument, all
    *    listeners for the `eventName` event will be removed.
    *
-   * 3. object.dispatch( eventName, eventData )
+   * 3. object.dispatch( eventName, eventData, [optional] synchronous=false )
    *
    *    eventName [String] - the name of an event to dispatch
    *    eventData [Object] - an object to attach to the event's `data` property
+   *    synchronous [Boolean] - an optional argument indicating that the callback
+   *                            should be fired synchronously with dispatch(). By
+   *                            default this is `false` and done asynchronously.
    *
-   *    Dispatch takes an eventName and creates a new event object, using
-   *    eventData as its data property.  It then invokes any and all listeners
-   *    which were previously registered with `listen`.
+   *    Dispatch takes an `eventName` and creates a new event object, using
+   *    `eventData` as its data property.  It then invokes any and all listeners
+   *    which were previously registered with `listen`.  Depending on the presence/
+   *    value of `synchronous`, this is either done synchronously or asynchronously.
    *
    * 4. object.chain( eventManagerWrappedObject, events )
    *
    *    eventManagerWrappedObject [Object] - an object wrapped by EventManagerWrapper
    *    events [Array] - an array of event names [String]
    *
-   *    Chain allows the events of one event source object to be chained to another,
+   *    Chain allows the events of one event source to be chained to another,
    *    such that dispatching an event through one will also cause it to invoke
    *    listeners on the other.  This is a form of event bubbling.
    *
@@ -66,11 +80,14 @@ define( [], function(){
    *    eventManagerWrappedObject [Object] - an object wrapped by EventManagerWrapper
    *    events [Array] - an array of event names [String]
    *
-   *    Uncain allows one to unchain one event source object from another,
+   *    Uncain allows one event source to be unchained from from another,
    *    which was previously chained using `chain`.
    **/
 
-  function isWrapped( object ) {
+  /**
+   * Static, shared functions for all event source wrapped objects.
+   **/
+  function isWrapped( object ){
     return object.listen && object.unlisten;
   }
 
@@ -96,9 +113,21 @@ define( [], function(){
     }
   }
 
-  function dispatch( target, eventName, eventData, listeners ){
-    var theseListeners,
-        e, i;
+  function invoke( eventName, listeners, data ){
+    var these, i;
+
+    if( listeners[ eventName ] ) {
+      these = listeners[ eventName ].slice();
+      i = these.length;
+      while( i-- ){
+        these[ i ]( data );
+      }
+    }
+  }
+
+  function dispatch( target, namespace, eventName, eventData, listeners, sync ){
+    var customEvent, e, namespacedEventName;
+
     if( typeof( eventName ) === "object" ){
       e = {
         type: eventName.type,
@@ -113,20 +142,25 @@ define( [], function(){
         data: eventData
       };
     }
-// humphd: do we need this????
-//    e.currentTarget = _target;
 
-    if( listeners[ eventName ] ) {
-      theseListeners = listeners[ eventName ].slice();
-      i = theseListeners.length;
-      while( i-- ){
-        theseListeners[ i ]( e );
-      }
+    namespacedEventName = namespace + eventName;
+
+    // XXXhumph - Force synchronous code path until we test more
+    // https://webmademovies.lighthouseapp.com/projects/65733/tickets/1130
+    sync = true;
+
+    if ( sync ) {
+      invoke( namespacedEventName, listeners, e );
+    } else /* async */ {
+      customEvent = document.createEvent( "CustomEvent" );
+      customEvent.initCustomEvent( namespacedEventName, false, false, e );
+      document.dispatchEvent( customEvent );
     }
   }
 
-  function listen( o, eventName, listener, listeners ){
-    var i;
+  function listen( o, namespace, eventName, listener, listeners, handler ){
+    var i, namespacedEventName;
+
     if( typeof( eventName ) === "object" ){
       for( i in eventName ){
         if( eventName.hasOwnProperty( i ) ){
@@ -134,14 +168,22 @@ define( [], function(){
         }
       }
     } else {
-      listeners[ eventName ] = listeners[ eventName ] || [];
-      listeners[ eventName ].push( listener );
+      namespacedEventName = namespace + eventName;
+
+      if( !listeners[ namespacedEventName ] ){
+        listeners[ namespacedEventName ] = [];
+        document.addEventListener( namespacedEventName, function( e ){
+          handler( namespacedEventName, e );
+        }, false);
+      }
+      listeners[ namespacedEventName ].push( listener );
     }
   }
 
-  function unlisten( o, eventName, listener, listeners ) {
-    var theseListeners,
-        idx, i;
+  function unlisten( o, namespace, eventName, listener, listeners, handler ) {
+    var these, idx, i,
+        namespacedEventName = namespace + eventName;
+
     if( typeof( eventName ) === "object" ){
       for( i in eventName ){
         if( eventName.hasOwnProperty( i ) ){
@@ -149,29 +191,57 @@ define( [], function(){
         }
       }
     } else {
-      theseListeners = listeners[ eventName ];
-      if ( !theseListeners ) {
+      these = listeners[ namespacedEventName ];
+      if ( !these ) {
         return;
       }
 
       if ( listener ) {
-        idx = theseListeners.indexOf( listener );
+        idx = these.indexOf( listener );
         if ( idx > -1 ) {
-          theseListeners.splice( idx, 1 );
+          these.splice( idx, 1 );
         }
-      } else {
-        // Wipe-out the array, but through the reference.
-        listeners[ eventName ].length = 0;
+      }
+
+      if ( !listener || these.length === 0 ) {
+        delete listeners[ namespacedEventName ];
+
+        document.removeEventListener( namespacedEventName, function( e ){
+          handler( namespacedEventName, e );
+        }, false);
       }
     }
   }
 
-  var EventManagerWrapper = function( object ) {
-    if ( !object || isWrapped( object) ) {
+  /**
+   * EventManagerWrapper objects maintain a few internal items.
+   * First, a list of listeners is kept for this object's events.
+   * Second, all event names are namespaced so there is no
+   * leakage into other event sources.  Third, an event handler
+   * is created, which has access to the appropriate listeners.
+   **/
+  function EventManagerWrapper( object ){
+
+    if ( !object || isWrapped( object) ){
       return;
     }
 
-    var _listeners = [];
+    var
+        // A list of listeners, keyed by namespaced event name.
+        _listeners = {},
+
+        // A unique namespace for events to avoid collisions. An
+        // event name "event" with namespace "1336504666771" would
+        // become "1336504666771event".
+        _namespace = Date.now() + "",
+
+        // An event handler used to invoke listeners, with scope
+        // such that it can get at *this* object's listeners.
+        _handler = function( eventName, domEvent ){
+          invoke( eventName, _listeners, domEvent.detail );
+        };
+
+    // Thin wrapper around calls to static functions
 
     object.chain = function( eventManagerWrappedObject , events ){
       chain( this, eventManagerWrappedObject, events );
@@ -181,16 +251,16 @@ define( [], function(){
       unchain( this, eventManagerWrappedObject, events );
     };
 
-    object.dispatch = function( eventName, eventData ){
-      dispatch( this, eventName, eventData, _listeners);
+    object.dispatch = function( eventName, eventData, sync ){
+      dispatch( this, _namespace, eventName, eventData, _listeners, !!sync );
     };
 
     object.listen = function( eventName, listener ){
-      listen( this, eventName, listener, _listeners );
+      listen( this, _namespace, eventName , listener, _listeners, _handler );
     };
 
     object.unlisten = function( eventName, listener ){
-      unlisten( this, eventName, listener, _listeners );
+      unlisten( this, _namespace, eventName, listener, _listeners, _handler );
     };
 
     return object;
