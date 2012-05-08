@@ -1171,7 +1171,7 @@ input.form-error {
   font-size: 14px;
   font-style: italic;
 }
-#butter-tray #plugin-list .container div {
+#butter-tray #plugin-list .container > div {
   cursor: pointer;
 
   position: relative;
@@ -1203,11 +1203,17 @@ input.form-error {
 
 }
 
-#butter-tray #plugin-list .container div > img {
+#butter-tray #plugin-list .container div > span.icon {
+  display: block;
   float: left;
-  margin-right: 15px;
+  width: 30px;
+  height: 30px;
+  background-size: 30px;
+  background-repeat: no-repeat;
+  margin-right: 10px;
 }
-#butter-tray #plugin-list .container div > span {
+
+#butter-tray #plugin-list .container div > span.label {
   line-height: 30px;
 }
 

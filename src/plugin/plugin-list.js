@@ -33,11 +33,13 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
 
     butter.listen( "pluginadded", function( e ){
       var element = document.createElement( "div" ),
-          icon = e.data.helper,
+          iconImg = e.data.helper,
+          icon = document.createElement( "span" ),
           text = document.createElement( "span" );
 
       DragNDrop.helper( element, {
         start: function(){
+          console.log( element );
           var targets = butter.targets,
               media = butter.currentMedia;
           media.view.blink();
@@ -50,12 +52,12 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
         }
       });
 
-      if( icon ) {
-        icon.removeAttribute( "id" );
-        icon.removeAttribute( "style" );
+      if( iconImg ) {
+        icon.style.backgroundImage = "url('" + iconImg.src + "')";
+        icon.className = "icon";
         element.appendChild( icon );
       }
-
+      text.className = "label";
       text.innerHTML = e.data.type;
       element.appendChild( text );
 
