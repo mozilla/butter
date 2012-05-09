@@ -18,7 +18,6 @@
 
     "noarg": true,
     "eqeqeq": true,
-    "bitwise": true,
     "undef": true,
     "curly": true,
     "forin": true,
