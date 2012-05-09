@@ -637,7 +637,7 @@
         _this.project.template = _config.name;
         
         //Add default if it doesn't exist
-        if ( !icons[ 'default'] ) {
+        if ( icons && !icons[ 'default'] ) {
           icons[ 'default' ] = 'popcorn-icon.png';
         }
 
