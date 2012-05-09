@@ -27,8 +27,7 @@ define( [
           TrackHandles,
           LangUtil ) {
 
-  var INITIAL_ZOOM = 100,
-      ZOOM_FACTOR = 100;
+  var MIN_VIEWABLE_SECS = 10;
 
   function MediaInstance( butter, media ){
     function onTrackOrderChanged( orderedTracks ){
@@ -36,7 +35,7 @@ define( [
     } //onTrackOrderChanged
 
     function zoomCallback( zoomLevel ){
-      var nextZoom = ( 1 + zoomLevel ) * ZOOM_FACTOR;
+      var nextZoom = _minZoomFactor * zoomLevel + _zoomFactor;
       if( nextZoom !== _zoom ){
         _zoom = nextZoom;
         _tracksContainer.zoom = _zoom;
@@ -60,7 +59,9 @@ define( [
         _trackHandles = new TrackHandles( butter, _media, _tracksContainer, onTrackOrderChanged ),
         _trackEventHighlight = butter.config.ui.trackEventHighlight || "click",
         _currentMouseDownTrackEvent,
-        _zoom = INITIAL_ZOOM;
+        _zoomFactor,
+        _minZoomFactor,
+        _zoom;
 
     EventManagerWrapper( _this );
 
@@ -151,6 +152,9 @@ define( [
     } //onTrackEventSelected
 
     function onMediaReady(){
+      _zoomFactor = _container.clientWidth / _media.duration;
+      _minZoomFactor = ( _container.clientWidth / MIN_VIEWABLE_SECS - _zoomFactor );
+      _zoom = _zoomFactor;
       _zoombar.update( 0 );
       _tracksContainer.zoom = _zoom;
       updateUI();

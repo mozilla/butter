@@ -26,14 +26,14 @@ define( [], function(){
       window.removeEventListener( "mouseup", onMouseUp, false );
       window.removeEventListener( "mousemove", onMouseMove, false );
       _handle.addEventListener( "mousedown", onMouseDown, false );
-      zoomCallback( _handle.offsetLeft / _rect.width  );
+      zoomCallback( _handle.offsetLeft / ( _rect.width - _handle.clientWidth ) );
     } //onMouseUp
 
     function onMouseMove( e ){
       var diff = e.pageX - _mousePos;
       diff = Math.max( 0, Math.min( diff, _elementWidth - _handleWidth ) );
       _handle.style.left = diff + "px";
-      zoomCallback( _handle.offsetLeft / _rect.width  );
+      zoomCallback( _handle.offsetLeft / ( _rect.width - _handle.clientWidth ) );
     } //onMouseMove
 
     function onMouseDown( e ){
