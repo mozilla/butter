@@ -39,7 +39,6 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
 
       DragNDrop.helper( element, {
         start: function(){
-          console.log( element );
           var targets = butter.targets,
               media = butter.currentMedia;
           media.view.blink();
