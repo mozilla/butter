@@ -36,6 +36,9 @@ target['check-lint'] = function() {
   echo('### Linting JS files');
 
   var files = find('src').filter( function( file ) {
+    if(file === "src/text.js"){
+      return null;
+    }
     return file.match(/\.js$/);
   }).join(" ");
 

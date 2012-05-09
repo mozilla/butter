@@ -7,14 +7,13 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/dom-fragment", "text!layou
     var _media = media,
         _pageElement,
         _onDropped = options.onDropped || function(){},
-        _propertiesElement = document.createElement( "div" ),
         _logoSpinner,
         _this = this;
 
     var _propertiesElement = DOMFragment( HTML_TEMPLATE ),
         urlTextbox = _propertiesElement.querySelector( "input" ),
         subtitle = _propertiesElement.querySelector( ".form-field-notes" ),
-        changeButton = _propertiesElement.querySelector( "button" )
+        changeButton = _propertiesElement.querySelector( "button" ),
         loadingContainer = _propertiesElement.querySelector( ".loading-container" );
 
     _logoSpinner = LogoSpinner( loadingContainer );
