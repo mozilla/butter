@@ -22,14 +22,18 @@
       #drop-target {
         color: #CCC;
         border: 3px dashed;
-        width: 120px;
-        padding: 40px 30px;
+        width: 160px;
+        height: 120px;
         margin-right: 20px;
         float: left;
         text-align: center;
         background-size: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
       }
       #drop-target > span {
+        padding-top: 30px;
+        display: block;
         font-style: italic;
       }
       #drop-target.dragover {
@@ -38,6 +42,7 @@
          -moz-box-shadow:0 0 5px #F6DC7E;
          box-shadow:0 0 5px #F6DC7E;
       }
+
     </style>
     <script type="text/javascript" src="editor.js"></script>
     <script type="text/javascript">
@@ -86,9 +91,15 @@
           });
 
           _comm.listen( "trackeventupdated", function( e ){
-            for( var item in _manifest ){
-              var element = document.getElementById( item );
-              if ( element) { element.value = e.data[ item ]; }
+            var item, element, dropTarget;
+            for( item in _manifest ){
+              element = document.getElementById( item );
+              if ( element ) { element.value = e.data[ item ]; }
+              if( item === "src" ) {
+                dropTarget = document.getElementById( "drop-target" );
+                if(  e.data[ item ] ) { dropTarget.style.backgroundImage = "url('" + e.data[ item ] + "')"; }     
+              }
+
             } //for
           });
 
@@ -173,6 +184,8 @@
                 dropTarget = document.createElement( "div" );
                 dropTarget.id = "drop-target";
                 dropTarget.innerHTML = "<span>Drag an image from your desktop...</span";
+                if(  popcornOptions[ item ] ) { dropTarget.style.backgroundImage = "url('" + popcornOptions[ item ] + "')"; }  
+
                 document.getElementById( "table" ).parentNode.insertBefore( dropTarget, document.getElementById( "table" ) );
 
                 dropTarget.addEventListener( "dragover", function( event ) {
@@ -186,6 +199,7 @@
                 }, false);
 
                 dropTarget.addEventListener( 'drop', function( event ) {
+                  dropTarget.className = "dropped";
                   event.preventDefault();
                   var file = event.dataTransfer.files[ 0 ],
                       imgSrc,
@@ -207,6 +221,7 @@
                       imgURI = canvas.toDataURL();
                       sendData( false, {"src" : imgURI } );
                       dropTarget.style.backgroundImage = "url('" +  imgURI + "')";
+                      dropTarget.firstChild.innerHTML = file.fileName;
                   };
                   image.src = imgSrc;
               
