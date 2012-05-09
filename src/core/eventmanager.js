@@ -87,12 +87,12 @@ define( [], function(){
   /**
    * Static, shared functions for all event source wrapped objects.
    **/
-  function isWrapped( object ){
+  function __isWrapped( object ){
     return object.listen && object.unlisten;
   }
 
-  function chain( a, b, events ){
-    if( !isWrapped(b) ){
+  function __chain( a, b, events ){
+    if( !__isWrapped(b) ){
       throw "Error: Object is not a valid event source: " + b;
     }
 
@@ -102,8 +102,8 @@ define( [], function(){
     }
   }
 
-  function unchain( a, b, events ){
-    if( !isWrapped(b) ){
+  function __unchain( a, b, events ){
+    if( !__isWrapped(b) ){
       throw "Error: Object is not a valid event source: " + b;
     }
 
@@ -113,7 +113,7 @@ define( [], function(){
     }
   }
 
-  function invoke( eventName, listeners, data ){
+  function __invoke( eventName, listeners, data ){
     var these, i;
 
     if( listeners[ eventName ] ) {
@@ -125,7 +125,7 @@ define( [], function(){
     }
   }
 
-  function dispatch( target, namespace, eventName, eventData, listeners, sync ){
+  function __dispatch( target, namespace, eventName, eventData, listeners, sync ){
     var customEvent, e, namespacedEventName;
 
     if( typeof( eventName ) === "object" ){
@@ -150,7 +150,7 @@ define( [], function(){
     sync = true;
 
     if ( sync ) {
-      invoke( namespacedEventName, listeners, e );
+      __invoke( namespacedEventName, listeners, e );
     } else /* async */ {
       customEvent = document.createEvent( "CustomEvent" );
       customEvent.initCustomEvent( namespacedEventName, false, false, e );
@@ -158,7 +158,7 @@ define( [], function(){
     }
   }
 
-  function listen( o, namespace, eventName, listener, listeners, handler ){
+  function __listen( o, namespace, eventName, listener, listeners, handler ){
     var i, namespacedEventName;
 
     if( typeof( eventName ) === "object" ){
@@ -180,7 +180,7 @@ define( [], function(){
     }
   }
 
-  function unlisten( o, namespace, eventName, listener, listeners, handler ) {
+  function __unlisten( o, namespace, eventName, listener, listeners, handler ) {
     var these, idx, i,
         namespacedEventName = namespace + eventName;
 
@@ -213,6 +213,8 @@ define( [], function(){
     }
   }
 
+  var __seed = Date.now();
+
   /**
    * EventManagerWrapper objects maintain a few internal items.
    * First, a list of listeners is kept for this object's events.
@@ -222,7 +224,7 @@ define( [], function(){
    **/
   function EventManagerWrapper( object ){
 
-    if ( !object || isWrapped( object) ){
+    if ( !object || __isWrapped( object) ){
       return;
     }
 
@@ -231,36 +233,36 @@ define( [], function(){
         _listeners = {},
 
         // A unique namespace for events to avoid collisions. An
-        // event name "event" with namespace "1336504666771" would
-        // become "1336504666771event".
-        _namespace = Date.now() + "",
+        // event name "event" with namespace "butter-1336504666771:"
+        // would become "butter-1336504666771:event".
+        _namespace = "butter-" + __seed++ + ":",
 
         // An event handler used to invoke listeners, with scope
         // such that it can get at *this* object's listeners.
         _handler = function( eventName, domEvent ){
-          invoke( eventName, _listeners, domEvent.detail );
+          __invoke( eventName, _listeners, domEvent.detail );
         };
 
     // Thin wrapper around calls to static functions
 
     object.chain = function( eventManagerWrappedObject , events ){
-      chain( this, eventManagerWrappedObject, events );
+      __chain( this, eventManagerWrappedObject, events );
     };
 
     object.unchain = function( eventManagerWrappedObject, events ){
-      unchain( this, eventManagerWrappedObject, events );
+      __unchain( this, eventManagerWrappedObject, events );
     };
 
     object.dispatch = function( eventName, eventData, sync ){
-      dispatch( this, _namespace, eventName, eventData, _listeners, !!sync );
+      __dispatch( this, _namespace, eventName, eventData, _listeners, !!sync );
     };
 
     object.listen = function( eventName, listener ){
-      listen( this, _namespace, eventName , listener, _listeners, _handler );
+      __listen( this, _namespace, eventName , listener, _listeners, _handler );
     };
 
     object.unlisten = function( eventName, listener ){
-      unlisten( this, _namespace, eventName, listener, _listeners, _handler );
+      __unlisten( this, _namespace, eventName, listener, _listeners, _handler );
     };
 
     return object;
