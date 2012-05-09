@@ -183,6 +183,7 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
     });
 
     _helper = document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" );
+    if( _helper ) { _helper = _helper.cloneNode( false ); } 
 
     this.createElement = function ( pattern ) {
       var pluginElement;
