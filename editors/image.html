@@ -141,15 +141,12 @@
                 col2.appendChild( canvas );
 
 
-                document.addEventListener( 'drop', onDocumentDrop, false );
-
-                function onDocumentDrop( event ) {
+                 document.addEventListener( 'drop', function onDocumentDrop( event ) {
                   event.preventDefault();
 
                   var file = event.dataTransfer.files[ 0 ],
                       imgSrc,
                       image,
-                      imgSrc,
                       imgURI;
 
                   if( window.URL ) { 
@@ -168,7 +165,7 @@
                       sendData( false, {"src" : imgURI } );
                   };
                   image.src = imgSrc;     
-                }
+                }, false);
 
               }
               else {
