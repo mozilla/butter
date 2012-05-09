@@ -1,0 +1,31 @@
+{
+    "predef": [
+        "Popcorn",
+        "requirejs",
+        "require",
+        "define",
+        "Range",
+        "DOMException",
+        "console"
+    ],
+
+    "node" : true,
+    "es5" : true,
+    "browser" : true,
+    "devel": true,
+
+    "indent": 2,
+
+    "noarg": true,
+    "eqeqeq": true,
+    "bitwise": true,
+    "undef": true,
+    "curly": true,
+    "forin": true,
+    "noempty": true,
+    "nonew": true,
+    "regexp": true,
+    "trailing": true,
+
+    "strict": false
+}
