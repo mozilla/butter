@@ -144,7 +144,7 @@ define( [
       _zoombar.update( 0 );
       _tracksContainer.zoom = _zoom;
       updateUI();
-      _em.dispatch( "ready" );
+      _this.dispatch( "ready" );
     }
 
     function onMediaReadyFirst(){
