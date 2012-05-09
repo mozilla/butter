@@ -1,7 +1,7 @@
 /* This Source Code Form is subject to the terms of the MIT license
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
- 
+
 (function(){
   var _comm = new Comm(),
       _manifest = {};
@@ -176,7 +176,7 @@
                 imgURI = canvas.toDataURL();
                 sendData( false, {"src" : imgURI } );
                 dropTarget.style.backgroundImage = "url('" +  imgURI + "')";
-                dropTarget.firstChild.innerHTML = file.fileName;
+                dropTarget.firstChild.innerHTML = file.name || file.fileName;
             };
             image.src = imgSrc;
         
