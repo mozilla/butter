@@ -38,6 +38,18 @@
             });
           } //sendData
 
+          // Highlight the contents of an input field
+          function highlight( e ){
+            e.preventDefault();
+
+            var elem = e.target;
+            if( !elem || !elem.type ){
+              return;
+            }
+
+            elem.select();
+          };
+
           function okPressed( e ) {
             sendData( true );
           }
@@ -142,6 +154,9 @@
                 field.addEventListener( "change", function( e ){
                   sendData( false );
                 }, false );
+
+                // When field is clicked, highlight everything within
+                field.addEventListener( "focus", focus, false);
               }
 
               // Remember first control added in editor so we can focus
