@@ -10,15 +10,10 @@ define(['util/xhr'], function(XHR) {
 
   var Cornfield = function( butter, config ) {
 
-    if( !config ){
-      return;
-    }
-
     var email = null,
-        server = config.server,
-        authType = config.authType || "browserid";
+        server = audience();
 
-    if( authType === "browserid" && !navigator.id ){
+    if ( !navigator.id ) {
       var script = document.createElement( "script" );
       script.src = "https://browserid.org/include.js";
       script.type = "text/javascript";
@@ -30,7 +25,7 @@ define(['util/xhr'], function(XHR) {
       navigator.id.get(function(assertion) {
         if (assertion) {
           XHR.post(server + "/browserid/verify",
-            { audience: audience(), assertion: assertion },
+            { audience: server, assertion: assertion },
             function() {
               if (this.readyState === 4) {
                 try {
