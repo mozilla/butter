@@ -130,6 +130,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         } //for
       } //if
 
+      _eventManager.dispatch( "getHTML", html );
+
       return "<html>" + html.innerHTML + "</html>";
     }; //getHTML
 
