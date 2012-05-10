@@ -3,7 +3,9 @@
 var JSLINT = './node_modules/jshint/bin/hint',
     RJS    = './node_modules/requirejs/bin/r.js',
     STYLUS = './node_modules/stylus/bin/stylus',
+    DOX    = './tools/dox.py',
     DIST_DIR = 'dist',
+    DOCS_DIR = 'docs',
     PACKAGE_NAME = 'butter';
 
 require('shelljs/make');
@@ -26,6 +28,28 @@ target.submodules = function() {
   echo('### Updating git submodules');
 
   exec('git submodule update --init --recursive');
+};
+
+target.docs = function() {
+  echo('### Creating documentation from src...');
+  mkdir('-p', DOCS_DIR);
+
+  var files = find('src').filter( function( file ) {
+    return file.match(/\.js$/);
+  });
+
+  var docTypes = [
+    'md'
+  ];
+
+  for (var i = files.length - 1; i >= 0; i--) {
+    echo('### Processing documentation for ' + files[i]);
+    for (var j = docTypes.length - 1; j >= 0; j--) {
+      var newFileName = DOCS_DIR + '/' + files[i].substring(4).replace(/\//g, '-').replace(/\.js$/, '.' + docTypes[j]),
+          command = 'python ' + DOX + ' -t ' + docTypes[j] + ' -o '+ newFileName + ' -i ' + files[i];
+      exec(command);
+    };
+  };
 };
 
 target.check = function() {
