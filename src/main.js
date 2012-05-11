@@ -8,8 +8,8 @@
       DEFAULT_TRACKEVENT_OFFSET = 0.01;
 
   define( [
-            "./core/logger",
             "./core/eventmanager",
+            "./core/logger",
             "./core/target",
             "./core/media",
             "./core/page",
@@ -19,8 +19,8 @@
             "util/xhr"
           ],
           function(
+            EventManagerWrapper,
             Logger,
-            EventManager,
             Target,
             Media,
             Page,
@@ -47,7 +47,6 @@
           _targets = [],
           _id = "Butter" + __guid++,
           _logger = new Logger( _id ),
-          _em = new EventManager( this ),
           _page,
           _config = {
             ui: {},
@@ -63,6 +62,8 @@
       if ( butterOptions.debug !== undefined ) {
         Logger.debug( butterOptions.debug );
       }
+
+      EventManagerWrapper( _this );
 
       this.project = {
         id: null,
@@ -139,7 +140,7 @@
       function targetTrackEventRequested( e ){
         if( _currentMedia ){
           var trackEvent = trackEventRequested( e.data.element, _currentMedia, e.target.elementID );
-          _em.dispatch( "trackeventcreated", {
+          _this.dispatch( "trackeventcreated", {
             trackEvent: trackEvent,
             by: "target"
           });
@@ -155,7 +156,7 @@
 
       function mediaTrackEventRequested( e ){
         var trackEvent = trackEventRequested( e.data, e.target, "Media Element" );
-        _em.dispatch( "trackeventcreated", {
+        _this.dispatch( "trackeventcreated", {
           trackEvent: trackEvent,
           by: "media"
         });
@@ -172,7 +173,7 @@
         _targets.push( target );
         target.listen( "trackeventrequested", targetTrackEventRequested );
         _logger.log( "Target added: " + target.name );
-        _em.dispatch( "targetadded", target );
+        _this.dispatch( "targetadded", target );
         if( target.isDefault ){
           _defaultTarget = target;
         } //if
@@ -189,7 +190,7 @@
           target.unlisten( "trackeventrequested", targetTrackEventRequested );
           _targets.splice( idx, 1 );
           delete _targets[ target.name ];
-          _em.dispatch( "targetremoved", target );
+          _this.dispatch( "targetremoved", target );
           if( _defaultTarget === target ){
             _defaultTarget = undefined;
           } //if
@@ -313,7 +314,7 @@
         var mediaName = media.name;
         _media.push( media );
 
-        _em.repeat( media, [
+        _this.chain( media, [
           "mediacontentchanged",
           "mediadurationchanged",
           "mediatargetchanged",
@@ -344,7 +345,7 @@
         media.listen( "trackeventrequested", mediaTrackEventRequested );
         media.listen( "mediaplayertyperequired", mediaPlayerTypeRequired );
 
-        _em.dispatch( "mediaadded", media );
+        _this.dispatch( "mediaadded", media );
         if ( !_currentMedia ) {
           _this.currentMedia = media;
         } //if
@@ -358,7 +359,7 @@
         var idx = _media.indexOf( media );
         if ( idx > -1 ) {
           _media.splice( idx, 1 );
-          _em.unrepeat( media, [
+          _this.unchain( media, [
             "mediacontentchanged",
             "mediadurationchanged",
             "mediatargetchanged",
@@ -374,7 +375,7 @@
           ]);
           var tracks = media.tracks;
           for ( var i=0, l=tracks.length; i<l; ++i ) {
-            _em.dispatch( "trackremoved", tracks[ i ] );
+            _this.dispatch( "trackremoved", tracks[ i ] );
           } //for
           if ( media === _currentMedia ) {
             _currentMedia = undefined;
@@ -383,7 +384,7 @@
           media.unlisten( "trackeventrequested", mediaTrackEventRequested );
           media.unlisten( "mediaplayertyperequired", mediaPlayerTypeRequired );
 
-          _em.dispatch( "mediaremoved", media );
+          _this.dispatch( "mediaremoved", media );
           return media;
         } //if
         return undefined;
@@ -465,7 +466,7 @@
             if ( media && _media.indexOf( media ) > -1 ) {
               _currentMedia = media;
               _logger.log( "Media Changed: " + media.name );
-              _em.dispatch( "mediachanged", media );
+              _this.dispatch( "mediachanged", media );
               return _currentMedia;
             } //if
           },
@@ -550,14 +551,14 @@
           if( callback ){
             callback();
           } //if
-          _em.dispatch( "pageready" );
+          _this.dispatch( "pageready" );
         });
       }; //preparePage
 
       __instances.push( this );
 
       if( butterOptions.ready ){
-        _em.listen( "ready", function( e ){
+        _this.listen( "ready", function( e ){
           butterOptions.ready( e.data );
         });
       } //if
@@ -668,7 +669,7 @@
                   _page.snapshotHTML();
                 }
                 //fire the ready event
-                _em.dispatch( "ready", _this );
+                _this.dispatch( "ready", _this );
               });
             });
           });
@@ -695,7 +696,7 @@
           readConfig();
         }
         else{
-          _em.dispatch( "configerror", _this );
+          _this.dispatch( "configerror", _this );
         } //if
       }
       else {

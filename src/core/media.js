@@ -4,13 +4,13 @@
 
 (function() {
   define( [
-            "core/logger", 
-            "core/eventmanager", 
+            "core/logger",
+            "core/eventmanager",
             "core/track",
             "core/popcorn-wrapper",
             "core/views/media-view"
-          ], 
-          function( Logger, EventManager, Track, PopcornWrapper, MediaView ){
+          ],
+          function( Logger, EventManagerWrapper, Track, PopcornWrapper, MediaView ){
 
     var MEDIA_ELEMENT_SAFETY_POLL_INTERVAL = 500,
         MEDIA_ELEMENT_SAFETY_POLL_ATTEMPTS = 10;
@@ -20,10 +20,11 @@
     var Media = function ( mediaOptions ) {
       mediaOptions = mediaOptions || {};
 
+      EventManagerWrapper( this );
+
       var _tracks = [],
           _id = "Media" + __guid++,
           _logger = new Logger( _id ),
-          _em = new EventManager( this ),
           _name = mediaOptions.name || _id,
           _url = mediaOptions.url,
           _ready = false,
@@ -34,33 +35,34 @@
           _popcornOptions = mediaOptions.popcornOptions,
           _mediaUpdateInterval,
           _view,
+          _this = this,
           _popcornWrapper = new PopcornWrapper( _id, {
             popcornEvents: {
               muted: function(){
-                _em.dispatch( "mediamuted", _this );
+                _this.dispatch( "mediamuted", _this );
               },
               unmuted: function(){
-                _em.dispatch( "mediaunmuted", _this );
+                _this.dispatch( "mediaunmuted", _this );
               },
               volumechange: function(){
-                _em.dispatch( "mediavolumechange", _popcornWrapper.volume );
+                _this.dispatch( "mediavolumechange", _popcornWrapper.volume );
               },
               timeupdate: function(){
                 _currentTime = _popcornWrapper.currentTime;
-                _em.dispatch( "mediatimeupdate", _this );
+                _this.dispatch( "mediatimeupdate", _this );
               },
               pause: function(){
                 clearInterval( _mediaUpdateInterval );
-                _em.dispatch( "mediapause" );
+                _this.dispatch( "mediapause" );
               },
               playing: function(){
                 _mediaUpdateInterval = setInterval( function(){
                   _currentTime = _popcornWrapper.currentTime;
                 }, 10 );
-                _em.dispatch( "mediaplaying" );
+                _this.dispatch( "mediaplaying" );
               },
               ended: function(){
-                _em.dispatch( "mediaended" );
+                _this.dispatch( "mediaended" );
               }
             },
             prepare: function(){
@@ -75,7 +77,7 @@
               if( _view ){
                 _view.update();
               }
-              _em.dispatch( "mediaready" );
+              _this.dispatch( "mediaready" );
             },
             constructing: function(){
               if( _view ){
@@ -83,21 +85,20 @@
               }
             },
             timeout: function(){
-              _em.dispatch( "mediatimeout" );
-              _em.dispatch( "mediafailed", "timeout" );
+              _this.dispatch( "mediatimeout" );
+              _this.dispatch( "mediafailed", "timeout" );
             },
             fail: function( e ){
-              _em.dispatch( "mediafailed", "error" );
+              _this.dispatch( "mediafailed", "error" );
             },
             playerTypeRequired: function( type ){
-              _em.dispatch( "mediaplayertyperequired", type );
+              _this.dispatch( "mediaplayertyperequired", type );
             },
             setup: {
               target: _target,
               url: _url
             }
-          }),
-          _this = this;
+          });
 
       this.popcornCallbacks = null;
       this.popcornScripts = null;
@@ -119,7 +120,7 @@
       };
 
       function onDroppedOnView( e ){
-        _em.dispatch( "trackeventrequested", e );
+        _this.dispatch( "trackeventrequested", e );
       }
 
       function onTrackEventAdded( e ){
@@ -145,7 +146,7 @@
         track.order = _tracks.length;
         track._media = _this;
         _tracks.push( track );
-        _em.repeat( track, [
+        _this.chain( track, [
           "tracktargetchanged",
           "trackeventadded",
           "trackeventremoved",
@@ -158,7 +159,7 @@
         track.listen( "trackeventadded", onTrackEventAdded );
         track.listen( "trackeventupdated", onTrackEventUpdated );
         track.listen( "trackeventremoved", onTrackEventRemoved );
-        _em.dispatch( "trackadded", track );
+        _this.dispatch( "trackadded", track );
         var trackEvents = track.trackEvents;
         if ( trackEvents.length > 0 ) {
           for ( var i=0, l=trackEvents.length; i<l; ++i ) {
@@ -184,7 +185,7 @@
           for ( var i=0, l=events.length; i<l; ++i ) {
             track.dispatch( "trackeventremoved", events[ i ] );
           } //for
-          _em.unrepeat( track, [
+          _this.unchain( track, [
             "tracktargetchanged",
             "trackeventadded",
             "trackeventremoved",
@@ -196,7 +197,7 @@
           track.unlisten( "trackeventadded", onTrackEventAdded );
           track.unlisten( "trackeventupdated", onTrackEventUpdated );
           track.unlisten( "trackeventremoved", onTrackEventRemoved );
-          _em.dispatch( "trackremoved", track );
+          _this.dispatch( "trackremoved", track );
           track._media = null;
           return track;
         } //if
@@ -232,13 +233,13 @@
       this.onReady = function( callback ){
         function onReady( e ){
           callback( e );
-          _em.unlisten( "mediaready", onReady );
+          _this.unlisten( "mediaready", onReady );
         }
         if( _ready ){
           callback();
         }
         else{
-          _em.listen( "mediaready", onReady );
+          _this.listen( "mediaready", onReady );
         }
       };
 
@@ -276,7 +277,7 @@
               _url = val;
               _popcornWrapper.clear( _target );
               setupContent();
-              _em.dispatch( "mediacontentchanged", _this );
+              _this.dispatch( "mediacontentchanged", _this );
             }
           }
         },
@@ -289,7 +290,7 @@
               _popcornWrapper.clear( _target );
               _target = val;
               setupContent();
-              _em.dispatch( "mediatargetchanged", _this );
+              _this.dispatch( "mediatargetchanged", _this );
             }
           },
           enumerable: true
@@ -341,7 +342,7 @@
                 _currentTime = _duration;
               } //if
               _popcornWrapper.currentTime = _currentTime;
-              _em.dispatch( "mediatimeupdate", _this );
+              _this.dispatch( "mediatimeupdate", _this );
             } //if
           },
           enumerable: true
@@ -354,7 +355,7 @@
             if( time ){
               _duration = time;
               _logger.log( "duration changed to " + _duration );
-              _em.dispatch( "mediadurationchanged", _this );
+              _this.dispatch( "mediadurationchanged", _this );
             }
           },
           enumerable: true
@@ -441,7 +442,7 @@
           },
           set: function( val ){
             _popcornOptions = val;
-            _em.dispatch( "mediapopcornsettingschanged", _this );
+            _this.dispatch( "mediapopcornsettingschanged", _this );
             setupContent();
           }
         }

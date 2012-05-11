@@ -8,7 +8,7 @@ define( [ "core/logger",
         ],
         function(
           Logger,
-          EventManager,
+          EventManagerWrapper,
           DragNDrop
         ){
 
@@ -21,11 +21,12 @@ define( [ "core/logger",
         _this = this,
         _trackEvents = [],
         _trackEventElements = [],
-        _em = new EventManager( this ),
         _element = document.createElement( "div" ),
         _duration = 1,
         _parent,
         _zoom = 1;
+
+    EventManagerWrapper( _this );
 
     _element.className = "butter-track";
     _element.id = _id;
@@ -43,7 +44,7 @@ define( [ "core/logger",
         if( draggableType === "plugin" ){
           left = mousePosition[ 0 ] - trackRect.left;
           start = left / trackRect.width * _duration;
-          _em.dispatch( "plugindropped", {
+          _this.dispatch( "plugindropped", {
             start: start,
             track: _track,
             type: dropped.getAttribute( "data-butter-plugin-type" )
@@ -53,7 +54,7 @@ define( [ "core/logger",
           if( dropped.parentNode !== _element ){
             left = dropped.offsetLeft;
             start = left / trackRect.width * _duration;
-            _em.dispatch( "trackeventdropped", {
+            _this.dispatch( "trackeventdropped", {
               start: start,
               track: _track,
               trackEvent: dropped.getAttribute( "data-butter-trackevent-id" )
@@ -123,7 +124,7 @@ define( [ "core/logger",
       trackEvent.view.zoom = _zoom;
       trackEvent.view.duration = _duration;
       trackEvent.view.parent = _this;
-      _em.repeat( trackEvent, [
+      _this.chain( trackEvent, [
         "trackeventmousedown",
         "trackeventmouseover",
         "trackeventmouseout"
@@ -136,7 +137,7 @@ define( [ "core/logger",
       _trackEvents.splice( _trackEvents.indexOf( trackEvent.view ), 1 );
       _trackEventElements.splice( _trackEvents.indexOf( trackEvent.view.element ), 1 );
       trackEvent.view.parent = null;
-      _em.unrepeat( trackEvent, [
+      _this.unchain( trackEvent, [
         "trackeventmousedown",
         "trackeventmouseover",
         "trackeventmouseout"

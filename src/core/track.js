@@ -10,7 +10,7 @@ define( [
         ],
         function(
           Logger,
-          EventManager,
+          EventManagerWrapper,
           TrackEvent,
           TrackView
         ){
@@ -24,13 +24,14 @@ define( [
         _id = "Track" + __guid++,
         _target = options.target,
         _logger = new Logger( _id ),
-        _em = new EventManager( this ),
         _name = options.name || _id,
         _order = options.order || 0,
         _view = new TrackView( this ),
         _this = this;
 
     _this._media = null;
+
+    EventManagerWrapper( _this );
 
     Object.defineProperties( this, {
       view: {
@@ -47,7 +48,7 @@ define( [
         },
         set: function( val ){
           _order = val;
-          _em.dispatch( "trackorderchanged", _order );
+          _this.dispatch( "trackorderchanged", _order );
         }
       },
       target: {
@@ -57,7 +58,7 @@ define( [
         },
         set: function( val ){
           _target = val;
-          _em.dispatch( "tracktargetchanged", _this );
+          _this.dispatch( "tracktargetchanged", _this );
           for( var i=0, l=_trackEvents.length; i<l; i++ ) {
             _trackEvents[ i ].target = val;
             _trackEvents[ i ].update({ target: val });
@@ -72,7 +73,7 @@ define( [
         },
         set: function( name ) {
           _name = name;
-          _em.dispatch( "tracknamechanged", _this );
+          _this.dispatch( "tracknamechanged", _this );
         }
       },
       id: {
@@ -144,7 +145,7 @@ define( [
       trackEvent._track = _this;
       _trackEvents.push( trackEvent );
       trackEvent.track = _this;
-      _em.repeat( trackEvent, [
+      _this.chain( trackEvent, [
         "trackeventupdated",
         "trackeventselected",
         "trackeventdeselected",
@@ -152,7 +153,7 @@ define( [
       ]);
       _view.addTrackEvent( trackEvent );
       trackEvent.track = _this;
-      _em.dispatch( "trackeventadded", trackEvent );
+      _this.dispatch( "trackeventadded", trackEvent );
       return trackEvent;
     }; //addTrackEvent
 
@@ -160,7 +161,7 @@ define( [
       var idx = _trackEvents.indexOf( trackEvent );
       if ( idx > -1 ) {
         _trackEvents.splice( idx, 1 );
-        _em.unrepeat( trackEvent, [
+        _this.unchain( trackEvent, [
           "trackeventupdated",
           "trackeventselected",
           "trackeventdeselected",
@@ -168,7 +169,7 @@ define( [
         ]);
         _view.removeTrackEvent( trackEvent );
         trackEvent._track = null;
-        _em.dispatch( "trackeventremoved", trackEvent );
+        _this.dispatch( "trackeventremoved", trackEvent );
         return trackEvent;
       } //if
 

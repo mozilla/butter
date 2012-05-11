@@ -2,7 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "util/time" ], function( EventManager, IFrameDialog, WindowDialog, TimeUtil ) {
+define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "util/time" ],
+        function( EventManagerWrapper, IFrameDialog, WindowDialog, TimeUtil ) {
 
   var DEFAULT_DIMS = [ 400, 400 ],
       DEFAULT_FRAME_TYPE = "iframe";
@@ -17,7 +18,6 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
         _source = source,
         _type = type,
         _dims = DEFAULT_DIMS.slice(),
-        _em = new EventManager( this ),
         _dialog,
         _dialogOptions = {
           type: _frameType,
@@ -28,6 +28,8 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
         _currentTarget,
         _currentTrackEvent,
         _this = this;
+
+    EventManagerWrapper( _this );
 
     _dims[ 0 ] = options.width || _dims[ 0 ];
     _dims[ 1 ] = options.height || _dims[ 1 ];
@@ -61,7 +63,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
       _dialog = null;
       _currentTrackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
       _currentTrackEvent.unlisten( "trackeventupdatefailed", onTrackEventUpdateFailed );
-      _em.dispatch( "close" );
+      _this.dispatch( "close" );
     }
 
     this.open = function( trackEvent ) {
@@ -102,7 +104,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
           blinkTarget();
           trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
           trackEvent.listen( "trackeventupdatefailed", onTrackEventUpdateFailed );
-          _em.dispatch( "open" );
+          _this.dispatch( "open" );
         },
         submit: function( e ){
           var duration = TimeUtil.roundTime( butter.currentMedia.duration ),

@@ -2,14 +2,13 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logger, EventManager, DragNDrop ){
+define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logger, EventManagerWrapper, DragNDrop ){
   
   var __guid = 0;
 
   return function( trackEvent, type, inputOptions ){
 
     var _id = "TrackEventView" + __guid++,
-        _eventManager = new EventManager( this ),
         _element = document.createElement( "div" ),
         _zoom = 1,
         _duration = 1,
@@ -23,6 +22,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
         _draggable,
         _resizable,
         _this = this;
+
+    EventManagerWrapper( _this );
 
     _element.appendChild( _typeElement );
 
@@ -154,10 +155,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
                 containment: _parent.element.parentNode,
                 scroll: _parent.element.parentNode.parentNode,
                 start: function(){
-                  _eventManager.dispatch( "trackeventdragstarted" );
+                  _this.dispatch( "trackeventdragstarted" );
                 },
                 stop: function(){
-                  _eventManager.dispatch( "trackeventdragstopped" );
+                  _this.dispatch( "trackeventdragstopped" );
                   movedCallback();
                 },
                 revert: true
@@ -198,7 +199,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
       var rect = _element.getClientRects()[ 0 ];
       _start = _element.offsetLeft / _zoom;
       _end = _start + rect.width / _zoom;
-      _eventManager.dispatch( "trackeventviewupdated" );
+      _this.dispatch( "trackeventviewupdated" );
     } //movedCallback
 
     _element.className = "butter-track-event";
@@ -208,20 +209,20 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
     _this.update( inputOptions );
 
     _element.addEventListener( "mousedown", function ( e ) {
-      _eventManager.dispatch( "trackeventmousedown", { originalEvent: e, trackEvent: trackEvent } );
+      _this.dispatch( "trackeventmousedown", { originalEvent: e, trackEvent: trackEvent } );
     }, false);
     _element.addEventListener( "mouseup", function ( e ) {
-      _eventManager.dispatch( "trackeventmouseup", { originalEvent: e, trackEvent: trackEvent } );
+      _this.dispatch( "trackeventmouseup", { originalEvent: e, trackEvent: trackEvent } );
     }, false);
     _element.addEventListener( "mouseover", function ( e ) {
-      _eventManager.dispatch( "trackeventmouseover", { originalEvent: e, trackEvent: trackEvent } );
+      _this.dispatch( "trackeventmouseover", { originalEvent: e, trackEvent: trackEvent } );
     }, false );
     _element.addEventListener( "mouseout", function ( e ) {
-      _eventManager.dispatch( "trackeventmouseout", { originalEvent: e, trackEvent: trackEvent } );
+      _this.dispatch( "trackeventmouseout", { originalEvent: e, trackEvent: trackEvent } );
     }, false );
 
     _element.addEventListener( "dblclick", function ( e ) {
-      _eventManager.dispatch( "trackeventdoubleclicked", { originalEvent: e, trackEvent: trackEvent } );
+      _this.dispatch( "trackeventdoubleclicked", { originalEvent: e, trackEvent: trackEvent } );
     }, false);
 
     function select( e ){

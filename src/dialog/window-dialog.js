@@ -3,11 +3,11 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [
-          "core/comm", 
+          "core/comm",
           "core/eventmanager",
           "dialog/modal"
-        ], 
-        function( Comm, EventManager, Modal ){
+        ],
+        function( Comm, EventManagerWrapper, Modal ){
 
   var DEFAULT_WINDOW_WIDTH = 640,
       DEFAULT_WINDOW_HEIGHT = 479,
@@ -22,7 +22,6 @@ define( [
 
     var _this = this,
         _url = dialogOptions.url,
-        _em = new EventManager( _this ),
         _comm,
         _window,
         _modalLayer,
@@ -40,14 +39,16 @@ define( [
         ],
         _listeners = dialogOptions.events || {};
 
+    EventManagerWrapper( _this );
+
     _this.modal = dialogOptions.modal;
 
     function onSubmit( e ){
-      _em.dispatch( e.type, e.data );
+      _this.dispatch( e.type, e.data );
     } //onSubmit
 
     function onCancel( e ){
-      _em.dispatch( e.type, e.data );
+      _this.dispatch( e.type, e.data );
       _this.close();
     } //onCancel
 
@@ -55,7 +56,7 @@ define( [
       if( e.data.type === "connectionclosed" ){
         _this.close();
       } //if
-      _em.dispatch( "error", e.data );
+      _this.dispatch( "error", e.data );
     } //onError
 
     this.close = function(){
@@ -82,9 +83,9 @@ define( [
         _comm = _window = undefined;
         _open = false;
         for( var e in _listeners ){
-          _em.unlisten( e, _listeners[ e ] );
+          _this.unlisten( e, _listeners[ e ] );
         } //for
-        _em.dispatch( "close" );
+        _this.dispatch( "close" );
       }, 0 );
     }; //close
 
@@ -109,7 +110,7 @@ define( [
         _comm.listen( "cancel", onCancel );
         _comm.listen( "close", _this.close );
         for( var e in _listeners ){
-          _em.listen( e, _listeners[ e ] );
+          _this.listen( e, _listeners[ e ] );
         } //for
         _statusInterval = setInterval( checkWindowStatus, WINDOW_CHECK_INTERVAL );
         while( _commQueue.length > 0 ){
@@ -117,7 +118,7 @@ define( [
           _this.send( popped.type, popped.data );
         } //while
         _open = true;
-        _em.dispatch( "open" );
+        _this.dispatch( "open" );
       });
     }; //open
 

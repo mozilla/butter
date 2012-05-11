@@ -14,9 +14,9 @@ define( [
           "./trackhandles"
         ],
         function(
-          TrackEvent, 
-          Track, 
-          EventManager,
+          TrackEvent,
+          Track,
+          EventManagerWrapper,
           TrackContainer,
           Scrollbars,
           TimeBar,
@@ -30,7 +30,6 @@ define( [
   function MediaInstance( butter, media ){
     var _this = this,
         _media = media,
-        _em = new EventManager( this ),
         _tracksContainer = new TrackContainer( media ),
         _rootElement = document.createElement( "div" ),
         _container = document.createElement( "div" ),
@@ -48,6 +47,8 @@ define( [
         _trackEventHighlight = butter.config.ui.trackEventHighlight || "click",
         _currentMouseDownTrackEvent,
         _zoom = INITIAL_ZOOM;
+
+    EventManagerWrapper( _this );
 
     _rootElement.className = "media-instance";
     _rootElement.id = "media-instance" + media.id;
@@ -143,7 +144,7 @@ define( [
       _zoombar.update( 0 );
       _tracksContainer.zoom = _zoom;
       updateUI();
-      _em.dispatch( "ready" );
+      _this.dispatch( "ready" );
     }
 
     function onMediaReadyFirst(){

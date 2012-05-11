@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager" ], function( EventManager ){
+define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
   var VERTICAL_SIZE_REDUCTION_FACTOR = 3;
 
@@ -18,8 +18,9 @@ define( [ "core/eventmanager" ], function( EventManager ){
         _scrollHeight,
         _handleHeight,
         _mousePos = 0,
-        _em = new EventManager( this ),
         _this = this;
+
+    EventManagerWrapper( _this );
 
     _element.className = "scroll-bar scroll-bar-v";
     _handle.className = "scroll-handle";
@@ -49,7 +50,7 @@ define( [ "core/eventmanager" ], function( EventManager ){
       _handle.style.top = diff + "px";
       var p = _handle.offsetTop / ( _elementHeight - _handleHeight );
       _containerParent.scrollTop = ( _scrollHeight - _elementHeight ) * p;
-      _em.dispatch( "scroll", _containerParent.scrollTop );
+      _this.dispatch( "scroll", _containerParent.scrollTop );
     } //onMouseMove
 
     function onMouseDown( e ){
@@ -145,8 +146,9 @@ define( [ "core/eventmanager" ], function( EventManager ){
         _scrollWidth,
         _handleWidth,
         _mousePos = 0,
-        _em = new EventManager( this ),
         _this = this;
+
+    EventManagerWrapper( _this );
 
     _element.className = "scroll-bar scroll-bar-h";
     _handle.className = "scroll-handle";
@@ -176,7 +178,7 @@ define( [ "core/eventmanager" ], function( EventManager ){
       _handle.style.left = diff + "px";
       var p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
       _containerParent.scrollLeft = ( _scrollWidth - _elementWidth ) * p;
-      _em.dispatch( "scroll", _containerParent.scrollLeft );
+      _this.dispatch( "scroll", _containerParent.scrollLeft );
     } //onMouseMove
 
     function onMouseDown( e ){
