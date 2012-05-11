@@ -131,7 +131,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManagerWr
         } //for
       } //if
 
-      _eventManager.dispatch( "getHTML", html );
+      this.dispatch( "getHTML", html );
 
       return "<html>" + html.innerHTML + "</html>";
     }; //getHTML
