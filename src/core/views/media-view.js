@@ -22,9 +22,9 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
     urlTextbox.type = "text";
     urlTextbox.className = "url";
     urlTextbox.addEventListener( "focus", function( e ){
-      e.preventDefault();
       var elem = e.target;
-      elem.select();
+      // Work around WebKit's bug with focus+select
+      setTimeout( function(){ elem.select(); }, 10 );
     }, false );
 
     var title = document.createElement( "h3" );
