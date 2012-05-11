@@ -40,14 +40,13 @@
 
           // Highlight the contents of an input field
           function highlight( e ){
-            e.preventDefault();
-
             var elem = e.target;
             if( !elem || !elem.type ){
               return;
             }
 
-            elem.select();
+            // Work around WebKit's bug with focus+select
+            setTimeout( function() { elem.select(); }, 10);
           };
 
           function okPressed( e ) {
@@ -156,7 +155,7 @@
                 }, false );
 
                 // When field is clicked, highlight everything within
-                field.addEventListener( "focus", focus, false);
+                field.addEventListener( "focus", highlight, false);
               }
 
               // Remember first control added in editor so we can focus
