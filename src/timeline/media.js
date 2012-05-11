@@ -28,9 +28,22 @@ define( [
       ZOOM_FACTOR = 100;
 
   function MediaInstance( butter, media ){
+    function onTrackOrderChanged( orderedTracks ){
+      _tracksContainer.orderTracks( orderedTracks );
+    } //onTrackOrderChanged
+
+    function zoomCallback( zoomLevel ){
+      var nextZoom = ( 1 + zoomLevel ) * ZOOM_FACTOR;
+      if( nextZoom !== _zoom ){
+        _zoom = nextZoom;
+        _tracksContainer.zoom = _zoom;
+        updateUI();
+      } //if
+    } //zoomCallback
+
     var _this = this,
         _media = media,
-        _tracksContainer = new TrackContainer( media ),
+        _tracksContainer = new TrackContainer( butter, media ),
         _rootElement = document.createElement( "div" ),
         _container = document.createElement( "div" ),
         _mediaStatusContainer = document.createElement( "div" ),
@@ -54,20 +67,7 @@ define( [
     _rootElement.id = "media-instance" + media.id;
     _container.className = "media-container";
 
-    function onTrackOrderChanged( orderedTracks ){
-      _tracksContainer.orderTracks( orderedTracks );
-    } //onTrackOrderChanged
-
     _mediaStatusContainer.className = "media-status-container";
-
-    function zoomCallback( zoomLevel ){
-      var nextZoom = ( 1 + zoomLevel ) * ZOOM_FACTOR;
-      if( nextZoom !== _zoom ){
-        _zoom = nextZoom;
-        _tracksContainer.zoom = _zoom;
-        updateUI();
-      } //if
-    } //zoomCallback
 
     _media.listen( "trackeventselected", function( e ){
       _selectedTracks.push( e.target );
@@ -195,7 +195,7 @@ define( [
           track.view.listen( "trackeventmouseout", onTrackEventMouseOut );
         } //if
       }
-      
+
       var existingTracks = _media.tracks;
       for( var i=0; i<existingTracks.length; ++i ){
         onTrackAdded({
@@ -336,7 +336,7 @@ define( [
         set: function( val ){
           if( val !== _shrunken ){
             _shrunken = val;
-            
+
           } //if
         }
       }

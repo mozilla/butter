@@ -88,17 +88,17 @@
           get: function(){
             var elem = "";
             if( _element && _element.id ){
-              elem = _element.id; 
+              elem = _element.id;
             } //if
             return {
               id: _id,
               name: _name,
-              element: elem 
+              element: elem
             };
           },
           set: function( importData ){
             if( importData.name ){
-              name = importData.name;
+              _name = importData.name;
             } //if
             if( importData.element ){
               _element = document.getElementById( importData.element );
@@ -112,4 +112,4 @@
     return Target;
 
   }); //define
-})();
+}());

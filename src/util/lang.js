@@ -130,8 +130,10 @@ define( [], function(){
     extend: function ( obj /* , extra arguments ... */) {
       var dest = obj, src = [].slice.call( arguments, 1 );
       src.forEach( function( copy ) {
-        for ( var prop in copy ) {
-          dest[ prop ] = copy[ prop ];
+        for( var prop in copy ){
+          if( copy.hasOwnProperty( prop ) ){
+            dest[ prop ] = copy[ prop ];
+          }
         }
       });
     }, //extend

@@ -100,7 +100,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
             targets: targets,
             media: media
           });
-          _currentTarget = corn.target; 
+          _currentTarget = corn.target;
           blinkTarget();
           trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
           trackEvent.listen( "trackeventupdatefailed", onTrackEventUpdateFailed );

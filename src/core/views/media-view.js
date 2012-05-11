@@ -33,9 +33,9 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
     changeButton.innerHTML = "Save";
     var loadingContainer = document.createElement( "div" );
     loadingContainer.className = "loading-container";
-  
+
     _logoSpinner = LogoSpinner( loadingContainer );
-    
+
     innerContainer.appendChild( title );
     innerContainer.appendChild( urlTextbox );
     innerContainer.appendChild( subtitle );
@@ -67,7 +67,7 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
         showError( true, "Not a valid URL. Use http://..." );
       }
     }
-    
+
     function testUrl(url) {
       var test = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
       return url.match(test);
@@ -121,12 +121,6 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
         _pageElement.destroy();
       } //if
       _pageElement = new PageElement( _media.target, {
-        over: function( event ){
-          _draggingOver = true;
-        },
-        out: function( event ){
-          _draggingOver = false;
-        },
         drop: function( element ){
           _onDropped( element );
         }

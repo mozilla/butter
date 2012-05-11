@@ -86,7 +86,7 @@ define( [
           } //if
         } //for
         if( newStart ){
-          _popcornOptions.start = newStart;          
+          _popcornOptions.start = newStart;
         }
         if( newEnd ){
           _popcornOptions.end = newEnd;

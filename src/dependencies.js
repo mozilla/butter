@@ -49,7 +49,7 @@ define([], function(){
           scriptElement.onload = scriptElement.onreadystatechange = callback;
         }
         else if( callback ){
-          callback();  
+          callback();
         }
       },
       css: function( url, exclude, callback, checkFn ){
@@ -135,7 +135,7 @@ define([], function(){
               _loaders[ item.type ]( item.url, item.exclude, callback, item.check );
             }
             else{
-              throw new Error( "Attempted to load resource without url." ); 
+              throw new Error( "Attempted to load resource without url." );
             }
           }
           else {

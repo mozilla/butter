@@ -127,7 +127,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
         ], onReady );
       }
       else{
-        onReady();  
+        onReady();
       }
     };
 
@@ -406,7 +406,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
         });
       }
     };
-    
+
     _this.loadIndicator.start();
 
     butter.listen( "ready", function(){

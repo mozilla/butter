@@ -92,7 +92,7 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
       // and element's local name is "html" and element's namespace is the HTML
       // namespace"
       if ( el === null ||
-           ( el.nodeName == "HTML" &&
+           ( el.nodeName === "HTML" &&
              dom.isHtmlNamespace( dom.getDocument( el ).documentElement ) &&
              dom.isHtmlNamespace( el )
            )
@@ -130,7 +130,9 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
         _path = pluginOptions.path,
         _manifest = {},
         _type = pluginOptions.type,
-        _element;
+        _element,
+        _helper = document.getElementById( _this.type + "-icon" ) ||
+                  document.getElementById( "default-icon" );
 
     if( _path ) {
       var head = document.getElementsByTagName( "HEAD" )[ 0 ],
@@ -182,9 +184,7 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
       }
     });
 
-    _helper = document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" );
-
-    this.createElement = function ( pattern ) {
+    this.createElement = function ( butter, pattern ) {
       var pluginElement;
       if ( !pattern ) {
         pluginElement = document.createElement( "span" );
@@ -210,7 +210,6 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
           }
         },
         stop: function(){
-          
         }
       });
       this.element = pluginElement;

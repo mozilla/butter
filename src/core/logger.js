@@ -18,7 +18,7 @@
 
       this.error = function( message ) {
         if ( __debug ) {
-          throw new Error( "[" + name + "]" + message ); 
+          throw new Error( "[" + name + "]" + message );
         }
       }; //error
 
@@ -34,4 +34,4 @@
 
     return logger;
   }); //define
-})();
+}());
