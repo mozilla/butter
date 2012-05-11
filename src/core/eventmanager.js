@@ -80,7 +80,7 @@ define( [], function(){
    *    eventManagerWrappedObject [Object] - an object wrapped by EventManagerWrapper
    *    events [Array] - an array of event names [String]
    *
-   *    Uncain allows one event source to be unchained from from another,
+   *    Unchain allows one event source to be unchained from from another,
    *    which was previously chained using `chain`.
    **/
 
@@ -116,7 +116,7 @@ define( [], function(){
   function __invoke( eventName, listeners, data ){
     var these, i;
 
-    if( listeners[ eventName ] ) {
+    if( listeners[ eventName ] ){
       these = listeners[ eventName ].slice();
       i = these.length;
       while( i-- ){
@@ -149,7 +149,7 @@ define( [], function(){
     // https://webmademovies.lighthouseapp.com/projects/65733/tickets/1130
     sync = true;
 
-    if ( sync ) {
+    if ( sync ){
       __invoke( namespacedEventName, listeners, e );
     } else /* async */ {
       customEvent = document.createEvent( "CustomEvent" );
@@ -180,7 +180,7 @@ define( [], function(){
     }
   }
 
-  function __unlisten( o, namespace, eventName, listener, listeners, handler ) {
+  function __unlisten( o, namespace, eventName, listener, listeners, handler ){
     var these, idx, i,
         namespacedEventName = namespace + eventName;
 
@@ -192,18 +192,18 @@ define( [], function(){
       }
     } else {
       these = listeners[ namespacedEventName ];
-      if ( !these ) {
+      if ( !these ){
         return;
       }
 
-      if ( listener ) {
+      if ( listener ){
         idx = these.indexOf( listener );
-        if ( idx > -1 ) {
+        if ( idx > -1 ){
           these.splice( idx, 1 );
         }
       }
 
-      if ( !listener || these.length === 0 ) {
+      if ( !listener || these.length === 0 ){
         delete listeners[ namespacedEventName ];
 
         document.removeEventListener( namespacedEventName, function( e ){
