@@ -17,9 +17,16 @@ define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpi
     editMessage.className = "edit-message";
     editMessage.innerHTML = "Edit source...";
     _propertiesElement.appendChild(editMessage);
+
     var urlTextbox = document.createElement( "input" );
     urlTextbox.type = "text";
     urlTextbox.className = "url";
+    urlTextbox.addEventListener( "focus", function( e ){
+      var elem = e.target;
+      // Work around WebKit's bug with focus+select
+      setTimeout( function(){ elem.select(); }, 10 );
+    }, false );
+
     var title = document.createElement( "h3" );
     title.innerHTML = "Video/Audio URL";
     var subtitle = document.createElement( "p" );
