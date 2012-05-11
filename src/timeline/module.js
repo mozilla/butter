@@ -3,11 +3,11 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [
-          "core/logger", 
+          "core/logger",
           "./media"
-        ], 
-        function( 
-          Logger, 
+        ],
+        function(
+          Logger,
           Media
         ){
 
@@ -101,7 +101,7 @@ define( [
           butter.dispatch( "timelineready" );
         }
       }
-    
+
       function mediaRemoved( event ){
         var mediaObject = event.data;
         if( _media[ mediaObject.id ] ){
@@ -122,7 +122,7 @@ define( [
     Object.defineProperties( this, {
       zoom: {
         get: function(){
-          return _currentMediaInstace.zoom;
+          return _currentMedia.zoom;
         },
         set: function( val ){
           _currentMedia.zoom = val;

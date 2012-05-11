@@ -46,13 +46,6 @@ define( [
       }
     });
 
-    var existingTracks = _media.tracks;
-    for( var i=0; i<existingTracks.length; ++i ){
-      onTrackAdded({
-        data: existingTracks[ i ]
-      });
-    }
-
     function onTrackAdded( e ){
       var track = e.data,
           trackId = track.id,
@@ -178,6 +171,13 @@ define( [
       };
 
       _addTrackButton.style.top = _listElement.offsetHeight - ADD_TRACK_BUTTON_Y_ADJUSTMENT + "px";
+    }
+
+    var existingTracks = _media.tracks;
+    for( var i=0; i<existingTracks.length; ++i ){
+      onTrackAdded({
+        data: existingTracks[ i ]
+      });
     }
 
     _media.listen( "trackadded", onTrackAdded );

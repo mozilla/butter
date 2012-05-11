@@ -218,7 +218,7 @@
         }
         return undefined;
       }; //getTargetByType
-      
+
       /****************************************************************
        * Project methods
        ****************************************************************/
@@ -329,6 +329,7 @@
           "trackeventeditrequested"
         ]);
 
+        var trackEvents;
         if ( media.tracks.length > 0 ) {
           for ( var ti=0, tl=media.tracks.length; ti<tl; ++ti ) {
             var track = media.tracks[ ti ];
@@ -674,7 +675,7 @@
             });
           });
         });
-      
+
       } //readConfig
 
       if( butterOptions.config && typeof( butterOptions.config ) === "string" ){
@@ -720,5 +721,5 @@
     return Butter;
   });
 
-})();
+}());
 

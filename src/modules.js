@@ -9,7 +9,7 @@ define(
     "timeline/module",
     "cornfield/module",
     "plugin/module"
-  ], 
+  ],
   function(){
 
   var moduleList = Array.prototype.slice.apply( arguments );

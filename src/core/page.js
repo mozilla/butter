@@ -23,7 +23,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManagerWr
       return {
         media: medias,
         target: targets
-      }; 
+      };
     }; // scrape
 
     this.prepare = function( readyCallback ){
@@ -56,7 +56,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManagerWr
     };
 
     this.getHTML = function( popcornStrings ){
-      var html, head, body, i, toClean, toExclude, node, newNode, base, mediaElements;
+      var html, head, body, i, l, toClean, toExclude, node, newNode, base, mediaElements;
 
       //html tag to which body and head are appended below
       html = document.createElement( "html" );
@@ -68,7 +68,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManagerWr
       else {
         body = _snapshot.body.cloneNode( true );
       }
-      
+
       head = document.getElementsByTagName( "head" )[ 0 ].cloneNode( true );
 
       toExclude = Array.prototype.slice.call( head.querySelectorAll( "*[data-butter-exclude]" ) );
@@ -90,7 +90,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManagerWr
         node.parentNode.replaceChild( newNode, node );
         newNode.removeAttribute( "data-butter-source" );
       }
-  
+
       toClean = body.querySelectorAll( "*[butter-clean=\"true\"]" );
       for ( i = 0, l = toClean.length; i < l; ++i ) {
         node = toClean[ i ];

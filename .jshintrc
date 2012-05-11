@@ -1,30 +1,31 @@
 {
+    // Environments
+    "node" : true,
+    "es5" : true,
+    "browser" : true,
+    "devel": true,
     "predef": [
         "Popcorn",
         "requirejs",
         "require",
         "define",
         "Range",
-        "DOMException",
-        "console"
+        "DOMException"
     ],
 
-    "node" : true,
-    "es5" : true,
-    "browser" : true,
-    "devel": true,
-
-    "indent": 2,
-
-    "noarg": true,
-    "eqeqeq": true,
-    "undef": true,
+    // Enforcing
     "curly": true,
+    "eqeqeq": true,
     "forin": true,
+    "immed": true,
+    "latedef": true,
     "noempty": true,
     "nonew": true,
-    "regexp": true,
+    "undef": true,
     "trailing": true,
 
+    // Relaxing
+    "evil": true,
+    "sub": true,
     "strict": false
 }

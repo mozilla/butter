@@ -12,7 +12,7 @@ function(
   DragNDrop
 ) {
 
-  return function( media ){
+  return function( media, butter ){
 
     var _media = media,
         _zoom = 1,

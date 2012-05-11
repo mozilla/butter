@@ -57,7 +57,9 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
      */
     function addPopcornHandlers(){
       for( var eventName in _popcornEvents ){
-        _popcorn.on( eventName, _popcornEvents[ eventName ] );
+        if( _popcornEvents.hasOwnProperty( eventName ) ) {
+          _popcorn.on( eventName, _popcornEvents[ eventName ] );
+        }
       } //for
     } //addPopcornHandlers
 
@@ -313,7 +315,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
               optionString = false;
               _logger.log( "WARNING: Unable to export event options: \n" + jsonError.message );
             }
-            
+
             if ( optionString ) {
               popcornString += "popcorn." + trackEvents[ i ]._natives.type + "(" +
                 optionString + ");\n";
@@ -442,7 +444,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         return;
       } //if
       if( _popcorn ){
-        _this.unbind(); 
+        _this.unbind();
       } //if
       while( container.firstChild ) {
         container.removeChild( container.firstChild );
@@ -523,7 +525,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
             return _popcorn.paused();
           } //if
           return true;
-        }, 
+        },
         set: function( val ){
           if( _popcorn ){
             if( val ){

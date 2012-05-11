@@ -81,7 +81,7 @@
         var editor = _editors[ type ] = new Editor( butter, source, type, frameType, _editorContainer );
         return editor;
       }; //add
-            
+
       this.remove = function( type ){
         if ( !type ) {
           return;
@@ -157,4 +157,4 @@
     return EventEditor;
 
   }); //define
-})();
+}());

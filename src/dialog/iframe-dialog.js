@@ -41,7 +41,7 @@ define( [
 
     this.close = function(){
       // Send a close message to the dialog first, then actually close the dialog.
-      // A setTimeout is used here to ensure that its associated function will be run 
+      // A setTimeout is used here to ensure that its associated function will be run
       // almost right after the postMessage happens. This ensures that messages get to
       // their destination before we remove the dom element (which will basically ruin
       // everything) by placing callbacks in the browser's event loop in the correct order.
@@ -75,8 +75,10 @@ define( [
       if( _this.modal ){
         _modalLayer = new Modal( _this.modal );
       } //if
-      for ( var e in listeners ) {
-        _listeners[ e ] = listeners[ e ];
+      for( var e in listeners ){
+        if( listeners.hasOwnProperty( e ) ){
+          _listeners[ e ] = listeners[ e ];
+        }
       } //for
       var defaultParent = _modalLayer ? _modalLayer.element : document.body;
       _parent = _parent || defaultParent;
@@ -89,7 +91,9 @@ define( [
           _comm.listen( "close", _this.close );
           window.addEventListener( "beforeunload",  _this.close, false );
           for( var e in _listeners ){
-            _this.listen( e, _listeners[ e ] );
+            if( _listeners.hasOwnProperty( e ) ){
+              _this.listen( e, _listeners[ e ] );
+            }
           } //for
           while( _commQueue.length > 0 ){
             var popped = _commQueue.pop();
