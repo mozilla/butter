@@ -655,6 +655,25 @@
       });
     });
   });
+
+  asyncTest( "Modifying exported HTML from Page's getHTML event" , function() {
+    expect( 1 );
+    createButter(function( butter ) {
+      var m1 = butter.addMedia( { url:"../external/popcorn-js/test/trailer.ogv", target:"mediaDiv" } ),
+          testText = "test text at end of body";
+
+      butter.page.listen( "getHTML", function( e ) {
+        var testTextNode = document.createTextNode( testText );
+        e.data.getElementsByTagName( "body" )[ 0 ].appendChild( testTextNode );
+      });
+
+      butter.listen( "mediaready", function( e ) {
+        equals( /test text at end of body\s*<\/body>/.test( butter.getHTML() ), true, "Text appended to body in getHTML event is included in exported HTML." );
+        start();
+      });
+    })
+  });
+
   module( "Debug functionality" );
   asyncTest( "Debug enables/disables logging", 4, function() {
     createButter(function( butter ) {
