@@ -1,6 +1,7 @@
 /* This Source Code Form is subject to the terms of the MIT license
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
+/*jshint evil:true*/
 
 define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
@@ -348,7 +349,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
      * and insert it as a script in the head if that fails.
      */
     function createPopcorn( popcornString ){
-      var popcornFunction = new Function( "", popcornString );
+      var popcornFunction = new Function( "", popcornString ),
           popcorn = popcornFunction();
       if ( !popcorn ) {
         var popcornScript = document.createElement( "script" );
