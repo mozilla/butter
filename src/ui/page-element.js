@@ -2,7 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tracker" ], function( Logger, EventManager, DragNDrop, PositionTracker ) {
+define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tracker" ],
+        function( Logger, EventManagerWrapper, DragNDrop, PositionTracker ) {
 
   var __nullFunction = function(){};
   
@@ -12,18 +13,19 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
         _highlightElement = document.createElement( "div" ),
         _events = events || {},
         _options = options || {},
-        _em = new EventManager( this ),
         _blinkFunction,
         _hilightFunction,
         _positionTracker,
         _this = this;
+
+    EventManagerWrapper( _this );
 
     _positionTracker = PositionTracker( _element, function( rect ){
       _highlightElement.style.left = rect.left + "px";
       _highlightElement.style.top = rect.top + "px";
       _highlightElement.style.width = rect.width + "px";
       _highlightElement.style.height = rect.height + "px";
-      _em.dispatch( "moved", rect );
+      _this.dispatch( "moved", rect );
     });
 
     this.highlight = _highlightFunction = function( state ){

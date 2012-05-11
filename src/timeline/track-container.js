@@ -5,12 +5,10 @@
 define(
 [
   "core/logger",
-  "core/eventmanager",
   "util/dragndrop"
 ],
 function(
   Logger,
-  EventManager,
   DragNDrop
 ) {
 

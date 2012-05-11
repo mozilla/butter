@@ -3,16 +3,16 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [
-          "./logger", 
+          "./logger",
           "./eventmanager",
           "util/lang",
           "util/time",
           "./views/trackevent-view"
         ],
-        function( 
-          Logger, 
-          EventManager, 
-          LangUtil, 
+        function(
+          Logger,
+          EventManagerWrapper,
+          LangUtil,
           TimeUtil,
           TrackEventView
         ){
@@ -27,7 +27,6 @@ define( [
         _id = "TrackEvent" + __guid++,
         _name = options.name || _id,
         _logger = new Logger( _id ),
-        _em = new EventManager( this ),
         _track,
         _type = options.type + "",
         _properties = [],
@@ -37,6 +36,8 @@ define( [
         },
         _view = new TrackEventView( this, _type, _popcornOptions ),
         _selected = false;
+
+    EventManagerWrapper( _this );
 
     _this.popcornOptions = _popcornOptions;
 
@@ -76,7 +77,7 @@ define( [
       }
 
       if( failed ){
-        _em.dispatch( "trackeventupdatefailed", failed );
+        _this.dispatch( "trackeventupdatefailed", failed );
       }
       else{
         for ( var prop in updateOptions ) {
@@ -92,7 +93,7 @@ define( [
         }
         _view.update( _popcornOptions );
         _this.popcornOptions = _popcornOptions;
-        _em.dispatch( "trackeventupdated", _this );
+        _this.dispatch( "trackeventupdated", _this );
       }
 
     }; //update
@@ -111,7 +112,7 @@ define( [
       } else {
         _popcornOptions.end = _popcornOptions.start;
       } // if
-      _em.dispatch( "trackeventupdated", _this );
+      _this.dispatch( "trackeventupdated", _this );
       _view.update( _popcornOptions );
     }; //moveFrameLeft
 
@@ -127,14 +128,14 @@ define( [
         }
         _popcornOptions.end = _track._media.duration;
       }
-      _em.dispatch( "trackeventupdated", _this );
+      _this.dispatch( "trackeventupdated", _this );
       _view.update( _popcornOptions );
     }; //moveFrameRight
 
     _view.listen( "trackeventviewupdated", function( e ){
       _popcornOptions.start = _view.start;
       _popcornOptions.end = _view.end;
-      _em.dispatch( "trackeventupdated" );
+      _this.dispatch( "trackeventupdated" );
     });
 
     Object.defineProperties( this, {
@@ -183,10 +184,10 @@ define( [
             _selected = val;
             _view.selected = _selected;
             if( _selected ){
-              _em.dispatch( "trackeventselected" );
+              _this.dispatch( "trackeventselected" );
             }
             else {
-              _em.dispatch( "trackeventdeselected" );
+              _this.dispatch( "trackeventdeselected" );
             } //if
           } //if
         }
@@ -211,7 +212,7 @@ define( [
           _this.popcornOptions = _popcornOptions;
           _view.type = _type;
           _view.update( _popcornOptions );
-          _em.dispatch( "trackeventupdated", _this );
+          _this.dispatch( "trackeventupdated", _this );
         }
       }
     }); //properties
@@ -221,4 +222,3 @@ define( [
   return TrackEvent;
 
 }); //define
-

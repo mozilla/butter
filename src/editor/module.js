@@ -4,13 +4,13 @@
 
 (function() {
 
-  define( [ "core/logger", 
-            "core/eventmanager", 
+  define( [ "core/logger",
+            "core/eventmanager",
             "core/trackevent",
             "./editor"
-          ], function( 
-            Logger, 
-            EventManager, 
+          ], function(
+            Logger,
+            EventManagerWrapper,
             TrackEvent,
             Editor
           ){
@@ -21,10 +21,11 @@
 
       var _editors = {},
           _logger = new Logger( "EventEditor" ),
-          _em = new EventManager( this ),
           _editorContainer,
           _openEditor,
           _this = this;
+
+      EventManagerWrapper( _this );
 
       butter.listen( "trackeventcreated", function( e ){
         if( [ "target", "media" ].indexOf( e.data.by ) > -1 && butter.ui.contentState === "timeline" ){
