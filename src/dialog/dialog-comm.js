@@ -63,7 +63,7 @@ var Comm = function(){
     _this.send( "ready", "ready" );
   } //onReady
   _this.listen( "ready", onReady );
-  
+
 }; //Comm
 root.Comm = Comm;
-})( window );
+}( window ));

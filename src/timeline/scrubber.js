@@ -212,7 +212,7 @@ define( [], function(){
       }
     });
 
-    _checkMediaInterval = setInterval( checkMedia, CHECK_MEDIA_INTERVAL );
+    var _checkMediaInterval = setInterval( checkMedia, CHECK_MEDIA_INTERVAL );
 
     this.destroy = function(){
       clearInterval( _checkMediaInterval );

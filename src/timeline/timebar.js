@@ -6,7 +6,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
   var CANVAS_CONTAINER_PADDING = 5;
 
-  return function( butter, media, tracksContainer, hScrollbar ){ 
+  return function( butter, media, tracksContainer, hScrollbar ){
 
     var _element = document.createElement( "div" ),
         _canvas = document.createElement( "canvas" ),
@@ -32,10 +32,10 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
       var context = _canvas.getContext( "2d" );
 
-      if ( _canvas.height != _canvas.offsetHeight ) {
+      if ( _canvas.height !== _canvas.offsetHeight ) {
         _canvas.height = _canvas.offsetHeight;
       }
-      if ( _canvas.width != containerWidth ) {
+      if ( _canvas.width !== containerWidth ) {
         _canvas.width = containerWidth;
       }
 

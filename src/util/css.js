@@ -16,7 +16,7 @@ define( [], function(){
     },
     removeClass: function( obj, className ){
       var classes = obj.className.split( " " );
-      for( var i=classes.length; i>-1; --i ){ 
+      for( var i=classes.length; i>-1; --i ){
         if( classes[ i ] === className ){
           classes.splice( i, 1 );
         } //if
