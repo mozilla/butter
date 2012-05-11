@@ -27,7 +27,10 @@ define( [
           TrackHandles,
           LangUtil ) {
 
-  var MIN_VIEWABLE_SECS = 10;
+  var MIN_VIEWABLE_SECS = 5,
+      USE_MIN_ZOOM_FACTOR = false,
+      MIN_VIEWABLE_PER_SEC = 200,
+      DEFAULT_ZOOM = 0.5;
 
   function MediaInstance( butter, media ){
     function onTrackOrderChanged( orderedTracks ){
@@ -35,7 +38,12 @@ define( [
     } //onTrackOrderChanged
 
     function zoomCallback( zoomLevel ){
-      var nextZoom = _minZoomFactor * zoomLevel + _zoomFactor;
+      var nextZoom;
+      if ( USE_MIN_ZOOM_FACTOR ) {
+        nextZoom = _minZoomFactor * zoomLevel + _zoomFactor;
+      } else {
+        nextZoom = MIN_VIEWABLE_PER_SEC * zoomLevel + _zoomFactor;
+      }
       if( nextZoom !== _zoom ){
         _zoom = nextZoom;
         _tracksContainer.zoom = _zoom;
@@ -155,7 +163,7 @@ define( [
       _zoomFactor = _container.clientWidth / _media.duration;
       _minZoomFactor = ( _container.clientWidth / MIN_VIEWABLE_SECS - _zoomFactor );
       _zoom = _zoomFactor;
-      _zoombar.update( 0 );
+      _zoombar.update( DEFAULT_ZOOM );
       _tracksContainer.zoom = _zoom;
       updateUI();
       _this.dispatch( "ready" );
