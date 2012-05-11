@@ -43,7 +43,7 @@ define( [
 
     var _this = this,
         _media = media,
-        _tracksContainer = new TrackContainer( media, butter ),
+        _tracksContainer = new TrackContainer( butter, media ),
         _rootElement = document.createElement( "div" ),
         _container = document.createElement( "div" ),
         _mediaStatusContainer = document.createElement( "div" ),

@@ -136,7 +136,7 @@
 
           _plugins.push( plugin );
           if( moduleOptions.defaults && moduleOptions.defaults.indexOf( plugin.type ) > -1 ){
-            _listContainer.appendChild( plugin.createElement( _pattern, butter ) );
+            _listContainer.appendChild( plugin.createElement( butter, _pattern ) );
           }
           butter.dispatch( "pluginadded", plugin );
         }
@@ -214,7 +214,7 @@
                   return;
                 }
               }
-              _listContainer.appendChild( plugin.createElement( _pattern, butter ) );
+              _listContainer.appendChild( plugin.createElement( butter, _pattern ) );
             }
           }
         }

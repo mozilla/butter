@@ -184,7 +184,7 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
       }
     });
 
-    this.createElement = function ( pattern, butter ) {
+    this.createElement = function ( butter, pattern ) {
       var pluginElement;
       if ( !pattern ) {
         pluginElement = document.createElement( "span" );
