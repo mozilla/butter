@@ -20,50 +20,56 @@ Butter.Template = function() {
   }
 
   t.getTrackEvents = function( query ) {
+    t.debug && console.log ( "getTrackEvents", query );
     var obj = {},
         i,
         allTracks,
         result;
 
     t.butter && ( allTracks = t.butter.orderedTrackEvents );
-
+    console.log( t.butter.orderedTrackEvents, allTracks);
     //Parse the query....
 
-    //getTrackEvent( 1 );
-    if( typeof query === "number" ) {
+    if( query === "all" ) {
+      result = allTracks.filter(function(tr) {
+        return( tr.popcornOptions !== undefined );
+      });
+    }
+    //getTrackEvents( 1 );
+    else if( typeof query === "number" ) {
       result = allTracks[ query ];
     }
-     //getTrackEvent( "text" );
+     //getTrackEvents( "text" );
     else if( typeof query === "string" ) {
       result = allTracks.filter( function( el, index ) {
         return( el.type && el.type === query );
       });
     }
-     //getTrackEvent( myEvent );
+     //getTrackEvents( myEvent );
     else if ( typeof query === "object" && query.popcornOptions ) {
       result = query;
     }
     else if ( typeof query === "object" ) {
       result = allTracks.filter( function( el, index ) {
 
-        // getTrackEvent({ before: ... });
+        // getTrackEvents({ before: ... });
         if( query.before && el.popcornOptions.start > query.before ) { return false; }
 
-        // getTrackEvent({ after: ... });
+        // getTrackEvents({ after: ... });
         if( query.after && el.popcornOptions.start < query.after ) { return false; }
 
-        // getTrackEvent({ type: "text" });
+        // getTrackEvents({ type: "text" });
         if( query.type && typeof query.type === "string" ) {
           if( el.type !== query.type ) { return false; }
-        //getTrackEvent({ type: ["text","footnote"] });
+        //getTrackEvents({ type: ["text","footnote"] });
         } else if ( query.type && typeof query.type === "object") {
            if( query.type.indexOf( el.type ) < 0 ) { return false; }
         }
 
-        //getTrackEvent({ index: 1 });
+        //getTrackEvents({ index: 1 });
         if( query.index && typeof query.index === "number" ) {
           if( query.index !== index ) { return false; }
-        //getTrackEvent({ index: [1, 2] });
+        //getTrackEvents({ index: [1, 2] });
         } else if ( query.index && typeof query.index === "object" ) {
           if( query.index.indexOf( index ) < 0 ) { return false; }
         }
@@ -71,18 +77,23 @@ Butter.Template = function() {
         return true;
 
       });
-    } //if
+    }
 
-    //Return false if there were no results, return the track event if there was only one, and an array if more than one were found.
-    if( !result || result.length === 0 ) { return false; }
+    //Return the track event if there was only one, and an array if more than one were found.
+    if( !result || result.length === 0 ) { return obj.data = false; }
     else if( result. length === 1 ) { obj.data = result[0] }
     else ( obj.data = result );
+
+    t.debug && console.log( "getTrackEvents", query, result );
 
     obj.foo = function() {
       return "bar";
     }
 
     obj.update = function( data ) { 
+      t.debug && console.log( "update", this, data );
+      if( !data ){ return; }
+
       function _update( trackEvent ) {
         var oldOptions = trackEvent.popcornOptions, option;
 
@@ -97,9 +108,11 @@ Butter.Template = function() {
       else { _update( this.data ); }
     }
 
-    obj.remove = function( data ) {
+    obj.remove = function() {
+      t.debug && console.log( "remove", this );
+      if( !this.data ){ return; }
       function _remove( trackEvent ) {
-        trackEvent.track.removeTrackEvent ( trackEvent );
+        trackEvent.track.removeTrackEvent( trackEvent );
       }
       if( this.data instanceof Array ) { t.each( this.data, _remove ); }
       else { _remove( this.data ); }
@@ -108,14 +121,44 @@ Butter.Template = function() {
     return obj;
   }
 
+  t.editor = function( plugin, args ) {
+    if( args === undefined ) { return; }
 
+    var editor = {},
+        _id = args.id || plugin + "-editor",
+        _onTrackEventUpdate = args.onTrackEventChange,
+        _onTrayElementClick = args.onTrayElementClick,
+        _onTargetClick = args.onTargetClick,
+        _onShowPanel = args.onShowPanel;
+
+    editor.modal = function() {
+
+    }
+
+    editor.imageDropper = function() {
+
+    }
+
+    editor.tabs = function() { 
+
+    }
+
+    return editor;
+  }
+
+  t.reset = function() {
+    var allTracks = t.getTrackEvents("all");
+    console.log("all", allTracks);
+    //there seems to be a problem with this getting all the popcorn instances
+    allTracks.remove();
+  }
 
   t.each = function( array, func ) {
     var i;
     for ( i = 0; i<array.length; i++ ) {
       (function( item ) {
-        func( item );
-      }( array[i] ));    
+        func( item );  
+      }( array[i] ));
     }
   }
 

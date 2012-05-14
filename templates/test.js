@@ -32,25 +32,74 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-        callback();
+        butter.tracks[ 1 ].addTrackEvent({ 
+          type: "image",
+          popcornOptions: {
+            start: 4,
+            end: 5,
+            target: "Area2"
+          }
+        });
+
+        document.getElementById("title").setAttribute("contenteditable", true);
+
+        callback && callback();
     }
 
     t.initCallback = function(){
     // This function runs after butter first initializes.
       t.showTray( true );
+
+      //In javascript...
+      var controls = document.getElementById( "template-controls");
+      var btn1 = document.createElement( "button" );
+      btn1.innerText = "Remove all text and footnote tracks";
+      btn1.addEventListener( "click", function(){
+        var text = t.getTrackEvents( { type: ["text", "footnote"] } );
+        text.remove();
+      }, false);
+
+      var btn2 = document.createElement( "button" );
+      btn2.innerText = "Change text";
+      btn2.addEventListener( "click", function(){
+        var text = t.getTrackEvents( { type: ["text", "footnote"] } );
+        text.update( { text: "OMG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" } );
+      }, false);
+
+      controls.appendChild( btn1 );
+      controls.appendChild( btn2 );
+
+      //Or, in jQuery....
+      var btn3 = document.createElement("button");
+      $(btn3).text( "Reset!" );
+      $(btn3).click( function() {
+        t.reset();
+      });
+
+      var btn4 = document.createElement("button");
+      $(btn4).text( "Hide tray");
+      $(btn4).toggle( function(){
+        t.showTray(false);
+        $(this).text("Show tray");
+      }, function() {
+        t.showTray(true);
+        $(this).text("Hide tray");
+      });
+
+      $("#template-controls").append( btn3, btn4 );
+
     }
 
     t.butterMediaLoaded = function( butter, media, popcorn ) {
     // This function runs every time the media source changes, or a project is loaded.
-      var text = t.getTrackEvents( { type: ["text", "footnote"] } );
-      text.update( { text: "textYO" } );
-      text.remove();
+  
     }
 
     t.popcornReady = function( popcorn ) {
     //This function runs once in butter AND once in exported projects.
       
     }
+
 
     //RUN -------------------------------------
 
