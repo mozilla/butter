@@ -70,7 +70,7 @@ define( [ "util/dragndrop", "util/lang" ], function( DragNDrop, LangUtils ){
     });
 
     _helper = document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" );
-    if( _helper ) { _helper = _helper.cloneNode( false ); } 
+    if( _helper ) { _helper = _helper.cloneNode( false ); }
 
     this.createElement = function ( butter, pattern ) {
       var pluginElement;

@@ -291,8 +291,9 @@ define( [], function(){
       return newObj;
     },
 
-    domFragment: function( inputString ) {    
-      var range = document.createRange();
+    domFragment: function( inputString ) {
+      var range = document.createRange(),
+          fragment;
       range.selectNode( document.body.firstChild );
       fragment = range.createContextualFragment( inputString );
       return fragment;
