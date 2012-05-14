@@ -637,6 +637,11 @@
             resourcesDir = _config.dirs.resources || "";
 
         _this.project.template = _config.name;
+        
+        //Add default if it doesn't exist
+        if ( icons && !icons[ 'default'] ) {
+          icons[ 'default' ] = 'popcorn-icon.png';
+        }
 
         for( var identifier in icons ){
           if( icons.hasOwnProperty( identifier ) ){
