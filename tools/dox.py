@@ -33,7 +33,7 @@ def formatMD(input):
             if 'doc' in subtree:
                 output += str(subtree['doc']) + "\n"
 
-            if 'type' in subtree and not subtree['type'] in ["Module", "Property"   ] and 'properties' in subtree:
+            if 'type' in subtree and 'properties' in subtree:
                 output += "\n"
 
                 signature = 'Usage: __' + str(subtree['name']) + '('
@@ -53,7 +53,8 @@ def formatMD(input):
                         params += prop['name'] + ', '
                 signature += params[:-2] + ')__'
 
-                output += "\n" + signature + "\n"
+                if not subtree['type'] in ["Module", "Property"]:
+                    output += "\n" + signature + "\n"
 
             output += "\n"
 
