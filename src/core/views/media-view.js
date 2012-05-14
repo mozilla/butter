@@ -1,5 +1,5 @@
-define( [ "ui/page-element", "ui/logo-spinner", "util/dom-fragment", "text!layouts/media-view.xml" ],
-  function( PageElement, LogoSpinner, DOMFragment, HTML_TEMPLATE ){
+define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "text!layouts/media-view.html" ],
+  function( PageElement, LogoSpinner, LangUtils, HTML_TEMPLATE ){
 
   var DEFAULT_SUBTITLE = "Supports HTML5 video, YouTube, and Vimeo";
 
@@ -10,7 +10,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/dom-fragment", "text!layou
         _logoSpinner,
         _this = this;
 
-    var _propertiesElement = DOMFragment( HTML_TEMPLATE ),
+    var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE ).firstChild,
         urlTextbox = _propertiesElement.querySelector( "input" ),
         subtitle = _propertiesElement.querySelector( ".form-field-notes" ),
         changeButton = _propertiesElement.querySelector( "button" ),
