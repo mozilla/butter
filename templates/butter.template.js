@@ -1,18 +1,6 @@
 Butter.Template = function() {
   var t = {};
 
-  t.tests = function() {
-    //Test get track events
-    console.log( 
-      t.getTrackEvents( 0 ),
-      t.getTrackEvents( { type: "text" } ),
-      t.getTrackEvents( { type: "foo" } ),
-      t.getTrackEvents( { type:[ "text", "footnote" ] } ),
-      t.getTrackEvents( { before: 1 } ),
-      t.getTrackEvents( { after: 1 } )
-    );
-  }
-
   t.showTray = function( show ){
     t.debug && console.log ( "template.showTray", show );
     t.butter && show === true && ( t.butter.ui.visible = true );
@@ -27,12 +15,10 @@ Butter.Template = function() {
         result;
 
     t.butter && ( allTracks = t.butter.orderedTrackEvents );
-    console.log( t.butter.orderedTrackEvents, allTracks);
     //Parse the query....
-
     if( query === "all" ) {
       result = allTracks.filter(function(tr) {
-        return( tr.popcornOptions !== undefined );
+        return( t.popcornOptions !== undefined );
       });
     }
     //getTrackEvents( 1 );
@@ -160,6 +146,10 @@ Butter.Template = function() {
         func( item );  
       }( array[i] ));
     }
+  }
+
+  t.tests = function() {
+    //Test get track events
   }
 
   t.eventWrapper = function( media, event ) {

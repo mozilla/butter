@@ -104,9 +104,12 @@ document.addEventListener( "DOMContentLoaded", function( e ){
     //RUN -------------------------------------
 
     if( Butter ) {
+
       Butter({
         config: t.config,
         ready: function( butter ){
+
+          butter.media[ 0 ].onReady( function(){ console.log("foo") });
 
           function start() {
             t.butter = butter;
@@ -114,7 +117,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             t.butterMediaLoaded( butter, butter.media[ 0 ], butter.media[ 0 ].popcorn.popcorn );
             t.debug && console.log ( t.name + ": butterMediaLoaded" );
 
-            t.popcornReady( butter.media[ 0 ].popcorn.popcorn );
+            t.popcornReady( butter.media[ 0 ].popcorn.popcorn );  
             t.eventWrapper( butter.media[ 0 ], "canplayall" ); //if canplay or canplayall is used, it must be removed.
 
             if( t.debug ) { t.tests(); } //tests for helpers
@@ -124,7 +127,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           t.debug && console.log( t.name + ": butterInit" );
 
           start();
-          butter.listen( "mediadurationchanged", start );
+          butter.listen( "mediaready", start );
 
           window.butter = butter;
         }
