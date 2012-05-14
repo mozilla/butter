@@ -7,13 +7,7 @@
   var DEFAULT_TRACKEVENT_DURATION = 1,
       DEFAULT_TRACKEVENT_OFFSET = 0.01;
 
-  var requireContext = require.config({
-    paths: {
-      text: '../external/require/text'
-    }
-  });
-
-  requireContext( [
+  define( [
             "core/eventmanager",
             "core/logger",
             "core/target",
