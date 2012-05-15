@@ -11,6 +11,10 @@ define([], function(){
       MIN_WIDTH = 15;
 
   var __droppables = [],
+      __selectedDraggables = {},
+      __mousePos = [ 0, 0],
+      __mouseLast = [ 0, 0 ],
+      __mouseDiff = [ 0, 0 ],
       __helpers = [];
 
   // for what seems like a bug in chrome. :/
@@ -22,6 +26,39 @@ define([], function(){
     left: 0,
     bottom: 0,
     right: 0
+  };
+
+  function onDragged( e ){
+    __mouseLast[ 0 ] = __mousePos[ 0 ];
+    __mouseLast[ 1 ] = __mousePos[ 1 ];
+    __mousePos = [ e.clientX, e.clientY ];
+    __mouseDiff[ 0 ] = __mousePos[ 0 ] - __mouseLast[ 0 ];
+    __mouseDiff[ 1 ] = __mousePos[ 1 ] - __mouseLast[ 1 ];
+
+    var remembers = [];
+
+    for( var id in __selectedDraggables ) {
+      if ( !__selectedDraggables[ id ].dragging ) {
+        __selectedDraggables[ id ].start( e );
+      }
+      __selectedDraggables[ id ].update();
+      remembers.push( __selectedDraggables[ id ] );
+    }
+
+    for( var i=__droppables.length - 1; i>=0; --i ){
+      var remember = false;
+      for( var j = remembers.length - 1; j>=0; --j ) {
+        if( remembers[ j ].element !== __droppables[ i ].element && __droppables[ i ].drag( remembers[ j ].element.getBoundingClientRect() ) ){
+          __droppables[ i ].remember( remembers[ j ].element );
+          remember = true;
+          break;
+        }
+      }
+
+      if ( !remember ) {
+        __droppables[ i ].forget();
+      }
+    }
   };
 
   function getPaddingRect( element ){
@@ -146,6 +183,7 @@ define([], function(){
           mouseOffset;
 
       function update(){
+
         var diff = mousePosition - mouseDownPosition,
             newX = originalPosition + diff,
             newW = originalWidth - diff;
@@ -178,14 +216,14 @@ define([], function(){
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
         _updateInterval = -1;
-        _onStop();
+        _onStop( e );
       }
 
       function onMouseMove( e ){
         mousePosition = e.clientX;
         if( _updateInterval === -1 ){
           _updateInterval = setInterval( update, SCROLL_INTERVAL );
-          _onStart();
+          _onStart( e );
         }
       }
 
@@ -234,14 +272,14 @@ define([], function(){
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
         _updateInterval = -1;
-        _onStop();
+        _onStop( e );
       }
 
       function onMouseMove( e ){
         mousePosition = e.clientX;
         if( _updateInterval === -1 ){
           _updateInterval = setInterval( update, SCROLL_INTERVAL );
-          _onStart();
+          _onStart( e );
         }
       }
 
@@ -287,12 +325,12 @@ define([], function(){
         img.src = _image.src;
         e.dataTransfer.setDragImage( img, img.width / 2, img.height / 2 );
       }
-      _onStart();
+      _onStart( e );
     });
 
     element.addEventListener( "dragend", function( e ){
       __currentDraggingElement = null;
-      _onStop();
+      _onStop( e );
     });
 
     element.addEventListener( "drop", function( e ){
@@ -305,7 +343,6 @@ define([], function(){
         _onDrop = options.drop || function(){},
         _onOver = options.over || function(){},
         _onOut = options.out || function(){},
-        _mousePos,
         _draggedElement;
 
     function onDrop( e ) {
@@ -377,16 +414,15 @@ define([], function(){
       },
       drop: function(){
         element.classList.remove( _hoverClass );
-
         if( _draggedElement ){
-          _onDrop( _draggedElement, _mousePos );
+          _onDrop( _draggedElement, __mousePos );
           _draggedElement = null;
           return true;
         }
         _draggedElement = null;
         return false;
       },
-      drag: function( dragElement, dragElementRect ){
+      drag: function( dragElementRect ){
         var rect = element.getBoundingClientRect();
 
         var maxL = Math.max( dragElementRect.left, rect.left ),
@@ -401,6 +437,7 @@ define([], function(){
         var overlapDims = [ minR - maxL, minB - maxT ];
 
         if( overlapDims[ 0 ] * overlapDims[ 1 ] / 2 > dragElementRect.width * dragElementRect.height / 4 ){
+
           return true;
         }
 
@@ -432,7 +469,7 @@ define([], function(){
         _axis = options.axis,
         _revert = options.revert,
         _mouseOffset,
-        _mousePos,
+        _element = element,
         _elementRect,
         _scrollRect,
         _offsetParentRect,
@@ -443,22 +480,19 @@ define([], function(){
         _onStart = options.start || function(){},
         _onStop = options.stop || function(){ return false; },
         _originalPosition,
+        _draggable = {
+          destroy: function(){
+            element.removeEventListener( "mousedown", onMouseDown, false );
+          }
+        },
+        _dragging = false,
         _containmentPadding = __nullRect;
 
     if( _containment ){
       _containmentPadding = getPaddingRect( _containment );
     }
 
-    function update(){
-      updatePosition();
-      if( _scroll ){
-        checkScroll();
-      }
-      checkContainment();
-      __drag( element, _elementRect, _mousePos );
-    }
-
-    function updateRects(){
+    _draggable.updateRects = function(){
       _containmentRect = _containment ? _containment.getBoundingClientRect() : __getWindowRect();
       _offsetParentRect = element.offsetParent ? element.offsetParent.getBoundingClientRect() : _containmentRect;
       _scrollRect = _scroll ? _scroll.getBoundingClientRect() : _containmentRect;
@@ -466,8 +500,9 @@ define([], function(){
     }
 
     function updatePosition(){
-      var x = _mousePos[ 0 ] - _mouseOffset[ 0 ],
-          y = _mousePos[ 1 ] - _mouseOffset[ 1 ];
+
+      var x = __mousePos[ 0 ] - _mouseOffset[ 0 ],
+          y = __mousePos[ 1 ] - _mouseOffset[ 1 ];
 
       if( !_axis || _axis.indexOf( "x" ) > -1 ){
         element.style.left = ( x - _offsetParentRect.left ) + "px";
@@ -481,15 +516,17 @@ define([], function(){
     }
 
     function checkScroll(){
+
       if( _elementRect.right > _scrollRect.right + SCROLL_WINDOW ){
         _scroll.scrollLeft += _scrollAmount;
         element.style.left = element.offsetLeft + _scrollAmount + "px";
-        updateRects();
       }
       else if( _elementRect.left < _scrollRect.left - SCROLL_WINDOW ){
         _scroll.scrollLeft -= _scrollAmount;
         element.style.left = element.offsetLeft - _scrollAmount + "px";
-        updateRects();
+      }
+      for( var id in __selectedDraggables ) {
+        __selectedDraggables[ id ].updateRects();
       }
     }
 
@@ -499,21 +536,20 @@ define([], function(){
       }
       e.preventDefault();
       e.stopPropagation();
-      window.addEventListener( "mousemove", onMouseMove, false );
+      window.addEventListener( "mousemove", onDragged, false );
       window.addEventListener( "mouseup", onMouseUp, false );
     }
 
     function onMouseUp( e ){
-      window.removeEventListener( "mousemove", onMouseMove, false );
-      window.removeEventListener( "mouseup", onMouseUp, false );
-      if( _updateInterval === -1 ){
+      window.removeEventListener( "mousemove", onDragged, false );
+
+      if ( !_dragging ) {
         return;
       }
-      element.style.zIndex = _oldZIndex;
-      clearInterval( _updateInterval );
-      _updateInterval = -1;
-      _onStop();
-      if( !__drop() && _revert ){
+
+      _dragging = false;
+      _onStop( e );
+      if( _revert ){
         element.style.left = _originalPosition[ 0 ] + "px";
         element.style.top = _originalPosition[ 1 ] + "px";
       }
@@ -558,27 +594,62 @@ define([], function(){
       _elementRect = element.getBoundingClientRect();
     }
 
-    function onMouseMove( e ){
-      _mousePos = [ e.clientX, e.clientY ];
-      if( _updateInterval === -1 ){
-        _originalPosition = [ element.offsetLeft, element.offsetTop ];
-        _oldZIndex = getComputedStyle( element ).getPropertyValue( "z-index" );
-        element.style.zIndex = MAXIMUM_Z_INDEX;
-        updateRects();
-        _mousePos = [ e.clientX, e.clientY ];
-        _mouseOffset = [ e.clientX - _elementRect.left, e.clientY - _elementRect.top ];
-        _updateInterval = setInterval( update, SCROLL_INTERVAL );
-        _onStart();
-      }
-    }
-
     element.addEventListener( "mousedown", onMouseDown, false );
 
-    return {
-      destroy: function(){
-        element.removeEventListener( "mousedown", onMouseDown, false );
+    _draggable.update = function(){
+
+      updatePosition();
+      if( _scroll ){
+        checkScroll();
       }
+      checkContainment();
     };
+
+    _draggable.start = function( e ){
+
+      if( _dragging ){
+        return;
+      }
+
+      _dragging = true;
+      _originalPosition = [ element.offsetLeft, element.offsetTop ];
+      _draggable.updateRects();
+      _mouseOffset = [ e.clientX - _elementRect.left, e.clientY - _elementRect.top ];
+      _onStart( e );
+    };
+
+    Object.defineProperties( _draggable, {
+      selected: {
+        enumerable: true,
+        get: function(){
+          return __selectedDraggables[ element.id ];
+        },
+        set: function( val ){
+          if ( val ) {
+            _oldZIndex = getComputedStyle( element ).getPropertyValue( "z-index" );
+            element.style.zIndex = MAXIMUM_Z_INDEX;
+            __selectedDraggables[ element.id ] = _draggable;
+          } else {
+            element.style.zIndex = _oldZIndex;
+            delete __selectedDraggables[ element.id ];
+          }
+        }
+      },
+      dragging: {
+        enumerable: true,
+        get: function(){
+          return _dragging;
+        }
+      },
+      element: {
+        enumerable: true,
+        get: function(){
+          return _element;
+        }
+      }
+    });
+
+    return _draggable;
   }
 
   function Sortable( parentElement, options ){

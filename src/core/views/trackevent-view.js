@@ -15,7 +15,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
         _type = type,
         _start = inputOptions.start || 0,
         _end = inputOptions.end || _start + 1,
-        _selected = false,
         _parent,
         _handles,
         _typeElement = document.createElement( "div" ),
@@ -91,7 +90,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
       },
       selected: {
         enumerable: true,
-        get: function(){ return _selected; },
+        get: function(){ return _draggable.selected; },
         set: function( val ){
           if( val ){
             select();
@@ -226,12 +225,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
     }, false);
 
     function select( e ){
-      _selected = true;
+      _draggable.selected = true;
       _element.setAttribute( "selected", true );
     } //select
 
     function deselect( e ) {
-      _selected = false;
+      _draggable.selected = false;
       _element.removeAttribute( "selected" );
     } //deselect
 
