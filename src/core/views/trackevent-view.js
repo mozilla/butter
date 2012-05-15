@@ -210,7 +210,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
 
     _element.addEventListener( "mousedown", function ( e ) {
       _this.dispatch( "trackeventmousedown", { originalEvent: e, trackEvent: trackEvent } );
-    }, false);
+    }, true);
     _element.addEventListener( "mouseup", function ( e ) {
       _this.dispatch( "trackeventmouseup", { originalEvent: e, trackEvent: trackEvent } );
     }, false);
