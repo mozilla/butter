@@ -16,7 +16,9 @@
             "./modules",
             "./dependencies",
             "ui/ui",
-            "util/xhr"
+            "util/xhr",
+            "./core/commands",
+            "./modules"
           ],
           function(
             EventManagerWrapper,
@@ -27,7 +29,9 @@
             Modules,
             Dependencies,
             UI,
-            XHR
+            XHR,
+            Commands,
+            Modules
           ){
 
     var __guid = 0,
@@ -655,6 +659,8 @@
             document.body.appendChild( img );
           } //if
         } //for
+
+        Commands( _this );
 
         //prepare modules first
         var moduleCollection = Modules( _this, _config ),

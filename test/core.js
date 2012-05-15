@@ -814,4 +814,174 @@
     });
   });
 
+  module( "UndoManager" );
+
+  test( "Clearing the UndoManager", function(){
+    expect( 1 );
+    createButter( function( butter ){
+      var undoManager = butter.undoManager,
+          command1 = {
+            execute: function(){
+              console.log( "execute command1" );
+            },
+            undo: function(){
+              console.log( "undo command1" );
+            }
+          },
+          command2 = {
+            execute: function(){
+              console.log( "execute command2" );
+            },
+            undo: function(){
+              console.log( "undo command2" );
+            }
+          };
+
+      undoManager.register( command1 );
+      undoManager.register( command2 );
+      undoManager.clear();
+      ok( !undoManager.canUndo() && !undoManager.canRedo(), "UndoManager has been cleared." );
+    });
+  });
+
+  test( "Register one command with execute and undo functions", function(){
+    expect( 1 );
+    createButter( function( butter ){
+      var undoManager = butter.undoManager,
+          command1 = {
+            execute: function(){
+              console.log( "execute command1" );
+            },
+            undo: function(){
+              console.log( "undo command1" );
+            }
+          };
+
+      undoManager.clear();
+      undoManager.register( command1 );
+      ok( undoManager.canUndo() && !undoManager.canRedo(), "UndoManager registered one command that has both execute and undo functions." );
+    });
+  });
+
+  test( "Register one command with execute function and no undo function", function(){
+    expect( 1 );
+    createButter( function( butter ){
+      var undoManager = butter.undoManager,
+          command1 = {
+            execute: function(){
+              console.log( "execute command1" );
+            }
+          };
+
+      undoManager.clear();
+      undoManager.register( command1 );
+      ok( !undoManager.canUndo() && !undoManager.canRedo(), "UndoManager did not register the command object that has no undo function." );
+    });
+  });
+
+  test( "Undo one command", function(){
+    expect( 1 );
+    createButter( function( butter ){
+      var undoManager = butter.undoManager,
+          command1 = {
+            execute: function(){
+              console.log( "execute command1" );
+            },
+            undo: function(){
+              console.log( "undo command1" );
+            }
+          };
+
+      undoManager.clear();
+      undoManager.register( command1 );
+      undoManager.undo();
+      ok( !undoManager.canUndo() && undoManager.canRedo(), "UndoManager undid the one command on the stack." );
+    });
+  });
+
+  test( "Undo two commands", function(){
+    expect( 2 );
+    createButter( function( butter ){
+      var undoManager = butter.undoManager,
+          command1 = {
+            execute: function(){
+              console.log( "execute command1" );
+            },
+            undo: function(){
+              console.log( "undo command1" );
+            }
+          },
+          command2 = {
+            execute: function(){
+              console.log( "execute command2" );
+            },
+            undo: function(){
+              console.log( "undo command2" );
+            }
+          };
+
+      undoManager.clear();
+      undoManager.register( command1 );
+      undoManager.register( command2 );
+      undoManager.undo();
+      ok( undoManager.canUndo() && undoManager.canRedo(), "UndoManager undid the first command and put it on the redo stack." );
+      undoManager.undo();
+      ok( !undoManager.canUndo() && undoManager.canRedo(), "UndoManager undid the second command and put it on the redo stack." );
+    });
+  });
+
+  test( "Redo one command", function(){
+    expect( 2 );
+    createButter( function( butter ){
+      var undoManager = butter.undoManager,
+          command1 = {
+            execute: function(){
+              console.log( "execute command1" );
+            },
+            undo: function(){
+              console.log( "undo command1" );
+            }
+          };
+
+      undoManager.clear();
+      undoManager.register( command1 );
+      undoManager.undo();
+      ok( !undoManager.canUndo() && undoManager.canRedo(), "UndoManager undid the first command and put it on the redo stack." );
+      undoManager.redo();
+      ok( undoManager.canUndo() && !undoManager.canRedo(), "UndoManager redid the first command and put it on the undo stack." );
+    });
+  });
+
+  test( "Redo two commands", function(){
+    expect( 1 );
+    createButter( function( butter ){
+      var undoManager = butter.undoManager,
+          command1 = {
+            execute: function(){
+              console.log( "execute command1" );
+            },
+            undo: function(){
+              console.log( "undo command1" );
+            }
+          },
+          command2 = {
+            execute: function(){
+              console.log( "execute command2" );
+            },
+            undo: function(){
+              console.log( "undo command2" );
+            }
+          };
+
+      undoManager.clear();
+      undoManager.register( command1 );
+      undoManager.register( command2 );
+      undoManager.undo();
+      undoManager.undo();
+      undoManager.redo();
+      undoManager.redo();
+      ok( undoManager.canUndo() && !undoManager.canRedo(), "UndoManager redid two commands." );
+    });
+  });
+
 })(window, window.document );

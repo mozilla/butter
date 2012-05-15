@@ -113,7 +113,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     if( options.enabled !== false ){
       document.body.appendChild( _element );
       butter.listen( "mediaadded", function( e ){
-        e.data.createView();
+        e.data.createView( butter );
       });
     }
 
@@ -350,9 +350,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
       8: function( e ) { // del key
         if( butter.selectedEvents.length ) {
           e.preventDefault();
-          for( var i = 0; i < butter.selectedEvents.length; i++ ) {
-            butter.selectedEvents[ i ].track.removeTrackEvent( butter.selectedEvents[ i ] );
-          } // for
+          butter.removeTrackEvents( butter.selectedEvents );
           butter.selectedEvents = [];
         } // if
       }, // del key

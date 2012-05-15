@@ -103,8 +103,8 @@
       this.popcornCallbacks = null;
       this.popcornScripts = null;
 
-      this.createView = function(){
-        _view = new MediaView( this, {
+      this.createView = function( butter ){
+        _view = new MediaView( butter, this, {
           onDropped: onDroppedOnView
         });
       };
@@ -139,11 +139,11 @@
         _popcornWrapper.destroyEvent( trackEvent );
       } //onTrackEventRemoved
 
-      this.addTrack = function ( track ) {
+      this.addTrack = function ( track, order ) {
         if ( !( track instanceof Track ) ) {
           track = new Track( track );
         } //if
-        track.order = _tracks.length;
+        track.order = ( order >= 0 ) ? order : _tracks.length;
         track._media = _this;
         _tracks.push( track );
         _this.chain( track, [
