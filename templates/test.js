@@ -43,10 +43,20 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
         document.getElementById("title").setAttribute("contenteditable", true);
 
-        callback && callback();
+        butter.listen("trackeventdoubleclicked", function(e) {
+        console.log( e );
+
+        });
+
+        butter.listen("trackeventselected", function(e) {
+          console.log( "foo" );
+          
+        });
+
+        callback && callback(butter, media, popcorn);
     }
 
-    t.initCallback = function(){
+    t.initCallback = function( butter, media, popcorn ){
     // This function runs after butter first initializes.
       t.showTray( true );
 
@@ -70,6 +80,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       controls.appendChild( btn2 );
 
       //Or, in jQuery....
+      /*
       var btn3 = document.createElement("button");
       $(btn3).text( "Reset!" );
       $(btn3).click( function() {
@@ -85,9 +96,11 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         t.showTray(true);
         $(this).text("Hide tray");
       });
-
+    
       $("#template-controls").append( btn3, btn4 );
-
+      
+      */ 
+    
     }
 
     t.butterMediaLoaded = function( butter, media, popcorn ) {
