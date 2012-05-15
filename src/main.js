@@ -8,11 +8,11 @@
       DEFAULT_TRACKEVENT_OFFSET = 0.01;
 
   define( [
-            "./core/eventmanager",
-            "./core/logger",
-            "./core/target",
-            "./core/media",
-            "./core/page",
+            "core/eventmanager",
+            "core/logger",
+            "core/target",
+            "core/media",
+            "core/page",
             "./modules",
             "./dependencies",
             "ui/ui",
