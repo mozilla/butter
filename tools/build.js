@@ -7,6 +7,10 @@
   // Where to find the module names listed below.
   baseUrl: '../src',
 
+  paths: {
+    'text': '../external/require/text'
+  },
+
   // Use has branch trimming in the build to remove the document.write
   // code in src/butter.js after a minification is done.
   has: {

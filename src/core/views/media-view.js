@@ -1,50 +1,25 @@
-define( [ "ui/page-element", "ui/logo-spinner" ], function( PageElement, LogoSpinner ){
-  
+define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "text!layouts/media-view.html" ],
+  function( PageElement, LogoSpinner, LangUtils, HTML_TEMPLATE ){
+
   var DEFAULT_SUBTITLE = "Supports HTML5 video, YouTube, and Vimeo";
 
   return function( media, options ){
     var _media = media,
         _pageElement,
         _onDropped = options.onDropped || function(){},
-        _propertiesElement = document.createElement( "div" ),
         _logoSpinner,
         _this = this;
 
-    _propertiesElement.className = "butter-media-properties";
-    _propertiesElement.setAttribute( "data-butter-exclude", true );
-
-    var editMessage = document.createElement( "p");
-    editMessage.className = "edit-message";
-    editMessage.innerHTML = "Edit source...";
-    _propertiesElement.appendChild(editMessage);
-    var urlTextbox = document.createElement( "input" );
-    urlTextbox.type = "text";
-    urlTextbox.className = "url";
-    var title = document.createElement( "h3" );
-    title.innerHTML = "Video/Audio URL";
-    var subtitle = document.createElement( "p" );
-    subtitle.className = "form-field-notes";
-    subtitle.innerHTML = DEFAULT_SUBTITLE;
-    var container = document.createElement( "container" );
-    container.className = "container";
-    var innerContainer = document.createElement( "div" );
-    innerContainer.className = "inner-container";
-    var changeButton = document.createElement( "button" );
-    changeButton.innerHTML = "Save";
-    var loadingContainer = document.createElement( "div" );
-    loadingContainer.className = "loading-container";
+    var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE ),
+        urlTextbox = _propertiesElement.querySelector( "input" ),
+        subtitle = _propertiesElement.querySelector( ".form-field-notes" ),
+        changeButton = _propertiesElement.querySelector( "button" ),
+        loadingContainer = _propertiesElement.querySelector( ".loading-container" );
 
     _logoSpinner = LogoSpinner( loadingContainer );
 
-    innerContainer.appendChild( title );
-    innerContainer.appendChild( urlTextbox );
-    innerContainer.appendChild( subtitle );
-    innerContainer.appendChild( changeButton );
-    innerContainer.appendChild( loadingContainer );
-    container.appendChild( innerContainer );
-
-    _propertiesElement.appendChild( container );
-
+    subtitle.innerHTML = DEFAULT_SUBTITLE;
+    
     function showError( state, message ){
       if( state ){
         subtitle.innerHTML = message;
