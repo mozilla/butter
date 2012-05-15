@@ -62,14 +62,11 @@ define( [], function(){
     var _container = document.createElement( "div" ),
         _timeBox = document.createElement( "input" ),
         _media = media,
-        _oldValue = 0,
-        _this = this;
+        _oldValue = 0;
 
     _container.className = "time-container";
     _container.appendChild( _timeBox );
     _timeBox.type = "text";
-
-    var timeCheckRegex = /[^0123456789:\.]/;
 
     function setTime( time, setCurrentTime ){
       if( typeof( time ) === "string" || !isNaN( time ) ){

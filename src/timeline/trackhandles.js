@@ -52,8 +52,7 @@ define( [
           trackName = track.name,
           trackDiv = document.createElement( "div" ),
           menuDiv = document.createElement( "div" ),
-          deleteButton = document.createElement( "div" ),
-          editButton = document.createElement( "div" );
+          deleteButton = document.createElement( "div" );
 
       menuDiv.className = "menu";
       deleteButton.className = "delete";

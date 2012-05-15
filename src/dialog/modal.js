@@ -15,8 +15,7 @@ define( [], function(){
       document.body.appendChild( __container );
     } //if
 
-    var _element = document.createElement( "div" ),
-        _this = this;
+    var _element = document.createElement( "div" );
 
     _element.className = "layer";
 

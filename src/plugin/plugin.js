@@ -15,7 +15,6 @@ define( [ "util/dragndrop", "util/lang" ], function( DragNDrop, LangUtils ){
         _path = pluginOptions.path,
         _manifest = {},
         _type = pluginOptions.type,
-        _element,
         _helper = document.getElementById( _this.type + "-icon" ) ||
                   document.getElementById( "default-icon" );
 
