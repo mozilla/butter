@@ -16,7 +16,8 @@
             "./modules",
             "./dependencies",
             "ui/ui",
-            "util/xhr"
+            "util/xhr",
+            "code-editor/editor"
           ],
           function(
             EventManagerWrapper,
@@ -27,7 +28,8 @@
             Modules,
             Dependencies,
             UI,
-            XHR
+            XHR,
+            CodeEditor
           ){
 
     var __guid = 0,
