@@ -2,6 +2,11 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
+/**
+ * Module: TrackEvent
+ * 
+ * Supports a single event in the Media > Track > TrackEvent model.
+ */
 define( [
           "./logger",
           "./eventmanager",
@@ -19,6 +24,13 @@ define( [
 
   var __guid = 0;
 
+  /**
+   * Class: TrackEvent
+   *
+   * Represents and governs a single popcorn event.
+   *
+   * @param {Object} options: Options for initialization. Can contain the properties type, name, and popcornOptions. If the popcornOptions property is specified, its contents will be used to initialize the plugin instance associated with this TrackEvent.
+   */
   var TrackEvent = function ( options ) {
 
     options = options || {};
@@ -50,6 +62,15 @@ define( [
     _popcornOptions.end = _popcornOptions.end || _popcornOptions.start + 1;
     _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
 
+    /**
+     * Member: update
+     *
+     * Updates the event properties and runs sanity checks on input.
+     *
+     * @param {Object} updateOptions: Object containing plugin-specific properties to be updated for this TrackEvent.
+     * @event trackeventupdatefailed: Occurs when an update operation failed because of conflicting times or other serious property problems. As the data property on this event is a string which represents the reason for failure.
+     * @event trackeventupdated: Occurs whenan update operation succeeded.
+     */
     this.update = function( updateOptions ) {
       var failed = false,
           newStart = _popcornOptions.start,
@@ -98,6 +119,15 @@ define( [
 
     }; //update
 
+    /**
+     * Member: moveFrameLeft
+     *
+     * Moves the event to the left, or shrinks it by a specified amount.
+     *
+     * @param {Number} inc: Amount by which the event is to move or grow.
+     * @param {Boolean} metaKey: State of the metaKey (windows, command, etc.). When true, the event duration is shortened.
+     * @event trackeventupdated: Occurs whenan update operation succeeded.
+     */
     this.moveFrameLeft = function( inc, metaKey ){
       if( !metaKey ) {
         if( _popcornOptions.start > inc ) {
@@ -116,6 +146,15 @@ define( [
       _view.update( _popcornOptions );
     }; //moveFrameLeft
 
+    /**
+     * Member: moveFrameRight
+     *
+     * Moves the event to the right, or elongates it by a specified amount.
+     *
+     * @param {Number} inc: Amount by which the event is to move or grow.
+     * @param {Boolean} metaKey: State of the metaKey (windows, command, etc.). When true, the event duration is lengthened.
+     * @event trackeventupdated: Occurs whenan update operation succeeded.
+     */
     this.moveFrameRight = function( inc, metaKey ){
       if( _popcornOptions.end < _track._media.duration - inc ) {
         _popcornOptions.end += inc;
@@ -139,6 +178,13 @@ define( [
     });
 
     Object.defineProperties( this, {
+
+      /**
+       * Property: _track
+       *
+       * Specifies the track on which this TrackEvent currently sites. When set, an update occurs.
+       * @malleable: Yes, but not recommended. Butter will manipulate this value automatically. Other uses may yield unexpected results.
+       */
       _track: {
         enumerable: true,
         get: function(){
@@ -149,6 +195,13 @@ define( [
           _this.update( _popcornOptions );
         }
       },
+
+      /**
+       * Property: view
+       *
+       * A reference to the view object generated for this TrackEvent.
+       * @malleable: No.
+       */
       view: {
         enumerable: true,
         configurable: false,
@@ -156,24 +209,55 @@ define( [
           return _view;
         }
       },
+
+      /**
+       * Property: type
+       *
+       * The type representing the popcorn plugin created and manipulated by this TrackEvent.
+       * @malleable: No.
+       */
       type: {
         enumerable: true,
         get: function(){
           return _type;
         }
       },
+
+      /**
+       * Property: name
+       *
+       * Name of this TrackEvent.
+       * @malleable: No.
+       */
       name: {
         enumerable: true,
         get: function(){
           return _name;
         }
       },
+
+      /**
+       * Property: id
+       *
+       * Name of this TrackEvent.
+       * @malleable: No.
+       */
       id: {
         enumerable: true,
         get: function(){
           return _id;
         }
       },
+
+      /**
+       * Property: selected
+       *
+       * Specifies the state of selection. When true, this TrackEvent is selected.
+       *
+       * @malleable: Yes.
+       * @event trackeventselected: Dispatched when selected state changes to true.
+       * @event trackeventdeselected: Dispatched when selected state changes to false.
+       */
       selected: {
         enumerable: true,
         get: function(){
@@ -192,6 +276,15 @@ define( [
           } //if
         }
       },
+
+      /**
+       * Property: json
+       *
+       * Represents this TrackEvent in a portable JSON format.
+       *
+       * @malleable: Yes. Will import JSON in the same format that it was exported.
+       * @event trackeventupdated: When this property is set, the TrackEvent's data will change, so a trackeventupdated event will be dispatched.
+       */
       json: {
         enumerable: true,
         get: function(){

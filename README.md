@@ -54,6 +54,11 @@ Before contributing a new patch be sure to run the following:
 * `node make check` to lint butter
 * run the qUnit tests in the test/ directory to be sure you broke nothing
 
+Documentation
+-------------
+
+Documentation can be created from the source files by running `node make docs`. Running this command will create `/doc` and fill it with markdown files corresponding to documentation found within the source.
+
 Getting Involved
 ----------------
 

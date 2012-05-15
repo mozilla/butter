@@ -16,3 +16,4 @@ node_modules
 cornfield/view
 css/butter.ui.css
 cornfield/config/runtime.json
+docs
