@@ -10,7 +10,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "text!layouts/media
         _logoSpinner,
         _this = this;
 
-    var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE ).firstChild,
+    var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE ),
         urlTextbox = _propertiesElement.querySelector( "input" ),
         subtitle = _propertiesElement.querySelector( ".form-field-notes" ),
         changeButton = _propertiesElement.querySelector( "button" ),

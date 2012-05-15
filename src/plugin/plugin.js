@@ -80,7 +80,7 @@ define( [ "util/dragndrop", "util/lang" ], function( DragNDrop, LangUtils ){
       }
       else {
         var patternInstance = pattern.replace( /\$type/g, _this.type );
-        pluginElement = LangUtils.domFragment( patternInstance ).firstChild;
+        pluginElement = LangUtils.domFragment( patternInstance );
       }
       pluginElement.id = PLUGIN_ELEMENT_PREFIX + _this.type;
       pluginElement.setAttribute( "data-butter-plugin-type", _this.type );
