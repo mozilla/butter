@@ -299,7 +299,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
             trackEvent = trackEvents[ i ];
             if( trackEvent._natives.manifest ) {
               popcornOptions = trackEvent._natives.manifest.options;
-            else {
+            } else {
               popcornOptions = {};
               console.log( "WARNING: There was no manifest for trackEvent:", trackEvent );
             }
