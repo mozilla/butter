@@ -9,6 +9,14 @@ document.addEventListener( "DOMContentLoaded", function( e ){
     t.butterInit = function( butter, media, popcorn, callback ) {
     // This function runs only once, when butter initializes. 
     // You should create tracks & starting track events here.
+
+      butter.listen("trackeventadded", function( e ) {
+        e.data.view.listen( "trackeventdoubleclicked", function(e) {
+          console.log( e );
+          t._editing = e.data.trackEvent;
+        });
+      });
+
       var track = media.addTrack( "Track1" );
         media.addTrack( "Track" + Math.random() );
         media.addTrack( "Track" + Math.random() );
@@ -42,16 +50,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         });
 
         document.getElementById("title").setAttribute("contenteditable", true);
-
-        butter.listen("trackeventdoubleclicked", function(e) {
-        console.log( e );
-
-        });
-
-        butter.listen("trackeventselected", function(e) {
-          console.log( "foo" );
-          
-        });
 
         callback && callback(butter, media, popcorn);
     }
@@ -142,6 +140,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           start();
           butter.listen( "mediaready", start );
 
+          window.template = t;
           window.butter = butter;
         }
       });
