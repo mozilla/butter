@@ -1136,7 +1136,7 @@ input.form-error {
   overflow: hidden;
   display: block;
   height: 27px;
-  margin-top: 1px;
+  padding: 1px;
   line-height: 25px;
   opacity: 0.8;
   position: absolute;
