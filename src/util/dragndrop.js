@@ -36,18 +36,18 @@ define([], function(){
     __mouseDiff[ 1 ] = __mousePos[ 1 ] - __mouseLast[ 1 ];
 
     var remembers = [],
-        selectedDroppable,
+        selectedDraggable,
         droppable,
         remember;
 
     for( var id in __selectedDraggables ){
       if( __selectedDraggables.hasOwnProperty( id ) ){
-        selectedDroppable = __selectedDraggables[ id ];
-        if( !selectedDroppable.dragging ){
-          selectedDroppable.start( e );
+        selectedDraggable = __selectedDraggables[ id ];
+        if( !selectedDraggable.dragging ){
+          selectedDraggable.start( e );
         }
-        selectedDroppable.update();
-        remembers.push( selectedDroppable );
+        selectedDraggable.update();
+        remembers.push( selectedDraggable );
       }
     }
 
@@ -220,14 +220,14 @@ define([], function(){
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
         _updateInterval = -1;
-        _onStop( e );
+        _onStop();
       }
 
       function onMouseMove( e ){
         mousePosition = e.clientX;
         if( _updateInterval === -1 ){
           _updateInterval = setInterval( update, SCROLL_INTERVAL );
-          _onStart( e );
+          _onStart();
         }
       }
 
@@ -276,14 +276,14 @@ define([], function(){
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
         _updateInterval = -1;
-        _onStop( e );
+        _onStop();
       }
 
       function onMouseMove( e ){
         mousePosition = e.clientX;
         if( _updateInterval === -1 ){
           _updateInterval = setInterval( update, SCROLL_INTERVAL );
-          _onStart( e );
+          _onStart();
         }
       }
 
@@ -329,12 +329,12 @@ define([], function(){
         img.src = _image.src;
         e.dataTransfer.setDragImage( img, img.width / 2, img.height / 2 );
       }
-      _onStart( e );
+      _onStart();
     });
 
     element.addEventListener( "dragend", function( e ){
       __currentDraggingElement = null;
-      _onStop( e );
+      _onStop();
     });
 
     element.addEventListener( "drop", function( e ){
@@ -563,7 +563,7 @@ define([], function(){
       }
 
       _dragging = false;
-      _onStop( e );
+      _onStop();
       if( _droppable && _droppable.drop( _draggable ) && _revert ){
         element.style.left = _originalPosition[ 0 ] + "px";
         element.style.top = _originalPosition[ 1 ] + "px";
@@ -630,7 +630,7 @@ define([], function(){
       _originalPosition = [ element.offsetLeft, element.offsetTop ];
       _draggable.updateRects();
       _mouseOffset = [ e.clientX - _elementRect.left, e.clientY - _elementRect.top ];
-      _onStart( e );
+      _onStart();
     };
 
     Object.defineProperties( _draggable, {
