@@ -12,6 +12,16 @@
     var b = new Butter({
       config: "cornfield-test-config.json",
         ready: function( butter ){
+          var filename = "test" + Date.now(),
+              data = {
+                name: filename,
+                html: "herpderp",
+                data: { stuff: "derpherp" },
+                template: "pop"
+              },
+              stringedData = JSON.stringify(data.data),
+              data = JSON.stringify(data);
+
           module( "Unauthenticated tests" );
 
           asyncTest("Sync API", 1, function() {
@@ -22,23 +32,21 @@
           asyncTest("Async API", 4, function() {
             butter.cornfield.logout(function(res) {
               equal(res, true, "Cornfield server is active");
-            });
 
-            butter.cornfield.list(function(res) {
-              deepEqual( res, { error: 'unauthorized' }, 'Not allowed to list files' );
-            });
+              butter.cornfield.list(function(res) {
+                deepEqual( res, { error: "unauthorized" }, "Not allowed to list projects" );
 
-            butter.cornfield.pull("test1", function(res) {
-              deepEqual( JSON.parse(res), { error: 'unauthorized' }, 'Not allowed to get files' );
-            });
+                butter.cornfield.load(filename, function(res) {
+                  deepEqual( res, { error: "unauthorized" }, "Not allowed to get projects" );
 
-            butter.cornfield.push("test1", "test1", function(res) {
-              deepEqual( res, { error: 'unauthorized' }, 'Not allowed to put files' );
-            });
+                  butter.cornfield.saveas(filename, data, function(res) {
+                    deepEqual( res, { error: "unauthorized" }, "Not allowed to save projects" );
 
-            setTimeout(function() {
-              start();
-            }, 500);
+                    start();
+                  });
+                });
+              });
+            });
           });
 
           module( "Authentication tests" );
@@ -62,40 +70,46 @@
 
           asyncTest("Async API", 7, function() {
             // Create a random filename we'll use for testing
-            var filename = "test" + Date.now();
+            var foundProject = false;
 
-            butter.cornfield.list(function(res){
-              ok(res, 'The file list response has data');
-              equal(res.error, 'okay', 'File list status is "okay"');
-              ok(res.filenames, 'There is a list of filenames');
-              equal(res.filenames.indexOf(filename), -1, filename + ' is not present in the file list');
+            butter.cornfield.list( function( res ){
+              ok(res, "The project list response has data" );
+              equal( res.error, "okay", "Project list status is \"okay\"" );
+              ok( res.projects, "There is a list of projects" );
 
-              butter.cornfield.pull(filename, function(res){
-                deepEqual(JSON.parse(res), { error: 'file not found' }, 'The file pull response is file not found');
+              for( i = 0, len = res.projects.length; i < len; i++ ){
+                if( res.projects[ i ].name === filename ){
+                  foundProject = true;
+                  break;
+                }
+              }
 
-                butter.cornfield.push(filename, filename, function(res){
-                  deepEqual(res, { error: 'okay' }, 'The file push response is okay');
+              equal( false, foundProject, filename + " is not present in the projects list" );
 
-                  butter.cornfield.pull(filename, function(res){
-                    equal(res, filename, 'The file is the same');
-                  })
+              butter.cornfield.load( filename, function( res ){
+                deepEqual( res, { error: "project not found" }, "The project load response is project not found" );
+
+                butter.cornfield.saveas(filename, data, function(res){
+                  deepEqual( res.error, "okay", "The project save response is okay" );
+
+                  filename = res.project._id;
+
+                  butter.cornfield.load(filename, function(res){
+                    equal( res.project, stringedData, "The project is the same" );
+
+                    start();
+                  });
                 });
               });
             });
-
-            setTimeout(function() {
-              start();
-            }, 1000);
           });
 
           asyncTest("Logout", 1, function() {
             butter.cornfield.logout(function(res) {
               equal(res, true, "Clean-up");
-            });
 
-            setTimeout(function() {
               start();
-            }, 500);
+            });
           });
         }
     });
