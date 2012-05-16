@@ -86,7 +86,7 @@ define([], function(){
 
   function __drop(){
     for( var i=__droppables.length - 1; i>=0; --i ){
-      if ( __droppables[ i ].drop() ) {
+      if( __droppables[ i ].drop() ){
         return true;
       }
     return false;
@@ -409,7 +409,7 @@ define([], function(){
       },
       forget: function( draggable ){
         if( _draggedElements[ draggable.element.id ] ){
-          if ( --_draggedCount === 0 ) {
+          if( --_draggedCount === 0 ){
             element.classList.remove( _hoverClass );
           }
           draggable.droppable = null;
@@ -420,7 +420,7 @@ define([], function(){
       drop: function( draggable ){
 
         if( _draggedElements[ draggable.element.id ] ){
-          if ( --_draggedCount === 0 ) {
+          if( --_draggedCount === 0 ){
             element.classList.remove( _hoverClass );
           }
           draggable.droppable = _droppable;
@@ -552,7 +552,7 @@ define([], function(){
     function onMouseUp( e ){
       window.removeEventListener( "mousemove", onDragged, false );
 
-      if ( !_dragging ) {
+      if( !_dragging ){
         return;
       }
 
@@ -661,7 +661,7 @@ define([], function(){
         get: function(){
           return _droppable;
         },
-        set: function( val ) {
+        set: function( val ){
           _droppable = val;
         }
       }
