@@ -128,7 +128,7 @@
       } //onTrackEventAdded
 
       function onTrackEventUpdated( e ){
-        _popcornWrapper.updateEvent( e.data );
+        _popcornWrapper.updateEvent( e.target );
       } //onTrackEventUpdated
 
       function onTrackEventRemoved( e ){
