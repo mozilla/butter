@@ -560,7 +560,7 @@ define([], function(){
       if( !_droppable && _revert ){
         element.style.left = _originalPosition[ 0 ] + "px";
         element.style.top = _originalPosition[ 1 ] + "px";
-      } else {
+      } else if ( _droppable ){
         _droppable.drop( _draggable );
       }
     }
