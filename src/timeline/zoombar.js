@@ -66,8 +66,7 @@ define( [], function(){
 
       var posX = e.pageX,
           handleRect = _handle.getBoundingClientRect(),
-          elementRect = _element.getBoundingClientRect(),
-          p;
+          elementRect = _element.getBoundingClientRect();
 
       if( posX > handleRect.right ) {
         _handle.style.left = ( ( posX - elementRect.left ) - _handleWidth ) + "px";

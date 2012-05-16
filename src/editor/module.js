@@ -4,12 +4,10 @@
 
 (function() {
 
-  define( [ "core/logger",
-            "core/eventmanager",
+  define( [ "core/eventmanager",
             "core/trackevent",
             "./editor"
           ], function(
-            Logger,
             EventManagerWrapper,
             TrackEvent,
             Editor
@@ -20,7 +18,6 @@
       moduleOptions = moduleOptions || {};
 
       var _editors = {},
-          _logger = new Logger( "EventEditor" ),
           _editorContainer,
           _openEditor,
           _this = this;

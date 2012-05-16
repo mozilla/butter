@@ -28,15 +28,10 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _onFail = options.fail || function(){},
         _onPlayerTypeRequired = options.playerTypeRequired || function(){},
         _onTimeout = options.timeout || function(){},
-        _url = options.setup && options.setup.url,
-        _target = options.target && options.setup.target,
         _popcorn,
         _mediaType,
-        _popcornTarget,
         _butterEventMap = {},
-        _mediaLoadAttempts = 0,
         _interruptLoad = false,
-        _playerReady = false,
         _this = this;
 
     /* Destroy popcorn bindings specfically without touching other discovered
@@ -105,8 +100,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
     // Destroy a Popcorn trackevent
     this.destroyEvent = function( trackEvent ){
-      var options = trackEvent.popcornOptions,
-          butterId = trackEvent.id,
+      var butterId = trackEvent.id,
           popcornId = _butterEventMap[ butterId ];
 
       // ensure the trackevent actually exists before we remove it
@@ -199,8 +193,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
      * dwell in.
      */
     function constructPlayer( target ){
-      var script,
-          targetElement = document.getElementById( target );
+      var targetElement = document.getElementById( target );
 
       if( _mediaType !== "object" && targetElement ) {
         if( [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) !== -1 ) {

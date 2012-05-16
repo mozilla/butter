@@ -257,7 +257,6 @@ define([], function(){
         _onOver = options.over || function(){},
         _onOut = options.out || function(){},
         _mousePos,
-        _zIndex,
         _draggedElement;
 
     element.addEventListener( "drop", function( e ){
@@ -400,9 +399,7 @@ define([], function(){
 
     function updatePosition(){
       var x = _mousePos[ 0 ] - _mouseOffset[ 0 ],
-          y = _mousePos[ 1 ] - _mouseOffset[ 1 ],
-          r = x + _elementRect.width,
-          b = y + _elementRect.height;
+          y = _mousePos[ 1 ] - _mouseOffset[ 1 ];
 
       if( !_axis || _axis.indexOf( "x" ) > -1 ){
         element.style.left = ( x - _offsetParentRect.left ) + "px";
