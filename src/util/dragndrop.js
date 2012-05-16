@@ -45,11 +45,11 @@ define([], function(){
         selectedDraggable = __selectedDraggables[ id ];
         if( !selectedDraggable.dragging ){
           selectedDraggable.start( e );
-        }
+        } //if
         selectedDraggable.update();
         remembers.push( selectedDraggable );
-      }
-    }
+      } //if
+    } //for
 
     for( var i = __droppables.length - 1; i >= 0; --i ){
       droppable = __droppables[ i ];
@@ -61,9 +61,9 @@ define([], function(){
           droppable.remember( remember );
         }else{
           droppable.forget( remember );
-        }
-      }
-    }
+        } //if
+      } //for
+    } //for
   };
 
   function getPaddingRect( element ){
@@ -411,28 +411,28 @@ define([], function(){
           _draggedElements[ draggable.element.id ] = draggable;
           draggable.droppable = _droppable;
           _onOver( draggable.element );
-        }
+        } //if
       },
       forget: function( draggable ){
         if( _draggedElements[ draggable.element.id ] ){
           if( --_draggedCount === 0 ){
             element.classList.remove( _hoverClass );
-          }
+          } //if
           draggable.droppable = null;
           _onOut( draggable.element );
           delete _draggedElements[ draggable.element.id ];
-        }
+        } // if
       },
       drop: function( draggable ){
 
         if( _draggedElements[ draggable.element.id ] ){
           if( --_draggedCount === 0 ){
             element.classList.remove( _hoverClass );
-          }
+          } //if
           draggable.droppable = _droppable;
           _onDrop( draggable.element, __mousePos );
           delete _draggedElements[ draggable.element.id ];
-        }
+        } //if
       },
       drag: function( dragElementRect ){
         var rect = element.getBoundingClientRect();
@@ -541,8 +541,8 @@ define([], function(){
       for( var id in __selectedDraggables ){
         if( __selectedDraggables.hasOwnProperty( id ) ){
           __selectedDraggables[ id ].updateRects();
-        }
-      }
+        } //if
+      } //for
     }
 
     function onMouseDown( e ){
@@ -647,7 +647,7 @@ define([], function(){
           } else {
             element.style.zIndex = _oldZIndex;
             delete __selectedDraggables[ element.id ];
-          }
+          } //if
         }
       },
       dragging: {
