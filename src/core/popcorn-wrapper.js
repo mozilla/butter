@@ -297,7 +297,12 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         if ( trackEvents ) {
           for ( i=0, l=trackEvents.length; i<l; ++i ) {
             trackEvent = trackEvents[ i ];
-            popcornOptions = trackEvent._natives.manifest.options;
+            if( trackEvent._natives.manifest ) {
+              popcornOptions = trackEvent._natives.manifest.options;
+            } else {
+              popcornOptions = {};
+              _logger.log( "WARNING: There was no manifest for trackEvent:", trackEvent );
+            }
             saveOptions = {};
             for ( option in popcornOptions ) {
               if ( popcornOptions.hasOwnProperty( option ) ) {
