@@ -118,7 +118,7 @@ define( [
 
       _currentMouseDownTrackEvent = trackEvent;
 
-      if( trackEvent.selected === true && originalEvent.shiftKey && _selectedTracks.length > 1 ){
+      if( trackEvent.selected === true && originalEvent.shiftKey && _selectedTracks.length > 1  && originalEvent.srcElement.className.split( " " ).indexOf( "handle" ) === -1 ){
         trackEvent.selected = false;
       }
       else {
