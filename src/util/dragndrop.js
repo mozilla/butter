@@ -62,6 +62,31 @@ define([], function(){
     } //for
   }
 
+  function onMouseUp( e ){
+    window.removeEventListener( "mousemove", onDragged, false );
+
+    var selectedDraggable;
+
+    for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
+      selectedDraggable = __selectedDraggables[ i ];
+      if( selectedDraggable.dragging ){
+        selectedDraggable.stop();
+      } //if
+      //selectedDraggable.update();
+      //remembers.push( selectedDraggable );
+    } //for
+  }
+
+  function onMouseDown( e ){
+    if( e.which !== 1 ){
+      return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+    window.addEventListener( "mousemove", onDragged, false );
+    window.addEventListener( "mouseup", onMouseUp, false );
+  }
+
   function getPaddingRect( element ){
     var style = getComputedStyle( element ),
           top = style.getPropertyValue( "padding-top" ),
@@ -538,33 +563,6 @@ define([], function(){
       } //for
     }
 
-    function onMouseDown( e ){
-      if( e.which !== 1 ){
-        return;
-      }
-      e.preventDefault();
-      e.stopPropagation();
-      window.addEventListener( "mousemove", onDragged, false );
-      window.addEventListener( "mouseup", onMouseUp, false );
-    }
-
-    function onMouseUp( e ){
-      window.removeEventListener( "mousemove", onDragged, false );
-
-      if( !_dragging ){
-        return;
-      }
-
-      _dragging = false;
-      _onStop();
-      if( !_droppable && _revert ){
-        element.style.left = _originalPosition[ 0 ] + "px";
-        element.style.top = _originalPosition[ 1 ] + "px";
-      } else if ( _droppable ){
-        _droppable.drop( _draggable );
-      }
-    }
-
     function checkContainment(){
       var x = _elementRect.left,
           y = _elementRect.top,
@@ -616,16 +614,22 @@ define([], function(){
     };
 
     _draggable.start = function( e ){
-
-      if( _dragging ){
-        return;
-      }
-
       _dragging = true;
       _originalPosition = [ element.offsetLeft, element.offsetTop ];
       _draggable.updateRects();
       _mouseOffset = [ e.clientX - _elementRect.left, e.clientY - _elementRect.top ];
       _onStart();
+    };
+
+    _draggable.stop = function(){
+      _dragging = false;
+      _onStop();
+      if( !_droppable && _revert ){
+        element.style.left = _originalPosition[ 0 ] + "px";
+        element.style.top = _originalPosition[ 1 ] + "px";
+      } else if ( _droppable ){
+        _droppable.drop( _draggable );
+      }
     };
 
     Object.defineProperties( _draggable, {
