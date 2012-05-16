@@ -63,7 +63,7 @@ target['check-lint'] = function() {
     return file.match(/\.js$/);
   }).join(" ");
 
-  exec(JSLINT + ' ' + files);
+  exec(JSLINT + ' ' + files + ' --show-non-errors');
 };
 
 target.build = function() {

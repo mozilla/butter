@@ -4,7 +4,7 @@
 
 /**
  * Module: TrackEvent
- * 
+ *
  * Supports a single event in the Media > Track > TrackEvent model.
  */
 define( [
@@ -41,7 +41,6 @@ define( [
         _logger = new Logger( _id ),
         _track,
         _type = options.type + "",
-        _properties = [],
         _popcornOptions = options.popcornOptions || {
           start: 0,
           end: 1

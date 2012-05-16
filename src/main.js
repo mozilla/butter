@@ -41,8 +41,7 @@
 
       butterOptions = butterOptions || {};
 
-      var _events = {},
-          _media = [],
+      var _media = [],
           _currentMedia,
           _targets = [],
           _id = "Butter" + __guid++,
@@ -311,7 +310,6 @@
         media.popcornCallbacks = _defaultPopcornCallbacks;
         media.popcornScripts = _defaultPopcornScripts;
 
-        var mediaName = media.name;
         _media.push( media );
 
         _this.chain( media, [

@@ -47,8 +47,6 @@ define( [
         _rootElement = document.createElement( "div" ),
         _container = document.createElement( "div" ),
         _mediaStatusContainer = document.createElement( "div" ),
-        _trackliner,
-        _tracks = {},
         _selectedTracks = [],
         _hScrollBar = new Scrollbars.Horizontal( _tracksContainer ),
         _vScrollBar = new Scrollbars.Vertical( _tracksContainer ),
@@ -237,7 +235,7 @@ define( [
         defaultTarget = butter.targets[ 0 ];
       } //if
 
-      var trackEvent = track.addTrackEvent({
+      track.addTrackEvent({
         popcornOptions: {
           start: start,
           end: start + 1,

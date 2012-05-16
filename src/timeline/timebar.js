@@ -13,8 +13,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
         _canvasContainer = document.createElement( "div" ),
         _media = media,
         _tracksContainer = tracksContainer,
-        _scrubber = new Scrubber( butter, _element, _media, _tracksContainer, hScrollbar ),
-        _this = this;
+        _scrubber = new Scrubber( butter, _element, _media, _tracksContainer, hScrollbar );
 
     _element.className = "time-bar";
     _canvasContainer.className = "time-bar-canvas-container";

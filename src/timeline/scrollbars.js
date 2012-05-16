@@ -9,7 +9,6 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
   function Vertical( tracksContainer ){
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
-        _tracksContainer = tracksContainer,
         _containerParent = tracksContainer.element,
         _containerChild = tracksContainer.container,
         _elementHeight,
@@ -137,7 +136,6 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
   function Horizontal( tracksContainer ){
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
-        _tracksContainer = tracksContainer,
         _containerParent = tracksContainer.element,
         _containerChild = tracksContainer.container,
         _elementWidth,

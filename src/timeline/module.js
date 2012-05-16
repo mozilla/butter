@@ -85,10 +85,6 @@ define( [
       _media[ mediaObject.id ] = media;
       _parentElement.appendChild( media.element );
 
-      function mediaReady( e ){
-        butter.dispatch( "timelineready" );
-      } //mediaReady
-
       function mediaChanged( event ){
         if ( _currentMedia !== _media[ event.data.id ] ){
           if ( _currentMedia ) {

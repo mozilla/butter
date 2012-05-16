@@ -7,8 +7,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "text!layouts/media
     var _media = media,
         _pageElement,
         _onDropped = options.onDropped || function(){},
-        _logoSpinner,
-        _this = this;
+        _logoSpinner;
 
     var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE ),
         urlTextbox = _propertiesElement.querySelector( "input" ),
