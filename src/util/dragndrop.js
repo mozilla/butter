@@ -11,6 +11,7 @@ define([], function(){
       MIN_WIDTH = 15;
 
   var __droppables = [],
+      __mouseDown = false,
       __selectedDraggables = [],
       __mousePos = [ 0, 0],
       __mouseLast = [ 0, 0 ],
@@ -27,6 +28,15 @@ define([], function(){
     right: 0
   };
 
+  function updateTimeout(){
+    if( __mouseDown ){
+      for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
+        __selectedDraggables[ i ].update();
+      } //for
+      window.setTimeout( updateTimeout, SCROLL_INTERVAL );
+    } //if
+  }
+
   function onDragged( e ){
     __mouseLast[ 0 ] = __mousePos[ 0 ];
     __mouseLast[ 1 ] = __mousePos[ 1 ];
@@ -42,8 +52,9 @@ define([], function(){
       selectedDraggable = __selectedDraggables[ i ];
       if( !selectedDraggable.dragging ){
         selectedDraggable.start( e );
+        __mouseDown = true;
+        window.setTimeout( updateTimeout, SCROLL_INTERVAL );
       } //if
-      selectedDraggable.update();
       remembers.push( selectedDraggable );
     } //for
 
@@ -63,6 +74,7 @@ define([], function(){
   }
 
   function onMouseUp( e ){
+    __mouseDown = false;
     window.removeEventListener( "mousemove", onDragged, false );
 
     var selectedDraggable;
@@ -72,8 +84,6 @@ define([], function(){
       if( selectedDraggable.dragging ){
         selectedDraggable.stop();
       } //if
-      //selectedDraggable.update();
-      //remembers.push( selectedDraggable );
     } //for
   }
 
