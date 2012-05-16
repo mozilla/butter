@@ -75,6 +75,13 @@ target.build = function() {
   exec(RJS + ' -o tools/build.js');
   exec(RJS + ' -o tools/build.optimized.js');
 
+  // Stamp Butter.version with the git commit sha we are using
+  var version = exec('git show -s --pretty=format:%h',
+                     {silent:true}).output.replace(/\r?\n/m, "");
+  console.log("'" + version + "'");
+  sed('-i', '@VERSION@', version, 'dist/butter.js');
+  sed('-i', '@VERSION@', version, 'dist/butter.min.js');
+
   exec(STYLUS + ' css');
   cp('css/*.css', DIST_DIR);
 };
