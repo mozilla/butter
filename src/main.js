@@ -18,7 +18,7 @@
             "ui/ui",
             "util/xhr",
             "util/lang",
-            "text!config/default-config.json"
+            "text!default-config.json"
           ],
           function(
             EventManagerWrapper,
@@ -64,12 +64,8 @@
       // butterOptions.config file.
       try {
         _defaultConfig = JSON.parse( DefaultConfigJSON );
-      } catch( e ) {
-        _defaultConfig = {
-          ui: {},
-          icons: {},
-          dirs: {}
-        };
+      } catch ( e) {
+        throw "Butter Error: unable to find or parse default-config.json";
       }
 
       Logger.debug( !!butterOptions.debug );
@@ -667,17 +663,10 @@
       }
 
       function readConfig( userConfig ){
-        var icons,
-            img,
-            resourcesDir,
-            option,
-            identifier,
-            extend = Lang.extend;
+        var resourcesDir;
 
         // Overwrite default config options with user settings.
-        _config = {};
-        extend( _config, _defaultConfig );
-        extend( _config, userConfig );
+        _config = Lang.defaults( userConfig, _defaultConfig );
 
         _this.project.template = _config.name;
         resourcesDir = _config.dirs.resources || "",
