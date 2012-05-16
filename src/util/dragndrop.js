@@ -37,19 +37,23 @@ define([], function(){
 
     var remembers = [];
 
-    for( var id in __selectedDraggables ) {
-      if ( !__selectedDraggables[ id ].dragging ) {
-        __selectedDraggables[ id ].start( e );
+    for( var id in __selectedDraggables ){
+      if( __selectedDraggables.hasOwnProperty( id ) ){
+        if( !__selectedDraggables[ id ].dragging ){
+          __selectedDraggables[ id ].start( e );
+        }
+        __selectedDraggables[ id ].update();
+        remembers.push( __selectedDraggables[ id ] );
       }
-      __selectedDraggables[ id ].update();
-      remembers.push( __selectedDraggables[ id ] );
     }
 
     for( var i=__droppables.length - 1; i>=0; --i ){
-      for( var j = remembers.length - 1; j>=0; --j ) {
-        if( __droppables[ i ].element.id && remembers[ j ].element.id !== __droppables[ i ].element.id && __droppables[ i ].drag( remembers[ j ].element.getBoundingClientRect() ) ){
+      for( var j = remembers.length - 1; j>=0; --j ){
+        if( __droppables[ i ].element.id &&
+            remembers[ j ].element.id !== __droppables[ i ].element.id &&
+            __droppables[ i ].drag( remembers[ j ].element.getBoundingClientRect() ) ){
           __droppables[ i ].remember( remembers[ j ] );
-        } else {
+        }else{
           __droppables[ i ].forget( remembers[ j ] );
         }
       }
@@ -528,8 +532,10 @@ define([], function(){
         _scroll.scrollLeft -= _scrollAmount;
         element.style.left = element.offsetLeft - _scrollAmount + "px";
       }
-      for( var id in __selectedDraggables ) {
-        __selectedDraggables[ id ].updateRects();
+      for( var id in __selectedDraggables ){
+        if( __selectedDraggables.hasOwnProperty( id ) ){
+          __selectedDraggables[ id ].updateRects();
+        }
       }
     }
 
