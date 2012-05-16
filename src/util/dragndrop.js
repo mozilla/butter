@@ -46,17 +46,12 @@ define([], function(){
     }
 
     for( var i=__droppables.length - 1; i>=0; --i ){
-      var remember = false;
       for( var j = remembers.length - 1; j>=0; --j ) {
-        if( remembers[ j ].element !== __droppables[ i ].element && __droppables[ i ].drag( remembers[ j ].element.getBoundingClientRect() ) ){
-          __droppables[ i ].remember( remembers[ j ].element );
-          remember = true;
-          break;
+        if( __droppables[ i ].element.id && remembers[ j ].element.id !== __droppables[ i ].element.id && __droppables[ i ].drag( remembers[ j ].element.getBoundingClientRect() ) ){
+          __droppables[ i ].remember( remembers[ j ] );
+        } else {
+          __droppables[ i ].forget( remembers[ j ] );
         }
-      }
-
-      if ( !remember ) {
-        __droppables[ i ].forget();
       }
     }
   };
@@ -86,12 +81,11 @@ define([], function(){
   }
 
   function __drop(){
-    var success = false;
     for( var i=__droppables.length - 1; i>=0; --i ){
-      var temp = __droppables[ i ].drop();
-      success = success || temp;
-    }
-    return success;
+      if ( __droppables[ i ].drop() ) {
+        return true;
+      }
+    return false;
   }
 
   function __drag( element, elementRect, mousePos ){
@@ -343,7 +337,9 @@ define([], function(){
         _onDrop = options.drop || function(){},
         _onOver = options.over || function(){},
         _onOut = options.out || function(){},
-        _draggedElement;
+        _droppable = {},
+        _draggedElements = {},
+        _draggedCount = 0;
 
     function onDrop( e ) {
       e.preventDefault();
@@ -396,31 +392,37 @@ define([], function(){
       _mousePos = [ e.clientX, e.clientY ];
     }, false );
 
-    var returnObj = {
+    _droppable = {
       element: element,
-      remember: function( dragElement ){
-        if( !_draggedElement ){
+      remember: function( draggable ){
+        if( !_draggedElements[ draggable.element.id ] ){
+          _draggedCount++;
           element.classList.add( _hoverClass );
-          _draggedElement = dragElement;
-          _onOver( _draggedElement );
+          _draggedElements[ draggable.element.id ] = draggable;
+          draggable.droppable = _droppable;
+          _onOver( draggable.element );
         }
       },
-      forget: function(){
-        if( _draggedElement ){
-          element.classList.remove( _hoverClass );
-          _onOut( _draggedElement );
-          _draggedElement = null;
+      forget: function( draggable ){
+        if( _draggedElements[ draggable.element.id ] ){
+          if ( --_draggedCount === 0 ) {
+            element.classList.remove( _hoverClass );
+          }
+          draggable.droppable = null;
+          _onOut( draggable.element );
+          delete _draggedElements[ draggable.element.id ];
         }
       },
-      drop: function(){
-        element.classList.remove( _hoverClass );
-        if( _draggedElement ){
-          _onDrop( _draggedElement, __mousePos );
-          _draggedElement = null;
-          return true;
+      drop: function( draggable ){
+
+        if( _draggedElements[ draggable.element.id ] ){
+          if ( --_draggedCount === 0 ) {
+            element.classList.remove( _hoverClass );
+          }
+          draggable.droppable = _droppable;
+          _onDrop( draggable.element, __mousePos );
+          delete _draggedElements[ draggable.element.id ];
         }
-        _draggedElement = null;
-        return false;
       },
       drag: function( dragElementRect ){
         var rect = element.getBoundingClientRect();
@@ -455,10 +457,10 @@ define([], function(){
       }
     };
 
-    __droppables.push( returnObj );
+    __droppables.push( _droppable );
     __sortDroppables();
 
-    return returnObj;
+    return _droppable;
   }
 
   function Draggable( element, options ){
@@ -485,6 +487,7 @@ define([], function(){
             element.removeEventListener( "mousedown", onMouseDown, false );
           }
         },
+        _droppable = null,
         _dragging = false,
         _containmentPadding = __nullRect;
 
@@ -549,7 +552,7 @@ define([], function(){
 
       _dragging = false;
       _onStop( e );
-      if( _revert ){
+      if( _droppable && _droppable.drop( _draggable ) && _revert ){
         element.style.left = _originalPosition[ 0 ] + "px";
         element.style.top = _originalPosition[ 1 ] + "px";
       }
@@ -645,6 +648,15 @@ define([], function(){
         enumerable: true,
         get: function(){
           return _element;
+        }
+      },
+      droppable: {
+        enumerable: true,
+        get: function(){
+          return _droppable;
+        },
+        set: function( val ) {
+          _droppable = val;
         }
       }
     });
