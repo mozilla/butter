@@ -3,7 +3,7 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 /**
- * Butter Textbox Widget
+ * Butter Textbox Widget Wrapper
  *
  * A simple input textbox with cross-browser click-to-select functionality.
  * Clicking this textbox will cause the contents to be selected.  The next
@@ -40,9 +40,10 @@ define( [], function(){
     input.addEventListener( "mouseup", __ignoreMouseUp, false );
   }
 
-  return function(){
-    var input = document.createElement( "input" );
-    input.type = "text";
+  return function( input ){
+    if( !(input && input.text) ){
+      throw "Expected an input element of type text";
+    }
 
     input.addEventListener(
       "blur",
