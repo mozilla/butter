@@ -301,7 +301,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
               popcornOptions = trackEvent._natives.manifest.options;
             } else {
               popcornOptions = {};
-              console.log( "WARNING: There was no manifest for trackEvent:", trackEvent );
+              _logger.log( "WARNING: There was no manifest for trackEvent:", trackEvent );
             }
             saveOptions = {};
             for ( option in popcornOptions ) {
