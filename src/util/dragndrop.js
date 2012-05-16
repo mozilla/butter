@@ -35,26 +35,32 @@ define([], function(){
     __mouseDiff[ 0 ] = __mousePos[ 0 ] - __mouseLast[ 0 ];
     __mouseDiff[ 1 ] = __mousePos[ 1 ] - __mouseLast[ 1 ];
 
-    var remembers = [];
+    var remembers = [],
+        selectedDroppable,
+        droppable,
+        remember;
 
     for( var id in __selectedDraggables ){
       if( __selectedDraggables.hasOwnProperty( id ) ){
-        if( !__selectedDraggables[ id ].dragging ){
-          __selectedDraggables[ id ].start( e );
+        selectedDroppable = __selectedDraggables[ id ];
+        if( !selectedDroppable.dragging ){
+          selectedDroppable.start( e );
         }
-        __selectedDraggables[ id ].update();
-        remembers.push( __selectedDraggables[ id ] );
+        selectedDroppable.update();
+        remembers.push( selectedDroppable );
       }
     }
 
-    for( var i=__droppables.length - 1; i>=0; --i ){
-      for( var j = remembers.length - 1; j>=0; --j ){
-        if( __droppables[ i ].element.id &&
-            remembers[ j ].element.id !== __droppables[ i ].element.id &&
-            __droppables[ i ].drag( remembers[ j ].element.getBoundingClientRect() ) ){
-          __droppables[ i ].remember( remembers[ j ] );
+    for( var i = __droppables.length - 1; i >= 0; --i ){
+      droppable = __droppables[ i ];
+      for( var j = remembers.length - 1; j >= 0; --j ){
+        remember = remembers[ j ];
+        if( droppable.element.id &&
+            remember.element.id !== droppable.element.id &&
+            droppable.drag( remember.element.getBoundingClientRect() ) ){
+          droppable.remember( remember );
         }else{
-          __droppables[ i ].forget( remembers[ j ] );
+          droppable.forget( remember );
         }
       }
     }
