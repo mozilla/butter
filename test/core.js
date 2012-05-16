@@ -17,7 +17,7 @@
     stop();
 
     Butter({
-      config: "../config/test.conf",
+      config: "test-config.json",
       debug: false,
       ready: function( butter ){
         callback( butter );
@@ -485,7 +485,7 @@
     stop();
 
     Butter({
-      config: "../config/test.conf",
+      config: "test-config.json",
       ready: function( butter ){
         m1 = butter.addMedia( { url:"www.test-url-1.com", target:"test-target-1" } );
         m2 = butter.addMedia( { url:"www.test-url-2.com", target:"test-target-2" } );
@@ -499,7 +499,7 @@
         exported = butter.exportProject();
 
         Butter({
-          config: "../config/test.conf",
+          config: "test-config.json",
           ready: function( secondButter ){
             teEvents = tEvents = mEvents = 0;
             secondButter.listen( "mediaadded", function(){
@@ -544,7 +544,7 @@
 
     expect( expected );
     Butter({
-      config: "../config/test.conf",
+      config: "test-config.json",
       ready: function( butter ){
         var mediaURLS = [ "http://www.youtube.com/watch?v=7glrZ4e4wYU",
             "http://vimeo.com/30619461",
@@ -749,7 +749,7 @@
     }, 2000);
 
     Butter({
-      config: "../config/test-simple.conf",
+      config: "test-simple-config.json",
       debug: false,
       ready: function( butter ){
         console.log(5);

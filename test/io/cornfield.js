@@ -10,7 +10,7 @@
 
   document.addEventListener( "DOMContentLoaded", function( e ){
     var b = new Butter({
-      config: "../../config/cornfield-test.conf",
+      config: "cornfield-test-config.json",
         ready: function( butter ){
           module( "Unauthenticated tests" );
 
