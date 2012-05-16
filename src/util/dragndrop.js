@@ -11,10 +11,9 @@ define([], function(){
       MIN_WIDTH = 15;
 
   var __droppables = [],
-      __selectedDraggables = {},
+      __selectedDraggables = [],
       __mousePos = [ 0, 0],
       __mouseLast = [ 0, 0 ],
-      __mouseDiff = [ 0, 0 ],
       __helpers = [];
 
   // for what seems like a bug in chrome. :/
@@ -32,26 +31,23 @@ define([], function(){
     __mouseLast[ 0 ] = __mousePos[ 0 ];
     __mouseLast[ 1 ] = __mousePos[ 1 ];
     __mousePos = [ e.clientX, e.clientY ];
-    __mouseDiff[ 0 ] = __mousePos[ 0 ] - __mouseLast[ 0 ];
-    __mouseDiff[ 1 ] = __mousePos[ 1 ] - __mouseLast[ 1 ];
 
     var remembers = [],
         selectedDraggable,
         droppable,
-        remember;
+        remember,
+        i;
 
-    for( var id in __selectedDraggables ){
-      if( __selectedDraggables.hasOwnProperty( id ) ){
-        selectedDraggable = __selectedDraggables[ id ];
-        if( !selectedDraggable.dragging ){
-          selectedDraggable.start( e );
-        } //if
-        selectedDraggable.update();
-        remembers.push( selectedDraggable );
+    for( i = __selectedDraggables.length - 1; i >= 0; --i ){
+      selectedDraggable = __selectedDraggables[ i ];
+      if( !selectedDraggable.dragging ){
+        selectedDraggable.start( e );
       } //if
+      selectedDraggable.update();
+      remembers.push( selectedDraggable );
     } //for
 
-    for( var i = __droppables.length - 1; i >= 0; --i ){
+    for( i = __droppables.length - 1; i >= 0; --i ){
       droppable = __droppables[ i ];
       for( var j = remembers.length - 1; j >= 0; --j ){
         remember = remembers[ j ];
@@ -64,7 +60,7 @@ define([], function(){
         } //if
       } //for
     } //for
-  };
+  }
 
   function getPaddingRect( element ){
     var style = getComputedStyle( element ),
@@ -510,7 +506,7 @@ define([], function(){
       _offsetParentRect = element.offsetParent ? element.offsetParent.getBoundingClientRect() : _containmentRect;
       _scrollRect = _scroll ? _scroll.getBoundingClientRect() : _containmentRect;
       _elementRect = element.getBoundingClientRect();
-    }
+    };
 
     function updatePosition(){
 
@@ -537,11 +533,9 @@ define([], function(){
       else if( _elementRect.left < _scrollRect.left - SCROLL_WINDOW ){
         _scroll.scrollLeft -= _scrollAmount;
         element.style.left = element.offsetLeft - _scrollAmount + "px";
-      }
-      for( var id in __selectedDraggables ){
-        if( __selectedDraggables.hasOwnProperty( id ) ){
-          __selectedDraggables[ id ].updateRects();
-        } //if
+      } //if
+      for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
+        __selectedDraggables[ i ].updateRects();
       } //for
     }
 
@@ -637,16 +631,26 @@ define([], function(){
       selected: {
         enumerable: true,
         get: function(){
-          return __selectedDraggables[ element.id ];
+          for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
+            if( __selectedDraggables[ i ].element.id === _element.id ){
+              return true;
+            } //if
+          } //for
+          return false;
         },
         set: function( val ){
           if ( val ) {
             _oldZIndex = getComputedStyle( element ).getPropertyValue( "z-index" );
             element.style.zIndex = MAXIMUM_Z_INDEX;
-            __selectedDraggables[ element.id ] = _draggable;
+            __selectedDraggables.push( _draggable );
           } else {
             element.style.zIndex = _oldZIndex;
-            delete __selectedDraggables[ element.id ];
+            for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
+              if( __selectedDraggables[ i ].element.id === _element.id ){
+                __selectedDraggables.splice( i, 1 );
+                return;
+              } //if
+            } //for
           } //if
         }
       },
