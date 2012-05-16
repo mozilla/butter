@@ -484,7 +484,6 @@ define([], function(){
         _containmentRect,
         _scrollAmount = options.scrollAmount || DEFAULT_SCROLL_AMOUNT,
         _oldZIndex,
-        _updateInterval = -1,
         _onStart = options.start || function(){},
         _onStop = options.stop || function(){ return false; },
         _originalPosition,
