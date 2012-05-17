@@ -32,8 +32,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       }
 
       media.onReady( start );
-      
-      window.butter = butter;
     } 
   }); //Butter
 }, false );
