@@ -13,9 +13,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "text!layouts/media
         urlTextbox = _propertiesElement.querySelector( "input" ),
         subtitle = _propertiesElement.querySelector( ".form-field-notes" ),
         changeButton = _propertiesElement.querySelector( "button" ),
-        loadingContainer = _propertiesElement.querySelector( ".loading-container" ),
-        innerContainer = _propertiesElement.querySelector( ".inner-container" ),
-        editMessage = _propertiesElement.querySelector( ".edit-message" );
+        loadingContainer = _propertiesElement.querySelector( ".loading-container" );
 
     urlTextbox.addEventListener( "focus", function( e ) {
       _propertiesElement.classList.add( "hold" );
@@ -28,7 +26,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "text!layouts/media
     _logoSpinner = LogoSpinner( loadingContainer );
 
     subtitle.innerHTML = DEFAULT_SUBTITLE;
-    console.log( "stop" );
+
     function showError( state, message ){
       if( state ){
         subtitle.innerHTML = message;
