@@ -27,9 +27,7 @@ define( [
           TrackHandles,
           LangUtil ) {
 
-  var MIN_VIEWABLE_SECS = 5,
-      USE_MIN_ZOOM_FACTOR = false,
-      MIN_VIEWABLE_PER_SEC = 200,
+  var MIN_ZOOM = 300,
       DEFAULT_ZOOM = 0.5;
 
   function MediaInstance( butter, media ){
@@ -39,11 +37,7 @@ define( [
 
     function zoomCallback( zoomLevel ){
       var nextZoom;
-      if ( USE_MIN_ZOOM_FACTOR ) {
-        nextZoom = _minZoomFactor * zoomLevel + _zoomFactor;
-      } else {
-        nextZoom = MIN_VIEWABLE_PER_SEC * zoomLevel + _zoomFactor;
-      }
+      nextZoom = MIN_ZOOM * zoomLevel + _zoomFactor;
       if( nextZoom !== _zoom ){
         _zoom = nextZoom;
         _tracksContainer.zoom = _zoom;
@@ -68,7 +62,6 @@ define( [
         _trackEventHighlight = butter.config.ui.trackEventHighlight || "click",
         _currentMouseDownTrackEvent,
         _zoomFactor,
-        _minZoomFactor,
         _zoom;
 
     EventManagerWrapper( _this );
@@ -161,7 +154,6 @@ define( [
 
     function onMediaReady(){
       _zoomFactor = _container.clientWidth / _media.duration;
-      _minZoomFactor = ( _container.clientWidth / MIN_VIEWABLE_SECS - _zoomFactor );
       _zoom = _zoomFactor;
       _zoombar.update( DEFAULT_ZOOM );
       _tracksContainer.zoom = _zoom;
