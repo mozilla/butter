@@ -54,7 +54,7 @@ define( [], function(){
       _handle.style.width = _handleWidth + "px";
       _elementWidth = _rect.width;
       if( level !== undefined ){
-        _handle.style.left = ( _rect.width - _handle.clientWidth ) * level + "px"; //( level * _handleWidth ) + "px";
+        _handle.style.left = ( _rect.width - _handle.clientWidth ) * level + "px";
         zoomCallback( _handle.offsetLeft / ( _rect.width - _handle.clientWidth ) );
       } //if
     };
