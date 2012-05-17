@@ -32,7 +32,7 @@
 
         Dialog.wait( "export", function( e ){
           try{
-            jsonExport.value = JSON.stringify( e.data.json );
+            jsonExport.value = JSON.stringify( e.data.json, null, 2 );
           }
           catch( e ){
             jsonExport.value = "There was an error trying to parse the JSON blob for this project. Please file a bug at https://webmademovies.lighthouseapp.com/projects/65733-butter/ and let us know.";
