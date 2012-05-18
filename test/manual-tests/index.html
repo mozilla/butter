@@ -21,7 +21,7 @@
       width: 200px; /*Width of frame div*/
       height: 100%;
       overflow: hidden; /* hidden | scroll Disable scrollbars. Set to "scroll" to enable*/
-      background: rgb(61, 61, 61);
+      background: -moz-linear-gradient(center bottom , rgb(44, 44, 44) 0pt, rgb(76, 76, 76) 100%);
       color: white;
       font-family: "MetaBold";
       font-size: 14px;
@@ -31,6 +31,7 @@
     #tests a {
       padding-top: 3px;
       color: white;
+      font-size: 12pt;
     }
 
     #butter-container {
@@ -57,28 +58,60 @@
       height: 100%;
       width: 100%;
     }
+
+    .PASS {
+      color: green !important;
+    }
+
+    .FAIL {
+      color: red !important;
+    }
   </style>
+  <script src="tests.js"></script>
+  <script>
+    document.addEventListener( "DOMContentLoaded", function() {
+
+      window.addEventListener( "message", function(e) {
+        var elem = document.getElementById( currentTest );
+        if( elem ){
+          elem.className = e.data;
+        }
+      }, false );
+
+      var test,
+          testList = document.getElementById("test-list"),
+          testListItem,
+          currentTest,
+          iframe = document.getElementById("butter"),
+          i = tests.length;
+
+      while( i-- ){
+        test = tests[ i ];
+        testListItem = document.createElement("li");
+        testListItem.innerHTML = '<a href="#"' +
+                                 '   id="' + test.href + '">' +
+                                 test.name + '</a>';
+        testList.appendChild( testListItem );
+      }
+
+      testList.addEventListener( "click", function( e ){
+        e.preventDefault();
+        var li = e.target;
+        iframe.src = li.id;
+        currentTest = li.id;
+      }, false );
+    }, false );
+  </script>
 </head>
 <body>
 
   <div id="butter-container">
-    <iframe id="butter" name="butter-frame" frameborder="0" noresize="noresize" src="test-youtube.html"></iframe>
+    <iframe id="butter" name="butter-frame" frameborder="0" noresize="noresize"></iframe>
   </div>
 
   <div id="tests">
     <h1>Manual Tests</h1>
-    <ol>
-      <li><a href="test-add.html" target="butter-frame">Add Events</a>
-      <li><a href="test-delete.html" target="butter-frame">Delete Events</a>
-      <li><a href="test-tracks.html" target="butter-frame">Add Tracks</a>
-      <li><a href="test-vimeo.html" target="butter-frame">Change Media to Vimeo</a>
-      <li><a href="test-youtube.html" target="butter-frame">Change Media to Youtube</a>
-	  <li><a href="test-save.html" target="butter-frame">Save and Load</a>
-      <li><a href="test-share.html" target="butter-frame">Share HTML5 project</a>
-      <li><a href="test-sharevimeo.html" target="butter-frame">Share Vimeo project</a>    
-        <li><a href="test-shareyoutube.html" target="butter-frame">Share Youtube project</a>   
-      <li><a href="test-export.html" target="butter-frame">Export HTML5 project</a>    
-    </ol>
+    <ol id="test-list"></ol>
   </div>
 
 </body>
