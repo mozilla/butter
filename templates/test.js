@@ -1,64 +1,64 @@
 document.addEventListener( "DOMContentLoaded", function( e ){
   
   (function( Butter ) {
-    var t = new Butter.Template();
+    var t = new Template();
     t.name = "Test Template";
     t.config = "../config/default.conf";
     t.debug = true; //Comment out for production
     editor = new t.editor();
 
     t.butterInit = function( butter, media, popcorn, callback ) {
+      t.log("Butter is loaded for the first time!");
+      //Main edit mode button
+      document.getElementById("edit-mode").addEventListener("click", function(){
+        var body = document.getElementById("main");
+        body.classList.contains("edit-mode") ? body.classList.remove("edit-mode") : body.classList.add("edit-mode");
+      });
 
-    //Main edit mode button
-    document.getElementById("edit-mode").addEventListener("click", function(){
-      var body = document.getElementById("main");
-      body.classList.contains("edit-mode") ? body.classList.remove("edit-mode") : body.classList.add("edit-mode");
-    });
+      //Add edit buttons to targets
+      t.each( butter.targets, function( targetObj ){
+        var target = targetObj.element,
+            editButton = document.createElement( "button");
 
-    //Add edit buttons to targets
-    t.each( butter.targets, function( targetObj ){
-      var target = targetObj.element,
-          editButton = document.createElement( "button");
+        editButton.className = "edit-button btn btn-icon-only";
+        editButton.setAttribute("data-butter-exclude", true);
+        editButton.innerHTML = 'Edit'
+        target.appendChild( editButton );
 
-      editButton.className = "edit-button btn btn-icon-only";
-      editButton.setAttribute("data-butter-exclude", true);
-      editButton.innerHTML = 'Edit'
-      target.appendChild( editButton );
-
-      editButton.addEventListener( "click", function(e) {
-        //Select the currently active popcorn event with the this button's target
-        var trackEvent = t.getTrackEvents({ target: targetObj.elementID, isActive: true });
-        var trackEventTarget =  t.children( target, function(el) { return (el.innerHTML === trackEvent.data.popcornOptions.text); });
-        console.log("editing...", trackEvent);
-        t._editing = trackEvent;
-        editor.makeContentEditable( trackEventTarget );
-        t.debug && console.log( t.name + ": Editing t._editing = (" + t._editing.id + ")", t._editing );  
-      }, false);
-      
-    });
-
-    //Before adding tracks, add editing functionality to trackevent view:
-    butter.listen("trackeventadded", function(e) {
-      t.debug && console.log( t.name + ": Track event added" );
-      var trackEvent = e.data;
-
-      if( trackEvent.type === "footnote" || trackEvent.type === "text" ) {
-        trackEvent.view.listen("trackeventdoubleclicked", function(){
-          var target = document.getElementById( trackEvent.popcornOptions.target );
+        editButton.addEventListener( "click", function(e) {
+          //Select the currently active popcorn event with the this button's target
+          var trackEvent = t.getTrackEvents({ target: targetObj.elementID, isActive: true });
+          var trackEventTarget =  t.children( target, function(el) { return (el.innerHTML === trackEvent.data.popcornOptions.text); });
+          console.log("editing...", trackEvent);
           t._editing = trackEvent;
-          // t.children takes an element and a function which returns an array of children for which the function returns true.
-          // In this case, it selects all children (i.e. containers) of the target which match the selected track event's text
-          editor.makeContentEditable( t.children( target, function(el) { return (el.innerHTML === t._editing.popcornOptions.text); }) );
-          t.debug && console.log( t.name + ": Editing t._editing = (" + t._editing.id + ")", t._editing );      
-        });
-      }//if
+          editor.makeContentEditable( trackEventTarget );
+          t.debug && console.log( t.name + ": Editing t._editing = (" + t._editing.id + ")", t._editing );  
+        }, false);
+        
+      });
 
-    });
+      //Before adding tracks, add editing functionality to trackevent view:
+      butter.listen("trackeventadded", function(e) {
+        t.debug && console.log( t.name + ": Track event added" );
+        var trackEvent = e.data;
 
-    //Add tracks
-    var track = media.addTrack( "Track1" );
-      media.addTrack( "Track" + Math.random() );
-      media.addTrack( "Track" + Math.random() );
+        if( trackEvent.type === "footnote" || trackEvent.type === "text" ) {
+          trackEvent.view.listen("trackeventdoubleclicked", function(){
+            var target = document.getElementById( trackEvent.popcornOptions.target );
+            t._editing = trackEvent;
+            // t.children takes an element and a function which returns an array of children for which the function returns true.
+            // In this case, it selects all children (i.e. containers) of the target which match the selected track event's text
+            editor.makeContentEditable( t.children( target, function(el) { return (el.innerHTML === t._editing.popcornOptions.text); }) );
+            t.debug && console.log( t.name + ": Editing t._editing = (" + t._editing.id + ")", t._editing );      
+          });
+        }//if
+
+      });
+
+      //Add tracks
+      var track = media.addTrack( "Track1" );
+        media.addTrack( "Track" + Math.random() );
+        media.addTrack( "Track" + Math.random() );
 
       var event = track.addTrackEvent({
         type: "text",
@@ -121,9 +121,9 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       btn3.addEventListener( "click", function(){
         var allEvents = t.getTrackEvents( "all" );
         if( allEvents ) {
-          alert( "There are " + allEvents.length + " events." );
+          t.log( "There are " + allEvents.length + " events." );
         } else {
-          alert( "There are no events" );
+          t.log( "There are no events" );
         }
       }, false);
 
@@ -132,9 +132,9 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       btn4.addEventListener( "click", function(){
         var activeEvents = t.getTrackEvents( { isActive: true } );
         if( activeEvents ) {
-          alert( "There are " + activeEvents.length + " active events." );
+          t.log( "There are " + activeEvents.length + " active events." );
         } else {
-          alert( "There are no active events" );
+          t.log( "There are no active events" );
         }
       }, false);
 
@@ -147,7 +147,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         t.each( result.data, function( trackEvent ) {
           text += trackEvent.id + " ";
         });
-        alert( text );
+        t.log( text );
         
       }, false);
 
@@ -162,18 +162,21 @@ document.addEventListener( "DOMContentLoaded", function( e ){
     }
 
     t.initCallback = function(){
+      t.log("Callback after init.");
       t.showTray( true );
 
     }
 
     t.butterMediaLoaded = function( butter, media, popcorn ) {
     // This function runs every time the media source changes, or a project is loaded.
+      t.log("There was some new media. Sweet.");
 
   
     }
 
     t.popcornReady = function( popcorn ) {
     //This function runs once in butter AND once in exported projects.
+    t.log("Popcorn stuff now.");
       
     }
 

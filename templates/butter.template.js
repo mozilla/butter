@@ -1,4 +1,4 @@
-Butter.Template = function() {
+Template = function() {
   var t = {};
 
   t.showTray = function( show ){
@@ -219,6 +219,34 @@ Butter.Template = function() {
     media.popcornScripts = {};
     media.popcornScripts.beforeEvents = 'popcorn.on( "' + event + '", popcornEvents );\nfunction popcornEvents() { ';
     media.popcornScripts.afterEvents = '\npopcorn.off( "' + event + '", popcornEvents );\n}'
+  }
+
+  t.log = function( text ) {
+    if(!t.debug){ return false; }
+    var debugContainer = document.getElementById( "template-debug-message" ),
+        messageEl = document.createElement("p");
+    messageEl.innerHTML = text;
+
+    _makeLog = function() {
+      var debugEl = document.createElement("div");
+      debugEl.style.position = "fixed";
+      debugEl.style.top = "40px";
+      debugEl.style.zindex = 1000;
+      debugEl.style.right = 0
+      debugEl.style.background = "rgba(254,236,58,.5)"
+      debugEl.style.width = "200px";
+      debugEl.style.height= "400px";
+      debugEl.style.overflowY = "scroll";
+      debugEl.id = "template-debug-message";
+      debugEl.innerHTML = "<h3>Debug messages (in reverse order)</h3>"
+      document.body.appendChild( debugEl );
+      debugContainer = debugEl;
+    }
+
+    !debugContainer && _makeLog();
+    debugContainer.insertBefore( messageEl, debugContainer.children[0] );
+
+    
   }
 
   return t;
