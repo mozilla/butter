@@ -2,10 +2,24 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
+
+/**
+ * Module: Comm
+ *
+ * Allows communication between entities through postMessage.
+ */
 define( [ "./eventmanager" ], function( EventManagerWrapper ){
 
   var __context = 1;
 
+  /**
+   * Class: Comm
+   *
+   * Lets entities communicate when communication restrictions exist by passing messages through postMessage.
+   *
+   * @param {Window} clientWindow: Window from/to which to send/receive messages
+   * @param {Function} readyCallback: Function to be called when link is set up
+   */
   var Comm = function( clientWindow, readyCallback ) {
     var _this = this,
         _readyInterval,

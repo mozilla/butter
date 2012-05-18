@@ -14,7 +14,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
         _events = events || {},
         _options = options || {},
         _blinkFunction,
-        _hilightFunction,
         _positionTracker,
         _this = this;
 
@@ -28,7 +27,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
       _this.dispatch( "moved", rect );
     });
 
-    var _highlightFunction = this.highlight = function( state ){
+    this.highlight = function( state ){
       if( state ){
         _this.blink = _blinkFunction;
         _highlightElement.style.visibility = "visible";

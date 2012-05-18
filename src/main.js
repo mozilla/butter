@@ -8,11 +8,11 @@
       DEFAULT_TRACKEVENT_OFFSET = 0.01;
 
   define( [
-            "./core/eventmanager",
-            "./core/logger",
-            "./core/target",
-            "./core/media",
-            "./core/page",
+            "core/eventmanager",
+            "core/logger",
+            "core/target",
+            "core/media",
+            "core/page",
             "./modules",
             "./dependencies",
             "ui/ui",
@@ -41,8 +41,7 @@
 
       butterOptions = butterOptions || {};
 
-      var _events = {},
-          _media = [],
+      var _media = [],
           _currentMedia,
           _targets = [],
           _id = "Butter" + __guid++,
@@ -311,7 +310,6 @@
         media.popcornCallbacks = _defaultPopcornCallbacks;
         media.popcornScripts = _defaultPopcornScripts;
 
-        var mediaName = media.name;
         _media.push( media );
 
         _this.chain( media, [
@@ -637,6 +635,11 @@
             resourcesDir = _config.dirs.resources || "";
 
         _this.project.template = _config.name;
+        
+        //Add default if it doesn't exist
+        if ( icons && !icons[ 'default'] ) {
+          icons[ 'default' ] = 'popcorn-icon.png';
+        }
 
         for( var identifier in icons ){
           if( icons.hasOwnProperty( identifier ) ){

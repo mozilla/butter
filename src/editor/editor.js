@@ -8,14 +8,10 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
   var DEFAULT_DIMS = [ 400, 400 ],
       DEFAULT_FRAME_TYPE = "iframe";
 
-  var __guid = 0;
-
   function Editor( butter, source, type, frameType, parentElement, options ){
     options = options || {};
 
-    var _id = __guid++,
-        _frameType = frameType || DEFAULT_FRAME_TYPE,
-        _source = source,
+    var _frameType = frameType || DEFAULT_FRAME_TYPE,
         _type = type,
         _dims = DEFAULT_DIMS.slice(),
         _dialog,
@@ -107,8 +103,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
           _this.dispatch( "open" );
         },
         submit: function( e ){
-          var duration = TimeUtil.roundTime( butter.currentMedia.duration ),
-              popcornData = e.data.eventData,
+          var popcornData = e.data.eventData,
               alsoClose = e.data.alsoClose;
           if( popcornData ){
             trackEvent.update( popcornData );

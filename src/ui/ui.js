@@ -34,8 +34,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
 
   function Component( element, options ){
     options = options || {};
-    var _element = element,
-        _onTransitionIn = options.transitionIn || function(){},
+    var _onTransitionIn = options.transitionIn || function(){},
         _onTransitionInComplete = options.transitionInComplete || function(){},
         _onTransitionOut = options.transitionOut || function(){},
         _onTransitionOutComplete = options.transitionOutComplete || function(){},
@@ -87,15 +86,6 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
 
     _element.setAttribute( "data-butter-exclude", "true" );
     _element.className = "butter-tray";
-
-    function createArea( id ){
-      var area = {
-        element: document.createElement( "div" ),
-        items: {}
-      };
-      area.element.id = id;
-      return area;
-    }
 
     _areas.work = new Area( "work" );
     _areas.statusbar = new Area( "status-bar" );

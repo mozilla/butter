@@ -124,19 +124,15 @@
       }
 
       function onTrackEventAdded( e ){
-        var newTrack = e.target,
-            trackEvent = e.data;
-        _popcornWrapper.updateEvent( trackEvent );
+        _popcornWrapper.updateEvent( e.data );
       } //onTrackEventAdded
 
       function onTrackEventUpdated( e ){
-        var trackEvent = e.target;
-        _popcornWrapper.updateEvent( trackEvent );
+        _popcornWrapper.updateEvent( e.target );
       } //onTrackEventUpdated
 
       function onTrackEventRemoved( e ){
-        var trackEvent = e.data;
-        _popcornWrapper.destroyEvent( trackEvent );
+        _popcornWrapper.destroyEvent( e.data );
       } //onTrackEventRemoved
 
       this.addTrack = function ( track ) {

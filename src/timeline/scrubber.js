@@ -23,15 +23,13 @@ define( [], function(){
         _zoom = 1,
         _scrollInterval = -1,
         _rect,
-        _mediaCheckInterval,
         _width,
         _isPlaying = false,
         _isScrubbing = false,
         _lastTime = -1,
         _lastScroll = _tracksContainer.element.scrollLeft,
         _lastZoom = -1,
-        _lineWidth = 0,
-        _this = this;
+        _lineWidth = 0;
 
     _container.className = "time-bar-scrubber-container";
     _node.className = "time-bar-scrubber-node";

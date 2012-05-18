@@ -3,6 +3,24 @@ Butter
 
 An SDK for authoring Popcorn projects.
 
+Supported Platforms
+-------------------
+
+We're writing Butter so that it runs in modern, HTML5 compatible browsers.  To that end, we test in the following configurations:
+
+#### Desktop (Windows, OS X, Linux):
+* Firefox stable (currently 12)
+* Chrome stable (currently 19)
+* Internet Explorer stable (currently 9, will support with 10 simultaneously when it's out)
+* Opera stable (currently 11.6)
+* Safari stable (currently 5.1)
+
+#### Mobile:
+* iOS 5.1 Safari Mobile (iPad 2+)
+* Android 2.3 & 4 - Firefox Mobile, Google Chrome, Android Browser (Samsung Galaxy 2)
+
+This list may change, as platforms and browsers change.  Also, our testing may expand to include other form factors (i.e., phones).
+
 Build Prerequisites
 -------------------
 
@@ -53,6 +71,11 @@ Before contributing a new patch be sure to run the following:
 
 * `node make check` to lint butter
 * run the qUnit tests in the test/ directory to be sure you broke nothing
+
+Documentation
+-------------
+
+Documentation can be created from the source files by running `node make docs`. Running this command will create `/doc` and fill it with markdown files corresponding to documentation found within the source.
 
 Getting Involved
 ----------------
