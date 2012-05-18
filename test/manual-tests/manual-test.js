@@ -22,16 +22,17 @@
     }
 
     function passFn() {
-      console.log("Test PASS: ", getInfo());
+      parent.postMessage("PASS", "*");
     }
 
     function failFn() {
-      console.log("Test FAIL: ", getInfo());
+      parent.postMessage("FAIL", "*");
     }
 
     function createButton( text, clickFn ) {
       var button = document.createElement( "button" );
       button.innerHTML = text;
+      button.style.cursor = "pointer";
       button.onclick = clickFn;
 
       return button;
