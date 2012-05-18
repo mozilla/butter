@@ -1,5 +1,5 @@
 {
-  "name": "test-config",
+  "name": "test-override-config",
   "debug": true,
   "ui": {
     "enabled": false,
@@ -24,17 +24,5 @@
       "footnote",
       "image"
     ]
-  },
-  "popcorn": {
-    "scripts": {
-      "init": "#init-script",
-      "beforeEvents": "test-before.js",
-      "afterEvents": "test-after.js"
-    },
-    "callbacks": {
-      "init": "_testInitCallback",
-      "beforeEvents": "_testBeforeCallback",
-      "afterEvents": "_testAfterCallback"
-    }
   }
 }

@@ -814,4 +814,34 @@
     });
   });
 
+  asyncTest( "Override Default Config", 4, function(){
+    // Create 2 butter instances.  Make sure config
+    // values are copied and replaced as expected.
+    Butter({
+      config: "test-config.json",
+      debug: false,
+      ready: function( butter1 ){
+
+        Butter({
+          // Use a user-supplied config file in order to override config.name
+          config: "test-override-config.json",
+          debug: false,
+          ready: function( butter2 ){
+
+            ok( butter1.config.name !== butter2.config.name, "Config names are different" );
+            equal( butter2.config.name, "test-override-config", "Config name should be replaced." );
+
+            // Test that things are otherwise the same for both specified and default config options.
+            deepEqual( butter1.config.plugin, butter2.config.plugin, "Config plugins are the same" );
+            deepEqual( butter1.config.dirs, butter2.config.dirs, "Config dirs are the same" );
+
+            start();
+
+          }
+        });
+
+      }
+    });
+  });
+
 })(window, window.document );

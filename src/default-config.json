@@ -7,7 +7,7 @@
   "ui": {
     "enabled": true,
     "trackEventHighlight": "click",
-    "title": "Butter"
+    "title": "Butter test"
   },
   "mediaDefaults": {
     "frameAnimation": true
