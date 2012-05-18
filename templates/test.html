@@ -9,7 +9,7 @@
     <script type="text/javascript" src="butter.template.js"></script>
     <script type="text/javascript" src="test.js"></script>
     <style>
-        #main, .content-div {
+        #video, .content-div {
           float: left;
         }
         .content-div {
@@ -24,7 +24,7 @@
           font-family: helvetica;
           font-style: bold;
         }
-        #main {
+        #video {
           min-width: 300px;
           min-height: 200px;
         }
@@ -33,19 +33,39 @@
           top: 30px;
         }
 
-        *[contenteditable="true"]:focus {
+        #main [data-butter-exclude] { display: none; }
+        #main #edit-mode {  display: block; font-size: 24px; }
+
+    </style>
+    <style data-butter-exclude>
+        /* Editor stuff, Should be moved */
+        #main.edit-mode [data-butter-exclude]{ display: inherit; }
+        .edit-mode .edit-button {
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+        .edit-mode *[data-butter="target"] {
+          box-shadow: 0 0 0 1px red;
+          position: relative; 
+        }
+        .edit-mode *[contenteditable="true"]{
           outline: none;
           background: #F6DC7E;
         }
     </style>
 </head>
 <body>
-   <div id="template-controls" data-butter-exclude></div>
-    <video id="main" data-butter="media" controls>
+  <div id="main" class="edit-mode">
+  <button id="edit-mode">Edit mode</button>
+  <div id="template-controls" data-butter-exclude></div>
+
+   <h1 id="title" data-butter="target"></h1>
+    <video id="video" data-butter="media" controls>
       <source src="../external/popcorn-js/test/trailer.ogv">
       <source src="../external/popcorn-js/test/trailer.mp4">
     </video>
-    <h1 id="title">Hello world</h1>
+    
     <div class="container-div">
         <div class="content-div" data-butter="target" id="Area1"></div>
         <p>Area 1</p>
@@ -55,6 +75,6 @@
         <p>Area 2</p>
     </div>
     <div id="target-div"></div>
-    
+  </div>  
 </body>
 </html>

@@ -8,17 +8,27 @@ Butter.Template = function() {
   }
 
   t.getTrackEvents = function( query ) {
-    t.debug && console.log ( "getTrackEvents", query );
     var obj = {},
         i,
+        currentTime,
         allTracks,
         result;
 
     t.butter && ( allTracks = t.butter.orderedTrackEvents );
     //Parse the query....
+
+    //All track events
     if( query === "all" ) {
       result = allTracks.filter(function(tr) {
-        return( t.popcornOptions !== undefined );
+        return( tr.popcornOptions !== undefined );
+      });
+    }
+    //Currently running track events
+    else if( query === "active") {
+      currentTime = t.butter.currentTime;
+      result = allTracks.filter( function( el, index ) {
+        //if current time >= el.popcornOptions.start && 
+        return( currentTime >= el.popcornOptions.start && currentTime <= el.popcornOptions.end );
       });
     }
     //getTrackEvents( 1 );
@@ -39,10 +49,19 @@ Butter.Template = function() {
       result = allTracks.filter( function( el, index ) {
 
         // getTrackEvents({ before: ... });
-        if( query.before && el.popcornOptions.start > query.before ) { return false; }
+        if( query.before && el.popcornOptions.start >= query.before || query.before === 0 ) { return false; }
 
         // getTrackEvents({ after: ... });
-        if( query.after && el.popcornOptions.start < query.after ) { return false; }
+        if( query.after && el.popcornOptions.start <= query.after ) { return false; }
+
+        // getTrackEvents({ target: Area1 });
+        if( query.target && el.popcornOptions.target !== query.target ) { return false; }
+
+        // getTrackEvents({ isActive: true });
+        if( query.isActive ) { 
+          currentTime = t.butter.currentTime;
+          if( !( currentTime >= el.popcornOptions.start && currentTime <= el.popcornOptions.end ) ){ return false; }
+        }
 
         // getTrackEvents({ type: "text" });
         if( query.type && typeof query.type === "string" ) {
@@ -65,87 +84,130 @@ Butter.Template = function() {
       });
     }
 
+    t.debug && console.log( t.name + ": getTrackEvents", query, result );
+
     //Return the track event if there was only one, and an array if more than one were found.
-    if( !result || result.length === 0 ) { return obj.data = false; }
-    else if( result. length === 1 ) { obj.data = result[0] }
-    else ( obj.data = result );
-
-    t.debug && console.log( "getTrackEvents", query, result );
-
-    obj.foo = function() {
-      return "bar";
-    }
+    if( !result || result.length === 0 ) { obj.length = 0; return obj.data = false; }
+    else if( result. length === 1 ) { obj.length = 1; obj.data = result[0] }
+    else { obj.length = result.length; obj.data = result; }
 
     obj.update = function( data ) { 
-      t.debug && console.log( "update", this, data );
+      t.debug && console.log( t.name + ": update", this, data );
       if( !data ){ return; }
 
+      t.each( this.data, _update );
       function _update( trackEvent ) {
         var oldOptions = trackEvent.popcornOptions, option;
-
         for (var option in oldOptions ) {
           data.option || ( data.option = oldOptions[ option ] );
         }
-
         trackEvent.update( data );
       }
-
-      if( this.data instanceof Array ) { t.each( this.data, _update ); }
-      else { _update( this.data ); }
     }
 
     obj.remove = function() {
-      t.debug && console.log( "remove", this );
+      t.debug && console.log( t.name +": remove", this );
       if( !this.data ){ return; }
+
+      t.each( this.data, _remove );
       function _remove( trackEvent ) {
         trackEvent.track.removeTrackEvent( trackEvent );
       }
-      if( this.data instanceof Array ) { t.each( this.data, _remove ); }
-      else { _remove( this.data ); }
     }
 
     return obj;
   }
 
-  t.editor = function( plugin, args ) {
-    if( args === undefined ) { return; }
-
-    var editor = {},
-        _id = args.id || plugin + "-editor",
-        _onTrackEventUpdate = args.onTrackEventChange,
-        _onTrayElementClick = args.onTrayElementClick,
-        _onTargetClick = args.onTargetClick,
-        _onShowPanel = args.onShowPanel;
+  t.editor = function() {
+    var editor = {};
 
     editor.modal = function() {
 
     }
-
     editor.imageDropper = function() {
 
     }
-
     editor.tabs = function() { 
 
     }
+    editor.makeContentEditable = function(element) {
+      var data={}, keyDownEvents;
+        element.setAttribute("contenteditable", true);
+        element.addEventListener( "blur", function(e){
+          e.preventDefault();
+          // data[element.getAttribute('data-name')];
+          data["text"] = _htmlfy( element.innerHTML );
+          element.innerHTML = data["text"];
+          element.setAttribute("contenteditable", false);
+          if( t._editing ) {
+            t._editing.update( data );
+            t.debug && console.log( t.name + ": Changed " + JSON.stringify(data).replace(/\</g, "&lt;").replace(/\>/g, "&gt;") );
+          }
+        }, false);
+        //Key events for contentEditable
+        document.addEventListener('keydown', keyDownEvents, true);
+        function keyDownEvents(event) {
+          var esc = event.which == 27,
+              nl = event.which == 13,
+              sp = event.which == 49,
+              el = event.target,
+              input = el.nodeName != 'INPUT' && el.nodeName != 'TEXTAREA',
+              data = {};
 
+          if (input) {
+            if (esc) {
+              // restore state
+              document.execCommand('undo');
+              el.blur();
+            } else if (nl) {
+              el.blur();
+              event.preventDefault();
+            }
+          }
+        }
+      }
+
+    //Replace b, strong, em etc. with html
+    function _htmlfy( str ) {
+        return str.replace(/&lt;i&gt;/g, "<i>")
+                  .replace(/&lt;\/i&gt;/g, "</i>")
+                  .replace(/&lt;em&gt;/g, "<em>")
+                  .replace(/&lt;\/em&gt;/g, "</em>")
+                  .replace(/&lt;b&gt;/g, "<b>")
+                  .replace(/&lt;\/b&gt;/g, "</b>")
+                  .replace(/&lt;strong&gt;/g, "<strong>")
+                  .replace(/&lt;\/strong&gt;/g, "</strong>");
+    }    
     return editor;
   }
 
   t.reset = function() {
     var allTracks = t.getTrackEvents("all");
-    console.log("all", allTracks);
-    //there seems to be a problem with this getting all the popcorn instances
     allTracks.remove();
   }
 
   t.each = function( array, func ) {
     var i;
-    for ( i = 0; i<array.length; i++ ) {
-      (function( item ) {
-        func( item );  
-      }( array[i] ));
+    if( !array ) {
+      return false;
+    } else if (!array.length) {
+      func( array );
+    } else {
+      for ( i = 0; i<array.length; i++ ) {
+        (function( item ) {
+          func( item );  
+        }( array[i] ));
+      }
     }
+  }
+
+  t.children = function( elem, fn ) {
+    var children = Array.prototype.slice.call( elem.children );
+    var results = children.filter( fn );
+
+    if (results.length === 0) { return false; }
+    else if (results.length === 1) { return results[0]; }
+    else { return results; }
   }
 
   t.tests = function() {
