@@ -103,21 +103,21 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
       //These are some tests for different getTrackEvent selectors
       var btn1 = document.createElement( "button" );
-      btn1.innerText = "Remove all text and footnote tracks";
+      btn1.innerHTML = "Remove all text and footnote tracks";
       btn1.addEventListener( "click", function(){
         var text = t.getTrackEvents( { type: ["text", "footnote"] } );
         text.remove();
       }, false);
 
       var btn2 = document.createElement( "button" );
-      btn2.innerText = "Change text to OMG!!!!!";
+      btn2.innerHTML = "Change text to OMG!!!!!";
       btn2.addEventListener( "click", function(){
         var text = t.getTrackEvents( { type: ["text", "footnote"] } );
         text.update( { text: "OMG!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" } );
       }, false);
 
       var btn3 = document.createElement( "button" );
-      btn3.innerText = "All track events";
+      btn3.innerHTML = "All track events";
       btn3.addEventListener( "click", function(){
         var allEvents = t.getTrackEvents( "all" );
         if( allEvents ) {
@@ -128,7 +128,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       }, false);
 
       var btn4 = document.createElement( "button" );
-      btn4.innerText = "Active popcorn events";
+      btn4.innerHTML = "Active popcorn events";
       btn4.addEventListener( "click", function(){
         var activeEvents = t.getTrackEvents( { isActive: true } );
         if( activeEvents ) {
@@ -139,7 +139,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       }, false);
 
       var btn5 = document.createElement( "button" );
-      btn5.innerText = "All track events before the scrubber";
+      btn5.innerHTML = "All track events before the scrubber";
       btn5.addEventListener( "click", function(){
         var text = "The events before the scrubber are: ",
             currentTime = t.butter.currentTime,
