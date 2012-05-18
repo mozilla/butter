@@ -45,13 +45,9 @@ define( [], function(){
       throw "Expected an input element of type text";
     }
 
-    input.addEventListener(
-      "blur",
-      function( e ){
+    input.addEventListener( "blur", function( e ){
         __addListeners( e.target );
-      },
-      false
-    );
+    }, false);
 
     __addListeners( input );
 
