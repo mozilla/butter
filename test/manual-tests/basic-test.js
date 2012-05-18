@@ -1,7 +1,6 @@
 document.addEventListener( "DOMContentLoaded", function( e ){
 
   Butter({
-    config: "default.conf",
     ready: function( butter ){
       var media = butter.media[ 0 ];
 
@@ -34,7 +33,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
       media.onReady( start );
 
-      window.butter = butter;
     }
   }); //Butter
 }, false );
