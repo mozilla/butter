@@ -56,13 +56,13 @@ define([  "../../external/codemirror/codemirror-compressed.js", "util/lang", "ui
               tabMode: 'indent',
               gutter: true,
               lineNumbers: true,
-              theme: 'ambiance'             
+              theme: 'ambiance'
             }),
           isOpen = false;
 
       var onChanged = function( properties ){
         element.innerHTML = editor.getValue();
-      }
+      };
 
       document.body.appendChild( editorWrapper );
 

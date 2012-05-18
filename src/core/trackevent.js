@@ -4,7 +4,7 @@
 
 /**
  * Module: TrackEvent
- * 
+ *
  * Supports a single event in the Media > Track > TrackEvent model.
  */
 define( [
