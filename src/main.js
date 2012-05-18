@@ -16,8 +16,7 @@
             "./modules",
             "./dependencies",
             "ui/ui",
-            "util/xhr",
-            "code-editor/editor"
+            "util/xhr"
           ],
           function(
             EventManagerWrapper,
@@ -28,8 +27,7 @@
             Modules,
             Dependencies,
             UI,
-            XHR,
-            CodeEditor
+            XHR
           ){
 
     var __guid = 0,
@@ -664,7 +662,7 @@
 
         _this.loader = loader;
 
-        _page = new Page( loader, _config );
+        _page = new Page( _this, loader, _config );
 
         _this.ui = new UI( _this, _config.ui );
 

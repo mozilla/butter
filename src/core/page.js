@@ -2,29 +2,35 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManagerWrapper ) {
+define( [ "core/logger", "core/eventmanager", "code-editor/editor" ], function( Logger, EventManagerWrapper, CodeEditor ) {
 
-  return function( loader, config ) {
+  return function( butter, loader, config ) {
 
     var POPCORN_BASE_URL = config.dirs[ "popcorn-js" ],
         POPCORN_URL = "{popcorn-js}/popcorn.js",
         PLAYER_URL = "{popcorn-js}/modules/player/popcorn.player.js",
         PLAYER_TYPE_URL = "{popcorn-js}/players/{type}/popcorn.{type}.js";
 
-    var _snapshot;
+    var _snapshot,
+        _codeEditor = new CodeEditor( butter );
 
     EventManagerWrapper( this );
 
     this.scrape = function() {
       var rootNode = document.body,
-          targets = rootNode.querySelectorAll("*[data-butter='target']"),
-          medias = rootNode.querySelectorAll("*[data-butter='media']");
+          targets = rootNode.querySelectorAll( "*[data-butter='target']" ),
+          medias = rootNode.querySelectorAll( "*[data-butter='media']" ),
+          editables = rootNode.querySelectorAll( "*[data-butter='editable']" );
+
+      for ( var i = editables.length - 1; i >= 0; i-- ) {
+        _codeEditor.activate( editables[i] );
+      }
 
       return {
         media: medias,
         target: targets
       };
-    }; // scrape
+    };
 
     this.prepare = function( readyCallback ){
       loader.load([

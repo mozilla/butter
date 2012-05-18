@@ -30,6 +30,16 @@
           position: relative;
           top: 30px;
         }
+        .editable-test {
+          position: absolute;
+          left: 800px;
+          width: 200px;
+          height: 300px;
+          border: 1px solid #000;
+        }
+        .editable-test *{
+          width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -37,6 +47,12 @@
       <source src="../external/popcorn-js/test/trailer.ogv">
       <source src="../external/popcorn-js/test/trailer.mp4">
     </video>
+    <div class="editable-test" data-butter="editable">
+      <img src="http://mozillapopcorn.org/maker/layouts/testing/thumbnail.gif" />
+    </div>
+    <div class="editable-test" style="left: 20px; top: 300px;" data-butter="editable">
+      LOL!!!!!!!!!!!!
+    </div>
     <div class="container-div">
         <div class="content-div" data-butter="target" id="Area1"></div>
         <p>Area 1</p>
