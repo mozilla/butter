@@ -15,10 +15,18 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "text!layouts/media
         changeButton = _propertiesElement.querySelector( "button" ),
         loadingContainer = _propertiesElement.querySelector( ".loading-container" );
 
+    urlTextbox.addEventListener( "focus", function( e ) {
+      _propertiesElement.classList.add( "hold" );
+    }, false );
+
+    urlTextbox.addEventListener( "blur", function( e ) {
+      _propertiesElement.classList.remove( "hold" );
+    }, false );
+
     _logoSpinner = LogoSpinner( loadingContainer );
 
     subtitle.innerHTML = DEFAULT_SUBTITLE;
-    
+
     function showError( state, message ){
       if( state ){
         subtitle.innerHTML = message;

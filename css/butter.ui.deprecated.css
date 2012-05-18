@@ -122,9 +122,9 @@
   display: none;
   padding: 10px;
 }
-.butter-media-properties:hover .inner-container {  display: block; }
-.butter-media-properties:hover .edit-message { display: none; }
-.butter-media-properties:hover {
+.butter-media-properties:hover .inner-container, .hold.butter-media-properties .inner-container {  display: block; }
+.butter-media-properties:hover .edit-message, .hold.butter-media-properties .edit-message { display: none; }
+.butter-media-properties:hover, .hold.butter-media-properties {
   opacity: 1.0;
   width: 250px;
   height: 100px;
