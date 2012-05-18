@@ -4,6 +4,7 @@
 
   // TODO: this should be something we reuse from src/ui/widget/textbox.js
   // with require.  We need to expose butter internals to editors.
+  // https://webmademovies.lighthouseapp.com/projects/65733/tickets/1174
   function __highlight( e ){
     var input = e.target;
     input.select();
