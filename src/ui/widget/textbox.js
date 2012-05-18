@@ -41,8 +41,8 @@ define( [], function(){
   }
 
   return function( input ){
-    if( !(input && input.text) ){
-      throw "Expected an input element of type text";
+    if( !(input && input.type === "text" ) ){
+      throw "Textbox: Expected an input element of type text";
     }
 
     input.addEventListener( "blur", function( e ){
