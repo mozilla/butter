@@ -1,0 +1,20 @@
+{
+  "editor": {
+    "default": "../../editors/default-editor.html"
+  },
+  "ui": {
+    "enabled": false,
+    "trackEventHighlight": "click"
+  },
+  "plugin": {
+  },
+  "icons": {
+    "default": "../../resources/popcorn-icon.png",
+    "image": "../../resources/image-icon.png"
+  },
+  "dirs": {
+    "popcorn-js": "../../external/popcorn-js/"
+  }
+}
+
+
