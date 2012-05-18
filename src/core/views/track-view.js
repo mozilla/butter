@@ -124,7 +124,7 @@ define( [ "core/logger",
       trackEvent.view.zoom = _zoom;
       trackEvent.view.duration = _duration;
       trackEvent.view.parent = _this;
-      _this.chain( trackEvent, [
+      _this.chain( trackEvent.view, [
         "trackeventmousedown",
         "trackeventmouseover",
         "trackeventmouseout"
@@ -137,7 +137,7 @@ define( [ "core/logger",
       _trackEvents.splice( _trackEvents.indexOf( trackEvent.view ), 1 );
       _trackEventElements.splice( _trackEvents.indexOf( trackEvent.view.element ), 1 );
       trackEvent.view.parent = null;
-      _this.unchain( trackEvent, [
+      _this.unchain( trackEvent.view, [
         "trackeventmousedown",
         "trackeventmouseover",
         "trackeventmouseout"
