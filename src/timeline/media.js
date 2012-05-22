@@ -52,7 +52,7 @@ define( [
         _mediaStatusContainer = document.createElement( "div" ),
         _selectedTracks = [],
         _hScrollBar = new Scrollbars.Horizontal( _tracksContainer ),
-        _vScrollBar = new Scrollbars.Vertical( _tracksContainer ),
+        _vScrollBar = new Scrollbars.Vertical( _tracksContainer, _rootElement ),
         _shrunken = false,
         _timebar = new TimeBar( butter, _media, _tracksContainer, _hScrollBar ),
         _zoombar = new ZoomBar( zoomCallback ),
