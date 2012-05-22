@@ -11,7 +11,8 @@ define( [
           "./timebar",
           "./zoombar",
           "./status",
-          "./trackhandles"
+          "./trackhandles",
+          "util/lang"
         ],
         function(
           TrackEvent,
@@ -22,7 +23,8 @@ define( [
           TimeBar,
           ZoomBar,
           Status,
-          TrackHandles ){
+          TrackHandles,
+          LangUtil ) {
 
   var INITIAL_ZOOM = 100,
       ZOOM_FACTOR = 100;
@@ -119,7 +121,7 @@ define( [
       _currentMouseDownTrackEvent = trackEvent;
 
       if( trackEvent.selected === true && originalEvent.shiftKey && _selectedTracks.length > 1  &&
-          originalEvent.srcElement.className.split( " " ).indexOf( "handle" ) === -1 ) {
+          !originalEvent.srcElement.classList.contains( "handle" ) ) {
         trackEvent.selected = false;
       }
       else {
