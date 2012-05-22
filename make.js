@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var JSLINT = './node_modules/jshint/bin/hint',
+    CSSLINT = 'node node_modules/csslint/cli.js',
     RJS    = './node_modules/requirejs/bin/r.js',
     STYLUS = './node_modules/stylus/bin/stylus',
     DOX    = './tools/dox.py',
@@ -54,6 +55,11 @@ target.docs = function() {
 
 target.check = function() {
   target['check-lint']();
+  target['check-css']();
+};
+
+target['check-css'] = function() {
+  exec(CSSLINT + ' css/');
 };
 
 target['check-lint'] = function() {
