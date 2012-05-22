@@ -4,7 +4,8 @@
 
 (function() {
 
-  var __debug = true;
+  // By default, logging is off.
+  var __debug = false;
 
   /**
    * Module: Logger
@@ -20,7 +21,7 @@
      *
      * @param {String} name: Name of the object to report in the log.
      */
-    function logger( name ) {
+    function Logger( name ) {
 
       /**
        * Member: log
@@ -45,28 +46,26 @@
        */
       this.error = function( message ) {
         if ( __debug ) {
-          throw new Error( "[" + name + "]" + message );
+          throw new Error( "[" + name + "] " + message );
         }
       }; //error
 
     }
 
     /**
-     * Class Function: debug
+     * Class Function: enabled
      *
-     * Effectively toggles the logger.
+     * Whether the logger is enabled or not.
      *
      * @param {Boolean} value: State of the logger.
      */
-    logger.debug = function( value ) {
-      if ( value !== undefined ) {
-        __debug = value;
-      } else {
+    Logger.enabled = function( value ) {
+      if ( value === undefined ) {
         return __debug;
       }
+      __debug = value;
     };
 
-    return logger;
+    return Logger;
   }); //define
 }());
-
