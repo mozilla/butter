@@ -93,7 +93,6 @@ target.package = function() {
 
   cp('-R', 'resources', DIST_DIR);
   cp('-R', 'dialogs', DIST_DIR);
-  cp('-R', 'config', DIST_DIR);
   cp('-R', 'editors', DIST_DIR);
   cp('-R', 'templates', DIST_DIR);
 

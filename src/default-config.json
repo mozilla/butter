@@ -1,0 +1,85 @@
+{
+  "name": "default-config",
+  "snapshotHTMLOnReady": true,
+  "editor": {
+    "default": "../editors/default-editor.html"
+  },
+  "ui": {
+    "enabled": true,
+    "trackEventHighlight": "click",
+    "title": "Butter test"
+  },
+  "mediaDefaults": {
+    "frameAnimation": true
+  },
+  "plugin": {
+    "plugins": [
+      {
+        "type": "attribution",
+        "path": "../external/popcorn-js/plugins/attribution/popcorn.attribution.js"
+      },
+      {
+        "type": "flickr",
+        "path": "../external/popcorn-js/plugins/flickr/popcorn.flickr.js"
+      },
+      {
+        "type": "footnote",
+        "path": "../external/popcorn-js/plugins/footnote/popcorn.footnote.js"
+      },
+      {
+        "type": "googlefeed",
+        "path": "../external/popcorn-js/plugins/googlefeed/popcorn.googlefeed.js"
+      },
+      {
+        "type": "googlemap",
+        "path": "../external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
+      },
+      {
+        "type": "image",
+        "path": "../external/popcorn-js/plugins/image/popcorn.image.js"
+      },
+      {
+        "type": "lowerthird",
+        "path": "../external/popcorn-js/plugins/lowerthird/popcorn.lowerthird.js"
+      },
+      {
+        "type": "subtitle",
+        "path": "../external/popcorn-js/plugins/subtitle/popcorn.subtitle.js"
+      },
+      {
+        "type": "tumblr",
+        "path": "../external/popcorn-js/plugins/tumblr/popcorn.tumblr.js"
+      },
+      {
+        "type": "twitter",
+        "path": "../external/popcorn-js/plugins/twitter/popcorn.twitter.js"
+      },
+      {
+        "type": "webpage",
+        "path": "../external/popcorn-js/plugins/webpage/popcorn.webpage.js"
+      },
+      {
+        "type": "wikipedia",
+        "path": "../external/popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"
+      },
+      {
+        "type": "wordriver",
+        "path": "../external/popcorn-js/plugins/wordriver/popcorn.wordriver.js"
+      }
+    ],
+    "defaults": [
+      "footnote",
+      "image"
+    ]
+  },
+  "dirs": {
+    "popcorn-js": "../external/popcorn-js/",
+    "css": "../css/",
+    "dialogs": "../dialogs/",
+    "resources": "../resources/"
+  },
+  "icons": {
+    "default": "popcorn-icon.png",
+    "image": "image-icon.png"
+  }
+}

@@ -16,7 +16,9 @@
             "./modules",
             "./dependencies",
             "ui/ui",
-            "util/xhr"
+            "util/xhr",
+            "util/lang",
+            "text!default-config.json"
           ],
           function(
             EventManagerWrapper,
@@ -27,7 +29,9 @@
             Modules,
             Dependencies,
             UI,
-            XHR
+            XHR,
+            Lang,
+            DefaultConfigJSON
           ){
 
     var __guid = 0,
@@ -47,20 +51,24 @@
           _id = "Butter" + __guid++,
           _logger = new Logger( _id ),
           _page,
-          _config = {
-            ui: {},
-            icons: {},
-            dirs: {}
-          },
+          _config,
+          _defaultConfig,
           _defaultTarget,
           _this = this,
           _selectedEvents = [],
           _defaultPopcornScripts = {},
           _defaultPopcornCallbacks = {};
 
-      if ( butterOptions.debug !== undefined ) {
-        Logger.debug( butterOptions.debug );
+      // We use the default configuration in config/default-conf.json as
+      // a base, and override whatever the user provides in the
+      // butterOptions.config file.
+      try {
+        _defaultConfig = JSON.parse( DefaultConfigJSON );
+      } catch ( e) {
+        throw "Butter Error: unable to find or parse default-config.json";
       }
+
+      Logger.debug( !!butterOptions.debug );
 
       EventManagerWrapper( _this );
 
@@ -629,30 +637,39 @@
         }
       };
 
-      function readConfig(){
-        var icons = _config.icons,
-            img,
-            resourcesDir = _config.dirs.resources || "";
+      function loadIcons( icons, resourcesDir ){
+        var icon, img, div;
+
+        for( icon in icons ){
+          if( icons.hasOwnProperty( icon ) ){
+            img = new Image();
+            img.id = icon + "-icon";
+            img.src = resourcesDir + icons[ icon ];
+
+            // We can't use "display: none", since that makes it
+            // invisible, and thus not load.  Opera also requires
+            // the image be in the DOM before it will load.
+            div = document.createElement( "div" );
+            div.setAttribute( "data-butter-exclude", "true" );
+            div.className = "butter-image-preload";
+
+            div.appendChild( img );
+            document.body.appendChild( div );
+          }
+        }
+      }
+
+      function readConfig( userConfig ){
+        var resourcesDir;
+
+        // Overwrite default config options with user settings (if any).
+        userConfig = userConfig || {};
+        _config = Lang.defaults( userConfig, _defaultConfig );
 
         _this.project.template = _config.name;
-        
-        //Add default if it doesn't exist
-        if ( icons && !icons[ 'default'] ) {
-          icons[ 'default' ] = 'popcorn-icon.png';
-        }
+        resourcesDir = _config.dirs.resources || "",
 
-        for( var identifier in icons ){
-          if( icons.hasOwnProperty( identifier ) ){
-            img = document.createElement( "img" );
-            img.src = resourcesDir + icons[ identifier ];
-            img.id = identifier + "-icon";
-            img.style.display = "none";
-            img.setAttribute( "data-butter-exclude", "true" );
-            // @secretrobotron: just attach this to the body hidden for now,
-            //                  so that it preloads if necessary
-            document.body.appendChild( img );
-          } //if
-        } //for
+        loadIcons( _config.icons, resourcesDir );
 
         //prepare modules first
         var moduleCollection = Modules( _this, _config ),
@@ -682,30 +699,34 @@
       } //readConfig
 
       if( butterOptions.config && typeof( butterOptions.config ) === "string" ){
-        var xhr = new XMLHttpRequest();
+        var xhr = new XMLHttpRequest(),
+          jsonConfig,
+          url = butterOptions.config + "?noCache=" + Date.now();
+
+        xhr.open( "GET", url, false );
         if( xhr.overrideMimeType ){
           // Firefox generates a misleading "syntax" error if we don't have this line.
           xhr.overrideMimeType( "application/json" );
         }
-        xhr.open( "GET", butterOptions.config, false );
+        // Deal with caching
+        xhr.setRequestHeader( "If-Modified-Since", "Fri, 01 Jan 1960 00:00:00 GMT" );
         xhr.send( null );
 
         if( xhr.status === 200 || xhr.status === 0 ){
           try{
-            _config = JSON.parse( xhr.responseText );
+            jsonConfig = JSON.parse( xhr.responseText );
           }
           catch( e ){
             throw new Error( "Butter config file not formatted properly." );
           }
-          readConfig();
+          readConfig( jsonConfig );
         }
         else{
           _this.dispatch( "configerror", _this );
         } //if
       }
       else {
-        _config = butterOptions.config;
-        readConfig();
+        readConfig( butterOptions.config );
       } //if
 
       this.page = _page;
