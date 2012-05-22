@@ -9,7 +9,7 @@ define([  "../../external/codemirror/codemirror-compressed.js", "util/lang", "ui
   var __elements = {};
 
   var BUTTON_WIDTH = 30,
-      EDITOR_WIDTH = 500,
+      EDITOR_WIDTH = 600,
       EDITOR_HEIGHT = 300;
 
   return function( butter ){
