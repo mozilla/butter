@@ -651,12 +651,9 @@
             // the image be in the DOM before it will load.
             div = document.createElement( "div" );
             div.setAttribute( "data-butter-exclude", "true" );
-            div.appendChild( img );
+            div.className = "butter-image-preload";
 
-            div.style.position = "absolute";
-            div.style.opacity = 0;
-            div.style.width = "1px";
-            div.style.height= "1px";
+            div.appendChild( img );
             document.body.appendChild( div );
           }
         }
