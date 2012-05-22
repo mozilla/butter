@@ -11,7 +11,9 @@ define( [
           "./timebar",
           "./zoombar",
           "./status",
-          "./trackhandles"
+          "./trackhandles",
+          // Include util/lang so we have access to our classList shim for browsers that don't support it
+          "util/lang"
         ],
         function(
           TrackEvent,
@@ -22,7 +24,8 @@ define( [
           TimeBar,
           ZoomBar,
           Status,
-          TrackHandles ){
+          TrackHandles,
+          LangUtil ) {
 
   var INITIAL_ZOOM = 100,
       ZOOM_FACTOR = 100;
@@ -118,7 +121,8 @@ define( [
 
       _currentMouseDownTrackEvent = trackEvent;
 
-      if( trackEvent.selected === true && originalEvent.shiftKey && _selectedTracks.length > 1 ){
+      if( trackEvent.selected === true && originalEvent.shiftKey && _selectedTracks.length > 1  &&
+          !originalEvent.srcElement.classList.contains( "handle" ) ) {
         trackEvent.selected = false;
       }
       else {
