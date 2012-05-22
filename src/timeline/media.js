@@ -2,7 +2,6 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-// Include util/lang so we have access to our classList shim for browsers that don't support it
 define( [
           "core/trackevent",
           "core/track",
@@ -13,6 +12,7 @@ define( [
           "./zoombar",
           "./status",
           "./trackhandles",
+          // Include util/lang so we have access to our classList shim for browsers that don't support it
           "util/lang"
         ],
         function(
