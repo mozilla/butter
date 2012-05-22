@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var JSLINT = './node_modules/jshint/bin/hint',
-    CSSLINT = 'node node_modules/csslint/cli.js',
+    CSSLINT = './node_modules/csslint/cli.js',
     RJS    = './node_modules/requirejs/bin/r.js',
     STYLUS = './node_modules/stylus/bin/stylus',
     DOX    = './tools/dox.py',
