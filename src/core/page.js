@@ -12,7 +12,7 @@ define( [ "core/logger", "core/eventmanager", "code-editor/editor" ], function( 
         PLAYER_TYPE_URL = "{popcorn-js}/players/{type}/popcorn.{type}.js";
 
     var _snapshot,
-        _codeEditor = new CodeEditor( butter );
+        _codeEditor;
 
     EventManagerWrapper( this );
 
@@ -22,8 +22,11 @@ define( [ "core/logger", "core/eventmanager", "code-editor/editor" ], function( 
           medias = rootNode.querySelectorAll( "*[data-butter='media']" ),
           editables = rootNode.querySelectorAll( "*[data-butter='editable']" );
 
-      for ( var i = editables.length - 1; i >= 0; i-- ) {
-        _codeEditor.activate( editables[i] );
+      if ( config.ui && config.ui.editableElements ){
+        _codeEditor = new CodeEditor( butter );
+        for ( var i = editables.length - 1; i >= 0; i-- ) {
+          _codeEditor.activate( editables[i] );
+        }
       }
 
       return {
