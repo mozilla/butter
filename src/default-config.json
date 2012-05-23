@@ -1,5 +1,6 @@
 {
   "name": "default-config",
+  "title": "Popcorn Maker",
   "snapshotHTMLOnReady": true,
   "editor": {
     "default": "../editors/default-editor.html"
