@@ -660,7 +660,7 @@
 
         _this.loader = loader;
 
-        _page = new Page( loader, _config );
+        _page = new Page( _this, loader, _config );
 
         _this.ui = new UI( _this, _config.ui );
 

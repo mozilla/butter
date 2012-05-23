@@ -8,7 +8,8 @@
   baseUrl: '../src',
 
   paths: {
-    'text': '../external/require/text'
+    'text': '../external/require/text',
+    'codemirror': '../external/codemirror/codemirror-compressed'
   },
 
   // Use has branch trimming in the build to remove the document.write

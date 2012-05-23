@@ -1,0 +1,30 @@
+editor-width = 600px
+editor-height = 300px
+
+.butter-code-editor-button
+  position absolute
+  background #000
+  width 30px
+  height 30px
+  cursor pointer
+  color #fff
+
+.butter-code-editor
+  position absolute
+  background #000
+  border 1px solid #000
+  width 0px
+  height 0px
+  overflow hidden
+  visibility hidden
+  transition width 0.3s, height 0.3s, visibility 0.3s
+
+  .CodeMirror
+    width editor-width
+    height editor-height
+    border 1px solid black
+
+.butter-code-editor.expanded
+  width editor-width
+  height editor-height
+  visibility visible
