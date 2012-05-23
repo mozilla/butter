@@ -291,6 +291,17 @@ define( [], function(){
       return newObj;
     },
 
+    // Fill in a given object with default properties.  Based on underscore (MIT License).
+    // https://github.com/documentcloud/underscore/blob/master/underscore.js
+    defaults: function( obj, source ){
+      for( var prop in source ){
+        if( obj[ prop ] === undefined ){
+          obj[ prop ] = source[ prop ];
+        }
+      }
+      return obj;
+    },
+
     domFragment: function( inputString ) {
       var range = document.createRange(),
           fragment;

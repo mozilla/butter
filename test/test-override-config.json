@@ -1,0 +1,28 @@
+{
+  "name": "test-override-config",
+  "debug": true,
+  "ui": {
+    "enabled": false,
+    "trackEventHighlight": "click"
+  },
+  "plugin": {
+    "plugins": [
+      {
+        "type": "footnote",
+        "path": "../external/popcorn-js/plugins/footnote/popcorn.footnote.js"
+      },
+      {
+        "type": "attribution",
+        "path": "../external/popcorn-js/plugins/attribution/popcorn.attribution.js"
+      },
+      {
+        "type": "image",
+        "path": "../external/popcorn-js/plugins/image/popcorn.image.js"
+      }
+    ],
+    "defaults": [
+      "footnote",
+      "image"
+    ]
+  }
+}
