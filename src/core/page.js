@@ -39,7 +39,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManagerWr
             return !!window.Popcorn && !!window.Popcorn.player;
           }
         }
-      ], readyCallback, true );
+      ], readyCallback, null, true );
     };
 
     this.addPlayerType = function( type, callback ){
