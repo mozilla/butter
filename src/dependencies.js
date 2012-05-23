@@ -52,37 +52,47 @@ define([], function(){
           callback();
         }
       },
-      css: function( url, exclude, callback, checkFn ){
-        var scriptElement;
+      css: function( url, exclude, callback, checkFn, error ){
+        var scriptElement,
+            interval;
+
         checkFn = checkFn || function(){
-          if( !scriptElement ){
-            return false;
-          }
-          for( var i = 0; i < document.styleSheets.length; ++i ){
-            if( document.styleSheets[ i ].href === scriptElement.href ){
-              return true;
-            }
-          }
-          return false;
+          return !!scriptElement;
         };
 
+        function runCheckFn() {
+          interval = setInterval( function(){
+            if( checkFn() ){
+              clearInterval( interval );
+              if( callback ){
+                callback();
+              }
+            }
+            else {
+              clearInterval( interval );
+              if( error ){
+                error();
+              }
+              else if( callback ){
+                callback();
+              }
+            }
+          }, CSS_POLL_INTERVAL );
+        }
+
         url = fixUrl( url );
+
         if( !checkFn() ){
           scriptElement = document.createElement( "link" );
           scriptElement.rel = "stylesheet";
+          scriptElement.onload =  runCheckFn;
+          scriptElement.onerror = error;
           scriptElement.href = url;
           document.head.appendChild( scriptElement );
         }
-
-        var interval = setInterval(function(){
-          if( checkFn() ){
-            clearInterval( interval );
-            if( callback ){
-              callback();
-            }
-          }
-        }, CSS_POLL_INTERVAL );
-
+        else if( callback ){
+          callback();
+        }
       }
     };
 
@@ -113,7 +123,7 @@ define([], function(){
 
     var Loader = {
 
-      load: function( items, callback, ordered ){
+      load: function( items, callback, error, ordered ){
         if( items instanceof Array && items.length > 0 ){
           var onLoad = generateLoaderCallback( items, callback );
           if( !ordered ){
@@ -132,7 +142,7 @@ define([], function(){
 
           if( _loaders[ item.type ] ){
             if( item.url ){
-              _loaders[ item.type ]( item.url, item.exclude, callback, item.check );
+              _loaders[ item.type ]( item.url, item.exclude, callback, item.check, error );
             }
             else{
               throw new Error( "Attempted to load resource without url." );
