@@ -9,19 +9,11 @@ const express = require('express'),
       TEMPLATES_DIR =  CONFIG.dirs.templates,
       PUBLISH_DIR = CONFIG.dirs.publish,
       PUBLISH_PREFIX = CONFIG.dirs.publishPrefix,
-      ENVIRONMENT = CONFIG.environment || {},
-      MODE = ENVIRONMENT.mode || "production",
       WWW_ROOT = path.resolve(CONFIG.dirs.wwwRoot || __dirname + "/.."),
       TEMPLATES = CONFIG.templates || {};
 
-var DEFAULT_USER = null,
-    canStoreData = true;
+var canStoreData = true;
 
-if( MODE === "development" ){
-  DEFAULT_USER = ENVIRONMENT.defaultUser;
-}
-
-console.log( "Environment: ", MODE );
 console.log( "Templates Dir:", TEMPLATES_DIR );
 console.log( "Publish Dir:", PUBLISH_DIR );
 
@@ -66,7 +58,7 @@ app.use(express.logger(CONFIG.logger))
 require('express-browserid').plugAll(app);
 
 function publishRoute( req, res ){
-  var email = req.session.email || DEFAULT_USER,
+  var email = req.session.email,
       id = req.params.id;
 
   if (!email) {
@@ -121,9 +113,6 @@ function publishRoute( req, res ){
   });
 }
 
-if( MODE === "development" ){
-  app.get('/publish/:id', publishRoute );  
-}
 app.post('/publish/:id', publishRoute );
 
 app.get('/projects', function(req, res) {
