@@ -10,6 +10,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         _logoSpinner;
 
     var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE ),
+        container = _propertiesElement.querySelector( "div.container" ),
         urlContainer = _propertiesElement.querySelector( "div.url" ),
         urlTextbox = _propertiesElement.querySelector( "input" ),
         subtitle = _propertiesElement.querySelector( ".form-field-notes" ),
@@ -18,10 +19,29 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         urlList = _propertiesElement.querySelector( "div.url-group" ),
         loadingContainer = _propertiesElement.querySelector( ".loading-container" );
 
+    var _containerDims;
+
+    function setDimensions( state ){
+      if( state ){
+        _propertiesElement.style.width = _containerDims.width + "px";
+        _propertiesElement.style.height = _containerDims.height + "px";
+      }
+      else {
+        _propertiesElement.style.width = "";
+        _propertiesElement.style.height = "";
+      }
+    }
+
     addUrlButton.addEventListener( "click", function( e ) {
       var newContainer = urlContainer.cloneNode( true );
+      newContainer.classList.remove( "fade-in" );
       urlList.appendChild( newContainer );
-      //_propertiesElement.style.height = _propertiesElement.scrollHeight + "px";
+      setTimeout(function(){
+        newContainer.classList.add( "fade-in" );
+      }, 0);
+      _containerDims.width = container.clientWidth;
+      _containerDims.height = container.clientHeight;
+      setDimensions( true );
     }, false );
 
     urlTextbox.addEventListener( "focus", function( e ) {
@@ -31,6 +51,22 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     urlTextbox.addEventListener( "blur", function( e ) {
       _propertiesElement.classList.remove( "hold" );
     }, false );
+
+    _propertiesElement.addEventListener( "mouseover", function( e ) {
+      // silly hack to stop jittering of width/height
+      if ( !_containerDims ) {
+        _containerDims = {
+          width: container.clientWidth,
+          height: container.clientHeight
+        };
+      }
+      setDimensions( true );
+      e.stopPropagation();
+    }, true );
+
+    _propertiesElement.addEventListener( "mouseout", function( e ) {
+      setDimensions( false );
+    }, true );
 
     _logoSpinner = LogoSpinner( loadingContainer );
 

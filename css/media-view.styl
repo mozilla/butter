@@ -6,49 +6,40 @@ CONTAINER_Z = 2140000001
 
 .butter-media-properties
   position absolute
-  width 90px
-  height 32px
   z-index BASE_Z
   font 12px Verdana, 12px sans-serif
   border 2px solid #fff
-  transition opacity 0.5s, width 0.25s, height 0.25s
+  transition width 0.25s, height 0.25s
   background-color #131313
   background-image -moz-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% )
   background-image -webkit-gradient( linear, left bottom, left top, color-stop( 0, #2c2c2c ), color-stop( 1, #4c4c4c ) )
-  overflow hidden
   border-radius 5px
+  height 30px
+  width 90px
+  overflow hidden
 
   .loading-container
     position absolute
     z-index CONTAINER_Z
     left 1px
     top 1px
-    width 30px
-    height 30px
 
   .container
-    width 250px
-    height 100px
-    min-width 250px
-    min-height 100px
     position absolute
+    top 0
     color #fff
+    width 240px
 
   .inner-container
-    display none
     padding 10px
+    visibility hidden
 
-  &:hover, &.hold
-
-    opacity 1.0
-    width 250px
-    min-height 100px
-
+  &:hover
     .inner-container
-      display block
+      visibility visible
 
     .edit-message
-      display none
+      visibility hidden
 
   .edit-message
     color #FFF
@@ -60,7 +51,12 @@ CONTAINER_Z = 2140000001
 
   .url
     width 224px
-  
+    overflow hidden
+
+    input, button
+      transition opacity .2s
+      opacity 0
+
     input
       width 190px
       padding 5px 3px
@@ -69,6 +65,10 @@ CONTAINER_Z = 2140000001
     button.remove
       padding 5px 3px
       width 20px
+
+    &.fade-in
+      input, button
+        opacity 1
 
   button.save
     margin-top .5em
