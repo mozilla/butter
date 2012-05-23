@@ -42,7 +42,7 @@ CONTAINER_Z = 2140000001
 
     opacity 1.0
     width 250px
-    height 100px
+    min-height 100px
 
     .inner-container
       display block
@@ -60,9 +60,20 @@ CONTAINER_Z = 2140000001
 
   .url
     width 224px
-    border 1px solid #333
-    padding 5px 3px
+  
+    input
+      width 190px
+      padding 5px 3px
+      border 1px solid #333
 
-  button
+    button.remove
+      padding 5px 3px
+      width 20px
+
+  button.save
+    margin-top .5em
+    float right
+
+  button.add-url
     margin-top .5em
     float right

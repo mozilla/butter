@@ -10,10 +10,19 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         _logoSpinner;
 
     var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE ),
+        urlContainer = _propertiesElement.querySelector( "div.url" ),
         urlTextbox = _propertiesElement.querySelector( "input" ),
         subtitle = _propertiesElement.querySelector( ".form-field-notes" ),
-        changeButton = _propertiesElement.querySelector( "button" ),
+        changeButton = _propertiesElement.querySelector( "button.save" ),
+        addUrlButton = _propertiesElement.querySelector( "button.add-url" ),
+        urlList = _propertiesElement.querySelector( "div.url-group" ),
         loadingContainer = _propertiesElement.querySelector( ".loading-container" );
+
+    addUrlButton.addEventListener( "click", function( e ) {
+      var newContainer = urlContainer.cloneNode( true );
+      urlList.appendChild( newContainer );
+      //_propertiesElement.style.height = _propertiesElement.scrollHeight + "px";
+    }, false );
 
     urlTextbox.addEventListener( "focus", function( e ) {
       _propertiesElement.classList.add( "hold" );
