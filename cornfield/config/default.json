@@ -15,10 +15,6 @@
     "publish": "view",
     "publishPrefix": "http://localhost:8888/cornfield/view"
   },
-  "environment": {
-    "mode": "development",
-    "defaultUser": "secretrobotron@gmail.com"
-  },
   "templates": {
     "default-butter-test": {
       "../external/popcorn-js/": "http://localhost:8888/external/popcorn-js/"
