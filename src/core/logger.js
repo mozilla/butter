@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-(function() {
+(function( undefined ) {
 
   // By default, logging is off.
   var __debug = false;
@@ -34,7 +34,7 @@
         if ( __debug ) {
           console.log( "[" + name + "] " + message );
         }
-      }; //log
+      };
 
       /**
        * Member: error
@@ -48,7 +48,7 @@
         if ( __debug ) {
           throw new Error( "[" + name + "] " + message );
         }
-      }; //error
+      };
 
     }
 
@@ -60,12 +60,13 @@
      * @param {Boolean} value: State of the logger.
      */
     Logger.enabled = function( value ) {
-      if ( value === undefined ) {
-        return __debug;
+      if ( value !== undefined ) {
+        __debug = !!value;
       }
-      __debug = value;
+      return __debug;
     };
 
     return Logger;
-  }); //define
+  });
+
 }());
