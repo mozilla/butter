@@ -1,0 +1,37 @@
+{
+  "editor": {
+    "default": "../../editors/default-editor.html",
+    "googlemap": "../../editors/googlemap-editor.html"
+  },
+  "plugin": {
+    "plugins": [
+      {
+        "type": "footnote",
+        "path": "../../external/popcorn-js/plugins/footnote/popcorn.footnote.js"
+      },
+      {
+        "type": "attribution",
+        "path": "../../external/popcorn-js/plugins/attribution/popcorn.attribution.js"
+      },
+      {
+        "type": "image",
+        "path": "../../external/popcorn-js/plugins/image/popcorn.image.js"
+      },
+      {
+        "name": "googlemap",
+        "type": "googlemap",
+        "path": "../../external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
+      }
+    ],
+    "defaults": [
+      "footnote",
+      "image"
+    ]
+  },
+  "dirs": {
+    "popcorn-js": "../../external/popcorn-js/",
+    "css": "../../css/",
+    "dialogs": "../../dialogs/",
+    "resources": "../../resources/"
+  }
+}
