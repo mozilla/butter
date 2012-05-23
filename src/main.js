@@ -59,7 +59,7 @@
           _defaultPopcornScripts = {},
           _defaultPopcornCallbacks = {};
 
-      // We use the default configuration in config/default-conf.json as
+      // We use the default configuration in src/default-config.json as
       // a base, and override whatever the user provides in the
       // butterOptions.config file.
       try {
@@ -68,7 +68,9 @@
         throw "Butter Error: unable to find or parse default-config.json";
       }
 
-      Logger.debug( !!butterOptions.debug );
+      if ( butterOptions.debug !== undefined ) {
+        Logger.enabled( butterOptions.debug );
+      }
 
       EventManagerWrapper( _this );
 
@@ -490,10 +492,10 @@
         },
         debug: {
           get: function() {
-            return Logger.debug();
+            return Logger.enabled();
           },
           set: function( value ) {
-            Logger.debug( value );
+            Logger.enabled( value );
           },
           enumerable: true
         }
