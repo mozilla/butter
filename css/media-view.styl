@@ -1,0 +1,68 @@
+BASE_Z = 2139000000
+CONTAINER_Z = 2140000001
+
+.butter-media-highlight
+  background-color rgba( 10, 170, 170, 0.4 )
+
+.butter-media-properties
+  position absolute
+  width 90px
+  height 32px
+  z-index BASE_Z
+  font 12px Verdana, 12px sans-serif
+  border 2px solid #fff
+  transition opacity 0.5s, width 0.25s, height 0.25s
+  background-color #131313
+  background-image -moz-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% )
+  background-image -webkit-gradient( linear, left bottom, left top, color-stop( 0, #2c2c2c ), color-stop( 1, #4c4c4c ) )
+  overflow hidden
+  border-radius 5px
+
+  .loading-container
+    position absolute
+    z-index CONTAINER_Z
+    left 1px
+    top 1px
+    width 30px
+    height 30px
+
+  .container
+    width 250px
+    height 100px
+    min-width 250px
+    min-height 100px
+    position absolute
+    color #fff
+
+  .inner-container
+    display none
+    padding 10px
+
+  &:hover, &.hold
+
+    opacity 1.0
+    width 250px
+    height 100px
+
+    .inner-container
+      display block
+
+    .edit-message
+      display none
+
+  .edit-message
+    color #FFF
+    padding-top 6px
+    padding-left 3px
+
+  h3, p
+    margin 0
+
+  .url
+    width 224px
+    border 1px solid #333
+    padding 5px 3px
+
+  button
+    margin-top .5em
+    float right
