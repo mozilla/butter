@@ -21,9 +21,9 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         });
 
         butter.tracks[ 2 ].addTrackEvent({ 
-          type: "footnote",
+          type: "image",
           popcornOptions: {
-            start: 1,
+            start: 0,
             end: 2,
             target: "Area2"
           }

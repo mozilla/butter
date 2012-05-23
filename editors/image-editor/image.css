@@ -1,0 +1,36 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  background: url("../../resources/bg.jpg");
+}
+table#table tr  td:nth-child(2) * {
+  font-size: 0.9em;
+}
+table {
+  color: #fff !important;
+}
+p#message {
+  color: #FF0000;
+}
+#drop-target {
+  color: #CCC;
+  border: 3px dashed;
+  width: 160px;
+  height: 120px;
+  margin-right: 20px;
+  float: left;
+  text-align: center;
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#drop-target > span {
+  padding-top: 30px;
+  display: block;
+  font-style: italic;
+}
+#drop-target.dragover {
+   border: 3px solid #F6DC7E;
+   -webkit-box-shadow:0 0 6px #F6DC7E;
+   -moz-box-shadow:0 0 5px #F6DC7E;
+   box-shadow:0 0 5px #F6DC7E;
+}
