@@ -6,11 +6,12 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
   var VERTICAL_SIZE_REDUCTION_FACTOR = 3;
 
-  function Vertical( tracksContainer ){
+  function Vertical( tracksContainer, scrollTarget ){
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
         _containerParent = tracksContainer.element,
         _containerChild = tracksContainer.container,
+        _scrollTarget = scrollTarget || _containerParent,
         _elementHeight,
         _parentHeight,
         _childHeight,
@@ -79,7 +80,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       setHandlePosition();
     }, false );
 
-    _containerParent.addEventListener( "mousewheel", function( e ){
+    _scrollTarget.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaY ){
         _containerParent.scrollTop -= e.wheelDeltaY;
         setHandlePosition();
@@ -88,7 +89,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
     }, false );
 
     // For Firefox
-    _containerParent.addEventListener( "DOMMouseScroll", function( e ){
+    _scrollTarget.addEventListener( "DOMMouseScroll", function( e ){
       if( e.axis === e.VERTICAL_AXIS && !e.shiftKey ){
         _containerParent.scrollTop += e.detail * 2;
         setHandlePosition();
@@ -133,11 +134,12 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
   } //Vertical
 
-  function Horizontal( tracksContainer ){
+  function Horizontal( tracksContainer, scrollTarget ){
     var _element = document.createElement( "div" ),
         _handle = document.createElement( "div" ),
         _containerParent = tracksContainer.element,
         _containerChild = tracksContainer.container,
+        _scrollTarget = scrollTarget || _containerChild,
         _elementWidth,
         _parentWidth,
         _childWidth,
@@ -202,7 +204,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       setHandlePosition();
     }, false );
 
-    _containerChild.addEventListener( "mousewheel", function( e ){
+    _scrollTarget.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaX ){
         _containerParent.scrollLeft -= e.wheelDeltaX;
         setHandlePosition();
@@ -211,7 +213,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
     }, false );
 
     // For Firefox
-    _containerChild.addEventListener( "DOMMouseScroll", function( e ){
+    _scrollTarget.addEventListener( "DOMMouseScroll", function( e ){
       if( e.axis === e.HORIZONTAL_AXIS || ( e.axis === e.VERTICAL_AXIS && e.shiftKey )){
         _containerParent.scrollLeft += e.detail * 2;
         setHandlePosition();
