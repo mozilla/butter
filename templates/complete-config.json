@@ -1,129 +1,87 @@
 {
   "name": "complete",
-  "snapshotHTMLOnReady": true,
-  "editor": {
-    "default": "../editors/default-editor.html"
-  },
-  "ui": {
-    "trackEventHighlight": "click",
-    "title": "Butter <sup style=\"text-decoration: underline;\">0.3</sup>"
-  },
   "plugin": {
     "plugins": [
-      { 
-      "name": "attribution",
+    {
       "type": "attribution",
       "path": "../external/popcorn-js/plugins/attribution/popcorn.attribution.js"
     },
     {
-      "name": "code",
       "type": "code",
       "path": "../external/popcorn-js/plugins/code/popcorn.code.js"
     },
     {
-      "name": "flickr",
       "type": "flickr",
       "path": "../external/popcorn-js/plugins/flickr/popcorn.flickr.js"
     },
     {
-      "name": "footnote",
       "type": "footnote",
       "path": "../external/popcorn-js/plugins/footnote/popcorn.footnote.js"
     },
     {
-      "name": "gml",
       "type": "gml",
       "path": "../external/popcorn-js/plugins/gml/popcorn.gml.js"
     },
     {
-      "name": "googlefeed",
       "type": "googlefeed",
       "path": "../external/popcorn-js/plugins/googlefeed/popcorn.googlefeed.js"
     },
     {
-      "name": "googlemap",
       "type": "googlemap",
       "path": "../external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
     },
     {
-      "name": "image",
       "type": "image",
       "path": "../external/popcorn-js/plugins/image/popcorn.image.js"
     },
     {
-      "name": "lastfm",
       "type": "lastfm",
       "path": "../external/popcorn-js/plugins/lastfm/popcorn.lastfm.js"
     },
     {
-      "name": "linkedin",
       "type": "linkedin",
       "path": "../external/popcorn-js/plugins/linkedin/popcorn.linkedin.js"
     },
     {
-      "name": "lowerthird",
       "type": "lowerthird",
       "path": "../external/popcorn-js/plugins/lowerthird/popcorn.lowerthird.js"
     },
     {
-      "name": "rdio",
       "type": "rdio",
       "path": "../external/popcorn-js/plugins/rdio/popcorn.rdio.js"
     },
     {
-      "name": "subtitle",
       "type": "subtitle",
       "path": "../external/popcorn-js/plugins/subtitle/popcorn.subtitle.js"
     },
     {
-      "name": "tagthisperson",
       "type": "tagthisperson",
       "path": "../external/popcorn-js/plugins/tagthisperson/popcorn.tagthisperson.js"
     },
     {
-      "name": "tumblr",
       "type": "tumblr",
       "path": "../external/popcorn-js/plugins/tumblr/popcorn.tumblr.js"
     },
     {
-      "name": "twitter",
       "type": "twitter",
       "path": "../external/popcorn-js/plugins/twitter/popcorn.twitter.js"
     },
     {
-      "name": "processing",
       "type": "processing",
       "path": "../external/popcorn-js/plugins/processing/popcorn.processing.js"
     },
     {
-      "name": "webpage",
       "type": "webpage",
       "path": "../external/popcorn-js/plugins/webpage/popcorn.webpage.js"
     },
     {
-      "name": "wikipedia",
       "type": "wikipedia",
       "path": "../external/popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"
     },
     {
-      "name": "wordriver",
       "type": "wordriver",
       "path": "../external/popcorn-js/plugins/wordriver/popcorn.wordriver.js"
     }
     ]
-  },
-  "icons": {
-    "default": "popcorn-icon.png",
-    "image": "image-icon.png"
-  },
-  "dirs": {
-    "popcorn-js": "../external/popcorn-js/",
-    "css": "../css/",
-    "dialogs": "../dialogs/",
-    "resources": "../resources/"
-  },
-  "mediaDefaults": {
-    "frameAnimation": true
   }
 }
-

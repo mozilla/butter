@@ -1,7 +1,6 @@
 {
-  "editor": {
-    "default": "../editors/default-editor.html"
-  },
+  "name": "test-config",
+  "debug": true,
   "ui": {
     "enabled": false,
     "trackEventHighlight": "click"
@@ -9,17 +8,14 @@
   "plugin": {
     "plugins": [
       {
-        "name": "footnote",
         "type": "footnote",
         "path": "../external/popcorn-js/plugins/footnote/popcorn.footnote.js"
       },
       {
-        "name": "attribution",
         "type": "attribution",
         "path": "../external/popcorn-js/plugins/attribution/popcorn.attribution.js"
       },
       {
-        "name": "image",
         "type": "image",
         "path": "../external/popcorn-js/plugins/image/popcorn.image.js"
       }
@@ -28,13 +24,6 @@
       "footnote",
       "image"
     ]
-  },
-  "icons": {
-    "default": "../resources/popcorn-icon.png",
-    "image": "../resources/image-icon.png"
-  },
-  "dirs": {
-    "popcorn-js": "../external/popcorn-js/"
   },
   "popcorn": {
     "scripts": {
@@ -49,4 +38,3 @@
     }
   }
 }
-
