@@ -1,5 +1,5 @@
-define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "text!layouts/media-view.html" ],
-  function( PageElement, LogoSpinner, LangUtils, HTML_TEMPLATE ){
+define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox", "text!layouts/media-view.html" ],
+  function( PageElement, LogoSpinner, LangUtils, TextboxWrapper, HTML_TEMPLATE ){
 
   var DEFAULT_SUBTITLE = "Supports HTML5 video, YouTube, and Vimeo";
 
@@ -24,6 +24,8 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "text!layouts/media
     }, false );
 
     _logoSpinner = LogoSpinner( loadingContainer );
+
+    TextboxWrapper( urlTextbox );
 
     subtitle.innerHTML = DEFAULT_SUBTITLE;
 
