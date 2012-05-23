@@ -1,6 +1,5 @@
 {
   "name": "default-config",
-  "title": "Popcorn Maker",
   "snapshotHTMLOnReady": true,
   "editor": {
     "default": "../editors/default-editor.html"
@@ -8,7 +7,7 @@
   "ui": {
     "enabled": true,
     "trackEventHighlight": "click",
-    "title": "Butter test"
+    "title": "Popcorn Maker"
   },
   "mediaDefaults": {
     "frameAnimation": true
