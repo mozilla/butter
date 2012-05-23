@@ -1,13 +1,7 @@
 {
-  "name": "default-butter-test",
-  "snapshotHTMLOnReady": true,
   "editor": {
     "default": "../../editors/default-editor.html",
     "googlemap": "../../editors/googlemap-editor.html"
-  },
-  "ui": {
-    "trackEventHighlight": "click",
-    "title": "Butter <sup style=\"text-decoration: underline;\">0.3</sup>"
   },
   "plugin": {
     "plugins": [
@@ -34,18 +28,10 @@
       "image"
     ]
   },
-  "icons": {
-    "default": "popcorn-icon.png",
-    "image": "image-icon.png"
-  },
   "dirs": {
     "popcorn-js": "../../external/popcorn-js/",
     "css": "../../css/",
     "dialogs": "../../dialogs/",
     "resources": "../../resources/"
-  },
-  "mediaDefaults": {
-    "frameAnimation": true
   }
 }
-
