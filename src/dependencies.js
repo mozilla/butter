@@ -68,15 +68,6 @@ define([], function(){
                 callback();
               }
             }
-            else {
-              clearInterval( interval );
-              if( error ){
-                error();
-              }
-              else if( callback ){
-                callback();
-              }
-            }
           }, CSS_POLL_INTERVAL );
         }
 
