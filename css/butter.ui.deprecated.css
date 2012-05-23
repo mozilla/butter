@@ -758,7 +758,6 @@ input.form-error {
   color: #666;
   font: 10px/25px Arial,Helvetica,sans-serif;
   height: 28px;
-  margin-bottom: 6px;
   -moz-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 0 10px 1px rgba( 160, 160, 160, 0.1 ), 1px -1px 1px #101010, -1px -1px 1px #101010;
   -o-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 0 10px 1px rgba( 160, 160, 160, 0.1 ), 1px -1px 1px #101010, -1px -1px 1px #101010;
   -webkit-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 0 10px 1px rgba( 160, 160, 160, 0.1 ), 1px -1px 1px #101010, -1px -1px 1px #101010;

@@ -6,6 +6,9 @@ var JSLINT = './node_modules/jshint/bin/hint',
     STYLUS = './node_modules/stylus/bin/stylus',
     DOX    = './tools/dox.py',
     DIST_DIR = 'dist',
+    CSS_DIR = 'css',
+    TEMPLATES_DIR = 'templates',
+    DIALOGS_DIR = 'dialogs',
     DOCS_DIR = 'docs',
     PACKAGE_NAME = 'butter';
 
@@ -59,7 +62,42 @@ target.check = function() {
 };
 
 target['check-css'] = function() {
-  exec(CSSLINT + ' css/');
+  // see cli.js --list-rules
+  var warnings = [
+    "important",
+    "adjoining-classes",
+    "duplicate-background-images",
+    "qualified-headings",
+    "fallback-colors",
+    "empty-rules",
+    "shorthand",
+    "overqualified-elements",
+    "import",
+    "regex-selectors",
+    "rules-count",
+    "universal-selector",
+    "unqualified-attributes",
+    "zero-units"
+  ].join(",");
+
+  var errors = [
+    "known-properties",
+    "compatible-vendor-prefixes",
+    "display-property-grouping",
+    "duplicate-properties",
+    "errors",
+    "gradients",
+    "font-sizes",
+    "font-faces",
+    "floats",
+    "vendor-prefix"
+  ].join(",");
+
+  exec(CSSLINT + ' --warnings=' + warnings +
+                 ' --errors=' + errors +
+                 ' ' + CSS_DIR +
+                 ' ' + DIALOGS_DIR +
+                 ' ' + TEMPLATES_DIR);
 };
 
 target['check-lint'] = function() {
