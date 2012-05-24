@@ -8,7 +8,7 @@ var Butter_tests = [{
   type: "Event"
 }, {
   name: "Cornfield",
-  path: "cornfield/index.html",
+  path: "http://localhost:8888/test/cornfield/index.html",
   type: "Cornfield"
 }, {
   name: "Plugin Manager",
