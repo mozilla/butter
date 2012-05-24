@@ -19,8 +19,7 @@
                 data: { stuff: "derpherp" },
                 template: "pop"
               },
-              stringedData = JSON.stringify(data.data),
-              data = JSON.stringify(data);
+              stringedData = JSON.stringify(data);
 
           module( "Unauthenticated tests" );
 
@@ -39,7 +38,7 @@
                 butter.cornfield.load(filename, function(res) {
                   deepEqual( res, { error: "unauthorized" }, "Not allowed to get projects" );
 
-                  butter.cornfield.saveas(filename, data, function(res) {
+                  butter.cornfield.saveas(filename, stringedData, function(res) {
                     deepEqual( res, { error: "unauthorized" }, "Not allowed to save projects" );
 
                     start();
@@ -69,7 +68,6 @@
           module( "Authenticated tests" );
 
           asyncTest("Async API", 7, function() {
-            // Create a random filename we'll use for testing
             var foundProject = false;
 
             butter.cornfield.list( function( res ){
@@ -89,13 +87,13 @@
               butter.cornfield.load( filename, function( res ){
                 deepEqual( res, { error: "project not found" }, "The project load response is project not found" );
 
-                butter.cornfield.saveas(filename, data, function(res){
-                  deepEqual( res.error, "okay", "The project save response is okay" );
+                butter.cornfield.saveas(filename, stringedData, function(res){
+                  equal( res.error, "okay", "The project save response is okay" );
 
                   filename = res.project._id;
 
                   butter.cornfield.load(filename, function(res){
-                    equal( res.project, stringedData, "The project is the same" );
+                    deepEqual( JSON.parse(res.project), data.data, "The project is the same" );
 
                     start();
                   });
