@@ -100,7 +100,7 @@ sub {
   opacity: 1;
 }
 
-.butter-logo-spin-outer .fade-out {
+.butter-logo-spin-outer.fade-out {
   -moz-opacity: 0;
   filter:alpha(opacity=0);
   opacity: 0;
