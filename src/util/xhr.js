@@ -45,7 +45,7 @@
         xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest" )
         xhr.send(null);
       },
-      "post": function(url, data, callback) {
+      "post": function(url, data, callback, type) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
         xhr.onreadystatechange = callback;
@@ -53,8 +53,13 @@
         if ( csrf_token ) {
           xhr.setRequestHeader( "X-CSRFToken", csrf_token );
         }
-        xhr.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded" );
-        xhr.send( parameterize( data ));
+        if ( !type ) {
+          xhr.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded" );
+          xhr.send( parameterize( data ));
+        } else {
+          xhr.setRequestHeader( "Content-Type", type );
+          xhr.send( data );
+        }
       }
     };
 
