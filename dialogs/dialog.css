@@ -193,7 +193,7 @@ h1 {
 
 body > h1 {
   position: fixed;
-  margin: 0px;
+  margin: 0;
 }
 
 #content > h1{

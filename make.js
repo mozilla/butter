@@ -62,21 +62,23 @@ target.check = function() {
 };
 
 target['check-css'] = function() {
-  // see cli.js --list-rules
+  // see cli.js --list-rules.  Commenting out some warnings for now
+  // which we might want to add back in later.
   var warnings = [
-    "important",
-    "adjoining-classes",
-    "duplicate-background-images",
-    "qualified-headings",
+//    "important",
+//    "adjoining-classes",
+//    "duplicate-background-images",
+//    "qualified-headings",
     "fallback-colors",
-    "empty-rules",
-    "shorthand",
-    "overqualified-elements",
-    "import",
+//    "empty-rules",
+//    "shorthand",
+//    "overqualified-elements",
+//    "import",
     "regex-selectors",
-    "rules-count",
-    "universal-selector",
-    "unqualified-attributes",
+//    "rules-count",
+//    "font-sizes",
+//    "universal-selector",
+//    "unqualified-attributes",
     "zero-units"
   ].join(",");
 
@@ -87,7 +89,6 @@ target['check-css'] = function() {
     "duplicate-properties",
     "errors",
     "gradients",
-    "font-sizes",
     "font-faces",
     "floats",
     "vendor-prefix"
