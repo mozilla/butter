@@ -153,7 +153,7 @@ sub {
   background-image: -webkit-gradient( linear, left bottom, left top, color-stop( 0, #2c2c2c ), color-stop( 1, #4c4c4c ) );
   background-image: -webkit-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% );
   background-image: -ms-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% );
-  background-image: -o-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% );
+  background-image: -o-linear-gradient( bottom, #2c2c2c 0, #4c4c4c 100% );
   background-image: -moz-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% );
   -moz-transition: opacity 0.5s, width 0.25s, height 0.25s;
   -o-transition: opacity 0.5s, width 0.25s, height 0.25s;
