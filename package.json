@@ -69,7 +69,8 @@
     "express-browserid": "0.0.x",
     "config": "0.4.x",
     "mongoose": "2.5.x",
-    "stylus": "0.25.x"
+    "stylus": "0.25.x",
+    "csslint": "0.9.x"
   },
   "license": "MIT",
   "engine": {
