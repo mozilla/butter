@@ -108,6 +108,7 @@
             field;
 
         var itemLabel = _manifest[ item ].label || item;
+        itemLabel = itemLabel.charAt( 0 ).toUpperCase() + itemLabel.slice( 1 );
         if( itemLabel === "In" ){
           itemLabel = "Start (seconds)";
         }
