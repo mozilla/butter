@@ -7,7 +7,7 @@
   "ui": {
     "enabled": true,
     "trackEventHighlight": "click",
-    "title": "Butter test"
+    "title": "Popcorn Maker"
   },
   "mediaDefaults": {
     "frameAnimation": true
