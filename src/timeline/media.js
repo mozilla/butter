@@ -70,11 +70,14 @@ define( [
 
     _mediaStatusContainer.className = "media-status-container";
 
-    _media.listen( "mediaplaying", function( e ) {
+    function snapToCurrentTime(){
       _tracksContainer.snapTo( _media.currentTime );
       _hScrollBar.update();
-    });
+    }
 
+    _media.listen( "mediaplaying", snapToCurrentTime );
+    _media.listen( "mediapause", snapToCurrentTime );
+    
     _media.listen( "trackeventselected", function( e ){
       _selectedTracks.push( e.target );
     });
