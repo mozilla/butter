@@ -275,6 +275,21 @@ app.post('/project/:id?', function( req, res ) {
   });
 });
 
+app.get('/api/whoami', function( req, res ) {
+  var email = req.session.email;
+
+  if ( !email ) {
+    res.json( { error: 'unauthorized' }, 403 );
+    return;
+  }
+
+  res.json({
+    email: email,
+    name: email,
+    username: email
+  });
+});
+
 var port = process.env.PORT || CONFIG.server.bindPort;
 
 app.listen(port, CONFIG.server.bindIP, function() {
