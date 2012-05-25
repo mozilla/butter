@@ -12,8 +12,21 @@
   user-select: none;
 }
 
-.butter-header-spacing {
+body.butter-header-spacing {
   padding-top: 35px;
+}
+
+body.butter-tray-spacing {
+  padding-bottom: 210px;
+  -moz-transition: padding-bottom 0.5s;
+  -webkit-transition: padding-bottom 0.5s;
+  -ms-transition: padding-bottom 0.5s;
+  -o-transition: padding-bottom 0.5s;
+  transition: padding-bottom 0.5s;
+}
+
+body.butter-tray-spacing.minimized {
+  padding-bottom: 35px;
 }
 
 @-webkit-keyframes spin {
