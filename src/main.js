@@ -737,6 +737,10 @@
 
     Butter.instances = __instances;
 
+    // Butter will report a version, which is the git commit sha
+    // of the version we ship.  This happens in make.js's build target.
+    Butter.version = "@VERSION@";
+
     if ( window.Butter.__waiting ) {
       for ( var i=0, l=window.Butter.__waiting.length; i<l; ++i ) {
         Butter.apply( {}, window.Butter.__waiting[ i ] );
