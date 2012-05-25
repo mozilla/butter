@@ -10,7 +10,9 @@ define(['util/xhr'], function(XHR) {
 
   var Cornfield = function( butter, config ) {
 
-    var email = null,
+    var email,
+        username,
+        name,
         server = audience();
 
     if ( !navigator.id ) {
@@ -41,6 +43,31 @@ define(['util/xhr'], function(XHR) {
             });
         } else {
           callback(undefined);
+        }
+      });
+    };
+
+    this.whoami = function( callback ) {
+      XHR.get( server + "/api/whoami", function() {
+        if ( this.readyState === 4 ) {
+          var response;
+
+          try {
+            response = JSON.parse( this.response );
+            if ( this.status === 200 && response.email ) {
+              email = response.email;
+              username = response.username;
+              name = response.name;
+            }
+          } catch ( err ) {
+            response = {
+              error: "failed to parse data from server: \n" + this.response
+            };
+          }
+
+          if ( callback ) {
+            callback( response );
+          }
         }
       });
     };
