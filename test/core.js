@@ -810,7 +810,7 @@
       }, function(){
         butter.loader.load({
           type: "css",
-          url: "test-script.css",
+          url: "test-css.css",
           check: function(){
             ok( true, "Second check function was run." );
             return true;
