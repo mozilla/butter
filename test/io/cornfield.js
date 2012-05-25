@@ -23,8 +23,8 @@
 
           module( "Unauthenticated tests" );
 
-          test("Sync API", 1, function() {
-            ok(!butter.cornfield.user(), 'Username is ""');
+          test( "Sync API", 1, function() {
+            ok( !butter.cornfield.user(), 'Username is ""' );
           });
 
           asyncTest("Async API", 4, function() {
@@ -70,7 +70,7 @@
 
             var failSafe = setTimeout(function() {
               start();
-            }, 20000);
+            }, 20000 );
           });
 
           module( "Authenticated tests" );
