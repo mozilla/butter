@@ -11,17 +11,17 @@ document.addEventListener( "DOMContentLoaded", function() {
               event.target.contentWindow.postMessage( "getFocus", "*" );
       },
       index = 0,
-      testFrame = document.getElementById( "test-frame" ),
-      results = document.getElementById( "qunit-tests" ),
+      testFrame = id( "test-frame" ),
+      results = id( "qunit-tests" ),
       totalPass = 0,
       totalFail = 0,
       totalRun = 0,
       totalTime = 0,
-      main_li = document.createElement( "li" ),
-      main_b = document.createElement( "b" ),
+      main_li = create( "li" ),
+      main_b = create( "b" ),
       currentTest = Butter_tests[ index ],
       results_arr = [],
-      userAgent = document.getElementById( "qunit-userAgent" );
+      userAgent = id( "qunit-userAgent" );
 
   testFrame.addEventListener( "load", sendGetFocus, false );
 
@@ -49,12 +49,12 @@ document.addEventListener( "DOMContentLoaded", function() {
     } else {
 
       // this message is a Done post, so tally up everything and build the list item
-      ol = document.createElement( "ol" );
+      ol = create( "ol" );
       ol.style.display = "none";
 
       // build inner list of results
       while( oneTest = results_arr.pop() ) {
-        li = document.createElement( "li" );
+        li = create( "li" );
         li.className = oneTest.failed ? "fail" : "pass";
         li.innerHTML = oneTest.name + " <b class='counts'>(<b class='failed'>" +
           oneTest.failed + "</b>, <b class='passed'>" +
@@ -67,7 +67,7 @@ document.addEventListener( "DOMContentLoaded", function() {
         }
       }
 
-      var a = document.createElement( "a" );
+      var a = create( "a" );
       a.innerHTML = "Run test in new window";
       a.href = currentTest.path;
       a.target = "_blank";
@@ -80,7 +80,7 @@ document.addEventListener( "DOMContentLoaded", function() {
       title = currentTest.name;
       type = currentTest.type;
 
-      main_b = document.createElement( "b" );
+      main_b = create( "b" );
       main_b.innerHTML = '<span class="module-name">' + type +
         ':&nbsp;</span><span class="test-name">' +
         title + ":</span> Tests completed in " +
@@ -111,8 +111,8 @@ document.addEventListener( "DOMContentLoaded", function() {
       // are there more tests?
       if ( ++index < Butter_tests.length ) {
         currentTest = Butter_tests[ index ];
-        main_li = document.createElement( "li" );
-        main_b = document.createElement( "b" );
+        main_li = create( "li" );
+        main_b = create( "b" );
         main_b.innerHTML = "Running " + currentTest.name;
         main_li.appendChild( main_b );
         main_li.className = "running";
@@ -123,9 +123,9 @@ document.addEventListener( "DOMContentLoaded", function() {
         // Finish test suite; display totals
         testFrame.parentNode.removeChild( testFrame );
 
-        document.getElementById( "qunit-banner" ).className = totalFail ? "qunit-fail" : "qunit-pass";
+        id( "qunit-banner" ).className = totalFail ? "qunit-fail" : "qunit-pass";
 
-        var banner = document.createElement( "p" ),
+        var banner = create( "p" ),
             html = [
               'Tests completed in ',
               totalTime,

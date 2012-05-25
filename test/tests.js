@@ -7,6 +7,10 @@ var Butter_tests = [{
   path: "eventmanager/index.html",
   type: "Event"
 }, {
+  name: "Logger",
+  path: "logger/index.html",
+  type: "Error Logging"
+}, {
   name: "Cornfield",
   path: "http://localhost:8888/test/cornfield/index.html",
   type: "Cornfield"
