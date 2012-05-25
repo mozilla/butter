@@ -1,6 +1,7 @@
 {
   "name": "test-config",
   "debug": true,
+  "scrapePage": false,
   "ui": {
     "enabled": false,
     "trackEventHighlight": "click"

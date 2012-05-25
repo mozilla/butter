@@ -512,59 +512,62 @@
             medias = scrapedObject.media;
 
         _page.prepare(function() {
-          var i, j, il, jl, url, oldTarget, oldMedia, mediaPopcornOptions, mediaObj;
-          for( i = 0, il = targets.length; i < il; ++i ) {
-            oldTarget = null;
-            if( _targets.length > 0 ){
-              for( j = 0, jl = _targets.length; j < jl; ++j ){
-                // don't add the same target twice
-                if( _targets[ j ].id === targets[ i ].id ){
-                  oldTarget = _targets[ j ];
-                  break;
-                } //if
-              } //for j
-            }
-
-            if( !oldTarget ){
-              _this.addTarget({ element: targets[ i ].id });
-            }
-          }
-
-          for( i = 0, il = medias.length; i < il; i++ ) {
-            oldMedia = null;
-            mediaPopcornOptions = null;
-            url = "";
-            mediaObj = medias[ i ];
-
-            if( mediaObj.getAttribute( "data-butter-source" ) ){
-              url = mediaObj.getAttribute( "data-butter-source" );
-            }
-            else if( [ "VIDEO", "AUDIO" ].indexOf( mediaObj.nodeName ) > -1 ) {
-              url = mediaObj.currentSrc;
-            }
-
-            if( _media.length > 0 ){
-              for( j = 0, jl = _media.length; j < jl; ++j ){
-                if( _media[ j ].id !== medias[ i ].id && _media[ j ].url !== url ){
-                  oldMedia = _media[ j ];
-                  break;
-                } //if
-              } //for
-            }
-            else{
-              if( _config.mediaDefaults ){
-                mediaPopcornOptions = _config.mediaDefaults;
+          if ( !!_config.scrapePage ) {
+            var i, j, il, jl, url, oldTarget, oldMedia, mediaPopcornOptions, mediaObj;
+            for( i = 0, il = targets.length; i < il; ++i ) {
+              oldTarget = null;
+              if( _targets.length > 0 ){
+                for( j = 0, jl = _targets.length; j < jl; ++j ){
+                  // don't add the same target twice
+                  if( _targets[ j ].id === targets[ i ].id ){
+                    oldTarget = _targets[ j ];
+                    break;
+                  } //if
+                } //for j
               }
-            } //if
 
-            if( !oldMedia ){
-              _this.addMedia({ target: medias[ i ].id, url: url, popcornOptions: mediaPopcornOptions });
+              if( !oldTarget ){
+                _this.addTarget({ element: targets[ i ].id });
+              }
             }
-          } //for
+
+            for( i = 0, il = medias.length; i < il; i++ ) {
+              oldMedia = null;
+              mediaPopcornOptions = null;
+              url = "";
+              mediaObj = medias[ i ];
+
+              if( mediaObj.getAttribute( "data-butter-source" ) ){
+                url = mediaObj.getAttribute( "data-butter-source" );
+              }
+              else if( [ "VIDEO", "AUDIO" ].indexOf( mediaObj.nodeName ) > -1 ) {
+                url = mediaObj.currentSrc;
+              }
+
+              if( _media.length > 0 ){
+                for( j = 0, jl = _media.length; j < jl; ++j ){
+                  if( _media[ j ].id !== medias[ i ].id && _media[ j ].url !== url ){
+                    oldMedia = _media[ j ];
+                    break;
+                  } //if
+                } //for
+              }
+              else{
+                if( _config.mediaDefaults ){
+                  mediaPopcornOptions = _config.mediaDefaults;
+                }
+              } //if
+
+              if( !oldMedia ){
+                _this.addMedia({ target: medias[ i ].id, url: url, popcornOptions: mediaPopcornOptions });
+              }
+            } //for
+          }
 
           if( callback ){
             callback();
           } //if
+          
           _this.dispatch( "pageready" );
         });
       }; //preparePage
@@ -730,7 +733,7 @@
                 }
                 attemptDataLoad(function(){
                   //fire the ready event
-                  _this.dispatch( "ready", _this );  
+                  _this.dispatch( "ready", _this );
                 });
               });
             });

@@ -1,0 +1,20 @@
+{
+  "name": "test-config-auto-load",
+  "savedDataUrl": "saved-data-0000.json",
+  "scrapePage": false,  
+  "ui": {
+    "enabled": false
+  },
+  "plugin": {
+    "plugins": [
+      {
+        "type": "footnote",
+        "path": "../external/popcorn-js/plugins/footnote/popcorn.footnote.js"
+      },
+      {
+        "type": "image",
+        "path": "../external/popcorn-js/plugins/image/popcorn.image.js"
+      }
+    ]
+  }
+}
