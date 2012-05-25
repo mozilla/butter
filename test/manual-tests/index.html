@@ -21,7 +21,14 @@
       width: 200px; /*Width of frame div*/
       height: 100%;
       overflow: hidden; /* hidden | scroll Disable scrollbars. Set to "scroll" to enable*/
-      background: -moz-linear-gradient(center bottom , rgb(44, 44, 44) 0pt, rgb(76, 76, 76) 100%);
+      background: #2c2c2c; /* Old browsers */
+      background: -moz-linear-gradient(top,  #2c2c2c 0pt, #4c4c4c 100%); /* FF3.6+ */
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0pt,#2c2c2c), color-stop(100%,#4c4c4c)); /* Chrome,Safari4+ */
+      background: -webkit-linear-gradient(top,  #2c2c2c 0pt,#4c4c4c 100%); /* Chrome10+,Safari5.1+ */
+      background: -o-linear-gradient(top,  #2c2c2c 0pt,#4c4c4c 100%); /* Opera 11.10+ */
+      background: -ms-linear-gradient(top,  #2c2c2c 0pt,#4c4c4c 100%); /* IE10+ */
+      background: linear-gradient(top,  #2c2c2c 0pt,#4c4c4c 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c2c2c', endColorstr='#4c4c4c',GradientType=0 ); /* IE6-9 */
       color: white;
       font-family: "MetaBold";
       font-size: 14px;
