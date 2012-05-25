@@ -97,6 +97,7 @@
       testList.addEventListener( "click", function( e ){
         e.preventDefault();
         var li = e.target;
+        iframe.onload = iframe.contentWindow.focus();
         iframe.src = li.id;
         currentTest = li.id;
       }, false );
