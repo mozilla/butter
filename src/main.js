@@ -666,6 +666,38 @@
         }
       }
 
+      function attemptDataLoad( finishedCallback ){
+        var xhr = new XMLHttpRequest(),
+            savedDataUrl = _config.savedDataUrl + "?noCache=" + Date.now(),
+            savedData;
+
+        xhr.open( "GET", savedDataUrl, false );
+
+        if( xhr.overrideMimeType ){
+          // Firefox generates a misleading "syntax" error if we don't have this line.
+          xhr.overrideMimeType( "application/json" );
+        }
+
+        // Deal with caching
+        xhr.setRequestHeader( "If-Modified-Since", "Fri, 01 Jan 1960 00:00:00 GMT" );
+        xhr.send( null );
+
+        if( xhr.status === 200 ){
+          try{
+            savedData = JSON.parse( xhr.responseText );
+          }
+          catch( e ){
+            _this.dispatch( "loaddataerror", "Saved data not formatted properly." );
+          }
+          _this.importProject( savedData );
+        }
+        else {
+          _logger.log( "Butter saved data not found: " + savedDataUrl );
+        }
+
+        finishedCallback();
+      }
+
       function readConfig( userConfig ){
         var resourcesDir;
 
@@ -696,8 +728,10 @@
                 if( _config.snapshotHTMLOnReady ){
                   _page.snapshotHTML();
                 }
-                //fire the ready event
-                _this.dispatch( "ready", _this );
+                attemptDataLoad(function(){
+                  //fire the ready event
+                  _this.dispatch( "ready", _this );  
+                });
               });
             });
           });
