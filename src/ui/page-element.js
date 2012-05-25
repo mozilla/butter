@@ -29,12 +29,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
 
     this.highlight = function( state ){
       if( state ){
-        _this.blink = _blinkFunction;
+        _this.blink = __nullFunction;
         _highlightElement.style.visibility = "visible";
         _highlightElement.removeAttribute( "data-blink" );
       }
       else {
-        _this.blink = __nullFunction;
+        _this.blink = _blinkFunction;
         _highlightElement.style.visibility = "hidden";
       }
     };
@@ -53,17 +53,24 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
     } //if
     _highlightElement.style.visibility = "hidden";
 
+    function onTransitionEnd(){
+      if( _highlightElement.getAttribute( "data-blink" ) !== true ){
+          _highlightElement.removeAttribute( "data-blink" );
+          _highlightElement.style.visibility = "hidden";
+        }
+      _this.blink = _blinkFunction;
+      _highlightElement.removeEventListener( 'transitionend', onTransitionEnd, false );
+      _highlightElement.removeEventListener( 'oTransitionEnd', onTransitionEnd, false );
+      _highlightElement.removeEventListener( 'webkitTransitionEnd', onTransitionEnd, false );
+    }
+
     this.blink = _blinkFunction = function(){
       _this.blink = __nullFunction;
       _highlightElement.setAttribute( "data-blink", "true" );
       _highlightElement.style.visibility = "visible";
-      setTimeout(function(){
-        if( _highlightElement.getAttribute( "data-blink" ) !== true ){
-          _highlightElement.removeAttribute( "data-blink" );
-          _highlightElement.style.visibility = "hidden";
-        }
-        _this.blink = _blinkFunction;
-      }, 1500 );
+      _highlightElement.addEventListener( 'transitionend', onTransitionEnd, false );
+      _highlightElement.addEventListener( 'oTransitionEnd', onTransitionEnd, false );
+      _highlightElement.addEventListener( 'webkitTransitionEnd', onTransitionEnd, false );
     }; //blink
 
     if( _element ){
