@@ -164,17 +164,6 @@ define( [
       _rootElement.appendChild( _zoombar.element );
       _rootElement.appendChild( _container );
 
-      _media.listen( "trackeventadded", function( e ){
-        var trackEvent = e.data;
-        trackEvent.view.listen( "trackeventdragstarted", onTrackEventDragStarted );
-        trackEvent.view.listen( "trackeventmouseup", onTrackEventMouseUp );
-        trackEvent.view.listen( "trackeventmousedown", onTrackEventMouseDown );
-        if( _trackEventHighlight === "hover" ){
-          trackEvent.view.listen( "trackeventmouseover", onTrackEventMouseOver );
-          trackEvent.view.listen( "trackeventmouseout", onTrackEventMouseOut );
-        } //if
-      });
-
       _media.listen( "trackeventremoved", function( e ){
         var trackEvent = e.data;
         trackEvent.view.unlisten( "trackeventdragstarted", onTrackEventDragStarted );
@@ -186,6 +175,17 @@ define( [
         } //if
       });
 
+      function onTrackEventAdded( e ){
+        var trackEvent = e.data;
+        trackEvent.view.listen( "trackeventdragstarted", onTrackEventDragStarted );
+        trackEvent.view.listen( "trackeventmouseup", onTrackEventMouseUp );
+        trackEvent.view.listen( "trackeventmousedown", onTrackEventMouseDown );
+        if( _trackEventHighlight === "hover" ){
+          trackEvent.view.listen( "trackeventmouseover", onTrackEventMouseOver );
+          trackEvent.view.listen( "trackeventmouseout", onTrackEventMouseOut );
+        }
+      }
+
       function onTrackAdded( e ){
         _vScrollBar.update();
         var track = e.data;
@@ -195,7 +195,15 @@ define( [
         if( _trackEventHighlight === "hover" ){
           track.view.listen( "trackeventmouseover", onTrackEventMouseOver );
           track.view.listen( "trackeventmouseout", onTrackEventMouseOut );
-        } //if
+        }
+
+        var existingEvents = track.trackEvents;
+        for( var i=0; i<existingEvents.length; ++i ){
+          onTrackEventAdded({
+            data: existingEvents[ i ]
+          });
+        }
+
       }
 
       var existingTracks = _media.tracks;
@@ -206,6 +214,7 @@ define( [
       }
 
       _media.listen( "trackadded", onTrackAdded );
+      _media.listen( "trackeventadded", onTrackEventAdded );
 
       _media.listen( "trackremoved", function( e ){
         _vScrollBar.update();
