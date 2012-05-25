@@ -207,7 +207,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
         butter.project.data = butter.exportProject();
         var saveString = JSON.stringify( butter.project );
         butter.ui.loadIndicator.start();
-        butter.cornfield.saveas( butter.project.id, saveString, function( e ){
+        butter.cornfield.save( butter.project.id, saveString, function( e ){
           butter.ui.loadIndicator.stop();
           if( e.error !== "okay" || !e.project || !e.project._id ){
             showErrorDialog( "There was a problem saving your project. Please try again." );

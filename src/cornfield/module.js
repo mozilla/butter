@@ -77,7 +77,7 @@ define(['util/xhr'], function(XHR) {
     };
 
     this.publish = function(id, callback) {
-      XHR.post(server + "/publish/" + id, null, function() {
+      XHR.post(server + "/api/publish/" + id, null, function() {
         if (this.readyState === 4) {
           try {
             var response = JSON.parse(this.response);
@@ -104,7 +104,7 @@ define(['util/xhr'], function(XHR) {
     };
 
     this.list = function(callback) {
-      XHR.get(server + "/projects", function() {
+      XHR.get(server + "/api/projects", function() {
         if (this.readyState === 4) {
           try {
             var response = JSON.parse(this.response);
@@ -116,13 +116,8 @@ define(['util/xhr'], function(XHR) {
       });
     };
 
-    this.refreshLoad = function( id ) {
-      window.location = server + "/load/" + id;
-    };
-
-    // XXX I need to figure out a better API for this
     this.load = function(id, callback) {
-      XHR.get(server + "/project/" + id, function() {
+      XHR.get(server + "/api/project/" + id, function() {
         if (this.readyState === 4) {
           try {
             var response = JSON.parse(this.response);
@@ -134,21 +129,14 @@ define(['util/xhr'], function(XHR) {
       });
     };
 
-    this.save = function(data, callback) {
-      XHR.post(server + "/project/", data, function() {
-        if (this.readyState === 4) {
-          try {
-            var response = JSON.parse(this.response);
-            callback(response);
-          } catch (err) {
-            callback({ error: "an unknown error occured" });
-          }
-        }
-      });
-    };
+    this.save = function(id, data, callback) {
+      var url = server + "/api/project/";
 
-    this.saveas = function(id, data, callback) {
-      XHR.post(server + "/project/" + id, data, function() {
+      if ( id ) {
+        url += id;
+      }
+
+      XHR.post( url, data, function() {
         if (this.readyState === 4) {
           try {
             var response = JSON.parse(this.response);
@@ -157,7 +145,7 @@ define(['util/xhr'], function(XHR) {
             callback({ error: "an unknown error occured" });
           }
         }
-      }, "json" );
+      }, "application/json" );
     };
   };
 

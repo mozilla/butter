@@ -113,9 +113,9 @@ function publishRoute( req, res ){
   });
 }
 
-app.post('/publish/:id', publishRoute );
+app.post('/api/publish/:id', publishRoute );
 
-app.get('/projects', function(req, res) {
+app.get('/api/projects', function(req, res) {
   var email = req.session.email;
 
   if (!email) {
@@ -160,28 +160,7 @@ app.get('/projects', function(req, res) {
   });
 });
 
-app.get('/load/:user/:id', function(req, res){
-  var email = req.params.user,
-      id = req.params.id;
-
-  if (!canStoreData) {
-    res.json({ error: 'storage service is not running' }, 500);
-    return;
-  }
-
-  UserModel.findOne( { email: email }, function( err, doc ) {
-    for( var i=0; i<doc.projects.length; ++i ){
-      if( String( doc.projects[ i ]._id ) === id ){
-        res.send( doc.projects[ i ].html, { 'Content-Type': 'text/html' }, 201);
-        return;
-      }  
-    }
-    res.send(404);    
-  });
-  
-});
-
-app.get('/project/:id?', function(req, res) {
+app.get('/api/project/:id?', function(req, res) {
   var email = req.session.email,
       id = req.params.id;
 
@@ -207,7 +186,7 @@ app.get('/project/:id?', function(req, res) {
   });
 });
 
-app.post('/project/:id?', function( req, res ) {
+app.post('/api/project/:id?', function( req, res ) {
   var email = req.session.email,
       id = req.params.id;
   
