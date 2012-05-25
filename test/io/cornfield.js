@@ -23,9 +23,8 @@
 
           module( "Unauthenticated tests" );
 
-          asyncTest("Sync API", 1, function() {
-            equal(butter.cornfield.user(), null, 'Username is ""');
-            start();
+          test("Sync API", 1, function() {
+            ok(!butter.cornfield.user(), 'Username is ""');
           });
 
           asyncTest("Async API", 4, function() {
@@ -48,6 +47,15 @@
             });
           });
 
+          asyncTest( "/api/whoami", 1, function() {
+            butter.cornfield.whoami( function( res ) {
+              deepEqual( res, {
+                error: 'unauthorized'
+              }, "Response is unauthorized" );
+              start();
+            });
+          });
+
           module( "Authentication tests" );
 
           asyncTest("Login (user input needed)", 4, function() {
@@ -62,7 +70,7 @@
 
             var failSafe = setTimeout(function() {
               start();
-            }, 10000);
+            }, 20000);
           });
 
           module( "Authenticated tests" );
@@ -99,6 +107,17 @@
                   });
                 });
               });
+            });
+          });
+
+          asyncTest( "/api/whoami", 1, function() {
+            butter.cornfield.whoami( function( res ) {
+              deepEqual( res, {
+                email: butter.cornfield.user(),
+                name: butter.cornfield.user(),
+                username: butter.cornfield.user()
+              }, "Response is unauthorized" );
+              start();
             });
           });
 
