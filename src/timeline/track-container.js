@@ -110,7 +110,7 @@ function(
       var p = time / _media.duration,
           newScroll = _element.scrollWidth * p;
       if ( newScroll < _element.scrollLeft || newScroll > _element.scrollLeft + _element.clientWidth ) {
-        _element.scrollLeft = newScroll;  
+        _element.scrollLeft = newScroll;
       }
     };
 
