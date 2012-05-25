@@ -101,6 +101,8 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     _element.appendChild( _areas.tools.element );
 
     if( options.enabled !== false ){
+      document.body.classList.add( "butter-header-spacing" );
+      document.body.classList.add( "butter-tray-spacing" );
       document.body.appendChild( _element );
       butter.listen( "mediaadded", function( e ){
         e.data.createView();
@@ -219,10 +221,12 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
           if( _state !== val ){
             _state = val;
             if( _state ){
+              document.body.classList.remove( "minimized" );
               _element.setAttribute( "ui-state", "visible" );
               _this.dispatch( "uivisibilitychanged", true );
             }
             else {
+              document.body.classList.add( "minimized" );
               _element.setAttribute( "ui-state", "hidden" );
               _this.dispatch( "uivisibilitychanged", false );
             } //if
