@@ -7,6 +7,10 @@
   function parameterize(data) {
     var s = [];
 
+    if ( !data ) {
+      return null;
+    }
+
     for(var key in data){
       if( data.hasOwnProperty( key ) ){
         s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(data[key]);
@@ -16,35 +20,45 @@
     return s.join("&").replace("/%20/g", "+");
   }
 
-  var __types = {
-    form: "application/x-www-form-urlencoded",
-    json: "application/json"
-  };
-
   define( [], function() {
+
+    function setCSRFToken() {
+      var element = document.getElementById("csrf_token_id");
+      if ( element ) {
+        csrf_token = element.value;
+      }
+    }
+
+    var csrf_token;
+
+    if ( document.readyState === "complete" ) {
+      setCSRFToken();
+    } else {
+      document.addEventListener( "DOMContentLoaded", setCSRFToken, false );
+    }
 
     var XHR = {
       "get": function(url, callback) {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url, true);
         xhr.onreadystatechange = callback;
+        xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest" );
         xhr.send(null);
       },
       "post": function(url, data, callback, type) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
         xhr.onreadystatechange = callback;
-        if( !type || type === "form" ){
-          xhr.setRequestHeader("Content-Type", __types.form);
-          xhr.send(parameterize(data));
+        xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest" );
+        if ( csrf_token ) {
+          xhr.setRequestHeader( "X-CSRFToken", csrf_token );
         }
-        else if( __types[ type ] ){
-          xhr.setRequestHeader("Content-Type", __types[ type ]);
-          xhr.send(data);
-        }
-        else{
-          xhr.setRequestHeader("Content-Type", "text/plain");
-          xhr.send(data);
+        if ( !type ) {
+          xhr.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded" );
+          xhr.send( parameterize( data ));
+        } else {
+          xhr.setRequestHeader( "Content-Type", type );
+          xhr.send( data );
         }
       }
     };

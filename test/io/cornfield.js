@@ -37,7 +37,7 @@
                 butter.cornfield.load(filename, function(res) {
                   deepEqual( res, { error: "unauthorized" }, "Not allowed to get projects" );
 
-                  butter.cornfield.saveas(filename, stringedData, function(res) {
+                  butter.cornfield.save(filename, stringedData, function(res) {
                     deepEqual( res, { error: "unauthorized" }, "Not allowed to save projects" );
 
                     start();
@@ -95,7 +95,7 @@
               butter.cornfield.load( filename, function( res ){
                 deepEqual( res, { error: "project not found" }, "The project load response is project not found" );
 
-                butter.cornfield.saveas(filename, stringedData, function(res){
+                butter.cornfield.save(filename, stringedData, function(res){
                   equal( res.error, "okay", "The project save response is okay" );
 
                   filename = res.project._id;
