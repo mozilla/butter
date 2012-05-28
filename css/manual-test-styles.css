@@ -18,7 +18,7 @@
   float: left;
   text-align: center;
   font-family: helvetica;
-  font-style: bold;
+  font-weight: bold;
 }
 
 video {
@@ -36,9 +36,9 @@ button {
   margin: 5px;
   padding: 0.25em 0.75em 0.2em;
   display: inline-block;
-  color: 0;
+  color: #000000;
   font-size: 1.142em;
-  border: 0pt none;
+  border: 0 none;
   border-radius: 0.2em 0.2em 0.2em 0.2em;
-  box-shadow: 1px 1px 0pt rgba(0, 0, 0, 0.25);
+  box-shadow: 1px 1px rgba(0, 0, 0, 0.25);
 }
