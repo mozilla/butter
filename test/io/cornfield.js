@@ -24,7 +24,7 @@
           module( "Unauthenticated tests" );
 
           test( "Sync API", 1, function() {
-            ok( !butter.cornfield.user(), "Username is \"\"" );
+            ok( !butter.cornfield.user(), "Username is undefined" );
           });
 
           asyncTest( "Async API", 4, function() {
