@@ -906,11 +906,11 @@
     Butter({
       config: "test-config-auto-load.json",
       ready: function( butter ){
-        start();
         equal( butter.media.length, 1, "One media created" );
         equal( butter.media[0].tracks.length, 2, "Two tracks created" );
         equal( butter.media[0].tracks[0].trackEvents.length, 0, "Track 1 has no events" );
         equal( butter.media[0].tracks[1].trackEvents.length, 1, "Track 2 has one event" );
+        start();
       }
     });
 
