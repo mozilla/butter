@@ -916,4 +916,10 @@
 
   });
 
+  test( "Only load plugin scripts once", 1, function() {
+    createButter(function( butter ) {
+      var footnoteScripts = document.head.querySelectorAll( "script[src='" + butter.config.plugin.plugins[ 0 ].path + "']" );
+      equal( footnoteScripts.length, 1, "Footnote script was only loaded once" );
+    });
+  });
 })( window, window.document );
