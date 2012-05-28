@@ -96,7 +96,7 @@ target['check-css'] = function() {
 
   exec(CSSLINT + ' --warnings=' + warnings +
                  ' --errors=' + errors +
- 		 ' --quiet --format=compact' +
+                 ' --quiet --format=compact' +
                  ' ' + CSS_DIR +
                  ' ' + DIALOGS_DIR +
                  ' ' + TEMPLATES_DIR);
