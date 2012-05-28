@@ -101,11 +101,6 @@ define([], function(){
 
       return zA - zB;
     });
-    var beep = [];
-    for( var i=0; i<__droppables.length; ++i){
-      beep.push(__droppables[i].element);
-    }
-    window.droppables = beep;
   }
 
   function Resizable( element, options ){
