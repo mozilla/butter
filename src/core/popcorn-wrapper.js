@@ -403,7 +403,11 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
      */
     function waitForMedia( readyCallback, timeoutCallback ){
       checkTimeoutLoop(function(){
-        return ( _popcorn.media.readyState >= 1 && _popcorn.duration() > 0 );
+        return ( _popcorn && /* Make sure _popcorn still exists (e.g., destroy() hasn't been called) */
+                 ( _popcorn.media.readyState >= 1 &&
+                   _popcorn.duration() > 0
+                 )
+               );
       }, readyCallback, timeoutCallback, MEDIA_WAIT_DURATION );
     }
 
