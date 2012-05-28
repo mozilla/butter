@@ -683,8 +683,6 @@
       }
 
       function readConfig( userConfig ){
-        var resourcesDir;
-
         // Overwrite default config options with user settings (if any).
         userConfig = userConfig || {};
         _config = Lang.defaults( userConfig, _defaultConfig );

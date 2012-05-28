@@ -57,11 +57,8 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     };
   }
 
-  function loadIcons( butter ){
-    var config = butter.config,
-        icons = config.icons,
-        resourcesDir = config.dirs.resources || "",
-        icon, img, div;
+  function loadIcons( icons, resourcesDir ){
+    var icon, img, div;
 
     for( icon in icons ){
       if( icons.hasOwnProperty( icon ) ){
@@ -125,7 +122,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     _element.appendChild( _areas.work.element );
     _element.appendChild( _areas.tools.element );
 
-    if( options.enabled !== false ){
+    if( options.ui.enabled !== false ){
       document.body.classList.add( "butter-header-spacing" );
       document.body.classList.add( "butter-tray-spacing" );
       document.body.appendChild( _element );
@@ -135,7 +132,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     }
 
     this.load = function( onReady ){
-      if( options.enabled !== false ){
+      if( options.ui.enabled !== false ){
         butter.loader.load(
           [
             {
@@ -145,7 +142,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
           ],
           function(){
             // icon preloading needs css to be loaded first
-            loadIcons( butter );
+            loadIcons( options.icons, options.dirs.resources || "" );
             onReady();
           }
         );
@@ -440,7 +437,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
       _this.visible = true;
       _toggler.visible = true;
       ContextButton( butter );
-      if( options.enabled !== false ){
+      if( options.ui.enabled !== false ){
         Header( butter, options );
       }
     });
