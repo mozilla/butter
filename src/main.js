@@ -670,32 +670,35 @@
       }
 
       function attemptDataLoad( finishedCallback ){
-        var xhr = new XMLHttpRequest(),
-            savedDataUrl = _config.savedDataUrl + "?noCache=" + Date.now(),
-            savedData;
+        if ( _config.savedDataUrl ) {
+          
+          var xhr = new XMLHttpRequest(),
+              savedDataUrl = _config.savedDataUrl + "?noCache=" + Date.now(),
+              savedData;
 
-        xhr.open( "GET", savedDataUrl, false );
+          xhr.open( "GET", savedDataUrl, false );
 
-        if( xhr.overrideMimeType ){
-          // Firefox generates a misleading "syntax" error if we don't have this line.
-          xhr.overrideMimeType( "application/json" );
-        }
-
-        // Deal with caching
-        xhr.setRequestHeader( "If-Modified-Since", "Fri, 01 Jan 1960 00:00:00 GMT" );
-        xhr.send( null );
-
-        if( xhr.status === 200 ){
-          try{
-            savedData = JSON.parse( xhr.responseText );
+          if( xhr.overrideMimeType ){
+            // Firefox generates a misleading "syntax" error if we don't have this line.
+            xhr.overrideMimeType( "application/json" );
           }
-          catch( e ){
-            _this.dispatch( "loaddataerror", "Saved data not formatted properly." );
+
+          // Deal with caching
+          xhr.setRequestHeader( "If-Modified-Since", "Fri, 01 Jan 1960 00:00:00 GMT" );
+          xhr.send( null );
+
+          if( xhr.status === 200 ){
+            try{
+              savedData = JSON.parse( xhr.responseText );
+            }
+            catch( e ){
+              _this.dispatch( "loaddataerror", "Saved data not formatted properly." );
+            }
+            _this.importProject( savedData );
           }
-          _this.importProject( savedData );
-        }
-        else {
-          _logger.log( "Butter saved data not found: " + savedDataUrl );
+          else {
+            _logger.log( "Butter saved data not found: " + savedDataUrl );
+          }
         }
 
         finishedCallback();

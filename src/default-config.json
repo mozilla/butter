@@ -1,6 +1,5 @@
 {
   "name": "default-config",
-  "savedDataUrl": "./saved-data.json",
   "snapshotHTMLOnReady": true,
   "editor": {
     "default": "../editors/default-editor.html"
