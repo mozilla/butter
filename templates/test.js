@@ -1,3 +1,5 @@
 document.addEventListener( "DOMContentLoaded", function( e ){
-  Butter();
+  Butter({
+    config: 'test-config.json'
+  });
 }, false );
