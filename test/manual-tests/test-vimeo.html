@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manual Test: Change Media to Vimeo</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
+    <script src="../../src/butter.js" data-butter-exclude></script>
+    <script type="text/javascript" src="basic-test.js" data-butter-exclude></script>
+    <script type="text/javascript" src="manual-test.js" data-butter-exclude></script>
+    <link rel="stylesheet" href="../../css/manual-test-styles.css" type="text/css" />
+</head>
+<body>
+    <video id="main" data-butter="media" controls>
+      <source src="../../external/popcorn-js/test/trailer.ogv"></source>
+      <source src="../../external/popcorn-js/test/trailer.mp4"></source>
+    </video>
+    <div class="container-div">
+        <div class="content-div" data-butter="target" id="Area1"></div>
+        <p>Area 1</p>
+    </div>
+    <div class="container-div">
+        <div class="content-div" data-butter="target" id="Area2" data-butter-default ></div>
+        <p>Area 2</p>
+    </div>
+    <div id="target-div"></div>
+
+    <!-- This is the test portion of the page -->
+    <div id="manual-test">
+
+      <!-- An explanation of what the test is all about -->
+      <div id="manual-test-desc">
+        <h1>Manual Test: Change Media to Vimeo</h1>
+        <p> This test makes sure that swapping a Vimeo video for an existing HTML5 video
+            in a project works, and maintains the existing track events.</p>
+      </div>
+
+      <!-- First, the steps that the user must follow -->
+      <div id="manual-test-steps">
+        <h2>Steps to Follow:</h2>
+        <ol>
+          <li>Wait for page to load, make sure HTML5 video is displayed on page
+          <li>Hover mouse over "Edit source..." area on HTML5 video (top-left corner)
+          <li>Enter the followoing Vimeo URL: <a href="http://vimeo.com/25107077">http://vimeo.com/25107077</a>
+          <li>Click the "Save" button in the source editor
+          <li>Wait for the Vimeo video to load
+          <li>Play the video and observe Area 1 and Area 2
+          <li>Drag the playhead along the timeline
+        </ol>
+      </div>
+
+      <!-- Second, the expected result.  Might be text, image, ... -->
+      <div id="manual-test-result">
+        <h2>Expected Result</h2>
+        <p>The HTML5 video should have been changed to a Vimeo video, and track events should fire in the Area 1 and Area 2 DIVs.  When dragging the playhead along the timeline, the timeline media should update. </p>
+      </div>
+
+      <!-- The pass/fail buttons.  These will get created in manual-test-buttons by manual-test.js -->
+      <div id="manual-test-buttons"></div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manual Test: Change Media to YouTube</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
+    <script src="../../src/butter.js" data-butter-exclude></script>
+    <script type="text/javascript" src="no-events-test.js" data-butter-exclude></script>
+    <script type="text/javascript" src="manual-test.js" data-butter-exclude></script>
+    <link rel="stylesheet" href="../../css/manual-test-styles.css" type="text/css" />
+</head>
+<body>
+    <video id="main" data-butter="media" controls>
+      <source src="../../external/popcorn-js/test/trailer.ogv"></source>
+      <source src="../../external/popcorn-js/test/trailer.mp4"></source>
+    </video>
+    <div class="container-div">
+        <div class="content-div" data-butter="target" id="Area1"></div>
+        <p>Area 1</p>
+    </div>
+    <div class="container-div">
+        <div class="content-div" data-butter="target" id="Area2" data-butter-default ></div>
+        <p>Area 2</p>
+    </div>
+    <div id="target-div"></div>
+
+    <!-- This is the test portion of the page -->
+    <div id="manual-test">
+
+      <!-- An explanation of what the test is all about -->
+      <div id="manual-test-desc">
+        <h1>Manual Test: Add a popcorn event</h1>
+        <p> This test makes sure that popcorn events can be added without incident.</p>
+      </div>
+
+      <!-- First, the steps that the user must follow -->
+      <div id="manual-test-steps">
+        <h2>Steps to Follow:</h2>
+        <ol>
+          <li>Wait for page to load, make sure HTML5 video is displayed on page
+          <li>Drag the "footnote" plugin from My Events (lower right) into the "area 1" div
+          <li>In the dialogue that appears in the tray, enter arbitrary text
+          <li>Click "done" to create the event
+          <li>Drag the "image" plugin from My Events (lower right) into the "area 2" div
+          <li>In the dialogue that appears in the tray, paste this URL <a href="http://mozillapopcorn.org/wp-content/uploads/2011/11/icon_popcorn_js-150x150.png">http://mozillapopcorn.org/wp-content/uploads/2011/11/icon_popcorn_js-150x150.png</a> into the source URL field
+          <li>Click "done" to create the event
+          <li>Scroll the playhead to a time before the events start
+          <li>Play through
+        </ol>
+      </div>
+
+      <!-- Second, the expected result.  Might be text, image, ... -->
+      <div id="manual-test-result">
+        <h2>Expected Result</h2>
+        <p>DIV 1 should have the text you entered, DIV 2 should display an image </p>
+      </div>
+
+      <!-- The pass/fail buttons.  These will get created in manual-test-buttons by manual-test.js -->
+      <div id="manual-test-buttons"></div>
+    </div>
+
+</body>
+</html>
