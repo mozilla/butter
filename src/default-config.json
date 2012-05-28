@@ -1,6 +1,7 @@
 {
   "name": "default-config",
   "snapshotHTMLOnReady": true,
+  "scrapePage": true,
   "editor": {
     "default": "../editors/default-editor.html"
   },
