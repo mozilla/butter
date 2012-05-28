@@ -77,6 +77,8 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     media.listen( "mediafailed", function( e ){
       showError( true, "Media failed to load. Check your URL:" );
       changeButton.removeAttribute( "disabled" );
+      _propertiesElement.classList.add( "hold" );
+      //_propertiesElement.classList.add( "butter-media-properties-error" );
       _logoSpinner.stop();
     });
 
