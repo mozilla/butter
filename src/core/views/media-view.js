@@ -40,7 +40,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
     function changeUrl(){
       if(testUrl(urlTextbox.value)){
-          subtitle.className = "form-field-notes form-ok";
+        subtitle.className = "form-field-notes form-ok";
         subtitle.innerHTML = "URL changed.";
         urlTextbox.className = "url form-ok";
         media.url = urlTextbox.value;
@@ -75,8 +75,11 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     });
 
     media.listen( "mediafailed", function( e ){
-      showError( true, "Media failed to load. Check your URL:" );
+      showError( true, "Media failed to load. Check your URL." );
       changeButton.removeAttribute( "disabled" );
+      _propertiesElement.classList.add( "hold" );
+      urlTextbox.className += " form-error";
+      subtitle.className += " form-error";
       _logoSpinner.stop();
     });
 
