@@ -48,15 +48,17 @@ define( [], function(){
 
     _handle.addEventListener( "mousedown", onMouseDown, false );
 
-    this.update = function( level ) {
+    this.update = function() {
       _rect = _element.getBoundingClientRect();
       _handleWidth = ( _rect.width / ZOOM_LEVELS );
       _handle.style.width = _handleWidth + "px";
       _elementWidth = _rect.width;
-      if( level !== undefined ){
-        _handle.style.left = ( _rect.width - _handle.clientWidth ) * level + "px";
-        zoomCallback( _handle.offsetLeft / ( _rect.width - _handle.clientWidth ) );
-      } //if
+    };
+
+    this.zoom = function( level ) {
+      _this.update();
+      _handle.style.left = ( _rect.width - _handle.clientWidth ) * level + "px";
+      zoomCallback( _handle.offsetLeft / ( _rect.width - _handle.clientWidth ) );
     };
 
     _element.addEventListener( "click", function( e ) {

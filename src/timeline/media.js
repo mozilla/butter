@@ -36,8 +36,7 @@ define( [
     } //onTrackOrderChanged
 
     function zoomCallback( zoomLevel ){
-      var nextZoom;
-      nextZoom = MIN_ZOOM * zoomLevel + _zoomFactor;
+      var nextZoom = MIN_ZOOM * zoomLevel + _zoomFactor;
       if( nextZoom !== _zoom ){
         _zoom = nextZoom;
         _tracksContainer.zoom = _zoom;
@@ -155,7 +154,7 @@ define( [
     function onMediaReady(){
       _zoomFactor = _container.clientWidth / _media.duration;
       _zoom = _zoomFactor;
-      _zoombar.update( DEFAULT_ZOOM );
+      _zoombar.zoom( DEFAULT_ZOOM );
       _tracksContainer.zoom = _zoom;
       updateUI();
       _this.dispatch( "ready" );
