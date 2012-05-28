@@ -2,8 +2,8 @@
   "name": "default-butter-test",
   "snapshotHTMLOnReady": true,
   "editor": {
-    "default": "http://localhost:8888/editors/default-editor.html",
-    "googlemap": "http://localhost:8888/editors/googlemap-editor.html"
+    "default": "../../editors/default-editor.html",
+    "googlemap": "../../editors/googlemap-editor.html"
   },
   "cornfield": {
     "server": "http://localhost:8888",
@@ -17,20 +17,20 @@
     "plugins": [
       {
         "type": "footnote",
-        "path": "http://localhost:8888/external/popcorn-js/plugins/footnote/popcorn.footnote.js"
+        "path": "../../external/popcorn-js/plugins/footnote/popcorn.footnote.js"
       },
       {
         "type": "attribution",
-        "path": "http://localhost:8888/external/popcorn-js/plugins/attribution/popcorn.attribution.js"
+        "path": "../../external/popcorn-js/plugins/attribution/popcorn.attribution.js"
       },
       {
         "type": "image",
-        "path": "http://localhost:8888/external/popcorn-js/plugins/image/popcorn.image.js"
+        "path": "../../external/popcorn-js/plugins/image/popcorn.image.js"
       },
       {
         "name": "googlemap",
         "type": "googlemap",
-        "path": "http://localhost:8888/external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
+        "path": "../../external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
       }
     ],
     "defaults": [
@@ -43,10 +43,10 @@
     "image": "image-icon.png"
   },
   "dirs": {
-    "popcorn-js": "/external/popcorn-js",
-    "css": "/css",
-    "dialogs": "/dialogs/",
-    "resources": "/resources/"
+    "popcorn-js": "../../external/popcorn-js",
+    "css": "../../css",
+    "dialogs": "../../dialogs/",
+    "resources": "../../resources/"
   },
   "mediaDefaults": {
     "frameAnimation": true
