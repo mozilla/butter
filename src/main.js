@@ -647,31 +647,9 @@
         }
       };
 
-      function loadIcons( icons, resourcesDir ){
-        var icon, img, div;
-
-        for( icon in icons ){
-          if( icons.hasOwnProperty( icon ) ){
-            img = new Image();
-            img.id = icon + "-icon";
-            img.src = resourcesDir + icons[ icon ];
-
-            // We can't use "display: none", since that makes it
-            // invisible, and thus not load.  Opera also requires
-            // the image be in the DOM before it will load.
-            div = document.createElement( "div" );
-            div.setAttribute( "data-butter-exclude", "true" );
-            div.className = "butter-image-preload";
-
-            div.appendChild( img );
-            document.body.appendChild( div );
-          }
-        }
-      }
-
       function attemptDataLoad( finishedCallback ){
         if ( _config.savedDataUrl ) {
-          
+
           var xhr = new XMLHttpRequest(),
               savedDataUrl = _config.savedDataUrl + "?noCache=" + Date.now(),
               savedData;
@@ -705,16 +683,11 @@
       }
 
       function readConfig( userConfig ){
-        var resourcesDir;
-
         // Overwrite default config options with user settings (if any).
         userConfig = userConfig || {};
         _config = Lang.defaults( userConfig, _defaultConfig );
 
         _this.project.template = _config.name;
-        resourcesDir = _config.dirs.resources || "",
-
-        loadIcons( _config.icons, resourcesDir );
 
         //prepare modules first
         var moduleCollection = Modules( _this, _config ),
@@ -724,7 +697,7 @@
 
         _page = new Page( loader, _config );
 
-        _this.ui = new UI( _this, _config.ui );
+        _this.ui = new UI( _this, _config );
 
         _this.ui.load(function(){
           //prepare the page next
