@@ -13,19 +13,49 @@
   window._testBeforeCallback = function(){};
   window._testAfterCallback = function(){};
 
+  // All modules that create Butter objects (e.g., Butter())
+  // should use this lifecycle, and call rememberButter() for all
+  // created butter instances.  Any created using createButter()
+  // already have it done automatically.
+  var butterLifeCycle = (function(){
+
+    var _tmpButter;
+
+    return {
+      setup: function(){
+        _tmpButter = [];
+      },
+      teardown: function(){
+        var i = _tmpButter.length;
+        while( i-- ){
+          _tmpButter[ i ].clearProject();
+          delete _tmpButter[ i ];
+        }
+      },
+      rememberButter: function(){
+        var i = arguments.length;
+        while( i-- ){
+          _tmpButter.push( arguments[ i ] );
+        }
+      }
+    };
+
+  })();
+
   function createButter( callback ){
 
     Butter({
       config: "test-config.json",
       debug: false,
       ready: function( butter ){
+        butterLifeCycle.rememberButter( butter );
         callback( butter );
       }
     });
-
   } //createButter
 
-  module( "Event Handling" );
+  module( "Media", butterLifeCycle );
+  module( "Event Handling",  butterLifeCycle );
 
   asyncTest( "Simple event handling", 2, function(){
 
@@ -49,12 +79,11 @@
     });
   });
 
-  module( "Core Object Functionality" );
+  module( "Core Object Functionality", butterLifeCycle );
 
   asyncTest( "Create Media object", 2, function(){
 
     createButter( function( butter ){
-
       var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../external/popcorn-js/test/trailer.ogv" } );
       ok( m1.name === "Media 1", "Name is correct" );
       ok( m1.target === "audio-test" && m1.url === "../external/popcorn-js/test/trailer.ogv", "Media storage is correct" );
@@ -192,7 +221,7 @@
     });
   });
 
-  module( "Track" );
+  module( "Track", butterLifeCycle );
 
   asyncTest( "Create Track object", 1, function(){
 
@@ -255,7 +284,7 @@
     });
   });
 
-  module( "TrackEvent" );
+  module( "TrackEvent", butterLifeCycle );
 
   asyncTest( "Create TrackEvent object", 1, function(){
 
@@ -353,6 +382,7 @@
           m;
 
       m = butter.addMedia();
+
       t1 = m.addTrack(),
       te = t1.addTrackEvent({ name: "TrackEvent 3", type: "test", start: 2, end: 3 } ),
       state = undefined;
@@ -457,7 +487,9 @@
 
       tempElement.id = "targetID";
       document.body.appendChild( tempElement );
+
       butter.addMedia();
+
       butter.addTarget( { name:"T1" } );
       butter.addTarget( { name:"T2", element: "targetID" } );
 
@@ -493,8 +525,11 @@
     Butter({
       config: "test-config.json",
       ready: function( butter ){
+        butterLifeCycle.rememberButter( butter );
+
         m1 = butter.addMedia( { url:"www.test-url-1.com", target:"test-target-1" } );
         m2 = butter.addMedia( { url:"www.test-url-2.com", target:"test-target-2" } );
+
         t1 = m1.addTrack();
         t2 = m1.addTrack();
         butter.currentMedia = m2;
@@ -507,6 +542,8 @@
         Butter({
           config: "test-config.json",
           ready: function( secondButter ){
+            butterLifeCycle.rememberButter( butter );
+
             teEvents = tEvents = mEvents = 0;
             secondButter.listen( "mediaadded", function(){
               mEvents++;
@@ -543,13 +580,16 @@
       }
     });
   });
-  module( "Player tests" );
+
+  module( "Player tests", butterLifeCycle );
   // Make sure HTML5 audio/video, youtube, and vimeo work
   asyncTest( "Test basic player support", 7, function() {
 
     Butter({
       config: "test-config.json",
       ready: function( butter ){
+        butterLifeCycle.rememberButter( butter );
+
         var mediaURLS = [ "http://www.youtube.com/watch?v=7glrZ4e4wYU",
             "http://vimeo.com/30619461",
             "../external/popcorn-js/test/italia.ogg" ],
@@ -591,6 +631,9 @@
       equals( document.getElementById( "strange-test-1" ).attributes.length, el.attributes.length, "has same attribute list length" );
       equals( document.getElementById( "strange-test-1" ).getAttribute( "data-butter" ), "media", "has data-butter attribute" );
 
+      el.removeAttribute( "data-butter-source" );
+      el.removeAttribute( "data-butter" );
+
       start();
     });
   });
@@ -616,7 +659,7 @@
     });
   });
 
-  module( "Exported HTML" );
+  module( "Exported HTML", butterLifeCycle );
   asyncTest( "exported HTML is properly escaped", 1, function() {
 
     createButter( function( butter ){
@@ -679,10 +722,10 @@
         equals( /test text at end of body\s*<\/body>/.test( butter.getHTML() ), true, "Text appended to body in getHTML event is included in exported HTML." );
         start();
       });
-    })
+    });
   });
 
-  module( "Debug functionality" );
+  module( "Debug functionality", butterLifeCycle );
   asyncTest( "Debug enables/disables logging", 4, function() {
 
     createButter(function( butter ) {
@@ -712,7 +755,8 @@
     });
   });
 
-  module( "Popcorn scripts and callbacks" );
+
+  module( "Popcorn scripts and callbacks", butterLifeCycle );
   asyncTest( "Existence and execution", 6, function(){
 
     createButter( function( butter ){
@@ -762,6 +806,8 @@
       config: "test-simple-config.json",
       debug: false,
       ready: function( butter ){
+
+        butterLifeCycle.rememberButter( butter );
         butter.preparePopcornScriptsAndCallbacks(function(){
           succeeded = true;
           ok( true, "Ready called without any scripts/callbacks." );
