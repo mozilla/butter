@@ -18,7 +18,8 @@ define( [ "util/dragndrop", "util/lang" ], function( DragNDrop, LangUtils ){
         _helper = document.getElementById( _this.type + "-icon" ) ||
                   document.getElementById( "default-icon" );
 
-    if( _path ) {
+    // before we try and add the plugins script, make sure we have a path to it and we haven't already included it
+    if( _path && !Popcorn.manifest[ _type ] ) {
       var head = document.getElementsByTagName( "HEAD" )[ 0 ],
           script = document.createElement( "script" );
 
