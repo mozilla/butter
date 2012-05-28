@@ -1,0 +1,43 @@
+{
+  "targets": [
+    {
+      "id": "Target0",
+      "name": "Target1",
+      "element": "test-target-1"
+    }
+  ],
+  "media": [
+    {
+      "id": "Media0",
+      "name": "Media0",
+      "url": "http://localhost:8888/external/popcorn-js/test/trailer.ogv",
+      "target": "mediaDiv",
+      "duration": 64.54166412353516,
+      "tracks": [
+        {
+          "name": "Track0",
+          "id": "Track0",
+          "trackEvents": []
+        },
+        {
+          "name": "Track1",
+          "id": "Track1",
+          "trackEvents": [
+            {
+              "id": "TrackEvent0",
+              "type": "text",
+              "popcornOptions": {
+                "start": 0,
+                "end": 3,
+                "text": "test",
+                "target": "test-target-1"
+              },
+              "track": "Track0",
+              "name": "TrackEvent0"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

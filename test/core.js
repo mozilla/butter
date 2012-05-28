@@ -625,16 +625,14 @@
     document.body.appendChild( el );
 
     createButter(function( butter ){
-
-      ok( butter.media.length > 0 && butter.media[0].url === "http://www.youtube.com/watch?v=7glrZ4e4wYU", "URL match" );
-      ok( document.getElementById( "strange-test-1" ), "New element exists" );
-      equals( document.getElementById( "strange-test-1" ).attributes.length, el.attributes.length, "has same attribute list length" );
-      equals( document.getElementById( "strange-test-1" ).getAttribute( "data-butter" ), "media", "has data-butter attribute" );
-
-      el.removeAttribute( "data-butter-source" );
-      el.removeAttribute( "data-butter" );
-
-      start();
+      butter.config.scrapePage = true;
+      butter.preparePage(function(){
+        ok( butter.media.length > 0 && butter.media[0].url === "http://www.youtube.com/watch?v=7glrZ4e4wYU", "URL match" );
+        ok( document.getElementById( "strange-test-1" ), "New element exists" );
+        equals( document.getElementById( "strange-test-1" ).attributes.length, el.attributes.length, "has same attribute list length" );
+        equals( document.getElementById( "strange-test-1" ).getAttribute( "data-butter" ), "media", "has data-butter attribute" );
+        start();
+      });
     });
   });
 
@@ -901,6 +899,21 @@
 
       }
     });
+  });
+
+  asyncTest( "Auto-load saved data", 4, function(){
+
+    Butter({
+      config: "test-config-auto-load.json",
+      ready: function( butter ){
+        equal( butter.media.length, 1, "One media created" );
+        equal( butter.media[0].tracks.length, 2, "Two tracks created" );
+        equal( butter.media[0].tracks[0].trackEvents.length, 0, "Track 1 has no events" );
+        equal( butter.media[0].tracks[1].trackEvents.length, 1, "Track 2 has one event" );
+        start();
+      }
+    });
+
   });
 
 })( window, window.document );
