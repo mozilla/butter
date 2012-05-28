@@ -153,8 +153,8 @@ define( [
 
     function onMediaReady(){
       _zoomFactor = _container.clientWidth / _media.duration;
-      _zoom = _zoomFactor;
-      _zoombar.zoom( DEFAULT_ZOOM );
+      _zoom = DEFAULT_ZOOM;
+      _zoombar.zoom( _zoom );
       _tracksContainer.zoom = _zoom;
       updateUI();
       _this.dispatch( "ready" );
