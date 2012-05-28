@@ -63,18 +63,6 @@ sub {
   }
 }
 
-@-o-keyframes spin {
-  0%  {   
-     -o-transform: rotate(0deg);
-     transform: rotate(0deg);
-  }
-  100% {  
-     -o-transform: rotate(360deg);
-     transform: rotate(360deg);
-  }
-}
-
-
 #butter-tray #butter-loading-container {
   position: absolute;
   z-index: 2140000001;
