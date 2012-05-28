@@ -1,8 +1,7 @@
-span#test-links {
-  float: right;
+div#test-links {
   padding-right: 15px;
 }
 
-span#test-links > a {
-  font-size: 0.8em;
+div#test-links > a {
+  font-size: 0.7em;
 }

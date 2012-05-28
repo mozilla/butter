@@ -20,12 +20,6 @@
     });
     // Fail tests that don't complete in 20s
     QUnit.config.testTimeout = 20000;
-
-    window.addEventListener( "message", function( e ) {
-      if ( e.data === "getFocus" ) {
-        window.focus();
-      }
-    }, false );
   }
 
 })( window );

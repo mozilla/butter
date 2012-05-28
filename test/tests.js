@@ -1,6 +1,6 @@
 var Butter_tests = [{
   name: "Core",
-  path: "./index.html",
+  path: "./core.html",
   type: "Core"
 }, {
   name: "Event Manager",
@@ -14,10 +14,6 @@ var Butter_tests = [{
   name: "Cornfield",
   path: "http://localhost:8888/test/cornfield/index.html",
   type: "Cornfield"
-}, {
-  name: "Plugin Manager",
-  path: "pluginmanager/index.html",
-  type: "Plugin"
 }
 
 ];

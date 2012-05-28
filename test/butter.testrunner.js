@@ -5,11 +5,6 @@ document.addEventListener( "DOMContentLoaded", function() {
       create = function( type ) {
         return document.createElement( type );
       },
-      sendGetFocus = function( event ) {
-          event.target &&
-            event.target.contentWindow &&
-              event.target.contentWindow.postMessage( "getFocus", "*" );
-      },
       index = 0,
       testFrame = id( "test-frame" ),
       results = id( "qunit-tests" ),
@@ -17,13 +12,12 @@ document.addEventListener( "DOMContentLoaded", function() {
       totalFail = 0,
       totalRun = 0,
       totalTime = 0,
-      main_li = create( "li" ),
-      main_b = create( "b" ),
+      mainLi = create( "li" ),
+      mainB = create( "b" ),
       currentTest = Butter_tests[ index ],
       results_arr = [],
       userAgent = id( "qunit-userAgent" );
 
-  testFrame.addEventListener( "load", sendGetFocus, false );
 
   if ( userAgent ) {
     userAgent.innerHTML = navigator.userAgent;
@@ -80,8 +74,8 @@ document.addEventListener( "DOMContentLoaded", function() {
       title = currentTest.name;
       type = currentTest.type;
 
-      main_b = create( "b" );
-      main_b.innerHTML = '<span class="module-name">' + type +
+      mainB = create( "b" );
+      mainB.innerHTML = '<span class="module-name">' + type +
         ':&nbsp;</span><span class="test-name">' +
         title + ":</span> Tests completed in " +
         time + " milliseconds " + " <b class='counts'>(<b class='failed'>" +
@@ -89,18 +83,18 @@ document.addEventListener( "DOMContentLoaded", function() {
         pass + "</b>, " + total + ")</b>";
 
       // set up click listener for expanding inner test list
-      main_b.addEventListener( "click", function( e ) {
+      mainB.addEventListener( "click", function( e ) {
         var next = e.target.nextSibling.nextSibling,
             display = next.style.display;
         next.style.display = display === "none" ? "block" : "none";
       }, false );
 
-      // build main_li, append all children and then append to result list
-      main_li.className = fail ? "fail" : "pass";
-      main_li.removeChild( main_li.firstChild );
-      main_li.appendChild( main_b );
-      main_li.appendChild( a );
-      main_li.appendChild( ol );
+      // build mainLi, append all children and then append to result list
+      mainLi.className = fail ? "fail" : "pass";
+      mainLi.removeChild( mainLi.firstChild );
+      mainLi.appendChild( mainB );
+      mainLi.appendChild( a );
+      mainLi.appendChild( ol );
 
       // update running totals
       totalRun += total;
@@ -111,12 +105,12 @@ document.addEventListener( "DOMContentLoaded", function() {
       // are there more tests?
       if ( ++index < Butter_tests.length ) {
         currentTest = Butter_tests[ index ];
-        main_li = create( "li" );
-        main_b = create( "b" );
-        main_b.innerHTML = "Running " + currentTest.name;
-        main_li.appendChild( main_b );
-        main_li.className = "running";
-        results.appendChild( main_li );
+        mainLi = create( "li" );
+        mainB = create( "b" );
+        mainB.innerHTML = "Running " + currentTest.name;
+        mainLi.appendChild( mainB );
+        mainLi.className = "running";
+        results.appendChild( mainLi );
         testFrame.src = currentTest.path;
         testFrame.contentWindow.focus();
       } else {
@@ -148,10 +142,10 @@ document.addEventListener( "DOMContentLoaded", function() {
   });
 
   // Kickstart the tests
-  main_b.innerHTML = "Running " + currentTest.name;
-  main_li.appendChild( main_b );
-  main_li.className = "running";
-  results.appendChild( main_li );
+  mainB.innerHTML = "Running " + currentTest.name;
+  mainLi.appendChild( mainB );
+  mainLi.className = "running";
+  results.appendChild( mainLi );
 
   testFrame.src = currentTest.path;
 }, false );
