@@ -57,6 +57,31 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     };
   }
 
+  function loadIcons( butter ){
+    var config = butter.config,
+        icons = config.icons,
+        resourcesDir = config.dirs.resources || "",
+        icon, img, div;
+
+    for( icon in icons ){
+      if( icons.hasOwnProperty( icon ) ){
+        img = new Image();
+        img.id = icon + "-icon";
+        img.src = resourcesDir + icons[ icon ];
+
+        // We can't use "display: none", since that makes it
+        // invisible, and thus not load.  Opera also requires
+        // the image be in the DOM before it will load.
+        div = document.createElement( "div" );
+        div.setAttribute( "data-butter-exclude", "true" );
+        div.className = "butter-image-preload";
+
+        div.appendChild( img );
+        document.body.appendChild( div );
+      }
+    }
+  }
+
   var __unwantedKeyPressElements = [
     "TEXTAREA",
     "INPUT",
@@ -111,12 +136,19 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
 
     this.load = function( onReady ){
       if( options.enabled !== false ){
-        butter.loader.load([
-          {
-            type: "css",
-            url: BUTTER_CSS_FILE
+        butter.loader.load(
+          [
+            {
+              type: "css",
+              url: BUTTER_CSS_FILE
+            }
+          ],
+          function(){
+            // icon preloading needs css to be loaded first
+            loadIcons( butter );
+            onReady();
           }
-        ], onReady );
+        );
       }
       else{
         onReady();
