@@ -77,7 +77,7 @@ define( [
 
     _media.listen( "mediaplaying", snapToCurrentTime );
     _media.listen( "mediapause", snapToCurrentTime );
-    
+
     _media.listen( "trackeventselected", function( e ){
       _selectedTracks.push( e.target );
     });
