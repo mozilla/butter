@@ -104,13 +104,18 @@
       this.popcornScripts = null;
 
       this.createView = function(){
-        _view = new MediaView( this, {
-          onDropped: onDroppedOnView
-        });
+        if ( !_view ) {
+          _view = new MediaView( this, {
+            onDropped: onDroppedOnView
+          });          
+        }
       };
 
       this.destroy = function(){
         _popcornWrapper.unbind();
+        if ( _view ) {
+          _view.destroy();
+        }
       };
 
       this.clear = function(){

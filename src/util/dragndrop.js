@@ -251,6 +251,7 @@ define([], function(){
   }
 
   function Droppable( element, options ){
+    console.log(element);
     options = options || {};
     var _hoverClass = options.hoverClass,
         _onDrop = options.drop || function(){},
