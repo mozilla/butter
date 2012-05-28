@@ -291,9 +291,10 @@
         var allTrackEvents = this.orderedTrackEvents;
 
         while( allTrackEvents.length > 0 ) {
-          allTrackEvents[0].track.removeTrackEvent( allTrackEvents[0] );
+          allTrackEvents[ 0 ].track.removeTrackEvent( allTrackEvents[ 0 ] );
         }
         while( _targets.length > 0 ){
+          _targets[ 0 ].destroy();
           _this.removeTarget( _targets[ 0 ] );
         }
         while( _media.length > 0 ){

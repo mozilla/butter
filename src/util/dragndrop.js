@@ -58,6 +58,7 @@ define([], function(){
   }
 
   function __drag( element, elementRect, mousePos ){
+    console.log(__droppables.length);
     var coveredDroppable;
     for( var i=__droppables.length - 1; i>=0; --i ){
       if( element !== __droppables[ i ].element && !coveredDroppable && __droppables[ i ].drag( element, elementRect, mousePos ) ){
@@ -68,6 +69,13 @@ define([], function(){
         __droppables[ i ].forget();
       }
     }
+  }
+
+  function __sortDroppables(){
+    __droppables = __droppables.sort( function ( a, b ) {
+      console.log( a, b );
+      return 1;
+    });
   }
 
   function Resizable( element, options ){
@@ -251,7 +259,6 @@ define([], function(){
   }
 
   function Droppable( element, options ){
-    console.log(element);
     options = options || {};
     var _hoverClass = options.hoverClass,
         _onDrop = options.drop || function(){},
@@ -307,7 +314,7 @@ define([], function(){
       _mousePos = [ e.clientX, e.clientY ];
     }, false );
 
-    __droppables.push({
+    var returnObj = {
       element: element,
       remember: function( dragElement ){
         if( !_draggedElement ){
@@ -334,7 +341,7 @@ define([], function(){
         _draggedElement = null;
         return false;
       },
-      drag: function( dragElement, dragElementRect, mousePos ){
+      drag: function( dragElement, dragElementRect ){
         var rect = element.getBoundingClientRect();
 
         var maxL = Math.max( dragElementRect.left, rect.left ),
@@ -353,8 +360,19 @@ define([], function(){
         }
 
         return false;
+      },
+      destroy: function(){
+        var idx = __droppables.indexOf( returnObj );
+        if ( idx > -1 ) {
+          __droppables.splice( idx, 1 );
+        }
       }
-    });
+    };
+
+    __droppables.push( returnObj );
+    __sortDroppables();
+
+    return returnObj;
   }
 
   function Draggable( element, options ){

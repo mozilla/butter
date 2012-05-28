@@ -90,6 +90,11 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       _pageElement.blink();
     };
 
+    this.destroy = function() {
+      _pageElement.destroy();
+      _pageElement = null;
+    };
+
     function pageElementMoved( e ){
       var rect = e ? e.data : _pageElement.element.getBoundingClientRect();
       _propertiesElement.style.left = rect.left + "px";

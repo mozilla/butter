@@ -30,7 +30,7 @@ function(
       _this.deselectOthers();
     }, false );
 
-    DragNDrop.droppable( _element, {
+    var _droppable = DragNDrop.droppable( _element, {
       drop: function( dropped, mousePosition ) {
         if ( dropped.getAttribute( "data-butter-draggable-type" ) === "plugin" ) {
           var newTrack = butter.currentMedia.addTrack(),
@@ -78,6 +78,12 @@ function(
         trackView.duration = _media.duration;
         trackView.zoom = _zoom;
       } //for
+    });
+
+    butter.listen( "mediaremoved", function ( e ) {
+      if ( e.data === _media ){
+        _droppable.destroy();
+      }
     });
 
     function onTrackAdded( e ){
