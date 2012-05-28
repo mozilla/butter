@@ -62,6 +62,8 @@ target.check = function() {
 };
 
 target['check-css'] = function() {
+  echo('### Linting CSS files');
+
   // see cli.js --list-rules.  Commenting out some warnings for now
   // which we might want to add back in later.
   var warnings = [
