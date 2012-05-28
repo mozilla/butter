@@ -54,6 +54,15 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
+        butter.tracks[ 1 ].addTrackEvent({
+          type: "facebook",
+          popcornOptions: {
+            start: 10,
+            end: 12,
+            target: "Area1"
+          }
+        });
+
         butter.tracks[ 1 ].addTrackEvent({ 
           type: "googlefeed",
           popcornOptions: {

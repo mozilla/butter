@@ -7,6 +7,8 @@
       "path": "../external/popcorn-js/plugins/attribution/popcorn.attribution.js"
     },
     {
+    {
+      "name": "code",
       "type": "code",
       "path": "../external/popcorn-js/plugins/code/popcorn.code.js"
     },
