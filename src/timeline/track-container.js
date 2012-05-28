@@ -79,6 +79,7 @@ function(
         _container.appendChild( trackView.element );
         trackView.duration = _media.duration;
         trackView.zoom = _zoom;
+        trackView.parent = _this;
       } //for
     });
 

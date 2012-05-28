@@ -68,7 +68,6 @@ define([], function(){
         __droppables[ i ].forget();
       }
     }
-    console.log( coveredDroppable.element );
   }
 
   function checkParent ( parent, child ) {
