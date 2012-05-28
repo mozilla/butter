@@ -12,8 +12,8 @@ html {
 html, body {
   width: 100%;
   height: 100%;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   max-height: 100%;
   max-width: 100%;
   border-radius: 18px;
@@ -38,28 +38,24 @@ html, body {
 }
 
 .hbox {
-  display: -webkit-box;
+  display: box;
   -webkit-box-orient: horizontal;
   -webkit-box-align: stretch;
-
-  display: -moz-box;
+  -ms-box-orient: horizontal;
+  -ms-box-align: stretch;
   -moz-box-orient: horizontal;
   -moz-box-align: stretch;
-
-  display: box;
   box-orient: horizontal;
   box-align: stretch;
 }
 
 .vbox {
-  display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-box-align: stretch;
-
-  display: -moz-box;
+  -ms-box-orient: vertical;
+  -ms-box-align: stretch;
   -moz-box-orient: vertical;
   -moz-box-align: stretch;
-
   display: box;
   box-orient: vertical;
   box-align: stretch;
@@ -99,6 +95,7 @@ body[data-error] #container {
 
 .center {
   -webkit-box-pack: center;
+  -ms-box-pack: center;
   -moz-box-pack: center;
   box-pack: center;
 }
@@ -111,6 +108,8 @@ body[data-error] #container {
   right: 0;
   margin: 45px;
   -moz-transition: margin-bottom 0.5s;
+  -ms-transition: margin-bottom 0.5s;
+  -o-transition: margin-bottom 0.5s;
   -webkit-transition: margin-bottom 0.5s;
   transition: margin-bottom 0.5s;
   z-index: 1;
@@ -194,7 +193,7 @@ h1 {
 
 body > h1 {
   position: fixed;
-  margin: 0px;
+  margin: 0;
 }
 
 #content > h1{
