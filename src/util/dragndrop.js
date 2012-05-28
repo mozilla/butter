@@ -15,6 +15,7 @@ define([], function(){
       __selectedDraggables = [],
       __mousePos = [ 0, 0],
       __mouseLast = [ 0, 0 ],
+      __scroll = false,
       __helpers = [];
 
   // for what seems like a bug in chrome. :/
@@ -29,6 +30,7 @@ define([], function(){
   };
 
   function updateTimeout(){
+    __scroll = false;
     if( __mouseDown ){
       for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
         __selectedDraggables[ i ].update();
@@ -43,20 +45,25 @@ define([], function(){
     __mousePos = [ e.clientX, e.clientY ];
 
     var remembers = [],
-        selectedDraggable,
         droppable,
         remember,
         i;
 
-    for( i = __selectedDraggables.length - 1; i >= 0; --i ){
-      selectedDraggable = __selectedDraggables[ i ];
-      if( !selectedDraggable.dragging ){
+    if( __mouseDown ){
+      for( i = __selectedDraggables.length - 1; i >= 0; --i ){
+        remembers.push( __selectedDraggables[ i ] );
+      } //for
+    }else{
+      var selectedDraggable;
+      __mouseDown = true;
+      window.setTimeout( updateTimeout, SCROLL_INTERVAL );
+
+      for( i = __selectedDraggables.length - 1; i >= 0; --i ){
+        selectedDraggable = __selectedDraggables[ i ];
         selectedDraggable.start( e );
-        __mouseDown = true;
-        window.setTimeout( updateTimeout, SCROLL_INTERVAL );
-      } //if
-      remembers.push( selectedDraggable );
-    } //for
+        remembers.push( __selectedDraggables[ i ] );
+      } //for
+    } //if
 
     for( i = __droppables.length - 1; i >= 0; --i ){
       droppable = __droppables[ i ];
@@ -455,12 +462,11 @@ define([], function(){
         } // if
       },
       drop: function( draggable ){
-
         if( _draggedElements[ draggable.element.id ] ){
           if( --_draggedCount === 0 ){
             element.classList.remove( _hoverClass );
           } //if
-          draggable.droppable = _droppable;
+          draggable.droppable = null;
           _onDrop( draggable.element, __mousePos );
           delete _draggedElements[ draggable.element.id ];
         } //if
@@ -559,18 +565,17 @@ define([], function(){
     }
 
     function checkScroll(){
-
-      if( _elementRect.right > _scrollRect.right + SCROLL_WINDOW ){
-        _scroll.scrollLeft += _scrollAmount;
-        element.style.left = element.offsetLeft + _scrollAmount + "px";
-      }
-      else if( _elementRect.left < _scrollRect.left - SCROLL_WINDOW ){
-        _scroll.scrollLeft -= _scrollAmount;
-        element.style.left = element.offsetLeft - _scrollAmount + "px";
+      if( !__scroll ){
+        if( _elementRect.right > _scrollRect.right + SCROLL_WINDOW ){
+          __scroll = true;
+          _scroll.scrollLeft += _scrollAmount;
+        }
+        else if( _elementRect.left < _scrollRect.left - SCROLL_WINDOW ){
+          __scroll = true;
+          _scroll.scrollLeft -= _scrollAmount;
+        } //if
       } //if
-      for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
-        __selectedDraggables[ i ].updateRects();
-      } //for
+      _draggable.updateRects();
     }
 
     function checkContainment(){
