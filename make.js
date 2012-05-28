@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
 var JSLINT = './node_modules/jshint/bin/hint',
+    CSSLINT = './node_modules/csslint/cli.js',
     RJS    = './node_modules/requirejs/bin/r.js',
     STYLUS = './node_modules/stylus/bin/stylus',
     DOX    = './tools/dox.py',
     DIST_DIR = 'dist',
+    CSS_DIR = 'css',
+    TEMPLATES_DIR = 'templates',
+    DIALOGS_DIR = 'dialogs',
     DOCS_DIR = 'docs',
     PACKAGE_NAME = 'butter';
 
@@ -54,6 +58,48 @@ target.docs = function() {
 
 target.check = function() {
   target['check-lint']();
+  target['check-css']();
+};
+
+target['check-css'] = function() {
+  // see cli.js --list-rules.  Commenting out some warnings for now
+  // which we might want to add back in later.
+  var warnings = [
+//    "important",
+//    "adjoining-classes",
+//    "duplicate-background-images",
+//    "qualified-headings",
+    "fallback-colors",
+//    "empty-rules",
+//    "shorthand",
+//    "overqualified-elements",
+//    "import",
+    "regex-selectors",
+//    "rules-count",
+//    "font-sizes",
+//    "universal-selector",
+//    "unqualified-attributes",
+    "zero-units"
+  ].join(",");
+
+  var errors = [
+    "known-properties",
+    "compatible-vendor-prefixes",
+    "display-property-grouping",
+    "duplicate-properties",
+    "errors",
+    "gradients",
+    "font-faces",
+    "floats",
+    "vendor-prefix"
+  ].join(",");
+
+  exec(CSSLINT + ' --warnings=' + warnings +
+                 ' --errors=' + errors +
+                 ' --quiet --format=compact' +
+                 ' ' + CSS_DIR +
+                 ' ' + DIALOGS_DIR +
+                 ' ' + TEMPLATES_DIR);
 };
 
 target['check-lint'] = function() {
