@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Popcorn Maker Manual Tests</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <style type="text/css">
+    body {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      overflow: hidden;
+      height: 100%;
+      max-height: 100%;
+    }
+
+    #tests {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 200px; /*Width of frame div*/
+      height: 100%;
+      overflow: hidden; /* hidden | scroll Disable scrollbars. Set to "scroll" to enable*/
+      background: #2c2c2c; /* Old browsers */
+      background: -moz-linear-gradient(top,  #2c2c2c 0pt, #4c4c4c 100%); /* FF3.6+ */
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0pt,#2c2c2c), color-stop(100%,#4c4c4c)); /* Chrome,Safari4+ */
+      background: -webkit-linear-gradient(top,  #2c2c2c 0pt,#4c4c4c 100%); /* Chrome10+,Safari5.1+ */
+      background: -o-linear-gradient(top,  #2c2c2c 0pt,#4c4c4c 100%); /* Opera 11.10+ */
+      background: -ms-linear-gradient(top,  #2c2c2c 0pt,#4c4c4c 100%); /* IE10+ */
+      background: linear-gradient(top,  #2c2c2c 0pt,#4c4c4c 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c2c2c', endColorstr='#4c4c4c',GradientType=0 ); /* IE6-9 */
+      color: white;
+      font-family: "MetaBold";
+      font-size: 14px;
+      padding: 3px;
+    }
+
+    #tests a {
+      padding-top: 3px;
+      color: white;
+      font-size: 12pt;
+    }
+
+    #butter-container {
+      position: fixed;
+      top: 0;
+      left: 200px; /*Set left value to WidthOfFrameDiv*/
+      right: 0;
+      bottom: 0;
+      overflow: auto;
+      background: #fff;
+    }
+
+    #butter {
+      position: absolute;
+      width: 100%;
+      height: 100%
+    }
+
+    * html body{ /*IE6 hack*/
+      padding: 0 0 0 200px; /*Set value to (0 0 0 WidthOfFrameDiv)*/
+    }
+
+    * html { /*IE6 hack*/
+      height: 100%;
+      width: 100%;
+    }
+
+    .PASS {
+      color: green !important;
+    }
+
+    .FAIL {
+      color: red !important;
+    }
+  </style>
+  <script src="tests.js"></script>
+  <script>
+    document.addEventListener( "DOMContentLoaded", function() {
+
+      window.addEventListener( "message", function(e) {
+        var elem = document.getElementById( currentTest );
+        if( elem ){
+          elem.className = e.data;
+        }
+      }, false );
+
+      var test,
+          testList = document.getElementById("test-list"),
+          testListItem,
+          currentTest,
+          iframe = document.getElementById("butter"),
+          i = tests.length;
+
+      while( i-- ){
+        test = tests[ i ];
+        testListItem = document.createElement("li");
+        testListItem.innerHTML = '<a href="#"' +
+                                 '   id="' + test.href + '">' +
+                                 test.name + '</a>';
+        testList.appendChild( testListItem );
+      }
+
+      testList.addEventListener( "click", function( e ){
+        e.preventDefault();
+        var li = e.target;
+        iframe.onload = iframe.contentWindow.focus();
+        iframe.src = li.id;
+        currentTest = li.id;
+      }, false );
+    }, false );
+  </script>
+</head>
+<body>
+
+  <div id="butter-container">
+    <iframe id="butter" name="butter-frame" frameborder="0" noresize="noresize"></iframe>
+  </div>
+
+  <div id="tests">
+    <h1>Manual Tests</h1>
+    <ol id="test-list"></ol>
+  </div>
+
+</body>
+</html>
