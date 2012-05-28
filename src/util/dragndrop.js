@@ -58,7 +58,6 @@ define([], function(){
   }
 
   function __drag( element, elementRect, mousePos ){
-    console.log(__droppables.length);
     var coveredDroppable;
     for( var i=__droppables.length - 1; i>=0; --i ){
       if( element !== __droppables[ i ].element && !coveredDroppable && __droppables[ i ].drag( element, elementRect, mousePos ) ){
@@ -69,13 +68,45 @@ define([], function(){
         __droppables[ i ].forget();
       }
     }
+    console.log( coveredDroppable.element );
+  }
+
+  function checkParent ( parent, child ) {
+    var parentNode = child.parentNode;
+    while( parentNode ) {
+      if ( parentNode === parent ) {
+        return true;
+      }
+      parentNode = parentNode.parentNode;
+    }
+    return false;
   }
 
   function __sortDroppables(){
     __droppables = __droppables.sort( function ( a, b ) {
-      console.log( a, b );
-      return 1;
+
+      var elementA = a.element,
+          elementB = b.element,
+          zA = getComputedStyle( elementA ).zIndex,
+          zB = getComputedStyle( elementB ).zIndex;
+
+      if ( checkParent( elementA, elementB ) ) {
+        return -1;
+      }
+      else if ( checkParent( elementB, elementA ) ) {
+        return 1;
+      }
+
+      zA = isNaN( zA ) ? 0 : zA;
+      zB = isNaN( zB ) ? 0 : zB;
+
+      return zA - zB;
     });
+    var beep = [];
+    for( var i=0; i<__droppables.length; ++i){
+      beep.push(__droppables[i].element);
+    }
+    window.droppables = beep;
   }
 
   function Resizable( element, options ){
