@@ -114,6 +114,7 @@ define( [ "core/logger",
           _parent = val;
           if ( _droppable ) {
             _droppable.destroy();
+            _droppable = null;
           }
           if ( _parent ) {
             setupDroppable();
