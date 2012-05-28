@@ -26,14 +26,14 @@ define( [], function(){
       window.removeEventListener( "mouseup", onMouseUp, false );
       window.removeEventListener( "mousemove", onMouseMove, false );
       _handle.addEventListener( "mousedown", onMouseDown, false );
-      zoomCallback( _handle.offsetLeft / _rect.width  );
+      zoomCallback( _handle.offsetLeft / ( _rect.width - _handle.clientWidth ) );
     } //onMouseUp
 
     function onMouseMove( e ){
       var diff = e.pageX - _mousePos;
       diff = Math.max( 0, Math.min( diff, _elementWidth - _handleWidth ) );
       _handle.style.left = diff + "px";
-      zoomCallback( _handle.offsetLeft / _rect.width  );
+      zoomCallback( _handle.offsetLeft / ( _rect.width - _handle.clientWidth ) );
     } //onMouseMove
 
     function onMouseDown( e ){
@@ -48,14 +48,17 @@ define( [], function(){
 
     _handle.addEventListener( "mousedown", onMouseDown, false );
 
-    this.update = function( level ) {
+    this.update = function() {
       _rect = _element.getBoundingClientRect();
       _handleWidth = ( _rect.width / ZOOM_LEVELS );
       _handle.style.width = _handleWidth + "px";
       _elementWidth = _rect.width;
-      if( level !== undefined ){
-        _handle.style.left = ( level * _handleWidth ) + "px";
-      } //if
+    };
+
+    this.zoom = function( level ) {
+      _this.update();
+      _handle.style.left = ( _rect.width - _handle.clientWidth ) * level + "px";
+      zoomCallback( _handle.offsetLeft / ( _rect.width - _handle.clientWidth ) );
     };
 
     _element.addEventListener( "click", function( e ) {
