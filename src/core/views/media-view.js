@@ -75,7 +75,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     });
 
     media.listen( "mediafailed", function( e ){
-      showError( true, "Media failed to load. Check your URL:" );
+      showError( true, "Media failed to load. Check your URL." );
       changeButton.removeAttribute( "disabled" );
       _propertiesElement.classList.add( "hold" );
       urlTextbox.className += " form-error";
