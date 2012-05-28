@@ -107,7 +107,7 @@
         if ( !_view ) {
           _view = new MediaView( this, {
             onDropped: onDroppedOnView
-          });          
+          });
         }
       };
 
