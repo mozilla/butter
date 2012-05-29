@@ -703,7 +703,7 @@
 
         _page = new Page( loader, _config );
 
-        _this.ui = new UI( _this, _config );
+        _this.ui = new UI( _this  );
 
         _this.ui.load(function(){
           //prepare the page next
