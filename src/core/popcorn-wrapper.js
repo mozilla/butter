@@ -134,8 +134,19 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _onFail( e );
       }
 
+      // attempt to grab the first url for a type inspection
+      var firstUrl = url;
+      if ( typeof( url ) !== "string" ) {
+        if ( !url.length ) {
+          throw "URL is invalid: empty array or not a string.";
+        }
+        else {
+          firstUrl = url[ 0 ];
+        }
+      }
+
       // discover and stash the type of media as dictated by the url
-      findMediaType( url );
+      findMediaType( firstUrl );
 
       // if there isn't a target, we can't really set anything up, so stop here
       if( !target ){
@@ -233,6 +244,13 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           i,
           option;
 
+      if ( typeof( url ) !== "string" ) {
+        url = JSON.stringify( url );
+      }
+      else {
+        url = "'" + url + "'";
+      }
+
       // prepare popcornOptions as a string
       if ( popcornOptions ) {
         popcornOptions = ", " + JSON.stringify( popcornOptions );
@@ -269,7 +287,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       }
       else{
         // just try to use Popcorn.smart to detect/setup video
-        popcornString += "var popcorn = Popcorn.smart( '#" + target + "', '" + url + "'" + popcornOptions + " );\n";
+        popcornString += "var popcorn = Popcorn.smart( '#" + target + "', " + url + popcornOptions + " );\n";
       }
 
       if( scripts.beforeEvents ){
@@ -446,6 +464,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       if ( [ "AUDIO", "VIDEO" ].indexOf( container.nodeName ) > -1 ) {
         container.currentSrc = "";
         container.src = "";
+        container.removeAttribute( "src" );
       } //if
     };
 
