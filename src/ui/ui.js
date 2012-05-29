@@ -332,7 +332,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
             trackEvent,
             nextTrack;
 
-        if( butter.selectedEvents.length ) {
+        if ( butter.selectedEvents.length ) {
           e.preventDefault();
         }
 
@@ -362,7 +362,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
             trackEvent,
             nextTrack;
 
-        if( butter.selectedEvents.length ) {
+        if ( butter.selectedEvents.length ) {
           e.preventDefault();
         }
 
