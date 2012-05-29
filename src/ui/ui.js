@@ -307,6 +307,8 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
 
     var processKey = {
       32: function( e ) { // space key
+        e.preventDefault();
+
         if( butter.currentMedia.ended ){
           butter.currentMedia.paused = false;
         }
@@ -329,6 +331,11 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
         var track,
             trackEvent,
             nextTrack;
+
+        if( butter.selectedEvents.length ) {
+          e.preventDefault();
+        }
+
         for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
           trackEvent = butter.selectedEvents[ i ];
           track = trackEvent.track;
@@ -354,6 +361,11 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
         var track,
             trackEvent,
             nextTrack;
+
+        if( butter.selectedEvents.length ) {
+          e.preventDefault();
+        }
+
         for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
           trackEvent = butter.selectedEvents[ i ];
           track = trackEvent.track;
