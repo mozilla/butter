@@ -1,3 +1,4 @@
 {
-  "savedDataUrl": "saved-data.json"
+  "savedDataUrl": "saved-data.json",
+  "baseDir": "../"
 }
