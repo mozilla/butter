@@ -521,10 +521,14 @@ input.form-error {
 .butter-highlight {
   position: absolute;
   z-index: 2100000000;
+  opacity: 0;
+}
+
+.butter-highlight.on {
   opacity: 1;
 }
 
-.butter-highlight[ data-blink="true" ]{
+.butter-highlight.blink{
   -moz-transition: opacity 1.5s;
   -o-transition: opacity 1.5s;
   -webkit-transition: opacity 1.5s;
