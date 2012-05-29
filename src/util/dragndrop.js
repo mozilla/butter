@@ -292,7 +292,7 @@ define([], function(){
         _mousePos,
         _draggedElement;
 
-    element.addEventListener( "drop", function( e ){
+    function onDrop( e ) {
       e.preventDefault();
       e.stopPropagation();
 
@@ -304,16 +304,15 @@ define([], function(){
       if( helper ){
         _onDrop( helper, [ e.clientX, e.clientY ] );
       }
-    }, false );
+    }
 
-    element.addEventListener( "dragover", function( e ){
+    function onDragOver( e ) {
       e.preventDefault();
       e.stopPropagation();
-
       e.dataTransfer.dropEffect = "copy";
-    }, false );
+    }
 
-    element.addEventListener( "dragenter", function( e ){
+    function onDragEnter( e ) {
       if( _hoverClass ) {
         element.classList.add( _hoverClass );
       }
@@ -322,9 +321,9 @@ define([], function(){
       if( helper ){
         _onOver( helper, [ e.clientX, e.clientY ] );
       }
-    }, false );
+    }
 
-    element.addEventListener( "dragleave", function( e ){
+    function onDragLeave( e ) {
       if ( _hoverClass ) {
         element.classList.remove( _hoverClass );
       }
@@ -333,7 +332,12 @@ define([], function(){
       if( helper ){
         _onOut( helper, [ e.clientX, e.clientY ] );
       }
-    }, false );
+    }
+
+    element.addEventListener( "drop", onDrop, false );
+    element.addEventListener( "dragover", onDragOver, false );
+    element.addEventListener( "dragenter", onDragEnter, false );
+    element.addEventListener( "dragleave", onDragLeave, false );
 
     window.addEventListener( "mousemove", function( e ){
       _mousePos = [ e.clientX, e.clientY ];
@@ -391,6 +395,10 @@ define([], function(){
         if ( idx > -1 ) {
           __droppables.splice( idx, 1 );
         }
+        element.removeEventListener( "drop", onDrop, false );
+        element.removeEventListener( "dragover", onDragOver, false );
+        element.removeEventListener( "dragenter", onDragEnter, false );
+        element.removeEventListener( "dragleave", onDragLeave, false );
       }
     };
 
