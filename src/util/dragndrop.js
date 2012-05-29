@@ -86,7 +86,7 @@ define([], function(){
     if ( isNaN( z ) ) {
       z = 0;
       var parentNode = element.parentNode;
-      while ( parentNode ) {
+      while ( parentNode && [ window, document ].indexOf( parentNode ) === -1 ) {
         var style = getComputedStyle( parentNode );
         if ( style ) {
           var nextZ = style.zIndex;
