@@ -81,13 +81,32 @@ define([], function(){
     return false;
   }
 
+  function getHighestZIndex ( element ) {
+    var z = getComputedStyle( element ).zIndex;
+    if ( isNaN( z ) ) {
+      z = 0;
+      var parentNode = element.parentNode;
+      while ( parentNode ) {
+        var style = getComputedStyle( parentNode );
+        if ( style ) {
+          var nextZ = style.zIndex;
+          if ( isNaN( nextZ ) && nextZ > z ) {
+            z = nextZ;
+          }          
+        }
+        parentNode = parentNode.parentNode;
+      }
+    }
+    
+  }
+
   function __sortDroppables(){
     __droppables = __droppables.sort( function ( a, b ) {
 
       var elementA = a.element,
           elementB = b.element,
-          zA = getComputedStyle( elementA ).zIndex,
-          zB = getComputedStyle( elementB ).zIndex;
+          zA = getHighestZIndex( elementA ),
+          zB = getHighestZIndex( elementB );
 
       if ( checkParent( elementA, elementB ) ) {
         return -1;
@@ -95,9 +114,6 @@ define([], function(){
       else if ( checkParent( elementB, elementA ) ) {
         return 1;
       }
-
-      zA = isNaN( zA ) ? 0 : zA;
-      zB = isNaN( zB ) ? 0 : zB;
 
       return zA - zB;
     });

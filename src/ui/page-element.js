@@ -83,7 +83,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
 
       _element.setAttribute( "butter-clean", "true" );
 
-      _droppable = DragNDrop.droppable( _element, {
+      _droppable = DragNDrop.droppable( _highlightElement, {
         over: function( dragElement ){
           if( dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
             return;
