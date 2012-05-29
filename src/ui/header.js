@@ -16,7 +16,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
         _exportButton,
         _logoutButton;
 
-    var title = options.title || "Butter";
+    var title = options.value( "title" ) || "Butter";
 
     _rootElement.innerHTML = '' +
       '<div class="logo-drop"></div><h1>' + title + '</h1>' +

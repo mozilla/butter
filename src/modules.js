@@ -22,7 +22,7 @@ define(
 
     for( var i=0; i<moduleList.length; ++i ){
       var name = moduleList[ i ].__moduleName;
-      butter[ name ] = new moduleList[ i ]( butter, config[ name ] );
+      butter[ name ] = new moduleList[ i ]( butter, config.value( name ) );
       modules.push( butter[ name ] );
     } //for
 
