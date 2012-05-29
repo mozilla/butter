@@ -62,7 +62,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       prepareTextbox( newContainer.querySelector( "input[type='text']" ) );
 
       if ( _urlList.querySelectorAll( "input[type='text']" ).length >= MAX_URLS ) {
-        _addUrlButton.setAttribute( "disabled", true );
+        _addUrlButton.style.visibility = "hidden";
       }
     }
 
@@ -72,7 +72,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       _containerDims.height = _container.clientHeight;
       setDimensions( true );
       if ( _urlList.querySelectorAll( "input[type='text']" ).length < MAX_URLS ) {
-        _addUrlButton.removeAttribute( "disabled" );
+        _addUrlButton.style.visibility = "visible";
       }
     }
 
@@ -96,13 +96,6 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     }, true );
 
     _propertiesElement.addEventListener( "mouseout", function( e ) {
-      var parentNode = e.toElement;
-      while( parentNode ) {
-        if( parentNode === _propertiesElement ) {
-          return false;
-        }
-        parentNode = parentNode.parentNode;
-      }
       setTimeout(function(){
         if ( _closeSignal ) {
           setDimensions( false );
