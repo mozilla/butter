@@ -1,34 +1,10 @@
-BASE_Z = 2139000000
-CONTAINER_Z = 2140000001
-
-.butter-media-highlight
-  background-color rgba( 10, 170, 170, 0.4 )
-
 .butter-media-properties
-  position absolute
-  z-index BASE_Z
-  font 12px Verdana, 12px sans-serif
-  border 2px solid #fff
-  transition width 0.25s, height 0.25s
-  background-color #131313
-  background-image -moz-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% )
-  background-image -webkit-gradient( linear, left bottom, left top, color-stop( 0, #2c2c2c ), color-stop( 1, #4c4c4c ) )
-  border-radius 5px
-  height 30px
+  height 32px
   width 90px
   overflow hidden
 
-  .loading-container
-    position absolute
-    z-index CONTAINER_Z
-    left 1px
-    top 1px
-
   .container
-    position absolute
     top 0
-    color #fff
-    width 240px
 
   .inner-container
     padding 10px
@@ -40,14 +16,6 @@ CONTAINER_Z = 2140000001
 
     .edit-message
       visibility hidden
-
-  .edit-message
-    color #FFF
-    padding-top 6px
-    padding-left 3px
-
-  h3, p
-    margin 0
 
   .url
     width 224px
@@ -70,10 +38,18 @@ CONTAINER_Z = 2140000001
       input, button
         opacity 1
 
-  button.save
-    margin-top .5em
-    float right
+    &:nth-of-type(1)
 
-  button.add-url
-    margin-top .5em
-    float right
+      button
+        display none
+
+      input
+        width 220px
+
+  button
+    &.save, &.add-url
+      margin-top .5em
+      float right
+
+    &.remove
+      margin-top .3em

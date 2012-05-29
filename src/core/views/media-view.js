@@ -10,14 +10,14 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         _logoSpinner;
 
     var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE ),
-        container = _propertiesElement.querySelector( "div.container" ),
-        urlContainer = _propertiesElement.querySelector( "div.url" ),
-        urlTextbox = _propertiesElement.querySelector( "input" ),
-        subtitle = _propertiesElement.querySelector( ".form-field-notes" ),
-        changeButton = _propertiesElement.querySelector( "button.save" ),
-        addUrlButton = _propertiesElement.querySelector( "button.add-url" ),
-        urlList = _propertiesElement.querySelector( "div.url-group" ),
-        loadingContainer = _propertiesElement.querySelector( ".loading-container" );
+        _container = _propertiesElement.querySelector( "div.container" ),
+        _urlContainer = _propertiesElement.querySelector( "div.url" ),
+        _urlTextbox = _propertiesElement.querySelector( "input[type='text']" ),
+        _subtitle = _propertiesElement.querySelector( ".form-field-notes" ),
+        _changeButton = _propertiesElement.querySelector( "button.save" ),
+        _addUrlButton = _propertiesElement.querySelector( "button.add-url" ),
+        _urlList = _propertiesElement.querySelector( "div.url-group" ),
+        _loadingContainer = _propertiesElement.querySelector( ".loading-container" );
 
     var _containerDims;
 
@@ -32,32 +32,51 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       }
     }
 
-    addUrlButton.addEventListener( "click", function( e ) {
-      var newContainer = urlContainer.cloneNode( true );
+    function prepareTextbox( textbox ){
+      TextboxWrapper( textbox );
+
+      textbox.addEventListener( "focus", function( e ) {
+        _propertiesElement.classList.add( "hold" );
+      }, false );
+
+      textbox.addEventListener( "blur", function( e ) {
+        _propertiesElement.classList.remove( "hold" );
+      }, false );      
+    }
+
+    _addUrlButton.addEventListener( "click", function( e ) {
+      var newContainer = _urlContainer.cloneNode( true );
       newContainer.classList.remove( "fade-in" );
-      urlList.appendChild( newContainer );
+      _urlList.appendChild( newContainer );
+
+      // force the browser to wait a tick before applying this class
+      // so fade-in effect occurs
       setTimeout(function(){
         newContainer.classList.add( "fade-in" );
       }, 0);
-      _containerDims.width = container.clientWidth;
-      _containerDims.height = container.clientHeight;
+
+      _containerDims.width = _container.clientWidth;
+      _containerDims.height = _container.clientHeight;
       setDimensions( true );
+
+      newContainer.querySelector( "button.remove" ).addEventListener( "click", function ( e ) {
+        _urlList.removeChild( newContainer );
+        _containerDims.width = _container.clientWidth;
+        _containerDims.height = _container.clientHeight;
+        setDimensions( true );
+      }, false );
+
+      prepareTextbox( newContainer.querySelector( "input[type='text']" ) );
     }, false );
 
-    urlTextbox.addEventListener( "focus", function( e ) {
-      _propertiesElement.classList.add( "hold" );
-    }, false );
-
-    urlTextbox.addEventListener( "blur", function( e ) {
-      _propertiesElement.classList.remove( "hold" );
-    }, false );
+    prepareTextbox( _urlTextbox );
 
     _propertiesElement.addEventListener( "mouseover", function( e ) {
       // silly hack to stop jittering of width/height
       if ( !_containerDims ) {
         _containerDims = {
-          width: container.clientWidth,
-          height: container.clientHeight
+          width: _container.clientWidth,
+          height: _container.clientHeight
         };
       }
       setDimensions( true );
@@ -68,33 +87,50 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       setDimensions( false );
     }, true );
 
-    _logoSpinner = LogoSpinner( loadingContainer );
+    _logoSpinner = LogoSpinner( _loadingContainer );
 
-    TextboxWrapper( urlTextbox );
-
-    subtitle.innerHTML = DEFAULT_SUBTITLE;
+    _subtitle.innerHTML = DEFAULT_SUBTITLE;
 
     function showError( state, message ){
       if( state ){
-        subtitle.innerHTML = message;
+        _subtitle.innerHTML = message;
       }
       else{
-        subtitle.innerHTML = DEFAULT_SUBTITLE;
+        _subtitle.innerHTML = DEFAULT_SUBTITLE;
       }
     }
 
     function changeUrl(){
-      if(testUrl(urlTextbox.value)){
-        subtitle.className = "form-field-notes form-ok";
-        subtitle.innerHTML = "URL changed.";
-        urlTextbox.className = "url form-ok";
-        media.url = urlTextbox.value;
+      var validTextboxes = [],
+          textboxes = _container.querySelectorAll( "input[type='text']" ),
+          errorTextboxes = [];
+
+      _subtitle.classList.add( "form-ok" );
+      _subtitle.classList.remove( "form-error" );
+
+      for ( var i = textboxes.length - 1; i >= 0; i-- ) {
+        textboxes[ i ].classList.add( "form-ok" );
+        textboxes[ i ].classList.remove( "form-error" );
+        if ( testUrl( textboxes[ i ].value ) ) {
+          validTextboxes.push( textboxes[ i ].value );
+        }
+        else {
+          _subtitle.classList.remove( "form-ok" );
+          _subtitle.classList.add( "form-error" );
+          errorTextboxes.push( textboxes[ i ] );
+          textboxes[ i ].classList.remove( "form-ok" );
+          textboxes[ i ].classList.add( "form-error" );
+        }
       }
-      else{
-        subtitle.className += " form-error";
-        urlTextbox.className += " form-error";
-        showError( true, "Not a valid URL. Use http://..." );
+
+      if ( errorTextboxes.length ) {
+        showError( true, "URL(s) not valid. Please use http://..." );
       }
+      else if ( validTextboxes.length ) {
+        _subtitle.innerHTML = "URL changed.";
+        media.url = validTextboxes;
+      }
+
     }
 
     function testUrl(url) {
@@ -102,35 +138,35 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       return url.match(test);
     }
 
-    urlTextbox.addEventListener( "keypress", function( e ){
+    _urlTextbox.addEventListener( "keypress", function( e ){
       if( e.which === 13 ){
         changeUrl();
       }
     }, false );
-    changeButton.addEventListener( "click", changeUrl, false );
+    _changeButton.addEventListener( "click", changeUrl, false );
 
     _logoSpinner.start();
-    changeButton.setAttribute( "disabled", true );
+    _changeButton.setAttribute( "disabled", true );
 
     media.listen( "mediacontentchanged", function( e ){
-      urlTextbox.value = media.url;
+      _urlTextbox.value = media.url;
       showError( false );
-      changeButton.setAttribute( "disabled", true );
+      _changeButton.setAttribute( "disabled", true );
       _logoSpinner.start();
     });
 
     media.listen( "mediafailed", function( e ){
       showError( true, "Media failed to load. Check your URL." );
-      changeButton.removeAttribute( "disabled" );
+      _changeButton.removeAttribute( "disabled" );
       _propertiesElement.classList.add( "hold" );
-      urlTextbox.className += " form-error";
-      subtitle.className += " form-error";
+      _urlTextbox.className += " form-error";
+      _subtitle.className += " form-error";
       _logoSpinner.stop();
     });
 
     media.listen( "mediaready", function( e ){
       showError( false );
-      changeButton.removeAttribute( "disabled" );
+      _changeButton.removeAttribute( "disabled" );
       _logoSpinner.stop();
     });
 
@@ -150,7 +186,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     }
 
     this.update = function(){
-      urlTextbox.value = media.url;
+      _urlTextbox.value = media.url;
 
       var targetElement = document.getElementById( _media.target );
 

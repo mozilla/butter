@@ -144,8 +144,6 @@ body.butter-tray-spacing.minimized {
 
 .butter-media-properties {
   position: absolute;
-  width: 90px;
-  height: 32px;
   z-index: 2139000000;
   font-family: Verdana, sans-serif;
   font-size: 12px;
@@ -176,24 +174,8 @@ body.butter-tray-spacing.minimized {
 
 .butter-media-properties .container {
   width: 250px;
-  height: 100px;
-  min-width: 250px;
-  min-height: 100px;
   position: absolute;
   color: #fff;
-}
-
-/*Show and hide media settings on mouse-over */
-.butter-media-properties .inner-container {
-  display: none;
-  padding: 10px;
-}
-.butter-media-properties:hover .inner-container, .hold.butter-media-properties .inner-container {  display: block; }
-.butter-media-properties:hover .edit-message, .hold.butter-media-properties .edit-message { display: none; }
-.butter-media-properties:hover, .hold.butter-media-properties {
-  opacity: 1.0;
-  width: 250px;
-  height: 100px;
 }
 
 /* Media settings inner elements */
@@ -207,7 +189,6 @@ body.butter-tray-spacing.minimized {
 }
 .butter-media-properties .url {
   width: 224px;
-  border: 1px solid #333;
   padding: 5px 3px;
 }
 .butter-media-properties button {
