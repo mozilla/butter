@@ -41,6 +41,12 @@
         });
       } //if
 
+      this.destroy = function () {
+        if ( _pageElement ) {
+          _pageElement.destroy();
+        }
+      };
+
       Object.defineProperties( this, {
         view: {
           enumerable: true,

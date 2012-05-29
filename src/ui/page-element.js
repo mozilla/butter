@@ -15,6 +15,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
         _options = options || {},
         _blinkFunction,
         _positionTracker,
+        _droppable,
         _this = this;
 
     EventManagerWrapper( _this );
@@ -44,6 +45,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
       if( _highlightElement.parentNode ){
         _highlightElement.parentNode.removeChild( _highlightElement );
       } //if
+
+      if ( _droppable ) {
+        _droppable.destroy();
+      }
     }; //destroy
 
     _highlightElement.className = "butter-highlight ";
@@ -78,7 +83,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
 
       _element.setAttribute( "butter-clean", "true" );
 
-      DragNDrop.droppable( _element, {
+      _droppable = DragNDrop.droppable( _element, {
         over: function( dragElement ){
           if( dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
             return;

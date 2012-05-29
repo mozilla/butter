@@ -21,6 +21,8 @@ function(
     var _element = document.createElement( "div" ),
         _container = document.createElement( "div" );
 
+    var _droppable;
+
     _element.appendChild( _container );
 
     _element.className = "tracks-container-wrapper";
@@ -30,7 +32,7 @@ function(
       _this.deselectOthers();
     }, false );
 
-    DragNDrop.droppable( _element, {
+    _droppable = DragNDrop.droppable( _element, {
       drop: function( dropped, mousePosition ) {
         if ( dropped.getAttribute( "data-butter-draggable-type" ) === "plugin" ) {
           var newTrack = butter.currentMedia.addTrack(),
@@ -77,7 +79,14 @@ function(
         _container.appendChild( trackView.element );
         trackView.duration = _media.duration;
         trackView.zoom = _zoom;
+        trackView.parent = _this;
       } //for
+    });
+
+    butter.listen( "mediaremoved", function ( e ) {
+      if ( e.data === _media && _droppable ){
+        _droppable.destroy();
+      }
     });
 
     function onTrackAdded( e ){

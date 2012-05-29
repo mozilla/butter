@@ -70,6 +70,39 @@ define([], function(){
     }
   }
 
+  function checkParent ( parent, child ) {
+    var parentNode = child.parentNode;
+    while( parentNode ) {
+      if ( parentNode === parent ) {
+        return true;
+      }
+      parentNode = parentNode.parentNode;
+    }
+    return false;
+  }
+
+  function __sortDroppables(){
+    __droppables = __droppables.sort( function ( a, b ) {
+
+      var elementA = a.element,
+          elementB = b.element,
+          zA = getComputedStyle( elementA ).zIndex,
+          zB = getComputedStyle( elementB ).zIndex;
+
+      if ( checkParent( elementA, elementB ) ) {
+        return -1;
+      }
+      else if ( checkParent( elementB, elementA ) ) {
+        return 1;
+      }
+
+      zA = isNaN( zA ) ? 0 : zA;
+      zB = isNaN( zB ) ? 0 : zB;
+
+      return zA - zB;
+    });
+  }
+
   function Resizable( element, options ){
     var _leftHandle = document.createElement( "div" ),
         _rightHandle = document.createElement( "div" ),
@@ -306,7 +339,7 @@ define([], function(){
       _mousePos = [ e.clientX, e.clientY ];
     }, false );
 
-    __droppables.push({
+    var returnObj = {
       element: element,
       remember: function( dragElement ){
         if( !_draggedElement ){
@@ -333,7 +366,7 @@ define([], function(){
         _draggedElement = null;
         return false;
       },
-      drag: function( dragElement, dragElementRect, mousePos ){
+      drag: function( dragElement, dragElementRect ){
         var rect = element.getBoundingClientRect();
 
         var maxL = Math.max( dragElementRect.left, rect.left ),
@@ -352,8 +385,19 @@ define([], function(){
         }
 
         return false;
+      },
+      destroy: function(){
+        var idx = __droppables.indexOf( returnObj );
+        if ( idx > -1 ) {
+          __droppables.splice( idx, 1 );
+        }
       }
-    });
+    };
+
+    __droppables.push( returnObj );
+    __sortDroppables();
+
+    return returnObj;
   }
 
   function Draggable( element, options ){
