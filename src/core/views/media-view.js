@@ -2,12 +2,14 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
   function( PageElement, LogoSpinner, LangUtils, TextboxWrapper, HTML_TEMPLATE ){
 
   var DEFAULT_SUBTITLE = "Supports HTML5 video, YouTube, and Vimeo",
+      MOUSE_OUT_DURATION = 300,
       MAX_URLS = 4;
 
   return function( media, options ){
     var _media = media,
         _pageElement,
         _onDropped = options.onDropped || function(){},
+        _closeSignal = false,
         _logoSpinner;
 
     var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE ),
@@ -24,6 +26,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
     function setDimensions( state ){
       if( state ){
+        _closeSignal = false;
         _propertiesElement.style.width = _containerDims.width + "px";
         _propertiesElement.style.height = _containerDims.height + "px";
       }
@@ -35,14 +38,6 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
     function prepareTextbox( textbox ){
       TextboxWrapper( textbox );
-
-      textbox.addEventListener( "focus", function( e ) {
-        _propertiesElement.classList.add( "hold" );
-      }, false );
-
-      textbox.addEventListener( "blur", function( e ) {
-        _propertiesElement.classList.remove( "hold" );
-      }, false );
     }
 
     function addUrl() {
@@ -88,6 +83,8 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     prepareTextbox( _urlTextbox );
 
     _propertiesElement.addEventListener( "mouseover", function( e ) {
+      e.stopPropagation();
+      _propertiesElement.classList.add( "open" );
       // silly hack to stop jittering of width/height
       if ( !_containerDims ) {
         _containerDims = {
@@ -96,12 +93,24 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         };
       }
       setDimensions( true );
-      e.stopPropagation();
     }, true );
 
     _propertiesElement.addEventListener( "mouseout", function( e ) {
-      setDimensions( false );
-    }, true );
+      var parentNode = e.toElement;
+      while( parentNode ) {
+        if( parentNode === _propertiesElement ) {
+          return false;
+        }
+        parentNode = parentNode.parentNode;
+      }
+      setTimeout(function(){
+        if ( _closeSignal ) {
+          setDimensions( false );
+          _propertiesElement.classList.remove( "open" );
+        }
+      }, MOUSE_OUT_DURATION );
+      _closeSignal = true;
+    }, false );
 
     _logoSpinner = LogoSpinner( _loadingContainer );
 
@@ -198,7 +207,6 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     media.listen( "mediafailed", function( e ){
       showError( true, "Media failed to load. Check your URL." );
       _changeButton.removeAttribute( "disabled" );
-      _propertiesElement.classList.add( "hold" );
       _urlTextbox.className += " form-error";
       _subtitle.className += " form-error";
       _logoSpinner.stop();
