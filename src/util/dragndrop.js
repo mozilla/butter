@@ -69,12 +69,12 @@ define([], function(){
       droppable = __droppables[ i ];
       for( var j = remembers.length - 1; j >= 0; --j ){
         remember = remembers[ j ];
-        if( droppable.element.id &&
-            remember.element.id !== droppable.element.id &&
-            droppable.drag( remember.element.getBoundingClientRect() ) ){
-          droppable.remember( remember );
-        }else{
+        if( !droppable.element.id ||
+            remember.element.id === droppable.element.id ||
+            !droppable.drag( remember.element.getBoundingClientRect() ) ){
           droppable.forget( remember );
+        }else{
+          droppable.remember( remember );
         } //if
       } //for
     } //for
@@ -443,7 +443,7 @@ define([], function(){
     _droppable = {
       element: element,
       remember: function( draggable ){
-        if( !_draggedElements[ draggable.element.id ] ){
+        if( !_draggedElements[ draggable.element.id ] && !draggable.droppable ){
           _draggedCount++;
           element.classList.add( _hoverClass );
           _draggedElements[ draggable.element.id ] = draggable;
