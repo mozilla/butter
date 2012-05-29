@@ -10,16 +10,17 @@ define(['util/xhr'], function(XHR) {
 
   var Cornfield = function( butter, config ) {
 
-    var email,
-        username,
+    var authenticated = false,
+        email,
         name,
+        username,
         server = audience();
 
     if ( !navigator.id ) {
       var script = document.createElement( "script" );
       script.src = "https://browserid.org/include.js";
       script.type = "text/javascript";
-      script.setAttribute( "data-butter-exlude", true );
+      script.setAttribute( "data-butter-exclude", true );
       document.head.appendChild( script );
     }
 
@@ -33,8 +34,15 @@ define(['util/xhr'], function(XHR) {
                 try {
                   var response = JSON.parse(this.response);
                   if (response.status === "okay") {
-                    email = response.email;
+
+                    // Get email, name, and username after logging in successfully
+                    butter.cornfield.whoami( function( data ) {
+                      callback( data );
+                    });
+                    return;
                   }
+
+                  // If there was an error of some sort, callback on that
                   callback(response);
                 } catch (err) {
                   callback({ error: "an unknown error occured" });
@@ -54,7 +62,8 @@ define(['util/xhr'], function(XHR) {
 
           try {
             response = JSON.parse( this.response );
-            if ( this.status === 200 && response.email ) {
+            if ( this.status === 200 ) {
+              authenticated = true;
               email = response.email;
               username = response.username;
               name = response.name;
@@ -72,8 +81,31 @@ define(['util/xhr'], function(XHR) {
       });
     };
 
-    this.user = function() {
+    // Check to see if we're already logged in
+    butter.listen( "ready", function onMediaReady() {
+      butter.unlisten( "ready", onMediaReady );
+
+      butter.cornfield.whoami( function( response ) {
+        if ( !response.error ) {
+          butter.dispatch( "autologinsucceeded", response );
+        }
+      });
+    });
+
+    this.email = function() {
       return email;
+    };
+
+    this.name = function() {
+      return name;
+    };
+
+    this.username = function() {
+      return username;
+    };
+
+    this.authenticated = function() {
+      return authenticated;
     };
 
     this.publish = function(id, callback) {
@@ -95,6 +127,10 @@ define(['util/xhr'], function(XHR) {
         if (this.readyState === 4) {
           try {
             var response = JSON.parse(this.response);
+            authenticated = false;
+            email = undefined;
+            username = undefined;
+            name = undefined;
             callback(response);
           } catch (err) {
             callback({ error: "an unknown error occured" });

@@ -23,25 +23,33 @@
 
           module( "Unauthenticated tests" );
 
-          test( "Sync API", 1, function() {
-            ok( !butter.cornfield.user(), "Username is undefined" );
+          asyncTest( "Logout", 1, function() {
+            butter.cornfield.logout( function( res ) {
+              equal( res, true, "Clean-up" );
+
+              start();
+            });
           });
 
-          asyncTest( "Async API", 4, function() {
-            butter.cornfield.logout( function( res ) {
-              equal( res, true, "Cornfield server is active" );
+          test( "Sync API", 4, function() {
+            ok( !butter.cornfield.authenticated(), "Authenticated is false" );
+            ok( !butter.cornfield.email(), "Email is undefined" );
+            ok( !butter.cornfield.name(), "Name is undefined" );
+            ok( !butter.cornfield.username(), "Username is undefined" );
+          });
 
-              butter.cornfield.list(function( res ) {
-                deepEqual( res, { error: "unauthorized" }, "Not allowed to list projects" );
+          asyncTest( "Async API", 3, function() {
 
-                butter.cornfield.load( filename, function( res ) {
-                  deepEqual( res, { error: "unauthorized" }, "Not allowed to get projects" );
+            butter.cornfield.list( function( res ) {
+              deepEqual( res, { error: "unauthorized" }, "Not allowed to list projects" );
 
-                  butter.cornfield.save( filename, stringedData, function( res ) {
-                    deepEqual( res, { error: "unauthorized" }, "Not allowed to save projects" );
+              butter.cornfield.load( filename, function( res ) {
+                deepEqual( res, { error: "unauthorized" }, "Not allowed to get projects" );
 
-                    start();
-                  });
+                butter.cornfield.save( filename, stringedData, function( res ) {
+                  deepEqual( res, { error: "unauthorized" }, "Not allowed to save projects" );
+
+                  start();
                 });
               });
             });
@@ -56,13 +64,15 @@
 
           module( "Authentication tests" );
 
-          asyncTest( "Login (user input needed)", 4, function() {
+          asyncTest( "Login (user input needed)", 6, function() {
             butter.cornfield.login( function( res ) {
               clearTimeout( failSafe );
               ok( res, "The login response has data" );
-              equal( res.status, "okay", "Login status is \"okay\"" );
+              ok( !res.error, "okay", "No errors while logging in" );
               ok( res.email, "The login has an email: " + res.email );
-              equal( res.email, butter.cornfield.user(), "Email is stored" );
+              equal( res.email, butter.cornfield.email(), "Email is stored" );
+              equal( res.name, butter.cornfield.name(), "Name is stored" );
+              equal( res.username, butter.cornfield.username(), "Name is stored" );
               start();
             });
 
@@ -73,6 +83,13 @@
           });
 
           module( "Authenticated tests" );
+
+          test( "Sync API", 4, function() {
+            ok( butter.cornfield.authenticated(), "Authenticated is true" );
+            ok( butter.cornfield.email(), "Email is a truthy value" );
+            ok( butter.cornfield.name(), "Name is a truthy value" );
+            ok( butter.cornfield.username(), "Username is a truthy value" );
+          });
 
           asyncTest( "Async API", 7, function() {
             var foundProject = false;
@@ -117,9 +134,9 @@
           asyncTest( "/api/whoami", 1, function() {
             butter.cornfield.whoami( function( res ) {
               deepEqual( res, {
-                email: butter.cornfield.user(),
-                name: butter.cornfield.user(),
-                username: butter.cornfield.user()
+                email: butter.cornfield.email(),
+                name: butter.cornfield.email(),
+                username: butter.cornfield.email()
               }, "Response contains user information" );
               start();
             });
@@ -131,6 +148,15 @@
 
               start();
             });
+          });
+
+          module( "State after logout" );
+
+          test( "Sync API", 4, function() {
+            ok( !butter.cornfield.authenticated(), "Authenticated is false" );
+            ok( !butter.cornfield.email(), "Email is undefined" );
+            ok( !butter.cornfield.name(), "Name is undefined" );
+            ok( !butter.cornfield.username(), "Username is undefined" );
           });
         }
     });

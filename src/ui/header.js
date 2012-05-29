@@ -56,14 +56,16 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
     var _oldDisplayProperty = _logoutButton.style.display;
     _logoutButton.style.display = "none";
 
-    function doAuth( successCallback, errorCallback ){
+    function authenticationRequired( successCallback, errorCallback ){
+      if ( butter.cornfield.authenticated() && successCallback ) {
+        successCallback();
+        return;
+      }
+
       butter.cornfield.login(function( response ){
-        if( response.status === "okay" ){
-          var email = response.email;
+        if ( !response.error ) {
           butter.cornfield.list(function( listResponse ) {
-            _authButton.innerHTML = email;
-            _authButton.title = "This is you!";
-            _logoutButton.style.display = _oldDisplayProperty;
+            loginDisplay();
             if( successCallback ){
               successCallback();
             }
@@ -120,20 +122,10 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
       dialog.open();
     }, false );
 
-    _authButton.addEventListener( "click", function( e ){
-      if( !butter.cornfield.user() ){
-        doAuth();
-      }
-    }, false );
+    _authButton.addEventListener( "click", authenticationRequired, false );
 
     _logoutButton.addEventListener( "click", function( e ){
-      if( butter.cornfield.user() ){
-        butter.cornfield.logout(function( response ){
-          _logoutButton.style.display = "none";
-          _authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
-          _authButton.title = DEFAULT_AUTH_BUTTON_TITLE;
-        });
-      }
+      butter.cornfield.logout( logoutDisplay );
     });
 
     function showErrorDialog( message, callback ){
@@ -192,12 +184,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
         }
       }
 
-      if( !butter.cornfield.user() ){
-        doAuth( prepare );
-      }
-      else{
-        prepare();
-      }
+      authenticationRequired( prepare );
     }, false );
 
     function doSave( callback ){
@@ -247,12 +234,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
     }
 
     _saveButton.addEventListener( "click", function( e ){
-      if( !butter.cornfield.user() ){
-        doAuth( doSave );
-      }
-      else{
-        doSave();
-      }
+      authenticationRequired( doSave );
     }, false );
 
     _loadButton.addEventListener( "click", function( e ){
@@ -305,13 +287,29 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
         });
       }
 
-      if( !butter.cornfield.user() ){
-        doAuth( prepare );
-      }
-      else{
-        prepare();
-      }
+      authenticationRequired( prepare );
     }, false );
+
+    function loginDisplay() {
+      _authButton.innerHTML = butter.cornfield.email();
+      _authButton.title = "This is you!";
+      _logoutButton.style.display = _oldDisplayProperty;
+    }
+
+    function logoutDisplay() {
+      _logoutButton.style.display = "none";
+      _authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
+      _authButton.title = DEFAULT_AUTH_BUTTON_TITLE;
+    }
+
+    if ( butter.cornfield.authenticated() ) {
+      loginDisplay();
+    } else {
+      butter.listen( "autologinsucceeded", function onAutoLoginSucceeded( e ) {
+        butter.unlisten( "autologinsucceeded", onAutoLoginSucceeded );
+        loginDisplay();
+      });
+    }
 
     function setup(){
       _rootElement.style.width = window.innerWidth + "px";
