@@ -4,7 +4,8 @@
   "snapshotHTMLOnReady": true,
   "scrapePage": true,
   "editor": {
-    "default": "{{baseDir}}editors/default-editor.html"
+    "default": "{{baseDir}}editors/default-editor.html",
+    "googlemap": "{{baseDir}}editors/googlemap-editor.html"
   },
   "ui": {
     "enabled": true,
