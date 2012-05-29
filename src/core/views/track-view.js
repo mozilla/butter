@@ -24,6 +24,7 @@ define( [ "core/logger",
         _element = document.createElement( "div" ),
         _duration = 1,
         _parent,
+        _droppable,
         _zoom = 1;
 
     EventManagerWrapper( _this );
@@ -31,38 +32,40 @@ define( [ "core/logger",
     _element.className = "butter-track";
     _element.id = _id;
 
-    DragNDrop.droppable( _element, {
-      hoverClass: "draggable-hover",
-      drop: function( dropped, mousePosition ) {
+    function setupDroppable(){
+      _droppable = DragNDrop.droppable( _element, {
+        hoverClass: "draggable-hover",
+        drop: function( dropped, mousePosition ) {
 
-        var draggableType = dropped.getAttribute( "data-butter-draggable-type" );
-        
-        var start,
-            left,
-            trackRect = _element.getBoundingClientRect();
+          var draggableType = dropped.getAttribute( "data-butter-draggable-type" );
+          
+          var start,
+              left,
+              trackRect = _element.getBoundingClientRect();
 
-        if( draggableType === "plugin" ){
-          left = mousePosition[ 0 ] - trackRect.left;
-          start = left / trackRect.width * _duration;
-          _this.dispatch( "plugindropped", {
-            start: start,
-            track: _track,
-            type: dropped.getAttribute( "data-butter-plugin-type" )
-          });
-        }
-        else if( draggableType === "trackevent" ) {
-          if( dropped.parentNode !== _element ){
-            left = dropped.offsetLeft;
+          if( draggableType === "plugin" ){
+            left = mousePosition[ 0 ] - trackRect.left;
             start = left / trackRect.width * _duration;
-            _this.dispatch( "trackeventdropped", {
+            _this.dispatch( "plugindropped", {
               start: start,
               track: _track,
-              trackEvent: dropped.getAttribute( "data-butter-trackevent-id" )
+              type: dropped.getAttribute( "data-butter-plugin-type" )
             });
           }
-        } //if
-      }
-    });
+          else if( draggableType === "trackevent" ) {
+            if( dropped.parentNode !== _element ){
+              left = dropped.offsetLeft;
+              start = left / trackRect.width * _duration;
+              _this.dispatch( "trackeventdropped", {
+                start: start,
+                track: _track,
+                trackEvent: dropped.getAttribute( "data-butter-trackevent-id" )
+              });
+            }
+          } //if
+        }
+      });
+    }
 
     function resetContainer(){
       _element.style.width = ( _duration * _zoom ) + "px";
@@ -109,9 +112,16 @@ define( [ "core/logger",
         },
         set: function( val ){
           _parent = val;
+          if ( _droppable ) {
+            _droppable.destroy();
+            _droppable = null;
+          }
+          if ( _parent ) {
+            setupDroppable();
+          }
           for( var i=0, l=_trackEvents.length; i<l; ++i ){
             _trackEvents[ i ].parent = _this;
-          } //for
+          }
         }
       }
     });
