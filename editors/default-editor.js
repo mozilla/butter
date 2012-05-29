@@ -38,14 +38,14 @@
 
   }
 
-
   document.addEventListener( "DOMContentLoaded", function( e ){
 
     function sendData( alsoClose ){
       alsoClose = !!alsoClose;
       var popcornOptions = {};
       for( var item in _manifest ) {
-        popcornOptions[ item ] = document.getElementById( item ).value;
+        var elem = document.getElementById( item );
+        popcornOptions[ item ] = elem.type === "checkbox" ? elem.checked : elem.value;
       }
       document.getElementById( "message" ).innerHTML = "";
       _comm.send( "submit", {
@@ -91,93 +91,104 @@
       var popcornOptions = e.data.popcornOptions,
           targets = e.data.targets,
           media = e.data.media,
+          table = document.getElementById( "table" ),
           mediaName = "Current Media Element",
-          elemToFocus;
+          elemToFocus,
+          createElement = {
+            defaultValue: function( item, val, isCheckbox ) {
+              // Don't print "undefined" or the like
+              if ( val === undefined ) {
+                if ( item.default ) {
+                  val = item.default;
+                } else {
+                  val = item.type === "number" ? 0 : "";
+                }
+              }
+              return val;
+            },
+            input: function( manifest, manifestProp ) {
+              var manifestItem = manifest[ manifestProp ],
+                  elem = document.createElement( manifestItem.elem ),
+                  type = manifestItem.type,
+                  val;
 
-      if( media && media.name && media.target ){
+              elem.type = type;
+              elem.id = manifestProp;
+              elem.style.width = "100%";
+              elem.placeholder = "Empty";
+
+              elem.value = elem.checked = this.defaultValue( manifestItem, popcornOptions[ manifestProp ] );
+              return elem;
+            },
+            select: function( manifest, manifestProp, items ) {
+              var manifestItem = manifest[ manifestProp ],
+                  elem = document.createElement( "SELECT" ),
+                  items = items || manifestItem.options,
+                  option;
+
+              elem.id = manifestProp;
+
+              for ( var i = 0, l = items.length; i < l; i++ ) {
+                option = document.createElement( "OPTION" );
+                option.value = items[ i ];
+                option.innerHTML = items[ i ];
+                elem.appendChild( option );
+              }
+              option = document.createElement( "OPTION" );
+              option.value = "Media Element";
+              option.innerHTML =  mediaName;
+              elem.appendChild( option );
+              elem.value = this.defaultValue( manifestItem, popcornOptions[ manifestProp ] );
+              return elem;
+            }
+          };
+
+      if ( media && media.name && media.target ) {
         mediaName += " (\"" + media.name + "\": " + media.target + ")";
-      } //if
+      }
 
       _manifest = e.data.manifest.options;
 
-      for( var item in _manifest ) {
+      for ( var item in _manifest ) {
         var row = document.createElement( "TR" ),
             col1 = document.createElement( "TD" ),
             col2 = document.createElement( "TD" ),
-            elem = _manifest[ item ].elem,
+            currentItem = _manifest[ item ],
+            itemLabel = currentItem.label || item,
             field;
 
-        var itemLabel = _manifest[ item ].label || item;
-        itemLabel = itemLabel.charAt( 0 ).toUpperCase() + itemLabel.slice( 1 );
-        if( itemLabel === "In" ){
+        if ( itemLabel === "In" ) {
           itemLabel = "Start (seconds)";
-        }
-        else if( itemLabel === "Out" ){
+        } else if ( itemLabel === "Out" ) {
           itemLabel = "End (seconds)";
-        } //if
+        }
 
         col1.innerHTML = "<span>" + itemLabel + "</span>";
 
-        if( item === "target" ) {
-          field = document.createElement( "SELECT" );
-          field.id = "target";
-
-          for( var i = 0, l = targets.length; i < l; i++ ) {
-            var option = document.createElement( "OPTION" );
-            option.value = targets[ i ];
-            option.innerHTML = targets[ i ];
-            field.appendChild( option );
-            if( popcornOptions.target === targets[ i ] ) {
-              field.value = targets[ i ];
-            }
-          }
-          var option = document.createElement( "OPTION" );
-          option.value = "Media Element";
-          option.innerHTML =  mediaName;
-          field.appendChild( option );
-          if( popcornOptions.target === "Media Element" ) {
-            field.value = "Media Element";
-          }
-          col2.appendChild( field );
-
-          field.addEventListener( "change", function( e ){
-            sendData( false );
-          }, false );
+        if ( item === "target" ) {
+          field = createElement[ "select" ]( _manifest, item, targets );
         } else {
-          field = document.createElement( elem );
-          field.id = item;
-          field.style.width = "100%";
-          field.placeholder = "Empty";
-
-          // If this is an input textbox, add focus+select behaviour
-          if( field.type === "text" ){
-            __TextboxWrapper( field );
-          }
-
-          // Don't print "undefined" or the like
-          var val = popcornOptions[ item ];
-          if ( val || val === 0 ) {
-            field.value = val;
-          }
-
-          col2.appendChild( field );
-          field.addEventListener( "change", function( e ){
-            sendData( false );
-          }, false );
+          field = createElement[ currentItem.elem ]( _manifest, item );
         }
+
+        col2.appendChild( field );
+        field.addEventListener( "change", function( e ){
+          sendData( false );
+        }, false );
 
         // Remember first control added in editor so we can focus
         elemToFocus = elemToFocus || field;
 
         row.appendChild( col1 );
         row.appendChild( col2 );
-        document.getElementById( "table" ).appendChild( row );
+        table.appendChild( row );
       }
 
       // Focus the first element in the editor
       if ( elemToFocus && elemToFocus.focus ) {
         elemToFocus.focus();
       }
+      sendData( false );
     });
   }, false );
 })();
