@@ -95,9 +95,9 @@
           mediaName = "Current Media Element",
           elemToFocus,
           createElement = {
-            defaultValue: function( item, val, isCheckbox ) {
+            defaultValue: function( item, val ) {
               // Don't print "undefined" or the like
-              if ( val === undefined ) {
+              if ( val === undefined || typeof val === "object" ) {
                 if ( item.default ) {
                   val = item.default;
                 } else {
@@ -151,11 +151,11 @@
 
       _manifest = e.data.manifest.options;
 
-      for ( var item in _manifest ) {
+      function createRow( item, data ) {
         var row = document.createElement( "TR" ),
             col1 = document.createElement( "TD" ),
             col2 = document.createElement( "TD" ),
-            currentItem = _manifest[ item ],
+            currentItem = manifest[ item ],
             itemLabel = currentItem.label || item,
             field;
 
@@ -167,11 +167,7 @@
 
         col1.innerHTML = "<span>" + itemLabel + "</span>";
 
-        if ( item === "target" ) {
-          field = createElement[ "select" ]( _manifest, item, targets );
-        } else {
-          field = createElement[ currentItem.elem ]( _manifest, item );
-        }
+        field = createElement[ currentItem.elem ]( _manifest, item, data );
 
         col2.appendChild( field );
         field.addEventListener( "change", function( e ){
@@ -184,6 +180,19 @@
         row.appendChild( col1 );
         row.appendChild( col2 );
         table.appendChild( row );
+      }
+
+      _manifest.target = {
+        elem: "select",
+        label: "Target"
+      };
+
+      for ( var item in _manifest ) {
+        if ( item === "target" ) {
+          createRow( item, targets );
+        } else {
+          createRow( item );
+        }
       }
 
       // Focus the first element in the editor
