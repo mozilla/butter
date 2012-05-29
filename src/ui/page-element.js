@@ -16,6 +16,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
         _blinkFunction,
         _positionTracker,
         _droppable,
+        _highlighting = false,
+        _draggingGlobal = false,
         _this = this;
 
     EventManagerWrapper( _this );
@@ -31,14 +33,35 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
     this.highlight = function( state ){
       if( state ){
         _this.blink = __nullFunction;
+        _highlighting = true;
         _highlightElement.style.visibility = "visible";
-        _highlightElement.removeAttribute( "data-blink" );
+        _highlightElement.classList.add( "on" );
+        _highlightElement.classList.remove( "blink" );
+        _highlightElement.removeEventListener( 'transitionend', onTransitionEnd, false );
+        _highlightElement.removeEventListener( 'oTransitionEnd', onTransitionEnd, false );
+        _highlightElement.removeEventListener( 'webkitTransitionEnd', onTransitionEnd, false );
       }
       else {
         _this.blink = _blinkFunction;
-        _highlightElement.style.visibility = "hidden";
+        _highlighting = false;
+        _highlightElement.classList.remove( "on" );
+        if ( !_draggingGlobal ) {
+          _highlightElement.style.visibility = "hidden";
+        }
       }
     };
+
+    window.addEventListener( "dragstart", function( e ) {
+      _highlightElement.style.visibility = "visible";
+      _draggingGlobal = true;
+    }, false );
+
+    window.addEventListener( "dragend", function( e ) {
+      if ( !_highlightElement.classList.contains( "blink" ) ) {
+        _highlightElement.style.visibility = "hidden";  
+      }
+      _draggingGlobal = false;
+    }, false );
 
     this.destroy = function(){
       _positionTracker.destroy();
@@ -59,11 +82,14 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
     _highlightElement.style.visibility = "hidden";
 
     function onTransitionEnd(){
-      if( _highlightElement.getAttribute( "data-blink" ) !== true ){
-          _highlightElement.removeAttribute( "data-blink" );
-          _highlightElement.style.visibility = "hidden";
-        }
-      _this.blink = _blinkFunction;
+      _highlightElement.classList.remove( "blink" );
+      if ( !_draggingGlobal && !_highlighting ) {
+        _highlightElement.style.visibility = "hidden";
+      }
+      if ( !_highlighting ) {
+        _highlightElement.classList.remove( "on" );
+        _this.blink = _blinkFunction;  
+      }
       _highlightElement.removeEventListener( 'transitionend', onTransitionEnd, false );
       _highlightElement.removeEventListener( 'oTransitionEnd', onTransitionEnd, false );
       _highlightElement.removeEventListener( 'webkitTransitionEnd', onTransitionEnd, false );
@@ -71,7 +97,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
 
     this.blink = _blinkFunction = function(){
       _this.blink = __nullFunction;
-      _highlightElement.setAttribute( "data-blink", "true" );
+      _highlightElement.classList.add( "on" );
+      setTimeout(function(){
+        _highlightElement.classList.add( "blink", "true" );
+      }, 0);
       _highlightElement.style.visibility = "visible";
       _highlightElement.addEventListener( 'transitionend', onTransitionEnd, false );
       _highlightElement.addEventListener( 'oTransitionEnd', onTransitionEnd, false );
@@ -83,7 +112,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
 
       _element.setAttribute( "butter-clean", "true" );
 
-      _droppable = DragNDrop.droppable( _element, {
+      _droppable = DragNDrop.droppable( _highlightElement, {
         over: function( dragElement ){
           if( dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
             return;
