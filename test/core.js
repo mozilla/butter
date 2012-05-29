@@ -666,7 +666,7 @@
       butter.listen( "mediaready", function( e ) {
         t1 = m1.addTrack();
         var messedUpString = "this'" + 'should"' + '""""""b"e' + "f'i'ne";
-        te1 = t1.addTrackEvent( { popcornOptions: { start: 0, end: 6, text: messedUpString, target: "stringSanity" }, type: "footnote" } );
+        te1 = t1.addTrackEvent( { popcornOptions: { start: 0, end: 6, text: messedUpString, target: "stringSanity" }, type: "text" } );
         butter.addTarget( { name: "beep" } );
 
         var func = Function( "", m1.generatePopcornString() );
@@ -696,7 +696,7 @@
             text: "OBVIOUS",
             target: "stringSanity"
           },
-          type: "footnote"
+          type: "text"
         });
 
         equals( butter.getHTML().match( "OBVIOUS" ).length, 1, "TrackEvent wasn't exported" );
@@ -920,8 +920,8 @@
     stop();
     createButter(function( butter ) {
       start();
-      var footnoteScripts = document.head.querySelectorAll( "script[src='" + butter.config.plugin.plugins[ 0 ].path + "']" );
-      equal( footnoteScripts.length, 1, "Footnote script was only loaded once" );
+      var textScripts = document.head.querySelectorAll( "script[src='" + butter.config.plugin.plugins[ 0 ].path + "']" );
+      equal( textScripts.length, 1, "Text script was only loaded once" );
     });
   });
 })( window, window.document );
