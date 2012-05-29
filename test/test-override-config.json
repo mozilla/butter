@@ -8,8 +8,8 @@
   "plugin": {
     "plugins": [
       {
-        "type": "footnote",
-        "path": "../external/popcorn-js/plugins/footnote/popcorn.footnote.js"
+        "type": "text",
+        "path": "../external/popcorn-js/plugins/text/popcorn.text.js"
       },
       {
         "type": "attribution",
@@ -21,7 +21,7 @@
       }
     ],
     "defaults": [
-      "footnote",
+      "text",
       "image"
     ]
   }
