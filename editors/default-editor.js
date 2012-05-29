@@ -155,7 +155,7 @@
         var row = document.createElement( "TR" ),
             col1 = document.createElement( "TD" ),
             col2 = document.createElement( "TD" ),
-            currentItem = _manifest[ item ],
+            currentItem = manifest[ item ],
             itemLabel = currentItem.label || item,
             field;
 
