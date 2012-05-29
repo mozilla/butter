@@ -521,10 +521,14 @@ input.form-error {
 .butter-highlight {
   position: absolute;
   z-index: 2100000000;
+  opacity: 0;
+}
+
+.butter-highlight.on {
   opacity: 1;
 }
 
-.butter-highlight[ data-blink="true" ]{
+.butter-highlight.blink{
   -moz-transition: opacity 1.5s;
   -o-transition: opacity 1.5s;
   -webkit-transition: opacity 1.5s;
@@ -534,12 +538,12 @@ input.form-error {
 }
 
 .butter-target-highlight {
-  background-color: rgb( 170, 170, 10);
+  background-color: rgb( 170, 170, 10 );
   background-color: rgba( 170, 170, 10, 0.4 );
 }
 
 .butter-media-highlight {
-  background-color: rgb( 10, 170, 170);
+  background-color: rgb( 10, 170, 170 );
   background-color: rgba( 10, 170, 170, 0.4 );
 }
 
