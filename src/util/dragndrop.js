@@ -92,7 +92,7 @@ define([], function(){
           var nextZ = style.zIndex;
           if ( isNaN( nextZ ) && nextZ > z ) {
             z = nextZ;
-          }          
+          }
         }
         parentNode = parentNode.parentNode;
       }
