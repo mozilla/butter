@@ -133,6 +133,7 @@ define([], function(){
       if( __droppables[ i ].drop() ){
         return true;
       }
+    }
     return false;
   }
 
@@ -436,10 +437,6 @@ define([], function(){
     element.addEventListener( "dragenter", onDragEnter, false );
     element.addEventListener( "dragleave", onDragLeave, false );
 
-    window.addEventListener( "mousemove", function( e ){
-      _mousePos = [ e.clientX, e.clientY ];
-    }, false );
-
     _droppable = {
       element: element,
       remember: function( draggable ){
@@ -493,7 +490,7 @@ define([], function(){
         return false;
       },
       destroy: function(){
-        var idx = __droppables.indexOf( returnObj );
+        var idx = __droppables.indexOf( _droppable );
         if ( idx > -1 ) {
           __droppables.splice( idx, 1 );
         }
