@@ -29,52 +29,6 @@
   };
 
   /**
-   * Replace any variable {{foo}} with the value of "foo" from the config.
-   * If value is a branch of config, descend into it and replace values.
-   */
-  function __replaceVariable( value, config ){
-    if( value === undefined ){
-      return value;
-    }
-
-    var newValue = value,
-        variable,
-        configValue,
-        substitution;
-
-    for( var variableName in __variables ){
-      if( __variables.hasOwnProperty( variableName ) ){
-        variable = __variables[ variableName ];
-        configValue = config[ variableName ];
-        substitution = configValue ? configValue : variable.defaultValue;
-        newValue = newValue.replace ?
-          newValue.replace( variable.name, substitution, "g" ) :
-          newValue;
-      }
-    }
-
-    return newValue;
-  }
-
-  function __replaceVariableBranch( property, config ){
-    if( property === undefined ){
-      return property;
-    }
-
-    for( var prop in property ){
-      if( property.hasOwnProperty( prop ) ){
-        if( typeof property[ prop ] === "object" ){
-          property[ prop ] = __replaceVariableBranch( property[ prop ], config );
-        } else {
-          property[ prop ] = __replaceVariable( property[ prop ], config );
-        }
-      }
-    }
-
-    return property;
-  }
-
-  /**
    * Validates any variable value being set, for example,
    * making sure paths end in '/'.
    */
@@ -117,7 +71,7 @@
       // Find the first config that has a given property, starting
       // with the most recently merged Configuration (if any) and
       // ending with our internal _config object.
-      function findConfig( property ){
+      function _findConfig( property ){
         var i = _merged.length;
         while( i-- ){
           if( _merged[ i ].value( property ) !== undefined ){
@@ -125,6 +79,60 @@
           }
         }
         return _config;
+      }
+
+      /**
+       * Replace any variable {{foo}} with the value of "foo" from the config.
+       * If value is a branch of config, descend into it and replace values.
+       */
+      function _replaceVariable( value, config ){
+        if( value === undefined ){
+          return value;
+        }
+
+        var newValue = value,
+            variable,
+            configValue,
+            substitution,
+            overrideConfig;
+
+        for( var variableName in __variables ){
+          if( __variables.hasOwnProperty( variableName ) ){
+            variable = __variables[ variableName ];
+
+            // Find the right config override for this value
+            // (if any) or use the one in our internal _config
+            overrideConfig = _findConfig( variableName );
+            configValue = overrideConfig instanceof Configuration ?
+              overrideConfig.value( variableName ) :
+              overrideConfig[ variableName ];
+
+            substitution = configValue ? configValue : variable.defaultValue;
+            newValue = newValue.replace ?
+              newValue.replace( variable.name, substitution, "g" ) :
+              newValue;
+          }
+        }
+
+        return newValue;
+      }
+
+      function _replaceVariableBranch( property, config ){
+        if( property === undefined ){
+          return property;
+        }
+
+        for( var prop in property ){
+          if( property.hasOwnProperty( prop ) ){
+            if( typeof property[ prop ] === "object" ){
+              property[ prop ] = _replaceVariableBranch( property[ prop ], config );
+            } else {
+              property[ prop ] = _replaceVariable( property[ prop ], config );
+            }
+          }
+        }
+
+        return property;
       }
 
       /**
@@ -141,7 +149,7 @@
        * @param {Object} newValue: [Optional] A new value to use.
        */
       this.value = function( property, newValue ){
-        var config = findConfig( property );
+        var config = _findConfig( property );
 
         if( config instanceof Configuration ){
           return config.value( property, newValue );
@@ -153,9 +161,9 @@
           // If we're giving back a property branch, replace values deep before
           // handing it back to the user.
           if( typeof config[ property ] === "object" ){
-            return __replaceVariableBranch( config[ property ], config );
+            return _replaceVariableBranch( config[ property ], config );
           } else {
-            return __replaceVariable( config[ property ], config );
+            return _replaceVariable( config[ property ], config );
           }
         }
       };

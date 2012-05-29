@@ -122,5 +122,38 @@
 
     });
 
+    test( "Merge and override", function(){
+
+      var configJSON1 = JSON.stringify({
+        "baseDir": "./",
+        "child": "{{baseDir}}child"
+      }),
+      configJSON2 = JSON.stringify({
+        "baseDir": "../../",
+        "child": "{{baseDir}}child"
+      }),
+      configJSON3 = JSON.stringify({
+        "baseDir": "../../../",
+        "child": "{{baseDir}}child"
+      }),
+      config1 = Config.parse( configJSON1 ),
+      config2 = Config.parse( configJSON2 ),
+      config3 = Config.parse( configJSON3 );
+
+      // Sanity test value substitution with no overrides
+      notEqual( config1.value( "child" ), config2.value( "child" ), "Merged values use override values" );
+      equal( config1.value( "child" ), "./child", "Proper baseDir value used for config1" );
+      equal( config2.value( "child" ), "../../child", "Proper baseDir value used for config2" );
+
+      // Override config1 with config2
+      config1.merge( config2 );
+      equal( config1.value( "child" ), config2.value( "child" ), "Merged values use override values" );
+
+      // Override config1 with config3
+      config1.merge( config3 );
+      equal( config1.value( "child" ), config3.value( "child" ), "Merged values use override values" );
+    });
+
   });
+
 }(window));
