@@ -10,6 +10,7 @@
   define( [
             "core/eventmanager",
             "core/logger",
+            "core/config",
             "core/target",
             "core/media",
             "core/page",
@@ -23,6 +24,7 @@
           function(
             EventManagerWrapper,
             Logger,
+            Config,
             Target,
             Media,
             Page,
@@ -63,7 +65,7 @@
       // a base, and override whatever the user provides in the
       // butterOptions.config file.
       try {
-        _defaultConfig = JSON.parse( DefaultConfigJSON );
+        _defaultConfig = Config.parse( DefaultConfigJSON );
       } catch ( e) {
         throw "Butter Error: unable to find or parse default-config.json";
       }
@@ -513,7 +515,7 @@
             medias = scrapedObject.media;
 
         _page.prepare(function() {
-          if ( !!_config.scrapePage ) {
+          if ( !!_config.value( "scrapePage" ) ) {
             var i, j, il, jl, url, oldTarget, oldMedia, mediaPopcornOptions, mediaObj;
             for( i = 0, il = targets.length; i < il; ++i ) {
               oldTarget = null;
@@ -554,8 +556,8 @@
                 } //for
               }
               else{
-                if( _config.mediaDefaults ){
-                  mediaPopcornOptions = _config.mediaDefaults;
+                if( _config.value( "mediaDefaults" ) ){
+                  mediaPopcornOptions = _config.value( "mediaDefaults" );
                 }
               } //if
 
@@ -582,7 +584,7 @@
       } //if
 
       var preparePopcornScriptsAndCallbacks = this.preparePopcornScriptsAndCallbacks = function( readyCallback ){
-        var popcornConfig = _config.popcorn || {},
+        var popcornConfig = _config.value( "popcorn" ) || {},
             callbacks = popcornConfig.callbacks,
             scripts = popcornConfig.scripts,
             toLoad = [],
@@ -649,10 +651,10 @@
       };
 
       function attemptDataLoad( finishedCallback ){
-        if ( _config.savedDataUrl ) {
+        if ( _config.value( "savedDataUrl" ) ) {
 
           var xhr = new XMLHttpRequest(),
-              savedDataUrl = _config.savedDataUrl + "?noCache=" + Date.now(),
+              savedDataUrl = _config.value( "savedDataUrl" ) + "?noCache=" + Date.now(),
               savedData;
 
           xhr.open( "GET", savedDataUrl, false );
@@ -685,10 +687,13 @@
 
       function readConfig( userConfig ){
         // Overwrite default config options with user settings (if any).
-        userConfig = userConfig || {};
-        _config = Lang.defaults( userConfig, _defaultConfig );
+        if( userConfig ){
+          _defaultConfig.merge( userConfig );
+        }
 
-        _this.project.template = _config.name;
+        _config = _defaultConfig;
+
+        _this.project.template = _config.value( "name" );
 
         //prepare modules first
         var moduleCollection = Modules( _this, _config ),
@@ -698,14 +703,14 @@
 
         _page = new Page( loader, _config );
 
-        _this.ui = new UI( _this, _config );
+        _this.ui = new UI( _this  );
 
         _this.ui.load(function(){
           //prepare the page next
           preparePopcornScriptsAndCallbacks(function(){
             preparePage(function(){
               moduleCollection.ready(function(){
-                if( _config.snapshotHTMLOnReady ){
+                if( _config.value( "snapshotHTMLOnReady" ) ){
                   _page.snapshotHTML();
                 }
                 attemptDataLoad(function(){
@@ -721,7 +726,7 @@
 
       if( butterOptions.config && typeof( butterOptions.config ) === "string" ){
         var xhr = new XMLHttpRequest(),
-          jsonConfig,
+          userConfig,
           url = butterOptions.config + "?noCache=" + Date.now();
 
         xhr.open( "GET", url, false );
@@ -735,12 +740,12 @@
 
         if( xhr.status === 200 || xhr.status === 0 ){
           try{
-            jsonConfig = JSON.parse( xhr.responseText );
+            userConfig = Config.parse( xhr.responseText );
           }
           catch( e ){
             throw new Error( "Butter config file not formatted properly." );
           }
-          readConfig( jsonConfig );
+          readConfig( userConfig );
         }
         else{
           _this.dispatch( "configerror", _this );

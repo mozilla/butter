@@ -89,12 +89,13 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
   var NUDGE_INCREMENT_SMALL = 0.25,
       NUDGE_INCREMENT_LARGE = 1;
 
-  function UI( butter, options ){
+  function UI( butter ){
 
     var _areas = {},
         _contentState = [],
         _state = true,
         _logoSpinner,
+        uiConfig = butter.config,
         _this = this;
 
     EventManagerWrapper( _this );
@@ -122,7 +123,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     _element.appendChild( _areas.work.element );
     _element.appendChild( _areas.tools.element );
 
-    if( options.ui.enabled !== false ){
+    if( uiConfig.value( "ui" ).enabled !== false ){
       document.body.classList.add( "butter-header-spacing" );
       document.body.classList.add( "butter-tray-spacing" );
       document.body.appendChild( _element );
@@ -132,7 +133,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     }
 
     this.load = function( onReady ){
-      if( options.ui.enabled !== false ){
+      if( uiConfig.value( "ui" ).enabled !== false ){
         butter.loader.load(
           [
             {
@@ -142,7 +143,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
           ],
           function(){
             // icon preloading needs css to be loaded first
-            loadIcons( options.icons, options.dirs.resources || "" );
+            loadIcons( uiConfig.value( "icons" ), uiConfig.value( "dirs" ).resources || "" );
             onReady();
           }
         );
@@ -437,12 +438,12 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
       _this.visible = true;
       _toggler.visible = true;
       ContextButton( butter );
-      if( options.ui.enabled !== false ){
-        Header( butter, options );
+      if( uiConfig.value( "ui" ).enabled !== false ){
+        Header( butter, uiConfig );
       }
     });
 
-    _this.dialogDir = butter.config.dirs.dialogs || "";
+    _this.dialogDir = butter.config.value( "dirs" ).dialogs || "";
 
    } //UI
 

@@ -625,7 +625,7 @@
     document.body.appendChild( el );
 
     createButter(function( butter ){
-      butter.config.scrapePage = true;
+      butter.config.value( "scrapePage", true );
       butter.preparePage(function(){
         ok( butter.media.length > 0 && butter.media[0].url === "http://www.youtube.com/watch?v=7glrZ4e4wYU", "URL match" );
         ok( document.getElementById( "strange-test-1" ), "New element exists" );
@@ -885,12 +885,12 @@
           debug: false,
           ready: function( butter2 ){
 
-            ok( butter1.config.name !== butter2.config.name, "Config names are different" );
-            equal( butter2.config.name, "test-override-config", "Config name should be replaced." );
+            ok( butter1.config.value( "name" )  !== butter2.config.name, "Config names are different" );
+            equal( butter2.config.value( "name" ), "test-override-config", "Config name should be replaced." );
 
             // Test that things are otherwise the same for both specified and default config options.
-            deepEqual( butter1.config.plugin, butter2.config.plugin, "Config plugins are the same" );
-            deepEqual( butter1.config.dirs, butter2.config.dirs, "Config dirs are the same" );
+            deepEqual( butter1.config.value( "plugin" ), butter2.config.value( "plugin" ), "Config plugins are the same" );
+            deepEqual( butter1.config.value( "dirs" ), butter2.config.value( "dirs" ), "Config dirs are the same" );
 
             start();
 
@@ -920,7 +920,7 @@
     stop();
     createButter(function( butter ) {
       start();
-      var textScripts = document.head.querySelectorAll( "script[src='" + butter.config.plugin.plugins[ 0 ].path + "']" );
+      var textScripts = document.head.querySelectorAll( "script[src='" + butter.config.value( "plugin" ).plugins[ 0 ].path + "']" );
       equal( textScripts.length, 1, "Text script was only loaded once" );
     });
   });

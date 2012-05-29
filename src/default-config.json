@@ -1,9 +1,10 @@
 {
   "name": "default-config",
+  "baseDir": "../",
   "snapshotHTMLOnReady": true,
   "scrapePage": true,
   "editor": {
-    "default": "../editors/default-editor.html"
+    "default": "{{baseDir}}editors/default-editor.html"
   },
   "ui": {
     "enabled": true,
@@ -17,55 +18,55 @@
     "plugins": [
       {
         "type": "attribution",
-        "path": "../external/popcorn-js/plugins/attribution/popcorn.attribution.js"
+        "path": "{{baseDir}}external/popcorn-js/plugins/attribution/popcorn.attribution.js"
       },
       {
         "type": "flickr",
-        "path": "../external/popcorn-js/plugins/flickr/popcorn.flickr.js"
+        "path": "{{baseDir}}external/popcorn-js/plugins/flickr/popcorn.flickr.js"
       },
       {
         "type": "text",
-        "path": "../external/popcorn-js/plugins/text/popcorn.text.js"
+        "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
       },
       {
         "type": "googlefeed",
-        "path": "../external/popcorn-js/plugins/googlefeed/popcorn.googlefeed.js"
+        "path": "{{baseDir}}external/popcorn-js/plugins/googlefeed/popcorn.googlefeed.js"
       },
       {
         "type": "googlemap",
-        "path": "../external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
+        "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
       },
       {
         "type": "image",
-        "path": "../external/popcorn-js/plugins/image/popcorn.image.js"
+        "path": "{{baseDir}}external/popcorn-js/plugins/image/popcorn.image.js"
       },
       {
         "type": "lowerthird",
-        "path": "../external/popcorn-js/plugins/lowerthird/popcorn.lowerthird.js"
+        "path": "{{baseDir}}external/popcorn-js/plugins/lowerthird/popcorn.lowerthird.js"
       },
       {
         "type": "subtitle",
-        "path": "../external/popcorn-js/plugins/subtitle/popcorn.subtitle.js"
+        "path": "{{baseDir}}external/popcorn-js/plugins/subtitle/popcorn.subtitle.js"
       },
       {
         "type": "tumblr",
-        "path": "../external/popcorn-js/plugins/tumblr/popcorn.tumblr.js"
+        "path": "{{baseDir}}external/popcorn-js/plugins/tumblr/popcorn.tumblr.js"
       },
       {
         "type": "twitter",
-        "path": "../external/popcorn-js/plugins/twitter/popcorn.twitter.js"
+        "path": "{{baseDir}}external/popcorn-js/plugins/twitter/popcorn.twitter.js"
       },
       {
         "type": "webpage",
-        "path": "../external/popcorn-js/plugins/webpage/popcorn.webpage.js"
+        "path": "{{baseDir}}external/popcorn-js/plugins/webpage/popcorn.webpage.js"
       },
       {
         "type": "wikipedia",
-        "path": "../external/popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"
+        "path": "{{baseDir}}external/popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"
       },
       {
         "type": "wordriver",
-        "path": "../external/popcorn-js/plugins/wordriver/popcorn.wordriver.js"
+        "path": "{{baseDir}}external/popcorn-js/plugins/wordriver/popcorn.wordriver.js"
       }
     ],
     "defaults": [
@@ -74,10 +75,10 @@
     ]
   },
   "dirs": {
-    "popcorn-js": "../external/popcorn-js/",
-    "css": "../css/",
-    "dialogs": "../dialogs/",
-    "resources": "../resources/"
+    "popcorn-js": "{{baseDir}}external/popcorn-js/",
+    "css": "{{baseDir}}css/",
+    "dialogs": "{{baseDir}}dialogs/",
+    "resources": "{{baseDir}}resources/"
   },
   "icons": {
     "default": "popcorn-icon.png",
