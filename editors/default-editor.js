@@ -134,10 +134,12 @@
                 option.innerHTML = items[ i ];
                 elem.appendChild( option );
               }
-              option = document.createElement( "OPTION" );
-              option.value = "Media Element";
-              option.innerHTML =  mediaName;
-              elem.appendChild( option );
+              if ( manifestProp === "target" ) {
+                option = document.createElement( "OPTION" );
+                option.value = "Media Element";
+                option.innerHTML =  mediaName;
+                elem.appendChild( option );
+              }
               elem.value = this.defaultValue( manifestItem, popcornOptions[ manifestProp ] );
               return elem;
             }
