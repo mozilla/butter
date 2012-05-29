@@ -1,0 +1,56 @@
+.butter-media-properties
+  height 32px
+  width 90px
+  overflow hidden
+
+  .container
+    top 0
+
+  .inner-container
+    padding 10px
+    margin-bottom 20px
+    visibility hidden
+
+  &.open
+    .inner-container
+      visibility visible
+
+    .edit-message
+      visibility hidden
+
+  .url
+    width 224px
+    overflow hidden
+
+    input, button
+      transition opacity .2s
+      opacity 0
+
+    input
+      width 190px
+      padding 5px 3px
+      border 1px solid #333
+
+    button.remove
+      padding 5px 3px
+      width 20px
+
+    &.fade-in
+      input, button
+        opacity 1
+
+    &:nth-of-type(1)
+
+      button
+        display none
+
+      input
+        width 220px
+
+  button
+    &.save, &.add-url
+      margin-top .5em
+      float right
+
+    &.remove
+      margin-top .3em
