@@ -12,7 +12,7 @@ var Butter_tests = [{
   type: "Error Logging"
 }, {
   name: "Cornfield",
-  path: "http://localhost:8888/test/cornfield/index.html",
+  path: "cornfield/index.html",
   type: "Cornfield"
 }
 
