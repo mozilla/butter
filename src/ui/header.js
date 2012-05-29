@@ -273,7 +273,9 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
                 },
                 submit: function( e ){
                   dialog.close();
-                  butter.cornfield.load( e.data, function( e ){
+                  var projectName = e.data.name,
+                      projectId = e.data.id;
+                  butter.cornfield.load( projectId, function( e ){
                     if( e.error === "okay" ){
                       var projectData;
                       try{
@@ -285,6 +287,8 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
                       }
                       butter.clearProject();
                       butter.importProject( projectData );
+                      butter.project.name = projectName;
+                      butter.project.id = projectId;
                     }
                     else{
                       showErrorDialog( "Your project could not be loaded. Please try another." );
