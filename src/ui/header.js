@@ -57,7 +57,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
     _logoutButton.style.display = "none";
 
     function authenticationRequired( successCallback, errorCallback ){
-      if ( butter.cornfield.authenticated() && successCallback ) {
+      if ( butter.cornfield.authenticated() && successCallback && typeof successCallback === "function" ) {
         successCallback();
         return;
       }
@@ -66,7 +66,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
         if ( !response.error ) {
           butter.cornfield.list(function( listResponse ) {
             loginDisplay();
-            if( successCallback ){
+            if ( successCallback && typeof successCallback === "function" ) {
               successCallback();
             }
           });
