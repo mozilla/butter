@@ -1,7 +1,8 @@
 define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox", "text!layouts/media-view.html" ],
   function( PageElement, LogoSpinner, LangUtils, TextboxWrapper, HTML_TEMPLATE ){
 
-  var DEFAULT_SUBTITLE = "Supports HTML5 video, YouTube, and Vimeo";
+  var DEFAULT_SUBTITLE = "Supports HTML5 video, YouTube, and Vimeo",
+      MAX_URLS = 4;
 
   return function( media, options ){
     var _media = media,
@@ -44,8 +45,8 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       }, false );
     }
 
-    function addUrl(){
-       var newContainer = _urlContainer.cloneNode( true );
+    function addUrl() {
+      var newContainer = _urlContainer.cloneNode( true );
       newContainer.classList.remove( "fade-in" );
       _urlList.appendChild( newContainer );
 
@@ -64,6 +65,10 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       }, false );
 
       prepareTextbox( newContainer.querySelector( "input[type='text']" ) );
+
+      if ( _urlList.querySelectorAll( "input[type='text']" ).length >= MAX_URLS ) {
+        _addUrlButton.setAttribute( "disabled", true );
+      }
     }
 
     function removeUrl( container ){
@@ -71,6 +76,9 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       _containerDims.width = _container.clientWidth;
       _containerDims.height = _container.clientHeight;
       setDimensions( true );
+      if ( _urlList.querySelectorAll( "input[type='text']" ).length < MAX_URLS ) {
+        _addUrlButton.removeAttribute( "disabled" );
+      }
     }
 
     _addUrlButton.addEventListener( "click", function( e ) {
