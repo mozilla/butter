@@ -41,11 +41,11 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
       textbox.addEventListener( "blur", function( e ) {
         _propertiesElement.classList.remove( "hold" );
-      }, false );      
+      }, false );
     }
 
-    _addUrlButton.addEventListener( "click", function( e ) {
-      var newContainer = _urlContainer.cloneNode( true );
+    function addUrl(){
+       var newContainer = _urlContainer.cloneNode( true );
       newContainer.classList.remove( "fade-in" );
       _urlList.appendChild( newContainer );
 
@@ -60,13 +60,21 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       setDimensions( true );
 
       newContainer.querySelector( "button.remove" ).addEventListener( "click", function ( e ) {
-        _urlList.removeChild( newContainer );
-        _containerDims.width = _container.clientWidth;
-        _containerDims.height = _container.clientHeight;
-        setDimensions( true );
+        removeUrl( newContainer );
       }, false );
 
       prepareTextbox( newContainer.querySelector( "input[type='text']" ) );
+    }
+
+    function removeUrl( container ){
+      _urlList.removeChild( container );
+      _containerDims.width = _container.clientWidth;
+      _containerDims.height = _container.clientHeight;
+      setDimensions( true );
+    }
+
+    _addUrlButton.addEventListener( "click", function( e ) {
+      addUrl();
     }, false );
 
     prepareTextbox( _urlTextbox );
@@ -148,8 +156,32 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     _logoSpinner.start();
     _changeButton.setAttribute( "disabled", true );
 
+    function updateURLS(){
+      if( typeof( media.url ) === "string" ) {
+        _urlTextbox.value = media.url;
+      }
+      else if ( media.url.length ) {
+        var urls = media.url,
+            currentUrls = _urlList.querySelectorAll( "input[type='text']" );
+        while ( currentUrls.length < urls.length ) {
+          addUrl();
+          currentUrls = _urlList.querySelectorAll( "input[type='text']" );
+        }
+        while ( currentUrls.length > urls.length ) {
+          removeUrl( currentUrls[ currentUrls.length - 1 ] );
+          currentUrls = _urlList.querySelectorAll( "input[type='text']" );
+        }
+        for ( var i = 0; i < urls.length; ++i ) {
+          currentUrls[ i ].value = urls[ i ];
+        }
+      }
+      else {
+        throw "Media url is expected value (not string or array): " + media.url;
+      }
+    }
+
     media.listen( "mediacontentchanged", function( e ){
-      _urlTextbox.value = media.url;
+      updateURLS();
       showError( false );
       _changeButton.setAttribute( "disabled", true );
       _logoSpinner.start();
@@ -186,7 +218,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     }
 
     this.update = function(){
-      _urlTextbox.value = media.url;
+      updateURLS();
 
       var targetElement = document.getElementById( _media.target );
 

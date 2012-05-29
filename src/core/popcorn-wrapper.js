@@ -288,7 +288,6 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       else{
         // just try to use Popcorn.smart to detect/setup video
         popcornString += "var popcorn = Popcorn.smart( '#" + target + "', " + url + popcornOptions + " );\n";
-        console.log( popcornString );
       }
 
       if( scripts.beforeEvents ){
