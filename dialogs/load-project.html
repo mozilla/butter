@@ -11,7 +11,10 @@
         var list = document.getElementById( "project-list" );
 
         Dialog.registerActivity( "load", function( e ){
-          Dialog.send( "submit", list.value );
+          Dialog.send( "submit", {
+            id: list.value,
+            name: list.querySelectorAll( 'option' )[ list.selectedIndex ].innerHTML
+          });
         });
 
         Dialog.disableElements( "load", "project-list" );
