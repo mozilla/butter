@@ -38,15 +38,15 @@
             ok( !butter.cornfield.username(), "Username is undefined" );
           });
 
-          asyncTest("Async API", 3, function() {
+          asyncTest( "Async API", 3, function() {
 
             butter.cornfield.list( function( res ) {
               deepEqual( res, { error: "unauthorized" }, "Not allowed to list projects" );
 
-              butter.cornfield.load(filename, function(res) {
+              butter.cornfield.load( filename, function( res ) {
                 deepEqual( res, { error: "unauthorized" }, "Not allowed to get projects" );
 
-                butter.cornfield.save(filename, stringedData, function(res) {
+                butter.cornfield.save( filename, stringedData, function( res ) {
                   deepEqual( res, { error: "unauthorized" }, "Not allowed to save projects" );
 
                   start();
