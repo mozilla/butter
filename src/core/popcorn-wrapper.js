@@ -222,18 +222,16 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
      * and create a stringified representation of the Popcorn constructor (usually to
      * insert in a script tag).
      */
-    var generatePopcornString = this.generatePopcornString = function( popcornOptions, url, target, method, callbacks, scripts ){
+    var generatePopcornString = this.generatePopcornString = function( popcornOptions, url, target, method, callbacks, scripts, trackEvents ){
 
       callbacks = callbacks || {};
       scripts = scripts || {};
 
       var popcornString = "",
-          trackEvents,
           trackEvent,
           optionString,
           saveOptions,
           i,
-          l,
           option;
 
       // prepare popcornOptions as a string
@@ -282,25 +280,18 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         popcornString += callbacks.beforeEvents + "( popcorn );\n";
       }
 
-      // if popcorn was built successful
+      // if popcorn was built successfully
       if ( _popcorn ) {
 
-        // gather and serialize existing trackevents
-        trackEvents = _popcorn.getTrackEvents();
         if ( trackEvents ) {
-          for ( i=0, l=trackEvents.length; i<l; ++i ) {
-            trackEvent = trackEvents[ i ];
-            if( trackEvent._natives.manifest ) {
-              popcornOptions = trackEvent._natives.manifest.options;
-            } else {
-              popcornOptions = {};
-              _logger.log( "WARNING: There was no manifest for trackEvent:", trackEvent );
-            }
+          for ( i = trackEvents.length - 1; i >= 0; i-- ) {
+            popcornOptions = trackEvents[ i ].popcornOptions;
+          
             saveOptions = {};
             for ( option in popcornOptions ) {
               if ( popcornOptions.hasOwnProperty( option ) ) {
-                if (trackEvent[ option ] !== undefined) {
-                  saveOptions[ option ] = trackEvent[ option ];
+                if ( popcornOptions[ option ] !== undefined ) {
+                  saveOptions[ option ] = popcornOptions[ option ];
                 }
               }
             }
@@ -315,11 +306,13 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
             }
 
             if ( optionString ) {
-              popcornString += "popcorn." + trackEvents[ i ]._natives.type + "(" +
+              popcornString += "popcorn." + trackEvents[ i ].type + "(" +
                 optionString + ");\n";
             }
-          } //for trackEvents
-        } //if trackEvents
+
+          }
+
+        }
 
       }
 

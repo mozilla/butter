@@ -250,7 +250,13 @@
       this.generatePopcornString = function( callbacks, scripts ){
         callbacks = callbacks || _this.popcornCallbacks;
         scripts = scripts || _this.popcornScripts;
-        return _popcornWrapper.generatePopcornString( _popcornOptions, _url, _target, null, callbacks, scripts );
+
+        var collectedEvents = [];
+        for ( var i = 0, l = _tracks.length; i < l; ++i ) {
+          collectedEvents = collectedEvents.concat( _tracks[ i ].trackEvents );
+        }
+
+        return _popcornWrapper.generatePopcornString( _popcornOptions, _url, _target, null, callbacks, scripts, collectedEvents );
       };
 
       Object.defineProperties( this, {
