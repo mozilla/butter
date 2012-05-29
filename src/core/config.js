@@ -29,9 +29,10 @@
   };
 
   /**
-   * Replace any variable {{foo}} with the value of "foo" from the config
+   * Replace any variable {{foo}} with the value of "foo" from the config.
+   * If value is a branch of config, descend into it and replace values.
    */
-  function __replaceVariables( value, config ){
+  function __replaceVariable( value, config ){
     if( value === undefined ){
       return value;
     }
@@ -53,6 +54,24 @@
     }
 
     return newValue;
+  }
+
+  function __replaceVariableBranch( property, config ){
+    if( property === undefined ){
+      return property;
+    }
+
+    for( var prop in property ){
+      if( property.hasOwnProperty( prop ) ){
+        if( typeof property[ prop ] === "object" ){
+          property[ prop ] = __replaceVariableBranch( property[ prop ], config );
+        } else {
+          property[ prop ] = __replaceVariable( property[ prop ], config );
+        }
+      }
+    }
+
+    return property;
   }
 
   /**
@@ -130,7 +149,14 @@
           if( newValue !== undefined ){
             config[ property ] = __validateVariable( property, newValue, config );
           }
-          return __replaceVariables( config[ property ], config );
+
+          // If we're giving back a property branch, replace values deep before
+          // handing it back to the user.
+          if( typeof config[ property ] === "object" ){
+            return __replaceVariableBranch( config[ property ], config );
+          } else {
+            return __replaceVariable( config[ property ], config );
+          }
         }
       };
 

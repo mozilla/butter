@@ -102,5 +102,25 @@
 
     });
 
+    test( "Deep property access", function(){
+      var baseDirString = "../../../",
+          configJSON = JSON.stringify({
+            "baseDir": baseDirString,
+            "parent": {
+              "child1": {
+                "grandchild1": "{{baseDir}}grandchild1"
+              },
+              "child2": "{{baseDir}}child2"
+            }
+          }), config = Config.parse( configJSON );
+
+      equal( config.value( "baseDir" ), baseDirString, "baseDir variable is present." );
+      equal( config.value( "parent" ).child2, baseDirString + "child2", "child2 path replaced" );
+      equal( config.value( "parent" ).child1.grandchild1,
+             baseDirString + "grandchild1",
+             "grandchild1 path replaced" );
+
+    });
+
   });
 }(window));

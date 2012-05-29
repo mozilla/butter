@@ -58,7 +58,7 @@ define( [
         _zoombar = new ZoomBar( zoomCallback ),
         _status = new Status( _media ),
         _trackHandles = new TrackHandles( butter, _media, _tracksContainer, onTrackOrderChanged ),
-        _trackEventHighlight = butter.config.ui.trackEventHighlight || "click",
+        _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
         _currentMouseDownTrackEvent,
         _zoomFactor,
         _zoom;

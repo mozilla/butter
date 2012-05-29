@@ -122,7 +122,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     _element.appendChild( _areas.work.element );
     _element.appendChild( _areas.tools.element );
 
-    if( options.ui.enabled !== false ){
+    if( options.value( "ui" ).enabled !== false ){
       document.body.classList.add( "butter-header-spacing" );
       document.body.classList.add( "butter-tray-spacing" );
       document.body.appendChild( _element );
@@ -132,7 +132,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     }
 
     this.load = function( onReady ){
-      if( options.ui.enabled !== false ){
+      if( options.value( "ui" ).enabled !== false ){
         butter.loader.load(
           [
             {
@@ -142,7 +142,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
           ],
           function(){
             // icon preloading needs css to be loaded first
-            loadIcons( options.icons, options.dirs.resources || "" );
+            loadIcons( options.value( "icons" ), options.value( "dirs" ).resources || "" );
             onReady();
           }
         );
@@ -437,12 +437,12 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
       _this.visible = true;
       _toggler.visible = true;
       ContextButton( butter );
-      if( options.ui.enabled !== false ){
+      if( options.value( "ui" ).enabled !== false ){
         Header( butter, options );
       }
     });
 
-    _this.dialogDir = butter.config.dirs.dialogs || "";
+    _this.dialogDir = butter.config.value( "dirs" ).dialogs || "";
 
    } //UI
 

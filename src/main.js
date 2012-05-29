@@ -515,7 +515,7 @@
             medias = scrapedObject.media;
 
         _page.prepare(function() {
-          if ( !!_config.scrapePage ) {
+          if ( !!_config.value( "scrapePage" ) ) {
             var i, j, il, jl, url, oldTarget, oldMedia, mediaPopcornOptions, mediaObj;
             for( i = 0, il = targets.length; i < il; ++i ) {
               oldTarget = null;
@@ -556,8 +556,8 @@
                 } //for
               }
               else{
-                if( _config.mediaDefaults ){
-                  mediaPopcornOptions = _config.mediaDefaults;
+                if( _config.value( "mediaDefaults" ) ){
+                  mediaPopcornOptions = _config.value( "mediaDefaults" );
                 }
               } //if
 
@@ -584,7 +584,7 @@
       } //if
 
       var preparePopcornScriptsAndCallbacks = this.preparePopcornScriptsAndCallbacks = function( readyCallback ){
-        var popcornConfig = _config.popcorn || {},
+        var popcornConfig = _config.value( "popcorn" ) || {},
             callbacks = popcornConfig.callbacks,
             scripts = popcornConfig.scripts,
             toLoad = [],
@@ -651,10 +651,10 @@
       };
 
       function attemptDataLoad( finishedCallback ){
-        if ( _config.savedDataUrl ) {
+        if ( _config.value( "savedDataUrl" ) ) {
 
           var xhr = new XMLHttpRequest(),
-              savedDataUrl = _config.savedDataUrl + "?noCache=" + Date.now(),
+              savedDataUrl = _config.value( "savedDataUrl" ) + "?noCache=" + Date.now(),
               savedData;
 
           xhr.open( "GET", savedDataUrl, false );
@@ -687,10 +687,13 @@
 
       function readConfig( userConfig ){
         // Overwrite default config options with user settings (if any).
-        _config = _defaultConfig;
-        _config = _config.merge( userConfig );
+        if( userConfig ){
+          _defaultConfig.merge( userConfig );
+        }
 
-        _this.project.template = _config.name;
+        _config = _defaultConfig;
+
+        _this.project.template = _config.value( "name" );
 
         //prepare modules first
         var moduleCollection = Modules( _this, _config ),
@@ -707,7 +710,7 @@
           preparePopcornScriptsAndCallbacks(function(){
             preparePage(function(){
               moduleCollection.ready(function(){
-                if( _config.snapshotHTMLOnReady ){
+                if( _config.value( "snapshotHTMLOnReady" ) ){
                   _page.snapshotHTML();
                 }
                 attemptDataLoad(function(){

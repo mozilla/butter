@@ -20,7 +20,7 @@ define([], function(){
 
   return function( config ){
 
-    var _configDirs = config.dirs;
+    var _configDirs = config.value( "dirs" );
 
     function fixUrl( url ){
       var match,
