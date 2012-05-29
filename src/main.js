@@ -10,6 +10,7 @@
   define( [
             "core/eventmanager",
             "core/logger",
+            "core/config",
             "core/target",
             "core/media",
             "core/page",
@@ -23,6 +24,7 @@
           function(
             EventManagerWrapper,
             Logger,
+            Config,
             Target,
             Media,
             Page,
@@ -63,7 +65,7 @@
       // a base, and override whatever the user provides in the
       // butterOptions.config file.
       try {
-        _defaultConfig = JSON.parse( DefaultConfigJSON );
+        _defaultConfig = Config.parse( DefaultConfigJSON );
       } catch ( e) {
         throw "Butter Error: unable to find or parse default-config.json";
       }
@@ -685,8 +687,8 @@
 
       function readConfig( userConfig ){
         // Overwrite default config options with user settings (if any).
-        userConfig = userConfig || {};
-        _config = Lang.defaults( userConfig, _defaultConfig );
+        _config = _defaultConfig;
+        _config = _config.merge( userConfig );
 
         _this.project.template = _config.name;
 
@@ -721,7 +723,7 @@
 
       if( butterOptions.config && typeof( butterOptions.config ) === "string" ){
         var xhr = new XMLHttpRequest(),
-          jsonConfig,
+          userConfig,
           url = butterOptions.config + "?noCache=" + Date.now();
 
         xhr.open( "GET", url, false );
@@ -735,12 +737,12 @@
 
         if( xhr.status === 200 || xhr.status === 0 ){
           try{
-            jsonConfig = JSON.parse( xhr.responseText );
+            userConfig = Config.parse( xhr.responseText );
           }
           catch( e ){
             throw new Error( "Butter config file not formatted properly." );
           }
-          readConfig( jsonConfig );
+          readConfig( userConfig );
         }
         else{
           _this.dispatch( "configerror", _this );
