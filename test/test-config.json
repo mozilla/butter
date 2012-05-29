@@ -6,6 +6,9 @@
     "enabled": false,
     "trackEventHighlight": "click"
   },
+  "editor": {
+    "googlemap": "../../editors/googlemap-editor.html"
+  },
   "plugin": {
     "plugins": [
       {
