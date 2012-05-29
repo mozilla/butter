@@ -95,9 +95,9 @@
           mediaName = "Current Media Element",
           elemToFocus,
           createElement = {
-            defaultValue: function( item, val, isCheckbox ) {
+            defaultValue: function( item, val ) {
               // Don't print "undefined" or the like
-              if ( val === undefined ) {
+              if ( val === undefined || typeof val === "object" ) {
                 if ( item.default ) {
                   val = item.default;
                 } else {
@@ -151,12 +151,11 @@
 
       _manifest = e.data.manifest.options;
 
-      function createRow( item, manifest, data ) {
-        var manifest = manifest || _manifest,
-            row = document.createElement( "TR" ),
+      function createRow( item, data ) {
+        var row = document.createElement( "TR" ),
             col1 = document.createElement( "TD" ),
             col2 = document.createElement( "TD" ),
-            currentItem = manifest[ item ],
+            currentItem = _manifest[ item ],
             itemLabel = currentItem.label || item,
             field;
 
@@ -168,7 +167,7 @@
 
         col1.innerHTML = "<span>" + itemLabel + "</span>";
 
-        field = createElement[ currentItem.elem ]( manifest, item, data );
+        field = createElement[ currentItem.elem ]( _manifest, item, data );
 
         col2.appendChild( field );
         field.addEventListener( "change", function( e ){
@@ -183,15 +182,15 @@
         table.appendChild( row );
       }
 
-      createRow( "target", {
-        target: {
-          elem: "select",
-          label: "Target"
-        }
-      }, targets );
+      _manifest.target = {
+        elem: "select",
+        label: "Target"
+      };
 
       for ( var item in _manifest ) {
-        if ( item !== "target" ) {
+        if ( item === "target" ) {
+          createRow( item, targets );
+        } else {
           createRow( item );
         }
       }
