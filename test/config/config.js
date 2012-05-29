@@ -91,5 +91,16 @@
 
     });
 
+    test( "Merging Configurations", function(){
+      var config1 = Config.parse( JSON.stringify({"foo1": "bar1"}) ),
+          config2 = Config.parse( JSON.stringify({"foo2": "bar2"}) );
+
+      config1.merge( config2 );
+
+      equal( config1.value( "foo1" ), "bar1", "config1 uses its own values" );
+      equal( config1.value( "foo2" ), config2.value( "foo2" ), "config1 uses merged values" );
+
+    });
+
   });
 }(window));

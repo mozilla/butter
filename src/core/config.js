@@ -32,6 +32,10 @@
    * Replace any variable {{foo}} with the value of "foo" from the config
    */
   function __replaceVariables( value, config ){
+    if( value === undefined ){
+      return value;
+    }
+
     var newValue = value,
         variable,
         configValue,
@@ -77,18 +81,32 @@
      *
      * Manages access to config properties, doing variable substitution.
      *
-     * @param {Object} config: A parsed config object, see config.parse().
+     * @param {Object} configObject: A parsed config object, see config.parse().
      * @throws config is not a parsed object (e.g., if string is passed).
      */
-    function Configuration( config ) {
+    function Configuration( configObject ) {
 
       // Constructor should be called by Config.parse()
-      if (typeof config !== "object"){
+      if (typeof configObject !== "object"){
         throw "Config Error: expected parsed config object";
       }
 
       // Cache the config object
-      var _config = config;
+      var _config = configObject,
+          _merged = [];
+
+      // Find the first config that has a given property, starting
+      // with the most recently merged Configuration (if any) and
+      // ending with our internal _config object.
+      function findConfig( property ){
+        var i = _merged.length;
+        while( i-- ){
+          if( _merged[ i ].value( property ) !== undefined ){
+            return _merged[ i ];
+          }
+        }
+        return _config;
+      }
 
       /**
        * Member: value
@@ -104,13 +122,21 @@
        * @param {Object} newValue: [Optional] A new value to use.
        */
       this.value = function( property, newValue ){
-        if( newValue !== undefined ){
-          _config[ property ] = __validateVariable( property, newValue, _config );
-        }
+        var config = findConfig( property );
 
-        return __replaceVariables( _config[ property ], _config );
+        if( config instanceof Configuration ){
+          return config.value( property, newValue );
+        } else {
+          if( newValue !== undefined ){
+            config[ property ] = __validateVariable( property, newValue, config );
+          }
+          return __replaceVariables( config[ property ], config );
+        }
       };
 
+      this.merge = function( configuration ){
+        _merged.push( configuration );
+      };
     }
 
     /**
