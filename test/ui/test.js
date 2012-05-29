@@ -23,7 +23,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         });
 
         butter.tracks[ 2 ].addTrackEvent({
-          type: "footnote",
+          type: "text",
           popcornOptions: {
             start: 1,
             end: 2,

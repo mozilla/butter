@@ -48,7 +48,7 @@
           "trackEvents": [
             {
               "id": "TrackEvent1",
-              "type": "footnote",
+              "type": "text",
               "popcornOptions": {
                 "start": 1,
                 "end": 2,
