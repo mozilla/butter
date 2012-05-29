@@ -228,7 +228,6 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       scripts = scripts || {};
 
       var popcornString = "",
-          trackEvent,
           optionString,
           saveOptions,
           i,
