@@ -47,7 +47,7 @@ define([], function(){
     var remembers = [],
         droppable,
         remember,
-        i;
+        i, j;
 
     if( __mouseDown ){
       for( i = __selectedDraggables.length - 1; i >= 0; --i ){
@@ -65,10 +65,10 @@ define([], function(){
       } //for
     } //if
 
-    for( i = __droppables.length - 1; i >= 0; --i ){
-      droppable = __droppables[ i ];
-      for( var j = remembers.length - 1; j >= 0; --j ){
-        remember = remembers[ j ];
+    for( i = remembers.length - 1; i >= 0; --i ){
+      remember = remembers[ i ];
+      for( j = __droppables.length - 1; j >= 0; --j ){
+        droppable = __droppables[ j ];
         if( !droppable.element.id ||
             remember.element.id === droppable.element.id ||
             !droppable.drag( remember.element.getBoundingClientRect() ) ){
@@ -126,28 +126,6 @@ define([], function(){
       right: window.innerWidth,
       bottom: window.innerHeight
     };
-  }
-
-  function __drop(){
-    for( var i=__droppables.length - 1; i>=0; --i ){
-      if( __droppables[ i ].drop() ){
-        return true;
-      }
-    }
-    return false;
-  }
-
-  function __drag( element, elementRect, mousePos ){
-    var coveredDroppable;
-    for( var i=__droppables.length - 1; i>=0; --i ){
-      if( element !== __droppables[ i ].element && !coveredDroppable && __droppables[ i ].drag( element, elementRect, mousePos ) ){
-        __droppables[ i ].remember( element );
-        coveredDroppable = __droppables[ i ];
-      }
-      else{
-        __droppables[ i ].forget();
-      }
-    }
   }
 
   function checkParent ( parent, child ) {
@@ -440,7 +418,7 @@ define([], function(){
     _droppable = {
       element: element,
       remember: function( draggable ){
-        if( !_draggedElements[ draggable.element.id ] && !draggable.droppable ){
+        if( !_draggedElements[ draggable.element.id ] ){
           _draggedCount++;
           element.classList.add( _hoverClass );
           _draggedElements[ draggable.element.id ] = draggable;
