@@ -21,6 +21,8 @@
             "core/page",
             "./modules",
             "./dependencies",
+            "./dialogs",
+            "dialog/dialog",
             "ui/ui",
             "util/xhr",
             "util/lang",
@@ -37,6 +39,8 @@
             Page,
             Modules,
             Dependencies,
+            Dialogs,
+            Dialog,
             UI,
             XHR,
             LangUtils,
@@ -108,6 +112,8 @@
       }
 
       EventManagerWrapper( _this );
+
+      this.dialog = Dialog;
 
       this.project = {
         id: null,

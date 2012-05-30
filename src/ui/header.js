@@ -1,12 +1,4 @@
-define( [
-  "dialog/iframe-dialog",
-  "util/lang",
-  "text!layouts/header.html"
-], function(
-  IFrameDialog,
-  Lang,
-  HEADER_TEMPLATE
-) {
+define( [ "dialog/dialog" ], function( Dialog ){
 
   var DEFAULT_AUTH_BUTTON_TEXT = "<span class='icon-user'></span> Sign In / Sign Up",
       DEFAULT_AUTH_BUTTON_TITLE = "Sign in or sign up with Persona";
@@ -41,18 +33,8 @@ define( [
         json: butter.exportProject()
       };
 
-      var dialog = new IFrameDialog({
-        type: "iframe",
-        modal: true,
-        url: butter.ui.dialogDir + "view-source.html",
-        events: {
-          open: function(){
-            dialog.send( "export", exportPackage );
-          },
-          cancel: function( e ){
-            dialog.close();
-          }
-        }
+      Dialog.spawn( "export", {
+        data: exportPackage,
       });
 
       dialog.open();
@@ -83,14 +65,9 @@ define( [
     }
 
     function showErrorDialog( message, callback ){
-      var dialog = new IFrameDialog({
-        type: "iframe",
-        modal: true,
-        url: butter.ui.dialogDir + "error-message.html",
+      var dialog = Dialog.spawn( "error-message", {
+        data: message,
         events: {
-          open: function( e ){
-            dialog.send( "message", message );
-          },
           cancel: function( e ){
             dialog.close();
             if( callback ){
@@ -99,7 +76,6 @@ define( [
           }
         }
       });
-      dialog.open();
     }
 
     _shareButton.addEventListener( "click", function( e ){
@@ -111,21 +87,9 @@ define( [
           }
           else{
             var url = e.url;
-            var dialog = new IFrameDialog({
-              type: "iframe",
-              modal: true,
-              classes: "fade-in smallIframe",
-              url: butter.ui.dialogDir + "share.html",
-              events: {
-                open: function( e ){
-                  dialog.send( "url", url );
-                },
-                cancel: function( e ){
-                  dialog.close();
-                }
-              }
+            var dialog = Dialog.spawn( "share", {
+              data: url
             });
-            dialog.open();
           }
         });
       }
@@ -163,26 +127,15 @@ define( [
       }
 
       if( !butter.project.name ){
-        var dialog = new IFrameDialog({
-          type: "iframe",
-          modal: true,
-          classes: "fade-in smallIframe",
-          url: butter.ui.dialogDir + "save-as.html",
+        var dialog = Dialog.spawn( "save-as", {
           events: {
-            open: function( e ){
-              dialog.send( "name", null );
-            },
             submit: function( e ){
               butter.project.name = e.data;
               dialog.close();
               execute();
-            },
-            cancel: function( e ){
-              dialog.close();
             }
           }
         });
-        dialog.open();
       }
       else{
         execute();

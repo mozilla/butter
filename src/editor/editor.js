@@ -2,22 +2,19 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "util/time" ],
-        function( EventManagerWrapper, IFrameDialog, WindowDialog, TimeUtil ) {
+define( [ "core/eventmanager", "./iframe", "util/time" ],
+        function( EventManagerWrapper, IFrame, TimeUtil ) {
 
   var DEFAULT_DIMS = [ 400, 400 ],
       DEFAULT_FRAME_TYPE = "iframe";
 
-  function Editor( butter, source, type, frameType, parentElement, options ){
+  function Editor( butter, source, type, parentElement, options ){
     options = options || {};
 
-    var _frameType = frameType || DEFAULT_FRAME_TYPE,
-        _type = type,
+    var _type = type,
         _dims = DEFAULT_DIMS.slice(),
         _dialog,
         _dialogOptions = {
-          type: _frameType,
-          modal: "behind-timeline",
           url: source,
           parent: parentElement
         },
@@ -64,18 +61,13 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
 
     this.open = function( trackEvent ) {
       if( !_dialog ){
-        if( _frameType === "window" ){
-          _dialog = new WindowDialog( _dialogOptions );
-        }
-        else{
-          _dialog = new IFrameDialog( _dialogOptions );
-        } //if
-      } //if
+        _dialog = new IFrame( _dialogOptions );
+      }
 
       if( !_dialog.closed && _dialog.focus ){
         _dialog.focus();
         return;
-      } //if
+      }
 
       _currentTrackEvent = trackEvent;
 
@@ -135,12 +127,6 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
         enumerable: true,
         get: function(){
           return _type;
-        }
-      },
-      frame: {
-        enumerable: true,
-        get: function(){
-          return _frameType;
         }
       },
       size: {
