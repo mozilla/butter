@@ -422,16 +422,23 @@ define([], function(){
           _draggedCount++;
           element.classList.add( _hoverClass );
           _draggedElements[ draggable.element.id ] = draggable;
-          draggable.droppable = _droppable;
+          draggable.droppables.push( _droppable );
           _onOver( draggable.element );
         } //if
       },
       forget: function( draggable ){
+        // we only care to forget if it is currently dragging
         if( _draggedElements[ draggable.element.id ] ){
           if( --_draggedCount === 0 ){
             element.classList.remove( _hoverClass );
           } //if
-          draggable.droppable = null;
+          // Remove the droppable from the draggable if we find a match.
+          for( var i = 0; i < draggable.droppables.length; i++ ){
+            if( draggable.droppables[ i ].element.id === element.id ){
+              draggable.droppables.splice( i, 1 );
+              break;
+            } //if
+          } //for
           _onOut( draggable.element );
           delete _draggedElements[ draggable.element.id ];
         } // if
@@ -441,7 +448,7 @@ define([], function(){
           if( --_draggedCount === 0 ){
             element.classList.remove( _hoverClass );
           } //if
-          draggable.droppable = null;
+          draggable.droppables = [];
           _onDrop( draggable.element, __mousePos );
           delete _draggedElements[ draggable.element.id ];
         } //if
@@ -506,9 +513,9 @@ define([], function(){
         _draggable = {
           destroy: function(){
             element.removeEventListener( "mousedown", onMouseDown, false );
-          }
+          },
+          droppables: []
         },
-        _droppable = null,
         _dragging = false,
         _containmentPadding = __nullRect;
 
@@ -614,12 +621,12 @@ define([], function(){
     _draggable.stop = function(){
       _dragging = false;
       _onStop();
-      if( !_droppable && _revert ){
+      if( !_draggable.droppables[ 0 ] && _revert ){
         element.style.left = _originalPosition[ 0 ] + "px";
         element.style.top = _originalPosition[ 1 ] + "px";
-      } else if ( _droppable ){
-        _droppable.drop( _draggable );
-      }
+      } else if ( _draggable.droppables[ 0 ] ){
+        _draggable.droppables[ 0 ].drop( _draggable );
+      } //if
     };
 
     Object.defineProperties( _draggable, {
@@ -659,15 +666,6 @@ define([], function(){
         enumerable: true,
         get: function(){
           return _element;
-        }
-      },
-      droppable: {
-        enumerable: true,
-        get: function(){
-          return _droppable;
-        },
-        set: function( val ){
-          _droppable = val;
         }
       }
     });
