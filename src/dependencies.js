@@ -4,11 +4,7 @@
 
 define([], function(){
 
-  var DEFAULT_DIRS = {
-        "popcorn-js": "../external/popcorn-js",
-        "css": "css"
-      },
-      VAR_REGEX = /\{([\w\-\._]+)\}/,
+  var VAR_REGEX = /\{([\w\-\._]+)\}/,
       CSS_POLL_INTERVAL = 10;
 
   var DEFAULT_CHECK_FUNCTION = function(){
@@ -28,10 +24,9 @@ define([], function(){
 
       while ( VAR_REGEX.test( url ) ) {
         match = VAR_REGEX.exec( url );
-        replacement = _configDirs[ match[ 1 ] ] || DEFAULT_DIRS[ match[ 1 ] ] || "";
+        replacement = _configDirs[ match[ 1 ] ] || "";
         url = url.replace( match[0], replacement );
       }
-
       return url.replace( "//", "/" );
     }
 
