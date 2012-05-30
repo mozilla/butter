@@ -16,7 +16,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             start: 0,
             end: 1,
             text: "test",
-            target: "Area1"
+            target: "video-overlay"
           }
         });
 
@@ -26,7 +26,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             start: 1,
             end: 2,
             text: "Test",   
-            target: "Area1"
+            target: "sidebar"
           }
         });
     
@@ -37,7 +37,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             end: 3,
             id:"webpages-a",
             src:"http://popcornjs.org/",
-            target: "Area1"
+            target: "sidebar"
           }
         });
 
@@ -48,7 +48,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             end: 4,
             title: "Cape Town yo",
             src:"http://en.wikipedia.org/wiki/Cape_Town",
-            target: "Area1"
+            target: "sidebar"
           }
         });
 

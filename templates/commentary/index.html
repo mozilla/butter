@@ -9,18 +9,15 @@
     <link rel="stylesheet" href="css/style.css" type="text/css" />
 </head>
 <body>
-    <video id="main" data-butter="media" controls>
-      <source src="../../external/popcorn-js/test/trailer.ogv"></source>
-      <source src="../../external/popcorn-js/test/trailer.mp4"></source>
-    </video>
-    <div class="container-div">
-        <div class="content-div" data-butter="target" id="Area1"></div>
-        <p>Area 1</p>
+  <div class="container">
+    <div id="video-container">
+      <video id="video" data-butter="media" controls>
+        <source src="../../external/popcorn-js/test/trailer.ogv"></source>
+        <source src="../../external/popcorn-js/test/trailer.mp4"></source>
+      </video>
+      <div id="video-overlay" data-butter-target></div>
     </div>
-    <div class="container-div">
-        <div class="content-div" data-butter="target" id="Area2" data-butter-default ></div>
-        <p>Area 2</p>
-    </div>
-    <div id="target-div"></div>
+    <div id="sidebar" data-butter-target></div>
+  </div>
 </body>
 </html>

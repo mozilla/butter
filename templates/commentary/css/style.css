@@ -1,23 +1,20 @@
-#main, .content-div {
-  float: left;
-}
-.content-div {
-  min-width: 200px;
-  min-height: 200px;
-  border: 3px solid #000;
-  margin: 5px;
-}
-.container-div {
-  float: left;
-  text-align: center;
-  font-family: helvetica;
-  font-style: bold;
-}
-#main {
-  min-width: 300px;
-  min-height: 200px;
-}
-video {
+.container { width: 960px; margin: 40px auto;}
+
+#video-container {
   position: relative;
-  top: 30px;
+  width: 640px;
+  min-height: 480px;
+  float: left;
 }
+
+#video { width: 100%; }
+
+#video-overlay {
+ position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+#sidebar { width: 320px; float: left; position: relative; }
