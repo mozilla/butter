@@ -4,10 +4,9 @@
 
 define( [
           "core/comm",
-          "core/eventmanager",
-          "dialog/modal"
+          "core/eventmanager"
         ],
-        function( Comm, EventManagerWrapper, Modal ){
+        function( Comm, EventManagerWrapper ){
 
   return function( dialogOptions ) {
     dialogOptions = dialogOptions || {};
@@ -24,12 +23,9 @@ define( [
         _iframe,
         _commQueue = [],
         _comm,
-        _modalLayer,
         _listeners = dialogOptions.events || {};
 
     EventManagerWrapper( _this );
-
-    this.modal = dialogOptions.modal;
 
     function onSubmit( e ){
       _this.dispatch( e.type, e.data );
@@ -49,10 +45,6 @@ define( [
       _this.send( "close" );
       setTimeout( function(){
         _parent.removeChild( _iframe );
-        if( _modalLayer ){
-          _modalLayer.destroy();
-          _modalLayer = undefined;
-        } //if
         _comm.unlisten( "submit", onSubmit );
         _comm.unlisten( "cancel", onCancel );
         _comm.unlisten( "close", _this.close );
@@ -73,16 +65,11 @@ define( [
       if( _open ){
         return;
       } //if
-      if( _this.modal ){
-        _modalLayer = new Modal( _this.modal );
-      } //if
       for( var e in listeners ){
         if( listeners.hasOwnProperty( e ) ){
           _listeners[ e ] = listeners[ e ];
         }
       } //for
-      var defaultParent = _modalLayer ? _modalLayer.element : document.body;
-      _parent = _parent || defaultParent;
       _iframe = document.createElement( "iframe" );
       _iframe.src = _url;
       _iframe.addEventListener( "load", function( e ){
@@ -144,5 +131,5 @@ define( [
         }
       }
     });
-  }; //IFrameDialog
+  };
 });

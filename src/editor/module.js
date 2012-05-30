@@ -31,20 +31,16 @@
       });
 
       function editorClosed( e ){
-        if( _openEditor.frame === "iframe" ){
-          if( butter.ui.contentState === "editor" ){
-            butter.ui.popContentState( "editor" );
-          }
+        if( butter.ui.contentState === "editor" ){
+          butter.ui.popContentState( "editor" );
         }
         _openEditor.unlisten( "close", editorClosed );
         _openEditor = null;
       }
 
       function editorOpened( e ){
-        if( _openEditor.frame === "iframe" ){
-          if( butter.ui.contentState !== "editor" ){
-            butter.ui.pushContentState( "editor" );
-          }
+        if( butter.ui.contentState !== "editor" ){
+          butter.ui.pushContentState( "editor" );
         }
       }
 
@@ -71,11 +67,11 @@
         }
       }; //edit
 
-      this.add = function( source, type, frameType ){
+      this.add = function( source, type ){
         if ( !type || !source ) {
           throw new Error( "Can't create an editor without a plugin type and editor source" );
         } //if
-        var editor = _editors[ type ] = new Editor( butter, source, type, frameType, _editorContainer );
+        var editor = _editors[ type ] = new Editor( butter, source, type, _editorContainer );
         return editor;
       }; //add
 

@@ -76,7 +76,6 @@
   "dirs": {
     "popcorn-js": "{{baseDir}}external/popcorn-js/",
     "css": "{{baseDir}}css/",
-    "dialogs": "{{baseDir}}dialogs/",
     "resources": "{{baseDir}}resources/"
   },
   "icons": {

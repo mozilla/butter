@@ -3,10 +3,10 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [
-          "dialog/iframe-dialog",
+          "dialog/dialog",
           "util/dragndrop"
         ],
-        function( IFrameDialog, DragNDrop ){
+        function( Dialog, DragNDrop ){
 
   var ADD_TRACK_BUTTON_Y_ADJUSTMENT = 37;
 
@@ -60,14 +60,9 @@ define( [
       menuDiv.appendChild( deleteButton );
 
       deleteButton.addEventListener( "click", function( e ){
-        var dialog = new IFrameDialog({
-          type: "iframe",
-          modal: true,
-          url: butter.ui.dialogDir + "delete-track.html",
+        var dialog = Dialog.spawn( "delete-track", {
+          data: trackName,
           events: {
-            open: function( e ){
-              dialog.send( "trackdata", trackName );
-            },
             submit: function( e ){
               if( e.data === true ){
                 media.removeTrack( track );
@@ -76,27 +71,15 @@ define( [
             },
             cancel: function( e ){
               dialog.close();
-            },
-            trackupdated: function( e ) {
-              dialog.send( "trackupdated", { success: false });
             }
           }
         });
-        dialog.trackupdated = function( e ) {
-          console.log( "called", e );
-        };
-        dialog.open();
       }, false );
 
       trackDiv.addEventListener( "dblclick", function( e ){
-        var dialog = new IFrameDialog({
-          type: "iframe",
-          modal: true,
-          url: butter.ui.dialogDir + "track-data.html",
+        var dialog = Dialog.spawn( "track-data", {
+          data: track,
           events: {
-            open: function( e ) {
-              dialog.send( "trackdata", track.json );
-            },
             submit: function( e ) {
               // wrap in a try catch so we know right away about any malformed JSON
               try {
@@ -139,16 +122,14 @@ define( [
                   track.addTrackEvent( toAdd[ i ] );
                 }
                 // let the dialog know things went well
-                dialog.send( "trackupdated", true );
+                dialog.send( "track-updated" );
               } catch ( error ) {
                 // inform the dialog about the issue
-                console.log( error );
-                dialog.send( "trackupdated", false );
+                dialog.send( "error" );
               }
             }
           }
         });
-        dialog.open();
       }, false );
 
       _menus.push( menuDiv );
