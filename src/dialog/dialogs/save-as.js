@@ -10,11 +10,11 @@ define([ "text!dialog/dialogs/save-as.html", "dialog/dialog" ],
 
     dialog.registerActivity( "save", function( e ){
       if( nameInput.value.replace( /\s/g, "" ) !== "" ){
-        dialog.send( "submit", nameInput.value );  
+        dialog.send( "submit", nameInput.value );
       }
       else{
         dialog.rootElement.querySelector( ".better" ).style.display = "inline";
-      }  
+      }
     });
 
     dialog.enableCloseButton();
