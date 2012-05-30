@@ -6,7 +6,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
         function( Logger, EventManagerWrapper, DragNDrop, PositionTracker ) {
 
   var __nullFunction = function(){};
-  
+
   return function( element, events, options ){
 
     var _element = typeof( element ) === "string" ? document.getElementById( element ) : element,
@@ -58,7 +58,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
 
     window.addEventListener( "dragend", function( e ) {
       if ( !_highlightElement.classList.contains( "blink" ) ) {
-        _highlightElement.style.visibility = "hidden";  
+        _highlightElement.style.visibility = "hidden";
       }
       _draggingGlobal = false;
     }, false );
@@ -88,7 +88,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
       }
       if ( !_highlighting ) {
         _highlightElement.classList.remove( "on" );
-        _this.blink = _blinkFunction;  
+        _this.blink = _blinkFunction;
       }
       _highlightElement.removeEventListener( 'transitionend', onTransitionEnd, false );
       _highlightElement.removeEventListener( 'oTransitionEnd', onTransitionEnd, false );
