@@ -686,9 +686,9 @@
       }
 
       function readConfig( userConfig ){
-        // Overwrite default config options with user settings (if any).
+        // Override default config options with user settings (if any).
         if( userConfig ){
-          _defaultConfig.merge( userConfig );
+          _defaultConfig.override( userConfig );
         }
 
         _config = _defaultConfig;
