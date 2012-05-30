@@ -31,7 +31,7 @@
 
     var csrf_token;
 
-    if ( document.readyState === "complete" ) {
+    if ( document.readyState !== "loading" ) {
       setCSRFToken();
     } else {
       document.addEventListener( "DOMContentLoaded", setCSRFToken, false );
