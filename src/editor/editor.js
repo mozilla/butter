@@ -5,8 +5,7 @@
 define( [ "core/eventmanager", "./iframe", "util/time" ],
         function( EventManagerWrapper, IFrame, TimeUtil ) {
 
-  var DEFAULT_DIMS = [ 400, 400 ],
-      DEFAULT_FRAME_TYPE = "iframe";
+  var DEFAULT_DIMS = [ 400, 400 ];
 
   function Editor( butter, source, type, parentElement, options ){
     options = options || {};

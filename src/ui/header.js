@@ -1,4 +1,5 @@
-define( [ "dialog/dialog" ], function( Dialog ){
+define( [ "dialog/dialog", "util/lang", "layouts/header.html" ],
+  function( Dialog, Lang, HEADER_TEMPLATE ){
 
   var DEFAULT_AUTH_BUTTON_TEXT = "<span class='icon-user'></span> Sign In / Sign Up",
       DEFAULT_AUTH_BUTTON_TITLE = "Sign in or sign up with Persona";
@@ -64,8 +65,23 @@ define( [ "dialog/dialog" ], function( Dialog ){
       });
     }
 
+    _exportButton.addEventListener( "click", function( e ){
+
+      var exportPackage = {
+        html: butter.getHTML(),
+        json: butter.exportProject()
+      };
+
+      Dialog.spawn( "export", {
+        data: exportPackage,
+      });
+
+    }, false );
+
+    _authButton.addEventListener( "click", authenticationRequired, false );
+
     function showErrorDialog( message, callback ){
-      var dialog = Dialog.spawn( "error-message", {
+      var dialog =Dialog.spawn( "error-message", {
         data: message,
         events: {
           cancel: function( e ){
@@ -87,7 +103,7 @@ define( [ "dialog/dialog" ], function( Dialog ){
           }
           else{
             var url = e.url;
-            var dialog = Dialog.spawn( "share", {
+            Dialog.spawn( "share", {
               data: url
             });
           }

@@ -1,0 +1,55 @@
+.butter-media-properties {
+  height: 32px;
+  width: 90px;
+  overflow: hidden;
+}
+.butter-media-properties .container {
+  top: 0;
+}
+.butter-media-properties .inner-container {
+  padding: 10px;
+  margin-bottom: 20px;
+  visibility: hidden;
+}
+.butter-media-properties.open .inner-container {
+  visibility: visible;
+}
+.butter-media-properties.open .edit-message {
+  visibility: hidden;
+}
+.butter-media-properties .url {
+  width: 224px;
+  overflow: hidden;
+}
+.butter-media-properties .url input,
+.butter-media-properties .url button {
+  transition: opacity 0.2s;
+  opacity: 0;
+}
+.butter-media-properties .url input {
+  width: 190px;
+  padding: 5px 3px;
+  border: 1px solid #333;
+}
+.butter-media-properties .url button.remove {
+  padding: 5px 3px;
+  width: 20px;
+}
+.butter-media-properties .url.fade-in input,
+.butter-media-properties .url.fade-in button {
+  opacity: 1;
+}
+.butter-media-properties .url:nth-of-type(1) button {
+  display: none;
+}
+.butter-media-properties .url:nth-of-type(1) input {
+  width: 220px;
+}
+.butter-media-properties button.save,
+.butter-media-properties button.add-url {
+  margin-top: 0.5em;
+  float: right;
+}
+.butter-media-properties button.remove {
+  margin-top: 0.3em;
+}

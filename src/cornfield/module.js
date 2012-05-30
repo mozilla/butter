@@ -111,8 +111,9 @@ define(['util/xhr'], function(XHR) {
     this.publish = function(id, callback) {
       XHR.post(server + "/api/publish/" + id, null, function() {
         if (this.readyState === 4) {
+          var response;
           try {
-            var response = JSON.parse(this.response);
+            response = JSON.parse(this.response);
           } catch (err) {
             callback({ error: "an unknown error occured" });
             return;
@@ -149,8 +150,9 @@ define(['util/xhr'], function(XHR) {
     this.list = function(callback) {
       XHR.get(server + "/api/projects", function() {
         if (this.readyState === 4) {
+          var response;
           try {
-            var response = JSON.parse(this.response);
+            response = JSON.parse(this.response);
           } catch (err) {
             callback({ error: "an unknown error occured" });
             return;

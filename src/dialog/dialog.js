@@ -80,13 +80,13 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
         enableElements: function(){
           for( var i=0; i<arguments.length; ++i ){
             _rootElement.querySelector( arguments[ i ] ).removeAttribute( "disabled" );
-          }      
+          }
         },
 
         disableElements: function(){
           for( var i=0; i<arguments.length; ++i ){
             _rootElement.querySelector( arguments[ i ] ).setAttribute( "disabled", true );
-          }      
+          }
         },
 
         send: function( message, data ){
@@ -146,7 +146,7 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
         _external.close();
       });
 
-      dialogOptions = dialogCtor( _internal, spawnOptions.data );
+      dialogCtor( _internal, spawnOptions.data );
 
       // make this happen a tiny bit later so variables get initialized before opening
       setTimeout( function(){
