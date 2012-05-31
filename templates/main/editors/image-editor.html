@@ -1,0 +1,52 @@
+<!--  This Source Code Form is subject to the terms of the MIT license
+      If a copy of the MIT license was not distributed with this file, you can
+      obtain one at http://www.mozillapopcorn.org/butter-license.txt -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Event Editor</title>
+    <style>
+      table#table tr  td:nth-child(2) * {
+        font-size: 0.9em;
+      }
+      table {
+        font-family: helvetica !important;
+        color: #fff !important;
+      }
+      p#message {
+        color: #FF0000;
+      }
+      #drop-target {
+        color: #CCC;
+        border: 3px dashed;
+        width: 160px;
+        height: 120px;
+        margin-right: 20px;
+        float: left;
+        text-align: center;
+        background-size: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      #drop-target > span {
+        padding-top: 30px;
+        display: block;
+        font-style: italic;
+      }
+      #drop-target.dragover {
+         border: 3px solid #F6DC7E;
+         -webkit-box-shadow:0 0 6px #F6DC7E;
+         -moz-box-shadow:0 0 5px #F6DC7E;
+         box-shadow:0 0 5px #F6DC7E;
+      }
+    </style>
+    <script type="text/javascript" src="editor.js"></script>
+    <script type="text/javascript" src="image-editor.js"></script>
+  </head>
+  <body>
+    <table id="table">
+    </table>
+    <p id="message"></p>
+  </body>
+</html>

@@ -2,7 +2,7 @@
   "name": "commentary",
   "baseDir": "../../",
   "editor": {
-    "image2": "{{baseDir}}templates/main/editors/basic-editor.html"
+    "image2": "{{baseDir}}templates/main/editors/image-editor.html"
   },
   "plugin": {
     "plugins": [
