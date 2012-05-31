@@ -38,6 +38,14 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
     function prepareTextbox( textbox ){
       TextboxWrapper( textbox );
+
+      textbox.addEventListener( "focus", function( e ) { 	
+        _propertiesElement.classList.add( "hold" );
+      }, false );
+
+      textbox.addEventListener( "blur", function( e ) {
+        _propertiesElement.classList.remove( "hold" );
+      }, false );  
     }
 
     function addUrl() {

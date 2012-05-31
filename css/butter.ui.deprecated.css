@@ -172,10 +172,18 @@ body.butter-tray-spacing.minimized {
   height: 30px;
 }
 
-.butter-media-properties .container {
+.butter-media-properties .container, .butter-media-properties.hold {
   width: 250px;
+  height: 118px;
   position: absolute;
   color: #fff;
+}
+
+.butter-media-properties.open .inner-container, .butter-media-properties.hold .inner-container {
+  visibility: visible;
+}
+.butter-media-properties.open .edit-message, .butter-media-properties.hold .edit-message {
+  visibility: hidden;
 }
 
 /* Media settings inner elements */
