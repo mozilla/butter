@@ -1,6 +1,9 @@
 {
   "name": "commentary",
   "baseDir": "../../",
+  "editor": {
+    "image2": "{{baseDir}}templates/main/editors/basic-editor.html"
+  },
   "plugin": {
     "plugins": [
     {
