@@ -11,18 +11,34 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         media.addTrack( "Track3" );
 
         butter.tracks[ 0 ].addTrackEvent({ 
-          type: "text",
+          type: "image2",
           popcornOptions: {
             start: 0,
             end: 2,
-            text: "Test",   
-            target: "sidebar"
+            target: "sidebar",
+            src: "http://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Persian_Cat_(kitten).jpg/220px-Persian_Cat_(kitten).jpg",
+            href: "http://www.google.com"
+          }
+        });
+
+        butter.tracks[ 1 ].addTrackEvent({ 
+          type: "image2",
+          popcornOptions: {
+            start: 0,
+            end: 2,
+            width: "400px",
+            height: "200px",
+            top: "30px",
+            left: "70px",
+            target: "video-overlay"
           }
         });
 
       }
 
+      window.butter = butter;
       media.onReady( start );
+
       
     } 
   }); //Butter

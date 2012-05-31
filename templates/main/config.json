@@ -12,8 +12,8 @@
       "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
     },
     {
-      "type": "image",
-      "path": "{{baseDir}}external/popcorn-js/plugins/image/popcorn.image.js"
+      "type": "image2",
+      "path": "{{baseDir}}templates/main/plugins/image2/popcorn.image2.js"
     },
     {
       "type": "lowerthird",
