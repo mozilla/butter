@@ -6,6 +6,7 @@
     <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
     <script src="../../src/butter.js" data-butter-exclude /></script>
     <script type="text/javascript" src="scripts.js" data-butter-exclude /></script>
+    <link rel="stylesheet" href="css/normalise.css" type="text/css" />
     <link rel="stylesheet" href="css/style.css" type="text/css" />
 </head>
 <body>
@@ -15,9 +16,11 @@
         <source src="../../external/popcorn-js/test/trailer.ogv"></source>
         <source src="../../external/popcorn-js/test/trailer.mp4"></source>
       </video>
-      <div id="video-overlay" data-butter="target"></div>
+      <div id="video-overlay" data-butter="target">
+        <label>#video-overlay</label>
+      </div>
     </div>
-    <div id="sidebar" data-butter="target"></div>
+    <div id="sidebar" data-butter="target"><label>#sidebar</label></div>
   </div>
 </body>
 </html>
