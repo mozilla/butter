@@ -40,52 +40,54 @@
           start: {
             elem: "input",
             type: "number",
-            label: "In"
+            label: "In",
+            hidden: true
           },
           end: {
             elem: "input",
             type: "number",
-            label: "Out"
+            label: "Out",
+            hidden: true
           },
           width: {
             elem: "input",
             type: "text",
             label: "width",
-            "default": "150px",
-            editable: true
+            "default": "150px"
           },
           height: {
             elem: "input",
             type: "text",
             label: "height",
             "default": "150px",
-            editable: true
+            hidden: true
           },
           top: {
             elem: "input",
             type: "text",
             label: "top",
             "default": "0",
-            editable: true
+            hidden: true
           },
           left: {
             elem: "input",
             type: "text",
             label: "left",
             "default": "0",
-            editable: true
+            hidden: true
           },
           src: {
             elem: "input",
             type: "url",
             label: "Source URL (Or drag an image over the existing one)",
-            editable: true
+            hidden: true
           },
           text: {
             elem: "input",
             type: "text",
             label: "TEXT",
-            optional: true
+            optional: true,
+            hidden: true
           },
           href: {
             elem: "input",
