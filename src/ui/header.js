@@ -293,12 +293,14 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
     function loginDisplay() {
       _authButton.innerHTML = butter.cornfield.email();
       _authButton.title = "This is you!";
+      _authButton.disabled = true;
       _logoutButton.style.display = _oldDisplayProperty;
     }
 
     function logoutDisplay() {
       _logoutButton.style.display = "none";
       _authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
+      _authButton.disabled = false;
       _authButton.title = DEFAULT_AUTH_BUTTON_TITLE;
     }
 
