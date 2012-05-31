@@ -1,0 +1,21 @@
+#map {
+  width: 542px;
+  height: 142px;
+  float: left;
+}
+
+input[type=text] {
+  width: 220px;
+}
+
+input[type=number] {
+  width: 80px;
+}
+
+p#message {
+  color: #FF0000;
+}
+
+.error {
+  border: 2px inset #FF0000;
+}
