@@ -52,7 +52,8 @@
     ],
     "defaults": [
       "text",
-      "image"
+      "image",
+      "googlemap"
     ]
   },
   "dirs": {
