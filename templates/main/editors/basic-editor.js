@@ -192,10 +192,10 @@
       for ( var item in _manifest ) {
         if ( item === "target" ) {
           createRow( item, false, targets );
-        } else if( _manifest[item]["editable"] === true ) { 
-          createRow( item, false );
-        } else {
+        } else if( _manifest[item]["hidden"] === true ) { 
           createRow( item, true );
+        } else {
+          createRow( item, false );
         }
       }
 
