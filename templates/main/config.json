@@ -27,6 +27,10 @@
       "type": "wikipedia",
       "path": "{{baseDir}}external/popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"
     }
+    ],
+    "defaults": [
+      "text",
+      "image2"
     ]
   }
 }
