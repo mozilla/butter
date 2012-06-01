@@ -26,6 +26,7 @@ var mongoose = require('mongoose'),
     });
     Schema = mongoose.Schema,
 
+
     Project = new Schema({
       name: String,
       html: String,
@@ -45,7 +46,7 @@ var mongoose = require('mongoose'),
       testURL: String,
       result: Boolean,
       userAgent: String,
-      popVersion: String,
+      popcornVersion: String,
       butterVersion: String
     }),
     TestResultModel = mongoose.model( "TestResult", TestResult );
@@ -280,8 +281,44 @@ app.get('/api/whoami', function( req, res ) {
   });
 });
 
-app.post('/api/tests/', function( req, res ) {
+app.post( "/api/tests/", function( req, res ) {
 
+  if( !req.body ){
+    res.json( {error: 'no project data received' }, 500 );
+    return;
+  }
+
+  var result = new TestResultModel({
+    testName: req.body.testTitle,
+    testURL: req.body.testURL,
+    result: req.body.result,
+    userAgent: req.body.ua,
+    popcornVersion: req.body.popcornVersion,
+    butterVersion: req.body.butterVersion
+  });
+
+  result.save( function( err ) {
+    if ( !err ) {
+      res.json( { error: "okay" } );
+    }
+  });
+});
+
+app.get( "/api/tests", function( req, res ) {
+  TestResultModel.find( {}, function( err, doc ) {
+    if ( err ) {
+      res.json( { error: "internal db error" }, 500 );
+      return;
+    }
+
+    if ( !doc ) {
+      res.json( { error: "No data stored" }, 500 );
+      return;
+    }
+
+    res.json( { error: "okay", testResults: doc } );
+
+  });
 });
 
 var port = process.env.PORT || CONFIG.server.bindPort;

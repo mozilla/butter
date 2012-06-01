@@ -4,7 +4,8 @@
   document.addEventListener( "DOMContentLoaded", function setup( e ){
     document.removeEventListener( "DOMContentLoaded", setup, false );
 
-    var result;
+    var result,
+        data = {};
 
     // Make sure we have a place to stick the Pass / Fail buttons
     var buttonDiv = document.getElementById( "manual-test-buttons" );
@@ -26,9 +27,11 @@
 
     function passFn() {
       result = true;
+      data = getInfo();
+      console.log(data);
 
-      _butter.cornfield.saveresult( getInfo(), function() {
-
+      _butter.cornfield.saveresult( data, function( e ) {
+        console.log("OMG WE MADE IT TO TEH CALLBACKS LOLZ - PASS", e);
       });
 
       parent.postMessage("PASS", "*");
@@ -36,9 +39,10 @@
 
     function failFn() {
       result = false;
+      data = getInfo();
 
-      _butter.cornfield.saveresult( getInfo(), function() {
-
+      _butter.cornfield.saveresult( data, function( e ) {
+        console.log("OMG WE MADE IT TO TEH CALLBACKS LOLZ - FAIL", e);
       });
 
       parent.postMessage("FAIL", "*");
