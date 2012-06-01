@@ -30,7 +30,7 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
 
       function onKeyDown( e ) {
         if (  _enterKeyActivity &&
-              __keyboardAvoidElements.indexOf( e.target.nodeName ) === -1 && 
+              __keyboardAvoidElements.indexOf( e.target.nodeName ) === -1 &&
               ( e.which === 13 || e.keyCode === 13 ) ) {
           _activities[ _enterKeyActivity ]( e );
         }
@@ -191,7 +191,7 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
         throw "Dialog '" + name + "' does not exist.";
       }
     },
-    
+
     modal: Modal
   };
 });
