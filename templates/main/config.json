@@ -8,6 +8,10 @@
       "path": "{{baseDir}}templates/main/plugins/widget-text/popcorn.text.widget.js"
     },
     {
+      "type": "sidebar-link",
+      "path": "{{baseDir}}templates/main/plugins/link/popcorn.sidebar-link.js"
+    },
+    {
       "type": "zoink",
       "path": "{{baseDir}}templates/main/plugins/zoink/popcorn.zoink.js"
     },
@@ -35,7 +39,8 @@
     "defaults": [
       "widget-text",
       "zoink",
-      "image2"
+      "image2",
+      "sidebar-link"
     ]
   }
 }
