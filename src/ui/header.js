@@ -81,7 +81,7 @@ define( [ "dialog/dialog", "util/lang", "layouts/header.html" ],
     _authButton.addEventListener( "click", authenticationRequired, false );
 
     function showErrorDialog( message, callback ){
-      var dialog =Dialog.spawn( "error-message", {
+      var dialog = Dialog.spawn( "error-message", {
         data: message,
         events: {
           cancel: function( e ){
