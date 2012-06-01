@@ -4,8 +4,8 @@
   "plugin": {
     "plugins": [
     {
-      "type": "text",
-      "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
+      "type": "widget-text",
+      "path": "{{baseDir}}templates/main/plugins/widget-text/popcorn.text.widget.js"
     },
     {
       "type": "zoink",
@@ -33,7 +33,7 @@
     }
     ],
     "defaults": [
-      "text",
+      "widget-text",
       "zoink",
       "image2"
     ]

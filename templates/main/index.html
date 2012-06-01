@@ -42,24 +42,24 @@
               <source src="../../external/popcorn-js/test/trailer.ogv"></source>
               <source src="../../external/popcorn-js/test/trailer.mp4"></source>
             </video>
-            <div class="cube-view video-overlay">
+            <div class="cube-view video-overlay"  data-butter="target">
               <div id="byline">
                 <h4>Webmaker</h4>
                 <h3>Kate Hudson</h3>
               </div>
-              <div class="cube ff">
+              <div id="logo" class="cube ff" display="none">
                   <div class="panel bottom"></div>
                   <div class="panel top"></div>
-                  <div class="panel left"><h1>special report</h1></div>
-                  <div class="panel right"><h1>special report</h1></div>
-                  <div class="panel front"><h1>mozilla news</h1></div>
-                  <div class="panel back"><h1>mozilla news</h1></div>
+                  <div class="panel left text"><h1></h1></div>
+                  <div class="panel right text"><h1></h1></div>
+                  <div class="panel front text"><h1></h1></div>
+                  <div class="panel back text"><h1></h1></div>
               </div>
            </div>​<!-- .cube-view -->
            <div id="corner-target" class="video-overlay"></div>
           </div><!--video-container-->
         <div class="bottom-tabs">
-          <ul>
+          <ul id="nowplaying-links">
             <li><a href="#">student strikes</a></li>
             <li><a href="#">baloney</a></li>
             <li><a href="#">lemons</a></li>
@@ -88,9 +88,7 @@
               <div class="widget-header">
                 <h3>Now playing <a href="#explore" class="btn btn-right btn-red">Explore</a></h3>
               </div>
-              <div class="widget-body light">
-                <h3>Student strike continues in Quebec</h3>
-                <p id="target"></p>
+              <div id="now-playing" data-butter="target" class="widget-body light">
               </div>
               <div class="widget-links">
                 <a href="#" class="btn btn-full-width btn-red">Link: asdasda</a>
