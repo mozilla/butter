@@ -7,11 +7,13 @@ define([ "text!dialog/dialogs/export.html", "dialog/dialog" ],
 
   Dialog.register( "export", LAYOUT_SRC, function( dialog, exportData ) {
 
-    var jsonButton = dialog.rootElement.querySelector( ".json-button" ),
-        htmlButton = dialog.rootElement.querySelector( ".html-button" ),
-        jsonExport = dialog.rootElement.querySelector( ".json-export" ),
-        htmlExport = dialog.rootElement.querySelector( ".html-export" ),
-        title = dialog.rootElement.querySelector( ".title" );
+    var rootElement = dialog.rootElement;
+
+    var jsonButton = rootElement.querySelector( ".json-button" ),
+        htmlButton = rootElement.querySelector( ".html-button" ),
+        jsonExport = rootElement.querySelector( ".json-export" ),
+        htmlExport = rootElement.querySelector( ".html-export" ),
+        title = rootElement.querySelector( ".title" );
 
     title.innerHTML = "HTML Export";
 
