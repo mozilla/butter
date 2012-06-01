@@ -177,21 +177,10 @@
         options._image = img;
       },
 
-      /**
-       * @member image
-       * The start function will be executed when the currentTime
-       * of the video  reaches the start time provided by the
-       * options variable
-       */
       start: function( event, options ) {
         options._container.style.display = "block";
       },
-      /**
-       * @member image
-       * The end function will be executed when the currentTime
-       * of the video  reaches the end time provided by the
-       * options variable
-       */
+   
       end: function( event, options ) {
         options._container.style.display = "none";
       },
