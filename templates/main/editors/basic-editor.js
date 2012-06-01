@@ -180,7 +180,7 @@
 
         row.appendChild( col1 );
         row.appendChild( col2 );
-        hidden && ( row.style.display = "none" );
+        hidden === true && ( row.style.display = "none" );
         table.appendChild( row );
       }
 
@@ -188,7 +188,6 @@
          _manifest.target = {
           elem: "select",
           label: "Target",
-          hidden: false,
           auto: true
          };
       }
