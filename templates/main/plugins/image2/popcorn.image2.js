@@ -40,57 +40,64 @@
           start: {
             elem: "input",
             type: "number",
-            label: "In"
+            label: "In",
+            hidden: true
           },
           end: {
             elem: "input",
             type: "number",
-            label: "Out"
+            label: "Out",
+            hidden: true
           },
-          width: {
-            elem: "input",
-            type: "text",
-            label: "width",
-            "default": "150px",
-            editable: true
-          },
-          height: {
-            elem: "input",
-            type: "text",
-            label: "height",
-            "default": "150px",
-            editable: true
-          },
-          top: {
-            elem: "input",
-            type: "text",
-            label: "top",
-            "default": "0",
-            editable: true
-          },
-          left: {
-            elem: "input",
-            type: "text",
-            label: "left",
-            "default": "0",
-            editable: true
+          imageType: {
+            elem: "select",
+            options: [ "yes", "no" ],
+            label: "Use URL?",
+            "default": "yes"
           },
           src: {
             elem: "input",
             type: "url",
-            label: "Source URL (Or drag an image over the existing one)",
-            editable: true
+            label: "Source URL",
+          },
+          width: {
+            elem: "input",
+            type: "text",
+            label: "Width",
+            "default": "150px"
+          },
+          height: {
+            elem: "input",
+            type: "text",
+            label: "Height",
+            "default": "150px",
+            hidden: true
+          },
+          top: {
+            elem: "input",
+            type: "text",
+            label: "Top",
+            "default": "0",
+            hidden: true
+          },
+          left: {
+            elem: "input",
+            type: "text",
+            label: "Left",
+            "default": "0",
+            hidden: true
           },
           text: {
             elem: "input",
             type: "text",
-            label: "TEXT",
-            optional: true
+            label: "Text",
+            optional: true,
+            hidden: true
           },
           href: {
             elem: "input",
             type: "url",
-            label: "anchor URL",
+            label: "Link URL",
             optional: true
           },
           target: "video-overlay"
@@ -170,21 +177,10 @@
         options._image = img;
       },
 
-      /**
-       * @member image
-       * The start function will be executed when the currentTime
-       * of the video  reaches the start time provided by the
-       * options variable
-       */
       start: function( event, options ) {
         options._container.style.display = "block";
       },
-      /**
-       * @member image
-       * The end function will be executed when the currentTime
-       * of the video  reaches the end time provided by the
-       * options variable
-       */
+   
       end: function( event, options ) {
         options._container.style.display = "none";
       },
