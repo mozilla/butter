@@ -24,10 +24,14 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
           _modal;
 
       function onKeyDown( e ) {
-        if ( _enterKeyActivity && __keyboardAvoidElements.indexOf( e.target.nodeName ) === -1 && ( e.which === 13 || e.keyCode === 13 ) ) {
+        if (  _enterKeyActivity &&
+              __keyboardAvoidElements.indexOf( e.target.nodeName ) === -1 && 
+              ( e.which === 13 || e.keyCode === 13 ) ) {
           _activities[ _enterKeyActivity ]( e );
         }
-        else if ( _escapeKeyActivity && __keyboardAvoidElements.indexOf( e.target.nodeName ) === -1 && ( e.which === 27 || e.keyCode === 27 ) ) {
+        else if ( _escapeKeyActivity &&
+                  __keyboardAvoidElements.indexOf( e.target.nodeName ) === -1 &&
+                  ( e.which === 27 || e.keyCode === 27 ) ) {
           _activities[ _escapeKeyActivity ]( e );
         }
       }
@@ -180,7 +184,5 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
         throw "Dialog '" + name + "' does no exist.";
       }
     }
-
   };
-
 });
