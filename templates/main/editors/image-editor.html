@@ -7,23 +7,35 @@
   <head>
     <title>Event Editor</title>
     <style>
-      table#table tr  td:nth-child(2) * {
-        font-size: 0.9em;
+      label {
+        width: 100px ;
+        font-family: sans-serif;
+        color: #fff;
       }
-      table {
-        font-family: helvetica !important;
-        color: #fff !important;
+      #table {
+        float: left;
+        width: 400px;
       }
+      #table > div > label {
+        width: 100px;
+        float: left;
+      }
+      #table > div > div {
+        width: 300px;
+        float: left;
+      }
+
       p#message {
         color: #FF0000;
       }
+      #source-editor {
+        float: left;
+        margin-right: 20px;
+      }
       #drop-target {
-        color: #CCC;
         border: 3px dashed;
         width: 160px;
         height: 120px;
-        margin-right: 20px;
-        float: left;
         text-align: center;
         background-size: 100%;
         background-position: center;
@@ -47,8 +59,10 @@
     <script type="text/javascript" src="image-editor.js"></script>
   </head>
   <body>
-    <table id="table">
-    </table>
+    <div id="source-editor">
+    </div>
+    <div id="table">
+    </div>
     <p id="message"></p>
   </body>
 </html>

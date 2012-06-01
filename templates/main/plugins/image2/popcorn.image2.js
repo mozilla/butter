@@ -49,50 +49,55 @@
             label: "Out",
             hidden: true
           },
+          imageType: {
+            elem: "select",
+            options: [ "yes", "no" ],
+            label: "Use URL?",
+            "default": "yes"
+          },
+          src: {
+            elem: "input",
+            type: "url",
+            label: "Source URL",
+          },
           width: {
             elem: "input",
             type: "text",
-            label: "width",
+            label: "Width",
             "default": "150px"
           },
           height: {
             elem: "input",
             type: "text",
-            label: "height",
+            label: "Height",
             "default": "150px",
             hidden: true
           },
           top: {
             elem: "input",
             type: "text",
-            label: "top",
+            label: "Top",
             "default": "0",
             hidden: true
           },
           left: {
             elem: "input",
             type: "text",
-            label: "left",
+            label: "Left",
             "default": "0",
-            hidden: true
-          },
-          src: {
-            elem: "input",
-            type: "url",
-            label: "Source URL (Or drag an image over the existing one)",
             hidden: true
           },
           text: {
             elem: "input",
             type: "text",
-            label: "TEXT",
+            label: "Text",
             optional: true,
             hidden: true
           },
           href: {
             elem: "input",
             type: "url",
-            label: "anchor URL",
+            label: "Link URL",
             optional: true
           },
           target: "video-overlay"

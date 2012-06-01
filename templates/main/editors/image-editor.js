@@ -46,6 +46,10 @@
       for( var item in _manifest ) {
         if ( options && options[ item ] ) {
            popcornOptions[ item ] = options[ item ];
+        } else if ( item === "src" ) {
+          if( document.getElementById( "imageType" ) && document.getElementById( "imageType" ).value === "yes" ) {
+            popcornOptions[ item ] = document.getElementById( item ).value;
+          }
         } else if ( document.getElementById( item ) ) {
           popcornOptions[ item ] = document.getElementById( item ).value;
         }
@@ -78,9 +82,20 @@
     });
 
     _comm.listen( "trackeventupdated", function( e ){
+      
       for( var item in _manifest ){
         var element = document.getElementById( item );
         element.value = e.data[ item ];
+        if( item === "src" ) {
+          if( e.data[ "imageType" ] === "no" ) {
+            document.getElementById("src-container").style.display = "none";
+            //document.getElementById("drop-target").style.display = "block";
+          } else if( e.data[ "imageType" ] === "yes" ) {
+            document.getElementById("src-container").style.display = "block";
+            //document.getElementById("drop-target").style.display = "none";
+          }
+        }
+       
       } //for
     });
 
@@ -96,6 +111,7 @@
           masterTarget = "video-overlay", //hard-coded for this template
           media = e.data.media,
           table = document.getElementById( "table" ),
+          sourceEditor = document.getElementById( "source-editor" ),
           mediaName = "Current Media Element",
           elemToFocus,
           createElement = {
@@ -156,9 +172,9 @@
       _manifest = e.data.manifest.options;
 
       function createRow( item, hidden, data ) {
-        var row = document.createElement( "TR" ),
-            col1 = document.createElement( "TD" ),
-            col2 = document.createElement( "TD" ),
+        var row = document.createElement( "div" ),
+            col1 = document.createElement( "label" ),
+            col2 = document.createElement( "div" ),
             currentItem = _manifest[ item ],
             itemLabel = currentItem.label || item,
             field;
@@ -175,7 +191,7 @@
 
         col2.appendChild( field );
         field.addEventListener( "change", function( e ){
-          sendData( false );
+          sendData( false, { elem : field.value } );
         }, false );
 
         // Remember first control added in editor so we can focus
@@ -184,14 +200,22 @@
         row.appendChild( col1 );
         row.appendChild( col2 );
         hidden && ( row.style.display = "none" );
-        table.appendChild( row );
+
+        if( item === "src" ) {
+          row.id = "src-container";
+          table.appendChild( row );
+          createImageDropper( item, hidden );
+        } else if ( item == "imageType") {
+          table.appendChild( row );
+        } else {
+          table.appendChild( row );
+        }
 
         return field;
       }
 
-      function createImageDropper(item, hidden, data){
-        var field = createRow( item, false ),
-            canvas = document.createElement( "canvas" ),
+      function createImageDropper( item, hidden ){
+        var canvas = document.createElement( "canvas" ),
             context,
             dropTarget;
 
@@ -203,7 +227,7 @@
 
         if(  popcornOptions[ item ] ) { dropTarget.style.backgroundImage = "url('" + popcornOptions[ item ] + "')"; }  
 
-        table.parentNode.insertBefore( dropTarget, table );
+        sourceEditor.appendChild( dropTarget );
 
         dropTarget.addEventListener( "dragover", function( event ) {
           event.preventDefault();
@@ -236,12 +260,13 @@
               context = canvas.getContext( '2d' );
               context.drawImage( this, 0, 0, this.width, this.height );
               imgURI = canvas.toDataURL();
-              sendData( false, {"src" : imgURI } );
+
+              sendData( false, {"src" : imgURI, "imageType": "no" } );
               dropTarget.style.backgroundImage = "url('" +  imgURI + "')";
               dropTarget.firstChild.innerHTML = "";
           };
           image.src = imgSrc;
-      
+
         }, false);
       }
 
@@ -253,8 +278,6 @@
       for ( var item in _manifest ) {
         if ( item === "target" ) {
           createRow( item, false, targets );
-        } else if ( item === "src" ){
-          createImageDropper( item, false );
         } else if( _manifest[item]["hidden"] === true ) { 
           createRow( item, true );
         } else {
