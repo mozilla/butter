@@ -11,6 +11,10 @@
       "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
     },
     {
+      "type": "zoink",
+      "path": "{{baseDir}}templates/main/plugins/zoink/popcorn.zoink.js"
+    },
+    {
       "type": "googlemap",
       "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
     },
@@ -33,6 +37,7 @@
     ],
     "defaults": [
       "text",
+      "zoink",
       "image2"
     ]
   }
