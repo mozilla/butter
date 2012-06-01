@@ -95,7 +95,11 @@
             label: "anchor URL",
             optional: true
           },
-          target: "video-overlay"
+          target: {
+            elem: "select",
+            options: [ "video-overlay" ],
+            label: "Target"
+          }
         }
       },
       _setup: function( options ) {

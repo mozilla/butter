@@ -34,6 +34,16 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
+        butter.tracks[ 2 ].addTrackEvent({ 
+          type: "text",
+          popcornOptions: {
+            start: 0,
+            end: 2,
+            target: "sidebar",
+            text: "Bloopy bloop",
+          }
+        });
+
       }
 
       window.butter = butter;
