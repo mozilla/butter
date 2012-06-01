@@ -25,7 +25,7 @@ var mongoose = require('mongoose'),
       }
     });
     Schema = mongoose.Schema,
-    
+
     Project = new Schema({
       name: String,
       html: String,
@@ -33,16 +33,27 @@ var mongoose = require('mongoose'),
       template: String
     }),
     ProjectModel = mongoose.model( 'Project', Project ),
-    
+
     User = new Schema({
       email: String,
       projects: [Project],
     }),
     UserModel = mongoose.model( 'User', User );
 
+    TestResult = new Schema({
+      testName: String,
+      testURL: String,
+      result: Boolean,
+      userAgent: String,
+      popVersion: String,
+      butterVersion: String
+    }),
+    TestResultModel = mongoose.model( "TestResult", TestResult );
+
+
 if ( !path.existsSync( PUBLISH_DIR ) ) {
   fs.mkdirSync( PUBLISH_DIR );
-} 
+}
 
 app.use(express.logger(CONFIG.logger))
   .use(express.bodyParser())
@@ -108,7 +119,7 @@ function publishRoute( req, res ){
           }
           res.json({ error: 'okay', url: url });
         });
-      }  
+      }
     }
   });
 }
@@ -189,7 +200,7 @@ app.get('/api/project/:id?', function(req, res) {
 app.post('/api/project/:id?', function( req, res ) {
   var email = req.session.email,
       id = req.params.id;
-  
+
   if ( !email ) {
     res.json( { error: 'unauthorized' }, 403 );
     return;
@@ -222,7 +233,7 @@ app.post('/api/project/:id?', function( req, res ) {
     for( var i=0, l=doc.projects.length; i<l; ++i ){
       // purposeful lazy comparison here (String -> string)
       if( doc.projects[ i ]._id == req.body.id ){
-        proj = doc.projects[ i ]; 
+        proj = doc.projects[ i ];
       }
     }
 
@@ -267,6 +278,10 @@ app.get('/api/whoami', function( req, res ) {
     name: email,
     username: email
   });
+});
+
+app.post('/api/tests/', function( req, res ) {
+
 });
 
 var port = process.env.PORT || CONFIG.server.bindPort;

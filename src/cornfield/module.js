@@ -183,6 +183,27 @@ define(['util/xhr'], function(XHR) {
         }
       }, "application/json" );
     };
+
+    // Saves a test result to the database
+    this.saveresult = function( data, callback ) {
+      XHR.post( server + "/api/tests/", data, function() {
+        if ( this.readyState === 4 ) {
+          var response;
+          try {
+            response = JSON.parse( this.response );
+          } catch ( err ) {
+            response = {
+              error: "failed to parse data from server: \n" + this.response
+            };
+          }
+
+          if( callback ) {
+            callback( response );
+          }
+        }
+
+      }, "application/json" );
+    };
   };
 
   Cornfield.__moduleName = "cornfield";

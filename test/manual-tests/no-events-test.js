@@ -10,6 +10,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         media.addTrack( "Track" + Math.random() );
         media.addTrack( "Track" + Math.random() );
 
+        window._butter = butter;
       }
 
       media.onReady( start );
