@@ -7,6 +7,11 @@
   var DEFAULT_TRACKEVENT_DURATION = 1,
       DEFAULT_TRACKEVENT_OFFSET = 0.01;
 
+  var ACCEPTED_UA_LIST = {
+    "Chrome": 17,
+    "Firefox": 11
+  };
+
   define( [
             "core/eventmanager",
             "core/logger",
@@ -19,6 +24,7 @@
             "ui/ui",
             "util/xhr",
             "text!default-config.json",
+            "text!layouts/ua-warning.html",
             "util/shims"                  // keep this at the end so it doesn't need a spot in the function signature
           ],
           function(
@@ -32,7 +38,8 @@
             Dependencies,
             UI,
             XHR,
-            DefaultConfigJSON
+            DefaultConfigJSON,
+            UAWarningLayout
           ){
 
     var __guid = 0,
@@ -42,7 +49,32 @@
       return new ButterInit( options );
     }; //Butter
 
+    Butter.showUAWarning = function() {
+      var uaWarningDiv = Lang.domFragment( UAWarningLayout );
+      document.body.appendChild( uaWarningDiv );
+      uaWarningDiv.classList.add( "slide-out" );
+      uaWarningDiv.getElementsByClassName( "close-button" )[0].onclick = function () {
+        document.body.removeChild( uaWarningDiv );
+      };
+    };
+
     function ButterInit( butterOptions ){
+
+      var ua = navigator.userAgent,
+          acceptedUA;
+      for ( var uaName in ACCEPTED_UA_LIST ) {
+        if( ACCEPTED_UA_LIST.hasOwnProperty( uaName ) ) {
+          var uaRegex = new RegExp( uaName + "/([0-9]+)\\.", "g" ),
+              match = uaRegex.exec( ua );
+          if ( match && match.length === 2 && Number( match[ 1 ] ) >= ACCEPTED_UA_LIST[ uaName ] ) {
+            acceptedUA = uaName + "/" + match[ 1 ];
+          }
+        }
+      }
+
+      if ( !acceptedUA ) {
+        Butter.showUAWarning();
+      }
 
       butterOptions = butterOptions || {};
 
@@ -569,7 +601,7 @@
           if( callback ){
             callback();
           } //if
-          
+
           _this.dispatch( "pageready" );
         });
       }; //preparePage
