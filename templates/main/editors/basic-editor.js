@@ -184,7 +184,8 @@
         table.appendChild( row );
       }
 
-      if( typeof _manifest.target === "string") {
+      //Default target element
+      if( typeof _manifest.target === "string" || !_manifest.target ) {
          _manifest.target = {
           elem: "select",
           label: "Target",
