@@ -18,10 +18,15 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
 
       var _listeners = spawnOptions.events || {},
           _activities = {},
-          _rootElement = LangUtils.domFragment( layoutSrc ).querySelector( ".butter-dialog" ),
+          _rootElement = LangUtils.domFragment( layoutSrc ),
           _enterKeyActivity,
           _escapeKeyActivity,
           _modal;
+
+      // make sure have a handle to the butter-dialog div
+      if ( !( _rootElement.classList && _rootElement.classList.contains( "butter-dialog" ) ) ) {
+        _rootElement = _rootElement.querySelector( ".butter-dialog" );
+      }
 
       function onKeyDown( e ) {
         if (  _enterKeyActivity &&
@@ -99,6 +104,8 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
       };
 
       var _external = {
+        element: _rootElement,
+
         open: function () {
           for( var e in _listeners ){
             if( _listeners.hasOwnProperty( e ) ){
@@ -181,8 +188,10 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
         return __openDialogs[ name ];
       }
       else {
-        throw "Dialog '" + name + "' does no exist.";
+        throw "Dialog '" + name + "' does not exist.";
       }
-    }
+    },
+    
+    modal: Modal
   };
 });

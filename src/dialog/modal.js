@@ -4,12 +4,11 @@
 
 define( [], function(){
 
-  var __container;
+  var __container = document.createElement( "div" );
 
-  return function( childElement ){
+  var Modal = function( childElement ){
 
-    if( !__container ){
-      __container = document.createElement( "div" );
+    if( !__container.parentNode ){
       __container.className = "butter-modal-container";
       __container.setAttribute( "data-butter-exclude", true );
       document.body.appendChild( __container );
@@ -41,5 +40,9 @@ define( [], function(){
     });
 
   };
+
+  Modal.element = __container;
+
+  return Modal;
 
 });
