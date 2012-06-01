@@ -10,7 +10,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         media.addTrack( "Track2" );
         media.addTrack( "Track3" );
 
-        butter.tracks[ 0 ].addTrackEvent({ 
+        butter.tracks[ 1 ].addTrackEvent({ 
           type: "image2",
           popcornOptions: {
             start: 0,
@@ -21,7 +21,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-        butter.tracks[ 1 ].addTrackEvent({ 
+        butter.tracks[ 2 ].addTrackEvent({ 
           type: "image2",
           popcornOptions: {
             start: 0,

@@ -89,10 +89,10 @@
                 <h3>Now playing <a href="#explore" class="btn btn-right btn-red">Explore</a></h3>
               </div>
               <div id="now-playing" data-butter="target" class="widget-body light">
+                <button id="addwidget" class="btn">Add text widget</button>
               </div>
-              <div id="nowplaying-links" class="widget-links" data-butter="target">
-                <a href="#" class="btn btn-full-width btn-red">Link: asdasda</a>
-                <a href="#" class="btn btn-full-width btn-red">Link: asdasda</a>
+              <div id="now-playing-links" data-butter="target" class="widget-links" >
+                <button id="addlink" class="btn">Add link</button>
               </div>
             </div>
             <div class="widget detail-t">
@@ -136,6 +136,34 @@ $("a[href='#explore']").toggle(function(){
       height: "151px"
     }, 200);
   });
+
+$("#addwidget").click(function(){
+
+  butter.tracks[ 0 ].addTrackEvent({ 
+    type: "widget-text",
+    popcornOptions: {
+      start: butter.currentTime,
+      end: butter.currentTime + 2,
+      target: "now-playing",
+      title: "Bloop",
+      text: "Floog"
+    }
+  });
+});
+
+$("#addlink").click(function(){
+
+  butter.tracks[ 0 ].addTrackEvent({ 
+    type: "sidebar-link",
+    popcornOptions: {
+      start: butter.currentTime,
+      end: butter.currentTime + 2,
+      target: "now-playing-links",
+      text: "Floog",
+      timecode: butter.currentTime
+    }
+  });
+});
 
 </script>
 <script src="scripts.js"></script>

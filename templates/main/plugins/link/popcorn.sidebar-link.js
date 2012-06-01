@@ -86,37 +86,6 @@
     return string.replace( /\r?\n/gm, "<br>" );
   }
 
-  // Subtitle specific functionality
-  function createSubtitleContainer( context, id ) {
-
-    var ctxContainer = context.container = document.createElement( "div" ),
-        style = ctxContainer.style,
-        media = context.media;
-
-    var updatePosition = function() {
-      var position = context.position();
-      // the video element must have height and width defined
-      style.fontSize = "18px";
-      style.width = media.offsetWidth + "px";
-      style.top = position.top  + media.offsetHeight - ctxContainer.offsetHeight - 40 + "px";
-      style.left = position.left + "px";
-
-      setTimeout( updatePosition, 10 );
-    };
-
-    ctxContainer.id = id || "";
-    style.position = "absolute";
-    style.color = "white";
-    style.textShadow = "black 2px 2px 6px";
-    style.fontWeight = "bold";
-    style.textAlign = "center";
-
-    updatePosition();
-
-    context.media.parentNode.appendChild( ctxContainer );
-
-    return ctxContainer;
-  }
 
   Popcorn.plugin( "sidebar-link", {
 
@@ -150,7 +119,11 @@
           type: "number",
           label: "Timecode for link (in s)"
         },
-        target: "nowplaying-links"
+        target: {
+          elem: "select",
+          options: ["now-playing-links"],
+          "default": "now-playing-links"
+        }
       }
     },
 
@@ -158,22 +131,20 @@
 
       var target,
           text,
-          anchor = options._container = document.createElement( "a" ),
-          container = options._outer = document.createElement( "li" );
+          container = options._container = document.createElement( "a" );
 
-      container.style.display = "none";
+      container.style.display = "none  ";
 
-      target = Popcorn.dom.find( "nowplaying-links" );
+      target = document.getElementById( options.target );
 
       // cache reference to actual target container
       options._target = target;
       text = options.text;
 
-      anchor.href = "#" + options.timecode || "";
-      anchor.innerHTML = text || "";
-      anchor.className = "btn btn-full-width btn-red";
+      container.href = "#" + options.timecode || "";
+      container.innerHTML = text || "";
+      container.className = "btn btn-full-width btn-red";
 
-      container.appendChild( anchor );
       target.appendChild( container );
 
     },
@@ -185,7 +156,7 @@
      * options variable
      */
     start: function( event, options ) {
-      options._outer.style.display = "inline";
+      options._container.style.display = "block";
     },
 
     /**
@@ -195,13 +166,13 @@
      * options variable
      */
     end: function( event, options ) {
-      options._outer.style.display = "none";
+      options._container.style.display = "none";
     },
 
     _teardown: function( options ) {
       var target = options._target;
       if ( target ) {
-        target.removeChild( options._outer );
+        target.removeChild( options._container );
       }
     }
   });

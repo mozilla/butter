@@ -162,6 +162,11 @@
           type: "checkbox",
           label: "Multiline",
           hidden: true
+        },
+        target: {
+          elem: "select",
+          options: ["now-playing"],
+          "default": "now-playing"
         }
       }
     },

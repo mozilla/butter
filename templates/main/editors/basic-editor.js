@@ -184,18 +184,21 @@
         table.appendChild( row );
       }
 
-      _manifest.target = {
-        elem: "select",
-        label: "Target"
-      };
+      if( typeof _manifest.target === "string") {
+         _manifest.target = {
+          elem: "select",
+          label: "Target",
+          hidden: false,
+          auto: true
+         };
+      }
 
       for ( var item in _manifest ) {
-        if ( item === "target" ) {
-          createRow( item, false, targets );
-        } else if( _manifest[item]["hidden"] === true ) { 
-          createRow( item, true );
-        } else {
-          createRow( item, false );
+        console.log( item, typeof _manifest[item] );
+        if ( item === "target" && _manifest[item].auto === true ) {
+          createRow( item, _manifest[item]["hidden"], targets );
+        } else { 
+          createRow( item, _manifest[item]["hidden"] );
         }
       }
 
