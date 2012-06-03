@@ -19,61 +19,56 @@
           start: {
             elem: "input",
             type: "number",
-            label: "In"
+            label: "In",
+            hidden: true
           },
           end: {
             elem: "input",
             type: "number",
-            label: "Out"
+            label: "Out",
+            hidden: true
           },
           text: {
             elem: "input",
             type: "text",
             label: "Text",
-            "default": "Edit me",
-            editable: true
+            "default": "Edit me"
           },
           style: {
             elem: "select",
             options: [ "speech", "thought", "fact", "fiction","icon", "none" ],
             type: "text",
-            label: "Style:",
-            editable: true
+            label: "Style:"
           },
           order: {
             elem: "select",
             options: [ 1, 2, 3 ],
             type: "text",
             label: "Layer order:",
-            "default": 1,
-            editable: true
+            "default": 1
           },
           classes: {
             elem: "input",
             type: "text",
-            label: "Classes (top, bottom, left, right, flip, pipe, fx)",
-            editable: true
+            label: "Classes (top, bottom, left, right, flip, pipe, fx)"
           },
           top: {
             elem: "input",
             type: "text",
             label: "Top:",
-            "default": "200px",
-            editable: true
+            "default": "200px"
           },
           left: {
             elem: "input",
             type: "text",
             label: "Left:",
-            "default": "200px",
-            editable: true
+            "default": "200px"
           },
           width: {
             elem: "input",
             type: "text",
             label: "Max width:",
-            "default": "200px",
-            editable: true
+            "default": "200px"
           },
           target: "video-overlay"
         }
