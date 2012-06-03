@@ -6,7 +6,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       var media = butter.media[ 0 ];
 
       function start(){
-        var btns,
+        var addPopcorn,
+            btns,
             headers;
 
         media.addTrack( "Track1" );
@@ -44,6 +45,14 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         // HIDE/SHOW PANELS ***
         // To show panels by default, add an .active class to them. Clicking the header will
         // toggle active/hidden states.
+        addPopcorn = document.getElementById("addPopcorn");
+        addPopcorn.addEventListener("click", function(e){
+          if ( addPopcorn.parentNode.classList.contains("active") ){
+            addPopcorn.parentNode.classList.remove("active");
+          } else {
+            addPopcorn.parentNode.classList.add("active");
+          }
+        });
         headers = document.querySelectorAll(".widget-list li:first-child");
         (function(headers){
           var i;
