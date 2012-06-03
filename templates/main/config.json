@@ -8,6 +8,14 @@
       "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
     },
     {
+      "type": "image2",
+      "path": "{{baseDir}}templates/main/plugins/image2/popcorn.image2.js"
+    },
+    {
+      "type": "context-switcher",
+      "path": "{{baseDir}}templates/main/plugins/context-switcher/popcorn.context-switcher.js"
+    },
+    {
       "type": "googlemap",
       "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
     },
@@ -29,8 +37,7 @@
     }
     ],
     "defaults": [
-      "text",
-      "image2"
+      "context-switcher"
     ]
   }
 }
