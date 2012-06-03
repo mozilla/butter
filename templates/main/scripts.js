@@ -42,6 +42,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         // **********************
 
         // HIDE/SHOW PANELS ***
+        // To show panels by default, add an .active class to them. Clicking the header will
+        // toggle active/hidden states.
         headers = document.querySelectorAll(".widget-list li:first-child");
         (function(headers){
           var i;
@@ -63,8 +65,10 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
         // BUTTONS ***
         // If a link is clicked in the sidebar widget, it adds a track event of the
-        // type defined in the 'for' attribute. The event is added to the next available track
-        // ( see findEmptyTrack )
+        // type defined in the 'data-butter-plugin' attribute. If 'data-butter-default' is defined, a special
+        // default set can be added from the manifest (see createDefault). 
+        // The event is added to the next available track
+        // (see findEmptyTrack)
         btns = document.querySelectorAll(".widget-list li:not(:first-child) a");
         (function(btns){
           var i;
@@ -72,23 +76,33 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             (function(btn){
               btn.addEventListener("click", function(e){
                 var pluginType,
+                    defaultType,
                     ct,
                     emptyTrack,
-                    defaults;
+                    defaults,
+                    messageEl;
 
                 e.preventDefault();
-                pluginType = btn.getAttribute("for"); // the plugin name
+                pluginType = btn.getAttribute("data-butter-plugin") || "text"; // the plugin name
+                defaultType = btn.getAttribute("data-butter-default") || "default";
                 ct = butter.currentTime;
                 emptyTrack = findEmptyTrack(ct, 1);
-                defaults = createDefaults( pluginType );
+                defaults = createDefaults( pluginType, defaultType );
                 defaults.start = ct;
                 defaults.end = ct + 1;
 
-                emptyTrack.addTrackEvent({
+                butter.tracks[ emptyTrack ].addTrackEvent({
                   type: pluginType,
                   popcornOptions: defaults
                 });
-                
+
+                messageEl = document.querySelector(".widget-message");
+                messageEl.innerHTML = "<p>" + "you added a " + pluginType + " event to track " + emptyTrack + " </p>";
+                messageEl.classList.add("on");
+                setTimeout( function(){
+                  messageEl.classList.remove("on");
+                }, 2000 );
+
               }, false);
             }(btns[i]));
           }
@@ -96,7 +110,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         
         // FIND EMPTY TRACK ***
         // Input: start time, duration of new event
-        // Output: an empty track in which the new event will fit, or else a new track.
+        // Output: the index of an empty track in which the new event will fit, or else a new track.
         function findEmptyTrack( newStartTime, duration ) {
           var trackCount = butter.tracks.length,
               trackEvents,
@@ -108,7 +122,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           for(i=0;i<trackCount;i++){
             trackEvents = butter.tracks[ i ].trackEvents;
             if( trackEvents.length === 0 ){
-             return butter.tracks[ i ]; //Return if the track is empty
+             return i; //Return if the track is empty
             }
             for(j=0;j<trackEvents.length;j++) {
               start = +trackEvents[j].popcornOptions.start;
@@ -116,29 +130,37 @@ document.addEventListener( "DOMContentLoaded", function( e ){
               if( (start - newStartTime < duration) || (start < newStartTime && newStartTime > end) ) {
                 continue;
               } else {
-                return butter.tracks[ i ];
+                return i;
               }
             }
           }
           // All tracks had conflicts, gotta make a new one
-          return media.addTrack( "Track" + Math.random() );
+          media.addTrack( "Track" + Math.random() );
+          return trackCount;
 
         }
 
         // DEFAULT MANIFEST ***
         // Returns a set of defaults given a plugin type
-        function createDefaults( pluginType ){
-
+        function createDefaults( pluginType, defaultType ){
           var _manifest = {
             text: {
-              text: "Hello world"
+              "default": {
+                text: "Hello world",
+                target: "video-overlay"
+              },
+              subtitles: {
+                text: "This is some subtitles",
+                target: "video-overlay"
+              }
             },
             image2: {
-              src: "http://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Persian_Cat_(kitten).jpg/220px-Persian_Cat_(kitten).jpg"
+              "default": {
+                src: "http://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Persian_Cat_(kitten).jpg/220px-Persian_Cat_(kitten).jpg"
+              }
             }
           };
-
-          return _manifest[ pluginType ];
+          return _manifest[ pluginType ][ defaultType ];
         }
 
       } //start
