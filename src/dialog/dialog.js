@@ -162,7 +162,7 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
       // make this happen a tiny bit later so variables get initialized before opening
       setTimeout( function(){
         _external.open();
-      }, 10 );
+      }, 0 );
 
       return _external;
     };
