@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Popcorn Maker Manual Tests</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript">
+      document.addEventListener( "DOMContentLoaded", function( e ) {
+        var xhr = new XMLHttpRequest(),
+            server = location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" );
+
+        xhr.open( "GET", server + "/api/tests/", false );
+
+        xhr.onreadystatechange = function() {
+          if ( this.readyState === 4 ) {
+            var tr,
+                td,
+                th = document.createElement( "TH" ),
+                table = document.getElementById( "data" ),
+                data = JSON.parse( this.responseText ),
+                result;
+
+            data = data.testResults;
+            data.reverse();
+
+            for ( x in data ) {
+              result = data [ x ];
+
+              tr = document.createElement( "tr" );
+
+              // Make TD, append it and make a new one
+              td = document.createElement( "td" );
+              td.innerHTML = result.testName;
+              tr.appendChild( td );
+              td = document.createElement( "td" );
+              td.innerHTML = result.butterVersion;
+              tr.appendChild( td );
+              td = document.createElement( "td" );
+              td.innerHTML = result.popcornVersion;
+              tr.appendChild( td );
+              td = document.createElement( "td" );
+              td.innerHTML = result.userAgent;
+              tr.appendChild( td );
+              td = document.createElement( "td" );
+              td.innerHTML = result.result ? "Passed" : "Failed";
+              tr.appendChild( td );
+
+              table.appendChild( tr );
+            }
+          }
+        };
+
+        xhr.send();
+      }, false );
+    </script>
+    <style>
+      #data th {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="qunit-header">Popcorn Maker Manual Test Suite - Results</h1>
+    <h2 id="qunit-userAgent"></h2>
+    <table id="data">
+      <tr>
+        <th>Test Name</th>
+        <th>Butter Version</th>
+        <th>Popcorn Version</th>
+        <th>User Agent</th>
+        <th>Test Result</th>
+      </tr>
+    </table>
+  </body>
+</html>

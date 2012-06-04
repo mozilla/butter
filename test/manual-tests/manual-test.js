@@ -5,47 +5,69 @@
     document.removeEventListener( "DOMContentLoaded", setup, false );
 
     var result,
-        data = {};
+        server = location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" );
 
     // Make sure we have a place to stick the Pass / Fail buttons
     var buttonDiv = document.getElementById( "manual-test-buttons" );
     if ( !buttonDiv ) {
-      console.log("Error: couldn't find 'manual-test-buttons' DIV in test page!");
+      console.log( "Error: couldn't find 'manual-test-buttons' DIV in test page!" );
       return;
     }
 
     function getInfo() {
       return {
-        ua: navigator.userAgent,
-        popcornVersion: Popcorn.version,
-        butterVersion: Butter.version,
         testTitle: document.title,
-        testURL: /[^\/]+$/.exec(location.pathname)[ 0 ],
-        result: result
+        butterVersion: Butter.version,
+        popcornVersion: Popcorn.version,
+        ua: navigator.userAgent,
+        result: result,
+        testURL: /[^\/]+$/.exec( location.pathname )[ 0 ]
       };
+    }
+
+    function postResults( data ) {
+      var xhr = XMLHttpRequest();
+
+      xhr.open( "POST", server + "/api/tests/", false );
+
+      xhr.onreadystatechange = function() {
+        if ( this.readyState === 4 ) {
+          var response;
+          try {
+            response = JSON.parse( this.responseText );
+          } catch ( err ) {
+            console.error( "failed to parse data from server: \n" + err );
+          }
+        }
+      };
+
+      xhr.setRequestHeader( "Content-Type", "application/json" );
+      xhr.send( data );
     }
 
     function passFn() {
       result = true;
-      data = getInfo();
-      console.log(data);
+      var data = JSON.stringify( getInfo() );
 
-      _butter.cornfield.saveresult( data, function( e ) {
-        console.log("OMG WE MADE IT TO TEH CALLBACKS LOLZ - PASS", e);
-      });
+      postResults( data );
 
-      parent.postMessage("PASS", "*");
+      parent.postMessage( "PASS", "*" );
+      disableButtons();
     }
 
     function failFn() {
       result = false;
-      data = getInfo();
+      var data = JSON.stringify( getInfo() );
 
-      _butter.cornfield.saveresult( data, function( e ) {
-        console.log("OMG WE MADE IT TO TEH CALLBACKS LOLZ - FAIL", e);
-      });
+      postResults( data );
 
-      parent.postMessage("FAIL", "*");
+      parent.postMessage( "FAIL", "*" );
+      disableButtons();
+    }
+
+    function disableButtons() {
+      document.getElementById( "PASS" ).disabled = true;
+      document.getElementById( "FAIL" ).disabled = true;
     }
 
     function createButton( text, clickFn ) {
@@ -53,6 +75,7 @@
       button.innerHTML = text;
       button.style.cursor = "pointer";
       button.onclick = clickFn;
+      button.id = text;
 
       return button;
     }
