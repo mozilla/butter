@@ -18,8 +18,8 @@
             "./dependencies",
             "ui/ui",
             "util/xhr",
-            "util/lang",
-            "text!default-config.json"
+            "text!default-config.json",
+            "util/shims"                  // keep this at the end so it doesn't need a spot in the function signature
           ],
           function(
             EventManagerWrapper,
@@ -32,7 +32,6 @@
             Dependencies,
             UI,
             XHR,
-            Lang,
             DefaultConfigJSON
           ){
 

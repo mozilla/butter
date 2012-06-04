@@ -12,8 +12,6 @@ define( [
           "./zoombar",
           "./status",
           "./trackhandles",
-          // Include util/lang so we have access to our classList shim for browsers that don't support it
-          "util/lang"
         ],
         function(
           TrackEvent,
@@ -24,8 +22,8 @@ define( [
           TimeBar,
           ZoomBar,
           Status,
-          TrackHandles,
-          LangUtil ) {
+          TrackHandles
+        ) {
 
   var MIN_ZOOM = 300,
       DEFAULT_ZOOM = 0.5;
