@@ -42,14 +42,22 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         // BEGIN EDITING FUNCTONS
         // **********************
 
+        //On load, show the panel.
+        setTimeout(function(){
+          document.getElementById("addPopcorn").classList.add("active");
+          document.getElementById("pop-browser").classList.add("active");
+        }, 1000);
+
         // HIDE/SHOW PANELS ***
         // To show panels by default, add an .active class to them. Clicking the header will
         // toggle active/hidden states.
         addPopcorn = document.getElementById("addPopcorn");
         addPopcorn.addEventListener("click", function(e){
           if ( addPopcorn.parentNode.classList.contains("active") ){
+            addPopcorn.classList.remove("active");
             addPopcorn.parentNode.classList.remove("active");
           } else {
+            addPopcorn.classList.add("active");
             addPopcorn.parentNode.classList.add("active");
           }
         });
