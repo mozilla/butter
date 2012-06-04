@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "./iframe", "util/time" ],
-        function( EventManagerWrapper, IFrame, TimeUtil ) {
+define( [ "core/eventmanager", "util/lang" ],
+        function( EventManagerWrapper, LangUtils ) {
 
   var DEFAULT_DIMS = [ 400, 400 ];
 
@@ -141,10 +141,30 @@ define( [ "core/eventmanager", "./iframe", "util/time" ],
       }
     });
 
-  } //Editor
+  }
 
-  return Editor;
+  //return Editor;
+
+  var __editors = {};
+
+  return {
+
+    register: function( name, layoutSrc, ctor ) {
+      __editors[ name ] = {
+        create: ctor,
+        layout: layoutSrc
+      };
+    },
+
+    open: function( editorName, parentElement, butter ) {
+      var description = __editors[ editorName ],
+          compiledLayout = LangUtils.domFragment( description.layout ).querySelector( ".butter-editor" );
+
+      parentElement.appendChild( compiledLayout );
+
+      return description.create.apply( this, [ compiledLayout, butter ].concat( Array.prototype.slice.call( arguments, 3 ) ) );
+    }
+
+  };
 
 });
-
-

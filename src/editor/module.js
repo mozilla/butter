@@ -68,6 +68,7 @@
       }; //edit
 
       this.add = function( source, type ){
+        return;
         if ( !type || !source ) {
           throw new Error( "Can't create an editor without a plugin type and editor source" );
         } //if
@@ -90,12 +91,25 @@
         }
       } //trackEventMouseUp
 
-      butter.listen( "trackeventadded", function( e ){
+      butter.listen( "trackeventadded", function ( e ) {
         e.data.view.listen( "trackeventmouseup", trackEventMouseUp, false );
-      });
 
-      butter.listen( "trackeventremoved", function( e ){
-        e.data.view.unlisten( "trackeventmouseup", trackEventMouseUp, false );
+        var trackEvent = e.data;
+
+        var trackEventDoubleClicked = function ( e ) {
+          //_this.edit( e.target.trackEvent );
+
+          Editor.open( "default", butter.ui.areas.editor.element, butter, trackEvent );
+        }
+
+        e.data.view.element.addEventListener( "dblclick", trackEventDoubleClicked, false );
+
+        butter.listen( "trackeventremoved", function ( e ) {
+          if ( e.data === trackEvent ) {
+            e.data.view.element.removeEventListener( "dblclick", trackEventDoubleClicked, false );  
+            e.data.view.unlisten( "trackeventmouseup", trackEventMouseUp, false );
+          }
+        });
       });
 
       this._start = function( onModuleReady ){
@@ -146,6 +160,8 @@
       });
 
     }
+
+    this.register = Editor.register;
 
     EventEditor.__moduleName = "editor";
 

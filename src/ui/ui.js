@@ -119,6 +119,7 @@ define( [
     _element.className = "butter-tray";
 
     _areas.work = new Area( "work" );
+    _areas.editor = new Area( "editor-area" );
     _areas.statusbar = new Area( "status-bar" );
     _areas.tools = new Area( "tools" );
 
@@ -134,7 +135,9 @@ define( [
     if( uiConfig.value( "ui" ).enabled !== false ){
       document.body.classList.add( "butter-header-spacing" );
       document.body.classList.add( "butter-tray-spacing" );
+      document.body.classList.add( "butter-editor-spacing" );
       document.body.appendChild( _element );
+      document.body.appendChild( _areas.editor.element );
       butter.listen( "mediaadded", function( e ){
         e.data.createView();
       });

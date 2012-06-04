@@ -1,0 +1,6 @@
+define(
+  [
+    "../editors/default"
+  ], function(){
+  
+});

@@ -87,6 +87,10 @@ body.butter-tray-spacing.minimized {
   padding-bottom: 35px;
 }
 
+body.butter-editor-spacing {
+  padding-right: 200px;
+}
+
 @-webkit-keyframes spin {
   0%   {
     -webkit-transform:rotate(0deg);
@@ -1420,4 +1424,72 @@ input.form-error {
   position: absolute;
   left: 4px;
   width: 96px;
+}
+
+#butter-timeline .butter-default-editor {
+
+}
+
+#butter-timeline .butter-default-editor table.properties tr  td:nth-child(2) * {
+  font-size: 0.9em;
+}
+
+#butter-timeline .butter-default-editor table {
+  font-family: helvetica !important;
+  color: #fff !important;
+}
+
+#butter-timeline .butter-default-editor p.message {
+  color: #FF0000;
+}
+
+#editor-area {
+  position: fixed;
+  z-index: 2000000000;
+  top: 35px;
+  bottom: 0;
+  right: 0;
+  width: 200px;
+  border: 1px solid #000;
+  background-image: url( "../resources/bg.jpg" );
+  -moz-transition: right 0.35s;
+  -ms-transition: right 0.35s;
+  -o-transition: right 0.35s;
+  -webkit-transition: right 0.35s;
+  transition: right 0.35s;
+  border-left: 1px solid #222;
+  box-shadow: inset 5px 0 5px rgba(0,0,0,.2);
+  color: #EEE;
+}
+
+#editor-area > .butter-editor {
+  height: 100%;
+  font: 14px 'MetaBold';
+}
+
+#editor-area > .butter-editor h1 {
+  font-size: 16px;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  margin: 0;
+}
+
+#editor-area > .butter-editor .trackevent-property {
+  padding: 10px;
+  clear: all;
+}
+
+#editor-area > .butter-editor .trackevent-property select, 
+#editor-area > .butter-editor .trackevent-property input {
+  float: right;
+}
+
+#editor-area > .butter-editor > .editor-tabs {
+  position: absolute;
+  top: 60px;
+  left: 5px;
+  bottom: 5px;
+  right: 5px;
+  border-radius: 5px;
 }
