@@ -14,13 +14,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         media.addTrack( "Track2" );
         media.addTrack( "Track3" );
 
-<<<<<<< HEAD
-        butter.tracks[ 1 ].addTrackEvent({
-          type: "image2",
-=======
          butter.tracks[ 1 ].addTrackEvent({
           type: "zoink",
->>>>>>> added icon styles with minified icons
           popcornOptions: {
             start: 0,
             end: 1,
@@ -33,13 +28,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-<<<<<<< HEAD
-        butter.tracks[ 2 ].addTrackEvent({
-          type: "image2",
-=======
         butter.tracks[ 0 ].addTrackEvent({
           type: "zoink",
->>>>>>> added icon styles with minified icons
           popcornOptions: {
             start: 0,
             end: 2,
@@ -51,29 +41,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-<<<<<<< HEAD
-        // **********************
-        // BEGIN EDITING FUNCTONS
-        // **********************
-
-        //On load, show the panel.
-        setTimeout(function(){
-          document.getElementById("addPopcorn").classList.add("active");
-          document.getElementById("pop-browser").classList.add("active");
-        }, 1000);
-
-        // HIDE/SHOW PANELS ***
-        // To show panels by default, add an .active class to them. Clicking the header will
-        // toggle active/hidden states.
-        addPopcorn = document.getElementById("addPopcorn");
-        addPopcorn.addEventListener("click", function(e){
-          if ( addPopcorn.parentNode.classList.contains("active") ){
-            addPopcorn.classList.remove("active");
-            addPopcorn.parentNode.classList.remove("active");
-          } else {
-            addPopcorn.classList.add("active");
-            addPopcorn.parentNode.classList.add("active");
-=======
         butter.tracks[ 0 ].addTrackEvent({
           type: "zoink",
           popcornOptions: {
@@ -111,7 +78,30 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             style: "fact",
             top: "20%",
             left: "40%"
->>>>>>> added icon styles with minified icons
+          }
+        });
+
+        // **********************
+        // BEGIN EDITING FUNCTONS
+        // **********************
+
+        //On load, show the panel.
+        setTimeout(function(){
+          document.getElementById("addPopcorn").classList.add("active");
+          document.getElementById("pop-browser").classList.add("active");
+        }, 1000);
+
+        // HIDE/SHOW PANELS ***
+        // To show panels by default, add an .active class to them. Clicking the header will
+        // toggle active/hidden states.
+        addPopcorn = document.getElementById("addPopcorn");
+        addPopcorn.addEventListener("click", function(e){
+          if ( addPopcorn.parentNode.classList.contains("active") ){
+            addPopcorn.classList.remove("active");
+            addPopcorn.parentNode.classList.remove("active");
+          } else {
+            addPopcorn.classList.add("active");
+            addPopcorn.parentNode.classList.add("active");
           }
         });
         headers = document.querySelectorAll(".widget-list li:first-child");
@@ -136,7 +126,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         // BUTTONS ***
         // If a link is clicked in the sidebar widget, it adds a track event of the
         // type defined in the 'data-butter-plugin' attribute. If 'data-butter-default' is defined, a special
-        // default set can be added from the manifest (see createDefault). 
+        // default set can be added from the manifest (see createDefault).
         // The event is added to the next available track
         // (see findEmptyTrack)
         btns = document.querySelectorAll(".widget-list li:not(:first-child) a");
@@ -197,9 +187,11 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             for(j=0;j<trackEvents.length;j++) {
               start = +trackEvents[j].popcornOptions.start;
               end = +trackEvents[j].popcornOptions.end;
-              if( (start - newStartTime < duration) || (start < newStartTime && newStartTime > end) ) {
+
+              if( start - newStartTime < duration || (start < newStartTime && newStartTime > end) ) {
                 break;
               } else {
+                console.log( j, i );
                 return i;
               }
             }
@@ -224,6 +216,24 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                 target: "video-overlay"
               }
             },
+            zoink: {
+              speech: {
+                style: "speech",
+                text: "This is really cool!",
+                width: "200px",
+                top: "50%",
+                left: "50%",
+                target: "video-overlay"
+              },
+              factfiction: {
+                style: "fact",
+                text: "This is totally not true",
+                width: "200px",
+                top: "50%",
+                left: "50%",
+                target: "video-overlay"
+              }
+            },
             image2: {
               "default": {
                 src: "http://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Persian_Cat_(kitten).jpg/220px-Persian_Cat_(kitten).jpg"
@@ -239,6 +249,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       media.onReady( start );
 
       
-    } 
+    }
   }); //Butter
 }, false );
