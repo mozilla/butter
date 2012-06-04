@@ -63,7 +63,10 @@ define( [
 
     if( !_type ){
       _logger.log( "Warning: " + _id + " has no type." );
-    } //if
+    }
+    else {
+      this.manifest = Popcorn.manifest[ _type ];
+    }
 
     _popcornOptions.start = _popcornOptions.start || 0;
     _popcornOptions.start = TimeUtil.roundTime( _popcornOptions.start );
@@ -336,6 +339,7 @@ define( [
         },
         set: function( importData ){
           _type = _popcornOptions.type = importData.type;
+          this.manifest = Popcorn.manifest[ _type ];
           if( importData.name ){
             _name = importData.name;
           }

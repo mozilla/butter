@@ -14,5 +14,5 @@ define(function( require, exports, module ){
     }
   });
 
-  ctx( [ "main" ] );
+  ctx( [ "../include/editors", "main" ] );
 });
