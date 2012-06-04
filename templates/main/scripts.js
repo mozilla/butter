@@ -145,7 +145,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
               start = +trackEvents[j].popcornOptions.start;
               end = +trackEvents[j].popcornOptions.end;
               if( (start - newStartTime < duration) || (start < newStartTime && newStartTime > end) ) {
-                continue;
+                break;
               } else {
                 return i;
               }
