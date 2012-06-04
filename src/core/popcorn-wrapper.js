@@ -43,7 +43,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _popcorn = undefined;
       }
       catch( e ){
-        _logger.log( "WARNING: Popcorn did NOT get destroyed properly: \n" + e.message + "\n" + e.stack );
+        _logger.warn( "WARNING: Popcorn did NOT get destroyed properly: \n" + e.message + "\n" + e.stack );
       } //try
     };
 
@@ -150,7 +150,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
       // if there isn't a target, we can't really set anything up, so stop here
       if( !target ){
-        _logger.log( "Warning: tried to prepare media with null target." );
+        _logger.warn( "Warning: tried to prepare media with null target." );
         return;
       }
 
@@ -264,7 +264,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           target = target.id;
         }
         else{
-          _logger.log( "WARNING: Unexpected non-string Popcorn target: " + target );
+          _logger.warn( "WARNING: Unexpected non-string Popcorn target: " + target );
         }
       } //if
 
@@ -319,7 +319,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
               optionString = JSON.stringify( saveOptions, null, 2 );
             } catch ( jsonError ) {
               optionString = false;
-              _logger.log( "WARNING: Unable to export event options: \n" + jsonError.message );
+              _logger.warn( "WARNING: Unable to export event options: \n" + jsonError.message );
             }
 
             if ( optionString ) {
@@ -452,7 +452,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         container = document.getElementById( container );
       } //if
       if( !container ){
-        _logger.log( "Warning: tried to clear media with null target." );
+        _logger.warn( "Warning: tried to clear media with null target." );
         return;
       } //if
       if( _popcorn ){

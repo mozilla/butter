@@ -37,6 +37,17 @@
       };
 
       /**
+       * Member: warn
+       *
+       * Outputs a warning message to the console prefixed by the given name.
+       *
+       * @param {String} message: Contents of the warning message
+       */
+      this.warn = function( message ) {
+        console.warn( "[" + name + "] " + message );
+      };
+
+      /**
        * Member: error
        *
        * Throws an error with the given message prefixed by the given name.
@@ -45,11 +56,8 @@
        * @throws: Obligatory, since this is an error
        */
       this.error = function( message ) {
-        if ( __debug ) {
-          throw new Error( "[" + name + "] " + message );
-        }
+        throw new Error( "[" + name + "] " + message );
       };
-
     }
 
     /**
@@ -65,8 +73,6 @@
       }
       return __debug;
     };
-
     return Logger;
   });
-
 }());

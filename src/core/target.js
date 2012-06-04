@@ -25,7 +25,7 @@
       } //if
 
       if( !_element ){
-        _logger.log( "Warning: Target element is null." );
+        _logger.warn( "Warning: Target element is null." );
       }
       else {
         _pageElement = new PageElement( _element, {
