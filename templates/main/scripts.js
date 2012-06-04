@@ -120,11 +120,12 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             for(j=0;j<trackEvents.length;j++) {
               start = +trackEvents[j].popcornOptions.start;
               end = +trackEvents[j].popcornOptions.end;
-
-              if( start <= newStartTime + duration && newStartTime < end ) {
+              if( start <= (newStartTime + duration) && newStartTime <= end ) {
                 break;
-              } else {
+              } else if ( j === trackEvents.length - 1 ){
                 return i;
+              } else {
+                continue;
               }
             }
           }
@@ -137,41 +138,58 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         // DEFAULT MANIFEST ***
         // Returns a set of defaults given a plugin type
         function createDefaults( pluginType, defaultType ){
-          var _manifest = {
-            text: {
-              "default": {
-                text: "Hello world",
-                target: "video-overlay"
-              },
-              subtitles: {
-                text: "This is some subtitles",
-                target: "video-overlay"
-              }
-            },
-            zoink: {
-              speech: {
-                style: "speech",
-                text: "This is really cool!",
-                width: "200px",
-                top: "50%",
-                left: "50%",
-                target: "video-overlay"
-              },
-              factfiction: {
-                style: "fact",
-                text: "This is totally not true",
-                width: "200px",
-                top: "50%",
-                left: "50%",
-                target: "video-overlay"
-              }
-            },
-            image2: {
-              "default": {
-                src: "http://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Persian_Cat_(kitten).jpg/220px-Persian_Cat_(kitten).jpg"
-              }
-            }
-          };
+          var iconList = ["check", "x"],
+              _manifest = {
+                text: {
+                  "default": {
+                    text: "Hello world",
+                    target: "video-overlay"
+                  },
+                  subtitles: {
+                    text: "This is some subtitles",
+                    target: "subtitles"
+                  }
+                },
+                zoink: {
+                  speech: {
+                    style: "speech",
+                    text: "This is really cool!",
+                    width: "200px",
+                    top: Math.floor(Math.random()*100) + "%",
+                    left: Math.floor(Math.random()*100) + "%",
+                    target: "video-overlay"
+                  },
+                  fact: {
+                    style: "fact",
+                    text: "This is totally true",
+                    width: "200px",
+                    top: Math.floor(Math.random()*100) + "%",
+                    left: Math.floor(Math.random()*100) + "%",
+                    target: "video-overlay"
+                  },
+                  fiction: {
+                    style: "fiction",
+                    text: "This is totally bogus.",
+                    width: "200px",
+                    top: Math.floor(Math.random()*100) + "%",
+                    left: Math.floor(Math.random()*100) + "%",
+                    target: "video-overlay"
+                  },
+                  icon: {
+                    style: "icon",
+                    classes: iconList[ Math.floor( Math.random() * iconList.length ) ],
+                    width: "200px",
+                    top: Math.floor(Math.random()*100) + "%",
+                    left: Math.floor(Math.random()*100) + "%",
+                    target: "video-overlay"
+                  }
+                },
+                image2: {
+                  "default": {
+                    src: "http://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Persian_Cat_(kitten).jpg/220px-Persian_Cat_(kitten).jpg"
+                  }
+                }
+              };
           return _manifest[ pluginType ][ defaultType ];
         }
 

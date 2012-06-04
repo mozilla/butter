@@ -212,6 +212,7 @@
           container.style.top = top;
           container.style.left = left;
           container.style.width = width;
+          container.style.marginLeft = -width.replace("px", "")/2 + "px";
           container.style.zIndex = +options.order + 1000;
           container.classList.add("pop");
           

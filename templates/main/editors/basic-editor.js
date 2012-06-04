@@ -90,7 +90,6 @@
     _comm.listen( "trackeventdata", function( e ){
       var popcornOptions = e.data.popcornOptions,
           targets = e.data.targets,
-          masterTarget = "video-overlay", //hard-coded for this template
           media = e.data.media,
           table = document.getElementById( "table" ),
           mediaName = "Current Media Element",
@@ -141,7 +140,6 @@
                 elem.appendChild( option );
               }
               elem.value = this.defaultValue( manifestItem, popcornOptions[ manifestProp ] );
-              if( manifestProp === "target" ) { elem.value = masterTarget }
               return elem;
             }
           };

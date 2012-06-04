@@ -22,9 +22,11 @@
             <li><a><i class="icon-small icon-arrow"></i>
               Annotions
             </a></li>
-            <li><a data-butter-plugin="text">Text<i class="icon icon-text"></i></a></li>
+            <li><a data-butter-plugin="text" data-butter-default="subtitles">Text<i class="icon icon-text"></i></a></li>
             <li><a data-butter-plugin="zoink" data-butter-default="speech">Bubble</a><i class="icon icon-zoink"></i></li>
-            <li><a data-butter-plugin="zoink" data-butter-default="factfiction">Fact/Fiction</a><i class="icon icon-fiction"></i></li>
+            <li><a data-butter-plugin="zoink" data-butter-default="fiction">Fiction</a><i class="icon icon-fiction"></i></li>
+            <li><a data-butter-plugin="zoink" data-butter-default="fact">Fact</a><i class="icon icon-fact"></i></li>
+            <li><a data-butter-plugin="zoink" data-butter-default="icon">Icon</a><i class="icon icon-check"></i></li>
           </ul>
           <ul class="widget-list">
             <li><a><i class="icon-small icon-arrow"></i>
@@ -61,6 +63,7 @@
       </video>
       <div id="video-overlay" data-butter="target">
         <label>#video-overlay</label>
+        <div id="subtitles" class="subtitles" data-butter="target"></div>
       </div>
     </div>
     <div id="sidebar" data-butter="target"><label>#sidebar</label></div>

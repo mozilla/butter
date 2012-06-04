@@ -5,13 +5,14 @@
   width: 250px;
   margin-right: 20px; /* scrollbars */
   position: fixed;
-  left: 5px;
+  right: 4px;
   top: 40px;
   color: #EEE;
   font-size: 13px;
   border-radius: 6px;
   z-index: 2139000001; /* eek. edit button */
   border-radius: 6px;
+  text-align: right;
 }
 
 .widget-header {
@@ -44,7 +45,7 @@
 
 .widget-container { 
   position: relative;
-  top: 5px;
+  top: 7px;
   box-shadow: 0 3px 8px 4px rgba(0,0,0,.4);
   border-radius: 6px;
   text-align: left;
@@ -61,7 +62,7 @@
 .widget-container:after {
   border-bottom-color: #000;
   border-width: 15px;
-  left: 20%;
+  left: 70%;
   margin-left: -15px;
   z-index: 3000;
 }
@@ -236,6 +237,8 @@
 .widget .icon-zoink{ width: 70px; background: url(../img/icon-zoink.png) center no-repeat; }
 .widget .icon-text{ width: 70px; background: url(../img/icon-text.png) center no-repeat; }
 .widget .icon-fiction{ width: 70px; background: url(../img/icon-fiction.png) center no-repeat; }
+.widget .icon-fact{ width: 70px; background: url(../img/icon-fact.png) center no-repeat; }
+.widget .icon-check{ width: 70px; background: url(../img/icon-check.png) center no-repeat; }
 .widget .icon-small { 
   position: relative;
   top: 3px;

@@ -17,6 +17,14 @@ html {
   float: left;
 }
 
+.subtitles {
+  position: absolute;
+  bottom: 50px;
+  color: #FFF;
+  text-align: center;
+  width: 100%;
+}
+
 #video { width: 100%; }
 
 #video-overlay {
