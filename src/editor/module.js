@@ -17,12 +17,18 @@
 
       moduleOptions = moduleOptions || {};
 
-      var _editors = {},
-          _editorContainer,
-          _openEditor,
+      var _currentEditor,
           _this = this;
 
       EventManagerWrapper( _this );
+
+      function openEditor( trackEvent ) {
+        if( _currentEditor ) {
+          _currentEditor.close();
+        }
+        _currentEditor = Editor.create( "default", butter );
+        _currentEditor.open( butter.ui.areas.editor.element, trackEvent );
+      }
 
       butter.listen( "trackeventcreated", function( e ){
         if( [ "target", "media" ].indexOf( e.data.by ) > -1 && butter.ui.contentState === "timeline" ){
@@ -30,127 +36,33 @@
         }
       });
 
-      function editorClosed( e ){
-        if( butter.ui.contentState === "editor" ){
-          butter.ui.popContentState( "editor" );
-        }
-        _openEditor.unlisten( "close", editorClosed );
-        _openEditor = null;
-      }
-
-      function editorOpened( e ){
-        if( butter.ui.contentState !== "editor" ){
-          butter.ui.pushContentState( "editor" );
-        }
-      }
-
       this.edit = function( trackEvent ){
         if ( !trackEvent || !( trackEvent instanceof TrackEvent ) ){
           throw new Error( "trackEvent must be valid to start an editor." );
-        } //if
-
-        var type = trackEvent.type;
-        if ( !_editors[ type ] ){
-          type = "default";
-        } //if
-        if( !_openEditor ){
-          var editor = _editors[ type ];
-          if( editor ){
-            _openEditor = editor;
-            editor.listen( "open", editorOpened );
-            editor.open( trackEvent );
-            editor.listen( "close", editorClosed );
-          }
-          else{
-            throw new Error( "Editor " + type + " not found." );
-          }
         }
-      }; //edit
-
-      this.add = function( source, type ){
-        return;
-        if ( !type || !source ) {
-          throw new Error( "Can't create an editor without a plugin type and editor source" );
-        } //if
-        var editor = _editors[ type ] = new Editor( butter, source, type, _editorContainer );
-        return editor;
-      }; //add
-
-      this.remove = function( type ){
-        if ( !type ) {
-          return;
-        }
-        var oldSource = _editors[ type ];
-        _editors[ type ] = undefined;
-       return oldSource;
-      }; //remove
+        openEditor( trackEvent );
+      };
 
       butter.listen( "trackeventadded", function ( e ) {
-
         var trackEvent = e.data;
 
         var trackEventDoubleClicked = function ( e ) {
-          //_this.edit( e.target.trackEvent );
+          openEditor( trackEvent );
+        };
 
-          Editor.open( "default", butter.ui.areas.editor.element, butter, trackEvent );
-        }
-
-        e.data.view.element.addEventListener( "dblclick", trackEventDoubleClicked, false );
+        e.data.view.element.addEventListener( "click", trackEventDoubleClicked, false );
 
         butter.listen( "trackeventremoved", function ( e ) {
           if ( e.data === trackEvent ) {
-            e.data.view.element.removeEventListener( "dblclick", trackEventDoubleClicked, false );  
+            e.data.view.element.removeEventListener( "click", trackEventDoubleClicked, false );
           }
         });
 
       });
 
       this._start = function( onModuleReady ){
-        var parentElement = document.createElement( "div" );
-        parentElement.id = "butter-editor";
-
-        _editorContainer = document.createElement( "div" );
-        _editorContainer.id = "editor-container";
-        parentElement.appendChild( _editorContainer );
-
-        parentElement.classList.add( "fadable" );
-
-        butter.ui.areas.work.addComponent( parentElement, {
-          states: [ "editor" ],
-          transitionIn: function(){
-            parentElement.style.display = "block";
-            setTimeout(function(){
-              parentElement.style.opacity = "1";
-            }, 0);
-          },
-          transitionInComplete: function(){
-
-          },
-          transitionOut: function(){
-            if( _openEditor ){
-              _openEditor.close();
-            }
-            parentElement.style.opacity = "0";
-          },
-          transitionOutComplete: function(){
-            parentElement.style.display = "none";
-          }
-        });
-
-        parentElement.style.display = "none";
-
-        for( var editorName in moduleOptions ){
-          if( moduleOptions.hasOwnProperty( editorName ) ){
-            _this.add( moduleOptions[ editorName ], editorName );
-          }
-        }
-
         onModuleReady();
-      }; //start
-
-      butter.listen( "trackeventeditrequested", function( e ){
-        _this.edit( e.target );
-      });
+      };
 
     }
 
