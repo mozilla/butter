@@ -261,7 +261,10 @@
           collectedEvents = collectedEvents.concat( _tracks[ i ].trackEvents );
         }
 
-        return _popcornWrapper.generatePopcornString( _popcornOptions, _url, _target, null, callbacks, scripts, collectedEvents );
+        /* TODO: determine if we need to turn on frameAnimation or not before calling generatePopcornString
+         * for now we default to off when exporting by passing an empty options object
+         */
+        return _popcornWrapper.generatePopcornString( {}, _url, _target, null, callbacks, scripts, collectedEvents );
       };
 
       Object.defineProperties( this, {
