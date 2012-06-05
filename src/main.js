@@ -707,17 +707,9 @@
             catch( e ){
               _this.dispatch( "loaddataerror", "Saved data not formatted properly." );
             }
-
-            if ( !savedData.projectID ) {
-              _this.importProject( savedData );
-            }
-            else {
-              _this.cornfield.load( savedData.projectID, function( e ) {
-                if ( e.error !== "okay" ) {
-                  _logger.log( "Could not auto load project with specified id. Status: " + e.error );
-                }
-              });
-            }
+            _this.project.id = savedData.projectID;
+            _this.project.name = savedData.name;
+            _this.importProject( savedData );
           }
           else {
             _logger.log( "Butter saved data not found: " + savedDataUrl );
