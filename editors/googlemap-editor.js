@@ -178,10 +178,9 @@ document.addEventListener( "DOMContentLoaded", function domReady() {
       function defaultValue( item, val ) {
         if ( val === undefined || typeof val === "object" ) {
           if ( item[ "default" ] ) {
-            val = item[ "default" ];
-          } else {
-            val = item.type === "number" ? 0 : "";
+            return item[ "default" ];
           }
+          return item.type === "number" ? 0 : "";
         }
         return val;
       }
