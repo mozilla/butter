@@ -52,16 +52,11 @@ define( [
 
     _this.popcornOptions = _popcornOptions;
 
-    function defaultValue( item, val ) {
-      // Don't print "undefined" or the like
-      if ( val === undefined || typeof val === "object" ) {
-        if ( item.default ) {
-          val = item.default;
-        } else {
-          val = item.type === "number" ? 0 : "";
-        }
+    function defaultValue( item ) {
+      if ( item.default ) {
+        return item.default;
       }
-      return val;
+      return item.type === "number" ? 0 : "";
     }
 
     if( !_type ){
@@ -111,7 +106,7 @@ define( [
       if( failed ){
         _this.dispatch( "trackeventupdatefailed", failed );
       } else {
-        var _manifest = Popcorn.manifest[ _type ].options;
+        var _manifest = Popcorn.manifest[ _type ] && Popcorn.manifest[ _type ].options;
         for ( var prop in _manifest ) {
           if ( _manifest.hasOwnProperty( prop ) ) {
             if ( updateOptions[ prop ] === undefined ) {
