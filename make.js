@@ -111,6 +111,10 @@ target['check-lint'] = function() {
     return file.match(/\.js$/);
   }).join(" ");
 
+  files += " " + find('editors').filter( function( file ) {
+    return file.match(/\.js$/);
+  }).join(" ");
+
   exec(JSLINT + ' ' + files + ' --show-non-errors');
 };
 
