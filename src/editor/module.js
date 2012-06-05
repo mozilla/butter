@@ -43,27 +43,20 @@
         openEditor( trackEvent );
       };
 
-      function trackEventMouseUp( e ){
-        if( butter.selectedEvents.length === 1 && !e.target.trackEvent.dragging ){
-          _this.edit( e.target.trackEvent );
-        }
-      } //trackEventMouseUp
-
       butter.listen( "trackeventadded", function ( e ) {
         var trackEvent = e.data;
 
-        trackEvent.view.listen( "trackeventmouseup", trackEventMouseUp, false );
-
-        var trackEventClicked = function ( e ) {
-          openEditor( trackEvent );
+        var trackEventMouseUp = function ( e ) {
+          if( butter.selectedEvents.length === 1 && !trackEvent.dragging ){
+            openEditor( trackEvent );
+          }
         };
 
-        e.data.view.element.addEventListener( "click", trackEventClicked, false );
+        e.data.view.element.addEventListener( "click", trackEventMouseUp, false );
 
         butter.listen( "trackeventremoved", function ( e ) {
           if ( e.data === trackEvent ) {
-            e.data.view.unlisten( "trackeventmouseup", trackEventMouseUp, false );
-            e.data.view.element.removeEventListener( "click", trackEventClicked, false );
+            e.data.view.element.removeEventListener( "mouseup", trackEventMouseUp, true );
           }
         });
       });

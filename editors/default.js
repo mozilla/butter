@@ -12,10 +12,31 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
 
     var _this = this;
 
+    var _butter = butter,
+        _rootElement = rootElement,
+        _targets = [ butter.currentMedia ].concat( butter.targets ),
+        _messageContainer = _rootElement.querySelector( "div.error-message" );
+
+    function setErrorState ( message ) {
+      if ( message ) {
+        _messageContainer.innerHTML = message;
+        _messageContainer.parentNode.style.height = _messageContainer.offsetHeight + "px";
+        _messageContainer.parentNode.style.visibility = "visible";
+        _messageContainer.parentNode.classList.add( "open" );
+      }
+      else {
+        _messageContainer.innerHTML = "";
+        _messageContainer.parentNode.style.height = "";
+        _messageContainer.parentNode.style.visibility = "";
+        _messageContainer.parentNode.classList.remove( "open" );
+      }
+    }
+
     Editor.BaseEditor( _this, butter, rootElement, {
       open: function ( parentElement, trackEvent ) {
         trackEvent.listen( "trackeventupdated", function ( e ) {
           _this.updatePropertiesFromManifest( e.target.popcornOptions );
+          setErrorState( false );
         });
         _this.createPropertiesFromManifest( trackEvent );
       },
@@ -23,9 +44,15 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
       }
     });
     
-    var _butter = butter,
-        _rootElement = rootElement,
-        _targets = [ butter.currentMedia ].concat( butter.targets );
+    function updateTrackEventWithTryCatch ( trackEvent, properties ) {
+      try {
+        trackEvent.update( properties );
+      }
+      catch ( e ) {
+        
+        setErrorState( e.toString() );
+      }
+    }
 
     function createTargetsList ( trackEvent ) {
       var propertyRootElement = __defaultLayouts.querySelector( ".trackevent-property.targets" ).cloneNode( true ),
@@ -50,10 +77,34 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
         var updateOptions = {};
         updateOptions[ propertyName ] = element.value;
         trackEvent.update( updateOptions );
-        var target = _this.butter.getTargetByType( "elementID", trackEvent.popcornOptions.target );
+        var target = _butter.getTargetByType( "elementID", trackEvent.popcornOptions.target );
         if( target ) {
           target.view.blink();
         }
+      }, false );
+    }
+
+    function attachStartEndHandler( element, trackEvent, propertyName ) {
+      element.addEventListener( "blur", function( e ) {
+        var updateOptions = {};
+        updateOptions[ propertyName ] = element.value;
+        updateTrackEventWithTryCatch( trackEvent, updateOptions );
+      }, false );
+      element.addEventListener( "keyup", function( e ) {
+        var value = element.value.replace( /\s/g, "" );
+        if ( value && value.length > 0 ) {
+          var updateOptions = {};
+          updateOptions[ propertyName ] = value;
+          updateTrackEventWithTryCatch( trackEvent, updateOptions );
+        }
+      }, false );
+    }
+
+    function attachCheckboxChangeHandler ( element, trackEvent, propertyName ) {
+      element.addEventListener( "click", function( e ) {
+        var updateOptions = {};
+        updateOptions[ propertyName ] = element.checked;
+        trackEvent.update( updateOptions );
       }, false );
     }
 
@@ -74,9 +125,16 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
       var elem = manifestEntry.elem || "default",
           propertyArchetype = __defaultLayouts.querySelector( ".trackevent-property." + elem ).cloneNode( true ),
           input,
-          select;
+          select,
+          itemLabel = manifestEntry.label || name;
 
-      propertyArchetype.querySelector( ".property-name" ).innerHTML = manifestEntry.label || name;
+      if ( itemLabel === "In" ) {
+        itemLabel = "Start (seconds)";
+      } else if ( itemLabel === "Out" ) {
+        itemLabel = "End (seconds)";
+      }
+
+      propertyArchetype.querySelector( ".property-name" ).innerHTML = itemLabel;
       if ( manifestEntry.elem === "select" ) {
         select = propertyArchetype.querySelector( "select" );
         select.setAttribute( "data-manifest-key", name );
@@ -85,11 +143,30 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
       else {
         input = propertyArchetype.querySelector( "input" );
         if ( data ) {
-          input.value = data;  
+          // Don't print "undefined" or the like
+          if ( data === undefined || typeof data === "object" ) {
+            if ( manifestEntry.default ) {
+              data = manifestEntry.default;
+            } else {
+              data = manifestEntry.type === "number" ? 0 : "";
+            }
+          }
+          input.value = data;
         }
         input.type = manifestEntry.type;
         input.setAttribute( "data-manifest-key", name );
-        attachInputChangeHandler( input, trackEvent, name );
+        if ( [ "start", "end" ].indexOf( name ) > -1 ) {
+          attachStartEndHandler( input, trackEvent, name );
+        }
+        else {
+          if ( input.type === "checkbox" ) {
+            attachCheckboxChangeHandler( input, trackEvent, name );
+          }
+          else {
+            attachInputChangeHandler( input, trackEvent, name );
+          }
+          
+        }
       }
 
       return propertyArchetype;
@@ -115,7 +192,13 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
       for ( var option in popcornOptions ) {
         if ( popcornOptions.hasOwnProperty( option ) ) {
           element = _rootElement.querySelector( "[data-manifest-key='" + option + "']" );
-          element.value = popcornOptions[ option ];
+
+          if ( element.type === "checkbox" ) {
+            element.checked = popcornOptions[ option ];
+          }
+          else {
+            element.value = popcornOptions[ option ];
+          }
         }
       }
     };
@@ -123,23 +206,6 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
   });
 
 });
-
-//     _comm.listen( "close", function( e ){
-//       // use this to process something right before the editor closes
-//     });
-
-//     _comm.listen( "trackeventupdated", function( e ){
-//       for( var item in _manifest ){
-//         var element = document.getElementById( item );
-//         element.value = e.data[ item ];
-//       } //for
-//     });
-
-//     _comm.listen( "trackeventupdatefailed", function( e ) {
-//       if( e.data === "invalidtime" ){
-//         document.getElementById( "message" ).innerHTML = "You've entered an invalid start or end time. Please verify that they are both greater than 0, the end time is equal to or less than the media's duration, and that the start time is less than the end time.";
-//       } //if
-//     });
 
 //     _comm.listen( "trackeventdata", function( e ){
 //       var popcornOptions = e.data.popcornOptions,
