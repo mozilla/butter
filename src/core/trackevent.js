@@ -53,15 +53,11 @@ define( [
     _this.popcornOptions = _popcornOptions;
 
     function defaultValue( item ) {
-      var val;
-
       if ( item.default ) {
-        val = item.default;
+        return item.default;
       } else {
-        val = item.type === "number" ? 0 : "";
+        return item.type === "number" ? 0 : "";
       }
-
-      return val;
     }
 
     if( !_type ){
