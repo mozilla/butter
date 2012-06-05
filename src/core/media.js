@@ -262,9 +262,10 @@
         }
 
         /* TODO: determine if we need to turn on frameAnimation or not before calling generatePopcornString
-         * for now we default to off when exporting by passing an empty options object
+         * for now we default to off when exporting by setting frameAnimation to false
          */
-        return _popcornWrapper.generatePopcornString( {}, _url, _target, null, callbacks, scripts, collectedEvents );
+        _popcornOptions.frameAnimation = false;
+        return _popcornWrapper.generatePopcornString( _popcornOptions, _url, _target, null, callbacks, scripts, collectedEvents );
       };
 
       Object.defineProperties( this, {
