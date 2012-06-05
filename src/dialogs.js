@@ -16,7 +16,8 @@
   ];
 
   var include = [];
-  for ( var i = 0; i < dialogs.length; ++i ) {
+  var i = dialogs.length;
+  while ( i-- ) {
     include.push( "dialog/dialogs/" + dialogs[ i ] );
   }
 
