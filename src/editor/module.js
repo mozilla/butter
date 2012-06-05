@@ -28,6 +28,7 @@
         }
         _currentEditor = Editor.create( "default", butter );
         _currentEditor.open( butter.ui.areas.editor.element, trackEvent );
+        return _currentEditor;
       }
 
       butter.listen( "trackeventcreated", function( e ){
@@ -40,7 +41,7 @@
         if ( !trackEvent || !( trackEvent instanceof TrackEvent ) ){
           throw new Error( "trackEvent must be valid to start an editor." );
         }
-        openEditor( trackEvent );
+        return openEditor( trackEvent );
       };
 
       butter.listen( "trackeventadded", function ( e ) {
