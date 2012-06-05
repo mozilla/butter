@@ -89,7 +89,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
     // For Firefox
     innerElement.addEventListener( "DOMMouseScroll", function( e ){
       if( e.axis === e.VERTICAL_AXIS && !e.shiftKey ){
-        innerElement.scrollTop += e.detail * 2;
+        outerElement.scrollTop += e.detail * 2;
         setHandlePosition();
         e.preventDefault();
       }
