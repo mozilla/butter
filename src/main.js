@@ -114,6 +114,8 @@
 
       EventManagerWrapper( _this );
 
+      // Leave a reference on the instance to expose dialogs to butter users at runtime.
+      // Especially good for letting people use/create dialogs without being in the butter core.
       this.dialog = Dialog;
 
       this.project = {

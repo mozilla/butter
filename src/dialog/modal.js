@@ -28,6 +28,7 @@ define( [], function(){
 
     this.destroy = function(){
       __container.removeChild( _element );
+      _element = null;
     };
 
     Object.defineProperties( this, {
