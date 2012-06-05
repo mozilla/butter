@@ -1,0 +1,332 @@
+<!doctype html>
+<html>
+  <head>
+  	<meta charset="utf-8">
+  	<title>Popcorn Maker: context</title>
+    <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
+    <script src="../../src/butter.js" data-butter-exclude /></script>
+    <script src="context.js" data-butter-exclude /></script>
+
+ 	 <style type="text/css" />
+html, body, div, span, object,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td, footer {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	background: transparent;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	line-height: 1;
+	font-family: Helvetica, Arial, "Lucida Grande";
+	font-size: 15px;
+    margin-top: 50px;
+    padding: 0;
+    height: 100%;
+}
+
+header, footer, article, section, aside, footer {
+    display:block;
+}
+
+a {
+	text-decoration: none;
+	color: #cc433d;
+}
+
+a:hover{
+	color: #f27c77;
+}
+
+h2 {
+	font-size: 18px;
+	font-weight: 300;
+	font-style: normal;
+}
+
+#wrapper {
+    width: 895px;
+    margin: 0 auto;
+}
+
+#title {
+    float: left;
+    padding: 15px 0 15px 0;
+    width: 330px;
+	-webkit-box-shadow: -1px 1px 1px #d9d9d9;
+	-moz-box-shadow: -1px 1px 1px #d9d9d9;
+	box-shadow:  -1px 1px 1px #d9d9d9;
+	border: 1px solid #c6c6c6;
+}
+
+#title a {
+	color: #2788d3;
+	font-family: Arial,sans-serif;
+	font-size: 30px;
+	font-weight: bold;
+	text-transform: lowercase;
+	text-decoration: none;
+	margin-left: 75px;
+}
+
+#title a:hover{
+	color: #5c6a98;
+	
+	}
+	
+#about {
+	float: right;
+	height: 60px;
+	width: 550px;
+	background: #FFF;
+	-webkit-box-shadow: -1px 1px 1px #d9d9d9;
+	-moz-box-shadow: -1px 1px 1px #d9d9d9;
+	box-shadow:  -1px 1px 1px #d9d9d9;
+	border: 1px solid #c6c6c6;
+}
+
+#text {
+	float:left;
+	font-size: 14px;
+	line-height: 16px;
+	width: 492px;
+	margin: 15px 0 0 17px;
+}
+
+#logo {
+  float: right;
+  margin: 10px 8px 0 0;
+}
+
+#leftcontent {
+  clear: both;
+  margin-bottom: 5px;
+  float: left;
+  width: 540px;
+}
+
+#rightcontent {
+  float: right;
+  width: 340px;
+}
+
+#Box2 {
+  font-size:18px;
+  line-height: 22px;
+  min-height: 70px;
+  width: 320px;
+}
+
+#Box3 {
+  font-size:18px;
+  line-height: 22px;
+  min-height: 70px;
+  width: 320px;
+}
+
+#Box4 {
+    min-height: 145px;
+    width: 300px;
+}
+
+
+#Box4 a {
+  font-size:18px;
+  line-height: 30px;
+
+}
+
+#Box1 {
+  min-height: 50px;
+  width: 520px;
+}
+
+
+#video {
+  min-height: 360px;
+  width: 540px;
+}
+
+aside {
+	margin-top: 14px;
+	padding: 12px;
+	background: #FFF;
+	position: relative;
+	-webkit-box-shadow: -1px 1px 1px #d9d9d9;
+	-moz-box-shadow: -1px 1px 1px #d9d9d9;
+	box-shadow:  -1px 1px 1px #d9d9d9;
+	border: 1px solid #c6c6c6;
+	margin-bottom: 10px;
+}
+
+.overlay{
+	z-index: 9001;
+	display: none;
+	top: 0px;
+	left: 0px;
+	opacity: 0.2;
+	filter: alpha(opacity=20);
+	height: 100%;
+	width: 100%;
+	background: red;
+	position: absolute;
+}
+
+.inactive{
+	z-index: 9001;
+	display: none;
+	top: 0px;
+	left: 0px;
+	opacity: 0.2;
+	filter: alpha(opacity=20);
+	height: 100%;
+	width: 100%;
+	background: grey;
+	position: absolute;
+}
+
+aside .content{
+	padding-top: 8px;
+	border-top:1px dotted #dddddd;
+	line-height: 15px;
+	color: #666;
+}
+
+#videobox{
+	margin: 0px;
+	margin-top: 15px;
+	padding: 0px;
+	line-height: 0px;
+	-webkit-box-shadow: -1px 1px 1px #d9d9d9;
+	-moz-box-shadow: -1px 1px 1px #d9d9d9;
+	box-shadow:  -1px 1px 1px #d9d9d9;
+	min-height: 360px;
+}
+
+aside:hover .content{
+	color: #000;
+}
+
+aside img{
+	display: block;
+	margin-bottom: 8px;
+}
+
+a.more {
+	font-weight: bold;
+	font-style: italic;
+	display: block;
+	text-align: right;
+}
+
+aside .icons{
+	display: block;
+	position: absolute;
+	top:6px;
+	right:8px;
+	padding: 0px;
+}
+
+footer {
+	clear:both;
+	margin-top: 20px;
+	padding: 10px;
+	font-size: 12px;
+	background: #eaeaea;
+	-webkit-box-shadow: -1px 1px 1px #d9d9d9;
+	-moz-box-shadow: -1px 1px 1px #d9d9d9;
+	box-shadow:  -1px 1px 1px #d9d9d9;
+	border: 1px solid #c6c6c6;
+
+}
+
+footer a {
+	text-decoration: none;
+	color: #2788d3;
+}
+
+footer a:hover{
+	color: #5c6a98;
+}
+</style>
+
+</head>
+
+  <body>
+  
+  <section id="wrapper">
+      <header>
+
+      <div id="title"><a href="http://www.rebelliouspixels.com">Title</a></div>
+      
+      <div id="about">
+      	<div id="text">Lorem ipsum</div>
+      
+      	<div id="logo">
+
+</div> 
+      </div>
+      
+      </header>
+
+<!-- Start Left Column -->
+  <div id="leftcontent">
+    <div id="videobox" data-butter="media" data-butter-source="http://videos-cdn.mozilla.net/serv/webmademovies/popcorntest.ogv">
+ 
+    </div>
+
+      <aside id="sources">
+
+                  <div class="content" id="Box1" data-butter="target"><div class="overlay"></div><div class="inactive"></div></div>
+       </aside>
+				        
+  </div>
+     <!-- Start Right Column -->
+     
+   <div id="rightcontent">
+        
+      
+        <aside id="sources">
+
+                  <div class="content" id="Box2" data-butter="target">
+                    <div class="overlay">
+                   </div>
+                     <div class="inactive">
+                   </div></div>
+       </aside>
+				        
+	    <aside id="sources">
+
+                  <div class="content" id="Box3" data-butter="target"><div class="overlay"></div><div class="inactive"></div></div>
+
+		</aside>
+				        
+	   <aside id="sources">
+                  <div class="content" id="Box4" data-butter="target"></div>
+
+	 </aside>
+
+				        
+   </div>
+ <footer>Made with <a href="http://mozillapopcorn.org">Mozilla Popcorn</a></footer>
+</section>
+        
+      
+  </body>
+</html>
+
+
