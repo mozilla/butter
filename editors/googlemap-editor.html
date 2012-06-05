@@ -11,11 +11,11 @@
     <div id="map"></div>
     <div id="form">
 
-      <label for="start">&nbsp;From:</label>
-      <input type="number" min="0" id="start" class="small"/>
+      <label for="start">&nbsp;Start:</label>
+      <input type="text" id="start"/>
 
-      <label for="end">&nbsp;To:</label>
-      <input type="number" min="0" id="end" class="small"/>
+      <label for="end">&nbsp;End:</label>
+      <input type="text" id="end"/>
 
       <br/>
       <span id="target-fieldset">
@@ -35,7 +35,7 @@
       <input type="number" min="-180" max="180" id="lng" class="small"/>
       <br/>
       <label for="map-mode">Map Mode:</label>
-      &nbsp;<select id="mapType">
+      &nbsp;<select id="type">
         <option value="ROADMAP">Road Map</option>
         <option value="SATELLITE">Satellite</option>
         <option value="HYBRID">Hybrid</option>
