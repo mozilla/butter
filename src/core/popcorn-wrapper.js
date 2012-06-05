@@ -210,14 +210,17 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         if( [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) !== -1 ) {
           var parentNode = targetElement.parentNode,
               newElement = document.createElement( "div" ),
+              videoAttributes = [ "controls", "preload", "autoplay", "loop", "muted", "poster", "src" ],
               attributes;
 
           newElement.id = targetElement.id;
           attributes = targetElement.attributes;
-          if( attributes ){
+          if ( attributes ) {
             for( var i = attributes.length - 1; i >= 0; i-- ) {
               var name = attributes[ i ].nodeName;
-              newElement.setAttribute( name, targetElement.getAttribute( name ) );
+              if ( videoAttributes.indexOf( name ) === -1 ) {
+                newElement.setAttribute( name, targetElement.getAttribute( name ) );
+              }
             }
           }
           if( targetElement.className ){
