@@ -997,7 +997,6 @@
     });
   });
 
-
   module( "Dialog" );
   asyncTest( "Basic usage", 4, function(){
 
@@ -1032,4 +1031,34 @@
     });
 
   });
+
+  module( "Editors", butterLifeCycle );
+
+  asyncTest( "Basic usage", 6, function () {
+    createButter( function( butter ) {
+      var media = butter.addMedia(),
+          track = media.addTrack(),
+          trackEvent = track.addTrackEvent({
+            type: "text",
+            popcornOptions: {
+              start: 3,
+              end: 6
+            }
+          });
+
+      var editor = butter.editor.edit( trackEvent );
+      ok( editor, "Got Editor back from edit call." );
+      ok( editor.rootElement.querySelectorAll( ".trackevent-property" ).length, "Default Editor created properties properly." );
+      equal( editor.rootElement.querySelector( ".trackevent-property > input[data-manifest-key='start']" ).value, 3, "[start] input box has correct value." );
+      equal( editor.rootElement.querySelector( ".trackevent-property > input[data-manifest-key='end']" ).value, 6, "[end] input box has correct value." );
+      trackEvent.update({
+        start: 1,
+        end: 10
+      });
+      equal( editor.rootElement.querySelector( ".trackevent-property > input[data-manifest-key='start']" ).value, 1, "[start] input box has correct value after update." );
+      equal( editor.rootElement.querySelector( ".trackevent-property > input[data-manifest-key='end']" ).value, 10, "[end] input box has correct value after update." );
+      start();
+    });
+  });
+
 })( window, window.document );
