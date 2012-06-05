@@ -8,7 +8,7 @@ input[type=text] {
   width: 220px;
 }
 
-input[type=number] {
+input#start, input#end {
   width: 80px;
 }
 
