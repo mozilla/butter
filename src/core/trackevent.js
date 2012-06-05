@@ -55,9 +55,8 @@ define( [
     function defaultValue( item ) {
       if ( item.default ) {
         return item.default;
-      } else {
-        return item.type === "number" ? 0 : "";
       }
+      return item.type === "number" ? 0 : "";
     }
 
     if( !_type ){
