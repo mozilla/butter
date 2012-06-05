@@ -602,7 +602,7 @@
           if( callback ){
             callback();
           } //if
-          
+
           _this.dispatch( "pageready" );
         });
       }; //preparePage
@@ -707,7 +707,17 @@
             catch( e ){
               _this.dispatch( "loaddataerror", "Saved data not formatted properly." );
             }
-            _this.importProject( savedData );
+
+            if ( !savedData.projectID ) {
+              _this.importProject( savedData );
+            }
+            else {
+              _this.cornfield.load( savedData.projectID, function( e ) {
+                if ( e.error !== "okay" ) {
+                  _logger.log( "Could not auto load project with specified id. Status: " + e.error );
+                }
+              });
+            }
           }
           else {
             _logger.log( "Butter saved data not found: " + savedDataUrl );
