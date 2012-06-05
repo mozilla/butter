@@ -157,6 +157,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
           }
           else{
             var url = e.url;
+console.log(e.url);
             var dialog = new IFrameDialog({
               type: "iframe",
               modal: true,
@@ -190,6 +191,7 @@ define( [ "dialog/iframe-dialog" ], function( IFrameDialog ){
     function doSave( callback ){
 
       function execute(){
+debugger;
         butter.project.html = butter.getHTML();
         butter.project.data = butter.exportProject();
         var saveString = JSON.stringify( butter.project );
