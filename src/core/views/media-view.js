@@ -126,7 +126,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       _subtitle.classList.add( "form-ok" );
       _subtitle.classList.remove( "form-error" );
 
-      for ( var i = textboxes.length - 1; i >= 0; i-- ) {
+      for ( var i = 0, len = textboxes.length; i < len; i++ ) {
         textboxes[ i ].classList.add( "form-ok" );
         textboxes[ i ].classList.remove( "form-error" );
         if ( testUrl( textboxes[ i ].value ) ) {
