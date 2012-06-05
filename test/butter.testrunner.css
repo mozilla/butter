@@ -1,0 +1,7 @@
+div#test-links {
+  padding-right: 15px;
+}
+
+div#test-links > a {
+  font-size: 0.7em;
+}
