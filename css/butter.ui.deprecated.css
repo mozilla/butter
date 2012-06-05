@@ -1477,7 +1477,7 @@ input.form-error {
 
 #editor-area > .butter-editor .trackevent-property {
   padding: 10px;
-  clear: all;
+  clear: both;
 }
 
 #editor-area > .butter-editor .trackevent-property select, 
