@@ -348,6 +348,37 @@
 
   });
 
+  asyncTest( "Trackevents use plugin defaults", 1, function() {
+
+    createButter(function( butter ) {
+      var te1,
+          m,
+          t;
+
+      butter.listen( "mediaready", function( e ) {
+        te1.update({
+          start: 5,
+          end: 6
+        });
+      });
+
+      butter.listen( "trackeventupdated", function( e ) {
+        equal( e.data.popcornOptions.text, "Popcorn.js", "Trackevent is given proper plugin defaults" );
+        start();
+      });
+
+      m = butter.addMedia({ url: "../external/popcorn-js/test/italia.ogg", target: "mediaDiv" }),
+      t = m.addTrack();
+
+      te1 = t.addTrackEvent({
+        name: "TrackEvent 1",
+        type: "text",
+        start: 0,
+        end: 1
+      });
+    });
+  });
+
   asyncTest( "Media objects have their own tracks", 4, function(){
 
     createButter( function( butter ){

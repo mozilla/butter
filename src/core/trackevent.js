@@ -52,6 +52,13 @@ define( [
 
     _this.popcornOptions = _popcornOptions;
 
+    function defaultValue( item ) {
+      if ( item.default ) {
+        return item.default;
+      }
+      return item.type === "number" ? 0 : "";
+    }
+
     if( !_type ){
       _logger.log( "Warning: " + _id + " has no type." );
     } //if
@@ -98,13 +105,17 @@ define( [
 
       if( failed ){
         _this.dispatch( "trackeventupdatefailed", failed );
-      }
-      else{
-        for ( var prop in updateOptions ) {
-          if ( updateOptions.hasOwnProperty( prop ) ) {
-            _popcornOptions[ prop ] = updateOptions[ prop ];
-          } //if
-        } //for
+      } else {
+        var _manifest = Popcorn.manifest[ _type ] && Popcorn.manifest[ _type ].options;
+        for ( var prop in _manifest ) {
+          if ( _manifest.hasOwnProperty( prop ) ) {
+            if ( updateOptions[ prop ] === undefined ) {
+              _popcornOptions[ prop ] = defaultValue( _manifest[ prop ] );
+            } else {
+              _popcornOptions[ prop ] = updateOptions[ prop ];
+            }
+          }
+        }
         if( newStart ){
           _popcornOptions.start = newStart;
         }
