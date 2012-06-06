@@ -10,7 +10,8 @@
   },
   "ui": {
     "enabled": true,
-    "trackEventHighlight": "click"
+    "cssRenderClientSide": false,
+    "trackEventHighlight": "click",
   },
   "mediaDefaults": {
     "frameAnimation": true

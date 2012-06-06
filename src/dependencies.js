@@ -48,11 +48,11 @@ define([], function(){
         }
       },
       css: function( url, exclude, callback, checkFn, error ){
-        var scriptElement,
+        var link,
             interval;
 
         checkFn = checkFn || function(){
-          return !!scriptElement;
+          return !!link;
         };
 
         function runCheckFn() {
@@ -69,12 +69,51 @@ define([], function(){
         url = fixUrl( url );
 
         if( !checkFn() ){
-          scriptElement = document.createElement( "link" );
-          scriptElement.rel = "stylesheet";
-          scriptElement.onload =  runCheckFn;
-          scriptElement.onerror = error;
-          scriptElement.href = url;
-          document.head.appendChild( scriptElement );
+          // Load the CSS, either directly or using less.js
+
+          // See if we need to render CSS client side with LESS
+          if( config.value( "cssRenderClientSide" ) === true ){
+            _loaders.js(
+              config.value( "dirs" ).tools + "/less-1.3.0.min.js",
+              null,
+              function callback(){
+                try{
+                  new(less.Parser)({
+                    optimization: less.optimization,
+//                    paths: [ url.replace( /\.css$/, ".less" ) ],
+//                    mime: 
+                    filename: url.replace( /\.css$/, ".less" )
+                  }).parse( data, function( e, href ){
+                    if( e ){
+                      error( e );
+                    }
+                    
+                  });
+                }catch( e ){
+                  error(e);
+                }
+
+                loadStyleSheet(
+                  url.replace( /\.css$/, ".less" ),
+                  callback,
+                  false,
+                  null
+                );
+              },
+              function checkFn(){
+                return !!window.less;
+              },
+              error
+            );
+          } else {
+            link = document.createElement( "link" );
+            link.type = "text/css";
+            link.rel = "stylesheet";
+            link.onerror = error;
+            link.onload = runCheckFn;
+            link.href = url;
+            document.head.appendChild( link );
+          }
         }
         else if( callback ){
           callback();
