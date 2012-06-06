@@ -82,7 +82,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                       "end": 22.46,
                       "target": "pop-container",
                       "text": "Make your own!",
-                      "link": "http://mozillapopcorn.org:8888/templates/pop/template.html",
+                      "link": "http://mozillapopcorn.org",
                       "left": "50%",
                       "top": "50%"
                   },

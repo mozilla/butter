@@ -3,7 +3,7 @@
   "baseDir": "../../",
   "editor": {
     "pop": "{{baseDir}}/templates/popup/editors/pop.html",
-    "words": "editors/words.html"
+    "words": "{{baseDir}}/templates/popup/editors/words.html"
   },
   "plugin": {
     "plugins": [
