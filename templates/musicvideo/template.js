@@ -14,7 +14,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           popcornOptions: {
             start: 0,
             end: 3,
-            text: "Mother Mother - Hayloft",
+            text: "Music video",
             target: "Title"
           }
         });
@@ -24,7 +24,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             popcornOptions: {
                start: 4,
                end: 9,
-               text: "  Luxury Wafers Sessions",
+               text: "Cool!",
                target: "Title"
              }
            });
