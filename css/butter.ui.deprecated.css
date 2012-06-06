@@ -136,7 +136,7 @@ body.butter-tray-spacing.minimized {
 }
 
 .butter-logo-spin-inner.active {
-  -o-animation-name: spin; 
+  -o-animation-name: spin;
   -o-animation-duration: 1s;
   -o-animation-timing-function: linear;
   -o-animation-iteration-count: infinite;
@@ -297,36 +297,18 @@ input.form-error {
   top: 8px;
 }
 
-#butter-header button, #butter-header a.button {
+#butter-header button {
   font-family: 'BebasRegular';
   font-size: 12px;
-  float: left;
   margin: 0 5px 0 0;
   text-align: center;
-  text-decoration: none;
   border-radius: 5px;
   border: none;
   cursor: pointer;
   color: white;
 }
 
-#butter-header-new {
- background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#667),color-stop(1,#D3D3D3));
- background-image: -webkit-linear-gradient(center bottom,#667 0,#D3D3D3 100%);
- background-image: -ms-linear-gradient(center bottom,#667 0,#D3D3D3 100%);
- background-image: -o-linear-gradient(bottom,#667 0,#D3D3D3 100%);
- background-image: -moz-linear-gradient(center bottom,#667 0,#D3D3D3 100%);
-}
-
-#butter-header-new:hover {
- background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0,#667),color-stop(1,#666));
- background-image: -webkit-linear-gradient(center bottom,#667 0,#666 100%);
- background-image: -moz-linear-gradient(center bottom,#667 0,#666 100%);
- background-image: -ms-linear-gradient(center bottom,#667 0,#666 100%);
- background-image: -o-linear-gradient(bottom,#667 0,#666 100%);
-}
-
-#butter-header-save {
+button.butter-header-brown {
   background: #D1BE70;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#A08546));
   background: -webkit-linear-gradient(top, #D1BE70 0%,#A08546 100%);
@@ -334,52 +316,9 @@ input.form-error {
   background: -o-linear-gradient(top, #D1BE70 0%,#A08546 100%);
   background: -ms-linear-gradient(top, #D1BE70 0%,#A08546 100%);
   background: linear-gradient(top, #D1BE70);
-  box-shadow: none;
 }
 
-#butter-header-save:hover {
-  background: #D1BE70;
-  background: -moz-linear-gradient(top, #D1BE70 0%, #AD9B4C 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#AD9B4C));
-  background: -webkit-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
-  background: -o-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
-  background: -ms-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
-  background: linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
- }
-
-#butter-header-load {
-  background: #D1BE70;
-  background: -moz-linear-gradient(top, #D1BE70 0%, #A08546 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#A08546));
-  background: -webkit-linear-gradient(top, #D1BE70 0%,#A08546 100%);
-  background: -o-linear-gradient(top, #D1BE70 0%,#A08546 100%);
-  background: -ms-linear-gradient(top, #D1BE70 0%,#A08546 100%);
-  background: linear-gradient(top, #D1BE70);
-  box-shadow: none;
-}
-
-#butter-header-load:hover {
-  background: #D1BE70;
-  background: -moz-linear-gradient(top, #D1BE70 0%, #AD9B4C 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#AD9B4C));
-  background: -webkit-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
-  background: -o-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
-  background: -ms-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
-  background: linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
-}
-
-#butter-header-export {
-  background: #D1BE70;
-  background: -moz-linear-gradient(top, #D1BE70 0%, #A08546 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#A08546));
-  background: -webkit-linear-gradient(top, #D1BE70 0%,#A08546 100%);
-  background: -o-linear-gradient(top, #D1BE70 0%,#A08546 100%);
-  background: -ms-linear-gradient(top, #D1BE70 0%,#A08546 100%);
-  background: linear-gradient(top, #D1BE70);
-  box-shadow: none;
-}
-
-#butter-header-export:hover {
+button.butter-header-brown:hover {
   background: #D1BE70;
   background: -moz-linear-gradient(top, #D1BE70 0%, #AD9B4C 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#AD9B4C));
@@ -390,7 +329,6 @@ input.form-error {
 }
 
 #butter-header-share {
-  width: 100px !important;
   background: #D1BE70;
   background: -moz-linear-gradient(top, #26B5D8 0%, #2B86D4 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#26B5D8), color-stop(100%,#2B86D4));
@@ -398,7 +336,6 @@ input.form-error {
   background: -o-linear-gradient(top, #26B5D8 0%,#2B86D4 100%);
   background: -ms-linear-gradient(top, #26B5D8 0%,#2B86D4 100%);
   background: linear-gradient(top, #2B86D4);
-  box-shadow: none;
 }
 
 #butter-header-share:hover {
@@ -422,19 +359,6 @@ input.form-error {
 }
 
 #butter-header-auth:hover {
-  color: #D3D3D3;
-}
-
-#butter-header-auth-in {
-  font-family: verdana;
-  border-radius: 0 !important;
-  background-color: transparent !important;
-  text-align: left;
-  text-shadow: none !important;
-  box-shadow: none !important;
-}
-
-#butter-header-auth-in:hover {
   color: #D3D3D3;
 }
 
