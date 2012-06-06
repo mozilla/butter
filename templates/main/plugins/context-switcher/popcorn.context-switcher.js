@@ -50,11 +50,23 @@
           contextSwitcherStyles.appendChild(document.createTextNode( "" +
             ".context-switcher {\n"+
             "  -webkit-transition: all .3s linear\n"+
+            "  -moz-transition: all .3s linear\n"+
+            "  -o-transition: all .3s linear\n"+
+            "  transition: all .3s linear\n"+
             "}\n"+
             ".context-switcher.context-switcher-tiny {\n"+
             "  -webkit-transform: scale(.25,.25);\n"+
             "  -webkit-transform-origin: top center;\n"+
             "  -webkit-transition: all .3s linear\n"+
+            "  -moz-transform: scale(.25,.25);\n"+
+            "  -moz-transform-origin: top center;\n"+
+            "  -moz-transition: all .3s linear\n"+
+            "  -o-transform: scale(.25,.25);\n"+
+            "  -o-transform-origin: top center;\n"+
+            "  -o-transition: all .3s linear\n"+
+            "  transform: scale(.25,.25);\n"+
+            "  transform-origin: top center;\n"+
+            "  transition: all .3s linear\n"+
             "}"
             ));
           document.head.appendChild(contextSwitcherStyles);
