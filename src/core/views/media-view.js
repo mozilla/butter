@@ -1,7 +1,7 @@
 define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox", "text!layouts/media-view.html" ],
   function( PageElement, LogoSpinner, LangUtils, TextboxWrapper, HTML_TEMPLATE ){
 
-  var DEFAULT_SUBTITLE = "Supports HTML5 video, YouTube, and Vimeo",
+  var DEFAULT_SUBTITLE = "Supports HTML5 video and YouTube",
       MOUSE_OUT_DURATION = 300,
       MAX_URLS = 4;
 

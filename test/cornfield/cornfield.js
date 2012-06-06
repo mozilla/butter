@@ -8,7 +8,7 @@
 
   QUnit.config.reorder = false;
 
-  document.addEventListener( "DOMContentLoaded", function( e ) {
+  function setupCornfieldTests(){
     var b = new Butter({
       config: "cornfield-test-config.json",
         ready: function( butter ) {
@@ -160,5 +160,22 @@
           });
         }
     });
-  }, false );
+  }
+
+  document.addEventListener( "DOMContentLoaded", function(){
+    // Make sure the cornfield server is running before bothering with all these tests.
+    asyncTest( "Cornfield Server Running", 1, function() {
+      var request = new XMLHttpRequest();
+      request.open('GET', '/api/whoami', false);
+      request.send();
+      if( request.status === 404 ){
+        ok( false, "Cornfield server not running on current server, skipping tests." );
+      } else {
+        ok( true, "Cornfield server is running on current server. Running Tests." );
+        setupCornfieldTests();
+      }
+      start();
+    });
+  }, false);
+
 }( window, window.document ));

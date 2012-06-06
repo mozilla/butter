@@ -602,7 +602,7 @@
           if( callback ){
             callback();
           } //if
-          
+
           _this.dispatch( "pageready" );
         });
       }; //preparePage
@@ -707,6 +707,8 @@
             catch( e ){
               _this.dispatch( "loaddataerror", "Saved data not formatted properly." );
             }
+            _this.project.id = savedData.projectID;
+            _this.project.name = savedData.name;
             _this.importProject( savedData );
           }
           else {
