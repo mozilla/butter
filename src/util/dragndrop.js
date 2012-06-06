@@ -13,7 +13,7 @@ define([], function(){
   var __droppables = [],
       __mouseDown = false,
       __selectedDraggables = [],
-      __mousePos = [ 0, 0],
+      __mousePos = [ 0, 0 ],
       __mouseLast = [ 0, 0 ],
       __scroll = false,
       __helpers = [];
