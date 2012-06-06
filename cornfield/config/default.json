@@ -14,10 +14,5 @@
     "templates": "../templates",
     "publish": "view",
     "publishPrefix": "http://localhost:8888/cornfield/view"
-  },
-  "templates": {
-    "default-butter-test": {
-      "../external/popcorn-js/": "http://localhost:8888/external/popcorn-js/"
-    }
   }
 }
