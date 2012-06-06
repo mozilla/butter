@@ -23,6 +23,7 @@
             "./dependencies",
             "ui/ui",
             "util/xhr",
+            "util/lang",
             "text!default-config.json",
             "text!layouts/ua-warning.html",
             "util/shims"                  // keep this at the end so it doesn't need a spot in the function signature
@@ -38,6 +39,7 @@
             Dependencies,
             UI,
             XHR,
+            LangUtils,
             DefaultConfigJSON,
             UAWarningLayout
           ){
@@ -50,7 +52,7 @@
     }; //Butter
 
     Butter.showUAWarning = function() {
-      var uaWarningDiv = Lang.domFragment( UAWarningLayout );
+      var uaWarningDiv = LangUtils.domFragment( UAWarningLayout );
       document.body.appendChild( uaWarningDiv );
       uaWarningDiv.classList.add( "slide-out" );
       uaWarningDiv.getElementsByClassName( "close-button" )[0].onclick = function () {
