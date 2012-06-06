@@ -171,6 +171,7 @@
       if( request.status === 404 ){
         ok( false, "Cornfield server not running on current server, skipping tests." );
       } else {
+        ok( true, "Cornfield server is running on current server. Running Tests." );
         setupCornfieldTests();
       }
       start();
