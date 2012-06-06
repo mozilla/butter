@@ -18,3 +18,6 @@ css/butter.ui.css
 cornfield/config/runtime.json
 docs
 css/media-view.css
+
+-f templates/supported/popup/sounds/mouthpop.ogg
+-f templates/supported/popup/sounds/mouthpop.wav
