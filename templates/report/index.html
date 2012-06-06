@@ -1,86 +1,29 @@
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>Popcorn Maker: report</title>
-    <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
-    <script src="../../src/butter.js" data-butter-exclude /></script>
-    <script type="text/javascript" src="bookreport.js" data-butter-exclude /></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Book Report</title>
+  <meta name="viewport" content="width=device-width">
 
-<style type="text/css">  
-body {
-background-color: black;
-color: white;
-}
-#videobox {
-	background-color: black;
-	border: 4px solid;
-	border-bottom-color:#555;
-    border-right-color:#333;
-    border-top-color:#ddd;
-    border-left-color:#bbb;
-	margin: 1em;
-	position: absolute;
-	top: 50px;
-	left: 100px;
-	width: 320px;
-	height: 180px;
-	z-index: 2000;
-}
-#secondary {
-	background-color: black;
-	border: 4px solid;
-	border-bottom-color:#555;
-    border-right-color:#333;
-    border-top-color:#ddd;
-    border-left-color:#bbb;
-	margin: 1em;
-	position: absolute;
-	top: 50px;
-	left: 440px;
-	width: 320px;
-	height: 180px;
-	z-index: 2000;
-}
-#tertiary {
-	margin: 1em;
-	position: absolute;
-	top: 50px;
-	left: 780px;
-	width: 480px;
-	height: 270px;
-	z-index: 2000;
-}
-#background {
-	width: 100%;
-	height: 90%;
-}
-  .scale:hover {
-    -webkit-transform: scale(1.5);
-    -moz-transform: scale(1.5);
-    -o-transform: scale(1.5);
-    z-index: 50;
-}
-  .showoff:hover {
-    -webkit-transform: scale(1.5);
-    -moz-transform: scale(1.5);
-    -o-transform: scale(1.5);
-    border-color: red;
-    z-index: 50;
-    -webkit-transition: all .5s ease-in-out;
-    -moz-transition: all .5s ease-in-out;
-    -o-transition: all .5s ease-in-out;
-}
-</style>
+  <link rel="stylesheet" href="../shared/normalise.css">
+  <link rel="stylesheet" href="style.css">
+
+  <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
+    <script src="../../src/butter.js" data-butter-exclude /></script>
+    <script type="text/javascript" src="bookreport.js" data-butter-exclude></script>
 </head>
 
 <body>
-<div>
-      <video id="videobox" data-butter="media" controls src="http://videos-cdn.mozilla.net/serv/webmademovies/popcorntest.ogv" class="showoff">
+  <div>
+    <video id="videobox" class="videobox" preload data-butter="media" controls>
+      <source src="http://videos-origin.mozilla.org/serv/webmademovies/Moz_Doc_0329_ThankYou.mp4" />
+      <source src="http://videos-origin.mozilla.org/serv/webmademovies/Moz_Doc_0329_ThankYou.ogv" />
+      <source src="http://videos-origin.mozilla.org/serv/webmademovies/Moz_Doc_0329_ThankYou.webm" />
+    </video>
   </div>
-  <div data-butter="target" id="secondary" class="showoff" data-butter="target">
-</div>
-    <div data-butter="target" id="tertiary" class="showoff" data-butter="target">
-
-</div>
-<div data-butter="target" id="background" data-butter="target"></div>
+  <div data-butter="target" id="secondary" class="secondary showoff" data-butter="target"></div>
+  <div data-butter="target" id="tertiary" class="tertiary showoff" data-butter="target"></div>
+  <div data-butter="target" id="background" class="background" data-butter="target"></div>
 </body>
 </html>
