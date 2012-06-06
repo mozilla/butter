@@ -94,6 +94,13 @@ section[role="video-container"] {
 section[role="video-container"]  > video {
   width: 100%;
 }
+.video-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 35px;
+  left: 0;
+  width: 100%;
+}
 
 section[role="suplementary"] {
   margin: 40px 0;
