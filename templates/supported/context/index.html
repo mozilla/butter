@@ -24,7 +24,11 @@
       </header>
       <!-- Start Left Column -->
       <div id="leftcontent">
-        <div id="videobox" data-butter="media" data-butter-source="http://videos-cdn.mozilla.net/serv/webmademovies/popcorntest.ogv"></div>
+          <video id="videobox" preload data-butter="media" controls>
+            <source src="../../../external/popcorn-js/test/trailer.mp4" />
+            <source src="../../../external/popcorn-js/test/trailer.ogv" />
+            <source src="../../../external/popcorn-js/test/trailer.webm" />
+          </video>
           <aside id="sources">
             <div class="content" id="Box1" data-butter="target"><div class="overlay"></div><div class="inactive"></div></div>
           </aside>              
