@@ -4,11 +4,13 @@ var JSLINT = './node_modules/jshint/bin/hint',
     CSSLINT = './node_modules/csslint/cli.js',
     UGLIFY = './node_modules/uglify-js/bin/uglifyjs',
     RJS    = './node_modules/requirejs/bin/r.js',
-    STYLUS = './node_modules/stylus/bin/stylus',
+    LESS = './node_modules/less/bin/lessc',
     DOX    = './tools/dox.py',
     DIST_DIR = 'dist',
     SRC_DIR = 'src',
     CSS_DIR = 'css',
+    BUTTER_LESS_FILE = CSS_DIR + '/butter.ui.less',
+    BUTTER_CSS_FILE = CSS_DIR + '/butter.ui.css',
     TEMPLATES_DIR = 'templates',
     DOCS_DIR = 'docs',
     EDITORS_DIR = 'editors',
@@ -139,6 +141,18 @@ target['check-css'] = function( dirs ) {
 
 target['check-lint'] = function( dir ) {
   checkJS( SRC_DIR, EDITORS_DIR );
+};
+
+target.css = function() {
+  echo('### Building CSS using LESS');
+
+  var result = exec(LESS + ' ' + BUTTER_LESS_FILE, {silent:true});
+  if( result.code === 0 ){
+    result.output.to(BUTTER_CSS_FILE);
+    target['check-css']();
+  } else {
+    echo( result.output );
+  }
 };
 
 function build( version ){
