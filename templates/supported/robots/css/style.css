@@ -7,8 +7,7 @@ body {
   font-family: lato, ratio, sans-serif;
 }
 .inner-container {
-  background-image: url(../img/grunge_top.png), url(../img/grunge_wall.png);
-  background-repeat: repeat-x, repeat;
+  background: url(../img/grunge_top.png) repeat-x, url(../img/grunge_wall.png) repeat;
 }
 .wrapper {
   margin: 0 auto;
