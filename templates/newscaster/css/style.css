@@ -7,7 +7,7 @@ body {
   color: #FEF49C;
   font-weight: 300;
   font-size: 14px;
-  font-family: lato, sans-serif;
+  font-family: lato, ratio, sans-serif;
 }
 
 .wrapper {
@@ -19,7 +19,7 @@ h1, h2, h3 {
   text-transform: uppercase;
   text-shadow: 0 1px 30px rgba(254,244,156, 0.6);
   font-weight: 400;
-  font-family: Audiowide, mashine, sans-serif;
+  font-family:  mashine, Audiowide, sans-serif;
 }
 
 h3 {
@@ -268,7 +268,7 @@ section[role="suplementary"] p:hover {
 .cube > div:nth-child(7) {
   background: #222;
   background: rgba(0,0,0,.8);
-  box-shadow: 0 0 30px 10px rgba(0,0,0,.8);
+  box-shadow: 0 0 20px 10px rgba(0,0,0,.8);
   -webkit-transform: rotateX(-90deg) rotate(180deg) translateZ(70px);
   -moz-transform: rotateX(-90deg) rotate(180deg) translateZ(70px);
   -o-transform: rotateX(-90deg) rotate(180deg) translateZ(70px);

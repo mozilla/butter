@@ -17,7 +17,7 @@ body {
 
 h1, h2, h3 {
   font-weight: 400;
-  font-family: orgovan-rounded-web, sans-serif;
+  font-family: orgovan-rounded-web, bangers, sans-serif;
 }
 
 h3 {
@@ -33,7 +33,9 @@ header {
 .logo {
   margin: 0;
   font-size: 50px;
-  opacity: .1;
+  opacity: .3;
+  color: transparent;
+  text-shadow: 0 0 8px #EEE;
   -webkit-transition: all .5s ease;
   -moz-transition: all .5s ease;
   -o-transition: all .5s ease;
@@ -44,9 +46,10 @@ header {
 .logo:hover, .logo.on {
   font-size: 60px;
   opacity: .9;
-  -webkit-animation: rumble .1s infinite linear;
-  -moz-animation: rumble .1s infinite linear;
-  animation: rumble .1s infinite linear;
+  text-shadow: 0 0 3px #EEE;
+  -webkit-animation: rumble .1s infinite ease;
+  -moz-animation: rumble .1s infinite ease;
+  animation: rumble .1s infinite ease;
 }
 
 @-webkit-keyframes rumble {
