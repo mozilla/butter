@@ -38,13 +38,14 @@ define([ 'util/xhr' ], function( XHR ){
         /* exclude= */ null,
         function jsLoadCallback(){
           // Assume *.less is beside *.css file
-          var lessURL = url.replace( /\.css$/, ".less" ),
+          var less = window.less,
+              lessURL = url.replace( /\.css$/, ".less" ),
               lessFile;
 
           // Load the .less file, parse with LESS, and inject CSS <style>
           XHR.get( lessURL, function xhrCallback(){
             if ( this.readyState === 4) {
-              var parser = new(less.Parser);
+              var parser = new less.Parser();
               lessFile = this.response;
 
               parser.parse( lessFile, function( e, root ){
@@ -160,9 +161,9 @@ define([ 'util/xhr' ], function( XHR ){
 
       load: function( items, callback, error, ordered ){
         error = error || function(){
-          console &&
-          console.log &&
-          console.log.apply( console , arguments );
+          if( console && console.log ){
+            console.log.apply( console , arguments );
+          }
         };
 
         if( items instanceof Array && items.length > 0 ){
