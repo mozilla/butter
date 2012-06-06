@@ -198,7 +198,6 @@ document.addEventListener( "DOMContentLoaded", function domReady() {
         // Add Targets
         addTargets( e.data.targets );
 
-
         for ( var prop in _manifest.options ) {
           if ( _manifest.options.hasOwnProperty( prop ) && !!elements[ prop ] ) {
             var val = trackEvent[ prop ];
