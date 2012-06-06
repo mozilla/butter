@@ -44,7 +44,7 @@ document.addEventListener( "DOMContentLoaded", function domReady() {
         addCenterChangedListener();
       } else {
         geocoder.geocode({
-          address: _manifest.options.location[ "default" ]
+          address: _manifest.options.location.default
         }, processResults );
       }
     }
@@ -64,7 +64,7 @@ document.addEventListener( "DOMContentLoaded", function domReady() {
 
   // Use the geocoder to update the map based on latitude and Longitude
   // Clears the location textbox
-  function geocode_latLng() {
+  function geocodeLatLng() {
 
     var lat = elements.lat.value,
         lng = elements.lng.value;
@@ -84,7 +84,7 @@ document.addEventListener( "DOMContentLoaded", function domReady() {
   // Use the Geocoder to update the map based on an address (location)
   // Clears the Lat and Lng boxes
   // Uses a timeout to cut down on requests as the user types.
-  function geocode_loc() {
+  function geocodeLoc() {
 
     if ( geolocTimeout ) {
       clearTimeout( geolocTimeout );
@@ -105,13 +105,13 @@ document.addEventListener( "DOMContentLoaded", function domReady() {
         type = elements.type.value;
 
     if ( stamenTypes.indexOf( type ) !== -1 ) {
-      layer = type.replace( "STAMEN-", "" ).toLowerCase();
+      layer = type.toLowerCase();
     }
 
     map.setMapTypeId( layer ? layer : gmaps.MapTypeId[ type ] );
 
     if ( layer ) {
-      map.mapTypes.set( layer, new gmaps.StamenMapType( layer ) );
+      map.mapTypes.set( layer, new gmaps.StamenMapType( layer.replace( "stamen-", "" ) ) );
     }
 
     update();
@@ -177,8 +177,8 @@ document.addEventListener( "DOMContentLoaded", function domReady() {
 
       function defaultValue( item, val ) {
         if ( val === undefined || typeof val === "object" ) {
-          if ( item[ "default" ] ) {
-            return item[ "default" ];
+          if ( item.default ) {
+            return item.default;
           }
           return item.type === "number" ? 0 : "";
         }
@@ -210,7 +210,7 @@ document.addEventListener( "DOMContentLoaded", function domReady() {
         trackEvent.zoom = typeof trackEvent.zoom === "number" ? trackEvent.zoom : 1;
 
         if ( stamenTypes.indexOf( trackEvent.type ) !== -1 ) {
-          layer = trackEvent.type.replace( "STAMEN-", "" ).toLowerCase();
+          layer = trackEvent.type.toLowerCase();
         }
 
         map = new gmaps.Map( document.getElementById( "map" ), {
@@ -222,7 +222,7 @@ document.addEventListener( "DOMContentLoaded", function domReady() {
         });
 
         if ( layer ) {
-          map.mapTypes.set( layer, new gmaps.StamenMapType( layer ) );
+          map.mapTypes.set( layer, new gmaps.StamenMapType( layer.replace( "stamen-", "" ) ) );
         }
 
         geocode( !!elements.location.value );
@@ -239,10 +239,10 @@ document.addEventListener( "DOMContentLoaded", function domReady() {
         elements.end.addEventListener( "change", update, false );
         elements.end.addEventListener( "keyup", update, false );
 
-        elements.lat.addEventListener( "blur", geocode_latLng, false );
-        elements.lng.addEventListener( "blur", geocode_latLng, false );
+        elements.lat.addEventListener( "blur", geocodeLatLng, false );
+        elements.lng.addEventListener( "blur", geocodeLatLng, false );
 
-        elements.location.addEventListener( "keypress", geocode_loc, false );
+        elements.location.addEventListener( "keypress", geocodeLoc, false );
 
         elements.type.addEventListener( "change", setMapType, false );
         elements.target.addEventListener( "change", update, false );
