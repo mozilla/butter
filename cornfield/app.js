@@ -9,8 +9,7 @@ const express = require('express'),
       TEMPLATES_DIR =  CONFIG.dirs.templates,
       PUBLISH_DIR = CONFIG.dirs.publish,
       PUBLISH_PREFIX = CONFIG.dirs.publishPrefix,
-      WWW_ROOT = path.resolve(CONFIG.dirs.wwwRoot || __dirname + "/.."),
-      TEMPLATES = CONFIG.templates || {};
+      WWW_ROOT = path.resolve(CONFIG.dirs.wwwRoot || __dirname + "/..");
 
 var canStoreData = true;
 
