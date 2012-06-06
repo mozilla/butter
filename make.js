@@ -57,13 +57,17 @@ target.docs = function() {
 };
 
 target.check = function() {
-  target['check-lint']();
-  target['check-css']();
+  target['check-lint']( "src" );
+  target['check-css']( CSS_DIR + ' ' + DIALOGS_DIR );
 };
 
-target['check-css'] = function() {
-  echo('### Linting CSS files');
+target['check-templates'] = function() {
+  target['check-lint']( TEMPLATES_DIR );
+  target['check-css']( TEMPLATES_DIR );
+};
 
+target['check-css'] = function( dirs ) {
+  echo('### Linting CSS files');
   // see cli.js --list-rules.  Commenting out some warnings for now
   // which we might want to add back in later.
   var warnings = [
@@ -99,63 +103,13 @@ target['check-css'] = function() {
   exec(CSSLINT + ' --warnings=' + warnings +
                  ' --errors=' + errors +
                  ' --quiet --format=compact' +
-                 ' ' + CSS_DIR +
-                 ' ' + DIALOGS_DIR);
+                 ' ' + dirs);
 };
 
-target['check-templates'] = function() {
-  echo('### Linting CSS template files');
-
-  // see cli.js --list-rules.  Commenting out some warnings for now
-  // which we might want to add back in later.
-  var CSSwarnings = [
-//    "important",
-//    "adjoining-classes",
-//    "duplicate-background-images",
-//    "qualified-headings",
-    "fallback-colors",
-//    "empty-rules",
-//    "shorthand",
-//    "overqualified-elements",
-//    "import",
-    "regex-selectors",
-//    "rules-count",
-//    "font-sizes",
-//    "universal-selector",
-//    "unqualified-attributes",
-    "zero-units"
-  ].join(",");
-
-  var CSSerrors = [
-    "known-properties",
-    "compatible-vendor-prefixes",
-    "display-property-grouping",
-    "duplicate-properties",
-    "errors",
-    "gradients",
-    "font-faces",
-    "floats",
-    "vendor-prefix"
-  ].join(",");
-
-  var JSfiles = find('templates').filter( function( file ) {
-    return file.match(/\.js$/);
-  }).join(" ");
-
-  exec(CSSLINT + ' --warnings=' + CSSwarnings +
-                 ' --errors=' + CSSerrors +
-                 ' --quiet --format=compact' +
-                 ' ' + TEMPLATES_DIR);
-
-  echo('### Linting JS template files');
-  exec(JSLINT + ' ' + JSfiles + ' --show-non-errors');
-
-};
-
-target['check-lint'] = function() {
+target['check-lint'] = function( dir ) {
   echo('### Linting JS files');
 
-  var files = find('src').filter( function( file ) {
+  var files = find( dir ).filter( function( file ) {
     return file.match(/\.js$/);
   }).join(" ");
 
