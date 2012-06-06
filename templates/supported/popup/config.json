@@ -2,18 +2,18 @@
   "name": "pop",
   "baseDir": "../../../",
   "editor": {
-    "pop": "{{baseDir}}/templates/supported/popup/editors/pop.html",
-    "words": "{{baseDir}}/templates/supported/popup/editors/words.html"
+    "pop": "{{baseDir}}templates/supported/popup/editors/pop.html",
+    "words": "{{baseDir}}templates/supported/popup/editors/words.html"
   },
   "plugin": {
     "plugins": [
       {
         "type": "pop",
-        "path": "{{baseDir}}/templates/supported/popup/plugins/popcorn.pop.js"
+        "path": "{{baseDir}}templates/supported/popup/plugins/popcorn.pop.js"
       },
       {
         "type": "words",
-        "path": "{{baseDir}}/templates/supported/popup/plugins/popcorn.words.js"
+        "path": "{{baseDir}}templates/supported/popup/plugins/popcorn.words.js"
       }
     ],
     "defaults" : [
