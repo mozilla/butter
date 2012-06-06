@@ -143,12 +143,16 @@ section[role="suplementary"] p:hover {
   -moz-transform: scale(0.8,0.8);
   -moz-perspective: 200; 
   -moz-perspective-origin: 50% 50px;
+  -o-transform: scale(0.8,0.8);
+  -o-perspective: 200; 
+  -o-perspective-origin: 50% 50px;
   -ms-transform: scale(0.8,0.8);
   -ms-perspective: 200; 
   -ms-perspective-origin: 50% 50px;
   transform: scale(0.8,0.8);
   perspective: 200; 
   perspective-origin: 50% 50px;
+  z-index: 1000;
 }
 
 .cube {
@@ -226,6 +230,7 @@ section[role="suplementary"] p:hover {
 }   
 
 .cube > div:first-child  {
+  display: block;
   -webkit-transform: rotateX(90deg) translateZ(50px);
   -moz-transform: rotateX(90deg) translateZ(50px);
   -o-transform: rotateX(90deg) translateZ(50px);
@@ -266,6 +271,7 @@ section[role="suplementary"] p:hover {
 }
 
 .cube > div:nth-child(6) {
+  display: block;
   -webkit-transform: rotateX(-90deg) rotate(180deg) translateZ(50px);
   -moz-transform: rotateX(-90deg) rotate(180deg) translateZ(50px);
   -o-transform: rotateX(-90deg) rotate(180deg) translateZ(50px);
@@ -274,6 +280,7 @@ section[role="suplementary"] p:hover {
 }
 
 .cube > div:nth-child(7) {
+  display: block;
   background: #222;
   background: rgba(0,0,0,.8);
   box-shadow: 0 0 20px 10px rgba(0,0,0,.8);
