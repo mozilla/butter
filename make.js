@@ -100,8 +100,56 @@ target['check-css'] = function() {
                  ' --errors=' + errors +
                  ' --quiet --format=compact' +
                  ' ' + CSS_DIR +
-                 ' ' + DIALOGS_DIR +
+                 ' ' + DIALOGS_DIR);
+};
+
+target['check-templates'] = function() {
+  echo('### Linting CSS template files');
+
+  // see cli.js --list-rules.  Commenting out some warnings for now
+  // which we might want to add back in later.
+  var CSSwarnings = [
+//    "important",
+//    "adjoining-classes",
+//    "duplicate-background-images",
+//    "qualified-headings",
+    "fallback-colors",
+//    "empty-rules",
+//    "shorthand",
+//    "overqualified-elements",
+//    "import",
+    "regex-selectors",
+//    "rules-count",
+//    "font-sizes",
+//    "universal-selector",
+//    "unqualified-attributes",
+    "zero-units"
+  ].join(",");
+
+  var CSSerrors = [
+    "known-properties",
+    "compatible-vendor-prefixes",
+    "display-property-grouping",
+    "duplicate-properties",
+    "errors",
+    "gradients",
+    "font-faces",
+    "floats",
+    "vendor-prefix"
+  ].join(",");
+
+  var JSfiles = find('templates').filter( function( file ) {
+    return file.match(/\.js$/);
+  }).join(" ");
+
+  exec(CSSLINT + ' --warnings=' + CSSwarnings +
+                 ' --errors=' + CSSerrors +
+                 ' --quiet --format=compact' +
                  ' ' + TEMPLATES_DIR);
+
+  echo('### Linting JS template files');
+  exec(JSLINT + ' ' + JSfiles + ' --show-non-errors');
+
 };
 
 target['check-lint'] = function() {
