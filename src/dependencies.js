@@ -2,10 +2,11 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define([], function(){
+define([ 'util/xhr' ], function( XHR ){
 
   var VAR_REGEX = /\{([\w\-\._]+)\}/,
-      CSS_POLL_INTERVAL = 10;
+      CSS_POLL_INTERVAL = 10,
+      LESS = "/less-1.3.0.min.js";
 
   var DEFAULT_CHECK_FUNCTION = function(){
     var index = 0;
@@ -28,6 +29,46 @@ define([], function(){
         url = url.replace( match[0], replacement );
       }
       return url.replace( "//", "/" );
+    }
+
+    function loadLessFile( loadJS, url, err ){
+      // Load less.js so we can parse the *.less -> *.css
+      loadJS(
+        config.value( "dirs" ).tools + LESS,
+        /* exclude= */ null,
+        function jsLoadCallback(){
+          // Assume *.less is beside *.css file
+          var lessURL = url.replace( /\.css$/, ".less" ),
+              lessFile;
+
+          // Load the .less file, parse with LESS, and inject CSS <style>
+          XHR.get( lessURL, function xhrCallback(){
+            if ( this.readyState === 4) {
+              var parser = new(less.Parser);
+              lessFile = this.response;
+
+              parser.parse( lessFile, function( e, root ){
+                if( e ){
+                  // Problem parsing less file
+                  err( "Butter: Error parsing LESS file [" + lessURL + "]", e.message );
+                  return;
+                }
+
+                var css, styles;
+                css = document.createElement( "style" ),
+                css.type = "text/css";
+                document.head.appendChild( css );
+                styles = document.createTextNode( root.toCSS() );
+                css.appendChild( styles );
+              });
+            }
+          });
+        },
+        function checkFn(){
+          return !!window.less;
+        },
+        err
+      );
     }
 
     var _loaders = {
@@ -69,43 +110,12 @@ define([], function(){
         url = fixUrl( url );
 
         if( !checkFn() ){
-          // Load the CSS, either directly or using less.js
-
           // See if we need to render CSS client side with LESS
           if( config.value( "cssRenderClientSide" ) === true ){
-            _loaders.js(
-              config.value( "dirs" ).tools + "/less-1.3.0.min.js",
-              null,
-              function callback(){
-                try{
-                  new(less.Parser)({
-                    optimization: less.optimization,
-//                    paths: [ url.replace( /\.css$/, ".less" ) ],
-//                    mime: 
-                    filename: url.replace( /\.css$/, ".less" )
-                  }).parse( data, function( e, href ){
-                    if( e ){
-                      error( e );
-                    }
-                    
-                  });
-                }catch( e ){
-                  error(e);
-                }
-
-                loadStyleSheet(
-                  url.replace( /\.css$/, ".less" ),
-                  callback,
-                  false,
-                  null
-                );
-              },
-              function checkFn(){
-                return !!window.less;
-              },
-              error
-            );
-          } else {
+            loadLessFile( _loaders.js, url, error );
+          }
+          // Regular css file, inject <link> in head
+          else {
             link = document.createElement( "link" );
             link.type = "text/css";
             link.rel = "stylesheet";
@@ -149,6 +159,12 @@ define([], function(){
     var Loader = {
 
       load: function( items, callback, error, ordered ){
+        error = error || function(){
+          console &&
+          console.log &&
+          console.log.apply( console , arguments );
+        };
+
         if( items instanceof Array && items.length > 0 ){
           var onLoad = generateLoaderCallback( items, callback );
           if( !ordered ){
