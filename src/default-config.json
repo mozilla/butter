@@ -1,6 +1,7 @@
 {
   "name": "default-config",
   "baseDir": "../",
+  "cssRenderClientSide": false,
   "snapshotHTMLOnReady": true,
   "scrapePage": true,
   "title": "Popcorn Maker",
@@ -72,7 +73,8 @@
   "dirs": {
     "popcorn-js": "{{baseDir}}external/popcorn-js/",
     "css": "{{baseDir}}css/",
-    "resources": "{{baseDir}}resources/"
+    "resources": "{{baseDir}}resources/",
+    "tools": "{{baseDir}}tools/"
   },
   "icons": {
     "default": "popcorn-icon.png",
