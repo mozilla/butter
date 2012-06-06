@@ -189,13 +189,13 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-        media.popcorn.popcorn.on("play", function(){
-          document.getElementById("logo").classList.add("on");
-        });
-
-        media.popcorn.popcorn.on("pause", function(){
-          document.getElementById("logo").classList.remove("on");
-        });
+      media.popcorn.popcorn.on("play", function(){
+        document.getElementById("logo").classList.add("on");
+      });
+       media.popcorn.popcorn.on("pause", function(){
+        document.getElementById("logo").classList.remove("on");
+      });
+        
 
       }
 

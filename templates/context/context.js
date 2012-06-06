@@ -1,6 +1,7 @@
 document.addEventListener( "DOMContentLoaded", function( e ){
 
   Butter({
+    
     config: "complete-config.json",
     ready: function( butter ){
       var media = butter.media[ 0 ];
@@ -20,19 +21,19 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-        butter.tracks[ 2 ].addTrackEvent({ 
+        butter.tracks[ 2 ].addTrackEvent({
           type: "footnote",
           popcornOptions: {
             start: 1,
             end: 2,
             target: "Box2"
-          }
+        }
         });
       }
 
       media.onReady( start );
       
       window.butter = butter;
-    } 
+    }
   }); //Butter
 }, false );
