@@ -173,7 +173,7 @@ function build( version ){
   sed('-i', '@VERSION@', version, 'dist/butter.js');
   sed('-i', '@VERSION@', version, 'dist/butter.min.js');
 
-  exec(STYLUS + ' css');
+  target.css();
   cp('css/*.css', DIST_DIR);
 }
 
