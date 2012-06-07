@@ -12,6 +12,10 @@
         "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
       },
       {
+        "type": "context-switcher",
+        "path": "{{baseDir}}templates/supported/shared/plugins/context-switcher/popcorn.context-switcher.js"
+      },
+      {
         "type": "titlecard",
         "path": "{{baseDir}}templates/supported/shared/plugins/titlecard/popcorn.titlecard.js"
       },
@@ -23,7 +27,8 @@
     "defaults": [
       "text",
       "titlecard",
-      "image2"
+      "image2",
+      "context-switcher"
     ]
   }
 }
