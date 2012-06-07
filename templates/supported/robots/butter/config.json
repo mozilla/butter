@@ -6,10 +6,15 @@
       {
         "type": "text",
         "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
+      },
+      {
+        "type": "speak",
+        "path": "{{baseDir}}templates/supported/shared/plugins/speak/popcorn.speak.js"
       }
     ],
     "defaults": [
-      "text"
+      "text",
+      "speak"
     ]
   }
 }
