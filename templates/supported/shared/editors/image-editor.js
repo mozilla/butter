@@ -258,7 +258,7 @@
             imgSrc = window.webkitURL.createObjectURL( file );
           }
 
-          image = document.createElement( 'img' );
+          image = document.createElement( "img" );
           image.onload = function () {
             canvas.width = this.width;
             canvas.height = this.height;
