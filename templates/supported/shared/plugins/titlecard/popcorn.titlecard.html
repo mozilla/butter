@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Test for Title Card</title>
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" type="text/css" href="../../css/normalise.css">
+	<link rel="stylesheet" type="text/css" href="../test.css">
+	<link rel="stylesheet" type="text/css" href="popcorn.titlecard.css">
+	<script src="../../../../external/popcorn-js/popcorn.js"></script>
+	<script src="popcorn.titlecard.js"></script>
+</head>
+<body>
+	<div class="video-container">
+		<video id="video" preload controls>
+			<source src="http://videos-origin.mozilla.org/serv/webmademovies/Moz_Doc_0329_ThankYou.mp4" />
+			<source src="http://videos-origin.mozilla.org/serv/webmademovies/Moz_Doc_0329_ThankYou.ogv" />
+			<source src="http://videos-origin.mozilla.org/serv/webmademovies/Moz_Doc_0329_ThankYou.webm" />
+		</video>
+		<div id="video-overlay" class="video-overlay">
+		</div>
+	</div>
+	<script>
+		var popcorn = Popcorn("video");
+		popcorn.titlecard({
+			start: 1,
+			end: 3,
+			title: "Hello world",
+			subheading: "Elections 2012",
+			target: "video-overlay"
+		});
+		popcorn.titlecard({
+			start: 4,
+			end: 6,
+			title: "Hello world",
+			target: "video-overlay"
+		});
+		popcorn.titlecard({
+			start: 7,
+			end: 9,
+			title: "Hello world",
+			subheading: "Blah"
+		});
+	</script>
+</body>
+</html>

@@ -6,10 +6,15 @@
       {
         "type": "text",
         "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
+      },
+      {
+        "type": "titlecard",
+        "path": "{{baseDir}}templates/supported/shared/plugins/titlecard/popcorn.titlecard.js"
       }
     ],
     "defaults": [
-      "text"
+      "text",
+      "titlecard"
     ]
   }
 }
