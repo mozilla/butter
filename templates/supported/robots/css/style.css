@@ -1,0 +1,128 @@
+/* ===== Primary Styles ========================================================
+   Author: @k88hudson
+   ========================================================================== */
+body {
+  color: #EEE;
+  font-size: 100%;
+  font-family: lato, ratio, sans-serif;
+}
+.inner-container {
+  background: url(../img/grunge_top.png) repeat-x, url(../img/grunge_wall.png) repeat;
+}
+.wrapper {
+  margin: 0 auto;
+  width: 800px;
+}
+
+h1, h2, h3 {
+  font-weight: 400;
+  font-family: orgovan-rounded-web, bangers, sans-serif;
+}
+
+h3 {
+  border-bottom: 1px solid #212121;
+}
+
+/*- - - Header - - -*/
+header { 
+  position: relative;
+  padding: 70px 0 15px 0;
+  text-align: center;
+}
+.logo {
+  margin: 0;
+  font-size: 50px;
+  opacity: .3;
+  color: transparent;
+  text-shadow: 0 0 8px #EEE;
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  transition: all .5s ease;
+  -ms-transition: all .5s ease;
+}
+
+.logo:hover, .logo.on {
+  font-size: 60px;
+  opacity: .9;
+  text-shadow: 0 0 3px #EEE;
+  -webkit-animation: rumble .1s infinite ease;
+  -moz-animation: rumble .1s infinite ease;
+  animation: rumble .1s infinite ease;
+}
+
+@-webkit-keyframes rumble {
+  0% {-webkit-transform: rotate(0deg);}
+  5% {-webkit-transform: translate(.1px, 0px); }
+  15% {-webkit-transform: translate(.1px, 0px) rotate(-1deg);}
+  66% {-webkit-transform: translate(-.1px, 0px);}
+  90% {-webkit-transform: translate(0px, -1px) rotate(0deg);}
+  95% {-webkit-transform: translate(-1px, 0px) rotate(1deg);}
+  100% {-webkit-transform: translate(0px, .1px) rotate(0deg);} 
+}
+@-moz-keyframes rumble {
+  0% {-moz-transform: rotate(0deg);}
+  5% {-moz-transform: translate(.1px, 0px);}
+  15% {-moz-transform: translate(.1px, 0px) rotate(-1deg);}
+  66% {-moz-transform: translate(-.1px, 0px);}
+  90% {-moz-transform: translate(0px, -1px) rotate(0deg);}
+  95% {-moz-transform: translate(-1px, 0px) rotate(1deg);}
+  100% {-moz-transform: translate(0px, .1px) rotate(0deg);} 
+}
+@keyframes rumble {
+  0% {transform: rotate(0deg);}
+  5% {transform: translate(.1px, 0px);}
+  15% {transform: translate(.1px, 0px) rotate(-1deg);}
+  66% {transform: translate(-.1px, 0px);}
+  90% {transform: translate(0px, -1px) rotate(0deg);}
+  95% {transform: translate(-1px, 0px) rotate(1deg);}
+  100% {transform: translate(0px, .1px) rotate(0deg);} 
+}
+
+/* /header */
+
+/*- - - Main - - -*/
+section[role="video-container"] {
+  position: relative;
+  z-index: 100;
+  width: 100%;
+  min-height: 450px;
+  background: #000;
+  box-shadow: 0 50px 30px -20px rgba(0,0,0,.6);
+}
+section[role="video-container"]  > video {
+  width: 100%;
+}
+.video-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 35px;
+  left: 0;
+  width: 100%;
+}
+
+section[role="suplementary"] {
+  margin: 40px 0;
+  font-weight: 400;
+  line-height: 1.4;
+}
+.block {
+  float: left;
+  margin-right: 25px;
+  width: 350px;
+}
+.block:first-child, .block:last-child {
+  width: 200px;
+}
+.block:last-child {
+  margin-right: 0;
+}
+
+/* /main */
+
+/*- - - Footer - - -*/
+footer {
+  padding: 20px 0 40px 0;
+  border-top: 1px solid #999;
+}
+/* /footer */
