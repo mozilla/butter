@@ -101,6 +101,10 @@ function publishRoute( req, res ){
 
 app.post('/api/publish/:id', publishRoute );
 
+app.get('/dashboard', function(req, res) {
+  res.send('This is just a placeholder', 200);
+});
+
 app.get('/api/projects', function(req, res) {
   var email = req.session.email;
 
