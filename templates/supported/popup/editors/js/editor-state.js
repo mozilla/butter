@@ -373,11 +373,17 @@
 		fieldset = field.fieldset || select;
 
 		if (targets.length <= 1) {
+			if ( fieldset ) {
+				fieldset.style.display = 'none';
+			}
+
 			if (targets.length) {
 				this.trackEvent.target = targets[0];
 			}
 		} else {
-			fieldset.style.display = '';
+			if ( fieldset ) {
+				fieldset.style.display = '';
+			}
 			select = field.element;
 
 			for (i = 0; i < targets.length; i++) {
