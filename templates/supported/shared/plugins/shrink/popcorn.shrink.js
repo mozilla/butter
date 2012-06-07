@@ -7,7 +7,7 @@
    *
    */
 
-  Popcorn.plugin( "context-switcher", {
+  Popcorn.plugin( "shrink", {
 
     manifest: {
       about: {
@@ -42,7 +42,7 @@
           _popcorn = this;
 
       options._videoContainer = document.getElementById( options.containerID ) || _popcorn.media;
-      options._videoContainer.classList.add( "context-switcher" );
+      options._videoContainer.classList.add( "shrink" );
     },
 
     /**
@@ -52,7 +52,7 @@
      * options variable
      */
     start: function( event, options ) {
-      options._videoContainer.classList.add( "context-switcher-tiny" );
+      options._videoContainer.classList.add( "shrink-tiny" );
     },
 
     /**
@@ -62,12 +62,12 @@
      * options variable
      */
     end: function( event, options ) {
-      options._videoContainer.classList.remove( "context-switcher-tiny" );
+      options._videoContainer.classList.remove( "shrink-tiny" );
     },
 
     _teardown: function( options ) {
-      options._videoContainer.classList.remove( "context-switcher" );
-      options._videoContainer.classList.remove( "context-switcher-tiny" );
+      options._videoContainer.classList.remove( "shrink" );
+      options._videoContainer.classList.remove( "shrink-tiny" );
     }
   });
 })( Popcorn );
