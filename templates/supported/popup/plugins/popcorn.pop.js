@@ -305,10 +305,15 @@ todo: animate top, left and other styles (color, font size, etc.)
         }
         
         img.style.left = -(width - 16) + 'px';
-        if (container.offsetHeight) {
-          img.style.top = (container.offsetHeight - height) / 2 - 4 + 'px';
-        }				
-        container.insertBefore(img, container.firstChild);
+
+        // make sure container is still non-null
+        // if _teardown is called too quickly, it will become null before img loads
+        if (container){
+          if (container.offsetHeight) {
+            img.style.top = (container.offsetHeight - height) / 2 - 4 + 'px';
+          }
+          container.insertBefore(img, container.firstChild);          
+        }
       }, false);
     }
     
