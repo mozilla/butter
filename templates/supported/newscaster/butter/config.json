@@ -8,13 +8,18 @@
         "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
       },
       {
+        "type": "shrink",
+        "path": "{{baseDir}}templates/supported/shared/plugins/shrink/popcorn.shrink.js"
+      },
+      {
         "type": "titlecard",
         "path": "{{baseDir}}templates/supported/shared/plugins/titlecard/popcorn.titlecard.js"
       }
     ],
     "defaults": [
       "text",
-      "titlecard"
+      "titlecard",
+      "shrink"
     ]
   }
 }
