@@ -2,6 +2,7 @@
   "name": "newscaster",
   "baseDir": "../../../",
   "editor": {
+    "default": "{{baseDir}}editors/default-editor.html",
     "image2": "{{baseDir}}templates/supported/shared/editors/image-editor.html"
   },
   "plugin": {
