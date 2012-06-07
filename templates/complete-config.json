@@ -4,6 +4,10 @@
   "plugin": {
     "plugins": [
     {
+      "type": "speak",
+      "path": "{{baseDir}}templates/speak/popcorn.speak.js"
+    },
+    {
       "type": "attribution",
       "path": "{{baseDir}}external/popcorn-js/plugins/attribution/popcorn.attribution.js"
     },
@@ -83,6 +87,9 @@
       "type": "wordriver",
       "path": "{{baseDir}}external/popcorn-js/plugins/wordriver/popcorn.wordriver.js"
     }
+    ],
+    "defaults": [
+      "speak"
     ]
   }
 }
