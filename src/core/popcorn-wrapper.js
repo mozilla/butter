@@ -283,7 +283,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       // special case for basePlayer, since it doesn't require as much of a harness
       if( _mediaType === "baseplayer" ) {
         popcornString +=  "Popcorn.player( 'baseplayer' );\n" +
-                          "var popcorn = Popcorn.baseplayer( '#" + target + "', " + popcornOptions + " );\n";
+                          "var popcorn = Popcorn.baseplayer( '#" + target + "' " + popcornOptions + " );\n";
       }
       else{
         // just try to use Popcorn.smart to detect/setup video
