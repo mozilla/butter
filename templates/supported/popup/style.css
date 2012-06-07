@@ -1,0 +1,75 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: #333333;
+  font-size: 12px;
+  font-family: Helvetica,Arial,sans-serif;
+}
+
+video {
+  outline: none;
+}
+
+#scale-buttons {
+  position: fixed;
+  right: 35px;
+  z-index: 1000;
+  padding: 20px;
+  background-color: #eee;
+}
+
+#video-container {
+  position: relative;
+  margin: 1em auto;
+  width: 768px;
+}
+
+#video-container .vjs-big-play-button,
+#video-container .vjs-controls,
+#video-container .vjs-styles-check {
+  z-index: 202;
+}
+
+#video-container .vjs-spinner {
+  z-index: 201;
+}
+
+/* disable full screen button */
+#video-container .vjs-fullscreen-control {
+  display: none;
+}
+#video-container .vjs-volume-control {
+  right: 10px;
+}
+#video-container .vjs-time-control {
+  right: 65px;
+}
+#video-container .vjs-progress-control {
+  right: 140px;
+}
+
+#video-container .popcorn-words {
+  z-index: 250;
+}
+
+#video-container video {
+  display: block;
+  width: 100%;
+}
+
+#video-container {
+  font-size: 20px;
+  line-height: normal;
+}
+
+#video-container > div {
+  line-height: normal;
+}
+
+#pop-container > div {
+  /* default position */
+  position: absolute;
+  top: 0;
+  left: 0;
+}

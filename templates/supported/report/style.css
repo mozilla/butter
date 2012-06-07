@@ -1,0 +1,69 @@
+body {
+  background-color: black;
+  color: white;
+}
+.videobox {
+  position: absolute;
+  top: 50px;
+  left: 100px;
+  z-index: 2000;
+  margin: 1em;
+  width: 320px;
+  height: 180px;
+  border: 4px solid;
+  background-color: black;
+  border-bottom-color:#555;
+  border-right-color:#333;
+  border-top-color:#ddd;
+  border-left-color:#bbb;
+}
+.secondary {
+  position: absolute;
+  top: 50px;
+  left: 440px;
+  z-index: 2000;
+  margin: 1em;
+  width: 320px;
+  height: 180px;
+  border: 4px solid;
+  background-color: black;
+  border-bottom-color:#555;
+  border-right-color:#333;
+  border-top-color:#ddd;
+  border-left-color:#bbb;
+}
+.tertiary {
+  position: absolute;
+  top: 50px;
+  left: 780px;
+  z-index: 2000;
+  margin: 1em;
+  width: 480px;
+  height: 270px;
+}
+.background {
+  width: 100%;
+  height: 90%;
+}
+.scale:hover {
+  z-index: 50;
+  -webkit-transform: scale(1.5);
+  -moz-transform: scale(1.5);
+  -o-transform: scale(1.5);
+  -ms-transform: scale(1.5);
+  transform: scale(1.5);
+}
+.showoff:hover {
+  z-index: 50;
+  border-color: red;
+  -webkit-transition: all .5s ease-in-out;
+  -moz-transition: all .5s ease-in-out;
+  -o-transition: all .5s ease-in-out;
+  transition: all .5s ease-in-out;
+  -webkit-transform: scale(1.5);
+  -moz-transform: scale(1.5);
+  -o-transform: scale(1.5);
+  -ms-transform: scale(1.5);
+  -ms-transition: all .5s ease-in-out;
+  transform: scale(1.5);
+}
