@@ -1,3 +1,6 @@
+/* This Source Code Form is subject to the terms of the MIT license
+ * If a copy of the MIT license was not distributed with this file, you can
+ * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 (function(){
   var _menuItems = document.getElementsByClassName('menu-item'),
       _contentElement = document.getElementById( "content" ),
@@ -85,6 +88,7 @@
           try {
             localStorage.pmHeaderStates = JSON.stringify(headerStates);
           } catch (e) {
+            console.log( "Could not store editor state in local storage")
           }
         }
       };

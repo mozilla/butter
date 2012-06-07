@@ -30,7 +30,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       } //start
 
       media.onReady( start );
-      window.butter = butter;
 
     }
   }); //Butter

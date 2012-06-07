@@ -1,7 +1,11 @@
+/* This Source Code Form is subject to the terms of the MIT license
+ * If a copy of the MIT license was not distributed with this file, you can
+ * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 (function(){
     var _menuItems = document.getElementsByClassName('menu-item'),
         _contentElement = document.getElementById( "content" ),
         i;
+
     function toggleMenuItem(element, state) {
       var contentId = element.getAttribute('data-content-id'),
           contentItem = _contentElement.querySelectorAll('div[data-content-id="' + contentId + '"]')[0];
@@ -16,6 +20,7 @@
     }
 
     function createMenuItem(element){
+      var i;
       element.addEventListener('click', function(e) {
         toggleMenuItem(element, !element.classList.contains('open'));
         for (i=0; i<_menuItems.length; ++i) {

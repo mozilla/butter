@@ -100,10 +100,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       butter.tracks[0].json = track1;
 
     }
-
+    
       media.onReady( start );
-      window.butter = butter;
-
 
     } //ready
   }); //Butter

@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="style.css">
 
   <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
-  <script src="../../../src/butter.js" data-butter-exclude /></script>
+  <script src="../../../src/butter.js" data-butter-exclude></script>
   <script type="text/javascript" src="context.js" data-butter-exclude></script>
 </head>
 <body>
@@ -21,36 +21,39 @@
         <div id="text">Lorem ipsum</div>
         <div id="logo"></div> 
       </div>
-      </header>
-      <!-- Start Left Column -->
-      <div id="leftcontent">
-          <video id="videobox" preload data-butter="media" controls>
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/trailer.mp4" />
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/trailer.ogv" />
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/trailer.webm" />
-          </video>
-          <aside id="sources">
-            <div class="content" id="Box1" data-butter="target"><div class="overlay"></div><div class="inactive"></div></div>
-          </aside>              
-      </div>
-      <!-- Start Right Column -->
-      <div id="rightcontent">
-          <aside class="sources">
-                <div class="content" id="Box2" data-butter="target">
-                  <div class="overlay"></div>
-                  <div class="inactive"></div>
-                 </div>
-          </aside>
-          <aside class="sources">
-            <div class="content" id="Box3" data-butter="target">
-              <div class="overlay"></div>
-              <div class="inactive"></div>
-            </div>
-          </aside>      
-          <aside class="sources">
-            <div class="content" id="Box4" data-butter="target"></div>
-          </aside>     
-      </div>
+    </header>
+
+    <!-- Start Left Column -->
+    <div id="leftcontent">
+        <video id="videobox" preload data-butter="media" controls>
+          <source src="http://videos-cdn.mozilla.net/serv/webmademovies/trailer.mp4">
+          <source src="http://videos-cdn.mozilla.net/serv/webmademovies/trailer.ogv">
+          <source src="http://videos-cdn.mozilla.net/serv/webmademovies/trailer.webm">
+        </video>
+        <aside id="sources">
+          <div class="content" id="Box1" data-butter="target"><div class="overlay"></div><div class="inactive"></div></div>
+        </aside>              
+    </div>
+
+    <!-- Start Right Column -->
+    <div id="rightcontent">
+      <aside class="sources">
+        <div class="content" id="Box2" data-butter="target">
+          <div class="overlay"></div>
+          <div class="inactive"></div>
+        </div>
+      </aside>
+      <aside class="sources">
+        <div class="content" id="Box3" data-butter="target">
+          <div class="overlay"></div>
+          <div class="inactive"></div>
+        </div>
+      </aside>      
+      <aside class="sources">
+        <div class="content" id="Box4" data-butter="target"></div>
+      </aside>     
+    </div>
+
     <footer>Made with <a href="http://mozillapopcorn.org">Mozilla Popcorn</a></footer>
   </section>
 </body>
