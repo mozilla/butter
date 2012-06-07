@@ -20,20 +20,20 @@ define( [], function(){
 
     function update(){
       if( _state ){
-        _icon.removeAttribute( "state" );
+        _icon.removeAttribute( "data-state" );
       }
       else {
-        _icon.setAttribute( "state", true );
+        _icon.setAttribute( "data-state", true );
       } //if
     } //update
 
     function onMouseUp( e ){
-      _button.removeAttribute( "mouse-state" );
+      _button.removeAttribute( "data-mouse-state" );
       window.removeEventListener( "mouseup", onMouseUp, false );
     } //onMouseUp
 
     _button.addEventListener( "mousedown", function( e ){
-      _button.setAttribute( "mouse-state", "depressed" );
+      _button.setAttribute( "data-mouse-state", "depressed" );
       window.addEventListener( "mouseup", onMouseUp, false );
     }, false );
 
