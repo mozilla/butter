@@ -1,5 +1,4 @@
 // PLUGIN: pop
-// http://www.youtube.com/watch?v=CwnnSSs0kFA
 /*
 
 Default sound by Herbert Boland
@@ -220,24 +219,6 @@ todo: animate top, left and other styles (color, font size, etc.)
         i += 'px';
       }
       container.style.left = i;
-      container.style.position = 'absolute';
-    }
-    
-    i = options.right;
-    if (i || i === 0) {
-      if (!isNaN(i)) {
-        i += 'px';
-      }
-      container.style.right = i;
-      container.style.position = 'absolute';
-    }
-    
-    i = options.bottom;
-    if (i || i === 0) {
-      if (!isNaN(i)) {
-        i += 'px';
-      }
-      container.style.bottom = i;
       container.style.position = 'absolute';
     }
     
@@ -563,16 +544,6 @@ todo: animate top, left and other styles (color, font size, etc.)
         elem:'input',
         type:'number',
         label:'Left position'
-      },
-      bottom: {
-        elem:'input',
-        type:'number',
-        label:'Bottom position'
-      },
-      right: {
-        elem:'input',
-        type:'number',
-        label:'Right position'
       },
       target: {
         elem:'input',
