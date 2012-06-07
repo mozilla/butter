@@ -1,6 +1,6 @@
 (function() {
 	"use strict";
-	
+
 	var	urlRegex = /^(([A-Za-z]+):\/\/)+(([a-zA-Z0-9\._\-]+\.[a-zA-Z]{2,6})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})|localhost)(\:([0-9]+))*(\/[^#]*)?(\#.*)?$/;
 
 	function clone(obj) {
@@ -13,7 +13,7 @@
 		}
 		return copy;
 	}
-	
+
 	// borrowing this function from Popcorn
 	// Simple function to parse a timestamp into seconds
 	// Acceptable formats are:
@@ -32,7 +32,7 @@
 		if ( typeof timeStr === "number" ) {
 			return timeStr;
 		}
-		
+
 		if ( typeof timeStr !== "string") {
 			timeStr += '';
 		}
@@ -71,7 +71,7 @@
 			return parseFloat( firstPair, 10 );
 		}
 	}
-	
+
 	function toTimeStamp( time, frameRate ) {
 		var i, factors = [ 60, 60, 24 ],
 			t, v, s = '';
@@ -85,11 +85,11 @@
 			s = ';' + v;
 			time = Math.floor(time);
 		}
-		
+
 		if (!time) {
 			return '00;00';
 		}
-		
+
 		for (i = 0; i < factors.length && time; i++) {
 			t = time % factors[i];
 			if (i) {
@@ -102,17 +102,17 @@
 			s = v + s;
 			time = (time - t) / factors[i];
 		}
-		
+
 		return s;
 	}
-	
+
 	function EditorState(fields, frameRate, width, height) {
 		var name, field, that = this;
 		function makeElementValidator(name, type, modify) {
 			var fn,
 				mod = modify,
 				validator = that.validators[type];
-			
+
 			if (!validator) {
 				if (mod) {
 					return function() {
@@ -133,7 +133,7 @@
 					};
 				}
 			}
-			
+
 			fn = function(event) {
 				var val = validator(this.value), saveVal;
 				if (val === undefined) {
@@ -169,12 +169,12 @@
 
 			return fn;
 		}
-		
+
 		this.lastStateSaved = {};
 		this.trackEvent = {};
 		this.undoStack = [];
 		this.fields = {};
-		
+
 		this.width = width || document.body.offsetWidth;
 		this.height = height || document.body.offsetHeight;
 
@@ -184,9 +184,9 @@
 				if (input !== 0 && !input) {
 					return '';
 				}
-				
+
 				input = toSeconds( input, frameRate );
-	
+
 				if (input !== false) {
 					return toTimeStamp(input, frameRate);
 				}
@@ -210,7 +210,7 @@
 				}
 			}
 		};
-		
+
 		// this is the value that gets saved
 		this.saveValue = {
 			time: function (input) {
@@ -235,36 +235,36 @@
 				}
 			}
 		};
-		
+
 
 		for (name in fields) {
 
 			field = fields[name];
-			
+
 			if (typeof field === 'string') {
 				field = {
 					type: field
 				};
 			}
-			
+
 			if (!field.id) {
 				field.id = name;
 			}
-			
+
 			if (field.element) {
 				field.id = field.element.id || field.id || name;
 			} else {
 				field.element = document.getElementById(field.id);
 			}
-			
+
 			if (field.element) {
 				field.element.addEventListener('change', makeElementValidator(name, field.type, true), true);
-	
+
 				if (field.element.tagName === 'TEXTAREA' || field.element.tagName === 'INPUT') {
 					field.element.addEventListener('keyup', makeElementValidator(name, field.type), false);
 				}
 			}
-			
+
 			if (field.type === 'target') {
 				this.target = field;
 				if (typeof field.fieldset === 'string') {
@@ -273,7 +273,7 @@
 			} else if (field.type === 'time') {
 //				field.
 			}
-			
+
 			this.fields[name] = field;
 		}
 
@@ -298,7 +298,7 @@
 					if (typeof field.callback === 'function') {
 						field.callback(field, that.trackEvent[n]);
 					}
-					
+
 				}
 			}
 
@@ -330,7 +330,7 @@
 						if (typeof field.callback === 'function') {
 							field.callback(field, that.trackEvent[n]);
 						}
-						
+
 					}
 				}
 
@@ -365,23 +365,20 @@
 		if (typeof field.filter === 'function') {
 			field.filter(field, targets);
 		}
-		
+
 		select = field.element;
 		fieldset = field.fieldset || select;
-		
-		if (targets.length <= 1) {
-			fieldset.style.display = 'none';
 
+		if (targets.length <= 1) {
 			if (targets.length) {
 				this.trackEvent.target = targets[0];
 			}
 		} else {
 			fieldset.style.display = '';
 			select = field.element;
-			//select.innerHTML = '<option>Default</option>';
-			
+
 			for (i = 0; i < targets.length; i++) {
-				
+
 				option = document.createElement('option');
 				option.value = targets[i][0];
 				option.appendChild( document.createTextNode(targets[i][0]) );
@@ -397,13 +394,13 @@
 			}
 
 		}
-		
+
 		this.targets = targets;
 	};
 
 	EditorState.prototype.setField = function (fieldName, value) {
 		var field = this.fields[fieldName];
-		
+
 		this.pushState();
 
 		if (this.saveValue[field.type]) {
@@ -415,11 +412,11 @@
 		if (this.validators[field.type] && field.element) {
 			field.element.value = this.validators[field.type](value);
 		}
-		
+
 		if (typeof field.callback === 'function') {
 			field.callback(field, value);
 		}
-		
+
 		this.save();
 
 		return this.trackEvent[fieldName];
@@ -434,8 +431,8 @@
 				if (this.validators[field.type]) {
 					value = this.validators[field.type](value);
 				}
-				
-				field.element.value = (!value && value !== 0) ? '' : value;	
+
+				field.element.value = (!value && value !== 0) ? '' : value;
 			}
 		}
 	};
@@ -466,7 +463,7 @@
 		this.pushState();
 		this.updateForm();
 	};
-	
+
 	EditorState.prototype.cancel = function () {
 		this.reset();
 		if (this.client) {
@@ -498,7 +495,7 @@
 			if (urlRegex.test(url)) {
 				return url;
 			}
-			
+
 			if (base && (matches = urlRegex.exec(base))) {
 				base = {};
 				base.protocol = matches[2] + ':';
@@ -511,11 +508,11 @@
 			}
 
 			var urlSplit = url.split('/');
-			
+
 			if (urlSplit.length && urlSplit[0] === '' ) {
 				return base.protocol + '//' + base.host + url;
 			}
-			
+
 			var dir = base.pathname.split('?');
 			dir = dir[0].split('/');
 			dir.pop();
