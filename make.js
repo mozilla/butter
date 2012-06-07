@@ -15,15 +15,14 @@ var JSLINT = './node_modules/jshint/bin/hint',
 require('shelljs/make');
 
 
-function checkCSS( dirs, warnings, errors ) {
-  // dirs must be passed as an array
+function checkCSS( dirs ) {
   echo('### Linting CSS files');
   if (dirs instanceof Array) {
     dirs = dirs.join(' ');
   }
 
   // see cli.js --list-rules.
-  warnings = warnings || [
+  var warnings = [
 //    "important",
 //    "adjoining-classes",
 //    "duplicate-background-images",
@@ -41,7 +40,7 @@ function checkCSS( dirs, warnings, errors ) {
     "zero-units"
   ].join(",");
 
-  errors = errors && errors.join(",") || [
+  var errors = [
     "known-properties",
     "compatible-vendor-prefixes",
     "display-property-grouping",
@@ -113,7 +112,7 @@ target.docs = function() {
 };
 
 target.check = function() {
-  checkJS( "src" );
+  checkJS( 'src' );
   checkCSS( [CSS_DIR, DIALOGS_DIR] );
 };
 
