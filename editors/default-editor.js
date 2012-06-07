@@ -1,10 +1,12 @@
 (function(){
-  var _comm = new Comm(),
+  var _comm = new window.Comm(),
       _manifest = {};
 
-  // TODO: this should be something we reuse from src/ui/widget/textbox.js
-  // with require.  We need to expose butter internals to editors.
-  // https://webmademovies.lighthouseapp.com/projects/65733/tickets/1174
+  /*
+   *TODO: this should be something we reuse from src/ui/widget/textbox.js
+   * with require.  We need to expose butter internals to editors.
+   * https://webmademovies.lighthouseapp.com/projects/65733/tickets/1174
+
   function __highlight( e ){
     var input = e.target;
     input.select();
@@ -37,6 +39,7 @@
     return input;
 
   }
+  */
 
   document.addEventListener( "DOMContentLoaded", function( e ){
 
@@ -44,8 +47,10 @@
       alsoClose = !!alsoClose;
       var popcornOptions = {};
       for( var item in _manifest ) {
-        var elem = document.getElementById( item );
-        popcornOptions[ item ] = elem.type === "checkbox" ? elem.checked : elem.value;
+        if( _manifest.hasOwnProperty( item ) ) {
+          var elem = document.getElementById( item );
+          popcornOptions[ item ] = elem.type === "checkbox" ? elem.checked : elem.value;
+        }
       }
       document.getElementById( "message" ).innerHTML = "";
       _comm.send( "submit", {
@@ -76,8 +81,10 @@
 
     _comm.listen( "trackeventupdated", function( e ){
       for( var item in _manifest ){
-        var element = document.getElementById( item );
-        element.value = e.data[ item ];
+        if( _manifest.hasOwnProperty( item ) ) {
+          var element = document.getElementById( item );
+          element.value = e.data[ item ];
+        }
       } //for
     });
 
@@ -109,8 +116,7 @@
             input: function( manifest, manifestProp ) {
               var manifestItem = manifest[ manifestProp ],
                   elem = document.createElement( manifestItem.elem ),
-                  type = manifestItem.type,
-                  val;
+                  type = manifestItem.type;
 
               elem.type = type;
               elem.id = manifestProp;
@@ -123,8 +129,9 @@
             select: function( manifest, manifestProp, items ) {
               var manifestItem = manifest[ manifestProp ],
                   elem = document.createElement( "SELECT" ),
-                  items = items || manifestItem.options,
                   option;
+
+              items = items || manifestItem.options;
 
               elem.id = manifestProp;
 
@@ -202,4 +209,4 @@
       sendData( false );
     });
   }, false );
-})();
+}());
