@@ -1,15 +1,25 @@
+body {
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+
 #map {
   width: 542px;
   height: 142px;
-  float: left;
 }
 
-input[type=text] {
-  width: 220px;
+table#table tr td input, table#table tr td select {
+  font-size: 0.9em;
+  width: 180px;
 }
 
-input#start, input#end {
-  width: 80px;
+table#table tr td label {
+  font-size: 0.9em;
+}
+
+table {
+  font-family: helvetica !important;
+  color: #fff !important;
 }
 
 p#message {
