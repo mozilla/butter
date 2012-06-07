@@ -43,11 +43,11 @@
     function sendData( alsoClose, options ){
       alsoClose = !!alsoClose;
       var popcornOptions = {};
-      for( var item in _manifest ) {
+      for ( var item in _manifest ) {
         if ( options && options[ item ] ) {
            popcornOptions[ item ] = options[ item ];
         } else if ( item === "src" ) {
-          if( document.getElementById( "imageType" ) && document.getElementById( "imageType" ).value === "url" ) {
+          if ( document.getElementById( "useURL" ) && document.getElementById( "useURL" ).value === true ) {
             popcornOptions[ item ] = document.getElementById( item ).value;
           }
         } else if ( document.getElementById( item ) ) {
@@ -70,9 +70,9 @@
     }
 
     document.addEventListener( "keydown", function( e ) {
-      if( e.keyCode === 13 ) {
+      if ( e.keyCode === 13 ) {
         okPressed( e );
-      } else if( e.keyCode === 27 ) {
+      } else if ( e.keyCode === 27 ) {
         cancelPressed( e );
       }
     }, false);
@@ -83,14 +83,14 @@
 
     _comm.listen( "trackeventupdated", function( e ){
       
-      for( var item in _manifest ){
+      for ( var item in _manifest ){
         var element = document.getElementById( item );
         element.value = e.data[ item ];
-        if( item === "src" ) {
-          if( e.data[ "imageType" ] === "dataURI" ) {
+        if ( item === "src" ) {
+          if ( e.data[ "useURL" ] === false ) {
             document.getElementById("src-container").style.display = "none";
             //document.getElementById("drop-target").style.display = "block";
-          } else if( e.data[ "imageType" ] === "url" ) {
+          } else if ( e.data[ "useURL" ] === true ) {
             document.getElementById("src-container").style.display = "block";
             //document.getElementById("drop-target").style.display = "none";
           }
@@ -100,7 +100,7 @@
     });
 
     _comm.listen( "trackeventupdatefailed", function( e ) {
-      if( e.data === "invalidtime" ){
+      if ( e.data === "invalidtime" ){
         document.getElementById( "message" ).innerHTML = "You've entered an invalid start or end time. Please verify that they are both greater than 0, the end time is equal to or less than the media's duration, and that the start time is less than the end time.";
       } //if
     });
@@ -160,7 +160,9 @@
                 elem.appendChild( option );
               }
               elem.value = this.defaultValue( manifestItem, popcornOptions[ manifestProp ] );
-              if( manifestProp === "target" ) { elem.value = masterTarget }
+              if ( manifestProp === "target" ) { 
+                elem.value = masterTarget 
+              }
               return elem;
             }
           };
@@ -206,7 +208,7 @@
           row.id = "src-container";
           table.appendChild( row );
           createImageDropper( item, hidden );
-        } else if ( item == "imageType") {
+        } else if ( item == "useURL") {
           table.appendChild( row );
         } else {
           table.appendChild( row );
@@ -224,9 +226,11 @@
 
         dropTarget = document.createElement( "div" );
         dropTarget.id = "drop-target";
-        dropTarget.innerHTML = "<span>Drag an image from your desktop...</span";
+        dropTarget.innerHTML = "<span>Drag an image from your desktop...</span>";
 
-        if(  popcornOptions[ item ] ) { dropTarget.style.backgroundImage = "url('" + popcornOptions[ item ] + "')"; }  
+        if(  popcornOptions[ item ] ) { 
+          dropTarget.style.backgroundImage = "url('" + popcornOptions[ item ] + "')"; 
+        }  
 
         sourceEditor.appendChild( dropTarget );
 
@@ -240,7 +244,7 @@
           dropTarget.className = "";
         }, false);
 
-        dropTarget.addEventListener( 'drop', function( event ) {
+        dropTarget.addEventListener( "drop", function( event ) {
           dropTarget.className = "dropped";
           event.preventDefault();
           var file = event.dataTransfer.files[ 0 ],
@@ -256,15 +260,15 @@
 
           image = document.createElement( 'img' );
           image.onload = function () {
-              canvas.width = this.width;
-              canvas.height = this.height;
-              context = canvas.getContext( '2d' );
-              context.drawImage( this, 0, 0, this.width, this.height );
-              imgURI = canvas.toDataURL();
+            canvas.width = this.width;
+            canvas.height = this.height;
+            context = canvas.getContext( '2d' );
+            context.drawImage( this, 0, 0, this.width, this.height );
+            imgURI = canvas.toDataURL();
 
-              sendData( false, {"src" : imgURI, "imageType": "dataURI" } );
-              dropTarget.style.backgroundImage = "url('" +  imgURI + "')";
-              dropTarget.firstChild.innerHTML = "";
+            sendData( false, { "src": imgURI, "useURL": false } );
+            dropTarget.style.backgroundImage = "url('" +  imgURI + "')";
+            dropTarget.firstChild.innerHTML = "";
           };
           image.src = imgSrc;
 

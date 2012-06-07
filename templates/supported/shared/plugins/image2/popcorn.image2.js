@@ -38,11 +38,11 @@
         },
         options: {
           target: "video-overlay",
-          imageType: {
-            elem: "select",
-            options: [ "url", "dataURI" ],
+          useURL: {
+            elem: "input",
+            type: "checkbox",
             label: "Use URL?",
-            "default": "url"
+            "default": false
           },
           src: {
             elem: "input",
