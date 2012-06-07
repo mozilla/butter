@@ -14,6 +14,61 @@ var JSLINT = './node_modules/jshint/bin/hint',
 
 require('shelljs/make');
 
+
+function checkCSS( dirs ) {
+  echo('### Linting CSS files');
+  if (dirs instanceof Array) {
+    dirs = dirs.join(' ');
+  }
+
+  // see cli.js --list-rules.
+  var warnings = [
+//    "important",
+//    "adjoining-classes",
+//    "duplicate-background-images",
+//    "qualified-headings",
+    "fallback-colors",
+//    "empty-rules",
+//    "shorthand",
+//    "overqualified-elements",
+//    "import",
+    "regex-selectors",
+//    "rules-count",
+//    "font-sizes",
+//    "universal-selector",
+//    "unqualified-attributes",
+    "zero-units"
+  ].join(",");
+
+  var errors = [
+    "known-properties",
+    "compatible-vendor-prefixes",
+    "display-property-grouping",
+    "duplicate-properties",
+    "errors",
+    "gradients",
+    "font-faces",
+    "floats",
+    "vendor-prefix"
+  ].join(",");
+
+  exec(CSSLINT + ' --warnings=' + warnings +
+                 ' --errors=' + errors +
+                 ' --quiet --format=compact' +
+                 ' ' + dirs);
+}
+
+function checkJS( dirs ){
+  // Takes a string or an array of strings referring to directories.
+  echo('### Linting JS files');
+  
+  var files = find(dirs).filter( function( file ) {
+        return file.match(/\.js$/);
+      }).join(' ');
+
+  exec(JSLINT + ' ' + files + ' --show-non-errors');
+}
+
 target.all = function() {
   target.submodules();
   target.check();
@@ -57,61 +112,21 @@ target.docs = function() {
 };
 
 target.check = function() {
-  target['check-lint']();
-  target['check-css']();
+  checkJS( 'src' );
+  checkCSS( [CSS_DIR, DIALOGS_DIR] );
 };
 
-target['check-css'] = function() {
-  echo('### Linting CSS files');
-
-  // see cli.js --list-rules.  Commenting out some warnings for now
-  // which we might want to add back in later.
-  var warnings = [
-//    "important",
-//    "adjoining-classes",
-//    "duplicate-background-images",
-//    "qualified-headings",
-    "fallback-colors",
-//    "empty-rules",
-//    "shorthand",
-//    "overqualified-elements",
-//    "import",
-    "regex-selectors",
-//    "rules-count",
-//    "font-sizes",
-//    "universal-selector",
-//    "unqualified-attributes",
-    "zero-units"
-  ].join(",");
-
-  var errors = [
-    "known-properties",
-    "compatible-vendor-prefixes",
-    "display-property-grouping",
-    "duplicate-properties",
-    "errors",
-    "gradients",
-    "font-faces",
-    "floats",
-    "vendor-prefix"
-  ].join(",");
-
-  exec(CSSLINT + ' --warnings=' + warnings +
-                 ' --errors=' + errors +
-                 ' --quiet --format=compact' +
-                 ' ' + CSS_DIR +
-                 ' ' + DIALOGS_DIR +
-                 ' ' + TEMPLATES_DIR);
+target['check-templates'] = function() {
+  checkJS( TEMPLATES_DIR );
+  checkCSS( TEMPLATES_DIR );
 };
 
-target['check-lint'] = function() {
-  echo('### Linting JS files');
+target['check-css'] = function( dirs ) {
+  checkCSS( [CSS_DIR, DIALOGS_DIR] );
+};
 
-  var files = find('src').filter( function( file ) {
-    return file.match(/\.js$/);
-  }).join(" ");
-
-  exec(JSLINT + ' ' + files + ' --show-non-errors');
+target['check-lint'] = function( dir ) {
+  checkJS( 'src' );
 };
 
 target.build = function() {
