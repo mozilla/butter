@@ -162,7 +162,7 @@ function lessToCSS( compress ){
         ( compress ? "with" : "without" ) +
         " compression)" );
 
-  var args = compress ? " -x " : " ",
+  var args = compress ? " --yui-compress " : " ",
   result = exec(LESS + args + BUTTER_LESS_FILE, {silent:true});
 
   if( result.code === 0 ){
