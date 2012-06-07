@@ -74,7 +74,12 @@ section[role="video-container"]  > video {
   left: 0;
   width: 100%;
 }
-
+.upper-corner {
+  position: absolute;;
+  top: 20px;
+  left: 20px;
+  width: 250px;
+}
 section[role="suplementary"] {
   margin: 40px 0;
   font-weight: 400;
