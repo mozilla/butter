@@ -1,0 +1,88 @@
+{
+  "name": "context",
+  "baseDir": "../../../",
+  "plugin": {
+    "plugins": [
+    {
+      "type": "attribution",
+      "path": "{{baseDir}}external/popcorn-js/plugins/attribution/popcorn.attribution.js"
+    },
+    {
+      "type": "code",
+      "path": "{{baseDir}}external/popcorn-js/plugins/code/popcorn.code.js"
+    },
+    {
+      "type": "flickr",
+      "path": "{{baseDir}}external/popcorn-js/plugins/flickr/popcorn.flickr.js"
+    },
+    {
+      "type": "text",
+      "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
+    },
+    {
+      "type": "gml",
+      "path": "{{baseDir}}external/popcorn-js/plugins/gml/popcorn.gml.js"
+    },
+    {
+      "type": "googlefeed",
+      "path": "{{baseDir}}external/popcorn-js/plugins/googlefeed/popcorn.googlefeed.js"
+    },
+    {
+      "type": "googlemap",
+      "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
+    },
+    {
+      "type": "image",
+      "path": "{{baseDir}}external/popcorn-js/plugins/image/popcorn.image.js"
+    },
+    {
+      "type": "lastfm",
+      "path": "{{baseDir}}external/popcorn-js/plugins/lastfm/popcorn.lastfm.js"
+    },
+    {
+      "type": "linkedin",
+      "path": "{{baseDir}}external/popcorn-js/plugins/linkedin/popcorn.linkedin.js"
+    },
+    {
+      "type": "lowerthird",
+      "path": "{{baseDir}}external/popcorn-js/plugins/lowerthird/popcorn.lowerthird.js"
+    },
+    {
+      "type": "rdio",
+      "path": "{{baseDir}}external/popcorn-js/plugins/rdio/popcorn.rdio.js"
+    },
+    {
+      "type": "subtitle",
+      "path": "{{baseDir}}external/popcorn-js/plugins/subtitle/popcorn.subtitle.js"
+    },
+    {
+      "type": "tagthisperson",
+      "path": "{{baseDir}}external/popcorn-js/plugins/tagthisperson/popcorn.tagthisperson.js"
+    },
+    {
+      "type": "tumblr",
+      "path": "{{baseDir}}external/popcorn-js/plugins/tumblr/popcorn.tumblr.js"
+    },
+    {
+      "type": "twitter",
+      "path": "{{baseDir}}external/popcorn-js/plugins/twitter/popcorn.twitter.js"
+    },
+    {
+      "type": "processing",
+      "path": "{{baseDir}}external/popcorn-js/plugins/processing/popcorn.processing.js"
+    },
+    {
+      "type": "webpage",
+      "path": "{{baseDir}}external/popcorn-js/plugins/webpage/popcorn.webpage.js"
+    },
+    {
+      "type": "wikipedia",
+      "path": "{{baseDir}}external/popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"
+    },
+    {
+      "type": "wordriver",
+      "path": "{{baseDir}}external/popcorn-js/plugins/wordriver/popcorn.wordriver.js"
+    }
+    ]
+  }
+}

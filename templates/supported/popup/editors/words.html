@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="../../../../editors/editor.js"></script>
+    <script type="text/javascript" src="js/editor-state.js"></script>
+    <link rel="stylesheet" type="text/css" href="editor.css">
+  </head>
+  <body>
+    <div id="menu">
+      <div class="menu-item" data-content-id="content">Content</div>
+      <div class="menu-item" data-content-id="position">Position</div>
+      <div class="menu-item" data-content-id="time">Time</div>
+      <div class="menu-item" data-content-id="style">Style</div>
+    </div>
+
+    <div id="content">
+      <div class="content-item" data-content-id="time">
+        <table class="form">
+          <tbody class="form-header">
+            <tr><th colspan="2">Time</th></tr>
+          </tbody>
+          <tbody>
+            <tr>
+              <th><label for="start">From:</label></th>
+              <td><input type="text" id="start"></td>
+            </tr>
+            <tr>
+              <th><label for="end">To:</label></th>
+              <td><input type="text" id="end"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="content-item" data-content-id="content">
+        <table class="form">
+          <tbody class="form-header">
+            <tr><th colspan="2">Content</th></tr>
+          </tbody>
+          <tbody>
+            <tr>
+              <th><label for="text">Text:</label></th>
+              <td><textarea id="text"></textarea></td>
+            </tr>
+            <tr>
+              <th><label for="link">Link:</label></th>
+              <td><input type="text" id="link"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="content-item" data-content-id="style">
+        <table class="form">
+          <tbody class="form-header">
+            <tr><th colspan="2">Style</th></tr>
+          </tbody>
+          <tbody>
+            <tr>
+              <th><label for="classes">Class(es):</label></th>
+              <td><input type="text" id="classes"></td>
+            </tr>
+            <tr>
+              <th><label for="align">Text Alignment:</label></th>
+              <td>
+                <select id="align">
+                  <option value="">Auto</option>
+                  <option value="left">Left</option>
+                  <option value="center">Center</option>
+                  <option value="right">Right</option>
+                  <option value="justify">Justify</option>
+                  <option value="start">Start</option>
+                  <option value="end">End</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th><label for="style">CSS:</label></th>
+              <td><input type="text" id="style"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="content-item" data-content-id="position">
+        <table class="form">
+          <tbody class="form-header">
+            <tr><th colspan="2">Position</th></tr>
+          </tbody>
+          <tbody>
+            <tr>
+              <th><label for="left">Left (%):</label></th>
+              <td><input type="text" id="left"></td>
+            </tr>
+            <tr>
+              <th><label for="top">Top (%):</label></th>
+              <td><input type="text" id="top"></td>
+            </tr>
+          </tbody>
+          <tbody id="target-section">
+            <tr>
+              <th><label for="target">Target:</label></th>
+              <td><select id="target"></select></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="js/words-editor.js"></script>
+  </body>
+</html>
