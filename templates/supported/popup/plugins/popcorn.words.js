@@ -22,7 +22,7 @@ todo: animate top, left and other styles (color, font size, etc.)
 			container,
 			textContainer,
 			text, node, i;
-		
+
 		if (!options) {
 			return nop;
 		}
@@ -39,12 +39,12 @@ todo: animate top, left and other styles (color, font size, etc.)
 		if (typeof target === 'string') {
 
 			target = document.getElementById(target);
-			
+
 			if (!target) {
 				return nop;
 			}
 		}
-		
+
 		container = document.createElement('div');
 		container.style.cssText = options.style || '';
 
@@ -65,29 +65,11 @@ todo: animate top, left and other styles (color, font size, etc.)
 			container.style.left = i;
 			container.style.position = 'absolute';
 		}
-		
-		i = options.right;
-		if (i || i === 0) {
-			if (!isNaN(i)) {
-				i += 'px';
-			}
-			container.style.right = i;
-			container.style.position = 'absolute';
-		}
-		
-		i = options.bottom;
-		if (i || i === 0) {
-			if (!isNaN(i)) {
-				i += 'px';
-			}
-			container.style.bottom = i;
-			container.style.position = 'absolute';
-		}
-		
+
 		if (options.align) {
 			container.style.textAlign = options.align;
 		}
-		
+
 
 		container.style.display = 'none';
 		if (options.classes) {
@@ -100,7 +82,7 @@ todo: animate top, left and other styles (color, font size, etc.)
 		} else {
 			container.setAttribute('class', 'popcorn-words');
 		}
-		
+
 		if (options.link) {
 			textContainer = document.createElement('a');
 			textContainer.setAttribute('href', options.link);
@@ -119,7 +101,7 @@ todo: animate top, left and other styles (color, font size, etc.)
 		} else {
 			textContainer = container;
 		}
-		
+
 		text = options.text.split(/[\n\r]/);
 		for (i = 0; i < text.length; i++) {
 			if (i) {
@@ -127,7 +109,7 @@ todo: animate top, left and other styles (color, font size, etc.)
 			}
 			textContainer.appendChild(document.createTextNode(text[i]));
 		}
-		
+
 		target.appendChild(container);
 		options.container = container;
 
@@ -173,7 +155,7 @@ todo: animate top, left and other styles (color, font size, etc.)
 				if (options.container) {
 					options.container.style.display = 'none';
 				}
-				
+
 				if (typeof options.onEnd === 'function') {
 					try {
 						options.onEnd(options);
@@ -233,16 +215,6 @@ todo: animate top, left and other styles (color, font size, etc.)
 				elem:'input',
 				type:'number',
 				label:'Left position'
-			},
-			bottom: {
-				elem:'input',
-				type:'number',
-				label:'Bottom position'
-			},
-			right: {
-				elem:'input',
-				type:'number',
-				label:'Right position'
 			},
 			target: {
 				elem:'input',
