@@ -25,7 +25,7 @@ define( [
       butter.ui.areas.work.addComponent( _parentElement, {
         states: [ "timeline" ],
         transitionIn: function(){
-          _parentElement.style.display = "block";
+          _parentElement.style.visibility = "visible";
           setTimeout(function(){
             _parentElement.style.opacity = "1";
           }, 0);
@@ -37,7 +37,7 @@ define( [
           _parentElement.style.opacity = "0";
         },
         transitionOutComplete: function(){
-          _parentElement.style.display = "none";
+          _parentElement.style.visibility = "hidden";
         }
       });
 
