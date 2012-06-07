@@ -14,6 +14,62 @@ var JSLINT = './node_modules/jshint/bin/hint',
 
 require('shelljs/make');
 
+
+function checkCSS( dirs, warnings, errors ) {
+  // dirs must be passed as an array
+  echo('### Linting CSS files');
+  if (dirs instanceof Array) {
+    dirs = dirs.join(' ');
+  }
+
+  // see cli.js --list-rules.
+  warnings = warnings || [
+//    "important",
+//    "adjoining-classes",
+//    "duplicate-background-images",
+//    "qualified-headings",
+    "fallback-colors",
+//    "empty-rules",
+//    "shorthand",
+//    "overqualified-elements",
+//    "import",
+    "regex-selectors",
+//    "rules-count",
+//    "font-sizes",
+//    "universal-selector",
+//    "unqualified-attributes",
+    "zero-units"
+  ].join(",");
+
+  errors = errors && errors.join(",") || [
+    "known-properties",
+    "compatible-vendor-prefixes",
+    "display-property-grouping",
+    "duplicate-properties",
+    "errors",
+    "gradients",
+    "font-faces",
+    "floats",
+    "vendor-prefix"
+  ].join(",");
+
+  exec(CSSLINT + ' --warnings=' + warnings +
+                 ' --errors=' + errors +
+                 ' --quiet --format=compact' +
+                 ' ' + dirs);
+}
+
+function checkJS( dirs ){
+  // Takes a string or an array of strings referring to directories.
+  echo('### Linting JS files');
+  
+  var files = find(dirs).filter( function( file ) {
+        return file.match(/\.js$/);
+      }).join(' ');
+
+  exec(JSLINT + ' ' + files + ' --show-non-errors');
+}
+
 target.all = function() {
   target.submodules();
   target.check();
@@ -57,63 +113,21 @@ target.docs = function() {
 };
 
 target.check = function() {
-  target['check-lint']( "src" );
-  target['check-css']( CSS_DIR + ' ' + DIALOGS_DIR );
+  checkJS( "src" );
+  checkCSS( [CSS_DIR, DIALOGS_DIR] );
 };
 
 target['check-templates'] = function() {
-  target['check-lint']( TEMPLATES_DIR );
-  target['check-css']( TEMPLATES_DIR );
+  checkJS( TEMPLATES_DIR );
+  checkCSS( TEMPLATES_DIR );
 };
 
 target['check-css'] = function( dirs ) {
-  echo('### Linting CSS files');
-  // see cli.js --list-rules.  Commenting out some warnings for now
-  // which we might want to add back in later.
-  var warnings = [
-//    "important",
-//    "adjoining-classes",
-//    "duplicate-background-images",
-//    "qualified-headings",
-    "fallback-colors",
-//    "empty-rules",
-//    "shorthand",
-//    "overqualified-elements",
-//    "import",
-    "regex-selectors",
-//    "rules-count",
-//    "font-sizes",
-//    "universal-selector",
-//    "unqualified-attributes",
-    "zero-units"
-  ].join(",");
-
-  var errors = [
-    "known-properties",
-    "compatible-vendor-prefixes",
-    "display-property-grouping",
-    "duplicate-properties",
-    "errors",
-    "gradients",
-    "font-faces",
-    "floats",
-    "vendor-prefix"
-  ].join(",");
-
-  exec(CSSLINT + ' --warnings=' + warnings +
-                 ' --errors=' + errors +
-                 ' --quiet --format=compact' +
-                 ' ' + dirs);
+  checkCSS( [CSS_DIR, DIALOGS_DIR] );
 };
 
 target['check-lint'] = function( dir ) {
-  echo('### Linting JS files');
-
-  var files = find( dir ).filter( function( file ) {
-    return file.match(/\.js$/);
-  }).join(" ");
-
-  exec(JSLINT + ' ' + files + ' --show-non-errors');
+  checkJS( 'src' );
 };
 
 target.build = function() {
