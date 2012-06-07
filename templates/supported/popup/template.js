@@ -93,8 +93,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       };
 
       //Add two random tracks
-      media.addTrack( "Track" + Math.random() );
-      media.addTrack( "Track" + Math.random() );
+      media.addTrack();
+      media.addTrack();
 
       //Add sample data
       butter.tracks[0].json = track1;

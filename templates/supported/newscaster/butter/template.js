@@ -10,8 +10,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
       function start(){
         media.addTrack( "Track1" );
-        media.addTrack( "Track" + Math.random() );
-        media.addTrack( "Track" + Math.random() );
+        media.addTrack();
+        media.addTrack();
 
         butter.tracks[0].addTrackEvent({
           type: "text",

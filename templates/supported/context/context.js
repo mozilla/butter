@@ -11,8 +11,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
       function start(){
         var track = media.addTrack( "Track1" );
-        media.addTrack( "Track" + Math.random() );
-        media.addTrack( "Track" + Math.random() );
+        media.addTrack();
+        media.addTrack();
 
         var event = track.addTrackEvent({
           type: "text",

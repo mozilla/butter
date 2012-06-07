@@ -10,7 +10,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
       function start(){
         var track1 = media.addTrack( "Track1" ),
-            track2 = media.addTrack( "Track" + Math.random() );
+            track2 = media.addTrack();
 
         track1.addTrackEvent({
           type: "text",
