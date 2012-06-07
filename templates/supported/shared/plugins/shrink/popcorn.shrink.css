@@ -1,11 +1,11 @@
-.context-switcher {
+.shrink {
   -webkit-transition: all .3s linear;
   -moz-transition: all .3s linear;
   -o-transition: all .3s linear;
   -ms-transition: all .3s linear;
   transition: all .3s linear;
 }
-.context-switcher.context-switcher-tiny {
+.shrink.shrink-tiny {
   -webkit-transform: scale(.25,.25);
   -webkit-transform-origin: top center;
   -webkit-transition: all .3s linear;
