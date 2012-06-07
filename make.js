@@ -6,10 +6,12 @@ var JSLINT = './node_modules/jshint/bin/hint',
     STYLUS = './node_modules/stylus/bin/stylus',
     DOX    = './tools/dox.py',
     DIST_DIR = 'dist',
+    SRC_DIR = 'src',
     CSS_DIR = 'css',
     TEMPLATES_DIR = 'templates',
     DIALOGS_DIR = 'dialogs',
     DOCS_DIR = 'docs',
+    EDITORS_DIR = 'editors',
     PACKAGE_NAME = 'butter';
 
 require('shelljs/make');
@@ -61,7 +63,7 @@ function checkCSS( dirs ) {
 function checkJS( dirs ){
   // Takes a string or an array of strings referring to directories.
   echo('### Linting JS files');
-  
+
   var files = find(dirs).filter( function( file ) {
         return file.match(/\.js$/);
       }).join(' ');
@@ -93,7 +95,7 @@ target.docs = function() {
   echo('### Creating documentation from src...');
   mkdir('-p', DOCS_DIR);
 
-  var files = find('src').filter( function( file ) {
+  var files = find( SRC_DIR ).filter( function( file ) {
     return file.match(/\.js$/);
   });
 
@@ -112,8 +114,8 @@ target.docs = function() {
 };
 
 target.check = function() {
-  checkJS( 'src' );
-  checkCSS( [CSS_DIR, DIALOGS_DIR] );
+  checkJS( [SRC_DIR, EDITORS_DIR] );
+  checkCSS( [CSS_DIR, DIALOGS_DIR, EDITORS_DIR] );
 };
 
 target['check-templates'] = function() {
@@ -122,11 +124,11 @@ target['check-templates'] = function() {
 };
 
 target['check-css'] = function( dirs ) {
-  checkCSS( [CSS_DIR, DIALOGS_DIR] );
+  checkCSS( [CSS_DIR, DIALOGS_DIR, EDITORS_DIR] );
 };
 
 target['check-lint'] = function( dir ) {
-  checkJS( 'src' );
+  checkJS( [SRC_DIR, EDITORS_DIR] );
 };
 
 target.build = function() {
