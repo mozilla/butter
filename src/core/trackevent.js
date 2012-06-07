@@ -116,6 +116,11 @@ define( [
             }
           }
         }
+
+        if ( !( "target" in _manifest ) && updateOptions.target ) {
+          _popcornOptions.target = updateOptions.target;
+        }
+
         if( newStart ){
           _popcornOptions.start = newStart;
         }
