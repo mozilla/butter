@@ -514,7 +514,8 @@ todo: animate top, left and other styles (color, font size, etc.)
       text: {
         elem:'input',
         type:'text',
-        label:'Text'
+        label:'Text',
+        "default": "pop!"
       },
       link: {
         elem:'input',
@@ -538,12 +539,14 @@ todo: animate top, left and other styles (color, font size, etc.)
       top: {
         elem:'input',
         type:'number',
-        label:'Top position'
+        label:'Top position',
+        "default": "50%"
       },
       left: {
         elem:'input',
         type:'number',
-        label:'Left position'
+        label:'Left position',
+        "default": "50%"
       },
       target: {
         elem:'input',

@@ -4,7 +4,7 @@
 (function(){
   var _menuItems = document.getElementsByClassName('menu-item'),
       _contentElement = document.getElementById( "content" ),
-      i;
+      j;
 
   function toggleMenuItem(element, state) {
     var contentId = element.getAttribute('data-content-id'),
@@ -20,6 +20,7 @@
   }
 
   function createMenuItem(element){
+    var i;
     element.addEventListener('click', function(e) {
       toggleMenuItem(element, !element.classList.contains('open'));
       for (i=0; i<_menuItems.length; ++i) {
@@ -30,15 +31,19 @@
     }, false);
   }
 
-  for (i=0; i<_menuItems.length; ++i) {
-    createMenuItem(_menuItems[i]);
+  for (j=0; j<_menuItems.length; ++j) {
+    createMenuItem(_menuItems[j]);
   }
-
+  
   toggleMenuItem(_menuItems[0], true);
 }());
 
 (function() {
-  var bin, icons = [], userIcons, i, editor;
+  var bin, 
+      icons = [], 
+      userIcons, 
+      i, 
+      editor;
   
   editor = new EditorState({
     start: {
@@ -69,10 +74,8 @@
     headerStates,
     header, id;
     
-  try {
-    headerStates = (localStorage && JSON.parse(localStorage.pmHeaderStates));
-  } catch(e) {
-  }
+  headerStates = (localStorage && JSON.parse(localStorage.pmHeaderStates));
+
   if (!headerStates) {
     headerStates = {};
   }
@@ -88,7 +91,7 @@
           try {
             localStorage.pmHeaderStates = JSON.stringify(headerStates);
           } catch (e) {
-            console.log( "Could not store editor state in local storage")
+            console.log( "Could not store editor state in local storage");
           }
         }
       };
