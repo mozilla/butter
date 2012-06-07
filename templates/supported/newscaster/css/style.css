@@ -75,7 +75,7 @@ section[role="video-container"]  > video {
   width: 100%;
 }
 .upper-corner {
-  position: absolute;;
+  position: absolute;
   top: 20px;
   left: 20px;
   width: 250px;
