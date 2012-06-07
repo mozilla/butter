@@ -37,16 +37,7 @@
           website: "http://scottdowne.wordpress.com/"
         },
         options: {
-          start: {
-            elem: "input",
-            type: "number",
-            label: "In"
-          },
-          end: {
-            elem: "input",
-            type: "number",
-            label: "Out"
-          },
+          target: "video-overlay",
           imageType: {
             elem: "select",
             options: [ "url", "dataURI" ],
@@ -57,6 +48,12 @@
             elem: "input",
             type: "url",
             label: "Source URL",
+          },
+          href: {
+            elem: "input",
+            type: "url",
+            label: "Link URL",
+            optional: true
           },
           width: {
             elem: "input",
@@ -82,13 +79,16 @@
             label: "Left",
             "default": "0"
           },
-          href: {
+          start: {
             elem: "input",
-            type: "url",
-            label: "Link URL",
-            optional: true
+            type: "number",
+            label: "In"
           },
-          target: "video-overlay"
+          end: {
+            elem: "input",
+            type: "number",
+            label: "Out"
+          }
         }
       },
       _setup: function( options ) {
@@ -113,7 +113,7 @@
 
 
         if ( !target && Popcorn.plugin.debug ) {
-          target = context.media.parentNode();
+          target = context.media.parentNode;
         }
         // add the widget's div to the target div
         target && target.appendChild( options._container );
