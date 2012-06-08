@@ -110,6 +110,7 @@
           options._container.style.height = options.height;
           options._container.style.top = options.top;
           options._container.style.left = options.left;
+          options._container.style.overflow = "hidden";
 
 
         if ( !target && Popcorn.plugin.debug ) {
