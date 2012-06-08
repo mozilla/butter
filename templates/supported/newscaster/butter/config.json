@@ -1,6 +1,10 @@
 {
   "name": "newscaster",
   "baseDir": "../../../",
+  "editor": {
+    "default": "{{baseDir}}editors/default-editor.html",
+    "image2": "{{baseDir}}templates/supported/shared/editors/image-editor.html"
+  },
   "plugin": {
     "plugins": [
       {
@@ -10,11 +14,16 @@
       {
         "type": "titlecard",
         "path": "{{baseDir}}templates/supported/shared/plugins/titlecard/popcorn.titlecard.js"
+      },
+      {
+        "type": "image2",
+        "path": "{{baseDir}}templates/supported/shared/plugins/image2/popcorn.image2.js"
       }
     ],
     "defaults": [
       "text",
       "titlecard"
+      "image2"
     ]
   }
 }
