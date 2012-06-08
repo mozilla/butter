@@ -123,7 +123,7 @@
               elem.style.width = "100%";
               elem.placeholder = "Empty";
 
-              if( type !== "checkbox" ) {
+              if( type === "text" || type === "number" || type === "url" ) {
                 __TextboxWrapper( elem );
               }
 
