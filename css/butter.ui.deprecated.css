@@ -205,6 +205,7 @@ body.butter-tray-spacing.minimized {
   padding-left: 3px;
 }
 .butter-media-properties h3, .butter-media-properties p {
+  font-family: Verdana, sans-serif;
   margin: 0;
 }
 .butter-media-properties .url {
