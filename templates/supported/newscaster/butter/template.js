@@ -1,9 +1,9 @@
 /* This Source Code Form is subject to the terms of the MIT license
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
-(function( Butter, $ ) {
-  document.addEventListener( "DOMContentLoaded", function( e ){
 
+document.addEventListener( "DOMContentLoaded", function( e ){
+  (function( Butter, $ ) {
     Butter({
       config: "butter/config.json",
       ready: function( butter ){
@@ -66,6 +66,7 @@
               }
 
               //Apply resizable/draggable if jQuery exists
+
               if( $ ) {
                 $( _container ).resizable({
                   stop: function(event, ui) {
@@ -115,7 +116,7 @@
                 image.onload = function () {
                     _canvas.width = this.width;
                     _canvas.height = this.height;
-                    _context = _canvas.getcontext( '2d' );
+                    _context = _canvas.getContext( '2d' );
                     _context.drawImage( this, 0, 0, this.width, this.height );
                     imgURI = _canvas.toDataURL();
                     trackEvent.update( { src: imgURI, isURL: false } );
@@ -137,5 +138,5 @@
       }
     }); //Butter
 
-  }, false );
-}( window.Butter, window.jQuery ));
+  }( window.Butter, window.jQuery ));
+}, false );
