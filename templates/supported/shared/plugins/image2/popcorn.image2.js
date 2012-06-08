@@ -71,13 +71,13 @@
             elem: "input",
             type: "text",
             label: "Top",
-            "default": "0"
+            "default": "100px"
           },
           left: {
             elem: "input",
             type: "text",
             label: "Left",
-            "default": "0"
+            "default": "200px"
           },
           start: {
             elem: "input",
@@ -110,6 +110,7 @@
           options._container.style.height = options.height;
           options._container.style.top = options.top;
           options._container.style.left = options.left;
+          options._container.style.overflow = "hidden";
 
 
         if ( !target && Popcorn.plugin.debug ) {
