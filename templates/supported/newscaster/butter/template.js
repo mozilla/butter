@@ -36,7 +36,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         var trackEvent,
             _container = null,
             _textEls,
-            _oldOptions;
+            _popcornOptions;
 
         if (e.type==="trackeventadded") { 
           trackEvent = e.data; 
@@ -63,11 +63,13 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             e.preventDefault();
           }, false);
 
+        //Change default text to indicate draggable
+        if( !_popcornOptions.src && window.$ ){
+          _container.innerHTML = "Drag an image from your desktop";
+        }
+
           //Apply resizable/draggable if jQuery exists
           window.$ && $( _container ).resizable({
-            start: function(event, ui) {
-              _container.style.border = "2px dashed #CCC";
-            },
             stop: function(event, ui) {
               _container.style.border = "";
               _popcornOptions.height = ui.size.height + "px";
@@ -95,19 +97,19 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
           dropTarget = _container;
 
-          dropTarget.addEventListener( "dragover", function( event ) {
-            event.preventDefault();
+          dropTarget.addEventListener( "dragover", function( e ) {
+            e.preventDefault();
             dropTarget.className = "dragover";
           }, false);
 
-          dropTarget.addEventListener( "dragleave", function( event ) {
-            event.preventDefault();
+          dropTarget.addEventListener( "dragleave", function( e ) {
+            e.preventDefault();
             dropTarget.className = "";
           }, false);
 
-          dropTarget.addEventListener( 'drop', function( event ) {
+          dropTarget.addEventListener( 'drop', function( e ) {
             dropTarget.className = "dropped";
-            event.preventDefault();
+            e.preventDefault();
             var file = event.dataTransfer.files[ 0 ],
                 imgSrc,
                 image,

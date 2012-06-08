@@ -71,13 +71,13 @@
             elem: "input",
             type: "text",
             label: "Top",
-            "default": "0"
+            "default": "100px"
           },
           left: {
             elem: "input",
             type: "text",
             label: "Left",
-            "default": "0"
+            "default": "200px"
           },
           start: {
             elem: "input",
