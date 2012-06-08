@@ -96,7 +96,9 @@
 
         var target = document.getElementById( options.target ),
             container = options._container = document.createElement("div"),
-            context = this;
+            context = this,
+            MAX_WIDTH = 600,
+            MIN_WIDTH = 100;
 
         if ( !target ) {
           target = context.media.parentNode;
@@ -106,13 +108,19 @@
 
 
         function speechBubble() {
-          var width = options.width + "px",
-              top = options.top + "px",
-              left = options.left + "px",
-              style = container.style,
-              flip;
 
-          flip = options.flip && " flip" || ""
+          // Normalise width settings
+          if ( options.width > MAX_WIDTH ) {
+            options.width = MAX_WIDTH;
+          } else if ( options.width < MIN_WIDTH ) {
+            options.width = MIN_WIDTH;
+          }
+
+         var width = options.width + "px",
+            top = options.top + "px",
+            left = options.left + "px",
+            style = container.style,
+            flip = options.flip && " flip" || "";
 
           function _makeTriangle( bubble ) {
             options.type = options.type || "";
