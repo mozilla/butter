@@ -678,11 +678,11 @@
           foo: 2
         }
       });
-      ok( m.generatePopcornString().indexOf( "{\"foo\":2}" ) > -1, "Popcorn string contained specified popcornOptions." );
+      ok( m.generatePopcornString().indexOf( "{\"foo\":2" ) > -1, "Popcorn string contained specified popcornOptions." );
       m.popcornOptions = {
         bar: 3
       };
-      ok( m.generatePopcornString().indexOf( "{\"bar\":3}" ) > -1, "Popcorn string contained specified popcornOptions again." );
+      ok( m.generatePopcornString().indexOf( "{\"bar\":3" ) > -1, "Popcorn string contained specified popcornOptions again." );
 
       start();
     });
