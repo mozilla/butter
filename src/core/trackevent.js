@@ -110,8 +110,10 @@ define( [
         if( _manifest ){
           for ( var prop in _manifest ) {
             if ( _manifest.hasOwnProperty( prop ) ) {
-              if ( updateOptions[ prop ] === undefined && applyDefaults ) {
-                _popcornOptions[ prop ] = defaultValue( _manifest[ prop ] );
+              if ( updateOptions[ prop ] === undefined ) {
+                if ( applyDefaults ) {
+                  _popcornOptions[ prop ] = defaultValue( _manifest[ prop ] );
+                }
               } else {
                 _popcornOptions[ prop ] = updateOptions[ prop ];
               }
