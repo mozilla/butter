@@ -10,11 +10,16 @@
       {
         "type": "speak",
         "path": "{{baseDir}}templates/supported/shared/plugins/speak/popcorn.speak.js"
+      },
+      {
+        "type": "zoink",
+        "path": "{{baseDir}}templates/supported/shared/plugins/zoink/popcorn.zoink.js"
       }
     ],
     "defaults": [
       "text",
-      "speak"
+      "speak",
+      "zoink"
     ]
   }
 }
