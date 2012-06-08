@@ -36,7 +36,11 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           var trackEvent,
               _container = null,
               _textEls,
-              _popcornOptions;
+              _popcornOptions,
+              canvas = document.createElement( "canvas" ),
+              context,
+              dropTarget,
+              field;
 
           if (e.type==="trackeventadded") { 
             trackEvent = e.data; 
@@ -87,11 +91,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             });
 
             /* Drag and drop DataURI */
-            var canvas = document.createElement( "canvas" ),
-                context,
-                dropTarget,
-                field;
-
             canvas.id = "grabimage";
             canvas.style.display = "none";
 
