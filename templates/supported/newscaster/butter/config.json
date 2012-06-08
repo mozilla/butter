@@ -26,15 +26,20 @@
       {
         "type": "mediaspawner",
         "path": "{{baseDir}}external/popcorn-js/plugins/mediaspawner/popcorn.mediaspawner.js"
+      },
+      {
+        "type": "zoink",
+        "path": "{{baseDir}}templates/supported/shared/plugins/zoink/popcorn.zoink.js"
       }
     ],
     "defaults": [
       "text",
       "titlecard",
       "image2",
-      "context-switcher",
       "shrink",
       "mediaspawner"
+      "zoink",
+      "shrink"
     ]
   }
 }
