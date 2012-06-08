@@ -15,6 +15,18 @@
   You MUST include popcorn.zoink.css in your html page for it to work.
 
  */
+
+  function normalize( value, minWidth, maxWidth ) {
+    value = +value;
+    if ( value > maxWidth ) {
+      return maxWidth;
+    } else if ( value < minWidth ) {
+      return minWidth;
+    } else {
+      return value;
+    }
+  }
+
   Popcorn.plugin( "zoink", {
       manifest: {
         about: {
@@ -96,9 +108,7 @@
 
         var target = document.getElementById( options.target ),
             container = options._container = document.createElement("div"),
-            context = this,
-            MAX_WIDTH = 600,
-            MIN_WIDTH = 100;
+            context = this;
 
         if ( !target ) {
           target = context.media.parentNode;
@@ -106,21 +116,13 @@
 
         options._target = target;
 
-
         function speechBubble() {
 
-          // Normalise width settings
-          if ( options.width > MAX_WIDTH ) {
-            options.width = MAX_WIDTH;
-          } else if ( options.width < MIN_WIDTH ) {
-            options.width = MIN_WIDTH;
-          }
-
-         var width = options.width + "px",
-            top = options.top + "px",
-            left = options.left + "px",
-            style = container.style,
-            flip = options.flip && " flip" || "";
+          var width = normalize( options.width, 100, 700 ) + "px",
+              top = normalize( options.top, -1000, 1000 ) + "px",
+              left = normalize( options.left, -1000, 1000 ) + "px",
+              style = container.style,
+              flip = options.flip && " flip" || "";
 
           function _makeTriangle( bubble ) {
             options.type = options.type || "";
