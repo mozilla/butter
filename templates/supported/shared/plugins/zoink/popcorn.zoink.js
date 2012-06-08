@@ -72,8 +72,8 @@
           },
           classes: {
             elem: "select",
-            options: ["", "fx", "icon-check", "icon-x"],
-            "default": "",
+            options: ["none", "fx", "icon-check", "icon-x"],
+            "default": "none",
             label: "Styles"
           },
           order: {
@@ -117,6 +117,10 @@
         options._target = target;
 
         function speechBubble() {
+
+          if( options.classes === "none" ){
+            options.classes = "";
+          }
 
           var width = normalize( options.width, 100, 700 ) + "px",
               top = normalize( options.top, -1000, 1000 ) + "px",
