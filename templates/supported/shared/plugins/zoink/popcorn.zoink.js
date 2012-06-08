@@ -17,7 +17,7 @@
  */
 
   function normalize( value, minWidth, maxWidth ) {
-    value = +value;
+    value = value | 0;
     if ( value > maxWidth ) {
       return maxWidth;
     } else if ( value < minWidth ) {
@@ -205,7 +205,7 @@
             bubble.className =  "speechBubble " + options.type + " " + options.triangle + " " + options.classes + flip;
 
             //Speech bubble
-            if( options.type === "speech" || options.type === "thought" ){
+            if ( options.type === "speech" || options.type === "thought" ){
               
               triangle = document.createElement("canvas");
               ctx = triangle.getContext("2d");
