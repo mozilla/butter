@@ -107,18 +107,20 @@ define( [
         _this.dispatch( "trackeventupdatefailed", failed );
       } else {
         var _manifest = Popcorn.manifest[ _type ] && Popcorn.manifest[ _type ].options;
-        for ( var prop in _manifest ) {
-          if ( _manifest.hasOwnProperty( prop ) ) {
-            if ( updateOptions[ prop ] === undefined ) {
-              _popcornOptions[ prop ] = defaultValue( _manifest[ prop ] );
-            } else {
-              _popcornOptions[ prop ] = updateOptions[ prop ];
+        if( _manifest ){
+          for ( var prop in _manifest ) {
+            if ( _manifest.hasOwnProperty( prop ) ) {
+              if ( updateOptions[ prop ] === undefined ) {
+                _popcornOptions[ prop ] = defaultValue( _manifest[ prop ] );
+              } else {
+                _popcornOptions[ prop ] = updateOptions[ prop ];
+              }
             }
           }
-        }
 
-        if ( !( "target" in _manifest ) && updateOptions.target ) {
-          _popcornOptions.target = updateOptions.target;
+          if ( !( "target" in _manifest ) && updateOptions.target ) {
+            _popcornOptions.target = updateOptions.target;
+          }
         }
 
         if( newStart ){
