@@ -22,6 +22,10 @@
       {
         "type": "image2",
         "path": "{{baseDir}}templates/supported/shared/plugins/image2/popcorn.image2.js"
+      },
+      {
+        "type": "mediaspawner",
+        "path": "{{baseDir}}external/popcorn-js/plugins/mediaspawner/popcorn.mediaspawner.js"
       }
     ],
     "defaults": [
@@ -29,7 +33,8 @@
       "titlecard",
       "image2",
       "context-switcher",
-      "shrink"
+      "shrink",
+      "mediaspawner"
     ]
   }
 }
