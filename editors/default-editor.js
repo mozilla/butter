@@ -6,6 +6,7 @@
    *TODO: this should be something we reuse from src/ui/widget/textbox.js
    * with require.  We need to expose butter internals to editors.
    * https://webmademovies.lighthouseapp.com/projects/65733/tickets/1174
+   */
 
   function __highlight( e ){
     var input = e.target;
@@ -25,9 +26,9 @@
   }
 
   function __TextboxWrapper( input ){
-
-    if( !( input && input.type === "text" ) ){
-      throw "Expected an input element of type text";
+console.log( input.type );
+    if( !( input && ( input.type === "text" || input.type === "number" || input.type === "url" ) ) ){
+      throw "Expected an input element of type text, number or url";
     }
 
     input.addEventListener( "blur", function( e ){
@@ -39,7 +40,6 @@
     return input;
 
   }
-  */
 
   document.addEventListener( "DOMContentLoaded", function( e ){
 
@@ -122,6 +122,10 @@
               elem.id = manifestProp;
               elem.style.width = "100%";
               elem.placeholder = "Empty";
+
+              if( type !== "checkbox" ) {
+                __TextboxWrapper( elem );
+              }
 
               elem.value = elem.checked = this.defaultValue( manifestItem, popcornOptions[ manifestProp ] );
               return elem;
