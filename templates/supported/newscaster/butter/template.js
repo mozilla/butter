@@ -35,34 +35,52 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
         var trackEvent,
             _container = null,
-            _textEls;
+            _textEls,
+            _oldOptions;
 
         if (e.type==="trackeventadded") { 
           trackEvent = e.data; 
         } else if (e.type==="trackeventupdated") { 
           trackEvent = e.target; 
-        } else { trackEvent = e; }
+        } else { 
+          trackEvent = e; 
+        }
+
+        // Remember old options. This can be taken out when defaults bug is resolved
+        _popcornOptions = trackEvent.popcornOptions;
 
         // Requires _container in options to work.
+        // This will be better when track events store a reference to popcorn in Butter, but it's ok for now.
         trackEvent.popcornTrackEvent = popcorn.getTrackEvent( popcorn.getLastTrackEventId() ); //Store a reference
         _container = trackEvent.popcornTrackEvent._container;
-        if (!_container ) { return; }
+        if (!_container ) { 
+          return; 
+        }
 
-        if( trackEvent.type === "image2" ) {
+        if ( trackEvent.type === "image2" ) {
+          // Prevent default draggable behaviour of images
           trackEvent.popcornTrackEvent._image.addEventListener("mousedown", function(e){
             e.preventDefault();
           }, false);
+
+          //Apply resizable/draggable if jQuery exists
           window.$ && $( _container ).resizable({
             start: function(event, ui) {
               _container.style.border = "2px dashed #CCC";
             },
             stop: function(event, ui) {
               _container.style.border = "";
-              trackEvent.update({ height: ui.size.height + "px", width: ui.size.width + "px" })
+              _popcornOptions.height = ui.size.height + "px";
+              _popcornOptions.width = ui.size.width + "px";
+              trackEvent.update( _popcornOptions );
+              //trackEvent.update({ height: ui.size.height + "px", width: ui.size.width + "px" })
             }
           }).draggable({
             stop: function(event, ui) {
-                trackEvent.update({top: ui.position.top + "px", left: ui.position.left + "px" });
+              _popcornOptions.top = ui.position.top + "px";
+              _popcornOptions.left = ui.position.left + "px";
+              trackEvent.update( _popcornOptions );
+              //trackEvent.update({top: ui.position.top + "px", left: ui.position.left + "px" });
             }
           });
 
@@ -95,9 +113,9 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                 image,
                 imgURI;
 
-            if( !file ) { return; }
+            if ( !file ) { return; }
 
-            if( window.URL ) { 
+            if ( window.URL ) { 
               imgSrc = window.URL.createObjectURL( file );
             } else if ( window.webkitURL ) {
               imgSrc = window.webkitURL.createObjectURL( file );
@@ -110,7 +128,9 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                 context = canvas.getContext( '2d' );
                 context.drawImage( this, 0, 0, this.width, this.height );
                 imgURI = canvas.toDataURL();  
-                trackEvent.update( {"src" : imgURI } );
+                _popcornOptions.src = imgURI;
+                _popcornOptions.isURL = false;
+                trackEvent.update( _popcornOptions );
             };
             image.src = imgSrc;
         
