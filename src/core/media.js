@@ -265,6 +265,7 @@
         /* TODO: determine if we need to turn on frameAnimation or not before calling generatePopcornString
          * for now we default to off when exporting by setting frameAnimation to false. This should be handled in #1370.
          */
+        _popcornOptions = _popcornOptions || {};
         _popcornOptions.frameAnimation = false;
         return _popcornWrapper.generatePopcornString( _popcornOptions, _url, _target, null, callbacks, scripts, collectedEvents );
       };
