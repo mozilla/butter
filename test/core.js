@@ -660,8 +660,8 @@
       butter.preparePage(function(){
         ok( butter.media.length > 0 && butter.media[0].url === "http://www.youtube.com/watch?v=7glrZ4e4wYU", "URL match" );
         ok( document.getElementById( "strange-test-1" ), "New element exists" );
-        equals( document.getElementById( "strange-test-1" ).attributes.length, el.attributes.length, "has same attribute list length" );
-        equals( document.getElementById( "strange-test-1" ).getAttribute( "data-butter" ), "media", "has data-butter attribute" );
+        equals( document.getElementById( "strange-test-1" ).getAttribute( "data-butter-source" ), "http://www.youtube.com/watch?v=7glrZ4e4wYU", "has correct url" );
+        equals( document.getElementById( "strange-test-1" ).getAttribute( "data-butter" ), "media", "has correct data-butter attribute" );
         start();
       });
     });
@@ -678,11 +678,11 @@
           foo: 2
         }
       });
-      ok( m.generatePopcornString().indexOf( "{\"foo\":2}" ) > -1, "Popcorn string contained specified popcornOptions." );
+      ok( m.generatePopcornString().indexOf( "{\"foo\":2" ) > -1, "Popcorn string contained specified popcornOptions." );
       m.popcornOptions = {
         bar: 3
       };
-      ok( m.generatePopcornString().indexOf( "{\"bar\":3}" ) > -1, "Popcorn string contained specified popcornOptions again." );
+      ok( m.generatePopcornString().indexOf( "{\"bar\":3" ) > -1, "Popcorn string contained specified popcornOptions again." );
 
       start();
     });
