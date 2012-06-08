@@ -22,7 +22,7 @@
     ],
     "defaults": [
       "text",
-      "titlecard"
+      "titlecard",
       "image2"
     ]
   }
