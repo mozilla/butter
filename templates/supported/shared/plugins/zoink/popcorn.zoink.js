@@ -100,8 +100,7 @@
           var width = options.width || 200,
               top = options.top,
               left = options.left,
-              style = container.style,
-              i;
+              style = container.style;
 
           style.position = "absolute";
           style.top = top;
@@ -187,8 +186,7 @@
               var el = document.createElement("div");
 
               el.innerHTML = "Did you know?";
-              style === "fact" && ( el.innerHTML = "Fact!" );
-              style === "fiction" && ( el.innerHTML = "Fiction!" );
+              el.innerHTML = ( style === "fact" && "Fact!" ) || ( style === "fiction"  && "Fiction!" );
 
               el.classList.add("zoink-didyouknow");
               style && style !== "didyouknow" && el.classList.add( style );
@@ -266,6 +264,6 @@
         if( options._container && options._target ) {
           options._target.removeChild( options._container );
         }
-      }
-  });
+      } 
+    });
 })( Popcorn );

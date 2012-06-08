@@ -23,7 +23,11 @@
 
 .speechBubble .canvas {
   position: absolute;
-  -webkit-transform-origin: 30% 0%;
+  -webkit-transform-origin: 30% 0;
+  -moz-transform-origin: 30% 0;
+  -o-transform-origin: 30% 0;
+  -ms-transform-origin: 30% 0;
+  transform-origin: 30% 0;
   z-index: 1001;
 }
 
@@ -33,19 +37,69 @@
 
 /* BOTTOM */
 .speechBubble { margin-bottom: 60px; }
-.speechBubble .canvas { bottom: -59px; -webkit-transform: scale(1, 1); }
-.speechBubble.flip .canvas { -webkit-transform: scale(-1, 1); }
+.speechBubble .canvas { 
+  bottom: -59px;
+  -webkit-transform: scale(1, 1);
+  -moz-transform: scale(1, 1);
+  -o-transform: scale(1, 1);
+  -ms-transform: scale(1, 1);
+  transform: scale(1, 1);
+}
+.speechBubble.flip .canvas { 
+  -webkit-transform: scale(-1, 1);
+  -moz-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
+  -ms-transform: scale(-1, 1);
+  transform: scale(-1, 1); 
+}
 .speechBubble.thought .canvas { bottom: -65px; }
-.speechBubble.long .canvas { bottom: -58px; -webkit-transform: scale(1, 1.5); }
-.speechBubble.long.flip .canvas{ -webkit-transform: scale(-1, 1.5); }
+.speechBubble.long .canvas { bottom: -58px;
+  -webkit-transform: scale(1, 1.5);
+  -moz-transform: scale(1, 1.5);
+  -o-transform: scale(1, 1.5);
+  -ms-transform: scale(1, 1.5);
+  transform: scale(1, 1.5); 
+}
+.speechBubble.long.flip .canvas{ 
+  -webkit-transform: scale(-1, 1.5);
+  -moz-transform: scale(-1, 1.5);
+  -o-transform: scale(-1, 1.5);
+  -ms-transform: scale(-1, 1.5);
+  transform: scale(-1, 1.5); 
+}
 
 /*TOP*/
 .speechBubble.top { margin-bottom: 15px; }
-.speechBubble.top .canvas {  top: 1px; -webkit-transform: scale(1, -1); }
-.speechBubble.top.flip .canvas { -webkit-transform: scale(-1, -1); }
+.speechBubble.top .canvas {  
+  top: 1px;
+  -webkit-transform: scale(1, -1);
+  -moz-transform: scale(1, -1);
+  -o-transform: scale(1, -1);
+  -ms-transform: scale(1, -1);
+  transform: scale(1, -1); 
+}
+.speechBubble.top.flip .canvas { 
+  -webkit-transform: scale(-1, -1);
+  -moz-transform: scale(-1, -1);
+  -o-transform: scale(-1, -1);
+  -ms-transform: scale(-1, -1);
+  transform: scale(-1, -1); 
+}
 .speechBubble.thought.top .canvas { top: -5px; }
-.speechBubble.long.top .canvas {  top: 2px; -webkit-transform: scale(-1, -1.5); }
-.speechBubble.long.top.flip .canvas { -webkit-transform: scale(1, -1.5); }
+.speechBubble.long.top .canvas {  top: 2px;
+  -webkit-transform: scale(-1, -1.5);
+  -moz-transform: scale(-1, -1.5);
+  -o-transform: scale(-1, -1.5);
+  -ms-transform: scale(-1, -1.5);
+  transform: scale(-1, -1.5); 
+}
+.speechBubble.long.top.flip .canvas { 
+  -webkit-transform: scale(1, -1.5);
+  -moz-transform: scale(1, -1.5);
+  -o-transform: scale(1, -1.5);
+  -ms-transform: scale(1, -1.5);
+  transform: scale(1, -1.5); 
+}
 
 .speechBubble .pipe{ 
   background: white;
@@ -53,7 +107,15 @@
   width: 10px;
   height: 30px;
   -webkit-transform-origin: top center;
+  -moz-transform-origin: top center;
+  -o-transform-origin: top center;
+  -ms-transform-origin: top center;
+  transform-origin: top center;
   -webkit-transform: rotate(-15deg);
+  -moz-transform: rotate(-15deg);
+  -o-transform: rotate(-15deg);
+  -ms-transform: rotate(-15deg);
+  transform: rotate(-15deg);
   border: 1px solid 
   black;
   border-top: 0;
