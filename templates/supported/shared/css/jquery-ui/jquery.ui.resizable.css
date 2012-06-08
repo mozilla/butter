@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Resizable#theming
  */
 .ui-resizable { position: relative;}
-.ui-resizable:hover { box-shadow: 3px 3px 10px #FEF49C; }
+.ui-resizable:hover { box-shadow: 0 0 20px rgba(254,244,156,.8); }
 .ui-resizable-handle { position: absolute; font-size: 0.1px; display: block; }
 .ui-resizable:hover .ui-icon { background-color: #FEF49C; }
 .ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
