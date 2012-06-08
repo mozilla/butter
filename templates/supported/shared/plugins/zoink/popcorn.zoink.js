@@ -51,12 +51,18 @@
           triangle: {
             elem: "select",
             options: ["top left", "top right", "bottom left", "bottom right"],
-            label: "Speech bubble triangle position"
+            label: "Speech bubble triangle position:"
+          },
+          flip: {
+            elem: "input",
+            type: "checkbox",
+            label: "Flip triangle? "
           },
           classes: {
             elem: "select",
             options: ["", "fx", "icon-check", "icon-x"],
-            "default": ""
+            "default": "",
+            label: "Styles"
           },
           order: {
             elem: "select",
@@ -103,7 +109,10 @@
           var width = options.width || "200px",
               top = options.top,
               left = options.left,
-              style = container.style;
+              style = container.style,
+              flip;
+
+          flip = options.flip && " flip" || ""
 
           function _makeTriangle( bubble ) {
             options.type = options.type || "";
@@ -178,7 +187,8 @@
             }
 
             //Set the base classes
-            bubble.className =  "speechBubble " + options.type + " " + options.triangle + " " + options.classes;
+
+            bubble.className =  "speechBubble " + options.type + " " + options.triangle + " " + options.classes + flip;
 
             //Speech bubble
             if( options.type === "speech" || options.type === "thought" ){
@@ -209,7 +219,8 @@
                 textClasses = options.textClasses;
 
             innerText.innerHTML = text;
-            innerText.className = "text" + textClasses && ( " " + textClasses );
+            innerText.classList.add("text");
+            textClasses && innerText.classList.add(textClasses);
             bubble.appendChild( innerText );
             container.appendChild( bubble );
             _makeTriangle( bubble );
