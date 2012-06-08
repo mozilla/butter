@@ -6,7 +6,8 @@ define([ 'util/xhr' ], function( XHR ){
 
   var VAR_REGEX = /\{([\w\-\._]+)\}/,
       CSS_POLL_INTERVAL = 10,
-      LESS = "/less-1.3.0.min.js";
+//      LESS = "/less-1.3.0.min.js";
+      LESS = "/less-1.3.0.js";
 
   var DEFAULT_CHECK_FUNCTION = function(){
     var index = 0;
@@ -31,12 +32,12 @@ define([ 'util/xhr' ], function( XHR ){
       return url.replace( "//", "/" );
     }
 
-    function loadLessFile( loadJS, url, err ){
+    function loadLessFile( loadJS, url, err, callback){
       // Load less.js so we can parse the *.less -> *.css
       loadJS(
         config.value( "dirs" ).tools + LESS,
         /* exclude= */ null,
-        function jsLoadCallback(){
+        function onLoadCallback(){
           // Assume *.less is beside *.css file
           var less = window.less,
               lessURL = url.replace( /\.css$/, ".less" ),
@@ -61,6 +62,14 @@ define([ 'util/xhr' ], function( XHR ){
                 document.head.appendChild( css );
                 styles = document.createTextNode( root.toCSS() );
                 css.appendChild( styles );
+
+                callback();
+/**
+                var div = document.createElement("div");
+                div.innerHTML = root.toCSS();
+                document.body.appendChild(div);
+                div.style.padding = "50px";
+**/
               });
             }
           });
@@ -113,7 +122,15 @@ define([ 'util/xhr' ], function( XHR ){
         if( !checkFn() ){
           // See if we need to render CSS client side with LESS
           if( config.value( "cssRenderClientSide" ) === true ){
-            loadLessFile( _loaders.js, url, error );
+            var lessDone = false;
+            function done(){
+              lessDone = true;
+            }
+            checkFn = function(){
+              return lessDone;
+            };
+            loadLessFile( _loaders.js, url, error, done );
+            runCheckFn();
           }
           // Regular css file, inject <link> in head
           else {
