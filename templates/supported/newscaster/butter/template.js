@@ -24,127 +24,124 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-      // EDITING HOOKS
-      // Would be good if these were part of a library in shared, instead of existing here.
-      // Should be updated to a hook syntax like hook("image2", myUpdateFunction) or something
-      // Add listeners for future track events.
-        butter.listen("trackeventadded", updateFunction);
-        butter.listen("trackeventupdated", updateFunction);
+        // EDITING HOOKS
+        // Would be good if these were part of a library in shared, instead of existing here.
+        // Should be updated to a hook syntax like hook("image2", myUpdateFunction) or something
+        // Add listeners for future track events.
+          butter.listen("trackeventadded", updateFunction);
+          butter.listen("trackeventupdated", updateFunction);
 
-      function updateFunction(e) {
+        function updateFunction(e) {
 
-        var trackEvent,
-            _container = null,
-            _textEls,
-            _popcornOptions;
+          var trackEvent,
+              _container = null,
+              _textEls,
+              _popcornOptions;
 
-        if (e.type==="trackeventadded") { 
-          trackEvent = e.data; 
-        } else if (e.type==="trackeventupdated") { 
-          trackEvent = e.target; 
-        } else { 
-          trackEvent = e; 
-        }
+          if (e.type==="trackeventadded") { 
+            trackEvent = e.data; 
+          } else if (e.type==="trackeventupdated") { 
+            trackEvent = e.target; 
+          } else { 
+            trackEvent = e; 
+          }
 
-        // Remember old options. This can be taken out when defaults bug is resolved
-        _popcornOptions = trackEvent.popcornOptions;
+          // Remember old options. This can be taken out when defaults bug is resolved
+          _popcornOptions = trackEvent.popcornOptions;
 
-        // Requires _container in options to work.
-        // This will be better when track events store a reference to popcorn in Butter, but it's ok for now.
-        trackEvent.popcornTrackEvent = popcorn.getTrackEvent( popcorn.getLastTrackEventId() ); //Store a reference
-        _container = trackEvent.popcornTrackEvent._container;
-        if (!_container ) { 
-          return; 
-        }
+          // Requires _container in options to work.
+          // This will be better when track events store a reference to popcorn in Butter, but it's ok for now.
+          trackEvent.popcornTrackEvent = popcorn.getTrackEvent( popcorn.getLastTrackEventId() ); //Store a reference
+          _container = trackEvent.popcornTrackEvent._container;
+          if (!_container ) { 
+            return; 
+          }
 
-        if ( trackEvent.type === "image2" ) {
-          // Prevent default draggable behaviour of images
-          trackEvent.popcornTrackEvent._image.addEventListener("mousedown", function(e){
-            e.preventDefault();
-          }, false);
+          if ( trackEvent.type === "image2" ) {
+            // Prevent default draggable behaviour of images
+            trackEvent.popcornTrackEvent._image.addEventListener( "mousedown", function(e) {
+              e.preventDefault();
+            }, false);
 
-        //Change default text to indicate draggable
-        if( !_popcornOptions.src && window.$ ){
-          _container.innerHTML = "Drag an image from your desktop";
-        }
-
-          //Apply resizable/draggable if jQuery exists
-          window.$ && $( _container ).resizable({
-            stop: function(event, ui) {
-              _container.style.border = "";
-              _popcornOptions.height = ui.size.height + "px";
-              _popcornOptions.width = ui.size.width + "px";
-              trackEvent.update( _popcornOptions );
-              //trackEvent.update({ height: ui.size.height + "px", width: ui.size.width + "px" })
-            }
-          }).draggable({
-            stop: function(event, ui) {
-              _popcornOptions.top = ui.position.top + "px";
-              _popcornOptions.left = ui.position.left + "px";
-              trackEvent.update( _popcornOptions );
-              //trackEvent.update({top: ui.position.top + "px", left: ui.position.left + "px" });
-            }
-          });
-
-          /* Drag and drop DataURI */
-          var canvas = document.createElement( "canvas" ),
-              context,
-              dropTarget,
-              field;
-
-          canvas.id = "grabimage";
-          canvas.style.display = "none";
-
-          dropTarget = _container;
-
-          dropTarget.addEventListener( "dragover", function( e ) {
-            e.preventDefault();
-            dropTarget.className = "dragover";
-          }, false);
-
-          dropTarget.addEventListener( "dragleave", function( e ) {
-            e.preventDefault();
-            dropTarget.className = "";
-          }, false);
-
-          dropTarget.addEventListener( 'drop', function( e ) {
-            dropTarget.className = "dropped";
-            e.preventDefault();
-            var file = event.dataTransfer.files[ 0 ],
-                imgSrc,
-                image,
-                imgURI;
-
-            if ( !file ) { return; }
-
-            if ( window.URL ) { 
-              imgSrc = window.URL.createObjectURL( file );
-            } else if ( window.webkitURL ) {
-              imgSrc = window.webkitURL.createObjectURL( file );
+            //Change default text to indicate draggable
+            if( !_popcornOptions.src && window.$ ){
+              _container.innerHTML = "Drag an image from your desktop";
             }
 
-            image = document.createElement( 'img' );
-            image.onload = function () {
-                canvas.width = this.width;
-                canvas.height = this.height;
-                context = canvas.getContext( '2d' );
-                context.drawImage( this, 0, 0, this.width, this.height );
-                imgURI = canvas.toDataURL();  
-                _popcornOptions.src = imgURI;
-                _popcornOptions.isURL = false;
+            //Apply resizable/draggable if jQuery exists
+            window.$ && $( _container ).resizable({
+              stop: function(event, ui) {
+                _container.style.border = "";
+                _popcornOptions.height = ui.size.height + "px";
+                _popcornOptions.width = ui.size.width + "px";
                 trackEvent.update( _popcornOptions );
-            };
-            image.src = imgSrc;
-        
-          }, false);
+                //trackEvent.update({ height: ui.size.height + "px", width: ui.size.width + "px" })
+              }
+            }).draggable({
+              stop: function(event, ui) {
+                _popcornOptions.top = ui.position.top + "px";
+                _popcornOptions.left = ui.position.left + "px";
+                trackEvent.update( _popcornOptions );
+                //trackEvent.update({top: ui.position.top + "px", left: ui.position.left + "px" });
+              }
+            });
 
-        }
-      }
-  
+            /* Drag and drop DataURI */
+            var canvas = document.createElement( "canvas" ),
+                context,
+                dropTarget,
+                field;
+
+            canvas.id = "grabimage";
+            canvas.style.display = "none";
+
+            dropTarget = _container;
+
+            dropTarget.addEventListener( "dragover", function( e ) {
+              e.preventDefault();
+              dropTarget.className = "dragover";
+            }, false);
+
+            dropTarget.addEventListener( "dragleave", function( e ) {
+              e.preventDefault();
+              dropTarget.className = "";
+            }, false);
+
+            dropTarget.addEventListener( 'drop', function( e ) {
+              dropTarget.className = "dropped";
+              e.preventDefault();
+              var file = event.dataTransfer.files[ 0 ],
+                  imgSrc,
+                  image,
+                  imgURI;
+
+              if ( !file ) { return; }
+
+              if ( window.URL ) { 
+                imgSrc = window.URL.createObjectURL( file );
+              } else if ( window.webkitURL ) {
+                imgSrc = window.webkitURL.createObjectURL( file );
+              }
+
+              image = document.createElement( 'img' );
+              image.onload = function () {
+                  canvas.width = this.width;
+                  canvas.height = this.height;
+                  context = canvas.getContext( '2d' );
+                  context.drawImage( this, 0, 0, this.width, this.height );
+                  imgURI = canvas.toDataURL();  
+                  _popcornOptions.src = imgURI;
+                  _popcornOptions.isURL = false;
+                  trackEvent.update( _popcornOptions );
+              };
+              image.src = imgSrc;
+            }, false);
+          } //image2
+        } //updateFunction
+    
       } //start
 
       media.onReady( start );
-
     }
   }); //Butter
 
