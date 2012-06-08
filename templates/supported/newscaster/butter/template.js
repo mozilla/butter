@@ -50,7 +50,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             trackEvent = e; 
           }
 
-          // Remember old options. This can be taken out when defaults bug is resolved
           _popcornOptions = trackEvent.popcornOptions;
 
           // Requires _container in options to work.
@@ -76,17 +75,11 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             window.$ && $( _container ).resizable({
               stop: function(event, ui) {
                 _container.style.border = "";
-                _popcornOptions.height = ui.size.height + "px";
-                _popcornOptions.width = ui.size.width + "px";
-                trackEvent.update( _popcornOptions );
-                //trackEvent.update({ height: ui.size.height + "px", width: ui.size.width + "px" })
+                trackEvent.update({ height: ui.size.height + "px", width: ui.size.width + "px" })
               }
             }).draggable({
               stop: function(event, ui) {
-                _popcornOptions.top = ui.position.top + "px";
-                _popcornOptions.left = ui.position.left + "px";
-                trackEvent.update( _popcornOptions );
-                //trackEvent.update({top: ui.position.top + "px", left: ui.position.left + "px" });
+                trackEvent.update({top: ui.position.top + "px", left: ui.position.left + "px" });
               }
             });
 
@@ -129,9 +122,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                   context = canvas.getContext( '2d' );
                   context.drawImage( this, 0, 0, this.width, this.height );
                   imgURI = canvas.toDataURL();  
-                  _popcornOptions.src = imgURI;
-                  _popcornOptions.isURL = false;
-                  trackEvent.update( _popcornOptions );
+                  trackEvent.update( { src: imgURI, isURL: false } );
               };
               image.src = imgSrc;
             }, false);
