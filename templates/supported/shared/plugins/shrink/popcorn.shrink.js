@@ -1,9 +1,10 @@
-// PLUGIN: Context Switcher
+// PLUGIN: Shrink
 
 (function ( Popcorn ) {
 
   /**
-   * Context Switcher Popcorn plug-in
+   * Shrink plug-in
+   * Created for the newscaster template
    *
    */
 
@@ -11,7 +12,7 @@
 
     manifest: {
       about: {
-        name: "Popcorn Context Switcher Plugin",
+        name: "Popcorn Shrink Plugin",
         version: "0.1",
         author: "@k88hudson"
       },
