@@ -26,7 +26,7 @@
   }
 
   function __TextboxWrapper( input ){
-console.log( input.type );
+
     if( !( input && ( input.type === "text" || input.type === "number" || input.type === "url" ) ) ){
       throw "Expected an input element of type text, number or url";
     }
