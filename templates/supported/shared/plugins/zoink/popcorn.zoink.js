@@ -44,7 +44,7 @@
           },
           style: {
             elem: "select",
-            options: [ "speech", "thought", "fact", "fiction","icon", "none" ],
+            options: [ "speech", "thought", "fact", "fiction", "icon", "none" ],
             type: "text",
             label: "Style:"
           },
@@ -91,96 +91,23 @@
         if ( !target ) {
           target = context.media.parentNode;
         }
+
         options._target = target;
-        
-        speechBubble();
-        options.callback && options.callback( options._container );
+
 
         function speechBubble() {
-          var width = options.width || 200,
+          var width = options.width || "200px",
               top = options.top,
               left = options.left,
               style = container.style;
 
-          style.position = "absolute";
-          style.top = top;
-          style.left = left;
-          style.width = width;
-          style.zIndex = +options.order + 1000;
-          container.classList.add( "pop" );
-          
-          target.appendChild( container );
-
-          if( options.style === "icon" ) {
-            style.width = "";
-            style.height = "";
-            container.classList.add( (options.classes && "zoink-icon-" + options.classes) || "zoink-icon-check" );
-            return;
-          }
-
-          _makeBubble();
-
-          function _makeBubble() {
-            var bubble = document.createElement("div"),
-                innerText = document.createElement("div"),
-                text = options.text || "",
-                style = options.style || "speech",
-                classes = options.classes || "bottom right",
-                textClasses = options.textClasses;
-
-            innerText.innerHTML = text;
-            innerText.className = "text" + textClasses && ( " " + textClasses );
-            bubble.appendChild( innerText );
-            container.appendChild( bubble );
-            _makeTriangle( bubble );
-          }
-
           function _makeTriangle( bubble ) {
             options.style || ( options.style = "" );
 
-            var elem,
-                triangle,
+            var triangle,
                 pipe,
                 ctx,
                 classes = options.classes || "bottom right";
-
-            //Check if the input is a string or an actual element
-            if (typeof bubble === "string") {
-              elem = document.getElementById(bubble);
-            } else {
-              elem = bubble;
-            }
-
-            //Set the base classes
-            elem.className =  "speechBubble " + options.style + " " + classes;
-
-            //Speech bubble
-            if( options.style === "speech" || options.style === "thought" ){
-              
-              triangle = document.createElement("canvas");
-              ctx = triangle.getContext("2d");
-
-              triangle.width = 40;
-              triangle.height = 60;
-              triangle.className = "canvas";
-              elem.appendChild( triangle );
-
-              //Draw according to the style
-              options.style === "speech" && drawSpeech( ctx );
-              options.style === "thought" && drawThought( ctx );
-            }
-
-            if ( options.style === "didyouknow" || options.style === "fact" || options.style === "fiction" ) {
-              addDidYouKnow( options.style );
-            }
-
-            //Pipe
-            if ( options.classes && options.classes.indexOf("pipe") !== -1 ){
-              elem.className +=  " connected pipe";
-              pipe = document.createElement("div");
-              pipe.className = "pipe";
-              elem.appendChild( pipe );
-            }
 
             function addDidYouKnow( style ){
               var el = document.createElement("div");
@@ -190,7 +117,7 @@
 
               el.classList.add("zoink-didyouknow");
               style && style !== "didyouknow" && el.classList.add( style );
-              elem.appendChild( el );
+              bubble.appendChild( el );
               elem.className += " didyouknow";
             }
 
@@ -247,9 +174,76 @@
                 ctx.stroke();
                 ctx.restore();
             }
+
+            //Set the base classes
+            bubble.className =  "speechBubble " + options.style + " " + classes;
+
+            //Speech bubble
+            if( options.style === "speech" || options.style === "thought" ){
+              
+              triangle = document.createElement("canvas");
+              ctx = triangle.getContext("2d");
+
+              triangle.width = 40;
+              triangle.height = 60;
+              triangle.className = "canvas";
+              bubble.appendChild( triangle );
+
+              //Draw according to the style
+              options.style === "speech" && drawSpeech( ctx );
+              options.style === "thought" && drawThought( ctx );
+            }
+
+            if ( options.style === "didyouknow" || options.style === "fact" || options.style === "fiction" ) {
+              addDidYouKnow( options.style );
+            }
+
+            //Pipe
+            if ( options.classes && options.classes.indexOf("pipe") !== -1 ){
+              bubble.className +=  " connected pipe";
+              pipe = document.createElement("div");
+              pipe.className = "pipe";
+              bubble.appendChild( pipe );
+            }
+          } //makeTriangle
+
+          function _makeBubble() {
+            var bubble = document.createElement("div"),
+                innerText = document.createElement("div"),
+                text = options.text || "",
+                style = options.style || "speech",
+                classes = options.classes || "bottom right",
+                textClasses = options.textClasses;
+
+            innerText.innerHTML = text;
+            innerText.className = "text" + textClasses && ( " " + textClasses );
+            bubble.appendChild( innerText );
+            container.appendChild( bubble );
+            _makeTriangle( bubble );
           }
-        } //addSpeechBubble
+
+          style.position = "absolute";
+          style.top = top;
+          style.left = left;
+          style.width = width;
+          style.zIndex = +options.order + 1000;
+          container.classList.add( "pop" );
+          
+          target.appendChild( container );
+
+          if( options.style === "icon" ) {
+            style.width = "";
+            style.height = "";
+            container.classList.add( (options.classes && "zoink-icon-" + options.classes) || "zoink-icon-check" );
+            return;
+          }
+          _makeBubble();
+        } //speechBubble
   
+      //Create the bubble
+      speechBubble();
+      options.callback && options.callback( options._container );
+
       },
 
       start: function( event, options ) {

@@ -116,8 +116,7 @@
   -o-transform: rotate(-15deg);
   -ms-transform: rotate(-15deg);
   transform: rotate(-15deg);
-  border: 1px solid 
-  black;
+  border: 1px solid #000;
   border-top: 0;
   border-bottom: 0;
   bottom: -25px;
