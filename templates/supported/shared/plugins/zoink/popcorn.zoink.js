@@ -73,21 +73,21 @@
           },
           top: {
             elem: "input",
-            type: "text",
+            type: "number",
             label: "Top:",
-            "default": "200px"
+            "default": 200
           },
           left: {
             elem: "input",
-            type: "text",
+            type: "number",
             label: "Left:",
-            "default": "200px"
+            "default": 200
           },
           width: {
             elem: "input",
-            type: "text",
+            type: "number",
             label: "Max width:",
-            "default": "200px"
+            "default": 200
           },
           target: "video-overlay"
         }
@@ -106,9 +106,9 @@
 
 
         function speechBubble() {
-          var width = options.width || "200px",
-              top = options.top,
-              left = options.left,
+          var width = options.width + "px",
+              top = options.top + "px",
+              left = options.left + "px",
               style = container.style,
               flip;
 
