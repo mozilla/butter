@@ -42,11 +42,21 @@
             label: "Text",
             "default": "Edit me"
           },
-          style: {
+          type: {
             elem: "select",
             options: [ "speech", "thought", "fact", "fiction", "icon", "none" ],
             type: "text",
             label: "Style:"
+          },
+          triangle: {
+            elem: "select",
+            options: ["top left", "top right", "bottom left", "bottom right"],
+            label: "Speech bubble triangle position"
+          },
+          classes: {
+            elem: "select",
+            options: ["", "fx", "icon-check", "icon-x"],
+            "default": ""
           },
           order: {
             elem: "select",
@@ -54,11 +64,6 @@
             type: "text",
             label: "Layer order:",
             "default": 1
-          },
-          classes: {
-            elem: "input",
-            type: "text",
-            label: "Classes (top, bottom, left, right, flip, pipe, fx)"
           },
           top: {
             elem: "input",
@@ -85,7 +90,6 @@
 
         var target = document.getElementById( options.target ),
             container = options._container = document.createElement("div"),
-            _options = {},
             context = this;
 
         if ( !target ) {
@@ -102,12 +106,10 @@
               style = container.style;
 
           function _makeTriangle( bubble ) {
-            options.style || ( options.style = "" );
+            options.type = options.type || "";
 
             var triangle,
-                pipe,
-                ctx,
-                classes = options.classes || "bottom right";
+                ctx;
 
             function addDidYouKnow( style ){
               var el = document.createElement("div");
@@ -118,7 +120,7 @@
               el.classList.add("zoink-didyouknow");
               style && style !== "didyouknow" && el.classList.add( style );
               bubble.appendChild( el );
-              elem.className += " didyouknow";
+              bubble.className += " didyouknow";
             }
 
             function drawSpeech( ctx ) {
@@ -176,10 +178,10 @@
             }
 
             //Set the base classes
-            bubble.className =  "speechBubble " + options.style + " " + classes;
+            bubble.className =  "speechBubble " + options.type + " " + options.triangle + " " + options.classes;
 
             //Speech bubble
-            if( options.style === "speech" || options.style === "thought" ){
+            if( options.type === "speech" || options.type === "thought" ){
               
               triangle = document.createElement("canvas");
               ctx = triangle.getContext("2d");
@@ -190,29 +192,20 @@
               bubble.appendChild( triangle );
 
               //Draw according to the style
-              options.style === "speech" && drawSpeech( ctx );
-              options.style === "thought" && drawThought( ctx );
+              options.type === "speech" && drawSpeech( ctx );
+              options.type === "thought" && drawThought( ctx );
             }
 
-            if ( options.style === "didyouknow" || options.style === "fact" || options.style === "fiction" ) {
-              addDidYouKnow( options.style );
+            if ( options.type === "didyouknow" || options.type === "fact" || options.type === "fiction" ) {
+              addDidYouKnow( options.type );
             }
 
-            //Pipe
-            if ( options.classes && options.classes.indexOf("pipe") !== -1 ){
-              bubble.className +=  " connected pipe";
-              pipe = document.createElement("div");
-              pipe.className = "pipe";
-              bubble.appendChild( pipe );
-            }
           } //makeTriangle
 
           function _makeBubble() {
             var bubble = document.createElement("div"),
                 innerText = document.createElement("div"),
-                text = options.text || "",
-                style = options.style || "speech",
-                classes = options.classes || "bottom right",
+                text = options.text,
                 textClasses = options.textClasses;
 
             innerText.innerHTML = text;
@@ -231,10 +224,10 @@
           
           target.appendChild( container );
 
-          if( options.style === "icon" ) {
+          if( options.type === "icon" ) {
             style.width = "";
             style.height = "";
-            container.classList.add( (options.classes && "zoink-icon-" + options.classes) || "zoink-icon-check" );
+            container.classList.add( (options.classes && "zoink-" + options.classes) || "zoink-icon-check" );
             return;
           }
           _makeBubble();
