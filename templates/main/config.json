@@ -1,0 +1,39 @@
+{
+  "name": "commentary",
+  "baseDir": "../../",
+  "editor": {
+    "image2": "{{baseDir}}templates/main/editors/basic-editor.html"
+  },
+  "plugin": {
+    "plugins": [
+    {
+      "type": "text",
+      "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
+    },
+    {
+      "type": "googlemap",
+      "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
+    },
+    {
+      "type": "image2",
+      "path": "{{baseDir}}templates/main/plugins/image2/popcorn.image2.js"
+    },
+    {
+      "type": "lowerthird",
+      "path": "{{baseDir}}external/popcorn-js/plugins/lowerthird/popcorn.lowerthird.js"
+    },
+    {
+      "type": "webpage",
+      "path": "{{baseDir}}external/popcorn-js/plugins/webpage/popcorn.webpage.js"
+    },
+    {
+      "type": "wikipedia",
+      "path": "{{baseDir}}external/popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"
+    }
+    ],
+    "defaults": [
+      "text",
+      "image2"
+    ]
+  }
+}
