@@ -60,7 +60,7 @@ define( [
     }
 
     if( !_type ){
-      _logger.log( "Warning: " + _id + " has no type." );
+      _logger.warn( "Warning: " + _id + " has no type." );
     } //if
 
     _popcornOptions.start = _popcornOptions.start || 0;

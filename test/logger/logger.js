@@ -73,7 +73,7 @@
       }
     });
 
-    asyncTest( "Logger.error obeys Logger.enabled", 1, function (){
+    asyncTest( "Logger.error throws even when logger is disabled", 1, function (){
       Logger.enabled( false );
       var logger = new Logger( "test" ),
         count = 0;
@@ -83,10 +83,9 @@
         count++;
       } finally {
         count++;
-        equal( 1, count, "Logger.error doesn't throw when Logger.enabled is false" );
+        equal( 2, count, "Logger.error throws when Logger.enabled is false" );
         start();
       }
     });
-
   });
 }(window));

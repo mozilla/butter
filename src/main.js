@@ -100,7 +100,7 @@
       try {
         _defaultConfig = Config.parse( DefaultConfigJSON );
       } catch ( e) {
-        throw "Butter Error: unable to find or parse default-config.json";
+        _logger.error( "unable to find or parse default-config.json" );
       }
 
       if ( butterOptions.debug !== undefined ) {
@@ -119,7 +119,7 @@
 
       function checkMedia() {
         if ( !_currentMedia ) {
-          throw new Error("No media object is selected");
+          _logger.error( "No media object is selected" );
         } //if
       } //checkMedia
 
@@ -157,7 +157,7 @@
         }
 
         if( !type ){
-          _logger.log( "Invalid trackevent type requested." );
+          _logger.warn( "Invalid trackevent type requested." );
           return;
         } //if
 
@@ -190,7 +190,7 @@
           });
         }
         else {
-          _logger.log( "Warning: No media to add dropped trackevent." );
+          _logger.warn( "Warning: No media to add dropped trackevent." );
         } //if
       } //targetTrackEventRequested
 
@@ -632,7 +632,7 @@
               // if the server sent back a bad response, record empty string and log error
               if( this.status !== 200 ){
                 _defaultPopcornScripts[ script ] = "";
-                _logger.log( "WARNING: Trouble loading Popcorn script: " + this.response );
+                _logger.error( "Trouble loading Popcorn script: " + this.response );
               }
               else{
                 // otherwise, store the response as text
@@ -706,14 +706,14 @@
               savedData = JSON.parse( xhr.responseText );
             }
             catch( e ){
-              _this.dispatch( "loaddataerror", "Saved data not formatted properly." );
+              _logger.error( "Saved data not formatted properly." );
             }
             _this.project.id = savedData.projectID;
             _this.project.name = savedData.name;
             _this.importProject( savedData );
           }
           else {
-            _logger.log( "Butter saved data not found: " + savedDataUrl );
+            _logger.error( "Butter saved data not found: " + savedDataUrl );
           }
         }
 
@@ -778,12 +778,12 @@
             userConfig = Config.parse( xhr.responseText );
           }
           catch( e ){
-            throw new Error( "Butter config file not formatted properly." );
+            _logger.error( "Butter config file not formatted properly." );
           }
           readConfig( userConfig );
         }
         else{
-          _this.dispatch( "configerror", _this );
+          _logger.error( "Butter config file not formatted properly." );
         } //if
       }
       else {
