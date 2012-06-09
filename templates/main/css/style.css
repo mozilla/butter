@@ -1,0 +1,23 @@
+.container { width: 960px; margin: 40px auto;}
+
+#video-container {
+  position: relative;
+  width: 640px;
+  margin-right: 20px;
+  min-height: 480px;
+  float: left;
+}
+
+#video { width: 100%; }
+
+#video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+#sidebar { width: 300px; float: left; position: relative; }
+
+label { position: absolute; top: 0; right: 0; background: yellow; opacity: .3; z-index: 2000;}
