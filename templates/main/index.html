@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Commentary Template</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
+    <script src="../../src/butter.js" data-butter-exclude /></script>
+    <script type="text/javascript" src="scripts.js" data-butter-exclude /></script>
+    <link rel="stylesheet" href="css/normalise.css" type="text/css" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="stylesheet" href="editors/side-widget.css" type="text/css" data-butter-exclude />
+</head>
+<body>
+
+  <div id="container">
+    <div class="widget-message"></div>
+    <section id="pop-browser" class="left-panel">
+      <button class="widget-header" id="addPopcorn">pop some corn</button> 
+      <div class="widget-container">
+        <div class="widget">
+          <ul class="widget-list active">
+            <li><a><i class="icon-small icon-arrow"></i>
+              Annotions
+            </a></li>
+            <li><a data-butter-plugin="text" data-butter-default="subtitles">Text<i class="icon icon-text"></i></a></li>
+            <li><a data-butter-plugin="zoink" data-butter-default="speech">Bubble</a><i class="icon icon-zoink"></i></li>
+            <li><a data-butter-plugin="zoink" data-butter-default="fiction">Fiction</a><i class="icon icon-fiction"></i></li>
+            <li><a data-butter-plugin="zoink" data-butter-default="fact">Fact</a><i class="icon icon-fact"></i></li>
+            <li><a data-butter-plugin="zoink" data-butter-default="icon">Icon</a><i class="icon icon-check"></i></li>
+          </ul>
+          <ul class="widget-list">
+            <li><a><i class="icon-small icon-arrow"></i>
+              News Caster
+            </a></li>
+            <li><a for="#15">Text<i class="icon icon-text"></i></a></li>
+            <li><a for="#20">Bubble</a><i class="icon icon-zoink"></i></li>
+            <li><a for="#20">Fact/Fiction</a><i class="icon icon-fiction"></i></li>
+          </ul>
+          <ul class="widget-list">
+            <li><a><i class="icon-small icon-arrow"></i>
+              Social
+            </a></li>
+            <li><a for="#15">Text<i class="icon icon-text"></i></a></li>
+            <li><a for="#20">Bubble</a><i class="icon icon-zoink"></i></li>
+            <li><a for="#20">Fact/Fiction</a><i class="icon icon-fiction"></i></li>
+          </ul>
+          <ul class="widget-list">
+            <li><a><i class="icon-small icon-arrow"></i>
+              Settings
+            </a></li>
+            <li><a for="#15">Text<i class="icon icon-text"></i></a></li>
+            <li><a for="#20">Bubble</a><i class="icon icon-zoink"></i></li>
+            <li><a for="#20">Fact/Fiction</a><i class="icon icon-fiction"></i></li>
+          </ul>
+        </div>
+      </div>
+     
+    </section>
+    <div id="video-container">
+      <video id="video" data-butter="media" controls>
+        <source src="../../external/popcorn-js/test/trailer.ogv"></source>
+        <source src="../../external/popcorn-js/test/trailer.mp4"></source>
+      </video>
+      <div id="video-overlay" data-butter="target">
+        <label>#video-overlay</label>
+        <div id="subtitles" class="subtitles" data-butter="target"></div>
+      </div>
+    </div>
+    <div id="sidebar" data-butter="target"><label>#sidebar</label></div>
+  </div>
+</body>
+</html>

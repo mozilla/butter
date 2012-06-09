@@ -1,0 +1,34 @@
+<!--  This Source Code Form is subject to the terms of the MIT license
+      If a copy of the MIT license was not distributed with this file, you can
+      obtain one at http://www.mozillapopcorn.org/butter-license.txt -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Event Editor</title>
+    <style>
+      table#table tr  td:nth-child(2) * {
+        font-size: 0.9em;
+      }
+      table {
+        font-family: helvetica !important;
+        color: #fff !important;
+      }
+      p#message {
+        color: #FF0000;
+      }
+      .vintage { display: none; }
+
+    </style>
+    <script src="../libs/jquery-1.7.2.min.js"></script>
+    <script src="../libs/vintage.js"></script>
+    <script type="text/javascript" src="editor.js"></script>
+    <script type="text/javascript" src="basic-editor.js"></script>
+  </head>
+  <body>
+    <table id="table">
+    </table>
+    <button id="instagram" class="vintage">Apply Vintage Effect</button>
+    <p id="message"></p>
+  </body>
+</html>
