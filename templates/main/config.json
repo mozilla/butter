@@ -1,0 +1,49 @@
+{
+  "name": "commentary",
+  "baseDir": "../../",
+  "editor": {
+    "default": "{{baseDir}}templates/main/editors/basic-editor.html"
+  },
+  "plugin": {
+    "plugins": [
+    {
+      "type": "widget-text",
+      "path": "{{baseDir}}templates/main/plugins/widget-text/popcorn.text.widget.js"
+    },
+    {
+      "type": "sidebar-link",
+      "path": "{{baseDir}}templates/main/plugins/link/popcorn.sidebar-link.js"
+    },
+    {
+      "type": "zoink",
+      "path": "{{baseDir}}templates/main/plugins/zoink/popcorn.zoink.js"
+    },
+    {
+      "type": "googlemap",
+      "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
+    },
+    {
+      "type": "image2",
+      "path": "{{baseDir}}templates/main/plugins/image2/popcorn.image2.js"
+    },
+    {
+      "type": "lowerthird",
+      "path": "{{baseDir}}external/popcorn-js/plugins/lowerthird/popcorn.lowerthird.js"
+    },
+    {
+      "type": "webpage",
+      "path": "{{baseDir}}external/popcorn-js/plugins/webpage/popcorn.webpage.js"
+    },
+    {
+      "type": "wikipedia",
+      "path": "{{baseDir}}external/popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"
+    }
+    ],
+    "defaults": [
+      "widget-text",
+      "zoink",
+      "image2",
+      "sidebar-link"
+    ]
+  }
+}

@@ -1,0 +1,171 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>NewsCaster</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <meta name="viewport" content="width=device-width">
+
+  <link rel="stylesheet" href="css/normalise.css" type="text/css">
+  <link rel="stylesheet" href="css/style.css" type="text/css">
+
+  <link href='http://fonts.googleapis.com/css?family=Merriweather:400,300,700' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Old+Standard+TT' rel='stylesheet' type='text/css'>
+
+  <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
+  <script src="../../src/butter.js" data-butter-exclude /></script>
+  <script type="text/javascript" src="http://use.typekit.com/pkx1xqg.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+</head>
+<body>
+  <div id="background"></div>
+  <header>
+
+  </header>
+  <div id="main" role="main" class="dark" >
+    <div class="grid-container">
+      <div class="inner-container clearfix">
+        <div class="grid-full">
+          <div id="top-bar">
+            <h1>knn news</h1>
+
+          </div>
+        </div>
+        <div id="left-container" class="grid-8of12">
+          <div id="video-container">
+            <video id="video" data-butter="media" controls>
+              <source src="../../external/popcorn-js/test/trailer.ogv"></source>
+              <source src="../../external/popcorn-js/test/trailer.mp4"></source>
+            </video>
+            <div class="cube-view video-overlay">
+              <div id="byline">
+                <h4>Webmaker</h4>
+                <h3>Kate Hudson</h3>
+              </div>
+              <div id="logo" class="cube ff" display="none">
+                  <div class="panel bottom"></div>
+                  <div class="panel top"></div>
+                  <div class="panel left text"><h1></h1></div>
+                  <div class="panel right text"><h1></h1></div>
+                  <div class="panel front text"><h1></h1></div>
+                  <div class="panel back text"><h1></h1></div>
+              </div>
+           </div>​<!-- .cube-view -->
+           <div id="corner-target" class="video-overlay" data-butter="target"></div>
+          </div><!--video-container-->
+        <div class="bottom-tabs">
+          <ul id="nowplaying-links">
+            <li><a href="#">student strikes</a></li>
+            <li><a href="#">baloney</a></li>
+            <li><a href="#">lemons</a></li>
+        </div>
+        <div class="bottom-container">
+
+          <h3>Student strike continues in Quebec</h3>
+          <h5>Jean Michel Duchamps &ndash; Montr&eacute;al Gazette</h5>
+            <p>QUEBEC – The provincial government intends to present a bill to end Quebec’s 14-week tuition strike, Premier Jean Charest announced Wednesday night – a proposal that was quickly and decisively rejected by student leaders.
+
+            <p>The bill calls for suspending the current academic session at 14 CEGEPs and 11 out of 18 universities where students remain out of classes unless an agreement can be reached.
+
+            <p>The winter session would resume in August and September.
+
+            <p>The bill would also guarantee that students who want to return to classes can.
+
+            <p>The specifics of the bill were not spelled out, respecting National Assembly protocol, which requires the government to first present bills in the assembly.
+
+            <p>Charest also said his April 27 proposal – to add $39 million in bursaries and to change student-aid rules so low-income students would not feel the impact of the $1,778 tuition increase over seven years – would come into force.
+
+            <p>The premier appealed to student and union leaders for calm, expressing the hope his new approach would lead to campus peace.</p>
+        </div>
+        </div>
+        <div id="right-panel" class="grid-4of12">
+            <div class="widget now-playing detail-b">
+              <div class="widget-header">
+                <h3>Now playing <a href="#explore" class="btn btn-right btn-red">Explore</a></h3>
+              </div>
+              <div id="now-playing" data-butter="target" class="widget-body light">
+                <button id="addwidget" class="btn add">Add text widget</button>
+              </div>
+              <div id="now-playing-links" data-butter="target" class="widget-links" >
+                <button id="addlink" class="btn add">Add link</button>
+              </div>
+            </div>
+            <div class="widget detail-t">
+              <div class="widget-header">
+                <h3>Coming up</h3>
+              </div>
+              <ul class="widget-list">
+                <li class="inactive"><a for="#5">This is a wonderful thing</a></li>
+                <li class="inactive"><a for="#5">This is a wonderful thing</a></li>
+                <li class="inactive"><a for="#5">This is a wonderful thing</a></li>
+                <li class="active"><a for="#15">Folders</a></li>
+                <li><a for="#20">Lots to do</a></li>
+              </ul>
+            </div>
+        </div>
+      </div>
+    </div><!--container-->
+  </div><!--main-->
+
+
+<footer>
+  <div class"grid-container">
+    <p>asdasds</p>
+  </div>
+</footer>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
+<script>
+$("a[href='#explore']").toggle(function(){
+    $(this).html("video");
+    $("#video-container").addClass("tiny");
+    $(".bottom-container").animate({
+      height: "520px",
+    }, 200);
+  }, function(e){
+    $(this).html("explore");
+    $("#video-container").removeClass("tiny");
+    $(".bottom-container").animate({
+      height: "151px"
+    }, 200);
+  });
+
+$("#addwidget").click(function(){
+
+  butter.tracks[ 0 ].addTrackEvent({ 
+    type: "widget-text",
+    popcornOptions: {
+      start: butter.currentTime,
+      end: butter.currentTime + 2,
+      target: "now-playing",
+      title: "Bloop",
+      text: "Floog"
+    }
+  });
+});
+
+$("#addlink").click(function(){
+
+  butter.tracks[ 0 ].addTrackEvent({ 
+    type: "sidebar-link",
+    popcornOptions: {
+      start: butter.currentTime,
+      end: butter.currentTime + 2,
+      target: "now-playing-links",
+      text: "Floog",
+      timecode: butter.currentTime
+    }
+  });
+});
+
+</script>
+<script src="scripts.js"></script>
+</body>
+</html>
