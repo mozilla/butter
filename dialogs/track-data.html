@@ -27,7 +27,7 @@
 
         Dialog.wait( "trackdata", function( e ){
           trackName.innerHTML = e.data.name;
-          trackData.value = JSON.stringify( e.data );
+          trackData.value = JSON.stringify( e.data, null, 4 );
           Dialog.enableCloseButton();
           Dialog.enableElements( "update" );
           Dialog.assignEscapeKey( "default-close" );
