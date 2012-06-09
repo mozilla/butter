@@ -54,7 +54,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
               return;
             }
 
-            if ( trackEvent.type === "image2" ) {
+            if ( trackEvent.type === "image" ) {
               // Prevent default draggable behaviour of images
               trackEvent.popcornTrackEvent._image.addEventListener( "mousedown", function(e) {
                 e.preventDefault();
@@ -123,15 +123,15 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                 };
                 image.src = imgSrc;
               }, false);
-            } //image2
+            } //image
           } //updateFunction
 
           // Would be good if these were part of a library in shared, instead of existing here.
-          // Should be updated to a hook syntax like hook("image2", myUpdateFunction) or something
+          // Should be updated to a hook syntax like hook("image", myUpdateFunction) or something
           // Add listeners for future track events.
           butter.listen("trackeventadded", updateFunction);
           butter.listen("trackeventupdated", updateFunction);
-      
+
         } //start
 
         media.onReady( start );
