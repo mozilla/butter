@@ -3,7 +3,7 @@
   "baseDir": "../../../",
   "editor": {
     "default": "{{baseDir}}editors/default-editor.html",
-    "image": "{{baseDir}}templates/supported/shared/editors/image-editor.html"
+    "photo": "{{baseDir}}templates/supported/shared/editors/photo-editor.html"
   },
   "plugin": {
     "plugins": [
@@ -20,8 +20,8 @@
         "path": "{{baseDir}}templates/supported/shared/plugins/titlecard/popcorn.titlecard.js"
       },
       {
-        "type": "image",
-        "path": "{{baseDir}}templates/supported/shared/plugins/image/popcorn.image.js"
+        "type": "photo",
+        "path": "{{baseDir}}templates/supported/shared/plugins/photo/popcorn.photo.js"
       },
       {
         "type": "mediaspawner",
@@ -35,7 +35,7 @@
     "defaults": [
       "text",
       "titlecard",
-      "image",
+      "photo",
       "shrink",
       "mediaspawner",
       "zoink",

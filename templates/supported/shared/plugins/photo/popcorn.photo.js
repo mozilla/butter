@@ -28,7 +28,7 @@
       } )
  *
  */
-  Popcorn.plugin( "image", {
+  Popcorn.plugin( "photo", {
       manifest: {
         about: {
           name: "Popcorn image Plugin",
