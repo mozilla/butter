@@ -28,7 +28,7 @@
       } )
  *
  */
-  Popcorn.plugin( "image2", {
+  Popcorn.plugin( "photo", {
       manifest: {
         about: {
           name: "Popcorn image Plugin",
@@ -150,7 +150,7 @@
       start: function( event, options ) {
         options._container.style.display = "block";
       },
-   
+
       end: function( event, options ) {
         options._container.style.display = "none";
       },
