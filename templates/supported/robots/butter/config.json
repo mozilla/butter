@@ -14,12 +14,17 @@
       {
         "type": "zoink",
         "path": "{{baseDir}}templates/supported/shared/plugins/zoink/popcorn.zoink.js"
+      },
+      {
+        "type": "titles",
+        "path": "{{baseDir}}templates/supported/shared/plugins/titles/popcorn.titles.js"
       }
     ],
     "defaults": [
       "text",
       "speak",
-      "zoink"
+      "zoink",
+      "titles"
     ]
   }
 }

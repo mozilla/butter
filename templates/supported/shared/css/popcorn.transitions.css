@@ -1,0 +1,90 @@
+/* This Source Code Form is subject to the terms of the MIT license
+ * If a copy of the MIT license was not distributed with this file, you can
+ * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
+/*-      -      -      -      -      -      -      -      -      -      -      -
+-     -     -     -     -     -     -     -     -     -     -     -     -     -   
+-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+---------------------------------------------------------------------------
+POPCORN TRANSITIONS ------------------------------------------------------
+------------------------------------------------------------------------
+
+This file contains CSS3 transitions used in popcorn.
+Enjoy!
+*/
+.popcorn-transition {
+  overflow: hidden;
+}
+.popcorn-off {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: visibility 0 .3s, opacity .3s linear;
+  -moz-transition: visibility 0 .3s, opacity .3s linear;
+  -o-transition: visibility 0 .3s, opacity .3s linear;
+  -ms-transition: visibility 0 .3s, opacity .3s linear;
+  transition: visibility 0 .3s, opacity .3s linear;
+}
+.popcorn-on {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: opacity .3s linear;
+  -moz-transition: opacity .3s linear;
+  -o-transition: opacity .3s linear;
+  -ms-transition: opacity .3s linear;
+  transition: opacity .3s linear;
+}
+.popcorn-off > div {
+  margin-top: -10000px;
+  -webkit-transition: margin-top 0 .3s;
+  -moz-transition: margin-top 0 .3s;
+  -o-transition: margin-top 0 .3s;
+  -ms-transition: margin-top 0 .3s;
+  transition: margin-top 0 .3s;
+}
+/* DURATIONS
+-------------------------------------------------- */
+.popcorn-transition-slow.popcorn-off {
+  -webkit-transition: visibility 0 .6s, opacity .6s linear;
+  -moz-transition: visibility 0 .6s, opacity .6s linear;
+  -o-transition: visibility 0 .6s, opacity .6s linear;
+  -ms-transition: visibility 0 .6s, opacity .6s linear;
+  transition: visibility 0 .6s, opacity .6s linear;
+}
+.popcorn-transition-slow.popcorn-on {
+  -webkit-transition: opacity .6s linear;
+  -moz-transition: opacity .6s linear;
+  -o-transition: opacity .6s linear;
+  -ms-transition: opacity .6s linear;
+  transition: opacity .6s linear;
+}
+.popcorn-transition-slow.popcorn-off > div {
+  -webkit-transition: margin-top 0 .6s;
+  -moz-transition: margin-top 0 .6s;
+  -o-transition: margin-top 0 .6s;
+  -ms-transition: margin-top 0 .6s;
+  transition: margin-top 0 .6s;
+}
+.popcorn-transition-fast.popcorn-off {
+  -webkit-transition: visibility 0 .15s, opacity .15s linear;
+  -moz-transition: visibility 0 .15s, opacity .15s linear;
+  -o-transition: visibility 0 .15s, opacity .15s linear;
+  -ms-transition: visibility 0 .15s, opacity .15s linear;
+  transition: visibility 0 .15s, opacity .15s linear;
+}
+.popcorn-transition-fast.popcorn-on {
+  -webkit-transition: opacity .15s linear;
+  -moz-transition: opacity .15s linear;
+  -o-transition: opacity .15s linear;
+  -ms-transition: opacity .15s linear;
+  transition: opacity .15s linear;
+}
+.popcorn-transition-fast.popcorn-off > div {
+  -webkit-transition: margin-top 0 .15s;
+  -moz-transition: margin-top 0 .15s;
+  -o-transition: margin-top 0 .15s;
+  -ms-transition: margin-top 0 .15s;
+  transition: margin-top 0 .15s;
+}
+
+/* ---/ DURATIONS ------------------------------- */
