@@ -63,6 +63,8 @@ define( [
         _zoomFactor,
         _zoom;
 
+    _tracksContainer.setScrollbars( _hScrollBar, _vScrollBar );
+
     EventManagerWrapper( _this );
 
     _rootElement.className = "media-instance";
@@ -192,7 +194,6 @@ define( [
       }
 
       function onTrackAdded( e ){
-        _vScrollBar.update();
         var track = e.data;
         track.view.listen( "plugindropped", onPluginDropped );
         track.view.listen( "trackeventdropped", onTrackEventDropped );
@@ -222,7 +223,6 @@ define( [
       _media.listen( "trackeventadded", onTrackEventAdded );
 
       _media.listen( "trackremoved", function( e ){
-        _vScrollBar.update();
         var track = e.data;
         track.view.unlisten( "plugindropped", onPluginDropped );
         track.view.unlisten( "trackeventdropped", onTrackEventDropped );

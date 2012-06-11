@@ -14,8 +14,6 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
         _scrollTarget = scrollTarget || _containerParent,
         _elementHeight,
         _parentHeight,
-        _childHeight,
-        _scrollHeight,
         _handleHeight,
         _mousePos = 0,
         _this = this;
@@ -29,10 +27,8 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
     function setup(){
       _parentHeight = _containerParent.getBoundingClientRect().height;
-      _childHeight = _containerChild.getBoundingClientRect().height;
       _elementHeight = _element.getBoundingClientRect().height;
-      _scrollHeight = _containerChild.scrollHeight;
-      _handleHeight = _elementHeight - ( _scrollHeight - _parentHeight ) / VERTICAL_SIZE_REDUCTION_FACTOR;
+      _handleHeight = _elementHeight - ( _containerChild.scrollHeight - _parentHeight ) / VERTICAL_SIZE_REDUCTION_FACTOR;
       _handleHeight = Math.max( 20, Math.min( _elementHeight, _handleHeight ) );
       _handle.style.height = _handleHeight + "px";
       setHandlePosition();
@@ -49,7 +45,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       diff = Math.max( 0, Math.min( diff, _elementHeight - _handleHeight ) );
       _handle.style.top = diff + "px";
       var p = _handle.offsetTop / ( _elementHeight - _handleHeight );
-      _containerParent.scrollTop = ( _scrollHeight - _elementHeight ) * p;
+      _containerParent.scrollTop = ( _containerChild.scrollHeight - _parentHeight ) * p;
       _this.dispatch( "scroll", _containerParent.scrollTop );
     } //onMouseMove
 
@@ -68,10 +64,11 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
     }; //update
 
     function setHandlePosition(){
-      if( _containerChild.scrollHeight - _elementHeight > 0 ) {
+      if ( _containerChild.scrollHeight - _elementHeight > 0 ) {
         _handle.style.top = ( _elementHeight - _handleHeight ) *
-          ( _containerParent.scrollTop / ( _containerChild.scrollHeight - _elementHeight ) ) + "px";
-      }else{
+          ( _containerParent.scrollTop / ( _containerChild.scrollHeight - _parentHeight ) ) + "px";
+      }
+      else {
         _handle.style.top = "0px";
       }
     }
@@ -115,7 +112,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       }
 
       p = _handle.offsetTop / ( _elementHeight - _handleHeight );
-      _containerParent.scrollTop = ( _scrollHeight - _elementHeight ) * p;
+      _containerParent.scrollTop = ( _containerChild.scrollHeight - _elementHeight ) * p;
     }, false);
 
     window.addEventListener( "resize", setup, false );
