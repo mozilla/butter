@@ -1,7 +1,7 @@
 (function(){
   var _comm = new Comm(),
       _manifest = {},
-      dataURI = "";
+      dataURI;
 
   // TODO: this should be something we reuse from src/ui/widget/textbox.js
   // with require.  We need to expose butter internals to editors.
@@ -174,6 +174,8 @@
               return elem;
             }
           };
+
+      dataURI = popcornOptions.src;
 
       if ( media && media.name && media.target ) {
         mediaName += " (\"" + media.name + "\": " + media.target + ")";
