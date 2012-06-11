@@ -123,12 +123,11 @@ define( [], function(){
    * Cross-browser full element.classList implementation for IE9 and friends.
    * 2011-06-15
    *
-   * By Eli Grey, http://eligrey.com
+   * By Eli Grey, http://purl.eligrey.com/github/classList.js/blob/master/classList.js
    * Public Domain.
    * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
    */
   /*global self, document, DOMException */
-  /*! @source http://purl.eligrey.com/github/classList.js/blob/master/classList.js*/
   if (typeof document !== "undefined" && !("classList" in document.createElement("a"))) {
     (function (view) {
       "use strict";
