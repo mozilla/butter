@@ -28,18 +28,6 @@
       } )
  *
  */
-
- function normalize( value, minWidth, maxWidth ) {
-    value = value | 0;
-    if ( value > maxWidth ) {
-      return maxWidth;
-    } else if ( value < minWidth ) {
-      return minWidth;
-    } else {
-      return value;
-    }
-  }
-
   Popcorn.plugin( "photo", {
       manifest: {
         about: {
