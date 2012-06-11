@@ -199,7 +199,7 @@
       }
 
       function mediaTrackEventRequested( e ){
-        var trackEvent = trackEventRequested( e.data, e.target, "Media Element" );
+        var trackEvent = trackEventRequested( e.data, e.target, _currentMedia.target );
         _this.dispatch( "trackeventcreated", {
           trackEvent: trackEvent,
           by: "media"

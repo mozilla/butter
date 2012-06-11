@@ -136,7 +136,7 @@
               }
               if ( manifestProp === "target" ) {
                 option = document.createElement( "OPTION" );
-                option.value = "Media Element";
+                option.value = media.target;
                 option.innerHTML =  mediaName;
                 elem.appendChild( option );
               }

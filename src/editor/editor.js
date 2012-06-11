@@ -31,7 +31,7 @@ define( [ "core/eventmanager", "dialog/iframe-dialog", "dialog/window-dialog", "
     _dims[ 1 ] = options.height || _dims[ 1 ];
 
     function blinkTarget(){
-      if( _currentTarget === "Media Element" ){
+      if( _currentTarget === butter.currentMedia.target ){
         butter.currentMedia.view.blink();
       }
       else{
