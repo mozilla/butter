@@ -126,7 +126,7 @@
       for( i=0; i< innerContainerClasses.length; i++ ){
         innerContainer.classList.add( innerContainerClasses[i] );
       }
-    dasdasd
+
       // Add each class to the outer container
       for( j=0; j<containerClasses.length; j++ ){
         container.classList.add( containerClasses[j] );

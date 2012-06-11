@@ -18,13 +18,23 @@
       {
         "type": "titles",
         "path": "{{baseDir}}templates/supported/shared/plugins/titles/popcorn.titles.js"
+      },
+      {
+        "type": "googlemap",
+        "path": "{{baseDir}}templates/supported/shared/plugins/googlemap/popcorn.googlemap.js"
+      },
+      {
+        "type": "flickr",
+        "path": "{{baseDir}}templates/supported/shared/plugins/flickr/popcorn.flickr.js"
       }
     ],
     "defaults": [
       "text",
       "speak",
       "zoink",
-      "titles"
+      "titles",
+      "googlemap",
+      "flickr"
     ]
   }
 }
