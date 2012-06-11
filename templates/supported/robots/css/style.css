@@ -73,6 +73,17 @@ section[role="video-container"]  > video {
   width: 100%;
 }
 
+.text-overlay {
+  display: table;
+  height: 500px;
+}
+.text-overlay > div {
+  width: 100%;
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
+}
+
 section[role="suplementary"] {
   margin: 40px 0;
   font-weight: 400;
@@ -99,7 +110,7 @@ footer {
 }
 /* /footer */
 
-/* POPCORN PLUGINS
+/* FLICKR
 -------------------------------------------------- */
 .popcorn-flickr p {
   display: none;
@@ -206,4 +217,28 @@ footer {
   width: 400px;
 }
 
-/* ---/ POPCORN PLUGINS ------------------------------- */
+/* ---/ FLICKR ------------------------------- */
+
+/* TITLES
+-------------------------------------------------- */
+.top-title, .bottom-title, .mid-title {
+  text-align: center;
+}
+.top-title {
+  font-family: 'Jolly Lodger', Georgia;
+  font-size: 120px;
+  text-transform: uppercase;
+  color: #FFF;
+}
+.mid-title {
+  font-family: 'Fredericka the Great', Georgia; 
+  font-size: 40px;
+}
+.bottom-title {
+  font-family: 'Lovers Quarrel', Georgia; 
+  font-size: 100px; 
+  margin: 0 20px;
+}
+
+
+/* ---/ TITLES ------------------------------- */

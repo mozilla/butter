@@ -25,7 +25,7 @@
   <script type="text/javascript" src="butter/template.js" data-butter-exclude></script>
 
   <!-- Fonts -->
-  <link href="http://fonts.googleapis.com/css?family=Jolly+Lodger|Bangers|Fredericka+the+Great" rel="stylesheet">
+  <link href="http://fonts.googleapis.com/css?family=Jolly+Lodger|Bangers|Fredericka+the+Great|Lovers+Quarrel" rel="stylesheet">
   <script type="text/javascript" src="http://use.typekit.com/vjc5yjz.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
@@ -43,7 +43,15 @@
             <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.ogv">
             <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.webm">
           </video>
-          <div id="video-overlay" class="video-overlay" data-butter="target"></div>
+          <div class="video-overlay text-overlay">
+            <div>
+              <div id="top-title" data-butter="target"></div>
+              <div id="mid-title" data-butter="target"></div>
+              <div id="bottom-title" data-butter="target"></div>
+            </div>
+          </div>
+          <div id="video-overlay" class="video-overlay" data-butter="target">
+          </div>
         </section>
         <section role="suplementary" class="cf">
           <article id="Supplementary1" class="block" data-butter="target">

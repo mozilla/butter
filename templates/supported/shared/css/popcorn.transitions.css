@@ -91,6 +91,11 @@ Enjoy!
 
 /* SPECIAL EFFECTS
 -------------------------------------------------- */
+.popcorn-effect-blur {
+  color: transparent;
+  text-shadow: 0 0 3px #FFF;
+}
+
 .popcorn-effect-rumble {
   -webkit-animation: rumble .1s infinite ease;
   -moz-animation: rumble .1s infinite ease;

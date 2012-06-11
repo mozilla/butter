@@ -17,7 +17,7 @@
       },
       {
         "type": "titles",
-        "path": "{{baseDir}}templates/supported/shared/plugins/titles/popcorn.titles.js"
+        "path": "{{baseDir}}templates/supported/shared/plugins/titles/popcorn.titles.robots.js"
       },
       {
         "type": "googlemap",
