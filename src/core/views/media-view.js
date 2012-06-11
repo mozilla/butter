@@ -6,6 +6,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       MAX_URLS = 4;
 
   return function( media, options ){
+
     var _media = media,
         _pageElement,
         _onDropped = options.onDropped || function(){},
@@ -13,7 +14,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         _logoSpinner;
 
     var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE ),
-        _container = _propertiesElement.querySelector( "div.container" ),
+        _container = _propertiesElement.querySelector( "div.butter-container" ),
         _urlContainer = _propertiesElement.querySelector( "div.url" ),
         _urlTextbox = _propertiesElement.querySelector( "input[type='text']" ),
         _subtitle = _propertiesElement.querySelector( ".form-field-notes" ),
@@ -21,7 +22,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         _addUrlButton = _propertiesElement.querySelector( "button.add-url" ),
         _urlList = _propertiesElement.querySelector( "div.url-group" ),
         _loadingContainer = _propertiesElement.querySelector( ".loading-container" );
-
+console.log(_container);
     var _containerDims;
 
     function setDimensions( state ){
