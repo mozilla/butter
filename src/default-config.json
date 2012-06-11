@@ -60,6 +60,27 @@
       "googlemap"
     ]
   },
+  "player": {
+    "players": [
+      {
+        "type": "youtube",
+        "path": "{{baseDir}}external/popcorn-js/players/youtube/popcorn.youtube.js"
+      },
+      {
+        "type": "soundcloud",
+        "path": "{{baseDir}}external/popcorn-js/players/soundcloud/popcorn.soundcloud.js"
+      },
+      {
+        "type": "vimeo",
+        "path": "{{baseDir}}external/popcorn-js/players/vimeo/popcorn.vimeo.js"
+      }
+    ],
+    "defaults": [
+      "youtube",
+      "soundcloud",
+      "vimeo"
+    ]
+  },
   "dirs": {
     "popcorn-js": "{{baseDir}}external/popcorn-js/",
     "css": "{{baseDir}}css/",

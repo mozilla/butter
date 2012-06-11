@@ -2,6 +2,7 @@
 
 var JSLINT = './node_modules/jshint/bin/hint',
     CSSLINT = './node_modules/csslint/cli.js',
+    UGLIFY = './node_modules/uglify-js/bin/uglifyjs',
     RJS    = './node_modules/requirejs/bin/r.js',
     STYLUS = './node_modules/stylus/bin/stylus',
     DOX    = './tools/dox.py',
@@ -10,6 +11,9 @@ var JSLINT = './node_modules/jshint/bin/hint',
     TEMPLATES_DIR = 'templates',
     DIALOGS_DIR = 'dialogs',
     DOCS_DIR = 'docs',
+    DEFAULT_CONFIG = './src/default-config',
+    BUTTERED_POPCORN = DIST_DIR + '/buttered-popcorn.js',
+    BUTTERED_POPCORN_MIN = DIST_DIR + '/buttered-popcorn.min.js',
     PACKAGE_NAME = 'butter';
 
 require('shelljs/make');
@@ -129,7 +133,7 @@ target['check-lint'] = function( dir ) {
   checkJS( 'src' );
 };
 
-target.build = function() {
+function build( version ){
   echo('### Building butter');
 
   target.clean();
@@ -138,14 +142,19 @@ target.build = function() {
   exec(RJS + ' -o tools/build.js');
   exec(RJS + ' -o tools/build.optimized.js');
 
-  // Stamp Butter.version with the git commit sha we are using
-  var version = exec('git describe',
-                     {silent:true}).output.replace(/\r?\n/m, "");
+  // Stamp Butter.version with supplied version
   sed('-i', '@VERSION@', version, 'dist/butter.js');
   sed('-i', '@VERSION@', version, 'dist/butter.min.js');
 
   exec(STYLUS + ' css');
   cp('css/*.css', DIST_DIR);
+}
+
+target.build = function(){
+  // Use git commit info
+  var version = exec('git describe',
+                     {silent:true}).output.replace(/\r?\n/m, "");
+  build( version );
 };
 
 target.server = function() {
@@ -167,6 +176,75 @@ target.package = function() {
 
   echo('### Creating butter.zip');
   cd(DIST_DIR)
+  exec('zip -r ' + PACKAGE_NAME + '.zip ' + ls('.').join(' '));
+};
+
+target.release = function() {
+  echo('### Making Butter Release');
+
+  // To pass a release version number, use:
+  // $ VERSION=0.5 node make release
+  var version = env['VERSION'] || env['version'];
+
+  if( !version ){
+    throw "Must provide a version when building a release: VERSION=XXX node make release";
+  }
+
+  build( version );
+
+  var defaultConfig = require( DEFAULT_CONFIG ),
+      popcornDir = defaultConfig.dirs['popcorn-js'].replace( '{{baseDir}}', './' ),
+      players = defaultConfig.player.players,
+      plugins = defaultConfig.plugin.plugins,
+      popcornFiles = [];
+
+  // Popcorn License Header
+  popcornFiles.push( popcornDir + '/LICENSE_HEADER' );
+
+  // classList shim
+  popcornFiles.push( './tools/classlist-shim.js' );
+
+  // popcorn IE8 shim
+  popcornFiles.push( popcornDir + '/ie8/popcorn.ie8.js' );
+
+  // popcorn.js
+  popcornFiles.push( popcornDir + '/popcorn.js' );
+
+  // plugins
+  plugins.forEach( function( plugin ){
+    popcornFiles.push( plugin.path.replace( '{{baseDir}}', './' ) );
+  });
+
+  // module for baseplayer
+  popcornFiles.push( popcornDir + '/modules/player/popcorn.player.js' );
+
+  // players
+  players.forEach( function( player ){
+    popcornFiles.push( player.path.replace( '{{baseDir}}', './' ) );
+  });
+
+  // Stamp Popcorn.version with the git commit sha we are using
+  var cwd = pwd();
+  cd( popcornDir );
+  var popcornVersion = exec('git describe',
+                       {silent:true}).output.replace(/\r?\n/m, "");
+  cd( cwd );
+
+  // Write out dist/buttered-popcorn.js
+  cat( popcornFiles ).to( BUTTERED_POPCORN );
+  sed('-i', '@VERSION', popcornVersion, BUTTERED_POPCORN);
+
+  // Write out dist/buttered-popcorn.min.js
+  exec( UGLIFY + ' --output ' + BUTTERED_POPCORN_MIN + ' ' + BUTTERED_POPCORN );
+
+  // Copy over templates and other resources
+  cp('-R', 'resources', DIST_DIR);
+  cp('-R', 'dialogs', DIST_DIR);
+  cp('-R', 'editors', DIST_DIR);
+  cp('-R', 'templates', DIST_DIR);
+
+  echo('### Creating butter.zip');
+  cd(DIST_DIR);
   exec('zip -r ' + PACKAGE_NAME + '.zip ' + ls('.').join(' '));
 };
 
