@@ -52,7 +52,7 @@ function(
       }
     });
 
-    this.setScrollbars = function ( hScrollbar, vScrollbar ) {
+    this.setScrollbars = function( hScrollbar, vScrollbar ){
       _hScrollbar = hScrollbar;
       _vScrollbar = vScrollbar;
     };
@@ -118,7 +118,7 @@ function(
     _media.listen( "trackremoved", function( e ){
       var trackView = e.data.view;
       _container.removeChild( trackView.element );
-      if ( _vScrollbar ) {
+      if( _vScrollbar ){
         _vScrollbar.update();
       }
     });

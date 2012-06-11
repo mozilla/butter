@@ -64,11 +64,11 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
     }; //update
 
     function setHandlePosition(){
-      if ( _containerChild.scrollHeight - _elementHeight > 0 ) {
+      if( _containerChild.scrollHeight - _elementHeight > 0 ){
         _handle.style.top = ( _elementHeight - _handleHeight ) *
           ( _containerParent.scrollTop / ( _containerChild.scrollHeight - _parentHeight ) ) + "px";
       }
-      else {
+      else{
         _handle.style.top = "0px";
       }
     }
