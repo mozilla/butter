@@ -25,11 +25,12 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
       media.onReady( start );
 
+      //Export this later
       popcorn.on( "play", function(){
-        $(".popcorn-effect-rumble-play").addClass(".popcorn-effect-rumble");
+        $(".popcorn-effect-rumble-play").addClass("popcorn-effect-rumble");
       });
       popcorn.on( "pause", function(){
-        $(".popcorn-effect-rumble-play").removeClass(".popcorn-effect-rumble");
+        $(".popcorn-effect-rumble-play").removeClass("popcorn-effect-rumble");
       });
 
     }
