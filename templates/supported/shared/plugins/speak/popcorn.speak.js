@@ -34,32 +34,33 @@
           showText: {
             elem: "input",
             type: "checkbox",
-            label: "Show text?"
+            label: "Show text?",
+            hidden: true
           },
           amplitude: {
             elem: "input",
             type: "text",
-            label: "Amplitude:"
+            label: "Amplitude"
           },
           wordgap: {
             elem: "input",
             type: "number",
-            label: "Wordgap:"
+            label: "Wordgap"
           },
           pitch: {
             elem: "input",
             type: "number",
-            label: "Pitch:"
+            label: "Pitch"
           },
           speed: {
             elem: "input",
             type: "number",
-            label: "Speed:"
+            label: "Speed"
           },
           pluginPath: {
             elem: "input",
             type: "text",
-            label: "Plugin path:",
+            label: "Plugin path",
             "default":"../shared/plugins/speak/"
           }
         }

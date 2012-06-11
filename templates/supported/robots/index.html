@@ -6,16 +6,26 @@
   <title>Robots</title>
   <meta name="viewport" content="width=device-width">
 
-  <link href='http://fonts.googleapis.com/css?family=Jolly+Lodger|Bangers' rel='stylesheet' type='text/css'>
+  <!-- Normalise! -->
   <link rel="stylesheet" href="../shared/css/normalise.css">
+
+  <!-- Main stylesheet -->
   <link rel="stylesheet" href="css/style.css">
 
+  <!-- Popcorn plugin stylesheets -->
+  <link rel="stylesheet" href="../shared/css/popcorn.transitions.css">
   <link rel="stylesheet" href="../shared/plugins/zoink/popcorn.zoink.css">
 
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+  <!-- Butter -->
   <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
   <script src="../../../src/butter.js" data-butter-exclude></script>
   <script type="text/javascript" src="butter/template.js" data-butter-exclude></script>
 
+  <!-- Fonts -->
+  <link href="http://fonts.googleapis.com/css?family=Jolly+Lodger|Bangers|Fredericka+the+Great|Lovers+Quarrel" rel="stylesheet">
   <script type="text/javascript" src="http://use.typekit.com/vjc5yjz.js"></script>
   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
@@ -24,16 +34,24 @@
   <div class="inner-container">
     <div class="wrapper">
       <header>
-        <h2 id="logo" class="logo on">Robots in everytown</h2>
+        <h2 id="logo" class="logo ">Robots in everytown</h2>
       </header>
       <div role="main">
         <section id="video-container" role="video-container">
           <video id="video" preload data-butter="media" controls>
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/trailer.mp4">
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/trailer.ogv">
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/trailer.webm">
+            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.mp4">
+            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.ogv">
+            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.webm">
           </video>
-          <div id="video-overlay" class="video-overlay" data-butter="target"></div>
+          <div class="video-overlay text-overlay">
+            <div>
+              <div id="top-title" data-butter="target"></div>
+              <div id="mid-title" data-butter="target"></div>
+              <div id="bottom-title" data-butter="target"></div>
+            </div>
+          </div>
+          <div id="video-overlay" class="video-overlay" data-butter="target" data-butter-default>
+          </div>
         </section>
         <section role="suplementary" class="cf">
           <article id="Supplementary1" class="block" data-butter="target">
@@ -49,6 +67,5 @@
       </footer>
     </div><!--.wrapper-->
   </div><!--.inner-container-->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,293 @@
+/* This Source Code Form is subject to the terms of the MIT license
+ * If a copy of the MIT license was not distributed with this file, you can
+ * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
+/*-      -      -      -      -      -      -      -      -      -      -      -
+-     -     -     -     -     -     -     -     -     -     -     -     -     -   
+-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -
+-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+---------------------------------------------------------------------------
+POPCORN TRANSITIONS ------------------------------------------------------
+------------------------------------------------------------------------
+
+This file contains CSS3 transitions used in popcorn.
+Enjoy!
+*/
+.popcorn-transition {
+  overflow: hidden;
+}
+.popcorn-off {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: visibility 0 .3s, opacity .3s linear;
+  -moz-transition: visibility 0 .3s, opacity .3s linear;
+  -o-transition: visibility 0 .3s, opacity .3s linear;
+  -ms-transition: visibility 0 .3s, opacity .3s linear;
+  transition: visibility 0 .3s, opacity .3s linear;
+}
+.popcorn-on {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: opacity .3s linear;
+  -moz-transition: opacity .3s linear;
+  -o-transition: opacity .3s linear;
+  -ms-transition: opacity .3s linear;
+  transition: opacity .3s linear;
+}
+.popcorn-off > div {
+  margin-top: -10000px;
+  -webkit-transition: margin-top 0 .3s;
+  -moz-transition: margin-top 0 .3s;
+  -o-transition: margin-top 0 .3s;
+  -ms-transition: margin-top 0 .3s;
+  transition: margin-top 0 .3s;
+}
+/* DURATIONS
+-------------------------------------------------- */
+.popcorn-transition-slow.popcorn-off {
+  -webkit-transition: visibility 0 .6s, opacity .6s linear;
+  -moz-transition: visibility 0 .6s, opacity .6s linear;
+  -o-transition: visibility 0 .6s, opacity .6s linear;
+  -ms-transition: visibility 0 .6s, opacity .6s linear;
+  transition: visibility 0 .6s, opacity .6s linear;
+}
+.popcorn-transition-slow.popcorn-on {
+  -webkit-transition: opacity .6s linear;
+  -moz-transition: opacity .6s linear;
+  -o-transition: opacity .6s linear;
+  -ms-transition: opacity .6s linear;
+  transition: opacity .6s linear;
+}
+.popcorn-transition-slow.popcorn-off > div {
+  -webkit-transition: margin-top 0 .6s;
+  -moz-transition: margin-top 0 .6s;
+  -o-transition: margin-top 0 .6s;
+  -ms-transition: margin-top 0 .6s;
+  transition: margin-top 0 .6s;
+}
+.popcorn-transition-fast.popcorn-off {
+  -webkit-transition: visibility 0 .15s, opacity .15s linear;
+  -moz-transition: visibility 0 .15s, opacity .15s linear;
+  -o-transition: visibility 0 .15s, opacity .15s linear;
+  -ms-transition: visibility 0 .15s, opacity .15s linear;
+  transition: visibility 0 .15s, opacity .15s linear;
+}
+.popcorn-transition-fast.popcorn-on {
+  -webkit-transition: opacity .15s linear;
+  -moz-transition: opacity .15s linear;
+  -o-transition: opacity .15s linear;
+  -ms-transition: opacity .15s linear;
+  transition: opacity .15s linear;
+}
+.popcorn-transition-fast.popcorn-off > div {
+  -webkit-transition: margin-top 0 .15s;
+  -moz-transition: margin-top 0 .15s;
+  -o-transition: margin-top 0 .15s;
+  -ms-transition: margin-top 0 .15s;
+  transition: margin-top 0 .15s;
+}
+
+/* ---/ DURATIONS ------------------------------- */
+
+/* SPECIAL EFFECTS
+-------------------------------------------------- */
+.popcorn-effect-blur {
+  color: transparent;
+  text-shadow: 0 0 3px #FFF,
+    0 0 20px #000;
+}
+
+.popcorn-effect-rumble {
+  -webkit-animation: rumble .1s infinite ease;
+  -moz-animation: rumble .1s infinite ease;
+  -ms-animation: rumble .1s infinite ease;
+  -o-animation: rumble .1s infinite  ease;
+  animation: rumble .1s infinite ease;
+}
+
+@-webkit-keyframes rumble {
+  0% {-webkit-transform: rotate(0deg);}
+  5% {-webkit-transform: translate(.1px, 0px); }
+  15% {-webkit-transform: translate(.1px, 0px) rotate(-1deg);}
+  66% {-webkit-transform: translate(-.1px, 0px);}
+  90% {-webkit-transform: translate(0px, -1px) rotate(0deg);}
+  95% {-webkit-transform: translate(-1px, 0px) rotate(1deg);}
+  100% {-webkit-transform: translate(0px, .1px) rotate(0deg);} 
+}
+@-moz-keyframes rumble {
+  0% {-moz-transform: rotate(0deg);}
+  5% {-moz-transform: translate(.1px, 0px);}
+  15% {-moz-transform: translate(.1px, 0px) rotate(-1deg);}
+  66% {-moz-transform: translate(-.1px, 0px);}
+  90% {-moz-transform: translate(0px, -1px) rotate(0deg);}
+  95% {-moz-transform: translate(-1px, 0px) rotate(1deg);}
+  100% {-moz-transform: translate(0px, .1px) rotate(0deg);} 
+}
+@-o-keyframes rumble {
+  0% {-o-transform: rotate(0deg);}
+  5% {-o-transform: translate(.1px, 0px);}
+  15% {-o-transform: translate(.1px, 0px) rotate(-1deg);}
+  66% {-o-transform: translate(-.1px, 0px);}
+  90% {-o-transform: translate(0px, -1px) rotate(0deg);}
+  95% {-o-transform: translate(-1px, 0px) rotate(1deg);}
+  100% {-o-transform: translate(0px, .1px) rotate(0deg);} 
+}
+@-ms-keyframes rumble {
+  0% {-ms-transform: rotate(0deg);}
+  5% {-ms-transform: translate(.1px, 0px);}
+  15% {-ms-transform: translate(.1px, 0px) rotate(-1deg);}
+  66% {-ms-transform: translate(-.1px, 0px);}
+  90% {-ms-transform: translate(0px, -1px) rotate(0deg);}
+  95% {-ms-transform: translate(-1px, 0px) rotate(1deg);}
+  100% {-ms-transform: translate(0px, .1px) rotate(0deg);} 
+}
+@keyframes rumble {
+  0% {transform: rotate(0deg);}
+  5% {transform: translate(.1px, 0px);}
+  15% {transform: translate(.1px, 0px) rotate(-1deg);}
+  66% {transform: translate(-.1px, 0px);}
+  90% {transform: translate(0px, -1px) rotate(0deg);}
+  95% {transform: translate(-1px, 0px) rotate(1deg);}
+  100% {transform: translate(0px, .1px) rotate(0deg);} 
+}
+
+.popcorn-effect-float {
+  -webkit-animation: float 5s infinite ease;
+  -moz-animation: float 5s infinite ease;
+  -ms-animation: float 5s infinite ease;
+  -o-animation: float 5s infinite ease;
+  animation: float 5s infinite ease;
+}
+@-webkit-keyframes float {
+  0% {-webkit-transform: translate(-10px);}
+  50% {-webkit-transform: translate(10, 5px); }
+  100% {-webkit-transform: translate(-10px);}
+}
+@-webkit-keyframes floatb {
+  0% {-webkit-transform: translate(30px) rotate(0deg); }
+  50% {-webkit-transform: translate(-30px, 0) rotate(-1deg); }
+  100% {-webkit-transform: translate(30px) rotate(0deg); } 
+}
+@-webkit-keyframes floatc {
+  0% {-webkit-transform: rotate(0deg);}
+  50% {-webkit-transform: translate(-20px, 0) rotate(10deg);}
+  100% {-webkit-transform: translate(0) rotate(0deg);} 
+}
+@-moz-keyframes float {
+  0% {-moz-transform: translate(-10px);}
+  50% {-moz-transform: translate(10, 5px); }
+  100% {-moz-transform: translate(-10px);}
+}
+@-moz-keyframes floatb {
+  0% {-moz-transform: translate(30px) rotate(0deg); }
+  50% {-moz-transform: translate(-30px, 0) rotate(-1deg); }
+  100% {-moz-transform: translate(30px) rotate(0deg); } 
+}
+@-moz-keyframes floatc {
+  0% {-moz-transform: rotate(0deg);}
+  50% {-moz-transform: translate(-20px, 0) rotate(10deg);}
+  100% {-moz-transform: translate(0) rotate(0deg);} 
+}
+@-o-keyframes float {
+  0% {-o-transform: translate(-10px);}
+  50% {-o-transform: translate(10, 5px); }
+  100% {-o-transform: translate(-10px);}
+}
+@-o-keyframes floatb {
+  0% {-o-transform: translate(30px) rotate(0deg); }
+  50% {-o-transform: translate(-30px, 0) rotate(-1deg); }
+  100% {-o-transform: translate(30px) rotate(0deg); } 
+}
+@-o-keyframes floatc {
+  0% {-o-transform: rotate(0deg);}
+  50% {-o-transform: translate(-20px, 0) rotate(10deg);}
+  100% {-o-transform: translate(0) rotate(0deg);} 
+}
+@-ms-keyframes float {
+  0% {-ms-transform: translate(-10px);}
+  50% {-ms-transform: translate(10, 5px); }
+  100% {-ms-transform: translate(-10px);}
+}
+@-ms-keyframes floatb {
+  0% {-ms-transform: translate(30px) rotate(0deg); }
+  50% {-ms-transform: translate(-30px, 0) rotate(-1deg); }
+  100% {-ms-transform: translate(30px) rotate(0deg); } 
+}
+@-ms-keyframes floatc {
+  0% {-ms-transform: rotate(0deg);}
+  50% {-ms-transform: translate(-20px, 0) rotate(10deg);}
+  100% {-ms-transform: translate(0) rotate(0deg);} 
+}
+@keyframes float {
+  0% {transform: translate(-10px);}
+  50% {transform: translate(10, 5px); }
+  100% {transform: translate(-10px);}
+}
+@keyframes floatb {
+  0% {transform: translate(30px) rotate(0deg); }
+  50% {transform: translate(-30px, 0) rotate(-1deg); }
+  100% {transform: translate(30px) rotate(0deg); } 
+}
+@keyframes floatc {
+  0% {transform: rotate(0deg);}
+  50% {transform: translate(-20px, 0) rotate(10deg);}
+  100% {transform: translate(0) rotate(0deg);} 
+}
+
+.pop {
+  -webkit-transform: scale(0,0);
+  -moz-transform: scale(0,0);
+  -o-transform: scale(0,0);
+  transform: scale(0,0);
+  -ms-transform: scale(0,0);
+}
+
+.pop.on{
+  -webkit-transform: scale(1,1);
+  -moz-transform: scale(1,1);
+  -o-transform: scale(1,1);
+  transform: scale(1,1);
+  -webkit-transform-origin: center;
+  -moz-transform-origin: center;
+  -o-transform-origin: center;
+  transform-origin: center;
+  -webkit-animation: pop .2s 1 ease-out;
+  -moz-animation: pop .2s 1 ease-out;
+  -ms-animation: pop .2s 1 ease-out;
+  -o-animation: pop .2s 1 ease-out;
+  animation: pop .2s 1 ease-out;
+  -ms-transform-origin: center;
+  -ms-transform: scale(1,1);
+}
+
+@-webkit-keyframes pop {
+  0% {-webkit-transform: scale(0,0);}
+  75% {-webkit-transform: scale(1.6,1.6);}
+  100% {-webkit-transform: scale(1,1);}
+}
+
+@-moz-keyframes pop {
+  0% {-moz-transform: scale(0,0);}
+  75% {-moz-transform: scale(1.6,1.6);}
+  100% {-moz-transform: scale(1,1);}
+}
+
+@-o-keyframes pop {
+  0% {-o-transform: scale(0,0);}
+  75% {-o-transform: scale(1.6,1.6);}
+  100% {-o-transform: scale(1,1);}
+}
+
+@-moz-keyframes pop {
+  0% {-ms-transform: scale(0,0);}
+  75% {-ms-transform: scale(1.6,1.6);}
+  100% {-ms-transform: scale(1,1);}
+}
+
+@keyframes pop {
+  0% {transform: scale(0,0);}
+  75% {transform: scale(1.6,1.6);}
+  100% {transform: scale(1,1);}
+}
+
+/* ---/ SPECIAL EFFECTS ------------------------------- */
