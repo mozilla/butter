@@ -44,9 +44,11 @@ textarea {
   text-align: right;
   text-shadow: 0 -1px 1px rgba(0,0,0,.4);
 }
+
 .butter-form-title h3 {
   margin-top: 0;
 }
+
 .butter-form {
   float: left;
   width: 450px;
@@ -54,6 +56,7 @@ textarea {
   color: #FFF;
   font-size: 1em;
 }
+
 .butter-form > div { /* fieldset */
   display: table;
   content: "";
@@ -61,6 +64,7 @@ textarea {
   font-size: 13px;
   line-height: 18px;
 }
+
 label {
   float: left;
   width: 80px;
@@ -72,6 +76,7 @@ label {
   color: #DDD;
   text-shadow: 0 -1px 1px rgba(0,0,0,.4);
 }
+
 .butter-form > div > div { /* input container */
   margin-left: 100px;
   margin-bottom: 5px;
@@ -96,20 +101,25 @@ input, .butter-unit {
   border-radius: 3px;
   color: #D5D5D5;
 }
+
 select {
   margin-top: 4px;
   width: 100px;
 }
+
 input[type="text"]{
   width: 260px;
 }
+
 input[type="number"]{
   width: 70px;
 }
+
 input[type="checkbox"] {
   width: auto;
   margin-top: 9px;
- }
+}
+
 input:focus{
   outline: none;
   border: 1px solid #272822;
@@ -126,9 +136,11 @@ input:focus{
   background: -ms-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #555;
   background: linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #555;
 }
+
 input:focus + .butter-unit {
   color: #CCC;
 }
+
 .butter-form-append input {
   display: inline-block;
   border-radius: 3px 0 0 3px;
@@ -158,6 +170,7 @@ input:focus + .butter-unit {
   line-height: 1.5;
   width: 450px;
 }
+
 .butter-error {
   color: #FFF;
   font-weight: 600;
@@ -168,7 +181,6 @@ input:focus + .butter-unit {
   box-shadow: 0 2px 3px rgba(0,0,0,.2);
   text-shadow: 0 -1px 1px rgba(0,0,0,.4);
 }
-
 
 /* Class specific
 -------------------------------------------------- */

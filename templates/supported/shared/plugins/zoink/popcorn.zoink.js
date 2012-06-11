@@ -88,7 +88,7 @@
             type: "number",
             label: "Top:",
             units: "px",
-            "default": 200,
+            "default": 200
           },
           left: {
             elem: "input",

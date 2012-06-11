@@ -176,7 +176,7 @@
           currentItem.units = "seconds";
         }
         if ( currentItem.units ) {
-          unitLabel = document.createElement("span");
+          unitLabel = document.createElement( "span" );
           unitLabel.classList.add( "butter-unit" );
           unitLabel.innerHTML = currentItem.units;
         }
@@ -198,7 +198,7 @@
 
         //Add unit label if it exists
         if( unitLabel ) {
-          col2.classList.add("butter-form-append");
+          col2.classList.add( "butter-form-append" );
           col2.appendChild( unitLabel );
         }
 
@@ -226,7 +226,7 @@
       }
 
       //Add the title info
-      document.getElementById("title").innerHTML = "<h3>"+e.data.manifest.about.name+"</h3>";
+      document.getElementById( "title" ).innerHTML = "<h3>" + e.data.manifest.about.name + "</h3>";
 
       // Focus the first element in the editor
       if ( elemToFocus && elemToFocus.focus ) {
