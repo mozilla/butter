@@ -226,7 +226,7 @@
       }
 
       //Add the title info
-      document.getElementById("title").innerHTML = "<h3>"+e.data.manifest.about.name+"</h3>"+"<p>"+e.data.manifest.about.author+"</p>"
+      document.getElementById("title").innerHTML = "<h3>"+e.data.manifest.about.name+"</h3>";
 
       // Focus the first element in the editor
       if ( elemToFocus && elemToFocus.focus ) {
