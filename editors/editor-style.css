@@ -18,7 +18,6 @@ textarea {
 
 button,
 input {
-  *overflow: visible;
   line-height: normal;
 }
 
@@ -86,9 +85,9 @@ input, .butter-unit {
   font-size: 13px;
   font-weight: normal;
   line-height: 16px;
-  color: white;
   background-color: #626262;
   background: -moz-linear-gradient(top, rgba(0,0,0,.1) 0%, rgba(0,0,0,0) 100%), #999;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46,46,46,1)), color-stop(100%,rgba(57,57,57,1)));
   background: -webkit-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #333;
   background: -o-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #999;
   background: -ms-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #999;
@@ -119,11 +118,15 @@ input[type="checkbox"] {
 input:focus{
   outline: none;
   border: 1px solid #272822;
-  background: #555;
   color: #FFF;
   -webkit-transition: all .3s ease;
-  background: -moz-linear-gradient(top, rgba(0,0,0,.1) 0%, rgba(0,0,0,0) 100%), #555;
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  -ms-transition: all .3s ease;
+  transition: all .3s ease;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(68,68,68,1)), color-stop(100%,rgba(85,85,85,1)));
   background: -webkit-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #555;
+  background: -moz-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #555;
   background: -o-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #555;
   background: -ms-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #555;
   background: linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #555;
