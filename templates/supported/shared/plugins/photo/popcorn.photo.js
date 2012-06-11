@@ -63,25 +63,25 @@
           },
           width: {
             elem: "input",
-            type: "text",
+            type: "number",
             label: "Width",
             "default": 150
           },
           height: {
             elem: "input",
-            type: "text",
+            type: "number",
             label: "Height",
             "default": 150
           },
           top: {
             elem: "input",
-            type: "text",
+            type: "number",
             label: "Top",
             "default": 100
           },
           left: {
             elem: "input",
-            type: "text",
+            type: "number",
             label: "Left",
             "default": 200
           },
@@ -101,10 +101,10 @@
         var img,
             target = document.getElementById( options.target ),
             context = this,
-            width = normalize( options.width, 100, 1000 ) + "px",
-            height = normalize( options.height, 100, 1000 ) + "px",
-            top = normalize( options.top, -1000, 1000 ) + "px",
-            left = normalize( options.left, -1000, 1000 ) + "px";
+            width = options.width + "px",
+            height = options.height + "px",
+            top = options.top + "px",
+            left = options.left + "px";
 
         if( options.href ) {
           options._container = document.createElement( "a" );

@@ -15,26 +15,13 @@ todo: animate top, left and other styles (color, font size, etc.)
 		end: function() {}
 	};
 
-	function normalize( value, minWidth, maxWidth ) {
-    value = value | 0;
-    if ( value > maxWidth ) {
-      return maxWidth;
-    } else if ( value < minWidth ) {
-      return minWidth;
-    } else {
-      return value;
-    }
-  }
-
 	Popcorn.plugin( 'words' , function(options) {
 		var popcorn,
 			video,
 			target,
 			container,
 			textContainer,
-			text, node, i,
-			left = normalize( options.left.substring( 0, options.left.indexOf( "%" )), 0, 100 ),
-      top = normalize( options.top.substring( 0, options.top.indexOf( "%" )), 0, 100 );
+			text, node, i;
 
 		if (!options) {
 			return nop;
@@ -61,8 +48,8 @@ todo: animate top, left and other styles (color, font size, etc.)
 		container = document.createElement('div');
 		container.style.cssText = options.style || '';
 
-		container.style.top = top + '%';
-    container.style.left = left + '%';
+		container.style.top = options.top + '%';
+    container.style.left = options.left + '%';
     container.style.position = 'absolute';
 
 		if (options.align) {

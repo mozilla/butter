@@ -20,8 +20,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                       "exit": 0.3,
                       "icon": "images/error.png",
                       "text": "Add kernels!",
-                      "left": "70%",
-                      "top": "40%"
+                      "left": "70",
+                      "top": "40"
                   },
                   "track": "Track0",
                   "name": "TrackEvent0"
@@ -36,8 +36,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                       "exit": 0.3,
                       "text": "Let 'em pop!",
                       "icon": "images/heart.png",
-                      "left": "30%",
-                      "top": "70%"
+                      "left": "30",
+                      "top": "70"
                   },
                   "track": "Track0",
                   "name": "TrackEvent2"
@@ -50,8 +50,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                       "end": 11.29,
                       "target": "pop-container",
                       "exit": 0.3,
-                      "left": "30%",
-                      "top": "30%",
+                      "left": "30",
+                      "top": "30",
                       "icon": "images/thumbsup.png",
                       "text": "Everything is better with Butter!"
                   },
@@ -68,8 +68,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                       "exit": 0.3,
                       "icon": "images/money.png",
                       "text": "Profit!",
-                      "left": "20%",
-                      "top": "80%"
+                      "left": "20",
+                      "top": "80"
                   },
                   "track": "Track0",
                   "name": "TrackEvent6"
@@ -83,8 +83,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                       "target": "pop-container",
                       "text": "Make your own!",
                       "link": "http://mozillapopcorn.org",
-                      "left": "50%",
-                      "top": "50%"
+                      "left": "50",
+                      "top": "50"
                   },
                   "track": "Track0",
                   "name": "TrackEvent8"
@@ -100,7 +100,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       butter.tracks[0].json = track1;
 
     }
-    
+
       media.onReady( start );
 
     } //ready

@@ -76,17 +76,6 @@ todo: animate top, left and other styles (color, font size, etc.)
     return document.createElementNS("http://www.w3.org/2000/svg",name);
   }
 
-  function normalize( value, minWidth, maxWidth ) {
-    value = value | 0;
-    if ( value > maxWidth ) {
-      return maxWidth;
-    } else if ( value < minWidth ) {
-      return minWidth;
-    } else {
-      return value;
-    }
-  }
-
   Popcorn.plugin( 'pop' , function(options) {
     var popcorn,
       video,
@@ -100,9 +89,7 @@ todo: animate top, left and other styles (color, font size, etc.)
       duration, fadeTime = 0.3,
       img, audio,
       callback,
-      loaded = false,
-      left = normalize( options.left.substring( 0, options.left.indexOf( "%" )), 0, 100 ),
-      top = normalize( options.top.substring( 0, options.top.indexOf( "%" )), 0, 100 );
+      loaded = false;
 
     function selectAudio(src) {
       var i, j, n, event, diff,
@@ -217,8 +204,8 @@ todo: animate top, left and other styles (color, font size, etc.)
     container = document.createElement('div');
     container.style.cssText = options.style || '';
 
-    container.style.top = top + '%';
-    container.style.left = left + '%';
+    container.style.top = options.top + '%';
+    container.style.left = options.left + '%';
     container.style.position = 'absolute';
 
     if (options.align) {
