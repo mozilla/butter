@@ -202,6 +202,11 @@
           col2.appendChild( unitLabel );
         }
 
+        //Hide if the manifest says so
+        if( currentItem.hidden === true ) {
+          row.style.display = "none";
+        }
+
         row.appendChild( col1 );
         row.appendChild( col2 );
         form.appendChild( row );
