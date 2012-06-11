@@ -315,8 +315,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
             //stringify will throw an error on circular data structures
             try {
-              //pretty print with 2 spaces per indent
-              optionString = JSON.stringify( saveOptions, null, 2 );
+              //pretty print with 4 spaces per indent
+              optionString = JSON.stringify( saveOptions, null, 4 );
             } catch ( jsonError ) {
               optionString = false;
               _logger.log( "WARNING: Unable to export event options: \n" + jsonError.message );
