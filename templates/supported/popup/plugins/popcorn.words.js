@@ -197,13 +197,13 @@ todo: animate top, left and other styles (color, font size, etc.)
 				elem:'input',
 				type:'number',
 				label:'Top position',
-        "default": "50%"
+        "default": "50"
 			},
 			left: {
 				elem:'input',
 				type:'number',
 				label:'Left position',
-        "default": "50%"
+        "default": "50"
 			},
 			bottom: {
 				elem:'input',
