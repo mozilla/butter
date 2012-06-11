@@ -87,6 +87,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
 
           if( trackEvent.view ){
             var popcornEvent = _popcorn.getTrackEvent( _butterEventMap[ butterId ] );
+            trackEvent.popcornTrackEvent = popcornEvent;
             if( popcornEvent.toString ){
               trackEvent.view.setToolTip( popcornEvent.toString() );
             }

@@ -51,6 +51,7 @@ define( [
     EventManagerWrapper( _this );
 
     _this.popcornOptions = _popcornOptions;
+    _this.popcornTrackEvent = null;
 
     function defaultValue( item ) {
       if ( item.default ) {
