@@ -2,6 +2,7 @@
 
 var JSLINT = './node_modules/jshint/bin/hint',
     CSSLINT = './node_modules/csslint/cli.js',
+    UGLIFY = './node_modules/uglify-js/bin/uglifyjs',
     RJS    = './node_modules/requirejs/bin/r.js',
     STYLUS = './node_modules/stylus/bin/stylus',
     DOX    = './tools/dox.py',
@@ -10,6 +11,8 @@ var JSLINT = './node_modules/jshint/bin/hint',
     TEMPLATES_DIR = 'templates',
     DIALOGS_DIR = 'dialogs',
     DOCS_DIR = 'docs',
+    DEFAULT_CONFIG = './src/default-config',
+    BUTTERED_POPCORN = DIST_DIR + '/buttered-popcorn.js',
     PACKAGE_NAME = 'butter';
 
 require('shelljs/make');
@@ -157,6 +160,113 @@ target.server = function() {
 
 target.package = function() {
   echo('### Making Butter Package');
+
+
+  var defaultConfig = require( DEFAULT_CONFIG ),
+      popcornDir = defaultConfig.dirs['popcorn-js'].replace( '{{baseDir}}', './' ),
+      players = defaultConfig.player.players,
+      plugins = defaultConfig.plugin.plugins,
+      popcornFiles = [];
+
+  // popcorn.js
+  popcornFiles.push( popcornDir + '/popcorn.js' );
+
+  // plugins
+  plugins.forEach( function( plugin ){
+    popcornFiles.push( plugin.path.replace( '{{baseDir}}', './' ) );
+  });
+
+  // module for baseplayer
+  popcornFiles.push( popcornDir + '/modules/player/popcorn.player.js' );
+
+  // players
+  players.forEach( function( player ){
+    popcornFiles.push( player.path.replace( '{{baseDir}}', './' ) );
+  });
+
+  // shims???
+  // todo
+
+  // Make dist/buttered-popcorn.js
+  exec( UGLIFY + ' --output ' + BUTTERED_POPCORN + ' ' + popcornFiles.join( ' ' ) );
+
+  // Stamp Popcorn.version with the git commit sha we are using
+  var cwd = pwd();
+  cd( popcornDir );
+  var popcornVersion = exec('git describe',
+                       {silent:true}).output.replace(/\r?\n/m, "");
+  cd( cwd );
+  sed('-i', '@VERSION', popcornVersion, BUTTERED_POPCORN);
+
+  console.log(popcornFiles.join(' '));
+
+  return;
+
+  target.build();
+
+  cp('-R', 'resources', DIST_DIR);
+  cp('-R', 'dialogs', DIST_DIR);
+  cp('-R', 'editors', DIST_DIR);
+  cp('-R', 'templates', DIST_DIR);
+
+  echo('### Creating butter.zip');
+  cd(DIST_DIR)
+  exec('zip -r ' + PACKAGE_NAME + '.zip ' + ls('.').join(' '));
+};
+
+target.release = function() {
+  echo('### Making Butter Release');
+
+  // To pass a release version number, use:
+  // node make release version=0.5
+  var arg4 = process.argv.slice(3)[0];
+  if( ! (arg4 && arg4.toUpperCase().indexOf( "VERSION=" ) === 0 ) ){
+    throw "Must provide a version when building a release: node make release version=XXX";
+  }
+
+  var version = arg4.split( '=' )[1];
+
+  console.log( version );
+
+  var defaultConfig = require( DEFAULT_CONFIG ),
+      popcornDir = defaultConfig.dirs['popcorn-js'].replace( '{{baseDir}}', './' ),
+      players = defaultConfig.player.players,
+      plugins = defaultConfig.plugin.plugins,
+      popcornFiles = [];
+
+  // popcorn.js
+  popcornFiles.push( popcornDir + '/popcorn.js' );
+
+  // plugins
+  plugins.forEach( function( plugin ){
+    popcornFiles.push( plugin.path.replace( '{{baseDir}}', './' ) );
+  });
+
+  // module for baseplayer
+  popcornFiles.push( popcornDir + '/modules/player/popcorn.player.js' );
+
+  // players
+  players.forEach( function( player ){
+    popcornFiles.push( player.path.replace( '{{baseDir}}', './' ) );
+  });
+
+  // shims???
+  // todo
+
+  // Stamp Butter.version with the git commit sha we are using
+  var cwd = pwd();
+  cd( popcornDir );
+  var popcornVersion = exec('git describe',
+                       {silent:true}).output.replace(/\r?\n/m, "");
+  cd( cwd );
+
+  exec( UGLIFY + ' --output ' + BUTTERED_POPCORN + ' ' + popcornFiles.join( ' ' ) )
+
+  sed('-i', '@VERSION', popcornVersion, BUTTERED_POPCORN);
+
+  console.log(popcornFiles.join(' '));
+
+  return;
 
   target.build();
 
