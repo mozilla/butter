@@ -161,47 +161,6 @@ target.server = function() {
 target.package = function() {
   echo('### Making Butter Package');
 
-
-  var defaultConfig = require( DEFAULT_CONFIG ),
-      popcornDir = defaultConfig.dirs['popcorn-js'].replace( '{{baseDir}}', './' ),
-      players = defaultConfig.player.players,
-      plugins = defaultConfig.plugin.plugins,
-      popcornFiles = [];
-
-  // popcorn.js
-  popcornFiles.push( popcornDir + '/popcorn.js' );
-
-  // plugins
-  plugins.forEach( function( plugin ){
-    popcornFiles.push( plugin.path.replace( '{{baseDir}}', './' ) );
-  });
-
-  // module for baseplayer
-  popcornFiles.push( popcornDir + '/modules/player/popcorn.player.js' );
-
-  // players
-  players.forEach( function( player ){
-    popcornFiles.push( player.path.replace( '{{baseDir}}', './' ) );
-  });
-
-  // shims???
-  // todo
-
-  // Make dist/buttered-popcorn.js
-  exec( UGLIFY + ' --output ' + BUTTERED_POPCORN + ' ' + popcornFiles.join( ' ' ) );
-
-  // Stamp Popcorn.version with the git commit sha we are using
-  var cwd = pwd();
-  cd( popcornDir );
-  var popcornVersion = exec('git describe',
-                       {silent:true}).output.replace(/\r?\n/m, "");
-  cd( cwd );
-  sed('-i', '@VERSION', popcornVersion, BUTTERED_POPCORN);
-
-  console.log(popcornFiles.join(' '));
-
-  return;
-
   target.build();
 
   cp('-R', 'resources', DIST_DIR);
