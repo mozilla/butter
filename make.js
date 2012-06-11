@@ -276,3 +276,22 @@ target.test = function() {
     }
   }
 };
+
+target['shared-plugins'] = function(){
+  echo('### Building shared plugins in dist/');
+
+  var sharedPlugins = DIST_DIR + '/shared-plugins.js',
+      sharedPluginsMin = DIST_DIR + '/shared-plugins.min.js';
+
+  // Get all shared template plugins.
+  var plugins = find( './templates/supported/shared/plugins' )
+        .filter( function(f){
+          return f.match(/popcorn\.[^.]+\.js/);
+        });
+
+  // Write out dist/shared-plugins.js
+  cat( plugins ).to( sharedPlugins );
+
+  // Write out dist/shared-plugins.min.js
+  exec( UGLIFY + ' -nc --output ' + sharedPluginsMin + ' ' + sharedPlugins );
+};
