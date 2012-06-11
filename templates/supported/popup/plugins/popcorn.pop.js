@@ -30,7 +30,7 @@ todo: animate top, left and other styles (color, font size, etc.)
     fontLoadedQueue = [],
     startedLoadingExternal = false,
     externalLoadedQueue = [];
-  
+
   function loadExternal(callback) {
     function checkExternal() {
       var fn;
@@ -42,12 +42,12 @@ todo: animate top, left and other styles (color, font size, etc.)
 
         return;
       }
-      
+
       setTimeout(checkExternal, 0);
     }
 
     var script;
-    
+
     if (window.WebFont) {
       if (callback && typeof callback === 'function') {
         callback();
@@ -66,7 +66,7 @@ todo: animate top, left and other styles (color, font size, etc.)
       startedLoadingExternal = true;
       setTimeout(checkExternal, 0);
     }
-    
+
     if (callback && typeof callback === 'function') {
       externalLoadedQueue.push(callback);
     }
@@ -74,6 +74,17 @@ todo: animate top, left and other styles (color, font size, etc.)
 
   function createSVGElement(name) {
     return document.createElementNS("http://www.w3.org/2000/svg",name);
+  }
+
+  function normalize( value, minWidth, maxWidth ) {
+    value = value | 0;
+    if ( value > maxWidth ) {
+      return maxWidth;
+    } else if ( value < minWidth ) {
+      return minWidth;
+    } else {
+      return value;
+    }
   }
 
   Popcorn.plugin( 'pop' , function(options) {
@@ -89,19 +100,21 @@ todo: animate top, left and other styles (color, font size, etc.)
       duration, fadeTime = 0.3,
       img, audio,
       callback,
-      loaded = false;
-    
+      loaded = false,
+      left = normalize( options.left.substring( 0, options.left.indexOf( "%" )), 0, 100 ),
+      top = normalize( options.top.substring( 0, options.top.indexOf( "%" )), 0, 100 );
+
     function selectAudio(src) {
       var i, j, n, event, diff,
         eligibleAudio,
         audio;
-      
+
       function resetAudio() {
         var that = this;
         this.currentTime = 0;
         this.pause();
       }
-      
+
       if (!sounds[src]) {
         audio = document.createElement('audio');
         audio.src = src;
@@ -115,14 +128,14 @@ todo: animate top, left and other styles (color, font size, etc.)
         sounds[src] = [audio];
         return audio;
       }
-      
+
       audio = sounds[src][0];
       if (audio.duration) {
         diff = Math.min(audio.duration, MAX_AUDIO_TIME);
       } else {
         diff = MAX_AUDIO_TIME;
       }
-      
+
       //make sure there are no other events using this sound at the same time
       eligibleAudio = sounds[src].slice(0);
       for (i = 0; i < events.length; i++) {
@@ -137,7 +150,7 @@ todo: animate top, left and other styles (color, font size, etc.)
           }
         }
       }
-      
+
       if (eligibleAudio.length) {
         audio = eligibleAudio[0];
       } else {
@@ -153,10 +166,10 @@ todo: animate top, left and other styles (color, font size, etc.)
         document.body.appendChild(audio);
         sounds[src].push(audio);
       }
-      
+
       return audio;
     }
-    
+
     if (!options) {
       return nop;
     }
@@ -173,12 +186,12 @@ todo: animate top, left and other styles (color, font size, etc.)
     if (typeof target === 'string') {
 
       target = document.getElementById(target);
-      
+
       if (!target) {
         return nop;
       }
     }
-    
+
     //default styles in a style sheet so they can be overridden
     if (!styleSheet) {
       styleSheet = document.createElement('style');
@@ -192,7 +205,7 @@ todo: animate top, left and other styles (color, font size, etc.)
       '#popcorn-pop-svg { display:none; }'
       ));
       document.head.appendChild(styleSheet);
-      
+
       //making a dummy placeholder to force the font to load
       node = document.createElement('div');
       node.style.visibility = 'hidden';
@@ -200,32 +213,18 @@ todo: animate top, left and other styles (color, font size, etc.)
       node.innerHTML = 'I have no responsibilities here whatsoever';
       document.body.appendChild(node);
     }
-    
+
     container = document.createElement('div');
     container.style.cssText = options.style || '';
 
-    i = options.top;
-    if (i || i === 0) {
-      if (!isNaN(i)) {
-        i += 'px';
-      }
-      container.style.top = i;
-      container.style.position = 'absolute';
-    }
+    container.style.top = top + '%';
+    container.style.left = left + '%';
+    container.style.position = 'absolute';
 
-    i = options.left;
-    if (i || i === 0) {
-      if (!isNaN(i)) {
-        i += 'px';
-      }
-      container.style.left = i;
-      container.style.position = 'absolute';
-    }
-    
     if (options.align) {
       container.style.textAlign = options.align;
     }
-    
+
 
     container.style.visibility = 'hidden';
     if (options.classes) {
@@ -238,10 +237,10 @@ todo: animate top, left and other styles (color, font size, etc.)
     } else {
       container.setAttribute('class', 'popcorn-pop');
     }
-    
+
     innerDiv = document.createElement('div');
     container.appendChild(innerDiv);
-    
+
     if (options.link) {
       textContainer = document.createElement('a');
       textContainer.setAttribute('href', options.link);
@@ -260,7 +259,7 @@ todo: animate top, left and other styles (color, font size, etc.)
     } else {
       textContainer = innerDiv;
     }
-    
+
     text = options.text.split(/[\n\r]/);
     for (i = 0; i < text.length; i++) {
       if (i) {
@@ -270,7 +269,7 @@ todo: animate top, left and other styles (color, font size, etc.)
       node.appendChild(document.createTextNode(text[i]));
       textContainer.appendChild(node);
     }
-    
+
     if (options.image) {
       if (!svg) {
         svg = createSVGElement('svg');
@@ -287,7 +286,7 @@ todo: animate top, left and other styles (color, font size, etc.)
         ellipse.setAttribute('rx', 0.95);
         ellipse.setAttribute('ry', 0.95);
         svg.appendChild(clipPath);
-        
+
         document.body.appendChild(svg);
       }
     } else if (options.icon) {
@@ -297,13 +296,13 @@ todo: animate top, left and other styles (color, font size, etc.)
       img.addEventListener('load', function() {
         var width = img.width || img.naturalWidth,
           height = img.height || img.naturalHeight;
-        
+
         if (height > 60) {
           width = 60 * width / height;
           height = 60;
           img.style.width = width + 'px';
         }
-        
+
         img.style.left = -(width - 16) + 'px';
 
         // make sure container is still non-null
@@ -312,14 +311,14 @@ todo: animate top, left and other styles (color, font size, etc.)
           if (container.offsetHeight) {
             img.style.top = (container.offsetHeight - height) / 2 - 4 + 'px';
           }
-          container.insertBefore(img, container.firstChild);          
+          container.insertBefore(img, container.firstChild);
         }
       }, false);
     }
-    
+
     target.appendChild(container);
     options.container = container;
-    
+
     //load up sound.
     if (options.sound !== false) {
       if (!options.sound) {
@@ -328,18 +327,18 @@ todo: animate top, left and other styles (color, font size, etc.)
         audio = options.sound;
         options.sound = audio.currentSrc;
       }
-      
+
       if (!audio) {
         audio = selectAudio(options.sound);
         options.audio = audio;
       }
     }
-    
+
     events.push(options);
-    
+
     callback = function() {
       var fontLoader;
-      
+
       var fontLoadedCallback = function() {
         fontLoaded = true;
         loaded = true;
@@ -385,7 +384,7 @@ todo: animate top, left and other styles (color, font size, etc.)
         }
       }
     }());
-    
+
     if (options.exit !== undefined && !isNaN(options.exit)) {
       fadeTime = options.exit;
       options.exit = 'fade';
@@ -395,7 +394,7 @@ todo: animate top, left and other styles (color, font size, etc.)
       options.exit = 'fade';
     }
 
-    duration = Math.min(0.25, options.end - options.start - 0.25);		
+    duration = Math.min(0.25, options.end - options.start - 0.25);
     fadeTime = Math.min(fadeTime, options.end - options.start - 0.25 - fadeTime);
 
     return {
@@ -404,7 +403,7 @@ todo: animate top, left and other styles (color, font size, etc.)
           options.container.style.visibility = 'visible';
           options.container.style.display = '';
         }
-        
+
         if (audio && audio.duration && !video.paused &&
           video.currentTime - 1 < options.start) {
 
@@ -437,15 +436,15 @@ todo: animate top, left and other styles (color, font size, etc.)
         }
 
         if (t < duration) {
-          scale = ( 1 - Math.pow( (t / duration) / 0.7 - 1, 2) ) / 0.8163;					
+          scale = ( 1 - Math.pow( (t / duration) / 0.7 - 1, 2) ) / 0.8163;
         } else if (options.exit === 'fade') {
           t = time - (options.end - fadeTime);
-          
+
           if (t > 0) {
             opacity = 1 - (t / fadeTime);
           }
         }
-        
+
         if (lastScale !== scale) {
           transform = 'scale(' + scale + ')';
           container.style.MozTransform = transform;
@@ -472,7 +471,7 @@ todo: animate top, left and other styles (color, font size, etc.)
         if (options.container) {
           options.container.style.display = 'none';
         }
-        
+
         if (typeof options.onEnd === 'function') {
           try {
             options.onEnd(options);
@@ -482,7 +481,7 @@ todo: animate top, left and other styles (color, font size, etc.)
       },
       _teardown: function( options ) {
         var i;
-        
+
         //remove from font-loading callback queue
         if (callback) {
           i = externalLoadedQueue.indexOf(callback);
@@ -491,13 +490,13 @@ todo: animate top, left and other styles (color, font size, etc.)
           }
           callback = null;
         }
-        
+
         //remove our claim on the sound file
         i = events.indexOf(options);
         if (i >= 0) {
           events.splice(i, 1);
         }
-        
+
         if (options.container && options.container.parentNode) {
           options.container.parentNode.removeChild(options.container);
           container = null;

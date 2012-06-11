@@ -28,6 +28,18 @@
       } )
  *
  */
+
+ function normalize( value, minWidth, maxWidth ) {
+    value = value | 0;
+    if ( value > maxWidth ) {
+      return maxWidth;
+    } else if ( value < minWidth ) {
+      return minWidth;
+    } else {
+      return value;
+    }
+  }
+
   Popcorn.plugin( "photo", {
       manifest: {
         about: {
@@ -53,25 +65,25 @@
             elem: "input",
             type: "text",
             label: "Width",
-            "default": "150px"
+            "default": 150
           },
           height: {
             elem: "input",
             type: "text",
             label: "Height",
-            "default": "150px"
+            "default": 150
           },
           top: {
             elem: "input",
             type: "text",
             label: "Top",
-            "default": "100px"
+            "default": 100
           },
           left: {
             elem: "input",
             type: "text",
             label: "Left",
-            "default": "200px"
+            "default": 200
           },
           start: {
             elem: "input",
@@ -88,7 +100,11 @@
       _setup: function( options ) {
         var img,
             target = document.getElementById( options.target ),
-            context = this;
+            context = this,
+            width = normalize( options.width, 100, 1000 ) + "px",
+            height = normalize( options.height, 100, 1000 ) + "px",
+            top = normalize( options.top, -1000, 1000 ) + "px",
+            left = normalize( options.left, -1000, 1000 ) + "px";
 
         if( options.href ) {
           options._container = document.createElement( "a" );
@@ -100,10 +116,10 @@
         }
           options._container.style.position = "absolute";
           options._container.style.display = "none";
-          options._container.style.width = options.width;
-          options._container.style.height = options.height;
-          options._container.style.top = options.top;
-          options._container.style.left = options.left;
+          options._container.style.width = width;
+          options._container.style.height = height;
+          options._container.style.top = top;
+          options._container.style.left = left;
           options._container.style.overflow = "hidden";
 
 
