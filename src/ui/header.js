@@ -8,8 +8,8 @@ define( [
   HEADER_TEMPLATE
 ) {
 
-  var DEFAULT_AUTH_BUTTON_TEXT = "Login / Sign Up",
-      DEFAULT_AUTH_BUTTON_TITLE = "Login using BrowserID authentication";
+  var DEFAULT_AUTH_BUTTON_TEXT = "<i class='icon-user'></i> Sign In / Sign Up",
+      DEFAULT_AUTH_BUTTON_TITLE = "Sign in or sign up with Persona";
 
   return function( butter, options ){
 
@@ -17,32 +17,22 @@ define( [
 
     var _rootElement = Lang.domFragment( HEADER_TEMPLATE ),
         _title,
-        _projectsButton,
         _saveButton,
+        _sourceButton,
         _shareButton,
-        _loginButton,
-        _logoutButton;
+        _authButton;
 
     _title = _rootElement.querySelector(".name");
     _title.innerHTML = options.value( "title" ) || "Butter";
 
-    document.body.insertBefore( _rootElement, document.body.firstChild );
+    _rootElement = document.body.insertBefore( _rootElement, document.body.firstChild );
 
-    _projectsButton = document.getElementById( "butter-header-projects" );
     _saveButton = document.getElementById( "butter-header-save" );
+    _sourceButton = document.getElementById( "butter-header-projects" );
     _shareButton = document.getElementById( "butter-header-share" );
-    _loginButton = document.getElementById( "butter-header-auth" );
-    _logoutButton = document.getElementById( "butter-header-auth-out" );
-
-    _saveButton.title = "Save your project";
-    _shareButton.title = "Generate a link to share this project with the world";
-    _logoutButton.title = "Logout";
-    _loginButton.title = DEFAULT_AUTH_BUTTON_TITLE;
+    _authButton = document.getElementById( "butter-header-auth" );
 
     document.body.classList.add( "butter-header-spacing" );
-
-    var _oldDisplayProperty = _logoutButton.style.display;
-    _logoutButton.style.display = "none";
 
     function authenticationRequired( successCallback, errorCallback ){
       if ( butter.cornfield.authenticated() && successCallback && typeof successCallback === "function" ) {
@@ -68,12 +58,6 @@ define( [
       });
     }
 
-    _loginButton.addEventListener( "click", authenticationRequired, false );
-
-    _logoutButton.addEventListener( "click", function( e ){
-      butter.cornfield.logout( logoutDisplay );
-    });
-
     function showErrorDialog( message, callback ){
       var dialog = new IFrameDialog({
         type: "iframe",
@@ -93,10 +77,6 @@ define( [
       });
       dialog.open();
     }
-
-    _projectsButton.addEventListener( "click", function() {
-      window.location = "/dashboard";
-    });
 
     _shareButton.addEventListener( "click", function( e ){
       function publish(){
@@ -187,18 +167,22 @@ define( [
       authenticationRequired( doSave );
     }, false );
 
+    function doLogout() {
+      butter.cornfield.logout( logoutDisplay );
+    }
+
     function loginDisplay() {
-      _loginButton.innerHTML = butter.cornfield.email();
-      _loginButton.title = "This is you!";
-      _loginButton.disabled = true;
-      _logoutButton.style.display = _oldDisplayProperty;
+      _authButton.removeEventListener( "click", authenticationRequired, false );
+      _authButton.innerHTML = "<i class='icon-user'></i> " + butter.cornfield.name();
+      _authButton.title = "This is you!";
+      _authButton.addEventListener( "click", doLogout, false );
     }
 
     function logoutDisplay() {
-      _logoutButton.style.display = "none";
-      _loginButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
-      _loginButton.disabled = false;
-      _loginButton.title = DEFAULT_AUTH_BUTTON_TITLE;
+      _authButton.removeEventListener( "click", doLogout, false );
+      _authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
+      _authButton.title = DEFAULT_AUTH_BUTTON_TITLE;
+      _authButton.addEventListener( "click", authenticationRequired, false );
     }
 
     if ( butter.cornfield.authenticated() ) {
@@ -210,13 +194,6 @@ define( [
         loginDisplay();
       });
     }
-
-    function setup(){
-      _rootElement.style.width = window.innerWidth + "px";
-    }
-
-    window.addEventListener( "resize", setup, false );
-    setup();
 
   };
 
