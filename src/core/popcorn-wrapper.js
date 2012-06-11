@@ -67,7 +67,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
     this.updateEvent = function( trackEvent ){
       var options = trackEvent.popcornOptions,
           butterId = trackEvent.id,
-          popcornId = _butterEventMap[ butterId ];
+          popcornId = _butterEventMap[ butterId ],
+          popcornEvent = null;
       /* ensure that the trackevent actually exists before removal.
       * we remove the trackevent because there is no easy way
       * to ensure what data has changed on any given track. It
@@ -85,9 +86,10 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           // store a local reference to the newly created trackevent
           _butterEventMap[ butterId ] = _popcorn.getLastTrackEventId();
 
+          popcornEvent = _popcorn.getTrackEvent( _butterEventMap[ butterId ] );
+          trackEvent.popcornTrackEvent = popcornEvent;
+
           if( trackEvent.view ){
-            var popcornEvent = _popcorn.getTrackEvent( _butterEventMap[ butterId ] );
-            trackEvent.popcornTrackEvent = popcornEvent;
             if( popcornEvent.toString ){
               trackEvent.view.setToolTip( popcornEvent.toString() );
             }
