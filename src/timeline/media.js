@@ -90,7 +90,7 @@ define( [
     });
 
     function blinkTarget( target ){
-      if( target !== "Media Element" ){
+      if( target !== _media.target ){
         target = butter.getTargetByType( "elementID", target );
         if( target ){
           target.view.blink();
