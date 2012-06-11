@@ -77,7 +77,7 @@ define( [
      * @event trackeventupdatefailed: Occurs when an update operation failed because of conflicting times or other serious property problems. As the data property on this event is a string which represents the reason for failure.
      * @event trackeventupdated: Occurs whenan update operation succeeded.
      */
-    this.update = function( updateOptions ) {
+    this.update = function( updateOptions, applyDefaults ) {
       var failed = false,
           newStart = _popcornOptions.start,
           newEnd = _popcornOptions.end;
@@ -111,7 +111,9 @@ define( [
           for ( var prop in _manifest ) {
             if ( _manifest.hasOwnProperty( prop ) ) {
               if ( updateOptions[ prop ] === undefined ) {
-                _popcornOptions[ prop ] = defaultValue( _manifest[ prop ] );
+                if ( applyDefaults ) {
+                  _popcornOptions[ prop ] = defaultValue( _manifest[ prop ] );
+                }
               } else {
                 _popcornOptions[ prop ] = updateOptions[ prop ];
               }
