@@ -189,25 +189,29 @@
         elem: "input",
         type: "text",
         label: "UserID",
-        optional: true
+        optional: true,
+        hidden: true
       },
       tags: {
         elem: "input",
         type: "text",
         label: "Tags",
-        "default": "ponies"
+        "default": "ponies",
+        units: "#"
       },
       username: {
         elem: "input",
         type: "text",
         label: "Username",
-        optional: true
+        optional: true,
+        hidden: true
       },
       apikey: {
         elem: "input",
         type: "text",
         label: "Api_key",
-        optional: true
+        optional: true,
+        hidden: true
       },
       target: "flickr-container",
       height: {
@@ -215,27 +219,31 @@
         type: "text",
         label: "Height",
         "default": "200px",
-        optional: true
+        optional: true,
+        hidden: true
       },
       width: {
         elem: "input",
         type: "text",
         label: "Width",
         "default": "200px",
-        optional: true
+        optional: true,
+        hidden: true
       },
       padding: {
         elem: "input",
         type: "text",
         label: "Padding",
-        optional: true
+        optional: true,
+        hidden: true
       },
       border: {
         elem: "input",
         type: "text",
         label: "Border",
         "default": "0",
-        optional: true
+        optional: true,
+        hidden: true
       },
       numberofimages: {
         elem: "input",

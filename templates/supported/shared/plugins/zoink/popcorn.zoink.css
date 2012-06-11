@@ -1,7 +1,7 @@
 .speechBubble {
   opacity: 0;
   font-family: orgovan-rounded-web, bangers, "Open Sans", sans-serif;
-  font-size: 18px;
+  font-size: 30px;
   line-height: 1;
   position: relative;
   display: inline-block;
@@ -16,10 +16,10 @@
   z-index: 1000;
 }
 .on .speechBubble{ opacity: 1; }
-
+ 
 .speechBubble.full-width { width: 100%; }
 .speechBubble.connected { margin-bottom: 15px; }
-.speechBubble.fx .text { text-align: center; font-size: 45px; font-weight: bold; padding: 10px;}
+.speechBubble.fx .text { text-align: center; font-size: 75px; font-weight: bold; padding: 10px;}
 
 .speechBubble .canvas {
   position: absolute;

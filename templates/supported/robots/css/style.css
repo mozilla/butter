@@ -75,7 +75,7 @@ section[role="video-container"]  > video {
 
 .text-overlay {
   display: table;
-  height: 500px;
+  height: 600px;
 }
 .text-overlay > div {
   width: 100%;
@@ -229,14 +229,18 @@ footer {
   font-size: 120px;
   text-transform: uppercase;
   color: #FFF;
+  line-height: 1;
 }
 .mid-title {
   font-family: 'Fredericka the Great', Georgia; 
-  font-size: 40px;
+  font-size: 35px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  letter-spacing: 0.1em;
 }
 .bottom-title {
   font-family: 'Lovers Quarrel', Georgia; 
-  font-size: 100px; 
+  font-size: 80px; 
   margin: 0 20px;
 }
 
