@@ -88,3 +88,144 @@ Enjoy!
 }
 
 /* ---/ DURATIONS ------------------------------- */
+
+/* SPECIAL EFFECTS
+-------------------------------------------------- */
+.popcorn-effect-rumble {
+  -webkit-animation: rumble .1s infinite ease;
+  -moz-animation: rumble .1s infinite ease;
+  -ms-animation: rumble .1s infinite ease;
+  -o-animation: rumble .1s infinite ease;
+  animation: rumble .1s infinite ease;
+}
+
+@-webkit-keyframes rumble {
+  0% {-webkit-transform: rotate(0deg);}
+  5% {-webkit-transform: translate(.1px, 0px); }
+  15% {-webkit-transform: translate(.1px, 0px) rotate(-1deg);}
+  66% {-webkit-transform: translate(-.1px, 0px);}
+  90% {-webkit-transform: translate(0px, -1px) rotate(0deg);}
+  95% {-webkit-transform: translate(-1px, 0px) rotate(1deg);}
+  100% {-webkit-transform: translate(0px, .1px) rotate(0deg);} 
+}
+@-moz-keyframes rumble {
+  0% {-moz-transform: rotate(0deg);}
+  5% {-moz-transform: translate(.1px, 0px);}
+  15% {-moz-transform: translate(.1px, 0px) rotate(-1deg);}
+  66% {-moz-transform: translate(-.1px, 0px);}
+  90% {-moz-transform: translate(0px, -1px) rotate(0deg);}
+  95% {-moz-transform: translate(-1px, 0px) rotate(1deg);}
+  100% {-moz-transform: translate(0px, .1px) rotate(0deg);} 
+}
+@-o-keyframes rumble {
+  0% {-o-transform: rotate(0deg);}
+  5% {-o-transform: translate(.1px, 0px);}
+  15% {-o-transform: translate(.1px, 0px) rotate(-1deg);}
+  66% {-o-transform: translate(-.1px, 0px);}
+  90% {-o-transform: translate(0px, -1px) rotate(0deg);}
+  95% {-o-transform: translate(-1px, 0px) rotate(1deg);}
+  100% {-o-transform: translate(0px, .1px) rotate(0deg);} 
+}
+@-ms-keyframes rumble {
+  0% {-ms-transform: rotate(0deg);}
+  5% {-ms-transform: translate(.1px, 0px);}
+  15% {-ms-transform: translate(.1px, 0px) rotate(-1deg);}
+  66% {-ms-transform: translate(-.1px, 0px);}
+  90% {-ms-transform: translate(0px, -1px) rotate(0deg);}
+  95% {-ms-transform: translate(-1px, 0px) rotate(1deg);}
+  100% {-ms-transform: translate(0px, .1px) rotate(0deg);} 
+}
+@keyframes rumble {
+  0% {transform: rotate(0deg);}
+  5% {transform: translate(.1px, 0px);}
+  15% {transform: translate(.1px, 0px) rotate(-1deg);}
+  66% {transform: translate(-.1px, 0px);}
+  90% {transform: translate(0px, -1px) rotate(0deg);}
+  95% {transform: translate(-1px, 0px) rotate(1deg);}
+  100% {transform: translate(0px, .1px) rotate(0deg);} 
+}
+
+.popcorn-effect-float {
+  -webkit-animation: float 5s infinite ease;
+  -moz-animation: float 5s infinite ease;
+  -ms-animation: float 5s infinite ease;
+  -o-animation: float 5s infinite ease;
+  animation: float 5s infinite ease;
+}
+@-webkit-keyframes float {
+  0% {-webkit-transform: translate(-10px);}
+  50% {-webkit-transform: translate(10, 5px); }
+  100% {-webkit-transform: translate(-10px);}
+}
+@-webkit-keyframes floatb {
+  0% {-webkit-transform: translate(30px) rotate(0deg); }
+  50% {-webkit-transform: translate(-30px, 0) rotate(-1deg); }
+  100% {-webkit-transform: translate(30px) rotate(0deg); } 
+}
+@-webkit-keyframes floatc {
+  0% {-webkit-transform: rotate(0deg);}
+  50% {-webkit-transform: translate(-20px, 0) rotate(10deg);}
+  100% {-webkit-transform: translate(0) rotate(0deg);} 
+}
+@-moz-keyframes float {
+  0% {-moz-transform: translate(-10px);}
+  50% {-moz-transform: translate(10, 5px); }
+  100% {-moz-transform: translate(-10px);}
+}
+@-moz-keyframes floatb {
+  0% {-moz-transform: translate(30px) rotate(0deg); }
+  50% {-moz-transform: translate(-30px, 0) rotate(-1deg); }
+  100% {-moz-transform: translate(30px) rotate(0deg); } 
+}
+@-moz-keyframes floatc {
+  0% {-moz-transform: rotate(0deg);}
+  50% {-moz-transform: translate(-20px, 0) rotate(10deg);}
+  100% {-moz-transform: translate(0) rotate(0deg);} 
+}
+@-o-keyframes float {
+  0% {-o-transform: translate(-10px);}
+  50% {-o-transform: translate(10, 5px); }
+  100% {-o-transform: translate(-10px);}
+}
+@-o-keyframes floatb {
+  0% {-o-transform: translate(30px) rotate(0deg); }
+  50% {-o-transform: translate(-30px, 0) rotate(-1deg); }
+  100% {-o-transform: translate(30px) rotate(0deg); } 
+}
+@-o-keyframes floatc {
+  0% {-o-transform: rotate(0deg);}
+  50% {-o-transform: translate(-20px, 0) rotate(10deg);}
+  100% {-o-transform: translate(0) rotate(0deg);} 
+}
+@-ms-keyframes float {
+  0% {-ms-transform: translate(-10px);}
+  50% {-ms-transform: translate(10, 5px); }
+  100% {-ms-transform: translate(-10px);}
+}
+@-ms-keyframes floatb {
+  0% {-ms-transform: translate(30px) rotate(0deg); }
+  50% {-ms-transform: translate(-30px, 0) rotate(-1deg); }
+  100% {-ms-transform: translate(30px) rotate(0deg); } 
+}
+@-ms-keyframes floatc {
+  0% {-ms-transform: rotate(0deg);}
+  50% {-ms-transform: translate(-20px, 0) rotate(10deg);}
+  100% {-ms-transform: translate(0) rotate(0deg);} 
+}
+@keyframes float {
+  0% {transform: translate(-10px);}
+  50% {transform: translate(10, 5px); }
+  100% {transform: translate(-10px);}
+}
+@keyframes floatb {
+  0% {transform: translate(30px) rotate(0deg); }
+  50% {transform: translate(-30px, 0) rotate(-1deg); }
+  100% {transform: translate(30px) rotate(0deg); } 
+}
+@keyframes floatc {
+  0% {transform: rotate(0deg);}
+  50% {transform: translate(-20px, 0) rotate(10deg);}
+  100% {transform: translate(0) rotate(0deg);} 
+}
+
+/* ---/ SPECIAL EFFECTS ------------------------------- */

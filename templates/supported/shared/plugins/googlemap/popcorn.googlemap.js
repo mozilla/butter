@@ -396,13 +396,14 @@ var googleCallback;
         elem: "select",
         options: [ "ROADMAP", "SATELLITE", "STREETVIEW", "HYBRID", "TERRAIN", "STAMEN-WATERCOLOR", "STAMEN-TERRAIN", "STAMEN-TONER" ],
         label: "Type",
-        optional: true
+        optional: true,
+        "default": "STAMEN-TONER"
       },
       zoom: {
         elem: "input",
         type: "text",
         label: "Zoom",
-        "default": 0,
+        "default": 9,
         optional: true
       },
       lat: {
@@ -421,7 +422,7 @@ var googleCallback;
         elem: "input",
         type: "text",
         label: "Location",
-        "default": "Toronto, Ontario, Canada"
+        "default": "Tokyo, Japan"
       },
       heading: {
         elem: "input",

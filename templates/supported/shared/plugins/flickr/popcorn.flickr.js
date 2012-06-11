@@ -51,8 +51,8 @@
         _link,
         _image,
         _count = options.numberofimages || 4,
-        _height = options.height || "50px",
-        _width = options.width || "50px",
+        _height = options.height || "200px",
+        _width = options.width || "200px",
         _padding = options.padding || "5px",
         _border = options.border || "0px";
 
@@ -194,7 +194,8 @@
       tags: {
         elem: "input",
         type: "text",
-        label: "Tags"
+        label: "Tags",
+        "default": "ponies"
       },
       username: {
         elem: "input",
@@ -213,14 +214,14 @@
         elem: "input",
         type: "text",
         label: "Height",
-        "default": "50px",
+        "default": "200px",
         optional: true
       },
       width: {
         elem: "input",
         type: "text",
         label: "Width",
-        "default": "50px",
+        "default": "200px",
         optional: true
       },
       padding: {
@@ -233,13 +234,13 @@
         elem: "input",
         type: "text",
         label: "Border",
-        "default": "5px",
+        "default": "0",
         optional: true
       },
       numberofimages: {
         elem: "input",
         type: "number",
-        "default": 4,
+        "default": 10,
         label: "Number of Images"
       }
     }
