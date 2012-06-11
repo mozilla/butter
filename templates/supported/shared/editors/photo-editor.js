@@ -1,7 +1,7 @@
 (function(){
   var _comm = new Comm(),
       _manifest = {},
-      dataURI;
+      dataURI = "";
 
   // TODO: this should be something we reuse from src/ui/widget/textbox.js
   // with require.  We need to expose butter internals to editors.
@@ -49,7 +49,7 @@
            popcornOptions[ item ] = options[ item ];
         } else if ( item === "src" ) {
           var source = document.getElementById( item ).value;
-          if ( source.substring( 0, 10 ) === "data:image" ) {
+          if ( /^data:image/.test( source ) ) {
             popcornOptions[ item ] = dataURI;
           }
           else {
@@ -89,18 +89,20 @@
     _comm.listen( "trackeventupdated", function( e ){
 
       for ( var item in _manifest ){
-        var element = document.getElementById( item ),
-            data = e.data[ item ];
+        if ( _manifest.hasOwnProperty( item ) ) {
+          var element = document.getElementById( item ),
+              data = e.data[ item ];
 
-        if ( item === "src" && data.substring( 0, 10 ) === "data:image" ) {
-          // Store the data URI so we can still keep it correct for the popcornOptions
-          dataURI = data;
-          // Only display data/image if the source is a dataURI as anything longer is confusing
-          // And chrome can't handle really long data URIs in textfields
-          element.value = data.substring( 0, 10 );
-        }
-        else {
-          element.value = data;
+          if ( item === "src" && /^data:image/.test( data ) ) {
+            // Store the data URI so we can still keep it correct for the popcornOptions
+            dataURI = data;
+            // Only display data/image if the source is a dataURI as anything longer is confusing
+            // And chrome can't handle really long data URIs in textfields
+            element.value = data.substring( 0, 10 );
+          }
+          else {
+            element.value = data;
+          }
         }
       } //for
     });
@@ -167,7 +169,7 @@
               }
               elem.value = this.defaultValue( manifestItem, popcornOptions[ manifestProp ] );
               if ( manifestProp === "target" ) {
-                elem.value = masterTarget
+                elem.value = masterTarget;
               }
               return elem;
             }
@@ -231,7 +233,7 @@
         dropTarget.id = "drop-target";
         dropTarget.innerHTML = "<span>Drag an image from your desktop...</span>";
 
-        if(  popcornOptions[ item ] && popcornOptions[ item ].substring( 0, 10 ) === "data:image" ) {
+        if(  popcornOptions[ item ] && /^data:image/.test( popcornOptions[ item ] ) ) {
           dropTarget.style.backgroundImage = "url('" + popcornOptions[ item ] + "')";
         }
 
