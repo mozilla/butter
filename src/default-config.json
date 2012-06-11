@@ -68,16 +68,17 @@
       },
       {
         "type": "soundcloud",
-        "path": "{{baseDir}}external/popcorn-js/players/soundcloud/soundcloud.youtube.js"
+        "path": "{{baseDir}}external/popcorn-js/players/soundcloud/popcorn.soundcloud.js"
       },
       {
         "type": "vimeo",
-        "path": "{{baseDir}}external/popcorn-js/players/vimeo/vimeo.youtube.js"
+        "path": "{{baseDir}}external/popcorn-js/players/vimeo/popcorn.vimeo.js"
       }
     ],
     "defaults": [
       "youtube",
-      "soundcloud"
+      "soundcloud",
+      "vimeo"
     ]
   },
   "dirs": {
