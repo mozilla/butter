@@ -1,8 +1,10 @@
 define( [
   "dialog/iframe-dialog",
+  "util/lang",
   "text!layouts/header.html"
 ], function(
   IFrameDialog,
+  Lang,
   HEADER_TEMPLATE
 ) {
 
@@ -13,7 +15,7 @@ define( [
 
     options = options || {};
 
-    var _rootElement = document.createElement( "div" ),
+    var _rootElement = Lang.domFragment( HEADER_TEMPLATE ),
         _title,
         _projectsButton,
         _saveButton,
@@ -21,12 +23,8 @@ define( [
         _loginButton,
         _logoutButton;
 
-    _rootElement.innerHTML = HEADER_TEMPLATE;
     _title = _rootElement.querySelector(".name");
     _title.innerHTML = options.value( "title" ) || "Popcorn Maker";
-
-    _rootElement.setAttribute( "data-butter-exclude", true );
-    _rootElement.id = "butter-header";
 
     document.body.insertBefore( _rootElement, document.body.firstChild );
 
