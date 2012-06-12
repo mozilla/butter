@@ -51,10 +51,10 @@
         _link,
         _image,
         _count = options.numberofimages || 4,
-        _height = options.height || "200px",
-        _width = options.width || "200px",
-        _padding = options.padding || "5px",
-        _border = options.border || "0px";
+        _height = options.height + "px" || "200px",
+        _width = options.width + "px" || "200px",
+        _padding = options.padding + "px" || "5px",
+        _border = options.border + "px" || "0px";
 
     // create a new div this way anything in the target div is left intact
     // this is later populated with Flickr images
@@ -216,32 +216,33 @@
       target: "flickr-container",
       height: {
         elem: "input",
-        type: "text",
+        type: "number",
         label: "Height",
-        "default": "200px",
+        "default": 200,
         optional: true,
         hidden: true
       },
       width: {
         elem: "input",
-        type: "text",
+        type: "number",
         label: "Width",
-        "default": "200px",
+        "default": 200,
         optional: true,
         hidden: true
       },
       padding: {
         elem: "input",
-        type: "text",
+        type: "number",
         label: "Padding",
+        "default": 0,
         optional: true,
         hidden: true
       },
       border: {
         elem: "input",
-        type: "text",
+        type: "number",
         label: "Border",
-        "default": "0",
+        "default": 0,
         optional: true,
         hidden: true
       },
