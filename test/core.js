@@ -286,14 +286,17 @@
 
   module( "TrackEvent", butterLifeCycle );
 
-  asyncTest( "Create TrackEvent object", 1, function(){
+  asyncTest( "Create TrackEvent object", 2, function(){
 
     createButter( function( butter ){
 
-      var m = butter.addMedia(),
+      var m = butter.addMedia({ url: "../external/popcorn-js/test/italia.ogg", target: "mediaDiv" }),
           t = m.addTrack(),
-          te1 = t.addTrackEvent( { name: "TrackEvent 1", type: "test", popcornOptions: { start: 0, end: 1 } } );
+          te1 = t.addTrackEvent( { name: "TrackEvent 1", type: "test", popcornOptions: { start: 0, end: 1 } } ),
+          te2 = t.addTrackEvent( { name: "TrackEvent 2", type: "cue", popcornOptions: 1 } );
+
       ok( te1.name === "TrackEvent 1" && te1.popcornOptions.start ===  0 && te1.popcornOptions.end === 1, "TrackEvent name is setup correctly" );
+      ok( te2.popcornTrackEvent._natives.type === "cue" && te2.popcornTrackEvent.start === 1, "TrackEvent has correct popcornTrackEvent reference" );
 
       start();
     });
