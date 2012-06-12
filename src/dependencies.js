@@ -43,6 +43,7 @@ define([], function(){
 
         if( !checkFn() ){
           var scriptElement = document.createElement( "script" );
+          scriptElement.setAttribute( "data-butter-include", true );
           scriptElement.src = url;
           scriptElement.type = "text/javascript";
           document.head.appendChild( scriptElement );
@@ -75,6 +76,7 @@ define([], function(){
 
         if( !checkFn() ){
           scriptElement = document.createElement( "link" );
+          scriptElement.setAttribute( "data-butter-include", true );
           scriptElement.rel = "stylesheet";
           scriptElement.onload =  runCheckFn;
           scriptElement.onerror = error;

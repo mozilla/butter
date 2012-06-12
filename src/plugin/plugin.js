@@ -24,6 +24,7 @@ define( [ "util/dragndrop", "util/lang" ], function( DragNDrop, LangUtils ){
           script = document.createElement( "script" );
 
       script.src = _path;
+      script.setAttribute( "data-butter-include", true );
       head.appendChild( script );
     } //if
 

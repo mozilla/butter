@@ -736,6 +736,10 @@
         _this.loader = loader;
 
         _page = new Page( loader, _config );
+        // if neccessary, take a snapshot of the page before any popcorn scripts are inserted
+        if ( _config.value( "snapshotHTMLOnReady" ) ) {
+          _page.snapshotHTML();
+        }
 
         _this.ui = new UI( _this  );
 
@@ -744,9 +748,6 @@
           preparePopcornScriptsAndCallbacks(function(){
             preparePage(function(){
               moduleCollection.ready(function(){
-                if( _config.value( "snapshotHTMLOnReady" ) ){
-                  _page.snapshotHTML();
-                }
                 attemptDataLoad(function(){
                   //fire the ready event
                   _this.dispatch( "ready", _this );
