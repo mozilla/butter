@@ -38,12 +38,6 @@
         },
         options: {
           target: "video-overlay",
-          useURL: {
-            elem: "input",
-            type: "checkbox",
-            label: "Use URL?",
-            "default": false
-          },
           src: {
             elem: "input",
             type: "url",

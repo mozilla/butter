@@ -1,6 +1,8 @@
 (function(){
   var _comm = new Comm(),
-      _manifest = {};
+      _manifest = {},
+      dataURI,
+      DROP_AREA_TEXT = "<span>Drag an image from your desktop...</span>";
 
   // TODO: this should be something we reuse from src/ui/widget/textbox.js
   // with require.  We need to expose butter internals to editors.
@@ -47,8 +49,11 @@
         if ( options && options[ item ] ) {
            popcornOptions[ item ] = options[ item ];
         } else if ( item === "src" ) {
-          if ( document.getElementById( "useURL" ) && document.getElementById( "useURL" ).value === true ) {
-            popcornOptions[ item ] = document.getElementById( item ).value;
+          var source = document.getElementById( item ).value;
+          if ( /^data:image/.test( source ) ) {
+            popcornOptions[ item ] = dataURI;
+          } else {
+            popcornOptions[ item ] = source;
           }
         } else if ( document.getElementById( item ) ) {
           popcornOptions[ item ] = document.getElementById( item ).value;
@@ -82,20 +87,33 @@
     });
 
     _comm.listen( "trackeventupdated", function( e ){
-      
+
       for ( var item in _manifest ){
-        var element = document.getElementById( item );
-        element.value = e.data[ item ];
-        if ( item === "src" ) {
-          if ( e.data[ "useURL" ] === false ) {
-            document.getElementById("src-container").style.display = "none";
-            //document.getElementById("drop-target").style.display = "block";
-          } else if ( e.data[ "useURL" ] === true ) {
-            document.getElementById("src-container").style.display = "block";
-            //document.getElementById("drop-target").style.display = "none";
+        if ( _manifest.hasOwnProperty( item ) ) {
+          var element = document.getElementById( item ),
+              data = e.data[ item ];
+
+          if ( item === "src" ) {
+            var dropTarget = document.getElementById( "drop-target" );
+            if ( /^data:image/.test( data ) ) {
+              // Store the data URI so we can still keep it correct for the popcornOptions
+              dataURI = data;
+              // Only display data/image if the source is a dataURI as anything longer is confusing
+              // And chrome can't handle really long data URIs in textfields
+              element.value = data.substring( 0, 10 );
+              // Set the src of the drop box in the editor to the dataURI
+              dropTarget.innerHTML = "";
+              dropTarget.style.backgroundImage = "url('" + data + "')";
+            } else {
+              element.value = data;
+
+              dropTarget.innerHTML = DROP_AREA_TEXT;
+              dropTarget.style.backgroundImage = "";
+            }
+          } else {
+            element.value = data;
           }
         }
-       
       } //for
     });
 
@@ -160,12 +178,14 @@
                 elem.appendChild( option );
               }
               elem.value = this.defaultValue( manifestItem, popcornOptions[ manifestProp ] );
-              if ( manifestProp === "target" ) { 
-                elem.value = masterTarget 
+              if ( manifestProp === "target" ) {
+                elem.value = masterTarget;
               }
               return elem;
             }
           };
+
+      dataURI = popcornOptions.src;
 
       if ( media && media.name && media.target ) {
         mediaName += " (\"" + media.name + "\": " + media.target + ")";
@@ -173,7 +193,7 @@
 
       _manifest = e.data.manifest.options;
 
-      function createRow( item, hidden, data ) {
+      function createRow( item, data ) {
         var row = document.createElement( "div" ),
             col1 = document.createElement( "label" ),
             col2 = document.createElement( "div" ),
@@ -192,7 +212,7 @@
         field = createElement[ currentItem.elem ]( _manifest, item, data );
 
         col2.appendChild( field );
-        field.addEventListener( "change", function( e ){
+        field.addEventListener( "change", function( e ) {
           sendData( false, { elem : field.value } );
         }, false );
 
@@ -202,12 +222,11 @@
         row.appendChild( col1 );
         row.appendChild( col2 );
         row.classList.add( item + "-container" );
-        hidden && ( row.style.display = "none" );
 
         if( item === "src" ) {
           row.id = "src-container";
           table.appendChild( row );
-          createImageDropper( item, hidden );
+          createImageDropper( item );
         } else if ( item == "useURL") {
           table.appendChild( row );
         } else {
@@ -217,20 +236,21 @@
         return field;
       }
 
-      function createImageDropper( item, hidden ){
+      function createImageDropper( item ){
         var canvas = document.createElement( "canvas" ),
             context,
-            dropTarget;
+            dropTarget,
+            result;
 
-        canvas.id = "grabimage";
+        result = /^data:image/.test( popcornOptions[ item ] );
 
         dropTarget = document.createElement( "div" );
         dropTarget.id = "drop-target";
-        dropTarget.innerHTML = "<span>Drag an image from your desktop...</span>";
+        dropTarget.innerHTML = result ? "" : DROP_AREA_TEXT;
 
-        if(  popcornOptions[ item ] ) { 
-          dropTarget.style.backgroundImage = "url('" + popcornOptions[ item ] + "')"; 
-        }  
+        if(  popcornOptions[ item ] && result ) {
+          dropTarget.style.backgroundImage = "url('" + popcornOptions[ item ] + "')";
+        }
 
         sourceEditor.appendChild( dropTarget );
 
@@ -252,7 +272,7 @@
               image,
               imgURI;
 
-          if( window.URL ) { 
+          if( window.URL ) {
             imgSrc = window.URL.createObjectURL( file );
           } else if ( window.webkitURL ) {
             imgSrc = window.webkitURL.createObjectURL( file );
@@ -262,11 +282,11 @@
           image.onload = function () {
             canvas.width = this.width;
             canvas.height = this.height;
-            context = canvas.getContext( '2d' );
+            context = canvas.getContext( "2d" );
             context.drawImage( this, 0, 0, this.width, this.height );
             imgURI = canvas.toDataURL();
 
-            sendData( false, { "src": imgURI, "useURL": false } );
+            sendData( false, { "src": imgURI } );
             dropTarget.style.backgroundImage = "url('" +  imgURI + "')";
             dropTarget.firstChild.innerHTML = "";
           };
@@ -282,11 +302,9 @@
 
       for ( var item in _manifest ) {
         if ( item === "target" ) {
-          createRow( item, false, targets );
-        } else if( _manifest[item]["hidden"] === true ) { 
-          createRow( item, true );
+          createRow( item, targets );
         } else {
-          createRow( item, false );
+          createRow( item );
         }
       }
 
