@@ -4,6 +4,7 @@ const express = require('express'),
       fs = require('fs'),
       path = require('path'),
       app = express.createServer(),
+      MongoStore = require('connect-mongo')(express),
       stylus = require('stylus'),
       CONFIG = require('config'),
       TEMPLATES_DIR =  CONFIG.dirs.templates,
@@ -22,7 +23,7 @@ var mongoose = require('mongoose'),
         console.error( "MongoDB: " + err + "\n  You will not be able to store any data." );
         canStoreData = false;
       }
-    });
+    }),
     Schema = mongoose.Schema,
 
     Project = new Schema({
@@ -39,6 +40,8 @@ var mongoose = require('mongoose'),
     }),
     UserModel = mongoose.model( 'User', User );
 
+CONFIG.session.store = new MongoStore({ db: "test" });
+
 if ( !path.existsSync( PUBLISH_DIR ) ) {
   fs.mkdirSync( PUBLISH_DIR );
 }
@@ -46,7 +49,7 @@ if ( !path.existsSync( PUBLISH_DIR ) ) {
 app.use(express.logger(CONFIG.logger))
   .use(express.bodyParser())
   .use(express.cookieParser())
-  .use(express.session(CONFIG.session))
+  .use( express.session( CONFIG.session ) )
   .use(stylus.middleware({
     src: WWW_ROOT
   }))
