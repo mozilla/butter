@@ -138,7 +138,7 @@ define( [
     this.addTrackEvent = function ( trackEvent ){
       if( !( trackEvent instanceof TrackEvent ) ){
         trackEvent = new TrackEvent( trackEvent );
-        trackEvent.update( trackEvent.popcornOptions, true );
+        trackEvent.update( trackEvent.popcornOptions );
       } //if
       if( _target ){
         trackEvent.target = _target;
