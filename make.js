@@ -296,13 +296,13 @@ target.storycamp = function(){
   build( 'storycamp' );
   target['buttered-popcorn']();
 
-  var storyCamp = 'storycamp-butter.js',
-      storyCampMin = 'storycamp-butter.min.js';
+  var storyCamp = 'butter.js',
+      storyCampMin = 'butter.min.js';
 
   function makeButterJS( keepMe, deleteMe ){
     echo( '### Cleaning temp files' );
     cd( DIST_DIR );
-    rm( '-f', 'butter.js', deleteMe, 'butter.min.js' );
+    rm( '-f', deleteMe );
 
     // Mirror layout in butter/ so templates are happy, renaming to src/butter.js
     mkdir( 'src' );
@@ -310,8 +310,6 @@ target.storycamp = function(){
   }
 
   var cwd = pwd();
-
-  cat( './LICENSE_HEADER', BUTTERED_POPCORN, DIST_DIR + '/butter.js' ).to( DIST_DIR + '/' + storyCamp );
 
   // Depending on whether we want minified source, keep one, delete one.
   if( unminified ){
