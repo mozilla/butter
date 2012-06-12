@@ -52,8 +52,7 @@
           var source = document.getElementById( item ).value;
           if ( /^data:image/.test( source ) ) {
             popcornOptions[ item ] = dataURI;
-          }
-          else {
+          } else {
             popcornOptions[ item ] = source;
           }
         } else if ( document.getElementById( item ) ) {
@@ -105,15 +104,13 @@
               // Set the src of the drop box in the editor to the dataURI
               dropTarget.innerHTML = "";
               dropTarget.style.backgroundImage = "url('" + data + "')";
-            }
-            else {
+            } else {
               element.value = data;
 
               dropTarget.innerHTML = DROP_AREA_TEXT;
               dropTarget.style.backgroundImage = "";
             }
-          }
-          else {
+          } else {
             element.value = data;
           }
         }

@@ -71,11 +71,17 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
                 $( _container ).resizable({
                   stop: function( event, ui ) {
                     _container.style.border = "";
-                    trackEvent.update( { height: ui.size.height + "px", width: ui.size.width + "px" } );
+                    trackEvent.update({
+                      height: ui.size.height + "px",
+                      width: ui.size.width + "px"
+                    });
                   }
                 }).draggable({
                   stop: function( event, ui ) {
-                    trackEvent.update( {top: ui.position.top + "px", left: ui.position.left + "px" } );
+                    trackEvent.update({ 
+                      top: ui.position.top + "px",
+                      left: ui.position.left + "px"
+                    });
                   }
                 });
               }
