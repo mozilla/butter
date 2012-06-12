@@ -287,27 +287,40 @@ target.test = function() {
 };
 
 target.storycamp = function(){
-  echo('### Making single file version of Butter + Popcorn');
+  echo('### Making single file version of Butter + Popcorn (use UNMINIFIED=1 for unminified)');
+
+  // To get unminified butter.js, use the UNMINIFIED env variable:
+  // $ UNMINIFIED=1 node make storycamp
+  var unminified = env['UNMINIFIED'] === "1";
 
   build( 'storycamp' );
   target['buttered-popcorn']();
 
-  var storyCamp = DIST_DIR + '/storycamp-butter.js',
-      storyCampMin = DIST_DIR + '/storycamp-butter.min.js';
+  var storyCamp = 'storycamp-butter.js',
+      storyCampMin = 'storycamp-butter.min.js';
 
-  cat( './LICENSE_HEADER', BUTTERED_POPCORN, DIST_DIR + '/butter.js' ).to( storyCamp );
+  function makeButterJS( keepMe, deleteMe ){
+    echo( '### Cleaning temp files' );
+    cd( DIST_DIR );
+    rm( '-f', 'butter.js', deleteMe, 'butter.min.js', 'buttered-popcorn.js', 'buttered-popcorn.min.js' );
 
-  // Write out dist/storycamp-butter.js
-  exec( UGLIFY + ' --output ' + storyCampMin + ' ' + storyCamp );
+    // Mirror layout in butter/ so templates are happy, renaming to src/butter.js
+    mkdir( 'src' );
+    mv( keepMe, './src/butter.js' );
+  }
 
-  echo('### Cleaning temp files');
   var cwd = pwd();
-  cd(DIST_DIR);
-  rm('-f', 'butter.js', 'storycamp-butter.js', 'butter.min.js', 'buttered-popcorn.js', 'buttered-popcorn.min.js');
 
-  // Mirror layout in butter/ so templates are happy
-  mkdir('src');
-  mv('storycamp-butter.min.js', './src/butter.js');
+  cat( './LICENSE_HEADER', BUTTERED_POPCORN, DIST_DIR + '/butter.js' ).to( DIST_DIR + '/' + storyCamp );
+
+  // Depending on whether we want minified source, keep one, delete one.
+  if( unminified ){
+    makeButterJS( storyCamp, storyCampMin );
+  } else {
+    // Write out dist/storycamp-butter.min.js
+    exec( UGLIFY + ' --output ' + DIST_DIR + '/' + storyCampMin + ' ' + DIST_DIR + '/' + storyCamp );
+    makeButterJS( storyCampMin, storyCamp );
+  }
 
   // Move css files into dist/css
   mkdir('css');
@@ -319,6 +332,7 @@ target.storycamp = function(){
   cp('-R', 'dialogs', DIST_DIR);
   cp('-R', 'editors', DIST_DIR);
   cp('-R', 'templates', DIST_DIR);
+  cp('-R', 'cornfield', DIST_DIR);
 
   // Copy the popcorn test videos over
   mkdir('-p', './dist/external/popcorn-js/test');
