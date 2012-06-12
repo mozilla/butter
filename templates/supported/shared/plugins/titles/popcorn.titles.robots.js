@@ -122,7 +122,6 @@
 
       //Check if it exists
       if ( robots.targets[ options.styles ] ) {
-        console.log( robots.targets[ options.styles ] );
         target = Popcorn.dom.find( robots.targets[ options.styles ] );
       }
       else if ( options.target ) {
