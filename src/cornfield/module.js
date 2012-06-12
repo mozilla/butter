@@ -125,15 +125,20 @@ define(['util/xhr'], function(XHR) {
       XHR.get(server + "/browserid/logout", function() {
         email = null;
         if (this.readyState === 4) {
+          var response;
+
           try {
-            var response = JSON.parse(this.response);
+            response = JSON.parse( this.response );
             authenticated = false;
             email = undefined;
             username = undefined;
             name = undefined;
-            callback(response);
           } catch (err) {
-            callback({ error: "an unknown error occured" });
+            response = { error: "an unknown error occured" };
+          }
+
+          if ( callback ) {
+            callback( response );
           }
         }
       });
