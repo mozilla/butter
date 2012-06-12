@@ -685,14 +685,18 @@
       function attemptDataLoad( finishedCallback ){
         var savedDataUrl;
 
-        var hrefSearch = window.location.href.match( /[&?]savedDataUrl=(.*)/ );
-        if ( hrefSearch && hrefSearch.length === 2 ) {
-          savedDataUrl = hrefSearch[ 1 ];
-        }
-        else {
-          savedDataUrl = _config.value( "savedDataUrl" );
-        }
+        // see if savedDataUrl is in the page's query string
+        window.location.search.substring( 1 ).split( "&" ).forEach(function( item ){
+          item = item.split( "=" );
+          if ( item && item[ 0 ] === "savedDataUrl" ) {
+            savedDataUrl = item[ 1 ];
+          }
+        });
 
+        // otherwise, try to grab it from the config
+        savedDataUrl = savedDataUrl || _config.value( "savedDataUrl" );
+
+        // if either succeeded, proceed with XHR to load saved data
         if ( savedDataUrl ) {
 
           var xhr = new XMLHttpRequest(),
