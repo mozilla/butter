@@ -28,11 +28,35 @@ define( [
     _rootElement = document.body.insertBefore( _rootElement, document.body.firstChild );
 
     _saveButton = document.getElementById( "butter-header-save" );
-    _sourceButton = document.getElementById( "butter-header-projects" );
+    _sourceButton = document.getElementById( "butter-header-source" );
     _shareButton = document.getElementById( "butter-header-share" );
     _authButton = document.getElementById( "butter-header-auth" );
 
     document.body.classList.add( "butter-header-spacing" );
+ 	  	
+    _sourceButton.addEventListener( "click", function( e ){
+
+      var exportPackage = {
+        html: butter.getHTML(),
+        json: butter.exportProject()
+      };
+
+      var dialog = new IFrameDialog({
+        type: "iframe",
+        modal: true,
+        url: butter.ui.dialogDir + "view-source.html",
+        events: {
+          open: function(){
+            dialog.send( "export", exportPackage );
+          },
+          cancel: function( e ){
+            dialog.close();
+          }
+        }
+      });
+ 	  	
+      dialog.open();
+    }, false );
 
     function authenticationRequired( successCallback, errorCallback ){
       if ( butter.cornfield.authenticated() && successCallback && typeof successCallback === "function" ) {
