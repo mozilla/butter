@@ -23,7 +23,7 @@ define( [
 
     _rootElement.innerHTML = HEADER_TEMPLATE;
     _title = _rootElement.querySelector(".name");
-    _title.innerHTML = options.value( "title" ) || "Butter";
+    _title.innerHTML = options.value( "title" );
 
     _rootElement.setAttribute( "data-butter-exclude", true );
     _rootElement.id = "butter-header";
