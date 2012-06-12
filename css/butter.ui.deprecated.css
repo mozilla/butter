@@ -292,7 +292,7 @@ input.form-error {
   background-image: -moz-linear-gradient( center bottom, #2C2C2C 0, #4C4C4C 100% );
   background-image: -ms-linear-gradient( center bottom, #2C2C2C 0, #4C4C4C 100% );
   display: block;
-  font-family: "Open Sans";
+  font-family: "Open Sans", "Helvetica Neue", sans-seirf
 }
 
 #butter-header h1 {
