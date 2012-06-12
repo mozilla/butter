@@ -38,7 +38,7 @@ function checkCSS() {
 //    "shorthand",
 //    "overqualified-elements",
 //    "import",
-    "regex-selectors",
+//    "regex-selectors",
 //    "rules-count",
 //    "font-sizes",
 //    "universal-selector",
