@@ -88,11 +88,7 @@
       _setup: function( options ) {
         var img,
             target = document.getElementById( options.target ),
-            context = this,
-            width = options.width + "px",
-            height = options.height + "px",
-            top = options.top + "px",
-            left = options.left + "px";
+            context = this;
 
         if( options.href ) {
           options._container = document.createElement( "a" );
@@ -104,10 +100,10 @@
         }
           options._container.style.position = "absolute";
           options._container.style.display = "none";
-          options._container.style.width = width;
-          options._container.style.height = height;
-          options._container.style.top = top;
-          options._container.style.left = left;
+          options._container.style.width = options.width + "px";
+          options._container.style.height = options.height + "px";
+          options._container.style.top = options.top + "px";
+          options._container.style.left = options.left + "px";
           options._container.style.overflow = "hidden";
 
 
