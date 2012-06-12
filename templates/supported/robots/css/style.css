@@ -76,8 +76,8 @@ section[role="video-container"]  > video {
 }
 
 .text-overlay {
-  display: table;
-  height: 600px;
+  display: table; 
+  height: 100%;
 }
 
 .text-overlay > div {
