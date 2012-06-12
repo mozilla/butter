@@ -99,6 +99,8 @@
             // Only display data/image if the source is a dataURI as anything longer is confusing
             // And chrome can't handle really long data URIs in textfields
             element.value = data.substring( 0, 10 );
+            // Set the src of the drop box in the editor to the dataURI
+            document.getElementById( "drop-target" ).style.backgroundImage = "url('" + data + "')";
           }
           else {
             element.value = data;
