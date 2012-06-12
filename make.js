@@ -302,7 +302,7 @@ target.storycamp = function(){
   function makeButterJS( keepMe, deleteMe ){
     echo( '### Cleaning temp files' );
     cd( DIST_DIR );
-    rm( '-f', 'butter.js', deleteMe, 'butter.min.js', 'buttered-popcorn.js', 'buttered-popcorn.min.js' );
+    rm( '-f', 'butter.js', deleteMe, 'butter.min.js' );
 
     // Mirror layout in butter/ so templates are happy, renaming to src/butter.js
     mkdir( 'src' );
@@ -341,4 +341,15 @@ target.storycamp = function(){
   // Copy the rest of the popcorn plugins over in case templates look for them
   mkdir('-p', './dist/external/popcorn-js/plugins');
   cp('-R', 'external/popcorn-js/plugins/*', './dist/external/popcorn-js/plugins');
+
+  // Export will need a version of popcorn.js where the templates expect it
+  // at dist/external/popcorn-js/popcorn.js
+  cd( DIST_DIR );
+  if( unminified ){
+    mv( 'buttered-popcorn.js', './external/popcorn-js/popcorn.js' );
+    rm( '-f', 'buttered-popcorn.min.js' );
+  } else {
+    mv( 'buttered-popcorn.min.js', './external/popcorn-js/popcorn.js' );
+    rm( '-f', 'buttered-popcorn.js' );
+  }
 };
