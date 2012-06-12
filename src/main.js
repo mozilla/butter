@@ -684,11 +684,22 @@
       };
 
       function attemptDataLoad( finishedCallback ){
-        if ( _config.value( "savedDataUrl" ) ) {
+        var savedDataUrl;
+
+        var hrefSearch = window.location.href.match( /[&?]savedDataUrl=(.*)/ );
+        if ( hrefSearch && hrefSearch.length === 2 ) {
+          savedDataUrl = hrefSearch[ 1 ];
+        }
+        else {
+          savedDataUrl = _config.value( "savedDataUrl" );
+        }
+
+        if ( savedDataUrl ) {
 
           var xhr = new XMLHttpRequest(),
-              savedDataUrl = _config.value( "savedDataUrl" ) + "?noCache=" + Date.now(),
               savedData;
+
+          savedDataUrl += "?noCache=" + Date.now(),
 
           xhr.open( "GET", savedDataUrl, false );
 
