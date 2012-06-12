@@ -11,9 +11,9 @@ define(['util/xhr'], function(XHR) {
   var Cornfield = function( butter, config ) {
 
     var authenticated = false,
-        email,
-        name,
-        username,
+        email = "",
+        name = "",
+        username = "",
         server = audience();
 
     if ( !navigator.id ) {
@@ -123,17 +123,22 @@ define(['util/xhr'], function(XHR) {
 
     this.logout = function(callback) {
       XHR.get(server + "/browserid/logout", function() {
-        email = null;
+        email = "";
         if (this.readyState === 4) {
+          var response;
+
           try {
-            var response = JSON.parse(this.response);
+            response = JSON.parse( this.response );
             authenticated = false;
-            email = undefined;
-            username = undefined;
-            name = undefined;
-            callback(response);
+            email = "";
+            username = "";
+            name = "";
           } catch (err) {
-            callback({ error: "an unknown error occured" });
+            response = { error: "an unknown error occured" };
+          }
+
+          if ( callback ) {
+            callback( response );
           }
         }
       });
