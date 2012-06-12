@@ -33,7 +33,7 @@ define( [
     _authButton = document.getElementById( "butter-header-auth" );
 
     document.body.classList.add( "butter-header-spacing" );
- 	  	
+
     _sourceButton.addEventListener( "click", function( e ){
 
       var exportPackage = {
@@ -54,7 +54,7 @@ define( [
           }
         }
       });
- 	  	
+
       dialog.open();
     }, false );
 
