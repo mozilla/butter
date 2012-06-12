@@ -7,7 +7,7 @@ body {
   color: #FEF49C;
   font-weight: 300;
   font-size: 14px;
-  font-family: lato, ratio, sans-serif;
+  font-family: lato, "Helvetica Neue", sans-serif;
 }
 
 .wrapper {
@@ -19,7 +19,7 @@ h1, h2, h3 {
   text-transform: uppercase;
   text-shadow: 0 1px 30px rgba(254,244,156, 0.6);
   font-weight: 400;
-  font-family:  mashine, Audiowide, sans-serif;
+  font-family:  Audiowide, sans-serif;
 }
 
 h3 {
