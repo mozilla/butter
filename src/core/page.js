@@ -52,24 +52,32 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManagerWr
       }, callback );
     };
 
-    this.getHTML = function( popcornStrings ){
-      var html, head, body, i, l, toClean, toExclude, node, newNode, base, mediaElements;
+    this.getHTML = function( popcornStrings ) {
+      var html, head, body, i, l, toClean, toInclude, toExclude, node, newNode, base, mediaElements;
 
       //html tag to which body and head are appended below
       html = document.createElement( "html" );
 
       // if there is already a snapshot, clone it instead of cloning the current dom
-      if( !_snapshot ){
+      if( !_snapshot ) {
         body = document.getElementsByTagName( "body" )[ 0 ].cloneNode( true );
-      }
-      else {
+        head = document.getElementsByTagName( "head" )[ 0 ].cloneNode( true );
+      } else {
         body = _snapshot.body.cloneNode( true );
+        head = _snapshot.head.cloneNode( true );
       }
-
-      head = document.getElementsByTagName( "head" )[ 0 ].cloneNode( true );
 
       toExclude = Array.prototype.slice.call( head.querySelectorAll( "*[data-butter-exclude]" ) );
+      toInclude = Array.prototype.slice.call( document.head.querySelectorAll( "*[data-butter-include]" ) );
       toExclude = toExclude.concat( Array.prototype.slice.call( head.querySelectorAll( "*[data-requiremodule]" ) ) );
+      // loop through all of the scripts that were not in the snapshot, but still need to be included
+      for ( i = 0, l = toInclude.length; i < l; ++i ) {
+        var item = toInclude[ i ],
+            clone = item.cloneNode( true );
+        // remove data-butter-include because there is no need to have it on export
+        clone.removeAttribute( "data-butter-include" );
+        head.appendChild( clone );
+      }
       for ( i = 0, l = toExclude.length; i < l; ++i ) {
         node = toExclude[ i ];
         node.parentNode.removeChild( node );
@@ -149,6 +157,5 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManagerWr
     this.eraseSnapshot = function(){
       _snapshot = null;
     };
-
   }; // page
 });
