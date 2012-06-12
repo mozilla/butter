@@ -218,10 +218,8 @@ section[role="suplementary"] p:hover {
 
 .cube > div {
   position: absolute;
-  display: table;
-  padding: 5px;
-  width: 90px;
-  height: 90px;
+  width: 100px;
+  height: 100px;
   border-radius: 3px;
   background: -moz-linear-gradient(top,  rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 25%, rgba(255,255,255,0.71) 61%, rgba(255,255,255,0.8) 76%, rgba(255,255,255,0.2) 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.7)), color-stop(25%,rgba(255,255,255,0.5)), color-stop(61%,rgba(255,255,255,0.71)), color-stop(76%,rgba(255,255,255,0.8)), color-stop(100%,rgba(255,255,255,0.2)));
@@ -234,16 +232,12 @@ section[role="suplementary"] p:hover {
   line-height: 1em;
 }   
 
-.cube > div:first-child  {
-  display: block;
-  -webkit-transform: rotateX(90deg) translateZ(50px);
-  -moz-transform: rotateX(90deg) translateZ(50px);
-  -o-transform: rotateX(90deg) translateZ(50px);
-  -ms-transform: rotateX(90deg) translateZ(50px);
-  transform: rotateX(90deg) translateZ(50px);
+.cube > div > div {
+  display: table;
+  width: 100%;
+  height: 100%;
 }
-
-.cube > div:nth-child(2) {
+.cube > div:nth-child(1) {
   -webkit-transform: translateZ(50px);
   -moz-transform: translateZ(50px);
   -o-transform: translateZ(50px);
@@ -251,7 +245,7 @@ section[role="suplementary"] p:hover {
   transform: translateZ(50px);
 }
 
-.cube > div:nth-child(3) {
+.cube > div:nth-child(2) {
   -webkit-transform: rotateY(90deg) translateZ(50px);
   -moz-transform: rotateY(90deg) translateZ(50px);
   -o-transform: rotateY(90deg) translateZ(50px);
@@ -259,7 +253,7 @@ section[role="suplementary"] p:hover {
   transform: rotateY(90deg) translateZ(50px);
 }
 
-.cube > div:nth-child(4) {
+.cube > div:nth-child(3) {
   -webkit-transform: rotateY(180deg) translateZ(50px);
   -moz-transform: rotateY(180deg) translateZ(50px);
   -o-transform: rotateY(180deg) translateZ(50px);
@@ -267,15 +261,22 @@ section[role="suplementary"] p:hover {
   transform: rotateY(180deg) translateZ(50px);
 }
 
-.cube > div:nth-child(5) {
+.cube > div:nth-child(4) {
   -webkit-transform: rotateY(-90deg) translateZ(50px);
   -moz-transform: rotateY(-90deg) translateZ(50px);
   -o-transform: rotateY(-90deg) translateZ(50px);
   -ms-transform: rotateY(-90deg) translateZ(50px);
   transform: rotateY(-90deg) translateZ(50px);
 }
-
-.cube > div:nth-child(6) {
+.cube > div.cube-top {
+  display: block;
+  -webkit-transform: rotateX(90deg) translateZ(50px);
+  -moz-transform: rotateX(90deg) translateZ(50px);
+  -o-transform: rotateX(90deg) translateZ(50px);
+  -ms-transform: rotateX(90deg) translateZ(50px);
+  transform: rotateX(90deg) translateZ(50px);
+}
+.cube > div.cube-bottom {
   display: block;
   -webkit-transform: rotateX(-90deg) rotate(180deg) translateZ(50px);
   -moz-transform: rotateX(-90deg) rotate(180deg) translateZ(50px);
@@ -284,7 +285,7 @@ section[role="suplementary"] p:hover {
   transform: rotateX(-90deg) rotate(180deg) translateZ(50px);
 }
 
-.cube > div:nth-child(7) {
+.cube > div.cube-shadow {
   display: block;
   background: #222;
   background: rgba(0,0,0,.8);
@@ -296,7 +297,7 @@ section[role="suplementary"] p:hover {
   transform: rotateX(-90deg) rotate(180deg) translateZ(70px);
 }
 
-.cube > div h2{
+.cube div h2{
   display: table-cell;
   color: #121212;
   vertical-align: middle;
@@ -305,7 +306,7 @@ section[role="suplementary"] p:hover {
 }
 
 /*- - - Footer - - -*/
-footer {;
+footer {
   padding: 20px 0 40px 0;
   border-top: 1px solid #212121;
 }
