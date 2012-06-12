@@ -1,4 +1,5 @@
 {
+  "name": "test",
   "savedDataUrl": "saved-data.json",
   "baseDir": "../"
 }
