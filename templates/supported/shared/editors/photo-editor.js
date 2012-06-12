@@ -149,6 +149,32 @@
                   elem = document.createElement( manifestItem.elem ),
                   type = manifestItem.type,
                   val;
+              if ( type === "number" ) {
+
+                elem.addEventListener( "keypress", function( e ) {
+                  var elem = e.target;
+
+                  if ( isNaN( elem.value ) ) {
+                    elem.classList.add( "error" );
+                  }
+                  else {
+                    elem.classList.remove( "error" );
+                  }
+
+                }, false );
+
+                elem.addEventListener( "change", function( e ) {
+                  var elem = e.target;
+
+                  if ( isNaN( elem.value ) ) {
+                    elem.classList.remove( "error" );
+                    elem.value = popcornOptions[ elem.id ];
+                  }
+
+                }, false );
+
+              }
+
               elem.type = type;
               elem.id = manifestProp;
               elem.style.width = "100%";
