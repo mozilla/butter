@@ -15,5 +15,17 @@
     "templates": "../templates",
     "publish": "view",
     "publishPrefix": "http://localhost:8888/cornfield/view"
-  }
+  },
+  "templates": {
+    "test": "../templates/test.html",
+    "robots": "../templates/supported/robots/index.html",
+    "report": "../templates/supported/report/index.html",
+    "popup": "../templates/supported/popup/index.html",
+    "musicvideo": "../templates/supported/musicvideo/index.html",
+    "context": "../templates/supported/context/index.html",
+    "robots": "../templates/supported/newscaster/index.html"
+  },
+  "exportAssets": [
+    "../../dist/buttered-popcorn.min.js"
+  ]
 }
