@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-document.addEventListener( "DOMContentLoaded", function( e ){
+document.addEventListener( "DOMContentLoaded", function( e ) {
   (function( Butter, $ ) {
     Butter({
       config: "butter/config.json",
@@ -15,7 +15,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           media.addTrack();
           media.addTrack();
 
-          butter.tracks[0].addTrackEvent({
+          butter.tracks[ 0 ].addTrackEvent({
             type: "text",
             popcornOptions: {
               start: 0,
@@ -26,7 +26,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           });
 
           // EDITING HOOKS
-          function updateFunction(e) {
+          function updateFunction( e ) {
 
             var trackEvent,
                 _container = null,
@@ -36,9 +36,9 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                 _context,
                 _dropTarget;
 
-            if (e.type==="trackeventadded") {
+            if ( e.type === "trackeventadded" ) {
               trackEvent = e.data;
-            } else if (e.type==="trackeventupdated") {
+            } else if ( e.type === "trackeventupdated" ) {
               trackEvent = e.target;
             } else {
               trackEvent = e;
@@ -50,13 +50,13 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             // This will be better when track events store a reference to popcorn in Butter, but it's ok for now.
             trackEvent.popcornTrackEvent = popcorn.getTrackEvent( popcorn.getLastTrackEventId() ); //Store a reference
             _container = trackEvent.popcornTrackEvent._container;
-            if (!_container ) {
+            if ( !_container ) {
               return;
             }
 
             if ( trackEvent.type === "photo" ) {
               // Prevent default draggable behaviour of images
-              trackEvent.popcornTrackEvent._image.addEventListener( "mousedown", function(e) {
+              trackEvent.popcornTrackEvent._image.addEventListener( "mousedown", function( e ) {
                 e.preventDefault();
               }, false);
 
@@ -69,20 +69,22 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
               if( $ ) {
                 $( _container ).resizable({
-                  stop: function(event, ui) {
+                  stop: function( event, ui ) {
                     _container.style.border = "";
-                    trackEvent.update({ height: ui.size.height + "px", width: ui.size.width + "px" });
+                    trackEvent.update({
+                      height: ui.size.height + "px",
+                      width: ui.size.width + "px"
+                    });
                   }
                 }).draggable({
-                  stop: function(event, ui) {
-                    trackEvent.update({top: ui.position.top + "px", left: ui.position.left + "px" });
+                  stop: function( event, ui ) {
+                    trackEvent.update({ 
+                      top: ui.position.top + "px",
+                      left: ui.position.left + "px"
+                    });
                   }
                 });
               }
-
-              /* Drag and drop DataURI */
-              _canvas.id = "grabimage";
-              _canvas.style.display = "none";
 
               _dropTarget = _container;
 
@@ -96,15 +98,17 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                 _dropTarget.className = "";
               }, false);
 
-              _dropTarget.addEventListener( 'drop', function( e ) {
+              _dropTarget.addEventListener( "drop", function( e ) {
                 _dropTarget.className = "dropped";
                 e.preventDefault();
-                var file = event.dataTransfer.files[ 0 ],
+                var file = e.dataTransfer.files[ 0 ],
                     imgSrc,
                     image,
                     imgURI;
 
-                if ( !file ) { return; }
+                if ( !file ) {
+                  return;
+                }
 
                 if ( window.URL ) {
                   imgSrc = window.URL.createObjectURL( file );
@@ -112,14 +116,14 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                   imgSrc = window.webkitURL.createObjectURL( file );
                 }
 
-                image = document.createElement( 'img' );
+                image = document.createElement( "img" );
                 image.onload = function () {
                     _canvas.width = this.width;
                     _canvas.height = this.height;
-                    _context = _canvas.getContext( '2d' );
+                    _context = _canvas.getContext( "2d" );
                     _context.drawImage( this, 0, 0, this.width, this.height );
                     imgURI = _canvas.toDataURL();
-                    trackEvent.update( { src: imgURI, isURL: false } );
+                    trackEvent.update( { src: imgURI } );
                 };
                 image.src = imgSrc;
               }, false);
@@ -129,8 +133,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           // Would be good if these were part of a library in shared, instead of existing here.
           // Should be updated to a hook syntax like hook("photo", myUpdateFunction) or something
           // Add listeners for future track events.
-          butter.listen("trackeventadded", updateFunction);
-          butter.listen("trackeventupdated", updateFunction);
+          butter.listen( "trackeventadded", updateFunction );
+          butter.listen( "trackeventupdated", updateFunction );
 
         } //start
 
