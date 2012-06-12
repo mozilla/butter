@@ -70,11 +70,16 @@ function checkJS(){
 
   var dirs = SLICE.call( arguments );
 
-  var files = find( dirs ).filter( function( file ) {
-        return file.match(/\.js$/);
-      }).join(' ');
+  // Get all js and json files in dirs
+  var files = "";
+  [ /\.js$/, /\.json$/ ].forEach( function( regexp ){
+    files += find( dirs ).filter( function( file ) {
+        return file.match( regexp );
+      }).join(' ') + ' ';
+  });
 
-  exec(JSLINT + ' ' + files + ' --show-non-errors');
+  // jshint with non-errors plus linting of json files
+  exec(JSLINT + ' ' + files + ' --show-non-errors --extra-ext json');
 }
 
 target.all = function() {
