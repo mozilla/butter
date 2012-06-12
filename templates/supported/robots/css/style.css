@@ -4,7 +4,7 @@
 body {
   color: #EEE;
   font-size: 100%;
-  font-family: lato, ratio, sans-serif;
+  font-family: lato, "Helvetica Neue", sans-serif;
 }
 .inner-container {
   background: url(../img/grunge_top.png) repeat-x, url(../img/grunge_wall.png) repeat;
