@@ -72,15 +72,15 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
                   stop: function( event, ui ) {
                     _container.style.border = "";
                     trackEvent.update({
-                      height: ui.size.height + "px",
-                      width: ui.size.width + "px"
+                      height: ui.size.height,
+                      width: ui.size.width
                     });
                   }
                 }).draggable({
                   stop: function( event, ui ) {
-                    trackEvent.update({ 
-                      top: ui.position.top + "px",
-                      left: ui.position.left + "px"
+                    trackEvent.update({
+                      top: ui.position.top,
+                      left: ui.position.left
                     });
                   }
                 });
