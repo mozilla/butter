@@ -53,7 +53,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManagerWr
     };
 
     this.getHTML = function( popcornStrings ) {
-      var html, head, body, i, l, toClean, toExclude, node, newNode, base, mediaElements;
+      var html, head, body, i, l, toClean, toInclude, toExclude, node, newNode, base, mediaElements;
 
       //html tag to which body and head are appended below
       html = document.createElement( "html" );
@@ -72,10 +72,11 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManagerWr
       toExclude = toExclude.concat( Array.prototype.slice.call( head.querySelectorAll( "*[data-requiremodule]" ) ) );
       // loop through all of the scripts that were not in the snapshot, but still need to be included
       for ( i = 0, l = toInclude.length; i < l; ++i ) {
-        var item = toInclude[ i ];
+        var item = toInclude[ i ],
+            clone = item.cloneNode( true );
         // remove data-butter-include because there is no need to have it on export
-        item.removeAttribute( "data-butter-include" );
-        head.appendChild( item.cloneNode( true ) );
+        clone.removeAttribute( "data-butter-include" );
+        head.appendChild( clone );
       }
       for ( i = 0, l = toExclude.length; i < l; ++i ) {
         node = toExclude[ i ];
