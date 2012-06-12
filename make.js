@@ -151,7 +151,12 @@ function build( version ){
   exec(RJS + ' -o tools/build.js');
   exec(RJS + ' -o tools/build.optimized.js');
 
-  // Stamp Butter.version with supplied version
+  // Stamp Butter.version with supplied version, or git info
+  if( !version ){
+    version = exec('git describe',
+                   {silent:true}).output.replace(/\r?\n/m, "");
+  }
+
   sed('-i', '@VERSION@', version, 'dist/butter.js');
   sed('-i', '@VERSION@', version, 'dist/butter.min.js');
 
@@ -160,10 +165,7 @@ function build( version ){
 }
 
 target.build = function(){
-  // Use git commit info
-  var version = exec('git describe',
-                     {silent:true}).output.replace(/\r?\n/m, "");
-  build( version );
+  build();
 };
 
 target.server = function() {
@@ -184,23 +186,12 @@ target.package = function() {
   cp('-R', 'templates', DIST_DIR);
 
   echo('### Creating butter.zip');
-  cd(DIST_DIR)
+  cd(DIST_DIR);
   exec('zip -r ' + PACKAGE_NAME + '.zip ' + ls('.').join(' '));
 };
 
-target.release = function() {
-  echo('### Making Butter Release');
-
-  // To pass a release version number, use:
-  // $ VERSION=0.5 node make release
-  var version = env['VERSION'];
-
-  if( !version ){
-    console.log( "ERROR: Must provide a version when building a release: VERSION=XXX node make release" );
-    return;
-  }
-
-  build( version );
+target['buttered-popcorn'] = function(){
+  echo('### Making Combined Popcorn for Butter: Buttered Popcorn');
 
   var defaultConfig = require( DEFAULT_CONFIG ),
       popcornDir = defaultConfig.dirs['popcorn-js'].replace( '{{baseDir}}', './' ),
@@ -246,6 +237,24 @@ target.release = function() {
 
   // Write out dist/buttered-popcorn.min.js
   exec( UGLIFY + ' --output ' + BUTTERED_POPCORN_MIN + ' ' + BUTTERED_POPCORN );
+};
+
+target.release = function() {
+  echo('### Making Butter Release');
+
+  // To pass a release version number, use:
+  // $ VERSION=0.5 node make release
+  var version = env['VERSION'];
+
+  if( !version ){
+    console.log( "ERROR: Must provide a version when building a release: VERSION=XXX node make release" );
+    return;
+  }
+
+  build( version );
+
+  // Build buttered-popcorn.js
+  target['buttered-popcorn']();
 
   // Copy over templates and other resources
   cp('-R', 'resources', DIST_DIR);
@@ -260,7 +269,7 @@ target.release = function() {
 
 target.beautify = function( a ) {
   echo('### Beautifying butter');
-  cd('tools')
+  cd('tools');
   exec('./beautify.sh');
 };
 
@@ -279,5 +288,71 @@ target.test = function() {
     } else {
       echo(unbeautified[ i ] + ' did not beautify correctly');
     }
+  }
+};
+
+target.storycamp = function(){
+  echo('### Making single file version of Butter + Popcorn (use UNMINIFIED=1 for unminified)');
+
+  // To get unminified butter.js, use the UNMINIFIED env variable:
+  // $ UNMINIFIED=1 node make storycamp
+  var unminified = env['UNMINIFIED'] === "1";
+
+  build( 'storycamp' );
+  target['buttered-popcorn']();
+
+  var storyCamp = 'butter.js',
+      storyCampMin = 'butter.min.js';
+
+  function makeButterJS( keepMe, deleteMe ){
+    echo( '### Cleaning temp files' );
+    cd( DIST_DIR );
+    rm( '-f', deleteMe );
+
+    // Mirror layout in butter/ so templates are happy, renaming to src/butter.js
+    mkdir( 'src' );
+    mv( keepMe, './src/butter.js' );
+  }
+
+  var cwd = pwd();
+
+  // Depending on whether we want minified source, keep one, delete one.
+  if( unminified ){
+    makeButterJS( storyCamp, storyCampMin );
+  } else {
+    // Write out dist/storycamp-butter.min.js
+    exec( UGLIFY + ' --output ' + DIST_DIR + '/' + storyCampMin + ' ' + DIST_DIR + '/' + storyCamp );
+    makeButterJS( storyCampMin, storyCamp );
+  }
+
+  // Move css files into dist/css
+  mkdir('css');
+  mv('*.css', './css');
+
+  // Copy other assets over
+  cd(cwd);
+  cp('-R', 'resources', DIST_DIR);
+  cp('-R', 'dialogs', DIST_DIR);
+  cp('-R', 'editors', DIST_DIR);
+  cp('-R', 'templates', DIST_DIR);
+  cp('-R', 'cornfield', DIST_DIR);
+
+  // Copy the popcorn test videos over
+  mkdir('-p', './dist/external/popcorn-js/test');
+  cp('external/popcorn-js/test/trailer.*', './dist/external/popcorn-js/test');
+
+  // Copy the rest of the popcorn plugins over in case templates look for them
+  mkdir('-p', './dist/external/popcorn-js/plugins');
+  cp('-R', 'external/popcorn-js/plugins/*', './dist/external/popcorn-js/plugins');
+
+  // Export will need a version of popcorn.js where the templates expect it
+  // at dist/external/popcorn-js/popcorn.js
+  cd( DIST_DIR );
+  if( unminified ){
+    mv( 'buttered-popcorn.js', './external/popcorn-js/popcorn.js' );
+    rm( '-f', 'buttered-popcorn.min.js' );
+  } else {
+    mv( 'buttered-popcorn.min.js', './external/popcorn-js/popcorn.js' );
+    rm( '-f', 'buttered-popcorn.js' );
   }
 };
