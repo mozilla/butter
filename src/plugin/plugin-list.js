@@ -3,7 +3,7 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [ "util/dragndrop" ], function( DragNDrop ){
-	
+
 	return function( butter ){
     var _parentElement = document.createElement( "div" ),
         _containerElement = document.createElement( "div" );
@@ -47,7 +47,7 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
           }
         },
         stop: function(){
-          
+
         }
       });
 
@@ -60,9 +60,9 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
       text.innerHTML = e.data.type;
       element.appendChild( text );
 
-      element.setAttribute( "data-butter-plugin-type", e.data.type );
+      element.setAttribute( "data-popcorn-plugin-type", e.data.type );
       element.setAttribute( "data-butter-draggable-type", "plugin" );
-      
+
       _containerElement.appendChild( element );
     });
 

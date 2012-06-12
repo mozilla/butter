@@ -4,7 +4,7 @@
 
 define( [ "util/dragndrop", "util/lang" ], function( DragNDrop, LangUtils ){
 
-  var PLUGIN_ELEMENT_PREFIX = "butter-plugin-";
+  var PLUGIN_ELEMENT_PREFIX = "popcorn-plugin-";
 
   return function( id, pluginOptions ){
     pluginOptions = pluginOptions || {};
@@ -83,7 +83,7 @@ define( [ "util/dragndrop", "util/lang" ], function( DragNDrop, LangUtils ){
         pluginElement = LangUtils.domFragment( patternInstance );
       }
       pluginElement.id = PLUGIN_ELEMENT_PREFIX + _this.type;
-      pluginElement.setAttribute( "data-butter-plugin-type", _this.type );
+      pluginElement.setAttribute( "data-popcorn-plugin-type", _this.type );
       pluginElement.setAttribute( "data-butter-draggable-type", "plugin" );
       DragNDrop.helper( pluginElement, {
         image: _helper,

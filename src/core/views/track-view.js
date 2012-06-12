@@ -49,7 +49,7 @@ define( [ "core/logger",
             _this.dispatch( "plugindropped", {
               start: start,
               track: _track,
-              type: dropped.getAttribute( "data-butter-plugin-type" )
+              type: dropped.getAttribute( "data-popcorn-plugin-type" )
             });
           }
           else if( draggableType === "trackevent" ) {
