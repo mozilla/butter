@@ -21,6 +21,9 @@ function(
     var _element = document.createElement( "div" ),
         _container = document.createElement( "div" );
 
+    var _hScrollbar,
+        _vScrollbar;
+
     var _droppable;
 
     _element.appendChild( _container );
@@ -48,6 +51,11 @@ function(
         }
       }
     });
+
+    this.setScrollbars = function( hScrollbar, vScrollbar ){
+      _hScrollbar = hScrollbar;
+      _vScrollbar = vScrollbar;
+    };
 
     this.orderTracks = function( orderedTracks ){
       for( var i=0, l=orderedTracks.length; i<l; ++i ){
@@ -95,6 +103,7 @@ function(
       trackView.duration = _media.duration;
       trackView.zoom = _zoom;
       trackView.parent = _this;
+      _vScrollbar.update();
     }
 
     var existingTracks = _media.tracks;
@@ -109,6 +118,9 @@ function(
     _media.listen( "trackremoved", function( e ){
       var trackView = e.data.view;
       _container.removeChild( trackView.element );
+      if( _vScrollbar ){
+        _vScrollbar.update();
+      }
     });
 
     _this.update = function(){
@@ -140,48 +152,6 @@ function(
         enumerable: true,
         get: function(){
           return _element;
-        }
-      },
-      width: {
-        enumerable: true,
-        get: function(){
-          return _element.getBoundingClientRect().width;
-        }
-      },
-      height: {
-        enumerable: true,
-        get: function(){
-          return _element.getBoundingClientRect().height;
-        }
-      },
-      scrollWidth: {
-        enumerable: true,
-        get: function(){
-          return _element.scrollWidth;
-        }
-      },
-      scrollHeight: {
-        enumerable: true,
-        get: function(){
-          return _element.scrollHeight;
-        }
-      },
-      vScroll: {
-        enumerable: true,
-        get: function(){
-          return _element.scrollTop / _element.scrollHeight;
-        },
-        set: function( val ){
-          _element.scrollTop = _element.scrollHeight * val;
-        }
-      },
-      hScroll: {
-        enumerable: true,
-        get: function(){
-          return _element.scrollLeft / _element.scrollWidth;
-        },
-        set: function( val ){
-          _element.scrollLeft = _element.scrollWidth * val;
         }
       },
       container: {
