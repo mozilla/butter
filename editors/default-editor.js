@@ -105,11 +105,7 @@
             defaultValue: function( item, val ) {
               // Don't print "undefined" or the like
               if ( val === undefined || typeof val === "object" ) {
-                if ( item.default ) {
-                  val = item.default;
-                } else {
-                  val = item.type === "number" ? 0 : "";
-                }
+                val = item.type === "number" ? 0 : "";
               }
               return val;
             },
