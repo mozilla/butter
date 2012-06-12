@@ -2,6 +2,30 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('Open-Sans-Italic'),
+    url('../resources/fonts/OpenSans-Italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('Open-Sans-Bold'),
+    url('../resources/fonts/OpenSans-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans Regular'), local('Open-Sans-Regular'),
+    url('../resources/fonts/OpenSans-Regular.ttf') format('truetype');
+}
+
 body > .butter-ua-warning {
   position: fixed;
   top: 0;
@@ -268,6 +292,7 @@ input.form-error {
   background-image: -moz-linear-gradient( center bottom, #2C2C2C 0, #4C4C4C 100% );
   background-image: -ms-linear-gradient( center bottom, #2C2C2C 0, #4C4C4C 100% );
   display: block;
+  font-family: "Open Sans", "Helvetica Neue", sans-seirf
 }
 
 #butter-header h1 {
@@ -281,99 +306,120 @@ input.form-error {
 }
 
 #butter-header a {
-  color: inherit;
   text-decoration: none;
 }
 
-#butter-header h1 span.logo {
-  font-family: 'MetaBold';
-  font-size: 50px;
-  padding-right: 10px;
-  color: white;
-}
-
 #butter-header div.editor-actions {
-  position: absolute;
-  right: 20px;
-  top: 8px;
+  float: right;
+  line-height: 1.8em;
 }
 
-#butter-header button {
-  font-family: 'BebasRegular';
-  font-size: 12px;
-  margin: 0 5px 0 0;
+.btn {
+  display: inline-block;
+  padding: 4px 10px 4px;
+  margin-bottom: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: #333333;
   text-align: center;
-  border-radius: 5px;
-  border: none;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  vertical-align: middle;
   cursor: pointer;
-  color: white;
+  background-color: #f5f5f5;
+  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+  background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: linear-gradient(top, #ffffff, #e6e6e6);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border: 1px solid #cccccc;
+  border-bottom-color: #b3b3b3;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+  -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+}
+.btn:hover,
+.btn:active,
+.btn.active,
+.btn.disabled,
+.btn[disabled] {
+  background-color: #e6e6e6;
+}
+.btn:active,
+.btn.active {
+  background-color: #cccccc;
+}
+.btn:hover {
+  color: #333333;
+  text-decoration: none;
+  background-color: #e6e6e6;
+  background-position: 0 -15px;
+  -webkit-transition: background-position 0.1s linear;
+  -moz-transition: background-position 0.1s linear;
+  -ms-transition: background-position 0.1s linear;
+  -o-transition: background-position 0.1s linear;
+  transition: background-position 0.1s linear;
+}
+.btn:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.btn.active,
+.btn:active {
+  background-color: #e6e6e6;
+  background-color: #d9d9d9;
+  background-image: none;
+  outline: 0;
+  -webkit-box-shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
+  -moz-box-shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
+}
+.btn.disabled,
+.btn[disabled] {
+  cursor: default;
+  background-color: #e6e6e6;
+  background-image: none;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
 }
 
-button.butter-header-brown {
-  background: #D1BE70;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#A08546));
-  background: -webkit-linear-gradient(top, #D1BE70 0%,#A08546 100%);
-  background: -moz-linear-gradient(top, #D1BE70 0%, #A08546 100%);
-  background: -o-linear-gradient(top, #D1BE70 0%,#A08546 100%);
-  background: -ms-linear-gradient(top, #D1BE70 0%,#A08546 100%);
-  background: linear-gradient(top, #D1BE70);
+[class^="icon-"],
+[class*=" icon-"] {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  vertical-align: sub;
+  background-image: url("../resources/glyphicons-halflings.png");
+  background-position: 14px 14px;
+  background-repeat: no-repeat;
+}
+.icon-ok-sign {
+  background-position: -72px -96px;
+}
+.icon-hdd {
+  background-position: 0 -144px;
+}
+.icon-share-alt {
+  background-position: -336px -96px;
+}
+.icon-user {
+  background-position: -168px 0;
 }
 
-button.butter-header-brown:hover {
-  background: #D1BE70;
-  background: -moz-linear-gradient(top, #D1BE70 0%, #AD9B4C 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#AD9B4C));
-  background: -webkit-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
-  background: -o-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
-  background: -ms-linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
-  background: linear-gradient(top, #D1BE70 0%,#AD9B4C 100%);
-}
-
-#butter-header-share {
-  background: #D1BE70;
-  background: -moz-linear-gradient(top, #26B5D8 0%, #2B86D4 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#26B5D8), color-stop(100%,#2B86D4));
-  background: -webkit-linear-gradient(top, #26B5D8 0%,#2B86D4 100%);
-  background: -o-linear-gradient(top, #26B5D8 0%,#2B86D4 100%);
-  background: -ms-linear-gradient(top, #26B5D8 0%,#2B86D4 100%);
-  background: linear-gradient(top, #2B86D4);
-}
-
-#butter-header-share:hover {
-  background: #D1BE70;
-  background: -moz-linear-gradient(top, #26B5D8 0%, #29B4D6 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#29B4D6));
-  background: -webkit-linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
-  background: -o-linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
-  background: -ms-linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
-  background: linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
-}
-
-#butter-header-auth {
-  font-family: verdana !important;
-  border-radius: 0 !important;
-  background-color: transparent !important;
-  margin-left: 10px;
-  text-align: left;
-  text-shadow: none !important;
-  box-shadow: none !important;
-}
-
-#butter-header-auth:hover {
-  color: #D3D3D3;
-}
-
-#butter-header-auth-out {
-  font-family: verdana;
-  border-radius: 0 !important;
-  background-color: transparent !important;
-  text-align: left;
-  text-shadow: none !important;
-  box-shadow: none !important;
-}
-
-#butter-header-auth-out:hover {
-  color: #D3D3D3;
+#butter-header .editor-actions a {
+  margin: 0 5px;
 }
 
 #butter-header .logo-drop {
