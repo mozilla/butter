@@ -90,7 +90,7 @@
 
     _comm.listen( "trackeventupdatefailed", function( e ) {
       if( e.data === "invalidtime" ){
-        document.getElementById( "message" ).innerHTML = "You've entered an invalid start or end time. Please verify that they are both greater than 0, the end time is equal to or less than the media's duration, and that the start time is less than the end time.";
+        document.getElementById( "message" ).innerHTML = "<div class=\"butter-error\">You've entered an invalid start or end time. Please verify that they are both greater than 0, the end time is equal to or less than the media's duration, and that the start time is less than the end time.</div>";
       } //if
     });
 
@@ -98,7 +98,7 @@
       var popcornOptions = e.data.popcornOptions,
           targets = e.data.targets,
           media = e.data.media,
-          table = document.getElementById( "table" ),
+          form = document.getElementById( "form" ),
           mediaName = "Current Media Element",
           elemToFocus,
           createElement = {
@@ -120,7 +120,6 @@
 
               elem.type = type;
               elem.id = manifestProp;
-              elem.style.width = "100%";
               elem.placeholder = "Empty";
 
               if( type === "text" || type === "number" || type === "url" ) {
@@ -163,17 +162,23 @@
       _manifest = e.data.manifest.options;
 
       function createRow( item, data ) {
-        var row = document.createElement( "TR" ),
-            col1 = document.createElement( "TD" ),
-            col2 = document.createElement( "TD" ),
+        var row = document.createElement( "div" ),
+            rowClassPrefix = "fieldset-",
+            col1 = document.createElement( "label" ),
+            col2 = document.createElement( "div" ),
             currentItem = _manifest[ item ],
             itemLabel = currentItem.label || item,
+            unitLabel,
             field;
 
-        if ( itemLabel === "In" ) {
-          itemLabel = "Start (seconds)";
-        } else if ( itemLabel === "Out" ) {
-          itemLabel = "End (seconds)";
+        // Add units, they exist in the manifest
+        if ( item === "start" ||  item === "end" ) {
+          currentItem.units = "seconds";
+        }
+        if ( currentItem.units ) {
+          unitLabel = document.createElement( "span" );
+          unitLabel.classList.add( "butter-unit" );
+          unitLabel.innerHTML = currentItem.units;
         }
 
         col1.innerHTML = "<span>" + itemLabel + "</span>";
@@ -188,9 +193,23 @@
         // Remember first control added in editor so we can focus
         elemToFocus = elemToFocus || field;
 
+        //Add classes for style selecting
+        row.classList.add( rowClassPrefix + item );
+
+        //Add unit label if it exists
+        if( unitLabel ) {
+          col2.classList.add( "butter-form-append" );
+          col2.appendChild( unitLabel );
+        }
+
+        //Hide if the manifest says so
+        if( currentItem.hidden === true ) {
+          row.style.display = "none";
+        }
+
         row.appendChild( col1 );
         row.appendChild( col2 );
-        table.appendChild( row );
+        form.appendChild( row );
       }
 
       _manifest.target = {
@@ -205,6 +224,9 @@
           createRow( item );
         }
       }
+
+      //Add the title info
+      document.getElementById( "title" ).innerHTML = "<h3>" + e.data.manifest.about.name + "</h3>";
 
       // Focus the first element in the editor
       if ( elemToFocus && elemToFocus.focus ) {
