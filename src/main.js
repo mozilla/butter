@@ -683,11 +683,26 @@
       };
 
       function attemptDataLoad( finishedCallback ){
-        if ( _config.value( "savedDataUrl" ) ) {
+        var savedDataUrl;
+
+        // see if savedDataUrl is in the page's query string
+        window.location.search.substring( 1 ).split( "&" ).forEach(function( item ){
+          item = item.split( "=" );
+          if ( item && item[ 0 ] === "savedDataUrl" ) {
+            savedDataUrl = item[ 1 ];
+          }
+        });
+
+        // otherwise, try to grab it from the config
+        savedDataUrl = savedDataUrl || _config.value( "savedDataUrl" );
+
+        // if either succeeded, proceed with XHR to load saved data
+        if ( savedDataUrl ) {
 
           var xhr = new XMLHttpRequest(),
-              savedDataUrl = _config.value( "savedDataUrl" ) + "?noCache=" + Date.now(),
               savedData;
+
+          savedDataUrl += "?noCache=" + Date.now(),
 
           xhr.open( "GET", savedDataUrl, false );
 
