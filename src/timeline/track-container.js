@@ -46,7 +46,7 @@ function(
           newTrack.view.dispatch( "plugindropped", {
             start: start,
             track: newTrack,
-            type: dropped.getAttribute( "data-butter-plugin-type" )
+            type: dropped.getAttribute( "data-popcorn-plugin-type" )
           });
         }
       }

@@ -1190,7 +1190,7 @@ input.form-error {
   line-height: 30px;
 }
 
-#butter-tray #butter-plugin {
+#butter-tray #popcorn-plugin {
   -moz-border-radius: 6px;
   -o-border-radius: 6px;
   -webkit-border-radius: 6px;
@@ -1212,7 +1212,7 @@ input.form-error {
   position: relative;
 }
 
-#butter-tray #butter-plugin .list-wrapper {
+#butter-tray #popcorn-plugin .list-wrapper {
   position: relative;
   top: 18px;
   padding-left: 5px;
@@ -1221,13 +1221,13 @@ input.form-error {
   overflow: hidden;
 }
 
-#butter-tray #butter-plugin .list {
+#butter-tray #popcorn-plugin .list {
   position: relative;
   padding-left: 5px;
   width: 100px;
 }
 
-#butter-tray #butter-plugin .title {
+#butter-tray #popcorn-plugin .title {
   position: absolute;
   top: 0;
   left: 0;
@@ -1249,14 +1249,14 @@ input.form-error {
   background: linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(40,40,40,1) 100%);
 }
 
-#butter-tray #butter-plugin .title span {
+#butter-tray #popcorn-plugin .title span {
   text-shadow: 0 -1px 1px #000;
   font-weight: 700;
   padding-left: 8px;
   color: #fff;
 }
 
-#butter-tray #butter-plugin .list-item {
+#butter-tray #popcorn-plugin .list-item {
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 600;
   color: #fff;
@@ -1268,14 +1268,14 @@ input.form-error {
   text-overflow: ellipsis;
 }
 
-#butter-tray #butter-plugin .scroll-bar-v {
+#butter-tray #popcorn-plugin .scroll-bar-v {
   right: 3px;
   width: 6px;
   height: 100px;
   top: 18px;
 }
 
-#butter-tray #butter-plugin .scroll-bar-v .scroll-handle {
+#butter-tray #popcorn-plugin .scroll-bar-v .scroll-handle {
   width: 4px;
 }
 
