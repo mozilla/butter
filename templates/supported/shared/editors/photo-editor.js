@@ -1,7 +1,8 @@
 (function(){
   var _comm = new Comm(),
       _manifest = {},
-      dataURI;
+      dataURI,
+      DROP_AREA_TEXT = "<span>Drag an image from your desktop...</span>";
 
   // TODO: this should be something we reuse from src/ui/widget/textbox.js
   // with require.  We need to expose butter internals to editors.
@@ -93,14 +94,24 @@
           var element = document.getElementById( item ),
               data = e.data[ item ];
 
-          if ( item === "src" && /^data:image/.test( data ) ) {
-            // Store the data URI so we can still keep it correct for the popcornOptions
-            dataURI = data;
-            // Only display data/image if the source is a dataURI as anything longer is confusing
-            // And chrome can't handle really long data URIs in textfields
-            element.value = data.substring( 0, 10 );
-            // Set the src of the drop box in the editor to the dataURI
-            document.getElementById( "drop-target" ).style.backgroundImage = "url('" + data + "')";
+          if ( item === "src" ) {
+            var dropTarget = document.getElementById( "drop-target" );
+            if ( /^data:image/.test( data ) ) {
+              // Store the data URI so we can still keep it correct for the popcornOptions
+              dataURI = data;
+              // Only display data/image if the source is a dataURI as anything longer is confusing
+              // And chrome can't handle really long data URIs in textfields
+              element.value = data.substring( 0, 10 );
+              // Set the src of the drop box in the editor to the dataURI
+              dropTarget.innerHTML = "";
+              dropTarget.style.backgroundImage = "url('" + data + "')";
+            }
+            else {
+              element.value = data;
+
+              dropTarget.innerHTML = DROP_AREA_TEXT;
+              dropTarget.style.backgroundImage = "";
+            }
           }
           else {
             element.value = data;
@@ -231,13 +242,16 @@
       function createImageDropper( item ){
         var canvas = document.createElement( "canvas" ),
             context,
-            dropTarget;
+            dropTarget,
+            result;
+
+        result = /^data:image/.test( popcornOptions[ item ] );
 
         dropTarget = document.createElement( "div" );
         dropTarget.id = "drop-target";
-        dropTarget.innerHTML = "<span>Drag an image from your desktop...</span>";
+        dropTarget.innerHTML = result ? "" : DROP_AREA_TEXT;
 
-        if(  popcornOptions[ item ] && /^data:image/.test( popcornOptions[ item ] ) ) {
+        if(  popcornOptions[ item ] && result ) {
           dropTarget.style.backgroundImage = "url('" + popcornOptions[ item ] + "')";
         }
 
