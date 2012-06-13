@@ -16,7 +16,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             start: 0,
             end: 3,
             text: "test",
-            target: "Secondary"
+            target: "secondary"
           }
         });
 
@@ -25,7 +25,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           popcornOptions: {
             start: 1,
             end: 2,
-            target: "Background"
+            target: "background"
           }
         });
       }
