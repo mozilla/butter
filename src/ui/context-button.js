@@ -5,7 +5,8 @@ define([], function(){
 
     _button.id = "add-popcorn";
     _button.title = "Add Popcorn Events to the timeline";
-    _button.innerHTML = "+Popcorn";
+    _button.classList.add( "btn" );
+    _button.innerHTML = "<i class=\"icon icon-plus-sign\"></i> Popcorn";
 
     _button.addEventListener( "click", function(){
       if( butter.ui.contentState === "timeline" ){
@@ -31,7 +32,7 @@ define([], function(){
       },
       transitionOut: function(){
         _button.setAttribute( "disabled", true );
-        _button.innerHTML = "+Popcorn";
+        _button.innerHTML = "<i class=\"icon icon-plus-sign\"></i> Popcorn";
         _button.title = "Add Popcorn Events to the timeline";
         _button.classList.remove( "add-popcorn-done" );
       },
