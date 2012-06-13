@@ -60,7 +60,8 @@
             elem: "input",
             type: "text",
             label: "Plugin path:",
-            "default":"../shared/plugins/speak/"
+            "default":"../shared/plugins/speak/",
+            hidden: true
           }
         }
       },
