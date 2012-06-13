@@ -26,7 +26,12 @@ video {
   height: 432px;
 }
 
-#video-container iframe {
+#video {
+  width: 100%;
+  height: 100%;
+}
+
+#video iframe {
   width: 100%;
   height: 100%;
 }
