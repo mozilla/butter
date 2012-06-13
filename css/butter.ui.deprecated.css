@@ -71,7 +71,7 @@ sub {
 }
 
 body.butter-header-spacing {
-  padding-top: 35px;
+  padding-top: 60px;
 }
 
 body.butter-tray-spacing {
@@ -189,7 +189,7 @@ body.butter-tray-spacing.minimized {
 .butter-media-properties {
   position: absolute;
   z-index: 2139000000;
-  font-family: Verdana, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
   font-size: 12px;
   border: 2px solid #fff;
   background-color: #131313;
@@ -229,7 +229,7 @@ body.butter-tray-spacing.minimized {
   padding-left: 3px;
 }
 .butter-media-properties h3, .butter-media-properties p {
-  font-family: Verdana, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
   margin: 0;
 }
 .butter-media-properties .url {
@@ -278,12 +278,14 @@ input.form-error {
   right: 0;
   padding: 15px 15px 15px 24px;
   color: #FFF;
-  background: -moz-linear-gradient(left,  rgba(16,16,16,0.96) 0%, rgba(16,16,16,0.56) 48%, rgba(16,16,16,0.93) 100%);
-  background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(16,16,16,0.96)), color-stop(48%,rgba(16,16,16,0.56)), color-stop(100%,rgba(16,16,16,0.93)));
-  background: -webkit-linear-gradient(left,  rgba(16,16,16,0.96) 0%,rgba(16,16,16,0.56) 48%,rgba(16,16,16,0.93) 100%);
-  background: -o-linear-gradient(left,  rgba(16,16,16,0.96) 0%,rgba(16,16,16,0.56) 48%,rgba(16,16,16,0.93) 100%);
-  background: -ms-linear-gradient(left,  rgba(16,16,16,0.96) 0%,rgba(16,16,16,0.56) 48%,rgba(16,16,16,0.93) 100%);
-  background: linear-gradient(left,  rgba(16,16,16,0.96) 0%,rgba(16,16,16,0.56) 48%,rgba(16,16,16,0.93) 100%);
+background: rgb(65,68,73);
+background: -moz-linear-gradient(top,  rgba(65,68,73,1) 0%, rgba(26,26,26,1) 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(65,68,73,1)), color-stop(100%,rgba(26,26,26,1)));
+background: -webkit-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(26,26,26,1) 100%);
+background: -o-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(26,26,26,1) 100%);
+background: -ms-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(26,26,26,1) 100%);
+background: linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(26,26,26,1) 100%);
+
   border-bottom: 1px solid #222;
   box-shadow: 0 2px 4px rgba(0,0,0,.3);
   display: block;
@@ -670,7 +672,9 @@ input.form-error {
   background-image: -ms-linear-gradient(center bottom,#1c1c1c 0,#2a2a2a 100%);
   background-image: -o-linear-gradient(bottom,#1c1c1c 0,#2a2a2a 100%);
   color: #666;
-  font: 10px/25px Arial,Helvetica,sans-serif;
+  font-size: 11px;
+  line-height: 25px;
+  font-weight: 700;
   height: 28px;
   -moz-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 0 10px 1px rgba( 160, 160, 160, 0.1 ), 1px -1px 1px #101010, -1px -1px 1px #101010;
   -o-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 0 10px 1px rgba( 160, 160, 160, 0.1 ), 1px -1px 1px #101010, -1px -1px 1px #101010;
@@ -877,11 +881,13 @@ input.form-error {
   -o-box-shadow: inset 0 1px 0 #5d5d5d;
   -webkit-box-shadow: inset 0 1px 0 #5d5d5d;
   box-shadow: inset 0 1px 0 #5d5d5d;
-  background-image: -webkit-gradient( linear, left bottom, left top, color-stop( 0, #2c2c2c ), color-stop( 1, #4c4c4c ) );
-  background-image: -webkit-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% );
-  background-image: -moz-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% );
-  background-image: -ms-linear-gradient( center bottom, #2c2c2c 0, #4c4c4c 100% );
-  background-image: -o-linear-gradient( bottom, #2c2c2c 0, #4c4c4c 100% );
+  background: rgb(65,68,73);
+  background: -moz-linear-gradient(top,  rgba(65,68,73,1) 0%, rgba(40,40,40,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(65,68,73,1)), color-stop(100%,rgba(40,40,40,1)));
+  background: -webkit-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(40,40,40,1) 100%);
+  background: -o-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(40,40,40,1) 100%);
+  background: -ms-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(40,40,40,1) 100%);
+  background: linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(40,40,40,1) 100%);
   position: absolute;
   height: 50px;
   top: 0;
@@ -1023,7 +1029,9 @@ input.form-error {
   background-image: -moz-linear-gradient( center bottom, rgb(255,255,0) 0%, rgb(200,200,0) 100% );
   background-image: -ms-linear-gradient( center bottom, rgb(255,255,0) 0%, rgb(200,200,0) 100% );
   background-image: -o-linear-gradient( bottom, rgb(255,255,0) 0%, rgb(200,200,0) 100% );
-  font: normal 10px/25px Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  line-height: 25px;
+  font-weight: 700;
   text-align: center;
   text-transform: uppercase;
   color: #333;
@@ -1160,7 +1168,7 @@ input.form-error {
 
 #butter-tray #plugin-list .container {
   padding: 5px;
-  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
   color: #EEE;
   height: 140px;
   overflow-y: scroll;
@@ -1260,23 +1268,33 @@ input.form-error {
   top: 0;
   left: 0;
   font-size: 11px;
-  font-family: Verdana;
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
   -moz-border-radius: 4px 4px 0 0;
   -o-border-radius: 4px 4px 0 0;
   -webkit-border-radius: 4px 4px 0 0;
   border-radius: 4px 4px 0 0;
-  height: 15px;
+  height: 17px;
   width: 100%;
   background-color: #3E3E3E;
+  background: rgb(65,68,73);
+  background: -moz-linear-gradient(top,  rgba(65,68,73,1) 0%, rgba(40,40,40,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(65,68,73,1)), color-stop(100%,rgba(40,40,40,1)));
+  background: -webkit-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(40,40,40,1) 100%);
+  background: -o-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(40,40,40,1) 100%);
+  background: -ms-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(40,40,40,1) 100%);
+  background: linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(40,40,40,1) 100%);
 }
 
 #butter-tray #butter-plugin .title span {
+  text-shadow: 0 -1px 1px #000;
+  font-weight: 700;
   padding-left: 8px;
   color: #fff;
 }
 
 #butter-tray #butter-plugin .list-item {
-  font-family: Verdana;
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: 600;
   color: #fff;
   list-style-type: none;
   cursor: pointer;
@@ -1308,11 +1326,12 @@ input.form-error {
 /* BUTTONS
 -------------------------------------------------- */
 
-.btn {
+.btn, .btn:visited {
   display: inline-block;
   padding: 4px 10px 4px;
   margin-bottom: 0;
   font-size: 13px;
+  font-weight: 600;
   line-height: 18px;
   color: #333333;
   text-align: center;
@@ -1327,16 +1346,11 @@ input.form-error {
   background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
   background-image: linear-gradient(top, #ffffff, #e6e6e6);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
   border-color: #e6e6e6 #e6e6e6 #bfbfbf;
   border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  border: 1px solid #cccccc;
+  border: 1px solid;
   border-bottom-color: #b3b3b3;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
   border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
-  -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
 }
 .btn:hover,
@@ -1411,6 +1425,9 @@ input.form-error {
 #butter-tray #add-track {
   text-transform: uppercase;
   font-size: 11px;
+  line-height: 20px;
+  font-weight: 600;
+  border-radius: 8px;
 }
 
 #butter-tray #add-popcorn {
@@ -1422,5 +1439,4 @@ input.form-error {
   position: absolute;
   left: 4px;
   width: 96px;  
-  border-radius: 6px;
 }
