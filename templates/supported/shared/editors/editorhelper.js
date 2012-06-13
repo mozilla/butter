@@ -12,7 +12,8 @@ document.addEventListener( "DOMContentLoaded", function(){
             _popcornOptions,
             _canvas = document.createElement( "canvas" ),
             _context,
-            _dropTarget;
+            _dropTarget,
+            _textEls;
 
         if ( e.type === "trackeventadded" ) {
           trackEvent = e.data;
@@ -34,13 +35,14 @@ document.addEventListener( "DOMContentLoaded", function(){
             e.preventDefault();
           }, false);
 
-          //Change default text to indicate draggable
-          if( !_popcornOptions.src && window.$ ){
-            _container.innerHTML = "<span>Drag an image from your desktop</span>";
-          }
-
           //Apply resizable/draggable if jQuery exists
           if( $ ) {
+            
+            //Change default text to indicate draggable
+            if( !_popcornOptions.src ){
+              _container.innerHTML = "<span>Drag an image from your desktop</span>";
+            }
+
             $( _container ).resizable({
               stop: function( event, ui ) {
                 _container.style.border = "";
@@ -101,23 +103,19 @@ document.addEventListener( "DOMContentLoaded", function(){
             image.src = imgSrc;
           }, false);
         } //image
-        else if( trackEvent.type === "zoink" ) {
-          _container.addEventListener( "dblclick", function( e ){
+        else if( trackEvent.type === "zoink" && $ ) {
 
-            textEls = _container.querySelectorAll( ".text" );
-            editor.makeContentEditable( textEls );
-            if( $ ) {
-              $( _container ).draggable( "disable" );
+          _container.addEventListener( "dblclick", function( e ){
+            $( _container ).draggable( "disable" );
+          }, false);
+
+          $( _container ).draggable({
+            stop: function(event, ui) {
+              trackEvent.update( { top: ui.position.top, left: ui.position.left } );
             }
           });
-          if( $ ) { 
-            $( _container ).draggable({
-              stop: function(event, ui) {
-                  trackEvent.update( { top: ui.position.top, left: ui.position.left } );
-              }
-            });
-          }
-        }//zoink
+
+        } //zoink
       } //updateFunction
 
       butter.unlisten( "trackeventadded", _updateFunction );
