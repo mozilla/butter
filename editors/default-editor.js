@@ -102,7 +102,7 @@
           mediaName = "Current Media Element",
           elemToFocus,
           createElement = {
-            defaultValue: function( item, val ) {
+            emptyValue: function( item, val ) {
               // Don't print "undefined" or the like
               if ( val === undefined || typeof val === "object" ) {
                 val = item.type === "number" ? 0 : "";
@@ -122,7 +122,7 @@
                 __TextboxWrapper( elem );
               }
 
-              elem.value = elem.checked = this.defaultValue( manifestItem, popcornOptions[ manifestProp ] );
+              elem.value = elem.checked = this.emptyValue( manifestItem, popcornOptions[ manifestProp ] );
               return elem;
             },
             select: function( manifest, manifestProp, items ) {
@@ -146,7 +146,7 @@
                 option.innerHTML =  mediaName;
                 elem.appendChild( option );
               }
-              elem.value = this.defaultValue( manifestItem, popcornOptions[ manifestProp ] );
+              elem.value = this.emptyValue( manifestItem, popcornOptions[ manifestProp ] );
               return elem;
             }
           };
