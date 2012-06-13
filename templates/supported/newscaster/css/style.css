@@ -173,7 +173,6 @@ section[role="suplementary"] p:hover {
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-timing-function: linear;
 
-  -moz-transition: -webkit-transform 50ms linear;
   -moz-transform: rotateX(-10deg) rotateY(20deg);
   -moz-transform-style: preserve-3d;
   -moz-transform: rotateX(-10deg) rotateY(-200deg);
