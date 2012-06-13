@@ -1,0 +1,18 @@
+doctype 5
+html
+  head
+    title Dashboard
+  body
+    h1 My Dashboard -
+      = user.email
+    table
+      tr
+        th Name
+        th Template
+        th ID
+      each project in user.projects
+        tr
+          td
+            a(href= project._id)
+              = project.name
+          td= project.template

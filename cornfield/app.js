@@ -66,7 +66,8 @@ app.configure( function() {
     .use( function( req, res, next ) {
       res.header( 'Cache-Control', 'no-store' );
       return next();
-    });
+    })
+    .set('view options', {layout: false});
 });
 
 app.configure( 'development', function() {
@@ -233,7 +234,21 @@ function publishRoute( req, res ){
 app.post('/api/publish/:id', publishRoute );
 
 app.get('/dashboard', function(req, res) {
-  res.send('This is just a placeholder', 200);
+  var email = req.session.email;
+
+  if ( !email ) {
+    res.json( { error: 'unauthorized' }, 403 );
+    return;
+  }
+
+  if (!canStoreData) {
+    res.json( { error: 'storage service is not running' }, 500 );
+    return;
+  }
+
+  UserModel.findOne( { email: email }, function( err, doc ) {
+    res.render( 'dashboard.jade', { user: doc } );
+  });
 });
 
 app.get('/api/projects', function(req, res) {
