@@ -9,7 +9,7 @@ const express = require('express'),
       CONFIG = require('config'),
       TEMPLATES_DIR =  CONFIG.dirs.templates,
       PUBLISH_DIR = CONFIG.dirs.publish,
-      PUBLISH_PREFIX = CONFIG.dirs.publishPrefix,
+      PUBLISH_PREFIX = CONFIG.dirs.hostname,
       WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
       VALID_TEMPLATES = CONFIG.templates,
       EXPORT_ASSETS = CONFIG.exportAssets;
@@ -111,19 +111,33 @@ function publishRoute( req, res ){
               currentTrack,
               currentTrackEvent,
               mediaPopcornOptions,
+              templateBase = VALID_TEMPLATES[ template ],
+              templateURL,
+              baseString,
+              headStartTagIndex,
+              templateScripts,
+              startString,
               j, k;
-
+          
+          templateURL = templateBase.substring( templateBase.indexOf( '/templates' ), templateBase.lastIndexOf( '/' ) );
+          baseString = '\n  <base href="' + PUBLISH_PREFIX + templateURL + '/"/>';
+          
           // look for script tags with data-butter-exclude in particular (e.g. butter's js script)
           data = data.replace( /\s*<script[\.\/='":_-\w\s]*data-butter-exclude[\.\/='":_-\w\s]*><\/script>/g, '' );
-
+          
+          // Adding 6 to cut out the actual head tag
+          headStartTagIndex = data.indexOf( '<head>' ) + 6;
           headEndTagIndex = data.indexOf( '</head>' );
           bodyEndTagIndex = data.indexOf( '</body>' );
+          
+          templateScripts = data.substring( headStartTagIndex, headEndTagIndex );
+          startString = data.substring( 0, headStartTagIndex);
 
           for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
-            externalAssetsString += '\n<script src="' + EXPORT_ASSETS[ i ] + '"></script>';
+            externalAssetsString += '\n<script src="' + PUBLISH_PREFIX + '/' + EXPORT_ASSETS[ i ] + '"></script>';
           }
 
-          popcornString += '<script>'
+          popcornString += '<script>';
 
           for ( i = 0; i < projectData.media.length; ++i ) {
             currentMedia = projectData.media[ i ];
@@ -143,7 +157,7 @@ function publishRoute( req, res ){
           }
           popcornString += '</script>';
 
-          data = data.substring( 0, headEndTagIndex ) + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + popcornString + data.substring( bodyEndTagIndex );
+          data = startString + baseString + templateScripts + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + popcornString + data.substring( bodyEndTagIndex );
 
           fs.writeFile( projectPath, data, function(){
             if( err ){

@@ -14,7 +14,7 @@
     "wwwRoot": "../",
     "templates": "../templates",
     "publish": "view",
-    "publishPrefix": "http://localhost:8888/cornfield/view"
+    "hostname": "http://localhost:8888"
   },
   "templates": {
     "test": "../templates/test.html",
@@ -23,6 +23,6 @@
     "newscaster": "../templates/supported/newscaster/index.html"
   },
   "exportAssets": [
-    "../../dist/external/popcorn-js/popcorn.js"
+    "external/popcorn-js/popcorn.js"
   ]
 }
