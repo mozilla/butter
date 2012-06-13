@@ -25,6 +25,6 @@
     "robots": "../templates/supported/newscaster/index.html"
   },
   "exportAssets": [
-    "../../dist/buttered-popcorn.min.js"
+    "../../dist/external/popcorn-js/popcorn.js"
   ]
 }
