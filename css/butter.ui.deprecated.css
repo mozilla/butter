@@ -278,14 +278,15 @@ input.form-error {
   right: 0;
   padding: 15px 15px 15px 24px;
   color: #FFF;
-background: rgb(65,68,73);
-background: -moz-linear-gradient(top,  rgba(65,68,73,1) 0%, rgba(26,26,26,1) 100%);
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(65,68,73,1)), color-stop(100%,rgba(26,26,26,1)));
-background: -webkit-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(26,26,26,1) 100%);
-background: -o-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(26,26,26,1) 100%);
-background: -ms-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(26,26,26,1) 100%);
-background: linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(26,26,26,1) 100%);
-
+  background: rgb(65,68,73);
+  background: rgb(65,68,73);
+  background: rgb(65,68,73);
+  background: -moz-linear-gradient(top,  rgba(65,68,73,1) 0%, rgba(44,44,44,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(65,68,73,1)), color-stop(100%,rgba(44,44,44,1)));
+  background: -webkit-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(44,44,44,1) 100%);
+  background: -o-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(44,44,44,1) 100%);
+  background: -ms-linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(44,44,44,1) 100%);
+  background: linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(44,44,44,1) 100%);
   border-bottom: 1px solid #222;
   box-shadow: 0 2px 4px rgba(0,0,0,.3);
   display: block;
@@ -395,6 +396,7 @@ background: linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(26,26,26,1) 100%);
   -o-transition: bottom 0.35s;
   -webkit-transition: bottom 0.35s;
   transition: bottom 0.35s;
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 .butter-highlight {
@@ -1423,10 +1425,7 @@ background: linear-gradient(top,  rgba(65,68,73,1) 0%,rgba(26,26,26,1) 100%);
 
 #butter-tray #add-popcorn,
 #butter-tray #add-track {
-  text-transform: uppercase;
-  font-size: 11px;
-  line-height: 20px;
-  font-weight: 600;
+  padding-top: 5px; 
   border-radius: 8px;
 }
 
