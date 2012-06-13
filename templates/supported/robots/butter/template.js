@@ -1,7 +1,7 @@
 document.addEventListener( "DOMContentLoaded", function( e ){
 
   Butter({
-    config: "butter/config.json",
+    config: "butter/robots-config.json",
     ready: function( butter ){
       var media = butter.media[ 0 ];
 

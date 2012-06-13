@@ -72,6 +72,10 @@
         "type": "wordriver",
         "path": "{{baseDir}}external/popcorn-js/plugins/wordriver/popcorn.wordriver.js"
       }
+    ],
+    "defaults": [
+      "text",
+      "image"
     ]
   }
 }
