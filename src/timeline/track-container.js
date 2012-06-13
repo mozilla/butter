@@ -104,7 +104,9 @@ function(
       trackView.duration = _media.duration;
       trackView.zoom = _zoom;
       trackView.parent = _this;
-      _vScrollbar && _vScrollbar.update();
+      if ( _vScrollbar ) {
+        _vScrollbar.update();
+      }
     }
 
     var existingTracks = _media.tracks;
