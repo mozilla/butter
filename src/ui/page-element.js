@@ -152,7 +152,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
         get: function(){
           return _element;
         }
-      },
+      }
     });
 
   }; //Element
