@@ -144,6 +144,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
 
     } //if
 
+    this.highlightElement = _highlightElement;
+
     Object.defineProperties( this, {
       element: {
         enumerable: true,

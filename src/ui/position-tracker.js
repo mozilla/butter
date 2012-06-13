@@ -1,25 +1,50 @@
 define([], function(){
 
-  var POLL_INTERVAL = 20;
-  
+  var requestAnimFrame = (function(){
+      return  window.requestAnimationFrame       ||
+              window.webkitRequestAnimationFrame ||
+              window.mozRequestAnimationFrame    ||
+              window.oRequestAnimationFrame      ||
+              window.msRequestAnimationFrame     ||
+              function( callback ){
+                window.setTimeout(callback, 1000 / 60);
+              };
+      }());
+
   return function( object, movedCallback ){
     var _rect = {},
-        interval;
+        _stopFlag = false;
 
-    interval = setInterval( function(){
+    function check () {
       var newPos = object.getBoundingClientRect();
-      if( newPos.left !== _rect.left ||
-          newPos.right !== _rect.right ||
-          newPos.top !== _rect.top ||
-          newPos.bottom !== _rect.bottom ){
-        _rect = newPos;
+      if (  newPos.left !== _rect.left ||
+            newPos.top !== _rect.top ){
+        _rect = {
+          left: newPos.left,
+          top: newPos.top
+        };
+        if ( document.body.scrollTop < 0 ) {
+          _rect.top += document.body.scrollTop;
+        }
         movedCallback( _rect );
       }
-    }, POLL_INTERVAL );
+    }
+
+    function loop () {
+      check();
+      if ( !_stopFlag ) {
+        requestAnimFrame( loop );
+      }
+    }
+
+    loop();
+
+    window.addEventListener( "scroll", check, false );
 
     return {
       destroy: function(){
-        clearInterval(interval);
+        _stopFlag = true;
+        window.removeEventListener( "scroll", check, false );
       }
     };
   };
