@@ -10,7 +10,9 @@ const express = require('express'),
       TEMPLATES_DIR =  CONFIG.dirs.templates,
       PUBLISH_DIR = CONFIG.dirs.publish,
       PUBLISH_PREFIX = CONFIG.dirs.publishPrefix,
-      WWW_ROOT = path.resolve(CONFIG.dirs.wwwRoot || __dirname + "/..");
+      WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
+      VALID_TEMPLATES = CONFIG.templates,
+      EXPORT_ASSETS = CONFIG.exportAssets;
 
 var canStoreData = true;
 
@@ -74,6 +76,7 @@ function publishRoute( req, res ){
   }
 
   UserModel.findOne( { email: email }, function( err, doc ) {
+    var i;
     if ( err ) {
       res.json({ error: 'internal db error' }, 500);
       return;
@@ -84,20 +87,82 @@ function publishRoute( req, res ){
       return;
     }
 
-    for ( var i=0; i<doc.projects.length; ++i ) {
+    var project;
+    for ( i=0; i<doc.projects.length; ++i ) {
       if ( String( doc.projects[ i ]._id ) === id ) {
+        project = doc.projects[ i ];
+        break;
+      }
+    }
+
+    if ( project ) {
+      var template = project.template;
+      if ( template && VALID_TEMPLATES[ template ] ) {
         var projectPath = PUBLISH_DIR + "/" + id + ".html",
             url = PUBLISH_PREFIX + "/" + id + ".html",
-            data = doc.projects[ i ].html;
+            projectData = JSON.parse( project.data );
 
-        fs.writeFile( projectPath, data, function(){
-          if( err ){
-            res.json({ error: 'internal file error' }, 500);
-            return;
+        fs.readFile( VALID_TEMPLATES[ template ], 'utf8', function(err, data){
+          var headEndTagIndex,
+              bodyEndTagIndex,
+              externalAssetsString = '',
+              popcornString = '',
+              currentMedia,
+              currentTrack,
+              currentTrackEvent,
+              mediaPopcornOptions,
+              j, k;
+
+          // look for script tags with data-butter-exclude in particular (e.g. butter's js script)
+          data = data.replace( /\s*<script[\.\/='":_-\w\s]*data-butter-exclude[\.\/='":_-\w\s]*><\/script>/g, '' );
+
+          headEndTagIndex = data.indexOf( '</head>' );
+          bodyEndTagIndex = data.indexOf( '</body>' );
+
+          for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
+            externalAssetsString += '\n<script src="' + EXPORT_ASSETS[ i ] + '"></script>';
           }
-          res.json({ error: 'okay', url: url });
+
+          popcornString += '<script>'
+
+          for ( i = 0; i < projectData.media.length; ++i ) {
+            currentMedia = projectData.media[ i ];
+            mediaPopcornOptions = currentMedia.popcornOptions || {};
+            popcornString += '\n(function(){';
+            popcornString += '\nvar popcorn = Popcorn.smart("#' + currentMedia.target + '", "' + currentMedia.url + '", ' + JSON.stringify( mediaPopcornOptions ) + ');';
+            for ( j = 0; j < currentMedia.tracks.length; ++ j ) {
+              currentTrack = currentMedia.tracks[ j ];
+              for ( k = 0; k < currentTrack.trackEvents.length; ++k ) {
+                currentTrackEvent = currentTrack.trackEvents[ k ];
+                popcornString += '\npopcorn.' + currentTrackEvent.type + '(';
+                popcornString += JSON.stringify( currentTrackEvent.popcornOptions, null, 2 );
+                popcornString += ');';
+              }
+            }
+            popcornString += '}());';
+          }
+          popcornString += '</script>';
+
+          data = data.substring( 0, headEndTagIndex ) + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + popcornString + data.substring( bodyEndTagIndex );
+
+          fs.writeFile( projectPath, data, function(){
+            if( err ){
+              res.json({ error: 'internal file error' }, 500);
+              return;
+            }
+            res.json({ error: 'okay', url: url });
+          });
+
         });
       }
+      else {
+        res.json({ error: 'template not found' }, 500);
+        return;
+      }
+    }
+    else {
+      res.json({ error: 'project not found' }, 500);
+      return;
     }
   });
 }
