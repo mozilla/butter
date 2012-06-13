@@ -206,7 +206,13 @@ document.addEventListener( "DOMContentLoaded", function( e ){
         });
       } //start
 
+      function mediaReady() {
+        var popcorn = butter.media[ 0 ].popcorn.popcorn,
+            editor = Butter.editorHelper( butter, popcorn );
+      }
+
       media.onReady( start );
+      butter.listen( "mediaready", mediaReady );
 
     }
   }); //Butter

@@ -7,11 +7,10 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
     Butter({
       config: "butter/config.json",
       ready: function( butter ){
-        var media = butter.media[ 0 ],
-            popcorn = butter.media[ 0 ].popcorn.popcorn,
-            editor = Butter.editorHelper( butter, popcorn );
+        var media = butter.media[ 0 ];
 
-        function start(){
+        function start() {
+
           media.addTrack( "Track1" );
           media.addTrack();
           media.addTrack();
@@ -27,9 +26,16 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
           });
         } //start
 
+        function mediaReady() {
+          var popcorn = butter.media[ 0 ].popcorn.popcorn,
+              editor = Butter.editorHelper( butter, popcorn );
+        }
+
         media.onReady( start );
+        butter.listen( "mediaready", mediaReady );
+
       }
-    }); //Butter
+    });
 
   }( window.Butter, window.jQuery ));
 }, false );
