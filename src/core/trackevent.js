@@ -134,6 +134,7 @@ define( [
         }
         _view.update( _popcornOptions );
         _this.popcornOptions = _popcornOptions;
+        console.log( "SHOULD BE FINE", _popcornOptions );
         _this.dispatch( "trackeventupdated", _this );
       }
 
