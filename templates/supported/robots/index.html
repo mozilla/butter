@@ -6,10 +6,11 @@
   <title>Robots</title>
   <meta name="viewport" content="width=device-width">
 
-  <link href='http://fonts.googleapis.com/css?family=Jolly+Lodger|Bangers|Lato' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Jolly+Lodger|Bangers|Lato|Fredericka+the+Great|Lovers+Quarrel' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="../shared/css/normalise.css">
   <link rel="stylesheet" href="css/style.css">
 
+  <link rel="stylesheet" href="../shared/css/popcorn.transitions.css">
   <link rel="stylesheet" href="../shared/plugins/zoink/popcorn.zoink.css">
 
   <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
@@ -26,10 +27,17 @@
       <div role="main">
         <section id="video-container" role="video-container">
           <video id="video" preload data-butter="media" controls>
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/trailer.mp4">
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/trailer.ogv">
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/trailer.webm">
+            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.mp4">
+            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.ogv">
+            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.webm">
           </video>
+          <div class="video-overlay">
+            <div class="text-overlay">
+              <div id="top-title" data-butter="target"></div>
+              <div id="mid-title" data-butter="target"></div>
+              <div id="bottom-title" data-butter="target"></div>
+            </div>
+          </div>
           <div id="video-overlay" class="video-overlay" data-butter="target"></div>
         </section>
         <section role="suplementary" class="cf">

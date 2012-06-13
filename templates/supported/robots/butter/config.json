@@ -2,6 +2,11 @@
   "name": "robots",
   "title": "Robots",
   "baseDir": "../../../",
+  "editor": {
+    "default": "{{baseDir}}editors/default-editor.html",
+    "photo": "{{baseDir}}templates/supported/shared/editors/photo-editor.html",
+    "googlemap": "{{baseDir}}editors/googlemap-editor.html"
+  },
   "plugin": {
     "plugins": [
       {
@@ -15,12 +20,31 @@
       {
         "type": "zoink",
         "path": "{{baseDir}}templates/supported/shared/plugins/zoink/popcorn.zoink.js"
+      },
+      {
+        "type": "titles",
+        "path": "{{baseDir}}templates/supported/shared/plugins/titles/popcorn.titles.robots.js"
+      },
+      {
+        "type": "photo",
+        "path": "{{baseDir}}templates/supported/shared/plugins/photo/popcorn.photo.js"
+      },
+      {
+        "type": "googlemap",
+        "path": "{{baseDir}}templates/supported/shared/plugins/googlemap/popcorn.googlemap.js"
+      },
+      {
+        "type": "flickr",
+        "path": "{{baseDir}}templates/supported/shared/plugins/flickr/popcorn.flickr.js"
       }
     ],
     "defaults": [
-      "text",
+      "photo",
       "speak",
-      "zoink"
+      "zoink",
+      "titles",
+      "googlemap",
+      "flickr"
     ]
   }
 }
