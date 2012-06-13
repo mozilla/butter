@@ -10,7 +10,7 @@ const express = require('express'),
       TEMPLATES_DIR =  CONFIG.dirs.templates,
       PUBLISH_DIR = CONFIG.dirs.publish,
       PUBLISH_PREFIX = CONFIG.dirs.publishPrefix,
-      WWW_ROOT = path.resolve(CONFIG.dirs.wwwRoot || __dirname + "/.."),
+      WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
       VALID_TEMPLATES = CONFIG.templates,
       EXPORT_ASSETS = CONFIG.exportAssets;
 
@@ -113,6 +113,7 @@ function publishRoute( req, res ){
               mediaPopcornOptions,
               j, k;
 
+          // look for script tags with data-butter-exclude in particular (e.g. butter's js script)
           data = data.replace( /\s*<script[\.\/='":_-\w\s]*data-butter-exclude[\.\/='":_-\w\s]*><\/script>/g, '' );
 
           headEndTagIndex = data.indexOf( '</head>' );

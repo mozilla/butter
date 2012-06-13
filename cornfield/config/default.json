@@ -20,8 +20,6 @@
     "test": "../templates/test.html",
     "robots": "../templates/supported/robots/index.html",
     "popup": "../templates/supported/popup/index.html",
-    "musicvideo": "../templates/supported/musicvideo/index.html",
-    "context": "../templates/supported/context/index.html",
     "robots": "../templates/supported/newscaster/index.html"
   },
   "exportAssets": [
