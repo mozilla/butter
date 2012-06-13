@@ -52,7 +52,7 @@
             elem: "input",
             type: "text",
             label: "Text",
-            "default": "Edit me"
+            "default": "zoink!"
           },
           type: {
             elem: "select",
