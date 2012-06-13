@@ -250,7 +250,6 @@
               });
           media.currentTime = 1.5;
           var contentDiv = document.getElementById( "media-target-test-div-overlay" );
-          console.log( contentDiv.childNodes[0].innerHTML );
           ok( contentDiv.childNodes[0].innerHTML === "LOL", "Media has target div with correct content." );
           document.body.removeChild( videoDiv );
           document.head.removeChild( popcornTextPlugin );
