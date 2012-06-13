@@ -71,7 +71,7 @@ sub {
 }
 
 body.butter-header-spacing {
-  padding-top: 60px;
+  padding-top: 50px;
 }
 
 body.butter-tray-spacing {
@@ -1427,7 +1427,7 @@ input.form-error {
 }
 
 #butter-tray #add-popcorn {
-  width: 100%;
+  width: 100px;
   margin-top: 6px;
 }
 
