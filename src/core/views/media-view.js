@@ -10,6 +10,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         _pageElement,
         _onDropped = options.onDropped || function(){},
         _closeSignal = false,
+        _keepOpen = false,
         _logoSpinner;
 
     var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE ),
@@ -23,6 +24,13 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         _loadingContainer = _propertiesElement.querySelector( ".loading-container" );
 
     var _containerDims;
+
+    function closeIfPossible(){
+      if ( _closeSignal && !_keepOpen ) {
+        setDimensions( false );
+        _propertiesElement.classList.remove( "open" );
+      }
+    }
 
     function setDimensions( state ){
       if( state ){
@@ -38,6 +46,13 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
     function prepareTextbox( textbox ){
       TextboxWrapper( textbox );
+      textbox.addEventListener( "blur", function( e ) {
+        _keepOpen = false;
+        closeIfPossible();
+      }, false );
+      textbox.addEventListener( "focus", function( e ) {
+        _keepOpen = true;
+      }, false );
     }
 
     function addUrl() {
@@ -97,10 +112,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
     _propertiesElement.addEventListener( "mouseout", function( e ) {
       setTimeout(function(){
-        if ( _closeSignal ) {
-          setDimensions( false );
-          _propertiesElement.classList.remove( "open" );
-        }
+        closeIfPossible();
       }, MOUSE_OUT_DURATION );
       _closeSignal = true;
     }, false );
