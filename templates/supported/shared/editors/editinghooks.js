@@ -1,12 +1,13 @@
-(function( Butter ) {
+(function( Butter, $ ) {
   Butter.editorHelper = function( butter, popcorn ) {
+    console.log( Butter, $ );
   // EDITING HOOKS
     function _updateFunction( e ) {
 
       var trackEvent,
-          _container = null,
+          _container,
           _textEls,
-          _popcornOptions;
+          _popcornOptions,
           _canvas = document.createElement( "canvas" ),
           _context,
           _dropTarget;
@@ -20,8 +21,15 @@
       }
 
       _popcornOptions = trackEvent.popcornTrackEvent;
+      _container = _popcornOptions._container;
+      console.log( _container );
+
+     
 
       if ( trackEvent.type === "photo" ) {
+         if( !_container ) {
+          return false;
+        }
         // Prevent default draggable behaviour of images
         trackEvent.popcornTrackEvent._image.addEventListener( "mousedown", function( e ) {
           e.preventDefault();
@@ -29,11 +37,10 @@
 
         //Change default text to indicate draggable
         if( !_popcornOptions.src && window.$ ){
-          _container.innerHTML = "Drag an image from your desktop";
+          _container.innerHTML = "<span>Drag an image from your desktop</span>";
         }
 
         //Apply resizable/draggable if jQuery exists
-
         if( $ ) {
           $( _container ).resizable({
             stop: function( event, ui ) {
@@ -84,7 +91,7 @@
           }
 
           image = document.createElement( "img" );
-          image.onload = function () {
+          image.onload = function() {
             _canvas.width = this.width;
             _canvas.height = this.height;
             _context = _canvas.getContext( "2d" );
@@ -95,10 +102,27 @@
           image.src = imgSrc;
         }, false);
       } //image
+      else if( trackEvent.type === "zoink" ) {
+        _container.addEventListener( "dblclick", function( e ){
+
+          textEls = _container.querySelectorAll( ".text" );
+          editor.makeContentEditable( textEls );
+          if( $ ) {
+            $( _container ).draggable( "disable" );
+          }
+        });
+        if( $ ) { 
+          $( _container ).draggable({
+            stop: function(event, ui) {
+                trackEvent.update( { top: ui.position.top, left: ui.position.left } );
+            }
+          });
+        }
+      }//zoink
     } //updateFunction
 
     // Add listeners for future track events.
     butter.listen( "trackeventadded", _updateFunction );
     butter.listen( "trackeventupdated", _updateFunction );
   }
-}( window.Butter ));
+}( window.Butter, window.jQuery ));

@@ -104,8 +104,6 @@
           options._container.style.height = options.height + "px";
           options._container.style.top = options.top + "px";
           options._container.style.left = options.left + "px";
-          options._container.style.overflow = "hidden";
-
 
         if ( !target && Popcorn.plugin.debug ) {
           target = context.media.parentNode;
@@ -128,9 +126,7 @@
 
           img.src = options.src;
         } else {
-          options._container.style.border = "2px dashed #CCC";
           img = document.createElement( "div" );
-          img.style.color = "red"
           img.style.height = "100%"
           img.style.width = "100%"
           img.innerHTML = "No image..."
