@@ -55,6 +55,7 @@ function(
     this.setScrollbars = function( hScrollbar, vScrollbar ){
       _hScrollbar = hScrollbar;
       _vScrollbar = vScrollbar;
+      _vScrollbar.update();
     };
 
     this.orderTracks = function( orderedTracks ){
@@ -103,7 +104,7 @@ function(
       trackView.duration = _media.duration;
       trackView.zoom = _zoom;
       trackView.parent = _this;
-      _vScrollbar.update();
+      _vScrollbar && _vScrollbar.update();
     }
 
     var existingTracks = _media.tracks;
