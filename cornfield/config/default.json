@@ -20,7 +20,7 @@
     "test": "../templates/test.html",
     "robots": "../templates/supported/robots/index.html",
     "popup": "../templates/supported/popup/index.html",
-    "robots": "../templates/supported/newscaster/index.html"
+    "newscaster": "../templates/supported/newscaster/index.html"
   },
   "exportAssets": [
     "../../dist/external/popcorn-js/popcorn.js"
