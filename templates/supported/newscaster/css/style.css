@@ -173,13 +173,10 @@ section[role="suplementary"] p:hover {
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-timing-function: linear;
 
-  -moz-transition: -moz-transform 50ms linear;
+  -moz-transition: -webkit-transform 50ms linear;
   -moz-transform: rotateX(-10deg) rotateY(20deg);
   -moz-transform-style: preserve-3d;
-  -moz-animation-name: z-spin;
-  -moz-animation-duration: 25s;
-  -moz-animation-iteration-count: infinite;
-  -moz-animation-timing-function: linear;
+  -moz-transform: rotateX(-10deg) rotateY(-200deg);
 
   -o-transition: transform 50ms linear;
   -o-transform: rotateX(-10deg) rotateY(20deg);
