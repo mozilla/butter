@@ -222,10 +222,6 @@
   });
 
   asyncTest( "Media targets", 1, function(){
-    var popcornTextPlugin = document.createElement( "script" );
-    popcornTextPlugin.src = "../external/popcorn-js/plugins/text/popcorn.text.js";
-    document.body.appendChild( popcornTextPlugin );
-
     var videoDiv = document.createElement( "video" );
     videoDiv.id = "media-target-test-div";
     videoDiv.setAttribute( "data-butter", "media" );
@@ -238,6 +234,11 @@
         var media = butter.media[0];
 
         media.listen( "mediaready", function(){
+
+        var popcornTextPlugin = document.createElement( "script" );
+        popcornTextPlugin.src = "../external/popcorn-js/plugins/text/popcorn.text.js";
+        document.head.appendChild( popcornTextPlugin );
+
           var trackEvent = media.addTrack().addTrackEvent({
                 type: "text",
                 popcornOptions: {
@@ -249,12 +250,13 @@
               });
           media.currentTime = 1.5;
           var contentDiv = document.getElementById( "media-target-test-div-overlay" );
-          ok( contentDiv, contentDiv.innerHTML === "LOL", "Media has target div with correct content." );
+          console.log( contentDiv.childNodes[0].innerHTML );
+          ok( contentDiv.childNodes[0].innerHTML === "LOL", "Media has target div with correct content." );
           document.body.removeChild( videoDiv );
+          document.head.removeChild( popcornTextPlugin );
           start();
         });
       });
-      //
     });
 
   });
