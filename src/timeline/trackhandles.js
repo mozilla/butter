@@ -8,7 +8,7 @@ define( [
         ],
         function( IFrameDialog, DragNDrop ){
 
-  var ADD_TRACK_BUTTON_Y_ADJUSTMENT = 35;
+  var ADD_TRACK_BUTTON_Y_ADJUSTMENT = 37;
 
   return function( butter, media, tracksContainer, orderChangedCallback ){
 
@@ -26,7 +26,8 @@ define( [
     _container.appendChild( _listElement );
 
     _addTrackButton.id = "add-track";
-    _addTrackButton.innerHTML = "+Track";
+    _addTrackButton.innerHTML = "<i class=\"icon icon-plus-sign\"></i> Track";
+    _addTrackButton.classList.add( "btn" );
     _addTrackButton.title = "Add a new Track for your events";
 
     _container.appendChild( _addTrackButton );

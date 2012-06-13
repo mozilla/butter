@@ -22,8 +22,8 @@ define( [
         _shareButton,
         _authButton;
 
-    _title = _rootElement.querySelector(".name");
-    _title.innerHTML = options.value( "title" );
+    _title = _rootElement.querySelector(".butter-name");
+    _title.innerHTML = options.value( "title" ) || "Popcorn Maker";
 
     _rootElement = document.body.insertBefore( _rootElement, document.body.firstChild );
 
