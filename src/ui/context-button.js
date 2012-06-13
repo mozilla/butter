@@ -1,11 +1,11 @@
 define([], function(){
 
   return function( butter ){
-    var _button = document.createElement( "button" );
+    var _button = document.createElement( "butter-button" );
 
     _button.id = "add-popcorn";
     _button.title = "Add Popcorn Events to the timeline";
-    _button.classList.add( "btn" );
+    _button.classList.add( "butter-btn" );
     _button.innerHTML = "<i class=\"icon icon-plus-sign\"></i> Popcorn";
 
     _button.addEventListener( "click", function(){

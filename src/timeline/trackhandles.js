@@ -27,7 +27,7 @@ define( [
 
     _addTrackButton.id = "add-track";
     _addTrackButton.innerHTML = "<i class=\"icon icon-plus-sign\"></i> Track";
-    _addTrackButton.classList.add( "btn" );
+    _addTrackButton.classList.add( "butter-btn" );
     _addTrackButton.title = "Add a new Track for your events";
 
     _container.appendChild( _addTrackButton );
