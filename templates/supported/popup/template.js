@@ -1,6 +1,6 @@
 document.addEventListener( "DOMContentLoaded", function( e ){
   Butter({
-    config: "config.json",
+    config: "popup-config.json",
     ready: function( butter ){
       var media = butter.media[ 0 ];
 

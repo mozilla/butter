@@ -5,7 +5,7 @@
 document.addEventListener( "DOMContentLoaded", function( e ) {
   (function( Butter, $ ) {
     Butter({
-      config: "butter/config.json",
+      config: "butter/newscaster-config.json",
       ready: function( butter ){
         var media = butter.media[ 0 ],
             popcorn = butter.media[ 0 ].popcorn.popcorn;

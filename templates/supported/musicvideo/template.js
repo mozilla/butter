@@ -4,7 +4,7 @@
 document.addEventListener( "DOMContentLoaded", function( e ){
 
   Butter({
-    config: "config.json",
+    config: "musicvideo-config.json",
     ready: function( butter ){
       var media = butter.media[ 0 ];
 
