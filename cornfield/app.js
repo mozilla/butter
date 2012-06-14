@@ -32,8 +32,7 @@ var mongoose = require('mongoose'),
       name: String,
       html: String,
       data: String,
-      template: String,
-      popcornString: String
+      template: String
     }),
     ProjectModel = mongoose.model( 'Project', Project ),
 
@@ -113,6 +112,10 @@ function publishRoute( req, res ){
                 bodyEndTagIndex,
                 externalAssetsString = '',
                 popcornString = '',
+                currentMedia,
+                currentTrack,
+                currentTrackEvent,
+                mediaPopcornOptions,
                 templateURL,
                 baseString,
                 headStartTagIndex,
@@ -147,11 +150,25 @@ function publishRoute( req, res ){
               }
             }
 
-            popcornString += '<script>\n(function(){\n';
-            for ( i = 0; i < project.popcornString.length; i++ ) {
-              popcornString += project.popcornString[ i ];
+            popcornString += '<script>'
+
+            for ( i = 0; i < projectData.media.length; ++i ) {
+              currentMedia = projectData.media[ i ];
+              mediaPopcornOptions = currentMedia.popcornOptions || {};
+              popcornString += '\n(function(){';
+              popcornString += '\nvar popcorn = Popcorn.smart("#' + currentMedia.target + '", "' + currentMedia.url + '", ' + JSON.stringify( mediaPopcornOptions ) + ');';
+              for ( j = 0; j < currentMedia.tracks.length; ++ j ) {
+                currentTrack = currentMedia.tracks[ j ];
+                for ( k = 0; k < currentTrack.trackEvents.length; ++k ) {
+                  currentTrackEvent = currentTrack.trackEvents[ k ];
+                  popcornString += '\npopcorn.' + currentTrackEvent.type + '(';
+                  popcornString += JSON.stringify( currentTrackEvent.popcornOptions, null, 2 );
+                  popcornString += ');';
+                }
+              }
+              popcornString += '}());';
             }
-            popcornString += '}());\n</script>';
+            popcornString += '</script>';
 
             data = startString + baseString + templateScripts + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + popcornString + data.substring( bodyEndTagIndex );
 
@@ -303,8 +320,7 @@ app.post('/api/project/:id?', function( req, res ) {
         name: req.body.name,
         html: req.body.html,
         template: req.body.template,
-        data: JSON.stringify( req.body.data ),
-        popcornString: req.body.popcornString
+        data: JSON.stringify( req.body.data )
       });
       doc.projects.push( proj );
     }
@@ -313,7 +329,6 @@ app.post('/api/project/:id?', function( req, res ) {
       proj.name = req.body.name;
       proj.html = req.body.html;
       proj.data = JSON.stringify( req.body.data );
-      proj.popcornString = req.body.popcornString;
     }
 
     doc.save();

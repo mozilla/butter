@@ -128,17 +128,13 @@
       }; //getManifest
 
       this.getHTML = function() {
-        return _page.getHTML( _this.getPopcornString() );
-      }; //getHTML
-      
-      this.getPopcornString = function() {
         var media = [];
         for( var i=0; i<_media.length; ++i ){
           media.push( _media[ i ].generatePopcornString() );
         } //for
         
-        return media;
-      };
+        return _page.getHTML( media );
+      }; //getHTML
 
       function trackEventRequested( element, media, target ){
         var track,

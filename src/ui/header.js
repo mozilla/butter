@@ -146,7 +146,6 @@ define( [
       function execute(){
         butter.project.html = butter.getHTML();
         butter.project.data = butter.exportProject();
-        butter.project.popcornString = butter.getPopcornString();
         var saveString = JSON.stringify( butter.project, null, 4 );
         butter.ui.loadIndicator.start();
         butter.cornfield.save( butter.project.id, saveString, function( e ){
