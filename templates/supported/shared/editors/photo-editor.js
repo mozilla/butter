@@ -314,7 +314,7 @@
 
             sendData( false, { "src": imgURI } );
             dropTarget.style.backgroundImage = "url('" +  imgURI + "')";
-            dropTarget.firstChild.innerHTML = "";
+            dropTarget.innerHTML = "";
           };
           image.src = imgSrc;
 
