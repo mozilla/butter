@@ -16,7 +16,7 @@ html, body {
   padding: 0;
   max-height: 100%;
   max-width: 100%;
-  border-radius: 18px;
+  border-radius: 6px;
 }
 
 @font-face {

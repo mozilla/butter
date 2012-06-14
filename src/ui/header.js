@@ -8,7 +8,7 @@ define( [
   HEADER_TEMPLATE
 ) {
 
-  var DEFAULT_AUTH_BUTTON_TEXT = "<i class='icon-user'></i> Sign In / Sign Up",
+  var DEFAULT_AUTH_BUTTON_TEXT = "<span class='icon-user'></span> Sign In / Sign Up",
       DEFAULT_AUTH_BUTTON_TITLE = "Sign in or sign up with Persona";
 
   return function( butter, options ){
@@ -22,7 +22,7 @@ define( [
         _shareButton,
         _authButton;
 
-    _title = _rootElement.querySelector(".name");
+    _title = _rootElement.querySelector(".butter-name");
     _title.innerHTML = options.value( "title" ) || "Popcorn Maker";
 
     _rootElement = document.body.insertBefore( _rootElement, document.body.firstChild );
@@ -197,7 +197,7 @@ define( [
 
     function loginDisplay() {
       _authButton.removeEventListener( "click", authenticationRequired, false );
-      _authButton.innerHTML = "<i class='icon-user'></i> " + butter.cornfield.name();
+      _authButton.innerHTML = "<span class='icon-user'></span> " + butter.cornfield.name();
       _authButton.title = "This is you!";
       _authButton.addEventListener( "click", doLogout, false );
     }
