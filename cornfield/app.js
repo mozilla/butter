@@ -138,7 +138,7 @@ function publishRoute( req, res ){
             startString = data.substring( 0, headStartTagIndex );
 
             for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
-              externalAssetsString += '\n<script src="' + path.relative( templateFile, path.resolve( EXPORT_ASSETS[ i ] ) ) + '"></script>';
+              externalAssetsString += '\n  <script src="' + path.relative( templateFile, path.resolve( EXPORT_ASSETS[ i ] ) ) + '"></script>\n';
             }
 
             // If the template has custom plugins defined in it's config, add them to our exported page
@@ -146,8 +146,9 @@ function publishRoute( req, res ){
               var plugins = templateConfig.plugin.plugins;
 
               for ( i = 0, len = plugins.length; i < len; i++ ) {
-                externalAssetsString += '\n<script src="' + PUBLISH_PREFIX + '/' + plugins[ i ].path.split( '{{baseDir}}' ).pop() + '"></script>';
+                externalAssetsString += '\n  <script src="' + PUBLISH_PREFIX + '/' + plugins[ i ].path.split( '{{baseDir}}' ).pop() + '"></script>';
               }
+              externalAssetsString += '\n';
             }
 
             popcornString += '<script>'
@@ -166,9 +167,9 @@ function publishRoute( req, res ){
                   popcornString += ');';
                 }
               }
-              popcornString += '}());';
+              popcornString += '}());\n';
             }
-            popcornString += '</script>';
+            popcornString += '</script>\n';
 
             data = startString + baseString + templateScripts + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + popcornString + data.substring( bodyEndTagIndex );
 
