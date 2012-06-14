@@ -6,20 +6,11 @@ An SDK for authoring Popcorn projects.
 Supported Platforms
 -------------------
 
-We're writing Butter so that it runs in modern, HTML5 compatible browsers.  To that end, we test in the following configurations:
+We're writing Butter so that it runs in modern, HTML5 compatible browsers.  For version 1.0, we're targeting modern HTML5 desktop browsers.  In the current version we are supporting:
 
 #### Desktop (Windows, OS X, Linux):
-* Firefox stable (currently 12)
-* Chrome stable (currently 19)
-* Internet Explorer stable (currently 9, will support with 10 simultaneously when it's out)
-* Opera stable (currently 11.6)
-* Safari stable (currently 5.1)
-
-#### Mobile:
-* iOS 5.1 Safari Mobile (iPad 2+)
-* Android 2.3 & 4 - Firefox Mobile, Google Chrome, Android Browser (Samsung Galaxy 2)
-
-This list may change, as platforms and browsers change.  Also, our testing may expand to include other form factors (i.e., phones).
+* Firefox stable
+* Chrome stable
 
 Build Prerequisites
 -------------------
@@ -60,9 +51,9 @@ Running Butter (without cornfield)
 Packaging and Distributing Butter
 --------------------------------
 
-Running `node make package` will compile all the necessary files into the `dist` folder, including resources like editors and dialogs which comprise a complete running environment for Butter.
+Running `node make storycamp` will compile all the necessary files into the `dist/` folder, including resources like editors and dialogs which comprise a complete running environment for Butter.
 
-The constituents of the `dist` folder are subsequently rolled into a zip file called `butter.zip` in the dist folder for an even easier distribution of the Butter environment.
+Within `dist/` you will find `src/butter.js` and `external/popcorn-js/popcorn.js`, which are single-file versions of the Butter and Popcorn.js sources, customized to the storycamp templates.  You can find these templates in `dist/templates/supported`.
 
 Testing
 -------
@@ -93,8 +84,4 @@ Contributing
 Known Issues
 ------------
 
-* Seeking in Youtube, Vimeo and Soundcloud using the butter UI may cause the video to pause.
-* Seeking in Vimeo using butter UI may cause the video to reset to second 0.
-* Youtube URL query string options like "&feature=youtu.be&t=2m1s" may cause issues. Example: http://www.youtube.com/watch?v=4LP6nDRbDOA&feature=youtu.be&t=2m1s
-* Soundcloud's playback position does not update visually while paused. Hitting play, it will fix its position.
-* Soundcloud will not respond to seeking until after it has been played once.
+Vimeo and SoundCloud, while working in this version, have issues that kept us from formally supporting them.  We are targeting these for a future release.
