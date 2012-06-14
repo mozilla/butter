@@ -6,7 +6,7 @@ define([], function(){
     _button.id = "add-popcorn";
     _button.title = "Add Popcorn Events to the timeline";
     _button.classList.add( "butter-btn" );
-    _button.innerHTML = "<i class=\"icon icon-plus-sign\"></i> Popcorn";
+    _button.innerHTML = "<span class=\"icon icon-plus-sign\"></span> Popcorn";
 
     _button.addEventListener( "click", function(){
       if( butter.ui.contentState === "timeline" ){
