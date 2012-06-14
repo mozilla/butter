@@ -1,6 +1,6 @@
 {
   "name": "test",
-  "template": "../templates/test.html",
+  "template": "test.html",
   "savedDataUrl": "saved-data.json",
   "baseDir": "../"
 }

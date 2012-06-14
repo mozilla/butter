@@ -106,8 +106,9 @@ function publishRoute( req, res ){
 
         fs.readFile( templateBase, 'utf8', function(err, conf){
           var templateConfig = JSON.parse( conf );
-          
-          fs.readFile( templateConfig.template, 'utf8', function( err, data ){
+          var templateFile = path.resolve( templateBase, '..', templateConfig.template );
+
+          fs.readFile( templateFile, 'utf8', function( err, data ){
             var headEndTagIndex,
                 bodyEndTagIndex,
                 externalAssetsString = '',
@@ -124,28 +125,28 @@ function publishRoute( req, res ){
 
             // look for script tags with data-butter-exclude in particular (e.g. butter's js script)
             data = data.replace( /\s*<script[\.\/='":_-\w\s]*data-butter-exclude[\.\/='":_-\w\s]*><\/script>/g, '' );
-            
+
             // Adding 6 to cut out the actual head tag
             headStartTagIndex = data.indexOf( '<head>' ) + 6;
             headEndTagIndex = data.indexOf( '</head>' );
             bodyEndTagIndex = data.indexOf( '</body>' );
-            
+
             templateScripts = data.substring( headStartTagIndex, headEndTagIndex );
             startString = data.substring( 0, headStartTagIndex);
 
             for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
               externalAssetsString += '\n<script src="' + PUBLISH_PREFIX + '/' + EXPORT_ASSETS[ i ] + '"></script>';
             }
-            
+
             // If the template has custom plugins defined in it's config, add them to our exported page
-            if ( templateConfig.plugin.plugins ) {
+            if ( templateConfig.plugin && templateConfig.plugin.plugins ) {
               var plugins = templateConfig.plugin.plugins;
-            
+
               for ( i = 0, len = plugins.length; i < len; i++ ) {
                 externalAssetsString += '\n<script src="' + PUBLISH_PREFIX + '/' + plugins[ i ].path.split( '{{baseDir}}' ).pop() + '"></script>';
-              } 
+              }
             }
-            
+
             popcornString += '<script>\n(function(){\n';
             for ( i = 0; i < project.popcornString.length; i++ ) {
               popcornString += project.popcornString[ i ];
