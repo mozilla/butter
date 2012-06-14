@@ -20,7 +20,7 @@
     "test": "{{templateBase}}test-config.json",
     "robots": "{{templateBase}}supported/robots/butter/config.json",
     "popup": "{{templateBase}}supported/popup/config.json",
-    "newscaster": "{{templateBase}}supported/newscaster/config.json"
+    "newscaster": "{{templateBase}}supported/newscaster/butter/config.json"
   },
   "exportAssets": [
     "external/popcorn-js/popcorn.js"

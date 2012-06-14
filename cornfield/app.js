@@ -105,8 +105,8 @@ function publishRoute( req, res ){
             templateBase = VALID_TEMPLATES[ template ].replace( '{{templateBase}}', TEMPLATES_DIR + '/' );
 
         fs.readFile( templateBase, 'utf8', function(err, conf){
-          var templateConfig = JSON.parse( conf );
-          var templateFile = path.resolve( templateBase, '..', templateConfig.template );
+          var templateConfig = JSON.parse( conf ),
+              templateFile = path.resolve( templateBase, '..', templateConfig.template );
 
           fs.readFile( templateFile, 'utf8', function( err, data ){
             var headEndTagIndex,
@@ -120,7 +120,7 @@ function publishRoute( req, res ){
                 startString,
                 j, k;
 
-            templateURL = templateBase.substring( templateBase.indexOf( '/templates' ), templateBase.lastIndexOf( '/' ) );
+            templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
             baseString = '\n  <base href="' + PUBLISH_PREFIX + templateURL + '/"/>';
 
             // look for script tags with data-butter-exclude in particular (e.g. butter's js script)
@@ -132,7 +132,7 @@ function publishRoute( req, res ){
             bodyEndTagIndex = data.indexOf( '</body>' );
 
             templateScripts = data.substring( headStartTagIndex, headEndTagIndex );
-            startString = data.substring( 0, headStartTagIndex);
+            startString = data.substring( 0, headStartTagIndex );
 
             for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
               externalAssetsString += '\n<script src="' + PUBLISH_PREFIX + '/' + EXPORT_ASSETS[ i ] + '"></script>';
