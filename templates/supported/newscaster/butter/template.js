@@ -7,7 +7,7 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
     Butter({
       config: "butter/config.json",
       ready: function( butter ){
-        var media = butter.media[ 0 ];
+        var media = butter.currentMedia;
 
         function start() {
 
@@ -27,8 +27,8 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
         } //start
 
         function mediaReady() {
-          var popcorn = butter.media[ 0 ].popcorn.popcorn,
-              editor = Butter.editorHelper( butter, popcorn );
+          var popcorn = butter.currentMedia.popcorn.popcorn,
+              editor = new EditorHelper( butter, popcorn );
         }
 
         media.onReady( start );

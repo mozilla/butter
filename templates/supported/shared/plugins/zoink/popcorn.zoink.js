@@ -103,8 +103,7 @@
             units: "px",
             label: "Max width:",
             "default": 200
-          },
-          target: "video-overlay"
+          }
         }
       },
       _setup: function( options ) {

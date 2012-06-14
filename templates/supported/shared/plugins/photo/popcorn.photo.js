@@ -88,7 +88,8 @@
       _setup: function( options ) {
         var img,
             target = document.getElementById( options.target ),
-            context = this;
+            context = this,
+            innerDiv = document.createElement( "div" );
 
         if( options.href ) {
           options._container = document.createElement( "a" );
@@ -108,8 +109,13 @@
         if ( !target && Popcorn.plugin.debug ) {
           target = context.media.parentNode;
         }
-        // add the widget's div to the target div
+
+        //cache a reference
+        options._target = target;
         target && target.appendChild( options._container );
+
+        innerDiv.style.overflow = "hidden";
+        innerDiv.style.height = "100%";
 
         //Is the source defined?
         if( options.src ) {
@@ -120,17 +126,20 @@
             img.style.borderStyle = "none";
             img.style.width = "100%";
 
-            options._container.appendChild( img );
+            innerDiv.appendChild( img );
+            options._container.appendChild( innerDiv );
 
           }, false );
 
           img.src = options.src;
         } else {
           img = document.createElement( "div" );
-          img.style.height = "100%"
-          img.style.width = "100%"
-          img.innerHTML = "No image..."
-          options._container.appendChild( img );
+          img.style.height = "100%";
+          img.style.width = "100%";
+          img.innerHTML = "No image...";
+
+          innerDiv.appendChild( img );
+          options._container.appendChild( innerDiv );
         }
 
         //Export
@@ -145,7 +154,7 @@
         options._container.style.display = "none";
       },
       _teardown: function( options ) {
-        document.getElementById( options.target ) && document.getElementById( options.target ).removeChild( options._container );
+        options._target && options._target.removeChild( options._container );
       }
   });
 })( Popcorn );
