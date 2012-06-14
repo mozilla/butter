@@ -38,7 +38,7 @@ define( [ "core/logger",
         drop: function( dropped, mousePosition ) {
 
           var draggableType = dropped.getAttribute( "data-butter-draggable-type" );
-          
+
           var start,
               left,
               trackRect = _element.getBoundingClientRect();
@@ -101,7 +101,7 @@ define( [ "core/logger",
           _duration = val;
           resetContainer();
           for( var i=0, l=_trackEvents.length; i<l; ++i ){
-            _trackEvents[ i ].duration = _duration;
+            _trackEvents[ i ].update();
           } //for
         }
       },
@@ -132,7 +132,6 @@ define( [ "core/logger",
       _trackEvents.push( trackEvent.view );
       _trackEventElements.push( trackEvent.view.element );
       trackEvent.view.zoom = _zoom;
-      trackEvent.view.duration = _duration;
       trackEvent.view.parent = _this;
       _this.chain( trackEvent, [
         "trackeventmousedown",
