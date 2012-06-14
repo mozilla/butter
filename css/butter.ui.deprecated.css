@@ -216,7 +216,7 @@ body.butter-tray-spacing.minimized {
   height: 30px;
 }
 
-.butter-media-properties .container {
+.butter-media-properties .butter-container {
   width: 250px;
   position: absolute;
   color: #fff;
@@ -228,7 +228,7 @@ body.butter-tray-spacing.minimized {
   padding-top: 6px;
   padding-left: 3px;
 }
-.butter-media-properties h3, .butter-media-properties p {
+.butter-media-properties .butter-inner-container-title, .butter-media-properties p {
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
   margin: 0;
 }
@@ -1423,7 +1423,7 @@ input.form-error {
 
 #butter-tray #add-popcorn,
 #butter-tray #add-track {
-  padding-top: 5px; 
+  padding-top: 5px;
   border-radius: 8px;
 }
 
