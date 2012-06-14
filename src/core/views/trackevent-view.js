@@ -3,7 +3,7 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logger, EventManagerWrapper, DragNDrop ){
-  
+
   var __guid = 0;
 
   return function( trackEvent, type, inputOptions ){
@@ -11,7 +11,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
     var _id = "TrackEventView" + __guid++,
         _element = document.createElement( "div" ),
         _zoom = 1,
-        _duration = 1,
         _type = type,
         _start = inputOptions.start || 0,
         _end = inputOptions.end || _start + 1,
@@ -32,8 +31,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
     } //toggleHandles
 
     function resetContainer(){
-      _element.style.left = ( _start / _duration * _zoom ) + "px";
-      _element.style.width = ( ( _end - _start ) / _duration * _zoom ) + "px";
+      _element.style.left = _start * _zoom + "px";
+      _element.style.width = ( _end - _start ) * _zoom + "px";
     } //resetContainer
 
     this.setToolTip = function( title ){
@@ -107,15 +106,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
         },
         set: function( val ){
           _zoom = val;
-          resetContainer();
-        }
-      },
-      duration: {
-        enumerable: true,
-        get: function(){
-          return _element.getBoundingClientRect().width / _zoom;
-        },
-        set: function( val ){
           resetContainer();
         }
       },
