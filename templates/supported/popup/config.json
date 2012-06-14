@@ -1,6 +1,7 @@
 {
   "name": "popup",
   "title": "Popup",
+  "template": "../templates/supported/popup/index.html",
   "baseDir": "../../../",
   "editor": {
     "pop": "{{baseDir}}templates/supported/popup/editors/pop.html",

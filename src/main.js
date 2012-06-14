@@ -127,13 +127,18 @@
         return _currentMedia.getManifest( name );
       }; //getManifest
 
-      this.getHTML = function(){
+      this.getHTML = function() {
+        return _page.getHTML( _this.getPopcornString() );
+      }; //getHTML
+      
+      this.getPopcornString = function() {
         var media = [];
         for( var i=0; i<_media.length; ++i ){
           media.push( _media[ i ].generatePopcornString() );
         } //for
-        return _page.getHTML( media );
-      }; //getHTML
+        
+        return media;
+      };
 
       function trackEventRequested( element, media, target ){
         var track,
