@@ -56,9 +56,12 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
 
             if ( trackEvent.type === "photo" ) {
               // Prevent default draggable behaviour of images
-              trackEvent.popcornTrackEvent._image.addEventListener( "mousedown", function( e ) {
-                e.preventDefault();
-              }, false);
+              var image = trackEvent.popcornTrackEvent._image;
+              if( image ){
+                image.addEventListener( "mousedown", function( e ) {
+                  e.preventDefault();
+                }, false);
+              }
 
               //Change default text to indicate draggable
               if( !_popcornOptions.src && window.$ ){
