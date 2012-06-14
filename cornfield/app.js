@@ -138,7 +138,7 @@ function publishRoute( req, res ){
             startString = data.substring( 0, headStartTagIndex );
 
             for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
-              externalAssetsString += '\n<script src="' + PUBLISH_PREFIX + '/' + EXPORT_ASSETS[ i ] + '"></script>';
+              externalAssetsString += '\n<script src="' + path.relative( templateFile, path.resolve( EXPORT_ASSETS[ i ] ) ) + '"></script>';
             }
 
             // If the template has custom plugins defined in it's config, add them to our exported page

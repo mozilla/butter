@@ -23,6 +23,6 @@
     "newscaster": "{{templateBase}}supported/newscaster/butter/config.json"
   },
   "exportAssets": [
-    "external/popcorn-js/popcorn.js"
+    "../dist/external/popcorn-js/popcorn.js"
   ]
 }
