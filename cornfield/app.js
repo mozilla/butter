@@ -102,9 +102,9 @@ function publishRoute( req, res ){
         var projectPath = PUBLISH_DIR + "/" + id + ".html",
             url = PUBLISH_PREFIX + "/" + id + ".html",
             projectData = JSON.parse( project.data ),
-            templateBase = VALID_TEMPLATES[ template ].replace( '{{templateBase}}', CONFIG.templateBase );
-console.log(path.resolve( templateBase, '..' ), templateBase);
-        fs.readFile( path.resolve( templateBase, '..' ), 'utf8', function(err, conf){
+            templateBase = VALID_TEMPLATES[ template ].replace( '{{templateBase}}', TEMPLATES_DIR + '/' );
+
+        fs.readFile( templateBase, 'utf8', function(err, conf){
           var templateConfig = JSON.parse( conf );
           
           fs.readFile( templateConfig.template, 'utf8', function( err, data ){

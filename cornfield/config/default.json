@@ -1,5 +1,4 @@
 {
-  "templateBase": "../../",
   "server" : {
     "bindIP" : "localhost",
     "bindPort" : "8888"
