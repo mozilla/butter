@@ -702,7 +702,7 @@
           var xhr = new XMLHttpRequest(),
               savedData;
 
-          savedDataUrl += "?noCache=" + Date.now(),
+          savedDataUrl += "?noCache=" + Date.now();
 
           xhr.open( "GET", savedDataUrl, false );
 
