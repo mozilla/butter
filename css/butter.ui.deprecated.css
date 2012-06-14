@@ -1401,6 +1401,7 @@ input.form-error {
   box-shadow: none;
 }
 
+/* All elements with a class starting in icon- */
 [class^="icon-"],
 [class*=" icon-"] {
   display: inline-block;
