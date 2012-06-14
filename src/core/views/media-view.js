@@ -1,17 +1,15 @@
 define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox", "text!layouts/media-view.html" ],
   function( PageElement, LogoSpinner, LangUtils, TextboxWrapper, HTML_TEMPLATE ){
 
-  var DEFAULT_SUBTITLE = "Supports HTML5 video and YouTube",
+  var DEFAULT_SUBTITLE = "Supports HTML5 video, YouTube, and Vimeo",
       MOUSE_OUT_DURATION = 300,
       MAX_URLS = 4;
 
   return function( media, options ){
-
     var _media = media,
         _pageElement,
         _onDropped = options.onDropped || function(){},
         _closeSignal = false,
-        _keepOpen = false,
         _logoSpinner;
 
     var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE ),
@@ -23,15 +21,8 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         _addUrlButton = _propertiesElement.querySelector( "button.add-url" ),
         _urlList = _propertiesElement.querySelector( "div.url-group" ),
         _loadingContainer = _propertiesElement.querySelector( ".loading-container" );
-console.log(_container);
-    var _containerDims;
 
-    function closeIfPossible(){
-      if ( _closeSignal && !_keepOpen ) {
-        setDimensions( false );
-        _propertiesElement.classList.remove( "open" );
-      }
-    }
+    var _containerDims;
 
     function setDimensions( state ){
       if( state ){
@@ -47,13 +38,6 @@ console.log(_container);
 
     function prepareTextbox( textbox ){
       TextboxWrapper( textbox );
-      textbox.addEventListener( "blur", function( e ) {
-        _keepOpen = false;
-        closeIfPossible();
-      }, false );
-      textbox.addEventListener( "focus", function( e ) {
-        _keepOpen = true;
-      }, false );
     }
 
     function addUrl() {
@@ -113,7 +97,10 @@ console.log(_container);
 
     _propertiesElement.addEventListener( "mouseout", function( e ) {
       setTimeout(function(){
-        closeIfPossible();
+        if ( _closeSignal ) {
+          setDimensions( false );
+          _propertiesElement.classList.remove( "open" );
+        }
       }, MOUSE_OUT_DURATION );
       _closeSignal = true;
     }, false );
