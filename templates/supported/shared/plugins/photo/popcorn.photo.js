@@ -110,10 +110,11 @@
           target = context.media.parentNode;
         }
 
-        //cache a reference
+        //Cache a reference
         options._target = target;
         target && target.appendChild( options._container );
 
+        //Allows cropping of the image by setting container height
         innerDiv.style.overflow = "hidden";
         innerDiv.style.height = "100%";
 
