@@ -57,14 +57,14 @@ header {
 /* /header */
 
 /*- - - Main - - -*/
-section[role="video-container"] {
+section.video-container {
   position: relative;
   width: 100%;
   min-height: 450px;
   background: #000;
   box-shadow: 0 50px 30px -20px rgba(0,0,0,.6);
 }
-section[role="video-container"]  > video {
+section.video-container > video {
   width: 100%;
 }
 .video-overlay {
@@ -80,7 +80,7 @@ section[role="video-container"]  > video {
   left: 20px;
   width: 250px;
 }
-section[role="suplementary"] {
+section.suplementary {
   margin: 40px 0;
   font-weight: 400;
   line-height: 1.4;
@@ -97,7 +97,7 @@ section[role="suplementary"] {
   margin-right: 0;
 }
 
-section[role="suplementary"] p {
+section.suplementary p {
   color: #FFF;
   opacity: .2;
   -webkit-transition: opacity .3s ease;
@@ -106,7 +106,7 @@ section[role="suplementary"] p {
   transition: opacity .3s ease;
   -ms-transition: opacity .3s ease;
 }
-section[role="suplementary"] p:hover {
+section.suplementary p:hover {
   opacity: 1;
   -webkit-transition: opacity .3s ease;
   -moz-transition: opacity .3s ease;
