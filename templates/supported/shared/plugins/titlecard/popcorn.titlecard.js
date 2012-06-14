@@ -41,10 +41,10 @@
           type: "text",
           label: "Out"
         },
-        title: {
+        heading: {
           elem: "input",
           type: "text",
-          label: "title",
+          label: "Heading",
           "default": "Popcorn rules dude!"
         },
         subheading: {
@@ -61,8 +61,8 @@
       var target,
           text,
           container = options._container = document.createElement( "div" ),
-          h2 = options.title && "<h2>" + options.title + "</h2>\n" || "",
-          h5 = options.subheading &&  "<h5>" + options.subheading + "</h5>\n" || "",
+          h2 = options.heading ? ( "<h2>" + options.heading + "</h2>\n" ) : "",
+          h5 = options.subheading ? ( "<h5>" + options.subheading + "</h5>\n" ) : "",
           titleString;
 
       container.classList.add( "title-card" );
@@ -73,7 +73,7 @@
         // Try to use supplied target
         target = Popcorn.dom.find( options.target );
       }
-      
+
       if ( !target ) {
         target = createContainer( this, options.target );
       }
@@ -106,7 +106,9 @@
 
     _teardown: function( options ) {
       var target = options._target;
-      target && target.removeChild( options._container );
+      if( target ){
+        target.removeChild( options._container );
+      }
     }
   });
-})( Popcorn );
+}( Popcorn ));
