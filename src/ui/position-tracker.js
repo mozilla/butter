@@ -21,7 +21,9 @@ define([], function(){
             newPos.top !== _rect.top ){
         _rect = {
           left: newPos.left,
-          top: newPos.top
+          top: newPos.top,
+          width: newPos.width,
+          height: newPos.height
         };
         if ( document.body.scrollTop < 0 ) {
           _rect.top += document.body.scrollTop;
