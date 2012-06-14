@@ -51,6 +51,8 @@ Running Butter (without cornfield)
 Packaging and Distributing Butter
 --------------------------------
 
+The 0.5.2 release is being done to support Mozilla's Storycamp project--a set of summer workshops using Popcorn and Butter.
+
 Running `node make storycamp` will compile all the necessary files into the `dist/` folder, including resources like editors and dialogs which comprise a complete running environment for Butter.
 
 Within `dist/` you will find `src/butter.js` and `external/popcorn-js/popcorn.js`, which are single-file versions of the Butter and Popcorn.js sources, customized to the storycamp templates.  You can find these templates in `dist/templates/supported`.
