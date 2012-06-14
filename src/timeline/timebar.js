@@ -38,7 +38,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
         _canvas.width = containerWidth;
       }
 
-      var inc = _tracksContainer.container.scrollWidth / _media.duration,
+      var inc = _tracksContainer.element.firstChild.clientWidth / _media.duration,
           textWidth = context.measureText( util.secondsToSMPTE( 5 ) ).width,
           padding = 20,
           lastPosition = 0,
