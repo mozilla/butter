@@ -18,28 +18,12 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
       "id": "Target0",
       "name": "Target0",
       "element": "above-right"
-    },
-    {
-      "id": "Target1",
-      "name": "Target1",
-      "element": "bottom-left"
-    },
-    {
-      "id": "Target2",
-      "name": "Target2",
-      "element": "bottom-middle"
-    },
-    {
-      "id": "Target3",
-      "name": "Target3",
-      "element": "bottom-right"
     }
   ],
   "media": [
     {
       "id": "Media0",
       "name": "Media0",
-      "url": "http://benmoskowitz.com/dana/studentresponse.ogv",
       "target": "video",
       "duration": 60.060150146484375,
       "tracks": [
