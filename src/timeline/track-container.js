@@ -132,8 +132,13 @@ function(
 
     _this.snapTo = function( time ){
       var p = time / _media.duration,
-          newScroll = _element.scrollWidth * p;
+          newScroll = _container.clientWidth * p,
+          maxLeft = _container.clientWidth - _element.clientWidth;
       if ( newScroll < _element.scrollLeft || newScroll > _element.scrollLeft + _element.clientWidth ) {
+        if ( newScroll > maxLeft ) {
+          _element.scrollLeft = maxLeft;
+          return;
+        }
         _element.scrollLeft = newScroll;
       }
     };
