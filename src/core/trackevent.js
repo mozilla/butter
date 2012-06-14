@@ -150,7 +150,7 @@ define( [
         _view.update( _popcornOptions );
         _this.popcornOptions = _popcornOptions;
 
-        // if PopcornWrapper exists, it means we're connected properly to a Popcorn instance, 
+        // if PopcornWrapper exists, it means we're connected properly to a Popcorn instance,
         // and can update the corresponding Popcorn trackevent for this object
         if ( _popcornWrapper ) {
           _popcornWrapper.updateEvent( _this );
