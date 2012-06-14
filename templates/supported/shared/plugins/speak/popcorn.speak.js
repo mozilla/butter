@@ -6,7 +6,13 @@
 /**
   Popcorn speak: speaks text
  */
-  Popcorn.plugin( "speak", {
+  Popcorn.plugin( "speak", (function(){
+
+    // Share a worker instance across instances to
+    // relieve memory pressure.
+    var speakWorker;
+
+    return {
       manifest: {
         about: {
           name: "Popcorn speak Plugin",
@@ -67,12 +73,10 @@
       },
       _setup: function( options ) {
         var target = options._target = document.getElementById( options.target ),
-            speakWorker,
             speakOptions,
             context = this;
 
         if ( !target ) {
-
           target = document.createElement( "div" );
           target.id = options.target;
           context.media.parentNode.appendChild( target );
@@ -83,10 +87,12 @@
         if( !options.pluginPath ) { options.pluginPath = "js/plugins/speak/"; }
 
         // SPEAK.JS by @kripken https://github.com/kripken/speak.js ---------------------------
-        try {
-          speakWorker = new Worker( options.pluginPath + 'speakWorker.js');
-        } catch(e) {
-          console.log('speak.js warning: no worker support');
+        if( !speakWorker ){
+          try {
+            speakWorker = new Worker( options.pluginPath + 'speakWorker.js');
+          } catch(e) {
+            console.log('speak.js warning: no worker support');
+          }
         }
 
         function speak(text, args) {
@@ -141,7 +147,7 @@
               }
               return ret;
             }
-            
+
             options._container = document.createElement("div");
             options._container.id = "container-" + Popcorn.guid();
             options._container.innerHTML=("<audio id=\""+Popcorn.guid()+"-player\" src=\"data:audio/x-wav;base64,"+encode64(wav)+"\">");
@@ -230,5 +236,6 @@
           options._target.removeChild( options.showTextEl );
         }
       }
-  });
-})( Popcorn );
+    };
+  }()))
+}( Popcorn ));
