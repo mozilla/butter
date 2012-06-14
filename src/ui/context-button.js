@@ -1,11 +1,12 @@
 define([], function(){
 
   return function( butter ){
-    var _button = document.createElement( "button" );
+    var _button = document.createElement( "butter-button" );
 
     _button.id = "add-popcorn";
     _button.title = "Add Popcorn Events to the timeline";
-    _button.innerHTML = "+Popcorn";
+    _button.classList.add( "butter-btn" );
+    _button.innerHTML = "<span class=\"icon icon-plus-sign\"></span> Popcorn";
 
     _button.addEventListener( "click", function(){
       if( butter.ui.contentState === "timeline" ){
@@ -31,7 +32,7 @@ define([], function(){
       },
       transitionOut: function(){
         _button.setAttribute( "disabled", true );
-        _button.innerHTML = "+Popcorn";
+        _button.innerHTML = "<span class=\"icon icon-plus-sign\"></span> Popcorn";
         _button.title = "Add Popcorn Events to the timeline";
         _button.classList.remove( "add-popcorn-done" );
       },
