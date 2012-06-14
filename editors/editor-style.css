@@ -1,0 +1,196 @@
+
+html {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #EEE;
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+      -ms-text-size-adjust: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  margin: 0;
+  font-size: 100%;
+  vertical-align: middle;
+}
+
+button,
+input {
+  line-height: normal;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+textarea {
+  overflow: auto;
+  vertical-align: top;
+}
+
+
+/* Main styles
+-------------------------------------------------- */
+
+.butter-form-title {
+  float: left;
+  width: 100px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #DDD;
+  text-align: right;
+  text-shadow: 0 -1px 1px rgba(0,0,0,.4);
+}
+
+.butter-form-title h3 {
+  margin-top: 0;
+}
+
+.butter-form {
+  float: left;
+  width: 450px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #FFF;
+  font-size: 1em;
+}
+
+.butter-form > div { /* fieldset */
+  display: table;
+  content: "";
+  clear: both;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+label {
+  float: left;
+  width: 80px;
+  padding-top: 5px;
+  margin-bottom: 5px;
+  text-align: right;
+  display: block;
+  font-weight: 600;
+  color: #DDD;
+  text-shadow: 0 -1px 1px rgba(0,0,0,.4);
+}
+
+.butter-form > div > div { /* input container */
+  margin-left: 100px;
+  margin-bottom: 5px;
+}
+
+input, .butter-unit {
+  padding: 4px 9px;
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 16px;
+  background-color: #626262;
+  background: -moz-linear-gradient(top, rgba(0,0,0,.1) 0%, rgba(0,0,0,0) 100%), #999;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(46,46,46,1)), color-stop(100%,rgba(57,57,57,1)));
+  background: -webkit-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #333;
+  background: -o-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #999;
+  background: -ms-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #999;
+  background: linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #999;
+  border: 1px solid #222;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.15);
+  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 1px 0 rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  color: #D5D5D5;
+}
+
+select {
+  margin-top: 4px;
+  width: 100px;
+}
+
+input[type="text"]{
+  width: 260px;
+}
+
+input[type="number"]{
+  width: 70px;
+}
+
+input[type="checkbox"] {
+  width: auto;
+  margin-top: 9px;
+}
+
+input:focus{
+  outline: none;
+  border: 1px solid #272822;
+  color: #FFF;
+  -webkit-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  -ms-transition: all .3s ease;
+  transition: all .3s ease;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(68,68,68,1)), color-stop(100%,rgba(85,85,85,1)));
+  background: -webkit-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #555;
+  background: -moz-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #555;
+  background: -o-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #555;
+  background: -ms-linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #555;
+  background: linear-gradient(top, rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 100%), #555;
+}
+
+input:focus + .butter-unit {
+  color: #CCC;
+}
+
+.butter-form-append input {
+  display: inline-block;
+  border-radius: 3px 0 0 3px;
+  border-right: 1px solid #000;
+}
+
+.butter-unit { 
+  display: inline-block;
+  margin-left: -1px;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 10px;
+  width: auto;
+  min-width: 16px;
+  padding: 4px 5px;
+  font-weight: normal;
+  text-align: center;
+  background-color: #222;
+  color: #999;
+  border: 1px solid black;
+  border-left: 0;
+  border-radius: 0 3px 3px 0;
+}
+
+#message {
+  float: left;
+  font-size: 12px;
+  line-height: 1.5;
+  width: 450px;
+}
+
+.butter-error {
+  color: #FFF;
+  font-weight: 600;
+  background: #B55054;
+  background: rgb(178,108,111);
+  border-radius: 6px;
+  padding: 15px;
+  box-shadow: 0 2px 3px rgba(0,0,0,.2);
+  text-shadow: 0 -1px 1px rgba(0,0,0,.4);
+}
+
+/* Class specific
+-------------------------------------------------- */
+.butter-form > .fieldset-start input,
+.butter-form > .fieldset-end input {
+  width: 70px;
+}
+
+.butter-form > .fieldset-target select {
+  width: auto;
+}
+
+/* ---/ Class specific ------------------------------- */

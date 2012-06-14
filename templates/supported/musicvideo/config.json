@@ -1,5 +1,6 @@
 {
   "name": "musicvideo",
+  "title": "Music Video",
   "baseDir": "../../../",
   "plugin": {
     "plugins": [
@@ -28,4 +29,3 @@
     ]
   }
 }
-

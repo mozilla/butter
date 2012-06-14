@@ -1,5 +1,6 @@
 {
   "name": "pop",
+  "title": "Popup",
   "baseDir": "../../../",
   "editor": {
     "pop": "{{baseDir}}templates/supported/popup/editors/pop.html",
@@ -25,4 +26,3 @@
     "frameAnimation": true
   }
 }
-

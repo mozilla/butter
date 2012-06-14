@@ -222,7 +222,7 @@
 			percent: function (input) {
 				input = parseFloat(input);
 				if (!isNaN(input)) {
-					return input + '%';
+					return input;
 				}
 			},
 			number: function (input, field) {

@@ -52,7 +52,7 @@
             elem: "input",
             type: "text",
             label: "Text",
-            "default": "Edit me"
+            "default": "zoink!"
           },
           type: {
             elem: "select",
@@ -87,17 +87,20 @@
             elem: "input",
             type: "number",
             label: "Top:",
+            units: "px",
             "default": 200
           },
           left: {
             elem: "input",
             type: "number",
             label: "Left:",
+            units: "px",
             "default": 200
           },
           width: {
             elem: "input",
             type: "number",
+            units: "px",
             label: "Max width:",
             "default": 200
           },

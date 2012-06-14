@@ -1,10 +1,13 @@
 (function(){
-  var _comm = new Comm(),
+  var _comm = new window.Comm(),
       _manifest = {};
 
-  // TODO: this should be something we reuse from src/ui/widget/textbox.js
-  // with require.  We need to expose butter internals to editors.
-  // https://webmademovies.lighthouseapp.com/projects/65733/tickets/1174
+  /*
+   *TODO: this should be something we reuse from src/ui/widget/textbox.js
+   * with require.  We need to expose butter internals to editors.
+   * https://webmademovies.lighthouseapp.com/projects/65733/tickets/1174
+   */
+
   function __highlight( e ){
     var input = e.target;
     input.select();
@@ -24,8 +27,8 @@
 
   function __TextboxWrapper( input ){
 
-    if( !( input && input.type === "text" ) ){
-      throw "Expected an input element of type text";
+    if( !( input && ( input.type === "text" || input.type === "number" || input.type === "url" ) ) ){
+      throw "Expected an input element of type text, number or url";
     }
 
     input.addEventListener( "blur", function( e ){
@@ -44,8 +47,10 @@
       alsoClose = !!alsoClose;
       var popcornOptions = {};
       for( var item in _manifest ) {
-        var elem = document.getElementById( item );
-        popcornOptions[ item ] = elem.type === "checkbox" ? elem.checked : elem.value;
+        if( _manifest.hasOwnProperty( item ) ) {
+          var elem = document.getElementById( item );
+          popcornOptions[ item ] = elem.type === "checkbox" ? elem.checked : elem.value;
+        }
       }
       document.getElementById( "message" ).innerHTML = "";
       _comm.send( "submit", {
@@ -76,14 +81,16 @@
 
     _comm.listen( "trackeventupdated", function( e ){
       for( var item in _manifest ){
-        var element = document.getElementById( item );
-        element.value = e.data[ item ];
+        if( _manifest.hasOwnProperty( item ) ) {
+          var element = document.getElementById( item );
+          element.value = e.data[ item ];
+        }
       } //for
     });
 
     _comm.listen( "trackeventupdatefailed", function( e ) {
       if( e.data === "invalidtime" ){
-        document.getElementById( "message" ).innerHTML = "You've entered an invalid start or end time. Please verify that they are both greater than 0, the end time is equal to or less than the media's duration, and that the start time is less than the end time.";
+        document.getElementById( "message" ).innerHTML = "<div class=\"butter-error\">You've entered an invalid start or end time. Please verify that they are both greater than 0, the end time is equal to or less than the media's duration, and that the start time is less than the end time.</div>";
       } //if
     });
 
@@ -91,40 +98,39 @@
       var popcornOptions = e.data.popcornOptions,
           targets = e.data.targets,
           media = e.data.media,
-          table = document.getElementById( "table" ),
+          form = document.getElementById( "form" ),
           mediaName = "Current Media Element",
           elemToFocus,
           createElement = {
-            defaultValue: function( item, val ) {
+            emptyValue: function( item, val ) {
               // Don't print "undefined" or the like
               if ( val === undefined || typeof val === "object" ) {
-                if ( item.default ) {
-                  val = item.default;
-                } else {
-                  val = item.type === "number" ? 0 : "";
-                }
+                val = item.type === "number" ? 0 : "";
               }
               return val;
             },
             input: function( manifest, manifestProp ) {
               var manifestItem = manifest[ manifestProp ],
                   elem = document.createElement( manifestItem.elem ),
-                  type = manifestItem.type,
-                  val;
+                  type = manifestItem.type;
 
               elem.type = type;
               elem.id = manifestProp;
-              elem.style.width = "100%";
               elem.placeholder = "Empty";
 
-              elem.value = elem.checked = this.defaultValue( manifestItem, popcornOptions[ manifestProp ] );
+              if( type === "text" || type === "number" || type === "url" ) {
+                __TextboxWrapper( elem );
+              }
+
+              elem.value = elem.checked = this.emptyValue( manifestItem, popcornOptions[ manifestProp ] );
               return elem;
             },
             select: function( manifest, manifestProp, items ) {
               var manifestItem = manifest[ manifestProp ],
                   elem = document.createElement( "SELECT" ),
-                  items = items || manifestItem.options,
                   option;
+
+              items = items || manifestItem.options;
 
               elem.id = manifestProp;
 
@@ -136,11 +142,11 @@
               }
               if ( manifestProp === "target" ) {
                 option = document.createElement( "OPTION" );
-                option.value = "Media Element";
+                option.value = media.target;
                 option.innerHTML =  mediaName;
                 elem.appendChild( option );
               }
-              elem.value = this.defaultValue( manifestItem, popcornOptions[ manifestProp ] );
+              elem.value = this.emptyValue( manifestItem, popcornOptions[ manifestProp ] );
               return elem;
             }
           };
@@ -152,17 +158,23 @@
       _manifest = e.data.manifest.options;
 
       function createRow( item, data ) {
-        var row = document.createElement( "TR" ),
-            col1 = document.createElement( "TD" ),
-            col2 = document.createElement( "TD" ),
+        var row = document.createElement( "div" ),
+            rowClassPrefix = "fieldset-",
+            col1 = document.createElement( "label" ),
+            col2 = document.createElement( "div" ),
             currentItem = _manifest[ item ],
             itemLabel = currentItem.label || item,
+            unitLabel,
             field;
 
-        if ( itemLabel === "In" ) {
-          itemLabel = "Start (seconds)";
-        } else if ( itemLabel === "Out" ) {
-          itemLabel = "End (seconds)";
+        // Add units, they exist in the manifest
+        if ( item === "start" ||  item === "end" ) {
+          currentItem.units = "seconds";
+        }
+        if ( currentItem.units ) {
+          unitLabel = document.createElement( "span" );
+          unitLabel.classList.add( "butter-unit" );
+          unitLabel.innerHTML = currentItem.units;
         }
 
         col1.innerHTML = "<span>" + itemLabel + "</span>";
@@ -177,9 +189,23 @@
         // Remember first control added in editor so we can focus
         elemToFocus = elemToFocus || field;
 
+        //Add classes for style selecting
+        row.classList.add( rowClassPrefix + item );
+
+        //Add unit label if it exists
+        if( unitLabel ) {
+          col2.classList.add( "butter-form-append" );
+          col2.appendChild( unitLabel );
+        }
+
+        //Hide if the manifest says so
+        if( currentItem.hidden === true ) {
+          row.style.display = "none";
+        }
+
         row.appendChild( col1 );
         row.appendChild( col2 );
-        table.appendChild( row );
+        form.appendChild( row );
       }
 
       _manifest.target = {
@@ -195,6 +221,9 @@
         }
       }
 
+      //Add the title info
+      document.getElementById( "title" ).innerHTML = "<h3>" + e.data.manifest.about.name + "</h3>";
+
       // Focus the first element in the editor
       if ( elemToFocus && elemToFocus.focus ) {
         elemToFocus.focus();
@@ -202,4 +231,4 @@
       sendData( false );
     });
   }, false );
-})();
+}());

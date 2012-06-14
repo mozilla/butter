@@ -38,12 +38,6 @@
         },
         options: {
           target: "video-overlay",
-          useURL: {
-            elem: "input",
-            type: "checkbox",
-            label: "Use URL?",
-            "default": false
-          },
           src: {
             elem: "input",
             type: "url",
@@ -57,27 +51,27 @@
           },
           width: {
             elem: "input",
-            type: "text",
+            type: "number",
             label: "Width",
-            "default": "150px"
+            "default": 150
           },
           height: {
             elem: "input",
-            type: "text",
+            type: "number",
             label: "Height",
-            "default": "150px"
+            "default": 150
           },
           top: {
             elem: "input",
-            type: "text",
+            type: "number",
             label: "Top",
-            "default": "100px"
+            "default": 100
           },
           left: {
             elem: "input",
-            type: "text",
+            type: "number",
             label: "Left",
-            "default": "200px"
+            "default": 200
           },
           start: {
             elem: "input",
@@ -106,10 +100,10 @@
         }
           options._container.style.position = "absolute";
           options._container.style.display = "none";
-          options._container.style.width = options.width;
-          options._container.style.height = options.height;
-          options._container.style.top = options.top;
-          options._container.style.left = options.left;
+          options._container.style.width = options.width + "px";
+          options._container.style.height = options.height + "px";
+          options._container.style.top = options.top + "px";
+          options._container.style.left = options.left + "px";
           options._container.style.overflow = "hidden";
 
 

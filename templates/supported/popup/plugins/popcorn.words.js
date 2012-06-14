@@ -48,23 +48,9 @@ todo: animate top, left and other styles (color, font size, etc.)
 		container = document.createElement('div');
 		container.style.cssText = options.style || '';
 
-		i = options.top;
-		if (i || i === 0) {
-			if (!isNaN(i)) {
-				i += 'px';
-			}
-			container.style.top = i;
-			container.style.position = 'absolute';
-		}
-
-		i = options.left;
-		if (i || i === 0) {
-			if (!isNaN(i)) {
-				i += 'px';
-			}
-			container.style.left = i;
-			container.style.position = 'absolute';
-		}
+		container.style.top = options.top + '%';
+    container.style.left = options.left + '%';
+    container.style.position = 'absolute';
 
 		if (options.align) {
 			container.style.textAlign = options.align;
@@ -211,13 +197,13 @@ todo: animate top, left and other styles (color, font size, etc.)
 				elem:'input',
 				type:'number',
 				label:'Top position',
-        "default": "50%"
+        "default": "50"
 			},
 			left: {
 				elem:'input',
 				type:'number',
 				label:'Left position',
-        "default": "50%"
+        "default": "50"
 			},
 			bottom: {
 				elem:'input',

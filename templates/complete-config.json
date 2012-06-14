@@ -1,5 +1,6 @@
 {
   "name": "complete",
+  "title": "Complete",
   "baseDir": "../",
   "plugin": {
     "plugins": [

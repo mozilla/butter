@@ -6,24 +6,13 @@
 <html>
   <head>
     <title>Event Editor</title>
-    <style>
-      table#table tr  td:nth-child(2) * {
-        font-size: 0.9em;
-      }
-      table {
-        font-family: helvetica !important;
-        color: #fff !important;
-      }
-      p#message {
-        color: #FF0000;
-      }
-    </style>
+    <link rel="stylesheet" href="editor-style.css">
     <script type="text/javascript" src="editor.js"></script>
     <script type="text/javascript" src="default-editor.js"></script>
   </head>
   <body>
-    <table id="table">
-    </table>
-    <p id="message"></p>
+    <div id="title" class="butter-form-title"></div>
+    <form id="form" class="butter-form"></form>
+    <div id="message"></div>
   </body>
 </html>

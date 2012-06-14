@@ -1,5 +1,6 @@
 {
   "name": "newscaster",
+  "title": "Newscaster",
   "baseDir": "../../../",
   "editor": {
     "default": "{{baseDir}}editors/default-editor.html",

@@ -1,0 +1,31 @@
+<!-- This Source Code Form is subject to the terms of the MIT license
+If a copy of the MIT license was not distributed with this file, you can
+obtain one at http://www.mozillapopcorn.org/butter-license.txt -->
+
+<html>
+  <head>
+    <title>Export</title>
+    <script type="text/javascript" src="dialog.js"></script>
+    <script type="text/javascript" src="view-source.js"></script>
+    <link rel="stylesheet" href="dialog.css" />
+    <style>
+      #json-export {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1><span id="title"></span></h1>
+    <div id="container" class="hbox center">
+      <div id="content" class="vbox center">
+        <textarea class="main-textarea" readonly id="json-export">Please wait...</textarea>
+        <textarea class="main-textarea" readonly id="html-export">Please wait...</textarea>
+      </div>
+    </div>
+    <div id="buttons" class="vbox center">
+      <button class="button-blue" disabled id="json-button">Get JSON</button>
+      <button class="button-blue" disabled id="html-button">Get HTML</button>
+    </div>
+    <div id="close-button"></div>
+  </body>
+</html>
