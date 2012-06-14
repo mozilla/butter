@@ -241,18 +241,3 @@ body > h1 {
 
 #content > h1{
 }
-
-button {
-  margin: 0 5px 5px 5px;
-  height: 30px;
-  display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  color: white;
-  font-family: 'Open Sans';
-  font-size: 18px;
-  min-width: 100px;
-}
