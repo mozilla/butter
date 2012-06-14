@@ -4,24 +4,24 @@
   "baseDir": "../../../",
   "plugin": {
     "plugins": [
-    {
-      "type": "text",
-      "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
-    },
-    {
-      "type": "googlemap",
-      "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
-    },
-    {
-      "type": "image",
-      "path": "{{baseDir}}external/popcorn-js/plugins/image/popcorn.image.js"
-    },
-    {
-      "type": "twitter",
-      "path": "{{baseDir}}external/popcorn-js/plugins/twitter/popcorn.twitter.js"
-    }
+      {
+        "type": "text",
+        "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
+      },
+      {
+        "type": "googlemap",
+        "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
+      },
+      {
+        "type": "image",
+        "path": "{{baseDir}}external/popcorn-js/plugins/image/popcorn.image.js"
+      },
+      {
+        "type": "twitter",
+        "path": "{{baseDir}}external/popcorn-js/plugins/twitter/popcorn.twitter.js"
+      }
     ],
-        "defaults": [
+    "defaults": [
       "text",
       "googlemap",
       "image",
