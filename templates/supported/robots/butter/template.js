@@ -6,6 +6,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       var media = butter.media[ 0 ];
 
       function start(){
+
         var trackOne = media.addTrack( "Track0" ),
             trackTwo = media.addTrack(),
             trackThree = media.addTrack();
@@ -203,7 +204,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             "pluginPath": "../shared/plugins/speak/"
           }
         });
-
       } //start
 
       media.onReady( start );
