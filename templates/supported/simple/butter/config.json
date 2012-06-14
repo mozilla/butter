@@ -1,4 +1,5 @@
 {
+  "name": "simple",
   "title": "Simple",
   "baseDir": "../../../",
   "plugin": {
