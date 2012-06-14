@@ -2,12 +2,14 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-document.addEventListener( "DOMContentLoaded", function( e ) {
-  (function( Butter, $ ) {
+document.addEventListener( "DOMContentLoaded", function( e ){
+  (function( Butter, EditorHelper ) {
     Butter({
       config: "butter/config.json",
       ready: function( butter ){
-        var media = butter.currentMedia;
+        var media = butter.currentMedia,
+            popcorn = butter.currentMedia.popcorn.popcorn,
+            editor = new EditorHelper( butter, popcorn );
 
         function start() {
 
@@ -26,16 +28,10 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
           });
         } //start
 
-        function mediaReady() {
-          var popcorn = butter.currentMedia.popcorn.popcorn,
-              editor = new EditorHelper( butter, popcorn );
-        }
-
         media.onReady( start );
-        butter.listen( "mediaready", mediaReady );
 
       }
     });
 
-  }( window.Butter, window.jQuery ));
+  }( window.Butter, window.EditorHelper ));
 }, false );

@@ -1,8 +1,5 @@
-document.addEventListener( "DOMContentLoaded", function(){
-  
-  (function( Butter, $ ) {
-
-    EditorHelper = function( butter, popcorn ) {
+(function( global, $ ) {
+    global.EditorHelper = function( butter, popcorn ) {
 
       function _updateFunction( e ) {
 
@@ -117,6 +114,4 @@ document.addEventListener( "DOMContentLoaded", function(){
       butter.listen( "trackeventupdated", _updateFunction );
 
     };
-  }( window.Butter, window.jQuery ));
-
-}, false);
+  })( window, window.jQuery );
