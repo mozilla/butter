@@ -85,15 +85,17 @@
           console.log( target );
         }
 
-        //Setup options needed for speak.js
-        if( !options.pluginPath ) { options.pluginPath = "js/plugins/speak/"; }
+        // Setup options needed for speak.js
+        if( !options.pluginPath ) {
+          options.pluginPath = "js/plugins/speak/";
+        }
 
         // SPEAK.JS by @kripken https://github.com/kripken/speak.js ---------------------------
         if( !speakWorker ){
           try {
-            speakWorker = new Worker( options.pluginPath + 'speakWorker.js');
+            speakWorker = new Worker( options.pluginPath + 'speakWorker.js' );
           } catch(e) {
-            console.log('speak.js warning: no worker support');
+            console.log( 'speak.js warning: no worker support' );
           }
         }
 
