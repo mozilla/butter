@@ -9,8 +9,10 @@
   Popcorn.plugin( "speak", (function(){
 
     // Share a worker instance across instances to
-    // relieve memory pressure.
-    var speakWorker;
+    // relieve memory pressure.  When speakWorkerRefs
+    // goes to 0, we can safely delete the instance.
+    var speakWorker,
+        speakWorkerRefs = 0;
 
     return {
       manifest: {
@@ -94,6 +96,9 @@
             console.log('speak.js warning: no worker support');
           }
         }
+
+        // Bump instance count
+        speakWorkerRefs++;
 
         function speak(text, args) {
           var PROFILE = 1;
@@ -234,6 +239,10 @@
         }
         if( options.showTextEl && options._target ) {
           options._target.removeChild( options.showTextEl );
+        }
+        // Decrease ref count on shared worker, delete if 0
+        if( --speakWorkerRefs === 0 ){
+          speakWorker = null;
         }
       }
     };
