@@ -32,7 +32,7 @@ define([], function(){
       },
       transitionOut: function(){
         _button.setAttribute( "disabled", true );
-        _button.innerHTML = "<i class=\"icon icon-plus-sign\"></i> Popcorn";
+        _button.innerHTML = "<span class=\"icon icon-plus-sign\"></span> Popcorn";
         _button.title = "Add Popcorn Events to the timeline";
         _button.classList.remove( "add-popcorn-done" );
       },
