@@ -228,7 +228,9 @@ define( [
         },
         set: function( val ){
           _track = val;
-          _this.update( _popcornOptions );
+          if ( _track ) {
+            _this.update( _popcornOptions );
+          }
         }
       },
 
