@@ -31,8 +31,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
     } //toggleHandles
 
     function resetContainer(){
-      _element.style.left = ( _start * _zoom ) + "px";
-      _element.style.width = ( ( _end - _start ) * _zoom ) + "px";
+      _element.style.left = _start * _zoom + "px";
+      _element.style.width = ( _end - _start ) * _zoom + "px";
     } //resetContainer
 
     this.setToolTip = function( title ){
