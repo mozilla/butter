@@ -8,14 +8,6 @@
  * Modified by @k88hudson for Popcorn Maker
  */
 
-.ui-draggable {
-  cursor: pointer;
-}
-
-.butter-dragover {
-  border: 1px dashed #FFF83A;
-}
-
 .ui-resizable,
 .ui-droppable { 
   position: relative; 
@@ -95,4 +87,16 @@ body:hover [class^="ui-resizable-"] {
   -o-transition: opacity .2s ease;
   -ms-transition: opacity .2s ease;
   transition: opacity .2s ease;
+}
+
+
+/* DRAGGABLE
+-------------------------------------------------- */
+
+.ui-draggable {
+  cursor: pointer;
+}
+
+.butter-dragover {
+  border: 1px dashed #FFF83A;
 }
