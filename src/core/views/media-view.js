@@ -14,14 +14,14 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         _logoSpinner;
 
     var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE ),
-        _container = _propertiesElement.querySelector( "div.container" ),
-        _urlContainer = _propertiesElement.querySelector( "div.url" ),
+        _container = _propertiesElement.querySelector( "div.butter-container" ),
+        _urlContainer = _propertiesElement.querySelector( "div.butter-url" ),
         _urlTextbox = _propertiesElement.querySelector( "input[type='text']" ),
-        _subtitle = _propertiesElement.querySelector( ".form-field-notes" ),
-        _changeButton = _propertiesElement.querySelector( "button.save" ),
-        _addUrlButton = _propertiesElement.querySelector( "button.add-url" ),
-        _urlList = _propertiesElement.querySelector( "div.url-group" ),
-        _loadingContainer = _propertiesElement.querySelector( ".loading-container" );
+        _subtitle = _propertiesElement.querySelector( ".butter-form-field-notes" ),
+        _changeButton = _propertiesElement.querySelector( "button.butter-btn-save" ),
+        _addUrlButton = _propertiesElement.querySelector( "button.butter-btn-add-url" ),
+        _urlList = _propertiesElement.querySelector( "div.butter-url-group" ),
+        _loadingContainer = _propertiesElement.querySelector( ".butter-loading-container" );
 
     var _containerDims;
 
@@ -70,7 +70,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       _containerDims.height = _container.clientHeight;
       setDimensions( true );
 
-      newContainer.querySelector( "button.remove" ).addEventListener( "click", function ( e ) {
+      newContainer.querySelector( "button.butter-btn-remove" ).addEventListener( "click", function ( e ) {
         removeUrl( newContainer );
       }, false );
 
@@ -247,19 +247,20 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         _pageElement.destroy();
       } //if
       _pageElement = new PageElement( _media.target, {
-        drop: function( element ){
-          _onDropped( element );
-        }
-      },
-      {
-        highlightClass: "butter-media-highlight"
-      });
+          drop: function( element ){
+            _onDropped( element );
+          }
+        },
+        {
+          highlightClass: "butter-media-highlight"
+        });
 
       if( targetElement ){
         if( !_propertiesElement.parentNode ){
           document.body.appendChild( _propertiesElement );
         }
         _pageElement.listen( "moved", pageElementMoved );
+        pageElementMoved();
       }
     };
 

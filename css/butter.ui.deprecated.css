@@ -207,7 +207,11 @@ body.butter-tray-spacing.minimized {
   border-radius: 5px;
 }
 
-.butter-media-properties .loading-container {
+.butter-media-properties.open .butter-inner-container-title {
+  padding: 0;
+}
+
+.butter-media-properties .butter-loading-container {
   position: absolute;
   z-index: 2140000001;
   left: 1px;
@@ -216,34 +220,38 @@ body.butter-tray-spacing.minimized {
   height: 30px;
 }
 
-.butter-media-properties .container {
+.butter-media-properties .butter-container {
   width: 250px;
   position: absolute;
   color: #fff;
 }
 
 /* Media settings inner elements */
-.butter-media-properties .edit-message {
+.butter-media-properties .butter-edit-message, .butter-inner-container-title {
   color: #FFF;
-  padding-top: 6px;
+  padding-top: 4px;
   padding-left: 3px;
+  font-size: 1.2em;
 }
-.butter-media-properties h3, .butter-media-properties p {
+
+.butter-media-properties .butter-inner-container-title, .butter-media-properties p {
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
   margin: 0;
 }
-.butter-media-properties .url {
+
+.butter-media-properties .butter-url {
   width: 224px;
-  padding: 5px 3px;
+  padding: 2px 3px;
 }
+
 .butter-media-properties button {
   margin-top: .5em;
   float: right;
 }
 
-.form-field-notes {
+.butter-form-field-notes {
   font-style: italic;
-  font-size: 80%;
+  font-size: 0.9em;
 }
 p.form-error {
   color: #FF0000 !important;
@@ -1418,12 +1426,13 @@ input.form-error {
 .icon-share-alt { background-position: -336px -96px; }
 .icon-user { background-position: -168px 0; }
 .icon-plus-sign { background-position: -408px -96px; }
+.icon-minus { background-position: -433px -96px; }
 
 /* SPECIFIC BUTTONS */
 
 #butter-tray #add-popcorn,
 #butter-tray #add-track {
-  padding-top: 5px; 
+  padding-top: 5px;
   border-radius: 8px;
 }
 
@@ -1435,5 +1444,5 @@ input.form-error {
 #butter-tray #add-track {
   position: absolute;
   left: 4px;
-  width: 96px;  
+  width: 96px;
 }

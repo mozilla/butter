@@ -48,7 +48,7 @@
       var popcornOptions = {};
       for( var item in _manifest ) {
         if( _manifest.hasOwnProperty( item ) ) {
-          var elem = document.getElementById( item );
+          var elem = document.getElementById( "manifest-" + item );
           popcornOptions[ item ] = elem.type === "checkbox" ? elem.checked : elem.value;
         }
       }
@@ -82,7 +82,7 @@
     _comm.listen( "trackeventupdated", function( e ){
       for( var item in _manifest ){
         if( _manifest.hasOwnProperty( item ) ) {
-          var element = document.getElementById( item );
+          var element = document.getElementById( "manifest-" + item );
           element.value = e.data[ item ];
         }
       } //for
@@ -115,7 +115,7 @@
                   type = manifestItem.type;
 
               elem.type = type;
-              elem.id = manifestProp;
+              elem.id = "manifest-" + manifestProp;
               elem.placeholder = "Empty";
 
               if( type === "text" || type === "number" || type === "url" ) {
@@ -132,7 +132,7 @@
 
               items = items || manifestItem.options;
 
-              elem.id = manifestProp;
+              elem.id = "manifest-" + manifestProp;
 
               for ( var i = 0, l = items.length; i < l; i++ ) {
                 option = document.createElement( "OPTION" );

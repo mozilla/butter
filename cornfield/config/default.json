@@ -14,15 +14,15 @@
     "wwwRoot": "../",
     "templates": "../templates",
     "publish": "view",
-    "publishPrefix": "http://localhost:8888/cornfield/view"
+    "hostname": "http://localhost:8888"
   },
   "templates": {
-    "test": "../templates/test.html",
-    "robots": "../templates/supported/robots/index.html",
-    "popup": "../templates/supported/popup/index.html",
-    "newscaster": "../templates/supported/newscaster/index.html"
+    "test": "{{templateBase}}test-config.json",
+    "robots": "{{templateBase}}supported/robots/butter/config.json",
+    "popup": "{{templateBase}}supported/popup/config.json",
+    "newscaster": "{{templateBase}}supported/newscaster/butter/config.json"
   },
   "exportAssets": [
-    "../../dist/external/popcorn-js/popcorn.js"
+    "../dist/external/popcorn-js/popcorn.js"
   ]
 }

@@ -9,12 +9,16 @@
   <link href='http://fonts.googleapis.com/css?family=Jolly+Lodger|Bangers|Lato|Fredericka+the+Great|Lovers+Quarrel' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="../shared/css/normalise.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="../shared/css/jquery-ui/jquery.ui.all.css">
 
   <link rel="stylesheet" href="../shared/css/popcorn.transitions.css">
   <link rel="stylesheet" href="../shared/plugins/zoink/popcorn.zoink.css">
 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js"></script>
   <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
   <script src="../../../src/butter.js" data-butter-exclude></script>
+  <script src="../shared/editors/editorhelper.js" data-butter-exclude></script>
   <script type="text/javascript" src="butter/template.js" data-butter-exclude></script>
 
 </head>
@@ -25,10 +29,9 @@
         <h2 id="logo" class="logo on">Robots in everytown</h2>
       </header>
       <div role="main">
-        <section id="video-container" role="video-container">
+        <section id="video-container" class="video-container">
           <video id="video" preload data-butter="media" controls>
             <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.mp4">
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.ogv">
             <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.webm">
           </video>
           <div class="video-overlay">
@@ -40,7 +43,7 @@
           </div>
           <div id="video-overlay" class="video-overlay" data-butter="target"></div>
         </section>
-        <section role="suplementary" class="cf">
+        <section class="cf suplementary">
           <article id="Supplementary1" class="block" data-butter="target">
           </article>
           <article class="block">
@@ -50,10 +53,11 @@
         </section>
       </div>
       <footer>
-        <span>Creative commons</span>
+        <div>All video images courtesy Public Domain material at The Internet Archive - www.archive.org</div>
+        <div>Music courtesy the Free Music Archive - www.freemusicarchive.org</div>
+        <div>Wake - "Steppin" - CC-BY</div>
       </footer>
     </div><!--.wrapper-->
   </div><!--.inner-container-->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 </body>
 </html>

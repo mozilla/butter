@@ -127,11 +127,12 @@
         return _currentMedia.getManifest( name );
       }; //getManifest
 
-      this.getHTML = function(){
+      this.getHTML = function() {
         var media = [];
         for( var i=0; i<_media.length; ++i ){
           media.push( _media[ i ].generatePopcornString() );
         } //for
+        
         return _page.getHTML( media );
       }; //getHTML
 
@@ -702,7 +703,7 @@
           var xhr = new XMLHttpRequest(),
               savedData;
 
-          savedDataUrl += "?noCache=" + Date.now(),
+          savedDataUrl += "?noCache=" + Date.now();
 
           xhr.open( "GET", savedDataUrl, false );
 

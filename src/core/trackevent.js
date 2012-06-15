@@ -46,6 +46,7 @@ define( [
           end: 1
         },
         _view = new TrackEventView( this, _type, _popcornOptions ),
+        _popcornWrapper = null,
         _selected = false;
 
     EventManagerWrapper( _this );
@@ -70,6 +71,17 @@ define( [
     _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
 
     /**
+     * Member: setPopcornWrapper
+     *
+     * Sets the PopcornWrapper object. Subsequently, PopcornWrapper can be used to directly manipulate Popcorn track events.
+     *
+     * @param {Object} newPopcornWrapper: PopcornWrapper object or null
+     */
+    this.setPopcornWrapper = function ( newPopcornWrapper ) {
+      _popcornWrapper = newPopcornWrapper;
+    };
+
+    /**
      * Member: update
      *
      * Updates the event properties and runs sanity checks on input.
@@ -79,6 +91,8 @@ define( [
      * @event trackeventupdated: Occurs whenan update operation succeeded.
      */
     this.update = function( updateOptions, applyDefaults ) {
+      updateOptions = updateOptions || {};
+
       var failed = false,
           newStart = _popcornOptions.start,
           newEnd = _popcornOptions.end;
@@ -132,8 +146,16 @@ define( [
         if( newEnd ){
           _popcornOptions.end = newEnd;
         }
+
         _view.update( _popcornOptions );
         _this.popcornOptions = _popcornOptions;
+
+        // if PopcornWrapper exists, it means we're connected properly to a Popcorn instance,
+        // and can update the corresponding Popcorn trackevent for this object
+        if ( _popcornWrapper ) {
+          _popcornWrapper.updateEvent( _this );
+        }
+        
         _this.dispatch( "trackeventupdated", _this );
       }
 
@@ -191,12 +213,6 @@ define( [
       _view.update( _popcornOptions );
     }; //moveFrameRight
 
-    _view.listen( "trackeventviewupdated", function( e ){
-      _popcornOptions.start = _view.start;
-      _popcornOptions.end = _view.end;
-      _this.dispatch( "trackeventupdated" );
-    });
-
     Object.defineProperties( this, {
 
       /**
@@ -212,7 +228,9 @@ define( [
         },
         set: function( val ){
           _track = val;
-          _this.update( _popcornOptions );
+          if ( _track ) {
+            _this.update( _popcornOptions );
+          }
         }
       },
 
