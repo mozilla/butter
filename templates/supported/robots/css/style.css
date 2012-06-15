@@ -7,7 +7,7 @@ body {
   font-family: lato, "Helvetica Neue", sans-serif;
 }
 .inner-container {
-  background: url(../img/grunge_top.png) repeat-x, url(../img/grunge_wall.png) repeat;
+  background: url(../img/grunge_wall.png) repeat;
 }
 .wrapper {
   margin: 0 auto;
@@ -88,7 +88,7 @@ section.video-container  > video {
 }
 
 section.suplementary {
-  margin: 40px 0;
+  margin: 20px 0;
   font-weight: 400;
   line-height: 1.4;
 }
