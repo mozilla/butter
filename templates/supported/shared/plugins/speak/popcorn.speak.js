@@ -104,7 +104,7 @@
         // Bump instance ref count
         speakWorkerRefs++;
 
-        function speak( text, args ) {
+        function speak( text, args, options ) {
           // set to true if you want debug output on times.
           var PROFILE = false;
 
@@ -171,6 +171,7 @@
             var startTime = Date.now();
             var data = parseWav( wav ); // validate the data and parse it
             options._audio = generateAudio( wav );
+            console.log('Audio created, setting on options._audio');
             if ( PROFILE ) {
               console.log( 'speak.js: wav processing took ' + ( Date.now()-startTime ).toFixed( 2 ) + ' ms' );
             }
@@ -198,12 +199,40 @@
           target: options.target
         };
 
-        // Use the manifest default in case none is given,
-        // important in Butter for initial creation.
-        options.text = options.text || manifestOptions.text.default;
+        // We have to treat options.text differently, since it is used
+        // to generate the wav and audio element.  When the user sets
+        // new values on options.text, we need to trigger a rebuild
+        // of the audio, so wrap in a getter/setter so we can catch
+        // any changes to the options.
+        var text = options.text || manifestOptions.text.default;
+        delete options.text;
+        Object.defineProperty( options, "text", {
+          get: function(){
+            return text;
+          },
+          set: function( aText ){
+            if( !( aText && typeof aText === "string" ) ){
+              return;
+            }
 
-        // Generate a default sound.
-        speak( options.text, speakOptions );
+            console.log('options.text setter, text=' + aText);
+
+            text = aText;
+
+            var speakOptions = {
+              amplitude: options.amplitude || manifestOptions.amplitude.default,
+              wordgap: options.wordgap || manifestOptions.wordgap.default,
+              pitch: options.pitch || manifestOptions.pitch.default,
+              speed: options.speed || manifestOptions.speed.default,
+              target: options.target
+            };
+
+            speak( text, speakOptions, this );
+          }
+        });
+
+        // Generate a default sound for butter.
+        speak( options.text, speakOptions, options );
 
         if( options.showText ) {
           options.showTextEl = document.createElement("span");
@@ -214,6 +243,7 @@
       },
 
       start: function( event, options ) {
+        console.log('speak.start options._audio=' + options._audio);
         if( options._audio ){
           options._audio.play();
         }
