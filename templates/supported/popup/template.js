@@ -2,7 +2,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
   Butter({
     config: "config.json",
     ready: function( butter ){
-      var media = butter.media[ 0 ];
+      var media = butter.currentMedia;
 
       function start(){
 

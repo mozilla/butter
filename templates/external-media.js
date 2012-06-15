@@ -2,7 +2,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
 
   Butter({
     ready: function( butter ){
-      var media = butter.media[ 0 ];
+      var media = butter.currentMedia;
 
       function start(){
         var track = media.addTrack( "Track1" );

@@ -1,12 +1,13 @@
-document.addEventListener( "DOMContentLoaded", function( e ){
-
+(function( Butter, EditorHelper ) {
   Butter({
     config: "butter/config.json",
     ready: function( butter ){
-      var media = butter.media[ 0 ];
+      var media = butter.currentMedia,
+          popcorn = media.popcorn.pocporn;
+
+      EditorHelper( butter, popcorn );
 
       function start(){
-
         var trackOne = media.addTrack( "Track0" ),
             trackTwo = media.addTrack(),
             trackThree = media.addTrack();
@@ -202,13 +203,13 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             "pitch": "0",
             "speed": "0",
             "pluginPath": "../shared/plugins/speak/"
-          }
+         }
         });
-      } //start
 
+      } //start
       media.onReady( start );
 
     }
   }); //Butter
+}( window.Butter, window.EditorHelper ));
 
-}, false );
