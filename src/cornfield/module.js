@@ -112,6 +112,7 @@ define(['util/xhr'], function(XHR) {
       XHR.post(server + "/api/publish/" + id, null, function() {
         if (this.readyState === 4) {
           try {
+            console.log( this );
             var response = JSON.parse(this.response);
             callback(response);
           } catch (err) {

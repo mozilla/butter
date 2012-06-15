@@ -66,9 +66,11 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         newContainer.classList.add( "fade-in" );
       }, 0);
 
+      if ( _containerDims ) {
       _containerDims.width = _container.clientWidth;
       _containerDims.height = _container.clientHeight;
       setDimensions( true );
+      }
 
       newContainer.querySelector( "button.remove" ).addEventListener( "click", function ( e ) {
         removeUrl( newContainer );
