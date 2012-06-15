@@ -56,7 +56,7 @@ header {
 /* /header */
 
 /*- - - Main - - -*/
-section[role="video-container"] {
+section.video-container {
   position: relative;
   z-index: 100;
   width: 100%;
@@ -64,7 +64,7 @@ section[role="video-container"] {
   background: #000;
   box-shadow: 0 50px 30px -20px rgba(0,0,0,.6);
 }
-section[role="video-container"]  > video {
+section.video-container  > video {
   width: 100%;
 }
 .video-overlay {
@@ -87,7 +87,7 @@ section[role="video-container"]  > video {
   vertical-align: middle;
 }
 
-section[role="suplementary"] {
+section.suplementary {
   margin: 40px 0;
   font-weight: 400;
   line-height: 1.4;
