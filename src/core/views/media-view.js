@@ -247,19 +247,20 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         _pageElement.destroy();
       } //if
       _pageElement = new PageElement( _media.target, {
-        drop: function( element ){
-          _onDropped( element );
-        }
-      },
-      {
-        highlightClass: "butter-media-highlight"
-      });
+          drop: function( element ){
+            _onDropped( element );
+          }
+        },
+        {
+          highlightClass: "butter-media-highlight"
+        });
 
       if( targetElement ){
         if( !_propertiesElement.parentNode ){
           document.body.appendChild( _propertiesElement );
         }
         _pageElement.listen( "moved", pageElementMoved );
+        pageElementMoved();
       }
     };
 
