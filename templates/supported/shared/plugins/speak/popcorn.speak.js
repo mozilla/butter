@@ -3,9 +3,9 @@
 
 (function ( Popcorn ) {
 
-/**
-  Popcorn speak: speaks text
- */
+  /**
+   * Popcorn speak: speaks text
+   **/
   Popcorn.plugin( "speak", (function(){
 
     // Share a worker instance across instances to
@@ -46,23 +46,27 @@
           },
           amplitude: {
             elem: "input",
-            type: "text",
-            label: "Amplitude:"
+            type: "number",
+            label: "Amplitude:",
+            default: 100
           },
           wordgap: {
             elem: "input",
             type: "number",
-            label: "Wordgap:"
+            label: "Wordgap:",
+            default: 0
           },
           pitch: {
             elem: "input",
             type: "number",
-            label: "Pitch:"
+            label: "Pitch:",
+            default: 50
           },
           speed: {
             elem: "input",
             type: "number",
-            label: "Speed:"
+            label: "Speed:",
+            default: 175
           },
           pluginPath: {
             elem: "input",
@@ -73,33 +77,31 @@
           }
         }
       },
+
       _setup: function( options ) {
         var target = options._target = document.getElementById( options.target ),
             speakOptions,
-            context = this;
+            context = this,
+            manifestOptions = options._natives.manifest.options;
 
         if ( !target ) {
           target = document.createElement( "div" );
           target.id = options.target;
           context.media.parentNode.appendChild( target );
-          console.log( target );
-        }
-
-        // Setup options needed for speak.js
-        if( !options.pluginPath ) {
-          options.pluginPath = "js/plugins/speak/";
         }
 
         // SPEAK.JS by @kripken https://github.com/kripken/speak.js ---------------------------
         if( !speakWorker ){
+          // Created a shared worker instance
           try {
+            options.pluginPath = options.pluginPath || "js/plugins/speak/";
             speakWorker = new Worker( options.pluginPath + 'speakWorker.js' );
           } catch(e) {
             console.log( 'speak.js warning: no worker support' );
           }
         }
 
-        // Bump instance count
+        // Bump instance ref count
         speakWorkerRefs++;
 
         function speak( text, args ) {
@@ -132,7 +134,7 @@
             };
           }
 
-          function playHTMLAudioElement( wav ) {
+          function generateAudio( wav ) {
             function encode64( data ) {
               var BASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
                   PAD = '=',
@@ -160,18 +162,15 @@
               return ret;
             }
 
-            options._container = document.createElement( "div" );
-            options._container.id = "container-" + Popcorn.guid();
-            options._container.innerHTML=( "<audio id=\"" + Popcorn.guid() +
-                                           "-player\" src=\"data:audio/x-wav;base64," +
-                                           encode64( wav )+ "\">" );
-            target.appendChild( options._container );
+            var audio = new Audio();
+            audio.src = "data:audio/x-wav;base64," + encode64( wav );
+            return audio;
           }
 
           function handleWav( wav ) {
             var startTime = Date.now();
             var data = parseWav( wav ); // validate the data and parse it
-            playHTMLAudioElement( wav );
+            options._audio = generateAudio( wav );
             if ( PROFILE ) {
               console.log( 'speak.js: wav processing took ' + ( Date.now()-startTime ).toFixed( 2 ) + ' ms' );
             }
@@ -190,24 +189,21 @@
 
         // END SPEAK.JS---------------------------------------
 
-        speakOptions = {};
-        if( options.amplitude ){
-          speakOptions.amplitude = options.amplitude;
-        }
-        if( options.wordgap ){
-          speakOptions.wordgap = options.wordgap;
-        }
-        if( options.pitch ){
-          speakOptions.pitch = options.pitch;
-        }
-        if( options.speed ){
-          speakOptions.speed = options.speed;
-        }
-        speakOptions.target = options.target;
+        // Use manifest defaults if none provided
+        speakOptions = {
+          amplitude: options.amplitude || manifestOptions.amplitude.default,
+          wordgap: options.wordgap || manifestOptions.wordgap.default,
+          pitch: options.pitch || manifestOptions.pitch.default,
+          speed: options.speed || manifestOptions.speed.default,
+          target: options.target
+        };
 
-        if( options.text ){
-          speak( options.text, speakOptions );
-        }
+        // Use the manifest default in case none is given,
+        // important in Butter for initial creation.
+        options.text = options.text || manifestOptions.text.default;
+
+        // Generate a default sound.
+        speak( options.text, speakOptions );
 
         if( options.showText ) {
           options.showTextEl = document.createElement("span");
@@ -215,15 +211,11 @@
           options.showTextEl.style.display = "none";
           target.appendChild( options.showTextEl );
         }
-
-        if( options.callback ){
-          options.callback( options._container );
-        }
       },
 
       start: function( event, options ) {
-        if( options._container ){
-          options._container.children[0].play();
+        if( options._audio ){
+          options._audio.play();
         }
         if( options.showTextEl ){
           options.showTextEl.style.display = "block";
@@ -237,12 +229,12 @@
       },
 
       _teardown: function( options ) {
-        if( options._container && options._target ) {
-          options._target.removeChild( options._container );
-        }
+        options._audio = null;
+
         if( options.showTextEl && options._target ) {
           options._target.removeChild( options.showTextEl );
         }
+
         // Decrease ref count on shared worker, delete if 0
         if( --speakWorkerRefs === 0 ){
           speakWorker = null;
