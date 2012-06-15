@@ -32,7 +32,8 @@ var mongoose = require('mongoose'),
       name: String,
       html: String,
       data: String,
-      template: String
+      template: String,
+      customData: String
     }),
     ProjectModel = mongoose.model( 'Project', Project ),
 
@@ -96,7 +97,9 @@ function publishRoute( req, res ){
     }
 
     if ( project ) {
-      var template = project.template;
+      var template = project.template,
+          customData = project.customData;
+
       if ( template && VALID_TEMPLATES[ template ] ) {
         var projectPath = PUBLISH_DIR + "/" + id + ".html",
             url = PUBLISH_PREFIX + "/" + id + ".html",
@@ -180,7 +183,9 @@ function publishRoute( req, res ){
             }
             popcornString += '</script>\n';
 
-            data = startString + baseString + templateScripts + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + popcornString + data.substring( bodyEndTagIndex );
+            customDataString = '\n<script type="application/butter-custom-data">\n' + customData + '\n</script>';
+
+            data = startString + baseString + templateScripts + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + customDataString + popcornString + data.substring( bodyEndTagIndex );
 
             fs.writeFile( projectPath, data, function(){
               if( err ){
@@ -330,7 +335,8 @@ app.post('/api/project/:id?', function( req, res ) {
         name: req.body.name,
         html: req.body.html,
         template: req.body.template,
-        data: JSON.stringify( req.body.data )
+        data: JSON.stringify( req.body.data ),
+        customData: JSON.stringify( req.body.customData, null, 2 )
       });
       doc.projects.push( proj );
     }
@@ -339,6 +345,7 @@ app.post('/api/project/:id?', function( req, res ) {
       proj.name = req.body.name;
       proj.html = req.body.html;
       proj.data = JSON.stringify( req.body.data );
+      proj.customData = JSON.stringify( req.body.customData, null, 2 );
     }
 
     doc.save();

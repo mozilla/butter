@@ -91,6 +91,7 @@
           _this = this,
           _selectedEvents = [],
           _defaultPopcornScripts = {},
+          _customData = {},
           _defaultPopcornCallbacks = {};
 
       // We use the default configuration in src/default-config.json as
@@ -113,8 +114,15 @@
         name: null,
         data: null,
         html: null,
-        template: null
+        template: null,
+        customData: null
       };
+
+      Object.defineProperty( this.project, "customData", {
+        get: function() {
+          return _customData;
+        }
+      });
 
       function checkMedia() {
         if ( !_currentMedia ) {
