@@ -1,8 +1,10 @@
 .speechBubble {
   opacity: 0;
   font-family: orgovan-rounded-web, bangers, "Open Sans", sans-serif;
+  font-weight: 600;
   font-size: 18px;
-  line-height: 1;
+  line-height: 1.2;
+  text-align: center;
   position: relative;
   display: inline-block;
   border: 2px solid black;
@@ -19,7 +21,7 @@
 
 .speechBubble.full-width { width: 100%; }
 .speechBubble.connected { margin-bottom: 15px; }
-.speechBubble.fx .text { text-align: center; font-size: 45px; font-weight: bold; padding: 10px;}
+.speechBubble.fx .text { text-align: center; font-size: 45px; padding: 10px;}
 
 .speechBubble .canvas {
   position: absolute;
