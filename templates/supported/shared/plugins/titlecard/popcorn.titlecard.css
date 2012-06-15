@@ -17,7 +17,7 @@
   -o-transition: all 4s ease;
   transition: all .4s ease;
   opacity: 1;
-  height: 130px;
+  height: 115px;
 }
 .title-card .text-container {
   position: absolute;
@@ -72,17 +72,16 @@
 
 .title-card .text-container > div {
   padding: 0 20px;
-  color: #F8FDE2;
   text-shadow: 0 3px 30px #000;
   z-index: 3;
 
 }
 .title-card .text-container > div > h2 {
   margin: 0 0 0 100px;
-  font-size: 2.6em;
+  font-size: 2.3em;
   line-height: 2.1em;
   text-transform: none;
-  font-weight: 400;
+  font-weight: 600;
   -webkit-transition: all 1s ease;
   -moz-transition: all 1s ease;
   -o-transition: all 1s ease;
@@ -90,10 +89,10 @@
 }
 .title-card .text-container > div > h5 {
   display: inline-block;
-  padding: 10px 300px 10px 40px;
+  padding: 8px 300px 8px 40px;
   margin: 0 0 0 -100px;
   text-transform: uppercase;
-  font-size: 1.2em;
+  font-size: 1.1em;
   background: -moz-linear-gradient(left,  rgba(67,1,17,1) 0%, rgba(57,1,14,0.56) 44%, rgba(44,0,10,0) 100%);
   background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(67,1,17,1)), color-stop(44%,rgba(57,1,14,0.56)), color-stop(100%,rgba(44,0,10,0)));
   background: -webkit-linear-gradient(left,  rgba(67,1,17,1) 0%,rgba(57,1,14,0.56) 44%,rgba(44,0,10,0) 100%);
