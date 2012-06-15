@@ -58,17 +58,8 @@
             elem: "select",
             options: [ "speech", "thought", "fact", "fiction", "icon", "none" ],
             type: "text",
-            label: "Style:"
-          },
-          triangle: {
-            elem: "select",
-            options: ["top left", "top right", "bottom left", "bottom right"],
-            label: "Speech bubble triangle position:"
-          },
-          flip: {
-            elem: "input",
-            type: "checkbox",
-            label: "Flip triangle? "
+            label: "Type",
+            "default": "thought"
           },
           classes: {
             elem: "select",
@@ -76,24 +67,35 @@
             "default": "none",
             label: "Styles"
           },
+          triangle: {
+            elem: "select",
+            options: ["top left", "top right", "bottom left", "bottom right"],
+            label: "Tail",
+            "default": "bottom left"
+          },
+          flip: {
+            elem: "input",
+            type: "checkbox",
+            label: "Flip Tail?"
+          },
           order: {
             elem: "select",
             options: [ 1, 2, 3 ],
             type: "text",
-            label: "Layer order:",
+            label: "Layer",
             "default": 1
           },
           top: {
             elem: "input",
             type: "number",
-            label: "Top:",
+            label: "Top",
             units: "px",
             "default": 200
           },
           left: {
             elem: "input",
             type: "number",
-            label: "Left:",
+            label: "Left",
             units: "px",
             "default": 200
           },
@@ -101,7 +103,7 @@
             elem: "input",
             type: "number",
             units: "px",
-            label: "Max width:",
+            label: "Max width",
             "default": 200
           }
         }
@@ -140,7 +142,7 @@
               var el = document.createElement("div");
 
               el.innerHTML = "Did you know?";
-              el.innerHTML = ( style === "fact" && "Fact!" ) || ( style === "fiction"  && "Fiction!" );
+              el.innerHTML = ( style === "fact" && "Fact" ) || ( style === "fiction"  && "Fiction" );
 
               el.classList.add("zoink-didyouknow");
               style && style !== "didyouknow" && el.classList.add( style );

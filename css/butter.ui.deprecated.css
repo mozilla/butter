@@ -1389,11 +1389,6 @@ input.form-error {
   -o-transition: all  0.1s linear;
   -ms-transition: all  0.1s linear;
   transition: all  0.1s linear;
-  -webkit-transform: scale(1.01, 1.01);
-  -moz-transform: scale(1.01, 1.01);
-  -o-transform: scale(1.01, 1.01);
-  -ms-transform: scale(1.01, 1.01);
-  transform: scale(1.01, 1.01);
 }
 .butter-btn:focus {
   outline: thin dotted #333;
@@ -1415,11 +1410,6 @@ input.form-error {
   cursor: default;
   opacity: 0.7;
   box-shadow: none;
-  -webkit-transform: scale(1,1);
-  -moz-transform: scale(1,1);
-  -o-transform: scale(1, 1);
-  -ms-transform: scale(1, 1);
-  transform: scale(1, 1);
 }
 
 /* All elements with a class starting in icon- */
