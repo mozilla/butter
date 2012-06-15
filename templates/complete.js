@@ -3,7 +3,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
   Butter({
     config: "complete-config.json",
     ready: function( butter ){
-      var media = butter.media[ 0 ];
+      var media = butter.currentMedia;
 
       function start(){
         var track = media.addTrack( "Track1" );

@@ -1,23 +1,102 @@
 /*!
- * jQuery UI Resizable 1.8.21
+ * jQuery UI
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
  * Dual licensed under the MIT or GPL Version 2 licenses.
  * http://jquery.org/license
  *
- * http://docs.jquery.com/UI/Resizable#theming
+ * Modified by @k88hudson for Popcorn Maker
  */
-.ui-resizable { position: relative;}
-.ui-resizable-handle { position: absolute; font-size: 0.1px; display: block; }
-.ui-resizable:hover .ui-icon { background-color: #FEF49C; }
-.ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
-.ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0; }
-.ui-resizable-s { cursor: s-resize; height: 7px; width: 100%; bottom: -5px; left: 0; }
-.ui-resizable-e { cursor: e-resize; width: 7px; right: -5px; top: 0; height: 100%; }
-.ui-resizable-w { cursor: w-resize; width: 7px; left: -5px; top: 0; height: 100%; }
-.ui-resizable-se { cursor: se-resize; width: 12px; height: 12px; right: 1px; bottom: 1px; }
-.ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: -5px; bottom: -5px; }
-.ui-resizable-nw { cursor: nw-resize; width: 9px; height: 9px; left: -5px; top: -5px; }
-.ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}
 
-.ui-draggable:hover { border: 2px dashed #CCC; }
+.ui-resizable,
+.ui-droppable { 
+  position: relative; 
+  color: #FFF83A; 
+  z-index: 2000;
+  border: 1px solid transparent;
+  -webkit-transition: border-color .2s ease;
+  -moz-transition: border-color .2s ease;
+  -o-transition: border-color .2s ease;
+  -ms-transition: border-color .2s ease;
+  transition: border-color .2s ease;
+}
+
+.ui-resizable span { 
+  position:relative; 
+  font-weight: 700;
+  display: block;
+  color: #222;
+  font-size: 11px;
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
+  background: #FFF83A;
+  padding: 5px 0;
+  width: 100%;
+  text-align: center;
+}
+
+.ui-resizable .ui-icon { 
+  border: 1px solid #FFF83A; 
+  background: none;
+  width: 5px; 
+  height: 5px; 
+  opacity: 0;
+}
+
+.ui-resizable-handle { 
+  position: absolute; 
+  font-size: 0.1px; 
+  display: block; 
+}
+
+.ui-resizable-disabled 
+.ui-resizable-handle, 
+.ui-resizable-autohide 
+.ui-resizable-handle { 
+  display: none; 
+}
+
+[class^="ui-resizable-"] {
+  border: 1px solid #FFF83A; 
+  background: none;
+  height: 5px;
+  width: 5px;
+  opacity: 0;
+}
+
+.ui-resizable-s { cursor: s-resize; bottom: -4px; left: 50%; }
+.ui-resizable-e { cursor: e-resize; right: -4px; top: 50%; }
+.ui-resizable-se { cursor: se-resize; right: -4px; bottom: -4px; }
+
+
+/* HOVER STYLES
+-------------------------------------------------- */
+body:hover .ui-resizable {
+  border: 1px solid #FFF83A;
+  -webkit-transition: border-color .2s ease;
+  -moz-transition: border-color .2s ease;
+  -o-transition: border-color .2s ease;
+  -ms-transition: border-color .2s ease;
+  transition: border-color .2s ease;
+}
+
+body:hover .ui-resizable .ui-icon,
+body:hover [class^="ui-resizable-"] { 
+  opacity: 1;
+  -webkit-transition: opacity .2s ease;
+  -moz-transition: opacity .2s ease;
+  -o-transition: opacity .2s ease;
+  -ms-transition: opacity .2s ease;
+  transition: opacity .2s ease;
+}
+
+
+/* DRAGGABLE
+-------------------------------------------------- */
+
+.ui-draggable {
+  cursor: pointer;
+}
+
+.butter-dragover {
+  border: 1px dashed #FFF83A;
+}
