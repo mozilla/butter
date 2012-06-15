@@ -3,7 +3,7 @@
     config: "butter/config.json",
     ready: function( butter ){
       var media = butter.currentMedia,
-          popcorn = butter.currentMedia.popcorn.pocporn;
+          popcorn = media.popcorn.pocporn;
 
       EditorHelper( butter, popcorn );
 
