@@ -462,7 +462,7 @@
         }
       });
 
-      this.retrieveSrc = function() {
+      function retrieveSrc() {
         var targetElement = document.getElementById( _target ),
             url = "";
 
@@ -487,7 +487,7 @@
               safetyInterval;
 
           safetyInterval = setInterval(function() {
-            var url = _this.retrieveSrc();
+            var url = retrieveSrc();
             if ( url ) {
               _url = url;
               setupContent();
