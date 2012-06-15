@@ -154,10 +154,19 @@ function publishRoute( req, res ){
             popcornString += '<script>'
 
             for ( i = 0; i < projectData.media.length; ++i ) {
+              var mediaUrls = '[ "',
+                  numSources;
               currentMedia = projectData.media[ i ];
               mediaPopcornOptions = currentMedia.popcornOptions || {};
+              numSources = currentMedia.url.length;
+              
+              for ( k = 0; k < numSources - 1; k++ ) {
+                mediaUrls += currentMedia.url[ k ] + '" , "';
+              }
+              mediaUrls += currentMedia.url[ numSources - 1 ] + '" ]';
+
               popcornString += '\n(function(){';
-              popcornString += '\nvar popcorn = Popcorn.smart("#' + currentMedia.target + '", "' + currentMedia.url + '", ' + JSON.stringify( mediaPopcornOptions ) + ');';
+              popcornString += '\nvar popcorn = Popcorn.smart("#' + currentMedia.target + '", ' + mediaUrls + ', ' + JSON.stringify( mediaPopcornOptions ) + ');';
               for ( j = 0; j < currentMedia.tracks.length; ++ j ) {
                 currentTrack = currentMedia.tracks[ j ];
                 for ( k = 0; k < currentTrack.trackEvents.length; ++k ) {
