@@ -462,19 +462,37 @@
         }
       });
 
+      function retrieveSrc() {
+        var targetElement = document.getElementById( _target ),
+            url = "";
+
+        if ( targetElement.children ) {
+          var children = targetElement.children;
+          url = [];
+          for ( var i = 0, il = children.length; i < il; i++ ) {
+            if ( children[ i ].nodeName === "SOURCE" ) {
+              url.push( children[ i ].src );
+            }
+          }
+        }
+        return !url.length ? targetElement.currentSrc : url;
+      }
+
       // There is an edge-case where currentSrc isn't set yet, but everything else about the video is valid.
       // So, here, we wait for it to be set.
       var targetElement = document.getElementById( _target );
       if( targetElement && [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) > -1 ) {
         if( !targetElement.currentSrc && targetElement.getAttribute( "src" ) || targetElement.childNodes.length > 0 ){
           var attempts = 0,
-              safetyInterval = setInterval(function(){
-            if( targetElement.currentSrc ){
-              _url = targetElement.currentSrc;
+              safetyInterval;
+
+          safetyInterval = setInterval(function() {
+            var url = retrieveSrc();
+            if ( url ) {
+              _url = url;
               setupContent();
               clearInterval( safetyInterval );
-            }
-            else if( attempts++ === MEDIA_ELEMENT_SAFETY_POLL_ATTEMPTS ){
+            } else if ( attempts++ === MEDIA_ELEMENT_SAFETY_POLL_ATTEMPTS ) {
               clearInterval( safetyInterval );
             }
           }, MEDIA_ELEMENT_SAFETY_POLL_INTERVAL );
