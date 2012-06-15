@@ -20,7 +20,7 @@
         trackOne.addTrackEvent({
           "type": "text",
           "popcornOptions": {
-            "start": "0",
+            "start": 0,
             "end": 1,
             "text": "Here you can put any text you like!",
             "target": "Area1",
@@ -51,10 +51,10 @@
             "triangle": "top left",
             "flip": false,
             "classes": "none",
-            "order": "1",
-            "top": "200",
-            "left": "200",
-            "width": "200"
+            "order": 1,
+            "top": 200,
+            "left": 200,
+            "width": 200
           }
         });
         
@@ -66,10 +66,10 @@
             "target": "video-overlay",
             "src": "http://www.mozilla.org/img/covehead/firefox/brand-toolkit/identity-logo-firefox.png",
             "href": "http://www.mozilla.org/",
-            "width": "150",
-            "height": "150",
-            "top": "25",
-            "left": "75"
+            "width": 150,
+            "height": 150,
+            "top": 25,
+            "left": 75
           }
         });
         
