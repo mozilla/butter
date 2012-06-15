@@ -16,7 +16,7 @@
 
     // We need to be able to get back to a Popcorn instance
     // after building audio elements async.  We key on
-    // popcorn.media.id for now.  Bit of a hack.
+    // our own custom ID, since there isn't one in Popcorn (yet).
     var popcornInstances = {};
 
     // Seed value for custom ids
@@ -158,12 +158,18 @@
             context = this,
             manifestOptions = options._natives.manifest.options;
 
+        // Force our own id on the Popcorn instance in case the video changes.
+        // Filed in Popcorn, not fixed yet.
+        if( !context.__id ){
+          context.__id = "Popcorn-" + seed++;
+        }
+
         // Force our own id on the options object so we can get it back in the worker.
         options.id = "speak-" + seed++;
 
         // Cache this Popcorn instance so the worker can get it back
-        if( !popcornInstances[ context.media.id ] ){
-          popcornInstances[ context.media.id ] = context;
+        if( !popcornInstances[ context.__id ] ){
+          popcornInstances[ context.__id ] = context;
         }
 
         if ( !target ) {
@@ -199,7 +205,7 @@
           var startTime = Date.now();
           // Post to the worker, passing data on Popcorn instance and Options object.
           speakWorker.postMessage({
-            popcornID: context.media.id,
+            popcornID: context.__id,
             optionsID: optionsID,
             text: text,
             args: args
