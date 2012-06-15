@@ -154,22 +154,27 @@ function publishRoute( req, res ){
               externalAssetsString += '\n';
             }
 
-            popcornString += '<script>'
+            popcornString += '<script>';
 
             for ( i = 0; i < projectData.media.length; ++i ) {
-              var mediaUrls = '[ "',
-                  numSources;
+              var mediaUrls,
+                  mediaUrlsString = '[ "';
+
               currentMedia = projectData.media[ i ];
+              // We expect a string (one url) or an array of url strings.
+              // Turn a single url into an array of 1 string.
+              mediaUrls = typeof currentMedia.url === "string" ? [ currentMedia.url ] : currentMedia.url;
               mediaPopcornOptions = currentMedia.popcornOptions || {};
-              numSources = currentMedia.url.length;
-              
+              numSources = mediaUrls.length;
+
               for ( k = 0; k < numSources - 1; k++ ) {
-                mediaUrls += currentMedia.url[ k ] + '" , "';
+                mediaUrlsString += mediaUrls[ k ] + '" , "';
               }
-              mediaUrls += currentMedia.url[ numSources - 1 ] + '" ]';
+              mediaUrlsString += mediaUrls[ numSources - 1 ] + '" ]';
 
               popcornString += '\n(function(){';
-              popcornString += '\nvar popcorn = Popcorn.smart("#' + currentMedia.target + '", ' + mediaUrls + ', ' + JSON.stringify( mediaPopcornOptions ) + ');';
+              popcornString += '\nvar popcorn = Popcorn.smart("#' + currentMedia.target + '", ' +
+                               mediaUrlsString + ', ' + JSON.stringify( mediaPopcornOptions ) + ');';
               for ( j = 0; j < currentMedia.tracks.length; ++ j ) {
                 currentTrack = currentMedia.tracks[ j ];
                 for ( k = 0; k < currentTrack.trackEvents.length; ++k ) {
