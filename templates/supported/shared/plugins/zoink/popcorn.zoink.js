@@ -58,7 +58,8 @@
             elem: "select",
             options: [ "speech", "thought", "fact", "fiction", "icon", "none" ],
             type: "text",
-            label: "Type"
+            label: "Type",
+            "default": "thought"
           },
           classes: {
             elem: "select",
@@ -69,7 +70,8 @@
           triangle: {
             elem: "select",
             options: ["top left", "top right", "bottom left", "bottom right"],
-            label: "Tail"
+            label: "Tail",
+            "default": "bottom left"
           },
           flip: {
             elem: "input",
@@ -140,7 +142,7 @@
               var el = document.createElement("div");
 
               el.innerHTML = "Did you know?";
-              el.innerHTML = ( style === "fact" && "Fact!" ) || ( style === "fiction"  && "Fiction!" );
+              el.innerHTML = ( style === "fact" && "Fact" ) || ( style === "fiction"  && "Fiction" );
 
               el.classList.add("zoink-didyouknow");
               style && style !== "didyouknow" && el.classList.add( style );

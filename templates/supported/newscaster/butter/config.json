@@ -5,7 +5,8 @@
   "baseDir": "../../../",
   "editor": {
     "default": "{{baseDir}}editors/default-editor.html",
-    "photo": "{{baseDir}}templates/supported/shared/editors/photo-editor.html"
+    "photo": "{{baseDir}}templates/supported/shared/editors/photo-editor.html",
+    "googlemaps": "{{baseDir}}editors/googlemap-editor.html"
   },
   "plugin": {
     "plugins": [
@@ -32,6 +33,14 @@
       {
         "type": "zoink",
         "path": "{{baseDir}}templates/supported/shared/plugins/zoink/popcorn.zoink.js"
+      },
+      {
+        "type": "googlemap",
+        "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
+      },
+      {
+        "type": "flickr",
+        "path": "{{baseDir}}templates/supported/shared/plugins/flickr/popcorn.flickr.js"
       }
     ],
     "defaults": [
@@ -41,7 +50,9 @@
       "shrink",
       "mediaspawner",
       "zoink",
-      "shrink"
+      "shrink",
+      "flickr",
+      "googlemap"
     ]
   }
 }
