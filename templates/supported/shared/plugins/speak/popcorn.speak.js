@@ -3,10 +3,92 @@
 
 (function ( Popcorn ) {
 
-/**
-  Popcorn speak: speaks text
- */
-  Popcorn.plugin( "speak", {
+  /**
+   * Popcorn speak: speaks text
+   **/
+  Popcorn.plugin( "speak", (function(){
+
+    // Share a worker instance across instances to
+    // relieve memory pressure.  When speakWorkerRefs
+    // goes to 0, we can safely delete the instance.
+    var speakWorker,
+        speakWorkerRefs = 0;
+
+    // We need to be able to get back to a Popcorn instance
+    // after building audio elements async.  We key on
+    // popcorn.media.id for now.  Bit of a hack.
+    var popcornInstances = {};
+
+    // Seed value for custom ids
+    var seed = Date.now();
+
+    // Audio generation
+    function parseWav( wav ) {
+      function readInt( i, bytes ) {
+        var ret = 0,
+            shft = 0;
+
+        while ( bytes ) {
+          ret += wav[ i ] << shft;
+          shft += 8;
+          i++;
+          bytes--;
+        }
+        return ret;
+      }
+      if ( readInt( 20, 2 ) != 1 ) {
+        throw 'Invalid compression code, not PCM';
+      }
+      if ( readInt( 22, 2 ) != 1 ) {
+        throw 'Invalid number of channels, not 1';
+      }
+      return {
+        sampleRate: readInt( 24, 4 ),
+        bitsPerSample: readInt( 34, 2 ),
+        samples: wav.subarray( 44 )
+      };
+    }
+
+    function generateAudio( wav ) {
+      function encode64( data ) {
+        var BASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+            PAD = '=',
+            ret = '',
+            leftchar = 0,
+            leftbits = 0,
+            i,
+            curr;
+        for( i = 0; i < data.length; i++ ) {
+          leftchar = ( leftchar << 8 ) | data[ i ];
+          leftbits += 8;
+          while ( leftbits >= 6 ) {
+            curr = ( leftchar >> ( leftbits-6 ) ) & 0x3f;
+            leftbits -= 6;
+            ret += BASE[ curr ];
+          }
+        }
+        if (leftbits == 2) {
+          ret += BASE[ ( leftchar&3 ) << 4 ];
+          ret += PAD + PAD;
+        } else if ( leftbits === 4 ) {
+          ret += BASE[ ( leftchar&0xf ) << 2 ];
+          ret += PAD;
+        }
+        return ret;
+      }
+
+      var audio = new Audio();
+      audio.src = "data:audio/x-wav;base64," + encode64( wav );
+      return audio;
+    }
+
+    function handleWav( options, wav ) {
+      var startTime = Date.now();
+      var data = parseWav( wav );
+      options._audio = generateAudio( wav );
+    }
+
+    return {
       manifest: {
         about: {
           name: "Popcorn speak Plugin",
@@ -38,23 +120,27 @@
           },
           amplitude: {
             elem: "input",
-            type: "text",
-            label: "Amplitude:"
+            type: "number",
+            label: "Amplitude:",
+            default: 100
           },
           wordgap: {
             elem: "input",
             type: "number",
-            label: "Wordgap:"
+            label: "Wordgap:",
+            default: 0
           },
           pitch: {
             elem: "input",
             type: "number",
-            label: "Pitch:"
+            label: "Pitch:",
+            default: 50
           },
           speed: {
             elem: "input",
             type: "number",
-            label: "Speed:"
+            label: "Speed:",
+            default: 175
           },
           pluginPath: {
             elem: "input",
@@ -65,170 +151,141 @@
           }
         }
       },
+
       _setup: function( options ) {
         var target = options._target = document.getElementById( options.target ),
-            speakWorker,
             speakOptions,
-            context = this;
+            context = this,
+            manifestOptions = options._natives.manifest.options;
+
+        // Force our own id on the options object so we can get it back in the worker.
+        options.id = "speak-" + seed++;
+
+        // Cache this Popcorn instance so the worker can get it back
+        if( !popcornInstances[ context.media.id ] ){
+          popcornInstances[ context.media.id ] = context;
+        }
 
         if ( !target ) {
-
           target = document.createElement( "div" );
           target.id = options.target;
           context.media.parentNode.appendChild( target );
-          console.log( target );
         }
-
-        //Setup options needed for speak.js
-        if( !options.pluginPath ) { options.pluginPath = "js/plugins/speak/"; }
 
         // SPEAK.JS by @kripken https://github.com/kripken/speak.js ---------------------------
-        try {
-          speakWorker = new Worker( options.pluginPath + 'speakWorker.js');
-        } catch(e) {
-          console.log('speak.js warning: no worker support');
-        }
+        if( !speakWorker ){
+          // Created a shared worker instance
+          try {
+            options.pluginPath = options.pluginPath || "js/plugins/speak/";
+            speakWorker = new Worker( options.pluginPath + 'speakWorker.js' );
+            speakWorker.onmessage = function( event ){
+              // Get Popcorn instance and options instance
+              var p = popcornInstances[ event.data.popcornID ],
+                  options = p.getTrackEvent( event.data.optionsID );
 
-        function speak(text, args) {
-          var PROFILE = 1;
-
-          function parseWav(wav) {
-            function readInt(i, bytes) {
-              var ret = 0,
-                  shft = 0;
-
-              while (bytes) {
-                ret += wav[i] << shft;
-                shft += 8;
-                i++;
-                bytes--;
-              }
-              return ret;
-            }
-            if (readInt(20, 2) != 1) throw 'Invalid compression code, not PCM';
-            if (readInt(22, 2) != 1) throw 'Invalid number of channels, not 1';
-            return {
-              sampleRate: readInt(24, 4),
-              bitsPerSample: readInt(34, 2),
-              samples: wav.subarray(44)
+              // Build Audio element and put on options object.
+              handleWav( options, event.data.data );
             };
-          }
-
-          function playHTMLAudioElement(wav) {
-            function encode64(data) {
-              var BASE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
-                  PAD = '=',
-                  ret = '',
-                  leftchar = 0,
-                  leftbits = 0,
-                  i,
-                  curr;
-              for (i = 0; i < data.length; i++) {
-                leftchar = (leftchar << 8) | data[i];
-                leftbits += 8;
-                while (leftbits >= 6) {
-                  curr = (leftchar >> (leftbits-6)) & 0x3f;
-                  leftbits -= 6;
-                  ret += BASE[curr];
-                }
-              }
-              if (leftbits == 2) {
-                ret += BASE[(leftchar&3) << 4];
-                ret += PAD + PAD;
-              } else if (leftbits == 4) {
-                ret += BASE[(leftchar&0xf) << 2];
-                ret += PAD;
-              }
-              return ret;
-            }
-            
-            options._container = document.createElement("div");
-            options._container.id = "container-" + Popcorn.guid();
-            options._container.innerHTML=("<audio id=\""+Popcorn.guid()+"-player\" src=\"data:audio/x-wav;base64,"+encode64(wav)+"\">");
-            target.appendChild( options._container );
-          }
-
-          function playAudioDataAPI(data) {
-            try {
-              var output = new Audio();
-              output.mozSetup(1, data.sampleRate);
-              var num = data.samples.length;
-              var buffer = data.samples;
-              var f32Buffer = new Float32Array(num);
-              for (var i = 0; i < num; i++) {
-                var value = buffer[i<<1] + (buffer[(i<<1)+1]<<8);
-                if (value >= 0x8000) value |= ~0x7FFF;
-                f32Buffer[i] = value / 0x8000;
-              }
-              output.mozWriteAudio(f32Buffer);
-              return true;
-            } catch(e) {
-              return false;
-            }
-          }
-
-          function handleWav(wav) {
-            var startTime = Date.now();
-            var data = parseWav(wav); // validate the data and parse it
-            // TODO: try playAudioDataAPI(data), and fallback if failed
-            playHTMLAudioElement(wav);
-            if (PROFILE) console.log('speak.js: wav processing took ' + (Date.now()-startTime).toFixed(2) + ' ms');
-          }
-
-          if (args && args.noWorker) {
-            // Do everything right now. speakGenerator.js must have been loaded.
-            var startTime = Date.now();
-            var wav = generateSpeech(text, args);
-            if (PROFILE) console.log('speak.js: processing took ' + (Date.now()-startTime).toFixed(2) + ' ms');
-            handleWav(wav);
-          } else {
-            // Call the worker, which will return a wav that we then play
-            var startTime = Date.now();
-            speakWorker.onmessage = function(event) {
-              if (PROFILE) console.log('speak.js: worker processing took ' + (Date.now()-startTime).toFixed(2) + ' ms');
-              handleWav(event.data);
-            };
-            speakWorker.postMessage({ text: text, args: args });
+          } catch(e) {
+            console.log( 'speak.js warning: no worker support' );
           }
         }
 
-      // END SPEAK.JS---------------------------------------
+        // Bump instance ref count
+        speakWorkerRefs++;
 
-      speakOptions = {};
-      options.amplitude && ( speakOptions.amplitude = options.amplitude );
-      options.wordgap && ( speakOptions.wordgap = options.wordgap );
-      options.pitch && ( speakOptions.pitch = options.pitch );
-      options.speed && ( speakOptions.speed = options.speed );
-      speakOptions.target = options.target;
+        function speak( text, args, optionsID ) {
+          // Call the worker, which will return a wav that we then play
+          var startTime = Date.now();
+          // Post to the worker, passing data on Popcorn instance and Options object.
+          speakWorker.postMessage({
+            popcornID: context.media.id,
+            optionsID: optionsID,
+            text: text,
+            args: args
+          });
+        }
 
-      options.text && speak( options.text, speakOptions );
+        // END SPEAK.JS---------------------------------------
 
-      if( options.showText ) {
-        options.showTextEl = document.createElement("span");
-        options.showTextEl.innerHTML = options.text;
-        options.showTextEl.style.display = "none";
-        target.appendChild( options.showTextEl );
-      }
+        // Use manifest defaults if none provided
+        speakOptions = {
+          amplitude: options.amplitude || manifestOptions.amplitude.default,
+          wordgap: options.wordgap || manifestOptions.wordgap.default,
+          pitch: options.pitch || manifestOptions.pitch.default,
+          speed: options.speed || manifestOptions.speed.default,
+          target: options.target
+        };
 
-      options.callback && options.callback( options._container );
-  
+        // We have to treat options.text differently, since it is used
+        // to generate the wav and audio element.  When the user sets
+        // new values on options.text, we need to trigger a rebuild
+        // of the audio, so wrap in a getter/setter so we can catch
+        // any changes to the options.
+        var text = options.text || manifestOptions.text.default;
+        delete options.text;
+        Object.defineProperty( options, "text", {
+          get: function(){
+            return text;
+          },
+          set: function( aText ){
+            if( !( aText && typeof aText === "string" ) ){
+              return;
+            }
+
+            text = aText;
+
+            var speakOptions = {
+              amplitude: options.amplitude || manifestOptions.amplitude.default,
+              wordgap: options.wordgap || manifestOptions.wordgap.default,
+              pitch: options.pitch || manifestOptions.pitch.default,
+              speed: options.speed || manifestOptions.speed.default,
+              target: options.target
+            };
+
+            speak( text, speakOptions, options.id );
+          }
+        });
+
+        // Generate a default sound for butter.
+        speak( options.text, speakOptions, options.id );
+
+        if( options.showText ) {
+          options.showTextEl = document.createElement("span");
+          options.showTextEl.innerHTML = options.text;
+          options.showTextEl.style.display = "none";
+          target.appendChild( options.showTextEl );
+        }
       },
+
       start: function( event, options ) {
-        options._container && options._container.children[0].play();
-        options.showTextEl && ( options.showTextEl.style.display = "block" );
+        if( options._audio ){
+          options._audio.play();
+        }
+        if( options.showTextEl ){
+          options.showTextEl.style.display = "block";
+        }
       },
-    
+
       end: function( event, options ) {
-        options.showTextEl && ( options.showTextEl.style.display = "none" );
+        if( options.showTextEl ){
+          options.showTextEl.style.display = "none";
+        }
       },
 
       _teardown: function( options ) {
-        if( options._container && options._target ) {
-          options._target.removeChild( options._container );
-        }
+        options._audio = null;
+
         if( options.showTextEl && options._target ) {
           options._target.removeChild( options.showTextEl );
         }
+
+        // Decrease ref count on shared worker, delete if 0
+        if( --speakWorkerRefs === 0 ){
+          speakWorker = null;
+        }
       }
-  });
-})( Popcorn );
+
+    };
+  }()));
+}( Popcorn ));
