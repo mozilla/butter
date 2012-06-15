@@ -207,7 +207,7 @@ body.butter-tray-spacing.minimized {
   border-radius: 5px;
 }
 
-.butter-media-properties .loading-container {
+.butter-media-properties .butter-loading-container {
   position: absolute;
   z-index: 2140000001;
   left: 1px;
@@ -223,7 +223,7 @@ body.butter-tray-spacing.minimized {
 }
 
 /* Media settings inner elements */
-.butter-media-properties .edit-message {
+.butter-media-properties .butter-edit-message {
   color: #FFF;
   padding-top: 6px;
   padding-left: 3px;
@@ -232,7 +232,7 @@ body.butter-tray-spacing.minimized {
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
   margin: 0;
 }
-.butter-media-properties .url {
+.butter-media-properties .butter-url {
   width: 224px;
   padding: 5px 3px;
 }
@@ -241,7 +241,7 @@ body.butter-tray-spacing.minimized {
   float: right;
 }
 
-.form-field-notes {
+.butter-form-field-notes {
   font-style: italic;
   font-size: 80%;
 }
