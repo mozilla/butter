@@ -476,7 +476,7 @@
           }
         }
         return !url.length ? targetElement.currentSrc : url;
-      };
+      }
 
       // There is an edge-case where currentSrc isn't set yet, but everything else about the video is valid.
       // So, here, we wait for it to be set.
