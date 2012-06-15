@@ -355,6 +355,11 @@ input.form-error {
   opacity: 0;
 }
 
+#butter-modal-container .layer iframe.smallIframe {
+  height: 10%;
+  min-height: 110px;
+}
+
 #butter-modal-container .layer.fade-in, #butter-modal-container .layer iframe.fade-in {
   opacity: 1;
   -moz-transition: opacity 0.5s;
