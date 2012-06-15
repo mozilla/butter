@@ -27,11 +27,26 @@ define( [
         _name = options.name || _id,
         _order = options.order || 0,
         _view = new TrackView( this ),
+        _popcornWrapper = null,
         _this = this;
 
     _this._media = null;
 
     EventManagerWrapper( _this );
+
+    /**
+     * Member: setPopcornWrapper
+     *
+     * Sets the PopcornWrapper object. Subsequently, PopcornWrapper can be used to directly manipulate Popcorn track events.
+     *
+     * @param {Object} newPopcornWrapper: PopcornWrapper object or null
+     */
+    this.setPopcornWrapper = function ( newPopcornWrapper ) {
+      _popcornWrapper = newPopcornWrapper;
+      for ( var i = 0, l = _trackEvents.length; i < l; ++i ){
+        _trackEvents[ i ].setPopcornWrapper( newPopcornWrapper );
+      }
+    };
 
     Object.defineProperties( this, {
       view: {
@@ -154,6 +169,7 @@ define( [
       ]);
       _view.addTrackEvent( trackEvent );
       trackEvent.track = _this;
+      trackEvent.setPopcornWrapper( _popcornWrapper );
       _this.dispatch( "trackeventadded", trackEvent );
       return trackEvent;
     }; //addTrackEvent
@@ -170,6 +186,7 @@ define( [
         ]);
         _view.removeTrackEvent( trackEvent );
         trackEvent._track = null;
+        trackEvent.setPopcornWrapper( null );
         _this.dispatch( "trackeventremoved", trackEvent );
         return trackEvent;
       } //if

@@ -235,9 +235,9 @@
 
         media.listen( "mediaready", function(){
 
-        var popcornTextPlugin = document.createElement( "script" );
-        popcornTextPlugin.src = "../external/popcorn-js/plugins/text/popcorn.text.js";
-        document.head.appendChild( popcornTextPlugin );
+          var popcornTextPlugin = document.createElement( "script" );
+          popcornTextPlugin.src = "../external/popcorn-js/plugins/text/popcorn.text.js";
+          document.head.appendChild( popcornTextPlugin );
 
           var trackEvent = media.addTrack().addTrackEvent({
                 type: "text",
@@ -251,9 +251,9 @@
           media.currentTime = 1.5;
           var contentDiv = document.getElementById( "media-target-test-div-overlay" );
           ok( contentDiv.childNodes[0].innerHTML === "LOL", "Media has target div with correct content." );
+          start();
           document.body.removeChild( videoDiv );
           document.head.removeChild( popcornTextPlugin );
-          start();
         });
       });
     });
@@ -394,29 +394,26 @@
 
     createButter(function( butter ) {
       var te1,
-          m,
-          t;
+          m = butter.addMedia({ url: "../external/popcorn-js/test/italia.ogg", target: "mediaDiv" }),
+          t = m.addTrack();
 
       butter.listen( "mediaready", function( e ) {
+        butter.listen( "trackeventupdated", function( e ) {
+          equal( e.data.popcornOptions.text, "Popcorn.js", "Trackevent is given proper plugin defaults" );
+          start();
+        });
+
+        te1 = t.addTrackEvent({
+          name: "TrackEvent 1",
+          type: "text",
+          start: 0,
+          end: 1
+        });
+
         te1.update({
           start: 5,
           end: 6
         });
-      });
-
-      butter.listen( "trackeventupdated", function( e ) {
-        equal( e.data.popcornOptions.text, "Popcorn.js", "Trackevent is given proper plugin defaults" );
-        start();
-      });
-
-      m = butter.addMedia({ url: "../external/popcorn-js/test/italia.ogg", target: "mediaDiv" }),
-      t = m.addTrack();
-
-      te1 = t.addTrackEvent({
-        name: "TrackEvent 1",
-        type: "text",
-        start: 0,
-        end: 1
       });
     });
   });

@@ -27,7 +27,6 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
 
           // EDITING HOOKS
           function updateFunction( e ) {
-
             var trackEvent,
                 _container = null,
                 _textEls,
@@ -46,9 +45,6 @@ document.addEventListener( "DOMContentLoaded", function( e ) {
 
             _popcornOptions = trackEvent.popcornOptions;
 
-            // Requires _container in options to work.
-            // This will be better when track events store a reference to popcorn in Butter, but it's ok for now.
-            trackEvent.popcornTrackEvent = popcorn.getTrackEvent( popcorn.getLastTrackEventId() ); //Store a reference
             _container = trackEvent.popcornTrackEvent._container;
             if ( !_container ) {
               return;
