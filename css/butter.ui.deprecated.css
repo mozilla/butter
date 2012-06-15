@@ -223,19 +223,23 @@ body.butter-tray-spacing.minimized {
 }
 
 /* Media settings inner elements */
-.butter-media-properties .butter-edit-message {
+.butter-media-properties .butter-edit-message, .butter-inner-container-title {
   color: #FFF;
-  padding-top: 6px;
+  padding-top: 4px;
   padding-left: 3px;
+  font-size: 1.2em;
 }
+
 .butter-media-properties .butter-inner-container-title, .butter-media-properties p {
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
   margin: 0;
 }
+
 .butter-media-properties .butter-url {
   width: 224px;
-  padding: 5px 3px;
+  padding: 2px 3px;
 }
+
 .butter-media-properties button {
   margin-top: .5em;
   float: right;
@@ -243,7 +247,7 @@ body.butter-tray-spacing.minimized {
 
 .butter-form-field-notes {
   font-style: italic;
-  font-size: 80%;
+  font-size: 0.9em;
 }
 p.form-error {
   color: #FF0000 !important;
