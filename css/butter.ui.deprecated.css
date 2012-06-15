@@ -1423,8 +1423,7 @@ input.form-error {
 }
 
 /* All elements with a class starting in icon- */
-[class^="icon-"],
-[class*=" icon-"] {
+[class^="icon-"] {
   display: inline-block;
   width: 14px;
   height: 14px;
@@ -1435,8 +1434,7 @@ input.form-error {
   background-repeat: no-repeat;
   margin-right: 3px;
 }
-.butter-btn:hover [class^="icon-"],
-.butter-btn:hover [class*=" icon-"] {
+.butter-btn:hover [class^="icon-"] {
   background-image: url("../resources/glyphicons-halflings-white.png");
 }
 
