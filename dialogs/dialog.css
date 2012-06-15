@@ -20,21 +20,27 @@ html, body {
 }
 
 @font-face {
-  font-family: 'BebasRegular';
-  src: url('../src/ui/assets/fonts/BEBAS___-webfont.eot');
-  src: url('../src/ui/assets/fonts/BEBAS___-webfont.eot?#iefix') format('embedded-opentype'),
-       url('../src/ui/assets/fonts/BEBAS___-webfont.woff') format('woff'),
-       url('../src/ui/assets/fonts/BEBAS___-webfont.ttf') format('truetype'),
-       url('../src/ui/assets/fonts/BEBAS___-webfont.svg#BebasRegular') format('svg');
-  font-weight: normal;
-  font-style: normal;
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('Open-Sans-Italic'),
+    url('../resources/fonts/OpenSans-Italic.ttf') format('truetype');
 }
-/* MetaWebPro font family licensed from fontshop.com. WOFF-FTW! */
+
 @font-face {
-   font-family: 'MetaBold';
-   src: url('http://www.mozilla.org/img/fonts/MetaWebPro-Bold.eot');
-   src: local('☺'), url('http://www.mozilla.org/img/fonts/MetaWebPro-Bold.woff') format('woff');
-   font-weight: bold;
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('Open-Sans-Bold'),
+    url('../resources/fonts/OpenSans-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans Regular'), local('Open-Sans-Regular'),
+    url('../resources/fonts/OpenSans-Regular.ttf') format('truetype');
 }
 
 .hbox {
@@ -63,14 +69,43 @@ html, body {
 
 #close-button {
   position: fixed;
-  top: 5px;
-  right: 5px;
-  background-image: url( "assets/close-button.png" );
-  background-repeat: no-repeat;
-  background-size: cover;
-  width: 30px;
-  height: 30px;
+  top: 10px;
+  right: 10px;
+  width: 10px;
+  height: 20px;
+  display: inline-block;
+  padding: 4px 10px 4px;
+  margin-bottom: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: #333333;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  vertical-align: middle;
   cursor: pointer;
+  background-color: #f5f5f5;
+  background-image: url("../resources/glyphicons-halflings.png"), -moz-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: url("../resources/glyphicons-halflings.png"), -ms-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: url("../resources/glyphicons-halflings.png"), -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+  background-image: url("../resources/glyphicons-halflings.png"), -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: url("../resources/glyphicons-halflings.png"), -o-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: url("../resources/glyphicons-halflings.png"), linear-gradient(top, #ffffff, #e6e6e6);
+  background-position: -304px 8px, 0 0;
+  background-repeat: no-repeat;
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border: 1px solid #cccccc;
+  border-bottom-color: #b3b3b3;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+}
+
+#close-button:active,
+#close-button.active,
+#close-button.disabled,
+#close-button[disabled],
+#close-button:focus {
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
 }
 
 #error {
@@ -81,7 +116,7 @@ html, body {
   height: 20px;
   text-align: center;
   color: #900;
-  font: 20px Verdana;
+  font: 20px "Open Sans", "Helvetica Neue", sans-serif;
   z-index: 0;
 }
 
@@ -128,47 +163,75 @@ body[data-error] #container {
   text-align: center;
 }
 
-.button-red {
-  background: #c22f02; /* Old browsers */
-  background: -moz-linear-gradient(top,  #c22f02 0%, #c42f02 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c22f02), color-stop(100%,#c42f02)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  #c22f02 0%,#c42f02 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  #c22f02 0%,#c42f02 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  #c22f02 0%,#c42f02 100%); /* IE10+ */
-  background: linear-gradient(top,  #c22f02 0%,#c42f02 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c22f02', endColorstr='#c42f02',GradientType=0 ); /* IE6-9 */
+.butter-dialog-button {
+  display: inline-block;
+  padding: 4px 10px 4px;
+  margin-bottom: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: #333333;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: #f5f5f5;
+  background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+  background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+  background-image: linear-gradient(top, #ffffff, #e6e6e6);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
+  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border: 1px solid #cccccc;
+  border-bottom-color: #b3b3b3;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
 }
-
-.button-red:hover {
-  background: #e23602; /* Old browsers */
-  background: -moz-linear-gradient(top,  #e23602 0%, #e43702 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e23602), color-stop(100%,#e43702)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  #e23602 0%,#e43702 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  #e23602 0%,#e43702 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  #e23602 0%,#e43702 100%); /* IE10+ */
-  background: linear-gradient(top,  #e23602 0%,#e43702 100%); /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e23602', endColorstr='#e43702',GradientType=0 ); /* IE6-9 */
+.butter-dialog-button:hover,
+.butter-dialog-button:active,
+.butter-dialog-button.active,
+.butter-dialog-button.disabled,
+.butter-dialog-button[disabled] {
+  background-color: #e6e6e6;
 }
-
-.button-blue {
-  background: #D1BE70;
-  background: -moz-linear-gradient(top, #26B5D8 0%, #2B86D4 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#26B5D8), color-stop(100%,#2B86D4));
-  background: -webkit-linear-gradient(top, #26B5D8 0%,#2B86D4 100%);
-  background: -o-linear-gradient(top, #26B5D8 0%,#2B86D4 100%);
-  background: -ms-linear-gradient(top, #26B5D8 0%,#2B86D4 100%);
-  background: linear-gradient(top, #2B86D4);
+.butter-dialog-button:active,
+.butter-dialog-button.active {
+  background-color: #cccccc;
+}
+.butter-dialog-button:hover {
+  color: #333333;
+  text-decoration: none;
+  background-color: #e6e6e6;
+  background-position: 0 -15px;
+  -webkit-transition: background-position 0.1s linear;
+  -moz-transition: background-position 0.1s linear;
+  -ms-transition: background-position 0.1s linear;
+  -o-transition: background-position 0.1s linear;
+  transition: background-position 0.1s linear;
+}
+.butter-dialog-button:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.butter-dialog-button.active,
+.butter-dialog-button:active {
+  background-color: #e6e6e6;
+  background-color: #d9d9d9;
+  background-image: none;
+  outline: 0;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
+}
+.butter-dialog-button.disabled,
+.butter-dialog-button[disabled] {
+  cursor: default;
+  background-color: #e6e6e6;
+  background-image: none;
+  opacity: 0.65;
   box-shadow: none;
-}
-
-.button-blue:hover {
-  background: #D1BE70;
-  background: -moz-linear-gradient(top, #26B5D8 0%, #29B4D6 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D1BE70), color-stop(100%,#29B4D6));
-  background: -webkit-linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
-  background: -o-linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
-  background: -ms-linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
-  background: linear-gradient(top, #26B5D8 0%,#29B4D6 100%);
 }
 
 .main-textarea {
@@ -183,7 +246,7 @@ body[data-error] #container {
 }
 
 h1 {
-  font: 35px 'MetaBold';
+  font: 25px "Open Sans", "Helvetica Neue", sans-serif;
   color: #fff;
   line-height: 40px;
   height: 40px;
@@ -197,19 +260,4 @@ body > h1 {
 }
 
 #content > h1{
-}
-
-button {
-  margin: 0 5px 5px 5px;
-  height: 30px;
-  display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  color: white;
-  font-family: Verdana, sans-serif;
-  font-size: 18px;
-  min-width: 100px;
 }

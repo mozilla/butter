@@ -114,6 +114,7 @@ define( [
             var dialog = new IFrameDialog({
               type: "iframe",
               modal: true,
+              classes: "fade-in smallIframe",
               url: butter.ui.dialogDir + "share.html",
               events: {
                 open: function( e ){
@@ -165,6 +166,7 @@ define( [
         var dialog = new IFrameDialog({
           type: "iframe",
           modal: true,
+          classes: "fade-in smallIframe",
           url: butter.ui.dialogDir + "save-as.html",
           events: {
             open: function( e ){

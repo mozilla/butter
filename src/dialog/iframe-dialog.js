@@ -19,6 +19,7 @@ define( [
     var _this = this,
         _url = dialogOptions.url,
         _parent = dialogOptions.parent,
+        _classes = dialogOptions.classes || "fade-in",
         _open = false,
         _iframe,
         _commQueue = [],
@@ -112,7 +113,7 @@ define( [
       // need to wait an event-loop cycle to apply this class
       // ow, opacity transition fails to render
       setTimeout( function(){
-        _iframe.className += " fade-in";
+        _iframe.className += " " + _classes.trim();
       }, 10 );
     }; //open
 
