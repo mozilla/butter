@@ -1,8 +1,10 @@
 .speechBubble {
   opacity: 0;
   font-family: orgovan-rounded-web, bangers, "Open Sans", sans-serif;
+  font-weight: 600;
   font-size: 18px;
-  line-height: 1;
+  line-height: 1.2;
+  text-align: center;
   position: relative;
   display: inline-block;
   border: 2px solid black;
@@ -19,7 +21,7 @@
 
 .speechBubble.full-width { width: 100%; }
 .speechBubble.connected { margin-bottom: 15px; }
-.speechBubble.fx .text { text-align: center; font-size: 45px; font-weight: bold; padding: 10px;}
+.speechBubble.fx .text { text-align: center; font-size: 45px; padding: 10px;}
 
 .speechBubble .canvas {
   position: absolute;
@@ -124,29 +126,47 @@
   z-index: 1001;
 }
 .zoink-didyouknow {
+  font-size: .9em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 800;
   position: absolute;
   background: blue;
   width: 100%;
-  height: 20px;
-  padding: 2px;
-  top: -20px;
-  left: -2px;
+  height: 30px;
+  padding: 5px 2px 5px 35px;
+  box-sizing: border-box;
+  top: -24px;
+  left: 0;
   color: #FFF;
-  text-align: center;
+  text-align: left;
   border-radius: 3px 3px 0 0;
 }
 .zoink-didyouknow.fiction{
-  background: red;
+  background: rgb(169,3,41);
+  background: url(thumbsdown.png) no-repeat, -moz-linear-gradient(top,  rgba(169,3,41,1) 0%, rgba(143,2,34,1) 44%, rgba(150,3,30,1) 100%);
+  background: url(thumbsdown.png) no-repeat, -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(169,3,41,1)), color-stop(44%,rgba(143,2,34,1)), color-stop(100%,rgba(150,3,30,1)));
+  background: url(thumbsdown.png) no-repeat, -webkit-linear-gradient(top,  rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(150,3,30,1) 100%);
+  background: url(thumbsdown.png) no-repeat, -o-linear-gradient(top,  rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(150,3,30,1) 100%);
+  background: url(thumbsdown.png) no-repeat, -ms-linear-gradient(top,  rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(150,3,30,1) 100%);
+  background: url(thumbsdown.png) no-repeat, linear-gradient(top,  rgba(169,3,41,1) 0%,rgba(143,2,34,1) 44%,rgba(150,3,30,1) 100%);
 }
 
 .zoink-didyouknow.fact{
-  background: green;
+  background: rgb(0,110,46);
+  background: url(thumbsup.png) no-repeat, -moz-linear-gradient(top,  rgba(0,110,46,1) 0%, rgba(1,91,0,1) 100%);
+  background: url(thumbsup.png) no-repeat,-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,110,46,1)), color-stop(100%,rgba(1,91,0,1)));
+  background: url(thumbsup.png) no-repeat,-webkit-linear-gradient(top,  rgba(0,110,46,1) 0%,rgba(1,91,0,1) 100%);
+  background: url(thumbsup.png) no-repeat, -o-linear-gradient(top,  rgba(0,110,46,1) 0%,rgba(1,91,0,1) 100%);
+  background: url(thumbsup.png) no-repeat,-ms-linear-gradient(top,  rgba(0,110,46,1) 0%,rgba(1,91,0,1) 100%);
+  background: url(thumbsup.png) no-repeat, linear-gradient(top,  rgba(0,110,46,1) 0%,rgba(1,91,0,1) 100%);
 }
 
 .speechBubble.didyouknow{
   border-radius: 0 0 6px 6px;
   min-width: 100px;
   text-align: center;
+  border: none;
 }
 .speechBubble.didyouknow .text {
   text-align: left;

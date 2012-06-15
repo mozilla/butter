@@ -1,0 +1,108 @@
+/* FLICKR
+-------------------------------------------------- */
+.popcorn-flickr p {
+  display: none;
+}
+.popcorn-flickr a {
+  position: absolute;
+  display: inline-block;
+  opacity: .8;
+  -webkit-transition: opacity .3s linear;
+  -moz-transition: opacity .3s linear;
+  -o-transition: opacity .3s linear;
+  -ms-transition: opacity .3s linear;
+  transition: opacity .3s linear;
+}
+.popcorn-flickr a > img {
+  width: 100%;
+  height: auto;
+  box-shadow: 3px 3px 20px #000;
+}
+.popcorn-flickr a:hover{
+  opacity: 1;
+  z-index: 2000;
+  -webkit-transition: opacity .3s linear;
+  -moz-transition: opacity .3s linear;
+  -o-transition: opacity .3s linear;
+  -ms-transition: opacity .3s linear;
+  transition: opacity .3s linear;
+}
+.popcorn-flickr a:nth-child(4n+0){
+  -webkit-animation: float 10s infinite linear;
+  -moz-animation: float 10s infinite linear;
+  -ms-animation: float 10s infinite linear;
+  -o-animation: float 10s infinite linear;
+  animation: float 10s infinite linear;
+}
+.popcorn-flickr a:nth-child(4n+1){
+  -webkit-animation: floatb 18s infinite linear;
+  -moz-animation: floatb 18s infinite linear;
+  -ms-animation: floatb 18s infinite linear;
+  -o-animation: floatb 18s infinite linear;
+  animation: floatb 18s infinite linear;
+}
+.popcorn-flickr a:nth-child(4n+2){
+  -webkit-animation: floatc 10s infinite linear;
+  -moz-animation: floatc 10s infinite linear;
+  -ms-animation: floatc 10s infinite linear;
+  -o-animation: floatc 10s infinite linear;
+  animation: floatc 10s infinite linear;
+}
+.popcorn-flickr a:nth-child(4n+3){
+  -webkit-animation: float 10s infinite linear;
+  -moz-animation: float 10s infinite linear;
+  -ms-animation: float 10s infinite linear;
+  -o-animation: float 10s infinite linear;
+  animation: float 10s infinite linear;
+}
+.popcorn-flickr a:nth-child(10n){
+ width: 100px;
+  bottom: 50px;
+  left: 300px;
+}
+.popcorn-flickr a:nth-child(10n+1){
+ bottom: 100px;
+  right: 40px;
+  width: 200px;
+}
+.popcorn-flickr a:nth-child(10n+2){
+  top: 10px;
+  right: 10px;
+  width: 400px;
+}
+.popcorn-flickr a:nth-child(10n+3){
+  bottom: 0;
+  left: 200px;
+}
+.popcorn-flickr a:nth-child(10n+4){
+  width: 300px;
+  top: 40px;
+  left: 100px;
+}
+.popcorn-flickr a:nth-child(10n+5){
+  width: 100px;
+  bottom: 40px;
+  left: 100px;
+}
+.popcorn-flickr a:nth-child(10n+6){
+  width: 200px;
+  top: 140px;
+  right: 20px;
+}
+.popcorn-flickr a:nth-child(10n+7){
+  width: 100px;
+  bottom: 40px;
+  right: 500px;
+}
+.popcorn-flickr a:nth-child(10n+8){
+  width: 200px;
+  bottom: 50px;
+  left: 30px;
+}
+.popcorn-flickr a:nth-child(10n+9){
+  top: 200px;
+  left: 360px;
+  width: 400px;
+}
+
+/* ---/ FLICKR ------------------------------- */
