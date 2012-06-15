@@ -1,6 +1,7 @@
 {
   "name": "robots",
   "title": "Robots",
+  "template": "../index.html",
   "baseDir": "../../../",
   "editor": {
     "default": "{{baseDir}}editors/default-editor.html",

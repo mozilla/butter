@@ -9,7 +9,7 @@ const express = require('express'),
       CONFIG = require('config'),
       TEMPLATES_DIR =  CONFIG.dirs.templates,
       PUBLISH_DIR = CONFIG.dirs.publish,
-      PUBLISH_PREFIX = CONFIG.dirs.publishPrefix,
+      PUBLISH_PREFIX = CONFIG.dirs.hostname,
       WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
       VALID_TEMPLATES = CONFIG.templates,
       EXPORT_ASSETS = CONFIG.exportAssets;
@@ -100,59 +100,87 @@ function publishRoute( req, res ){
       if ( template && VALID_TEMPLATES[ template ] ) {
         var projectPath = PUBLISH_DIR + "/" + id + ".html",
             url = PUBLISH_PREFIX + "/" + id + ".html",
-            projectData = JSON.parse( project.data );
+            projectData = JSON.parse( project.data ),
+            templateBase = VALID_TEMPLATES[ template ].replace( '{{templateBase}}', TEMPLATES_DIR + '/' );
 
-        fs.readFile( VALID_TEMPLATES[ template ], 'utf8', function(err, data){
-          var headEndTagIndex,
-              bodyEndTagIndex,
-              externalAssetsString = '',
-              popcornString = '',
-              currentMedia,
-              currentTrack,
-              currentTrackEvent,
-              mediaPopcornOptions,
-              j, k;
+        fs.readFile( templateBase, 'utf8', function(err, conf){
+          var templateConfig = JSON.parse( conf ),
+              templateFile = path.resolve( templateBase, '..', templateConfig.template );
 
-          // look for script tags with data-butter-exclude in particular (e.g. butter's js script)
-          data = data.replace( /\s*<script[\.\/='":_-\w\s]*data-butter-exclude[\.\/='":_-\w\s]*><\/script>/g, '' );
+          fs.readFile( templateFile, 'utf8', function( err, data ){
+            var headEndTagIndex,
+                bodyEndTagIndex,
+                externalAssetsString = '',
+                popcornString = '',
+                currentMedia,
+                currentTrack,
+                currentTrackEvent,
+                mediaPopcornOptions,
+                templateURL,
+                baseString,
+                headStartTagIndex,
+                templateScripts,
+                startString,
+                j, k;
 
-          headEndTagIndex = data.indexOf( '</head>' );
-          bodyEndTagIndex = data.indexOf( '</body>' );
+            templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
+            baseString = '\n  <base href="' + PUBLISH_PREFIX + templateURL + '/"/>';
 
-          for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
-            externalAssetsString += '\n<script src="' + EXPORT_ASSETS[ i ] + '"></script>';
-          }
+            // look for script tags with data-butter-exclude in particular (e.g. butter's js script)
+            data = data.replace( /\s*<script[\.\/='":_-\w\s]*data-butter-exclude[\.\/='":_-\w\s]*><\/script>/g, '' );
 
-          popcornString += '<script>'
+            // Adding 6 to cut out the actual head tag
+            headStartTagIndex = data.indexOf( '<head>' ) + 6;
+            headEndTagIndex = data.indexOf( '</head>' );
+            bodyEndTagIndex = data.indexOf( '</body>' );
 
-          for ( i = 0; i < projectData.media.length; ++i ) {
-            currentMedia = projectData.media[ i ];
-            mediaPopcornOptions = currentMedia.popcornOptions || {};
-            popcornString += '\n(function(){';
-            popcornString += '\nvar popcorn = Popcorn.smart("#' + currentMedia.target + '", "' + currentMedia.url + '", ' + JSON.stringify( mediaPopcornOptions ) + ');';
-            for ( j = 0; j < currentMedia.tracks.length; ++ j ) {
-              currentTrack = currentMedia.tracks[ j ];
-              for ( k = 0; k < currentTrack.trackEvents.length; ++k ) {
-                currentTrackEvent = currentTrack.trackEvents[ k ];
-                popcornString += '\npopcorn.' + currentTrackEvent.type + '(';
-                popcornString += JSON.stringify( currentTrackEvent.popcornOptions, null, 2 );
-                popcornString += ');';
+            templateScripts = data.substring( headStartTagIndex, headEndTagIndex );
+            startString = data.substring( 0, headStartTagIndex );
+
+            for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
+              externalAssetsString += '\n  <script src="' + path.relative( templateFile, path.resolve( EXPORT_ASSETS[ i ] ) ) + '"></script>\n';
+            }
+
+            // If the template has custom plugins defined in it's config, add them to our exported page
+            if ( templateConfig.plugin && templateConfig.plugin.plugins ) {
+              var plugins = templateConfig.plugin.plugins;
+
+              for ( i = 0, len = plugins.length; i < len; i++ ) {
+                externalAssetsString += '\n  <script src="' + PUBLISH_PREFIX + '/' + plugins[ i ].path.split( '{{baseDir}}' ).pop() + '"></script>';
               }
+              externalAssetsString += '\n';
             }
-            popcornString += '}());';
-          }
-          popcornString += '</script>';
 
-          data = data.substring( 0, headEndTagIndex ) + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + popcornString + data.substring( bodyEndTagIndex );
+            popcornString += '<script>'
 
-          fs.writeFile( projectPath, data, function(){
-            if( err ){
-              res.json({ error: 'internal file error' }, 500);
-              return;
+            for ( i = 0; i < projectData.media.length; ++i ) {
+              currentMedia = projectData.media[ i ];
+              mediaPopcornOptions = currentMedia.popcornOptions || {};
+              popcornString += '\n(function(){';
+              popcornString += '\nvar popcorn = Popcorn.smart("#' + currentMedia.target + '", "' + currentMedia.url + '", ' + JSON.stringify( mediaPopcornOptions ) + ');';
+              for ( j = 0; j < currentMedia.tracks.length; ++ j ) {
+                currentTrack = currentMedia.tracks[ j ];
+                for ( k = 0; k < currentTrack.trackEvents.length; ++k ) {
+                  currentTrackEvent = currentTrack.trackEvents[ k ];
+                  popcornString += '\npopcorn.' + currentTrackEvent.type + '(';
+                  popcornString += JSON.stringify( currentTrackEvent.popcornOptions, null, 2 );
+                  popcornString += ');';
+                }
+              }
+              popcornString += '}());\n';
             }
-            res.json({ error: 'okay', url: url });
+            popcornString += '</script>\n';
+
+            data = startString + baseString + templateScripts + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + popcornString + data.substring( bodyEndTagIndex );
+
+            fs.writeFile( projectPath, data, function(){
+              if( err ){
+                res.json({ error: 'internal file error' }, 500);
+                return;
+              }
+              res.json({ error: 'okay', url: url });
+            });
           });
-
         });
       }
       else {
