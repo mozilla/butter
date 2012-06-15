@@ -4,7 +4,7 @@
 
 body {
   background: #121212;
-  color: #FEF49C;
+  color: #F8FDE2;
   font-weight: 300;
   font-size: 14px;
   font-family: lato, "Helvetica Neue", sans-serif;
@@ -15,11 +15,20 @@ body {
   width: 800px;
 }
 
-h1, h2, h3 {
-  text-transform: uppercase;
+.logo, .cube h2{
+  font-family: "Bree Serif", Georgia, sans-serif;
+  font-weight: 700;
+  letter-spacing: .05em;
+}
+
+h2, h5 {
   text-shadow: 0 1px 30px rgba(254,244,156, 0.6);
-  font-weight: 400;
-  font-family:  Audiowide, sans-serif;
+  text-transform: uppercase;
+  font-family: "Bree Serif", Georgia, sans-serif;
+}
+
+h2 {
+  font-family: "Merriweather", Georgia, sans-serif;
 }
 
 h3 {
@@ -35,6 +44,7 @@ header {
 }
 .logo {
   margin: 0;
+  font-size: 1.8em;
   -webkit-transition: all .5s ease;
   -moz-transition: all .5s ease;
   -o-transition: all .5s ease;
@@ -42,7 +52,7 @@ header {
   -ms-transition: all .5s ease;
 }
 .logo:hover {
-   margin-left: 2px;
+  margin-left: 2px;
   color: #FFFFE0;
   text-shadow: 0 1px 40px rgba(217,27,91,.3),
     0 1px 40px rgba(254,244,156, 1),
