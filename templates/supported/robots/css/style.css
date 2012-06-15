@@ -108,8 +108,29 @@ section.suplementary {
 
 /*- - - Footer - - -*/
 footer {
+  font-size: .9em;
   padding: 20px 0 40px 0;
-  border-top: 1px solid #999;
+  color: #666;
+  line-height: 1.5;
+}
+footer a, a:visited {
+  color: #777;
+  text-decoration: none;
+}
+footer img {
+  margin-top: 6px;
+}
+footer:hover {
+  color: #EEE;
+  -webkit-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  -ms-transition: all .3s ease;
+  transition: all .3s ease;
+}
+footer:hover a {
+  color: #FFF;
+  text-decoration: underline;
 }
 /* /footer */
 
