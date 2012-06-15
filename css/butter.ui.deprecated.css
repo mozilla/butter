@@ -1408,7 +1408,6 @@ input.form-error {
   background: rgba(86,92,104,1);
   border: 1px solid #222;
   cursor: default;
-  background: none;
   opacity: 0.7;
   box-shadow: none;
   -webkit-transform: scale(1,1);
@@ -1431,6 +1430,11 @@ input.form-error {
   background-repeat: no-repeat;
   margin-right: 3px;
 }
+.butter-btn:hover [class^="icon-"],
+.butter-btn:hover [class*=" icon-"] {
+  background-image: url("../resources/glyphicons-halflings-white.png");
+}
+
 .icon-ok-sign { background-position: -72px -96px; }
 .icon-hdd { background-position: 0 -144px; }
 .icon-share-alt { background-position: -336px -96px; }
