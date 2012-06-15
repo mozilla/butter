@@ -2,36 +2,35 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-document.addEventListener( "DOMContentLoaded", function( e ){
-  (function( Butter, EditorHelper ) {
-    Butter({
-      config: "butter/config.json",
-      ready: function( butter ){
-        var media = butter.currentMedia,
-            popcorn = butter.currentMedia.popcorn.popcorn,
-            editor = new EditorHelper( butter, popcorn );
+(function( Butter, EditorHelper ) {
+  Butter({
+    config: "butter/config.json",
+    ready: function( butter ){
+      var media = butter.currentMedia,
+          popcorn = butter.currentMedia.popcorn.popcorn;
 
-        function start() {
+      EditorHelper( butter, popcorn );
 
-          media.addTrack( "Track1" );
-          media.addTrack();
-          media.addTrack();
+      function start() {
 
-          butter.tracks[ 0 ].addTrackEvent({
-            type: "text",
-            popcornOptions: {
-              start: 0,
-              end: 1,
-              text: "This is a test.",
-              target: "Area1"
-            }
-          });
-        } //start
+        media.addTrack( "Track1" );
+        media.addTrack();
+        media.addTrack();
 
-        media.onReady( start );
+        butter.tracks[ 0 ].addTrackEvent({
+          type: "text",
+          popcornOptions: {
+            start: 0,
+            end: 1,
+            text: "This is a test.",
+            target: "Area1"
+          }
+        });
+      } //start
 
-      }
-    });
+      media.onReady( start );
 
-  }( window.Butter, window.EditorHelper ));
-}, false );
+    }
+  });
+
+}( window.Butter, window.EditorHelper ));
