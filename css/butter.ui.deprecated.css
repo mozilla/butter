@@ -207,6 +207,10 @@ body.butter-tray-spacing.minimized {
   border-radius: 5px;
 }
 
+.butter-media-properties.open .butter-inner-container-title {
+  padding: 0;
+}
+
 .butter-media-properties .butter-loading-container {
   position: absolute;
   z-index: 2140000001;
