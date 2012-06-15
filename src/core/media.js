@@ -71,7 +71,8 @@
               for( var i = 0, l = _tracks.length; i < l; i++ ) {
                 var te = _tracks[ i ].trackEvents;
                 for( var j = 0, k = te.length; j < k; j++ ) {
-                  _popcornWrapper.updateEvent( te[ j ] );
+                  // should call _popcornWrapper.updateEvent( te[ j ] ) circuitously
+                  te[ j ].update();
                 }
               }
               if( _view ){
@@ -129,15 +130,15 @@
       }
 
       function onTrackEventAdded( e ){
-        _popcornWrapper.updateEvent( e.data );
+        var trackEvent = e.data;
+        _popcornWrapper.updateEvent( trackEvent );
+        trackEvent._popcornWrapper = _popcornWrapper;
       } //onTrackEventAdded
 
-      function onTrackEventUpdated( e ){
-        _popcornWrapper.updateEvent( e.target );
-      } //onTrackEventUpdated
-
       function onTrackEventRemoved( e ){
-        _popcornWrapper.destroyEvent( e.data );
+        var trackEvent = e.data;
+        _popcornWrapper.destroyEvent( trackEvent );
+        trackEvent._popcornWrapper = null;
       } //onTrackEventRemoved
 
       this.addTrack = function ( track ) {
@@ -156,11 +157,10 @@
           "trackeventdeselected",
           "trackeventeditrequested"
         ]);
-        track.popcorn = _popcornWrapper;
         track.listen( "trackeventadded", onTrackEventAdded );
-        track.listen( "trackeventupdated", onTrackEventUpdated );
         track.listen( "trackeventremoved", onTrackEventRemoved );
         _this.dispatch( "trackadded", track );
+        track.setPopcornWrapper( _popcornWrapper );
         var trackEvents = track.trackEvents;
         if ( trackEvents.length > 0 ) {
           for ( var i=0, l=trackEvents.length; i<l; ++i ) {
@@ -196,8 +196,8 @@
             "trackeventdeselected",
             "trackeventeditrequested"
           ]);
+          track.setPopcornWrapper( null );
           track.unlisten( "trackeventadded", onTrackEventAdded );
-          track.unlisten( "trackeventupdated", onTrackEventUpdated );
           track.unlisten( "trackeventremoved", onTrackEventRemoved );
           _this.dispatch( "trackremoved", track );
           track._media = null;
