@@ -1,0 +1,67 @@
+@import "butter.ui.deprecated.css";
+.butter-image-preload {
+  visibility: hidden;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.butter-media-properties {
+  height: 32px;
+  width: 90px;
+  overflow: hidden;
+}
+.butter-media-properties .butter-container {
+  top: 0;
+}
+.butter-media-properties .butter-inner-container {
+  padding: 10px;
+  margin-bottom: 20px;
+  visibility: hidden;
+}
+.butter-media-properties.open .butter-inner-container {
+  visibility: visible;
+}
+.butter-media-properties.open .butter-edit-message {
+  visibility: hidden;
+}
+.butter-media-properties .butter-url {
+  width: 224px;
+  overflow: hidden;
+}
+.butter-media-properties .butter-url input,
+.butter-media-properties .butter-url button {
+  transition: opacity 0.2s;
+  opacity: 0;
+}
+.butter-media-properties .butter-url input {
+  width: 190px;
+  padding: 5px 3px;
+  border: 1px solid #333;
+}
+.butter-media-properties .butter-url button.butter-btn-remove {
+  padding: 5px 3px;
+  width: 20px;
+}
+.butter-media-properties .butter-url.fade-in input,
+.butter-media-properties .butter-url.fade-in button {
+  opacity: 1;
+}
+.butter-media-properties .butter-url:nth-of-type(1) button {
+  display: none;
+}
+.butter-media-properties .butter-url:nth-of-type(1) input {
+  width: 220px;
+}
+.butter-media-properties button.butter-btn-save,
+.butter-media-properties button.butter-btn-add-url {
+  margin-top: 0.5em;
+  float: right;
+}
+.butter-media-properties button.butter-btn-remove {
+  margin-top: 0.3em;
+}
+
+.icon-minus { 
+  background-position: -433px -96px;
+}
