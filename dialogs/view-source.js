@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the MIT license
+ * If a copy of the MIT license was not distributed with this file, you can
+ * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
+
 Dialog.ready(function(){
   var jsonButton = document.getElementById( "json-button" ),
       htmlButton = document.getElementById( "html-button" ),
@@ -13,12 +17,16 @@ Dialog.ready(function(){
     title.innerHTML = "Project JSON Data";
     htmlExport.style.display = "none";
     jsonExport.style.display = "block";
+    Dialog.disableElements( "json-button" );
+    Dialog.enableElements( "html-button" );
   }, false );
 
   htmlButton.addEventListener( "click", function( e ){
     title.innerHTML = "HTML Export";
     htmlExport.style.display = "block";
     jsonExport.style.display = "none";
+    Dialog.disableElements( "html-button" );
+    Dialog.enableElements( "json-button" );
   }, false );
 
   Dialog.wait( "export", function( e ){
@@ -32,6 +40,6 @@ Dialog.ready(function(){
     Dialog.enableCloseButton();
     Dialog.assignEscapeKey( "default-close" );
     Dialog.assignEnterKey( "default-close" );
-    Dialog.enableElements( "json-button", "html-button" );
+    Dialog.enableElements( "json-button" );
   });
 });
