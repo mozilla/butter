@@ -17,49 +17,93 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js"></script>
+  <script type="text/javascript" src="js/bigtext.js"></script>
+  <script type="text/javascript" src="js/script.js"></script>
+  
   <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
   <script src="../../../src/butter.js" data-butter-exclude></script>
   <script src="../shared/editors/editorhelper.js" data-butter-exclude></script>
   <script type="text/javascript" src="butter/template.js" data-butter-exclude></script>
-
+  <style data-butter-exclude>
+    .butter-header-spacing h2,
+    .butter-header-spacing h2.scroll{
+      top: 50px;
+    }
+  </style>
 </head>
 <body>
-  <div class="inner-container">
-    <div class="wrapper">
-      <header>
-        <h2 id="logo" class="logo on">Robots in everytown</h2>
-      </header>
-      <div role="main">
-        <section id="video-container" class="video-container">
-          <video id="video" preload data-butter="media" controls>
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.mp4">
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.webm">
-          </video>
-          <div class="video-overlay">
-            <div class="text-overlay">
-              <div id="top-title" data-butter="target"></div>
-              <div id="mid-title" data-butter="target"></div>
-              <div id="bottom-title" data-butter="target"></div>
-            </div>
-          </div>
-          <div id="video-overlay" class="video-overlay" data-butter="target"></div>
-        </section>
-        <section class="cf suplementary">
-          <article id="Supplementary1" class="block" data-butter="target">
-          </article>
-          <article class="block">
-          </article>
-          <article id="Supplementary2" class="block" data-butter="target">
-          </article>
-        </section>
-      </div>
-      <footer>
-       <p>All video and images courtesy Public Domain material at <a href="http://www.archive.org">The Internet Archive</a>
-        <br>Music courtesy the <a href="www.freemusicarchive.org"> Free Music Archive</a>
-        <br>Wake <em>"Steppin"</em>
-        <br><img src="http://i.creativecommons.org/l/by/3.0/88x31.png"></p>
-      </footer>
-    </div><!--.wrapper-->
-  </div><!--.inner-container-->
-</body>
+  <div role="main">
+  <h2 id="banner"><img src="img/flourish1.png" height="90" width="70">The toronto Daily news<img src="img/flourish2.png" height="90" width="70"></h2>
+  <div class="full">
+    <p class="note transform">
+      <span class="pointer"></span>exclusive breaking news!
+      <span class="pointer"></span>don't miss!
+      <span class="pointer"></span>we've got the scoop
+    </p>
+    <hr>
+  </div>
+  <div class="quarter">
+  <article>
+    <div class="bigtext title transform">
+      <div>Robots</div>
+      <div class="chunk">to invade</div>
+      <div>tokyo</div>
+    </div>
+     <p class="byline transform">elen smith</p>
+    <div class="dropcap transform">
+      <p>According to the Robot Leader, robots are planning to invade the earth. There invasion will begin in <a href="#4">Tokyo, Japan</a>.</p>
+      <p>Why are the Robots coming to earth, and why have they chosen our beloved city? They are looking for <a href="#4">Chuck Norris</a>. "This human is strong," says the Robot Leader.</p> 
+      <p>Our sources have confirmed that the only thing that can stop them is <a href="#4">kittens</a>.</p>
+    </div>
+    <hr>
+    <div class="transform">
+      <p>Although the robots want to destroy all kittens, they will not be able to do it so easily</p>
+      <p>Not if Chuck Norris has anything to say about it!</p>
+    </div>
+    <hr>
+    <div id="mini-container" class="transform" data-butter="target"></div>
+</article>
+</div>
+<div class="threequarter">
+  <div id="video-container" class="video-container">
+    <video id="video" preload data-butter="media" controls>
+      <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.mp4">
+      <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.ogv">
+      <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.webm">
+    </video>
+    <div id="video-overlay" class="video-overlay" data-butter="target"></div>
+  </div>
+ <article class="three"> 
+    <div>
+      <p>The robots can only be stopped if we find more help! Tweet #allhailrobots to disclose your location and join us. And don't tell the robots about twitter.</p>
+      <p>All video and images courtesy Public Domain material at <a href="http://www.archive.org">The Internet Archive</a>. Music courtesy the <a href="www.freemusicarchive.org"> Free Music Archive</a>. Wake <em>"Steppin"</em>. </p>
+      <p>This project was created in Mozilla Popcorn for the Story Camp Project. You can make your own project to -- just visit MozillaPopcorn.org, and put those robots in line!</p>
+      <p>A robot is a mechanical or virtual intelligent agent that can perform tasks automatically or with guidance, typically by remote control.</p>
+  </div>
+  <div class="bigtext alt">
+      <div>humans</div>
+      <div>must try</div>
+      <div>to defeat the</div>
+      <div>Robots</div>
+      <div class="chunk"><a href="http://www.twitter.com">#allhailrobots</a></div>
+    </div> 
+</article>
+</div>
+<div class="full">
+      <hr>
+   <article class="four"> 
+    <div class="bigtext">
+      <div>Everything you need</div>
+      <div>to know about robots</div>
+    </div>
+    <p class="byline">wikipedia</p>
+    <div>
+      <p>A robot is a mechanical or virtual intelligent agent that can perform tasks automatically or with guidance, typically by remote control. In practice a robot is usually an electro-mechanical machine that is guided by computer and electronic programming. Robots can be autonomous, semi-autonomous or remotely controlled. Robots range from humanoids such as ASIMO and TOPIO to Nano robots, Swarm robots, Industrial robots, military robots, mobile and servicing robots. By mimicking a lifelike appearance or automating movements, a robot may convey a sense that it has intent or agency of its own. The branch of technology that deals with robots is robotics.</p>
+      <p>When societies first began developing, nearly all production and effort was the result of human labour, as well as with the aid of semi- and fully domesticated animals. As mechanical means of performing functions were discovered, and mechanics and complex mechanisms were developed, many tasks began to require less for human labour. Machinery was initially used for repetitive functions, such as lifting water and grinding grain. With technological advances more complex machines were slowly developed, such as those invented by Hero of Alexandria (in Egypt) in the 1st century AD, and the first half of the second millennium AD, such as the Automata of Al-Jazari in the 12th century AD (in medieval Iraq). They were not widely adopted as human labour, particularly slave labour, was still inexpensive compared to the capital-intensive machines.</p>
+    </div>
+  </article>
+  <hr>
+</div>
+</div>
 </html>
