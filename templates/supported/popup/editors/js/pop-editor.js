@@ -40,7 +40,7 @@
 
   (function() {
     var bin, icons = [], userIcons, i, editor,
-      imagePath = 'http://mozillapopcorn.org/maker/layouts/pop/';
+      imagePath = location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" ) + '/templates/supported/popup/';
     
     function indexOf(array, callback) {
       var elements = array.filter(callback);
