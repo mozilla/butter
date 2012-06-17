@@ -94,9 +94,9 @@
               "target": "video-overlay",
               "type": "STAMEN-TONER",
               "zoom": 10,
-              "lat": "49.264810770785395",
-              "lng": "-123.2402695734375",
-              "location": "",
+              "lat": "",
+              "lng": "",
+              "location": "Tokyo, Japan",
               "heading": "",
               "pitch": 1
             }
