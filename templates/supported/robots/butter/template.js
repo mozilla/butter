@@ -11,7 +11,24 @@
         function start(){
           var trackOne = media.addTrack( "Track0" ),
               trackTwo = media.addTrack(),
-              trackThree = media.addTrack();
+              trackThree = media.addTrack(),
+              trackFour = media.addTrack();
+
+          trackFour.addTrackEvent({
+            "type": "googlemap",
+            "popcornOptions": {
+                "start": 0,
+                "end": 80,
+                "target": "mini-container",
+                "type": "STAMEN-TONER",
+                "zoom": 9,
+                "lat": "",
+                "lng": "",
+                "location": "Tokyo, Japan",
+                "heading": "",
+                "pitch": 1
+            }
+          });
 
           trackOne.addTrackEvent({
             "type": "flickr",
@@ -19,7 +36,7 @@
               "start": 33.06,
               "end": 37.873,
               "text": "This is a test.",
-              "target": "top-title",
+              "target": "video-overlay",
               "tags": "kitten",
               "height": "200",
               "width": "200",
@@ -34,7 +51,7 @@
             "popcornOptions": {
               "start": 0,
               "end": 2.361,
-              "target": "top-title",
+              "target": "video-overlay",
               "text": "ALL HAIL ROBOTS!",
               "styles": "Top Title",
               "transitionSpeed": "slow"
@@ -46,7 +63,7 @@
             popcornOptions: {
               start: 57.059,
               end: 62.146,
-              target: "top-title",
+              target: "video-overlay",
               text: "Share on Twitter! Use hashtag #allhailrobots",
               styles: "Top Title",
               transitionSpeed: "normal"
@@ -58,7 +75,7 @@
             "popcornOptions": {
               "start": 5.161,
               "end": 7.454,
-              "target": "top-title",
+              "target": "video-overlay",
               "text": "The human beings",
               "showText": false,
               "amplitude": "",
@@ -90,7 +107,7 @@
             "popcornOptions": {
               "start": 30.49485575863204,
               "end": 32.9224219865747,
-              "target": "top-title",
+              "target": "video-overlay",
               "text": "Gotta dance!",
               "type": "thought",
               "triangle": "top left",
@@ -123,7 +140,7 @@
             "popcornOptions": {
               "start": 7.323,
               "end": 9.198,
-              "target": "top-title",
+              "target": "video-overlay",
               "text": "so very weak",
               "showText": false,
               "amplitude": "",
@@ -139,7 +156,7 @@
             "popcornOptions": {
               "start": 10.881,
               "end": 12.158,
-              "target": "top-title",
+              "target": "video-overlay",
               "text": "We robots have come to install order on earth.  Our invasion will be centered at this location",
               "showText": false,
               "amplitude": "",
@@ -155,7 +172,7 @@
             "popcornOptions": {
               "start": 32.96156578783416,
               "end": 35.02191450484101,
-              "target": "top-title",
+              "target": "video-overlay",
               "text": "the only thing that can stop them is this object",
               "showText": false,
               "amplitude": "",
@@ -171,7 +188,7 @@
             "popcornOptions": {
               "start": 24.551,
               "end": 29.642,
-              "target": "top-title",
+              "target": "video-overlay",
               "text": "We have come for this human - he is strong",
               "showText": false,
               "amplitude": "",
@@ -187,7 +204,7 @@
             "popcornOptions": {
               "start": 54.609,
               "end": 55.609,
-              "target": "top-title",
+              "target": "video-overlay",
               "text": "YOU MUST NOW TELL THE OTHERS OF OUR CONQUEST!",
               "showText": false,
               "amplitude": "",
@@ -203,7 +220,7 @@
             "popcornOptions": {
               "start": 38.082,
               "end": 41.081,
-              "target": "top-title",
+              "target": "video-overlay",
               "text": "we must destroy them all",
               "showText": false,
               "amplitude": "",
