@@ -84,15 +84,7 @@
               var targetElement = document.getElementById( _target );
               if (  targetElement &&
                     targetElement.getAttribute( "data-butter-media-controls" ) ) {
-                // Check if the media element is the target itself, or if it's a child node
-                if (  [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) === -1 &&
-                      targetElement.firstChild &&
-                      [ "VIDEO", "AUDIO" ].indexOf( targetElement.firstChild.nodeName ) > -1 ) {
-                  targetElement.firstChild.setAttribute( "controls", true );
-                }
-                else {
-                  targetElement.setAttribute( "controls" );
-                }
+                _popcornWrapper.popcorn.controls( true );
               }
 
               _this.dispatch( "mediaready" );
