@@ -1,6 +1,7 @@
 {
   "name": "simple",
   "title": "Simple",
+  "template": "../index.html",
   "baseDir": "../../../",
   "plugin": {
     "plugins": [
