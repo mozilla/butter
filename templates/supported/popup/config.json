@@ -3,6 +3,7 @@
   "title": "Popup",
   "template": "index.html",
   "baseDir": "../../../",
+  "savedDataUrl": "saved-data.json",
   "editor": {
     "pop": "{{baseDir}}templates/supported/popup/editors/pop.html"
   },
