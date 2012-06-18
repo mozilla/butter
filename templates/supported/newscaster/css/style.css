@@ -78,6 +78,10 @@ section.video-container {
   width: 100%;
 }
 
+#video > video {
+  width: 100%;
+}
+
 .video-overlay {
   position: absolute;
   top: 0;

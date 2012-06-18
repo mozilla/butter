@@ -64,6 +64,10 @@ section.video-container {
   box-shadow: 0 50px 30px -20px rgba(0,0,0,.6);
 }
 
+#video > video {
+  width: 100%;
+}
+
 .video-overlay {
   position: absolute;
   top: 0;
