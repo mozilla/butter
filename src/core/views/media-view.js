@@ -132,7 +132,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       }
     }
 
-    function changeUrl(){
+    function changeUrl() {
       var validTextboxes = [],
           textboxes = _container.querySelectorAll( "input[type='text']" ),
           errorTextboxes = [];
@@ -165,7 +165,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
     }
 
-    function testUrl ( url ) {
+    function testUrl( url ) {
       var test = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
       return url.match(test);
     }
@@ -180,7 +180,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     _logoSpinner.start();
     _changeButton.setAttribute( "disabled", true );
 
-    function parseURLArray ( urlArray ) {
+    function parseURLArray( urlArray ) {
       var currentUrls = _urlList.querySelectorAll( "input[type='text']" );
       while ( currentUrls.length < urlArray.length ) {
         addUrl();
@@ -195,7 +195,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       }
     }
 
-    function updateURLS () {
+    function updateURLS() {
       var url = media.url;
       if( typeof( url ) === "string" ) {
         _urlTextbox.value = url;
