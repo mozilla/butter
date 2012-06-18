@@ -49,16 +49,21 @@ if ( !path.existsSync( PUBLISH_DIR ) ) {
   fs.mkdirSync( PUBLISH_DIR );
 }
 
-app.use(express.logger(CONFIG.logger))
-  .use(express.bodyParser())
-  .use(express.cookieParser())
-  .use( express.session( CONFIG.session ) )
-  .use(stylus.middleware({
-    src: WWW_ROOT
-  }))
-  .use(express.static( WWW_ROOT ))
-  .use(express.static( PUBLISH_DIR ))
-  .use(express.directory( WWW_ROOT, { icons: true } ) );
+app.configure( function() {
+  app.use( express.logger( CONFIG.logger ) )
+    .use( express.static( WWW_ROOT ) )
+    .use( express.static( PUBLISH_DIR ) )
+    .use( express.bodyParser() )
+    .use( express.cookieParser() )
+    .use( express.session( CONFIG.session ) )
+    .use( stylus.middleware({
+      src: WWW_ROOT
+    }));
+});
+
+app.configure( 'development', function() {
+  app.use( express.directory( WWW_ROOT, { icons: true } ) );
+});
 
 require('express-browserid').plugAll(app);
 
