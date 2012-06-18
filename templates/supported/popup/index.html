@@ -15,11 +15,9 @@
 </head>
 <body>
     <div id="video-container" class="video-js-box">
-        <video id="video" style="width:768px;height:432px;" preload class="video-js" data-butter="media" controls>
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.mp4">
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.ogv">
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.webm">
-        </video>
+        <div id="video" class="video-js" data-butter="media"
+          data-butter-source="http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.mp4,http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.ogv,http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.webm" 
+          data-butter-media-controls="true"></div>
         <div id="pop-container" data-butter="target"></div>
     </div>
 </body>

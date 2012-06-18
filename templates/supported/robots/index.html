@@ -31,10 +31,9 @@
       </header>
       <div role="main">
         <section id="video-container" class="video-container">
-          <video id="video" style="width:800px; height:500px;" preload data-butter="media" controls>
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.mp4">
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/robots.webm">
-          </video>
+          <div id="video" data-butter="media"
+            data-butter-source="http://videos-cdn.mozilla.net/serv/webmademovies/robots.mp4,http://videos-cdn.mozilla.net/serv/webmademovies/robots.webm" 
+            data-butter-media-controls="true"></div>
           <div class="video-overlay">
             <div class="text-overlay">
               <div id="top-title" data-butter="target"></div>
