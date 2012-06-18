@@ -26,8 +26,8 @@
       "id": "Media0",
       "name": "Media0",
       "url": [
-        "http://videos-origin.mozilla.org/serv/webmademovies/Moz_Doc_0329_GetInvolved.mp4",
-        "http://videos-origin.mozilla.org/serv/webmademovies/Moz_Doc_0329_GetInvolved.webm"
+        "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved.mp4",
+        "http://videos-cdn.mozilla.net/serv/webmademovies/Moz_Doc_0329_GetInvolved.webm"
       ],
       "target": "video",
       "duration": 178.411,
