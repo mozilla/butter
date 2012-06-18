@@ -12,6 +12,7 @@ html
       each project in projects
         tr
           td
-            a(href= project._id)
+            a(href= project.href)
               = project.name
-          td= project.template
+          td
+            = project.template
