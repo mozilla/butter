@@ -2,21 +2,82 @@ doctype 5
 html
   head
     title Dashboard
+    link(rel='stylesheet',href='../css/butter.ui.css')
     style
-      th {
-        text-align: left
+      body {
+        font-family: "Open Sans", "Helvetica Neue", sans-serif;
+        background: #3D3F44;
+        color: #888;
+        width: 650px;
+        margin: 0 auto;
+        font-size: .9em;
       }
-  body
-    h1 My Dashboard -
-      = user.email
+      table, th, tr, td {
+        border: none;
+        border-spacing: 0;
+        padding: 0;
+        margin: 0;
+      }
+      table {
+        margin-top: 20px;
+      }
+      th {
+        text-align: left;
+        color: #EEE;
+        border-bottom: 1px solid #222;
+        font-size: 1.2em;
+      }
+      td, th {
+        padding: 5px 10px;
+      }
+      td:first-child {
+        width: 350px;
+      }
+      td:first-child:hover {
+        
+        background: rgb(255,239,158);
+        -webkit-transition: .2s all;
+        -moz-transition: .2s all;
+        -ms-transition: .2s all;
+        -o-transition: .2s all;
+        transition: .2s all;
+      }
+      td:first-child:hover a {
+        color: #242428; 
+      }
+      td:nth-child(2) {
+        width: 300px;
+      }
+      tr:nth-child(odd) {
+        background: rgba(0,0,0,.3);
+      }
+      tr:nth-child(even) {
+        background: rgba(0,0,0,.4);
+      }
+      
+      .butter-projects-title {
+        display: block;
+        text-align: left;
+        text-decoration: none;
+        color: #EEE;
+      }
+      .butter-projects-title:hover {
+        color: #FFF;
+      }
+  body.butter-header-spacing
+    div#butter-header
+      div.butter-header-inner
+        div.butter-logo
+        span.butter-name My Dashboard &ndash; 
+          = user.email
     table
       tr
-        th Name
+        th Project Title
         th Template
       each project in projects
         tr
           td
-            a(href= project.href)
+            a(href= project.href).butter-projects-title
               = project.name
           td
             = project.template
