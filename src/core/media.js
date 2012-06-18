@@ -78,6 +78,23 @@
               if( _view ){
                 _view.update();
               }
+
+              // If the target element has a `data-butter-media-controls` property,
+              // set the `controls` attribute on the corresponding media element.
+              var targetElement = document.getElementById( _target );
+              if (  targetElement && 
+                    targetElement.getAttribute( "data-butter-media-controls" ) ) {
+                // Check if the media element is the target itself, or if it's a child node
+                if (  [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) === -1 && 
+                      targetElement.firstChild &&
+                      [ "VIDEO", "AUDIO" ].indexOf( targetElement.firstChild.nodeName ) > -1 ) {
+                  targetElement.firstChild.setAttribute( "controls" );
+                }
+                else {
+                  targetElement.setAttribute( "controls" ); 
+                }
+              }
+
               _this.dispatch( "mediaready" );
             },
             constructing: function(){
@@ -300,6 +317,7 @@
             return _target;
           },
           set: function( val ) {
+            console.log( val );
             if ( _target !== val ) {
               _popcornWrapper.clear( _target );
               _target = val;
@@ -465,6 +483,7 @@
       function retrieveSrc() {
         var targetElement = document.getElementById( _target ),
             url = "";
+            console.log( _target, targetElement );
 
         if ( targetElement.children ) {
           var children = targetElement.children;

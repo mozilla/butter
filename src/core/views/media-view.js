@@ -165,7 +165,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
     }
 
-    function testUrl(url) {
+    function testUrl ( url ) {
       var test = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
       return url.match(test);
     }
@@ -180,27 +180,37 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     _logoSpinner.start();
     _changeButton.setAttribute( "disabled", true );
 
-    function updateURLS(){
-      if( typeof( media.url ) === "string" ) {
-        _urlTextbox.value = media.url;
+    function parseURLArray ( urlArray ) {
+      var currentUrls = _urlList.querySelectorAll( "input[type='text']" );
+      while ( currentUrls.length < urlArray.length ) {
+        addUrl();
+        currentUrls = _urlList.querySelectorAll( "input[type='text']" );
       }
-      else if ( media.url.length ) {
-        var urls = media.url,
-            currentUrls = _urlList.querySelectorAll( "input[type='text']" );
-        while ( currentUrls.length < urls.length ) {
-          addUrl();
-          currentUrls = _urlList.querySelectorAll( "input[type='text']" );
+      while ( currentUrls.length > urlArray.length ) {
+        removeUrl( currentUrls[ currentUrls.length - 1 ] );
+        currentUrls = _urlList.querySelectorAll( "input[type='text']" );
+      }
+      for ( var i = 0; i < urlArray.length; ++i ) {
+        currentUrls[ i ].value = urlArray[ i ];
+      }
+    }
+
+    function updateURLS () {
+      var url = media.url;
+      if( typeof( url ) === "string" ) {
+        if ( url.indexOf( "," ) > -1 ) {
+          url = url.split( "," );
+          parseURLArray( url );
         }
-        while ( currentUrls.length > urls.length ) {
-          removeUrl( currentUrls[ currentUrls.length - 1 ] );
-          currentUrls = _urlList.querySelectorAll( "input[type='text']" );
+        else {
+          _urlTextbox.value = url;  
         }
-        for ( var i = 0; i < urls.length; ++i ) {
-          currentUrls[ i ].value = urls[ i ];
-        }
+      }
+      else if ( url.length ) {
+        parseURLArray( url );
       }
       else {
-        throw "Media url is expected value (not string or array): " + media.url;
+        throw "Media url is expected value (not string or array): " + url;
       }
     }
 
