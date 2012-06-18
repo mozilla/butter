@@ -23,10 +23,6 @@
         "path": "{{baseDir}}templates/supported/shared/plugins/photo/popcorn.photo.js"
       },
       {
-        "type": "mediaspawner",
-        "path": "{{baseDir}}external/popcorn-js/plugins/mediaspawner/popcorn.mediaspawner.js"
-      },
-      {
         "type": "zoink",
         "path": "{{baseDir}}templates/supported/shared/plugins/zoink/popcorn.zoink.js"
       },
@@ -43,7 +39,6 @@
       "text",
       "titlecard",
       "photo",
-      "mediaspawner",
       "zoink",
       "shrink",
       "flickr",
