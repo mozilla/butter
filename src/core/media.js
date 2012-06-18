@@ -88,7 +88,7 @@
                 if (  [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) === -1 &&
                       targetElement.firstChild &&
                       [ "VIDEO", "AUDIO" ].indexOf( targetElement.firstChild.nodeName ) > -1 ) {
-                  targetElement.firstChild.setAttribute( "controls" );
+                  targetElement.firstChild.setAttribute( "controls", true );
                 }
                 else {
                   targetElement.setAttribute( "controls" );
