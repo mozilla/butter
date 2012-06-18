@@ -58,7 +58,15 @@ app.configure( function() {
     .use( express.session( CONFIG.session ) )
     .use( stylus.middleware({
       src: WWW_ROOT
-    }));
+    }))
+    /* Show Zeus who's boss
+     * This only affects requests under /api and /browserid, not static files
+     * because the static file writes the response header before we hit this middleware
+     */
+    .use( function( req, res, next ) {
+      res.header( 'Cache-Control', 'no-store' );
+      return next();
+    });
 });
 
 app.configure( 'development', function() {
