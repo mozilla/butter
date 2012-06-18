@@ -317,7 +317,6 @@
             return _target;
           },
           set: function( val ) {
-            console.log( val );
             if ( _target !== val ) {
               _popcornWrapper.clear( _target );
               _target = val;
