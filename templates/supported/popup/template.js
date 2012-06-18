@@ -73,21 +73,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
                   },
                   "track": "Track0",
                   "name": "TrackEvent6"
-              },
-              {
-                  "id": "TrackEvent8",
-                  "type": "words",
-                  "popcornOptions": {
-                      "start": 18.14,
-                      "end": 22.46,
-                      "target": "pop-container",
-                      "text": "Make your own!",
-                      "link": "http://mozillapopcorn.org",
-                      "left": "50",
-                      "top": "50"
-                  },
-                  "track": "Track0",
-                  "name": "TrackEvent8"
               }
           ]
       };
