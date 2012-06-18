@@ -26,7 +26,5 @@
 .shrink-alt.shrink-tiny {
   opacity: .2;
   pointer-events:none;
-  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='your_transparent.png', sizingMethod='scale');
-  background:none !important;
 }
 
