@@ -502,7 +502,6 @@
         // we already have a source, so lets call setupContent and ensure the url has been set
         } else {
           _url = url;
-          setupContent();
         }
       }
 
