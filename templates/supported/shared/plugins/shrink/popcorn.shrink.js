@@ -40,10 +40,18 @@
 
       var target,
           text,
-          _popcorn = this;
+          _popcorn = this,
+          type = _popcorn.media.tagName;
 
       options._videoContainer = document.getElementById( options.containerID ) || _popcorn.media;
-      options._videoContainer.classList.add( "shrink" );
+
+      if ( type === "VIDEO" ) {
+        //It's an HTML5 video. Shrinking is OK.
+        options._videoContainer.classList.add( "shrink" );
+      } else {
+        //It's Youtube or Vimeo :(
+        options._videoContainer.classList.add( "shrink-alt" );
+      }
     },
 
     /**
@@ -68,6 +76,7 @@
 
     _teardown: function( options ) {
       options._videoContainer.classList.remove( "shrink" );
+      options._videoContainer.classList.remove( "shrink-alt" );
       options._videoContainer.classList.remove( "shrink-tiny" );
     }
   });

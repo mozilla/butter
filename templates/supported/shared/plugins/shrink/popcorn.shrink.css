@@ -1,4 +1,5 @@
-.shrink {
+.shrink,
+.shrink-alt {
   -webkit-transition: all .3s linear;
   -moz-transition: all .3s linear;
   -o-transition: all .3s linear;
@@ -22,3 +23,10 @@
   transform-origin: top center;
   transition: all .3s linear;
 }
+.shrink-alt.shrink-tiny {
+  opacity: .2;
+  pointer-events:none;
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='your_transparent.png', sizingMethod='scale');
+  background:none !important;
+}
+
