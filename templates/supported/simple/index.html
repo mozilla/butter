@@ -14,11 +14,9 @@
     <div class="row-fluid">
       <div class="span6 video-background">
         <div id="video-container">
-          <video id="video" preload="auto" data-butter="media" controls>
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/studentresponse.mp4">
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/studentresponse.ogv">
-            <source src="http://videos-cdn.mozilla.net/serv/webmademovies/studentresponse.webm">
-          </video>
+          <div id="video" data-butter="media"
+          data-butter-source="http://videos-cdn.mozilla.net/serv/webmademovies/studentresponse.mp4,http://videos-cdn.mozilla.net/serv/webmademovies/studentresponse.ogv,http://videos-cdn.mozilla.net/serv/webmademovies/studentresponse.webm" 
+          data-butter-media-controls="true"></div>
         </div>
     </div>
     <div id="above-right" class="span6 well" data-butter="target"></div>
