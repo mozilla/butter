@@ -2,6 +2,7 @@
   "name": "musicvideo",
   "title": "Music Video",
   "baseDir": "../../../",
+  "savedDataUrl": "saved-data.json",
   "plugin": {
     "plugins": [
       {

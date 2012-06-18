@@ -3,6 +3,7 @@
   "title": "Simple",
   "template": "../index.html",
   "baseDir": "../../../",
+  "savedDataUrl": "butter/saved-data.json",
   "plugin": {
     "plugins": [
       {
@@ -28,6 +29,6 @@
       "image",
       "twitter"
     ]
-  
+
   }
 }
