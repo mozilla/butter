@@ -123,6 +123,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
      * user.
      */
     this.prepare = function( url, target, popcornOptions, callbacks, scripts ){
+      var urlsFromString;
 
       // called when timeout occurs preparing popcorn or the media
       function timeoutWrapper( e ){
@@ -146,6 +147,11 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         else {
           firstUrl = url[ 0 ];
         }
+      }
+      else if ( url.indexOf( "," ) > -1 ) {
+        urlsFromString = url.split( "," );
+        firstUrl = urlsFromString[ 0 ];
+        url = urlsFromString;
       }
 
       // discover and stash the type of media as dictated by the url

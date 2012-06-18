@@ -78,6 +78,15 @@
               if( _view ){
                 _view.update();
               }
+
+              // If the target element has a `data-butter-media-controls` property,
+              // set the `controls` attribute on the corresponding media element.
+              var targetElement = document.getElementById( _target );
+              if (  targetElement &&
+                    targetElement.getAttribute( "data-butter-media-controls" ) ) {
+                _popcornWrapper.popcorn.controls( true );
+              }
+
               _this.dispatch( "mediaready" );
             },
             constructing: function(){
@@ -222,10 +231,13 @@
       }; //getManifest
 
       function setupContent(){
-        if( _url && _target ){
+        if ( _url && _url.indexOf( "," ) > -1 ) {
+          _url = _url.split( "," );
+        }
+        if ( _url && _target ){
           _popcornWrapper.prepare( _url, _target, _popcornOptions, _this.popcornCallbacks, _this.popcornScripts );
-        } //if
-        if( _view ){
+        }
+        if ( _view ) {
           _view.update();
         }
       }
@@ -386,6 +398,7 @@
               url: _url,
               target: _target,
               duration: _duration,
+              controls: _popcornWrapper.popcorn ? _popcornWrapper.popcorn.controls() : false,
               tracks: exportJSONTracks
             };
           },
