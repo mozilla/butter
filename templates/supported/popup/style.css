@@ -7,7 +7,8 @@ body {
   font-family: Helvetica,Arial,sans-serif;
 }
 
-video {
+#video > video {
+  width: 100%;
   outline: none;
 }
 
@@ -24,11 +25,6 @@ video {
   margin: 1em auto;
   width: 768px;
   height: 432px;
-}
-
-#video, #video iframe {
-  width: 100%;
-  height: 100%;
 }
 
 #video-container .vjs-big-play-button,
