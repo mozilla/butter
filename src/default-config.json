@@ -44,10 +44,6 @@
       {
         "type": "wikipedia",
         "path": "{{baseDir}}external/popcorn-js/plugins/wikipedia/popcorn.wikipedia.js"
-      },
-      {
-        "type": "mediaspawner",
-        "path": "{{baseDir}}external/popcorn-js/plugins/mediaspawner/popcorn.mediaspawner.js"
       }
     ],
     "defaults": [
