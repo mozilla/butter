@@ -272,7 +272,7 @@ app.get('/dashboard', function(req, res) {
           name: project.name,
           template: project.template,
           href: templateConfigs[ project.template ].template + 
-            "?savedDataURL=" + PUBLISH_PREFIX + "/api/project/" + project._id
+            "?savedDataUrl=" + PUBLISH_PREFIX + "/api/project/" + project._id
         });
       }
     }
@@ -348,8 +348,7 @@ app.get('/api/project/:id?', function(req, res) {
   UserModel.findOne( { email: email }, function( err, doc ) {
     for( var i=0; i<doc.projects.length; ++i ){
       if( String( doc.projects[ i ]._id ) === id ){
-        returnVal = { error: "okay", project: doc.projects[ i ].data };
-        res.json( returnVal );
+        res.json( JSON.parse( doc.projects[ i ].data ) );
         return;
       }
     }
