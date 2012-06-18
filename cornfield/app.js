@@ -184,6 +184,9 @@ function publishRoute( req, res ){
                   popcornString += ');';
                 }
               }
+              if ( currentMedia.controls ) {
+                popcornString += "\npopcorn.controls( true );\n";
+              }
               popcornString += '}());\n';
             }
             popcornString += '</script>\n';

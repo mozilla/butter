@@ -398,6 +398,7 @@
               url: _url,
               target: _target,
               duration: _duration,
+              controls: _popcornWrapper.popcorn ? _popcornWrapper.popcorn.controls() : false,
               tracks: exportJSONTracks
             };
           },
