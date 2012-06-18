@@ -70,6 +70,7 @@
     "jshint": "0.6.x",
     "requirejs": "1.0.x",
     "express": "2.5.x",
+    "jade": "0.26.x",
     "express-browserid": "0.0.x",
     "config": "0.4.x",
     "mongoose": "2.5.x",

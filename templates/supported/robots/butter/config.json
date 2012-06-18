@@ -3,6 +3,7 @@
   "title": "Robots",
   "template": "../index.html",
   "baseDir": "../../../",
+  "savedDataUrl": "butter/saved-data.json",
   "editor": {
     "default": "{{baseDir}}editors/default-editor.html",
     "photo": "{{baseDir}}templates/supported/shared/editors/photo-editor.html",

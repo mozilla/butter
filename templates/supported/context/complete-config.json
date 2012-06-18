@@ -1,6 +1,7 @@
 {
   "title": "Context",
   "baseDir": "../../../",
+  "savedDataUrl": "saved-data.json",
   "plugin": {
     "plugins": [
     {

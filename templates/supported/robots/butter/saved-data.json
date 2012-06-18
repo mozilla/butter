@@ -1,0 +1,297 @@
+{
+  "targets": [
+    {
+      "id": "Target0",
+      "name": "Target0",
+      "element": "top-title"
+    },
+    {
+      "id": "Target1",
+      "name": "Target1",
+      "element": "mid-title"
+    },
+    {
+      "id": "Target2",
+      "name": "Target2",
+      "element": "bottom-title"
+    },
+    {
+      "id": "Target3",
+      "name": "Target3",
+      "element": "video-overlay"
+    },
+    {
+      "id": "Target4",
+      "name": "Target4",
+      "element": "Supplementary1"
+    },
+    {
+      "id": "Target5",
+      "name": "Target5",
+      "element": "Supplementary2"
+    }
+  ],
+  "media": [
+    {
+      "id": "Media0",
+      "name": "Media0",
+      "url": [
+        "http://videos-cdn.mozilla.net/serv/webmademovies/robots.mp4",
+        "http://videos-cdn.mozilla.net/serv/webmademovies/robots.webm"
+      ],
+      "target": "video",
+      "duration": 69.747,
+      "controls": true,
+      "tracks": [
+        {
+          "name": "Track0",
+          "id": "Track0",
+          "trackEvents": [
+            {
+              "id": "TrackEvent0",
+              "type": "flickr",
+              "popcornOptions": {
+                "start": 33.06,
+                "end": 37.873,
+                "text": "This is a test.",
+                "target": "top-title",
+                "tags": "kitten",
+                "height": "200",
+                "width": "200",
+                "padding": "0",
+                "border": "0",
+                "numberofimages": "10",
+                "userid": "",
+                "username": "",
+                "apikey": ""
+              },
+              "track": "Track0",
+              "name": "TrackEvent0"
+            },
+            {
+              "id": "TrackEvent1",
+              "type": "titles",
+              "popcornOptions": {
+                "start": 0,
+                "end": 2.361,
+                "target": "top-title",
+                "text": "ALL HAIL ROBOTS!",
+                "styles": "Top Title",
+                "transitionSpeed": "slow"
+              },
+              "track": "Track0",
+              "name": "TrackEvent1"
+            },
+            {
+              "id": "TrackEvent2",
+              "type": "titles",
+              "popcornOptions": {
+                "start": 57.059,
+                "end": 62.146,
+                "target": "top-title",
+                "text": "Share on Twitter! Use hashtag #allhailrobots",
+                "styles": "Top Title",
+                "transitionSpeed": "normal"
+              },
+              "track": "Track0",
+              "name": "TrackEvent2"
+            }
+          ]
+        },
+        {
+          "name": "Track1",
+          "id": "Track1",
+          "trackEvents": [
+            {
+              "id": "TrackEvent3",
+              "type": "speak",
+              "popcornOptions": {
+                "start": 5.161,
+                "end": 7.454,
+                "target": "top-title",
+                "text": "The human beings",
+                "showText": false,
+                "amplitude": "",
+                "wordgap": "0",
+                "pitch": "100",
+                "speed": "100",
+                "pluginPath": "../shared/plugins/speak/"
+              },
+              "track": "Track1",
+              "name": "TrackEvent3"
+            },
+            {
+              "id": "TrackEvent4",
+              "type": "googlemap",
+              "popcornOptions": {
+                "start": 18.832,
+                "end": 24.411,
+                "target": "video-overlay",
+                "type": "STAMEN-TONER",
+                "zoom": 10,
+                "lat": "49.264810770785395",
+                "lng": "-123.2402695734375",
+                "location": "",
+                "heading": "",
+                "pitch": 1
+              },
+              "track": "Track1",
+              "name": "TrackEvent4"
+            },
+            {
+              "id": "TrackEvent5",
+              "type": "zoink",
+              "popcornOptions": {
+                "start": 30.495,
+                "end": 32.922,
+                "target": "top-title",
+                "text": "Gotta dance!",
+                "type": "thought",
+                "triangle": "top left",
+                "flip": true,
+                "classes": "fx",
+                "order": "1",
+                "top": "200",
+                "left": "275",
+                "width": "200"
+              },
+              "track": "Track1",
+              "name": "TrackEvent5"
+            },
+            {
+              "id": "TrackEvent6",
+              "type": "photo",
+              "popcornOptions": {
+                "start": 24.481,
+                "end": 30.061,
+                "target": "video-overlay",
+                "src": "http://media.techworld.com/cmsdata/news/3213248/chucknorris.jpg",
+                "href": "",
+                "width": "500",
+                "height": "500",
+                "top": "100",
+                "left": "200"
+              },
+              "track": "Track1",
+              "name": "TrackEvent6"
+            }
+          ]
+        },
+        {
+          "name": "Track2",
+          "id": "Track2",
+          "trackEvents": [
+            {
+              "id": "TrackEvent7",
+              "type": "speak",
+              "popcornOptions": {
+                "start": 7.323,
+                "end": 9.198,
+                "target": "top-title",
+                "text": "so very weak",
+                "showText": false,
+                "amplitude": "",
+                "wordgap": "0",
+                "pitch": "100",
+                "speed": "120",
+                "pluginPath": "../shared/plugins/speak/"
+              },
+              "track": "Track2",
+              "name": "TrackEvent7"
+            },
+            {
+              "id": "TrackEvent8",
+              "type": "speak",
+              "popcornOptions": {
+                "start": 10.881,
+                "end": 12.158,
+                "target": "top-title",
+                "text": "We robots have come to install order on earth.  Our invasion will be centered at this location",
+                "showText": false,
+                "amplitude": "",
+                "wordgap": "0",
+                "pitch": "100",
+                "speed": "60",
+                "pluginPath": "../shared/plugins/speak/"
+              },
+              "track": "Track2",
+              "name": "TrackEvent8"
+            },
+            {
+              "id": "TrackEvent9",
+              "type": "speak",
+              "popcornOptions": {
+                "start": 32.962,
+                "end": 35.022,
+                "target": "top-title",
+                "text": "the only thing that can stop them is this object",
+                "showText": false,
+                "amplitude": "",
+                "wordgap": "0",
+                "pitch": "70",
+                "speed": "70",
+                "pluginPath": "../shared/plugins/speak/"
+              },
+              "track": "Track2",
+              "name": "TrackEvent9"
+            },
+            {
+              "id": "TrackEvent10",
+              "type": "speak",
+              "popcornOptions": {
+                "start": 24.551,
+                "end": 29.642,
+                "target": "top-title",
+                "text": "We have come for this human - he is strong",
+                "showText": false,
+                "amplitude": "",
+                "wordgap": "0",
+                "pitch": "20",
+                "speed": "120",
+                "pluginPath": "../shared/plugins/speak/"
+              },
+              "track": "Track2",
+              "name": "TrackEvent10"
+            },
+            {
+              "id": "TrackEvent11",
+              "type": "speak",
+              "popcornOptions": {
+                "start": 54.609,
+                "end": 55.609,
+                "target": "top-title",
+                "text": "YOU MUST NOW TELL THE OTHERS OF OUR CONQUEST!",
+                "showText": false,
+                "amplitude": "",
+                "wordgap": "0",
+                "pitch": "80",
+                "speed": "80",
+                "pluginPath": "../shared/plugins/speak/"
+              },
+              "track": "Track2",
+              "name": "TrackEvent11"
+            },
+            {
+              "id": "TrackEvent12",
+              "type": "speak",
+              "popcornOptions": {
+                "start": 38.082,
+                "end": 41.081,
+                "target": "top-title",
+                "text": "we must destroy them all",
+                "showText": false,
+                "amplitude": "",
+                "wordgap": "0",
+                "pitch": "0",
+                "speed": "0",
+                "pluginPath": "../shared/plugins/speak/"
+              },
+              "track": "Track2",
+              "name": "TrackEvent12"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

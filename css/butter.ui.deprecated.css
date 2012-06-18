@@ -1439,6 +1439,7 @@ input.form-error {
   background-image: url("../resources/glyphicons-halflings-white.png");
 }
 
+.icon-grear-sign { background-position: -240px 0; }
 .icon-ok-sign { background-position: -72px -96px; }
 .icon-eye-open { background-position: -96px -120px; }
 .icon-share-alt { background-position: -336px -96px; }
