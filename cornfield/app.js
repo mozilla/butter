@@ -3,6 +3,7 @@ console.log( __dirname );
 const express = require('express'),
       fs = require('fs'),
       path = require('path'),
+      url = require('url'),
       app = express.createServer(),
       MongoStore = require('connect-mongo')(express),
       stylus = require('stylus'),
@@ -13,6 +14,23 @@ const express = require('express'),
       WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
       VALID_TEMPLATES = CONFIG.templates,
       EXPORT_ASSETS = CONFIG.exportAssets;
+
+var templateConfigs = {};
+
+function readTemplateConfig( templateName, templatedPath ) {
+  var configPath = templatedPath.replace( '{{templateBase}}', TEMPLATES_DIR + '/' );
+  fs.readFile( configPath, 'utf8', function( err, conf ) {
+    var configPathBase = configPath.substring( 0, configPath.lastIndexOf( '/' ) );
+    conf = JSON.parse( conf );
+    conf.template = configPathBase + '/' + conf.template;
+    templateConfigs[ templateName ] = conf;
+  });
+}
+
+// parse configs ahead of any action that has to happen with them
+for ( var templateName in VALID_TEMPLATES ) {
+  readTemplateConfig( templateName, VALID_TEMPLATES[ templateName ] );
+}
 
 var canStoreData = true;
 
@@ -118,104 +136,101 @@ function publishRoute( req, res ){
         var projectPath = PUBLISH_DIR + "/" + id + ".html",
             url = PUBLISH_PREFIX + "/" + id + ".html",
             projectData = JSON.parse( project.data ),
-            templateBase = VALID_TEMPLATES[ template ].replace( '{{templateBase}}', TEMPLATES_DIR + '/' );
+            templateBase = VALID_TEMPLATES[ template ].replace( '{{templateBase}}', TEMPLATES_DIR + '/' ),
+            templateConfig = templateConfigs[ template ],
+            templateFile = templateConfig.template;
 
-        fs.readFile( templateBase, 'utf8', function(err, conf){
-          var templateConfig = JSON.parse( conf ),
-              templateFile = path.resolve( templateBase, '..', templateConfig.template );
+        fs.readFile( templateFile, 'utf8', function( err, data ){
+          var headEndTagIndex,
+              bodyEndTagIndex,
+              externalAssetsString = '',
+              popcornString = '',
+              currentMedia,
+              currentTrack,
+              currentTrackEvent,
+              mediaPopcornOptions,
+              templateURL,
+              baseString,
+              headStartTagIndex,
+              templateScripts,
+              startString,
+              j, k;
 
-          fs.readFile( templateFile, 'utf8', function( err, data ){
-            var headEndTagIndex,
-                bodyEndTagIndex,
-                externalAssetsString = '',
-                popcornString = '',
-                currentMedia,
-                currentTrack,
-                currentTrackEvent,
-                mediaPopcornOptions,
-                templateURL,
-                baseString,
-                headStartTagIndex,
-                templateScripts,
-                startString,
-                j, k;
+          templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
+          baseString = '\n  <base href="' + PUBLISH_PREFIX + templateURL + '/"/>';
 
-            templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
-            baseString = '\n  <base href="' + PUBLISH_PREFIX + templateURL + '/"/>';
+          // look for script tags with data-butter-exclude in particular (e.g. butter's js script)
+          data = data.replace( /\s*<script[\.\/='":_-\w\s]*data-butter-exclude[\.\/='":_-\w\s]*><\/script>/g, '' );
 
-            // look for script tags with data-butter-exclude in particular (e.g. butter's js script)
-            data = data.replace( /\s*<script[\.\/='":_-\w\s]*data-butter-exclude[\.\/='":_-\w\s]*><\/script>/g, '' );
+          // Adding 6 to cut out the actual head tag
+          headStartTagIndex = data.indexOf( '<head>' ) + 6;
+          headEndTagIndex = data.indexOf( '</head>' );
+          bodyEndTagIndex = data.indexOf( '</body>' );
 
-            // Adding 6 to cut out the actual head tag
-            headStartTagIndex = data.indexOf( '<head>' ) + 6;
-            headEndTagIndex = data.indexOf( '</head>' );
-            bodyEndTagIndex = data.indexOf( '</body>' );
+          templateScripts = data.substring( headStartTagIndex, headEndTagIndex );
+          startString = data.substring( 0, headStartTagIndex );
 
-            templateScripts = data.substring( headStartTagIndex, headEndTagIndex );
-            startString = data.substring( 0, headStartTagIndex );
+          for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
+            externalAssetsString += '\n  <script src="' + path.relative( templateFile, path.resolve( EXPORT_ASSETS[ i ] ) ) + '"></script>\n';
+          }
 
-            for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
-              externalAssetsString += '\n  <script src="' + path.relative( templateFile, path.resolve( EXPORT_ASSETS[ i ] ) ) + '"></script>\n';
+          // If the template has custom plugins defined in it's config, add them to our exported page
+          if ( templateConfig.plugin && templateConfig.plugin.plugins ) {
+            var plugins = templateConfig.plugin.plugins;
+
+            for ( i = 0, len = plugins.length; i < len; i++ ) {
+              externalAssetsString += '\n  <script src="' + PUBLISH_PREFIX + '/' + plugins[ i ].path.split( '{{baseDir}}' ).pop() + '"></script>';
             }
+            externalAssetsString += '\n';
+          }
 
-            // If the template has custom plugins defined in it's config, add them to our exported page
-            if ( templateConfig.plugin && templateConfig.plugin.plugins ) {
-              var plugins = templateConfig.plugin.plugins;
+          popcornString += '<script>';
 
-              for ( i = 0, len = plugins.length; i < len; i++ ) {
-                externalAssetsString += '\n  <script src="' + PUBLISH_PREFIX + '/' + plugins[ i ].path.split( '{{baseDir}}' ).pop() + '"></script>';
-              }
-              externalAssetsString += '\n';
+          for ( i = 0; i < projectData.media.length; ++i ) {
+            var mediaUrls,
+                mediaUrlsString = '[ "';
+
+            currentMedia = projectData.media[ i ];
+            // We expect a string (one url) or an array of url strings.
+            // Turn a single url into an array of 1 string.
+            mediaUrls = typeof currentMedia.url === "string" ? [ currentMedia.url ] : currentMedia.url;
+            mediaPopcornOptions = currentMedia.popcornOptions || {};
+            numSources = mediaUrls.length;
+
+            for ( k = 0; k < numSources - 1; k++ ) {
+              mediaUrlsString += mediaUrls[ k ] + '" , "';
             }
+            mediaUrlsString += mediaUrls[ numSources - 1 ] + '" ]';
 
-            popcornString += '<script>';
-
-            for ( i = 0; i < projectData.media.length; ++i ) {
-              var mediaUrls,
-                  mediaUrlsString = '[ "';
-
-              currentMedia = projectData.media[ i ];
-              // We expect a string (one url) or an array of url strings.
-              // Turn a single url into an array of 1 string.
-              mediaUrls = typeof currentMedia.url === "string" ? [ currentMedia.url ] : currentMedia.url;
-              mediaPopcornOptions = currentMedia.popcornOptions || {};
-              numSources = mediaUrls.length;
-
-              for ( k = 0; k < numSources - 1; k++ ) {
-                mediaUrlsString += mediaUrls[ k ] + '" , "';
+            popcornString += '\n(function(){';
+            popcornString += '\nvar popcorn = Popcorn.smart("#' + currentMedia.target + '", ' +
+                             mediaUrlsString + ', ' + JSON.stringify( mediaPopcornOptions ) + ');';
+            for ( j = 0; j < currentMedia.tracks.length; ++ j ) {
+              currentTrack = currentMedia.tracks[ j ];
+              for ( k = 0; k < currentTrack.trackEvents.length; ++k ) {
+                currentTrackEvent = currentTrack.trackEvents[ k ];
+                popcornString += '\npopcorn.' + currentTrackEvent.type + '(';
+                popcornString += JSON.stringify( currentTrackEvent.popcornOptions, null, 2 );
+                popcornString += ');';
               }
-              mediaUrlsString += mediaUrls[ numSources - 1 ] + '" ]';
-
-              popcornString += '\n(function(){';
-              popcornString += '\nvar popcorn = Popcorn.smart("#' + currentMedia.target + '", ' +
-                               mediaUrlsString + ', ' + JSON.stringify( mediaPopcornOptions ) + ');';
-              for ( j = 0; j < currentMedia.tracks.length; ++ j ) {
-                currentTrack = currentMedia.tracks[ j ];
-                for ( k = 0; k < currentTrack.trackEvents.length; ++k ) {
-                  currentTrackEvent = currentTrack.trackEvents[ k ];
-                  popcornString += '\npopcorn.' + currentTrackEvent.type + '(';
-                  popcornString += JSON.stringify( currentTrackEvent.popcornOptions, null, 2 );
-                  popcornString += ');';
-                }
-              }
-              if ( currentMedia.controls ) {
-                popcornString += "\npopcorn.controls( true );\n";
-              }
-              popcornString += '}());\n';
             }
-            popcornString += '</script>\n';
+            if ( currentMedia.controls ) {
+              popcornString += "\npopcorn.controls( true );\n";
+            }
+            popcornString += '}());\n';
+          }
+          popcornString += '</script>\n';
 
-            customDataString = '\n<script type="application/butter-custom-data">\n' + customData + '\n</script>';
+          customDataString = '\n<script type="application/butter-custom-data">\n' + customData + '\n</script>';
 
-            data = startString + baseString + templateScripts + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + customDataString + popcornString + data.substring( bodyEndTagIndex );
+          data = startString + baseString + templateScripts + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + customDataString + popcornString + data.substring( bodyEndTagIndex );
 
-            fs.writeFile( projectPath, data, function(){
-              if( err ){
-                res.json({ error: 'internal file error' }, 500);
-                return;
-              }
-              res.json({ error: 'okay', url: url });
-            });
+          fs.writeFile( projectPath, data, function(){
+            if( err ){
+              res.json({ error: 'internal file error' }, 500);
+              return;
+            }
+            res.json({ error: 'okay', url: url });
           });
         });
       }
@@ -252,15 +267,21 @@ app.get('/dashboard', function(req, res) {
     for ( var i = 0, l = doc.projects.length; i < l; ++i ) {
       project = doc.projects[ i ];
       if ( project.template && VALID_TEMPLATES[ project.template ] ) {
-        userProjects.push( project );
+        userProjects.push({
+          _id: project._id,
+          name: project.name,
+          template: project.template,
+          href: templateConfigs[ project.template ].template + 
+            "?savedDataURL=" + PUBLISH_PREFIX + "/api/project/" + project._id
+        });
       }
     }
 
     res.render( 'dashboard.jade', { 
       user: {
-        email: doc.email,
+        email: email,
       },
-      projects: userProjects 
+      projects: userProjects
     });
   });
 });
