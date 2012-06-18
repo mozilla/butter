@@ -462,9 +462,9 @@
         }
       });
 
-      function retrieveSrc() {
-        var targetElement = document.getElementById( _target ),
-            url = "";
+      // check to see if we have any child source elements and use them if neccessary
+      function retrieveSrc( targetElement ) {
+        var url = "";
 
         if ( targetElement.children ) {
           var children = targetElement.children;
@@ -480,14 +480,17 @@
 
       // There is an edge-case where currentSrc isn't set yet, but everything else about the video is valid.
       // So, here, we wait for it to be set.
-      var targetElement = document.getElementById( _target );
-      if( targetElement && [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) > -1 ) {
-        if( !targetElement.currentSrc && targetElement.getAttribute( "src" ) || targetElement.childNodes.length > 0 ){
+      var targetElement = document.getElementById( _target ),
+          url = _url;
+      if ( targetElement && [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) > -1 ) {
+        url = url || retrieveSrc( targetElement );
+        if ( !url ) {
           var attempts = 0,
               safetyInterval;
 
           safetyInterval = setInterval(function() {
-            var url = retrieveSrc();
+            console.log( targetElement );
+            url = retrieveSrc( targetElement )
             if ( url ) {
               _url = url;
               setupContent();
@@ -496,6 +499,10 @@
               clearInterval( safetyInterval );
             }
           }, MEDIA_ELEMENT_SAFETY_POLL_INTERVAL );
+        // we already have a source, so lets call setupContent and ensure the url has been set
+        } else {
+          _url = url;
+          setupContent();
         }
       }
 
