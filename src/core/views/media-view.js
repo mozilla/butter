@@ -203,7 +203,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
           parseURLArray( url );
         }
         else {
-          _urlTextbox.value = url;  
+          _urlTextbox.value = url;
         }
       }
       else if ( url.length ) {
