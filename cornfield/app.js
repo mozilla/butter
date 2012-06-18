@@ -237,17 +237,31 @@ app.get('/dashboard', function(req, res) {
   var email = req.session.email;
 
   if ( !email ) {
-    res.json( { error: 'unauthorized' }, 403 );
+    res.render( 'dashboard-unauthorized.jade' );
     return;
   }
 
-  if (!canStoreData) {
+  if ( !canStoreData ) {
     res.json( { error: 'storage service is not running' }, 500 );
     return;
   }
 
   UserModel.findOne( { email: email }, function( err, doc ) {
-    res.render( 'dashboard.jade', { user: doc } );
+    var userProjects = [],
+        project;
+    for ( var i = 0, l = doc.projects.length; i < l; ++i ) {
+      project = doc.projects[ i ];
+      if ( project.template && VALID_TEMPLATES[ project.template ] ) {
+        userProjects.push( project );
+      }
+    }
+
+    res.render( 'dashboard.jade', { 
+      user: {
+        email: doc.email,
+      },
+      projects: userProjects 
+    });
   });
 });
 
