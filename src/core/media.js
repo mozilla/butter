@@ -481,17 +481,17 @@
       // There is an edge-case where currentSrc isn't set yet, but everything else about the video is valid.
       // So, here, we wait for it to be set.
       var targetElement = document.getElementById( _target ),
-          url = _url,
+          mediaSource = _url,
           attempts = 0,
           safetyInterval;
 
       if ( targetElement && [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) > -1 ) {
-        url = url || retrieveSrc( targetElement );
-        if ( !url ) {
+        mediaSource = mediaSource || retrieveSrc( targetElement );
+        if ( !mediaSource ) {
           safetyInterval = setInterval(function() {
-            url = retrieveSrc( targetElement );
-            if ( url ) {
-              _url = url;
+            mediaSource = retrieveSrc( targetElement );
+            if ( mediaSource ) {
+              _url = mediaSource ;
               setupContent();
               clearInterval( safetyInterval );
             } else if ( attempts++ === MEDIA_ELEMENT_SAFETY_POLL_ATTEMPTS ) {
@@ -500,7 +500,7 @@
           }, MEDIA_ELEMENT_SAFETY_POLL_INTERVAL );
         // we already have a source, lets make sure we update it
         } else {
-          _url = url;
+          _url = mediaSource;
         }
       }
 
