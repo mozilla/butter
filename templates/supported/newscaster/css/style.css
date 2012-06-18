@@ -1,13 +1,28 @@
 /* ===== Primary Styles ========================================================
    Author: @k88hudson
    ========================================================================== */
-
+html {
+  background: -moz-linear-gradient(#4f4f59, #a7a7b1);
+  background: -ms-linear-gradient(#4f4f59, #a7a7b1);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #4f4f59), color-stop(100%, #a7a7b1)); /* Safari 4+, Chrome 2+ */
+  background: -webkit-linear-gradient(#4f4f59, #a7a7b1);
+  background: -o-linear-gradient(#4f4f59, #a7a7b1);
+  background: linear-gradient(black, white);
+  height: 100%;
+}
 body {
-  background: #121212;
-  color: #F8FDE2;
+  color: #FFF;
   font-weight: 300;
   font-size: 14px;
   font-family: lato, "Helvetica Neue", sans-serif;
+}
+#bg-cubes {
+  background: url(../img/background-scroll.png) center 5% no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .wrapper {
@@ -22,7 +37,7 @@ body {
 }
 
 h2, h5 {
-  text-shadow: 0 1px 30px rgba(254,244,156, 0.6);
+  text-shadow: 0 1px 30px rgba(255,255,255, 0.6);
   text-transform: uppercase;
   font-family: "Bree Serif", Georgia, sans-serif;
 }
@@ -32,7 +47,7 @@ h2 {
 }
 
 h3 {
-  border-bottom: 1px solid #212121;
+  border-bottom: 1px solid #FFF;
 }
 
 /*- - - Header- - -*/
@@ -40,7 +55,6 @@ header {
   position: relative;
   margin-bottom: 20px;
   padding: 70px 0 20px 0;
-  border-bottom: 1px solid #212121;
 }
 .logo {
   margin: 0;
@@ -232,15 +246,13 @@ section.suplementary p:hover {
   width: 100px;
   height: 100px;
   border-radius: 3px;
-  background: -moz-linear-gradient(top,  rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 25%, rgba(255,255,255,0.71) 61%, rgba(255,255,255,0.8) 76%, rgba(255,255,255,0.2) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.7)), color-stop(25%,rgba(255,255,255,0.5)), color-stop(61%,rgba(255,255,255,0.71)), color-stop(76%,rgba(255,255,255,0.8)), color-stop(100%,rgba(255,255,255,0.2)));
-  background: -webkit-linear-gradient(top,  rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.5) 25%,rgba(255,255,255,0.71) 61%,rgba(255,255,255,0.8) 76%,rgba(255,255,255,0.2) 100%);
-  background: -o-linear-gradient(top,  rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.5) 25%,rgba(255,255,255,0.71) 61%,rgba(255,255,255,0.8) 76%,rgba(255,255,255,0.2) 100%);
-  background: -ms-linear-gradient(top,  rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.5) 25%,rgba(255,255,255,0.71) 61%,rgba(255,255,255,0.8) 76%,rgba(255,255,255,0.2) 100%);
-  background: linear-gradient(top,  rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.5) 25%,rgba(255,255,255,0.71) 61%,rgba(255,255,255,0.8) 76%,rgba(255,255,255,0.2) 100%);
-  color: #121212;
-  font-size: 1em;
-  line-height: 1em;
+  background: -moz-linear-gradient(left,  rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.5) 25%, rgba(0,0,0,0.8) 76%, rgba(0,0,0,0.2) 100%);
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.7)), color-stop(25%,rgba(0,0,0,0.5)), color-stop(76%,rgba(0,0,0,0.8)), color-stop(100%,rgba(0,0,0,0.2)));
+  background: -webkit-linear-gradient(left,  rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.5) 25%,rgba(0,0,0,0.8) 76%,rgba(0,0,0,0.2) 100%);
+  background: -o-linear-gradient(left,  rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.5) 25%,rgba(0,0,0,0.8) 76%,rgba(0,0,0,0.2) 100%);
+  background: -ms-linear-gradient(left,  rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.5) 25%,rgba(0,0,0,0.8) 76%,rgba(0,0,0,0.2) 100%);
+  background: linear-gradient(left,  rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.5) 25%,rgba(0,0,0,0.8) 76%,rgba(0,0,0,0.2) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3000000', endColorstr='#33000000',GradientType=1 );
 }   
 
 .cube > div > div {
@@ -310,10 +322,15 @@ section.suplementary p:hover {
 
 .cube div h2{
   display: table-cell;
-  color: #121212;
   vertical-align: middle;
   text-align: center;
   line-height: 1.2;
+  font-family: "Helvetica Neue", sans-serif;
+  font-weight: 800;
+  color: #FF374C;
+  font-size: 3em;
+  letter-spacing: -0.08em;
+  text-shadow: none;
 }
 
 /*- - - Footer - - -*/

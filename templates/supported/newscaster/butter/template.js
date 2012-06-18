@@ -19,72 +19,104 @@
               trackThree = media.addTrack();
 
           trackOne.addTrackEvent({
-            "type": "text",
-            "popcornOptions": {
-              "start": 0,
-              "end": 1,
-              "text": "Here you can put any text you like!",
-              "target": "Area1",
-              "escape": false,
-              "multiline": false
-            }
-          });
-
-          trackOne.addTrackEvent({
             "type": "titlecard",
-            "popcornOptions": {
-              "start": 3.988,
-              "end": 6.866,
-              "target": "video-overlay",
-              "title": "Popcorn rules!",
-              "subheading": "These dudes agree:"
-            }
+              "popcornOptions": {
+                "start": 1.781,
+                "end": 4.684,
+                "target": "video-overlay",
+                "title": "Popcorn rules!",
+                "subheading": "These dudes agree:"
+              }
           });
 
           trackOne.addTrackEvent({
             "type": "zoink",
-            "popcornOptions": {
-              "start": 7.477,
-              "end": 9.537,
-              "target": "video-overlay",
-              "text": "I am a Robot!",
-              "type": "thought",
-              "triangle": "top left",
-              "flip": false,
-              "classes": "none",
-              "order": 1,
-              "top": 200,
-              "left": 200,
-              "width": 200
-            }
+              "popcornOptions": {
+                "start": 7.145,
+                "end": 8.363,
+                "target": "video-overlay",
+                "text": "TED is awesome",
+                "type": "fact",
+                "triangle": "top left",
+                "flip": false,
+                "classes": "none",
+                "order": "1",
+                "top": 134,
+                "left": 74,
+                "width": "200"
+              }
           });
 
           trackTwo.addTrackEvent({
-            "type": "photo",
-            "popcornOptions": {
-              "start": 3.988,
-              "end": 6.872,
-              "target": "video-overlay",
-              "src": "http://www.mozilla.org/img/covehead/firefox/brand-toolkit/identity-logo-firefox.png",
-              "href": "http://www.mozilla.org/",
-              "width": 150,
-              "height": 150,
-              "top": 25,
-              "left": 75
-            }
+              "type": "googlemap",
+              "popcornOptions": {
+                "start": 4.319,
+                "end": 6.953,
+                "target": "video-overlay",
+                "type": "ROADMAP",
+                "zoom": 12,
+                "lat": "",
+                "lng": "",
+                "location": "toronto",
+                "heading": "",
+                "pitch": 1
+              }
           });
 
           trackTwo.addTrackEvent({
-            "type": "text",
-            "popcornOptions": {
-              "start": 1.23,
-              "end": 2.23,
-              "target": "Area2",
-              "text": "Also in here!",
-              "escape": false,
-              "multiline": false
-            }
+            "type": "zoink",
+              "popcornOptions": {
+                "start": 7.459,
+                "end": 8.536,
+                "target": "video-overlay",
+                "text": "I love coffee",
+                "type": "fact",
+                "classes": "none",
+                "triangle": "bottom left",
+                "flip": false,
+                "order": "1",
+                "top": 221,
+                "left": 74,
+                "width": "200"
+              }
           });
+
+          trackThree.addTrackEvent({
+            "type": "zoink",
+              "popcornOptions": {
+                "start": 7.722,
+                "end": 8.779,
+                "target": "video-overlay",
+                "text": "I like clowns",
+                "type": "fiction",
+                "classes": "none",
+                "triangle": "bottom left",
+                "flip": false,
+                "order": "1",
+                "top": 304,
+                "left": 76,
+                "width": "200"
+              }
+          });
+
+          trackTwo.addTrackEvent({
+            "type": "flickr",
+              "popcornOptions": {
+                "start": 9.414,
+                "end": 10.414,
+                "target": "video-overlay",
+                "userid": "",
+                "tags": "ponies",
+                "username": "",
+                "apikey": "",
+                "height": 200,
+                "width": 200,
+                "padding": 0,
+                "border": 0,
+                "numberofimages": 10
+              }
+          });
+
         } //start
         media.onReady( start );
       }
