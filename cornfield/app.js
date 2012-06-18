@@ -345,9 +345,14 @@ app.get('/api/project/:id?', function(req, res) {
   }
 
   UserModel.findOne( { email: email }, function( err, doc ) {
+    var project;
     for( var i=0; i<doc.projects.length; ++i ){
-      if( String( doc.projects[ i ]._id ) === id ){
-        res.json( JSON.parse( doc.projects[ i ].data ) );
+      project = doc.projects[ i ];
+      if( String( project._id ) === id ){
+        var projectJSON = JSON.parse( project.data );
+        projectJSON.name = project.name;
+        projectJSON.projectID = project._id;
+        res.json( projectJSON );
         return;
       }
     }
