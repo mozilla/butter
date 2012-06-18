@@ -15,10 +15,6 @@
         "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
       },
       {
-        "type": "shrink",
-        "path": "{{baseDir}}templates/supported/shared/plugins/shrink/popcorn.shrink.js"
-      },
-      {
         "type": "titlecard",
         "path": "{{baseDir}}templates/supported/shared/plugins/titlecard/popcorn.titlecard.js"
       },
@@ -47,7 +43,6 @@
       "text",
       "titlecard",
       "photo",
-      "shrink",
       "mediaspawner",
       "zoink",
       "shrink",
