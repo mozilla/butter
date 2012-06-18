@@ -64,10 +64,10 @@
   </header>
   <div role="main">
     <section id="video-container" class="video-container">
-      <video id="video" style="width:800px; height:500px;" preload data-butter="media" controls>
-        <source src="http://videos-origin.mozilla.org/serv/webmademovies/Moz_Doc_0329_GetInvolved.mp4">
-        <source src="http://videos-origin.mozilla.org/serv/webmademovies/Moz_Doc_0329_GetInvolved.webm">
-      </video>
+      <div id="video" data-butter="media"
+        data-butter-source="http://videos-origin.mozilla.org/serv/webmademovies/Moz_Doc_0329_GetInvolved.mp4,http://videos-origin.mozilla.org/serv/webmademovies/Moz_Doc_0329_GetInvolved.ogv,http://videos-origin.mozilla.org/serv/webmademovies/Moz_Doc_0329_GetInvolved.webm" 
+        data-butter-media-controls="true"
+        style="width:800px; height:500px;"></div>
       <div id="video-overlay" class="video-overlay" data-butter="target">
         <div id="upper-corner" class="upper-corner" data-butter="target"></div>
       </div>
