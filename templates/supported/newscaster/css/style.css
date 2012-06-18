@@ -70,13 +70,14 @@ header {
 section.video-container {
   position: relative;
   width: 100%;
-  min-height: 450px;
   background: #000;
   box-shadow: 0 50px 30px -20px rgba(0,0,0,.6);
 }
-section.video-container > video {
+
+#video {
   width: 100%;
 }
+
 .video-overlay {
   position: absolute;
   top: 0;

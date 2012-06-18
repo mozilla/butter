@@ -26,11 +26,6 @@ video {
   height: 432px;
 }
 
-#video, #video iframe {
-  width: 100%;
-  height: 100%;
-}
-
 #video-container .vjs-big-play-button,
 #video-container .vjs-controls,
 #video-container .vjs-styles-check {
