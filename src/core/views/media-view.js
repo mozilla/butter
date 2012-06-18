@@ -198,13 +198,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     function updateURLS () {
       var url = media.url;
       if( typeof( url ) === "string" ) {
-        if ( url.indexOf( "," ) > -1 ) {
-          url = url.split( "," );
-          parseURLArray( url );
-        }
-        else {
-          _urlTextbox.value = url;
-        }
+        _urlTextbox.value = url;
       }
       else if ( url.length ) {
         parseURLArray( url );

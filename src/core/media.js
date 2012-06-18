@@ -239,10 +239,13 @@
       }; //getManifest
 
       function setupContent(){
-        if( _url && _target ){
+        if ( _url && _url.indexOf( "," ) > -1 ) {
+          _url = _url.split( "," );
+        }
+        if ( _url && _target ){
           _popcornWrapper.prepare( _url, _target, _popcornOptions, _this.popcornCallbacks, _this.popcornScripts );
-        } //if
-        if( _view ){
+        }
+        if ( _view ) {
           _view.update();
         }
       }
