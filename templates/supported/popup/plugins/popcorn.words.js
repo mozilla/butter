@@ -27,7 +27,11 @@ todo: animate top, left and other styles (color, font size, etc.)
 			return nop;
 		}
 
-		if (!options.target || !options.text) {
+    if ( !options.target || options.target === this.media.id ) {
+      options.target = "pop-container";
+    }
+
+		if (!options.text) {
 			return nop;
 		}
 
