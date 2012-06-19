@@ -2,9 +2,7 @@
     global.pdebug = (function() {
       var d = {};
 
-      d.youtubeplz = function(){
-        console.log( "http://www.youtube.com/watch?v=qp0HIF3SfI4&feature=g-vrec" );
-      };
+      d.youtubeplz = "http://www.youtube.com/watch?v=qp0HIF3SfI4&feature=g-vrec";
 
       d.logComputed = function( el, property ) {
         var styles;
