@@ -5,9 +5,8 @@ body {
   color: #EEE;
   font-size: 100%;
   font-family: lato, "Helvetica Neue", sans-serif;
-}
-.inner-container {
-  background: url(../img/grunge_wall.png) repeat;
+  background: #333 url(../img/grunge_wall.png) repeat;
+  height: 100%;
 }
 .wrapper {
   margin: 0 auto;
