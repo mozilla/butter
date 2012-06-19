@@ -34,6 +34,10 @@
       {
         "type": "flickr",
         "path": "{{baseDir}}templates/supported/shared/plugins/flickr/popcorn.flickr.js"
+      },
+      {
+        "type": "shrink",
+        "path": "{{baseDir}}templates/supported/shared/plugins/shrink/popcorn.shrink.js"
       }
     ],
     "defaults": [
