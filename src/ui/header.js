@@ -1,4 +1,4 @@
-define( [ "dialog/dialog", "util/lang", "layouts/header.html" ],
+define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
   function( Dialog, Lang, HEADER_TEMPLATE ){
 
   var DEFAULT_AUTH_BUTTON_TEXT = "<span class='icon-user'></span> Sign In / Sign Up",
@@ -36,9 +36,8 @@ define( [ "dialog/dialog", "util/lang", "layouts/header.html" ],
 
       Dialog.spawn( "export", {
         data: exportPackage,
-      });
+      }).open();
 
-      dialog.open();
     }, false );
 
     function authenticationRequired( successCallback, errorCallback ){
@@ -65,19 +64,6 @@ define( [ "dialog/dialog", "util/lang", "layouts/header.html" ],
       });
     }
 
-    _exportButton.addEventListener( "click", function( e ){
-
-      var exportPackage = {
-        html: butter.getHTML(),
-        json: butter.exportProject()
-      };
-
-      Dialog.spawn( "export", {
-        data: exportPackage,
-      });
-
-    }, false );
-
     _authButton.addEventListener( "click", authenticationRequired, false );
 
     function showErrorDialog( message, callback ){
@@ -92,6 +78,7 @@ define( [ "dialog/dialog", "util/lang", "layouts/header.html" ],
           }
         }
       });
+      dialog.open();
     }
 
     _shareButton.addEventListener( "click", function( e ){
@@ -105,7 +92,7 @@ define( [ "dialog/dialog", "util/lang", "layouts/header.html" ],
             var url = e.url;
             Dialog.spawn( "share", {
               data: url
-            });
+            }).open();
           }
         });
       }
@@ -148,6 +135,7 @@ define( [ "dialog/dialog", "util/lang", "layouts/header.html" ],
             }
           }
         });
+        dialog.open();
       }
       else{
         execute();

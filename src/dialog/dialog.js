@@ -11,7 +11,7 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
         "TEXTAREA"
       ];
 
-  function __createDialog ( layoutSrc, dialogCtor ) {
+  function __createDialog( layoutSrc, dialogCtor ) {
     return function ( spawnOptions ) {
 
       spawnOptions = spawnOptions || {};
@@ -51,8 +51,9 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
         enableCloseButton: function(){
           var closeButton = _rootElement.querySelector( ".close-button" );
           if( closeButton ){
-            closeButton.addEventListener( "click", function( e ){
+            closeButton.addEventListener( "click", function closeClickHandler( e ){
               _internal.activity( "default-close" );
+              closeButton.removeEventListener( "click", closeClickHandler, false );
             }, false );
           }
         },
@@ -87,13 +88,15 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
         },
 
         enableElements: function(){
-          for( var i=0; i<arguments.length; ++i ){
+          var i = arguments.length;
+          while ( i-- ) {
             _rootElement.querySelector( arguments[ i ] ).removeAttribute( "disabled" );
           }
         },
 
         disableElements: function(){
-          for( var i=0; i<arguments.length; ++i ){
+          var i = arguments.length;
+          while ( i-- ) {
             _rootElement.querySelector( arguments[ i ] ).setAttribute( "disabled", true );
           }
         },
@@ -106,9 +109,9 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
       var _external = {
         element: _rootElement,
 
-        open: function () {
-          for( var e in _listeners ){
-            if( _listeners.hasOwnProperty( e ) ){
+        open: function() {
+          for ( var e in _listeners ) {
+            if ( _listeners.hasOwnProperty( e ) ) {
               _external.listen( e, _listeners[ e ] );
             }
           }
@@ -121,10 +124,12 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
           _external.dispatch( "open" );
         },
 
-        close: function () {
+        close: function() {
           for( var e in _listeners ){
-            if( e !== "close" ){
-              _internal.unlisten( e, _listeners[ e ] );
+            if ( _listeners.hasOwnProperty( e ) ) {
+              if ( e !== "close" ) {
+                _internal.unlisten( e, _listeners[ e ] );
+              }
             }
           }
           _modal.destroy();
@@ -134,11 +139,11 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
           _external.dispatch( "close" );
         },
 
-        send: function ( message, data ) {
+        send: function( message, data ) {
           _internal.dispatch( message, data );
         },
 
-        focus: function () {
+        focus: function() {
           _rootElement.focus();
           _internal.dispatch( "focus" );
         }
@@ -159,29 +164,24 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
 
       dialogCtor( _internal, spawnOptions.data );
 
-      // make this happen a tiny bit later so variables get initialized before opening
-      setTimeout( function(){
-        _external.open();
-      }, 0 );
-
       return _external;
     };
   }
 
   return {
 
-    register: function ( name, layoutSrc, dialogCtor ) {
+    register: function( name, layoutSrc, dialogCtor ) {
       __dialogs[ name ] = __createDialog( layoutSrc, dialogCtor );
     },
 
-    spawn: function ( name, spawnOptions ) {
+    spawn: function( name, spawnOptions ) {
       if ( __dialogs[ name ] ) {
         if ( __openDialogs[ name ] ) {
           __openDialogs[ name ].focus();
         }
         else {
           __openDialogs[ name ] = __dialogs[ name ]( spawnOptions );
-          __openDialogs[ name ].listen( "close", function () {
+          __openDialogs[ name ].listen( "close", function() {
             __openDialogs[ name ] = null;
           });
         }
