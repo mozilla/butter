@@ -349,6 +349,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         popcornString += callbacks.afterEvents + "( popcorn );\n";
       }
 
+      popcornString += "popcorn.controls( true );\n";
+
       // if the `method` var is blank, the user probably just wanted an inline function without an onLoad wrapper
       method = method || "inline";
 
@@ -358,7 +360,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         popcornString += "\n},false);";
       }
       else {
-        popcornString = popcornString + "\n return popcorn;";
+        popcornString = popcornString + "\nreturn popcorn;";
       } //if
 
       return popcornString;
