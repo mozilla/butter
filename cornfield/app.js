@@ -352,7 +352,6 @@ app.get('/api/project/:id?', function(req, res) {
         var projectJSON = JSON.parse( project.data );
         projectJSON.name = project.name;
         projectJSON.projectID = project._id;
-        projectJSON.error = "okay";
         res.json( projectJSON );
         return;
       }
