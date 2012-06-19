@@ -1,9 +1,12 @@
 (function( global ) {
-    global.PositionDebugger = function( butter, popcorn ) {
-      console.log( "Need youtube?" );
-      console.log( "http://www.youtube.com/watch?v=qp0HIF3SfI4&feature=g-vrec" );
+    global.pdebug = (function() {
+      var d = {};
 
-      this.logComputed = function( el, property ) {
+      d.youtubeplz = function(){
+        console.log( "http://www.youtube.com/watch?v=qp0HIF3SfI4&feature=g-vrec" );
+      };
+
+      d.logComputed = function( el, property ) {
         var styles;
         if( !el ) { return; }
         styles = window.getComputedStyle( el );
@@ -12,5 +15,16 @@
         }
       };
 
-    };
+      d.check = function() {
+        d.logComputed( document.getElementById( "video" ), "width" );
+        d.logComputed( document.querySelector( "#video > iframe" ), "width" );
+        d.logComputed( document.getElementById( "video-overlay" ), "width" );
+        d.logComputed( document.getElementById( "video" ), "height" );
+        d.logComputed( document.querySelector( "#video > iframe" ), "height" );
+        d.logComputed( document.getElementById( "video-overlay" ), "height" );
+      };
+
+      return d;
+
+    }());
 }( window ) );
