@@ -8,7 +8,8 @@
 
   QUnit.config.reorder = false;
 
-  function setupCornfieldTests(){
+  document.addEventListener( "DOMContentLoaded", function(){
+
     var b = new Butter({
       config: "cornfield-test-config.json",
         ready: function( butter ) {
@@ -17,9 +18,24 @@
                 name: filename,
                 html: "herpderp",
                 data: { stuff: "derpherp" },
-                template: "pop"
+                template: "popup"
               },
               stringedData = JSON.stringify( data );
+
+          module( "Server State" );
+
+          // Make sure the cornfield server is running before bothering with all these tests.
+          asyncTest( "Environment ", 1, function() {
+            var request = new XMLHttpRequest();
+            request.open( 'GET', '/api/whoami', false );
+            request.send();
+            if ( request.status === 404 ) {
+              ok( false, "Cornfield server not running on node server, skipping tests." );
+            } else {
+              ok( true, "Cornfield server is running on node server, running Tests." );
+            }
+            start();
+          });
 
           module( "Unauthenticated tests" );
 
@@ -117,7 +133,7 @@
                   filename = res.project._id;
 
                   butter.cornfield.load( filename, function( res ) {
-                    deepEqual( JSON.parse( res.project ), data.data, "The project is the same" );
+                    equal( res.stuff, data.data.stuff, "The project is the same" );
 
                     start();
                   });
@@ -160,22 +176,5 @@
           });
         }
     });
-  }
-
-  document.addEventListener( "DOMContentLoaded", function(){
-    // Make sure the cornfield server is running before bothering with all these tests.
-    asyncTest( "Cornfield Server Running", 1, function() {
-      var request = new XMLHttpRequest();
-      request.open('GET', '/api/whoami', false);
-      request.send();
-      if( request.status === 404 ){
-        ok( false, "Cornfield server not running on current server, skipping tests." );
-      } else {
-        ok( true, "Cornfield server is running on current server. Running Tests." );
-        setupCornfieldTests();
-      }
-      start();
-    });
-  }, false);
-
+  }, false );
 }( window, window.document ));
