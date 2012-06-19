@@ -267,7 +267,8 @@ app.get('/dashboard', function(req, res) {
       project = doc.projects[ i ];
       if ( project.template && VALID_TEMPLATES[ project.template ] ) {
         userProjects.push({
-          _id: project._id,
+          // make sure _id is a string. saw some strange double-quotes on output otherwise
+          _id: String(project._id),
           name: project.name,
           template: project.template,
           href: templateConfigs[ project.template ].template + 
@@ -359,6 +360,36 @@ app.get('/api/project/:id?', function(req, res) {
     res.json( { error: "project not found" } );
   });
 });
+
+app.get('/api/delete/:id?', function(req, res) {
+  var email = req.session.email,
+      id = req.params.id;
+
+  if (!email) {
+    res.json({ error: 'unauthorized' }, 403);
+    return;
+  }
+
+  if (!canStoreData) {
+    res.json({ error: 'storage service is not running' }, 500);
+    return;
+  }
+
+  UserModel.findOne( { email: email }, function( err, doc ) {
+    var project;
+    for( var i=0; i<doc.projects.length; ++i ){
+      project = doc.projects[ i ];
+      if( String( project._id ) === id ){
+        doc.projects.splice( i, 1 );
+        doc.save();
+        res.json( { error: 'okay' }, 200 );
+        return;
+      }
+    }
+    res.json( { error: 'project not found' }, 404 );
+  });
+});
+
 
 app.post('/api/project/:id?', function( req, res ) {
   var email = req.session.email,
