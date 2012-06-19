@@ -68,8 +68,8 @@ if ( !path.existsSync( PUBLISH_DIR ) ) {
 
 app.configure( function() {
   app.use( express.logger( CONFIG.logger ) )
-    .use( express.static( WWW_ROOT ) )
-    .use( express.static( PUBLISH_DIR ) )
+    .use( express.static( WWW_ROOT ), CONFIG.staticMiddleware )
+    .use( express.static( PUBLISH_DIR ), CONFIG.staticMiddleware )
     .use( express.bodyParser() )
     .use( express.cookieParser() )
     .use( express.session( CONFIG.session ) )

@@ -6,6 +6,9 @@
   "logger" : {
     "format" : "default"
   },
+  "staticMiddleware": {
+  "maxAge": "120000"
+  },
   "dirs": {
     "publish": "/var/maker-published",
     "hostname": "http://maker.mozillapopcorn.org"

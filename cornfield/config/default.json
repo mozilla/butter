@@ -10,6 +10,9 @@
     "secret": "thisisareallyreallylongsecrettoencryptcookies",
     "maxAge": "3600000"
   },
+  "staticMiddleware": {
+    "maxAge": "0"
+  },
   "dirs": {
     "wwwRoot": "../",
     "templates": "../templates",
