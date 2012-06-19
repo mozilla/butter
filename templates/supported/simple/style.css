@@ -29,7 +29,7 @@
   .row-fluid {
     width: 100%;
   }
-  .row-fluid [class*="span"] {
+  .row-fluid .span {
     display: block;
     float: left;
     width: 100%;
@@ -41,48 +41,18 @@
     -o-box-sizing: border-box;
     box-sizing: border-box;
   }
-  .row-fluid [class*="span"]:first-child {
+  .row-fluid .span:first-child {
     margin-left: 0;
   }
-  .row-fluid .span12 {
-    width: 99.99999998999999%;
-  }
-  .row-fluid .span11 {
-    width: 91.489361693%;
-  }
-  .row-fluid .span10 {
-    width: 82.97872339599999%;
-  }
-  .row-fluid .span9 {
-    width: 74.468085099%;
-  }
-  .row-fluid .span8 {
-    width: 65.95744680199999%;
-  }
-  .row-fluid .span7 {
-    width: 57.446808505%;
-  }
-  .row-fluid .span6 {
-    width: 48.93617020799999%;
-  }
-  .row-fluid .span5 {
-    width: 40.425531911%;
-  }
-  .row-fluid .span4 {
-    width: 31.914893614%;
-  }
-  .row-fluid .span3 {
-    width: 23.404255317%;
-  }
-  .row-fluid .span2 {
-    width: 14.89361702%;
-  }
-  .row-fluid .span1 {
-    width: 6.382978723%;
+  .row-fluid .span {
+    width: 50%;
   }
   .video-background {
     background-color: black; 
     padding: 5px;
+    width: 640px;
+    height: 390px;
+    float: left;
   }
   .well {
     min-height: 20px;
