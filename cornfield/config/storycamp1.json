@@ -7,7 +7,7 @@
     "format" : "default"
   },
   "staticMiddleware": {
-  "maxAge": "120000"
+    "maxAge": "120000"
   },
   "dirs": {
     "publish": "/var/maker-published",
