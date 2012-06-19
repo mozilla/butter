@@ -131,12 +131,8 @@ define( [
       }
 
       function prepare(){
-        if( butter.project.id ){
-          publish();
-        }
-        else{
-          doSave( publish );
-        }
+        // (Re-)Save first, and publish
+        doSave( publish );
       }
 
       authenticationRequired( prepare );
