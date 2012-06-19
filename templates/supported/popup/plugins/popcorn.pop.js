@@ -23,6 +23,7 @@ todo: animate top, left and other styles (color, font size, etc.)
     _setup: Popcorn.nop,
     start: Popcorn.nop,
     end: Popcorn.nop,
+    frame: Popcorn.nop,
     _teardown: Popcorn.nop
   });
 
