@@ -11,9 +11,9 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       // how long to wait for the status of something in checkTimeoutLoop
   var STATUS_INTERVAL = 100,
       // timeout duration to wait for popcorn players to exist
-      PLAYER_WAIT_DURATION = 10000,
+      PLAYER_WAIT_DURATION = 20000,
       // timeout duration to wait for media to be ready
-      MEDIA_WAIT_DURATION = 10000;
+      MEDIA_WAIT_DURATION = 25000;
 
   /* The Popcorn-Wrapper wraps various functionality and setup associated with
    * creating, updating, and removing associated data with Popcorn.js.
