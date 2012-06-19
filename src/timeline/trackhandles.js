@@ -74,6 +74,7 @@ define( [
             }
           }
         });
+        dialog.open();
       }, false );
 
       trackDiv.addEventListener( "dblclick", function( e ){
@@ -130,6 +131,7 @@ define( [
             }
           }
         });
+        dialog.open();
       }, false );
 
       _menus.push( menuDiv );

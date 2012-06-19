@@ -11,7 +11,6 @@
     "export",
     "quit-confirmation",
     "save-as",
-    "load",
     "share"
   ];
 
