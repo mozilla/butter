@@ -44,6 +44,24 @@ sub {
     transform: rotate(360deg);
   }
 }
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('Open-Sans-Italic'), url('../resources/fonts/OpenSans-Italic.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('Open-Sans-Bold'), url('../resources/fonts/OpenSans-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans Regular'), local('Open-Sans-Regular'), url('../resources/fonts/OpenSans-Regular.ttf') format('truetype');
+}
 body > .butter-ua-warning {
   position: fixed;
   top: 0;
@@ -51,13 +69,13 @@ body > .butter-ua-warning {
   width: 100%;
   min-height: 40px;
   background: #fefcea;
-  background: -moz-linear-gradient(top, #fefcea 0%, #f1da36 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fefcea), color-stop(100%, #f1da36));
-  background: -webkit-linear-gradient(top, #fefcea 0%, #f1da36 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fefcea), color-stop(100%, #f1da36));
+  background: -webkit-linear-gradient(center top, #fefcea 0%, #f1da36 100%);
+  background: -ms-linear-gradient(center top, #fefcea 0%, #f1da36 100%);
   background: -o-linear-gradient(top, #fefcea 0%, #f1da36 100%);
-  background: -ms-linear-gradient(top, #fefcea 0%, #f1da36 100%);
-  background: linear-gradient(top, #fefcea 0%, #f1da36 100%);
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#fefcea', endColorstr='#f1da36', GradientType=0);
+  background: -moz-linear-gradient(center top, #fefcea 0%, #f1da36 100%);
+  background: linear-gradient(top, #fefcea);
+  background-image: linear-gradient(top, #fefcea 0%, #f1da36 100%);
   z-index: 2140000010;
   font: 10pt Arial, Helvetica, sans-serif;
   text-align: center;
@@ -198,13 +216,6 @@ input.form-error {
   src: url('http://www.mozilla.org/img/fonts/MetaWebPro-Bold.eot');
   src: local('☺'), url('http://www.mozilla.org/img/fonts/MetaWebPro-Bold.woff') format('woff');
   font-weight: bold;
-}
-@font-face {
-  font-family: 'BebasRegular';
-  src: url('../resources/fonts/BEBAS___-webfont.eot');
-  src: url('../resources/fonts/BEBAS___-webfont.eot?#iefix') format('embedded-opentype'), url('../resources/fonts/BEBAS___-webfont.woff') format('woff'), url('../resources/fonts/BEBAS___-webfont.ttf') format('truetype'), url('../resources/fonts/BEBAS___-webfont.svg#BebasRegular') format('svg');
-  font-weight: normal;
-  font-style: normal;
 }
 button.butter-header-brown {
   background: #D1BE70;
