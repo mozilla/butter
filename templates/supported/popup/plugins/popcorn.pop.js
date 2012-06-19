@@ -19,7 +19,13 @@ todo: animate top, left and other styles (color, font size, etc.)
   /**
    * Stub implementation of words for API compat in 0.5.x
    */
-  Popcorn.plugin( 'words', {} );
+  Popcorn.plugin( 'words', {
+    _setup: Popcorn.nop,
+    start: Popcorn.nop,
+    end: Popcorn.nop,
+    frame: Popcorn.nop,
+    _teardown: Popcorn.nop
+  });
 
 
   var styleSheet,
