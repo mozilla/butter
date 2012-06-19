@@ -16,6 +16,12 @@ todo: animate top, left and other styles (color, font size, etc.)
 
 "use strict";
 
+  /**
+   * Stub implementation of words for API compat in 0.5.x
+   */
+  Popcorn.plugin( 'words' );
+
+
   var styleSheet,
     svg, clipPath, ellipse,
     sounds = {},
