@@ -18,7 +18,7 @@
                 name: filename,
                 html: "herpderp",
                 data: { stuff: "derpherp" },
-                template: "pop"
+                template: "popup"
               },
               stringedData = JSON.stringify( data );
 
@@ -133,7 +133,7 @@
                   filename = res.project._id;
 
                   butter.cornfield.load( filename, function( res ) {
-                    deepEqual( JSON.parse( res.project ), data.data, "The project is the same" );
+                    equal( res.stuff, data.data.stuff, "The project is the same" );
 
                     start();
                   });
