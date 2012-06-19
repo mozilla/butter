@@ -12,6 +12,11 @@ We're writing Butter so that it runs in modern, HTML5 compatible browsers.  For 
 * Firefox stable
 * Chrome stable
 
+Known Issues
+------------
+
+* Chrome has a [known bug](http://code.google.com/p/chromium/issues/detail?id=31014) where loading a video with the same source URL multiple times will cause the loading process to hang with no UI or JavaScript indication. This can occur with videos on the same page or tab.
+
 Build Prerequisites
 -------------------
 
