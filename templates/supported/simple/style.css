@@ -10,6 +10,12 @@
     width: 100%;
     margin: 0px auto;
   }
+  
+  #video {
+    width: 640px;
+    height: 390px;
+  }
+  
   a {
     color: #0088cc;
     text-decoration: none;
