@@ -210,9 +210,10 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
     function disableURLS( flag ) {
       var urls = _urlList.getElementsByTagName( "input" );
-      for ( i = 0; i < urls.length; i++ ) {
+      for ( var i = 0; i < urls.length; i++ ) {
         urls[ i ].disabled = flag;
       }
+      _keepOpen = flag;
     }
 
     media.listen( "mediacontentchanged", function( e ){
