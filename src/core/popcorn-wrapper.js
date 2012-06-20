@@ -3,7 +3,7 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 /*jshint evil:true*/
 
-define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
+define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, EventManager, URI ) {
 
   // regex to determine the type of player we need to use based on the provided url
   var __urlRegex = /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)(youtu|vimeo|soundcloud|baseplayer)/;
@@ -253,12 +253,15 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           i,
           option;
 
-      if ( typeof( url ) !== "string" ) {
-        url = JSON.stringify( url );
+      // Chrome currently won't load multiple copies of the same video.
+      // See http://code.google.com/p/chromium/issues/detail?id=31014.
+      // Munge the url so we get a unique media resource key.
+      url = typeof url === "string" ? [ url ] : url;
+      for( i=0; i<url.length; i++ ){
+        url[ i ] = URI.makeUnique( url[ i ] ).toString();
       }
-      else {
-        url = "'" + url + "'";
-      }
+      // Transform into a string of URLs (i.e., array string)
+      url = JSON.stringify( url );
 
       // prepare popcornOptions as a string
       if ( popcornOptions ) {
