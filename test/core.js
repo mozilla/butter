@@ -653,7 +653,7 @@
 
   module( "Player tests", butterLifeCycle );
   // Make sure HTML5 audio/video, youtube, and vimeo work
-  asyncTest( "Test basic player support", 7, function() {
+  asyncTest( "Test basic player support", 5, function() {
 
     Butter({
       config: "test-config.json",
@@ -661,7 +661,6 @@
         butterLifeCycle.rememberButter( butter );
 
         var mediaURLS = [ "http://www.youtube.com/watch?v=7glrZ4e4wYU",
-            "http://vimeo.com/30619461",
             "../external/popcorn-js/test/italia.ogg" ],
             index = 0,
             count = 0;
