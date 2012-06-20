@@ -6,11 +6,16 @@
     background-color: #ffffff;
   }
   video {
-    max-height: 360px;
     height: 100%;
     width: 100%;
     margin: 0px auto;
   }
+  
+  #video {
+    width: 640px;
+    height: 390px;
+  }
+  
   a {
     color: #0088cc;
     text-decoration: none;
@@ -19,76 +24,28 @@
     color: #005580;
     text-decoration: underline;
   }
-  .video-container {
-    text-align:center;
-  }
-  .container-fluid {
+  .container {
     margin-top: 25px;
     padding-right: 20px;
     padding-left: 20px;
+    width: 1305px;
+    margin: 25px auto 0 auto;
   }
-  .row-fluid {
-    width: 100%;
-  }
-  .row-fluid [class*="span"] {
-    display: block;
+  .video-background {
+    background-color: black; 
+    padding: 5px;
+    width: 640px;
+    height: 390px;
+    margin-right: 25px;
     float: left;
-    width: 100%;
-    min-height: 28px;
-    margin-left: 2.127659574%;
+  }
+  .well {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box;
-  }
-  .row-fluid [class*="span"]:first-child {
-    margin-left: 0;
-  }
-  .row-fluid .span12 {
-    width: 99.99999998999999%;
-  }
-  .row-fluid .span11 {
-    width: 91.489361693%;
-  }
-  .row-fluid .span10 {
-    width: 82.97872339599999%;
-  }
-  .row-fluid .span9 {
-    width: 74.468085099%;
-  }
-  .row-fluid .span8 {
-    width: 65.95744680199999%;
-  }
-  .row-fluid .span7 {
-    width: 57.446808505%;
-  }
-  .row-fluid .span6 {
-    width: 48.93617020799999%;
-  }
-  .row-fluid .span5 {
-    width: 40.425531911%;
-  }
-  .row-fluid .span4 {
-    width: 31.914893614%;
-  }
-  .row-fluid .span3 {
-    width: 23.404255317%;
-  }
-  .row-fluid .span2 {
-    width: 14.89361702%;
-  }
-  .row-fluid .span1 {
-    width: 6.382978723%;
-  }
-  .video-background {
-    background-color: black; 
-    padding: 5px;
-  }
-  .well {
     min-height: 20px;
-    padding: 19px;
-    margin-bottom: 20px;
     background-color: #f5f5f5;
     border: 1px solid #eee;
     border: 1px solid rgba(0, 0, 0, 0.05);
@@ -102,6 +59,8 @@
     -o-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
     -ms-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-    height: 380px; 
+    height: 400px;
+    display: block;
+    width: 630px;
     overflow: hidden;
   }
