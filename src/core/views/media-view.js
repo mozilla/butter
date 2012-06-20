@@ -208,16 +208,29 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       }
     }
 
+    function disableURLS( flag ) {
+      var removeButtons = _urlList.querySelectorAll( "button.butter-btn-remove" ),
+          urls = _urlList.querySelectorAll( "input[type='text']" );
+      for ( var i = 0; i < urls.length; i++ ) {
+        urls[ i ].disabled = flag;
+        removeButtons[ i ].disabled = flag;
+      }
+      _keepOpen = flag;
+      _addUrlButton.disabled = flag;
+    }
+
     media.listen( "mediacontentchanged", function( e ){
       updateURLS();
       showError( false );
       _changeButton.setAttribute( "disabled", true );
+      disableURLS( true );
       _logoSpinner.start();
     });
 
     media.listen( "mediafailed", function( e ){
       showError( true, "Media failed to load. Check your URL." );
       _changeButton.removeAttribute( "disabled" );
+      disableURLS( false );
       _urlTextbox.className += " form-error";
       _subtitle.className += " form-error";
       _logoSpinner.stop();
@@ -226,6 +239,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     media.listen( "mediaready", function( e ){
       showError( false );
       _changeButton.removeAttribute( "disabled" );
+      disableURLS( false );
       _logoSpinner.stop();
     });
 
