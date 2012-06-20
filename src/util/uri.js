@@ -10,25 +10,32 @@ define( [], function(){
   // http://blog.stevenlevithan.com/archives/parseuri
   // MIT License
 
-  function parseUri (str) {
+  function parseUri( str ){
     var o   = parseUri.options,
-        m   = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
+        m   = o.parser[ o.strictMode ? "strict" : "loose" ].exec( str ),
         uri = {},
         i   = 14;
 
-    while (i--) uri[o.key[i]] = m[i] || "";
+    while( i-- ){
+      uri[ o.key[ i ] ] = m[ i ] || "";
+    }
 
-    uri[o.q.name] = {};
-    uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
-      if ($1) uri[o.q.name][$1] = $2;
+    uri[ o.q.name ] = {};
+    uri[ o.key[ 12 ] ].replace( o.q.parser, function( $0, $1, $2 ){
+      if ($1){
+        uri[ o.q.name ][ $1 ] = $2;
+      }
     });
 
     return uri;
-  };
+  }
 
   parseUri.options = {
     strictMode: false,
-    key: ["source","protocol","authority","userInfo","user","password","host","port","relative","path","directory","file","query","anchor"],
+    key: [
+      "source","protocol","authority","userInfo","user","password",
+      "host","port","relative","path","directory","file","query","anchor"
+    ],
     q:   {
       name:   "queryKey",
       parser: /(?:^|&)([^&=]*)=?([^&]*)/g
@@ -67,6 +74,9 @@ define( [], function(){
     set seed( value ){
       seed = value|0;
     },
+    get seed(){
+      return seed;
+    },
 
     // Parse a string into a URI object.
     parse: function( uriString ){
@@ -80,7 +90,9 @@ define( [], function(){
     // Make a URI object (or URI string, turned into a URI object) unique.
     // This will turn http://foo.com into http://foo.com?<UID_KEY_NAME>=<seed number++>.
     makeUnique: function( uriObject ){
-      var value,
+      var key,
+          value,
+          queryKey,
           queryString = "",
           queryKeyCount = 0;
 
@@ -88,19 +100,23 @@ define( [], function(){
         uriObject = this.parse( uriObject );
       }
 
+      queryKey = uriObject.queryKey;
+
       // Stamp the query string with a unique ID, or use what's there
       // (safe to call multiple times).
-      if( !( UID_KEY_NAME in uriObject.queryKey ) ){
-        uriObject.queryKey[ UID_KEY_NAME ] = seed++;
+      if( !( UID_KEY_NAME in queryKey ) ){
+        queryKey[ UID_KEY_NAME ] = seed++;
 
         // Update query string to reflect change
-        for( key in uriObject.queryKey ){
-          value = uriObject.queryKey[ key ];
-          queryString += queryKeyCount > 0 ? "&" : "";
-          queryString += key;
-          // Allow value=0
-          queryString += ( !!value || value === 0 ) ? "=" + value : "";
-          queryKeyCount++;
+        for( key in queryKey ){
+          if( queryKey.hasOwnProperty( key ) ){
+            value = queryKey[ key ];
+            queryString += queryKeyCount > 0 ? "&" : "";
+            queryString += key;
+            // Allow value=0
+            queryString += ( !!value || value === 0 ) ? "=" + value : "";
+            queryKeyCount++;
+          }
         }
         uriObject.query = queryString;
       }
