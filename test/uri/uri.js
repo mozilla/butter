@@ -195,10 +195,12 @@
     test( "Multiple calls to URI.makeUnique", function(){
       URI.seed = 0;
 
-      var uri = URI.parse( "host.com:81/direc.tory/file.ext?query=1&test=2#anchor" );
-      equal( URI.makeUnique( uri ).toString(),
-             URI.makeUnique( uri ).toString(),
-             "Safe to call makeUnique more than once" );
+      var uriA = "host.com:81/direc.tory/file.ext?query=1&test=2#anchor",
+          uriB = "host.com:81/direc.tory/file.ext?query=1&test=2&butteruid=0#anchor",
+          uriC = "host.com:81/direc.tory/file.ext?query=1&test=2&butteruid=1#anchor";
+
+      equal( URI.makeUnique( uriA ).toString(), uriB , "Calling URI.makeUnique once works." );
+      equal( URI.makeUnique( uriB ).toString(), uriC , "Calling URI.makeUnique twice works." );
     });
 
   });

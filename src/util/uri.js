@@ -102,24 +102,20 @@ define( [], function(){
 
       queryKey = uriObject.queryKey;
 
-      // Stamp the query string with a unique ID, or use what's there
-      // (safe to call multiple times).
-      if( !( UID_KEY_NAME in queryKey ) ){
-        queryKey[ UID_KEY_NAME ] = seed++;
+      queryKey[ UID_KEY_NAME ] = seed++;
 
-        // Update query string to reflect change
-        for( key in queryKey ){
-          if( queryKey.hasOwnProperty( key ) ){
-            value = queryKey[ key ];
-            queryString += queryKeyCount > 0 ? "&" : "";
-            queryString += key;
-            // Allow value=0
-            queryString += ( !!value || value === 0 ) ? "=" + value : "";
-            queryKeyCount++;
-          }
+      // Update query string to reflect change
+      for( key in queryKey ){
+        if( queryKey.hasOwnProperty( key ) ){
+          value = queryKey[ key ];
+          queryString += queryKeyCount > 0 ? "&" : "";
+          queryString += key;
+          // Allow value=0
+          queryString += ( !!value || value === 0 ) ? "=" + value : "";
+          queryKeyCount++;
         }
-        uriObject.query = queryString;
       }
+      uriObject.query = queryString;
 
       return uriObject;
     }
