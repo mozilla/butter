@@ -133,9 +133,8 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
     }
 
     function changeUrl() {
-      var validTextboxes = [],
-          textboxes = _container.querySelectorAll( "input[type='text']" ),
-          errorTextboxes = [];
+      var urlArray = [],
+          textboxes = _container.querySelectorAll( "input[type='text']" );
 
       _subtitle.classList.add( "form-ok" );
       _subtitle.classList.remove( "form-error" );
@@ -143,17 +142,10 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       for ( var i = 0, len = textboxes.length; i < len; i++ ) {
         textboxes[ i ].classList.add( "form-ok" );
         textboxes[ i ].classList.remove( "form-error" );
-        validTextboxes.push( textboxes[ i ].value );
-
+        urlArray.push( textboxes[ i ].value );
       }
 
-      if ( errorTextboxes.length ) {
-        showError( true, "URL(s) not valid. Please use http://..." );
-      }
-      else if ( validTextboxes.length ) {
-        _subtitle.innerHTML = "URL changed.";
-        media.url = validTextboxes;
-      }
+      media.url = urlArray;
 
     }
 
