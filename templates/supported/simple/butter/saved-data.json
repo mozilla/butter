@@ -132,20 +132,6 @@
               "name": "TrackEvent12"
             },
             {
-              "id": "TrackEvent6",
-              "type": "twitter",
-              "popcornOptions": {
-                "start": 56,
-                "end": 60,
-                "target": "above-right",
-                "src": "#earthquakes",
-                "height": "200",
-                "width": "250"
-              },
-              "track": "Track0",
-              "name": "TrackEvent13"
-            },
-            {
               "id": "TrackEvent7",
               "type": "text",
               "popcornOptions": {
