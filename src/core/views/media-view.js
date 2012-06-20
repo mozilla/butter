@@ -143,16 +143,8 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
       for ( var i = 0, len = textboxes.length; i < len; i++ ) {
         textboxes[ i ].classList.add( "form-ok" );
         textboxes[ i ].classList.remove( "form-error" );
-        if ( testUrl( textboxes[ i ].value ) ) {
-          validTextboxes.push( textboxes[ i ].value );
-        }
-        else {
-          _subtitle.classList.remove( "form-ok" );
-          _subtitle.classList.add( "form-error" );
-          errorTextboxes.push( textboxes[ i ] );
-          textboxes[ i ].classList.remove( "form-ok" );
-          textboxes[ i ].classList.add( "form-error" );
-        }
+        validTextboxes.push( textboxes[ i ].value );
+
       }
 
       if ( errorTextboxes.length ) {
@@ -163,11 +155,6 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         media.url = validTextboxes;
       }
 
-    }
-
-    function testUrl( url ) {
-      var test = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-      return url.match(test);
     }
 
     _urlTextbox.addEventListener( "keypress", function( e ){
