@@ -11,4 +11,4 @@
       }
     }); //Butter
   }, false);
-}( window.Butter, window.EditorHelper));
+}( window.Butter, window.EditorHelper ));
