@@ -210,7 +210,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
     function disableURLS( flag ) {
       var removeButtons = _urlList.querySelector( "button.butter-btn-remove" );
-      for ( var i = 0; i < urls.length; i++ ) {
+      for ( var i = 0; i < _urlTextbox.length; i++ ) {
        _urlTextbox[ i ].disabled = flag;
        removeButtons[ i ].disabled = flag;
       }
