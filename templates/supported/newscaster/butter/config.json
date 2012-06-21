@@ -45,13 +45,13 @@
       }
     ],
     "defaults": [
+      "flickr",
       "titles",
       "titlecard",
       "photo",
       "shrink",
       "zoink",
       "shrink",
-      "flickr",
       "googlemap"
     ]
   }
