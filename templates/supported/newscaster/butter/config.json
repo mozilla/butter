@@ -12,6 +12,10 @@
   "plugin": {
     "plugins": [
       {
+        "type": "flickr",
+        "path": "{{baseDir}}templates/supported/shared/plugins/flickr/popcorn.flickr.js"
+      },
+      {
         "type": "titles",
         "path": "{{baseDir}}templates/supported/shared/plugins/titles/popcorn.titles.js"
       },
@@ -34,10 +38,6 @@
       {
         "type": "googlemap",
         "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
-      },
-      {
-        "type": "flickr",
-        "path": "{{baseDir}}templates/supported/shared/plugins/flickr/popcorn.flickr.js"
       },
       {
         "type": "shrink",
