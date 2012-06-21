@@ -9,8 +9,8 @@ body {
   height: 100%;
   font-weight: 300;
   font-size: 14px;
-  font-family: lato, "Helvetica Neue", sans-serif;
-  background: #121212;
+  font-family: "proxima-nova", "Helvetica Neue", sans-serif;
+  background: #302F30;
   -webkit-transition: all 1s ease;
   -moz-transition: all 1s ease;
   -o-transition: all 1s ease;
@@ -21,7 +21,7 @@ body {
 #bg-cubes {
   background: url(../img/background-scroll.png) center 5% no-repeat;
   position: absolute;
-  top: 50px;
+  top: 30px;
   left: 0;
   width: 100%;
   height: 100%;
@@ -33,19 +33,8 @@ body {
   width: 800px;
 }
 
-.logo, .cube h2{
-  font-family: "Bree Serif", Georgia, sans-serif;
-  letter-spacing: .05em;
-}
-
-h2, h5 {
-  text-transform: uppercase;
-  font-weight: 400;
-  font-family: "Bree Serif", Georgia, sans-serif;
-}
-
 h2 {
-  font-family: "Merriweather", Georgia, sans-serif;
+  font-family: "quatro-slab", Georgia, sans-serif;
   color: #FFF;
 }
 
@@ -53,35 +42,10 @@ h3 {
   border-bottom: 1px solid #FFF;
 }
 
-/*- - - Header- - -*/
-header { 
-  position: relative;
-  margin-bottom: 20px;
-  padding: 70px 0 20px 0;
+h5 {
+  font-family: "proxima-nova",  Georgia, sans-serif;
 }
-.logo {
-  margin: 0;
-  font-size: 1.8em;
-  -webkit-transition: all .5s ease;
-  -moz-transition: all .5s ease;
-  -o-transition: all .5s ease;
-  transition: all .5s ease;
-  -ms-transition: all .5s ease;
-}
-.logo:hover {
-  margin-left: 2px;
-  color: #FFFFE0;
-  text-shadow: 0 1px 40px rgba(217,27,91,.3),
-    0 1px 40px rgba(254,244,156, 1),
-    0 1px 20px rgba(254,244,156, .4);
-  -webkit-transition: all .5s ease;
-  -moz-transition: all .5s ease;
-  -o-transition: all .5s ease;
-  transition: all .5s ease;
-  -ms-transition: all .5s ease;
 
-}
-/* /header */
 
 /*- - - Main - - -*/
 section.video-container {
@@ -113,41 +77,7 @@ section.video-container {
   width: 320px;
   height: 200px;
 }
-section.suplementary {
-  margin: 40px 0;
-  font-weight: 400;
-  line-height: 1.4;
-}
-.block {
-  float: left;
-  margin-right: 25px;
-  width: 350px;
-}
-.block:first-child, .block:last-child {
-  width: 200px;
-}
-.block:last-child {
-  margin-right: 0;
-}
 
-section.suplementary p {
-  color: #FFF;
-  opacity: .2;
-  -webkit-transition: opacity .3s ease;
-  -moz-transition: opacity .3s ease;
-  -o-transition: opacity .3s ease;
-  transition: opacity .3s ease;
-  -ms-transition: opacity .3s ease;
-}
-section.suplementary p:hover {
-  opacity: 1;
-  -webkit-transition: opacity .3s ease;
-  -moz-transition: opacity .3s ease;
-  -o-transition: opacity .3s ease;
-  transition: opacity .3s ease;
-  -ms-transition: opacity .3s ease;
-}
-/* /main */
 
 /*- - - Cube - - -*/
 @-moz-keyframes z-spin{
@@ -171,34 +101,11 @@ section.suplementary p:hover {
     100%{ transform: rotateX(-10deg) rotateY(-360deg); }
 }
 
-.ted-container {
-  position: absolute;
-  left: 20px;
-  bottom: 40px;
-  -webkit-transform: scale(0.6,0.6);
-  -webkit-perspective: 200; 
-  -webkit-perspective-origin: 50% 50px;
-  -moz-transform: scale(0.8,0.8);
-  -moz-perspective: 200; 
-  -moz-perspective-origin: 50% 50px;
-  -o-transform: scale(0.8,0.8);
-  -o-perspective: 200; 
-  -o-perspective-origin: 50% 50px;
-  -ms-transform: scale(0.8,0.8);
-  -ms-perspective: 200; 
-  -ms-perspective-origin: 50% 50px;
-  transform: scale(0.8,0.8);
-  perspective: 200; 
-  perspective-origin: 50% 50px;
-  z-index: 1000;
-}
-
-
 .cube-container {
   position: absolute;
-  right: 20px;
-  bottom: 50px;
-  -webkit-transform: scale(0.6,0.6);
+  right: -10px;
+  bottom: -20px;
+  -webkit-transform: scale(0.8,0.8);
   -webkit-perspective: 200; 
   -webkit-perspective-origin: 50% 50px;
   -moz-transform: scale(0.8,0.8);
@@ -266,11 +173,28 @@ section.suplementary p:hover {
   margin-top: 0;
   padding-top: 0;
   color: #fff;
+  text-transform: uppercase;
 }
 
 .cube a {
-  color: #FF374C;
+  color: #71031B;
   text-decoration: none;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+
+.cube:hover a {
+  color: #F65D00;
+  text-shadow: 0 1px 10px #FE6A00;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
 }
 
 .cube > div {
@@ -278,31 +202,9 @@ section.suplementary p:hover {
   width: 100px;
   height: 100px;
   border-radius: 3px;
-  background: rgba(0,0,0,.5);
-  -webkit-transition: all 1s ease;
-  -moz-transition: all 1s ease;
-  -o-transition: all 1s ease;
-  -ms-transition: all 1s ease;
-  transition: all 1s ease;
+  background: rgba(255,255,255,.7)
 }   
 
-.cube:hover > div {
-  background: #FF374C;
-  -webkit-transition: all 1s ease;
-  -moz-transition: all 1s ease;
-  -o-transition: all 1s ease;
-  -ms-transition: all 1s ease;
-  transition: all 1s ease;
-}
-
-.cube:hover a {
-  color: #000;
-  -webkit-transition: all 1s ease;
-  -moz-transition: all 1s ease;
-  -o-transition: all 1s ease;
-  -ms-transition: all 1s ease;
-  transition: all 1s ease;
-}
 
 .cube > div > div {
   display: table;
@@ -374,7 +276,7 @@ section.suplementary p:hover {
   vertical-align: middle;
   text-align: center;
   line-height: 1.2;
-  font-family: "Helvetica Neue", sans-serif;
+  font-family: "proxima-nova", "Helvetica Neue", sans-serif;
   font-weight: 800;
   color: #FF374C;
   font-size: 3em;
@@ -390,7 +292,7 @@ footer {
 /* /footer */
 
 .popcorn-titles {
-  font-family: Merriweather, georgia;
+  font-family: "quatro-slab", georgia;
   color: #444;
   position: relative;
   font-size: 13px;
@@ -416,6 +318,10 @@ footer {
   top: -10px;
 }
 
+.title-card .text-container > div > h2 {
+  font-weight: 400;
+}
+
 .title-card .text-container > div > h5 { 
   background: #FFF;
   background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,1) 53%, rgba(255,255,255,0) 100%);
@@ -426,7 +332,12 @@ footer {
   background: linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 53%,rgba(255,255,255,0) 100%);
   color: #640710;
   position: relative;
-  left: 30px;
-  padding-left: 10px;
+  left: 10px;
+  padding-left: 30px;
   padding-right: 180px;
+  font-size: 14px;
+}
+
+.title-card .text-container > div > h5:before {
+  content: "";
 }
