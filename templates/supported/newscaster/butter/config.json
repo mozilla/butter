@@ -12,8 +12,8 @@
   "plugin": {
     "plugins": [
       {
-        "type": "text",
-        "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
+        "type": "titles",
+        "path": "{{baseDir}}templates/supported/shared/plugins/titles/popcorn.titles.js"
       },
       {
         "type": "titlecard",
@@ -22,6 +22,10 @@
       {
         "type": "photo",
         "path": "{{baseDir}}templates/supported/shared/plugins/photo/popcorn.photo.js"
+      },
+      {
+        "type": "shrink",
+        "path": "{{baseDir}}templates/supported/shared/plugins/shrink/popcorn.shrink.js"
       },
       {
         "type": "zoink",
@@ -34,12 +38,17 @@
       {
         "type": "flickr",
         "path": "{{baseDir}}templates/supported/shared/plugins/flickr/popcorn.flickr.js"
+      },
+      {
+        "type": "shrink",
+        "path": "{{baseDir}}templates/supported/shared/plugins/shrink/popcorn.shrink.js"
       }
     ],
     "defaults": [
-      "text",
+      "titles",
       "titlecard",
       "photo",
+      "shrink",
       "zoink",
       "shrink",
       "flickr",

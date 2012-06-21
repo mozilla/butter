@@ -1,38 +1,56 @@
 /* ===== Primary Styles ========================================================
    Author: @k88hudson
    ========================================================================== */
+::-moz-selection { background: rgba(0,0,0,.2); text-shadow: none; }
+::selection { background: rgba(0,0,0,.2); text-shadow: none; }
 
 body {
-  background: #121212;
-  color: #F8FDE2;
+  color: #FFF;
+  height: 100%;
   font-weight: 300;
   font-size: 14px;
   font-family: lato, "Helvetica Neue", sans-serif;
+  background: #121212;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+#bg-cubes {
+  background: url(../img/background-scroll.png) center 5% no-repeat;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: .3;
 }
 
 .wrapper {
-  margin: 0 auto;
+  margin: 30px auto;
   width: 800px;
 }
 
 .logo, .cube h2{
   font-family: "Bree Serif", Georgia, sans-serif;
-  font-weight: 400;
   letter-spacing: .05em;
 }
 
 h2, h5 {
-  text-shadow: 0 1px 30px rgba(254,244,156, 0.6);
   text-transform: uppercase;
+  font-weight: 400;
   font-family: "Bree Serif", Georgia, sans-serif;
 }
 
 h2 {
   font-family: "Merriweather", Georgia, sans-serif;
+  color: #FFF;
 }
 
 h3 {
-  border-bottom: 1px solid #212121;
+  border-bottom: 1px solid #FFF;
 }
 
 /*- - - Header- - -*/
@@ -40,7 +58,6 @@ header {
   position: relative;
   margin-bottom: 20px;
   padding: 70px 0 20px 0;
-  border-bottom: 1px solid #212121;
 }
 .logo {
   margin: 0;
@@ -91,9 +108,10 @@ section.video-container {
 }
 .upper-corner {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 250px;
+  top: 50px;
+  left: 25px;
+  width: 320px;
+  height: 200px;
 }
 section.suplementary {
   margin: 40px 0;
@@ -153,15 +171,38 @@ section.suplementary p:hover {
     100%{ transform: rotateX(-10deg) rotateY(-360deg); }
 }
 
-.cube-container {
+.ted-container {
   position: absolute;
-  right: 0;
-  bottom: -10px;
+  left: 20px;
+  bottom: 40px;
   -webkit-transform: scale(0.6,0.6);
   -webkit-perspective: 200; 
   -webkit-perspective-origin: 50% 50px;
   -moz-transform: scale(0.8,0.8);
   -moz-perspective: 200; 
+  -moz-perspective-origin: 50% 50px;
+  -o-transform: scale(0.8,0.8);
+  -o-perspective: 200; 
+  -o-perspective-origin: 50% 50px;
+  -ms-transform: scale(0.8,0.8);
+  -ms-perspective: 200; 
+  -ms-perspective-origin: 50% 50px;
+  transform: scale(0.8,0.8);
+  perspective: 200; 
+  perspective-origin: 50% 50px;
+  z-index: 1000;
+}
+
+
+.cube-container {
+  position: absolute;
+  right: 20px;
+  bottom: 50px;
+  -webkit-transform: scale(0.6,0.6);
+  -webkit-perspective: 200; 
+  -webkit-perspective-origin: 50% 50px;
+  -moz-transform: scale(0.8,0.8);
+  -moz-perspective: 200px; 
   -moz-perspective-origin: 50% 50px;
   -o-transform: scale(0.8,0.8);
   -o-perspective: 200; 
@@ -191,6 +232,10 @@ section.suplementary p:hover {
   -moz-transform: rotateX(-10deg) rotateY(20deg);
   -moz-transform-style: preserve-3d;
   -moz-transform: rotateX(-10deg) rotateY(-200deg);
+  -moz-animation-name: z-spin;
+  -moz-animation-duration: 25s;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: linear;
 
   -o-transition: transform 50ms linear;
   -o-transform: rotateX(-10deg) rotateY(20deg);
@@ -224,7 +269,8 @@ section.suplementary p:hover {
 }
 
 .cube a {
-  color: #fff;
+  color: #FF374C;
+  text-decoration: none;
 }
 
 .cube > div {
@@ -232,16 +278,31 @@ section.suplementary p:hover {
   width: 100px;
   height: 100px;
   border-radius: 3px;
-  background: -moz-linear-gradient(top,  rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 25%, rgba(255,255,255,0.71) 61%, rgba(255,255,255,0.8) 76%, rgba(255,255,255,0.2) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.7)), color-stop(25%,rgba(255,255,255,0.5)), color-stop(61%,rgba(255,255,255,0.71)), color-stop(76%,rgba(255,255,255,0.8)), color-stop(100%,rgba(255,255,255,0.2)));
-  background: -webkit-linear-gradient(top,  rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.5) 25%,rgba(255,255,255,0.71) 61%,rgba(255,255,255,0.8) 76%,rgba(255,255,255,0.2) 100%);
-  background: -o-linear-gradient(top,  rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.5) 25%,rgba(255,255,255,0.71) 61%,rgba(255,255,255,0.8) 76%,rgba(255,255,255,0.2) 100%);
-  background: -ms-linear-gradient(top,  rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.5) 25%,rgba(255,255,255,0.71) 61%,rgba(255,255,255,0.8) 76%,rgba(255,255,255,0.2) 100%);
-  background: linear-gradient(top,  rgba(255,255,255,0.7) 0%,rgba(255,255,255,0.5) 25%,rgba(255,255,255,0.71) 61%,rgba(255,255,255,0.8) 76%,rgba(255,255,255,0.2) 100%);
-  color: #121212;
-  font-size: 1em;
-  line-height: 1em;
+  background: rgba(0,0,0,.5);
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
 }   
+
+.cube:hover > div {
+  background: #FF374C;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+.cube:hover a {
+  color: #000;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
+}
 
 .cube > div > div {
   display: table;
@@ -310,10 +371,15 @@ section.suplementary p:hover {
 
 .cube div h2{
   display: table-cell;
-  color: #121212;
   vertical-align: middle;
   text-align: center;
   line-height: 1.2;
+  font-family: "Helvetica Neue", sans-serif;
+  font-weight: 800;
+  color: #FF374C;
+  font-size: 3em;
+  letter-spacing: -0.08em;
+  text-shadow: none;
 }
 
 /*- - - Footer - - -*/
@@ -322,3 +388,45 @@ footer {
   border-top: 1px solid #212121;
 }
 /* /footer */
+
+.popcorn-titles {
+  font-family: Merriweather, georgia;
+  color: #444;
+  position: relative;
+  font-size: 13px;
+}
+
+.popcorn-titles > div {
+  background: #FFF;
+  padding: 30px 20px 10px 20px;
+  box-shadow: 0 50px 30px -20px rgba(0,0,0,.6);
+}
+
+.popcorn-titles h3 {
+  margin-top: 0;
+  font-size: 1.5em;
+}
+
+.popcorn-titles:after {
+  content: "";
+  background: transparent url(../img/tornpaper.png) repeat-x;
+  display: block;
+  height: 37px;
+  position: relative;
+  top: -10px;
+}
+
+.title-card .text-container > div > h5 { 
+  background: #FFF;
+  background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,1) 53%, rgba(255,255,255,0) 100%);
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,1)), color-stop(53%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0)));
+  background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 53%,rgba(255,255,255,0) 100%);
+  background: -o-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 53%,rgba(255,255,255,0) 100%);
+  background: -ms-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 53%,rgba(255,255,255,0) 100%);
+  background: linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 53%,rgba(255,255,255,0) 100%);
+  color: #640710;
+  position: relative;
+  left: 30px;
+  padding-left: 10px;
+  padding-right: 180px;
+}
