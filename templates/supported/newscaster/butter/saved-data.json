@@ -21,7 +21,7 @@
       "id": "Media0",
       "name": "Media0",
       "target": "video",
-      "duration": 20.375,
+      "duration": 21.588233,
       "controls": true,
       "tracks": [
         {
@@ -42,11 +42,11 @@
               "name": "TrackEvent0"
             },
             {
-              "id": "TrackEvent9",
+              "id": "TrackEvent1",
               "type": "googlemap",
               "popcornOptions": {
-                "start": 7.005,
-                "end": 13.312,
+                "start": 7.007,
+                "end": 12.582,
                 "target": "background-container",
                 "type": "ROADMAP",
                 "zoom": 13,
@@ -87,8 +87,8 @@
               "id": "TrackEvent3",
               "type": "zoink",
               "popcornOptions": {
-                "start": 10.405,
-                "end": 13.054,
+                "start": 10.564,
+                "end": 14.977,
                 "target": "background-container",
                 "text": "<img src=\"http://www.math.toronto.edu/toronto/toronto.gif\"> <a href=\"http://http://en.wikipedia.org/wiki/Toronto\">Toronto</a> is the largest city in Canada and the provincial capital of Ontario. It is located in Southern Ontario on the northwestern shore of Lake Ontario.",
                 "type": "fact",
@@ -96,15 +96,15 @@
                 "triangle": "bottom left",
                 "flip": false,
                 "order": "1",
-                "top": "217",
-                "left": "1052",
+                "top": 286,
+                "left": 198,
                 "width": "200"
               },
               "track": "Track1",
               "name": "TrackEvent3"
             },
             {
-              "id": "TrackEvent5",
+              "id": "TrackEvent4",
               "type": "zoink",
               "popcornOptions": {
                 "start": 18.06,
@@ -116,12 +116,32 @@
                 "triangle": "bottom left",
                 "flip": false,
                 "order": "1",
-                "top": 236,
-                "left": 627,
+                "top": 295,
+                "left": 683,
                 "width": "200"
               },
               "track": "Track1",
               "name": "TrackEvent8"
+            },
+            {
+              "id": "TrackEvent5",
+              "type": "zoink",
+              "popcornOptions": {
+                "start": 7.941,
+                "end": 10.051,
+                "target": "background-container",
+                "text": "Welcome to Toronto!",
+                "type": "speech",
+                "classes": "none",
+                "triangle": "top left",
+                "flip": false,
+                "order": "1",
+                "top": 179,
+                "left": 741,
+                "width": "200"
+              },
+              "track": "Track1",
+              "name": "TrackEvent4"
             }
           ]
         },
@@ -131,26 +151,6 @@
           "trackEvents": [
             {
               "id": "TrackEvent6",
-              "type": "zoink",
-              "popcornOptions": {
-                "start": 7.939,
-                "end": 10.039,
-                "target": "background-container",
-                "text": "Welcome to Toronto!",
-                "type": "speech",
-                "classes": "none",
-                "triangle": "top left",
-                "flip": false,
-                "order": "1",
-                "top": "196",
-                "left": "795",
-                "width": "200"
-              },
-              "track": "Track2",
-              "name": "TrackEvent4"
-            },
-            {
-              "id": "TrackEvent7",
               "type": "titles",
               "popcornOptions": {
                 "start": 16.432,
@@ -167,11 +167,11 @@
               "name": "TrackEvent9"
             },
             {
-              "id": "TrackEvent1",
+              "id": "TrackEvent7",
               "type": "zoink",
               "popcornOptions": {
-                "start": 10.321,
-                "end": 13.087,
+                "start": 9.606,
+                "end": 14.991,
                 "target": "background-container",
                 "text": "<strong>Did you know?</strong> Most of the developers working on Popcorn Maker live in Toronto.",
                 "type": "fact",
@@ -179,8 +179,8 @@
                 "flip": false,
                 "classes": "none",
                 "order": "1",
-                "top": "244",
-                "left": "173",
+                "top": 157,
+                "left": 194,
                 "width": "200"
               },
               "track": "Track2",
