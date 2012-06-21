@@ -329,14 +329,17 @@
 
     createButter( function( butter ){
 
+      Popcorn.plugin( "createTrackEventTest", function() {} );
+
       var m = butter.addMedia({ url: "../external/popcorn-js/test/italia.ogg", target: "mediaDiv" }),
           t = m.addTrack(),
           te1 = t.addTrackEvent( { name: "TrackEvent 1", type: "test", popcornOptions: { start: 0, end: 1 } } ),
-          te2 = t.addTrackEvent( { name: "TrackEvent 2", type: "cue", popcornOptions: 1 } );
+          te2 = t.addTrackEvent( { name: "TrackEvent 2", type: "createTrackEventTest", popcornOptions: { start: 1 } } );
 
       ok( te1.name === "TrackEvent 1" && te1.popcornOptions.start ===  0 && te1.popcornOptions.end === 1, "TrackEvent name is setup correctly" );
-      ok( te2.popcornTrackEvent._natives.type === "cue" && te2.popcornTrackEvent.start === 1, "TrackEvent has correct popcornTrackEvent reference" );
+      ok( te2.popcornTrackEvent._natives.type === "createTrackEventTest" && te2.popcornTrackEvent.start === 1, "TrackEvent has correct popcornTrackEvent reference" );
 
+      Popcorn.removePlugin( "createTrackEventTest" );
       start();
     });
   });
@@ -653,7 +656,7 @@
 
   module( "Player tests", butterLifeCycle );
   // Make sure HTML5 audio/video, youtube, and vimeo work
-  asyncTest( "Test basic player support", 7, function() {
+  asyncTest( "Test basic player support", 5, function() {
 
     Butter({
       config: "test-config.json",
@@ -661,7 +664,6 @@
         butterLifeCycle.rememberButter( butter );
 
         var mediaURLS = [ "http://www.youtube.com/watch?v=7glrZ4e4wYU",
-            "http://vimeo.com/30619461",
             "../external/popcorn-js/test/italia.ogg" ],
             index = 0,
             count = 0;
