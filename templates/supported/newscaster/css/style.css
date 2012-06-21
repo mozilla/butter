@@ -28,6 +28,11 @@ body {
   opacity: .3;
 }
 
+a,
+a:visited {
+  color: #79051F;
+}
+
 .wrapper {
   margin: 30px auto;
   width: 800px;
@@ -296,6 +301,7 @@ footer {
   color: #444;
   position: relative;
   font-size: 13px;
+  padding-bottom: 30px;
 }
 
 .popcorn-titles > div {
