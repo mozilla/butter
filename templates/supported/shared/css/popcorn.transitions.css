@@ -278,7 +278,7 @@ Enjoy!
   100% {-o-transform: scale(1,1);}
 }
 
-@-moz-keyframes pop {
+@-ms-keyframes pop {
   0% {-ms-transform: scale(0,0);}
   75% {-ms-transform: scale(1.6,1.6);}
   100% {-ms-transform: scale(1,1);}
