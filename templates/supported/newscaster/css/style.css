@@ -3,6 +3,16 @@
    ========================================================================== */
 ::-moz-selection { background: rgba(0,0,0,.2); text-shadow: none; }
 ::selection { background: rgba(0,0,0,.2); text-shadow: none; }
+html {
+  background: rgb(18,18,20);
+  background: -moz-linear-gradient(top,  rgba(18,18,20,1) 0%, rgba(59,59,63,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(18,18,20,1)), color-stop(100%,rgba(59,59,63,1)));
+  background: -webkit-linear-gradient(top,  rgba(18,18,20,1) 0%,rgba(59,59,63,1) 100%);
+  background: -o-linear-gradient(top,  rgba(18,18,20,1) 0%,rgba(59,59,63,1) 100%);
+  background: -ms-linear-gradient(top,  rgba(18,18,20,1) 0%,rgba(59,59,63,1) 100%);
+  background: linear-gradient(top,  rgba(18,18,20,1) 0%,rgba(59,59,63,1) 100%);
+  height: 100%;
+ }
 
 body {
   color: #FFF;
@@ -10,7 +20,6 @@ body {
   font-weight: 300;
   font-size: 14px;
   font-family: "proxima-nova", "Helvetica Neue", sans-serif;
-  background: #302F30;
   -webkit-transition: all 1s ease;
   -moz-transition: all 1s ease;
   -o-transition: all 1s ease;
@@ -438,18 +447,21 @@ footer {
 
 .title-card .text-container > div > h5 { 
   background: #FFF;
-  background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,1) 53%, rgba(255,255,255,0) 100%);
-  background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,1)), color-stop(53%,rgba(255,255,255,1)), color-stop(100%,rgba(255,255,255,0)));
-  background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 53%,rgba(255,255,255,0) 100%);
-  background: -o-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 53%,rgba(255,255,255,0) 100%);
-  background: -ms-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 53%,rgba(255,255,255,0) 100%);
-  background: linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 53%,rgba(255,255,255,0) 100%);
-  color: #640710;
+  background: -moz-linear-gradient(-45deg,  rgba(188,188,188,1) 0%, rgba(221,221,221,1) 16%, rgba(236,236,236,1) 53%, rgba(255,255,255,0) 100%);
+  background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(188,188,188,1)), color-stop(16%,rgba(221,221,221,1)), color-stop(53%,rgba(236,236,236,1)), color-stop(100%,rgba(255,255,255,0)));
+  background: -webkit-linear-gradient(-45deg,  rgba(188,188,188,1) 0%,rgba(221,221,221,1) 16%,rgba(236,236,236,1) 53%,rgba(255,255,255,0) 100%);
+  background: -o-linear-gradient(-45deg,  rgba(188,188,188,1) 0%,rgba(221,221,221,1) 16%,rgba(236,236,236,1) 53%,rgba(255,255,255,0) 100%);
+  background: -ms-linear-gradient(-45deg,  rgba(188,188,188,1) 0%,rgba(221,221,221,1) 16%,rgba(236,236,236,1) 53%,rgba(255,255,255,0) 100%);
+  background: linear-gradient(-45deg,  rgba(188,188,188,1) 0%,rgba(221,221,221,1) 16%,rgba(236,236,236,1) 53%,rgba(255,255,255,0) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bcbcbc', endColorstr='#00ffffff',GradientType=1 );
+  color: #121212;
+  text-shadow: 0 1px #FFF;
   position: relative;
   left: 10px;
   padding-left: 30px;
   padding-right: 180px;
   font-size: 14px;
+  font-weight: 300;
 }
 
 .title-card .text-container > div > h5:before {
