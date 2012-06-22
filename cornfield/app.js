@@ -140,6 +140,12 @@ function publishRoute( req, res ){
             templateFile = templateConfig.template;
 
         fs.readFile( templateFile, 'utf8', function( err, data ){
+
+          if ( err ) {
+            res.json( { error: 'error reading template file' }, 500 );
+            return;
+          }
+
           var headEndTagIndex,
               bodyEndTagIndex,
               externalAssetsString = '',
