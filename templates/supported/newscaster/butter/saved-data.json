@@ -156,7 +156,7 @@
                 "start": 16.432,
                 "end": 20.026,
                 "target": "upper-corner",
-                "text": "<h3>Changing how we tell stories on the web</h3><p>Today we shared an early prototype of an online tool that will help anyone tell stories with video in new ways on the web.</p><p><a href=\"http://www.webmaker.org/about\">Learn more</a>.</p>",
+                "text": "<h3>Changing how we tell stories on the web</h3><p>Today we shared an early prototype of an online tool that will help anyone tell stories with video in new ways on the web.</p><p><a href=\"http://www.webmaker.org/about\" target=\"_blank\">Learn more...</a></p>",
                 "innerContainerClasses": "",
                 "containerClasses": "popcorn-transition popcorn-titles",
                 "activeClass": "popcorn-on",
