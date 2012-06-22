@@ -82,6 +82,7 @@
       classes: 'text',
       align: 'text',
       style: 'text',
+      width: 'number',
       exit: {
         type: 'nonNegativeNumber',
         callback: function(field, value) {

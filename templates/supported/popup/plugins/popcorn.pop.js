@@ -222,6 +222,7 @@ todo: animate top, left and other styles (color, font size, etc.)
 
     container.style.top = options.top + '%';
     container.style.left = options.left + '%';
+    container.style.width = options.width + 'px';
     container.style.position = 'absolute';
 
     if (options.align) {
@@ -564,6 +565,13 @@ todo: animate top, left and other styles (color, font size, etc.)
         elem:'input',
         type:'text',
         label:'Pop Icon'
+      },
+      width: {
+        elem:'input',
+        type:'number',
+        label:'Popup Width',
+        "default": 100,
+        units: 'px'
       }/*,
       onSetup: {
         type: "function",

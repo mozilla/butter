@@ -130,6 +130,10 @@ input[type=range] {
   width: 80%;
 }
 
+#width {
+  width: 82%;
+}
+
 input[type=text].small {
   width: 40px;
 }
