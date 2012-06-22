@@ -115,18 +115,22 @@ section.video-container {
     100%{ transform: rotateX(-10deg) rotateY(-360deg); }
 }
 
+<<<<<<< HEAD
 @-webkit-keyframes wavesfast {
   0% {background-position: 0 0;}
   90% {background-position: 0 0;}
   100% {background-position: 0 800px;}
 }
 
+=======
+>>>>>>> 398aefa9f55fc177f9f35cf843ed9ab754f5c639
 @-moz-keyframes wavesfast {
   0% {background-position: 0 0;}
   90% {background-position: 0 0;}
   100% {background-position: 0 800px;}
 }
 
+<<<<<<< HEAD
 @-o-keyframes wavesfast {
   0% {background-position: 0 0;}
   90% {background-position: 0 0;}
@@ -145,9 +149,10 @@ section.video-container {
   100% {background-position: 0 800px;}
 }
 
-
-
-
+@-moz-keyframes weathericon {
+  0% {background-position: 0 0;}
+  100% {background-position: 800px 0;}
+}
 
 .logo-alt {
   position: absolute;
@@ -227,6 +232,7 @@ section.video-container {
   -ms-animation: wavesfast 10s ease-in infinite;
   -o-animation: wavesfast 10s ease-in infinite;
   animation: wavesfast 10s ease-in infinite;
+
 }
 
 .logo-img {
@@ -308,7 +314,10 @@ section.video-container {
   -o-transition: all 1s ease;
   -ms-transition: all 1s ease;
   transition: all 1s ease;
+
 }
+
+
 
 .cube h2 {
   margin-top: 0;
