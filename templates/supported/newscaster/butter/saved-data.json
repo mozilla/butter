@@ -122,26 +122,6 @@
               },
               "track": "Track1",
               "name": "TrackEvent8"
-            },
-            {
-              "id": "TrackEvent5",
-              "type": "zoink",
-              "popcornOptions": {
-                "start": 7.941,
-                "end": 10.051,
-                "target": "background-container",
-                "text": "Welcome to Toronto!",
-                "type": "speech",
-                "classes": "none",
-                "triangle": "top left",
-                "flip": true,
-                "order": "1",
-                "top": 210,
-                "left": 949,
-                "width": "200"
-              },
-              "track": "Track1",
-              "name": "TrackEvent4"
             }
           ]
         },
