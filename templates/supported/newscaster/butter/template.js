@@ -24,8 +24,6 @@
             success: function( data ) {
               console.log( data );
               var current = data.data.current_condition[0],
-                  cloudCover = current.cloudcover,
-                  weatherCode = current.weatherCode,
                   weatherIcon = "img/weather/wsprite" + current.weatherIconUrl[0].value.split("wsymbol_")[1].replace(/_/g,"-"),
                   temp = current.temp_C;
 
