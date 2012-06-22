@@ -144,10 +144,6 @@ section.video-container {
   -moz-transform: rotateX(-10deg) rotateY(20deg);
   -moz-transform-style: preserve-3d;
   -moz-transform: rotateX(-10deg) rotateY(-200deg);
-  -moz-animation-name: z-spin;
-  -moz-animation-duration: 25s;
-  -moz-animation-iteration-count: infinite;
-  -moz-animation-timing-function: linear;
 
   -o-transition: transform 50ms linear;
   -o-transform: rotateX(-10deg) rotateY(20deg);
@@ -172,6 +168,19 @@ section.video-container {
   animation-duration: 25s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
+  
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+.cube:hover {
+  -moz-animation-name: z-spin;
+  -moz-animation-duration: 25s;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-timing-function: linear;
 }
 
 .cube h2 {
