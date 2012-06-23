@@ -115,22 +115,12 @@ section.video-container {
     100%{ transform: rotateX(-10deg) rotateY(-360deg); }
 }
 
-<<<<<<< HEAD
-@-webkit-keyframes wavesfast {
-  0% {background-position: 0 0;}
-  90% {background-position: 0 0;}
-  100% {background-position: 0 800px;}
-}
-
-=======
->>>>>>> 398aefa9f55fc177f9f35cf843ed9ab754f5c639
 @-moz-keyframes wavesfast {
   0% {background-position: 0 0;}
   90% {background-position: 0 0;}
   100% {background-position: 0 800px;}
 }
 
-<<<<<<< HEAD
 @-o-keyframes wavesfast {
   0% {background-position: 0 0;}
   90% {background-position: 0 0;}
@@ -147,11 +137,6 @@ section.video-container {
   0% {background-position: 0 0;}
   90% {background-position: 0 0;}
   100% {background-position: 0 800px;}
-}
-
-@-moz-keyframes weathericon {
-  0% {background-position: 0 0;}
-  100% {background-position: 800px 0;}
 }
 
 .logo-alt {
@@ -177,7 +162,6 @@ section.video-container {
   background: -o-linear-gradient(-45deg,  rgba(167,167,167,1) 0%,rgba(224,224,224,1) 55%,rgba(244,244,244,1) 59%,rgba(167,167,167,1) 100%);
   background: -ms-linear-gradient(-45deg,  rgba(167,167,167,1) 0%,rgba(224,224,224,1) 55%,rgba(244,244,244,1) 59%,rgba(167,167,167,1) 100%);
   background: linear-gradient(-45deg,  rgba(167,167,167,1) 0%,rgba(224,224,224,1) 55%,rgba(244,244,244,1) 59%,rgba(167,167,167,1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a7a7a7', endColorstr='#a7a7a7',GradientType=1 );
   box-shadow: 0 50px 30px -20px rgba(0,0,0,.6);
 
 }
@@ -355,8 +339,7 @@ section.video-container {
   background: rgba(255,255,255,.7)
 }   
 
-
-.cube > div > div {
+.cube > div > div {   
   display: table;
   width: 100%;
   height: 100%;
