@@ -102,26 +102,6 @@
               },
               "track": "Track1",
               "name": "TrackEvent3"
-            },
-            {
-              "id": "TrackEvent4",
-              "type": "zoink",
-              "popcornOptions": {
-                "start": 18.06,
-                "end": 20.049,
-                "target": "video-overlay",
-                "text": "I think you should click me.",
-                "type": "thought",
-                "classes": "none",
-                "triangle": "bottom left",
-                "flip": false,
-                "order": "1",
-                "top": 295,
-                "left": 683,
-                "width": "200"
-              },
-              "track": "Track1",
-              "name": "TrackEvent8"
             }
           ]
         },

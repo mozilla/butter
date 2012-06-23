@@ -1,6 +1,6 @@
 {
   "name": "newscaster",
-  "title": "Newscaster",
+  "title": "Popcorn",
   "template": "../index.html",
   "baseDir": "../../../",
   "savedDataUrl": "butter/saved-data.json",
