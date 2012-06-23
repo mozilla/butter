@@ -27,7 +27,7 @@ var parArr = [
 	{id:"#red-icon5", x:5030, y:100, layer:1, pages:[4, 5]},
 	{id:"#dottedline", x:5500, y:-250, layer:2, pages:[5]},
 	{id:"#video-sm", x:5550, y:-120, layer:1.5, pages:[5, 6]},
-	{id:"#video-big", x:5446, y:-300, layer:1.5, pages:[7]},
+	{id:"#video-big", x:5446, y:-250, layer:1.5, pages:[7]},
 	{id:"#popcorn-logo", x:6250, y:-140, layer:1, pages:[8]},
 	{id:"#mini-popcorn-logo", x:7270, y:-130, layer:1, pages:[9, 10]},
 	{id:"#red-icon1-2", x:7020, y:50, layer:0.9, pages:[9, 10]},

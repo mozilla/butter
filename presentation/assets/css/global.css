@@ -119,7 +119,10 @@ Slide specific styles
   -ms-transition: all .5s ease;
   transition: all .5s ease;
   opacity: 1;
+}
 
+#mini-popcorn-logo {
+  z-index: 20000 !important;
 }
 
 
