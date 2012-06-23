@@ -469,9 +469,10 @@ footer {
   position: relative;
   left: 10px;
   padding-left: 30px;
-  padding-right: 180px;
-  font-size: 14px;
-  font-weight: 300;
+  padding-right: 200px;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
 }
 
 .title-card .text-container > div > h5:before {
