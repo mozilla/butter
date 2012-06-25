@@ -771,31 +771,7 @@ input.form-error {
   margin: 0;
   height: 135px;
 }
-#butter-timeline .tracks-container-wrapper {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  -webkit-box-shadow: inset 0 0 6px #131313;
-  -moz-box-shadow: inset 0 0 6px #131313;
-  -o-box-shadow: inset 0 0 6px #131313;
-  box-shadow: inset 0 0 6px #131313;
-  border: 1px solid #2B2B2B;
-  border-image: initial;
-  -moz-border-radius: 5px;
-  -o-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-}
-#butter-timeline .tracks-container-wrapper .tracks-container {
-  width: 100%;
-  position: relative;
-  background: transparent;
-  font-size: 100%;
-  outline: none;
-  padding-top: 7px;
-  padding-bottom: 35px;
-}
-#butter-timeline .tracks-container-wrapper .tracks-container .butter-track {
+#butter-timeline .tracks-container .butter-track {
   width: 100%;
   -moz-border-radius: 6px;
   -o-border-radius: 6px;
@@ -817,18 +793,18 @@ input.form-error {
   -webkit-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0, 0, 0, 0.4), inset 0 -1px 1px rgba(0, 0, 0, 0.6);
   box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0, 0, 0, 0.4), inset 0 -1px 1px rgba(0, 0, 0, 0.6);
 }
-#butter-timeline .tracks-container-wrapper .tracks-container .butter-track .track-title {
+#butter-timeline .tracks-container .butter-track .track-title {
   position: absolute;
   left: 5px;
   top: 50%;
 }
-#butter-timeline .tracks-container-wrapper .tracks-container .butter-track.draggable-hover {
+#butter-timeline .tracks-container .butter-track.draggable-hover {
   -moz-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0, 0, 0, 0.4), inset 0 -1px 1px rgba(0, 0, 0, 0.6), inset 0 0 10px #1122cc;
   -o-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0, 0, 0, 0.4), inset 0 -1px 1px rgba(0, 0, 0, 0.6), inset 0 0 10px #1122cc;
   -webkit-box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0, 0, 0, 0.4), inset 0 -1px 1px rgba(0, 0, 0, 0.6), inset 0 0 10px #3355cc;
   box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0, 0, 0, 0.4), inset 0 -1px 1px rgba(0, 0, 0, 0.6), inset 0 0 10px #3355ee, inset 1px 1px 10px #3355ee;
 }
-#butter-timeline .tracks-container-wrapper .tracks-container .butter-track-event {
+#butter-timeline .tracks-container .butter-track-event {
   -moz-box-shadow: inset 0 9px 0 rgba(255, 255, 255, 0.5);
   -o-box-shadow: inset 0 9px 0 rgba(255, 255, 255, 0.5);
   -webkit-box-shadow: inset 0 9px 0 rgba(255, 255, 255, 0.5);
@@ -864,7 +840,7 @@ input.form-error {
   opacity: 0.8;
   position: absolute;
 }
-#butter-timeline .tracks-container-wrapper .tracks-container .butter-track-event .handle {
+#butter-timeline .tracks-container .butter-track-event .handle {
   position: absolute;
   height: 100%;
   min-width: 15px;
@@ -872,25 +848,49 @@ input.form-error {
   background-color: #ffffff;
   background-color: rgba(255, 255, 255, 0.5);
 }
-#butter-timeline .tracks-container-wrapper .tracks-container .butter-track-event .left-handle {
+#butter-timeline .tracks-container .butter-track-event .left-handle {
   border-top-left-radius: 6px;
   border-bottom-left-radius: 6px;
   left: 0;
   top: 0;
   cursor: w-resize;
 }
-#butter-timeline .tracks-container-wrapper .tracks-container .butter-track-event .right-handle {
+#butter-timeline .tracks-container .butter-track-event .right-handle {
   border-top-right-radius: 6px;
   border-bottom-right-radius: 6px;
   right: 0;
   top: 0;
   cursor: e-resize;
 }
-#butter-timeline .tracks-container-wrapper .tracks-container .butter-track-event[selected="true"] {
+#butter-timeline .tracks-container .butter-track-event[selected="true"] {
   -moz-box-shadow: inset 0 9px 0 rgba(255, 255, 255, 0.5), 2px 2px 2px rgba(65, 80, 215, 0.8), -2px 2px 2px rgba(65, 80, 215, 0.8), 2px -2px 2px rgba(65, 80, 215, 0.8), -2px -2px 2px rgba(65, 80, 215, 0.8);
   -o-box-shadow: inset 0 9px 0 rgba(255, 255, 255, 0.5), 2px 2px 2px rgba(65, 80, 215, 0.8), -2px 2px 2px rgba(65, 80, 215, 0.8), 2px -2px 2px rgba(65, 80, 215, 0.8), -2px -2px 2px rgba(65, 80, 215, 0.8);
   -webkit-box-shadow: inset 0 9px 0 rgba(255, 255, 255, 0.5), 2px 2px 2px rgba(65, 80, 215, 0.8), -2px 2px 2px rgba(65, 80, 215, 0.8), 2px -2px 2px rgba(65, 80, 215, 0.8), -2px -2px 2px rgba(65, 80, 215, 0.8);
   box-shadow: inset 0 9px 0 rgba(255, 255, 255, 0.5), 2px 2px 2px rgba(65, 80, 215, 0.8), -2px 2px 2px rgba(65, 80, 215, 0.8), 2px -2px 2px rgba(65, 80, 215, 0.8), -2px -2px 2px rgba(65, 80, 215, 0.8);
+}
+#butter-timeline .tracks-container-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  -webkit-box-shadow: inset 0 0 6px #131313;
+  -moz-box-shadow: inset 0 0 6px #131313;
+  -o-box-shadow: inset 0 0 6px #131313;
+  box-shadow: inset 0 0 6px #131313;
+  border: 1px solid #2B2B2B;
+  border-image: initial;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+#butter-timeline .tracks-container-wrapper .tracks-container {
+  width: 100%;
+  position: relative;
+  background: transparent;
+  font-size: 100%;
+  outline: none;
+  padding-top: 7px;
+  padding-bottom: 35px;
 }
 #butter-timeline .track-handle-container {
   position: absolute;
