@@ -153,6 +153,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
                 },
                 revert: true
               });
+              _draggable.selected = _trackEvent.selected;
 
               _resizable = DragNDrop.resizable( _element, {
                 containment: _parent.element.parentNode,
@@ -218,12 +219,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
       _this.dispatch( "trackeventdoubleclicked", { originalEvent: e, trackEvent: trackEvent } );
     }, false);
 
-    function select( e ){
+    function select(){
       _draggable.selected = true;
       _element.setAttribute( "selected", true );
     } //select
 
-    function deselect( e ) {
+    function deselect() {
       _draggable.selected = false;
       _element.removeAttribute( "selected" );
     } //deselect
