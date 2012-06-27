@@ -507,6 +507,7 @@ define([], function(){
         _droppable = null,
         _draggable = {
           destroy: function(){
+            _draggable.selected = false;
             element.removeEventListener( "mousedown", onMouseDown, false );
           }
         },

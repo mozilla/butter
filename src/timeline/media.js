@@ -50,7 +50,6 @@ define( [
         _rootElement = document.createElement( "div" ),
         _container = document.createElement( "div" ),
         _mediaStatusContainer = document.createElement( "div" ),
-        _selectedTrackEvents = [],
         _hScrollBar = new Scrollbars.Horizontal( _tracksContainer ),
         _vScrollBar = new Scrollbars.Vertical( _tracksContainer, _rootElement ),
         _shrunken = false,
@@ -80,14 +79,6 @@ define( [
 
     _media.listen( "mediaplaying", snapToCurrentTime );
     _media.listen( "mediapause", snapToCurrentTime );
-
-    _media.listen( "trackeventselected", function( e ){
-      _selectedTrackEvents.push( e.target );
-    });
-
-    _media.listen( "trackeventdeselected", function( e ){
-      _selectedTrackEvents.splice( _selectedTrackEvents.indexOf( e.target ), 1 );
-    });
 
     function blinkTarget( target ){
       if( target !== _media.target ){
