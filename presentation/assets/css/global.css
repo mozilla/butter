@@ -1,0 +1,142 @@
+body{
+	display:none;
+  text-rendering: optimizeLegibility;
+}
+
+/*///////////////////////////////////////////////////////////////////////////
+Frame styles
+///////////////////////////////////////////////////////////////////////////*/
+
+#bg-gradient{
+	position:absolute;
+	width:1024px;
+	height:768px;
+	left:3px;
+	top:3px;
+  background: rgb(18,18,20);
+  background: -moz-linear-gradient(top,  rgba(18,18,20,1) 0%, rgba(59,59,63,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(18,18,20,1)), color-stop(100%,rgba(59,59,63,1)));
+  background: -webkit-linear-gradient(top,  rgba(18,18,20,1) 0%,rgba(59,59,63,1) 100%);
+  background: -o-linear-gradient(top,  rgba(18,18,20,1) 0%,rgba(59,59,63,1) 100%);
+  background: -ms-linear-gradient(top,  rgba(18,18,20,1) 0%,rgba(59,59,63,1) 100%);
+  background: linear-gradient(top,  rgba(18,18,20,1) 0%,rgba(59,59,63,1) 100%);
+}
+
+#logo{
+	left:0;
+	top:3px;
+	position:absolute;
+	z-index:1000;
+}
+
+
+/*///////////////////////////////////////////////////////////////////////////
+Navigation
+///////////////////////////////////////////////////////////////////////////*/
+
+#arrowbottom{
+	-webkit-transform: rotate(-180deg);
+	-moz-transform: rotate(-180deg);
+}
+
+#nav div{
+	z-index:1000;
+	position:absolute;
+}
+
+#nav .over{
+	display:none;
+}
+
+#btn-right{
+	-webkit-transform: rotate(-180deg);
+	-moz-transform: rotate(-180deg);
+}
+
+
+/*///////////////////////////////////////////////////////////////////////////
+General slide style
+///////////////////////////////////////////////////////////////////////////*/
+
+.parallax-item{
+	position:fixed;
+	display:none;
+}
+
+
+/*///////////////////////////////////////////////////////////////////////////
+Text styles
+///////////////////////////////////////////////////////////////////////////*/
+
+h1{
+	font-family: OpenSansLightRegular, calluna, georgia, sans-serif;
+	font-size: 70px;
+	font-weight: 300;
+	color:#FFF;
+  text-shadow: 0 1px 3px rgba(0,0,0,.8);
+}
+
+
+/*///////////////////////////////////////////////////////////////////////////
+Slide specific styles
+///////////////////////////////////////////////////////////////////////////*/
+
+#line1{ width:600px;}
+#line2{ width:800px;text-align:center;line-height:70px;}
+#line3{ width:400px;text-align:center;line-height:70px;}
+#line4{ width:400px;line-height:70px;}
+#popcorn-template h1 {
+  margin-bottom: 5px;
+  text-align: center;
+  bottom: 30px;
+  position: absolute;
+  width: 100%;
+}
+
+#makecorn{ 
+  display:block;
+  width: 930px;
+  height: 557px;
+  background-image: url(../img/makecorn-off.png);
+}
+
+#makecorn > img {
+  position: relative;
+  box-shadow: 0 4px 10px -3px rgba(0,0,0,.7);
+  opacity: 0;
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  -ms-transition: all .5s ease;
+  transition: all .5s ease;
+  z-index: 1000;
+}
+
+#makecorn:hover > img { 
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  -ms-transition: all .5s ease;
+  transition: all .5s ease;
+  opacity: 1;
+}
+
+#mini-popcorn-logo {
+  z-index: 20000 !important;
+}
+
+
+/*///////////////////////////////////////////////////////////////////////////
+Fonts
+///////////////////////////////////////////////////////////////////////////*/
+
+@font-face {
+    font-family: 'OpenSansLightRegular';
+    src: url('../fonts/opensans-light-webfont.eot');
+    src: url('../fonts/opensans-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/opensans-light-webfont.woff') format('woff'),
+         url('../fonts/opensans-light-webfont.ttf') format('truetype'),
+         url('../fonts/opensans-light-webfont.svg#OpenSansLightRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

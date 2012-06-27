@@ -1,6 +1,6 @@
 {
   "name": "newscaster",
-  "title": "Newscaster",
+  "title": "Popcorn",
   "template": "../index.html",
   "baseDir": "../../../",
   "savedDataUrl": "butter/saved-data.json",
@@ -12,8 +12,12 @@
   "plugin": {
     "plugins": [
       {
-        "type": "text",
-        "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
+        "type": "flickr",
+        "path": "{{baseDir}}templates/supported/shared/plugins/flickr/popcorn.flickr.js"
+      },
+      {
+        "type": "titles",
+        "path": "{{baseDir}}templates/supported/shared/plugins/titles/popcorn.titles.js"
       },
       {
         "type": "titlecard",
@@ -24,6 +28,10 @@
         "path": "{{baseDir}}templates/supported/shared/plugins/photo/popcorn.photo.js"
       },
       {
+        "type": "shrink",
+        "path": "{{baseDir}}templates/supported/shared/plugins/shrink/popcorn.shrink.js"
+      },
+      {
         "type": "zoink",
         "path": "{{baseDir}}templates/supported/shared/plugins/zoink/popcorn.zoink.js"
       },
@@ -32,17 +40,18 @@
         "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
       },
       {
-        "type": "flickr",
-        "path": "{{baseDir}}templates/supported/shared/plugins/flickr/popcorn.flickr.js"
+        "type": "shrink",
+        "path": "{{baseDir}}templates/supported/shared/plugins/shrink/popcorn.shrink.js"
       }
     ],
     "defaults": [
-      "text",
+      "flickr",
+      "titles",
       "titlecard",
       "photo",
+      "shrink",
       "zoink",
       "shrink",
-      "flickr",
       "googlemap"
     ]
   }
