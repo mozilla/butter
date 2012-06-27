@@ -157,11 +157,11 @@ section.suplementary p:hover {
   position: absolute;
   right: 0;
   bottom: -10px;
-  -webkit-transform: scale(0.6,0.6);
+  -webkit-transform: scale(0.8,0.8);
   -webkit-perspective: 200;
   -webkit-perspective-origin: 50% 50px;
   -moz-transform: scale(0.8,0.8);
-  -moz-perspective: 200;
+  -moz-perspective: 200px;
   -moz-perspective-origin: 50% 50px;
   -o-transform: scale(0.8,0.8);
   -o-perspective: 200;
