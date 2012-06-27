@@ -143,7 +143,7 @@ section.video-container {
   position: absolute;
   right: -55px;
   bottom: 50px;
-  height: 100px;
+  height: 90px;
   width: 200px;
   overflow: hidden;
   color: #121212;
@@ -163,6 +163,7 @@ section.video-container {
   background: -ms-linear-gradient(-45deg,  rgba(167,167,167,1) 0%,rgba(224,224,224,1) 55%,rgba(244,244,244,1) 59%,rgba(167,167,167,1) 100%);
   background: linear-gradient(-45deg,  rgba(167,167,167,1) 0%,rgba(224,224,224,1) 55%,rgba(244,244,244,1) 59%,rgba(167,167,167,1) 100%);
   box-shadow: 0 50px 30px -20px rgba(0,0,0,.6);
+  z-index: 4000;
 
 }
 
@@ -179,7 +180,7 @@ section.video-container {
 .logo-inner {
   position: absolute;
   top: 2px;
-  width: 100px;
+  width: 200px;
   margin-top: 10px;
 }
 .logo-alt h2,
@@ -450,6 +451,10 @@ footer {
   height: 37px;
   position: relative;
   top: -10px;
+}
+
+.title-card {
+  z-index: 3000;
 }
 
 .title-card .text-container > div > h2 {
