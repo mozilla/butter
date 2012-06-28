@@ -28,7 +28,7 @@ define( [
           LangUtil ) {
 
   var MIN_ZOOM = 300,
-      DEFAULT_ZOOM = 0.5;
+      DEFAULT_ZOOM = 0;
 
   function MediaInstance( butter, media ){
     function onTrackOrderChanged( orderedTracks ){
