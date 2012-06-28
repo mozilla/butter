@@ -29,6 +29,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         _onPlayerTypeRequired = options.playerTypeRequired || function(){},
         _onTimeout = options.timeout || function(){},
         _popcorn,
+        _target,
         _mediaType,
         _butterEventMap = {},
         _interruptLoad = false,
@@ -57,6 +58,25 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         }
       } //for
     } //addPopcornHandlers
+
+    // used to replace targetNode with newNode
+    function replaceNode( parentNode, newNode, targetNode ) {
+      var attributes;
+
+      newNode.id = targetNode.id;
+      attributes = targetNode.attributes;
+      if( attributes ){
+        for( var i = attributes.length - 1; i >= 0; i-- ) {
+          var name = attributes[ i ].nodeName;
+          newNode.setAttribute( name, targetNode.getAttribute( name ) );
+        }
+      }
+      if( targetNode.className ){
+        newNode.className = targetNode.className;
+      }
+      parentNode.replaceChild( newNode, targetNode);
+      newNode.setAttribute( "data-butter", "media" );
+    }
 
     // Cancel loading or preparing of media whilst attempting to setup
     this.interruptLoad = function(){
@@ -157,11 +177,12 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         return;
       }
 
+      _target = target;
       // only enter this block if popcorn doesn't already exist (call clear() first to destroy it)
       if( !_popcorn ) {
         try {
           // make sure popcorn is setup properly: players, etc
-          waitForPopcorn( function(){
+          waitForPopcorn(function(){
             // construct the correct dom infrastructure if required
             constructPlayer( target );
             // generate a function which will create a popcorn instance when entered into the page
@@ -172,7 +193,18 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
               _onConstructing();
             }
             // wait for the media to become available and notify the user, or timeout
-            waitForMedia( _onPrepare, timeoutWrapper );
+            waitForMedia(function() {
+
+              var targetElem = document.getElementById( _target );
+
+              if ( _mediaType === "object" && targetElem.nodeName === "DIV" ) {
+                var clone = targetElem.children[ 0 ].cloneNode( true ),
+                    parentNode = targetElem.parentNode;
+
+                replaceNode( parentNode, clone, targetElem );
+              }
+              _onPrepare();
+            }, timeoutWrapper );
           }, timeoutWrapper );
         }
         catch( e ) {
@@ -212,22 +244,9 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       if( _mediaType !== "object" && targetElement ) {
         if( [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) !== -1 ) {
           var parentNode = targetElement.parentNode,
-              newElement = document.createElement( "div" ),
-              attributes;
+              newElement = document.createElement( "div" );
 
-          newElement.id = targetElement.id;
-          attributes = targetElement.attributes;
-          if( attributes ){
-            for( var i = attributes.length - 1; i >= 0; i-- ) {
-              var name = attributes[ i ].nodeName;
-              newElement.setAttribute( name, targetElement.getAttribute( name ) );
-            }
-          }
-          if( targetElement.className ){
-            newElement.className = targetElement.className;
-          }
-          parentNode.replaceChild( newElement, targetElement );
-          newElement.setAttribute( "data-butter", "media" );
+          replaceNode( parentNode, newElement, targetElement );
         }
       }
     }
