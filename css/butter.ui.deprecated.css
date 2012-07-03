@@ -1442,7 +1442,7 @@ input.form-error {
 #editor-area {
   position: fixed;
   z-index: 2000000000;
-  top: 35px;
+  top: 51px;
   bottom: 0;
   right: 0;
   width: 200px;
