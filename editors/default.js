@@ -81,6 +81,9 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
         if( target ) {
           target.view.blink();
         }
+        else {
+          _butter.currentMedia.view.blink();
+        }
       }, false );
     }
 

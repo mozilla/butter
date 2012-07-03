@@ -144,8 +144,10 @@ define( [
         manifestOptions = this.manifest.options;
         for ( var prop in manifestOptions ) {
           if ( manifestOptions.hasOwnProperty( prop ) ) {
-            if ( updateOptions[ prop ] === undefined && applyDefaults ) {
-              _popcornOptions[ prop ] = defaultValue( manifestOptions[ prop ] );
+            if ( updateOptions[ prop ] === undefined ) {
+              if ( applyDefaults ) {
+                _popcornOptions[ prop ] = defaultValue( manifestOptions[ prop ] );
+              }
             } else {
               _popcornOptions[ prop ] = updateOptions[ prop ];
             }
@@ -171,6 +173,8 @@ define( [
 
       _view.update( _popcornOptions );
       _this.popcornOptions = _popcornOptions;
+
+      console.log( _popcornOptions.start );
 
       // we should only get here if no exceptions happened
       _this.dispatch( "trackeventupdated", _this );
