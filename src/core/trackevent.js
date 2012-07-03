@@ -174,8 +174,6 @@ define( [
       _view.update( _popcornOptions );
       _this.popcornOptions = _popcornOptions;
 
-      console.log( _popcornOptions.start );
-
       // we should only get here if no exceptions happened
       _this.dispatch( "trackeventupdated", _this );
 
