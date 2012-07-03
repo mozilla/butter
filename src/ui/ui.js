@@ -251,13 +251,11 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
           if( _state !== val ){
             _state = val;
             if( _state ){
-              document.body.classList.remove( "minimized" );
-              _element.setAttribute( "data-ui-state", "visible" );
+              _element.classList.remove( "minimized" );
               _this.dispatch( "uivisibilitychanged", true );
             }
             else {
-              document.body.classList.add( "minimized" );
-              _element.setAttribute( "data-ui-state", "hidden" );
+              _element.classList.add( "minimized" );
               _this.dispatch( "uivisibilitychanged", false );
             } //if
           } //if

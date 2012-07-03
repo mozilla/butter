@@ -827,6 +827,10 @@ input.form-error {
   cursor: pointer;
 }
 
+#butter-tray.minimized {
+  bottom: -170px;
+}
+
 #butter-tray #toggle-button div {
   background-image: url("../resources/buttons.png");
   background-position: -255px 10px;
@@ -837,8 +841,8 @@ input.form-error {
   margin: 0 18px 0 18px;
 }
 
-#butter-tray[ data-ui-state="hidden" ] #toggle-button div {
-  background-position: -255px -7px;
+#butter-tray.minimized #toggle-button div {
+  background-position: -255px -9px;
 }
 
 #status-bar {
@@ -881,7 +885,7 @@ input.form-error {
   transition: top 0.5s;
 }
 
-#butter-tray[ data-ui-state="hidden" ] .media-instance {
+#butter-tray.minimized .media-instance {
   top: 0;
 }
 
