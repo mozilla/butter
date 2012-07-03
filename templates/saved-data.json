@@ -55,7 +55,8 @@
               "popcornOptions": {
                 "start": 1,
                 "end": 2,
-                "target": "Area2"
+                "target": "Area2",
+                "text": "tset"
               },
               "track": "Track2",
               "name": "TrackEvent1"
