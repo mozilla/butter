@@ -4,7 +4,7 @@
 
 /**
  * Module: EditorModule
- * 
+ *
  * Butter Module for Editors
  */
 define( [ "core/eventmanager",
@@ -18,7 +18,7 @@ define( [ "core/eventmanager",
 
   /**
    * Class: EventEditor
-   * 
+   *
    * Module which provides Editor functionality to Butter
    */
   function EventEditor( butter, moduleOptions ){
@@ -32,7 +32,7 @@ define( [ "core/eventmanager",
 
     /**
      * Member: openEditor
-     * 
+     *
      * Open the editor corresponding to the type of the given TrackEvent
      *
      * @param {TrackEvent} trackEvent: TrackEvent to edit
@@ -56,7 +56,7 @@ define( [ "core/eventmanager",
 
     /**
      * Member: edit
-     * 
+     *
      * Open the editor of corresponding to the type of the given TrackEvent
      *
      * @param {TrackEvent} trackEvent: TrackEvent to edit
@@ -87,7 +87,7 @@ define( [ "core/eventmanager",
 
     /**
      * Member: _start
-     * 
+     *
      * Prepares this module for Butter startup
      *
      * @param {Function} onModuleReady: Callback to signify that module is ready

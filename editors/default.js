@@ -30,9 +30,9 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
      * Member: setErrorState
      *
      * Sets the error state of the editor, making an error message visible
-     * 
+     *
      * @param {String} message: Error message to display
-     */ 
+     */
     function setErrorState ( message ) {
       if ( message ) {
         _messageContainer.innerHTML = message;
@@ -66,10 +66,10 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
      * Member: updateTrackEventWithTryCatch
      *
      * Attempt to update the properties of a TrackEvent; set the error state if a failure occurs.
-     * 
+     *
      * @param {TrackEvent} trackEvent: TrackEvent to update
      * @param {Object} properties: TrackEvent properties to update
-     */ 
+     */
     function updateTrackEventWithTryCatch ( trackEvent, properties ) {
       try {
         trackEvent.update( properties );
@@ -83,7 +83,7 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
      * Member: createTargetsList
      *
      * Creates the target list and attaches the handlers for target change events
-     * 
+     *
      * @param {TrackEvent} trackEvent: TrackEvent to which change handlers are attached (for calling update consequently)
      */
     function createTargetsList ( trackEvent ) {
@@ -112,7 +112,7 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
      * Member: attachSelectChangeHandler
      *
      * Attaches a handler to the change event from a <select> element and updates the TrackEvent corresponding to the given property name
-     * 
+     *
      * @param {DOMElement} element: Element to which handler is attached
      * @param {TrackEvent} trackEvent: TrackEvent to update
      * @param {String} propertyName: Name of property to update when change is detected
@@ -140,7 +140,7 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
      * Attaches handlers to an element (likely an <input>) and updates the TrackEvent corresponding to the given property name.
      * Special consideration is given to properties like "start" and "end" that can't be blank. On keyup event, update only when
      * appropriate.
-     * 
+     *
      * @param {DOMElement} element: Element to which handler is attached
      * @param {TrackEvent} trackEvent: TrackEvent to update
      * @param {String} propertyName: Name of property to update when change is detected
@@ -166,7 +166,7 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
      * Member: attachCheckboxChangeHandler
      *
      * Attaches handlers to a checkbox element and updates the TrackEvent corresponding to the given property name
-     * 
+     *
      * @param {DOMElement} element: Element to which handler is attached
      * @param {TrackEvent} trackEvent: TrackEvent to update
      * @param {String} propertyName: Name of property to update when change is detected
@@ -183,7 +183,7 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
      * Member: attachInputChangeHandler
      *
      * Attaches handlers to a checkbox element and updates the TrackEvent corresponding to the given property name
-     * 
+     *
      * @param {DOMElement} element: Element to which handler is attached
      * @param {TrackEvent} trackEvent: TrackEvent to update
      * @param {String} propertyName: Name of property to update when change is detected
@@ -205,11 +205,11 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
      * Member: createManifestItem
      *
      * Creates an element according to the manifest of the TrackEvent
-     * 
+     *
      * @param {String} name: Name of the manifest item to represent
      * @param {Object} manifestEntry: The manifest entry from a Popcorn plugin
      * @param {*} data: Initial data to insert in the created element
-     * @param {TrackEvent} trackEvent: TrackEvent to which handlers will be attached 
+     * @param {TrackEvent} trackEvent: TrackEvent to which handlers will be attached
      */
     function createManifestItem ( name, manifestEntry, data, trackEvent ) {
       var elem = manifestEntry.elem || "default",
@@ -228,7 +228,7 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
       // Grab the element with class 'property-name' to supply the archetype for new manifest entries
       propertyArchetype.querySelector( ".property-name" ).innerHTML = itemLabel;
 
-      // If the manifest's 'elem' property is 'select', create a <select> element. Otherwise, create an 
+      // If the manifest's 'elem' property is 'select', create a <select> element. Otherwise, create an
       // <input>.
       if ( manifestEntry.elem === "select" ) {
         select = propertyArchetype.querySelector( "select" );
@@ -277,7 +277,7 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
      * Member: createPropertiesFromManifest
      *
      * Creates editable elements according to the properties on the manifest of the given TrackEvent
-     * 
+     *
      * @param {TrackEvent} trackEvent: TrackEvent from which manifest will be retrieved
      */
     this.createPropertiesFromManifest = function ( trackEvent ) {
