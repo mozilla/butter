@@ -35,7 +35,7 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
     Editor.BaseEditor( _this, butter, rootElement, {
       open: function ( parentElement, trackEvent ) {
         trackEvent.listen( "trackeventupdated", function ( e ) {
-          _this.updatePropertiesFromManifest( e.target.popcornOptions );
+          _this.updatePropertiesFromManifest( e.target );
           setErrorState( false );
         });
         _this.createPropertiesFromManifest( trackEvent );
@@ -191,13 +191,15 @@ define( [ "text!./default.html", "text!layouts/trackevent-editor-defaults.html",
 
       _rootElement.appendChild( targetList );
 
-      _this.updatePropertiesFromManifest( trackEvent.popcornOptions );
+      _this.updatePropertiesFromManifest( trackEvent );
     };
 
-    this.updatePropertiesFromManifest = function ( popcornOptions ) {
-      var element;
-      for ( var option in popcornOptions ) {
-        if ( popcornOptions.hasOwnProperty( option ) ) {
+    this.updatePropertiesFromManifest = function ( trackEvent ) {
+      var element,
+          popcornOptions = trackEvent.popcornOptions,
+          manifestOptions = trackEvent.manifest.options;
+      for ( var option in manifestOptions ) {
+        if ( manifestOptions.hasOwnProperty( option ) ) {
           element = _rootElement.querySelector( "[data-manifest-key='" + option + "']" );
 
           if ( element.type === "checkbox" ) {

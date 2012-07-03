@@ -48,6 +48,10 @@ define( [ "core/eventmanager", "util/lang" ],
           compiledLayout = LangUtils.domFragment( description.layout ).querySelector( ".butter-editor" );
 
       return new description.create( compiledLayout, butter );
+    },
+
+    isRegistered: function( name ) {
+      return !!__editors[ name ];
     }
 
   };
