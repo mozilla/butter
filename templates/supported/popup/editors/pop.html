@@ -1,0 +1,159 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <title>Pop Editor</title>
+    <script type="text/javascript" src="../../../../editors/editor.js"></script>
+    <script type="text/javascript" src="js/editor-state.js"></script>
+    <script type="text/javascript" src="js/html5slider.js"></script>
+    <link rel="stylesheet" type="text/css" href="editor.css">
+  </head>
+  <body>
+
+  <div id="menu">
+    <div class="menu-item" data-content-id="content">Content</div>
+    <div class="menu-item" data-content-id="position">Position</div>
+    <div class="menu-item" data-content-id="graphics">Graphics</div>
+    <div class="menu-item" data-content-id="style">Style</div>
+    <div class="menu-item" data-content-id="time">Time</div>
+  </div>
+
+  <div id="content">
+    <div class="content-item" data-content-id="time">
+    <table class="form">
+      <tbody class="form-header">
+      <tr><th colspan="2">Time</th></tr>
+      </tbody>
+      <tbody>
+      <tr>
+        <th><label for="start">From:</label></th>
+        <td><input type="text" id="start"></td>
+      </tr>
+      <tr>
+        <th><label for="end">To:</label></th>
+        <td><input type="text" id="end"></td>
+      </tr>
+      <tr>
+        <th><label for="end">Fade Out:</label></th>
+        <td><input type="range" min="0" max="5" step="0.1" id="exit">
+        <span id="fade-out">0 s</span></td>
+      </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="content-item" data-content-id="content">
+    <table class="form">
+      <tbody class="form-header">
+      <tr><th colspan="2">Content</th></tr>
+      </tbody>
+      <tbody>
+      <tr>
+        <th><label for="text">Text:</label></th>
+        <td><textarea id="text"></textarea></td>
+      </tr>
+      <tr>
+        <th><label for="link">Link <br><span class="note">(e.g. http://www.google.com)</span>:</label></th>
+        <td><input type="text" id="link" var></td>
+      </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="content-item" data-content-id="position">
+    <table class="form">
+      <tbody class="form-header">
+      <tr><th colspan="2">Position</th></tr>
+      </tbody>
+      <tbody>
+      <tr>
+        <th><label for="left">Left (%):</label></th>
+        <td><input type="range" min="0" max="100" step="1" id="left"><span id="left-pos">50%</span></td>
+      </tr>
+      <tr>
+        <th><label for="top">Top (%):</label></th>
+        <td><input type="range" min="0" max="100" type="text" id="top"><span id="top-pos">50%</span></td>
+      </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="content-item" data-content-id="graphics">
+    <table class="form">
+      <tbody class="form-header">
+        <tr><th colspan="2">Graphics</th></tr>
+      </tbody>
+      <tbody>
+        <tr>
+        <th><label for="left">Icon:</label></th>
+        <td>
+          <div id="icon-bin"><span id="no-icon">None</span></div>
+          <div>
+          <input type="text" id="icon-url">
+          <button id="add-icon">Add by URL</button>
+          </div>
+        </td>
+        </tr>
+      </tbody>
+      </table>
+    </div>
+
+    <div class="content-item" data-content-id="style">
+    <table class="form">
+      <tbody class="form-header">
+      <tr><th colspan="2">Style</th></tr>
+      </tbody>
+      <tbody>
+      <tr>
+        <th><label for="classes">Class(es):</label></th>
+        <td><input type="text" id="classes"></td>
+      </tr>
+      <tr>
+        <th><label for="align">Text Alignment:</label></th>
+        <td>
+        <select id="align">
+          <option value="">Auto</option>
+          <option value="left">Left</option>
+          <option value="center">Center</option>
+          <option value="right">Right</option>
+          <option value="justify">Justify</option>
+          <option value="start">Start</option>
+          <option value="end">End</option>
+        </select>
+        </td>
+      </tr>
+      <tr>
+        <th><label for="style">CSS:</label></th>
+        <td><input type="text" id="style"></td>
+      </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <script type="text/javascript" src="js/pop-editor.js"></script>
+  <!--
+
+  Sound credits:
+  Pop #1 "MouthPop.wav"
+  Credit: Herbert Boland
+  URL: http://www.freesound.org/people/HerbertBoland/sounds/33369/
+  CC: By
+  
+  Record Scratch #1 - "scratch23.wav"
+  Credit: JaZzy JunGgle
+  URL: http://www.freesound.org/people/junggle/sounds/29942/
+  CC:  Sample + By
+  
+  Video Game Blip #1 - "bump.wav"
+  Credit: StaneStane
+  http://www.freesound.org/people/StaneStane/sounds/73562/
+  CC: By
+  
+  Video Game Death #1 - "tape_slow9.wav"
+  Credit: zerolagtime
+  URL: http://www.freesound.org/people/zerolagtime/sounds/49246/
+  CC: By
+
+  -->
+  </body>
+</html>

@@ -763,7 +763,7 @@ define([], function(){
         return;
       }
       _moved = false;
-      _draggingElement = e.target;
+      _draggingElement = this;
       _draggingOriginalPosition = _draggingElement.offsetTop;
 
       var style = getComputedStyle( _draggingElement );

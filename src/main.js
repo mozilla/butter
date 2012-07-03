@@ -39,7 +39,7 @@
             Dependencies,
             UI,
             XHR,
-            LangUtils,
+            Lang,
             DefaultConfigJSON,
             UAWarningLayout
           ){
@@ -52,7 +52,7 @@
     }; //Butter
 
     Butter.showUAWarning = function() {
-      var uaWarningDiv = LangUtils.domFragment( UAWarningLayout );
+      var uaWarningDiv = Lang.domFragment( UAWarningLayout );
       document.body.appendChild( uaWarningDiv );
       uaWarningDiv.classList.add( "slide-out" );
       uaWarningDiv.getElementsByClassName( "close-button" )[0].onclick = function () {
@@ -92,6 +92,7 @@
           _this = this,
           _selectedEvents = [],
           _defaultPopcornScripts = {},
+          _customData = {},
           _defaultPopcornCallbacks = {};
 
       // We use the default configuration in src/default-config.json as
@@ -114,8 +115,15 @@
         name: null,
         data: null,
         html: null,
-        template: null
+        template: null,
+        customData: null
       };
+
+      Object.defineProperty( this.project, "customData", {
+        get: function() {
+          return _customData;
+        }
+      });
 
       function checkMedia() {
         if ( !_currentMedia ) {
@@ -128,11 +136,12 @@
         return _currentMedia.getManifest( name );
       }; //getManifest
 
-      this.getHTML = function(){
+      this.getHTML = function() {
         var media = [];
         for( var i=0; i<_media.length; ++i ){
           media.push( _media[ i ].generatePopcornString() );
         } //for
+
         return _page.getHTML( media );
       }; //getHTML
 
@@ -575,9 +584,6 @@
 
               if( mediaObj.getAttribute( "data-butter-source" ) ){
                 url = mediaObj.getAttribute( "data-butter-source" );
-              }
-              else if( [ "VIDEO", "AUDIO" ].indexOf( mediaObj.nodeName ) > -1 ) {
-                url = mediaObj.currentSrc;
               }
 
               if( _media.length > 0 ){

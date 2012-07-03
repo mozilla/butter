@@ -3,7 +3,7 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 /*jshint evil:true*/
 
-define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
+define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, EventManager, URI ) {
 
   // regex to determine the type of player we need to use based on the provided url
   var __urlRegex = /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)(youtu|vimeo|soundcloud|baseplayer)/;
@@ -123,6 +123,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
      * user.
      */
     this.prepare = function( url, target, popcornOptions, callbacks, scripts ){
+      var urlsFromString;
 
       // called when timeout occurs preparing popcorn or the media
       function timeoutWrapper( e ){
@@ -146,6 +147,11 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         else {
           firstUrl = url[ 0 ];
         }
+      }
+      else if ( url.indexOf( "," ) > -1 ) {
+        urlsFromString = url.split( "," );
+        firstUrl = urlsFromString[ 0 ];
+        url = urlsFromString;
       }
 
       // discover and stash the type of media as dictated by the url
@@ -247,12 +253,15 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
           i,
           option;
 
-      if ( typeof( url ) !== "string" ) {
-        url = JSON.stringify( url );
+      // Chrome currently won't load multiple copies of the same video.
+      // See http://code.google.com/p/chromium/issues/detail?id=31014.
+      // Munge the url so we get a unique media resource key.
+      url = typeof url === "string" ? [ url ] : url;
+      for( i=0; i<url.length; i++ ){
+        url[ i ] = URI.makeUnique( url[ i ] ).toString();
       }
-      else {
-        url = "'" + url + "'";
-      }
+      // Transform into a string of URLs (i.e., array string)
+      url = JSON.stringify( url );
 
       // prepare popcornOptions as a string
       if ( popcornOptions ) {
@@ -343,6 +352,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         popcornString += callbacks.afterEvents + "( popcorn );\n";
       }
 
+      popcornString += "popcorn.controls( true );\n";
+
       // if the `method` var is blank, the user probably just wanted an inline function without an onLoad wrapper
       method = method || "inline";
 
@@ -352,7 +363,7 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         popcornString += "\n},false);";
       }
       else {
-        popcornString = popcornString + "\n return popcorn;";
+        popcornString = popcornString + "\nreturn popcorn;";
       } //if
 
       return popcornString;

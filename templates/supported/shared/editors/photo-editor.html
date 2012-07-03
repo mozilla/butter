@@ -1,0 +1,88 @@
+<!--  This Source Code Form is subject to the terms of the MIT license
+      If a copy of the MIT license was not distributed with this file, you can
+      obtain one at http://www.mozillapopcorn.org/butter-license.txt -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Event Editor</title>
+    <style>
+      label {
+        width: 100px ;
+        font-family: sans-serif;
+        color: #fff;
+      }
+      #table {
+        float: left;
+        width: 400px;
+      }
+
+      #table > div {
+        clear: both;
+      }
+      #table > div.start-container,
+      #table > div.end-container,
+      #table > div.width-container,
+      #table > div.height-container,
+      #table > div.top-container,
+      #table > div.left-container {
+        width: 200px;
+        float: left;
+        clear: none;
+      }
+
+      #table > div > label {
+        width: 40%;
+        float: left;
+      }
+      #table > div > div {
+        width: 50%;
+        float: left;
+      }
+
+      p#message {
+        color: #FF0000;
+      }
+      #source-editor {
+        float: left;
+        margin-right: 20px;
+      }
+      #drop-target {
+        border: 3px dashed;
+        width: 160px;
+        height: 120px;
+        text-align: center;
+        background-size: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      #drop-target > span {
+        padding: 30px 20px;
+        display: block;
+        color: #FFF;
+        font-family: sans-serif;
+        text-shadow: 0 0 3px #000, 0 0 3px #000, 0 0 5px #000;
+      }
+      #drop-target.dragover {
+         border: 3px solid #F6DC7E;
+         -webkit-box-shadow:0 0 6px #F6DC7E;
+         -moz-box-shadow:0 0 5px #F6DC7E;
+         box-shadow:0 0 5px #F6DC7E;
+      }
+
+      .error {
+        background-color: #f33;
+      }
+
+    </style>
+    <script type="text/javascript" src="../../../../editors/editor.js"></script>
+    <script type="text/javascript" src="photo-editor.js"></script>
+  </head>
+  <body>
+    <div id="source-editor">
+    </div>
+    <div id="table">
+    </div>
+    <p id="message"></p>
+  </body>
+</html>

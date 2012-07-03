@@ -1,0 +1,24 @@
+.shrink {
+  -webkit-transition: all .3s linear;
+  -moz-transition: all .3s linear;
+  -o-transition: all .3s linear;
+  -ms-transition: all .3s linear;
+  transition: all .3s linear;
+}
+.shrink.shrink-tiny {
+  -webkit-transform: scale(.25,.25);
+  -webkit-transform-origin: top center;
+  -webkit-transition: all .3s linear;
+  -moz-transform: scale(.25,.25);
+  -moz-transform-origin: top center;
+  -moz-transition: all .3s linear;
+  -o-transform: scale(.25,.25);
+  -o-transform-origin: top center;
+  -o-transition: all .3s linear;
+  -ms-transform: scale(.25,.25);
+  -ms-transform-origin: top center;
+  -ms-transition: all .3s linear;
+  transform: scale(.25,.25);
+  transform-origin: top center;
+  transition: all .3s linear;
+}

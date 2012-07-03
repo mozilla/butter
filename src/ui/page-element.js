@@ -37,9 +37,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
         _highlightElement.style.visibility = "visible";
         _highlightElement.classList.add( "on" );
         _highlightElement.classList.remove( "blink" );
-        _highlightElement.removeEventListener( 'transitionend', onTransitionEnd, false );
-        _highlightElement.removeEventListener( 'oTransitionEnd', onTransitionEnd, false );
-        _highlightElement.removeEventListener( 'webkitTransitionEnd', onTransitionEnd, false );
       }
       else {
         _this.blink = _blinkFunction;
@@ -90,9 +87,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
         _highlightElement.classList.remove( "on" );
         _this.blink = _blinkFunction;
       }
-      _highlightElement.removeEventListener( 'transitionend', onTransitionEnd, false );
-      _highlightElement.removeEventListener( 'oTransitionEnd', onTransitionEnd, false );
-      _highlightElement.removeEventListener( 'webkitTransitionEnd', onTransitionEnd, false );
     }
 
     this.blink = _blinkFunction = function(){
@@ -102,9 +96,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
         _highlightElement.classList.add( "blink", "true" );
       }, 0);
       _highlightElement.style.visibility = "visible";
-      _highlightElement.addEventListener( 'transitionend', onTransitionEnd, false );
-      _highlightElement.addEventListener( 'oTransitionEnd', onTransitionEnd, false );
-      _highlightElement.addEventListener( 'webkitTransitionEnd', onTransitionEnd, false );
+      setTimeout( onTransitionEnd, 1500 );
     }; //blink
 
     if( _element ){

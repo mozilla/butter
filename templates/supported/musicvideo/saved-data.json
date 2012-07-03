@@ -1,0 +1,103 @@
+{
+  "targets": [
+    {
+      "id": "Target0",
+      "name": "Target0",
+      "element": "Title"
+    },
+    {
+      "id": "Target1",
+      "name": "Target1",
+      "element": "Area1"
+    }
+  ],
+  "media": [
+    {
+      "id": "Media0",
+      "name": "Media0",
+      "url": [
+        "http://videos-cdn.mozilla.net/serv/webmademovies/trailer.mp4",
+        "http://videos-cdn.mozilla.net/serv/webmademovies/trailer.ogv",
+        "http://videos-cdn.mozilla.net/serv/webmademovies/trailer.webm"
+      ],
+      "target": "main",
+      "duration": 64.522791,
+      "controls": true,
+      "tracks": [
+        {
+          "name": "Track0",
+          "id": "Track0",
+          "trackEvents": [
+            {
+              "id": "TrackEvent0",
+              "type": "text",
+              "popcornOptions": {
+                "start": 0,
+                "end": 3,
+                "text": "Music video",
+                "target": "Title",
+                "escape": "",
+                "multiline": ""
+              },
+              "track": "Track0",
+              "name": "TrackEvent0"
+            },
+            {
+              "id": "TrackEvent1",
+              "type": "text",
+              "popcornOptions": {
+                "start": 4,
+                "end": 9,
+                "text": "Cool!",
+                "target": "Title",
+                "escape": "",
+                "multiline": ""
+              },
+              "track": "Track0",
+              "name": "TrackEvent1"
+            },
+            {
+              "id": "TrackEvent3",
+              "type": "flickr",
+              "popcornOptions": {
+                "start": 6,
+                "end": 9,
+                "height": 120,
+                "width": 120,
+                "tags": "mothermother",
+                "numberofimages": 10,
+                "target": "Area1",
+                "userid": "",
+                "username": "",
+                "apikey": "",
+                "padding": "",
+                "border": "5px"
+              },
+              "track": "Track0",
+              "name": "TrackEvent3"
+            }
+          ]
+        },
+        {
+          "name": "Track1",
+          "id": "Track1",
+          "trackEvents": [
+            {
+              "id": "TrackEvent2",
+              "type": "lastfm",
+              "popcornOptions": {
+                "start": 1,
+                "end": 6,
+                "artist": "mother mother",
+                "apikey": "30ac38340e8be75f9268727cb4526b3d",
+                "target": "Area1"
+              },
+              "track": "Track1",
+              "name": "TrackEvent2"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
