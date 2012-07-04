@@ -2,15 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [
-          "core/eventmanager",
-          "./toggler",
-          "./logo-spinner",
-          "./context-button",
-          "./header",
-          "./unload-dialog"
-        ],
-        function( EventManagerWrapper, Toggler, LogoSpinner, ContextButton, Header, UnloadDialog ){
+define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button", "./header", "./unload-dialog" ],
+        function( EventManagerWrapper, Toggler, LogoSpinner, ContextButton, Header, LangUtils, EDITOR_AREA_LAYOUT, UnloadDialog ){
 
   var TRANSITION_DURATION = 500,
       BUTTER_CSS_FILE = "{css}/butter.ui.css";
@@ -108,6 +101,10 @@ define( [
     EventManagerWrapper( _this );
     UnloadDialog( butter );
 
+    // Expose Area to external bodies through `butter.ui`
+    // Modules should be creating their own Areas when possible
+    _this.Area = Area;
+
     _areas.main = new Area( "butter-tray" );
 
     this.contentStateLocked = false;
@@ -119,7 +116,6 @@ define( [
     _element.className = "butter-tray";
 
     _areas.work = new Area( "work" );
-    _areas.editor = new Area( "editor-area" );
     _areas.statusbar = new Area( "status-bar" );
     _areas.tools = new Area( "tools" );
 
@@ -135,9 +131,7 @@ define( [
     if( uiConfig.value( "ui" ).enabled !== false ){
       document.body.classList.add( "butter-header-spacing" );
       document.body.classList.add( "butter-tray-spacing" );
-      document.body.classList.add( "butter-editor-spacing" );
       document.body.appendChild( _element );
-      document.body.appendChild( _areas.editor.element );
       butter.listen( "mediaadded", function( e ){
         e.data.createView();
       });
@@ -466,7 +460,7 @@ define( [
 
     _this.dialogDir = butter.config.value( "dirs" ).dialogs || "";
 
-   } //UI
+  } //UI
 
   UI.__moduleName = "ui";
 
