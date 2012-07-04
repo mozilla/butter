@@ -5,7 +5,6 @@ define([], function(){
     var changed = false,
         events = [
           "mediacontentchanged",
-          "mediadurationchanged",
           "mediatargetchanged",
           "trackadded",
           "trackremoved",
@@ -29,10 +28,13 @@ define([], function(){
       }
     };
 
-    for ( var i = 0, el = events.length; i < el; i++ ) {
+    butter.listen( "ready", function() {
 
-      butter.listen( events[ i ], eventFunction );
-    }
+      for ( var i = 0, el = events.length; i < el; i++ ) {
+
+        butter.listen( events[ i ], eventFunction );
+      }
+    });
 
     butter.listen( "projectsaved", function() {
 
