@@ -7,14 +7,10 @@
  *
  * Butter Module for Editors
  */
-define( [ "core/eventmanager",
-          "core/trackevent",
-          "./editor"
-        ], function(
-          EventManagerWrapper,
-          TrackEvent,
-          Editor
-        ){
+define( [ "core/eventmanager", "core/trackevent", "./editor",
+          "util/lang", "text!layouts/editor-area.html" ],
+  function( EventManagerWrapper, TrackEvent, Editor, 
+            LangUtils, EDITOR_AREA_LAYOUT ){
 
   /**
    * Class: EventEditor
@@ -94,6 +90,12 @@ define( [ "core/eventmanager",
      */
     this._start = function( onModuleReady ){
       onModuleReady();
+      if( butter.config.value( "ui" ).enabled !== false ){
+        var editorAreaDOMRoot = LangUtils.domFragment( EDITOR_AREA_LAYOUT );
+        butter.ui.areas.editor = new butter.ui.Area( "editor-area", editorAreaDOMRoot );
+        document.body.classList.add( "butter-editor-spacing" );
+        document.body.appendChild( editorAreaDOMRoot );
+      }
     };
 
   }

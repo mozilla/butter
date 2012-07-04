@@ -1439,7 +1439,7 @@ input.form-error {
   color: #FF0000;
 }
 
-#editor-area {
+.butter-editor-area {
   position: fixed;
   z-index: 2000000000;
   top: 51px;
@@ -1458,12 +1458,12 @@ input.form-error {
   color: #EEE;
 }
 
-#editor-area > .butter-editor {
+.butter-editor-area > .butter-editor {
   height: 100%;
   font: 14px 'MetaBold';
 }
 
-#editor-area > .butter-editor h1 {
+.butter-editor-area > .butter-editor h1 {
   font-size: 16px;
   color: #fff;
   padding: 10px;
@@ -1471,17 +1471,17 @@ input.form-error {
   margin: 0;
 }
 
-#editor-area > .butter-editor .trackevent-property {
+.butter-editor-area > .butter-editor .trackevent-property {
   padding: 10px;
   clear: both;
 }
 
-#editor-area > .butter-editor .trackevent-property select, 
-#editor-area > .butter-editor .trackevent-property input {
+.butter-editor-area > .butter-editor .trackevent-property select, 
+.butter-editor-area > .butter-editor .trackevent-property input {
   float: right;
 }
 
-#editor-area > .butter-editor > .editor-tabs {
+.butter-editor-area > .butter-editor > .editor-tabs {
   position: absolute;
   top: 60px;
   left: 5px;
@@ -1490,7 +1490,7 @@ input.form-error {
   border-radius: 5px;
 }
 
-#editor-area > .butter-editor > div.error-message-container {
+.butter-editor-area > .butter-editor > div.error-message-container {
   margin: 0 5px 0 5px;
   padding: 0 5px 0 5px;
   border-radius: 5px;
@@ -1508,11 +1508,11 @@ input.form-error {
   visibility: hidden;
 }
 
-#editor-area > .butter-editor > div.error-message-container.open {
+.butter-editor-area > .butter-editor > div.error-message-container.open {
   margin: 5px 5px 5px 5px;
   padding: 5px 5px 5px 5px;
 }
 
-#editor-area > .butter-editor > div.error-message {
+.butter-editor-area > .butter-editor > div.error-message {
   width: 180px;
 }
