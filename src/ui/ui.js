@@ -110,10 +110,16 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     this.contentStateLocked = false;
 
     var _element = _areas.main.element,
-        _toggler = new Toggler( butter, _element );
+        _toggler = new Toggler( function ( e ) {
+          console.log('bloop!');
+          butter.ui.visible = !butter.ui.visible;
+          _toggler.state = butter.ui.visible;
+        }, "Show/Hide Timeline" );
 
     _element.setAttribute( "data-butter-exclude", "true" );
     _element.className = "butter-tray";
+
+    _element.appendChild( _toggler.element );
 
     _areas.work = new Area( "work" );
     _areas.statusbar = new Area( "status-bar" );
