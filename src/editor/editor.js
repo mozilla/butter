@@ -115,6 +115,38 @@ define( [ "core/eventmanager", "util/lang" ],
      */
     isRegistered: function( name ) {
       return !!__editors[ name ];
+    },
+
+    /**
+     * Function: loadLayout
+     *
+     * Loads a layout from the specified src
+     *
+     * @param {String} src: The source from which the layout will be loaded
+     */
+    loadLayout: function( src, readyCallback ) {
+      var xhr = new XMLHttpRequest(),
+      xhr.open( "GET", src, false );
+
+      if( xhr.overrideMimeType ){
+        xhr.overrideMimeType( "text/plain" );
+      }
+
+      // Deal with caching
+      xhr.setRequestHeader( "If-Modified-Since", "Fri, 01 Jan 1960 00:00:00 GMT" );
+      xhr.send( null );
+      if( xhr.status === 200 ){
+        readyCallback({
+          state: "success",
+          data: xhr.responseText
+        });
+      }
+      else {
+        readyCallback({
+          state: "failure",
+          data: null
+        });
+      }
     }
 
   };
