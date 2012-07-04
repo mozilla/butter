@@ -2,8 +2,15 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button", "./header" ],
-        function( EventManagerWrapper, Toggler, LogoSpinner, ContextButton, Header ){
+define( [
+          "core/eventmanager",
+          "./toggler",
+          "./logo-spinner",
+          "./context-button",
+          "./header",
+          "./unload-dialog"
+        ],
+        function( EventManagerWrapper, Toggler, LogoSpinner, ContextButton, Header, UnloadDialog ){
 
   var TRANSITION_DURATION = 500,
       BUTTER_CSS_FILE = "{css}/butter.ui.css";
@@ -99,6 +106,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
         _this = this;
 
     EventManagerWrapper( _this );
+    UnloadDialog( butter );
 
     _areas.main = new Area( "butter-tray" );
 

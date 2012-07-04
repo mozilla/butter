@@ -121,6 +121,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
           if( callback ){
             callback();
           }
+          butter.dispatch( "projectsaved" );
         });
       }
 
