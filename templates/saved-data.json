@@ -15,7 +15,10 @@
     {
       "id": "Media0",
       "name": "Media0",
-      "url": "../external/popcorn-js/test/trailer.ogv",
+      "url": [
+        "../external/popcorn-js/test/trailer.mp4",
+        "../external/popcorn-js/test/trailer.webm"
+      ],
       "target": "main",
       "duration": 64.54166412353516,
       "tracks": [

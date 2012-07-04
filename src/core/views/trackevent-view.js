@@ -19,6 +19,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
         _typeElement = document.createElement( "div" ),
         _draggable,
         _resizable,
+        _trackEvent = trackEvent,
         _this = this;
 
     EventManagerWrapper( _this );
@@ -55,7 +56,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
       trackEvent: {
         enumerable: true,
         get: function(){
-          return trackEvent;
+          return _trackEvent;
         }
       },
       element: {
@@ -188,8 +189,11 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
       var rect = _element.getClientRects()[ 0 ];
       _start = _element.offsetLeft / _zoom;
       _end = _start + rect.width / _zoom;
-      _this.dispatch( "trackeventviewupdated" );
-    } //movedCallback
+      _trackEvent.update({
+        start: _start,
+        end: _end
+      });
+    }
 
     _element.className = "butter-track-event";
     _this.type = _type;

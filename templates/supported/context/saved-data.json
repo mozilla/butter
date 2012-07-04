@@ -1,0 +1,85 @@
+{
+  "targets": [
+    {
+      "id": "Target0",
+      "name": "Target0",
+      "element": "Box1"
+    },
+    {
+      "id": "Target1",
+      "name": "Target1",
+      "element": "Box2"
+    },
+    {
+      "id": "Target2",
+      "name": "Target2",
+      "element": "Box3"
+    },
+    {
+      "id": "Target3",
+      "name": "Target3",
+      "element": "Box4"
+    }
+  ],
+  "media": [
+    {
+      "id": "Media0",
+      "name": "Media0",
+      "url": [
+        "http://videos-cdn.mozilla.net/serv/webmademovies/trailer.mp4",
+        "http://videos-cdn.mozilla.net/serv/webmademovies/trailer.ogv",
+        "http://videos-cdn.mozilla.net/serv/webmademovies/trailer.webm"
+      ],
+      "target": "videobox",
+      "duration": 64.522791,
+      "controls": true,
+      "tracks": [
+        {
+          "name": "Track0",
+          "id": "Track0",
+          "trackEvents": [
+            {
+              "id": "TrackEvent0",
+              "type": "text",
+              "popcornOptions": {
+                "start": 0,
+                "end": 3,
+                "text": "test",
+                "target": "Box1",
+                "escape": "",
+                "multiline": ""
+              },
+              "track": "Track0",
+              "name": "TrackEvent0"
+            }
+          ]
+        },
+        {
+          "name": "Track1",
+          "id": "Track1",
+          "trackEvents": []
+        },
+        {
+          "name": "Track2",
+          "id": "Track2",
+          "trackEvents": [
+            {
+              "id": "TrackEvent1",
+              "type": "text",
+              "popcornOptions": {
+                "start": 1,
+                "end": 2,
+                "target": "Box2",
+                "text": "Popcorn.js",
+                "escape": "",
+                "multiline": ""
+              },
+              "track": "Track2",
+              "name": "TrackEvent1"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "musicvideo",
+  "title": "Music Video",
+  "baseDir": "../../../",
+  "savedDataUrl": "saved-data.json",
+  "plugin": {
+    "plugins": [
+      {
+        "type": "text",
+        "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
+      },
+      {
+        "type": "attribution",
+        "path": "{{baseDir}}external/popcorn-js/plugins/attribution/popcorn.attribution.js"
+      },
+      {
+        "type": "lastfm",
+        "path": "{{baseDir}}external/popcorn-js/plugins/lastfm/popcorn.lastfm.js"
+      },
+      {
+        "type": "flickr",
+        "path": "{{baseDir}}external/popcorn-js/plugins/flickr/popcorn.flickr.js"
+      }
+    ],
+    "defaults": [
+      "text",
+      "attribution",
+      "lastfm",
+      "flickr"
+    ]
+  }
+}

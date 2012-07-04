@@ -1,0 +1,163 @@
+/* ===== Primary Styles ========================================================
+   Author: @k88hudson
+   ========================================================================== */
+body {
+  color: #EEE;
+  font-size: 100%;
+  font-family: lato, "Helvetica Neue", sans-serif;
+  background: #333 url(../img/grunge_wall.png) repeat;
+  height: 100%;
+}
+.wrapper {
+  margin: 0 auto;
+  width: 800px;
+}
+
+h1, h2, h3 {
+  font-weight: 400;
+  font-family: orgovan-rounded-web, bangers, sans-serif;
+}
+
+h3 {
+  border-bottom: 1px solid #212121;
+}
+
+/*- - - Header - - -*/
+header {
+  position: relative;
+  padding: 20px 0 15px 0;
+  text-align: center;
+}
+.logo {
+  margin: 0;
+  font-size: 50px;
+  opacity: .3;
+  color: transparent;
+  text-shadow: 0 0 8px #EEE;
+  -webkit-transition: all .5s ease;
+  -moz-transition: all .5s ease;
+  -o-transition: all .5s ease;
+  transition: all .5s ease;
+  -ms-transition: all .5s ease;
+}
+
+.logo:hover, .logo.on {
+  font-size: 60px;
+  opacity: .9;
+  text-shadow: 0 0 3px #EEE;
+  -webkit-animation: rumble .1s infinite ease;
+  -moz-animation: rumble .1s infinite ease;
+  -o-animation: rumble .1s infinite ease;
+  -ms-animation: .1s infinite ease;
+  animation: rumble .1s infinite ease;
+}
+
+/* /header */
+
+/*- - - Main - - -*/
+section.video-container {
+  position: relative;
+  z-index: 100;
+  width: 100%;
+  background: #000;
+  box-shadow: 0 50px 30px -20px rgba(0,0,0,.6);
+}
+
+#video > video {
+  width: 100%;
+  height: 100%;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 35px;
+  left: 0;
+  width: 100%;
+}
+
+.text-overlay {
+  display: table;
+  height: 100%;
+}
+
+.text-overlay > div {
+  width: 100%;
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+section.suplementary {
+  margin: 20px 0;
+  font-weight: 400;
+  line-height: 1.4;
+}
+.block {
+  float: left;
+  margin-right: 25px;
+  width: 350px;
+}
+.block:first-child, .block:last-child {
+  width: 200px;
+}
+.block:last-child {
+  margin-right: 0;
+}
+
+/* /main */
+
+/*- - - Footer - - -*/
+footer {
+  font-size: .9em;
+  padding: 20px 0 40px 0;
+  color: #666;
+  line-height: 1.5;
+}
+footer a, a:visited {
+  color: #777;
+  text-decoration: none;
+}
+footer img {
+  margin-top: 6px;
+}
+footer:hover {
+  color: #EEE;
+  -webkit-transition: all .3s ease;
+  -moz-transition: all .3s ease;
+  -o-transition: all .3s ease;
+  -ms-transition: all .3s ease;
+  transition: all .3s ease;
+}
+footer:hover a {
+  color: #FFF;
+  text-decoration: underline;
+}
+/* /footer */
+
+
+/* TITLES
+-------------------------------------------------- */
+.top-title, .bottom-title, .mid-title {
+  text-align: center;
+}
+.top-title {
+  font-family: 'Jolly Lodger', Georgia;
+  font-size: 120px;
+  text-transform: uppercase;
+  color: #FFF;
+  line-height: 1;
+}
+.mid-title {
+  font-family: 'Fredericka the Great', Georgia;
+  font-size: 35px;
+  text-transform: uppercase;
+  margin-top: 10px;
+  letter-spacing: 0.1em;
+}
+.bottom-title {
+  font-family: 'Lovers Quarrel', Georgia;
+  font-size: 80px;
+  margin: 0 20px;
+}
+/* ---/ TITLES ------------------------------- */

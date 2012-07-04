@@ -235,9 +235,9 @@
 
         media.listen( "mediaready", function(){
 
-        var popcornTextPlugin = document.createElement( "script" );
-        popcornTextPlugin.src = "../external/popcorn-js/plugins/text/popcorn.text.js";
-        document.head.appendChild( popcornTextPlugin );
+          var popcornTextPlugin = document.createElement( "script" );
+          popcornTextPlugin.src = "../external/popcorn-js/plugins/text/popcorn.text.js";
+          document.head.appendChild( popcornTextPlugin );
 
           var trackEvent = media.addTrack().addTrackEvent({
                 type: "text",
@@ -251,9 +251,9 @@
           media.currentTime = 1.5;
           var contentDiv = document.getElementById( "media-target-test-div-overlay" );
           ok( contentDiv.childNodes[0].innerHTML === "LOL", "Media has target div with correct content." );
+          start();
           document.body.removeChild( videoDiv );
           document.head.removeChild( popcornTextPlugin );
-          start();
         });
       });
     });
@@ -329,14 +329,17 @@
 
     createButter( function( butter ){
 
+      Popcorn.plugin( "createTrackEventTest", function() {} );
+
       var m = butter.addMedia({ url: "../external/popcorn-js/test/italia.ogg", target: "mediaDiv" }),
           t = m.addTrack(),
           te1 = t.addTrackEvent( { name: "TrackEvent 1", type: "test", popcornOptions: { start: 0, end: 1 } } ),
-          te2 = t.addTrackEvent( { name: "TrackEvent 2", type: "cue", popcornOptions: 1 } );
+          te2 = t.addTrackEvent( { name: "TrackEvent 2", type: "createTrackEventTest", popcornOptions: { start: 1 } } );
 
       ok( te1.name === "TrackEvent 1" && te1.popcornOptions.start ===  0 && te1.popcornOptions.end === 1, "TrackEvent name is setup correctly" );
-      ok( te2.popcornTrackEvent._natives.type === "cue" && te2.popcornTrackEvent.start === 1, "TrackEvent has correct popcornTrackEvent reference" );
+      ok( te2.popcornTrackEvent._natives.type === "createTrackEventTest" && te2.popcornTrackEvent.start === 1, "TrackEvent has correct popcornTrackEvent reference" );
 
+      Popcorn.removePlugin( "createTrackEventTest" );
       start();
     });
   });
@@ -394,29 +397,26 @@
 
     createButter(function( butter ) {
       var te1,
-          m,
-          t;
+          m = butter.addMedia({ url: "../external/popcorn-js/test/italia.ogg", target: "mediaDiv" }),
+          t = m.addTrack();
 
       butter.listen( "mediaready", function( e ) {
+        butter.listen( "trackeventupdated", function( e ) {
+          equal( e.data.popcornOptions.text, "Popcorn.js", "Trackevent is given proper plugin defaults" );
+          start();
+        });
+
+        te1 = t.addTrackEvent({
+          name: "TrackEvent 1",
+          type: "text",
+          start: 0,
+          end: 1
+        });
+
         te1.update({
           start: 5,
           end: 6
         });
-      });
-
-      butter.listen( "trackeventupdated", function( e ) {
-        equal( e.data.popcornOptions.text, "Popcorn.js", "Trackevent is given proper plugin defaults" );
-        start();
-      });
-
-      m = butter.addMedia({ url: "../external/popcorn-js/test/italia.ogg", target: "mediaDiv" }),
-      t = m.addTrack();
-
-      te1 = t.addTrackEvent({
-        name: "TrackEvent 1",
-        type: "text",
-        start: 0,
-        end: 1
       });
     });
   });
@@ -656,7 +656,7 @@
 
   module( "Player tests", butterLifeCycle );
   // Make sure HTML5 audio/video, youtube, and vimeo work
-  asyncTest( "Test basic player support", 7, function() {
+  asyncTest( "Test basic player support", 5, function() {
 
     Butter({
       config: "test-config.json",
@@ -664,7 +664,6 @@
         butterLifeCycle.rememberButter( butter );
 
         var mediaURLS = [ "http://www.youtube.com/watch?v=7glrZ4e4wYU",
-            "http://vimeo.com/30619461",
             "../external/popcorn-js/test/italia.ogg" ],
             index = 0,
             count = 0;

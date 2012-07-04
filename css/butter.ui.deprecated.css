@@ -278,7 +278,7 @@ input.form-error {
 /* HEADER
 -------------------------------------------------- */
 
-#butter-header {
+#butter-header, .butter-header {
   z-index: 2140000000;
   position: fixed;
   left: 0;
@@ -847,7 +847,7 @@ input.form-error {
   height: 27px;
 }
 
-#butter-tray[ ui-state="hidden" ] {
+#butter-tray[ data-ui-state="hidden" ] {
   bottom: -170px;
 }
 
@@ -1375,6 +1375,7 @@ input.form-error {
   background-color: rgb(71,76,86);
 }
 .butter-btn:hover {
+  color: #EEE;
   text-decoration: none;
   box-shadow: inset 0 1px 1px rgba(255,255,255,.4), 0 1px 3px rgba(0,0,0,.5);
   background: rgb(86,92,104);
@@ -1423,8 +1424,7 @@ input.form-error {
 }
 
 /* All elements with a class starting in icon- */
-[class^="icon-"],
-[class*=" icon-"] {
+[class^="icon-"] {
   display: inline-block;
   width: 14px;
   height: 14px;
@@ -1435,11 +1435,11 @@ input.form-error {
   background-repeat: no-repeat;
   margin-right: 3px;
 }
-.butter-btn:hover [class^="icon-"],
-.butter-btn:hover [class*=" icon-"] {
+.butter-btn:hover [class^="icon-"] {
   background-image: url("../resources/glyphicons-halflings-white.png");
 }
 
+.icon-grear-sign { background-position: -240px 0; }
 .icon-ok-sign { background-position: -72px -96px; }
 .icon-eye-open { background-position: -96px -120px; }
 .icon-share-alt { background-position: -336px -96px; }

@@ -1,0 +1,24 @@
+{
+  "name": "popup",
+  "title": "Popup",
+  "template": "index.html",
+  "baseDir": "../../../",
+  "savedDataUrl": "saved-data.json",
+  "editor": {
+    "pop": "{{baseDir}}templates/supported/popup/editors/pop.html"
+  },
+  "plugin": {
+    "plugins": [
+      {
+        "type": "pop",
+        "path": "{{baseDir}}templates/supported/popup/plugins/popcorn.pop.js"
+      }
+    ],
+    "defaults" : [
+      "pop"
+    ]
+  },
+  "mediaDefaults": {
+    "frameAnimation": true
+  }
+}

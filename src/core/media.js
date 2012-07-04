@@ -71,12 +71,22 @@
               for( var i = 0, l = _tracks.length; i < l; i++ ) {
                 var te = _tracks[ i ].trackEvents;
                 for( var j = 0, k = te.length; j < k; j++ ) {
-                  _popcornWrapper.updateEvent( te[ j ] );
+                  // should call _popcornWrapper.updateEvent( te[ j ] ) circuitously
+                  te[ j ].update();
                 }
               }
               if( _view ){
                 _view.update();
               }
+
+              // If the target element has a `data-butter-media-controls` property,
+              // set the `controls` attribute on the corresponding media element.
+              var targetElement = document.getElementById( _target );
+              if (  targetElement &&
+                    targetElement.getAttribute( "data-butter-media-controls" ) ) {
+                _popcornWrapper.popcorn.controls( true );
+              }
+
               _this.dispatch( "mediaready" );
             },
             constructing: function(){
@@ -129,15 +139,15 @@
       }
 
       function onTrackEventAdded( e ){
-        _popcornWrapper.updateEvent( e.data );
+        var trackEvent = e.data;
+        _popcornWrapper.updateEvent( trackEvent );
+        trackEvent._popcornWrapper = _popcornWrapper;
       } //onTrackEventAdded
 
-      function onTrackEventUpdated( e ){
-        _popcornWrapper.updateEvent( e.target );
-      } //onTrackEventUpdated
-
       function onTrackEventRemoved( e ){
-        _popcornWrapper.destroyEvent( e.data );
+        var trackEvent = e.data;
+        _popcornWrapper.destroyEvent( trackEvent );
+        trackEvent._popcornWrapper = null;
       } //onTrackEventRemoved
 
       this.addTrack = function ( track ) {
@@ -156,11 +166,10 @@
           "trackeventdeselected",
           "trackeventeditrequested"
         ]);
-        track.popcorn = _popcornWrapper;
         track.listen( "trackeventadded", onTrackEventAdded );
-        track.listen( "trackeventupdated", onTrackEventUpdated );
         track.listen( "trackeventremoved", onTrackEventRemoved );
         _this.dispatch( "trackadded", track );
+        track.setPopcornWrapper( _popcornWrapper );
         var trackEvents = track.trackEvents;
         if ( trackEvents.length > 0 ) {
           for ( var i=0, l=trackEvents.length; i<l; ++i ) {
@@ -196,8 +205,8 @@
             "trackeventdeselected",
             "trackeventeditrequested"
           ]);
+          track.setPopcornWrapper( null );
           track.unlisten( "trackeventadded", onTrackEventAdded );
-          track.unlisten( "trackeventupdated", onTrackEventUpdated );
           track.unlisten( "trackeventremoved", onTrackEventRemoved );
           _this.dispatch( "trackremoved", track );
           track._media = null;
@@ -222,10 +231,13 @@
       }; //getManifest
 
       function setupContent(){
-        if( _url && _target ){
+        if ( _url && _url.indexOf( "," ) > -1 ) {
+          _url = _url.split( "," );
+        }
+        if ( _url && _target ){
           _popcornWrapper.prepare( _url, _target, _popcornOptions, _this.popcornCallbacks, _this.popcornScripts );
-        } //if
-        if( _view ){
+        }
+        if ( _view ) {
           _view.update();
         }
       }
@@ -386,6 +398,7 @@
               url: _url,
               target: _target,
               duration: _duration,
+              controls: _popcornWrapper.popcorn ? _popcornWrapper.popcorn.controls() : false,
               tracks: exportJSONTracks
             };
           },
@@ -462,22 +475,45 @@
         }
       });
 
+      // check to see if we have any child source elements and use them if neccessary
+      function retrieveSrc( targetElement ) {
+        var url = "";
+
+        if ( targetElement.children ) {
+          var children = targetElement.children;
+          url = [];
+          for ( var i = 0, il = children.length; i < il; i++ ) {
+            if ( children[ i ].nodeName === "SOURCE" ) {
+              url.push( children[ i ].src );
+            }
+          }
+        }
+        return !url.length ? targetElement.currentSrc : url;
+      }
+
       // There is an edge-case where currentSrc isn't set yet, but everything else about the video is valid.
       // So, here, we wait for it to be set.
-      var targetElement = document.getElementById( _target );
-      if( targetElement && [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) > -1 ) {
-        if( !targetElement.currentSrc && targetElement.getAttribute( "src" ) || targetElement.childNodes.length > 0 ){
-          var attempts = 0,
-              safetyInterval = setInterval(function(){
-            if( targetElement.currentSrc ){
-              _url = targetElement.currentSrc;
+      var targetElement = document.getElementById( _target ),
+          mediaSource = _url,
+          attempts = 0,
+          safetyInterval;
+
+      if ( targetElement && [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) > -1 ) {
+        mediaSource = mediaSource || retrieveSrc( targetElement );
+        if ( !mediaSource ) {
+          safetyInterval = setInterval(function() {
+            mediaSource = retrieveSrc( targetElement );
+            if ( mediaSource ) {
+              _url = mediaSource ;
               setupContent();
               clearInterval( safetyInterval );
-            }
-            else if( attempts++ === MEDIA_ELEMENT_SAFETY_POLL_ATTEMPTS ){
+            } else if ( attempts++ === MEDIA_ELEMENT_SAFETY_POLL_ATTEMPTS ) {
               clearInterval( safetyInterval );
             }
           }, MEDIA_ELEMENT_SAFETY_POLL_INTERVAL );
+        // we already have a source, lets make sure we update it
+        } else {
+          _url = mediaSource;
         }
       }
 
