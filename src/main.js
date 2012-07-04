@@ -155,7 +155,7 @@
 
       function trackEventRequested( element, media, target ){
         var track,
-            type = element.getAttribute( "data-butter-plugin-type" ),
+            type = element.getAttribute( "data-popcorn-plugin-type" ),
             start = media.currentTime,
             end;
 
