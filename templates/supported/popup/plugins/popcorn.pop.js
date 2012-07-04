@@ -228,8 +228,6 @@ todo: animate top, left and other styles (color, font size, etc.)
       container.style.textAlign = options.align;
     }
 
-
-    container.style.visibility = 'hidden';
     if (options.classes) {
       if (options.classes.length && options.classes.join) {
         //an array works
@@ -319,6 +317,7 @@ todo: animate top, left and other styles (color, font size, etc.)
       }, false);
     }
 
+    container.classList.add( "pop" );
     target.appendChild(container);
     options.container = container;
 
@@ -346,8 +345,6 @@ todo: animate top, left and other styles (color, font size, etc.)
         fontLoaded = true;
         loaded = true;
         if (container) {
-          container.style.visibility = '';
-          container.style.display = 'none';
           if (typeof options.onLoad === 'function') {
             options.onLoad(options);
           }
@@ -403,8 +400,7 @@ todo: animate top, left and other styles (color, font size, etc.)
     return {
       start: function( event, options ) {
         if (options.container) {
-          options.container.style.visibility = 'visible';
-          options.container.style.display = '';
+          options.container.classList.add( "on" );
         }
 
         if (audio && audio.duration && !video.paused &&
@@ -428,51 +424,9 @@ todo: animate top, left and other styles (color, font size, etc.)
           }
         }
       },
-      frame: function(event, options, time){
-        var scale = 1, opacity = 1,
-          t = time - options.start,
-          div = options.container,
-          transform;
-
-        if (!options.container) {
-          return;
-        }
-
-        if (t < duration) {
-          scale = ( 1 - Math.pow( (t / duration) / 0.7 - 1, 2) ) / 0.8163;
-        } else if (options.exit === 'fade') {
-          t = time - (options.end - fadeTime);
-
-          if (t > 0) {
-            opacity = 1 - (t / fadeTime);
-          }
-        }
-
-        if (lastScale !== scale) {
-          transform = 'scale(' + scale + ')';
-          container.style.MozTransform = transform;
-          container.style.webkitTransform = transform;
-          container.style.ieTransform = transform;
-          container.style.oTransform = transform;
-          container.style.transform = transform;
-          lastScale = scale;
-        }
-
-        if (lastOpacity !== opacity) {
-          container.style.opacity = opacity;
-          lastOpacity = opacity;
-        }
-
-        if (typeof options.onFrame === 'function') {
-          try {
-            options.onFrame(options, time);
-          } catch (e) {
-          }
-        }
-      },
       end: function( event, options ) {
         if (options.container) {
-          options.container.style.display = 'none';
+          options.container.classList.remove( "on" );
         }
 
         if (typeof options.onEnd === 'function') {
