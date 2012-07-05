@@ -10,7 +10,7 @@ define( [
           "./header",
           "./unload-dialog"
         ],
-        function( EventManagerWrapper, Toggler, LogoSpinner, ContextButton, Header, unloadDialog ){
+        function( EventManagerWrapper, Toggler, LogoSpinner, ContextButton, Header, UnloadDialog ){
 
   var TRANSITION_DURATION = 500,
       BUTTER_CSS_FILE = "{css}/butter.ui.css";
@@ -106,7 +106,7 @@ define( [
         _this = this;
 
     EventManagerWrapper( _this );
-    unloadDialog( butter );
+    UnloadDialog( butter );
 
     _areas.main = new Area( "butter-tray" );
 
