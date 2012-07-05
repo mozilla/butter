@@ -1,6 +1,0 @@
-define(
-  [
-    "../editors/default"
-  ], function(){
-  
-});

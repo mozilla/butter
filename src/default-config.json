@@ -4,10 +4,6 @@
   "snapshotHTMLOnReady": true,
   "scrapePage": true,
   "title": "Popcorn Maker",
-  "editor": {
-    "default": "{{baseDir}}editors/default-editor.html",
-    "googlemap": "{{baseDir}}editors/googlemap-editor.html"
-  },
   "ui": {
     "enabled": true,
     "trackEventHighlight": "click"
