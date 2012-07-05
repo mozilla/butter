@@ -2,6 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
+( function( Butter ) {
 
 Butter.Editor.loadLayout( "{{baseDir}}editors/googlemap-editor.html", function( layoutSrc ) {
 
@@ -9,8 +10,7 @@ Butter.Editor.loadLayout( "{{baseDir}}editors/googlemap-editor.html", function( 
 
     var _this = this;
 
-    var _butter = butter,
-        _rootElement = rootElement,
+    var _rootElement = rootElement,
         _targets = [ butter.currentMedia ].concat( butter.targets ),
         _messageContainer = _rootElement.querySelector( "div.error-message" ),
         _targetSelectElement;
@@ -44,7 +44,7 @@ Butter.Editor.loadLayout( "{{baseDir}}editors/googlemap-editor.html", function( 
      *
      * @param {TrackEvent} trackEvent: TrackEvent to update
      * @param {Object} updateOptions: TrackEvent properties to update
-     */    
+     */
     function updateTrackEventWithoutTryCatch( trackEvent, updateOptions ) {
       trackEvent.update( updateOptions );
     }
@@ -87,7 +87,7 @@ Butter.Editor.loadLayout( "{{baseDir}}editors/googlemap-editor.html", function( 
 
       optionsContainer.appendChild( targetList );
 
-      _this.createPropertiesFromManifest( trackEvent, 
+      _this.createPropertiesFromManifest( trackEvent,
           function( elementType, element, trackEvent, name ){
             if ( elementType === "select" ) {
               _this.attachSelectChangeHandler( element, trackEvent, name, updateTrackEventWithoutTryCatch );
@@ -148,3 +148,5 @@ Butter.Editor.loadLayout( "{{baseDir}}editors/googlemap-editor.html", function( 
   });
 
 });
+
+}( window.Butter ));
