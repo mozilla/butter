@@ -55,7 +55,7 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
        *
        * Handler for keydown events that runs two specific activities if they're bound: Enter and Escape keys
        *
-       * @param {Event} e: Standard DOM Event from a keydown occurrence 
+       * @param {Event} e: Standard DOM Event from a keydown occurrence
        */
       function onKeyDown( e ) {
         if (  _enterKeyActivity &&

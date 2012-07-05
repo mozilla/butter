@@ -101,7 +101,7 @@ define( [ "core/eventmanager", "util/lang", "util/xhr", "text!layouts/trackevent
         }
 
         return propertyRootElement;
-      }
+      };
 
       /**
        * Member: attachSelectChangeHandler
@@ -127,7 +127,7 @@ define( [ "core/eventmanager", "util/lang", "util/xhr", "text!layouts/trackevent
             extendObject.butter.currentMedia.view.blink();
           }
         }, false );
-      }
+      };
 
       /**
        * Member: attachStartEndHandler
@@ -163,7 +163,7 @@ define( [ "core/eventmanager", "util/lang", "util/xhr", "text!layouts/trackevent
             }
           }
         }, false );
-      }
+      };
 
       /**
        * Member: attachCheckboxChangeHandler
@@ -180,7 +180,7 @@ define( [ "core/eventmanager", "util/lang", "util/xhr", "text!layouts/trackevent
           updateOptions[ propertyName ] = element.checked;
           trackEvent.update( updateOptions );
         }, false );
-      }
+      };
 
       /**
        * Member: attachInputChangeHandler
@@ -205,7 +205,7 @@ define( [ "core/eventmanager", "util/lang", "util/xhr", "text!layouts/trackevent
           updateOptions[ propertyName ] = element.value;
           trackEvent.update( updateOptions );
         }, false );
-      }
+      };
 
       /**
        * Member: createManifestItem
@@ -277,7 +277,7 @@ define( [ "core/eventmanager", "util/lang", "util/xhr", "text!layouts/trackevent
         }
 
         return propertyArchetype;
-      }
+      };
 
       /**
        * Member: updatePropertiesFromManifest
@@ -290,9 +290,10 @@ define( [ "core/eventmanager", "util/lang", "util/xhr", "text!layouts/trackevent
         var element,
             popcornOptions = trackEvent.popcornOptions,
             manifestOptions = trackEvent.manifest.options,
-            manifestKeys = manifestKeys || Object.keys( manifestOptions ),
             option,
             i, l;
+
+        manifestKeys = manifestKeys || Object.keys( manifestOptions );
 
         if ( forceTarget && manifestKeys.indexOf( "target" ) === -1 ) {
           manifestKeys = manifestKeys.concat( "target" );
@@ -330,11 +331,11 @@ define( [ "core/eventmanager", "util/lang", "util/xhr", "text!layouts/trackevent
        */
       extendObject.createPropertiesFromManifest = function( trackEvent, itemCallback, manifestKeys, container ) {
         var manifestOptions,
-            selectElement,
             item,
             element,
-            container = container || extendObject.rootElement,
             i, l;
+
+        container = container || extendObject.rootElement;
 
         if ( !trackEvent.manifest ) {
           throw "Unable to create properties from null manifest. Perhaps trackevent is not initialized properly yet.";

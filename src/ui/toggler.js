@@ -29,7 +29,7 @@ define( [ "util/lang", "text!layouts/toggler.html" ], function( LangUtils, TOGGL
             _element.classList.add( "toggled" );
           }
           else {
-            _element.classList.remove( "toggled" ); 
+            _element.classList.remove( "toggled" );
           }
         }
       },

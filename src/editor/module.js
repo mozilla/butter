@@ -10,7 +10,7 @@
 define( [ "core/eventmanager", "core/trackevent", "./editor",
           "ui/toggler", "util/lang", "text!layouts/editor-area.html",
           "./default" ],
-  function( EventManagerWrapper, TrackEvent, Editor, 
+  function( EventManagerWrapper, TrackEvent, Editor,
             Toggler, LangUtils, EDITOR_AREA_LAYOUT,
             DefaultEditor ){
 
@@ -119,9 +119,6 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         _editorAreaDOMRoot.classList.add( "minimized" );
 
         document.body.appendChild( _editorAreaDOMRoot );
-
-        Editor.baseDir = butter.config.value( "baseDir" );
-        Butter.Editor = Editor;
 
         var config = butter.config.value( "editor" );
         for ( var editorName in config ) {
