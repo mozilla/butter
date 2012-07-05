@@ -395,29 +395,6 @@ input.form-error {
   background-color: rgba( 10, 170, 170, 0.4 );
 }
 
-#butter-editor {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 2140000002;
-  background-image: url( "../resources/bg.jpg" );
-  opacity: 0;
-}
-
-#butter-editor #editor-container{
-  height: 150px;
-  padding: 0 150px 0 0;
-  position: relative;
-}
-
-#butter-editor #editor-container iframe {
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
 #butter-timeline {
   position: absolute;
   width: 100%;
@@ -1532,4 +1509,8 @@ input.form-error {
 
 .butter-editor-area > .butter-editor > div.error-message {
   width: 180px;
+}
+
+.butter-editor-area > .butter-editor > button {
+  margin: 10px;
 }

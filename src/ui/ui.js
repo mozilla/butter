@@ -111,7 +111,6 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
 
     var _element = _areas.main.element,
         _toggler = new Toggler( function ( e ) {
-          console.log('bloop!');
           butter.ui.visible = !butter.ui.visible;
           _toggler.state = butter.ui.visible;
         }, "Show/Hide Timeline" );

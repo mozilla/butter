@@ -3,7 +3,6 @@
   "title": "Complete",
   "baseDir": "../",
   "editor": {
-    "googlemap": "{{baseDir}}editors/googlemap-editor.js"
   },
   "plugin": {
     "plugins": [

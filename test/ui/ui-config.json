@@ -1,7 +1,5 @@
 {
   "editor": {
-    "default": "../../editors/default-editor.html",
-    "googlemap": "../../editors/googlemap-editor.html"
   },
   "plugin": {
     "plugins": [

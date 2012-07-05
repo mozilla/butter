@@ -8,9 +8,11 @@
  * Butter Module for Editors
  */
 define( [ "core/eventmanager", "core/trackevent", "./editor",
-          "ui/toggler", "util/lang", "text!layouts/editor-area.html" ],
+          "ui/toggler", "util/lang", "text!layouts/editor-area.html",
+          "./default" ],
   function( EventManagerWrapper, TrackEvent, Editor, 
-            Toggler, LangUtils, EDITOR_AREA_LAYOUT ){
+            Toggler, LangUtils, EDITOR_AREA_LAYOUT,
+            DefaultEditor ){
 
   /**
    * Class: EventEditor
@@ -22,6 +24,8 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     moduleOptions = moduleOptions || {};
 
     var _currentEditor,
+        _firstUse = false,
+        _editorAreaDOMRoot,
         _this = this;
 
     EventManagerWrapper( _this );
@@ -34,7 +38,13 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
      * @param {TrackEvent} trackEvent: TrackEvent to edit
      */
     function openEditor( trackEvent ) {
-      var editorType = Editor.isRegistered( trackEvent.type ) || "default";
+      // If the editor has never been used before, open it now
+      if ( !_firstUse ) {
+        _firstUse = true;
+        _editorAreaDOMRoot.classList.remove( "minimized" );
+      }
+
+      var editorType = Editor.isRegistered( trackEvent.type ) ? trackEvent.type : "default";
       if( _currentEditor ) {
         _currentEditor.close();
       }
@@ -91,21 +101,38 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     this._start = function( onModuleReady ){
       onModuleReady();
       if( butter.config.value( "ui" ).enabled !== false ){
-        var editorAreaDOMRoot = LangUtils.domFragment( EDITOR_AREA_LAYOUT );
-        butter.ui.areas.editor = new butter.ui.Area( "editor-area", editorAreaDOMRoot );
+        _editorAreaDOMRoot = LangUtils.domFragment( EDITOR_AREA_LAYOUT );
+        butter.ui.areas.editor = new butter.ui.Area( "editor-area", _editorAreaDOMRoot );
         var toggler = new Toggler( function( e ) {
-          var newState = !editorAreaDOMRoot.classList.contains( "minimized" );
+          var newState = !_editorAreaDOMRoot.classList.contains( "minimized" );
           toggler.state = newState;
           if ( newState ) {
-            editorAreaDOMRoot.classList.add( "minimized" );
+            _editorAreaDOMRoot.classList.add( "minimized" );
           }
           else {
-            editorAreaDOMRoot.classList.remove( "minimized" ); 
+            _editorAreaDOMRoot.classList.remove( "minimized" );
           }
         }, "Show/Hide Editor" );
-        editorAreaDOMRoot.appendChild( toggler.element );
+        _editorAreaDOMRoot.appendChild( toggler.element );
         document.body.classList.add( "butter-editor-spacing" );
-        document.body.appendChild( editorAreaDOMRoot );
+
+        // Start minimized
+        _editorAreaDOMRoot.classList.add( "minimized" );
+
+        document.body.appendChild( _editorAreaDOMRoot );
+
+        Editor.baseDir = butter.config.value( "baseDir" );
+        Butter.Editor = Editor;
+
+        var config = butter.config.value( "editor" );
+        for ( var editorName in config ) {
+          if ( config.hasOwnProperty( editorName ) ) {
+            butter.loader.load({
+              url: config[ editorName ],
+              type: "js"
+            });
+          }
+        }
       }
     };
 
