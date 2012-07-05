@@ -41,7 +41,8 @@ todo: animate top, left and other styles (color, font size, etc.)
     fontLoaded = false,
     fontLoadedQueue = [],
     startedLoadingExternal = false,
-    externalLoadedQueue = [];
+    externalLoadedQueue = [],
+    MIN_WIDTH = 75;
 
   function loadExternal(callback) {
     function checkExternal() {
@@ -219,9 +220,11 @@ todo: animate top, left and other styles (color, font size, etc.)
 
     container = document.createElement('div');
     container.style.cssText = options.style || '';
+    options.width = options.width < MIN_WIDTH ? MIN_WIDTH : options.width;
 
     container.style.top = options.top + '%';
     container.style.left = options.left + '%';
+    container.style.width = options.width + 'px';
     container.style.position = 'absolute';
 
     if (options.align) {
@@ -564,6 +567,13 @@ todo: animate top, left and other styles (color, font size, etc.)
         elem:'input',
         type:'text',
         label:'Pop Icon'
+      },
+      width: {
+        elem:'input',
+        type:'number',
+        label: 'Popup Width',
+        "default": 100,
+        units: 'px'
       }/*,
       onSetup: {
         type: "function",
