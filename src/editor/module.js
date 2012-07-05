@@ -25,7 +25,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
 
     var _currentEditor,
         _firstUse = false,
-        _editorAreaDOMRoot,
+        _editorAreaDOMRoot = LangUtils.domFragment( EDITOR_AREA_LAYOUT ),
         _this = this;
 
     EventManagerWrapper( _this );
@@ -49,7 +49,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         _currentEditor.close();
       }
       _currentEditor = Editor.create( editorType, butter );
-      _currentEditor.open( butter.ui.areas.editor.element, trackEvent );
+      _currentEditor.open( _editorAreaDOMRoot, trackEvent );
       return _currentEditor;
     }
 
@@ -101,7 +101,6 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     this._start = function( onModuleReady ){
       onModuleReady();
       if( butter.config.value( "ui" ).enabled !== false ){
-        _editorAreaDOMRoot = LangUtils.domFragment( EDITOR_AREA_LAYOUT );
         butter.ui.areas.editor = new butter.ui.Area( "editor-area", _editorAreaDOMRoot );
         var toggler = new Toggler( function( e ) {
           var newState = !_editorAreaDOMRoot.classList.contains( "minimized" );
