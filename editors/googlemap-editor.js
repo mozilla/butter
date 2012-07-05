@@ -4,9 +4,7 @@
 
 ( function( Butter ) {
 
-Butter.Editor.loadLayout( "{{baseDir}}editors/googlemap-editor.html", function( layoutSrc ) {
-
-  Butter.Editor.register( "googlemap", layoutSrc, function( rootElement, butter ) {
+  Butter.Editor.register( "googlemap", "load!{{baseDir}}editors/googlemap-editor.html", function( rootElement, butter ) {
 
     var _this = this;
 
@@ -146,7 +144,5 @@ Butter.Editor.loadLayout( "{{baseDir}}editors/googlemap-editor.html", function( 
     });
 
   });
-
-});
 
 }( window.Butter ));

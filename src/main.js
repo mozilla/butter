@@ -758,7 +758,7 @@
         _this.project.template = _config.value( "name" );
 
         //prepare modules first
-        var moduleCollection = Modules( _this, _config ),
+        var moduleCollection = Modules( Butter, _this, _config ),
             loader = Dependencies( _config );
 
         _this.loader = loader;
