@@ -1027,6 +1027,7 @@
           });
           external.close();
         });
+        external.open();
       }
     });
 

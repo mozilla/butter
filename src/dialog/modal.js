@@ -21,7 +21,7 @@ define( [], function(){
     // need to wait an event-loop cycle to apply this class
     // ow, opacity transition fails to render
     setTimeout( function(){
-      _element.classList.add( "fade-in" );
+      _element && _element.classList.add( "fade-in" );
     }, 10 );
 
     _element.appendChild( childElement );
