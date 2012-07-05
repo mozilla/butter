@@ -19,7 +19,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
    *
    * Module which provides Editor functionality to Butter
    */
-  function EventEditor( butter, moduleOptions ){
+  function EventEditor( butter, moduleOptions, ButterNamespace ){
 
     moduleOptions = moduleOptions || {};
 
@@ -30,6 +30,8 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         _this = this;
 
     EventManagerWrapper( _this );
+
+    ButterNamespace.Editor = Editor;
 
     /**
      * Member: openEditor
@@ -112,7 +114,8 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
      * @param {Function} onModuleReady: Callback to signify that module is ready
      */
     this._start = function( onModuleReady ){
-      onModuleReady();
+      var editorsToLoad = [];
+
       if( butter.config.value( "ui" ).enabled !== false ){
         butter.ui.areas.editor = new butter.ui.Area( "editor-area", _editorAreaDOMRoot );
         _toggler = new Toggler( function( e ) {
@@ -136,12 +139,25 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         var config = butter.config.value( "editor" );
         for ( var editorName in config ) {
           if ( config.hasOwnProperty( editorName ) ) {
-            butter.loader.load({
+            editorsToLoad.push({
               url: config[ editorName ],
               type: "js"
             });
           }
         }
+
+        if ( editorsToLoad.length > 0 ){
+          butter.loader.load( editorsToLoad, function() {
+            Editor.loadUrlSpecifiedLayouts( onModuleReady, butter.config.value( "baseDir" ) );
+          });
+        }
+        else {
+          onModuleReady();
+        }
+
+      }
+      else {
+        onModuleReady();
       }
     };
 
