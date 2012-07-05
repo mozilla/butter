@@ -1028,6 +1028,7 @@
           });
           external.close();
         });
+        external.open();
       }
     });
 
