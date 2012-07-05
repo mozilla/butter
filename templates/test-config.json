@@ -2,5 +2,8 @@
   "name": "test",
   "template": "test.html",
   "savedDataUrl": "saved-data.json",
-  "baseDir": "../"
+  "baseDir": "../",
+  "editor": {
+    "googlemap": "{{baseDir}}editors/googlemap-editor.js"
+  }
 }

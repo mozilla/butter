@@ -391,8 +391,7 @@
           "tracktargetchanged",
           "trackeventadded",
           "trackeventremoved",
-          "trackeventupdated",
-          "trackeventeditrequested"
+          "trackeventupdated"
         ]);
 
         var trackEvents;
@@ -437,8 +436,7 @@
             "tracktargetchanged",
             "trackeventadded",
             "trackeventremoved",
-            "trackeventupdated",
-            "trackeventeditrequested"
+            "trackeventupdated"
           ]);
           var tracks = media.tracks;
           for ( var i=0, l=tracks.length; i<l; ++i ) {
@@ -760,7 +758,7 @@
         _this.project.template = _config.value( "name" );
 
         //prepare modules first
-        var moduleCollection = Modules( _this, _config ),
+        var moduleCollection = Modules( Butter, _this, _config ),
             loader = Dependencies( _config );
 
         _this.loader = loader;

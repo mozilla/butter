@@ -24,10 +24,10 @@
 .butter-media-properties .url input,
 .butter-media-properties .url button {
   transition: opacity 0.2s;
-  -moz-transition: opacity: 0.5;
-  -webkit-transition: opacity: 0.5;
-  -ms-transition: opacity: 0.5;
-  -o-transition: opacity: 0.5;
+  -moz-transition: opacity 0.5;
+  -webkit-transition: opacity 0.5;
+  -ms-transition: opacity 0.5;
+  -o-transition: opacity 0.5;
   opacity: 0;
 }
 .butter-media-properties .url input {
