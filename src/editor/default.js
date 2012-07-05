@@ -19,8 +19,7 @@ define( [ "text!./default.html",
 
     var _this = this;
 
-    var _butter = butter,
-        _rootElement = rootElement,
+    var _rootElement = rootElement,
         _trackEvent,
         _targets = [ butter.currentMedia ].concat( butter.targets ),
         _messageContainer = _rootElement.querySelector( "div.error-message" );
@@ -55,8 +54,11 @@ define( [ "text!./default.html",
     // Extend this object to become a BaseEditor
     Editor.BaseEditor( _this, butter, rootElement, {
       open: function ( parentElement, trackEvent ) {
+        var targetList,
+            selectElement;
+
         _trackEvent = trackEvent;
-        _this.createPropertiesFromManifest( trackEvent, 
+        _this.createPropertiesFromManifest( trackEvent,
           function( elementType, element, trackEvent, name ){
             if ( elementType === "select" ) {
               _this.attachSelectChangeHandler( element, trackEvent, name, updateTrackEventWithoutTryCatch );
@@ -77,7 +79,7 @@ define( [ "text!./default.html",
             }
           });
 
-        var targetList = _this.createTargetsList( _targets );
+        targetList = _this.createTargetsList( _targets );
         selectElement = targetList.querySelector( "select" );
         // Attach the onchange handler to trackEvent is updated when <select> is changed
         _this.attachSelectChangeHandler( selectElement, trackEvent, "target" );
@@ -100,7 +102,7 @@ define( [ "text!./default.html",
      *
      * @param {TrackEvent} trackEvent: TrackEvent to update
      * @param {Object} updateOptions: TrackEvent properties to update
-     */    
+     */
     function updateTrackEventWithoutTryCatch( trackEvent, updateOptions ) {
       trackEvent.update( updateOptions );
     }
