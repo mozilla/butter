@@ -2,24 +2,12 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-(function(){
-
-  var dialogs = [
-    "error-message",
-    "track-data",
-    "delete-track",
-    "export",
-    "quit-confirmation",
-    "save-as",
-    "share"
-  ];
-
-  var include = [];
-  var i = dialogs.length;
-  while ( i-- ) {
-    include.push( "dialog/dialogs/" + dialogs[ i ] );
-  }
-
-  define( include, function() {} );
-
-}());
+define([
+  "dialog/dialogs/error-message",
+  "dialog/dialogs/track-data",
+  "dialog/dialogs/delete-track",
+  "dialog/dialogs/export",
+  "dialog/dialogs/quit-confirmation",
+  "dialog/dialogs/save-as",
+  "dialog/dialogs/share",
+], function() {} );

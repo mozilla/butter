@@ -180,7 +180,6 @@ target.package = function() {
   target.build();
 
   cp('-R', 'resources', DIST_DIR);
-  cp('-R', 'dialogs', DIST_DIR);
   cp('-R', 'editors', DIST_DIR);
   cp('-R', 'templates', DIST_DIR);
 
@@ -257,7 +256,6 @@ target.release = function() {
 
   // Copy over templates and other resources
   cp('-R', 'resources', DIST_DIR);
-  cp('-R', 'dialogs', DIST_DIR);
   cp('-R', 'editors', DIST_DIR);
   cp('-R', 'templates', DIST_DIR);
 
@@ -331,7 +329,6 @@ target.storycamp = function(){
   // Copy other assets over
   cd(cwd);
   cp('-R', 'resources', DIST_DIR);
-  cp('-R', 'dialogs', DIST_DIR);
   cp('-R', 'editors', DIST_DIR);
   cp('-R', 'templates', DIST_DIR);
   cp('-R', 'cornfield', DIST_DIR);
