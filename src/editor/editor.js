@@ -5,9 +5,10 @@
 /**
  * Module: Editor
  */
-define( [ "core/eventmanager", "util/lang", "util/xhr", 
+define( [ "core/eventmanager", "util/lang", "util/xhr",
           "util/keys", "text!layouts/trackevent-editor-defaults.html" ],
-        function( EventManagerWrapper, LangUtils, XHRUtils, KeysUtils, DEFAULT_LAYOUT_SNIPPETS ) {
+        function( EventManagerWrapper, LangUtils, XHRUtils,
+          KeysUtils, DEFAULT_LAYOUT_SNIPPETS ) {
 
   var __editors = {},
       __defaultLayouts = LangUtils.domFragment( DEFAULT_LAYOUT_SNIPPETS ),
