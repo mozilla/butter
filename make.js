@@ -125,7 +125,7 @@ target.docs = function() {
 
 target.check = function() {
   checkJS( SRC_DIR, EDITORS_DIR );
-  checkCSS( CSS_DIR, DIALOGS_DIR, EDITORS_DIR );
+  checkCSS( CSS_DIR, EDITORS_DIR );
 };
 
 target['check-templates'] = function() {
@@ -134,7 +134,7 @@ target['check-templates'] = function() {
 };
 
 target['check-css'] = function( dirs ) {
-  checkCSS( CSS_DIR, DIALOGS_DIR, EDITORS_DIR );
+  checkCSS( CSS_DIR, EDITORS_DIR );
 };
 
 target['check-lint'] = function( dir ) {
