@@ -23,6 +23,7 @@
             "./dependencies",
             "./dialogs",
             "dialog/dialog",
+            "editor/editor",
             "ui/ui",
             "util/xhr",
             "util/lang",
@@ -41,6 +42,7 @@
             Dependencies,
             Dialogs,
             Dialog,
+            Editor,
             UI,
             XHR,
             Lang,
@@ -820,6 +822,8 @@
       this.page = _page;
 
     }
+
+    Butter.Editor = Editor;
 
     Butter.instances = __instances;
 

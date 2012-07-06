@@ -357,7 +357,7 @@ define( [ "core/eventmanager", "util/lang", "util/xhr",
 
         for ( i = 0, l = manifestKeys.length; i < l; ++i ) {
           item = manifestKeys[ i ];
-          if ( ignoreManifestKeys.indexOf( item ) > -1 ) {
+          if ( ignoreManifestKeys && ignoreManifestKeys.indexOf( item ) > -1 ) {
             continue;
           }
           element = extendObject.createManifestItem( item, manifestOptions[ item ], trackEvent.popcornOptions[ item ], trackEvent, itemCallback );
@@ -396,7 +396,16 @@ define( [ "core/eventmanager", "util/lang", "util/xhr",
 
           // Collect the element labeled with the 'butter-editor' class to avoid other elements (such as comments)
           // which may exist in the layout.
-          compiledLayout = LangUtils.domFragment( description.layout ).querySelector( ".butter-editor" );
+          compiledLayout = LangUtils.domFragment( description.layout );
+
+      // If domFragment returned a DOMFragment (not an actual element) try to get the proper element out of it
+      if ( !compiledLayout.classList ) {
+        compiledLayout = compiledLayout.querySelector( ".butter-editor" );
+      }
+
+      if ( !compiledLayout ) {
+        throw new Error( "Editor layout not formatted properly." );
+      }
 
       return new description.create( compiledLayout, butter );
     },
