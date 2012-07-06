@@ -31,50 +31,9 @@ define([ 'util/xhr' ], function( XHR ){
       return url.replace( "//", "/" );
     }
 
-    function loadLessFile( loadJS, url, err, callback){
-      // Load less.js so we can parse the *.less -> *.css
-      loadJS(
-        config.value( "dirs" ).tools + LESS,
-        /* exclude= */ null,
-        function onLoadCallback(){
-          // Assume *.less is beside *.css file
-          var less = window.less,
-              lessURL = url.replace( /\.css$/, ".less" ),
-              lessFile;
-
-          // Load the .less file, parse with LESS, and inject CSS <style>
-          XHR.get( lessURL, function xhrCallback(){
-            if ( this.readyState === 4) {
-              var parser = new less.Parser();
-              lessFile = this.response;
-
-              parser.parse( lessFile, function( e, root ){
-                if( e ){
-                  // Problem parsing less file
-                  err( "Butter: Error parsing LESS file [" + lessURL + "]", e.message );
-                  return;
-                }
-
-                var css, styles;
-                css = document.createElement( "style" ),
-                css.type = "text/css";
-                document.head.appendChild( css );
-                styles = document.createTextNode( root.toCSS() );
-                css.appendChild( styles );
-
-                callback();
-              });
-            }
-          });
-        },
-        function checkFn(){
-          return !!window.less;
-        },
-        err
-      );
-    }
-
     var _loaders = {
+
+      // JavaScript Loader
       js: function( url, exclude, callback, checkFn ){
         checkFn = checkFn || DEFAULT_CHECK_FUNCTION();
 
@@ -91,6 +50,8 @@ define([ 'util/xhr' ], function( XHR ){
           callback();
         }
       },
+
+      // CSS Loader
       css: function( url, exclude, callback, checkFn, error ){
         var link,
             interval;
@@ -113,24 +74,60 @@ define([ 'util/xhr' ], function( XHR ){
         url = fixUrl( url );
 
         if( !checkFn() ){
-          // See if we need to render CSS client side with LESS
-          if( config.value( "cssRenderClientSide" ) === true ){
-            loadLessFile( _loaders.js, url, error, callback );
-          }
-          // Regular css file, inject <link> in head
-          else {
-            link = document.createElement( "link" );
-            link.type = "text/css";
-            link.rel = "stylesheet";
-            link.onerror = error;
-            link.onload = runCheckFn;
-            link.href = url;
-            document.head.appendChild( link );
-          }
+          link = document.createElement( "link" );
+          link.type = "text/css";
+          link.rel = "stylesheet";
+          link.onerror = error;
+          link.onload = runCheckFn;
+          link.href = url;
+          document.head.appendChild( link );
         }
         else if( callback ){
           callback();
         }
+      },
+
+      // LESS Loader - needs to be converted to CSS
+      less: function( url, exclude, callback, checkFn, error ){
+        url = fixUrl( url );
+
+        // Load less.js so we can parse the *.less -> *.css
+        _loaders.js( config.value( "dirs" ).tools + LESS, exclude,
+          function onLoadCallback(){
+            // Assume *.less is beside *.css file
+            var less = window.less,
+                lessFile;
+
+            // Load the .less file, parse with LESS, and inject CSS <style>
+            XHR.get( url, function xhrCallback(){
+              if ( this.readyState === 4) {
+                var parser = new less.Parser();
+                lessFile = this.response;
+
+                parser.parse( lessFile, function( e, root ){
+                  if( e ){
+                    // Problem parsing less file
+                    error( "Butter: Error parsing LESS file [" + url + "]", e.message );
+                    return;
+                  }
+
+                  var css, styles;
+                  css = document.createElement( "style" ),
+                  css.type = "text/css";
+                  document.head.appendChild( css );
+                  styles = document.createTextNode( root.toCSS() );
+                  css.appendChild( styles );
+
+                  callback();
+                });
+              }
+            });
+          },
+          function checkFn(){
+            return !!window.less;
+          },
+          error
+        );
       }
     };
 
