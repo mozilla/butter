@@ -142,19 +142,21 @@ define( [
 
       if ( this.manifest ) {
         manifestOptions = this.manifest.options;
-        for ( var prop in manifestOptions ) {
-          if ( manifestOptions.hasOwnProperty( prop ) ) {
-            if ( updateOptions[ prop ] === undefined ) {
-              if ( applyDefaults ) {
-                _popcornOptions[ prop ] = defaultValue( manifestOptions[ prop ] );
+        if ( manifestOptions ) {
+          for ( var prop in manifestOptions ) {
+            if ( manifestOptions.hasOwnProperty( prop ) ) {
+              if ( updateOptions[ prop ] === undefined ) {
+                if ( applyDefaults ) {
+                  _popcornOptions[ prop ] = defaultValue( manifestOptions[ prop ] );
+                }
+              } else {
+                _popcornOptions[ prop ] = updateOptions[ prop ];
               }
-            } else {
-              _popcornOptions[ prop ] = updateOptions[ prop ];
             }
           }
-        }
-        if ( !( "target" in manifestOptions ) && updateOptions.target ) {
-          _popcornOptions.target = updateOptions.target;
+          if ( !( "target" in manifestOptions ) && updateOptions.target ) {
+            _popcornOptions.target = updateOptions.target;
+          }
         }
       }
       
