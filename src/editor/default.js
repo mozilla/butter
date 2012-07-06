@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "text!./default.html", "editor/editor", "util/lang" ],
-  function( LAYOUT_SRC, Editor, LangUtils ) {
+define( [ "text!./default.html", "editor/editor" ],
+  function( LAYOUT_SRC, Editor ) {
 
   /**
    * Class: DefaultEditor

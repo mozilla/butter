@@ -43,6 +43,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       if ( !_firstUse ) {
         _firstUse = true;
         _editorAreaDOMRoot.classList.remove( "minimized" );
+        _toggler.state = false;
       }
 
       var editorType = Editor.isRegistered( trackEvent.type ) ? trackEvent.type : "default";
