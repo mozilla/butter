@@ -16,6 +16,7 @@
   "dirs": {
     "wwwRoot": "../",
     "templates": "../templates",
+    "css": "../css",
     "publish": "view",
     "hostname": "http://localhost:8888"
   },
