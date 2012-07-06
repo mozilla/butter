@@ -5,12 +5,21 @@
 /**
  * Module: Editor
  */
-define( [ "core/eventmanager", "util/lang", "util/xhr", "text!layouts/trackevent-editor-defaults.html" ],
-        function( EventManagerWrapper, LangUtils, XHRUtils, DEFAULT_LAYOUT_SNIPPETS ) {
+define( [ "core/eventmanager", "util/lang", "util/xhr", 
+          "util/keys", "text!layouts/trackevent-editor-defaults.html" ],
+        function( EventManagerWrapper, LangUtils, XHRUtils, KeysUtils, DEFAULT_LAYOUT_SNIPPETS ) {
 
   var __editors = {},
       __defaultLayouts = LangUtils.domFragment( DEFAULT_LAYOUT_SNIPPETS ),
-      __safeKeyUpKeys = [ 37, 38, 39, 40, 8, 27 ];
+      __safeKeyUpKeys = [
+                          KeysUtils.LEFT,
+                          KeysUtils.UP,
+                          KeysUtils.RIGHT,
+                          KeysUtils.DOWN,
+                          KeysUtils.DELETE,
+                          KeysUtils.TAB,
+                          KeysUtils.ESCAPE
+                        ];
 
   /**
    * Namespace: Editor
