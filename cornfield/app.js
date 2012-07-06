@@ -92,6 +92,16 @@ app.configure( 'development', function() {
 
 require('express-browserid').plugAll(app);
 
+// From https://github.com/mozilla/zamboni/blob/a4b32033/media/js/mkt/utils.js#L15
+function escapeHTMLinJSON( key, value ) {
+  if ( typeof value === "string" ) {
+    return value.replace( /&/g, '&amp;' ).replace( />/g, '&gt;' ).replace( /</g, '&lt;' )
+                .replace( /'/g, '&#39;' ).replace( /"/g, '&#34;' );
+  }
+
+  return value;
+}
+
 function publishRoute( req, res ){
   var email = req.session.email,
       id = req.params.id;
@@ -128,12 +138,12 @@ function publishRoute( req, res ){
 
     if ( project ) {
       var template = project.template,
-          customData = project.customData;
+          customData = JSON.parse( project.customData, escapeHTMLinJSON );
 
       if ( template && VALID_TEMPLATES[ template ] ) {
         var projectPath = PUBLISH_DIR + "/" + id + ".html",
             url = PUBLISH_PREFIX + "/" + id + ".html",
-            projectData = JSON.parse( project.data ),
+            projectData = JSON.parse( project.data, escapeHTMLinJSON ),
             templateBase = VALID_TEMPLATES[ template ].replace( '{{templateBase}}', TEMPLATES_DIR + '/' ),
             templateConfig = templateConfigs[ template ],
             templateFile = templateConfig.template;
@@ -225,7 +235,7 @@ function publishRoute( req, res ){
           }
           popcornString += '</script>\n';
 
-          customDataString = '\n<script type="application/butter-custom-data">\n' + customData + '\n</script>';
+          customDataString = '\n<script type="application/butter-custom-data">\n' + JSON.stringify( customData, null, 2 ) + '\n</script>';
 
           data = startString + baseString + templateScripts + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + customDataString + popcornString + data.substring( bodyEndTagIndex );
 
