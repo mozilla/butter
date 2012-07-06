@@ -23,7 +23,11 @@
 }
 .butter-media-properties .url input,
 .butter-media-properties .url button {
+<<<<<<< HEAD
   transition: opacity 0.5;
+=======
+  transition: opacity 0.2s;
+>>>>>>> [t1174] lint cleanup after rebase
   -moz-transition: opacity 0.5;
   -webkit-transition: opacity 0.5;
   -ms-transition: opacity 0.5;

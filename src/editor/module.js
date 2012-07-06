@@ -2,154 +2,155 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-(function() {
+/**
+ * Module: EditorModule
+ *
+ * Butter Module for Editors
+ */
+define( [ "core/eventmanager", "core/trackevent", "./editor",
+          "ui/toggler", "util/lang", "text!layouts/editor-area.html",
+          "./default" ],
+  function( EventManagerWrapper, TrackEvent, Editor,
+            Toggler, LangUtils, EDITOR_AREA_LAYOUT,
+            DefaultEditor ){
 
-  define( [ "core/eventmanager",
-            "core/trackevent",
-            "./editor"
-          ], function(
-            EventManagerWrapper,
-            TrackEvent,
-            Editor
-          ){
+  /**
+   * Class: EventEditor
+   *
+   * Module which provides Editor functionality to Butter
+   */
+  function EventEditor( butter, moduleOptions ){
 
-    function EventEditor( butter, moduleOptions ){
+    moduleOptions = moduleOptions || {};
 
-      moduleOptions = moduleOptions || {};
+    var _currentEditor,
+        _firstUse = false,
+        _editorAreaDOMRoot = LangUtils.domFragment( EDITOR_AREA_LAYOUT ),
+        _toggler,
+        _this = this;
 
-      var _editors = {},
-          _editorContainer,
-          _openEditor,
-          _this = this;
+    EventManagerWrapper( _this );
 
-      EventManagerWrapper( _this );
-
-      butter.listen( "trackeventcreated", function( e ){
-        if( [ "target", "media" ].indexOf( e.data.by ) > -1 && butter.ui.contentState === "timeline" ){
-          _this.edit( e.data.trackEvent );
-        }
-      });
-
-      function editorClosed( e ){
-        if( butter.ui.contentState === "editor" ){
-          butter.ui.popContentState( "editor" );
-        }
-        _openEditor.unlisten( "close", editorClosed );
-        _openEditor = null;
+    /**
+     * Member: openEditor
+     *
+     * Open the editor corresponding to the type of the given TrackEvent
+     *
+     * @param {TrackEvent} trackEvent: TrackEvent to edit
+     */
+    function openEditor( trackEvent ) {
+      // If the editor has never been used before, open it now
+      if ( !_firstUse ) {
+        _firstUse = true;
+        _editorAreaDOMRoot.classList.remove( "minimized" );
+        _toggler.state = false;
       }
 
-      function editorOpened( e ){
-        if( butter.ui.contentState !== "editor" ){
-          butter.ui.pushContentState( "editor" );
-        }
+      var editorType = Editor.isRegistered( trackEvent.type ) ? trackEvent.type : "default";
+      if( _currentEditor ) {
+        _currentEditor.close();
       }
-
-      this.edit = function( trackEvent ){
-        if ( !trackEvent || !( trackEvent instanceof TrackEvent ) ){
-          throw new Error( "trackEvent must be valid to start an editor." );
-        } //if
-
-        var type = trackEvent.type;
-        if ( !_editors[ type ] ){
-          type = "default";
-        } //if
-        if( !_openEditor ){
-          var editor = _editors[ type ];
-          if( editor ){
-            _openEditor = editor;
-            editor.listen( "open", editorOpened );
-            editor.open( trackEvent );
-            editor.listen( "close", editorClosed );
-          }
-          else{
-            throw new Error( "Editor " + type + " not found." );
-          }
-        }
-      }; //edit
-
-      this.add = function( source, type ){
-        if ( !type || !source ) {
-          throw new Error( "Can't create an editor without a plugin type and editor source" );
-        } //if
-        var editor = _editors[ type ] = new Editor( butter, source, type, _editorContainer );
-        return editor;
-      }; //add
-
-      this.remove = function( type ){
-        if ( !type ) {
-          return;
-        }
-        var oldSource = _editors[ type ];
-        _editors[ type ] = undefined;
-       return oldSource;
-      }; //remove
-
-      function trackEventMouseUp( e ){
-        if( butter.selectedEvents.length === 1 && !e.target.trackEvent.dragging ){
-          _this.edit( e.target.trackEvent );
-        }
-      } //trackEventMouseUp
-
-      butter.listen( "trackeventadded", function( e ){
-        e.data.view.listen( "trackeventmouseup", trackEventMouseUp, false );
-      });
-
-      butter.listen( "trackeventremoved", function( e ){
-        e.data.view.unlisten( "trackeventmouseup", trackEventMouseUp, false );
-      });
-
-      this._start = function( onModuleReady ){
-        var parentElement = document.createElement( "div" );
-        parentElement.id = "butter-editor";
-
-        _editorContainer = document.createElement( "div" );
-        _editorContainer.id = "editor-container";
-        parentElement.appendChild( _editorContainer );
-
-        parentElement.classList.add( "fadable" );
-
-        butter.ui.areas.work.addComponent( parentElement, {
-          states: [ "editor" ],
-          transitionIn: function(){
-            parentElement.style.display = "block";
-            setTimeout(function(){
-              parentElement.style.opacity = "1";
-            }, 0);
-          },
-          transitionInComplete: function(){
-
-          },
-          transitionOut: function(){
-            if( _openEditor ){
-              _openEditor.close();
-            }
-            parentElement.style.opacity = "0";
-          },
-          transitionOutComplete: function(){
-            parentElement.style.display = "none";
-          }
-        });
-
-        parentElement.style.display = "none";
-
-        for( var editorName in moduleOptions ){
-          if( moduleOptions.hasOwnProperty( editorName ) ){
-            _this.add( moduleOptions[ editorName ], editorName );
-          }
-        }
-
-        onModuleReady();
-      }; //start
-
-      butter.listen( "trackeventeditrequested", function( e ){
-        _this.edit( e.target );
-      });
-
+      _currentEditor = Editor.create( editorType, butter );
+      _currentEditor.open( _editorAreaDOMRoot, trackEvent );
+      return _currentEditor;
     }
 
-    EventEditor.__moduleName = "editor";
+    // When a TrackEvent is somewhere in butter, open its editor immediately.
+    butter.listen( "trackeventcreated", function( e ){
+      if( [ "target", "media" ].indexOf( e.data.by ) > -1 && butter.ui.contentState === "timeline" ){
+        openEditor( e.data.trackEvent );
+      }
+    });
 
-    return EventEditor;
+    /**
+     * Member: edit
+     *
+     * Open the editor of corresponding to the type of the given TrackEvent
+     *
+     * @param {TrackEvent} trackEvent: TrackEvent to edit
+     */
+    this.edit = function( trackEvent ){
+      if ( !trackEvent || !( trackEvent instanceof TrackEvent ) ){
+        throw new Error( "trackEvent must be valid to start an editor." );
+      }
+      return openEditor( trackEvent );
+    };
 
-  }); //define
-}());
+    butter.listen( "trackeventadded", function ( e ) {
+      var trackEvent = e.data;
+
+      // Open a new editor on a single click
+      var trackEventMouseUp = function ( e ) {
+        if( butter.selectedEvents.length === 1 && !trackEvent.dragging ){
+          openEditor( trackEvent );
+        }
+      };
+
+      // Always open the editor on a double-click
+      var onTrackEventDoubleClicked = function ( e ) {
+        _editorAreaDOMRoot.classList.remove( "minimized" );
+        _toggler.state = false;
+      };
+
+      trackEvent.view.element.addEventListener( "mouseup", trackEventMouseUp, true );
+      trackEvent.view.element.addEventListener( "dblclick", onTrackEventDoubleClicked, false );
+
+      butter.listen( "trackeventremoved", function ( e ) {
+        if ( e.data === trackEvent ) {
+          trackEvent.view.element.removeEventListener( "mouseup", trackEventMouseUp, true );
+          trackEvent.view.element.removeEventListener( "dblclick", onTrackEventDoubleClicked, false );
+        }
+      });
+
+    });
+
+    /**
+     * Member: _start
+     *
+     * Prepares this module for Butter startup
+     *
+     * @param {Function} onModuleReady: Callback to signify that module is ready
+     */
+    this._start = function( onModuleReady ){
+      onModuleReady();
+      if( butter.config.value( "ui" ).enabled !== false ){
+        butter.ui.areas.editor = new butter.ui.Area( "editor-area", _editorAreaDOMRoot );
+        _toggler = new Toggler( function( e ) {
+          var newState = !_editorAreaDOMRoot.classList.contains( "minimized" );
+          _toggler.state = newState;
+          if ( newState ) {
+            _editorAreaDOMRoot.classList.add( "minimized" );
+          }
+          else {
+            _editorAreaDOMRoot.classList.remove( "minimized" );
+          }
+        }, "Show/Hide Editor", true );
+        _editorAreaDOMRoot.appendChild( _toggler.element );
+        document.body.classList.add( "butter-editor-spacing" );
+
+        // Start minimized
+        _editorAreaDOMRoot.classList.add( "minimized" );
+
+        document.body.appendChild( _editorAreaDOMRoot );
+
+        var config = butter.config.value( "editor" );
+        for ( var editorName in config ) {
+          if ( config.hasOwnProperty( editorName ) ) {
+            butter.loader.load({
+              url: config[ editorName ],
+              type: "js"
+            });
+          }
+        }
+      }
+    };
+
+  }
+
+  this.register = Editor.register;
+
+  EventEditor.__moduleName = "editor";
+
+  return EventEditor;
+
+}); //define

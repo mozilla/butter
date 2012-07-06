@@ -231,7 +231,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
       _this.dispatch( "trackeventclicked", { originalEvent: e, trackEvent: _trackEvent } );
     }, false);
 
-    function select(){
+    function select() {
       _draggable.selected = true;
       _element.setAttribute( "selected", true );
     } //select
