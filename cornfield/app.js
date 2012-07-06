@@ -47,7 +47,6 @@ var mongoose = require('mongoose'),
 
     Project = new Schema({
       name: String,
-      html: String,
       data: String,
       template: String,
       customData: String
@@ -277,13 +276,13 @@ app.get('/dashboard', function(req, res) {
           _id: String(project._id),
           name: project.name,
           template: project.template,
-          href: templateConfigs[ project.template ].template + 
+          href: templateConfigs[ project.template ].template +
             "?savedDataUrl=" + PUBLISH_PREFIX + "/api/project/" + project._id
         });
       }
     }
 
-    res.render( 'dashboard.jade', { 
+    res.render( 'dashboard.jade', {
       user: {
         email: email,
       },
@@ -444,7 +443,6 @@ app.post('/api/project/:id?', function( req, res ) {
       }
       var proj = new ProjectModel({
         name: req.body.name,
-        html: req.body.html,
         template: req.body.template,
         data: JSON.stringify( req.body.data ),
         customData: JSON.stringify( req.body.customData, null, 2 )
@@ -454,7 +452,6 @@ app.post('/api/project/:id?', function( req, res ) {
     else{
       proj.template = req.body.template;
       proj.name = req.body.name;
-      proj.html = req.body.html;
       proj.data = JSON.stringify( req.body.data );
       proj.customData = JSON.stringify( req.body.customData, null, 2 );
     }
