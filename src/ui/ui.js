@@ -6,7 +6,11 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
         function( EventManagerWrapper, Toggler, LogoSpinner, ContextButton, Header, UnloadDialog ){
 
   var TRANSITION_DURATION = 500,
-      BUTTER_CSS_FILE = "{css}/butter.ui.css";
+      // Butter's UI is written in LESS, but deployed as CSS.
+      // Depending on the config file, we'll use a pre-built
+      // CSS file, or build CSS from LESS in the browser.
+      BUTTER_CSS_FILE = "{css}/butter.ui.css",
+      BUTTER_LESS_FILE = "{css}/butter.ui.less";
 
   function Area( id, element ){
     var _element,
@@ -95,7 +99,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
         _contentState = [],
         _state = true,
         _logoSpinner,
-        uiConfig = butter.config,
+        _uiConfig = butter.config,
         _this = this;
 
     EventManagerWrapper( _this );
@@ -133,7 +137,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     _element.appendChild( _areas.work.element );
     _element.appendChild( _areas.tools.element );
 
-    if( uiConfig.value( "ui" ).enabled !== false ){
+    if( _uiConfig.value( "ui" ).enabled !== false ){
       document.body.classList.add( "butter-header-spacing" );
       document.body.classList.add( "butter-tray-spacing" );
       document.body.appendChild( _element );
@@ -143,20 +147,25 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     }
 
     this.load = function( onReady ){
-      if( uiConfig.value( "ui" ).enabled !== false ){
-        butter.loader.load(
-          [
-            {
-              type: "css",
-              url: BUTTER_CSS_FILE
-            }
-          ],
-          function(){
-            // icon preloading needs css to be loaded first
-            loadIcons( uiConfig.value( "icons" ), uiConfig.value( "dirs" ).resources || "" );
-            onReady();
-          }
-        );
+      if( _uiConfig.value( "ui" ).enabled !== false ){
+        var loadOptions = {};
+
+        // Determine if we should load a pre-built CSS file for Butter (e.g.,
+        // the deployment case, post `node make`), or whether we need to load
+        // the LESS file directly and parse it into CSS (e.g., the dev case).
+        if( _uiConfig.value( "cssRenderClientSide" ) === true ){
+          loadOptions.type = "less";
+          loadOptions.url = BUTTER_LESS_FILE;
+        } else {
+          loadOptions.type = "css";
+          loadOptions.url = BUTTER_CSS_FILE;
+        }
+
+        butter.loader.load( [ loadOptions ], function(){
+          // icon preloading needs css to be loaded first
+          loadIcons( _uiConfig.value( "icons" ), _uiConfig.value( "dirs" ).resources || "" );
+          onReady();
+        });
       }
       else{
         onReady();
@@ -458,8 +467,8 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
       _this.visible = true;
       _toggler.visible = true;
       ContextButton( butter );
-      if( uiConfig.value( "ui" ).enabled !== false ){
-        Header( butter, uiConfig );
+      if( _uiConfig.value( "ui" ).enabled !== false ){
+        Header( butter, _uiConfig );
       }
     });
 

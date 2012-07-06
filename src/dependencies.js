@@ -2,10 +2,11 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define([], function(){
+define([ 'util/xhr' ], function( XHR ){
 
   var VAR_REGEX = /\{([\w\-\._]+)\}/,
-      CSS_POLL_INTERVAL = 10;
+      CSS_POLL_INTERVAL = 10,
+      LESS = "/less-1.3.0.min.js";
 
   var DEFAULT_CHECK_FUNCTION = function(){
     var index = 0;
@@ -31,6 +32,8 @@ define([], function(){
     }
 
     var _loaders = {
+
+      // JavaScript Loader
       js: function( url, exclude, callback, checkFn ){
         checkFn = checkFn || DEFAULT_CHECK_FUNCTION();
 
@@ -47,12 +50,14 @@ define([], function(){
           callback();
         }
       },
+
+      // CSS Loader
       css: function( url, exclude, callback, checkFn, error ){
-        var scriptElement,
+        var link,
             interval;
 
         checkFn = checkFn || function(){
-          return !!scriptElement;
+          return !!link;
         };
 
         function runCheckFn() {
@@ -69,16 +74,60 @@ define([], function(){
         url = fixUrl( url );
 
         if( !checkFn() ){
-          scriptElement = document.createElement( "link" );
-          scriptElement.rel = "stylesheet";
-          scriptElement.onload =  runCheckFn;
-          scriptElement.onerror = error;
-          scriptElement.href = url;
-          document.head.appendChild( scriptElement );
+          link = document.createElement( "link" );
+          link.type = "text/css";
+          link.rel = "stylesheet";
+          link.onerror = error;
+          link.onload = runCheckFn;
+          link.href = url;
+          document.head.appendChild( link );
         }
         else if( callback ){
           callback();
         }
+      },
+
+      // LESS Loader - needs to be converted to CSS
+      less: function( url, exclude, callback, checkFn, error ){
+        url = fixUrl( url );
+
+        // Load less.js so we can parse the *.less -> *.css
+        _loaders.js( config.value( "dirs" ).tools + LESS, exclude,
+          function onLoadCallback(){
+            // Assume *.less is beside *.css file
+            var less = window.less,
+                lessFile;
+
+            // Load the .less file, parse with LESS, and inject CSS <style>
+            XHR.get( url, function xhrCallback(){
+              if ( this.readyState === 4) {
+                var parser = new less.Parser();
+                lessFile = this.response;
+
+                parser.parse( lessFile, function( e, root ){
+                  if( e ){
+                    // Problem parsing less file
+                    error( "Butter: Error parsing LESS file [" + url + "]", e.message );
+                    return;
+                  }
+
+                  var css, styles;
+                  css = document.createElement( "style" ),
+                  css.type = "text/css";
+                  document.head.appendChild( css );
+                  styles = document.createTextNode( root.toCSS() );
+                  css.appendChild( styles );
+
+                  callback();
+                });
+              }
+            });
+          },
+          function checkFn(){
+            return !!window.less;
+          },
+          error
+        );
       }
     };
 
@@ -110,6 +159,12 @@ define([], function(){
     var Loader = {
 
       load: function( items, callback, error, ordered ){
+        error = error || function(){
+          if( console && console.log ){
+            console.log.apply( console , arguments );
+          }
+        };
+
         if( items instanceof Array && items.length > 0 ){
           var onLoad = generateLoaderCallback( items, callback );
           if( !ordered ){

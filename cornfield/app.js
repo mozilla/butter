@@ -5,11 +5,12 @@ const express = require('express'),
       path = require('path'),
       app = express.createServer(),
       MongoStore = require('connect-mongo')(express),
-      stylus = require('stylus'),
+      lessMiddleware = require('less-middleware'),
       CONFIG = require('config'),
       TEMPLATES_DIR =  CONFIG.dirs.templates,
       PUBLISH_DIR = CONFIG.dirs.publish,
       PUBLISH_PREFIX = CONFIG.dirs.hostname,
+      CSS_DIR = CONFIG.dirs.css,
       WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
       VALID_TEMPLATES = CONFIG.templates,
       EXPORT_ASSETS = CONFIG.exportAssets;
@@ -72,8 +73,10 @@ app.configure( function() {
     .use( express.bodyParser() )
     .use( express.cookieParser() )
     .use( express.session( CONFIG.session ) )
-    .use( stylus.middleware({
-      src: WWW_ROOT
+    // Auto-compile CSS from LESS.  Other options: https://github.com/emberfeather/less.js-middleware
+    .use( lessMiddleware({
+      src: path.join( CSS_DIR, 'butter.ui.less' ),
+      dest: path.join( CSS_DIR, 'butter.ui.css' )
     }))
     /* Show Zeus who's boss
      * This only affects requests under /api and /browserid, not static files
