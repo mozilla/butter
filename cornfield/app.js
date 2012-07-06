@@ -186,8 +186,9 @@ function publishRoute( req, res ){
           templateScripts = data.substring( headStartTagIndex, headEndTagIndex );
           startString = data.substring( 0, headStartTagIndex );
 
+          externalAssetsString += '\n';
           for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
-            externalAssetsString += '\n  <script src="' + path.relative( templateFile, path.resolve( EXPORT_ASSETS[ i ] ) ) + '"></script>\n';
+            externalAssetsString += '  <script src="' + path.relative( templateFile, path.resolve( EXPORT_ASSETS[ i ] ) ) + '"></script>\n';
           }
 
           // If the template has custom plugins defined in it's config, add them to our exported page
@@ -237,7 +238,7 @@ function publishRoute( req, res ){
           }
           popcornString += '</script>\n';
 
-          customDataString = '\n<script type="application/butter-custom-data">\n' + JSON.stringify( customData, null, 2 ) + '\n</script>';
+          customDataString = '\n<script type="application/butter-custom-data">\n' + JSON.stringify( customData, null, 2 ) + '\n</script>\n';
 
           data = startString + baseString + templateScripts + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + customDataString + popcornString + data.substring( bodyEndTagIndex );
 
