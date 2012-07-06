@@ -249,6 +249,20 @@ define( [
       },
 
       /**
+       * Property: dragging
+       *
+       * A dragging state of the track event.
+       * @malleable: No.
+       */
+      dragging: {
+        enumerable: true,
+        configurable: false,
+        get: function(){
+          return _view.dragging;
+        }
+      },
+
+      /**
        * Property: type
        *
        * The type representing the popcorn plugin created and manipulated by this TrackEvent.

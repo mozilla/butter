@@ -84,16 +84,18 @@
        return oldSource;
       }; //remove
 
-      function trackEventDoubleClicked( e ){
-        _this.edit( e.target.trackEvent );
-      } //trackEventDoubleClicked
+      function trackEventMouseUp( e ){
+        if( butter.selectedEvents.length === 1 && !e.target.trackEvent.dragging ){
+          _this.edit( e.target.trackEvent );
+        }
+      } //trackEventMouseUp
 
       butter.listen( "trackeventadded", function( e ){
-        e.data.view.listen( "trackeventdoubleclicked", trackEventDoubleClicked, false );
+        e.data.view.listen( "trackeventmouseup", trackEventMouseUp, false );
       });
 
       butter.listen( "trackeventremoved", function( e ){
-        e.data.view.unlisten( "trackeventdoubleclicked", trackEventDoubleClicked, false );
+        e.data.view.unlisten( "trackeventmouseup", trackEventMouseUp, false );
       });
 
       this._start = function( onModuleReady ){
