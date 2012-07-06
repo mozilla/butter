@@ -328,8 +328,9 @@ define( [ "core/eventmanager", "util/lang", "util/xhr", "text!layouts/trackevent
        * @param {Function} itemCallback: Callback which is passed to createManifestItem for each element created
        * @param {Array} manifestKeys: Optional. If only specific keys are desired from the manifest, use them
        * @param {DOMElement} container: Optional. If specified, elements will be inserted into container, not rootElement
+       * @param {Array} ignoreManifestKeys: Optional. Keys in this array are ignored such that elements for them are not created
        */
-      extendObject.createPropertiesFromManifest = function( trackEvent, itemCallback, manifestKeys, container ) {
+      extendObject.createPropertiesFromManifest = function( trackEvent, itemCallback, manifestKeys, container, ignoreManifestKeys ) {
         var manifestOptions,
             item,
             element,
@@ -346,6 +347,9 @@ define( [ "core/eventmanager", "util/lang", "util/xhr", "text!layouts/trackevent
 
         for ( i = 0, l = manifestKeys.length; i < l; ++i ) {
           item = manifestKeys[ i ];
+          if ( ignoreManifestKeys.indexOf( item ) > -1 ) {
+            continue;
+          }
           element = extendObject.createManifestItem( item, manifestOptions[ item ], trackEvent.popcornOptions[ item ], trackEvent, itemCallback );
           container.appendChild( element );
         }

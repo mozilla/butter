@@ -2,9 +2,15 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "util/lang", "text!layouts/toggler.html" ], function( LangUtils, TOGGLER_LAYOUT ){
-  return function( clickHandler, elementTitle ){
+define( [ "util/lang", "text!layouts/toggler.html" ],
+  function( LangUtils, TOGGLER_LAYOUT ){
+
+  return function( clickHandler, elementTitle, startState ){
     var _element = LangUtils.domFragment( TOGGLER_LAYOUT );
+
+    if ( startState !== false && startState !== true ) {
+      startState = false;
+    }
 
     _element.title = elementTitle || "Show/Hide";
 
@@ -43,6 +49,8 @@ define( [ "util/lang", "text!layouts/toggler.html" ], function( LangUtils, TOGGL
         }
       }
     });
+
+    this.state = startState;
 
   };
 });

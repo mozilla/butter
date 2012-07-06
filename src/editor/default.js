@@ -77,7 +77,7 @@ define( [ "text!./default.html",
                 
               }
             }
-          });
+          }, null, null, [ 'target' ] );
 
         targetList = _this.createTargetsList( _targets );
         selectElement = targetList.querySelector( "select" );

@@ -26,6 +26,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     var _currentEditor,
         _firstUse = false,
         _editorAreaDOMRoot = LangUtils.domFragment( EDITOR_AREA_LAYOUT ),
+        _toggler,
         _this = this;
 
     EventManagerWrapper( _this );
@@ -77,17 +78,26 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     butter.listen( "trackeventadded", function ( e ) {
       var trackEvent = e.data;
 
+      // Open a new editor on a single click
       var trackEventMouseUp = function ( e ) {
         if( butter.selectedEvents.length === 1 && !trackEvent.dragging ){
           openEditor( trackEvent );
         }
       };
 
+      // Always open the editor on a double-click
+      var onTrackEventDoubleClicked = function ( e ) {
+        _editorAreaDOMRoot.classList.remove( "minimized" );
+        _toggler.state = false;
+      };
+
       trackEvent.view.element.addEventListener( "mouseup", trackEventMouseUp, true );
+      trackEvent.view.element.addEventListener( "dblclick", onTrackEventDoubleClicked, false );
 
       butter.listen( "trackeventremoved", function ( e ) {
         if ( e.data === trackEvent ) {
-          e.data.view.element.removeEventListener( "mouseup", trackEventMouseUp, true );
+          trackEvent.view.element.removeEventListener( "mouseup", trackEventMouseUp, true );
+          trackEvent.view.element.removeEventListener( "dblclick", onTrackEventDoubleClicked, false );
         }
       });
 
@@ -104,17 +114,17 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       onModuleReady();
       if( butter.config.value( "ui" ).enabled !== false ){
         butter.ui.areas.editor = new butter.ui.Area( "editor-area", _editorAreaDOMRoot );
-        var toggler = new Toggler( function( e ) {
+        _toggler = new Toggler( function( e ) {
           var newState = !_editorAreaDOMRoot.classList.contains( "minimized" );
-          toggler.state = newState;
+          _toggler.state = newState;
           if ( newState ) {
             _editorAreaDOMRoot.classList.add( "minimized" );
           }
           else {
             _editorAreaDOMRoot.classList.remove( "minimized" );
           }
-        }, "Show/Hide Editor" );
-        _editorAreaDOMRoot.appendChild( toggler.element );
+        }, "Show/Hide Editor", true );
+        _editorAreaDOMRoot.appendChild( _toggler.element );
         document.body.classList.add( "butter-editor-spacing" );
 
         // Start minimized
