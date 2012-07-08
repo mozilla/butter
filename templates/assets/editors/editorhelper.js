@@ -111,6 +111,7 @@
       function _sizeSwitcher( e ) {
         var selectedSize = this.options[this.selectedIndex].value,
             wrapper = document.getElementById( "embed-wrapper" ),
+            CONTROLS_HEIGHT = 35,
             EMBED_SIZES = {
               "small": {
                 width: 560,
@@ -131,7 +132,7 @@
             };
 
         wrapper.style.width = EMBED_SIZES[ selectedSize ].width + "px";
-        wrapper.style.height = EMBED_SIZES[ selectedSize ].height + "px";
+        wrapper.style.height = EMBED_SIZES[ selectedSize ].height+ CONTROLS_HEIGHT + "px";
 
       }
 

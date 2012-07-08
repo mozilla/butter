@@ -12,21 +12,35 @@ body {
 
 .wrapper {
   margin: 40px auto;
-  width: 800px;
+  width: 560px;
+  height: 375px;
+  box-shadow: 0 50px 30px -20px rgba(0,0,0,.6);
 }
 
 /* VIDEO
 -------------------------------------------------- */
-.video-container {
+.video {
   position: relative;
   width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
 }
 
-.video,
-.video > video {
+.video > video,
+.video > iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
 }
 
+.butter-controls {
+  background: red;
+  height: 35px;
+}
+
+/* Use this class for a full overlay */
 .video-overlay {
   position: absolute;
   top: 0;
