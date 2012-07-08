@@ -107,11 +107,42 @@
         } //zoink
       } //updateFunction
 
+      //Add a size chooser to the template
+      function _sizeSwitcher( e ) {
+        var selectedSize = this.options[this.selectedIndex].value,
+            wrapper = document.getElementById( "embed-wrapper" ),
+            EMBED_SIZES = {
+              "small": {
+                width: 560,
+                height: 340
+              },
+              "medium": {
+                width: 640,
+                height: 385
+              },
+              "large": {
+                width: 853,
+                height: 505
+              },
+              "fullscreen": {
+                width: 1280,
+                height: 745
+              }
+            };
+
+        wrapper.style.width = EMBED_SIZES[ selectedSize ].width + "px";
+        wrapper.style.height = EMBED_SIZES[ selectedSize ].height + "px";
+
+      }
+
       butter.unlisten( "trackeventadded", _updateFunction );
       butter.unlisten( "trackeventupdated", _updateFunction );
 
       butter.listen( "trackeventadded", _updateFunction );
       butter.listen( "trackeventupdated", _updateFunction );
+
+      //Run the size chooser
+      document.getElementById( "butter-template-size" ).addEventListener( "change", _sizeSwitcher, false );
 
     };
   })( window, window.jQuery );

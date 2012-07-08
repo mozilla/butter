@@ -11,7 +11,7 @@ body {
 }
 
 .wrapper {
-  margin: 0 auto;
+  margin: 40px auto;
   width: 800px;
 }
 
@@ -33,6 +33,7 @@ body {
   bottom: 0;
   left: 0;
   width: 100%;
+  pointer-events: none;
 }
 
 
