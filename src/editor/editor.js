@@ -389,7 +389,7 @@ define( [ "core/eventmanager", "util/lang", "util/xhr",
      * For layouts that were specified as `load!<url>`, replace the url with actual layout content by loading
      * it through XHR. This is useful for editors specified in Butter config files, since using `Butter.Editor`
      * outside of the core will not guarantee that {{baseDir}} properly exists until #1245 has landed:
-     * 
+     *
      * https://webmademovies.lighthouseapp.com/projects/65733/tickets/1245-remove-instances-have-butter-become-a-singleton
      *
      * @param {Function} readyCallback: After all layouts have been loaded, call this function
