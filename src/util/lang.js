@@ -68,8 +68,12 @@ define( [], function(){
 
     domFragment: function( inputString ) {
       var range = document.createRange(),
+
+          // For particularly speedy loads, 'body' might not exist yet, so try to use 'head'
+          container = document.body || document.head,
           fragment;
-      range.selectNode( document.body.firstChild );
+
+      range.selectNode( container );
       fragment = range.createContextualFragment( inputString );
 
       if( fragment.childNodes.length === 1 ){
