@@ -115,19 +115,19 @@
             EMBED_SIZES = {
               "small": {
                 width: 560,
-                height: 340
+                height: 315
               },
               "medium": {
                 width: 640,
-                height: 385
+                height: 350
               },
               "large": {
                 width: 853,
-                height: 505
+                height: 470
               },
               "fullscreen": {
                 width: 1280,
-                height: 745
+                height: 715
               }
             };
 

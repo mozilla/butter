@@ -32,17 +32,14 @@
         "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
       },
       {
-        "type": "flickr",
-        "path": "{{baseDir}}templates/supported/shared/plugins/flickr/popcorn.flickr.js"
+        "type": "sidebar",
+        "path": "{{baseDir}}templates/assets/plugins/sidebar/popcorn.sidebar.js"
       }
     ],
     "defaults": [
       "text",
       "titlecard",
-      "photo",
-      "zoink",
-      "shrink",
-      "flickr",
+      "sidebar",
       "googlemap"
     ]
   }
