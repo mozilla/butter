@@ -1,7 +1,7 @@
 {
   "targets": [
     {
-      "id": "overlay",
+      "id": "Target0",
       "name": "overlay",
       "element": "overlay"
     }
@@ -11,12 +11,13 @@
       "id": "Media0",
       "name": "Media0",
       "url": [
-        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.mp4",
-        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.ogv",
-        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.webm"
+        "http://videos-cdn.mozilla.net/serv/webmademovies/storycamp/storycamp_episode1.mp4?butteruid=1341815828171",
+        "http://videos-cdn.mozilla.net/serv/webmademovies/storycamp/storycamp_episode1.ogv?butteruid=1341815828172",
+        "http://videos-cdn.mozilla.net/serv/webmademovies/storycamp/storycamp_episode1.webm?butteruid=1341815828173"
       ],
       "target": "video",
-      "duration": 64.54166412353516,
+      "duration": 121.12100219726562,
+      "controls": true,
       "tracks": [
         {
           "name": "Track0",
@@ -27,7 +28,7 @@
               "type": "text",
               "popcornOptions": {
                 "start": 0,
-                "end": 3,
+                "end": 2,
                 "text": "test",
                 "target": "overlay"
               },
@@ -35,6 +36,11 @@
               "name": "TrackEvent0"
             }
           ]
+        },
+        {
+          "name": "Track1",
+          "id": "Track1",
+          "trackEvents": []
         }
       ]
     }

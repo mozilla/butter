@@ -34,6 +34,14 @@
       {
         "type": "sidebar",
         "path": "{{baseDir}}templates/assets/plugins/sidebar/popcorn.sidebar.js"
+      },
+      {
+        "type": "timelink",
+        "path": "{{baseDir}}templates/assets/plugins/timelink/popcorn.timelink.js"
+      },
+      {
+        "type": "commentary",
+        "path": "{{baseDir}}templates/assets/plugins/commentary/popcorn.commentary.js"
       }
     ],
     "defaults": [

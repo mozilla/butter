@@ -8,11 +8,11 @@
    *
    */
 
-  Popcorn.plugin( "sidebar", {
+  Popcorn.plugin( "timelink", {
 
     manifest: {
       about: {
-        name: "Popcorn Sidebar Plugin",
+        name: "Popcorn Timelink Plugin",
         version: "0.1",
         author: "@k88hudson"
       },
@@ -27,11 +27,11 @@
           type: "text",
           label: "Out"
         },
-        containerID: {
+        linkID: {
           elem: "input",
           type: "text",
-          label: "Container ID",
-          "default": "embed-wrapper"
+          label: "Link ID",
+          "default": "link"
         }
       }
     },
@@ -42,7 +42,15 @@
           text,
           _popcorn = this;
 
-      options._videoContainer = document.getElementById( options.containerID ) || _popcorn.media;
+      options._link = options.linkEl || document.getElementById( options.linkID );
+
+      function _timelink( e ) {
+        e.preventDefault();
+        _popcorn.currentTime( options.start );
+      }
+
+      options._link.addEventListener( "click", _timelink, false);
+
     },
 
     /**
@@ -52,7 +60,7 @@
      * options variable
      */
     start: function( event, options ) {
-      options._videoContainer.classList.add( "wrapper-sidebar" );
+      options._link.classList.add( "active" );
     },
 
     /**
@@ -62,11 +70,11 @@
      * options variable
      */
     end: function( event, options ) {
-      options._videoContainer.classList.remove( "wrapper-sidebar" );
+      options._link.classList.remove( "active" );
     },
 
     _teardown: function( options ) {
-      //
+      options._link.classList.remove( "active" );
     }
   });
 })( Popcorn );
