@@ -25,7 +25,7 @@ define([], function(){
       }
     };
 
-    butter.listen( "ready", function() {
+    butter.listen( "mediaready", function() {
       for ( var i = 0, el = events.length; i < el; i++ ) {
         butter.listen( events[ i ], eventFunction );
       }
