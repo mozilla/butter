@@ -456,6 +456,9 @@ input {
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
 
   * { .select(none); }
+  &.minimized {
+    bottom: -170px;
+  }
   #plugin-list {
     position: relative;
     top: 5px;
@@ -611,6 +614,10 @@ input {
   .fadable {
     .transition(opacity, 0.5s);
   }
+  .butter-toggle-button {
+    top: -23px;
+    right: 10px;
+  }
   .status-container {
     position: absolute;
     width: 100px;
@@ -694,39 +701,40 @@ input {
       cursor: pointer;
     }
   }
-  .butter-toggle-button {
-    height: 30px;
-    width: 50px;
-    background-image: url( "../resources/bg.jpg" );
-    border-top-right-radius: 15px;
-    border-top-left-radius: 15px;
-    position: absolute;
-    -moz-box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
-    -o-box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
-    -webkit-box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
-    box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
-    z-index: -1;
-    
-    &:hover {
-      moz-box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
-      -o-box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
-      -webkit-box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
-      box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
-      cursor: pointer;
-    }
-    div {
-      background-image: url("../resources/buttons.png");
-      background-position: -255px 10px;
-      width: 15px;
-      height: 20px;
-      background-clip: content-box;
-      background-repeat: no-repeat;
-      margin: 0 18px 0 18px;
-    }
-    &.toggled {
-      > div {
-        background-position: -255px -9px;
-      }
+}
+
+ .butter-toggle-button {
+  height: 30px;
+  width: 50px;
+  background-image: url( "../resources/bg.jpg" );
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  position: absolute;
+  -moz-box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
+  -o-box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
+  -webkit-box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
+  box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
+  z-index: -1;
+  
+  &:hover {
+    moz-box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
+    -o-box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
+    -webkit-box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
+    box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
+    cursor: pointer;
+  }
+  div {
+    background-image: url("../resources/buttons.png");
+    background-position: -255px 10px;
+    width: 15px;
+    height: 20px;
+    background-clip: content-box;
+    background-repeat: no-repeat;
+    margin: 0 18px 0 18px;
+  }
+  &.toggled {
+    > div {
+      background-position: -255px -9px;
     }
   }
 }
@@ -819,7 +827,7 @@ input {
     top: 5px;
     padding: 0;
     margin: 0;
-    height: 135px;
+    height: 145px;
   }
   .tracks-container {
     .butter-track {
@@ -1389,6 +1397,97 @@ input {
   position: absolute;
   left: 4px;
   width: 96px;
+}
+
+.butter-editor-area {
+  position: fixed;
+  z-index: 2000000000;
+  top: 51px;
+  bottom: 0;
+  right: 0;
+  width: 200px;
+  border: 1px solid #000;
+  background-image: url( "../resources/bg.jpg" );
+  -moz-transition: right 0.35s;
+  -ms-transition: right 0.35s;
+  -o-transition: right 0.35s;
+  -webkit-transition: right 0.35s;
+  transition: right 0.35s;
+  border-left: 1px solid #222;
+  box-shadow: inset 5px 0 5px rgba(0,0,0,.2);
+  color: #EEE;
+  
+  &.minimized {
+    right: -200px;
+  }
+  .butter-toggle-button {
+    top: 14px;
+    left: -38px;
+    -moz-transform: rotate(-90deg);
+    -webkit-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+  }
+  > .butter-editor {
+    height: 100%;
+    font: 14px 'MetaBold';
+    
+    h1 {
+      font-size: 16px;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      margin: 0;
+    }
+    .trackevent-property {
+      padding: 10px;
+      clear: both;
+    }
+    .trackevent-property {
+      select,
+      input {
+        float: right;
+      }
+    }
+    > .editor-tabs {
+      position: absolute;
+      top: 60px;
+      left: 5px;
+      bottom: 5px;
+      right: 5px;
+      border-radius: 5px;
+    }
+    > div {
+      &.error-message-container {
+        margin: 0 5px 0 5px;
+        padding: 0 5px 0 5px;
+        border-radius: 5px;
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, .8);
+        background: rgb(0, 0, 0);
+        background: rgba(0, 0, 0, 0.2);
+        -moz-transition: height 0.35s, margin 0.35s, padding 0.35s;
+        -ms-transition: height 0.35s, margin 0.35s, padding 0.35s;
+        -o-transition: height 0.35s, margin 0.35s, padding 0.35s;
+        -webkit-transition: height 0.35s, margin 0.35s, padding 0.35s;
+        transition: height 0.35s, margin 0.35s, padding 0.35s;
+        overflow: hidden;
+        height: 0;
+        margin-bottom: 0;
+        visibility: hidden;
+      }
+      &.error-message-container.open {
+        margin: 5px 5px 5px 5px;
+        padding: 5px 5px 5px 5px;
+      }
+      &.error-message {
+        width: 180px;
+      }
+    }
+    > button {
+      margin: 10px;
+    }
+  }
 }
 
 @import "media-view.css";
