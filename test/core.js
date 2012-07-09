@@ -54,7 +54,6 @@
     });
   } //createButter
 
-  module( "Media", butterLifeCycle );
   module( "Event Handling",  butterLifeCycle );
 
   asyncTest( "Simple event handling", 2, function(){
@@ -79,8 +78,7 @@
     });
   });
 
-  module( "Core Object Functionality", butterLifeCycle );
-
+  module( "Media", butterLifeCycle );
   asyncTest( "Create Media object", 2, function(){
 
     createButter( function( butter ){
@@ -258,6 +256,49 @@
       });
     });
 
+  });
+
+  asyncTest( "Multiple media urls in media url", 3, function(){
+    var videoDiv = document.createElement( "div" );
+    videoDiv.id = "media-target-test-div";
+    videoDiv.setAttribute( "data-butter", "media" );
+    document.body.appendChild( videoDiv );
+
+    createButter( function( butter ) {
+      butter.config.value( "scrapePage", true );
+      butter.preparePage(function(){
+        butter.listen( "mediacontentchanged", function() {
+          ok( Array.isArray( butter.currentMedia.url ), "butter.currentMedia.url is array" );
+          ok( butter.currentMedia.url[ 0 ].indexOf( "../external/popcorn-js/test/trailer.ogv" ) > -1, "media url contains ogv file" ); 
+          ok( butter.currentMedia.url[ 1 ].indexOf( "../external/popcorn-js/test/trailer.webm" ) > -1, "media url contains webm file" );
+          start();
+          document.body.removeChild( videoDiv );
+        });
+        butter.currentMedia.url = [
+          "../external/popcorn-js/test/trailer.ogv",
+          "../external/popcorn-js/test/trailer.webm"
+        ];
+      });
+    });
+  });
+
+  asyncTest( "Multiple media urls in data-butter-source", 3, function(){
+    var videoDiv = document.createElement( "div" );
+    videoDiv.id = "media-target-test-div";
+    videoDiv.setAttribute( "data-butter", "media" );
+    videoDiv.setAttribute( "data-butter-source", "../external/popcorn-js/test/trailer.ogv,../external/popcorn-js/test/trailer.webm" );
+    document.body.appendChild( videoDiv );
+
+    createButter( function( butter ) {
+      butter.config.value( "scrapePage", true );
+      butter.preparePage(function(){
+        ok( Array.isArray( butter.currentMedia.url ), "butter.currentMedia.url is array" );
+        ok( butter.currentMedia.url[ 0 ].indexOf( "../external/popcorn-js/test/trailer.ogv" ) > -1, "media url contains ogv file" ); 
+        ok( butter.currentMedia.url[ 1 ].indexOf( "../external/popcorn-js/test/trailer.webm" ) > -1, "media url contains webm file" );
+        start();
+        document.body.removeChild( videoDiv );
+      });
+    });
   });
 
   module( "Track", butterLifeCycle );
