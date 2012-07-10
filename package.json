@@ -68,7 +68,7 @@
   "dependencies": {
     "shelljs": "0.0.x",
     "jshint": "0.6.x",
-    "requirejs": "1.0.x",
+    "requirejs": "2.0.x",
     "express": "2.5.x",
     "jade": "0.26.x",
     "express-browserid": "0.0.x",
