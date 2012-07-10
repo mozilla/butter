@@ -91,14 +91,14 @@
 
     });
 
-    test( "Merging Configurations", function(){
+    test( "Overriding Configuration", function(){
       var config1 = Config.parse( JSON.stringify({"foo1": "bar1"}) ),
           config2 = Config.parse( JSON.stringify({"foo2": "bar2"}) );
 
-      config1.merge( config2 );
+      config1.override( config2 );
 
       equal( config1.value( "foo1" ), "bar1", "config1 uses its own values" );
-      equal( config1.value( "foo2" ), config2.value( "foo2" ), "config1 uses merged values" );
+      equal( config1.value( "foo2" ), config2.value( "foo2" ), "config1 uses overrided values" );
 
     });
 
@@ -122,7 +122,7 @@
 
     });
 
-    test( "Merge and override", function(){
+    test( "Override and override", function(){
 
       var configJSON1 = JSON.stringify({
         "baseDir": "./",
@@ -141,17 +141,17 @@
       config3 = Config.parse( configJSON3 );
 
       // Sanity test value substitution with no overrides
-      notEqual( config1.value( "child" ), config2.value( "child" ), "Merged values use override values" );
+      notEqual( config1.value( "child" ), config2.value( "child" ), "Overrided values use override values" );
       equal( config1.value( "child" ), "./child", "Proper baseDir value used for config1" );
       equal( config2.value( "child" ), "../../child", "Proper baseDir value used for config2" );
 
       // Override config1 with config2
-      config1.merge( config2 );
-      equal( config1.value( "child" ), config2.value( "child" ), "Merged values use override values" );
+      config1.override( config2 );
+      equal( config1.value( "child" ), config2.value( "child" ), "Overrided values use override values" );
 
       // Override config1 with config3
-      config1.merge( config3 );
-      equal( config1.value( "child" ), config3.value( "child" ), "Merged values use override values" );
+      config1.override( config3 );
+      equal( config1.value( "child" ), config3.value( "child" ), "Overrided values use override values" );
     });
 
   });

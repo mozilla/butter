@@ -5,6 +5,16 @@
 (function( undefined ) {
 
   /**
+   * Shared config for all Configuration instances, keyed on configID below
+   */
+  var __config = {};
+
+  /**
+   * Configuration IDs go from 1..n, and are used to key __config
+   */
+  var __id = 0;
+
+  /**
    * Variables allowed in config files.  Variables take the form:
    *
    * "foo": "value",
@@ -32,7 +42,7 @@
    * Validates any variable value being set, for example,
    * making sure paths end in '/'.
    */
-  function __validateVariable( property, value, config ){
+  function __validateVariable( property, value ){
     var variable = __variables[ property ];
 
     if( !( variable && variable.validate ) ){
@@ -40,6 +50,55 @@
     }
 
     return variable.validate( value );
+  }
+
+  /**
+   * Replace any variable {{foo}} with the value of "foo" from the config.
+   */
+  function __replaceVariable( value, config ){
+    if( value === undefined ){
+      return value;
+    }
+
+    var newValue = value,
+        variable,
+        configValue,
+        substitution;
+
+    for( var variableName in __variables ){
+      if( __variables.hasOwnProperty( variableName ) ){
+        variable = __variables[ variableName ];
+        configValue = config[ variableName ];
+        substitution = configValue ? configValue : variable.defaultValue;
+        newValue = newValue.replace ?
+          newValue.replace( variable.name, substitution, "g" ) :
+          newValue;
+      }
+    }
+
+    return newValue;
+  }
+
+  /**
+   * Replace any variable {{foo}} with the value of "foo" down a property
+   * branch.
+   */
+  function __replaceVariableBranch( property, config ){
+    if( property === undefined ){
+      return property;
+    }
+
+    for( var propName in property ){
+      if( property.hasOwnProperty( propName ) ){
+        if( typeof property[ propName ] === "object" ){
+          property[ propName ] = __replaceVariableBranch( property[ propName ], config );
+        } else {
+          property[ propName ] = __replaceVariable( property[ propName ], config );
+        }
+      }
+    }
+
+    return property;
   }
 
   /**
@@ -54,86 +113,19 @@
      *
      * Manages access to config properties, doing variable substitution.
      *
+     * @param {String} configID: A unique ID for this config, used as key into __config.
      * @param {Object} configObject: A parsed config object, see config.parse().
      * @throws config is not a parsed object (e.g., if string is passed).
      */
-    function Configuration( configObject ) {
+    function Configuration( configID, configObject ) {
 
       // Constructor should be called by Config.parse()
       if (typeof configObject !== "object"){
         throw "Config Error: expected parsed config object";
       }
 
-      // Cache the config object
-      var _config = configObject,
-          _merged = [];
-
-      // Find the first config that has a given property, starting
-      // with the most recently merged Configuration (if any) and
-      // ending with our internal _config object.
-      function _findConfig( property ){
-        var i = _merged.length;
-        while( i-- ){
-          if( _merged[ i ].value( property ) !== undefined ){
-            return _merged[ i ];
-          }
-        }
-        return _config;
-      }
-
-      /**
-       * Replace any variable {{foo}} with the value of "foo" from the config.
-       * If value is a branch of config, descend into it and replace values.
-       */
-      function _replaceVariable( value, config ){
-        if( value === undefined ){
-          return value;
-        }
-
-        var newValue = value,
-            variable,
-            configValue,
-            substitution,
-            overrideConfig;
-
-        for( var variableName in __variables ){
-          if( __variables.hasOwnProperty( variableName ) ){
-            variable = __variables[ variableName ];
-
-            // Find the right config override for this value
-            // (if any) or use the one in our internal _config
-            overrideConfig = _findConfig( variableName );
-            configValue = overrideConfig instanceof Configuration ?
-              overrideConfig.value( variableName ) :
-              overrideConfig[ variableName ];
-
-            substitution = configValue ? configValue : variable.defaultValue;
-            newValue = newValue.replace ?
-              newValue.replace( variable.name, substitution, "g" ) :
-              newValue;
-          }
-        }
-
-        return newValue;
-      }
-
-      function _replaceVariableBranch( property, config ){
-        if( property === undefined ){
-          return property;
-        }
-
-        for( var prop in property ){
-          if( property.hasOwnProperty( prop ) ){
-            if( typeof property[ prop ] === "object" ){
-              property[ prop ] = _replaceVariableBranch( property[ prop ], config );
-            } else {
-              property[ prop ] = _replaceVariable( property[ prop ], config );
-            }
-          }
-        }
-
-        return property;
-      }
+      // Register configuration info centrally
+      __config[ configID ] = configObject;
 
       /**
        * Member: value
@@ -149,28 +141,47 @@
        * @param {Object} newValue: [Optional] A new value to use.
        */
       this.value = function( property, newValue ){
-        var config = _findConfig( property );
+        var configValue;
 
-        if( config instanceof Configuration ){
-          return config.value( property, newValue );
+        if( newValue !== undefined ){
+          configObject[ property ] = __validateVariable( property, newValue );
+        }
+
+        // If we're giving back a property branch, replace values deep before
+        // handing it back to the user.
+        configValue = configObject[ property ];
+        if( typeof configValue === "object" ){
+          return __replaceVariableBranch( configValue, configObject );
         } else {
-          if( newValue !== undefined ){
-            config[ property ] = __validateVariable( property, newValue, config );
-          }
+          return __replaceVariable( configValue, configObject );
+        }
+      };
 
-          // If we're giving back a property branch, replace values deep before
-          // handing it back to the user.
-          if( typeof config[ property ] === "object" ){
-            return _replaceVariableBranch( config[ property ], config );
-          } else {
-            return _replaceVariable( config[ property ], config );
+      /**
+       * Member: override
+       *
+       * Overrides this Configuration object's top-level config with values
+       * in another, leaving any values in this object alone which aren't
+       * in the other. You typically override a default configuration with
+       * a user's extra settings.
+       */
+      this.override = function( configuration ){
+        var configA = configObject,
+            configB = __config[ configuration.id ];
+
+        for( var propName in configB ){
+          if( configB.hasOwnProperty( propName ) ){
+            configA[ propName ] = configB[ propName ];
           }
         }
       };
 
-      this.merge = function( configuration ){
-        _merged.push( configuration );
-      };
+      /**
+       * Member: id
+       *
+       * An internal-use getter for keying config information.
+       */
+      Object.defineProperty( this, "id", { get: function(){ return configID; } } );
     }
 
     /**
@@ -189,10 +200,9 @@
        * @throws JSON is malformed or otherwise can't be parsed.
        */
       parse: function( configJSON ){
-        var config;
         try {
-          config = JSON.parse( configJSON );
-          return new Configuration( config );
+          var config = JSON.parse( configJSON );
+          return new Configuration( "config-" + __id++, config );
         } catch( e ){
           throw "Config.parse Error: unable to parse config string. Error was: " + e.message;
         }
