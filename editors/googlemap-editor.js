@@ -11,7 +11,126 @@
     var _rootElement = rootElement,
         _targets = [ butter.currentMedia ].concat( butter.targets ),
         _messageContainer = _rootElement.querySelector( "div.error-message" ),
-        _targetSelectElement;
+        _targetSelectElement,
+        _trackEvent,
+        _popcornEventMapReference,
+        _mapListeners;
+
+    /**
+     * Member: onCenterChanged
+     *
+     * GoogleMaps center changed event handler. Updates the associated trackevent after map center is moved.
+     */
+    function onDragEnd() {
+      var center = _popcornEventMapReference.getCenter(),
+          updateOptions = {
+            lat: center.lat(),
+            lng: center.lng(),
+            location: ""
+          };
+      _trackEvent.update( updateOptions );
+    }
+
+    /**
+     * Member: onCenterChanged
+     *
+     * GoogleMaps center changed event handler. Updates the associated trackevent after map center is moved.
+     */
+    function onCenterChanged() {
+      var center = _popcornEventMapReference.getCenter(),
+          updateOptions = {
+            lat: center.lat(),
+            lng: center.lng(),
+            location: ""
+          };
+      _trackEvent.update( updateOptions );
+    }
+
+    /**
+     * Member: onHeadingChanged
+     *
+     * GoogleMaps heading changed event handler. Updates the associated trackevent after map heading is changed.
+     */
+    function onHeadingChanged() {
+      var updateOptions = {
+            heading: _popcornEventMapReference.getHeading(),
+            location: ""
+          };
+      _trackEvent.update( updateOptions );
+    }
+
+    /**
+     * Member: onZoomChanged
+     *
+     * GoogleMaps zoom changed event handler. Updates the associated trackevent after map zoom is changed.
+     */
+    function onZoomChanged() {
+      var updateOptions = {
+            zoom: _popcornEventMapReference.getZoom(),
+            location: ""
+          };
+      _trackEvent.update( updateOptions );
+    }
+
+    /**
+     * Member: onTiltChanged
+     *
+     * GoogleMaps tilt changed event handler. Updates the associated trackevent after map tilt is changed.
+     */
+    function onTiltChanged() {
+      var updateOptions = {
+            pitch: _popcornEventMapReference.getTilt(),
+            location: ""
+          };
+      _trackEvent.update( updateOptions );
+    }
+
+    /**
+     * Member: setupMapListeners
+     *
+     * Adds listeners to the google map object to detect change in state.
+     */
+    function setupMapListeners() {
+      _mapListeners = [];
+      _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'dragend', onDragEnd ) );
+      _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'zoom_changed', onZoomChanged ) );
+      _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'tilt_changed', onTiltChanged ) );
+      _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'heading_changed', onHeadingChanged ) );
+    }
+
+    /**
+     * Member: removeMapListeners
+     *
+     * Removes listeners added by `setupMapListeners`.
+     */
+    function removeMapListeners() {
+      if ( _popcornEventMapReference && _trackEvent.popcornTrackEvent._map ) {
+        while ( _mapListeners.length ) {
+          google.maps.event.removeListener( _mapListeners.pop() );  
+        }
+      }
+    }
+
+    /**
+     * Member: getMapFromTrackEvent
+     *
+     * Retrieves a handle to the map associated with the trackevent and proceeds to call `setupMapListeners`.
+     * `removeMapListeners` is called first to remove old listeners if a map was already initialized
+     * (trackeventupdate might cause this to occur).
+     */
+    function getMapFromTrackEvent() {
+      removeMapListeners();
+      if ( !_trackEvent.popcornTrackEvent._map ) {
+        _trackEvent.popcornTrackEvent.onmaploaded = function( options, map ){
+          _popcornEventMapReference = map;
+          setupMapListeners();
+        }
+      }
+      else {
+        _popcornEventMapReference = _trackEvent.popcornTrackEvent._map;
+        setupMapListeners();        
+      }
+    }
 
     /**
      * Member: setErrorState
@@ -72,6 +191,8 @@
      * @param {TrackEvent} trackEvent: The TrackEvent being edited
      */
     function setup( trackEvent ){
+      _trackEvent = trackEvent;
+
       var targetList = _this.createTargetsList( _targets ),
           optionsContainer = _rootElement.querySelector( ".editor-options" );
 
@@ -108,21 +229,7 @@
           null,
           optionsContainer );
 
-      _rootElement.querySelector( "button" ).addEventListener( "click", function( e ) {
-        if ( trackEvent.popcornTrackEvent._map ) {
-          var map = trackEvent.popcornTrackEvent._map,
-              center = map.getCenter(),
-              updateOptions = {
-                lat: center.lat(),
-                lng: center.lng(),
-                heading: map.getHeading(),
-                pitch: map.getTilt(),
-                zoom: map.getZoom(),
-                location: ""
-              };
-          trackEvent.update( updateOptions );
-        }
-      }, false );
+      getMapFromTrackEvent();
 
       _this.updatePropertiesFromManifest( trackEvent );
 
@@ -136,10 +243,13 @@
           _this.updatePropertiesFromManifest( e.target );
           _targetSelectElement.value = trackEvent.popcornOptions.target;
           setErrorState( false );
+          getMapFromTrackEvent();
         });
         setup( trackEvent );
       },
-      close: function () {}
+      close: function () {
+        removeMapListeners();
+      }
     });
 
   });
