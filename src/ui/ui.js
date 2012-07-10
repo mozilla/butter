@@ -103,7 +103,6 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
         _this = this;
 
     EventManagerWrapper( _this );
-    UnloadDialog( butter );
 
     // Expose Area to external bodies through `butter.ui`
     // Modules should be creating their own Areas when possible
@@ -138,6 +137,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     _element.appendChild( _areas.tools.element );
 
     if( _uiConfig.value( "ui" ).enabled !== false ){
+      UnloadDialog( butter );
       document.body.classList.add( "butter-header-spacing" );
       document.body.classList.add( "butter-tray-spacing" );
       document.body.appendChild( _element );
