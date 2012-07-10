@@ -79,7 +79,7 @@
       _targetSelectElement = targetList.querySelector( "select" );
 
       // Remove the default "Media Element" target so that the googlemaps plugin doesn't get angry with a blank target
-      _targetSelectElement.removeChild( _targetSelectElement.querySelector( '.default-target-option' ) );
+      _targetSelectElement.removeChild( _targetSelectElement.querySelector( ".default-target-option" ) );
       _this.attachSelectChangeHandler( _targetSelectElement, trackEvent, "target" );
       _targetSelectElement.value = trackEvent.popcornOptions.target;
 
@@ -139,8 +139,7 @@
         });
         setup( trackEvent );
       },
-      close: function () {
-      }
+      close: function () {}
     });
 
   });
