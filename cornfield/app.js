@@ -3,6 +3,7 @@ console.log( __dirname );
 const express = require('express'),
       fs = require('fs'),
       path = require('path'),
+      html5 = require('html5'),
       app = express.createServer(),
       MongoStore = require('connect-mongo')(express),
       stylus = require('stylus'),
@@ -17,12 +18,37 @@ const express = require('express'),
 var templateConfigs = {};
 
 function readTemplateConfig( templateName, templatedPath ) {
+  var parser = new html5.Parser({});
+
   var configPath = templatedPath.replace( '{{templateBase}}', TEMPLATES_DIR + '/' );
   fs.readFile( configPath, 'utf8', function( err, conf ) {
     var configPathBase = configPath.substring( 0, configPath.lastIndexOf( '/' ) );
     conf = JSON.parse( conf );
     conf.template = configPathBase + '/' + conf.template;
     templateConfigs[ templateName ] = conf;
+
+    var templateFile = fs.readFileSync( conf.template );
+    parser.parse( templateFile );
+
+    if ( conf.popcorn && conf.popcorn.scripts ) {
+      var popcornScripts = conf.popcorn.scripts;
+      for ( var scriptKey in popcornScripts ) {
+        var script = popcornScripts[ scriptKey ];
+
+        // Check for "#script-name" ids
+        if (  script.charAt( 0 ) === "#" ) {
+          var scriptId = script.substr( 1 ),
+              parsedObject = parser.document._ids[ scriptId ];
+          if (  parsedObject &&
+                parsedObject[ 0 ] &&
+                parsedObject[ 0 ]._childNodes &&
+                parsedObject[ 0 ]._childNodes[ 0 ] ) {
+            popcornScripts[ scriptKey ] = parsedObject[ 0 ]._childNodes[ 0 ].__nodeValue;
+          }
+        }
+      }
+    }
+
   });
 }
 
@@ -168,7 +194,12 @@ function publishRoute( req, res ){
               headStartTagIndex,
               templateScripts,
               startString,
+              popcornScripts = templateConfig.popcorn ? templateConfig.popcorn.scripts : {},
               j, k;
+
+          popcornScripts.init = popcornScripts.init ? popcornScripts.init + '\n' : '';
+          popcornScripts.beforeEvents = popcornScripts.beforeEvents ? popcornScripts.beforeEvents + '\n' : '';
+          popcornScripts.afterEvents = popcornScripts.afterEvents ? popcornScripts.afterEvents + '\n' : '';
 
           templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
           baseString = '\n  <base href="' + PUBLISH_PREFIX + templateURL + '/"/>';
@@ -217,8 +248,10 @@ function publishRoute( req, res ){
             mediaUrlsString += mediaUrls[ numSources - 1 ] + '" ]';
 
             popcornString += '\n(function(){';
+            popcornString += popcornScripts.init;
             popcornString += '\nvar popcorn = Popcorn.smart("#' + currentMedia.target + '", ' +
                              mediaUrlsString + ', ' + JSON.stringify( mediaPopcornOptions ) + ');';
+            popcornString += popcornScripts.beforeEvents;
             for ( j = 0; j < currentMedia.tracks.length; ++ j ) {
               currentTrack = currentMedia.tracks[ j ];
               for ( k = 0; k < currentTrack.trackEvents.length; ++k ) {
@@ -228,6 +261,7 @@ function publishRoute( req, res ){
                 popcornString += ');';
               }
             }
+            popcornString += popcornScripts.afterEvents;
             if ( currentMedia.controls ) {
               popcornString += "\npopcorn.controls( true );\n";
             }
