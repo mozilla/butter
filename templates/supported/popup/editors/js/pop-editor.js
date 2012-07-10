@@ -82,6 +82,13 @@
       classes: 'text',
       align: 'text',
       style: 'text',
+      width: {
+        type: 'number',
+        callback: function(field, value) {
+          document.getElementById('pop-width').innerHTML = value;
+        },
+        defaultValue: 100
+      },
       exit: {
         type: 'nonNegativeNumber',
         callback: function(field, value) {

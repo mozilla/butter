@@ -20,6 +20,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
         _draggable,
         _resizable,
         _trackEvent = trackEvent,
+        _dragging = false,
         _this = this;
 
     EventManagerWrapper( _this );
@@ -100,6 +101,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
           } //if
         }
       },
+      dragging: {
+        enumerable: true,
+        get: function(){
+          return _dragging;
+        }
+      },
       zoom: {
         enumerable: true,
         get: function(){
@@ -145,9 +152,11 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
                 containment: _parent.element.parentNode,
                 scroll: _parent.element.parentNode.parentNode,
                 start: function(){
+                  _dragging = true;
                   _this.dispatch( "trackeventdragstarted" );
                 },
                 stop: function(){
+                  _dragging = false;
                   _this.dispatch( "trackeventdragstopped" );
                   movedCallback();
                 },
@@ -162,7 +171,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
               });
 
               _element.setAttribute( "data-butter-draggable-type", "trackevent" );
-              _element.setAttribute( "data-butter-trackevent-id", trackEvent.id );
+              _element.setAttribute( "data-butter-trackevent-id", _trackEvent.id );
 
               if( !_handles ){
                 _handles = _element.querySelectorAll( ".handle" );
@@ -203,23 +212,26 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
     _this.update( inputOptions );
 
     _element.addEventListener( "mousedown", function ( e ) {
-      _this.dispatch( "trackeventmousedown", { originalEvent: e, trackEvent: trackEvent } );
+      _this.dispatch( "trackeventmousedown", { originalEvent: e, trackEvent: _trackEvent } );
     }, true);
     _element.addEventListener( "mouseup", function ( e ) {
-      _this.dispatch( "trackeventmouseup", { originalEvent: e, trackEvent: trackEvent } );
+      _this.dispatch( "trackeventmouseup", { originalEvent: e, trackEvent: _trackEvent } );
     }, false);
     _element.addEventListener( "mouseover", function ( e ) {
-      _this.dispatch( "trackeventmouseover", { originalEvent: e, trackEvent: trackEvent } );
+      _this.dispatch( "trackeventmouseover", { originalEvent: e, trackEvent: _trackEvent } );
     }, false );
     _element.addEventListener( "mouseout", function ( e ) {
-      _this.dispatch( "trackeventmouseout", { originalEvent: e, trackEvent: trackEvent } );
+      _this.dispatch( "trackeventmouseout", { originalEvent: e, trackEvent: _trackEvent } );
     }, false );
 
     _element.addEventListener( "dblclick", function ( e ) {
-      _this.dispatch( "trackeventdoubleclicked", { originalEvent: e, trackEvent: trackEvent } );
+      _this.dispatch( "trackeventdoubleclicked", { originalEvent: e, trackEvent: _trackEvent } );
+    }, false);
+    _element.addEventListener( "click", function ( e ) {
+      _this.dispatch( "trackeventclicked", { originalEvent: e, trackEvent: _trackEvent } );
     }, false);
 
-    function select(){
+    function select() {
       _draggable.selected = true;
       _element.setAttribute( "selected", true );
     } //select

@@ -24,6 +24,15 @@ define( [
 
   var __guid = 0;
 
+  var TrackEventUpdateException = function ( reason, message ) {
+    this.type = "trackevent-update";
+    this.reason = reason;
+    this.message = message;
+    this.toString = function () {
+      return "TrackEvent update failed: " + message;
+    };
+  };
+
   /**
    * Class: TrackEvent
    *
@@ -63,7 +72,10 @@ define( [
 
     if( !_type ){
       _logger.log( "Warning: " + _id + " has no type." );
-    } //if
+    }
+    else {
+      this.manifest = Popcorn.manifest[ _type ];
+    }
 
     _popcornOptions.start = _popcornOptions.start || 0;
     _popcornOptions.start = TimeUtil.roundTime( _popcornOptions.start );
@@ -87,79 +99,87 @@ define( [
      * Updates the event properties and runs sanity checks on input.
      *
      * @param {Object} updateOptions: Object containing plugin-specific properties to be updated for this TrackEvent.
-     * @event trackeventupdatefailed: Occurs when an update operation failed because of conflicting times or other serious property problems. As the data property on this event is a string which represents the reason for failure.
-     * @event trackeventupdated: Occurs whenan update operation succeeded.
+     * @event trackeventupdated: Occurs when an update operation succeeded.
+     * @throws TrackEventUpdateException: When an update operation failed because of conflicting times or other serious property problems.
      */
     this.update = function( updateOptions, applyDefaults ) {
       updateOptions = updateOptions || {};
 
-      var failed = false,
-          newStart = _popcornOptions.start,
-          newEnd = _popcornOptions.end;
+      var newStart = _popcornOptions.start,
+          newEnd = _popcornOptions.end,
+          manifestOptions;
 
-      if ( !isNaN( updateOptions.start ) ) {
-        newStart = TimeUtil.roundTime( updateOptions.start );
-      }
-      if ( !isNaN( updateOptions.end ) ) {
-        newEnd = TimeUtil.roundTime( updateOptions.end );
-      }
-
-      if ( newStart >= newEnd ){
-        failed = "invalidtime";
-      }
-      else {
-        if( _track && _track._media ){
-          var media = _track._media;
-          if( ( newStart > media.duration ) ||
-              ( newEnd > media.duration ) ||
-              ( newStart < 0 ) ) {
-            failed = "invalidtime";
-          }
+      if ( updateOptions.start ) {
+        if ( !isNaN( updateOptions.start ) ) {
+          newStart = TimeUtil.roundTime( updateOptions.start );
+        }
+        else {
+          throw new TrackEventUpdateException( "invalid-start-time", "[start] is an invalid value." );
         }
       }
 
-      if( failed ){
-        _this.dispatch( "trackeventupdatefailed", failed );
-      } else {
-        var _manifest = Popcorn.manifest[ _type ] && Popcorn.manifest[ _type ].options;
-        if( _manifest ){
-          for ( var prop in _manifest ) {
-            if ( _manifest.hasOwnProperty( prop ) ) {
+      if ( updateOptions.end ) {
+        if ( !isNaN( updateOptions.end ) ) {
+          newEnd = TimeUtil.roundTime( updateOptions.end );
+        }
+        else {
+          throw new TrackEventUpdateException( "invalid-end-time", "[end] is an invalid value." );
+        }
+
+      }
+
+      if ( newStart >= newEnd ) {
+        throw new TrackEventUpdateException( "start-greater-than-end", "[start] must be equal to or less than [end]." );
+      }
+      if ( _track && _track._media && _track._media.ready ) {
+        var media = _track._media;
+        if( ( newStart > media.duration ) ||
+            ( newEnd > media.duration ) ||
+            ( newStart < 0 ) ) {
+          throw new TrackEventUpdateException( "invalid-times", "[start] or [end] are not within the duration of media" );
+        }
+      }
+
+      if ( this.manifest ) {
+        manifestOptions = this.manifest.options;
+        if ( manifestOptions ) {
+          for ( var prop in manifestOptions ) {
+            if ( manifestOptions.hasOwnProperty( prop ) ) {
               if ( updateOptions[ prop ] === undefined ) {
                 if ( applyDefaults ) {
-                  _popcornOptions[ prop ] = defaultValue( _manifest[ prop ] );
+                  _popcornOptions[ prop ] = defaultValue( manifestOptions[ prop ] );
                 }
               } else {
                 _popcornOptions[ prop ] = updateOptions[ prop ];
               }
             }
           }
-
-          if ( !( "target" in _manifest ) && updateOptions.target ) {
+          if ( !( "target" in manifestOptions ) && updateOptions.target ) {
             _popcornOptions.target = updateOptions.target;
           }
         }
-
-        if( newStart ){
-          _popcornOptions.start = newStart;
-        }
-        if( newEnd ){
-          _popcornOptions.end = newEnd;
-        }
-
-        _view.update( _popcornOptions );
-        _this.popcornOptions = _popcornOptions;
-
-        // if PopcornWrapper exists, it means we're connected properly to a Popcorn instance,
-        // and can update the corresponding Popcorn trackevent for this object
-        if ( _popcornWrapper ) {
-          _popcornWrapper.updateEvent( _this );
-        }
-
-        _this.dispatch( "trackeventupdated", _this );
+      }
+      
+      if( newStart ){
+        _popcornOptions.start = newStart;
+      }
+      if( newEnd ){
+        _popcornOptions.end = newEnd;
       }
 
-    }; //update
+      // if PopcornWrapper exists, it means we're connected properly to a Popcorn instance,
+      // and can update the corresponding Popcorn trackevent for this object
+      if ( _popcornWrapper ) {
+        _popcornWrapper.updateEvent( _this );
+      }
+
+      _view.update( _popcornOptions );
+      _this.popcornOptions = _popcornOptions;
+
+      // we should only get here if no exceptions happened
+      _this.dispatch( "trackeventupdated", _this );
+
+    };
 
     /**
      * Member: moveFrameLeft
@@ -245,6 +265,20 @@ define( [
         configurable: false,
         get: function(){
           return _view;
+        }
+      },
+
+      /**
+       * Property: dragging
+       *
+       * A dragging state of the track event.
+       * @malleable: No.
+       */
+      dragging: {
+        enumerable: true,
+        configurable: false,
+        get: function(){
+          return _view.dragging;
         }
       },
 
@@ -336,6 +370,7 @@ define( [
         },
         set: function( importData ){
           _type = _popcornOptions.type = importData.type;
+          this.manifest = Popcorn.manifest[ _type ];
           if( importData.name ){
             _name = importData.name;
           }

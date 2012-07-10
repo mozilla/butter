@@ -11,7 +11,6 @@ var JSLINT = './node_modules/jshint/bin/hint',
     CSS_DIR = 'css',
     TEMPLATES_DIR = 'templates',
     DOCS_DIR = 'docs',
-    EDITORS_DIR = 'editors',
     DEFAULT_CONFIG = './src/default-config',
     BUTTERED_POPCORN = DIST_DIR + '/buttered-popcorn.js',
     BUTTERED_POPCORN_MIN = DIST_DIR + '/buttered-popcorn.min.js',
@@ -124,8 +123,8 @@ target.docs = function() {
 };
 
 target.check = function() {
-  checkJS( SRC_DIR, EDITORS_DIR );
-  checkCSS( CSS_DIR, DIALOGS_DIR, EDITORS_DIR );
+  checkJS( SRC_DIR );
+  checkCSS( CSS_DIR );
 };
 
 target['check-templates'] = function() {
@@ -134,11 +133,11 @@ target['check-templates'] = function() {
 };
 
 target['check-css'] = function( dirs ) {
-  checkCSS( CSS_DIR, DIALOGS_DIR, EDITORS_DIR );
+  checkCSS( CSS_DIR );
 };
 
 target['check-lint'] = function( dir ) {
-  checkJS( SRC_DIR, EDITORS_DIR );
+  checkJS( SRC_DIR );
 };
 
 function build( version ){
@@ -180,8 +179,6 @@ target.package = function() {
   target.build();
 
   cp('-R', 'resources', DIST_DIR);
-  cp('-R', 'dialogs', DIST_DIR);
-  cp('-R', 'editors', DIST_DIR);
   cp('-R', 'templates', DIST_DIR);
 
   echo('### Creating butter.zip');
@@ -257,8 +254,6 @@ target.release = function() {
 
   // Copy over templates and other resources
   cp('-R', 'resources', DIST_DIR);
-  cp('-R', 'dialogs', DIST_DIR);
-  cp('-R', 'editors', DIST_DIR);
   cp('-R', 'templates', DIST_DIR);
 
   echo('### Creating butter.zip');
@@ -331,8 +326,6 @@ target.storycamp = function(){
   // Copy other assets over
   cd(cwd);
   cp('-R', 'resources', DIST_DIR);
-  cp('-R', 'dialogs', DIST_DIR);
-  cp('-R', 'editors', DIST_DIR);
   cp('-R', 'templates', DIST_DIR);
   cp('-R', 'cornfield', DIST_DIR);
 

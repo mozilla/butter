@@ -31,7 +31,7 @@
           _target = mediaOptions.target,
           _registry,
           _currentTime = 0,
-          _duration = 0,
+          _duration = -1,
           _popcornOptions = mediaOptions.popcornOptions,
           _mediaUpdateInterval,
           _view,
@@ -163,8 +163,7 @@
           "trackeventremoved",
           "trackeventupdated",
           "trackeventselected",
-          "trackeventdeselected",
-          "trackeventeditrequested"
+          "trackeventdeselected"
         ]);
         track.listen( "trackeventadded", onTrackEventAdded );
         track.listen( "trackeventremoved", onTrackEventRemoved );
@@ -202,8 +201,7 @@
             "trackeventremoved",
             "trackeventupdated",
             "trackeventselected",
-            "trackeventdeselected",
-            "trackeventeditrequested"
+            "trackeventdeselected"
           ]);
           track.setPopcornWrapper( null );
           track.unlisten( "trackeventadded", onTrackEventAdded );

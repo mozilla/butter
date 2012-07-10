@@ -1,7 +1,4 @@
 {
-  "editor": {
-    "default": "../../editors/default-editor.html"
-  },
   "ui": {
     "enabled": false,
     "trackEventHighlight": "click"

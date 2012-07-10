@@ -23,6 +23,7 @@
             "./dependencies",
             "./dialogs",
             "dialog/dialog",
+            "editor/editor",
             "ui/ui",
             "util/xhr",
             "util/lang",
@@ -41,6 +42,7 @@
             Dependencies,
             Dialogs,
             Dialog,
+            Editor,
             UI,
             XHR,
             Lang,
@@ -391,8 +393,7 @@
           "tracktargetchanged",
           "trackeventadded",
           "trackeventremoved",
-          "trackeventupdated",
-          "trackeventeditrequested"
+          "trackeventupdated"
         ]);
 
         var trackEvents;
@@ -437,8 +438,7 @@
             "tracktargetchanged",
             "trackeventadded",
             "trackeventremoved",
-            "trackeventupdated",
-            "trackeventeditrequested"
+            "trackeventupdated"
           ]);
           var tracks = media.tracks;
           for ( var i=0, l=tracks.length; i<l; ++i ) {
@@ -822,6 +822,8 @@
       this.page = _page;
 
     }
+
+    Butter.Editor = Editor;
 
     Butter.instances = __instances;
 

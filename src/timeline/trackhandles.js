@@ -178,10 +178,25 @@ define( [
       _container.scrollTop = tracksContainer.element.scrollTop;
     }, false );
 
+    _container.addEventListener( "mousewheel", function( e ){
+      if( e.wheelDeltaY ){
+        tracksContainer.element.scrollTop -= e.wheelDeltaY;
+        e.preventDefault();
+      }
+    }, false );
+
+    // For Firefox
+    _container.addEventListener( "DOMMouseScroll", function( e ){
+      if( e.axis === e.VERTICAL_AXIS && !e.shiftKey ){
+        tracksContainer.element.scrollTop += e.detail * 2;
+        e.preventDefault();
+      }
+    }, false );
+
     this.update = function(){
       _container.scrollTop = tracksContainer.element.scrollTop;
       _addTrackButton.style.top = _listElement.offsetHeight - ADD_TRACK_BUTTON_Y_ADJUSTMENT + "px";
-    }; //update
+    };
 
     _this.update();
 

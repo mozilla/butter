@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button", "./header" ],
-        function( EventManagerWrapper, Toggler, LogoSpinner, ContextButton, Header ){
+define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button", "./header", "./unload-dialog" ],
+        function( EventManagerWrapper, Toggler, LogoSpinner, ContextButton, Header, UnloadDialog ){
 
   var TRANSITION_DURATION = 500,
       BUTTER_CSS_FILE = "{css}/butter.ui.css";
@@ -99,16 +99,26 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
         _this = this;
 
     EventManagerWrapper( _this );
+    UnloadDialog( butter );
+
+    // Expose Area to external bodies through `butter.ui`
+    // Modules should be creating their own Areas when possible
+    _this.Area = Area;
 
     _areas.main = new Area( "butter-tray" );
 
     this.contentStateLocked = false;
 
     var _element = _areas.main.element,
-        _toggler = new Toggler( butter, _element );
+        _toggler = new Toggler( function ( e ) {
+          butter.ui.visible = !butter.ui.visible;
+          _toggler.state = butter.ui.visible;
+        }, "Show/Hide Timeline" );
 
     _element.setAttribute( "data-butter-exclude", "true" );
     _element.className = "butter-tray";
+
+    _element.appendChild( _toggler.element );
 
     _areas.work = new Area( "work" );
     _areas.statusbar = new Area( "status-bar" );
@@ -455,7 +465,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
 
     _this.dialogDir = butter.config.value( "dirs" ).dialogs || "";
 
-   } //UI
+  } //UI
 
   UI.__moduleName = "ui";
 

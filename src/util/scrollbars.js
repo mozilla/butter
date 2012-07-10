@@ -29,17 +29,17 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       _childHeight = innerElement.getBoundingClientRect().height;
       _elementHeight = _element.getBoundingClientRect().height;
       _scrollHeight = outerElement.scrollHeight;
-      _handleHeight = _elementHeight - ( _scrollHeight - _parentHeight ) / VERTICAL_SIZE_REDUCTION_FACTOR;
+      _handleHeight = _elementHeight - ( innerElement.scrollHeight - _parentHeight ) / VERTICAL_SIZE_REDUCTION_FACTOR;
       _handleHeight = Math.max( 20, Math.min( _elementHeight, _handleHeight ) );
       _handle.style.height = _handleHeight + "px";
       setHandlePosition();
-    } //setup
+    }
 
     function onMouseUp(){
       window.removeEventListener( "mouseup", onMouseUp, false );
       window.removeEventListener( "mousemove", onMouseMove, false );
       _handle.addEventListener( "mousedown", onMouseDown, false );
-    } //onMouseUp
+    }
 
     function onMouseMove( e ){
       var diff = e.pageY - _mousePos,
@@ -49,7 +49,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       _handle.style.top = diff + "px";
       outerElement.scrollTop = ( _scrollHeight - _parentHeight ) * p;
       _this.dispatch( "scroll", outerElement.scrollTop );
-    } //onMouseMove
+    }
 
     function onMouseDown( e ){
       if( e.button === 0 ){
@@ -58,12 +58,12 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
         window.addEventListener( "mouseup", onMouseUp, false );
         window.addEventListener( "mousemove", onMouseMove, false );
         _handle.removeEventListener( "mousedown", onMouseDown, false );
-      } //if
-    } //onMouseDown
+      }
+    }
 
     this.update = function(){
       setup();
-    }; //update
+    };
 
     function setHandlePosition(){
       if( innerElement.scrollHeight - _elementHeight > 0 ) {
@@ -74,11 +74,11 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       }
     }
 
-    innerElement.addEventListener( "scroll", function( e ){
+    outerElement.addEventListener( "scroll", function( e ){
       setHandlePosition();
     }, false );
 
-    innerElement.addEventListener( "mousewheel", function( e ){
+    outerElement.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaY ){
         outerElement.scrollTop -= e.wheelDeltaY;
         setHandlePosition();
@@ -87,9 +87,9 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
     }, false );
 
     // For Firefox
-    innerElement.addEventListener( "DOMMouseScroll", function( e ){
+    outerElement.addEventListener( "DOMMouseScroll", function( e ){
       if( e.axis === e.VERTICAL_AXIS && !e.shiftKey ){
-        innerElement.scrollTop += e.detail * 2;
+        outerElement.scrollTop += e.detail * 2;
         setHandlePosition();
         e.preventDefault();
       }
@@ -113,7 +113,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       }
 
       p = _handle.offsetTop / ( _elementHeight - _handleHeight );
-      innerElement.scrollTop = ( _scrollHeight - _elementHeight ) * p;
+      outerElement.scrollTop = ( _scrollHeight - _elementHeight ) * p;
     }, false);
 
     window.addEventListener( "resize", setup, false );
@@ -130,7 +130,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       }
     });
 
-  } //Vertical
+  }
 
   function Horizontal( outerElement, innerElement ){
     var _element = document.createElement( "div" ),
@@ -159,22 +159,22 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       _handleWidth = Math.max( 20, Math.min( _elementWidth, _handleWidth ) );
       _handle.style.width = _handleWidth + "px";
       setHandlePosition();
-    } //setup
+    }
 
     function onMouseUp(){
       window.removeEventListener( "mouseup", onMouseUp, false );
       window.removeEventListener( "mousemove", onMouseMove, false );
       _handle.addEventListener( "mousedown", onMouseDown, false );
-    } //onMouseUp
+    }
 
     function onMouseMove( e ){
       var diff = e.pageX - _mousePos;
       diff = Math.max( 0, Math.min( diff, _elementWidth - _handleWidth ) );
       _handle.style.left = diff + "px";
       var p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
-      innerElement.scrollLeft = ( _scrollWidth - _elementWidth ) * p;
-      _this.dispatch( "scroll", innerElement.scrollLeft );
-    } //onMouseMove
+      outerElement.scrollLeft = ( _scrollWidth - _elementWidth ) * p;
+      _this.dispatch( "scroll", outerElement.scrollLeft );
+    }
 
     function onMouseDown( e ){
       if( e.button === 0 ){
@@ -183,34 +183,34 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
         window.addEventListener( "mouseup", onMouseUp, false );
         window.addEventListener( "mousemove", onMouseMove, false );
         _handle.removeEventListener( "mousedown", onMouseDown, false );
-      } //if
-    } //onMouseDown
+      }
+    }
 
     function setHandlePosition(){
       if( _scrollWidth - _elementWidth > 0 ) {
         _handle.style.left = ( _elementWidth - _handleWidth ) *
-          ( innerElement.scrollLeft / ( _scrollWidth - _elementWidth )) + "px";
-      }else{
+          ( outerElement.scrollLeft / ( _scrollWidth - _elementWidth ) ) + "px";
+      } else {
         _handle.style.left = "0px";
       }
     }
 
-    innerElement.addEventListener( "scroll", function( e ){
+    outerElement.addEventListener( "scroll", function( e ){
       setHandlePosition();
     }, false );
 
-    innerElement.addEventListener( "mousewheel", function( e ){
+    outerElement.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaX ){
-        innerElement.scrollLeft -= e.wheelDeltaX;
+        outerElement.scrollLeft -= e.wheelDeltaX;
         setHandlePosition();
         e.preventDefault();
       }
     }, false );
 
     // For Firefox
-    innerElement.addEventListener( "DOMMouseScroll", function( e ){
+    outerElement.addEventListener( "DOMMouseScroll", function( e ){
       if( e.axis === e.HORIZONTAL_AXIS || ( e.axis === e.VERTICAL_AXIS && e.shiftKey )){
-        innerElement.scrollLeft += e.detail * 2;
+        outerElement.scrollLeft += e.detail * 2;
         setHandlePosition();
         e.preventDefault();
       }
@@ -235,7 +235,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       }
 
       p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
-      innerElement.scrollLeft = ( _scrollWidth - _elementWidth ) * p;
+      outerElement.scrollLeft = ( _scrollWidth - _elementWidth ) * p;
     }, false);
 
     window.addEventListener( "resize", setup, false );
@@ -243,7 +243,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
     this.update = function(){
       setup();
-    }; //update
+    };
 
     setup();
 
@@ -256,12 +256,12 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       }
     });
 
-  } //Horizontal
+  }
 
   return {
     Vertical: Vertical,
     Horizontal: Horizontal
   };
 
-}); //define
+});
 
