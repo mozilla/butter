@@ -215,6 +215,7 @@
                 }
               }
               _listContainer.appendChild( plugin.createElement( butter, _pattern ) );
+              _scrollbar.update();
             }
           }
         }
