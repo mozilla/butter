@@ -5,7 +5,7 @@ const express = require('express'),
       path = require('path'),
       app = express.createServer(),
       MongoStore = require('connect-mongo')(express),
-      stylus = require('stylus'),
+      lessMiddleware = require('less-middleware'),
       CONFIG = require('config'),
       TEMPLATES_DIR =  CONFIG.dirs.templates,
       PUBLISH_DIR = CONFIG.dirs.publish,
@@ -72,8 +72,10 @@ app.configure( function() {
     .use( express.bodyParser() )
     .use( express.cookieParser() )
     .use( express.session( CONFIG.session ) )
-    .use( stylus.middleware({
-      src: WWW_ROOT
+    // Auto-compile CSS from LESS.  Other options: https://github.com/emberfeather/less.js-middleware
+    .use( lessMiddleware({
+      src: WWW_ROOT,
+      dest: WWW_ROOT
     }))
     /* Show Zeus who's boss
      * This only affects requests under /api and /browserid, not static files
