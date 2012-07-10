@@ -929,6 +929,43 @@
     });
   });
 
+  asyncTest( "Inline scripts", 3, function(){
+
+    createButter( function( butter ){
+
+      var theZONE = "";
+
+      function testoTronInit( popcorn ){
+        theZone += "i" + !!popcorn;
+      }
+
+      function testoTronBefore( popcorn ){
+        theZone += "b" + !!popcorn;
+      }
+
+      function testoTronAfter( popcorn ){
+        theZone += "a" + !!popcorn;
+      }
+
+      var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../external/popcorn-js/test/trailer.ogv" } );
+
+      m1.onReady(function(){
+        butter.popcornScripts.init = testoTronInit;
+        butter.popcornScripts.beforeEvents = testoTronBefore;
+        butter.popcornScripts.afterEvents = testoTronAfter;
+
+        var exported = butter.getHTML();
+        ok( exported.indexOf( "testoTronInit" ) > -1, "init callback is in export script" );
+        ok( exported.indexOf( "testoTronBefore" ) > -1, "before callback is in export script" );
+        ok( exported.indexOf( "testoTronAfter" ) > -1, "after callback is in export script" );
+
+        start();
+      });
+
+    });
+  });
+
+
   module( "Dependency Loader" );
   asyncTest( "Load test script", 3, function(){
 

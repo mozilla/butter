@@ -1,3 +1,5 @@
+
+
 /* This Source Code Form is subject to the terms of the MIT license
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
@@ -241,6 +243,16 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
     }
 
+    /* Determines whether or not `script` is a Function, and attempts to get its src if
+     * it is. Otherwise, return a string equivalent to that passed in.
+     */
+    function scriptToString( script ){
+      if ( typeof script === "function" ) {
+        return "(" + script.toString() + "(popcorn));\n";
+      }
+      return script;
+    }
+
     /* Determine which player is needed (usually based on the result of findMediaType)
      * and create a stringified representation of the Popcorn constructor (usually to
      * insert in a script tag).
@@ -289,7 +301,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
 
       if( scripts.init ){
-        popcornString += scripts.init + "\n";
+        popcornString += scriptToString( scripts.init ) + "\n";
       }
       if( callbacks.init ){
         popcornString += callbacks.init + "();\n";
@@ -306,7 +318,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
 
       if( scripts.beforeEvents ){
-        popcornString += scripts.beforeEvents + "\n";
+        popcornString += scriptToString( scripts.beforeEvents ) + "\n";
       }
       if( callbacks.beforeEvents ){
         popcornString += callbacks.beforeEvents + "( popcorn );\n";
@@ -349,7 +361,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
 
       if( scripts.afterEvents ){
-        popcornString += scripts.afterEvents + "\n";
+        popcornString += scriptToString( scripts.afterEvents ) + "\n";
       }
       if( callbacks.afterEvents ){
         popcornString += callbacks.afterEvents + "( popcorn );\n";

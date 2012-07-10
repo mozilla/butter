@@ -101,6 +101,10 @@
           _customData = {},
           _defaultPopcornCallbacks = {};
 
+      // Expose popcorn scripts/callbacks to Butter
+      this.popcornScripts = _defaultPopcornScripts;
+      this.popcornCallbacks = _defaultPopcornCallbacks;
+
       // We use the default configuration in src/default-config.json as
       // a base, and override whatever the user provides in the
       // butterOptions.config file.
