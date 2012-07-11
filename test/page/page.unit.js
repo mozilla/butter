@@ -1,8 +1,6 @@
 /*global text,expect,ok,module,notEqual,Butter,test,window*/
 require( [ "../src/core/page", "../src/core/config", "../src/dependencies" ], function( Page, Config, Dependencies ) {
-  var _iframe,
-      _butter,
-      _config = Config.parse( JSON.stringify( {
+  var _config = Config.parse( JSON.stringify({
           "baseDir": "../../", 
           "dirs": { 
             "popcorn-js": "{{baseDir}}external/popcorn-js/"
@@ -22,49 +20,72 @@ require( [ "../src/core/page", "../src/core/config", "../src/dependencies" ], fu
 
   module( "Page" );
 
-  function startTests() {
+  function startButter() {
+    Butter({
+      config: 'test-config.json',
+      ready: function( butter ) {
+        function startTests() {
 
-    asyncTest( "scrape media target and media elements", 3, function() {
-      var scrapedPage;
+          asyncTest( "addPlayerType player script loading", 1, function() {
+            var _type = "youtube";
+            function checkPlayerScript( type ) {
+              ok( true, "addPlayerType made it through to it's callback. " + type + " script will have been added to the page" );
+              start();
+            }
+            butter.page.addPlayerType( _type, checkPlayerScript( _type ) );
+          });
 
-      scrapedPage = _butter.page.scrape();
+          function getHTMLTest() {
+            asyncTest( "getHTML functionality", 9, function() {
+              var fakeScript = [ "var i = 1 + 1;" ],
+                  html = butter.page.getHTML( fakeScript ),
+                  testDiv = document.createElement( "div" ),
+                  headString = html.substring( html.indexOf( "<head>" ) + 6, html.indexOf( "</head>" ) ),
+                  expectedBaseSrc = location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" ) + "/test/page/",
+                  bodyString = html.substring( html.indexOf( "<body>" ) + 6, html.indexOf( "</body>" ) );
 
-      ok( scrapedPage, "Scrape Returned an Object" );
-      equal( scrapedPage.media.length, 1, "Scrape retrieved one media element" );
-      equal( scrapedPage.target.length, 2, "Scrape retrieved two target elements" );
-      start();
-    });
+              // inject elements into div to test for expected elements
+              testDiv.innerHTML = headString;
 
-    asyncTest( "getHTML generation", 1, function() {
-      var html = _butter.page.getHTML(),
-          xhr = new XMLHttpRequest();
+              // Check that all the expected butter attributes were removed
+              equal( html.indexOf( "data-butter-source" ), -1, "Removed all data-butter-source attributes" );
+              equal( html.indexOf( "data-butter-exclude" ), -1, "Removed all data-butter-exclude elements" );
+              equal( html.indexOf( "data-butter-default" ), -1, "Removed all data-butter-default attributes" );
 
-      xhr.open( "GET", "expectedPage.html", false );
-      xhr.onreadystatechange = function() {
-        if ( xhr.readyState === 4 ) {
-          equal( xhr.responseText, html, "getHTML generated expected html." );
-          start();
-          addPlayerScript();
+              var baseTag = testDiv.getElementsByTagName( "base" )[ 0 ];
+
+              equal( baseTag.href, expectedBaseSrc, "Generated expected base tag" );
+
+              testDiv.innerHTML = bodyString;
+
+              var popcornScripts = testDiv.getElementsByTagName( "script" )[ 0 ],
+                  butterCleanDiv = testDiv.querySelector( "#test" );
+
+              ok( !butterCleanDiv.hasAttribute( "butter-clean" ), "Removed the butter-clean attribute" );
+              ok( !butterCleanDiv.hasAttribute( "data-butter" ), "Removed the data-butter attribute on element with butter-clean=true" );
+              ok( !butterCleanDiv.hasAttribute( "data-butter-default" ), "Removed the data-butter-default attribute on element with butter-clean=true" );
+              ok( popcornScripts, "getHTML generated a script element in the body" );
+              ok( popcornScripts.innerHTML.indexOf( fakeScript[ 0 ] ), "Added expected popcornScripts to the HTML" );
+              start();
+            });
+          }
+
+          asyncTest( "scrape media target and media elements", 2, function() {
+            var scrapedPage;
+
+            scrapedPage = butter.page.scrape();
+
+            equal( scrapedPage.media.length, 1, "Scrape retrieved one media element" );
+            equal( scrapedPage.target.length, 2, "Scrape retrieved two target elements" );
+            start();
+            // For some reason there seems to be another sync bermuda triangle appearing
+            getHTMLTest();
+          });
         }
-      }
-      xhr.send();
-    });
-  }
 
-  function loadIframe() {
-    // Halt the tests from running
-    stop();
-    // load iframe into current doc
-    _iframe = document.createElement( "iframe" );
-    _iframe.onload = function() {
-      setTimeout( function() {
-        _butter = _iframe.contentWindow.Butter.instances[ 0 ];
-        start();
-        _butter.media[ 0 ].onReady( startTests );
-      }, 1500 );
-    }
-    _iframe.src = "test.html";
-    document.body.appendChild( _iframe );
+        butter.currentMedia.onReady( startTests );
+      }
+      });
   }
 
   asyncTest( "prepare script loading", 2, function() {
@@ -72,19 +93,9 @@ require( [ "../src/core/page", "../src/core/config", "../src/dependencies" ], fu
       ok( window.Popcorn, "prepare successfully loaded the Popcorn script" );
       ok( window.Popcorn.player, "prepare successfully loaded the Popcorn Player Module script" );
       start();
+      startButter();
     }
 
     _page.prepare( checkScripts );
   });
-
-  asyncTest( "addPlayerType player script loading", 1, function() {
-    var _type = "vimeo";
-    function checkPlayerScript( type ) {
-      ok( true, "addPlayerType made it through to it's callback. " + type + " script will have been added to the page" );
-      start();
-      loadIframe();
-    }
-    _page.addPlayerType( _type, checkPlayerScript( _type ) );
-  });
-  
 });
