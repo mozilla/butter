@@ -18,6 +18,7 @@ require( [ "../src/core/track" ], function( Track ) {
       }
     });
   }
+
   module( "Media" );
 
   function startTests() {
@@ -119,7 +120,7 @@ require( [ "../src/core/track" ], function( Track ) {
       xhr.open( "GET", "expectedScript.js", false );
       xhr.onreadystatechange = function() {
         if ( xhr.readyState === 4 ) {
-          equal( xhr.responseText, js, "getHTML generated expected html." );
+          equal( xhr.responseText, js, "generatePopcornString generated expected Popcorn JS." );
           start();
           startTests();
         }

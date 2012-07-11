@@ -1,4 +1,4 @@
-(function(window, document, undefined ){
+
   var defaultEvent = {
         type: "text",
         popcornOptions: {
@@ -237,5 +237,3 @@
       });
     });
   });
-
-})( window, window.document );
