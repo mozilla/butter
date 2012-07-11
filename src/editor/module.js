@@ -113,18 +113,18 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
      */
     this._start = function( onModuleReady ){
       onModuleReady();
+      _toggler = new Toggler( function( e ) {
+        var newState = !_editorAreaDOMRoot.classList.contains( "minimized" );
+        _toggler.state = newState;
+        if ( newState ) {
+          _editorAreaDOMRoot.classList.add( "minimized" );
+        }
+        else {
+          _editorAreaDOMRoot.classList.remove( "minimized" );
+        }
+      }, "Show/Hide Editor", true );
       if( butter.config.value( "ui" ).enabled !== false ){
         butter.ui.areas.editor = new butter.ui.Area( "editor-area", _editorAreaDOMRoot );
-        _toggler = new Toggler( function( e ) {
-          var newState = !_editorAreaDOMRoot.classList.contains( "minimized" );
-          _toggler.state = newState;
-          if ( newState ) {
-            _editorAreaDOMRoot.classList.add( "minimized" );
-          }
-          else {
-            _editorAreaDOMRoot.classList.remove( "minimized" );
-          }
-        }, "Show/Hide Editor", true );
         _editorAreaDOMRoot.appendChild( _toggler.element );
         document.body.classList.add( "butter-editor-spacing" );
 
