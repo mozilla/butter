@@ -147,7 +147,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
     }, false );
 
     function doLogout() {
-      butter.cornfield.logout( logoutDisplay );
+      navigator.id.logout( butter.cornfield.logout( logoutDisplay ) );
     }
 
     function loginDisplay() {
