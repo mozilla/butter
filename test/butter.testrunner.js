@@ -131,7 +131,7 @@
         testFrame.src = currentTest.path;
       } else {
         // Finish test suite; display totals
-        $( testFrame ).remove();
+        testFrame.parentNode.removeChild( testFrame );
 
         id( "qunit-banner" ).className = totalFail ? "qunit-fail" : "qunit-pass";
 
