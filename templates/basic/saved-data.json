@@ -11,9 +11,8 @@
       "id": "Media0",
       "name": "Media0",
       "url": [
-        "http://videos-cdn.mozilla.net/serv/webmademovies/storycamp/storycamp_episode1.mp4?butteruid=1341815828171",
-        "http://videos-cdn.mozilla.net/serv/webmademovies/storycamp/storycamp_episode1.ogv?butteruid=1341815828172",
-        "http://videos-cdn.mozilla.net/serv/webmademovies/storycamp/storycamp_episode1.webm?butteruid=1341815828173"
+        "http://videos-cdn.mozilla.net/serv/webmademovies/trailer.mp4",
+        "http://videos-cdn.mozilla.net/serv/webmademovies/storycamp/storycamp_episode1.webm"
       ],
       "target": "video",
       "duration": 121.12100219726562,
