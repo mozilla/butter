@@ -14,8 +14,8 @@
         totalFail = 0,
         totalRun = 0,
         totalTime = 0,
-        main_li = create( "li" ),
-        main_b = create( "b" ),
+        mainLi = create( "li" ),
+        mainB = create( "b" ),
         results_arr = [],
         currentTest,
         testList = [],
@@ -25,12 +25,12 @@
 
     if ( userAgent ) {
       userAgent.innerHTML = navigator.userAgent;
-    };
+    }
 
     function sendGetFocus( event ) {
-      event.target &&
-        event.target.contentWindow &&
-          event.target.contentWindow.postMessage( "getFocus", "*" );
+      if ( event.target && event.target.contentWindow ) {
+        event.target.contentWindow.postMessage( "getFocus", "*" );
+      }
     }
 
     function receiveResults( data ) {
@@ -41,7 +41,6 @@
           a,
           oneTest,
           time,
-          title,
           type,
           fail = 0,
           pass = 0,
@@ -81,30 +80,28 @@
         total = message.total;
         time = message.runtime;
 
-        title = currentTest.name;
-        type = currentTest.type;
+        type = currentTest.name + " Tests";
 
-        main_b = create( "b" );
-        main_b.innerHTML = '<span class="module-name">' + type +
-          ':&nbsp;</span><span class="test-name">' +
-          title + ":</span> Tests completed in " +
+        mainB = create( "b" );
+        mainB.innerHTML = "<span class='test-name'>" + type +
+          "&nbsp;</span>completed in " +
           time + " milliseconds " + " <b class='counts'>(<b class='failed'>" +
           fail + "</b>, <b class='passed'>" +
           pass + "</b>, " + total + ")</b>";
 
         // set up click listener for expanding inner test list
-        main_b.addEventListener( "click", function( e ) {
+        mainB.addEventListener( "click", function( e ) {
           var next = e.target.nextSibling.nextSibling,
               display = next.style.display;
           next.style.display = display === "none" ? "block" : "none";
         }, false );
 
-        // build main_li, append all children and then append to result list
-        main_li.className = fail ? "fail" : "pass";
-        main_li.removeChild( main_li.firstChild );
-        main_li.appendChild( main_b );
-        main_li.appendChild( a );
-        main_li.appendChild( ol );
+        // build mainLi, append all children and then append to result list
+        mainLi.className = fail ? "fail" : "pass";
+        mainLi.removeChild( mainLi.firstChild );
+        mainLi.appendChild( mainB );
+        mainLi.appendChild( a );
+        mainLi.appendChild( ol );
 
         // update running totals
         totalRun += total;
@@ -119,12 +116,12 @@
     function advance() {
       if ( ++index < testList.length ) {
         currentTest = testList[ index ];
-        main_li = create( "li" );
-        main_b = create ( "b" );
-        main_b.innerHTML = "Running " + currentTest.name;
-        main_li.appendChild( main_b );
-        main_li.className = "running";
-        results.appendChild( main_li );
+        mainLi = create( "li" );
+        mainB = create ( "b" );
+        mainB.innerHTML = "Running " + currentTest.name;
+        mainLi.appendChild( mainB );
+        mainLi.className = "running";
+        results.appendChild( mainLi );
         testFrame.onload = function() {
           testFrame.contentWindow.focus();
         }
@@ -187,7 +184,9 @@
               testLinks.appendChild( anchor );
             }
           }
-          loadedCallback && typeof loadedCallback === "function" && loadedCallback();
+          if ( loadedCallback && typeof loadedCallback === "function" ) {
+            loadedCallback();
+          }
         }
       }
       xhr.send();
@@ -196,10 +195,10 @@
     this.runTests = function() {
       if ( testList.length ) {
         currentTest = testList[ index ];
-        main_b.innerHTML = "Running " + currentTest.name;
-        main_li.appendChild( main_b );
-        main_li.className = "running";
-        results.appendChild( main_li );
+        mainB.innerHTML = "Running " + currentTest.name;
+        mainLi.appendChild( mainB );
+        mainLi.className = "running";
+        results.appendChild( mainLi );
 
         testFrame.src = currentTest.path;
       }
@@ -211,7 +210,7 @@
     // Populate the userAgent h2 with information, if available
     if ( userAgent ) {
       userAgent.innerHTML = navigator.userAgent;
-    };
+    }
 
     // Triggers tallying of results, and advances the tests.
     window.addEventListener( "message", function( e ) {
