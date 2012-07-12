@@ -1,4 +1,4 @@
-.butter-dialog  {
+.butter-dialog {
   position: relative;
   background: #a5a5a5; /* Old browsers */
   background: -moz-linear-gradient(top, #a5a5a5 0%, #727272 100%); /* FF3.6+ */
@@ -80,7 +80,6 @@
     height: 20px;
     text-align: center;
     color: #900;
-    font: 20px "Open Sans", "Helvetica Neue", sans-serif;
     z-index: 0;
   }
   &[data-error] {
@@ -133,7 +132,6 @@
     resize: none;
   }
   h1 {
-    font: 25px "Open Sans", "Helvetica Neue", sans-serif;
     color: #fff;
     line-height: 40px;
     height: 40px;
@@ -226,11 +224,7 @@
     text-decoration: none;
     background-color: #e6e6e6;
     background-position: 0 -15px;
-    -webkit-transition: background-position 0.1s linear;
-    -moz-transition: background-position 0.1s linear;
-    -ms-transition: background-position 0.1s linear;
-    -o-transition: background-position 0.1s linear;
-    transition: background-position 0.1s linear;
+    .transition(background-position, 0.1s, linear);
   }
   &:focus {
     outline: thin dotted #333;
