@@ -1,0 +1,47 @@
+{
+  "targets": [
+    {
+      "id": "Target0",
+      "name": "overlay",
+      "element": "overlay"
+    }
+  ],
+  "media": [
+    {
+      "id": "Media0",
+      "name": "Media0",
+      "url": [
+        "http://videos-cdn.mozilla.net/serv/webmademovies/trailer.mp4",
+        "http://videos-cdn.mozilla.net/serv/webmademovies/storycamp/storycamp_episode1.webm"
+      ],
+      "target": "video",
+      "duration": 121.12100219726562,
+      "controls": true,
+      "tracks": [
+        {
+          "name": "Track0",
+          "id": "Track0",
+          "trackEvents": [
+            {
+              "id": "TrackEvent0",
+              "type": "text",
+              "popcornOptions": {
+                "start": 0,
+                "end": 2,
+                "text": "test",
+                "target": "overlay"
+              },
+              "track": "Track0",
+              "name": "TrackEvent0"
+            }
+          ]
+        },
+        {
+          "name": "Track1",
+          "id": "Track1",
+          "trackEvents": []
+        }
+      ]
+    }
+  ]
+}
