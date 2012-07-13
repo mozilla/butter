@@ -469,7 +469,6 @@
       this.getTrackEvents = function ( property, query, popcornOption ) {
 
         var allTrackEvents = this.orderedTrackEvents,
-            result,
             _filterTrackEvents;
 
         if ( !property ) {
