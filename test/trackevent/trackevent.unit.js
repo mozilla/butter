@@ -1,4 +1,4 @@
-
+/*global Butter,asyncTest,equal,start*/
   var defaultEvent = {
         type: "text",
         popcornOptions: {

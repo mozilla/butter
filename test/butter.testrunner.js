@@ -19,7 +19,6 @@
         results_arr = [],
         currentTest,
         testList = [],
-        results_arr = [],
         userAgent = id( "qunit-userAgent" );
 
 
@@ -44,11 +43,12 @@
           type,
           fail = 0,
           pass = 0,
-          total = 0;
+          total = 0,
+          oneTest;
 
       // If name is present, we know this is a testDone post, so push results into array.
       if ( message.name ) {
-        results_arr.push( message )
+        results_arr.push( message );
       } else {
 
         // this message is a Done post, so tally up everything and build the list item
@@ -56,7 +56,8 @@
         ol.style.display = "none";
 
         // build inner list of results
-        while( oneTest = results_arr.pop() ) {
+        oneTest = results_arr.pop();
+        while( oneTest ) {
           li = create( "li" );
           li.className = oneTest.failed ? "fail" : "pass";
           li.innerHTML = oneTest.name + " <b class='counts'>(<b class='failed'>" +
@@ -68,9 +69,10 @@
           if ( oneTest.failed ) {
             ol.style.display = "block";
           }
+          oneTest = results_arr.pop();
         }
 
-        var a = create( "a" );
+        a = create( "a" );
         a.innerHTML = "Run test in new window";
         a.href = currentTest.path;
         a.target = "_blank";
@@ -124,7 +126,7 @@
         results.appendChild( mainLi );
         testFrame.onload = function() {
           testFrame.contentWindow.focus();
-        }
+        };
         testFrame.src = currentTest.path;
       } else {
         // Finish test suite; display totals
@@ -166,31 +168,35 @@
               anchorText,
               testName;
 
-          for ( x in allTests ) {
-            testGroup = allTests[ x ];
-            for ( f in testGroup ) {
-              testName = f.charAt( 0 ).toUpperCase() + f.slice( 1 );
-              testList.push({
-                "name": testName,
-                "path": "../" + testGroup[ f ],
-                "type": testGroup
-              });
+          for ( var x in allTests ) {
+            if ( allTests[ x ] ) {
+              testGroup = allTests[ x ];
+              for ( var f in testGroup ) {
+                if ( testGroup[ f ] ) {
+                  testName = f.charAt( 0 ).toUpperCase() + f.slice( 1 );
+                  testList.push({
+                    "name": testName,
+                    "path": "../" + testGroup[ f ],
+                    "type": testGroup
+                  });
 
-              anchor = document.createElement( "a" );
-              anchor.target = "_blank";
-              anchor.href = "../" + testGroup[ f ];
-              anchorText = document.createTextNode( testName );
-              anchor.appendChild( anchorText );
-              testLinks.appendChild( anchor );
+                  anchor = document.createElement( "a" );
+                  anchor.target = "_blank";
+                  anchor.href = "../" + testGroup[ f ];
+                  anchorText = document.createTextNode( testName );
+                  anchor.appendChild( anchorText );
+                  testLinks.appendChild( anchor );
+                }
+              }
             }
           }
           if ( loadedCallback && typeof loadedCallback === "function" ) {
             loadedCallback();
           }
         }
-      }
+      };
       xhr.send();
-    }
+    };
 
     this.runTests = function() {
       if ( testList.length ) {

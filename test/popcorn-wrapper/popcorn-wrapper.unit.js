@@ -1,3 +1,4 @@
+/*global Butter,asyncTest,equal,start,ok*/
 require( [ "../src/core/popcorn-wrapper" ], function( PopcornWrapper ) {
   var defaultEvent = { start: 1, end: 4, text: "Track Event" },
       _iframe,
@@ -29,7 +30,7 @@ require( [ "../src/core/popcorn-wrapper" ], function( PopcornWrapper ) {
     ok( _pPrepare.popcorn, "Successfully generated popcorn instance" );
     ok( _pPrepare.popcorn.options[ 0 ].frameAnimation, "Successfully set true flag for frameAnimation" );
     _pPrepare.popcorn.destroy();
-    start();    
+    start();
   });
   
   asyncTest( "destroyEvent", 1, function() {

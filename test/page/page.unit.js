@@ -1,8 +1,8 @@
-/*global text,expect,ok,module,notEqual,Butter,test,window*/
+/*global Butter,asyncTest,equal,start,ok*/
 require( [ "../src/core/page", "../src/core/config", "../src/dependencies" ], function( Page, Config, Dependencies ) {
   var _config = Config.parse( JSON.stringify({
-          "baseDir": "../../", 
-          "dirs": { 
+          "baseDir": "../../",
+          "dirs": {
             "popcorn-js": "{{baseDir}}external/popcorn-js/"
           },
           "player": {

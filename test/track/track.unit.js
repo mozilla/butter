@@ -1,3 +1,4 @@
+/*global Butter,asyncTest,equal,start*/
 var defaultEvent = {
       type: "text",
       popcornOptions: {
@@ -30,7 +31,7 @@ asyncTest( "getTrackEventById", 1, function() {
 
     equal( retrievedEvent.id, te.id, "Retrieved track event with correct id" );
     start();
-  })
+  });
 });
 
 asyncTest( "deselectEvents", 2, function() {

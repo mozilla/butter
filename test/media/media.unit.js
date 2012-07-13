@@ -1,3 +1,4 @@
+/*global Butter,asyncTest,equal,start*/
 require( [ "../src/core/track" ], function( Track ) {
   var defaultEvent = {
         type: "text",
@@ -39,7 +40,7 @@ require( [ "../src/core/track" ], function( Track ) {
 
     asyncTest( "getTrackById functionality", 1, function() {
       createButter( function( butter ) {
-        var trackOne = butter.currentMedia.tracks[ 0 ];
+        var trackOne = butter.currentMedia.tracks[ 0 ],
             trackTwo = butter.currentMedia.getTrackById( trackOne.id );
 
         equal( trackOne.id, trackTwo.id, "getTrackById returned expected track event" );
@@ -124,7 +125,7 @@ require( [ "../src/core/track" ], function( Track ) {
           start();
           startTests();
         }
-      }
+      };
       xhr.send();
     });
   });
