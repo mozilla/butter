@@ -1,4 +1,4 @@
-/*global text,expect,ok,module,notEqual,Butter,test,window*/
+/*global text,expect,ok,module,notEqual,Butter,test,window,equal,raises,deepEqual*/
 (function (window, undefined) {
 
   require( [ "../src/core/config" ], function( Config ){
