@@ -18,6 +18,13 @@ define([], function(){
       return "You have unsaved project data.";
     };
 
+    var mediaReady = function() {
+      butter.unlisten( "mediaready", mediaReady );
+      for ( var i = 0, el = events.length; i < el; i++ ) {
+        butter.listen( events[ i ], eventFunction );
+      }
+    };
+
     var eventFunction = function() {
       if ( !changed ) {
         changed = true;
@@ -25,11 +32,7 @@ define([], function(){
       }
     };
 
-    butter.listen( "ready", function() {
-      for ( var i = 0, el = events.length; i < el; i++ ) {
-        butter.listen( events[ i ], eventFunction );
-      }
-    });
+    butter.listen( "mediaready", mediaReady );
 
     butter.listen( "projectsaved", function() {
       changed = false;
