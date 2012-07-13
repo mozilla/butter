@@ -11,29 +11,28 @@
   user-select: @param; 
 }
 .gradient(@startCol, @stopCol, @startLoc, @endLoc, @startPerc, @stopPerc) {
-   background-image: -webkit-gradient(linear,left @startLoc,left @endLoc,color-stop(@startPerc,@startCol),color-stop(@stopPerc,@stopCol));
-   background: -webkit-linear-gradient(center @startLoc,@startCol @startPerc,@stopCol @stopPerc);
-   background: -ms-linear-gradient(center @startLoc,@startCol @startPerc,@stopCol @stopPerc);
-   background: -o-linear-gradient(@startLoc,@startCol @startPerc,@stopCol @stopPerc);
-   background: -moz-linear-gradient(center @startLoc,@startCol @startPerc,@stopCol @stopPerc);
-   background: linear-gradient(@startLoc, @startCol);
-   background-image: linear-gradient(@startLoc, @startCol @startPerc, @stopCol @stopPerc);
-} 
-.transition (@transition1) {
+  background: -webkit-gradient(linear,left @startLoc,left @endLoc,color-stop(@startPerc,@startCol),color-stop(@stopPerc,@stopCol));
+  background: -webkit-linear-gradient(center @startLoc,@startCol @startPerc,@stopCol @stopPerc);
+  background: -ms-linear-gradient(center @startLoc,@startCol @startPerc,@stopCol @stopPerc);
+  background: -o-linear-gradient(@startLoc,@startCol @startPerc,@stopCol @stopPerc);
+  background: -moz-linear-gradient(center @startLoc,@startCol @startPerc,@stopCol @stopPerc);
+  background: linear-gradient(@startLoc, @startCol);
+}
+.transition(@transition1) {
   -webkit-transition: @transition1;
   -moz-transition: @transition1;
   -o-transition: @transition1;
   -ms-transition: @transition1;
   transition: @transition1;
 }
-.transition (@transition1, @transition2) {
+.transition(@transition1, @transition2) {
   -webkit-transition: @transition1, @transition2;
   -moz-transition: @transition1, @transition2;
   -o-transition: @transition1, @transition2;
   -ms-transition: @transition1, @transition2;
   transition: @transition1, @transition2;
 }
-.transition (@transition1, @transition2, @transition3) {
+.transition(@transition1, @transition2, @transition3) {
   -webkit-transition: @transition1, @transition2, @transition3;
   -moz-transition: @transition1, @transition2, @transition3;
   -o-transition: @transition1, @transition2, @transition3;
@@ -44,7 +43,6 @@
 .backgroundColour(@r, @g, @b, @a) {
   background-color: rgba(@r, @g, @b, @a);
 }
-// End mixins
 
 //Start utilities
 .butter-image-preload {
