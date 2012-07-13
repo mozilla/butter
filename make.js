@@ -22,6 +22,8 @@ var path = require( "path" ),
 
     DOCS_DIR = 'docs',
 
+    TEST_DIR = 'test',
+
     DEFAULT_CONFIG = './src/default-config',
 
     CSS_DIR = 'css',
@@ -157,6 +159,10 @@ target['check-css'] = function( dirs ) {
 
 target['check-lint'] = function( dir ) {
   checkJS( SRC_DIR );
+};
+
+target['check-tests'] = function( dir ) {
+  checkJS( TEST_DIR );
 };
 
 // If compress is true, crush CSS down, otherwise leave expanded.

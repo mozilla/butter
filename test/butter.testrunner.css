@@ -2,6 +2,10 @@ div#test-links {
   padding-right: 15px;
 }
 
+#test-links a {
+  margin-right: 5px;
+}
+
 div#test-links > a {
   font-size: 0.7em;
 }
