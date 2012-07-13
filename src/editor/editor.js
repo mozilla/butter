@@ -267,11 +267,7 @@ define( [ "core/eventmanager", "util/lang", "util/xhr",
           if ( data ) {
             // Don't print "undefined" or the like
             if ( data === undefined || typeof data === "object" ) {
-              if ( manifestEntry.default ) {
-                data = manifestEntry.default;
-              } else {
-                data = manifestEntry.type === "number" ? 0 : "";
-              }
+              data = manifestEntry.type === "number" ? 0 : "";
             }
             editorElement.value = data;
           }
