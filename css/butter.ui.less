@@ -45,6 +45,41 @@
 
 // End mixins
 
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('Open-Sans-Italic'),
+    url('../resources/fonts/OpenSans-Italic.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('Open-Sans-Bold'),
+    url('../resources/fonts/OpenSans-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans Regular'), local('Open-Sans-Regular'),
+    url('../resources/fonts/OpenSans-Regular.ttf') format('truetype');
+}
+
+@font-face {
+   font-family: 'MetaBold';
+   src: url('http://www.mozilla.org/img/fonts/MetaWebPro-Bold.eot');
+   src: local('?'), url('http://www.mozilla.org/img/fonts/MetaWebPro-Bold.woff') format('woff');
+   font-weight: bold;
+}
+
+body {
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
+}
+
 //Utilities
 .butter-image-preload {
   visibility: hidden;
@@ -101,37 +136,6 @@ sub {
     -ms-transform:rotate(360deg);
     transform:rotate(360deg);
   }
-}
-
-@font-face {
-  font-family: 'Open Sans';
-  font-style: italic;
-  font-weight: 400;
-  src: local('Open Sans Italic'), local('Open-Sans-Italic'),
-    url('../resources/fonts/OpenSans-Italic.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 700;
-  src: local('Open Sans Bold'), local('Open-Sans-Bold'),
-    url('../resources/fonts/OpenSans-Bold.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Open Sans Regular'), local('Open-Sans-Regular'),
-    url('../resources/fonts/OpenSans-Regular.ttf') format('truetype');
-}
-
-@font-face {
-   font-family: 'MetaBold';
-   src: url('http://www.mozilla.org/img/fonts/MetaWebPro-Bold.eot');
-   src: local('?'), url('http://www.mozilla.org/img/fonts/MetaWebPro-Bold.woff') format('woff');
-   font-weight: bold;
 }
 
 .butter-ua-warning {
@@ -205,7 +209,6 @@ sub {
 .butter-media-properties {
   position: fixed;
   z-index: 2139000000;
-  font-family: "Open Sans", "Helvetica Neue", sans-serif;
   font-size: 12px;
   border: 2px solid #fff;
   background-color: #131313;
@@ -297,7 +300,6 @@ input {
   border-bottom: 1px solid #222;
   box-shadow: 0 2px 4px rgba(0,0,0,0.3);
   display: block;
-  font-family: "Open Sans", "Helvetica Neue", sans-serif;
   .transition(all .3s ease);
 }
 
@@ -314,7 +316,6 @@ input {
   border-bottom: 1px solid #222;
   box-shadow: 0 2px 4px rgba(0,0,0,.3);
   display: block;
-  font-family: "Open Sans", "Helvetica Neue", sans-serif;
   .transition(all .3s ease);
   
   &:hover {
@@ -334,7 +335,6 @@ input {
     margin-right: 5px;
   }
   .butter-name {
-    font-family: MetaBold, "Open Sans", sans-serif;
     float: left;
     font-size: 20px;
     line-height: 30px;
@@ -480,7 +480,6 @@ input {
       position: absolute;
       top: 0;
       left: 0;
-      font-family: "Open Sans", "Helvetica Neue", sans-serif;
       -moz-border-radius: 4px 4px 0 0;
       -o-border-radius: 4px 4px 0 0;
       -webkit-border-radius: 4px 4px 0 0;
