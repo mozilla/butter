@@ -6,7 +6,7 @@
  * Module: Editor
  */
 define( [ "util/lang", "util/xhr",
-          "./base-editor.js", "./trackevent-editor" ],
+          "./base-editor", "./trackevent-editor" ],
   function( LangUtils, XHRUtils,
             BaseEditor, TrackEventEditor ) {
 

@@ -51,7 +51,7 @@ define( [ "text!./default.html", "editor/editor" ],
     }
 
     // Extend this object to become a BaseEditor
-    Editor.BaseEditor( _this, butter, rootElement, {
+    Editor.TrackEventEditor( _this, butter, rootElement, {
       open: function ( parentElement, trackEvent ) {
         var targetList,
             selectElement;
@@ -60,7 +60,7 @@ define( [ "text!./default.html", "editor/editor" ],
         _this.createPropertiesFromManifest( trackEvent,
           function( elementType, element, trackEvent, name ){
             if ( elementType === "select" ) {
-              _this.attachSelectChangeHandler( element, trackEvent, name, updateTrackEventWithoutTryCatch );
+              _this.attachSelectChangeHandler( element, trackEvent, name, updateTrackEventWithTryCatch );
             }
             else {
               if ( [ "start", "end" ].indexOf( name ) > -1 ) {
@@ -68,10 +68,10 @@ define( [ "text!./default.html", "editor/editor" ],
               }
               else {
                 if ( element.type === "checkbox" ) {
-                  _this.attachCheckboxChangeHandler( element, trackEvent, name, updateTrackEventWithoutTryCatch );
+                  _this.attachCheckboxChangeHandler( element, trackEvent, name, updateTrackEventWithTryCatch );
                 }
                 else {
-                  _this.attachInputChangeHandler( element, trackEvent, name, updateTrackEventWithoutTryCatch );
+                  _this.attachInputChangeHandler( element, trackEvent, name, updateTrackEventWithTryCatch );
                 }
                 
               }
@@ -93,18 +93,6 @@ define( [ "text!./default.html", "editor/editor" ],
         _trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
       }
     });
-
-    /**
-     * Member: updateTrackEventWithoutTryCatch
-     *
-     * Simple handler for updating a TrackEvent when needed
-     *
-     * @param {TrackEvent} trackEvent: TrackEvent to update
-     * @param {Object} updateOptions: TrackEvent properties to update
-     */
-    function updateTrackEventWithoutTryCatch( trackEvent, updateOptions ) {
-      trackEvent.update( updateOptions );
-    }
 
     /**
      * Member: updateTrackEventWithTryCatch
