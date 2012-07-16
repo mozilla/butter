@@ -16,11 +16,11 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
   __newStyleSheet.media = "screen";
   __newStyleSheet.setAttribute( "data-butter-exclude", "true" );
 
-  function colourHashFromType( type ){
+  function colourHashFromType( type ) {
     var hue = 0, saturation = 0, lightness = 0, srcString = type;
 
     // very simple hashing function
-    while( srcString.length < 9 ){
+    while ( srcString.length < 9 ) {
       srcString += type;
     }
     hue = ( srcString.charCodeAt( 0 ) + srcString.charCodeAt( 3 ) + srcString.charCodeAt( 6 ) ) % ( ( srcString.charCodeAt( 8) * 5 ) % 360 );
@@ -28,12 +28,12 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
     lightness = ( ( srcString.charCodeAt( 1 ) + srcString.charCodeAt( 3 ) + srcString.charCodeAt( 5 ) + srcString.charCodeAt( 7 ) ) % 100 ) * 0.20 + 40;
 
     // bump up reds because they're hard to see
-    if( hue < 20 || hue > 340 ){
+    if ( hue < 20 || hue > 340 ) {
       lightness += 10;
     }
 
     // dial back blue/greens a bit
-    if( hue > 160 && hue < 200 ){
+    if ( hue > 160 && hue < 200 ) {
       lightness -= 10;
     }
 
@@ -44,7 +44,7 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
     };
   }
 
-  function createStyleForType( type ){
+  function createStyleForType( type ) {
     var styleContent = "",
         hash = colourHashFromType( type );
     styleContent +=__cssRulePrefix + "[" + __cssRuleProperty + "=\"" + type + "\"]{";
@@ -76,16 +76,16 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
     var _scrollbar = new Scrollbars.Vertical( _listWrapper, _listContainer );
     _container.appendChild( _scrollbar.element );
 
-    this._start = function( onModuleReady ){
-      if( butter.ui ){
+    this._start = function( onModuleReady ) {
+      if ( butter.ui ) {
         document.head.appendChild( __newStyleSheet );
         butter.ui.areas.tools.addComponent( _container );
         PluginList( butter );
       }
-      if( moduleOptions && moduleOptions.plugins ){
+      if ( moduleOptions && moduleOptions.plugins ) {
         _this.add( moduleOptions.plugins, onModuleReady );
       }
-      else{
+      else {
         onModuleReady();
       }
     };
@@ -103,13 +103,13 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
           i,
           l;
 
-      if( ! ( plugins instanceof Array ) ) {
+      if ( ! ( plugins instanceof Array ) ) {
         plugins = [ plugins ];
       }
 
-      for( i = 0, l = plugins.length; i < l; i++ ) {
+      for ( i = 0, l = plugins.length; i < l; i++ ) {
         plugin = new Plugin( plugins[ i ] );
-        if( !__trackEventCSSRules[ plugin.type ] ){
+        if ( !__trackEventCSSRules[ plugin.type ] ){
           createStyleForType( plugin.type );
         }
         pluginLoadDescriptors.push({
@@ -121,9 +121,9 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
       }
 
       butter.loader.load( pluginLoadDescriptors, function(){
-        for( i = 0, l = newPlugins.length; i < l; i++ ) {
+        for ( i = 0, l = newPlugins.length; i < l; i++ ) {
           plugin = newPlugins[ i ];
-          if( moduleOptions.defaults && moduleOptions.defaults.indexOf( plugin.type ) > -1 ){
+          if ( moduleOptions.defaults && moduleOptions.defaults.indexOf( plugin.type ) > -1 ) {
             _listContainer.appendChild( plugin.createElement( butter, _pattern ) );
           }
           _plugins.push( plugin );
@@ -138,9 +138,9 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
 
     this.remove = function( plugin ) {
 
-      if( typeof plugin === "string" ) {
+      if ( typeof plugin === "string" ) {
         plugin = this.get( plugin );
-        if( !plugin ) {
+        if ( !plugin ) {
           return;
         }
       }
@@ -148,12 +148,12 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
       var i, l;
 
       for ( i = 0, l = _plugins.length; i < l; i++ ) {
-        if( _plugins[ i ].name === plugin.name ) {
+        if ( _plugins[ i ].name === plugin.name ) {
           var tracks = butter.tracks;
           for ( i = 0, l = tracks.length; i < l; i++ ) {
             var trackEvents = tracks[ i ].trackEvents;
-            for( var k = 0, ln = trackEvents.length - 1; ln >= k; ln-- ) {
-              if( trackEvents[ ln ].type === plugin.name ) {
+            for ( var k = 0, ln = trackEvents.length - 1; ln >= k; ln-- ) {
+              if ( trackEvents[ ln ].type === plugin.name ) {
                 tracks[ i ].removeTrackEvent( trackEvents[ ln ] );
               }
             }
@@ -165,7 +165,7 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
 
           var head = document.getElementsByTagName( "HEAD" )[ 0 ];
           for ( i = 0, l = head.children.length; i < l; i++ ) {
-            if( head.children[ i ].getAttribute( "src" ) === plugin.path ) {
+            if ( head.children[ i ].getAttribute( "src" ) === plugin.path ) {
               head.removeChild( head.children[ i ] );
             }
           }
@@ -177,7 +177,7 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
       _scrollbar.update();
     };
 
-    this.clear = function () {
+    this.clear = function() {
       while ( _plugins.length > 0 ) {
         var plugin = _plugins.pop();
         _listContainer.removeChild( plugin.element );
@@ -195,12 +195,12 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
 
     DragNDrop.droppable( _container, {
       drop: function( element ){
-        if( element.getAttribute( "data-butter-draggable-type" ) === "plugin" ){
+        if ( element.getAttribute( "data-butter-draggable-type" ) === "plugin" ) {
           var pluginType = element.getAttribute( "data-popcorn-plugin-type" ),
               plugin = _this.get( pluginType );
-          if( plugin ){
-            for( var i=0; i<_listContainer.childNodes.length; ++i ){
-              if( _listContainer.childNodes[ i ].getAttribute( "data-popcorn-plugin-type" ) === pluginType ){
+          if ( plugin ) {
+            for ( var i=0; i<_listContainer.childNodes.length; ++i ) {
+              if ( _listContainer.childNodes[ i ].getAttribute( "data-popcorn-plugin-type" ) === pluginType ) {
                 return;
               }
             }

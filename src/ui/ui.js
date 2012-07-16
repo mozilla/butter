@@ -124,11 +124,11 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
       });
     }
 
-    this.loadIcons = function( icons, resourcesDir ){
+    this.loadIcons = function( icons, resourcesDir ) {
       var icon, img, div;
 
-      for( icon in icons ){
-        if( icons.hasOwnProperty( icon ) ){
+      for ( icon in icons ) {
+        if ( icons.hasOwnProperty( icon ) ) {
           img = new Image();
           img.id = icon + "-icon";
           img.src = resourcesDir + icons[ icon ];
