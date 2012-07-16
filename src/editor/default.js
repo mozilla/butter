@@ -50,7 +50,7 @@ define( [ "text!./default.html", "editor/editor" ],
       setErrorState( false );
     }
 
-    // Extend this object to become a BaseEditor
+    // Extend this object to become a TrackEventEditor
     Editor.TrackEventEditor( _this, butter, rootElement, {
       open: function ( parentElement, trackEvent ) {
         var targetList,
