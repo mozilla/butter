@@ -19,7 +19,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
    *
    * Module which provides Editor functionality to Butter
    */
-  function EventEditor( butter, moduleOptions ){
+  function EventEditor( butter, moduleOptions, ButterNamespace ){
 
     moduleOptions = moduleOptions || {};
 
@@ -30,6 +30,8 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         _this = this;
 
     EventManagerWrapper( _this );
+
+    ButterNamespace.Editor = Editor;
 
     /**
      * Member: openEditor
@@ -113,18 +115,21 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
      */
     this._start = function( onModuleReady ){
       onModuleReady();
+      _toggler = new Toggler( function( e ) {
+        var newState = !_editorAreaDOMRoot.classList.contains( "minimized" );
+        _toggler.state = newState;
+        if ( newState ) {
+          _editorAreaDOMRoot.classList.add( "minimized" );
+        }
+        else {
+          _editorAreaDOMRoot.classList.remove( "minimized" );
+        }
+      }, "Show/Hide Editor", true );
+
+      var editorsToLoad = [];
+
       if( butter.config.value( "ui" ).enabled !== false ){
         butter.ui.areas.editor = new butter.ui.Area( "editor-area", _editorAreaDOMRoot );
-        _toggler = new Toggler( function( e ) {
-          var newState = !_editorAreaDOMRoot.classList.contains( "minimized" );
-          _toggler.state = newState;
-          if ( newState ) {
-            _editorAreaDOMRoot.classList.add( "minimized" );
-          }
-          else {
-            _editorAreaDOMRoot.classList.remove( "minimized" );
-          }
-        }, "Show/Hide Editor", true );
         _editorAreaDOMRoot.appendChild( _toggler.element );
         document.body.classList.add( "butter-editor-spacing" );
 
@@ -136,12 +141,25 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         var config = butter.config.value( "editor" );
         for ( var editorName in config ) {
           if ( config.hasOwnProperty( editorName ) ) {
-            butter.loader.load({
+            editorsToLoad.push({
               url: config[ editorName ],
               type: "js"
             });
           }
         }
+
+        if ( editorsToLoad.length > 0 ){
+          butter.loader.load( editorsToLoad, function() {
+            Editor.loadUrlSpecifiedLayouts( onModuleReady, butter.config.value( "baseDir" ) );
+          });
+        }
+        else {
+          onModuleReady();
+        }
+
+      }
+      else {
+        onModuleReady();
       }
     };
 

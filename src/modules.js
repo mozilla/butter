@@ -14,7 +14,7 @@ define(
 
   var moduleList = Array.prototype.slice.apply( arguments );
 
-  return function( butter, config, onReady ){
+  return function( Butter, butter, config, onReady ){
 
     var modules = [],
         loadedModules = 0,
@@ -22,7 +22,7 @@ define(
 
     for( var i=0; i<moduleList.length; ++i ){
       var name = moduleList[ i ].__moduleName;
-      butter[ name ] = new moduleList[ i ]( butter, config.value( name ) );
+      butter[ name ] = new moduleList[ i ]( butter, config.value( name ), Butter );
       modules.push( butter[ name ] );
     } //for
 

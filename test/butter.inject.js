@@ -1,3 +1,4 @@
+/*global QUnit*/
 (function( global ) {
 
   var combineFn = function( first, second ) {
@@ -22,4 +23,4 @@
     QUnit.config.testTimeout = 20000;
   }
 
-})( window );
+}( window ));

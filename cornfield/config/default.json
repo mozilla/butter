@@ -27,6 +27,18 @@
     "simple": "{{templateBase}}supported/simple/butter/config.json"
   },
   "exportAssets": [
-    "../dist/external/popcorn-js/popcorn.js"
+    "../external/popcorn-js/ie8/popcorn.ie8.js",
+    "../external/popcorn-js/popcorn.js",
+    "../external/popcorn-js/modules/player/popcorn.player.js",
+    "../external/popcorn-js/players/youtube/popcorn.youtube.js",
+    "../external/popcorn-js/players/vimeo/popcorn.vimeo.js",
+    "../external/popcorn-js/players/soundcloud/popcorn.soundcloud.js",
+    "../external/popcorn-js/plugins/wikipedia/popcorn.wikipedia.js",
+    "../external/popcorn-js/plugins/twitter/popcorn.twitter.js",
+    "../external/popcorn-js/plugins/text/popcorn.text.js",
+    "../external/popcorn-js/plugins/googlemap/popcorn.googlemap.js",
+    "../external/popcorn-js/plugins/image/popcorn.image.js",
+    "../external/popcorn-js/plugins/webpage/popcorn.webpage.js",
+    "../external/popcorn-js/plugins/attribution/popcorn.attribution.js"
   ]
 }

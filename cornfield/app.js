@@ -5,7 +5,7 @@ const express = require('express'),
       path = require('path'),
       app = express.createServer(),
       MongoStore = require('connect-mongo')(express),
-      stylus = require('stylus'),
+      lessMiddleware = require('less-middleware'),
       CONFIG = require('config'),
       TEMPLATES_DIR =  CONFIG.dirs.templates,
       PUBLISH_DIR = CONFIG.dirs.publish,
@@ -72,8 +72,10 @@ app.configure( function() {
     .use( express.bodyParser() )
     .use( express.cookieParser() )
     .use( express.session( CONFIG.session ) )
-    .use( stylus.middleware({
-      src: WWW_ROOT
+    // Auto-compile CSS from LESS.  Other options: https://github.com/emberfeather/less.js-middleware
+    .use( lessMiddleware({
+      src: WWW_ROOT,
+      dest: WWW_ROOT
     }))
     /* Show Zeus who's boss
      * This only affects requests under /api and /browserid, not static files
@@ -184,8 +186,9 @@ function publishRoute( req, res ){
           templateScripts = data.substring( headStartTagIndex, headEndTagIndex );
           startString = data.substring( 0, headStartTagIndex );
 
+          externalAssetsString += '\n';
           for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
-            externalAssetsString += '\n  <script src="' + path.relative( templateFile, path.resolve( EXPORT_ASSETS[ i ] ) ) + '"></script>\n';
+            externalAssetsString += '  <script src="' + path.relative( templateFile, path.resolve( EXPORT_ASSETS[ i ] ) ) + '"></script>\n';
           }
 
           // If the template has custom plugins defined in it's config, add them to our exported page
@@ -235,7 +238,7 @@ function publishRoute( req, res ){
           }
           popcornString += '</script>\n';
 
-          customDataString = '\n<script type="application/butter-custom-data">\n' + JSON.stringify( customData, null, 2 ) + '\n</script>';
+          customDataString = '\n<script type="application/butter-custom-data">\n' + JSON.stringify( customData, null, 2 ) + '\n</script>\n';
 
           data = startString + baseString + templateScripts + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + customDataString + popcornString + data.substring( bodyEndTagIndex );
 

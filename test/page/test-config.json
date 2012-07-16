@@ -1,0 +1,8 @@
+{
+  "name": "pageTest",
+  "savedDataUrl": "saved-data.json",
+  "baseDir": "../../",
+  "ui": {
+    "enabled": false
+  }
+}

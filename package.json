@@ -68,16 +68,17 @@
   "dependencies": {
     "shelljs": "0.0.x",
     "jshint": "0.6.x",
-    "requirejs": "1.0.x",
+    "requirejs": "2.0.x",
     "express": "2.5.x",
     "jade": "0.26.x",
     "express-browserid": "0.0.x",
     "config": "0.4.x",
     "mongoose": "2.5.x",
     "connect-mongo": "0.1.x",
-    "stylus": "0.25.x",
     "csslint": "0.9.x",
-    "uglify-js": "1.3.x"
+    "uglify-js": "1.3.x",
+    "less": "1.3.x",
+    "less-middleware": "0.1.x"
   },
   "license": "MIT",
   "engine": {

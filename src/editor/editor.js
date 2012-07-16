@@ -267,11 +267,7 @@ define( [ "core/eventmanager", "util/lang", "util/xhr",
           if ( data ) {
             // Don't print "undefined" or the like
             if ( data === undefined || typeof data === "object" ) {
-              if ( manifestEntry.default ) {
-                data = manifestEntry.default;
-              } else {
-                data = manifestEntry.type === "number" ? 0 : "";
-              }
+              data = manifestEntry.type === "number" ? 0 : "";
             }
             editorElement.value = data;
           }
@@ -370,10 +366,10 @@ define( [ "core/eventmanager", "util/lang", "util/xhr",
     /**
      * Function: register
      *
-     * Extends a given object to be a BaseEditor, giving it rudamentary editor capabilities
+     * Registers an editor in the system.
      *
      * @param {String} name: Name of the editor
-     * @param {String} layoutSrc: String representing the basic HTML layout of the editor
+     * @param {String} layoutSrc: String representing the basic HTML layout of the editor. May be prepended with "load!" to signify that load must be done after butter is initialized.
      * @param {Function} ctor: Constructor to be run when the Editor is being created
      */
     register: function( name, layoutSrc, ctor ) {
@@ -381,6 +377,43 @@ define( [ "core/eventmanager", "util/lang", "util/xhr",
         create: ctor,
         layout: layoutSrc
       };
+    },
+
+    /**
+     * Function: loadUrlSpecifiedLayouts
+     *
+     * For layouts that were specified as `load!<url>`, replace the url with actual layout content by loading
+     * it through XHR. This is useful for editors specified in Butter config files, since using `Butter.Editor`
+     * outside of the core will not guarantee that {{baseDir}} properly exists until #1245 has landed:
+     *
+     * https://webmademovies.lighthouseapp.com/projects/65733/tickets/1245-remove-instances-have-butter-become-a-singleton
+     *
+     * @param {Function} readyCallback: After all layouts have been loaded, call this function
+     */
+    loadUrlSpecifiedLayouts: function( readyCallback, baseDir ) {
+      var layoutsToLoad = [],
+          loadedLayouts = 0;
+
+      for ( var editor in __editors ) {
+        if ( __editors.hasOwnProperty( editor ) && __editors[ editor ].layout.indexOf( "load!" ) === 0 ) {
+          layoutsToLoad.push( __editors[ editor ] );
+        }
+      }
+
+      if ( layoutsToLoad.length === 0 ) {
+        readyCallback();
+      }
+      else {
+        layoutsToLoad.forEach( function( editorHusk ) {
+          Editor.loadLayout( editorHusk.layout.substring( 5 ), function( layoutSrc ){
+            editorHusk.layout = layoutSrc;
+            ++loadedLayouts;
+            if ( loadedLayouts === layoutsToLoad.length ) {
+              readyCallback();
+            }
+          }, baseDir );
+        });
+      }
     },
 
     /**
@@ -427,10 +460,13 @@ define( [ "core/eventmanager", "util/lang", "util/xhr",
      * Loads a layout from the specified src
      *
      * @param {String} src: The source from which the layout will be loaded
+     * @param {Function} readyCallback: Called once layout is loaded
+     * @param {String} baseDir: Optional. Can be specified to replace {{baseDir}} in url variables
      */
-    loadLayout: function( src, readyCallback ) {
+    loadLayout: function( src, readyCallback, baseDir ) {
+      baseDir = baseDir || "";
       if ( src.indexOf( "{{baseDir}}" ) > -1 ) {
-        src = src.replace( "{{baseDir}}", Editor.baseDir );
+        src = src.replace( "{{baseDir}}", baseDir );
       }
       XHRUtils.get( src, function( e ) {
         if ( e.target.readyState === 4 ){

@@ -462,6 +462,38 @@
       };
 
       /****************************************************************
+       * Trackevents
+       ****************************************************************/
+      // Selects all track events for which TrackEvent.property === query.
+      // If the third param is true, it selects track events for which TrackEvent.popcornOptions.property === query.
+      this.getTrackEvents = function ( property, query, popcornOption ) {
+
+        var allTrackEvents = this.orderedTrackEvents,
+            _filterTrackEvents;
+
+        if ( !property ) {
+          return allTrackEvents;
+        }
+        
+        if ( popcornOption ) {
+           _filterTrackEvents = function ( el ) {
+              return ( el.popcornOptions[ property ] === query );
+            };
+        } else {
+          _filterTrackEvents = function ( el ) {
+            return ( el[ property ] === query );
+          };
+        }
+
+        return allTrackEvents.filter( _filterTrackEvents );
+      };
+
+      // Selects all track events for which TrackEvent.type === query
+      this.getTrackEventsByType = function ( query ) {
+        return this.getTrackEvents( "type", query );
+      };
+
+      /****************************************************************
        * Properties
        ****************************************************************/
       Object.defineProperties( _this, {
@@ -750,9 +782,9 @@
       }
 
       function readConfig( userConfig ){
-        // Overwrite default config options with user settings (if any).
+        // Override default config options with user settings (if any).
         if( userConfig ){
-          _defaultConfig.merge( userConfig );
+          _defaultConfig.override( userConfig );
         }
 
         _config = _defaultConfig;
@@ -760,7 +792,7 @@
         _this.project.template = _config.value( "name" );
 
         //prepare modules first
-        var moduleCollection = Modules( _this, _config ),
+        var moduleCollection = Modules( Butter, _this, _config ),
             loader = Dependencies( _config );
 
         _this.loader = loader;

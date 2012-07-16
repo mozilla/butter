@@ -695,6 +695,37 @@
     });
   });
 
+  asyncTest( "Select all track events of a particular type using getTrackEvents", 2, function(){
+
+    createButter( function( butter ){
+
+      var m = butter.addMedia({ url: "../external/popcorn-js/test/italia.ogg", target: "mediaDiv" }),
+          t = m.addTrack(),
+          te1 = t.addTrackEvent( { name: "TrackEvent 1", type: "text", popcornOptions: { start: 0, end: 1, target: "mediaDiv" } } ),
+          te2 = t.addTrackEvent( { name: "TrackEvent 2", type: "test", popcornOptions: { start: 0, end: 3, target: "mediaDiv" } } );
+
+      ok( butter.getTrackEvents( "type", "text" ).length === 1, "One text track event exists." );
+      ok( butter.getTrackEvents().length === 2, "Selecting all track events by not providing parameters works." );
+
+      start();
+    });
+  });
+
+  asyncTest( "Select all track events of a particular type using getTrackEventsByType", 1, function(){
+
+    createButter( function( butter ){
+
+      var m = butter.addMedia({ url: "../external/popcorn-js/test/italia.ogg", target: "mediaDiv" }),
+          t = m.addTrack(),
+          te1 = t.addTrackEvent( { name: "TrackEvent 1", type: "text", popcornOptions: { start: 0, end: 1, target: "mediaDiv" } } ),
+          te2 = t.addTrackEvent( { name: "TrackEvent 2", type: "test", popcornOptions: { start: 0, end: 3, target: "mediaDiv" } } );
+
+      ok( butter.getTrackEventsByType( "test" ).length === 1, "One test track event exists." );
+
+      start();
+    });
+  });
+
   module( "Player tests", butterLifeCycle );
   // Make sure HTML5 audio/video, youtube, and vimeo work
   asyncTest( "Test basic player support", 5, function() {
