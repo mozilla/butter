@@ -1,6 +1,5 @@
 /*global Butter,asyncTest,equal,start,ok*/
-require( [], function() {
-
+(function(){
   // All modules that create Butter objects (e.g., Butter())
   // should use this lifecycle, and call rememberButter() for all
   // created butter instances.  Any created using createButter()
@@ -66,4 +65,4 @@ require( [], function() {
     });
   });
 
-});
+}());
