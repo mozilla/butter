@@ -13,7 +13,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ) {
    * @param {Butter} butter: An instance of Butter
    * @param {DOMElement} rootElement: The root element to which the editor's content will be attached
    * @param {Object} events: Events such as 'open' and 'close' can be defined on this object to be called at the appropriate times
-   */  
+   */
   return function( extendObject, butter, rootElement, events ) {
 
     EventManagerWrapper( extendObject );
