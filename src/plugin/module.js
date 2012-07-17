@@ -2,6 +2,11 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
+/**
+ * Module: PluginModule
+ *
+ * A Butter module which provides Popcorn plugin support.
+ */
 define( [ "core/logger", "util/dragndrop", "util/scrollbars",
           "./plugin-list", "./plugin" ],
   function( Logger, DragNDrop, Scrollbars,
@@ -16,6 +21,13 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
   __newStyleSheet.media = "screen";
   __newStyleSheet.setAttribute( "data-butter-exclude", "true" );
 
+  /**
+   * Function: colourHashFromType
+   *
+   * Simple hash function to calculates a [relatively] unique colour for a plugin.
+   *
+   * @param {String} type: Name of the plugin
+   */
   function colourHashFromType( type ) {
     var hue = 0, saturation = 0, lightness = 0, srcString = type;
 
@@ -44,6 +56,13 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
     };
   }
 
+  /**
+   * Function: createStyleForType
+   *
+   * Creates a css entry for a plugin type
+   *
+   * @param {String} type: Name of the plugin
+   */
   function createStyleForType( type ) {
     var styleContent = "",
         hash = colourHashFromType( type );
@@ -53,6 +72,14 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
     __newStyleSheet.innerHTML = __newStyleSheet.innerHTML + styleContent;
   }
 
+  /**
+   * Class: PluginManager
+   *
+   * Provides Butter module functionality for Plugins
+   *
+   * @param {Butter} butter: A butter instance
+   * @param {Butter} moduleOptions: Config options passed in when module starts up.
+   */
   var PluginManager = function( butter, moduleOptions ) {
 
     var _plugins = this.plugins = [],
@@ -76,6 +103,13 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
     var _scrollbar = new Scrollbars.Vertical( _listWrapper, _listContainer );
     _container.appendChild( _scrollbar.element );
 
+    /**
+     * Member: _start
+     *
+     * Module start function
+     *
+     * @param {Function} onModuleReady: Callback to signify that this module is ready to run
+     */
     this._start = function( onModuleReady ) {
       if ( butter.ui ) {
         document.head.appendChild( __newStyleSheet );
@@ -90,12 +124,28 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
       }
     };
 
+    /**
+     * Member: generatePluginTypeCheckFunction
+     *
+     * Generates a check function for the given plugin type specifically for the butter loader to use.
+     *
+     * @param {String} pluginType: Name of plugin
+     */
     function generatePluginTypeCheckFunction( pluginType ) {
       return function(){
+        // Does Popcorn know about this plugin type yet?
         return !!Popcorn.manifest[ pluginType ];
       };
     }
 
+    /**
+     * Member: add
+     *
+     * Add a plugin to Butter
+     *
+     * @param {String or Array} plugins: Plugins to add to the system. If this parameter is an array, each entry will be added separately.
+     * @param {Function} onReadyCallback: Callback to call when plugins are finished loading.
+     */
     this.add = function( plugins, onReadyCallback ) {
       var newPlugins = [],
           pluginLoadDescriptors = [],
@@ -103,20 +153,26 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
           i,
           l;
 
+      // Try to always use an array for code simplicity
       if ( ! ( plugins instanceof Array ) ) {
         plugins = [ plugins ];
       }
 
       for ( i = 0, l = plugins.length; i < l; i++ ) {
         plugin = new Plugin( plugins[ i ] );
+
+        // Create the styling for this plugin and its trackevents
         if ( !__trackEventCSSRules[ plugin.type ] ){
           createStyleForType( plugin.type );
         }
+
+        // Create a loader descriptor for this plugin type for the Butter loader
         pluginLoadDescriptors.push({
           type: "js",
           url: plugin.path,
           check: generatePluginTypeCheckFunction( plugin.type )
         });
+
         newPlugins.push( plugin );
       }
 
@@ -136,48 +192,73 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
       return newPlugins;
     };
 
+    /**
+     * Member: remove
+     *
+     * Remove a plugin from Butter
+     *
+     * @param {String or Plugin} plugin: Name of plugin or Plugin object to remove
+     */
     this.remove = function( plugin ) {
       var trackEvents,
           trackEvent,
           i;
 
+      // If a string was passed in, try to get a Plugin object instead.
       if ( typeof plugin === "string" ) {
         plugin = this.get( plugin );
         if ( !plugin ) {
+          // If no plugin was found, we know we don't have to go any further because it's not here!
           return;
         }
       }
 
+      // Remove all trackevents that were using this plugin type
       trackEvents = butter.getTrackEventsByType( plugin.type );
-
       while ( trackEvents.length ) {
         trackEvent = trackEvents.pop();
         trackEvent.track.removeTrackEvent( trackEvent );
       }
 
+      // Drop reference to plugin object
       i = _plugins.indexOf( plugin );
-
       if ( i > -1 ) {
         _plugins.splice( i, 1 );
       }
 
+      // If it was in the plugin list, remove it
       if ( plugin.element && plugin.element.parentNode ) {
         _listContainer.removeChild( plugin.element );
       }
 
+      // Update scrollbars because height of list may have changed.
       _scrollbar.update();
 
       butter.dispatch( "pluginremoved", plugin );
     };
 
+    /**
+     * Member: clear
+     *
+     * Removes all plugins from Butter.
+     */
     this.clear = function() {
       while ( _plugins.length > 0 ) {
         var plugin = _plugins.pop();
-        _listContainer.removeChild( plugin.element );
+        if ( plugin.element && plugin.element.parentNode ) {
+          _listContainer.removeChild( plugin.element );
+        }
         butter.dispatch( "pluginremoved", plugin );
       }
     };
 
+    /**
+     * Member: get
+     *
+     * Returns a plugin object corresponding to the given type.
+     *
+     * @param {String} type: Name of plugin to retrieve
+     */
     this.get = function( type ) {
       for ( var i = 0, l = _plugins.length; i < l; ++i ) {
         if ( _plugins[ i ].type === type ) {
@@ -186,6 +267,8 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
       }
     };
 
+
+    // Make the entire container droppable so that it can be added to.
     DragNDrop.droppable( _container, {
       drop: function( element ){
         if ( element.getAttribute( "data-butter-draggable-type" ) === "plugin" ) {
@@ -205,6 +288,7 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
     });
   };
 
+  // Give the module a name so the module loader can act sanely.
   PluginManager.__moduleName = "plugin";
 
   return PluginManager;
