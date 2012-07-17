@@ -65,4 +65,26 @@
     });
   });
 
+  asyncTest( "Remove plugin", 2, function() {
+    createButter( function( butter ) {
+
+      var track = butter.media[0].addTrack(),
+          trackEvent = track.addTrackEvent({
+            type: "text",
+            popcornOptions: {
+              start: 1,
+              stop: 2
+            }
+          });
+
+      butter.plugin.remove( "text" );
+
+      equal( track.trackEvents.length, 0, "No trackevents of the 'text' type left." );
+      equal( !!butter.plugin.get( "text" ), false, "Text plugin removed from registry" );
+
+      start();
+
+    });
+  });
+
 }());

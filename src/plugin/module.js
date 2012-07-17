@@ -137,9 +137,9 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
     };
 
     this.remove = function( plugin ) {
-      var tracks, trackEvents,
-          head,
-          i, l, k;
+      var trackEvents,
+          trackEvent,
+          i;
 
       if ( typeof plugin === "string" ) {
         plugin = this.get( plugin );
@@ -148,34 +148,26 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
         }
       }
 
-      for ( i = 0, l = _plugins.length; i < l; i++ ) {
-        if ( _plugins[ i ].name === plugin.name ) {
-          tracks = butter.tracks;
-          for ( i = 0, l = tracks.length; i < l; i++ ) {
-            trackEvents = tracks[ i ].trackEvents;
-            for ( k = 0, ln = trackEvents.length - 1; ln >= k; ln-- ) {
-              if ( trackEvents[ ln ].type === plugin.name ) {
-                tracks[ i ].removeTrackEvent( trackEvents[ ln ] );
-              }
-            }
-          }
+      trackEvents = butter.getTrackEventsByType( plugin.type );
 
-          _plugins.splice( i, 1 );
-          l--;
-          _listContainer.removeChild( plugin.element );
+      while ( trackEvents.length ) {
+        trackEvent = trackEvents.pop();
+        trackEvent.track.removeTrackEvent( trackEvent );
+      }
 
-          head = document.getElementsByTagName( "HEAD" )[ 0 ];
-          for ( i = 0, l = head.children.length; i < l; i++ ) {
-            if ( head.children[ i ].getAttribute( "src" ) === plugin.path ) {
-              head.removeChild( head.children[ i ] );
-            }
-          }
+      i = _plugins.indexOf( plugin );
 
-          butter.dispatch( "pluginremoved", plugin );
-        }
+      if ( i > -1 ) {
+        _plugins.splice( i, 1 );
+      }
+
+      if ( plugin.element && plugin.element.parentNode ) {
+        _listContainer.removeChild( plugin.element );
       }
 
       _scrollbar.update();
+
+      butter.dispatch( "pluginremoved", plugin );
     };
 
     this.clear = function() {
@@ -186,9 +178,9 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
       }
     };
 
-    this.get = function( name ) {
-      for ( var i=0, l=_plugins.length; i<l; ++i ) {
-        if ( _plugins[ i ].name === name ) {
+    this.get = function( type ) {
+      for ( var i = 0, l = _plugins.length; i < l; ++i ) {
+        if ( _plugins[ i ].type === type ) {
           return _plugins[ i ];
         }
       }
