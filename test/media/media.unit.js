@@ -9,6 +9,35 @@ require( [ "../src/core/track" ], function( Track ) {
         }
       };
 
+  // All modules that create Butter objects (e.g., Butter())
+  // should use this lifecycle, and call rememberButter() for all
+  // created butter instances.  Any created using createButter()
+  // already have it done automatically.
+  var butterLifeCycle = (function(){
+
+    var _tmpButter;
+
+    return {
+      setup: function(){
+        _tmpButter = [];
+      },
+      teardown: function(){
+        var i = _tmpButter.length;
+        while( i-- ){
+          _tmpButter[ i ].clearProject();
+          delete _tmpButter[ i ];
+        }
+      },
+      rememberButter: function(){
+        var i = arguments.length;
+        while( i-- ){
+          _tmpButter.push( arguments[ i ] );
+        }
+      }
+    };
+
+  }());
+
   function createButter( callback ){
 
     Butter({
@@ -20,10 +49,20 @@ require( [ "../src/core/track" ], function( Track ) {
     });
   }
 
-  module( "Media" );
+  module( "Media", butterLifeCycle );
 
-  function startTests() {
-    asyncTest( "addTrack functionality", 1, function() {
+  asyncTest( "generatePopcornString functionality", 2, function() {
+    createButter( function( butter ) {
+      var fakeScript = [ "var i = 1 + 1;" ],
+          js = butter.currentMedia.generatePopcornString( fakeScript );
+
+      ok( js.indexOf( fakeScript[ 0 ] ), "Added expected popcornevents to popcorn script" );
+      ok( js.indexOf( butter.currentMedia.url ), "current media's url is present in the popcorn script" );
+      start();
+    });
+  });
+
+  asyncTest( "addTrack functionality", 1, function() {
       createButter( function( butter ) {
         var track = new Track( { name: "TestTrack" } );
 
@@ -38,95 +77,73 @@ require( [ "../src/core/track" ], function( Track ) {
       });
     });
 
-    asyncTest( "getTrackById functionality", 1, function() {
-      createButter( function( butter ) {
-        var trackOne = butter.currentMedia.tracks[ 0 ],
-            trackTwo = butter.currentMedia.getTrackById( trackOne.id );
+  asyncTest( "getTrackById functionality", 1, function() {
+    createButter( function( butter ) {
+      var trackOne = butter.currentMedia.tracks[ 0 ],
+          trackTwo = butter.currentMedia.getTrackById( trackOne.id );
 
-        equal( trackOne.id, trackTwo.id, "getTrackById returned expected track event" );
-        start();
-      });
+      equal( trackOne.id, trackTwo.id, "getTrackById returned expected track event" );
+      start();
     });
+  });
 
-    asyncTest( "removeTrack functionality", 2, function() {
-      createButter( function( butter ) {
-        var tracks = butter.currentMedia.tracks,
-            trackOne = tracks[ 0 ],
-            trackTwo = tracks[ 1 ],
-            trackEvent = trackTwo.trackEvents[ 0 ];
+  asyncTest( "removeTrack functionality", 2, function() {
+    createButter( function( butter ) {
+      var tracks = butter.currentMedia.tracks,
+          trackOne = tracks[ 0 ],
+          trackTwo = tracks[ 1 ],
+          trackEvent = trackTwo.trackEvents[ 0 ];
 
-        butter.listen( "trackremoved", function( e ) {
+      butter.listen( "trackremoved", function( e ) {
 
-          butter.unlisten( "trackremoved" );
-          butter.listen( "trackeventremoved", function( e ) {
+        butter.unlisten( "trackremoved" );
+        butter.listen( "trackeventremoved", function( e ) {
 
-            butter.unlisten( "trackeventremoved" );
-            equal( e.data.id, trackEvent.id, "Successfully sent trackeventremoved for the trackevent on the track" );
-            start();
-          });
-
-          equal( e.data.id, trackOne.id, "Removed the correct track" );
-
-          butter.currentMedia.removeTrack( trackTwo );
+          butter.unlisten( "trackeventremoved" );
+          equal( e.data.id, trackEvent.id, "Successfully sent trackeventremoved for the trackevent on the track" );
+          start();
         });
 
-        butter.currentMedia.removeTrack( trackOne );
+        equal( e.data.id, trackOne.id, "Removed the correct track" );
+
+        butter.currentMedia.removeTrack( trackTwo );
       });
+
+      butter.currentMedia.removeTrack( trackOne );
     });
+  });
 
-    asyncTest( "findTrackWithTrackEventId functionality", 1, function() {
-      createButter( function( butter ) {
-        var track = butter.currentMedia.tracks[ 0 ],
-            trackEvent,
-            receivedTrack;
-
-        // None of my tracks have events right now, adding a new one
-        track.addTrackEvent();
-        trackEvent = track.trackEvents[ 0 ];
-
-        receivedTrack = butter.currentMedia.findTrackWithTrackEventId( trackEvent.id );
-        equal( receivedTrack.track.id, track.id, "Received expected track with id " + track.id );
-        start();
-      });
-    });
-
-    asyncTest( "getManifest functionality", function() {
-      createButter( function( butter ) {
-        var fakeManifest = {
-              stuff: "stuff",
-              stuff2: "stuff2",
-              moreStuff: "even more stuff"
-            },
-            retrievedItem;
-
-        // First need to set a fake manifest
-        butter.currentMedia.registry = fakeManifest;
-
-        retrievedItem = butter.currentMedia.getManifest( "stuff" );
-        equal( retrievedItem, fakeManifest.stuff, "Retrieved the correct manifest information" );
-        start();
-      });
-    });
-  }
-
-  asyncTest( "generatePopcornString functionality", function() {
+  asyncTest( "findTrackWithTrackEventId functionality", 1, function() {
     createButter( function( butter ) {
-      var js = butter.currentMedia.generatePopcornString(),
-          index = js.indexOf( "?" ),
-          xhr = new XMLHttpRequest();
+      var track = butter.currentMedia.tracks[ 0 ],
+          trackEvent,
+          receivedTrack;
 
-      // Removing our expected butter UID
-      js = js.substring( 0, index ) + js.substring( index + 24 );
+      // None of my tracks have events right now, adding a new one
+      track.addTrackEvent();
+      trackEvent = track.trackEvents[ 0 ];
 
-      xhr.open( "GET", "expectedScript.js", false );
-      xhr.onreadystatechange = function() {
-        if ( xhr.readyState === 4 ) {
-          equal( xhr.responseText, js, "generatePopcornString generated expected Popcorn JS." );
-          start();
-          startTests();
-        }
-      };
-      xhr.send();
+      receivedTrack = butter.currentMedia.findTrackWithTrackEventId( trackEvent.id );
+      equal( receivedTrack.track.id, track.id, "Received expected track with id " + track.id );
+      start();
+    });
+  });
+
+  asyncTest( "getManifest functionality", function() {
+    createButter( function( butter ) {
+      var fakeManifest = {
+            stuff: "stuff",
+            stuff2: "stuff2",
+            moreStuff: "even more stuff"
+          },
+          retrievedItem;
+
+      // First need to set a fake manifest
+      butter.currentMedia.registry = fakeManifest;
+
+      retrievedItem = butter.currentMedia.getManifest( "stuff" );
+      equal( retrievedItem, fakeManifest.stuff, "Retrieved the correct manifest information" );
+      start();
     });
   });
 });

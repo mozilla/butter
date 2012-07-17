@@ -114,7 +114,6 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
      * @param {Function} onModuleReady: Callback to signify that module is ready
      */
     this._start = function( onModuleReady ){
-      onModuleReady();
       _toggler = new Toggler( function( e ) {
         var newState = !_editorAreaDOMRoot.classList.contains( "minimized" );
         _toggler.state = newState;
