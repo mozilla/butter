@@ -1,0 +1,105 @@
+// VARIABLES
+@HEADER_SPACING: 50px;
+@TRAY_HEIGHT: 220px;
+@TRAY_SPACING: @TRAY_HEIGHT - 10;
+@TRAY_SPACING_MINIMIZED: 35px;
+
+// MIXINS
+.selectable(@param) {
+  -webkit-touch-callout: @param;
+  -webkit-user-select: @param;
+  -moz-user-select: @param;
+  -ms-user-select: @param;
+  user-select: @param; 
+}
+.gradient(@angle, @startCol, @stopCol, @startLoc, @endLoc, @startPerc, @stopPerc) {
+   background: -webkit-gradient(linear,left @startLoc,left @endLoc,color-stop(@startPerc,@startCol),color-stop(@stopPerc,@stopCol));
+   background: -webkit-linear-gradient(@angle @startLoc,@startCol @startPerc,@stopCol @stopPerc);
+   background: -moz-linear-gradient(@angle @startLoc,@startCol @startPerc,@stopCol @stopPerc);
+   background: -ms-linear-gradient(@angle @startLoc,@startCol @startPerc,@stopCol @stopPerc);
+   background: -o-linear-gradient(@angle @startLoc,@startCol @startPerc,@stopCol @stopPerc);
+   background: linear-gradient(@angle @startLoc, @startCol);
+} 
+.transition(@transition1) {
+  -webkit-transition: @transition1;
+  -moz-transition: @transition1;
+  -o-transition: @transition1;
+  -ms-transition: @transition1;
+  transition: @transition1;
+}
+.transition(@transition1, @transition2) {
+  -webkit-transition: @transition1, @transition2;
+  -moz-transition: @transition1, @transition2;
+  -o-transition: @transition1, @transition2;
+  -ms-transition: @transition1, @transition2;
+  transition: @transition1, @transition2;
+}
+.transition(@transition1, @transition2, @transition3) {
+  -webkit-transition: @transition1, @transition2, @transition3;
+  -moz-transition: @transition1, @transition2, @transition3;
+  -o-transition: @transition1, @transition2, @transition3;
+  -ms-transition: @transition1, @transition2, @transition3;
+  transition: @transition1, @transition2, @transition3;
+}
+.backgroundColour(@r, @g, @b, @a) {
+  background-color: rgba(@r, @g, @b, @a);
+}
+.animation(@animation) {
+  -webkit-animation: @animation;
+  -moz-animation: @animation;
+  -o-animation: @animation;
+  -ms-animation: @animation;
+}
+.transform(@transformation) {
+  -webkit-transform: @transformation;
+  -moz-transform: @transformation;
+  -o-transform: @transformation;
+  -ms-transform: @transformation;
+  transform: @transformation;
+}
+
+.transformAnimation(@startProperty, @endProperty) {
+  @-webkit-keyframes spin {
+    0% {
+      -webkit-transform: @startProperty;
+      transform: @startProperty;
+    }
+    100% {
+      -webkit-transform: @endProperty;
+      transform: @endProperty;
+    }
+  }
+  @-moz-keyframes spin {
+    0% {
+      -moz-transform: @startProperty;
+      transform: @startProperty;
+    }
+    100% {
+      -moz-transform: @endProperty;
+      transform: @endProperty;
+    }
+  }
+  @-ms-keyframes spin {
+    0% {
+      -ms-transform: @startProperty;
+      transform: @startProperty;
+    }
+    100% {
+      -ms-transform: @endProperty;
+      transform: @endProperty;
+    }
+  }
+}
+
+.boxOrient(@direction) {
+  -webkit-box-orient: @direction;
+  -moz-box-orient: @direction;
+  -ms-box-orient: @direction;
+  box-orient: @direction;
+}
+.boxAlign(@property) {
+  -webkit-box-align: @property;
+  -moz-box-align: @property;
+  -ms-box-align: @property;
+  box-align: @property;
+}

@@ -1,0 +1,222 @@
+/*********************************************************
+* TRAY STATUS
+*/
+
+#status-bar {
+  box-shadow: inset 0 1px 0 #5d5d5d;
+  .gradient( center, #2c2c2c, #4c4c4c, bottom, top, 0%, 100% );
+  position: absolute;
+  height: 50px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-bottom: 1px solid #000;
+  .selectable( none );
+
+  //Play and mute buttons
+  .status-button {
+    width: 24px;
+    height: 24px;
+    border-radius: 20px;
+    background: #d1be70; 
+
+    .status-button-icon {
+      background-image: url( "../resources/buttons.png" );
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+      background-repeat: no-repeat;
+    }
+
+  }
+
+  /* Play/Pause UI */
+  // This is where the play/pause button is
+  // TO-DO: prefix with butter-;
+  .status-container {
+    position: absolute;
+    width: 100px;
+    height: 40px;
+    top: 5px;
+    left: 0;
+
+    .time-container {
+      position: absolute;
+      top: 4px;
+      left: 20px;
+      width: 80px;
+      height: 15px;
+      background-image: url( "../resources/status-bg.png" );
+      color: #999999;
+      font-size: 11px;
+      text-align: center;
+      box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
+      border-radius: 20px 20px 20px 20px;
+      padding: 2px;
+      
+      input {
+        background: transparent;
+        color: rgb( 200, 200, 180 );
+        border: none;
+        width: 65px;
+        padding-left: 10px;
+        height: 13px;
+        font-size: 90%;
+
+        &:focus {
+          .selectable( text );
+        }
+        
+      }
+
+    }
+
+    .play-button-container {
+      position: absolute;
+      left: 2px;
+      width: 24px;
+      height: 24px;
+      background-image: url( "../resources/status-bg.png" );
+      color: #999999;
+      font-size: 11px;
+      line-height: 20px;
+      text-align: center;
+      box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
+      border-radius: 20px;
+      padding: 3px;
+
+      .status-button[data-mouse-state="depressed"]{
+        .gradient( center, #bdaa5c, #e0d299, top, bottom, 0%, 100% );     
+      } 
+
+      .status-button-icon {
+        background-position: -321px 7px;
+      } 
+
+      .status-button-icon[data-state="true"] {
+        background-position: -320px -19px;
+      } 
+
+    }
+
+  }
+
+  .media-status-container {
+    height: 30px;
+    padding: 0 150px 0 115px;
+    position: relative;
+  }
+  .time-bar {
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    height: 30px;
+    
+    canvas {
+      height: 27px;
+    }
+  }
+
+  .time-bar-scrubber-container {
+    z-index: 2140000010;
+    background-image: url( "../resources/status-bg.png" );
+    border-radius: 15px;
+    position: absolute;
+    .selectable( none );
+    top: 0;
+    width: 100%;
+    left: 0;
+    height: 8px;
+    padding: 0 2px;
+    box-shadow: 0 1px 0 #737373,inset 0 1px 1px #131313;
+    
+    .fill-bar {
+      background: none repeat scroll 0 0 rgba( 200, 200, 140, 0.2 );
+      border-radius: 15px;
+      height: 4px;
+      left: 2px;
+      margin-top: 2px;
+      position: absolute;
+      top: 0;
+      width: 0;
+    }
+  }
+
+  .time-bar-scrubber-node {
+    border: 2px solid #BBB;
+    background: #FFF;
+    width: 10px;
+    height: 10px;
+    border-radius: 20px;
+    position: absolute;
+    left: 0;
+    margin-left: -7px;
+    margin-top: -2px;
+    cursor: pointer;
+  }
+
+  .time-bar-scrubber-line {
+    background: rgba( 200, 0, 0, 0.7);
+    position: absolute;
+    top: 12px;
+    left: 3px;
+    width: 4px;
+    height: 180px;
+    cursor: pointer;
+    z-index: 2140000000;
+  }
+
+  .time-bar-scrubber-line[data-butter-shortened] {
+    height: 20px;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+  }
+
+  .time-bar-canvas-container {
+    position: absolute;
+    left: 0;
+    top: 13px;
+    height: 27px;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .mute-button-container {
+    position: absolute;
+    top: 5px;
+    right: 120px;
+    width: 17px;
+    height: 17px;
+    background-image: url( "../resources/status-bg.png" );
+    color: #999999;
+    font-size: 11px;
+    line-height: 20px;
+    text-align: center;
+    box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
+    border-radius: 20px;
+    padding: 3px;
+    
+    .status-button-icon {
+      background-position: -109px -141px;
+    }
+
+    .status-button-icon[data-state="true"] {
+      background-position: -109px -157px;
+    }
+
+    .status-button {
+      width: 17px;
+      height: 17px;
+      border-radius: 20px;
+      .gradient( center, #b4b4b4, #777777, top, bottom, 0%, 100% );
+      
+      &:hover {
+        .gradient( center, #b4b4b4, #969696, top, bottom, 0%, 100% );
+      }
+    }
+    .status-button[data-mouse-state="depressed"] {
+      .gradient( center, #959595, #cccccc, top, bottom, 0%, 100% );
+    }
+  }
+}
+

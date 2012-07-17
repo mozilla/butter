@@ -1,0 +1,117 @@
+/*********************************************************
+* BUTTONS
+*/
+
+.butter-btn, .butter-btn:visited {
+  display: inline-block;
+  padding: 5px 10px 4px;
+  margin-bottom: 0;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  color: #EEE;
+  text-align: center;
+  text-shadow: 0 -1px 1px rgba(0,0,0,.75);
+  vertical-align: middle;
+  cursor: pointer;
+  background: -moz-linear-gradient(top,  rgba(71,76,86,1) 0%, rgba(64,71,81,1) 9%, rgba(51,51,51,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(71,76,86,1)), color-stop(9%,rgba(64,71,81,1)), color-stop(100%,rgba(51,51,51,1)));
+  background: -webkit-linear-gradient(top,  rgba(71,76,86,1) 0%,rgba(64,71,81,1) 9%,rgba(51,51,51,1) 100%);
+  background: -o-linear-gradient(top,  rgba(71,76,86,1) 0%,rgba(64,71,81,1) 9%,rgba(51,51,51,1) 100%);
+  background: -ms-linear-gradient(top,  rgba(71,76,86,1) 0%,rgba(64,71,81,1) 9%,rgba(51,51,51,1) 100%);
+  background: linear-gradient(top,  rgba(71,76,86,1) 0%,rgba(64,71,81,1) 9%,rgba(51,51,51,1) 100%);
+  background-repeat: repeat-x;
+  border: 1px solid #222;
+  border-bottom-color: #000;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.2);
+}
+.butter-btn:hover,
+.butter-btn:active,
+.butter-btn.active,
+.butter-btn.disabled,
+.butter-btn[disabled] {
+  background-color: rgb(64,71,81);
+}
+.butter-btn:active,
+.butter-btn.active {
+  background-color: rgb(71,76,86);
+}
+.butter-btn:hover {
+  color: #EEE;
+  text-decoration: none;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,.4), 0 1px 3px rgba(0,0,0,.5);
+  background: -moz-linear-gradient(top,  rgba(86,92,104,1) 0%, rgba(79,87,99,1) 9%, rgba(69,69,69,1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(86,92,104,1)), color-stop(9%,rgba(79,87,99,1)), color-stop(100%,rgba(69,69,69,1)));
+  background: -webkit-linear-gradient(top,  rgba(86,92,104,1) 0%,rgba(79,87,99,1) 9%,rgba(69,69,69,1) 100%);
+  background: -o-linear-gradient(top,  rgba(86,92,104,1) 0%,rgba(79,87,99,1) 9%,rgba(69,69,69,1) 100%);
+  background: -ms-linear-gradient(top,  rgba(86,92,104,1) 0%,rgba(79,87,99,1) 9%,rgba(69,69,69,1) 100%);
+  background: linear-gradient(top,  rgba(86,92,104,1) 0%,rgba(79,87,99,1) 9%,rgba(69,69,69,1) 100%);
+  .transition( all  0.1s linear );
+  .transform( scale( 1.01, 1.01 ) );
+}
+.butter-btn:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+.butter-btn.active,
+.butter-btn:active {
+  background: rgb( 86,92,104 );
+  outline: 0;
+  box-shadow: inset 0 2px 4px rgba( 0, 0, 0, .15 ), 0 1px 2px rgba( 0, 0, 0, .5 );
+}
+.butter-btn.disabled,
+.butter-btn[disabled],
+.butter-btn[disabled]:hover,
+.butter-btn.disable:hover {
+  background: rgb( 86, 92, 104 );
+  border: 1px solid #222;
+  cursor: default;
+  opacity: 0.7;
+  box-shadow: none;
+  .transform( scale( 1, 1 ) );
+}
+
+/* All elements with a class starting in icon- */
+[class^="icon-"] {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  vertical-align: sub;
+  background-image: url( "../resources/glyphicons-halflings.png" );
+  background-position: 14px 14px;
+  background-repeat: no-repeat;
+  margin-right: 3px;
+}
+.butter-btn:hover [class^="icon-"] {
+  background-image: url( "../resources/glyphicons-halflings-white.png" );
+}
+
+.icon-grear-sign { background-position: -240px 0; }
+.icon-ok-sign { background-position: -72px -96px; }
+.icon-eye-open { background-position: -96px -120px; }
+.icon-share-alt { background-position: -336px -96px; }
+.icon-user { background-position: -168px 0; }
+.icon-plus-sign { background-position: -408px -96px; }
+.icon-minus { background-position: -433px -96px; }
+
+/* Specific Buttons */
+
+#butter-tray #add-popcorn,
+#butter-tray #add-track {
+  padding-top: 5px;
+  border-radius: 8px;
+}
+
+#butter-tray #add-popcorn {
+  width: 100px;
+  margin-top: 6px;
+}
+
+#butter-tray #add-track {
+  position: absolute;
+  left: 4px;
+  width: 96px;
+}
