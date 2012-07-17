@@ -18,7 +18,8 @@ html
             table.className = '';
           }
           else {
-            nameSpan.innerHTML = projectName;
+            nameSpan.innerHTML = '';
+            nameSpan.appendChild( document.createTextNode( projectName ) );
 
             //avoid shim problems completely
             header.className = 'butter-delete-confirmation open';
