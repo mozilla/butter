@@ -2,8 +2,12 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button", "./header", "./unload-dialog" ],
-        function( EventManagerWrapper, Toggler, LogoSpinner, ContextButton, Header, UnloadDialog ){
+define( [ "core/eventmanager", "./toggler", "./logo-spinner",
+          "./context-button", "./header", "./unload-dialog",
+          "./tray" ],
+  function( EventManagerWrapper, Toggler, LogoSpinner,
+            ContextButton, Header, UnloadDialog,
+            Tray ){
 
   var TRANSITION_DURATION = 500,
       // Butter's UI is written in LESS, but deployed as CSS.
@@ -11,55 +15,6 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
       // CSS file, or build CSS from LESS in the browser.
       BUTTER_CSS_FILE = "{css}/butter.ui.css",
       BUTTER_LESS_FILE = "{css}/butter.ui.less";
-
-  function Area( id, element ){
-    var _element,
-        _components = [],
-        _this = this;
-
-    EventManagerWrapper( _this );
-
-    this.element = _element = element || document.createElement( "div" );
-    _element.id = id;
-    this.items = {};
-
-    this.addComponent = function( element, options ){
-      var component = new Component( element, options );
-      _components.push( component );
-      _element.appendChild( component.element );
-    };
-
-    this.setContentState = function( state ){
-      for( var i=0, l=_components.length; i<l; ++i ){
-        _components[ i ].setState( state );
-      }
-    };
-  }
-
-  function Component( element, options ){
-    options = options || {};
-    var _onTransitionIn = options.transitionIn || function(){},
-        _onTransitionInComplete = options.transitionInComplete || function(){},
-        _onTransitionOut = options.transitionOut || function(){},
-        _onTransitionOutComplete = options.transitionOutComplete || function(){},
-        _validStates = options.states || [],
-        _enabled = false;
-
-    this.element = element;
-
-    this.setState = function( state ){
-      if( ( !_validStates || _validStates.indexOf( state ) > -1 ) && !_enabled ){
-        _enabled = true;
-        _onTransitionIn();
-        setTimeout( _onTransitionInComplete, TRANSITION_DURATION );
-      }
-      else if( _enabled ){
-        _onTransitionOut();
-        setTimeout( _onTransitionOutComplete, TRANSITION_DURATION );
-        _enabled = false;
-      }
-    };
-  }
 
   var __unwantedKeyPressElements = [
     "TEXTAREA",
@@ -73,7 +28,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
 
   function UI( butter ){
 
-    var _areas = {},
+    var _areas = this.areas = {},
         _contentState = [],
         _state = true,
         _logoSpinner,
@@ -83,23 +38,19 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
 
     EventManagerWrapper( _this );
 
-    // Expose Area to external bodies through `butter.ui`
-    // Modules should be creating their own Areas when possible
-    _this.Area = Area;
-
-    _areas.main = new Area( "butter-tray" );
-
     this.contentStateLocked = false;
 
+    this.tray = new Tray();
+
+/*
     var _element = _areas.main.element,
         _toggler = new Toggler( function ( e ) {
           butter.ui.visible = !butter.ui.visible;
           _toggler.state = !_toggler.state;
         }, "Show/Hide Timeline" );
+*/
 
-    _element.setAttribute( "data-butter-exclude", "true" );
-    _element.className = "butter-tray";
-
+/*
     _element.appendChild( _toggler.element );
 
     _areas.work = new Area( "work" );
@@ -114,6 +65,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     _element.appendChild( _areas.statusbar.element );
     _element.appendChild( _areas.work.element );
     _element.appendChild( _areas.tools.element );
+*/
 
     if ( _uiOptions.enabled ) {
       if ( _uiOptions.onLeaveDialog ) {
@@ -121,7 +73,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
       }
       document.body.classList.add( "butter-header-spacing" );
       document.body.classList.add( "butter-tray-spacing" );
-      document.body.appendChild( _element );
+      // document.body.appendChild( _element );
       butter.listen( "mediaadded", function( e ){
         e.data.createView();
       });
@@ -257,13 +209,6 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
           return _element;
         }
       },
-      areas: {
-        configurable: false,
-        enumerable: true,
-        get: function(){
-          return _areas;
-        }
-      },
       visible: {
         enumerable: true,
         get: function(){
@@ -280,9 +225,9 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
             else {
               document.body.classList.add( "tray-minimized" );
               _element.classList.add( "minimized" );
-              _this.dispatch( "uivisibilitychanged", false );
-            } //if
-          } //if
+              _this.dispatch( "uivisibilitychanged", true );
+            }
+          }
         }
       }
     });
@@ -450,18 +395,18 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
 
     this.TRANSITION_DURATION = TRANSITION_DURATION;
 
-    _toggler.visible = false;
+    // _toggler.visible = false;
     _this.visible = false;
 
     this.loadIndicator = {
       start: function(){
-        _logoSpinner.start();
-        logoContainer.style.display = "block";
+        // _logoSpinner.start();
+        // logoContainer.style.display = "block";
       },
       stop: function(){
-        _logoSpinner.stop(function(){
-          logoContainer.style.display = "none";
-        });
+        // _logoSpinner.stop(function(){
+        //   logoContainer.style.display = "none";
+        // });
       }
     };
 
@@ -470,7 +415,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     butter.listen( "ready", function(){
       _this.loadIndicator.stop();
       _this.visible = true;
-      _toggler.visible = true;
+      // _toggler.visible = true;
       ContextButton( butter );
       if( _uiOptions.enabled ){
         Header( butter, _uiConfig );

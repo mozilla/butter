@@ -22,6 +22,7 @@ define( [
     _parentElement.classList.add( "fadable" );
 
     this._start = function( onModuleReady ){
+/*
       butter.ui.areas.work.addComponent( _parentElement, {
         states: [ "timeline" ],
         transitionIn: function(){
@@ -51,6 +52,7 @@ define( [
       });
 
       butter.ui.pushContentState( "timeline" );
+*/
       onModuleReady();
     };
 

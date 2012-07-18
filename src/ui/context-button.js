@@ -19,6 +19,7 @@ define([], function(){
       }
     }, false );
 
+/*
     butter.ui.areas.tools.addComponent( _button, {
       states: [ "add-popcorn", "editor" ],
       transitionIn: function(){
@@ -40,5 +41,6 @@ define([], function(){
         _button.removeAttribute( "disabled" );
       }
     });
+*/
   };
 });

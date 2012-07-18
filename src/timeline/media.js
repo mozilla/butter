@@ -2,45 +2,29 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [
-          "core/trackevent",
-          "core/track",
-          "core/eventmanager",
-          "./track-container",
-          "util/scrollbars",
-          "./timebar",
-          "./zoombar",
-          "./status",
-          "./trackhandles",
-        ],
-        function(
-          TrackEvent,
-          Track,
-          EventManagerWrapper,
-          TrackContainer,
-          Scrollbars,
-          TimeBar,
-          ZoomBar,
-          Status,
-          TrackHandles
-        ) {
+define( [ "core/trackevent", "core/track", "core/eventmanager",
+          "./track-container", "util/scrollbars", "./timebar",
+          "./zoombar", "./status", "./trackhandles" ],
+  function( TrackEvent, Track, EventManagerWrapper,
+            TrackContainer, Scrollbars, TimeBar,
+            ZoomBar, Status, TrackHandles ) {
 
   var MIN_ZOOM = 300,
       DEFAULT_ZOOM = 0.5;
 
-  function MediaInstance( butter, media ){
-    function onTrackOrderChanged( orderedTracks ){
+  function MediaInstance( butter, media ) {
+    function onTrackOrderChanged( orderedTracks ) {
       _tracksContainer.orderTracks( orderedTracks );
-    } //onTrackOrderChanged
+    }
 
-    function zoomCallback( zoomLevel ){
+    function zoomCallback( zoomLevel ) {
       var nextZoom = MIN_ZOOM * zoomLevel + _zoomFactor;
       if( nextZoom !== _zoom ){
         _zoom = nextZoom;
         _tracksContainer.zoom = _zoom;
         updateUI();
-      } //if
-    } //zoomCallback
+      }
+    }
 
     var _this = this,
         _media = media,
@@ -51,9 +35,9 @@ define( [
         _hScrollBar = new Scrollbars.Horizontal( _tracksContainer.element, _tracksContainer.container ),
         _vScrollBar = new Scrollbars.Vertical( _tracksContainer.element, _tracksContainer.container ),
         _shrunken = false,
-        _timebar = new TimeBar( butter, _media, _tracksContainer, _hScrollBar ),
+        _timebar = new TimeBar( butter, _media, butter.ui.tray.statusArea, _tracksContainer, _hScrollBar ),
         _zoombar = new ZoomBar( zoomCallback ),
-        _status = new Status( _media ),
+        _status = new Status( _media, butter.ui.tray.statusArea ),
         _trackHandles = new TrackHandles( butter, _media, _tracksContainer, onTrackOrderChanged ),
         _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
         _currentMouseDownTrackEvent,
@@ -152,10 +136,10 @@ define( [
       _container.appendChild( _tracksContainer.element );
       _container.appendChild( _hScrollBar.element );
       _container.appendChild( _vScrollBar.element );
-      _mediaStatusContainer.appendChild( _timebar.element );
-      _mediaStatusContainer.appendChild( _status.statusElement );
-      _mediaStatusContainer.appendChild( _status.muteElement );
-      butter.ui.areas.statusbar.element.appendChild( _mediaStatusContainer );
+      //_mediaStatusContainer.appendChild( _timebar.element );
+      //_mediaStatusContainer.appendChild( _status.statusElement );
+      //_mediaStatusContainer.appendChild( _status.muteElement );
+      // butter.ui.areas.statusbar.element.appendChild( _mediaStatusContainer );
       _rootElement.appendChild( _trackHandles.element );
       _rootElement.appendChild( _zoombar.element );
       _rootElement.appendChild( _container );

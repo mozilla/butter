@@ -12,6 +12,7 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
     _containerElement.className = "container";
     _parentElement.appendChild( _containerElement );
 
+/*
     butter.ui.areas.work.addComponent( _parentElement, {
       states: [ "add-popcorn" ],
       transitionIn: function(){
@@ -30,6 +31,7 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
         _parentElement.style.display = "none";
       }
     });
+*/
 
     butter.listen( "pluginadded", function( e ){
       var element = document.createElement( "div" ),

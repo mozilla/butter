@@ -113,7 +113,7 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
     this._start = function( onModuleReady ) {
       if ( butter.ui ) {
         document.head.appendChild( __newStyleSheet );
-        butter.ui.areas.tools.addComponent( _container );
+        // butter.ui.areas.tools.addComponent( _container );
         PluginList( butter );
       }
       if ( moduleOptions && moduleOptions.plugins ) {
