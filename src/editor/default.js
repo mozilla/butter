@@ -60,18 +60,18 @@ define( [ "text!./default.html", "editor/editor" ],
         _this.createPropertiesFromManifest( trackEvent,
           function( elementType, element, trackEvent, name ){
             if ( elementType === "select" ) {
-              _this.attachSelectChangeHandler( element, trackEvent, name, updateTrackEventWithTryCatch );
+              _this.attachSelectChangeHandler( element, trackEvent, name, updateTrackEvent );
             }
             else {
               if ( [ "start", "end" ].indexOf( name ) > -1 ) {
-                _this.attachStartEndHandler( element, trackEvent, name, updateTrackEventWithTryCatch );
+                _this.attachStartEndHandler( element, trackEvent, name, updateTrackEvent );
               }
               else {
                 if ( element.type === "checkbox" ) {
-                  _this.attachCheckboxChangeHandler( element, trackEvent, name, updateTrackEventWithTryCatch );
+                  _this.attachCheckboxChangeHandler( element, trackEvent, name, updateTrackEvent );
                 }
                 else {
-                  _this.attachInputChangeHandler( element, trackEvent, name, updateTrackEventWithTryCatch );
+                  _this.attachInputChangeHandler( element, trackEvent, name, updateTrackEvent );
                 }
                 
               }
@@ -95,14 +95,14 @@ define( [ "text!./default.html", "editor/editor" ],
     });
 
     /**
-     * Member: updateTrackEventWithTryCatch
+     * Member: updateTrackEvent
      *
      * Attempt to update the properties of a TrackEvent; set the error state if a failure occurs.
      *
      * @param {TrackEvent} trackEvent: TrackEvent to update
      * @param {Object} properties: TrackEvent properties to update
      */
-    function updateTrackEventWithTryCatch( trackEvent, properties ) {
+    function updateTrackEvent( trackEvent, properties ) {
       try {
         trackEvent.update( properties );
       }
