@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var path = require( "path" ),
+    spawn = require('child_process').spawn,
     normalize = function( p ){ return '"' + path.normalize( p ) + '"'; },
     join = path.join,
     // Make Windows happy, use `node <path>`
@@ -269,7 +270,23 @@ target.server = function() {
   echo('### Serving butter');
 
   cd('cornfield');
-  exec('node app.js', { async: true });
+
+  // Use child_process.spawn here for a long-running server process
+  // (replaces `exec('node app.js', { async: true });`).
+  var server = spawn( 'node', [ 'app.js' ] );
+
+  // Mostly stolen from http://nodejs.org/docs/v0.3.5/api/child_processes.html#child_process.spawn
+  server.stdout.on( 'data', function( data ) {
+    process.stdout.write( data );
+  });
+
+  server.stderr.on( 'data', function( data ) {
+    process.stderr.write( "" + data );
+  });
+
+  server.on( 'exit', function( code ) {
+    console.log( 'server process exited with code ' + code );
+  });
 };
 
 target.package = function() {

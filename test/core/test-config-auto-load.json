@@ -1,0 +1,22 @@
+{
+  "name": "test-config-auto-load",
+  "makeVideoURLsUnique": false,
+  "baseDir": "../../../",
+  "savedDataUrl": "../saved-data-0000.json",
+  "scrapePage": false,  
+  "ui": {
+    "enabled": false
+  },
+  "plugin": {
+    "plugins": [
+      {
+        "type": "text",
+        "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
+      },
+      {
+        "type": "image",
+        "path": "{{baseDir}}external/popcorn-js/plugins/image/popcorn.image.js"
+      }
+    ]
+  }
+}

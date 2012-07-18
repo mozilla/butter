@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+
+      asyncTest( "Basic usage", 4, function(){
+
+        var testDialogSrc = "" +
+            "<div class=\"butter-dialog\">" +
+            "</div>";
+
+        createButterCore(function ( butter ){
+          butter.dialog.register( "test", testDialogSrc, function( internal ){
+            internal.listen( "test", function( e ){
+              internal.send( "test", "test" );
+            });
+          });
+          var external = butter.dialog.spawn( "test" );
+          external.listen( "test", function( e ){
+            ok( true, "Communication channels open" );
+            ok( butter.dialog.modal.element.querySelector( ".butter-dialog" ) === external.element, "Dialog element is correct and on page." );
+          });
+
+          external.listen( "open", function(){
+            external.send( "test" );
+            ok( true, "Open handler called." );
+            external.listen( "close", function(){
+              ok( true, "Close handler called." );
+              start();
+            });
+            external.close();
+          });
+          external.open();
+        });
+
+      });
+
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Dialog ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture"></div>
+  </body>
+</html>

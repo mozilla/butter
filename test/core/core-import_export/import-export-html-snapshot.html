@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Export HTML snapshotting", 1, function() {
+
+        createButterCore( function( butter ){
+
+          var m1 = butter.addMedia( { url:"../../../external/popcorn-js/test/trailer.ogv", target:"mediaDiv" } );
+
+          butter.listen( "mediaready", function( e ) {
+            butter.page.snapshotHTML();
+
+            t1 = m1.addTrack();
+            te1 = t1.addTrackEvent({
+              popcornOptions: {
+                start: 0,
+                end: 6,
+                text: "OBVIOUS",
+                target: "stringSanity"
+              },
+              type: "text"
+            });
+
+            equals( butter.getHTML().match( "OBVIOUS" ).length, 1, "TrackEvent wasn't exported" );
+
+            start();
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Exported HTML ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="mediaDiv"></div>
+    </div>
+  </body>
+</html>

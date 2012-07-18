@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Test basic player support", 5, function() {
+
+        createButterCore( function( butter ) {
+          var mediaURLS = [ "http://www.youtube.com/watch?v=7glrZ4e4wYU",
+              "../../../external/popcorn-js/test/italia.ogg" ],
+              index = 0,
+              count = 0;
+
+          equals( butter.currentMedia, undefined, "Initially there is no media" );
+
+          function mediaReady() {
+            ok( true, "Media changed triggered" + mediaURLS[ index ] );
+            equals( butter.currentMedia.url, mediaURLS[ index ], "The currentMedia's url is equal to the one that has been set" );
+
+            if( index + 1 === mediaURLS.length ) {
+              butter.unlisten( "mediaready", mediaReady );
+              start();
+            }
+
+            butter.currentMedia = butter.addMedia({ url: mediaURLS[ ++index ], target: "mediaDiv" });
+          }
+
+          butter.listen( "mediaready", mediaReady );
+          butter.addMedia({ url: mediaURLS[ index ], target: "mediaDiv" });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Player ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="mediaDiv" style="width: 500px; height: 400px;"></div>
+    </div>
+  </body>
+</html>

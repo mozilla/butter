@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Target creation and removal", 24, function() {
+
+        createButterCore(function( butter ) {
+
+          var targets,
+              elem = document.createElement( "div" );
+
+          elem.id = "targetID";
+          document.body.appendChild( elem );
+
+          equals( typeof butter.getTargetByType, "function", "butter instance has the getTargetByType function" );
+          equals( typeof butter.addTarget, "function", "butter instance has the addTarget function" );
+          equals( typeof butter.removeTarget, "function", "butter instance has the removeTarget function" );
+          equals( typeof butter.targets, "object", "butter instance has a targets array" );
+
+          var t1 = butter.addTarget({ name: "Target 2" });
+          var t2 = butter.addTarget({ element: "targetID" });
+          var t3 = butter.addTarget();
+
+          targets = butter.targets;
+          equals( targets.length, 3, "targets array has 3 items ( 3 targets )" );
+
+          for( var i = 0, l = targets.length; i < l; i++ ) {
+            equals( targets[ i ].id, "Target" + i, "Target " + ( i + 1 ) + " has the correct id" );
+          }
+
+          equals( targets[ 0 ].name, "Target 2", "Target 2 has the correct name" );
+          equals( typeof targets[ 1 ].element, "object", "Target 3 element exists" );
+          equals( targets[ 1 ].element.id, "targetID", "Target 3 element is correct" );
+          ok( targets[ 2 ], "empty target is acceptable" );
+
+          equals( butter.getTargetByType( "name", "Target 2" ).name, targets[ 0 ].name, "getting target by name works properly" );
+          equals( butter.getTargetByType( "id", "Target2" ).id, targets[ 2 ].id, "getting target by id works properly" );
+          equals( butter.getTargetByType( "element", targets[ 1 ].element).element, targets[ 1 ].element, "getting target by element works properly" );
+
+          for( var i = targets.length, l = 0; i > l; i-- ) {
+            var targs = butter.targets;
+            equals( targs.length, i, "Before removal: " + i + " targets" );
+            butter.removeTarget( targs[ i - 1 ] );
+            ok( !targs[ i - 1 ], "Target " + ( i - 1 ) + " no longer exists" );
+            equals( targs.length, i - 1, "After removal: " + ( i - 1 ) + " targets" );
+          }
+
+          start();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Target ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture"></div>
+  </body>
+</html>

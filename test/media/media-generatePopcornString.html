@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite [Media Module]</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../inject.js"></script>
+    <script type="text/javascript" src="../../src/butter.js"></script>
+    <script src="../butter.inject.js"></script>
+    <script src="../test-utils.js"></script>
+    <script>
+      asyncTest( "generatePopcornString functionality", function() {
+        createButterModule( function( butter ) {
+          var fakeScript = [ "var i = 1 + 1;" ],
+              js = butter.currentMedia.generatePopcornString( fakeScript );
+
+          ok( js.indexOf( fakeScript[ 0 ] ), "Generated popcornstring with expected script added" );
+          ok( js.indexOf( butter.currentMedia.url ), "Generated popcornstring with expected url" );
+          ok( js.indexOf( "{\"frameAnimation\": false}" ), "Frame animation is set to false by generatePopcornString as expected" );
+          start();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite [Media Module]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+  </body>
+</html>

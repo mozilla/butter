@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Media targets", 1, function(){
+
+        createButterCore( function( butter ) {
+          butter.config.value( "scrapePage", true );
+          butter.preparePage(function(){
+            var media = butter.media[0];
+
+            media.listen( "mediaready", function(){
+
+              var popcornTextPlugin = document.createElement( "script" );
+              popcornTextPlugin.src = "../../../external/popcorn-js/plugins/text/popcorn.text.js";
+              document.head.appendChild( popcornTextPlugin );
+
+              var trackEvent = media.addTrack().addTrackEvent({
+                    type: "text",
+                    popcornOptions: {
+                      start: 1,
+                      end: 2,
+                      text: "LOL",
+                      target: "media-target-test-div"
+                    }
+                  });
+              media.currentTime = 1.5;
+              var contentDiv = document.getElementById( "media-target-test-div-overlay" );
+              ok( contentDiv.childNodes[0].innerHTML === "LOL", "Media has target div with correct content." );
+              start();
+              document.head.removeChild( popcornTextPlugin );
+            });
+          });
+        });
+
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Media ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <video id="media-target-test-div" data-butter="media">
+        <source src="../../../external/popcorn-js/test/trailer.ogv" />
+        <source src="../../../external/popcorn-js/test/trailer.mp4" />
+      </video>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite [Editor Module]</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../inject.js"></script>
+    <script type="text/javascript" src="../../src/butter.js"></script>
+    <script src="../butter.inject.js"></script>
+    <script src="../test-utils.js"></script>
+    <script>
+      asyncTest( "Basic usage", 6, function() {
+        createButterModule( function( butter ) {
+          var media = butter.addMedia(),
+              track = media.addTrack(),
+              trackEvent = track.addTrackEvent({
+                type: "text",
+                popcornOptions: {
+                  start: 3,
+                  end: 6
+                }
+              });
+
+          var editor = butter.editor.editTrackEvent( trackEvent );
+          ok( editor, "Got Editor back from edit call." );
+          ok( editor.rootElement.querySelectorAll( ".trackevent-property" ).length, "Default Editor created properties properly." );
+          equal( editor.rootElement.querySelector( ".trackevent-property > input[data-manifest-key='start']" ).value, 3, "[start] input box has correct value." );
+          equal( editor.rootElement.querySelector( ".trackevent-property > input[data-manifest-key='end']" ).value, 6, "[end] input box has correct value." );
+          trackEvent.update({
+            start: 1,
+            end: 10
+          });
+          equal( editor.rootElement.querySelector( ".trackevent-property > input[data-manifest-key='start']" ).value, 1, "[start] input box has correct value after update." );
+          equal( editor.rootElement.querySelector( ".trackevent-property > input[data-manifest-key='end']" ).value, 10, "[end] input box has correct value after update." );
+          start();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite [Editor Module]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="test-target-1"></div>
+  </body>
+</html>
