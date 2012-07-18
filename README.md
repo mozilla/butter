@@ -88,6 +88,77 @@ Contributing
 * Be sure to change the ticket state on lighthouse to "peer-review-requested" and assign to to one of the [core developers](https://github.com/mozilla/butter/blob/master/package.json) for review
 * We have a bot that can run tests on code within pull requests. Try typing `/botio check` for linting, `/botio preview` to run the server, or `/botio help` for a list of all commands.
 
+# Get started working on Butter
+
+1. Join the #popcorn IRC channel
+A lot of the people working on Butter are in the #popcorn channel on irc.mozilla.org during business hours M to F (most of us are in Toronto, so Eastern Time). 
+
+2. Request to be added to lighthouse
+Ask someone to add you to our ticketing system, which currently exists here:
+https://webmademovies.lighthouseapp.com/projects/65733-popcorn-maker/
+Our upcoming milestone and the responsibilites associate with it can be found here:
+https://webmademovies.lighthouseapp.com/projects/65733-popcorn-maker/milestones/current
+
+## Designers
+
+### Where to find/drop files
+
+Our design files are organized on dropbox, at this link:
+https://www.dropbox.com/sh/7vm2rvw3axvkp0k/Tk4MKH4nZe
+You can ask Kate ( k88hudson on IRC or Twitter ) to be added as a collaborator if you want to drop your files in here.
+
+### File System
+* References: screen shots and other reference work from the webmaker project or HTML5 ecosystem
+* Wireframes: documents about the functionality/interaction/description of features
+* Visual Comps: UI mock-ups and style guide
+
+###  Working with lighthouse
+When someone assigns you a ticket, it will show up in your lighthouse queue with a status of `ui-comps-requested` or `assigned`.
+
+If you want someone to review or give feedback on your work, the best thing to do is:
+* Put a link to your files in the ticket ( on our dropbox or somewhere externally )
+* Change the status of the ticket to `peer-review-requested` or `feedback-requested`, and choose a member of the team to be responsible.
+
+## Developers
+
+### Github repo
+You can find the github repo for Butter at https://github.com/mozilla/butter. In order to clone with dependencies simply run
+```
+git clone https://github.com/mozilla/butter --recursive
+```
+from your terminal.
+
+If you're going to be making pull requests you'll want to fork your own version as well.
+
+### Working with lighthouse
+All of our code changes to Butter are documented in tickets, and go through two levels of peer-review. You can find a list of open tickets here:
+https://webmademovies.lighthouseapp.com/projects/65733-popcorn-maker/milestones/current
+
+If you are interested in working on a ticket, assign it to yourself (see above for how to get added to lighthouse), by marking the responsible field to your name and the status to `assigned`.
+
+### Working with branches + making a pull-request
+By convention, when we are working on a ticket we do so by creating a new branch of master named after the ticket. For example, if I was working on ticket #1234, I would run:
+```
+git checkout -b t1234
+```
+from my terminal while on `master`.
+We also tend to mark our commit messages with ticket numbers to make our history more readable, for example:
+```
+"[t1234] Fixed all the bugs"
+```
+After you have commited your changes, you can go to github and make a pull-request against `mozilla:master`. Try to make sure you have rebased to the lastest version of master.
+
+### Getting review
+All code changes in butter have to go through two levels of peer review. This improves the integrity of our code, and everyone goes through the process, from casual contributors to our most senior developers.
+
+1. After you have made a pull-request, post the link (e.g. https://github.com/mozilla/butter/pull/662) in the corresponding ticket.
+2. Set the status of the ticket to `peer-review requested`, and choose someone to review your code. If you're not sure who to ask, check out this list https://github.com/organizations/mozilla/teams/151407 or better, ask in #popcorn on IRC.
+3. After you get a review, you will see (1) comments in the diff in your pull-request and (2) comments in lighthouse. Keep an eye on the ticket to see when your review is done.
+4. Complete the changes that were requested, or if you disagree or need more information, comment in the pull-request or lighthouse. Commit and push up. 
+5. After your review passes, your reviewer will pass the ticket on to `super-review-requested`. You will likely have more changes after that review.
+6. After your final round of changes, your ticket will change to `review-looks-good`. Ask someone to help you rebase/merge into master. Hurrah!
+
+
 Known Issues
 ------------
 
