@@ -4,10 +4,12 @@
 
 define( [ "core/trackevent", "core/track", "core/eventmanager",
           "./track-container", "util/scrollbars", "./timebar",
-          "./zoombar", "./status", "./trackhandles" ],
+          "./zoombar", "./status", "./trackhandles",
+          "util/lang", "text!layouts/media-instance.html" ],
   function( TrackEvent, Track, EventManagerWrapper,
             TrackContainer, Scrollbars, TimeBar,
-            ZoomBar, Status, TrackHandles ) {
+            ZoomBar, Status, TrackHandles,
+            LangUtils, MEDIA_INSTANCE_LAYOUT ) {
 
   var MIN_ZOOM = 300,
       DEFAULT_ZOOM = 0.5;
@@ -28,10 +30,10 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     var _this = this,
         _media = media,
-        _tracksContainer = new TrackContainer( butter, media ),
-        _rootElement = document.createElement( "div" ),
-        _container = document.createElement( "div" ),
-        _mediaStatusContainer = document.createElement( "div" ),
+        _rootElement = LangUtils.domFragment( MEDIA_INSTANCE_LAYOUT ),
+        _tracksContainer = new TrackContainer( butter, media, _rootElement ),
+        _container = _rootElement.querySelector( ".media-container" ),
+        _mediaStatusContainer = _rootElement.querySelector( ".media-status-container" ),
         _hScrollBar = new Scrollbars.Horizontal( _tracksContainer.element, _tracksContainer.container ),
         _vScrollBar = new Scrollbars.Vertical( _tracksContainer.element, _tracksContainer.container ),
         _shrunken = false,
@@ -48,12 +50,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     EventManagerWrapper( _this );
 
-    _rootElement.className = "media-instance";
-    _rootElement.id = "media-instance" + media.id;
-    _container.className = "media-container";
-
-    _mediaStatusContainer.className = "media-status-container";
-
     function snapToCurrentTime(){
       _tracksContainer.snapTo( _media.currentTime );
       _hScrollBar.update();
@@ -67,12 +63,12 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         target = butter.getTargetByType( "elementID", target );
         if( target ){
           target.view.blink();
-        } //if
+        }
       }
       else {
         _media.view.blink();
-      } //if
-    } //blinkTarget
+      }
+    }
 
     function onTrackEventMouseOver( e ){
       var trackEvent = e.trackEvent,
@@ -80,8 +76,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
       if( corn.target ){
         blinkTarget( corn.target );
-      } //if
-    } //onTrackEventMouseOver
+      }
+    }
 
     function onTrackEventMouseOut( e ){
     }
@@ -111,14 +107,14 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         for( var t in tracks ){
           if( tracks.hasOwnProperty( t ) ){
             tracks[ t ].deselectEvents( trackEvent );
-          } //if
-        } //for
+          }
+        }
         butter.selectedEvents = [ trackEvent ];
       }
       else {
         butter.selectedEvents.push( trackEvent );
-      } //if
-    } //onTrackEventSelected
+      }
+    }
 
     function onMediaReady(){
       _zoomFactor = _container.clientWidth / _media.duration;
@@ -142,7 +138,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       // butter.ui.areas.statusbar.element.appendChild( _mediaStatusContainer );
       _rootElement.appendChild( _trackHandles.element );
       _rootElement.appendChild( _zoombar.element );
-      _rootElement.appendChild( _container );
+
+      butter.ui.tray.setMediaInstance( _rootElement );
 
       _media.listen( "trackeventremoved", function( e ){
         var trackEvent = e.data;
@@ -152,7 +149,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         if( _trackEventHighlight === "hover" ){
           trackEvent.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
           trackEvent.view.unlisten( "trackeventmouseout", onTrackEventMouseOut );
-        } //if
+        }
       });
 
       function onTrackEventAdded( e ){
@@ -203,7 +200,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         if( _trackEventHighlight === "hover" ){
           track.view.listen( "trackeventmouseover", onTrackEventMouseOver );
           track.view.listen( "trackeventmouseout", onTrackEventMouseOut );
-        } //if
+        }
       });
 
       onMediaReady();
@@ -219,12 +216,12 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
       if( start + 1 > _media.duration ){
           start = _media.duration - 1;
-      } //if
+      }
 
       var defaultTarget = butter.defaultTarget;
       if( !defaultTarget && butter.targets.length > 0 ){
         defaultTarget = butter.targets[ 0 ];
-      } //if
+      }
 
       track.addTrackEvent({
         popcornOptions: {
@@ -237,9 +234,9 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
       if( defaultTarget ){
         defaultTarget.view.blink();
-      } //if
+      }
 
-    } //onPluginDropped
+    }
 
     function onTrackEventDropped( e ){
       var search = _media.findTrackWithTrackEventId( e.data.trackEvent ),
@@ -255,7 +252,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       trackEvent.update( corn );
 
       e.data.track.addTrackEvent( trackEvent );
-    } //onTrackEventDropped
+    }
 
 
     this.destroy = function() {
@@ -264,15 +261,15 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         butter.ui.areas.statusbar.element.removeChild( _mediaStatusContainer );
       }
       _timebar.destroy();
-    }; //destroy
+    };
 
     this.hide = function() {
       _rootElement.style.display = "none";
-    }; //hide
+    };
 
     this.show = function() {
       _rootElement.style.display = "block";
-    }; //show
+    };
 
     function updateUI() {
       if( _media.duration ){
@@ -282,8 +279,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _vScrollBar.update();
         _zoombar.update();
         _trackHandles.update();
-      } //if
-    } //updateUI
+      }
+    }
 
     butter.listen( "ready", function(){
       updateUI();
@@ -326,12 +323,12 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           if( val !== _shrunken ){
             _shrunken = val;
 
-          } //if
+          }
         }
       }
     });
 
-  } //MediaInstance
+  }
 
   return MediaInstance;
 

@@ -10,10 +10,10 @@ define( [], function(){
       MOUSE_SCRUBBER_PIXEL_WINDOW = 3;
 
   return function( butter, parentElement, media, tracksContainer, hScrollbar ){
-    var _container = document.createElement( "div" ),
-        _node = document.createElement( "div" ),
-        _line = document.createElement( "div" ),
-        _fill = document.createElement( "div" ),
+    var _container = parentElement,
+        _node = _container.querySelector( ".time-bar-scrubber-node" ),
+        _line = _container.querySelector( ".time-bar-scrubber-line" ),
+        _fill = _container.querySelector( ".fill-bar" ),
         _tracksContainer = tracksContainer,
         _tracksContainerWidth,
         _element = parentElement,
@@ -32,26 +32,6 @@ define( [], function(){
         _lineWidth = 0,
         _seekCompleted = false,
         _seekMouseUp = false;
-
-    _container.className = "time-bar-scrubber-container";
-    _node.className = "time-bar-scrubber-node";
-    _line.className = "time-bar-scrubber-line";
-    _node.title = _line.title = "Displays the media's current time. Drag to seek through the media.";
-    _fill.className = "fill-bar";
-
-    _node.appendChild( _line );
-    _container.appendChild( _fill );
-    _container.appendChild( _node );
-    _element.appendChild( _container );
-
-    butter.ui.registerStateToggleFunctions( "timeline", {
-      transitionIn: function(){
-        _line.removeAttribute( "data-butter-shortened" );
-      },
-      transitionOut: function(){
-        _line.setAttribute( "data-butter-shortened", true );
-      }
-    });
 
     function setNodePosition(){
       var duration = _media.duration,

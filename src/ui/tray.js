@@ -24,6 +24,12 @@ define( [ "util/lang", "text!layouts/tray.html",
 
     document.body.appendChild( trayRoot );
 
+    this.setMediaInstance = function( mediaInstanceRootElement ) {
+      var timelineContainer = this.timelineArea.querySelector( ".butter-timeline" );
+      timelineContainer.innerHTML = "";
+      timelineContainer.appendChild( mediaInstanceRootElement );
+    };
+
   };
 
 });
