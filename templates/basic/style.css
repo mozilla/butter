@@ -47,6 +47,74 @@ body {
   background: #000;
 }
 
+/* CONTROLS
+-------------------------------------------------- */
+
+#butter-controls {
+  background: red;
+  height: 35px;
+  width: 100%;
+  float: left;
+  display: none;
+}
+
+#controls-big-play-button {
+  display: none;
+}
+
+#controls-timebar {
+  height: 100%;
+  width: 100%;
+  background: blue;
+  position: relative;
+}
+
+#controls-progressbar {
+  height: 100%;
+  width: 0px;
+  background: green;
+  position: absolute;
+}
+
+#controls-scrubber {
+  height: 100%;
+  width: 5px;
+  background: red;
+  position: absolute;
+}
+
+.controls-event-tick {
+  height: 100%;
+  background: yellow;
+}
+
+#butter-controls.controls-active {
+   /* active happens on mouse over and is reverted to default on mouse out */
+  display: block;
+}
+
+#butter-controls.controls-ready/*, #controls-big-play-button.controls-ready*/ {
+  /* ready happens when the template is exported, and not while in the editor */
+  /* remove this if you want the big play button and active to show controls */
+  display: block;
+}
+
+.controls-playing:before {
+  content: "pause";
+}
+
+.controls-paused:before {
+  content: "play";
+}
+
+.controls-muted:before {
+  content: "unmute";
+}
+
+.controls-unmuted:before {
+  content: "mute";
+}
+
 /* Use this class for a full overlay */
 .video-overlay {
   position: absolute;

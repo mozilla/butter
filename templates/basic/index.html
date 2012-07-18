@@ -23,6 +23,7 @@
 
 </head>
 <body>
+  <script src="controls.js"></script>
   <div id="embed-wrapper" class="wrapper cf">
     <div id="video-container" class="video-container">
       <div id="video" class="video" data-butter="media"></div>
@@ -31,7 +32,18 @@
     <div class="sidebar">
       <div class="sidebar-inner"></div>
     </div>
-    <div id="butter-controls" class="butter-controls"></div>
+    <div id="butter-controls">
+      <span id="controls-play" class="controls-paused"></span>
+      <span id="controls-mute" class="controls-unmuted"></span>
+      <span id="controls-currenttime">00:00:00</span>
+      <span> | </span>
+      <span id="controls-duration">00:00:00</span>
+      <div id="controls-timebar">
+        <div id="controls-progressbar"></div>
+        <div id="controls-scrubber"></div>
+      </div>
+    </div>
+    <!--<button id="controls-big-play-button">PLAY IT</button>-->
   </div>
 </body>
 </html>
