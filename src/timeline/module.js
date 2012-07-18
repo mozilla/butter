@@ -22,35 +22,6 @@ define( [
     _parentElement.classList.add( "fadable" );
 
     this._start = function( onModuleReady ){
-      butter.ui.areas.work.addComponent( _parentElement, {
-        states: [ "timeline" ],
-        transitionIn: function(){
-          _parentElement.style.visibility = "visible";
-          setTimeout(function(){
-            _parentElement.style.opacity = "1";
-          }, 0);
-        },
-        transitionInComplete: function(){
-
-        },
-        transitionOut: function(){
-          _parentElement.style.opacity = "0";
-        },
-        transitionOutComplete: function(){
-          _parentElement.style.visibility = "hidden";
-        }
-      });
-
-      butter.ui.registerStateToggleFunctions( "timeline", {
-        transitionIn: function(){
-          _parentElement.removeAttribute( "data-butter-disabled" );
-        },
-        transitionOut: function(){
-          _parentElement.setAttribute( "data-butter-disabled", true );
-        }
-      });
-
-      butter.ui.pushContentState( "timeline" );
       onModuleReady();
     };
 

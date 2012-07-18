@@ -33,6 +33,27 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     ButterNamespace.Editor = Editor;
 
     /**
+     * Member: openEditor
+     *
+     * Opens an editor corresponding to the given editor name if it exists
+     *
+     * @param {String} editorName: Name of editor to open
+     */
+    _this.openEditor = function( editorName, forceTrayOpen, openData ) {
+      // If the editor has never been used before, open it now
+      _editorAreaDOMRoot.classList.remove( "minimized" );
+      document.body.classList.remove( "editor-minimized" );
+      _toggler.state = false;
+
+      if( _currentEditor ) {
+        _currentEditor.close();
+      }
+      _currentEditor = Editor.create( editorName, butter );
+      _currentEditor.open( _editorAreaDOMRoot, openData );
+      return _currentEditor;
+    };
+
+    /**
      * Member: editTrackEvent
      *
      * Open the editor corresponding to the type of the given TrackEvent
@@ -43,17 +64,8 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       if ( !trackEvent || !( trackEvent instanceof TrackEvent ) ) {
         throw new Error( "trackEvent must be valid to start an editor." );
       }
-
-      _editorAreaDOMRoot.classList.remove( "minimized" );
-      _toggler.state = false;
-
       var editorType = Editor.isRegistered( trackEvent.type ) ? trackEvent.type : "default";
-      if( _currentEditor ) {
-        _currentEditor.close();
-      }
-      _currentEditor = Editor.create( editorType, butter );
-      _currentEditor.open( _editorAreaDOMRoot, trackEvent );
-      return _currentEditor;
+      return _this.openEditor( editorType, false, trackEvent );
     };
 
     // When a TrackEvent is somewhere in butter, open its editor immediately.
@@ -116,7 +128,6 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       var editorsToLoad = [];
 
       if( butter.config.value( "ui" ).enabled !== false ){
-        butter.ui.areas.editor = new butter.ui.Area( "editor-area", _editorAreaDOMRoot );
         _editorAreaDOMRoot.appendChild( _toggler.element );
         document.body.classList.add( "butter-editor-spacing" );
 

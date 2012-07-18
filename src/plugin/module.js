@@ -14,7 +14,7 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
 
   var __trackEventCSSRules = {},
       __cssRuleProperty = "data-butter-trackevent-type",
-      __cssRulePrefix = "#butter-timeline .butter-track-event",
+      __cssRulePrefix = ".butter-timeline .butter-track-event",
       __newStyleSheet = document.createElement( "style" );
 
   __newStyleSheet.type = "text/css";
@@ -83,25 +83,13 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
   var PluginManager = function( butter, moduleOptions ) {
 
     var _plugins = this.plugins = [],
-        _container = document.createElement( "div" ),
-        _listWrapper = document.createElement( "div" ),
-        _listContainer = document.createElement( "div" ),
+        _container,
+        _listWrapper,
+        _listContainer,
         _this = this,
         _pattern = '<div class="list-item $type_tool">$type</div>';
 
-    _container.id = "popcorn-plugin";
-    _listContainer.className = "list";
-    _listWrapper.className = "list-wrapper";
-
-    var title = document.createElement( "div" );
-    title.className = "title";
-    title.innerHTML = "<span>My Events</span>";
-    _container.appendChild( title );
-    _listWrapper.appendChild( _listContainer );
-    _container.appendChild( _listWrapper );
-
-    var _scrollbar = new Scrollbars.Vertical( _listWrapper, _listContainer );
-    _container.appendChild( _scrollbar.element );
+    var _scrollbar;
 
     /**
      * Member: _start
@@ -113,7 +101,33 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
     this._start = function( onModuleReady ) {
       if ( butter.ui ) {
         document.head.appendChild( __newStyleSheet );
-        butter.ui.areas.tools.addComponent( _container );
+        _container = butter.ui.tray.pluginArea.querySelector( ".popcorn-plugin-list" );
+        _listContainer = _container.querySelector( ".list" );
+        _listWrapper = _container.querySelector( ".list-wrapper" );
+        _scrollbar = new Scrollbars.Vertical( _listWrapper, _listContainer );
+        _container.appendChild( _scrollbar.element );
+
+        // Make the entire container droppable so that it can be added to.
+        DragNDrop.droppable( _container, {
+          drop: function( element ){
+            var pluginType = element.getAttribute( "data-popcorn-plugin-type" ),
+                draggableType = element.getAttribute( "data-butter-draggable-type" ),
+                plugin,
+                existingContainer;
+
+            if ( draggableType === "plugin" ) {
+              plugin = _this.get( pluginType );
+              if ( plugin ) {
+                existingContainer = _listContainer.querySelector( "[data-popcorn-plugin-type='" + pluginType + "']" );
+                if ( !existingContainer ) {
+                  _listContainer.appendChild( plugin.createElement( butter, _pattern ) );
+                  _scrollbar.update();
+                }
+              }
+            }
+          }
+        });
+
         PluginList( butter );
       }
       if ( moduleOptions && moduleOptions.plugins ) {
@@ -267,25 +281,6 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
       }
     };
 
-
-    // Make the entire container droppable so that it can be added to.
-    DragNDrop.droppable( _container, {
-      drop: function( element ){
-        if ( element.getAttribute( "data-butter-draggable-type" ) === "plugin" ) {
-          var pluginType = element.getAttribute( "data-popcorn-plugin-type" ),
-              plugin = _this.get( pluginType );
-          if ( plugin ) {
-            for ( var i=0; i<_listContainer.childNodes.length; ++i ) {
-              if ( _listContainer.childNodes[ i ].getAttribute( "data-popcorn-plugin-type" ) === pluginType ) {
-                return;
-              }
-            }
-            _listContainer.appendChild( plugin.createElement( butter, _pattern ) );
-            _scrollbar.update();
-          }
-        }
-      }
-    });
   };
 
   // Give the module a name so the module loader can act sanely.

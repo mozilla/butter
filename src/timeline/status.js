@@ -4,46 +4,24 @@
 
 define( [], function(){
 
-  function Button( className, onClick, toolTip ){
-    var _container = document.createElement( "div" ),
-        _button = document.createElement( "div" ),
-        _icon = document.createElement( "div" ),
+  function Button( parentNode, className, onClick, toolTip ) {
+    var _container = parentNode.querySelector( className ),
+        _button = _container.querySelector( ".status-button" ),
+        _icon = _container.querySelector( ".status-button-icon" ),
         _state = true;
 
-    _container.className = className;
-    _button.className = "status-button";
-    _button.title = toolTip || "";
-    _icon.className = "status-button-icon";
-
-    _container.appendChild( _button );
-    _button.appendChild( _icon );
-
-    function update(){
+    function update() {
       if( _state ){
         _icon.removeAttribute( "data-state" );
       }
       else {
         _icon.setAttribute( "data-state", true );
-      } //if
-    } //update
-
-    function onMouseUp( e ){
-      _button.removeAttribute( "data-mouse-state" );
-      window.removeEventListener( "mouseup", onMouseUp, false );
-    } //onMouseUp
-
-    _button.addEventListener( "mousedown", function( e ){
-      _button.setAttribute( "data-mouse-state", "depressed" );
-      window.addEventListener( "mouseup", onMouseUp, false );
-    }, false );
+      }
+    }
 
     _button.addEventListener( "click", onClick, false );
 
     Object.defineProperties( this, {
-      element: {
-        enumerable: true,
-        get: function(){ return _container; }
-      },
       state: {
         enumerable: true,
         get: function(){
@@ -55,18 +33,13 @@ define( [], function(){
         }
       }
     });
+  }
 
-  } //Button
-
-  function Time( media ){
-    var _container = document.createElement( "div" ),
-        _timeBox = document.createElement( "input" ),
+  function Time( parentNode, media ){
+    var _container = parentNode.querySelector( ".time-container" ),
+        _timeBox = _container.querySelector( "input" ),
         _media = media,
         _oldValue = 0;
-
-    _container.className = "time-container";
-    _container.appendChild( _timeBox );
-    _timeBox.type = "text";
 
     function setTime( time, setCurrentTime ){
       if( typeof( time ) === "string" || !isNaN( time ) ){
@@ -118,42 +91,32 @@ define( [], function(){
 
     setTime( 0, false );
 
-    Object.defineProperties( this, {
-      element: {
-        enumerable: true,
-        get: function(){
-          return _container;
-        }
-      }
-    });
+  }
 
-  } //Time
-
-  return function( media ){
+  return function( media, statusArea ){
 
     var _media = media,
-        _statusContainer = document.createElement( "div" ),
+        _statusContainer = statusArea.querySelector( ".status-container" ),
         _muteButton,
         _playButton,
-        _time,
-        _this = this;
+        _time;
 
     _statusContainer.className = "status-container";
 
-    _time = new Time( _media );
+    _time = new Time( statusArea, _media );
 
-    _muteButton = new Button( "mute-button-container", function( e ){
+    _muteButton = new Button( statusArea, ".mute-button-container", function( e ) {
       _media.muted = !_media.muted;
-    }, "Toggle volume on/off" );
+    });
 
-    _playButton = new Button( "play-button-container", function( e ){
-      if( _media.ended ){
+    _playButton = new Button( statusArea, ".play-button-container", function( e ) {
+      if ( _media.ended ) {
         _media.paused = false;
       }
-      else{
+      else {
         _media.paused = !_media.paused;
       }
-    }, "Play/Pause media");
+    });
 
     _media.listen( "mediamuted", function( e ){
       _muteButton.state = false;
@@ -179,31 +142,7 @@ define( [], function(){
       _playButton.state = true;
     });
 
-    _statusContainer.appendChild( _time.element );
-    _statusContainer.appendChild( _playButton.element );
-
-    _this.update = function(){
-    }; //update
-
-    _this.destroy = function(){
-    }; //destroy
-
-    Object.defineProperties( this, {
-      statusElement: {
-        enumerable: true,
-        get: function(){
-          return _statusContainer;
-        }
-      },
-      muteElement: {
-        enumerable: true,
-        get: function(){
-          return _muteButton.element;
-        }
-      }
-    });
-
-  }; //Status
+  };
 
 });
 
