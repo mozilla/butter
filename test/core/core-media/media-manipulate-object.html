@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Add, retrieve, use, and remove Media object", 16, function(){
+
+        createButterCore( function( butter ){
+
+          var mediaState = 0,
+              mediaEventState = 0,
+              mediaContent,
+              mediaTarget;
+
+          butter.listen("mediaadded", function( media ){
+            mediaEventState--;
+            mediaState = [ 1, media.data ];
+          });
+          butter.listen("mediachanged", function( media ){
+            mediaEventState *= 2;
+            mediaState = [ 2, media.data ];
+          });
+          butter.listen( "mediaremoved", function( media ){
+            mediaState = [ 0, media.data ];
+          });
+
+          var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../../../external/popcorn-js/test/trailer.ogv" } ),
+              m2;
+
+          ok( mediaEventState === -2, "Media events received in correct order" );
+          ok( butter.getMediaByType( "name" , "Media 1" ) === m1 && m1.name === "Media 1", "Method 1 object stored and retrieved" );
+
+          m2 = butter.addMedia( { name: "Media 2", media: document.getElementById("audio-test") } );
+
+          ok( butter.getMediaByType( "name", "Media 2" ) === m2 && m2.name === "Media 2", "Method 2 object stored and retrieved" );
+          ok( mediaState[ 0 ] === 1 && mediaState[ 1 ] === m2, "mediaadded event received" );
+          ok( butter.currentMedia === m1, "Current media is Media 1" );
+
+          butter.currentMedia = m2;
+          ok( mediaState[ 0 ] === 2 && mediaState[ 1 ] === m2, "mediachanged event received" );
+          ok( butter.currentMedia === m2, "Current media is Media 2" );
+
+          butter.currentMedia = m1;
+          ok( butter.currentMedia === m1, "Current media is Media 1 again" );
+          ok( mediaState[ 0 ] === 2 && mediaState[ 1 ] === m1, "mediachanged event received" );
+
+          mediaContent = m1.url;
+          mediaTarget = m1.target;
+
+          butter.listen( "mediacontentchanged", function( e ){
+            mediaContent = e.data.url;
+          });
+          butter.listen( "mediatargetchanged", function( e ){
+            mediaTarget = e.data.target;
+          });
+
+          var targetDiv = document.createElement( "div" );
+          targetDiv.style.display = "none";
+          targetDiv.id = "audio-foo";
+          document.body.appendChild( targetDiv );
+          m1.target = targetDiv;
+          m1.url = "www.mozilla.org";
+          ok( mediaTarget.id === "audio-foo", "Media target changed properly" );
+          ok( mediaContent === "www.mozilla.org", "Media content changed properly" );
+
+          butter.removeMedia( m2 );
+          ok( mediaState[ 0 ] === 0 && mediaState[ 1 ] === m2, "mediaremoved event received" );
+          butter.removeMedia( m1 );
+          ok( mediaState[ 0 ] === 0 && mediaState[ 1 ] === m1, "mediaremoved event received" );
+
+          ok( butter.getMediaByType( "name", "Media 1" ) === undefined, "Media 1 doesn't exist" );
+          ok( butter.getMediaByType( "name", "Media 2" ) === undefined, "Media 2 doesn't exist" );
+
+          ok( butter.media.length === 0, "There are no Media" );
+
+          start();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Media ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <audio id="audio-test" controls autobuffer preload="auto" >
+        <source src="../sample.oga" />
+      </audio>
+      <div id="mediaDiv"></div>
+      <div id="test-target-1"></div>
+      <div id="test-target-2"></div>
+      <div id="stringSanity"></div>
+      <div id="css-test"></div>
+    </div>
+  </body>
+</html>

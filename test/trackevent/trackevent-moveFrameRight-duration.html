@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite [Track Event]</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../inject.js"></script>
+    <script type="text/javascript" src="../../src/butter.js"></script>
+    <script src="../butter.inject.js"></script>
+    <script src="../test-utils.js"></script>
+    <script>
+      asyncTest( "moveFrameRight - hitting media duration", function() {
+        createButterModule( function( butter ) {
+          butter.currentMedia.onReady( function() {
+            var duration = butter.currentMedia.duration,
+                te = butter.currentMedia.tracks[ 1 ].trackEvents[ 0 ],
+                inc = duration - 1,
+                oldStart = te.popcornOptions.start,
+                oldEnd = te.popcornOptions.end;
+
+            // MetaKey false, simply moving track event
+            butter.listen( "trackeventupdated", function( e ) {
+              butter.unlisten( "trackeventupdated" );
+
+              var expectedStart = oldStart + ( duration - oldEnd );
+              equal( te.popcornOptions.start, expectedStart, "Start time should have been increased" );
+              equal( te.popcornOptions.end, duration, "End time should be the duration, as " + oldEnd + " + " + inc + " > " + duration );
+
+              butter.listen( "trackeventupdated", function( e ) {
+                butter.unlisten( "trackeventupdated" );
+
+                // MetaKey is used. Start time should not change, end should be duration
+                butter.listen( "trackeventupdated", function( e ) {
+                  butter.unlisten( "trackeventupdated" );
+
+                  equal( te.popcornOptions.start, oldStart, "Start shouldn't have changed" );
+                  equal( te.popcornOptions.end, duration, "End should have been set to the duration" );
+
+                  start();
+                });
+
+                oldStart = te.popcornOptions.start;
+                oldEnd = te.popcornOptions.end;
+                te.moveFrameRight( inc, true );
+              });
+
+              // resetting the times of the track event
+              te.update( { start: 5, end: 10 } );
+            });
+
+            te.moveFrameRight( inc );
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite [Track Event]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="mediaDiv"></div>
+      <div id="test-target-1"></div>
+    </div>
+  </body>
+</html>

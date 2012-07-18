@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite [Media Module]</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../inject.js"></script>
+    <script type="text/javascript" src="../../src/butter.js"></script>
+    <script src="../butter.inject.js"></script>
+    <script src="../test-utils.js"></script>
+    <script>
+      asyncTest( "getManifest functionality", function() {
+        createButterModule( function( butter ) {
+          var fakeManifest = {
+                stuff: "stuff",
+                stuff2: "stuff2",
+                moreStuff: "even more stuff"
+              },
+              retrievedItem;
+
+          // First need to set a fake manifest
+          butter.currentMedia.registry = fakeManifest;
+
+          retrievedItem = butter.currentMedia.getManifest( "stuff" );
+          equal( retrievedItem, fakeManifest.stuff, "Retrieved the correct manifest information" );
+          start();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite [Media Module]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+  </body>
+</html>

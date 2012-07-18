@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Add, retrieve, and remove Track", 10, function(){
+
+        createButterCore( function( butter ){
+
+          var trackState = 0,
+              m = butter.addMedia(),
+              t1,
+              t2,
+              t3;
+
+          butter.listen( "trackadded", function( track ){
+            trackState = [ 1, track.data ];
+          });
+          butter.listen( "trackremoved", function( track ){
+            trackState = [ 0, track.data ];
+          });
+
+          t1 = m.addTrack( { name: "Track 1" } );
+          ok( trackState[ 0 ] === 1 && trackState[ 1 ] === t1, "trackadded event received" );
+
+          t2 = m.addTrack( { name: "Track 2" } );
+          ok( trackState[ 0 ] === 1 && trackState[ 1 ] === t2, "trackadded event received" );
+
+          ok( m.getTrackById( t1.id ) === t1 &&
+              m.getTrackById( t1.id ).name === "Track 1",
+              "Track generation method 1");
+          ok( m.getTrackById( t2.id ) === t2 &&
+              m.getTrackById( t2.id ).name === "Track 2",
+              "Track generation method 2");
+
+          m.removeTrack( t1 );
+          ok( trackState[ 0 ] === 0 && trackState[ 1 ] === t1, "trackremoved event received" );
+          m.removeTrack( t2 );
+          ok( trackState[ 0 ] === 0 && trackState[ 1 ] === t2, "trackremoved event received" );
+
+          ok( m.getTrackById( t1.id ) === undefined, "Track 1 doesn't exist" );
+          ok( m.getTrackById( t2.id ) === undefined, "Track 2 doesn't exist" );
+
+          ok( butter.tracks.length === 0, "There are no Tracks" );
+
+          t3 = m.addTrack( { name: "Track 3", target: "Target 1" } );
+          m.addTrack( t3 );
+          t3.addTrackEvent( { name: "TrackEvent 49", type: "test" } );
+          ok( t3.target === "Target 1", "TrackEvents inherit target when track target is set" );
+
+          start();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Track ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture"></div>
+  </body>
+</html>

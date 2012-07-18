@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Select all track events of a particular type using getTrackEventsByType", 1, function(){
+
+        createButterCore( function( butter ){
+
+          var m = butter.addMedia({ url: "../../../external/popcorn-js/test/italia.ogg", target: "mediaDiv" }),
+              t = m.addTrack(),
+              te1 = t.addTrackEvent( { name: "TrackEvent 1", type: "text", popcornOptions: { start: 0, end: 1, target: "mediaDiv" } } ),
+              te2 = t.addTrackEvent( { name: "TrackEvent 2", type: "test", popcornOptions: { start: 0, end: 3, target: "mediaDiv" } } );
+
+          ok( butter.getTrackEventsByType( "test" ).length === 1, "One test track event exists." );
+
+          start();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Track Event ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="mediaDiv"></div>
+    </div>
+  </body>
+</html>

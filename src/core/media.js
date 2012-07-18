@@ -110,7 +110,8 @@
             setup: {
               target: _target,
               url: _url
-            }
+            },
+            makeVideoURLsUnique: mediaOptions.makeVideoURLsUnique
           });
 
       this.popcornCallbacks = null;

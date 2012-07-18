@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite [Media Module]</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../inject.js"></script>
+    <script type="text/javascript" src="../../src/butter.js"></script>
+    <script src="../butter.inject.js"></script>
+    <script src="../test-utils.js"></script>
+    <script>
+      asyncTest( "removeTrack functionality", 2, function() {
+        createButterModule( function( butter ) {
+          var tracks = butter.currentMedia.tracks,
+              trackOne = tracks[ 0 ],
+              trackTwo = tracks[ 1 ],
+              trackEvent = trackTwo.trackEvents[ 0 ];
+
+          butter.listen( "trackremoved", function( e ) {
+
+            butter.unlisten( "trackremoved" );
+            butter.listen( "trackeventremoved", function( e ) {
+
+              butter.unlisten( "trackeventremoved" );
+              equal( e.data.id, trackEvent.id, "Successfully sent trackeventremoved for the trackevent on the track" );
+              start();
+            });
+
+            equal( e.data.id, trackOne.id, "Removed the correct track" );
+
+            butter.currentMedia.removeTrack( trackTwo );
+          });
+
+          butter.currentMedia.removeTrack( trackOne );
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite [Media Module]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+  </body>
+</html>

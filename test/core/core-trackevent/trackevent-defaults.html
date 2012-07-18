@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Trackevents use plugin defaults", 1, function() {
+
+        createButterCore(function( butter ) {
+          var te1,
+              m = butter.addMedia({ url: "../../../external/popcorn-js/test/italia.ogg", target: "mediaDiv" }),
+              t = m.addTrack();
+
+          butter.listen( "mediaready", function( e ) {
+            butter.listen( "trackeventupdated", function( e ) {
+              equal( e.data.popcornOptions.text, "Popcorn.js", "Trackevent is given proper plugin defaults" );
+              start();
+            });
+
+            te1 = t.addTrackEvent({
+              name: "TrackEvent 1",
+              type: "text",
+              start: 0,
+              end: 1
+            });
+
+            te1.update({
+              start: 5,
+              end: 6
+            });
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Track Event ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="mediaDiv"></div>
+    </div>
+  </body>
+</html>

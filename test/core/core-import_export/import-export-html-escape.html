@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Exported HTML Escape", 1, function() {
+
+        createButterCore( function( butter ){
+          var m1 = butter.addMedia( { url:"../../../external/popcorn-js/test/trailer.ogv", target:"mediaDiv" } );
+
+          butter.listen( "mediaready", function( e ) {
+            t1 = m1.addTrack();
+            var messedUpString = "this'" + 'should"' + '""""""b"e' + "f'i'ne";
+            te1 = t1.addTrackEvent( { popcornOptions: { start: 0, end: 6, text: messedUpString, target: "stringSanity" }, type: "text" } );
+            butter.addTarget( { name: "beep" } );
+
+            var func = Function( "", m1.generatePopcornString() );
+                pop = func();
+
+            equals( document.getElementById( "stringSanity" ).children[ 0 ].innerHTML, messedUpString, "String escaping in exported HTML is fine" );
+
+            start();
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Exported HTML ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="mediaDiv"></div>
+    </div>
+  </body>
+</html>
