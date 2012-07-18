@@ -270,10 +270,12 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
           if( _state !== val ){
             _state = val;
             if( _state ){
+              document.body.classList.remove( "tray-minimized" );
               _element.classList.remove( "minimized" );
               _this.dispatch( "uivisibilitychanged", true );
             }
             else {
+              document.body.classList.add( "tray-minimized" );
               _element.classList.add( "minimized" );
               _this.dispatch( "uivisibilitychanged", false );
             } //if
