@@ -49,6 +49,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       if ( !_firstUse ) {
         _firstUse = true;
         _editorAreaDOMRoot.classList.remove( "minimized" );
+        document.body.classList.remove( "editor-minimized" );
         _toggler.state = false;
       }
 
@@ -108,9 +109,11 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         var newState = !_editorAreaDOMRoot.classList.contains( "minimized" );
         _toggler.state = newState;
         if ( newState ) {
+          document.body.classList.add( "editor-minimized" );
           _editorAreaDOMRoot.classList.add( "minimized" );
         }
         else {
+          document.body.classList.remove( "editor-minimized" );
           _editorAreaDOMRoot.classList.remove( "minimized" );
         }
       }, "Show/Hide Editor", true );
@@ -124,6 +127,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
 
         // Start minimized
         _editorAreaDOMRoot.classList.add( "minimized" );
+        document.body.classList.add( "editor-minimized" );
 
         document.body.appendChild( _editorAreaDOMRoot );
 
