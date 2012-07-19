@@ -13,6 +13,7 @@ var path = require( "path" ),
     RJS = nodeExec( normalize( "./node_modules/requirejs/bin/r.js" ) ),
     LESS = nodeExec( normalize( "./node_modules/less/bin/lessc" ) ),
     DOX = normalize( "./tools/dox.py" ),
+    MIRRORJS = nodeExec( normalize( "./tools/mirror.js" ) ),
 
     SRC_DIR = 'src',
 
@@ -98,7 +99,23 @@ function checkJS(){
   });
 
   // jshint with non-errors plus linting of json files
-  exec(JSLINT + ' ' + files + ' --show-non-errors --extra-ext json');
+  exec( JSLINT + ' ' + files + ' --show-non-errors --extra-ext json' );
+}
+
+function checkJSStyle(){
+  echo('### Style-Linting JS files');
+
+  var dirs = SLICE.call( arguments );
+
+  // Get all js files in dirs
+  var files = "";
+  var regexp = /\.js$/;
+  
+  files += find( dirs ).filter( function( file ) {
+    return file.match( regexp );
+  }).join(' ') + ' ';
+
+  exec( MIRRORJS + ' ' + files );
 }
 
 target.all = function() {
@@ -146,11 +163,17 @@ target.docs = function() {
 target.check = function() {
   checkJS( SRC_DIR );
   checkCSS( CSS_DIR );
+  checkJSStyle( SRC_DIR );
 };
 
 target['check-templates'] = function() {
   checkJS( TEMPLATES_DIR );
   checkCSS( TEMPLATES_DIR );
+  checkJSStyle( TEMPLATES_DIR );
+};
+
+target['check-js-style'] = function() {
+  checkJSStyle( SRC_DIR );
 };
 
 target['check-css'] = function( dirs ) {
@@ -159,10 +182,12 @@ target['check-css'] = function( dirs ) {
 
 target['check-lint'] = function( dir ) {
   checkJS( SRC_DIR );
+  checkJSStyle( SRC_DIR );
 };
 
 target['check-tests'] = function( dir ) {
   checkJS( TEST_DIR );
+  checkJSStyle( TEST_DIR );
 };
 
 // If compress is true, crush CSS down, otherwise leave expanded.

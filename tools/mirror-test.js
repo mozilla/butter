@@ -6,6 +6,13 @@
 
   j*=2;
 
+  var regex = /fwofijoweij/;
+  var string = "lkjweflkjwef";
+
+  /***
+   * Block comment
+   */
+
   function badBrackets(){
 
   }
@@ -22,6 +29,8 @@
 
   if(false){
 
+  } else {
+    
   }
 
 }());
