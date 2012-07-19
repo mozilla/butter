@@ -2,27 +2,43 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "util/dragndrop" ], function( DragNDrop ){
+define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-list-editor.html" ],
+  function( DragNDrop, LangUtils, Editor, EDITOR_LAYOUT ) {
 
 	return function( butter ){
-    var _parentElement = document.createElement( "div" ),
-        _containerElement = document.createElement( "div" );
 
-    _parentElement.id = "plugin-list";
-    _containerElement.className = "container";
-    _parentElement.appendChild( _containerElement );
+    var _parentElement = LangUtils.domFragment( EDITOR_LAYOUT ),
+        _containerElement = _parentElement.querySelector( ".container" );
 
     var _button = butter.ui.tray.pluginArea.querySelector( ".add-popcorn" );
 
+    var _pluginArchetype = _containerElement.querySelector( "div" );
+    _pluginArchetype.parentNode.removeChild( _pluginArchetype );
+    console.log( _pluginArchetype );
+
+    Editor.register( "plugin-list", null, function( rootElement, butter ) {
+      console.log("blamo!");
+      rootElement = _parentElement;
+
+      Editor.BaseEditor( this, butter, rootElement, {
+        open: function( parentElement ) {
+          console.log("open");
+        },
+        close: function() {
+          console.log("close");
+        }
+      });
+    });
+
     _button.addEventListener( "click", function(){
-      console.log(2);
+      butter.editor.openEditor( "plugin-list" );
     }, false );
 
     butter.listen( "pluginadded", function( e ){
-      var element = document.createElement( "div" ),
+      var element = _pluginArchetype.cloneNode( true ),
           iconImg = e.data.helper,
-          icon = document.createElement( "span" ),
-          text = document.createElement( "span" );
+          icon = element.querySelector( "span.icon" ),
+          text = element.querySelector( "span.label" );
 
       DragNDrop.helper( element, {
         start: function(){
@@ -40,22 +56,15 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
 
       if( iconImg ) {
         icon.style.backgroundImage = "url('" + iconImg.src + "')";
-        icon.className = "icon";
-        element.appendChild( icon );
       }
-      text.className = "label";
+
       text.innerHTML = e.data.type;
-      element.appendChild( text );
 
       element.setAttribute( "data-popcorn-plugin-type", e.data.type );
       element.setAttribute( "data-butter-draggable-type", "plugin" );
 
       _containerElement.appendChild( element );
     });
-
-    _parentElement.style.display = "none";
-    _parentElement.classList.add( "fadable" );
-
 	};
 
 });
