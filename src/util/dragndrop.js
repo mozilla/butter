@@ -34,9 +34,9 @@ define([], function(){
     if( __mouseDown ){
       for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
         __selectedDraggables[ i ].update();
-      } //for
+      }
       window.setTimeout( updateTimeout, SCROLL_INTERVAL );
-    } //if
+    }
   }
 
   function onDragged( e ){
@@ -44,40 +44,36 @@ define([], function(){
     __mouseLast[ 1 ] = __mousePos[ 1 ];
     __mousePos = [ e.clientX, e.clientY ];
 
-    var remembers = [],
+    var remembers,
         droppable,
         remember,
+        selectedDraggable,
         i, j;
 
-    if( __mouseDown ){
-      for( i = __selectedDraggables.length - 1; i >= 0; --i ){
-        remembers.push( __selectedDraggables[ i ] );
-      } //for
-    }else{
-      var selectedDraggable;
+    remembers = __selectedDraggables.slice();
+
+    if( !__mouseDown ){
       __mouseDown = true;
       window.setTimeout( updateTimeout, SCROLL_INTERVAL );
-
-      for( i = __selectedDraggables.length - 1; i >= 0; --i ){
-        selectedDraggable = __selectedDraggables[ i ];
-        selectedDraggable.start( e );
-        remembers.push( __selectedDraggables[ i ] );
-      } //for
-    } //if
+      for( i = remembers.length - 1; i >= 0; --i ){
+        remembers[ i ].start( e );
+      }
+    }
 
     for( i = remembers.length - 1; i >= 0; --i ){
       remember = remembers[ i ];
       for( j = __droppables.length - 1; j >= 0; --j ){
         droppable = __droppables[ j ];
-        if( !droppable.element.id ||
-            remember.element.id === droppable.element.id ||
+        if( remember.element === droppable.element ||
             !droppable.drag( remember.element.getBoundingClientRect() ) ){
           droppable.forget( remember );
-        }else{
+        }
+        else {
           droppable.remember( remember );
-        } //if
-      } //for
-    } //for
+          break;
+        }
+      }
+    }
   }
 
   function onMouseUp( e ){
@@ -90,8 +86,8 @@ define([], function(){
       selectedDraggable = __selectedDraggables[ i ];
       if( selectedDraggable.dragging ){
         selectedDraggable.stop();
-      } //if
-    } //for
+      }
+    }
   }
 
   function onMouseDown( e ){
@@ -365,7 +361,7 @@ define([], function(){
         _onOver = options.over || function(){},
         _onOut = options.out || function(){},
         _droppable = {},
-        _draggedElements = {},
+        _rememberedDraggables = [],
         _draggedCount = 0;
 
     function onDrop( e ) {
@@ -415,37 +411,39 @@ define([], function(){
     element.addEventListener( "dragenter", onDragEnter, false );
     element.addEventListener( "dragleave", onDragLeave, false );
 
+    function removeDraggable( draggable ) {
+      var idx = _rememberedDraggables.indexOf( draggable );
+      if( idx > -1 ){
+        _rememberedDraggables.splice( idx, 1 );
+        if( _rememberedDraggables.length === 0 ){
+          element.classList.remove( _hoverClass );
+        }
+      }
+      return idx > -1;
+    }
+
     _droppable = {
       element: element,
       remember: function( draggable ){
-        if( !_draggedElements[ draggable.element.id ] && !draggable.droppable ){
-          _draggedCount++;
+        var idx = _rememberedDraggables.indexOf( draggable );
+        if( idx === -1 ){
+          _rememberedDraggables.push( draggable );
           element.classList.add( _hoverClass );
-          _draggedElements[ draggable.element.id ] = draggable;
           draggable.droppable = _droppable;
           _onOver( draggable.element );
-        } //if
+        }
       },
       forget: function( draggable ){
-        // we only care to forget if it is currently dragging
-        if( _draggedElements[ draggable.element.id ] && draggable.droppable ){
-          if( --_draggedCount === 0 ){
-            element.classList.remove( _hoverClass );
-          } //if
+        if ( removeDraggable( draggable ) ) {
           draggable.droppable = null;
           _onOut( draggable.element );
-          delete _draggedElements[ draggable.element.id ];
-        } // if
+        }
       },
       drop: function( draggable ){
-        if( _draggedElements[ draggable.element.id ] ){
-          if( --_draggedCount === 0 ){
-            element.classList.remove( _hoverClass );
-          } //if
-          draggable.droppable = null;
+        if ( removeDraggable( draggable ) ) {
           _onDrop( draggable.element, __mousePos );
-          delete _draggedElements[ draggable.element.id ];
-        } //if
+          draggable.droppable = null;
+        }
       },
       drag: function( dragElementRect ){
         var rect = element.getBoundingClientRect();
@@ -462,7 +460,6 @@ define([], function(){
         var overlapDims = [ minR - maxL, minB - maxT ];
 
         if( overlapDims[ 0 ] * overlapDims[ 1 ] / 2 > dragElementRect.width * dragElementRect.height / 4 ){
-
           return true;
         }
 
@@ -504,13 +501,7 @@ define([], function(){
         _onStart = options.start || function(){},
         _onStop = options.stop || function(){ return false; },
         _originalPosition,
-        _droppable = null,
-        _draggable = {
-          destroy: function(){
-            _draggable.selected = false;
-            element.removeEventListener( "mousedown", onMouseDown, false );
-          }
-        },
+        _draggable = {},
         _dragging = false,
         _containmentPadding = __nullRect;
 
@@ -526,7 +517,6 @@ define([], function(){
     };
 
     function updatePosition(){
-
       var x = __mousePos[ 0 ] - _mouseOffset[ 0 ],
           y = __mousePos[ 1 ] - _mouseOffset[ 1 ];
 
@@ -596,8 +586,14 @@ define([], function(){
 
     element.addEventListener( "mousedown", onMouseDown, false );
 
-    _draggable.update = function(){
+    _draggable.droppable = null;
 
+    _draggable.destroy = function(){
+      _draggable.selected = false;
+      element.removeEventListener( "mousedown", onMouseDown, false );
+    };
+
+    _draggable.update = function(){
       updatePosition();
       if( _scroll ){
         checkScroll();
@@ -616,12 +612,12 @@ define([], function(){
     _draggable.stop = function(){
       _dragging = false;
       _onStop();
-      if( !_droppable && _revert ){
+      if( !_draggable.droppable && _revert ){
         element.style.left = _originalPosition[ 0 ] + "px";
         element.style.top = _originalPosition[ 1 ] + "px";
-      } else if ( _droppable ){
-        _droppable.drop( _draggable );
-      } //if
+      } else if ( _draggable.droppable ){
+        _draggable.droppable.drop( _draggable );
+      }
     };
 
     Object.defineProperties( _draggable, {
@@ -631,8 +627,8 @@ define([], function(){
           for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
             if( __selectedDraggables[ i ].element.id === _element.id ){
               return true;
-            } //if
-          } //for
+            }
+          }
           return false;
         },
         set: function( val ){
@@ -646,9 +642,9 @@ define([], function(){
               if( __selectedDraggables[ i ].element.id === _element.id ){
                 __selectedDraggables.splice( i, 1 );
                 return;
-              } //if
-            } //for
-          } //if
+              }
+            }
+          }
         }
       },
       dragging: {
@@ -661,15 +657,6 @@ define([], function(){
         enumerable: true,
         get: function(){
           return _element;
-        }
-      },
-      droppable: {
-        enumerable: true,
-        get: function(){
-          return _droppable;
-        },
-        set: function( val ){
-          _droppable = val;
         }
       }
     });

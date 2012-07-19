@@ -70,7 +70,6 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
     styleContent += "background: hsl( " + hash.h + ", " + hash.s + "%, " + hash.l + "% );";
     styleContent += "}";
     __newStyleSheet.innerHTML = __newStyleSheet.innerHTML + styleContent;
-    console.log(__newStyleSheet);
   }
 
   /**
