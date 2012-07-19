@@ -51,41 +51,36 @@ body {
 -------------------------------------------------- */
 
 #butter-controls {
-  background: red;
-  height: 35px;
+  height: 50px;
   width: 100%;
-  float: left;
   display: none;
+  background: #242029;
 }
+
+
+/* Big Button */
 
 #controls-big-play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -40px;
   display: none;
+  height: 80px;
+  width: 80px;
+  border: 2px solid #D0D0D0;
+  border-radius: 50px;
+  background: #242029;
+  text-align: center;
 }
 
-#controls-timebar {
-  height: 100%;
-  width: 100%;
-  background: blue;
-  position: relative;
-}
-
-#controls-progressbar {
-  height: 100%;
-  width: 0px;
-  background: green;
-  position: absolute;
-}
-
-#controls-scrubber {
-  height: 100%;
-  width: 5px;
-  background: red;
-  position: absolute;
-}
-
-.controls-event-tick {
-  height: 100%;
-  background: yellow;
+#controls-big-play-button > span {
+  display: inline-block;
+  height: 50px;
+  width: 40px;
+  margin-left: 8px;
+  margin-top: 3px;
+  background: url(video-js.png) -97px 4px no-repeat;
 }
 
 #butter-controls.controls-active {
@@ -99,21 +94,105 @@ body {
   display: block;
 }
 
-.controls-playing:before {
-  content: "pause";
+#controls-big-play-button.controls-ready {
+  display: block;
 }
 
-.controls-paused:before {
-  content: "play";
+
+/* Rows */
+
+.controls-top,
+.controls-bottom {
+  
 }
 
-.controls-muted:before {
-  content: "unmute";
+/* Top */
+
+.controls-top {
+  padding-top: 5px;
+  border-bottom: 1px solid black;
+  height: 18px;
 }
 
-.controls-unmuted:before {
-  content: "mute";
+#controls-currenttime,
+#controls-duration {
+  float: left;
+  width: 10%;
+  font-size: 11px;
+  line-height: 12px;
+  text-align: center;
 }
+
+/* Bottom */
+.controls-bottom {
+  width: 100%;
+  border-top: 1px solid rgba( 255, 255, 255, .1 );
+}
+
+#controls-timebar {
+  float: left;
+  background: rgba( 0, 0, 0, .2 );
+  box-shadow: inset 0 1px 5px 2px rgba( 0, 0, 0, .5 );
+  position: relative;
+  height: 12px;
+  width: 80%;
+  border-radius: 6px;
+}
+
+#controls-progressbar {
+  height: 100%;
+  background: rgba( 0, 0, 0, .4 );
+  position: absolute;
+  border-radius: 6px 0 0 8px;
+}
+
+#controls-scrubber {
+  position: relative;
+  height: 100%;
+  width: 2px;
+  background: #EEE;
+  position: absolute;
+  cursor: pointer;
+}
+
+#controls-scrubber:after {
+  content: "";
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
+  background: #EEE;
+  top: -2px;
+  left: -5px;
+}
+
+/* Buttons */
+
+.controls-btn {
+  display: inline-block;
+  padding: 10px;
+  background: url( video-js.png ) no-repeat;
+  margin-left: 8px;
+}
+
+.controls-playing {
+  background-position: -20px 3px;
+}
+
+.controls-paused {
+  background-position: 5px 3px;
+
+}
+
+.controls-muted {
+  background-position: 0 -21px;
+}
+
+.controls-unmuted {
+  background-position: -25px -21px;
+}
+
+/* END CONTROLS */
 
 /* Use this class for a full overlay */
 .video-overlay {
