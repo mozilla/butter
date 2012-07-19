@@ -126,7 +126,7 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
           }
         });
 
-        // PluginList( butter );
+        PluginList( butter );
       }
       if ( moduleOptions && moduleOptions.plugins ) {
         _this.add( moduleOptions.plugins, onModuleReady );

@@ -2,11 +2,11 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "./toggler", "./logo-spinner",
-          "./context-button", "./header", "./unload-dialog",
+define( [ "core/eventmanager", "./toggler",
+          "./header", "./unload-dialog",
           "./tray" ],
-  function( EventManagerWrapper, Toggler, LogoSpinner,
-            ContextButton, Header, UnloadDialog,
+  function( EventManagerWrapper, Toggler,
+            Header, UnloadDialog,
             Tray ){
 
   var TRANSITION_DURATION = 500,
@@ -31,7 +31,6 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner",
     var _areas = this.areas = {},
         _contentState = [],
         _state = true,
-        _logoSpinner,
         _uiConfig = butter.config,
         _uiOptions = _uiConfig.value( "ui" ),
         _this = this;
@@ -42,30 +41,12 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner",
 
     this.tray = new Tray();
 
-/*
-    var _element = _areas.main.element,
-        _toggler = new Toggler( function ( e ) {
+    var _toggler = new Toggler( function ( e ) {
           butter.ui.visible = !butter.ui.visible;
           _toggler.state = !_toggler.state;
         }, "Show/Hide Timeline" );
-*/
 
-/*
-    _element.appendChild( _toggler.element );
-
-    _areas.work = new Area( "work" );
-    _areas.statusbar = new Area( "status-bar" );
-    _areas.tools = new Area( "tools" );
-
-    var logoContainer = document.createElement( "div" );
-    logoContainer.id = "butter-loading-container";
-    _logoSpinner = LogoSpinner( logoContainer );
-    _element.appendChild( logoContainer );
-
-    _element.appendChild( _areas.statusbar.element );
-    _element.appendChild( _areas.work.element );
-    _element.appendChild( _areas.tools.element );
-*/
+    this.tray.rootElement.appendChild( _toggler.element );
 
     if ( _uiOptions.enabled ) {
       if ( _uiOptions.onLeaveDialog ) {
@@ -219,12 +200,12 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner",
             _state = val;
             if( _state ){
               document.body.classList.remove( "tray-minimized" );
-              _element.classList.remove( "minimized" );
+              this.tray.rootElement.classList.remove( "minimized" );
               _this.dispatch( "uivisibilitychanged", true );
             }
             else {
               document.body.classList.add( "tray-minimized" );
-              _element.classList.add( "minimized" );
+              this.tray.rootElement.classList.add( "minimized" );
               _this.dispatch( "uivisibilitychanged", true );
             }
           }
@@ -395,18 +376,15 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner",
 
     this.TRANSITION_DURATION = TRANSITION_DURATION;
 
-    // _toggler.visible = false;
+    _toggler.visible = false;
     _this.visible = false;
 
     this.loadIndicator = {
       start: function(){
-        // _logoSpinner.start();
-        // logoContainer.style.display = "block";
+        _this.tray.toggleLoadingSpinner( true );
       },
       stop: function(){
-        // _logoSpinner.stop(function(){
-        //   logoContainer.style.display = "none";
-        // });
+        _this.tray.toggleLoadingSpinner( false );
       }
     };
 
@@ -415,9 +393,8 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner",
     butter.listen( "ready", function(){
       _this.loadIndicator.stop();
       _this.visible = true;
-      // _toggler.visible = true;
-      ContextButton( butter );
-      if( _uiOptions.enabled ){
+      _toggler.visible = true;
+      if( _uiConfig.value( "ui" ).enabled !== false ){
         Header( butter, _uiConfig );
       }
     });

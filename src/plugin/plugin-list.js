@@ -12,26 +12,11 @@ define( [ "util/dragndrop" ], function( DragNDrop ){
     _containerElement.className = "container";
     _parentElement.appendChild( _containerElement );
 
-/*
-    butter.ui.areas.work.addComponent( _parentElement, {
-      states: [ "add-popcorn" ],
-      transitionIn: function(){
-        _parentElement.style.display = "block";
-        setTimeout(function(){
-          _parentElement.style.opacity = "1";
-        }, 0);
-      },
-      transitionOut: function(){
-        _parentElement.style.opacity = "0";
-      },
-      transitionInComplete: function(){
+    var _button = butter.ui.tray.pluginArea.querySelector( ".add-popcorn" );
 
-      },
-      transitionOutComplete: function(){
-        _parentElement.style.display = "none";
-      }
-    });
-*/
+    _button.addEventListener( "click", function(){
+      console.log(2);
+    }, false );
 
     butter.listen( "pluginadded", function( e ){
       var element = document.createElement( "div" ),
