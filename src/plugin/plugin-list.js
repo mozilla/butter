@@ -14,7 +14,6 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
 
     var _pluginArchetype = _containerElement.querySelector( "div" );
     _pluginArchetype.parentNode.removeChild( _pluginArchetype );
-    console.log( _pluginArchetype );
 
     Editor.register( "plugin-list", null, function( rootElement, butter ) {
       console.log("blamo!");
