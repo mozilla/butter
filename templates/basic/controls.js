@@ -22,7 +22,7 @@
         durationDialog, timebar, progressBar, bigPlayButton,
         scrubber, seeking, playStateCache, active, timeStamp,
         // functions
-        bigPlayClicked, bigPlayListener, activate, deactivate,
+        bigPlayClicked, activate, deactivate,
         togglePlay, mouseMove, mouseUp, mouseDown;
 
     if ( !controls ) {
@@ -41,7 +41,7 @@
     seeking = false;
     playStateCache = false;
     active = false;
-    timeStamp = new Date();
+    timeStamp = new Date( 1970, 0, 1 );
 
     p.controls( false );
 
@@ -51,21 +51,15 @@
 
       bigPlayClicked = function() {
 
+        p.media.removeEventListener( "play", bigPlayClicked, false );
         bigPlayButton.removeEventListener( "mouseup", bigPlayClicked, false );
         bigPlayButton.classList.remove( "controls-ready" );
         p.media.addEventListener( "mouseover", activate, false );
-        p.play();
-      };
-
-      bigPlayListener = function() {
-
-        p.off( "play", bigPlayListener );
-        bigPlayButton.classList.remove( "controls-ready" );
-        p.media.addEventListener( "mouseover", activate, false );
+        p.paused && p.play();
       };
 
       bigPlayButton.addEventListener( "mouseup", bigPlayClicked, false );
-      p.on( "play", bigPlayListener );
+      p.media.addEventListener( "play", bigPlayClicked, false );
     }
 
     controls.classList.add( "controls-ready" );
@@ -104,7 +98,7 @@
       playButton.addEventListener( "mouseup", togglePlay, false );
 
       p.on( "play", function() {
-
+console.log( "on" );
         playButton.classList.remove( "controls-paused" );
         playButton.classList.add( "controls-playing" );
       });
