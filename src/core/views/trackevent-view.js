@@ -2,21 +2,21 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logger, EventManagerWrapper, DragNDrop ){
-
-  var __guid = 0;
+define( [ "core/logger", "core/eventmanager", "util/dragndrop",
+          "util/lang", "text!layouts/trackevent.html" ],
+  function( Logger, EventManagerWrapper, DragNDrop,
+            LangUtils, TRACKEVENT_LAYOUT ) {
 
   return function( trackEvent, type, inputOptions ){
 
-    var _id = "TrackEventView" + __guid++,
-        _element = document.createElement( "div" ),
+    var _element = LangUtils.domFragment( TRACKEVENT_LAYOUT ),
         _zoom = 1,
         _type = type,
         _start = inputOptions.start || 0,
         _end = inputOptions.end || _start + 1,
         _parent,
         _handles,
-        _typeElement = document.createElement( "div" ),
+        _typeElement = _element.querySelector( ".title" ),
         _draggable,
         _resizable,
         _trackEvent = trackEvent,
@@ -24,8 +24,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
         _this = this;
 
     EventManagerWrapper( _this );
-
-    _element.appendChild( _typeElement );
 
     function toggleHandles( state ){
       _handles[ 0 ].style.visibility = state ? "visible" : "hidden";
@@ -117,13 +115,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
           resetContainer();
         }
       },
-      id: {
-        enumerable: true,
-        configurable: false,
-        get: function(){
-          return _id;
-        }
-      },
       parent: {
         enumerabled: true,
         get: function(){
@@ -147,7 +138,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
           if( _parent ){
 
             if( _parent.element && _parent.element.parentNode && _parent.element.parentNode.parentNode ){
-
               _draggable = DragNDrop.draggable( _element, {
                 containment: _parent.element.parentNode,
                 scroll: _parent.element.parentNode.parentNode,
@@ -162,13 +152,14 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
                 },
                 revert: true
               });
+
               _draggable.selected = _trackEvent.selected;
 
               _resizable = DragNDrop.resizable( _element, {
-                containment: _parent.element.parentNode,
-                scroll: _parent.element.parentNode.parentNode,
-                stop: movedCallback
-              });
+                 containment: _parent.element.parentNode,
+                 scroll: _parent.element.parentNode.parentNode,
+                 stop: movedCallback
+               });
 
               _element.setAttribute( "data-butter-draggable-type", "trackevent" );
               _element.setAttribute( "data-butter-trackevent-id", _trackEvent.id );
@@ -208,7 +199,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ], function( Logg
     _element.className = "butter-track-event";
     _this.type = _type;
 
-    _element.id = _id;
     _this.update( inputOptions );
 
     _element.addEventListener( "mousedown", function ( e ) {

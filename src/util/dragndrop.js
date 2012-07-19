@@ -69,6 +69,13 @@ define([], function(){
           droppable.forget( remember );
         }
         else {
+          // If we stumbled on a valid droppable early in the array
+          // and the draggable has a droppable already that is, perhaps
+          // further along in the array, forcefully forget the draggable
+          // before telling another droppable to remember it.
+          if ( remember.droppable && remember.droppable !== droppable ) {
+            remember.droppable.forget( remember );
+          }
           droppable.remember( remember );
           break;
         }
@@ -84,9 +91,7 @@ define([], function(){
 
     for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
       selectedDraggable = __selectedDraggables[ i ];
-      if( selectedDraggable.dragging ){
-        selectedDraggable.stop();
-      }
+      selectedDraggable.stop();
     }
   }
 
@@ -174,20 +179,14 @@ define([], function(){
   }
 
   function Resizable( element, options ){
-    var _leftHandle = document.createElement( "div" ),
-        _rightHandle = document.createElement( "div" ),
+    var _leftHandle = element.querySelector( ".handle.left-handle" ),
+        _rightHandle = element.querySelector( ".handle.right-handle" ),
         _onStart = options.start || function(){},
         _onStop = options.stop || function(){},
         _updateInterval = -1,
         _scroll = options.scroll,
         _scrollRect,
         _elementRect;
-
-    _leftHandle.className = "handle left-handle";
-    _rightHandle.className = "handle right-handle";
-
-    element.appendChild( _leftHandle );
-    element.appendChild( _rightHandle );
 
     function onLeftMouseDown( e ){
       e.stopPropagation();
@@ -317,8 +316,6 @@ define([], function(){
       destroy: function(){
         _leftHandle.removeEventListener( "mousedown", onLeftMouseDown, false );
         _rightHandle.removeEventListener( "mousedown", onRightMouseDown, false );
-        element.removeChild( _leftHandle );
-        element.removeChild( _rightHandle );
       }
     };
   }
@@ -502,7 +499,6 @@ define([], function(){
         _onStop = options.stop || function(){ return false; },
         _originalPosition,
         _draggable = {},
-        _dragging = false,
         _containmentPadding = __nullRect;
 
     if( _containment ){
@@ -602,7 +598,6 @@ define([], function(){
     };
 
     _draggable.start = function( e ){
-      _dragging = true;
       _originalPosition = [ element.offsetLeft, element.offsetTop ];
       _draggable.updateRects();
       _mouseOffset = [ e.clientX - _elementRect.left, e.clientY - _elementRect.top ];
@@ -610,13 +605,16 @@ define([], function(){
     };
 
     _draggable.stop = function(){
-      _dragging = false;
-      _onStop();
-      if( !_draggable.droppable && _revert ){
-        element.style.left = _originalPosition[ 0 ] + "px";
-        element.style.top = _originalPosition[ 1 ] + "px";
-      } else if ( _draggable.droppable ){
-        _draggable.droppable.drop( _draggable );
+      // If originalPosition is not null, start() was called
+      if ( _originalPosition ) {
+        _onStop();
+        if( !_draggable.droppable && _revert ){
+          element.style.left = _originalPosition[ 0 ] + "px";
+          element.style.top = _originalPosition[ 1 ] + "px";
+        } else if ( _draggable.droppable ){
+          _draggable.droppable.drop( _draggable );
+        }
+        _originalPosition = null;
       }
     };
 
@@ -625,7 +623,7 @@ define([], function(){
         enumerable: true,
         get: function(){
           for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
-            if( __selectedDraggables[ i ].element.id === _element.id ){
+            if( __selectedDraggables[ i ].element === _element ){
               return true;
             }
           }
@@ -639,18 +637,12 @@ define([], function(){
           } else {
             element.style.zIndex = _oldZIndex;
             for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
-              if( __selectedDraggables[ i ].element.id === _element.id ){
+              if( __selectedDraggables[ i ].element === _element ){
                 __selectedDraggables.splice( i, 1 );
                 return;
               }
             }
           }
-        }
-      },
-      dragging: {
-        enumerable: true,
-        get: function(){
-          return _dragging;
         }
       },
       element: {
