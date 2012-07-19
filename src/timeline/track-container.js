@@ -23,22 +23,22 @@ define( [ "core/logger", "util/dragndrop" ],
       _this.deselectOthers();
     }, false );
 
-    // _droppable = DragNDrop.droppable( _element, {
-    //   drop: function( dropped, mousePosition ) {
-    //     if ( dropped.getAttribute( "data-butter-draggable-type" ) === "plugin" ) {
-    //       var newTrack = butter.currentMedia.addTrack(),
-    //           trackRect = newTrack.view.element.getBoundingClientRect(),
-    //           left = mousePosition[ 0 ] - trackRect.left,
-    //           start = left / trackRect.width * newTrack.view.duration;
+    _droppable = DragNDrop.droppable( _element, {
+      drop: function( dropped, mousePosition ) {
+        if ( dropped.getAttribute( "data-butter-draggable-type" ) === "plugin" ) {
+          var newTrack = butter.currentMedia.addTrack(),
+              trackRect = newTrack.view.element.getBoundingClientRect(),
+              left = mousePosition[ 0 ] - trackRect.left,
+              start = left / trackRect.width * newTrack.view.duration;
 
-    //       newTrack.view.dispatch( "plugindropped", {
-    //         start: start,
-    //         track: newTrack,
-    //         type: dropped.getAttribute( "data-popcorn-plugin-type" )
-    //       });
-    //     }
-    //   }
-    // });
+          newTrack.view.dispatch( "plugindropped", {
+            start: start,
+            track: newTrack,
+            type: dropped.getAttribute( "data-popcorn-plugin-type" )
+          });
+        }
+      }
+    });
 
     this.setScrollbars = function( hScrollbar, vScrollbar ) {
       _hScrollbar = hScrollbar;
