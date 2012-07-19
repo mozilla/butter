@@ -139,7 +139,7 @@
      *
      * @param {String} message: Error message to display
      */
-    function setErrorState ( message ) {
+    function setErrorState( message ) {
       if ( message ) {
         _messageContainer.innerHTML = message;
         _messageContainer.parentNode.style.height = _messageContainer.offsetHeight + "px";
@@ -236,8 +236,8 @@
     }
 
     // Extend this object to become a BaseEditor
-    Butter.Editor.BaseEditor( _this, butter, rootElement, {
-      open: function ( parentElement, trackEvent ) {
+    Butter.Editor.TrackEventEditor( _this, butter, rootElement, {
+      open: function( parentElement, trackEvent ) {
         // Update properties when TrackEvent is updated
         trackEvent.listen( "trackeventupdated", function ( e ) {
           _this.updatePropertiesFromManifest( e.target );
@@ -247,7 +247,7 @@
         });
         setup( trackEvent );
       },
-      close: function () {
+      close: function() {
         removeMapListeners();
       }
     });
