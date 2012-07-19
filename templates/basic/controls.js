@@ -80,7 +80,12 @@
     controls.addEventListener( "mouseover", activate, false );
     controls.addEventListener( "mouseout", deactivate, false );
 
-    togglePlay = function() {
+    togglePlay = function( e ) {
+
+      if ( e.button !== 0 ) {
+
+        return;
+      }
 
       if ( p.paused() ) {
 
@@ -98,7 +103,7 @@
       playButton.addEventListener( "mouseup", togglePlay, false );
 
       p.on( "play", function() {
-console.log( "on" );
+
         playButton.classList.remove( "controls-paused" );
         playButton.classList.add( "controls-playing" );
       });
@@ -111,7 +116,12 @@ console.log( "on" );
 
     if ( muteButton ) {
 
-      muteButton.addEventListener( "mouseup", function() {
+      muteButton.addEventListener( "mouseup", function( e ) {
+
+        if ( e.button !== 0 ) {
+
+          return;
+        }
 
         if ( p.muted() ) {
 
@@ -181,6 +191,11 @@ console.log( "on" );
 
       mouseUp = function( e ) {
 
+        if ( e.button !== 0 ) {
+
+          return;
+        }
+
         e.preventDefault();
         seeking = false;
         !active && deactivate();
@@ -191,6 +206,13 @@ console.log( "on" );
 
       mouseDown = function( e ) {
 
+        var position = e.clientX - timebar.getBoundingClientRect().left;
+
+        if ( e.button !== 0 ) {
+
+          return;
+        }
+
         e.preventDefault();
         seeking = true;
         playStateCache = !p.paused();
@@ -200,15 +222,15 @@ console.log( "on" );
 
         if ( progressBar ) {
 
-          progressBar.style.width = e.layerX + "px";
+          progressBar.style.width = position + "px";
         }
 
         if ( scrubber ) {
 
-          scrubber.style.left = e.layerX - ( scrubber.offsetWidth / 2 ) + "px";
+          scrubber.style.left = position - ( scrubber.offsetWidth / 2 ) + "px";
         }
 
-        p.currentTime( e.layerX / timebar.offsetWidth * 100 * p.duration() / 100 );
+        p.currentTime( position / timebar.offsetWidth * 100 * p.duration() / 100 );
       };
 
       timebar.addEventListener( "mousedown", mouseDown, false );
