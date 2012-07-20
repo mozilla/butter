@@ -65,12 +65,13 @@ function Tokenizer(){
     var rule;
     var match;
     var length;
+    var i;
 
     // Spin until there is no data left.
     while(data.length){
 
       // Compare each rule until one is found to match.
-      for(var i=0, l=_rules.length; i<l; ++i){
+      for(i=0, l=_rules.length; i<l; ++i){
         rule = _rules[i];
         match = data.match(rule);
         if(match){
@@ -113,7 +114,9 @@ function tokenize(fileName, data){
 
   // Lots of tokens commonly known for JavaScript.
   t.addRule(/^('[^']*'|"[^"]*")/, 'string');
-  t.addRule(/\./, 'dot');
+  t.addRule(/^\n\s*\}\)/, 'final-brackets');
+  t.addRule(/^\}\(\)\);/, 'final-brackets-execution');
+  t.addRule(/^\./, 'dot');
   t.addRule(/^\s+/, 'whitespace');
   t.addRule(/^\/{2,}[^\n]*/, 'comment');
   t.addRule(/^\/\*(([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*)\*+\//, 'block-comment');
@@ -121,6 +124,7 @@ function tokenize(fileName, data){
   t.addRule(/^[\+\&\|\>\<\-\*\/]\=/, 'assignment');
   t.addRule(/^([+-]{2}[\w\d]+|[\w\d]+[+-]{2})/, 'short-math');
   t.addRule(/^[\+\-\*\/]/, 'operator');
+  t.addRule(/^\!=+/, 'not-equal');
   t.addRule(/^={1,3}/, 'equals');
   t.addRule(/^if[^\w]/, 'if', 2);
   t.addRule(/^else[^\w]/, 'else', 4);
@@ -130,6 +134,7 @@ function tokenize(fileName, data){
   t.addRule(/^do[^\w]/, 'do', 2);
   t.addRule(/^case[^\w]/, 'case', 4);
   t.addRule(/^throw[^\w]/, 'throw', 5);
+  t.addRule(/^\!/, 'not');
   t.addRule(/^\(/, 'left-circle-bracket');
   t.addRule(/^\)/, 'right-circle-bracket');
   t.addRule(/^\[/, 'left-square-bracket');
@@ -164,13 +169,9 @@ function tokenize(fileName, data){
     }
   });
 
-  t.on('whitespace', function(match){
-    collectNewlines(match);
-  });
-
-  t.on('block-comment', function(match){
-    collectNewlines(match);
-  });
+  t.on('final-brackets', collectNewlines);
+  t.on('block-comment', collectNewlines);
+  t.on('whitespace', collectNewlines);
 
   t.on('left-circle-bracket', function(match){
     if(['if', 'for', 'while', 'switch'].indexOf(match) > -1){
@@ -197,7 +198,7 @@ function tokenize(fileName, data){
   });
 
   t.on('word', function(match){
-    if(['whitespace', 'dot'].indexOf(t.lastToken) === -1){
+    if(['whitespace', 'dot', 'not'].indexOf(t.lastToken) === -1){
       reportError('no whitespace before "' + match + '". found "' + t.lastMatch + '" instead.' );
     }
   });
