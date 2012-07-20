@@ -106,15 +106,15 @@ define( [], function(){
 
     _time = new Time( statusArea, _media );
 
-    _muteButton = new Button( statusArea, ".mute-button-container", function( e ){
+    _muteButton = new Button( statusArea, ".mute-button-container", function( e ) {
       _media.muted = !_media.muted;
     });
 
-    _playButton = new Button( statusArea, ".play-button-container", function( e ){
-      if( _media.ended ){
+    _playButton = new Button( statusArea, ".play-button-container", function( e ) {
+      if ( _media.ended ) {
         _media.paused = false;
       }
-      else{
+      else {
         _media.paused = !_media.paused;
       }
     });

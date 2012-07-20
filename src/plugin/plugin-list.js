@@ -5,7 +5,7 @@
 define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-list-editor.html" ],
   function( DragNDrop, LangUtils, Editor, EDITOR_LAYOUT ) {
 
-	return function( butter ){
+	return function( butter ) {
 
     var _parentElement = LangUtils.domFragment( EDITOR_LAYOUT ),
         _containerElement = _parentElement.querySelector( ".container" );
@@ -16,44 +16,41 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
     _pluginArchetype.parentNode.removeChild( _pluginArchetype );
 
     Editor.register( "plugin-list", null, function( rootElement, butter ) {
-      console.log("blamo!");
       rootElement = _parentElement;
 
       Editor.BaseEditor( this, butter, rootElement, {
         open: function( parentElement ) {
-          console.log("open");
         },
         close: function() {
-          console.log("close");
         }
       });
     });
 
-    _button.addEventListener( "click", function(){
+    _button.addEventListener( "click", function() {
       butter.editor.openEditor( "plugin-list" );
     }, false );
 
-    butter.listen( "pluginadded", function( e ){
+    butter.listen( "pluginadded", function( e ) {
       var element = _pluginArchetype.cloneNode( true ),
           iconImg = e.data.helper,
           icon = element.querySelector( "span.icon" ),
           text = element.querySelector( "span.label" );
 
       DragNDrop.helper( element, {
-        start: function(){
+        start: function() {
           var targets = butter.targets,
               media = butter.currentMedia;
           media.view.blink();
-          for( var i=0, l=targets.length; i<l; ++i ){
+          for ( var i = 0, l = targets.length; i < l; ++i ) {
             targets[ i ].view.blink();
           }
         },
-        stop: function(){
+        stop: function() {
 
         }
       });
 
-      if( iconImg ) {
+      if ( iconImg ) {
         icon.style.backgroundImage = "url('" + iconImg.src + "')";
       }
 

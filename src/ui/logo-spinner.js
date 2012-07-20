@@ -4,7 +4,7 @@ define( [ "util/lang", "text!layouts/logo-spinner.html" ],
   return function( parentElement ) {
 
     var outerElement = LangUtils.domFragment( LAYOUT_SRC ),
-        innerElement = outerElement.querySelector( "div" );
+        innerElement = outerElement.querySelector( ".butter-logo-spin-inner" );
 
     if( parentElement ){
       parentElement.appendChild( outerElement );

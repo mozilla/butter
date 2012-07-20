@@ -106,7 +106,7 @@ define( [ "core/logger", "util/dragndrop" ],
 
     _media.listen( "trackadded", onTrackAdded );
 
-    _media.listen( "trackremoved", function( e ){
+    _media.listen( "trackremoved", function( e ) {
       var trackView = e.data.view;
       _container.removeChild( trackView.element );
       if ( _vScrollbar ) {

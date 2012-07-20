@@ -21,7 +21,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     function zoomCallback( zoomLevel ) {
       var nextZoom = MIN_ZOOM * zoomLevel + _zoomFactor;
-      if( nextZoom !== _zoom ){
+      if ( nextZoom !== _zoom ) {
         _zoom = nextZoom;
         _tracksContainer.zoom = _zoom;
         updateUI();

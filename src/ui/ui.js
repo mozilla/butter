@@ -54,7 +54,6 @@ define( [ "core/eventmanager", "./toggler",
       }
       document.body.classList.add( "butter-header-spacing" );
       document.body.classList.add( "butter-tray-spacing" );
-      // document.body.appendChild( _element );
       butter.listen( "mediaadded", function( e ){
         e.data.createView();
       });

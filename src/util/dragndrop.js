@@ -584,12 +584,12 @@ define([], function(){
 
     _draggable.droppable = null;
 
-    _draggable.destroy = function(){
+    _draggable.destroy = function() {
       _draggable.selected = false;
       element.removeEventListener( "mousedown", onMouseDown, false );
     };
 
-    _draggable.update = function(){
+    _draggable.update = function() {
       updatePosition();
       if( _scroll ){
         checkScroll();
@@ -608,10 +608,11 @@ define([], function(){
       // If originalPosition is not null, start() was called
       if ( _originalPosition ) {
         _onStop();
-        if( !_draggable.droppable && _revert ){
+        if ( !_draggable.droppable && _revert ) {
           element.style.left = _originalPosition[ 0 ] + "px";
           element.style.top = _originalPosition[ 1 ] + "px";
-        } else if ( _draggable.droppable ){
+        }
+        else if ( _draggable.droppable ) {
           _draggable.droppable.drop( _draggable );
         }
         _originalPosition = null;
@@ -634,10 +635,11 @@ define([], function(){
             _oldZIndex = getComputedStyle( element ).getPropertyValue( "z-index" );
             element.style.zIndex = MAXIMUM_Z_INDEX;
             __selectedDraggables.push( _draggable );
-          } else {
+          }
+          else {
             element.style.zIndex = _oldZIndex;
-            for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
-              if( __selectedDraggables[ i ].element === _element ){
+            for ( var i = __selectedDraggables.length - 1; i >= 0; --i ) {
+              if ( __selectedDraggables[ i ].element === _element ) {
                 __selectedDraggables.splice( i, 1 );
                 return;
               }

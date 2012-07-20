@@ -6,7 +6,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
   var CANVAS_CONTAINER_PADDING = 5;
 
-  return function( butter, media, statusArea, tracksContainer, hScrollbar ){
+  return function( butter, media, statusArea, tracksContainer, hScrollbar ) {
 
     var _element = statusArea.querySelector( ".time-bar" ),
         _canvas = _element.querySelector( "canvas" ),
