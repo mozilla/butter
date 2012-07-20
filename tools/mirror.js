@@ -74,9 +74,11 @@ function Tokenizer(){
       for(i=0, l=_rules.length; i<l; ++i){
         rule = _rules[i];
         match = data.match(rule);
-        if(match){
+        // Only actually match if the match was at the beginning of the string (slow parse!).
+        if(match && match.index === 0){
           break;
         }
+        match = null;
       }
 
       // If a rule matched, tokenize!
@@ -113,40 +115,40 @@ function tokenize(fileName, data){
   var lines = data.split('\n');
 
   // Lots of tokens commonly known for JavaScript.
-  t.addRule(/^('[^']*'|"[^"]*")/, 'string');
-  t.addRule(/^\n\s*\}\)/, 'final-brackets');
-  t.addRule(/^\}\(\)\);/, 'final-brackets-execution');
-  t.addRule(/^\./, 'dot');
-  t.addRule(/^\s+/, 'whitespace');
-  t.addRule(/^\/{2,}[^\n]*/, 'comment');
-  t.addRule(/^\/\*(([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*)\*+\//, 'block-comment');
-  t.addRule(/^\/.*\/[gmi]*/, 'regexp');
-  t.addRule(/^[\+\&\|\>\<\-\*\/]\=/, 'assignment');
-  t.addRule(/^([+-]{2}[\w\d]+|[\w\d]+[+-]{2})/, 'short-math');
-  t.addRule(/^[\+\-\*\/]/, 'operator');
-  t.addRule(/^\!=+/, 'not-equal');
-  t.addRule(/^={1,3}/, 'equals');
-  t.addRule(/^if[^\w]/, 'if', 2);
-  t.addRule(/^else[^\w]/, 'else', 4);
-  t.addRule(/^for[^\w]/, 'for', 3);
-  t.addRule(/^while[^\w]/, 'while', 5);
-  t.addRule(/^switch[^\w]/, 'switch', 6);
-  t.addRule(/^do[^\w]/, 'do', 2);
-  t.addRule(/^case[^\w]/, 'case', 4);
-  t.addRule(/^throw[^\w]/, 'throw', 5);
-  t.addRule(/^\!/, 'not');
-  t.addRule(/^\(/, 'left-circle-bracket');
-  t.addRule(/^\)/, 'right-circle-bracket');
-  t.addRule(/^\[/, 'left-square-bracket');
-  t.addRule(/^\]/, 'right-square-bracket');
-  t.addRule(/^\</, 'left-angle-bracket');
-  t.addRule(/^\>/, 'right-angle-bracket');
-  t.addRule(/^\{/, 'left-curly-bracket');
-  t.addRule(/^\}/, 'right-curly-bracket');
-  t.addRule(/^function/, 'function');
-  t.addRule(/^var/, 'var');
-  t.addRule(/^\n/, 'newline');
-  t.addRule(/^[\w\d]+/, 'word');
+  t.addRule(/('[^']*'|"[^"]*")/, 'string');
+  t.addRule(/\n\s*\}\)/, 'final-brackets');
+  t.addRule(/\}\(\)\);/, 'final-brackets-execution');
+  t.addRule(/\./, 'dot');
+  t.addRule(/\s+/, 'whitespace');
+  t.addRule(/\/{2,}[^\n]*/, 'comment');
+  t.addRule(/\/\*(([^*]|[\r\n]|(\*+([^*\/]|[\r\n])))*)\*+\//, 'block-comment');
+  t.addRule(/\/.*\/[gmi]*/, 'regexp');
+  t.addRule(/[\+\&\|\>\<\-\*\/]\=/, 'assignment');
+  t.addRule(/([+-]{2}[\w\d]+|[\w\d]+[+-]{2})/, 'short-math');
+  t.addRule(/[\+\-\*\/]/, 'operator');
+  t.addRule(/\!=+/, 'not-equal');
+  t.addRule(/={1,3}/, 'equals');
+  t.addRule(/if[^\w]/, 'if', 2);
+  t.addRule(/else[^\w]/, 'else', 4);
+  t.addRule(/for[^\w]/, 'for', 3);
+  t.addRule(/while[^\w]/, 'while', 5);
+  t.addRule(/switch[^\w]/, 'switch', 6);
+  t.addRule(/do[^\w]/, 'do', 2);
+  t.addRule(/case[^\w]/, 'case', 4);
+  t.addRule(/throw[^\w]/, 'throw', 5);
+  t.addRule(/\!/, 'not');
+  t.addRule(/\(/, 'left-circle-bracket');
+  t.addRule(/\)/, 'right-circle-bracket');
+  t.addRule(/\[/, 'left-square-bracket');
+  t.addRule(/\]/, 'right-square-bracket');
+  t.addRule(/\</, 'left-angle-bracket');
+  t.addRule(/\>/, 'right-angle-bracket');
+  t.addRule(/\{/, 'left-curly-bracket');
+  t.addRule(/\}/, 'right-curly-bracket');
+  t.addRule(/function/, 'function');
+  t.addRule(/var/, 'var');
+  t.addRule(/\n/, 'newline');
+  t.addRule(/[\w\d]+/, 'word');
 
   // Output a well-formatted error.
   function reportError(error){
