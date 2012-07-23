@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "max plugin zindex config option", 2, function(){
+        createButterCore( function( butter ) {
+          var trackEvent;
+          butter.addMedia();
+          equal( butter.media[ 0 ].maxPluginZIndex, 1000, "max plugin zIndex is set by config" );
+          Popcorn.plugin( "zindextest", {
+            manifest: {
+              options: {
+                zindex: {
+                  hidden: true
+                }
+              }
+            }
+          });
+          trackEvent = butter.media[ 0 ].addTrack().addTrackEvent({
+            type: "zindextest",
+            popcornOptions: {
+              start: 1,
+              end: 2
+            }
+          });
+          equal( trackEvent.popcornOptions.zindex, 1000, "Popcorn track event has z index applied" );
+          start();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Media ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture"></div>
+  </body>
+</html>
