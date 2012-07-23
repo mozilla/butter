@@ -1,0 +1,216 @@
+/*********************************************************
+* TRAY
+*/
+
+// Adds room to bottom of template for tray
+.butter-tray-spacing {
+  padding-bottom: @TRAY_SPACING;
+  .transition( padding-bottom 0.5s );
+}
+
+.butter-tray-spacing.tray-minimized {
+  padding-bottom: @TRAY_SPACING_MINIMIZED;
+}
+
+#butter-tray {
+  .selectable( none );
+  position: fixed;
+  z-index: 2140000000;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: @TRAY_HEIGHT;
+  border: 1px solid #000;
+  background-image: url( "../resources/bg.jpg" );
+  .transition( bottom 0.35s );
+
+  * { 
+    .selectable( none );
+  }
+  &.minimized {
+    bottom: -170px;
+  }
+
+  //This is the list of plugins that appears after clickling the "Popcorn" Button
+  #plugin-list {
+    position: relative;
+    top: 5px;
+    left: 5px;
+    height: 150px;
+    z-index: 2140000002;
+    background-image: url( "../resources/bg.jpg" );
+    opacity: 0;
+    border-radius: 5px;
+    box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, 0 0 1px #000;
+    
+    .container {
+      padding: 5px;
+      color: #EEE;
+      height: 140px;
+      overflow-y: scroll;
+      
+      >p {
+        margin: 0 0 10px 5px;
+        font-size: 14px;
+        font-style: italic;
+      }
+      
+      >div {
+        cursor: pointer;
+        position: relative;
+        float: left;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        padding: 15px 25px 15px 15px;
+        width: 160px;
+        font-size: 14px;
+        font-weight: 600;
+        text-shadow: 0 1px 2px #000;
+        border-radius: 10px;
+        border: 1px solid black;
+        box-shadow: inset 0 1px 0 rgba( 255,255,255,0.2 ), 0 3px 3px rgba( 0,0,0,0.2 );
+        .gradient( center, rgb( 31,31,31 ), rgb( 36,36,36 ), bottom, top, 29%, 65% );
+      }
+      div {
+        >span {
+          &.icon {
+            display: block;
+            float: left;
+            width: 30px;
+            height: 30px;
+            background-size: 30px;
+            background-repeat: no-repeat;
+            margin-right: 10px;
+          }
+          &.label {
+            line-height: 30px;
+          }
+        }
+      }
+    }
+  }
+  
+  // This is the list of plugins in "my events"
+  #work {
+    padding: 0 150px 0 0;
+    position: relative;
+    height: 160px;
+    top: 50px;
+  }
+
+  #popcorn-plugin {
+    border-radius: 6px;
+    font-size: 80%;
+    .gradient( center, #6E6E6E, #7D7D7D, bottom, top, 0%, 100% );
+    border: 1px solid #333;
+    box-shadow: 0 1px 0 #656565;
+    padding: 3px;
+    height: 115px;
+    width: 115px;
+    position: relative;
+    
+    .list-wrapper {
+      position: relative;
+      top: 18px;
+      padding-left: 5px;
+      height: 95px;
+      width: 100px;
+      overflow: hidden;
+    }
+    .list {
+      position: relative;
+      padding-left: 5px;
+      width: 100px;
+    }
+    .title {
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 4px 4px 0 0;
+      height: 17px;
+      width: 100%;
+      background-color: #3E3E3E;
+      .gradient( center, #414449, #282828, top, bottom, 0%, 100% );
+      
+      span {
+        text-shadow: 0 -1px 1px #000;
+        font-weight: 700;
+        padding-left: 8px;
+        color: #FFF;
+      }
+    }
+    .list-item {
+      font-weight: 600;
+      color: #FFF;
+      list-style-type: none;
+      cursor: pointer;
+      font-size: 12px;
+      width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .scroll-bar-v {
+      right: 3px;
+      width: 6px;
+      height: 100px;
+      top: 18px;
+      
+      .scroll-handle {
+        width: 4px;
+      }
+    }
+  }
+
+  // This is the container for the spinning popcorn logo on the right side of the tray
+  #butter-loading-container {
+    position: absolute;
+    z-index: 2140000001;
+    right: 10px;
+    top: 3px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .fadable { 
+    //TO-DO: This should be moved into a general UI kit
+    .transition( opacity 0.5s );
+  }
+
+  /* Scrollbars */
+
+  // TO-DO: move to UI kit and prefix with butter-
+  .scroll-bar {
+    background: #222;
+    border-radius: 15px;
+    position: absolute;
+    box-shadow: 0 1px 0 #656565;
+    .selectable( none );
+  }
+
+  .scroll-bar-v {
+    .scroll-handle {
+      width: 8px;
+      left: 1px;
+      position: absolute;
+      background: #777;
+      border-radius: 15px;
+      box-shadow: inset 0 -1px 1px #000;
+    }
+  }
+
+  .scroll-handle {
+    height: 8px;
+    top: 1px;
+    position: absolute;
+    background: #777;
+    border-radius: 15px;
+    box-shadow: inset 0 -1px 1px #000;
+    
+    &:hover {
+      background: #FFF;
+      cursor: pointer;
+    }
+
+  }
+
+}

@@ -1,0 +1,81 @@
+/*********************************************************
+* EDITORS
+*/
+
+.butter-editor-area {
+  position: fixed;
+  z-index: 2000000000;
+  top: 51px;
+  bottom: 0;
+  right: 0;
+  width: 200px;
+  border: 1px solid #000;
+  background-image: url( "../resources/bg.jpg" );
+  .transition( right 0.35s );
+  border-left: 1px solid #222;
+  box-shadow: inset 5px 0 5px rgba( 0, 0, 0, .2 );
+  color: #EEE;
+  
+  &.minimized {
+    right: -200px;
+  }
+  .butter-toggle-button {
+    top: 14px;
+    left: -38px;
+    .transform( rotate( -90deg ) );
+  }
+  > .butter-editor {
+    height: 100%;
+    font: 14px 'MetaBold';
+    
+    h1 {
+      font-size: 16px;
+      color: #FFF;
+      padding: 10px;
+      text-align: center;
+      margin: 0;
+    }
+    .trackevent-property {
+      padding: 10px;
+      clear: both;
+    }
+    .trackevent-property {
+      select,
+      input {
+        float: right;
+      }
+    }
+    > .editor-tabs {
+      position: absolute;
+      top: 60px;
+      left: 5px;
+      bottom: 5px;
+      right: 5px;
+      border-radius: 5px;
+    }
+    > div {
+      &.error-message-container {
+        margin: 0 5px 0 5px;
+        padding: 0 5px 0 5px;
+        border-radius: 5px;
+        box-shadow: inset 0 0 5px rgba( 0, 0, 0, .8 );
+        background: rgba( 0, 0, 0, .2 );
+        .transition( height 0.35s, margin 0.35s, padding 0.35s );
+        overflow: hidden;
+        height: 0;
+        margin-bottom: 0;
+        visibility: hidden;
+      }
+      &.error-message-container.open {
+        margin: 5px;
+        padding: 5px;
+      }
+      &.error-message {
+        width: 180px;
+      }
+    }
+    > button {
+      margin: 10px;
+    }
+  }
+}

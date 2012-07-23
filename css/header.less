@@ -1,0 +1,59 @@
+/*********************************************************
+* HEADER
+*/
+
+// Adds room to template to account for header
+.butter-header-spacing {
+  padding-top: @HEADER_SPACING;
+}
+
+#butter-header {
+  z-index: 2140000000;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  padding: 10px 15px 10px 24px;
+  color: #FFF;
+  border-bottom: 1px solid #222;
+  box-shadow: 0 2px 4px rgba( 0, 0, 0, .3 );
+  background: rgb(65,68,73);
+  .gradient( center, #414449, #2C2C2C, top, bottom, 0%, 100% );
+  .transition( all .3s ease );
+  
+  &:hover {
+    .transition( all .3s ease );
+    box-shadow: 0 2px 4px rgba( 0, 0, 0, .5 );
+  }
+
+  .butter-header-inner {
+    height: 30px;
+  }
+
+  .butter-logo {
+    float: left;
+    background-size: cover;
+    background-image: url( "../resources/drop.png" );
+    width: 23px;
+    height: 23px;
+    margin: 4px 5px 0 0;
+  }
+
+  .butter-name {
+    float: left;
+    font-size: 20px;
+    line-height: 30px;
+    font-weight: 700;
+    text-shadow: 0 -1px 0 #000, 0 -1px 1px #000;
+    margin: 0;
+  }
+
+  .butter-editor-actions {
+    float: right;
+  }
+
+  .butter-editor-actions > a {
+    text-decoration: none;
+  }
+  
+}

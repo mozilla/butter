@@ -6,71 +6,24 @@ define( [ "util/dragndrop", "util/lang" ], function( DragNDrop, LangUtils ){
 
   var PLUGIN_ELEMENT_PREFIX = "popcorn-plugin-";
 
-  return function( id, pluginOptions ){
+  return function( pluginOptions ){
     pluginOptions = pluginOptions || {};
 
-    var _id = "plugin" + id,
-        _this = this,
-        _name = pluginOptions.type,
-        _path = pluginOptions.path,
-        _manifest = {},
-        _type = pluginOptions.type,
-        _helper = document.getElementById( _this.type + "-icon" ) ||
-                  document.getElementById( "default-icon" );
+    var _this = this,
+        _helper;
 
-    // before we try and add the plugins script, make sure we have a path to it and we haven't already included it
-    if( _path && !Popcorn.manifest[ _type ] ) {
-      var head = document.getElementsByTagName( "HEAD" )[ 0 ],
-          script = document.createElement( "script" );
+    this.type = pluginOptions.type;
+    this.path = pluginOptions.path;
 
-      script.src = _path;
-      head.appendChild( script );
-    } //if
-
-    Object.defineProperties( this, {
-      id: {
-        enumerable: true,
-        get: function() {
-          return _id;
-        }
-      },
-      name: {
-        enumerable: true,
-        get: function() {
-          return _name;
-        }
-      },
-      path: {
-        enumerable: true,
-        get: function() {
-          return _path;
-        }
-      },
-      manifest: {
-        enumerable: true,
-        get: function() {
-          return _manifest;
-        },
-        set: function( manifest ) {
-          _manifest = manifest;
-        }
-      },
-      type: {
-        enumerable: true,
-        get: function() {
-          return _type;
-        }
-      },
-      helper: {
-        enumerable: true,
-        get: function(){
-          return _helper;
-        }
+    this.generateHelper = function() {
+      _helper = document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" );
+      if( _helper ) {
+        _helper = _helper.cloneNode( false );
+        // Prevent two elements from having the same ID on the page
+        _helper.id = null;
       }
-    });
-
-    _helper = document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" );
-    if( _helper ) { _helper = _helper.cloneNode( false ); }
+      _this.helper = _helper;
+    };
 
     this.createElement = function ( butter, pattern ) {
       var pluginElement;
@@ -100,7 +53,9 @@ define( [ "util/dragndrop", "util/lang" ], function( DragNDrop, LangUtils ){
       });
       this.element = pluginElement;
       return pluginElement;
-    }; //createElement
+    };
+
+    this.generateHelper();
 
   };
 });

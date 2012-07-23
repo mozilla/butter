@@ -52,7 +52,7 @@ function checkCSS() {
 //    "adjoining-classes",
 //    "duplicate-background-images",
 //    "qualified-headings",
-    "fallback-colors",
+//    "fallback-colors",
 //    "empty-rules",
 //    "shorthand",
 //    "overqualified-elements",

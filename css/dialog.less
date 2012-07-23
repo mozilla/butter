@@ -1,28 +1,20 @@
-.butter-dialog  {
+/*********************************************************
+* DIALOGS
+*/
+
+.butter-dialog {
   position: relative;
-  .gradient(#a5a5a5,#727272, top, bottom, 0%, 100%);
+  .gradient(center, #a5a5a5,#727272, top, bottom, 0%, 100%);
 
   .hbox {
     display: box;
-    -webkit-box-orient: horizontal;
-    -webkit-box-align: stretch;
-    -ms-box-orient: horizontal;
-    -ms-box-align: stretch;
-    -moz-box-orient: horizontal;
-    -moz-box-align: stretch;
-    box-orient: horizontal;
-    box-align: stretch;
+    .boxOrient(horizontal);
+    .boxAlign(stretch);
   }
   .vbox {
-    -webkit-box-orient: vertical;
-    -webkit-box-align: stretch;
-    -ms-box-orient: vertical;
-    -ms-box-align: stretch;
-    -moz-box-orient: vertical;
-    -moz-box-align: stretch;
     display: box;
-    box-orient: vertical;
-    box-align: stretch;
+    .boxOrient(vertical);
+    .boxAlign(stretch);
   }
   .close-button {
     position: absolute;
@@ -222,7 +214,6 @@
   }
   &.active,
   &:active {
-    background-color: #e6e6e6;
     background-color: #d9d9d9;
     background-image: none;
     outline: 0;
@@ -251,7 +242,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgb( 0, 0, 0 );
     background: rgba( 0, 0, 0, 0.7 );
     position: fixed;
     opacity: 0;
@@ -260,8 +250,8 @@
       width: 60%;
       height: 60%;
       margin: 5% 20%;
-      background-color: #fff;
-      border: 3px solid #fff;
+      background-color: #FFF;
+      border: 3px solid #FFF;
       border-radius: 6px;
       &.small {
         height: 20%;

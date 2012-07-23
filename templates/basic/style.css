@@ -1,0 +1,145 @@
+/* ===== Primary Styles ========================================================
+   Author: @k88hudson
+   ========================================================================== */
+
+body {
+  background: #333;
+  color: #F8FDE2;
+  font-weight: 300;
+  font-size: 14px;
+  font-family: "Helvetica Neue", sans-serif;
+}
+
+.wrapper {
+  margin: 40px auto;
+  width: 560px;
+  box-shadow: 0 50px 30px -20px rgba(0,0,0,.6);
+}
+
+.wrapper .sidebar {
+  display: none;
+}
+
+/* VIDEO
+-------------------------------------------------- */
+.video-container {
+  position: relative;
+}
+
+.video {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+}
+
+.video > video,
+.video > iframe,
+.video > object {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video > video {
+  background: #000;
+}
+
+/* Use this class for a full overlay */
+.video-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Sidebar Layout
+-------------------------------------------------- */
+
+.wrapper-sidebar .video-container,
+.wrapper-sidebar .sidebar {
+  float: left;
+}
+.wrapper-sidebar .video-container {
+  width: 75%;
+}
+.wrapper-sidebar .sidebar {
+  display: block;
+  position: relative;
+  width: 25%;
+  padding-bottom: 42.1875%;
+  color: #222;
+  height: 0;
+}
+.wrapper-sidebar .sidebar > .sidebar-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #FFF;
+  overflow: scroll;
+}
+
+
+/* MEDIA QUERIES
+-------------------------------------------------- */
+
+ /* Smartphones (portrait and landscape) ----------- */
+@media only screen and (max-width : 560px) {
+  .wrapper { width: 320px; }
+}
+
+@media only screen and (min-width: 560px) and (max-width : 768px) {
+  .wrapper { width: 560px; }
+}
+
+@media only screen and (max-width : 768px) {
+  .wrapper-sidebar .video-container,
+  .wrapper-sidebar .sidebar {
+    width: 100%;
+  }
+  .wrapper-sidebar .sidebar,
+  .wrapper-sidebar .sidebar .sidebar-inner {
+    position: relative;
+    padding-bottom: 0;
+    height: 100%;
+  }
+}
+
+/* iPads (portrait) and small desktops ----------- */
+@media only screen and (min-width : 768px) and (max-width : 1024px) {
+  .wrapper { width: 640px; }
+  .wrapper-sidebar .video-container {
+    width: 70%;
+  }
+  .wrapper-sidebar .sidebar {
+    width: 30%;
+    padding-bottom: 39.375%;
+  }
+}
+
+/* iPads (landscape) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+  .wrapper { width: 640px; }
+}
+
+/* Desktops and laptops ----------- */
+@media only screen and (min-width : 1024px) {
+  .wrapper { width: 853px; }
+}
+
+/* Large screens ----------- */
+@media only screen and (min-width : 1824px) {
+  .wrapper { width: 1280px; }
+}
+
+/* iPhone 4 ----------- */
+@media only screen and (-webkit-min-device-pixel-ratio : 1.5), only screen and (min-device-pixel-ratio : 1.5) {
+/* Styles */
+}

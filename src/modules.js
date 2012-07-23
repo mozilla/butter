@@ -24,7 +24,7 @@ define(
       var name = moduleList[ i ].__moduleName;
       butter[ name ] = new moduleList[ i ]( butter, config.value( name ), Butter );
       modules.push( butter[ name ] );
-    } //for
+    }
 
     return {
       load: function( onLoaded ){
@@ -41,8 +41,8 @@ define(
           }
           else{
             loadedModules++;
-          } //if
-        } //for
+          }
+        }
 
         if( loadedModules === modules.length ){
           onLoaded();
@@ -61,9 +61,9 @@ define(
             modules[ i ]._start( onModuleReady );
           }
           else{
-            readyModules++;
-          } //if
-        } //for
+            onModuleReady();
+          }
+        }
       }
     };
 

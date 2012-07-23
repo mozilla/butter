@@ -1,0 +1,35 @@
+{
+  "name": "basic",
+  "template": "index.html",
+  "baseDir": "../../",
+  "savedDataUrl": "saved-data.json",
+  "plugin": {
+    "plugins": [
+      {
+        "type": "titles",
+        "path": "{{baseDir}}templates/assets/plugins/titles/popcorn.titles.js"
+      },
+      {
+        "type": "photo",
+        "path": "{{baseDir}}templates/assets/plugins/photo/popcorn.photo.js"
+      },
+      {
+        "type": "zoink",
+        "path": "{{baseDir}}templates/assets/plugins/zoink/popcorn.zoink.js"
+      },
+      {
+        "type": "googlemap",
+        "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
+      }
+    ],
+    "defaults": [
+      "titles",
+      "photo",
+      "zoink",
+      "googlemap"
+    ]
+  },
+  "editor": {
+    "googlemap": "{{baseDir}}editors/googlemap-editor.js"
+  }
+}

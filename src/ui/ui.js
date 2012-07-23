@@ -61,28 +61,6 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     };
   }
 
-  function loadIcons( icons, resourcesDir ){
-    var icon, img, div;
-
-    for( icon in icons ){
-      if( icons.hasOwnProperty( icon ) ){
-        img = new Image();
-        img.id = icon + "-icon";
-        img.src = resourcesDir + icons[ icon ];
-
-        // We can't use "display: none", since that makes it
-        // invisible, and thus not load.  Opera also requires
-        // the image be in the DOM before it will load.
-        div = document.createElement( "div" );
-        div.setAttribute( "data-butter-exclude", "true" );
-        div.className = "butter-image-preload";
-
-        div.appendChild( img );
-        document.body.appendChild( div );
-      }
-    }
-  }
-
   var __unwantedKeyPressElements = [
     "TEXTAREA",
     "INPUT",
@@ -146,6 +124,28 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
       });
     }
 
+    this.loadIcons = function( icons, resourcesDir ) {
+      var icon, img, div;
+
+      for ( icon in icons ) {
+        if ( icons.hasOwnProperty( icon ) ) {
+          img = new Image();
+          img.id = icon + "-icon";
+          img.src = resourcesDir + icons[ icon ];
+
+          // We can't use "display: none", since that makes it
+          // invisible, and thus not load.  Opera also requires
+          // the image be in the DOM before it will load.
+          div = document.createElement( "div" );
+          div.setAttribute( "data-butter-exclude", "true" );
+          div.className = "butter-image-preload";
+
+          div.appendChild( img );
+          document.body.appendChild( div );
+        }
+      }
+    };
+
     this.load = function( onReady ){
       if( _uiConfig.value( "ui" ).enabled !== false ){
         var loadOptions = {};
@@ -163,7 +163,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
 
         butter.loader.load( [ loadOptions ], function(){
           // icon preloading needs css to be loaded first
-          loadIcons( _uiConfig.value( "icons" ), _uiConfig.value( "dirs" ).resources || "" );
+          _this.loadIcons( _uiConfig.value( "icons" ), _uiConfig.value( "dirs" ).resources || "" );
           onReady();
         });
       }
@@ -270,10 +270,12 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
           if( _state !== val ){
             _state = val;
             if( _state ){
+              document.body.classList.remove( "tray-minimized" );
               _element.classList.remove( "minimized" );
               _this.dispatch( "uivisibilitychanged", true );
             }
             else {
+              document.body.classList.add( "tray-minimized" );
               _element.classList.add( "minimized" );
               _this.dispatch( "uivisibilitychanged", false );
             } //if
