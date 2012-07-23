@@ -20,7 +20,7 @@
         // variables
         muteButton, playButton, currentTimeDialog,
         durationDialog, timebar, progressBar, bigPlayButton,
-        scrubber, seeking, playStateCache, active, timeStamp,
+        scrubber, seeking, playStateCache, active,
         // functions
         bigPlayClicked, activate, deactivate,
         togglePlay, mouseMove, mouseUp, mouseDown;
@@ -41,7 +41,6 @@
     seeking = false;
     playStateCache = false;
     active = false;
-    timeStamp = new Date( 1970, 0, 1 );
 
     p.controls( false );
 
@@ -150,7 +149,8 @@
 
       p.on( "durationchange", function() {
 
-        var time = p.duration(),
+        var timeStamp = new Date( 1970, 0, 1 ),
+            time = p.duration(),
             seconds;
 
         timeStamp.setSeconds( Math.round( time ) );
@@ -237,7 +237,8 @@
 
       p.on( "timeupdate", function() {
 
-        var time = p.currentTime(),
+        var timeStamp = new Date( 1970, 0, 1 ),
+            time = p.currentTime(),
             seconds,
             width = ( time / p.duration() * 100 * timebar.offsetWidth / 100 );
 
@@ -255,7 +256,7 @@
         seconds = timeStamp.toTimeString().substr( 0, 8 );
 
         if ( currentTimeDialog ) {
-
+console.log( seconds );
           currentTimeDialog.innerHTML = seconds;
         }
       });
