@@ -158,12 +158,16 @@
 
         e.preventDefault();
 
-        if ( position < 0 ) {
+        if ( position <= 0 ) {
 
+          p.mute();
           position = 0;
         } else if ( position > volume.offsetWidth ) {
 
           position = volume.offsetWidth;
+        } else {
+
+          p.unmute();
         }
 
         if ( volumeProgressBar ) {
@@ -203,6 +207,14 @@
         e.preventDefault();
         window.addEventListener( "mouseup", volumeMouseUp, false );
         window.addEventListener( "mousemove", volumeMouseMove, false );
+
+        if ( position === 0 ) {
+
+          p.mute();
+        } else {
+
+          p.unmute();
+        }
 
         if ( volumeProgressBar ) {
 
@@ -276,12 +288,12 @@
 
         if ( progressBar ) {
 
-          progressBar.style.width = position + "px";
+          progressBar.style.width = ( position / timebar.offsetWidth * 100 ) + "%";
         }
 
         if ( scrubber ) {
 
-          scrubber.style.left = position - ( scrubber.offsetWidth / 2 ) + "px";
+          scrubber.style.left = ( ( position - ( scrubber.offsetWidth / 2 ) ) / timebar.offsetWidth * 100 ) + "%";
         }
 
         p.currentTime( position / timebar.offsetWidth * 100 * p.duration() / 100 );
@@ -320,12 +332,12 @@
 
         if ( progressBar ) {
 
-          progressBar.style.width = position + "px";
+          progressBar.style.width = ( position / timebar.offsetWidth * 100 ) + "%";
         }
 
         if ( scrubber ) {
 
-          scrubber.style.left = position - ( scrubber.offsetWidth / 2 ) + "px";
+          scrubber.style.left = ( ( position - ( scrubber.offsetWidth / 2 ) ) / timebar.offsetWidth * 100 ) + "%";
         }
 
         p.currentTime( position / timebar.offsetWidth * 100 * p.duration() / 100 );
@@ -342,12 +354,12 @@
 
         if ( progressBar ) {
 
-          progressBar.style.width = width + "px";
+          progressBar.style.width = ( width / timebar.offsetWidth * 100 ) + "%";
         }
 
         if ( scrubber ) {
 
-          scrubber.style.left = width - ( scrubber.offsetWidth / 2 ) + "px";
+          scrubber.style.left = ( ( width - ( scrubber.offsetWidth / 2 ) ) / timebar.offsetWidth * 100 ) + "%";
         }
 
         timeStamp.setSeconds( Math.round( time ) );
