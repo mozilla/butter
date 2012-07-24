@@ -51,7 +51,8 @@ body {
 -------------------------------------------------- */
 
 #butter-controls {
-  height: 50px;
+  position: relative;
+  height: 22px;
   width: 100%;
   display: none;
   background: #242029;
@@ -98,44 +99,53 @@ body {
   display: block;
 }
 
-
-/* Rows */
-
-.controls-top,
-.controls-bottom {
-  
-}
-
-/* Top */
-
-.controls-top {
-  padding-top: 5px;
-  border-bottom: 1px solid black;
-  height: 18px;
-}
-
-#controls-currenttime,
-#controls-duration {
-  float: left;
-  width: 10%;
+#controls-currenttime {
+  position: absolute;
+  width: 50px;
+  left: 0px;
   font-size: 11px;
   line-height: 12px;
   text-align: center;
 }
 
-/* Bottom */
-.controls-bottom {
-  width: 100%;
-  border-top: 1px solid rgba( 255, 255, 255, .1 );
+#controls-duration {
+  position: absolute;
+  width: 50px;
+  right: 8px;
+  font-size: 11px;
+  line-height: 12px;
+  text-align: center;
+}
+
+.controls-left {
+  height: 22px;
+  position: absolute;
+  width: 56px;
+}
+
+.controls-middle {
+  padding-top: 5px;
+  height: 17px;
+  position: absolute;
+  width: 60px;
+  left: 65px;
+}
+
+.controls-right {
+  padding-top: 5px;
+  height: 17px;
+  position: absolute;
+  left: 125px;
+  right: 0px;
 }
 
 #controls-timebar {
-  float: left;
+  position: absolute;
   background: rgba( 0, 0, 0, .2 );
   box-shadow: inset 0 1px 5px 2px rgba( 0, 0, 0, .5 );
-  position: relative;
   height: 12px;
-  width: 80%;
+  left: 68px;
+  right: 68px;
   border-radius: 6px;
 }
 
@@ -166,6 +176,43 @@ body {
   left: -5px;
 }
 
+#controls-volume {
+  float: left;
+  background: rgba( 0, 0, 0, .2 );
+  box-shadow: inset 0 1px 5px 2px rgba( 0, 0, 0, .5 );
+  position: relative;
+  height: 12px;
+  width: 80%;
+  border-radius: 6px;
+}
+
+#controls-volume-progressbar {
+  height: 100%;
+  background: rgba( 0, 0, 0, .4 );
+  position: absolute;
+  border-radius: 6px 0 0 8px;
+}
+
+#controls-volume-scrubber {
+  position: relative;
+  height: 100%;
+  width: 2px;
+  background: #EEE;
+  position: absolute;
+  cursor: pointer;
+}
+
+#controls-volume-scrubber:after {
+  content: "";
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
+  background: #EEE;
+  top: -2px;
+  left: -5px;
+}
+
 /* Buttons */
 
 .controls-btn {
@@ -173,6 +220,7 @@ body {
   padding: 10px;
   background: url( video-js.png ) no-repeat;
   margin-left: 8px;
+  float: left;
 }
 
 .controls-playing {
