@@ -256,7 +256,7 @@
         seconds = timeStamp.toTimeString().substr( 0, 8 );
 
         if ( currentTimeDialog ) {
-console.log( seconds );
+
           currentTimeDialog.innerHTML = seconds;
         }
       });
