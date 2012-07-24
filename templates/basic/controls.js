@@ -21,9 +21,11 @@
         muteButton, playButton, currentTimeDialog,
         durationDialog, timebar, progressBar, bigPlayButton,
         scrubber, seeking, playStateCache, active,
+        volume, volumeProgressBar, volumeScrubber,
         // functions
         bigPlayClicked, activate, deactivate,
-        togglePlay, mouseMove, mouseUp, mouseDown;
+        togglePlay, timeMouseMove, timeMouseUp, timeMouseDown,
+        volumeMouseMove, voumeMouseUp, volumeMouseDown;
 
     if ( !controls ) {
 
@@ -38,6 +40,9 @@
     progressBar = document.getElementById( "controls-progressbar" );
     bigPlayButton = document.getElementById( "controls-big-play-button" );
     scrubber = document.getElementById( "controls-scrubber" );
+    volume = document.getElementById( "controls-volume" );
+    volumeProgressBar = document.getElementById( "controls-volume-progressbar" );
+    volumeScrubber = document.getElementById( "controls-volume-scrubber" );
     seeking = false;
     playStateCache = false;
     active = false;
@@ -145,6 +150,99 @@
       });
     }
 
+    if ( volume ) {
+
+      volumeMouseMove = function( e ) {
+
+        var position = e.clientX - volume.getBoundingClientRect().left;
+
+        e.preventDefault();
+
+        if ( position < 0 ) {
+
+          position = 0;
+        } else if ( position > volume.offsetWidth ) {
+
+          position = volume.offsetWidth;
+        }
+
+        if ( volumeProgressBar ) {
+
+          volumeProgressBar.style.width = position + "px";
+        }
+
+        if ( volumeScrubber ) {
+
+          volumeScrubber.style.left = position - ( volumeScrubber.offsetWidth / 2 ) + "px";
+        }
+
+        p.volume( position / volume.offsetWidth );
+      };
+
+      volumeMouseUp = function( e ) {
+
+        if ( e.button !== 0 ) {
+
+          return;
+        }
+
+        e.preventDefault();
+        window.removeEventListener( "mouseup", volumeMouseUp, false );
+        window.removeEventListener( "mousemove", volumeMouseMove, false );
+      };
+
+      volumeMouseDown = function( e ) {
+
+        var position = e.clientX - volume.getBoundingClientRect().left;
+
+        if ( e.button !== 0 ) {
+
+          return;
+        }
+
+        e.preventDefault();
+        window.addEventListener( "mouseup", volumeMouseUp, false );
+        window.addEventListener( "mousemove", volumeMouseMove, false );
+
+        if ( volumeProgressBar ) {
+
+          volumeProgressBar.style.width = position + "px";
+        }
+
+        if ( volumeScrubber ) {
+
+          volumeScrubber.style.left = position - ( volumeScrubber.offsetWidth / 2 ) + "px";
+        }
+
+        p.volume( position / volume.offsetWidth );
+      };
+
+      volume.addEventListener( "mousedown", volumeMouseDown, false );
+
+      p.on( "volumechange", function() {
+
+        var width;
+
+        if ( p.muted() ) {
+
+          width = 0;
+        } else {
+
+          width = p.volume() * volume.offsetWidth;
+        }
+
+        if ( volumeProgressBar ) {
+
+          volumeProgressBar.style.width = width + "px";
+        }
+
+        if ( volumeScrubber ) {
+
+          volumeScrubber.style.left = width - ( volumeScrubber.offsetWidth / 2 ) + "px";
+        }
+      });
+    }
+
     if ( durationDialog ) {
 
       p.on( "durationchange", function() {
@@ -162,7 +260,7 @@
 
     if ( timebar ) {
 
-      mouseMove = function( e ) {
+      timeMouseMove = function( e ) {
 
         var position = e.clientX - timebar.getBoundingClientRect().left;
 
@@ -189,7 +287,7 @@
         p.currentTime( position / timebar.offsetWidth * 100 * p.duration() / 100 );
       };
 
-      mouseUp = function( e ) {
+      timeMouseUp = function( e ) {
 
         if ( e.button !== 0 ) {
 
@@ -200,11 +298,11 @@
         seeking = false;
         !active && deactivate();
         playStateCache && p.play();
-        window.removeEventListener( "mouseup", mouseUp, false );
-        window.removeEventListener( "mousemove", mouseMove, false );
+        window.removeEventListener( "mouseup", timeMouseUp, false );
+        window.removeEventListener( "mousemove", timeMouseMove, false );
       };
 
-      mouseDown = function( e ) {
+      timeMouseDown = function( e ) {
 
         var position = e.clientX - timebar.getBoundingClientRect().left;
 
@@ -217,8 +315,8 @@
         seeking = true;
         playStateCache = !p.paused();
         p.pause();
-        window.addEventListener( "mouseup", mouseUp, false );
-        window.addEventListener( "mousemove", mouseMove, false );
+        window.addEventListener( "mouseup", timeMouseUp, false );
+        window.addEventListener( "mousemove", timeMouseMove, false );
 
         if ( progressBar ) {
 
@@ -233,7 +331,7 @@
         p.currentTime( position / timebar.offsetWidth * 100 * p.duration() / 100 );
       };
 
-      timebar.addEventListener( "mousedown", mouseDown, false );
+      timebar.addEventListener( "mousedown", timeMouseDown, false );
 
       p.on( "timeupdate", function() {
 

@@ -205,7 +205,7 @@ body {
 #controls-volume-scrubber:after {
   content: "";
   position: absolute;
-  width: 15px;
+  width: 8px;
   height: 15px;
   border-radius: 15px;
   background: #EEE;
