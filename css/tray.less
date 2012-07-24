@@ -69,7 +69,7 @@
         border-radius: 10px;
         border: 1px solid black;
         box-shadow: inset 0 1px 0 rgba( 255,255,255,0.2 ), 0 3px 3px rgba( 0,0,0,0.2 );
-        .gradient( center, rgb( 31,31,31 ), rgb( 36,36,36 ), bottom, top, 29%, 65% );
+        .gradient( "vertical", #242424, #1F1F1F );
       }
       div {
         >span {
@@ -101,7 +101,7 @@
   #popcorn-plugin {
     border-radius: 6px;
     font-size: 80%;
-    .gradient( center, #6E6E6E, #7D7D7D, bottom, top, 0%, 100% );
+    .gradient( "vertical", #7D7D7D, #6E6E6E );
     border: 1px solid #333;
     box-shadow: 0 1px 0 #656565;
     padding: 3px;
@@ -129,8 +129,7 @@
       border-radius: 4px 4px 0 0;
       height: 17px;
       width: 100%;
-      background-color: #3E3E3E;
-      .gradient( center, #414449, #282828, top, bottom, 0%, 100% );
+      .gradient( "vertical", #414449, #282828, true );
       
       span {
         text-shadow: 0 -1px 1px #000;
