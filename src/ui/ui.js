@@ -78,6 +78,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
         _state = true,
         _logoSpinner,
         _uiConfig = butter.config,
+        _uiOptions = _uiConfig.value( "ui" ),
         _this = this;
 
     EventManagerWrapper( _this );
@@ -114,8 +115,10 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     _element.appendChild( _areas.work.element );
     _element.appendChild( _areas.tools.element );
 
-    if( _uiConfig.value( "ui" ).enabled !== false ){
-      UnloadDialog( butter );
+    if ( _uiOptions.enabled ) {
+      if ( _uiOptions.onLeaveDialog ) {
+        UnloadDialog( butter );
+      }
       document.body.classList.add( "butter-header-spacing" );
       document.body.classList.add( "butter-tray-spacing" );
       document.body.appendChild( _element );
@@ -147,13 +150,13 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
     };
 
     this.load = function( onReady ){
-      if( _uiConfig.value( "ui" ).enabled !== false ){
+      if( _uiOptions.enabled ){
         var loadOptions = {};
 
         // Determine if we should load a pre-built CSS file for Butter (e.g.,
         // the deployment case, post `node make`), or whether we need to load
         // the LESS file directly and parse it into CSS (e.g., the dev case).
-        if( _uiConfig.value( "cssRenderClientSide" ) === true ){
+        if( _uiConfig.value( "cssRenderClientSide" ) ){
           loadOptions.type = "less";
           loadOptions.url = BUTTER_LESS_FILE;
         } else {
@@ -469,7 +472,7 @@ define( [ "core/eventmanager", "./toggler", "./logo-spinner", "./context-button"
       _this.visible = true;
       _toggler.visible = true;
       ContextButton( butter );
-      if( _uiConfig.value( "ui" ).enabled !== false ){
+      if( _uiOptions.enabled ){
         Header( butter, _uiConfig );
       }
     });
