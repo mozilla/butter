@@ -44,7 +44,12 @@ define([ 'util/xhr' ], function( XHR ){
           scriptElement.src = url;
           scriptElement.type = "text/javascript";
           document.head.appendChild( scriptElement );
-          scriptElement.onload = scriptElement.onreadystatechange = callback;
+          scriptElement.onload = scriptElement.onreadystatechange = function() {
+          //Used for IE9
+          if ( this.readyState === "loaded" ) {
+            callback();
+          } 
+		  };
         }
         else if( callback ){
           callback();
