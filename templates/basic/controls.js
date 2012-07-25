@@ -29,7 +29,7 @@
 
     var ready = function() {
 
-      p.media.removeEventListener( "canplaythrough", ready, false );
+      p.media.removeEventListener( "loadedmetadata", ready, false );
 
       muteButton = document.getElementById( "controls-mute" );
       playButton = document.getElementById( "controls-play" );
@@ -394,12 +394,12 @@
       return p;
     }
 
-    if ( p.readyState() >= 4 ) {
+    if ( p.readyState() >= 1 ) {
 
       ready();
     } else {
 
-      p.media.addEventListener( "canplaythrough", ready, false );
+      p.media.addEventListener( "loadedmetadata", ready, false );
     }
 
     return p;
