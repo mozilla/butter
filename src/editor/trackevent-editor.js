@@ -213,18 +213,18 @@ define( [ "util/lang", "util/keys", "./base-editor",
      */
     extendObject.createManifestItem = function( name, manifestEntry, data, trackEvent, itemCallback ) {
       var elem = manifestEntry.elem || "default",
-          propertyArchetype = __defaultLayouts.querySelector( ".trackevent-property." + elem ).cloneNode( true ),
-          editorElement,
           itemLabel = manifestEntry.label || name,
+          isStartOrEnd = [ "start", "end" ].indexOf( name.toLowerCase() ) > -1,
+          units = manifestEntry.units || ( isStartOrEnd ? "seconds" : "" ),
+          propertyArchetype = __defaultLayouts.querySelector( ".trackevent-property." + elem + ( units ? ".units" : "" ) ).cloneNode( true ),
+          editorElement,
           option,
           manifestEntryOption,
           i, l;
 
-      // Treat 'in' and 'out' specially, changing their titles to 'Start' and 'End' respectively
-      if ( itemLabel === "In" ) {
-        itemLabel = "Start (seconds)";
-      } else if ( itemLabel === "Out" ) {
-        itemLabel = "End (seconds)";
+      // only populate if this is an input element that has associated units
+      if ( units ) {
+        propertyArchetype.querySelector( ".butter-unit" ).innerHTML = units;
       }
 
       // Grab the element with class 'property-name' to supply the archetype for new manifest entries
@@ -352,6 +352,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
           continue;
         }
         element = extendObject.createManifestItem( item, manifestOptions[ item ], trackEvent.popcornOptions[ item ], trackEvent, itemCallback );
+
         container.appendChild( element );
       }
     };
