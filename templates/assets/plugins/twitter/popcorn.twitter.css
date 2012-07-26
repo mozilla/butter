@@ -1,0 +1,27 @@
+div {
+  font-weight: bold;
+}
+
+.popcorn-twitter {
+
+}
+
+.popcorn-twitter .tweet {
+  margin-top: 2px;
+}
+
+.popcorn-twitter .tweet img {
+  float: left;
+}
+
+.popcorn-twitter .feed {
+  font-size: 120%;
+}
+
+.popcorn-twitter .sidebar {
+
+}
+
+.popcorn-twitter .ticket {
+  
+}
