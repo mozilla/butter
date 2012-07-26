@@ -29,7 +29,9 @@ define( [], function(){
         _lastTime = -1,
         _lastScroll = _tracksContainer.element.scrollLeft,
         _lastZoom = -1,
-        _lineWidth = 0;
+        _lineWidth = 0,
+        _seekCompleted = false,
+        _seekMouseUp = false;
 
     _container.className = "time-bar-scrubber-container";
     _node.className = "time-bar-scrubber-node";
@@ -98,8 +100,13 @@ define( [], function(){
     hScrollbar.listen( "scroll", setNodePosition );
 
     function onMouseUp( e ){
-      if( _isPlaying || _isScrubbing ){
+      _seekMouseUp = true;
+
+      if( _isPlaying && _seekCompleted ){
         _media.play();
+      }
+
+      if( _isScrubbing ){
         _isScrubbing = false;
       }
 
@@ -163,6 +170,16 @@ define( [], function(){
       setNodePosition();
     } //onMouseMove
 
+    function onSeeked( e ){
+      _seekCompleted = true;
+
+      _media.unlisten( "mediaseeked", onSeeked );
+
+      if( _isPlaying && _seekMouseUp ) {
+        _media.play();
+      }
+    }
+
     function onScrubberMouseDown( e ){
       _mouseDownPos = e.pageX - _node.offsetLeft;
 
@@ -171,10 +188,13 @@ define( [], function(){
         _isScrubbing = true;
       }
 
+      _seekCompleted = _seekMouseUp = false;
+      _media.listen( "mediaseeked", onSeeked );
+
       _node.removeEventListener( "mousedown", onScrubberMouseDown, false );
       window.addEventListener( "mousemove", onMouseMove, false );
       window.addEventListener( "mouseup", onMouseUp, false );
-    } //onMouesDown
+    } //onMouseDown
 
     var onMouseDown = this.onMouseDown = function( e ){
       var pos = e.pageX - _container.getBoundingClientRect().left;
