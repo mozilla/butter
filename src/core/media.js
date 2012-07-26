@@ -63,6 +63,9 @@
               },
               ended: function(){
                 _this.dispatch( "mediaended" );
+              },
+              seeked: function(){
+                _this.dispatch( "mediaseeked" );
               }
             },
             prepare: function(){
