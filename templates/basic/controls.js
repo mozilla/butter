@@ -24,8 +24,9 @@
         volume, volumeProgressBar, volumeScrubber,
         // functions
         bigPlayClicked, activate, deactivate, volumechange,
-        togglePlay, timeMouseMove, timeMouseUp, timeMouseDown,
-        volumeMouseMove, voumeMouseUp, volumeMouseDown, mutechange;
+        togglePlay, timeMouseMove, timeMouseUp,
+        timeMouseDown, volumeMouseMove, voumeMouseUp,
+        volumeMouseDown, durationchange, mutechange;
 
     var ready = function() {
 
@@ -273,7 +274,7 @@
 
       if ( durationDialog ) {
 
-        p.on( "durationchange", function() {
+        durationchange = function() {
 
           var timeStamp = new Date( 1970, 0, 1 ),
               time = p.duration(),
@@ -283,7 +284,10 @@
           seconds = timeStamp.toTimeString().substr( 0, 8 );
 
           durationDialog.innerHTML = seconds;
-        });
+        };
+
+        p.on( "durationchange", durationchange );
+        durationchange();
       }
 
       if ( timebar ) {
