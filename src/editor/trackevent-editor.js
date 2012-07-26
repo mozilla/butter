@@ -221,8 +221,12 @@ define( [ "util/lang", "util/keys", "./base-editor",
           }
           editorElement.value = data;
         }
-        editorElement.type = manifestEntry.type;
-
+        try {
+          editorElement.type = manifestEntry.type;
+        }
+        catch (e) {
+          editorElement.type = "text";
+        }
         // data-manifest-key is used to update this property later on
         editorElement.setAttribute( "data-manifest-key", name );
 
