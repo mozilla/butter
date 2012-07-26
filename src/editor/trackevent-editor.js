@@ -182,11 +182,18 @@ define( [ "util/lang", "util/keys", "./base-editor",
       var elem = manifestEntry.elem || "default",
           itemLabel = manifestEntry.label || name,
           isStartOrEnd = [ "start", "end" ].indexOf( itemLabel.toLowerCase() ) > -1,
-          propertyArchetype = __defaultLayouts.querySelector( ".trackevent-property." + elem + ( isStartOrEnd ? ".start-end" : "" ) ).cloneNode( true ),
+          units = manifestEntry.units || ( isStartOrEnd ? "seconds" : "" ),
+          propertyArchetype = __defaultLayouts.querySelector( ".trackevent-property." + elem + ( units ? ".units" : "" ) ).cloneNode( true ),
           editorElement,
           option,
           manifestEntryOption,
           i, l;
+      console.log( manifestEntry.units );
+
+      // only populate if this is an input element that has associated units
+      if ( units ) {
+        propertyArchetype.querySelector( ".butter-unit" ).innerHTML = units;
+      }
 
       // Grab the element with class 'property-name' to supply the archetype for new manifest entries
       propertyArchetype.querySelector( ".property-name" ).innerHTML = itemLabel;
@@ -296,8 +303,6 @@ define( [ "util/lang", "util/keys", "./base-editor",
       var manifestOptions,
           item,
           element,
-          inputContainer,
-          unitLabel,
           i, l;
 
       container = container || extendObject.rootElement;
