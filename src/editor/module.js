@@ -24,7 +24,6 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     moduleOptions = moduleOptions || {};
 
     var _currentEditor,
-        _firstUse = false,
         _editorAreaDOMRoot = LangUtils.domFragment( EDITOR_AREA_LAYOUT ),
         _toggler,
         _this = this;
@@ -45,13 +44,8 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         throw new Error( "trackEvent must be valid to start an editor." );
       }
 
-      // If the editor has never been used before, open it now
-      if ( !_firstUse ) {
-        _firstUse = true;
-        _editorAreaDOMRoot.classList.remove( "minimized" );
-        document.body.classList.remove( "editor-minimized" );
-        _toggler.state = false;
-      }
+      _editorAreaDOMRoot.classList.remove( "minimized" );
+      _toggler.state = false;
 
       var editorType = Editor.isRegistered( trackEvent.type ) ? trackEvent.type : "default";
       if( _currentEditor ) {
@@ -63,38 +57,39 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     };
 
     // When a TrackEvent is somewhere in butter, open its editor immediately.
-    butter.listen( "trackeventcreated", function( e ){
+    butter.listen( "trackeventcreated", function( e ) {
       if( [ "target", "media" ].indexOf( e.data.by ) > -1 && butter.ui.contentState === "timeline" ){
         _this.editTrackEvent( e.data.trackEvent );
       }
     });
 
     butter.listen( "trackeventadded", function ( e ) {
-      var trackEvent = e.data;
+      var trackEvent = e.data,
+          view = trackEvent.view,
+          element = trackEvent.view.element;
 
       // Open a new editor on a single click
-      var trackEventMouseUp = function ( e ) {
-        if( butter.selectedEvents.length === 1 && !trackEvent.dragging ){
+      var trackEventClicked = function ( e ) {
+        if( butter.selectedEvents.length === 1 && !trackEvent.dragging ) {
           _this.editTrackEvent( trackEvent );
         }
       };
 
-      // Always open the editor on a double-click
-      var onTrackEventDoubleClicked = function ( e ) {
-        _editorAreaDOMRoot.classList.remove( "minimized" );
-        _toggler.state = false;
-      };
+      element.addEventListener( "mouseup", trackEventClicked, true );
 
-      trackEvent.view.element.addEventListener( "mouseup", trackEventMouseUp, true );
-      trackEvent.view.element.addEventListener( "dblclick", onTrackEventDoubleClicked, false );
+      view.listen( "trackeventdragstarted", function() {
+        element.removeEventListener( "mouseup", trackEventClicked, true );
+      });
+
+      view.listen( "trackeventdragstopped", function() {
+        element.addEventListener( "mouseup", trackEventClicked, true );
+      });
 
       butter.listen( "trackeventremoved", function ( e ) {
         if ( e.data === trackEvent ) {
-          trackEvent.view.element.removeEventListener( "mouseup", trackEventMouseUp, true );
-          trackEvent.view.element.removeEventListener( "dblclick", onTrackEventDoubleClicked, false );
+          element.removeEventListener( "click", trackEventClicked, true );
         }
       });
-
     });
 
     /**
