@@ -44,7 +44,9 @@ define([ 'util/xhr' ], function( XHR ){
           scriptElement.src = url;
           scriptElement.type = "text/javascript";
           document.head.appendChild( scriptElement );
-          scriptElement.onload = scriptElement.onreadystatechange = callback;
+          scriptElement.onload =  function() {
+            callback();
+          };
         }
         else if( callback ){
           callback();
