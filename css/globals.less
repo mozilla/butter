@@ -13,6 +13,7 @@
   user-select: @param; 
 }
 .gradient(@angle, @startCol, @stopCol, @startLoc, @endLoc, @startPerc, @stopPerc) {
+   background: @startCol; 
    background: -webkit-gradient(linear,left @startLoc,left @endLoc,color-stop(@startPerc,@startCol),color-stop(@stopPerc,@stopCol));
    background: -webkit-linear-gradient(@angle @startLoc,@startCol @startPerc,@stopCol @stopPerc);
    background: -moz-linear-gradient(@angle @startLoc,@startCol @startPerc,@stopCol @stopPerc);
