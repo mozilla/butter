@@ -20,13 +20,18 @@
       {
         "type": "googlemap",
         "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
+      },
+      {
+        "type": "twitter",
+        "path": "{{baseDir}}templates/assets/plugins/twitter/popcorn.twitter.js"
       }
     ],
     "defaults": [
       "titles",
       "photo",
       "zoink",
-      "googlemap"
+      "googlemap",
+      "twitter"
     ]
   },
   "editor": {
