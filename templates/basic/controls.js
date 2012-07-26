@@ -286,7 +286,6 @@
           durationDialog.innerHTML = seconds;
         };
 
-        p.on( "durationchange", durationchange );
         durationchange();
       }
 
