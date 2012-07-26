@@ -188,7 +188,6 @@ define( [ "util/lang", "util/keys", "./base-editor",
           option,
           manifestEntryOption,
           i, l;
-      console.log( manifestEntry.units );
 
       // only populate if this is an input element that has associated units
       if ( units ) {
