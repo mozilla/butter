@@ -85,10 +85,6 @@ define( [], function(){
         timeStamp.setSeconds( time );
         seconds = timeStamp.toTimeString().substr( 0, 8 );
 
-        if( seconds > 86399 ){
-          seconds = Math.floor( ( timeStamp - Date.parse( "1/1/70" ) ) / 3600000 ) + seconds.substr( 2 );
-        } //if
-
         _timeBox.value = seconds;
       }
       else {
