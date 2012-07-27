@@ -14,17 +14,12 @@
   text-shadow: 0 -1px 1px rgba(0,0,0,.75);
   vertical-align: middle;
   cursor: pointer;
-  background: -moz-linear-gradient(top,  rgba(71,76,86,1) 0%, rgba(64,71,81,1) 9%, rgba(51,51,51,1) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(71,76,86,1)), color-stop(9%,rgba(64,71,81,1)), color-stop(100%,rgba(51,51,51,1)));
-  background: -webkit-linear-gradient(top,  rgba(71,76,86,1) 0%,rgba(64,71,81,1) 9%,rgba(51,51,51,1) 100%);
-  background: -o-linear-gradient(top,  rgba(71,76,86,1) 0%,rgba(64,71,81,1) 9%,rgba(51,51,51,1) 100%);
-  background: -ms-linear-gradient(top,  rgba(71,76,86,1) 0%,rgba(64,71,81,1) 9%,rgba(51,51,51,1) 100%);
-  background: linear-gradient(top,  rgba(71,76,86,1) 0%,rgba(64,71,81,1) 9%,rgba(51,51,51,1) 100%);
-  background-repeat: repeat-x;
   border: 1px solid #222;
   border-bottom-color: #000;
   border-radius: 4px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.2);
+  box-shadow: inset 0 1px 0 rgba( 255, 255, 255, .2),
+    0 1px 2px rgba( 0, 0, 0, .2);
+  .gradient( "vertical", #404751, #333, true );
 }
 .butter-btn:hover,
 .butter-btn:active,
@@ -40,15 +35,10 @@
 .butter-btn:hover {
   color: #EEE;
   text-decoration: none;
-  box-shadow: inset 0 1px 1px rgba(255,255,255,.4), 0 1px 3px rgba(0,0,0,.5);
-  background: -moz-linear-gradient(top,  rgba(86,92,104,1) 0%, rgba(79,87,99,1) 9%, rgba(69,69,69,1) 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(86,92,104,1)), color-stop(9%,rgba(79,87,99,1)), color-stop(100%,rgba(69,69,69,1)));
-  background: -webkit-linear-gradient(top,  rgba(86,92,104,1) 0%,rgba(79,87,99,1) 9%,rgba(69,69,69,1) 100%);
-  background: -o-linear-gradient(top,  rgba(86,92,104,1) 0%,rgba(79,87,99,1) 9%,rgba(69,69,69,1) 100%);
-  background: -ms-linear-gradient(top,  rgba(86,92,104,1) 0%,rgba(79,87,99,1) 9%,rgba(69,69,69,1) 100%);
-  background: linear-gradient(top,  rgba(86,92,104,1) 0%,rgba(79,87,99,1) 9%,rgba(69,69,69,1) 100%);
-  .transition( all  0.1s linear );
-  .transform( scale( 1.01, 1.01 ) );
+  box-shadow: inset 0 1px 1px rgba( 255, 255, 255, .4 ), 
+    0 1px 3px rgba( 0, 0, 0, .5 );
+  .gradient( "vertical", #4F5763, #454545, true );
+  .transition( all .1s linear );
 }
 .butter-btn:focus {
   outline: thin dotted #333;
@@ -59,7 +49,8 @@
 .butter-btn:active {
   background: rgb( 86,92,104 );
   outline: 0;
-  box-shadow: inset 0 2px 4px rgba( 0, 0, 0, .15 ), 0 1px 2px rgba( 0, 0, 0, .5 );
+  box-shadow: inset 0 2px 4px rgba( 0, 0, 0, .15 ),
+    0 1px 2px rgba( 0, 0, 0, .5 );
 }
 .butter-btn.disabled,
 .butter-btn[disabled],
@@ -70,7 +61,6 @@
   cursor: default;
   opacity: 0.7;
   box-shadow: none;
-  .transform( scale( 1, 1 ) );
 }
 
 /* All elements with a class starting in icon- */

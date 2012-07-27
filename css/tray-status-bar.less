@@ -4,7 +4,7 @@
 
 #status-bar {
   box-shadow: inset 0 1px 0 #5d5d5d;
-  .gradient( center, #2c2c2c, #4c4c4c, bottom, top, 0%, 100% );
+  .gradient( "vertical", #4c4c4c, #2c2c2c );
   position: absolute;
   height: 50px;
   top: 0;
@@ -86,7 +86,7 @@
       padding: 3px;
 
       .status-button[data-mouse-state="depressed"]{
-        .gradient( center, #bdaa5c, #e0d299, top, bottom, 0%, 100% );     
+        .gradient( "vertical", #bdaa5c, #e0d299, true );
       } 
 
       .status-button-icon {
@@ -208,14 +208,14 @@
       width: 17px;
       height: 17px;
       border-radius: 20px;
-      .gradient( center, #b4b4b4, #777777, top, bottom, 0%, 100% );
+      .gradient( "vertical", #B4B4B4, #777, true );
       
       &:hover {
-        .gradient( center, #b4b4b4, #969696, top, bottom, 0%, 100% );
+        .gradient( "vertical", #B4B4B4, #969696, true );
       }
     }
     .status-button[data-mouse-state="depressed"] {
-      .gradient( center, #959595, #cccccc, top, bottom, 0%, 100% );
+      .gradient( "vertical", #959595, #CCC, true );
     }
   }
 }

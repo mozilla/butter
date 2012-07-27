@@ -12,14 +12,44 @@
   -ms-user-select: @param;
   user-select: @param; 
 }
-.gradient(@angle, @startCol, @stopCol, @startLoc, @endLoc, @startPerc, @stopPerc) {
-   background: -webkit-gradient(linear,left @startLoc,left @endLoc,color-stop(@startPerc,@startCol),color-stop(@stopPerc,@stopCol));
-   background: -webkit-linear-gradient(@angle @startLoc,@startCol @startPerc,@stopCol @stopPerc);
-   background: -moz-linear-gradient(@angle @startLoc,@startCol @startPerc,@stopCol @stopPerc);
-   background: -ms-linear-gradient(@angle @startLoc,@startCol @startPerc,@stopCol @stopPerc);
-   background: -o-linear-gradient(@angle @startLoc,@startCol @startPerc,@stopCol @stopPerc);
-   background: linear-gradient(@angle @startLoc, @startCol);
-} 
+
+// GRADIENTS 
+// Usage:
+//  .gradient( "vertical", red, blue );         -> Creates a gradient from top = red to bottom = blue.
+//  .gradient( "horizonal", red, blue );        -> Creates a gradient from left = red to right = blue.
+//  .gradient( "vertical", red, blue, true );   -> Creates a gradient with a solid-color fallback. This is
+//                                                 necessary for IE9 when the container has a border-radius of 2+
+
+._gradient( @color1, @color2, @startLoc, @endLoc, @from, @to, @ieFallback: false, @ieGradientType: 0 ) when ( @ieFallback ) {
+  // Internal mixin for generating gradients when there are rounded corners
+  background: @color1;
+  background: -webkit-gradient( linear, @startLoc, @endLoc, color-stop( @from, @color1 ), color-stop( @to, @color2 ) );
+  background: -webkit-linear-gradient( @startLoc, @color1 @from, @color2 @to );
+  background: -moz-linear-gradient( @startLoc, @color1 @from, @color2 @to );
+  background: -ms-linear-gradient( @startLoc, @color1 @from, @color2 @to );
+  background: -o-linear-gradient( @startLoc, @color1 @from, @color2 @to );
+  background: linear-gradient( @startLoc, @color1 );
+}
+
+._gradient( @color1, @color2, @startLoc, @endLoc, @from, @to, @ieFallback: false, @ieGradientType: 0 ) when not ( @ieFallback ) {
+  // Internal mixin for generating gradients when there are no rounded corners
+  filter: e( %( "progid:DXImageTransform.Microsoft.Gradient(color1orStr='%d', EndColorStr='%d', GradientType=%d)", @color1, @color2, @ieGradientType ) );
+  background: -webkit-gradient( linear, @startLoc, @endLoc, color-stop( @from, @color1 ), color-stop( @to, @color2 ) );
+  background: -webkit-linear-gradient( @startLoc, @color1 @from, @color2 @to );
+  background: -moz-linear-gradient( @startLoc, @color1 @from, @color2 @to );
+  background: -ms-linear-gradient( @startLoc, @color1 @from, @color2 @to );
+  background: -o-linear-gradient( @startLoc, @color1 @from, @color2 @to );
+  background: linear-gradient( @startLoc, @color1 );
+}
+
+.gradient( "vertical", @color1, @color2, @fallback: false ) {
+  ._gradient( @color1, @color2, top, bottom, 0%, 100%, @fallback, 0 );
+}
+
+.gradient( "horizontal", @color1, @color2, @fallback: false ) {
+  ._gradient( @color1, @color2, left, right, 0%, 100%, @fallback, 1 );
+}
+
 .transition(@transition1) {
   -webkit-transition: @transition1;
   -moz-transition: @transition1;
