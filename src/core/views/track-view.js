@@ -142,6 +142,30 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       ]);
     }; //removeTrackEvent
 
-  }; //TrackView
+    this.checkOverlay = function( trackevent ) {
+      var teData = trackevent.data,
+          currentTrackEvent;
 
+      // utility function to check if two trackevents are overlapping
+      function isOverlapping( te1, te2 ) {
+        var start1 = te1.start,
+            start2 = te2.start,
+            end1 = te1.end,
+            end2 = te2.end;
+
+        return !( start1 > end2 && start2 < end1 );
+      }
+
+      // loop over all the trackevents for this track and see if we overlap
+      for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
+        currentTrackEvent = _trackEvents[ i ].trackEvent;
+        if ( teData.id !== currentTrackEvent.id ) {
+          if ( isOverlapping( teData.popcornOptions, currentTrackEvent.popcornOptions ) ) {
+            _track._media.dispatch( "trackeventoverlap", teData );
+            break;
+          }
+        }
+      }
+    };
+  }; //TrackView
 });

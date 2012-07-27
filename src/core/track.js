@@ -214,6 +214,15 @@ define( [
         } //if
       } //for
     }; //deselectEvents
+
+    // check to see if this trackevent overlaps with any existing trackevents
+    this.listen( "trackeventupdated", function( trackevent ) {
+      _view.checkOverlay( trackevent );
+    });
+
+    this.listen( "trackeventadded", function( trackevent ) {
+      _view.checkOverlay( trackevent );
+    });
   }; //Track
 
   return Track;

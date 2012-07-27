@@ -25,6 +25,29 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
     var _containerDims;
 
+    _media.listen( "trackeventoverlap", function( trackevent ) {
+      var tracks = _media.tracks,
+          te = trackevent.data,
+          foundTrack = false,
+          currentTrack = te._track;
+
+      for ( var i = 0, l = tracks.length; i < l; i++ ) {
+        // search for the track under the current one
+        if ( ( tracks[ i ].order - currentTrack.order ) === 1 ) {
+          currentTrack.removeTrackEvent( te );
+          tracks[ i ].addTrackEvent( te );
+          foundTrack = true;
+          break;
+        }
+      }
+
+      if ( !foundTrack ) {
+        _media.addTrack();
+        currentTrack.removeTrackEvent( te );
+        tracks[ i ].addTrackEvent( te );
+      }
+    });
+
     function closeIfPossible(){
       if ( _closeSignal && !_keepOpen ) {
         setDimensions( false );

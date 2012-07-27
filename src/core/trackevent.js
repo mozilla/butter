@@ -103,6 +103,9 @@ define( [
      * @throws TrackEventUpdateException: When an update operation failed because of conflicting times or other serious property problems.
      */
     this.update = function( updateOptions, applyDefaults ) {
+      if ( !_track ) {
+        return;
+      }
       updateOptions = updateOptions || {};
 
       var newStart = _popcornOptions.start,
