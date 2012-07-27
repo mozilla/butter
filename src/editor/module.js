@@ -69,25 +69,25 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
           element = trackEvent.view.element;
 
       // Open a new editor on a single click
-      var trackEventClicked = function ( e ) {
+      var trackEventMouseUp = function ( e ) {
         if( butter.selectedEvents.length === 1 && !trackEvent.dragging ) {
           _this.editTrackEvent( trackEvent );
         }
       };
 
-      element.addEventListener( "mouseup", trackEventClicked, true );
+      element.addEventListener( "mouseup", trackEventMouseUp, true );
 
       view.listen( "trackeventdragstarted", function() {
-        element.removeEventListener( "mouseup", trackEventClicked, true );
+        element.removeEventListener( "mouseup", trackEventMouseUp, true );
       });
 
       view.listen( "trackeventdragstopped", function() {
-        element.addEventListener( "mouseup", trackEventClicked, true );
+        element.addEventListener( "mouseup", trackEventMouseUp, true );
       });
 
       butter.listen( "trackeventremoved", function ( e ) {
         if ( e.data === trackEvent ) {
-          element.removeEventListener( "click", trackEventClicked, true );
+          element.removeEventListener( "mouseup", trackEventMouseUp, true );
         }
       });
     });
