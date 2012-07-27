@@ -176,7 +176,6 @@
 
       this.addTrack = function ( track ) {
         track = ensureNewTrackIsTrack( track );
-
         // Sort tracks first, so we can guarantee their ordering
         _this.sortTracks( true );
 
@@ -184,7 +183,7 @@
         track.order = _tracks.length;
 
         setupNewTrack( track );
-        
+
         // Simply add the track onto the ordered tracks array
         _orderedTracks.push( track );
 
@@ -217,8 +216,6 @@
           }
 
           setupNewTrack( newTrack );
-          
-          console.log( newTrack.view );
 
           _this.dispatch( "trackadded", newTrack );
           _this.dispatch( "trackorderchanged", _orderedTracks );
@@ -232,13 +229,13 @@
         }
       };
 
-      this.getTrackById = function( id ){
-        for( var i=0, l=_tracks.length; i<l; ++i ){
-          if( _tracks[ i ].id === id ){
+      this.getTrackById = function( id ) {
+        for ( var i = 0, l = _tracks.length; i < l; ++i ) {
+          if ( _tracks[ i ].id === id ) {
             return _tracks[ i ];
-          } //if
-        } //for
-      }; //getTrackById
+          }
+        }
+      };
 
       this.removeTrack = function ( track ) {
         var idx = _tracks.indexOf( track );

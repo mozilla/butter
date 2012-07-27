@@ -39,7 +39,7 @@ define([], function(){
     }
   }
 
-  function onDragged( e ){
+  var onDragged = function( e ){
     __mouseLast[ 0 ] = __mousePos[ 0 ];
     __mouseLast[ 1 ] = __mousePos[ 1 ];
     __mousePos = [ e.clientX, e.clientY ];
@@ -62,6 +62,7 @@ define([], function(){
 
     for( i = remembers.length - 1; i >= 0; --i ){
       remember = remembers[ i ];
+      remember.drag( e );
       for( j = __droppables.length - 1; j >= 0; --j ){
         droppable = __droppables[ j ];
         if( remember.element === droppable.element ||
@@ -81,7 +82,7 @@ define([], function(){
         }
       }
     }
-  }
+  };
 
   function onMouseUp( e ){
     __mouseDown = false;
@@ -359,6 +360,7 @@ define([], function(){
         _onOver = options.over || function(){},
         _onOut = options.out || function(){},
         _droppable = {},
+        _data = options.data,
         _rememberedDraggables = [];
 
     function onDrop( e ) {
@@ -438,7 +440,7 @@ define([], function(){
       },
       drop: function( draggable ){
         if ( removeDraggable( draggable ) ) {
-          _onDrop( draggable.element, __mousePos );
+          _onDrop( draggable, __mousePos );
           draggable.droppable = null;
         }
       },
@@ -471,8 +473,17 @@ define([], function(){
         element.removeEventListener( "dragover", onDragOver, false );
         element.removeEventListener( "dragenter", onDragEnter, false );
         element.removeEventListener( "dragleave", onDragLeave, false );
-      }
+      },
     };
+
+    Object.defineProperties( _droppable, {
+      data: {
+        enumerable: true,
+        get: function() {
+          return _data;
+        }
+      }
+    });
 
     __droppables.push( _droppable );
     __sortDroppables();
@@ -497,8 +508,10 @@ define([], function(){
         _oldZIndex,
         _onStart = options.start || function(){},
         _onStop = options.stop || function(){ return false; },
+        _onDrag = options.drag || function(){},
         _originalPosition,
         _draggable = {},
+        _data = options.data,
         _containmentPadding = __nullRect;
 
     if( _containment ){
@@ -602,6 +615,16 @@ define([], function(){
       _draggable.updateRects();
       _mouseOffset = [ e.clientX - _elementRect.left, e.clientY - _elementRect.top ];
       _onStart();
+      // Make sure the position is up to date after this call because the user may
+      // have moved the element around in the DOM tree.
+      _draggable.updateRects();
+      updatePosition();
+    };
+
+    _draggable.drag = function( e ) {
+      if ( _draggable.droppable ) {
+        _onDrag( _draggable, _draggable.droppable );
+      }
     };
 
     _draggable.stop = function(){
@@ -620,6 +643,12 @@ define([], function(){
     };
 
     Object.defineProperties( _draggable, {
+      data: {
+        enumerable: true,
+        get: function() {
+          return _data;
+        }
+      },
       selected: {
         enumerable: true,
         get: function(){

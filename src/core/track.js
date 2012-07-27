@@ -3,13 +3,11 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [
-          "./logger",
           "./eventmanager",
           "./trackevent",
           "./views/track-view"
         ],
         function(
-          Logger,
           EventManagerWrapper,
           TrackEvent,
           TrackView
@@ -21,16 +19,16 @@ define( [
     options = options || {};
 
     var _trackEvents = [],
-        _id = "Layer" + __guid++,
         _target = options.target,
-        _logger = new Logger( _id ),
-        _name = options.name || _id,
-        _view = new TrackView( this ),
+        _id = "" + __guid++,
+        _name = options.name || "Layer" + _id,
+        _view = new TrackView( _id, this ),
         _popcornWrapper = null,
         _this = this;
 
     _this._media = null;
     _this.order = 0;
+    _this.ghost = null;
 
     EventManagerWrapper( _this );
 
@@ -50,7 +48,9 @@ define( [
 
     this.updateTrackEvents = function() {
       for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
-        _trackEvents[ i ].update();
+        if ( !_trackEvents[ i ].view.ghost ) {
+          _trackEvents[ i ].update();
+        }
       }
     };
 
@@ -73,8 +73,7 @@ define( [
           for( var i=0, l=_trackEvents.length; i<l; i++ ) {
             _trackEvents[ i ].target = val;
             _trackEvents[ i ].update({ target: val });
-          } //for
-          _logger.log( "target changed: " + val );
+          }
         }
       },
       name: {
@@ -89,8 +88,7 @@ define( [
       },
       id: {
         enumerable: true,
-        configurable: false,
-        get: function(){
+        get: function() {
           return _id;
         }
       },
@@ -146,7 +144,7 @@ define( [
       } //for
     }; //getTrackEventByName
 
-    this.addTrackEvent = function ( trackEvent ) {
+    this.addTrackEvent = function ( trackEvent, suppressEvents ) {
       var oldSelected = trackEvent ? !!trackEvent.selected : false;
 
       // Never absorb a track object. Only create new ones.
@@ -174,10 +172,12 @@ define( [
       // Add it to the view.
       _view.addTrackEvent( trackEvent );
 
-      // Tell everyone a new trackevent was born (and raised).
-      _this.dispatch( "trackeventadded", trackEvent );
-
       trackEvent.selected = oldSelected;
+
+      if ( !suppressEvents ) {
+        // Tell everyone a new trackevent was born (and raised).
+        _this.dispatch( "trackeventadded", trackEvent );
+      }
 
       return trackEvent;
     }; //addTrackEvent
@@ -206,6 +206,7 @@ define( [
         } //if
       } //for
     }; //deselectEvents
+
   }; //Track
 
   return Track;

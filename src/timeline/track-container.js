@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/logger", "util/dragndrop" ],
-  function( Logger, DragNDrop ) {
+define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
+  function( Logger, DragNDrop, TrackEventDragManager ) {
 
   return function( butter, media, mediaInstanceRootElement ) {
 
@@ -18,6 +18,8 @@ define( [ "core/logger", "util/dragndrop" ],
         _vScrollbar;
 
     var _droppable;
+
+    _this.trackEventDragManager = new TrackEventDragManager( media, _container );
 
     butter.listen( "trackorderchanged", function( e ) {
       var orderedTracks = e.data;
@@ -35,6 +37,7 @@ define( [ "core/logger", "util/dragndrop" ],
 
     _droppable = DragNDrop.droppable( _element, {
       drop: function( dropped, mousePosition ) {
+        dropped = dropped.data ? dropped.data.element : dropped;
         if ( dropped.getAttribute( "data-butter-draggable-type" ) === "plugin" ) {
           var newTrack = butter.currentMedia.addTrack(),
               trackRect = newTrack.view.element.getBoundingClientRect(),
@@ -91,12 +94,53 @@ define( [ "core/logger", "util/dragndrop" ],
       }
     }
 
+    function onTrackEventDragged( draggable, droppable ) {
+      _this.trackEventDragManager.trackEventDragged( draggable.data, droppable.data );
+      _vScrollbar.update();
+    }
+
+    function onTrackEventDragStarted( e ) {
+      var trackEventView = e.target,
+          element = trackEventView.element,
+          trackView = trackEventView.trackEvent.track.view;
+      trackView.element.removeChild( element );
+      _container.appendChild( element );
+      _vScrollbar.update();
+    }
+
+    function onTrackEventDragStopped( e ) {
+      var trackEventView = e.target,
+          element = trackEventView.element,
+          trackView = trackEventView.trackEvent.track.view;
+      _container.removeChild( element );
+      trackView.element.appendChild( element );
+      _vScrollbar.update();
+    }
+
     var existingTracks = _media.tracks;
     for ( var i = 0; i < existingTracks.length; ++i ) {
       onTrackAdded({
         data: existingTracks[ i ]
       });
     }
+
+    _media.listen( "trackeventupdated", function( e ) {
+      _this.trackEventDragManager.trackEventUpdated( e.target );
+    });
+
+    _media.listen( "trackeventadded", function( e ) {
+      var trackEventView = e.data.view;
+      trackEventView.setDragHandler( onTrackEventDragged );
+      trackEventView.listen( "trackeventdragstarted", onTrackEventDragStarted );
+      trackEventView.listen( "trackeventdragstopped", onTrackEventDragStopped );
+    });
+
+    _media.listen( "trackeventremoved", function( e ) {
+      var trackEventView = e.data.view;
+      trackEventView.setDragHandler( null );
+      trackEventView.unlisten( "trackeventdragstarted", onTrackEventDragStarted );
+      trackEventView.unlisten( "trackeventdragstopped", onTrackEventDragStopped );
+    });
 
     _media.listen( "trackadded", onTrackAdded );
 

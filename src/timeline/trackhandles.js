@@ -21,6 +21,15 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
       butter.currentMedia.addTrack();
     }, false );
 
+    function sortHandles(){
+      var tracks = butter.currentMedia.orderedTracks;
+      for ( var i = 0, l = tracks.length; i < l; ++i ) {
+        _listElement.appendChild( _tracks[ tracks[ i ].id ].element );
+      }
+    }
+
+    _media.listen( "trackorderchanged", sortHandles );
+
     var _sortable = DragNDrop.sortable( _listElement, {
       change: function( elements ){
         for( var i=0, l=elements.length; i<l; ++i ){
@@ -131,6 +140,8 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
       };
 
       _addTrackButton.style.top = _listElement.offsetHeight - ADD_TRACK_BUTTON_Y_ADJUSTMENT + "px";
+
+      sortHandles();
     }
 
     var existingTracks = _media.tracks;
