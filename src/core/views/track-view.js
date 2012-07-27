@@ -153,7 +153,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
             end1 = te1.end,
             end2 = te2.end;
 
-        return !( start1 > end2 && start2 < end1 );
+        return ( start1 < end2 && start2 < end1 );
       }
 
       // loop over all the trackevents for this track and see if we overlap
