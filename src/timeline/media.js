@@ -60,6 +60,15 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
     _media.listen( "mediaplaying", snapToCurrentTime );
     _media.listen( "mediapause", snapToCurrentTime );
 
+    _media.listen( "changetrack", function( e ) {
+      var tracks = _media.tracks,
+          newOrder = media.tracks;
+
+      var ghostTrack = newOrder.pop();
+      newOrder.splice( e.data.order, 0, ghostTrack );
+      onTrackOrderChanged( newOrder );
+    });
+
     function blinkTarget( target ){
       if( target !== _media.target ){
         target = butter.getTargetByType( "elementID", target );
@@ -244,9 +253,27 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
     function onTrackEventDropped( e ){
       var search = _media.findTrackWithTrackEventId( e.data.trackEvent ),
           trackEvent = search.trackEvent,
-          corn = trackEvent.popcornOptions;
+          corn = trackEvent.popcornOptions,
+          ghost;
 
-      search.track.removeTrackEvent( trackEvent );
+      // wait until after the trackEvent has moved to the correct track to
+      // set its ghost to null. This is so that when moving a trackevent on
+      // the same track that has a ghost gets handled properly
+      if ( trackEvent.view.ghost ) {
+        ghost = trackEvent.view.ghost;
+
+        // this used to be a ghost but it shouldn't be anymore as a trackevent was just dropped on it
+        if ( ghost.track.isGhost ) {
+          ghost.track.isGhost = false;
+          ghost.track.view.ghost = null;
+        }
+
+        trackEvent = trackEvent.track.removeTrackEvent( trackEvent );
+        ghost.track.addTrackEvent( trackEvent );
+        trackEvent.view.cleanupGhost();
+        return;
+      }
+      trackEvent.track.removeTrackEvent( trackEvent );
 
       var duration = corn.end- corn.start;
       corn.start = e.data.start;

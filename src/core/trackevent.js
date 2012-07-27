@@ -40,7 +40,7 @@ define( [
    *
    * @param {Object} options: Options for initialization. Can contain the properties type, name, and popcornOptions. If the popcornOptions property is specified, its contents will be used to initialize the plugin instance associated with this TrackEvent.
    */
-  var TrackEvent = function ( options, track, popcornWrapper ) {
+  var TrackEvent = function ( options, track, popcornWrapper, isGhost ) {
 
     options = options || {};
 
@@ -49,6 +49,7 @@ define( [
         _name = options.name || _id,
         _logger = new Logger( _id ),
         _track = track,
+        _isGhost = isGhost,
         _type = options.type + "",
         _popcornOptions = options.popcornOptions || {
           start: 0,
@@ -90,7 +91,9 @@ define( [
      * @param {Object} newPopcornWrapper: PopcornWrapper object or null
      */
     this.setPopcornWrapper = function ( newPopcornWrapper ) {
-      _popcornWrapper = newPopcornWrapper;
+      if ( !_isGhost ) {
+        _popcornWrapper = newPopcornWrapper;
+      }
     };
 
     /**
@@ -103,6 +106,9 @@ define( [
      * @throws TrackEventUpdateException: When an update operation failed because of conflicting times or other serious property problems.
      */
     this.update = function( updateOptions, applyDefaults ) {
+      if ( !_track ) {
+        return;
+      }
       updateOptions = updateOptions || {};
 
       var newStart = _popcornOptions.start,
@@ -167,7 +173,7 @@ define( [
 
       // if PopcornWrapper exists, it means we're connected properly to a Popcorn instance,
       // and can update the corresponding Popcorn trackevent for this object
-      if ( _popcornWrapper ) {
+      if ( _popcornWrapper && !_isGhost ) {
         _popcornWrapper.updateEvent( _this );
       }
 
@@ -242,9 +248,23 @@ define( [
      * a husk for popcorn data at this point.
      */
     this.unbind = function() {
-      _popcornWrapper.destroyEvent( _this );
+      _popcornWrapper && _popcornWrapper.destroyEvent( _this );
       _popcornWrapper = null;
       _track = null;
+    };
+
+    /*
+     * Member: createGhost
+     *
+     * Creates a clone of the current trackEvent that does not have an associated Popcorn trackevent.
+     * Used to notify the user when a trackevent overlaps and where the new location will be
+     * when the trackevent is dropped
+     */
+    this.createGhost = function() {
+      var options = JSON.parse( JSON.stringify( _popcornOptions ) );
+      options.type = _type;
+      _ghostTrackEvent = new TrackEvent( options, true );
+      return _ghostTrackEvent;
     };
 
     Object.defineProperties( this, {
@@ -261,6 +281,21 @@ define( [
         }
       },
 
+      /*
+       * Property: isGhost
+       *
+       * Specifies whether this trackEvent is a ghost or not
+       */
+      isGhost: {
+        enumerable: true,
+        get: function() {
+          return _isGhost;
+        },
+        set: function( val ) {
+          _isGhost = val;
+        }
+      },
+
       /**
        * Property: view
        *
@@ -274,7 +309,6 @@ define( [
           return _view;
         }
       },
-
       /**
        * Property: dragging
        *
