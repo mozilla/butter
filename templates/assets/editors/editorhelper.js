@@ -60,7 +60,6 @@
       } else {
         _trackEvent = e;
       }
-
       if ( plugins[ _trackEvent.type ] ) {
         plugins[ _trackEvent.type ]( _trackEvent );
       }

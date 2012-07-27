@@ -124,7 +124,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop", "ui/position-tra
           } //if
         }, //out
         drop: function( dragElement ){
-          if( dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
+          if( !dragElement.getAttribute || dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ){
             return;
           }
           _this.highlight( false );

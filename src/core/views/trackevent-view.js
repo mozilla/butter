@@ -24,6 +24,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         _resizing = false,
         _padding = 0,
         _elementText,
+        _ghost,
+        _onDrag,
         _this = this;
 
     EventManagerWrapper( _this );
@@ -35,10 +37,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
       }
     }
 
-    function resetContainer(){
+    function resetContainer() {
       _element.style.left = _start * _zoom + "px";
       _element.style.width = ( _end - _start ) * _zoom + "px";
-    } //resetContainer
+    }
 
     this.setToolTip = function( title ){
       _element.title = title;
@@ -56,11 +58,59 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
       resetContainer();
     }; //update
 
+    /**
+     * Member: createGhost
+     *
+     * Creates a clone of the current trackEvent that does not have an associated Popcorn trackevent.
+     * Used to notify the user when a trackevent overlaps and where the new location will be
+     * when the trackevent is dropped
+     */
+    this.createGhost = function( track ) {
+      if ( _ghost ) {
+        return _ghost;
+      }
+
+      var clone = _element.cloneNode( false );
+      clone.style.top = "";
+      clone.style.left = "";
+      clone.classList.add( "butter-track-event-ghost" );
+
+      _ghost = {
+        element: clone
+      };
+
+      return _ghost;
+    };
+
+    /*
+     * Member: cleanupGhost
+     *
+     * Removes this trackEvent's ghost and makes sure isGhost is set to false
+     */
+    this.cleanupGhost = function() {
+      _ghost.track.view.removeTrackEventGhost( _ghost );
+      _ghost = null;
+    };
+
+    this.updateGhost = function() {
+      _ghost.element.style.left = _element.style.left;
+    };
+
+    this.setDragHandler = function( dragHandler ) {
+      _onDrag = dragHandler;
+    };
+
     Object.defineProperties( this, {
       trackEvent: {
         enumerable: true,
         get: function(){
           return _trackEvent;
+        }
+      },
+      ghost: {
+        enumerable: true,
+        get: function() {
+          return _ghost;
         }
       },
       element: {
@@ -170,6 +220,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
               _draggable = DragNDrop.draggable( _element, {
                 containment: _parent.element.parentNode,
                 scroll: _parent.element.parentNode.parentNode,
+                data: _this,
                 start: function(){
                   _dragging = true;
                   _this.dispatch( "trackeventdragstarted" );
@@ -177,7 +228,16 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                 stop: function(){
                   _dragging = false;
                   _this.dispatch( "trackeventdragstopped" );
-                  movedCallback();
+
+                  // Prevent movedcallback if "trackeventdragstopped" removed this trackEvent
+                  if ( _element.parentNode ) {
+                    movedCallback();
+                  }
+                },
+                drag: function( draggable, droppable ) {
+                  if ( _onDrag ) {
+                    _onDrag( draggable, droppable );
+                  }
                 },
                 revert: true
               });

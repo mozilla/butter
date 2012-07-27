@@ -114,12 +114,21 @@ define( [], function(){
   }
 
   function __invoke( eventName, listeners, data ){
-    var these, i;
+    var these, i, stopLoop = false;
+
+    // XXXsecretrobotron - A stopPropagation system similar to that of real events.
+    // Since our event system only uses one custom event to call an array of listeners,
+    // regular stopPropagation won't work. Until we're on a pur CustomEvent system,
+    // this will have to do.
+    var stopPropagation = function() {
+      stopLoop = true;
+    };
 
     if( listeners[ eventName ] ){
       these = listeners[ eventName ].slice();
       i = these.length;
-      while( i-- ){
+      while( i-- && !stopLoop ){
+        data.stopPropagation = stopPropagation;
         these[ i ]( data );
       }
     }
@@ -174,7 +183,7 @@ define( [], function(){
         listeners[ namespacedEventName ] = [];
         document.addEventListener( namespacedEventName, function( e ){
           handler( namespacedEventName, e );
-        }, false);
+        }, false );
       }
       listeners[ namespacedEventName ].push( listener );
     }
@@ -208,7 +217,7 @@ define( [], function(){
 
         document.removeEventListener( namespacedEventName, function( e ){
           handler( namespacedEventName, e );
-        }, false);
+        }, false );
       }
     }
   }
