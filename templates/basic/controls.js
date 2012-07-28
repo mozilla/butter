@@ -5,7 +5,6 @@
   // we build the controls on top of p.media.
   // we also need to run this script before DOMContentLoaded,
   // and after popcorn is loaded. This is why it is in the body.
-  // deal with it.
   if ( !Popcorn ) {
 
     return;
@@ -21,7 +20,7 @@
         muteButton, playButton, currentTimeDialog,
         durationDialog, timebar, progressBar, bigPlayButton,
         scrubber, seeking, playStateCache, active,
-        volume, volumeProgressBar, volumeScrubber,
+        volume, volumeProgressBar, volumeScrubber, position,
         // functions
         bigPlayClicked, activate, deactivate, volumechange,
         togglePlay, timeMouseMove, timeMouseUp,
@@ -157,9 +156,9 @@
 
         volumeMouseMove = function( e ) {
 
-          var position = e.clientX - volume.getBoundingClientRect().left;
-
           e.preventDefault();
+
+          position = e.clientX - volume.getBoundingClientRect().left;
 
           if ( position <= 0 ) {
 
@@ -175,12 +174,12 @@
 
           if ( volumeProgressBar ) {
 
-            volumeProgressBar.style.width = position + "px";
+            volumeProgressBar.style.width = ( position / volume.offsetWidth * 100 ) + "%";
           }
 
           if ( volumeScrubber ) {
 
-            volumeScrubber.style.left = position - ( volumeScrubber.offsetWidth / 2 ) + "px";
+            volumeScrubber.style.left = ( ( position - ( volumeScrubber.offsetWidth / 2 ) ) / volume.offsetWidth * 100 ) + "%";
           }
 
           p.volume( position / volume.offsetWidth );
@@ -200,12 +199,12 @@
 
         volumeMouseDown = function( e ) {
 
-          var position = e.clientX - volume.getBoundingClientRect().left;
-
           if ( e.button !== 0 ) {
 
             return;
           }
+
+          position = e.clientX - volume.getBoundingClientRect().left;
 
           e.preventDefault();
           window.addEventListener( "mouseup", volumeMouseUp, false );
@@ -221,12 +220,12 @@
 
           if ( volumeProgressBar ) {
 
-            volumeProgressBar.style.width = position + "px";
+            volumeProgressBar.style.width = ( position / volume.offsetWidth * 100 ) + "%";
           }
 
           if ( volumeScrubber ) {
 
-            volumeScrubber.style.left = position - ( volumeScrubber.offsetWidth / 2 ) + "px";
+            volumeScrubber.style.left = ( ( position - ( volumeScrubber.offsetWidth / 2 ) ) / volume.offsetWidth * 100 ) + "%";
           }
 
           p.volume( position / volume.offsetWidth );
@@ -257,12 +256,12 @@
 
           if ( volumeProgressBar ) {
 
-            volumeProgressBar.style.width = width + "px";
+            volumeProgressBar.style.width = ( width / volume.offsetWidth * 100 ) + "%";
           }
 
           if ( volumeScrubber ) {
 
-            volumeScrubber.style.left = width - ( volumeScrubber.offsetWidth / 2 ) + "px";
+            volumeScrubber.style.left = ( ( width - ( volumeScrubber.offsetWidth / 2 ) ) / volume.offsetWidth * 100 ) + "%";
           }
         };
 
@@ -293,9 +292,9 @@
 
         timeMouseMove = function( e ) {
 
-          var position = e.clientX - timebar.getBoundingClientRect().left;
-
           e.preventDefault();
+
+          position = e.clientX - timebar.getBoundingClientRect().left;
 
           if ( position < 0 ) {
 
@@ -335,12 +334,12 @@
 
         timeMouseDown = function( e ) {
 
-          var position = e.clientX - timebar.getBoundingClientRect().left;
-
           if ( e.button !== 0 ) {
 
             return;
           }
+
+          position = e.clientX - timebar.getBoundingClientRect().left;
 
           e.preventDefault();
           seeking = true;
