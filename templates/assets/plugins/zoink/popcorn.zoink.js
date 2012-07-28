@@ -174,7 +174,17 @@
         }
       }
     },
-
+    _dragSetup: function( options, callback ) {
+      if ( callback ) {
+        callback();
+      }
+    },
+    onDragEnd: function( event, ui, trackevent ) {
+      trackevent.update({
+        top: ui.position.top,
+        left: ui.position.left
+      });
+    },
     _setup: function( options ) {
 
       var target = document.getElementById( options.target ),
