@@ -1,0 +1,23 @@
+a.image-plugin-link {
+  text-decoration: none;
+  height: 100%;
+  width: 100%;
+  display: block;
+}
+
+img.image-plugin-img, img.image-plugin-flickr-image {
+  border-style: none;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+div.image-plugin-container {
+  overflow: hidden;
+  display: block;
+  position: relative;
+}
+
+div.image-plugin-hidden, a.image-plugin-hidden, img.image-plugin-hidden {
+  display: none;
+}

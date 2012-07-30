@@ -24,6 +24,10 @@
       {
         "type": "twitter",
         "path": "{{baseDir}}templates/assets/plugins/twitter/popcorn.twitter.js"
+      },
+      {
+        "type": "image",
+        "path": "{{baseDir}}templates/assets/plugins/image/popcorn.image.js"
       }
     ],
     "defaults": [
@@ -31,7 +35,8 @@
       "photo",
       "zoink",
       "googlemap",
-      "twitter"
+      "twitter",
+      "image"
     ]
   },
   "editor": {
