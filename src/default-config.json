@@ -16,10 +16,6 @@
   "plugin": {
     "plugins": [
       {
-        "type": "attribution",
-        "path": "{{baseDir}}external/popcorn-js/plugins/attribution/popcorn.attribution.js"
-      },
-      {
         "type": "webpage",
         "path": "{{baseDir}}external/popcorn-js/plugins/webpage/popcorn.webpage.js"
       },
