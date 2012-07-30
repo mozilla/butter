@@ -34,17 +34,24 @@ define([ 'util/xhr' ], function( XHR ){
     var _loaders = {
 
       // JavaScript Loader
-      js: function( url, exclude, callback, checkFn ){
+      js: function( url, exclude, callback, checkFn, error ){
         checkFn = checkFn || DEFAULT_CHECK_FUNCTION();
 
         url = fixUrl( url );
 
         if( !checkFn() ){
           var scriptElement = document.createElement( "script" );
-          scriptElement.src = url;
           scriptElement.type = "text/javascript";
-          document.head.appendChild( scriptElement );
           scriptElement.onload = callback;
+          scriptElement.onerror = function( e ) {
+            // Opera has a bug that will cause it to also fire load after
+            // setting it to null to prevent this
+            scriptElement.onload = null;
+
+            error( e );
+          };
+          scriptElement.src = url;
+          document.head.appendChild( scriptElement );
         }
         else if( callback ){
           callback();
@@ -173,7 +180,7 @@ define([ 'util/xhr' ], function( XHR ){
           var onLoad = generateLoaderCallback( items, callback );
           if( !ordered ){
             for( var i = 0; i < items.length; ++i ){
-              Loader.load( items[ i ], onLoad );
+              Loader.load( items[ i ], onLoad, error );
             }
           }
           else {
