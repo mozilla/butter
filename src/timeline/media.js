@@ -253,9 +253,11 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
 
     this.destroy = function() {
-      _rootElement.parentNode.removeChild( _rootElement );
-      if( _mediaStatusContainer.parentNode ){
-        butter.ui.areas.statusbar.element.removeChild( _mediaStatusContainer );
+      if ( _rootElement.parentNode ) {
+        _rootElement.parentNode.removeChild( _rootElement );
+      }
+      if( _mediaStatusContainer && _mediaStatusContainer.parentNode ){
+        _mediaStatusContainer.parentNode.removeChild( _mediaStatusContainer );
       }
       _timebar.destroy();
     };
