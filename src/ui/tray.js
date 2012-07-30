@@ -30,7 +30,9 @@ define( [ "util/lang",  "./logo-spinner",
     this.timelineArea.appendChild( timelineAreaFragment );
     this.pluginArea.appendChild( pluginAreaFragment );
 
-    document.body.appendChild( trayRoot );
+    this.attachToDOM = function(){
+      document.body.appendChild( trayRoot );
+    };
 
     this.setMediaInstance = function( mediaInstanceRootElement ) {
       var timelineContainer = this.timelineArea.querySelector( ".butter-timeline" );

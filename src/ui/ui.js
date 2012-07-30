@@ -99,6 +99,8 @@ define( [ "core/eventmanager", "./toggler",
           _this.loadIcons( _uiConfig.value( "icons" ), _uiConfig.value( "dirs" ).resources || "" );
           onReady();
         });
+        
+        _this.tray.attachToDOM();
       }
       else{
         onReady();
