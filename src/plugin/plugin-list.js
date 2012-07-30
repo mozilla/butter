@@ -27,7 +27,9 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
     });
 
     _button.addEventListener( "click", function() {
-      butter.editor.openEditor( "plugin-list" );
+      // Open the 'plugin-list' editor as defined above, and force the
+      // editor tray to open.
+      butter.editor.openEditor( "plugin-list", true );
     }, false );
 
     butter.listen( "pluginadded", function( e ) {

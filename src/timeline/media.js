@@ -39,12 +39,13 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _shrunken = false,
         _timebar = new TimeBar( butter, _media, butter.ui.tray.statusArea, _tracksContainer, _hScrollBar ),
         _zoombar = new ZoomBar( zoomCallback ),
-        _status = new Status( _media, butter.ui.tray.statusArea ),
         _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer, onTrackOrderChanged ),
         _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
         _currentMouseDownTrackEvent,
         _zoomFactor,
         _zoom;
+
+    Status( _media, butter.ui.tray.statusArea );
 
     _tracksContainer.setScrollbars( _hScrollBar, _vScrollBar );
 
@@ -132,10 +133,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _container.appendChild( _tracksContainer.element );
       _container.appendChild( _hScrollBar.element );
       _container.appendChild( _vScrollBar.element );
-      //_mediaStatusContainer.appendChild( _timebar.element );
-      //_mediaStatusContainer.appendChild( _status.statusElement );
-      //_mediaStatusContainer.appendChild( _status.muteElement );
-      // butter.ui.areas.statusbar.element.appendChild( _mediaStatusContainer );
       _rootElement.appendChild( _trackHandles.element );
       _rootElement.appendChild( _zoombar.element );
 

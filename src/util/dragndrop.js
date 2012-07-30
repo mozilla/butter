@@ -47,8 +47,8 @@ define([], function(){
     var remembers,
         droppable,
         remember,
-        selectedDraggable,
-        i, j;
+        i,
+        j;
 
     remembers = __selectedDraggables.slice();
 
@@ -358,8 +358,7 @@ define([], function(){
         _onOver = options.over || function(){},
         _onOut = options.out || function(){},
         _droppable = {},
-        _rememberedDraggables = [],
-        _draggedCount = 0;
+        _rememberedDraggables = [];
 
     function onDrop( e ) {
       e.preventDefault();

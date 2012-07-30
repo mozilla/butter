@@ -111,9 +111,11 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
         DragNDrop.droppable( _container, {
           drop: function( element ){
             var pluginType = element.getAttribute( "data-popcorn-plugin-type" ),
+                draggableType = element.getAttribute( "data-butter-draggable-type" ),
                 plugin,
                 existingContainer;
-            if ( pluginType === "plugin" ) {
+
+            if ( draggableType === "plugin" ) {
               plugin = _this.get( pluginType );
               if ( plugin ) {
                 existingContainer = _listContainer.querySelector( "[data-popcorn-plugin-type='" + pluginType + "']" );

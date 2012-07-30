@@ -16,7 +16,6 @@ define( [], function(){
         _fill = _container.querySelector( ".fill-bar" ),
         _tracksContainer = tracksContainer,
         _tracksContainerWidth,
-        _element = parentElement,
         _media = media,
         _mouseDownPos,
         _currentMousePos,

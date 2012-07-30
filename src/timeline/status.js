@@ -99,8 +99,7 @@ define( [], function(){
         _statusContainer = statusArea.querySelector( ".status-container" ),
         _muteButton,
         _playButton,
-        _time,
-        _this = this;
+        _time;
 
     _statusContainer.className = "status-container";
 

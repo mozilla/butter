@@ -28,9 +28,7 @@ define( [ "core/eventmanager", "./toggler",
 
   function UI( butter ){
 
-    var _areas = this.areas = {},
-        _contentState = [],
-        _state = true,
+    var _visibility = true,
         _uiConfig = butter.config,
         _uiOptions = _uiConfig.value( "ui" ),
         _this = this;
@@ -107,97 +105,16 @@ define( [ "core/eventmanager", "./toggler",
       }
     };
 
-    this.registerStateToggleFunctions = function( state, events ){
-      _this.listen( "contentstatechanged", function( e ){
-        if( e.data.oldState === state ){
-          events.transitionOut( e );
-        }
-        if( e.data.newState === state ){
-          events.transitionIn( e );
-        }
-      });
-    };
-
-    this.pushContentState = function( state ){
-      if( _this.contentStateLocked ){
-        return;
-      }
-      var oldState = _this.contentState;
-      _contentState.push( state );
-      _element.setAttribute( "data-butter-content-state", _this.contentState );
-      for( var a in _areas ){
-        if( _areas.hasOwnProperty( a ) ){
-          _areas[ a ].setContentState( state );
-        }
-      }
-      _this.dispatch( "contentstatechanged", {
-        oldState: oldState,
-        newState: _this.contentState
-      });
-    };
-
-    this.popContentState = function(){
-      if( _this.contentStateLocked ){
-        return;
-      }
-      var oldState = _contentState.pop(),
-          newState = _this.contentState;
-      _element.setAttribute( "data-butter-content-state", newState );
-      for( var a in _areas ){
-        if( _areas.hasOwnProperty( a ) ){
-          _areas[ a ].setContentState( newState );
-        }
-      }
-      _this.dispatch( "contentstatechanged", {
-        oldState: oldState,
-        newState: newState
-      });
-      return oldState;
-    };
-
-    this.setContentState = function( newState ){
-      var oldState = _contentState.pop();
-      _contentState = [ newState ];
-      _element.setAttribute( "data-butter-content-state", newState );
-      for( var a in _areas ){
-        if( _areas.hasOwnProperty( a ) ){
-          _areas[ a ].setContentState( newState );
-        }
-      }
-      _this.dispatch( "contentstatechanged", {
-        oldState: oldState,
-        newState: newState
-      });
-      return oldState;
-    };
-
     Object.defineProperties( this, {
-      contentState: {
-        configurable: false,
-        enumerable: true,
-        get: function(){
-          if( _contentState.length > 0 ){
-            return _contentState[ _contentState.length - 1 ];
-          }
-          return null;
-        }
-      },
-      element: {
-        configurable: false,
-        enumerable: true,
-        get: function(){
-          return _element;
-        }
-      },
       visible: {
         enumerable: true,
         get: function(){
-          return _state;
+          return _visibility;
         },
         set: function( val ){
-          if( _state !== val ){
-            _state = val;
-            if( _state ){
+          if( _visibility !== val ){
+            _visibility = val;
+            if( _visibility ){
               document.body.classList.remove( "tray-minimized" );
               this.tray.rootElement.classList.remove( "minimized" );
               _this.dispatch( "uivisibilitychanged", true );

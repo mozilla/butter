@@ -156,10 +156,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
               _draggable.selected = _trackEvent.selected;
 
               _resizable = DragNDrop.resizable( _element, {
-                 containment: _parent.element.parentNode,
-                 scroll: _parent.element.parentNode.parentNode,
-                 stop: movedCallback
-               });
+                containment: _parent.element.parentNode,
+                scroll: _parent.element.parentNode.parentNode,
+                stop: movedCallback
+              });
 
               _element.setAttribute( "data-butter-draggable-type", "trackevent" );
               _element.setAttribute( "data-butter-trackevent-id", _trackEvent.id );

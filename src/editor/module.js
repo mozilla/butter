@@ -128,7 +128,6 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       var editorsToLoad = [];
 
       if( butter.config.value( "ui" ).enabled !== false ){
-        //butter.ui.areas.editor = new butter.ui.Area( "editor-area", _editorAreaDOMRoot );
         _editorAreaDOMRoot.appendChild( _toggler.element );
         document.body.classList.add( "butter-editor-spacing" );
 
