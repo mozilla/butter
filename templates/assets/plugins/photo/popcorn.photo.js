@@ -59,6 +59,85 @@
           }
         }
       },
+      _dragSetup: function( options, callback ) {
+        var _popcornOptions = options.popcornTrackEvent,
+            _image = _popcornOptions._image,
+            _container = _popcornOptions._container,
+            _canvas = document.createElement( "canvas" );
+
+        //Prevent default draggable behaviour of images
+        _image.addEventListener( "mousedown", function( e ) {
+          e.preventDefault();
+        }, false );
+
+        if ( !_popcornOptions.src ) {
+          _container.innerHTML = "<span>Drag an image from your desktop</span>";
+        }
+
+        _container.addEventListener( "dragover", function( e ) {
+          e.preventDefault();
+          _container.classList.add( "butter-dragover" );
+        }, false );
+
+        _container.addEventListener( "dragleave", function( e ) {
+          e.preventDefault();
+          _container.classList.remove( "butter-dragover" );
+        }, false );
+
+        _container.addEventListener( "drop", function( e ) {
+          _container.classList.add( "butter-dropped" );
+          e.preventDefault();
+          var file = e.dataTransfer.files[ 0 ],
+              imgSrc,
+              image,
+              imgURI;
+
+          if ( !file ) {
+            return;
+          }
+
+          if ( window.URL ) {
+            imgSrc = window.URL.createObjectURL( file );
+          } else if ( window.webkitURL ) {
+            imgSrc = window.webkitURL.createObjectURL( file );
+          }
+
+          image = document.createElement( "img" );
+          image.onload = function() {
+            _canvas.width = this.width;
+            _canvas.height = this.height;
+            _context = _canvas.getContext( "2d" );
+            _context.drawImage( this, 0, 0, this.width, this.height );
+            imgURI = _canvas.toDataURL();
+            options.update( { src: imgURI } );
+          };
+          image.src = imgSrc;
+        }, false );
+
+        if ( callback ) {
+          callback();
+        }
+      },
+      onDragEnd: function( event, ui, trackevent ) {
+        trackevent.update({
+          top: ui.position.top,
+          left: ui.position.left
+        });
+      },
+      _resizeSetup: function( options, callback ) {
+        if ( callback ) {
+          callback();
+        }
+      },
+      onResizeEnd: function( event, ui, trackevent ) {
+        var _container = trackevent.popcornTrackEvent._container;
+
+        _container.style.border = "";
+        trackevent.update({
+          height: ui.size.height,
+          width: ui.size.width
+        });
+      },
       _setup: function( options ) {
         var img,
             target = document.getElementById( options.target ),
