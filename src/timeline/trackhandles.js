@@ -12,7 +12,7 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
     var _media = media,
         _container = mediaInstanceRootElement.querySelector( ".track-handle-container" ),
         _listElement = _container.querySelector( ".handle-list" ),
-        _addTrackButton = _container.querySelector( "button" ),
+        _addTrackButton = _container.querySelector( "button.add-track" ),
         _tracks = {},
         _menus = [],
         _this = this;
