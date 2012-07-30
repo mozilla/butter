@@ -1,0 +1,83 @@
+!!! 5
+html(lang='en')
+  head
+    !{templateScripts}
+    !{externalAssets}
+    !{popcorn}
+    !{customData}
+    link(rel='stylesheet', href='/css/embed.css')
+    // This is the embed, the actual content is at the following URL
+    link(rel='cannonical', href='/#{id}.html')
+    style
+      @-o-viewport { width: device-width; }
+      @-moz-viewport { width: device-width; }
+      @-ms-viewport { width: device-width; }
+      @-webkit-viewport { width: device-width; }
+      @viewport { width: device-width; }
+    script(src='/src/embed.js')
+  body.embed
+    #container.container
+      #video.video
+        #smart
+        #post-roll.embed-overlay(style='display: none;')
+          .post-roll-inner
+            .embed-logo
+              a(href='#') Popcorn Logo
+            .embed-project
+              div
+                .embed-title #{title}
+                .embed-author #{author}
+              .post-roll-description
+                | This project was created entirely in a browser using
+                strong HTML5 and javascript
+                | .
+              ul.embed-nav.post-roll-options
+                li
+                  a#replay-post(href='#') Replay
+                li
+                  a#remix-post(href='#') Remix
+                li
+                  a#share-post(href='#') Share
+        #share.embed-overlay(style='display: none;')
+          .share-inner
+            a#share-close(href='#') [X]
+            .embed-logo
+              a(href='#') Popcorn Logo
+            .embed-project
+              div
+                .embed-project-title My Project
+                .embed-author Jonny Appleseed
+            #share-options.share-options
+              fieldset
+                label URL
+                input#share-url.share-ul(type='url', value='http://wwww.gasdasdasdasd.com')
+                ul.embed-nav.share-buttons
+                  li
+                    a#replay-share(href='#') Twitter
+                  li
+                    a#remix-share(href='#') Facebook
+                  li
+                    a#share-share(href='#') Google+
+              fieldset
+                label Embed
+                textarea#share-iframe
+                  iframe(blah='blah')
+                .share-size
+                  label Size
+                  select#share-size.share-size-picker(selectedindex='2')
+                    option(value='560x340') 560x340
+                    option(value='640x385') 640x385
+                    option(value='853x505') 853x505
+                    option(value='1280x745') 1280x745
+        #info
+          .play-state.embed-logo
+            a(href='#') Popcorn Logo
+          .play-state.embed-info
+            .embed-project-title #{title}
+            .embed-author #{author}
+      #controls.controls(style='display: none;')
+        | Controls|
+        span#play-pause Play
+        | |
+        span#fullscreen Fullscreen
+        | |

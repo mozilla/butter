@@ -3,6 +3,7 @@ console.log( __dirname );
 const express = require('express'),
       fs = require('fs'),
       path = require('path'),
+      jade = require('jade'),
       app = express.createServer(),
       MongoStore = require('connect-mongo')(express),
       lessMiddleware = require('less-middleware'),
@@ -104,6 +105,21 @@ function escapeHTMLinJSON( key, value ) {
   return value;
 }
 
+function writeEmbed( projectEmbedPath, embedUrl, res, url, data ) {
+  if( !writeEmbed.templateFn ) {
+    writeEmbed.templateFn = jade.compile( fs.readFileSync( 'views/embed.jade', 'utf8' ),
+                                          { filename: 'embed.jade', pretty: true } );
+  }
+
+  fs.writeFile( projectEmbedPath, writeEmbed.templateFn( data ), function( err ){
+    if( err ){
+      res.json({ error: 'internal file error' }, 500);
+      return;
+    }
+    res.json({ error: 'okay', url: url });
+  });
+}
+
 function publishRoute( req, res ){
   var email = req.session.email,
       id = req.params.id;
@@ -144,7 +160,9 @@ function publishRoute( req, res ){
 
       if ( template && VALID_TEMPLATES[ template ] ) {
         var projectPath = PUBLISH_DIR + "/" + id + ".html",
+            projectEmbedPath = PUBLISH_DIR + "/" + id + "-embed.html",
             url = PUBLISH_PREFIX + "/" + id + ".html",
+            embedUrl = PUBLISH_PREFIX + "/" + id + "-embed.html",
             projectData = JSON.parse( project.data, escapeHTMLinJSON ),
             templateBase = VALID_TEMPLATES[ template ].replace( '{{templateBase}}', TEMPLATES_DIR + '/' ),
             templateConfig = templateConfigs[ template ],
@@ -161,6 +179,7 @@ function publishRoute( req, res ){
               bodyEndTagIndex,
               externalAssetsString = '',
               popcornString = '',
+              customDataString = '',
               currentMedia,
               currentTrack,
               currentTrackEvent,
@@ -212,6 +231,9 @@ function publishRoute( req, res ){
             // Turn a single url into an array of 1 string.
             mediaUrls = typeof currentMedia.url === "string" ? [ currentMedia.url ] : currentMedia.url;
             mediaPopcornOptions = currentMedia.popcornOptions || {};
+            // Force the Popcorn instance we generate to have an ID we can query.
+            mediaPopcornOptions.id = "Butter-Generated";
+
             numSources = mediaUrls.length;
 
             for ( k = 0; k < numSources - 1; k++ ) {
@@ -231,20 +253,41 @@ function publishRoute( req, res ){
                 popcornString += ');';
               }
             }
+
+            if ( currentMedia.controls ) {
+              popcornString += "\npopcorn.controls( true );\n";
+            } else {
+              popcornString += "\npopcorn.controls( false );\n";
+            }
             popcornString += '}());\n';
           }
           popcornString += '</script>\n';
 
           customDataString = '\n<script type="application/butter-custom-data">\n' + JSON.stringify( customData, null, 2 ) + '\n</script>\n';
-
           data = startString + baseString + templateScripts + externalAssetsString + data.substring( headEndTagIndex, bodyEndTagIndex ) + customDataString + popcornString + data.substring( bodyEndTagIndex );
 
-          fs.writeFile( projectPath, data, function(){
+          fs.writeFile( projectPath, data, function( err ){
             if( err ){
               res.json({ error: 'internal file error' }, 500);
               return;
             }
-            res.json({ error: 'okay', url: url });
+
+            // Write out embed HTML, too.
+            writeEmbed( projectEmbedPath, embedUrl, res, url, {
+              id: id,
+              author: email,
+              title: "todo",
+              templateScripts: templateScripts,
+              externalAssets: externalAssetsString,
+              customData: customDataString,
+              // XXX: need a better way to wrap function, DOM needs to be ready
+              popcorn: popcornString.replace( /^\(function\(\)\{/m, "Popcorn( function(){" )
+                                    .replace( /\}\(\)\);$/m, "});" )
+              // XXX: need a better way to force controls off in embed.
+                                    .replace( "popcorn.controls( true );", "popcorn.controls( false );" )
+              // XXX: need a better way to force the use of the #smart div
+                                    .replace( /Popcorn.smart\("#([^"]+)"/, "Popcorn.smart(\"#smart\"" )
+            });
           });
         });
       }
