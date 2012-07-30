@@ -87,7 +87,7 @@ define( [ "core/logger", "util/dragndrop", "util/scrollbars",
         _listWrapper = document.createElement( "div" ),
         _listContainer = document.createElement( "div" ),
         _this = this,
-        _pattern = '<div class="list-item $type_tool">$type</div>';
+        _pattern = '<div class="list-item $type_tool" unselectable="on"><a draggable="true" href="#">$type</a></div>';
 
     _container.id = "popcorn-plugin";
     _listContainer.className = "list";
