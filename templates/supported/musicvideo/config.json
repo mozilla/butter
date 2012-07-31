@@ -10,10 +10,6 @@
         "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
       },
       {
-        "type": "attribution",
-        "path": "{{baseDir}}external/popcorn-js/plugins/attribution/popcorn.attribution.js"
-      },
-      {
         "type": "lastfm",
         "path": "{{baseDir}}external/popcorn-js/plugins/lastfm/popcorn.lastfm.js"
       },
@@ -24,7 +20,6 @@
     ],
     "defaults": [
       "text",
-      "attribution",
       "lastfm",
       "flickr"
     ]
