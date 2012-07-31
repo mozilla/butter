@@ -84,8 +84,17 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         get: function(){ return _type; },
         set: function( val ){
           _type = val;
-          _typeElement.innerHTML = _type;
           _element.setAttribute( "data-butter-trackevent-type", _type );
+        }
+      },
+      elementText: {
+        enumerable: true,
+        get: function() {
+          return _elementText;
+        },
+        set: function( val ) {
+          _elementText = val;
+          _typeElement.innerHTML = _elementText;
         }
       },
       selected: {
