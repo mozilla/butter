@@ -40,11 +40,49 @@ var path = require( "path" ),
 
 require('shelljs/make');
 
+// To supress CSS warnings/errors for a particular line, end the line
+// with a comment indicating you want CSS Lint to ignore this line's
+// error(s).  Here are some examples:
+//
+//   -webkit-appearance: button; /* csslint-ignore */
+//   -webkit-appearance: button; /*csslint-ignore*/
+//   -webkit-appearance: button; /* csslint-ignore: This is being done because of iOS ... */
+function checkCSSFile( filename, warnings, errors ) {
+  var fileLines = cat( filename ).split( /\r?\n/ ),
+    ignoreLines = "",
+    // Look for: "blah blah blah /* csslint-ignore */" or
+    //           "blah blah /*csslint-ignore: this is my reason*/"
+    ignoreRegex = /\/\*\s*csslint-ignore[^*]*\*\/$/,
+    // Errors look like: "css/butter.ui.css: line 186, col 3, Error..."
+    lineRegex = /\: line (\d+),/;
 
-function checkCSS() {
+  // Build a map of lines to ignore: "|14||27|" means ignore lines 14 and 27
+  for( var i=0; i < fileLines.length; i++ ){
+    if( ignoreRegex.test( fileLines[ i ] ) ) {
+      ignoreLines += "|" + i + "|";
+    }
+  }
+
+  // Run CSSLint across the file, check for errors/warnings and ignore if
+  // they are ones we know about from above.
+  var outputLines = exec(CSSLINT +
+    ' --warnings=' + warnings +
+    ' --errors=' + errors +
+    ' --quiet --format=compact' +
+    ' ' + filename, { silent: true } ).output.split( /\r?\n/ )
+    .forEach( function( line ) {
+      if( !line ) {
+        return;
+      }
+      var number = "|" + lineRegex.exec( line )[1] + "|";
+      if( ignoreLines.indexOf( number ) === -1 ) {
+        echo( line );
+      }
+  });
+}
+
+function checkCSS( dir ) {
   echo('### Linting CSS files');
-
-  var dirs = SLICE.call( arguments ).join( ' ' );
 
   // see cli.js --list-rules.
   var warnings = [
@@ -77,10 +115,17 @@ function checkCSS() {
     "vendor-prefix"
   ].join(",");
 
-  exec(CSSLINT + ' --warnings=' + warnings +
-                 ' --errors=' + errors +
-                 ' --quiet --format=compact' +
-                 ' ' + dirs);
+
+  var files = ls( dir );
+  files.forEach( function( filename ) {
+    filename = join( dir, filename );
+    if( /\.css$/.test( filename ) ) {
+      checkCSSFile( filename, warnings, errors );
+    }
+  });
+
+  // CSS Lint seems to want to print 2 blank lines when done.
+  echo('\n\n');
 }
 
 function checkJS(){
@@ -177,7 +222,11 @@ function lessToCSS( compress ){
   if( result.code === 0 ){
     var css = BUTTER_CSS_FILE_COMMENT + "\n\n" + result.output;
     css.to( BUTTER_CSS_FILE );
-    target['check-css']();
+    // Our /* csslint-ignore */ override can't work when compressed.
+    // People should lint on their own separate to that.
+    if( !compress ) {
+      target['check-css']();
+    }
   } else {
     echo( result.output );
   }
@@ -293,7 +342,7 @@ target.release = function() {
   var version = env['VERSION'];
 
   if( !version ){
-    console.log( "ERROR: Must provide a version when building a release: VERSION=XXX node make release" );
+    echo( "ERROR: Must provide a version when building a release: VERSION=XXX node make release" );
     return;
   }
 
