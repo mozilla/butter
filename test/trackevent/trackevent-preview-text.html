@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite [Track Event]</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../inject.js"></script>
+    <script type="text/javascript" src="../../src/butter.js"></script>
+    <script src="../butter.inject.js"></script>
+    <script src="../test-utils.js"></script>
+    <script>
+      asyncTest( "TrackEvent preview text", 2, function() {
+        createButterModule(function( butter ) {
+          var defaultEvent = {
+                type: "text",
+                popcornOptions: {
+                  start: 1,
+                  end: 5,
+                  text: "This is"
+                }
+              },
+              t = butter.currentMedia.tracks[ 0 ],
+              previewStrings = [ "This is a test", defaultEvent.popcornOptions.text ],
+              te;
+
+          butter.listen( "trackeventupdated", function( e ) {
+            equal( previewStrings.pop(), e.data.popcornOptions.text, "TrackEvent preview text is set correctly" );
+            if ( !previewStrings.length ) {
+              butter.unlisten( "trackeventupdated" );
+              start();
+            } else {
+              te.update({
+                start: 5,
+                end: 10,
+                text: previewStrings[ 0 ]
+              });
+            }
+          });
+          te = t.addTrackEvent( defaultEvent );
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite [Track Event]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="mediaDiv"></div>
+      <div id="test-target-1"></div>
+    </div>
+  </body>
+</html>

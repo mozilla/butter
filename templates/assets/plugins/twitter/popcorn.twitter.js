@@ -206,6 +206,9 @@
 
       Popcorn.xhr( { url: requestString, dataType: "jsonp", success: twitterCallback } );
 
+        options.toString = function() {
+          return options.username || options._natives.manifest.options.username[ "default" ];
+        };
     },
     start: function( event, options ) {
       if ( options._container ) {

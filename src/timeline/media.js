@@ -216,7 +216,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
       var type = e.data.type,
           track = e.data.track,
-          start = e.data.start;
+          start = e.data.start,
+          trackEvent;
 
       if( start + 1 > _media.duration ){
           start = _media.duration - 1;
@@ -227,7 +228,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         defaultTarget = butter.targets[ 0 ];
       }
 
-      track.addTrackEvent({
+      trackEvent = track.addTrackEvent({
         popcornOptions: {
           start: start,
           end: start + 1,
@@ -235,6 +236,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         },
         type: type
       });
+
+      trackEvent.update();
 
       if( defaultTarget ){
         defaultTarget.view.blink();
