@@ -5,10 +5,6 @@
   "plugin": {
     "plugins": [
     {
-      "type": "attribution",
-      "path": "{{baseDir}}external/popcorn-js/plugins/attribution/popcorn.attribution.js"
-    },
-    {
       "type": "code",
       "path": "{{baseDir}}external/popcorn-js/plugins/code/popcorn.code.js"
     },

@@ -29,19 +29,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             target: "Area1"
           }
         });
-    
-        butter.tracks[ 1 ].addTrackEvent({ 
-          type: "attribution",
-          popcornOptions: {
-            start: 2,
-            end: 3  ,
-            nameofwork: "A Shared Culture",
-            copyrightholder:"Jesse Dylan",
-            license: "CC-BY-N6",
-            licenseurl: "http://creativecommons.org/licenses/by-nc/2.0/",
-            target: "Area2"
-          }
-        });
 
         butter.tracks[ 1 ].addTrackEvent({ 
           type: "flickr",

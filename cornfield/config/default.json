@@ -39,7 +39,6 @@
     "../external/popcorn-js/plugins/text/popcorn.text.js",
     "../external/popcorn-js/plugins/googlemap/popcorn.googlemap.js",
     "../external/popcorn-js/plugins/image/popcorn.image.js",
-    "../external/popcorn-js/plugins/webpage/popcorn.webpage.js",
-    "../external/popcorn-js/plugins/attribution/popcorn.attribution.js"
+    "../external/popcorn-js/plugins/webpage/popcorn.webpage.js"
   ]
 }
