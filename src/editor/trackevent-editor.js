@@ -18,7 +18,21 @@ define( [ "util/lang", "util/keys", "./base-editor",
                           KeysUtils.DELETE,
                           KeysUtils.TAB,
                           KeysUtils.ESCAPE
-                        ];
+                        ],
+      __googleFonts = [];
+
+  // Load Google Fonts right off the bat. Avoid being loaded multiple times.
+  if ( __googleFonts.length === 0 ) {
+    var xhr = new XMLHttpRequest(); 
+
+    xhr.open( "GET", "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBUDXomquprJqpOeP3Qi3X7UHWc8bDBH1E", false );
+    xhr.onreadystatechange = function() {
+      if ( xhr.readyState === 4 ) {
+        __googleFonts = JSON.parse( xhr.responseText ).items;
+      }
+    };
+    xhr.send();
+  }
 
   /**
    * Class: TrackEventEditor
@@ -34,9 +48,16 @@ define( [ "util/lang", "util/keys", "./base-editor",
 
     // Wedge a check for scrollbars into the open event if it exists
     var oldOpenEvent = events.open;
+
+    extendObject.updateScrollBars = function() {
+      for( var i = 0, sLen = extendObject.vScrollBars.length; i < sLen; i++ ) {
+        extendObject.vScrollBars[ i ].update();
+      }
+    }
+
     events.open = function() {
-      if ( extendObject.vScrollBar ) {
-        extendObject.vScrollBar.update();
+      if ( extendObject.vScrollBars ) {
+        extendObject.updateScrollBars();
       }
       if ( oldOpenEvent ) {
         oldOpenEvent.apply( this, arguments );
@@ -49,7 +70,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
 
     // A vertical scrollbar may be added if lots of editor content is available (perhaps a large manifest is present for a plugin).
     // See addVerticalScrollbar below for more details.
-    extendObject.vScrollBar = null;
+    extendObject.vScrollBars = [];
 
     /**
      * Member: createTargetsList
@@ -167,6 +188,31 @@ define( [ "util/lang", "util/keys", "./base-editor",
     };
 
     /**
+     * Member: attachAnchorChangeHandler
+     *
+     * Attaches handlers to a anchor element and updates the TrackEvent corresponding to the given property name
+     *
+     * @param {DOMElement} element: Element to which handler is attached
+     * @param {TrackEvent} trackEvent: TrackEvent to update
+     * @param {String} propertyName: Name of property to update when change is detected
+     */
+    extendObject.attachAnchorChangeHandler = function( element, trackEvent, propertyName ) {
+      element.addEventListener( "click", function( e ) {
+        var updateOptions = {},
+            state = element.getAttribute( "selected" );
+
+        // Flip the state
+        state = state === "false" ? true : false;
+
+        element.setAttribute( "selected", state );
+        element.classList.toggle( trackEvent.manifest.options[ propertyName ].styleClass );
+
+        updateOptions[ propertyName ] = state;
+        trackEvent.update( updateOptions );
+      }, false );
+    };
+
+    /**
      * Member: attachInputChangeHandler
      *
      * Attaches handlers to a checkbox element and updates the TrackEvent corresponding to the given property name
@@ -222,13 +268,21 @@ define( [ "util/lang", "util/keys", "./base-editor",
           manifestEntryOption,
           i, l;
 
+      // If the manifestEntry was specified to be hidden, or part of an advanced set of options don't use traditional
+      // element building
+      if ( manifestEntry.hidden ) {
+        return; 
+      }
+
       // only populate if this is an input element that has associated units
       if ( units ) {
         propertyArchetype.querySelector( ".butter-unit" ).innerHTML = units;
       }
 
       // Grab the element with class 'property-name' to supply the archetype for new manifest entries
-      propertyArchetype.querySelector( ".property-name" ).innerHTML = itemLabel;
+      if ( propertyArchetype.querySelector( ".property-name" ) ) {
+        propertyArchetype.querySelector( ".property-name" ).innerHTML = itemLabel;
+      }
 
       // If the manifest's 'elem' property is 'select', create a <select> element. Otherwise, create an
       // <input>.
@@ -256,6 +310,36 @@ define( [ "util/lang", "util/keys", "./base-editor",
             editorElement.appendChild( option );
           }
         }
+        else if ( manifestEntry.googleFonts ) {
+          var font,
+              m,
+              fLen;
+
+          for ( m = 0, fLen = __googleFonts.length; m < fLen; m++ ) {
+            font = document.createElement( "option" );
+
+            font.value = font.innerHTML = __googleFonts[ m ].family;
+            editorElement.appendChild( font );
+          }
+        }
+      }
+      else if ( manifestEntry.elem === "a" ) {
+        editorElement = propertyArchetype.querySelector( "a" );
+
+        editorElement.innerHTML = manifestEntry.text;
+        editorElement.title = manifestEntry.title;
+        editorElement.setAttribute( "selected", false );
+      }
+      else if ( manifestEntry.elem === "color-wheel" ) {
+        editorElement = propertyArchetype.querySelector( ".color-selector" );
+        editorElement.classList.add( manifestEntry.styleClass );
+
+        if ( itemCallback ) {
+          itemCallback( manifestEntry.elem, editorElement, trackEvent, name );
+        }
+
+        // Return Early. Callback is handling the construction of the ColorWheel using the Libraries
+        return;
       }
       else {
         editorElement = propertyArchetype.querySelector( "input" );
@@ -331,36 +415,47 @@ define( [ "util/lang", "util/keys", "./base-editor",
      * @param {DOMElement} container: Optional. If specified, elements will be inserted into container, not rootElement
      * @param {Array} ignoreManifestKeys: Optional. Keys in this array are ignored such that elements for them are not created
      */
-    extendObject.createPropertiesFromManifest = function( trackEvent, itemCallback, manifestKeys, container, ignoreManifestKeys ) {
+    extendObject.createPropertiesFromManifest = function( trackEvent, basicCallback, advancedCallback, manifestKeys, basicContainer, advancedContainer, ignoreManifestKeys ) {
       var manifestOptions,
           item,
           element,
+          container,
+          callback,
+          optionGroup,
           i, l;
 
-      container = container || extendObject.rootElement;
+      basicContainer = basicContainer || extendObject.rootElement;
+      advancedContainer = advancedContainer || extendObject.rootElement;
 
       if ( !trackEvent.manifest ) {
         throw "Unable to create properties from null manifest. Perhaps trackevent is not initialized properly yet.";
       }
 
       manifestOptions = trackEvent.manifest.options;
+
+      // Creates all "Basic" manifest options
       manifestKeys = manifestKeys || Object.keys( manifestOptions );
 
       for ( i = 0, l = manifestKeys.length; i < l; ++i ) {
         item = manifestKeys[ i ];
+        optionGroup = manifestOptions[ item ].group ? manifestOptions[ item ].group : "basic";
+        container = optionGroup === "advanced" ? advancedContainer : basicContainer;
+        callback = optionGroup === "advanced" ? advancedCallback : basicCallback;
         if ( ignoreManifestKeys && ignoreManifestKeys.indexOf( item ) > -1 ) {
           continue;
         }
-        element = extendObject.createManifestItem( item, manifestOptions[ item ], trackEvent.popcornOptions[ item ], trackEvent, itemCallback );
+        element = extendObject.createManifestItem( item, manifestOptions[ item ], trackEvent.popcornOptions[ item ], trackEvent, callback );
 
-        container.appendChild( element );
+        element && container.appendChild( element );
       }
+
     };
 
     extendObject.addVerticalScrollbar = function( wrapperElement, contentElement, scrollbarContainerElement ) {
-      extendObject.vScrollBar = new Scrollbars.Vertical( wrapperElement, contentElement );
-      scrollbarContainerElement.appendChild( extendObject.vScrollBar.element );
-      extendObject.vScrollBar.update();
+      var newScrollBar = new Scrollbars.Vertical( wrapperElement, contentElement );
+      extendObject.vScrollBars.push( newScrollBar );
+      scrollbarContainerElement.appendChild( newScrollBar.element );
+      newScrollBar.update();
     };
 
   };

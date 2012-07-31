@@ -58,7 +58,7 @@ define( [ "text!./default.html", "editor/editor" ],
             optionsWrapper = _rootElement.querySelector( ".editor-options-wrapper" ),
             selectElement;
 
-        _this.applyExtraStyleTag( compiledLayout );
+        _this.applyExtraHeadTags( compiledLayout );
 
         _trackEvent = trackEvent;
         _this.createPropertiesFromManifest( trackEvent,
@@ -80,7 +80,7 @@ define( [ "text!./default.html", "editor/editor" ],
                 
               }
             }
-          }, null, optionsContainer, [ 'target' ] );
+          }, null, null, optionsContainer, null, [ 'target' ] );
 
         targetList = _this.createTargetsList( _targets );
         selectElement = targetList.querySelector( "select" );
@@ -91,13 +91,13 @@ define( [ "text!./default.html", "editor/editor" ],
         _this.updatePropertiesFromManifest( trackEvent, null, true );
 
         _this.addVerticalScrollbar( optionsWrapper, optionsContainer, _rootElement );
-        _this.vScrollBar.update();
+        _this.updateScrollBars();
 
         // Update properties when TrackEvent is updated
         trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
       },
       close: function () {
-        _this.removeExtraStyleTag();
+        _this.removeExtraHeadTags();
         _trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
       }
     });
