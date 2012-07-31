@@ -2,73 +2,67 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "util/dragndrop" ], function( DragNDrop ){
+define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-list-editor.html" ],
+  function( DragNDrop, LangUtils, Editor, EDITOR_LAYOUT ) {
 
-	return function( butter ){
-    var _parentElement = document.createElement( "div" ),
-        _containerElement = document.createElement( "div" );
+	return function( butter ) {
 
-    _parentElement.id = "plugin-list";
-    _containerElement.className = "container";
-    _parentElement.appendChild( _containerElement );
+    var _parentElement = LangUtils.domFragment( EDITOR_LAYOUT ),
+        _containerElement = _parentElement.querySelector( ".container" );
 
-    butter.ui.areas.work.addComponent( _parentElement, {
-      states: [ "add-popcorn" ],
-      transitionIn: function(){
-        _parentElement.style.display = "block";
-        setTimeout(function(){
-          _parentElement.style.opacity = "1";
-        }, 0);
-      },
-      transitionOut: function(){
-        _parentElement.style.opacity = "0";
-      },
-      transitionInComplete: function(){
+    var _button = butter.ui.tray.pluginArea.querySelector( ".add-popcorn" );
 
-      },
-      transitionOutComplete: function(){
-        _parentElement.style.display = "none";
-      }
+    var _pluginArchetype = _containerElement.querySelector( "div" );
+    _pluginArchetype.parentNode.removeChild( _pluginArchetype );
+
+    Editor.register( "plugin-list", null, function( rootElement, butter ) {
+      rootElement = _parentElement;
+
+      Editor.BaseEditor( this, butter, rootElement, {
+        open: function( parentElement ) {
+        },
+        close: function() {
+        }
+      });
     });
 
-    butter.listen( "pluginadded", function( e ){
-      var element = document.createElement( "div" ),
+    _button.addEventListener( "click", function() {
+      // Open the 'plugin-list' editor as defined above, and force the
+      // editor tray to open.
+      butter.editor.openEditor( "plugin-list", true );
+    }, false );
+
+    butter.listen( "pluginadded", function( e ) {
+      var element = _pluginArchetype.cloneNode( true ),
           iconImg = e.data.helper,
-          icon = document.createElement( "span" ),
-          text = document.createElement( "span" );
+          icon = element.querySelector( "span.icon" ),
+          text = element.querySelector( "span.label" );
 
       DragNDrop.helper( element, {
-        start: function(){
+        start: function() {
           var targets = butter.targets,
               media = butter.currentMedia;
           media.view.blink();
-          for( var i=0, l=targets.length; i<l; ++i ){
+          for ( var i = 0, l = targets.length; i < l; ++i ) {
             targets[ i ].view.blink();
           }
         },
-        stop: function(){
+        stop: function() {
 
         }
       });
 
-      if( iconImg ) {
+      if ( iconImg ) {
         icon.style.backgroundImage = "url('" + iconImg.src + "')";
-        icon.className = "icon";
-        element.appendChild( icon );
       }
-      text.className = "label";
+
       text.innerHTML = e.data.type;
-      element.appendChild( text );
 
       element.setAttribute( "data-popcorn-plugin-type", e.data.type );
       element.setAttribute( "data-butter-draggable-type", "plugin" );
 
       _containerElement.appendChild( element );
     });
-
-    _parentElement.style.display = "none";
-    _parentElement.classList.add( "fadable" );
-
 	};
 
 });

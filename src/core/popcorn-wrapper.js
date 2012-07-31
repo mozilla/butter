@@ -38,13 +38,15 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
      * settings
      */
     this.unbind = function(){
-      try{
-        _popcorn.destroy();
-        _popcorn = undefined;
+      if ( _popcorn ) {
+        try{
+          _popcorn.destroy();
+          _popcorn = undefined;
+        }
+        catch( e ){
+          _logger.log( "WARNING: Popcorn did NOT get destroyed properly: \n" + e.message + "\n" + e.stack );
+        }
       }
-      catch( e ){
-        _logger.log( "WARNING: Popcorn did NOT get destroyed properly: \n" + e.message + "\n" + e.stack );
-      } //try
     };
 
     /* Setup any handlers that were defined in the options passed into
