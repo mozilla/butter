@@ -21,6 +21,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         _resizable,
         _trackEvent = trackEvent,
         _dragging = false,
+        _padding = 0,
         _this = this;
 
     EventManagerWrapper( _this );
@@ -138,6 +139,15 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
           if( _parent ){
 
             if( _parent.element && _parent.element.parentNode && _parent.element.parentNode.parentNode ){
+
+              // Capture the element's computed style on initialization
+              var elementStyle = getComputedStyle( _element ),
+                  paddingLeft = elementStyle.paddingLeft ? +elementStyle.paddingLeft.substring( 0, elementStyle.paddingLeft.length - 2 ) : 0,
+                  paddingRight = elementStyle.paddingRight ? +elementStyle.paddingRight.substring( 0, elementStyle.paddingRight.length - 2 ) : 0;
+
+              // Store padding values to negate from width calculations
+              _padding = paddingLeft + paddingRight;
+
               _draggable = DragNDrop.draggable( _element, {
                 containment: _parent.element.parentNode,
                 scroll: _parent.element.parentNode.parentNode,
@@ -158,6 +168,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
               _resizable = DragNDrop.resizable( _element, {
                 containment: _parent.element.parentNode,
                 scroll: _parent.element.parentNode.parentNode,
+                padding: _padding,
                 stop: movedCallback
               });
 
@@ -187,9 +198,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
     function movedCallback() {
       _element.style.top = "0px";
-      var rect = _element.getClientRects()[ 0 ];
       _start = _element.offsetLeft / _zoom;
-      _end = _start + rect.width / _zoom;
+      _end = _start + ( _element.offsetWidth - _padding ) / _zoom;
       _trackEvent.update({
         start: _start,
         end: _end
