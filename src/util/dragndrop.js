@@ -183,6 +183,7 @@ define([], function(){
         _rightHandle = element.querySelector( ".handle.right-handle" ),
         _onStart = options.start || function(){},
         _onStop = options.stop || function(){},
+        _padding = options.padding || 0,
         _updateInterval = -1,
         _scroll = options.scroll,
         _scrollRect,
@@ -193,7 +194,7 @@ define([], function(){
 
       var originalRect = element.getBoundingClientRect(),
           originalPosition = element.offsetLeft,
-          originalWidth = element.offsetWidth,
+          originalWidth = element.clientWidth,
           mouseDownPosition = e.clientX,
           mousePosition,
           mouseOffset;
@@ -223,7 +224,7 @@ define([], function(){
         }
 
         element.style.left = newX + "px";
-        element.style.width = newW + "px";
+        element.style.width = newW - _padding + "px";
         _elementRect = element.getBoundingClientRect();
       }
 
