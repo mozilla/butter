@@ -38,6 +38,7 @@ define( [ "core/eventmanager", "./toggler",
     this.contentStateLocked = false;
 
     this.tray = new Tray();
+    this.header = new Header( butter, _uiConfig );
 
     var _toggler = new Toggler( function ( e ) {
           butter.ui.visible = !butter.ui.visible;
@@ -108,6 +109,11 @@ define( [ "core/eventmanager", "./toggler",
     };
 
     Object.defineProperties( this, {
+      enabled: {
+        get: function() {
+          return _uiOptions.enabled;
+        }
+      },
       visible: {
         enumerable: true,
         get: function(){
@@ -313,7 +319,7 @@ define( [ "core/eventmanager", "./toggler",
       _this.visible = true;
       _toggler.visible = true;
       if( _uiConfig.value( "ui" ).enabled !== false ){
-        Header( butter, _uiConfig );
+        _this.header.attachToDOM();
       }
     });
 

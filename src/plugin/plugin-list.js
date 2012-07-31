@@ -10,7 +10,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
     var _parentElement = LangUtils.domFragment( EDITOR_LAYOUT ),
         _containerElement = _parentElement.querySelector( ".container" );
 
-    var _button = butter.ui.tray.pluginArea.querySelector( ".add-popcorn" );
+    var _button = butter.ui.header.element.querySelector( ".add-popcorn" );
 
     var _pluginArchetype = _containerElement.querySelector( "div" );
     _pluginArchetype.parentNode.removeChild( _pluginArchetype );
@@ -62,6 +62,11 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
       element.setAttribute( "data-butter-draggable-type", "plugin" );
 
       _containerElement.appendChild( element );
+    });
+
+    // Open the plugin-list editor right after butter is finished starting up
+    butter.listen( "ready", function() {
+      butter.editor.openEditor( "plugin-list", true );
     });
 	};
 
