@@ -125,8 +125,6 @@ function checkCSS( dir ) {
     }
   });
 
-  // CSS Lint seems to want to print 2 blank lines when done.
-  echo('\n\n');
 }
 
 function checkJS(){
