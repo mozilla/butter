@@ -209,6 +209,9 @@ define( [ "util/lang", "util/keys", "./base-editor",
           for ( i = 0, l = manifestEntry.options.length; i < l; ++i ){
             option = document.createElement( "option" );
             manifestEntryOption = manifestEntry.options[ i ];
+
+            // if the manifest has values for options, use the options as labels
+            // and the values as values for the <option> elements
             if ( manifestEntry.values && manifestEntry.values[ i ] ) {
               option.innerHTML = manifestEntryOption;
               option.value = manifestEntry.values[ i ];
@@ -216,6 +219,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
             else {
               option.value = option.innerHTML = manifestEntryOption;
             }
+
             editorElement.appendChild( option );
           }
         }
