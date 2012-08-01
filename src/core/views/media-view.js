@@ -25,28 +25,45 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
     var _containerDims;
 
-    _media.listen( "trackeventoverlap", function( trackevent ) {
+    _media.listen( "trackeventoverlap", function( data ) {
       var tracks = _media.tracks,
-          te = trackevent.data,
+          te = data.data.trackevent,
+          track = data.data.track,
+          ghost,
           foundTrack = false,
           currentTrack = te._track;
 
       for ( var i = 0, l = tracks.length; i < l; i++ ) {
         // search for the track under the current one
-        if ( ( tracks[ i ].order - currentTrack.order ) === 1 ) {
-          currentTrack.removeTrackEvent( te );
-          tracks[ i ].addTrackEvent( te );
+        if ( ( tracks[ i ].order - track.order ) === 0 ) {
+          console.log( "OVERLAPPING", te.ghost, te.isGhost );
+          if ( !te.ghost && !te.isGhost ) {
+            ghost = te.createGhost();
+            ghost.view.zoom = tracks[ i + 1 ].view.zoom;
+            tracks[ i + 1 ].addTrackEvent( ghost );
+            ghost.view.updatePosition( te.view.element );
+            ghost.view.element.style.opacity = "0.3";
+          } else if ( te.ghost ) {
+            ghost = te.ghost;
+            if ( ghost.view ) {
+            ghost.view.zoom = tracks[ i ].view.zoom;
+            ghost.view.updatePosition( te.view.element );
+            }
+          }
           foundTrack = true;
           break;
         }
       }
 
       if ( !foundTrack ) {
-        _media.addTrack();
-        currentTrack.removeTrackEvent( te );
-        tracks[ i ].addTrackEvent( te );
+        if ( !te.ghost && !te.isGhost ) {
+          ghost = te.createGhost();
+          tracks[ i + 1 ].addTrackEvent( ghost );
+          ghost.view.element.style.opacity = "0.3";
+        }
       }
     });
+
 
     function closeIfPossible(){
       if ( _closeSignal && !_keepOpen ) {

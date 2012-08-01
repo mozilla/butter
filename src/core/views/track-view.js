@@ -143,28 +143,40 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
     }; //removeTrackEvent
 
     this.checkOverlay = function( trackevent ) {
-      var teData = trackevent.data,
-          currentTrackEvent;
+      var teData = trackevent.data || trackevent,
+          currentTrackEvent,
+          rect1 = teData.view.element.getBoundingClientRect(),
+          rect2,
+          overlapFound = false;
 
+      if ( !teData.dragging ) {
+        return;
+      }
       // utility function to check if two trackevents are overlapping
       function isOverlapping( te1, te2 ) {
-        var start1 = te1.start,
-            start2 = te2.start,
-            end1 = te1.end,
-            end2 = te2.end;
-
-        return ( start1 < end2 && start2 < end1 );
+        return ( !( ( te1.top > te2.bottom ) || ( te1.bottom < te2.top ) ) && !( ( te1.left > te2.right ) || ( te1.right < te2.left ) ) );
       }
 
       // loop over all the trackevents for this track and see if we overlap
       for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
         currentTrackEvent = _trackEvents[ i ].trackEvent;
-        if ( teData.id !== currentTrackEvent.id ) {
-          if ( isOverlapping( teData.popcornOptions, currentTrackEvent.popcornOptions ) ) {
-            _track._media.dispatch( "trackeventoverlap", teData );
+        rect2 = currentTrackEvent.view.element.getBoundingClientRect();
+        if ( teData.id !== currentTrackEvent.id  && !teData.isGhost ) {
+          if ( isOverlapping( rect1, rect2 ) ) {
+            overlapFound = true;
+            _track._media.dispatch( "trackeventoverlap", {
+              trackevent: teData,
+              track: _track
+            });
             break;
           }
         }
+      }
+      if ( !overlapFound && teData.ghost ) {
+        teData.ghost._track.removeTrackEvent( teData.ghost );
+        teData.ghost = null;
+        teData.ghost.view = null;
+        teData.isGhost = false;
       }
     };
   }; //TrackView

@@ -250,6 +250,14 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           trackEvent = search.trackEvent,
           corn = trackEvent.popcornOptions;
 
+      if ( trackEvent.ghost ) {
+        console.log( "WE GOT A GHOST" );
+        trackEvent.ghost._track.addTrackEvent( trackEvent );
+        trackEvent.ghost._track.removeTrackEvent( trackEvent.ghost );
+        trackEvent.ghost = null;
+        trackEvent.isGhost = false;
+        return;
+      }
       search.track.removeTrackEvent( trackEvent );
 
       var duration = corn.end- corn.start;

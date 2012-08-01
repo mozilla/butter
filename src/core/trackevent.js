@@ -40,7 +40,7 @@ define( [
    *
    * @param {Object} options: Options for initialization. Can contain the properties type, name, and popcornOptions. If the popcornOptions property is specified, its contents will be used to initialize the plugin instance associated with this TrackEvent.
    */
-  var TrackEvent = function ( options, track, popcornWrapper ) {
+  var TrackEvent = function ( options, track, popcornWrapper, isGhost ) {
 
     options = options || {};
 
@@ -49,6 +49,8 @@ define( [
         _name = options.name || _id,
         _logger = new Logger( _id ),
         _track = track,
+        _isGhost = isGhost,
+        _ghostTrackEvent,
         _type = options.type + "",
         _popcornOptions = options.popcornOptions || {
           start: 0,
@@ -90,7 +92,9 @@ define( [
      * @param {Object} newPopcornWrapper: PopcornWrapper object or null
      */
     this.setPopcornWrapper = function ( newPopcornWrapper ) {
-      _popcornWrapper = newPopcornWrapper;
+      if ( !_isGhost ) {
+        _popcornWrapper = newPopcornWrapper;
+      }
     };
 
     /**
@@ -184,6 +188,7 @@ define( [
 
       // we should only get here if no exceptions happened
       _this.dispatch( "trackeventupdated", _this );
+      _ghostTrackEvent && _ghostTrackEvent.update( updateOptions );
     };
 
     /**
@@ -250,6 +255,20 @@ define( [
       _track = null;
     };
 
+    /*
+     * Member: createGhost
+     *
+     * Creates a clone of the current trackEvent that does not have an associated Popcorn trackevent.
+     * Used to notify the user when a trackevent overlaps and where the new location will be
+     * when the trackevent is dropped
+     */
+    this.createGhost = function() {
+      var options = JSON.parse( JSON.stringify( _popcornOptions ) );
+      options.type = _type;
+      _ghostTrackEvent = new TrackEvent( options, true );
+      return _ghostTrackEvent;
+    };
+
     Object.defineProperties( this, {
 
       /**
@@ -275,6 +294,35 @@ define( [
         configurable: false,
         get: function(){
           return _view;
+        }
+      },
+      /**
+       * Property: ghost
+       *
+       * A reference to this trackevents ghost
+       */
+      ghost: {
+        enumerable: true,
+        get: function() {
+          return _ghostTrackEvent;
+        },
+        set: function( val ) {
+          _ghostTrackEvent = val;
+        }
+      },
+
+      /**
+       * Property: isGhost
+       *
+       * Returns true or false if this is a ghosted trackevent or not
+       */
+      isGhost: {
+        enumerable: true,
+        get: function() {
+          return _isGhost;
+        },
+        set: function( val ) {
+          _isGhost = val;
         }
       },
 
