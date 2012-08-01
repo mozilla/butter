@@ -154,10 +154,25 @@ All code changes in butter have to go through two levels of peer review. This im
 1. After you have made a pull-request, post the link (e.g. https://github.com/mozilla/butter/pull/662) in the corresponding ticket.
 2. Set the status of the ticket to `peer-review requested`, and choose someone to review your code. If you're not sure who to ask, check out this list https://github.com/organizations/mozilla/teams/151407 or better, ask in #popcorn on IRC.
 3. After you get a review, you will see (1) comments in the diff in your pull-request and (2) comments in lighthouse. Keep an eye on the ticket to see when your review is done.
-4. Complete the changes that were requested, or if you disagree or need more information, comment in the pull-request or lighthouse. Commit and push up. 
+4. Complete the changes that were requested, or if you disagree or need more information, comment in the pull-request or lighthouse. Commit and push up.
 5. After your review passes, your reviewer will pass the ticket on to `super-review-requested`. You will likely have more changes after that review.
 6. After your final round of changes, your ticket will change to `review-looks-good`. Ask someone to help you rebase/merge into master. Hurrah!
 
+### Landing (for those with commit rights to github.com/mozilla/butter)
+Once code has been reviewed (PR+ and SR+), and you want to land it, you need to follow our rebase strategy. Please don't use Github's "Merge pull request". Instead, please do the following:
+
+* git checkout master
+* git pull mozilla master # assuming your remote to Mozilla's butter is called `mozilla`
+* git checkout mybranch
+* git rebase -i master # consider squashing your commits here, if it makes sense
+* # make sure everything still works in Butter at this point
+* git push origin mybranch --force
+* git checkout master
+* git merge mybranch --ff-only # no need for a commit message, as we're not doing a merge commit
+* git push mozilla master
+* # Paste URL to commits in ticket, and mark it as "Staged"
+
+We use this landing strategy in order to make backing-out failed commits easier.
 
 Known Issues
 ------------
