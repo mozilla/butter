@@ -1,11 +1,6 @@
 // PLUGIN: Twitter
 
 (function ( Popcorn, global ) {
-  var LAYOUT_TYPES = {
-        "ticker": "ticker",
-        "feed": "feed",
-        "sidebar": "sidebar"
-      };
 
   Popcorn.plugin( "twitter", {
     manifest: {
@@ -39,6 +34,7 @@
         searchType: {
           elem: "select",
           options: [ "Mixed", "Recent", "Popular" ],
+          values: [ "mixed", "recent", "popular" ],
           label: "Search Results",
           "default": "Mixed"
         },
@@ -60,7 +56,8 @@
           label: "End"
         },
         transitions: {
-          "temp": "doo"
+          transitionIn: "pop",
+          transitionOut: "fly"
           /*
            * TODO when we sort out editor stuff
            * Idea is the editors pass in a transitions object that tells us what transitions we want
@@ -70,22 +67,30 @@
         layout: {
           elem: "select",
           options: [ "Ticker", "Sidebar", "Feed" ],
+          values: [ "ticker", "sidebar", "feed" ],
           label: "Tweet Layout",
           "default": "Feed",
           optional: true
         },
         top: {
           hidden: true,
+          elem: "input",
           type: "number",
+          units: "%",
           "default": 10
         },
         left: {
           hidden: true,
+          elem: "input",
           type: "number",
+          units: "%",
           "default": 10
         },
         style: {
-          "temp": "doo"
+          "font-family": "stuff",
+          "font-size": "stuff",
+          "color": "blue",
+          "text-decoration": "underline"
           /* TODO when we sort out editor stuff
            * Idea is the editors pass in a style object of sorts and it then applies those styles.
            */
@@ -95,7 +100,6 @@
     _setup: function( options ) {
       var target = Popcorn.dom.find( options.target ),
           requestString = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=",
-          _layout = options.layout ? options.layout.toLowerCase() : "feed",
           titleText = document.createElement( "span" ),
           tweetsContainer = document.createElement( "ul" ),
           img,
@@ -111,13 +115,12 @@
 
       options._target = target;
 
-      // Ensure all options applying CSS classes or other select options are set to lowercase
-      options.searchType = options.searchType ? options.searchType.toLowerCase() : "mixed";
-
       options._container = document.createElement( "div" );
       options._container.classList.add( "popcorn-twitter" );
       options._container.id = "twitter-" + Popcorn.guid();
-      options._container.style.visibility = "hidden";
+      options._container.style.top = options.top + "%";
+      options._container.style.left = options.left + "%";
+      options._container.style.display = "none";
       titleText.classList.add( "popcorn-twitter-title" );
       titleText.appendChild( document.createTextNode( options.widgetTitle ) );
       options._container.appendChild( titleText );
@@ -127,13 +130,15 @@
             currTweet,
             twitterHandle,
             twitterName,
-            imageLinkSource;
+            imageLinkSource,
+            i,
+            rLen;
 
         if ( results.length <= 0 ) {
           return;
         }
 
-        for ( var i = 0, rLen = results.length; i < rLen; i++ ) {
+        for ( i = 0, rLen = results.length; i < rLen; i++ ) {
           currTweet = results[ i ];
           tweetContainer = document.createElement( "li" );
           img = document.createElement( "img" );
@@ -155,7 +160,7 @@
 
           // Text Setup
           tweetText.innerHTML = currTweet.text;
-          tweetUser.innerHTML = "<a href='http://www.twitter.com/" + twitterHandle + "' target=_blank>" +
+          tweetUser.innerHTML = "<a href=\"http://www.twitter.com/" + twitterHandle + "\" target=_blank>" +
                                 twitterHandle + "</a>&nbsp;" + twitterName;
           tweetTextCont.appendChild( tweetUser );
           tweetTextCont.appendChild( tweetText );
@@ -164,12 +169,12 @@
         }
 
         // TODO: Handle Transitions stuff here later
-        // if ( options.transitionEnd ) {
-        //   options._container.classList.add( options.transitionEnd );
+        // if ( options.transitions.transitionEnd ) {
+        //   options._container.classList.add( options.transitions.transitionEnd );
         // }
 
-        // if ( options.transitionIn ) {
-        //   options._container.classList.add( options.transitionIn );
+        // if ( options.transitions.transitionIn ) {
+        //   options._container.classList.add( options.transitions.transitionIn );
         // }
 
         options._container.appendChild( tweetsContainer );
@@ -177,7 +182,7 @@
 
       // Set layout class for container
       if ( options.layout ) {
-        options._container.classList.add( LAYOUT_TYPES[ _layout ] );
+        options._container.classList.add( options.layout );
       }
 
       target.appendChild( options._container );
@@ -205,14 +210,14 @@
     },
     start: function( event, options ) {
       if ( options._container ) {
-        options._container.style.visibility = "visible";
-        options._container.classList.add( "on" );
+        options._container.style.display = "block";
+        //options._container.classList.add( "on" );
       }
     },
     end: function( event, options ) {
       if ( options._container ) {
-        options._container.style.visibility = "hidden";
-        options._container.classList.remove( "on" );
+        options._container.style.display = "none";
+        //options._container.classList.remove( "on" );
       }
     },
     _teardown: function( options ) {
