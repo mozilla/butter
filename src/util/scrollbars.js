@@ -19,12 +19,12 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
     EventManagerWrapper( _this );
 
-    _element.className = "scroll-bar scroll-bar-v";
+    _element.className = "butter-scroll-bar scroll-bar-v";
     _handle.className = "scroll-handle";
 
     _element.appendChild( _handle );
 
-    function setup(){
+    this.update = function() {
       _parentHeight = outerElement.getBoundingClientRect().height;
       _childHeight = innerElement.getBoundingClientRect().height;
       _elementHeight = _element.getBoundingClientRect().height;
@@ -33,7 +33,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       _handleHeight = Math.max( 20, Math.min( _elementHeight, _handleHeight ) );
       _handle.style.height = _handleHeight + "px";
       setHandlePosition();
-    }
+    };
 
     function onMouseUp(){
       window.removeEventListener( "mouseup", onMouseUp, false );
@@ -46,7 +46,6 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
           maxDiff = _elementHeight - _handleHeight;
       diff = Math.max( 0, Math.min( diff, maxDiff ) );
       var p = diff / maxDiff;
-      _handle.style.top = diff + "px";
       outerElement.scrollTop = ( _scrollHeight - _parentHeight ) * p;
       _this.dispatch( "scroll", outerElement.scrollTop );
     }
@@ -59,17 +58,15 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
         window.addEventListener( "mousemove", onMouseMove, false );
         _handle.removeEventListener( "mousedown", onMouseDown, false );
       }
+      e.preventDefault();
     }
 
-    this.update = function(){
-      setup();
-    };
-
-    function setHandlePosition(){
-      if( innerElement.scrollHeight - _elementHeight > 0 ) {
+    function setHandlePosition() {
+      if ( innerElement.scrollHeight - _elementHeight > 0 ) {
         _handle.style.top = ( _elementHeight - _handleHeight ) *
-          ( outerElement.scrollTop / ( outerElement.scrollHeight - _elementHeight ) ) + "px";
-      }else{
+          ( outerElement.scrollTop / ( _scrollHeight - _parentHeight ) ) + "px";
+      }
+      else {
         _handle.style.top = "0px";
       }
     }
@@ -116,10 +113,10 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       outerElement.scrollTop = ( _scrollHeight - _elementHeight ) * p;
     }, false);
 
-    window.addEventListener( "resize", setup, false );
+    window.addEventListener( "resize", _this.update, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
 
-    setup();
+    _this.update();
 
     Object.defineProperties( this, {
       element: {
@@ -145,12 +142,12 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
     EventManagerWrapper( _this );
 
-    _element.className = "scroll-bar scroll-bar-h";
+    _element.className = "butter-scroll-bar scroll-bar-h";
     _handle.className = "scroll-handle";
 
     _element.appendChild( _handle );
 
-    function setup(){
+    this.update = function() {
       _parentWidth = outerElement.getBoundingClientRect().width;
       _childWidth = innerElement.getBoundingClientRect().width;
       _elementWidth = _element.getBoundingClientRect().width;
@@ -159,7 +156,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       _handleWidth = Math.max( 20, Math.min( _elementWidth, _handleWidth ) );
       _handle.style.width = _handleWidth + "px";
       setHandlePosition();
-    }
+    };
 
     function onMouseUp(){
       window.removeEventListener( "mouseup", onMouseUp, false );
@@ -184,6 +181,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
         window.addEventListener( "mousemove", onMouseMove, false );
         _handle.removeEventListener( "mousedown", onMouseDown, false );
       }
+      e.preventDefault();
     }
 
     function setHandlePosition(){
@@ -238,14 +236,10 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       outerElement.scrollLeft = ( _scrollWidth - _elementWidth ) * p;
     }, false);
 
-    window.addEventListener( "resize", setup, false );
+    window.addEventListener( "resize", _this.update, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
 
-    this.update = function(){
-      setup();
-    };
-
-    setup();
+    _this.update();
 
     Object.defineProperties( this, {
       element: {

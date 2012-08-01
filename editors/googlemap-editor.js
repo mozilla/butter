@@ -4,7 +4,8 @@
 
 ( function( Butter ) {
 
-  Butter.Editor.register( "googlemap", "load!{{baseDir}}editors/googlemap-editor.html", function( rootElement, butter ) {
+  Butter.Editor.register( "googlemap", "load!{{baseDir}}editors/googlemap-editor.html",
+    function( rootElement, butter, compiledLayout ) {
 
     var _this = this;
 
@@ -14,6 +15,7 @@
         _targetSelectElement,
         _trackEvent,
         _popcornEventMapReference,
+        _extraStyleTag,
         _mapListeners;
 
     /**
@@ -180,7 +182,8 @@
       _trackEvent = trackEvent;
 
       var targetList = _this.createTargetsList( _targets ),
-          optionsContainer = _rootElement.querySelector( ".editor-options" );
+          optionsContainer = _rootElement.querySelector( ".editor-options" ),
+          optionsWrapper = _rootElement.querySelector( ".editor-options-wrapper" );
 
       // Attach the onchange handler to trackEvent is updated when <select> is changed
       _targetSelectElement = targetList.querySelector( "select" );
@@ -219,6 +222,8 @@
 
       _this.updatePropertiesFromManifest( trackEvent );
 
+      _this.addVerticalScrollbar( optionsWrapper, optionsContainer, _rootElement );
+      _this.vScrollBar.update();
     }
 
     // Extend this object to become a BaseEditor
@@ -232,8 +237,11 @@
           getMapFromTrackEvent();
         });
         setup( trackEvent );
+        _this.applyExtraStyleTag( compiledLayout );
+        _this.vScrollBar.update();
       },
       close: function() {
+        _this.removeExtraStyleTag();
         removeMapListeners();
       }
     });

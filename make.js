@@ -233,6 +233,11 @@ target["check-html"] = function() {
     },
     {
       text: "Warning: The character encoding of the document was not declared."
+    },
+    {
+      // Let <style> be in fragments.
+      text: "Error: Element “style” not allowed as child of element “body” in this context. (Suppressing further errors from this subtree.)",
+      when: isHTMLFragment
     }
   ];
 

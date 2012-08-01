@@ -85,12 +85,16 @@ define( [ "util/lang", "util/xhr",
      */
     create: function( editorName, butter ) {
       var description = __editors[ editorName ],
+          completeLayout,
           compiledLayout;
 
       if ( description.layout ) {
         // Collect the element labeled with the 'butter-editor' class to avoid other elements (such as comments)
         // which may exist in the layout.
         compiledLayout = LangUtils.domFragment( description.layout );
+
+        // Expose the full compiledLayout to the editor for later use.
+        completeLayout = compiledLayout;
 
         // If domFragment returned a DOMFragment (not an actual element) try to get the proper element out of it
         if ( !compiledLayout.classList ) {
@@ -102,7 +106,7 @@ define( [ "util/lang", "util/xhr",
         }
       }
 
-      return new description.create( compiledLayout, butter );
+      return new description.create( compiledLayout, butter, completeLayout );
     },
 
     /**
