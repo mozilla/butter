@@ -3,17 +3,16 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [ "util/lang",  "./logo-spinner",
-          "text!layouts/tray.html", "text!layouts/plugin-area.html",
+          "text!layouts/tray.html",
           "text!layouts/status-area.html", "text!layouts/timeline-area.html" ],
   function( LangUtils, LogoSpinner,
-            TRAY_LAYOUT, PLUGIN_AREA_LAYOUT,
+            TRAY_LAYOUT,
             STATUS_AREA_LAYOUT, TIMELINE_AREA_LAYOUT ) {
 
   return function(){
 
     var statusAreaFragment = LangUtils.domFragment( STATUS_AREA_LAYOUT );
     var timelineAreaFragment = LangUtils.domFragment( TIMELINE_AREA_LAYOUT );
-    var pluginAreaFragment = LangUtils.domFragment( PLUGIN_AREA_LAYOUT );
     var trayRoot = LangUtils.domFragment( TRAY_LAYOUT );
 
     var _loadingContainer = trayRoot.querySelector( ".butter-loading-container" );
@@ -22,13 +21,11 @@ define( [ "util/lang",  "./logo-spinner",
 
     this.statusArea = trayRoot.querySelector( ".butter-status-area" );
     this.timelineArea = trayRoot.querySelector( ".butter-timeline-area" );
-    this.pluginArea = trayRoot.querySelector( ".butter-plugin-area" );
     
     this.rootElement = trayRoot;
 
     this.statusArea.appendChild( statusAreaFragment );
     this.timelineArea.appendChild( timelineAreaFragment );
-    this.pluginArea.appendChild( pluginAreaFragment );
 
     this.attachToDOM = function(){
       document.body.appendChild( trayRoot );

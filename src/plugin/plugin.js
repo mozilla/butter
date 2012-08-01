@@ -4,8 +4,6 @@
 
 define( [ "util/dragndrop", "util/lang" ], function( DragNDrop, LangUtils ){
 
-  var PLUGIN_ELEMENT_PREFIX = "popcorn-plugin-";
-
   return function( pluginOptions ){
     pluginOptions = pluginOptions || {};
 
@@ -22,40 +20,10 @@ define( [ "util/dragndrop", "util/lang" ], function( DragNDrop, LangUtils ){
         // Prevent two elements from having the same ID on the page
         _helper.id = null;
       }
+      _helper.setAttribute( "data-popcorn-plugin-type", _this.type );
+      _helper.setAttribute( "data-butter-draggable-type", "plugin" );
       _this.helper = _helper;
     };
-
-    this.createElement = function ( butter, pattern ) {
-      var pluginElement;
-      if ( !pattern ) {
-        pluginElement = document.createElement( "span" );
-        pluginElement.innerHTML = _this.type + " ";
-      }
-      else {
-        var patternInstance = pattern.replace( /\$type/g, _this.type );
-        pluginElement = LangUtils.domFragment( patternInstance );
-      }
-      pluginElement.id = PLUGIN_ELEMENT_PREFIX + _this.type;
-      pluginElement.setAttribute( "data-popcorn-plugin-type", _this.type );
-      pluginElement.setAttribute( "data-butter-draggable-type", "plugin" );
-      DragNDrop.helper( pluginElement, {
-        image: _helper,
-        start: function(){
-          var targets = butter.targets,
-              media = butter.currentMedia;
-          media.view.blink();
-          for( var i=0, l=targets.length; i<l; ++i ){
-            targets[ i ].view.blink();
-          }
-        },
-        stop: function(){
-        }
-      });
-      this.element = pluginElement;
-      return pluginElement;
-    };
-
-    this.generateHelper();
 
   };
 });

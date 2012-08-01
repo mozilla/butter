@@ -8,7 +8,8 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
 
     options = options || {};
 
-    var _rootElement = Lang.domFragment( HEADER_TEMPLATE ),
+    var _this = this,
+        _rootElement = Lang.domFragment( HEADER_TEMPLATE ),
         _title,
         _saveButton,
         _sourceButton,
@@ -18,14 +19,12 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
     _title = _rootElement.querySelector(".butter-name");
     _title.innerHTML = options.value( "title" ) || "Popcorn Maker";
 
-    _rootElement = document.body.insertBefore( _rootElement, document.body.firstChild );
+    _saveButton = _rootElement.querySelector( ".butter-header-save" );
+    _sourceButton = _rootElement.querySelector( ".butter-header-source" );
+    _shareButton = _rootElement.querySelector( ".butter-header-share" );
+    _authButton = _rootElement.querySelector( ".butter-header-auth" );
 
-    _saveButton = document.getElementById( "butter-header-save" );
-    _sourceButton = document.getElementById( "butter-header-source" );
-    _shareButton = document.getElementById( "butter-header-share" );
-    _authButton = document.getElementById( "butter-header-auth" );
-
-    document.body.classList.add( "butter-header-spacing" );
+    _this.element = _rootElement;
 
     _sourceButton.addEventListener( "click", function( e ){
 
@@ -173,6 +172,11 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
         loginDisplay();
       });
     }
+
+    this.attachToDOM = function() {
+      document.body.classList.add( "butter-header-spacing" );
+      document.body.insertBefore( _rootElement, document.body.firstChild );
+    };
 
   };
 
