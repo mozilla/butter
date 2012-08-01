@@ -73,19 +73,6 @@
     }
 
     /**
-     * Member: onTiltChanged
-     *
-     * GoogleMaps tilt changed event handler. Updates the associated trackevent after map tilt is changed.
-     */
-    function onTiltChanged() {
-      var updateOptions = {
-            pitch: _popcornEventMapReference.getTilt(),
-            location: ""
-          };
-      _trackEvent.update( updateOptions );
-    }
-
-    /**
      * Member: setupMapListeners
      *
      * Adds listeners to the google map object to detect change in state.
@@ -94,7 +81,6 @@
       _mapListeners = [];
       _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'dragend', onDragEnd ) );
       _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'zoom_changed', onZoomChanged ) );
-      _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'tilt_changed', onTiltChanged ) );
       _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'heading_changed', onHeadingChanged ) );
     }
 
