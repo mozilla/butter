@@ -184,6 +184,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
           editorElement,
           itemLabel = manifestEntry.label || name,
           option,
+          manifestEntryOption,
           i, l;
 
       // Treat 'in' and 'out' specially, changing their titles to 'Start' and 'End' respectively
@@ -207,7 +208,14 @@ define( [ "util/lang", "util/keys", "./base-editor",
         if ( manifestEntry.options ) {
           for ( i = 0, l = manifestEntry.options.length; i < l; ++i ){
             option = document.createElement( "option" );
-            option.value = option.innerHTML = manifestEntry.options[ i ];
+            manifestEntryOption = manifestEntry.options[ i ];
+            if ( manifestEntry.values && manifestEntry.values[ i ] ) {
+              option.innerHTML = manifestEntryOption;
+              option.value = manifestEntry.values[ i ];
+            }
+            else {
+              option.value = option.innerHTML = manifestEntryOption;
+            }
             editorElement.appendChild( option );
           }
         }
