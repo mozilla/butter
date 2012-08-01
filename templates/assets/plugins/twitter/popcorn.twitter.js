@@ -161,7 +161,7 @@
           // Text Setup
           tweetText.innerHTML = currTweet.text;
           tweetUser.innerHTML = "<a href=\"http://www.twitter.com/" + twitterHandle + "\" target=_blank>" +
-                                twitterHandle + "</a>&nbsp;" + twitterName;
+                                twitterName + "</a>&nbsp;" + twitterHandle;
           tweetTextCont.appendChild( tweetUser );
           tweetTextCont.appendChild( tweetText );
           tweetContainer.appendChild( tweetTextCont ); 
