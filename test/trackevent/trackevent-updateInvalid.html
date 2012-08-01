@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite [Track Event]</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../inject.js"></script>
+    <script type="text/javascript" src="../../src/butter.js"></script>
+    <script src="../butter.inject.js"></script>
+    <script src="../test-utils.js"></script>
+    <script>
+      asyncTest( "update w/ invalid options", 4, function() {
+        createButterModule( function( butter ) {
+          butter.currentMedia.onReady( function() {
+            var te = butter.currentMedia.tracks[ 1 ].trackEvents[ 0 ];
+
+            try {
+              te.update( { start: "m", end: 3 } );
+            } catch( e ) {
+              equal( e.reason, "invalid-start-time", "Correctly caught " + e.reason );
+
+              try {
+                te.update( { start: 1, end: "m" } );
+              } catch( e2 ) {
+                equal( e2.reason, "invalid-end-time", "Correctly caught " + e2.reason );
+
+                try {
+                  te.update( { start: 10, end: 8 } );
+                } catch( e3 ) {
+                  equal( e3.reason, "start-greater-than-end", "Correctly caught " + e3.reason );
+
+                  try {
+                    te.update( { start: 5, end: 800 } );
+                  } catch( e4 ) {
+                    equal( e4.reason, "invalid-times", "Correctly caught " + e4.reason );
+                    start();
+                  }
+                }
+              }
+            }
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite [Track Event]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="mediaDiv"></div>
+      <div id="test-target-1"></div>
+    </div>
+  </body>
+</html>

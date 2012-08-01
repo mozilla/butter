@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Butter Test Suite [Track Event]</title>
-    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
-    <script type="text/javascript" src="../qunit/qunit.js"></script>
-    <script type="text/javascript" src="../inject.js"></script>
-    <script type="text/javascript" src="../../src/butter.js"></script>
-    <script type="text/javascript" src="trackevent.unit.js"></script>
-    <script src="../butter.inject.js"></script>
-  </head>
-  <body>
-    <h1 id="qunit-header">Butter API Test Suite [Track Event]</h1>
-    <h2 id="qunit-banner"></h2>
-    <div id="qunit-testrunner-toolbar"></div>
-    <h2 id="qunit-userAgent"></h2>
-    <ol id="qunit-tests"></ol>
-    <div id="qunit-fixture">
-      <div id="mediaDiv"></div>
-      <div id="test-target-1"></div>
-    </div>
-  </body>
+<head>
+  <title>Butter Test Suite Runner</title>
+  <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="../butter.testrunner.css" type="text/css" >
+  <script src="../butter.testrunner.js"></script>
+  <script>
+    document.addEventListener( "DOMContentLoaded", function() {
+      var runner = new TestRunner();
+      runner.getTests( "trackevent-tests.conf", function() {
+        runner.runTests();
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1 id="qunit-header">
+    Butter Test Suite [ Page Module ]
+    <div id="test-links"></div>
+  </h1>
+  <h2 id="qunit-banner"></h2>
+  <h2 id="qunit-userAgent"></h2>
+  <ol id="qunit-tests"></ol>
+</body>
 </html>

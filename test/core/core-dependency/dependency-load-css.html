@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+
+      asyncTest( "Load test CSS", 2, function(){
+
+        createButterCore( function( butter ){
+
+          butter.loader.load({
+            type: "css",
+            url: "../test-css.css"
+          }, function(){
+            butter.loader.load({
+              type: "css",
+              url: "../test-css.css",
+              check: function(){
+                ok( true, "Second check function was run." );
+                return true;
+              }
+            }, function(){
+              var testDiv = document.getElementById( "css-test" ),
+                  style = getComputedStyle( testDiv );
+              equals( style.getPropertyValue( "height" ), "100px", "Test css loaded and applied properties." );
+
+              start();
+            });
+          });
+
+        });
+      });
+
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Dependency ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="css-test"></div>
+    </div>
+  </body>
+</html>

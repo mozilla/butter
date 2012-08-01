@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Create Media object", 2, function(){
+
+        createButterCore( function( butter ){
+          var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../../../external/popcorn-js/test/trailer.ogv" } );
+          ok( m1.name === "Media 1", "Name is correct" );
+          ok( m1.target === "audio-test" && m1.url === "../../../external/popcorn-js/test/trailer.ogv", "Media storage is correct" );
+
+          start();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Media ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <audio id="audio-test" controls autobuffer preload="auto" >
+        <source src="../sample.oga" />
+      </audio>
+      <div id="mediaDiv"></div>
+      <div id="test-target-1"></div>
+      <div id="test-target-2"></div>
+      <div id="stringSanity"></div>
+      <div id="css-test"></div>
+    </div>
+  </body>
+</html>

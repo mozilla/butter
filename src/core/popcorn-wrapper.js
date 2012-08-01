@@ -32,7 +32,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         _mediaType,
         _butterEventMap = {},
         _interruptLoad = false,
-        _this = this;
+        _this = this,
+        _makeVideoURLsUnique = options.makeVideoURLsUnique;
 
     /* Destroy popcorn bindings specfically without touching other discovered
      * settings
@@ -261,9 +262,12 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       // Chrome currently won't load multiple copies of the same video.
       // See http://code.google.com/p/chromium/issues/detail?id=31014.
       // Munge the url so we get a unique media resource key.
+      // However if set in the config, don't append this
       url = typeof url === "string" ? [ url ] : url;
-      for( i=0; i<url.length; i++ ){
-        url[ i ] = URI.makeUnique( url[ i ] ).toString();
+      if ( _makeVideoURLsUnique ) {
+        for( i=0; i<url.length; i++ ){
+          url[ i ] = URI.makeUnique( url[ i ] ).toString();
+        }
       }
       // Transform into a string of URLs (i.e., array string)
       url = JSON.stringify( url );

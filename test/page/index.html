@@ -1,58 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Butter Test Suite [Page]</title>
-    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen" data-butter-exclude>
-    <script type="text/javascript" src="../qunit/qunit.js" data-butter-exclude></script>
-    <script type="text/javascript" src="../inject.js" data-butter-exclude></script>
-    <script type="text/javascript" src="../../src/butter.js" data-butter-exclude></script>
-    <script src="https://browserid.org/include.js" type="text/javascript" data-butter-exclude></script>
-    <script type="text/javascript" src="page.unit.js" data-butter-exclude></script>
-    <script src="../butter.inject.js" data-butter-exclude></script>
-    <style>
-        body {
-          height: 900px;
-        }
-        #main, .content-div {
-          float: left;
-        }
-        .content-div {
-          width: 100px;
-          height: 100px;
-          border: 3px solid #000;
-          margin: 5px;
-        }
-        .container-div {
-          float: left;
-          text-align: center;
-          font-family: helvetica;
-          font-style: bold;
-        }
-        #main {
-          min-width: 300px;
-          min-height: 200px;
-        }
-    </style>
-  </head>
-  <body>
-    <h1 id="qunit-header">Butter API Test Suite [Page]</h1>
-    <h2 id="qunit-banner"></h2>
-    <div id="qunit-testrunner-toolbar"></div>
-    <h2 id="qunit-userAgent"></h2>
-    <ol id="qunit-tests"></ol>
-    <div id="qunit-fixture">
-      <div id="test" butter-clean="true" data-butter="nothing" data-butter-default></div>
-      <div id="main" data-butter="media">
-      </div>
-      <div class="container-div">
-          <div class="content-div" data-butter="target" id="Area1"></div>
-          <p>Area 1</p>
-      </div>
-      <div class="container-div">
-          <div class="content-div" data-butter="target" id="Area2" data-butter-default></div>
-          <p>Area 2</p>
-      </div>
-    </div>
-  </body>
+<head>
+  <title>Butter Test Suite Runner</title>
+  <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+  <link rel="stylesheet" href="../butter.testrunner.css" type="text/css" >
+  <script src="../butter.testrunner.js"></script>
+  <script>
+    document.addEventListener( "DOMContentLoaded", function() {
+      var runner = new TestRunner();
+      runner.getTests( "page-tests.conf", function() {
+        runner.runTests();
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1 id="qunit-header">
+    Butter Test Suite [ Page Module ]
+    <div id="test-links"></div>
+  </h1>
+  <h2 id="qunit-banner"></h2>
+  <h2 id="qunit-userAgent"></h2>
+  <ol id="qunit-tests"></ol>
+</body>
 </html>

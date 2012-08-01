@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+
+      asyncTest( "Auto-load saved data", 4, function(){
+
+        Butter({
+          config: "../test-config-auto-load.json",
+          ready: function( butter ){
+            equal( butter.media.length, 1, "One media created" );
+            equal( butter.media[ 0 ].tracks.length, 2, "Two tracks created" );
+            equal( butter.media[ 0 ].tracks[ 0 ].trackEvents.length, 0, "Track 1 has no events" );
+            equal( butter.media[ 0 ].tracks[ 1 ].trackEvents.length, 1, "Track 2 has one event" );
+            start();
+          }
+        });
+
+      });
+
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Dependency ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture"></div>
+  </body>
+</html>

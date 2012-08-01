@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "No scripts/callbacks", 1, function(){
+        var succeeded = false;
+
+        setTimeout(function(){
+          if( !succeeded ){
+            ok( false, "Timeout! Ready not called. Script load skipping failed." );
+            start();
+          }
+        }, 2000);
+
+        Butter({
+          config: "../test-simple-config.json",
+          debug: false,
+          ready: function( butter ){
+
+            butter.preparePopcornScriptsAndCallbacks(function(){
+              succeeded = true;
+              ok( true, "Ready called without any scripts/callbacks." );
+
+              start();
+            });
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Scripts ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="mediaDiv"></div>
+    </div>
+  </body>
+</html>

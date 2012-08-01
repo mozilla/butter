@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Target serialization", 4, function(){
+
+        createButterCore( function( butter ){
+
+          var tempElement = document.createElement( "div" ),
+              sTargs,
+              targs;
+
+          tempElement.id = "targetID";
+          document.body.appendChild( tempElement );
+
+          butter.addMedia();
+
+          butter.addTarget( { name:"T1" } );
+          butter.addTarget( { name:"T2", element: "targetID" } );
+
+          sTargs = butter.serializeTargets();
+          targs = butter.targets;
+          ok( sTargs[ 0 ].name === targs[ 0 ].name, "first target name is correct" );
+          ok( sTargs[ 1 ].name === targs[ 1 ].name, "second target name is correct" );
+          ok( sTargs[ 0 ].element === "", "serialized target defaults safely to empty string" );
+          ok( sTargs[ 1 ].element === "targetID", "serialized target return's correct element ID" );
+
+          document.body.removeChild( tempElement );
+          delete tempElement;
+
+          start();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Target ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture"></div>
+  </body>
+</html>

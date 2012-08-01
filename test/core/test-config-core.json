@@ -1,0 +1,41 @@
+{
+  "name": "test-config",
+  "baseDir": "../../../",
+  "debug": true,
+  "scrapePage": false,
+  "makeVideoURLsUnique": false,
+  "ui": {
+    "enabled": false,
+    "trackEventHighlight": "click"
+  },
+  "editor": {
+  },
+  "plugin": {
+    "plugins": [
+      {
+        "type": "text",
+        "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
+      },
+      {
+        "type": "image",
+        "path": "{{baseDir}}external/popcorn-js/plugins/image/popcorn.image.js"
+      }
+    ],
+    "defaults": [
+      "text",
+      "image"
+    ]
+  },
+  "popcorn": {
+    "scripts": {
+      "init": "#init-script",
+      "beforeEvents": "../test-before.js",
+      "afterEvents": "../test-after.js"
+    },
+    "callbacks": {
+      "init": "_testInitCallback",
+      "beforeEvents": "_testBeforeCallback",
+      "afterEvents": "_testAfterCallback"
+    }
+  }
+}

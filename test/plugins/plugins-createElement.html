@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite [Plugins]</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../inject.js"></script>
+    <script type="text/javascript" src="../../src/butter.js"></script>
+    <script src="../butter.inject.js"></script>
+    <script src="../test-utils.js"></script>
+    <script>
+      asyncTest( "Create element", 2, function() {
+        createButterModule( function( butter ) {
+          var plugin1 = butter.plugin.plugins[0],
+              plugin2 = butter.plugin.plugins[1];
+
+          // Taken from src/ui/module
+          butter.ui.loadIcons( butter.config.value( "icons" ), butter.config.value( "dirs" ).resources || "" );
+
+          plugin1.generateHelper();
+          plugin2.generateHelper();
+
+          equal( plugin1.helper.src, document.getElementById( "default-icon" ).src, "Default plugin icon is correct" );
+          equal( plugin2.helper.src, document.getElementById( "image-icon" ).src, "Image plugin icon is correct" );
+
+          start();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite [Plugins]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="video"></div>
+    </div>
+  </body>
+</html>

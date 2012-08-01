@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite [Track]</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../inject.js"></script>
+    <script type="text/javascript" src="../../src/butter.js"></script>
+    <script src="../butter.inject.js"></script>
+    <script src="../test-utils.js"></script>
+    <script>
+      var defaultEvent = {
+            type: "text",
+            popcornOptions: {
+              start: 2,
+              end: 5,
+              text: "This is a test"
+            }
+          };
+
+      asyncTest( "deselectEvents", 2, function() {
+        createButterModule( function( butter ) {
+          var t = butter.tracks[ 0 ],
+              te1,
+              te2;
+
+          te1 = t.addTrackEvent( defaultEvent );
+          te2 = t.addTrackEvent( defaultEvent );
+
+          //Set both track events to being selected
+          te1.selected = te2.selected = true;
+
+          t.deselectEvents( te1 );
+
+          te1 = t.getTrackEventById( te1.id );
+          te2 = t.getTrackEventById( te2.id );
+
+          equal( te1.selected, true, "Track should still be selected" );
+          equal( te2.selected, false, "Track shouldn't be selected" );
+          start();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite [Track]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="video"></div>
+    </div>
+  </body>
+</html>

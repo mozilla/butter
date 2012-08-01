@@ -9,3 +9,9 @@ div#test-links {
 div#test-links > a {
   font-size: 0.7em;
 }
+
+iframe {
+  height: 600px;
+  width: 100%; 
+  overflow: scroll;
+}
