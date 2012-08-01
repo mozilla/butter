@@ -189,7 +189,6 @@ define( [], function(){
       _zoom = zoom || _zoom;
       _width = containerWidth;
       _tracksContainerWidth = _tracksContainer.container.getBoundingClientRect().width;
-      _container.style.width = _width + "px";
       _rect = _container.getBoundingClientRect();
       _lineWidth = _line.clientWidth;
       setNodePosition();

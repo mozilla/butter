@@ -12,17 +12,21 @@
   padding-bottom: @TRAY_SPACING_MINIMIZED;
 }
 
+.butter-editor-spacing.editor-minimized .butter-tray {
+  right: 0;
+}
+
 .butter-tray {
   .selectable( none );
   position: fixed;
   z-index: 2140000000;
   bottom: 0;
   left: 0;
-  width: 100%;
+  right: 200px;
   height: @TRAY_HEIGHT;
   border: 1px solid #000;
   background-image: url( "../resources/bg.jpg" );
-  .transition( bottom 0.35s );
+  .transition( bottom 0.35s, right 0.35s );
 
   * { 
     .selectable( none );
@@ -67,6 +71,7 @@
     position: absolute;
     box-shadow: 0 1px 0 #656565;
     .selectable( none );
+    overflow: hidden;
   }
 
   .scroll-bar-v {
