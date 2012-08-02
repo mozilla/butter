@@ -7,8 +7,7 @@
             "core/logger",
             "core/eventmanager",
             "core/track",
-            "core/popcorn-wrapper",
-            "core/views/media-view"
+            "core/popcorn-wrapper"
           ],
           function( Logger, EventManagerWrapper, Track, PopcornWrapper, MediaView ){
 
@@ -119,14 +118,6 @@
       this.popcornScripts = null;
       this.maxPluginZIndex = 0;
 
-      this.createView = function(){
-        if ( !_view ) {
-          _view = new MediaView( this, {
-            onDropped: onDroppedOnView
-          });
-        }
-      };
-
       this.destroy = function(){
         _popcornWrapper.unbind();
         if ( _view ) {
@@ -139,10 +130,6 @@
           _this.removeTrack( _tracks[ 0 ] );
         }
       };
-
-      function onDroppedOnView( e ){
-        _this.dispatch( "trackeventrequested", e );
-      }
 
       function ensureNewTrackIsTrack( track ) {
         if ( !( track instanceof Track ) ) {

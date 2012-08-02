@@ -18,6 +18,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
 
       Editor.BaseEditor( this, butter, rootElement, {
         open: function( parentElement ) {
+
         },
         close: function() {
         }
