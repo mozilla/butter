@@ -1977,7 +1977,8 @@ header {
   height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-bottom: 5px solid #efefef;
+  border-bottom: 5px solid #FFF;
+  z-index: 100001;
 }
 /*********************************************************
 * Header
@@ -2234,6 +2235,22 @@ header {
 }
 .plugin-toc {
   background: url(../img/plugins/toc.png) no-repeat;
+}
+.more-plugin-list {
+  display: none;
+}
+.more-plugin-list > ul {
+  box-shadow: inset 0 1px 1px 0 rgba(0, 0, 0, 0.2);
+  height: 300px;
+  overflow: scroll;
+}
+.more-plugin-list > ul > li {
+  padding: 10px 0;
+  box-shadow: 0 1px 0 #ffffff, inset 0 -1px 0 0 #cccccc;
+}
+.more-plugin-list > ul > li > p {
+  font-size: 0.8em;
+  margin-bottom: 0;
 }
 /*********************************************************
 * Stage

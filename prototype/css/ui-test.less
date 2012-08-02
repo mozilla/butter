@@ -270,7 +270,8 @@ header {
       height: 0; 
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;  
-      border-bottom: 5px solid @baseLight;
+      border-bottom: 5px solid #FFF;
+      z-index: 100001;
     }
    
   }
@@ -555,6 +556,23 @@ header {
   background: url( ../img/plugins/toc.png ) no-repeat;
 }
 
+.more-plugin-list {
+  display: none;
+  > ul {
+    box-shadow: inset 0 1px 1px 0 rgba( 0, 0, 0, .2 );
+    height: 300px;
+    overflow: scroll;
+    > li {
+      padding: 10px 0;
+      box-shadow: 0 1px 0 #FFF,
+        inset 0 -1px 0 0 #CCC;
+      > p {
+        font-size: 0.8em;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
 
 /*********************************************************
 * Stage

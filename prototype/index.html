@@ -83,9 +83,7 @@
         <div class="butter-editor-breadcrumbs">Event Menu</div>
         <div class="butter-editor-outer">
           <div class="butter-editor-inner">  
-            <fieldset>
-              <input class="big" type="search" placeholder="Search">
-            </fieldset>
+            
             <fieldset class="btn-events-list">
                 <a class="btn-light btn-events tooltip"><i class="icon-plugin plugin-text"></i>
                   <span>Text</span>
@@ -98,16 +96,26 @@
                 <a class="btn-light btn-events"><i class="icon-plugin plugin-image"></i><span>Image</span></a>
                 <a class="btn-light btn-events"><i class="icon-plugin plugin-map"></i><span>Map</span></a>
                 <a class="btn-light btn-events"><i class="icon-plugin plugin-toc"></i><span>Stuff</span></a>
-            </fieldset>          
+            </fieldset>  
             <fieldset>
-              <!--<div class="ui-button-group ui-light">
-                <a>This is a dropdown</a>
-                <select name="stledas" id="myselect1">
-                  <option val="jeldo">dasd</option>
-                  <option val="dasda">d32fff</option>
-                </select>
-              </div>
-              -->
+              <input id="plugin-search" class="big" type="search" placeholder="Search">
+            </fieldset>        
+            <fieldset class="more-plugin-list">
+              <label><strong>Search results</strong></label>
+              <ul class="nav">
+                <li>
+                  <a class="btn-light">Kinetic text plugin</a>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore ...</p>
+                </li>
+                <li>
+                  <a class="btn-light">Secret Robotron</a>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore ...</p>
+                </li>
+                <li>
+                  <a class="btn-light">Awesome purple dots</a>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore ...</p>
+                </li>
+              </ul>
             </fieldset>
           </div>
         </div>
@@ -366,6 +374,11 @@
     // EDITOR STUFF
     $( ".butter-editor-header > ul a" ).bind( "click", function( e ) {
       openPanel ( this.hash );
+    });
+
+    // PLUGIN SEARCH
+    document.getElementById( "plugin-search" ).addEventListener( "keydown", function() {
+      $( ".more-plugin-list" ).fadeIn();
     });
 
     // TRAY STUFF
