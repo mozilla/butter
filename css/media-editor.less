@@ -1,0 +1,201 @@
+/*********************************************************
+* MEDIA EDITOR
+*/
+
+.media-editor {
+
+  .container {
+    padding: 15px;
+  }
+
+ #new-media-source-btn {
+    display: block;
+    height: 20px;
+    width: 150px;
+    position: relative;
+    margin: 15px 0 15px 0;
+ }
+
+  #new-media-source-btn, #update-media-source-btn {
+
+    .gradient( "center top", #41BB92, #39A480, false );
+    color: #ffffff;
+    text-shadow: 0 1px #276f57;
+    padding: 6px 10px;
+    font-size: 14px;
+
+    i {
+      margin-right: 5px;
+      position: relative;
+      top: 2px;
+      display: inline-block;
+      height: 14px;
+      width: 14px;
+    }
+
+    &.hidden {
+      display: none;
+    }
+  }
+
+  #add-alternate-media-source-btn {
+    margin-top: 10px;
+    display: inline-block;
+  }
+
+  #new-media-source-btn, #update-media-source-btn,
+  #cancel-media-source-btn, #add-alternate-media-source-btn {
+    .selectable( none );
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  #new-media-source-btn:hover, #update-media-source-btn:hover {
+    box-shadow: 0 1px 0 #65CAA8 inset, 0 -1px 0 #276F57, 0 1px 0 #349574, 1px 0 0 #3AA883, -1px 0 0 #3AA883;
+  }
+
+  #cancel-media-source-btn:hover, #add-alternate-media-source-btn:hover {
+    box-shadow: 0 1px 0 #EBEBEB inset, 0 -1px 0 #EEEBEE, 0 1px 0 #EEEEEE, 1px 0 0 #EEEEEE, -1px 0 0 #EBEBEB;
+  }
+
+  #add-new-media-source {
+    display: block;
+    margin: 15px 0 15px 0;
+    &.hidden {
+      display: none;
+    }
+
+  }
+
+  .alternate-new-media-group, .new-media-btn-group p {
+    label {
+      font-size: 12px;
+      margin: 10px 0 10px 0;
+    }
+    &.hidden {
+      display: none;
+    }
+  }
+
+  #update-media-source-btn, #cancel-media-source-btn {
+    position: relative;
+    display: inline-block;
+    padding: 6px 10px;
+  }
+
+  .btn-light, .ui-light a {
+
+    .gradient( "center top", #EEEEEE, #EBEBEB, true );
+
+    border-radius: 3px 3px 3px 3px;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0 1px 0 0 #FFFFFF inset, 1px 0 0 0 #F8F8F8 inset, -1px 0 0 0 #F8F8F8 inset, 0 -1px 0 0 #F8F8F8 inset, 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+    color: #6F6F6F;
+    font-size: 14px;
+    padding: 5px 10px;
+    text-shadow: 0 1px 0 #FFFFFF;
+  }
+
+  span input.current-media-input {
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    color: #555555;
+    font-size: 12px;
+    padding: 7px;
+    width: 85%;
+    height: 32px;
+    margin: 5px 0;
+  }
+
+  div.media-editor-inner-wrapper {
+    &:first-child input {
+      font-size: 14px;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    
+    &:not(:first-child) input {
+      width: 90%;
+    }
+
+    &:nth-of-type(2) {
+      margin-top: 10px;
+    }
+  }
+
+
+  span input.current-media-input, .btn-light, .ui-light a {
+    -webkit-border-bottom-colors: none;
+       -moz-border-bottom-colors: none;
+        -ms-border-bottom-colors: none;
+         -o-border-bottom-colors: none;
+
+
+    -webkit-border-image: none;
+       -moz-border-image: none;
+        -ms-border-image: none;
+         -o-border-image: none;
+            border-image: none;
+    
+    -webkit-border-left-colors: none;
+       -moz-border-left-colors: none;
+        -ms-border-left-colors: none;
+         -o-border-left-colors: none;
+
+    -webkit-border-right-colors: none;
+       -moz-border-right-colors: none;
+        -ms-border-right-colors: none;
+         -o-border-right-colors: none;
+
+    -webkit-border-top-colors: none;
+       -moz-border-top-colors: none;
+        -ms-border-top-colors: none;
+         -o-border-top-colors: none;
+  }
+
+  input.error {
+    border: 1px inset #ff0000;
+  }
+
+  #current-media-div {
+
+    &.disabled {
+      opacity: 0.5;
+    }
+
+    label {
+      margin-bottom: 10px;
+    }
+  }
+
+  span a.delete-media-btn {
+    height: 32px;
+    width: 0;
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 10px;
+
+    i {
+      position: relative;
+      top: 0;
+      left: 0;
+    }
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    padding: 10px 0;
+    cursor: pointer;
+  }
+
+  label.media-error-message {
+    color: #ff0000;
+    &.hidden {
+      display: none;
+    }
+  }
+}

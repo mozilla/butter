@@ -1,2 +1,39 @@
-<div class="butter-editor media-editor">
+<div class="media-editor butter-editor fadable">
+  <h1>Change Media Source</h1>
+  <div class="container">
+    <a id="new-media-source-btn" class="butter-btn-green">
+      <i class="icon icon-white icon-plus-sign"></i>
+      New Media Source
+    </a>
+    <div id="add-new-media-source" class="editor-input hidden">
+      <label>New Media Source</label>
+      <input id="new-media-input" type="url" value="" placeholder="http://" />
+      <div class="alternate-new-media-group hidden">
+        <label id="alternate-media-warning"></label>
+        <input type="url" id="alternate-media-input-a" value="" placeholder="http://" />
+        <input type="url" id="alternate-media-input-b" value="" placeholder="http://" />
+      </div>
+      <div class="new-media-btn-group">
+        <p>
+          <label id="new-media-warning">Warning: Pressing change will replace all current media associated with your project!</label>
+          <a id="update-media-source-btn" class="butter-btn-green">
+            Change
+          </a>
+          <a id="cancel-media-source-btn" class="btn-light">
+            Cancel
+          </a>
+        </p>
+      </div>
+    </div>
+    <div id="current-media-div">
+      <label>Primary Media</label>
+      <span id="current-media-wrapper"></span>
+      <a id="add-alternate-media-source-btn" class="btn-light">
+        Add Alternate
+      </a>
+      <label class="media-error-message hidden">
+        Error: one or more media sources failed to load!
+      </label>
+    </div>
+  </div>
 </div>

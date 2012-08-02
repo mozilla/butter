@@ -4,10 +4,10 @@
 
 define( [ "core/eventmanager", "./toggler",
           "./header", "./unload-dialog",
-          "./tray" ],
+          "./tray", "../editor/media-editor" ],
   function( EventManagerWrapper, Toggler,
             Header, UnloadDialog,
-            Tray ){
+            Tray, MediaEditor ){
 
   var TRANSITION_DURATION = 500,
       // Butter's UI is written in LESS, but deployed as CSS.
@@ -55,9 +55,6 @@ define( [ "core/eventmanager", "./toggler",
       }
       document.body.classList.add( "butter-header-spacing" );
       document.body.classList.add( "butter-tray-spacing" );
-      butter.listen( "mediaadded", function( e ){
-        e.data.createView();
-      });
     }
 
     this.loadIcons = function( plugins, resourcesDir ) {
@@ -311,6 +308,7 @@ define( [ "core/eventmanager", "./toggler",
       _toggler.visible = true;
       if( _uiConfig.value( "ui" ).enabled !== false ){
         _this.header.attachToDOM();
+        MediaEditor( butter );
       }
     });
 

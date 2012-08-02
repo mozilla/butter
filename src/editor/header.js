@@ -20,7 +20,7 @@ define([], function(){
     var _currentFocus;
 
     _mediaButton.addEventListener( "click", function( e ) {
-      editorModule.openEditor( "media-properties" );
+      editorModule.openEditor( "media-editor" );
     }, false );
 
     _popcornButton.addEventListener( "click", function( e ) {
