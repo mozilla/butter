@@ -66,6 +66,8 @@ define( [ "core/logger", "util/dragndrop" ],
 
     function resetContainer() {
       _container.style.width = _media.duration * _zoom + "px";
+      _vScrollbar.update();
+      _hScrollbar.update();
     }
 
     _media.listen( "mediaready", function(){

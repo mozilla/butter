@@ -6,21 +6,15 @@
 define( [], function(){
   var ZOOM_LEVELS = 6;
 
-  return function( zoomCallback ){
+  return function( zoomCallback, mediaRootElement ){
 
-    var _element = document.createElement( "div" ),
-        _handle = document.createElement( "div" ),
+    var _element = mediaRootElement.querySelector( ".zoom-bar" ),
+        _handle = _element.querySelector( ".scroll-handle" ),
         _rect,
         _mousePos,
         _handleWidth,
         _elementWidth,
         _this = this;
-
-    _element.className = "zoom-bar scroll-bar";
-    _handle.className = "scroll-handle";
-    _handle.title = "Change the zoom level of the timeline";
-
-    _element.appendChild( _handle );
 
     function onMouseUp(){
       window.removeEventListener( "mouseup", onMouseUp, false );

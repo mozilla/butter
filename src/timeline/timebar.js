@@ -10,7 +10,6 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
     var _element = statusArea.querySelector( ".time-bar" ),
         _canvas = _element.querySelector( "canvas" ),
-        _canvasContainer = _element.querySelector( ".time-bar-canvas-container" ),
         _media = media,
         _tracksContainer = tracksContainer,
         _scrubber = new Scrubber( butter, _element, _media, _tracksContainer, hScrollbar );
@@ -21,8 +20,6 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       var tracksContainerWidth = tracksContainer.container.getBoundingClientRect().width,
           width = Math.min( tracksContainerWidth, _tracksContainer.container.scrollWidth ),
           containerWidth = Math.min( width, _tracksContainer.element.offsetWidth - CANVAS_CONTAINER_PADDING );
-
-      _canvasContainer.style.width = containerWidth + "px";
 
       var context = _canvas.getContext( "2d" );
 

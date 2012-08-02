@@ -114,6 +114,14 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     this._start = function( onModuleReady ){
       _toggler = new Toggler( function( e ) {
         var newState = !_editorAreaDOMRoot.classList.contains( "minimized" );
+
+        var onTransitionEnd = function(){
+          _editorAreaDOMRoot.removeEventListener( "transitionend", onTransitionEnd, false );
+          _editorAreaDOMRoot.removeEventListener( "oTransitionEnd", onTransitionEnd, false );
+          _editorAreaDOMRoot.removeEventListener( "webkitTransitionEnd", onTransitionEnd, false );
+          _this.dispatch( "editorminimized", newState );
+        };
+
         _toggler.state = newState;
         if ( newState ) {
           document.body.classList.add( "editor-minimized" );
@@ -123,6 +131,12 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
           document.body.classList.remove( "editor-minimized" );
           _editorAreaDOMRoot.classList.remove( "minimized" );
         }
+
+        //Listen for the end of the "minimize" transition
+        _editorAreaDOMRoot.addEventListener( "transitionend", onTransitionEnd, false );
+        _editorAreaDOMRoot.addEventListener( "oTransitionEnd", onTransitionEnd, false );
+        _editorAreaDOMRoot.addEventListener( "webkitTransitionEnd", onTransitionEnd, false );
+        
       }, "Show/Hide Editor", true );
 
       var editorsToLoad = [];

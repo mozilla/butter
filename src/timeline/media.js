@@ -38,7 +38,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _vScrollBar = new Scrollbars.Vertical( _tracksContainer.element, _tracksContainer.container ),
         _shrunken = false,
         _timebar = new TimeBar( butter, _media, butter.ui.tray.statusArea, _tracksContainer, _hScrollBar ),
-        _zoombar = new ZoomBar( zoomCallback ),
+        _zoombar = new ZoomBar( zoomCallback, _rootElement ),
         _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer, onTrackOrderChanged ),
         _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
         _currentMouseDownTrackEvent,
@@ -50,6 +50,11 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
     _tracksContainer.setScrollbars( _hScrollBar, _vScrollBar );
 
     EventManagerWrapper( _this );
+
+    function onEditorMinimized( e ) {
+      _timebar.update( _zoom );
+      _tracksContainer.update();
+    }
 
     function snapToCurrentTime(){
       _tracksContainer.snapTo( _media.currentTime );
@@ -205,6 +210,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     _media.listen( "mediaready", onMediaReadyFirst );
 
+    butter.editor.listen( "editorminimized", onEditorMinimized );
+
     function onPluginDropped( e ){
 
       var type = e.data.type,
@@ -260,6 +267,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _mediaStatusContainer.parentNode.removeChild( _mediaStatusContainer );
       }
       _timebar.destroy();
+      butter.editor.unlisten( "editorminimized", onEditorMinimized );
     };
 
     this.hide = function() {
