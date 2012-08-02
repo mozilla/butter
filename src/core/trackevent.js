@@ -40,7 +40,7 @@ define( [
    *
    * @param {Object} options: Options for initialization. Can contain the properties type, name, and popcornOptions. If the popcornOptions property is specified, its contents will be used to initialize the plugin instance associated with this TrackEvent.
    */
-  var TrackEvent = function ( options ) {
+  var TrackEvent = function ( options, track, popcornWrapper ) {
 
     options = options || {};
 
@@ -48,14 +48,14 @@ define( [
         _id = "TrackEvent" + __guid++,
         _name = options.name || _id,
         _logger = new Logger( _id ),
-        _track,
+        _track = track,
         _type = options.type + "",
         _popcornOptions = options.popcornOptions || {
           start: 0,
           end: 1
         },
         _view = new TrackEventView( this, _type, _popcornOptions ),
-        _popcornWrapper = null,
+        _popcornWrapper = popcornWrapper,
         _selected = false;
 
     EventManagerWrapper( _this );
@@ -235,24 +235,29 @@ define( [
       _this.update( _popcornOptions );
     }; //moveFrameRight
 
+    /**
+     * Member: unbind
+     *
+     * Kills references to popcornWrapper and track which are necessary to function. TrackEvent becomes
+     * a husk for popcorn data at this point.
+     */
+    this.unbind = function() {
+      _popcornWrapper.destroyEvent( _this );
+      _popcornWrapper = null;
+      _track = null;
+    };
+
     Object.defineProperties( this, {
 
       /**
-       * Property: _track
+       * Property: track
        *
-       * Specifies the track on which this TrackEvent currently sites. When set, an update occurs.
-       * @malleable: Yes, but not recommended. Butter will manipulate this value automatically. Other uses may yield unexpected results.
+       * Specifies the track on which this TrackEvent currently sites.
        */
-      _track: {
+      track: {
         enumerable: true,
         get: function(){
           return _track;
-        },
-        set: function( val ){
-          _track = val;
-          if ( _track ) {
-            _this.update( _popcornOptions );
-          }
         }
       },
 

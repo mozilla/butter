@@ -143,18 +143,6 @@
         _this.dispatch( "trackeventrequested", e );
       }
 
-      function onTrackEventAdded( e ){
-        var trackEvent = e.data;
-        _popcornWrapper.updateEvent( trackEvent );
-        trackEvent._popcornWrapper = _popcornWrapper;
-      } //onTrackEventAdded
-
-      function onTrackEventRemoved( e ){
-        var trackEvent = e.data;
-        _popcornWrapper.destroyEvent( trackEvent );
-        trackEvent._popcornWrapper = null;
-      } //onTrackEventRemoved
-
       this.addTrack = function ( track ) {
         if ( !( track instanceof Track ) ) {
           track = new Track( track );
@@ -170,8 +158,6 @@
           "trackeventselected",
           "trackeventdeselected"
         ]);
-        track.listen( "trackeventadded", onTrackEventAdded );
-        track.listen( "trackeventremoved", onTrackEventRemoved );
         _this.dispatch( "trackadded", track );
         track.setPopcornWrapper( _popcornWrapper );
         var trackEvents = track.trackEvents;
@@ -209,8 +195,6 @@
             "trackeventdeselected"
           ]);
           track.setPopcornWrapper( null );
-          track.unlisten( "trackeventadded", onTrackEventAdded );
-          track.unlisten( "trackeventremoved", onTrackEventRemoved );
           _this.dispatch( "trackremoved", track );
           track._media = null;
           return track;

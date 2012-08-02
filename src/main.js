@@ -225,6 +225,35 @@
         });
       }
 
+      function onTrackEventSelected( e ) {
+        _selectedEvents.push( e.target );
+      }
+
+      function onTrackEventDeSelected( e ) {
+        var trackEvent = e.target,
+            idx = _selectedEvents.indexOf( trackEvent );
+        if ( idx > -1 ) {
+          _selectedEvents.splice( idx, 1 );
+        }
+      }
+
+      function onTrackEventRemoved( e ) {
+        var trackEvent = e.data,
+            idx = _selectedEvents.indexOf( trackEvent );
+        if ( idx > -1 ) {
+          _selectedEvents.splice( idx, 1 );
+        }
+      }
+
+      this.deselectAllTrackEvents = function() {
+        // selectedEvents' length will change as each trackevent's selected property
+        // is set to false, so use a while loop here to loop through the continually
+        // shrinking selectedEvents array.
+        while ( _selectedEvents.length ) {
+          _selectedEvents[ 0 ].selected = false;
+        }
+      };
+
        /****************************************************************
        * Target methods
        ****************************************************************/
@@ -414,6 +443,10 @@
           } //for
         } //if
 
+        media.listen( "trackeventremoved", onTrackEventRemoved );
+        media.listen( "trackeventselected", onTrackEventSelected );
+        media.listen( "trackeventdeselected", onTrackEventDeSelected );
+
         media.listen( "trackeventrequested", mediaTrackEventRequested );
         media.listen( "mediaplayertyperequired", mediaPlayerTypeRequired );
 
@@ -451,6 +484,10 @@
           if ( media === _currentMedia ) {
             _currentMedia = undefined;
           } //if
+
+          media.unlisten( "trackeventremoved", onTrackEventRemoved );
+          media.unlisten( "trackeventselected", onTrackEventSelected );
+          media.unlisten( "trackeventdeselected", onTrackEventDeSelected );
 
           media.unlisten( "trackeventrequested", mediaTrackEventRequested );
           media.unlisten( "mediaplayertyperequired", mediaPlayerTypeRequired );
@@ -578,9 +615,6 @@
         selectedEvents: {
           get: function() {
             return _selectedEvents;
-          },
-          set: function(selectedEvents) {
-            _selectedEvents = selectedEvents;
           },
           enumerable: true
         },
