@@ -1,0 +1,599 @@
+@import "globals";
+@import "colors";
+@import "normalize";
+@import "ui";
+@import "main";
+@import "mediaqueries";
+@import "utilities";
+@import "print";
+
+// Grid calculations
+@gridTotal: 1080px;
+@gridMargin: 20px;
+@gridDivisions: 12;
+
+@gridUnit: ( @gridTotal - @gridMargin * ( @gridDivisions - 1 ) ) / @gridDivisions;
+
+// Have to do this manually :(
+@grid-1: @gridUnit;
+@grid-2: @gridUnit * 2 + @gridMargin;
+@grid-3: @gridUnit * 3 + @gridMargin * 2;
+@grid-4: @gridUnit * 4 + @gridMargin * 3;
+@grid-5: @gridUnit * 5 + @gridMargin * 4;
+@grid-6: @gridUnit * 6 + @gridMargin * 5;
+@grid-7: @gridUnit * 7 + @gridMargin * 5;
+@grid-8: @gridUnit * 8 + @gridMargin * 2;
+@grid-9: @gridUnit * 9 + @gridMargin * 8;
+@grid-10: @gridUnit * 10 + @gridMargin * 9;
+@grid-11: @gridUnit * 11 + @gridMargin * 10;
+@grid-12: @gridUnit * 12 + @gridMargin * 11;
+
+// Main Sections
+@headerHeight: @grid-1;
+@editorWidth: @grid-4;
+@trayHeight: @grid-3;
+@collapsed: @grid-1 * .7;
+@visualsHeight: @grid-1 * .7;
+@controlsHeight: @grid-1 * .7; // same a collapsed
+
+// Logo
+@logoWidth: 52px;
+
+// Video
+@videoPhone: 320px;
+@videoSmall: 560px;
+@videoTablet: 640px;
+@videoDesktop: 853px;
+@videoLarge: 1280px;
+
+.videoSize( @width ) {
+  width: @width;
+  height: @width * .56125;
+}
+
+//Controls
+
+
+// Utility
+@maxZ: 10000;
+
+// Colors
+@baseDark: #052938;
+@baseLight: #EFEFEF;
+@textShadow: 0 -2px 0 #000;
+@rouge: #CB2408;
+@green: #78B88F;
+
+
+/*********************************************************
+* Base
+*/
+
+html {
+  background: @noise #121212;
+}
+
+.butter-wrapper {
+  position: absolute;
+  top: headerHeight;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+section {
+  .box-sizing( border-box );
+  .transition( all .3s ease );
+}
+
+/*********************************************************
+* Buttons
+*/
+
+@buttonTopSpacing: 15px;
+
+.button() {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 2px;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.btn-shadow( @color ) {
+  box-shadow: inset 0 1px 0 lighten( @color, 10% ),
+  0 -1px 0 darken( @color, 20% ),
+  0 1px 0 darken( @color, 10% ),
+  1px 0 0 darken( @color, 5% ),
+  -1px 0 0 darken( @color, 5% );
+}
+
+.btn-shadow( @color, "hover" ) {
+  box-shadow: inset 0 1px 0 lighten( @color, 15% ),
+    0 -1px 0 darken( @color, 20% ),
+    0 1px 0 darken( @color, 14% ),
+    1px 0 0 darken( @color, 5% ),
+    -1px 0 0 darken( @color, 5% ),
+    0 2px 2px rgba( 0, 0, 0, 0.5 );
+}
+
+[class^="butter-btn-"],
+[class^=" butter-btn-"] {
+  .button();
+  &:hover {
+    cursor: pointer;
+  }
+  > .icon {
+    position: relative;
+    top: 2px;
+    margin-right: 5px;
+  }
+}
+
+[class^="butter-btn-"] + [class^="butter-btn-"] {
+  margin-left: 3px;
+}
+
+.butter-btn-dark {
+  color: @baseDark;
+  //border-top: 1px solid #000;
+  text-shadow: 0 1px white;
+  .btn-shadow( @baseLight - 10 );
+  .gradient( "vertical", lighten( @baseLight, 3% ), darken( @baseLight, 2% ) );
+  &:hover {
+    color: #000;
+    .btn-shadow( @baseLight, "hover" );
+  }
+}
+
+.butter-btn-red {
+  color: #EEE;
+  text-shadow:0 -1px 0 darken( @rouge, 20% );
+  .btn-shadow( @rouge );
+  .gradient( "vertical", @rouge, darken( @rouge, 6% ) ); 
+  &:hover {
+    color: #FFF;
+    .btn-shadow( @rouge, "hover" );
+  }
+}
+
+.btn-light,
+.ui-light a {
+  .button2( #EEE, 10%, #333, 3px, 10% );
+  font-size: 14px;
+  padding: 5px 10px;
+}
+
+
+
+/*********************************************************
+* Header
+*/
+
+#logo {
+  padding-left: @logoWidth - 10;
+  font-size: 18px;
+  font-weight: 600;
+  margin-left: @gridMargin;
+  color: @baseDark;
+  text-shadow: 0 1px 1px #FFF;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  line-height: @headerHeight;
+  background: url( ../img/logo.png ) no-repeat;
+  background-size: @logoWidth - 15;
+  float: left;
+}
+
+#butter-header-buttons {
+  padding-top: @buttonTopSpacing;
+  margin-right: @gridMargin;
+  float: right;
+}
+
+/*********************************************************
+* Editor
+*/
+
+@inputOutline: #CCC;
+@inputFocus: @rouge;
+@inputText: #555;
+
+@inputTextSize: 13px;
+@inputPadding: 5px;
+
+.butter-editor {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: @editorWidth;
+  .gradient( "vertical", @baseLight, darken( @baseLight, 5% ) );
+  box-shadow:  -1px 0 0 fade( #000, 20% );
+  overflow-x: hidden;
+  overflow-y: scroll;
+  z-index: 200;
+}
+.butter-editor-close-btn {
+   > i {
+    background-position: -456px -72px;
+  }
+}
+.butter-editor-outer {
+  .box-sizing( border-box );
+  width: @editorWidth;
+  padding-right: 20px; /* scrollbar */
+}
+
+.butter-editor-inner {
+  padding: 20px;
+
+  h3{
+    margin-top: 0;
+    text-transform: uppercase;
+    font-size: .9em;
+    letter-spacing: 0.08em;
+    color: #444;
+    text-shadow: 0 1px 0 #FFF;
+  }
+
+  label {
+    font-size: 13px;
+    display: block;
+    padding: @inputPadding 0;
+  }
+
+  fieldset {
+    margin-bottom: 13px;
+  }
+
+  input,
+  textarea {
+    border: 1px solid @inputOutline;
+    border-top-color: darken( @inputOutline, 10% );
+    border-radius: 2px;
+    color: @inputText;
+    padding: @inputPadding;
+    font-size: @inputTextSize;
+    box-sizing: border-box;
+    width: 100%;
+
+    &:focus {
+      outline: none;
+      border: 1px solid fade( @inputFocus, 50% );
+      box-shadow: 0 0 4px fade( @inputFocus, 50% );
+    }
+  }
+
+  textarea {
+    min-height: 100px;
+    line-height: 1.25;
+  }
+
+}
+
+/*********************************************************
+* Stage
+*/
+
+.butter-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: @editorWidth;
+  right: @editorWidth;
+  bottom: @trayHeight;
+  .gradient( "vertical", @baseLight, darken( @baseLight, 5% ) );
+}
+
+.butter-embed-container {
+  .videoSize( @videoDesktop );
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.butter-media-source {
+  padding: 10px 0;
+}
+
+.butter-video-container {
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 0 0 0 1px darken( @baseDark, 15% ),
+    0 1px 0 0 lighten( @baseDark, 3% );
+  .box-sizing( border-box );
+  background: darken( @baseDark, 10% );
+  video,
+  iframe {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+
+/*********************************************************
+* Tray
+*/
+
+.butter-tray {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: @editorWidth;
+  height: @trayHeight;
+  //background: darken( @baseDark, 5% );
+  .gradient( "vertical", darken( @baseLight, 10% ), darken( @baseLight, 5% ) );
+}
+
+.butter-btn-media {
+  float: left;
+  margin-right: 5px;
+}
+
+.butter-controls {
+  position: absolute;
+  top:0;
+  left: 0;
+  right: 0;
+  background: @baseDark;
+  height: @controlsHeight;
+  .box-sizing( border-box );
+   padding: 14px;
+
+  &:hover .ui-resizable-handle {
+    background: @baseLight;
+  }
+
+}
+
+.butter-controls-inner {
+  position: relative
+  display: block;
+  height: 8px;
+  display: block;
+  background: #E7EEF1;
+  border-radius: 5px;
+  overflow-x: hidden;
+}
+
+.butter-scrubber {
+  position: absolute;
+  cursor: move;
+  left: 30px;
+  top: -5px;
+  padding-bottom: 2px;
+  width: 1px;
+  height: @controlsHeight;
+  background: @rouge;
+}
+
+.butter-scrubber-large {
+  position: absolute;
+  cursor: move;
+  top: 21px;
+  left: 30px;
+  padding-bottom: 40px;
+  width: 1px;
+  height: 100px;
+  background: @rouge;
+}
+
+.butter-scrubber-head {
+  @_scrubberHeadSize: 12px;
+  @_scrubberBorder: 3px;
+
+  position: absolute;
+  top: -@_scrubberHeadSize;
+  left: -@_scrubberHeadSize / 2;
+  width: @_scrubberHeadSize - @_scrubberBorder;
+  height: @_scrubberHeadSize - @_scrubberBorder;
+  border-radius: @_scrubberHeadSize;
+  background: @green;
+  border: @_scrubberBorder solid @baseLight;
+  box-shadow: 0 2px 2px 1px rgba( 0, 0, 0, .4 );
+  z-index: @maxZ;
+}
+
+/*********************************************************
+* Visualization
+*/
+
+.butter-visuals {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  .gradient( "vertical", darken( @baseLight, 10% ), darken( @baseLight, 20% ) );
+  border: 1px solid rgba(57, 75, 81, 0.25);
+  border-bottom-color: #777;
+  box-shadow: inset 0 1px 0 lighten( @baseLight, 5% ),
+    0 3px 20px rgba( 0, 0, 0, .3 );
+  border-width: 1px 0 1px 0;
+  padding: @visualsHeight / 3 ;
+
+  .butter-visuals-inner {
+    position: relative;
+    display: block;
+    height: @visualsHeight * 2 / 3;
+    display: block;
+    background: rgba( 0, 0, 0, 0.1 );
+    border-radius: 5px;
+    border-top: 1px solid darken( @baseLight, 50% );
+  }
+
+}
+
+.butter-range {
+  position: absolute;
+  top: 0;
+  width: 100px;
+  height: 28px;
+  .gradient( "vertical", fade( #FFF, 20% ), fade( #FFF, 7% ));
+  border: 3px solid #FFF;
+  box-shadow: inset 0 1px 2px 1px rgba( 0, 0, 0, .5 );
+
+  .ui-resizable-handle {
+    @_handlesHeight: 14px;
+    @_handlesWidth: 4px;
+
+    display: block;
+    position: absolute;
+    top: 50%;
+    height: @_handlesHeight;
+    width: @_handlesWidth;
+    margin-top: -@_handlesHeight / 2;
+    cursor: pointer;
+    
+    &.ui-resizable-w {
+      left: -@_handlesWidth / 2;
+    }
+
+    &.ui-resizable-e {
+      right: -@_handlesWidth / 2;
+    }
+
+  }
+
+} // range
+
+#butter-visualization {
+  position: absolute;
+  top: 0px;
+  bottom: 5px;
+  left: 0;
+  right: 0;
+  margin: 5px;
+  list-style: none;
+
+  li {
+    position: absolute;
+    height: 3px;
+    background: @rouge;
+  }
+
+}
+
+#butter-tracks-container {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 150px;
+  overflow: hidden;
+}
+
+#butter-tracks {
+  position: relative;
+  @_trackHeight: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 2000px;
+  height: 3 * ( @_trackHeight + 5 );
+
+  li {
+    position: absolute;
+    display: block;
+    .gradient( "vertical", @baseLight, darken( @baseLight, 5% ) );
+    border: 1px solid rgba( 0, 0, 0, .3 );
+    box-shadow: inset 0 1px 0 #FFF,
+      0 1px 1px rgba( 0, 0, 0, .8 );
+    border-radius: 5px;
+    height: @_trackHeight;
+    margin-bottom: 5px;
+  }
+}
+
+
+
+
+
+/*********************************************************
+* Collapsed states
+*/
+
+.butter-editor-collapsed {
+  .butter-editor {
+    width: 0;
+  }
+  .butter-tray {
+    right: 0;
+  }
+  .butter-stage {
+    right: 0;
+  }
+  .butter-editor-close-btn > i {
+    background-position: -432px -72px; // left
+  }
+}
+
+.butter-tray-collapsed {
+  .butter-tray{
+    height: @collapsed;
+  }
+  .butter-stage {
+    bottom: @collapsed;
+  }
+}
+
+
+/*********************************************************
+* Media Queries
+*/
+
+@_editorWidth: 306px;
+
+@mediaSmallMin: 560px + @_editorWidth;
+@mediaTabletMin: 768px + @_editorWidth;
+@mediaDesktopMin: 1024px + @_editorWidth;
+@mediaLargeMin: 1280px + @_editorWidth;
+
+@mediaPhoneMax: @mediaSmallMin;
+@mediaSmallMax: @mediaTabletMin;
+@mediaTabletMax: @mediaDesktopMin;
+@mediaDesktopMax: @mediaLargeMin;
+
+ /* Smartphones (portrait and landscape) ----------- */
+@media only screen and ( max-width: @mediaPhoneMax ) {
+
+  .butter-embed-container {
+    .videoSize( @videoPhone );
+  }
+
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and ( min-width: @mediaSmallMin ) and ( max-width: @mediaSmallMax ) {
+  .butter-embed-container {
+    .videoSize( @videoSmall );
+  }
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and ( min-width: @mediaTabletMin ) and ( max-width: @mediaTabletMax ) {
+  .butter-embed-container {
+    .videoSize( @videoTablet );
+  }
+}
+
+/* Desktops and laptops ----------- */
+@media only screen ( min-width: @mediaDesktopMin ) {
+  .butter-embed-container {
+    .videoSize( @videoDesktop );
+  }
+}
+
+/* Large screens ----------- */
+@media only screen and (min-width: @mediaLargeMin ) {
+  .butter-tray-collapsed .butter-embed-container {
+    margin-top: 0;
+    .videoSize( @videoLarge );
+  }
+}
+
+/* iPhone 4 ----------- */
+@media only screen and (-webkit-min-device-pixel-ratio : 1.5), only screen and (min-device-pixel-ratio : 1.5) {
+/* Styles */
+}
+
