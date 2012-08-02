@@ -103,12 +103,16 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     function onTrackEventMouseDown( e ){
       var trackEvent = e.data.trackEvent,
-          originalEvent = e.data.originalEvent;
+          originalEvent = e.data.originalEvent,
+          isHandle = originalEvent.target.classList.contains( "handle" );
 
       _currentMouseDownTrackEvent = trackEvent;
 
-      trackEvent.selected = true;
-      if( !originalEvent.shiftKey ){
+      if ( !isHandle ) {
+        trackEvent.selected = true;
+      }
+
+      if( !originalEvent.shiftKey && !isHandle ){
         var tracks = _media.tracks;
         for( var t in tracks ){
           if( tracks.hasOwnProperty( t ) ){

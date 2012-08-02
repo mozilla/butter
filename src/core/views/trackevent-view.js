@@ -21,6 +21,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         _resizable,
         _trackEvent = trackEvent,
         _dragging = false,
+        _resizing = false,
         _padding = 0,
         _elementText,
         _this = this;
@@ -118,6 +119,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
           return _dragging;
         }
       },
+      resizing: {
+        enumerable: true,
+        get: function() {
+          return _resizing;
+        }
+      },
       zoom: {
         enumerable: true,
         get: function(){
@@ -181,7 +188,13 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                 containment: _parent.element.parentNode,
                 scroll: _parent.element.parentNode.parentNode,
                 padding: _padding,
-                stop: movedCallback
+                start: function() {
+                  _resizing = true;
+                },
+                stop: function() {
+                  _resizing = false;
+                  movedCallback();
+                }
               });
 
               _element.setAttribute( "data-butter-draggable-type", "trackevent" );
