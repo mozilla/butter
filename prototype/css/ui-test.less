@@ -260,7 +260,8 @@ header {
     border: 1px solid #CCC;
     box-shadow: 1px 3px 7px -2px rgba( 0, 0, 0, .5 );
 
-    &:after {
+    &:after,
+    &:before {
       content: "";
       position: absolute;
       top: -5px;
@@ -272,6 +273,11 @@ header {
       border-right: 5px solid transparent;  
       border-bottom: 5px solid #FFF;
       z-index: 100001;
+    }
+
+    &:before {
+      top: -6px;
+      border-bottom: 5px solid #CCC;
     }
    
   }
