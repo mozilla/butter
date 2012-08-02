@@ -107,6 +107,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
         updateOptions[ propertyName ] = element.value;
         callback( trackEvent, updateOptions );
       }, false );
+
       element.addEventListener( "keyup", function( e ) {
         if ( __safeKeyUpKeys.indexOf( e.which ) > -1 ) {
           return;
@@ -122,6 +123,12 @@ define( [ "util/lang", "util/keys", "./base-editor",
             callback( trackEvent, updateOptions );
           }
         }
+      }, false );
+
+      element.addEventListener( "change", function( e ) {
+        var updateOptions = {};
+        updateOptions[ propertyName ] = element.value;
+        trackEvent.update( updateOptions );
       }, false );
     };
 
@@ -157,6 +164,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
         updateOptions[ propertyName ] = element.value;
         trackEvent.update( updateOptions );
       }, false );
+
       element.addEventListener( "keyup", function( e ) {
         if ( __safeKeyUpKeys.indexOf( e.which ) > -1 ) {
           return;
@@ -165,6 +173,14 @@ define( [ "util/lang", "util/keys", "./base-editor",
         updateOptions[ propertyName ] = element.value;
         trackEvent.update( updateOptions );
       }, false );
+
+      if ( element.type === "number" ) {
+        element.addEventListener( "change", function( e ) {
+          var updateOptions = {};
+          updateOptions[ propertyName ] = element.value;
+          trackEvent.update( updateOptions );
+        }, false );
+      }
     };
 
     /**
