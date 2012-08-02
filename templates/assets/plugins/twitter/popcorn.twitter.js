@@ -36,7 +36,7 @@
           options: [ "Mixed", "Recent", "Popular" ],
           values: [ "mixed", "recent", "popular" ],
           label: "Search Results",
-          "default": "Mixed"
+          "default": "mixed"
         },
         numberOfTweets: {
           elem: "input",
@@ -69,7 +69,7 @@
           options: [ "Ticker", "Sidebar", "Feed" ],
           values: [ "ticker", "sidebar", "feed" ],
           label: "Tweet Layout",
-          "default": "Feed",
+          "default": "feed",
           optional: true
         },
         top: {
@@ -114,6 +114,11 @@
       }
 
       options._target = target;
+
+      // safeguard against no search/username being provided
+      if ( options.search && options.username ) {
+        options.search = options._natives.manifest.options.search[ "default" ];
+      }
 
       options._container = document.createElement( "div" );
       options._container.classList.add( "popcorn-twitter" );
@@ -169,13 +174,13 @@
         }
 
         // TODO: Handle Transitions stuff here later
-        // if ( options.transitions.transitionEnd ) {
-        //   options._container.classList.add( options.transitions.transitionEnd );
-        // }
+        if ( options.transitions.transitionEnd ) {
+          options._container.classList.add( options.transitions.transitionEnd );
+        }
 
-        // if ( options.transitions.transitionIn ) {
-        //   options._container.classList.add( options.transitions.transitionIn );
-        // }
+        if ( options.transitions.transitionIn ) {
+          options._container.classList.add( options.transitions.transitionIn );
+        }
 
         options._container.appendChild( tweetsContainer );
       }
@@ -199,29 +204,23 @@
                        "&rpp=" + options.numberOfTweets || 10;
       }
 
-      Popcorn.xhr(
-        {
-          url: requestString,
-          dataType: "jsonp",
-          success: twitterCallback
-        }
-      );
+      Popcorn.xhr( { url: requestString, dataType: "jsonp", success: twitterCallback } );
 
     },
     start: function( event, options ) {
       if ( options._container ) {
         options._container.style.display = "block";
-        //options._container.classList.add( "on" );
+        options._container.classList.add( "on" );
       }
     },
     end: function( event, options ) {
       if ( options._container ) {
         options._container.style.display = "none";
-        //options._container.classList.remove( "on" );
+        options._container.classList.remove( "on" );
       }
     },
     _teardown: function( options ) {
-      // DESTROY EVERYTHING
+      // Remove the plugins container when being destroyed
       if ( options._container && options._target ) {
         options._target.removeChild( options._container );
       }
