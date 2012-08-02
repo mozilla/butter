@@ -33,44 +33,58 @@
             
             <div class="butter-btn-group butter-login-true">
                 <a class="butter-btn-dark"><span class="butter-avatar"></span><span class="mobile-hide">brett_gaylor</a>
-              <a href="#settings" id="project-name-btn" class="butter-btn-dark set-hash"><strong><span class="mobile-hide">Project: </strong>Newscaster</span></a>
+              <a class="butter-btn-dark "><strong><span class="mobile-hide">Project: </strong>Newscaster</span></a>
             </div>
             <a id="butter-btn-save" class="butter-btn-green butter-login-true">Save</a>
           </div>
         </header>
-  <!--
+
         <div id="media-source" class="butter-media-source">
-           <a class="butter-btn-dark"><i class="icon icon-white icon-plus"></i> Add Video Source</a>
+           <a id="edit-media" class="butter-btn-dark"><i class="icon icon-white icon-film"></i> Add Video Source</a>
         </div>
-    -->
+    
         <div class="butter-video-container">
           <video id="video" preload data-butter="media" controls>
             <source src="http://ia700300.us.archive.org/9/items/nozon-test1/Nozon-test_512kb.mp4">
             <source src="http://ia700300.us.archive.org/9/items/nozon-test1/Nozon-test.ogv">
           </video>
+          <div class="edit-media-overlay off">
+            <div class="butter-editor-inner">
+              <h3>Edit Media</h3>
+              <fieldset>
+                <input id="butter-media-input" type="text" placeholder="http://www.dasdasdas.com/dasdasdasd.mp4">
+              </fieldset>
+              <fieldset class="html5-fields">
+                <input class="butter-media-chrome" type="text" value="http://www.dasdasdas.com/dasdasdasd.mp4">
+                <label>Firefox</label>
+                <input class="butter-media-firefox warning" type="text" placeholder="Warning, not including an .ogv version will make your project unviewable in firefox">
+              </fieldset>
+              <fieldset>
+                <p><a class="butter-btn-dark">Add Media</a></p>
+                <p></p>
+              </fieldset>
+            </div>
+          </div>
         </div>
       </div>
     </section>
     <section id="editor" class="butter-editor">
       <header class="butter-editor-header">
         <ul>
-          <li><a href="#media" id="media-tab" class="butter-btn-dark butter-active"><i class="icon icon-white icon-film"></i>Media</a></li>
-          <li><a href="#popcorn" class="butter-btn-dark"><i class="icon icon-white icon-comment"></i>Popcorn</a></li>
+          <li><a href="#popcorn" class="butter-btn-dark butter-active"><i class="icon icon-white icon-comment"></i>Add Popcorn</a></li>
           <li><a href="#share" class="butter-btn-dark"><i class="icon icon-white icon-share"></i>Share</a></li>
           <li><a href="#settings" class="butter-btn-dark"><i class="icon icon-only icon-white icon-cog"></i></a></li> 
           <li class="fl-right"><a href="#collapse" class="butter-btn-dark butter-editor-close-btn"><i class="icon icon-only icon-white icon-chevron-right"></i></a></li>  
         </ul>
       </header>
 
-      <div data-panel="media" class="butter-editor-panel butter-panel-active">
+      <div data-panel="media" class="butter-editor-panel">
         <div class="butter-editor-breadcrumbs">Change Media Source</div>
         <div class="butter-editor-outer">
           <div class="butter-editor-inner">  
             <fieldset>
               <label>Add a URL</label>
-              <div id="media-input">
-                <input type="text" placeholder="http://" value="http://ia700300.us.archive.org/9/items/nozon-test1/Nozon-test_512kb.mp4">
-              </div>
+              <input type="text" placeholder="http://" value="http://ia700300.us.archive.org/9/items/nozon-test1/Nozon-test_512kb.mp4">
             </fieldset>          
             <fieldset>
           
@@ -79,11 +93,10 @@
         </div>
       </div><!-- #media -->
 
-      <div data-panel="popcorn" class="butter-editor-panel">
+      <div data-panel="popcorn" class="butter-editor-panel butter-panel-active">
         <div class="butter-editor-breadcrumbs">Event Menu</div>
         <div class="butter-editor-outer">
           <div class="butter-editor-inner">  
-            
             <fieldset class="btn-events-list">
                 <a class="btn-light btn-events tooltip"><i class="icon-plugin plugin-text"></i>
                   <span>Text</span>
@@ -96,26 +109,19 @@
                 <a class="btn-light btn-events"><i class="icon-plugin plugin-image"></i><span>Image</span></a>
                 <a class="btn-light btn-events"><i class="icon-plugin plugin-map"></i><span>Map</span></a>
                 <a class="btn-light btn-events"><i class="icon-plugin plugin-toc"></i><span>Stuff</span></a>
-            </fieldset>  
+            </fieldset>
             <fieldset>
-              <input id="plugin-search" class="big" type="search" placeholder="Search">
+              <input class="big" type="search" placeholder="Search">
             </fieldset>        
-            <fieldset class="more-plugin-list">
-              <label><strong>Search results</strong></label>
-              <ul class="nav">
-                <li>
-                  <a class="btn-light">Kinetic text plugin</a>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore ...</p>
-                </li>
-                <li>
-                  <a class="btn-light">Secret Robotron</a>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore ...</p>
-                </li>
-                <li>
-                  <a class="btn-light">Awesome purple dots</a>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore ...</p>
-                </li>
-              </ul>
+            <fieldset>
+              <!--<div class="ui-button-group ui-light">
+                <a>This is a dropdown</a>
+                <select name="stledas" id="myselect1">
+                  <option val="jeldo">dasd</option>
+                  <option val="dasda">d32fff</option>
+                </select>
+              </div>
+              -->
             </fieldset>
           </div>
         </div>
@@ -225,12 +231,7 @@
     </div>
   </section>
 
-  <div id="butter-tooltip" style="hidden">
-    <div class="butter-tooltip tooltip-large">
 
-     <div><i class="icon-plugin plugin-video"></i>Add your video!</div>
-    </div>
-  </div>
   </div>
 <!--
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
@@ -319,15 +320,11 @@
     function openPanel ( hash ) {
       var panel = hash.replace( "#", "" );
 
-      if ( panel === "collapse" ) {
-        document.body.classList.toggle( "butter-editor-collapsed" );
-      } else {
-        $( ".butter-panel-active" ).removeClass( "butter-panel-active" );
-        $( "[data-panel=\"" + panel + "\"]" ).addClass( "butter-panel-active" );
+      $( ".butter-panel-active" ).removeClass( "butter-panel-active" );
+      $( "[data-panel=\"" + panel + "\"]" ).addClass( "butter-panel-active" );
 
-        $( ".butter-active" ).removeClass( "butter-active" );
-        $( "a[href=\""+ hash + "\"]" ).addClass( "butter-active" );
-      }
+      $( ".butter-active" ).removeClass( "butter-active" );
+      $( "a[href=\""+ hash + "\"]" ).addClass( "butter-active" );
 
     }
 
@@ -339,31 +336,25 @@
 
     $( ".set-hash" ).bind( "click", function() {
       openPanel( this.hash );
-      console.log( this );
     });
 
-
-    // LOGIN STUFF
-    $( ".butter-login-true" ).hide();
-    $( ".butter-login-false" ).click( function() {
-      $( ".butter-login-false" ).hide();
-      $( ".butter-login-true" ).show();
-    });
     // ON LOAD, SHOW TOOLTIP
 
     function hideToolTip() {
-      $( "#media-input > .butter-tooltip" ).removeClass( "tooltip-on" );
+      $( "#edit-media > .butter-tooltip" ).removeClass( "tooltip-on" );
       document.body.removeEventListener( "click", hideToolTip );
-      document.getElementById( "media-tab" ).removeEventListener( "click", hideToolTip );
+      document.getElementById( "edit-media" ).removeEventListener( "click", hideToolTip );
     }
 
-    $( "#media-input" ).append( $( "#butter-tooltip" ).html() );
+    $( "#edit-media" ).append( '<div class="butter-tooltip">' +
+     '<div>Add your video URL here</div>' +
+      '</div>' );
 
     if ( !hash ) {
 
       window.setTimeout( function(){
-        $( "#media-input > .butter-tooltip" ).addClass( "tooltip-on" );
-        $( "#media-input" ).bind( "hover", hideToolTip );
+        $( "#edit-media > .butter-tooltip" ).addClass( "tooltip-on" );
+        $( "#edit-media" ).bind( "hover", hideToolTip );
 
         document.body.addEventListener( "click", hideToolTip, false );
 
@@ -371,14 +362,37 @@
       
     }
 
-    // EDITOR STUFF
-    $( ".butter-editor-header > ul a" ).bind( "click", function( e ) {
-      openPanel ( this.hash );
+    // EDIT MEDIA BUTTON
+    $( "#edit-media" ).bind( "click", function(){
+      $( ".edit-media-overlay" ).toggleClass( "off" );
     });
 
-    // PLUGIN SEARCH
-    document.getElementById( "plugin-search" ).addEventListener( "keydown", function() {
-      $( ".more-plugin-list" ).fadeIn();
+    document.getElementById( "butter-media-input" ).addEventListener( "keydown", function() {
+      var $this = $( this );
+      console.log(  $this.val().index( "mp4" ) );
+      if( $this.val().index( "mp4" ) ) {
+        $this.hide();
+        $( ".html5-fields" ).fadeIn();
+      }
+      
+
+    });
+
+    // LOGIN STUFF
+    $( ".butter-login-true" ).hide();
+    $( ".butter-login-false" ).click( function() {
+      $( ".butter-login-false" ).hide();
+      $( ".butter-login-true" ).show();
+    });
+
+    // EDITOR STUFF
+    $( ".butter-editor-header > ul a" ).bind( "click", function( e ) {
+      if ( this.hash === "#collapse" ) {
+        e.preventDefault();
+        document.body.classList.toggle( "butter-editor-collapsed" );
+        return;
+      }
+      openPanel ( this.hash );
     });
 
     // TRAY STUFF

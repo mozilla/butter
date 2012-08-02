@@ -226,16 +226,6 @@ header {
     > div { margin-top: 10px; }
   }
 
- &.tooltip-large {
-    > div {
-      font-size: 16px;
-      width: 150px;
-      padding: 20px;
-      color: @green;
-      font-weight: 700;
-    }
-  }
-
   opacity: 0;
   position: absolute;
   top: 90%;
@@ -243,20 +233,22 @@ header {
   margin-top: -10px;
   margin-left: -60px;
   z-index: 100000;
+  overflow: hidden;
   .transition( all .3s ease );
 
   > div {
     position: relative;
-    line-height: 1.25;
+    line-height: 1.4;
     margin-top: -1000px;
     width: 120px;
     background: #FFF;
     text-shadow: none;
     color: #444;
-    font-size: 11px;
+    font-size: 12px;
     padding: 10px;
     .box-sizing( border-box );
     border-radius: 2px;
+    
     border: 1px solid #CCC;
     box-shadow: 1px 3px 7px -2px rgba( 0, 0, 0, .5 );
 
@@ -271,15 +263,15 @@ header {
       height: 0; 
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;  
-      border-bottom: 5px solid #FFF;
-      z-index: 100001;
+      border-bottom: 5px solid @baseLight;
     }
-
+    &:after {
+      z-index: 100000;
+    }
     &:before {
       top: -6px;
-      border-bottom: 5px solid #CCC;
+      border-bottom: 5px solid #999;
     }
-   
   }
 }
 
@@ -290,10 +282,11 @@ header {
 
 .butter-header {
   z-index: 100;
+  padding: 20px 0;
   .clearfix();
-  position: absolute;
-  left: 20px;
-  top: 20px;
+    position: absolute;
+  left: 10px;
+  top: 0;
   width: 100%;
 }
 
@@ -346,11 +339,6 @@ header {
 
 #butter-btn-save {
   margin-left: 10px;
-}
-
-
-#media-input {
-  position: relative;
 }
 
 /*********************************************************
@@ -549,11 +537,6 @@ header {
   background: url( ../img/plugins/image.png ) no-repeat;
 }
 
-.plugin-video {
-  background: url( ../img/plugins/video.png ) no-repeat;
-  height: 30px;
-}
-
 .plugin-map {
   background: url( ../img/plugins/map.png ) no-repeat;
 }
@@ -562,23 +545,6 @@ header {
   background: url( ../img/plugins/toc.png ) no-repeat;
 }
 
-.more-plugin-list {
-  display: none;
-  > ul {
-    box-shadow: inset 0 1px 1px 0 rgba( 0, 0, 0, .2 );
-    height: 300px;
-    overflow: scroll;
-    > li {
-      padding: 10px 0;
-      box-shadow: 0 1px 0 #FFF,
-        inset 0 -1px 0 0 #CCC;
-      > p {
-        font-size: 0.8em;
-        margin-bottom: 0;
-      }
-    }
-  }
-}
 
 /*********************************************************
 * Stage
@@ -604,6 +570,7 @@ header {
 }
 
 .butter-video-container {
+  position: relative;
   width: 100%;
   height: 100%;
   box-shadow: inset 0 0 0 1px darken( @baseDark, 15% ),
@@ -875,6 +842,45 @@ header {
   bottom: 0;
   width: 1px;
   background: @rouge;
+}
+
+/*********************************************************
+* Overlay
+*/
+
+.edit-media-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: auto;
+  width: 100%;
+  background: fade( @baseDark, 50% );
+  .transition( height .3s ease );
+  overflow: hidden;
+  color: #EEE;
+
+  h3 {
+    margin-top: 0;
+  }
+
+  &.off {
+    height: 0;
+    .transition( height .3s ease );
+  }
+}
+
+.html5-fields {
+  display: none;
+  .warning {
+    border: 1px solid @rouge;
+ 
+    &::-webkit-input-placeholder {
+      color: @rouge;
+    }
+    &:-moz-placeholder {
+      color: @rouge;
+    }
+  }
 }
 
 
