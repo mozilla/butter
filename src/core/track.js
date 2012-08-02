@@ -23,6 +23,8 @@ define( [
     var _trackEvents = [],
         _id = "Layer" + __guid++,
         _target = options.target,
+        _ghostTrack,
+        _isGhost = false,
         _logger = new Logger( _id ),
         _name = options.name || _id,
         _order = 0,
@@ -68,6 +70,24 @@ define( [
           for ( i = 0, l = _trackEvents.length; i < l; i++ ) {
             _trackEvents[ i ].update();
           }
+        }
+      },
+      isGhost: {
+        enumerable: true,
+        get: function() {
+          return _isGhost;
+        },
+        set: function( val ) {
+          _isGhost = val;
+        }
+      },
+      ghostTrack: {
+        enumerable: true,
+        get: function() {
+          return _ghostTrack;
+        },
+        set: function( val ) {
+          _ghostTrack = val;
         }
       },
       target: {
@@ -202,8 +222,6 @@ define( [
         _view.removeTrackEvent( trackEvent );
         trackEvent.unbind();
         trackEvent._track = null;
-        trackEvent.ghost = null;
-        trackEvent.isGhost = false;
         trackEvent.setPopcornWrapper( null );
         _this.dispatch( "trackeventremoved", trackEvent );
         return trackEvent;

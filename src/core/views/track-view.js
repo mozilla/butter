@@ -147,6 +147,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
           currentTrackEvent,
           rect1 = teData.view.element.getBoundingClientRect(),
           rect2,
+          track,
+          ghost,
           overlapFound = false;
 
       if ( !teData.dragging ) {
@@ -161,8 +163,9 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
         currentTrackEvent = _trackEvents[ i ].trackEvent;
         rect2 = currentTrackEvent.view.element.getBoundingClientRect();
-        if ( teData.id !== currentTrackEvent.id  && !teData.isGhost ) {
+        if ( teData.id !== currentTrackEvent.id ) {
           if ( isOverlapping( rect1, rect2 ) ) {
+            console.log( "MATCH ON TRACK", currentTrackEvent._track.id );
             overlapFound = true;
             _track._media.dispatch( "trackeventoverlap", {
               trackevent: teData,
@@ -172,10 +175,18 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
           }
         }
       }
+
       if ( !overlapFound && teData.ghost ) {
+        console.log( "cleaning up ghost" );
+        ghost = teData.ghost;
+        track = ghost._track;
+        if ( track && track.ghostTrack ) {
+          track._media.removeTrack( track.ghostTrack );
+          track.ghostTrack.isGhost = false;
+          track.ghostTrack = null;
+        }
         teData.ghost._track.removeTrackEvent( teData.ghost );
         teData.ghost = null;
-        teData.ghost.view = null;
         teData.isGhost = false;
       }
     };

@@ -30,14 +30,14 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
           te = data.data.trackevent,
           track = data.data.track,
           ghost,
+          ghostTrack,
           foundTrack = false,
           currentTrack = te._track;
 
       for ( var i = 0, l = tracks.length; i < l; i++ ) {
         // search for the track under the current one
-        if ( ( tracks[ i ].order - track.order ) === 0 ) {
-          console.log( "OVERLAPPING", te.ghost, te.isGhost );
-          if ( !te.ghost && !te.isGhost ) {
+        if ( tracks[ i ].id === track.id && tracks[ i + 1 ] ) {
+          if ( !te.ghost ) {
             ghost = te.createGhost();
             ghost.view.zoom = tracks[ i + 1 ].view.zoom;
             tracks[ i + 1 ].addTrackEvent( ghost );
@@ -46,8 +46,8 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
           } else if ( te.ghost ) {
             ghost = te.ghost;
             if ( ghost.view ) {
-            ghost.view.zoom = tracks[ i ].view.zoom;
-            ghost.view.updatePosition( te.view.element );
+              ghost.view.zoom = tracks[ i ].view.zoom;
+              ghost.view.updatePosition( te.view.element );
             }
           }
           foundTrack = true;
@@ -57,9 +57,14 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
       if ( !foundTrack ) {
         if ( !te.ghost && !te.isGhost ) {
+          ghostTrack = track._media.addTrack();
+          ghostTrack.isGhost = true;
           ghost = te.createGhost();
-          tracks[ i + 1 ].addTrackEvent( ghost );
+          tracks[ tracks.length - 1 ].addTrackEvent( ghost );
+          ghost._track.ghostTrack = ghostTrack;
+          console.log( ghostTrack.id );
           ghost.view.element.style.opacity = "0.3";
+          ghost.view.updatePosition( te.view.element );
         }
       }
     });

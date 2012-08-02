@@ -186,17 +186,28 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                   _dragging = false;
                   _this.dispatch( "trackeventdragstopped" );
                   movedCallback();
+                  if ( _trackEvent.ghost ) {
+                    ghost = _trackEvent.ghost;
+                    var te = _trackEvent._track.removeTrackEvent( _trackEvent );
+                    te.ghost._track.addTrackEvent( te );
+                    te.ghost._track.removeTrackEvent( te.ghost );
+                    _trackEvent.isGhost = false;
+                  }
                 },
                 drag: function( element ) {
                   var tracks = _trackEvent._track._media.tracks,
                       rect1 = element.getBoundingClientRect(),
                       rect2;
+
                   for ( var i = 0, l = tracks.length; i < l; i++ ) {
-                    rect2 = tracks[ i ].view.element.getBoundingClientRect();
-                    if ( !( ( rect1.top > rect2.bottom ) || ( rect1.bottom < rect2.top ) ) ) {
-                      tracks[ i ].view.checkOverlay( _trackEvent );
+                    if ( tracks[ i ]  ) {
+                      rect2 = tracks[ i ].view.element.getBoundingClientRect();
+                      if ( !( ( rect1.top > rect2.bottom ) || ( rect1.bottom < rect2.top ) ) ) {
+                        tracks[ i ].view.checkOverlay( _trackEvent );
+                      }
                     }
                   }
+
                 },
                 revert: true
               });
