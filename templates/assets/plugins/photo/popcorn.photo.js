@@ -27,25 +27,25 @@
             elem: "input",
             type: "number",
             label: "Width",
-            "default": 150
+            "default": 20
           },
           height: {
             elem: "input",
             type: "number",
             label: "Height",
-            "default": 150
+            "default": 15
           },
           top: {
             elem: "input",
             type: "number",
             label: "Top",
-            "default": 100
+            "default": 5
           },
           left: {
             elem: "input",
             type: "number",
             label: "Left",
-            "default": 200
+            "default": 5
           },
           start: {
             elem: "input",
@@ -75,10 +75,10 @@
         }
           options._container.style.position = "absolute";
           options._container.style.display = "none";
-          options._container.style.width = options.width + "px";
-          options._container.style.height = options.height + "px";
-          options._container.style.top = options.top + "px";
-          options._container.style.left = options.left + "px";
+          options._container.style.width = options.width + "%";
+          options._container.style.height = options.height + "%";
+          options._container.style.top = options.top + "%";
+          options._container.style.left = options.left + "%";
 
         if ( !target && Popcorn.plugin.debug ) {
           target = context.media.parentNode;

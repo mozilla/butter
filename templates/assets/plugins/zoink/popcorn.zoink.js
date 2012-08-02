@@ -151,22 +151,22 @@
           elem: "input",
           type: "number",
           label: "Top",
-          units: "px",
-          "default": 200
+          units: "%",
+          "default": 5
         },
         left: {
           elem: "input",
           type: "number",
           label: "Left",
-          units: "px",
-          "default": 200
+          units: "%",
+          "default": 50
         },
         width: {
           elem: "input",
           type: "number",
-          units: "px",
+          units: "%",
           label: "Max width",
-          "default": 200
+          "default": 10
         }
       }
     },
@@ -189,9 +189,9 @@
           options.classes = "";
         }
 
-        var width = normalize( options.width, 100, 700 ) + "px",
-            top = normalize( options.top, -1000, 1000 ) + "px",
-            left = normalize( options.left, -1000, 1000 ) + "px",
+        var width = normalize( options.width, 5, 100 ) + "%",
+            top = normalize( options.top, 1, 100 ) + "%",
+            left = normalize( options.left, 1, 100 ) + "%",
             style = container.style,
             flip = options.flip && " flip" || "";
 
