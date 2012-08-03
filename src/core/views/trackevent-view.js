@@ -22,6 +22,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         _trackEvent = trackEvent,
         _dragging = false,
         _padding = 0,
+        _elementText,
         _this = this;
 
     EventManagerWrapper( _this );
