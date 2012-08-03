@@ -1,3 +1,4 @@
+/*global google*/
 /* This Source Code Form is subject to the terms of the MIT license
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
@@ -15,30 +16,14 @@
         _targetSelectElement,
         _trackEvent,
         _popcornEventMapReference,
-        _extraStyleTag,
         _mapListeners;
 
     /**
-     * Member: onCenterChanged
+     * Member: onDragEnd
      *
-     * GoogleMaps center changed event handler. Updates the associated trackevent after map center is moved.
+     * GoogleMaps drag ended event handler. Updates the associated trackevent after the drag has ended.
      */
     function onDragEnd() {
-      var center = _popcornEventMapReference.getCenter(),
-          updateOptions = {
-            lat: center.lat(),
-            lng: center.lng(),
-            location: ""
-          };
-      _trackEvent.update( updateOptions );
-    }
-
-    /**
-     * Member: onCenterChanged
-     *
-     * GoogleMaps center changed event handler. Updates the associated trackevent after map center is moved.
-     */
-    function onCenterChanged() {
       var center = _popcornEventMapReference.getCenter(),
           updateOptions = {
             lat: center.lat(),
@@ -94,7 +79,7 @@
     function removeMapListeners() {
       if ( _popcornEventMapReference && _trackEvent.popcornTrackEvent._map ) {
         while ( _mapListeners.length ) {
-          google.maps.event.removeListener( _mapListeners.pop() );  
+          google.maps.event.removeListener( _mapListeners.pop() );
         }
       }
     }
@@ -112,11 +97,11 @@
         _trackEvent.popcornTrackEvent.onmaploaded = function( options, map ){
           _popcornEventMapReference = map;
           setupMapListeners();
-        }
+        };
       }
       else {
         _popcornEventMapReference = _trackEvent.popcornTrackEvent._map;
-        setupMapListeners();        
+        setupMapListeners();
       }
     }
 
@@ -211,7 +196,7 @@
                 else {
                   _this.attachInputChangeHandler( element, trackEvent, name, updateTrackEventWithoutTryCatch );
                 }
-                
+
               }
             }
           },

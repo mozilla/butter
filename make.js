@@ -276,7 +276,7 @@ target.docs = function() {
 };
 
 target.check = function() {
-  checkJS( SRC_DIR );
+  checkJS( SRC_DIR, EDITORS_DIR );
   checkCSS( CSS_DIR );
   target["check-html"]();
 };
@@ -288,10 +288,6 @@ target['check-templates'] = function() {
 
 target['check-css'] = function( dirs ) {
   checkCSS( CSS_DIR );
-};
-
-target['check-lint'] = function( dir ) {
-  checkJS( SRC_DIR );
 };
 
 target['check-tests'] = function( dir ) {
@@ -401,6 +397,7 @@ target.package = function() {
 
   target.build();
 
+  cp('-R', 'editors', DIST_DIR);
   cp('-R', 'resources', DIST_DIR);
   cp('-R', 'templates', DIST_DIR);
 
@@ -476,6 +473,7 @@ target.release = function() {
   target['buttered-popcorn']();
 
   // Copy over templates and other resources
+  cp('-R', 'editors', DIST_DIR);
   cp('-R', 'resources', DIST_DIR);
   cp('-R', 'templates', DIST_DIR);
 
@@ -548,6 +546,7 @@ target.storycamp = function(){
 
   // Copy other assets over
   cd(cwd);
+  cp('-R', 'editors', DIST_DIR);
   cp('-R', 'resources', DIST_DIR);
   cp('-R', 'templates', DIST_DIR);
   cp('-R', 'cornfield', DIST_DIR);
