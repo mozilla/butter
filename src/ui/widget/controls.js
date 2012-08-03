@@ -8,7 +8,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
   return function( container, p ) {
 
     var _controls = LangUtils.domFragment( CONTROLS_LAYOUT ).querySelector( "#butter-controls" ),
-        _container = document.getElementById( container ),
+        _container = typeof container === "string" ? document.getElementById( container ) : container,
         // variables
         muteButton, playButton, currentTimeDialog,
         durationDialog, timebar, progressBar, bigPlayButton,
@@ -22,7 +22,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
 
     var ready = function() {
 
-      _container.appendChild( _container );
+      _container.appendChild( _controls );
 
       p.media.removeEventListener( "loadedmetadata", ready, false );
 
@@ -121,13 +121,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
             return;
           }
 
-          if ( p.muted() ) {
-
-            p.unmute();
-          } else {
-
-            p.mute();
-          }
+          p[ p.muted() ? "unmute" : "mute" ]();
         }, false );
 
         mutechange = function() {
