@@ -116,7 +116,7 @@
       options._target = target;
 
       // safeguard against no search/username being provided
-      if ( options.search && options.username ) {
+      if ( !options.search && !options.username ) {
         options.search = options._natives.manifest.options.search[ "default" ];
       }
 
