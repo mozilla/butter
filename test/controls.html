@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Controls example page</title>
+  <link rel="stylesheet" href="../css/controls.css" type="text/css" >
+  <style>
+    #video {
+      width: 100%;
+    }
+    #container {
+      width: 800px;;
+    }
+  </style>
+  <script src="../external/require/require.js"></script>
+  <script src="../external/popcorn-js/popcorn.js"></script>
+  <script>
+    document.addEventListener( "DOMContentLoaded", function() {
+      var req = requirejs.config({
+        context: "controls",
+        baseUrl: "/src",
+        paths: {
+          'text': '../external/require/text'
+        }
+      });
+
+      req( [ "ui/widget/controls" ],
+        function( Controls ) {
+          var p = Popcorn( "#video" ),
+              controls = Controls( "controlsDiv", p );
+      });
+    }, false );
+  </script>
+</head>
+<body>
+  <div id="container">
+    <video src="../external/popcorn-js/test/trailer.webm" id="video"></video>
+    <div id="controlsDiv"></div>
+  </div>
+</body>
+</html>

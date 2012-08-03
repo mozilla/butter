@@ -1,0 +1,189 @@
+#butter-controls {
+  color: #F8FDE2;
+  position: relative;
+  height: 22px;
+  width: 100%;
+  display: none;
+  background: #242029;
+}
+
+/* Big Button */
+
+#controls-big-play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -40px;
+  display: none;
+  height: 80px;
+  width: 80px;
+  border: 2px solid #D0D0D0;
+  border-radius: 50px;
+  background: #242029;
+  text-align: center;
+}
+
+#controls-big-play-button > span {
+  display: inline-block;
+  height: 50px;
+  width: 40px;
+  margin-left: 8px;
+  margin-top: 3px;
+  background: url( "../resources/video.png" ) -97px 4px no-repeat;
+}
+
+#butter-controls.controls-active {
+   /* active happens on mouse over and is reverted to default on mouse out */
+  display: block;
+}
+
+#butter-controls.controls-ready/*, #controls-big-play-button.controls-ready*/ {
+  /* ready happens when the template is exported, and not while in the editor */
+  /* remove this if you want the big play button and active to show controls */
+  display: block;
+}
+
+#controls-big-play-button.controls-ready {
+  display: block;
+}
+
+#controls-currenttime {
+  position: absolute;
+  width: 50px;
+  left: 0;
+  font-size: 11px;
+  line-height: 12px;
+  text-align: center;
+}
+
+#controls-duration {
+  position: absolute;
+  width: 50px;
+  right: 8px;
+  font-size: 11px;
+  line-height: 12px;
+  text-align: center;
+}
+
+.controls-left {
+  height: 22px;
+  position: absolute;
+  width: 35px;
+}
+
+.controls-middle {
+  padding-top: 5px;
+  height: 17px;
+  position: absolute;
+  left: 35px;
+  right: 80px;
+}
+
+.controls-right {
+  padding-top: 5px;
+  height: 17px;
+  position: absolute;
+  width: 80px;
+  right: 0;
+}
+
+#controls-timebar {
+  position: absolute;
+  background: rgba( 0, 0, 0, .2 );
+  box-shadow: inset 0 1px 5px 2px rgba( 0, 0, 0, .5 );
+  height: 12px;
+  left: 68px;
+  right: 68px;
+  border-radius: 6px;
+}
+
+#controls-progressbar {
+  height: 100%;
+  background: rgba( 0, 0, 0, .4 );
+  position: absolute;
+  border-radius: 6px 0 0 8px;
+}
+
+#controls-scrubber {
+  height: 100%;
+  width: 2px;
+  background: #EEE;
+  position: absolute;
+  cursor: pointer;
+}
+
+#controls-scrubber:after {
+  content: "";
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 15px;
+  background: #EEE;
+  top: -2px;
+  left: -5px;
+}
+
+#controls-volume {
+  float: left;
+  background: rgba( 0, 0, 0, .2 );
+  box-shadow: inset 0 1px 5px 2px rgba( 0, 0, 0, .5 );
+  position: absolute;
+  height: 12px;
+  left: 35px;
+  right: 10px;
+  border-radius: 6px;
+}
+
+#controls-volume-progressbar {
+  height: 100%;
+  background: rgba( 0, 0, 0, .4 );
+  position: absolute;
+  border-radius: 6px 0 0 8px;
+}
+
+#controls-volume-scrubber {
+  height: 100%;
+  width: 2px;
+  background: #EEE;
+  position: absolute;
+  cursor: pointer;
+}
+
+#controls-volume-scrubber:after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 15px;
+  border-radius: 15px;
+  background: #EEE;
+  top: -2px;
+  left: -5px;
+}
+
+/* Buttons */
+
+.controls-btn {
+  display: inline-block;
+  padding: 10px;
+  background: url( "../resources/video.png" ) no-repeat;
+  margin-left: 4px;
+  position: absolute;
+  top: 0;
+}
+
+.controls-playing {
+  background-position: -20px 3px;
+}
+
+.controls-paused {
+  background-position: 5px 3px;
+
+}
+
+.controls-muted {
+  background-position: 0 -21px;
+}
+
+.controls-unmuted {
+  background-position: -25px -21px;
+}
