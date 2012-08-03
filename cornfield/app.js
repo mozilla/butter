@@ -60,7 +60,7 @@ var mongoose = require('mongoose'),
     }),
     UserModel = mongoose.model( 'User', User );
 
-//CONFIG.session.store = new MongoStore({ db: "test" });
+CONFIG.session.store = new MongoStore({ db: "test" });
 
 if ( !path.existsSync( PUBLISH_DIR ) ) {
   fs.mkdirSync( PUBLISH_DIR );
