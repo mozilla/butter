@@ -20,6 +20,24 @@ body {
   display: none;
 }
 
+/* body-wrapper required to circumvent this bug in webkit: https://bugs.webkit.org/show_bug.cgi?id=77811 */
+.butter-header-spacing .body-wrapper {
+  position: absolute;
+  left: 0;
+  top: 50px; /* compensate for header */
+  right: 200px;
+  bottom: 0;
+  -webkit-transition: right 0.25s;
+  -moz-transition: right 0.25s;
+  -ms-transition: right 0.25s;
+  -o-transition: right 0.25s;
+  transition: right 0.25s;
+}
+
+body.editor-minimized .body-wrapper {
+  right: 0;
+}
+
 /* VIDEO
 -------------------------------------------------- */
 .video-container {
