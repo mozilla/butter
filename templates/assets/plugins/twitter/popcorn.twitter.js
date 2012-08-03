@@ -169,7 +169,7 @@
                                 twitterName + "</a>&nbsp;" + twitterHandle;
           tweetTextCont.appendChild( tweetUser );
           tweetTextCont.appendChild( tweetText );
-          tweetContainer.appendChild( tweetTextCont ); 
+          tweetContainer.appendChild( tweetTextCont );
           tweetsContainer.appendChild( tweetContainer );
         }
 
@@ -226,4 +226,4 @@
       }
     }
   });
-})( Popcorn, this );
+}( Popcorn, this ));
