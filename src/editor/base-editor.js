@@ -21,6 +21,9 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ) {
     extendObject.butter = butter;
     extendObject.rootElement = rootElement;
     extendObject.parentElement = null;
+
+    // Used when applyStyleTag is called -- see below
+    var _extraStyleTag = null;
   
     /**
      * Member: open
@@ -32,13 +35,15 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ) {
     extendObject.open = function( parentElement ) {
       extendObject.parentElement = parentElement;
 
+      // Attach the editor's root element to the given parentElement.
+      // Do this before calling the open event so that element size and structure are defined.
+      extendObject.parentElement.appendChild( extendObject.rootElement );
+
       // If an open event existed on the events object passed into the constructor, call it
       if ( events.open ) {
         events.open.apply( extendObject, arguments );
       }
 
-      // Attach the editor's root element to the given parentElement
-      extendObject.parentElement.appendChild( extendObject.rootElement );
       extendObject.dispatch( "open" );
     };
 
@@ -57,6 +62,32 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ) {
       }
 
       extendObject.dispatch( "closed" );
+    };
+
+    /**
+     * Member: applyExtraStyleTag
+     *
+     * If a style tag is present in the given layout, place it in the document's head.
+     *
+     * @param {DOMFragment} layout: DOMFragment containing the style tag
+     */
+    extendObject.applyExtraStyleTag = function( layout ) {
+      _extraStyleTag = layout.querySelector( "style" );
+      if ( _extraStyleTag ) {
+        document.head.appendChild( _extraStyleTag );
+      }
+    };
+
+    /**
+     * Member: removeExtraStyleTag
+     *
+     * If a style tag was added with applExtraStyleTag(), remove it.
+     */
+    extendObject.removeExtraStyleTag = function() {
+      if ( _extraStyleTag ) {
+        document.head.removeChild( _extraStyleTag );
+        _extraStyleTag = null;
+      }
     };
 
   };

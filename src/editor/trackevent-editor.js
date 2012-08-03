@@ -3,9 +3,11 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [ "util/lang", "util/keys", "./base-editor",
-          "text!layouts/trackevent-editor-defaults.html" ],
+          "text!layouts/trackevent-editor-defaults.html",
+          "util/scrollbars" ],
   function( LangUtils, KeysUtils, BaseEditor,
-            DEFAULT_LAYOUT_SNIPPETS ) {
+            DEFAULT_LAYOUT_SNIPPETS,
+            Scrollbars ) {
 
   var __defaultLayouts = LangUtils.domFragment( DEFAULT_LAYOUT_SNIPPETS ),
       __safeKeyUpKeys = [
@@ -30,9 +32,24 @@ define( [ "util/lang", "util/keys", "./base-editor",
    */
   return function( extendObject, butter, rootElement, events ) {
 
+    // Wedge a check for scrollbars into the open event if it exists
+    var oldOpenEvent = events.open;
+    events.open = function() {
+      if ( extendObject.vScrollBar ) {
+        extendObject.vScrollBar.update();
+      }
+      if ( oldOpenEvent ) {
+        oldOpenEvent.apply( this, arguments );
+      }
+    };
+
     BaseEditor( extendObject, butter, rootElement, events );
 
     extendObject.defaultLayouts = __defaultLayouts.cloneNode( true );
+
+    // A vertical scrollbar may be added if lots of editor content is available (perhaps a large manifest is present for a plugin).
+    // See addVerticalScrollbar below for more details.
+    extendObject.vScrollBar = null;
 
     /**
      * Member: createTargetsList
@@ -337,6 +354,12 @@ define( [ "util/lang", "util/keys", "./base-editor",
         element = extendObject.createManifestItem( item, manifestOptions[ item ], trackEvent.popcornOptions[ item ], trackEvent, itemCallback );
         container.appendChild( element );
       }
+    };
+
+    extendObject.addVerticalScrollbar = function( wrapperElement, contentElement, scrollbarContainerElement ) {
+      extendObject.vScrollBar = new Scrollbars.Vertical( wrapperElement, contentElement );
+      scrollbarContainerElement.appendChild( extendObject.vScrollBar.element );
+      extendObject.vScrollBar.update();
     };
 
   };

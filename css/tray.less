@@ -62,42 +62,4 @@
     .transition( opacity 0.5s );
   }
 
-  /* Scrollbars */
-
-  // TO-DO: move to UI kit and prefix with butter-
-  .scroll-bar {
-    background: #222;
-    border-radius: 15px;
-    position: absolute;
-    box-shadow: 0 1px 0 #656565;
-    .selectable( none );
-    overflow: hidden;
-  }
-
-  .scroll-bar-v {
-    .scroll-handle {
-      width: 8px;
-      left: 1px;
-      position: absolute;
-      background: #777;
-      border-radius: 15px;
-      box-shadow: inset 0 -1px 1px #000;
-    }
-  }
-
-  .scroll-handle {
-    height: 8px;
-    top: 1px;
-    position: absolute;
-    background: #777;
-    border-radius: 15px;
-    box-shadow: inset 0 -1px 1px #000;
-    
-    &:hover {
-      background: #FFF;
-      cursor: pointer;
-    }
-
-  }
-
 }
