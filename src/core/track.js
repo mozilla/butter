@@ -154,26 +154,39 @@ define( [
       } //for
     }; //getTrackEventByName
 
-    this.addTrackEvent = function ( trackEvent ){
-      if( !( trackEvent instanceof TrackEvent ) ){
-        trackEvent = new TrackEvent( trackEvent );
-      }
-      trackEvent._track = _this;
+    this.addTrackEvent = function ( trackEvent ) {
+      var oldSelected = trackEvent ? !!trackEvent.selected : false;
+
+      // Never absorb a track object. Only create new ones.
+      // Keeps track->trackevent ownership simple! :)
+      trackEvent = new TrackEvent( trackEvent, _this, _popcornWrapper );
+
+      // Update the trackevent with defaults (if necessary)
       trackEvent.update( trackEvent.popcornOptions, true );
+
+      // If the track itself has a target, give it to the trackevent as well.
       if( _target ){
         trackEvent.target = _target;
-      } //if
+      }
+
+      // Remember the trackevent
       _trackEvents.push( trackEvent );
-      trackEvent.track = _this;
+
+      // Listen for a handful of events that affect functionality in and outside of this track.
       _this.chain( trackEvent, [
         "trackeventupdated",
         "trackeventselected",
         "trackeventdeselected"
       ]);
+
+      // Add it to the view.
       _view.addTrackEvent( trackEvent );
-      trackEvent.track = _this;
-      trackEvent.setPopcornWrapper( _popcornWrapper );
+
+      // Tell everyone a new trackevent was born (and raised).
       _this.dispatch( "trackeventadded", trackEvent );
+
+      trackEvent.selected = oldSelected;
+
       return trackEvent;
     }; //addTrackEvent
 
@@ -187,8 +200,7 @@ define( [
           "trackeventdeselected"
         ]);
         _view.removeTrackEvent( trackEvent );
-        trackEvent._track = null;
-        trackEvent.setPopcornWrapper( null );
+        trackEvent.unbind();
         _this.dispatch( "trackeventremoved", trackEvent );
         return trackEvent;
       } //if

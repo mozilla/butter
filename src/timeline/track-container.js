@@ -20,7 +20,7 @@ define( [ "core/logger", "util/dragndrop" ],
     var _droppable;
 
     _container.addEventListener( "mousedown", function( e ) {
-      _this.deselectOthers();
+      butter.deselectAllTrackEvents();
     }, false );
 
     _droppable = DragNDrop.droppable( _element, {
@@ -54,14 +54,6 @@ define( [ "core/logger", "util/dragndrop" ],
           _container.insertBefore( trackElement, _container.childNodes[ i + 1 ] );
         }
       }
-    };
-
-    this.deselectOthers = function() {
-      for ( var i = 0; i < butter.selectedEvents.length; i++ ) {
-        butter.selectedEvents[ i ].selected = false;
-      }
-      butter.selectedEvents = [];
-      return _this;
     };
 
     function resetContainer() {

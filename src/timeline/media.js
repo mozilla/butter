@@ -115,10 +115,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
             tracks[ t ].deselectEvents( trackEvent );
           }
         }
-        butter.selectedEvents = [ trackEvent ];
-      }
-      else {
-        butter.selectedEvents.push( trackEvent );
       }
     }
 

@@ -27,10 +27,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
     EventManagerWrapper( _this );
 
-    function toggleHandles( state ){
-      _handles[ 0 ].style.visibility = state ? "visible" : "hidden";
-      _handles[ 1 ].style.visibility = state ? "visible" : "hidden";
-    } //toggleHandles
+    function toggleHandles( state ) {
+      if ( _parent ) {
+        _handles[ 0 ].style.visibility = state ? "visible" : "hidden";
+        _handles[ 1 ].style.visibility = state ? "visible" : "hidden";
+      }
+    }
 
     function resetContainer(){
       _element.style.left = _start * _zoom + "px";

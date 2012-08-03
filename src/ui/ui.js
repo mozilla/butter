@@ -203,14 +203,17 @@ define( [ "core/eventmanager", "./toggler",
       38: function( e ) { // up key
         var track,
             trackEvent,
-            nextTrack;
+            nextTrack,
 
-        if ( butter.selectedEvents.length ) {
+            //copy this selectedEvents because it will change inside loop
+            selectedEvents = butter.selectedEvents.slice();
+
+        if ( selectedEvents.length ) {
           e.preventDefault();
         }
 
-        for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
-          trackEvent = butter.selectedEvents[ i ];
+        for( var i = 0, seLength = selectedEvents.length; i < seLength; i++ ) {
+          trackEvent = selectedEvents[ i ];
           track = trackEvent.track;
           nextTrack = orderedTracks[ orderedTracks.indexOf( track ) - 1 ];
           if( nextTrack ) {
@@ -233,14 +236,17 @@ define( [ "core/eventmanager", "./toggler",
       40: function( e ) { // down key
         var track,
             trackEvent,
-            nextTrack;
+            nextTrack,
 
-        if ( butter.selectedEvents.length ) {
+            //copy this selectedEvents because it will change inside loop
+            selectedEvents = butter.selectedEvents.slice();
+
+        if ( selectedEvents.length ) {
           e.preventDefault();
         }
 
-        for( var i = 0, seLength = butter.selectedEvents.length; i < seLength; i++ ) {
-          trackEvent = butter.selectedEvents[ i ];
+        for( var i = 0, seLength = selectedEvents.length; i < seLength; i++ ) {
+          trackEvent = selectedEvents[ i ];
           track = trackEvent.track;
           nextTrack = orderedTracks[ orderedTracks.indexOf( track ) + 1 ];
           if( nextTrack ) {
@@ -250,10 +256,7 @@ define( [ "core/eventmanager", "./toggler",
         } // for
       }, // down key
       27: function( e ) { // esc key
-        for( var i = 0; i < butter.selectedEvents.length; i++ ) {
-          butter.selectedEvents[ i ].selected = false;
-        } // for
-        butter.selectedEvents = [];
+        butter.deselectAllTrackEvents();
       }, // esc key
       8: function( e ) { // del key
         if( butter.selectedEvents.length ) {
@@ -261,7 +264,6 @@ define( [ "core/eventmanager", "./toggler",
           for( var i = 0; i < butter.selectedEvents.length; i++ ) {
             butter.selectedEvents[ i ].track.removeTrackEvent( butter.selectedEvents[ i ] );
           } // for
-          butter.selectedEvents = [];
         } // if
       }, // del key
       9: function( e ) { // tab key
@@ -279,12 +281,8 @@ define( [ "core/eventmanager", "./toggler",
               index = orderedTrackEvents.length - 1;
             } // if
           } // if
-          for( var i = 0; i < butter.selectedEvents.length; i++ ) {
-            butter.selectedEvents[ i ].selected = false;
-          } // for
-          butter.selectedEvents = [];
+          butter.deselectAllTrackEvents();
           orderedTrackEvents[ index ].selected = true;
-          butter.selectedEvents.push( orderedTrackEvents[ index ] );
         } // if
       } // tab key
     };
