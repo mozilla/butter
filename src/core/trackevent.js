@@ -152,6 +152,9 @@ define( [
           if ( !( "target" in manifestOptions ) && updateOptions.target ) {
             _popcornOptions.target = updateOptions.target;
           }
+          if ( "zindex" in manifestOptions ) {
+            _popcornOptions.zindex = _track._media.maxPluginZIndex - _track.order;
+          }
         }
       }
       

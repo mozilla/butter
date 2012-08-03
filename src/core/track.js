@@ -21,11 +21,11 @@ define( [
     options = options || {};
 
     var _trackEvents = [],
-        _id = "Track" + __guid++,
+        _id = "Layer" + __guid++,
         _target = options.target,
         _logger = new Logger( _id ),
         _name = options.name || _id,
-        _order = options.order || 0,
+        _order = 0,
         _view = new TrackView( this ),
         _popcornWrapper = null,
         _this = this;
@@ -62,8 +62,12 @@ define( [
           return _order;
         },
         set: function( val ){
+          var i, l;
           _order = val;
           _this.dispatch( "trackorderchanged", _order );
+          for ( i = 0, l = _trackEvents.length; i < l; i++ ) {
+            _trackEvents[ i ].update();
+          }
         }
       },
       target: {
@@ -153,12 +157,12 @@ define( [
     this.addTrackEvent = function ( trackEvent ){
       if( !( trackEvent instanceof TrackEvent ) ){
         trackEvent = new TrackEvent( trackEvent );
-        trackEvent.update( trackEvent.popcornOptions, true );
-      } //if
+      }
+      trackEvent._track = _this;
+      trackEvent.update( trackEvent.popcornOptions, true );
       if( _target ){
         trackEvent.target = _target;
       } //if
-      trackEvent._track = _this;
       _trackEvents.push( trackEvent );
       trackEvent.track = _this;
       _this.chain( trackEvent, [
@@ -198,7 +202,6 @@ define( [
         } //if
       } //for
     }; //deselectEvents
-
   }; //Track
 
   return Track;
