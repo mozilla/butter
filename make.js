@@ -363,8 +363,6 @@ function build( version ){
   exec(RJS + ' -o tools/build.optimized.js');
   stampVersion( version, 'dist/butter.min.js' );
 
-  embed( version );
-
   // Compress CSS for deployment
   lessToCSS( true );
 
