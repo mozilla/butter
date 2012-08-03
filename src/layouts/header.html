@@ -1,14 +1,15 @@
 <div class="butter-header" data-butter-exclude>
-  <div class="butter-header-inner">
+  <header class="butter-header">
     <div class="butter-logo"></div>
-    <span class="butter-name"></span>
-    <div class="butter-editor-actions">
-      <a class="butter-btn butter-header-load" href="/dashboard" title="Manage your projects"><span class="icon-grear-sign"></span> Projects</a>
-      <a class="butter-btn butter-header-save" href="#" title="Save your project"><span class="icon-ok-sign"></span> Save</a>
-      <a class="butter-btn butter-header-source" href="#" title="View the source of this template"><span class="icon-eye-open"></span> View Source</a>
-      <a class="butter-btn butter-header-share" href="#" title="Generate a link to share this project with the world"><span class="icon-share-alt"></span> Publish</a>
-      <a class="butter-btn butter-header-auth" href="#" title="Sign in or sign up with Persona"><span class='icon-user'></span>Sign In / Sign Up</a>
-      <a title="Add Popcorn Events to the timeline" class="butter-btn add-popcorn"><span class="icon-plus-sign"></span> Add Events</a>
+    <div class="butter-header-buttons-left">
+      <a class="butter-btn-green butter-login-btn butter-login-false"><i class="icon icon-white icon-user"></i> Login</a>
+      <a class="butter-btn-green butter-save-btn"><i class="icon icon-white icon-user"></i> Save</a>
+      
+      <div class="butter-btn-group butter-login-true" style="display: none; ">
+          <a class="butter-btn-dark"><span class="butter-avatar"></span><span class="mobile-hide">brett_gaylor</span></a>
+        <a class="butter-btn-dark "><strong><span class="mobile-hide">Project: </span></strong>Newscaster</a>
+      </div>
+      <a id="butter-btn-save" class="butter-btn-green butter-login-true" style="display: none; ">Save</a>
     </div>
-  </div>
+  </header>
 </div>

@@ -10,8 +10,6 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
     var _parentElement = LangUtils.domFragment( EDITOR_LAYOUT, ".plugin-list-editor" ),
         _containerElement = _parentElement.querySelector( ".container" );
 
-    var _button = butter.ui.header.element.querySelector( ".add-popcorn" );
-
     var _pluginArchetype = _containerElement.querySelector( "div" );
     _pluginArchetype.parentNode.removeChild( _pluginArchetype );
 
@@ -25,12 +23,6 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         }
       });
     });
-
-    _button.addEventListener( "click", function() {
-      // Open the 'plugin-list' editor as defined above, and force the
-      // editor tray to open.
-      butter.editor.openEditor( "plugin-list", true );
-    }, false );
 
     butter.listen( "pluginadded", function( e ) {
       var element = _pluginArchetype.cloneNode( true ),

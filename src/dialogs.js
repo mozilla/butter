@@ -6,7 +6,6 @@ define([
   "dialog/dialogs/error-message",
   "dialog/dialogs/track-data",
   "dialog/dialogs/delete-track",
-  "dialog/dialogs/export",
   "dialog/dialogs/quit-confirmation",
   "dialog/dialogs/save-as",
   "dialog/dialogs/share",

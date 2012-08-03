@@ -119,7 +119,7 @@
   }
 
   .time-bar-scrubber-container {
-    z-index: 2140000010;
+    z-index: @TRAY_Z_INDEX + 10;
     background-image: url( "../resources/status-bg.png" );
     border-radius: 15px;
     position: absolute;
@@ -164,7 +164,7 @@
     width: 4px;
     height: 180px;
     cursor: pointer;
-    z-index: 2140000000;
+    z-index: @TRAY_Z_INDEX + 9;
   }
 
   .time-bar-scrubber-line[data-butter-shortened] {
