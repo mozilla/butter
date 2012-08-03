@@ -2,6 +2,27 @@
 * EDITORS
 */
 
+.butter-unit {
+  display: inline-block;
+  margin-left: -4px;
+  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-size: 10px;
+  width: auto;
+  min-width: 16px;
+  padding: 8px 5px 4px 5px;
+  font-weight: normal;
+  text-align: center;
+  background-color: #222;
+  color: #999;
+  border: 1px solid black;
+  border-left: 0;
+  border-radius: 0 3px 3px 0;
+}
+.butter-form-append input {
+  display: inline-block;
+  border-radius: 3px 0 0 3px;
+  border-right: 1px solid #000;
+}
 .butter-editor-area {
   position: fixed;
   z-index: 2000000000;
@@ -15,7 +36,7 @@
   border-left: 1px solid #222;
   box-shadow: inset 5px 0 5px rgba( 0, 0, 0, .2 );
   color: #EEE;
-  
+
   &.minimized {
     right: -200px;
   }
@@ -27,7 +48,9 @@
   > .butter-editor {
     height: 100%;
     font: 14px 'MetaBold';
-    
+    input:focus + .butter-unit {
+      color: #CCC;
+    }
     h1 {
       font-size: 16px;
       color: #FFF;
@@ -40,10 +63,10 @@
       clear: both;
     }
     .trackevent-property {
-      select,
-      input {
-        float: left;
-        width: 180px;
+      .butter-form-append {
+        input {
+          width: 120px;
+        }
       }
     }
     > .editor-tabs {
