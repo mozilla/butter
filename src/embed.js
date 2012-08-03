@@ -56,15 +56,6 @@ function init( window, document ) {
       popcorn.play();
     }
 
-    function togglePlay() {
-      if( isVisible( "post-roll" ) ||
-          isVisible( "share" ) ) {
-        return;
-      }
-      popcorn[ popcorn.paused() ? "play" : "pause" ]();
-    }
-    $( "play-pause" ).addEventListener( "click", togglePlay, false );
-
     $( "replay-post" ).addEventListener( "click", replay, false );
     $( "replay-share" ).addEventListener( "click", replay, false );
 
@@ -78,13 +69,7 @@ function init( window, document ) {
       Popcorn.nop();
     }, false );
 
-    $( "fullscreen" ).addEventListener( "click", function() {
-      if( document.fullscreenElement ) {
-        cancelFullscreen();
-      } else {
-        requestFullscreen( $( "container" ) );
-      }
-    }, false );
+    // TODO: fullscreen UI event handler for "container div...
   }
 
   function buildIFrameHTML() {
@@ -155,10 +140,6 @@ function init( window, document ) {
     popcorn.on( "playing", function() {
       $( "play-pause" ).innerHTML = "Pause";
       addStateClass( "embed-playing" );
-
-      if( isVisible( "post-roll" ) ) {
-       hide( "post-roll" );
-      }
     });
 
     function onCanPlay() {
@@ -177,15 +158,19 @@ function init( window, document ) {
 
   var req = requirejs.config({
     context: "embed",
-    baseUrl: "/src"
+    baseUrl: "/src",
+    paths: {
+      text: "../external/require/text"
+    }
   });
 
   req([
       "util/uri",
+      "ui/widget/controls",
       // keep this at the end so it doesn't need a spot in the function signature
       "util/shims"
     ],
-    function( URI ) {
+    function( URI, Controls ) {
       /**
        * Expose Butter so we can get version info out of the iframe doc's embed.
        * This "butter" is never meant to live in a page with the full "butter".
@@ -239,6 +224,7 @@ function init( window, document ) {
       // TODO: config.autohide
       // TODO: config.autoplay
       if( config.controls ) {
+        Controls( "controls", popcorn );
         show( "controls" );
       }
 

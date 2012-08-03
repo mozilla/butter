@@ -6,6 +6,7 @@ html(lang='en')
     !{popcorn}
     !{customData}
     link(rel='stylesheet', href='/css/embed.css')
+    link(rel='stylesheet', href="/css/controls.css")
     // This is the embed, the actual content is at the following URL
     link(rel='cannonical', href='/#{id}.html')
     style
@@ -74,8 +75,3 @@ html(lang='en')
             .embed-title #{title}
             .embed-author #{author}
       #controls.controls(style='display: none;')
-        | Controls|
-        span#play-pause Play
-        | |
-        span#fullscreen Fullscreen
-        | |
