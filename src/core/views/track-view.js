@@ -198,16 +198,20 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
           // if a ghosted trackevent doesn't exist, create one!
           if ( !ghost ) {
             // create a ghost track
-            _this.createGhost( _track._media );
-            ghost = trackEventView.createGhost( _ghost );
+            if ( !_ghost ) {
+              _this.createGhost( _track._media );
+              _ghost.order = currentTrack.order;
+            }
             // create a new ghost on the track below the currentone
-            ghost = trackEventView.createGhost( nextTrack );
+            ghost = trackEventView.createGhost( _ghost );
+            console.log( ghost._track.id );
             ghostView = ghost.view;
             // update zoom and position so it is the same as the current trackEvent
-            ghost.view.zoom = nextTrack.view.zoom;
+            ghost.view.zoom = _track.view.ghost.view.zoom;
             ghostView.updatePosition( trackEventView.element );
             // make it look all ghosty and stuff
             ghostView.element.style.opacity = "0.3";
+            //_ghost.addTrackEvent( ghost );
           // if we already have a ghost be sure to update it
           } else {
             // just to be safe make sure we have a reference to the ghosts view

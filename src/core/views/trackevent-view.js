@@ -259,7 +259,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                     }
 
                     // make sure that we remove the ghost after we drag off the current trackEvent
-                    if ( track.isGhost ) {
+                    if ( track.isGhost && track.trackEvents.length === 0 ) {
+                      console.log( "WHY ARE YOU REMOVING ME" );
                       track._media.removeTrack( track );
                     }
                     // if we found an overlap meaning we are currently dragging over a trackevent
