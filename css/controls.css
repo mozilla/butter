@@ -142,7 +142,6 @@
 }
 
 #controls-volume-scrubber {
-  position: relative;
   height: 100%;
   width: 2px;
   background: #EEE;
