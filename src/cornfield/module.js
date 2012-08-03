@@ -18,7 +18,7 @@ define(['util/xhr'], function(XHR) {
 
     if ( !navigator.id ) {
       var script = document.createElement( "script" );
-      script.src = "https://browserid.org/include.js";
+      script.src = "https://login.persona.org/include.js";
       script.type = "text/javascript";
       script.setAttribute( "data-butter-exclude", true );
       document.head.appendChild( script );
