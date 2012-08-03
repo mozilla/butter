@@ -83,6 +83,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       // Open a new editor on a single click
       var trackEventMouseUp = function ( e ) {
         if( butter.selectedEvents.length === 1 && !trackEvent.dragging && !view.resizing ) {
+          trackEvent.selected = true;
           _this.editTrackEvent( trackEvent );
         }
       };

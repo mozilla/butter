@@ -107,7 +107,9 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
       _currentMouseDownTrackEvent = trackEvent;
 
-      trackEvent.selected = true;
+      if ( !originalEvent.target.classList.contains( "handle" ) && trackEvent.selected ) {
+        trackEvent.selected = true;
+      }
       if( !originalEvent.shiftKey ){
         var tracks = _media.tracks;
         for( var t in tracks ){
