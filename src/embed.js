@@ -6,18 +6,28 @@ function init( window, document ) {
 
   function requestFullscreen( elem ) {
     // Prefix + case differences.
-    elem.requestFullscreen && elem.requestFullscreen();
-    elem.mozRequestFullscreen && elem.mozRequestFullscreen();
-    elem.mozRequestFullScreen && elem.mozRequestFullScreen();
-    elem.webkitRequestFullscreen && elem.webkitRequestFullscreen();
+    if ( elem.requestFullscreen ) {
+      elem.requestFullscreen();
+    } else if ( elem.mozRequestFullscreen ) {
+      elem.mozRequestFullscreen();
+    } else if ( elem.mozRequestFullScreen ) {
+      elem.mozRequestFullScreen();
+    } else if ( elem.webkitRequestFullscreen ) {
+      elem.webkitRequestFullscreen();
+    }
   }
 
   function cancelFullscreen() {
     // Prefix + case differences.
-    document.exitFullscreen && document.exitFullscreen();
-    document.mozCancelFullscreen && document.mozCancelFullscreen();
-    document.mozCancelFullScreen && document.mozCancelFullScreen();
-    document.webkitCancelFullscreen && document.webkitCancelFullscreen();
+    if ( document.exitFullscreen ) {
+      document.exitFullscreen();
+    } else if ( document.mozCancelFullscreen ) {
+      document.mozCancelFullscreen();
+    } else if ( document.mozCancelFullScreen ) {
+      document.mozCancelFullScreen();
+    } else if ( document.webkitCancelFullscreen ) {
+      document.webkitCancelFullscreen();
+    }
   }
 
   function $( id ) {
@@ -25,7 +35,7 @@ function init( window, document ) {
       return id;
     }
     return document.getElementById( id );
-  };
+  }
 
   function isVisible( id ) {
     return $( id ).style.display !== "none";
@@ -102,6 +112,10 @@ function init( window, document ) {
   }
 
   function setupEventHandlers( popcorn, config ) {
+    $( "share-close" ).addEventListener( "click", function() {
+      hide( "share" );
+    }, false );
+
     $( "share-size" ).onchange = function() {
       $( "share-iframe" ).value = buildIFrameHTML();
     };
@@ -126,12 +140,6 @@ function init( window, document ) {
       }
     });
 
-    popcorn.on( "volumechange", function() {
-    });
-
-    popcorn.on( "loadedmetadata", function() {
-    });
-
     function onCanPlay() {
       if( config.autoplay ) {
         popcorn.play();
@@ -148,10 +156,7 @@ function init( window, document ) {
 
   var req = requirejs.config({
     context: "embed",
-    baseUrl: "/src" // ../"
-    // Paths are relative to the baseUrl
-//    paths: {
-//      "text": "../external/require/text"
+    baseUrl: "/src"
   });
 
   req([
@@ -214,10 +219,6 @@ function init( window, document ) {
       // TODO: config.autoplay
       if( config.controls ) {
         show( "controls" );
-      }
-
-      if( config.branding ) {
-
       }
 
       setupClickHandlers( popcorn, config );
