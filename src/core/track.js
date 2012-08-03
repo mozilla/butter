@@ -174,12 +174,12 @@ define( [
       } //for
     }; //getTrackEventByName
 
-    this.addTrackEvent = function ( trackEvent ) {
+    this.addTrackEvent = function ( trackEvent, isGhost ) {
       var oldSelected = trackEvent ? !!trackEvent.selected : false;
 
       // Never absorb a track object. Only create new ones.
       // Keeps track->trackevent ownership simple! :)
-      trackEvent = new TrackEvent( trackEvent, _this, _popcornWrapper );
+      trackEvent = new TrackEvent( trackEvent, _this, _popcornWrapper, isGhost );
 
       // Update the trackevent with defaults (if necessary)
       trackEvent.update( trackEvent.popcornOptions, true );

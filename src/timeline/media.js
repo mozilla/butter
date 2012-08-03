@@ -254,14 +254,15 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       // wait until after the trackEvent has moved to the correct track to 
       // set its ghost to null. This is so that when moving a trackevent on
       // the same track that has a ghost gets handled properly
-      if ( trackEvent.ghost ) {
-        ghost = trackEvent.ghost;
-        console.log( trackEvent._track.id );
-        if ( ghost._track && ghost._track.ghostTrack && ghost.isGhost ) {
+      if ( trackEvent.view.ghost ) {
+        ghost = trackEvent.view.ghost;
+        /*if ( ghost._track && ghost._track.ghostTrack && ghost.isGhost ) {
           ghost._track.ghostTrack.isGhost = false;
           ghost._track.ghostTrack = null;
-        }
-        trackEvent.ghost = null;
+        }*/
+        trackEvent = trackEvent._track.removeTrackEvent( trackEvent );
+        ghost._track.addTrackEvent( trackEvent );
+        trackEvent.view.cleanupGhost();
         return;
       }
       trackEvent.track.removeTrackEvent( trackEvent );

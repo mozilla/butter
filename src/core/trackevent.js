@@ -50,7 +50,6 @@ define( [
         _logger = new Logger( _id ),
         _track = track,
         _isGhost = isGhost,
-        _ghostTrackEvent,
         _type = options.type + "",
         _popcornOptions = options.popcornOptions || {
           start: 0,
@@ -188,7 +187,6 @@ define( [
 
       // we should only get here if no exceptions happened
       _this.dispatch( "trackeventupdated", _this );
-      _ghostTrackEvent && _ghostTrackEvent.update( updateOptions );
     };
 
     /**
@@ -283,6 +281,21 @@ define( [
         }
       },
 
+      /*
+       * Property: isGhost
+       *
+       * Specifies whether this trackEvent is a ghost or not
+       */
+      isGhost: {
+        enumerable: true,
+        get: function() {
+          return _isGhost;
+        },
+        set: function( val ) {
+          _isGhost = val;
+        }
+      },
+
       /**
        * Property: view
        *
@@ -296,36 +309,6 @@ define( [
           return _view;
         }
       },
-      /**
-       * Property: ghost
-       *
-       * A reference to this trackevents ghost
-       */
-      ghost: {
-        enumerable: true,
-        get: function() {
-          return _ghostTrackEvent;
-        },
-        set: function( val ) {
-          _ghostTrackEvent = val;
-        }
-      },
-
-      /**
-       * Property: isGhost
-       *
-       * Returns true or false if this is a ghosted trackevent or not
-       */
-      isGhost: {
-        enumerable: true,
-        get: function() {
-          return _isGhost;
-        },
-        set: function( val ) {
-          _isGhost = val;
-        }
-      },
-
       /**
        * Property: dragging
        *

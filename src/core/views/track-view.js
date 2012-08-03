@@ -142,6 +142,64 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       ]);
     }; //removeTrackEvent
 
+    // helper function to create ghosts when neccessary of the appropriate trackevents
+    function handleOverlap( trackEvent, track ) {
+      var tracks = track._media.tracks,
+          trackEventView = trackEvent.view,
+          ghost = trackEvent.view.ghost,
+          currentTrack,
+          nextTrack,
+          ghostView,
+          ghostTrack,
+          foundTrack = false;
+
+      // loop over the tracks to find the one under the current one (if it exists)
+      for ( var i = 0, l = tracks.length; i < l; i++ ) {
+
+        currentTrack = tracks[ i ];
+        nextTrack = tracks[ i + 1 ];
+
+        // search for the track under the current one and make sure there is space for a ghost
+        if ( currentTrack.id === track.id && nextTrack ) {
+          // if a ghosted trackevent doesn't exist, create one!
+          if ( !ghost ) {
+            // create a new ghost on the track below the currentone
+            ghost = trackEventView.createGhost( nextTrack );
+            ghostView = ghost.view;
+            // update zoom and position so it is the same as the current trackEvent
+            ghost.view.zoom = nextTrack.view.zoom;
+            ghostView.updatePosition( trackEventView.element );
+            // make it look all ghosty and stuff
+            ghostView.element.style.opacity = "0.3";
+          // if we already have a ghost be sure to update it
+          } else {
+            // just to be safe make sure we have a reference to the ghosts view
+            if ( ghost.view ) {
+              ghostView = ghost.view;
+              ghostView.zoom = tracks[ i ].view.zoom;
+              ghostView.updatePosition( trackEvent.view.element );
+            }
+          }
+          foundTrack = true;
+          break;
+        }
+      }
+
+      // if we didn't find an overlapping trackevent?
+      if ( !foundTrack ) {
+        /*if ( !ghost && !te.isGhost ) {
+          ghostTrack = track._media.addTrack();
+          ghostTrack.isGhost = true;
+          ghost = te.createGhost();
+          tracks[ tracks.length - 1 ].addTrackEvent( ghost );
+          ghost._track.ghostTrack = ghostTrack;
+          console.log( ghostTrack.id );
+          ghost.view.element.style.opacity = "0.3";
+          ghost.view.updatePosition( te.view.element );
+        }*/
+      }
+    }
+
     this.checkOverlay = function( trackevent ) {
       var teData = trackevent.data || trackevent,
           currentTrackEvent,
@@ -154,6 +212,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       if ( !teData.dragging ) {
         return;
       }
+
       // utility function to check if two trackevents are overlapping
       function isOverlapping( te1, te2 ) {
         return ( !( ( te1.top > te2.bottom ) || ( te1.bottom < te2.top ) ) && !( ( te1.left > te2.right ) || ( te1.right < te2.left ) ) );
@@ -161,33 +220,37 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
 
       // loop over all the trackevents for this track and see if we overlap
       for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
+
         currentTrackEvent = _trackEvents[ i ].trackEvent;
         rect2 = currentTrackEvent.view.element.getBoundingClientRect();
-        if ( teData.id !== currentTrackEvent.id ) {
+
+        // make sure that we don't check against the same trackEvent
+        if ( teData.id !== currentTrackEvent.id && !teData.isGhost ) {
           if ( isOverlapping( rect1, rect2 ) ) {
-            console.log( "MATCH ON TRACK", currentTrackEvent._track.id );
             overlapFound = true;
-            _track._media.dispatch( "trackeventoverlap", {
-              trackevent: teData,
-              track: _track
-            });
             break;
           }
         }
       }
 
-      if ( !overlapFound && teData.ghost ) {
-        console.log( "cleaning up ghost" );
-        ghost = teData.ghost;
+      // if we didn't find an overlapping trackevent and a ghost exists for this trackevent
+      // this should be called when dragging an overlapping trackevent into an open space
+      if ( !overlapFound && teData.view.ghost ) {
+
+        ghost = teData.view.ghost;
         track = ghost._track;
-        if ( track && track.ghostTrack ) {
-          track._media.removeTrack( track.ghostTrack );
-          track.ghostTrack.isGhost = false;
-          track.ghostTrack = null;
+
+        // if we had a ghosted track, get rid of the ghost and clean up after ourself
+        if ( track && track.view.ghost ) {
+          track._media.removeTrack( track.view.ghostTrack );
+          track.view.cleanupGhost();
         }
-        teData.ghost._track.removeTrackEvent( teData.ghost );
-        teData.ghost = null;
-        teData.isGhost = false;
+
+        // also be sure to cleanup the ghost trackevent
+        teData.view.cleanupGhost();
+      // if we found an overlap meaning we are currently dragging over a trackevent
+      } else if ( overlapFound ) {
+        handleOverlap( teData, currentTrackEvent._track );
       }
     };
   }; //TrackView

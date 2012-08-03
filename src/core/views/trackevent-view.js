@@ -19,12 +19,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         _typeElement = _element.querySelector( ".title" ),
         _draggable,
         _resizable,
-        _dropped = false,
         _trackEvent = trackEvent,
         _dragging = false,
         _resizing = false,
         _padding = 0,
         _elementText,
+        _ghost,
         _this = this;
 
     EventManagerWrapper( _this );
@@ -63,11 +63,45 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
       resetContainer();
     }; //update
 
+    /**
+     * Member: createGhost
+     *
+     * Creates a clone of the current trackEvent that does not have an associated Popcorn trackevent.
+     * Used to notify the user when a trackevent overlaps and where the new location will be
+     * when the trackevent is dropped
+     */
+    this.createGhost = function( track ) {
+      var options = JSON.parse( JSON.stringify( _trackEvent.popcornOptions ) );
+      options.type = _type;
+      _ghost = track.addTrackEvent( options, true );
+      return _ghost;
+    };
+
+    /*
+     * Member: cleanupGhost
+     *
+     * Removes this trackEvents ghost and makes sure isGhost is set to false
+     */
+    this.cleanupGhost = function() {
+      _ghost.isGhost = false;
+      _ghost._track.removeTrackEvent( _ghost );
+      _ghost = null;
+    };
+
     Object.defineProperties( this, {
       trackEvent: {
         enumerable: true,
         get: function(){
           return _trackEvent;
+        }
+      },
+      ghost: {
+        enumerable: true,
+        get: function() {
+          return _ghost;
+        },
+        set: function( val ) {
+          _ghost = val;
         }
       },
       element: {
@@ -180,18 +214,21 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                 start: function(){
                   _dragging = true;
                   _this.dispatch( "trackeventdragstarted" );
+                  console.log( "DRAG START", _dragging );
                 },
                 stop: function(){
-                  var te;
-                  _dragging = false;
+                  var te,
+                      _dragging = false;
+
                   _this.dispatch( "trackeventdragstopped" );
                   movedCallback();
-                  if ( _trackEvent.ghost ) {
-                    ghost = _trackEvent.ghost;
-                    var te = _trackEvent._track.removeTrackEvent( _trackEvent );
-                    te.ghost._track.addTrackEvent( te );
-                    te.ghost._track.removeTrackEvent( te.ghost );
-                    _trackEvent.isGhost = false;
+
+                  if ( _trackEvent.view.ghost ) {
+                    ghost = _trackEvent.view.ghost;
+                    te = _trackEvent._track.removeTrackEvent( _trackEvent );
+                    ghost._track.addTrackEvent( te );
+                    te.view.cleanupGhost();
+                    //console.log( "trackEvent should now be on: ", te._track.id );
                   }
                 },
                 drag: function( element ) {
@@ -200,9 +237,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                       rect2;
 
                   for ( var i = 0, l = tracks.length; i < l; i++ ) {
-                    if ( tracks[ i ]  ) {
+                    if ( tracks[ i ] ) {
                       rect2 = tracks[ i ].view.element.getBoundingClientRect();
                       if ( !( ( rect1.top > rect2.bottom ) || ( rect1.bottom < rect2.top ) ) ) {
+                        console.log( "checking on track:", tracks[ i ].id );
                         tracks[ i ].view.checkOverlay( _trackEvent );
                       }
                     }
