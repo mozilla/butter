@@ -18,17 +18,17 @@ html(lang='en')
   body.embed
     #container.container
       #video.video
-        #smart
+        #embed-smart
         #post-roll.embed-overlay(style='display: none;')
           .post-roll-inner
-            .embed-logo
-              a(href='#') Popcorn Logo
+            a(href='#').embed-logo
             .embed-project
               div
                 .embed-title #{title}
                 .embed-author #{author}
               .post-roll-description
                 | This project was created entirely in a browser using
+                br
                 strong HTML5 and javascript
                 | .
               ul.embed-nav.post-roll-options
@@ -41,11 +41,10 @@ html(lang='en')
         #share.embed-overlay(style='display: none;')
           .share-inner
             a#share-close(href='#') [X]
-            .embed-logo
-              a(href='#') Popcorn Logo
+            a(href='#').embed-logo
             .embed-project
               div
-                .embed-project-title My Project
+                .embed-title My Project
                 .embed-author Jonny Appleseed
             #share-options.share-options
               fieldset
@@ -69,11 +68,10 @@ html(lang='en')
                     option(value='640x385') 640x385
                     option(value='853x505') 853x505
                     option(value='1280x745') 1280x745
-        #info
-          .play-state.embed-logo
-            a(href='#') Popcorn Logo
-          .play-state.embed-info
-            .embed-project-title #{title}
+        #embed-info
+          a(href='#').embed-logo
+          .embed-info
+            .embed-title #{title}
             .embed-author #{author}
       #controls.controls(style='display: none;')
         | Controls|

@@ -112,9 +112,31 @@ function init( window, document ) {
   }
 
   function setupEventHandlers( popcorn, config ) {
-    $( "share-close" ).addEventListener( "click", function() {
+
+    var stateClasses = [
+      "embed-playing",
+      "embed-paused",
+      "embed-ended"
+    ];
+
+    function addStateClass( state ) {
+      var el = $( "container" );
+
+      if ( el.classList.contains( state ) ) {
+        return;
+      }
+
+      for( var i = 0; i < stateClasses.length; i++ ) {
+        el.classList.remove( stateClasses[ i ] );
+      }
+
+      el.classList.add( state );
+    }
+
+     $( "share-close" ).addEventListener( "click", function() {
       hide( "share" );
     }, false );
+
 
     $( "share-size" ).onchange = function() {
       $( "share-iframe" ).value = buildIFrameHTML();
@@ -122,18 +144,17 @@ function init( window, document ) {
 
     popcorn.on( "ended", function() {
       show( "post-roll" );
+      addStateClass( "embed-ended" );
     });
 
     popcorn.on( "pause", function() {
       $( "play-pause" ).innerHTML = "Play";
+      addStateClass( "embed-paused" );
     });
 
     popcorn.on( "playing", function() {
       $( "play-pause" ).innerHTML = "Pause";
-
-      if( isVisible( "info" ) ) {
-        hide( "info" );
-      }
+      addStateClass( "embed-playing" );
 
       if( isVisible( "post-roll" ) ) {
        hide( "post-roll" );
