@@ -286,7 +286,7 @@ function publishRoute( req, res ){
               // XXX: need a better way to force controls off in embed.
                                     .replace( "popcorn.controls( true );", "popcorn.controls( false );" )
               // XXX: need a better way to force the use of the #smart div
-                                    .replace( /Popcorn.smart\("#([^"]+)"/, "Popcorn.smart(\"#smart\"" )
+                                    .replace( /Popcorn.smart\("#([^"]+)"/, "Popcorn.smart(\"#embed-smart\"" )
             });
           });
         });
