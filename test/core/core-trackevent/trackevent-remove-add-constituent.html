@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Remove/Add Track events for constituent TrackEvents", 4, function(){
+
+        createButterCore( function( butter ){
+
+          var t1,
+              te,
+              state,
+              m;
+
+          m = butter.addMedia();
+
+          t1 = m.addTrack(),
+          te = t1.addTrackEvent( { name: "TrackEvent 3", type: "test", start: 2, end: 3 } ),
+          state = undefined;
+
+          butter.listen( "trackeventremoved", function( trackEvent ){
+            state = trackEvent.data;
+          } );
+
+          butter.listen( "trackeventadded", function( trackEvent ){
+            state = trackEvent.data;
+          } );
+
+          ok( t1.trackEvents.length === 1, "Track event stored" );
+
+          m.removeTrack( t1 );
+          ok( state === te, "Track event removal event" );
+
+          state = undefined;
+
+          m.addTrack( t1 );
+          ok( state === te, "Track event added again" );
+          ok( t1.trackEvents.length === 1, "Track event stored" );
+
+          start();
+        });
+
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Track Event ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="mediaDiv"></div>
+    </div>
+  </body>
+</html>

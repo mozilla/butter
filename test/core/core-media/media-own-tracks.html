@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Media objects have their own tracks", 4, function(){
+
+        createButterCore( function( butter ){
+
+          var m1 = butter.addMedia(),
+              m2 = butter.addMedia();
+
+          var t1 = m1.addTrack( { name: "Track 1" } );
+          butter.currentMedia = m2;
+          var t2 = m2.addTrack( { name: "Track 2" } );
+          butter.currentMedia = m1;
+
+          ok( m1.getTrackById( t1.id ) !== undefined, "Track 1 is on Media 1");
+          ok( m1.getTrackById( t2.id ) === undefined, "Track 2 is not on Media 1");
+
+          butter.currentMedia = m2;
+
+          ok( m2.getTrackById( t1.id ) === undefined, "Track 1 is not on Media 1");
+          ok( m2.getTrackById( t2.id ) !== undefined, "Track 2 is on Media 1");
+
+          start();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Media ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture"></div>
+  </body>
+</html>

@@ -6,19 +6,13 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
   var CANVAS_CONTAINER_PADDING = 5;
 
-  return function( butter, media, tracksContainer, hScrollbar ){
+  return function( butter, media, statusArea, tracksContainer, hScrollbar ) {
 
-    var _element = document.createElement( "div" ),
-        _canvas = document.createElement( "canvas" ),
-        _canvasContainer = document.createElement( "div" ),
+    var _element = statusArea.querySelector( ".time-bar" ),
+        _canvas = _element.querySelector( "canvas" ),
         _media = media,
         _tracksContainer = tracksContainer,
         _scrubber = new Scrubber( butter, _element, _media, _tracksContainer, hScrollbar );
-
-    _element.className = "time-bar";
-    _canvasContainer.className = "time-bar-canvas-container";
-    _canvasContainer.appendChild( _canvas );
-    _element.appendChild( _canvasContainer );
 
     _canvas.addEventListener( "mousedown", _scrubber.onMouseDown, false );
 
@@ -26,8 +20,6 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       var tracksContainerWidth = tracksContainer.container.getBoundingClientRect().width,
           width = Math.min( tracksContainerWidth, _tracksContainer.container.scrollWidth ),
           containerWidth = Math.min( width, _tracksContainer.element.offsetWidth - CANVAS_CONTAINER_PADDING );
-
-      _canvasContainer.style.width = containerWidth + "px";
 
       var context = _canvas.getContext( "2d" );
 
@@ -38,7 +30,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
         _canvas.width = containerWidth;
       }
 
-      var inc = _tracksContainer.element.firstChild.clientWidth / _media.duration,
+      var inc = _tracksContainer.container.clientWidth / _media.duration,
           textWidth = context.measureText( util.secondsToSMPTE( 5 ) ).width,
           padding = 20,
           lastPosition = 0,

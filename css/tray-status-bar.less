@@ -2,9 +2,9 @@
 * TRAY STATUS
 */
 
-#status-bar {
+.butter-status-area {
   box-shadow: inset 0 1px 0 #5d5d5d;
-  .gradient( center, #2c2c2c, #4c4c4c, bottom, top, 0%, 100% );
+  .gradient( "vertical", #4c4c4c, #2c2c2c );
   position: absolute;
   height: 50px;
   top: 0;
@@ -85,8 +85,8 @@
       border-radius: 20px;
       padding: 3px;
 
-      .status-button[data-mouse-state="depressed"]{
-        .gradient( center, #bdaa5c, #e0d299, top, bottom, 0%, 100% );     
+      .status-button:active{
+        .gradient( "vertical", #bdaa5c, #e0d299, true );
       } 
 
       .status-button-icon {
@@ -108,8 +108,9 @@
   }
   .time-bar {
     position: absolute;
+    left: 115px;
     top: 10px;
-    width: 100%;
+    right: 35px;
     height: 30px;
     
     canvas {
@@ -124,7 +125,7 @@
     position: absolute;
     .selectable( none );
     top: 0;
-    width: 100%;
+    right: 0;
     left: 0;
     height: 8px;
     padding: 0 2px;
@@ -178,13 +179,13 @@
     top: 13px;
     height: 27px;
     overflow: hidden;
-    width: 100%;
+    right: 0;
   }
 
   .mute-button-container {
     position: absolute;
     top: 5px;
-    right: 120px;
+    right: 7px;
     width: 17px;
     height: 17px;
     background-image: url( "../resources/status-bg.png" );
@@ -208,14 +209,14 @@
       width: 17px;
       height: 17px;
       border-radius: 20px;
-      .gradient( center, #b4b4b4, #777777, top, bottom, 0%, 100% );
+      .gradient( "vertical", #B4B4B4, #777, true );
       
       &:hover {
-        .gradient( center, #b4b4b4, #969696, top, bottom, 0%, 100% );
+        .gradient( "vertical", #B4B4B4, #969696, true );
       }
     }
-    .status-button[data-mouse-state="depressed"] {
-      .gradient( center, #959595, #cccccc, top, bottom, 0%, 100% );
+    .status-button:active {
+      .gradient( "vertical", #959595, #CCC, true );
     }
   }
 }

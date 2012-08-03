@@ -10,13 +10,12 @@ define( [], function(){
       MOUSE_SCRUBBER_PIXEL_WINDOW = 3;
 
   return function( butter, parentElement, media, tracksContainer, hScrollbar ){
-    var _container = document.createElement( "div" ),
-        _node = document.createElement( "div" ),
-        _line = document.createElement( "div" ),
-        _fill = document.createElement( "div" ),
+    var _container = parentElement,
+        _node = _container.querySelector( ".time-bar-scrubber-node" ),
+        _line = _container.querySelector( ".time-bar-scrubber-line" ),
+        _fill = _container.querySelector( ".fill-bar" ),
         _tracksContainer = tracksContainer,
         _tracksContainerWidth,
-        _element = parentElement,
         _media = media,
         _mouseDownPos,
         _currentMousePos,
@@ -29,27 +28,9 @@ define( [], function(){
         _lastTime = -1,
         _lastScroll = _tracksContainer.element.scrollLeft,
         _lastZoom = -1,
-        _lineWidth = 0;
-
-    _container.className = "time-bar-scrubber-container";
-    _node.className = "time-bar-scrubber-node";
-    _line.className = "time-bar-scrubber-line";
-    _node.title = _line.title = "Displays the media's current time. Drag to seek through the media.";
-    _fill.className = "fill-bar";
-
-    _node.appendChild( _line );
-    _container.appendChild( _fill );
-    _container.appendChild( _node );
-    _element.appendChild( _container );
-
-    butter.ui.registerStateToggleFunctions( "timeline", {
-      transitionIn: function(){
-        _line.removeAttribute( "data-butter-shortened" );
-      },
-      transitionOut: function(){
-        _line.setAttribute( "data-butter-shortened", true );
-      }
-    });
+        _lineWidth = 0,
+        _seekCompleted = false,
+        _seekMouseUp = false;
 
     function setNodePosition(){
       var duration = _media.duration,
@@ -98,8 +79,13 @@ define( [], function(){
     hScrollbar.listen( "scroll", setNodePosition );
 
     function onMouseUp( e ){
-      if( _isPlaying || _isScrubbing ){
+      _seekMouseUp = true;
+
+      if( _isPlaying && _seekCompleted ){
         _media.play();
+      }
+
+      if( _isScrubbing ){
         _isScrubbing = false;
       }
 
@@ -163,6 +149,16 @@ define( [], function(){
       setNodePosition();
     } //onMouseMove
 
+    function onSeeked( e ){
+      _seekCompleted = true;
+
+      _media.unlisten( "mediaseeked", onSeeked );
+
+      if( _isPlaying && _seekMouseUp ) {
+        _media.play();
+      }
+    }
+
     function onScrubberMouseDown( e ){
       _mouseDownPos = e.pageX - _node.offsetLeft;
 
@@ -171,10 +167,13 @@ define( [], function(){
         _isScrubbing = true;
       }
 
+      _seekCompleted = _seekMouseUp = false;
+      _media.listen( "mediaseeked", onSeeked );
+
       _node.removeEventListener( "mousedown", onScrubberMouseDown, false );
       window.addEventListener( "mousemove", onMouseMove, false );
       window.addEventListener( "mouseup", onMouseUp, false );
-    } //onMouesDown
+    } //onMouseDown
 
     var onMouseDown = this.onMouseDown = function( e ){
       var pos = e.pageX - _container.getBoundingClientRect().left;
@@ -190,7 +189,6 @@ define( [], function(){
       _zoom = zoom || _zoom;
       _width = containerWidth;
       _tracksContainerWidth = _tracksContainer.container.getBoundingClientRect().width;
-      _container.style.width = _width + "px";
       _rect = _container.getBoundingClientRect();
       _lineWidth = _line.clientWidth;
       setNodePosition();

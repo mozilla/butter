@@ -52,7 +52,9 @@ define( [ "util/lang", "util/xhr",
           loadedLayouts = 0;
 
       for ( var editor in __editors ) {
-        if ( __editors.hasOwnProperty( editor ) && __editors[ editor ].layout.indexOf( "load!" ) === 0 ) {
+        if (  __editors.hasOwnProperty( editor ) &&
+              __editors[ editor ].layout &&
+              __editors[ editor ].layout.indexOf( "load!" ) === 0 ) {
           layoutsToLoad.push( __editors[ editor ] );
         }
       }
@@ -83,21 +85,28 @@ define( [ "util/lang", "util/xhr",
      */
     create: function( editorName, butter ) {
       var description = __editors[ editorName ],
+          completeLayout,
+          compiledLayout;
 
-          // Collect the element labeled with the 'butter-editor' class to avoid other elements (such as comments)
-          // which may exist in the layout.
-          compiledLayout = LangUtils.domFragment( description.layout );
+      if ( description.layout ) {
+        // Collect the element labeled with the 'butter-editor' class to avoid other elements (such as comments)
+        // which may exist in the layout.
+        compiledLayout = LangUtils.domFragment( description.layout );
 
-      // If domFragment returned a DOMFragment (not an actual element) try to get the proper element out of it
-      if ( !compiledLayout.classList ) {
-        compiledLayout = compiledLayout.querySelector( ".butter-editor" );
+        // Expose the full compiledLayout to the editor for later use.
+        completeLayout = compiledLayout;
+
+        // If domFragment returned a DOMFragment (not an actual element) try to get the proper element out of it
+        if ( !compiledLayout.classList ) {
+          compiledLayout = compiledLayout.querySelector( ".butter-editor" );
+        }
+
+        if ( !compiledLayout ) {
+          throw new Error( "Editor layout not formatted properly." );
+        }
       }
 
-      if ( !compiledLayout ) {
-        throw new Error( "Editor layout not formatted properly." );
-      }
-
-      return new description.create( compiledLayout, butter );
+      return new description.create( compiledLayout, butter, completeLayout );
     },
 
     /**

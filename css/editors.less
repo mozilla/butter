@@ -25,9 +25,13 @@
     .transform( rotate( -90deg ) );
   }
   > .butter-editor {
-    height: 100%;
     font: 14px 'MetaBold';
-    
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
     h1 {
       font-size: 16px;
       color: #FFF;
@@ -42,7 +46,8 @@
     .trackevent-property {
       select,
       input {
-        float: right;
+        float: left;
+        width: 100%;
       }
     }
     > .editor-tabs {
@@ -78,4 +83,33 @@
       margin: 10px;
     }
   }
+
+  .scrollbar-wrapper {
+    position: absolute;
+    top: 0;
+    right: 15px;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
+
+  .allow-scrollbar {
+    .trackevent-property {
+      padding-right: 15px;
+    }
+
+    .butter-scroll-bar.scroll-bar-v {
+      top: 10%;
+      right: 2px;
+      width: 10px;
+      bottom: 10%;
+    }
+  }
+}
+
+.butter-editor-spacing {
+  padding-right: 200px;
+}
+.butter-editor-spacing.editor-minimized {
+  padding-right: 0;
 }

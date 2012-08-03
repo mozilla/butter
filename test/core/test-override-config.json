@@ -1,0 +1,26 @@
+{
+  "name": "test-override-config",
+  "debug": true,
+  "baseDir": "../../",
+  "makeVideoURLsUnique": false,
+  "ui": {
+    "enabled": false,
+    "trackEventHighlight": "click"
+  },
+  "plugin": {
+    "plugins": [
+      {
+        "type": "text",
+        "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
+      },
+      {
+        "type": "image",
+        "path": "{{baseDir}}external/popcorn-js/plugins/image/popcorn.image.js"
+      }
+    ],
+    "defaults": [
+      "text",
+      "image"
+    ]
+  }
+}

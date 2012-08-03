@@ -21,6 +21,7 @@
     });
     // Fail tests that don't complete in 20s
     QUnit.config.testTimeout = 20000;
+    QUnit.config.reorder = false;
   }
 
 }( window ));

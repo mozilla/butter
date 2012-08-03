@@ -24,7 +24,8 @@
     "robots": "{{templateBase}}supported/robots/butter/config.json",
     "popup": "{{templateBase}}supported/popup/config.json",
     "newscaster": "{{templateBase}}supported/newscaster/butter/config.json",
-    "simple": "{{templateBase}}supported/simple/butter/config.json"
+    "simple": "{{templateBase}}supported/simple/butter/config.json",
+    "basic": "{{templateBase}}basic/config.json"
   },
   "exportAssets": [
     "../external/popcorn-js/ie8/popcorn.ie8.js",
@@ -38,7 +39,6 @@
     "../external/popcorn-js/plugins/text/popcorn.text.js",
     "../external/popcorn-js/plugins/googlemap/popcorn.googlemap.js",
     "../external/popcorn-js/plugins/image/popcorn.image.js",
-    "../external/popcorn-js/plugins/webpage/popcorn.webpage.js",
-    "../external/popcorn-js/plugins/attribution/popcorn.attribution.js"
+    "../external/popcorn-js/plugins/webpage/popcorn.webpage.js"
   ]
 }

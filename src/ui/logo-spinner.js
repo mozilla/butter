@@ -1,14 +1,10 @@
-define([], function(){
+define( [ "util/lang", "text!layouts/logo-spinner.html" ],
+  function( LangUtils, LAYOUT_SRC ) {
   
-  return function( parentElement ){
+  return function( parentElement ) {
 
-    var outerElement = document.createElement( "div" ),
-        innerElement = document.createElement( "div" );
-
-    outerElement.className = "butter-logo-spin-outer";
-    innerElement.className = "butter-logo-spin-inner";
-
-    outerElement.appendChild( innerElement );
+    var outerElement = LangUtils.domFragment( LAYOUT_SRC ),
+        innerElement = outerElement.querySelector( ".butter-logo-spin-inner" );
 
     if( parentElement ){
       parentElement.appendChild( outerElement );

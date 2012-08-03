@@ -63,6 +63,9 @@
               },
               ended: function(){
                 _this.dispatch( "mediaended" );
+              },
+              seeked: function(){
+                _this.dispatch( "mediaseeked" );
               }
             },
             prepare: function(){
@@ -107,7 +110,8 @@
             setup: {
               target: _target,
               url: _url
-            }
+            },
+            makeVideoURLsUnique: mediaOptions.makeVideoURLsUnique
           });
 
       this.popcornCallbacks = null;

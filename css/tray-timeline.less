@@ -2,16 +2,7 @@
 * TRAY TIMELINE
 */
 
-#tools {
-  z-index: 2140000003;
-  position: absolute;
-  right: 10px;
-  top: 55px;
-  width: 120px;
-  height: 150px;
-}
-
-#butter-timeline {
+.butter-timeline {
   position: absolute;
   width: 100%;
   height: 160px;
@@ -28,7 +19,7 @@
   }
   .media-instance {
     height: 190px;
-    padding: 0 150px 0 115px;
+    padding: 0 35px 0 115px;
     position: relative;
     .selectable( none );
     .transition( top 0.5s );
@@ -82,7 +73,7 @@
       box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 );
       border-radius: 5px;
       .selectable( none );
-      .gradient( center, rgb( 255,255,0 ), rgb( 200,200,0 ), bottom, top, 0%, 100% );
+      .gradient( "vertical", #C8C800, #FFFF00, true );
       font-size: 11px;
       line-height: 25px;
       font-weight: 700;
@@ -170,7 +161,7 @@
         border-radius: 6px;
         margin-bottom: 6px;
         position: relative;
-        .gradient( center, #1c1c1c, #2a2a2a, bottom, top, 0%, 100% );
+        .gradient( "vertical", #2A2A2A, #1C1C1C, true );
         color: #666;
         font-size: 11px;
         line-height: 25px;

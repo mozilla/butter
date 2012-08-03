@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Test strange div/video player support", 4, function(){
+
+        var el = document.createElement( "video" ),
+            qunit = document.getElementById( "qunit-fixture" );
+        el.setAttribute( "data-butter-source", "http://www.youtube.com/watch?v=7glrZ4e4wYU" );
+        el.setAttribute( "data-butter", "media" );
+        el.id = "strange-test-1";
+        qunit.appendChild( el );
+
+        createButterCore(function( butter ){
+          butter.config.value( "scrapePage", true );
+          butter.preparePage(function(){
+            ok( butter.media.length > 0 && butter.media[ 0 ].url === "http://www.youtube.com/watch?v=7glrZ4e4wYU", "URL match" );
+            ok( document.getElementById( "strange-test-1" ), "New element exists" );
+            equals( document.getElementById( "strange-test-1" ).getAttribute( "data-butter-source" ), "http://www.youtube.com/watch?v=7glrZ4e4wYU", "has correct url" );
+            equals( document.getElementById( "strange-test-1" ).getAttribute( "data-butter" ), "media", "has correct data-butter attribute" );
+            start();
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Player ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="mediaDiv"></div>
+    </div>
+  </body>
+</html>

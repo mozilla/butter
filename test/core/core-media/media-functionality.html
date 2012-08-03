@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Simple Media functionality", 6, function(){
+
+        createButterCore( function( butter ){
+
+          var m1 = butter.addMedia( { media: "test" } ),
+              state = [ 0, 0 ];
+
+          butter.listen( "mediatimeupdate", function( media ){
+            state[ 0 ] = 1;
+          });
+          butter.listen( "mediadurationchanged", function( media ){
+            state[ 1 ] = 1;
+          });
+
+          m1.duration = 2;
+          ok( m1.duration === 2, "duration is correct" );
+          m1.currentTime = 1;
+          ok( m1.currentTime === 1, "currentTime is correct" );
+          ok( state[ 0 ] === 1 && state[ 1 ] === 1, "events fired" );
+
+          state = [ 0, 0 ];
+          butter.duration = 5;
+          ok( butter.duration === 5, "duration is correct" );
+          butter.currentTime = 2;
+          ok( butter.currentTime === 2, "currentTime is correct" );
+          ok( state[ 0 ] === 1 && state[ 1 ] === 1, "events fired" );
+
+          start();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Media ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture"></div>
+  </body>
+</html>

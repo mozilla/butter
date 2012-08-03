@@ -374,6 +374,9 @@
       //addMedia - add a media object
       this.addMedia = function ( media ) {
         if ( !( media instanceof Media ) ) {
+          if ( media ) {
+            media.makeVideoURLsUnique = _config.value( "makeVideoURLsUnique" );
+          }
           media = new Media( media );
         } //if
 

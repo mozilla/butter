@@ -5,16 +5,43 @@
   <link rel="stylesheet" href="qunit/qunit.css" type="text/css" media="screen">
   <link rel="stylesheet" href="butter.testrunner.css" type="text/css" >
   <script src="butter.testrunner.js"></script>
+  <script>
+    document.addEventListener( "DOMContentLoaded", function() {
+      var runner = new TestRunner();
+      runner.getTests( "../tests.conf", function() {
+        runner.runTests();
+      });
+    });
+  </script>
 </head>
 <body>
   <h1 id="qunit-header">
     Butter Test Suite
-    <div id="test-links"></div>
+    <div id="test-links">
+      <a target="_blank" href="core/core-debug/index.html">Core Debug</a> |
+      <a target="_blank" href="core/core-dependency/index.html">Core Dependency</a> |
+      <a target="_blank" href="core/core-dialog/index.html">Core Dialog</a> |
+      <a target="_blank" href="core/core-import_export/index.html">Core Import/Export</a> |
+      <a target="_blank" href="core/core-media/index.html">Core Media</a> |
+      <a target="_blank" href="core/core-player/index.html">Core Player</a> |
+      <a target="_blank" href="core/core-scripts/index.html">Core Scripts</a> |
+      <a target="_blank" href="core/core-target/index.html">Core Target</a> |
+      <a target="_blank" href="core/core-track/index.html">Core Track</a> |
+      <a target="_blank" href="core/core-trackevent/index.html">Core Track Event</a> |
+      <a target="_blank" href="editor/index.html">Editor</a> |
+      <a target="_blank" href="eventmanager/index.html">Eventmanager Module</a> |
+      <a target="_blank" href="logger/index.html">Logger Module</a> |
+      <a target="_blank" href="media/index.html">Media Module</a> |
+      <a target="_blank" href="page/index.html">Page Module</a> |
+      <a target="_blank" href="plugins/index.html">Plugins Module</a> |
+      <a target="_blank" href="popcorn-wrapper/index.html">Popcorn Wrapper Module</a> |
+      <a target="_blank" href="track/index.html">Track Module</a> |
+      <a target="_blank" href="trackevent/index.html">Track Event Module</a> |
+      <a target="_blank" href="uri/index.html">URI Util</a> |
+    </div>
   </h1>
   <h2 id="qunit-banner"></h2>
   <h2 id="qunit-userAgent"></h2>
   <ol id="qunit-tests"></ol>
-  <iframe id="test-frame" style="height: 600px; width: 100%; overflow: scroll;"></iframe>
-
 </body>
 </html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite [Track Event]</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../inject.js"></script>
+    <script type="text/javascript" src="../../src/butter.js"></script>
+    <script src="../butter.inject.js"></script>
+    <script src="../test-utils.js"></script>
+    <script>
+      var defaultEvent = {
+            type: "text",
+            popcornOptions: {
+              start: 2,
+              end: 5,
+              text: "This is"
+            }
+          };
+
+      asyncTest( "update w/ valid options", 5, function() {
+        createButterModule( function( butter ) {
+          var t = butter.currentMedia.tracks[ 0 ],
+              te;
+
+          butter.listen( "trackeventupdated", function( e ) {
+            butter.unlisten( "trackeventupdated" );
+            equal( e.data.popcornOptions.start, 0, "Applied correct default start time" );
+            equal( e.data.popcornOptions.end, 1, "Applied correct default end time" );
+
+            butter.listen( "trackeventupdated", function( e ) {
+              butter.unlisten( "trackeventupdated" );
+              equal( e.data.popcornOptions.start, 5, "Correctly applied new start time" );
+              equal( e.data.popcornOptions.end, 10, "Correctly applied new end time" );
+              equal( e.data.popcornOptions.text, "This is a test", "Correctly applied new text value" );
+
+              start();
+            });
+
+            te = t.addTrackEvent( defaultEvent );
+            te.update( { start: 5, end: 10, text: "This is a test" } );
+          });
+
+          te = t.addTrackEvent( { name: "TestEvent" } );
+          // Checking Defaults
+          te.update();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite [Track Event]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="mediaDiv"></div>
+      <div id="test-target-1"></div>
+    </div>
+  </body>
+</html>

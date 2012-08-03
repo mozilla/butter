@@ -2,22 +2,12 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/logger",
-          "core/eventmanager",
-          "util/dragndrop"
-        ],
-        function(
-          Logger,
-          EventManagerWrapper,
-          DragNDrop
-        ){
+define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
+  function( Logger, EventManagerWrapper, DragNDrop ) {
 
-  var __guid = 0;
+  return function( track ) {
 
-  return function( track ){
-
-    var _id = "TrackView" + __guid++,
-        _track = track,
+    var _track = track,
         _this = this,
         _trackEvents = [],
         _trackEventElements = [],
@@ -30,7 +20,6 @@ define( [ "core/logger",
     EventManagerWrapper( _this );
 
     _element.className = "butter-track";
-    _element.id = _id;
 
     function setupDroppable(){
       _droppable = DragNDrop.droppable( _element, {

@@ -34,9 +34,9 @@ define([], function(){
     if( __mouseDown ){
       for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
         __selectedDraggables[ i ].update();
-      } //for
+      }
       window.setTimeout( updateTimeout, SCROLL_INTERVAL );
-    } //if
+    }
   }
 
   function onDragged( e ){
@@ -44,40 +44,43 @@ define([], function(){
     __mouseLast[ 1 ] = __mousePos[ 1 ];
     __mousePos = [ e.clientX, e.clientY ];
 
-    var remembers = [],
+    var remembers,
         droppable,
         remember,
-        i, j;
+        i,
+        j;
 
-    if( __mouseDown ){
-      for( i = __selectedDraggables.length - 1; i >= 0; --i ){
-        remembers.push( __selectedDraggables[ i ] );
-      } //for
-    }else{
-      var selectedDraggable;
+    remembers = __selectedDraggables.slice();
+
+    if( !__mouseDown ){
       __mouseDown = true;
       window.setTimeout( updateTimeout, SCROLL_INTERVAL );
-
-      for( i = __selectedDraggables.length - 1; i >= 0; --i ){
-        selectedDraggable = __selectedDraggables[ i ];
-        selectedDraggable.start( e );
-        remembers.push( __selectedDraggables[ i ] );
-      } //for
-    } //if
+      for( i = remembers.length - 1; i >= 0; --i ){
+        remembers[ i ].start( e );
+      }
+    }
 
     for( i = remembers.length - 1; i >= 0; --i ){
       remember = remembers[ i ];
       for( j = __droppables.length - 1; j >= 0; --j ){
         droppable = __droppables[ j ];
-        if( !droppable.element.id ||
-            remember.element.id === droppable.element.id ||
+        if( remember.element === droppable.element ||
             !droppable.drag( remember.element.getBoundingClientRect() ) ){
           droppable.forget( remember );
-        }else{
+        }
+        else {
+          // If we stumbled on a valid droppable early in the array
+          // and the draggable has a droppable already that is, perhaps
+          // further along in the array, forcefully forget the draggable
+          // before telling another droppable to remember it.
+          if ( remember.droppable && remember.droppable !== droppable ) {
+            remember.droppable.forget( remember );
+          }
           droppable.remember( remember );
-        } //if
-      } //for
-    } //for
+          break;
+        }
+      }
+    }
   }
 
   function onMouseUp( e ){
@@ -88,10 +91,8 @@ define([], function(){
 
     for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
       selectedDraggable = __selectedDraggables[ i ];
-      if( selectedDraggable.dragging ){
-        selectedDraggable.stop();
-      } //if
-    } //for
+      selectedDraggable.stop();
+    }
   }
 
   function onMouseDown( e ){
@@ -178,27 +179,22 @@ define([], function(){
   }
 
   function Resizable( element, options ){
-    var _leftHandle = document.createElement( "div" ),
-        _rightHandle = document.createElement( "div" ),
+    var _leftHandle = element.querySelector( ".handle.left-handle" ),
+        _rightHandle = element.querySelector( ".handle.right-handle" ),
         _onStart = options.start || function(){},
         _onStop = options.stop || function(){},
+        _padding = options.padding || 0,
         _updateInterval = -1,
         _scroll = options.scroll,
         _scrollRect,
         _elementRect;
-
-    _leftHandle.className = "handle left-handle";
-    _rightHandle.className = "handle right-handle";
-
-    element.appendChild( _leftHandle );
-    element.appendChild( _rightHandle );
 
     function onLeftMouseDown( e ){
       e.stopPropagation();
 
       var originalRect = element.getBoundingClientRect(),
           originalPosition = element.offsetLeft,
-          originalWidth = element.offsetWidth,
+          originalWidth = element.clientWidth,
           mouseDownPosition = e.clientX,
           mousePosition,
           mouseOffset;
@@ -228,7 +224,7 @@ define([], function(){
         }
 
         element.style.left = newX + "px";
-        element.style.width = newW + "px";
+        element.style.width = newW - _padding + "px";
         _elementRect = element.getBoundingClientRect();
       }
 
@@ -321,8 +317,6 @@ define([], function(){
       destroy: function(){
         _leftHandle.removeEventListener( "mousedown", onLeftMouseDown, false );
         _rightHandle.removeEventListener( "mousedown", onRightMouseDown, false );
-        element.removeChild( _leftHandle );
-        element.removeChild( _rightHandle );
       }
     };
   }
@@ -365,8 +359,7 @@ define([], function(){
         _onOver = options.over || function(){},
         _onOut = options.out || function(){},
         _droppable = {},
-        _draggedElements = {},
-        _draggedCount = 0;
+        _rememberedDraggables = [];
 
     function onDrop( e ) {
       e.preventDefault();
@@ -415,37 +408,39 @@ define([], function(){
     element.addEventListener( "dragenter", onDragEnter, false );
     element.addEventListener( "dragleave", onDragLeave, false );
 
+    function removeDraggable( draggable ) {
+      var idx = _rememberedDraggables.indexOf( draggable );
+      if( idx > -1 ){
+        _rememberedDraggables.splice( idx, 1 );
+        if( _rememberedDraggables.length === 0 ){
+          element.classList.remove( _hoverClass );
+        }
+      }
+      return idx > -1;
+    }
+
     _droppable = {
       element: element,
       remember: function( draggable ){
-        if( !_draggedElements[ draggable.element.id ] && !draggable.droppable ){
-          _draggedCount++;
+        var idx = _rememberedDraggables.indexOf( draggable );
+        if( idx === -1 ){
+          _rememberedDraggables.push( draggable );
           element.classList.add( _hoverClass );
-          _draggedElements[ draggable.element.id ] = draggable;
           draggable.droppable = _droppable;
           _onOver( draggable.element );
-        } //if
+        }
       },
       forget: function( draggable ){
-        // we only care to forget if it is currently dragging
-        if( _draggedElements[ draggable.element.id ] && draggable.droppable ){
-          if( --_draggedCount === 0 ){
-            element.classList.remove( _hoverClass );
-          } //if
+        if ( removeDraggable( draggable ) ) {
           draggable.droppable = null;
           _onOut( draggable.element );
-          delete _draggedElements[ draggable.element.id ];
-        } // if
+        }
       },
       drop: function( draggable ){
-        if( _draggedElements[ draggable.element.id ] ){
-          if( --_draggedCount === 0 ){
-            element.classList.remove( _hoverClass );
-          } //if
-          draggable.droppable = null;
+        if ( removeDraggable( draggable ) ) {
           _onDrop( draggable.element, __mousePos );
-          delete _draggedElements[ draggable.element.id ];
-        } //if
+          draggable.droppable = null;
+        }
       },
       drag: function( dragElementRect ){
         var rect = element.getBoundingClientRect();
@@ -462,7 +457,6 @@ define([], function(){
         var overlapDims = [ minR - maxL, minB - maxT ];
 
         if( overlapDims[ 0 ] * overlapDims[ 1 ] / 2 > dragElementRect.width * dragElementRect.height / 4 ){
-
           return true;
         }
 
@@ -504,14 +498,7 @@ define([], function(){
         _onStart = options.start || function(){},
         _onStop = options.stop || function(){ return false; },
         _originalPosition,
-        _droppable = null,
-        _draggable = {
-          destroy: function(){
-            _draggable.selected = false;
-            element.removeEventListener( "mousedown", onMouseDown, false );
-          }
-        },
-        _dragging = false,
+        _draggable = {},
         _containmentPadding = __nullRect;
 
     if( _containment ){
@@ -526,7 +513,6 @@ define([], function(){
     };
 
     function updatePosition(){
-
       var x = __mousePos[ 0 ] - _mouseOffset[ 0 ],
           y = __mousePos[ 1 ] - _mouseOffset[ 1 ];
 
@@ -596,8 +582,14 @@ define([], function(){
 
     element.addEventListener( "mousedown", onMouseDown, false );
 
-    _draggable.update = function(){
+    _draggable.droppable = null;
 
+    _draggable.destroy = function() {
+      _draggable.selected = false;
+      element.removeEventListener( "mousedown", onMouseDown, false );
+    };
+
+    _draggable.update = function() {
       updatePosition();
       if( _scroll ){
         checkScroll();
@@ -606,7 +598,6 @@ define([], function(){
     };
 
     _draggable.start = function( e ){
-      _dragging = true;
       _originalPosition = [ element.offsetLeft, element.offsetTop ];
       _draggable.updateRects();
       _mouseOffset = [ e.clientX - _elementRect.left, e.clientY - _elementRect.top ];
@@ -614,14 +605,18 @@ define([], function(){
     };
 
     _draggable.stop = function(){
-      _dragging = false;
-      _onStop();
-      if( !_droppable && _revert ){
-        element.style.left = _originalPosition[ 0 ] + "px";
-        element.style.top = _originalPosition[ 1 ] + "px";
-      } else if ( _droppable ){
-        _droppable.drop( _draggable );
-      } //if
+      // If originalPosition is not null, start() was called
+      if ( _originalPosition ) {
+        _onStop();
+        if ( !_draggable.droppable && _revert ) {
+          element.style.left = _originalPosition[ 0 ] + "px";
+          element.style.top = _originalPosition[ 1 ] + "px";
+        }
+        else if ( _draggable.droppable ) {
+          _draggable.droppable.drop( _draggable );
+        }
+        _originalPosition = null;
+      }
     };
 
     Object.defineProperties( _draggable, {
@@ -629,10 +624,10 @@ define([], function(){
         enumerable: true,
         get: function(){
           for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
-            if( __selectedDraggables[ i ].element.id === _element.id ){
+            if( __selectedDraggables[ i ].element === _element ){
               return true;
-            } //if
-          } //for
+            }
+          }
           return false;
         },
         set: function( val ){
@@ -640,36 +635,22 @@ define([], function(){
             _oldZIndex = getComputedStyle( element ).getPropertyValue( "z-index" );
             element.style.zIndex = MAXIMUM_Z_INDEX;
             __selectedDraggables.push( _draggable );
-          } else {
+          }
+          else {
             element.style.zIndex = _oldZIndex;
-            for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
-              if( __selectedDraggables[ i ].element.id === _element.id ){
+            for ( var i = __selectedDraggables.length - 1; i >= 0; --i ) {
+              if ( __selectedDraggables[ i ].element === _element ) {
                 __selectedDraggables.splice( i, 1 );
                 return;
-              } //if
-            } //for
-          } //if
-        }
-      },
-      dragging: {
-        enumerable: true,
-        get: function(){
-          return _dragging;
+              }
+            }
+          }
         }
       },
       element: {
         enumerable: true,
         get: function(){
           return _element;
-        }
-      },
-      droppable: {
-        enumerable: true,
-        get: function(){
-          return _droppable;
-        },
-        set: function( val ){
-          _droppable = val;
         }
       }
     });

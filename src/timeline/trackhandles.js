@@ -2,37 +2,22 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [
-          "dialog/dialog",
-          "util/dragndrop"
-        ],
-        function( Dialog, DragNDrop ){
+define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-handle.html" ],
+  function( Dialog, DragNDrop, LangUtils, TRACK_HANDLE_LAYOUT ) {
 
   var ADD_TRACK_BUTTON_Y_ADJUSTMENT = 37;
 
-  return function( butter, media, tracksContainer, orderChangedCallback ){
+  return function( butter, media, mediaInstanceRootElement, tracksContainer, orderChangedCallback ) {
 
     var _media = media,
-        _container = document.createElement( "div" ),
-        _listElement = document.createElement( "div" ),
-        _addTrackButton = document.createElement( "button" ),
+        _container = mediaInstanceRootElement.querySelector( ".track-handle-container" ),
+        _listElement = _container.querySelector( ".handle-list" ),
+        _addTrackButton = _container.querySelector( "button.add-track" ),
         _tracks = {},
         _menus = [],
         _this = this;
 
-    _container.className = "track-handle-container";
-    _listElement.className = "handle-list";
-
-    _container.appendChild( _listElement );
-
-    _addTrackButton.id = "add-track";
-    _addTrackButton.innerHTML = "<span class=\"icon icon-plus-sign\"></span> Track";
-    _addTrackButton.classList.add( "butter-btn" );
-    _addTrackButton.title = "Add a new Track for your events";
-
-    _container.appendChild( _addTrackButton );
-
-    _addTrackButton.addEventListener( "click", function( e ){
+    _addTrackButton.addEventListener( "click", function( e ) {
       butter.currentMedia.addTrack();
     }, false );
 
@@ -47,19 +32,15 @@ define( [
       }
     });
 
-    function onTrackAdded( e ){
+    function onTrackAdded( e ) {
       var track = e.data,
           trackId = track.id,
           trackName = track.name,
-          trackDiv = document.createElement( "div" ),
-          menuDiv = document.createElement( "div" ),
-          deleteButton = document.createElement( "div" );
+          trackDiv = LangUtils.domFragment( TRACK_HANDLE_LAYOUT ),
+          menuDiv = trackDiv.querySelector( ".menu" ),
+          deleteButton = menuDiv.querySelector( ".delete" );
 
-      menuDiv.className = "menu";
-      deleteButton.className = "delete";
-      menuDiv.appendChild( deleteButton );
-
-      deleteButton.addEventListener( "click", function( e ){
+      deleteButton.addEventListener( "click", function( e ) {
         var dialog = Dialog.spawn( "delete-track", {
           data: trackName,
           events: {
@@ -136,11 +117,8 @@ define( [
 
       _menus.push( menuDiv );
 
-      trackDiv.className = "track-handle";
-      trackDiv.id = "track-handle-" + trackId;
       trackDiv.setAttribute( "data-butter-track-id", trackId );
-      trackDiv.appendChild( document.createTextNode( trackName ) );
-      trackDiv.appendChild( menuDiv );
+      trackDiv.querySelector( "span.title" ).appendChild( document.createTextNode( trackName ) );
 
       _sortable.addItem( trackDiv );
 

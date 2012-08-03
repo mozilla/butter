@@ -4,7 +4,8 @@
 
 ( function( Butter ) {
 
-  Butter.Editor.register( "googlemap", "load!{{baseDir}}editors/googlemap-editor.html", function( rootElement, butter ) {
+  Butter.Editor.register( "googlemap", "load!{{baseDir}}editors/googlemap-editor.html",
+    function( rootElement, butter, compiledLayout ) {
 
     var _this = this;
 
@@ -14,6 +15,7 @@
         _targetSelectElement,
         _trackEvent,
         _popcornEventMapReference,
+        _extraStyleTag,
         _mapListeners;
 
     /**
@@ -73,19 +75,6 @@
     }
 
     /**
-     * Member: onTiltChanged
-     *
-     * GoogleMaps tilt changed event handler. Updates the associated trackevent after map tilt is changed.
-     */
-    function onTiltChanged() {
-      var updateOptions = {
-            pitch: _popcornEventMapReference.getTilt(),
-            location: ""
-          };
-      _trackEvent.update( updateOptions );
-    }
-
-    /**
      * Member: setupMapListeners
      *
      * Adds listeners to the google map object to detect change in state.
@@ -94,7 +83,6 @@
       _mapListeners = [];
       _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'dragend', onDragEnd ) );
       _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'zoom_changed', onZoomChanged ) );
-      _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'tilt_changed', onTiltChanged ) );
       _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'heading_changed', onHeadingChanged ) );
     }
 
@@ -194,7 +182,8 @@
       _trackEvent = trackEvent;
 
       var targetList = _this.createTargetsList( _targets ),
-          optionsContainer = _rootElement.querySelector( ".editor-options" );
+          optionsContainer = _rootElement.querySelector( ".editor-options" ),
+          optionsWrapper = _rootElement.querySelector( ".editor-options-wrapper" );
 
       // Attach the onchange handler to trackEvent is updated when <select> is changed
       _targetSelectElement = targetList.querySelector( "select" );
@@ -233,6 +222,8 @@
 
       _this.updatePropertiesFromManifest( trackEvent );
 
+      _this.addVerticalScrollbar( optionsWrapper, optionsContainer, _rootElement );
+      _this.vScrollBar.update();
     }
 
     // Extend this object to become a BaseEditor
@@ -246,8 +237,11 @@
           getMapFromTrackEvent();
         });
         setup( trackEvent );
+        _this.applyExtraStyleTag( compiledLayout );
+        _this.vScrollBar.update();
       },
       close: function() {
+        _this.removeExtraStyleTag();
         removeMapListeners();
       }
     });

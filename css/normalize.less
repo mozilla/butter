@@ -1,12 +1,129 @@
-/*********************************************************
+/*
 * NORMALIZATION
+* A lot of this is from normalize.css and HTML5 Boilerplate, docs for which can be found at h5bp.com/css
 */
 
-body {
+/*********************************************************
+* HTML5 display
+*/
+
+// Corrects html5  display definitions in IE9
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+summary {
+  display: block;
+}
+
+audio,
+canvas,
+video {
+  display: inline-block;
+}
+
+// Forces controls to display in modern browsers
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+// IE9 doesn't support the new HTML5 hidden attribute
+[hidden] {
+  display: none;
+}
+
+/*********************************************************
+* Links
+*/
+
+// Addresses `outline` inconsistency between Chrome and other browsers.
+a:focus {
+  outline: thin dotted;
+}
+
+// Improves readability when focused and also mouse hovered in all browsers.
+// See people.opera.com/patrickl/experiments/keyboard/test
+a:active,
+a:hover {
+  outline: 0;
+}
+
+/*********************************************************
+* Typography
+*/
+
+// Prevent iOS text size adjust on device orientation change, without disabling user zoom: h5bp.com/g
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+// Normalize fonts
+html,
+button,
+input,
+select,
+textarea {
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
 }
 
-sub, sup {
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+
+b,
+strong {
+  font-weight: bold;
+}
+
+blockquote {
+  margin: 1em 40px;
+}
+
+dfn {
+  font-style: italic;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #CCC;
+  margin: 1em 0;
+  padding: 0;
+}
+
+// Redeclare monospace font family: h5bp.com/j
+pre,
+code,
+kbd,
+samp {
+  font-family: "menlo", monospace, serif;
+  font-size: 1em;
+}
+
+// Improve readability of pre-formatted text
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+small {
+  font-size: 85%;
+}
+
+// Superscripts and subscripts: h5bp.com/k;
+sub,
+sup {
   font-size: 75%;
   line-height: 0;
   position: relative;
@@ -19,4 +136,129 @@ sup {
 
 sub {
   bottom: -0.25em;
+}
+
+/*********************************************************
+* Selection
+*/
+
+::-moz-selection {
+  background: @COLOR_SELECTION;
+  text-shadow: none;
+}
+
+::selection {
+  background: @COLOR_SELECTION;
+  text-shadow: none;
+}
+
+
+/*********************************************************
+* Images
+*/
+
+// Removes border when inside `a` element for IE9
+img {
+  border: 0;
+}
+
+// Corrects overflow displayed oddly in IE9.
+svg:not(:root) {
+  overflow: hidden;
+}
+
+// Margins not present in IE9
+figure {
+  margin: 0;
+}
+
+/*********************************************************
+* Forms
+*/
+
+// Normalize spacing
+fieldset {
+  border: 1px solid #C0C0C0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+
+// Corrects color not being inherited in IE9
+legend {
+  border: 0;
+  padding: 0;
+}
+
+// 1. Corrects font size not being inherited in all browsers.
+// 2. Addresses margins set differently in Chrome
+// 3. Improves appearance and consistency in all browsers.
+button,
+input,
+select,
+textarea {
+  font-size: 100%; //1
+  margin: 0; //2 
+  vertical-align: baseline; //3
+}
+
+
+// 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio` and `video` controls.
+// 2. Corrects inability to style clickable `input` types in iOS.
+// 3. Improves usability and consistency of cursor style between image-type `input` and others.
+button,
+html input[type="button"], //1
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button; /* csslint-ignore: (2) */
+  cursor: pointer; //3
+}
+
+// Reset default cursor for disabled elements.
+button[disabled],
+input[disabled] {
+  cursor: default;
+}
+
+// 1. Addresses box sizing set to content-box in IE9.
+// 2. Removes excess padding in IE9.
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box; //1
+  padding: 0; //2
+}
+
+// 1. Addresses `appearance` set to `searchfield` in S5, Chrome.
+// 2. Addresses `box-sizing` set to `border-box` in S5, Chrome (include `-moz` to future-proof).
+input[type="search"] {
+  -webkit-appearance: textfield; /* csslint-ignore: (1) */
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box; //2
+  box-sizing: content-box;
+}
+
+// Removes inner padding and search cancel button in S5, Chrome on OS X.
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none; /* csslint-ignore */
+}
+
+// 1. Removes default vertical scrollbar in IE9.
+// 2. Improves readability and alignment in all browsers.
+textarea {
+  overflow: auto; //1
+  vertical-align: top; //2
+}
+
+/*********************************************************
+* Tables
+*/
+
+// Remove most spacing between table cells.
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+td {
+  vertical-align: top;
 }

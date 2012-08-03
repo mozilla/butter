@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite</title>
+    <link rel="stylesheet" href="../../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../../../src/butter.js"></script>
+    <script src="../../butter.inject.js"></script>
+    <script src="../../test-utils.js"></script>
+    <script>
+      asyncTest( "Existence and execution", 6, function(){
+
+        createButterCore( function( butter ){
+
+          var theZONE = "";
+
+          window._testInitCallback = function(){ theZONE += "i"; };
+          window._testBeforeCallback = function(){ theZONE += "b"; };
+          window._testAfterCallback = function(){ theZONE += "a" };
+
+          var initScript = document.createElement( "script" );
+          initScript.innerHTML = '"inline test init from element"';
+          initScript.id = "init-script";
+          document.head.appendChild( initScript );
+
+          var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../../../external/popcorn-js/test/trailer.ogv" } );
+
+          m1.onReady(function(){
+            butter.preparePopcornScriptsAndCallbacks(function(){
+              document.head.removeChild( initScript );
+              var exported = butter.getHTML();
+              ok( exported.indexOf( "inline test init from element" ) > -1, "found init script" );
+              ok( exported.indexOf( "inline test before" ) > -1, "found before script" );
+              ok( exported.indexOf( "inline test after" ) > -1, "found after script" );
+              ok( theZONE.indexOf( "i" ) > -1, "init callback called" );
+              ok( theZONE.indexOf( "b" ) > -1, "before callback called" );
+              ok( theZONE.indexOf( "a" ) > -1, "after callback called" );
+
+              start();
+            });
+          });
+
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite[ Core - Scripts ]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="audio-test"></div>
+    </div>
+  </body>
+</html>

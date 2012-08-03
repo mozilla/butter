@@ -4,7 +4,7 @@
 
 define( [], function(){
 
-  var __timeAccuracy = 3;
+  var __timeAccuracy = 5;
 
   function roundTime( time ){
     return Math.round( time * ( Math.pow( 10, __timeAccuracy ) ) ) / Math.pow( 10, __timeAccuracy );

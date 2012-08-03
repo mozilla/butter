@@ -109,23 +109,18 @@ define( [
           newEnd = _popcornOptions.end,
           manifestOptions;
 
-      if ( updateOptions.start ) {
-        if ( !isNaN( updateOptions.start ) ) {
-          newStart = TimeUtil.roundTime( updateOptions.start );
-        }
-        else {
-          throw new TrackEventUpdateException( "invalid-start-time", "[start] is an invalid value." );
-        }
+      if ( !isNaN( updateOptions.start ) ) {
+        newStart = TimeUtil.roundTime( updateOptions.start );
+      }
+      else if ( !!updateOptions.start ) {
+        throw new TrackEventUpdateException( "invalid-start-time", "[start] is an invalid value." );
       }
 
-      if ( updateOptions.end ) {
-        if ( !isNaN( updateOptions.end ) ) {
-          newEnd = TimeUtil.roundTime( updateOptions.end );
-        }
-        else {
-          throw new TrackEventUpdateException( "invalid-end-time", "[end] is an invalid value." );
-        }
-
+      if ( !isNaN( updateOptions.end ) ) {
+        newEnd = TimeUtil.roundTime( updateOptions.end );
+      }
+      else if ( updateOptions.end ) {
+        throw new TrackEventUpdateException( "invalid-end-time", "[end] is an invalid value." );
       }
 
       if ( newStart >= newEnd ) {
@@ -205,7 +200,7 @@ define( [
         _popcornOptions.end = _popcornOptions.start;
       } // if
       _this.dispatch( "trackeventupdated", _this );
-      _view.update( _popcornOptions );
+      _this.update( _popcornOptions );
     }; //moveFrameLeft
 
     /**
@@ -230,7 +225,7 @@ define( [
         _popcornOptions.end = _track._media.duration;
       }
       _this.dispatch( "trackeventupdated", _this );
-      _view.update( _popcornOptions );
+      _this.update( _popcornOptions );
     }; //moveFrameRight
 
     Object.defineProperties( this, {

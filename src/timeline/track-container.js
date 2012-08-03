@@ -2,36 +2,24 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define(
-[
-  "core/logger",
-  "util/dragndrop"
-],
-function(
-  Logger,
-  DragNDrop
-) {
+define( [ "core/logger", "util/dragndrop" ],
+  function( Logger, DragNDrop ) {
 
-  return function( butter, media ){
+  return function( butter, media, mediaInstanceRootElement ) {
 
     var _media = media,
         _zoom = 1,
         _this = this;
 
-    var _element = document.createElement( "div" ),
-        _container = document.createElement( "div" );
+    var _element = mediaInstanceRootElement.querySelector( ".tracks-container-wrapper" ),
+        _container = mediaInstanceRootElement.querySelector( ".tracks-container" );
 
     var _hScrollbar,
         _vScrollbar;
 
     var _droppable;
 
-    _element.appendChild( _container );
-
-    _element.className = "tracks-container-wrapper";
-    _container.className = "tracks-container";
-
-    _container.addEventListener( "mousedown", function( e ){
+    _container.addEventListener( "mousedown", function( e ) {
       _this.deselectOthers();
     }, false );
 
@@ -52,44 +40,46 @@ function(
       }
     });
 
-    this.setScrollbars = function( hScrollbar, vScrollbar ){
+    this.setScrollbars = function( hScrollbar, vScrollbar ) {
       _hScrollbar = hScrollbar;
       _vScrollbar = vScrollbar;
       _vScrollbar.update();
     };
 
     this.orderTracks = function( orderedTracks ){
-      for( var i=0, l=orderedTracks.length; i<l; ++i ){
+      for ( var i = 0, l = orderedTracks.length; i < l; ++i ) {
         var trackElement = orderedTracks[ i ].view.element;
-        if( trackElement !== _container.childNodes[ i ] ){
+        if ( trackElement !== _container.childNodes[ i ] ) {
           orderedTracks[ i ].order = i;
           _container.insertBefore( trackElement, _container.childNodes[ i + 1 ] );
-        } //if
-      } //for
-    }; //orderTracks
+        }
+      }
+    };
 
     this.deselectOthers = function() {
-      for( var i = 0; i < butter.selectedEvents.length; i++ ) {
+      for ( var i = 0; i < butter.selectedEvents.length; i++ ) {
         butter.selectedEvents[ i ].selected = false;
-      } // for
+      }
       butter.selectedEvents = [];
       return _this;
-    }; //deselectOthers
+    };
 
     function resetContainer() {
       _container.style.width = _media.duration * _zoom + "px";
-    } //resetContainer
+      _vScrollbar.update();
+      _hScrollbar.update();
+    }
 
     _media.listen( "mediaready", function(){
       resetContainer();
       var tracks = _media.tracks;
-      for( var i=0, il=tracks.length; i<il; ++i ){
+      for ( var i = 0, il = tracks.length; i < il; ++i ) {
         var trackView = tracks[ i ].view;
         _container.appendChild( trackView.element );
         trackView.duration = _media.duration;
         trackView.zoom = _zoom;
         trackView.parent = _this;
-      } //for
+      }
     });
 
     butter.listen( "mediaremoved", function ( e ) {
@@ -98,7 +88,7 @@ function(
       }
     });
 
-    function onTrackAdded( e ){
+    function onTrackAdded( e ) {
       var trackView = e.data.view;
       _container.appendChild( trackView.element );
       trackView.duration = _media.duration;
@@ -110,7 +100,7 @@ function(
     }
 
     var existingTracks = _media.tracks;
-    for( var i=0; i<existingTracks.length; ++i ){
+    for ( var i = 0; i < existingTracks.length; ++i ) {
       onTrackAdded({
         data: existingTracks[ i ]
       });
@@ -118,19 +108,19 @@ function(
 
     _media.listen( "trackadded", onTrackAdded );
 
-    _media.listen( "trackremoved", function( e ){
+    _media.listen( "trackremoved", function( e ) {
       var trackView = e.data.view;
       _container.removeChild( trackView.element );
-      if( _vScrollbar ){
+      if ( _vScrollbar ) {
         _vScrollbar.update();
       }
     });
 
-    _this.update = function(){
+    _this.update = function() {
       resetContainer();
     };
 
-    _this.snapTo = function( time ){
+    _this.snapTo = function( time ) {
       var p = time / _media.duration,
           newScroll = _container.clientWidth * p,
           maxLeft = _container.clientWidth - _element.clientWidth;
@@ -146,14 +136,16 @@ function(
     Object.defineProperties( this, {
       zoom: {
         enumerable: true,
-        get: function(){ return _zoom; },
-        set: function( val ){
+        get: function() {
+          return _zoom;
+        },
+        set: function( val ) {
           _zoom = val;
           resetContainer();
           var tracks = _media.tracks;
-          for( var i=0, il=tracks.length; i<il; ++i ){
+          for ( var i = 0, il = tracks.length; i < il; ++i ) {
             tracks[ i ].view.zoom = _zoom;
-          } //for
+          }
         }
       },
       element: {
