@@ -225,9 +225,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
         rect2 = currentTrackEvent.view.element.getBoundingClientRect();
 
         // make sure that we don't check against the same trackEvent
-        if ( teData.id !== currentTrackEvent.id && !teData.isGhost ) {
+        if ( teData.id !== currentTrackEvent.id ) {
           if ( isOverlapping( rect1, rect2 ) ) {
             overlapFound = true;
+            handleOverlap( teData, currentTrackEvent._track );
             break;
           }
         }
@@ -250,7 +251,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
         teData.view.cleanupGhost();
       // if we found an overlap meaning we are currently dragging over a trackevent
       } else if ( overlapFound ) {
-        handleOverlap( teData, currentTrackEvent._track );
       }
     };
   }; //TrackView

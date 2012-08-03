@@ -240,7 +240,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                     if ( tracks[ i ] ) {
                       rect2 = tracks[ i ].view.element.getBoundingClientRect();
                       if ( !( ( rect1.top > rect2.bottom ) || ( rect1.bottom < rect2.top ) ) ) {
-                        console.log( "checking on track:", tracks[ i ].id );
                         tracks[ i ].view.checkOverlay( _trackEvent );
                       }
                     }
