@@ -193,7 +193,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                 },
                 stop: function() {
                   _resizing = false;
-                  movedCallback
+                  movedCallback();
                 }
               });
 
