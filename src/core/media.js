@@ -145,7 +145,6 @@
 
       function onTrackEventAdded( e ){
         var trackEvent = e.data;
-        console.log( "NEW TRACKEVENT ADDED", trackEvent.view.ghost );
         _popcornWrapper.updateEvent( trackEvent );
         trackEvent._popcornWrapper = _popcornWrapper;
       } //onTrackEventAdded

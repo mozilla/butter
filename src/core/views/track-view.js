@@ -85,7 +85,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       var track;
 
       _ghost.isGhost = false;
-      track = _ghost._track.removeTrackEvent( _ghost );
+      _ghost._media.removeTrack( _ghost );
       _ghost = null;
       return track;
     };
@@ -200,7 +200,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
             // create a ghost track
             if ( !_ghost ) {
               _this.createGhost( _track._media );
-              _ghost.order = currentTrack.order;
+
+              console.log( _ghost.isGhost );
+              _track._media.dispatch( "changetrack", {
+                order: _track.order + 1
+              });
+              console.log( _ghost.isGhost );
             }
             // create a new ghost on the track below the currentone
             ghost = trackEventView.createGhost( _ghost );

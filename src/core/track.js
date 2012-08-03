@@ -66,19 +66,6 @@ define( [
         set: function( val ){
           var i, l;
           _order = val;
-          if ( _this._media ) {
-            var orderFound = false,
-                orderedTracks = _this._media.tracks;
-
-            for ( var j = 0, jl = orederedTracks.length; j < jl; j++ ) {
-              if ( orderedTracks[ i ].order = e.data ) {
-                e.target.order = e.data;
-              }
-              if ( orderFound ) {
-                orderedTracks[ i ].order = j + 1;
-              }
-            }
-          }
           _this.dispatch( "trackorderchanged", _order );
           for ( i = 0, l = _trackEvents.length; i < l; i++ ) {
             _trackEvents[ i ].update();

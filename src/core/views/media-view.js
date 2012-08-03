@@ -25,51 +25,6 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
 
     var _containerDims;
 
-    _media.listen( "trackeventoverlap", function( data ) {
-      var tracks = _media.tracks,
-          te = data.data.trackevent,
-          track = data.data.track,
-          ghost,
-          ghostTrack,
-          foundTrack = false,
-          currentTrack = te._track;
-
-      for ( var i = 0, l = tracks.length; i < l; i++ ) {
-        // search for the track under the current one
-        if ( tracks[ i ].id === track.id && tracks[ i + 1 ] ) {
-          if ( !te.ghost ) {
-            ghost = te.createGhost();
-            ghost.view.zoom = tracks[ i + 1 ].view.zoom;
-            tracks[ i + 1 ].addTrackEvent( ghost );
-            ghost.view.updatePosition( te.view.element );
-            ghost.view.element.style.opacity = "0.3";
-          } else if ( te.ghost ) {
-            ghost = te.ghost;
-            if ( ghost.view ) {
-              ghost.view.zoom = tracks[ i ].view.zoom;
-              ghost.view.updatePosition( te.view.element );
-            }
-          }
-          foundTrack = true;
-          break;
-        }
-      }
-
-      if ( !foundTrack ) {
-        if ( !te.ghost && !te.isGhost ) {
-          ghostTrack = track._media.addTrack();
-          ghostTrack.isGhost = true;
-          ghost = te.createGhost();
-          tracks[ tracks.length - 1 ].addTrackEvent( ghost );
-          ghost._track.ghostTrack = ghostTrack;
-          console.log( ghostTrack.id );
-          ghost.view.element.style.opacity = "0.3";
-          ghost.view.updatePosition( te.view.element );
-        }
-      }
-    });
-
-
     function closeIfPossible(){
       if ( _closeSignal && !_keepOpen ) {
         setDimensions( false );

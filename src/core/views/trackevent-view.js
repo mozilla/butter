@@ -246,6 +246,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                     }
                   }
 
+                  console.log( _ghost );
                   // if we didn't find an overlapping trackevent and a ghost exists for this trackevent
                   // this should be called when dragging an overlapping trackevent into an open space
                   if ( !_overlapping && _ghost ) {
@@ -259,9 +260,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                     }
 
                     // make sure that we remove the ghost after we drag off the current trackEvent
-                    if ( track.isGhost && track.trackEvents.length === 0 ) {
-                      console.log( "WHY ARE YOU REMOVING ME" );
-                      track._media.removeTrack( track );
+                    if ( track.isGhost ) {
+                      for( var j = 0, jl = tracks.length; j < jl; j++ ) {
+                        if ( tracks[ j ] && tracks[ j ].view && tracks[ j ].view.ghost && tracks[ j ].view.ghost.id === track.id ) {
+                          tracks[ j ].view.cleanupGhost();
+                        }
+                      }
                     }
                     // if we found an overlap meaning we are currently dragging over a trackevent
                     _this.cleanupGhost();
