@@ -379,6 +379,7 @@
           }
           media = new Media( media );
         } //if
+        media.maxPluginZIndex = _config.value( "maxPluginZIndex" );
 
         media.popcornCallbacks = _defaultPopcornCallbacks;
         media.popcornScripts = _defaultPopcornScripts;

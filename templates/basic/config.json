@@ -31,5 +31,6 @@
   },
   "editor": {
     "googlemap": "{{baseDir}}editors/googlemap-editor.js"
-  }
+  },
+  "maxPluginZIndex": 1000
 }

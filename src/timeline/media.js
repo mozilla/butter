@@ -253,11 +253,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       corn.start = e.data.start;
       corn.end = corn.start + duration;
 
-      trackEvent.update( corn );
-
       e.data.track.addTrackEvent( trackEvent );
     }
-
 
     this.destroy = function() {
       if ( _rootElement.parentNode ) {

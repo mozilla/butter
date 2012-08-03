@@ -144,12 +144,8 @@
           type: "checkbox",
           label: "Flip Tail?"
         },
-        order: {
-          elem: "select",
-          options: [ 1, 2, 3 ],
-          type: "text",
-          label: "Layer",
-          "default": 1
+        zindex: {
+          hidden: true
         },
         top: {
           elem: "input",
@@ -271,7 +267,7 @@
         style.top = top;
         style.left = left;
         style.width = width;
-        style.zIndex = +options.order + 1000;
+        style.zIndex = +options.zindex;
         container.classList.add( "pop" );
         
         target.appendChild( container );
