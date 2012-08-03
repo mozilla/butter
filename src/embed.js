@@ -112,6 +112,10 @@ function init( window, document ) {
   }
 
   function setupEventHandlers( popcorn, config ) {
+    $( "share-close" ).addEventListener( "click", function() {
+      hide( "share" );
+    }, false );
+
     $( "share-size" ).onchange = function() {
       $( "share-iframe" ).value = buildIFrameHTML();
     };
