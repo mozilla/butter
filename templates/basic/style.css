@@ -20,6 +20,7 @@ body {
   display: none;
 }
 
+/* body-wrapper required to circumvent this bug in webkit: https://bugs.webkit.org/show_bug.cgi?id=77811 */
 .body-wrapper {
   position: absolute;
   left: 0;
