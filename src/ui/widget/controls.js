@@ -17,7 +17,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
         // functions
         bigPlayClicked, activate, deactivate, volumechange,
         togglePlay, timeMouseMove, timeMouseUp,
-        timeMouseDown, volumeMouseMove, voumeMouseUp,
+        timeMouseDown, volumeMouseMove, volumeMouseUp,
         volumeMouseDown, durationchange, mutechange;
 
     var ready = function() {
@@ -53,30 +53,34 @@ define( [ "util/lang", "text!layouts/controls.html" ],
           bigPlayButton.removeEventListener( "mouseup", bigPlayClicked, false );
           bigPlayButton.classList.remove( "controls-ready" );
           p.media.addEventListener( "mouseover", activate, false );
-          p.paused && p.play();
+          if ( p.paused ) {
+            p.play();
+          }
         };
 
         bigPlayButton.addEventListener( "mouseup", bigPlayClicked, false );
         p.media.addEventListener( "play", bigPlayClicked, false );
       }
 
-      controls.classList.add( "controls-ready" );
+      _controls.classList.add( "controls-ready" );
 
       activate = function() {
 
         active = true;
-        controls.classList.add( "controls-active" );
+        _controls.classList.add( "controls-active" );
       };
 
       deactivate = function() {
 
         active = false;
-        !seeking && controls.classList.remove( "controls-active" );
+        if ( !seeking ) {
+          _controls.classList.remove( "controls-active" );
+        }
       };
 
       p.media.addEventListener( "mouseout", deactivate, false );
-      controls.addEventListener( "mouseover", activate, false );
-      controls.addEventListener( "mouseout", deactivate, false );
+      _controls.addEventListener( "mouseover", activate, false );
+      _controls.addEventListener( "mouseout", deactivate, false );
 
       togglePlay = function( e ) {
 
@@ -315,8 +319,12 @@ define( [ "util/lang", "text!layouts/controls.html" ],
 
           e.preventDefault();
           seeking = false;
-          !active && deactivate();
-          playStateCache && p.play();
+          if ( !active ) {
+            deactivate();
+          }
+          if ( playStateCache ) {
+            p.play();
+          }
           window.removeEventListener( "mouseup", timeMouseUp, false );
           window.removeEventListener( "mousemove", timeMouseMove, false );
         };
