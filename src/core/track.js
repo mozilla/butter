@@ -81,15 +81,6 @@ define( [
           _isGhost = val;
         }
       },
-      ghostTrack: {
-        enumerable: true,
-        get: function() {
-          return _ghostTrack;
-        },
-        set: function( val ) {
-          _ghostTrack = val;
-        }
-      },
       target: {
         enumerable: true,
         get: function(){

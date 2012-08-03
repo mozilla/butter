@@ -24,6 +24,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         _resizing = false,
         _padding = 0,
         _elementText,
+        _overlapping = false,
         _ghost,
         _this = this;
 
@@ -99,9 +100,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         enumerable: true,
         get: function() {
           return _ghost;
-        },
-        set: function( val ) {
-          _ghost = val;
         }
       },
       element: {
@@ -227,12 +225,11 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                     ghost = _trackEvent.view.ghost;
                     te = _trackEvent._track.removeTrackEvent( _trackEvent );
                     ghost._track.addTrackEvent( te );
-                    te.view.cleanupGhost();
-                    //console.log( "trackEvent should now be on: ", te._track.id );
                   }
                 },
                 drag: function( element ) {
                   var tracks = _trackEvent._track._media.tracks,
+                      track,
                       rect1 = element.getBoundingClientRect(),
                       rect2;
 
@@ -240,9 +237,33 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                     if ( tracks[ i ] ) {
                       rect2 = tracks[ i ].view.element.getBoundingClientRect();
                       if ( !( ( rect1.top > rect2.bottom ) || ( rect1.bottom < rect2.top ) ) ) {
-                        tracks[ i ].view.checkOverlay( _trackEvent );
+                        if ( !tracks[ i ].isGhost ) {
+                          _overlapping = tracks[ i ].view.checkOverlay( _trackEvent );
+                        } else {
+                          tracks[ i ].view.checkOverlay( _trackEvent );
+                        }
                       }
                     }
+                  }
+
+                  // if we didn't find an overlapping trackevent and a ghost exists for this trackevent
+                  // this should be called when dragging an overlapping trackevent into an open space
+                  if ( !_overlapping && _ghost ) {
+
+                    track = _ghost._track;
+
+                    // if we had a ghosted track, get rid of the ghost and clean up after ourself
+                    if ( track && track.view.ghost && track.view.ghost.isGhost ) {
+                      track._media.removeTrack( track.view.ghostTrack );
+                      track.view.cleanupGhost();
+                    }
+
+                    // make sure that we remove the ghost after we drag off the current trackEvent
+                    if ( track.isGhost ) {
+                      track._media.removeTrack( track );
+                    }
+                    // if we found an overlap meaning we are currently dragging over a trackevent
+                    _this.cleanupGhost();
                   }
 
                 },

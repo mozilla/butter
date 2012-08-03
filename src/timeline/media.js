@@ -256,13 +256,13 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       // the same track that has a ghost gets handled properly
       if ( trackEvent.view.ghost ) {
         ghost = trackEvent.view.ghost;
-        /*if ( ghost._track && ghost._track.ghostTrack && ghost.isGhost ) {
-          ghost._track.ghostTrack.isGhost = false;
-          ghost._track.ghostTrack = null;
-        }*/
         trackEvent = trackEvent._track.removeTrackEvent( trackEvent );
         ghost._track.addTrackEvent( trackEvent );
         trackEvent.view.cleanupGhost();
+        // this used to be a ghost but it shouldn't be anymore as a trackevent was just dropped on it
+        if ( trackEvent._track.isGhost ) {
+          trackEvent._track.isGhost = false;
+        }
         return;
       }
       trackEvent.track.removeTrackEvent( trackEvent );
