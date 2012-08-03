@@ -200,7 +200,7 @@ define( [
         _popcornOptions.end = _popcornOptions.start;
       } // if
       _this.dispatch( "trackeventupdated", _this );
-      _view.update( _popcornOptions );
+      _this.update( _popcornOptions );
     }; //moveFrameLeft
 
     /**
@@ -225,7 +225,7 @@ define( [
         _popcornOptions.end = _track._media.duration;
       }
       _this.dispatch( "trackeventupdated", _this );
-      _view.update( _popcornOptions );
+      _this.update( _popcornOptions );
     }; //moveFrameRight
 
     Object.defineProperties( this, {
