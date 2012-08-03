@@ -315,6 +315,33 @@ function lessToCSS( compress ){
   }
 }
 
+function stampVersion( version, filename ){
+  // Stamp embed.version with supplied version, or git info
+  version = version ||exec( 'git describe',
+                            {silent:true} ).output.replace( /\r?\n/m, "" );
+  sed( '-i', '@VERSION@', version, filename );
+}
+
+function embed( version ){
+  echo('### Building embed');
+
+  target.dist();
+
+  exec(RJS + ' -o tools/embed.js');
+  stampVersion( version, 'dist/embed.js' );
+
+  exec(RJS + ' -o tools/embed.optimized.js');
+  stampVersion( version, 'dist/embed.min.js' );
+}
+
+target.embed = function(){
+  // To pass a release version number, use:
+  // $ VERSION=0.5 node make embed
+  var version = env['VERSION'];
+
+  embed( version );
+};
+
 target.css = function() {
   // Leave CSS expanded if building in tree (for debugging)
   lessToCSS( false );
@@ -323,25 +350,20 @@ target.css = function() {
 function build( version ){
   echo('### Building butter');
 
-  target.clean();
   target.dist();
 
   exec(RJS + ' -o tools/build.js');
+  stampVersion( version, 'dist/butter.js' );
+
   exec(RJS + ' -o tools/build.optimized.js');
+  stampVersion( version, 'dist/butter.min.js' );
 
-  // Stamp Butter.version with supplied version, or git info
-  if( !version ){
-    version = exec('git describe',
-                   {silent:true}).output.replace(/\r?\n/m, "");
-  }
-
-  sed('-i', '@VERSION@', version, 'dist/butter.js');
-  sed('-i', '@VERSION@', version, 'dist/butter.min.js');
+  embed( version );
 
   // Compress CSS for deployment
   lessToCSS( true );
 
-  cp( BUTTER_CSS_FILE, DIST_DIR );
+  cp( "-f", BUTTER_CSS_FILE, DIST_DIR );
 }
 
 target.build = function(){
