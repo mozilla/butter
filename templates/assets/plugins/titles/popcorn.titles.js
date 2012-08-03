@@ -142,6 +142,10 @@
       container.appendChild( innerContainer );
       target.appendChild( container );
 
+      options.toString = function() {
+        // use the default option if it doesn't exist
+        return options.text || options._natives.manifest.options.text[ "default" ];
+      };
     },
 
     start: function( event, options ) {

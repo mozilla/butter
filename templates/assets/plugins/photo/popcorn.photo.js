@@ -119,6 +119,12 @@
 
         //Export
         options._image = img;
+
+        options.toString = function() {
+          var string = options.src || options._natives.manifest.options.src[ "default" ] || "Photo",
+              match = string.replace( /.*\//g, "" );
+          return match.length ? match : string;
+        };
       },
 
       start: function( event, options ) {
