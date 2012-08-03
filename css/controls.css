@@ -50,7 +50,7 @@
 #controls-currenttime {
   position: absolute;
   width: 50px;
-  left: 0px;
+  left: 0;
   font-size: 11px;
   line-height: 12px;
   text-align: center;
@@ -84,7 +84,7 @@
   height: 17px;
   position: absolute;
   width: 80px;
-  right: 0px;
+  right: 0;
 }
 
 #controls-timebar {
@@ -105,7 +105,6 @@
 }
 
 #controls-scrubber {
-  position: relative;
   height: 100%;
   width: 2px;
   background: #EEE;
@@ -170,7 +169,7 @@
   background: url( "../resources/video.png" ) no-repeat;
   margin-left: 4px;
   position: absolute;
-  top: 0px;
+  top: 0;
 }
 
 .controls-playing {

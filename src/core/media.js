@@ -36,7 +36,6 @@
           _mediaUpdateInterval,
           _view,
           _this = this,
-          _maxPluginZIndex = mediaOptions.maxPluginZIndex,
           _popcornWrapper = new PopcornWrapper( _id, {
             popcornEvents: {
               muted: function(){
