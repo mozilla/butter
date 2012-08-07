@@ -4,41 +4,11 @@
 
 function init( window, document ) {
 
-  function requestFullscreen( elem ) {
-    // Prefix + case differences.
-    if ( elem.requestFullscreen ) {
-      elem.requestFullscreen();
-    } else if ( elem.mozRequestFullscreen ) {
-      elem.mozRequestFullscreen();
-    } else if ( elem.mozRequestFullScreen ) {
-      elem.mozRequestFullScreen();
-    } else if ( elem.webkitRequestFullscreen ) {
-      elem.webkitRequestFullscreen();
-    }
-  }
-
-  function cancelFullscreen() {
-    // Prefix + case differences.
-    if ( document.exitFullscreen ) {
-      document.exitFullscreen();
-    } else if ( document.mozCancelFullscreen ) {
-      document.mozCancelFullscreen();
-    } else if ( document.mozCancelFullScreen ) {
-      document.mozCancelFullScreen();
-    } else if ( document.webkitCancelFullscreen ) {
-      document.webkitCancelFullscreen();
-    }
-  }
-
   function $( id ) {
     if( typeof id !== "string" ) {
       return id;
     }
     return document.getElementById( id );
-  }
-
-  function isVisible( id ) {
-    return $( id ).style.display !== "none";
   }
 
   function show( elem ) {
@@ -133,12 +103,10 @@ function init( window, document ) {
     });
 
     popcorn.on( "pause", function() {
-      $( "play-pause" ).innerHTML = "Play";
       addStateClass( "embed-paused" );
     });
 
     popcorn.on( "playing", function() {
-      $( "play-pause" ).innerHTML = "Pause";
       addStateClass( "embed-playing" );
     });
 
@@ -167,10 +135,11 @@ function init( window, document ) {
   req([
       "util/uri",
       "ui/widget/controls",
+      "ui/widget/textbox",
       // keep this at the end so it doesn't need a spot in the function signature
       "util/shims"
     ],
-    function( URI, Controls ) {
+    function( URI, Controls, TextboxWrapper ) {
       /**
        * Expose Butter so we can get version info out of the iframe doc's embed.
        * This "butter" is never meant to live in a page with the full "butter".
@@ -230,6 +199,10 @@ function init( window, document ) {
 
       setupClickHandlers( popcorn, config );
       setupEventHandlers( popcorn, config );
+
+      // Wrap textboxes so they click-to-highlight
+      TextboxWrapper( $( "share-url" ) );
+      TextboxWrapper( $( "share-iframe" ) );
 
       // Write out the iframe HTML necessary to embed this
       $( "share-iframe" ).value = buildIFrameHTML();
