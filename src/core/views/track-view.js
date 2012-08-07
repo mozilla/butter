@@ -184,50 +184,71 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
           trackEventView = trackEvent.view,
           ghost = trackEvent.view.ghost,
           currentTrack,
+          nextTrack,
           ghostView,
           ghostTrack,
           foundTrack = false;
 
+      if ( trackEvent.isGhost ) {
+        return;
+      }
+
+      function checkGhostOverlay( track ) {
+        // create a ghost track
+        if ( track.view.checkOverlay( ghost ) ) {
+          if ( !_ghost ) {
+            _this.createGhost( _track._media );
+
+            _track._media.dispatch( "changetrack", {
+              order: _track.order + 1
+            });
+          } else {
+            _track._media.addTrack( _ghost );
+            _track._media.dispatch( "changetrack", {
+              order: _track.order + 1
+            });
+          }
+          track.removeTrackEvent( ghost );
+          _ghost.addTrackEvent( ghost );
+        }
+      }
       // loop over the tracks to find the one under the current one (if it exists)
       for ( var i = 0, l = tracks.length; i < l; i++ ) {
 
         currentTrack = tracks[ i ];
+        nextTrack = tracks[ i + 1 ];
 
         // search for the track under the current one and make sure there is space for a ghost
         if ( currentTrack.id === track.id ) {
-          // if a ghosted trackevent doesn't exist, create one!
-          if ( !ghost ) {
-            // create a ghost track
-            if ( !_ghost ) {
-              _this.createGhost( _track._media );
+          // if there is another track
+          if ( nextTrack ) {
+            // if a ghosted trackevent doesn't exist, create one!
+            if ( !ghost ) {
+              // create a new ghost on the track below the currentone
+              ghost = trackEventView.createGhost( nextTrack );
 
-              console.log( _ghost.isGhost );
-              _track._media.dispatch( "changetrack", {
-                order: _track.order + 1
-              });
-              console.log( _ghost.isGhost );
-            }
-            // create a new ghost on the track below the currentone
-            ghost = trackEventView.createGhost( _ghost );
-            console.log( ghost._track.id );
-            ghostView = ghost.view;
-            // update zoom and position so it is the same as the current trackEvent
-            ghost.view.zoom = _track.view.ghost.view.zoom;
-            ghostView.updatePosition( trackEventView.element );
-            // make it look all ghosty and stuff
-            ghostView.element.style.opacity = "0.3";
-            //_ghost.addTrackEvent( ghost );
-          // if we already have a ghost be sure to update it
-          } else {
-            // just to be safe make sure we have a reference to the ghosts view
-            if ( ghost.view ) {
+              checkGhostOverlay( nextTrack );
+
               ghostView = ghost.view;
-              ghostView.zoom = tracks[ i ].view.zoom;
-              ghostView.updatePosition( trackEvent.view.element );
+              // update zoom and position so it is the same as the current trackEvent
+              ghostView.zoom = _track.view.zoom;
+              ghostView.updatePosition( trackEventView.element );
+              // make it look all ghosty and stuff
+              ghostView.element.style.opacity = "0.3";
+              //_ghost.addTrackEvent( ghost );
+            // if we already have a ghost be sure to update it
+            } else {
+              checkGhostOverlay( nextTrack );
+              // just to be safe make sure we have a reference to the ghosts view
+              if ( ghost.view ) {
+                ghostView = ghost.view;
+                ghostView.zoom = tracks[ i ].view.zoom;
+                ghostView.updatePosition( trackEvent.view.element );
+              }
             }
+            foundTrack = true;
+            break;
           }
-          foundTrack = true;
-          break;
         }
       }
 
@@ -267,11 +288,9 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
           currentTrackEvent,
           rect1 = teData.view.element.getBoundingClientRect(),
           rect2,
-          track,
-          ghost,
-          overlapFound = false;
+          track;
 
-      if ( !teData.dragging ) {
+      if ( !teData.dragging && !teData.isGhost ) {
         return;
       }
 
@@ -289,8 +308,9 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
         // make sure that we don't check against the same trackEvent
         if ( teData.id !== currentTrackEvent.id && !_track.isGhost ) {
           if ( isOverlapping( rect1, rect2 ) ) {
-            overlapFound = true;
-            handleOverlap( teData, currentTrackEvent._track );
+            if ( !currentTrackEvent.isGhost ) {
+              handleOverlap( teData, currentTrackEvent._track );
+            }
             return true;
           }
         }

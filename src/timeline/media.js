@@ -271,6 +271,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         // this used to be a ghost but it shouldn't be anymore as a trackevent was just dropped on it
         if ( trackEvent._track.isGhost ) {
           trackEvent._track.isGhost = false;
+          trackEvent._track.ghost = null;
         }
         return;
       }

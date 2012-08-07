@@ -212,7 +212,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                 start: function(){
                   _dragging = true;
                   _this.dispatch( "trackeventdragstarted" );
-                  console.log( "DRAG START", _dragging );
                 },
                 stop: function(){
                   var te,
@@ -246,7 +245,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                     }
                   }
 
-                  console.log( _ghost );
                   // if we didn't find an overlapping trackevent and a ghost exists for this trackevent
                   // this should be called when dragging an overlapping trackevent into an open space
                   if ( !_overlapping && _ghost ) {
@@ -254,8 +252,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                     track = _ghost._track;
 
                     // if we had a ghosted track, get rid of the ghost and clean up after ourself
-                    if ( track && track.view.ghost && track.view.ghost.isGhost ) {
-                      track._media.removeTrack( track.view.ghostTrack );
+                    if ( track && track.view && track.view.ghost && track.view.ghost.isGhost ) {
                       track.view.cleanupGhost();
                     }
 
@@ -263,7 +260,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                     if ( track.isGhost ) {
                       for( var j = 0, jl = tracks.length; j < jl; j++ ) {
                         if ( tracks[ j ] && tracks[ j ].view && tracks[ j ].view.ghost && tracks[ j ].view.ghost.id === track.id ) {
-                          tracks[ j ].view.cleanupGhost();
+                          track._media.removeTrack( tracks[ j ].view.ghost );
                         }
                       }
                     }
