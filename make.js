@@ -6,6 +6,7 @@ var path = require( "path" ),
     join = path.join,
     // Make Windows happy, use `node <path>`
     nodeExec = function( p ){ return 'node "' + p + '"'; },
+    pythonExec = function( p ){ return 'python "' + p + '"'; },
     SLICE = Array.prototype.slice,
 
     JSLINT = nodeExec( normalize( "./node_modules/jshint/bin/hint" ) ),
