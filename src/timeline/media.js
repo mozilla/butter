@@ -26,7 +26,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     var _this = this,
         _media = media,
-        _rootElement = LangUtils.domFragment( MEDIA_INSTANCE_LAYOUT ),
+        _rootElement = LangUtils.domFragment( MEDIA_INSTANCE_LAYOUT, ".media-instance" ),
         _tracksContainer = new TrackContainer( butter, media, _rootElement ),
         _container = _rootElement.querySelector( ".media-container" ),
         _mediaStatusContainer = _rootElement.querySelector( ".media-status-container" ),

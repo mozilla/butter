@@ -66,20 +66,25 @@ define( [], function(){
       return obj;
     },
 
-    domFragment: function( inputString ) {
+    domFragment: function( inputString, immediateSelector ) {
       var range = document.createRange(),
 
           // For particularly speedy loads, 'body' might not exist yet, so try to use 'head'
           container = document.body || document.head,
-          fragment;
+          fragment,
+          child;
 
       range.selectNode( container );
       fragment = range.createContextualFragment( inputString );
 
-      if( fragment.childNodes.length === 1 ){
-        var child = fragment.firstChild;
-        fragment.removeChild( child );
-        return child;
+      // If immediateSelector was specified, try to use it to find a child node of the fragment
+      // and return it.
+      if( immediateSelector ){
+        child = fragment.querySelector( immediateSelector );
+        if ( child ) {
+          fragment.removeChild( child );
+          return child;
+        }
       }
 
       return fragment;

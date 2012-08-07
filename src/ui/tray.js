@@ -11,9 +11,9 @@ define( [ "util/lang",  "./logo-spinner",
 
   return function(){
 
-    var statusAreaFragment = LangUtils.domFragment( STATUS_AREA_LAYOUT );
-    var timelineAreaFragment = LangUtils.domFragment( TIMELINE_AREA_LAYOUT );
-    var trayRoot = LangUtils.domFragment( TRAY_LAYOUT );
+    var statusAreaFragment = LangUtils.domFragment( STATUS_AREA_LAYOUT, ".media-status-container" );
+    var timelineAreaFragment = LangUtils.domFragment( TIMELINE_AREA_LAYOUT, ".butter-timeline" );
+    var trayRoot = LangUtils.domFragment( TRAY_LAYOUT, ".butter-tray" );
 
     var _loadingContainer = trayRoot.querySelector( ".butter-loading-container" );
 

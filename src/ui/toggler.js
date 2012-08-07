@@ -6,7 +6,7 @@ define( [ "util/lang", "text!layouts/toggler.html" ],
   function( LangUtils, TOGGLER_LAYOUT ){
 
   return function( clickHandler, elementTitle, startState ){
-    var _element = LangUtils.domFragment( TOGGLER_LAYOUT );
+    var _element = LangUtils.domFragment( TOGGLER_LAYOUT, ".butter-toggle-button" );
 
     if ( startState !== false && startState !== true ) {
       startState = false;

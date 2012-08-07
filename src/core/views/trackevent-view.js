@@ -9,7 +9,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
   return function( trackEvent, type, inputOptions ){
 
-    var _element = LangUtils.domFragment( TRACKEVENT_LAYOUT ),
+    var _element = LangUtils.domFragment( TRACKEVENT_LAYOUT, ".butter-track-event" ),
         _zoom = 1,
         _type = type,
         _start = inputOptions.start || 0,

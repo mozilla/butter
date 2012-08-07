@@ -47,7 +47,7 @@
             XHR,
             Lang,
             DefaultConfigJSON,
-            UAWarningLayout
+            UA_WARNING_LAYOUT
           ){
 
     var __guid = 0,
@@ -58,7 +58,7 @@
     }; //Butter
 
     Butter.showUAWarning = function() {
-      var uaWarningDiv = Lang.domFragment( UAWarningLayout );
+      var uaWarningDiv = Lang.domFragment( UA_WARNING_LAYOUT, ".butter-ua-warning" );
       document.body.appendChild( uaWarningDiv );
       uaWarningDiv.classList.add( "slide-out" );
       uaWarningDiv.getElementsByClassName( "close-button" )[0].onclick = function () {
