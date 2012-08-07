@@ -9,7 +9,7 @@ var path = require( "path" ),
     SLICE = Array.prototype.slice,
 
     JSLINT = nodeExec( normalize( "./node_modules/jshint/bin/hint" ) ),
-    HTML5LINT = normalize( "./tools/html5check.py" ),
+    HTML5LINT = pythonExec( normalize( "./tools/html5check.py" ) ),
     CSSLINT = nodeExec( normalize( "./node_modules/csslint/cli.js" ) ),
     UGLIFY = nodeExec( normalize( "./node_modules/uglify-js/bin/uglifyjs" ) ),
     RJS = nodeExec( normalize( "./node_modules/requirejs/bin/r.js" ) ),
