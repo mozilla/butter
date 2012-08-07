@@ -9,10 +9,10 @@
  */
 define( [ "core/eventmanager", "core/trackevent", "./editor",
           "ui/toggler", "util/lang", "text!layouts/editor-area.html",
-          "./default" ],
+          "./default", "core/logger" ],
   function( EventManagerWrapper, TrackEvent, Editor,
             Toggler, LangUtils, EDITOR_AREA_LAYOUT,
-            DefaultEditor ){
+            DefaultEditor, Logger ){
 
   /**
    * Class: EventEditor
@@ -26,7 +26,8 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     var _currentEditor,
         _editorAreaDOMRoot = LangUtils.domFragment( EDITOR_AREA_LAYOUT ),
         _toggler,
-        _this = this;
+        _this = this,
+        _logger = new Logger( butter.id );
 
     EventManagerWrapper( _this );
 
@@ -140,7 +141,8 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         
       }, "Show/Hide Editor", true );
 
-      var editorsToLoad = [];
+      var editorsToLoad = [],
+          editorsLoaded = 0;
 
       if( butter.config.value( "ui" ).enabled !== false ){
         _editorAreaDOMRoot.appendChild( _toggler.element );
@@ -165,6 +167,12 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         if ( editorsToLoad.length > 0 ){
           butter.loader.load( editorsToLoad, function() {
             Editor.loadUrlSpecifiedLayouts( onModuleReady, butter.config.value( "baseDir" ) );
+          }, function( e ) {
+            _logger.log( "Couldn't load editor " + e.srcElement.src );
+            
+            if ( ++editorsLoaded === editorsToLoad.length ) {
+              onModuleReady();
+            }
           });
         }
         else {
