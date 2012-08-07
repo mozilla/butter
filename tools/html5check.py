@@ -20,14 +20,33 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 # DEALINGS IN THE SOFTWARE.
 
-import httplib
+# Several "try" blocks for python2/3 differences (@secretrobotron)
+try:
+  import httplib
+except:
+  import http.client as httplib
+
 import os
 import sys
 import re
-import urlparse
+
+try:
+  import urlparse
+except:
+  import urllib.parse as urlparse
+
 import string
 import gzip
-import StringIO
+
+try:
+  from BytesIO import BytesIO
+except:
+  from io import BytesIO
+
+try:
+  maketrans = str.maketrans
+except:
+  maketrans = string.maketrans
 
 extPat = re.compile(r'^.*\.([A-Za-z]+)$')
 extDict = {
@@ -52,13 +71,13 @@ service = 'https://validator.mozillalabs.com/'
 
 for arg in argv:
   if '--help' == arg:
-    print '-h : force text/html'
-    print '-x : force application/xhtml+xml'
-    print '-g : GNU output'
-    print '-e : errors only (no info or warnings)'
-    print '--encoding=foo : declare encoding foo'
-    print '--service=url  : the address of the HTML5 validator'
-    print 'One file argument allowed. Leave out to read from stdin.' 
+    print('-h : force text/html')
+    print('-x : force application/xhtml+xml')
+    print('-g : GNU output')
+    print('-e : errors only (no info or warnings)')
+    print('--encoding=foo : declare encoding foo')
+    print('--service=url  : the address of the HTML5 validator')
+    print('One file argument allowed. Leave out to read from stdin.')
     sys.exit(0)
   elif arg.startswith("--encoding="):
     encoding = arg[11:]
@@ -98,8 +117,8 @@ elif fileName:
   m = extPat.match(fileName)
   if m:
     ext = m.group(1)
-    ext = ext.translate(string.maketrans(string.ascii_uppercase, string.ascii_lowercase))    
-    if extDict.has_key(ext):
+    ext = ext.translate(maketrans(string.ascii_uppercase, string.ascii_lowercase))    
+    if ext in extDict:
       contentType = extDict[ext]
     else:
       sys.stderr.write('Unable to guess Content-Type from file name. Please force the type.\n')
@@ -121,7 +140,7 @@ else:
 
 data = inputHandle.read()
 
-buf = StringIO.StringIO()
+buf = BytesIO()
 gzipper = gzip.GzipFile(fileobj=buf, mode='wb')
 gzipper.write(data)
 gzipper.close()
@@ -148,8 +167,8 @@ while (status == 302 or status == 301 or status == 307) and redirectCount < 10:
   parsed = urlparse.urlsplit(url)
   if redirectCount > 0:
     connection.close() # previous connection
-    print 'Redirecting to %s' % url
-    print 'Please press enter to continue or type "stop" followed by enter to stop.'
+    print('Redirecting to %s' % url)
+    print('Please press enter to continue or type "stop" followed by enter to stop.')
     if raw_input() != "":
       sys.exit(0)
   connection = httplib.HTTPSConnection(parsed[1])
@@ -170,7 +189,7 @@ if status != 200:
   sys.exit(5)
 
 if response.getheader('Content-Encoding', 'identity').lower() == 'gzip':
-  response = gzip.GzipFile(fileobj=StringIO.StringIO(response.read()))
+  response = gzip.GzipFile(fileobj=BytesIO(response.read()))
   
 if fileName and gnu:
   quotedName = '"%s"' % fileName.replace('"', '\\042')
@@ -178,6 +197,6 @@ if fileName and gnu:
     sys.stdout.write(quotedName)
     sys.stdout.write(line)
 else:
-  sys.stdout.write(response.read())
+  sys.stdout.write(response.read().decode('utf-8'))
 
 connection.close()
