@@ -1,9 +1,25 @@
 .wikipedia-inner-container {
   display: none;
   position: relative;
-  border: 1px solid #bbb;
   font-family: sans-serif;
   color: #000000;
+  background: #ddd;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+}
+
+.wikipedia-title {
+  position: absolute;
+  display: block;
+  top: 2.5px;
+  left: 2.5px;
+  right: 2.5px;
+  height: 36px;
+  background: #fff;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
 }
 
 .wikipedia-title-text {
@@ -11,9 +27,15 @@
   font-size: 18pt;
   overflow: hidden;
   font-weight: bolder;
-  padding: 10px 0 0 20px;
+  height: 100%;
   overflow: hidden;
   white-space: nowrap;
+  line-height: 40px;
+  text-indent: 20px;
+  background: #fff;
+  -webkit-border-radius: inherit;
+     -moz-border-radius: inherit;
+          border-radius: inherit;
 }
 
 .wikipedia-title-text a {
@@ -21,24 +43,18 @@
   text-decoration: none;
 }
 
-.wikipedia-title {
-  position: absolute;
-  display: block;
-  top: 0;
-  width: 100%;
-  height: 40px;
-  border-bottom: 1px solid #ddd;
-}
-
 .wikipedia-main-content {
   position: absolute;
   display: block;
   overflow: auto;
-  top: 40px;
-  bottom: 75px;
-  width: 100%;
-  background-color: #ddd
-
+  top: 41px;
+  bottom: 45px;
+  right: 2.5px;
+  left: 2.5px;
+  background-color: #fff;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
 }
 
 .wikipedia-content {
@@ -47,48 +63,41 @@
   font-weight: normal;
   padding: 10px 20px 10px 20px;
   word-wrap: break-word;
+  line-height: 20px;
+  word-spacing: 1px;
+  letter-spacing: .3px;
 }
 
-.wikipedia-sections {
+.wikipedia-to-wiki {
   position: absolute;
-  overflow: auto;
+  overflow: hidden;
   display: block;
+  bottom: 2.5px;
+  left: 2.5px;
+  right: 2.5px;
+  height: 40px;
+  line-height: 30px;
+  text-align: left;
+  text-indent: 20px;
+  background-color: #fff;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+}
+
+.wikipedia-to-wiki div {
+  display: block;
+  overflow: hidden;
   bottom: 0;
   width: 100%;
-  height: 75px;
-  border-top: 2px solid #ddd;
-}
-
-.wikipedia-sections-container {
-  text-align: center;
-  font-size: 12pt;
-  font-weight: normal;
-}
-
-.wikipedia-sections-button {
-  width: 100%;
-  height: 25px;
-  position: relative;
-  display: block;
-  line-height: 30px;
-  cursor: pointer;
-  background-color: #dddddd; /* Old browsers */
-  background-repeat: repeat-x; /* Repeat the gradient */
-  background-image: -moz-linear-gradient(top, #eeeeee 0%, #dddddd 100%); /* FF3.6+ */
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#eeeeee), color-stop(100%,#dddddd)); /* Chrome,Safari4+ */
-  background-image: -webkit-linear-gradient(top, #eeeeee 0%,#dddddd 100%); /* Chrome 10+,Safari 5.1+ */
-  background-image: -ms-linear-gradient(top, #eeeeee 0%,#dddddd 100%); /* IE10+ */
-  background-image: -o-linear-gradient(top, #eeeeee 0%,#dddddd 100%); /* Opera 11.10+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#dddddd',GradientType=0 ); /* IE6-9 */
-  background-image: linear-gradient(top, #eeeeee 0%,#dddddd 100%); /* W3C */
+  height: 100%;
+  line-height: 45px;
+  text-align: left;
+  text-indent: 20px;
 }
 
 .wikipedia-visible {
   display: block;
-}
-
-.wikipedia-background {
-  background-color: #eee;
 }
 
 .wikipedia-ellipsis {

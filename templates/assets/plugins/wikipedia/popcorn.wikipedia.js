@@ -38,11 +38,9 @@
           _titleTextArea,
           _mainContentDiv,
           _contentArea,
-          _sectionsDiv,
-          _sectionsContainer,
+          _toWikipedia,
           _container,
           _href,
-          _widgets = [],
           _guid = Popcorn.guid(),
           _manifestOpts = options._natives.manifest.options;
 
@@ -62,7 +60,6 @@
 
       _titleDiv = create( "div" );
       _titleDiv.classList.add( "wikipedia-title");
-      _titleDiv.classList.add( "wikipedia-background" );
 
       _titleTextArea = create( "div" );
       _titleTextArea.classList.add( "wikipedia-title-text" );
@@ -78,36 +75,30 @@
 
       _mainContentDiv.appendChild( _contentArea );
 
-      _sectionsDiv = create( "div" );
-      _sectionsDiv.classList.add( "wikipedia-sections" );
-      _sectionsDiv.classList.add( "wikipedia-background" );
-
-      _sectionsContainer = create( "div" );
-      _sectionsContainer.classList.add( "wikipedia-sections-container" );
-      _sectionsContainer.classList.add( "wikipedia-ellipsis" );
-
-      _sectionsDiv.appendChild( _sectionsContainer );
+      _toWikipedia = create( "div" );
+      _toWikipedia.classList.add( "wikipedia-to-wiki" );
 
       _container.appendChild( _titleDiv );
       _container.appendChild( _mainContentDiv );
-      _container.appendChild( _sectionsDiv );
+      _container.appendChild( _toWikipedia );
 
       options._target.appendChild( _container );
-
 
       if ( !options.lang ) {
         options.lang = "en";
       }
 
       window[ "wikiCallback" + _guid ]  = function ( data ) {
+
         var responseFragment = getFragment( "<div>" + data.parse.text + "</div>" ),
             element = responseFragment.querySelector( "div > p:nth-of-type(1)" ),
-            sectionFragment = getFragment( "<div class=\"wikipedia-sections-button\"></div>" ),
-            sectionButton,
             mainText = "",
-            link;
+            toWikiLink,
+            link,
+            fragNodeName;
 
-        _titleTextArea.innerHTML = "<a href=\"" + options._link + "\" target=\"_blank\">" + data.parse.title + "</a>";
+        _titleTextArea.appendChild( getFragment( "<a href=\"" + options._link + "\" target=\"_blank\">" + data.parse.title + "</a>" ) );
+        _toWikipedia.appendChild( getFragment( "<div>Read more on <a href=\"" + options._link + "\" target=\"_blank\">Wikipedia</a></div>" ) );
 
         // Store the Main text of the article, will leave "element" on first header element
         while ( element && element.nodeName === "P" ) {
@@ -116,45 +107,6 @@
         }
 
         _contentArea.innerHTML = mainText;
-
-        sectionButton = sectionFragment.cloneNode( true );
-        sectionButton.innerHTML = "Main";
-        sectionButton.onclick = function() {
-          _contentArea.innerHTML = mainText;
-        };
-
-        _sectionsContainer.appendChild( sectionButton );
-
-        // Continuing from where we left off, link all sections
-        while( element ) {
-          // ignore everything after "See Also" section
-          if ( element.firstElementChild && element.firstElementChild.id === "See_also" ) {
-            break;
-          }
-          if ( /^H[2-4]$/.test( element.nodeName ) ) {
-            sectionButton = sectionFragment.cloneNode( true );
-            sectionButton.innerHTML = element.firstElementChild.innerHTML.replace( /((<(.|\n)+?>)|(\((.*?)\) )|(\[(.*?)\]))/g, "" );
-            sectionButton.setAttribute( "data-header-id", element.firstElementChild.id.replace( /(\.|:)/g, "\\$1" ) );
-            sectionButton.onclick = function( e ) {
-              var elem = e.target,
-                  fragElem = responseFragment.querySelector( "span[id=" + elem.getAttribute( "data-header-id" ) + "]" ).parentNode,
-                  nextFragChild = fragElem.nextElementSibling;
-              if ( nextFragChild.nodeName === "P" ) {
-                _contentArea.innerHTML = nextFragChild.textContent + "<br />";
-                nextFragChild = nextFragChild.nextElementSibling;
-              } else if ( nextFragChild.nodeName === "DIV" ) {
-                link = nextFragChild.cloneNode( true );
-                link.firstElementChild.href = "//" + options.lang + ".wikipedia.org/" + link.firstElementChild.href.replace( "http://localhost:8888/", "" );
-                link.firstElementChild.setAttribute( "target", "_blank" );
-                _contentArea.innerHTML = link.innerHTML;
-                nextFragChild = nextFragChild.nextElementSibling;
-              }
-            };
-
-            _sectionsContainer.appendChild( sectionButton );
-          }
-          element = element.nextElementSibling;
-        }
 
       };
 
