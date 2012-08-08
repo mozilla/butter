@@ -280,9 +280,10 @@
       this.sortTracks = function() {
         _orderedTracks = _tracks.slice();
         _orderedTracks.sort( compareTrackOrder );
-        _orderedTracks.forEach( function( track ) {
-          track.updateTrackEvents();
-        });
+        for ( var i = 0, l = _orderedTracks.length; i < l; ++i ) {
+          _orderedTracks[ i ].updateTrackEvents();
+        }
+        _this.dispatch( "trackorderchanged", _orderedTracks );
       };
 
       this.getNextTrack = function( currentTrack ) {
