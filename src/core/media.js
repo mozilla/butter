@@ -198,8 +198,8 @@
           ]);
           track.setPopcornWrapper( null );
           _this.sortTracks();
-          _this.dispatch( "trackremoved", track );
           track._media = null;
+          _this.dispatch( "trackremoved", track );
           return track;
         } //if
       }; //removeTrack
