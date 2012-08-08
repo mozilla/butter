@@ -144,11 +144,14 @@
         _this.dispatch( "trackeventrequested", e );
       }
 
-      this.addTrack = function ( track ) {
+      function ensureNewTrackIsTrack( track ) {
         if ( !( track instanceof Track ) ) {
           track = new Track( track );
-        } //if
-        track.order = _tracks.length;
+        }
+        return track;
+      }
+
+      function setupNewTrack( track ) {
         track._media = _this;
         _tracks.push( track );
         _this.chain( track, [
@@ -159,17 +162,75 @@
           "trackeventselected",
           "trackeventdeselected"
         ]);
-        _this.dispatch( "trackadded", track );
         track.setPopcornWrapper( _popcornWrapper );
-        _this.sortTracks();
+      }
+
+      function addNewTrackTrackEvents( track ) {
         var trackEvents = track.trackEvents;
         if ( trackEvents.length > 0 ) {
           for ( var i=0, l=trackEvents.length; i<l; ++i ) {
             track.dispatch( "trackeventadded", trackEvents[ i ] );
-          } //for
-        } //if
+          }
+        }
+      }
+
+      this.addTrack = function ( track ) {
+        track = ensureNewTrackIsTrack( track );
+
+        // Sort tracks first, so we can guarantee their ordering
+        _this.sortTracks( true );
+
+        // Give new track last order since it's newest
+        track.order = _tracks.length;
+
+        setupNewTrack( track );
+        
+        // Simply add the track onto the ordered tracks array
+        _orderedTracks.push( track );
+
+        _this.dispatch( "trackadded", track );
+        _this.dispatch( "trackorderchanged", _orderedTracks );
+
+        addNewTrackTrackEvents( track );
+
         return track;
-      }; //addTrack
+      };
+
+      this.insertTrackBefore = function( newTrack, otherTrack ) {
+        newTrack = ensureNewTrackIsTrack( newTrack );
+
+        // Sort tracks first, so we can guarantee their ordering
+        _this.sortTracks( true );
+
+        var idx = _orderedTracks.indexOf( otherTrack );
+
+        if ( idx > -1 ) {
+          // Give new track last order since it's newest
+          newTrack.order = _tracks.length;
+
+          // Insert new track
+          _orderedTracks.splice( idx, 0, newTrack );
+
+          // Fix all the order properties on subsequent tracks
+          for ( var i = idx, l = _orderedTracks.length; i < l; ++i ) {
+            _orderedTracks[ i ].order = i;
+          }
+
+          setupNewTrack( newTrack );
+          
+          console.log( newTrack.view );
+
+          _this.dispatch( "trackadded", newTrack );
+          _this.dispatch( "trackorderchanged", _orderedTracks );
+
+          addNewTrackTrackEvents( newTrack );
+
+          return newTrack;
+        }
+        else {
+          throw "inserTrackBefore must be passed a valid relative track.";
+        }
+      };
 
       this.getTrackById = function( id ){
         for( var i=0, l=_tracks.length; i<l; ++i ){
@@ -277,13 +338,16 @@
         return a.order > b.order;
       }
 
-      this.sortTracks = function() {
+      this.sortTracks = function( suppressEvent ) {
         _orderedTracks = _tracks.slice();
         _orderedTracks.sort( compareTrackOrder );
         for ( var i = 0, l = _orderedTracks.length; i < l; ++i ) {
+          _orderedTracks.order = i;
           _orderedTracks[ i ].updateTrackEvents();
         }
-        _this.dispatch( "trackorderchanged", _orderedTracks );
+        if ( !suppressEvent ) {
+          _this.dispatch( "trackorderchanged", _orderedTracks );
+        }
       };
 
       this.getNextTrack = function( currentTrack ) {
