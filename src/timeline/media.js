@@ -15,10 +15,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       DEFAULT_ZOOM = 0.5;
 
   function MediaInstance( butter, media ) {
-    function onTrackOrderChanged( orderedTracks ) {
-      _tracksContainer.orderTracks( orderedTracks );
-    }
-
     function zoomCallback( zoomLevel ) {
       var nextZoom = MIN_ZOOM * zoomLevel + _zoomFactor;
       if ( nextZoom !== _zoom ) {
@@ -39,7 +35,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _shrunken = false,
         _timebar = new TimeBar( butter, _media, butter.ui.tray.statusArea, _tracksContainer, _hScrollBar ),
         _zoombar = new ZoomBar( zoomCallback, _rootElement ),
-        _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer, onTrackOrderChanged ),
+        _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer ),
         _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
         _currentMouseDownTrackEvent,
         _zoomFactor,

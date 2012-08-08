@@ -158,26 +158,6 @@ define( [ "core/eventmanager", "./toggler",
       orderedTrackEvents.sort( sortTrackEvents );
     }); // listen
 
-    var orderedTracks = butter.orderedTracks = [],
-        sortTracks = function( a, b ) {
-          return a.order > b.order;
-        };
-
-    butter.listen( "trackadded", function( e ) {
-      e.data.listen( "trackorderchanged", function( e ) {
-        orderedTracks.sort( sortTracks );
-      }); // listen
-      orderedTracks.push( e.data );
-      orderedTracks.sort( sortTracks );
-    }); // listen
-
-    butter.listen( "trackremoved", function( e ) {
-      var index = orderedTracks.indexOf( e.data );
-      if( index > -1 ){
-        orderedTracks.splice( index, 1 );
-      } // if
-    }); // listen
-
     var processKey = {
       32: function( e ) { // space key
         e.preventDefault();
@@ -215,7 +195,7 @@ define( [ "core/eventmanager", "./toggler",
         for( var i = 0, seLength = selectedEvents.length; i < seLength; i++ ) {
           trackEvent = selectedEvents[ i ];
           track = trackEvent.track;
-          nextTrack = orderedTracks[ orderedTracks.indexOf( track ) - 1 ];
+          nextTrack = butter.currentMedia.getLastTrack( track );
           if( nextTrack ) {
             track.removeTrackEvent( trackEvent );
             nextTrack.addTrackEvent( trackEvent );
@@ -248,7 +228,7 @@ define( [ "core/eventmanager", "./toggler",
         for( var i = 0, seLength = selectedEvents.length; i < seLength; i++ ) {
           trackEvent = selectedEvents[ i ];
           track = trackEvent.track;
-          nextTrack = orderedTracks[ orderedTracks.indexOf( track ) + 1 ];
+          nextTrack = butter.currentMedia.getNextTrack( track );
           if( nextTrack ) {
             track.removeTrackEvent( trackEvent );
             nextTrack.addTrackEvent( trackEvent );

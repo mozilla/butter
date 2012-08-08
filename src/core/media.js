@@ -23,6 +23,7 @@
       EventManagerWrapper( this );
 
       var _tracks = [],
+          _orderedTracks,
           _id = "Media" + __guid++,
           _logger = new Logger( _id ),
           _name = mediaOptions.name || _id,
@@ -160,6 +161,7 @@
         ]);
         _this.dispatch( "trackadded", track );
         track.setPopcornWrapper( _popcornWrapper );
+        _this.sortTracks();
         var trackEvents = track.trackEvents;
         if ( trackEvents.length > 0 ) {
           for ( var i=0, l=trackEvents.length; i<l; ++i ) {
@@ -195,6 +197,7 @@
             "trackeventdeselected"
           ]);
           track.setPopcornWrapper( null );
+          _this.sortTracks();
           _this.dispatch( "trackremoved", track );
           track._media = null;
           return track;
@@ -270,6 +273,34 @@
         return _popcornWrapper.generatePopcornString( popcornOptions, _url, _target, null, callbacks, scripts, collectedEvents );
       };
 
+      function compareTrackOrder( a, b ) {
+        return a.order > b.order;
+      }
+
+      this.sortTracks = function( suppressEvent ){
+        _orderedTracks = _tracks.slice();
+        _orderedTracks.sort( compareTrackOrder );
+        if ( !suppressEvent ) {
+          _this.dispatch( "trackorderchanged", _orderedTracks );
+        }
+      };
+
+      this.getNextTrack = function( currentTrack ) {
+        var trackIndex = _orderedTracks.indexOf( currentTrack );
+        if ( trackIndex > -1 && trackIndex < _orderedTracks.length - 1 ) {
+          return _orderedTracks[ trackIndex + 1 ];
+        }
+        return null;
+      };
+
+      this.getLastTrack = function( currentTrack ) {
+        var trackIndex = _orderedTracks.indexOf( currentTrack );
+        if ( trackIndex > 0 ) {
+          return _orderedTracks[ trackIndex - 1 ];
+        }
+        return null;
+      };
+
       Object.defineProperties( this, {
         ended: {
           enumerable: true,
@@ -338,6 +369,12 @@
         tracks: {
           get: function(){
             return _tracks;
+          },
+          enumerable: true
+        },
+        orderedTracks: {
+          get: function() {
+            return _orderedTracks;
           },
           enumerable: true
         },

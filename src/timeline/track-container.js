@@ -19,6 +19,16 @@ define( [ "core/logger", "util/dragndrop" ],
 
     var _droppable;
 
+    butter.listen( "trackorderchanged", function( e ) {
+      var orderedTracks = e.data;
+      for ( var i = 0, l = orderedTracks.length; i < l; ++i ) {
+        var trackElement = orderedTracks[ i ].view.element;
+        if ( trackElement !== _container.childNodes[ i ] ) {
+          _container.insertBefore( trackElement, _container.childNodes[ i + 1 ] );
+        }
+      }
+    });
+
     _container.addEventListener( "mousedown", function( e ) {
       butter.deselectAllTrackEvents();
     }, false );
@@ -44,16 +54,6 @@ define( [ "core/logger", "util/dragndrop" ],
       _hScrollbar = hScrollbar;
       _vScrollbar = vScrollbar;
       _vScrollbar.update();
-    };
-
-    this.orderTracks = function( orderedTracks ){
-      for ( var i = 0, l = orderedTracks.length; i < l; ++i ) {
-        var trackElement = orderedTracks[ i ].view.element;
-        if ( trackElement !== _container.childNodes[ i ] ) {
-          orderedTracks[ i ].order = i;
-          _container.insertBefore( trackElement, _container.childNodes[ i + 1 ] );
-        }
-      }
     };
 
     function resetContainer() {

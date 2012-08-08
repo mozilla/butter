@@ -25,12 +25,12 @@ define( [
         _target = options.target,
         _logger = new Logger( _id ),
         _name = options.name || _id,
-        _order = 0,
         _view = new TrackView( this ),
         _popcornWrapper = null,
         _this = this;
 
     _this._media = null;
+    _this.order = 0;
 
     EventManagerWrapper( _this );
 
@@ -48,26 +48,18 @@ define( [
       }
     };
 
+    this.updateTrackEvents = function() {
+      for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
+        _trackEvents[ i ].update();
+      }
+    };
+
     Object.defineProperties( this, {
       view: {
         enumerable: true,
         configurable: false,
         get: function(){
           return _view;
-        }
-      },
-      order: {
-        enumerable: true,
-        get: function(){
-          return _order;
-        },
-        set: function( val ){
-          var i, l;
-          _order = val;
-          _this.dispatch( "trackorderchanged", _order );
-          for ( i = 0, l = _trackEvents.length; i < l; i++ ) {
-            _trackEvents[ i ].update();
-          }
         }
       },
       target: {
