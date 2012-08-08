@@ -1,6 +1,6 @@
 .wikipedia-inner-container {
   display: none;
-  position: relative;
+  position: absolute;
   font-family: sans-serif;
   font-size: 14px;
   font-weight: 600;
