@@ -36,7 +36,7 @@
 
 ._gradient( @color1, @color2, @startLoc, @endLoc, @from, @to, @ieFallback: false, @ieGradientType: 0 ) when not ( @ieFallback ) {
   // Internal mixin for generating gradients when there are no rounded corners
-  filter: e( %( "progid:DXImageTransform.Microsoft.Gradient(color1orStr='%d', EndColorStr='%d', GradientType=%d)", @color1, @color2, @ieGradientType ) );
+  filter: e( %( "progid:DXImageTransform.Microsoft.Gradient(startColorstr='%d', endColorstr='%d', GradientType=%d)", @color1, @color2, @ieGradientType ) );
   background: -webkit-gradient( linear, @startLoc, @endLoc, color-stop( @from, @color1 ), color-stop( @to, @color2 ) );
   background: -webkit-linear-gradient( @startLoc, @color1 @from, @color2 @to );
   background: -moz-linear-gradient( @startLoc, @color1 @from, @color2 @to );
