@@ -7,7 +7,7 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
 
   var ADD_TRACK_BUTTON_Y_ADJUSTMENT = 37;
 
-  return function( butter, media, mediaInstanceRootElement, tracksContainer, orderChangedCallback ) {
+  return function( butter, media, mediaInstanceRootElement, tracksContainer ) {
 
     var _media = media,
         _container = mediaInstanceRootElement.querySelector( ".track-handle-container" ),
@@ -23,12 +23,11 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
 
     var _sortable = DragNDrop.sortable( _listElement, {
       change: function( elements ){
-        var orderedTracks = [];
         for( var i=0, l=elements.length; i<l; ++i ){
           var id = elements[ i ].getAttribute( "data-butter-track-id" );
-          orderedTracks.push( _tracks[ id ].track );
+          _tracks[ id ].track.order = i;
         }
-        orderChangedCallback( orderedTracks );
+        butter.currentMedia.sortTracks();
       }
     });
 
