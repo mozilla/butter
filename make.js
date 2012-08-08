@@ -6,10 +6,11 @@ var path = require( "path" ),
     join = path.join,
     // Make Windows happy, use `node <path>`
     nodeExec = function( p ){ return 'node "' + p + '"'; },
+    pythonExec = function( p ){ return 'python "' + p + '"'; },
     SLICE = Array.prototype.slice,
 
     JSLINT = nodeExec( normalize( "./node_modules/jshint/bin/hint" ) ),
-    HTML5LINT = normalize( "./tools/html5check.py" ),
+    HTML5LINT = pythonExec( normalize( "./tools/html5check.py" ) ),
     CSSLINT = nodeExec( normalize( "./node_modules/csslint/cli.js" ) ),
     UGLIFY = nodeExec( normalize( "./node_modules/uglify-js/bin/uglifyjs" ) ),
     RJS = nodeExec( normalize( "./node_modules/requirejs/bin/r.js" ) ),
