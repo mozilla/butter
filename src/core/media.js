@@ -280,6 +280,9 @@
       this.sortTracks = function( suppressEvent ){
         _orderedTracks = _tracks.slice();
         _orderedTracks.sort( compareTrackOrder );
+        _orderedTracks.forEach( function(track) {
+          track.updateTrackEvents();
+        });
         if ( !suppressEvent ) {
           _this.dispatch( "trackorderchanged", _orderedTracks );
         }
