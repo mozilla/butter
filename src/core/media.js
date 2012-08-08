@@ -277,15 +277,12 @@
         return a.order > b.order;
       }
 
-      this.sortTracks = function( suppressEvent ){
+      this.sortTracks = function() {
         _orderedTracks = _tracks.slice();
         _orderedTracks.sort( compareTrackOrder );
-        _orderedTracks.forEach( function(track) {
+        _orderedTracks.forEach( function( track ) {
           track.updateTrackEvents();
         });
-        if ( !suppressEvent ) {
-          _this.dispatch( "trackorderchanged", _orderedTracks );
-        }
       };
 
       this.getNextTrack = function( currentTrack ) {
