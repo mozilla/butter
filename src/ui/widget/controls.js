@@ -235,7 +235,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
             width = 0;
           } else {
 
-            width = p.volume() * volume.offsetWidth;
+            width = p.volume();
           }
 
           if ( width === 0 ) {
@@ -249,12 +249,12 @@ define( [ "util/lang", "text!layouts/controls.html" ],
 
           if ( volumeProgressBar ) {
 
-            volumeProgressBar.style.width = ( width / volume.offsetWidth * 100 ) + "%";
+            volumeProgressBar.style.width = ( width * 100 ) + "%";
           }
 
           if ( volumeScrubber ) {
 
-            volumeScrubber.style.left = ( ( width - ( volumeScrubber.offsetWidth / 2 ) ) / volume.offsetWidth * 100 ) + "%";
+            volumeScrubber.style.left = ( ( width - ( volumeScrubber.offsetWidth / 2 ) ) * 100 ) + "%";
           }
         };
 
