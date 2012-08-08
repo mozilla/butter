@@ -173,7 +173,7 @@ define( [
 
       // if PopcornWrapper exists, it means we're connected properly to a Popcorn instance,
       // and can update the corresponding Popcorn trackevent for this object
-      if ( _popcornWrapper ) {
+      if ( _popcornWrapper && !_isGhost ) {
         _popcornWrapper.updateEvent( _this );
       }
 
@@ -248,7 +248,7 @@ define( [
      * a husk for popcorn data at this point.
      */
     this.unbind = function() {
-      _popcornWrapper.destroyEvent( _this );
+      _popcornWrapper && _popcornWrapper.destroyEvent( _this );
       _popcornWrapper = null;
       _track = null;
     };

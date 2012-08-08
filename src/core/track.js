@@ -212,8 +212,6 @@ define( [
         ]);
         _view.removeTrackEvent( trackEvent );
         trackEvent.unbind();
-        trackEvent._track = null;
-        trackEvent.setPopcornWrapper( null );
         _this.dispatch( "trackeventremoved", trackEvent );
         return trackEvent;
       } //if

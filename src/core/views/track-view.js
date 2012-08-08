@@ -209,7 +209,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
             });
           }
           track.removeTrackEvent( ghost );
-          _ghost.addTrackEvent( ghost );
+          _ghost.addTrackEvent( ghost, true );
         }
       }
       // loop over the tracks to find the one under the current one (if it exists)
@@ -226,6 +226,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
             if ( !ghost ) {
               // create a new ghost on the track below the currentone
               ghost = trackEventView.createGhost( nextTrack );
+              ghost.update( trackEvent.popcornOptions );
 
               checkGhostOverlay( nextTrack );
 
@@ -267,13 +268,13 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
           ghostView.updatePosition( trackEventView.element );
           ghostView.element.style.opacity = "0.3";
 
-          _ghost.addTrackEvent( ghost );
+          _ghost.addTrackEvent( ghost, true );
         // we already have a ghost track so just update it
         } else if ( _ghost ) {
           ghost = trackEventView.createGhost( _ghost );
 
           _track._media.addTrack( _ghost );
-          _ghost.addTrackEvent( ghost );
+          _ghost.addTrackEvent( ghost, true );
 
           ghostView = ghost.view;
           ghostView.zoom = _track.view.zoom;
@@ -309,7 +310,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
         if ( teData.id !== currentTrackEvent.id && !_track.isGhost ) {
           if ( isOverlapping( rect1, rect2 ) ) {
             if ( !currentTrackEvent.isGhost ) {
-              handleOverlap( teData, currentTrackEvent._track );
+              handleOverlap( teData, currentTrackEvent.track );
             }
             return true;
           }

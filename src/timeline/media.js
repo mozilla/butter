@@ -256,22 +256,27 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     function onTrackEventDropped( e ){
       var search = _media.findTrackWithTrackEventId( e.data.trackEvent ),
-          trackEvent = search.trackEvent,
-          corn = trackEvent.popcornOptions,
+          trackEvent,
+          corn,
           ghost;
 
-      // wait until after the trackEvent has moved to the correct track to 
+      trackEvent = search.trackEvent,
+      corn = trackEvent.popcornOptions,
+      ghost;
+
+
+      // wait until after the trackEvent has moved to the correct track to
       // set its ghost to null. This is so that when moving a trackevent on
       // the same track that has a ghost gets handled properly
       if ( trackEvent.view.ghost ) {
         ghost = trackEvent.view.ghost;
-        trackEvent = trackEvent._track.removeTrackEvent( trackEvent );
-        ghost._track.addTrackEvent( trackEvent );
+        trackEvent = trackEvent.track.removeTrackEvent( trackEvent );
+        ghost.track.addTrackEvent( trackEvent );
         trackEvent.view.cleanupGhost();
         // this used to be a ghost but it shouldn't be anymore as a trackevent was just dropped on it
-        if ( trackEvent._track.isGhost ) {
-          trackEvent._track.isGhost = false;
-          trackEvent._track.ghost = null;
+        if ( trackEvent.track && trackEvent.track.isGhost ) {
+          trackEvent.track.isGhost = false;
+          trackEvent.track.ghost = null;
         }
         return;
       }
