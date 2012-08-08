@@ -9,6 +9,8 @@ EditorHelper.addPlugin( "popup", function( trackEvent ) {
 
   if ( window.jQuery ) {
     EditorHelper.draggable( trackEvent, _container, media );
-    EditorHelper.resizable( trackEvent, _container, media, "e" );
+    EditorHelper.resizable( trackEvent, _container, media, {
+      handlePositions: "e"
+    });
   }
 });
