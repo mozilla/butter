@@ -1,6 +1,6 @@
 /*global EditorHelper*/
 
-EditorHelper.addPlugin( "zoink", function( trackEvent ) {
+EditorHelper.addPlugin( "popup", function( trackEvent ) {
   var _container,
       _popcornOptions,
       _context,
