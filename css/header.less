@@ -13,22 +13,10 @@
   left: 0;
   top: 0;
   right: @EDITOR_WIDTH;
-  *zoom: 1;
   padding: 5px 0 5px 24px;
-  color: #FFF;
-  border-bottom: 1px solid #222;
-  box-shadow: 0 2px 4px rgba( 0, 0, 0, .3 );
-  .gradient( "vertical", #414449, #2C2C2C );
-  .transition( all .3s ease );
-
-  &:before,
-  &:after {
-    content: "";
-    display: table;
-  }
-  &:after {
-    clear: both;
-  }
+  .transition( all .25s ease );
+  background: #FFF;
+  .clearfix();
   
   .butter-logo {
     position: relative;

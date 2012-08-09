@@ -2,14 +2,6 @@
    Author: @k88hudson
    ========================================================================== */
 
-body {
-  background: #333;
-  color: #F8FDE2;
-  font-weight: 300;
-  font-size: 14px;
-  font-family: "Helvetica Neue", sans-serif;
-}
-
 .wrapper {
   margin: 40px auto;
   width: 560px;
