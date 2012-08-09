@@ -13,7 +13,7 @@ define( [ "ui/page-element", "ui/logo-spinner", "util/lang", "ui/widget/textbox"
         _keepOpen = false,
         _logoSpinner;
 
-    var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE ),
+    var _propertiesElement = LangUtils.domFragment( HTML_TEMPLATE, ".butter-media-properties" ),
         _container = _propertiesElement.querySelector( "div.butter-container" ),
         _urlContainer = _propertiesElement.querySelector( "div.butter-url" ),
         _urlTextbox = _propertiesElement.querySelector( "input[type='text']" ),

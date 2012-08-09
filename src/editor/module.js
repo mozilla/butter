@@ -24,7 +24,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     moduleOptions = moduleOptions || {};
 
     var _currentEditor,
-        _editorAreaDOMRoot = LangUtils.domFragment( EDITOR_AREA_LAYOUT ),
+        _editorAreaDOMRoot = LangUtils.domFragment( EDITOR_AREA_LAYOUT, ".butter-editor-area" ),
         _toggler,
         _this = this,
         _logger = new Logger( butter.id );

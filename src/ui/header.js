@@ -9,14 +9,14 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
     options = options || {};
 
     var _this = this,
-        _rootElement = Lang.domFragment( HEADER_TEMPLATE ),
+        _rootElement = Lang.domFragment( HEADER_TEMPLATE, ".butter-header" ),
         _title,
         _saveButton,
         _sourceButton,
         _shareButton,
         _authButton;
 
-    _title = _rootElement.querySelector(".butter-name");
+    _title = _rootElement.querySelector( ".butter-name" );
     _title.innerHTML = options.value( "title" ) || "Popcorn Maker";
 
     _saveButton = _rootElement.querySelector( ".butter-header-save" );

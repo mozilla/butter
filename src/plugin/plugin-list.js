@@ -7,7 +7,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
 
 	return function( butter ) {
 
-    var _parentElement = LangUtils.domFragment( EDITOR_LAYOUT ),
+    var _parentElement = LangUtils.domFragment( EDITOR_LAYOUT, ".plugin-list-editor" ),
         _containerElement = _parentElement.querySelector( ".container" );
 
     var _button = butter.ui.header.element.querySelector( ".add-popcorn" );
