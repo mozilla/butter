@@ -186,19 +186,28 @@ define( [ "util/lang", "util/keys", "./base-editor",
      * @param {DOMElement} element: Element to which handler is attached
      * @param {TrackEvent} trackEvent: TrackEvent to update
      * @param {String} propertyName: Name of property to update when change is detected
+     * @param {Function} callback: OPTIONAL - Called when update is ready to occur
      */
-     extendObject.attachInputChangeHandler = function( element, trackEvent, propertyName ) {
+     extendObject.attachInputChangeHandler = function( element, trackEvent, propertyName, callback ) {
       element.addEventListener( "blur", function( e ) {
         var updateOptions = {};
         updateOptions[ propertyName ] = element.value;
-        trackEvent.update( updateOptions );
+        if ( callback ) {
+          callback( trackEvent, updateOptions );
+        } else {
+          trackEvent.update( updateOptions );
+        }
       }, false );
 
       if ( element.type === "number" ) {
         element.addEventListener( "change", function( e ) {
           var updateOptions = {};
           updateOptions[ propertyName ] = element.value;
-          trackEvent.update( updateOptions );
+          if ( callback ) {
+            callback( trackEvent, updateOptions );
+          } else {
+            trackEvent.update( updateOptions );
+          }
         }, false );
       }
     };

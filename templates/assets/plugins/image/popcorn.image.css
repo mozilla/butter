@@ -15,7 +15,7 @@ img.image-plugin-img, img.image-plugin-flickr-image {
 div.image-plugin-container {
   overflow: hidden;
   display: block;
-  position: relative;
+  position: absolute;
 }
 
 div.image-plugin-hidden, a.image-plugin-hidden, img.image-plugin-hidden {
