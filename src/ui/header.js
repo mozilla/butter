@@ -10,34 +10,10 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
 
     var _this = this,
         _rootElement = Lang.domFragment( HEADER_TEMPLATE, ".butter-header" ),
-        _title,
-        _saveButton,
-        _sourceButton,
-        _shareButton,
-        _authButton;
-
-    _title = _rootElement.querySelector( ".butter-name" );
-    _title.innerHTML = options.value( "title" ) || "Popcorn Maker";
-
-    _saveButton = _rootElement.querySelector( ".butter-header-save" );
-    _sourceButton = _rootElement.querySelector( ".butter-header-source" );
-    _shareButton = _rootElement.querySelector( ".butter-header-share" );
-    _authButton = _rootElement.querySelector( ".butter-header-auth" );
+        _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
+        _authButton = _rootElement.querySelector( ".butter-login-btn" );
 
     _this.element = _rootElement;
-
-    _sourceButton.addEventListener( "click", function( e ){
-
-      var exportPackage = {
-        html: butter.getHTML(),
-        json: butter.exportProject()
-      };
-
-      Dialog.spawn( "export", {
-        data: exportPackage,
-      }).open();
-
-    }, false );
 
     function authenticationRequired( successCallback, errorCallback ){
       if ( butter.cornfield.authenticated() && successCallback && typeof successCallback === "function" ) {
@@ -79,30 +55,6 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
       });
       dialog.open();
     }
-
-    _shareButton.addEventListener( "click", function( e ){
-      function publish(){
-        butter.cornfield.publish( butter.project.id, function( e ){
-          if( e.error !== "okay" ){
-            showErrorDialog( "There was a problem saving your project. Please try again." );
-            return;
-          }
-          else{
-            var url = e.url;
-            Dialog.spawn( "share", {
-              data: url
-            }).open();
-          }
-        });
-      }
-
-      function prepare(){
-        // (Re-)Save first, and publish
-        doSave( publish );
-      }
-
-      authenticationRequired( prepare );
-    }, false );
 
     function doSave( callback ){
 

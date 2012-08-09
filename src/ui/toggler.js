@@ -2,11 +2,11 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "util/lang", "text!layouts/toggler.html" ],
-  function( LangUtils, TOGGLER_LAYOUT ){
+define( [ "util/lang" ],
+  function( LangUtils ){
 
-  return function( clickHandler, elementTitle, startState ){
-    var _element = LangUtils.domFragment( TOGGLER_LAYOUT, ".butter-toggle-button" );
+  return function( rootElement, clickHandler, elementTitle, startState ){
+    var _element = rootElement;
 
     if ( startState !== false && startState !== true ) {
       startState = false;

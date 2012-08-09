@@ -93,6 +93,11 @@ define( [ "text!./default.html", "editor/editor" ],
         _this.addVerticalScrollbar( optionsWrapper, optionsContainer, _rootElement );
         _this.vScrollBar.update();
 
+        // Catch the end of a transition for when the error message box opens/closes
+        _messageContainer.parentNode.addEventListener( "transitionend", _this.vScrollBar.update, false );
+        _messageContainer.parentNode.addEventListener( "oTransitionEnd", _this.vScrollBar.update, false );
+        _messageContainer.parentNode.addEventListener( "webkitTransitionEnd", _this.vScrollBar.update, false );
+
         // Update properties when TrackEvent is updated
         trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
       },

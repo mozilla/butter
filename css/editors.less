@@ -26,10 +26,10 @@
 .butter-editor-area {
   position: fixed;
   z-index: 2000000000;
-  top: 51px;
+  top: 0;
   bottom: 0;
   right: 0;
-  width: 200px;
+  width: @EDITOR_WIDTH;
   border: 1px solid #000;
   background-image: url( "../resources/bg.jpg" );
   .transition( right 0.35s );
@@ -38,14 +38,14 @@
   color: #EEE;
 
   &.minimized {
-    right: -200px;
+    right: -@EDITOR_WIDTH - 2;
   }
   .butter-toggle-button {
     top: 14px;
     left: -38px;
     .transform( rotate( -90deg ) );
   }
-  > .butter-editor {
+  .butter-editor {
     font: 14px 'MetaBold';
     position: absolute;
     top: 0;
@@ -85,53 +85,132 @@
       right: 5px;
       border-radius: 5px;
     }
-    > div {
-      &.error-message-container {
-        margin: 0 5px 0 5px;
-        padding: 0 5px 0 5px;
-        border-radius: 5px;
-        box-shadow: inset 0 0 5px rgba( 0, 0, 0, .8 );
-        background: rgba( 0, 0, 0, .2 );
-        .transition( height 0.35s, margin 0.35s, padding 0.35s );
-        overflow: hidden;
-        height: 0;
-        margin-bottom: 0;
-        visibility: hidden;
-      }
-      &.error-message-container.open {
+
+    .error-message-container {
+      margin: 0 5px 0 5px;
+      padding: 0 5px 0 5px;
+      border-radius: 5px;
+      box-shadow: inset 0 0 5px rgba( 0, 0, 0, .8 );
+      background: rgba( 0, 0, 0, .2 );
+      .transition( height 0.35s, margin 0.35s, padding 0.35s );
+      overflow: hidden;
+      height: 0;
+      margin-bottom: 0;
+      visibility: hidden;
+      &.open {
         margin: 5px;
         padding: 5px;
       }
-      &.error-message {
+      > error-message {
         width: 180px;
       }
     }
+
     > button {
       margin: 10px;
     }
   }
 
-  .scrollbar-wrapper {
+  .butter-editor-header {
     position: absolute;
     top: 0;
-    right: 15px;
+    right: 0;
     left: 0;
+    height: 41px;
+    .gradient( "vertical", #242f33, #192124 );
+    box-shadow: 0 1px 0 rgba(57, 75, 81, 0.25);
+    border-bottom: 5px solid #41bb92;
+
+    > ul {
+      position: absolute;
+      bottom: 0;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      *zoom: 1;
+
+      &:before,
+      &:after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+
+      > li {
+        float: left;
+        padding: 10px 0 10px 0;
+
+        &.fl-right {
+          float: right;
+        }
+
+        a.butter-btn-dark {
+          padding: 12px;
+          height: 100%;
+          background: none;
+          font-size: 15px;
+          margin-right: 0;
+          border: none;
+          box-shadow: none;
+          border-radius: 0;
+        }
+
+        a.butter-btn-dark.butter-active {
+          background: #41bb92;
+          text-shadow: 0 1px 1px #276f57;
+        }
+      }
+
+    }
+
+    .butter-editor-close-btn {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: @HEADER_Z_INDEX + 1;
+
+      i {
+        background-position: -456px -72px; /* from icon-chevron-right */
+      }
+
+      &.toggled i {
+        background-position: -432px -72px; /* from icon-chevron-right */
+      }
+    }
+
+  }
+
+  .butter-editor-content {
+    position: absolute;
+    top: 51px;
     bottom: 0;
-    overflow: hidden;
-  }
+    right: 0;
+    left: 0;
 
-  .allow-scrollbar {
-    .trackevent-property {
-      padding-right: 15px;
+    .scrollbar-wrapper {
+      position: absolute;
+      top: 0;
+      right: 15px;
+      left: 0;
+      bottom: 0;
+      overflow: hidden;
     }
 
-    .butter-scroll-bar.scroll-bar-v {
-      top: 10%;
-      right: 2px;
-      width: 10px;
-      bottom: 10%;
+    .allow-scrollbar {
+      .trackevent-property {
+        padding-right: 15px;
+      }
+
+      .butter-scroll-bar.scroll-bar-v {
+        top: 10%;
+        right: 2px;
+        width: 10px;
+        bottom: 10%;
+      }
     }
   }
+
 }
 
 .butter-editor-spacing {
@@ -140,3 +219,4 @@
 .butter-editor-spacing.editor-minimized {
   padding-right: 0;
 }
+

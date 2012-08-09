@@ -40,12 +40,14 @@ define( [ "core/eventmanager", "./toggler",
     this.tray = new Tray();
     this.header = new Header( butter, _uiConfig );
 
-    var _toggler = new Toggler( function ( e ) {
+    // Filled in by the editor module
+    this.editor = null;
+
+    var _toggler = new Toggler( this.tray.rootElement.querySelector( ".butter-toggle-button" ),
+        function ( e ) {
           butter.ui.visible = !butter.ui.visible;
           _toggler.state = !_toggler.state;
         }, "Show/Hide Timeline" );
-
-    this.tray.rootElement.appendChild( _toggler.element );
 
     if ( _uiOptions.enabled ) {
       if ( _uiOptions.onLeaveDialog ) {
@@ -78,6 +80,11 @@ define( [ "core/eventmanager", "./toggler",
           document.body.appendChild( div );
         }
       }
+    };
+
+    this.setEditor = function( editorAreaDOMRoot ) {
+      _this.editor = editorAreaDOMRoot;
+      document.body.appendChild( editorAreaDOMRoot );
     };
 
     this.load = function( onReady ){

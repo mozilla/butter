@@ -88,6 +88,10 @@ define( [ "util/lang", "util/xhr",
           completeLayout,
           compiledLayout;
 
+      if ( !description ) {
+        throw "Editor \"" + editorName + "\" does not exist.";
+      }
+
       if ( description.layout ) {
         // Collect the element labeled with the 'butter-editor' class to avoid other elements (such as comments)
         // which may exist in the layout.
@@ -102,7 +106,7 @@ define( [ "util/lang", "util/xhr",
         }
 
         if ( !compiledLayout ) {
-          throw new Error( "Editor layout not formatted properly." );
+          throw "Editor layout not formatted properly.";
         }
       }
 

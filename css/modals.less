@@ -10,7 +10,7 @@
   height: 0;
   
   .layer {
-    z-index: 2140000100;
+    z-index: @MODAL_Z_INDEX;
     top: 0;
     left: 0;
     width: 100%;
@@ -25,7 +25,7 @@
     }
 
     &.behind-timeline {
-      z-index: 2139000000;
+      z-index: @TRAY_Z_INDEX - 10;
     }
 
   }

@@ -19,10 +19,10 @@
 .butter-tray {
   .selectable( none );
   position: fixed;
-  z-index: 2140000000;
+  z-index: @TRAY_Z_INDEX;
   bottom: 0;
   left: 0;
-  right: 200px;
+  right: @EDITOR_WIDTH;
   height: @TRAY_HEIGHT;
   border: 1px solid #000;
   background-image: url( "../resources/bg.jpg" );
@@ -50,7 +50,7 @@
   // This is the container for the spinning popcorn logo on the right side of the tray
   .butter-loading-container {
     position: absolute;
-    z-index: 2140000001;
+    z-index: @TRAY_Z_INDEX + 1;
     right: 10px;
     top: 3px;
     width: 50px;
