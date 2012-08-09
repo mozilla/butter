@@ -28,6 +28,10 @@
       {
         "type": "image",
         "path": "{{baseDir}}templates/assets/plugins/image/popcorn.image.js"
+      },
+      {
+        "type": "repeat",
+        "path": "{{baseDir}}templates/assets/plugins/repeat/popcorn.repeat.js"
       }
     ],
     "defaults": [
@@ -36,7 +40,8 @@
       "popup",
       "googlemap",
       "twitter",
-      "image"
+      "image",
+      "repeat"
     ]
   },
   "editor": {
