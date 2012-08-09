@@ -197,6 +197,10 @@ if fileName and gnu:
     sys.stdout.write(quotedName)
     sys.stdout.write(line)
 else:
-  sys.stdout.write(response.read().decode('utf-8'))
+  output = response.read()
+  # python2/3 difference in output's type
+  if not isinstance(output, str):
+    output = output.decode('utf-8')
+  sys.stdout.write(output)
 
 connection.close()
