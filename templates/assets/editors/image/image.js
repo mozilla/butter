@@ -1,15 +1,12 @@
 /*global EditorHelper*/
 
-EditorHelper.addPlugin( "photo", function( trackEvent ) {
-  var _container,
-      _popcornOptions,
-      _canvas = document.createElement( "canvas" ),
-      _context,
-      media;
-
-  _popcornOptions = trackEvent.popcornTrackEvent;
-  _container = _popcornOptions._container;
-  media = document.getElementById( trackEvent.track._media.target );
+EditorHelper.addPlugin( "image", function( trackEvent ) {
+  var _canvas = document.createElement( "canvas" ),
+      _popcornOptions = trackEvent.popcornTrackEvent,
+      _container = _popcornOptions._container,
+      _image = _popcornOptions._image,
+      _media = document.getElementById( trackEvent.track._media.target ),
+      _context;
 
   if ( window.jQuery ) {
     //Change default text to indicate draggable
@@ -17,14 +14,15 @@ EditorHelper.addPlugin( "photo", function( trackEvent ) {
       _container.innerHTML = "<span class=\"title\">Drag an image from your desktop</span>";
     }
 
-    window.EditorHelper.resizable( trackEvent, _container, media );
-    window.EditorHelper.draggable( trackEvent, _container, media );
+    window.EditorHelper.resizable( trackEvent, _container, _media );
+    window.EditorHelper.draggable( trackEvent, _container, _media );
   }
 
-  // Prevent default draggable behaviour of images
-  trackEvent.popcornTrackEvent._image.addEventListener( "mousedown", function( e ) {
-    e.preventDefault();
-  }, false);
+  if ( _image ) {
+    _image.addEventListener( "mousedown", function( e ) {
+      e.preventDefault();
+    }, false);
+  }
 
   _container.addEventListener( "dragover", function( e ) {
     e.preventDefault();
