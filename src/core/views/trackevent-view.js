@@ -221,28 +221,26 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                   _this.dispatch( "trackeventdragstopped" );
                   movedCallback();
 
-                  /*if ( _trackEvent.view.ghost ) {
+                  if ( _trackEvent.view.ghost && ( _trackEvent.track.order - _trackEvent.view.ghost.track.order === -1 ) ) {
                     ghost = _trackEvent.view.ghost;
                     te = _trackEvent.track.removeTrackEvent( _trackEvent );
                     ghost.track.addTrackEvent( te );
-                  }*/
+                    te.view.cleanupGhost();
+                  }
                 },
-                drag: function( element ) {
+                drag: function( element, droppable ) {
                   var tracks = _trackEvent.track._media.tracks,
                       track,
-                      rect1 = element.getBoundingClientRect(),
-                      rect2;
+                      droppableId = droppable.getAttribute( "data-butter-track-id" );
 
                   for ( var i = 0, l = tracks.length; i < l; i++ ) {
-                    if ( tracks[ i ] ) {
-                      rect2 = tracks[ i ].view.element.getBoundingClientRect();
-                      if ( !( ( rect1.top > rect2.bottom ) || ( rect1.bottom < rect2.top ) ) ) {
-                        if ( !tracks[ i ].isGhost ) {
-                          _overlapping = tracks[ i ].view.checkOverlay( _trackEvent );
-                        } else {
-                          tracks[ i ].view.checkOverlay( _trackEvent );
-                        }
+                    if ( tracks[ i ].view.id == droppableId ) {
+                      if ( !tracks[ i ].isGhost ) {
+                        _overlapping = tracks[ i ].view.checkOverlay( _trackEvent );
+                      } else {
+                        tracks[ i ].view.checkOverlay( _trackEvent );
                       }
+                      break;
                     }
                   }
 
@@ -265,6 +263,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                         }
                       }
                     }
+                    _overlapping = false;
                     // if we found an overlap meaning we are currently dragging over a trackevent
                     _this.cleanupGhost();
                   }

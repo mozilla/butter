@@ -607,7 +607,9 @@ define([], function(){
     };
 
     _draggable.drag = function( e ) {
-      _onDrag( _element );
+      if ( _draggable.droppable ) {
+        _onDrag( _element, _draggable.droppable.element );
+      }
     };
 
     _draggable.stop = function(){

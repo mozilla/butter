@@ -5,9 +5,12 @@
 define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
   function( Logger, EventManagerWrapper, DragNDrop ) {
 
+  var __guid = 0;
+
   return function( track ) {
 
-    var _track = track,
+    var _id = __guid++,
+        _track = track,
         _this = this,
         _trackEvents = [],
         _trackEventElements = [],
@@ -28,13 +31,14 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
         hoverClass: "draggable-hover",
         drop: function( dropped, mousePosition ) {
 
-          var draggableType = dropped.getAttribute( "data-butter-draggable-type" );
-
-          var start,
+          var draggableType = dropped.getAttribute( "data-butter-draggable-type" ),
+              start,
               left,
-              trackRect = _element.getBoundingClientRect();
+              trackRect = _element.getBoundingClientRect(),
+              trackEventId;
 
-          if( draggableType === "plugin" ){
+
+          if ( draggableType === "plugin" ) {
             left = mousePosition[ 0 ] - trackRect.left;
             start = left / trackRect.width * _duration;
             _this.dispatch( "plugindropped", {
@@ -42,21 +46,25 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
               track: _track,
               type: dropped.getAttribute( "data-popcorn-plugin-type" )
             });
-          }
-          else if( draggableType === "trackevent" ) {
-            if( dropped.parentNode !== _element ){
+          } else if ( draggableType === "trackevent" ) {
+            if ( dropped.parentNode !== _element ) {
+              trackEventId = dropped.getAttribute( "data-butter-trackevent-id" );
               left = dropped.offsetLeft;
               start = left / trackRect.width * _duration;
-              _this.dispatch( "trackeventdropped", {
-                start: start,
-                track: _track,
-                trackEvent: dropped.getAttribute( "data-butter-trackevent-id" )
-              });
+              if ( _track._media.findTrackWithTrackEventId( trackEventId ) ) {
+                _this.dispatch( "trackeventdropped", {
+                  start: start,
+                  track: _track,
+                  trackEvent: trackEventId
+                });
+              }
             }
-          } //if
+          }
         }
       });
     }
+
+    _element.setAttribute( "data-butter-track-id", _id );
 
     function resetContainer(){
       _element.style.width = ( _duration * _zoom ) + "px";
@@ -91,6 +99,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
     };
 
     Object.defineProperties( this, {
+      id: {
+        enumerable: true,
+        get: function() {
+          return _id;
+        }
+      },
       element: {
         enumerable: true,
         configurable: false,
@@ -195,7 +209,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
 
       function checkGhostOverlay( track ) {
         // create a ghost track
-        if ( track.view.checkOverlay( ghost ) ) {
+        if ( track.view.checkOverlay( ghost ) && ghost.track.id !== track.id ) {
           if ( !_ghost ) {
             _this.createGhost( _track._media );
 
@@ -268,13 +282,11 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
           ghostView.updatePosition( trackEventView.element );
           ghostView.element.style.opacity = "0.3";
 
-          _ghost.addTrackEvent( ghost, true );
         // we already have a ghost track so just update it
         } else if ( _ghost ) {
           ghost = trackEventView.createGhost( _ghost );
 
           _track._media.addTrack( _ghost );
-          _ghost.addTrackEvent( ghost, true );
 
           ghostView = ghost.view;
           ghostView.zoom = _track.view.zoom;
@@ -308,11 +320,13 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
 
         // make sure that we don't check against the same trackEvent
         if ( teData.id !== currentTrackEvent.id && !_track.isGhost ) {
-          if ( isOverlapping( rect1, rect2 ) ) {
-            if ( !currentTrackEvent.isGhost ) {
-              handleOverlap( teData, currentTrackEvent.track );
+          if ( !currentTrackEvent.ghost || currentTrackEvent.ghost.id !== teData.id ) {
+            if ( isOverlapping( rect1, rect2 ) ) {
+              if ( !currentTrackEvent.isGhost ) {
+                handleOverlap( teData, currentTrackEvent.track );
+              }
+              return true;
             }
-            return true;
           }
         }
       }
