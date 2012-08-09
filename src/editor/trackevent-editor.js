@@ -182,15 +182,6 @@ define( [ "util/lang", "util/keys", "./base-editor",
         trackEvent.update( updateOptions );
       }, false );
 
-      element.addEventListener( "keyup", function( e ) {
-        if ( __safeKeyUpKeys.indexOf( e.which ) > -1 ) {
-          return;
-        }
-        var updateOptions = {};
-        updateOptions[ propertyName ] = element.value;
-        trackEvent.update( updateOptions );
-      }, false );
-
       if ( element.type === "number" ) {
         element.addEventListener( "change", function( e ) {
           var updateOptions = {};
