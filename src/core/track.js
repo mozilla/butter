@@ -23,6 +23,8 @@ define( [
     var _trackEvents = [],
         _id = "Layer" + __guid++,
         _target = options.target,
+        _ghostTrack,
+        _isGhost = false,
         _logger = new Logger( _id ),
         _name = options.name || _id,
         _order = 0,
@@ -68,6 +70,15 @@ define( [
           for ( i = 0, l = _trackEvents.length; i < l; i++ ) {
             _trackEvents[ i ].update();
           }
+        }
+      },
+      isGhost: {
+        enumerable: true,
+        get: function() {
+          return _isGhost;
+        },
+        set: function( val ) {
+          _isGhost = val;
         }
       },
       target: {
@@ -154,12 +165,12 @@ define( [
       } //for
     }; //getTrackEventByName
 
-    this.addTrackEvent = function ( trackEvent ) {
+    this.addTrackEvent = function ( trackEvent, isGhost ) {
       var oldSelected = trackEvent ? !!trackEvent.selected : false;
 
       // Never absorb a track object. Only create new ones.
       // Keeps track->trackevent ownership simple! :)
-      trackEvent = new TrackEvent( trackEvent, _this, _popcornWrapper );
+      trackEvent = new TrackEvent( trackEvent, _this, _popcornWrapper, isGhost );
 
       // Update the trackevent with defaults (if necessary)
       trackEvent.update( trackEvent.popcornOptions, true );
@@ -214,6 +225,15 @@ define( [
         } //if
       } //for
     }; //deselectEvents
+
+    // check to see if this trackevent overlaps with any existing trackevents
+    this.listen( "trackeventupdated", function( trackevent ) {
+      _view.checkOverlay( trackevent );
+    });
+
+    this.listen( "trackeventadded", function( trackevent ) {
+      _view.checkOverlay( trackevent );
+    });
   }; //Track
 
   return Track;

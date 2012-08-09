@@ -143,6 +143,18 @@
         _this.dispatch( "trackeventrequested", e );
       }
 
+      function onTrackEventAdded( e ){
+        var trackEvent = e.data;
+        _popcornWrapper.updateEvent( trackEvent );
+        trackEvent._popcornWrapper = _popcornWrapper;
+      } //onTrackEventAdded
+
+      function onTrackEventRemoved( e ){
+        var trackEvent = e.data;
+        _popcornWrapper.destroyEvent( trackEvent );
+        trackEvent._popcornWrapper = null;
+      } //onTrackEventRemoved
+
       this.addTrack = function ( track ) {
         if ( !( track instanceof Track ) ) {
           track = new Track( track );
