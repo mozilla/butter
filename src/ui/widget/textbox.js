@@ -41,7 +41,11 @@ define( [], function(){
   }
 
   return function( input ){
-    if( !(input && input.type === "text" ) ){
+    if( !(input && (
+            input.type === "text" ||
+            input.type === "textarea" ||
+            input.type === "url" )
+         ) ){
       throw "Textbox: Expected an input element of type text";
     }
 
