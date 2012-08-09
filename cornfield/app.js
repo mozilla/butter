@@ -166,7 +166,8 @@ function publishRoute( req, res ){
             projectData = JSON.parse( project.data, escapeHTMLinJSON ),
             templateBase = VALID_TEMPLATES[ template ].replace( '{{templateBase}}', TEMPLATES_DIR + '/' ),
             templateConfig = templateConfigs[ template ],
-            templateFile = templateConfig.template;
+            templateFile = templateConfig.template,
+            baseHref;
 
         fs.readFile( templateFile, 'utf8', function( err, data ){
 
@@ -192,7 +193,8 @@ function publishRoute( req, res ){
               j, k;
 
           templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
-          baseString = '\n  <base href="' + PUBLISH_PREFIX + templateURL + '/"/>';
+          baseHref = PUBLISH_PREFIX + templateURL + "/";
+          baseString = '\n  <base href="' + baseHref + '"/>';
 
           // look for script tags with data-butter-exclude in particular (e.g. butter's js script)
           data = data.replace( /\s*<script[\.\/='":_-\w\s]*data-butter-exclude[\.\/='":_-\w\s]*><\/script>/g, '' );
@@ -277,6 +279,7 @@ function publishRoute( req, res ){
               id: id,
               author: email,
               title: "todo",
+              baseHref: baseHref,
               templateScripts: templateScripts,
               externalAssets: externalAssetsString,
               customData: customDataString,
