@@ -11,12 +11,6 @@
         website: "mschranz.wordpress.com, http://github.com/mjschranz"
       },
       options: {
-        widgetTitle: {
-          elem: "input",
-          type: "text",
-          label: "Widget Title",
-          "default": "Popcorn.js"
-        },
         search: {
           elem: "input",
           type: "text",
@@ -36,7 +30,8 @@
           options: [ "Mixed", "Recent", "Popular" ],
           values: [ "mixed", "recent", "popular" ],
           label: "Search Results",
-          "default": "mixed"
+          "default": "mixed",
+          "hidden": true
         },
         numberOfTweets: {
           elem: "input",
@@ -66,8 +61,8 @@
         },
         layout: {
           elem: "select",
-          options: [ "Ticker", "Sidebar", "Feed" ],
-          values: [ "ticker", "sidebar", "feed" ],
+          options: [ "Ticker", "Feed" ],
+          values: [ "ticker", "feed" ],
           label: "Tweet Layout",
           "default": "feed",
           optional: true
@@ -101,6 +96,7 @@
       var target = Popcorn.dom.find( options.target ),
           requestString = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=",
           titleText = document.createElement( "span" ),
+          outerTweetsContainer = document.createElement( "div" ),
           tweetsContainer = document.createElement( "ul" ),
           img,
           tweetContainer,
@@ -127,7 +123,7 @@
       options._container.style.left = options.left + "%";
       options._container.style.display = "none";
       titleText.classList.add( "popcorn-twitter-title" );
-      titleText.appendChild( document.createTextNode( options.widgetTitle ) );
+      titleText.appendChild( document.createTextNode( options.search || options.username || "Twitter" ) );
       options._container.appendChild( titleText );
 
       function twitterCallback( e ) {
@@ -182,7 +178,9 @@
           options._container.classList.add( options.transitions.transitionIn );
         }
 
-        options._container.appendChild( tweetsContainer );
+        outerTweetsContainer.classList.add( "popcorn-twitter-tweets" );
+        outerTweetsContainer.appendChild( tweetsContainer );
+        options._container.appendChild( outerTweetsContainer );
       }
 
       // Set layout class for container
