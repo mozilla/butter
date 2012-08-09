@@ -1,124 +1,15 @@
 /*********************************************************
 * EDITORS
 */
-
-.butter-unit {
-  display: inline-block;
-  margin-left: -4px;
-  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-  font-size: 10px;
-  width: auto;
-  min-width: 16px;
-  padding: 8px 5px 4px 5px;
-  font-weight: normal;
-  text-align: center;
-  background-color: #222;
-  color: #999;
-  border: 1px solid black;
-  border-left: 0;
-  border-radius: 0 3px 3px 0;
-}
-.butter-form-append input {
-  display: inline-block;
-  border-radius: 3px 0 0 3px;
-  border-right: 1px solid #000;
-}
-.butter-editor-area {
-  position: fixed;
-  z-index: 2000000000;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: @EDITOR_WIDTH;
-  border: 1px solid #000;
-  background-image: url( "../resources/bg.jpg" );
-  .transition( right 0.35s );
-  border-left: 1px solid #222;
-  box-shadow: inset 5px 0 5px rgba( 0, 0, 0, .2 );
-  color: #EEE;
-
-  &.minimized {
-    right: -@EDITOR_WIDTH - 2;
-  }
-  .butter-toggle-button {
-    top: 14px;
-    left: -38px;
-    .transform( rotate( -90deg ) );
-  }
-  .butter-editor {
-    font: 14px 'MetaBold';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    input:focus + .butter-unit {
-      color: #CCC;
-    }
-    h1 {
-      font-size: 16px;
-      color: #FFF;
-      padding: 10px;
-      text-align: center;
-      margin: 0;
-    }
-    .trackevent-property {
-      padding: 10px;
-      clear: both;
-      select,
-      input {
-        float: left;
-        width: 100%;
-      }
-      .butter-form-append {
-        input {
-          width: 106px;
-        }
-      }
-    }
-    > .editor-tabs {
-      position: absolute;
-      top: 60px;
-      left: 5px;
-      bottom: 5px;
-      right: 5px;
-      border-radius: 5px;
-    }
-
-    .error-message-container {
-      margin: 0 5px 0 5px;
-      padding: 0 5px 0 5px;
-      border-radius: 5px;
-      box-shadow: inset 0 0 5px rgba( 0, 0, 0, .8 );
-      background: rgba( 0, 0, 0, .2 );
-      .transition( height 0.35s, margin 0.35s, padding 0.35s );
-      overflow: hidden;
-      height: 0;
-      margin-bottom: 0;
-      visibility: hidden;
-      &.open {
-        margin: 5px;
-        padding: 5px;
-      }
-      > error-message {
-        width: 180px;
-      }
-    }
-
-    > button {
-      margin: 10px;
-    }
-  }
+  @_editorToolbarHeight: 40px;
 
   .butter-editor-header {
     position: absolute;
     top: 0;
     right: 0;
     left: 0;
-    height: 41px;
+    height: @_editorToolbarHeight;
     .gradient( "vertical", #242f33, #192124 );
-    box-shadow: 0 1px 0 rgba(57, 75, 81, 0.25);
     border-bottom: 5px solid #41bb92;
 
     > ul {
@@ -128,22 +19,11 @@
       margin: 0;
       padding: 0;
       width: 100%;
-      *zoom: 1;
-
-      &:before,
-      &:after {
-        content: "";
-        display: table;
-        clear: both;
-      }
+      .clearfix();
 
       > li {
         float: left;
         padding: 10px 0 10px 0;
-
-        &.fl-right {
-          float: right;
-        }
 
         a.butter-btn-dark {
           padding: 12px;
@@ -154,69 +34,225 @@
           border: none;
           box-shadow: none;
           border-radius: 0;
+
+          &.butter-active {
+            background: #41bb92;
+            text-shadow: 0 1px 1px #276f57;
+          }
+          >i {
+            margin-right: 5px;
+          }
         }
 
-        a.butter-btn-dark.butter-active {
-          background: #41bb92;
-          text-shadow: 0 1px 1px #276f57;
-        }
+      }
+    }
+  } // .butter-editor-header
+
+ .butter-editor-close-btn {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: @HEADER_Z_INDEX + 1;
+  i {
+    background-position: -456px -72px; /* from icon-chevron-right */
+  }
+  &.toggled i {
+    background-position: -432px -72px; /* from icon-chevron-right */
+  }
+}
+
+/*********************************************************
+* Main Editor Area
+*/
+
+.butter-editor-area {
+  @_editorHeaderHeight: 50px;
+  @_editorScrollbarWidth: 15px;
+
+  position: fixed;
+  z-index: 2000000000;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: @EDITOR_WIDTH;
+  background: @baseLight;
+  .transition( right 0.35s );
+
+  &.minimized {
+    right: -@EDITOR_WIDTH - 2;
+  }
+
+  // Tabs, breadcrumbs
+  .butter-editor {
+    color: @baseText;
+    font-size: 13px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-left: 1px solid @baseLightOutline;
+
+    h1 { // Breadcrumbs
+      color: @green;
+      font-size: 16px;
+      height: @_editorHeaderHeight;
+      line-height: @_editorHeaderHeight;
+      padding: 0 20px;
+      margin: 0;
+      background: #FFF;
+      border-bottom: 1px solid @baseLightOutline;
+    }
+
+    // Tabs
+    .editor-tabs {
+      position: absolute;
+      top: 60px;
+      left: 5px;
+      bottom: 5px;
+      right: 5px;
+      border-radius: 5px;
+
+      > button {
+        margin: 10px;
       }
 
     }
 
-    .butter-editor-close-btn {
-      position: fixed;
-      top: 0;
-      right: 0;
-      z-index: @HEADER_Z_INDEX + 1;
+  }
 
-      i {
-        background-position: -456px -72px; /* from icon-chevron-right */
-      }
+  // Errors
+  .error-message-container {
+    .transition( height 0.35s, margin 0.35s, padding 0.35s );
+    overflow: hidden;
+    height: 0;
+    color: #D93B21;
+    visibility: hidden;
+  }
 
-      &.toggled i {
-        background-position: -432px -72px; /* from icon-chevron-right */
-      }
-    }
+  .error-message-container.open {
+    padding: 10px 20px;
+    padding-right: 35px; //scrollbars
+    background: #F0DDDD;
+  }
 
+
+  // Spacing 
+ .butter-editor-spacing {
+    padding-right: @EDITOR_WIDTH;
+  }
+
+  .butter-editor-spacing.editor-minimized {
+    padding-right: 0;
   }
 
   .butter-editor-content {
     position: absolute;
-    top: 51px;
+    top: @_editorToolbarHeight;
     bottom: 0;
-    right: 0;
+    width: 100%;
+  }
+  .butter-editor-body {
+    position: relative;
+    margin: 5px 20px;
+    height: 100%;
+  }
+
+  // Scrollbars
+  .scrollbar-wrapper {
+    position: absolute;
+    top: 0;
+    right: @_editorScrollbarWidth;
     left: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
 
-    .scrollbar-wrapper {
-      position: absolute;
-      top: 0;
-      right: 15px;
-      left: 0;
-      bottom: 0;
-      overflow: hidden;
-    }
-
-    .allow-scrollbar {
-      .trackevent-property {
-        padding-right: 15px;
-      }
-
-      .butter-scroll-bar.scroll-bar-v {
-        top: 10%;
-        right: 2px;
-        width: 10px;
-        bottom: 10%;
-      }
+  .allow-scrollbar {
+    .butter-scroll-bar.scroll-bar-v {
+      top: @_editorToolbarHeight + 10px;
+      right: 2px;
+      width: 10px;
+      bottom: 5px;
     }
   }
 
-}
+} //editor area
 
-.butter-editor-spacing {
-  padding-right: 200px;
-}
-.butter-editor-spacing.editor-minimized {
-  padding-right: 0;
-}
+
+/*********************************************************
+* Editor UI styles
+*/
+
+// Fieldset
+.trackevent-property {
+  margin: 5px 0;
+  .clearfix();
+
+  // Label
+  .property-name {
+    font-size: 13px;
+    padding: 10px 0;
+  }
+
+  // Inputs
+  select,
+  input {
+    float: left;
+    width: 100%;
+    padding: 6px;
+    border: 1px solid @baseLightOutline;
+    border-top-color: darken( @baseLightOutline, 10% );
+    border-radius: 2px;
+    .box-sizing( border-box );
+
+    &:focus {
+      outline: none;
+      border: 1px solid @green;
+      .transition( border 0.25s ease );
+    }
+  }
+
+  // Error/Invalid
+  input:invalid,
+  textarea:invalid,
+  input:invalid + .butter-unit {
+    border-color: @red;
+  }
+
+  input:invalid + .butter-unit {
+    border-left-color: @baseLightOutline;
+  }
+
+  // Units
+  .butter-form-append > input {
+    width: 200px;
+    display: inline-block;
+    border-radius: 2px 0 0 2px;
+
+    &:focus + .butter-unit {
+      border-color: @green;
+      border-left-color: @baseLightOutline;
+    }
+
+  }
+
+  .butter-unit {
+    display: inline-block;
+    margin-left: -1px;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 10px;
+    line-height: 30px;
+    padding: 0 5px;
+    width: auto;
+    min-width: 16px;
+    font-weight: normal;
+    text-align: center;
+    background-color: @baseLight;
+    color: #777;
+    border: 1px solid @baseLightOutline;
+    border-radius: 0 3px 3px 0;
+  }
+
+} // Fieldset
 
