@@ -1,9 +1,9 @@
 {
   "targets": [
     {
-      "id": "overlay",
-      "name": "overlay",
-      "element": "overlay"
+      "id": "video-container",
+      "name": "video-container",
+      "element": "video-container"
     }
   ],
   "media": [
@@ -28,7 +28,7 @@
               "popcornOptions": {
                 "start": 0.076,
                 "end": 1.085,
-                "target": "overlay",
+                "target": "video-container",
                 "text": "Popcorn.js",
                 "innerContainerClasses": "",
                 "containerClasses": "popcorn-transition popcorn-titles",
