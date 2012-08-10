@@ -126,6 +126,7 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
 
     _media.listen( "trackeventupdated", function( e ) {
       _this.trackEventDragManager.trackEventUpdated( e.target );
+      _vScrollbar.update();
     });
 
     _media.listen( "trackeventadded", function( e ) {
@@ -133,6 +134,7 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
       trackEventView.setDragHandler( onTrackEventDragged );
       trackEventView.listen( "trackeventdragstarted", onTrackEventDragStarted );
       trackEventView.listen( "trackeventdragstopped", onTrackEventDragStopped );
+      _vScrollbar.update();
     });
 
     _media.listen( "trackeventremoved", function( e ) {
@@ -140,6 +142,7 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
       trackEventView.setDragHandler( null );
       trackEventView.unlisten( "trackeventdragstarted", onTrackEventDragStarted );
       trackEventView.unlisten( "trackeventdragstopped", onTrackEventDragStopped );
+      _vScrollbar.update();
     });
 
     _media.listen( "trackadded", onTrackAdded );

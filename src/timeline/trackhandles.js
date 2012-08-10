@@ -22,9 +22,16 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
     }, false );
 
     function sortHandles(){
-      var tracks = butter.currentMedia.orderedTracks;
-      for ( var i = 0, l = tracks.length; i < l; ++i ) {
-        _listElement.appendChild( _tracks[ tracks[ i ].id ].element );
+      if ( butter.currentMedia ) {
+        var tracks = butter.currentMedia.orderedTracks;
+        for ( var i = 0, l = tracks.length; i < l; ++i ) {
+          var trackHandle = _tracks[ tracks[ i ].id ];
+          // It *is* possible for there to be more tracks than there are track handles while importing, so
+          // do a check here to see if a handle exists first before ordering.
+          if ( trackHandle ) {
+            _listElement.appendChild( trackHandle.element );
+          }
+        }
       }
     }
 

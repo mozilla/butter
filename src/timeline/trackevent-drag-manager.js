@@ -69,7 +69,7 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
           nextTrack = _media.getNextTrack( track );
           if ( !nextTrack || nextTrack.view.findOverlappingTrackEvent( trackEventView ) ) {
             nextTrack = createGhostTrackForTrack( track, nextTrack );
-            if ( trackEventView.ghost ) {
+            if ( trackEventView.ghost && trackEventView.ghost.track !== nextTrack ) {
               trackEventView.cleanupGhost();
             }
           }
@@ -101,10 +101,6 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
           newTrackEvent = ghost.track.addTrackEvent( trackEvent );
           trackEvent.view.cleanupGhost( currentTrack );
           correctOverlappingTrackEvents( newTrackEvent );
-          cleanUpGhostTracks();
-        }
-        else {
-          trackEvent.view.cleanupGhost( currentTrack );
           cleanUpGhostTracks();
         }
       }

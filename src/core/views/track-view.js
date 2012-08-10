@@ -180,6 +180,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       var otherTrackEventView,
           rect1 = rect,
           rect2;
+      
+      // If the rect's width is 0 here, it's likely that we're not even attached to the DOM
+      if ( rect1.width === 0 ) {
+        return null;
+      }
+
       // loop over all the trackevents for this track and see if we overlap
       for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
         otherTrackEventView = _trackEvents[ i ];
@@ -199,6 +205,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       var otherTrackEventView,
           rect1 = trackEventView.element.getBoundingClientRect(),
           rect2;
+
+      // If the rect's width is 0 here, it's likely that we're not even attached to the DOM
+      if ( rect1.width === 0 ) {
+        return null;
+      }
+
       // loop over all the trackevents for this track and see if we overlap
       for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
         otherTrackEventView = _trackEvents[ i ];
