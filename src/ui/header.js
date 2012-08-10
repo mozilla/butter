@@ -96,8 +96,27 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
       }
     }
 
+    function publish(){
+      butter.cornfield.publish( butter.project.id, function( e ){
+        if( e.error !== "okay" ){
+          showErrorDialog( "There was a problem saving your project. Please try again." );
+          return;
+        }
+        else{
+          var url = e.url;
+          Dialog.spawn( "share", {
+            data: url
+          }).open();
+        }
+      });
+    }
+
+    function prepare() {
+      doSave( publish );
+    }
+
     _saveButton.addEventListener( "click", function( e ){
-      authenticationRequired( doSave );
+      authenticationRequired( prepare );
     }, false );
 
     function doLogout() {
