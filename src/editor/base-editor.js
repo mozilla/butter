@@ -2,7 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager" ], function( EventManagerWrapper ) {
+define( [ "core/eventmanager", "util/scrollbars" ],
+  function( EventManagerWrapper, Scrollbars ) {
 
   /**
    * Class: BaseEditor
@@ -105,6 +106,25 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ) {
         document.head.removeChild( _extraStyleTags[ x ] );
       }
       _extraStyleTags = [];
+    };
+
+    /**
+     * Member: addScrollbar
+     *
+     * Creates a scrollbar with the following options:
+     *    outer:      The outer containing element. ( optional. Default = inner.ParentNode )
+     *    inner:      The inner element with the scrollable content.
+     *    appendTo:   The element to append the scrollbar to.
+     */
+    extendObject.addScrollbar = function( options ) {
+      var outerEl = options.outer  || options.inner.parentNode,
+          innerEl = options.inner,
+          containerEl = options.container;
+      extendObject.scrollbar = new Scrollbars.Vertical( outerEl, innerEl );
+      containerEl.appendChild( extendObject.scrollbar.element );
+      extendObject.scrollbar.update();
+      
+      return extendObject.scrollBar;
     };
 
   };
