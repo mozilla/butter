@@ -57,7 +57,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
     }
 
     function doSave( callback ){
-console.log( callback );
+
       function execute(){
         butter.project.data = butter.exportProject();
         var saveString = JSON.stringify( butter.project, null, 4 );
