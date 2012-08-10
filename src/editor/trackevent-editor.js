@@ -18,7 +18,20 @@ define( [ "util/lang", "util/keys", "./base-editor",
                           KeysUtils.DELETE,
                           KeysUtils.TAB,
                           KeysUtils.ESCAPE
-                        ];
+                        ],
+      __googleFonts;
+
+  var xhr = new XMLHttpRequest();
+
+  xhr.open( "GET", "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBw1zCqXJayewLR3qrcWQLhfryqCzbuV60", false );
+  xhr.onreadystatechange = function() {
+    if ( xhr.readyState === 4 ) {
+      if ( xhr.responseText !== "Not Found" ) {
+        __googleFonts = JSON.parse( xhr.responseText ).items;
+      }
+    }
+  };
+  xhr.send();
 
   /**
    * Class: TrackEventEditor
@@ -34,9 +47,14 @@ define( [ "util/lang", "util/keys", "./base-editor",
 
     // Wedge a check for scrollbars into the open event if it exists
     var oldOpenEvent = events.open;
+
+    extendObject.updateScrollBar = function() {
+      extendObject.vScrollBar.update();
+    };
+
     events.open = function() {
       if ( extendObject.vScrollBar ) {
-        extendObject.vScrollBar.update();
+        extendObject.updateScrollBar();
       }
       if ( oldOpenEvent ) {
         oldOpenEvent.apply( this, arguments );
@@ -49,7 +67,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
 
     // A vertical scrollbar may be added if lots of editor content is available (perhaps a large manifest is present for a plugin).
     // See addVerticalScrollbar below for more details.
-    extendObject.vScrollBar = null;
+    extendObject.vScrollBars = null;
 
     /**
      * Member: createTargetsList
@@ -213,13 +231,21 @@ define( [ "util/lang", "util/keys", "./base-editor",
           manifestEntryOption,
           i, l;
 
+      // If the manifestEntry was specified to be hidden, or part of an advanced set of options don't use traditional
+      // element building
+      if ( manifestEntry.hidden ) {
+        return;
+      }
+
       // only populate if this is an input element that has associated units
       if ( units ) {
         propertyArchetype.querySelector( ".butter-unit" ).innerHTML = units;
       }
 
       // Grab the element with class 'property-name' to supply the archetype for new manifest entries
-      propertyArchetype.querySelector( ".property-name" ).innerHTML = itemLabel;
+      if ( propertyArchetype.querySelector( ".property-name" ) ) {
+        propertyArchetype.querySelector( ".property-name" ).innerHTML = itemLabel;
+      }
 
       // If the manifest's 'elem' property is 'select', create a <select> element. Otherwise, create an
       // <input>.
@@ -245,6 +271,18 @@ define( [ "util/lang", "util/keys", "./base-editor",
             }
 
             editorElement.appendChild( option );
+          }
+        }
+        else if ( manifestEntry.googleFonts && __googleFonts ) {
+          var font,
+              m,
+              fLen;
+
+          for ( m = 0, fLen = __googleFonts.length; m < fLen; m++ ) {
+            font = document.createElement( "option" );
+
+            font.value = font.innerHTML = __googleFonts[ m ].family;
+            editorElement.appendChild( font );
           }
         }
       }
@@ -322,30 +360,39 @@ define( [ "util/lang", "util/keys", "./base-editor",
      * @param {DOMElement} container: Optional. If specified, elements will be inserted into container, not rootElement
      * @param {Array} ignoreManifestKeys: Optional. Keys in this array are ignored such that elements for them are not created
      */
-    extendObject.createPropertiesFromManifest = function( trackEvent, itemCallback, manifestKeys, container, ignoreManifestKeys ) {
+    extendObject.createPropertiesFromManifest = function( trackEvent, callback, manifestKeys, basicContainer, advancedContainer, ignoreManifestKeys ) {
       var manifestOptions,
           item,
           element,
+          container,
+          optionGroup,
           i, l;
 
-      container = container || extendObject.rootElement;
+      basicContainer = basicContainer || extendObject.rootElement;
+      advancedContainer = advancedContainer || extendObject.rootElement;
 
       if ( !trackEvent.manifest ) {
         throw "Unable to create properties from null manifest. Perhaps trackevent is not initialized properly yet.";
       }
 
       manifestOptions = trackEvent.manifest.options;
+
       manifestKeys = manifestKeys || Object.keys( manifestOptions );
 
       for ( i = 0, l = manifestKeys.length; i < l; ++i ) {
         item = manifestKeys[ i ];
+        optionGroup = manifestOptions[ item ].group ? manifestOptions[ item ].group : "basic";
+        container = optionGroup === "advanced" ? advancedContainer : basicContainer;
         if ( ignoreManifestKeys && ignoreManifestKeys.indexOf( item ) > -1 ) {
           continue;
         }
-        element = extendObject.createManifestItem( item, manifestOptions[ item ], trackEvent.popcornOptions[ item ], trackEvent, itemCallback );
+        element = extendObject.createManifestItem( item, manifestOptions[ item ], trackEvent.popcornOptions[ item ], trackEvent, callback );
 
-        container.appendChild( element );
+        if ( element ) {
+          container.appendChild( element );
+        }
       }
+
     };
 
     extendObject.addVerticalScrollbar = function( wrapperElement, contentElement, scrollbarContainerElement ) {

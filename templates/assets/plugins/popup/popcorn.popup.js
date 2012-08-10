@@ -2,91 +2,14 @@
 
 (function ( Popcorn ) {
 
-  var styleSheet,
-      svg, clipPath, ellipse,
-      sounds = {},
+  var sounds = {},
       events = [],
       soundIndex = 0,
       MAX_AUDIO_TIME = 2,
-      fontLoaded = false,
-      fontLoadedQueue = [],
-      startedLoadingExternal = false,
-      externalLoadedQueue = [],
       _pluginRoot = location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" ) + "/templates/assets/plugins/popup/",
       FILL_STYLE = "rgb(255, 255, 255)",
       innerDivTriangles = {},
       DEFAULT_FONT = "Tangerine";
-
-  function selectAudio( id, sources ) {
-    var i, j, n, event, diff,
-        eligibleAudio,
-        audio,
-        source;
-
-    function resetAudio() {
-      var that = this;
-      this.currentTime = 0;
-      this.pause();
-    }
-
-    if ( !sounds[ id ] ) {
-      audio = document.createElement( "audio" );
-      for ( i = 0; i < sources.length; i ++ ) {
-        source = document.createElement( "source" );
-        source.src = _pluginRoot + sources[ i ];
-        audio.appendChild( source );
-      }
-      audio.id = "popcorn-pop-sound-" + soundIndex;
-      soundIndex++;
-      audio.preload = true;
-      audio.style.display = "none";
-      audio.addEventListener( "ended", resetAudio, false );
-
-      document.body.appendChild( audio );
-      sounds[ id ] = [ audio ];
-      return audio;
-    }
-
-    audio = sounds[ id ][ 0 ];
-    if ( audio.duration ) {
-      diff = Math.min( audio.duration, MAX_AUDIO_TIME );
-    } else {
-      diff = MAX_AUDIO_TIME;
-    }
-
-    //make sure there are no other events using this sound at the same time
-    eligibleAudio = sounds[ id ].slice( 0 );
-    for ( i = 0; i < events.length; i++ ) {
-      event = events[ i ];
-      if ( event.sound === options.sound &&
-        event.start <= options.start + diff &&
-        event.start + diff >= options.start ) {
-
-        j = eligibleAudio.indexOf( event.audio );
-        if ( j >= 0 ) {
-          eligibleAudio.splice( j, 1 );
-        }
-      }
-    }
-
-    if ( eligibleAudio.length ) {
-      audio = eligibleAudio[ 0 ];
-    } else {
-      audio = sounds[ id ][ 0 ].cloneNode( true );
-      audio.id = "popcorn-pop-sound-" + soundIndex;
-      soundIndex++;
-
-      // not sure whether cloning copies the events in all browsers,
-      // so remove it and add again just in case
-      audio.removeEventListener( "ended", resetAudio, false );
-      audio.addEventListener( "ended", resetAudio, false );
-
-      document.body.appendChild( audio );
-      sounds[ id ].push( audio );
-    }
-
-    return audio;
-  }
 
   // Set up speech innerDiv triangles
   innerDivTriangles.speech = document.createElement( "canvas" );
@@ -216,12 +139,12 @@
         icon: {
           elem: "select",
           options: [ "Error", "Audio", "Broken Heart", "Cone", "Earth",
-                     "Eye", "Heart", "Info", "Man", "Money", "Music", "Net", 
-                     "Skull", "Start", "Thumbs Down", "Thumbs Up", "Time", 
+                     "Eye", "Heart", "Info", "Man", "Money", "Music", "Net",
+                     "Skull", "Star", "Thumbs Down", "Thumbs Up", "Time",
                      "Trophy", "Tv", "User", "Virus", "Women" ],
           values: [ "error", "audio", "broken heart", "cone", "earth",
-                     "eye", "heart", "info", "man", "money", "music", "net", 
-                     "skull", "start", "thumbs down", "thumbs up", "time", 
+                     "eye", "heart", "info", "man", "money", "music", "net",
+                     "skull", "star", "thumbsdown", "thumbsup", "time",
                      "trophy", "tv", "user", "virus", "women" ],
           label: "Pop Icon",
           "default": "error",
@@ -281,31 +204,31 @@
           group: "advanced"
         },
         fontColor: {
-          elem: "color-wheel",
-          height_width: 100,
-          styleClass: "center",
+          elem: "input",
+          type: "text",
+          label: "Font",
           "default": "#668B8B",
           group: "advanced"
         },
         fontWeight: {
-          elem: "a",
-          text: "B",
-          title: "Bold the text!",
-          styleClass: "weight",
+          elem: "input",
+          type: "checkbox",
+          label: "Bold",
+          "default": false,
           group: "advanced"
         },
         fontItalics: {
-          elem: "a",
-          text: "i",
-          title: "Add italics to the text!",
-          styleClass: "italics",
+          elem: "input",
+          type: "checkbox",
+          label: "Italics",
+          "default": false,
           group: "advanced"
         },
         textUnderline: {
-          elem: "a",
-          text: "U",
-          title: "Add an underline to the text!",
-          styleClass: "underline",
+          elem: "input",
+          type: "checkbox",
+          label: "Underline",
+          "default": false,
           group: "advanced"
         },
         zindex: {
@@ -321,11 +244,17 @@
           context = this,
           audio,
           width = normalize( options.width, 5, 100 ) + "%",
-          top = normalize( options.top, 0, 100 ) + "%",
-          left = normalize( options.left, 0, 100 ) + "%",
+          top = normalize( options.top, 0, 95 ) + "%",
+          left = normalize( options.left, 0, 95 ) + "%",
           i,
           fontSheet,
-          originalFamily = options.fontFamily;
+          originalFamily = options.fontFamily,
+          flip = options.flip ? " flip" : "",
+          innerDiv = document.createElement( "div" ),
+          textContainer = document.createElement( "div" ),
+          text = options.text,
+          node,
+          img;
 
       if ( !target ) {
         target = context.media.parentNode;
@@ -333,14 +262,75 @@
 
       options._target = target;
 
-      if ( options.classes === "none" ) {
-        options.classes = "";
-      }
+      function selectAudio( id, sources ) {
+        var i, j, event, diff,
+            eligibleAudio,
+            audio,
+            source;
 
-      var flip = options.flip ? " flip" : "",
-          innerDiv = document.createElement( "div" ),
-          textContainer = document.createElement( "div" ),
-          text = options.text;
+        function resetAudio() {
+          this.currentTime = 0;
+          this.pause();
+        }
+
+        if ( !sounds[ id ] ) {
+          audio = document.createElement( "audio" );
+          for ( i = 0; i < sources.length; i ++ ) {
+            source = document.createElement( "source" );
+            source.src = _pluginRoot + sources[ i ];
+            audio.appendChild( source );
+          }
+          audio.id = "popcorn-pop-sound-" + soundIndex;
+          soundIndex++;
+          audio.preload = true;
+          audio.style.display = "none";
+          audio.addEventListener( "ended", resetAudio, false );
+
+          document.body.appendChild( audio );
+          sounds[ id ] = [ audio ];
+          return audio;
+        }
+
+        audio = sounds[ id ][ 0 ];
+        if ( audio.duration ) {
+          diff = Math.min( audio.duration, MAX_AUDIO_TIME );
+        } else {
+          diff = MAX_AUDIO_TIME;
+        }
+
+        //make sure there are no other events using this sound at the same time
+        eligibleAudio = sounds[ id ].slice( 0 );
+        for ( i = 0; i < events.length; i++ ) {
+          event = events[ i ];
+          if ( event.sound === options.sound &&
+            event.start <= options.start + diff &&
+            event.start + diff >= options.start ) {
+
+            j = eligibleAudio.indexOf( event.audio );
+            if ( j >= 0 ) {
+              eligibleAudio.splice( j, 1 );
+            }
+          }
+        }
+
+        if ( eligibleAudio.length ) {
+          audio = eligibleAudio[ 0 ];
+        } else {
+          audio = sounds[ id ][ 0 ].cloneNode( true );
+          audio.id = "popcorn-pop-sound-" + soundIndex;
+          soundIndex++;
+
+          // not sure whether cloning copies the events in all browsers,
+          // so remove it and add again just in case
+          audio.removeEventListener( "ended", resetAudio, false );
+          audio.addEventListener( "ended", resetAudio, false );
+
+          document.body.appendChild( audio );
+          sounds[ id ].push( audio );
+        }
+
+        return audio;
+      }
 
       function makeTriangle( innerDiv ) {
 
@@ -425,7 +415,7 @@
               container.insertBefore( img, container.firstChild );
             }
           }, false );
-          img.src = _pluginRoot + "images/" + options.icon.replace( /^\s+|\s+$/g, "" ).toLowerCase() + ".png";
+          img.src = _pluginRoot + "images/" + options.icon + ".png";
         }
 
         //load up sound.
