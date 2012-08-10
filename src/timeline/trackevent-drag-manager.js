@@ -95,13 +95,24 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
       var currentTrack = trackEvent.track,
           ghost = trackEvent.view.ghost,
           newTrackEvent;
-
-      if ( ghost && ghost.track && !ghost.track.isGhost ) {
-        trackEvent.track.removeTrackEvent( trackEvent );
-        newTrackEvent = ghost.track.addTrackEvent( trackEvent );
-        trackEvent.view.cleanupGhost( currentTrack );
-        correctOverlappingTrackEvents( newTrackEvent );
-        cleanUpGhostTracks();
+          try{
+            console.log(ghost, ghost.track, ghost.track.isGhost );
+          }
+          catch(e){
+            console.log('whoops');
+          }
+      if ( ghost && ghost.track ) {
+        if ( !ghost.track.isGhost ) {
+          trackEvent.track.removeTrackEvent( trackEvent );
+          newTrackEvent = ghost.track.addTrackEvent( trackEvent );
+          trackEvent.view.cleanupGhost( currentTrack );
+          correctOverlappingTrackEvents( newTrackEvent );
+          cleanUpGhostTracks();
+        }
+        else {
+          trackEvent.view.cleanupGhost( currentTrack );
+          cleanUpGhostTracks();
+        }
       }
       else {
         correctOverlappingTrackEvents( trackEvent );
