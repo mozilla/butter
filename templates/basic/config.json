@@ -22,7 +22,7 @@
       },
       {
         "type": "googlemap",
-        "path": "{{baseDir}}external/popcorn-js/plugins/googlemap/popcorn.googlemap.js",
+        "path": "{{baseDir}}templates/assets/plugins/googlemap/popcorn.googlemap.js",
         "icon": "{{baseDir}}resources/icons/map.png"
       },
       {

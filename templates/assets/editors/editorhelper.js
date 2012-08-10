@@ -42,7 +42,7 @@
         _trackEvent = e;
       }
       if ( plugins[ _trackEvent.type ] ) {
-        plugins[ _trackEvent.type ]( _trackEvent );
+        plugins[ _trackEvent.type ]( _trackEvent, butter.currentMedia.popcorn.popcorn );
       }
     } //updateFunction
 

@@ -346,7 +346,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
           if ( data === undefined || typeof data === "object" ) {
             data = manifestEntry.type === "number" ? 0 : "";
           }
-          editorElement.value = data;
+          editorElement.placeholder = editorElement.value = data;
         }
         editorElement.type = manifestEntry.type;
 
