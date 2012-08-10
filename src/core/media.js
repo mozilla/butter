@@ -184,7 +184,7 @@
         track.order = _tracks.length;
 
         setupNewTrack( track );
-        
+
         // Simply add the track onto the ordered tracks array
         _orderedTracks.push( track );
 
@@ -217,8 +217,6 @@
           }
 
           setupNewTrack( newTrack );
-          
-          console.log( newTrack.view );
 
           _this.dispatch( "trackadded", newTrack );
           _this.dispatch( "trackorderchanged", _orderedTracks );
