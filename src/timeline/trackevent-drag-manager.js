@@ -95,12 +95,6 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
       var currentTrack = trackEvent.track,
           ghost = trackEvent.view.ghost,
           newTrackEvent;
-          try{
-            console.log(ghost, ghost.track, ghost.track.isGhost );
-          }
-          catch(e){
-            console.log('whoops');
-          }
       if ( ghost && ghost.track ) {
         if ( !ghost.track.isGhost ) {
           trackEvent.track.removeTrackEvent( trackEvent );
