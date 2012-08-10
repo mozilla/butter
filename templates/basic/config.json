@@ -14,8 +14,8 @@
         "path": "{{baseDir}}templates/assets/plugins/photo/popcorn.photo.js"
       },
       {
-        "type": "zoink",
-        "path": "{{baseDir}}templates/assets/plugins/zoink/popcorn.zoink.js"
+        "type": "popup",
+        "path": "{{baseDir}}templates/assets/plugins/popup/popcorn.popup.js"
       },
       {
         "type": "googlemap",
@@ -33,7 +33,7 @@
     "defaults": [
       "titles",
       "photo",
-      "zoink",
+      "popup",
       "googlemap",
       "twitter",
       "image"

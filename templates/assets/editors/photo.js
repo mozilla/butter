@@ -14,7 +14,7 @@ EditorHelper.addPlugin( "photo", function( trackEvent ) {
   if ( window.jQuery ) {
     //Change default text to indicate draggable
     if ( !_popcornOptions.src ){
-      _container.innerHTML = "<span>Drag an image from your desktop</span>";
+      _container.innerHTML = "<span class=\"title\">Drag an image from your desktop</span>";
     }
 
     window.EditorHelper.resizable( trackEvent, _container, media );

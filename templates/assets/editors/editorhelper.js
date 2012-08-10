@@ -35,10 +35,11 @@
       });
     };
 
-    EditorHelper.resizable = function( trackEvent, resizeContainer, mediaContainer ) {
+    EditorHelper.resizable = function( trackEvent, resizeContainer, mediaContainer, handlePositions ) {
       var media = mediaContainer.getBoundingClientRect();
 
       $( resizeContainer ).resizable({
+        handles: handlePositions,
         stop: function( event, ui ) {
           trackEvent.update({
             height: ( ui.size.height / media.height ) * 100,

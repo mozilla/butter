@@ -1,6 +1,6 @@
 /*global EditorHelper*/
 
-EditorHelper.addPlugin( "zoink", function( trackEvent ) {
+EditorHelper.addPlugin( "popup", function( trackEvent ) {
   var _container,
       _popcornOptions,
       _context,
@@ -11,6 +11,7 @@ EditorHelper.addPlugin( "zoink", function( trackEvent ) {
   media = document.getElementById( trackEvent.track._media.target );
 
   if ( window.jQuery ) {
-    window.EditorHelper.draggable( trackEvent, _container, media );
+    EditorHelper.draggable( trackEvent, _container, media );
+    EditorHelper.resizable( trackEvent, _container, media, "e" );
   }
 });
