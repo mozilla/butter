@@ -88,6 +88,7 @@ define( [ "util/lang", "util/xhr",
           completeLayout,
           compiledLayout;
 
+      console.log( __editors);
       if ( !description ) {
         throw "Editor \"" + editorName + "\" does not exist.";
       }

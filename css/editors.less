@@ -1,62 +1,63 @@
 /*********************************************************
 * EDITORS
 */
-  @_editorToolbarHeight: 40px;
+  @_editorHeaderHeight: 45px;
+  @_editorHeaderBorder: 5px;
+  @_editorTitle: 50px;
+  @_editorScrollbarWidth: 15px;
 
-  .butter-editor-header {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    height: @_editorToolbarHeight;
-    .gradient( "vertical", #242f33, #192124 );
-    border-bottom: 5px solid #41bb92;
+/*********************************************************
+* Editor Header
+*/
 
-    > ul {
-      position: absolute;
-      bottom: 0;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      .clearfix();
+.butter-editor-header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  border-bottom: @_editorHeaderBorder solid @green;
+  height: @_editorHeaderHeight;
+  background: @baseDark;
 
-      > li {
-        float: left;
-        padding: 10px 0 10px 0;
+  > ul {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    list-style: none;
+    .clearfix();
 
-        a.butter-btn-dark {
-          padding: 12px;
-          height: 100%;
-          background: none;
-          font-size: 15px;
-          margin-right: 0;
-          border: none;
-          box-shadow: none;
-          border-radius: 0;
-
-          &.butter-active {
-            background: #41bb92;
-            text-shadow: 0 1px 1px #276f57;
-          }
-          >i {
-            margin-right: 5px;
-          }
-        }
-
-      }
+    > li {
+      float: left;
     }
-  } // .butter-editor-header
+  }
+} // .butter-editor-header
 
- .butter-editor-close-btn {
+.butter-editor-header .butter-btn {
+  background: none;
+  border: none;
+  color: #FFF;
+  font-size: 14px;
+  padding: 0 10px;
+  border-radius: 0;
+  height: @_editorHeaderHeight;
+  line-height: @_editorHeaderHeight;
+  >.icon {
+    margin-top: 1px;
+    margin-left: 0;
+    margin-right: 2px;
+  }
+  &.butter-active {
+    background: @green;
+  }
+}
+
+.butter-editor-close-btn {
   position: fixed;
   top: 0;
   right: 0;
   z-index: @HEADER_Z_INDEX + 1;
-  i {
-    background-position: -456px -72px; /* from icon-chevron-right */
-  }
-  &.toggled i {
+  &.toggled .icon {
+    background-image: url("../resources/glyphicons-halflings.png");
     background-position: -432px -72px; /* from icon-chevron-right */
   }
 }
@@ -66,8 +67,6 @@
 */
 
 .butter-editor-area {
-  @_editorHeaderHeight: 50px;
-  @_editorScrollbarWidth: 15px;
 
   position: fixed;
   z-index: 2000000000;
@@ -77,6 +76,7 @@
   width: @EDITOR_WIDTH;
   background: @baseLight;
   .transition( right 0.35s );
+  border-left: 1px solid @baseLightOutline;
 
   &.minimized {
     right: -@EDITOR_WIDTH - 2;
@@ -91,17 +91,17 @@
     left: 0;
     right: 0;
     bottom: 0;
-    border-left: 1px solid @baseLightOutline;
 
     h1 { // Breadcrumbs
       color: @green;
       font-size: 16px;
-      height: @_editorHeaderHeight;
-      line-height: @_editorHeaderHeight;
-      padding: 0 20px;
+      height: @_editorTitle;
+      line-height: @_editorTitle;
       margin: 0;
+      padding: 0 20px;
       background: #FFF;
       border-bottom: 1px solid @baseLightOutline;
+      .box-sizing( border-box );
     }
 
     // Tabs
@@ -148,18 +148,25 @@
 
   .butter-editor-content {
     position: absolute;
-    top: @_editorToolbarHeight;
+    top: @_editorHeaderHeight + @_editorHeaderBorder;
     bottom: 0;
     width: 100%;
   }
+
   .butter-editor-body {
-    position: relative;
-    margin: 5px 20px;
-    height: 100%;
+    position: absolute;
+    top: @_editorTitle;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .editor-options-wrapper {
+    padding: 20px;
+    padding-top: 10px;
   }
 
   // Scrollbars
-  .scrollbar-wrapper {
+  .scrollbar-outer {
     position: absolute;
     top: 0;
     right: @_editorScrollbarWidth;
@@ -170,8 +177,8 @@
 
   .allow-scrollbar {
     .butter-scroll-bar.scroll-bar-v {
-      top: @_editorToolbarHeight + 10px;
-      right: 2px;
+      top: 5px;
+      right: 5px;
       width: 10px;
       bottom: 5px;
     }
@@ -184,34 +191,81 @@
 * Editor UI styles
 */
 
+@_editorInnerWidth: 286px;
+@_editorTextIndent: 40px;
+@_editorInputHeight: 32px;
+
+.butter-editor-area {
+
 // Fieldset
-.trackevent-property {
-  margin: 5px 0;
-  .clearfix();
+  .trackevent-property,
+  fieldset {
+    border: none;
+    padding: 0;
+    margin-bottom: 10px;
+    .clearfix();
+  }
 
   // Label
-  .property-name {
+  .property-name,
+  label {
+    display: block;
     font-size: 13px;
-    padding: 10px 0;
+    padding: 5px 0;
   }
+
 
   // Inputs
   select,
-  input {
-    float: left;
+  input,
+  textarea {
+    height: @_editorInputHeight;
     width: 100%;
     padding: 6px;
+    margin-bottom: 5px;
     border: 1px solid @baseLightOutline;
     border-top-color: darken( @baseLightOutline, 10% );
     border-radius: 2px;
     .box-sizing( border-box );
-
+    &:-moz-placeholder {
+      color: #AAA;
+    }
     &:focus {
       outline: none;
       border: 1px solid @green;
       .transition( border 0.25s ease );
     }
   }
+
+  // Textareas
+  textarea {
+    height: 100px;
+    line-height: 1.3;
+  }
+
+  // Radios
+  .butter-form-radio,
+  .butter-form-checkbox {
+    line-height: 1.3em;
+    padding-left: @_editorTextIndent;
+    padding-top: 0;
+    border: none;
+  }
+
+  input[type="radio"],
+  input[type="checkbox"] {
+    float: left;
+    vertical-align: text-top;
+    width: 12px;
+    height: 13px;
+    margin-left: -@_editorTextIndent + 2;
+    margin-top: 2px;
+  }
+
+  input[type="checkbox"] {
+    margin-top: 2px;
+  }
+
 
   // Error/Invalid
   input:invalid,
@@ -220,31 +274,29 @@
     border-color: @red;
   }
 
-  input:invalid + .butter-unit {
-    border-left-color: @baseLightOutline;
-  }
 
   // Units
-  .butter-form-append > input {
-    width: 241px;
+  .butter-form-append {
+    position: relative;
     display: inline-block;
-    border-radius: 2px 0 0 2px;
-
-    &:focus + .butter-unit {
-      border-color: @green;
-      border-left-color: @baseLightOutline;
+    .clearfix();
+    >input {
+      height: @_editorInputHeight;
+      float: left;
+      border-radius: 2px 0 0 2px;
+      width: 200px;
     }
-
   }
 
   .butter-unit {
-    display: inline-block;
-    margin-left: -1px;
+    height: @_editorInputHeight - 2;
+    position: absolute;
+    right: -2px;
+    bottom: 5px;
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
     font-size: 10px;
-    line-height: 30px;
+    line-height: @_editorInputHeight;
     padding: 0 5px;
-    width: auto;
     min-width: 16px;
     font-weight: normal;
     text-align: center;
@@ -254,5 +306,47 @@
     border-radius: 0 3px 3px 0;
   }
 
+  // Inline form styles
+
+  .butter-form-inline.form-single {
+    .clearfix();
+    label {
+      .box-sizing( border-box );
+      width: 80px;
+      float: left;
+      padding: 0;
+      margin-top: 5px;
+    }
+
+    > input, textarea, select {
+      float: left;
+      margin-left: 5px;
+      width: @_editorInnerWidth - 85;
+    }
+  }
+
+  .butter-form-inline.form-half{
+    .butter-form-radio,
+    .butter-form-checkbox {
+      .box-sizing( border-box );
+      width: @_editorInnerWidth / 2;
+      float: left;
+    }
+    > input,
+    > select,
+    .butter-form-append {
+      &:last-child {
+        margin-left: 10px;
+      }
+      position: relative;
+      width: @_editorInnerWidth / 2 - 10;
+      float: left;
+      > input {
+        width: 100%;
+      }
+    }
+  }
+
 } // Fieldset
+
 

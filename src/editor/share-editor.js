@@ -9,7 +9,7 @@ define( [ "editor/editor", "editor/base-editor", "text!layouts/share-editor.html
 
     Editor.BaseEditor( this, butter, rootElement, {
       open: function() {
-
+    
       },
       close: function() {
 
