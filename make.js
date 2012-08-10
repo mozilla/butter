@@ -74,8 +74,17 @@ function checkCSSFile( filename, warnings, errors ) {
       if( !line ) {
         return;
       }
-      var number = "|" + lineRegex.exec( line )[1] + "|";
-      if( ignoreLines.indexOf( number ) === -1 ) {
+
+      // Some warnings don't refer to a line, e.g.
+      // "css/butter.ui.css: Warning - Too many floats (10)..."
+      var matches = line.match( lineRegex ),
+        lineNumber = matches ? matches[ 1 ] : null;
+
+      if( !!lineNumber ) {
+        if( ignoreLines.indexOf( "|" + lineNumber + "|" ) === -1 ) {
+          echo( line );
+        }
+      } else {
         echo( line );
       }
   });
