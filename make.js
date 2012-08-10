@@ -24,6 +24,7 @@ var path = require( "path" ),
     DOCS_DIR = 'docs',
     TEST_DIR = 'test',
     CSS_DIR = 'css',
+    CORNFIELD_DIR = 'cornfield',
 
     DEFAULT_CONFIG = './src/default-config',
 
@@ -277,7 +278,7 @@ target.docs = function() {
 };
 
 target.check = function() {
-  checkJS( SRC_DIR, EDITORS_DIR );
+  checkJS( SRC_DIR, EDITORS_DIR, CORNFIELD_DIR );
   checkCSS( CSS_DIR );
   target["check-html"]();
 };
@@ -373,7 +374,7 @@ target.build = function(){
 target.server = function() {
   echo('### Serving butter');
 
-  cd('cornfield');
+  cd( CORNFIELD_DIR );
 
   // Use child_process.spawn here for a long-running server process
   // (replaces `exec('node app.js', { async: true });`).

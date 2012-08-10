@@ -1,19 +1,20 @@
+/*jshint eqeqeq:false */
 console.log( __dirname );
 
-const express = require('express'),
-      fs = require('fs'),
-      path = require('path'),
-      jade = require('jade'),
-      app = express.createServer(),
-      MongoStore = require('connect-mongo')(express),
-      lessMiddleware = require('less-middleware'),
-      CONFIG = require('config'),
-      TEMPLATES_DIR =  CONFIG.dirs.templates,
-      PUBLISH_DIR = CONFIG.dirs.publish,
-      PUBLISH_PREFIX = CONFIG.dirs.hostname,
-      WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
-      VALID_TEMPLATES = CONFIG.templates,
-      EXPORT_ASSETS = CONFIG.exportAssets;
+var express = require('express'),
+    fs = require('fs'),
+    path = require('path'),
+    jade = require('jade'),
+    app = express.createServer(),
+    MongoStore = require('connect-mongo')(express),
+    lessMiddleware = require('less-middleware'),
+    CONFIG = require('config'),
+    TEMPLATES_DIR =  CONFIG.dirs.templates,
+    PUBLISH_DIR = CONFIG.dirs.publish,
+    PUBLISH_PREFIX = CONFIG.dirs.hostname,
+    WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
+    VALID_TEMPLATES = CONFIG.templates,
+    EXPORT_ASSETS = CONFIG.exportAssets;
 
 var templateConfigs = {};
 
@@ -29,7 +30,9 @@ function readTemplateConfig( templateName, templatedPath ) {
 
 // parse configs ahead of any action that has to happen with them
 for ( var templateName in VALID_TEMPLATES ) {
-  readTemplateConfig( templateName, VALID_TEMPLATES[ templateName ] );
+  if ( VALID_TEMPLATES.hasOwnProperty( templateName ) ) {
+    readTemplateConfig( templateName, VALID_TEMPLATES[ templateName ] );
+  }
 }
 
 var canStoreData = true;
@@ -164,7 +167,6 @@ function publishRoute( req, res ){
             url = PUBLISH_PREFIX + "/" + id + ".html",
             embedUrl = PUBLISH_PREFIX + "/" + id + "-embed.html",
             projectData = JSON.parse( project.data, escapeHTMLinJSON ),
-            templateBase = VALID_TEMPLATES[ template ].replace( '{{templateBase}}', TEMPLATES_DIR + '/' ),
             templateConfig = templateConfigs[ template ],
             templateFile = templateConfig.template,
             baseHref;
@@ -190,16 +192,17 @@ function publishRoute( req, res ){
               headStartTagIndex,
               templateScripts,
               startString,
-              j, k;
+              numSources,
+              j, k, len;
 
           templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
           baseHref = PUBLISH_PREFIX + templateURL + "/";
           baseString = '\n  <base href="' + baseHref + '"/>';
 
           // look for script tags with data-butter-exclude in particular (e.g. butter's js script)
-          data = data.replace( /\s*<script[\.\/='":_-\w\s]*data-butter-exclude[\.\/='":_-\w\s]*><\/script>/g, '' );
+          data = data.replace( /\s*<script[\.\/='":_\-\w\s]*data-butter-exclude[\.\/='":_\-\w\s]*><\/script>/g, '' );
 
-          // Adding 6 to cut out the actual head tag
+          // Adding  to cut out the actual head tag
           headStartTagIndex = data.indexOf( '<head>' ) + 6;
           headEndTagIndex = data.indexOf( '</head>' );
           bodyEndTagIndex = data.indexOf( '</body>' );
@@ -453,8 +456,7 @@ app.get('/api/delete/:id?', function(req, res) {
 
 
 app.post('/api/project/:id?', function( req, res ) {
-  var email = req.session.email,
-      id = req.params.id;
+  var email = req.session.email;
 
   if ( !email ) {
     res.json( { error: 'unauthorized' }, 403 );
@@ -497,7 +499,7 @@ app.post('/api/project/:id?', function( req, res ) {
         res.json( {error: 'id specified but not found. data corruption or haxxors.'}, 500 );
         return;
       }
-      var proj = new ProjectModel({
+      proj = new ProjectModel({
         name: req.body.name,
         template: req.body.template,
         data: JSON.stringify( req.body.data ),
