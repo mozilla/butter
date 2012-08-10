@@ -19,6 +19,8 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
 
     var _droppable;
 
+    var _justDropped = [];
+
     _this.trackEventDragManager = new TrackEventDragManager( media, _container );
 
     butter.listen( "trackorderchanged", function( e ) {
@@ -115,6 +117,7 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
       _container.removeChild( element );
       trackView.element.appendChild( element );
       _vScrollbar.update();
+      _justDropped.push( trackEventView.trackEvent );
     }
 
     var existingTracks = _media.tracks;
@@ -125,8 +128,16 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
     }
 
     _media.listen( "trackeventupdated", function( e ) {
-      _this.trackEventDragManager.trackEventUpdated( e.target );
-      _vScrollbar.update();
+      var trackEvent = e.target,
+          idx = _justDropped.indexOf( trackEvent );
+
+      // Make sure not every trackevent update comes through here. Only care about
+      // the ones that were just dragging.
+      if ( idx > -1 ) {
+        _justDropped.splice( idx, 1 );
+        _this.trackEventDragManager.trackEventUpdated( trackEvent );
+        _vScrollbar.update();
+      }
     });
 
     _media.listen( "trackeventadded", function( e ) {

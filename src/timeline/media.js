@@ -233,6 +233,9 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         type: type
       });
 
+      // Call this first to make sure it's in the right place.
+      _tracksContainer.trackEventDragManager.correctOverlappingTrackEvents( trackEvent );
+
       trackEvent.update();
 
       if( defaultTarget ){

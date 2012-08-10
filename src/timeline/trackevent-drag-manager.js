@@ -27,6 +27,8 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
       }
     }
 
+    this.correctOverlappingTrackEvents = correctOverlappingTrackEvents;
+
     function createGhostTrackForTrack( track, nextTrack ) {
       var ghostTrack;
       if ( !track.ghost ) {
@@ -91,17 +93,47 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
       }
     };
 
+    this.findNextAvailableTrack = function( track, trackEvent ) {
+      while ( track ) {
+        track = _media.getNextTrack( track );
+        if ( !track.view.findOverlappingTrackEvent( trackEvent.view ) ) {
+          return track;
+        }
+      }
+      return track;
+    };
+
+    function replaceGhostWithTrack( ghostTrack ) {
+      var newTrack;
+      if ( ghostTrack.lastTrack && ghostTrack.nextTrack ) {
+        newTrack = _media.insertTrackBefore( null, ghostTrack.nextTrack );
+      }
+      else {
+        newTrack = _media.addTrack();
+      }
+      return newTrack;
+    }
+
     this.trackEventUpdated = function( trackEvent ) {
       var currentTrack = trackEvent.track,
           ghost = trackEvent.view.ghost,
-          newTrackEvent;
+          newTrackEvent,
+          newTrack;
       if ( ghost && ghost.track ) {
-        if ( !ghost.track.isGhost ) {
+        newTrack = ghost.track;
+        if ( !newTrack.isGhost ) {
           trackEvent.track.removeTrackEvent( trackEvent );
-          newTrackEvent = ghost.track.addTrackEvent( trackEvent );
+          newTrackEvent = newTrack.addTrackEvent( trackEvent );
           trackEvent.view.cleanupGhost( currentTrack );
           correctOverlappingTrackEvents( newTrackEvent );
           cleanUpGhostTracks();
+        }
+        else {
+          var newTrack = replaceGhostWithTrack( newTrack );
+          trackEvent.track.removeTrackEvent( trackEvent );
+          newTrackEvent = newTrack.addTrackEvent( trackEvent );
+          trackEvent.view.cleanupGhost();
+          cleanUpGhostTracks();       
         }
       }
       else {
@@ -124,11 +156,8 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
           if ( ghostTrack.resultantTrack ) {
             newTrack = ghostTrack.resultantTrack;
           }
-          else if ( newTrack.lastTrack && newTrack.nextTrack ) {
-            newTrack = _media.insertTrackBefore( null, newTrack.nextTrack );
-          }
           else {
-            newTrack = _media.addTrack();
+            newTrack = replaceGhostWithTrack( newTrack );
           }
           ghostTrack.resultantTrack = newTrack;
         }

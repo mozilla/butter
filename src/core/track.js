@@ -144,7 +144,7 @@ define( [
       } //for
     }; //getTrackEventByName
 
-    this.addTrackEvent = function ( trackEvent, suppressEvents ) {
+    this.addTrackEvent = function ( trackEvent ) {
       var oldSelected = trackEvent ? !!trackEvent.selected : false;
 
       // Never absorb a track object. Only create new ones.
@@ -158,7 +158,6 @@ define( [
       if( _target ){
         trackEvent.target = _target;
       }
-
       // Remember the trackevent
       _trackEvents.push( trackEvent );
 
@@ -174,10 +173,7 @@ define( [
 
       trackEvent.selected = oldSelected;
 
-      if ( !suppressEvents ) {
-        // Tell everyone a new trackevent was born (and raised).
-        _this.dispatch( "trackeventadded", trackEvent );
-      }
+      _this.dispatch( "trackeventadded", trackEvent );
 
       return trackEvent;
     }; //addTrackEvent
