@@ -208,7 +208,7 @@
       _this.updatePropertiesFromManifest( trackEvent );
 
       _this.addVerticalScrollbar( optionsWrapper, optionsContainer, _rootElement );
-      _this.vScrollBar.update();
+      _this.updateScrollBar();
     }
 
     // Extend this object to become a BaseEditor
@@ -222,11 +222,11 @@
           getMapFromTrackEvent();
         });
         setup( trackEvent );
-        _this.applyExtraStyleTag( compiledLayout );
-        _this.vScrollBar.update();
+        _this.applyExtraHeadTags( compiledLayout );
+        _this.updateScrollBar();
       },
       close: function() {
-        _this.removeExtraStyleTag();
+        _this.removeExtraHeadTags();
         removeMapListeners();
       }
     });
