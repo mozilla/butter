@@ -107,7 +107,7 @@ define( [ "core/eventmanager", "util/scrollbars" ],
      * Creates a scrollbar with the following options:
      *    outer:      The outer containing element. ( optional. Default = inner.ParentNode )
      *    inner:      The inner element with the scrollable content.
-     *    container:  The element to append the scrollbar to.
+     *    appendTo:  The element to append the scrollbar to.
      */
     extendObject.addScrollbar = function( options ) {
       var innerDefault = extendObject.rootElement.querySelector( ".scrollbar-inner" );
@@ -115,7 +115,7 @@ define( [ "core/eventmanager", "util/scrollbars" ],
       options = options || innerDefault && {
         inner: innerDefault,
         outer: extendObject.rootElement.querySelector( ".scrollbar-outer" ) || innerDefault.parentNode,
-        container: extendObject.rootElement.querySelector( ".scrollbar-container" ) || extendObject.rootElement
+        appendTo: extendObject.rootElement.querySelector( ".scrollbar-append-to" ) || extendObject.rootElement
       };
 
       if ( !options ) {
@@ -123,7 +123,7 @@ define( [ "core/eventmanager", "util/scrollbars" ],
       }
 
       extendObject.scrollbar = new Scrollbars.Vertical( options.outer, options.inner );
-      options.container.appendChild( extendObject.scrollbar.element );
+      options.appendTo.appendChild( extendObject.scrollbar.element );
       
       extendObject.scrollbar.update();
       
