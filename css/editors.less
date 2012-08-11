@@ -176,7 +176,7 @@
   }
 
   .allow-scrollbar {
-    .butter-scroll-bar.scroll-bar-v {
+    .butter-scroll-bar.butter-scroll-bar-v {
       top: 5px;
       right: 5px;
       width: 10px;
@@ -349,4 +349,35 @@
 
 } // Fieldset
 
+/*********************************************************
+* Scrollbars
+*/
 
+.butter-scroll-bar {
+  position: absolute;
+  background: darken( @baseLight, 30% );
+  box-shadow: 0 0 1px rgba( 0, 0, 0, 0.3   );
+  border-radius: 15px;
+  .selectable( none );
+  overflow: hidden;
+}
+
+.butter-scroll-handle {
+  height: 8px;
+  top: 1px;
+  position: absolute;
+  background: darken( @baseLight, 10% );
+  border-radius: 15px;
+  &:hover,
+  &.butter-scollbar-active {
+    background: darken( @baseLight, 50% );
+    cursor: pointer;
+  }
+}
+
+.butter-scroll-bar-v {
+  .butter-scroll-handle {
+    width: 8px;
+    left: 1px;
+  }
+}
