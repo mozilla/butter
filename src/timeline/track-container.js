@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/logger", "util/dragndrop" ],
-  function( Logger, DragNDrop ) {
+define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
+  function( Logger, DragNDrop, TrackEventDragManager ) {
 
   return function( butter, media, mediaInstanceRootElement ) {
 
@@ -18,6 +18,10 @@ define( [ "core/logger", "util/dragndrop" ],
         _vScrollbar;
 
     var _droppable;
+
+    var _justDropped = [];
+
+    _this.trackEventDragManager = new TrackEventDragManager( media, _container );
 
     butter.listen( "trackorderchanged", function( e ) {
       var orderedTracks = e.data;
@@ -35,6 +39,7 @@ define( [ "core/logger", "util/dragndrop" ],
 
     _droppable = DragNDrop.droppable( _element, {
       drop: function( dropped, mousePosition ) {
+        dropped = dropped.data ? dropped.data.element : dropped;
         if ( dropped.getAttribute( "data-butter-draggable-type" ) === "plugin" ) {
           var newTrack = butter.currentMedia.addTrack(),
               trackRect = newTrack.view.element.getBoundingClientRect(),
@@ -91,12 +96,72 @@ define( [ "core/logger", "util/dragndrop" ],
       }
     }
 
+    function onTrackEventDragged( draggable, droppable ) {
+      _this.trackEventDragManager.trackEventDragged( draggable.data, droppable.data );
+      _vScrollbar.update();
+    }
+
+    function onTrackEventDragStarted( e ) {
+      var trackEventView = e.target,
+          element = trackEventView.element,
+          trackView = trackEventView.trackEvent.track.view;
+      trackView.element.removeChild( element );
+      _container.appendChild( element );
+      _vScrollbar.update();
+    }
+
+    function onTrackEventDragStopped( e ) {
+      var trackEventView = e.target,
+          element = trackEventView.element,
+          trackView = trackEventView.trackEvent.track.view;
+      _container.removeChild( element );
+      trackView.element.appendChild( element );
+      _vScrollbar.update();
+      _justDropped.push( trackEventView.trackEvent );
+    }
+
     var existingTracks = _media.tracks;
     for ( var i = 0; i < existingTracks.length; ++i ) {
       onTrackAdded({
         data: existingTracks[ i ]
       });
     }
+
+    _media.listen( "trackeventupdated", function( e ) {
+      var trackEvent = e.target,
+          idx = _justDropped.indexOf( trackEvent );
+
+      // Make sure not every trackevent update comes through here. Only care about
+      // the ones that were just dragging.
+      if ( idx > -1 ) {
+        _justDropped.splice( idx, 1 );
+        var newEventOccurred = _this.trackEventDragManager.trackEventUpdated( trackEvent );
+
+        // If a new event was created through updating, the old one should be forgotten about, and more updates
+        // for it should not occur.
+        if ( newEventOccurred ) {
+          e.stopPropagation();
+        }
+
+        _vScrollbar.update();
+      }
+    });
+
+    _media.listen( "trackeventadded", function( e ) {
+      var trackEventView = e.data.view;
+      trackEventView.setDragHandler( onTrackEventDragged );
+      trackEventView.listen( "trackeventdragstarted", onTrackEventDragStarted );
+      trackEventView.listen( "trackeventdragstopped", onTrackEventDragStopped );
+      _vScrollbar.update();
+    });
+
+    _media.listen( "trackeventremoved", function( e ) {
+      var trackEventView = e.data.view;
+      trackEventView.setDragHandler( null );
+      trackEventView.unlisten( "trackeventdragstarted", onTrackEventDragStarted );
+      trackEventView.unlisten( "trackeventdragstopped", onTrackEventDragStopped );
+      _vScrollbar.update();
+    });
 
     _media.listen( "trackadded", onTrackAdded );
 
