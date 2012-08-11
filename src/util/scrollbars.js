@@ -20,8 +20,8 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
     EventManagerWrapper( _this );
 
-    _element.className = "butter-scroll-bar scroll-bar-v";
-    _handle.className = "scroll-handle";
+    _element.className = "butter-scroll-bar butter-scroll-bar-v";
+    _handle.className = "butter-scroll-handle";
 
     _element.appendChild( _handle );
 
@@ -145,8 +145,8 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
     EventManagerWrapper( _this );
 
-    _element.className = "butter-scroll-bar scroll-bar-h";
-    _handle.className = "scroll-handle";
+    _element.className = "butter-scroll-bar butter-scroll-bar-h";
+    _handle.className = "butter-scroll-handle";
 
     _element.appendChild( _handle );
 

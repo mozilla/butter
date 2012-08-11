@@ -1,36 +1,8 @@
-/* Scrollbars */
+/*********************************************************
+* Base Styles
+*/
+
 body {
   background: @baseStage;
   overflow: hidden;
-}
-
-// TO-DO: move to UI kit and prefix with butter-
-.butter-scroll-bar {
-  background: darken( @baseLight, 30% );
-  box-shadow: 0 0 1px rgba( 0, 0, 0, 0.3   );
-  border-radius: 15px;
-  position: absolute;
-  .selectable( none );
-  overflow: hidden;
-
-  .scroll-handle {
-    height: 8px;
-    top: 1px;
-    position: absolute;
-    background: darken( @baseLight, 10% );
-    border-radius: 15px;
-    
-    &:hover,
-    &.butter-scollbar-active {
-      background: darken( @baseLight, 50% );
-      cursor: pointer;
-    }
-  }
-
-  &.scroll-bar-v {
-    .scroll-handle {
-      width: 8px;
-      left: 1px;
-    }
-  }
 }
