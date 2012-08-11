@@ -135,7 +135,14 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
       // the ones that were just dragging.
       if ( idx > -1 ) {
         _justDropped.splice( idx, 1 );
-        _this.trackEventDragManager.trackEventUpdated( trackEvent );
+        var newEventOccurred = _this.trackEventDragManager.trackEventUpdated( trackEvent );
+
+        // If a new event was created through updating, the old one should be forgotten about, and more updates
+        // for it should not occur.
+        if ( newEventOccurred ) {
+          e.stopPropagation();
+        }
+
         _vScrollbar.update();
       }
     });

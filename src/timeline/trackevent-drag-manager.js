@@ -129,16 +129,18 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
           cleanUpGhostTracks();
         }
         else {
-          var newTrack = replaceGhostWithTrack( newTrack );
+          newTrack = replaceGhostWithTrack( newTrack );
           trackEvent.track.removeTrackEvent( trackEvent );
           newTrackEvent = newTrack.addTrackEvent( trackEvent );
           trackEvent.view.cleanupGhost();
-          cleanUpGhostTracks();       
+          cleanUpGhostTracks();
         }
       }
       else {
         correctOverlappingTrackEvents( trackEvent );
       }
+
+      return !!newTrackEvent;
     };
 
     this.trackEventDropped = function( trackEvent, newTrack, startTime ) {

@@ -228,7 +228,11 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                 stop: function(){
                   _dragging = false;
                   _this.dispatch( "trackeventdragstopped" );
-                  movedCallback();
+
+                  // Prevent movedcallback if "trackeventdragstopped" removed this trackEvent
+                  if ( _element.parentNode ) {
+                    movedCallback();
+                  }
                 },
                 drag: function( draggable, droppable ) {
                   if ( _onDrag ) {
