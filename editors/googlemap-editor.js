@@ -207,8 +207,6 @@
 
       _this.updatePropertiesFromManifest( trackEvent );
 
-      _this.addVerticalScrollbar( optionsWrapper, optionsContainer, _rootElement );
-      _this.updateScrollBar();
     }
 
     // Extend this object to become a BaseEditor
@@ -223,7 +221,6 @@
         });
         setup( trackEvent );
         _this.applyExtraHeadTags( compiledLayout );
-        _this.updateScrollBar();
       },
       close: function() {
         _this.removeExtraHeadTags();

@@ -53,9 +53,6 @@ define( [ "util/lang", "util/keys", "./base-editor",
     };
 
     events.open = function() {
-      if ( extendObject.vScrollBar ) {
-        extendObject.updateScrollBar();
-      }
       if ( oldOpenEvent ) {
         oldOpenEvent.apply( this, arguments );
       }
@@ -393,12 +390,6 @@ define( [ "util/lang", "util/keys", "./base-editor",
         }
       }
 
-    };
-
-    extendObject.addVerticalScrollbar = function( wrapperElement, contentElement, scrollbarContainerElement ) {
-      extendObject.vScrollBar = new Scrollbars.Vertical( wrapperElement, contentElement );
-      scrollbarContainerElement.appendChild( extendObject.vScrollBar.element );
-      extendObject.vScrollBar.update();
     };
 
   };
