@@ -34,11 +34,21 @@ define( [ "core/eventmanager", "util/scrollbars" ],
      * @param {DOMElement} parentElement: The element to which the editor's root will be attached
      */
     extendObject.open = function( parentElement ) {
+
       extendObject.parentElement = parentElement;
 
       // Attach the editor's root element to the given parentElement.
       // Do this before calling the open event so that element size and structure are defined.
       extendObject.parentElement.appendChild( extendObject.rootElement );
+
+      // Update scrollbars, add one automatically if an allow-scrollbar class is added
+      // See .addScrollbar for manual settings
+      if ( extendObject.scrollbar ) {
+        extendObject.scrollbar.update();
+      } else if ( extendObject.rootElement.classList.contains( "allow-scrollbar" ) ) {
+        extendObject.addScrollbar();
+      }
+
 
       // If an open event existed on the events object passed into the constructor, call it
       if ( events.open ) {
@@ -97,14 +107,24 @@ define( [ "core/eventmanager", "util/scrollbars" ],
      * Creates a scrollbar with the following options:
      *    outer:      The outer containing element. ( optional. Default = inner.ParentNode )
      *    inner:      The inner element with the scrollable content.
-     *    appendTo:   The element to append the scrollbar to.
+     *    container:  The element to append the scrollbar to.
      */
     extendObject.addScrollbar = function( options ) {
-      var outerEl = options.outer  || options.inner.parentNode,
-          innerEl = options.inner,
-          containerEl = options.container;
-      extendObject.scrollbar = new Scrollbars.Vertical( outerEl, innerEl );
-      containerEl.appendChild( extendObject.scrollbar.element );
+      var innerDefault = extendObject.rootElement.querySelector( ".scrollbar-inner" );
+
+      options = options || innerDefault && {
+        inner: innerDefault,
+        outer: extendObject.rootElement.querySelector( ".scrollbar-outer" ) || innerDefault.parentNode,
+        container: extendObject.rootElement.querySelector( ".scrollbar-container" ) || extendObject.rootElement
+      };
+
+      if ( !options ) {
+        return;
+      }
+
+      extendObject.scrollbar = new Scrollbars.Vertical( options.outer, options.inner );
+      options.container.appendChild( extendObject.scrollbar.element );
+      
       extendObject.scrollbar.update();
       
       return extendObject.scrollBar;

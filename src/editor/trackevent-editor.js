@@ -35,9 +35,6 @@ define( [ "util/lang", "util/keys", "./base-editor",
     // Wedge a check for scrollbars into the open event if it exists
     var oldOpenEvent = events.open;
     events.open = function() {
-      if ( extendObject.vScrollBar ) {
-        extendObject.vScrollBar.update();
-      }
       if ( oldOpenEvent ) {
         oldOpenEvent.apply( this, arguments );
       }
@@ -46,10 +43,6 @@ define( [ "util/lang", "util/keys", "./base-editor",
     BaseEditor( extendObject, butter, rootElement, events );
 
     extendObject.defaultLayouts = __defaultLayouts.cloneNode( true );
-
-    // A vertical scrollbar may be added if lots of editor content is available (perhaps a large manifest is present for a plugin).
-    // See addVerticalScrollbar below for more details.
-    extendObject.vScrollBar = null;
 
     /**
      * Member: createTargetsList
@@ -346,12 +339,6 @@ define( [ "util/lang", "util/keys", "./base-editor",
 
         container.appendChild( element );
       }
-    };
-
-    extendObject.addVerticalScrollbar = function( wrapperElement, contentElement, scrollbarContainerElement ) {
-      extendObject.vScrollBar = new Scrollbars.Vertical( wrapperElement, contentElement );
-      scrollbarContainerElement.appendChild( extendObject.vScrollBar.element );
-      extendObject.vScrollBar.update();
     };
 
   };

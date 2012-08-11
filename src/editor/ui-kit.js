@@ -15,15 +15,6 @@ define( [ "editor/editor", "editor/base-editor", "text!layouts/ui-kit.html" ],
 
     Editor.BaseEditor( this, butter, rootElement, {
       open: function() {
-        var scrollBar;
-
-        scrollBar = _this.addScrollbar({
-          inner: _rootElement.querySelector( ".scrollbar-inner" ),
-          outer: _rootElement.querySelector( ".scrollbar-outer" ),
-          container: _rootElement.querySelector( ".scrollbar-container" ) || _rootElement
-        });
-
-        scrollBar.update();
     
       },
       close: function() {

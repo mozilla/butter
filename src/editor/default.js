@@ -90,18 +90,13 @@ define( [ "text!./default.html", "editor/editor" ],
 
         _this.updatePropertiesFromManifest( trackEvent, null, true );
 
-        _this.addScrollbar({
-          inner: _rootElement.querySelector( ".scrollbar-inner" ),
-          outer: _rootElement.querySelector( ".scrollbar-outer" ),
-          container: _rootElement.querySelector( ".scrollbar-container" ) || _rootElement
-        });
-
-        _this.scrollbar.update();
-
         // Catch the end of a transition for when the error message box opens/closes
-        _messageContainer.parentNode.addEventListener( "transitionend", _this.scrollbar.update, false );
-        _messageContainer.parentNode.addEventListener( "oTransitionEnd", _this.scrollbar.update, false );
-        _messageContainer.parentNode.addEventListener( "webkitTransitionEnd", _this.scrollbar.update, false );
+        if ( _this.scrollbar ) {
+          _messageContainer.parentNode.addEventListener( "transitionend", _this.scrollbar.update, false );
+          _messageContainer.parentNode.addEventListener( "oTransitionEnd", _this.scrollbar.update, false );
+          _messageContainer.parentNode.addEventListener( "webkitTransitionEnd", _this.scrollbar.update, false );
+        }
+        
 
         // Update properties when TrackEvent is updated
         trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
