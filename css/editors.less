@@ -4,6 +4,7 @@
   @_editorHeaderHeight: 45px;
   @_editorHeaderBorder: 5px;
   @_editorTitle: 50px;
+  @_editorTabs: 30px;
   @_editorScrollbarWidth: 15px;
 
 /*********************************************************
@@ -92,37 +93,43 @@
     right: 0;
     bottom: 0;
 
-    .basic-tab {
+    .butter-editor-tabs {
+      padding: 0 20px;
+      margin: 0;
+      list-style: none;
+      height: @_editorTabs;
+      > li {
+        float: left;
+        margin-right: 3px;
+        margin-top: -1px;
+      }
+      .butter-btn {
+        background: lighten( @baseLightOutline, 10% );
+        border-radius: 0;
+        border: 1px solid @baseLightOutline;
+        &.butter-active {
+          background: #FFF;
+          border-top-color: #FFF;
+        }
+      }
+    }
+
+    .editor-options {
       position: absolute;
-      top: 40px;
-      left: 10px;
+      top: 2px;
+      left: 2px;
     }
-    .advanced-tab {
+    .advanced-options {
       position: absolute;
-      right: 18px;
-      top: 40px;
+      top: 2px;
+      left: 2px;
     }
 
-    .editor-options-wrapper {
-
-      .editor-options {
-        position: absolute;
-        top: 2px;
-        left: 2px;
-      }
-      .advanced-options {
-        position: absolute;
-        top: 2px;
-        left: 2px;
-      }
-
-      .display-off {
-        display: none;
-      }
+    .display-off {
+      display: none;
     }
-    input:focus + .butter-unit {
-      color: #CCC;
-    }
+ 
+  
 
     h1 { // Breadcrumbs
       color: @green;
@@ -192,6 +199,10 @@
     width: 100%;
   }
 
+  .butter-editor-body.butter-tabs-spacing {
+    top: @_editorTitle + @_editorTabs;
+  }
+
   // Scrollbars
   .scrollbar-outer {
     position: absolute;
@@ -229,11 +240,12 @@
   fieldset {
     border: none;
     margin: 10px 20px;
+    padding: 0;
     .clearfix();
   }
 
   // Label
-  .property-name,
+  label.property-name,
   label {
     display: block;
     font-size: 13px;

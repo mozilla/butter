@@ -176,7 +176,7 @@
       _this.addScrollbar({
         inner: wrapper,
         outer: wrapper,
-        container: _rootElement.querySelector( ".scrollbar-container" )
+        appendTo: _rootElement.querySelector( ".scrollbar-append-to" )
       });
 
       _this.scrollbar.update();
@@ -203,6 +203,8 @@
           if ( basicTab.classList.contains( "display-off" ) ) {
             basicTab.classList.toggle( "display-off" );
             advancedTab.classList.toggle( "display-off" );
+            basicButton.classList.add( "butter-active" );
+            advancedButton.classList.remove( "butter-active" );
             _this.scrollbar.update();
           }
         });
@@ -211,6 +213,8 @@
           if ( !basicTab.classList.contains( "display-off" ) ) {
             basicTab.classList.toggle( "display-off" );
             advancedTab.classList.toggle( "display-off" );
+            basicButton.classList.remove( "butter-active" );
+            advancedButton.classList.add( "butter-active" );
             _this.scrollbar.update();
           }
         });
