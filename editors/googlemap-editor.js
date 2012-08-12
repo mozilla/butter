@@ -206,7 +206,7 @@
       getMapFromTrackEvent();
 
       _this.updatePropertiesFromManifest( trackEvent );
-
+      _this.scrollbar.update();
     }
 
     // Extend this object to become a BaseEditor
@@ -220,10 +220,8 @@
           getMapFromTrackEvent();
         });
         setup( trackEvent );
-        _this.applyExtraHeadTags( compiledLayout );
       },
       close: function() {
-        _this.removeExtraHeadTags();
         removeMapListeners();
       }
     });

@@ -97,12 +97,12 @@ define( [ "text!./default.html", "editor/editor" ],
           _messageContainer.parentNode.addEventListener( "webkitTransitionEnd", _this.scrollbar.update, false );
         }
         
+        _this.scrollbar.update();
 
         // Update properties when TrackEvent is updated
         trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
       },
       close: function () {
-        _this.removeExtraHeadTags();
         _trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
       }
     });

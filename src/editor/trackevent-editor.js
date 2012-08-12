@@ -47,11 +47,6 @@ define( [ "util/lang", "util/keys", "./base-editor",
 
     // Wedge a check for scrollbars into the open event if it exists
     var oldOpenEvent = events.open;
-
-    extendObject.updateScrollBar = function() {
-      extendObject.vScrollBar.update();
-    };
-
     events.open = function() {
       if ( extendObject.vScrollBar ) {
         extendObject.vScrollBar.update();
@@ -64,9 +59,6 @@ define( [ "util/lang", "util/keys", "./base-editor",
     BaseEditor( extendObject, butter, rootElement, events );
 
     extendObject.defaultLayouts = __defaultLayouts.cloneNode( true );
-
-    // See addVerticalScrollbar below for more details.
-    extendObject.vScrollBar = null;
 
     /**
      * Member: createTargetsList
@@ -392,13 +384,6 @@ define( [ "util/lang", "util/keys", "./base-editor",
         }
       }
 
-    };
-
-    // Note: this function is deprecated by .addScrollbar in base-editor.js
-    extendObject.addVerticalScrollbar = function( wrapperElement, contentElement, scrollbarContainerElement ) {
-      extendObject.vScrollBar = new Scrollbars.Vertical( wrapperElement, contentElement );
-      scrollbarContainerElement.appendChild( extendObject.vScrollBar.element );
-      extendObject.vScrollBar.update();
     };
 
   };

@@ -76,8 +76,9 @@
     function setup( trackEvent ) {
       _trackEvent = trackEvent;
 
-      var basicContainer = _rootElement.querySelector( ".basic-options" ),
+      var basicContainer = _rootElement.querySelector( ".editor-options" ),
           advancedContainer = _rootElement.querySelector( ".advanced-options" ),
+          wrapper = _rootElement.querySelector( ".scrollbar-outer" ),
           pluginOptions = {};
 
       function callback( elementType, element, trackEvent, name ) {
@@ -170,8 +171,15 @@
       _this.createPropertiesFromManifest( trackEvent, callback, null, basicContainer, advancedContainer );
       attachHandlers();
       _this.updatePropertiesFromManifest( trackEvent );
-      _this.addVerticalScrollbar( basicContainer.parentNode, basicContainer.parentNode, _rootElement );
-      _this.updateScrollBar();
+
+      // Override default scrollbar to account for both tab containers
+      _this.addScrollbar({
+        inner: wrapper,
+        outer: wrapper,
+        container: _rootElement.querySelector( ".scrollbar-container" )
+      });
+
+      _this.scrollbar.update();
     }
 
     // Extend this object to become a BaseEditor
@@ -188,14 +196,14 @@
 
         var basicButton = document.querySelector( ".basic-tab" ),
             advancedButton = document.querySelector( ".advanced-tab" ),
-            basicTab = document.querySelector( ".basic-options" ),
+            basicTab = document.querySelector( ".editor-options" ),
             advancedTab = document.querySelector( ".advanced-options" );
 
         basicButton.addEventListener( "mouseup", function( e ) {
           if ( basicTab.classList.contains( "display-off" ) ) {
             basicTab.classList.toggle( "display-off" );
             advancedTab.classList.toggle( "display-off" );
-            _this.updateScrollBar();
+            _this.scrollbar.update();
           }
         });
 
@@ -203,7 +211,7 @@
           if ( !basicTab.classList.contains( "display-off" ) ) {
             basicTab.classList.toggle( "display-off" );
             advancedTab.classList.toggle( "display-off" );
-            _this.updateScrollBar();
+            _this.scrollbar.update();
           }
         });
       },
