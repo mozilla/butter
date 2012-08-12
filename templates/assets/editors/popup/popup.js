@@ -2,12 +2,9 @@
 
 EditorHelper.addPlugin( "popup", function( trackEvent ) {
   var _container,
-      _popcornOptions,
-      _context,
       media;
 
-  _popcornOptions = trackEvent.popcornTrackEvent;
-  _container = _popcornOptions._container;
+  _container = trackEvent.popcornTrackEvent._container;
   media = document.getElementById( trackEvent.track._media.target );
 
   if ( window.jQuery ) {

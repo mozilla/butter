@@ -40,7 +40,8 @@
     ]
   },
   "editor": {
-    "googlemap": "{{baseDir}}editors/googlemap-editor.js"
+    "googlemap": "{{baseDir}}editors/googlemap-editor.js",
+    "popup": "{{baseDir}}templates/assets/editors/popup/popup-editor.js"
   },
   "maxPluginZIndex": 1000
 }
