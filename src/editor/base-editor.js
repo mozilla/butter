@@ -23,8 +23,9 @@ define( [ "core/eventmanager", "util/scrollbars" ],
     extendObject.rootElement = rootElement;
     extendObject.parentElement = null;
 
-    // Used when applyStyleTag is called -- see below
-    var _extraStyleTag = null;
+    // Used when applyExtraHeadTags is called -- see below
+    var _extraScriptTags = [],
+        _extraStyleTags = [];
   
     /**
      * Member: open
@@ -48,7 +49,6 @@ define( [ "core/eventmanager", "util/scrollbars" ],
       } else if ( extendObject.rootElement.classList.contains( "allow-scrollbar" ) ) {
         extendObject.addScrollbar();
       }
-
 
       // If an open event existed on the events object passed into the constructor, call it
       if ( events.open ) {
@@ -76,29 +76,74 @@ define( [ "core/eventmanager", "util/scrollbars" ],
     };
 
     /**
-     * Member: applyExtraStyleTag
+     * Member: applyExtraHeadTags
      *
-     * If a style tag is present in the given layout, place it in the document's head.
+     * If a tag that belongs in the <head> is present in the given layout, place it in the document's head.
      *
      * @param {DOMFragment} layout: DOMFragment containing the style tag
      */
-    extendObject.applyExtraStyleTag = function( layout ) {
-      _extraStyleTag = layout.querySelector( "style" );
-      if ( _extraStyleTag ) {
-        document.head.appendChild( _extraStyleTag );
+    extendObject.applyExtraHeadTags = function( layout ) {
+      var scriptNodes = layout.querySelectorAll( "script" ),
+          styleNodes = layout.querySelectorAll( "style" ),
+          x;
+
+      for ( x = 0; x < scriptNodes.length; x++ ) {
+        _extraScriptTags[ x ] = scriptNodes[ x ];
+        document.head.appendChild( _extraScriptTags[ x ] );
+      }
+
+      for ( x = 0; x < styleNodes.length; x++ ) {
+        _extraStyleTags[ x ] = styleNodes[ x ];
+        document.head.appendChild( _extraStyleTags[ x ] );
       }
     };
 
     /**
-     * Member: removeExtraStyleTag
+     * Member: addScrollbar
      *
-     * If a style tag was added with applExtraStyleTag(), remove it.
+     * Creates a scrollbar with the following options:
+     *    outer:      The outer containing element. ( optional. Default = inner.ParentNode )
+     *    inner:      The inner element with the scrollable content.
+     *    container:  The element to append the scrollbar to.
      */
-    extendObject.removeExtraStyleTag = function() {
-      if ( _extraStyleTag ) {
-        document.head.removeChild( _extraStyleTag );
-        _extraStyleTag = null;
+    extendObject.addScrollbar = function( options ) {
+      var innerDefault = extendObject.rootElement.querySelector( ".scrollbar-inner" );
+
+      options = options || innerDefault && {
+        inner: innerDefault,
+        outer: extendObject.rootElement.querySelector( ".scrollbar-outer" ) || innerDefault.parentNode,
+        container: extendObject.rootElement.querySelector( ".scrollbar-container" ) || extendObject.rootElement
+      };
+
+      if ( !options ) {
+        return;
       }
+
+      extendObject.scrollbar = new Scrollbars.Vertical( options.outer, options.inner );
+      options.container.appendChild( extendObject.scrollbar.element );
+      
+      extendObject.scrollbar.update();
+      
+      return extendObject.scrollBar;
+    };
+
+    /**
+     * Member: removeExtraTags
+     *
+     * Remove all extra style/script tags that have been added to the document head.
+     */
+    extendObject.removeExtraHeadTags = function() {
+      var x;
+
+      for ( x = 0; x < _extraScriptTags.length; x++ ) {
+        document.head.removeChild( _extraScriptTags[ x ] );
+      }
+      _extraScriptTags = [];
+
+      for ( x = 0; x < _extraStyleTags.length; x++ ) {
+        document.head.removeChild( _extraStyleTags[ x ] );
+      }
+      _extraStyleTags = [];
     };
 
     /**

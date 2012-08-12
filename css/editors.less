@@ -92,6 +92,38 @@
     right: 0;
     bottom: 0;
 
+    .basic-tab {
+      position: absolute;
+      top: 40px;
+      left: 10px;
+    }
+    .advanced-tab {
+      position: absolute;
+      right: 18px;
+      top: 40px;
+    }
+
+    .editor-options-wrapper {
+
+      .editor-options {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+      }
+      .advanced-options {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+      }
+
+      .display-off {
+        display: none;
+      }
+    }
+    input:focus + .butter-unit {
+      color: #CCC;
+    }
+
     h1 { // Breadcrumbs
       color: @green;
       font-size: 16px;
@@ -137,7 +169,6 @@
     background: #F0DDDD;
   }
 
-
   // Spacing 
  .butter-editor-spacing {
     padding-right: @EDITOR_WIDTH;
@@ -159,9 +190,6 @@
     top: @_editorTitle;
     bottom: 0;
     width: 100%;
-  }
-
-  .editor-options-wrapper {
   }
 
   // Scrollbars

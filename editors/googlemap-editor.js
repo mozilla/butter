@@ -206,6 +206,7 @@
       getMapFromTrackEvent();
 
       _this.updatePropertiesFromManifest( trackEvent );
+      _this.scrollbar.update();
 
     }
 
@@ -220,10 +221,11 @@
           getMapFromTrackEvent();
         });
         setup( trackEvent );
+
         _this.applyExtraStyleTag( compiledLayout );
+
       },
       close: function() {
-        _this.removeExtraStyleTag();
         removeMapListeners();
       }
     });
