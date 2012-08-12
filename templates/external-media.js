@@ -1,3 +1,4 @@
+/*global Butter*/
 document.addEventListener( "DOMContentLoaded", function( e ){
 
   Butter({
@@ -5,11 +6,11 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       var media = butter.currentMedia;
 
       function start(){
-        var track = media.addTrack( "Track1" );
+        media.addTrack( "Track1" );
         media.addTrack( "Track" + Math.random() );
         media.addTrack( "Track" + Math.random() );
 
-        var event = track.addTrackEvent({
+        butter.tracks[ 0 ].addTrackEvent({
           type: "text",
           popcornOptions: {
             start: 0,
@@ -19,7 +20,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
           }
         });
 
-        butter.tracks[ 2 ].addTrackEvent({ 
+        butter.tracks[ 2 ].addTrackEvent({
           type: "text",
           popcornOptions: {
             start: 1,
@@ -31,6 +32,6 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       }
 
       media.onReady( start );
-    } 
+    }
   }); //Butter
 }, false );

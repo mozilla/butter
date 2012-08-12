@@ -19,7 +19,7 @@ var path = require( "path" ),
 
     SRC_DIR = 'src',
     EDITORS_DIR = 'editors',
-    TEMPLATES_DIR = 'templates/basic',
+    TEMPLATES_DIR = 'templates',
     DIST_DIR = 'dist',
     DOCS_DIR = 'docs',
     TEST_DIR = 'test',
@@ -290,7 +290,7 @@ target.docs = function() {
 };
 
 target.check = function() {
-  checkJS( SRC_DIR, EDITORS_DIR, CORNFIELD_DIR );
+  checkJS( SRC_DIR, EDITORS_DIR, CORNFIELD_DIR, TEMPLATES_DIR );
   checkCSS( CSS_DIR );
   target["check-html"]();
 };
