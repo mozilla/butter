@@ -92,7 +92,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
         execute();
       }
     }
- 	  	
+
     function publish(){
       butter.cornfield.publish( butter.project.id, function( e ){
         if( e.error !== "okay" ){
