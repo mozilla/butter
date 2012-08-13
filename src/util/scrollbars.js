@@ -4,7 +4,8 @@
 
 define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
-  var VERTICAL_SIZE_REDUCTION_FACTOR = 3;
+  var VERTICAL_SIZE_REDUCTION_FACTOR = 3,
+      activeClass = "butter-scollbar-active";
 
   function Vertical( outerElement, innerElement ){
     var _element = document.createElement( "div" ),
@@ -19,8 +20,8 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
     EventManagerWrapper( _this );
 
-    _element.className = "butter-scroll-bar scroll-bar-v";
-    _handle.className = "scroll-handle";
+    _element.className = "butter-scroll-bar butter-scroll-bar-v";
+    _handle.className = "butter-scroll-handle";
 
     _element.appendChild( _handle );
 
@@ -39,6 +40,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       window.removeEventListener( "mouseup", onMouseUp, false );
       window.removeEventListener( "mousemove", onMouseMove, false );
       _handle.addEventListener( "mousedown", onMouseDown, false );
+      _handle.classList.remove( activeClass );
     }
 
     function onMouseMove( e ){
@@ -57,6 +59,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
         window.addEventListener( "mouseup", onMouseUp, false );
         window.addEventListener( "mousemove", onMouseMove, false );
         _handle.removeEventListener( "mousedown", onMouseDown, false );
+        _handle.classList.add( activeClass );
       }
       e.preventDefault();
     }
@@ -142,8 +145,8 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
     EventManagerWrapper( _this );
 
-    _element.className = "butter-scroll-bar scroll-bar-h";
-    _handle.className = "scroll-handle";
+    _element.className = "butter-scroll-bar butter-scroll-bar-h";
+    _handle.className = "butter-scroll-handle";
 
     _element.appendChild( _handle );
 

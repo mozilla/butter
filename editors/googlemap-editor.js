@@ -206,9 +206,8 @@
       getMapFromTrackEvent();
 
       _this.updatePropertiesFromManifest( trackEvent );
+      _this.scrollbar.update();
 
-      _this.addVerticalScrollbar( optionsWrapper, optionsContainer, _rootElement );
-      _this.updateScrollBar();
     }
 
     // Extend this object to become a BaseEditor
@@ -222,11 +221,11 @@
           getMapFromTrackEvent();
         });
         setup( trackEvent );
-        _this.applyExtraHeadTags( compiledLayout );
-        _this.updateScrollBar();
+
+        _this.applyExtraStyleTag( compiledLayout );
+
       },
       close: function() {
-        _this.removeExtraHeadTags();
         removeMapListeners();
       }
     });
