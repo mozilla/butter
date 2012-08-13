@@ -88,6 +88,10 @@ section.video-container {
   bottom: 35px;
   left: 0;
   width: 100%;
+  pointer-events: none;
+}
+.video-overlay > *{
+  pointer-events: auto;
 }
 .upper-corner {
   position: absolute;
