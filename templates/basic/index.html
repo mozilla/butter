@@ -8,7 +8,6 @@
 
   <meta name="viewport" content="width=device-width">
 
-  <link rel="stylesheet" href="../assets/css/normalise.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="../assets/css/jquery-ui/jquery.ui.butter.css">
 
@@ -30,9 +29,8 @@
   <script src="controls.js"></script>
   <div class="body-wrapper">
     <div id="embed-wrapper" class="wrapper cf">
-      <div id="video-container" class="video-container">
+      <div id="video-container" class="video-container" data-butter="target">
         <div id="video" class="video" data-butter="media"></div>
-        <div id="overlay" class="video-overlay"></div>
         <button id="controls-big-play-button"><span></span></button>
       </div>
       <div class="sidebar">
