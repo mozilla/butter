@@ -2,7 +2,6 @@
   display: none;
   position: absolute;
   font-family: sans-serif;
-  font-size: 14px;
   font-weight: 600;
   color: #000000;
   background: #ddd;
@@ -26,7 +25,7 @@
 
 .wikipedia-title-text {
   text-align: left;
-  font-size: 18pt;
+  font-size: 18px;
   overflow: hidden;
   font-weight: bolder;
   height: 100%;
@@ -61,11 +60,11 @@
 
 .wikipedia-content {
   text-align: left;
-  font-size: 12pt;
+  font-size: 14px;
   font-weight: normal;
   padding: 10px 20px 10px 20px;
   word-wrap: break-word;
-  line-height: 20px;
+  line-height: 1.4;
   word-spacing: 1px;
   letter-spacing: .3px;
 }

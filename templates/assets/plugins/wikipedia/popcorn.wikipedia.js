@@ -2,6 +2,19 @@
 
 (function ( Popcorn ) {
 
+  var allWikiLangLinks = ( "en,ja,es,de,ru,fr,it,pt,pl,zh,nl,tr,ar,sv,id,cs,fi,ko,th,fa,hu,he,no,vi,uk,da,ro" + 
+                         ",bg,hr,ca,el,sk,ms,sr,lt,sl,simple,eo,tl,et,hi,kk,sh,nn,ta,az,bs,af,eu,ka,lv,gl" +
+                         ",tpi,mk,mr,la,ml,sq,be,cy,br,is,an,bn,war,oc,hy,arz,te,jv,ceb,sw" +
+                         ",lb,als,ur,vo,fy,kn,gan,mg,ang,vec,gd,gu,ast,io,uz,qu,wuu,su,ku,yo,ga" +
+                         ",tt,scn,bar,nds,se,ht,ne,ia,sco,lmo,mn,cv,ckb,diq,my,pnb,new,pms,zh-min-nan,yi,am" +
+                         ",bpy,li,si,os,mt,nah,ps,fo,hsb,ilo,nap,wa,gv,ky,pam,sah,co,tg,ba,bcl" +
+                         ",hif,km,sa,vls,or,mzn,ig,so,bo,kl,ksh,as,mi,szl,mwl,nrm,dsb,fiu-vro,dv,stq" +
+                         ",tk,roa-rup,bug,mhr,kw,fur,sc,lad,csb,pa,rue,frr,gn,rm,ace,nv,bjn,arc,krc,ext,ug,nov" +
+                         ",frp,crh,ab,lij,jbo,kv,ay,ce,ln,pdc,udm,eml,ie,mrj,xal,bh,hak,lo,wo" +
+                         ",glk,myv,sn,chr,pag,rw,pcd,pap,zea,lbe,vep,koi,na,haw,cu,to,pi,av,zu,lez,kab,mdf," +
+                         "tet,kaa,za,bm,rmy,kbd,iu,bi,kg,pih,ss,chy,ee,om,cr,cdo,srn,got,ha,bxr,ch,ty,sm,ltg," +
+                         "pnt,ak,dz,st,sd,ik,ts,nso,y,tn,ki,ff,rn,xh,sg,ve,tw,ks,tum,fj,ti,lg" ).split( "," );
+
   // shortcut
   function create( type ) {
     return document.createElement( type );
@@ -90,6 +103,12 @@
 
       window[ "wikiCallback" + _guid ]  = function ( data ) {
 
+        if ( data.error ) {
+          _titleTextArea.innerHTML = "Uh oh....";
+          _contentArea.innerHTML = data.error.info;
+          return;
+        }
+
         var responseFragment = getFragment( "<div>" + data.parse.text + "</div>" ),
             element = responseFragment.querySelector( "div > p:nth-of-type(1)" ),
             mainText = "",
@@ -165,41 +184,44 @@
           label: "End"
         },
         lang: {
-          elem: "input",
-          type: "text",
+          elem: "select",
+          options: allWikiLangLinks,
           label: "Language",
-          "default": "en",
-          optional: true
+          "default": "en"
         },
         src: {
           elem: "input", 
           type: "text", 
-          label: "Article Link",
+          label: "Article Link/Title",
           "default": "London_2012_Olympics"
         },
         width: {
           elem: "input",
           type: "number",
           label: "Width",
-          "default": 100
+          "default": 40,
+          "units": "%"
         },
         height: {
           elem: "input",
           type: "number",
           label: "Height",
-          "default": 100
+          "default": 50,
+          "units": "%"
         },
         top: {
           elem: "input",
           type: "number",
           label: "Top",
-          "default": 0
+          "default": 25,
+          "units": "%"
         },
         left: {
           elem: "input",
           type: "number",
           label: "Left",
-          "default": 0
+          "default": 30,
+          "units": "%"
         },
         target: "#wikipedia-container"
       }
