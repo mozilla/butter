@@ -14,8 +14,8 @@
         "path": "{{baseDir}}templates/assets/plugins/photo/popcorn.photo.js"
       },
       {
-        "type": "zoink",
-        "path": "{{baseDir}}templates/assets/plugins/zoink/popcorn.zoink.js"
+        "type": "popup",
+        "path": "{{baseDir}}templates/assets/plugins/popup/popcorn.popup.js"
       },
       {
         "type": "googlemap",
@@ -33,14 +33,15 @@
     "defaults": [
       "titles",
       "photo",
-      "zoink",
+      "popup",
       "googlemap",
       "twitter",
       "image"
     ]
   },
   "editor": {
-    "googlemap": "{{baseDir}}editors/googlemap-editor.js"
+    "googlemap": "{{baseDir}}editors/googlemap-editor.js",
+    "popup": "{{baseDir}}templates/assets/editors/popup/popup-editor.js"
   },
   "maxPluginZIndex": 1000
 }

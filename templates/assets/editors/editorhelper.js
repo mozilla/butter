@@ -22,7 +22,7 @@
           }
         };
 
-    EditorHelper.draggable = function( trackEvent, dragContainer, mediaContainer ) {
+    global.EditorHelper.draggable = function( trackEvent, dragContainer, mediaContainer ) {
       var media = mediaContainer.getBoundingClientRect();
 
       $( dragContainer ).draggable({
@@ -35,10 +35,11 @@
       });
     };
 
-    EditorHelper.resizable = function( trackEvent, resizeContainer, mediaContainer ) {
+    global.EditorHelper.resizable = function( trackEvent, resizeContainer, mediaContainer, handlePositions ) {
       var media = mediaContainer.getBoundingClientRect();
 
       $( resizeContainer ).resizable({
+        handles: handlePositions,
         stop: function( event, ui ) {
           trackEvent.update({
             height: ( ui.size.height / media.height ) * 100,
@@ -82,8 +83,8 @@
     butter.listen( "trackeventupdated", _updateFunction );
   };
 
-  EditorHelper.addPlugin = function( plugin, callback ) {
+  global.EditorHelper.addPlugin = function( plugin, callback ) {
     plugins[ plugin ] = callback;
   };
 
-})( window, window.jQuery );
+}( window, window.jQuery ));

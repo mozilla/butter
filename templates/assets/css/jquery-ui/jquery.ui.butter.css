@@ -21,7 +21,7 @@
   transition: border-color .2s ease;
 }
 
-.ui-resizable span { 
+.ui-resizable .title { 
   position:relative; 
   font-weight: 700;
   display: block;

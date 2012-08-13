@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Popcorn Twitter Plug-in Demo</title>
+  <script src="../../../../external/popcorn-js/popcorn.js"></script>
+  <link rel="stylesheet" href="popcorn.popup.css">
+  <link rel="stylesheet" href="../../css/popcorn.transitions.css">
+  <script src="popcorn.popup.js"></script>
+  <script>
+    document.addEventListener( "DOMContentLoaded", function () {
+      var p = Popcorn( "#video" )
+      .popup({
+        "start": 3.27792,
+        "end": 10,
+        "target": "popupdiv",
+        "text": "zoink!",
+        "type": "popup",
+        "icon": "error",
+        "top": 30,
+        "left": 5,
+        "width": 10,
+        "transitionIn": "none",
+        "transitionOut": "none",
+        "fontSize": 20,
+        "fontColor": "#668B8B",
+        "zindex": 1000
+      })
+      .volume( 0 )
+      .play();
+    }, false );
+  </script>
+</head>
+<body>
+<h1 id="qunit-header">Popcorn Popup Plug-in Demo</h1>
+  <p>Allows for cool cool things to popup on the screen and be position around the video. Types include Popup, Thought, Speech, Did You Know and Fact</p>
+
+  <div style="width: 500px; height: 285px;">
+    <video id="video"
+      controls
+      width= "500px"
+      poster="../../../../external/popcorn-js/test/poster.png">
+
+      <source id="mp4"
+        src="../../../../external/popcorn-js/test/trailer.mp4"
+        type="video/mp4;" codecs="avc1, mp4a" >
+
+      <source id="ogv"
+        src="../../../../external/popcorn-js/test/trailer.ogv"
+        type="video/ogg;" codecs="theora, vorbis">
+
+      <p>Your user agent does not support the HTML5 Video element.</p>
+
+    </video>
+    <div id="popupdiv"></div>
+  </div>
+</body>
+</html>
+
