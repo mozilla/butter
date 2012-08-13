@@ -28,7 +28,7 @@
   // have explicit dependencies for them, but uses them on demand. Also,
   // butter.js references butter-src in a document.write string, so it will
   // not be found by the AST analysis done in the optimizer.
-  include: [ 'embed/embed' ],
+  include: [ 'embed' ],
 
   // Wraps Butter in a closure and adds license information
   wrap: {
