@@ -1,10 +1,17 @@
 /*********************************************************
 * HEADER
 */
+@_logoWidth: 140px;
 
 // Adds room to template to account for header
 .butter-header-spacing {
   padding-top: @HEADER_SPACING;
+}
+
+.butter-editor-spacing.editor-minimized {
+  .butter-header {
+    right: 0;
+  }
 }
 
 .butter-header {
@@ -13,60 +20,41 @@
   left: 0;
   top: 0;
   right: @EDITOR_WIDTH;
-  *zoom: 1;
-  padding: 5px 0 5px 24px;
-  color: #FFF;
-  border-bottom: 1px solid #222;
-  box-shadow: 0 2px 4px rgba( 0, 0, 0, .3 );
-  .gradient( "vertical", #414449, #2C2C2C );
-  .transition( all .3s ease );
+  padding: 10px 0 5px 24px;
+  .transition( all .25s ease );
+  .clearfix();
+}
 
-  &:before,
-  &:after {
-    content: "";
-    display: table;
-  }
-  &:after {
-    clear: both;
-  }
-  
-  .butter-logo {
-    position: relative;
-    float: left;
-    height: 50px;
-    width: 100px;
-    background: url( '../resources/logo-words.png' ) no-repeat;
-    background-size: contain;
-    z-index: 100000;
-  }
-  
-  .butter-header-buttons-left {
-    margin-top: 10px;
-    margin-left: 10px;
+.butter-logo {
+  position: relative;
+  float: left;
+  height: @HEADER_SPACING;
+  width: @_logoWidth;
+  background: url( '../resources/logo-words.png' ) no-repeat;
+  z-index: 100000;
+}
+
+/*********************************************************
+* Buttons
+*/
+
+.butter-header-buttons-left {
+  margin-top: 20px;
+  margin-left: @_logoWidth + 10px;
+  line-height: 24px;
+}
+
+// Hide these until login is true.
+.butter-project-title,
+.butter-save-btn {
+  display: none;
+}
+
+.butter-login-true {
+  .butter-project-title,
+  .butter-save-btn {
     display: inline-block;
-    line-height: 24px;
-    *zoom: 1;
   }
-  
-  .butter-header-buttons-left {
-    &:before,
-    &:after {
-      content: "";
-      display: table;
-    }
-    &:after {
-      clear: both;
-    }
-    > a {
-      margin-left: 10px;
-      padding: 3px 6px;
-      float: left;
-    }
-  }
+
 }
 
-.butter-editor-spacing.editor-minimized {
-  .butter-header {
-    right: 0;
-  }
-}

@@ -9,7 +9,7 @@ define( [], function(){
   return function( zoomCallback, mediaRootElement ){
 
     var _element = mediaRootElement.querySelector( ".zoom-bar" ),
-        _handle = _element.querySelector( ".scroll-handle" ),
+        _handle = _element.querySelector( ".butter-scroll-handle" ),
         _rect,
         _mousePos,
         _handleWidth,

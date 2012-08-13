@@ -1,14 +1,10 @@
 //This is the list of plugins that appears after clickling the "Popcorn" Button
 .butter-editor-area {
   .plugin-list-editor {
-    position: relative;
-    top: 5px;
-    left: 5px;
     
     .container {
-      padding: 5px;
-      color: #EEE;
-      
+      padding: 20px;
+
       >p {
         margin: 0 0 10px 5px;
         font-size: 14px;
@@ -16,21 +12,29 @@
       }
       
       >div {
-        cursor: pointer;
+        text-transform: capitalize;
         position: relative;
-        float: left;
-        margin-right: 10px;
-        margin-bottom: 10px;
-        margin-left: 10px;
-        padding: 10px;
-        width: 140px;
+        background: #FFF;
+        box-shadow: inset 0 1px 0 0 white, inset 1px 0 0 0 white, inset -1px 0 0 0 white, inset 0 -1px 0 0 white, 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+        border: 1px solid #CCC;
+        border-radius: 2px;
+        border-top-color: #E3E3E3;
+        border-bottom-color: #BDBDBD;
+        color: #555;
         font-size: 14px;
-        font-weight: 600;
-        text-shadow: 0 1px 2px #000;
-        border-radius: 10px;
-        border: 1px solid black;
-        box-shadow: inset 0 1px 0 rgba( 255,255,255,0.2 ), 0 3px 3px rgba( 0,0,0,0.2 );
-        .gradient( "vertical", #242424, #1F1F1F, true );
+        height: 30px;
+        margin-bottom: 10px;
+        margin-right: 5px;
+        line-height: 25px;
+        cursor: move;
+        padding: 10px;
+
+        &:hover {
+          left: -2px;
+          top: -2px;
+          box-shadow: 4px 4px 0 -2px rgba( 0, 0, 0, .3 );
+        }
+
       }
       div {
         >span {
@@ -43,11 +47,10 @@
             background-repeat: no-repeat;
             margin-right: 10px;
           }
-          &.label {
-            line-height: 30px;
-          }
         }
+      
       }
+ 
     }
   }
 }
