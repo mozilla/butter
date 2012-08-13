@@ -70,7 +70,8 @@
     "googlemap": "{{baseDir}}editors/googlemap-editor.js",
     "popup": "{{baseDir}}templates/assets/editors/popup/popup-editor.js",
     "image": "{{baseDir}}templates/assets/editors/image/popcorn.image.editor.js",
-    "titles": "{{baseDir}}templates/assets/editors/titles/titles-editor.js"
+    "titles": "{{baseDir}}templates/assets/editors/titles/titles-editor.js",
+    "twitter": "{{baseDir}}templates/assets/editors/twitter/twitter-editor.js"
   },
   "maxPluginZIndex": 1000
 }

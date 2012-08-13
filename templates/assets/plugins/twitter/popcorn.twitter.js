@@ -2,6 +2,10 @@
 
 (function ( Popcorn, global ) {
 
+  function normalize( value, min, max ) {
+    return Math.max( Math.min( value || 0, max ), min );
+  }
+
   Popcorn.plugin( "twitter", {
     manifest: {
       about: {
@@ -11,6 +15,18 @@
         website: "mschranz.wordpress.com, http://github.com/mjschranz"
       },
       options: {
+        start: {
+          elem: "input",
+          type: "number",
+          label: "Start",
+          units: "seconds"
+        },
+        end: {
+          elem: "input",
+          type: "number",
+          label: "End",
+          units: "seconds"
+        },
         search: {
           elem: "input",
           type: "text",
@@ -22,7 +38,6 @@
           elem: "input",
           type: "text",
           label: "Tweets from User",
-          "default": "@popcornjs",
           optional: true
         },
         searchType: {
@@ -40,24 +55,12 @@
           "default": 10,
           optional: true
         },
-        start: {
-          elem: "input",
-          type: "number",
-          label: "Start"
-        },
-        end: {
-          elem: "input",
-          type: "number",
-          label: "End"
-        },
-        transitions: {
-          transitionIn: "pop",
-          transitionOut: "fly"
-          /*
-           * TODO when we sort out editor stuff
-           * Idea is the editors pass in a transitions object that tells us what transitions we want
-           * to apply.
-           */
+        transition: {
+          elem: "select",
+          options: [ "None", "Pop", "Fly Up", "Fly Down", "Sparkles" ],
+          values: [ "none", "pop", "flyUp", "flyDown", "sparkles" ],
+          label: "Transition",
+          "default": "pop"
         },
         layout: {
           elem: "select",
@@ -81,14 +84,8 @@
           units: "%",
           "default": 10
         },
-        style: {
-          "font-family": "stuff",
-          "font-size": "stuff",
-          "color": "blue",
-          "text-decoration": "underline"
-          /* TODO when we sort out editor stuff
-           * Idea is the editors pass in a style object of sorts and it then applies those styles.
-           */
+        zindex: {
+          hidden: true
         }
       }
     },
@@ -103,13 +100,27 @@
           imgLink,
           tweetTextCont,
           tweetUser,
-          tweetText;
+          tweetText,
+          // 97 I used to prevent the container being in an unclickable position after dragging
+          top = normalize( options.top, 0, 97 ),
+          left = normalize( options.left, 0, 97 ),
+          allTweets = [],
+          numberOfTweets = options.numberOfTweets;
 
       if ( !target ) {
         target = this.media.parentNode;
       }
 
       options._target = target;
+
+      if ( !numberOfTweets ) {
+        numberOfTweets = options._natives.manifest.options.numberOfTweets[ "default" ];
+      } else if ( numberOfTweets === 0 ) {
+        numberOfTweets = 1;
+      } else if ( options.username && numberOfTweets > 20 ) {
+        // Requests for a specific user will only return a max of 20
+        numberOfTweets = 20;
+      }
 
       // safeguard against no search/username being provided
       if ( !options.search && !options.username ) {
@@ -118,10 +129,11 @@
 
       options._container = document.createElement( "div" );
       options._container.classList.add( "popcorn-twitter" );
-      options._container.id = "twitter-" + Popcorn.guid();
-      options._container.style.top = options.top + "%";
-      options._container.style.left = options.left + "%";
+      options._container.id = Popcorn.guid( "twitter" );
+      options._container.style.top = top + "%";
+      options._container.style.left = left + "%";
       options._container.style.display = "none";
+      options._container.style.zIndex = +options.zindex;
       titleText.classList.add( "popcorn-twitter-title" );
       titleText.appendChild( document.createTextNode( options.search || options.username || "Twitter" ) );
       options._container.appendChild( titleText );
@@ -133,80 +145,93 @@
             twitterName,
             imageLinkSource,
             i,
+            k,
             rLen;
 
-        if ( results.length <= 0 ) {
-          return;
+        function buildTheTweets() {
+
+          rLen = allTweets.length;
+
+          for ( i = 0; i < rLen; i++ ) {
+            currTweet = allTweets[ i ];
+            tweetContainer = document.createElement( "li" );
+            img = document.createElement( "img" );
+            imgLink = document.createElement( "a" );
+            tweetTextCont = document.createElement( "div" );
+            tweetUser = document.createElement( "div" );
+            tweetUser.classList.add( "popcorn-twitter-tweet-user" );
+            tweetText = document.createElement( "div" );
+            tweetText.classList.add( "popcorn-twitter-tweet-text" );
+            imageLinkSource = currTweet.profile_image_url || currTweet.user.profile_image_url;
+            twitterHandle = currTweet.from_user || currTweet.user.screen_name,
+            twitterName = currTweet.from_user_name || currTweet.user.name;
+
+            imgLink.classList.add( "popcorn-twitter-tweet-image" );
+            imgLink.href = img.src = imageLinkSource;
+            imgLink.target = "_blank"; // Ensure it opens in new tab/window
+            imgLink.appendChild( img );
+            tweetContainer.appendChild( imgLink );
+
+            // Text Setup
+            tweetText.innerHTML = currTweet.text;
+            tweetUser.innerHTML = "<a href=\"http://www.twitter.com/" + twitterHandle + "\" target=_blank>" +
+                                  twitterName + "</a>&nbsp;@" + twitterHandle;
+            tweetTextCont.appendChild( tweetUser );
+            tweetTextCont.appendChild( tweetText );
+            tweetContainer.appendChild( tweetTextCont );
+            tweetsContainer.appendChild( tweetContainer );
+          }
+
+          // Set layout class for container
+          if ( options.layout ) {
+            options._container.classList.add( options.layout );
+          }
+
+          if ( options.transition ) {
+            options._container.classList.add( options.transition );
+          }
+
+          outerTweetsContainer.classList.add( "popcorn-twitter-tweets" );
+          outerTweetsContainer.appendChild( tweetsContainer );
+          options._container.appendChild( outerTweetsContainer );
         }
 
-        for ( i = 0, rLen = results.length; i < rLen; i++ ) {
-          currTweet = results[ i ];
-          tweetContainer = document.createElement( "li" );
-          img = document.createElement( "img" );
-          imgLink = document.createElement( "a" );
-          tweetTextCont = document.createElement( "div" );
-          tweetUser = document.createElement( "div" );
-          tweetUser.classList.add( "popcorn-twitter-tweet-user" );
-          tweetText = document.createElement( "div" );
-          tweetText.classList.add( "popcorn-twitter-tweet-text" );
-          imageLinkSource = currTweet.profile_image_url || currTweet.user.profile_image_url;
-          twitterHandle = currTweet.from_user || currTweet.user.screen_name,
-          twitterName = currTweet.from_user_name || currTweet.user.name;
-
-          imgLink.classList.add( "popcorn-twitter-tweet-image" );
-          imgLink.href = img.src = imageLinkSource;
-          imgLink.target = "_blank"; // Ensure it opens in new tab/window
-          imgLink.appendChild( img );
-          tweetContainer.appendChild( imgLink );
-
-          // Text Setup
-          tweetText.innerHTML = currTweet.text;
-          tweetUser.innerHTML = "<a href=\"http://www.twitter.com/" + twitterHandle + "\" target=_blank>" +
-                                twitterName + "</a>&nbsp;" + twitterHandle;
-          tweetTextCont.appendChild( tweetUser );
-          tweetTextCont.appendChild( tweetText );
-          tweetContainer.appendChild( tweetTextCont );
-          tweetsContainer.appendChild( tweetContainer );
+        for ( k = 0, rLen = results.length; k < rLen && allTweets.length < options.numberOfTweets; k++ ) {
+          allTweets.push( results[ k ] );
         }
 
-        // TODO: Handle Transitions stuff here later
-        if ( options.transitions.transitionEnd ) {
-          options._container.classList.add( options.transitions.transitionEnd );
+        // Search API doesn't simply return count of tweets. It returns up to 100
+        // and then provides a link to query the next "Page" of the same results
+        if ( allTweets.length < options.numberOfTweets && options.search ) {
+          Popcorn.xhr({
+            url: requestString.substring( 0, requestString.indexOf( "?" ) ) + e.next_page,
+            dataType: "jsonp",
+            success: twitterCallback
+          });
+        } else {
+          buildTheTweets();
         }
-
-        if ( options.transitions.transitionIn ) {
-          options._container.classList.add( options.transitions.transitionIn );
-        }
-
-        outerTweetsContainer.classList.add( "popcorn-twitter-tweets" );
-        outerTweetsContainer.appendChild( tweetsContainer );
-        options._container.appendChild( outerTweetsContainer );
-      }
-
-      // Set layout class for container
-      if ( options.layout ) {
-        options._container.classList.add( options.layout );
+        
       }
 
       target.appendChild( options._container );
 
       // Append various query options here
       requestString += options.username +
-                       "&count=" + options.numberOfTweets || 10;
+                       "&count=" + options.numberOfTweets + "&include_rts=true";
 
       if ( options.search ) {
         requestString = "http://search.twitter.com/search.json?q=";
 
         requestString += options.search +
-                       "&result_type=" + options.searchType +
-                       "&rpp=" + options.numberOfTweets || 10;
+                       "&result_type=" + options.searchType;
       }
 
       Popcorn.xhr( { url: requestString, dataType: "jsonp", success: twitterCallback } );
 
-        options.toString = function() {
-          return options.username || options._natives.manifest.options.username[ "default" ];
-        };
+      options.toString = function() {
+        return options.username || options.search || options._natives.manifest.options.search[ "default" ];
+      };
     },
     start: function( event, options ) {
       if ( options._container ) {
