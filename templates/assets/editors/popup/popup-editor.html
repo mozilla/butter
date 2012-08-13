@@ -2,19 +2,25 @@
       If a copy of the MIT license was not distributed with this file, you can
       obtain one at http://www.mozillapopcorn.org/butter-license.txt -->
 
-<div class="butter-editor popup-editor allow-scrollbar">
+<div class="butter-editor default-editor allow-scrollbar">
   <h1>Popup Editor</h1>
-  <div class="error-message"></div>
-  <a class="butter-btn basic-tab">Basic</a>
-  <a class="butter-btn advanced-tab">Advanced</a>
-  <div class="editor-options-wrapper scrollbar-wrapper">
-    <div class="basic-options"></div>
-    <div class="advanced-options display-off"></div>
+  <ul class="butter-editor-tabs">
+      <li><a class="butter-btn basic-tab butter-active">Basic</a></li>
+      <li><a class="butter-btn advanced-tab">Advanced</a></li>
+  </ul>
+  <div class="butter-editor-body butter-tabs-spacing scrollbar-append-to">
+    <div class="editor-options-wrapper scrollbar-outer">
+      <div class="editor-options scrollbar-inner">
+          <div class="error-message-container">
+            <div class="error-message"></div>
+          </div>
+      </div>
+
+      <div class="advanced-options scrollbar-inner display-off">
+          <div class="error-message-container">
+            <div class="error-message"></div>
+          </div>
+      </div>
+    </div>
   </div>
 </div>
-
-<style>
-  .butter-editor.popup-editor .editor-options-wrapper {
-    top: 75px;
-  }
-</style>

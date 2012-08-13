@@ -59,7 +59,7 @@
 }
 .popcorn-twitter-tweet-text {
   font-size: 14px;
-}
+
 /*********************************************************
 * Ticker
 */
@@ -148,6 +148,11 @@
     margin-top: 0;
   }
 }
+
+}
+/*********************************************************
+* Ticker
+*/
 .popcorn-twitter.ticker {
   position: absolute;
   top: auto !important;
@@ -158,7 +163,7 @@
   color: #F1E79F;
   font-size: 13px;
   width: 100%;
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#222222', endColorstr='#1a1a1a', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr='#222222', endColorstr='#1a1a1a', GradientType=0);
   background: -webkit-gradient(linear, top, bottom, color-stop(0%, #222222), color-stop(100%, #1a1a1a));
   background: -webkit-linear-gradient(top, #222222 0%, #1a1a1a 100%);
   background: -moz-linear-gradient(top, #222222 0%, #1a1a1a 100%);
