@@ -206,7 +206,7 @@ document.addEventListener( "DOMContentLoaded", function domReady() {
         }
 
         elements.type.value = elements.type.value || "ROADMAP";
-        trackEvent.zoom = typeof trackEvent.zoom === "number" ? trackEvent.zoom : 1;
+        trackEvent.zoom = typeof trackEvent.zoom === "number" ? trackEvent.zoom : 10;
 
         if ( stamenTypes.indexOf( trackEvent.type ) !== -1 ) {
           layer = trackEvent.type.toLowerCase();
