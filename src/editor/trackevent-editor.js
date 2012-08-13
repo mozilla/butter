@@ -19,19 +19,18 @@ define( [ "util/lang", "util/keys", "./base-editor",
                           KeysUtils.TAB,
                           KeysUtils.ESCAPE
                         ],
-      __googleFonts;
-
-  var xhr = new XMLHttpRequest();
-
-  xhr.open( "GET", "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBw1zCqXJayewLR3qrcWQLhfryqCzbuV60", false );
-  xhr.onreadystatechange = function() {
-    if ( xhr.readyState === 4 ) {
-      if ( xhr.responseText !== "Not Found" ) {
-        __googleFonts = JSON.parse( xhr.responseText ).items;
-      }
-    }
-  };
-  xhr.send();
+      __googleFonts = [
+                        "Gentium Book Basic",
+                        "Lato",
+                        "Vollkorn",
+                        "Merriweather",
+                        "Gravitas One",
+                        "PT Sans",
+                        "Open Sans",
+                        "Bangers",
+                        "Fredoka One",
+                        "Covered By Your Grace"
+                      ];
 
   /**
    * Class: TrackEventEditor
@@ -291,7 +290,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
           for ( m = 0, fLen = __googleFonts.length; m < fLen; m++ ) {
             font = document.createElement( "option" );
 
-            font.value = font.innerHTML = __googleFonts[ m ].family;
+            font.value = font.label = __googleFonts[ m ];
             editorElement.appendChild( font );
           }
         }
