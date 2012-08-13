@@ -221,9 +221,11 @@
           getMapFromTrackEvent();
         });
         setup( trackEvent );
+        _this.applyExtraHeadTags( compiledLayout );
 
       },
       close: function() {
+        _this.removeExtraHeadTags();
         removeMapListeners();
       }
     });
