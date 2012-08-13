@@ -8,11 +8,11 @@
       <div class="editor-options scrollbar-inner">
         <fieldset>
           <label>Buttons</label>
-          <a class="butter-btn btn-light">Button</a>
-          <a class="butter-btn btn-green">Button</a>
+          <a class="butter-btn btn-light" data-tooltip="This is an example of a tooltip">Button</a>
+          <a class="butter-btn btn-green" data-tooltip="This is an example of a tooltip added with the data-tooltip attribute. Isn't it neat?">Button</a>
           <a class="butter-btn btn-light"><span class="icon icon-cog"></span>Button + Icon</a>
           <p>
-            <span class="btn-group">
+            <span class="btn-group" data-tooltip="This is an example of a tooltip">
               <a class="butter-btn btn-light">Button</a>
               <a class="butter-btn btn-light"><span class="icon icon-only icon-cog"></span></a>
             </span>
@@ -22,12 +22,32 @@
         <fieldset>
           <label>Text boxes</label>
           <input type="text" placeholder="default input">
-          <div class="butter-form-append">
+          <div class="butter-form-append" data-tooltip="This is an example of a tooltip">
             <input type="text" placeholder="butter-form-append">
             <span class="butter-unit">unit</span>
           </div>
           <textarea></textarea>
       
+        </fieldset>
+
+        <fieldset>
+          <label>Tooltips</label>
+          <code>ui/widgets/tooltip.js</code>
+          <p><a class="butter-btn btn-light" data-tooltip="hello world">Button
+          </a></p>
+          <pre>
+// Manual usage
+var tooltip1 = Tooltip.create({ 
+  message: "hello world" 
+});
+myButton.appendChild( tooltip1 );
+
+// Apply to all elements inside a rootElement  
+&lt;a id="test2" class="butter-btn btn-light" 
+  data-tooltip="coolio"&gt;Button&lt;/a&gt;
+  
+Tooltip.apply( rootElement );
+          </pre>
         </fieldset>
 
         <fieldset>
