@@ -8,6 +8,7 @@ var express = require('express'),
     app = express.createServer(),
     MongoStore = require('connect-mongo')(express),
     lessMiddleware = require('less-middleware'),
+    sanitizer = require( './lib/sanitizer' ),
     CONFIG = require('config'),
     TEMPLATES_DIR =  CONFIG.dirs.templates,
     PUBLISH_DIR = CONFIG.dirs.publish,
@@ -98,16 +99,6 @@ app.configure( 'development', function() {
 
 require('express-browserid').plugAll(app);
 
-// From https://github.com/mozilla/zamboni/blob/a4b32033/media/js/mkt/utils.js#L15
-function escapeHTMLinJSON( key, value ) {
-  if ( typeof value === "string" ) {
-    return value.replace( /&/g, '&amp;' ).replace( />/g, '&gt;' ).replace( /</g, '&lt;' )
-                .replace( /'/g, '&#39;' ).replace( /"/g, '&#34;' );
-  }
-
-  return value;
-}
-
 function writeEmbed( projectEmbedPath, embedUrl, res, url, data ) {
   if( !writeEmbed.templateFn ) {
     writeEmbed.templateFn = jade.compile( fs.readFileSync( 'views/embed.jade', 'utf8' ),
@@ -159,14 +150,14 @@ function publishRoute( req, res ){
 
     if ( project ) {
       var template = project.template,
-          customData = JSON.parse( project.customData, escapeHTMLinJSON );
+          customData = JSON.parse( project.customData, sanitizer.escapeHTMLinJSON );
 
       if ( template && VALID_TEMPLATES[ template ] ) {
         var projectPath = PUBLISH_DIR + "/" + id + ".html",
             projectEmbedPath = PUBLISH_DIR + "/" + id + "-embed.html",
             url = PUBLISH_PREFIX + "/" + id + ".html",
             embedUrl = PUBLISH_PREFIX + "/" + id + "-embed.html",
-            projectData = JSON.parse( project.data, escapeHTMLinJSON ),
+            projectData = JSON.parse( project.data, sanitizer.escapeHTMLinJSON ),
             templateConfig = templateConfigs[ template ],
             templateFile = templateConfig.template,
             baseHref;
@@ -333,7 +324,7 @@ app.get('/dashboard', function(req, res) {
         userProjects.push({
           // make sure _id is a string. saw some strange double-quotes on output otherwise
           _id: String(project._id),
-          name: project.name,
+          name: sanitizer.escapeHTML( project.name ),
           template: project.template,
           href: templateConfigs[ project.template ].template +
             "?savedDataUrl=" + PUBLISH_PREFIX + "/api/project/" + project._id
