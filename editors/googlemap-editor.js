@@ -222,8 +222,6 @@
         });
         setup( trackEvent );
 
-        _this.applyExtraStyleTag( compiledLayout );
-
       },
       close: function() {
         removeMapListeners();
