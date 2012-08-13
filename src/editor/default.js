@@ -55,7 +55,6 @@ define( [ "text!./default.html", "editor/editor" ],
       open: function ( parentElement, trackEvent ) {
         var targetList,
             optionsContainer = _rootElement.querySelector( ".editor-options" ),
-            optionsWrapper = _rootElement.querySelector( ".editor-options-wrapper" ),
             selectElement;
 
         _this.applyExtraHeadTags( compiledLayout );

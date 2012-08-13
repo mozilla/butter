@@ -6,12 +6,6 @@ define( [ "editor/editor", "editor/base-editor", "text!layouts/ui-kit.html" ],
   function( Editor, BaseEditor, LAYOUT_SRC ) {
 
   Editor.register( "ui-kit", LAYOUT_SRC, function( rootElement, butter, compiledLayout ) {
-    var _this = this;
-
-    var _rootElement = rootElement,
-        _trackEvent,
-        _targets = [ butter.currentMedia ].concat( butter.targets ),
-        _messageContainer = _rootElement.querySelector( "div.error-message" );
 
     Editor.BaseEditor( this, butter, rootElement, {
       open: function() {
