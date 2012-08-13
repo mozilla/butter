@@ -167,8 +167,7 @@
       _trackEvent = trackEvent;
 
       var targetList = _this.createTargetsList( _targets ),
-          optionsContainer = _rootElement.querySelector( ".editor-options" ),
-          optionsWrapper = _rootElement.querySelector( ".editor-options-wrapper" );
+          optionsContainer = _rootElement.querySelector( ".editor-options" );
 
       // Attach the onchange handler to trackEvent is updated when <select> is changed
       _targetSelectElement = targetList.querySelector( "select" );
@@ -206,9 +205,8 @@
       getMapFromTrackEvent();
 
       _this.updatePropertiesFromManifest( trackEvent );
+      _this.scrollbar.update();
 
-      _this.addVerticalScrollbar( optionsWrapper, optionsContainer, _rootElement );
-      _this.updateScrollBar();
     }
 
     // Extend this object to become a BaseEditor
@@ -223,7 +221,7 @@
         });
         setup( trackEvent );
         _this.applyExtraHeadTags( compiledLayout );
-        _this.updateScrollBar();
+
       },
       close: function() {
         _this.removeExtraHeadTags();

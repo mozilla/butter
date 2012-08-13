@@ -47,14 +47,9 @@ define( [ "util/lang", "util/keys", "./base-editor",
 
     // Wedge a check for scrollbars into the open event if it exists
     var oldOpenEvent = events.open;
-
-    extendObject.updateScrollBar = function() {
-      extendObject.vScrollBar.update();
-    };
-
     events.open = function() {
       if ( extendObject.vScrollBar ) {
-        extendObject.updateScrollBar();
+        extendObject.vScrollBar.update();
       }
       if ( oldOpenEvent ) {
         oldOpenEvent.apply( this, arguments );
@@ -65,9 +60,9 @@ define( [ "util/lang", "util/keys", "./base-editor",
 
     extendObject.defaultLayouts = __defaultLayouts.cloneNode( true );
 
-    // A vertical scrollbar may be added if lots of editor content is available (perhaps a large manifest is present for a plugin).
+
     // See addVerticalScrollbar below for more details.
-    extendObject.vScrollBars = null;
+    extendObject.vScrollBar = null;
 
     /**
      * Member: createTargetsList
@@ -225,11 +220,26 @@ define( [ "util/lang", "util/keys", "./base-editor",
           itemLabel = manifestEntry.label || name,
           isStartOrEnd = [ "start", "end" ].indexOf( name.toLowerCase() ) > -1,
           units = manifestEntry.units || ( isStartOrEnd ? "seconds" : "" ),
-          propertyArchetype = __defaultLayouts.querySelector( ".trackevent-property." + elem + ( units ? ".units" : "" ) ).cloneNode( true ),
+          propertyArchetypeSelector,
+          propertyArchetype,
           editorElement,
           option,
           manifestEntryOption,
           i, l;
+
+      // Get the right property archetype
+      propertyArchetypeSelector = ".trackevent-property." + elem;
+      if ( units ) {
+        propertyArchetypeSelector += ".units";
+      }
+      if ( manifestEntry.type === "checkbox" ) {
+        propertyArchetypeSelector += ".checkbox";
+      }
+      if ( manifestEntry.type === "radio" ) {
+        propertyArchetypeSelector += ".radio";
+      }
+
+      propertyArchetype = __defaultLayouts.querySelector( propertyArchetypeSelector ).cloneNode( true );
 
       // If the manifestEntry was specified to be hidden, or part of an advanced set of options don't use traditional
       // element building
@@ -392,13 +402,14 @@ define( [ "util/lang", "util/keys", "./base-editor",
           container.appendChild( element );
         }
       }
-
     };
 
+    // Note: this function is deprecated by .addScrollbar in base-editor.js
     extendObject.addVerticalScrollbar = function( wrapperElement, contentElement, scrollbarContainerElement ) {
       extendObject.vScrollBar = new Scrollbars.Vertical( wrapperElement, contentElement );
       scrollbarContainerElement.appendChild( extendObject.vScrollBar.element );
       extendObject.vScrollBar.update();
+
     };
 
   };
