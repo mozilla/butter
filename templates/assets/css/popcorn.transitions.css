@@ -42,6 +42,25 @@ Enjoy!
   -ms-transition: margin-top 0 .3s;
   transition: margin-top 0 .3s;
 }
+
+/*********************************************************
+* Standard Transitions
+*/
+
+.popcorn-fade {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: opacity .3s linear, visibility .3s linear;
+  -moz-transition: opacity .3s linear, visibility .3s linear;
+  -o-transition: opacity .3s linear, visibility .3s linear;
+  -ms-transition: opacity .3s linear, visibility .3s linear;
+  transition: opacity .3s linear, visibility .3s linear;
+}
+.popcorn-fade.on {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* DURATIONS
 -------------------------------------------------- */
 .popcorn-transition-slow.popcorn-off {

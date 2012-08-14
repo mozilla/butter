@@ -26,15 +26,10 @@
               "id": "TrackEvent3",
               "type": "titles",
               "popcornOptions": {
-                "start": 0.076,
-                "end": 1.085,
+                "start": 1.53541,
+                "end": 2.085,
                 "target": "video-container",
-                "text": "Popcorn.js",
-                "innerContainerClasses": "",
-                "containerClasses": "popcorn-transition popcorn-titles",
-                "activeClass": "popcorn-on",
-                "inactiveClass": "popcorn-off",
-                "transitionSpeed": "normal"
+                "text": "Pop some corn!"
               },
               "track": "Track0",
               "name": "TrackEvent3"
