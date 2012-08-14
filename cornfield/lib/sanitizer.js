@@ -1,5 +1,3 @@
-var Bleach = require( 'bleach.js' );
-
 var sanitizer = {
   // From https://github.com/mozilla/zamboni/blob/a4b32033/media/js/mkt/utils.js#L15
   escapeHTML: function escapeHTML( s ) {
