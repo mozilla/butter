@@ -148,7 +148,12 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           trackEvent.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
           trackEvent.view.unlisten( "trackeventmouseout", onTrackEventMouseOut );
         }
+        trackEvent.view.listen( "trackeventopened", onTrackEventOpen );
       });
+
+      function onTrackEventOpen( e ) {
+        butter.dispatch( "trackeventopened", e.data );
+      }
 
       function onTrackEventAdded( e ){
         var trackEvent = e.data;
@@ -159,6 +164,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           trackEvent.view.listen( "trackeventmouseover", onTrackEventMouseOver );
           trackEvent.view.listen( "trackeventmouseout", onTrackEventMouseOut );
         }
+        trackEvent.view.listen( "trackeventopened", onTrackEventOpen );
       }
 
       function onTrackAdded( e ){
@@ -242,6 +248,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         defaultTarget.view.blink();
       }
 
+      trackEvent.view.open();
     }
 
     function onTrackEventDropped( e ) {
