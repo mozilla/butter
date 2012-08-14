@@ -1,5 +1,5 @@
-define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
-  function( Dialog, Lang, HEADER_TEMPLATE ){
+define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/tooltip" ],
+  function( Dialog, Lang, HEADER_TEMPLATE, ToolTip ){
 
   var DEFAULT_AUTH_BUTTON_TEXT = "<span class='icon-user'></span> Sign In / Sign Up",
       DEFAULT_AUTH_BUTTON_TITLE = "Sign in or sign up with Persona";
@@ -13,10 +13,20 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
         _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
         _buttonGroup = _rootElement.querySelector( ".butter-login-project-info"),
         _authButton = _rootElement.querySelector( ".butter-login-btn" ),
+        _projectName = _rootElement.querySelector( ".butter-project-title" ),
         _loginClass = "butter-login-true",
-        _activeClass = "btn-green";
+        _activeClass = "btn-green",
+        _noProjectNameToolTip,
+        _projectNamePlaceHolderText = _projectName.childNodes[ 1 ].data;
+
+    // create a tooltip for the projectName element
+    ToolTip.create({
+      element: _projectName,
+      top: "43px"
+    });
 
     _this.element = _rootElement;
+    ToolTip.apply( _projectName );
 
     function authenticationRequired( successCallback, errorCallback ){
       if ( butter.cornfield.authenticated() && successCallback && typeof successCallback === "function" ) {
@@ -115,9 +125,82 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
       doSave( publish );
     }
 
+    function onMouseOver() {
+      _projectName.removeEventListener( "mouseover", onMouseOver, false );
+      _projectName.removeChild( _noProjectNameToolTip );
+    }
+
+    function createErrorToolTip() {
+      _projectName.removeEventListener( "mouseover", onMouseOver, false );
+
+      if ( _projectName.querySelector( ".tooltip-error" ) ) {
+        _projectName.removeChild( _noProjectNameToolTip );
+      }
+
+      if ( butter.project.name && butter.project.name !== _projectNamePlaceHolderText ) {
+        return;
+      }
+
+      _noProjectNameToolTip = ToolTip.create({
+        message: "Please give your project a name before saving",
+        hidden: false,
+        element: _projectName,
+        top: "43px"
+      });
+
+      _noProjectNameToolTip.classList.add( "tooltip-error" );
+      _projectName.addEventListener( "mouseover", onMouseOver, false );
+      return true;
+    }
+
+    function onKeyPress( e ) {
+      var node = _projectName.childNodes[ 1 ];
+
+      // if this wasn't the 'enter' key, return early
+      if ( e.keyCode !== 13 ) {
+        return;
+      }
+
+      node.blur();
+      node.removeEventListener( "keypress", onKeyPress, false );
+    }
+
+    function onBlur() {
+      var node = _projectName.childNodes[ 1 ],
+          text = document.createTextNode( node.value || _projectNamePlaceHolderText );
+
+      butter.project.name = node.value;
+
+      createErrorToolTip();
+      _projectName.replaceChild( text, node );
+      node.removeEventListener( "blur", onBlur, false );
+      _projectName.addEventListener( "click", projectNameClick, false );
+    }
+
     _saveButton.addEventListener( "click", function( e ){
+      if ( createErrorToolTip() ) {
+        return;
+      }
       authenticationRequired( prepare );
     }, false );
+
+    function projectNameClick( e ) {
+      var input = document.createElement( "input" ),
+          childNode = _projectName.childNodes[ 1 ];
+
+      input.type = "text";
+
+      input.placeholder = _projectNamePlaceHolderText;
+      input.value = childNode.data !== _projectNamePlaceHolderText ? childNode.data : "";
+      _projectName.replaceChild( input, childNode );
+      _projectName.removeEventListener( "click", projectNameClick, false );
+      input.focus();
+      input.addEventListener( "blur", onBlur, false );
+      input.addEventListener( "keypress", onKeyPress, false );
+    }
+
+    _projectName.addEventListener( "click", projectNameClick, false );
+
 
     function doLogout() {
       butter.cornfield.logout( logoutDisplay );
