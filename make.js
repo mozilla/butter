@@ -232,6 +232,10 @@ target["check-html"] = function() {
   // to only ignore when some condition is true.
   var ignoreList = [
     {
+      // Don't warn on valid docs
+      text: "The document is valid HTML5 + ARIA + SVG 1.1 + MathML 2.0 (subject to the utter previewness of this service)."
+    },
+    {
       text: "Error: Start tag seen without seeing a doctype first. Expected “<!DOCTYPE html>”.",
       when: isHTMLFragment
     },
