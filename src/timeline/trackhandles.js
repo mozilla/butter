@@ -23,9 +23,10 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
 
     function sortHandles(){
       if ( butter.currentMedia ) {
-        var tracks = butter.currentMedia.orderedTracks;
+        var tracks = butter.currentMedia.orderedTracks,
+            trackHandle;
         for ( var i = 0, l = tracks.length; i < l; ++i ) {
-          var trackHandle = _tracks[ tracks[ i ].id ];
+          trackHandle = _tracks[ tracks[ i ].id ];
           // It *is* possible for there to be more tracks than there are track handles while importing, so
           // do a check here to see if a handle exists first before ordering.
           if ( trackHandle ) {
@@ -34,8 +35,6 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
         }
       }
     }
-
-    _media.listen( "trackorderchanged", sortHandles );
 
     var _sortable = DragNDrop.sortable( _listElement, {
       change: function( elements ){
