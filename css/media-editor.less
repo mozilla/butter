@@ -17,7 +17,9 @@
  }
 
   #new-media-source-btn, #update-media-source-btn, #confirm-media-source-change-btn {
-    background: -moz-linear-gradient(center top , #41BB92 0%, #39A480 100%) repeat scroll 0 0 transparent;
+
+    .gradient( "center top", #41BB92, #39A480, false );
+
     box-shadow: 0 1px 0 #65CAA8 inset, 0 -1px 0 #276F57, 0 1px 0 #349574, 1px 0 0 #3AA883, -1px 0 0 #3AA883;
     color: #ffffff;
     text-shadow: 0 1px #276f57;
@@ -73,12 +75,9 @@
   }
 
   .btn-light, .ui-light a {
-    -moz-border-bottom-colors: none;
-    -moz-border-image: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    background: -moz-linear-gradient(center top , #EEEEEE 0%, #EBEBEB 100%) repeat scroll 0 0 transparent;
+
+    .gradient( "center top", #EEEEEE, #EBEBEB, true );
+
     border-radius: 3px 3px 3px 3px;
     border-style: solid;
     border-width: 1px;
@@ -90,11 +89,7 @@
   }
 
   span input.current-media-input {
-    -moz-border-bottom-colors: none;
-    -moz-border-image: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
+
     border-radius: 2px 2px 2px 2px;
     border-style: solid;
     border-width: 1px;
@@ -104,6 +99,35 @@
     width: 70%;
     height: 32px;
     margin: 5px 0;
+  }
+
+  span input.current-media-input, .btn-light, .ui-light a {
+    -webkit-border-bottom-colors: none;
+       -moz-border-bottom-colors: none;
+        -ms-border-bottom-colors: none;
+         -o-border-bottom-colors: none;
+
+
+    -webkit-border-image: none;
+       -moz-border-image: none;
+        -ms-border-image: none;
+         -o-border-image: none;
+            border-image: none;
+    
+    -webkit-border-left-colors: none;
+       -moz-border-left-colors: none;
+        -ms-border-left-colors: none;
+         -o-border-left-colors: none;
+
+    -webkit-border-right-colors: none;
+       -moz-border-right-colors: none;
+        -ms-border-right-colors: none;
+         -o-border-right-colors: none;
+
+    -webkit-border-top-colors: none;
+       -moz-border-top-colors: none;
+        -ms-border-top-colors: none;
+         -o-border-top-colors: none;
   }
 
   input.error {

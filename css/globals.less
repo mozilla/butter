@@ -73,6 +73,10 @@
   ._gradient( @color1, @color2, left, right, 0%, 100%, @fallback, 1 );
 }
 
+.gradient( "center top", @color1, @color2, @fallback: false ) {
+  ._gradient( @color1, @color2, left, right, 0%, 100%, @fallback, 1 );
+}
+
 .transition(@transition1) {
   -webkit-transition: @transition1;
   -moz-transition: @transition1;
