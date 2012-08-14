@@ -1,8 +1,14 @@
-/* This Source Code Form is subject to the terms of the MIT license
- * If a copy of the MIT license was not distributed with this file, you can
- * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 function init( window, document ) {
+
+  /**
+   * embed.js is a separate, top-level entry point into the requirejs
+   * structure of src/.  We use it in order to cherry-pick modules from
+   * Butter as part of our embed scripts.  The embed.js file is meant
+   * to be used on its own, without butter.js, and vice versa.  See
+   * tools/embed.js and tools/embed.optimized.js, and the `make embed`
+   * target for more info.
+   */
 
   function $( id ) {
     if( typeof id !== "string" ) {
@@ -124,7 +130,7 @@ function init( window, document ) {
     }
   }
 
-  var req = requirejs.config({
+  var require = requirejs.config({
     context: "embed",
     baseUrl: "/src",
     paths: {
@@ -132,7 +138,7 @@ function init( window, document ) {
     }
   });
 
-  req([
+  require([
       "util/uri",
       "ui/widget/controls",
       "ui/widget/textbox",
@@ -220,7 +226,7 @@ function init( window, document ) {
 }
 
 // Source tree case vs. require-built case.
-if( !window.require ) {
+if( typeof require === "undefined" ) {
   Popcorn.getScript( "../../external/require/require.js", function() {
     init( window, window.document );
  });
