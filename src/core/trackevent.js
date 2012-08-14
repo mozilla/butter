@@ -125,7 +125,7 @@ define( [
       }
 
       if ( newStart >= newEnd ) {
-        throw new TrackEventUpdateException( "start-greater-than-end", "[start] must be equal to or less than [end]." );
+        throw new TrackEventUpdateException( "start-greater-than-end", "[start] must be less than [end]." );
       }
       if ( _track && _track._media && _track._media.ready ) {
         var media = _track._media;
