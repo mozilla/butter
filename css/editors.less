@@ -175,59 +175,6 @@
     background: #F0DDDD;
   }
 
-  .butter-notify {
-    .transition( height 0.35s, margin 0.35s, padding 0.35s );
-    background: #FFF;
-    color: #555;
-    border-top: 1px solid @baseLightOutline;
-    overflow: hidden;
-    position: absolute;
-    height: 0;
-    bottom: 5px;
-    left: -1px;
-    right: @_editorScrollbarWidth;
-    visibility: hidden;
-    line-height: 18px;
-
-     h3 {
-      font-size: 18px;
-      margin-top: 0;
-     }
-
-     .butter-badge {
-      float: left;
-      width: 80px;
-      height: 80px;
-      background-image: url(https://github.com/toolness/openbadges.org/raw/master/static/img/index/101badge.png);
-      background-size: cover;
-      margin-right: 5px;
-     }
-
-     .butter-badge-link {
-      margin-top: 10px;
-     }
-
-     &.not-logged-in {
-        .logged-in {
-          display: none;
-        }
-     }
-     &.logged-in {
-        .not-logged-in {
-          display: none;
-        }
-     }
-
-
-  }
-
-  .butter-notify.butter-notification-on {
-    visibility: visible;
-    height: auto;
-    padding: 20px 20px;
-    padding-right: 15px; //scrollbars
-  }
-
   // Spacing 
  .butter-editor-spacing {
     padding-right: @EDITOR_WIDTH;
@@ -276,6 +223,78 @@
   }
 
 } //editor area
+
+
+.butter-notify {
+  .transition( height 0.35s, margin 0.35s, padding 0.35s );
+  background: #FFF;
+  color: #555;
+  border-top: 1px solid @baseLightOutline;
+  overflow: hidden;
+  position: absolute;
+  height: 0;
+  bottom: 5px;
+  left: -1px;
+  right: @_editorScrollbarWidth;
+  visibility: hidden;
+  line-height: 18px;
+
+   h3 {
+    font-size: 18px;
+    margin-top: 0;
+   }
+
+   &.not-logged-in {
+      .logged-in {
+        display: none;
+      }
+   }
+   &.logged-in {
+      .not-logged-in {
+        display: none;
+      }
+   }
+}
+
+.butter-badge {
+  float: left;
+  width: 80px;
+  height: 80px;
+  background-image: url(https://github.com/toolness/openbadges.org/raw/master/static/img/index/101badge.png);
+  background-size: cover;
+  margin-right: 5px;
+}
+
+// Badge tooltip
+.butter-login-btn .butter-tooltip {
+  opacity: 1;
+    > div {
+    margin-top: 10px; 
+    text-align: left;
+    width: 180px;
+  }
+  p {
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+}
+
+.butter-tooltip .butter-badge {
+  width: 60px;
+  height: 60px;
+  margin-right: 5px;
+}
+
+.butter-badge-link {
+  margin-top: 10px;
+}
+
+.butter-notify.butter-notification-on {
+  visibility: visible;
+  height: auto;
+  padding: 20px 20px;
+  padding-right: 15px; //scrollbars
+}
 
 
 /*********************************************************

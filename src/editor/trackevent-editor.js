@@ -441,20 +441,21 @@ define( [ "util/lang", "util/keys", "./base-editor",
 
       extendObject.badgeNotification = function ( options ) {
         var isLoggedIn =  butter.cornfield.authenticated(), // API call here
-            messageEl = options.element || extendObject.rootElement.querySelector( ".butter-notify" ),
-            authButton = messageEl.querySelector( ".butter-auth-button" );
+            loginButton = document.querySelector( ".butter-login-btn" ),
+            tooltip = document.createElement( "div" ),
+            tooltipText;
 
-        messageEl.querySelector( ".butter-notify-content" ).appendChild( document.createTextNode( options.message ) );
-        messageEl.classList.add( "butter-notification-on" );
+        tooltipText = options.message;
+        tooltip.classList.add( "butter-tooltip" );
+        tooltip.innerHTML = "<div><p><strong>Wow, you got a badge!</strong></p><div class=\"butter-badge\"></div>" + tooltipText + "</div>";
 
-        if ( isLoggedIn ) {
-          messageEl.classList.add( "logged-in" );
-          options.unlisten();
-        } else {
-          messageEl.classList.add( "not-logged-in" );
-          authButton.addEventListener( "click", authenticationRequired, false );
-        }
+        loginButton.setAttribute( "data-tooltip", true);
+        loginButton.appendChild( tooltip );
 
+        tooltip.addEventListener( "click", function() { 
+          tooltip.parentNode.removeChild( tooltip );
+        }, false );
+        options.unlisten();
       };
 
 
