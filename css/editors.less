@@ -262,7 +262,8 @@
     right: @_editorScrollbarWidth;
     left: 0;
     bottom: 0;
-    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: visible;
   }
 
   .allow-scrollbar {
@@ -469,5 +470,73 @@
   .butter-scroll-handle {
     width: 8px;
     left: 1px;
+  }
+}
+
+/*********************************************************
+* Tooltip
+*/
+
+[data-tooltip] {
+  position: relative;
+  &:hover > .butter-tooltip {
+    opacity: 1;
+    > div { margin-top: 10px; }
+  }
+}
+
+.butter-tooltip {
+
+  &.tooltip-on {
+    opacity: 1;
+    > div { margin-top: 10px; }
+  }
+
+  opacity: 0;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  margin-top: -10px;
+  margin-left: -80px;
+  z-index: 100000;
+  overflow: hidden;
+  .transition( all .3s ease );
+
+  > div {
+    position: relative;
+    line-height: 1.4;
+    margin-top: -1000px;
+    width: 160px;
+    background: #FFF;
+    text-shadow: none;
+    color: #444;
+    font-size: 12px;
+    padding: 10px;
+    .box-sizing( border-box );
+    border-radius: 2px;
+    text-align: center;
+    border: 1px solid #CCC;
+    box-shadow: 1px 3px 7px -2px rgba( 0, 0, 0, .5 );
+
+    &:after,
+    &:before {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      margin-left: -5px;
+      width: 0; 
+      height: 0; 
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;  
+      border-bottom: 5px solid @baseLight;
+    }
+    &:after {
+      z-index: 100000;
+    }
+    &:before {
+      top: -6px;
+      border-bottom: 5px solid #999;
+    }
   }
 }
