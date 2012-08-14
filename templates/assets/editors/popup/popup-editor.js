@@ -218,6 +218,22 @@
             _this.scrollbar.update();
           }
         });
+
+        function addNotification( e ) {
+
+          var allPopups = butter.getTrackEventsByType( "popup" ).length;
+
+          if ( allPopups > 1 ) {
+            document.body.classList.add( "notifications-on" );
+            setTimeout( function() {
+               document.body.classList.remove( "notifications-on" );
+            }, 5000 );
+          }
+          
+        }
+
+        trackEvent.listen( "trackeventupdated", addNotification);
+
       },
       close: function() {
         _this.removeExtraHeadTags();

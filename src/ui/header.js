@@ -13,6 +13,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
         _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
         _buttonGroup = _rootElement.querySelector( ".butter-login-project-info"),
         _authButton = _rootElement.querySelector( ".butter-login-btn" ),
+        _tabzilla = _rootElement.querySelector( "#tabzilla" ),
         _loginClass = "butter-login-true",
         _activeClass = "btn-green";
 
@@ -41,6 +42,8 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
         }
       });
     }
+
+    _this.authenticationRequired = authenticationRequired;
 
     _authButton.addEventListener( "click", authenticationRequired, false );
 
@@ -152,6 +155,10 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
         loginDisplay();
       });
     }
+
+    _tabzilla.addEventListener( "click", function( e ) {
+      document.body.classList.toggle( "notifications-on" );
+    }, false );
 
     this.attachToDOM = function() {
       document.body.classList.add( "butter-header-spacing" );

@@ -20,7 +20,6 @@
   left: 0;
   top: 0;
   right: @EDITOR_WIDTH;
-  padding: 10px 0 5px 24px;
   .transition( all .25s ease );
   .clearfix();
 }
@@ -39,7 +38,7 @@
 */
 
 .butter-header-buttons-left {
-  margin-top: 20px;
+  padding-top: 20px;
   margin-left: @_logoWidth + 10px;
   line-height: 24px;
 }
@@ -58,3 +57,45 @@
 
 }
 
+/*********************************************************
+* Tabzilla
+*/
+.butter-header-inner {
+  position: relative;
+}
+#tabzilla {
+  position: absolute;
+  top: -1px;
+  right: 50px;
+  display: block;
+  background: url(//www.mozilla.org/tabzilla/media/img/tab.png);
+  height: 44px;
+  width: 150px;
+  text-indent: -2000px;
+  overflow: hidden;
+  z-index: 999;
+}
+
+.notification-tabzilla {
+  height: 0;
+  overflow: hidden;
+  background: #FFF;
+  border-bottom: 1px solid @baseLightOutline;
+  .transition( all .3s ease);
+}
+
+.inner-notifications {
+  padding: 25px;
+}
+
+.notifications-on {
+  .notification-tabzilla {
+    height: 80px;
+  }
+  .butter-header-spacing {
+    padding-top: @HEADER_SPACING + 80px;
+  }
+  .body-wrapper {
+    top: @HEADER_SPACING + 80px;
+  }
+}
