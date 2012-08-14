@@ -40,7 +40,7 @@
                 this.createPropertiesFromManifest( trackEvent,
                   function( elementType, element, trackEvent, name ){
                     createdManifestItems.push( name );
-                  }, null, rootElement.querySelector( ".content-container" ), [ "start", "end", "target" ] );
+                  }, null, rootElement.querySelector( ".content-container" ), null, [ "start", "end", "target" ] );
 
                 ok( createdManifestItems.indexOf( "start" ) === -1, "start not created from manifest" );
                 ok( createdManifestItems.indexOf( "end" ) === -1, "end not created from manifest" );
