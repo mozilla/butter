@@ -24,8 +24,8 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
     extendObject.parentElement = null;
 
     // Used when applyExtraHeadTags is called -- see below
-    var _extraScriptTags = [],
-        _extraStyleTags = [];
+    var _extraStyleTags = [],
+        _extraLinkTags = [];
 
     /**
      * Member: open
@@ -86,13 +86,13 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
      * @param {DOMFragment} layout: DOMFragment containing the style tag
      */
     extendObject.applyExtraHeadTags = function( layout ) {
-      var scriptNodes = layout.querySelectorAll( "script" ),
+      var linkNodes = layout.querySelectorAll( "link" ),
           styleNodes = layout.querySelectorAll( "style" ),
           x;
 
-      for ( x = 0; x < scriptNodes.length; x++ ) {
-        _extraScriptTags[ x ] = scriptNodes[ x ];
-        document.head.appendChild( _extraScriptTags[ x ] );
+      for ( x = 0; x < linkNodes.length; x++ ) {
+        _extraLinkTags[ x ] = linkNodes[ x ];
+        document.head.appendChild( _extraLinkTags[ x ] );
       }
 
       for ( x = 0; x < styleNodes.length; x++ ) {
@@ -140,17 +140,17 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
     };
 
     /**
-     * Member: removeExtraTags
+     * Member: removeExtraHeadTags
      *
-     * Remove all extra style/script tags that have been added to the document head.
+     * Remove all extra style/link tags that have been added to the document head.
      */
     extendObject.removeExtraHeadTags = function() {
       var x;
 
-      for ( x = 0; x < _extraScriptTags.length; x++ ) {
-        document.head.removeChild( _extraScriptTags[ x ] );
+      for ( x = 0; x < _extraLinkTags.length; x++ ) {
+        document.head.removeChild( _extraLinkTags[ x ] );
       }
-      _extraScriptTags = [];
+      _extraLinkTags = [];
 
       for ( x = 0; x < _extraStyleTags.length; x++ ) {
         document.head.removeChild( _extraStyleTags[ x ] );
