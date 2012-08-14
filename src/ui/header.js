@@ -1,5 +1,5 @@
-define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/tooltip" ],
-  function( Dialog, Lang, HEADER_TEMPLATE, ToolTip ){
+define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
+  function( Dialog, Lang, Header, ToolTip ) {
 
   var DEFAULT_AUTH_BUTTON_TEXT = "<span class='icon-user'></span> Sign In / Sign Up",
       DEFAULT_AUTH_BUTTON_TITLE = "Sign in or sign up with Persona";
@@ -9,21 +9,17 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
     options = options || {};
 
     var _this = this,
-        _rootElement = Lang.domFragment( HEADER_TEMPLATE, ".butter-header" ),
-        _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
-        _buttonGroup = _rootElement.querySelector( ".butter-login-project-info"),
-        _authButton = _rootElement.querySelector( ".butter-login-btn" ),
-        _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
-        _projectName = _projectTitle.querySelector( ".butter-project-name" ),
+        _header = new Header( butter, options ),
+        _rootElement = _header.rootElement,
+        _saveButton = _header.saveButton,
+        _buttonGroup = _header.buttonGroup,
+        _authButton = _header.authButton,
+        _projectTitle = _header.projectTitle,
+        _projectName = _header.projectName,
         _loginClass = "butter-login-true",
         _activeClass = "btn-green",
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML;
-
-    // This is an easter egg to open a UI kit editor. Hurrah
-    _rootElement.querySelector( ".butter-logo" ).addEventListener( "dblclick", function( e ) {
-      butter.editor.openEditor( "ui-kit" );
-    }, false );
 
     // create a tooltip for the projectName element
     ToolTip.create({
@@ -34,101 +30,27 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
     _this.element = _rootElement;
     ToolTip.apply( _projectTitle );
 
-    function authenticationRequired( successCallback, errorCallback ){
-      if ( butter.cornfield.authenticated() && successCallback && typeof successCallback === "function" ) {
-        successCallback();
-        return;
-      }
-
-      butter.cornfield.login(function( response ){
-        if ( !response.error ) {
-          butter.cornfield.list(function( listResponse ) {
-            loginDisplay();
-            if ( successCallback && typeof successCallback === "function" ) {
-              successCallback();
-            }
-          });
+    function login( successCallback, errorCallback ) {
+      _header.authenticationRequired(function() {
+        loginDisplay();
+        butter.dispatch( "authenticated" );
+        if ( successCallback && typeof successCallback === "function" ) {
+          successCallback();
         }
-        else{
-          showErrorDialog( "There was an error logging in. Please try again." );
-          if( errorCallback ){
-            errorCallback();
-          }
-        }
-      });
+      }, errorCallback );
     }
 
-    _authButton.addEventListener( "click", authenticationRequired, false );
+    _authButton.addEventListener( "click", login, false );
 
-    function showErrorDialog( message, callback ){
-      var dialog = Dialog.spawn( "error-message", {
-        data: message,
-        events: {
-          cancel: function( e ){
-            dialog.close();
-            if( callback ){
-              callback();
-            }
-          }
-        }
-      });
-      dialog.open();
-    }
-
-    function doSave( callback ){
-
-      function execute(){
-        butter.project.data = butter.exportProject();
-        var saveString = JSON.stringify( butter.project, null, 4 );
-        butter.ui.loadIndicator.start();
-        butter.cornfield.save( butter.project.id, saveString, function( e ){
-          butter.ui.loadIndicator.stop();
-          if( e.error !== "okay" || !e.project || !e.project._id ){
-            showErrorDialog( "There was a problem saving your project. Please try again." );
-            return;
-          }
-          butter.project.id = e.project._id;
-          if( callback ){
-            callback();
-          }
-          butter.dispatch( "projectsaved" );
-        });
-      }
-
-      if( !butter.project.name ){
-        var dialog = Dialog.spawn( "save-as", {
-          events: {
-            submit: function( e ){
-              butter.project.name = e.data;
-              dialog.close();
-              execute();
-            }
-          }
-        });
-        dialog.open();
-      }
-      else{
-        execute();
-      }
-    }
-
-    function publish(){
+    function publish() {
       butter.cornfield.publish( butter.project.id, function( e ){
         if( e.error !== "okay" ){
-          showErrorDialog( "There was a problem saving your project. Please try again." );
+          _header.showErrorDialog( "There was a problem saving your project. Please try again." );
           return;
-        }
-        else{
-          var url = e.url;
-          Dialog.spawn( "share", {
-            data: url
-          }).open();
+        } else {
+          butter.editor.openEditor( "share-properties" );
         }
       });
-    }
-
-    function prepare() {
-      doSave( publish );
     }
 
     function onMouseOver() {
@@ -136,27 +58,9 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
       _projectTitle.removeChild( _noProjectNameToolTip );
     }
 
-    function createErrorToolTip() {
-      _projectTitle.removeEventListener( "mouseover", onMouseOver, false );
-
-      if ( _projectTitle.querySelector( ".tooltip-error" ) ) {
-        _projectTitle.removeChild( _noProjectNameToolTip );
-      }
-
-      if ( butter.project.name && butter.project.name !== _projectTitlePlaceHolderText ) {
-        return;
-      }
-
-      _noProjectNameToolTip = ToolTip.create({
-        message: "Please give your project a name before saving",
-        hidden: false,
-        element: _projectTitle,
-        top: "43px"
-      });
-
-      _noProjectNameToolTip.classList.add( "tooltip-error" );
-      _projectTitle.addEventListener( "mouseover", onMouseOver, false );
-      return true;
+    function prepare() {
+      butter.dispatch( "projectsaved" );
+      _header.save( publish );
     }
 
     function onKeyPress( e ) {
@@ -171,23 +75,53 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
       node.removeEventListener( "keypress", onKeyPress, false );
     }
 
+    /*
+     * Function: checkProjectName
+     *
+     * Checks whether the current projects name is a valid one or not.
+     * @returns boolean value representing whether or not the current project name is valid
+     */
+    function checkProjectName() {
+      if ( !butter.project.name || butter.project.name === _projectTitlePlaceHolderText ) {
+        return false;
+      }
+      return true;
+    }
+
     function onBlur() {
       var node = _projectTitle.querySelector( ".butter-project-name" );
 
       _projectName.innerHTML = node.value || _projectTitlePlaceHolderText;
       butter.project.name = node.value;
 
-      createErrorToolTip();
+      if ( checkProjectName() ) {
+        _header.save( publish );
+      } else {
+        _noProjectNameToolTip = _header.createErrorToolTip( _projectTitle, {
+          message: "Please give your project a name before saving",
+          hidden: false,
+          element: _projectTitle,
+          top: "43px"
+        }, onMouseOver );
+        butter.dispatch( "projectupdated" );
+      }
       _projectTitle.replaceChild( _projectName, node );
       node.removeEventListener( "blur", onBlur, false );
       _projectTitle.addEventListener( "click", projectNameClick, false );
     }
 
     _saveButton.addEventListener( "click", function( e ){
-      if ( createErrorToolTip() ) {
+      if ( checkProjectName() ) {
+        login( prepare );
         return;
+      } else {
+        _noProjectNameToolTip = _header.createErrorToolTip( _projectTitle, {
+          message: "Please give your project a name before saving",
+          hidden: false,
+          element: _projectTitle,
+          top: "43px"
+        }, onMouseOver );
       }
-      authenticationRequired( prepare );
     }, false );
 
     function projectNameClick( e ) {
@@ -207,16 +141,15 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
 
     _projectTitle.addEventListener( "click", projectNameClick, false );
 
-
     function doLogout() {
-      butter.cornfield.logout( logoutDisplay );
+      _header.logout( logoutDisplay );
     }
 
     function loginDisplay() {
       _buttonGroup.classList.add( "btn-group" );
       _rootElement.classList.add( _loginClass );
       _authButton.classList.remove( _activeClass );
-      _authButton.removeEventListener( "click", authenticationRequired, false );
+      _authButton.removeEventListener( "click", _header.authenticationRequired, false );
       _authButton.innerHTML = "<span class='icon icon-user'></span> " + butter.cornfield.name();
       _authButton.title = "This is you!";
       _authButton.addEventListener( "click", doLogout, false );
@@ -229,7 +162,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
       _authButton.removeEventListener( "click", doLogout, false );
       _authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
       _authButton.title = DEFAULT_AUTH_BUTTON_TITLE;
-      _authButton.addEventListener( "click", authenticationRequired, false );
+      _authButton.addEventListener( "click", login, false );
     }
 
     if ( butter.cornfield.authenticated() ) {
@@ -247,6 +180,11 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
       document.body.insertBefore( _rootElement, document.body.firstChild );
     };
 
+    butter.listen( "authenticated", function() {
+      loginDisplay();
+    });
+    butter.listen( "projectsaved", function() {
+      _projectName.innerHTML = butter.project.name;
+    });
   };
-
 });
