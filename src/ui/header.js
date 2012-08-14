@@ -42,6 +42,8 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
       });
     }
 
+    _this.authenticationRequired = authenticationRequired;
+
     _authButton.addEventListener( "click", authenticationRequired, false );
 
     function showErrorDialog( message, callback ){

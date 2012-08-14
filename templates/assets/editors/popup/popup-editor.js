@@ -218,6 +218,26 @@
             _this.scrollbar.update();
           }
         });
+
+        function addNotification( e ) {
+
+          var allPopups = butter.getTrackEventsByType( "popup" ).length;
+
+          if ( allPopups > 1 ) {
+            console.log( "Dsadasda" );
+            _this.badgeNotification({
+              event: e,
+              message: "Sweet, you just made 3 popups. That means you're a popup master. Congratulations!",
+              unlisten: function() {
+                trackEvent.unlisten( "trackeventupdated", addNotification);
+              }
+            });
+          }
+          
+        }
+
+        trackEvent.listen( "trackeventupdated", addNotification);
+
       },
       close: function() {
         _this.removeExtraHeadTags();
