@@ -43,7 +43,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
    * @param {Object} events: Events such as 'open' and 'close' can be defined on this object to be called at the appropriate times
    */
   return function( extendObject, butter, rootElement, events ) {
-
+  
     // Wedge a check for scrollbars into the open event if it exists
     var oldOpenEvent = events.open;
     events.open = function() {
@@ -411,6 +411,53 @@ define( [ "util/lang", "util/keys", "./base-editor",
         }
       }
     };
+
+    // Apply notifications
+
+
+      function authenticationRequired( successCallback, errorCallback ){
+      if ( butter.cornfield.authenticated() && successCallback && typeof successCallback === "function" ) {
+        successCallback();
+        return;
+      }
+
+      butter.cornfield.login(function( response ){
+        if ( !response.error ) {
+          butter.cornfield.list(function( listResponse ) {
+            //loginDisplay();
+            if ( successCallback && typeof successCallback === "function" ) {
+              successCallback();
+            }
+          });
+        }
+        else{
+          //showErrorDialog( "There was an error logging in. Please try again." );
+          if( errorCallback ){
+            errorCallback();
+          }
+        }
+      });
+    }
+
+      extendObject.badgeNotification = function ( options ) {
+        var isLoggedIn =  butter.cornfield.authenticated(), // API call here
+            loginButton = document.querySelector( ".butter-login-btn" ),
+            tooltip = document.createElement( "div" ),
+            tooltipText;
+
+        tooltipText = options.message;
+        tooltip.classList.add( "butter-tooltip" );
+        tooltip.innerHTML = "<div><p><strong>Wow, you got a badge!</strong></p><div class=\"butter-badge\"></div>" + tooltipText + "</div>";
+
+        loginButton.setAttribute( "data-tooltip", true);
+        loginButton.appendChild( tooltip );
+
+        tooltip.addEventListener( "click", function() { 
+          tooltip.parentNode.removeChild( tooltip );
+        }, false );
+        options.unlisten();
+      };
+
 
     // Note: this function is deprecated by .addScrollbar in base-editor.js
     extendObject.addVerticalScrollbar = function( wrapperElement, contentElement, scrollbarContainerElement ) {

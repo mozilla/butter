@@ -55,6 +55,9 @@ define( [ "core/eventmanager", "util/scrollbars" ],
         events.open.apply( extendObject, arguments );
       }
 
+      // Add tooltips
+      extendObject.addTooltips();
+
       extendObject.dispatch( "open" );
     };
 
@@ -125,6 +128,22 @@ define( [ "core/eventmanager", "util/scrollbars" ],
       extendObject.scrollbar.update();
       
       return extendObject.scrollBar;
+    };
+
+    extendObject.addTooltips = function() {
+      var tooltipContainers = extendObject.rootElement.querySelectorAll( "[data-tooltip]" ),
+          innerTooltip,
+          tooltipText,
+          i;
+
+      for( i = 0; i < tooltipContainers.length; i++ ) {
+        innerTooltip = document.createElement( "div" );
+        tooltipText = tooltipContainers[ i ].getAttribute( "data-tooltip" ) || tooltipContainers[ i ].getAttribute( "title" ) || "";
+        innerTooltip.classList.add( "butter-tooltip" );
+        innerTooltip.innerHTML = "<div>" + tooltipText + "</div>";
+        tooltipContainers[ i ].appendChild( innerTooltip );
+      }
+
     };
 
     /**

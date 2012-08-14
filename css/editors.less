@@ -165,14 +165,13 @@
     .transition( height 0.35s, margin 0.35s, padding 0.35s );
     overflow: hidden;
     height: 0;
-    color: #D93B21;
+    color: #EEE;
     visibility: hidden;
     width: 300px;
   }
 
   .error-message-container.open {
     padding: 10px 20px;
-    padding-right: 15px; //scrollbars
     background: #F0DDDD;
   }
 
@@ -210,7 +209,8 @@
     right: @_editorScrollbarWidth;
     left: 0;
     bottom: 0;
-    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: visible;
   }
 
   .allow-scrollbar {
@@ -223,6 +223,78 @@
   }
 
 } //editor area
+
+
+.butter-notify {
+  .transition( height 0.35s, margin 0.35s, padding 0.35s );
+  background: #FFF;
+  color: #555;
+  border-top: 1px solid @baseLightOutline;
+  overflow: hidden;
+  position: absolute;
+  height: 0;
+  bottom: 5px;
+  left: -1px;
+  right: @_editorScrollbarWidth;
+  visibility: hidden;
+  line-height: 18px;
+
+   h3 {
+    font-size: 18px;
+    margin-top: 0;
+   }
+
+   &.not-logged-in {
+      .logged-in {
+        display: none;
+      }
+   }
+   &.logged-in {
+      .not-logged-in {
+        display: none;
+      }
+   }
+}
+
+.butter-badge {
+  float: left;
+  width: 80px;
+  height: 80px;
+  background-image: url(https://github.com/toolness/openbadges.org/raw/master/static/img/index/101badge.png);
+  background-size: cover;
+  margin-right: 5px;
+}
+
+// Badge tooltip
+.butter-login-btn .butter-tooltip {
+  opacity: 1;
+    > div {
+    margin-top: 10px; 
+    text-align: left;
+    width: 180px;
+  }
+  p {
+    margin-top: 0;
+    margin-bottom: 5px;
+  }
+}
+
+.butter-tooltip .butter-badge {
+  width: 60px;
+  height: 60px;
+  margin-right: 5px;
+}
+
+.butter-badge-link {
+  margin-top: 10px;
+}
+
+.butter-notify.butter-notification-on {
+  visibility: visible;
+  height: auto;
+  padding: 20px 20px;
+  padding-right: 15px; //scrollbars
+}
 
 
 /*********************************************************
@@ -417,5 +489,73 @@
   .butter-scroll-handle {
     width: 8px;
     left: 1px;
+  }
+}
+
+/*********************************************************
+* Tooltip
+*/
+
+[data-tooltip] {
+  position: relative;
+  &:hover > .butter-tooltip {
+    opacity: 1;
+    > div { margin-top: 10px; }
+  }
+}
+
+.butter-tooltip {
+
+  &.tooltip-on {
+    opacity: 1;
+    > div { margin-top: 10px; }
+  }
+
+  opacity: 0;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  margin-top: -10px;
+  margin-left: -80px;
+  z-index: 100000;
+  overflow: hidden;
+  .transition( all .3s ease );
+
+  > div {
+    position: relative;
+    line-height: 1.4;
+    margin-top: -1000px;
+    width: 160px;
+    background: #FFF;
+    text-shadow: none;
+    color: #444;
+    font-size: 12px;
+    padding: 10px;
+    .box-sizing( border-box );
+    border-radius: 2px;
+    text-align: center;
+    border: 1px solid #CCC;
+    box-shadow: 1px 3px 7px -2px rgba( 0, 0, 0, .5 );
+
+    &:after,
+    &:before {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      margin-left: -5px;
+      width: 0; 
+      height: 0; 
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;  
+      border-bottom: 5px solid @baseLight;
+    }
+    &:after {
+      z-index: 100000;
+    }
+    &:before {
+      top: -6px;
+      border-bottom: 5px solid #999;
+    }
   }
 }
