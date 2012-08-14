@@ -13,6 +13,7 @@
         createButterModule( function( butter ) {
           var te = butter.currentMedia.tracks[ 1 ].trackEvents[ 0 ],
               inc = 3,
+              minimumTrackEventSize = 0.2,
               oldStart = te.popcornOptions.start,
               oldEnd = te.popcornOptions.end;
 
@@ -27,7 +28,10 @@
               butter.unlisten( "trackeventupdated" );
 
               equal( te.popcornOptions.start, oldStart, "Start time should be zero" );
-              equal( te.popcornOptions.end, oldEnd - inc, "End should have had increment subtracted from it" );
+              // using Math.max here incase our default trackEvent options change (end > 3)
+              // this way it will use the default trackEvent size (0.2 seconds) or the actual difference if it was larger
+              // than the default trackEvent size
+              equal( te.popcornOptions.end, Math.max( oldEnd - inc, minimumTrackEventSize ), "End should have had increment subtracted from it" );
 
               start();
             });
