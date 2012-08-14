@@ -1,12 +1,31 @@
-<div class="butter-editor share-edito allow-scrollbar">
-  <h1>Sample Editor</h1>
+<div class="butter-editor share-editor allow-scrollbar">
+  <h1>Share your project</h1>
   <div class="error-message-container">
     <div class="error-message"></div>
   </div>
-  <div class="butter-editor-body">
-    <div class="editor-options-wrapper scrollbar-wrapper">
-      <div class="editor-options">
-      </div>
-    </div>
+  <div class="container save-container sub-container">
+    <label>Please give your project a name</label>
+    <span class="butter-project-name-wrapper">
+      <input class="butter-project-name"/>
+    </span>
+    <a class="butter-btn btn-light btn-green butter-login-btn hide-container">Login</a>
+    <a class="butter-btn btn-green butter-save-btn hide-container">Save</a>
+  </div>
+  <div class="container editor-container">
+    <h2>Share</h2>
+    <input class="big butter-project-url" type="text" readonly="readonly"/>
+    <span class="butter-share-facebook"></span>
+    <span class="butter-share-twitter"></span>
+    <span class="butter-share-google"></span>
+    <h2>Embed</h2>
+    <p>Copy and paste the embed code below into any webpage.</p>
+    <textarea class="butter-project-embed-url" readonly="readonly"></textarea>
+    <label>Size</label>
+    <select class="butter-embed-size">
+      <option value="560x340">560x340</option>
+      <option value="640x385">640x385</option>
+      <option value="853x505">853x505</option>
+      <option value="1280x745">1280x745</option>
+    </select>
   </div>
 </div>
