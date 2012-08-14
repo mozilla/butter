@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Embed Preview</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/project-view.css">
+</head>
+<body>
+  <iframe id="iframe"></iframe>
+  <script>
+  document.addEventListener( "DOMContentLoaded", function(){
+    var id = window.location.search.substring( 1 ).split( "id=" )[ 1 ].split( "&" )[ 0 ],
+        embedPath = "-embed.html";
+    document.getElementById( "iframe" ).setAttribute( "src", id + embedPath );
+  }, false);
+    
+  </script>
+</body>
+</html>

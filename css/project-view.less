@@ -1,0 +1,39 @@
+.height-width( @width ) {
+  width: @width;
+  height: .5625 * @width + 22;
+}
+
+iframe {
+  display: block;
+  margin: 60px auto;
+  border: 0;
+}
+
+@small: 560px;
+@medium: 640px;
+@large: 853px;
+@xlarge: 1280px;
+
+@media only screen and ( max-width: @medium ) {
+  iframe {
+    .height-width( @small );
+  }
+}
+
+@media only screen and ( min-width: @medium ) {
+  iframe {
+    .height-width( @medium );
+  }
+}
+
+@media only screen and ( min-width: @large ) {
+  iframe {
+    .height-width( @large );
+  }
+}
+
+@media only screen and ( min-width: @xlarge ) {
+  iframe {
+    .height-width( @xlarge );
+  }
+}
