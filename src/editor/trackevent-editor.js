@@ -412,6 +412,24 @@ define( [ "util/lang", "util/keys", "./base-editor",
       }
     };
 
+    // Apply notifications
+      extendObject.badgeNotification = function ( options ) {
+        var isLoggedIn =  butter.cornfield.authenticated(), // API call here
+            messageEl = options.element || extendObject.rootElement.querySelector( ".butter-notify" );
+
+        messageEl.querySelector( ".butter-notify-content" ).appendChild( document.createTextNode( options.message ) );
+        messageEl.classList.add( "butter-notification-on" );
+
+        if ( isLoggedIn ) {
+          messageEl.classList.add( "logged-in" );
+          options.unlisten();
+        } else {
+          messageEl.classList.add( "not-logged-in" );
+        }
+
+      };
+
+
     // Note: this function is deprecated by .addScrollbar in base-editor.js
     extendObject.addVerticalScrollbar = function( wrapperElement, contentElement, scrollbarContainerElement ) {
       extendObject.vScrollBar = new Scrollbars.Vertical( wrapperElement, contentElement );

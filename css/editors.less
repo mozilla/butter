@@ -165,15 +165,67 @@
     .transition( height 0.35s, margin 0.35s, padding 0.35s );
     overflow: hidden;
     height: 0;
-    color: #D93B21;
+    color: #EEE;
     visibility: hidden;
     width: 300px;
   }
 
   .error-message-container.open {
     padding: 10px 20px;
-    padding-right: 15px; //scrollbars
     background: #F0DDDD;
+  }
+
+  .butter-notify {
+    .transition( height 0.35s, margin 0.35s, padding 0.35s );
+    background: #FFF;
+    color: #555;
+    border-top: 1px solid @baseLightOutline;
+    overflow: hidden;
+    position: absolute;
+    height: 0;
+    bottom: 5px;
+    left: -1px;
+    right: @_editorScrollbarWidth;
+    visibility: hidden;
+    line-height: 18px;
+
+     h3 {
+      font-size: 18px;
+      margin-top: 0;
+     }
+
+     .butter-badge {
+      float: left;
+      width: 80px;
+      height: 80px;
+      background-image: url(https://github.com/toolness/openbadges.org/raw/master/static/img/index/101badge.png);
+      background-size: cover;
+      margin-right: 5px;
+     }
+
+     .butter-badge-link {
+      margin-top: 10px;
+     }
+
+     &.not-logged-in {
+        .logged-in {
+          display: none;
+        }
+     }
+     &.logged-in {
+        .not-logged-in {
+          display: none;
+        }
+     }
+
+
+  }
+
+  .butter-notify.butter-notification-on {
+    visibility: visible;
+    height: auto;
+    padding: 20px 20px;
+    padding-right: 15px; //scrollbars
   }
 
   // Spacing 
