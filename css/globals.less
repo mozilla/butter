@@ -17,6 +17,14 @@
 
 // COLORS
 @COLOR_SELECTION: #FEF49C;
+@baseDark: #052938;
+@baseLight: #F4F5F5;
+@baseStage: #E7EDF0;  
+@green: #3FB58E;
+@red: #D93B21;
+@baseLightOutline: #CCC;
+@baseText: #555;
+
 
 // MIXINS
 .selectable(@param) {
@@ -146,4 +154,27 @@
   -moz-box-align: @property;
   -ms-box-align: @property;
   box-align: @property;
+}
+
+
+.box-sizing( @property ) {
+  // https://developer.mozilla.org/En/CSS/Box-sizing
+  -webkit-box-sizing: @property; // Chrome 10-
+  -moz-box-sizing: @property;
+  -ms-box-sizing: @property; // IE 8+
+  box-sizing: @property; // Opera, Safari 5.1+, Chrome 10+
+}
+
+// *********************************************************
+// POSITIONING
+//
+
+.clearfix() {
+  *zoom: 1;
+  &:before, 
+  &:after { 
+    content: "";
+    display: table; 
+  }
+  &:after { clear: both; }
 }

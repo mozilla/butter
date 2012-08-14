@@ -2,7 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager" ], function( EventManagerWrapper ) {
+define( [ "core/eventmanager", "util/scrollbars" ],
+  function( EventManagerWrapper, Scrollbars ) {
 
   /**
    * Class: BaseEditor
@@ -34,11 +35,20 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ) {
      * @param {DOMElement} parentElement: The element to which the editor's root will be attached
      */
     extendObject.open = function( parentElement ) {
+
       extendObject.parentElement = parentElement;
 
       // Attach the editor's root element to the given parentElement.
       // Do this before calling the open event so that element size and structure are defined.
       extendObject.parentElement.appendChild( extendObject.rootElement );
+
+      // Update scrollbars, add one automatically if an allow-scrollbar class is added
+      // See .addScrollbar for manual settings
+      if ( extendObject.scrollbar ) {
+        extendObject.scrollbar.update();
+      } else if ( extendObject.rootElement.classList.contains( "allow-scrollbar" ) ) {
+        extendObject.addScrollbar();
+      }
 
       // If an open event existed on the events object passed into the constructor, call it
       if ( events.open ) {
@@ -66,7 +76,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ) {
     };
 
     /**
-     * Member: applyExtraTag
+     * Member: applyExtraHeadTags
      *
      * If a tag that belongs in the <head> is present in the given layout, place it in the document's head.
      *
@@ -86,6 +96,35 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ) {
         _extraStyleTags[ x ] = styleNodes[ x ];
         document.head.appendChild( _extraStyleTags[ x ] );
       }
+    };
+
+    /**
+     * Member: addScrollbar
+     *
+     * Creates a scrollbar with the following options:
+     *    outer:      The outer containing element. ( optional. Default = inner.ParentNode )
+     *    inner:      The inner element with the scrollable content.
+     *    container:  The element to append the scrollbar to.
+     */
+    extendObject.addScrollbar = function( options ) {
+      var innerDefault = extendObject.rootElement.querySelector( ".scrollbar-inner" );
+
+      options = options || innerDefault && {
+        inner: innerDefault,
+        outer: extendObject.rootElement.querySelector( ".scrollbar-outer" ) || innerDefault.parentNode,
+        appendTo: extendObject.rootElement.querySelector( ".scrollbar-append-to" ) || extendObject.rootElement
+      };
+
+      if ( !options ) {
+        return;
+      }
+
+      extendObject.scrollbar = new Scrollbars.Vertical( options.outer, options.inner );
+      options.appendTo.appendChild( extendObject.scrollbar.element );
+      
+      extendObject.scrollbar.update();
+      
+      return extendObject.scrollBar;
     };
 
     /**

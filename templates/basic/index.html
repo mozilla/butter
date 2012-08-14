@@ -8,7 +8,6 @@
 
   <meta name="viewport" content="width=device-width">
 
-  <link rel="stylesheet" href="../assets/css/normalise.css">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="../assets/css/jquery-ui/jquery.ui.butter.css">
 
@@ -21,8 +20,8 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js"></script>
   <script src="../assets/editors/editorhelper.js" data-butter-exclude></script>
-  <script src="../assets/editors/photo.js" data-butter-exclude></script>
   <script src="../assets/editors/popup/popup.js" data-butter-exclude></script>
+  <script src="../assets/editors/image/image.js" data-butter-exclude></script>
   <script src="template.js" data-butter-exclude></script>
 
 </head>
@@ -30,9 +29,8 @@
   <script src="controls.js"></script>
   <div class="body-wrapper">
     <div id="embed-wrapper" class="wrapper cf">
-      <div id="video-container" class="video-container">
+      <div id="video-container" class="video-container" data-butter="target">
         <div id="video" class="video" data-butter="media"></div>
-        <div id="overlay" class="video-overlay"></div>
         <button id="controls-big-play-button"><span></span></button>
       </div>
       <div class="sidebar">

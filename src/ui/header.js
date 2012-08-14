@@ -11,7 +11,10 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
     var _this = this,
         _rootElement = Lang.domFragment( HEADER_TEMPLATE, ".butter-header" ),
         _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
-        _authButton = _rootElement.querySelector( ".butter-login-btn" );
+        _buttonGroup = _rootElement.querySelector( ".butter-login-project-info"),
+        _authButton = _rootElement.querySelector( ".butter-login-btn" ),
+        _loginClass = "butter-login-true",
+        _activeClass = "btn-green";
 
     _this.element = _rootElement;
 
@@ -93,8 +96,27 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
       }
     }
 
+    function publish(){
+      butter.cornfield.publish( butter.project.id, function( e ){
+        if( e.error !== "okay" ){
+          showErrorDialog( "There was a problem saving your project. Please try again." );
+          return;
+        }
+        else{
+          var url = e.url;
+          Dialog.spawn( "share", {
+            data: url
+          }).open();
+        }
+      });
+    }
+
+    function prepare() {
+      doSave( publish );
+    }
+
     _saveButton.addEventListener( "click", function( e ){
-      authenticationRequired( doSave );
+      authenticationRequired( prepare );
     }, false );
 
     function doLogout() {
@@ -102,13 +124,19 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
     }
 
     function loginDisplay() {
+      _buttonGroup.classList.add( "btn-group" );
+      _rootElement.classList.add( _loginClass );
+      _authButton.classList.remove( _activeClass );
       _authButton.removeEventListener( "click", authenticationRequired, false );
-      _authButton.innerHTML = "<span class='icon-user'></span> " + butter.cornfield.name();
+      _authButton.innerHTML = "<span class='icon icon-user'></span> " + butter.cornfield.name();
       _authButton.title = "This is you!";
       _authButton.addEventListener( "click", doLogout, false );
     }
 
     function logoutDisplay() {
+      _rootElement.classList.remove( _loginClass );
+      _buttonGroup.classList.remove( "btn-group" );
+      _authButton.classList.add( _activeClass );
       _authButton.removeEventListener( "click", doLogout, false );
       _authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
       _authButton.title = DEFAULT_AUTH_BUTTON_TITLE;

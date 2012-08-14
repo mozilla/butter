@@ -1,281 +1,421 @@
 /*********************************************************
 * EDITORS
 */
+  @_editorHeaderHeight: 45px;
+  @_editorHeaderBorder: 5px;
+  @_editorTitle: 50px;
+  @_editorTabs: 30px;
+  @_editorScrollbarWidth: 15px;
 
-.butter-unit {
-  display: inline-block;
-  margin-left: -4px;
-  font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
-  font-size: 10px;
-  width: auto;
-  min-width: 16px;
-  padding: 8px 5px 4px 5px;
-  font-weight: normal;
-  text-align: center;
-  background-color: #222;
-  color: #999;
-  border: 1px solid black;
-  border-left: 0;
-  border-radius: 0 3px 3px 0;
+/*********************************************************
+* Editor Header
+*/
+
+.butter-editor-header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: -1px;
+  border-bottom: @_editorHeaderBorder solid @green;
+  height: @_editorHeaderHeight;
+  background: @baseDark;
+
+  > ul {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    list-style: none;
+    .clearfix();
+
+    > li {
+      float: left;
+    }
+  }
+} // .butter-editor-header
+
+.butter-editor-header .butter-btn {
+  background: none;
+  border: none;
+  color: #FFF;
+  font-size: 14px;
+  padding: 0 10px;
+  border-radius: 0;
+  height: @_editorHeaderHeight;
+  line-height: @_editorHeaderHeight;
+  >.icon {
+    margin-top: 1px;
+    margin-left: 0;
+    margin-right: 2px;
+  }
+  &.butter-active {
+    background: @green;
+  }
 }
-.butter-form-append input {
-  display: inline-block;
-  border-radius: 3px 0 0 3px;
-  border-right: 1px solid #000;
+
+.butter-editor-close-btn {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: @HEADER_Z_INDEX + 1;
+  &.toggled .icon {
+    background-image: url("../resources/glyphicons-halflings.png");
+    background-position: -432px -72px; /* from icon-chevron-right */
+  }
 }
+
+/*********************************************************
+* Main Editor Area
+*/
+
 .butter-editor-area {
+
   position: fixed;
   z-index: 2000000000;
   top: 0;
   bottom: 0;
   right: 0;
   width: @EDITOR_WIDTH;
-  border: 1px solid #000;
-  background-image: url( "../resources/bg.jpg" );
+  background: @baseLight;
   .transition( right 0.35s );
-  border-left: 1px solid #222;
-  box-shadow: inset 5px 0 5px rgba( 0, 0, 0, .2 );
-  color: #EEE;
+  border-left: 1px solid @baseLightOutline;
 
   &.minimized {
     right: -@EDITOR_WIDTH - 2;
   }
-  .butter-toggle-button {
-    top: 14px;
-    left: -38px;
-    .transform( rotate( -90deg ) );
-  }
+
+  // Tabs, breadcrumbs
   .butter-editor {
-    font: 14px 'MetaBold';
+    color: @baseText;
+    font-size: 13px;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
 
-    .basic-tab {
-      position: absolute;
-      top: 40px;
-      left: 10px;
-    }
-    .advanced-tab {
-      position: absolute;
-      right: 18px;
-      top: 40px;
-    }
-
-    .editor-options-wrapper {
-      top: 45px;
-
-      .basic-options {
-        position: absolute;
-        top: 2px;
-        left: 2px;
-      }
-      .advanced-options {
-        position: absolute;
-        top: 2px;
-        left: 2px;
-      }
-
-      .display-off {
-        display: none;
-      }
-      .font-btn {
-        display: inline-block;
-        padding: 5px 10px 4px;
-        margin-bottom: 0;
-        font-size: 12px;
-        line-height: 18px;
-        color: #EEE;
-        text-align: center;
-        text-shadow: 0 -1px 1px rgba(0,0,0,.75);
-        vertical-align: middle;
-        cursor: pointer;
-        border: 1px solid #222;
-        border-bottom-color: #000;
-        border-radius: 4px;
-        box-shadow: inset 0 1px 0 rgba( 255, 255, 255, .2),
-          0 1px 2px rgba( 0, 0, 0, .2);
-        .gradient( "vertical", #404751, #333, true );
-
-        .italics {
-          font-style: italic;
-        }
-        .weight {
-          font-weight: bold;
-        }
-        .underline {
-          text-decoration: underline;
-        }
-      }
-    }
-    input:focus + .butter-unit {
-      color: #CCC;
-    }
-    h1 {
-      font-size: 16px;
-      color: #FFF;
-      padding: 10px;
-      text-align: center;
+    .butter-editor-tabs {
+      padding: 0 20px;
       margin: 0;
-    }
-    .trackevent-property {
-      padding: 10px;
-      clear: both;
-      select,
-      input {
+      list-style: none;
+      height: @_editorTabs;
+      > li {
         float: left;
-        width: 100%;
+        margin-right: 3px;
+        margin-top: -1px;
       }
-      .butter-form-append {
-        input {
-          width: 106px;
+      .butter-btn {
+        background: lighten( @baseLightOutline, 10% );
+        border-radius: 0;
+        border: 1px solid @baseLightOutline;
+        &.butter-active {
+          background: #FFF;
+          border-top-color: #FFF;
         }
       }
-      .color-wheel {
-        margin-top: 5px;
-      }
     }
-    > .editor-tabs {
+
+    .editor-options {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+    }
+    .advanced-options {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+    }
+
+    .display-off {
+      display: none;
+    }
+ 
+  
+
+    h1 { // Breadcrumbs
+      color: @green;
+      font-size: 16px;
+      height: @_editorTitle;
+      line-height: @_editorTitle;
+      margin: 0;
+      padding: 0 20px;
+      background: #FFF;
+      border-bottom: 1px solid @baseLightOutline;
+      .box-sizing( border-box );
+    }
+
+    // Tabs
+    .editor-tabs {
       position: absolute;
       top: 60px;
       left: 5px;
       bottom: 5px;
       right: 5px;
       border-radius: 5px;
+
+      > button {
+        margin: 10px;
+      }
+
     }
 
-    .error-message-container {
-      margin: 0 5px 0 5px;
-      padding: 0 5px 0 5px;
-      border-radius: 5px;
-      box-shadow: inset 0 0 5px rgba( 0, 0, 0, .8 );
-      background: rgba( 0, 0, 0, .2 );
-      .transition( height 0.35s, margin 0.35s, padding 0.35s );
-      overflow: hidden;
-      height: 0;
-      margin-bottom: 0;
-      visibility: hidden;
-      &.open {
-        margin: 5px;
-        padding: 5px;
-      }
-      > error-message {
-        width: 180px;
-      }
-    }
-
-    > button {
-      margin: 10px;
-    }
   }
 
-  .butter-editor-header {
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    height: 41px;
-    .gradient( "vertical", #242f33, #192124 );
-    box-shadow: 0 1px 0 rgba(57, 75, 81, 0.25);
-    border-bottom: 5px solid #41bb92;
+  // Errors
+  .error-message-container {
+    .transition( height 0.35s, margin 0.35s, padding 0.35s );
+    overflow: hidden;
+    height: 0;
+    color: #D93B21;
+    visibility: hidden;
+    width: 300px;
+  }
 
-    > ul {
-      position: absolute;
-      bottom: 0;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      *zoom: 1;
+  .error-message-container.open {
+    padding: 10px 20px;
+    padding-right: 15px; //scrollbars
+    background: #F0DDDD;
+  }
 
-      &:before,
-      &:after {
-        content: "";
-        display: table;
-        clear: both;
-      }
+  // Spacing 
+ .butter-editor-spacing {
+    padding-right: @EDITOR_WIDTH;
+  }
 
-      > li {
-        float: left;
-        padding: 10px 0 10px 0;
-
-        &.fl-right {
-          float: right;
-        }
-
-        a.butter-btn-dark {
-          padding: 12px;
-          height: 100%;
-          background: none;
-          font-size: 15px;
-          margin-right: 0;
-          border: none;
-          box-shadow: none;
-          border-radius: 0;
-        }
-
-        a.butter-btn-dark.butter-active {
-          background: #41bb92;
-          text-shadow: 0 1px 1px #276f57;
-        }
-      }
-
-    }
-
-    .butter-editor-close-btn {
-      position: fixed;
-      top: 0;
-      right: 0;
-      z-index: @HEADER_Z_INDEX + 1;
-
-      i {
-        background-position: -456px -72px; /* from icon-chevron-right */
-      }
-
-      &.toggled i {
-        background-position: -432px -72px; /* from icon-chevron-right */
-      }
-    }
-
+  .butter-editor-spacing.editor-minimized {
+    padding-right: 0;
   }
 
   .butter-editor-content {
     position: absolute;
-    top: 51px;
+    top: @_editorHeaderHeight + @_editorHeaderBorder;
     bottom: 0;
-    right: 0;
-    left: 0;
+    width: 100%;
+  }
 
-    .scrollbar-wrapper {
-      position: absolute;
-      top: 0;
-      right: 15px;
-      left: 0;
-      bottom: 0;
-      overflow: hidden;
+  .butter-editor-body {
+    position: absolute;
+    top: @_editorTitle;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .butter-editor-body.butter-tabs-spacing {
+    top: @_editorTitle + @_editorTabs;
+  }
+
+  // Scrollbars
+  .scrollbar-outer {
+    position: absolute;
+    top: 0;
+    right: @_editorScrollbarWidth;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+  }
+
+  .allow-scrollbar {
+    .butter-scroll-bar.butter-scroll-bar-v {
+      top: 5px;
+      right: 5px;
+      width: 10px;
+      bottom: 5px;
+    }
+  }
+
+} //editor area
+
+
+/*********************************************************
+* Editor UI styles
+*/
+
+@_editorInnerWidth: 286px;
+@_editorTextIndent: 40px;
+@_editorInputHeight: 32px;
+
+.butter-editor-area {
+
+// Fieldset
+  .trackevent-property,
+  fieldset {
+    border: none;
+    margin: 10px 20px;
+    padding: 0;
+    .clearfix();
+  }
+
+  // Label
+  label.property-name,
+  label {
+    display: block;
+    font-size: 13px;
+    padding: 5px 0;
+  }
+
+
+  // Inputs
+  select,
+  input,
+  textarea {
+    height: @_editorInputHeight;
+    width: 100%;
+    padding: 6px;
+    margin-bottom: 5px;
+    border: 1px solid @baseLightOutline;
+    border-top-color: darken( @baseLightOutline, 10% );
+    border-radius: 2px;
+    .box-sizing( border-box );
+    &:-moz-placeholder {
+      color: #AAA;
+    }
+    &:focus {
+      outline: none;
+      border: 1px solid @green;
+      .transition( border 0.25s ease );
+    }
+  }
+
+  // Textareas
+  textarea {
+    height: 100px;
+    line-height: 1.3;
+  }
+
+  // Radios
+  .butter-form-radio,
+  .butter-form-checkbox {
+    line-height: 1.3em;
+    padding-left: @_editorTextIndent;
+    padding-top: 0;
+    border: none;
+  }
+
+  input[type="radio"],
+  input[type="checkbox"] {
+    float: left;
+    vertical-align: text-top;
+    width: 12px;
+    height: 13px;
+    margin-left: -@_editorTextIndent + 2;
+    margin-top: 2px;
+  }
+
+  input[type="checkbox"] {
+    margin-top: 2px;
+  }
+
+
+  // Error/Invalid
+  input:invalid,
+  textarea:invalid,
+  input:invalid + .butter-unit {
+    border-color: @red;
+  }
+
+
+  // Units
+  .butter-form-append {
+    position: relative;
+    display: inline-block;
+    .clearfix();
+    >input {
+      height: @_editorInputHeight;
+      float: left;
+      border-radius: 2px 0 0 2px;
+      width: 200px;
+    }
+  }
+
+  .butter-unit {
+    height: @_editorInputHeight - 2;
+    position: absolute;
+    right: -2px;
+    bottom: 5px;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 10px;
+    line-height: @_editorInputHeight;
+    padding: 0 5px;
+    min-width: 16px;
+    font-weight: normal;
+    text-align: center;
+    background-color: @baseLight;
+    color: #777;
+    border: 1px solid @baseLightOutline;
+    border-radius: 0 3px 3px 0;
+  }
+
+  // Inline form styles
+
+  .butter-form-inline.form-single {
+    .clearfix();
+    label {
+      .box-sizing( border-box );
+      width: 80px;
+      float: left;
+      padding: 0;
+      margin-top: 5px;
     }
 
-    .allow-scrollbar {
-      .trackevent-property {
-        padding-right: 15px;
-      }
+    > input, textarea, select {
+      float: left;
+      margin-left: 5px;
+      width: @_editorInnerWidth - 85;
+    }
+  }
 
-      .butter-scroll-bar.scroll-bar-v {
-        top: 10%;
-        right: 2px;
-        width: 10px;
-        bottom: 10%;
+  .butter-form-inline.form-half{
+    .butter-form-radio,
+    .butter-form-checkbox {
+      .box-sizing( border-box );
+      width: @_editorInnerWidth / 2;
+      float: left;
+    }
+    > input,
+    > select,
+    .butter-form-append {
+      &:last-child {
+        margin-left: 10px;
+      }
+      position: relative;
+      width: @_editorInnerWidth / 2 - 10;
+      float: left;
+      > input {
+        width: 100%;
       }
     }
   }
 
+} // Fieldset
+
+/*********************************************************
+* Scrollbars
+*/
+
+.butter-scroll-bar {
+  position: absolute;
+  background: darken( @baseLight, 30% );
+  box-shadow: 0 0 1px rgba( 0, 0, 0, 0.3   );
+  border-radius: 15px;
+  .selectable( none );
+  overflow: hidden;
 }
 
-.butter-editor-spacing {
-  padding-right: 200px;
+.butter-scroll-handle {
+  height: 8px;
+  top: 1px;
+  position: absolute;
+  background: darken( @baseLight, 10% );
+  border-radius: 15px;
+  &:hover,
+  &.butter-scollbar-active {
+    background: darken( @baseLight, 50% );
+    cursor: pointer;
+  }
 }
-.butter-editor-spacing.editor-minimized {
-  padding-right: 0;
+
+.butter-scroll-bar-v {
+  .butter-scroll-handle {
+    width: 8px;
+    left: 1px;
+  }
 }

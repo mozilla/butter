@@ -21,10 +21,6 @@
   },
   "templates": {
     "test": "{{templateBase}}test-config.json",
-    "robots": "{{templateBase}}supported/robots/butter/config.json",
-    "popup": "{{templateBase}}supported/popup/config.json",
-    "newscaster": "{{templateBase}}supported/newscaster/butter/config.json",
-    "simple": "{{templateBase}}supported/simple/butter/config.json",
     "basic": "{{templateBase}}basic/config.json"
   },
   "exportAssets": [

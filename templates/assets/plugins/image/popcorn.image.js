@@ -1,7 +1,7 @@
 "use strict";
 
 // PLUGIN: IMAGE
-// Key 
+// Key
 (function ( Popcorn ) {
 
   var APIKEY = "&api_key=b939e5bd8aa696db965888a31b2f1964",
@@ -52,8 +52,7 @@
 
     _setup: function( options ) {
 
-      var _img,
-          _target,
+      var _target,
           _link,
           _image,
           _container,
@@ -110,11 +109,11 @@
 
             if ( !_photos ) {
               return;
-            };
+            }
 
             Popcorn.forEach( _photos, function ( item, i ) {
 
-              _url = ( item.media && item.media.m ) || unescape( item.url_m );
+              _url = ( item.media && item.media.m ) || window.unescape( item.url_m );
 
               if ( i < _count ) {
                 _link = document.createElement( "a" );
@@ -149,8 +148,8 @@
                   ref.classList.remove( "image-plugin-hidden" );
                   _lastVisible = ref;
                   break;
-                };
-              };
+                }
+              }
             };
 
             // Check if should be currently visible
@@ -172,25 +171,41 @@
             getPhotoSet( options.photosetId, _flickrCallback );
           }
         }
+
+        options.toString = function() {
+          if ( options.photosetId ) {
+            return "Photoset Id: " + options.photosetId;
+          } else if ( /^data:/.test( options.src ) ) {
+            // might ba a data URI
+            return options.src.substring( 0 , 30 ) + "...";
+          }
+          return options.src || options.tags || options.username || "Image Plugin";
+        };
       }
     },
 
     start: function( event, options ) {
       if ( options._container ) {
-        options._updateImage && this.on( "timeupdate", options._updateImage );
+        if ( options._updateImage ) {
+          this.on( "timeupdate", options._updateImage );
+        }
         options._container.classList.remove( "image-plugin-hidden" );
       }
     },
 
     end: function( event, options ) {
       if( options._container ) {
-        options._updateImage && this.off( "timeupdate", options._updateImage );
+        if ( options._updateImage ) {
+          this.off( "timeupdate", options._updateImage );
+        }
         options._container.classList.add( "image-plugin-hidden" );
       }
     },
 
     _teardown: function( options ) {
-      options._updateImage && this.off( options._updateImage );
+      if ( options._updateImage ) {
+        this.off( options._updateImage );
+      }
       options._container.parentNode.removeChild( options._container );
       delete options._container;
     },
@@ -234,35 +249,51 @@
           optional: true,
           default: "72157630814677262"
         },
-        width: {
-          elem: "input",
-          type: "number",
-          label: "Width",
-          "default": 100
-        },
         count: {
           elem: "input",
           type: "number",
           label: "Flickr: Count",
           optional: true
         },
+        width: {
+          elem: "input",
+          type: "number",
+          label: "Width",
+          "default": 80,
+          "units": "%"
+        },
         height: {
           elem: "input",
           type: "number",
           label: "Height",
-          "default": 100
+          "default": 80,
+          "units": "%"
         },
         top: {
           elem: "input",
           type: "number",
           label: "Top",
-          "default": 10
+          "default": 10,
+          "units": "%"
         },
         left: {
           elem: "input",
           type: "number",
           label: "Left",
-          "default": 10
+          "default": 10,
+          "units": "%"
+        },
+        transitionInClass: {
+          elem: "input",
+          type: "text",
+          label: "In Transition",
+          optional: true
+        },
+        transitionOutClass: {
+          elem: "input",
+          type: "text",
+          label: "Out Transition",
+          optional: true
         },
         start: {
           elem: "input",
@@ -277,4 +308,4 @@
       }
     }
   });
-})( window.Popcorn );
+}( window.Popcorn ));

@@ -35,6 +35,11 @@ define([], function(){
       editorModule.openEditor( "settings" );
     }, false );
 
+    // This is an easter egg to open a UI kit editor. Hurrah
+    _settingsButton.addEventListener( "dblclick", function( e ) {
+      editorModule.openEditor( "ui-kit" );
+    }, false );
+
     this.setFocus = function( editorName ) {
       var focusCandidate = _focusMap[ editorName ];
       if ( _currentFocus ) {

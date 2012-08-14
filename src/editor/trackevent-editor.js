@@ -19,19 +19,18 @@ define( [ "util/lang", "util/keys", "./base-editor",
                           KeysUtils.TAB,
                           KeysUtils.ESCAPE
                         ],
-      __googleFonts;
-
-  var xhr = new XMLHttpRequest();
-
-  xhr.open( "GET", "https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBw1zCqXJayewLR3qrcWQLhfryqCzbuV60", false );
-  xhr.onreadystatechange = function() {
-    if ( xhr.readyState === 4 ) {
-      if ( xhr.responseText !== "Not Found" ) {
-        __googleFonts = JSON.parse( xhr.responseText ).items;
-      }
-    }
-  };
-  xhr.send();
+      __googleFonts = [
+                        "Gentium Book Basic",
+                        "Lato",
+                        "Vollkorn",
+                        "Merriweather",
+                        "Gravitas One",
+                        "PT Sans",
+                        "Open Sans",
+                        "Bangers",
+                        "Fredoka One",
+                        "Covered By Your Grace"
+                      ];
 
   /**
    * Class: TrackEventEditor
@@ -47,14 +46,9 @@ define( [ "util/lang", "util/keys", "./base-editor",
 
     // Wedge a check for scrollbars into the open event if it exists
     var oldOpenEvent = events.open;
-
-    extendObject.updateScrollBar = function() {
-      extendObject.vScrollBar.update();
-    };
-
     events.open = function() {
       if ( extendObject.vScrollBar ) {
-        extendObject.updateScrollBar();
+        extendObject.vScrollBar.update();
       }
       if ( oldOpenEvent ) {
         oldOpenEvent.apply( this, arguments );
@@ -65,9 +59,9 @@ define( [ "util/lang", "util/keys", "./base-editor",
 
     extendObject.defaultLayouts = __defaultLayouts.cloneNode( true );
 
-    // A vertical scrollbar may be added if lots of editor content is available (perhaps a large manifest is present for a plugin).
+
     // See addVerticalScrollbar below for more details.
-    extendObject.vScrollBars = null;
+    extendObject.vScrollBar = null;
 
     /**
      * Member: createTargetsList
@@ -192,19 +186,28 @@ define( [ "util/lang", "util/keys", "./base-editor",
      * @param {DOMElement} element: Element to which handler is attached
      * @param {TrackEvent} trackEvent: TrackEvent to update
      * @param {String} propertyName: Name of property to update when change is detected
+     * @param {Function} callback: OPTIONAL - Called when update is ready to occur
      */
-     extendObject.attachInputChangeHandler = function( element, trackEvent, propertyName ) {
+     extendObject.attachInputChangeHandler = function( element, trackEvent, propertyName, callback ) {
       element.addEventListener( "blur", function( e ) {
         var updateOptions = {};
         updateOptions[ propertyName ] = element.value;
-        trackEvent.update( updateOptions );
+        if ( callback ) {
+          callback( trackEvent, updateOptions );
+        } else {
+          trackEvent.update( updateOptions );
+        }
       }, false );
 
       if ( element.type === "number" ) {
         element.addEventListener( "change", function( e ) {
           var updateOptions = {};
           updateOptions[ propertyName ] = element.value;
-          trackEvent.update( updateOptions );
+          if ( callback ) {
+            callback( trackEvent, updateOptions );
+          } else {
+            trackEvent.update( updateOptions );
+          }
         }, false );
       }
     };
@@ -225,11 +228,26 @@ define( [ "util/lang", "util/keys", "./base-editor",
           itemLabel = manifestEntry.label || name,
           isStartOrEnd = [ "start", "end" ].indexOf( name.toLowerCase() ) > -1,
           units = manifestEntry.units || ( isStartOrEnd ? "seconds" : "" ),
-          propertyArchetype = __defaultLayouts.querySelector( ".trackevent-property." + elem + ( units ? ".units" : "" ) ).cloneNode( true ),
+          propertyArchetypeSelector,
+          propertyArchetype,
           editorElement,
           option,
           manifestEntryOption,
           i, l;
+
+      // Get the right property archetype
+      propertyArchetypeSelector = ".trackevent-property." + elem;
+      if ( units ) {
+        propertyArchetypeSelector += ".units";
+      }
+      if ( manifestEntry.type === "checkbox" ) {
+        propertyArchetypeSelector += ".checkbox";
+      }
+      if ( manifestEntry.type === "radio" ) {
+        propertyArchetypeSelector += ".radio";
+      }
+
+      propertyArchetype = __defaultLayouts.querySelector( propertyArchetypeSelector ).cloneNode( true );
 
       // If the manifestEntry was specified to be hidden, or part of an advanced set of options don't use traditional
       // element building
@@ -281,7 +299,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
           for ( m = 0, fLen = __googleFonts.length; m < fLen; m++ ) {
             font = document.createElement( "option" );
 
-            font.value = font.innerHTML = __googleFonts[ m ].family;
+            font.value = font.label = __googleFonts[ m ];
             editorElement.appendChild( font );
           }
         }
@@ -392,13 +410,14 @@ define( [ "util/lang", "util/keys", "./base-editor",
           container.appendChild( element );
         }
       }
-
     };
 
+    // Note: this function is deprecated by .addScrollbar in base-editor.js
     extendObject.addVerticalScrollbar = function( wrapperElement, contentElement, scrollbarContainerElement ) {
       extendObject.vScrollBar = new Scrollbars.Vertical( wrapperElement, contentElement );
       scrollbarContainerElement.appendChild( extendObject.vScrollBar.element );
       extendObject.vScrollBar.update();
+
     };
 
   };

@@ -55,7 +55,6 @@ define( [ "text!./default.html", "editor/editor" ],
       open: function ( parentElement, trackEvent ) {
         var targetList,
             optionsContainer = _rootElement.querySelector( ".editor-options" ),
-            optionsWrapper = _rootElement.querySelector( ".editor-options-wrapper" ),
             selectElement;
 
         _this.applyExtraHeadTags( compiledLayout );
@@ -90,19 +89,20 @@ define( [ "text!./default.html", "editor/editor" ],
 
         _this.updatePropertiesFromManifest( trackEvent, null, true );
 
-        _this.addVerticalScrollbar( optionsWrapper, optionsContainer, _rootElement );
-        _this.updateScrollBar();
-
         // Catch the end of a transition for when the error message box opens/closes
-        _messageContainer.parentNode.addEventListener( "transitionend", _this.vScrollBar.update, false );
-        _messageContainer.parentNode.addEventListener( "oTransitionEnd", _this.vScrollBar.update, false );
-        _messageContainer.parentNode.addEventListener( "webkitTransitionEnd", _this.vScrollBar.update, false );
+        if ( _this.scrollbar ) {
+          _messageContainer.parentNode.addEventListener( "transitionend", _this.scrollbar.update, false );
+          _messageContainer.parentNode.addEventListener( "oTransitionEnd", _this.scrollbar.update, false );
+          _messageContainer.parentNode.addEventListener( "webkitTransitionEnd", _this.scrollbar.update, false );
+        }
+        
+        _this.scrollbar.update();
+
 
         // Update properties when TrackEvent is updated
         trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
       },
       close: function () {
-        _this.removeExtraHeadTags();
         _trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
       }
     });
