@@ -43,7 +43,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
    * @param {Object} events: Events such as 'open' and 'close' can be defined on this object to be called at the appropriate times
    */
   return function( extendObject, butter, rootElement, events ) {
-
+  
     // Wedge a check for scrollbars into the open event if it exists
     var oldOpenEvent = events.open;
     events.open = function() {
@@ -413,9 +413,36 @@ define( [ "util/lang", "util/keys", "./base-editor",
     };
 
     // Apply notifications
+
+
+      function authenticationRequired( successCallback, errorCallback ){
+      if ( butter.cornfield.authenticated() && successCallback && typeof successCallback === "function" ) {
+        successCallback();
+        return;
+      }
+
+      butter.cornfield.login(function( response ){
+        if ( !response.error ) {
+          butter.cornfield.list(function( listResponse ) {
+            //loginDisplay();
+            if ( successCallback && typeof successCallback === "function" ) {
+              successCallback();
+            }
+          });
+        }
+        else{
+          //showErrorDialog( "There was an error logging in. Please try again." );
+          if( errorCallback ){
+            errorCallback();
+          }
+        }
+      });
+    }
+
       extendObject.badgeNotification = function ( options ) {
         var isLoggedIn =  butter.cornfield.authenticated(), // API call here
-            messageEl = options.element || extendObject.rootElement.querySelector( ".butter-notify" );
+            messageEl = options.element || extendObject.rootElement.querySelector( ".butter-notify" ),
+            authButton = messageEl.querySelector( ".butter-auth-button" );
 
         messageEl.querySelector( ".butter-notify-content" ).appendChild( document.createTextNode( options.message ) );
         messageEl.classList.add( "butter-notification-on" );
@@ -425,6 +452,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
           options.unlisten();
         } else {
           messageEl.classList.add( "not-logged-in" );
+          authButton.addEventListener( "click", authenticationRequired, false );
         }
 
       };
