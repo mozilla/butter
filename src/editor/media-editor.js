@@ -25,7 +25,9 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
         _media = butter.currentMedia,
         __URL_INPUT_INNER_WRAPPER = LangUtils.domFragment( "<div class=\"media-editor-inner-wrapper\"></div>", "div" ),
         __URL_INPUT_FRAG = LangUtils.domFragment( "<input type=\"text\" class=\"current-media-input\" placeholder=\"http://\"/>", "input" ),
-        __URL_INPUT_DEL_FRAG = LangUtils.domFragment( "<a class=\"delete-media-btn\"><i class=\"icon icon-minus-sign\" ></i></a>", "a" ) ;
+        __URL_INPUT_DEL_FRAG = LangUtils.domFragment( "<a class=\"delete-media-btn\"><i class=\"icon icon-minus-sign\" ></i></a>", "a" ),
+        __MAX_MEDIA_INPUTS = 4,
+        _inputCount = 0;
 
     function updateButterMedia() {
       var urlInputs = _currentMediaWrapper.querySelectorAll( "input" ),
@@ -42,9 +44,9 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
       _media.url = newMediaArr;
     }
 
-    function removeMedia( mediaUrlWrapper ) {
+    function removeMediaWrapper( mediaUrlWrapper ) {
       _currentMediaWrapper.removeChild( mediaUrlWrapper );
-      updateButterMedia();
+      _inputCount--;
     }
 
     function createInput( url ) {
@@ -58,20 +60,22 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
         deleteBtn = __URL_INPUT_DEL_FRAG.cloneNode( true );
         deleteBtn.addEventListener( "click", function( e ) {
           var targ = e.target.parentElement.parentElement;
-          removeMedia( targ );
+          removeMediaWrapper( targ );
         });
 
         wrapper = __URL_INPUT_INNER_WRAPPER.cloneNode( true );
         wrapper.appendChild( urlInput );
         wrapper.appendChild( deleteBtn );
 
-        return wrapper;
+        _currentMediaWrapper.appendChild( wrapper );
+        _inputCount++;
     }
 
     function clearCurrentMediaList() {
       while( _currentMediaWrapper.firstChild ) {
         _currentMediaWrapper.removeChild( _currentMediaWrapper.firstChild );
       }
+      _inputCount = 0;
     }
 
     function setup() {
@@ -82,7 +86,7 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
       }
 
       for ( var i = 0, l = url.length; i < l; i++ ) {
-        _currentMediaWrapper.appendChild( createInput( url[ i ] ) );
+        createInput( url[ i ] );
       }
     }
 
@@ -151,14 +155,14 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
     _confirmNewMedia.addEventListener( "click", function() {
       if ( _newMediaInput.value ) {
         clearCurrentMediaList();
-        _currentMediaWrapper.appendChild( createInput( _newMediaInput.value ) );
+        createInput( _newMediaInput.value );
 
         if ( _alternateNewMediaInputA.value ) {
-          _currentMediaWrapper.appendChild( createInput( _alternateNewMediaInputA.value ) );
+          createInput( _alternateNewMediaInputA.value );
         }
 
         if ( _alternateNewMediaInputB.value ) {
-          _currentMediaWrapper.appendChild( createInput( _alternateNewMediaInputB.value ) );
+          createInput( _alternateNewMediaInputB.value );
         }
 
         _addNewMediaBtn.classList.remove( "hidden" );
@@ -175,7 +179,9 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
     });
 
     _addAlternateSourceBtn.addEventListener( "click", function() {
-      _currentMediaWrapper.appendChild( createInput( "" ) );
+      if ( _inputCount < __MAX_MEDIA_INPUTS ) {
+        createInput( "" );
+      }
     });
 
     _media.listen( "mediacontentchanged", function() {
