@@ -14,8 +14,7 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
     var _element = mediaInstanceRootElement.querySelector( ".tracks-container-wrapper" ),
         _container = mediaInstanceRootElement.querySelector( ".tracks-container" );
 
-    var _hScrollbar,
-        _vScrollbar;
+    var _vScrollbar;
 
     var _droppable;
 
@@ -60,15 +59,13 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
     });
 
     this.setScrollbars = function( hScrollbar, vScrollbar ) {
-      _hScrollbar = hScrollbar;
       _vScrollbar = vScrollbar;
       _vScrollbar.update();
     };
 
     function resetContainer() {
-      _container.style.width = _media.duration * _zoom + "px";
+      _container.style.width = _element.clientWidth / _zoom + "px";
       _vScrollbar.update();
-      _hScrollbar.update();
     }
 
     _media.listen( "mediaready", function(){

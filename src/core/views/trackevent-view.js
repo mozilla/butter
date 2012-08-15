@@ -38,9 +38,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
       }
     }
 
-    function resetContainer() {
-      _element.style.left = _start * _zoom + "px";
-      _element.style.width = ( _end - _start ) * _zoom + "px";
+    function resetContainer(){
+      if ( !_trackEvent.track || !_trackEvent.track._media ) {
+        return;
+      }
+      _element.style.left = _start  / _trackEvent.track._media.duration * 100 + "%";
+      _element.style.width = ( _end - _start ) / _trackEvent.track._media.duration * 100 + "%";
     }
 
     this.setToolTip = function( title ){
@@ -289,8 +292,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
     function movedCallback() {
       _element.style.top = "0px";
-      _start = _element.offsetLeft / _zoom;
-      _end = _start + ( _element.offsetWidth - _padding ) / _zoom;
+      _start = ( _element.offsetLeft / _trackEvent.track.view.element.offsetWidth ) * _trackEvent.track._media.duration;
+      _end = _start + ( _element.offsetWidth / _trackEvent.track.view.element.offsetWidth ) * _trackEvent.track._media.duration;
       _trackEvent.update({
         start: _start,
         end: _end

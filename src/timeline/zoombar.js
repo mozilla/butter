@@ -7,7 +7,6 @@ define( [], function(){
   var ZOOM_LEVELS = 6;
 
   return function( zoomCallback, mediaRootElement ){
-
     var _element = mediaRootElement.querySelector( ".zoom-bar" ),
         _handle = _element.querySelector( ".butter-scroll-handle" ),
         _rect,

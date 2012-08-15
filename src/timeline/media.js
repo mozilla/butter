@@ -4,21 +4,19 @@
 
 define( [ "core/trackevent", "core/track", "core/eventmanager",
           "./track-container", "util/scrollbars", "./timebar",
-          "./zoombar", "./status", "./trackhandles",
+          "./zoombar", "./status", "./trackhandles", "./super-scrollbar",
           "util/lang", "text!layouts/media-instance.html" ],
   function( TrackEvent, Track, EventManagerWrapper,
             TrackContainer, Scrollbars, TimeBar,
-            ZoomBar, Status, TrackHandles,
+            ZoomBar, Status, TrackHandles, SuperScrollbar,
             LangUtils, MEDIA_INSTANCE_LAYOUT ) {
 
-  var MIN_ZOOM = 300,
-      DEFAULT_ZOOM = 0.5;
+  var DEFAULT_ZOOM = 0.5;
 
   function MediaInstance( butter, media ) {
     function zoomCallback( zoomLevel ) {
-      var nextZoom = MIN_ZOOM * zoomLevel + _zoomFactor;
-      if ( nextZoom !== _zoom ) {
-        _zoom = nextZoom;
+      if ( zoomLevel !== _zoom ) {
+        _zoom = zoomLevel;
         _tracksContainer.zoom = _zoom;
         updateUI();
       }
@@ -30,11 +28,10 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _tracksContainer = new TrackContainer( butter, media, _rootElement ),
         _container = _rootElement.querySelector( ".media-container" ),
         _mediaStatusContainer = _rootElement.querySelector( ".media-status-container" ),
-        _hScrollBar = new Scrollbars.Horizontal( _tracksContainer.element, _tracksContainer.container ),
+        _superScrollbar = new SuperScrollbar( _tracksContainer.element, _tracksContainer.container, zoomCallback, _media ),
         _vScrollBar = new Scrollbars.Vertical( _tracksContainer.element, _tracksContainer.container ),
         _shrunken = false,
-        _timebar = new TimeBar( butter, _media, butter.ui.tray.statusArea, _tracksContainer, _hScrollBar ),
-        _zoombar = new ZoomBar( zoomCallback, _rootElement ),
+        _timebar = new TimeBar( butter, _media, butter.ui.tray.statusArea, _tracksContainer ),
         _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer ),
         _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
         _currentMouseDownTrackEvent,
@@ -43,7 +40,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     Status( _media, butter.ui.tray.statusArea );
 
-    _tracksContainer.setScrollbars( _hScrollBar, _vScrollBar );
+    _tracksContainer.setScrollbars( null, _vScrollBar );
 
     EventManagerWrapper( _this );
 
@@ -54,7 +51,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     function snapToCurrentTime(){
       _tracksContainer.snapTo( _media.currentTime );
-      _hScrollBar.update();
     }
 
     _media.listen( "mediaplaying", snapToCurrentTime );
@@ -121,7 +117,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
     function onMediaReady(){
       _zoomFactor = _container.clientWidth / _media.duration;
       _zoom = DEFAULT_ZOOM;
-      _zoombar.zoom( _zoom );
+      _superScrollbar.zoom( _zoom );
       _tracksContainer.zoom = _zoom;
       updateUI();
       _this.dispatch( "ready" );
@@ -132,10 +128,9 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _media.listen( "mediaready", onMediaReady );
 
       _container.appendChild( _tracksContainer.element );
-      _container.appendChild( _hScrollBar.element );
+      _container.appendChild( _superScrollbar.element );
       _container.appendChild( _vScrollBar.element );
       _rootElement.appendChild( _trackHandles.element );
-      _rootElement.appendChild( _zoombar.element );
 
       butter.ui.tray.setMediaInstance( _rootElement );
 
@@ -282,9 +277,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       if( _media.duration ){
         _tracksContainer.update();
         _timebar.update( _zoom );
-        _hScrollBar.update();
         _vScrollBar.update();
-        _zoombar.update();
+        _superScrollbar.update();
         _trackHandles.update();
       }
     }
