@@ -6,9 +6,8 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManagerWr
 
   return function( loader, config ) {
 
-    var PLAYER_TYPE_URL = "{popcorn-js}/players/{type}/popcorn.{type}.js";
-
-    var _snapshot;
+    var PLAYER_TYPE_URL = "{popcorn-js}/players/{type}/popcorn.{type}.js",
+      _snapshot;
 
     EventManagerWrapper( this );
 
@@ -38,7 +37,49 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManagerWr
           check: function(){
             return !!window.Popcorn && !!window.Popcorn.player;
           }
+        },
+
+        // XXXhumph - We're converting players to use wrappers, so preload
+        // the ones we need for those players to work.  See ticket #1994.
+        {
+          type: "js",
+          url: "{popcorn-js}/wrappers/common/popcorn._MediaElementProto.js",
+          check: function(){
+            return !!window.Popcorn && !!window.Popcorn._MediaElementProto;
+          }
+        },
+
+        {
+          type: "js",
+          url: "{popcorn-js}/wrappers/html5/popcorn.HTMLMediaElement.js",
+          check: function(){
+            return !!window.Popcorn &&
+                   !!window.Popcorn.HTMLVideoElement &&
+                   !!window.Popcorn.HTMLAudioElement;
+          }
+        },
+        {
+          type: "js",
+          url: "{popcorn-js}/wrappers/vimeo/popcorn.HTMLVimeoVideoElement.js",
+          check: function(){
+            return !!window.Popcorn && !!window.Popcorn.HTMLVimeoVideoElement;
+          }
+        },
+        {
+          type: "js",
+          url: "{popcorn-js}/wrappers/soundcloud/popcorn.HTMLSoundCloudAudioElement.js",
+          check: function(){
+            return !!window.Popcorn && !!window.Popcorn.HTMLSoundCloudAudioElement;
+          }
+        },
+        {
+          type: "js",
+          url: "{popcorn-js}/wrappers/null/popcorn.HTMLNullVideoElement.js",
+          check: function(){
+            return !!window.Popcorn && !!window.Popcorn.HTMLNullVideoElement;
+          }
         }
+
       ], readyCallback, null, true );
     };
 

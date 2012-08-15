@@ -442,6 +442,7 @@ target['buttered-popcorn'] = function(){
 
   var defaultConfig = require( DEFAULT_CONFIG ),
       popcornDir = defaultConfig.dirs['popcorn-js'].replace( '{{baseDir}}', './' ),
+      wrappers = defaultConfig.wrapper.wrappers,
       players = defaultConfig.player.players,
       plugins = defaultConfig.plugin.plugins,
       popcornFiles = [];
@@ -461,6 +462,14 @@ target['buttered-popcorn'] = function(){
   // plugins
   plugins.forEach( function( plugin ){
     popcornFiles.push( plugin.path.replace( '{{baseDir}}', './' ) );
+  });
+
+  // wrapper base prototype
+  popcornFiles.push( popcornDir + '/wrappers/common/popcorn._MediaElementProto.js' );
+
+  // wrappers
+  wrappers.forEach( function( wrapper ){
+    popcornFiles.push( wrapper.path.replace( '{{baseDir}}', './' ) );
   });
 
   // module for baseplayer
