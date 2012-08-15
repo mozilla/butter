@@ -19,12 +19,11 @@
   #new-media-source-btn, #update-media-source-btn {
 
     .gradient( "center top", #41BB92, #39A480, false );
-
-    box-shadow: 0 1px 0 #65CAA8 inset, 0 -1px 0 #276F57, 0 1px 0 #349574, 1px 0 0 #3AA883, -1px 0 0 #3AA883;
     color: #ffffff;
     text-shadow: 0 1px #276f57;
     padding: 6px 10px;
     font-size: 14px;
+
     i {
       margin-right: 5px;
       position: relative;
@@ -33,6 +32,7 @@
       height: 14px;
       width: 14px;
     }
+
     &.hidden {
       display: none;
     }
@@ -49,6 +49,14 @@
     &:hover {
       cursor: pointer;
     }
+  }
+
+  #new-media-source-btn:hover, #update-media-source-btn:hover {
+    box-shadow: 0 1px 0 #65CAA8 inset, 0 -1px 0 #276F57, 0 1px 0 #349574, 1px 0 0 #3AA883, -1px 0 0 #3AA883;
+  }
+
+  #cancel-media-source-btn:hover, #add-alternate-media-source-btn:hover {
+    box-shadow: 0 1px 0 #EBEBEB inset, 0 -1px 0 #EEEBEE, 0 1px 0 #EEEEEE, 1px 0 0 #EEEEEE, -1px 0 0 #EBEBEB;
   }
 
   #add-new-media-source {
@@ -105,13 +113,12 @@
   div.media-editor-inner-wrapper {
     &:first-child input {
       font-size: 14px;
+      width: 100%;
+      margin-bottom: 15px;
     }
     
-    &:not(:first-child) {
-      margin-left: 5%;
-      input {
-        width: 84%;
-      }
+    &:not(:first-child) input {
+      width: 90%;
     }
 
     &:nth-of-type(2) {
@@ -166,7 +173,7 @@
 
   span a.delete-media-btn {
     height: 32px;
-    width: 32px;
+    width: 0;
     display: inline-block;
     cursor: pointer;
     margin-left: 10px;

@@ -76,15 +76,15 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
           updateButterMedia();
         });
 
-        deleteBtn = __URL_INPUT_DEL_FRAG.cloneNode( true );
-        deleteBtn.addEventListener( "click", removeBtnHandler, false );
-
         wrapper = __URL_INPUT_INNER_WRAPPER.cloneNode( true );
         wrapper.appendChild( urlInput );
-        wrapper.appendChild( deleteBtn );
 
         if ( !_currentMediaWrapper.firstChild ) {
           wrapper.appendChild( __PRIMARY_MEDIA_LABEL.cloneNode( true ) );
+        } else {
+          deleteBtn = __URL_INPUT_DEL_FRAG.cloneNode( true );
+          deleteBtn.addEventListener( "click", removeBtnHandler, false );
+          wrapper.appendChild( deleteBtn );
         }
 
         _currentMediaWrapper.appendChild( wrapper );
