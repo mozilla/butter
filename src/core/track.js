@@ -13,9 +13,10 @@ define( [
           TrackView
         ){
 
-  var __guid = 0;
+  var __guid = 0,
+      Track;
 
-  var Track = function( options ){
+  Track = function( options ) {
     options = options || {};
 
     var _trackEvents = [],
@@ -181,7 +182,13 @@ define( [
       return trackEvent;
     }; //addTrackEvent
 
-    this.removeTrackEvent = function( trackEvent ){
+    /*
+     * Method removeTrackEvent
+     *
+     * @param {Object} trackEvent: The trackEvent to be removed from this track
+     * @param {Boolean} expectingTrackEvent: if true means we should not remove this track if it is empty as we are expecting a new trackEvent soon. This mostly comes in to play when adding/removing ghost trackEvents.
+     */
+    this.removeTrackEvent = function( trackEvent, expectingTrackEvent ){
       var idx = _trackEvents.indexOf( trackEvent );
       if ( idx > -1 ) {
         _trackEvents.splice( idx, 1 );
@@ -193,10 +200,12 @@ define( [
         _view.removeTrackEvent( trackEvent );
         trackEvent.unbind();
         _this.dispatch( "trackeventremoved", trackEvent );
+        if ( !_trackEvents.length && !expectingTrackEvent ) {
+          _this._media.removeTrack( _this );
+        }
         return trackEvent;
-      } //if
-
-    }; //removeEvent
+      }
+    };
 
     this.deselectEvents = function( except ){
       for( var i=0, l=_trackEvents.length; i<l; ++i ){

@@ -120,14 +120,15 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
       if ( ghost && ghost.track ) {
         newTrack = ghost.track;
         if ( !newTrack.isGhost ) {
-          trackEvent.track.removeTrackEvent( trackEvent );
+          // make sure the track doesn't get cleared if it's empty by passing in true
+          trackEvent.track.removeTrackEvent( trackEvent, true );
           newTrackEvent = newTrack.addTrackEvent( trackEvent );
           trackEvent.view.cleanupGhost( currentTrack );
           correctOverlappingTrackEvents( newTrackEvent );
           cleanUpGhostTracks();
         }
         else {
-          newTrack = replaceGhostWithTrack( newTrack );
+          newTrack = replaceGhostWithTrack( newTrack, true );
           trackEvent.track.removeTrackEvent( trackEvent );
           newTrackEvent = newTrack.addTrackEvent( trackEvent );
           trackEvent.view.cleanupGhost();

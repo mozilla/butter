@@ -8,7 +8,7 @@
     <script src="../../butter.inject.js"></script>
     <script src="../../test-utils.js"></script>
     <script>
-      asyncTest( "Add, retrieve, and remove TrackEvent", 13, function(){
+      asyncTest( "Add, retrieve, and remove TrackEvent", 12, function(){
 
         createButterCore( function( butter ){
 
@@ -46,11 +46,6 @@
           ok( t.getTrackEventByName( "TrackEvent 1" ) === undefined, "TrackEvent 1 doesn't exist" );
           ok( t.getTrackEventByName( "TrackEvent 2" ) === undefined, "TrackEvent 2 doesn't exist" );
           ok( t.getTrackEventByName( "TrackEvent 3" ) === undefined, "TrackEvent 3 doesn't exist" );
-
-          var tracks = butter.tracks;
-          for ( var track in tracks ) {
-            ok( tracks[ track ].trackEvents.length === 0, "No TrackEvents remain" );
-          }
 
           start();
         });
