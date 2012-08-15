@@ -9,7 +9,7 @@ define( [], function(){
       SCROLL_DISTANCE = 20,
       MOUSE_SCRUBBER_PIXEL_WINDOW = 3;
 
-  return function( butter, parentElement, media, tracksContainer, hScrollbar ){
+  return function( butter, parentElement, media, tracksContainer ){
     var _container = parentElement,
         _node = _container.querySelector( ".time-bar-scrubber-node" ),
         _line = _container.querySelector( ".time-bar-scrubber-line" ),
@@ -75,8 +75,6 @@ define( [], function(){
       _lastZoom = _zoom;
 
     } //setNodePosition
-
-    hScrollbar.listen( "scroll", setNodePosition );
 
     function onMouseUp( e ){
       _seekMouseUp = true;

@@ -65,7 +65,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
     _element.setAttribute( "data-butter-track-id", _id );
 
     function resetContainer(){
-      _element.style.width = ( _duration * _zoom ) + "px";
+      _element.style.width = "100%";
     } //resetContainer
 
     Object.defineProperties( this, {
