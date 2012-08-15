@@ -144,7 +144,7 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
     this.trackEventDropped = function( trackEvent, newTrack, startTime ) {
       var newTrackEvent,
           oldTrack = trackEvent.track,
-          corn = trackEvent.popcornOptions,
+          popcornOptions = trackEvent.popcornOptions,
           ghost = trackEvent.view.ghost,
           ghostTrack,
           duration;
@@ -170,16 +170,15 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
       }
       else {
         oldTrack.removeTrackEvent( trackEvent );
-        duration = corn.end - corn.start;
-        corn.start = startTime;
-        corn.end = corn.start + duration;
+        duration = popcornOptions.end - popcornOptions.start;
+        popcornOptions.start = startTime;
+        popcornOptions.end = popcornOptions.start + duration;
         newTrackEvent = newTrack.addTrackEvent( trackEvent );
       }
 
       correctOverlappingTrackEvents( newTrackEvent );
       cleanUpGhostTracks();
     };
-
   }
 
   return TrackEventDragManager;

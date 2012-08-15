@@ -67,7 +67,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
      */
     this.createGhost = function( track ) {
       if ( _ghost ) {
-        throw "Ghost already exists for this track event!";
+        return _ghost;
       }
 
       var clone = _element.cloneNode( false );
@@ -85,7 +85,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
     /*
      * Member: cleanupGhost
      *
-     * Removes this trackEvents ghost and makes sure isGhost is set to false
+     * Removes this trackEvent's ghost and makes sure isGhost is set to false
      */
     this.cleanupGhost = function() {
       _ghost.track.view.removeTrackEventGhost( _ghost );

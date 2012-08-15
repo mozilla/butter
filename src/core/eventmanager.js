@@ -141,7 +141,7 @@ define( [], function(){
       e = {
         type: eventName.type,
         target: eventName.target,
-        data: eventName.data,
+        data: eventName.data
       };
       eventName = e.type;
     } else {

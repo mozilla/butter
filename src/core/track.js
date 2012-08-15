@@ -28,6 +28,11 @@ define( [
 
     _this._media = null;
     _this.order = 0;
+    /*
+     * ghost stores a reference to the current track's ghost.
+     * A ghost track is created when a trackevent overlaps another trackevent and there is
+     * no room for a ghost trackevent to exist.
+     */
     _this.ghost = null;
 
     EventManagerWrapper( _this );

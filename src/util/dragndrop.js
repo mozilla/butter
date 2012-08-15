@@ -39,7 +39,7 @@ define([], function(){
     }
   }
 
-  var onDragged = function( e ){
+  function onDragged( e ) {
     __mouseLast[ 0 ] = __mousePos[ 0 ];
     __mouseLast[ 1 ] = __mousePos[ 1 ];
     __mousePos = [ e.clientX, e.clientY ];

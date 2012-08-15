@@ -47,7 +47,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
             trackEventView = dropped.data;
             track = trackEventView.trackEvent.track;
 
-            //Only rearrange trackEvent if it was moved *onto* this track
+            // Only rearrange trackEvent if it was moved *onto* this track
             if ( track && track !== _track ) {
               left = droppedElement.offsetLeft;
               start = left / trackRect.width * _duration;
@@ -160,11 +160,14 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       ]);
     };
 
+    // Creates a ghost trackEvent on this track. This means a cloned representation of a currently overlapping trackEvent
+    // is added to this track.
     this.addTrackEventGhost = function( ghost ) {
       ghost.track = _track;
       _element.appendChild( ghost.element );
     };
 
+    // Removes a ghost trackEvent from this track
     this.removeTrackEventGhost = function( ghost ) {
       ghost.track = null;
       _element.removeChild( ghost.element );
