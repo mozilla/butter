@@ -17,7 +17,10 @@
           }
           if ( options.count > 0 || +options.loop === 0 ) {
             this.currentTime( options.start );
-            options.loop && options.count--;
+            
+            if ( options.loop ) {
+              options.count--;
+            }
           } else {
             options.count = +options.loop;
           }

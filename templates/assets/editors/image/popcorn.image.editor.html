@@ -22,7 +22,7 @@
         </div>
 
         <div class="editor-radio-wrapper">
-          <input type="radio" name="source-type" disabled="true" id="editor-dragdrop-radio" class="editor-input-radio" />
+          <input type="radio" name="source-type" id="editor-dragdrop-radio" class="editor-input-radio" disabled/>
           <div class="editor-radio-label">
             You can drop an image from your desktop on the container
           </div>
@@ -43,7 +43,7 @@
 
           <input type="text" id="editor-flickr-tag" class="editor-text-input"/><br />
           Gallery URL<br />
-          <input input="url" id="editor-flickr-url" class="editor-text-input"/><br />
+          <input type="url" id="editor-flickr-url" class="editor-text-input"/><br />
           <div class="editor-flickr-number">
             Number
             <input type="number" id="editor-flickr-number" class="editor-text-input" />
@@ -55,15 +55,15 @@
           Transition<br />
           in<br />
           <select class="editor-select" id="editor-in-select">
-            <option value="fade">fade</options>
-            <option value="pop">pop</options>
+            <option value="fade">fade</option>
+            <option value="pop">pop</option>
             <option value="">none</option>
           </select>
-          </br />
+          <br />
           Out<br />
           <select class="editor-select" id="editor-out-select">
-            <option value="fade">fade</options>
-            <option value="pop">pop</options>
+            <option value="fade">fade</option>
+            <option value="pop">pop</option>
             <option value="">none</option>
           </select>
         </div>

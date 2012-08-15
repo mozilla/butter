@@ -99,12 +99,6 @@
           // See DURATION section of popcorn.transition.css
           transitionSpeed = options.transitionSpeed,
           transitionClass = "popcorn-transition-" + transitionSpeed,
-          transitionValues = {
-            slow: 0.6,
-            fast: 0.15,
-            normal: 0.3
-          },
-          transitionDuration = transitionValues[ transitionSpeed ],
           i, l;
 
       // --------------------------------------
@@ -170,4 +164,4 @@
       }
     }
   });
-})( window.Popcorn );
+}( window.Popcorn ));
