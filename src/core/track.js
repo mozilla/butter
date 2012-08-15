@@ -3,13 +3,11 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [
-          "./logger",
           "./eventmanager",
           "./trackevent",
           "./views/track-view"
         ],
         function(
-          Logger,
           EventManagerWrapper,
           TrackEvent,
           TrackView
@@ -21,16 +19,21 @@ define( [
     options = options || {};
 
     var _trackEvents = [],
-        _id = "Layer" + __guid++,
         _target = options.target,
-        _logger = new Logger( _id ),
-        _name = options.name || _id,
-        _view = new TrackView( this ),
+        _id = "" + __guid++,
+        _name = options.name || "Layer" + _id,
+        _view = new TrackView( _id, this ),
         _popcornWrapper = null,
         _this = this;
 
     _this._media = null;
     _this.order = 0;
+    /*
+     * ghost stores a reference to the current track's ghost.
+     * A ghost track is created when a trackevent overlaps another trackevent and there is
+     * no room for a ghost trackevent to exist.
+     */
+    _this.ghost = null;
 
     EventManagerWrapper( _this );
 
@@ -73,8 +76,7 @@ define( [
           for( var i=0, l=_trackEvents.length; i<l; i++ ) {
             _trackEvents[ i ].target = val;
             _trackEvents[ i ].update({ target: val });
-          } //for
-          _logger.log( "target changed: " + val );
+          }
         }
       },
       name: {
@@ -89,8 +91,7 @@ define( [
       },
       id: {
         enumerable: true,
-        configurable: false,
-        get: function(){
+        get: function() {
           return _id;
         }
       },
@@ -160,7 +161,6 @@ define( [
       if( _target ){
         trackEvent.target = _target;
       }
-
       // Remember the trackevent
       _trackEvents.push( trackEvent );
 
@@ -174,10 +174,9 @@ define( [
       // Add it to the view.
       _view.addTrackEvent( trackEvent );
 
-      // Tell everyone a new trackevent was born (and raised).
-      _this.dispatch( "trackeventadded", trackEvent );
-
       trackEvent.selected = oldSelected;
+
+      _this.dispatch( "trackeventadded", trackEvent );
 
       return trackEvent;
     }; //addTrackEvent
@@ -206,6 +205,7 @@ define( [
         } //if
       } //for
     }; //deselectEvents
+
   }; //Track
 
   return Track;

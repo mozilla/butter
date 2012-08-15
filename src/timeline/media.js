@@ -194,10 +194,10 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         var track = e.data;
         track.view.unlisten( "plugindropped", onPluginDropped );
         track.view.unlisten( "trackeventdropped", onTrackEventDropped );
-        track.view.listen( "trackeventmousedown", onTrackEventMouseDown );
+        track.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
         if( _trackEventHighlight === "hover" ){
-          track.view.listen( "trackeventmouseover", onTrackEventMouseOver );
-          track.view.listen( "trackeventmouseout", onTrackEventMouseOut );
+          track.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
+          track.view.unlisten( "trackeventmouseout", onTrackEventMouseOut );
         }
       });
 
@@ -233,6 +233,9 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         type: type
       });
 
+      // Call this first to make sure it's in the right place.
+      _tracksContainer.trackEventDragManager.correctOverlappingTrackEvents( trackEvent );
+
       trackEvent.update();
 
       if( defaultTarget ){
@@ -241,18 +244,12 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     }
 
-    function onTrackEventDropped( e ){
-      var search = _media.findTrackWithTrackEventId( e.data.trackEvent ),
-          trackEvent = search.trackEvent,
-          corn = trackEvent.popcornOptions;
+    function onTrackEventDropped( e ) {
+      var trackEvent = e.data.trackEvent,
+          newTrack = e.data.track;
 
-      search.track.removeTrackEvent( trackEvent );
-
-      var duration = corn.end- corn.start;
-      corn.start = e.data.start;
-      corn.end = corn.start + duration;
-
-      e.data.track.addTrackEvent( trackEvent );
+      _tracksContainer.trackEventDragManager.trackEventDropped( trackEvent, newTrack, e.data.start );
+      _vScrollBar.update();
     }
 
     this.destroy = function() {

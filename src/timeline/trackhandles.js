@@ -21,6 +21,21 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
       butter.currentMedia.addTrack();
     }, false );
 
+    function sortHandles(){
+      if ( butter.currentMedia ) {
+        var tracks = butter.currentMedia.orderedTracks,
+            trackHandle;
+        for ( var i = 0, l = tracks.length; i < l; ++i ) {
+          trackHandle = _tracks[ tracks[ i ].id ];
+          // It *is* possible for there to be more tracks than there are track handles while importing, so
+          // do a check here to see if a handle exists first before ordering.
+          if ( trackHandle ) {
+            _listElement.appendChild( trackHandle.element );
+          }
+        }
+      }
+    }
+
     var _sortable = DragNDrop.sortable( _listElement, {
       change: function( elements ){
         for( var i=0, l=elements.length; i<l; ++i ){
@@ -131,6 +146,8 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
       };
 
       _addTrackButton.style.top = _listElement.offsetHeight - ADD_TRACK_BUTTON_Y_ADJUSTMENT + "px";
+
+      sortHandles();
     }
 
     var existingTracks = _media.tracks;
