@@ -120,7 +120,8 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
       if ( ghost && ghost.track ) {
         newTrack = ghost.track;
         if ( !newTrack.isGhost ) {
-          trackEvent.track.removeTrackEvent( trackEvent );
+          // make sure the track doesn't get cleared if it's empty by passing in true only if we were ghosting on the current track
+          trackEvent.track.removeTrackEvent( trackEvent, ( newTrack.id === trackEvent.track.id ) && true );
           newTrackEvent = newTrack.addTrackEvent( trackEvent );
           trackEvent.view.cleanupGhost( currentTrack );
           correctOverlappingTrackEvents( newTrackEvent );
