@@ -46,22 +46,57 @@ define( [ "util/lang", "util/keys", "./base-editor",
 
     // Wedge a check for scrollbars into the open event if it exists
     var oldOpenEvent = events.open;
+
     events.open = function() {
-      if ( extendObject.vScrollBar ) {
-        extendObject.vScrollBar.update();
-      }
+      var basicButton = document.querySelector( ".basic-tab" ),
+          advancedButton = document.querySelector( ".advanced-tab" ),
+          basicTab = document.querySelector( ".editor-options" ),
+          advancedTab = document.querySelector( ".advanced-options" ),
+          wrapper = rootElement.querySelector( ".scrollbar-outer" );
+
       if ( oldOpenEvent ) {
         oldOpenEvent.apply( this, arguments );
+
+        // Code for handling basic/advanced options tabs are going to be the same. If the user defined these buttons
+        // handle it for them here rather than force them to write the code in their editor
+        if ( basicButton && advancedButton ) {
+          basicButton.addEventListener( "mouseup", function( e ) {
+            if ( basicTab.classList.contains( "display-off" ) ) {
+              basicTab.classList.toggle( "display-off" );
+              advancedTab.classList.toggle( "display-off" );
+              basicButton.classList.add( "butter-active" );
+              advancedButton.classList.remove( "butter-active" );
+              extendObject.scrollbar.update();
+            }
+          });
+
+          advancedButton.addEventListener( "mouseup", function( e ) {
+            if ( !basicTab.classList.contains( "display-off" ) ) {
+              basicTab.classList.toggle( "display-off" );
+              advancedTab.classList.toggle( "display-off" );
+              basicButton.classList.remove( "butter-active" );
+              advancedButton.classList.add( "butter-active" );
+              extendObject.scrollbar.update();
+            }
+          });
+
+          // Override default scrollbar to account for both tab containers
+          extendObject.addScrollbar({
+            inner: wrapper,
+            outer: wrapper,
+            appendTo: rootElement.querySelector( ".scrollbar-append-to" )
+          });
+        }
+      }
+
+      if ( extendObject.scrollbar ) {
+        extendObject.scrollbar.update();
       }
     };
 
     BaseEditor( extendObject, butter, rootElement, events );
 
     extendObject.defaultLayouts = __defaultLayouts.cloneNode( true );
-
-
-    // See addVerticalScrollbar below for more details.
-    extendObject.vScrollBar = null;
 
     /**
      * Member: createTargetsList
@@ -410,14 +445,6 @@ define( [ "util/lang", "util/keys", "./base-editor",
           container.appendChild( element );
         }
       }
-    };
-
-    // Note: this function is deprecated by .addScrollbar in base-editor.js
-    extendObject.addVerticalScrollbar = function( wrapperElement, contentElement, scrollbarContainerElement ) {
-      extendObject.vScrollBar = new Scrollbars.Vertical( wrapperElement, contentElement );
-      scrollbarContainerElement.appendChild( extendObject.vScrollBar.element );
-      extendObject.vScrollBar.update();
-
     };
 
   };

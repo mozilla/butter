@@ -78,7 +78,6 @@
 
       var basicContainer = _rootElement.querySelector( ".editor-options" ),
           advancedContainer = _rootElement.querySelector( ".advanced-options" ),
-          wrapper = _rootElement.querySelector( ".scrollbar-outer" ),
           pluginOptions = {};
 
       function callback( elementType, element, trackEvent, name ) {
@@ -171,15 +170,6 @@
       _this.createPropertiesFromManifest( trackEvent, callback, null, basicContainer, advancedContainer );
       attachHandlers();
       _this.updatePropertiesFromManifest( trackEvent );
-
-      // Override default scrollbar to account for both tab containers
-      _this.addScrollbar({
-        inner: wrapper,
-        outer: wrapper,
-        appendTo: _rootElement.querySelector( ".scrollbar-append-to" )
-      });
-
-      _this.scrollbar.update();
     }
 
     // Extend this object to become a BaseEditor
@@ -192,35 +182,9 @@
           setErrorState( false );
         });
         setup( trackEvent );
-        _this.applyExtraHeadTags( compiledLayout );
-
-        var basicButton = document.querySelector( ".basic-tab" ),
-            advancedButton = document.querySelector( ".advanced-tab" ),
-            basicTab = document.querySelector( ".editor-options" ),
-            advancedTab = document.querySelector( ".advanced-options" );
-
-        basicButton.addEventListener( "mouseup", function( e ) {
-          if ( basicTab.classList.contains( "display-off" ) ) {
-            basicTab.classList.toggle( "display-off" );
-            advancedTab.classList.toggle( "display-off" );
-            basicButton.classList.add( "butter-active" );
-            advancedButton.classList.remove( "butter-active" );
-            _this.scrollbar.update();
-          }
-        });
-
-        advancedButton.addEventListener( "mouseup", function( e ) {
-          if ( !basicTab.classList.contains( "display-off" ) ) {
-            basicTab.classList.toggle( "display-off" );
-            advancedTab.classList.toggle( "display-off" );
-            basicButton.classList.remove( "butter-active" );
-            advancedButton.classList.add( "butter-active" );
-            _this.scrollbar.update();
-          }
-        });
       },
       close: function() {
-        _this.removeExtraHeadTags();
+
       }
     });
 
