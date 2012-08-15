@@ -28,9 +28,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
         drop: function( dropped, mousePosition ) {
           var droppedElement = dropped.data ? dropped.data.element : dropped,
               trackEventView,
-              track;
-
-          var draggableType = droppedElement.getAttribute( "data-butter-draggable-type" ),
+              track,
+              draggableType = droppedElement.getAttribute( "data-butter-draggable-type" ),
               start,
               left,
               trackRect = _element.getBoundingClientRect();
@@ -176,36 +175,19 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       return !( te1.left > te2.right || te1.right < te2.left );
     }
 
-    this.findOverlappingTrackEventFromRect = function( rect ) {
-      var otherTrackEventView,
-          rect1 = rect,
-          rect2;
-      
-      // If the rect's width is 0 here, it's likely that we're not even attached to the DOM
-      if ( rect1.width === 0 ) {
-        return null;
-      }
-
-      // loop over all the trackevents for this track and see if we overlap
-      for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
-        otherTrackEventView = _trackEvents[ i ];
-        // make sure that we don't check against the same trackEvent
-        if ( !otherTrackEventView.dragging ) {
-          rect2 = otherTrackEventView.element.getBoundingClientRect();
-          // if a trackevent overlaps and it's not a ghost...
-          if ( !otherTrackEventView.isGhost && isOverlapping( rect1, rect2 ) ) {
-            return otherTrackEventView.trackEvent;
-          }
-        }
-      }
-      return null;
-    };
-
-    this.findOverlappingTrackEvent = function( trackEventView ) {
+    this.findOverlappingTrackEvent = function( trackEventView, fromRect ) {
       var otherTrackEventView,
           rect1 = trackEventView.element.getBoundingClientRect(),
           rect2;
 
+      function findOverlap( teView1, teView2 ) {
+        if ( !fromRect ) {
+          return !!( teView1 !== teView2 && !teView2.dragging );
+        } else {
+          return !teView2.dragging;
+        }
+      }
+
       // If the rect's width is 0 here, it's likely that we're not even attached to the DOM
       if ( rect1.width === 0 ) {
         return null;
@@ -215,7 +197,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
         otherTrackEventView = _trackEvents[ i ];
         // make sure that we don't check against the same trackEvent
-        if ( trackEventView !== otherTrackEventView && !otherTrackEventView.dragging ) {
+        if ( findOverlap( trackEventView, otherTrackEventView ) ) {
           rect2 = otherTrackEventView.element.getBoundingClientRect();
           // if a trackevent overlaps and it's not a ghost...
           if ( !otherTrackEventView.isGhost && isOverlapping( rect1, rect2 ) ) {

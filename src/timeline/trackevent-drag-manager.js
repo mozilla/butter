@@ -13,13 +13,11 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
       var track = trackEvent.track,
           trackView = track.view,
           trackEventView = trackEvent.view,
-          nextTrack = track,
-          trackEventViewRect;
+          nextTrack = track;
 
       if ( trackView.findOverlappingTrackEvent( trackEventView ) ) {
-        trackEventViewRect = trackEventView.element.getBoundingClientRect();
         track.removeTrackEvent( trackEvent );
-        while ( trackView.findOverlappingTrackEventFromRect( trackEventViewRect ) ) {
+        while ( trackView.findOverlappingTrackEvent( trackEventView, true ) ) {
           nextTrack = _media.getNextTrack( nextTrack ) || _media.addTrack();
           trackView = nextTrack.view;
         }

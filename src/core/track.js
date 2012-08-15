@@ -48,9 +48,7 @@ define( [
 
     this.updateTrackEvents = function() {
       for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
-        if ( !_trackEvents[ i ].view.ghost ) {
-          _trackEvents[ i ].update();
-        }
+        _trackEvents[ i ].update();
       }
     };
 
