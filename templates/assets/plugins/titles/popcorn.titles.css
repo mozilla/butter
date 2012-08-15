@@ -1,0 +1,45 @@
+.popcorn-titles {
+  color: #FFF;
+}
+
+.center {
+  top: 50%;
+  left: 50%;
+}
+
+.right {
+  right: 0;
+  top: 50%;
+}
+
+.left {
+  left: 0;
+  top: 50%;
+}
+
+.bottom {
+  bottom: 0;
+  left: 50%;
+}
+
+.top {
+  left: 50%;
+  top: 0;
+}
+
+/* Placeholders */
+.popcorn-titles .sparkly {
+
+}
+
+.popcorn-titles .shiny {
+
+}
+
+.popcorn-titles .big {
+
+}
+
+.popcorn-titles .small {
+
+}
