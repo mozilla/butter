@@ -43,6 +43,10 @@
       {
         "type": "stop",
         "path": "{{baseDir}}templates/assets/plugins/stop/popcorn.stop.js"
+      },
+      {
+        "type": "jump",
+        "path": "{{baseDir}}templates/assets/plugins/jump/popcorn.jump.js"
       }
     ],
     "defaults": [
@@ -53,7 +57,8 @@
       "twitter",
       "image",
       "repeat",
-      "stop"
+      "stop",
+      "jump"
     ]
   },
   "editor": {
