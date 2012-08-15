@@ -9,6 +9,10 @@
     return document.createElement( type );
   }
 
+  function normalize( value, minWidth, maxWidth ) {
+    return Math.max( Math.min( value || 0, maxWidth ), minWidth );
+  }
+
   function getFragment( inputString ) {
     //grabbed from butter util methods
     var range = document.createRange(),
@@ -27,15 +31,14 @@
     }
 
     return fragment;
-  };
+  }
 
   var WikipediaDefinition = {
 
     _setup : function( options ) {
       // declare needed variables
       // get a guid to use for the global wikicallback function
-      var _text,
-          _title,
+      var _title,
           _titleDiv,
           _titleTextArea,
           _mainContentDiv,
@@ -55,13 +58,13 @@
       options._container = _container = create( "div" );
 
       _container.classList.add( "wikipedia-inner-container" );
-      _container.style.width = ( options.width || _manifestOpts.width[ "default" ] ) + "%";
-      _container.style.height = ( options.height || _manifestOpts.height[ "default" ] ) + "%";
-      _container.style.top = ( options.top || _manifestOpts.top[ "default" ] ) + "%";
-      _container.style.left = ( options.left || _manifestOpts.left[ "default" ] ) + "%";
+      _container.style.width = normalize( options.width || _manifestOpts.width[ "default" ], 20, 100 ) + "%";
+      _container.style.height = normalize( options.height || _manifestOpts.height[ "default" ], 30, 100 ) + "%";
+      _container.style.top = normalize( options.top || _manifestOpts.top[ "default" ], 0, 70 ) + "%";
+      _container.style.left = normalize( options.left || _manifestOpts.left[ "default" ], 0, 80 ) + "%";
 
       _titleDiv = create( "div" );
-      _titleDiv.classList.add( "wikipedia-title");
+      _titleDiv.classList.add( "wikipedia-title" );
 
       _titleTextArea = create( "div" );
       _titleTextArea.classList.add( "wikipedia-title-text" );
@@ -100,10 +103,7 @@
 
         var responseFragment = getFragment( "<div>" + data.parse.text + "</div>" ),
             element = responseFragment.querySelector( "div > p:nth-of-type(1)" ),
-            mainText = "",
-            toWikiLink,
-            link,
-            fragNodeName;
+            mainText = "";
 
         _titleTextArea.appendChild( getFragment( "<a href=\"" + options._link + "\" target=\"_blank\">" + data.parse.title + "</a>" ) );
         _toWikipedia.appendChild( getFragment( "<div>Read more on <a href=\"" + options._link + "\" target=\"_blank\">Wikipedia</a></div>" ) );
@@ -155,9 +155,9 @@
     }
   };
 
-  // Language codes: http://stats.wikimedia.org/EN/TablesDatabaseWikiLinks.htm 
+  // Language codes: http://stats.wikimedia.org/EN/TablesDatabaseWikiLinks.htm
 
-  allWikiLangLinks = ( "en,ja,es,de,ru,fr,it,pt,pl,zh,nl,tr,ar,sv,id,cs,fi,ko,th,fa,hu,he,no,vi,uk,da,ro" + 
+  allWikiLangLinks = ( "en,ja,es,de,ru,fr,it,pt,pl,zh,nl,tr,ar,sv,id,cs,fi,ko,th,fa,hu,he,no,vi,uk,da,ro" +
                          ",bg,hr,ca,el,sk,ms,sr,lt,sl,simple,eo,tl,et,hi,kk,sh,nn,ta,az,bs,af,eu,ka,lv,gl" +
                          ",zh_yue,tpi,mk,mr,la,ml,sq,be,cy,br,is,an,bn,war,oc,hy,arz,te,jv,ceb,sw" +
                          ",lb,als,ur,vo,fy,kn,gan,mg,ang,vec,gd,gu,ast,io,uz,qu,wuu,su,ku,yo,ga" +
@@ -228,8 +228,8 @@
         "default": "en"
       },
       src: {
-        elem: "input", 
-        type: "text", 
+        elem: "input",
+        type: "text",
         label: "Article Link/Title",
         "default": "London_2012_Olympics"
       },
@@ -238,31 +238,37 @@
         type: "number",
         label: "Width",
         "default": 40,
-        "units": "%"
+        "units": "%",
+        "hidden": true
       },
       height: {
         elem: "input",
         type: "number",
         label: "Height",
         "default": 50,
-        "units": "%"
+        "units": "%",
+        "hidden": true
       },
       top: {
         elem: "input",
         type: "number",
         label: "Top",
         "default": 25,
-        "units": "%"
+        "units": "%",
+        "hidden": true
       },
       left: {
         elem: "input",
         type: "number",
         label: "Left",
         "default": 30,
-        "units": "%"
+        "units": "%",
+        "hidden": true
       },
-      target: "#wikipedia-container"
+      target: {
+        hidden: true
+      }
     }
   });
 
-})( Popcorn );
+}( Popcorn ));
