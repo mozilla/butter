@@ -11,19 +11,8 @@
   
    **/
 
-  // Assumes the video is wrapped in a container.
-  function createContainer( context, id ) {
-    var ctxContainer = context.container = document.createElement( "div" ),
-        style = ctxContainer.style,
-        media = context.media;
-
-    ctxContainer.id = id || "popcorn-titles-" + Popcorn.guid();
-    style.position = "absolute";
-    style.left = 0;
-    style.bottom = "35px";
-
-    media.parentNode.appendChild( ctxContainer );
-    return ctxContainer;
+  function normalize( value, minWidth, maxWidth ) {
+    return Math.max( Math.min( value || 0, maxWidth ), minWidth );
   }
 
   Popcorn.plugin( "titles", {
@@ -51,26 +40,76 @@
           label: "Text",
           "default": "Popcorn.js"
         },
-        innerContainerLayout: {
+        position: {
           elem: "select",
-          options: [ "Left", "Right" ],
-          values: [ "left", "right" ],
-          label: "Layout",
-          "default": ""
+          options: [ "Center", "Bottom", "Left", "Right", "Top", "Custom" ],
+          values: [ "center", "bottom", "left", "right", "top", "custom"  ],
+          label: "Text Position",
+          "default": "center"
         },
-        containerStyle: {
+        transition: {
           elem: "select",
-          options: [ "Titles", "News" ],
-          values: [ "popcorn-titles", "popcorn-news" ],
-          label: "Container Classes",
-          "default": "popcorn-titles"
+          options: [ "None", "Pop", "Fly Up", "Fly Down", "Sparkles" ],
+          values: [ "none", "pop", "flyUp", "flyDown", "sparkles" ],
+          label: "Transition",
+          "default": "pop"
         },
-        transitionSpeed: {
+        fontFamily: {
           elem: "select",
-          options: [ "Slow", "Normal", "Fast" ],
-          values: [ "slow", "normal", "fast" ],
-          label: "Transition Speed",
-          "default": "normal"
+          label: "Font",
+          styleClass: "",
+          googleFonts: true,
+          group: "advanced"
+        },
+        fontSize: {
+          elem: "input",
+          type: "number",
+          label: "Font Size",
+          "default": 25,
+          units: "px",
+          group: "advanced"
+        },
+        fontColor: {
+          elem: "input",
+          type: "text",
+          label: "Font",
+          "default": "#668B8B",
+          group: "advanced"
+        },
+        fontWeight: {
+          elem: "input",
+          type: "checkbox",
+          label: "Bold",
+          "default": false,
+          group: "advanced"
+        },
+        fontItalics: {
+          elem: "input",
+          type: "checkbox",
+          label: "Italics",
+          "default": false,
+          group: "advanced"
+        },
+        textUnderline: {
+          elem: "input",
+          type: "checkbox",
+          label: "Underline",
+          "default": false,
+          group: "advanced"
+        },
+        left: {
+          elem: "input",
+          type: "number",
+          label: "Left",
+          units: "%",
+          hidden: true
+        },
+        top: {
+          elem: "input",
+          type: "number",
+          label: "Top",
+          units: "%",
+          hidden: true
         }
       }
     },
@@ -79,45 +118,51 @@
 
       var target = Popcorn.dom.find( options.target ),
           text = options.text,
-          innerContainer = document.createElement( "div" ),
-          innerContainerClasses = ( options.innerContainerClasses && options.innerContainerClasses.split( " " ) ) || [],
           container = options._container = document.createElement( "div" ),
-          // See DURATION section of popcorn.transition.css
-          transitionSpeed = options.transitionSpeed,
-          transitionClass = "popcorn-transition-" + transitionSpeed,
-          i, l;
+          fontSheet;
 
-      options.inactiveClass = "popcorn-off";
-      options.activeClass = "popcorn-on";
-
-      // --------------------------------------
-      // PREPARE THE TARGET
-
-      //Check if it exists
       if ( !target ) {
-        target = options._newContainer = createContainer( this, options.target );
+        target = this.media.parentNode;
       }
-      // Cache reference to actual target container
+
       options._target = target;
+      container.style.position = "absolute";
+      container.classList.add( "popcorn-titles" );
 
+      if ( options.position === "custom" ) {
+        container.style.left = normalize( options.left || 15, 0, 97 ) + "%";
+        container.style.top = normalize( options.top || 15, 0, 97 ) + "%";
+      }
+      else {
+        container.classList.add( options.position );
+      }
 
-      // --------------------------------------
-      // PREPARE THE CONTAINER
+      // Add transition class
+      container.classList.add( options.transition );
 
-      // Add each class to the inner container
-      innerContainer.classList.add( options.innerContainerLayout );
-
-      // Add each class to the outer container
-      container.className = "popcorn-transition";
-      container.classList.add( options.containerStyle );
-
-      // Add transition styles and hide on setup
-      container.classList.add( transitionClass );
-      container.classList.add( options.inactiveClass );
-      //Add the text, and append to target.
-      innerContainer.innerHTML = text || "";
-      container.appendChild( innerContainer );
+      // Handle all custom fonts/styling
+      container.innerHTML = text;
+      container.style.zIndex = +options.zindex;
       target.appendChild( container );
+
+      container.style.fontStyle = options.fontItalics ? "italic" : "normal";
+      container.style.color = options.fontColor ? options.fontColor : "#668B8B";
+      container.style.textDecoration = options.textUnderline ? "underline" : "none";
+      container.style.fontSize = options.fontSize ? options.fontSize + "px" : "25px";
+      container.style.fontWeight = options.fontWeight ? "bold" : "normal";
+
+      fontSheet = document.createElement( "link" );
+      fontSheet.rel = "stylesheet";
+      fontSheet.type = "text/css";
+      options.fontFamily = options.fontFamily ? options.fontFamily.replace( /\s/g, "+" ) : "Tangerine";
+      // Store reference to generated sheet for removal later, remove any existing ones
+      options._fontSheet = fontSheet;
+      document.head.appendChild( fontSheet );
+
+      fontSheet.onload = function ( e ) {
+        container.style.fontFamily = options.fontFamily;
+      };
+      fontSheet.href = "http://fonts.googleapis.com/css?family=" + options.fontFamily;
 
       options.toString = function() {
         // use the default option if it doesn't exist
@@ -126,24 +171,20 @@
     },
 
     start: function( event, options ) {
-      options._container.classList.add( options.activeClass );
-      options._container.classList.remove( options.inactiveClass );
+      options._container.classList.add( "on" );
     },
 
     end: function( event, options ) {
-      options._container.classList.add( options.inactiveClass );
-      options._container.classList.remove( options.activeClass );
+      options._container.classList.remove( "on" );
     },
 
     _teardown: function( options ) {
-      var target = options._target,
-          newContainer = options._newContainer;
-      if ( target ) {
-        target.removeChild( options._container );
+      if ( options._target ) {
+        options._target.removeChild( options._container );
       }
-      //If we created a new container, we should remove it now.
-      if ( newContainer && newContainer.parentNode ) {
-        newContainer.parentNode.removeChild( newContainer );
+
+      if ( options._fontSheet ) {
+        document.head.removeChild( options._fontSheet );
       }
     }
   });
