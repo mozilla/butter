@@ -7,7 +7,8 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       var media = butter.currentMedia;
 
       function start(){
-        var track = media.addTrack();
+        media.addTrack();
+        media.addTrack();
 
         butter.tracks[ 0 ].addTrackEvent({
           type: "text",
