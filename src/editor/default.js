@@ -76,16 +76,17 @@ define( [ "text!./default.html", "editor/editor" ],
                 else {
                   _this.attachInputChangeHandler( element, trackEvent, name, updateTrackEvent );
                 }
-                
               }
             }
           }, null, optionsContainer, null, [ "target" ] );
 
-        targetList = _this.createTargetsList( _targets );
-        selectElement = targetList.querySelector( "select" );
-        // Attach the onchange handler to trackEvent is updated when <select> is changed
-        _this.attachSelectChangeHandler( selectElement, trackEvent, "target" );
-        optionsContainer.appendChild( targetList );
+        if ( !trackEvent.manifest.options.target.hidden ) {
+          targetList = _this.createTargetsList( _targets );
+          selectElement = targetList.querySelector( "select" );
+          // Attach the onchange handler to trackEvent is updated when <select> is changed
+          _this.attachSelectChangeHandler( selectElement, trackEvent, "target" );
+          optionsContainer.appendChild( targetList );
+        }
 
         _this.updatePropertiesFromManifest( trackEvent, null, true );
 
@@ -95,7 +96,7 @@ define( [ "text!./default.html", "editor/editor" ],
           _messageContainer.parentNode.addEventListener( "oTransitionEnd", _this.scrollbar.update, false );
           _messageContainer.parentNode.addEventListener( "webkitTransitionEnd", _this.scrollbar.update, false );
         }
-        
+
         _this.scrollbar.update();
 
 

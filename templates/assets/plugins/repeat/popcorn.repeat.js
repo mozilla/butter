@@ -39,7 +39,7 @@
         "label": "Out"
       },
       "target": {
-        "default": "hidden"
+        "hidden": true
       },
       "loop": {
         "label": "Number of loops (0 = forever)",

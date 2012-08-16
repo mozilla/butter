@@ -51,7 +51,7 @@
         "default": "0"
       },
       "target": {
-        "default": "hidden"
+        "hidden": true
       }
     }
   });
