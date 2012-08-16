@@ -32,6 +32,10 @@
       {
         "type": "repeat",
         "path": "{{baseDir}}templates/assets/plugins/repeat/popcorn.repeat.js"
+      },
+      {
+        "type": "stop",
+        "path": "{{baseDir}}templates/assets/plugins/stop/popcorn.stop.js"
       }
     ],
     "defaults": [
@@ -41,7 +45,8 @@
       "googlemap",
       "twitter",
       "image",
-      "repeat"
+      "repeat",
+      "stop"
     ]
   },
   "editor": {

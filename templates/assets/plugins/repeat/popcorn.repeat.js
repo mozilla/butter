@@ -17,7 +17,6 @@
           }
           if ( options.count > 0 || +options.loop === 0 ) {
             this.currentTime( options.start );
-            
             if ( options.loop ) {
               options.count--;
             }
@@ -40,7 +39,7 @@
         "label": "Out"
       },
       "target": {
-        "default": "overlay"
+        "default": "hidden"
       },
       "loop": {
         "label": "Number of loops (0 = forever)",
