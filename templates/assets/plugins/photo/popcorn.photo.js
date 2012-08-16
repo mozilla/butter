@@ -86,7 +86,9 @@
 
         //Cache a reference
         options._target = target;
-        target && target.appendChild( options._container );
+        if ( target ) {
+          target.appendChild( options._container );
+        }
 
         //Allows cropping of the image by setting container height
         innerDiv.style.overflow = "hidden";
@@ -97,7 +99,6 @@
           img = document.createElement( "img" );
           img.addEventListener( "load", function() {
 
-            var fontHeight, divText;
             img.style.borderStyle = "none";
             img.style.width = "100%";
 
@@ -134,9 +135,11 @@
       end: function( event, options ) {
         options._container.style.display = "none";
       },
-      
+
       _teardown: function( options ) {
-        options._target && options._target.removeChild( options._container );
+        if ( options._target ) {
+          options._target.removeChild( options._container );
+        }
       }
   });
-})( Popcorn );
+}( Popcorn ));

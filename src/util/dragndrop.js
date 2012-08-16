@@ -82,7 +82,7 @@ define([], function(){
         }
       }
     }
-  };
+  }
 
   function onMouseUp( e ){
     __mouseDown = false;
@@ -157,7 +157,7 @@ define([], function(){
         parentNode = parentNode.parentNode;
       }
     }
-    
+
   }
 
   function __sortDroppables(){
