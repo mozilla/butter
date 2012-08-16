@@ -2,78 +2,86 @@
       If a copy of the MIT license was not distributed with this file, you can
       obtain one at http://www.mozillapopcorn.org/butter-license.txt -->
 
-<div class="butter-editor image-editor">
-  <h1>Image Event Editor</h1>
+<div class="butter-editor image-editor allow-scrollbar">
+  <h1>Image Editor</h1>
   <div class="error-message-container">
     <div class="error-message"></div>
   </div>
-  <div class="editor-options-wrapper">
-    <div class="editor-options">
-      <div class="editor-source">
+  <div class="butter-editor-body scrollbar-append-to">
+    <div class="editor-options-wrapper scrollbar-outer">
+       <div class="editor-options-wrapper">
+        <div class="editor-options">
+          <fieldset class="butter-form-inline form-half">
+            <div class="butter-form-append">
+              <label>Start</label>
+              <input type="text" id="editor-in-value">
+              <span class="butter-unit">seconds</span>
+            </div>
+            <div class="butter-form-append">
+              <label>End</label>
+              <input type="text" id="editor-out-value" >
+              <span class="butter-unit">seconds</span>
+            </div>
+          </fieldset>
+  
+          <fieldset class="editor-source">
+            <label class="editor-section-header">Source</label>
+            <div class="editor-radio-wrapper">
+              <label class="butter-form-radio">
+                <input type="radio" name="source-type" id="editor-dragdrop-radio"> You can drop an image from your desktop on the container
+              </label>
+            </div>
 
-        <div>In</div>
-        <input type="number" id="editor-in-value" class="editor-text-input"/>
+            <div class="editor-radio-wrapper">
+              <label class="butter-form-radio">
+                <input type="radio" name="source-type" id="editor-url-radio">
+                 URL
+                <input type="url" id="editor-url" class="editor-text-input">
+              </label>
+            </div>
 
-        <div>Out</div>
-        <input type="number" id="editor-out-value" class="editor-text-input"/>
+            <div class="editor-radio-wrapper">
+              <label class="butter-form-radio">
+                <input type="radio" name="source-type" id="editor-flickr-radio"  class="editor-input-radio" >
+                Flickr Slideshow
+                <label>Tag Search</label>
+                <input type="text" id="editor-flickr-tag" class="editor-text-input">
+                <label>Gallery URL</label>
+                <input type="url" id="editor-flickr-url" class="editor-text-input">
+                <div class="editor-flickr-number">
+                  <label>Number</label>
+                  <input type="number" id="editor-flickr-number" class="editor-text-input" />
+                </div>
+            </div>
+          </fieldset>
 
-        <div class="editor-header">
-          Source
-        </div>
+          <fieldset class="butter-form-inline form-half editor-transition">
+            <div class="butter-form-append">
+              <label>Transition in</label>
+              <select class="editor-select" id="editor-in-select">
+                <option value="fade">fade</option>
+                <option value="pop">pop</option>
+                <option value="">none</option>
+              </select>
+            </div>
+            <div class="butter-form-append">
+            <label>Transition out</label>
+              <select class="editor-select" id="editor-out-select">
+                <option value="fade">fade</option>
+                <option value="pop">pop</option>
+                <option value="">none</option>
+              </select>
+            </div>
+          </fieldset>
 
-        <div class="editor-radio-wrapper">
-          <input type="radio" name="source-type" id="editor-dragdrop-radio" class="editor-input-radio" disabled/>
-          <div class="editor-radio-label">
-            You can drop an image from your desktop on the container
-          </div>
-        </div>
-        <div class="editor-radio-wrapper">
-          <input type="radio" name="source-type" id="editor-url-radio" class="editor-input-radio" />
-          <label for="editor-url-radio">URL</label><br />
-          <input type="url" id="editor-url" class="editor-text-input"/><br />
-        </div>
-
-        <div class="editor-radio-wrapper">
-          <input type="radio" name="source-type" id="editor-flickr-radio"  class="editor-input-radio" />
-          <label for="editor-flickr-radio" >Flickr Slideshow</label><br />
-
-          <div class="editor-header">
-            Tag Search
-          </div>
-
-          <input type="text" id="editor-flickr-tag" class="editor-text-input"/><br />
-          Gallery URL<br />
-          <input type="url" id="editor-flickr-url" class="editor-text-input"/><br />
-          <div class="editor-flickr-number">
-            Number
-            <input type="number" id="editor-flickr-number" class="editor-text-input" />
-          </div>
-        </div>
-      </div>
-      <div class="editor-transition">
-        <div class="editor-header">
-          Transition<br />
-          in<br />
-          <select class="editor-select" id="editor-in-select">
-            <option value="fade">fade</option>
-            <option value="pop">pop</option>
-            <option value="">none</option>
-          </select>
-          <br />
-          Out<br />
-          <select class="editor-select" id="editor-out-select">
-            <option value="fade">fade</option>
-            <option value="pop">pop</option>
-            <option value="">none</option>
-          </select>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<style type="text/css">
-  .butter-editor.image-editor .editor-options-wrapper {
-    top: 40px;
-  }
-</style>
+
+
+
+
+
