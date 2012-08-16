@@ -119,7 +119,7 @@ function checkCSS( dir ) {
     "errors",
     "gradients",
     "font-faces",
-    "floats",
+    //"floats",
     "vendor-prefix"
   ].join(",");
 

@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip.js" ],
+define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
   function( EventManagerWrapper, Scrollbars, Tooltip ) {
 
   /**
