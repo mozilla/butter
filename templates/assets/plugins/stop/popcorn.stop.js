@@ -3,7 +3,9 @@
     var _this = this,
         _timeout,
         _seekedFunc = function() {
-          _timeout && clearTimeout( _timeout );
+          if ( _timeout ) {
+            clearTimeout( _timeout );
+          }
           this.off( "seeked", _seekedFunc );
         };
     return {
