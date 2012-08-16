@@ -183,10 +183,10 @@
         },
         transition: {
           elem: "select",
-          options: [ "None", "Pop", "Fly Up", "Fly Down", "Sparkles" ],
-          values: [ "none", "pop", "flyUp", "flyDown", "sparkles" ],
+          options: [ "None", "Pop", "Slide Up", "Slide Down", "Fade" ],
+          values: [ "none", "popcorn-pop", "popcorn-slide-up", "popcorn-slide-down", "popcorn-fade" ],
           label: "Transition",
-          "default": "pop"
+          "default": "popcorn-pop"
         },
         fontFamily: {
           elem: "select",
@@ -432,6 +432,7 @@
 
       // Add transition
       container.classList.add( options.transition );
+      container.classList.add( "off" );
       target.appendChild( container );
       options._container = container;
 
@@ -459,6 +460,7 @@
        * TODO:
        * Handle Fliping On/Off of transitions here properly
        */
+      options._container.classList.remove( "off" );
       options._container.classList.add( "on" );
 
       if ( audio && audio.duration && !video.paused &&
@@ -481,6 +483,7 @@
        * TODO:
        * Handle Fliping On/Off of transitions here properly
        */
+      options._container.classList.add( "off" );
       options._container.classList.remove( "on" );
     },
     

@@ -1,5 +1,4 @@
 .speechBubble {
-  opacity: 0;
   line-height: 1.2;
   text-align: center;
   position: relative;
@@ -11,7 +10,6 @@
   z-index: 1000;
   word-wrap: break-word;
 }
-.on .speechBubble { opacity: 1; }
 
 .speechBubble .canvas {
   position: absolute;

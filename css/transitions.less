@@ -1,0 +1,71 @@
+/* This Source Code Form is subject to the terms of the MIT license
+ * If a copy of the MIT license was not distributed with this file, you can
+ * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
+/*
+*/
+@import "globals";
+
+/*********************************************************
+* Base transition styles
+*/
+.transition-state( @property, @off, @on ) {
+  .transition( @property 0.3s ease, visibility 0.3s ease );
+  visibility: ~`"visible;\n  @{property}: @{on}"`;
+  &.off{
+    visibility: ~`"hidden;\n  @{property}: @{off} !important"`;
+  }
+}
+
+// Basic transitions
+.popcorn-fade {
+  .transition-state( opacity, 0, 1 );
+}
+
+.popcorn-slide-up {
+  .transition-state( margin-top, 100%, auto );
+}
+
+.popcorn-slide-down {
+  .transition-state( margin-top, -100%, auto );
+}
+
+.popcorn-pop {
+  visibility: hidden;
+  .transform( scale( 0, 0 ) );
+  .transform-origin( center );
+}
+.popcorn-pop.on{
+  visibility: visible;
+  .transform( scale( 1, 1 ) );
+  .animation( pop .2s 1 ease-out );
+}
+
+/*********************************************************
+* Keyframe Animations
+*/
+
+@-webkit-keyframes pop {
+  0% {-webkit-transform: scale( 0, 0 ); transform: scale( 0, 0 ); }
+  75% {-webkit-transform: scale( 1.6, 1.6 ); transform: scale( 1.6, 1.6 ); }
+  100% {-webkit-transform: scale( 1, 1 ); transform: scale( 1, 1 ); }
+}
+@-moz-keyframes pop {
+  0% {-moz-transform: scale( 0, 0 ); transform: scale( 0, 0 ); }
+  75% {-moz-transform: scale( 1.6, 1.6 ); transform: scale( 1.6, 1.6 ); }
+  100% {-moz-transform: scale( 1, 1); transform: scale( 1, 1 ); }
+}
+@-o-keyframes pop { /* csslint-ignore: does too exist */
+  0% {-o-transform: scale( 0, 0 ); transform: scale( 0, 0 ); }
+  75% {-o-transform: scale( 1.6, 1.6 ); transform: scale( 1.6, 1.6 ); }
+  100% {-o-transform: scale( 1, 1 ); transform: scale( 1.0, 1.0 ); }
+} /* csslint-ignore */
+@-ms-keyframes pop {
+  0% {-ms-transform: scale( 0, 0 ); transform: scale( 0, 0 ); }
+  75% {-ms-transform: scale( 1.6, 1.6); transform: scale( 1.6, 1.6 ); }
+  100% {-ms-transform: scale( 1, 1 ); transform: scale( 1, 1 ); }
+}
+@keyframes pop {
+  0% {transform: scale( 0, 0 ); }
+  75% {transform: scale( 1.6, 1.6 ); }
+  100% {transform: scale( 1, 1 ); }
+}

@@ -15,6 +15,7 @@ dist
 node_modules
 cornfield/view
 css/butter.ui.css
+css/transitions.css
 cornfield/config/runtime.json
 docs
 css/media-view.css

@@ -15,11 +15,6 @@
   color: #FFF83A; 
   z-index: 2000;
   border: 1px solid transparent;
-  -webkit-transition: border-color .2s ease;
-  -moz-transition: border-color .2s ease;
-  -o-transition: border-color .2s ease;
-  -ms-transition: border-color .2s ease;
-  transition: border-color .2s ease;
 }
 
 .ui-resizable .title { 
@@ -74,21 +69,11 @@
 body:hover .ui-resizable,
 body:hover .ui-draggable {
   border: 1px solid #FFF83A;
-  -webkit-transition: border-color .2s ease;
-  -moz-transition: border-color .2s ease;
-  -o-transition: border-color .2s ease;
-  -ms-transition: border-color .2s ease;
-  transition: border-color .2s ease;
 }
 
 body:hover .ui-resizable .ui-icon,
 body:hover [class^="ui-resizable-"] { 
   opacity: 1;
-  -webkit-transition: opacity .2s ease;
-  -moz-transition: opacity .2s ease;
-  -o-transition: opacity .2s ease;
-  -ms-transition: opacity .2s ease;
-  transition: opacity .2s ease;
 }
 
 
