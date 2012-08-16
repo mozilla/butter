@@ -74,16 +74,10 @@
       }
     }     
     .butter-track-event {
-      box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 );
+      box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.8 );
       border-radius: 5px;
       .selectable( none );
-      .gradient( "vertical", #C8C800, #FFFF00, true );
-      font-size: 11px;
-      line-height: 25px;
-      font-weight: 700;
-      text-align: center;
-      text-transform: uppercase;
-      color: #333;
+      background: #FFF;
       cursor: move;
       overflow: hidden;
       display: block;
@@ -91,7 +85,24 @@
       padding: 1px;
       opacity: 0.8;
       position: absolute;
-          
+
+      .title {
+        font-size: 11px;
+        font-weight: 700;
+        text-align: left;
+        position: absolute;
+        left: 35px;
+        line-height: 25px;
+        color: #333;
+      }
+      .butter-track-event-icon {
+        position: absolute;
+        height: 25px;
+        width: 30px;
+        background-size: 20px;
+        background-position: center center;
+        background-repeat: no-repeat;
+      }
       .handle {
         position: absolute;
         height: 100%;

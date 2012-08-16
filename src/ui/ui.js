@@ -60,15 +60,20 @@ define( [ "core/eventmanager", "./toggler",
       });
     }
 
-    this.loadIcons = function( icons, resourcesDir ) {
-      var icon, img, div;
+    this.loadIcons = function( plugins, resourcesDir ) {
+      var path, img, div;
 
-      for ( icon in icons ) {
-        if ( icons.hasOwnProperty( icon ) ) {
+      plugins.forEach( function( plugin ) {
+          path = plugin.icon;
+
+          if ( !path ) {
+            return;
+          }
+          
           img = new Image();
-          img.id = icon + "-icon";
-          img.src = resourcesDir + icons[ icon ];
-
+          img.id = plugin.type + "-icon";
+          img.src = path;
+        
           // We can't use "display: none", since that makes it
           // invisible, and thus not load.  Opera also requires
           // the image be in the DOM before it will load.
@@ -78,8 +83,7 @@ define( [ "core/eventmanager", "./toggler",
 
           div.appendChild( img );
           document.body.appendChild( div );
-        }
-      }
+      });
     };
 
     this.setEditor = function( editorAreaDOMRoot ) {
@@ -104,7 +108,9 @@ define( [ "core/eventmanager", "./toggler",
 
         butter.loader.load( [ loadOptions ], function(){
           // icon preloading needs css to be loaded first
-          _this.loadIcons( _uiConfig.value( "icons" ), _uiConfig.value( "dirs" ).resources || "" );
+
+          _this.loadIcons( _uiConfig.value( "plugin" ).plugins, _uiConfig.value( "dirs" ).resources || "" );
+
           onReady();
         });
         

@@ -38,6 +38,12 @@
 * Buttons
 */
 
+.butter-header {
+  .butter-btn {
+    padding: 8px 10px;
+  }
+}
+
 .butter-header-buttons-left {
   margin-top: 20px;
   margin-left: @_logoWidth + 10px;
@@ -54,6 +60,10 @@
   .butter-project-title,
   .butter-save-btn {
     display: inline-block;
+  }
+  .btn-light {
+    .gradient( "vertical", #FFF, @baseLight );
+    border-bottom-color: darken( @baseLightOutline, 15% );
   }
 
 }

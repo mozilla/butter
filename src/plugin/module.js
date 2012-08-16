@@ -10,65 +10,11 @@
 define( [ "core/logger", "./plugin-list", "./plugin" ],
   function( Logger, PluginList, Plugin ) {
 
-  var __trackEventCSSRules = {},
-      __cssRuleProperty = "data-butter-trackevent-type",
-      __cssRulePrefix = ".butter-timeline .butter-track-event",
-      __newStyleSheet = document.createElement( "style" );
+  var __newStyleSheet = document.createElement( "style" );
 
   __newStyleSheet.type = "text/css";
   __newStyleSheet.media = "screen";
   __newStyleSheet.setAttribute( "data-butter-exclude", "true" );
-
-  /**
-   * Function: colourHashFromType
-   *
-   * Simple hash function to calculates a [relatively] unique colour for a plugin.
-   *
-   * @param {String} type: Name of the plugin
-   */
-  function colourHashFromType( type ) {
-    var hue = 0, saturation = 0, lightness = 0, srcString = type;
-
-    // very simple hashing function
-    while ( srcString.length < 9 ) {
-      srcString += type;
-    }
-    hue = ( srcString.charCodeAt( 0 ) + srcString.charCodeAt( 3 ) + srcString.charCodeAt( 6 ) ) % ( ( srcString.charCodeAt( 8) * 5 ) % 360 );
-    saturation = ( ( srcString.charCodeAt( 0 ) + srcString.charCodeAt( 2 ) + srcString.charCodeAt( 4 ) + srcString.charCodeAt( 6 ) ) % 100 ) * 0.05 + 95;
-    lightness = ( ( srcString.charCodeAt( 1 ) + srcString.charCodeAt( 3 ) + srcString.charCodeAt( 5 ) + srcString.charCodeAt( 7 ) ) % 100 ) * 0.20 + 40;
-
-    // bump up reds because they're hard to see
-    if ( hue < 20 || hue > 340 ) {
-      lightness += 10;
-    }
-
-    // dial back blue/greens a bit
-    if ( hue > 160 && hue < 200 ) {
-      lightness -= 10;
-    }
-
-    return {
-      h: hue,
-      s: saturation,
-      l: lightness
-    };
-  }
-
-  /**
-   * Function: createStyleForType
-   *
-   * Creates a css entry for a plugin type
-   *
-   * @param {String} type: Name of the plugin
-   */
-  function createStyleForType( type ) {
-    var styleContent = "",
-        hash = colourHashFromType( type );
-    styleContent +=__cssRulePrefix + "[" + __cssRuleProperty + "=\"" + type + "\"]{";
-    styleContent += "background: hsl( " + hash.h + ", " + hash.s + "%, " + hash.l + "% );";
-    styleContent += "}";
-    __newStyleSheet.innerHTML = __newStyleSheet.innerHTML + styleContent;
-  }
 
   /**
    * Class: PluginManager
@@ -137,11 +83,6 @@ define( [ "core/logger", "./plugin-list", "./plugin" ],
 
       for ( i = 0, l = plugins.length; i < l; i++ ) {
         plugin = new Plugin( plugins[ i ] );
-
-        // Create the styling for this plugin and its trackevents
-        if ( !__trackEventCSSRules[ plugin.type ] ){
-          createStyleForType( plugin.type );
-        }
 
         // Create a loader descriptor for this plugin type for the Butter loader
         pluginLoadDescriptors.push({

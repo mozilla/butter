@@ -12,6 +12,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
     var _element = LangUtils.domFragment( TRACKEVENT_LAYOUT, ".butter-track-event" ),
         _zoom = 1,
         _type = type,
+        _icon = document.getElementById( _type + "-icon" ),
         _start = inputOptions.start || 0,
         _end = inputOptions.end || _start + 1,
         _parent,
@@ -292,6 +293,9 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
     }
 
     _element.className = "butter-track-event";
+    if ( _icon ) {
+      _element.querySelector( ".butter-track-event-icon" ).style.backgroundImage = "url( "+ _icon.src + ")";
+    }
     _this.type = _type;
 
     _this.update( inputOptions );
