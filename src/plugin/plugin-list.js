@@ -8,9 +8,9 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
 	return function( butter ) {
 
     var _parentElement = LangUtils.domFragment( EDITOR_LAYOUT, ".plugin-list-editor" ),
-        _containerElement = _parentElement.querySelector( ".container" );
+        _containerElement = _parentElement.querySelector( ".plugin-container" );
 
-    var _pluginArchetype = _containerElement.querySelector( "div" );
+    var _pluginArchetype = _containerElement.querySelector( ".butter-plugin-tile" );
     _pluginArchetype.parentNode.removeChild( _pluginArchetype );
 
     Editor.register( "plugin-list", null, function( rootElement, butter ) {
@@ -27,8 +27,8 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
     butter.listen( "pluginadded", function( e ) {
       var element = _pluginArchetype.cloneNode( true ),
           iconImg = e.data.helper,
-          icon = element.querySelector( "span.icon" ),
-          text = element.querySelector( "span.label" );
+          icon = element.querySelector( ".butter-plugin-icon" ),
+          text = element.querySelector( ".butter-plugin-label" );
 
       DragNDrop.helper( element, {
         start: function() {
