@@ -51,32 +51,17 @@
 /* Toggle hide/show button for editor and tray */
 
 .butter-toggle-button {
-  height: 30px;
-  width: 50px;
-  background-image: url( "../resources/bg.jpg" );
-  border-top-right-radius: 15px;
-  border-top-left-radius: 15px;
   position: absolute;
-  box-shadow: inset 0 -3px 5px #222, 1px -1px 1px #222, -1px -1px 1px #222;
-  z-index: -1;
-  
+  height: 14px;
+  width: 14px;
+  background-image: url( "../resources/glyphicons-halflings-grey.png" );
+  background-position: -313px -119px;
+  cursor: pointer;
   &:hover {
-    box-shadow: inset 0 -3px 5px #000, 1px -1px 1px #000, -1px -1px 1px #000;
-    cursor: pointer;
-  }
-  div {
-    background-image: url( "../resources/buttons.png" );
-    background-position: -255px 10px;
-    width: 15px;
-    height: 20px;
-    background-clip: content-box;
-    background-repeat: no-repeat;
-    margin: 0 18px 0 18px;
+    background-image: url( "../resources/glyphicons-halflings.png" );
   }
   &.toggled {
-    > div {
-      background-position: -255px -9px;
-    }
+    background-position: -288px -120px;
   }
 }
 

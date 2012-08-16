@@ -2,7 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [], function(){
+define( [ "util/lang" ],
+  function( util ) {
 
   var CHECK_MEDIA_INTERVAL = 50,
       SCROLL_INTERVAL = 16,
@@ -12,6 +13,7 @@ define( [], function(){
   return function( butter, parentElement, media, tracksContainer ){
     var _container = parentElement,
         _node = _container.querySelector( ".time-bar-scrubber-node" ),
+        _timeTooltip = _container.querySelector( ".butter-time-tooltip" ),
         _line = _container.querySelector( ".time-bar-scrubber-line" ),
         _fill = _container.querySelector( ".fill-bar" ),
         _tracksContainer = tracksContainer,
@@ -37,6 +39,7 @@ define( [], function(){
           currentTime = _media.currentTime,
           tracksElement = _tracksContainer.element,
           scrollLeft = tracksElement.scrollLeft;
+          _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
 
       // if we can avoid re-setting position and visibility, then do so
       if( _lastTime !== currentTime || _lastScroll !== scrollLeft || _lastZoom !== _zoom ){
@@ -78,6 +81,8 @@ define( [], function(){
 
     function onMouseUp( e ){
       _seekMouseUp = true;
+
+      _timeTooltip.classList.remove( "tooltip-on" );
 
       if( _isPlaying && _seekCompleted ){
         _media.play();
@@ -165,6 +170,11 @@ define( [], function(){
         _isScrubbing = true;
       }
 
+      if ( _media.currentTime ) {
+        _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
+      }
+      _timeTooltip.classList.add( "tooltip-on" );
+
       _seekCompleted = _seekMouseUp = false;
       _media.listen( "mediaseeked", onSeeked );
 
@@ -190,6 +200,7 @@ define( [], function(){
       _rect = _container.getBoundingClientRect();
       _lineWidth = _line.clientWidth;
       setNodePosition();
+
     }; //update
 
     function checkMedia(){

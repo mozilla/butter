@@ -7,15 +7,14 @@ define( [], function(){
   function Button( parentNode, className, onClick, toolTip ) {
     var _container = parentNode.querySelector( className ),
         _button = _container.querySelector( ".status-button" ),
-        _icon = _container.querySelector( ".status-button-icon" ),
         _state = true;
 
     function update() {
       if( _state ){
-        _icon.removeAttribute( "data-state" );
+        _button.removeAttribute( "data-state" );
       }
       else {
-        _icon.setAttribute( "data-state", true );
+        _button.setAttribute( "data-state", true );
       }
     }
 
@@ -53,12 +52,12 @@ define( [], function(){
         } //if
 
         var timeStamp = new Date( 1970, 0, 1 ),
-            seconds;
+            timeParts;
 
         timeStamp.setSeconds( time );
-        seconds = timeStamp.toTimeString().substr( 0, 8 );
+        timeParts = timeStamp.toTimeString().split(" ")[ 0 ].split( ":" );
 
-        _timeBox.value = seconds;
+        _timeBox.value = timeParts[ 1 ] + ":" + timeParts[ 2 ];
       }
       else {
         _timeBox.value = _oldValue;
