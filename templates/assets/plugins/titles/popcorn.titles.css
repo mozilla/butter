@@ -1,0 +1,78 @@
+.popcorn-titles {
+  color: #FFF;
+  overflow: hidden;
+}
+
+.popcorn-titles.off {
+  visibility: hidden;
+}
+
+.titles-fixed {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+}
+.titles-fixed > div {
+  display: table;
+  vertical-align: middle; 
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.titles-fixed > div > span {
+  display: table-cell;
+  padding: 20px;
+}
+
+.center > span {
+  vertical-align: middle; 
+  text-align: center;
+}
+
+.right > span {
+  vertical-align: middle;
+  text-align: right;
+}
+
+.left > span {
+  vertical-align: middle;
+  text-align: left;
+}
+
+.bottom > span {
+  vertical-align: bottom;
+  text-align: center;
+}
+
+.top > span {
+  vertical-align: top;
+  text-align: center;
+}
+
+.titles-custom {
+  display: inline-block;
+  max-width: 500px;
+}
+
+.titles-custom > div > span {
+  padding: 0;
+}
+
+/* Placeholders */
+.popcorn-titles .sparkly {
+
+}
+
+.popcorn-titles .shiny {
+
+}
+
+.popcorn-titles .big {
+
+}
+
+.popcorn-titles .small {
+
+}

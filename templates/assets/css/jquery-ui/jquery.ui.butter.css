@@ -9,7 +9,8 @@
  */
 
 .ui-resizable,
-.ui-droppable { 
+.ui-droppable,
+.ui-draggable { 
   position: relative; 
   color: #FFF83A; 
   z-index: 2000;
@@ -70,7 +71,8 @@
 
 /* HOVER STYLES
 -------------------------------------------------- */
-body:hover .ui-resizable {
+body:hover .ui-resizable,
+body:hover .ui-draggable {
   border: 1px solid #FFF83A;
   -webkit-transition: border-color .2s ease;
   -moz-transition: border-color .2s ease;
