@@ -16,6 +16,7 @@ node_modules
 cornfield/view
 css/butter.ui.css
 css/transitions.css
+css/embed-shell.css
 cornfield/config/runtime.json
 docs
 css/media-view.css
