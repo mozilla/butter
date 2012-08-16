@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "util/scrollbars", "../../../src/ui/widget/tooltip.js" ],
+define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip.js" ],
   function( EventManagerWrapper, Scrollbars, Tooltip ) {
 
   /**
@@ -26,7 +26,7 @@ define( [ "core/eventmanager", "util/scrollbars", "../../../src/ui/widget/toolti
     // Used when applyExtraHeadTags is called -- see below
     var _extraScriptTags = [],
         _extraStyleTags = [];
-  
+
     /**
      * Member: open
      *
@@ -124,9 +124,9 @@ define( [ "core/eventmanager", "util/scrollbars", "../../../src/ui/widget/toolti
 
       extendObject.scrollbar = new Scrollbars.Vertical( options.outer, options.inner );
       options.appendTo.appendChild( extendObject.scrollbar.element );
-      
+
       extendObject.scrollbar.update();
-      
+
       return extendObject.scrollBar;
     };
 

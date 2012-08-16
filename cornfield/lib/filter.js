@@ -20,7 +20,7 @@ filters = {
       }, 500 );
     }
   }
-}
+};
 
 module.exports = function ctor( opts ) {
   options = opts;
