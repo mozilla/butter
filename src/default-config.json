@@ -64,6 +64,32 @@
       "vimeo"
     ]
   },
+  "wrapper": {
+    "wrappers": [
+      {
+        "type": "html5",
+        "path": "{{baseDir}}external/popcorn-js/wrappers/html5/popcorn.HTMLMediaElement.js"
+      },
+      {
+        "type": "soundcloud",
+        "path": "{{baseDir}}external/popcorn-js/wrappers/soundcloud/popcorn.HTMLSoundCloudAudioElement.js"
+      },
+      {
+        "type": "vimeo",
+        "path": "{{baseDir}}external/popcorn-js/wrappers/vimeo/popcorn.HTMLVimeoVideoElement.js"
+      },
+      {
+        "type": "null",
+        "path": "{{baseDir}}external/popcorn-js/wrappers/null/popcorn.HTMLNullVideoElement.js"
+      }
+    ],
+    "defaults": [
+      "html5",
+      "soundcloud",
+      "vimeo",
+      "null"
+    ]
+  },
   "dirs": {
     "popcorn-js": "{{baseDir}}external/popcorn-js/",
     "css": "{{baseDir}}css/",
