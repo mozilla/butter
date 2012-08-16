@@ -1,3 +1,6 @@
+// Options must be shared with anyone require()-ing this file
+var options;
+
 var filters = {
   isLoggedIn: function( req, res, next ) {
     if ( req.session.email ) {
@@ -5,7 +8,17 @@ var filters = {
     } else {
       res.json( { error: 'unauthorized' }, 403 );
     }
+  },
+  isStorageAvailable: function( req, res, next ) {
+    if ( options.dbOnline ) {
+      next();
+    } else {
+      res.json( { error: 'storage service is not running' }, 500 );
+    }
   }
 }
 
-module.exports = filters;
+module.exports = function ctor( opts ) {
+  options = opts;
+  return filters;
+};
