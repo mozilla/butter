@@ -8,6 +8,8 @@ var express = require('express'),
     app = express.createServer(),
     MongoStore = require('connect-mongo')(express),
     lessMiddleware = require('less-middleware'),
+    filterOptions = { dbOnline: true },
+    filter = require( './lib/filter' )( filterOptions ),
     sanitizer = require( './lib/sanitizer' ),
     CONFIG = require('config'),
     TEMPLATES_DIR =  CONFIG.dirs.templates,
@@ -36,8 +38,6 @@ for ( var templateName in VALID_TEMPLATES ) {
   }
 }
 
-var canStoreData = true;
-
 console.log( "Templates Dir:", TEMPLATES_DIR );
 console.log( "Publish Dir:", PUBLISH_DIR );
 
@@ -45,7 +45,7 @@ var mongoose = require('mongoose'),
     db = mongoose.connect('mongodb://localhost/test', function( err ) {
       if ( err ) {
         console.error( "MongoDB: " + err + "\n  You will not be able to store any data." );
-        canStoreData = false;
+        filterOptions.dbOnline = false;
       }
     }),
     Schema = mongoose.Schema,
@@ -114,19 +114,9 @@ function writeEmbed( projectEmbedPath, embedUrl, res, url, data ) {
   });
 }
 
-function publishRoute( req, res ){
+app.post( '/api/publish/:id', filter.isLoggedIn, filter.isStorageAvailable, function publishRoute( req, res ) {
   var email = req.session.email,
       id = req.params.id;
-
-  if (!email) {
-    res.json({ error: 'unauthorized' }, 403);
-    return;
-  }
-
-  if (!canStoreData) {
-    res.json({ error: 'storage service is not running' }, 500);
-    return;
-  }
 
   UserModel.findOne( { email: email }, function( err, doc ) {
     var i;
@@ -298,20 +288,13 @@ function publishRoute( req, res ){
       return;
     }
   });
-}
+});
 
-app.post('/api/publish/:id', publishRoute );
-
-app.get('/dashboard', function(req, res) {
+app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
   var email = req.session.email;
 
   if ( !email ) {
     res.render( 'dashboard-unauthorized.jade' );
-    return;
-  }
-
-  if ( !canStoreData ) {
-    res.json( { error: 'storage service is not running' }, 500 );
     return;
   }
 
@@ -341,18 +324,8 @@ app.get('/dashboard', function(req, res) {
   });
 });
 
-app.get('/api/projects', function(req, res) {
+app.get( '/api/projects', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
   var email = req.session.email;
-
-  if (!email) {
-    res.json({ error: 'unauthorized' }, 403);
-    return;
-  }
-
-  if (!canStoreData) {
-    res.json({ error: 'storage service is not running' }, 500);
-    return;
-  }
 
   UserModel.findOne( { email: email }, function( err, doc ) {
 
@@ -386,19 +359,9 @@ app.get('/api/projects', function(req, res) {
   });
 });
 
-app.get('/api/project/:id?', function(req, res) {
+app.get( '/api/project/:id?', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
   var email = req.session.email,
       id = req.params.id;
-
-  if (!email) {
-    res.json({ error: 'unauthorized' }, 403);
-    return;
-  }
-
-  if (!canStoreData) {
-    res.json({ error: 'storage service is not running' }, 500);
-    return;
-  }
 
   UserModel.findOne( { email: email }, function( err, doc ) {
     var project;
@@ -416,19 +379,9 @@ app.get('/api/project/:id?', function(req, res) {
   });
 });
 
-app.get('/api/delete/:id?', function(req, res) {
+app.get( '/api/delete/:id?', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
   var email = req.session.email,
       id = req.params.id;
-
-  if (!email) {
-    res.json({ error: 'unauthorized' }, 403);
-    return;
-  }
-
-  if (!canStoreData) {
-    res.json({ error: 'storage service is not running' }, 500);
-    return;
-  }
 
   UserModel.findOne( { email: email }, function( err, doc ) {
     var project;
@@ -446,21 +399,11 @@ app.get('/api/delete/:id?', function(req, res) {
 });
 
 
-app.post('/api/project/:id?', function( req, res ) {
+app.post( '/api/project/:id?', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
   var email = req.session.email;
-
-  if ( !email ) {
-    res.json( { error: 'unauthorized' }, 403 );
-    return;
-  }
 
   if( !req.body ){
     res.json( {error: 'no project data received' }, 500 );
-    return;
-  }
-
-  if (!canStoreData) {
-    res.json({ error: 'storage service is not running' }, 500);
     return;
   }
 
@@ -513,13 +456,8 @@ app.post('/api/project/:id?', function( req, res ) {
   });
 });
 
-app.get('/api/whoami', function( req, res ) {
+app.get( '/api/whoami', filter.isLoggedIn, function( req, res ) {
   var email = req.session.email;
-
-  if ( !email ) {
-    res.json( { error: 'unauthorized' }, 403 );
-    return;
-  }
 
   res.json({
     email: email,
