@@ -1,19 +1,23 @@
 // Options must be shared with anyone require()-ing this file
-var options;
+var options, filters;
 
-var filters = {
+filters = {
   isLoggedIn: function( req, res, next ) {
     if ( req.session.email ) {
       next();
     } else {
-      res.json( { error: 'unauthorized' }, 403 );
+      res.json({
+        error: 'unauthorized'
+      }, 403 );
     }
   },
   isStorageAvailable: function( req, res, next ) {
     if ( options.dbOnline ) {
       next();
     } else {
-      res.json( { error: 'storage service is not running' }, 500 );
+      res.json({
+        error: 'storage service is not running'
+      }, 500 );
     }
   }
 }

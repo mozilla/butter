@@ -290,7 +290,7 @@ app.post( '/api/publish/:id', filter.isLoggedIn, filter.isStorageAvailable, func
   });
 });
 
-app.get( '/dashboard', filter.isStorageAvailable, function(req, res) {
+app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
   var email = req.session.email;
 
   if ( !email ) {
@@ -324,7 +324,7 @@ app.get( '/dashboard', filter.isStorageAvailable, function(req, res) {
   });
 });
 
-app.get( '/api/projects', filter.isLoggedIn, filter.isStorageAvailable, function(req, res) {
+app.get( '/api/projects', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
   var email = req.session.email;
 
   UserModel.findOne( { email: email }, function( err, doc ) {
@@ -359,7 +359,7 @@ app.get( '/api/projects', filter.isLoggedIn, filter.isStorageAvailable, function
   });
 });
 
-app.get( '/api/project/:id?', filter.isLoggedIn, filter.isStorageAvailable, function(req, res) {
+app.get( '/api/project/:id?', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
   var email = req.session.email,
       id = req.params.id;
 
@@ -379,7 +379,7 @@ app.get( '/api/project/:id?', filter.isLoggedIn, filter.isStorageAvailable, func
   });
 });
 
-app.get( '/api/delete/:id?', filter.isLoggedIn, filter.isStorageAvailable, function(req, res) {
+app.get( '/api/delete/:id?', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
   var email = req.session.email,
       id = req.params.id;
 
