@@ -26,6 +26,12 @@
   "exportAssets": [
     "../external/popcorn-js/ie8/popcorn.ie8.js",
     "../external/popcorn-js/popcorn.js",
+    "../external/popcorn-js/wrappers/common/popcorn._MediaElementProto.js",
+    "../external/popcorn-js/wrappers/html5/popcorn.HTMLMediaElement.js",
+    "../external/popcorn-js/wrappers/null/popcorn.HTMLNullVideoElement.js",
+    "../external/popcorn-js/wrappers/soundcloud/popcorn.HTMLSoundCloudAudioElement.js",
+    "../external/popcorn-js/wrappers/vimeo/popcorn.HTMLVimeoVideoElement.js",
+    "../external/popcorn-js/wrappers/youtube/popcorn.HTMLYouTubeVideoElement.js",
     "../external/popcorn-js/modules/player/popcorn.player.js",
     "../external/popcorn-js/players/youtube/popcorn.youtube.js",
     "../external/popcorn-js/players/vimeo/popcorn.vimeo.js",
