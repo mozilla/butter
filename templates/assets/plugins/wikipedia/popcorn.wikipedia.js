@@ -46,7 +46,7 @@
           _toWikipedia,
           _container,
           _href,
-          _guid = Popcorn.guid(),
+          _guid = Popcorn.guid( "wikiCallback" ),
           _manifestOpts = options._natives.manifest.options;
 
       options._target = Popcorn.dom.find( options.target ) || Popcorn.dom.find( _manifestOpts.target[ "default" ] );
@@ -93,10 +93,10 @@
         options.lang = "en";
       }
 
-      window[ "wikiCallback" + _guid ]  = function ( data ) {
+      window[ _guid ]  = function ( data ) {
 
         if ( data.error ) {
-          _titleTextArea.innerHTML = "Uh oh....";
+          _titleTextArea.innerHTML = "Article Not Found";
           _contentArea.innerHTML = data.error.info;
           return;
         }
@@ -120,13 +120,13 @@
 
       if ( options.src ) {
 
-        _href = "//" + options.lang + ".wikipedia.org/w/";
+        _href = "//" + window.escape( options.lang ) + ".wikipedia.org/w/";
         _title = options.src.slice( options.src.lastIndexOf( "/" ) + 1 );
         options._link = "//" + options.lang + ".wikipedia.org/wiki/" + _title;
 
         // gets the mobile format, so that we don't load unwanted images when the respose is turned into a documentFragment
         Popcorn.getScript( _href + "api.php?action=parse&prop=text&redirects&page=" +
-          _title + "&noimages=1&mobileformat=html&format=json&callback=wikiCallback" + _guid );
+          window.escape( _title ) + "&noimages=1&mobileformat=html&format=json&callback=" + _guid );
       }
 
       options.toString = function() {
@@ -141,14 +141,12 @@
     },
 
     end: function( event, options ){
-
       if ( options._container ) {
         options._container.classList.remove( "wikipedia-visible" );
       }
     },
 
     _teardown: function( options ){
-
       if ( options._target && options._container ) {
         options._target.removeChild( options._container );
       }
@@ -231,7 +229,7 @@
         elem: "input",
         type: "text",
         label: "Article Link/Title",
-        "default": "London_2012_Olympics"
+        "default": "Popcorn.js"
       },
       width: {
         elem: "input",

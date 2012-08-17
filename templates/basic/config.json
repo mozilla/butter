@@ -53,7 +53,8 @@
       },
       {
         "type": "wikipedia",
-        "path": "{{baseDir}}templates/assets/plugins/wikipedia/popcorn.wikipedia.js"
+        "path": "{{baseDir}}templates/assets/plugins/wikipedia/popcorn.wikipedia.js",
+        "icon": "{{baseDir}}templates/assets/plugins/wikipedia/wikipedia-icon.png"
       }
     ],
     "defaults": [
