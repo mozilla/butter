@@ -193,6 +193,7 @@
           label: "Font",
           styleClass: "",
           googleFonts: true,
+          "default": "Merriweather",
           group: "advanced"
         },
         fontSize: {
@@ -439,7 +440,7 @@
       fontSheet = document.createElement( "link" );
       fontSheet.rel = "stylesheet";
       fontSheet.type = "text/css";
-      options.fontFamily = options.fontFamily ? options.fontFamily.replace( /\s/g, "+" ) : "Tangerine";
+      options.fontFamily = options.fontFamily ? options.fontFamily : options._natives.manifest.options.fontFamily[ "default" ];
       // Store reference to generated sheet for removal later, remove any existing ones
       options._fontSheet = fontSheet;
       document.head.appendChild( fontSheet );
@@ -448,7 +449,7 @@
         // Apply all the styles
         textContainer.style.fontFamily = options.fontFamily ? originalFamily : DEFAULT_FONT;
       };
-      fontSheet.href = "http://fonts.googleapis.com/css?family=" + options.fontFamily;
+      fontSheet.href = "http://fonts.googleapis.com/css?family=" + options.fontFamily.replace( /\s/g, "+" );
 
     },
 
