@@ -36,6 +36,7 @@
         "icon": "{{baseDir}}templates/assets/plugins/image/image-icon.png"
       },
       {
+        "type": "repeat",
         "path": "{{baseDir}}templates/assets/plugins/repeat/popcorn.repeat.js",
         "icon": "{{baseDir}}resources/icons/link.png"
       },
@@ -46,10 +47,6 @@
       {
         "type": "jump",
         "path": "{{baseDir}}templates/assets/plugins/jump/popcorn.jump.js"
-      },
-      {
-        "type": "repeat",
-        "path": "{{baseDir}}templates/assets/plugins/repeat/popcorn.repeat.js"
       },
       {
         "type": "wikipedia",
