@@ -21,10 +21,10 @@ body {
   font-family: "Helvetica Neue", sans-serif;
 }
 
-#play {
+#controls-big-play-button {
   width: 57px;
   height: 66px;
-  background: url(http://ocupopdev.com/popcorn-embed/img/icon_play.png) no-repeat;
+  background: url(../resources/controls/icon_play.png) no-repeat;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -101,32 +101,25 @@ body {
 @embedLogoWidth: 100px;
 @embedLogoHeight: 45px;
 
-#embed-info {
+.embed-info {
   position: absolute;
   width: 100%;
   background: rgba(255,255,255,0.85);
   padding: 10px;
-  font-family: "ff-meta-web-pro";
+  font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
   border-bottom: 1px solid rgba(0,0,0,0.2);
-}
-
-.embed-logo {
-  float: left;
-  background: url( "../resources/logo/logo-100x45.png" ) no-repeat;
-  width: @embedLogoWidth;
-  height: @embedLogoHeight;
 }
 
 .embed-info {
 
-  .profile-mug {
+  .embed-logo-small {
     width: 90px;
     height: 90px;
-    background: url(http://ocupopdev.com/popcorn-embed/img/profile_image.png) no-repeat;
+    background: url(../resources/controls/postroll_logo.png) center no-repeat;
+    background-size: contain;
     float: left;
     padding: 0;
     margin-right: 10px;
-    border: 1px solid rgba(0,0,0,0.1);
   }
 
   .mozpop {
@@ -153,34 +146,36 @@ body {
     color: #002839;
   }
 
-  .group {
+  .embed-details {
     float: left;
     margin-top: 8px;
   }
 
 }
 
-.embed-playing #embed-info {
-  .embed-logo {
+.embed-playing .embed-info {
+  background: none;
+  border-bottom: none;
+  .embed-logo-small {
     opacity: 0.5;
     .transition( opacity 0.4s ease );
   }
-  .embed-info {
+  .embed-details{
     display: block;
     opacity: 0;
     .transition( opacity 0.2s ease );
   }
   &:hover {
-    .embed-logo {
+    .embed-logo-small {
       opacity: 1;
     }
-   .embed-info {
+   .embed-details {
       opacity: 1;
     }
   }
 }
 
-.embed-ended #embed-info {
+.embed-ended .embed-info {
   display: none;
 }
 
@@ -190,7 +185,7 @@ body {
 */
 
 #post-roll {
-  font-family: "ff-meta-web-pro";
+  font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 #post-roll {
@@ -205,7 +200,7 @@ body {
 
   .embed-logo {
     float: left;
-    background: url(http://ocupopdev.com/popcorn-embed/img/postroll_logo.png) 0 0 no-repeat;
+    background: url(../resources/controls/postroll_logo.png) 0 0 no-repeat;
     width: 30%;
     background-size: 100%;
     max-width: 231px;
@@ -235,7 +230,7 @@ body {
   }
 
   .embed-nav > li > a {
-    background: rgba(0,0,0,0.3) url(http://ocupopdev.com/popcorn-embed/img/controls_icons.png) no-repeat;
+    background: rgba(0,0,0,0.3) url(../resources/controls/controls_icons.png) no-repeat;
     margin: 0;
     padding: 0;
     position: relative;
@@ -245,6 +240,7 @@ body {
   }
 
   .embed-nav > li > a span {
+    color: #676867;
     display: block;
     position: absolute;
     top: 60px;
@@ -290,7 +286,7 @@ body {
 #share {
 
   .embed-logo {
-    background: url( "http://ocupopdev.com/popcorn-embed/img/controls_icons.png" ) no-repeat;
+    background: url( "../resources/controls/controls_icons.png" ) no-repeat;
     width: @embedLogoWidth * 2;
     height: @embedLogoHeight * 2;
   }
@@ -399,7 +395,7 @@ body {
 @media only screen and ( max-width: @large ) {
 
   #post-roll {
-    font-family: "ff-meta-web-pro";
+    font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
     text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
     font-size: 1.2em;
     line-height: 1.4em;
@@ -526,20 +522,22 @@ body {
   }
 
     #post-roll {
-      font-family: "ff-meta-web-pro";
+      font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
       text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
-      font-size: 1em;
+      font-size: 13px;
       line-height: 1.4em;
       color: #676867;
+      .post-roll-description {
+        display: none;
+      }
     }
 
 
   .embed-info {
 
-    .profile-mug {
+    .embed-logo-small {
       width: 63px;
       height: 63px;
-      background-size: 100%;
       margin-right: 10px;
     }
 
@@ -556,7 +554,7 @@ body {
       font-size: 1em;
     }
 
-    .group {
+    .embed-details {
       margin-top: 0px;
     }
   }

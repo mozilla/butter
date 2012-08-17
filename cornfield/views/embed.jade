@@ -21,25 +21,29 @@ html(lang='en')
     #container.container
       #video-container.video
         #video
+        #controls-big-play-button
         #post-roll.embed-overlay(style='display: none;')
           .post-roll-inner
             a(href='#').embed-logo
             .embed-project
               div
+                .mozpopcorn mozilla Popcorn
                 .embed-title #{title}
                 .embed-author #{author}
               .post-roll-description
                 | This project was created entirely in a browser using
-                br
-                strong HTML5 and javascript
+                strong  HTML5 and javascript
                 | .
               ul.embed-nav.post-roll-options
                 li
-                  a#replay-post(href='#') Replay
+                  a#replay-post
+                    span Replay
                 li
-                  a#remix-post(href='#') Remix
+                  a#remix-post
+                    span Remix
                 li
-                  a#share-post(href='#') Share
+                  a#share-post
+                    span Share
         #share.embed-overlay(style='display: none;')
           .share-inner
             a#share-close(href='#') [X]
@@ -70,11 +74,10 @@ html(lang='en')
                     option(value='640x403') 640x403
                     option(value='853x523') 853x523
                     option(value='1280x763') 1280x763
-        #embed-info
-          .embed-info
-            .profile-mug
-            .group
-              a.mozpop(href='javascript:void(0);') mozilla Popcorn
-              a.embed-title(href='javascript:void(0);') #{title}
-              a.embed-author(href='javascript:void(0);') #{author}
+        .embed-info
+          .embed-logo-small
+          .embed-details
+            a.mozpop(href='javascript:void(0);') mozilla Popcorn
+            a.embed-title(href='javascript:void(0);') #{title}
+            a.embed-author(href='javascript:void(0);') #{author}
       #controls.controls(style='display: none;')
