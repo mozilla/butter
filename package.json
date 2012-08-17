@@ -1,9 +1,13 @@
 {
   "name": "butter",
-  "version": "0.5.2",
+  "version": "0.8",
   "author": "The Mozilla Popcorn Team <dev-popcorn@lists.mozilla.org>",
   "description": "The Popcorn authoring tool",
   "contributors": [
+    {
+      "name": "Brett Gaylor",
+      "email": "brett@mozillafoundation.org "
+    },
     {
       "name": "Bobby Richter",
       "email": "secretrobotron@gmail.com"
@@ -59,6 +63,18 @@
     {
       "name": "Robert Stanica",
       "email": "robertstanica@gmail.com"
+    },
+    {
+      "name": "Chris Appleton",
+      "email": "christopher@mozillafoundation.org"
+    },
+    {
+      "name": "Cory Shaw",
+      "email": "c@ocupop.com"
+    },
+    {
+      "name": "Michael Nieling",
+      "email": "m@ocupop.com"
     }
   ],
   "repository": {
