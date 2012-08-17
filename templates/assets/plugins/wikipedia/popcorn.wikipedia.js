@@ -7,10 +7,6 @@
     return document.createElement( type );
   }
 
-  function normalize( value, minWidth, maxWidth ) {
-    return Math.max( Math.min( value || 0, maxWidth ), minWidth );
-  }
-
   function getFragment( inputString ) {
     //grabbed from butter util methods
     var range = document.createRange(),
@@ -29,6 +25,14 @@
 
     return fragment;
   }
+
+  function validateDimension( value, fallback ) {
+    if ( typeof value === "number" ) {
+      return value;
+    }
+    return fallback;
+  }
+
 
   var WikipediaDefinition = {
 
@@ -55,10 +59,11 @@
       options._container = _container = create( "div" );
 
       _container.classList.add( "wikipedia-inner-container" );
-      _container.style.width = normalize( options.width || _manifestOpts.width[ "default" ], 20, 100 ) + "%";
-      _container.style.height = normalize( options.height || _manifestOpts.height[ "default" ], 30, 100 ) + "%";
-      _container.style.top = normalize( options.top || _manifestOpts.top[ "default" ], 0, 70 ) + "%";
-      _container.style.left = normalize( options.left || _manifestOpts.left[ "default" ], 0, 80 ) + "%";
+
+      _container.style.width = validateDimension( options.width, "100" ) + "%";
+      _container.style.height = validateDimension( options.height, "100" ) + "%";
+      _container.style.top = validateDimension( options.top, "0" ) + "%";
+      _container.style.left = validateDimension( options.left, "0" ) + "%";
 
       _titleDiv = create( "div" );
       _titleDiv.classList.add( "wikipedia-title" );
