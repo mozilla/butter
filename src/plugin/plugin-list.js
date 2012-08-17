@@ -33,9 +33,8 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
 
       DragNDrop.helper( element, {
         start: function() {
-          var targets = butter.targets,
-              media = butter.currentMedia;
-          media.view.blink();
+          var targets = butter.targets;
+
           for ( var i = 0, l = targets.length; i < l; ++i ) {
             targets[ i ].view.blink();
           }
