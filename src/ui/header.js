@@ -13,20 +13,21 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
         _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
         _buttonGroup = _rootElement.querySelector( ".butter-login-project-info"),
         _authButton = _rootElement.querySelector( ".butter-login-btn" ),
-        _projectName = _rootElement.querySelector( ".butter-project-title" ),
+        _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
+        _projectName = _projectTitle.querySelector( ".butter-project-name" ),
         _loginClass = "butter-login-true",
         _activeClass = "btn-green",
         _noProjectNameToolTip,
-        _projectNamePlaceHolderText = _projectName.childNodes[ 1 ].data;
+        _projectTitlePlaceHolderText = _projectName.innerHTML;
 
     // create a tooltip for the projectName element
     ToolTip.create({
-      element: _projectName,
+      element: _projectTitle,
       top: "43px"
     });
 
     _this.element = _rootElement;
-    ToolTip.apply( _projectName );
+    ToolTip.apply( _projectTitle );
 
     function authenticationRequired( successCallback, errorCallback ){
       if ( butter.cornfield.authenticated() && successCallback && typeof successCallback === "function" ) {
@@ -126,35 +127,35 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
     }
 
     function onMouseOver() {
-      _projectName.removeEventListener( "mouseover", onMouseOver, false );
-      _projectName.removeChild( _noProjectNameToolTip );
+      _projectTitle.removeEventListener( "mouseover", onMouseOver, false );
+      _projectTitle.removeChild( _noProjectNameToolTip );
     }
 
     function createErrorToolTip() {
-      _projectName.removeEventListener( "mouseover", onMouseOver, false );
+      _projectTitle.removeEventListener( "mouseover", onMouseOver, false );
 
-      if ( _projectName.querySelector( ".tooltip-error" ) ) {
-        _projectName.removeChild( _noProjectNameToolTip );
+      if ( _projectTitle.querySelector( ".tooltip-error" ) ) {
+        _projectTitle.removeChild( _noProjectNameToolTip );
       }
 
-      if ( butter.project.name && butter.project.name !== _projectNamePlaceHolderText ) {
+      if ( butter.project.name && butter.project.name !== _projectTitlePlaceHolderText ) {
         return;
       }
 
       _noProjectNameToolTip = ToolTip.create({
         message: "Please give your project a name before saving",
         hidden: false,
-        element: _projectName,
+        element: _projectTitle,
         top: "43px"
       });
 
       _noProjectNameToolTip.classList.add( "tooltip-error" );
-      _projectName.addEventListener( "mouseover", onMouseOver, false );
+      _projectTitle.addEventListener( "mouseover", onMouseOver, false );
       return true;
     }
 
     function onKeyPress( e ) {
-      var node = _projectName.childNodes[ 1 ];
+      var node = _projectTitle.querySelector( ".butter-project-name" );
 
       // if this wasn't the 'enter' key, return early
       if ( e.keyCode !== 13 ) {
@@ -166,15 +167,15 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
     }
 
     function onBlur() {
-      var node = _projectName.childNodes[ 1 ],
-          text = document.createTextNode( node.value || _projectNamePlaceHolderText );
+      var node = _projectTitle.querySelector( ".butter-project-name" );
 
+      _projectName.innerHTML = node.value || _projectTitlePlaceHolderText;
       butter.project.name = node.value;
 
       createErrorToolTip();
-      _projectName.replaceChild( text, node );
+      _projectTitle.replaceChild( _projectName, node );
       node.removeEventListener( "blur", onBlur, false );
-      _projectName.addEventListener( "click", projectNameClick, false );
+      _projectTitle.addEventListener( "click", projectNameClick, false );
     }
 
     _saveButton.addEventListener( "click", function( e ){
@@ -185,21 +186,21 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
     }, false );
 
     function projectNameClick( e ) {
-      var input = document.createElement( "input" ),
-          childNode = _projectName.childNodes[ 1 ];
+      var input = document.createElement( "input" );
 
       input.type = "text";
 
-      input.placeholder = _projectNamePlaceHolderText;
-      input.value = childNode.data !== _projectNamePlaceHolderText ? childNode.data : "";
-      _projectName.replaceChild( input, childNode );
-      _projectName.removeEventListener( "click", projectNameClick, false );
+      input.placeholder = _projectTitlePlaceHolderText;
+      input.classList.add( "butter-project-name" );
+      input.value = _projectName.innerHTML !== _projectTitlePlaceHolderText ? _projectName.innerHTML : "";
+      _projectTitle.replaceChild( input, _projectName );
+      _projectTitle.removeEventListener( "click", projectNameClick, false );
       input.focus();
       input.addEventListener( "blur", onBlur, false );
       input.addEventListener( "keypress", onKeyPress, false );
     }
 
-    _projectName.addEventListener( "click", projectNameClick, false );
+    _projectTitle.addEventListener( "click", projectNameClick, false );
 
 
     function doLogout() {
