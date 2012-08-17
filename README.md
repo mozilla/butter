@@ -48,7 +48,7 @@ Running Butter (with cornfield)
 Running Butter (without cornfield)
 ----------------------------------
 
-* Be sure to have a webserver of some sort running and navigate to butter/templates/test.html ( keep in mind you will not be able to save and load projects )
+* Be sure to have a webserver of some sort running and navigate to butter/templates/basic/ ( keep in mind you will not be able to save and load projects )
 * Run `node make` to ensure all of the CSS has been compiled, since Stylus files are used in place of plain CSS
 * If you do not have a webserver setup you can create a temporary one by running `python -m SimpleHTTPServer 8888` inside the root of your Butter directory
 * Navigate to localhost:8888 to use butter
@@ -56,11 +56,9 @@ Running Butter (without cornfield)
 Packaging and Distributing Butter
 --------------------------------
 
-The 0.5.2 release is being done to support Mozilla's Storycamp project--a set of summer workshops using Popcorn and Butter.
+Running `node make deploy` will compile all the necessary files into the `dist/` folder, including resources like editors and dialogs which comprise a complete running environment for Butter.
 
-Running `node make storycamp` will compile all the necessary files into the `dist/` folder, including resources like editors and dialogs which comprise a complete running environment for Butter.
-
-Within `dist/` you will find `src/butter.js` and `external/popcorn-js/popcorn.js`, which are single-file versions of the Butter and Popcorn.js sources, customized to the storycamp templates.  You can find these templates in `dist/templates/supported`.
+Within `dist/` you will find `src/butter.js` and `external/popcorn-js/popcorn.js`, which are single-file versions of the Butter and Popcorn.js sources, customized to the basic template.  You can find these templates in `dist/templates/basics`.
 
 Testing
 -------
@@ -173,8 +171,3 @@ Once code has been reviewed (PR+ and SR+), and you want to land it, you need to 
 * # Paste URL to commits in ticket, and mark it as "Staged"
 
 We use this landing strategy in order to make backing-out failed commits easier.
-
-Known Issues
-------------
-
-Vimeo and SoundCloud, while working in this version, have issues that kept us from formally supporting them.  We are targeting these for a future release.
