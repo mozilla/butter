@@ -1,5 +1,3 @@
-"use strict";
-
 (function ( Popcorn ) {
 
   var allWikiLangLinks, allWikiLangNames;
@@ -16,7 +14,6 @@
   function getFragment( inputString ) {
     //grabbed from butter util methods
     var range = document.createRange(),
-
         // For particularly speedy loads, 'body' might not exist yet, so try to use 'head'
         container = document.body || document.head,
         fragment;
@@ -93,7 +90,7 @@
         options.lang = "en";
       }
 
-      window[ _guid ]  = function ( data ) {
+      window[ _guid ] = function ( data ) {
 
         if ( data.error ) {
           _titleTextArea.innerHTML = "Article Not Found";
@@ -105,24 +102,22 @@
             element = responseFragment.querySelector( "div > p:nth-of-type(1)" ),
             mainText = "";
 
-        _titleTextArea.appendChild( getFragment( "<a href=\"" + options._link + "\" target=\"_blank\">" + data.parse.title + "</a>" ) );
+        _titleTextArea.appendChild( getFragment( "<a href=\"" + options._link + "\" target=\"_blank\">" + window.escape( data.parse.title ) + "</a>" ) );
         _toWikipedia.appendChild( getFragment( "<div>Read more on <a href=\"" + options._link + "\" target=\"_blank\">Wikipedia</a></div>" ) );
 
-        // Store the Main text of the article, will leave "element" on first header element
         while ( element && element.nodeName === "P" ) {
           mainText += element.textContent + "<br />";
           element = element.nextElementSibling;
         }
 
         _contentArea.innerHTML = mainText;
-
       };
 
       if ( options.src ) {
 
         _href = "//" + window.escape( options.lang ) + ".wikipedia.org/w/";
         _title = options.src.slice( options.src.lastIndexOf( "/" ) + 1 );
-        options._link = "//" + options.lang + ".wikipedia.org/wiki/" + _title;
+        options._link = "//" + window.escape( options.lang + ".wikipedia.org/wiki/" + _title );
 
         // gets the mobile format, so that we don't load unwanted images when the respose is turned into a documentFragment
         Popcorn.getScript( _href + "api.php?action=parse&prop=text&redirects&page=" +
