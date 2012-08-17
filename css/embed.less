@@ -21,6 +21,19 @@ body {
   font-family: "Helvetica Neue", sans-serif;
 }
 
+#play {
+  width: 57px;
+  height: 66px;
+  background: url(http://ocupopdev.com/popcorn-embed/img/icon_play.png) no-repeat;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -33px;
+  margin-left: -26px;
+  z-index: 9999;
+  cursor: pointer;
+}
+
 .embed {
   width: 100%;
   height: 100%;
@@ -51,8 +64,8 @@ body {
 }
 
 .embed-overlay {
-  background: rgba( 0, 0, 0, .7 );
-  color: #EEE;
+  background: rgba( 255,255,255,0.95);
+  color: #676867;
 }
 
 .embed-nav {
@@ -90,9 +103,11 @@ body {
 
 #embed-info {
   position: absolute;
-  top: 5px;
-  left: 5px;
-
+  width: 100%;
+  background: rgba(255,255,255,0.85);
+  padding: 10px;
+  font-family: "ff-meta-web-pro";
+  border-bottom: 1px solid rgba(0,0,0,0.2);
 }
 
 .embed-logo {
@@ -103,22 +118,44 @@ body {
 }
 
 .embed-info {
-  padding-left: @embedLogoWidth + 20px;
 
-  > div {
-    background: rgba( 0, 0, 0, .5 );
-    padding: .3em .5em;
+  .profile-mug {
+    width: 90px;
+    height: 90px;
+    background: url(http://ocupopdev.com/popcorn-embed/img/profile_image.png) no-repeat;
+    float: left;
+    padding: 0;
+    margin-right: 10px;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .mozpop {
+    color: #58595B;
+    font-size: 1.1em;
+    font-weight: bold;
+    line-height: 1em;
+    text-decoration: none;
   }
 
   .embed-title {
-    font-size: 15px;
-    margin-bottom: 5px;
-    font-weight: 700;
+    font-size: 2em;
+    font-weight: bold;
+    line-height: 1.2em;
+    display: block;
+    text-decoration: none;
+    color: #002839;
   }
 
   .embed-author {
-    font-size: 12px;
-    display: inline-block;
+    font-size: 1.4em;
+    line-height: 1em;
+    text-decoration: none;
+    color: #002839;
+  }
+
+  .group {
+    float: left;
+    margin-top: 8px;
   }
 
 }
@@ -152,6 +189,9 @@ body {
 * POST ROLL
 */
 
+#post-roll {
+  font-family: "ff-meta-web-pro";
+}
 
 #post-roll {
   .post-roll-inner {
@@ -159,10 +199,20 @@ body {
     padding: 10%;
   }
 
+  .mozpopcorn {
+    color: #D53B2A;
+  }
+
   .embed-logo {
-    background: url( "../resources/logo/logo-100x45@x2.png" ) no-repeat;
-    width: @embedLogoWidth * 2;
-    height: @embedLogoHeight * 2;
+    float: left;
+    background: url(http://ocupopdev.com/popcorn-embed/img/postroll_logo.png) 0 0 no-repeat;
+    width: 30%;
+    background-size: 100%;
+    max-width: 231px;
+    height: 388px;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: -5%;
   }
 
   .embed-project {
@@ -172,25 +222,57 @@ body {
   .embed-title {
     font-size: 32px;
     font-weight: 700;
+    color: #676867;
   }
 
   .embed-author {
     margin-bottom: 1em;
+    color: #676867;
+  }
+
+  .post-roll-description {
+    color: #676867;
   }
 
   .embed-nav > li > a {
-    background: url( "../resources/embed-icons-50x50.png" ) no-repeat;
+    background: rgba(0,0,0,0.3) url(http://ocupopdev.com/popcorn-embed/img/controls_icons.png) no-repeat;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    border-radius: 7px;
+    width: 58px;
+    height: 58px;
+  }
+
+  .embed-nav > li > a span {
+    display: block;
+    position: absolute;
+    top: 60px;
+    font-size: .8em;
   }
 
   #replay-post {
-    background-position: 0 0;
+    background-position: 9px -28px;
   }
+
+  #replay-post:hover {
+    background-color: #2BB673;
+  }
+
   #remix-post {
-    background-position: -50px 0;
+    background-position: 9px -78px;
+  }
+
+  #remix-post:hover {
+    background-color: #002839;
   }
 
   #share-post {
-    background-position: -100px 0;
+    background-position: 9px -123px;
+  }
+
+  #share-post:hover {
+    background-color: #D53B2A;
   }
 
 } // post-roll
@@ -208,7 +290,7 @@ body {
 #share {
 
   .embed-logo {
-    background: url( "../resources/logo/logo-100x45@x2.png" ) no-repeat;
+    background: url( "http://ocupopdev.com/popcorn-embed/img/controls_icons.png" ) no-repeat;
     width: @embedLogoWidth * 2;
     height: @embedLogoHeight * 2;
   }
@@ -303,13 +385,7 @@ body {
 }
 
 
-/*********************************************************
-* CONTROLS
-*/
-.controls {
-  background: green;
-  height: 30px;
-}
+
 
 /*********************************************************
 * MEDIA QUERIES
@@ -320,22 +396,106 @@ body {
 @large: 853px;
 @xlarge: 1280px;
 
-@media only screen and ( max-width: @small ) {
- 
+@media only screen and ( max-width: @large ) {
+
   #post-roll {
+    font-family: "ff-meta-web-pro";
+    text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
+    font-size: 1.2em;
+    line-height: 1.4em;
+    color: #676867;
+  }
+
+  #post-roll {
+
     .post-roll-inner {
-      padding: 0;
-      top: 50px;
-      left: 40px;
+      left: 0px !important;
+      width: 80% !important;
+      padding: 5% !important;
+      top: 10%;
     }
+
     .embed-logo {
-      background: url( "../resources/logo/logo-100x45.png" ) no-repeat;
-      width: @embedLogoWidth;
-      height: @embedLogoHeight;
+      width: 20% !important;
+      background-size: 100% !important;
+      margin-left: 10%;
+      margin-top: 0px;
+      height:255px !important;
     }
+
+    .embed-title {
+      font-size: 25px !important;
+      font-weight: 700;
+      line-height: 1em;
+    }
+
+    .mozpopcorn {
+      color: #D53B2A;
+      font-weight: bold;
+      font-size: 16px;
+      margin: 0 0 5px 0;
+    }
+
+    .embed-author {
+      margin-bottom: 1em;
+      font-size: 18px;
+    }
+
+  }
+
+}
+
+
+@media only screen and ( max-width: @small ) {
+
+  #post-roll {
+
     .embed-project {
       padding-left: @embedLogoWidth + 30px;
     }
+
+    .embed-logo {
+        width: 20%;
+        background-size: 100%;
+        margin-left: 20px;
+        margin-top: 0px;
+        height: 175px;
+      }
+
+      .embed-project {
+        margin-top: 0;
+      }
+
+      .embed-title {
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 1em;
+      }
+
+      .mozpopcorn {
+        color: #D53B2A;
+        font-weight: bold;
+        font-size: 15px;
+        margin: 0 0 5px 0;
+      }
+
+      .embed-author {
+        margin-bottom: 1em;
+        font-size: 16px;
+      }
+
+      .embed-project {
+        margin-top: 0px;
+        padding-left: 0;
+      }
+
+      .post-roll-inner {
+        left: 0px;
+        top: 0px;
+        width: 90%;
+        padding: 0;
+      }
+
   }
 
   #share {
@@ -364,4 +524,47 @@ body {
       }
     }
   }
+
+    #post-roll {
+      font-family: "ff-meta-web-pro";
+      text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
+      font-size: 1em;
+      line-height: 1.4em;
+      color: #676867;
+    }
+
+
+  .embed-info {
+
+    .profile-mug {
+      width: 63px;
+      height: 63px;
+      background-size: 100%;
+      margin-right: 10px;
+    }
+
+    .mozpop {
+      font-size: .9em;
+    }
+
+    .embed-title {
+      font-size: 1.3em;
+
+    }
+
+    .embed-author {
+      font-size: 1em;
+    }
+
+    .group {
+      margin-top: 0px;
+    }
+  }
+
+  #play {
+    width: 40px;
+    background-size: 100%;
+    margin-top: 0;
+  }
+
 }
