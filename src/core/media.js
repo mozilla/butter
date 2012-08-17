@@ -9,7 +9,7 @@
             "core/track",
             "core/popcorn-wrapper"
           ],
-          function( Logger, EventManagerWrapper, Track, PopcornWrapper, MediaView ){
+          function( Logger, EventManagerWrapper, Track, PopcornWrapper ){
 
     var MEDIA_ELEMENT_SAFETY_POLL_INTERVAL = 500,
         MEDIA_ELEMENT_SAFETY_POLL_ATTEMPTS = 10;

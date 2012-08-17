@@ -275,8 +275,10 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
         open: function( parentElement ) {
           clearCurrentMediaList();
           setup();
+          document.querySelector( ".butter-editor-header-media" ).classList.add( "butter-active" );
         },
         close: function() {
+          document.querySelector( ".butter-editor-header-media" ).classList.remove( "butter-active" );
         }
       });
     });
