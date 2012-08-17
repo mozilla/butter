@@ -82,7 +82,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
 
     // When a TrackEvent is somewhere in butter, open its editor immediately.
     butter.listen( "trackeventcreated", function( e ) {
-      if( [ "target", "media" ].indexOf( e.data.by ) > -1 && butter.ui.contentState === "timeline" ){
+      if ( [ "target", "media" ].indexOf( e.data.by ) > -1 ) {
         _this.editTrackEvent( e.data.trackEvent );
       }
     });
