@@ -46,7 +46,7 @@
           _guid = Popcorn.guid( "wikiCallback" ),
           _manifestOpts = options._natives.manifest.options;
 
-      options._target = Popcorn.dom.find( options.target ) || Popcorn.dom.find( _manifestOpts.target[ "default" ] );
+      options._target = Popcorn.dom.find( options.target );
 
       if ( !options._target ) {
         return;
