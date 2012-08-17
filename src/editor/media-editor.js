@@ -72,9 +72,20 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
         urlInput = __URL_INPUT_FRAG.cloneNode( true );
         urlInput.value = url;
 
-        urlInput.addEventListener( "blur", function() {
-          updateButterMedia();
-        });
+        (function() {
+          var oldValue = "",
+              input = urlInput;
+
+          input.addEventListener( "blur", function() {
+            if ( oldValue !== input.value ) {
+              updateButterMedia();
+            }
+          });
+
+          input.addEventListener( "focus", function() {
+            oldValue = input.value;
+          });
+        }());
 
         wrapper = __URL_INPUT_INNER_WRAPPER.cloneNode( true );
         wrapper.appendChild( urlInput );
