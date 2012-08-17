@@ -11,11 +11,6 @@
         "icon": "{{baseDir}}templates/assets/plugins/titles/titles-icon.png"
       },
       {
-        "type": "photo",
-        "path": "{{baseDir}}templates/assets/plugins/photo/popcorn.photo.js",
-        "icon": "{{baseDir}}templates/assets/plugins/image/image-icon.png"
-      },
-      {
         "type": "popup",
         "path": "{{baseDir}}templates/assets/plugins/popup/popcorn.popup.js",
         "icon": "{{baseDir}}templates/assets/plugins/popup/popup-icon.png"
@@ -59,7 +54,6 @@
     ],
     "defaults": [
       "titles",
-      "photo",
       "popup",
       "googlemap",
       "twitter",
