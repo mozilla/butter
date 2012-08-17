@@ -11,12 +11,10 @@
     var _this = this;
 
     var _rootElement = rootElement,
-        _targets = [ butter.currentMedia ].concat( butter.targets ),
         _messageContainer = _rootElement.querySelector( "div.error-message" ),
-        _targetSelectElement,
         _trackEvent,
         _popcornEventMapReference,
-        _mapListeners;
+        _butter;
 
     /**
      * Member: onDragEnd
@@ -53,8 +51,7 @@
      */
     function onZoomChanged() {
       var updateOptions = {
-            zoom: _popcornEventMapReference.getZoom(),
-            location: ""
+            zoom: _popcornEventMapReference.getZoom()
           };
       _trackEvent.update( updateOptions );
     }
@@ -65,10 +62,9 @@
      * Adds listeners to the google map object to detect change in state.
      */
     function setupMapListeners() {
-      _mapListeners = [];
-      _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'dragend', onDragEnd ) );
-      _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'zoom_changed', onZoomChanged ) );
-      _mapListeners.push( google.maps.event.addListener( _popcornEventMapReference, 'heading_changed', onHeadingChanged ) );
+      google.maps.event.addListener( _popcornEventMapReference, "dragend", onDragEnd );
+      google.maps.event.addListener( _popcornEventMapReference, "zoom_changed", onZoomChanged );
+      google.maps.event.addListener( _popcornEventMapReference, "heading_changed", onHeadingChanged );
     }
 
     /**
@@ -78,9 +74,7 @@
      */
     function removeMapListeners() {
       if ( _popcornEventMapReference && _trackEvent.popcornTrackEvent._map ) {
-        while ( _mapListeners.length ) {
-          google.maps.event.removeListener( _mapListeners.pop() );
-        }
+        google.maps.event.clearInstanceListeners( _popcornEventMapReference );
       }
     }
 
@@ -166,43 +160,126 @@
     function setup( trackEvent ){
       _trackEvent = trackEvent;
 
-      var targetList = _this.createTargetsList( _targets ),
+      var pluginOptions = {},
+          ignoreKeys = [
+            "target"
+          ],
           optionsContainer = _rootElement.querySelector( ".editor-options" );
 
-      // Attach the onchange handler to trackEvent is updated when <select> is changed
-      _targetSelectElement = targetList.querySelector( "select" );
+      function callback( elementType, element, trackEvent, name ) {
+        pluginOptions[ name ] = {
+          element: element,
+          trackEvent: trackEvent,
+          elementType: elementType
+        };
+      }
 
-      // Remove the default "Media Element" target so that the googlemaps plugin doesn't get angry with a blank target
-      _targetSelectElement.removeChild( _targetSelectElement.querySelector( ".default-target-option" ) );
-      _this.attachSelectChangeHandler( _targetSelectElement, trackEvent, "target" );
-      _targetSelectElement.value = trackEvent.popcornOptions.target;
+      function attachHandlers() {
+        var key,
+            option,
+            pitchObject,
+            headingObject,
+            currentMapType;
 
-      optionsContainer.appendChild( targetList );
+        function toggleStreetView() {
+          pitchObject.element.parentNode.style.display = "block";
+          headingObject.element.parentNode.style.display = "block";
+          _this.scrollbar.update();
+        }
 
-      _this.createPropertiesFromManifest( trackEvent,
-          function( elementType, element, trackEvent, name ){
-            if ( elementType === "select" ) {
-              _this.attachSelectChangeHandler( element, trackEvent, name, updateTrackEventWithoutTryCatch );
+        function toggleMaps() {
+          pitchObject.element.parentNode.style.display = "none";
+          headingObject.element.parentNode.style.display = "none";
+          _this.scrollbar.update();
+        }
+
+        function attachTypeHandler( option ) {
+          option.element.addEventListener( "change", function( e ) {
+            var elementVal = e.srcElement.value,
+                updateOptions = {},
+                target;
+
+            if ( elementVal === "STREETVIEW" ) {
+              toggleStreetView();
+            } else {
+              toggleMaps();
             }
-            else {
-              if ( [ "start", "end" ].indexOf( name ) > -1 ) {
-                _this.attachStartEndHandler( element, trackEvent, name, updateTrackEventWithTryCatch );
-              }
-              else {
-                if ( element.type === "checkbox" ) {
-                  _this.attachCheckboxChangeHandler( element, trackEvent, name, updateTrackEventWithoutTryCatch );
-                }
-                else {
-                  _this.attachInputChangeHandler( element, trackEvent, name, updateTrackEventWithoutTryCatch );
-                }
 
+            updateOptions.type = elementVal;
+            option.trackEvent.update( updateOptions );
+
+            // Attempt to make the trackEvent's target blink
+            target = _butter.getTargetByType( "elementID", option.trackEvent.popcornOptions.target );
+            if( target ) {
+              target.view.blink();
+            } else {
+              _butter.currentMedia.view.blink();
+            }
+          }, false );
+        }
+
+        function attachFullscreenHandler( option ) {
+          option.element.addEventListener( "click", function( e ) {
+            var srcElement = e.srcElement,
+                updateOptions = {},
+                manifestOpts = trackEvent.manifest.options;
+
+            if ( srcElement.checked ) {
+              updateOptions = {
+                height: 100,
+                width: 100,
+                left: 0,
+                top: 0,
+                fullscreen: true
+              };
+
+            } else {
+              updateOptions = {
+                height: manifestOpts.height[ "default" ],
+                width: manifestOpts.width[ "default" ],
+                left: manifestOpts.left[ "default" ],
+                top: manifestOpts.top[ "default" ],
+                fullscreen: false
+              };
+            }
+
+            trackEvent.update( updateOptions );
+          }, false );
+        }
+
+        for ( key in pluginOptions ) {
+          if ( pluginOptions.hasOwnProperty( key ) ) {
+            option = pluginOptions[ key ];
+
+            if ( key === "type" ) {
+              pitchObject = pluginOptions.pitch,
+              headingObject = pluginOptions.heading,
+              currentMapType = option.trackEvent.popcornOptions.type;
+
+              if ( currentMapType === "STREETVIEW" ) {
+                toggleStreetView();
+              } else {
+                toggleMaps();
+              }
+
+              attachTypeHandler( option );
+            } else if ( option.elementType === "select" && key !== "type" ) {
+              _this.attachSelectChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
+            } else if ( key === "fullscreen" ) {
+              attachFullscreenHandler( option );
+            } else if ( option.elementType === "input" ) {
+              if ( [ "start", "end" ].indexOf( key ) > -1 ) {
+                _this.attachStartEndHandler( option.element, option.trackEvent, key, updateTrackEventWithTryCatch );
+              } else {
+                _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
               }
             }
-          },
-          null,
-          optionsContainer );
+          }
+        }
+      }
 
-      getMapFromTrackEvent();
+      _this.createPropertiesFromManifest( trackEvent, callback, null, optionsContainer, null, ignoreKeys );
+      attachHandlers();
 
       _this.updatePropertiesFromManifest( trackEvent );
       _this.scrollbar.update();
@@ -212,19 +289,31 @@
     // Extend this object to become a BaseEditor
     Butter.Editor.TrackEventEditor( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
+        var popcorn = butter.currentMedia.popcorn.popcorn;
+
+        _butter = butter;
         // Update properties when TrackEvent is updated
         trackEvent.listen( "trackeventupdated", function ( e ) {
           _this.updatePropertiesFromManifest( e.target );
-          _targetSelectElement.value = trackEvent.popcornOptions.target;
           setErrorState( false );
+
+          // Now we REALLY know that we can try setting up listeners
+          popcorn.on( "googlemaps-loaded", function() {
+            popcorn.off( "googlemaps-loaded" );
+            getMapFromTrackEvent();
+          });
+        });
+
+        // Now we REALLY know that we can try setting up listeners
+        popcorn.on( "googlemaps-loaded", function() {
+          popcorn.off( "googlemaps-loaded" );
           getMapFromTrackEvent();
         });
+
         setup( trackEvent );
-        _this.applyExtraHeadTags( compiledLayout );
 
       },
       close: function() {
-        _this.removeExtraHeadTags();
         removeMapListeners();
       }
     });
