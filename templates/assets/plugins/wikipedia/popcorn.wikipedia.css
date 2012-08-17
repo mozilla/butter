@@ -1,0 +1,110 @@
+.wikipedia-inner-container {
+  display: none;
+  position: absolute;
+  font-family: sans-serif;
+  font-weight: 600;
+  color: #000000;
+  background: #ddd;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+}
+
+.wikipedia-title {
+  position: absolute;
+  display: block;
+  top: 2.5px;
+  left: 2.5px;
+  right: 2.5px;
+  height: 36px;
+  background: #fff;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+}
+
+.wikipedia-title-text {
+  text-align: left;
+  font-size: 18px;
+  overflow: hidden;
+  font-weight: bolder;
+  height: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  line-height: 40px;
+  text-indent: 20px;
+  background: #fff;
+  -webkit-border-radius: inherit;
+     -moz-border-radius: inherit;
+          border-radius: inherit;
+}
+
+.wikipedia-title-text a {
+  color: black;
+  text-decoration: none;
+}
+
+.wikipedia-main-content {
+  position: absolute;
+  display: block;
+  overflow: auto;
+  top: 41px;
+  bottom: 45px;
+  right: 2.5px;
+  left: 2.5px;
+  background-color: #fff;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+}
+
+.wikipedia-content {
+  text-align: left;
+  font-size: 14px;
+  font-weight: normal;
+  padding: 10px 20px 10px 20px;
+  word-wrap: break-word;
+  line-height: 1.4;
+  word-spacing: 1px;
+  letter-spacing: .3px;
+}
+
+.wikipedia-to-wiki {
+  position: absolute;
+  overflow: hidden;
+  display: block;
+  bottom: 2.5px;
+  left: 2.5px;
+  right: 2.5px;
+  height: 40px;
+  line-height: 30px;
+  text-align: left;
+  text-indent: 20px;
+  background-color: #fff;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+}
+
+.wikipedia-to-wiki div {
+  display: block;
+  overflow: hidden;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  line-height: 45px;
+  text-align: left;
+  text-indent: 20px;
+}
+
+.wikipedia-visible {
+  display: block;
+}
+
+.wikipedia-ellipsis {
+    -webkit-text-overflow: ellipsis;
+     -moz-text-overflow: ellipsis;
+      -ms-text-overflow: ellipsis;
+       -o-text-overflow: ellipsis;
+          text-overflow: ellipsis;
+}
