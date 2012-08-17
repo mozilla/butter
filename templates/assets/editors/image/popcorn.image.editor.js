@@ -27,7 +27,8 @@
       _urlActive = false,
       _flickrActive = false,
       _dragDropActive = false,
-      _trackEvent;
+      _trackEvent,
+      _disabledClass = "butter-editor-disabled";
 
   function onTrackEventUpdated( e ) {
     _trackEvent = e.target,
@@ -35,6 +36,9 @@
   }
 
   function toggleFlickr( state ) {
+    _flickrRadio.classList.remove( "butter-editor-disabled" );
+    _dragDropRadio.classList.add( "butter-editor-disabled" );
+    _urlRadio.classList.add( "butter-editor-disabled" );
     _tagInput.disabled = _galleryUrlInput.disabled = _numberInput.disabled = state;
     _tagInput.value = _galleryUrlInput.value = _numberInput.value = "";
     _flickrActive = !state;
