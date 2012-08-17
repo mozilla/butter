@@ -94,21 +94,25 @@
   -ms-transition: @transition1, @transition2, @transition3;
   transition: @transition1, @transition2, @transition3;
 }
-.backgroundColour(@r, @g, @b, @a) {
-  background-color: rgba(@r, @g, @b, @a);
-}
-.animation(@animation) {
+.animation( @animation ) {
   -webkit-animation: @animation;
   -moz-animation: @animation;
   -o-animation: @animation;
   -ms-animation: @animation;
 }
-.transform(@transformation) {
+.transform( @transformation ) {
   -webkit-transform: @transformation;
   -moz-transform: @transformation;
   -o-transform: @transformation;
   -ms-transform: @transformation;
   transform: @transformation;
+}
+.transform-origin( @transformation ) {
+  -webkit-transform-origin: @transformation;
+  -moz-transform-origin: @transformation;
+  -o-transform-origin: @transformation;
+  -ms-transform-origin: @transformation;
+  transform-origin: @transformation;
 }
 
 .transformAnimation(@startProperty, @endProperty) {
@@ -156,8 +160,6 @@
   -ms-box-align: @property;
   box-align: @property;
 }
-
-
 .box-sizing( @property ) {
   // https://developer.mozilla.org/En/CSS/Box-sizing
   -webkit-box-sizing: @property; // Chrome 10-
