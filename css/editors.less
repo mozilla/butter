@@ -132,12 +132,11 @@
     .display-off {
       display: none;
     }
- 
-  
 
     h1 { // Breadcrumbs
       color: @green;
       font-size: 16px;
+      text-transform: capitalize;
       height: @_editorTitle;
       line-height: @_editorTitle;
       margin: 0;
@@ -145,6 +144,28 @@
       background: #FFF;
       border-bottom: 1px solid @baseLightOutline;
       .box-sizing( border-box );
+      .butter-breadcrumbs {
+        opacity: 0.6;
+        position: relative;
+        padding-right: 15px;
+        margin-right: 15px;
+        display: inline-block;
+        cursor: pointer;
+        border-right: 1px solid @baseLightOutline;
+        .triangle( "right", 5px, #FFF, 1px, @baseLightOutline );
+        &:hover {
+          opacity: 1;
+        }
+      }
+      .close-btn {
+        position: relative;
+        float: right;
+        top: 10px;
+        left: 10px;
+        line-height: 14px;
+        cursor: pointer;
+      }
+
     }
 
     // Tabs

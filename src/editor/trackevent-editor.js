@@ -43,15 +43,14 @@ define( [ "util/lang", "util/keys", "./base-editor",
    * @param {Object} events: Events such as 'open' and 'close' can be defined on this object to be called at the appropriate times
    */
   return function( extendObject, butter, rootElement, events ) {
-
     // Wedge a check for scrollbars into the open event if it exists
     var oldOpenEvent = events.open;
 
-    events.open = function() {
-      var basicButton = document.querySelector( ".basic-tab" ),
-          advancedButton = document.querySelector( ".advanced-tab" ),
-          basicTab = document.querySelector( ".editor-options" ),
-          advancedTab = document.querySelector( ".advanced-options" ),
+    events.open = function( trackEvent ) {
+      var basicButton = rootElement.querySelector( ".basic-tab" ),
+          advancedButton = rootElement.querySelector( ".advanced-tab" ),
+          basicTab = rootElement.querySelector( ".editor-options" ),
+          advancedTab = rootElement.querySelector( ".advanced-options" ),
           wrapper = rootElement.querySelector( ".scrollbar-outer" );
 
       if ( oldOpenEvent ) {
@@ -92,11 +91,37 @@ define( [ "util/lang", "util/keys", "./base-editor",
       if ( extendObject.scrollbar ) {
         extendObject.scrollbar.update();
       }
+
+      extendObject.createTitle( trackEvent );
+
     };
 
     BaseEditor( extendObject, butter, rootElement, events );
 
     extendObject.defaultLayouts = __defaultLayouts.cloneNode( true );
+
+    extendObject.createTitle = function( trackEvent ) {
+      var titleEl = rootElement.querySelector( "h1" ),
+          addPopcornLink = document.createElement( "a" ),
+          closeEditorLink = document.createElement( "a" );
+
+      closeEditorLink.classList.add( "close-btn" );
+      closeEditorLink.innerHTML = "<span class=\"icon icon-only icon-x\"></span>";
+      closeEditorLink.addEventListener( "click", function( e ) {
+        extendObject.close();
+      }, false );
+
+      addPopcornLink.classList.add( "butter-breadcrumbs" );
+      addPopcornLink.innerHTML = "Events";
+      addPopcornLink.addEventListener( "click", function( e ) {
+        extendObject.close();
+      }, false );
+
+      titleEl.innerHTML = "";
+      titleEl.appendChild( addPopcornLink );
+      titleEl.appendChild( document.createTextNode( trackEvent.type ) );
+      titleEl.appendChild( closeEditorLink );
+    };
 
     /**
      * Member: createTargetsList

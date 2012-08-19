@@ -57,7 +57,7 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
 
       // Add tooltips
       extendObject.addTooltips();
-
+      
       extendObject.dispatch( "open" );
     };
 
