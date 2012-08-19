@@ -18,6 +18,8 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
             //included here to register themselves
             MediaEditor, ShareEditor ){
 
+  var DEFAULT_EDITOR_NAME = "plugin-list";
+
   /**
    * Class: EventEditor
    *
@@ -59,7 +61,11 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       }
       _currentEditor = Editor.create( editorName, butter );
       _currentEditor.open( _editorContentArea, openData );
-      
+
+      _currentEditor.listen( "back", function( e ) {
+        _this.openEditor( DEFAULT_EDITOR_NAME );
+      });
+
       _header.setFocus( editorName );
 
       return _currentEditor;

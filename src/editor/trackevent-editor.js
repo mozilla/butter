@@ -43,15 +43,14 @@ define( [ "util/lang", "util/keys", "./base-editor",
    * @param {Object} events: Events such as 'open' and 'close' can be defined on this object to be called at the appropriate times
    */
   return function( extendObject, butter, rootElement, events ) {
-
     // Wedge a check for scrollbars into the open event if it exists
     var oldOpenEvent = events.open;
 
-    events.open = function() {
-      var basicButton = document.querySelector( ".basic-tab" ),
-          advancedButton = document.querySelector( ".advanced-tab" ),
-          basicTab = document.querySelector( ".editor-options" ),
-          advancedTab = document.querySelector( ".advanced-options" ),
+    events.open = function( trackEvent ) {
+      var basicButton = rootElement.querySelector( ".basic-tab" ),
+          advancedButton = rootElement.querySelector( ".advanced-tab" ),
+          basicTab = rootElement.querySelector( ".editor-options" ),
+          advancedTab = rootElement.querySelector( ".advanced-options" ),
           wrapper = rootElement.querySelector( ".scrollbar-outer" );
 
       if ( oldOpenEvent ) {
@@ -97,6 +96,33 @@ define( [ "util/lang", "util/keys", "./base-editor",
     BaseEditor( extendObject, butter, rootElement, events );
 
     extendObject.defaultLayouts = __defaultLayouts.cloneNode( true );
+
+    extendObject.createBreadcrumbs = function( trackEvent ) {
+      var oldTitleEl = rootElement.querySelector( "h1" ),
+          breadcrumbsLayout = extendObject.defaultLayouts.querySelector( ".butter-breadcrumbs" ),
+          backLink = breadcrumbsLayout.querySelector( ".butter-breadcrumbs-back" ),
+          editorTitle =  breadcrumbsLayout.querySelector( ".butter-editor-title" ),
+          closeEditorLink =  breadcrumbsLayout.querySelector( ".close-btn" );
+
+      if ( !trackEvent ) {
+        return;
+      }
+
+      closeEditorLink.addEventListener( "click", function( e ) {
+        extendObject.dispatch( "back" );
+      }, false );
+
+      backLink.addEventListener( "click", function( e ) {
+        extendObject.dispatch( "back" );
+      }, false );
+
+      if ( trackEvent.type ) {
+        editorTitle.innerHTML = "";
+        editorTitle.appendChild( document.createTextNode( trackEvent.type ) );
+      }
+
+      oldTitleEl.parentNode.replaceChild( breadcrumbsLayout, oldTitleEl );
+    };
 
     /**
      * Member: createTargetsList
@@ -431,6 +457,8 @@ define( [ "util/lang", "util/keys", "./base-editor",
       if ( !trackEvent.manifest ) {
         throw "Unable to create properties from null manifest. Perhaps trackevent is not initialized properly yet.";
       }
+
+      extendObject.createBreadcrumbs( trackEvent );
 
       manifestOptions = trackEvent.manifest.options;
 

@@ -74,7 +74,7 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
       if ( events.close ) {
         events.close.apply( extendObject, arguments );
       }
-
+      
       extendObject.dispatch( "closed" );
     };
 
