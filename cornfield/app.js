@@ -275,11 +275,6 @@ app.post( '/api/publish/:id', filter.isLoggedIn, filter.isStorageAvailable, func
           }
         }
 
-        if ( currentMedia.controls ) {
-          popcornString += "\npopcorn.controls( true );\n";
-        } else {
-          popcornString += "\npopcorn.controls( false );\n";
-        }
         popcornString += '}());\n';
       }
       popcornString += '</script>\n';
@@ -314,10 +309,6 @@ app.post( '/api/publish/:id', filter.isLoggedIn, filter.isStorageAvailable, func
                     // XXX: need a better way to wrap function, DOM needs to be ready
                     popcorn: popcornString.replace( /^\(function\(\)\{/m, "Popcorn( function(){" )
                                           .replace( /\}\(\)\);$/m, "});" )
-                    // XXX: need a better way to force controls off in embed.
-                                          .replace( "popcorn.controls( true );", "popcorn.controls( false );" )
-                    // XXX: need a better way to force the use of the #smart div
-                                          .replace( /Popcorn.smart\("#([^"]+)"/, "Popcorn.smart(\"#embed-smart\"" )
                   },
                   publishEmbedShell );
 
