@@ -47,8 +47,7 @@
           _toWikipedia,
           _container,
           _href,
-          _guid = Popcorn.guid( "wikiCallback" ),
-          _manifestOpts = options._natives.manifest.options;
+          _guid = Popcorn.guid( "wikiCallback" );
 
       options._target = Popcorn.dom.find( options.target );
 
