@@ -58,7 +58,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         _currentEditor.close();
       }
       _currentEditor = Editor.create( editorName, butter );
-      _currentEditor.open( _editorContentArea, openData, this );
+      _currentEditor.open( _editorContentArea, openData );
       
       _header.setFocus( editorName );
 

@@ -46,7 +46,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
     // Wedge a check for scrollbars into the open event if it exists
     var oldOpenEvent = events.open;
 
-    events.open = function( parentElement, trackEvent, editorModule ) {
+    events.open = function( trackEvent ) {
       var basicButton = rootElement.querySelector( ".basic-tab" ),
           advancedButton = rootElement.querySelector( ".advanced-tab" ),
           basicTab = rootElement.querySelector( ".editor-options" ),
@@ -92,7 +92,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
         extendObject.scrollbar.update();
       }
 
-      extendObject.createTitle( trackEvent, editorModule );
+      extendObject.createTitle( trackEvent );
 
     };
 
@@ -100,7 +100,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
 
     extendObject.defaultLayouts = __defaultLayouts.cloneNode( true );
 
-    extendObject.createTitle = function( trackEvent, editorModule ) {
+    extendObject.createTitle = function( trackEvent ) {
       var titleEl = rootElement.querySelector( "h1" ),
           addPopcornLink = document.createElement( "a" ),
           closeEditorLink = document.createElement( "a" );
@@ -108,13 +108,13 @@ define( [ "util/lang", "util/keys", "./base-editor",
       closeEditorLink.classList.add( "close-btn" );
       closeEditorLink.innerHTML = "<span class=\"icon icon-only icon-x\"></span>";
       closeEditorLink.addEventListener( "click", function( e ) {
-        editorModule.openEditor( "plugin-list" );
+        extendObject.close();
       }, false );
 
       addPopcornLink.classList.add( "butter-breadcrumbs" );
       addPopcornLink.innerHTML = "Events";
       addPopcornLink.addEventListener( "click", function( e ) {
-        editorModule.openEditor( "plugin-list" );
+        extendObject.close();
       }, false );
 
       titleEl.innerHTML = "";
