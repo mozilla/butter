@@ -119,10 +119,6 @@ var googleCallback;
         target = Popcorn.dom.find( options.target ),
         that = this;
 
-    function normalize( value, min, max ) {
-      return Math.max( Math.min( value || 0, max ), min );
-    }
-
     if ( !target ) {
       target = that.media.parentNode;
     }
@@ -132,10 +128,10 @@ var googleCallback;
     options.type = options.type || "ROADMAP";
     options.lat = options.lat || 0;
     options.lng = options.lng || 0;
-    options.height = normalize( options.height, 35, 100 ) + "%";
-    options.width = normalize( options.width, 35, 100 ) + "%";
-    options.left = normalize( options.left, 0, 97 ) + "%";
-    options.top = normalize( options.top, 0, 97 ) + "%";
+    options.height = options.height + "%";
+    options.width = options.width + "%";
+    options.left = options.left + "%";
+    options.top = options.top + "%";
 
     // if this is the first time running the plugins
     // call the function that gets the sctipt

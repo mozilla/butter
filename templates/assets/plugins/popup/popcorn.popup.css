@@ -26,7 +26,6 @@
 .speechBubble.left .canvas { left: 15px; }
 
 /* BOTTOM */
-.speechBubble .bottom { margin-bottom: 60px; }
 .speechBubble .canvas { 
   bottom: -59px;
   -webkit-transform: scale(1, 1);
@@ -65,7 +64,6 @@
 }
 
 /*TOP*/
-.speechBubble.top { margin-bottom: 15px; }
 
 .speechBubble.top .canvas {  
   top: 1px;

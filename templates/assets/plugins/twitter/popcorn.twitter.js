@@ -2,10 +2,6 @@
 
 (function ( Popcorn, global ) {
 
-  function normalize( value, min, max ) {
-    return Math.max( Math.min( value || 0, max ), min );
-  }
-
   Popcorn.plugin( "twitter", {
     manifest: {
       about: {
@@ -101,9 +97,6 @@
           tweetTextCont,
           tweetUser,
           tweetText,
-          // 97 I used to prevent the container being in an unclickable position after dragging
-          top = normalize( options.top, 0, 97 ),
-          left = normalize( options.left, 0, 97 ),
           allTweets = [],
           numberOfTweets = options.numberOfTweets;
 
@@ -130,8 +123,8 @@
       options._container = document.createElement( "div" );
       options._container.classList.add( "popcorn-twitter" );
       options._container.id = Popcorn.guid( "twitter" );
-      options._container.style.top = top + "%";
-      options._container.style.left = left + "%";
+      options._container.style.top = options.top + "%";
+      options._container.style.left = options.left + "%";
       options._container.style.display = "none";
       options._container.style.zIndex = +options.zindex;
       titleText.classList.add( "popcorn-twitter-title" );

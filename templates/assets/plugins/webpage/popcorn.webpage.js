@@ -2,10 +2,6 @@
 
 (function ( Popcorn ) {
 
-  function normalize( value, minValue, maxValue ) {
-    return Math.max( Math.min( value || 0, maxValue ), minValue );
-  }
-
   Popcorn.plugin( "webpage" , {
     _setup: function( options ) {
 
@@ -31,10 +27,10 @@
       iframe.id = options.id || Popcorn.guid();
       iframe.src = options.src;
 
-      wrapper.style.top = normalize( options.top || manifest.options.top[ "default" ], 0, 90 ) + "%";
-      wrapper.style.left = normalize( options.left || manifest.options.left[ "default" ], 0, 90 ) + "%";
-      wrapper.style.height = normalize( options.height || manifest.options.height[ "default" ], 10, 100 ) + "%";
-      wrapper.style.width = normalize( options.width || manifest.options.width[ "default" ], 10, 100 ) + "%";
+      wrapper.style.top = options.top + "%";
+      wrapper.style.left = options.left + "%";
+      wrapper.style.height = options.height + "%";
+      wrapper.style.width = options.width + "%";
       wrapper.style.position = "absolute";
 
       wrapper.appendChild( iframe );
