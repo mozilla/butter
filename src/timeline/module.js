@@ -85,18 +85,6 @@ define( [
       butter.listen( "mediachanged", mediaChanged );
       butter.listen( "mediaremoved", mediaRemoved );
     });
-
-    Object.defineProperties( this, {
-      zoom: {
-        get: function(){
-          return _currentMedia.zoom;
-        },
-        set: function( val ){
-          _currentMedia.zoom = val;
-        }
-      }
-    });
-
   }; //Timeline
 
   Timeline.__moduleName = "timeline";

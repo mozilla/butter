@@ -17,7 +17,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
     _canvas.addEventListener( "mousedown", _scrubber.onMouseDown, false );
 
-    function drawTicks( zoom ) {
+    function drawTicks() {
       var tracksContainerWidth = tracksContainer.container.getBoundingClientRect().width,
           width = Math.min( tracksContainerWidth, _tracksContainer.container.scrollWidth ),
           containerWidth = Math.min( width, _tracksContainer.element.offsetWidth - CANVAS_CONTAINER_PADDING );
@@ -94,15 +94,15 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       context.stroke();
       context.translate( _tracksContainer.element.scrollLeft, 0 );
 
-      _scrubber.update( containerWidth, zoom );
+      _scrubber.update( containerWidth );
     }
 
     _tracksContainer.element.addEventListener( "scroll", drawTicks, false );
 
     window.addEventListener( "resize", drawTicks, false );
 
-    this.update = function( zoom ) {
-      drawTicks( zoom );
+    this.update = function() {
+      drawTicks();
     };
 
     this.destroy = function(){

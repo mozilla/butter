@@ -11,15 +11,16 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
   var TRACK_PADDING = 1, // this padding is pixels between track event visuals.
       // this is, in pixels, how close the left and right handles on the viewport can get.
       // TODO: there is a bug I cannot find (yet), to keep this value from working on right handle.
-      // right drag solves this with css min-width that is the same as MIN_ZOOM.
-      // min-width only seems to work for right, and not left, so left uses MIN_ZOOM.
+      // right drag solves this with css min-width that is the same as MIN_WIDTH.
+      // min-width only seems to work for right, and not left, so left uses MIN_WIDTH.
       // need one fix for both cases.
-      MIN_ZOOM = 5;
+      MIN_WIDTH = 5;
 
-  return function( outerElement, innerElement, zoomCallback, media ) {
+  return function( outerElement, innerElement, setContainerWidth, media, width ) {
     var _element = LangUtils.domFragment( SUPER_SCROLLBAR_LAYOUT ).querySelector( "#butter-super-scrollbar-container" ),
-        _rect, _zoom, _duration,
+        _rect, _duration,
         _media = media,
+        _width = width,
         // viewport is the draggable, resizable, representation of the viewable track container.
         _viewPort = _element.querySelector( "#butter-super-scrollbar-viewport" ),
         _leftHandle = _viewPort.querySelector( "#butter-super-scrollbar-handle-left" ),
@@ -31,8 +32,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
         _position = 0,
         _leftPos = 0,
         _rightPos = 0,
-        _trackEventVisuals = {},
-        _this = this;
+        _trackEventVisuals = {};
 
     var onViewMouseUp, onViewMouseDown, onViewMouseMove,
         onLeftMouseUp, onLeftMouseDown, onLeftMouseMove,
@@ -166,12 +166,12 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       }
 
       // make sure left never goes over right.
-      if ( _position + MIN_ZOOM > _viewPort.offsetLeft + _viewPort.clientWidth ) {
-        _position = _viewPort.offsetLeft + _viewPort.clientWidth - MIN_ZOOM;
+      if ( _position + MIN_WIDTH > _viewPort.offsetLeft + _viewPort.clientWidth ) {
+        _position = _viewPort.offsetLeft + _viewPort.clientWidth - MIN_WIDTH;
       }
 
       _viewPort.style.left = _position / _rect.width * 100 + "%";
-      zoomCallback( _viewPort.clientWidth / _rect.width );
+      setContainerWidth( _viewPort.clientWidth / _rect.width * 100 );
       outerElement.scrollLeft = _viewPort.offsetLeft / _rect.width * innerElement.scrollWidth;
     };
 
@@ -189,8 +189,8 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       }
 
       _viewPort.style.right = _position / _rect.width * 100 + "%";
+      setContainerWidth( _viewPort.offsetWidth / _rect.width * 100 );
       outerElement.scrollLeft = _viewPort.offsetLeft / _rect.width * innerElement.scrollWidth;
-      zoomCallback( _viewPort.offsetWidth / _rect.width );
     };
 
     _element.addEventListener( "mousedown", onElementMouseDown, false );
@@ -246,11 +246,14 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     });
 
     _media.listen( "mediaready", function( e ) {
-      var width = ( 1 - _zoom ) * 100,
+      // in the case of our viewport, we have to reverse the percentage.
+      var width = 100 - _width,
           left = outerElement.scrollLeft / innerElement.offsetWidth * 100;
       _duration = e.target.duration;
       _viewPort.style.left = left + "%";
+      // another reversal.
       _viewPort.style.right = 100 - ( width + left ) + "%";
+      setContainerWidth( width );
     });
 
     Object.defineProperties( this, {

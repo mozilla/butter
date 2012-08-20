@@ -10,7 +10,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
   return function( trackEvent, type, inputOptions ){
 
     var _element = LangUtils.domFragment( TRACKEVENT_LAYOUT, ".butter-track-event" ),
-        _zoom = 1,
         _type = type,
         _icon = document.getElementById( _type + "-icon" ),
         _start = inputOptions.start || 0,
@@ -38,7 +37,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
       }
     }
 
-    function resetContainer(){
+    function resetContainer() {
       if ( !_trackEvent.track || !_trackEvent.track._media ) {
         return;
       }
@@ -182,16 +181,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         enumerable: true,
         get: function() {
           return _resizing;
-        }
-      },
-      zoom: {
-        enumerable: true,
-        get: function(){
-          return _zoom;
-        },
-        set: function( val ){
-          _zoom = val;
-          resetContainer();
         }
       },
       parent: {

@@ -21,7 +21,6 @@ define( [ "util/lang" ],
         _media = media,
         _mouseDownPos,
         _currentMousePos,
-        _zoom = 1,
         _scrollInterval = -1,
         _rect,
         _width,
@@ -29,7 +28,6 @@ define( [ "util/lang" ],
         _isScrubbing = false,
         _lastTime = -1,
         _lastScroll = _tracksContainer.element.scrollLeft,
-        _lastZoom = -1,
         _lineWidth = 0,
         _seekCompleted = false,
         _seekMouseUp = false;
@@ -42,7 +40,7 @@ define( [ "util/lang" ],
           _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
 
       // if we can avoid re-setting position and visibility, then do so
-      if( _lastTime !== currentTime || _lastScroll !== scrollLeft || _lastZoom !== _zoom ){
+      if( _lastTime !== currentTime || _lastScroll !== scrollLeft ){
 
         var pos = currentTime / duration * _tracksContainerWidth,
             adjustedPos = pos - scrollLeft;
@@ -75,7 +73,6 @@ define( [ "util/lang" ],
 
       _lastTime = currentTime;
       _lastScroll = scrollLeft;
-      _lastZoom = _zoom;
 
     } //setNodePosition
 
@@ -193,8 +190,7 @@ define( [ "util/lang" ],
     _node.addEventListener( "mousedown", onScrubberMouseDown, false );
     _container.addEventListener( "mousedown", onMouseDown, false );
 
-    this.update = function( containerWidth, zoom ){
-      _zoom = zoom || _zoom;
+    this.update = function( containerWidth ){
       _width = containerWidth;
       _tracksContainerWidth = _tracksContainer.container.getBoundingClientRect().width;
       _rect = _container.getBoundingClientRect();
