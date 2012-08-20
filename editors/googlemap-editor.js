@@ -195,7 +195,7 @@
 
         function attachTypeHandler( option ) {
           option.element.addEventListener( "change", function( e ) {
-            var elementVal = e.srcElement.value,
+            var elementVal = e.target.value,
                 updateOptions = {},
                 target;
 
@@ -210,7 +210,7 @@
 
             // Attempt to make the trackEvent's target blink
             target = _butter.getTargetByType( "elementID", option.trackEvent.popcornOptions.target );
-            if( target ) {
+            if ( target ) {
               target.view.blink();
             } else {
               _butter.currentMedia.view.blink();
@@ -220,7 +220,7 @@
 
         function attachFullscreenHandler( option ) {
           option.element.addEventListener( "click", function( e ) {
-            var srcElement = e.srcElement,
+            var srcElement = e.target,
                 updateOptions = {},
                 manifestOpts = trackEvent.manifest.options;
 
