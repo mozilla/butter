@@ -1,36 +1,22 @@
+/* @override 
+   http://ocupopdev.com/popcorn-embed/css/controls.css */
+
+.controls {
+  background: white;
+  border: 1px solid #d5d6d5;
+  height: 41px;
+}
+
 #butter-controls {
   color: #F8FDE2;
   position: relative;
   height: 22px;
   width: 100%;
-  display: none;
-  background: #242029;
+  display: block;
+  background:white;
 }
 
-/* Big Button */
 
-#controls-big-play-button {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -40px;
-  display: none;
-  height: 80px;
-  width: 80px;
-  border: 2px solid #D0D0D0;
-  border-radius: 50px;
-  background: #242029;
-  text-align: center;
-}
-
-#controls-big-play-button > span {
-  display: inline-block;
-  height: 50px;
-  width: 40px;
-  margin-left: 8px;
-  margin-top: 3px;
-  background: url( "../resources/video.png" ) -97px 4px no-repeat;
-}
 
 #butter-controls.controls-active {
    /* active happens on mouse over and is reverted to default on mouse out */
@@ -47,23 +33,6 @@
   display: block;
 }
 
-#controls-currenttime {
-  position: absolute;
-  width: 50px;
-  left: 0;
-  font-size: 11px;
-  line-height: 12px;
-  text-align: center;
-}
-
-#controls-duration {
-  position: absolute;
-  width: 50px;
-  right: 8px;
-  font-size: 11px;
-  line-height: 12px;
-  text-align: center;
-}
 
 .controls-left {
   height: 22px;
@@ -72,36 +41,44 @@
 }
 
 .controls-middle {
-  padding-top: 5px;
-  height: 17px;
+  margin-top: 0;
+  height: 36px;
   position: absolute;
-  left: 35px;
-  right: 80px;
+  left: 185px;
+  right: 215px;
+  padding-right: 20px;
+  border-right: 1px solid #d5d6d5;
 }
 
 .controls-right {
-  padding-top: 5px;
-  height: 17px;
+  padding-top: 0;
+  height: 41px;
   position: absolute;
-  width: 80px;
-  right: 0;
+  width: 120px;
+  right: 45px;
+  background: #f2f2f2;
+  border-right: 1px solid #d5d6d5;
+  border-left: 1px solid #d5d6d5;
 }
 
 #controls-timebar {
   position: absolute;
-  background: rgba( 0, 0, 0, .2 );
-  box-shadow: inset 0 1px 5px 2px rgba( 0, 0, 0, .5 );
-  height: 12px;
-  left: 68px;
-  right: 68px;
-  border-radius: 6px;
+  background: #e4e4e4;
+  height: 15px;
+  left: 0;
+  right: 0;
+  top: 12px;
+  margin-right: 12px;
+  border-radius: 0;
+  box-shadow: none;
+  cursor: pointer;
 }
 
 #controls-progressbar {
   height: 100%;
-  background: rgba( 0, 0, 0, .4 );
+  background: #1eb771;
   position: absolute;
-  border-radius: 6px 0 0 8px;
+  border-radius: 0;
 }
 
 #controls-scrubber {
@@ -110,6 +87,7 @@
   background: #EEE;
   position: absolute;
   cursor: pointer;
+  display: none;
 }
 
 #controls-scrubber:after {
@@ -124,14 +102,14 @@
 }
 
 #controls-volume {
-  float: left;
   background: rgba( 0, 0, 0, .2 );
-  box-shadow: inset 0 1px 5px 2px rgba( 0, 0, 0, .5 );
+  box-shadow: none;
   position: absolute;
-  height: 12px;
-  left: 35px;
-  right: 10px;
-  border-radius: 6px;
+  height: 15px;
+  right: 235px !important;
+  top: 12px;
+  width: 30px;
+  border-radius: 0;
 }
 
 #controls-volume-progressbar {
@@ -142,6 +120,7 @@
 }
 
 #controls-volume-scrubber {
+  display: none;
   height: 100%;
   width: 2px;
   background: #EEE;
@@ -160,23 +139,127 @@
   left: -5px;
 }
 
+/* Time */
+
+.time {
+  position: absolute;
+  left: 43px;
+  height: 27px;
+  background: url(../resources/controls/controls_time_arrowL.gif) no-repeat left top, url(../resources/controls/controls_time_arrowR.gif) right top no-repeat;
+  background-color: #f2f2f2;
+  font-size: 12px;
+  line-height: 1em;
+  padding-top: 14px;
+  padding-right: 15px;
+  padding-left: 15px;
+  color: #58595b;
+}
+
+#controls-currenttime {
+  color: #1eb771;
+  position: relative;
+  text-align: left;
+  left: auto;
+  right: auto;
+  font-size: 12px;
+  line-height: 1em;
+}
+
+#controls-duration {
+  left: auto;
+  right: auto;
+  position: relative;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1em;
+}
+
+
+/* Volume */
+
+#volume {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  right: 175px;
+  top: 11px;
+}
+
+#volume div {
+  float: left;
+  width: 5px;
+  height: 18px;
+  padding-left: 1px;
+  padding-right: 2px;
+  cursor: pointer;
+  position: relative;
+}
+
+#volume div span {
+  background: #d5d5d6;
+  display: block;
+  position: absolute;
+  width: 5px;
+  bottom: 0;
+}
+
+#volume div.active span {
+  background: #1eb771;
+}
+
+#volume div:hover span {
+  background-color: #b5b5b5;
+}
+
+#volume div:last-child {
+  padding-right: 0;
+}
+
+#volume #volume-one span {
+  height: 25%;
+}
+
+#volume #volume-two span {
+  height: 50%;
+}
+
+#volume #volume-three span {
+  height: 75%;
+}
+
+#volume #volume-four span {
+  height: 100%;
+}
+
+#volume #volume-one {
+
+}
+
 /* Buttons */
 
+#controls-play {
+  width: 28px;
+  height: 28px;
+  background: #1eb771 url(../resources/controls/controls_icon_playPause.png) no-repeat;
+  padding: 0;
+  border-radius: 3px;
+  margin-top: 7px;
+  margin-left: 7px;
+  cursor: pointer;
+}
+
 .controls-btn {
-  display: inline-block;
   padding: 10px;
-  background: url( "../resources/video.png" ) no-repeat;
-  margin-left: 4px;
   position: absolute;
   top: 0;
 }
 
 .controls-playing {
-  background-position: -20px 3px;
+  background-position: center -15px !important;
 }
 
 .controls-paused {
-  background-position: 5px 3px;
+  background-position: center 10px !important;
 
 }
 
@@ -186,4 +269,83 @@
 
 .controls-unmuted {
   background-position: -25px -21px;
+}
+
+.controls-right div {
+  background: #cecfcf url(../resources/controls/controls_icons.png) no-repeat;
+  margin-top: 6px;
+  margin-left: 9px;
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+  float: left;
+  cursor: pointer;
+}
+
+.controls-right div:hover {
+  background-color: #1eb771;
+}
+
+#controls-share {
+  background-position: -27px -2px;
+}
+
+#controls-remix {
+  background-position: -61px -2px;
+}
+
+#controls-fullscreen {
+  background-position: 7px -2px;
+}
+
+#controls-logo {
+  width: 45px;
+  height: 42px;
+  background: url(../resources/controls/controls_icons.png) no-repeat -85px 2px;
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+}
+
+
+/* other misc styles to be refactored into embed.less */
+
+
+#post-roll {
+  font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.4);
+  font-size: 1.5em;
+  line-height: 1.4em;
+  color: #676867;
+}
+
+#post-roll a {
+  color: #676867;
+}
+
+#post-roll .mozpopcorn {
+  color: #D53B2A;
+  font-weight: bold;
+  font-size: 20px;
+  margin: 0 0 5px 0;
+}
+
+#post-roll .embed-project {
+  padding-left: 0;
+}
+
+#post-roll .embed-title {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1em;
+}
+
+#post-roll .embed-author {
+  margin-bottom: 1em;
+  font-size: 20px;
+}
+
+#post-roll .embed-project {
+  margin-top: 0;
+  padding-left: 0 !important;
 }

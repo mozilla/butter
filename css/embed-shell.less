@@ -1,6 +1,12 @@
+@controlsHeight: 43px;
+@small: 560px;
+@medium: 640px;
+@large: 853px;
+@xlarge: 1280px;
+
 .height-width( @width ) {
   width: @width;
-  height: .5625 * @width + 22;
+  height: (.5625 * @width ) + @controlsHeight;
 }
 
 iframe {
@@ -9,10 +15,6 @@ iframe {
   border: 0;
 }
 
-@small: 560px;
-@medium: 640px;
-@large: 853px;
-@xlarge: 1280px;
 
 @media only screen and ( max-width: @medium ) {
   iframe {
