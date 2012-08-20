@@ -316,28 +316,25 @@
        ****************************************************************/
       //importProject - Import project data
       this.importProject = function ( projectData ) {
-        var i,
-            l;
+        var oldTarget,
+            targetData,
+            i, l;
 
         if ( projectData.targets ) {
           for ( i = 0, l = projectData.targets.length; i < l; ++i ) {
-
-            var t, targets = _this.targets, targetData = projectData.targets[ i ];
-            for ( var k=0, j=targets.length; k<j; ++k ) {
-              if ( targets[ k ].name === targetData.name ) {
-                t = targets[ k ];
-                break;
-              }
-            }
-
-            if ( !t ) {
+            targetData = projectData.targets[ i ];
+            oldTarget = _this.getTargetByType( "elementID", targetData.element );
+            // Only add target if it's not already added.
+            if ( !oldTarget ) {
               _this.addTarget( targetData );
             }
             else {
-              t.json = targetData;
+              // If it was already added, just update its json.
+              oldTarget.json = targetData;
             }
           }
         }
+
         if ( projectData.media ) {
           for ( i = 0, l = projectData.media.length; i < l; ++i ) {
 
@@ -640,17 +637,8 @@
           if ( !!_config.value( "scrapePage" ) ) {
             var i, j, il, jl, url, oldTarget, oldMedia, mediaPopcornOptions, mediaObj;
             for( i = 0, il = targets.length; i < il; ++i ) {
-              oldTarget = null;
-              if( _targets.length > 0 ){
-                for( j = 0, jl = _targets.length; j < jl; ++j ){
-                  // don't add the same target twice
-                  if( _targets[ j ].id === targets[ i ].id ){
-                    oldTarget = _targets[ j ];
-                    break;
-                  } //if
-                } //for j
-              }
-
+              // Only add targets that don't already exist.
+              oldTarget = _this.getTargetByType( "elementID", targets[ i ].element );
               if( !oldTarget ){
                 _this.addTarget({ element: targets[ i ].id });
               }
