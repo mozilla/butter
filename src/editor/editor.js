@@ -10,7 +10,8 @@ define( [ "util/lang", "util/xhr",
   function( LangUtils, XHRUtils,
             BaseEditor, TrackEventEditor ) {
 
-  var __editors = {};
+  var __editors = {},
+      __loadedEditors = {};
 
   /**
    * Namespace: Editor
@@ -55,7 +56,9 @@ define( [ "util/lang", "util/xhr",
         if (  __editors.hasOwnProperty( editor ) &&
               __editors[ editor ].layout &&
               __editors[ editor ].layout.indexOf( "load!" ) === 0 ) {
-          layoutsToLoad.push( __editors[ editor ] );
+          layoutsToLoad.push( editor );
+        } else {
+          __loadedEditors[ editor ] = __editors[ editor ];
         }
       }
 
@@ -63,9 +66,11 @@ define( [ "util/lang", "util/xhr",
         readyCallback();
       }
       else {
-        layoutsToLoad.forEach( function( editorHusk ) {
-          Editor.loadLayout( editorHusk.layout.substring( 5 ), function( layoutSrc ){
-            editorHusk.layout = layoutSrc;
+        layoutsToLoad.forEach( function( editor ) {
+          Editor.loadLayout( __editors[ editor ].layout.substring( 5 ), function( layoutSrc ){
+            __loadedEditors[ editor ] = {};
+            __loadedEditors[ editor ].layout = layoutSrc;
+            __loadedEditors[ editor ].create = __editors[ editor ].create;
             ++loadedLayouts;
             if ( loadedLayouts === layoutsToLoad.length ) {
               readyCallback();
@@ -84,7 +89,7 @@ define( [ "util/lang", "util/xhr",
      * @param {Butter} butter: An instance of Butter
      */
     create: function( editorName, butter ) {
-      var description = __editors[ editorName ],
+      var description = __loadedEditors[ editorName ],
           completeLayout,
           compiledLayout;
 
@@ -121,7 +126,7 @@ define( [ "util/lang", "util/xhr",
      * @param {String} name: Name of the editor of which existence will be verified
      */
     isRegistered: function( name ) {
-      return !!__editors[ name ];
+      return !!__loadedEditors[ name ];
     },
 
     /**
