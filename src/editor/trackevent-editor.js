@@ -106,16 +106,16 @@ define( [ "util/lang", "util/keys", "./base-editor",
           closeEditorLink = document.createElement( "a" );
 
       closeEditorLink.classList.add( "close-btn" );
-      closeEditorLink.innerHTML = '<span class="icon icon-only icon-x"></span>';
+      closeEditorLink.innerHTML = "<span class=\"icon icon-only icon-x\"></span>";
       closeEditorLink.addEventListener( "click", function( e ) {
         editorModule.openEditor( "plugin-list" );
-      }, false);
+      }, false );
 
       addPopcornLink.classList.add( "butter-breadcrumbs" );
       addPopcornLink.innerHTML = "Events";
       addPopcornLink.addEventListener( "click", function( e ) {
         editorModule.openEditor( "plugin-list" );
-      }, false);
+      }, false );
 
       titleEl.innerHTML = "";
       titleEl.appendChild( addPopcornLink );
