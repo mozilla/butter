@@ -161,8 +161,8 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       }
 
       _viewPort.style.right = _position / _rect.width * 100 + "%";
-      outerElement.scrollLeft = _viewPort.offsetLeft / _rect.width * innerElement.scrollWidth;
       zoomCallback( _viewPort.offsetWidth / _rect.width );
+      outerElement.scrollLeft = _viewPort.offsetLeft / _rect.width * innerElement.scrollWidth;
     };
 
     _viewPort.addEventListener( "mousedown", onViewMouseDown, false );
