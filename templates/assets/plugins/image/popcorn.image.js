@@ -48,6 +48,13 @@
     return inArr;
   }
 
+  function validateDimension( value, fallback ) {
+    if ( typeof value === "number" ) {
+      return value;
+    }
+    return fallback;
+  }
+
   Popcorn.plugin( "image", {
 
     _setup: function( options ) {
@@ -64,10 +71,10 @@
 
       _container.classList.add( "image-plugin-container" );
       _container.classList.add( "image-plugin-hidden" );
-      _container.style.width = ( options.width || 100 ) + "%";
-      _container.style.height = ( options.height || 100 ) + "%";
-      _container.style.top = ( options.top || 0 ) + "%";
-      _container.style.left = ( options.left || 0 ) + "%";
+      _container.style.width = validateDimension( options.width, "100" ) + "%";
+      _container.style.height = validateDimension( options.height, "100" ) + "%";
+      _container.style.top = validateDimension( options.top, "0" ) + "%";
+      _container.style.left = validateDimension( options.left, "0" ) + "%";
 
       if ( _target ) {
 
@@ -86,8 +93,6 @@
           _image = document.createElement( "img" );
           _image.addEventListener( "load", function() {
             _image.classList.add( "image-plugin-img" );
-            _container.style.height = ( +options.height || 100 ) + "%";
-            _container.style.width = ( +options.width || 100 ) + "%";
 
             ( _link || _container ).appendChild( _image );
 
