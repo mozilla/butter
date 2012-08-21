@@ -9,30 +9,19 @@
   Editor.register( "image", "load!{{baseDir}}templates/assets/editors/image/popcorn.image.editor.html",
                    function( rootElement, butter, compiledLayout ) {
 
-  var _this = this;
-
   var _rootElement = rootElement,
       _messageContainer = _rootElement.querySelector( "div.error-message" ),
-      _inputIn = _rootElement.querySelector( "#editor-in-value" ),
-      _inputOut = _rootElement.querySelector( "#editor-out-value" ),
-      _dragDropRadio = _rootElement.querySelector( "#editor-dragdrop-radio" ),
       _urlRadio = _rootElement.querySelector( "#editor-url-radio" ),
       _flickrRadio = _rootElement.querySelector( "#editor-flickr-radio" ),
       _urlInput = _rootElement.querySelector( "#editor-url" ),
       _tagInput = _rootElement.querySelector( "#editor-flickr-tag" ),
       _galleryUrlInput = _rootElement.querySelector( "#editor-flickr-url" ),
       _numberInput = _rootElement.querySelector( "#editor-flickr-number" ),
-      _transitionIn = _rootElement.querySelector( "#editor-in-select" ),
-      _transitionOut = _rootElement.querySelector( "#editor-out-select" ),
       _urlActive = false,
       _flickrActive = false,
       _dragDropActive = false,
-      _trackEvent;
-
-  function onTrackEventUpdated( e ) {
-    _trackEvent = e.target,
-    update();
-  }
+      _trackEvent,
+      _this = this;
 
   function toggleFlickr( state ) {
     _tagInput.disabled = _galleryUrlInput.disabled = _numberInput.disabled = state;
@@ -44,6 +33,11 @@
         "photosetId": "",
         "count": ""
       });
+    } else {
+      _tagInput.classList.remove( "butter-editor-disabled" );
+      _galleryUrlInput.classList.remove( "butter-editor-disabled" );
+      _numberInput.classList.remove( "butter-editor-disabled" );
+      _urlInput.classList.add( "butter-editor-disabled" );
     }
   }
 
@@ -55,6 +49,11 @@
       updateTrackEvent( _trackEvent, {
         "src": ""
       });
+    } else if ( !state ) {
+      _tagInput.classList.add( "butter-editor-disabled" );
+      _galleryUrlInput.classList.add( "butter-editor-disabled" );
+      _numberInput.classList.add( "butter-editor-disabled" );
+      _urlInput.classList.remove( "butter-editor-disabled" );
     }
   }
 
@@ -66,6 +65,10 @@
   }
 
   function dragDropMode() {
+    _tagInput.classList.add( "butter-editor-disabled" );
+    _galleryUrlInput.classList.add( "butter-editor-disabled" );
+    _numberInput.classList.add( "butter-editor-disabled" );
+    _urlInput.classList.add( "butter-editor-disabled" );
     _dragDropActive = true;
     if ( _flickrActive ) {
       toggleFlickr( true );
@@ -73,7 +76,6 @@
     if ( _urlActive ) {
       toggleUrl( true );
     }
-    _dragDropRadio.checked = true;
   }
 
   function urlMode() {
@@ -121,86 +123,113 @@
     }
   }
 
-  function update() {
+  function setup( trackEvent ) {
+    _trackEvent = trackEvent;
 
-    var popOpts = _trackEvent.popcornOptions,
-        src = popOpts.src;
+    var container = _rootElement.querySelector( ".editor-options" ),
+        pluginOptions = {},
+        ignoreKeys = [
+          "src",
+          "tags",
+          "photosetId",
+          "count",
+          "username",
+          "target"
+        ];
 
-    _inputIn.value = popOpts.start;
-    _inputOut.value = popOpts.end;
+    function callback( elementType, element, trackEvent, name ) {
+      pluginOptions[ name ] = {
+        element: element,
+        trackEvent: trackEvent,
+        elementType: elementType
+      };
+    }
 
-    if ( src ) {
-      if ( /^data:/.test( src ) ) {
-        dragDropMode();
+    function attachHandlers() {
+      var start = pluginOptions.start.element.parentNode.parentNode,
+          end = pluginOptions.end.element.parentNode.parentNode,
+          sourceWrapper = _rootElement.querySelector( ".editor-source" ),
+          src = _trackEvent.popcornOptions.src;
+
+      // Move start and end to first elements in editor
+      container.insertBefore( start, sourceWrapper );
+      container.insertBefore( end, sourceWrapper );
+
+      // Determine initial state
+      if ( src ) {
+        if ( /^data:/.test( src ) ) {
+          dragDropMode();
+          toggleFlickr( true );
+          toggleUrl( true );
+        } else {
+          urlMode();
+          toggleFlickr( true );
+        }
       } else {
+        toggleUrl( true );
+        flickrMode();
+      }
+
+      _urlRadio.onchange = function() {
         urlMode();
-        _urlInput.value = src;
-      }
-    } else if ( popOpts.tags ) {
-      flickrMode();
-      _tagInput.value = popOpts.tags;
-    } else if ( popOpts.photosetId ) {
-      flickrMode();
-      _galleryUrlInput.value = popOpts.photosetId;
+      };
+
+      _flickrRadio.onchange = function() {
+        flickrMode();
+      };
+
+      _this.attachInputChangeHandler( _urlInput, _trackEvent, "src", updateTrackEvent );
+      _this.attachInputChangeHandler( _tagInput, _trackEvent, "tags", function( te, prop ) {
+        te.update({
+          tags: prop.tags,
+          photosetId: ""
+        });
+      });
+      _this.attachInputChangeHandler( _numberInput, _trackEvent, "count", updateTrackEvent );
+      _this.attachInputChangeHandler( pluginOptions.start.element, _trackEvent, "start", updateTrackEvent );
+      _this.attachInputChangeHandler( pluginOptions.end.element, _trackEvent, "end", updateTrackEvent );
+      _this.attachSelectChangeHandler( pluginOptions.transition.element, _trackEvent, "transition", updateTrackEvent );
+
+      _this.attachInputChangeHandler( _galleryUrlInput, _trackEvent, "photosetId", function( te, prop ) {
+
+        var id = /\d+$/.exec( prop.photosetId );
+
+        if ( id ) {
+          prop.photosetId = id[ 0 ];
+          updateTrackEvent( te, prop );
+        }
+      });
     }
 
-    if ( popOpts.count && !_numberInput.disabled ) {
-      _numberInput.value = popOpts.count;
-    }
+    _this.createPropertiesFromManifest( trackEvent, callback, null, container, null, ignoreKeys );
+    attachHandlers();
 
-    _transitionIn.value = popOpts.transitionInClass;
-    _transitionOut.value = popOpts.transitionOutClass;
-
-  }
-
-  function setupListeners() {
-
-    _dragDropRadio.onchange = function() {
-      dragDropMode();
-    };
-
-    _urlRadio.onchange = function() {
-      urlMode();
-    };
-
-    _flickrRadio.onchange = function() {
-      flickrMode();
-    };
-
-    _this.attachStartEndHandler( _inputIn, _trackEvent, "start", updateTrackEvent );
-    _this.attachStartEndHandler( _inputOut, _trackEvent, "end", updateTrackEvent );
-
-    _this.attachInputChangeHandler( _urlInput, _trackEvent, "src" );
-    _this.attachInputChangeHandler( _tagInput, _trackEvent, "tags" );
-    _this.attachInputChangeHandler( _numberInput, _trackEvent, "count" );
-
-    _this.attachInputChangeHandler( _galleryUrlInput, _trackEvent, "photosetId", function( te, prop) {
-
-      var id = /\d+$/.exec( prop.photosetId );
-
-      if ( id ) {
-        prop.photosetId = id[ 0 ];
-        updateTrackEvent( te, prop );
-      }
-    });
-
-    _this.attachSelectChangeHandler( _transitionIn, _trackEvent, "transitionInClass" );
-    _this.attachSelectChangeHandler( _transitionOut, _trackEvent, "transitionOutClass" );
-
+    _this.updatePropertiesFromManifest( trackEvent );
+    _this.scrollbar.update();
   }
 
   Editor.TrackEventEditor( _this, butter, rootElement, {
     open: function( parentElement, trackEvent ) {
       _this.applyExtraHeadTags( compiledLayout );
       _trackEvent = trackEvent;
-      _trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
-      update();
-      setupListeners();
+      _trackEvent.listen( "trackeventupdated", function( e ) {
+        _trackEvent = e.target;
+        _this.updatePropertiesFromManifest( _trackEvent );
 
+        // Prevent dataURIs from appearing in the editor
+        if ( !/^data:image/.test( _trackEvent.popcornOptions.src ) ) {
+          _urlInput.value = _trackEvent.popcornOptions.src;
+        } else if ( _trackEvent.popcornOptions.src ) {
+          dragDropMode();
+        }
+        setErrorState( false );
+      });
+      
+      setup( trackEvent );
     },
     close: function() {
       _this.removeExtraHeadTags();
-      _trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
+      _trackEvent.unlisten( "trackeventupdated" );
     }
   });
 

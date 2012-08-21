@@ -75,20 +75,14 @@
       _container.style.height = validateDimension( options.height, "100" ) + "%";
       _container.style.top = validateDimension( options.top, "0" ) + "%";
       _container.style.left = validateDimension( options.left, "0" ) + "%";
+      _container.classList.add( options.transition );
+      _container.classList.add( "off" );
 
       if ( _target ) {
 
         _target.appendChild( _container );
 
         if ( options.src ) {
-
-          if( options.href ) {
-            _link = document.createElement( "a" );
-            _link.href = options.href || options.src;
-            _link.target = "_blank";
-            _link.classList.add( "image-plugin-link" );
-            _container.appendChild( _link );
-          }
 
           _image = document.createElement( "img" );
           _image.addEventListener( "load", function() {
@@ -196,6 +190,8 @@
         }
         options._container.classList.remove( "image-plugin-hidden" );
       }
+      options._container.classList.add( "on" );
+      options._container.classList.remove( "off" );
     },
 
     end: function( event, options ) {
@@ -205,6 +201,8 @@
         }
         options._container.classList.add( "image-plugin-hidden" );
       }
+      options._container.classList.remove( "on" );
+      options._container.classList.add( "off" );
     },
 
     _teardown: function( options ) {
@@ -229,12 +227,6 @@
           type: "url",
           label: "Source URL",
         },
-        href: {
-          elem: "input",
-          type: "url",
-          label: "Link URL",
-          optional: true
-        },
         username: {
           elem: "input",
           type: "text",
@@ -252,63 +244,65 @@
           type: "text",
           label: "Flickr: Photoset Id",
           optional: true,
-          default: "72157630814677262"
+          "default": "72157630814677262"
         },
         count: {
           elem: "input",
           type: "number",
           label: "Flickr: Count",
-          optional: true
+          optional: true,
+          "default": 5
         },
         width: {
           elem: "input",
           type: "number",
           label: "Width",
           "default": 80,
-          "units": "%"
+          "units": "%",
+          hidden: true
         },
         height: {
           elem: "input",
           type: "number",
           label: "Height",
           "default": 80,
-          "units": "%"
+          "units": "%",
+          hidden: true
         },
         top: {
           elem: "input",
           type: "number",
           label: "Top",
           "default": 10,
-          "units": "%"
+          "units": "%",
+          hidden: true
         },
         left: {
           elem: "input",
           type: "number",
           label: "Left",
           "default": 10,
-          "units": "%"
+          "units": "%",
+          hidden: true
         },
-        transitionInClass: {
-          elem: "input",
-          type: "text",
-          label: "In Transition",
-          optional: true
-        },
-        transitionOutClass: {
-          elem: "input",
-          type: "text",
-          label: "Out Transition",
-          optional: true
+        transition: {
+          elem: "select",
+          options: [ "None", "Pop", "Slide Up", "Slide Down", "Fade" ],
+          values: [ "none", "popcorn-pop", "popcorn-slide-up", "popcorn-slide-down", "popcorn-fade" ],
+          label: "Transition",
+          "default": "popcorn-pop"
         },
         start: {
           elem: "input",
           type: "number",
-          label: "In"
+          label: "Start",
+          units: "seconds"
         },
         end: {
           elem: "input",
           type: "number",
-          label: "Out"
+          label: "End",
+          units: "seconds"
         }
       }
     }
