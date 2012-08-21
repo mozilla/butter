@@ -113,6 +113,7 @@ function init( window, document ) {
     });
 
     popcorn.on( "playing", function() {
+      hide( "post-roll" );
       addStateClass( "embed-playing" );
     });
 

@@ -16,7 +16,24 @@
   background:white;
 }
 
+/* Big Button */
 
+#controls-big-play-button {
+  display: none;
+  width: 57px;
+  height: 66px;
+  background: url(../resources/controls/icon_play.png) no-repeat;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -33px;
+  margin-left: -26px;
+  z-index: 9999;
+  cursor: pointer;
+}
+#controls-big-play-button.controls-ready {
+  display: block;
+}
 
 #butter-controls.controls-active {
    /* active happens on mouse over and is reverted to default on mouse out */
@@ -101,43 +118,6 @@
   left: -5px;
 }
 
-#controls-volume {
-  background: rgba( 0, 0, 0, .2 );
-  box-shadow: none;
-  position: absolute;
-  height: 15px;
-  right: 235px !important;
-  top: 12px;
-  width: 30px;
-  border-radius: 0;
-}
-
-#controls-volume-progressbar {
-  height: 100%;
-  background: rgba( 0, 0, 0, .4 );
-  position: absolute;
-  border-radius: 6px 0 0 8px;
-}
-
-#controls-volume-scrubber {
-  display: none;
-  height: 100%;
-  width: 2px;
-  background: #EEE;
-  position: absolute;
-  cursor: pointer;
-}
-
-#controls-volume-scrubber:after {
-  content: "";
-  position: absolute;
-  width: 8px;
-  height: 15px;
-  border-radius: 15px;
-  background: #EEE;
-  top: -2px;
-  left: -5px;
-}
 
 /* Time */
 
@@ -177,7 +157,7 @@
 
 /* Volume */
 
-#volume {
+#controls-volume {
   position: absolute;
   width: 30px;
   height: 30px;
@@ -185,7 +165,7 @@
   top: 11px;
 }
 
-#volume div {
+#controls-volume div {
   float: left;
   width: 5px;
   height: 18px;
@@ -195,7 +175,7 @@
   position: relative;
 }
 
-#volume div span {
+#controls-volume div span {
   background: #d5d5d6;
   display: block;
   position: absolute;
@@ -203,35 +183,35 @@
   bottom: 0;
 }
 
-#volume div.active span {
+#controls-volume div.active span {
   background: #1eb771;
 }
 
-#volume div:hover span {
+#controls-volume div:hover span {
   background-color: #b5b5b5;
 }
 
-#volume div:last-child {
+#controls-volume div:last-child {
   padding-right: 0;
 }
 
-#volume #volume-one span {
+#controls-volume #controls-volume-one span {
   height: 25%;
 }
 
-#volume #volume-two span {
+#controls-volume #controls-volume-two span {
   height: 50%;
 }
 
-#volume #volume-three span {
+#controls-volume #controls-volume-three span {
   height: 75%;
 }
 
-#volume #volume-four span {
+#controls-volume #controls-volume-four span {
   height: 100%;
 }
 
-#volume #volume-one {
+#controls-volume #controls-volume-one {
 
 }
 
