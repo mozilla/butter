@@ -35,9 +35,6 @@
               target: _this
             });
           }
-        },
-        {
-          highlightClass: "butter-target-highlight"
         });
       } //if
 

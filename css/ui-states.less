@@ -48,30 +48,6 @@
 // Webkit, Moz and MS Keyframes for transform
 .transformAnimation(rotate(0deg), rotate(360deg));
 
-/* Blinking/hightlighting */
-
-.butter-highlight {
-  position: fixed;
-  z-index: @HIGHLIGHT_Z_INDEX;
-  opacity: 0;
-  
-  &.on {
-    opacity: 1;
-  }
-  &.blink {
-    .transition(opacity 1.5s);
-    opacity: 0;
-  }
-}
-
-.butter-target-highlight {
-  background: rgba( 170, 170, 10, 0.4 );
-}
-
-.butter-media-highlight {
-  background: rgba( 10, 170, 170, 0.4 );
-}
-
 /* Toggle hide/show button for editor and tray */
 
 .butter-toggle-button {
@@ -102,4 +78,15 @@
       background-position: -255px -9px;
     }
   }
+}
+
+/* Targets and highlighting */
+
+.butter-highlight-on {
+  box-shadow: 0 0 0 10px @green;
+}
+
+.butter-highlight-fade {
+  .transition( box-shadow 1.5s );
+  box-shadow: 0 0 0 10px transparent;
 }
