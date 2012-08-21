@@ -36,7 +36,8 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
 
     var onViewMouseUp, onViewMouseDown, onViewMouseMove,
         onLeftMouseUp, onLeftMouseDown, onLeftMouseMove,
-        onRightMouseUp, onRightMouseDown, onRightMouseMove;
+        onRightMouseUp, onRightMouseDown, onRightMouseMove,
+        onElementMouseUp, onElementMouseDown, onElementMouseMove;
 
     this.update = function() {
       _rect = _element.getBoundingClientRect();
@@ -53,6 +54,13 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       // another reversal.
       _viewPort.style.right = 100 - ( width + left ) + "%";
       zoomCallback( level );
+    };
+
+    onElementMouseUp = function( e ) {
+      e.preventDefault();
+      e.stopPropagation();
+      window.removeEventListener( "mouseup", onElementMouseUp, false );
+      window.removeEventListener( "mousemove", onElementMouseMove, false );
     };
 
     onViewMouseUp = function( e ) {
@@ -76,10 +84,20 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       window.removeEventListener( "mousemove", onRightMouseMove, false );
     };
 
+    onElementMouseDown = function( e ) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      media.currentTime = ( e.clientX - _rect.left ) / _rect.width * _duration;
+
+      window.addEventListener( "mouseup", onElementMouseUp, false );
+      window.addEventListener( "mousemove", onElementMouseMove, false );
+    };
+
     onViewMouseDown = function( e ) {
       e.preventDefault();
       e.stopPropagation();
-      _lastPosition = e.clientX;
+      _lastPosition = e.clientX - _rect.left;
       window.addEventListener( "mouseup", onViewMouseUp, false );
       window.addEventListener( "mousemove", onViewMouseMove, false );
     };
@@ -98,15 +116,25 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       window.addEventListener( "mousemove", onRightMouseMove, false );
     };
 
+    onElementMouseMove = function( e ) {
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      media.currentTime = ( e.clientX - _rect.left ) / _rect.width * _duration;
+    };
+
     onViewMouseMove = function( e ) {
 
       e.preventDefault();
       e.stopPropagation();
 
+      _position = e.clientX - _rect.left;
+
       // leftPos is from the left of the container, to the left of the viewport.
-      _leftPos = ( _viewPort.getBoundingClientRect().left + e.clientX - _lastPosition ) - _rect.left;
+      _leftPos = ( _viewPort.offsetLeft + _position - _lastPosition );
       // rightPos is from the right of the container, to the right of the viewport.
-      _rightPos = _rect.width - ( ( ( _viewPort.getBoundingClientRect().left + e.clientX - _lastPosition ) - _rect.left ) + _viewPort.offsetWidth );
+      _rightPos = _rect.width - ( ( ( _viewPort.offsetLeft + _position - _lastPosition ) ) + _viewPort.offsetWidth );
 
       // make sure we never go out of bounds.
       if ( _leftPos < 0 ) {
@@ -121,7 +149,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       _viewPort.style.right = _rightPos / _rect.width * 100 + "%";
       _viewPort.style.left = _leftPos / _rect.width * 100 + "%";
       outerElement.scrollLeft = _viewPort.offsetLeft / _rect.width * innerElement.scrollWidth;
-      _lastPosition = e.clientX;
+      _lastPosition = _position;
     };
 
     onLeftMouseMove = function( e ) {
@@ -165,6 +193,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       zoomCallback( _viewPort.offsetWidth / _rect.width );
     };
 
+    _element.addEventListener( "mousedown", onElementMouseDown, false );
     _viewPort.addEventListener( "mousedown", onViewMouseDown, false );
     _leftHandle.addEventListener( "mousedown", onLeftMouseDown, false );
     _rightHandle.addEventListener( "mousedown", onRightMouseDown, false );
