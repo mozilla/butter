@@ -335,7 +335,8 @@ define([], function(){
     element.addEventListener( "dragstart", function( e ){
       __currentDraggingElement = element;
       e.dataTransfer.effectAllowed = "all";
-      e.dataTransfer.setData( "text", _id );
+      // coerce to string so IE9 doesn't throw
+      e.dataTransfer.setData( "text", _id + "" );
       if( _image ){
         var img = document.createElement( "img" );
         img.src = _image.src;
