@@ -20,7 +20,7 @@
   margin-right: 10px;
   font-size: 16px;
   font-weight: 700;
-  background: #ffffff url("../../../../resources/icons/twitter.png") right center no-repeat;
+  background: #ffffff url("twitter-icon.png") right center no-repeat;
   border-bottom: 1px solid #CCC;
 }
 .popcorn-twitter-tweets {
@@ -59,6 +59,7 @@
 }
 .popcorn-twitter-tweet-text {
   font-size: 14px;
+}
 
 /*********************************************************
 * Ticker
@@ -148,8 +149,6 @@
     margin-top: 0;
   }
 }
-
-}
 /*********************************************************
 * Ticker
 */
@@ -180,7 +179,7 @@
 .popcorn-twitter.ticker .popcorn-twitter-tweets {
   overflow: hidden;
   margin-right: 10px;
-  background: url("../../../../resources/icons/twitter.png") right 10px no-repeat;
+  background: url("twitter-icon.png") right 10px no-repeat;
 }
 .popcorn-twitter.ticker a {
   text-decoration: none;

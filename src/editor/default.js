@@ -80,7 +80,7 @@ define( [ "text!./default.html", "editor/editor" ],
             }
           }, null, optionsContainer, null, [ "target" ] );
 
-        if ( !trackEvent.manifest.options.target.hidden ) {
+        if ( trackEvent.manifest.options.target && !trackEvent.manifest.options.target.hidden ) {
           targetList = _this.createTargetsList( _targets );
           selectElement = targetList.querySelector( "select" );
           // Attach the onchange handler to trackEvent is updated when <select> is changed

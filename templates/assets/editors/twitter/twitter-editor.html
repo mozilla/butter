@@ -1,0 +1,30 @@
+<!--  This Source Code Form is subject to the terms of the MIT license
+      If a copy of the MIT license was not distributed with this file, you can
+      obtain one at http://www.mozillapopcorn.org/butter-license.txt -->
+
+<div class="butter-editor default-editor allow-scrollbar">
+  <h1>Twitter Editor</h1>
+  <div class="butter-editor-body scrollbar-append-to">
+    <div class="editor-options-wrapper scrollbar-outer">
+      <div class="editor-options scrollbar-inner">
+        <fieldset class="trackevent-property default input radio">
+          <label class="editor-section-header" id="search-label">Search</label>
+          <div class="butter-form-radio">
+            <input class="value" type="radio" name="query-type" id="search-radio" checked/>
+            <input class="value" type="text" id="search-text" data-manifest-key="search"/>
+          </div>
+        </fieldset>
+        <fieldset class="trackevent-property default input radio">
+          <label class="property-name">Username</label>
+          <div class="butter-form-radio">
+            <input class="value" type="radio" name="query-type" id="user-radio" />
+            <input class="value" type="text" id="user-text" data-manifest-key="username" />
+          </div>
+        </fieldset>
+        <div class="error-message-container">
+          <div class="error-message"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
