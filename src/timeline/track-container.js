@@ -23,11 +23,19 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
     _this.trackEventDragManager = new TrackEventDragManager( media, _container );
 
     butter.listen( "trackorderchanged", function( e ) {
-      var orderedTracks = e.data;
+      var orderedTracks = e.data,
+          track,
+          trackElement,
+          trackAtOrder,
+          order;
+
       for ( var i = 0, l = orderedTracks.length; i < l; ++i ) {
-        var trackElement = orderedTracks[ i ].view.element;
-        if ( trackElement !== _container.childNodes[ i ] ) {
-          _container.insertBefore( trackElement, _container.childNodes[ i + 1 ] );
+        track = orderedTracks[ i ];
+        trackElement = track.view.element;
+        order = track.order;
+        trackAtOrder = _container.childNodes[ order ];
+        if ( trackElement !== trackAtOrder ) {
+          _container.insertBefore( trackElement, trackAtOrder );
         }
       }
     });
