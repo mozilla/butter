@@ -27,7 +27,7 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
       for ( var i = 0, l = orderedTracks.length; i < l; ++i ) {
         var trackElement = orderedTracks[ i ].view.element;
         if ( trackElement !== _container.childNodes[ i ] ) {
-          _container.insertBefore( trackElement, _container.childNodes[ i + 1 ] );
+          _container.insertBefore( trackElement, _container.childNodes[ i ] );
         }
       }
     });
