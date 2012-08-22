@@ -131,6 +131,70 @@ function init( window, document ) {
     }
   }
 
+  function applyConfigOptions( config, popcorn, Controls ) {
+    // TODO#1721 Setup UI based on config options
+    if( config.autohide ) {
+      // TODO: Add CSS class for :hover in order to show controls, hide (e.g., slide down
+      // or fade) otherwise.
+      Popcorn.nop();
+    }
+    if( config.controls ) {
+      Controls( "controls", popcorn );
+      show( "controls" );
+    }
+    if( config.loop ) {
+      popcorn.loop( true );
+    }
+    if( !config.fullscreen ) {
+      // TODO: remove fullscreen button or disable
+      Popcorn.nop();
+    }
+    if( !config.branding ) {
+      // TODO: remove/hide branding
+      Popcorn.nop();
+    }
+    if( !config.showinfo ) {
+      // TODO: remove/hide title, author, etc.
+      Popcorn.nop();
+    }
+
+    // Some config options want the video to be ready before we do anything.
+    function onLoad() {
+      popcorn.off( "loadedmetadata", onLoad );
+
+      // See if we should start playing at a time other than 0.
+      // We combine this logic with autoplay, since you either
+      // seek+play or play or neither.
+      if( config.start > 0 ) {
+        popcorn.on( "seeked", function onSeeked(){
+          popcorn.off( "seeked", onSeeked );
+          if( config.autoplay ) {
+            popcorn.play();
+          }
+        });
+        popcorn.currentTime( config.start );
+      } else if ( config.autoplay ) {
+        popcorn.play();
+      }
+
+      // See if we should pause at some time other than duration.
+      if( config.end > 0 ) {
+        popcorn.on( "timeupdate", function onTimeUpdate(){
+          if( popcorn.currentTime() >= config.end && !popcorn.paused() ) {
+            popcorn.off( "timeupdate", onTimeUpdate );
+            popcorn.pause();
+          }
+        });
+      }
+    }
+    // Either the video is ready, or we need to wait.
+    if( popcorn.readyState() >= 1 ) {
+      onLoad();
+    } else {
+      popcorn.on( "loadedmetadata", onLoad );
+    }
+  }
+
   var require = requirejs.config({
     context: "embed",
     baseUrl: "/src",
@@ -195,14 +259,7 @@ function init( window, document ) {
         branding: qs.branding === "0" ? false : true,
         showinfo: qs.showinfo === "0" ? false : true
       };
-
-      // Setup UI based on config options
-      // TODO: config.autohide
-      // TODO: config.autoplay
-      if( config.controls ) {
-        Controls( "controls", popcorn );
-        show( "controls" );
-      }
+      applyConfigOptions( config, popcorn, Controls );
 
       setupClickHandlers( popcorn, config );
       setupEventHandlers( popcorn, config );
