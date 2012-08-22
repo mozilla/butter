@@ -15,6 +15,8 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
         _authButton = _rootElement.querySelector( ".butter-login-btn" ),
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
+        _tabzilla = _rootElement.querySelector( "#tabzilla "),
+        _myProjectsButton = _rootElement.querySelector( ".butter-my-projects-btn"),
         _loginClass = "butter-login-true",
         _activeClass = "btn-green",
         _noProjectNameToolTip,
@@ -28,11 +30,18 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
     // create a tooltip for the projectName element
     ToolTip.create({
       element: _projectTitle,
-      top: "43px"
+      top: "50px"
     });
 
     _this.element = _rootElement;
-    ToolTip.apply( _projectTitle );
+
+    _tabzilla.addEventListener( "click", function( e ) {
+      document.body.classList.toggle( "tabzilla-open");
+    }, false );
+
+    _myProjectsButton.addEventListener( "click", function( e ) {
+      document.body.classList.toggle( "tabzilla-open");
+    }, false );
 
     function authenticationRequired( successCallback, errorCallback ){
       if ( butter.cornfield.authenticated() && successCallback && typeof successCallback === "function" ) {
@@ -213,7 +222,6 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
     }
 
     function loginDisplay() {
-      _buttonGroup.classList.add( "btn-group" );
       _rootElement.classList.add( _loginClass );
       _authButton.classList.remove( _activeClass );
       _authButton.removeEventListener( "click", authenticationRequired, false );
