@@ -202,13 +202,52 @@ function init( window, document ) {
 
       // Setup UI based on config options
       // TODO: config.autohide
-      // TODO: config.autoplay
       if ( config.autoplay ) {
         popcorn.autoplay( true );
+      }
+      if ( config.loop ) {
+        popcorn.loop( true );
       }
       if ( config.controls ) {
         Controls( "controls", popcorn );
         show( "#controls" );
+      }
+
+      // Some config options want the video to be ready before we do anything.
+      function onLoad() {
+        var start = config.start,
+            end = config.end;
+
+        popcorn.off( "load", onLoad );
+
+        // See if we should start playing at a time other than 0.
+        // We combine this logic with autoplay, since you either
+        // seek+play or play or neither.
+        if ( start > 0 && start < popcorn.duration ) {
+          popcorn.on( "seeked", function onSeeked() {
+            popcorn.off( "seeked", onSeeked );
+            if ( config.autoplay ) {
+              popcorn.play();
+            }
+          });
+          popcorn.currentTime( start );
+        } else if ( config.autoplay ) {
+          popcorn.play();
+        }
+
+        // See if we should pause at some time other than duration.
+        if ( end > 0 && end > start && end <= popcorn.duration ) {
+          popcorn.cue( end, function() {
+            popcorn.pause();
+          });
+        }
+      }
+
+      // Either the video is ready, or we need to wait.
+      if ( popcorn.readyState >= 1 ) {
+        onLoad();
+      } else {
+        popcorn.on( "loadedmetadata", onLoad );
       }
 
       setupClickHandlers( popcorn, config );
