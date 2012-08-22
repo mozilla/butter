@@ -4,7 +4,8 @@
 
 define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
-  var CANVAS_CONTAINER_PADDING = 5;
+  var CANVAS_CONTAINER_PADDING = 5,
+      TICK_COLOR = "#999999";
 
   return function( butter, media, statusArea, tracksContainer, hScrollbar ) {
 
@@ -82,15 +83,14 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
             lastTimeDisplayed = position;
             // text color
-            context.fillStyle = "#999999";
-            context.fillText( util.secondsToSMPTE( i ), -~position - ( textWidth / 2 ), 21 );
+            context.fillStyle = TICK_COLOR;
           }
 
           lastPosition = position;
         }
       }
       // stroke color
-      context.strokeStyle = "#999999";
+      context.strokeStyle = TICK_COLOR;
       context.stroke();
       context.translate( _tracksContainer.element.scrollLeft, 0 );
 

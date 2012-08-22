@@ -128,7 +128,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _media.listen( "mediaready", onMediaReady );
 
       _container.appendChild( _tracksContainer.element );
-      _container.appendChild( _superScrollbar.element );
+      _rootElement.appendChild( _superScrollbar.element );
       _container.appendChild( _vScrollBar.element );
       _rootElement.appendChild( _trackHandles.element );
 
