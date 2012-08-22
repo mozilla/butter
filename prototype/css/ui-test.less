@@ -1,0 +1,979 @@
+@import "globals";
+@import "colors";
+@import "normalize";
+@import "ui";
+@import "main";
+@import "mediaqueries";
+@import "utilities";
+@import "print";
+
+// Grid calculations
+@gridTotal: 960px;
+@gridMargin: 12px;
+@gridDivisions: 16;
+
+@gridUnit: ( @gridTotal - @gridMargin * ( @gridDivisions - 1 ) ) / @gridDivisions;
+
+// Have to do this manually :(
+@grid-1: @gridUnit;
+@grid-2: @gridUnit * 2 + @gridMargin;
+@grid-3: @gridUnit * 3 + @gridMargin * 2;
+@grid-4: @gridUnit * 4 + @gridMargin * 3;
+@grid-5: @gridUnit * 5 + @gridMargin * 4;
+@grid-6: @gridUnit * 6 + @gridMargin * 5;
+@grid-7: @gridUnit * 7 + @gridMargin * 5;
+@grid-8: @gridUnit * 8 + @gridMargin * 2;
+@grid-9: @gridUnit * 9 + @gridMargin * 8;
+@grid-10: @gridUnit * 10 + @gridMargin * 9;
+@grid-11: @gridUnit * 11 + @gridMargin * 10;
+@grid-12: @gridUnit * 12 + @gridMargin * 11;
+@grid-13: @gridUnit * 13 + @gridMargin * 11;
+@grid-14: @gridUnit * 14 + @gridMargin * 13;
+@grid-15: @gridUnit * 15 + @gridMargin * 14;
+@grid-16: @gridUnit * 16 + @gridMargin * 15;
+
+// Main Sections
+@headerHeight: @grid-2;
+@editorWidth: @grid-6;
+@editorHeaderHeight: @grid-1;
+@trayHeight: @grid-4;
+@traySidebarWidth: @grid-3;
+@collapsed: @grid-1;
+@controlsHeight: @grid-1; // same a collapsed
+
+@butterVisualsHeight: @grid-1;
+
+// Logo
+@logoWidth: 52px;
+
+// Video
+@videoPhone: 320px;
+@videoSmall: 560px;
+@videoTablet: 640px;
+@videoDesktop: 853px;
+@videoLarge: 1280px;
+
+.videoSize( @width ) {
+  width: @width;
+  height: @width * .56125;
+}
+
+// Utility
+@maxZ: 10000;
+
+// Colors
+@baseDark: #242F33;
+@baseLight: #EFEFEF;
+@textShadow: 0 -2px 0 #000;
+@rouge: #CB2408;
+@green: #41BB92;
+
+
+/*********************************************************
+* Base
+*/
+
+html {
+  background: @noise #121212;
+   .gradient( "wash", darken( @baseDark, 5% ), darken( @baseDark, 10% ), lighten( @baseDark, 5% ), @noiseLight );
+}
+
+.butter-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+section,
+header {
+  .box-sizing( border-box );
+  .transition( all .3s ease );
+}
+
+/*********************************************************
+* Buttons
+*/
+
+@buttonTopSpacing: 15px;
+
+.button() {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 2px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.btn-shadow( @color ) {
+  box-shadow: inset 0 1px 0 lighten( @color, 10% ),
+  0 -1px 0 darken( @color, 20% ),
+  0 1px 0 darken( @color, 10% ),
+  1px 0 0 darken( @color, 5% ),
+  -1px 0 0 darken( @color, 5% );
+}
+
+.btn-shadow( @color, "hover" ) {
+  box-shadow: inset 0 1px 0 lighten( @color, 15% ),
+    0 -1px 0 darken( @color, 20% ),
+    0 1px 0 darken( @color, 14% ),
+    1px 0 0 darken( @color, 5% ),
+    -1px 0 0 darken( @color, 5% ),
+    0 2px 2px rgba( 0, 0, 0, 0.5 );
+}
+
+[class^="butter-btn-"],
+[class^=" butter-btn-"] {
+  .button();
+  &:hover {
+    cursor: pointer;
+  }
+  > .icon {
+    position: relative;
+    top: 2px;
+    margin-right: 5px;
+
+    &.icon-only {
+      margin-right: 0;
+    }
+
+  }
+}
+
+[class^="butter-btn-"] + [class^="butter-btn-"] {
+  margin-left: 3px;
+}
+
+.butter-btn-dark,
+.butter-btn-dark:visited {
+  position: relative;
+  color: #EEE;
+  //border-top: 1px solid #000;
+  text-shadow: @textShadow;
+  .btn-shadow( @baseDark );
+  .gradient( "vertical", lighten( @baseDark, 3% ), darken( @baseDark, 2% ) );
+  &:hover {
+    color: #FFF;
+    .btn-shadow( @baseDark, "hover" );
+  }
+}
+
+.butter-btn-green,
+.butter-btn-green:visited {
+  position: relative;
+  color: #FFF;
+  text-shadow: 0 1px 0 darken( @green, 20% );
+  .btn-shadow( @green );
+  .gradient( "vertical", @green, darken( @green, 6% ) ); 
+  &:hover {
+    color: #FFF;
+    .btn-shadow( @green, "hover" );
+  }
+}
+
+.btn-light,
+.ui-light a {
+  .button2( #EEE, 1%, #333, 3px, 10% );
+  font-size: 14px;
+  padding: 5px 10px;
+}
+
+.icon.icon-only {
+  margin-right: 0;
+}
+
+.butter-play-btn,
+.butter-volume-btn {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-radius: 30px;
+  text-align: center;
+  background: fade( #FFF, 20% );
+  border: none;
+  box-shadow: none;
+  > i {
+    margin-top: 5px;
+  }
+}
+
+.butter-volume-btn {
+  width: 25px;
+  height: 25px;
+  > i {
+    margin-top: 3px;
+  }
+}
+
+/*********************************************************
+* Tooltip
+*/
+
+.tooltip {
+  position: relative;
+  &:hover > .butter-tooltip {
+    opacity: 1;
+    > div { margin-top: 10px; }
+  }
+}
+
+.butter-tooltip {
+
+  &.tooltip-on {
+    opacity: 1;
+    > div { margin-top: 10px; }
+  }
+
+ &.tooltip-large {
+    > div {
+      font-size: 16px;
+      width: 150px;
+      padding: 20px;
+      color: @green;
+      font-weight: 700;
+    }
+  }
+
+  opacity: 0;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  margin-top: -10px;
+  margin-left: -60px;
+  z-index: 100000;
+  .transition( all .3s ease );
+
+  > div {
+    position: relative;
+    line-height: 1.25;
+    margin-top: -1000px;
+    width: 120px;
+    background: #FFF;
+    text-shadow: none;
+    color: #444;
+    font-size: 11px;
+    padding: 10px;
+    .box-sizing( border-box );
+    border-radius: 2px;
+    border: 1px solid #CCC;
+    box-shadow: 1px 3px 7px -2px rgba( 0, 0, 0, .5 );
+
+    &:after,
+    &:before {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      margin-left: -5px;
+      width: 0; 
+      height: 0; 
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;  
+      border-bottom: 5px solid #FFF;
+      z-index: 100001;
+    }
+
+    &:before {
+      top: -6px;
+      border-bottom: 5px solid #CCC;
+    }
+   
+  }
+}
+
+
+/*********************************************************
+* Header
+*/
+
+.butter-header {
+  z-index: 100;
+  .clearfix();
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  width: 100%;
+}
+
+.butter-logo {
+  position: relative;
+  float: left;
+  height: 65px;
+  width: 170px;
+  background: url( ../img/logo-words.png ) no-repeat;
+  z-index: 100000;
+}
+
+.butter-header-buttons-left {
+  margin-top: 15px;
+  display: inline-block;
+
+  line-height: 24px;
+  .clearfix();
+  > a {
+    float: left;
+  }
+}
+
+.butter-btn-group {
+  float: left;
+  padding: 0;
+
+  > a {
+    position: relative;
+    float: left;
+    border-radius: 0;
+    &:first-child {
+      left: 3px;
+      border-radius: 2px 0 0 2px;
+    }
+    &:last-child {
+      left: -3px;
+      border-radius: 0 2px 2px 0;
+    }
+  }
+}
+
+.butter-avatar {
+  float: left;
+  height: 24px;
+  width: 24px;
+  background: url( ../img/brett.png ) no-repeat;
+  margin-right: 5px;
+}
+
+#butter-btn-save {
+  margin-left: 10px;
+}
+
+
+#media-input {
+  position: relative;
+}
+
+/*********************************************************
+* Editor
+*/
+
+@inputOutline: #CCC;
+@inputFocus: @green;
+@inputText: #555;
+
+@inputTextSize: 13px;
+@inputPadding: 10px;
+
+.butter-editor {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: @editorWidth;
+  .gradient( "vertical", @baseLight, darken( @baseLight, 5% ) );
+  box-shadow: -2px -5px 5px 0 fade( #000, 20% );
+  border-left: 1px solid #222;
+  overflow: visible;
+  z-index: 10000;
+}
+
+.butter-editor-header {
+  position: relative;
+  height: @editorHeaderHeight;
+  .gradient( "vertical", @baseDark, darken( @baseDark, 5% ) );
+  box-shadow: 0 1px 0 fade( lighten( @baseDark, 10% ), 25%);
+  border-bottom: 5px solid @green;
+
+  > ul {
+    position: absolute;
+    bottom: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    .clearfix();
+
+    > li {
+      float: left;
+
+      &.fl-right {
+        float: right;
+      }
+
+      > a.butter-btn-dark {
+        background: none;
+        font-size: 15px;
+        margin-right: 0;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+        padding: @editorHeaderHeight / 4;
+
+        &.butter-active {
+          background: @green;
+          text-shadow: 0 1px 1px darken( @green, 20% );
+        }
+
+      }
+
+    }
+
+  }
+}
+
+.butter-editor-close-btn {
+   > i {
+    background-position: -456px -72px;
+  }
+}
+
+// PANELS
+.butter-editor-panel {
+  display: none;
+}
+
+.butter-panel-active {
+  display: block;
+}
+
+.butter-editor-outer {
+  .box-sizing( border-box );
+  width: @editorWidth;
+  padding-right: 20px; /* scrollbar */
+}
+
+.butter-editor-breadcrumbs {
+  margin-top: 0;
+  color: @green;
+  font-weight: 600;
+  text-shadow: none;
+  background: #FFF;
+  padding: 15px;
+  border-bottom: 1px solid #CCC;
+}
+
+.butter-editor-inner {
+  padding: 20px;
+
+
+  label {
+    font-size: 13px;
+    display: block;
+    padding: @inputPadding 0;
+  }
+
+  fieldset {
+    margin-bottom: 13px;
+  }
+
+  input,
+  textarea {
+    border: 1px solid @inputOutline;
+    border-top-color: darken( @inputOutline, 10% );
+    border-radius: 2px;
+    color: @inputText;
+    padding: @inputPadding;
+    font-size: @inputTextSize;
+    box-sizing: border-box;
+    width: 100%;
+
+    &:focus {
+      outline: none;
+      border: 1px solid fade( @inputFocus, 50% );
+      box-shadow: 0 0 1px fade( @inputFocus, 50% );
+    }
+  }
+
+  textarea {
+    min-height: 100px;
+    line-height: 1.25;
+  }
+
+  .big {
+    font-size: @inputTextSize * 1.25;
+  }
+
+  .ui-button-group {
+    margin-bottom: 5px;
+  }
+
+}
+
+/*********************************************************
+* Add events
+*/
+
+.btn-events {
+  position: relative;
+  padding: 10px;
+  width: 100px;
+  height: 30px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  line-height: 25px;
+  cursor: move;
+
+   > span {
+    //display: none;
+  }
+
+  &:hover {
+    left: -2px;
+    top: -2px;
+    box-shadow: 4px 4px 0 -2px rgba( 0, 0, 0, .3 );
+  }
+
+}
+
+.icon-plugin {
+  float: left;
+  display: inline-block;
+  height: 25px;
+  width: 25px;
+  margin-right: 10px;
+}
+
+.plugin-text {
+  background: url( ../img/plugins/text.png ) no-repeat;
+}
+
+.plugin-link {
+  background: url( ../img/plugins/link.png ) no-repeat;
+}
+
+.plugin-twitter {
+  background: url( ../img/plugins/twitter.png ) no-repeat;
+}
+
+.plugin-image {
+  background: url( ../img/plugins/image.png ) no-repeat;
+}
+
+.plugin-video {
+  background: url( ../img/plugins/video.png ) no-repeat;
+  height: 30px;
+}
+
+.plugin-map {
+  background: url( ../img/plugins/map.png ) no-repeat;
+}
+
+.plugin-toc {
+  background: url( ../img/plugins/toc.png ) no-repeat;
+}
+
+.more-plugin-list {
+  display: none;
+  > ul {
+    box-shadow: inset 0 1px 1px 0 rgba( 0, 0, 0, .2 );
+    height: 300px;
+    overflow: scroll;
+    > li {
+      padding: 10px 0;
+      box-shadow: 0 1px 0 #FFF,
+        inset 0 -1px 0 0 #CCC;
+      > p {
+        font-size: 0.8em;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+/*********************************************************
+* Stage
+*/
+
+.butter-stage {
+  position: absolute;
+  left: 0;
+  right: @editorWidth;
+  top: 0;
+  right: @editorWidth;
+  bottom: @trayHeight;
+ 
+}
+
+.butter-embed-container {
+  .videoSize( @videoDesktop );
+  margin: 120px auto;
+}
+
+.butter-media-source {
+  padding: 10px 0;
+}
+
+.butter-video-container {
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 0 0 0 1px darken( @baseDark, 15% ),
+    0 1px 0 0 lighten( @baseDark, 3% );
+  .box-sizing( border-box );
+  background: darken( @baseDark, 10% );
+  video,
+  iframe {
+    width: 100%;
+    height: 100%;
+  }
+
+  &.hover-state {
+    box-shadow: inset 0 0 0 1px darken( @baseDark, 15% ),
+    0 1px 0 0 lighten( @baseDark, 3% ),
+    0 1px 10px -1px @green;
+  }
+
+  &.drag-over-state {
+    box-shadow: inset 0 0 0 1px darken( @baseDark, 15% ),
+    0 1px 0 0 lighten( @baseDark, 3% ),
+    0 1px 10px 3px @green;
+  }
+
+}
+/*
+
+/*********************************************************
+* Tray
+*/
+
+.butter-tray {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: @editorWidth;
+  height: @trayHeight;
+  //background: darken( @baseDark, 5% );
+  .gradient( "vertical", darken( @baseLight, 10% ), darken( @baseLight, 5% ) );
+}
+
+.butter-btn-media {
+  float: left;
+  margin-right: 5px;
+}
+
+/*********************************************************
+* Tray sidebar
+*/
+
+.butter-tray-sidebar {
+  position: relative;
+  z-index: 20000;
+  float: left;
+  width: @traySidebarWidth;
+  .gradient( "vertical", darken( @baseLight, 10% ), darken( @baseLight, 5% ) );
+  height: @trayHeight;
+  border-right: 1px solid darken( @baseLight, 30% );
+  box-shadow: 0 2px 4px 1px fade( #000, 20% );
+  //  inset 0 7px 2px -3px fade( #000, 40% );
+}
+
+.butter-tray-sidebar-controls {
+  height: @controlsHeight;
+  padding: 10px;
+  background: @baseDark;
+  width: 100%;
+  .box-sizing( border-box );
+}
+
+.butter-time {
+  color: @baseLight;
+  font-size: 12px;
+  margin: 0 10px;
+}
+
+.butter-current-time {
+  color: @green;
+}
+
+
+.butter-tracks-outer {
+  position: absolute;
+  left: @traySidebarWidth;
+  height: 100%;
+  right: 0;
+}
+
+.butter-tracks-container {
+  position: relative;
+  display: block;
+  height: @trayHeight - @controlsHeight;
+  overflow: hidden;
+}
+
+.butter-tracks {
+  @_trackHeight: 28px;
+  position: relative;
+  width: 2000px;
+  height: 100%;
+
+  ul {
+    position: relative;
+    width: 100%;
+    height: 3 * ( @_trackHeight + 5 );
+    top: @controlsHeight - @_trackHeight ;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    position: absolute;
+    display: block;
+    .gradient( "vertical", @baseLight, darken( @baseLight, 5% ) );
+    border: 1px solid rgba( 0, 0, 0, .3 );
+    box-shadow: inset 0 1px 0 #FFF,
+      0 1px 1px rgba( 0, 0, 0, .8 );
+    border-radius: 5px;
+    height: @_trackHeight;
+    margin-bottom: 5px;
+  }
+}
+
+.butter-controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: @baseDark;
+  height: @controlsHeight;
+  .box-sizing( border-box );
+   padding: 14px;
+
+  &:hover .ui-resizable-handle {
+    background: @green;
+  }
+
+}
+
+.butter-controls-inner {
+  position: relative
+  display: block;
+  height: 10px;
+  margin-top: 5px;
+  display: block;
+  background: #E7EEF1;
+  border-radius: 5px;
+  overflow-x: hidden;
+}
+
+.butter-scrubber-large {
+  position: absolute;
+  cursor: move;
+  z-index: 100000;
+  top: 28px;
+  left: 200px;
+  padding-bottom: 50px;
+  width: 1px;
+  height: 100px;
+  background: fade( @rouge, 50% );
+}
+
+.butter-scrubber-head {
+  @_scrubberHeadSize: 12px;
+  @_scrubberBorder: 3px;
+
+  position: absolute;
+  top: -@_scrubberHeadSize;
+  left: -@_scrubberHeadSize / 2;
+  width: @_scrubberHeadSize - @_scrubberBorder;
+  height: @_scrubberHeadSize - @_scrubberBorder;
+  border-radius: @_scrubberHeadSize;
+  background: @green;
+  border: @_scrubberBorder solid @baseLight;
+  box-shadow: 0 2px 2px 1px rgba( 0, 0, 0, .4 );
+
+  z-index: @maxZ;
+}
+
+/*********************************************************
+* Visualization
+*/
+
+.butter-visuals {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  .gradient( "vertical", darken( @baseLight, 10% ), darken( @baseLight, 5% ) );
+  border: 1px solid rgba(57, 75, 81, 0.25);
+  border-top-color: #AAA;
+  box-shadow:  0 1px 0 lighten( @baseLight, 5% );
+  border-width: 1px 0 1px 0;
+  padding: 3;
+
+  .butter-visuals-inner {
+    position: relative;
+    display: block;
+    height: @butterVisualsHeight * 2 / 3 ;
+    display: block;
+    background: rgba( 0, 0, 0, 0.1 );
+    //border-top: 1px solid darken( @baseLight, 50% );
+  }
+
+}
+
+#butter-visualization {
+  position: absolute;
+  top: 0px;
+  bottom: 5px;
+  left: 0;
+  right: 0;
+  margin: 5px;
+  list-style: none;
+
+  li {
+    position: absolute;
+    height: 3px;
+    background: @baseDark;
+  }
+}
+
+
+.butter-range {
+  position: absolute;
+  top: 0;
+  width: 100px;
+  height: 28px;
+  .gradient( "vertical", fade( #FFF, 20% ), fade( #FFF, 7% ));
+  border: 3px solid #FFF;
+  box-shadow: inset 0 1px 2px 1px rgba( 0, 0, 0, .5 );
+  cursor: move;
+
+  .ui-resizable-handle {
+    @_handlesHeight: 14px;
+    @_handlesWidth: 4px;
+
+    display: block;
+    position: absolute;
+    top: 50%;
+    height: @_handlesHeight;
+    width: @_handlesWidth;
+    margin-top: -@_handlesHeight / 2;
+    
+    
+    &.ui-resizable-w {
+      left: -@_handlesWidth / 2;
+      cursor: w-resize;
+      background: @green;
+    }
+
+    &.ui-resizable-e {
+      right: -@_handlesWidth / 2;
+      cursor: e-resize;
+      background: @green;
+    }
+
+  }
+
+} // range
+
+.butter-scrubber {
+  position: absolute;
+  cursor: move;
+  left: 30px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: @rouge;
+}
+
+
+
+/*********************************************************
+* Collapsed states
+*/
+
+.butter-editor-collapsed {
+  .butter-header {
+    right: 0;
+  }
+  .butter-editor {
+    width: 0;
+  }
+  .butter-tray {
+    right: 0;
+  }
+  .butter-stage {
+    right: 0;
+  }
+  .butter-editor-close-btn > i {
+    background-position: -432px -72px; // left
+  }
+}
+
+.butter-tray-collapsed {
+  .butter-tray{
+    height: @collapsed;
+  }
+  .butter-stage {
+    bottom: @collapsed;
+  }
+}
+
+
+/*********************************************************
+* Media Queries
+*/
+
+@_editorWidth: 306px;
+
+@mediaSmallMin: 560px + @_editorWidth;
+@mediaTabletMin: 768px + @_editorWidth;
+@mediaDesktopMin: 1024px + @_editorWidth;
+@mediaLargeMin: 1280px + @_editorWidth;
+
+@mediaPhoneMax: @mediaSmallMin;
+@mediaSmallMax: @mediaTabletMin;
+@mediaTabletMax: @mediaDesktopMin;
+@mediaDesktopMax: @mediaLargeMin;
+
+ /* Smartphones (portrait and landscape) ----------- */
+@media only screen and ( max-width: @mediaPhoneMax ) {
+
+  .butter-embed-container {
+    .videoSize( @videoPhone );
+  }
+
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and ( min-width: @mediaSmallMin ) and ( max-width: @mediaSmallMax ) {
+  .butter-embed-container {
+    .videoSize( @videoSmall );
+  }
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and ( min-width: @mediaTabletMin ) and ( max-width: @mediaTabletMax ) {
+  .butter-embed-container {
+    .videoSize( @videoTablet );
+  }
+}
+
+/* Mobile */
+@media only screen and ( max-width: @mediaSmallMax )  {
+  .mobile-hide {
+    display: none;
+  }
+}
+
+/* Desktops and laptops ----------- */
+@media only screen ( min-width: @mediaDesktopMin ) {
+  .butter-embed-container {
+    .videoSize( @videoDesktop );
+  }
+}
+
+/* Large screens ----------- */
+@media only screen and (min-width: @mediaLargeMin ) {
+  .butter-tray-collapsed .butter-embed-container {
+    margin-top: 0;
+    .videoSize( @videoLarge );
+  }
+}
+
+/* iPhone 4 ----------- */
+@media only screen and (-webkit-min-device-pixel-ratio : 1.5), only screen and (min-device-pixel-ratio : 1.5) {
+/* Styles */
+}
+

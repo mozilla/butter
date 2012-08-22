@@ -1,0 +1,477 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Tests for cichlid</title>
+
+  <meta name="viewport" content="width=device-width">
+  <link rel="stylesheet" href="css/ui-test.css">
+
+  <script type="text/javascript" src="http://use.typekit.com/qnf5iux.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+</head>
+<body>
+  <script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=179656678785574";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  <div id="wrapper" class="butter-wrapper">
+
+    <section id="stage" class="butter-stage">
+      <div class="butter-embed-container">
+        <header class="butter-header">
+          <div class="butter-logo"></div>
+          <div class="butter-header-buttons-left">
+            <a class="butter-btn-green butter-login-false"><i class="icon icon-white icon-user"></i> Login</a>
+            
+            <div class="butter-btn-group butter-login-true">
+                <a class="butter-btn-dark"><span class="butter-avatar"></span><span class="mobile-hide">brett_gaylor</a>
+              <a href="#settings" id="project-name-btn" class="butter-btn-dark set-hash"><strong><span class="mobile-hide">Project: </strong>Newscaster</span></a>
+            </div>
+            <a id="butter-btn-save" class="butter-btn-green butter-login-true">Save</a>
+          </div>
+        </header>
+  <!--
+        <div id="media-source" class="butter-media-source">
+           <a class="butter-btn-dark"><i class="icon icon-white icon-plus"></i> Add Video Source</a>
+        </div>
+    -->
+        <div class="butter-video-container">
+          <video id="video" preload data-butter="media" controls>
+            <source src="http://ia700300.us.archive.org/9/items/nozon-test1/Nozon-test_512kb.mp4">
+            <source src="http://ia700300.us.archive.org/9/items/nozon-test1/Nozon-test.ogv">
+          </video>
+        </div>
+      </div>
+    </section>
+    <section id="editor" class="butter-editor">
+      <header class="butter-editor-header">
+        <ul>
+          <li><a href="#media" id="media-tab" class="butter-btn-dark butter-active"><i class="icon icon-white icon-film"></i>Media</a></li>
+          <li><a href="#popcorn" class="butter-btn-dark"><i class="icon icon-white icon-comment"></i>Popcorn</a></li>
+          <li><a href="#share" class="butter-btn-dark"><i class="icon icon-white icon-share"></i>Share</a></li>
+          <li><a href="#settings" class="butter-btn-dark"><i class="icon icon-only icon-white icon-cog"></i></a></li> 
+          <li class="fl-right"><a href="#collapse" class="butter-btn-dark butter-editor-close-btn"><i class="icon icon-only icon-white icon-chevron-right"></i></a></li>  
+        </ul>
+      </header>
+
+      <div data-panel="media" class="butter-editor-panel butter-panel-active">
+        <div class="butter-editor-breadcrumbs">Change Media Source</div>
+        <div class="butter-editor-outer">
+          <div class="butter-editor-inner">  
+            <fieldset>
+              <label>Add a URL</label>
+              <div id="media-input">
+                <input type="text" placeholder="http://" value="http://ia700300.us.archive.org/9/items/nozon-test1/Nozon-test_512kb.mp4">
+              </div>
+            </fieldset>          
+            <fieldset>
+          
+            </fieldset>
+          </div>
+        </div>
+      </div><!-- #media -->
+
+      <div data-panel="popcorn" class="butter-editor-panel">
+        <div class="butter-editor-breadcrumbs">Event Menu</div>
+        <div class="butter-editor-outer">
+          <div class="butter-editor-inner">  
+            
+            <fieldset class="btn-events-list">
+                <a class="btn-light btn-events tooltip"><i class="icon-plugin plugin-text"></i>
+                  <span>Text</span>
+                  <div class="butter-tooltip">
+                    <div>Blah blah blah blah Lorem ipsum dolor sit amet.</div>
+                  </div>
+                </a>
+                <a class="btn-light btn-events"><i class="icon-plugin plugin-link"></i><span>Link</span></a>
+                <a class="btn-light btn-events"><i class="icon-plugin plugin-twitter"></i><span>Twitter</span></a>
+                <a class="btn-light btn-events"><i class="icon-plugin plugin-image"></i><span>Image</span></a>
+                <a class="btn-light btn-events"><i class="icon-plugin plugin-map"></i><span>Map</span></a>
+                <a class="btn-light btn-events"><i class="icon-plugin plugin-toc"></i><span>Stuff</span></a>
+            </fieldset>  
+            <fieldset>
+              <input id="plugin-search" class="big" type="search" placeholder="Search">
+            </fieldset>        
+            <fieldset class="more-plugin-list">
+              <label><strong>Search results</strong></label>
+              <ul class="nav">
+                <li>
+                  <a class="btn-light">Kinetic text plugin</a>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore ...</p>
+                </li>
+                <li>
+                  <a class="btn-light">Secret Robotron</a>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore ...</p>
+                </li>
+                <li>
+                  <a class="btn-light">Awesome purple dots</a>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore ...</p>
+                </li>
+              </ul>
+            </fieldset>
+          </div>
+        </div>
+      </div><!-- #popcorn -->
+
+      <div data-panel="share" class="butter-editor-panel">
+        <div class="butter-editor-breadcrumbs">Share your project</div>
+        <div class="butter-editor-outer">
+          <div class="butter-editor-inner">       
+            <fieldset>
+              <input class="big" type="text" value="http://popco.rn/1d02J" disabled="true">
+            </fieldset>
+            <fieldset>
+              <label>Share</label>
+              <div id="fb-root"></div>
+              <div class="fb-like" data-send="false" data-width="200" data-show-faces="true"></div>
+              <div><a href="https://twitter.com/share" class="twitter-share-button" data-via="k88hudson">Tweet</a></div>
+              <g:plusone annotation="inline"></g:plusone>
+            </fieldset>
+            <fieldset class="btn-events-list">
+              <label>Embed</label>
+              <div class="ui-button-group ui-light">
+                <a>iFrame Embed</a>
+                <select name="stledas" id="myselect1">
+                  <option val="jeldo">Tumblr</option>
+                  <option val="dasda">Wordpress</option>
+                </select>
+              </div>
+              <textarea><iframe src="http://popco.rn/embed/1d02J"></iframe></textarea>
+            </fieldset>  
+          </div>
+        </div>
+      </div><!-- #share -->
+
+      <div data-panel="settings" class="butter-editor-panel">
+        <div class="butter-editor-breadcrumbs">Project Settings</div>
+        <div class="butter-editor-outer">
+          <div class="butter-editor-inner">  
+            <fieldset>
+              <label>Project Title</label>
+              <input type="text" placeholder="My Project">
+            </fieldset>
+            <fieldset>
+              <label>Author</label>
+              <input type="text" value="Kate Hudson">
+            </fieldset>
+            <fieldset>
+              <label>Description</label>
+              <textarea></textarea>
+            </fieldset>        
+            <fieldset>
+              <a class="butter-btn-green">Save Changes</a>
+            </fieldset>
+          </div>
+        </div>
+      </div><!-- #settings -->
+
+      <div data-panel="settings-not-logged-in" class="butter-editor-panel">
+        <div class="butter-editor-breadcrumbs">Project Settings</div>
+        <div class="butter-editor-outer">
+          <div class="butter-editor-inner">  
+            <fieldset>
+              <label>Project Title</label>
+              <input type="text" placeholder="My Project">
+            </fieldset>     
+            <fieldset>
+              <a class="butter-btn-green set-hash" href="#settings">Please login to save</a>
+            </fieldset>
+          </div>
+        </div>
+      </div><!-- #settings -->
+
+
+    </section>
+   <section id="tray" class="butter-tray">
+    <div class="butter-tray-sidebar">
+      <div class="butter-tray-sidebar-controls">
+         <a class="butter-btn-dark butter-play-btn"><i class="icon icon-white icon-only icon-play"></i></a>
+         <span class="butter-time"><span class="butter-current-time">15.42</span> / 24.13</span>
+         <a class="butter-btn-dark butter-volume-btn"><i class="icon icon-white icon-only icon-volume-down"></i></a>
+      </div>
+      <div class="butter-tray-layers"></div>
+    </div>
+    <div class="butter-tracks-outer">
+      <div id="butter-tracks-container" class="butter-tracks-container">
+          
+          <div id="butter-tracks" class="butter-tracks">
+            <div id="controls" class="butter-controls">
+              <div class="butter-controls-inner"></div>
+            </div>
+            <span id="butter-scrubber-large" class="butter-scrubber-large">
+              <span class="butter-scrubber-head"></span>
+            </span> 
+           <ul></ul> 
+          </div>
+      </div>
+
+      <div id="butter-visuals" class="butter-visuals">
+        <div id="butter-controls-inner" class="butter-visuals-inner">
+          <ul id="butter-visualization"></ul>
+          <span id="butter-range" class="butter-range">  
+          </span>
+          <span id="butter-scrubber" class="butter-scrubber">
+          </span> 
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="butter-tooltip" style="hidden">
+    <div class="butter-tooltip tooltip-large">
+
+     <div><i class="icon-plugin plugin-video"></i>Add your video!</div>
+    </div>
+  </div>
+  </div>
+<!--
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+-->
+  
+  <!-- Gross share button widgets -->
+  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+  <script type="text/javascript">
+    (function() {
+      var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+      po.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+    })();
+  </script>
+
+  <script src="js/libs/jquery.js"></script>
+  <script src="js/libs/jquery.ui.js"></script>
+  <script src="js/libs/jquery.localScroll.min.js"></script>
+  <script src="js/script.js"></script>
+  <script>
+  document.addEventListener( "DOMContentLoaded", function(){
+
+    var butter = {},
+        i,
+        l;
+
+    butter.duration = 80;
+    butter.tracks = [ 1, 2, 3 ];
+    butter.orderedTrackEvents = [
+      {
+        track: 1,
+        start: 3,
+        end: 5
+      },
+      {
+        track: 2,
+        start: 10,
+        end: 15
+      },
+      {
+        track: 2,
+        start: 24,
+        end: 30
+      },
+      {
+        track: 3,
+        start: 24,
+        end: 35
+      },
+      {
+        track: 1,
+        start: 67,
+        end: 75
+      }
+    ];
+
+    function addVisualizationEl( obj) {
+      var dur = butter.duration,
+          el,
+          trackEl,
+          ul = document.getElementById( "butter-visualization" ),
+          tracks = document.querySelector( "#butter-tracks > ul" ),
+          start = obj.start,
+          end = obj.end,
+          track = obj.track,
+          totalTracks = butter.tracks.length;
+
+      el = document.createElement( "li" );
+      el.style.left = start / dur * 100 + "%";
+      el.style.right = ( dur - end ) / dur * 100 + "%";
+      el.style.top = track / totalTracks * 100 + "%";
+
+      trackEl = el.cloneNode( "true" );
+
+      ul.appendChild( el );
+      tracks.appendChild( trackEl );
+
+    }
+
+    for ( i = 0, l = butter.orderedTrackEvents.length; i < l; i++ ) {
+      addVisualizationEl( butter.orderedTrackEvents[ i ] );
+    }
+
+    function openPanel ( hash ) {
+      var panel = hash.replace( "#", "" );
+
+      if ( panel === "collapse" ) {
+        document.body.classList.toggle( "butter-editor-collapsed" );
+      } else {
+        $( ".butter-panel-active" ).removeClass( "butter-panel-active" );
+        $( "[data-panel=\"" + panel + "\"]" ).addClass( "butter-panel-active" );
+
+        $( ".butter-active" ).removeClass( "butter-active" );
+        $( "a[href=\""+ hash + "\"]" ).addClass( "butter-active" );
+      }
+
+    }
+
+    // ON LOAD, read hash
+    var hash = window.location.hash;
+    if ( hash ) {
+      openPanel( hash );
+    }
+
+    $( ".set-hash" ).bind( "click", function() {
+      openPanel( this.hash );
+      console.log( this );
+    });
+
+
+    // LOGIN STUFF
+    $( ".butter-login-true" ).hide();
+    $( ".butter-login-false" ).click( function() {
+      $( ".butter-login-false" ).hide();
+      $( ".butter-login-true" ).show();
+    });
+    // ON LOAD, SHOW TOOLTIP
+
+    function hideToolTip() {
+      $( "#media-input > .butter-tooltip" ).removeClass( "tooltip-on" );
+      document.body.removeEventListener( "click", hideToolTip );
+      document.getElementById( "media-tab" ).removeEventListener( "click", hideToolTip );
+    }
+
+    $( "#media-input" ).append( $( "#butter-tooltip" ).html() );
+
+    if ( !hash ) {
+
+      window.setTimeout( function(){
+        $( "#media-input > .butter-tooltip" ).addClass( "tooltip-on" );
+        $( "#media-input" ).bind( "hover", hideToolTip );
+
+        document.body.addEventListener( "click", hideToolTip, false );
+
+      }, 1000 );
+      
+    }
+
+    // EDITOR STUFF
+    $( ".butter-editor-header > ul a" ).bind( "click", function( e ) {
+      openPanel ( this.hash );
+    });
+
+    // PLUGIN SEARCH
+    document.getElementById( "plugin-search" ).addEventListener( "keydown", function() {
+      $( ".more-plugin-list" ).fadeIn();
+    });
+
+    // TRAY STUFF
+
+    var tracks = document.getElementById( "butter-tracks" ),
+        tracksView = document.getElementById( "butter-tracks-container" ),
+        viz = document.getElementById( "butter-visualization" ),
+        vizWidth = viz.getBoundingClientRect().width,
+        vizView = document.getElementById( "butter-range" ),
+        scrubber = document.getElementById( "butter-scrubber-large" ),
+        scrubberViz = document.getElementById( "butter-scrubber" );
+
+
+    function trayToViewer( val ) {
+      var tray = $( "#butter-tracks" ).width(),
+          viewer = $( "#butter-controls-inner" ).width(),
+          ratio = viewer / tray;
+
+      return val * ratio;
+    }
+
+    function updateScrubbers() {
+      var small = document.getElementById( "butter-scrubber" ),
+          large = document.getElementById( "butter-scrubber-large" );
+
+      small.style.left = large.style.left;
+
+    }
+
+    function resetView() {
+      var vizViewWidth = vizView.getBoundingClientRect().width,
+          vizViewLeft = vizView.style.left.replace( "px", "" ),
+          tracksViewWidth = tracksView.getBoundingClientRect().width,
+          newTracksWidth = tracksViewWidth * vizWidth / vizViewWidth,
+          newLeft = vizViewLeft / vizWidth  * newTracksWidth;
+
+          tracks.style.width = newTracksWidth + "px",
+          $( tracksView ).scrollTo( newLeft, 0 );
+    }
+
+    $( ".butter-scrubber-large" ).draggable({ 
+      axis: "x",
+      containment: "#butter-controls-inner",
+      drag: function( event, ui ) {
+        var newScrubberPos = trayToViewer( ui.position.left );
+        document.getElementById( "butter-scrubber" ).style.left = newScrubberPos + "px";
+
+      },
+      stop: function( event, ui ) {
+        var total = $( "#butter-tracks" ).width(),
+            endPos = ui.position.left,
+            leftInPercent =  endPos/ total * 100 + "%";
+
+        this.style.left = leftInPercent;
+        document.getElementById( "butter-scrubber-large" ).style.left = leftInPercent;
+
+      }
+    });
+
+    $( ".butter-range" ).draggable(
+      { axis: "x",
+      containment: "#butter-controls-inner",
+      drag: function( event, ui ) {
+        resetView( this );
+      }
+    }).resizable({ 
+      handles: "e, w", 
+      containment: "#butter-controls-inner",
+      resize: function( event, ui ) {
+        resetView( this );
+      }
+    });
+
+    $( ".btn-events" ).draggable({
+      helper: "clone",
+      drag: function( event, ui ) {
+        $( ".butter-video-container ").addClass("hover-state" );
+      },
+      stop: function( event, ui ){
+        $( ".butter-video-container ").removeClass("hover-state" );
+      }
+    });
+
+    $( ".btn-events-list" ).bind( "mouseover", function( e ) {
+      $( ".butter-video-container ").addClass("hover-state" );
+    });
+
+    $( ".btn-events-list" ).bind( "mouseout", function( e ) {
+      $( ".butter-video-container ").removeClass("hover-state" );
+    });
+
+  }, false);
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+@import "globals";
+@import "colors";
+@import "normalize";
+@import "ui";
+@import "main";
+@import "mediaqueries";
+@import "utilities";
+@import "print";
+
+body {
+  background: white;
+}
+
+.bg,
+.bg-light,
+.bg-dark {
+  padding: 40px;
+}
+
+.bg-light {
+  background: @noise #EEE;
+}
+
+.bg-dark {
+  background: @noise #121212;
+}
+
+.test {
+  width: 200px;
+  height: 200px;
+  display: inline-block;
+  .box-sizing( border-box );
+}
+
+.UIHelpers();
+
+.noiseBackgroundLight {
+  .noiseBackground( #FFF );
+}
+
+.noiseBackgroundMid {
+  .noiseBackground( @rouge );
+}
+
+.noiseBackgroundDark {
+  .noiseBackground( @night );
+}
+
+.noiseBackground2 {
+  .noiseBackground( @rouge, darken( @rouge, 15% ) );
+}
+
+.gradientVertical {
+  .gradient( "vertical", @lime, @lemonlime );
+}
+
+.gradientWash {
+  .gradient( "wash", @night, @teal, @hotpink, 100%, top left );
+}
+
+.bg-light > .gradiatedBorder {
+  .gradiatedBorder( darken( @rouge, 10% ) );
+  background: @rouge;
+}
+
+.bg-dark > .gradiatedBorder {
+  .gradiatedBorder( #EEE );
+  background: rgba( 255, 255, 255, .4);
+}
+
+.glowLight {
+  .glow( #FFF, "light" );
+  background: #FFF;
+}
+
+.glowMid {
+  .glow( @rouge );
+  background: @rouge;
+}
+
+.glowDark {
+  .glow( @night, "dark" );
+  background: @night;
+}
+
+.drop-down {
+  @_borderRadius: 3px;
+  @_textHeight: 32px;
+  @_padding: 8px;
+  @_color: @slate;
+  @_color2: darken( @slate, 3% );
+  @_textColor: #EEE;
+  @_insetColor: darken( @slate, 10% );
+  @_lightness: "dark";
+  
+  .dropDown( @_borderRadius, @_textHeight, @_padding, @_color, @_color2, @_textColor, @_insetColor, @_lightness );
+
+}

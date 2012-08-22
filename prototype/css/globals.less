@@ -1,0 +1,464 @@
+// GLOBALS
+
+@textColor: #222;
+
+// ----------------------------------------
+// Backgrounds
+// ----------------------------------------
+
+.noiseBackground( @color ) when ( lightness( @color ) =< 50% ) {
+  background: @color @noise;
+}
+
+.noiseBackground( @color ) when ( lightness( @color ) > 50%  ) {
+  background: @color @noise2;
+}
+
+.noiseBackground( @color, @color2 ) {
+   background: @noise, -webkit-linear-gradient(top, @color 0%, @color2 100%);
+   background: @noise, -moz-linear-gradient(to, @color 0%,@color2 100%);
+   background: @noise, -ms-linear-gradient(top, @color 0%,@color2 100%);
+   background: @noise, -o-linear-gradient(top, @color 0%,@color2 100%);
+   background: @noise, linear-gradient(top, @color);
+}
+
+._gradient( @args ) when not ( isstring( @args ) ) {
+   // This is a private mixin used by gradient functions
+   background: -webkit-linear-gradient( @args );
+   background: -moz-linear-gradient( @args );
+   background: -ms-linear-gradient( @args );
+   background: -o-linear-gradient( @args );
+   background: linear-gradient( @args );
+}
+
+._gradient( @args ) when not ( isstring( @args ) ) {
+   // This is a private mixin used by gradient functions
+   background: -webkit-linear-gradient( @args );
+   background: -moz-linear-gradient( @args );
+   background: -ms-linear-gradient( @args );
+   background: -o-linear-gradient( @args );
+   background: linear-gradient( @args );
+} 
+
+
+._gradient(@angle, @startCol, @stopCol, @startLoc, @endLoc, @startPerc, @stopPerc) {
+   // This is a private mixin used by gradient functions
+   background: -webkit-gradient(linear,left @startLoc,left @endLoc,color-stop(@startPerc,@startCol),color-stop(@stopPerc,@stopCol));
+   background: -webkit-linear-gradient(@angle @startLoc,@startCol @startPerc,@stopCol @stopPerc);
+   background: -moz-linear-gradient(@angle @startLoc,@startCol @startPerc,@stopCol @stopPerc);
+   background: -ms-linear-gradient(@angle @startLoc,@startCol @startPerc,@stopCol @stopPerc);
+   background: -o-linear-gradient(@angle @startLoc,@startCol @startPerc,@stopCol @stopPerc);
+   background: linear-gradient(@angle @startLoc, @startCol);
+} 
+
+.gradient( "vertical", @color, @color2, @from: 0%, @to: 100% ) {
+  background: -moz-linear-gradient(top, @color @from, @color2 @to);
+  background: -webkit-linear-gradient(top, @color @from, @color2 @to);
+  background: -o-linear-gradient(top, @color @from, @color2 @to);
+  background: -ms-linear-gradient(top, @color @from, @color2 @to);
+  background: linear-gradient(top, @color @from, @color2 @to);
+}
+
+.gradient( "horizontal", @color, @color2, @from: 0%, @to: 100% ) {
+  background: -moz-linear-gradient(left, @color @from, @color2 @to);
+  background: -webkit-linear-gradient(left, @color @from, @color2 @to);
+  background: -o-linear-gradient(left, @color @from, @color2 @to);
+  background: -ms-linear-gradient(left, @color @from, @color2 @to);
+  background: linear-gradient(left, @color @from, @color2 @to);
+}
+
+.gradient( "radial", @color, @color2, @start: 50%, @from: 0%, @to: 100% ) {
+  background: -moz-radial-gradient( center @start, @color @from, @color2 @to );
+  // This looks like crap in FF. 
+  background: -webkit-radial-gradient(center @start, @color @from, @color2 @to);
+  background: -o-radial-gradient( center @start, @color @from, @color2 @to );
+  background: -ms-radial-gradient( center @start, @color @from, @color2 @to );
+  background: radial-gradient( center @start, @color @from, @color2 @to );
+}
+
+.gradient( "wash", @color, @color2, @color3, @noise: @noise, @coverage: 100%, @corner: top right ) {
+  background: @noise,
+    -moz-linear-gradient( @corner, @color3 0%, fade( @color3, 0% ) @coverage ),
+    -moz-linear-gradient(top, @color 0%, @color2 100%);
+  background: @noise,
+    -webkit-linear-gradient( @corner, @color3 0%, fade( @color3, 0% ) @coverage ),
+    -webkit-linear-gradient(top, @color 0%, @color2 100%);
+  background: @noise,
+    -o-linear-gradient( @corner, @color3 0%, fade( @color3, 0% ) @coverage ),
+    -o-linear-gradient(top, @color 0%, @color2 100%);
+  background: @noise,
+    -ms-linear-gradient( @corner, @color3 0%, fade( @color3, 0% ) @coverage ),
+    -ms-linear-gradient(top, @color 0%, @color2 100%);
+  background: @noise,
+    linear-gradient( @corner, @color3 0%, fade( @color3, 0% ) @coverage ),
+    linear-gradient(top, @color 0%, @color2 100%);
+  background-repeat: repeat, no-repeat;
+  background-attachment: fixed;
+}
+
+.colorBlocks( @color, @color2 ) {
+  .gradient( left, @color1 0%, @color2 100% );
+}
+
+.colorBlocks( @color, @color2, @color3 ) {
+  .gradient( left, 
+    @color1 0%, @color1 33.333%,
+    @color2 33.333%, @color2 66.667%,
+    @color3 33.333%, @color3 66.667%,
+  );
+}
+
+.colorBlocks( @color, @color2, @color3, @color4 ) {
+  .gradient( left, @color1 0%, @color2 100% );
+}
+
+.colorBlocks( @color, @color2, @color3, @color4, @color5 ) {
+  .gradient( left, @color1 0%, @color2 100% );
+}
+
+.colorBlocks( @color, @color2, @color3, @color4, @color5, @color6 ) {
+  .gradient( left, @color1 0%, @color2 100% );
+}
+
+// ----------------------------------------
+// Special Lighting Effects
+// ----------------------------------------
+
+.gradiatedBorder( @color ) {
+  border: 1px solid darken( @color, 10% );
+  border-top-color: darken( @color, 5% );
+  border-bottom-color: darken( @color, 20% );
+}
+
+.gradiatedBorder( @color ) when ( lightness( @color ) > 50% ) {
+  border: 1px solid darken( @color, 20% );
+  border-top-color: darken( @color, 10% );
+  border-bottom-color: darken( @color, 25% );
+}
+
+.gradiatedBorder( @color, @topColor, @bottomColor ) when ( iscolor( @topColor ) ) {
+  border: 1px solid @color;
+  border-top-color: @topColor;
+  border-bottom-color: @bottomColor;
+}
+
+.glow( @color, @shadow: 0 1px 2px 0 rgba( 0, 0, 0, .2 ) ) when not ( isstring( @shadow ) ) {
+  box-shadow: inset 0 1px 0 0 lighten( @color, 20% ),
+    inset 1px 0 0 0 lighten( @color, 4%),
+    inset -1px 0 0 0 lighten( @color, 4%),
+    inset 0 -1px 0 0 lighten( @color, 4%),
+    @shadow;
+  .gradiatedBorder( darken( @color, 5% ) );
+}
+
+.glow( @color, "light" ) {
+  box-shadow: inset 0 1px 0 0 lighten( @color, 20% ),
+    inset 1px 0 0 0 lighten( @color, 4%),
+    inset -1px 0 0 0 lighten( @color, 4%),
+    inset 0 -1px 0 0 lighten( @color, 4%),
+    0 1px 3px 0 rgba( 0, 0, 0, .1 );
+  .gradiatedBorder( darken( @color, 10% ) );
+}
+
+.glow( @color, "dark" ) {
+  box-shadow: inset 0 1px 0 0 lighten( @color, 10% ),
+    inset 1px 0 0 0 lighten( @color, 4%),
+    inset -1px 0 0 0 lighten( @color, 4%),
+    inset 0 -1px 0 0 lighten( @color, 4%),
+    0 1px 3px 0 rgba( 0, 0, 0, .4 );
+}
+
+.glowTop( @color, @shadow) {
+  box-shadow: inset 0 1px 0 0 lighten( @color, 10% ),
+    @shadow;
+}
+
+.punched( @alpha1: 0.7, @alpha2: 0.1 ) {
+  box-shadow: inset 0 1px 1px 0 rgba( 0, 0, 0, @alpha1 ),
+    0 1px 0 0 rgba( 255, 255, 255, @alpha2);
+}
+
+// ----------------------------------------
+// Animations
+// ----------------------------------------
+
+.transition( @arguments: all .2s ease ) {
+  -webkit-transition: @arguments;
+  -moz-transition: @arguments;
+  -o-transition: @arguments;
+  -ms-transition: @arguments;
+  transition: @arguments;
+}
+
+// ----------------------------------------
+// Positioning
+// ----------------------------------------
+
+.box-sizing( @property ) {
+  // https://developer.mozilla.org/En/CSS/Box-sizing
+  -webkit-box-sizing: @property; // Chrome 10-
+  -moz-box-sizing: @property;
+  -ms-box-sizing: @property; // IE 8+
+  box-sizing: @property; // Opera, Safari 5.1+, Chrome 10+
+}
+
+.clearfix() {
+  *zoom: 1;
+  &:before, 
+  &:after { 
+    content: "";
+    display: table; 
+  }
+  &:after { clear: both; }
+}
+
+// ----------------------------------------
+// UI
+// ----------------------------------------
+
+// Buttons and inputs
+
+// Drop Downs
+.dropDown( @borderRadius, @textHeight, @padding, @color, @color2, @textColor, @insetColor, @lightness ) {
+  border-radius: @borderRadius;
+  font-size: 13px;
+  .box-sizing( border-box );
+
+  .drop-down-header {
+    position: relative;
+    padding: @padding * 1.5 @padding;
+    line-height: @textHeight;
+    border: 1px solid darken( @color, 40% );
+    border-radius: @borderRadius @borderRadius 0 0;
+    .gradient( "vertical", @color, @color2 ); 
+    .glowTop( @color, 0 1px 2px 0 rgba( 0, 0, 0, .7 ) );
+    .box-sizing( border-box );
+  }
+
+  .drop-down-body > ul {
+    .listReset();
+    border-radius: 0;
+    border: 1px solid darken( @color, 40% );
+    border-top: none;
+
+    > li {
+      line-height: @textHeight;
+      color: @textColor;
+      padding: @padding;
+      border-top: 1px solid lighten( @color, 15% );
+      border-bottom: 1px solid darken( @color, 30% );
+      background: @color;
+      .box-sizing( border-box );
+      .clearfix();
+    }
+  }
+
+  .ui-count {
+    height: @textHeight;
+    line-height: @textHeight;
+    display: inline-block;
+    background: @_insetColor;
+    padding: 0 11px;
+    color: lighten( @textColor, 10% );
+    font-size: 11px;
+    line-height: @textHeight;
+    border-radius: 11px;
+    text-shadow: 0 -1px 0 rgba( 0, 0, 0, .6 );
+    .punched();
+    .box-sizing( border-box );
+  }
+
+  .ui-inset-input {
+    width: 250px;
+    display: inline-block;
+    height: @textHeight;
+    line-height: @textHeight;
+    border: none;
+    background: @_insetColor;
+    padding: 0 10px;
+    color: @textColor;
+    font-size: 11px;
+    border-radius: 9px;
+    text-shadow: 0 -1px 0 #000;
+    .punched();
+    .box-sizing( border-box );
+
+    &:focus {
+      outline: none;
+      text-shadow: 0 1px 1px #000;
+      color: #FFF;
+      .gradient( "vertical", lighten( @_insetColor, 5% ), lighten( @_insetColor, 10% ) );
+      .punched( .9, .3 );
+    }
+    
+  }
+
+} // Drop Downs
+
+
+// ----------------------------------------
+// Grid
+// ----------------------------------------
+
+.gridUnit( @margin, @divisions, @totalWidth, @units ) {
+    @n: @divisions / @units;
+    @_totalMargin: ( @n - 1 ) * @margin;
+    width: ( @totalWidth - @_totalMargin ) / @n;
+}
+
+.gridRow( @margin, @divisions ) {
+
+  ._setWidth( @units ) {
+    @n: @divisions / @units;
+    @_totalMargin: ( @n - 1 ) * @margin;
+    width: ( 100% - @_totalMargin ) / @n;
+  }
+
+  .grid-row {
+    .clearfix();
+    > div {
+      float: left;
+      margin-right: @margin;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .grid-1 {
+    ._setWidth( 1 );
+  }
+  .grid-2 {
+    ._setWidth( 2 );
+  }
+  .grid-3 {
+    ._setWidth( 3 );
+  }
+  .grid-4 {
+    ._setWidth( 4 );
+  }
+  .grid-5 {
+    ._setWidth( 5 );
+  }
+  .grid-6 {
+    ._setWidth( 6 );
+  }
+  .grid-7 {
+    ._setWidth( 7 );
+  }
+  .grid-8 {
+    ._setWidth( 8 );
+  }
+  .grid-9 {
+    ._setWidth( 9 );
+  }
+  .grid-10 {
+    ._setWidth( 10 );
+  }
+  .grid-11 {
+    ._setWidth( 11 );
+  }
+  .grid-12 {
+    ._setWidth( 12 );
+  }
+  .grid-full {
+    ._setWidth( @divisions );
+  }
+
+}
+/*
+.grid-row {
+  @_margin: 4%;
+  @_divisions: 12;
+  @_padding: 14px;
+  @_height: auto;
+
+  ._setWidth( @units ) {
+    @n: 12 / @units;
+    @_totalMargin: ( @n - 1 ) * @_margin;
+    width: ( 100% - ( ( @n - 1 ) * @_margin ) ) / @n;
+  }
+  .clearfix();
+
+  > div {
+    float: left;
+    margin-right: @_margin;
+    padding: @_padding;
+    height: @_height;
+    .box-sizing( border-box );
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+  }
+
+  .grid-1 {
+    ._setWidth( 1 );
+  }
+
+  .grid-2 {
+    ._setWidth( 2 );
+  }
+
+  .grid-3 {
+    ._setWidth( 3 );
+  }
+
+  .grid-4 {
+    ._setWidth( 4 );
+  }
+
+  .grid-5 {
+    ._setWidth( 5 );
+  }
+
+  .grid-6 {
+    ._setWidth( 6 );
+  }
+
+  .grid-9 {
+    ._setWidth( 9 );
+  }
+
+} // grid-row
+*/
+
+// Helpers for positioning, etc.
+.UIHelpers() {
+
+  .ui-float-right {
+    float: right;
+  }
+
+}
+
+// Panels
+.ui-panel {
+  @_padding: 0;
+  @_color: fade( #121212, 70%);
+  @_color2: darken( @_color, 10% );
+
+  color: fade( #FFF, 50% );
+  padding: @_padding;
+  border-radius: 5px;
+
+  .noiseBackground( @_color, @_color2 );
+  border: 1px solid @_color;
+  box-shadow: inset 0 1px 2px lighten( @_color, 30% ),
+    inset 0 -2px 10px fade( @_color, 80% );
+
+  strong {
+    color: #FFF;
+  }
+
+  .grid-row > :not( :first-child ) {
+    box-shadow: -1px 0 0 @_color,
+      -2px 0 0 lighten( @_color, 22% );
+  }
+
+}
+
+
+// HACK!
+.typekit-badge { display: none !important; }
