@@ -141,7 +141,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       _trackEvents.push( trackEvent.view );
       trackEvent.view.zoom = _zoom;
       trackEvent.view.parent = _this;
-      _this.chain( trackEvent, [
+      _this.chain( trackEvent.view, [
         "trackeventmousedown",
         "trackeventmouseover",
         "trackeventmouseout"
@@ -153,7 +153,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       _element.removeChild( trackEventElement );
       _trackEvents.splice( _trackEvents.indexOf( trackEvent.view ), 1 );
       trackEvent.view.parent = null;
-      _this.unchain( trackEvent, [
+      _this.unchain( trackEvent.view, [
         "trackeventmousedown",
         "trackeventmouseover",
         "trackeventmouseout"
