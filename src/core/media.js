@@ -304,7 +304,7 @@
       };
 
       function compareTrackOrder( a, b ) {
-        return a.order > b.order;
+        return a.order - b.order;
       }
 
       this.sortTracks = function( suppressEvent ) {
