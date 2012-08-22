@@ -5,6 +5,15 @@
   background: white;
   border: 1px solid #d5d6d5;
   height: 41px;
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 1s linear;
+}
+
+.controls-hide {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 1s, opacity 1s linear;
 }
 
 #butter-controls {
