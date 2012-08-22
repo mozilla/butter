@@ -99,14 +99,12 @@
         start: {
           elem: "input",
           type: "number",
-          label: "In",
-          hidden: true
+          label: "In"
         },
         end: {
           elem: "input",
           type: "number",
-          label: "Out",
-          hidden: true
+          label: "Out"
         },
         text: {
           elem: "input",
@@ -451,6 +449,9 @@
       };
       fontSheet.href = "http://fonts.googleapis.com/css?family=" + options.fontFamily.replace( /\s/g, "+" );
 
+      options.toString = function() {
+        return options.text || options._natives.manifest.options.text[ "default" ];
+      };
     },
 
     start: function( event, options ) {
