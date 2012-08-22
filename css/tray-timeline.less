@@ -5,33 +5,32 @@
 @_trackHeight: @_trackEventHeight + 3;
 @_mediaContainerHeight: 140px;
 @_trackContainerSpacing: 0;
-@_sidePadding: 20px;
 @_trackHandleWidth: 109px;
 
 // Main timeline section
 .butter-timeline-area {
   position: absolute;
-  width: 100%;
+  left: 0;
   border-top: 1px solid @baseLightOutline;
 }
 
 // butter-timeline-area-inner
 .butter-timeline {
-  position: relative;
-  height: @_mediaContainerHeight;
-  bottom: 0;
+  position: absolute;
+  top: 0;
   left: 0;
+  right: @_timebarRight;
   z-index: @TRAY_Z_INDEX + 1;
 }
 // inside .butter-timeline
 .media-instance {
   height: 100%;
-  padding: 0 @_sidePadding 0 @_trackHandleWidth;
+  padding-left: @_trackHandleWidth;
   position: relative;
   .selectable( none );
   .transition( top 0.5s );
   .butter-scroll-bar-v {
-    right: -16px;
+    right: -18px;
     width: 10px;
     height: 100%;
     top: 0;
