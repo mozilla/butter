@@ -17,19 +17,31 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
         _projectTitle = _userData.projectTitle,
         _projectName = _userData.projectName,
         _previewBtn = _rootElement.querySelector( ".butter-preview-btn" ),
+        _nameDropDown = _buttonGroup.querySelector( "ul" ),
+        _logoutBtn = _nameDropDown.querySelector( ".butter-logout-btn" ),
+        _tabzilla = _rootElement.querySelector( "#tabzilla" ),
         _loginClass = "butter-login-true",
         _activeClass = "btn-green",
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML;
 
+
     // create a tooltip for the projectName element
     ToolTip.create({
       element: _projectTitle,
-      top: "43px"
+      top: "50px"
     });
 
+    // This is an easter egg to open a UI kit editor. Hurrah
+    _rootElement.querySelector( ".butter-logo" ).addEventListener( "dblclick", function( e ) {
+      butter.editor.openEditor( "ui-kit" );
+    }, false );
+
     _this.element = _rootElement;
-    ToolTip.apply( _projectTitle );
+
+    _tabzilla.addEventListener( "click", function( e ) {
+      document.body.classList.toggle( "tabzilla-open" );
+    }, false );
 
     function login( successCallback, errorCallback ) {
       _userData.authenticationRequired(function() {
@@ -142,20 +154,25 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       input.addEventListener( "keypress", onKeyPress, false );
     }
 
-    _projectTitle.addEventListener( "click", projectNameClick, false );
 
+    _projectName.addEventListener( "click", projectNameClick, false );
+
+    function toggleDropDown() {
+      _nameDropDown.classList.toggle( "butter-dropdown-off" );
+    }
+  
     function doLogout() {
       _userData.logout( logoutDisplay );
+      _nameDropDown.classList.add( "butter-dropdown-off" );
     }
 
     function loginDisplay() {
-      _buttonGroup.classList.add( "btn-group" );
       _rootElement.classList.add( _loginClass );
       _authButton.classList.remove( _activeClass );
-      _authButton.removeEventListener( "click", login, false );
-      _authButton.innerHTML = "<span class='icon icon-user'></span> " + butter.cornfield.name();
+      _authButton.innerHTML = "<span class='icon icon-user'></span> " + butter.cornfield.name() + "<i class=\"icon icon-downtick\"></i>";
       _authButton.title = "This is you!";
-      _authButton.addEventListener( "click", doLogout, false );
+      _authButton.addEventListener( "click", toggleDropDown, false );
+      _logoutBtn.addEventListener( "click", doLogout, false );
     }
 
     function logoutDisplay() {
@@ -168,6 +185,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       _authButton.addEventListener( "click", login, false );
       _previewBtn.classList.add( "butter-hidden" );
       _previewBtn.href = "";
+      _authButton.removeEventListener( "click", toggleDropDown, false );
     }
 
     if ( butter.cornfield.authenticated() ) {

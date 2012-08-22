@@ -80,3 +80,32 @@
   .transition( box-shadow 1.5s );
   box-shadow: 0 0 0 10px transparent;
 }
+
+/*********************************************************
+* Drop down
+*/
+
+.butter-dropdown-off {
+  visibility: hidden;
+}
+
+
+
+/*********************************************************
+* Tabzilla
+*/
+
+.tabzilla-open {
+  &.butter-header-spacing {
+    padding-top: @TABZILLA_HEIGHT + @HEADER_SPACING;
+  }
+  .butter-header {
+    top: @TABZILLA_HEIGHT;
+    z-index: @MODAL_Z_INDEX;
+    box-shadow: 0 -1px 0 0 #CCC;
+  }
+  #tabzilla {
+    top: -1px;
+  }
+}
+
