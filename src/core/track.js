@@ -118,6 +118,7 @@ define( [
             for( var i=0, l=importTrackEvents.length; i<l; ++i ){
               var newTrackEvent = new TrackEvent();
               newTrackEvent.json = importTrackEvents[ i ];
+              newTrackEvent.update( newTrackEvent.popcornOptions );
               _this.addTrackEvent( newTrackEvent );
             }
           }
