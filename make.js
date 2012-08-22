@@ -37,7 +37,38 @@ var path = require( "path" ),
     BUTTERED_POPCORN = join( DIST_DIR, '/buttered-popcorn.js' ),
     BUTTERED_POPCORN_MIN = join( DIST_DIR, '/buttered-popcorn.min.js' ),
 
-    PACKAGE_NAME = "butter";
+    PACKAGE_NAME = "butter",
+
+    // see cli.js --list-rules.
+    warnings = [
+    //    "important",
+    //    "adjoining-classes",
+    //    "duplicate-background-images",
+    //    "qualified-headings",
+    //    "fallback-colors",
+    //    "empty-rules",
+    //    "shorthand",
+    //    "overqualified-elements",
+    //    "import",
+    //    "regex-selectors",
+    //    "rules-count",
+    //    "font-sizes",
+    //    "universal-selector",
+    //    "unqualified-attributes",
+      "zero-units"
+    ].join(","),
+
+    errors = [
+      "known-properties",
+      "compatible-vendor-prefixes",
+      "display-property-grouping",
+      "duplicate-properties",
+      "errors",
+      "gradients",
+      "font-faces",
+      //"floats",
+      "vendor-prefix"
+    ].join(",");
 
 require('shelljs/make');
 
@@ -48,7 +79,7 @@ require('shelljs/make');
 //   -webkit-appearance: button; /* csslint-ignore */
 //   -webkit-appearance: button; /*csslint-ignore*/
 //   -webkit-appearance: button; /* csslint-ignore: This is being done because of iOS ... */
-function checkCSSFile( filename, warnings, errors ) {
+function checkCSSFile( filename ) {
   var fileLines = cat( filename ).split( /\r?\n/ ),
     ignoreLines = "",
     // Look for: "blah blah blah /* csslint-ignore */" or
@@ -91,46 +122,15 @@ function checkCSSFile( filename, warnings, errors ) {
   });
 }
 
+
 function checkCSS( dir ) {
   echo('### Linting CSS files');
-
-  // see cli.js --list-rules.
-  var warnings = [
-//    "important",
-//    "adjoining-classes",
-//    "duplicate-background-images",
-//    "qualified-headings",
-//    "fallback-colors",
-//    "empty-rules",
-//    "shorthand",
-//    "overqualified-elements",
-//    "import",
-//    "regex-selectors",
-//    "rules-count",
-//    "font-sizes",
-//    "universal-selector",
-//    "unqualified-attributes",
-    "zero-units"
-  ].join(",");
-
-  var errors = [
-    "known-properties",
-    "compatible-vendor-prefixes",
-    "display-property-grouping",
-    "duplicate-properties",
-    "errors",
-    "gradients",
-    "font-faces",
-    //"floats",
-    "vendor-prefix"
-  ].join(",");
-
 
   var files = ls( dir );
   files.forEach( function( filename ) {
     filename = join( dir, filename );
     if( /\.css$/.test( filename ) ) {
-      checkCSSFile( filename, warnings, errors );
+      checkCSSFile( filename );
     }
   });
 
@@ -156,8 +156,9 @@ function checkJS(){
 
 target.all = function() {
   target.submodules();
-  target.check();
+  checkJS( SRC_DIR, EDITORS_DIR, CORNFIELD_DIR, TEMPLATES_DIR );
   target.build();
+  checkCSS( CSS_DIR );
 };
 
 target.clean = function() {
@@ -302,7 +303,7 @@ target['check-templates'] = function() {
   checkCSS( TEMPLATES_DIR );
 };
 
-target['check-css'] = function( dirs ) {
+target['check-css'] = function() {
   checkCSS( CSS_DIR );
 };
 
@@ -329,7 +330,8 @@ function lessToCSS( options ){
     // Our /* csslint-ignore */ override can't work when compressed.
     // People should lint on their own separate to that.
     if( !compress ) {
-      target['check-css']();
+      echo( "### Linting " + cssFile );
+      checkCSSFile( cssFile );
     }
   } else {
     echo( result.output );
