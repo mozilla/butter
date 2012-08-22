@@ -8,8 +8,8 @@ var express = require('express'),
     app = express.createServer(),
     MongoStore = require('connect-mongo')(express),
     lessMiddleware = require('less-middleware'),
-    filterOptions = { dbOnline: true },
-    filter = require( './lib/filter' )( filterOptions ),
+    User = require( './lib/user' ),
+    filter = require( './lib/filter' )( User.isDBOnline ),
     sanitizer = require( './lib/sanitizer' ),
     CONFIG = require('config'),
     TEMPLATES_DIR =  CONFIG.dirs.templates,
@@ -44,29 +44,6 @@ for ( var templateName in VALID_TEMPLATES ) {
 
 console.log( "Templates Dir:", TEMPLATES_DIR );
 console.log( "Publish Dir:", PUBLISH_DIR );
-
-var mongoose = require('mongoose'),
-    db = mongoose.connect('mongodb://localhost/test', function( err ) {
-      if ( err ) {
-        console.error( "MongoDB: " + err + "\n  You will not be able to store any data." );
-        filterOptions.dbOnline = false;
-      }
-    }),
-    Schema = mongoose.Schema,
-
-    Project = new Schema({
-      name: String,
-      data: String,
-      template: String,
-      customData: String
-    }),
-    ProjectModel = mongoose.model( 'Project', Project ),
-
-    User = new Schema({
-      email: String,
-      projects: [Project],
-    }),
-    UserModel = mongoose.model( 'User', User );
 
 CONFIG.session.store = new MongoStore({ db: "test" });
 
@@ -108,6 +85,7 @@ app.configure( 'development', function() {
 });
 
 require('express-browserid').plugAll(app);
+require('./routes')( app, User, filter, sanitizer );
 
 function writeEmbedShell( path, res, url, data, callback ) {
   if( !writeEmbedShell.templateFn ) {
@@ -151,32 +129,19 @@ app.post( '/api/publish/:id', filter.isLoggedIn, filter.isStorageAvailable, func
   var email = req.session.email,
       id = req.params.id;
 
-  UserModel.findOne( { email: email }, function( err, doc ) {
-    var i;
+  User.findProject( email, id, function( err, project ) {
     if ( err ) {
-      res.json({ error: 'internal db error' }, 500);
+      res.json( { error: err }, 500);
       return;
-    }
-
-    if ( !doc ) {
-      res.json({ error: 'user not found' }, 500);
-      return;
-    }
-
-    var project;
-    for ( i=0; i<doc.projects.length; ++i ) {
-      if ( String( doc.projects[ i ]._id ) === id ) {
-        project = doc.projects[ i ];
-        break;
-      }
     }
 
     if ( !project ) {
-      res.json({ error: 'project not found' }, 500);
+      res.json( { error: 'project not found' }, 404);
       return;
     }
 
-    var template = project.template,
+    var i = 0,
+        template = project.template,
         customData = JSON.parse( project.customData, sanitizer.escapeHTMLinJSON );
 
     if( !( template && VALID_TEMPLATES[ template ] ) ) {
@@ -324,9 +289,10 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
     return;
   }
 
-  UserModel.findOne( { email: email }, function( err, doc ) {
+  User.findAllProjects( email, function( err, doc ) {
     var userProjects = [],
         project;
+
     for ( var i = 0, l = doc.projects.length; i < l; ++i ) {
       project = doc.projects[ i ];
       if ( project.template && VALID_TEMPLATES[ project.template ] ) {
@@ -347,148 +313,6 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
       },
       projects: userProjects
     });
-  });
-});
-
-app.get( '/api/projects', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
-  var email = req.session.email;
-
-  UserModel.findOne( { email: email }, function( err, doc ) {
-
-    // Add a user record if they've never logged in yet
-    if ( err === null && doc === null ) {
-      doc = new UserModel({
-        email: email
-      });
-      doc.save( function( err ) {
-        if ( err ) {
-          console.log( err );
-        }
-      });
-
-      res.json({ error: 'okay', projects: [] });
-      return;
-    }
-
-    if ( err ) {
-      console.log( err );
-      res.json({ error: err, projects: [] }, 500);
-    }
-
-    // We really only need to send the name and id for future use
-    var projectData = [];
-    doc.projects.forEach( function( value, index, arr ) {
-      projectData.push( { name: value.name, id: value._id } );
-    });
-
-    res.json({ error: 'okay', projects: projectData });
-  });
-});
-
-app.get( '/api/project/:id?', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
-  var email = req.session.email,
-      id = req.params.id;
-
-  UserModel.findOne( { email: email }, function( err, doc ) {
-    var project;
-    for( var i=0; i<doc.projects.length; ++i ){
-      project = doc.projects[ i ];
-      if( String( project._id ) === id ){
-        var projectJSON = JSON.parse( project.data );
-        projectJSON.name = project.name;
-        projectJSON.projectID = project._id;
-        res.json( projectJSON );
-        return;
-      }
-    }
-    res.json( { error: "project not found" } );
-  });
-});
-
-app.get( '/api/delete/:id?', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
-  var email = req.session.email,
-      id = req.params.id;
-
-  UserModel.findOne( { email: email }, function( err, doc ) {
-    var project;
-    for( var i=0; i<doc.projects.length; ++i ){
-      project = doc.projects[ i ];
-      if( String( project._id ) === id ){
-        doc.projects.splice( i, 1 );
-        doc.save();
-        res.json( { error: 'okay' }, 200 );
-        return;
-      }
-    }
-    res.json( { error: 'project not found' }, 404 );
-  });
-});
-
-
-app.post( '/api/project/:id?', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
-  var email = req.session.email;
-
-  if( !req.body ){
-    res.json( {error: 'no project data received' }, 500 );
-    return;
-  }
-
-  UserModel.findOne( { email: email }, function( err, doc ) {
-
-    if( err ){
-      res.json( {error: 'internal db error' }, 500 );
-      return;
-    }
-
-    if( !doc ){
-      doc = new UserModel({
-        email: email
-      });
-    }
-
-    var proj;
-    for( var i=0, l=doc.projects.length; i<l; ++i ){
-      // purposeful lazy comparison here (String -> string)
-      if( doc.projects[ i ]._id == req.body.id ){
-        proj = doc.projects[ i ];
-      }
-    }
-
-    if( !proj ){
-      if( req.body.id ){
-        res.json( {error: 'id specified but not found. data corruption or haxxors.'}, 500 );
-        return;
-      }
-      proj = new ProjectModel({
-        name: req.body.name,
-        template: req.body.template,
-        data: JSON.stringify( req.body.data ),
-        customData: JSON.stringify( req.body.customData, null, 2 )
-      });
-      doc.projects.push( proj );
-    }
-    else{
-      proj.template = req.body.template;
-      proj.name = req.body.name;
-      proj.data = JSON.stringify( req.body.data );
-      proj.customData = JSON.stringify( req.body.customData, null, 2 );
-    }
-
-    doc.save();
-
-    res.json({ error: 'okay', project: proj });
-    return;
-
-  });
-});
-
-app.get( '/api/whoami', filter.isLoggedIn, function( req, res ) {
-  var email = req.session.email;
-
-  res.json({
-    email: email,
-    name: email,
-    username: email
   });
 });
 
