@@ -10,13 +10,13 @@
 define( [ "core/eventmanager", "core/trackevent", "./editor",
           "ui/toggler", "util/lang", "text!layouts/editor-area.html",
           "./default", "core/logger", "./header",
-          "./media-editor", "./share-editor", "./settings-editor", "./ui-kit" ],
+          "./media-editor", "./share-editor", "./ui-kit" ],
   function( EventManagerWrapper, TrackEvent, Editor,
             Toggler, LangUtils, EDITOR_AREA_LAYOUT,
             DefaultEditor, Logger, Header,
 
             //included here to register themselves
-            MediaEditor, ShareEditor, SettingsEditor ){
+            MediaEditor, ShareEditor ){
 
   /**
    * Class: EventEditor
