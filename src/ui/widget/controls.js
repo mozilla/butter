@@ -10,7 +10,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
     var _controls = LangUtils.domFragment( CONTROLS_LAYOUT ).querySelector( "#butter-controls" ),
         _container = typeof container === "string" ? document.getElementById( container ) : container,
         // variables
-        muteButton, playButton, currentTimeDialog,
+        muteButton, playButton, currentTimeDialog, fullscreenButton,
         durationDialog, timebar, progressBar, bigPlayButton,
         scrubber, seeking, playStateCache, active,
         volume, volumeProgressBar, volumeScrubber, position,
@@ -35,6 +35,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
       bigPlayButton = document.getElementById( "controls-big-play-button" );
       scrubber = document.getElementById( "controls-scrubber" );
       volume = document.getElementById( "controls-volume" );
+      fullscreenButton = document.getElementById( "controls-fullscreen" );
       volumeProgressBar = document.getElementById( "controls-volume-progressbar" );
       volumeScrubber = document.getElementById( "controls-volume-scrubber" );
       seeking = false;
@@ -42,6 +43,37 @@ define( [ "util/lang", "text!layouts/controls.html" ],
       active = false;
 
       p.controls( false );
+
+      function requestFullscreen( elem ) {
+        // Prefix + case differences.
+        if ( elem.requestFullscreen ) {
+          elem.requestFullscreen();
+        } else if ( elem.mozRequestFullscreen ) {
+          elem.mozRequestFullscreen();
+        } else if ( elem.mozRequestFullScreen ) {
+          elem.mozRequestFullScreen();
+        } else if ( elem.webkitRequestFullscreen ) {
+          elem.webkitRequestFullscreen();
+        }
+      }
+
+      function checkFullscreen() {
+        if ( document.isFullScreen || document.mozIsFullScreen || document.webkitIsFullScreen ) {
+          return true;
+        }
+        return false;
+      }
+
+      function cancelFullscreen() {
+        // Prefix + case differences.
+        if ( document.exitFullScreen ) {
+          document.exitFullScreen();
+        } else if ( document.mozCancelFullScreen ) {
+          document.mozCancelFullScreen();
+        } else if ( document.webkitCancelFullScreen ) {
+          document.webkitCancelFullScreen();
+        }
+      }
 
       if ( bigPlayButton ) {
 
@@ -177,6 +209,18 @@ define( [ "util/lang", "text!layouts/controls.html" ],
 
           p.volume( position / volume.offsetWidth );
         };
+
+        if ( fullscreenButton ) {
+          p.on( "butter-fullscreen-allowed", function( e ) {
+            fullscreenButton.addEventListener( "click", function() {
+              if ( checkFullscreen() ) {
+                cancelFullscreen();
+              } else {
+                requestFullscreen( e );
+              }
+            }, false);
+          });
+        }
 
         volumeMouseUp = function( e ) {
 
