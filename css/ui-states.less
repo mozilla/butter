@@ -75,3 +75,36 @@
   .transition( box-shadow 1.5s );
   box-shadow: 0 0 0 10px transparent;
 }
+
+
+/*********************************************************
+* Tabzilla
+*/
+@_tabzillaHeight: 500px;
+
+.tabzilla-open {
+  &.butter-header-spacing {
+    padding-top: @_tabzillaHeight + @HEADER_SPACING;
+  }
+  .butter-header {
+    top: @_tabzillaHeight;
+    z-index: @MODAL_Z_INDEX;
+    box-shadow: 0 -1px 0 0 #CCC;
+  }
+  .tabzilla-area {
+    top: -@_tabzillaHeight;
+  }
+  #tabzilla {
+    top: -1px;
+  }
+}
+
+.tabzilla-area {
+  position: absolute;
+  top: -@_tabzillaHeight * 2;
+  right: 0;
+  height: @_tabzillaHeight;
+  background: fade( white, 95% );
+  padding: 0 80px;
+  .transition( all .3s ease );
+}
