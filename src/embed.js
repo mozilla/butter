@@ -1,4 +1,3 @@
-
 function init( window, document ) {
 
   /**
@@ -11,7 +10,7 @@ function init( window, document ) {
    */
 
   function $( id ) {
-    if( typeof id !== "string" ) {
+    if ( typeof id !== "string" ) {
       return id;
     }
     return document.querySelector( id );
@@ -54,6 +53,7 @@ function init( window, document ) {
       shareSize = $( "#share-size" ).value.split( "x" ),
       width = shareSize[0],
       height = shareSize[1];
+
     return '<iframe src="' + src + '" width="' + width + '" height="' + height +
            '" frameborder="0" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>';
   }
@@ -62,9 +62,9 @@ function init( window, document ) {
   function getCannonicalURL() {
     var links = document.querySelectorAll( "link" ),
       link;
-    for( var i=0; i<links.length; i++ ) {
+    for ( var i = 0; i < links.length; i++ ) {
       link = links[ i ];
-      if( link.rel === "cannonical" ) {
+      if ( link.rel === "cannonical" ) {
         return link.href;
       }
     }
@@ -87,7 +87,7 @@ function init( window, document ) {
         return;
       }
 
-      for( var i = 0; i < stateClasses.length; i++ ) {
+      for ( var i = 0; i < stateClasses.length; i++ ) {
         el.classList.remove( stateClasses[ i ] );
       }
 
@@ -118,14 +118,14 @@ function init( window, document ) {
     });
 
     function onCanPlay() {
-      if( config.autoplay ) {
+      if ( config.autoplay ) {
         popcorn.play();
       }
     }
     popcorn.on( "canplay", onCanPlay );
 
     // See if Popcorn was ready before we got setup
-    if( popcorn.readyState() >= 3 && config.autoplay ) {
+    if ( popcorn.readyState() >= 3 && config.autoplay ) {
       popcorn.off( "canplay", onCanPlay );
       popcorn.play();
     }
@@ -152,10 +152,12 @@ function init( window, document ) {
        * This "butter" is never meant to live in a page with the full "butter".
        * We warn then remove if this happens.
        **/
-      var Butter = { version: "Butter-Embed-@VERSION@" },
-        popcorn = Popcorn.byId( "Butter-Generated" ),
-        config,
-        qs = URI.parse( window.location.href ).queryKey;
+      var Butter = {
+            version: "Butter-Embed-@VERSION@"
+          },
+          popcorn = Popcorn.byId( "Butter-Generated" ),
+          config,
+          qs = URI.parse( window.location.href ).queryKey;
 
       /**
        * The embed can be configured via the query string:
@@ -177,15 +179,17 @@ function init( window, document ) {
         end: qs.end|0,
         fullscreen: qs.fullscreen === "0" ? false : (function( document ) {
           // Check for prefixed/unprefixed Fullscreen API support
-          if( "fullScreenElement" in document ) {
+          if ( "fullScreenElement" in document ) {
             return true;
           }
+
           var pre = "khtml o ms webkit moz".split( " " ),
-            i = pre.length,
-            prefix;
-          while( i-- ) {
+              i = pre.length,
+              prefix;
+
+          while ( i-- ) {
             prefix = pre[ i ];
-            if( (prefix + "FullscreenElement" ) in document ) {
+            if ( (prefix + "FullscreenElement" ) in document ) {
               return true;
             }
           }
@@ -199,7 +203,10 @@ function init( window, document ) {
       // Setup UI based on config options
       // TODO: config.autohide
       // TODO: config.autoplay
-      if( config.controls ) {
+      if ( config.autoplay ) {
+        popcorn.autoplay( true );
+      }
+      if ( config.controls ) {
         Controls( "controls", popcorn );
         show( "#controls" );
       }
@@ -217,7 +224,7 @@ function init( window, document ) {
       // Get the page's cannonical URL and put in share URL
       $( "#share-url" ).value = getCannonicalURL();
 
-      if( window.Butter && console && console.warn ){
+      if ( window.Butter && console && console.warn ){
         console.warn( "Butter Warning: page already contains Butter, removing." );
         delete window.Butter;
       }
@@ -227,7 +234,7 @@ function init( window, document ) {
 }
 
 // Source tree case vs. require-built case.
-if( typeof require === "undefined" ) {
+if ( typeof require === "undefined" ) {
   Popcorn.getScript( "../../external/require/require.js", function() {
     init( window, window.document );
  });
