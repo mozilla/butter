@@ -82,7 +82,10 @@ define( [], function(){
       if( immediateSelector ){
         child = fragment.querySelector( immediateSelector );
         if ( child ) {
-          fragment.removeChild( child );
+          // Opera appends children to the <body> in some cases, so the parentNode might not be `fragment` here.
+          // So, remove it from whatever its attached to, since it was spawned right here.
+          // Note: should be `fragment.removeChild( child );`
+          child.parentNode.removeChild( child );
           return child;
         }
       }
