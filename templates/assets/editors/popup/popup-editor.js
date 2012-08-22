@@ -104,7 +104,7 @@
 
         function attachTypeHandler( option ) {
           option.element.addEventListener( "change", function( e ) {
-            var elementVal = e.srcElement.value,
+            var elementVal = e.target.value,
                 updateOptions = {},
                 target;
 
