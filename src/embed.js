@@ -175,8 +175,8 @@ function init( window, document ) {
         autohide: qs.autohide === "0" ? false : true,
         autoplay: qs.autoplay === "1" ? true : false,
         controls: qs.controls === "0" ? false : true,
-        start: qs.start|0,
-        end: qs.end|0,
+        start: qs.start || 0,
+        end: qs.end || 0,
         fullscreen: qs.fullscreen === "0" ? false : (function( document ) {
           // Check for prefixed/unprefixed Fullscreen API support
           if ( "fullScreenElement" in document ) {
