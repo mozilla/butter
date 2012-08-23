@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+/*globals cat,cd,cp,env,exec,echo,find,ls,mkdir,mv,pwd,rm,sed,target*/
 
 var path = require( "path" ),
     spawn = require('child_process').spawn,
@@ -15,14 +15,11 @@ var path = require( "path" ),
     UGLIFY = nodeExec( normalize( "./node_modules/uglify-js/bin/uglifyjs" ) ),
     RJS = nodeExec( normalize( "./node_modules/requirejs/bin/r.js" ) ),
     LESS = nodeExec( normalize( "./node_modules/less/bin/lessc" ) ),
-    DOX = normalize( "./tools/dox.py" ),
 
     SRC_DIR = 'src',
     EDITORS_DIR = 'editors',
     TEMPLATES_DIR = 'templates',
     DIST_DIR = 'dist',
-    DOCS_DIR = 'docs',
-    TEST_DIR = 'test',
     CSS_DIR = 'css',
     CORNFIELD_DIR = 'cornfield',
 
@@ -35,9 +32,7 @@ var path = require( "path" ),
     BUTTER_TRANSITIONS_CSS_FILE = join( CSS_DIR, "/transitions.css" ),
 
     BUTTERED_POPCORN = join( DIST_DIR, '/buttered-popcorn.js' ),
-    BUTTERED_POPCORN_MIN = join( DIST_DIR, '/buttered-popcorn.min.js' ),
-
-    PACKAGE_NAME = "butter";
+    BUTTERED_POPCORN_MIN = join( DIST_DIR, '/buttered-popcorn.min.js' );
 
 require('shelljs/make');
 
@@ -66,7 +61,7 @@ function checkCSSFile( filename, warnings, errors ) {
 
   // Run CSSLint across the file, check for errors/warnings and ignore if
   // they are ones we know about from above.
-  var outputLines = exec(CSSLINT +
+  exec(CSSLINT +
     ' --warnings=' + warnings +
     ' --errors=' + errors +
     ' --quiet --format=compact' +
@@ -154,31 +149,32 @@ function checkJS(){
   exec(JSLINT + ' ' + files + ' --show-non-errors --extra-ext json');
 }
 
+var desc = {
+  check: 'Lint CSS, HTML, and JS',
+  css: 'Build LESS files to CSS',
+  deploy: 'Build Butter suitable for production',
+  server: 'Run the development server'
+};
+
 target.all = function() {
-  target.submodules();
-  target.check();
-  target.build();
+  echo('Please specify a target. Available targets:');
+  Object.keys(target).sort().filter(function(t) {
+    return t !== "all";
+  }).forEach(function(t) {
+    echo('  ' + t + ' - ' + desc[t]);
+  });
 };
 
-target.clean = function() {
+function clean() {
   rm('-fr', DIST_DIR);
-};
-
-target.dist = function() {
   mkdir('-p', DIST_DIR);
-};
-
-target.submodules = function() {
-  echo('### Updating git submodules');
-
-  exec('git submodule update --init --recursive');
-};
+}
 
 function checkHTMLFile( filename, ignoreList ) {
   var printedHeader = false,
     printFooter = false;
 
-  out = exec( HTML5LINT + " -h " + filename, { silent: true } ).output;
+  var out = exec( HTML5LINT + " -h " + filename, { silent: true } ).output;
 
   if ( out ) {
     out = out.replace( "There were errors. (Tried in the text/html mode.)\n", "", "m" );
@@ -221,12 +217,12 @@ function checkHTMLFile( filename, ignoreList ) {
   }
 }
 
-target["check-html"] = function() {
+function checkHTML() {
   echo('### Linting HTML - requires network access');
 
   // Poor-man's HTML Doc vs. Fragment check
   function isHTMLFragment( filename ) {
-    return !( /\<html[^>]*\>/m ).test( cat( filename ) );
+    return !( /<html[^>]*\>/m ).test( cat( filename ) );
   }
 
   // List of errors/warnings to ignore, some with a conditional
@@ -257,7 +253,7 @@ target["check-html"] = function() {
     }
   ];
 
-  var files = find([
+  find([
     EDITORS_DIR,
     join( SRC_DIR, "layouts" ),
     join( SRC_DIR, "editor" ),
@@ -266,53 +262,10 @@ target["check-html"] = function() {
   }).forEach( function( filename ) {
     checkHTMLFile( filename, ignoreList );
   });
-};
+}
 
-
-target.docs = function() {
-  echo('### Creating documentation from src...');
-  mkdir('-p', DOCS_DIR);
-
-  var files = find( SRC_DIR ).filter( function( file ) {
-    return file.match(/\.js$/);
-  });
-
-  var docTypes = [
-    'md'
-  ];
-
-  for (var i = files.length - 1; i >= 0; i--) {
-    echo('### Processing documentation for ' + files[i]);
-    for (var j = docTypes.length - 1; j >= 0; j--) {
-      var newFileName = DOCS_DIR + '/' + files[i].substring(4).replace(/\//g, '-').replace(/\.js$/, '.' + docTypes[j]),
-          command = 'python ' + DOX + ' -t ' + docTypes[j] + ' -o '+ newFileName + ' -i ' + files[i];
-      exec(command);
-    };
-  };
-};
-
-target.check = function() {
-  checkJS( SRC_DIR, EDITORS_DIR, CORNFIELD_DIR, TEMPLATES_DIR );
-  checkCSS( CSS_DIR );
-  target["check-html"]();
-};
-
-target['check-templates'] = function() {
-  checkJS( TEMPLATES_DIR );
-  checkCSS( TEMPLATES_DIR );
-};
-
-target['check-css'] = function( dirs ) {
-  checkCSS( CSS_DIR );
-};
-
-target['check-tests'] = function( dir ) {
-  checkJS( TEST_DIR );
-};
-
-// If compress is true, crush CSS down, otherwise leave expanded.
 function lessToCSS( options ){
-  var compress = options.compress || false,
+  var compress = !!options.compress,
       lessFile = options.lessFile,
       cssFile = options.cssFile;
 
@@ -326,15 +279,37 @@ function lessToCSS( options ){
   if( result.code === 0 ){
     var css = BUTTER_CSS_FILE_COMMENT + "\n\n" + result.output;
     css.to( cssFile );
-    // Our /* csslint-ignore */ override can't work when compressed.
-    // People should lint on their own separate to that.
-    if( !compress ) {
-      target['check-css']();
-    }
   } else {
     echo( result.output );
   }
 }
+
+function buildCSS(compress) {
+  lessToCSS({
+    lessFile: BUTTER_LESS_FILE,
+    cssFile: BUTTER_CSS_FILE,
+    compress: compress
+  });
+
+  lessToCSS({
+    lessFile: BUTTER_TRANSITIONS_LESS_FILE,
+    cssFile: BUTTER_TRANSITIONS_CSS_FILE,
+    compress: compress
+  });
+
+  lessToCSS({
+    lessFile: "css/embed.less",
+    cssFile: "css/embed.css",
+    compress: compress
+  });
+}
+
+target.check = function() {
+  checkJS( 'make.js', SRC_DIR, EDITORS_DIR, CORNFIELD_DIR, TEMPLATES_DIR );
+  buildCSS();
+  checkCSS( CSS_DIR, TEMPLATES_DIR );
+  checkHTML();
+};
 
 function stampVersion( version, filename ){
   // Stamp embed.version with supplied version, or git info
@@ -343,52 +318,12 @@ function stampVersion( version, filename ){
   sed( '-i', '@VERSION@', version, filename );
 }
 
-function embed( version, compress ){
-  echo('### Building embed');
-
-  target.dist();
-
-  exec(RJS + ' -o tools/embed.js');
-  stampVersion( version, 'dist/embed.js' );
-
-  exec(RJS + ' -o tools/embed.optimized.js');
-  stampVersion( version, 'dist/embed.min.js' );
-
-  // Build the embed CSS file
-  lessToCSS({
-    lessFile: "css/embed.less",
-    cssFile: "css/embed.css",
-    compress: compress
-  });
-}
-
-target.embed = function(){
-  // To pass a release version number, use:
-  // $ VERSION=0.5 node make embed
-  var version = env['VERSION'];
-
-  embed( version, true );
-};
-
 target.css = function() {
-  // Leave CSS expanded if building in tree (for debugging)
-  lessToCSS({
-    lessFile: BUTTER_LESS_FILE,
-    cssFile: BUTTER_CSS_FILE,
-    compress: false
-  });
-
-  lessToCSS({
-    lessFile: BUTTER_TRANSITIONS_LESS_FILE,
-    cssFile: BUTTER_TRANSITIONS_CSS_FILE,
-    compress: false
-  });
+  buildCSS();
 };
 
-function build( version, compress ){
+function buildJS( version ){
   echo('### Building butter');
-
-  target.dist();
 
   exec(RJS + ' -o tools/build.js');
   stampVersion( version, 'dist/butter.js' );
@@ -396,23 +331,12 @@ function build( version, compress ){
   exec(RJS + ' -o tools/build.optimized.js');
   stampVersion( version, 'dist/butter.min.js' );
 
-  // Compress CSS for deployment
-  lessToCSS({
-    lessFile: BUTTER_LESS_FILE,
-    cssFile: BUTTER_CSS_FILE,
-    compress: compress
-  });
+  exec(RJS + ' -o tools/embed.js');
+  stampVersion( version, 'dist/embed.js' );
 
-  lessToCSS({
-    lessFile: BUTTER_TRANSITIONS_LESS_FILE,
-    cssFile: BUTTER_TRANSITIONS_CSS_FILE,
-    compress: compress
-  });
+  exec(RJS + ' -o tools/embed.optimized.js');
+  stampVersion( version, 'dist/embed.min.js' );
 }
-
-target.build = function(){
-  build( "build", true );
-};
 
 target.server = function() {
   echo('### Serving butter');
@@ -437,21 +361,7 @@ target.server = function() {
   });
 };
 
-target.package = function() {
-  echo('### Making Butter Package');
-
-  target.build();
-
-  cp('-R', 'editors', DIST_DIR);
-  cp('-R', 'resources', DIST_DIR);
-  cp('-R', 'templates', DIST_DIR);
-
-  echo('### Creating butter.zip');
-  cd(DIST_DIR);
-  exec('zip -r ' + PACKAGE_NAME + '.zip ' + ls('.').join(' '));
-};
-
-target['buttered-popcorn'] = function(){
+function butteredPopcorn() {
   echo('### Making Combined Popcorn for Butter: Buttered Popcorn');
 
   var defaultConfig = require( DEFAULT_CONFIG ),
@@ -507,58 +417,14 @@ target['buttered-popcorn'] = function(){
 
   // Write out dist/buttered-popcorn.min.js
   exec( UGLIFY + ' --output ' + BUTTERED_POPCORN_MIN + ' ' + BUTTERED_POPCORN );
-};
+}
 
-target.release = function() {
-  echo('### Making Butter Release');
-
-  // To pass a release version number, use:
-  // $ VERSION=0.5 node make release
-  var version = env['VERSION'];
-
-  if( !version ){
-    echo( "ERROR: Must provide a version when building a release: VERSION=XXX node make release" );
-    return;
-  }
-
-  build( version, true );
-
-  // Build buttered-popcorn.js
-  target['buttered-popcorn']();
-
-  // Copy over templates and other resources
-  cp('-R', 'editors', DIST_DIR);
-  cp('-R', 'resources', DIST_DIR);
-  cp('-R', 'templates', DIST_DIR);
-
-  echo('### Creating butter.zip');
-  cd(DIST_DIR);
-  exec('zip -r ' + PACKAGE_NAME + '.zip ' + ls('.').join(' '));
-};
-
-target.beautify = function( a ) {
-  echo('### Beautifying butter');
-  cd('tools');
-  exec('./beautify.sh');
-};
-
-target.test = function() {
-  var unbeautified = [ "if.js", "for.js", "while.js", "array.js", "function.js", "object.js", "comments.js", "eolspace.js" ],
-      beautified = [ "if.expected.js", "for.expected.js", "while.expected.js", "array.expected.js", "function.expected.js", "object.expected.js", "comments.expected.js", "eolspace.expected.js" ],
-      result;
-
-  echo('### Testing Beautifier');
-  for( var i = 0, l = unbeautified.length; i < l; i++ ) {
-    result = exec('bash test/beautifier/test.sh ' + unbeautified[ i ] + ' ' + beautified[ i ]);
-    rm('tmp.txt');
-    // checking against a length of 1 because if the output is empty a newline character gets returned
-    if( result.output.length === 1 ) {
-      echo(unbeautified[ i ] + ' was beautified correctly');
-    } else {
-      echo(unbeautified[ i ] + ' did not beautify correctly');
-    }
-  }
-};
+function mirrorInSrc( filenameSuffix, minified ) {
+  var keep = minified ? ".min.js" : ".js",
+      remove = !minified ? ".min.js" : ".js";
+  mv( '-f', join( DIST_DIR, filenameSuffix + keep ), join( DIST_DIR, './src/' + filenameSuffix + '.js' ) );
+  rm( '-f', join( DIST_DIR, filenameSuffix + remove ) );
+}
 
 target.deploy = function(){
   echo('### Making deployable versions of butter, embed, popcorn, etc. (use UNMINIFIED=1 for unminified)');
@@ -568,33 +434,18 @@ target.deploy = function(){
   var unminified = env['UNMINIFIED'] === "1",
       version = env['VERSION'];
 
-  target.clean();
-  target.dist();
+  clean();
 
-  embed( version, !unminified );
-  build( 'deploy', !unminified );
-  target['buttered-popcorn']();
-
-  function mirrorInSrc( filenameSuffix, minified ) {
-    var keep = minified ? ".min.js" : ".js",
-        remove = !minified ? ".min.js" : ".js";
-    mv( '-f', join( DIST_DIR, filenameSuffix + keep ), join( DIST_DIR, './src/' + filenameSuffix + '.js' ) );
-    rm( '-f', join( DIST_DIR, filenameSuffix + remove ) );
-  }
+  buildJS( version );
+  buildCSS( true );
+  butteredPopcorn();
 
   // We'll mirror src/butter.js and src/embed.js to mimic exploded install
   mkdir('-p', './dist/src');
 
   // Depending on whether we want minified source, keep one, delete one.
-  if( unminified ){
-    mirrorInSrc( "butter", false );
-    mirrorInSrc( "embed", false);
-  } else {
-    // Write out dist/storycamp-butter.min.js
-    exec( UGLIFY + ' --output ' + DIST_DIR + '/butter.min.js ' + DIST_DIR + '/' + 'butter.js' );
-    mirrorInSrc( "butter", true );
-    mirrorInSrc( "embed", true );
-  }
+  mirrorInSrc( "butter", !unminified );
+  mirrorInSrc( "embed", !unminified );
 
   // Copy other assets over
   mkdir( join( DIST_DIR, 'css' ) );
