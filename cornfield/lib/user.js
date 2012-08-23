@@ -60,7 +60,7 @@ module.exports = {
   },
   deleteProject: function( email, pid, callback ) {
     if ( !email || !pid ) {
-      callback();
+      callback( 'not enough parameters to delete' );
       return;
     }
 
@@ -78,7 +78,7 @@ module.exports = {
   },
   findAllProjects: function findAllProjects( email, callback ) {
     if ( !email ) {
-      callback();
+      callback( 'not enough parameters to search' );
       return;
     }
 
@@ -86,7 +86,7 @@ module.exports = {
   },
   findProject: function findProject( email, pid, callback ) {
     if ( !email || !pid ) {
-      callback();
+      callback( 'not enough parameters to search' );
       return;
     }
 
