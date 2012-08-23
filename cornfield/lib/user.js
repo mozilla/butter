@@ -19,7 +19,7 @@ User = new Schema({
 }),
 UserModel = mongoose.model( 'User', User );
 
-mongoose.connect('mongodb://localhost/test', function( err ) {
+mongoose.connect( 'mongodb://localhost/test', function( err ) {
   if ( !err ) {
     dbOnline = true;
   }
@@ -64,7 +64,7 @@ module.exports = {
       return;
     }
 
-    this.findAllProjects( email, function( err, doc) {
+    this.findAllProjects( email, function( err, doc ) {
       if ( err ) {
         callback( err );
         return;
@@ -90,7 +90,7 @@ module.exports = {
       return;
     }
 
-    this.findAllProjects( email, function( err, doc) {
+    this.findAllProjects( email, function( err, doc ) {
       if ( err ) {
         callback( err );
         return;
