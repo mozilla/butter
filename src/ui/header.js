@@ -20,6 +20,11 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML;
 
+    // This is an easter egg to open a UI kit editor. Hurrah
+    _rootElement.querySelector( ".butter-logo" ).addEventListener( "dblclick", function( e ) {
+      butter.editor.openEditor( "ui-kit" );
+    }, false );
+
     // create a tooltip for the projectName element
     ToolTip.create({
       element: _projectTitle,

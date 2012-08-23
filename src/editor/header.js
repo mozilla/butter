@@ -7,14 +7,12 @@ define([], function(){
   return function( editorAreaDOMRoot, editorModule ) {
     var _mediaButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-media" ),
         _popcornButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-popcorn" ),
-        _shareButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-share" ),
-        _settingsButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-settings" );
+        _shareButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-share" );
 
     var _focusMap = {
       "media-properties": _mediaButton,
       "plugin-list": _popcornButton,
-      "share-properties": _shareButton,
-      "settings": _settingsButton
+      "share-properties": _shareButton
     };
 
     var _currentFocus;
@@ -29,15 +27,6 @@ define([], function(){
 
     _shareButton.addEventListener( "click", function( e ) {
       editorModule.openEditor( "share-properties" );
-    }, false );
-
-    _settingsButton.addEventListener( "click", function( e ) {
-      editorModule.openEditor( "settings" );
-    }, false );
-
-    // This is an easter egg to open a UI kit editor. Hurrah
-    _settingsButton.addEventListener( "dblclick", function( e ) {
-      editorModule.openEditor( "ui-kit" );
     }, false );
 
     this.setFocus = function( editorName ) {
