@@ -322,20 +322,23 @@ target.css = function() {
   buildCSS();
 };
 
-function buildJS( version ){
-  echo('### Building butter');
+function buildJS( version, compress ){
+  echo('### Building Butter (' + ( compress ? 'with' : 'without' ) + ' compression)');
 
-  exec(RJS + ' -o tools/build.js');
-  stampVersion( version, 'dist/butter.js' );
+  var doCompress = compress ? "" : "optimize=none";
+  var result = "";
 
-  exec(RJS + ' -o tools/build.optimized.js');
-  stampVersion( version, 'dist/butter.min.js' );
+  result = exec(RJS + ' -o tools/build.js ' + doCompress, {silent: true});
+  if (!!result.code) {
+    echo(result.output);
+  }
+  stampVersion( version, 'dist/src/butter.js' );
 
-  exec(RJS + ' -o tools/embed.js');
-  stampVersion( version, 'dist/embed.js' );
-
-  exec(RJS + ' -o tools/embed.optimized.js');
-  stampVersion( version, 'dist/embed.min.js' );
+  result = exec(RJS + ' -o tools/embed.js ' + doCompress, {silent: true});
+  if (!!result.code) {
+    echo(result.output);
+  }
+  stampVersion( version, 'dist/src/embed.js' );
 }
 
 target.server = function() {
@@ -416,36 +419,25 @@ function butteredPopcorn() {
   sed('-i', '@VERSION', popcornVersion, BUTTERED_POPCORN);
 
   // Write out dist/buttered-popcorn.min.js
-  exec( UGLIFY + ' --output ' + BUTTERED_POPCORN_MIN + ' ' + BUTTERED_POPCORN );
-}
 
-function mirrorInSrc( filenameSuffix, minified ) {
-  var keep = minified ? ".min.js" : ".js",
-      remove = !minified ? ".min.js" : ".js";
-  mv( '-f', join( DIST_DIR, filenameSuffix + keep ), join( DIST_DIR, './src/' + filenameSuffix + '.js' ) );
-  rm( '-f', join( DIST_DIR, filenameSuffix + remove ) );
 }
 
 target.deploy = function(){
   echo('### Making deployable versions of butter, embed, popcorn, etc. (use UNMINIFIED=1 for unminified)');
 
   // To get unminified butter.js, use the UNMINIFIED env variable:
-  // $ UNMINIFIED=1 node make storycamp
-  var unminified = env['UNMINIFIED'] === "1",
+  // $ UNMINIFIED=1 node make deploy
+  var compress = env['UNMINIFIED'] !== "1",
       version = env['VERSION'];
 
   clean();
 
-  buildJS( version );
-  buildCSS( true );
+  buildJS( version, compress );
+  buildCSS( compress );
   butteredPopcorn();
 
   // We'll mirror src/butter.js and src/embed.js to mimic exploded install
   mkdir('-p', './dist/src');
-
-  // Depending on whether we want minified source, keep one, delete one.
-  mirrorInSrc( "butter", !unminified );
-  mirrorInSrc( "embed", !unminified );
 
   // Copy other assets over
   mkdir( join( DIST_DIR, 'css' ) );
@@ -465,12 +457,8 @@ target.deploy = function(){
 
   // Export will need a version of popcorn.js where the templates expect it
   // at dist/external/popcorn-js/popcorn.js
-  cd( DIST_DIR );
-  if( unminified ){
-    mv( 'buttered-popcorn.js', './external/popcorn-js/popcorn.js' );
-    rm( '-f', 'buttered-popcorn.min.js' );
-  } else {
-    mv( 'buttered-popcorn.min.js', './external/popcorn-js/popcorn.js' );
-    rm( '-f', 'buttered-popcorn.js' );
+  if ( compress ) {
+    exec( UGLIFY + ' --output ' + BUTTERED_POPCORN + ' ' + BUTTERED_POPCORN );
   }
+  mv( BUTTERED_POPCORN, './dist/external/popcorn-js/popcorn.js' );
 };
