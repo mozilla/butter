@@ -156,8 +156,10 @@ function checkJS(){
 
 target.all = function() {
   target.submodules();
-  target.check();
   target.build();
+  // Don't check CSS - it's build with compression in target.build()
+  checkJS( SRC_DIR, EDITORS_DIR, CORNFIELD_DIR, TEMPLATES_DIR );
+  target[ "check-html" ]();
 };
 
 target.clean = function() {
@@ -314,7 +316,11 @@ target['check-tests'] = function( dir ) {
 function lessToCSS( options ){
   var compress = options.compress || false,
       lessFile = options.lessFile,
-      cssFile = options.cssFile;
+      cssFile = options.cssFile,
+      // when calling lessToCSS more than once, with no compression,
+      // options.lint can be used in the last call to kick-off the lint
+      // process on all css files that were compiled.
+      doLint = options.lint;
 
   echo( "### Building CSS using LESS for " + lessFile + " (" +
         ( compress ? "with" : "without" ) +
@@ -328,7 +334,7 @@ function lessToCSS( options ){
     css.to( cssFile );
     // Our /* csslint-ignore */ override can't work when compressed.
     // People should lint on their own separate to that.
-    if( !compress ) {
+    if( !compress && doLint ) {
       target['check-css']();
     }
   } else {
@@ -381,7 +387,8 @@ target.css = function() {
   lessToCSS({
     lessFile: BUTTER_TRANSITIONS_LESS_FILE,
     cssFile: BUTTER_TRANSITIONS_CSS_FILE,
-    compress: false
+    compress: false,
+    lint: true
   });
 };
 
