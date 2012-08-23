@@ -1,5 +1,6 @@
-// Options must be shared with anyone require()-ing this file
-var options, filters;
+'use strict';
+
+var dbCheckFn, filters;
 
 filters = {
   isLoggedIn: function( req, res, next ) {
@@ -12,7 +13,7 @@ filters = {
     }
   },
   isStorageAvailable: function( req, res, next ) {
-    if ( options.dbOnline ) {
+    if ( dbCheckFn() ) {
       next();
     } else {
       res.json({
@@ -22,7 +23,7 @@ filters = {
   }
 };
 
-module.exports = function ctor( opts ) {
-  options = opts;
+module.exports = function ctor( fn ) {
+  dbCheckFn = fn;
   return filters;
 };
