@@ -65,6 +65,18 @@
   }
 }
 
+/* Scrollbar hidding */
+.butter-scrollbar-hidden {
+  .transition( opacity 0.1s ease, visibility 0.1s ease );
+  visibility: visible;
+  opacity: 1;
+
+  &.off {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
 /* Targets and highlighting */
 
 .butter-highlight-on {
