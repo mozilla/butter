@@ -30,10 +30,12 @@ define( [ "util/lang", "util/xhr",
      * @param {Function} ctor: Constructor to be run when the Editor is being created
      */
     register: function( name, layoutSrc, ctor ) {
-      __editors[ name ] = {
-        create: ctor,
-        layout: layoutSrc
-      };
+      if ( !Editor.isRegistered( name ) ) {
+        __editors[ name ] = {
+          create: ctor,
+          layout: layoutSrc
+        };
+      }
     },
 
     /**
