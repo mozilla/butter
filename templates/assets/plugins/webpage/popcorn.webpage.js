@@ -26,6 +26,8 @@
       iframe.setAttribute( "height", "100%" );
       iframe.id = options.id || Popcorn.guid();
       iframe.src = options.src;
+      wrapper.classList.add( options.transition );
+      wrapper.classList.add( "off" );
 
       wrapper.style.top = options.top + "%";
       wrapper.style.left = options.left + "%";
@@ -34,8 +36,6 @@
       wrapper.style.position = "absolute";
 
       wrapper.appendChild( iframe );
-      wrapper.classList.add( "off" );
-      wrapper.classList.add( "popcorn-fade" );
 
       options.toString = function() {
         return options.src || manifest.options.src[ "default" ];
@@ -43,13 +43,17 @@
     },
 
     start: function( event, options ){
-      options._wrapper.classList.add( "on" );
-      options._wrapper.classList.remove( "off" );
+      if ( options._wrapper ) {
+        options._wrapper.classList.add( "on" );
+        options._wrapper.classList.remove( "off" );
+      }
     },
 
     end: function( event, options ){
-      options._wrapper.classList.add( "off" );
-      options._wrapper.classList.remove( "on" );
+      if ( options._wrapper ) {
+        options._wrapper.classList.add( "off" );
+        options._wrapper.classList.remove( "on" );
+      }
     },
 
     _teardown: function( options ) {
@@ -115,6 +119,13 @@
         target: {
           "default": "iframe-container",
           hidden: true
+        },
+        transition: {
+          elem: "select",
+          options: [ "None", "Pop", "Fade", "Slide Up", "Slide Down" ],
+          values: [ "popcorn-none", "popcorn-pop", "popcorn-fade", "popcorn-slide-up", "popcorn-slide-down" ],
+          label: "Transition",
+          "default": "popcorn-fade"
         }
       }
     }

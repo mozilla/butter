@@ -170,8 +170,8 @@
         },
         transition: {
           elem: "select",
-          options: [ "None", "Pop", "Slide Up", "Slide Down", "Fade" ],
-          values: [ "none", "popcorn-pop", "popcorn-slide-up", "popcorn-slide-down", "popcorn-fade" ],
+          options: [ "None", "Pop", "Fade", "Slide Up", "Slide Down" ],
+          values: [ "popcorn-none", "popcorn-pop", "popcorn-fade", "popcorn-slide-up", "popcorn-slide-down" ],
           label: "Transition",
           "default": "popcorn-pop"
         },
@@ -459,12 +459,10 @@
       var audio = options.audio,
           video = this.media;
 
-      /*
-       * TODO:
-       * Handle Fliping On/Off of transitions here properly
-       */
-      options._container.classList.remove( "off" );
-      options._container.classList.add( "on" );
+      if ( options._container ) {
+        options._container.classList.add( "on" );
+        options._container.classList.remove( "off" );
+      }
 
       if ( audio && audio.duration && !video.paused &&
         video.currentTime - 1 < options.start ) {
@@ -482,12 +480,10 @@
     },
 
     end: function( event, options ) {
-      /*
-       * TODO:
-       * Handle Fliping On/Off of transitions here properly
-       */
-      options._container.classList.add( "off" );
-      options._container.classList.remove( "on" );
+      if ( options._container ) {
+        options._container.classList.add( "off" );
+        options._container.classList.remove( "on" );
+      }
     },
     
     _teardown: function( options ) {

@@ -53,10 +53,10 @@
         },
         transition: {
           elem: "select",
-          options: [ "None", "Pop", "Fly Up", "Fly Down", "Sparkles" ],
-          values: [ "none", "pop", "flyUp", "flyDown", "sparkles" ],
+          options: [ "None", "Pop", "Fade", "Slide Up", "Slide Down" ],
+          values: [ "popcorn-none", "popcorn-pop", "popcorn-fade", "popcorn-slide-up", "popcorn-slide-down" ],
           label: "Transition",
-          "default": "pop"
+          "default": "popcorn-fade"
         },
         layout: {
           elem: "select",
@@ -125,10 +125,20 @@
       options._container.id = Popcorn.guid( "twitter" );
       options._container.style.top = options.top + "%";
       options._container.style.left = options.left + "%";
-      options._container.style.display = "none";
       options._container.style.zIndex = +options.zindex;
       titleText.classList.add( "popcorn-twitter-title" );
       titleText.appendChild( document.createTextNode( options.search || options.username || "Twitter" ) );
+
+      // Set layout class for container
+      if ( options.layout ) {
+        options._container.classList.add( options.layout );
+      }
+
+      // Set transitions for container
+      if ( options.layout !== "ticker" ) {
+        options._container.classList.add( options.transition );
+        options._container.classList.add( "off" );
+      }
       options._container.appendChild( titleText );
 
       function twitterCallback( e ) {
@@ -175,15 +185,6 @@
             tweetsContainer.appendChild( tweetContainer );
           }
 
-          // Set layout class for container
-          if ( options.layout ) {
-            options._container.classList.add( options.layout );
-          }
-
-          if ( options.transition ) {
-            options._container.classList.add( options.transition );
-          }
-
           outerTweetsContainer.classList.add( "popcorn-twitter-tweets" );
           outerTweetsContainer.appendChild( tweetsContainer );
           options._container.appendChild( outerTweetsContainer );
@@ -228,13 +229,13 @@
     },
     start: function( event, options ) {
       if ( options._container ) {
-        options._container.style.display = "block";
         options._container.classList.add( "on" );
+        options._container.classList.remove( "off" );
       }
     },
     end: function( event, options ) {
       if ( options._container ) {
-        options._container.style.display = "none";
+        options._container.classList.add( "off" );
         options._container.classList.remove( "on" );
       }
     },
