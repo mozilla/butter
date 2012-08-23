@@ -386,11 +386,111 @@ body {
   }
   
   .share-size {
-    width: 100px;
     float: left;
-    margin-left: 20px;
+    margin-left: 10px;
     line-height: 1em;
+    position: relative;
   }
+
+  .size-options {
+    background: #ababab;
+    border-radius: 5px;
+    position: absolute;
+    z-index: 9999;
+    width: 113px;
+
+    a {
+      font-size: 12px;
+      color: white;
+      text-shadow: 1px 1px 0px rgba( 0, 0, 0, 0.2 );
+      text-decoration: none;
+      border-bottom: 1px solid rgba( 255, 255, 255, 0.3 );
+      padding: 3px 0;
+      display: none;
+    }
+
+    a:last-child {
+      border-bottom: none;
+    }
+
+    a:hover {
+      background:#1EB771;
+    }
+
+    a.current {
+      display:block;
+      background: url(../resources/controls/embed_size_sprite.png) no-repeat 90px 15px;
+    }
+
+    a.current:hover {
+      display:block;
+      background: #1EB771;
+    }
+
+    a:first-child:hover {
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+
+    a:last-child:hover {
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+
+
+
+    span {
+      display: block;
+    }
+
+    span.icon {
+        background: url(../resources/controls/embed_size_sprite.png) no-repeat;
+        width: 36px;
+        height: 29px;
+        margin: 0 3px;
+        float: left;
+    }
+
+    span.size{
+      font-weight: bold;
+      line-height: 1.2em;
+    }
+
+    span.dimensions {
+      line-height: 1.2em;
+    }
+
+    .small .icon {
+      background-position: center -14px;
+    }
+
+    .medium .icon {
+      background-position: center -52px;
+    }
+
+    .large .icon {
+      background-position: center -91px;
+    }
+
+    .xlarge .icon {
+      background-position: center -131px;
+    }
+
+
+
+  }
+
+  .size-options:hover a {
+    display: block;
+    background-image: none;
+  }
+
+  .size-options:hover a.current {
+    background: url(../resources/controls/embed_size_sprite.png) no-repeat 88px -162px;
+  }
+
+
+
 
 }
 
@@ -472,10 +572,18 @@ body {
 
     .share-size {
       float: none;
-      margin-left: 0;
+      margin-left: 20%;
       margin-top: 60px;
       width: 100%;
+
+      .size-options {
+        bottom:-35px;
+      }
+    
+
     }
+
+
 
     .share-size  label {
       float: left;
@@ -567,7 +675,6 @@ body {
       }
 
       .share-size {
-        margin-left: 0;
         float: none;
         width: 100%;
         margin-top: 40px;

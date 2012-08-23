@@ -51,7 +51,7 @@ function init( window, document ) {
   function buildIFrameHTML() {
     var src = window.location,
       // Sizes are strings: "200x400"
-      shareSize = $( "share-size" ).value.split( "x" ),
+      shareSize = $( ".size-options a.current span.dimensions" ).text().split( "x" ),
       width = shareSize[0],
       height = shareSize[1];
     return '<iframe src="' + src + '" width="' + width + '" height="' + height +
@@ -99,9 +99,9 @@ function init( window, document ) {
     }, false );
 
 
-    $( "share-size" ).onchange = function() {
-      $( "share-iframe" ).value = buildIFrameHTML();
-    };
+    // $( ".share-options a" ).click(function() {
+    //   $( "share-iframe" ).value = buildIFrameHTML();
+    // });
 
     popcorn.on( "ended", function() {
       show( "post-roll" );
