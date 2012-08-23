@@ -15,17 +15,6 @@
   innerDivTriangles.speech = document.createElement( "canvas" );
   innerDivTriangles.thought = document.createElement( "canvas" );
 
-  function normalize( value, minWidth, maxWidth ) {
-    value = value | 0;
-    if ( value > maxWidth ) {
-      return maxWidth;
-    } else if ( value < minWidth ) {
-      return minWidth;
-    } else {
-      return value;
-    }
-  }
-
   // Creates a triangle for a speech innerDiv
   function drawSpeech( canvas, lineWidth ) {
     var ctx  = canvas.getContext( "2d" );
@@ -242,9 +231,9 @@
           container = document.createElement( "div" ),
           context = this,
           audio,
-          width = normalize( options.width, 5, 100 ) + "%",
-          top = normalize( options.top, 0, 95 ) + "%",
-          left = normalize( options.left, 0, 95 ) + "%",
+          width = options.width + "%",
+          top,
+          left = options.left + "%",
           i,
           fontSheet,
           originalFamily = options.fontFamily,
@@ -253,10 +242,24 @@
           textContainer = document.createElement( "div" ),
           text = options.text,
           node,
-          img;
+          img,
+          TRIANGLE_WIDTH = 40,
+          TRIANGLE_HEIGHT = 60;
 
       if ( !target ) {
         target = context.media.parentNode;
+      }
+
+      // There is a bug with jQueryUI dragging with Chrome allowing us to be able to drag it beyond the
+      // parent element.
+      if ( options.type !== "popup" ) {
+        var vidContainerHeight = context.media.parentNode.getBoundingClientRect().height,
+            paddingHeight = ( ( vidContainerHeight - 10 ) / vidContainerHeight ) * 100;
+
+        top = options.top > paddingHeight ? paddingHeight : options.top;
+        top += "%";
+      } else {
+        top = options.top + "%";
       }
 
       options._target = target;
@@ -334,9 +337,7 @@
       function makeTriangle( innerDiv ) {
 
         var triangle,
-            ctx,
-            TRIANGLE_WIDTH = 40,
-            TRIANGLE_HEIGHT = 60;
+            ctx;
 
         //Set the base classes
         innerDiv.className =  "speechBubble " + options.type + " " + options.triangle + " " + flip;

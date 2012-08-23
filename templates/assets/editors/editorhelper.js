@@ -25,6 +25,7 @@
       $( dragContainer ).draggable({
         handle: options.handle,
         start: options.start,
+        containment: "parent",
         stop: function( event, ui ) {
           if ( options.end ) {
             options.end();
@@ -59,13 +60,17 @@
       $( resizeContainer ).resizable({
         handles: options.handlePositions,
         start: options.start,
+        containment: "parent",
         stop: function( event, ui ) {
+          var height = ( ui.size.height + resizeContainer.offsetTop ) <= media.height ? ui.size.height : media.height - resizeContainer.offsetTop,
+              width = ( ui.size.width + resizeContainer.offsetLeft ) <= media.width ? ui.size.width : media.width - resizeContainer.offsetLeft;
+
           if ( options.end ) {
             options.end();
           }
           trackEvent.update({
-            height: ( ui.size.height / media.height ) * 100,
-            width: ( ui.size.width / media.width ) * 100
+            height: ( height / media.height ) * 100,
+            width: ( width / media.width ) * 100
           });
         }
       });

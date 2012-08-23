@@ -129,6 +129,7 @@
           type: "number",
           label: "Left",
           units: "%",
+          "default": 30,
           hidden: true
         },
         top: {
@@ -136,6 +137,7 @@
           type: "number",
           label: "Top",
           units: "%",
+          "default": 30,
           hidden: true
         }
       }
@@ -159,8 +161,8 @@
 
       if ( options.position === "custom" ) {
         container.classList.add( "titles-custom" );
-        container.style.left = normalize( options.left || 15, 0, 97 ) + "%";
-        container.style.top = normalize( options.top || 15, 0, 97 ) + "%";
+        container.style.left = options.left + "%";
+        container.style.top = options.top + "%";
       }
       else {
         container.classList.add( "titles-fixed" );
