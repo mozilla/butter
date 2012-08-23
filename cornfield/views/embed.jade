@@ -9,7 +9,7 @@ html(lang='en')
     link(rel='stylesheet', href='/css/embed.css')
     link(rel='stylesheet', href="/css/controls.css")
     // This is the embed, the actual content is at the following URL
-    link(rel='cannonical', href='/#{id}.html')
+    link(rel='cannonical', href='/v/#{id}.html')
     style
       @-o-viewport { width: device-width; }
       @-moz-viewport { width: device-width; }
@@ -55,7 +55,7 @@ html(lang='en')
             #share-options.share-options
               fieldset
                 label URL
-                input#share-url.share-ul(type='url', value='http://wwww.gasdasdasdasd.com')
+                input#share-url.share-ul(type='url')
                 ul.embed-nav.share-buttons
                   li
                     a#replay-share(href='#') Twitter
