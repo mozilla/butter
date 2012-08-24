@@ -47,13 +47,13 @@ console.log( "Publish Dir:", PUBLISH_DIR );
 
 CONFIG.session.store = new MongoStore({ db: "test" });
 
-if ( !path.existsSync( PUBLISH_DIR ) ) {
+if ( !fs.existsSync( PUBLISH_DIR ) ) {
   fs.mkdirSync( PUBLISH_DIR );
 }
-if ( !path.existsSync( PUBLISH_DIR_V ) ) {
+if ( !fs.existsSync( PUBLISH_DIR_V ) ) {
   fs.mkdirSync( PUBLISH_DIR_V );
 }
-if ( !path.existsSync( PUBLISH_DIR_E ) ) {
+if ( !fs.existsSync( PUBLISH_DIR_E ) ) {
   fs.mkdirSync( PUBLISH_DIR_E );
 }
 
