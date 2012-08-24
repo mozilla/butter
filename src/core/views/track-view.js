@@ -14,8 +14,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
         _element = document.createElement( "div" ),
         _duration = 1,
         _parent,
-        _droppable,
-        _zoom = 1;
+        _droppable;
 
     EventManagerWrapper( _this );
 
@@ -64,10 +63,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
 
     _element.setAttribute( "data-butter-track-id", _id );
 
-    function resetContainer(){
-      _element.style.width = "100%";
-    } //resetContainer
-
     Object.defineProperties( this, {
       id: {
         enumerable: true,
@@ -82,19 +77,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
           return _element;
         }
       },
-      zoom: {
-        enumerable: true,
-        get: function(){
-          return _zoom;
-        },
-        set: function( val ){
-          _zoom = val;
-          resetContainer();
-          for( var i=0, l=_trackEvents.length; i<l; ++i ){
-            _trackEvents[ i ].zoom = _zoom;
-          } //for
-        }
-      },
       duration: {
         enumerable: true,
         get: function(){
@@ -102,7 +84,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
         },
         set: function( val ){
           _duration = val;
-          resetContainer();
           for( var i=0, l=_trackEvents.length; i<l; ++i ){
             _trackEvents[ i ].update();
           } //for
@@ -139,7 +120,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       var trackEventElement = trackEvent.view.element;
       _element.appendChild( trackEventElement );
       _trackEvents.push( trackEvent.view );
-      trackEvent.view.zoom = _zoom;
       trackEvent.view.parent = _this;
       _this.chain( trackEvent, [
         "trackeventmousedown",
