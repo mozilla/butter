@@ -16,8 +16,9 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
         _nameDropDown = _buttonGroup.querySelector( "ul" ),
+        _logoutBtn = _nameDropDown.querySelector( ".butter-logout-btn"),
+        _myProjectsButton = _nameDropDown.querySelector( ".butter-my-projects-btn"),
         _tabzilla = _rootElement.querySelector( "#tabzilla "),
-        _myProjectsButton = _rootElement.querySelector( ".butter-my-projects-btn"),
         _loginClass = "butter-login-true",
         _activeClass = "btn-green",
         _noProjectNameToolTip,
@@ -196,9 +197,6 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
 
     function projectNameClick( e ) {
       var input = document.createElement( "input" );
-
-      _projectNameDropDown.classList.add( "butter-dropdown-off" );
-
       input.type = "text";
 
       input.placeholder = _projectTitlePlaceHolderText;
@@ -213,8 +211,12 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
 
     _projectName.addEventListener( "click", projectNameClick, false );
 
+    function toggleDropDown() {
+      _nameDropDown.classList.toggle( "butter-dropdown-off" );
+    }
   
     function doLogout() {
+      _nameDropDown.classList.add( "butter-dropdown-off" );
       butter.cornfield.logout( logoutDisplay );
     }
 
@@ -224,9 +226,8 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
       _authButton.removeEventListener( "click", authenticationRequired, false );
       _authButton.innerHTML = "<span class='icon icon-user'></span> " + butter.cornfield.name() + "<i class=\"icon icon-downtick\"></i>";
       _authButton.title = "This is you!";
-      _authButton.addEventListener( "click", function() {
-        _nameDropDown.classList.toggle( "butter-dropdown-off" );
-      }, false );
+      _authButton.addEventListener( "click", toggleDropDown, false );
+      _logoutBtn.addEventListener( "click", doLogout, false );
     }
 
     function logoutDisplay() {
@@ -237,6 +238,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
       _authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
       _authButton.title = DEFAULT_AUTH_BUTTON_TITLE;
       _authButton.addEventListener( "click", authenticationRequired, false );
+      _authButton.removeEventListener( "click", toggleDropDown, false );
     }
 
     if ( butter.cornfield.authenticated() ) {
