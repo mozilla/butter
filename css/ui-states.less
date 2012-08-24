@@ -66,13 +66,10 @@
 }
 
 /* Scrollbar hidding */
-.butter-scrollbar-hidden {
-  .transition( opacity 0.1s ease, visibility 0.1s ease );
-  visibility: visible;
+.butter-scrollbar-visible {
   opacity: 1;
-
-  &.off {
-    visibility: hidden;
+  &.hidden {
+    .transition( opacity 1.5s ease );
     opacity: 0;
   }
 }

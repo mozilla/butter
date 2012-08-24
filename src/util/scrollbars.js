@@ -16,12 +16,11 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
         _scrollHeight,
         _handleHeight,
         _mousePos = 0,
-        _this = this,
-        _lastTop;
+        _this = this;
 
     EventManagerWrapper( _this );
 
-    _element.className = "butter-scroll-bar butter-scroll-bar-v butter-scrollbar-hidden off";
+    _element.className = "butter-scroll-bar butter-scroll-bar-v butter-scrollbar-visible hidden";
     _handle.className = "butter-scroll-handle";
 
     _element.appendChild( _handle );
@@ -47,26 +46,21 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       }
       
       // Toggles a fadding transition for our scrollbar
-      if ( !_element.classList.contains( "off" ) ) {
-        
-        if ( _lastTop === _handle.style.top ) {
-          setTimeout(function() {
-            _element.classList.add( "off" );
-          }, 1500 );
-        } else {
-          _lastTop = _handle.style.top;
-        }
+      if ( !_element.classList.contains( "hidden" ) ) {
+        _element.classList.add( "hidden" );
       }
     }
 
     outerElement.addEventListener( "scroll", function( e ){
-      _element.classList.remove( "off" );
+      _element.classList.remove( "hidden" );
+      _element.classList.add( "butter-scrollbar-visible" );
       setHandlePosition();
     }, false );
 
     outerElement.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaY ){
-        _element.classList.remove( "off" );
+        _element.classList.remove( "butter-scrollbar-hidden" );
+        _element.classList.add( "butter-scrollbar-visible" );
         outerElement.scrollTop -= e.wheelDeltaY;
         setHandlePosition();
         e.preventDefault();
@@ -76,7 +70,8 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
     // For Firefox
     outerElement.addEventListener( "DOMMouseScroll", function( e ){
       if( e.axis === e.VERTICAL_AXIS && !e.shiftKey ){
-        _element.classList.remove( "off" );
+        _element.classList.remove( "hidden" );
+        _element.classList.add( "butter-scrollbar-visible" );
         outerElement.scrollTop += e.detail * 2;
         setHandlePosition();
         e.preventDefault();
@@ -107,12 +102,11 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
         _scrollWidth,
         _handleWidth,
         _mousePos = 0,
-        _this = this,
-        _lastLeft;
+        _this = this;
 
     EventManagerWrapper( _this );
 
-    _element.className = "butter-scroll-bar butter-scroll-bar-h butter-scrollbar-hidden off";
+    _element.className = "butter-scroll-bar butter-scroll-bar-h butter-scrollbar-visible hidden";
     _handle.className = "butter-scroll-handle";
 
     _element.appendChild( _handle );
@@ -137,26 +131,21 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       }
       
       // Toggles a fadding transition for our scrollbar
-      if ( !_element.classList.contains( "off" ) ) {
-        
-        if ( _lastLeft === _handle.style.left ) {
-          setTimeout(function() {
-            _element.classList.add( "off" );
-          }, 1500 );
-        } else {
-          _lastLeft = _handle.style.left;
-        }
+      if ( !_element.classList.contains( "hidden" ) ) {
+        _element.classList.add( "hidden" );
       }
     }
 
     outerElement.addEventListener( "scroll", function( e ){
-      _element.classList.remove( "off" );
+      _element.classList.remove( "hidden" );
+      _element.classList.add( "butter-scrollbar-visible" );
       setHandlePosition();
     }, false );
 
     outerElement.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaX ){
-        _element.classList.remove( "off" );
+        _element.classList.remove( "hidden" );
+        _element.classList.add( "butter-scrollbar-visible" );
         outerElement.scrollLeft -= e.wheelDeltaX;
         setHandlePosition();
         e.preventDefault();
@@ -166,7 +155,8 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
     // For Firefox
     outerElement.addEventListener( "DOMMouseScroll", function( e ){
       if( e.axis === e.HORIZONTAL_AXIS || ( e.axis === e.VERTICAL_AXIS && e.shiftKey )){
-        _element.classList.remove( "off" );
+        _element.classList.remove( "hidden" );
+        _element.classList.add( "butter-scrollbar-visible" );
         outerElement.scrollLeft += e.detail * 2;
         setHandlePosition();
         e.preventDefault();
