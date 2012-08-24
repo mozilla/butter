@@ -2,7 +2,7 @@
   "name": "default-config",
   "baseDir": "../",
   "cssRenderClientSide": false,
-  "snapshotHTMLOnReady": true,
+  "snapshotHTMLOnReady": false,
   "scrapePage": true,
   "title": "Popcorn Maker",
   "ui": {
