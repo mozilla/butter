@@ -43,19 +43,6 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       _rect = _element.getBoundingClientRect();
     };
 
-    // level is a value between 0 and 1, representing the percentage to zoom.
-    this.zoom = function( level ) {
-      _this.update();
-      // in the case of our viewport, we have to reverse the percentage.
-      var width = ( 1 - level ) * 100,
-          left = outerElement.scrollLeft / innerElement.offsetWidth * 100;
-      _zoom = level;
-      _viewPort.style.left = left + "%";
-      // another reversal.
-      _viewPort.style.right = 100 - ( width + left ) + "%";
-      zoomCallback( level );
-    };
-
     onElementMouseUp = function( e ) {
       e.preventDefault();
       e.stopPropagation();
