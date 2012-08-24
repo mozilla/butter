@@ -3,13 +3,11 @@
    ========================================================================== */
 
 .wrapper {
-  margin: 40px auto;
   width: 560px;
-  box-shadow: 0 50px 30px -20px rgba(0,0,0,.6);
-}
-
-.wrapper .sidebar {
-  display: none;
+  border: 15px solid #FFF;
+  margin: 40px auto;
+  box-shadow: 0 0 0 1px #CCC,
+    0 25px 5px -20px rgba( 0, 0, 0, 0.5 );
 }
 
 /* body-wrapper required to circumvent this bug in webkit: https://bugs.webkit.org/show_bug.cgi?id=77811 */
@@ -98,57 +96,20 @@ body.editor-minimized .body-wrapper {
 
 /* MEDIA QUERIES
 -------------------------------------------------- */
+/* 
+Magic numbers:
+350 is the horizontal offset
+300 is the vertical offset (tray + header)
+*/
 
- /* Smartphones (portrait and landscape) ----------- */
-@media only screen and (max-width : 560px) {
-  .wrapper { width: 320px; }
-}
-
-@media only screen and (min-width: 560px) and (max-width : 768px) {
-  .wrapper { width: 560px; }
-}
-
-@media only screen and (max-width : 768px) {
-  .wrapper-sidebar .video-container,
-  .wrapper-sidebar .sidebar {
-    width: 100%;
-  }
-  .wrapper-sidebar .sidebar,
-  .wrapper-sidebar .sidebar .sidebar-inner {
-    position: relative;
-    padding-bottom: 0;
-    height: 100%;
-  }
-}
-
-/* iPads (portrait) and small desktops ----------- */
-@media only screen and (min-width : 768px) and (max-width : 1024px) {
-  .wrapper { width: 640px; }
-  .wrapper-sidebar .video-container {
-    width: 70%;
-  }
-  .wrapper-sidebar .sidebar {
-    width: 30%;
-    padding-bottom: 39.375%;
-  }
-}
-
-/* iPads (landscape) ----------- */
-@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+@media only screen and (min-width : 990px) and (min-height : 660px) {
   .wrapper { width: 640px; }
 }
 
-/* Desktops and laptops ----------- */
-@media only screen and (min-width : 1024px) {
+@media only screen and (min-width : 1203px) and (min-height : 780px) {
   .wrapper { width: 853px; }
 }
 
-/* Large screens ----------- */
-@media only screen and (min-width : 1824px) {
+@media only screen and (min-width : 1630px) and (min-height : 1020px) {
   .wrapper { width: 1280px; }
-}
-
-/* iPhone 4 ----------- */
-@media only screen and (-webkit-min-device-pixel-ratio : 1.5), only screen and (min-device-pixel-ratio : 1.5) {
-/* Styles */
 }
