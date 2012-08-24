@@ -96,15 +96,20 @@ body.editor-minimized .body-wrapper {
 
 /* MEDIA QUERIES
 -------------------------------------------------- */
+/* 
+Magic numbers:
+350 is the horizontal offset
+300 is the vertical offset (tray + header)
+*/
 
-@media only screen and (min-width : 990px) {
+@media only screen and (min-width : 990px) and (min-height : 660px) {
   .wrapper { width: 640px; }
 }
 
-@media only screen and (min-width : 1203px) {
+@media only screen and (min-width : 1203px) and (min-height : 780px) {
   .wrapper { width: 853px; }
 }
 
-@media only screen and (min-width : 1630px) {
+@media only screen and (min-width : 1630px) and (min-height : 1020px) {
   .wrapper { width: 1280px; }
 }
