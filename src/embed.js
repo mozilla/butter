@@ -14,7 +14,7 @@ function init( window, document ) {
     if( typeof id !== "string" ) {
       return id;
     }
-    return document.getElementById( id );
+    return document.querySelector( id );
   }
 
   function show( elem ) {
@@ -32,15 +32,15 @@ function init( window, document ) {
       popcorn.play();
     }
 
-    $( "replay-post" ).addEventListener( "click", replay, false );
-    $( "replay-share" ).addEventListener( "click", replay, false );
+    $( "#replay-post" ).addEventListener( "click", replay, false );
+    $( "#replay-share" ).addEventListener( "click", replay, false );
 
-    $( "share-post" ).addEventListener( "click", function() {
-      hide( "post-roll" );
-      show( "share" );
+    $( "#share-post" ).addEventListener( "click", function() {
+      hide( "#post-roll" );
+      show( "#share" );
     }, false );
 
-    $( "share-share" ).addEventListener( "click", function() {
+    $( "#share-share" ).addEventListener( "click", function() {
       // Not sure what share in the context of share means...
       Popcorn.nop();
     }, false );
@@ -51,7 +51,7 @@ function init( window, document ) {
   function buildIFrameHTML() {
     var src = window.location,
       // Sizes are strings: "200x400"
-      shareSize = $( "share-size" ).value.split( "x" ),
+      shareSize = $( "#share-size" ).value.split( "x" ),
       width = shareSize[0],
       height = shareSize[1];
     return '<iframe src="' + src + '" width="' + width + '" height="' + height +
@@ -81,7 +81,7 @@ function init( window, document ) {
     ];
 
     function addStateClass( state ) {
-      var el = $( "container" );
+      var el = $( "#container" );
 
       if ( el.classList.contains( state ) ) {
         return;
@@ -94,17 +94,17 @@ function init( window, document ) {
       el.classList.add( state );
     }
 
-     $( "share-close" ).addEventListener( "click", function() {
-      hide( "share" );
+     $( "#share-close" ).addEventListener( "click", function() {
+      hide( "#share" );
     }, false );
 
 
-    $( "share-size" ).onchange = function() {
-      $( "share-iframe" ).value = buildIFrameHTML();
+    $( "#share-size" ).onchange = function() {
+      $( "#share-iframe" ).value = buildIFrameHTML();
     };
 
     popcorn.on( "ended", function() {
-      show( "post-roll" );
+      show( "#post-roll" );
       addStateClass( "embed-ended" );
     });
 
@@ -113,7 +113,7 @@ function init( window, document ) {
     });
 
     popcorn.on( "playing", function() {
-      hide( "post-roll" );
+      hide( "#post-roll" );
       addStateClass( "embed-playing" );
     });
 
@@ -201,21 +201,21 @@ function init( window, document ) {
       // TODO: config.autoplay
       if( config.controls ) {
         Controls( "controls", popcorn );
-        show( "controls" );
+        show( "#controls" );
       }
 
       setupClickHandlers( popcorn, config );
       setupEventHandlers( popcorn, config );
 
       // Wrap textboxes so they click-to-highlight
-      TextboxWrapper( $( "share-url" ) );
-      TextboxWrapper( $( "share-iframe" ) );
+      TextboxWrapper( $( "#share-url" ) );
+      TextboxWrapper( $( "#share-iframe" ) );
 
       // Write out the iframe HTML necessary to embed this
-      $( "share-iframe" ).value = buildIFrameHTML();
+      $( "#share-iframe" ).value = buildIFrameHTML();
 
       // Get the page's cannonical URL and put in share URL
-      $( "share-url" ).value = getCannonicalURL();
+      $( "#share-url" ).value = getCannonicalURL();
 
       if( window.Butter && console && console.warn ){
         console.warn( "Butter Warning: page already contains Butter, removing." );
