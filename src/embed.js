@@ -51,7 +51,7 @@ function init( window, document ) {
   function buildIFrameHTML() {
     var src = window.location,
       // Sizes are strings: "200x400"
-      shareSize = $( ".size-options a.current span.dimensions" ).text().split( "x" ),
+      shareSize = document.querySelector(".size-options a.current span.dimensions").textContent.split( "x" ),
       width = shareSize[0],
       height = shareSize[1];
     return '<iframe src="' + src + '" width="' + width + '" height="' + height +
@@ -94,14 +94,14 @@ function init( window, document ) {
       el.classList.add( state );
     }
 
-     $( "share-close" ).addEventListener( "click", function() {
+    $( "share-close" ).addEventListener( "click", function() {
       hide( "share" );
     }, false );
 
-
-    // $( ".share-options a" ).click(function() {
+    // TODO Add plain JS to remove ".current" from other anchor elemens add ".current" to clicked element 
+    // document.querySelector(".size-options a.large").onclick=function() {
     //   $( "share-iframe" ).value = buildIFrameHTML();
-    // });
+    // };
 
     popcorn.on( "ended", function() {
       show( "post-roll" );
