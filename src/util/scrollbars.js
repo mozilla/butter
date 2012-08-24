@@ -36,6 +36,37 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       setHandlePosition();
     };
 
+    function onMouseUp(){
+      window.removeEventListener( "mouseup", onMouseUp, false );
+      window.removeEventListener( "mousemove", onMouseMove, false );
+      _handle.addEventListener( "mousedown", onMouseDown, false );
+      _handle.classList.remove( activeClass );
+      // Apply transition class to hide scrollbar
+      _element.classList.add( "hidden" );
+    }
+
+    function onMouseMove( e ){
+      var diff = e.pageY - _mousePos,
+          maxDiff = _elementHeight - _handleHeight;
+      diff = Math.max( 0, Math.min( diff, maxDiff ) );
+      var p = diff / maxDiff;
+      outerElement.scrollTop = ( _scrollHeight - _parentHeight ) * p;
+      _this.dispatch( "scroll", outerElement.scrollTop );
+    }
+
+    function onMouseDown( e ){
+      if( e.button === 0 ){
+        _element.classList.remove( "hidden" );
+        var handleY = _handle.offsetTop;
+        _mousePos = e.pageY - handleY;
+        window.addEventListener( "mouseup", onMouseUp, false );
+        window.addEventListener( "mousemove", onMouseMove, false );
+        _handle.removeEventListener( "mousedown", onMouseDown, false );
+        _handle.classList.add( activeClass );
+      }
+      e.preventDefault();
+    }
+
     function setHandlePosition() {
       if ( innerElement.scrollHeight - _elementHeight > 0 ) {
         _handle.style.top = ( _elementHeight - _handleHeight ) *
@@ -53,14 +84,12 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
     outerElement.addEventListener( "scroll", function( e ){
       _element.classList.remove( "hidden" );
-      _element.classList.add( "butter-scrollbar-visible" );
       setHandlePosition();
     }, false );
 
     outerElement.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaY ){
-        _element.classList.remove( "butter-scrollbar-hidden" );
-        _element.classList.add( "butter-scrollbar-visible" );
+        _element.classList.remove( "hidden" );
         outerElement.scrollTop -= e.wheelDeltaY;
         setHandlePosition();
         e.preventDefault();
@@ -71,14 +100,40 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
     outerElement.addEventListener( "DOMMouseScroll", function( e ){
       if( e.axis === e.VERTICAL_AXIS && !e.shiftKey ){
         _element.classList.remove( "hidden" );
-        _element.classList.add( "butter-scrollbar-visible" );
         outerElement.scrollTop += e.detail * 2;
         setHandlePosition();
         e.preventDefault();
       }
     }, false );
 
+    _element.addEventListener( "click", function( e ) {
+      // bail early if this event is coming from the handle
+      if( e.srcElement === _handle || e.button > 0 ) {
+        return;
+      }
+
+      _element.classList.remove( "hidden" );
+
+      var posY = e.pageY,
+          handleRect = _handle.getBoundingClientRect(),
+          elementRect = _element.getBoundingClientRect(),
+          p;
+
+      if( posY > handleRect.bottom ) {
+        _handle.style.top = ( ( posY - elementRect.top ) - _handleHeight ) + "px";
+      } else if( posY < handleRect.top ) {
+        _handle.style.top = posY - elementRect.top + "px";
+      }
+
+      p = _handle.offsetTop / ( _elementHeight - _handleHeight );
+      outerElement.scrollTop = ( _scrollHeight - _elementHeight ) * p;
+
+      // Apply transition class to hide scrollbar
+      _element.classList.add( "hidden" );
+    }, false );
+
     window.addEventListener( "resize", _this.update, false );
+    _handle.addEventListener( "mousedown", onMouseDown, false );
 
     _this.update();
 
@@ -122,6 +177,35 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       setHandlePosition();
     };
 
+    function onMouseUp(){
+      window.removeEventListener( "mouseup", onMouseUp, false );
+      window.removeEventListener( "mousemove", onMouseMove, false );
+      _handle.addEventListener( "mousedown", onMouseDown, false );
+      // Apply transition class to hide scrollbar
+      _element.classList.add( "hidden" );
+    }
+
+    function onMouseMove( e ){
+      var diff = e.pageX - _mousePos;
+      diff = Math.max( 0, Math.min( diff, _elementWidth - _handleWidth ) );
+      _handle.style.left = diff + "px";
+      var p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
+      outerElement.scrollLeft = ( _scrollWidth - _elementWidth ) * p;
+      _this.dispatch( "scroll", outerElement.scrollLeft );
+    }
+
+    function onMouseDown( e ){
+      if( e.button === 0 ){
+        _element.classList.remove( "hidden" );
+        var handleX = _handle.offsetLeft;
+        _mousePos = e.pageX - handleX;
+        window.addEventListener( "mouseup", onMouseUp, false );
+        window.addEventListener( "mousemove", onMouseMove, false );
+        _handle.removeEventListener( "mousedown", onMouseDown, false );
+      }
+      e.preventDefault();
+    }
+
     function setHandlePosition() {
       if( _scrollWidth - _elementWidth > 0 ) {
         _handle.style.left = ( _elementWidth - _handleWidth ) *
@@ -138,14 +222,12 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
     outerElement.addEventListener( "scroll", function( e ){
       _element.classList.remove( "hidden" );
-      _element.classList.add( "butter-scrollbar-visible" );
       setHandlePosition();
     }, false );
 
     outerElement.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaX ){
         _element.classList.remove( "hidden" );
-        _element.classList.add( "butter-scrollbar-visible" );
         outerElement.scrollLeft -= e.wheelDeltaX;
         setHandlePosition();
         e.preventDefault();
@@ -156,14 +238,41 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
     outerElement.addEventListener( "DOMMouseScroll", function( e ){
       if( e.axis === e.HORIZONTAL_AXIS || ( e.axis === e.VERTICAL_AXIS && e.shiftKey )){
         _element.classList.remove( "hidden" );
-        _element.classList.add( "butter-scrollbar-visible" );
         outerElement.scrollLeft += e.detail * 2;
         setHandlePosition();
         e.preventDefault();
       }
     }, false );
 
+    _element.addEventListener( "click", function( e ) {
+      // bail early if this event is coming from the handle
+      if( e.srcElement === _handle || e.button > 0 ) {
+        return;
+      }
+
+      _element.classList.remove( "hidden" );
+
+      var posX = e.pageX,
+          handleRect = _handle.getBoundingClientRect(),
+          elementRect = _element.getBoundingClientRect(),
+          p;
+
+      if( posX > handleRect.right ) {
+        _handle.style.left = ( ( posX - elementRect.left ) - _handleWidth ) + "px";
+      }
+      else if( posX < handleRect.left ) {
+        _handle.style.left = posX - elementRect.left + "px";
+      }
+
+      p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
+      outerElement.scrollLeft = ( _scrollWidth - _elementWidth ) * p;
+
+      // Apply transition on the scrollbar
+      _element.classList.add( "hidden" );
+    }, false );
+
     window.addEventListener( "resize", _this.update, false );
+    _handle.addEventListener( "mousedown", onMouseDown, false );
 
     _this.update();
 
