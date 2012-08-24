@@ -65,7 +65,6 @@ var googleCallback;
     if ( layer ) {
       map.mapTypes.set( layer, new google.maps.StamenMapType( layer ) );
     }
-    map.getDiv().style.display = "none";
 
     return map;
   }
@@ -149,10 +148,8 @@ var googleCallback;
     newdiv.style.top = options.top;
     newdiv.style.zIndex = +options.zindex;
     newdiv.style.position = "absolute";
-
-    if ( options.transition && options.transition !== "none" ) {
-      newdiv.classList.add( options.transition );
-    }
+    newdiv.classList.add( options.transition );
+    newdiv.classList.add( "off" );
 
     options._container = newdiv;
 
@@ -276,9 +273,9 @@ var googleCallback;
           if ( map ) {
             options._map = map;
 
-            map.getDiv().style.display = "block";
-            map.getDiv().classList.add( "on" );
             // reset the location and zoom just in case the user played with the map
+            newdiv.classList.remove( "off" );
+            newdiv.classList.add( "on" );
             google.maps.event.trigger( map, "resize" );
             map.setCenter( location );
 
@@ -398,8 +395,8 @@ var googleCallback;
         // if the map exists hide it do not delete the map just in
         // case the user seeks back to time b/w start and end
         if ( map ) {
-          map.getDiv().style.display = "none";
-          map.getDiv().classList.remove( "on" );
+          newdiv.classList.remove( "on" );
+          newdiv.classList.add( "off" );
         }
       },
       _teardown: function ( options ) {
@@ -472,10 +469,10 @@ var googleCallback;
       },
       transition: {
         elem: "select",
-        options: [ "None", "Pop", "Fly Up", "Fly Down", "Sparkles" ],
-        values: [ "none", "pop", "flyUp", "flyDown", "sparkles" ],
+        options: [ "None", "Pop", "Fade", "Slide Up", "Slide Down" ],
+        values: [ "popcorn-none", "popcorn-pop", "popcorn-fade", "popcorn-slide-up", "popcorn-slide-down" ],
         label: "Transition",
-        "default": "none"
+        "default": "popcorn-fade"
       },
       left: {
         elem: "input",

@@ -70,7 +70,6 @@
       options._container = _container = document.createElement( "div" );
 
       _container.classList.add( "image-plugin-container" );
-      _container.classList.add( "image-plugin-hidden" );
       _container.style.width = validateDimension( options.width, "100" ) + "%";
       _container.style.height = validateDimension( options.height, "100" ) + "%";
       _container.style.top = validateDimension( options.top, "0" ) + "%";
@@ -188,10 +187,10 @@
         if ( options._updateImage ) {
           this.on( "timeupdate", options._updateImage );
         }
-        options._container.classList.remove( "image-plugin-hidden" );
+
+        options._container.classList.add( "on" );
+        options._container.classList.remove( "off" );
       }
-      options._container.classList.add( "on" );
-      options._container.classList.remove( "off" );
     },
 
     end: function( event, options ) {
@@ -199,10 +198,10 @@
         if ( options._updateImage ) {
           this.off( "timeupdate", options._updateImage );
         }
-        options._container.classList.add( "image-plugin-hidden" );
+
+        options._container.classList.add( "off" );
+        options._container.classList.remove( "on" );
       }
-      options._container.classList.remove( "on" );
-      options._container.classList.add( "off" );
     },
 
     _teardown: function( options ) {
@@ -288,9 +287,9 @@
         transition: {
           elem: "select",
           options: [ "None", "Pop", "Slide Up", "Slide Down", "Fade" ],
-          values: [ "none", "popcorn-pop", "popcorn-slide-up", "popcorn-slide-down", "popcorn-fade" ],
+          values: [ "popcorn-none", "popcorn-pop", "popcorn-slide-up", "popcorn-slide-down", "popcorn-fade" ],
           label: "Transition",
-          "default": "popcorn-pop"
+          "default": "popcorn-fade"
         },
         start: {
           elem: "input",

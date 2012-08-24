@@ -75,8 +75,8 @@
         },
         transition: {
           elem: "select",
-          options: [ "None", "Pop", "Fade", ],
-          values: [ "none", "pop", "popcorn-fade" ],
+          options: [ "None", "Pop", "Fade", "Slide Up", "Slide Down" ],
+          values: [ "popcorn-none", "popcorn-pop", "popcorn-fade", "popcorn-slide-up", "popcorn-slide-down" ],
           label: "Transition",
           "default": "popcorn-fade"
         },
@@ -170,7 +170,7 @@
       }
 
       // Add transition class
-      container.classList.add( options.transition );
+      options._container.classList.add( options.transition );
       options._container.classList.add( "off" );
 
       // Handle all custom fonts/styling
@@ -205,13 +205,17 @@
     },
 
     start: function( event, options ) {
-      options._container.classList.remove( "off" );
-      options._container.classList.add( "on" );
+      if ( options._container ) {
+        options._container.classList.add( "on" );
+        options._container.classList.remove( "off" );
+      }
     },
 
     end: function( event, options ) {
-      options._container.classList.remove( "on" );
-      options._container.classList.add( "off" );
+      if ( options._container ) {
+        options._container.classList.add( "off" );
+        options._container.classList.remove( "on" );
+      }
     },
 
     _teardown: function( options ) {

@@ -87,6 +87,8 @@
       _container.appendChild( _titleDiv );
       _container.appendChild( _mainContentDiv );
       _container.appendChild( _toWikipedia );
+      _container.classList.add( options.transition );
+      _container.classList.add( "off" );
 
       options._target.appendChild( _container );
 
@@ -135,13 +137,15 @@
 
     start: function( event, options ){
       if ( options._container ) {
-        options._container.classList.add( "wikipedia-visible" );
+        options._container.classList.add( "on" );
+        options._container.classList.remove( "off" );
       }
     },
 
     end: function( event, options ){
       if ( options._container ) {
-        options._container.classList.remove( "wikipedia-visible" );
+        options._container.classList.add( "off" );
+        options._container.classList.remove( "on" );
       }
     },
 
@@ -264,6 +268,13 @@
       },
       target: {
         hidden: true
+      },
+      transition: {
+        elem: "select",
+        options: [ "None", "Pop", "Fade", "Slide Up", "Slide Down" ],
+        values: [ "popcorn-none", "popcorn-pop", "popcorn-fade", "popcorn-slide-up", "popcorn-slide-down" ],
+        label: "Transition",
+        "default": "popcorn-fade"
       }
     }
   });
