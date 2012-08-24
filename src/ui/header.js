@@ -15,6 +15,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
         _authButton = _rootElement.querySelector( ".butter-login-btn" ),
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
+        _nameDropDown = _authButton.querySelector( "ul" ),
         _tabzilla = _rootElement.querySelector( "#tabzilla "),
         _myProjectsButton = _rootElement.querySelector( ".butter-my-projects-btn"),
         _loginClass = "butter-login-true",
@@ -26,12 +27,6 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
     _rootElement.querySelector( ".butter-logo" ).addEventListener( "dblclick", function( e ) {
       butter.editor.openEditor( "ui-kit" );
     }, false );
-
-    // create a tooltip for the projectName element
-    ToolTip.create({
-      element: _projectTitle,
-      top: "50px"
-    });
 
     _this.element = _rootElement;
 
@@ -202,6 +197,8 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
     function projectNameClick( e ) {
       var input = document.createElement( "input" );
 
+      _projectNameDropDown.classList.add( "butter-dropdown-off" );
+
       input.type = "text";
 
       input.placeholder = _projectTitlePlaceHolderText;
@@ -214,9 +211,9 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
       input.addEventListener( "keypress", onKeyPress, false );
     }
 
-    _projectTitle.addEventListener( "click", projectNameClick, false );
+    _projectName.addEventListener( "click", projectNameClick, false );
 
-
+  
     function doLogout() {
       butter.cornfield.logout( logoutDisplay );
     }

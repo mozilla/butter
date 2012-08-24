@@ -77,6 +77,7 @@
   }
 }
 
+
 #tabzilla {
   display: block;
   background: url( "../resources/tabzilla.png" );
@@ -117,6 +118,36 @@
   color: @green;
   &:focus {
     outline: none;
+  }
+}
+
+
+.butter-project-title .icon {
+  margin-top: 3px;
+}
+
+.butter-login-project-info > ul {
+  position: absolute;
+  top: 100%;
+  border-radius: 0 0 2px 2px;
+  width: 150px;
+  padding: 0;
+  background: #FFF;
+  li {
+    color: @baseText;
+    border-top: 1px solid lighten( @baseLightOutline, 10% );
+    list-style: none;
+    font-size: 11px;
+    line-height: 35px;
+    margin: 0;
+    &:last-child {
+      border-radius: 0 0 2px 2px;
+    }
+  }
+  a {
+    display: block;
+    padding-left: 10px;
+    height: 100%;
   }
 }
 
