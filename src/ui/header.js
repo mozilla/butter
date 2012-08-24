@@ -15,7 +15,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
         _authButton = _rootElement.querySelector( ".butter-login-btn" ),
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
-        _nameDropDown = _authButton.querySelector( "ul" ),
+        _nameDropDown = _buttonGroup.querySelector( "ul" ),
         _tabzilla = _rootElement.querySelector( "#tabzilla "),
         _myProjectsButton = _rootElement.querySelector( ".butter-my-projects-btn"),
         _loginClass = "butter-login-true",
@@ -222,9 +222,11 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
       _rootElement.classList.add( _loginClass );
       _authButton.classList.remove( _activeClass );
       _authButton.removeEventListener( "click", authenticationRequired, false );
-      _authButton.innerHTML = "<span class='icon icon-user'></span> " + butter.cornfield.name();
+      _authButton.innerHTML = "<span class='icon icon-user'></span> " + butter.cornfield.name() + "<i class=\"icon icon-downtick\"></i>";
       _authButton.title = "This is you!";
-      _authButton.addEventListener( "click", doLogout, false );
+      _authButton.addEventListener( "click", function() {
+        _nameDropDown.classList.toggle( "butter-dropdown-off" );
+      }, false );
     }
 
     function logoutDisplay() {
