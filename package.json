@@ -90,7 +90,7 @@
     "express-browserid": "0.0.x",
     "config": "0.4.x",
     "mongoose": "2.5.x",
-    "connect-mongo": "0.1.x",
+    "client-sessions": "0.0.8",
     "csslint": "0.9.x",
     "uglify-js": "1.3.x",
     "less": "1.3.x",
