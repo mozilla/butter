@@ -104,11 +104,12 @@ function init( window, document ) {
     var sizeOptions = document.getElementsByClassName('option');
 
     for( var i = 0; i < sizeOptions.length; i++ ) {
-        sizeOptions[ i ].addEventListener( "click", function() {
+        sizeOptions[ i ].addEventListener( "click", function(event) {
           $('.size-options a.current').classList.remove( 'current');
           this.classList.add('current');
           $( "#share-iframe" ).value = buildIFrameHTML();
-        });
+          event.preventDefault();
+        });  
     }
 
     popcorn.on( "ended", function() {
