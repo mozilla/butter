@@ -6,7 +6,7 @@ var express = require('express'),
     path = require('path'),
     jade = require('jade'),
     app = express.createServer(),
-    MongoStore = require('connect-mongo')(express),
+    clientSessions = require('client-sessions'),
     lessMiddleware = require('less-middleware'),
     User = require( './lib/user' ),
     filter = require( './lib/filter' )( User.isDBOnline ),
@@ -45,8 +45,6 @@ for ( var templateName in VALID_TEMPLATES ) {
 console.log( "Templates Dir:", TEMPLATES_DIR );
 console.log( "Publish Dir:", PUBLISH_DIR );
 
-CONFIG.session.store = new MongoStore({ db: "test" });
-
 if ( !fs.existsSync( PUBLISH_DIR ) ) {
   fs.mkdirSync( PUBLISH_DIR );
 }
@@ -63,7 +61,7 @@ app.configure( function() {
     .use( express.static( PUBLISH_DIR, JSON.parse( JSON.stringify( CONFIG.staticMiddleware ) ) ) )
     .use( express.bodyParser() )
     .use( express.cookieParser() )
-    .use( express.session( CONFIG.session ) )
+    .use( clientSessions( CONFIG.session ) )
     // Auto-compile CSS from LESS.  Other options: https://github.com/emberfeather/less.js-middleware
     .use( lessMiddleware({
       src: WWW_ROOT,
