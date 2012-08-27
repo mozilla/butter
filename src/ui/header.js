@@ -15,6 +15,10 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
         _authButton = _rootElement.querySelector( ".butter-login-btn" ),
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
+        _nameDropDown = _buttonGroup.querySelector( "ul" ),
+        _logoutBtn = _nameDropDown.querySelector( ".butter-logout-btn"),
+        _myProjectsButton = _nameDropDown.querySelector( ".butter-my-projects-btn"),
+        _tabzilla = _rootElement.querySelector( "#tabzilla "),
         _loginClass = "butter-login-true",
         _activeClass = "btn-green",
         _noProjectNameToolTip,
@@ -25,14 +29,15 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
       butter.editor.openEditor( "ui-kit" );
     }, false );
 
-    // create a tooltip for the projectName element
-    ToolTip.create({
-      element: _projectTitle,
-      top: "43px"
-    });
-
     _this.element = _rootElement;
-    ToolTip.apply( _projectTitle );
+
+    _tabzilla.addEventListener( "click", function( e ) {
+      document.body.classList.toggle( "tabzilla-open");
+    }, false );
+
+    _myProjectsButton.addEventListener( "click", function( e ) {
+      document.body.classList.toggle( "tabzilla-open");
+    }, false );
 
     function authenticationRequired( successCallback, errorCallback ){
       if ( butter.cornfield.authenticated() && successCallback && typeof successCallback === "function" ) {
@@ -192,7 +197,6 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
 
     function projectNameClick( e ) {
       var input = document.createElement( "input" );
-
       input.type = "text";
 
       input.placeholder = _projectTitlePlaceHolderText;
@@ -205,21 +209,25 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
       input.addEventListener( "keypress", onKeyPress, false );
     }
 
-    _projectTitle.addEventListener( "click", projectNameClick, false );
+    _projectName.addEventListener( "click", projectNameClick, false );
 
-
+    function toggleDropDown() {
+      _nameDropDown.classList.toggle( "butter-dropdown-off" );
+    }
+  
     function doLogout() {
+      _nameDropDown.classList.add( "butter-dropdown-off" );
       butter.cornfield.logout( logoutDisplay );
     }
 
     function loginDisplay() {
-      _buttonGroup.classList.add( "btn-group" );
       _rootElement.classList.add( _loginClass );
       _authButton.classList.remove( _activeClass );
       _authButton.removeEventListener( "click", authenticationRequired, false );
-      _authButton.innerHTML = "<span class='icon icon-user'></span> " + butter.cornfield.name();
+      _authButton.innerHTML = "<span class='icon icon-user'></span> " + butter.cornfield.name() + "<i class=\"icon icon-downtick\"></i>";
       _authButton.title = "This is you!";
-      _authButton.addEventListener( "click", doLogout, false );
+      _authButton.addEventListener( "click", toggleDropDown, false );
+      _logoutBtn.addEventListener( "click", doLogout, false );
     }
 
     function logoutDisplay() {
@@ -230,6 +238,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
       _authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
       _authButton.title = DEFAULT_AUTH_BUTTON_TITLE;
       _authButton.addEventListener( "click", authenticationRequired, false );
+      _authButton.removeEventListener( "click", toggleDropDown, false );
     }
 
     if ( butter.cornfield.authenticated() ) {
