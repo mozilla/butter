@@ -10,7 +10,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
     var _controls = LangUtils.domFragment( CONTROLS_LAYOUT ).querySelector( "#butter-controls" ),
         _container = typeof container === "string" ? document.getElementById( container ) : container,
         // variables
-        muteButton, playButton, currentTimeDialog,
+        muteButton, playButton, currentTimeDialog, fullscreenButton,
         durationDialog, timebar, progressBar, bigPlayButton,
         scrubber, seeking, playStateCache, active,
         volume, volumeProgressBar, volumeScrubber, position,
@@ -35,7 +35,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
       bigPlayButton = document.getElementById( "controls-big-play-button" );
       scrubber = document.getElementById( "controls-scrubber" );
       volume = document.getElementById( "controls-volume" );
-      fullscreen = document.getElementById( "controls-fullscreen" );
+      fullscreenButton = document.getElementById( "controls-fullscreen" );
       volumeProgressBar = document.getElementById( "controls-volume-progressbar" );
       volumeScrubber = document.getElementById( "controls-volume-scrubber" );
       seeking = false;
@@ -210,9 +210,9 @@ define( [ "util/lang", "text!layouts/controls.html" ],
           p.volume( position / volume.offsetWidth );
         };
 
-        if ( fullscreen ) {
+        if ( fullscreenButton ) {
           p.on( "butter-fullscreen-allowed", function( e ) {
-            fullscreen.addEventListener( "click", function() {
+            fullscreenButton.addEventListener( "click", function() {
               if ( checkFullscreen() ) {
                 cancelFullscreen();
               } else {

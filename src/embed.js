@@ -7,13 +7,13 @@ function init( window, document ) {
   ];
 
   /**
-  * embed.js is a separate, top-level entry point into the requirejs
-  * structure of src/.  We use it in order to cherry-pick modules from
-  * Butter as part of our embed scripts.  The embed.js file is meant
-  * to be used on its own, without butter.js, and vice versa.  See
-  * tools/embed.js and tools/embed.optimized.js, and the `make embed`
-  * target for more info.
-  */
+   * embed.js is a separate, top-level entry point into the requirejs
+   * structure of src/.  We use it in order to cherry-pick modules from
+   * Butter as part of our embed scripts.  The embed.js file is meant
+   * to be used on its own, without butter.js, and vice versa.  See
+   * tools/embed.js and tools/embed.optimized.js, and the `make embed`
+   * target for more info.
+   */
 
   function $( id ) {
     if ( typeof id !== "string" ) {
@@ -66,11 +66,11 @@ function init( window, document ) {
     var src = window.location,
       // Sizes are strings: "200x400"
       shareSize = $( "#share-size" ).value.split( "x" ),
-      width = shareSize[0],
-      height = shareSize[1];
+      width = shareSize[ 0 ],
+      height = shareSize[ 1 ];
 
     return '<iframe src="' + src + '" width="' + width + '" height="' + height +
-          '" frameborder="0" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>';
+           '" frameborder="0" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>';
   }
 
   // We put the embed's cannoncial URL in a <link rel="cannoncial" href="...">
@@ -89,7 +89,7 @@ function init( window, document ) {
   }
 
   function addStateClass( state ) {
-    var el = $( "container" );
+    var el = $( "#container" );
 
     if ( el.classList.contains( state ) ) {
       return;
@@ -104,7 +104,7 @@ function init( window, document ) {
 
   function setupEventHandlers( popcorn, config ) {
 
-    $( "share-close" ).addEventListener( "click", function() {
+    $( "#share-close" ).addEventListener( "click", function() {
       hide( "share" );
     }, false );
 
@@ -157,10 +157,10 @@ function init( window, document ) {
     ],
     function( URI, Controls, TextboxWrapper ) {
       /**
-      * Expose Butter so we can get version info out of the iframe doc's embed.
-      * This "butter" is never meant to live in a page with the full "butter".
-      * We warn then remove if this happens.
-      **/
+       * Expose Butter so we can get version info out of the iframe doc's embed.
+       * This "butter" is never meant to live in a page with the full "butter".
+       * We warn then remove if this happens.
+       **/
       var Butter = {
             version: "Butter-Embed-@VERSION@"
           },
@@ -170,22 +170,21 @@ function init( window, document ) {
           container = document.querySelectorAll( ".container" )[ 0 ],
           videoContainer = document.getElementById( "video-container" ),
           controlsElement = document.getElementById( "controls" ),
-          _container,
           autoHideTimeout,
           hide = true;
 
       /**
-      * The embed can be configured via the query string:
-      *   autohide   = 1{default}|0    automatically hide the controls once playing begins
-      *   autoplay   = 1|{default}0    automatically play the video on load
-      *   controls   = 1{default}|0    display controls
-      *   start      = {integer 0-end} time to start playing (default=0)
-      *   end        = {integer 0-end} time to end playing (default={end})
-      *   fullscreen = 1{default}|0    whether to allow fullscreen mode (e.g., hide/show button)
-      *   loop       = 1|0{default}    whether to loop when hitting the end
-      *   branding   = 1{default}|0    whether or not to show the Mozilla Popcorn branding
-      *   showinfo   = 1{default}|0    whether to show video title, author, etc. before playing
-      **/
+       * the embed can be configured via the query string:
+       *   autohide   = 1{default}|0    automatically hide the controls once playing begins
+       *   autoplay   = 1|{default}0    automatically play the video on load
+       *   controls   = 1{default}|0    display controls
+       *   start      = {integer 0-end} time to start playing (default=0)
+       *   end        = {integer 0-end} time to end playing (default={end})
+       *   fullscreen = 1{default}|0    whether to allow fullscreen mode (e.g., hide/show button)
+       *   loop       = 1|0{default}    whether to loop when hitting the end
+       *   branding   = 1{default}|0    whether or not to show the mozilla popcorn branding
+       *   showinfo   = 1{default}|0    whether to show video title, author, etc. before playing
+       **/
       config = {
         autohide: qs.autohide === "0" ? false : true,
         autoplay: qs.autoplay === "1" ? true : false,
@@ -219,7 +218,7 @@ function init( window, document ) {
       if ( config.controls ) {
         popcorn.controls( true );
         Controls( "controls", popcorn );
-        show( "controls" );
+        show( "#controls" );
       }
 
       // Setup UI based on config options
@@ -235,30 +234,51 @@ function init( window, document ) {
         // if autohide is true, make sure that we hide the controls when the user isn't mousing over them or has left
         // their mouse overtop of the video for to long
         if ( config.autohide ) {
-          controlsElement.classList.add( "controls-hide" );
-          container.addEventListener( "mouseover", function() {
-            clearTimeout( autoHideTimeout );
-            // if we move outside of the controls we should ensure `hide` is true
-            hide = true;
+          popcorn.on( "pause", function() {
             controlsElement.classList.remove( "controls-hide" );
-          }, false);
-          container.addEventListener( "mouseout", function() {
-            clearTimeout( autoHideTimeout );
+          });
+          // only hide the controls initially if the video is playing
+          if ( !popcorn.paused() ) {
             controlsElement.classList.add( "controls-hide" );
-          }, false);
-          container.addEventListener( "mousemove", function() {
-            controlsElement.classList.remove( "controls-hide" );
-            clearTimeout( autoHideTimeout );
+          }
+
+          // as soon as playing occurs, add the neccessary timeouts and listeners
+          popcorn.on( "play", function onPlay() {
+            container.addEventListener( "mouseover", function() {
+              clearTimeout( autoHideTimeout );
+              // if we move outside of the controls we should ensure `hide` is true
+              hide = true;
+              controlsElement.classList.remove( "controls-hide" );
+            }, false);
+            container.addEventListener( "mouseout", function() {
+              clearTimeout( autoHideTimeout );
+              if ( !popcorn.paused() ) {
+                controlsElement.classList.add( "controls-hide" );
+              }
+            }, false);
+            container.addEventListener( "mousemove", function() {
+              controlsElement.classList.remove( "controls-hide" );
+              clearTimeout( autoHideTimeout );
+              autoHideTimeout = setTimeout(function() {
+                // check the boolean value `hide` to make sure we should still hide
+                if ( hide && !popcorn.paused() ) {
+                  controlsElement.classList.add( "controls-hide" );
+                  hide = true;
+                }
+              }, 1000);
+            }, false);
+            controlsElement.addEventListener( "mousemove", function() {
+              // if the user is mousing over the controls, ensure we don't hide them be setting `hide` to false
+              hide = false;
+            }, false);
             autoHideTimeout = setTimeout(function() {
               // check the boolean value `hide` to make sure we should still hide
-              hide && controlsElement.classList.add( "controls-hide" );
-              hide = true;
+              if ( hide && !popcorn.paused() ) {
+                controlsElement.classList.add( "controls-hide" );
+                hide = true;
+              }
             }, 1000);
-          }, false);
-          controlsElement.addEventListener( "mousemove", function() {
-            // if the user is mousing over the controls, ensure we don't hide them be setting `hide` to false
-            hide = false;
-          }, false);
+          });
         }
 
         // if false, do not show video title, author, etc. before playing
@@ -321,14 +341,14 @@ function init( window, document ) {
         setupEventHandlers( popcorn, config );
 
         // Wrap textboxes so they click-to-highlight
-        TextboxWrapper( $( "share-url" ) );
-        TextboxWrapper( $( "share-iframe" ) );
+        TextboxWrapper( $( "#share-url" ) );
+        TextboxWrapper( $( "#share-iframe" ) );
 
         // Write out the iframe HTML necessary to embed this
-        $( "share-iframe" ).value = buildIFrameHTML();
+        $( "#share-iframe" ).value = buildIFrameHTML();
 
         // Get the page's cannonical URL and put in share URL
-        $( "share-url" ).value = getCannonicalURL();
+        $( "#share-url" ).value = getCannonicalURL();
       }
 
       if ( window.Butter && console && console.warn ) {

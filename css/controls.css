@@ -7,13 +7,13 @@
   height: 41px;
   visibility: visible;
   opacity: 1;
-  transition: opacity 1s linear;
+  transition: opacity .5s ease-in-out;
+  -moz-transition: opacity .5s ease-in-out;
+  -webkit-transition: opacity .5s ease-in-out;
 }
 
 .controls-hide {
-  visibility: hidden;
   opacity: 0;
-  transition: visibility 0s 1s, opacity 1s linear;
 }
 
 #butter-controls {
