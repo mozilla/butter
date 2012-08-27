@@ -73,10 +73,10 @@
           acceptedUA;
       for ( var uaName in ACCEPTED_UA_LIST ) {
         if( ACCEPTED_UA_LIST.hasOwnProperty( uaName ) ) {
-          var uaRegex = new RegExp( uaName + "(/|\\s)([0-9]+)\\.", "g" ),
+          var uaRegex = new RegExp( uaName + "(?:/|\\s)([0-9]+)\\.", "g" ),
               match = uaRegex.exec( ua );
-          if ( match && match.length === 3 && Number( match[ 2 ] ) >= ACCEPTED_UA_LIST[ uaName ] ) {
-            acceptedUA = uaName + "/" + match[ 2 ];
+          if ( match && match.length === 2 && Number( match[ 1 ] ) >= ACCEPTED_UA_LIST[ uaName ] ) {
+            acceptedUA = uaName + "/" + match[ 1 ];
           }
         }
       }
