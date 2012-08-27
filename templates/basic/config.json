@@ -37,11 +37,13 @@
       },
       {
         "type": "stop",
-        "path": "{{baseDir}}templates/assets/plugins/stop/popcorn.stop.js"
+        "path": "{{baseDir}}templates/assets/plugins/stop/popcorn.stop.js",
+        "icon": "{{baseDir}}resources/icons/stop.png"
       },
       {
         "type": "jump",
-        "path": "{{baseDir}}templates/assets/plugins/jump/popcorn.jump.js"
+        "path": "{{baseDir}}templates/assets/plugins/jump/popcorn.jump.js",
+        "icon": "{{baseDir}}resources/icons/jump.png"
       },
       {
         "type": "wikipedia",
