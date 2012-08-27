@@ -76,7 +76,7 @@ Documentation can be created from the source files by running `node make docs`. 
 Getting Involved
 ----------------
 
-We have an active irc community on irc.mozilla.org in the #popcorn channel, as well as a mailing list that you can subscribe to https://groups.google.com/group/web-made-movies-working. Come say hi!
+We have an active irc community on irc.mozilla.org in the #popcorn channel, as well as a mailing list that you can subscribe to https://mail.mozilla.org/listinfo/community-popcorn. Come say hi!
 
 Contributing
 ------------
