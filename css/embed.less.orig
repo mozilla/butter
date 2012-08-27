@@ -392,12 +392,35 @@ body {
     position: relative;
   }
 
+<<<<<<< HEAD
   .size-options {
     background: #ababab;
     border-radius: 5px;
     position: absolute;
     z-index: 9999;
     width: 113px;
+=======
+.share-options input,
+.share-options textarea {
+  width: 50%;
+  min-width: 320px;
+  padding: 10px;
+  border: none;
+  float: left;
+  border-radius: 2px;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 1px #2BB673;
+  }
+}
+
+.share-options textarea {
+  background: black;
+  height: 100px;
+  color: #EEE;
+  font-family: menlo, monospace ;
+}
+>>>>>>> upstream/master
 
     a {
       font-size: 12px;
@@ -507,14 +530,50 @@ body {
 
 @media only screen and ( max-width: @large ) {
 
+<<<<<<< HEAD
   #post-roll, #share {
+=======
+  #post-roll {
+    font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.4);
+    font-size: 1.2em;
+    line-height: 1.4em;
+    color: #676867;
+  }
+
+  #post-roll {
+
+    .post-roll-inner {
+      left: 0 !important;
+      width: 80% !important;
+      padding: 5% !important;
+      top: 10%;
+    }
+>>>>>>> upstream/master
 
     .embed-logo {
       width: 20%;
       background-size: 100%;
       margin-left: 10%;
       margin-top: 0;
+<<<<<<< HEAD
       height:255px;
+=======
+      height:255px !important;
+    }
+
+    .embed-title {
+      font-size: 25px !important;
+      font-weight: 700;
+      line-height: 1em;
+    }
+
+    .mozpopcorn {
+      color: #D53B2A;
+      font-weight: bold;
+      font-size: 16px;
+      margin: 0 0 5px 0;
+>>>>>>> upstream/master
     }
 
     .embed-author {
@@ -541,8 +600,17 @@ body {
     .share-options {
 
 
+<<<<<<< HEAD
       input {
         width: 70%;
+=======
+    .embed-logo {
+        width: 20%;
+        background-size: 100%;
+        margin-left: 20px;
+        margin-top: 0;
+        height: 175px;
+>>>>>>> upstream/master
       }
 
       fieldset {
@@ -568,6 +636,7 @@ body {
         padding-top: 8px;
       }
 
+<<<<<<< HEAD
     }
 
     .share-size {
@@ -578,6 +647,18 @@ body {
 
       .size-options {
         bottom:-35px;
+=======
+      .embed-project {
+        margin-top: 0;
+        padding-left: 0;
+      }
+
+      .post-roll-inner {
+        left: 0;
+        top: 0;
+        width: 90%;
+        padding: 0;
+>>>>>>> upstream/master
       }
     
 
@@ -663,9 +744,20 @@ body {
         min-width: 0;
       }
 
+<<<<<<< HEAD
       input {
         width: 70%;
         min-width: 0;
+=======
+    #post-roll {
+      font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
+      text-shadow: 1px 1px 0 rgba(255,255,255,0.4);
+      font-size: 13px;
+      line-height: 1.4em;
+      color: #676867;
+      .post-roll-description {
+        display: none;
+>>>>>>> upstream/master
       }
 
       label {
