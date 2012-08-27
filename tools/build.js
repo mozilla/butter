@@ -39,11 +39,6 @@
     endFile: '../tools/wrap.end'
   },
 
-  // The built butter.min.js file for use by web sites.
-  out: '../dist/butter.js',
-
-  // Do not minify with the requirejs optimizer, to allow shipping
-  // a non-minified and minified version. The Makefile will do the
-  // minification.
-  optimize: 'none'
+  // The built butter.js file for use by web sites.
+  out: '../dist/src/butter.js',
 })

@@ -17,34 +17,35 @@
 }
 
 .butter-tray {
-  .selectable( none );
+  background: @baseLight;
   position: fixed;
   z-index: @TRAY_Z_INDEX;
   bottom: 0;
   left: 0;
   right: @EDITOR_WIDTH;
   height: @TRAY_HEIGHT;
-  border: 1px solid #000;
-  background-image: url( "../resources/bg.jpg" );
+  .selectable( none );
   .transition( bottom 0.35s, right 0.35s );
 
-  * { 
+  * {
     .selectable( none );
   }
+
   &.minimized {
-    bottom: -170px;
+    bottom: -@TRAY_HEIGHT + @_butterStatusHeight;
   }
 
   .butter-toggle-button {
-    top: -23px;
-    right: 10px;
+    top: 15px;
+    right: 6px;
+    z-index: @TRAY_Z_INDEX + 10;
   }
 
   // This is the list of plugins in "my events"
   .butter-timeline-area {
     position: relative;
     height: 160px;
-    top: 50px;
+    top: @_butterStatusHeight;
   }
 
   // This is the container for the spinning popcorn logo on the right side of the tray
@@ -60,12 +61,6 @@
   .fadable { 
     //TO-DO: This should be moved into a general UI kit
     .transition( opacity 0.5s );
-  }
-
-  // Add track button
-  .add-track {
-    position: absolute;
-    left: 5px;
   }
 
 

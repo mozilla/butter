@@ -75,8 +75,8 @@
         },
         transition: {
           elem: "select",
-          options: [ "None", "Pop", "Fade", ],
-          values: [ "none", "pop", "popcorn-fade" ],
+          options: [ "None", "Pop", "Fade", "Slide Up", "Slide Down" ],
+          values: [ "popcorn-none", "popcorn-pop", "popcorn-fade", "popcorn-slide-up", "popcorn-slide-down" ],
           label: "Transition",
           "default": "popcorn-fade"
         },
@@ -129,6 +129,7 @@
           type: "number",
           label: "Left",
           units: "%",
+          "default": 30,
           hidden: true
         },
         top: {
@@ -136,6 +137,7 @@
           type: "number",
           label: "Top",
           units: "%",
+          "default": 30,
           hidden: true
         }
       }
@@ -159,8 +161,8 @@
 
       if ( options.position === "custom" ) {
         container.classList.add( "titles-custom" );
-        container.style.left = normalize( options.left || 15, 0, 97 ) + "%";
-        container.style.top = normalize( options.top || 15, 0, 97 ) + "%";
+        container.style.left = options.left + "%";
+        container.style.top = options.top + "%";
       }
       else {
         container.classList.add( "titles-fixed" );
@@ -168,7 +170,7 @@
       }
 
       // Add transition class
-      container.classList.add( options.transition );
+      options._container.classList.add( options.transition );
       options._container.classList.add( "off" );
 
       // Handle all custom fonts/styling
@@ -203,13 +205,17 @@
     },
 
     start: function( event, options ) {
-      options._container.classList.remove( "off" );
-      options._container.classList.add( "on" );
+      if ( options._container ) {
+        options._container.classList.add( "on" );
+        options._container.classList.remove( "off" );
+      }
     },
 
     end: function( event, options ) {
-      options._container.classList.remove( "on" );
-      options._container.classList.add( "off" );
+      if ( options._container ) {
+        options._container.classList.add( "off" );
+        options._container.classList.remove( "on" );
+      }
     },
 
     _teardown: function( options ) {

@@ -1,223 +1,221 @@
 /*********************************************************
 * TRAY STATUS
 */
+@_butterStatusHeight: 45px;
+@_mediaStatusContainerHeight: @_butterStatusHeight;
+@_playButtonHeight: 26px;
+@_scrubberBarHeight: 8px;
+@_scrubberHandleHeight: 10px;
+@_traySideWidth: 95px;
+@_timebarRight: 27px;
+
+/*********************************************************
+* Butter Status Area - The top bar in the tray
+*/
 
 .butter-status-area {
-  box-shadow: inset 0 1px 0 #5d5d5d;
-  .gradient( "vertical", #4c4c4c, #2c2c2c );
   position: absolute;
-  height: 50px;
+  height: @_butterStatusHeight;
   top: 0;
   left: 0;
   width: 100%;
-  border-bottom: 1px solid #000;
   .selectable( none );
+}
 
-  //Play and mute buttons
-  .status-button {
-    width: 24px;
-    height: 24px;
-    border-radius: 20px;
-    background: #d1be70; 
+.media-status-container {
+  position: relative;
+  height: @_mediaStatusContainerHeight;
+  background: #FFF;
+  border-top: 1px solid @baseLightOutline;
+}
 
-    .status-button-icon {
-      background-image: url( "../resources/buttons.png" );
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-      background-repeat: no-repeat;
-    }
 
-  }
+/*********************************************************
+* Time bar - The horizontal line where the scrubber is
+*/
 
-  /* Play/Pause UI */
-  // This is where the play/pause button is
-  // TO-DO: prefix with butter-;
-  .status-container {
-    position: absolute;
-    width: 100px;
-    height: 40px;
-    top: 5px;
-    left: 0;
+.time-bar {
+  position: absolute;
+  left: @_traySideWidth + 10px;
+  top: ( @_mediaStatusContainerHeight - @_scrubberBarHeight ) / 2;
+  right: @_timebarRight;
+  height: @_scrubberBarHeight;
+}
 
-    .time-container {
-      position: absolute;
-      top: 4px;
-      left: 20px;
-      width: 80px;
-      height: 15px;
-      background-image: url( "../resources/status-bg.png" );
-      color: #999999;
-      font-size: 11px;
-      text-align: center;
-      box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
-      border-radius: 20px 20px 20px 20px;
-      padding: 2px;
-      
-      input {
-        background: transparent;
-        color: rgb( 200, 200, 180 );
-        border: none;
-        width: 65px;
-        padding-left: 10px;
-        height: 13px;
-        font-size: 90%;
+// Time ticks
+.time-bar-canvas-container {
+  position: absolute;
+  left: 0;
+  top: @_mediaStatusContainerHeight / 4;
+  height: @_mediaStatusContainerHeight / 2;
+  overflow: hidden;
+  right: 0;
+  opacity: 0.5;
+}
 
-        &:focus {
-          .selectable( text );
-        }
-        
-      }
-
-    }
-
-    .play-button-container {
-      position: absolute;
-      left: 2px;
-      width: 24px;
-      height: 24px;
-      background-image: url( "../resources/status-bg.png" );
-      color: #999999;
-      font-size: 11px;
-      line-height: 20px;
-      text-align: center;
-      box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
-      border-radius: 20px;
-      padding: 3px;
-
-      .status-button:active{
-        .gradient( "vertical", #bdaa5c, #e0d299, true );
-      } 
-
-      .status-button-icon {
-        background-position: -321px 7px;
-      } 
-
-      .status-button-icon[data-state="true"] {
-        background-position: -320px -19px;
-      } 
-
-    }
-
-  }
-
-  .media-status-container {
-    height: 30px;
-    padding: 0 150px 0 115px;
-    position: relative;
-  }
-  .time-bar {
-    position: absolute;
-    left: 115px;
-    top: 10px;
-    right: 35px;
-    height: 30px;
-    
-    canvas {
-      height: 27px;
-    }
-  }
-
-  .time-bar-scrubber-container {
-    z-index: @TRAY_Z_INDEX + 10;
-    background-image: url( "../resources/status-bg.png" );
+.time-bar-scrubber-container {
+  background: fade( @baseDark, 20% );
+  border-bottom: 1px solid #FFF;
+  z-index: @TRAY_Z_INDEX + 10;
+  border-radius: 15px;
+  position: absolute;
+  .selectable( none );
+  top: 0;
+  right: 0;
+  left: 0;
+  height: @_scrubberBarHeight;
+  .fill-bar {
+    background: @green;
     border-radius: 15px;
+    height: @_scrubberBarHeight;
     position: absolute;
-    .selectable( none );
     top: 0;
-    right: 0;
-    left: 0;
-    height: 8px;
-    padding: 0 2px;
-    box-shadow: 0 1px 0 #737373,inset 0 1px 1px #131313;
-    
-    .fill-bar {
-      background: none repeat scroll 0 0 rgba( 200, 200, 140, 0.2 );
-      border-radius: 15px;
-      height: 4px;
-      left: 2px;
-      margin-top: 2px;
-      position: absolute;
-      top: 0;
-      width: 0;
-    }
-  }
-
-  .time-bar-scrubber-node {
-    border: 2px solid #BBB;
-    background: #FFF;
-    width: 10px;
-    height: 10px;
-    border-radius: 20px;
-    position: absolute;
-    left: 0;
-    margin-left: -7px;
-    margin-top: -2px;
-    cursor: pointer;
-  }
-
-  .time-bar-scrubber-line {
-    background: rgba( 200, 0, 0, 0.7);
-    position: absolute;
-    top: 12px;
-    left: 3px;
-    width: 4px;
-    height: 165px;
-    cursor: pointer;
-    z-index: @TRAY_Z_INDEX + 9;
-  }
-
-  .time-bar-scrubber-line[data-butter-shortened] {
-    height: 20px;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
-  }
-
-  .time-bar-canvas-container {
-    position: absolute;
-    left: 0;
-    top: 13px;
-    height: 27px;
-    overflow: hidden;
-    right: 0;
-  }
-
-  .mute-button-container {
-    position: absolute;
-    top: 5px;
-    right: 7px;
-    width: 17px;
-    height: 17px;
-    background-image: url( "../resources/status-bg.png" );
-    color: #999999;
-    font-size: 11px;
-    line-height: 20px;
-    text-align: center;
-    box-shadow: 0 1px 0 #737373, 0 1px 0 #131313 inset;
-    border-radius: 20px;
-    padding: 3px;
-    
-    .status-button-icon {
-      background-position: -109px -141px;
-    }
-
-    .status-button-icon[data-state="true"] {
-      background-position: -109px -157px;
-    }
-
-    .status-button {
-      width: 17px;
-      height: 17px;
-      border-radius: 20px;
-      .gradient( "vertical", #B4B4B4, #777, true );
-      
-      &:hover {
-        .gradient( "vertical", #B4B4B4, #969696, true );
-      }
-    }
-    .status-button:active {
-      .gradient( "vertical", #959595, #CCC, true );
-    }
   }
 }
 
+.time-bar-scrubber-line {
+  position: absolute;
+  top: @_scrubberHandleHeight + 3px;
+  left: 4px;
+  width: 2px;
+  height: 150px;
+  cursor: pointer;
+  z-index: @TRAY_Z_INDEX + 9;
+  background: fade( @red, 50% );
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: -2px;
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
+    background-color: @red;
+  }
+}
+
+.time-bar-scrubber-node {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 3px solid #FFF;
+  background: @green;
+  width: @_scrubberHandleHeight;
+  height: @_scrubberHandleHeight;
+  border-radius: @_scrubberHandleHeight;
+  margin-left: -@_scrubberHandleHeight / 2;
+  margin-top: -@_scrubberHandleHeight / 2;
+  box-shadow: 0 2px 3px rgba( 0, 0, 0, 0.8 );
+  cursor: pointer;
+}
+
+// Tooltip that show the time when you hover over/drag the scrubber
+.butter-time-tooltip {
+  @_tooltipHeight: 30px;
+  @_tooltipWidth: 70px;
+  width: @_tooltipWidth;
+  margin-left: -@_tooltipWidth / 2;
+  padding: @_tooltipHeight / 3;
+  font-size: 11px;
+  line-height: @_tooltipHeight / 3;
+  top: -( @_tooltipHeight + 4px );
+  height: @_tooltipHeight;
+  &.tooltip-on {
+    .transition( all 0.1s ease 0 );
+  }
+  &:after, &:before{
+    top: 100%;
+    border-bottom: none;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;  
+    border-top: 5px solid #FFF;
+  }
+  &:before {
+    top: 100%;
+    border-bottom: none;
+    border-top: 5px solid #CCC;
+  }
+}
+
+/*********************************************************
+* Status container - Play button, time code at the top left of the tray.
+*/
+
+.status-container {
+  position: absolute;
+  width: @_traySideWidth;
+  height: @_butterStatusHeight;
+  line-height: @_butterStatusHeight;
+  top: 0;
+  left: 0;
+}
+
+.time-container {
+  float: left;
+  margin-left: 10px;
+  input {
+    background: transparent;
+    color: @baseText;
+    border: none;
+    width: 40px;
+    font-size: 10px;
+    font-family: menlo, monospace;
+    &:focus {
+      .selectable( text );
+    } 
+  }
+}
+
+.status-button {
+  width: @_playButtonHeight;
+  height: @_playButtonHeight;
+  line-height: @_playButtonHeight;
+  text-align: center;
+  border-radius: 4px;
+  background: @green;
+  &:active {
+    background-color: lighten( @green, 10% );
+  } 
+}
+
+.play-button-container {
+  position: relative;
+  height: 100%;
+  float: left;
+  width: @_playButtonHeight + 13px;
+  background: lighten( @baseLight, 5% );
+  border-right: 1px solid @baseLightOutline;
+  .triangle( "right", 4px, #FFF, 1px, @baseLightOutline );
+  .status-button {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    margin-top: -@_playButtonHeight / 2;
+    border-bottom: 1px solid #FFF;
+  }
+  .icon {
+    margin-top: 3px;
+  }
+  .status-button[data-state="true"] > .icon {
+    background-position: -288px -72px;
+  }
+}
+
+.mute-button-container {
+  position: absolute;
+  top: 13px;
+  left: @_traySideWidth - 10px;
+
+  .status-button {
+    width: 20px;
+    height: 20px;
+    background: none;
+    .icon {
+      background-image: url( "../resources/glyphicons-halflings.png" );
+    }
+    &[data-state="true"] .icon {
+      background-position: -360px -24px;
+    }
+  }
+
+}

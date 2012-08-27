@@ -2,7 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [], function(){
+define( [ "util/lang" ],
+  function( util ) {
 
   var CHECK_MEDIA_INTERVAL = 50,
       SCROLL_INTERVAL = 16,
@@ -12,6 +13,7 @@ define( [], function(){
   return function( butter, parentElement, media, tracksContainer ){
     var _container = parentElement,
         _node = _container.querySelector( ".time-bar-scrubber-node" ),
+        _timeTooltip = _container.querySelector( ".butter-time-tooltip" ),
         _line = _container.querySelector( ".time-bar-scrubber-line" ),
         _fill = _container.querySelector( ".fill-bar" ),
         _tracksContainer = tracksContainer,
@@ -19,7 +21,6 @@ define( [], function(){
         _media = media,
         _mouseDownPos,
         _currentMousePos,
-        _zoom = 1,
         _scrollInterval = -1,
         _rect,
         _width,
@@ -27,7 +28,6 @@ define( [], function(){
         _isScrubbing = false,
         _lastTime = -1,
         _lastScroll = _tracksContainer.element.scrollLeft,
-        _lastZoom = -1,
         _lineWidth = 0,
         _seekCompleted = false,
         _seekMouseUp = false;
@@ -37,9 +37,10 @@ define( [], function(){
           currentTime = _media.currentTime,
           tracksElement = _tracksContainer.element,
           scrollLeft = tracksElement.scrollLeft;
+          _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
 
       // if we can avoid re-setting position and visibility, then do so
-      if( _lastTime !== currentTime || _lastScroll !== scrollLeft || _lastZoom !== _zoom ){
+      if( _lastTime !== currentTime || _lastScroll !== scrollLeft ){
 
         var pos = currentTime / duration * _tracksContainerWidth,
             adjustedPos = pos - scrollLeft;
@@ -72,12 +73,13 @@ define( [], function(){
 
       _lastTime = currentTime;
       _lastScroll = scrollLeft;
-      _lastZoom = _zoom;
 
     } //setNodePosition
 
     function onMouseUp( e ){
       _seekMouseUp = true;
+
+      _timeTooltip.classList.remove( "tooltip-on" );
 
       if( _isPlaying && _seekCompleted ){
         _media.play();
@@ -165,6 +167,11 @@ define( [], function(){
         _isScrubbing = true;
       }
 
+      if ( _media.currentTime ) {
+        _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
+      }
+      _timeTooltip.classList.add( "tooltip-on" );
+
       _seekCompleted = _seekMouseUp = false;
       _media.listen( "mediaseeked", onSeeked );
 
@@ -183,13 +190,13 @@ define( [], function(){
     _node.addEventListener( "mousedown", onScrubberMouseDown, false );
     _container.addEventListener( "mousedown", onMouseDown, false );
 
-    this.update = function( containerWidth, zoom ){
-      _zoom = zoom || _zoom;
+    this.update = function( containerWidth ){
       _width = containerWidth;
       _tracksContainerWidth = _tracksContainer.container.getBoundingClientRect().width;
       _rect = _container.getBoundingClientRect();
       _lineWidth = _line.clientWidth;
       setNodePosition();
+
     }; //update
 
     function checkMedia(){

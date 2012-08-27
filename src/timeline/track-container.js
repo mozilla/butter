@@ -8,7 +8,7 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
   return function( butter, media, mediaInstanceRootElement ) {
 
     var _media = media,
-        _zoom = 1,
+        _width = 1,
         _this = this;
 
     var _element = mediaInstanceRootElement.querySelector( ".tracks-container-wrapper" ),
@@ -27,7 +27,7 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
       for ( var i = 0, l = orderedTracks.length; i < l; ++i ) {
         var trackElement = orderedTracks[ i ].view.element;
         if ( trackElement !== _container.childNodes[ i ] ) {
-          _container.insertBefore( trackElement, _container.childNodes[ i + 1 ] );
+          _container.insertBefore( trackElement, _container.childNodes[ i ] );
         }
       }
     });
@@ -64,7 +64,7 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
     };
 
     function resetContainer() {
-      _container.style.width = _element.clientWidth / _zoom + "px";
+      _container.style.width = _element.clientWidth / _width + "px";
       _vScrollbar.update();
     }
 
@@ -75,7 +75,6 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
         var trackView = tracks[ i ].view;
         _container.appendChild( trackView.element );
         trackView.duration = _media.duration;
-        trackView.zoom = _zoom;
         trackView.parent = _this;
       }
     });
@@ -90,7 +89,6 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
       var trackView = e.data.view;
       _container.appendChild( trackView.element );
       trackView.duration = _media.duration;
-      trackView.zoom = _zoom;
       trackView.parent = _this;
       if ( _vScrollbar ) {
         _vScrollbar.update();
@@ -192,18 +190,14 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
     };
 
     Object.defineProperties( this, {
-      zoom: {
+      width: {
         enumerable: true,
         get: function() {
-          return _zoom;
+          return _width * 100;
         },
         set: function( val ) {
-          _zoom = val;
+          _width = val / 100;
           resetContainer();
-          var tracks = _media.tracks;
-          for ( var i = 0, il = tracks.length; i < il; ++i ) {
-            tracks[ i ].view.zoom = _zoom;
-          }
         }
       },
       element: {

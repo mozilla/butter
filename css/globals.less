@@ -20,7 +20,7 @@
 @baseLight: #F4F5F5;
 @baseStage: #E7EDF0;  
 @green: #3FB58E;
-@red: #D93B21;
+@red: #CB3E21;
 @baseLightOutline: #CCC;
 @baseText: #555;
 
@@ -182,4 +182,28 @@
     display: table; 
   }
   &:after { clear: both; }
+}
+
+.triangle( "right", @size, @color, @borderSize, @borderColor ) {
+  &:after, &:before {
+    left: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none; /* csslint-ignore */
+  }
+  &:after {
+    border-left-color: @color;
+    border-width: @size;
+    top: 50%;
+    margin-top: -@size;
+  }
+  &:before {
+    border-left-color: @borderColor;
+    border-width: @size + @borderSize + 1;
+    top: 50%;
+    margin-top: -( @size + @borderSize + 1);
+  }
 }

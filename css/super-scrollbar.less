@@ -3,17 +3,20 @@
   display: block;
   height: 32.5px;
   position: relative;
+  left: 0;
+  right: 0;
+  border-top: 1px solid @baseLightOutline;
 }
 
 #butter-super-scrollbar-visuals {
-  margin-top: 5px;
+  margin-top: 7px;
   height: 100%;
   width: 100%;
   position: absolute;
 }
 
 #butter-super-scrollbar-viewport {
-  .gradient( "vertical", fade( #FFF, 20% ), fade( #FFF, 7% ) );
+  .gradient( "vertical", fade( #FFF, 20% ), fade( #FFF, 7% ), true );
   border: 3px solid #FFFFFF;
   box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.5) inset;
   cursor: move;

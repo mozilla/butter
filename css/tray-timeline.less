@@ -1,231 +1,259 @@
 /*********************************************************
 * TRAY TIMELINE
 */
+@_trackEventHeight: 27px;
+@_trackHeight: @_trackEventHeight + 3;
+@_mediaContainerHeight: 140px;
+@_trackContainerSpacing: 0;
+@_trackHandleWidth: 109px;
 
+// Main timeline section
+.butter-timeline-area {
+  position: absolute;
+  left: 0;
+  border-top: 1px solid @baseLightOutline;
+}
+
+// butter-timeline-area-inner
 .butter-timeline {
   position: absolute;
-  width: 100%;
-  height: 160px;
-  bottom: 0;
+  top: 0;
   left: 0;
+  right: @_timebarRight;
   z-index: @TRAY_Z_INDEX + 1;
-  
-  .zoom-bar {
-    position: absolute;
-    top: 155px;
-    left: 10px;
-    width: 100px;
-    height: 10px;
-  }
-  .media-instance {
-    height: 130px;
-    padding: 0 35px 0 115px;
-    position: relative;
-    .selectable( none );
-    .transition( top 0.5s );
-  }
-  .butter-scroll-bar-h {
-    bottom: -15px;
-    width: 100%;
-    height: 10px;
-    left: 0;
-  }
+}
+// inside .butter-timeline
+.media-instance {
+  height: 100%;
+  padding-left: @_trackHandleWidth;
+  position: relative;
+  .selectable( none );
+  .transition( top 0.5s );
   .butter-scroll-bar-v {
-    right: -16px;
+    right: -18px;
     width: 10px;
     height: 100%;
     top: 0;
   }
-  .media-container {
-    position: relative;
-    top: 5px;
-    padding: 0;
-    margin: 0;
-    height: 100%;
-  }
-  .tracks-container {
-    .butter-track {
-      width: 100%;
-      border-radius: 6px;
-      background-attachment: scroll;
-      background-clip: border-box;
-      background-color: transparent;
-      background-image: url( "../resources/track-bg.png" );
-      background-origin: padding-box;
-      background-position: 0 0;
-      background-repeat: repeat;
-      background-size: auto auto;
-      height: 28px;
-      margin-bottom: 6px;
-      position: relative;
-      box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0 -1px 1px rgba(0,0,0,0.6);
-        
-      .track-title {
-        position: absolute;
-        left: 5px;
-        top: 50%;
-      }
-      &.draggable-hover {
-        box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 1px 1px 6px #000000, inset 1px 3px 1px rgba(0,0,0,0.4), inset 0 -1px 1px rgba(0,0,0,0.6), inset 0 0 10px #3355ee, inset 1px 1px 10px #3355ee;
-      }
+}
 
-      &.butter-track-ghost {
-        opacity: 0.4;
-      }
-    }     
-    .butter-track-event {
-      box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.8 );
-      border-radius: 5px;
-      .selectable( none );
-      background: #FFF;
-      cursor: move;
-      overflow: hidden;
-      display: block;
-      height: 27px;
-      padding: 1px;
-      opacity: 0.8;
-      position: absolute;
+//inside .media-instance
+.media-container {
+  position: relative;
+  top: @_trackContainerSpacing;
+  height: @_mediaContainerHeight;
+}
 
-      .title {
-        font-size: 11px;
-        font-weight: 700;
-        text-align: left;
-        position: absolute;
-        left: 35px;
-        line-height: 25px;
-        color: #333;
-      }
-      .butter-track-event-icon {
-        position: absolute;
-        height: 25px;
-        width: 30px;
-        background-size: 20px;
-        background-position: center center;
-        background-repeat: no-repeat;
-      }
-      .handle {
-        position: absolute;
-        height: 100%;
-        min-width: 15px;
-        width: 15px;
-        background-color: rgba( 255, 255, 255, 0.5 );
-      }
-      .left-handle {
-        border-top-left-radius: 6px;
-        border-bottom-left-radius: 6px;
-        left: 0;
-        top: 0;
-        cursor: w-resize;
-      }
-      .right-handle {
-        border-top-right-radius: 6px;
-        border-bottom-right-radius: 6px;
-        right: 0;
-        top: 0;
-        cursor: e-resize;
-      }
+.tracks-container-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-left: 1px solid @baseLightOutline;
+  box-shadow: inset 0 0 5px rgba( 0, 0, 0, 0.2 );
+}
 
-      &.butter-track-event-ghost {
-        opacity: 0.3;
-      }
-    }
-    .butter-track-event[selected="true"] {
-      box-shadow: inset 0 9px 0 rgba( 255, 255, 255, 0.5 ),
-                  2px 2px 2px rgba( 65, 80, 215, 0.8 ),
-                  -2px 2px 2px rgba( 65, 80, 215, 0.8 ),
-                  2px -2px 2px rgba( 65, 80, 215, 0.8 ),
-                  -2px -2px 2px rgba( 65, 80, 215, 0.8 );
-    }
-  }
-  .tracks-container-wrapper {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    box-shadow: inset 0 0 6px #131313;
-    border: 1px solid #2B2B2B;
-    border-image: initial;
-    border-radius: 5px;
+.tracks-container {
+  padding-bottom: @_trackHeight;  //must have padding to account for add popcorn button
+  position: relative;
+}
+
+/*********************************************************
+* Track
+*/
+.butter-track {
+  width: 100%;
+  height: @_trackHeight;
+  position: relative;
+  border-bottom: 1px dashed @baseLightOutline;
     
-    .tracks-container {
-      width: 100%;
-      position: relative;
-      background: transparent;
-      font-size: 100%;
-      outline: none;
-      padding-top: 7px;
-      padding-bottom: 35px;
-    }
+  .track-title {
+    position: absolute;
+    left: 5px;
+    top: 50%;
   }
-  .track-handle-container {
+  &.draggable-hover {
+    //box-shadow: inset 0 0 0 2px @green;
+    background: fade( #FFF, 80% );
+  }
+
+  &.butter-track-ghost {
+    opacity: 0.4;
+  }
+}
+
+/*********************************************************
+* Track Event
+*/
+.butter-track-event {
+  .selectable( none );
+  background: #FFF;
+  box-shadow: 1px 5px 2px -3px rgba( 0, 0, 0, 0.1 );
+  border: 1px solid #CCC;
+  border-radius: 4px;
+  border-top-color: #E3E3E3;
+  border-bottom-color: #BDBDBD;
+  cursor: move;
+  overflow: hidden;
+  display: block;
+  height: @_trackEventHeight;
+  padding: 1px;
+  position: absolute;
+
+  &[selected="true"] {
+    border-color: @green;
+    box-shadow: 1px 5px 2px -3px rgba( 0, 0, 0, 0.2 );
+  }
+
+  .title {
+    font-size: 11px;
+    font-weight: 700;
+    text-align: left;
+    position: absolute;
+    left: 35px;
+    line-height: 25px;
+    color: @baseText;
+  }
+  .butter-track-event-icon {
+    position: absolute;
+    height: 25px;
+    width: 30px;
+    background-size: 20px;
+    background-image: url( "../resources/default-icon.png" );
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+  .handle {
     position: absolute;
     height: 100%;
-    width: 105px;
-    left: 5px;
-    top: 6px;
-    bottom: 18px;
-    overflow: hidden;
-    box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, 0 0 1px #000;
-    border-radius: 5px;
-    
-    .handle-list {
-      position: relative;
-      padding: 5%;
-      width: 90%;
-      padding-top: 9px;
-      padding-bottom: 35px;
-      
-      .track-handle {
-        cursor: pointer;
-        width: 95px;
-        border-radius: 6px;
-        margin-bottom: 6px;
-        position: relative;
-        .gradient( "vertical", #2A2A2A, #1C1C1C, true );
-        color: #666;
-        font-size: 11px;
-        line-height: 25px;
-        font-weight: 700;
-        height: 28px;
-        box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, inset 0 10px 1px rgba( 160, 160, 160, 0.1 ), 1px -1px 1px #101010, -1px -1px 1px #101010;
-        text-transform: uppercase;
-        text-align: center;
-        overflow: hidden;
-        
-        &:hover {
-          .menu {
-            width: 20px;
-          }
-        }
-        .menu {
-          position: absolute;
-          width: 0;
-          height: 28px;
-          top: -1px;
-          left: 0;
-          border-radius: 7px;
-          background: rgba( 100, 100, 100, 0.5 );
-          .transition( width 0.1s );
-          
-          &:hover {
-            background: rgba( 100, 100, 100, 0.8 );
-          }
-          .delete {
-            position: absolute;
-            right: 3px;
-            top: 8px;
-            background-image: url( "../resources/buttons.png" );
-            background-position: -143px -144px;
-            cursor: pointer;
-            width: 15px;
-            height: 10px;
-          }
-        }
-      }
-      .placeholder {
-        width: 95px;
-        box-shadow: 0 1px 0 #737373, inset 0 1px 0 #414141, 0 0 1px #000;
-        background: transparent;
-      }
+    min-width: 15px;
+    width: 15px;
+    background-color: rgba( 255, 255, 255, 0.5 );
+  }
+  .left-handle {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    left: 0;
+    top: 0;
+    cursor: w-resize;
+  }
+  .right-handle {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    right: 0;
+    top: 0;
+    cursor: e-resize;
+  }
+
+  &.butter-track-event-ghost {
+    opacity: 0.3;
+  }
+}
+
+/*********************************************************
+* Track Handle Container - Left-hand side panel
+*/
+
+.track-handle-container {
+  position: absolute;
+  width: @_trackHandleWidth;
+  left: 0;
+  top: @_trackContainerSpacing;
+  bottom: 0;
+  overflow: hidden;
+  background: darken( @baseLight, 4% );
+}
+
+.handle-list {
+  position: relative;
+  padding-bottom: @_trackHeight;
+}
+
+.track-handle {
+  border: none;
+  border-bottom: 1px solid darken( @baseLight, 25% );
+  cursor: pointer;
+  width: 100%;
+  height: @_trackHeight;
+  background: darken( @baseLight, 3% );
+  position: relative;
+  line-height: @_trackHeight;
+  overflow: hidden;
+  box-shadow: inset 0 1px #FFF;
+  .title {
+    padding-left: 22px;
+    font-size: 11px;
+    color: @baseText;
+  }
+  &:first-of-type {
+    box-shadow: none;
+  }
+
+  .menu {
+    position: absolute;
+    width: 0;
+    height: 100%;
+    top: 0;
+    left: 0;
+    .transition( width 0.1s );
+    opacity: 0.3;
+    &:hover {
+      opacity: 1;
+    }
+    .delete {
+      position: absolute;
+      right: 0;
+      top: 8px;
+      background-image: url( "../resources/glyphicons-halflings.png" );
+      background-position: -456px 0;
+      cursor: pointer;
+      width: 14px;
+      height: 14px;
     }
   }
+  &:hover .menu {
+    width: 15px;
+  }
+  &:hover .track-handle-icon {
+    border-color: #000;
+  }
+}
+
+.track-handle-icon {
+  border: 0 solid darken( @baseLightOutline, 10% );
+  box-shadow: inset 0 1px 0 #FFF, 0 1px 0 #FFF;
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  display: inline-block;
+  width: 14px;
+  height: 9px;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  &:after {
+    box-shadow: 0 1px 0 #FFF;
+    border-bottom: 1px solid darken( @baseLightOutline, 10% );
+    content: " ";
+    position: absolute;
+    display: block;
+    top: 4px;
+    width: 100%;
+  }
+}
+
+.add-track {
+  padding: 0;
+  font-size: 11px;
+  position: absolute;
+  right: 9px;
+  width: 20px;
+  font-weight: 700;
+  margin-left: 10px;
+  margin-top: 14px; // This is a crappy work-around because the height of this is getting set in javascript
+}
+
+// Drag and dropping track handles
+.placeholder {
+  width: 95px;
+  box-shadow: inset 0 1px 0 #999, 0 0 1px #AAA;
+  background: transparent;
 }

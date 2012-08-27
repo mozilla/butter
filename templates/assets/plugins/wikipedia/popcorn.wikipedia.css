@@ -1,5 +1,4 @@
 .wikipedia-inner-container {
-  display: none;
   position: absolute;
   font-family: sans-serif;
   font-weight: 600;
@@ -95,10 +94,6 @@
   line-height: 45px;
   text-align: left;
   text-indent: 20px;
-}
-
-.wikipedia-visible {
-  display: block;
 }
 
 .wikipedia-ellipsis {

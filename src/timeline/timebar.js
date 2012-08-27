@@ -4,7 +4,8 @@
 
 define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
-  var CANVAS_CONTAINER_PADDING = 5;
+  var CANVAS_CONTAINER_PADDING = 5,
+      TICK_COLOR = "#999999";
 
   return function( butter, media, statusArea, tracksContainer, hScrollbar ) {
 
@@ -16,7 +17,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
     _canvas.addEventListener( "mousedown", _scrubber.onMouseDown, false );
 
-    function drawTicks( zoom ) {
+    function drawTicks() {
       var tracksContainerWidth = tracksContainer.container.getBoundingClientRect().width,
           width = Math.min( tracksContainerWidth, _tracksContainer.container.scrollWidth ),
           containerWidth = Math.min( width, _tracksContainer.element.offsetWidth - CANVAS_CONTAINER_PADDING );
@@ -82,27 +83,26 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
             lastTimeDisplayed = position;
             // text color
-            context.fillStyle = "#999999";
-            context.fillText( util.secondsToSMPTE( i ), -~position - ( textWidth / 2 ), 21 );
+            context.fillStyle = TICK_COLOR;
           }
 
           lastPosition = position;
         }
       }
       // stroke color
-      context.strokeStyle = "#999999";
+      context.strokeStyle = TICK_COLOR;
       context.stroke();
       context.translate( _tracksContainer.element.scrollLeft, 0 );
 
-      _scrubber.update( containerWidth, zoom );
+      _scrubber.update( containerWidth );
     }
 
     _tracksContainer.element.addEventListener( "scroll", drawTicks, false );
 
     window.addEventListener( "resize", drawTicks, false );
 
-    this.update = function( zoom ) {
-      drawTicks( zoom );
+    this.update = function() {
+      drawTicks();
     };
 
     this.destroy = function(){

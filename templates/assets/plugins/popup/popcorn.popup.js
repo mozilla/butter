@@ -15,17 +15,6 @@
   innerDivTriangles.speech = document.createElement( "canvas" );
   innerDivTriangles.thought = document.createElement( "canvas" );
 
-  function normalize( value, minWidth, maxWidth ) {
-    value = value | 0;
-    if ( value > maxWidth ) {
-      return maxWidth;
-    } else if ( value < minWidth ) {
-      return minWidth;
-    } else {
-      return value;
-    }
-  }
-
   // Creates a triangle for a speech innerDiv
   function drawSpeech( canvas, lineWidth ) {
     var ctx  = canvas.getContext( "2d" );
@@ -99,14 +88,12 @@
         start: {
           elem: "input",
           type: "number",
-          label: "In",
-          hidden: true
+          label: "In"
         },
         end: {
           elem: "input",
           type: "number",
-          label: "Out",
-          hidden: true
+          label: "Out"
         },
         text: {
           elem: "input",
@@ -183,8 +170,8 @@
         },
         transition: {
           elem: "select",
-          options: [ "None", "Pop", "Slide Up", "Slide Down", "Fade" ],
-          values: [ "none", "popcorn-pop", "popcorn-slide-up", "popcorn-slide-down", "popcorn-fade" ],
+          options: [ "None", "Pop", "Fade", "Slide Up", "Slide Down" ],
+          values: [ "popcorn-none", "popcorn-pop", "popcorn-fade", "popcorn-slide-up", "popcorn-slide-down" ],
           label: "Transition",
           "default": "popcorn-pop"
         },
@@ -244,9 +231,9 @@
           container = document.createElement( "div" ),
           context = this,
           audio,
-          width = normalize( options.width, 5, 100 ) + "%",
-          top = normalize( options.top, 0, 95 ) + "%",
-          left = normalize( options.left, 0, 95 ) + "%",
+          width = options.width + "%",
+          top,
+          left = options.left + "%",
           i,
           fontSheet,
           originalFamily = options.fontFamily,
@@ -255,10 +242,24 @@
           textContainer = document.createElement( "div" ),
           text = options.text,
           node,
-          img;
+          img,
+          TRIANGLE_WIDTH = 40,
+          TRIANGLE_HEIGHT = 60;
 
       if ( !target ) {
         target = context.media.parentNode;
+      }
+
+      // There is a bug with jQueryUI dragging with Chrome allowing us to be able to drag it beyond the
+      // parent element.
+      if ( options.type !== "popup" ) {
+        var vidContainerHeight = context.media.parentNode.getBoundingClientRect().height,
+            paddingHeight = ( ( vidContainerHeight - 10 ) / vidContainerHeight ) * 100;
+
+        top = options.top > paddingHeight ? paddingHeight : options.top;
+        top += "%";
+      } else {
+        top = options.top + "%";
       }
 
       options._target = target;
@@ -336,9 +337,7 @@
       function makeTriangle( innerDiv ) {
 
         var triangle,
-            ctx,
-            TRIANGLE_WIDTH = 40,
-            TRIANGLE_HEIGHT = 60;
+            ctx;
 
         //Set the base classes
         innerDiv.className =  "speechBubble " + options.type + " " + options.triangle + " " + flip;
@@ -451,18 +450,19 @@
       };
       fontSheet.href = "http://fonts.googleapis.com/css?family=" + options.fontFamily.replace( /\s/g, "+" );
 
+      options.toString = function() {
+        return options.text || options._natives.manifest.options.text[ "default" ];
+      };
     },
 
     start: function( event, options ) {
       var audio = options.audio,
           video = this.media;
 
-      /*
-       * TODO:
-       * Handle Fliping On/Off of transitions here properly
-       */
-      options._container.classList.remove( "off" );
-      options._container.classList.add( "on" );
+      if ( options._container ) {
+        options._container.classList.add( "on" );
+        options._container.classList.remove( "off" );
+      }
 
       if ( audio && audio.duration && !video.paused &&
         video.currentTime - 1 < options.start ) {
@@ -480,12 +480,10 @@
     },
 
     end: function( event, options ) {
-      /*
-       * TODO:
-       * Handle Fliping On/Off of transitions here properly
-       */
-      options._container.classList.add( "off" );
-      options._container.classList.remove( "on" );
+      if ( options._container ) {
+        options._container.classList.add( "off" );
+        options._container.classList.remove( "on" );
+      }
     },
     
     _teardown: function( options ) {
