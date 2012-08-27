@@ -51,7 +51,7 @@ function init( window, document ) {
   function buildIFrameHTML() {
     var src = window.location,
       // Sizes are strings: "200x400"
-      shareSize = $( "#share-size" ).value.split( "x" ),
+      shareSize = $( ".size-options a.current span.dimensions" ).textContent.split( "x" ),
       width = shareSize[0],
       height = shareSize[1];
     return '<iframe src="' + src + '" width="' + width + '" height="' + height +
@@ -94,18 +94,22 @@ function init( window, document ) {
       el.classList.add( state );
     }
 
-     $( "#share-close" ).addEventListener( "click", function() {
+    $( "#share-close" ).addEventListener( "click", function() {
       hide( "#share" );
     }, false );
+ 
 
-    // TODO Add plain JS to remove ".current" from other anchor elemens add ".current" to clicked element 
-    // document.querySelector(".size-options a.large").onclick=function() {
-    //   $( "share-iframe" ).value = buildIFrameHTML();
-    // };
 
-    $( "#share-size" ).onchange = function() {
-      $( "#share-iframe" ).value = buildIFrameHTML();
-    };
+    
+    var sizeOptions = document.getElementsByClassName('option');
+
+    for( var i = 0; i < sizeOptions.length; i++ ) {
+        sizeOptions[ i ].addEventListener( "click", function() {
+          $('.size-options a.current').classList.remove( 'current');
+          this.classList.add('current');
+          $( "#share-iframe" ).value = buildIFrameHTML();
+        });
+    }
 
     popcorn.on( "ended", function() {
       show( "#post-roll" );
