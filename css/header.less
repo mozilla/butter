@@ -1,7 +1,7 @@
 /*********************************************************
 * HEADER
 */
-@_logoWidth: 140px;
+@_logoWidth: 230px;
 
 // Adds room to template to account for header
 .butter-header-spacing {
@@ -19,52 +19,146 @@
   position: fixed;
   left: 0;
   top: 0;
-  right: @EDITOR_WIDTH;
-  padding: 10px 0 5px 24px;
-  .transition( all .25s ease );
+  right: 0;
+  height: @HEADER_SPACING;
+  background: #FFF;
+  color: lighten( @baseText, 10% );
+  text-shadow: 0 1px 0 #FFF;
+  font-size: 0.95em;
+  border-bottom: 1px solid darken( @editorOutline, 10% );
+  box-shadow: 0 -1px 10px 0 rgba( 0, 0, 0, 0.1 );
+  .transition( all .3s ease );
   .clearfix();
 }
 
 .butter-logo {
-  position: relative;
-  float: left;
-  height: @HEADER_SPACING;
+  position: absolute;
+  top: 0;
+  left: 30px;
+  height: 100px;
+  width: @_logoWidth;
+  background: url( '../resources/logo-words.png' ) no-repeat;
+  z-index: 100000;
+}
+.butter-logo-words {
+  position: absolute;
+  top: 1px;
+  left: 30px;
+  height: 60px;
   width: @_logoWidth;
   background: url( '../resources/logo-words.png' ) no-repeat;
   z-index: 100000;
 }
 
+.butter-nav {
+  position: relative;
+  left: @_logoWidth;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: @HEADER_SPACING;
+  line-height: @HEADER_SPACING;
+  > li {
+    float: left;
+    border-right: 1px solid lighten( @baseLightOutline, 10% );
+    box-shadow: inset -1px 0 #FFF;
+    padding: 0 20px;
+    &:first-child {
+      font-weight: 600;
+      padding-left: 0;
+      font-size: 16px;
+      color: @green;
+      cursor: pointer;
+    }
+    &:last-child {
+      border-right: none;
+      box-shadow: none;
+    }
+  }
+}
+
+#tabzilla {
+  display: block;
+  background: url( "../resources/tabzilla.png" );
+  height: 44px;
+  width: 150px;
+  position: absolute;
+  top: 0;
+  right: 30px;
+  text-indent: -2000px;
+  overflow: hidden;
+  z-index: 999;
+}
+
+
 /*********************************************************
 * Buttons
 */
 
+.butter-header-buttons-right {
+  position: absolute;
+  height: @HEADER_SPACING;
+  line-height: @HEADER_SPACING;
+  right: 180px;
+  top: 0;
+}
+
 .butter-header {
   .butter-btn {
-    padding: 8px 10px;
+    text-shadow: none;
   }
 }
 
-.butter-header-buttons-left {
-  margin-top: 20px;
-  margin-left: @_logoWidth + 10px;
-  line-height: 24px;
+.butter-project-title > input {
+  font-size: 14px;
+  border: 1px solid @green;
+  border-radius: 2px;
+  padding: 5px;
+  color: @green;
+  &:focus {
+    outline: none;
+  }
 }
 
 // Hide these until login is true.
 .butter-project-title,
-.butter-save-btn {
+.butter-save-btn,
+.butter-badges-btn,
+.butter-my-projects-btn {
   display: none;
 }
 
 .butter-login-true {
+  .btn-light {
+    border: none;
+    background: none;
+    box-shadow: none;
+  }
   .butter-project-title,
-  .butter-save-btn {
+  .butter-save-btn,
+  .butter-badges-btn,
+  .butter-my-projects-btn {
     display: inline-block;
   }
-  .btn-light {
-    .gradient( "vertical", #FFF, @baseLight );
-    border-bottom-color: darken( @baseLightOutline, 15% );
-  }
 
+  .butter-badges-btn {
+    font-size: 12px;
+    font-weight: 700;
+    background: darken( @baseLight, 5% );
+    border: 1px solid @baseLightOutline;
+    color: @baseText;
+    &:hover {
+      background: #27AAE1;
+      border: 1px solid #316BBF;
+      color: #FFF;
+    }
+    padding: 4px 10px;
+    border-radius: 3px;
+    text-shadow: none;
+  }
 }
 
+
+.butter-save-btn {
+  margin-left: 15px;
+}
