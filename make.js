@@ -302,6 +302,12 @@ function buildCSS(compress) {
     cssFile: "css/embed.css",
     compress: compress
   });
+
+  lessToCSS({
+    lessFile: "css/embed-shell.less",
+    cssFile: "css/embed-shell.css",
+    compress: compress
+  });
 }
 
 target.check = function() {
