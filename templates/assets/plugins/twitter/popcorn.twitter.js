@@ -2,6 +2,8 @@
 
 (function ( Popcorn, global ) {
 
+  var CACHED_RESULTS = {};
+
   Popcorn.plugin( "twitter", {
     manifest: {
       about: {
@@ -98,6 +100,7 @@
           tweetUser,
           tweetText,
           allTweets = [],
+          query,
           numberOfTweets = options.numberOfTweets;
 
       if ( !target ) {
@@ -141,54 +144,65 @@
       }
       options._container.appendChild( titleText );
 
-      function twitterCallback( e ) {
-        var results = e.results || e,
-            currTweet,
+      query = options.search || options.username;
+
+      function buildTheTweets( tweets ) {
+        var currTweet,
             twitterHandle,
             twitterName,
             imageLinkSource,
             i,
+            len;
+
+        // If we made it here, the query was a new one so store it in our cache
+        CACHED_RESULTS[ query ] = tweets;
+
+        len = tweets.length;
+
+        for ( i = 0; i < len; i++ ) {
+          currTweet = tweets[ i ];
+          tweetContainer = document.createElement( "li" );
+          img = document.createElement( "img" );
+          imgLink = document.createElement( "a" );
+          tweetTextCont = document.createElement( "div" );
+          tweetUser = document.createElement( "div" );
+          tweetUser.classList.add( "popcorn-twitter-tweet-user" );
+          tweetText = document.createElement( "div" );
+          tweetText.classList.add( "popcorn-twitter-tweet-text" );
+          imageLinkSource = currTweet.profile_image_url || currTweet.user.profile_image_url;
+          twitterHandle = currTweet.from_user || currTweet.user.screen_name;
+          twitterName = currTweet.from_user_name || currTweet.user.name;
+
+          imgLink.classList.add( "popcorn-twitter-tweet-image" );
+          imgLink.href = img.src = imageLinkSource;
+          imgLink.target = "_blank"; // Ensure it opens in new tab/window
+          imgLink.appendChild( img );
+          tweetContainer.appendChild( imgLink );
+
+          // Text Setup
+          tweetText.innerHTML = currTweet.text;
+          tweetUser.innerHTML = "<a href=\"http://www.twitter.com/" + twitterHandle + "\" target=_blank>" +
+                                twitterName + "</a>&nbsp;@" + twitterHandle;
+          tweetTextCont.appendChild( tweetUser );
+          tweetTextCont.appendChild( tweetText );
+          tweetContainer.appendChild( tweetTextCont );
+          tweetsContainer.appendChild( tweetContainer );
+        }
+
+        // Set layout class for container
+        if ( options.layout ) {
+          options._container.classList.add( options.layout );
+        }
+
+        outerTweetsContainer.classList.add( "popcorn-twitter-tweets" );
+        outerTweetsContainer.appendChild( tweetsContainer );
+        options._container.appendChild( outerTweetsContainer );
+      }
+
+      function twitterCallback( e ) {
+        var results = e.results || e,
             k,
             rLen;
-
-        function buildTheTweets() {
-
-          rLen = allTweets.length;
-
-          for ( i = 0; i < rLen; i++ ) {
-            currTweet = allTweets[ i ];
-            tweetContainer = document.createElement( "li" );
-            img = document.createElement( "img" );
-            imgLink = document.createElement( "a" );
-            tweetTextCont = document.createElement( "div" );
-            tweetUser = document.createElement( "div" );
-            tweetUser.classList.add( "popcorn-twitter-tweet-user" );
-            tweetText = document.createElement( "div" );
-            tweetText.classList.add( "popcorn-twitter-tweet-text" );
-            imageLinkSource = currTweet.profile_image_url || currTweet.user.profile_image_url;
-            twitterHandle = currTweet.from_user || currTweet.user.screen_name,
-            twitterName = currTweet.from_user_name || currTweet.user.name;
-
-            imgLink.classList.add( "popcorn-twitter-tweet-image" );
-            imgLink.href = img.src = imageLinkSource;
-            imgLink.target = "_blank"; // Ensure it opens in new tab/window
-            imgLink.appendChild( img );
-            tweetContainer.appendChild( imgLink );
-
-            // Text Setup
-            tweetText.innerHTML = currTweet.text;
-            tweetUser.innerHTML = "<a href=\"http://www.twitter.com/" + twitterHandle + "\" target=_blank>" +
-                                  twitterName + "</a>&nbsp;@" + twitterHandle;
-            tweetTextCont.appendChild( tweetUser );
-            tweetTextCont.appendChild( tweetText );
-            tweetContainer.appendChild( tweetTextCont );
-            tweetsContainer.appendChild( tweetContainer );
-          }
-
-          outerTweetsContainer.classList.add( "popcorn-twitter-tweets" );
-          outerTweetsContainer.appendChild( tweetsContainer );
-          options._container.appendChild( outerTweetsContainer );
-        }
 
         for ( k = 0, rLen = results.length; k < rLen && allTweets.length < options.numberOfTweets; k++ ) {
           allTweets.push( results[ k ] );
@@ -203,25 +217,46 @@
             success: twitterCallback
           });
         } else {
-          buildTheTweets();
+          buildTheTweets( allTweets );
         }
-        
       }
 
       target.appendChild( options._container );
 
-      // Append various query options here
-      requestString += options.username +
-                       "&count=" + options.numberOfTweets + "&include_rts=true";
+      // We stored the results objects we get to save API calls being made
+      if ( !CACHED_RESULTS[ query ] ) {
+        if ( options.username ) {
+          Popcorn.xhr({
+            url: "https://api.twitter.com/1/account/rate_limit_status.json",
+            dataType: "jsonp",
+            success: function( e ) {
+              if ( e.remaining_hits === 0 ) {
+                var warningText = document.createElement( "div" );
 
-      if ( options.search ) {
-        requestString = "http://search.twitter.com/search.json?q=";
+                warningText.innerHTML = "You have hit the request limit for the hour. This will reset at " +
+                  e.reset_time.substring( 0, e.reset_time.indexOf( "+" ) ) + " GMT.";
 
-        requestString += options.search +
-                       "&result_type=" + options.searchType;
+                options._container.appendChild( warningText );
+              } else {
+                // Append various query options here
+                requestString += options.username +
+                               "&count=" + options.numberOfTweets + "&include_rts=true";
+
+                Popcorn.xhr( { url: requestString, dataType: "jsonp", success: twitterCallback } );
+              }
+          }});
+        } else if ( options.search ) {
+          requestString = "http://search.twitter.com/search.json?q=";
+
+          requestString += options.search +
+                         "&result_type=" + options.searchType;
+
+          Popcorn.xhr( { url: requestString, dataType: "jsonp", success: twitterCallback } );
+
+        }
+      } else {
+        buildTheTweets( CACHED_RESULTS[ query ] );
       }
-
-      Popcorn.xhr( { url: requestString, dataType: "jsonp", success: twitterCallback } );
 
       options.toString = function() {
         return options.username || options.search || options._natives.manifest.options.search[ "default" ];
