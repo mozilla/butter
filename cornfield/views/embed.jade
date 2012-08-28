@@ -26,7 +26,7 @@ html(lang='en')
           .post-roll-inner
             a(href='#').embed-logo
             .embed-project
-              div
+              div( data-butter-template="#{template}" )
                 .mozpopcorn mozilla Popcorn
                 .embed-title #{title}
                 .embed-author #{author}
@@ -51,8 +51,8 @@ html(lang='en')
             .embed-project
               div
                 .mozpopcorn mozilla Popcorn
-                .embed-title My Project
-                .embed-author Jonny Appleseed
+                .embed-title #{title}
+                .embed-author #{author}
             #share-options.share-options
               fieldset
                 label URL

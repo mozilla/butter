@@ -12,7 +12,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
         // variables
         muteButton, playButton, currentTimeDialog, fullscreenButton,
         durationDialog, timebar, progressBar, bigPlayButton,
-        scrubber, seeking, playStateCache, active,
+        remixButton, scrubber, seeking, playStateCache, active,
         volume, volumeProgressBar, volumeScrubber, position,
         // functions
         bigPlayClicked, activate, deactivate, volumechange,
@@ -38,6 +38,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
       fullscreenButton = document.getElementById( "controls-fullscreen" );
       volumeProgressBar = document.getElementById( "controls-volume-progressbar" );
       volumeScrubber = document.getElementById( "controls-volume-scrubber" );
+      remixButton = document.getElementById( "controls-remix" );
       seeking = false;
       playStateCache = false;
       active = false;
@@ -109,6 +110,13 @@ define( [ "util/lang", "text!layouts/controls.html" ],
           _controls.classList.remove( "controls-active" );
         }
       };
+
+      function remixInButter() {
+
+          var loc = window.location;
+          window.location = loc.origin + "/templates/" + document.querySelectorAll( "[data-butter-template]" )[ 0 ].getAttribute( "data-butter-template" ) + "/?savedDataUrl=" + loc.origin
+                            + "/api/project/" + loc.pathname.slice( 3, -5 );
+      }
 
       p.media.addEventListener( "mouseout", deactivate, false );
       _controls.addEventListener( "mouseover", activate, false );
@@ -306,6 +314,11 @@ define( [ "util/lang", "text!layouts/controls.html" ],
 
         // fire to get and set initially volume slider position
         volumechange();
+      }
+
+      p.on( "remixInButter", remixInButter );
+      if ( remixButton ) {
+        remixButton.addEventListener( "click", remixInButter, false);
       }
 
       if ( durationDialog ) {
