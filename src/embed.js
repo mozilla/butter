@@ -189,8 +189,8 @@ function init( window, document ) {
         autohide: qs.autohide === "0" ? false : true,
         autoplay: qs.autoplay === "1" ? true : false,
         controls: qs.controls === "0" ? false : true,
-        start: qs.start || 0,
-        end: qs.end || 0,
+        start: qs.start|0,
+        end: qs.end|0,
         fullscreen: qs.fullscreen === "0" ? false : (function( document ) {
           // Check for prefixed/unprefixed Fullscreen API support
           if ( "fullScreenElement" in document ) {
@@ -222,7 +222,7 @@ function init( window, document ) {
       }
 
       // Setup UI based on config options
-      if ( !config.branding) {
+      if ( !config.branding ) {
         container.removeChild( controlsElement );
         videoContainer.removeChild( document.getElementById( "controls-big-play-button" ) );
         videoContainer.removeChild( document.getElementById( "post-roll" ) );
@@ -364,7 +364,7 @@ function init( window, document ) {
 if ( typeof require === "undefined" ) {
   Popcorn.getScript( "../../external/require/require.js", function() {
     init( window, window.document );
-});
+  });
 } else {
   init( window, window.document );
 }
