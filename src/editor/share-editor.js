@@ -11,33 +11,40 @@ define( [ "editor/editor",
   function( Editor, BaseEditor, LangUtils, XHR, LAYOUT_SRC, BADGE_LAYOUT ) {
 
   var __badgeLayout = LangUtils.domFragment( BADGE_LAYOUT ),
-      __timeStamp = new Date().getTime();
+      __timeStamp = "";
 
   function createBadgeElement( data ) {
     var badgeRoot = __badgeLayout.cloneNode( true ).querySelector( ".butter-badge" ),
         iconEl = badgeRoot.querySelector( ".butter-badge-icon" ),
         nameEl = badgeRoot.querySelector( ".butter-badge-name" ),
         descEl = badgeRoot.querySelector( ".butter-badge-desc" ),
-        imgEl = document.createElement( "img" );
+        closeBtn = badgeRoot.querySelector( ".butter-badge-close" );
 
-    imgEl.src = data.image_url;
     iconEl.href = data.image_url;
-    //iconEl.style[ "background-image" ] = "url( \"" + data.image_url + "\" )";
-    iconEl.appendChild( imgEl );
+    iconEl.style[ "background-image" ] = "url( \"" + data.image_url + "\" )";
     nameEl.appendChild( document.createTextNode( data.name ) );
     descEl.appendChild( document.createTextNode( data.description ) );
+
+    closeBtn.addEventListener( "click", function( e ) {
+      badgeRoot.style.opacity = 0;
+      setTimeout( function() {
+        badgeRoot.style.display = "none";
+      }, 1000 );
+    }, false );
+
     return badgeRoot;
   }
 
   function getBadges( rootElement ) {
       var _badgeContainer = rootElement.querySelector( ".butter-badge-container" );
 
-      console.log( __timeStamp );
       XHR.get( "/api/badges?since=" + __timeStamp, function( data) {
         var i,
-            l;
+            l,
+            badgeData;
+
         if ( data.target.readyState === 4 ) {
-          var badgeData = JSON.parse( data.target.responseText ).badges;
+          badgeData = JSON.parse( data.target.responseText ).badges;
           if ( !badgeData ) {
             return;
           }

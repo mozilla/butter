@@ -556,7 +556,9 @@
   right: 0;
   padding: 20px;
 }
+
 .butter-badge {
+  position: relative;
   border: 1px solid @baseLightOutline;
   box-shadow: 0 2px 20px -10px rgba( 0, 0, 0, 0.5 );
   border-radius: 5px;
@@ -565,10 +567,21 @@
   height: 60px;
   padding: 20px;
   .transition( opacity 1s ease );
+  &:after {
+    content: " ";
+    position: absolute;
+    height: 24px;
+    width: 24px;
+    background: url( "../resources/trophy.png") no-repeat;
+    bottom: 10px;
+    right: 5px;
+  }
 }
+
 .butter-badge-header {
   font-style: italic;
 }
+
 .butter-badge-icon {
   position: relative;
   height: 60px;
@@ -584,8 +597,21 @@
     top: -2px;
   }
 }
+
 .butter-badge-name {
   font-weight: 700;
   font-size: 1.2em;
   margin: 5px 0;
+}
+
+.butter-badge-close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+  opacity: 0.3;
+  .transition( opacity 0.2s ease );
+  &:hover {
+    opacity: 1;
+  }
 }
