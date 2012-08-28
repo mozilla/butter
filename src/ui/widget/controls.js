@@ -113,9 +113,12 @@ define( [ "util/lang", "text!layouts/controls.html" ],
 
       function remixInButter() {
 
-          var loc = window.location;
-          window.location = loc.origin + "/templates/" + document.querySelectorAll( "[data-butter-template]" )[ 0 ].getAttribute( "data-butter-template" ) + "/?savedDataUrl=" + loc.origin
-                            + "/api/project/" + loc.pathname.slice( 3, -5 );
+        var loc = window.location;
+        // webkit has location.origin but Firefox and Opera do not, make sure we handle them accordingly
+        loc.origin = loc.origin || ( loc.protocol + "//" + loc.host );
+        window.location = loc.origin + "/templates/"
+                          + document.querySelectorAll( "[data-butter-template]" )[ 0 ].getAttribute( "data-butter-template" ) + "/?savedDataUrl="
+                          + loc.origin + "/api/project/" + loc.pathname.slice( 3, -5 );
       }
 
       p.media.addEventListener( "mouseout", deactivate, false );
