@@ -10,12 +10,6 @@
 define( [ "core/logger", "./plugin-list", "./plugin" ],
   function( Logger, PluginList, Plugin ) {
 
-  var __newStyleSheet = document.createElement( "style" );
-
-  __newStyleSheet.type = "text/css";
-  __newStyleSheet.media = "screen";
-  __newStyleSheet.setAttribute( "data-butter-exclude", "true" );
-
   /**
    * Class: PluginManager
    *
@@ -37,7 +31,6 @@ define( [ "core/logger", "./plugin-list", "./plugin" ],
      * @param {Function} onModuleReady: Callback to signify that this module is ready to run
      */
     this._start = function( onModuleReady ) {
-      document.head.appendChild( __newStyleSheet );
       PluginList( butter );
       if ( moduleOptions && moduleOptions.plugins ) {
         _this.add( moduleOptions.plugins, onModuleReady );
