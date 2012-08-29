@@ -128,9 +128,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
 
     this.logout = function( callback ) {
       butter.dispatch( "logout" );
-      if ( callback ) {
-        butter.cornfield.logout( callback );
-      }
+      butter.cornfield.logout( callback );
     };
 
     Object.defineProperties( this, {

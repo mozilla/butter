@@ -4,7 +4,7 @@
 
 define([ "editor/editor", "editor/base-editor", "ui/user-data",
           "text!layouts/share-editor.html", "util/social-media" ],
-  function( Editor, BaseEditor, Header, LAYOUT_SRC, SocialMedia ) {
+  function( Editor, BaseEditor, UserData, LAYOUT_SRC, SocialMedia ) {
 
   Editor.register( "share-properties", LAYOUT_SRC, function( rootElement, butter, compiledLayout ) {
     var socialMedia = SocialMedia(),
@@ -20,7 +20,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         projectName = projectNameWrapper.querySelector( ".butter-project-name" ),
         loginBtn = saveContainer.querySelector( ".butter-login-btn" ),
         saveBtn = saveContainer.querySelector( ".butter-save-btn" ),
-        header = new Header( butter ),
+        userData = new UserData( butter ),
         embedDimensions = embedSize.value.split( "x" ),
         embedWidth = embedDimensions[ 0 ],
         embedHeight = embedDimensions[ 1 ],
@@ -61,7 +61,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       if ( e.data ) {
         return;
       }
-      header.save(function() {
+      userData.save(function() {
         butter.unlisten( "projectsaved", projectSaved );
         displayEditor();
       });
@@ -97,7 +97,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
 
       butter.cornfield.publish( butter.project.id, function( e ) {
         if ( e.error !== "okay" ) {
-          header.showErrorDialog( "There was a problem saving your project. Please try again." );
+          userData.showErrorDialog( "There was a problem saving your project. Please try again." );
           return;
         }
         projectURL.value = e.url;
@@ -116,7 +116,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       }
       var doNotUpdate = true;
 
-      header.authenticationRequired(function() {
+      userData.authenticationRequired(function() {
         if ( !butter.project.name ) {
           displaySave();
           doNotUpdate = false;
@@ -135,7 +135,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       }
 
       if ( !butter.project.name ) {
-        tooltip = header.createErrorToolTip( projectNameWrapper, {
+        tooltip = userData.createErrorToolTip( projectNameWrapper, {
           message: "Please give your project a name before saving",
           hidden: false,
           element: projectNameWrapper,
@@ -145,7 +145,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       }
 
       butter.dispatch( "projectsaved", true );
-      header.save(function() {
+      userData.save(function() {
         displayEditor();
       }, null );
     }
