@@ -104,7 +104,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
           editorTitle =  breadcrumbsLayout.querySelector( ".butter-editor-title" ),
           closeEditorLink =  breadcrumbsLayout.querySelector( ".close-btn" );
 
-      if ( !trackEvent ) {
+      if ( !trackEvent || !oldTitleEl ) {
         return;
       }
 
