@@ -32,7 +32,7 @@ define(['util/xhr'], function(XHR) {
             function() {
               if (this.readyState === 4) {
                 try {
-                  var response = JSON.parse(this.response);
+                  var response = JSON.parse(this.response || this.responseText);
                   if (response.status === "okay") {
 
                     // Get email, name, and username after logging in successfully
@@ -61,7 +61,7 @@ define(['util/xhr'], function(XHR) {
           var response;
 
           try {
-            response = JSON.parse( this.response );
+            response = JSON.parse( this.response || this.responseText );
             if ( this.status === 200 ) {
               authenticated = true;
               email = response.email;
