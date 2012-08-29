@@ -31,7 +31,7 @@
               testDiv = document.createElement( "div" ),
               headString = html.substring( html.indexOf( "<head>" ) + 6, html.lastIndexOf( "</head>" ) ),
               expectedBaseSrc = location.href.substring( 0 , location.href.indexOf( "/page/" ) + 6 ),
-              bodyString = html.substring( html.lastIndexOf( "<body class=\"tray-minimized\">" ), html.lastIndexOf( "</body>" ) );
+              bodyString = html.substring( html.lastIndexOf( "<body class=\"\">" ), html.lastIndexOf( "</body>" ) );
 
           // inject elements into div to test for expected elements
           testDiv.innerHTML = headString;
