@@ -60,25 +60,28 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
         _this.applyExtraHeadTags( compiledLayout );
 
         _trackEvent = trackEvent;
-        _this.createPropertiesFromManifest( trackEvent,
-          function( elementType, element, trackEvent, name ){
+
+        optionsContainer.appendChild( _this.createStartEndInputs( trackEvent, updateTrackEvent ) );
+
+        _this.createPropertiesFromManifest({
+          trackEvent: trackEvent,
+          callback: function( elementType, element, trackEvent, name ) {
             if ( elementType === "select" ) {
               _this.attachSelectChangeHandler( element, trackEvent, name, updateTrackEvent );
             }
             else {
-              if ( [ "start", "end" ].indexOf( name ) > -1 || trackEvent.manifest.options[ name ].units === "seconds" ) {
-                _this.attachSecondsChangeHandler( element, trackEvent, name, updateTrackEvent );
+              if ( element.type === "checkbox" ) {
+                _this.attachCheckboxChangeHandler( element, trackEvent, name, updateTrackEvent );
               }
               else {
-                if ( element.type === "checkbox" ) {
-                  _this.attachCheckboxChangeHandler( element, trackEvent, name, updateTrackEvent );
-                }
-                else {
-                  _this.attachInputChangeHandler( element, trackEvent, name, updateTrackEvent );
-                }
+                _this.attachInputChangeHandler( element, trackEvent, name, updateTrackEvent );
               }
             }
-          }, null, optionsContainer, null, [ "target" ] );
+          },
+          basicContainer: optionsContainer,
+          ignoreManifestKeys: [ "target", "start", "end" ],
+          safeCallback: updateTrackEvent
+        });
 
         if ( trackEvent.manifest.options.target && !trackEvent.manifest.options.target.hidden ) {
           targetList = _this.createTargetsList( _targets );

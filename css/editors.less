@@ -306,6 +306,7 @@
   textarea {
     height: 100px;
     line-height: 1.3;
+    resize: none;
   }
 
   // Radios
@@ -327,10 +328,14 @@
     margin-top: 2px;
   }
 
-  input[type="checkbox"] {
-    margin-top: 2px;
-  }
+  .checkbox-group {
+    float: left;
+    margin-right: 10px;
 
+    input[type="checkbox"] {
+      float: right;
+    }
+  }
 
   // Error/Invalid
   input:invalid,

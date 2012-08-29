@@ -152,11 +152,11 @@
             else if ( option.elementType === "select" && key !== "type" ) {
               _this.attachSelectChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
             }
+            else if ( option.elementType === "textarea" ) {
+              _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
+            }
             else if ( option.elementType === "input" ) {
-              if ( [ "start", "end" ].indexOf( key ) > -1 ) {
-                _this.attachSecondsChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithTryCatch );
-              }
-              else if ( option.element.type === "checkbox" ) {
+              if ( option.element.type === "checkbox" ) {
                 _this.attachCheckboxChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
               }
               else {
@@ -167,7 +167,17 @@
         }
       }
 
-      _this.createPropertiesFromManifest( trackEvent, callback, null, basicContainer, advancedContainer );
+      basicContainer.appendChild( _this.createStartEndInputs( trackEvent, updateTrackEventWithTryCatch ) );
+
+      _this.createPropertiesFromManifest({
+        trackEvent: trackEvent,
+        callback: callback,
+        basicContainer: basicContainer,
+        advancedContainer: advancedContainer,
+        safeCallback: updateTrackEventWithTryCatch,
+        ignoreManifestKeys: [ "start", "end" ]
+      });
+
       attachHandlers();
       _this.updatePropertiesFromManifest( trackEvent );
     }
