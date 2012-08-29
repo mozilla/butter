@@ -1,5 +1,5 @@
 define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
-  function( Dialog, Lang, Header, ToolTip ) {
+  function( Dialog, Lang, UserData, ToolTip ) {
 
   var DEFAULT_AUTH_BUTTON_TEXT = "<span class='icon-user'></span> Sign In / Sign Up",
       DEFAULT_AUTH_BUTTON_TITLE = "Sign in or sign up with Persona";
@@ -9,13 +9,13 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     options = options || {};
 
     var _this = this,
-        _header = new Header( butter, options ),
-        _rootElement = _header.rootElement,
-        _saveButton = _header.saveButton,
-        _buttonGroup = _header.buttonGroup,
-        _authButton = _header.authButton,
-        _projectTitle = _header.projectTitle,
-        _projectName = _header.projectName,
+        _userData = new UserData( butter, options ),
+        _rootElement = _userData.rootElement,
+        _saveButton = _userData.saveButton,
+        _buttonGroup = _userData.buttonGroup,
+        _authButton = _userData.authButton,
+        _projectTitle = _userData.projectTitle,
+        _projectName = _userData.projectName,
         _loginClass = "butter-login-true",
         _activeClass = "btn-green",
         _noProjectNameToolTip,
@@ -31,7 +31,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     ToolTip.apply( _projectTitle );
 
     function login( successCallback, errorCallback ) {
-      _header.authenticationRequired(function() {
+      _userData.authenticationRequired(function() {
         loginDisplay();
         butter.dispatch( "authenticated" );
         if ( successCallback && typeof successCallback === "function" ) {
@@ -45,7 +45,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     function publish() {
       butter.cornfield.publish( butter.project.id, function( e ){
         if( e.error !== "okay" ){
-          _header.showErrorDialog( "There was a problem saving your project. Please try again." );
+          _userData.showErrorDialog( "There was a problem saving your project. Please try again." );
           return;
         } else {
           butter.editor.openEditor( "share-properties" );
@@ -60,7 +60,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
 
     function prepare() {
       butter.dispatch( "projectsaved" );
-      _header.save( publish );
+      _userData.save( publish );
     }
 
     function onKeyPress( e ) {
@@ -95,9 +95,9 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       butter.project.name = node.value;
 
       if ( checkProjectName() ) {
-        _header.save( publish );
+        _userData.save( publish );
       } else {
-        _noProjectNameToolTip = _header.createErrorToolTip( _projectTitle, {
+        _noProjectNameToolTip = _userData.createErrorToolTip( _projectTitle, {
           message: "Please give your project a name before saving",
           hidden: false,
           element: _projectTitle,
@@ -115,7 +115,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
         login( prepare );
         return;
       } else {
-        _noProjectNameToolTip = _header.createErrorToolTip( _projectTitle, {
+        _noProjectNameToolTip = _userData.createErrorToolTip( _projectTitle, {
           message: "Please give your project a name before saving",
           hidden: false,
           element: _projectTitle,
@@ -142,14 +142,14 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     _projectTitle.addEventListener( "click", projectNameClick, false );
 
     function doLogout() {
-      _header.logout( logoutDisplay );
+      _userData.logout( logoutDisplay );
     }
 
     function loginDisplay() {
       _buttonGroup.classList.add( "btn-group" );
       _rootElement.classList.add( _loginClass );
       _authButton.classList.remove( _activeClass );
-      _authButton.removeEventListener( "click", _header.authenticationRequired, false );
+      _authButton.removeEventListener( "click", login, false );
       _authButton.innerHTML = "<span class='icon icon-user'></span> " + butter.cornfield.name();
       _authButton.title = "This is you!";
       _authButton.addEventListener( "click", doLogout, false );
