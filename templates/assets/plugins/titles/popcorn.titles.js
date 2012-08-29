@@ -51,8 +51,7 @@
       },
       options: {
         text: {
-          elem: "input",
-          type: "text",
+          elem: "textarea",
           label: "Text",
           "default": "Mozilla Popcorn"
         },
@@ -107,25 +106,10 @@
           "default": DEFAULT_FONT_COLOR,
           group: "advanced"
         },
-        fontWeight: {
-          elem: "input",
-          type: "checkbox",
-          label: "Bold",
-          "default": false,
-          group: "advanced"
-        },
-        fontItalics: {
-          elem: "input",
-          type: "checkbox",
-          label: "Italics",
-          "default": false,
-          group: "advanced"
-        },
-        textUnderline: {
-          elem: "input",
-          type: "checkbox",
-          label: "Underline",
-          "default": false,
+        fontDecorations: {
+          elem: "checkbox-group",
+          labels: { bold: "Bold", italics: "Italics", underline: "Underline" },
+          "default": { bold: false, italics: false, underline: false },
           group: "advanced"
         },
         left: {
@@ -156,7 +140,10 @@
           text = newlineToBreak( escapeHTML( options.text ) ),
           container = options._container = document.createElement( "div" ),
           innerContainer = document.createElement( "div" ),
-          fontSheet;
+          fontSheet,
+          fontDecorations = options.fontDecorations || options._natives.manifest.options.fontDecorations[ "default" ],
+          position = options.position || options._natives.manifest.options.position[ "default" ],
+          transition = options.transition || options._natives.manifest.options.transition[ "default" ];
 
       if ( !target ) {
         target = this.media.parentNode;
@@ -166,18 +153,18 @@
       container.style.position = "absolute";
       container.classList.add( "popcorn-titles" );
 
-      if ( options.position === "custom" ) {
+      if ( position === "custom" ) {
         container.classList.add( "titles-custom" );
         container.style.left = options.left + "%";
         container.style.top = options.top + "%";
       }
       else {
         container.classList.add( "titles-fixed" );
-        innerContainer.classList.add( options.position );
+        innerContainer.classList.add( position );
       }
 
       // Add transition class
-      options._container.classList.add( options.transition );
+      options._container.classList.add( transition );
       options._container.classList.add( "off" );
 
       // Handle all custom fonts/styling
@@ -186,12 +173,11 @@
       container.appendChild( innerContainer );
       target.appendChild( container );
 
-      container.style.fontStyle = options.fontItalics ? "italic" : "normal";
       options.fontColor = options.fontColor && validateHexColor( options.fontColor ) || DEFAULT_FONT_COLOR;
-      container.style.color = options.fontColor;
-      container.style.textDecoration = options.textUnderline ? "underline" : "none";
-      container.style.fontSize = options.fontSize ? normalize( options.fontSize, 8, 200 ) + "px" : "24px";
-      container.style.fontWeight = options.fontWeight ? "bold" : "normal";
+      innerContainer.style.fontStyle = fontDecorations.italics ? "italic" : "normal";
+      innerContainer.style.textDecoration = fontDecorations.underline ? "underline" : "none";
+      innerContainer.style.fontSize = options.fontSize ? normalize( options.fontSize, 8, 200 ) + "px" : "24px";
+      innerContainer.style.fontWeight = fontDecorations.bold ? "bold" : "normal";
 
       fontSheet = document.createElement( "link" );
       fontSheet.rel = "stylesheet";
@@ -202,7 +188,7 @@
       document.head.appendChild( fontSheet );
 
       fontSheet.onload = function ( e ) {
-        container.style.fontFamily = options.fontFamily;
+        innerContainer.style.fontFamily = options.fontFamily;
       };
       fontSheet.href = "http://fonts.googleapis.com/css?family=" + options.fontFamily.replace( /\s/g, "+" );
 

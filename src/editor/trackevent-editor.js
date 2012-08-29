@@ -35,7 +35,8 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
    */
   return function( extendObject, butter, rootElement, events ) {
     // Wedge a check for scrollbars into the open event if it exists
-    var oldOpenEvent = events.open;
+    var oldOpenEvent = events.open,
+        startEndCount = 0;
 
     events.open = function( parentElement, trackEvent ) {
       var basicButton = rootElement.querySelector( ".basic-tab" ),
@@ -230,6 +231,40 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
     };
 
     /**
+     * Member: attachCheckboxGroupChangeHandler
+     *
+     * Attaches handlers to a checkbox element and updates the TrackEvent corresponding to the given property name
+     *
+     * @param {TrackEvent} trackEvent: TrackEvent to update
+     * @param {String} propertyName: Name of property to update when change is detected
+     */
+    function attachCheckboxGroupChangeHandler( element, trackEvent, propertyName ) {
+      element.addEventListener( "click", function( e ) {
+        var updateOption = {},
+            updateOptions = {},
+            i,
+            labels = trackEvent.manifest.options[ propertyName ].labels,
+            currentElement,
+            currentElementData = element.getAttribute( "data-manifest-key" );
+
+        // Add in current checkbox
+        updateOptions[ currentElementData ] = element.checked;
+
+        // Add in the rest
+        for ( i in labels ) {
+          if ( labels.hasOwnProperty( i ) && i !== currentElementData ) {
+            currentElement = extendObject.rootElement.querySelector( "[data-manifest-key='" + i + "']" );
+            updateOptions[ i ] = currentElement.checked;
+          }
+        }
+
+        updateOption[ propertyName ] = updateOptions;
+
+        trackEvent.update( updateOption );
+      }, false );
+    }
+
+    /**
      * Member: attachInputChangeHandler
      *
      * Attaches handlers to a checkbox element and updates the TrackEvent corresponding to the given property name
@@ -298,6 +333,10 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
         propertyArchetypeSelector += ".radio";
       }
 
+      if ( isStartOrEnd ) {
+        startEndCount++;
+      }
+
       propertyArchetype = __defaultLayouts.querySelector( propertyArchetypeSelector ).cloneNode( true );
 
       // If the manifestEntry was specified to be hidden, or part of an advanced set of options don't use traditional
@@ -354,6 +393,49 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
             editorElement.appendChild( font );
           }
         }
+      } 
+      else if ( manifestEntry.elem === "textarea" ) {
+        editorElement = propertyArchetype.querySelector( "textarea" );
+
+        // data-manifest-key is used to update this property later on
+        editorElement.setAttribute( "data-manifest-key", name );
+
+        if ( data ) {
+          // Don't print "undefined" or the like
+          if ( data === undefined || typeof data === "object" ) {
+            data = "";
+          }
+          editorElement.value = data;
+        }
+
+      }
+      else if ( manifestEntry.elem === "checkbox-group" ) {
+        var x,
+            option,
+            elementParent = propertyArchetype,
+            checkbox,
+            label;
+
+        editorElement = propertyArchetype.querySelector( ".checkbox-group" ).cloneNode( true );
+
+        // Remove originally defined element
+        elementParent.removeChild( elementParent.querySelector( "div" ) );
+
+        for ( x in manifestEntry.labels ) {
+          if ( manifestEntry.labels.hasOwnProperty( x ) ) {
+            checkbox = editorElement.querySelector( ".value" );
+            label = editorElement.querySelector( ".property-name" );
+
+            attachCheckboxGroupChangeHandler( checkbox, trackEvent, name );
+
+            label.innerHTML = manifestEntry.labels[ x ];
+            checkbox.value = manifestEntry.default[ x ];
+            checkbox.setAttribute( "data-manifest-key", x );
+
+            elementParent.appendChild( editorElement );
+            editorElement = propertyArchetype.querySelector( ".checkbox-group" ).cloneNode( true );
+          }
+        }
       }
       else {
         editorElement = propertyArchetype.querySelector( "input" );
@@ -373,6 +455,32 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
         // data-manifest-key is used to update this property later on
         editorElement.setAttribute( "data-manifest-key", name );
 
+        if ( startEndCount === 2 ) {
+          // Ensure the element we lookup that has already been put in the dom is the other time attribute compared
+          // to the current
+          var otherElement = name === "start" ? "end" : "start";
+              otherTimeElement = rootElement.querySelector( "input[data-manifest-key='" + otherElement + "']" ),
+              otherTimeElementParent = otherTimeElement.parentNode.parentNode,
+              otherTimeElementContainer = otherTimeElement.parentNode,
+              currentElementContainer = propertyArchetype.querySelector( ".butter-form-append" ),
+              currentElementLabel = propertyArchetype.querySelector( ".property-name" );
+
+          currentElementContainer.insertBefore( currentElementLabel, propertyArchetype.querySelector( ".value" ) );
+          otherTimeElementParent.className = "butter-form-inline form-half";
+          otherTimeElementContainer.insertBefore( otherTimeElementParent.querySelector( ".property-name" ),
+                                                  otherTimeElementContainer.querySelector( ".value" ) );
+
+          if ( otherElement === "start" ) {
+            otherTimeElementParent.appendChild( currentElementContainer );
+          } else {
+            otherTimeElementParent.insertBefore( currentElementContainer,
+                                                 otherTimeElementParent.querySelector( ".butter-form-append" ) );
+          }
+
+          // Reset counter and prevent editor from appending the new element to it's own container
+          startEndCount = 0;
+          propertyArchetype = null;
+        }
       }
 
       if ( itemCallback ) {
@@ -426,6 +534,23 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
               element.value = manifestOptions[ option ].default || "";
             }
           }
+        }
+        else if ( manifestOptions[ option ].elem === "checkbox-group" ) {
+          var m,
+              labels = manifestOptions[ option ].labels,
+              popcornOption = popcornOptions[ option ];
+
+          for ( m in labels ) {
+            if ( labels.hasOwnProperty( m ) ) {
+              element = extendObject.rootElement.querySelector( "[data-manifest-key='" + m + "']" );
+
+              if ( typeof popcornOptions[ option ] !== "undefined" ) {
+                element.checked = popcornOption[ m ];
+              } else {
+                element.checked = manifestOptions[ option ].default[ m ];
+              }
+            }
+          } 
         }
       }
     };

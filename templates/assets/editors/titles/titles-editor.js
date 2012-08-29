@@ -96,6 +96,9 @@
             if ( option.elementType === "select" && key !== "type" ) {
               _this.attachSelectChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
             }
+            else if ( option.elementType === "textarea" ) {
+              _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
+            }
             else if ( option.elementType === "input" ) {
               if ( [ "start", "end" ].indexOf( key ) > -1 ) {
                 _this.attachSecondsChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithTryCatch );
