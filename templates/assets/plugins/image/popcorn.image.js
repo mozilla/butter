@@ -236,21 +236,21 @@
           elem: "input",
           type: "text",
           label: "Flickr: Tags",
-          optional: true
+          optional: true,
+          "default": "kittens"
         },
         photosetId: {
           elem: "input",
           type: "text",
           label: "Flickr: Photoset Id",
-          optional: true,
-          "default": "72157630814677262"
+          optional: true
         },
         count: {
           elem: "input",
           type: "number",
           label: "Flickr: Count",
           optional: true,
-          "default": 5
+          "default": 1
         },
         width: {
           elem: "input",
