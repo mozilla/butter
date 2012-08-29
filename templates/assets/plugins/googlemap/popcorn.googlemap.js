@@ -379,7 +379,7 @@ var googleCallback;
           } else {
             setTimeout(function () {
               isMapSetup();
-            }, 50);
+            }, 50 );
           }
 
         };
