@@ -23,6 +23,10 @@ var express = require('express'),
     VALID_TEMPLATES = CONFIG.templates,
     EXPORT_ASSETS = CONFIG.exportAssets;
 
+var EMBED_JS_SCRIPT_INSERTION = '\n/*** Load & start embed script after Popcorn is initialized. ***/' +
+                                '\nvar script = document.createElement("script");' +
+                                '\nscript.src="/src/embed.js";\ndocument.body.appendChild(script);';
+
 var templateConfigs = {};
 
 function readTemplateConfig( templateName, templatedPath ) {
@@ -271,7 +275,7 @@ app.post( '/api/publish/:id', filter.isLoggedIn, filter.isStorageAvailable, func
                     customData: customDataString,
                     // XXX: need a better way to wrap function, DOM needs to be ready
                     popcorn: popcornString.replace( /^\(function\(\)\{/m, "Popcorn( function(){" )
-                                          .replace( /\}\(\)\);$/m, "});" )
+                                          .replace( /\}\(\)\);$/m, "\n" + EMBED_JS_SCRIPT_INSERTION + "\n});" )
                   },
                   publishEmbedShell );
 
