@@ -33,6 +33,24 @@
     return fallback;
   }
 
+  function sanitize( text ) {
+    return text.replace( /\(/g, "&lpar;" )
+               .replace( /\)/g, "&rpar;" )
+               .replace( /-/g, "&hyphen;" )
+               .replace( /\s/g, "&nbsp;" )
+               .replace( /,/g, "&comma;" )
+               .replace( /'/g, "&apos" );
+  }
+
+  function areValidElements( element ) {
+    while( !element.textContent ){
+      element = element.nextElementSibling;
+      if ( !element || element.nodeName !== "P" ) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   var WikipediaDefinition = {
 
@@ -104,12 +122,17 @@
           return;
         }
 
-        var responseFragment = getFragment( "<div>" + data.parse.text + "</div>" ),
-            element = responseFragment.querySelector( "div > p:nth-of-type(1)" ),
+        var childIndex = 1,
+            responseFragment = getFragment( "<div>" + data.parse.text + "</div>" ),
+            element = responseFragment.querySelector( "div > p:nth-of-type(" + childIndex + ")" ),
             mainText = "";
 
-        _titleTextArea.appendChild( getFragment( "<a href=\"" + options._link + "\" target=\"_blank\">" + window.escape( data.parse.title ) + "</a>" ) );
+        _titleTextArea.appendChild( getFragment( "<a href=\"" + options._link + "\" target=\"_blank\">" + sanitize( data.parse.title ) + "</a>" ) );
         _toWikipedia.appendChild( getFragment( "<div>Read more on <a href=\"" + options._link + "\" target=\"_blank\">Wikipedia</a></div>" ) );
+
+        while ( !areValidElements( element ) ) {
+          element = responseFragment.querySelector( "div > p:nth-of-type(" + ( ++childIndex ) + ")" );
+        }
 
         while ( element && element.nodeName === "P" ) {
           mainText += element.textContent + "<br />";
