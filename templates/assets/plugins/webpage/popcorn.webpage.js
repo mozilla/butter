@@ -34,6 +34,7 @@
       wrapper.style.height = options.height + "%";
       wrapper.style.width = options.width + "%";
       wrapper.style.position = "absolute";
+      wrapper.style.zIndex = +options.zindex;
 
       wrapper.appendChild( iframe );
 
@@ -126,6 +127,9 @@
           values: [ "popcorn-none", "popcorn-pop", "popcorn-fade", "popcorn-slide-up", "popcorn-slide-down" ],
           label: "Transition",
           "default": "popcorn-fade"
+        },
+        zindex: {
+          hidden: true
         }
       }
     }

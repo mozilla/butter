@@ -439,7 +439,11 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
             element.checked = popcornOptions[ option ];
           }
           else {
-            element.value = popcornOptions[ option ];
+            if ( typeof popcornOptions[ option ] !== "undefined" ) {
+              element.value = popcornOptions[ option ];
+            } else {
+              element.value = manifestOptions[ option ].default || "";
+            }
           }
         }
       }

@@ -476,6 +476,7 @@
                 var newTrack = new Track();
                 newTrack.json = importTracks[ i ];
                 _this.addTrack( newTrack );
+                newTrack.updateTrackEvents();
               }
             }
           },

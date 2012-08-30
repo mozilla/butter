@@ -117,7 +117,8 @@ define( [
 
       var newStart = _popcornOptions.start,
           newEnd = _popcornOptions.end,
-          manifestOptions;
+          manifestOptions,
+          media;
 
       if ( !isNaN( updateOptions.start ) ) {
         newStart = TimeUtil.roundTime( updateOptions.start );
@@ -136,11 +137,12 @@ define( [
       if ( newStart >= newEnd ) {
         throw new TrackEventUpdateException( "start-greater-than-end", "[start] must be less than [end]." );
       }
-      if ( _track && _track._media && _track._media.ready ) {
-        var media = _track._media;
-        if( ( newStart > media.duration ) ||
-            ( newEnd > media.duration ) ||
-            ( newStart < 0 ) ) {
+      if ( _track && _track._media ) {
+        media = _track._media;
+        if( media.ready &&
+            ( newStart > media.duration ||
+            newEnd > media.duration ||
+            newStart < 0 ) ) {
           throw new TrackEventUpdateException( "invalid-times", "[start] or [end] are not within the duration of media" );
         }
       }
@@ -162,8 +164,8 @@ define( [
           if ( !( "target" in manifestOptions ) && updateOptions.target ) {
             _popcornOptions.target = updateOptions.target;
           }
-          if ( "zindex" in manifestOptions ) {
-            _popcornOptions.zindex = _track._media.maxPluginZIndex - _track.order;
+          if ( "zindex" in manifestOptions && media ) {
+            _popcornOptions.zindex = media.maxPluginZIndex - _track.order;
           }
         }
       }

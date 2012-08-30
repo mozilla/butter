@@ -74,6 +74,7 @@
       _container.style.height = validateDimension( options.height, "100" ) + "%";
       _container.style.top = validateDimension( options.top, "0" ) + "%";
       _container.style.left = validateDimension( options.left, "0" ) + "%";
+      _container.style.zIndex = +options.zindex;
       _container.classList.add( options.transition );
       _container.classList.add( "off" );
 
@@ -302,6 +303,9 @@
           type: "number",
           label: "End",
           units: "seconds"
+        },
+        zindex: {
+          hidden: true
         }
       }
     }
