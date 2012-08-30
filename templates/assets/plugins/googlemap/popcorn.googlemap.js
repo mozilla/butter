@@ -116,7 +116,8 @@ var googleCallback;
   Popcorn.plugin( "googlemap", function ( options ) {
     var newdiv, map, location,
         target = Popcorn.dom.find( options.target ),
-        that = this;
+        that = this,
+        ranOnce = false;
 
     if ( !target ) {
       target = that.media.parentNode;
@@ -270,9 +271,9 @@ var googleCallback;
             }, t );
           }
 
-          if ( map ) {
+          if ( map && !ranOnce ) {
             options._map = map;
-
+            ranOnce = true;
             // reset the location and zoom just in case the user played with the map
             newdiv.classList.remove( "off" );
             newdiv.classList.add( "on" );
@@ -376,6 +377,9 @@ var googleCallback;
               options.onmaploaded( options, map );
             }
 
+          } else if ( ranOnce ) {
+            newdiv.classList.remove( "off" );
+            newdiv.classList.add( "on" );
           } else {
             setTimeout(function () {
               isMapSetup();
