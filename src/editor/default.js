@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "text!./default.html", "editor/editor" ],
-  function( LAYOUT_SRC, Editor ) {
+define( [ "text!./default.html", "editor/editor", "util/lang" ],
+  function( LAYOUT_SRC, Editor, LangUtils ) {
 
   /**
    * Class: DefaultEditor
@@ -92,9 +92,7 @@ define( [ "text!./default.html", "editor/editor" ],
 
         // Catch the end of a transition for when the error message box opens/closes
         if ( _this.scrollbar ) {
-          _messageContainer.parentNode.addEventListener( "transitionend", _this.scrollbar.update, false );
-          _messageContainer.parentNode.addEventListener( "oTransitionEnd", _this.scrollbar.update, false );
-          _messageContainer.parentNode.addEventListener( "webkitTransitionEnd", _this.scrollbar.update, false );
+          LangUtils.applyTransitionEndListener( _messageContainer.parentNode, _this.scrollbar.update );
         }
 
         _this.scrollbar.update();

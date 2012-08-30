@@ -140,9 +140,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
           var newState = !_editorAreaDOMRoot.classList.contains( "minimized" );
 
           var onTransitionEnd = function(){
-            _editorAreaDOMRoot.removeEventListener( "transitionend", onTransitionEnd, false );
-            _editorAreaDOMRoot.removeEventListener( "oTransitionEnd", onTransitionEnd, false );
-            _editorAreaDOMRoot.removeEventListener( "webkitTransitionEnd", onTransitionEnd, false );
+            LangUtils.removeTransitionEndListener( _editorAreaDOMRoot, onTransitionEnd );
             _this.dispatch( "editorminimized", newState );
           };
 
@@ -156,10 +154,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
             _editorAreaDOMRoot.classList.remove( "minimized" );
           }
 
-          //Listen for the end of the "minimize" transition
-          _editorAreaDOMRoot.addEventListener( "transitionend", onTransitionEnd, false );
-          _editorAreaDOMRoot.addEventListener( "oTransitionEnd", onTransitionEnd, false );
-          _editorAreaDOMRoot.addEventListener( "webkitTransitionEnd", onTransitionEnd, false );
+          LangUtils.applyTransitionEndListener( _editorAreaDOMRoot, onTransitionEnd );
           
         }, "Show/Hide Editor", true );
 

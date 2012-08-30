@@ -4,6 +4,8 @@
 
 define( [], function(){
 
+  var DEFAULT_TRANSITION_TIMEOUT = 15;
+
   return {
 
     extend: function ( obj /* , extra arguments ... */) {
@@ -91,8 +93,37 @@ define( [], function(){
       }
 
       return fragment;
-    }
+    },
 
+    applyTransitionEndListener: (function() {
+      var div = document.createElement( "div" ),
+          p,
+          pre = [ "OTransition", "webkitTransition", "MozTransition", "transition" ];
+
+      // Check for CSS3 Transition support
+      /*jshint loopfunc:true */
+      for ( p in pre ) {
+        if ( div.style[ pre[ p ] ] !== undefined ) {
+          return function( element, listener ) {
+            element.addEventListener( "transitionend", listener, false );
+            element.addEventListener( "oTransitionEnd", listener, false );
+            element.addEventListener( "webkitTransitionEnd", listener, false );
+          };
+        }
+      }
+      /*jshint loopfunc:false */
+
+      // Fallback on setTimeout
+      return function( element, listener ) {
+        setTimeout( listener, DEFAULT_TRANSITION_TIMEOUT );
+      };
+    }()),
+
+    removeTransitionEndListener: function( element, listener ) {
+      element.removeEventListener( "transitionend", listener, false );
+      element.removeEventListener( "oTransitionEnd", listener, false );
+      element.removeEventListener( "webkitTransitionEnd", listener, false );
+    }
   };
 
 });
