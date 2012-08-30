@@ -32,7 +32,7 @@ define(['util/xhr'], function(XHR) {
             function() {
               if (this.readyState === 4) {
                 try {
-                  var response = JSON.parse(this.response || this.responseText);
+                  var response = JSON.parse( this.response || this.responseText );
                   if (response.status === "okay") {
 
                     // Get email, name, and username after logging in successfully
@@ -113,7 +113,7 @@ define(['util/xhr'], function(XHR) {
         if (this.readyState === 4) {
           var response;
           try {
-            response = JSON.parse(this.response);
+            response = JSON.parse( this.response || this.responseText );
           } catch (err) {
             callback({ error: "an unknown error occured" });
             return;
@@ -131,7 +131,7 @@ define(['util/xhr'], function(XHR) {
           var response;
 
           try {
-            response = JSON.parse( this.response );
+            response = JSON.parse( this.response || this.responseText );
             authenticated = false;
             email = "";
             username = "";
@@ -152,7 +152,7 @@ define(['util/xhr'], function(XHR) {
         if (this.readyState === 4) {
           var response;
           try {
-            response = JSON.parse(this.response);
+            response = JSON.parse( this.response || this.responseText );
           } catch (err) {
             callback({ error: "an unknown error occured" });
             return;
@@ -166,7 +166,7 @@ define(['util/xhr'], function(XHR) {
       XHR.get(server + "/api/project/" + id, function() {
         if (this.readyState === 4) {
           try {
-            var response = JSON.parse(this.response);
+            var response = JSON.parse( this.response || this.responseText );
             callback(response);
           } catch (err) {
             callback({ error: "an unknown error occured" });
@@ -185,7 +185,7 @@ define(['util/xhr'], function(XHR) {
       XHR.post( url, data, function() {
         if (this.readyState === 4) {
           try {
-            var response = JSON.parse(this.response);
+            var response = JSON.parse( this.response || this.responseText );
             callback(response);
           } catch (err) {
             callback({ error: "an unknown error occured" });
