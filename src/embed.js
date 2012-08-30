@@ -360,11 +360,13 @@ function init( window, document ) {
   );
 }
 
-// Source tree case vs. require-built case.
-if ( typeof require === "undefined" ) {
-  Popcorn.getScript( "../../external/require/require.js", function() {
+document.addEventListener( "DOMContentLoaded", function() {
+  // Source tree case vs. require-built case.
+  if ( typeof require === "undefined" ) {
+    Popcorn.getScript( "../../external/require/require.js", function() {
+      init( window, window.document );
+    });
+  } else {
     init( window, window.document );
-  });
-} else {
-  init( window, window.document );
-}
+  }
+}, false );
