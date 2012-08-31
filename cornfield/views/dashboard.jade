@@ -76,15 +76,20 @@ html
         width: 650px;
         margin: 0 auto;
         font-size: .9em;
+        overflow: scroll;
       }
       table, th, tr, td {
         border: none;
         border-spacing: 0;
         padding: 0;
         margin: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        max-width: 350px;
       }
       table {
         margin-top: 20px;
+        margin-bottom: 40px;
         -moz-transition: margin-top 0.3s;
         -webkit-transition: margin-top 0.3s;
         -ms-transition: margin-top 0.3s;
@@ -140,6 +145,10 @@ html
         text-align: left;
         text-decoration: none;
         color: #EEE;
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
       .butter-projects-title:hover {
         color: #FFF;
