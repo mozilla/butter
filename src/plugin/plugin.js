@@ -11,6 +11,7 @@ define( [ "util/dragndrop", "util/lang" ], function( DragNDrop, LangUtils ){
         _helper;
 
     this.type = pluginOptions.type;
+    this.name = pluginOptions.name || pluginOptions.type;
     this.path = pluginOptions.path;
 
     this.generateHelper = function() {

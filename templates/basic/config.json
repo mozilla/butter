@@ -31,17 +31,21 @@
         "icon": "{{baseDir}}templates/assets/plugins/image/image-icon.png"
       },
       {
-        "type": "repeat",
-        "path": "{{baseDir}}templates/assets/plugins/repeat/popcorn.repeat.js",
-        "icon": "{{baseDir}}resources/icons/link.png"
+        "type": "clip",
+        "path": "{{baseDir}}templates/assets/plugins/clip/popcorn.clip.js",
+        "icon": "{{baseDir}}resources/icons/link.png",
+        "icon": "{{baseDir}}templates/assets/plugins/clip/clip-icon.png"
+      },
+      {
+        "type": "skip",
+        "path": "{{baseDir}}templates/assets/plugins/skip/popcorn.skip.js",
+        "icon": "{{baseDir}}templates/assets/plugins/skip/skip-icon.png"
       },
       {
         "type": "stop",
-        "path": "{{baseDir}}templates/assets/plugins/stop/popcorn.stop.js"
-      },
-      {
-        "type": "jump",
-        "path": "{{baseDir}}templates/assets/plugins/jump/popcorn.jump.js"
+        "name": "Pause",
+        "path": "{{baseDir}}templates/assets/plugins/stop/popcorn.stop.js",
+        "icon": "{{baseDir}}templates/assets/plugins/stop/pause-icon.png" 
       },
       {
         "type": "wikipedia",
@@ -60,10 +64,11 @@
       "googlemap",
       "twitter",
       "image",
-      "repeat",
+      "wikipedia",
+      "webpage",
+      "clip",
       "stop",
-      "jump",
-      "wikipedia"
+      "skip"
     ]
   },
   "editor": {

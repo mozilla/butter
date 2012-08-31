@@ -34,6 +34,7 @@
     };
   },
   {
+    "name": "Pause",
     "options": {
       "start": {
         "elem": "input",

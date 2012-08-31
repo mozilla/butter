@@ -29,7 +29,8 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
       var element = _pluginArchetype.cloneNode( true ),
           iconImg = e.data.helper,
           icon = element.querySelector( ".butter-plugin-icon" ),
-          text = element.querySelector( ".butter-plugin-label" );
+          text = element.querySelector( ".butter-plugin-label" ),
+          pluginName = e.data.name;
 
       DragNDrop.helper( element, {
         start: function() {
@@ -48,7 +49,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         icon.style.backgroundImage = "url('" + iconImg.src + "')";
       }
 
-      text.innerHTML = e.data.type;
+      text.innerHTML = pluginName;
 
       element.setAttribute( "data-popcorn-plugin-type", e.data.type );
       element.setAttribute( "data-butter-draggable-type", "plugin" );

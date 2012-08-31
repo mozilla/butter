@@ -1,17 +1,18 @@
 (function( Popcorn ) {
-  Popcorn.plugin( "jump", function() {
+  Popcorn.plugin( "skip", function() {
     return {
       _setup: function( options ) {
         options.toString = function() {
-          return "Jump to " + options.jump;
+          return "This section will not be played";
         };
       },
       start: function( event, options ) {
         if ( !this.seeking() ) {
-          this.currentTime( +options.jump );
+          this.currentTime( +options.end );
         }
       },
       end: function( event, options ) {
+
       }
     };
   },
@@ -29,12 +30,6 @@
       },
       "target": {
         "hidden": true
-      },
-      "jump": {
-        "label": "Jump to time",
-        "elem": "input",
-        "type": "number",
-        "units": "seconds"
       }
     }
   });
