@@ -103,7 +103,7 @@ function init( window, document ) {
   }
 
   function setupEventHandlers( popcorn, config ) {
-    var sizeOptions = document.querySelector( ".option" ),
+    var sizeOptions = document.querySelectorAll( ".option" ),
         i,
         l;
 
