@@ -106,6 +106,7 @@ function init( window, document ) {
 
     $( "#share-close" ).addEventListener( "click", function() {
       hide( "#share" );
+    }, false );
     
     var sizeOptions = document.getElementsByClassName('option');
 
