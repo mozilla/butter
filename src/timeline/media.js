@@ -11,7 +11,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
             Status, TrackHandles, SuperScrollbar,
             LangUtils, MEDIA_INSTANCE_LAYOUT ) {
 
-  var DEFAULT_WIDTH = 50;
+  var DEFAULT_WIDTH = 50,
+      __DEFAULT_TRACKEVENT_TIME = 5;
 
   function MediaInstance( butter, media ) {
 
@@ -227,7 +228,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       trackEvent = track.addTrackEvent({
         popcornOptions: {
           start: start,
-          end: start + 1,
+          end: start + __DEFAULT_TRACKEVENT_TIME,
           target: defaultTarget.elementID
         },
         type: type
