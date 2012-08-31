@@ -1,0 +1,10 @@
+{
+  "dirs": {
+    "wwwRoot": "../public",
+    "templates": "../public/templates",
+    "publish": "../published"
+  },
+  "exportAssets": [
+    "../external/popcorn-js/popcorn.js"
+  ]
+}

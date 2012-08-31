@@ -77,10 +77,6 @@ app.configure( function() {
     .set('view options', {layout: false});
 });
 
-app.configure( 'development', function() {
-  app.use( express.directory( WWW_ROOT, { icons: true } ) );
-});
-
 require('express-browserid').plugAll(app);
 require('./routes')( app, User, filter, sanitizer );
 
