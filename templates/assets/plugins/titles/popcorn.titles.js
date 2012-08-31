@@ -11,6 +11,8 @@
   
    **/
 
+  var DEFAULT_FONT_COLOR = "#000";
+
   function normalize( value, minWidth, maxWidth ) {
     return Math.max( Math.min( value || 0, maxWidth ), minWidth );
   }
@@ -100,7 +102,7 @@
           elem: "input",
           type: "text",
           label: "Font Colour",
-          "default": "#FFF",
+          "default": DEFAULT_FONT_COLOR,
           group: "advanced"
         },
         fontWeight: {
@@ -138,6 +140,9 @@
           label: "Top",
           units: "%",
           "default": 30,
+          hidden: true
+        },
+        zindex: {
           hidden: true
         }
       }
@@ -180,7 +185,8 @@
       target.appendChild( container );
 
       container.style.fontStyle = options.fontItalics ? "italic" : "normal";
-      container.style.color = validateHexColor( options.fontColor ) ? options.fontColor : "#668B8B";
+      options.fontColor = options.fontColor && validateHexColor( options.fontColor ) || DEFAULT_FONT_COLOR;
+      container.style.color = options.fontColor;
       container.style.textDecoration = options.textUnderline ? "underline" : "none";
       container.style.fontSize = options.fontSize ? normalize( options.fontSize, 8, 200 ) + "px" : "24px";
       container.style.fontWeight = options.fontWeight ? "bold" : "normal";

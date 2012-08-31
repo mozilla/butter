@@ -156,7 +156,9 @@ define( [
       trackEvent = new TrackEvent( trackEvent, _this, _popcornWrapper );
 
       // Update the trackevent with defaults (if necessary)
-      trackEvent.update( trackEvent.popcornOptions, true );
+      if ( _this._media ) {
+        trackEvent.update( trackEvent.popcornOptions, true );
+      }
 
       // If the track itself has a target, give it to the trackevent as well.
       if( _target ){

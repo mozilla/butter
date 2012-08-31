@@ -81,6 +81,7 @@
       _container.style.height = validateDimension( options.height, "100" ) + "%";
       _container.style.top = validateDimension( options.top, "0" ) + "%";
       _container.style.left = validateDimension( options.left, "0" ) + "%";
+      _container.style.zIndex = +options.zindex;
 
       _titleDiv = create( "div" );
       _titleDiv.classList.add( "wikipedia-title" );
@@ -298,6 +299,9 @@
         values: [ "popcorn-none", "popcorn-pop", "popcorn-fade", "popcorn-slide-up", "popcorn-slide-down" ],
         label: "Transition",
         "default": "popcorn-fade"
+      },
+      zindex: {
+        hidden: true
       }
     }
   });
