@@ -2,10 +2,10 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "util/lang", "util/keys", "./base-editor",
+define([ "util/lang", "util/keys", "util/time", "./base-editor",
           "text!layouts/trackevent-editor-defaults.html",
           "util/scrollbars" ],
-  function( LangUtils, KeysUtils, BaseEditor,
+  function( LangUtils, KeysUtils, TimeUtils, BaseEditor,
             DEFAULT_LAYOUT_SNIPPETS,
             Scrollbars ) {
 
@@ -46,7 +46,7 @@ define( [ "util/lang", "util/keys", "./base-editor",
     // Wedge a check for scrollbars into the open event if it exists
     var oldOpenEvent = events.open;
 
-    events.open = function( trackEvent ) {
+    events.open = function( parentElement, trackEvent ) {
       var basicButton = rootElement.querySelector( ".basic-tab" ),
           advancedButton = rootElement.querySelector( ".advanced-tab" ),
           basicTab = rootElement.querySelector( ".editor-options" ),
@@ -91,6 +91,9 @@ define( [ "util/lang", "util/keys", "./base-editor",
       if ( extendObject.scrollbar ) {
         extendObject.scrollbar.update();
       }
+
+      extendObject.showPluginPreview( trackEvent );
+
     };
 
     BaseEditor( extendObject, butter, rootElement, events );
@@ -151,6 +154,18 @@ define( [ "util/lang", "util/keys", "./base-editor",
       }
 
       return propertyRootElement;
+    };
+
+    extendObject.showPluginPreview = function( trackEvent ) {
+      var startTime = trackEvent.popcornOptions.start,
+          endTime = trackEvent.popcornOptions.end,
+          currentTime = butter.currentTime,
+          accuracy = startTime * Math.pow( 10, TimeUtils.timeAccuracy - 1 );
+
+      if ( currentTime < startTime || currentTime > endTime ) {
+        // Account for accuracy
+        butter.currentTime = Math.ceil( startTime * accuracy ) / accuracy;
+      }
     };
 
     /**
@@ -429,8 +444,6 @@ define( [ "util/lang", "util/keys", "./base-editor",
         }
       }
     };
-
-
 
     /**
      * Member: createPropertiesFromManifest
