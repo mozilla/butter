@@ -40,7 +40,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
           }
         },
         stop: function() {
-
+          butter.currentMedia.pause();
         }
       });
 
@@ -60,6 +60,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
     butter.listen( "ready", function() {
       butter.editor.openEditor( "plugin-list", true );
     });
+
 	};
 
 });
