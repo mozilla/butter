@@ -1,17 +1,29 @@
 (function( Popcorn ) {
-  Popcorn.plugin( "jump", function() {
+  Popcorn.plugin( "skip", function() {
+
     return {
       _setup: function( options ) {
-        options.toString = function() {
-          return "Jump to " + options.jump;
+        var skipTime = options.end;
+        
+        options.skipRange = function() {
+          var ct = this.currentTime();
+          if ( ct > options.start && ct < options.end ) {
+            this.currentTime( skipTime );
+          }
         };
+        options.toString = function() {
+          return "Skip";
+        };
+
+        this.on( "timeupdate", options.skipRange );
+       
       },
       start: function( event, options ) {
-        if ( !this.seeking() ) {
-          this.currentTime( +options.jump );
-        }
       },
       end: function( event, options ) {
+      },
+      _teardown: function( options ) {
+        this.off( "timeupdate", options.skipRange );
       }
     };
   },
@@ -29,12 +41,6 @@
       },
       "target": {
         "hidden": true
-      },
-      "jump": {
-        "label": "Jump to time",
-        "elem": "input",
-        "type": "number",
-        "units": "seconds"
       }
     }
   });

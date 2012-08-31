@@ -31,17 +31,21 @@
         "icon": "{{baseDir}}templates/assets/plugins/image/image-icon.png"
       },
       {
-        "type": "repeat",
-        "path": "{{baseDir}}templates/assets/plugins/repeat/popcorn.repeat.js",
-        "icon": "{{baseDir}}resources/icons/link.png"
+        "type": "loopPlugin",
+        "displayName": "loop",
+        "path": "{{baseDir}}templates/assets/plugins/loopPlugin/popcorn.loopPlugin.js",
+        "icon": "{{baseDir}}templates/assets/plugins/loopPlugin/loop-icon.png"
       },
       {
-        "type": "stop",
-        "path": "{{baseDir}}templates/assets/plugins/stop/popcorn.stop.js"
+        "type": "skip",
+        "path": "{{baseDir}}templates/assets/plugins/skip/popcorn.skip.js",
+        "icon": "{{baseDir}}templates/assets/plugins/skip/skip-icon.png"
       },
       {
-        "type": "jump",
-        "path": "{{baseDir}}templates/assets/plugins/jump/popcorn.jump.js"
+        "type": "pausePlugin",
+        "displayName": "Pause",
+        "path": "{{baseDir}}templates/assets/plugins/pausePlugin/popcorn.pausePlugin.js",
+        "icon": "{{baseDir}}templates/assets/plugins/pausePlugin/pause-icon.png"
       },
       {
         "type": "wikipedia",
@@ -60,10 +64,11 @@
       "googlemap",
       "twitter",
       "image",
-      "repeat",
-      "stop",
-      "jump",
-      "wikipedia"
+      "wikipedia",
+      "webpage",
+      "loopPlugin",
+      "pausePlugin",
+      "skip"
     ]
   },
   "editor": {
