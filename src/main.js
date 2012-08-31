@@ -4,8 +4,7 @@
 
 (function () {
 
-  var DEFAULT_TRACKEVENT_DURATION = 1,
-      DEFAULT_TRACKEVENT_OFFSET = 0.01;
+  var DEFAULT_TRACKEVENT_OFFSET = 0.01;
 
   var ACCEPTED_UA_LIST = {
     "Chrome": 17,
@@ -20,6 +19,7 @@
             "core/target",
             "core/media",
             "core/page",
+            "core/consts",
             "./modules",
             "./dependencies",
             "./dialogs",
@@ -39,6 +39,7 @@
             Target,
             Media,
             Page,
+            Consts,
             Modules,
             Dependencies,
             Dialogs,
@@ -163,14 +164,14 @@
             end;
 
         if( start > media.duration ){
-          start = media.duration - DEFAULT_TRACKEVENT_DURATION;
+          start = media.duration - Consts.DEFAULT_TRACKEVENT_DURATION;
         }
 
         if( start < 0 ){
           start = 0;
         }
 
-        end = start + DEFAULT_TRACKEVENT_DURATION;
+        end = start + Consts.DEFAULT_TRACKEVENT_DURATION;
 
         if( end > media.duration ){
           end = media.duration;

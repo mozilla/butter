@@ -3,16 +3,15 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [ "core/trackevent", "core/track", "core/eventmanager",
-          "./track-container", "util/scrollbars", "./timebar",
-          "./status", "./trackhandles", "./super-scrollbar",
+          "core/consts", "./track-container", "util/scrollbars",
+          "./timebar", "./status", "./trackhandles", "./super-scrollbar",
           "util/lang", "text!layouts/media-instance.html" ],
   function( TrackEvent, Track, EventManagerWrapper,
-            TrackContainer, Scrollbars, TimeBar,
-            Status, TrackHandles, SuperScrollbar,
+            Consts, TrackContainer, Scrollbars,
+            TimeBar, Status, TrackHandles, SuperScrollbar,
             LangUtils, MEDIA_INSTANCE_LAYOUT ) {
 
-  var DEFAULT_WIDTH = 50,
-      __DEFAULT_TRACKEVENT_TIME = 5;
+  var DEFAULT_WIDTH = 50;
 
   function MediaInstance( butter, media ) {
 
@@ -216,8 +215,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           start = e.data.start,
           trackEvent;
 
-      if( start + 1 > _media.duration ){
-          start = _media.duration - 1;
+      if( start + Consts.DEFAULT_TRACKEVENT_DURATION > _media.duration ){
+          start = _media.duration - Consts.DEFAULT_TRACKEVENT_DURATION;
       }
 
       var defaultTarget = butter.defaultTarget;
@@ -228,7 +227,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       trackEvent = track.addTrackEvent({
         popcornOptions: {
           start: start,
-          end: start + __DEFAULT_TRACKEVENT_TIME,
+          end: start + Consts.DEFAULT_TRACKEVENT_DURATION,
           target: defaultTarget.elementID
         },
         type: type
