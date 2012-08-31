@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "util/lang", "util/keys", "util/time", "./base-editor",
+define([ "util/lang", "util/keys", "util/time", "./base-editor",
           "text!layouts/trackevent-editor-defaults.html",
           "util/scrollbars" ],
   function( LangUtils, KeysUtils, TimeUtils, BaseEditor,
@@ -86,7 +86,6 @@ define( [ "util/lang", "util/keys", "util/time", "./base-editor",
             appendTo: rootElement.querySelector( ".scrollbar-append-to" )
           });
         }
-
       }
 
       if ( extendObject.scrollbar ) {
@@ -161,10 +160,11 @@ define( [ "util/lang", "util/keys", "util/time", "./base-editor",
       var startTime = trackEvent.popcornOptions.start,
           endTime = trackEvent.popcornOptions.end,
           currentTime = butter.currentTime,
-          accuracy = TimeUtils.timeAccuracy;
+          accuracy = startTime * Math.pow( 10, TimeUtils.timeAccuracy - 1 );
+
       if ( currentTime < startTime || currentTime > endTime ) {
         // Account for accuracy
-        butter.currentTime = Math.ceil( startTime * Math.pow( 10, accuracy - 1 ) ) / Math.pow( 10, accuracy - 1 ) ;
+        butter.currentTime = Math.ceil( startTime * accuracy ) / accuracy;
       }
     };
 
