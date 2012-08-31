@@ -233,7 +233,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
       element.addEventListener( "change", function( e ) {
         var updateOptions = {};
         updateOptions[ propertyName ] = element.value;
-        trackEvent.update( updateOptions );
+        callback( trackEvent, updateOptions );
       }, false );
     };
 
