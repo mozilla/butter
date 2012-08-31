@@ -247,7 +247,7 @@ app.post( '/api/publish/:id', filter.isLoggedIn, filter.isStorageAvailable, func
         writeEmbedShell( path.join( PUBLISH_DIR_V, id + ".html" ),
                          res, PUBLISH_PREFIX_V + "/" + id + ".html",
                          {
-                           author: email,
+                           author: project.author,
                            projectName: project.name,
                            embedSrc: PUBLISH_PREFIX_E + "/" + id + ".html"
                          });
@@ -257,7 +257,7 @@ app.post( '/api/publish/:id', filter.isLoggedIn, filter.isStorageAvailable, func
                   res, path.join( PUBLISH_PREFIX_E, id + ".html" ),
                   {
                     id: id,
-                    author: email,
+                    author: project.author,
                     title: project.name,
                     baseHref: baseHref,
                     templateScripts: templateScripts,
