@@ -46,10 +46,11 @@ html(lang='en')
                     span Share
         #share.embed-overlay(style='display: none;')
           .share-inner
-            a#share-close(href='#') [X]
+            a#share-close(href='#') X
             a(href='#').embed-logo
             .embed-project
               div
+                .mozpopcorn mozilla Popcorn
                 .embed-title My Project
                 .embed-author Jonny Appleseed
             #share-options.share-options
@@ -68,12 +69,23 @@ html(lang='en')
                 textarea#share-iframe
                   iframe(blah='blah')
                 .share-size
-                  label Size
-                  select#share-size.share-size-picker(selectedindex='2')
-                    option(value='560x358') 560x358
-                    option(value='640x403') 640x403
-                    option(value='853x523') 853x523
-                    option(value='1280x763') 1280x763
+                  div.size-options
+                    a.small.option(href='#')
+                      span.icon 
+                      span.size Small
+                      span.dimensions 560x358
+                    a.medium.option.current(href='#') 
+                      span.icon 
+                      span.size Medium
+                      span.dimensions 640x403
+                    a.large.option(href='#') 
+                      span.icon 
+                      span.size Large
+                      span.dimensions 853x523
+                    a.xlarge.option(href='#')
+                      span.icon 
+                      span.size X-Large
+                      span.dimensions 1280x763
         .embed-info
           .embed-logo-small
           .embed-details

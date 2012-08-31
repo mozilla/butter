@@ -105,12 +105,18 @@ function init( window, document ) {
   function setupEventHandlers( popcorn, config ) {
 
     $( "#share-close" ).addEventListener( "click", function() {
-      hide( "share" );
-    }, false );
+      hide( "#share" );
+    
+    var sizeOptions = document.getElementsByClassName('option');
 
-    $( "#share-size" ).onchange = function() {
-      $( "#share-iframe" ).value = buildIFrameHTML();
-    };
+    for( var i = 0; i < sizeOptions.length; i++ ) {
+        sizeOptions[ i ].addEventListener( "click", function(event) {
+          $('.size-options a.current').classList.remove( 'current');
+          this.classList.add('current');
+          $( "#share-iframe" ).value = buildIFrameHTML();
+          event.preventDefault();
+        });  
+    }
 
     popcorn.on( "ended", function() {
       show( "#post-roll" );
