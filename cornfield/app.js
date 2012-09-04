@@ -55,6 +55,10 @@ if ( !fs.existsSync( PUBLISH_DIR_E ) ) {
   fs.mkdirSync( PUBLISH_DIR_E );
 }
 
+app.configure( 'development', function() {
+  app.use( lessMiddleware( WWW_ROOT ));
+});
+
 app.configure( function() {
   app.use( express.logger( CONFIG.logger ) )
     .use( express.static( WWW_ROOT, JSON.parse( JSON.stringify( CONFIG.staticMiddleware ) ) ) )
@@ -62,11 +66,6 @@ app.configure( function() {
     .use( express.bodyParser() )
     .use( express.cookieParser() )
     .use( clientSessions( CONFIG.session ) )
-    // Auto-compile CSS from LESS.  Other options: https://github.com/emberfeather/less.js-middleware
-    .use( lessMiddleware({
-      src: WWW_ROOT,
-      dest: WWW_ROOT
-    }))
     /* Show Zeus who's boss
      * This only affects requests under /api and /browserid, not static files
      * because the static file writes the response header before we hit this middleware
