@@ -16,6 +16,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
         _authButton = _userData.authButton,
         _projectTitle = _userData.projectTitle,
         _projectName = _userData.projectName,
+        _previewBtn = _rootElement.querySelector( ".butter-preview-link" ),
         _loginClass = "butter-login-true",
         _activeClass = "btn-green",
         _noProjectNameToolTip,
@@ -123,6 +124,22 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
         }, onMouseOver );
       }
     }, false );
+
+   _previewBtn.addEventListener( "click", function( e ) {
+      e.preventDefault();
+      butter.cornfield.publish( butter.project.id, function( e ) {
+        if ( e.url ) {
+          window.open( e.url );
+        } else {
+          _noProjectNameToolTip = _userData.createErrorToolTip( _projectTitle, {
+            message: "Please give your project a name before saving",
+            hidden: false,
+            element: _projectTitle,
+            top: "43px"
+          }, onMouseOver );
+        }
+      });
+   }, false );
 
     function projectNameClick( e ) {
       var input = document.createElement( "input" );
