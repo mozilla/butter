@@ -68,19 +68,12 @@
           "default": "feed",
           optional: true
         },
-        top: {
-          hidden: true,
-          elem: "input",
-          type: "number",
-          units: "%",
-          "default": 10
-        },
         left: {
           hidden: true,
           elem: "input",
           type: "number",
           units: "%",
-          "default": 10
+          "default": 0
         },
         zindex: {
           hidden: true
@@ -126,7 +119,6 @@
       options._container = document.createElement( "div" );
       options._container.classList.add( "popcorn-twitter" );
       options._container.id = Popcorn.guid( "twitter" );
-      options._container.style.top = options.top + "%";
       options._container.style.left = options.left + "%";
       options._container.style.zIndex = +options.zindex;
       titleText.classList.add( "popcorn-twitter-title" );
@@ -138,7 +130,7 @@
       }
 
       // Set transitions for container
-      if ( options.layout !== "ticker" ) {
+      if ( options.transition ) {
         options._container.classList.add( options.transition );
         options._container.classList.add( "off" );
       }
