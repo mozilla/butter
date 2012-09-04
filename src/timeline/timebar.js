@@ -97,6 +97,16 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       _scrubber.update( containerWidth );
     }
 
+    // drawTicks() is called as a consequence of update(), which is called
+    // from timeline/media to update according to viewport-centering. As a result,
+    // drawTicks() need only happen when tracksContainer scrolls and the media is
+    // not playing (probably when the user is scrubbing/zooming/scrolling).
+    _media.listen( "mediapause", function() {
+      _tracksContainer.element.addEventListener( "scroll", drawTicks, false );
+    });
+    _media.listen( "mediaplaying", function() {
+      _tracksContainer.element.removeEventListener( "scroll", drawTicks, false );
+    });
     _tracksContainer.element.addEventListener( "scroll", drawTicks, false );
 
     window.addEventListener( "resize", drawTicks, false );
