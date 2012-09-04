@@ -278,10 +278,11 @@ define( [ "core/eventmanager", "./toggler",
     };
 
     window.addEventListener( "keydown", function( e ){
-      var key = e.which || e.keyCode;
+      var key = e.which || e.keyCode,
+          eTarget = e.target;
       // this allows backspace and del to do the same thing on windows and mac keyboards
       key = key === 46 ? 8 : key;
-      if( processKey[ key ] && __unwantedKeyPressElements.indexOf( e.target.nodeName ) === -1 ){
+      if( processKey[ key ] && !eTarget.isContentEditable && __unwantedKeyPressElements.indexOf( eTarget.nodeName ) === -1 ){
         processKey[ key ]( e );
       } // if
     }, false );

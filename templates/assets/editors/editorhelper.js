@@ -76,6 +76,40 @@
       });
     };
 
+    /**
+     * Member: contentEditable
+     *
+     * Makes a container's content editable using contenteditable
+     *
+     * @paran {TrackEvent} trackEvent: The trackEvent to update when content changes
+     * @param {DOMElement} contentContainer: the container which to listen for changes and set as editable
+     * @param {media} The current media's target element in Butter ( parent container )
+     */
+    global.EditorHelper.contentEditable = function( trackEvent, contentContainer, mediaContainer ) {
+      var media = mediaContainer.getBoundingClientRect();
+
+      if ( contentContainer ) {
+        contentContainer.addEventListener( "blur", function( e ) {
+          var newText = contentContainer.innerHTML;
+          trackEvent.update({
+            text: newText && newText !== "" ? newText : trackEvent.popcornOptions.text
+          });
+        }, false );
+        contentContainer.addEventListener( "keydown", function( e ) {
+          var newText = contentContainer.innerHTML;
+          if ( e.keyCode === 13 ) {
+            trackEvent.update({
+              text: newText && newText !== "" ? newText : trackEvent.popcornOptions.text
+            });
+          }
+        }, false );
+        contentContainer.addEventListener( "mousedown", function( e ) {
+          e.stopPropagation();
+        }, false );
+        contentContainer.setAttribute( "contenteditable", "true" );
+      }
+    };
+
     function _updateFunction( e ) {
 
       var _trackEvent;
