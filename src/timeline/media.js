@@ -37,7 +37,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _timebar = new TimeBar( butter, _media, butter.ui.tray.statusArea, _tracksContainer ),
         _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer ),
         _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
-        _currentMouseDownTrackEvent;
+        _currentMouseDownTrackEvent,
+        _defaultTrackeventDuration = butter.config.value( "trackEvent" ).defaultDuration;
 
     Status( _media, butter.ui.tray.statusArea );
 
@@ -215,8 +216,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           start = e.data.start,
           trackEvent;
 
-      if( start + 1 > _media.duration ){
-          start = _media.duration - 1;
+      if( start + _defaultTrackeventDuration > _media.duration ){
+          start = _media.duration - _defaultTrackeventDuration;
       }
 
       var defaultTarget = butter.defaultTarget;
@@ -227,7 +228,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       trackEvent = track.addTrackEvent({
         popcornOptions: {
           start: start,
-          end: start + 1,
+          end: start + _defaultTrackeventDuration,
           target: defaultTarget.elementID
         },
         type: type
