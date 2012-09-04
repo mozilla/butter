@@ -16,6 +16,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
         _authButton = _userData.authButton,
         _projectTitle = _userData.projectTitle,
         _projectName = _userData.projectName,
+        _previewBtn = _rootElement.querySelector( ".butter-preview-btn" ),
         _loginClass = "butter-login-true",
         _activeClass = "btn-green",
         _noProjectNameToolTip,
@@ -49,6 +50,8 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
           return;
         } else {
           butter.editor.openEditor( "share-properties" );
+          _previewBtn.classList.remove( "butter-hidden" );
+          _previewBtn.href = e.url;
         }
       });
     }
@@ -163,6 +166,8 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       _authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
       _authButton.title = DEFAULT_AUTH_BUTTON_TITLE;
       _authButton.addEventListener( "click", login, false );
+      _previewBtn.classList.add( "butter-hidden" );
+      _previewBtn.href = "";
     }
 
     if ( butter.cornfield.authenticated() ) {
