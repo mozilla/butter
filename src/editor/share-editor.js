@@ -13,6 +13,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         projectURL = editorContainer.querySelector( ".butter-project-url" ),
         projectEmbedURL = editorContainer.querySelector( ".butter-project-embed-url" ),
         embedSize = editorContainer.querySelector( ".butter-embed-size" ),
+        previewBtn = editorContainer.querySelector( ".butter-preview-link" ),
         shareFacebook = editorContainer.querySelector( ".butter-share-facebook" ),
         shareTwitter = editorContainer.querySelector( ".butter-share-twitter" ),
         shareGoogle = editorContainer.querySelector( ".butter-share-google" ),
@@ -101,6 +102,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
           return;
         }
         projectURL.value = e.url;
+        previewBtn.href = e.url;
         updateEmbed( projectURL.value.replace( "/v/", "/e/" ) );
         socialMedia.hotLoad( shareFacebook, socialMedia.facebook, e.url );
         socialMedia.hotLoad( shareTwitter, socialMedia.twitter, e.url );
