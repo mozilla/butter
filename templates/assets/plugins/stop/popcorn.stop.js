@@ -11,7 +11,7 @@
     return {
       _setup: function( options ) {
         options.toString = function() {
-          return "Stop " + ( options.duration > 0 ? options.duration : "forever" );
+          return "Pause " + ( options.duration > 0 ? options.duration : "forever" );
         };
       },
       start: function( event, options ) {
@@ -34,7 +34,7 @@
     };
   },
   {
-    "name": "Pause",
+    "displayName": "Pause",
     "options": {
       "start": {
         "elem": "input",

@@ -106,7 +106,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
           backLink = breadcrumbsLayout.querySelector( ".butter-breadcrumbs-back" ),
           editorTitle =  breadcrumbsLayout.querySelector( ".butter-editor-title" ),
           closeEditorLink =  breadcrumbsLayout.querySelector( ".close-btn" ),
-          pluginName = trackEvent.manifest.name || trackEvent.type;
+          pluginName = trackEvent.manifest.displayName || trackEvent.type;
 
       if ( !trackEvent || !oldTitleEl ) {
         return;

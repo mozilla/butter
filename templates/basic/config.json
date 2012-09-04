@@ -43,7 +43,7 @@
       },
       {
         "type": "stop",
-        "name": "Pause",
+        "displayName": "Pause",
         "path": "{{baseDir}}templates/assets/plugins/stop/popcorn.stop.js",
         "icon": "{{baseDir}}templates/assets/plugins/stop/pause-icon.png" 
       },
