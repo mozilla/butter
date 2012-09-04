@@ -118,7 +118,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
         loc.origin = loc.origin || ( loc.protocol + "//" + loc.host );
         window.location = loc.origin + "/templates/"
                           + document.querySelectorAll( "[data-butter-template]" )[ 0 ].getAttribute( "data-butter-template" ) + "/?savedDataUrl="
-                          + loc.origin + "/api/project/" + loc.pathname.slice( 3, -5 );
+                          + loc.origin + "/api/remix/" + loc.pathname.slice( 3, -5 );
       }
 
       p.media.addEventListener( "mouseout", deactivate, false );
