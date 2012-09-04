@@ -87,8 +87,6 @@ function checkCSSFile( filename, warnings, errors ) {
 }
 
 function checkCSS( dir ) {
-  echo('### Linting CSS files');
-
   // see cli.js --list-rules.
   var warnings = [
 //    "important",
@@ -133,8 +131,6 @@ function checkCSS( dir ) {
 
 function checkJS(){
   // Takes a string or an array of strings referring to directories.
-  echo('### Linting JS files');
-
   var dirs = SLICE.call( arguments );
 
   // Get all js and json files in dirs
@@ -218,8 +214,6 @@ function checkHTMLFile( filename, ignoreList ) {
 }
 
 function checkHTML() {
-  echo('### Linting HTML - requires network access');
-
   // Poor-man's HTML Doc vs. Fragment check
   function isHTMLFragment( filename ) {
     return !( /<html[^>]*\>/m ).test( cat( filename ) );
@@ -269,10 +263,6 @@ function lessToCSS( options ){
   var compress = !!options.compress,
       lessFile = options.lessFile,
       cssFile = options.cssFile;
-
-  echo( "### Building CSS using LESS for " + lessFile + " (" +
-        ( compress ? "with" : "without" ) +
-        " compression)" );
 
   var args = compress ? " --yui-compress " : " ",
   result = exec(LESS + args + lessFile, {silent:true});
@@ -330,8 +320,6 @@ target.css = function() {
 };
 
 function buildJS( version, compress ){
-  echo('### Building Butter (' + ( compress ? 'with' : 'without' ) + ' compression)');
-
   var doCompress = compress ? "" : "optimize=none";
   var result = "";
 
@@ -372,8 +360,6 @@ target.server = function() {
 };
 
 function butteredPopcorn() {
-  echo('### Making Combined Popcorn for Butter: Buttered Popcorn');
-
   var defaultConfig = require( DEFAULT_CONFIG ),
       popcornDir = defaultConfig.dirs['popcorn-js'].replace( '{{baseDir}}', './' ),
       wrappers = defaultConfig.wrapper.wrappers,
@@ -430,7 +416,7 @@ function butteredPopcorn() {
 }
 
 target.deploy = function(){
-  echo('### Making deployable versions of butter, embed, popcorn, etc. (use UNMINIFIED=1 for unminified)');
+  echo('### Making deployable versions of butter, embed, popcorn, etc. in dist/ (use UNMINIFIED=1 for unminified)');
 
   // To get unminified butter.js, use the UNMINIFIED env variable:
   // $ UNMINIFIED=1 node make deploy
