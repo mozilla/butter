@@ -86,17 +86,18 @@
      * @param {media} The current media's target element in Butter ( parent container )
      */
     global.EditorHelper.contentEditable = function( trackEvent, contentContainer, mediaContainer ) {
-      var media = mediaContainer.getBoundingClientRect();
+      var media = mediaContainer.getBoundingClientRect(),
+          newText = "";
 
       if ( contentContainer ) {
         contentContainer.addEventListener( "blur", function( e ) {
-          var newText = contentContainer.innerHTML;
+          newText = contentContainer.textContent;
           trackEvent.update({
             text: newText && newText !== "" ? newText : trackEvent.popcornOptions.text
           });
         }, false );
         contentContainer.addEventListener( "keydown", function( e ) {
-          var newText = contentContainer.innerHTML;
+          newText = contentContainer.textContent;
           if ( e.keyCode === 13 ) {
             trackEvent.update({
               text: newText && newText !== "" ? newText : trackEvent.popcornOptions.text
