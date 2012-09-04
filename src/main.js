@@ -19,7 +19,6 @@
             "core/target",
             "core/media",
             "core/page",
-            "core/consts",
             "./modules",
             "./dependencies",
             "./dialogs",
@@ -39,7 +38,6 @@
             Target,
             Media,
             Page,
-            Consts,
             Modules,
             Dependencies,
             Dialogs,
@@ -101,7 +99,8 @@
           _selectedEvents = [],
           _defaultPopcornScripts = {},
           _customData = {},
-          _defaultPopcornCallbacks = {};
+          _defaultPopcornCallbacks = {},
+          _defaultTrackeventDuration;
 
       // We use the default configuration in src/default-config.json as
       // a base, and override whatever the user provides in the
@@ -164,14 +163,14 @@
             end;
 
         if( start > media.duration ){
-          start = media.duration - Consts.DEFAULT_TRACKEVENT_DURATION;
+          start = media.duration - _defaultTrackeventDuration;
         }
 
         if( start < 0 ){
           start = 0;
         }
 
-        end = start + Consts.DEFAULT_TRACKEVENT_DURATION;
+        end = start + _defaultTrackeventDuration;
 
         if( end > media.duration ){
           end = media.duration;
@@ -818,6 +817,7 @@
         }
 
         _config = _defaultConfig;
+        _defaultTrackeventDuration = _config.value( "trackEvent" ).defaultDuration;
 
         _this.project.template = _config.value( "name" );
 
