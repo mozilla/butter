@@ -257,6 +257,7 @@ function checkHTML() {
     EDITORS_DIR,
     join( SRC_DIR, "layouts" ),
     join( SRC_DIR, "editor" ),
+    'public',
     TEMPLATES_DIR ] ).filter( function( file ) {
     return file.match( /\.html$/ );
   }).forEach( function( filename ) {
@@ -467,4 +468,11 @@ target.deploy = function(){
     exec( UGLIFY + ' --output ' + BUTTERED_POPCORN + ' ' + BUTTERED_POPCORN );
   }
   mv( BUTTERED_POPCORN, './dist/external/popcorn-js/popcorn.js' );
+
+  // Move everything into the public folder
+  cp( '-R', 'public', DIST_DIR );
+  mv([ 'dist/css', 'dist/editors', 'dist/external', 'dist/resources', 'dist/src', 'dist/templates' ], 'dist/public/' );
+
+  // It's important to use the production config
+  echo( 'Run cornfield with `NODE_ENV=production node app.js`' );
 };
