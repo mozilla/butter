@@ -375,7 +375,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
           for ( m = 0, fLen = __googleFonts.length; m < fLen; m++ ) {
             font = document.createElement( "option" );
 
-            font.value = font.label = __googleFonts[ m ];
+            font.value = font.innerHTML = __googleFonts[ m ];
             editorElement.appendChild( font );
           }
         }
