@@ -186,5 +186,10 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     butter.listen( "projectsaved", function() {
       _projectName.innerHTML = butter.project.name;
     });
+    butter.listen( "ready", function() {
+      if ( butter.project.name ) {
+        _projectTitle.innerHTML = butter.project.name;
+      }
+    });
   };
 });
