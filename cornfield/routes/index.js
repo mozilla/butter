@@ -20,6 +20,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
 
       if ( !doc ) {
         res.json( { error: "project not found" }, 404 );
+        return;
       }
 
       var projectJSON = JSON.parse( doc.data );
@@ -33,6 +34,11 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
     User.findAllProjects( req.session.email, function( err, doc ) {
       if ( err ) {
         res.json( { error: err, projects: [] }, 500 );
+        return;
+      }
+
+      if ( !doc ) {
+        res.json( { error: "no projects found" }, 404 );
         return;
       }
 
