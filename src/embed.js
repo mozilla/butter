@@ -65,7 +65,7 @@ function init( window, document ) {
   function buildIFrameHTML() {
     var src = window.location,
       // Sizes are strings: "200x400"
-      shareSize = $( "#share-size" ).value.split( "x" ),
+      shareSize = $( ".size-options .current .dimensions" ).textContent.split( "x" ),
       width = shareSize[ 0 ],
       height = shareSize[ 1 ];
 
@@ -103,14 +103,22 @@ function init( window, document ) {
   }
 
   function setupEventHandlers( popcorn, config ) {
+    var sizeOptions = document.querySelectorAll( ".option" ),
+        i,
+        l;
 
     $( "#share-close" ).addEventListener( "click", function() {
-      hide( "share" );
+      hide( "#share" );
     }, false );
-
-    $( "#share-size" ).onchange = function() {
-      $( "#share-iframe" ).value = buildIFrameHTML();
-    };
+  
+    for ( i = 0, l = sizeOptions.length; i < l; i++ ) {
+        sizeOptions[ i ].addEventListener( "click", function( event ) {
+          event.preventDefault();
+          $( ".size-options .current" ).classList.remove( "current" );
+          this.classList.add( "current" );
+          $( "#share-iframe" ).value = buildIFrameHTML();
+        }, false );
+    }
 
     popcorn.on( "ended", function() {
       show( "#post-roll" );
