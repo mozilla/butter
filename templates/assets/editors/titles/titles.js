@@ -11,5 +11,6 @@ EditorHelper.addPlugin( "titles", function( trackEvent ) {
     if ( trackEvent.popcornOptions.position === "custom" ) {
       EditorHelper.draggable( trackEvent, _container, media );
     }
+    EditorHelper.contentEditable( trackEvent, _container.querySelector( "span" ) );
   }
 });
