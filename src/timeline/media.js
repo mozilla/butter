@@ -11,16 +11,16 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
             Status, TrackHandles, SuperScrollbar,
             LangUtils, MEDIA_INSTANCE_LAYOUT ) {
 
-  var DEFAULT_WIDTH = 50;
+  var DEFAULT_BOUNDS = [ 0, 0.5 ];
 
   function MediaInstance( butter, media ) {
 
-    var _width;
+    var _bounds;
 
-    function setContainerWidth( width ) {
-      if ( _width !== width ) {
-        _width = width;
-        _tracksContainer.width = _width;
+    function setContainerBounds( left, right ) {
+      if ( _bounds[0] !== left || _bounds[1] !== right ) {
+        _bounds = [ left, right ];
+        _tracksContainer.setViewportBounds( left, right );
         updateUI();
       }
     }
@@ -31,7 +31,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _tracksContainer = new TrackContainer( butter, media, _rootElement ),
         _container = _rootElement.querySelector( ".media-container" ),
         _mediaStatusContainer = _rootElement.querySelector( ".media-status-container" ),
-        _superScrollbar = new SuperScrollbar( _tracksContainer.element, _tracksContainer.container, setContainerWidth, _media ),
+        _superScrollbar = new SuperScrollbar( _tracksContainer.element, _tracksContainer.container, setContainerBounds, _media ),
         _vScrollBar = new Scrollbars.Vertical( _tracksContainer.element, _tracksContainer.container ),
         _shrunken = false,
         _timebar = new TimeBar( butter, _media, butter.ui.tray.statusArea, _tracksContainer ),
@@ -132,8 +132,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
     }
 
     function onMediaReady(){
-      _width = DEFAULT_WIDTH;
-      _tracksContainer.width = _width;
+      _bounds = DEFAULT_BOUNDS;
+      _tracksContainer.setViewportBounds( _bounds[ 0 ], _bounds[ 1 ] );
       updateUI();
       _this.dispatch( "ready" );
     }
