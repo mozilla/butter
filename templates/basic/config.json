@@ -42,10 +42,10 @@
         "icon": "{{baseDir}}templates/assets/plugins/skip/skip-icon.png"
       },
       {
-        "type": "stop",
+        "type": "pausePlugin",
         "displayName": "Pause",
-        "path": "{{baseDir}}templates/assets/plugins/stop/popcorn.stop.js",
-        "icon": "{{baseDir}}templates/assets/plugins/stop/pause-icon.png" 
+        "path": "{{baseDir}}templates/assets/plugins/pausePlugin/popcorn.pausePlugin.js",
+        "icon": "{{baseDir}}templates/assets/plugins/pausePlugin/pause-icon.png" 
       },
       {
         "type": "wikipedia",
@@ -67,7 +67,7 @@
       "wikipedia",
       "webpage",
       "clip",
-      "stop",
+      "pausePlugin",
       "skip"
     ]
   },

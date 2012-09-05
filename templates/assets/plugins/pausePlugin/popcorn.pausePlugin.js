@@ -1,5 +1,5 @@
 (function( Popcorn ) {
-  Popcorn.plugin( "stop", function() {
+  Popcorn.plugin( "pausePlugin", function() {
     var _this = this,
         _timeout,
         _seekedFunc = function() {

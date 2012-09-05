@@ -1,16 +1,22 @@
 (function( Popcorn ) {
   Popcorn.plugin( "skip", function() {
+
     return {
       _setup: function( options ) {
-        var skipRange = options.skipRange = function() {
-          if ( this.currentTime() > options.start && this.currentTime() < options.end ) {
-            this.currentTime( options.end );
+        var skipTime = options.end;
+        
+        options.skipRange = function() {
+          var ct = this.currentTime();
+          if ( ct > options.start && ct < options.end ) {
+            this.currentTime( skipTime );
           }
         };
-        this.on( "timeupdate", skipRange );
         options.toString = function() {
-          return "This section will not be played";
+          return "Skip";
         };
+
+        this.on( "timeupdate", options.skipRange );
+       
       },
       start: function( event, options ) {
       },

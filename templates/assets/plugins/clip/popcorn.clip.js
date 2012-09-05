@@ -1,68 +1,28 @@
 (function( Popcorn ) {
-
-  var clipData = {
-    clips: [],
-    skips: []
-  };
-
   Popcorn.plugin( "clip", function() {
     return {
       _setup: function( options ) {
-        var allClips = clipData.clips,
-            count = 0,
-            popcorn = this;
-
-        if ( allClips.length === 0 ) {
-          allClips.push( options );
-        } else {
-          allClips.forEach( function( clip, i ) {
-            if ( clip.start < options.start ) {
-              allClips.splice( i, 0, options );
-            }
-          });
-        }
-
-        console.log( allClips, "allclips" );
-
-        allClips.forEach( function( clip, i ) {
-          var prevClip = allClips[ i - 1 ],
-              nextClip = allClips[ i + 1 ];
-
-          if ( !prevClip ) {
-            popcorn.skip({
-              start: 0,
-              end: clip.start
-            });
-          }
-          else if ( nextClip ) {
-            popcorn.skip({
-              start: clip.end,
-              end: nextClip.start
-            });
-          } else {
-            console.log ( "last" );
-          }
-        });
-
-
+        options.loop = options.loop || 0;
+        options.count = +options.loop;
         options.toString = function() {
-          return "Only this section will be played";
+          return "Loop: " + ( options.loop > 0 ? options.count : "forever" );
         };
       },
       start: function( event, options ) {
       },
       end: function( event, options ) {
-        /*
-          if ( options.loop ) {
-            this.currentTime( options.start );
-          } else {
-            this.pause();
-            this.emit( "ended" );
+          if ( ( this.currentTime() > options.end + 1 || this.currentTime() < options.end - 1 ) || this.seeking() || this.paused() ) {
+            options.count = +options.loop;
+            return;
           }
-          */
-      },
-      _teardown: function( options ) {
-
+          if ( options.count > 0 || +options.loop === 0 ) {
+            this.currentTime( options.start );
+            if ( options.loop ) {
+              options.count--;
+            }
+          } else {
+            options.count = +options.loop;
+          }
       }
     };
   },
@@ -82,9 +42,10 @@
         "hidden": true
       },
       "loop": {
-        "label": "Loop",
-        "type": "checkbox",
-        "default": true
+        "label": "Number of loops (0 = forever)",
+        "elem": "input",
+        "type": "number",
+        "default": 1
       }
     }
   });
