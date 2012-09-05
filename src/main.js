@@ -29,6 +29,7 @@
             "util/lang",
             "text!default-config.json",
             "text!layouts/ua-warning.html",
+            "ui/widget/tooltip",
             "util/shims"                  // keep this at the end so it doesn't need a spot in the function signature
           ],
           function(
@@ -47,7 +48,8 @@
             XHR,
             Lang,
             DefaultConfigJSON,
-            UA_WARNING_LAYOUT
+            UA_WARNING_LAYOUT,
+            ToolTip
           ){
 
     var __guid = 0,
@@ -56,6 +58,8 @@
     var Butter = function( options ){
       return new ButterInit( options );
     }; //Butter
+
+    Butter.ToolTip = ToolTip;
 
     Butter.showUAWarning = function() {
       var uaWarningDiv = Lang.domFragment( UA_WARNING_LAYOUT, ".butter-ua-warning" );

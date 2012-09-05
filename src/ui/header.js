@@ -1,5 +1,5 @@
-define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
-  function( Dialog, Lang, UserData, ToolTip ) {
+define([ "dialog/dialog", "util/lang", "ui/user-data" ],
+  function( Dialog, Lang, UserData ) {
 
   var DEFAULT_AUTH_BUTTON_TEXT = "<span class='icon-user'></span> Sign In / Sign Up",
       DEFAULT_AUTH_BUTTON_TITLE = "Sign in or sign up with Persona";

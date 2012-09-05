@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
-  function( EventManagerWrapper, Scrollbars, Tooltip ) {
+define( [ "core/eventmanager", "util/scrollbars" ],
+  function( EventManagerWrapper, Scrollbars ) {
 
   /**
    * Class: BaseEditor
@@ -136,7 +136,7 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
     * Add tooltips to all elements marked data-tooltip
     */
     extendObject.addTooltips = function()  {
-      Tooltip.apply( extendObject.rootElement );
+      window.Butter.ToolTip.apply( extendObject.rootElement );
     };
 
     /**

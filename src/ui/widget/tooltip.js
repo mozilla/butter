@@ -11,15 +11,25 @@
 define( [], function() {
   var __tooltipClass = "butter-tooltip",
       __tooltipOnClass = "tooltip-on",
-      Tooltip;
+      _registeredTooltips = {},
+      ToolTip;
 
-  Tooltip = {
+  function register( tooltip ) {
+    _registeredTooltips[ tooltip.title ] = tooltip;
+  }
+
+  function isRegistered( title ) {
+    return !!_registeredTooltips[ title ];
+  }
+
+  ToolTip = {
     /**
      * Member: create
      *
      * Creates a tooltip inside a given element, with optional message.
      * Usage:
      * Tooltip.create({
+     *  name: "tooltip-name"
      *  element: myParentElement,
      *  message: "This is my message",
      *  top: 14px,
@@ -31,9 +41,14 @@ define( [], function() {
       var element = options.element,
           tooltipEl = document.createElement( "div" ),
           tooltipText = options.message || element.getAttribute( "data-tooltip" ) || element.getAttribute( "title" ) || "",
+          tooltipTitle = options.title || element.getAttribute( "title" ) || ( "" + new Date() ),
           top = options.top,
           left = options.left,
           parentRect;
+
+      if ( isRegistered( tooltipTitle ) ) {
+        return;
+      }
 
       tooltipEl.classList.add( __tooltipClass );
       tooltipEl.innerHTML = tooltipText;
@@ -55,6 +70,12 @@ define( [], function() {
         element.appendChild( tooltipEl );
       }
 
+      register( {
+        title: tooltipTitle,
+        elem: tooltipEl,
+        text: tooltipText
+      });
+
       return tooltipEl;
     },
     /**
@@ -71,11 +92,19 @@ define( [], function() {
       elements = rootElement.querySelectorAll( "[data-tooltip]" );
 
       for ( i = 0, l = elements.length; i < l; i++ ) {
-        Tooltip.create({
+        ToolTip.create({
           element: elements[ i ]
         });
       }
-    }
+    },
+    /**
+     * Member: get
+     *
+     * Get a tooltip reference by name
+     */
+     get: function( title ){
+      return _registeredTooltips[ title ];
+     }
   };
-  return Tooltip;
+  return ToolTip;
 });
