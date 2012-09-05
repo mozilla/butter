@@ -1,1 +1,63 @@
-{"targets":[{"id":"Target0","name":"video-container","element":"video-container"}],"media":[{"id":"Media0","name":"Media0","url":["https://www.youtube.com/watch?v=Qw9oX-kZ_9k&NR=1&feature=fvwp&butteruid=1346876878570","http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.ogv?butteruid=1346876878571","http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.webm?butteruid=1346876878572"],"target":"video","duration":6.706,"controls":true,"tracks":[{"name":"Layer1","id":"1","trackEvents":[{"id":"TrackEvent4","type":"repeat","popcornOptions":{"start":0,"end":3.03327,"target":"video-container","loop":"0"},"track":"Layer1","name":"TrackEvent2"}]},{"name":"Layer2","id":"2","trackEvents":[{"id":"TrackEvent13","type":"titles","popcornOptions":{"start":0,"end":5.01271,"target":"video-container","text":"whatchyoutalkinbout?","position":"custom","transition":"popcorn-fade","fontFamily":"Fredoka One","fontSize":"18","fontColor":"#000ccc","fontWeight":true,"fontItalics":"","textUnderline":"","left":63.411488147301796,"top":15.409202061354963,"zindex":999},"track":"Layer2","name":"TrackEvent13"}]},{"name":"Layer3","id":"3","trackEvents":[]}]}],"name":"meme","projectID":"5047b6f90a5eec8f650002f6"}
+{
+    "targets": [{
+        "id": "Target0",
+        "name": "video-container",
+        "element": "video-container"
+    }],
+    "media": [{
+        "id": "Media0",
+        "name": "Media0",
+        "url": ["https://www.youtube.com/watch?v=Qw9oX-kZ_9k&NR=1&feature=fvwp&butteruid=1346876878570", "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.ogv?butteruid=1346876878571", "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.webm?butteruid=1346876878572"],
+        "target": "video",
+        "duration": 6.706,
+        "controls": true,
+        "tracks": [{
+            "name": "Layer1",
+            "id": "1",
+            "trackEvents": [{
+                "id": "TrackEvent4",
+                "type": "repeat",
+                "popcornOptions": {
+                    "start": 0,
+                    "end": 3.03327,
+                    "target": "video-container",
+                    "loop": "0"
+                },
+                "track": "Layer1",
+                "name": "TrackEvent2"
+            }]
+        }, {
+            "name": "Layer2",
+            "id": "2",
+            "trackEvents": [{
+                "id": "TrackEvent13",
+                "type": "titles",
+                "popcornOptions": {
+                    "start": 0,
+                    "end": 5.01271,
+                    "target": "video-container",
+                    "text": "whatchyoutalkinbout?",
+                    "position": "custom",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Fredoka One",
+                    "fontSize": "18",
+                    "fontColor": "#000ccc",
+                    "fontWeight": true,
+                    "fontItalics": "",
+                    "textUnderline": "",
+                    "left": 63.411488147301796,
+                    "top": 15.409202061354963,
+                    "zindex": 999
+                },
+                "track": "Layer2",
+                "name": "TrackEvent13"
+            }]
+        }, {
+            "name": "Layer3",
+            "id": "3",
+            "trackEvents": []
+        }]
+    }],
+    "name": "meme",
+    "projectID": "5047b6f90a5eec8f650002f6"
+}
