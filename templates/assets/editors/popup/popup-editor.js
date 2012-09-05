@@ -154,7 +154,7 @@
             }
             else if ( option.elementType === "input" ) {
               if ( [ "start", "end" ].indexOf( key ) > -1 ) {
-                _this.attachStartEndHandler( option.element, option.trackEvent, key, updateTrackEventWithTryCatch );
+                _this.attachSecondsChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithTryCatch );
               }
               else if ( option.element.type === "checkbox" ) {
                 _this.attachCheckboxChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
