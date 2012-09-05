@@ -57,6 +57,9 @@ if ( !fs.existsSync( PUBLISH_DIR_E ) ) {
 
 app.configure( 'development', function() {
   app.use( lessMiddleware( WWW_ROOT ));
+  CONFIG.additionalStaticRoots.forEach( function( dir ) {
+    app.use( express.static( dir ) );
+  });
 });
 
 app.configure( function() {
