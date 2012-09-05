@@ -43,11 +43,9 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
       }
 
       var projectData = [];
-      if ( doc.projects ) {
-        doc.projects.forEach( function( value ) {
-          projectData.push( { name: value.name, id: value._id } );
-        });
-      }
+      doc.forEach( function( value ) {
+        projectData.push( { name: value.name, id: value._id } );
+      });
 
       res.json({ error: 'okay', projects: projectData });
     });

@@ -6,18 +6,12 @@ mongoose = require('mongoose'),
 Schema = mongoose.Schema,
 
 Project = new Schema({
-  name: String,
   data: String,
-  template: String,
-  customData: String
-}),
-ProjectModel = mongoose.model( 'Project', Project ),
-
-User = new Schema({
   email: String,
-  projects: [Project],
+  name: String,
+  template: String
 }),
-UserModel = mongoose.model( 'User', User );
+ProjectModel = mongoose.model( 'Project2', Project );
 
 mongoose.connect( 'mongodb://localhost/test', function( err ) {
   if ( !err ) {
@@ -32,30 +26,15 @@ module.exports = {
       return;
     }
 
-    this.findAllProjects( email, function( err, doc ) {
-      if ( err ) {
-        callback( err );
-        return;
-      }
+    var project = new ProjectModel({
+      data: JSON.stringify( data.data ),
+      email: email,
+      name: data.name,
+      template: data.template
+    });
 
-      if ( !doc ) {
-        doc = new UserModel({
-          email: email
-        });
-      }
-
-      var project = new ProjectModel({
-        customData: JSON.stringify( data.customData ),
-        data: JSON.stringify( data.data ),
-        name: data.name,
-        template: data.template
-      });
-
-      doc.projects.push( project );
-
-      doc.save( function( err ) {
-        callback( err, project );
-      });
+    project.save( function( err ) {
+      callback( err, project );
     });
   },
   deleteProject: function( email, pid, callback ) {
@@ -64,17 +43,7 @@ module.exports = {
       return;
     }
 
-    this.findAllProjects( email, function( err, doc ) {
-      if ( err ) {
-        callback( err );
-        return;
-      }
-
-      doc.projects.id( pid ).remove();
-      doc.save( function( err ) {
-        callback( err );
-      });
-    });
+    ProjectModel.remove( { email: email, _id: pid }, callback );
   },
   findAllProjects: function findAllProjects( email, callback ) {
     if ( !email ) {
@@ -82,7 +51,7 @@ module.exports = {
       return;
     }
 
-    UserModel.findOne( { email: email }, callback );
+    ProjectModel.find( { email: email }, callback );
   },
   findProject: function findProject( email, pid, callback ) {
     if ( !email || !pid ) {
@@ -90,36 +59,40 @@ module.exports = {
       return;
     }
 
-    this.findAllProjects( email, function( err, doc ) {
+    ProjectModel.find( { email: email, _id: pid }, function( err, doc ) {
       if ( err ) {
         callback( err );
         return;
       }
 
-      callback( err, doc.projects.id( pid ) );
+      // .find() returns an array, but this API expects a single document or null
+      doc = doc.length > 0 ? doc[ 0 ] : null;
+      callback( err, doc );
     });
   },
   isDBOnline: function isDBOnline() {
     return dbOnline;
   },
   updateProject: function updateProject( email, pid, data, callback ) {
-    if ( !email || !pid || !data || !data.id ) {
+    if ( !email || !pid || !data ) {
       callback( 'not enough parameters to update' );
       return;
     }
 
-    this.findProject( email, pid, function( err, doc ) {
+    ProjectModel.find( { email: email, _id: pid }, function( err, doc ) {
       if ( err ) {
         callback( err );
         return;
       }
 
-      if ( !doc ) {
+      if ( doc.length !== 1 ) {
         callback( 'project id not found' );
+        return;
       }
 
-      doc.customData = JSON.stringify( data.customData );
+      doc = doc[ 0 ];
       doc.data = JSON.stringify( data.data );
+      doc.email = email;
       doc.name = data.name;
       doc.template = data.template;
 
