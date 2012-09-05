@@ -2,17 +2,22 @@
   Popcorn.plugin( "skip", function() {
     return {
       _setup: function( options ) {
+        var skipRange = options.skipRange = function() {
+          if ( this.currentTime() > options.start && this.currentTime() < options.end ) {
+            this.currentTime( options.end );
+          }
+        };
+        this.on( "timeupdate", skipRange );
         options.toString = function() {
           return "This section will not be played";
         };
       },
       start: function( event, options ) {
-        if ( !this.seeking() ) {
-          this.currentTime( +options.end );
-        }
       },
       end: function( event, options ) {
-
+      },
+      _teardown: function( options ) {
+        this.off( "timeupdate", options.skipRange );
       }
     };
   },
