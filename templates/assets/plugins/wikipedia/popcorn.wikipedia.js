@@ -238,12 +238,14 @@
       start: {
         elem: "input",
         type: "number",
-        label: "Start"
+        label: "Start",
+        "units": "seconds"
       },
       end: {
         elem: "input",
         type: "number",
-        label: "End"
+        label: "End",
+        "units": "seconds"
       },
       lang: {
         elem: "select",

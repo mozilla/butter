@@ -20,12 +20,14 @@
       "start": {
         "elem": "input",
         "type": "text",
-        "label": "In"
+        "label": "In",
+        "units": "seconds"
       },
       "end": {
         "elem": "input",
         "type": "text",
-        "label": "Out"
+        "label": "Out",
+        "units": "seconds"
       },
       "target": {
         "hidden": true

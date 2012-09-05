@@ -88,12 +88,14 @@
         start: {
           elem: "input",
           type: "number",
-          label: "In"
+          label: "In",
+          "units": "seconds"
         },
         end: {
           elem: "input",
           type: "number",
-          label: "Out"
+          label: "Out",
+          "units": "seconds"
         },
         text: {
           elem: "input",

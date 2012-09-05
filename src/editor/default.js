@@ -66,8 +66,8 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
               _this.attachSelectChangeHandler( element, trackEvent, name, updateTrackEvent );
             }
             else {
-              if ( [ "start", "end" ].indexOf( name ) > -1 ) {
-                _this.attachStartEndHandler( element, trackEvent, name, updateTrackEvent );
+              if ( [ "start", "end" ].indexOf( name ) > -1 || trackEvent.manifest.options[ name ].units === "seconds" ) {
+                _this.attachSecondsChangeHandler( element, trackEvent, name, updateTrackEvent );
               }
               else {
                 if ( element.type === "checkbox" ) {
