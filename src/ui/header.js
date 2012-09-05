@@ -25,9 +25,10 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML;
 
-
     // create a tooltip for the projectName element
     ToolTip.create({
+      title: "header-title-tooltip",
+      message: "Change the name of your project",
       element: _projectTitle,
       top: "50px"
     });
@@ -38,6 +39,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     }, false );
 
     _this.element = _rootElement;
+    ToolTip.apply( _projectTitle );
 
     _tabzilla.addEventListener( "click", function( e ) {
       document.body.classList.toggle( "tabzilla-open" );
