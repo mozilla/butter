@@ -286,7 +286,7 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
     var userProjects = [],
         project;
 
-    for ( var i = 0, l = doc.projects.length; i < l; ++i ) {
+    for ( var i = 0; doc && doc.projects && i < doc.projects.length; ++i ) {
       project = doc.projects[ i ];
       if ( project.template && VALID_TEMPLATES[ project.template ] ) {
         userProjects.push({
@@ -294,8 +294,8 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
           _id: String(project._id),
           name: sanitizer.escapeHTML( project.name ),
           template: project.template,
-          href: templateConfigs[ project.template ].template +
-            "?savedDataUrl=" + PUBLISH_PREFIX + "/api/project/" + project._id
+          href: path.relative( WWW_ROOT, templateConfigs[ project.template ].template ) +
+            "?savedDataUrl=/api/project/" + project._id
         });
       }
     }
