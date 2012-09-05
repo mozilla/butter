@@ -6,15 +6,9 @@
 
   var APIKEY = "&api_key=b939e5bd8aa696db965888a31b2f1964",
       flickrUrl = "http://api.flickr.com/services/",
-      getUserIdCmd = flickrUrl + "rest/?method=flickr.people.findByUsername",
-      getPhotoCmd = flickrUrl + "rest/?method=flickr.photos.search&page=1&extras=url_m&media=photos",
+      getPhotoCmd = flickrUrl + "rest/?method=flickr.photos.search&page=1&extras=url_m&media=photos&safe_search=1",
       getPhotosetCmd = flickrUrl + "rest/?method=flickr.photosets.getPhotos&extras=url_m&media=photos",
       jsonBits = "&format=json&jsoncallback=flickr";
-
-  function getFlickrUserId( userName, ready ) {
-    var uri = getUserIdCmd + "&username=" + userName + APIKEY + jsonBits;
-    Popcorn.getJSONP( uri, ready );
-  }
 
   function getFlickrData( tags, count, userId, ready ) {
     var uri = getPhotoCmd + APIKEY + "&per_page=" + count + "&";
@@ -160,11 +154,7 @@
             }
           };
 
-          if ( options.username ) {
-            getFlickrUserId( options.username, function( data ){
-              getFlickrData( options.tags, data && data.user && data.user.nsid, _flickrCallback );
-            });
-          } else if ( options.tags ) {
+          if ( options.tags ) {
             getFlickrData( options.tags, options._count || 10, _flickrCallback );
           } else if ( options.photosetId ) {
             getPhotoSet( options.photosetId, _flickrCallback );
@@ -178,7 +168,7 @@
             // might ba a data URI
             return options.src.substring( 0 , 30 ) + "...";
           }
-          return options.src || options.tags || options.username || "Image Plugin";
+          return options.src || options.tags || "Image Plugin";
         };
       }
     },
@@ -227,18 +217,12 @@
           type: "url",
           label: "Source URL",
         },
-        username: {
-          elem: "input",
-          type: "text",
-          label: "Flickr: User Name",
-          optional: true
-        },
         tags: {
           elem: "input",
           type: "text",
           label: "Flickr: Tags",
           optional: true,
-          "default": "kittens"
+          "default": "Mozilla"
         },
         photosetId: {
           elem: "input",
