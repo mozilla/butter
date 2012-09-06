@@ -7,7 +7,7 @@
     "media": [{
         "id": "Media0",
         "name": "Media0",
-        "url": ["http://videos-origin.mozilla.org/serv/webmademovies/neighbourhood2.webm?butteruid=1346248121973"],
+        "url": ["http://videos-origin.mozilla.org/serv/webmademovies/neighbourhood2.webm?butteruid=1346973383492", "http://videos-origin.mozilla.org/serv/webmademovies/neighbourhood2.mp4?butteruid=1346973383493"],
         "target": "video",
         "duration": 31.949,
         "controls": true,
@@ -31,7 +31,8 @@
                     "fontItalics": "",
                     "textUnderline": "",
                     "left": 30,
-                    "top": 30
+                    "top": 30,
+                    "zindex": 1000
                 },
                 "track": "Layer0",
                 "name": "TrackEvent3"
@@ -52,7 +53,8 @@
                     "fontItalics": "",
                     "textUnderline": "",
                     "left": 30,
-                    "top": 30
+                    "top": 30,
+                    "zindex": 1000
                 },
                 "track": "Layer0",
                 "name": "TrackEvent3"
@@ -69,12 +71,13 @@
                     "height": 50,
                     "top": 2.282200339064422,
                     "left": 59.191089554101325,
-                    "transition": "popcorn-fade"
+                    "transition": "popcorn-fade",
+                    "zindex": 1000
                 },
                 "track": "Layer0",
                 "name": "TrackEvent5"
             }, {
-                "id": "TrackEvent6",
+                "id": "TrackEvent7",
                 "type": "wikipedia",
                 "popcornOptions": {
                     "start": 9.58762,
@@ -83,15 +86,16 @@
                     "lang": "en",
                     "src": "http://en.wikipedia.org/wiki/Belfry_Theatre",
                     "width": 40,
-                    "height": 50,
-                    "top": 25,
-                    "left": 30,
-                    "transition": "popcorn-fade"
+                    "height": 96.66666666666667,
+                    "top": 0.8333333333333334,
+                    "left": 60,
+                    "transition": "popcorn-fade",
+                    "zindex": 1000
                 },
                 "track": "Layer0",
                 "name": "TrackEvent6"
             }, {
-                "id": "TrackEvent8",
+                "id": "TrackEvent9",
                 "type": "googlemap",
                 "popcornOptions": {
                     "start": 14.0599,
@@ -115,7 +119,7 @@
                 "track": "Layer0",
                 "name": "TrackEvent8"
             }, {
-                "id": "TrackEvent9",
+                "id": "TrackEvent11",
                 "type": "wikipedia",
                 "popcornOptions": {
                     "start": 21.98138,
@@ -127,12 +131,13 @@
                     "height": 50,
                     "top": 45.00833731605336,
                     "left": 59.07385625984577,
-                    "transition": "popcorn-fade"
+                    "transition": "popcorn-fade",
+                    "zindex": 1000
                 },
                 "track": "Layer0",
                 "name": "TrackEvent9"
             }, {
-                "id": "TrackEvent10",
+                "id": "TrackEvent13",
                 "type": "titles",
                 "popcornOptions": {
                     "start": 27.72518,
@@ -148,12 +153,13 @@
                     "fontItalics": "",
                     "textUnderline": "",
                     "left": 30,
-                    "top": 30
+                    "top": 30,
+                    "zindex": 1000
                 },
                 "track": "Layer0",
                 "name": "TrackEvent10"
             }, {
-                "id": "TrackEvent11",
+                "id": "TrackEvent15",
                 "type": "titles",
                 "popcornOptions": {
                     "start": 29.19322,
@@ -169,7 +175,8 @@
                     "fontItalics": "",
                     "textUnderline": "",
                     "left": 30,
-                    "top": 30
+                    "top": 30,
+                    "zindex": 1000
                 },
                 "track": "Layer0",
                 "name": "TrackEvent11"
@@ -177,5 +184,5 @@
         }]
     }],
     "name": "New Fernwood",
-    "projectID": "503e246ae9fb33bb42000093"
+    "projectID": "50492253700a4aa82800028d"
 }
