@@ -103,7 +103,9 @@
           }
         }, false );
         contentContainer.addEventListener( "mousedown", function( e ) {
-          !e.shiftKey && e.stopPropagation();
+          if ( !e.shiftKey ) {
+            e.stopPropagation();
+          }
         }, false );
         contentContainer.setAttribute( "contenteditable", "true" );
       }
