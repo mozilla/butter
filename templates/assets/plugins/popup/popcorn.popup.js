@@ -98,8 +98,7 @@
           "units": "seconds"
         },
         text: {
-          elem: "input",
-          type: "text",
+          elem: "textarea",
           label: "Text",
           "default": "zoink!"
         },
