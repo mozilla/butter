@@ -1,5 +1,5 @@
 (function( Popcorn ) {
-  Popcorn.plugin( "clip", function() {
+  Popcorn.plugin( "loopPlugin", function() {
     return {
       _setup: function( options ) {
         options.loop = options.loop || 0;
@@ -27,6 +27,7 @@
     };
   },
   {
+    "displayName": "loop",
     "options": {
       "start": {
         "elem": "input",

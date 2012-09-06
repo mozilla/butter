@@ -31,10 +31,10 @@
         "icon": "{{baseDir}}templates/assets/plugins/image/image-icon.png"
       },
       {
-        "type": "clip",
-        "path": "{{baseDir}}templates/assets/plugins/clip/popcorn.clip.js",
-        "icon": "{{baseDir}}resources/icons/link.png",
-        "icon": "{{baseDir}}templates/assets/plugins/clip/clip-icon.png"
+        "type": "loopPlugin",
+        "displayName": "loop",
+        "path": "{{baseDir}}templates/assets/plugins/loopPlugin/popcorn.loopPlugin.js",
+        "icon": "{{baseDir}}templates/assets/plugins/loopPlugin/loop-icon.png"
       },
       {
         "type": "skip",
@@ -66,7 +66,7 @@
       "image",
       "wikipedia",
       "webpage",
-      "clip",
+      "loopPlugin",
       "pausePlugin",
       "skip"
     ]
