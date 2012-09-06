@@ -98,7 +98,6 @@
           _this = this,
           _selectedEvents = [],
           _defaultPopcornScripts = {},
-          _customData = {},
           _defaultPopcornCallbacks = {},
           _defaultTrackeventDuration;
 
@@ -125,16 +124,8 @@
         id: null,
         name: null,
         data: null,
-        html: null,
         template: null,
-        customData: null
       };
-
-      Object.defineProperty( this.project, "customData", {
-        get: function() {
-          return _customData;
-        }
-      });
 
       function checkMedia() {
         if ( !_currentMedia ) {
@@ -515,7 +506,7 @@
         if ( !property ) {
           return allTrackEvents;
         }
-        
+
         if ( popcornOption ) {
            _filterTrackEvents = function ( el ) {
               return ( el.popcornOptions[ property ] === query );
