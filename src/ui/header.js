@@ -166,6 +166,8 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       _authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
       _authButton.title = DEFAULT_AUTH_BUTTON_TITLE;
       _authButton.addEventListener( "click", login, false );
+      _previewBtn.classList.add( "butter-hidden" );
+      _previewBtn.href = "";
     }
 
     if ( butter.cornfield.authenticated() ) {
