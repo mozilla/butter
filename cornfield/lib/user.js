@@ -96,7 +96,7 @@ module.exports = {
         return;
       }
 
-      callback( err, doc.projects.id( pid ) );
+      callback( err, doc, doc.projects.id( pid ) );
     });
   },
   isDBOnline: function isDBOnline() {
@@ -108,7 +108,7 @@ module.exports = {
       return;
     }
 
-    this.findProject( email, pid, function( err, doc ) {
+    this.findProject( email, pid, function( err, doc, project ) {
       if ( err ) {
         callback( err );
         return;
@@ -118,13 +118,13 @@ module.exports = {
         callback( 'project id not found' );
       }
 
-      doc.customData = JSON.stringify( data.customData );
-      doc.data = JSON.stringify( data.data );
-      doc.name = data.name;
-      doc.template = data.template;
+      project.customData = JSON.stringify( data.customData );
+      project.data = JSON.stringify( data.data );
+      project.name = data.name;
+      project.template = data.template;
 
       doc.save( function( err ) {
-        callback( err, doc );
+        callback( err, project );
       });
     });
   }

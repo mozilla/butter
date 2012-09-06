@@ -12,7 +12,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
   });
 
   app.get( '/api/project/:id?', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
-    User.findProject( req.session.email, req.params.id, function( err, doc ) {
+    User.findProject( req.session.email, req.params.id, function( err, doc, project ) {
       if ( err ) {
         res.json( { error: err }, 500 );
         return;
@@ -23,9 +23,9 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
         return;
       }
 
-      var projectJSON = JSON.parse( doc.data );
-      projectJSON.name = doc.name;
-      projectJSON.projectID = doc._id;
+      var projectJSON = JSON.parse( project.data );
+      projectJSON.name = project.name;
+      projectJSON.projectID = project._id;
       res.json( projectJSON );
     });
   });

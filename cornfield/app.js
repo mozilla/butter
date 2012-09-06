@@ -122,7 +122,7 @@ app.post( '/api/publish/:id', filter.isLoggedIn, filter.isStorageAvailable, func
   var email = req.session.email,
       id = req.params.id;
 
-  User.findProject( email, id, function( err, project ) {
+  User.findProject( email, id, function( err, doc, project ) {
     if ( err ) {
       res.json( { error: err }, 500);
       return;
