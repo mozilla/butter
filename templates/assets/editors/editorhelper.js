@@ -8,7 +8,7 @@
      *
      * Makes a container draggable using jQueryUI
      *
-     * @paran {TrackEvent} trackEvent: The trackEvent to update when position changes
+     * @param {TrackEvent} trackEvent: The trackEvent to update when position changes
      * @param {DOMElement} dragContainer: the container which to apply draggable to
      * @param {media} The current media's target element in Butter ( parent container )
      * @param {Object} extra options to apply to the draggable call
@@ -43,7 +43,7 @@
      *
      * Makes a container resizable using jQueryUI
      *
-     * @paran {TrackEvent} trackEvent: The trackEvent to update when size changes
+     * @param {TrackEvent} trackEvent: The trackEvent to update when size changes
      * @param {DOMElement} resizeContainer: the container which to apply resizable to
      * @param {media} The current media's target element in Butter ( parent container )
      * @param {Object} extra options to apply to the resizeable call
@@ -81,7 +81,7 @@
      *
      * Makes a container's content editable using contenteditable
      *
-     * @paran {TrackEvent} trackEvent: The trackEvent to update when content changes
+     * @param {TrackEvent} trackEvent: The trackEvent to update when content changes
      * @param {DOMElement} contentContainer: the container which to listen for changes and set as editable
      */
     global.EditorHelper.contentEditable = function( trackEvent, contentContainer ) {
@@ -95,8 +95,8 @@
           });
         }, false );
         contentContainer.addEventListener( "keydown", function( e ) {
-          newText = contentContainer.textContent;
           if ( e.keyCode === 13 ) {
+            newText = contentContainer.textContent;
             trackEvent.update({
               text: newText && newText !== "" ? newText : trackEvent.popcornOptions.text
             });
