@@ -83,11 +83,9 @@
      *
      * @paran {TrackEvent} trackEvent: The trackEvent to update when content changes
      * @param {DOMElement} contentContainer: the container which to listen for changes and set as editable
-     * @param {media} The current media's target element in Butter ( parent container )
      */
-    global.EditorHelper.contentEditable = function( trackEvent, contentContainer, mediaContainer ) {
-      var media = mediaContainer.getBoundingClientRect(),
-          newText = "";
+    global.EditorHelper.contentEditable = function( trackEvent, contentContainer ) {
+      var newText = "";
 
       if ( contentContainer ) {
         contentContainer.addEventListener( "blur", function( e ) {
