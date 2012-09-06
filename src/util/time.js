@@ -11,14 +11,24 @@ define( [], function(){
     return Math.round( time * ( Math.pow( 10, accuracy ) ) ) / Math.pow( 10, accuracy );
   } //roundTime
 
-  function toSeconds( time ){
+  function toSeconds( time ) {
     var splitTime,
         seconds,
         minutes,
-        hours;
+        hours,
+        negative = false;
+
+    if ( typeof time === "number" ) {
+      return time;
+    }
 
     if ( !time ) {
-      return time;
+      return false;
+    }
+
+    if ( time.substring( 0, 1 ) === "-" ) {
+      time = time.replace( "-", "" );
+      negative = true;
     }
 
     splitTime = time.split( ":" );
@@ -33,7 +43,15 @@ define( [], function(){
     if ( minutes ) {
       seconds += minutes * 60;
     }
-        
+
+    if ( seconds !== 0 && !seconds ) {
+      return false;
+    }
+
+    if ( negative ) {
+      seconds = -seconds;
+    }
+
     return seconds;
   }
 
@@ -41,10 +59,20 @@ define( [], function(){
     var hours,
         minutes,
         seconds,
-        timeString;
+        timeString,
+        isNegative = "";
 
     if ( typeof time === "string" ) {
       time = toSeconds( time );
+    }
+
+    if ( typeof time !== "number" ) {
+      return time;
+    }
+
+    if ( time < 0 ) {
+      isNegative = "-";
+      time = -time;
     }
 
     hours = Math.floor( time / 3600 );
@@ -53,7 +81,7 @@ define( [], function(){
     timeString = seconds + "";
 
     if ( !minutes && !hours ) {
-      return timeString;
+      return isNegative + timeString;
     }
 
     if ( !seconds ) {
@@ -76,7 +104,7 @@ define( [], function(){
       timeString = hours + ":" + timeString;
     }
 
-    return timeString;
+    return isNegative + timeString;
   }
 
   var utils = {
