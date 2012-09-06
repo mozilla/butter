@@ -23,7 +23,7 @@ define( [ "util/lang" ],
         _currentMousePos,
         _scrollInterval = -1,
         _rect,
-        _width,
+        _width = 0,
         _isPlaying = false,
         _isScrubbing = false,
         _lastTime = -1,
@@ -32,17 +32,18 @@ define( [ "util/lang" ],
         _seekCompleted = false,
         _seekMouseUp = false;
 
-    function setNodePosition(){
+    function setNodePosition() {
       var duration = _media.duration,
           currentTime = _media.currentTime,
           tracksElement = _tracksContainer.element,
           scrollLeft = tracksElement.scrollLeft;
           _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
 
-      // if we can avoid re-setting position and visibility, then do so
+      // If we can avoid re-setting position and visibility, then do so
       if( _lastTime !== currentTime || _lastScroll !== scrollLeft ){
-
-        var pos = currentTime / duration * _tracksContainerWidth,
+        // To prevent some scrubber jittering (from viewport centering), pos is rounded before
+        // being used in calculation to account for possible precision issues.
+        var pos = Math.round( currentTime / duration * _tracksContainerWidth ),
             adjustedPos = pos - scrollLeft;
 
         // If the node position is outside of the viewing window, hide it.
@@ -68,13 +69,11 @@ define( [ "util/lang" ],
           } //if
           _fill.style.display = "block";
         } //if
-
       } //if
 
       _lastTime = currentTime;
       _lastScroll = scrollLeft;
-
-    } //setNodePosition
+    }
 
     function onMouseUp( e ){
       _seekMouseUp = true;
@@ -190,18 +189,17 @@ define( [ "util/lang" ],
     _node.addEventListener( "mousedown", onScrubberMouseDown, false );
     _container.addEventListener( "mousedown", onMouseDown, false );
 
-    this.update = function( containerWidth ){
-      _width = containerWidth;
+    this.update = function( containerWidth ) {
+      _width = containerWidth || _width;
       _tracksContainerWidth = _tracksContainer.container.getBoundingClientRect().width;
       _rect = _container.getBoundingClientRect();
       _lineWidth = _line.clientWidth;
       setNodePosition();
+    };
 
-    }; //update
-
-    function checkMedia(){
+    function checkMedia() {
       setNodePosition();
-    } //checkMedia
+    }
 
     _media.listen( "mediaplaying", function( e ){
       _isPlaying = true;
@@ -217,6 +215,6 @@ define( [ "util/lang" ],
 
     this.destroy = function(){
       clearInterval( _checkMediaInterval );
-    }; //destroy
+    };
   };
 });

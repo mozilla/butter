@@ -85,6 +85,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       e.preventDefault();
       e.stopPropagation();
       _offset = e.clientX - _rect.left - _viewPort.offsetLeft;
+      _media.pause();  // pause the media here to diffuse confusion with scrolling & playing
       window.addEventListener( "mouseup", onViewMouseUp, false );
       window.addEventListener( "mousemove", onViewMouseMove, false );
     };
@@ -92,6 +93,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     onLeftMouseDown = function( e ) {
       e.preventDefault();
       e.stopPropagation();
+      _media.pause();  // pause the media here to diffuse confusion with scrolling & playing
       outerElement.removeEventListener( "scroll", updateView, false );
       window.addEventListener( "mouseup", onLeftMouseUp, false );
       window.addEventListener( "mousemove", onLeftMouseMove, false );
@@ -100,6 +102,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     onRightMouseDown = function( e ) {
       e.preventDefault();
       e.stopPropagation();
+      _media.pause();  // pause the media here to diffuse confusion with scrolling & playing
       outerElement.removeEventListener( "scroll", updateView, false );
       window.addEventListener( "mouseup", onRightMouseUp, false );
       window.addEventListener( "mousemove", onRightMouseMove, false );

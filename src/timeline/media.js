@@ -51,12 +51,27 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _tracksContainer.update();
     }
 
-    function snapToCurrentTime(){
-      _tracksContainer.snapTo( _media.currentTime );
+    function onMediaTimeUpdate() {
+      // Move the viewport to be centered around the scrubber
+      _tracksContainer.followCurrentTime();
+      // Align the timebar again to remove jitter
+      // TODO: this is expensive, and only fixes 50% of the problem
+      _timebar.update();
     }
 
-    _media.listen( "mediaplaying", snapToCurrentTime );
-    _media.listen( "mediapause", snapToCurrentTime );
+    _media.listen( "mediaplaying", function(){
+      // Make sure the viewport contains the scrubber
+      _tracksContainer.snapTo( _media.currentTime );
+      // Listen for timeupdate to attempt to center the viewport around the scrubber
+      _media.listen( "mediatimeupdate", onMediaTimeUpdate );
+    });
+
+    _media.listen( "mediapause", function(){
+      // Make sure the viewport contains the scrubber
+      _tracksContainer.snapTo( _media.currentTime );
+      // Stop listening for timeupdates so that the user can scroll around freely
+      _media.unlisten( "mediatimeupdate", onMediaTimeUpdate );
+    });
 
     function blinkTarget( target ){
       if( target !== _media.target ){

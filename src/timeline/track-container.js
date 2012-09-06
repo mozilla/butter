@@ -5,6 +5,9 @@
 define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
   function( Logger, DragNDrop, TrackEventDragManager ) {
 
+  var TWEEN_PERCENTAGE = 0.35,    // diminishing factor for tweening (see followCurrentTime)
+      TWEEN_THRESHOLD = 10;       // threshold beyond which tweening occurs (see followCurrentTime)
+
   return function( butter, media, mediaInstanceRootElement ) {
 
     var _media = media,
@@ -171,6 +174,40 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
         _vScrollbar.update();
       }
     });
+
+    /**
+     * Member: followCurrentTime
+     *
+     * Attempts to position the viewport around the media's currentTime (the scrubber)
+     * such that the currentTime is centered in the viewport. If currentTime is situated
+     * to the right of the mid-point of the track container, this code begins to affect
+     * the scrollLeft property of _element by either setting the value to the mid-point
+     * immediately (if currentTime is not beyond TWEEN_THRESHOLD from the mid-point), or
+     * by incrementally stepping toward the mid-point by tweening to provide some
+     * softening for proper user feedback.
+     *
+     * Note that the values assigned to scrollLeft are rounded to prevent jitter.
+     */
+    _this.followCurrentTime = function() {
+      var p = _media.currentTime / _media.duration,
+          currentTimePixel = p * _container.clientWidth,
+          halfWidth = _element.clientWidth / 2,
+          xOffset = currentTimePixel - _element.scrollLeft,
+          target = p * _container.scrollWidth - halfWidth;
+
+      // If the currentTime surpasses half of the width of the track container...
+      if ( xOffset >= halfWidth ) {
+        // ... by more than TWEEN_THRESHOLD...
+        if ( xOffset - halfWidth > TWEEN_THRESHOLD ) {
+          // then perform a simple tween on scrollLeft to slide the scrubber back into the middle.
+          _element.scrollLeft = Math.round( _element.scrollLeft - ( _element.scrollLeft - target ) * TWEEN_PERCENTAGE );
+        }
+        else {
+          // Otherwise, just nail scrollLeft at the center point.
+          _element.scrollLeft = Math.round( target );
+        }
+      }
+    };
 
     _this.update = function() {
       resetContainer();
