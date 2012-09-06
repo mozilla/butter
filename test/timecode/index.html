@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite [URI]</title>
+	  <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+	  <script type="text/javascript" src="../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../inject.js"></script>
+    <script type="text/javascript" src="../../src/butter.js"></script>
+    <script src="../butter.inject.js"></script>
+    <script>
+      require( [ "../src/util/time" ], function( TimeUtils ){
+
+        var Timecode = TimeUtils.timecode;
+
+        test( "Timecode existence" , function (){
+          ok( Timecode, "Timecode exists" );
+          ok( Timecode.toSeconds, "timecode.toSeconds exists" );
+          ok( Timecode.parse, "timecode.parse exists" );
+        });
+
+        test( "timecode.toSeconds", function(){
+
+          var toSeconds = Timecode.toSeconds;
+
+          equal( typeof toSeconds( "1" ), "number", "pass" );
+          equal( typeof toSeconds( "0" ), "number", "pass" );
+          equal( typeof toSeconds( 0 ), "number", "pass" );
+
+          equal( toSeconds( "3600" ), 3600, "pass" );
+          equal( toSeconds( "01.10" ), 1.1, "pass" );
+          equal( toSeconds( "00:01.10" ), 1.1, "pass" );
+          equal( toSeconds( "01:01.10" ), 61.1, "pass" );
+          equal( toSeconds( "01:00:01.10" ), 3601.1, "pass" );
+          equal( toSeconds( "01:01:01.10" ), 3661.1, "pass" );
+          equal( toSeconds( "01:01:01" ), 3661, "pass" );
+          equal( toSeconds( "1:1:1.1" ), 3661.1, "pass" );
+          equal( toSeconds( "01:01:00.10" ), 3660.1, "pass" );
+          equal( toSeconds( "01:00:00.10" ), 3600.1, "pass" );
+          equal( toSeconds( "01:00:00.00" ), 3600, "pass" );
+          equal( toSeconds( "00:00:01" ), 1, "pass" );
+
+          equal( toSeconds( "00:00:00.00" ), 0, "pass" );
+          equal( typeof toSeconds( "00:00:00.00" ), "number", "pass" );
+
+          equal( toSeconds( 1.0001 ), 1.0001, "pass" );
+          equal( toSeconds( "1.0001" ), 1.0001, "pass" );
+          equal( toSeconds( -1.0001 ), -1.0001, "pass" );
+          equal( toSeconds( "-1.0001" ), -1.0001, "pass" );
+
+          equal( toSeconds( "60:00" ), 3600, "pass" );
+          equal( toSeconds( "1:60:00" ), 7200, "pass" );
+          equal( toSeconds( "1:60" ), 120, "pass" );
+          equal( toSeconds( "60" ), 60, "pass" );
+
+          equal( toSeconds( "-1:60:00" ), -7200, "pass" );
+          equal( toSeconds( "-60:00" ), -3600, "pass" );
+          equal( toSeconds( "-60" ), -60, "pass" );
+          equal( toSeconds( "-1:60" ), -120, "pass" );
+
+          equal( toSeconds( "" ), false, "pass" );
+          equal( toSeconds( "invalid" ), false, "pass" );
+        });
+
+        test( "timecode.parse", function(){
+
+          var parseTime = Timecode.parse;
+
+          equal( parseTime( "01:01:01" ), "1:01:01", "pass" );
+          equal( parseTime( "00:00:01" ), "1", "pass" );
+          equal( parseTime( "1" ), "1", "pass" );
+          equal( parseTime( "0" ), "0", "pass" );
+          equal( parseTime( "00:01" ), "1", "pass" );
+
+          equal( typeof parseTime( "0" ), "string", "pass" );
+          equal( typeof parseTime( "1" ), "string", "pass" );
+          equal( typeof parseTime( 1 ), "string", "pass" );
+          equal( typeof parseTime( 0 ), "string", "pass" );
+
+          equal( parseTime( 1 ), "1", "pass" );
+          equal( parseTime( 120 ), "2:00", "pass" );
+          equal( parseTime( 3600 ), "1:00:00", "pass" );
+          equal( parseTime( -1 ), "-1", "pass" );
+          equal( parseTime( -3600 ), "-1:00:00", "pass" );
+          equal( parseTime( -120 ), "-2:00", "pass" );
+
+          equal( parseTime( "01:01" ), "1:01", "pass" );
+          equal( parseTime( "1:01" ), "1:01", "pass" );
+          equal( parseTime( "01:01:01" ), "1:01:01", "pass" );
+          equal( parseTime( "1:01:01" ), "1:01:01", "pass" );
+          equal( parseTime( "-01:01" ), "-1:01", "pass" );
+          equal( parseTime( "-1:01" ), "-1:01", "pass" );
+          equal( parseTime( "-01:01:01" ), "-1:01:01", "pass" );
+          equal( parseTime( "-1:01:01" ), "-1:01:01", "pass" );
+
+          equal( parseTime( 0.01 ), "0.01", "pass" );
+          equal( parseTime( 0.001 ), "0", "pass" );
+          equal( parseTime( "01:01.10" ), "1:01.1", "pass" );
+
+          equal( parseTime( "" ), false, "pass" );
+          equal( parseTime( "invalid" ), false, "pass" );
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite [Timecode]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+  </body>
+</html>
