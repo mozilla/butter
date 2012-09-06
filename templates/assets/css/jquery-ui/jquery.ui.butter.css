@@ -14,7 +14,6 @@
   position: relative; 
   color: #FFF83A; 
   z-index: 2000;
-  border: 1px solid transparent;
 }
 
 .ui-resizable .title { 
@@ -68,7 +67,7 @@
 -------------------------------------------------- */
 body:hover .ui-resizable,
 body:hover .ui-draggable {
-  border: 1px solid #FFF83A;
+  box-shadow: 0 0 0 2px #FFF83A;
 }
 
 body:hover .ui-resizable .ui-icon,

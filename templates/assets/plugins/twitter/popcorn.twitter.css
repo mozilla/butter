@@ -7,12 +7,12 @@
   color: #555;
   font-size: 13px;
   overflow: hidden;
+  bottom: 0;
   width: 35%;
-  height: 60%;
+  height: 100%;
   background: #FEFEFE;
   border-radius: 2px;
   background-clip: padding-box;
-  border: 5px solid rgba(255, 255, 255, 0.3);
 }
 .popcorn-twitter-title {
   display: block;
@@ -25,7 +25,7 @@
 }
 .popcorn-twitter-tweets {
   overflow-y: scroll;
-  height: 340px;
+  height: 100%;
   border-bottom: 1px solid #CCC;
 }
 .popcorn-twitter ul {
