@@ -11,7 +11,6 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
   return function( butter, media, mediaInstanceRootElement ) {
 
     var _media = media,
-        _width = 1,
         _this = this;
 
     var _element = mediaInstanceRootElement.querySelector( ".tracks-container-wrapper" ),
@@ -19,9 +18,11 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
 
     var _vScrollbar;
 
-    var _droppable;
+    var _droppable,
+        _justDropped = [];
 
-    var _justDropped = [];
+    var _leftViewportBoundary = 0,
+        _viewportWidthRatio = 0.1;
 
     _this.trackEventDragManager = new TrackEventDragManager( media, _container );
 
@@ -67,7 +68,8 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
     };
 
     function resetContainer() {
-      _container.style.width = _element.clientWidth / _width + "px";
+      _element.scrollLeft = _container.scrollWidth * _leftViewportBoundary;
+      _container.style.width = _element.clientWidth / _viewportWidthRatio + "px";
       _vScrollbar.update();
     }
 
@@ -213,6 +215,22 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
       resetContainer();
     };
 
+    /**
+     * Member: setContainerBounds
+     *
+     * Adjusts the viewport boundaries. A left and width value can be specified
+     * representing the left and width percentage of the viewport with respect to its
+     * container. If either is -1, it is ignored, and the old value is preserved.
+     *
+     * @param {Number} left: Left side of the viewport as percent from 0 - 1
+     * @param {Number} width: Ratio of viewport to tracks (0 - 1)
+     */
+    _this.setViewportBounds = function( left, width ) {
+      _leftViewportBoundary = left >= 0 ? ( left > 1 ? 1 : left ) : _leftViewportBoundary;
+      _viewportWidthRatio = width >= 0 ? ( width > 1 ? 1 : width ) : _viewportWidthRatio;
+      resetContainer();
+    };
+
     _this.snapTo = function( time ) {
       var p = time / _media.duration,
           newScroll = _container.clientWidth * p,
@@ -227,16 +245,6 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
     };
 
     Object.defineProperties( this, {
-      width: {
-        enumerable: true,
-        get: function() {
-          return _width * 100;
-        },
-        set: function( val ) {
-          _width = val / 100;
-          resetContainer();
-        }
-      },
       element: {
         enumerable: true,
         get: function(){

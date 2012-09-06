@@ -6,6 +6,37 @@
   left: 0;
   right: 0;
   border-top: 1px solid @baseLightOutline;
+
+  .butter-super-scrollbar-zoom-buttons {
+    position: absolute;
+    width: 14px;
+    height: 26px;
+    right: -20px;
+    top: 3px;
+
+    & > div {
+      text-align: center;
+      height: 48%;
+      width: 100%;
+      line-height: 100%;
+      cursor: pointer;
+      background: #d9dddd;
+      color: @baseLight;
+      border-radius: 3px;
+      background-image: url("../resources/glyphicons-halflings.png");
+      &:active {
+        background-color: darken( #d9dddd, 10% );
+      }
+    }
+
+    .butter-super-scrollbar-zoom-in {
+      background-position: -336px 0;
+    }
+    .butter-super-scrollbar-zoom-out {
+      margin-top: 2px;
+      background-position: -360px 0;
+    }
+  }
 }
 
 #butter-super-scrollbar-visuals {
@@ -24,6 +55,9 @@
   position: absolute;
   top: 0;
   min-width: 5px;
+  &.viewport-transition {
+    .transition(left 0.1s linear, right 0.1s linear);
+  }
 }
 
 .butter-super-scrollbar-trackevent {
