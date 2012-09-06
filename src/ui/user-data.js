@@ -6,8 +6,8 @@
  * This file exposes various helper methods centered around user-data, such as logging in,
  * saving, and logging out.
  */
-define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
-  function( Dialog, Lang, HEADER_TEMPLATE ) {
+define( [ "dialog/dialog", "util/lang", "ui/widget/tooltip", "text!layouts/header.html" ],
+  function( Dialog, Lang, ToolTip, HEADER_TEMPLATE ) {
 
   return function( butter ) {
     var _this = this,
@@ -117,7 +117,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
         element.removeChild( element.querySelector( ".tooltip-error" ) );
       }
 
-      tooltip = window.Butter.ToolTip.create( options );
+      tooltip = ToolTip.create( options );
 
       tooltip.classList.add( "tooltip-error" );
       element.addEventListener( "mouseover", mouseOverListener, false );

@@ -103,7 +103,7 @@ define( [], function() {
      * Get a tooltip reference by name
      */
      get: function( title ){
-      return _registeredTooltips[ title ];
+       return _registeredTooltips[ title ];
      }
   };
   return ToolTip;

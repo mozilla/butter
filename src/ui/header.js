@@ -1,5 +1,5 @@
-define([ "dialog/dialog", "util/lang", "ui/user-data" ],
-  function( Dialog, Lang, UserData ) {
+define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
+  function( Dialog, Lang, UserData, ToolTip ) {
 
   var DEFAULT_AUTH_BUTTON_TEXT = "<span class='icon-user'></span> Sign In / Sign Up",
       DEFAULT_AUTH_BUTTON_TITLE = "Sign in or sign up with Persona";
@@ -25,11 +25,11 @@ define([ "dialog/dialog", "util/lang", "ui/user-data" ],
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML;
 
-
     // create a tooltip for the projectName element
     ToolTip.create({
+      title: "header-title-tooltip",
       element: _projectTitle,
-      top: "50px"
+      top: "43px"
     });
 
     // This is an easter egg to open a UI kit editor. Hurrah
@@ -38,6 +38,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data" ],
     }, false );
 
     _this.element = _rootElement;
+    ToolTip.apply( _projectTitle );
 
     _tabzilla.addEventListener( "click", function( e ) {
       document.body.classList.toggle( "tabzilla-open" );
