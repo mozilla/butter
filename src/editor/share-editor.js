@@ -97,12 +97,17 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       projectName.value = "";
 
       butter.cornfield.publish( butter.project.id, function( e ) {
+        var headerPreviewBtn = document.querySelector( ".butter-header .butter-preview-btn" );
         if ( e.error !== "okay" ) {
           userData.showErrorDialog( "There was a problem saving your project. Please try again." );
           return;
         }
+
         projectURL.value = e.url;
         previewBtn.href = e.url;
+        headerPreviewBtn.classList.remove( "butter-hidden" );
+        headerPreviewBtn.href = e.url;
+
         updateEmbed( projectURL.value.replace( "/v/", "/e/" ) );
         socialMedia.hotLoad( shareFacebook, socialMedia.facebook, e.url );
         socialMedia.hotLoad( shareTwitter, socialMedia.twitter, e.url );
