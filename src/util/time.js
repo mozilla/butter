@@ -15,7 +15,7 @@ define( [], function(){
    * Accuracy of 2:
    * 1.012345 -> 1.01
    *
-   * @param {Number} time: Time to round given existing accuracy
+   * @param {Number} time: Time to round given __timeAccuracy
    */
   function roundTime( time ){
     return Math.round( time * ( Math.pow( 10, __timeAccuracy ) ) ) / Math.pow( 10, __timeAccuracy );
@@ -33,7 +33,7 @@ define( [], function(){
    * " 003600.00" -> 3600
    * " 003600.99" -> 3600.99
    *
-   * @param {String} time: Timecode to which is converted to seconds
+   * @param {String} time: Timecode to be converted to seconds
    */
   function toSeconds( time ) {
     var splitTime,
@@ -80,7 +80,7 @@ define( [], function(){
    * "  000:01:01.00" -> "1:01"
    * "3600" -> "1:00:00"
    *
-   * @param {Number} time: Seconds to which is converted to timecode
+   * @param {Number} time: Seconds to be converted to timecode
    */
   function toTimecode( time ){
     var hours,
