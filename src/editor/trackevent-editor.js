@@ -198,7 +198,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
      * @param {String} propertyName: Name of property to update when change is detected
      * @param {Function} callback: Called when update is ready to occur
      */
-     extendObject.attachSecondsChangeHandler = function( element, trackEvent, propertyName, callback ) {
+    extendObject.attachSecondsChangeHandler = function( element, trackEvent, propertyName, callback ) {
       element.addEventListener( "blur", function( e ) {
         var updateOptions = {};
         updateOptions[ propertyName ] = TimeUtils.toSeconds( element.value );

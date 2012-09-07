@@ -6,22 +6,35 @@ define( [], function(){
 
   var __timeAccuracy = 5;
 
+  /**
+   * Member: roundTime
+   *
+   * Rounds a number to a set accuracy
+   * Accuracy of 5:
+   * 1.012345 -> 1.01234
+   * Accuracy of 2:
+   * 1.012345 -> 1.01
+   *
+   * @param {Number} time: Time to round given existing accuracy
+   */
   function roundTime( time ){
     return Math.round( time * ( Math.pow( 10, __timeAccuracy ) ) ) / Math.pow( 10, __timeAccuracy );
-  } //roundTime
+  }
 
   /**
+   * Member: toSeconds
+   *
    * toSeconds converts a timecode string to seconds.
    * "HH:MM:SS.DD" -> seconds
-   *
    * examples:
    * "1:00:00" -> 3600
    * "-1:00:00" -> -3600
-   *
    * it also converts strings with seconds to seconds
    * " 003600.00" -> 3600
    * " 003600.99" -> 3600.99
-   **/
+   *
+   * @param {String} time: Timecode to which is converted to seconds
+   */
   function toSeconds( time ) {
     var splitTime,
         seconds,
@@ -55,18 +68,20 @@ define( [], function(){
   }
 
   /**
+   * Member: toTimecode
+   *
    * toTimecode converts seconds to a timecode string.
    * seconds -> "HH:MM:SS.DD"
-   *
    * examples:
    * 3600 -> "1:00:00"
    * -3600 -> "-1:00:00"
-   *
    * it also converts strings to timecode
    * "  00:00:01" -> "1"
    * "  000:01:01.00" -> "1:01"
    * "3600" -> "1:00:00"
-   **/
+   *
+   * @param {Number} time: Seconds to which is converted to timecode
+   */
   function toTimecode( time ){
     var hours,
         minutes,
@@ -79,7 +94,7 @@ define( [], function(){
     }
 
     if ( typeof time !== "number" ) {
-      return time;
+      return 0;
     }
 
     if ( time < 0 ) {
