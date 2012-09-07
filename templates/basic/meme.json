@@ -7,26 +7,11 @@
     "media": [{
         "id": "Media0",
         "name": "Media0",
-        "url": ["https://www.youtube.com/watch?v=Qw9oX-kZ_9k&NR=1&feature=fvwp&butteruid=1346991906014"],
+        "url": ["https://www.youtube.com/watch?v=Qw9oX-kZ_9k&NR=1&feature=fvwp&butteruid=1347052070809"],
         "target": "video",
         "duration": 6.706,
         "controls": true,
         "tracks": [{
-            "name": "Layer1",
-            "id": "0",
-            "trackEvents": [{
-                "id": "TrackEvent1",
-                "type": "repeat",
-                "popcornOptions": {
-                    "start": 0,
-                    "end": 3.03327,
-                    "target": "video-container",
-                    "loop": "0"
-                },
-                "track": "Layer1",
-                "name": "TrackEvent2"
-            }]
-        }, {
             "name": "Layer2",
             "id": "1",
             "trackEvents": [{
@@ -52,7 +37,7 @@
                 "track": "Layer2",
                 "name": "TrackEvent13"
             }, {
-                "id": "TrackEvent4",
+                "id": "TrackEvent5",
                 "type": "titles",
                 "popcornOptions": {
                     "start": 0.68126,
@@ -74,7 +59,7 @@
                 "track": "Layer2",
                 "name": "TrackEvent4"
             }, {
-                "id": "TrackEvent6",
+                "id": "TrackEvent7",
                 "type": "titles",
                 "popcornOptions": {
                     "start": 1.57816,
@@ -99,7 +84,18 @@
         }, {
             "name": "Layer3",
             "id": "2",
-            "trackEvents": []
+            "trackEvents": [{
+                "id": "TrackEvent8",
+                "type": "loopPlugin",
+                "popcornOptions": {
+                    "start": 0,
+                    "end": 2.71333,
+                    "target": "video-container",
+                    "loop": 0
+                },
+                "track": "Layer3",
+                "name": "TrackEvent8"
+            }]
         }]
     }]
 }
