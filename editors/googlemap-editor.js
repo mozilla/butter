@@ -278,7 +278,7 @@
         trackEvent: trackEvent,
         callback: callback,
         basicContainer: optionsContainer,
-        ignoreKeys: ignoreKeys,
+        ignoreManifestKeys: ignoreKeys,
         safeCallback: updateTrackEventWithTryCatch
       });
 

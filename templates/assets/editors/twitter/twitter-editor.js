@@ -159,7 +159,7 @@
         trackEvent: trackEvent,
         callback: callback,
         basicContainer: container,
-        ignoreKeys: ignoreKeys,
+        ignoreManifestKeys: ignoreKeys,
         safeCallback: updateTrackEventWithTryCatch
       });
 

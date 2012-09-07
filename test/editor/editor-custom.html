@@ -43,7 +43,7 @@
                     createdManifestItems.push( name );
                   },
                   basicContainer: contentContainer,
-                  ignoreKeys: [ "start", "end", "target" ]
+                  ignoreManifestKeys: [ "start", "end", "target" ]
                 });
 
                 ok( createdManifestItems.indexOf( "start" ) === -1, "start not created from manifest" );
@@ -58,10 +58,10 @@
                   callback: function( elementType, element, trackEvent, name ){
                     createdManifestItems2.push( name );
                   },
-                  ignoreKeys: [ "start" ]
+                  ignoreManifestKeys: [ "text" ]
                 });
 
-                ok( createdManifestItems2.indexOf( "start" ) === -1, "Start wasn't created as expected" );
+                ok( createdManifestItems2.indexOf( "text" ) === -1, "Text wasn't created as expected" );
 
                 ok( contentContainer.querySelectorAll( "*" ).length > 0, ".content-container was filled with manifest items" );
                 var startElement = rootElement.querySelector( "[data-manifest-key='start']" ).parentNode;

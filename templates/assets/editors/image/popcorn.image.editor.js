@@ -196,7 +196,7 @@
       trackEvent: trackEvent,
       callback: callback,
       container: container,
-      ignoreKeys: ignoreKeys,
+      ignoreManifestKeys: ignoreKeys,
       safeCallback: updateTrackEvent
     });
 

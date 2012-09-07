@@ -210,7 +210,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
         updateOptions[ propertyName ] = TimeUtils.toSeconds( element.value );
         callback( trackEvent, updateOptions );
       }, false );
-    }
+    };
 
     /**
      * Member: attachCheckboxChangeHandler
@@ -243,15 +243,11 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
             updateOptions = {},
             i,
             labels = trackEvent.manifest.options[ propertyName ].labels,
-            currentElement,
-            currentElementData = element.getAttribute( "data-manifest-key" );
-
-        // Add in current checkbox
-        updateOptions[ currentElementData ] = element.checked;
+            currentElement;
 
         // Add in the rest
         for ( i in labels ) {
-          if ( labels.hasOwnProperty( i ) && i !== currentElementData ) {
+          if ( labels.hasOwnProperty( i ) ) {
             currentElement = extendObject.rootElement.querySelector( "[data-manifest-key='" + i + "']" );
             updateOptions[ i ] = currentElement.checked;
           }
