@@ -67,10 +67,12 @@ define([  "dialog/dialog",
     function checkBadges( badges ) {
       var newBadge,
           badgeLink;
+
       if ( badges.length > 0 ) {
         newBadge = Badges.makeBadge( badges[ 0 ], "dropdown" );
         badgeLink = Badges.badgeLink();
         badgeLink.addEventListener( "click", function(){
+          document.body.classList.toggle( "tabzilla-open" );
           butter.editor.openEditor( "share-properties" );
         }, false );
         newBadge.appendChild( badgeLink );
