@@ -298,11 +298,11 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
           start = editorElement.querySelector( "input[data-manifest-key='start']" ),
           end = editorElement.querySelector( "input[data-manifest-key='end']" );
 
-      extendObject.attachStartEndHandler( start, trackEvent, "start", callback );
-      extendObject.attachStartEndHandler( end, trackEvent, "end", callback );
+      extendObject.attachSecondsChangeHandler( start, trackEvent, "start", callback );
+      extendObject.attachSecondsChangeHandler( end, trackEvent, "end", callback );
 
       return editorElement;
-    }
+    };
 
     /**
      * Member: createManifestItem
