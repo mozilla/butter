@@ -67,13 +67,15 @@
           elem: "input",
           type: "text",
           label: "In",
-          group: "advanced"
+          group: "advanced",
+          "units": "seconds"
         },
         end: {
           elem: "input",
           type: "text",
           label: "Out",
-          group: "advanced"
+          group: "advanced",
+          "units": "seconds"
         },
         transition: {
           elem: "select",
