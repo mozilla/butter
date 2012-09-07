@@ -154,7 +154,6 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       input.addEventListener( "keypress", onKeyPress, false );
     }
 
-
     _projectName.addEventListener( "click", projectNameClick, false );
 
     function toggleDropDown() {
@@ -211,7 +210,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     });
     butter.listen( "ready", function() {
       if ( butter.project.name ) {
-        _projectTitle.innerHTML = butter.project.name;
+        _projectName.innerHTML = butter.project.name;
       }
     });
   };
