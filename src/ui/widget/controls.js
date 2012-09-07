@@ -5,7 +5,7 @@
 define( [ "util/lang", "text!layouts/controls.html" ],
   function( LangUtils, CONTROLS_LAYOUT ) {
 
-  return function( container, p ) {
+  return function( container, p, options ) {
 
     var _controls = LangUtils.domFragment( CONTROLS_LAYOUT ).querySelector( "#butter-controls" ),
         _container = typeof container === "string" ? document.getElementById( container ) : container,
@@ -14,11 +14,20 @@ define( [ "util/lang", "text!layouts/controls.html" ],
         durationDialog, timebar, progressBar, bigPlayButton,
         scrubber, seeking, playStateCache, active,
         volume, volumeProgressBar, volumeScrubber, position,
+        controlsShare, controlsRemix, controlsFullscreen, controlsLogo,
         // functions
         bigPlayClicked, activate, deactivate, volumechange,
         togglePlay, timeMouseMove, timeMouseUp,
         timeMouseDown, volumeMouseMove, volumeMouseUp,
         volumeMouseDown, durationchange, mutechange;
+
+    // Deal with callbacks for various buttons in controls
+    options = options || {};
+    var nop = function(){},
+        onShareClick = options.onShareClick || nop,
+        onRemixClick = options.onRemixClick || nop,
+        onFullscreenClick = options.onFullscreenClick || nop,
+        onLogoClick = options.onLogoClick || nop;
 
     var ready = function() {
 
@@ -38,42 +47,21 @@ define( [ "util/lang", "text!layouts/controls.html" ],
       fullscreenButton = document.getElementById( "controls-fullscreen" );
       volumeProgressBar = document.getElementById( "controls-volume-progressbar" );
       volumeScrubber = document.getElementById( "controls-volume-scrubber" );
+      controlsShare = document.getElementById( "controls-share" );
+      controlsRemix = document.getElementById( "controls-remix" );
+      controlsFullscreen = document.getElementById( "controls-fullscreen" );
+      controlsLogo = document.getElementById( "controls-logo" );
       seeking = false;
       playStateCache = false;
       active = false;
 
+      // Wire custom callbacks for right-hand buttons
+      controlsShare.addEventListener( "click", onShareClick, false );
+      controlsRemix.addEventListener( "click", onRemixClick, false );
+      controlsFullscreen.addEventListener( "click", onFullscreenClick, false );
+      controlsLogo.addEventListener( "click", onLogoClick, false );
+
       p.controls( false );
-
-      function requestFullscreen( elem ) {
-        // Prefix + case differences.
-        if ( elem.requestFullscreen ) {
-          elem.requestFullscreen();
-        } else if ( elem.mozRequestFullscreen ) {
-          elem.mozRequestFullscreen();
-        } else if ( elem.mozRequestFullScreen ) {
-          elem.mozRequestFullScreen();
-        } else if ( elem.webkitRequestFullscreen ) {
-          elem.webkitRequestFullscreen();
-        }
-      }
-
-      function checkFullscreen() {
-        if ( document.isFullScreen || document.mozIsFullScreen || document.webkitIsFullScreen ) {
-          return true;
-        }
-        return false;
-      }
-
-      function cancelFullscreen() {
-        // Prefix + case differences.
-        if ( document.exitFullScreen ) {
-          document.exitFullScreen();
-        } else if ( document.mozCancelFullScreen ) {
-          document.mozCancelFullScreen();
-        } else if ( document.webkitCancelFullScreen ) {
-          document.webkitCancelFullScreen();
-        }
-      }
 
       if ( bigPlayButton ) {
 
@@ -82,7 +70,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
         bigPlayClicked = function() {
 
           p.media.removeEventListener( "play", bigPlayClicked, false );
-          bigPlayButton.removeEventListener( "mouseup", bigPlayClicked, false );
+          bigPlayButton.removeEventListener( "click", bigPlayClicked, false );
           bigPlayButton.classList.remove( "controls-ready" );
           p.media.addEventListener( "mouseover", activate, false );
           if ( p.paused() ) {
@@ -90,7 +78,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
           }
         };
 
-        bigPlayButton.addEventListener( "mouseup", bigPlayClicked, false );
+        bigPlayButton.addEventListener( "click", bigPlayClicked, false );
         p.media.addEventListener( "play", bigPlayClicked, false );
       }
 
@@ -130,11 +118,11 @@ define( [ "util/lang", "text!layouts/controls.html" ],
         }
       };
 
-      p.media.addEventListener( "mouseup", togglePlay, false );
+      p.media.addEventListener( "click", togglePlay, false );
 
       if ( playButton ) {
 
-        playButton.addEventListener( "mouseup", togglePlay, false );
+        playButton.addEventListener( "click", togglePlay, false );
 
         p.on( "play", function() {
 
@@ -150,7 +138,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
 
       if ( muteButton ) {
 
-        muteButton.addEventListener( "mouseup", function( e ) {
+        muteButton.addEventListener( "click", function( e ) {
 
           if ( e.button !== 0 ) {
 
@@ -209,18 +197,6 @@ define( [ "util/lang", "text!layouts/controls.html" ],
 
           p.volume( position / volume.offsetWidth );
         };
-
-        if ( fullscreenButton ) {
-          p.on( "butter-fullscreen-allowed", function( e ) {
-            fullscreenButton.addEventListener( "click", function() {
-              if ( checkFullscreen() ) {
-                cancelFullscreen();
-              } else {
-                requestFullscreen( e );
-              }
-            }, false);
-          });
-        }
 
         volumeMouseUp = function( e ) {
 
