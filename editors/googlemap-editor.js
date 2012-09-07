@@ -162,7 +162,9 @@
 
       var pluginOptions = {},
           ignoreKeys = [
-            "target"
+            "target",
+            "start",
+            "end"
           ],
           optionsContainer = _rootElement.querySelector( ".editor-options" );
 
@@ -268,17 +270,22 @@
             } else if ( key === "fullscreen" ) {
               attachFullscreenHandler( option );
             } else if ( option.elementType === "input" ) {
-              if ( [ "start", "end" ].indexOf( key ) > -1 ) {
-                _this.attachSecondsChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithTryCatch );
-              } else {
-                _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
-              }
+              _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
             }
           }
         }
       }
 
-      _this.createPropertiesFromManifest( trackEvent, callback, null, optionsContainer, null, ignoreKeys );
+      optionsContainer.appendChild( _this.createStartEndInputs( trackEvent, updateTrackEventWithTryCatch ) );
+
+      _this.createPropertiesFromManifest({
+        trackEvent: trackEvent,
+        callback: callback,
+        basicContainer: optionsContainer,
+        ignoreManifestKeys: ignoreKeys,
+        safeCallback: updateTrackEventWithTryCatch
+      });
+
       attachHandlers();
 
       _this.updatePropertiesFromManifest( trackEvent );

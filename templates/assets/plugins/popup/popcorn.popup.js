@@ -98,8 +98,7 @@
           "units": "seconds"
         },
         text: {
-          elem: "input",
-          type: "text",
+          elem: "textarea",
           label: "Text",
           "default": "zoink!"
         },
@@ -200,25 +199,10 @@
           "default": "#668B8B",
           group: "advanced"
         },
-        fontWeight: {
-          elem: "input",
-          type: "checkbox",
-          label: "Bold",
-          "default": false,
-          group: "advanced"
-        },
-        fontItalics: {
-          elem: "input",
-          type: "checkbox",
-          label: "Italics",
-          "default": false,
-          group: "advanced"
-        },
-        textUnderline: {
-          elem: "input",
-          type: "checkbox",
-          label: "Underline",
-          "default": false,
+        fontDecorations: {
+          elem: "checkbox-group",
+          labels: { bold: "Bold", italics: "Italics", underline: "Underline" },
+          "default": { bold: false, italics: false, underline: false },
           group: "advanced"
         },
         zindex: {
@@ -380,11 +364,11 @@
         textContainer.appendChild( node );
       }
 
-      textContainer.style.fontStyle = options.fontItalics ? "italic" : "normal";
+      textContainer.style.fontStyle = options.fontDecorations.italics ? "italic" : "normal";
       textContainer.style.color = options.fontColor ? options.fontColor : "#668B8B";
-      textContainer.style.textDecoration = options.textUnderline ? "underline" : "none";
+      textContainer.style.textDecoration = options.fontDecorations.underline ? "underline" : "none";
       textContainer.style.fontSize = options.fontSize ? options.fontSize + "px" : "12px";
-      textContainer.style.fontWeight = options.fontWeight ? "bold" : "normal";
+      textContainer.style.fontWeight = options.fontDecorations.bold ? "bold" : "normal";
 
       innerDiv.appendChild( textContainer );
       container.appendChild( innerDiv );

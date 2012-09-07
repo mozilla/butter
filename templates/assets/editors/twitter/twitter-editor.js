@@ -82,8 +82,11 @@
           pluginOptions = {},
           ignoreKeys = [
             "search",
-            "username"
-          ];
+            "username",
+            "start",
+            "end"
+          ],
+          startEndElement;
 
       function callback( elementType, element, trackEvent, name ) {
         pluginOptions[ name ] = {
@@ -96,17 +99,10 @@
       function attachHandlers() {
         var key,
             option,
-            start = pluginOptions.start.element.parentNode.parentNode,
-            end = pluginOptions.end.element.parentNode.parentNode,
-            searchLabel = _rootElement.querySelector( "#search-label" ).parentNode,
             searchButton = _rootElement.querySelector( "#search-radio" ),
             userButton = _rootElement.querySelector( "#user-radio" ),
             searchText = _rootElement.querySelector( "#search-text" ),
             userText = _rootElement.querySelector( "#user-text" );
-
-        // Move start and end to first elements in editor
-        container.insertBefore( start, searchLabel );
-        container.insertBefore( end, searchLabel );
 
         // Disable the user search box immediately
         userText.disabled = true;
@@ -156,18 +152,23 @@
               _this.attachSelectChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
             }
             else if ( option.elementType === "input" ) {
-              if ( [ "start", "end" ].indexOf( key ) > -1 ) {
-                _this.attachSecondsChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithTryCatch );
-              }
-              else {
-                _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
-              }
+              _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
             }
           }
         }
       }
 
-      _this.createPropertiesFromManifest( trackEvent, callback, null, container, null, ignoreKeys );
+      startEndElement = _this.createStartEndInputs( trackEvent, updateTrackEventWithTryCatch );
+      container.insertBefore( startEndElement, container.firstChild );
+
+      _this.createPropertiesFromManifest({
+        trackEvent: trackEvent,
+        callback: callback,
+        basicContainer: container,
+        ignoreManifestKeys: ignoreKeys,
+        safeCallback: updateTrackEventWithTryCatch
+      });
+
       attachHandlers();
       _this.updatePropertiesFromManifest( trackEvent );
 
