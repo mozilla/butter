@@ -10,15 +10,6 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
             Scrollbars ) {
 
   var __defaultLayouts = LangUtils.domFragment( DEFAULT_LAYOUT_SNIPPETS ),
-      __safeKeyUpKeys = [
-                          KeysUtils.LEFT,
-                          KeysUtils.UP,
-                          KeysUtils.RIGHT,
-                          KeysUtils.DOWN,
-                          KeysUtils.DELETE,
-                          KeysUtils.TAB,
-                          KeysUtils.ESCAPE
-                        ],
       __googleFonts = [
                         "Gentium Book Basic",
                         "Lato",
