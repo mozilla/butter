@@ -11,16 +11,151 @@
 define( [], function() {
   var __tooltipClass = "butter-tooltip",
       __tooltipOnClass = "tooltip-on",
+      __toolTipNoHoverClass = "tooltip-no-hover",
       _registeredTooltips = {},
+      ToolTipObj,
       ToolTip;
 
   function register( tooltip ) {
-    _registeredTooltips[ tooltip.title ] = tooltip;
+    _registeredTooltips[ tooltip.name ] = tooltip;
   }
 
-  function isRegistered( title ) {
-    return !!_registeredTooltips[ title ];
+  function isRegistered( name ) {
+    return !!_registeredTooltips[ name ];
   }
+
+  // ToolTip Constructor
+  ToolTipObj = function( options ) {
+    if ( options && isRegistered( options.name ) ) {
+      return;
+    }
+
+    var parentElement,
+        name,
+        text,
+        top,
+        left,
+        tooltipElement = document.createElement( "div" );
+
+    tooltipElement.classList.add( __tooltipClass );
+
+    Object.defineProperty( this, "text", {
+      get: function() {
+        return text;
+      },
+      set: function( newText ) {
+        if ( newText && typeof newText === "string" ) {
+          text = newText;
+          tooltipElement.innerHTML = newText;
+        }
+      },
+      enumerable: true
+    });
+
+    Object.defineProperty( this, "hidden", {
+      get: function() {
+        return tooltipElement.classList.contains( __tooltipOnClass );
+      },
+      set: function( hidden ) {
+        if ( hidden || hidden === undefined ) {
+          tooltipElement.classList.remove( __tooltipOnClass );
+        } else {
+          tooltipElement.classList.add( __tooltipOnClass );
+        }
+      },
+      enumerable: true
+    });
+
+    Object.defineProperty( this, "hover", {
+      get: function() {
+        return !tooltipElement.classList.contains( __toolTipNoHoverClass );
+      },
+      set: function( hover ) {
+        if ( hover || hover === undefined ) {
+          tooltipElement.classList.remove( __toolTipNoHoverClass  );
+        } else {
+          tooltipElement.classList.add( __toolTipNoHoverClass );
+        }
+      },
+      enumerable: true
+    });
+
+    Object.defineProperty( this, "top", {
+      get: function() {
+        return top;
+      },
+      set: function( newTop ) {
+        if ( parentElement && newTop && typeof newTop === "string" ) {
+          top = newTop;
+          tooltipElement.style.top = newTop;
+        }
+      },
+      enumerable: true
+    });
+
+    Object.defineProperty( this, "left", {
+      get: function() {
+        return left;
+      },
+      set: function( newLeft ) {
+        if ( parentElement && newLeft && typeof newLeft === "string" ) {
+          left = newLeft;
+          tooltipElement.style.left = newLeft;
+        }
+      },
+      enumerable: true
+    });
+
+    Object.defineProperty( this, "tooltipElement", {
+      get: function() {
+        return tooltipElement;
+      },
+      enumerable: true
+    });
+
+    Object.defineProperty( this, "parent", {
+      get: function() {
+        return parentElement;
+      },
+      set: function( newParent ) {
+        if ( newParent ) {
+          // Parent must be relative or absolute for tooltip to be positioned properly
+          if ( [ "absolute", "relative" ].indexOf( getComputedStyle( newParent ).getPropertyValue( "position" ) ) === -1 ) {
+            newParent.style.position = "relative";
+          }
+
+          parentElement = newParent;
+          parentElement.appendChild( tooltipElement );
+        }
+      },
+      enumerable: true
+    });
+
+    Object.defineProperty( this, "name", {
+      get: function() {
+        return name;
+      },
+      enumerable: true
+    });
+
+    this.destroy = function() {
+      parentElement.removeChild( tooltipElement );
+      _registeredTooltips[ name ] = undefined;
+    };
+
+    this.parent = options.element;
+    this.top = options.top || parentElement.getBoundingClientRect().height + "px";
+    this.left = options.left || "50%";
+    this.text = options.message || parentElement.getAttribute( "data-tooltip" ) || parentElement.getAttribute( "title" ) || "";
+    this.hidden = options.hidden;
+    this.hover = options.hover;
+
+    name = options.name;
+
+    register( this );
+
+    return this;
+  };
 
   ToolTip = {
     /**
@@ -34,49 +169,14 @@ define( [], function() {
      *  message: "This is my message",
      *  top: 14px,
      *  left: 30px,
-     *  hidden: true
+     *  hidden: true,
+     *  hover: true
      * });
      */
     create: function( options ) {
-      var element = options.element,
-          tooltipEl = document.createElement( "div" ),
-          tooltipText = options.message || element.getAttribute( "data-tooltip" ) || element.getAttribute( "title" ) || "",
-          tooltipTitle = options.title || element.getAttribute( "title" ) || ( "" + new Date() ),
-          top = options.top,
-          left = options.left,
-          parentRect;
+      var newToolTip = new ToolTipObj( options );
 
-      if ( isRegistered( tooltipTitle ) ) {
-        return;
-      }
-
-      tooltipEl.classList.add( __tooltipClass );
-      tooltipEl.innerHTML = tooltipText;
-
-      if ( options.hidden === false ) {
-        tooltipEl.classList.add( __tooltipOnClass );
-      }
-
-      if ( element ) {
-         // Parent must be relative or absolute for tooltip to be positioned properly
-        if ( [ "absolute", "relative" ].indexOf( getComputedStyle( element ).getPropertyValue( "position" ) ) === -1 ) {
-          element.style.position = "relative";
-        }
-
-        parentRect = element.getBoundingClientRect();
-        tooltipEl.style.top = top || parentRect.height + "px";
-        tooltipEl.style.left = left || "50%";
-
-        element.appendChild( tooltipEl );
-      }
-
-      register( {
-        title: tooltipTitle,
-        elem: tooltipEl,
-        text: tooltipText
-      });
-
-      return tooltipEl;
+      return newToolTip.tooltipElement;
     },
     /**
      * Member: apply
