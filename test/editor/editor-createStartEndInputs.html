@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite [Editor Module]</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../inject.js"></script>
+    <script type="text/javascript" src="../../src/butter.js"></script>
+    <script src="../butter.inject.js"></script>
+    <script src="../test-utils.js"></script>
+    <script>
+      asyncTest( "createStartEndInputs handling", 2, function() {
+
+        var layoutSrc = "<div class=\"butter-editor\">" +
+                        "  <div class=\"error-message-container\">" +
+                        "    <div class=\"content-container\"></div>" +
+                        "    <div class=\"error-message\"></div>" +
+                        "  </div>" +
+                        "</div>";
+
+        createButterModule( function( butter ) {
+          var media = butter.addMedia(),
+              track = media.addTrack(),
+              trackEvent = track.addTrackEvent({
+                type: "text",
+                popcornOptions: {
+                  start: 3,
+                  end: 6
+                }
+              });
+
+          Butter.Editor.register( "text", layoutSrc, function( rootElement, butter ) {
+            Butter.Editor.TrackEventEditor( this, butter, rootElement, {
+              open: function( parentElement, trackEvent ) {
+                var contentContainer = rootElement.querySelector( ".content-container" ),
+                    startEndElement;
+
+                startEndElement = this.createStartEndInputs( trackEvent );
+
+                equal( "butter-form-inline form-half start-end", startEndElement.className,
+                  "Correctly picked the right element layout structure" );
+                equal( startEndElement.querySelectorAll( "div" ).length, 2, "Correctly has the expected 2 divs" );
+                start();
+              },
+              close: function() {
+              }
+            });
+          });
+
+          var editor = butter.editor.editTrackEvent( trackEvent );
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite [Editor Module]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="test-target-1"></div>
+  </body>
+</html>

@@ -53,20 +53,27 @@
                 ok( createdManifestItems.indexOf( "multiline" ) > -1, "multiline created from manifest" );
                 ok( createdManifestItems.indexOf( "text" ) > -1, "text created from manifest" );
 
+                // Clear content container of any nodes
+                if ( contentContainer.hasChildNodes() ) {
+                  while ( contentContainer.childNodes.length >= 1 ) {
+                    contentContainer.removeChild( contentContainer.firstChild );
+                  }
+                }
+
                 this.createPropertiesFromManifest({
                   trackEvent: trackEvent,
                   callback: function( elementType, element, trackEvent, name ){
                     createdManifestItems2.push( name );
                   },
-                  ignoreManifestKeys: [ "text" ]
+                  manifestKeys: [ "text" ]
                 });
 
-                ok( createdManifestItems2.indexOf( "text" ) === -1, "Text wasn't created as expected" );
+                ok( createdManifestItems2.indexOf( "text" ) > -1, "Text was created as expected" );
 
-                ok( contentContainer.querySelectorAll( "*" ).length > 0, ".content-container was filled with manifest items" );
-                var startElement = rootElement.querySelector( "[data-manifest-key='start']" ).parentNode;
-                ok( startElement, "start element was created with correct data-manifest-key" );
-                ok( startElement.parentNode.parentNode === rootElement, "start element was created outside of content-container" );
+                ok( rootElement.querySelectorAll( "fieldset" ).length > 0, "rootElement was filled with manifest items" );
+                var textElement = rootElement.querySelector( "input[data-manifest-key='text']" );
+                ok( textElement, "text element was created with correct data-manifest-key" );
+                ok( textElement.parentNode.parentNode === rootElement, "text element was created outside of content-container" );
                 start();
               },
               close: function() {
