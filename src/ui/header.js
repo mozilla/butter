@@ -28,8 +28,9 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     // create a tooltip for the projectName element
     ToolTip.create({
       title: "header-title-tooltip",
+      message: "Change the name of your project",
       element: _projectTitle,
-      top: "43px"
+      top: "50px"
     });
 
     // This is an easter egg to open a UI kit editor. Hurrah
