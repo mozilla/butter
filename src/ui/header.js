@@ -50,6 +50,7 @@ define([  "dialog/dialog",
 
     _tabzilla.addEventListener( "click", function( e ) {
       document.body.classList.toggle( "tabzilla-open" );
+      document.body.classList.remove( "badges-open" );
     }, false );
 
     function login( successCallback, errorCallback ) {
@@ -72,7 +73,7 @@ define([  "dialog/dialog",
         newBadge = Badges.makeBadge( badges[ 0 ], "dropdown" );
         badgeLink = Badges.badgeLink();
         badgeLink.addEventListener( "click", function(){
-          document.body.classList.toggle( "tabzilla-open" );
+          document.body.classList.toggle( "badges-open" );
           butter.editor.openEditor( "share-properties" );
         }, false );
         newBadge.appendChild( badgeLink );

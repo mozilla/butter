@@ -4,6 +4,7 @@ define([ "util/lang", "util/xhr", "text!layouts/badges.html" ],
     var _badgeLayout = Lang.domFragment( BADGES_LAYOUT, ".butter-badge" ),
         _badgeLink = Lang.domFragment( BADGES_LAYOUT, ".butter-badge-backpack-link" ),
         _backpack = Lang.domFragment( BADGES_LAYOUT, ".butter-badge-backpack"),
+        _backpackBadgeButtons = Lang.domFragment( BADGES_LAYOUT, ".butter-badge-buttons"),
         _this;
 
     _this = {
@@ -19,6 +20,7 @@ define([ "util/lang", "util/xhr", "text!layouts/badges.html" ],
               document.body.appendChild( _backpack );
             }
             newBadge = _this.makeBadge( badges[ 0] );
+            newBadge.appendChild( _backpackBadgeButtons.cloneNode( true ) );
             _backpack.querySelector( ".butter-badge-container" ).appendChild( newBadge );
           }
         });
@@ -31,9 +33,9 @@ define([ "util/lang", "util/xhr", "text!layouts/badges.html" ],
             newBadge.classList.add( item.replace( / /g, "" ) );
           });
         }
-        newBadge.querySelector( ".butter-badge-title").innerHTML = data.name;
-        newBadge.querySelector( ".butter-badge-image").style[ "background-image" ] = data.image_url;
-        newBadge.querySelector( ".butter-badge-desc").innerHTML = data.description;
+        newBadge.querySelector( ".butter-badge-title" ).innerHTML = data.name;
+        newBadge.querySelector( ".butter-badge-image" ).style[ "background-image" ] = data.image_url;
+        newBadge.querySelector( ".butter-badge-desc" ).innerHTML = data.description;
         return newBadge;
       },
       badgeLink: function() {

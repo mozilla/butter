@@ -308,6 +308,7 @@
   .box-sizing( border-box );
   .transition( all .2s ease-in-out );
   .butter-badge {
+    position: relative;
     float: left;
     width: 250px;
     height: 100px;
@@ -315,8 +316,13 @@
     border-radius: 3px;
     padding: 10px;
   }
+  .butter-badge-buttons {
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
+  }
 }
 
-.tabzilla-open .butter-badge-backpack {
+.badges-open .butter-badge-backpack {
   top: 0;
 }
