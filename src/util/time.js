@@ -11,12 +11,22 @@ define( [], function(){
     return Math.round( time * ( Math.pow( 10, accuracy ) ) ) / Math.pow( 10, accuracy );
   } //roundTime
 
+  // toSeconds converts a timecode string to seconds.
+  // "HH:MM:SS.DD" -> seconds
+
+  // examples:
+  // "1:00:00" -> 3600
+  // "-1:00:00" -> -3600
+
+  // it also parses strings to seconds
+  // " 003600.00" -> 3600
+  // " 003600.99" -> 3600.99
   function toSeconds( time ) {
     var splitTime,
         seconds,
         minutes,
         hours,
-        negative = false;
+        isNegative = 1;
 
     if ( typeof time === "number" ) {
       return time;
@@ -26,15 +36,16 @@ define( [], function(){
       return 0;
     }
 
+    time = time.trim();
     if ( time.substring( 0, 1 ) === "-" ) {
       time = time.replace( "-", "" );
-      negative = true;
+      isNegative = -1;
     }
 
     splitTime = time.split( ":" );
-    seconds = +splitTime[ splitTime.length - 1 ];
-    minutes = +splitTime[ splitTime.length - 2 ];
-    hours = +splitTime[ splitTime.length - 3 ];
+    seconds = +splitTime[ splitTime.length - 1 ] || 0;
+    minutes = +splitTime[ splitTime.length - 2 ] || 0;
+    hours = +splitTime[ splitTime.length - 3 ] || 0;
 
     if ( hours ) {
       seconds += hours * 3600;
@@ -44,17 +55,19 @@ define( [], function(){
       seconds += minutes * 60;
     }
 
-    if ( seconds !== 0 && !seconds ) {
-      return 0;
-    }
-
-    if ( negative ) {
-      seconds = -seconds;
-    }
-
-    return seconds;
+    return seconds * isNegative;
   }
 
+  // parse converts time to a timecode string.
+  // seconds -> "HH:MM:SS.DD"
+
+  // examples:
+  // 3600 -> "1:00:00"
+  // -3600 -> "-1:00:00"
+
+  // it also parses strings to timecode
+  // "  00:00:01" -> "1"
+  // "  000:01:01.00" -> "1:01"
   function parse( time ){
     var hours,
         minutes,
