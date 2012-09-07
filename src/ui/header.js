@@ -77,7 +77,6 @@ define([  "dialog/dialog",
           butter.editor.openEditor( "share-properties" );
         }, false );
         newBadge.appendChild( badgeLink );
-        _badgeCounter.querySelector( ".butter-badge-number" ).innerHTML = badges.length;
         _badgeCounter.querySelector( ".butter-badge" ) && _badgeCounter.removeChild( _badgeCounter.querySelector( ".butter-badge" ) ) ;
         _badgeCounter.appendChild( newBadge );
         _badgeCounter.addEventListener( "click", function(){
@@ -96,6 +95,7 @@ define([  "dialog/dialog",
           _previewBtn.classList.remove( "butter-hidden" );
           _previewBtn.href = e.url;
           _rootElement.querySelector( ".butter-badge-img" ).classList.add( "butter-badge-gold" );
+          _badgeCounter.querySelector( ".butter-badge-number" ).innerHTML = 1;
         }
       });
     }
