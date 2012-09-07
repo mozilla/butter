@@ -1,5 +1,5 @@
 (function( Popcorn ) {
-  Popcorn.plugin( "repeat", function() {
+  Popcorn.plugin( "loopPlugin", function() {
     return {
       _setup: function( options ) {
         options.loop = options.loop || 0;
@@ -27,6 +27,7 @@
     };
   },
   {
+    "displayName": "loop",
     "options": {
       "start": {
         "elem": "input",
@@ -45,7 +46,7 @@
         "label": "Number of loops (0 = forever)",
         "elem": "input",
         "type": "number",
-        "default": 1
+        "default": 0
       }
     }
   });

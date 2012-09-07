@@ -105,7 +105,8 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
           breadcrumbsLayout = extendObject.defaultLayouts.querySelector( ".butter-breadcrumbs" ),
           backLink = breadcrumbsLayout.querySelector( ".butter-breadcrumbs-back" ),
           editorTitle =  breadcrumbsLayout.querySelector( ".butter-editor-title" ),
-          closeEditorLink =  breadcrumbsLayout.querySelector( ".close-btn" );
+          closeEditorLink =  breadcrumbsLayout.querySelector( ".close-btn" ),
+          pluginName = trackEvent.manifest.displayName || trackEvent.type;
 
       if ( !trackEvent || !oldTitleEl ) {
         return;
@@ -121,7 +122,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
 
       if ( trackEvent.type ) {
         editorTitle.innerHTML = "";
-        editorTitle.appendChild( document.createTextNode( trackEvent.type ) );
+        editorTitle.appendChild( document.createTextNode( pluginName ) );
       }
 
       oldTitleEl.parentNode.replaceChild( breadcrumbsLayout, oldTitleEl );

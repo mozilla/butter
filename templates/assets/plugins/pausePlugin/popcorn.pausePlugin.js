@@ -1,5 +1,5 @@
 (function( Popcorn ) {
-  Popcorn.plugin( "stop", function() {
+  Popcorn.plugin( "pausePlugin", function() {
     var _this = this,
         _timeout,
         _seekedFunc = function() {
@@ -11,7 +11,7 @@
     return {
       _setup: function( options ) {
         options.toString = function() {
-          return "Stop " + ( options.duration > 0 ? options.duration : "forever" );
+          return "Pause " + ( options.duration > 0 ? options.duration : "forever" );
         };
       },
       start: function( event, options ) {
@@ -34,6 +34,7 @@
     };
   },
   {
+    "displayName": "Pause",
     "options": {
       "start": {
         "elem": "input",
