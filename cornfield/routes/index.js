@@ -89,4 +89,24 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
       });
     }
   });
+
+  // We have a separate remix API for unsecured and sanitized access to projects
+  app.get( '/api/remix/:id', filter.isStorageAvailable, function( req, res ) {
+    User.findById( req.params.id, function( err, project ) {
+      if ( err ) {
+        res.json( { error: err }, 500 );
+        return;
+      }
+
+      if ( !project ) {
+        res.json( { error: 'project not found' }, 404 );
+        return;
+      }
+
+      var projectJSON = JSON.parse( project.data, sanitizer.escapeHTMLinJSON );
+      projectJSON.name = "Remix of " + sanitizer.escapeHTML( project.name );
+
+      res.json( projectJSON );
+    });
+  });
 };

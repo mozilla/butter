@@ -82,8 +82,7 @@ function init( window, document ) {
   }
 
   function remixClick( popcorn ) {
-    // TODO: see ticket #1755
-    return;
+    $( "#remix-post" ).click();
   }
 
   function fullscreenClick() {
