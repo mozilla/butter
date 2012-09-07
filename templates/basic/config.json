@@ -45,7 +45,7 @@
         "type": "pausePlugin",
         "displayName": "Pause",
         "path": "{{baseDir}}templates/assets/plugins/pausePlugin/popcorn.pausePlugin.js",
-        "icon": "{{baseDir}}templates/assets/plugins/pausePlugin/pause-icon.png" 
+        "icon": "{{baseDir}}templates/assets/plugins/pausePlugin/pause-icon.png"
       },
       {
         "type": "wikipedia",
