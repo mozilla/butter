@@ -11,6 +11,8 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         editorContainer = rootElement.querySelector( ".editor-container" ),
         saveContainer = rootElement.querySelector( ".save-container" ),
         projectURL = editorContainer.querySelector( ".butter-project-url" ),
+        authorInput = editorContainer.querySelector( ".butter-project-author" ),
+        authorUpdateButton = editorContainer.querySelector( ".butter-project-author-update" ),
         projectEmbedURL = editorContainer.querySelector( ".butter-project-embed-url" ),
         embedSize = editorContainer.querySelector( ".butter-embed-size" ),
         previewBtn = editorContainer.querySelector( ".butter-preview-link" ),
@@ -27,6 +29,8 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         embedHeight = embedDimensions[ 1 ],
         tooltip;
 
+    authorInput.value = butter.project.author === "Anonymous" || !butter.project.author ? "" : butter.project.author;
+
     function onMouseOver() {
       projectNameWrapper.removeEventListener( "mouseover", onMouseOver, false );
       if ( tooltip ) {
@@ -42,6 +46,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
     function displayLogin() {
       resetInput();
       embedSize.disabled = true;
+      authorInput.disabled = true;
       saveBtn.removeEventListener( "click", save, false );
       saveBtn.classList.add( "hide-container" );
       saveContainer.classList.remove( "butter-login-true" );
@@ -71,6 +76,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
     function displaySave() {
       resetInput();
       embedSize.disabled = true;
+      authorInput.disabled = true;
       butter.listen( "projectsaved", projectSaved );
       loginBtn.classList.add( "hide-container" );
       loginBtn.removeEventListener( "click", login, false );
@@ -92,6 +98,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       }
 
       embedSize.disabled = false;
+      authorInput.disabled = false;
       saveContainer.classList.add( "hide-container" );
       editorContainer.classList.remove( "fade-container" );
       projectName.value = "";
@@ -141,6 +148,9 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         projectName.value = butter.project.name;
       }
 
+      butter.project.author = authorInput.value || "Anonymous";
+      authorUpdateButton.classList.add( "disabled" );
+
       if ( !butter.project.name ) {
         tooltip = userData.createErrorToolTip( projectNameWrapper, {
           message: "Please give your project a name before saving",
@@ -163,6 +173,16 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       embedHeight = embedDimensions[ 1 ];
       updateEmbed( projectURL.value.replace( "/v/", "/e/" ) );
     }, false);
+
+    authorInput.addEventListener( "input", function( e ) {
+      authorUpdateButton.classList.remove( "disabled" );
+    }, false );
+
+    authorInput.addEventListener( "blur", function( e ) {
+      if ( authorInput.value !== butter.project.author ) {
+        save();
+      }
+    }, false );
 
     butter.listen( "authenticated", function( e ) {
       if ( e.data ) {

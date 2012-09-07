@@ -791,6 +791,7 @@
             }
             _this.project.id = savedData.projectID;
             _this.project.name = savedData.name;
+            _this.project.author = savedData.author;
             _this.importProject( savedData );
           }
           else {

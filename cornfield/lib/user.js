@@ -9,6 +9,7 @@ Project = new Schema({
   data: String,
   email: String,
   name: String,
+  author: String,
   template: String
 }),
 ProjectModel = mongoose.model( 'Project2', Project );
@@ -30,6 +31,7 @@ module.exports = {
       data: JSON.stringify( data.data ),
       email: email,
       name: data.name,
+      author: data.author || "Anonymous",
       template: data.template
     });
 
@@ -94,6 +96,7 @@ module.exports = {
       doc.data = JSON.stringify( data.data );
       doc.email = email;
       doc.name = data.name;
+      doc.author = data.author || "Anonymous";
       doc.template = data.template;
 
       doc.save( function( err ) {
