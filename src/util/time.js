@@ -15,10 +15,12 @@ define( [], function(){
    * Accuracy of 2:
    * 1.012345 -> 1.01
    *
-   * @param {Number} time: Time to round given __timeAccuracy
+   * @param {Number} time: Time which will be rounded
+   * @param {Number} accuracy: A one time accuracy to round to
    */
-  function roundTime( time ){
-    return Math.round( time * ( Math.pow( 10, __timeAccuracy ) ) ) / Math.pow( 10, __timeAccuracy );
+  function roundTime( time, accuracy ){
+    accuracy = accuracy >= 0 ? accuracy : __timeAccuracy;
+    return Math.round( time * ( Math.pow( 10, accuracy ) ) ) / Math.pow( 10, accuracy );
   }
 
   /**
@@ -104,8 +106,7 @@ define( [], function(){
 
     hours = Math.floor( time / 3600 );
     minutes = Math.floor( ( time % 3600 ) / 60 );
-    __timeAccuracy = 2;
-    seconds = roundTime( time % 60 );
+    seconds = roundTime( time % 60, 2 );
     timeString = seconds + "";
 
     if ( !minutes && !hours ) {
