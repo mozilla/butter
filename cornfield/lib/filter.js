@@ -20,6 +20,10 @@ filters = {
         error: 'storage service is not running'
       }, 500 );
     }
+  },
+  // this is used when a user is 'remixing' another users exported project
+  noLoginRequired: function( req, res, next ) {
+    next();
   }
 };
 

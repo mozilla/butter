@@ -258,6 +258,7 @@ app.post( '/api/publish/:id', filter.isLoggedIn, filter.isStorageAvailable, func
                   {
                     id: id,
                     author: email,
+                    template: project.template,
                     title: project.name,
                     baseHref: baseHref,
                     templateScripts: templateScripts,

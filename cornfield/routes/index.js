@@ -30,6 +30,21 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
     });
   });
 
+  app.get( '/api/remix/:id?', filter.noLoginRequired, filter.isStorageAvailable, function( req, res ) {
+    User.findUser( req.params.id, function( err, doc ) {
+      if ( err ) {
+        res.json( { error: err }, 500 );
+        return;
+      }
+
+      if ( !doc ) {
+        res.json( { error: "project not found" }, 404 );
+      }
+
+      res.json( JSON.parse( doc.data ) );
+    });
+  });
+
   app.get( '/api/projects', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
     User.findAllProjects( req.session.email, function( err, doc ) {
       if ( err ) {

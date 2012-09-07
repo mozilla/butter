@@ -54,6 +54,9 @@ function init( window, document ) {
       show( "#share" );
     }, false );
 
+    $( "#remix-post" ).addEventListener( "click", function() {
+      popcorn.emit( "remixInButter" );
+    });
     $( "#share-share" ).addEventListener( "click", function() {
       // Not sure what share in the context of share means...
       Popcorn.nop();

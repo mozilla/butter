@@ -70,6 +70,24 @@ module.exports = {
       callback( err, doc );
     });
   },
+  findUser: function findUser( pid, callback ) {
+    if ( !pid ) {
+      callback( 'not enough parameters to search' );
+      return;
+    }
+    UserModel.find({
+      "projects._id": pid
+    }).select( "projects.data" ).exec(function( err, doc ) {
+      var projects = doc[ 0 ].projects;
+
+      for ( var i = 0, l = projects.length; i < l; i++ ) {
+        if ( "" + projects[ i ]._id === pid ) {
+          callback( err, projects[ i ] );
+          break;
+        }
+      }
+    });
+  },
   isDBOnline: function isDBOnline() {
     return dbOnline;
   },
