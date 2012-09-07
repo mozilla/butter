@@ -62,6 +62,7 @@ define( [], function(){
       else {
         _timeBox.value = _oldValue;
       } //if
+      _timeBox.value = _timeBox.value + " / " + "00:00" ;
     } //setTime
 
     _media.listen( "mediatimeupdate", function( e ){
