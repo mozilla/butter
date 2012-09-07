@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [], function(){
+define( [ "util/time" ], function( TimeUtils ){
 
   function Button( parentNode, className, onClick, toolTip ) {
     var _container = parentNode.querySelector( className ),
@@ -44,20 +44,14 @@ define( [], function(){
       if( typeof( time ) === "string" || !isNaN( time ) ){
         if( setCurrentTime ){
           try {
-            _media.currentTime = Popcorn.util.toSeconds( time );
+            _media.currentTime = TimeUtils.toSeconds( time );
           }
           catch( e ){
             time = _media.currentTime;
           } //try
         } //if
 
-        var timeStamp = new Date( 1970, 0, 1 ),
-            timeParts;
-
-        timeStamp.setSeconds( time );
-        timeParts = timeStamp.toTimeString().split(" ")[ 0 ].split( ":" );
-
-        _timeBox.value = timeParts[ 1 ] + ":" + timeParts[ 2 ];
+        _timeBox.value = TimeUtils.toTimecode( time );
       }
       else {
         _timeBox.value = _oldValue;

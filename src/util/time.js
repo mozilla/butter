@@ -82,7 +82,7 @@ define( [], function(){
    *
    * @param {Number} time: Seconds to which is converted to timecode
    */
-  function toTimecode( time ){
+  function toTimecode( time, zeroPadding ){
     var hours,
         minutes,
         seconds,
