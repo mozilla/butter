@@ -46,7 +46,7 @@
         "label": "Number of loops (0 = forever)",
         "elem": "input",
         "type": "number",
-        "default": 1
+        "default": 0
       }
     }
   });
