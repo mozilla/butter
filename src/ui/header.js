@@ -95,6 +95,7 @@ define([  "dialog/dialog",
           butter.editor.openEditor( "share-properties" );
           _previewBtn.classList.remove( "butter-hidden" );
           _previewBtn.href = e.url;
+          _rootElement.querySelector( ".butter-badge-img" ).classList.add( "butter-badge-gold" );
         }
       });
     }

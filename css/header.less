@@ -211,10 +211,13 @@
   display: inline-block;
   float: left;
   margin-right: 3px;
-  background: url( "https://wiki.mozilla.org/images/b/bb/Merit-badge.png" ) no-repeat;
+  background: url( "../resources/badges/badge-grey.png" ) no-repeat;
   background-size: 24px 24px;
   height: 24px;
   width: 24px;
+  &.butter-badge-gold {
+    background-image: url( "../resources/badges/badge-gold.png" );
+  }
 }
 
 .butter-badge.dropdown {
@@ -285,7 +288,7 @@
   float: left;
   height: 40px;
   width: 40px;
-  background: url( "https://wiki.mozilla.org/images/b/bb/Merit-badge.png" ) no-repeat;
+  background: url( "../resources/badges/badge-gold.png" ) no-repeat;
   background-size: 40px 40px;
   margin-right: 10px;
 }
@@ -315,6 +318,7 @@
     border: 1px solid #CCC;
     border-radius: 3px;
     padding: 10px;
+    margin-right: 20px;
   }
   .butter-badge-buttons {
     position: absolute;

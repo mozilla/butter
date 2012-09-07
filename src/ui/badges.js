@@ -1,5 +1,5 @@
 
-define([ "util/lang", "util/xhr", "text!layouts/badges.html" ],
+define([ "util/lang", "util/xhr", "text!layouts/badges.html"],
   function( Lang, XHR, BADGES_LAYOUT ) {
     var _badgeLayout = Lang.domFragment( BADGES_LAYOUT, ".butter-badge" ),
         _badgeLink = Lang.domFragment( BADGES_LAYOUT, ".butter-badge-backpack-link" ),
@@ -20,18 +20,21 @@ define([ "util/lang", "util/xhr", "text!layouts/badges.html" ],
             if ( !document.querySelector( ".butter-badge-backpack" ) ) {
               document.body.appendChild( _backpack );
             }
-            newBadge = _this.makeBadge( badges[ 0] );
-            badgeButtons = _backpackBadgeButtons.cloneNode( true );
-            console.log( badgeButtons );
-            badgeButtons.querySelector( ".butter-add-badge" ).addEventListener( "click", function( ) {
-              this.classList.add( "btn-green" );
-              this.classList.remove( "btn-light" );
-              this.querySelector( ".icon" ).classList.remove( "icon-arrow-right" );
-              this.querySelector( ".icon" ).classList.add( "icon-ok" );
-              this.querySelector( ".icon" ).classList.add( "icon-white" );
-            }, false );
-            newBadge.appendChild( badgeButtons );
-            _backpack.querySelector( ".butter-badge-container" ).appendChild( newBadge );
+            badges.forEach( function( badge ){
+              newBadge = _this.makeBadge( badge );
+              badgeButtons = _backpackBadgeButtons.cloneNode( true );
+              console.log( badgeButtons );
+              badgeButtons.querySelector( ".butter-add-badge" ).addEventListener( "click", function( ) {
+                this.classList.add( "btn-green" );
+                this.classList.remove( "btn-light" );
+                this.querySelector( ".badge-message" ).innerHTML = "Sent!";
+                this.querySelector( ".icon" ).classList.remove( "icon-arrow-right" );
+                this.querySelector( ".icon" ).classList.add( "icon-ok" );
+                this.querySelector( ".icon" ).classList.add( "icon-white" );
+              }, false );
+              newBadge.appendChild( badgeButtons );
+              _backpack.querySelector( ".butter-badge-container" ).appendChild( newBadge );
+            });
           }
         });
       },
