@@ -85,7 +85,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
           bigPlayButton.removeEventListener( "mouseup", bigPlayClicked, false );
           bigPlayButton.classList.remove( "controls-ready" );
           p.media.addEventListener( "mouseover", activate, false );
-          if ( p.paused ) {
+          if ( p.paused() ) {
             p.play();
           }
         };
