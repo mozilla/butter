@@ -253,6 +253,9 @@ app.post( '/api/publish/:id', filter.isLoggedIn, filter.isStorageAvailable, func
                          });
       }
 
+      // This is a query string-only URL because of the <base> tag
+      var remixUrl = "?savedDataUrl=/api/remix/" + project._id;
+
       writeEmbed( path.join( PUBLISH_DIR_E, id + ".html" ),
                   res, path.join( PUBLISH_PREFIX_E, id + ".html" ),
                   {
@@ -260,6 +263,7 @@ app.post( '/api/publish/:id', filter.isLoggedIn, filter.isStorageAvailable, func
                     author: email,
                     title: project.name,
                     baseHref: baseHref,
+                    remixUrl: remixUrl,
                     templateScripts: templateScripts,
                     externalAssets: externalAssetsString,
                     // XXX: need a better way to wrap function, DOM needs to be ready
