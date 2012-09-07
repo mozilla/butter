@@ -22,82 +22,82 @@
 
           var toSeconds = Timecode.toSeconds;
 
-          equal( typeof toSeconds( "1" ), "number", "pass" );
-          equal( typeof toSeconds( "0" ), "number", "pass" );
-          equal( typeof toSeconds( 0 ), "number", "pass" );
+          strictEqual( typeof toSeconds( "1" ), "number", "pass" );
+          strictEqual( typeof toSeconds( "0" ), "number", "pass" );
+          strictEqual( typeof toSeconds( 0 ), "number", "pass" );
 
-          equal( toSeconds( "3600" ), 3600, "pass" );
-          equal( toSeconds( "01.10" ), 1.1, "pass" );
-          equal( toSeconds( "00:01.10" ), 1.1, "pass" );
-          equal( toSeconds( "01:01.10" ), 61.1, "pass" );
-          equal( toSeconds( "01:00:01.10" ), 3601.1, "pass" );
-          equal( toSeconds( "01:01:01.10" ), 3661.1, "pass" );
-          equal( toSeconds( "01:01:01" ), 3661, "pass" );
-          equal( toSeconds( "1:1:1.1" ), 3661.1, "pass" );
-          equal( toSeconds( "01:01:00.10" ), 3660.1, "pass" );
-          equal( toSeconds( "01:00:00.10" ), 3600.1, "pass" );
-          equal( toSeconds( "01:00:00.00" ), 3600, "pass" );
-          equal( toSeconds( "00:00:01" ), 1, "pass" );
+          strictEqual( toSeconds( "3600" ), 3600, "pass" );
+          strictEqual( toSeconds( "01.10" ), 1.1, "pass" );
+          strictEqual( toSeconds( "00:01.10" ), 1.1, "pass" );
+          strictEqual( toSeconds( "01:01.10" ), 61.1, "pass" );
+          strictEqual( toSeconds( "01:00:01.10" ), 3601.1, "pass" );
+          strictEqual( toSeconds( "01:01:01.10" ), 3661.1, "pass" );
+          strictEqual( toSeconds( "01:01:01" ), 3661, "pass" );
+          strictEqual( toSeconds( "1:1:1.1" ), 3661.1, "pass" );
+          strictEqual( toSeconds( "01:01:00.10" ), 3660.1, "pass" );
+          strictEqual( toSeconds( "01:00:00.10" ), 3600.1, "pass" );
+          strictEqual( toSeconds( "01:00:00.00" ), 3600, "pass" );
+          strictEqual( toSeconds( "00:00:01" ), 1, "pass" );
 
-          equal( toSeconds( "00:00:00.00" ), 0, "pass" );
-          equal( typeof toSeconds( "00:00:00.00" ), "number", "pass" );
+          strictEqual( toSeconds( "00:00:00.00" ), 0, "pass" );
+          strictEqual( typeof toSeconds( "00:00:00.00" ), "number", "pass" );
 
-          equal( toSeconds( 1.0001 ), 1.0001, "pass" );
-          equal( toSeconds( "1.0001" ), 1.0001, "pass" );
-          equal( toSeconds( -1.0001 ), -1.0001, "pass" );
-          equal( toSeconds( "-1.0001" ), -1.0001, "pass" );
+          strictEqual( toSeconds( 1.0001 ), 1.0001, "pass" );
+          strictEqual( toSeconds( "1.0001" ), 1.0001, "pass" );
+          strictEqual( toSeconds( -1.0001 ), -1.0001, "pass" );
+          strictEqual( toSeconds( "-1.0001" ), -1.0001, "pass" );
 
-          equal( toSeconds( "60:00" ), 3600, "pass" );
-          equal( toSeconds( "1:60:00" ), 7200, "pass" );
-          equal( toSeconds( "1:60" ), 120, "pass" );
-          equal( toSeconds( "60" ), 60, "pass" );
+          strictEqual( toSeconds( "60:00" ), 3600, "pass" );
+          strictEqual( toSeconds( "1:60:00" ), 7200, "pass" );
+          strictEqual( toSeconds( "1:60" ), 120, "pass" );
+          strictEqual( toSeconds( "60" ), 60, "pass" );
 
-          equal( toSeconds( "-1:60:00" ), -7200, "pass" );
-          equal( toSeconds( "-60:00" ), -3600, "pass" );
-          equal( toSeconds( "-60" ), -60, "pass" );
-          equal( toSeconds( "-1:60" ), -120, "pass" );
+          strictEqual( toSeconds( "-1:60:00" ), -7200, "pass" );
+          strictEqual( toSeconds( "-60:00" ), -3600, "pass" );
+          strictEqual( toSeconds( "-60" ), -60, "pass" );
+          strictEqual( toSeconds( "-1:60" ), -120, "pass" );
 
-          equal( toSeconds( "" ), false, "pass" );
-          equal( toSeconds( "invalid" ), false, "pass" );
+          strictEqual( toSeconds( "" ), 0, "pass" );
+          strictEqual( toSeconds( "invalid" ), 0, "pass" );
         });
 
         test( "timecode.parse", function(){
 
           var parseTime = Timecode.parse;
 
-          equal( parseTime( "01:01:01" ), "1:01:01", "pass" );
-          equal( parseTime( "00:00:01" ), "1", "pass" );
-          equal( parseTime( "1" ), "1", "pass" );
-          equal( parseTime( "0" ), "0", "pass" );
-          equal( parseTime( "00:01" ), "1", "pass" );
+          strictEqual( parseTime( "01:01:01" ), "1:01:01", "pass" );
+          strictEqual( parseTime( "00:00:01" ), "1", "pass" );
+          strictEqual( parseTime( "1" ), "1", "pass" );
+          strictEqual( parseTime( "0" ), "0", "pass" );
+          strictEqual( parseTime( "00:01" ), "1", "pass" );
 
-          equal( typeof parseTime( "0" ), "string", "pass" );
-          equal( typeof parseTime( "1" ), "string", "pass" );
-          equal( typeof parseTime( 1 ), "string", "pass" );
-          equal( typeof parseTime( 0 ), "string", "pass" );
+          strictEqual( typeof parseTime( "0" ), "string", "pass" );
+          strictEqual( typeof parseTime( "1" ), "string", "pass" );
+          strictEqual( typeof parseTime( 1 ), "string", "pass" );
+          strictEqual( typeof parseTime( 0 ), "string", "pass" );
 
-          equal( parseTime( 1 ), "1", "pass" );
-          equal( parseTime( 120 ), "2:00", "pass" );
-          equal( parseTime( 3600 ), "1:00:00", "pass" );
-          equal( parseTime( -1 ), "-1", "pass" );
-          equal( parseTime( -3600 ), "-1:00:00", "pass" );
-          equal( parseTime( -120 ), "-2:00", "pass" );
+          strictEqual( parseTime( 1 ), "1", "pass" );
+          strictEqual( parseTime( 120 ), "2:00", "pass" );
+          strictEqual( parseTime( 3600 ), "1:00:00", "pass" );
+          strictEqual( parseTime( -1 ), "-1", "pass" );
+          strictEqual( parseTime( -3600 ), "-1:00:00", "pass" );
+          strictEqual( parseTime( -120 ), "-2:00", "pass" );
 
-          equal( parseTime( "01:01" ), "1:01", "pass" );
-          equal( parseTime( "1:01" ), "1:01", "pass" );
-          equal( parseTime( "01:01:01" ), "1:01:01", "pass" );
-          equal( parseTime( "1:01:01" ), "1:01:01", "pass" );
-          equal( parseTime( "-01:01" ), "-1:01", "pass" );
-          equal( parseTime( "-1:01" ), "-1:01", "pass" );
-          equal( parseTime( "-01:01:01" ), "-1:01:01", "pass" );
-          equal( parseTime( "-1:01:01" ), "-1:01:01", "pass" );
+          strictEqual( parseTime( "01:01" ), "1:01", "pass" );
+          strictEqual( parseTime( "1:01" ), "1:01", "pass" );
+          strictEqual( parseTime( "01:01:01" ), "1:01:01", "pass" );
+          strictEqual( parseTime( "1:01:01" ), "1:01:01", "pass" );
+          strictEqual( parseTime( "-01:01" ), "-1:01", "pass" );
+          strictEqual( parseTime( "-1:01" ), "-1:01", "pass" );
+          strictEqual( parseTime( "-01:01:01" ), "-1:01:01", "pass" );
+          strictEqual( parseTime( "-1:01:01" ), "-1:01:01", "pass" );
 
-          equal( parseTime( 0.01 ), "0.01", "pass" );
-          equal( parseTime( 0.001 ), "0", "pass" );
-          equal( parseTime( "01:01.10" ), "1:01.1", "pass" );
+          strictEqual( parseTime( 0.01 ), "0.01", "pass" );
+          strictEqual( parseTime( 0.001 ), "0", "pass" );
+          strictEqual( parseTime( "01:01.10" ), "1:01.1", "pass" );
 
-          equal( parseTime( "" ), false, "pass" );
-          equal( parseTime( "invalid" ), false, "pass" );
+          strictEqual( parseTime( "" ), "0", "pass" );
+          strictEqual( parseTime( "invalid" ), "0", "pass" );
         });
       });
     </script>

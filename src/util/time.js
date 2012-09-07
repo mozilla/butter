@@ -22,8 +22,8 @@ define( [], function(){
       return time;
     }
 
-    if ( !time ) {
-      return false;
+    if ( typeof time !== "string" ) {
+      return 0;
     }
 
     if ( time.substring( 0, 1 ) === "-" ) {
@@ -45,7 +45,7 @@ define( [], function(){
     }
 
     if ( seconds !== 0 && !seconds ) {
-      return false;
+      return 0;
     }
 
     if ( negative ) {
