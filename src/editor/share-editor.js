@@ -119,17 +119,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data", "ui/badges",
         socialMedia.hotLoad( shareFacebook, socialMedia.facebook, e.url );
         socialMedia.hotLoad( shareTwitter, socialMedia.twitter, e.url );
         socialMedia.hotLoad( shareGoogle, socialMedia.google, e.url );
-
-        Badges.check( function( data ) {
-          var badgeContainer = rootElement.querySelector( ".badges-container"),
-              newBadge;
-
-          newBadge = Badges.makeBadge( data[ 0 ] );
-          badgeContainer.innerHTML = "";
-          badgeContainer.appendChild( newBadge );
-        });
-
-
+        
       });
     }
 
