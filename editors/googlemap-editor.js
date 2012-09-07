@@ -268,17 +268,20 @@
             } else if ( key === "fullscreen" ) {
               attachFullscreenHandler( option );
             } else if ( option.elementType === "input" ) {
-              if ( [ "start", "end" ].indexOf( key ) > -1 ) {
-                _this.attachSecondsChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithTryCatch );
-              } else {
-                _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
-              }
+              _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
             }
           }
         }
       }
 
-      _this.createPropertiesFromManifest( trackEvent, callback, null, optionsContainer, null, ignoreKeys );
+      _this.createPropertiesFromManifest({
+        trackEvent: trackEvent,
+        callback: callback,
+        basicContainer: optionsContainer,
+        ignoreKeys: ignoreKeys,
+        safeCallback: updateTrackEventWithTryCatch
+      });
+
       attachHandlers();
 
       _this.updatePropertiesFromManifest( trackEvent );

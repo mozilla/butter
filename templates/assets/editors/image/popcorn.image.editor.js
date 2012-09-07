@@ -146,14 +146,7 @@
     }
 
     function attachHandlers() {
-      var start = pluginOptions.start.element.parentNode.parentNode,
-          end = pluginOptions.end.element.parentNode.parentNode,
-          sourceWrapper = _rootElement.querySelector( ".editor-source" ),
-          src = _trackEvent.popcornOptions.src;
-
-      // Move start and end to first elements in editor
-      container.insertBefore( start, sourceWrapper );
-      container.insertBefore( end, sourceWrapper );
+      var src = _trackEvent.popcornOptions.src;
 
       // Determine initial state
       if ( src ) {
@@ -186,8 +179,6 @@
         });
       });
       _this.attachInputChangeHandler( _numberInput, _trackEvent, "count", updateTrackEvent );
-      _this.attachInputChangeHandler( pluginOptions.start.element, _trackEvent, "start", updateTrackEvent );
-      _this.attachInputChangeHandler( pluginOptions.end.element, _trackEvent, "end", updateTrackEvent );
       _this.attachSelectChangeHandler( pluginOptions.transition.element, _trackEvent, "transition", updateTrackEvent );
 
       _this.attachInputChangeHandler( _galleryUrlInput, _trackEvent, "photosetId", function( te, prop ) {
@@ -201,7 +192,14 @@
       });
     }
 
-    _this.createPropertiesFromManifest( trackEvent, callback, null, container, null, ignoreKeys );
+    _this.createPropertiesFromManifest({
+      trackEvent: trackEvent,
+      callback: callback,
+      container: container,
+      ignoreKeys: ignoreKeys,
+      safeCallback: updateTrackEvent
+    });
+
     attachHandlers();
 
     _this.updatePropertiesFromManifest( trackEvent );

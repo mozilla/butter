@@ -60,8 +60,9 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
         _this.applyExtraHeadTags( compiledLayout );
 
         _trackEvent = trackEvent;
-        _this.createPropertiesFromManifest( trackEvent,
-          function( elementType, element, trackEvent, name ){
+        _this.createPropertiesFromManifest({
+          trackEvent: trackEvent,
+          callback: function( elementType, element, trackEvent, name ){
             if ( elementType === "select" ) {
               _this.attachSelectChangeHandler( element, trackEvent, name, updateTrackEvent );
             }
@@ -78,7 +79,11 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
                 }
               }
             }
-          }, null, optionsContainer, null, [ "target" ] );
+          },
+          basicContainer: optionsContainer,
+          ignoreKeys: [ "target" ],
+          safeCallback: updateTrackEvent
+        });
 
         if ( trackEvent.manifest.options.target && !trackEvent.manifest.options.target.hidden ) {
           targetList = _this.createTargetsList( _targets );

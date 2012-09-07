@@ -100,10 +100,7 @@
               _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
             }
             else if ( option.elementType === "input" ) {
-              if ( [ "start", "end" ].indexOf( key ) > -1 ) {
-                _this.attachSecondsChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithTryCatch );
-              }
-              else if ( option.element.type === "checkbox" ) {
+              if ( option.element.type === "checkbox" ) {
                 _this.attachCheckboxChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
               }
               else {
@@ -114,7 +111,14 @@
         }
       }
 
-      _this.createPropertiesFromManifest( trackEvent, callback, null, basicContainer, advancedContainer );
+      _this.createPropertiesFromManifest({
+        trackEvent: trackEvent,
+        callback: callback,
+        basicContainer: basicContainer,
+        advancedContainer: advancedContainer,
+        safeCallback: updateTrackEventWithTryCatch
+      });
+
       attachHandlers();
       _this.updatePropertiesFromManifest( trackEvent );
     }

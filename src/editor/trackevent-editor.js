@@ -35,8 +35,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
    */
   return function( extendObject, butter, rootElement, events ) {
     // Wedge a check for scrollbars into the open event if it exists
-    var oldOpenEvent = events.open,
-        startEndCount = 0;
+    var oldOpenEvent = events.open;
 
     events.open = function( parentElement, trackEvent ) {
       var basicButton = rootElement.querySelector( ".basic-tab" ),
@@ -211,7 +210,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
         updateOptions[ propertyName ] = TimeUtils.toSeconds( element.value );
         callback( trackEvent, updateOptions );
       }, false );
-    };
+    }
 
     /**
      * Member: attachCheckboxChangeHandler
@@ -298,6 +297,22 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
       }
     };
 
+    function createStartEndInputs( trackEvent, container, callback ) {
+      var editorElement = __defaultLayouts.querySelector( ".start-end" ).cloneNode( true ),
+          start = editorElement.querySelector( "input[data-manifest-key='start']" ),
+          end = editorElement.querySelector( "input[data-manifest-key='end']" );
+
+      extendObject.attachStartEndHandler( start, trackEvent, "start", callback );
+      extendObject.attachStartEndHandler( end, trackEvent, "end", callback );
+
+      if ( container.firstChild ) {
+        container.insertBefore( editorElement, container.firstChild );
+      }
+      else {
+        container.appendChild( editorElement );
+      }
+    }
+
     /**
      * Member: createManifestItem
      *
@@ -333,15 +348,10 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
         propertyArchetypeSelector += ".radio";
       }
 
-      if ( isStartOrEnd ) {
-        startEndCount++;
-      }
-
       propertyArchetype = __defaultLayouts.querySelector( propertyArchetypeSelector ).cloneNode( true );
 
-      // If the manifestEntry was specified to be hidden, or part of an advanced set of options don't use traditional
-      // element building
-      if ( manifestEntry.hidden ) {
+      // If the manifestEntry was specified to be hidden or is start/end bail early
+      if ( manifestEntry.hidden || isStartOrEnd ) {
         return;
       }
 
@@ -393,7 +403,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
             editorElement.appendChild( font );
           }
         }
-      } 
+      }
       else if ( manifestEntry.elem === "textarea" ) {
         editorElement = propertyArchetype.querySelector( "textarea" );
 
@@ -410,8 +420,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
 
       }
       else if ( manifestEntry.elem === "checkbox-group" ) {
-        var x,
-            option,
+        var item,
             elementParent = propertyArchetype,
             checkbox,
             label;
@@ -421,16 +430,16 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
         // Remove originally defined element
         elementParent.removeChild( elementParent.querySelector( "div" ) );
 
-        for ( x in manifestEntry.labels ) {
-          if ( manifestEntry.labels.hasOwnProperty( x ) ) {
+        for ( item in manifestEntry.labels ) {
+          if ( manifestEntry.labels.hasOwnProperty( item ) ) {
             checkbox = editorElement.querySelector( ".value" );
             label = editorElement.querySelector( ".property-name" );
 
             attachCheckboxGroupChangeHandler( checkbox, trackEvent, name );
 
-            label.innerHTML = manifestEntry.labels[ x ];
-            checkbox.value = manifestEntry.default[ x ];
-            checkbox.setAttribute( "data-manifest-key", x );
+            label.innerHTML = manifestEntry.labels[ item ];
+            checkbox.value = manifestEntry.default[ item ];
+            checkbox.setAttribute( "data-manifest-key", item );
 
             elementParent.appendChild( editorElement );
             editorElement = propertyArchetype.querySelector( ".checkbox-group" ).cloneNode( true );
@@ -455,32 +464,6 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
         // data-manifest-key is used to update this property later on
         editorElement.setAttribute( "data-manifest-key", name );
 
-        if ( startEndCount === 2 ) {
-          // Ensure the element we lookup that has already been put in the dom is the other time attribute compared
-          // to the current
-          var otherElement = name === "start" ? "end" : "start";
-              otherTimeElement = rootElement.querySelector( "input[data-manifest-key='" + otherElement + "']" ),
-              otherTimeElementParent = otherTimeElement.parentNode.parentNode,
-              otherTimeElementContainer = otherTimeElement.parentNode,
-              currentElementContainer = propertyArchetype.querySelector( ".butter-form-append" ),
-              currentElementLabel = propertyArchetype.querySelector( ".property-name" );
-
-          currentElementContainer.insertBefore( currentElementLabel, propertyArchetype.querySelector( ".value" ) );
-          otherTimeElementParent.className = "butter-form-inline form-half";
-          otherTimeElementContainer.insertBefore( otherTimeElementParent.querySelector( ".property-name" ),
-                                                  otherTimeElementContainer.querySelector( ".value" ) );
-
-          if ( otherElement === "start" ) {
-            otherTimeElementParent.appendChild( currentElementContainer );
-          } else {
-            otherTimeElementParent.insertBefore( currentElementContainer,
-                                                 otherTimeElementParent.querySelector( ".butter-form-append" ) );
-          }
-
-          // Reset counter and prevent editor from appending the new element to it's own container
-          startEndCount = 0;
-          propertyArchetype = null;
-        }
       }
 
       if ( itemCallback ) {
@@ -535,7 +518,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
             }
           }
         }
-        else if ( manifestOptions[ option ].elem === "checkbox-group" ) {
+        else if ( manifestOptions[ option ] && manifestOptions[ option ].elem === "checkbox-group" ) {
           var m,
               labels = manifestOptions[ option ].labels,
               popcornOption = popcornOptions[ option ];
@@ -550,7 +533,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
                 element.checked = manifestOptions[ option ].default[ m ];
               }
             }
-          } 
+          }
         }
       }
     };
@@ -560,22 +543,31 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
      *
      * Creates editable elements according to the properties on the manifest of the given TrackEvent
      *
-     * @param {TrackEvent} trackEvent: TrackEvent from which manifest will be retrieved
-     * @param {Function} itemCallback: Callback which is passed to createManifestItem for each element created
-     * @param {Array} manifestKeys: Optional. If only specific keys are desired from the manifest, use them
-     * @param {DOMElement} container: Optional. If specified, elements will be inserted into container, not rootElement
-     * @param {Array} ignoreManifestKeys: Optional. Keys in this array are ignored such that elements for them are not created
+     * @param {options} An object which can expect the following properties:
+     *
+     *  {TrackEvent} trackEvent: TrackEvent from which manifest will be retrieved
+     *  {Function} itemCallback: Callback which is passed to createManifestItem for each element created
+     *  {Array} manifestKeys: Optional. If only specific keys are desired from the manifest, use them
+     *  {DOMElement} basicContainer: Optional. If specified, elements will be inserted into basicContainer, not rootElement
+     *  {DOMElement} advancedContainer: Optional. If specified, elements will be inserted into advancedContainer, not rootElement
+     *  {Array} ignoreManifestKeys: Optional. Keys in this array are ignored such that elements for them are not created
+     *  {Function} safeCallback: Optional. A callback that can be used for safe handling of track event updating.
      */
-    extendObject.createPropertiesFromManifest = function( trackEvent, callback, manifestKeys, basicContainer, advancedContainer, ignoreManifestKeys ) {
+    extendObject.createPropertiesFromManifest = function( options ) {
       var manifestOptions,
           item,
           element,
           container,
           optionGroup,
+          manifestKeys,
+          basicContainer,
+          advancedContainer,
+          trackEvent = options.trackEvent,
+          ignoreManifestKeys = options.ignoreManifestKeys || [],
           i, l;
 
-      basicContainer = basicContainer || extendObject.rootElement;
-      advancedContainer = advancedContainer || extendObject.rootElement;
+      basicContainer = options.basicContainer || extendObject.rootElement;
+      advancedContainer = options.advancedContainer || extendObject.rootElement;
 
       if ( !trackEvent.manifest ) {
         throw "Unable to create properties from null manifest. Perhaps trackevent is not initialized properly yet.";
@@ -585,7 +577,22 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
 
       manifestOptions = trackEvent.manifest.options;
 
-      manifestKeys = manifestKeys || Object.keys( manifestOptions );
+      if ( ignoreManifestKeys.indexOf( [ "start", "end" ] ) === -1 ) {
+        if ( manifestOptions.start.group ) {
+          optionGroup = manifestOptions.start.group;
+        }
+        else if ( manifestOptions.end.group ) {
+          optionGroup = manifestOptions.end.group;
+        }
+        else {
+          optionGroup = "basic";
+        }
+
+        container = optionGroup === "advanced" ? advancedContainer : basicContainer;
+        createStartEndInputs( trackEvent, container, options.safeCallback );
+      }
+
+      manifestKeys = options.manifestKeys || Object.keys( manifestOptions );
 
       for ( i = 0, l = manifestKeys.length; i < l; ++i ) {
         item = manifestKeys[ i ];
@@ -594,7 +601,8 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
         if ( ignoreManifestKeys && ignoreManifestKeys.indexOf( item ) > -1 ) {
           continue;
         }
-        element = extendObject.createManifestItem( item, manifestOptions[ item ], trackEvent.popcornOptions[ item ], trackEvent, callback );
+        element = extendObject.createManifestItem( item, manifestOptions[ item ], trackEvent.popcornOptions[ item ], trackEvent,
+                                                   options.callback );
 
         if ( element ) {
           container.appendChild( element );
