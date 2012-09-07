@@ -3,8 +3,12 @@ function init( window, document ) {
   var stateClasses = [
     "embed-playing",
     "embed-paused",
-    "embed-ended"
+    "embed-dialog-open"
   ];
+
+  // Sometimes we want to show the info div when we pause, sometimes
+  // we don't (e.g., when we open the share dialog).
+  var hideInfoDiv = false;
 
   /**
    * embed.js is a separate, top-level entry point into the requirejs
@@ -30,12 +34,65 @@ function init( window, document ) {
     elem.style.display = "block";
   }
 
+  function requestFullscreen( elem ) {
+    if ( elem.requestFullscreen ) {
+      elem.requestFullscreen();
+    } else if ( elem.mozRequestFullscreen ) {
+      elem.mozRequestFullscreen();
+    } else if ( elem.mozRequestFullScreen ) {
+      elem.mozRequestFullScreen();
+    } else if ( elem.webkitRequestFullscreen ) {
+      elem.webkitRequestFullscreen();
+    }
+  }
+
+  function isFullscreen() {
+    return !((document.fullScreenElement && document.fullScreenElement !== null) ||
+            (!document.mozFullScreen && !document.webkitIsFullScreen));
+  }
+
+  function cancelFullscreen() {
+    if ( document.exitFullScreen ) {
+      document.exitFullScreen();
+    } else if ( document.mozCancelFullScreen ) {
+      document.mozCancelFullScreen();
+    } else if ( document.webkitCancelFullScreen ) {
+      document.webkitCancelFullScreen();
+    }
+  }
+
   function hide( elem ) {
     elem = $( elem );
     if ( !elem ) {
       return;
     }
     elem.style.display = "none";
+  }
+
+  function shareClick( popcorn ) {
+    if ( !popcorn.paused() ) {
+      hideInfoDiv = true;
+      popcorn.pause();
+    }
+
+    addStateClass( "embed-dialog-open" );
+    hide( "#controls-big-play-button" );
+    hide( "#post-roll" );
+    show( "#share" );
+  }
+
+  function remixClick( popcorn ) {
+    // TODO: see ticket #1755
+    return;
+  }
+
+  function fullscreenClick() {
+    var container = document.getElementById( "container" );
+    if( !isFullscreen() ) {
+      requestFullscreen( container );
+    } else {
+      cancelFullscreen();
+    }
   }
 
   function setupClickHandlers( popcorn, config ) {
@@ -48,18 +105,9 @@ function init( window, document ) {
 
     $( "#replay-post" ).addEventListener( "click", replay, false );
     $( "#replay-share" ).addEventListener( "click", replay, false );
-
     $( "#share-post" ).addEventListener( "click", function() {
-      hide( "#post-roll" );
-      show( "#share" );
+      shareClick( popcorn );
     }, false );
-
-    $( "#share-share" ).addEventListener( "click", function() {
-      // Not sure what share in the context of share means...
-      Popcorn.nop();
-    }, false );
-
-    // TODO: fullscreen UI event handler for "container div...
   }
 
   function buildIFrameHTML() {
@@ -108,6 +156,11 @@ function init( window, document ) {
 
     $( "#share-close" ).addEventListener( "click", function() {
       hide( "#share" );
+
+      // If the video is done, go back to the postroll
+      if ( popcorn.ended() ) {
+        show( "#post-roll" );
+      }
     }, false );
 
     function sizeOptionFn( e ) {
@@ -116,21 +169,27 @@ function init( window, document ) {
       this.classList.add( "current" );
       $( "#share-iframe" ).value = buildIFrameHTML();
     }
-    
+
     for ( i = 0, l = sizeOptions.length; i < l; i++ ) {
       sizeOptions[ i ].addEventListener( "click", sizeOptionFn, false );
     }
 
     popcorn.on( "ended", function() {
       show( "#post-roll" );
-      addStateClass( "embed-ended" );
+      addStateClass( "embed-dialog-open" );
     });
 
     popcorn.on( "pause", function() {
-      addStateClass( "embed-paused" );
+      if ( hideInfoDiv ) {
+        addStateClass( "embed-dialog-open" );
+        hideInfoDiv = false;
+      } else {
+        addStateClass( "embed-paused" );
+      }
     });
 
     popcorn.on( "playing", function() {
+      hide( "#share" );
       hide( "#post-roll" );
       addStateClass( "embed-playing" );
     });
@@ -226,7 +285,17 @@ function init( window, document ) {
       // if true, show media controls
       if ( config.controls ) {
         popcorn.controls( true );
-        Controls( "controls", popcorn );
+        Controls( "controls", popcorn, {
+          onShareClick: function() {
+            shareClick( popcorn );
+          },
+          onRemixClick: function() {
+            remixClick( popcorn );
+          },
+          onFullscreenClick: function() {
+            fullscreenClick();
+          }
+        });
         show( "#controls" );
       }
 
@@ -294,7 +363,6 @@ function init( window, document ) {
         if ( !config.showinfo ) {
           addStateClass( "embed-playing" );
         }
-
       }
 
       // if true, continually loop media playback
@@ -339,7 +407,7 @@ function init( window, document ) {
       }
 
       // Either the video is ready, or we need to wait.
-      if ( popcorn.readyState >= 1 ) {
+      if ( popcorn.readyState() >= 1 ) {
         onLoad();
       } else {
         popcorn.media.addEventListener( "canplay", onLoad );
