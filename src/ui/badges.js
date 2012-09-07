@@ -12,7 +12,8 @@ define([ "util/lang", "util/xhr", "text!layouts/badges.html" ],
         var url = "/api/badges";
         XHR.get( url, function( resp ) {
           var badges,
-              newBadge;
+              newBadge,
+              badgeButtons;
           if ( resp.target.readyState === 4 && callback ) {
             badges = JSON.parse( resp.target.responseText ).badges;
             callback( badges );
@@ -20,7 +21,16 @@ define([ "util/lang", "util/xhr", "text!layouts/badges.html" ],
               document.body.appendChild( _backpack );
             }
             newBadge = _this.makeBadge( badges[ 0] );
-            newBadge.appendChild( _backpackBadgeButtons.cloneNode( true ) );
+            badgeButtons = _backpackBadgeButtons.cloneNode( true );
+            console.log( badgeButtons );
+            badgeButtons.querySelector( ".butter-add-badge" ).addEventListener( "click", function( ) {
+              this.classList.add( "btn-green" );
+              this.classList.remove( "btn-light" );
+              this.querySelector( ".icon" ).classList.remove( "icon-arrow-right" );
+              this.querySelector( ".icon" ).classList.add( "icon-ok" );
+              this.querySelector( ".icon" ).classList.add( "icon-white" );
+            }, false );
+            newBadge.appendChild( badgeButtons );
             _backpack.querySelector( ".butter-badge-container" ).appendChild( newBadge );
           }
         });
