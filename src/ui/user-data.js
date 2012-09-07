@@ -13,7 +13,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
     var _this = this,
         _rootElement = Lang.domFragment( HEADER_TEMPLATE, ".butter-header" ),
         _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
-        _buttonGroup = _rootElement.querySelector( ".butter-login-project-info"),
+        _buttonGroup = _rootElement.querySelector( ".butter-login-project-info" ),
         _authButton = _rootElement.querySelector( ".butter-login-btn" ),
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" );
