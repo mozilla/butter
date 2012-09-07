@@ -32,21 +32,21 @@ define( [], function() {
 
     var parentElement,
         name,
-        text,
+        message,
         top,
         left,
         tooltipElement = document.createElement( "div" );
 
     tooltipElement.classList.add( __tooltipClass );
 
-    Object.defineProperty( this, "text", {
+    Object.defineProperty( this, "message", {
       get: function() {
-        return text;
+        return message;
       },
-      set: function( newText ) {
-        if ( newText && typeof newText === "string" ) {
-          text = newText;
-          tooltipElement.innerHTML = newText;
+      set: function( newMessage ) {
+        if ( newMessage && typeof newMessage === "string" ) {
+          message = newMessage;
+          tooltipElement.innerHTML = newMessage;
         }
       },
       enumerable: true
@@ -54,7 +54,7 @@ define( [], function() {
 
     Object.defineProperty( this, "hidden", {
       get: function() {
-        return tooltipElement.classList.contains( __tooltipOnClass );
+        return !tooltipElement.classList.contains( __tooltipOnClass );
       },
       set: function( hidden ) {
         if ( hidden || hidden === undefined ) {
@@ -146,7 +146,7 @@ define( [], function() {
     this.parent = options.element;
     this.top = options.top || parentElement.getBoundingClientRect().height + "px";
     this.left = options.left || "50%";
-    this.text = options.message || parentElement.getAttribute( "data-tooltip" ) || parentElement.getAttribute( "title" ) || "";
+    this.message = options.message || parentElement.getAttribute( "data-tooltip" ) || parentElement.getAttribute( "title" ) || "";
     this.hidden = options.hidden;
     this.hover = options.hover;
 

@@ -1,25 +1,42 @@
 {
-  "editor": {
+  "name": "ui-config",
+  "baseDir": "../../",
+  "cssRenderClientSide": false,
+  "snapshotHTMLOnReady": false,
+  "scrapePage": true,
+  "title": "Popcorn Maker",
+  "ui": {
+    "enabled": true,
+    "onLeaveDialog": true,
+    "trackEventHighlight": "click"
+  },
+  "makeVideoURLsUnique": true,
+  "mediaDefaults": {
+    "frameAnimation": true
+  },
+  "trackEvent": {
+    "defaultDuration": 5
   },
   "plugin": {
     "plugins": [
       {
-        "type": "text",
-        "path": "../../external/popcorn-js/plugins/text/popcorn.text.js"
+        "type": "titles",
+        "path": "../../templates/assets/plugins/titles/popcorn.titles.js"
       },
       {
         "type": "image",
-        "path": "../../external/popcorn-js/plugins/image/popcorn.image.js"
+        "path": "../../templates/assets/plugins/image/popcorn.image.js"
       },
       {
         "name": "googlemap",
         "type": "googlemap",
-        "path": "../../external/popcorn-js/plugins/googlemap/popcorn.googlemap.js"
+        "path": "../../templates/assets/plugins/googlemap/popcorn.googlemap.js"
       }
     ],
     "defaults": [
-      "text",
-      "image"
+      "titles",
+      "image",
+      "googlemap"
     ]
   },
   "dirs": {
@@ -27,5 +44,9 @@
     "css": "../../css/",
     "dialogs": "../../dialogs/",
     "resources": "../../resources/"
+  },
+  "icons": {
+    "default": "popcorn-icon.png",
+    "image": "image-icon.png"
   }
 }
