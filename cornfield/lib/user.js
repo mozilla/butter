@@ -72,6 +72,14 @@ module.exports = {
       callback( err, doc );
     });
   },
+  findById: function findById( pid, callback ) {
+    if ( !pid ) {
+      callback( 'not enough parameters for search' );
+      return;
+    }
+
+    ProjectModel.findById( pid, callback );
+  },
   isDBOnline: function isDBOnline() {
     return dbOnline;
   },
