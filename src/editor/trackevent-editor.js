@@ -200,13 +200,13 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
      extendObject.attachSecondsChangeHandler = function( element, trackEvent, propertyName, callback ) {
       element.addEventListener( "blur", function( e ) {
         var updateOptions = {};
-        updateOptions[ propertyName ] = TimeUtils.timecode.toSeconds( element.value );
+        updateOptions[ propertyName ] = TimeUtils.toSeconds( element.value );
         callback( trackEvent, updateOptions );
       }, false );
 
       element.addEventListener( "change", function( e ) {
         var updateOptions = {};
-        updateOptions[ propertyName ] = TimeUtils.timecode.toSeconds( element.value );
+        updateOptions[ propertyName ] = TimeUtils.toSeconds( element.value );
         callback( trackEvent, updateOptions );
       }, false );
     };
@@ -417,7 +417,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
           else {
             if ( typeof popcornOptions[ option ] !== "undefined" ) {
               if ( units === "seconds" ) {
-                element.value = TimeUtils.timecode.parse( popcornOptions[ option ] );
+                element.value = TimeUtils.toTimecode( popcornOptions[ option ] );
               } else {
                 element.value = popcornOptions[ option ];
               }

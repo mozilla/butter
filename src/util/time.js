@@ -4,11 +4,10 @@
 
 define( [], function(){
 
-  var __timeAccuracy = 5;
+  var __timeAccuracy= 5;
 
-  function roundTime( time, accuracy ){
-    accuracy = accuracy || __timeAccuracy;
-    return Math.round( time * ( Math.pow( 10, accuracy ) ) ) / Math.pow( 10, accuracy );
+  function roundTime( time ){
+    return Math.round( time * ( Math.pow( 10, __timeAccuracy ) ) ) / Math.pow( 10, __timeAccuracy );
   } //roundTime
 
   /**
@@ -19,7 +18,7 @@ define( [], function(){
    * "1:00:00" -> 3600
    * "-1:00:00" -> -3600
    *
-   * it also parses strings to seconds
+   * it also converts strings with seconds to seconds
    * " 003600.00" -> 3600
    * " 003600.99" -> 3600.99
    **/
@@ -50,25 +49,25 @@ define( [], function(){
     hours = +splitTime[ splitTime.length - 3 ] || 0;
 
     seconds += hours * 3600;
-
     seconds += minutes * 60;
 
     return seconds * isNegative;
   }
 
   /**
-   * parse converts time to a timecode string.
+   * toTimecode converts seconds to a timecode string.
    * seconds -> "HH:MM:SS.DD"
    *
    * examples:
    * 3600 -> "1:00:00"
    * -3600 -> "-1:00:00"
    *
-   * it also parses strings to timecode
+   * it also converts strings to timecode
    * "  00:00:01" -> "1"
    * "  000:01:01.00" -> "1:01"
+   * "3600" -> "1:00:00"
    **/
-  function parse( time ){
+  function toTimecode( time ){
     var hours,
         minutes,
         seconds,
@@ -90,7 +89,8 @@ define( [], function(){
 
     hours = Math.floor( time / 3600 );
     minutes = Math.floor( ( time % 3600 ) / 60 );
-    seconds = roundTime( time % 60, 2 );
+    __timeAccuracy = 2;
+    seconds = roundTime( time % 60 );
     timeString = seconds + "";
 
     if ( !minutes && !hours ) {
@@ -122,10 +122,8 @@ define( [], function(){
 
   var utils = {
     roundTime: roundTime,
-    timecode: {
-      toSeconds: toSeconds,
-      parse: parse
-    }
+    toSeconds: toSeconds,
+    toTimecode: toTimecode
   }; //utils
 
   Object.defineProperties( utils, {

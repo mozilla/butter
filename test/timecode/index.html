@@ -10,17 +10,14 @@
     <script>
       require( [ "../src/util/time" ], function( TimeUtils ){
 
-        var timecode = TimeUtils.timecode;
-
-        test( "Timecode existence" , function (){
-          ok( timecode, "timecode exists" );
-          ok( timecode.toSeconds, "timecode.toSeconds exists" );
-          ok( timecode.parse, "timecode.parse exists" );
+        test( "Timecode functions existence" , function (){
+          ok( TimeUtils.toSeconds, "timecode.toSeconds exists" );
+          ok( TimeUtils.toTimecode, "timecode.TimeUtils exists" );
         });
 
         test( "timecode.toSeconds", function(){
 
-          var toSeconds = timecode.toSeconds;
+          var toSeconds = TimeUtils.toSeconds;
 
           strictEqual( typeof toSeconds( "1" ), "number", "pass" );
           strictEqual( typeof toSeconds( "0" ), "number", "pass" );
@@ -68,9 +65,9 @@
           strictEqual( toSeconds( "00:00:invalid" ), 0, "pass" );
         });
 
-        test( "timecode.parse", function(){
+        test( "timecode.toTimecode", function(){
 
-          var parseTime = timecode.parse;
+          var parseTime = TimeUtils.toTimecode;
 
           strictEqual( parseTime( "01:01:01" ), "1:01:01", "pass" );
           strictEqual( parseTime( "00:00:01" ), "1", "pass" );
