@@ -7,9 +7,9 @@
     "media": [{
         "id": "Media0",
         "name": "Media0",
-        "url": ["https://www.youtube.com/watch?v=Qw9oX-kZ_9k&NR=1&feature=fvwp&butteruid=1346972985841"],
+        "url": ["https://www.youtube.com/watch?v=Qw9oX-kZ_9k&NR=1&feature=fvwp&butteruid=1346991906014"],
         "target": "video",
-        "duration": -1,
+        "duration": 6.706,
         "controls": true,
         "tracks": [{
             "name": "Layer1",
@@ -34,14 +34,14 @@
                 "type": "titles",
                 "popcornOptions": {
                     "start": 0,
-                    "end": 5.01271,
+                    "end": 0.54223,
                     "target": "video-container",
-                    "text": "whatchyoutalkinbout?",
+                    "text": "WHAT",
                     "position": "custom",
                     "transition": "popcorn-fade",
-                    "fontFamily": "Fredoka One",
-                    "fontSize": "18",
-                    "fontColor": "#000ccc",
+                    "fontFamily": "Open Sans",
+                    "fontSize": "24",
+                    "fontColor": "#ffffff",
                     "fontWeight": true,
                     "fontItalics": "",
                     "textUnderline": "",
@@ -51,6 +51,50 @@
                 },
                 "track": "Layer2",
                 "name": "TrackEvent13"
+            }, {
+                "id": "TrackEvent4",
+                "type": "titles",
+                "popcornOptions": {
+                    "start": 0.68126,
+                    "end": 1.16324,
+                    "target": "video-container",
+                    "text": "wat",
+                    "position": "left",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Merriweather",
+                    "fontSize": 48,
+                    "fontColor": "#fff",
+                    "fontWeight": true,
+                    "fontItalics": "",
+                    "textUnderline": "",
+                    "left": 30,
+                    "top": 30,
+                    "zindex": 999
+                },
+                "track": "Layer2",
+                "name": "TrackEvent4"
+            }, {
+                "id": "TrackEvent6",
+                "type": "titles",
+                "popcornOptions": {
+                    "start": 1.57816,
+                    "end": 2.01468,
+                    "target": "video-container",
+                    "text": "wut",
+                    "position": "right",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Merriweather",
+                    "fontSize": 48,
+                    "fontColor": "#ffffff",
+                    "fontWeight": "",
+                    "fontItalics": "",
+                    "textUnderline": "",
+                    "left": 30,
+                    "top": 30,
+                    "zindex": 999
+                },
+                "track": "Layer2",
+                "name": "TrackEvent5"
             }]
         }, {
             "name": "Layer3",
@@ -58,6 +102,4 @@
             "trackEvents": []
         }]
     }],
-    "name": "meme",
-    "projectID": "50492253700a4aa828000297"
 }
