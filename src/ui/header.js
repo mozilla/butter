@@ -1,5 +1,12 @@
-define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip", "util/xhr", "text!layouts/badges.html" ],
-  function( Dialog, Lang, UserData, ToolTip, XHR, BADGES_LAYOUT ) {
+define([  "dialog/dialog",
+          "util/lang",
+          "ui/user-data",
+          "ui/widget/tooltip",
+          "util/xhr",
+          "text!layouts/badges.html",
+          "ui/badges"
+          ],
+  function( Dialog, Lang, UserData, ToolTip, XHR, BADGES_LAYOUT, Badges ) {
 
   var DEFAULT_AUTH_BUTTON_TEXT = "<span class='icon-user'></span> Sign In / Sign Up",
       DEFAULT_AUTH_BUTTON_TITLE = "Sign in or sign up with Persona";
@@ -57,29 +64,23 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip", "uti
 
     _authButton.addEventListener( "click", login, false );
 
-    function checkBadges() {
-      XHR.get( "/api/badges", function( resp ) {
-        var badges,
-            newBadge;
-
-        if ( resp.target.readyState === 4 ) {
-          badges = JSON.parse( resp.target.responseText ).badges;
-          console.log( badges );
-          if ( badges.length > 0 ) {
-            _badgeCounter.querySelector( ".butter-badge-number" ).innerHTML = badges.length;
-            _badgeCounter.querySelector( ".butter-badge" ) && _badgeCounter.removeChild( _badgeCounter.querySelector( ".butter-badge" ) ) ;
-            newBadge = _badgeLayout.cloneNode( true );
-            newBadge.querySelector( ".butter-badge-title").innerHTML = badges[ 0 ].name;
-            newBadge.querySelector( ".butter-badge-image").style[ "background-image" ] = badges[ 0 ].image_url;
-            newBadge.querySelector( ".butter-badge-desc").innerHTML = badges[ 0 ].description;
-            console.log( newBadge );
-            _badgeCounter.appendChild( newBadge );
-            _badgeCounter.addEventListener( "click", function(){
-              newBadge.classList.toggle( "butter-badge-on" );
-            }, false );
-          }
-        }
-      });
+    function checkBadges( badges ) {
+      var newBadge,
+          badgeLink;
+      if ( badges.length > 0 ) {
+        newBadge = Badges.makeBadge( badges[ 0 ], "dropdown" );
+        badgeLink = Badges.badgeLink();
+        badgeLink.addEventListener( "click", function(){
+          butter.editor.openEditor( "share-properties" );
+        }, false );
+        newBadge.appendChild( badgeLink );
+        _badgeCounter.querySelector( ".butter-badge-number" ).innerHTML = badges.length;
+        _badgeCounter.querySelector( ".butter-badge" ) && _badgeCounter.removeChild( _badgeCounter.querySelector( ".butter-badge" ) ) ;
+        _badgeCounter.appendChild( newBadge );
+        _badgeCounter.addEventListener( "click", function(){
+          newBadge.classList.toggle( "butter-badge-on" );
+        }, false );
+      }
     }
 
     function publish() {
@@ -214,7 +215,8 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip", "uti
       _authButton.removeEventListener( "click", login, false );
       _logoutBtn.addEventListener( "click", doLogout, false );
 
-      checkBadges();
+      Badges.check( checkBadges );
+
     }
 
     function logoutDisplay() {

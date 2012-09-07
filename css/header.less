@@ -217,7 +217,7 @@
   width: 24px;
 }
 
-.butter-badge {
+.butter-badge.dropdown {
   @_tooltipWidth: 210px;
   visibility: hidden;
   opacity: 0;
@@ -268,22 +268,28 @@
     border-bottom: 5px solid #CCC;
   }
 
-  // Badge components
-  .butter-badge-title {
-    font-size: 14px;
-    font-weight: 700;
-    margin-bottom: 10px;
-  }
-  .butter-badge-image {
-    float: left;
-    height: 40px;
-    width: 40px;
-    background: url( "https://wiki.mozilla.org/images/b/bb/Merit-badge.png" ) no-repeat;
-    background-size: 40px 40px;
-    margin-right: 10px;
-  }
   .butter-badge-backpack-link {
     margin-top: 10px;
   }
 }
 
+// Badge components
+.butter-badge-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+
+.butter-badge-image {
+  float: left;
+  height: 40px;
+  width: 40px;
+  background: url( "https://wiki.mozilla.org/images/b/bb/Merit-badge.png" ) no-repeat;
+  background-size: 40px 40px;
+  margin-right: 10px;
+}
+
+.butter-badges-container {
+  margin-bottom: 10px;
+}

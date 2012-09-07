@@ -2,9 +2,9 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define([ "editor/editor", "editor/base-editor", "ui/user-data",
+define([ "editor/editor", "editor/base-editor", "ui/user-data", "ui/badges",
           "text!layouts/share-editor.html", "util/social-media" ],
-  function( Editor, BaseEditor, UserData, LAYOUT_SRC, SocialMedia ) {
+  function( Editor, BaseEditor, UserData, Badges, LAYOUT_SRC, SocialMedia ) {
 
   Editor.register( "share-properties", LAYOUT_SRC, function( rootElement, butter, compiledLayout ) {
     var socialMedia = SocialMedia(),
@@ -119,6 +119,17 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         socialMedia.hotLoad( shareFacebook, socialMedia.facebook, e.url );
         socialMedia.hotLoad( shareTwitter, socialMedia.twitter, e.url );
         socialMedia.hotLoad( shareGoogle, socialMedia.google, e.url );
+
+        Badges.check( function( data ) {
+          var badgeContainer = rootElement.querySelector( ".badges-container"),
+              newBadge;
+
+          newBadge = Badges.makeBadge( data[ 0 ] );
+          badgeContainer.innerHTML = "";
+          badgeContainer.appendChild( newBadge );
+        });
+
+
       });
     }
 
