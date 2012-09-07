@@ -293,7 +293,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
       }
     };
 
-    function createStartEndInputs( trackEvent, container, callback ) {
+    extendObject.createStartEndInputs = function( trackEvent, callback ) {
       var editorElement = __defaultLayouts.querySelector( ".start-end" ).cloneNode( true ),
           start = editorElement.querySelector( "input[data-manifest-key='start']" ),
           end = editorElement.querySelector( "input[data-manifest-key='end']" );
@@ -301,12 +301,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
       extendObject.attachStartEndHandler( start, trackEvent, "start", callback );
       extendObject.attachStartEndHandler( end, trackEvent, "end", callback );
 
-      if ( container.firstChild ) {
-        container.insertBefore( editorElement, container.firstChild );
-      }
-      else {
-        container.appendChild( editorElement );
-      }
+      return editorElement;
     }
 
     /**
@@ -346,8 +341,8 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
 
       propertyArchetype = __defaultLayouts.querySelector( propertyArchetypeSelector ).cloneNode( true );
 
-      // If the manifestEntry was specified to be hidden or is start/end bail early
-      if ( manifestEntry.hidden || isStartOrEnd ) {
+      // If the manifestEntry was specified to be hidden bail early
+      if ( manifestEntry.hidden ) {
         return;
       }
 
@@ -547,7 +542,6 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
      *  {DOMElement} basicContainer: Optional. If specified, elements will be inserted into basicContainer, not rootElement
      *  {DOMElement} advancedContainer: Optional. If specified, elements will be inserted into advancedContainer, not rootElement
      *  {Array} ignoreManifestKeys: Optional. Keys in this array are ignored such that elements for them are not created
-     *  {Function} safeCallback: Optional. A callback that can be used for safe handling of track event updating.
      */
     extendObject.createPropertiesFromManifest = function( options ) {
       var manifestOptions,
@@ -572,21 +566,6 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
       extendObject.createBreadcrumbs( trackEvent );
 
       manifestOptions = trackEvent.manifest.options;
-
-      if ( ignoreManifestKeys.indexOf( [ "start", "end" ] ) === -1 ) {
-        if ( manifestOptions.start.group ) {
-          optionGroup = manifestOptions.start.group;
-        }
-        else if ( manifestOptions.end.group ) {
-          optionGroup = manifestOptions.end.group;
-        }
-        else {
-          optionGroup = "basic";
-        }
-
-        container = optionGroup === "advanced" ? advancedContainer : basicContainer;
-        createStartEndInputs( trackEvent, container, options.safeCallback );
-      }
 
       manifestKeys = options.manifestKeys || Object.keys( manifestOptions );
 

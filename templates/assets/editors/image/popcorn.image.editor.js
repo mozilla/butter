@@ -134,8 +134,11 @@
           "photosetId",
           "count",
           "username",
-          "target"
-        ];
+          "target",
+          "start",
+          "end"
+        ],
+        startEndElement;
 
     function callback( elementType, element, trackEvent, name ) {
       pluginOptions[ name ] = {
@@ -192,10 +195,13 @@
       });
     }
 
+    startEndElement = _this.createStartEndInputs( trackEvent, updateTrackEvent );
+    container.insertBefore( startEndElement, container.firstChild );
+
     _this.createPropertiesFromManifest({
       trackEvent: trackEvent,
       callback: callback,
-      container: container,
+      basicContainer: container,
       ignoreManifestKeys: ignoreKeys,
       safeCallback: updateTrackEvent
     });

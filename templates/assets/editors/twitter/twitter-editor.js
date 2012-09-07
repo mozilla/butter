@@ -82,8 +82,11 @@
           pluginOptions = {},
           ignoreKeys = [
             "search",
-            "username"
-          ];
+            "username",
+            "start",
+            "end"
+          ],
+          startEndElement;
 
       function callback( elementType, element, trackEvent, name ) {
         pluginOptions[ name ] = {
@@ -154,6 +157,9 @@
           }
         }
       }
+
+      startEndElement = _this.createStartEndInputs( trackEvent, updateTrackEventWithTryCatch );
+      container.insertBefore( startEndElement, container.firstChild );
 
       _this.createPropertiesFromManifest({
         trackEvent: trackEvent,

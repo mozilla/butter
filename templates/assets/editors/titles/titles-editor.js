@@ -111,12 +111,15 @@
         }
       }
 
+      advancedContainer.appendChild( _this.createStartEndInputs( trackEvent, updateTrackEventWithTryCatch ) );
+
       _this.createPropertiesFromManifest({
         trackEvent: trackEvent,
         callback: callback,
         basicContainer: basicContainer,
         advancedContainer: advancedContainer,
-        safeCallback: updateTrackEventWithTryCatch
+        safeCallback: updateTrackEventWithTryCatch,
+        ignoreManifestKeys: [ "start", "end" ]
       });
 
       attachHandlers();

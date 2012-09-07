@@ -60,6 +60,9 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
         _this.applyExtraHeadTags( compiledLayout );
 
         _trackEvent = trackEvent;
+
+        optionsContainer.appendChild( _this.createStartEndInputs( trackEvent, updateTrackEvent ) );
+
         _this.createPropertiesFromManifest({
           trackEvent: trackEvent,
           callback: function( elementType, element, trackEvent, name ) {
@@ -76,7 +79,7 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
             }
           },
           basicContainer: optionsContainer,
-          ignoreManifestKeys: [ "target" ],
+          ignoreManifestKeys: [ "target", "start", "end" ],
           safeCallback: updateTrackEvent
         });
 

@@ -162,7 +162,9 @@
 
       var pluginOptions = {},
           ignoreKeys = [
-            "target"
+            "target",
+            "start",
+            "end"
           ],
           optionsContainer = _rootElement.querySelector( ".editor-options" );
 
@@ -273,6 +275,8 @@
           }
         }
       }
+
+      optionsContainer.appendChild( _this.createStartEndInputs( trackEvent, updateTrackEventWithTryCatch ) );
 
       _this.createPropertiesFromManifest({
         trackEvent: trackEvent,
