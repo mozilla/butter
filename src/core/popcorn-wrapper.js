@@ -357,7 +357,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         popcornString += callbacks.afterEvents + "( popcorn );\n";
       }
 
-      popcornString += "popcorn.controls( true );\n";
+      popcornString += "popcorn.controls( false );\n";
 
       // if the `method` var is blank, the user probably just wanted an inline function without an onLoad wrapper
       method = method || "inline";
