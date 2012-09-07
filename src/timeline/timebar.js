@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
+define( [ "util/time", "./scrubber" ], function( TimeUtils, Scrubber ) {
 
   var CANVAS_CONTAINER_PADDING = 5,
       TICK_COLOR = "#999999";
@@ -32,7 +32,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       }
 
       var inc = _tracksContainer.container.clientWidth / _media.duration,
-          textWidth = context.measureText( util.secondsToSMPTE( 5 ) ).width,
+          textWidth = context.measureText( TimeUtils.toTimecode( 5 ) ).width,
           padding = 20,
           lastPosition = 0,
           lastTimeDisplayed = -( ( textWidth + padding ) / 2 ),

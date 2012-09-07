@@ -10,15 +10,6 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
             Scrollbars ) {
 
   var __defaultLayouts = LangUtils.domFragment( DEFAULT_LAYOUT_SNIPPETS ),
-      __safeKeyUpKeys = [
-                          KeysUtils.LEFT,
-                          KeysUtils.UP,
-                          KeysUtils.RIGHT,
-                          KeysUtils.DOWN,
-                          KeysUtils.DELETE,
-                          KeysUtils.TAB,
-                          KeysUtils.ESCAPE
-                        ],
       __googleFonts = [
                         "Gentium Book Basic",
                         "Lato",
@@ -196,7 +187,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
     };
 
     /**
-     * Member: attachStartEndHandler
+     * Member: attachSecondsChangeHandler
      *
      * Attaches handlers to an element (likely an <input>) and updates the TrackEvent corresponding to the given property name.
      * Special consideration is given to properties like "start" and "end" that can't be blank. On keyup event, update only when
@@ -207,33 +198,16 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
      * @param {String} propertyName: Name of property to update when change is detected
      * @param {Function} callback: Called when update is ready to occur
      */
-     extendObject.attachStartEndHandler = function( element, trackEvent, propertyName, callback ) {
+    extendObject.attachSecondsChangeHandler = function( element, trackEvent, propertyName, callback ) {
       element.addEventListener( "blur", function( e ) {
         var updateOptions = {};
-        updateOptions[ propertyName ] = element.value;
+        updateOptions[ propertyName ] = TimeUtils.toSeconds( element.value );
         callback( trackEvent, updateOptions );
-      }, false );
-
-      element.addEventListener( "keyup", function( e ) {
-        if ( __safeKeyUpKeys.indexOf( e.which ) > -1 ) {
-          return;
-        }
-        // Check if value is only whitespace, and don't bother updating if it is
-        var value = element.value.replace( /\s/g, "" );
-        if ( value && value.length > 0 ) {
-          var updateOptions = {};
-          updateOptions[ propertyName ] = value;
-
-          // Perhaps the user isn't finished typing something that includes decimals
-          if ( value.charAt( value.length - 1 ) !== "." ) {
-            callback( trackEvent, updateOptions );
-          }
-        }
       }, false );
 
       element.addEventListener( "change", function( e ) {
         var updateOptions = {};
-        updateOptions[ propertyName ] = element.value;
+        updateOptions[ propertyName ] = TimeUtils.toSeconds( element.value );
         callback( trackEvent, updateOptions );
       }, false );
     };
@@ -420,6 +394,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
           popcornOptions = trackEvent.popcornOptions,
           manifestOptions = trackEvent.manifest.options,
           option,
+          units,
           i, l;
 
       manifestKeys = manifestKeys || Object.keys( manifestOptions );
@@ -430,6 +405,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
 
       for ( i = 0, l = manifestKeys.length; i < l; ++i ) {
         option = manifestKeys[ i ];
+        units = manifestOptions[ option ].units;
 
         // Look for the element with the correct manifest-key which was attached to an element during creation of the editor
         element = extendObject.rootElement.querySelector( "[data-manifest-key='" + option + "']" );
@@ -441,7 +417,11 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
           }
           else {
             if ( typeof popcornOptions[ option ] !== "undefined" ) {
-              element.value = popcornOptions[ option ];
+              if ( units === "seconds" ) {
+                element.value = TimeUtils.toTimecode( popcornOptions[ option ] );
+              } else {
+                element.value = popcornOptions[ option ];
+              }
             } else {
               element.value = manifestOptions[ option ].default || "";
             }

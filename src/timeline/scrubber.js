@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "util/lang" ],
-  function( util ) {
+define( [ "util/time" ],
+  function( TimeUtils ) {
 
   var CHECK_MEDIA_INTERVAL = 50,
       SCROLL_INTERVAL = 16,
@@ -37,7 +37,7 @@ define( [ "util/lang" ],
           currentTime = _media.currentTime,
           tracksElement = _tracksContainer.element,
           scrollLeft = tracksElement.scrollLeft;
-          _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
+          _timeTooltip.innerHTML = TimeUtils.toTimecode( _media.currentTime );
 
       // If we can avoid re-setting position and visibility, then do so
       if( _lastTime !== currentTime || _lastScroll !== scrollLeft ){
@@ -167,7 +167,7 @@ define( [ "util/lang" ],
       }
 
       if ( _media.currentTime ) {
-        _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
+        _timeTooltip.innerHTML = TimeUtils.toTimecode( _media.currentTime );
       }
       _timeTooltip.classList.add( "tooltip-on" );
 
