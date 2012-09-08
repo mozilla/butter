@@ -115,7 +115,7 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
       options = options || innerDefault && {
         inner: innerDefault,
         outer: extendObject.rootElement.querySelector( ".scrollbar-outer" ) || innerDefault.parentNode,
-        appendTo: extendObject.rootElement.querySelector( ".scrollbar-append-to" ) || extendObject.rootElement
+        appendTo: extendObject.rootElement.querySelector( ".scrollbar-container" ) || extendObject.rootElement
       };
 
       if ( !options ) {
