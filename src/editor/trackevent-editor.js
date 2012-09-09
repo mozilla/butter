@@ -33,7 +33,8 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
    */
   return function( extendObject, butter, rootElement, events ) {
     // Wedge a check for scrollbars into the open event if it exists
-    var oldOpenEvent = events.open;
+    var _oldOpenEvent = events.open,
+        _trackEvent;
 
     events.open = function( parentElement, trackEvent ) {
       var basicButton = rootElement.querySelector( ".basic-tab" ),
@@ -42,8 +43,10 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
           advancedTab = rootElement.querySelector( ".advanced-options" ),
           wrapper = rootElement.querySelector( ".scrollbar-outer" );
 
-      if ( oldOpenEvent ) {
-        oldOpenEvent.apply( this, arguments );
+      _trackEvent = trackEvent;
+
+      if ( _oldOpenEvent ) {
+        _oldOpenEvent.apply( this, arguments );
 
         // Code for handling basic/advanced options tabs are going to be the same. If the user defined these buttons
         // handle it for them here rather than force them to write the code in their editor
@@ -584,6 +587,26 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
         }
       }
     };
+
+    extendObject.getTrackEvent = function() {
+      return _trackEvent;
+    };
+
+    butter.listen( "trackeventremoved", function( e ) {
+
+      var currentTrackEvent,
+          currentEditor = butter.editor.currentEditor;
+
+      // Means the current editor is a track event editor
+      if ( currentEditor.getTrackEvent ) {
+
+        currentTrackEvent = currentEditor.getTrackEvent();
+        // Ensure event being deleted matches the one currently being used by the editor
+        if ( e.data.id === currentTrackEvent.id ) {
+          butter.editor.closeEditor();
+        }
+      }
+    });
 
   };
 
