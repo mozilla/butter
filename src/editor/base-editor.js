@@ -68,7 +68,9 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
      */
     extendObject.close = function() {
       // Remove the editor's root element from the element to which it was attached
-      extendObject.rootElement.parentNode.removeChild( extendObject.rootElement );
+      if ( extendObject.rootElement.parentNode ) {
+        extendObject.rootElement.parentNode.removeChild( extendObject.rootElement );
+      }
 
       // If a close event existed on the events object passed into the constructor, call it
       if ( events.close ) {

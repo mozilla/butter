@@ -250,9 +250,13 @@ define( [ "core/eventmanager", "./toggler",
       }, // esc key
       8: function( e ) { // del key
         if( butter.selectedEvents.length ) {
+          var trackEvent,
+              i;
           e.preventDefault();
-          for( var i = 0; i < butter.selectedEvents.length; i++ ) {
-            butter.selectedEvents[ i ].track.removeTrackEvent( butter.selectedEvents[ i ] );
+          for( i = 0; i < butter.selectedEvents.length; i++ ) {
+            trackEvent = butter.selectedEvents[ i ];
+            trackEvent.track.removeTrackEvent( trackEvent );
+            butter.editor.closeEditor();
           } // for
         } // if
       }, // del key
