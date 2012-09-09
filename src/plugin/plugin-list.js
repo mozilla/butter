@@ -54,6 +54,25 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
       element.setAttribute( "data-popcorn-plugin-type", e.data.type );
       element.setAttribute( "data-butter-draggable-type", "plugin" );
 
+      element.addEventListener( "dblclick", function( e ) {
+        var pluginType = element.getAttribute( "data-popcorn-plugin-type" ),
+            trackEvent = {
+              type: pluginType,
+              popcornOptions: {
+                start: butter.currentTime,
+                end: butter.currentTime + butter.config.value( "trackEvent" ).defaultDuration
+              }
+            };
+
+        if ( !butter.tracks.length ) {
+          butter.currentMedia.addTrack();
+        }
+
+        trackEvent = butter.tracks[ 0 ].addTrackEvent( trackEvent );
+
+        trackEvent.view.open();
+      }, false );
+
       _containerElement.appendChild( element );
     });
 
