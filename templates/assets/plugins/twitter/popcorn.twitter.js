@@ -136,7 +136,7 @@
       }
       options._container.appendChild( titleText );
 
-      query = options.search || options.username;
+      query = ( options.search || options.username ) + numberOfTweets;
 
       function buildTheTweets( tweets ) {
         var currTweet,
@@ -240,7 +240,7 @@
         } else if ( options.search ) {
           requestString = "http://search.twitter.com/search.json?q=";
 
-          requestString += options.search +
+          requestString += escape( options.search ) +
                          "&result_type=" + options.searchType;
 
           Popcorn.xhr( { url: requestString, dataType: "jsonp", success: twitterCallback } );

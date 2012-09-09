@@ -27,5 +27,6 @@
     // Relaxing
     "evil": true,
     "sub": true,
-    "strict": false
+    "strict": false,
+    "nonstandard": true
 }
