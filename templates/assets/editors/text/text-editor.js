@@ -5,7 +5,7 @@
 
 ( function( Butter ) {
 
-  Butter.Editor.register( "titles", "load!{{baseDir}}templates/assets/editors/titles/titles-editor.html",
+  Butter.Editor.register( "text", "load!{{baseDir}}templates/assets/editors/text/text-editor.html",
     function( rootElement, butter, compiledLayout ) {
 
     var _this = this;

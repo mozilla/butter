@@ -16,7 +16,7 @@
             "id": "1",
             "trackEvents": [{
                 "id": "TrackEvent3",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 0,
                     "end": 0.54223,
@@ -38,7 +38,7 @@
                 "name": "TrackEvent13"
             }, {
                 "id": "TrackEvent5",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 0.68126,
                     "end": 1.16324,
@@ -60,7 +60,7 @@
                 "name": "TrackEvent4"
             }, {
                 "id": "TrackEvent7",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 1.57816,
                     "end": 2.01468,

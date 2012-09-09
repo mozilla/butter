@@ -1,6 +1,6 @@
 /*global EditorHelper*/
 
-EditorHelper.addPlugin( "titles", function( trackEvent ) {
+EditorHelper.addPlugin( "text", function( trackEvent ) {
   var _container,
       media;
 

@@ -6,9 +6,9 @@
   "plugin": {
     "plugins": [
       {
-        "type": "titles",
-        "path": "{{baseDir}}templates/assets/plugins/titles/popcorn.titles.js",
-        "icon": "{{baseDir}}templates/assets/plugins/titles/titles-icon.png"
+        "type": "text",
+        "path": "{{baseDir}}templates/assets/plugins/text/popcorn.text.js",
+        "icon": "{{baseDir}}templates/assets/plugins/text/text-icon.png"
       },
       {
         "type": "popup",
@@ -59,7 +59,7 @@
       }
     ],
     "defaults": [
-      "titles",
+      "text",
       "popup",
       "googlemap",
       "twitter",
@@ -75,7 +75,7 @@
     "googlemap": "{{baseDir}}editors/googlemap-editor.js",
     "popup": "{{baseDir}}templates/assets/editors/popup/popup-editor.js",
     "image": "{{baseDir}}templates/assets/editors/image/popcorn.image.editor.js",
-    "titles": "{{baseDir}}templates/assets/editors/titles/titles-editor.js",
+    "text": "{{baseDir}}templates/assets/editors/text/text-editor.js",
     "twitter": "{{baseDir}}templates/assets/editors/twitter/twitter-editor.js"
   },
   "maxPluginZIndex": 1000

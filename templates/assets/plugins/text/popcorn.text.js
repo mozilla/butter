@@ -1,9 +1,9 @@
-// PLUGIN: titles
+// PLUGIN: text
 
 (function ( Popcorn ) {
 
   /**
-   * titles Popcorn plug-in
+   * text Popcorn plug-in
    * Based on popcorn.text.js by @humph
    * @param {Object} options
    *
@@ -41,11 +41,11 @@
     return string.replace( /\r?\n/gm, "<br>" );
   }
 
-  Popcorn.plugin( "titles", {
+  Popcorn.plugin( "text", {
 
     manifest: {
       about: {
-        name: "Popcorn titles Plugin",
+        name: "Popcorn text Plugin",
         version: "0.1",
         author: "@k88hudson, @mjschranz"
       },
@@ -151,15 +151,15 @@
 
       options._target = target;
       container.style.position = "absolute";
-      container.classList.add( "popcorn-titles" );
+      container.classList.add( "popcorn-text" );
 
       if ( position === "custom" ) {
-        container.classList.add( "titles-custom" );
+        container.classList.add( "text-custom" );
         container.style.left = options.left + "%";
         container.style.top = options.top + "%";
       }
       else {
-        container.classList.add( "titles-fixed" );
+        container.classList.add( "text-fixed" );
         innerContainer.classList.add( position );
       }
 
