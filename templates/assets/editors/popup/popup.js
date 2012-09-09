@@ -11,7 +11,8 @@ EditorHelper.addPlugin( "popup", function( trackEvent ) {
     EditorHelper.contentEditable( trackEvent, _container.querySelector( "span" ) );
     EditorHelper.draggable( trackEvent, _container, media );
     EditorHelper.resizable( trackEvent, _container, media, {
-      handlePositions: "e"
+      handlePositions: "e",
+      minWidth: 10
     });
   }
 });

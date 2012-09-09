@@ -44,7 +44,11 @@ EditorHelper.addPlugin( "googlemap", function( trackEvent, popcornInstance ) {
       EditorHelper.draggable( trackEvent, container, media );
     }, false );
 
-    EditorHelper.resizable( trackEvent, container, media, "e, se, s, nw" );
+    EditorHelper.resizable( trackEvent, container, media, {
+      handlePositions: "e, se, s, nw",
+      minHeight: 20,
+      minWidth: 20
+    });
   }
 
   // Plugin emits this event when googlemaps fires it's idle event. We have to wait until
