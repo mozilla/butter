@@ -1,5 +1,12 @@
-define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
-  function( Dialog, Lang, UserData, ToolTip ) {
+define([  "dialog/dialog",
+          "util/lang",
+          "ui/user-data",
+          "ui/widget/tooltip",
+          "util/xhr",
+          "text!layouts/badges.html",
+          "ui/badges"
+          ],
+  function( Dialog, Lang, UserData, ToolTip, XHR, BADGES_LAYOUT, Badges ) {
 
   var DEFAULT_AUTH_BUTTON_TEXT = "<span class='icon-user'></span> Sign In / Sign Up",
       DEFAULT_AUTH_BUTTON_TITLE = "Sign in or sign up with Persona";
@@ -23,8 +30,10 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
         _loginClass = "butter-login-true",
         _activeClass = "btn-green",
         _noProjectNameToolTip,
-        _projectTitlePlaceHolderText = _projectName.innerHTML;
-
+        _projectTitlePlaceHolderText = _projectName.innerHTML,
+        _loginContainer = _rootElement.querySelector( ".butter-login-project-info" ),
+        _badgeLayout = Lang.domFragment( BADGES_LAYOUT, ".butter-badge" ),
+        _badgeCounter = Lang.domFragment( BADGES_LAYOUT, ".butter-badge-count" );
 
     // create a tooltip for the projectName element
     ToolTip.create({
@@ -41,6 +50,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
 
     _tabzilla.addEventListener( "click", function( e ) {
       document.body.classList.toggle( "tabzilla-open" );
+      document.body.classList.remove( "badges-open" );
     }, false );
 
     function login( successCallback, errorCallback ) {
@@ -55,6 +65,26 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
 
     _authButton.addEventListener( "click", login, false );
 
+    function checkBadges( badges ) {
+      var newBadge,
+          badgeLink;
+
+      if ( badges.length > 0 ) {
+        newBadge = Badges.makeBadge( badges[ 0 ], "dropdown" );
+        badgeLink = Badges.badgeLink();
+        badgeLink.addEventListener( "click", function(){
+          document.body.classList.toggle( "badges-open" );
+          butter.editor.openEditor( "share-properties" );
+        }, false );
+        newBadge.appendChild( badgeLink );
+        _badgeCounter.querySelector( ".butter-badge" ) && _badgeCounter.removeChild( _badgeCounter.querySelector( ".butter-badge" ) ) ;
+        _badgeCounter.appendChild( newBadge );
+        _badgeCounter.addEventListener( "click", function(){
+          newBadge.classList.toggle( "butter-badge-on" );
+        }, false );
+      }
+    }
+
     function publish() {
       butter.cornfield.publish( butter.project.id, function( e ){
         if( e.error !== "okay" ){
@@ -64,6 +94,8 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
           butter.editor.openEditor( "share-properties" );
           _previewBtn.classList.remove( "butter-hidden" );
           _previewBtn.href = e.url;
+          _rootElement.querySelector( ".butter-badge-img" ).classList.add( "butter-badge-gold" );
+          _badgeCounter.querySelector( ".butter-badge-number" ).innerHTML = 1;
         }
       });
     }
@@ -166,12 +198,29 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     }
 
     function loginDisplay() {
+      var downTick,
+          userName;
+
+      downTick = document.createElement( "span" );
+      downTick.className = "icon icon-downtick";
+      downTick.addEventListener( "click", toggleDropDown, false );
+
+      userName = document.createElement( "span" );
+      userName.innerHTML = butter.cornfield.name();
+      userName.className = "butter-username";
+      userName.addEventListener( "click", toggleDropDown, false );
+
       _rootElement.classList.add( _loginClass );
       _authButton.classList.remove( _activeClass );
-      _authButton.innerHTML = "<span class='icon icon-user'></span> " + butter.cornfield.name() + "<i class=\"icon icon-downtick\"></i>";
-      _authButton.title = "This is you!";
-      _authButton.addEventListener( "click", toggleDropDown, false );
+      _authButton.innerHTML = "";
+      _authButton.appendChild( userName );
+      _authButton.appendChild( downTick );
+      _authButton.appendChild( _badgeCounter );
+      _authButton.removeEventListener( "click", login, false );
       _logoutBtn.addEventListener( "click", doLogout, false );
+
+      Badges.check( checkBadges );
+
     }
 
     function logoutDisplay() {
