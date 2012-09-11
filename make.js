@@ -251,7 +251,6 @@ function checkHTML() {
     EDITORS_DIR,
     join( SRC_DIR, "layouts" ),
     join( SRC_DIR, "editor" ),
-    'public',
     TEMPLATES_DIR ] ).filter( function( file ) {
     return file.match( /\.html$/ );
   }).forEach( function( filename ) {
