@@ -41,6 +41,10 @@ body.editor-minimized .body-wrapper {
   height: 0;
 }
 
+.video > iframe {
+  pointer-events: none;
+}
+
 .video > video,
 .video > iframe,
 .video > object {
