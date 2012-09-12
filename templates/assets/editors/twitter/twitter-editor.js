@@ -200,7 +200,5 @@
         _trackEvent.unlisten( "trackeventupdated" );
       }
     });
-
   });
-
 }( window.Butter ));

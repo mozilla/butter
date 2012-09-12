@@ -9,13 +9,9 @@ define( [ "editor/editor", "editor/base-editor", "text!layouts/ui-kit.html" ],
 
     Editor.BaseEditor.extend( this, butter, rootElement, {
       open: function() {
-    
       },
       close: function() {
-
       }
     });
-
   });
-
 });

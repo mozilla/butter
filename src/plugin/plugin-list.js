@@ -5,7 +5,7 @@
 define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-list-editor.html" ],
   function( DragNDrop, LangUtils, Editor, EDITOR_LAYOUT ) {
 
-	return function( butter ) {
+  return function( butter ) {
 
     var _parentElement = LangUtils.domFragment( EDITOR_LAYOUT, ".plugin-list-editor" ),
         _containerElement = _parentElement.querySelector( ".plugin-container" );
@@ -18,7 +18,6 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
 
       Editor.BaseEditor.extend( this, butter, rootElement, {
         open: function( parentElement ) {
-
         },
         close: function() {
         }
@@ -64,9 +63,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
 
     // Open the plugin-list editor right after butter is finished starting up
     butter.listen( "ready", function() {
-      butter.editor.openEditor( "plugin-list", true );
+      butter.editor.openEditor( "plugin-list" );
     });
-
-	};
-
+  };
 });

@@ -256,7 +256,5 @@
       close: function() {
       }
     });
-
   });
-
 }( window.Butter ));
