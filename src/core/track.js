@@ -202,7 +202,7 @@ define( [
         _view.removeTrackEvent( trackEvent );
         trackEvent.unbind();
         _this.dispatch( "trackeventremoved", trackEvent );
-        if ( !_trackEvents.length && !expectingTrackEvent ) {
+        if ( !_trackEvents.length && !expectingTrackEvent && _this._media.tracks.length > 1 ) {
           _this._media.removeTrack( _this );
         }
         return trackEvent;
