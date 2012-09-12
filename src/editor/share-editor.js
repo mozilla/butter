@@ -57,9 +57,6 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
     }
 
     function resetInput() {
-      shareFacebook.innerHTML = "";
-      shareTwitter.innerHTML = "";
-      shareGoogle.innerHTML = "";
       projectURL.value = "";
       projectEmbedURL.value = "";
       fadeEditorContainer();
@@ -111,21 +108,27 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       projectName.value = "";
 
       butter.cornfield.publish( butter.project.id, function( e ) {
-        var headerPreviewBtn = document.querySelector( ".butter-header .butter-preview-btn" );
+        var headerPreviewBtn = document.querySelector( ".butter-header .butter-preview-btn" ),
+            url = e.url;
+
         if ( e.error !== "okay" ) {
           userData.showErrorDialog( "There was a problem saving your project. Please try again." );
           return;
         }
 
-        projectURL.value = e.url;
-        previewBtn.href = e.url;
+        projectURL.value = url;
+        previewBtn.href = url;
         headerPreviewBtn.classList.remove( "butter-hidden" );
-        headerPreviewBtn.href = e.url;
+        headerPreviewBtn.href = url;
 
         updateEmbed( projectURL.value.replace( "/v/", "/e/" ) );
-        socialMedia.hotLoad( shareFacebook, socialMedia.facebook, e.url );
-        socialMedia.hotLoad( shareTwitter, socialMedia.twitter, e.url );
-        socialMedia.hotLoad( shareGoogle, socialMedia.google, e.url );
+        // if any of the buttons haven't loaded, or if we aren't logged in
+        if ( !shareFacebook.childNodes.length || !shareTwitter.childNodes.length ||
+             !shareGoogle.childNodes.length || !butter.cornfield.authenticated() ) {
+          socialMedia.hotLoad( shareFacebook, socialMedia.facebook, url );
+          socialMedia.hotLoad( shareTwitter, socialMedia.twitter, url );
+          socialMedia.hotLoad( shareGoogle, socialMedia.google, url );
+        }
       });
     }
 
@@ -226,5 +229,5 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       close: function() {
       }
     });
-  });
+  }, true );
 });

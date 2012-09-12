@@ -29,9 +29,10 @@ define( [ "util/lang", "util/xhr",
      * @param {String} layoutSrc: String representing the basic HTML layout of the editor. May be prepended with "load!" to signify that load must be done after butter is initialized.
      * @param {Function} ctor: Constructor to be run when the Editor is being created
      */
-    register: function( name, layoutSrc, ctor ) {
+    register: function( name, layoutSrc, ctor, persist ) {
       __editors[ name ] = {
         create: ctor,
+        persist: !!persist,
         layout: layoutSrc
       };
     },
@@ -114,7 +115,7 @@ define( [ "util/lang", "util/xhr",
     },
 
     /**
-     * Function: create
+     * Function: isRegistered
      *
      * Reports the existence of an editor given a name
      *
@@ -146,6 +147,9 @@ define( [ "util/lang", "util/xhr",
 
     },
 
+    isPersistant: function( editorName ) {
+      return __editors[ editorName ].persist;
+    },
     // will be set by Editor module when it loads
     baseDir: null
 

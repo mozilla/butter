@@ -35,6 +35,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         _header,
         _toggler,
         _this = this,
+        _createdEditors = {},
         _logger = new Logger( butter.id );
 
     EventManager.extend( _this );
@@ -49,18 +50,33 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
      * Opens an editor corresponding to the given editor name if it exists
      *
      * @param {String} editorName: Name of editor to open
+     * @param {Object} options: An object storing various optional parameters that are used when opening an editor. These options are:
+     * * @param {Booelean} persist: Indicate whether or not the editor should be recreated each time it wants to be opened
+     * * @param {Object} openData: TrackEvent data used within an editors `open` method
      */
-    _this.openEditor = function( editorName, forceTrayOpen, openData ) {
+    _this.openEditor = function( editorName, options ) {
+      options = options || {};
+
+      var persist = options.persist;
+      persist = persist === true || persist === false ? persist : Editor.isPersistant( editorName );
+
       // If the editor has never been used before, open it now
       _editorAreaDOMRoot.classList.remove( "minimized" );
       document.body.classList.remove( "editor-minimized" );
       _toggler.state = false;
 
-      if( _currentEditor ) {
+      if ( _currentEditor ) {
         _currentEditor.close();
       }
-      _currentEditor = Editor.create( editorName, butter );
-      _currentEditor.open( _editorContentArea, openData );
+
+      // Some editors may not need to be created again. If so, store them in an object and open and close them as needed.
+      if ( persist && _createdEditors[ editorName ] ) {
+        _currentEditor = _createdEditors[ editorName ];
+      } else {
+        _currentEditor = _createdEditors[ editorName ] = Editor.create( editorName, butter );
+      }
+
+      _currentEditor.open( _editorContentArea, options.openData );
 
       _currentEditor.listen( "back", function( e ) {
         _this.openEditor( DEFAULT_EDITOR_NAME );
@@ -97,7 +113,9 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         throw new Error( "trackEvent must be valid to start an editor." );
       }
       var editorType = Editor.isRegistered( trackEvent.type ) ? trackEvent.type : "default";
-      return _this.openEditor( editorType, false, trackEvent );
+      return _this.openEditor( editorType, {
+        openData: trackEvent
+      });
     };
 
     butter.listen( "trackeventadded", function ( e ) {

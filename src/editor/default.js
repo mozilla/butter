@@ -125,7 +125,5 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
         setErrorState( e.toString() );
       }
     }
-
   });
-
 });
