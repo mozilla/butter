@@ -96,10 +96,7 @@ function init( window, document ) {
 
   function setupClickHandlers( popcorn, config ) {
     function replay() {
-      // call load before play here to ensure that the video begins at the correct location
-      // meaning that if a start value was specified we start at it
-      popcorn.load();
-      popcorn.play();
+      popcorn.play( config.start );
     }
 
     $( "#replay-post" ).addEventListener( "click", replay, false );
@@ -253,7 +250,7 @@ function init( window, document ) {
        *   showinfo   = 1{default}|0    whether to show video title, author, etc. before playing
        **/
       config = {
-        autohide: qs.autohide === "0" ? false : true,
+        autohide: qs.autohide === "1" ? true : false,
         autoplay: qs.autoplay === "1" ? true : false,
         controls: qs.controls === "0" ? false : true,
         start: qs.start|0,
@@ -391,7 +388,11 @@ function init( window, document ) {
               popcorn.play();
             }
           });
-          popcorn.currentTime( start );
+          function timeupdate() {
+            popcorn.currentTime( start );
+            popcorn.off( "timeupdate", timeupdate );
+          }
+          popcorn.on( "timeupdate", timeupdate );
         } else if ( config.autoplay ) {
           popcorn.play();
         }
