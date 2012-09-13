@@ -82,6 +82,16 @@ define( [ "util/lang", "text!layouts/controls.html" ],
         p.media.addEventListener( "play", bigPlayClicked, false );
       }
 
+      // this block is used to ensure that when the video is played on a mobile device that the controls and playButton overlay
+      // are in the correct state when it begins playing
+      if ( !p.paused() ) {
+        if ( bigPlayButton ) {
+          bigPlayClicked();
+        }
+        playButton.classList.remove( "controls-paused" );
+        playButton.classList.add( "controls-playing" );
+      }
+
       _controls.classList.add( "controls-ready" );
 
       activate = function() {

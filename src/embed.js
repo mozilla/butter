@@ -82,7 +82,7 @@ function init( window, document ) {
   }
 
   function remixClick( popcorn ) {
-    $( "#remix-post" ).click();
+    window.open( $( "#remix-post" ).href, "_blank" );
   }
 
   function fullscreenClick() {
@@ -96,10 +96,7 @@ function init( window, document ) {
 
   function setupClickHandlers( popcorn, config ) {
     function replay() {
-      // call load before play here to ensure that the video begins at the correct location
-      // meaning that if a start value was specified we start at it
-      popcorn.load();
-      popcorn.play();
+      popcorn.play( config.start );
     }
 
     $( "#replay-post" ).addEventListener( "click", replay, false );
@@ -248,7 +245,7 @@ function init( window, document ) {
        *   showinfo   = 1{default}|0    whether to show video title, author, etc. before playing
        **/
       config = {
-        autohide: qs.autohide === "0" ? false : true,
+        autohide: qs.autohide === "1" ? true : false,
         autoplay: qs.autoplay === "1" ? true : false,
         controls: qs.controls === "0" ? false : true,
         start: qs.start|0,
@@ -312,6 +309,13 @@ function init( window, document ) {
 
         popcorn.off( "load", onLoad );
 
+        // update the currentTime to the embed options start value
+        // this is needed for mobile devices as attempting to listen for `canplay` or similar events
+        // that let us know it is safe to update the current time seem to be futile
+        function timeupdate() {
+          popcorn.currentTime( start );
+          popcorn.off( "timeupdate", timeupdate );
+        }
         // See if we should start playing at a time other than 0.
         // We combine this logic with autoplay, since you either
         // seek+play or play or neither.
@@ -322,7 +326,7 @@ function init( window, document ) {
               popcorn.play();
             }
           });
-          popcorn.currentTime( start );
+          popcorn.on( "timeupdate", timeupdate );
         } else if ( config.autoplay ) {
           popcorn.play();
         }
