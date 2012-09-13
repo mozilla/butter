@@ -97,11 +97,11 @@ define([], function(){
   }
 
   function onMouseDown( e ){
+    e.stopPropagation();
     if( e.which !== 1 ){
       return;
     }
     e.preventDefault();
-    e.stopPropagation();
     window.addEventListener( "mousemove", onDragged, false );
     window.addEventListener( "mouseup", onMouseUp, false );
   }
