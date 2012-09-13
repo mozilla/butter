@@ -96,8 +96,9 @@ define([], function(){
     }
   }
 
-  function onMouseDown( e ){
-    if( e.which !== 1 ){
+  function onMouseDown( e ) {
+    if ( e.which !== 1 ) {
+      onMouseUp( e );
       return;
     }
     e.preventDefault();

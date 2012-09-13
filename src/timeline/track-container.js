@@ -118,6 +118,7 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
       var trackEventView = e.target,
           element = trackEventView.element,
           trackView = trackEventView.trackEvent.track.view;
+
       trackView.element.removeChild( element );
       _container.appendChild( element );
       _vScrollbar.update();
