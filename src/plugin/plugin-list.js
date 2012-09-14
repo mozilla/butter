@@ -35,8 +35,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
       DragNDrop.helper( element, {
         start: function() {
           var targets = butter.targets,
-              mediaContainer = document.getElementById( butter.currentMedia.target ),
-              iframeVideo = mediaContainer.querySelector( "iframe" );
+              iframeVideo = document.querySelector( "#" + butter.currentMedia.target + " > iframe" );
 
           if ( iframeVideo ) {
             iframeVideo.style.pointerEvents = "none";
@@ -48,8 +47,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         },
         stop: function() {
 
-          var mediaContainer = document.getElementById( butter.currentMedia.target ),
-              iframeVideo = mediaContainer.querySelector( "iframe" )
+          var iframeVideo = document.querySelector( "#" + butter.currentMedia.target + " > iframe" );
 
           if ( iframeVideo ) {
             iframeVideo.style.pointerEvents = "auto";
