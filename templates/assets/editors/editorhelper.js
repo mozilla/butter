@@ -18,15 +18,28 @@
      *                    {Function} end: Fucntion to execute on drag end event
      */
     global.EditorHelper.draggable = function( trackEvent, dragContainer, mediaContainer, options ) {
-      var media = mediaContainer.getBoundingClientRect();
+      var media = mediaContainer.getBoundingClientRect(),
+          iframeVideo = mediaContainer.querySelector( "iframe" );
 
       options = options || {};
 
       $( dragContainer ).draggable({
         handle: options.handle,
-        start: options.start,
         containment: "parent",
+        start: function() {
+          if ( iframeVideo ) {
+            iframeVideo.style.pointerEvents = "none";
+          }
+
+          if ( options.start ) {
+            options.start();
+          }
+        },
         stop: function( event, ui ) {
+          if ( iframeVideo ) {
+            iframeVideo.style.pointerEvents = "auto";
+          }
+
           if ( options.end ) {
             options.end();
           }
@@ -55,17 +68,30 @@
      *                    {Number} minHeight: Minimum height that the resizeContainer should be
      */
     global.EditorHelper.resizable = function( trackEvent, resizeContainer, mediaContainer, options ) {
-      var media = mediaContainer.getBoundingClientRect();
+      var media = mediaContainer.getBoundingClientRect(),
+          iframeVideo = mediaContainer.querySelector( "iframe" );
 
       options = options || {};
 
       $( resizeContainer ).resizable({
         handles: options.handlePositions,
-        start: options.start,
+        start: function() {
+          if ( iframeVideo ) {
+            iframeVideo.style.pointerEvents = "none";
+          }
+
+          if ( options.start ) {
+            options.start();
+          }
+        },
         containment: "parent",
         stop: function( event, ui ) {
           var height = ( ui.size.height + resizeContainer.offsetTop ) <= media.height ? ui.size.height : media.height - resizeContainer.offsetTop,
               width = ( ui.size.width + resizeContainer.offsetLeft ) <= media.width ? ui.size.width : media.width - resizeContainer.offsetLeft;
+
+          if ( iframeVideo ) {
+            iframeVideo.style.pointerEvents = "auto";
+          }
 
           if ( options.end ) {
             options.end();

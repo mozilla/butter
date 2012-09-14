@@ -34,13 +34,27 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
 
       DragNDrop.helper( element, {
         start: function() {
-          var targets = butter.targets;
+          var targets = butter.targets,
+              mediaContainer = document.getElementById( butter.currentMedia.target ),
+              iframeVideo = mediaContainer.querySelector( "iframe" );
+
+          if ( iframeVideo ) {
+            iframeVideo.style.pointerEvents = "none";
+          }
 
           for ( var i = 0, l = targets.length; i < l; ++i ) {
             targets[ i ].view.blink();
           }
         },
         stop: function() {
+
+          var mediaContainer = document.getElementById( butter.currentMedia.target ),
+              iframeVideo = mediaContainer.querySelector( "iframe" )
+
+          if ( iframeVideo ) {
+            iframeVideo.style.pointerEvents = "auto";
+          }
+
           butter.currentMedia.pause();
         }
       });
