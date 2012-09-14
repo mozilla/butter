@@ -40,7 +40,7 @@ define( [], function(){
     input.addEventListener( "mouseup", __ignoreMouseUp, false );
   }
 
-  return function( input ){
+  return function( input, options ){
     if( !(input && (
             input.type === "text" ||
             input.type === "textarea" ||
@@ -48,6 +48,9 @@ define( [], function(){
          ) ){
       throw "Textbox: Expected an input element of type text";
     }
+
+    options = options || {};
+    input.readOnly = !!options.readOnly;
 
     input.addEventListener( "blur", function( e ){
         __addListeners( e.target );
