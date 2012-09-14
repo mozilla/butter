@@ -114,3 +114,7 @@ Magic numbers:
 .manual-test-steps > ol {
   margin-left: -15px;
 }
+
+#manual-test {
+  font-size: 0.8em;
+}
