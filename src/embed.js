@@ -416,9 +416,9 @@ function init( window, document ) {
         setupClickHandlers( popcorn, config );
         setupEventHandlers( popcorn, config );
 
-        // Wrap textboxes so they click-to-highlight
-        TextboxWrapper( $( "#share-url" ) );
-        TextboxWrapper( $( "#share-iframe" ) );
+        // Wrap textboxes so they click-to-highlight and are readonly
+        TextboxWrapper( $( "#share-url" ), { readOnly: true } );
+        TextboxWrapper( $( "#share-iframe" ), { readOnly: true } );
 
         // Write out the iframe HTML necessary to embed this
         $( "#share-iframe" ).value = buildIFrameHTML();
