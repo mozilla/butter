@@ -16,7 +16,7 @@
             "id": "0",
             "trackEvents": [{
                 "id": "TrackEvent1",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 0,
                     "end": 3.44305,
@@ -31,7 +31,7 @@
                 "name": "TrackEvent3"
             }, {
                 "id": "TrackEvent3",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 3.66883,
                     "end": 5.95479,
@@ -53,7 +53,7 @@
                 "name": "TrackEvent2"
             }, {
                 "id": "TrackEvent5",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 8.35364,
                     "end": 9.22851,
@@ -99,7 +99,7 @@
                 "name": "TrackEvent4"
             }, {
                 "id": "TrackEvent9",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 15.86411,
                     "end": 17.58928,
@@ -139,7 +139,7 @@
                 "name": "TrackEvent10"
             }, {
                 "id": "TrackEvent13",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 44.51221,
                     "end": 45.84833,
@@ -179,7 +179,7 @@
                 "name": "TrackEvent15"
             }, {
                 "id": "TrackEvent21",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 35.07671,
                     "end": 36.18562,
@@ -201,7 +201,7 @@
                 "name": "TrackEvent12"
             }, {
                 "id": "TrackEvent23",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 41.95447,
                     "end": 42.90885,
@@ -223,7 +223,7 @@
                 "name": "TrackEvent13"
             }, {
                 "id": "TrackEvent28",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 73.29626,
                     "end": 76.57932,
@@ -245,7 +245,7 @@
                 "name": "TrackEvent17"
             }, {
                 "id": "TrackEvent29",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 68.21896,
                     "end": 73.33443,
@@ -267,7 +267,7 @@
                 "name": "TrackEvent16"
             }, {
                 "id": "TrackEvent33",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 76.80837,
                     "end": 78.64077,
@@ -293,7 +293,7 @@
             "id": "1",
             "trackEvents": [{
                 "id": "TrackEvent25",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 11.14625,
                     "end": 13.75247,
@@ -315,7 +315,7 @@
                 "name": "TrackEvent18"
             }, {
                 "id": "TrackEvent27",
-                "type": "titles",
+                "type": "text",
                 "popcornOptions": {
                     "start": 28.09035,
                     "end": 30.37808,

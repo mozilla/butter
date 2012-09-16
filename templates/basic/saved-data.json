@@ -24,7 +24,7 @@
           "trackEvents": [
             {
               "id": "TrackEvent3",
-              "type": "titles",
+              "type": "text",
               "popcornOptions": {
                 "start": 1,
                 "end": 6,
