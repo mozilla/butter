@@ -54,7 +54,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
       element.setAttribute( "data-popcorn-plugin-type", e.data.type );
       element.setAttribute( "data-butter-draggable-type", "plugin" );
 
-      element.addEventListener( "dblclick", function( e ) {
+      element.addEventListener( "click", function( e ) {
         var pluginType = element.getAttribute( "data-popcorn-plugin-type" ),
             trackEvent = {
               type: pluginType,
