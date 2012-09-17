@@ -17,85 +17,18 @@
         _butter;
 
     /**
-     * Member: onDragEnd
-     *
-     * GoogleMaps drag ended event handler. Updates the associated trackevent after the drag has ended.
-     */
-    function onDragEnd() {
-      var center = _popcornEventMapReference.getCenter(),
-          updateOptions = {
-            lat: center.lat(),
-            lng: center.lng(),
-            location: ""
-          };
-      _trackEvent.update( updateOptions );
-    }
-
-    /**
-     * Member: onHeadingChanged
-     *
-     * GoogleMaps heading changed event handler. Updates the associated trackevent after map heading is changed.
-     */
-    function onHeadingChanged() {
-      var updateOptions = {
-            heading: _popcornEventMapReference.getHeading(),
-            location: ""
-          };
-      _trackEvent.update( updateOptions );
-    }
-
-    /**
-     * Member: onZoomChanged
-     *
-     * GoogleMaps zoom changed event handler. Updates the associated trackevent after map zoom is changed.
-     */
-    function onZoomChanged() {
-      var updateOptions = {
-            zoom: _popcornEventMapReference.getZoom()
-          };
-      _trackEvent.update( updateOptions );
-    }
-
-    /**
-     * Member: setupMapListeners
-     *
-     * Adds listeners to the google map object to detect change in state.
-     */
-    function setupMapListeners() {
-      google.maps.event.addListener( _popcornEventMapReference, "dragend", onDragEnd );
-      google.maps.event.addListener( _popcornEventMapReference, "zoom_changed", onZoomChanged );
-      google.maps.event.addListener( _popcornEventMapReference, "heading_changed", onHeadingChanged );
-    }
-
-    /**
-     * Member: removeMapListeners
-     *
-     * Removes listeners added by `setupMapListeners`.
-     */
-    function removeMapListeners() {
-      if ( _popcornEventMapReference && _trackEvent.popcornTrackEvent._map ) {
-        google.maps.event.clearInstanceListeners( _popcornEventMapReference );
-      }
-    }
-
-    /**
      * Member: getMapFromTrackEvent
      *
-     * Retrieves a handle to the map associated with the trackevent and proceeds to call `setupMapListeners`.
-     * `removeMapListeners` is called first to remove old listeners if a map was already initialized
-     * (trackeventupdate might cause this to occur).
+     * Retrieves a handle to the map associated with the trackevent.
      */
     function getMapFromTrackEvent() {
-      removeMapListeners();
       if ( !_trackEvent.popcornTrackEvent._map ) {
         _trackEvent.popcornTrackEvent.onmaploaded = function( options, map ){
           _popcornEventMapReference = map;
-          setupMapListeners();
         };
       }
       else {
         _popcornEventMapReference = _trackEvent.popcornTrackEvent._map;
-        setupMapListeners();
       }
     }
 
@@ -321,7 +254,6 @@
 
       },
       close: function() {
-        removeMapListeners();
       }
     });
 

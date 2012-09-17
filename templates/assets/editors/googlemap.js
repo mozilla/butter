@@ -1,6 +1,8 @@
-/*global EditorHelper,google*/
+/*global EditorHelper,google,clearTimeout,setTimeout*/
 
 EditorHelper.addPlugin( "googlemap", function( trackEvent, popcornInstance ) {
+  var UPDATE_TIMEOUT = 250;
+
   var container,
       media,
       hotspot,
@@ -59,6 +61,9 @@ EditorHelper.addPlugin( "googlemap", function( trackEvent, popcornInstance ) {
     // We need to setup listeners on the maps for the following events incase the user decides
     // to manipulate the map before opening the editor
     function setupMapListeners() {
+
+      var updateTimeout;
+
       google.maps.event.addListener( popcornEventMapReference, "dragend", function() {
         var center = popcornEventMapReference.getCenter();
 
@@ -75,12 +80,36 @@ EditorHelper.addPlugin( "googlemap", function( trackEvent, popcornInstance ) {
         });
       });
 
-      google.maps.event.addListener( popcornEventMapReference, "heading_changed", function() {
-        trackEvent.update({
-          heading: popcornEventMapReference.getHeading(),
-          location: ""
-        });
-      });
+      function doUpdate() {
+        // setTimeout is used because the maps API fires a ridiculous amount of events as it animates
+        // zooming and panning, which causes the trackEvent to flicker and sometimes disappear.
+        // This will likely be fixed when the silent popcorn update function lands
+        // TODO: refactor this when silent updating is enabled in Popcorn.
+        if ( updateTimeout ) {
+          clearTimeout( updateTimeout );
+        }
+
+        updateTimeout = setTimeout(function() {
+          var pov = popcornEventMapReference.streetView.pov,
+              latlng = popcornEventMapReference.streetView.getPosition();
+          trackEvent.update({
+            heading: pov.heading,
+            pitch: pov.pitch,
+            zoom: pov.zoom,
+            lat: latlng.lat(),
+            lng: latlng.lng(),
+            location: ""
+          });
+        }, UPDATE_TIMEOUT );
+      }
+
+      // If this is a street view, apply streetview specific listeners
+      if ( popcornEventMapReference.streetView ) {
+
+        google.maps.event.addListener( popcornEventMapReference.streetView, "pov_changed", doUpdate );
+        google.maps.event.addListener( popcornEventMapReference.streetView, "position_changed", doUpdate );
+        google.maps.event.addListener( popcornEventMapReference.streetView, "pano_changed", doUpdate );
+      }
 
       setup();
     }
