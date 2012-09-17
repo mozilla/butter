@@ -43,21 +43,30 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
     _droppable = DragNDrop.droppable( _element, {
       drop: function( dropped, mousePosition ) {
         var tracks = butter.currentMedia.orderedTracks,
-            lastTrackBottom = tracks[ tracks.length - 1 ].view.element.getBoundingClientRect().bottom;
+            lastTrackBottom = tracks[ tracks.length - 1 ].view.element.getBoundingClientRect().bottom,
+            droppedElement = dropped.data ? dropped.data.element : dropped;
 
-        dropped = dropped.data ? dropped.data.element : dropped;
         // ensure its a plugin and that only the area under the last track is droppable
-        if ( dropped.getAttribute( "data-butter-draggable-type" ) === "plugin" && mousePosition[ 1 ] > lastTrackBottom ) {
+        if ( mousePosition[ 1 ] > lastTrackBottom ) {
           var newTrack = butter.currentMedia.addTrack(),
               trackRect = newTrack.view.element.getBoundingClientRect(),
               left = mousePosition[ 0 ] - trackRect.left,
-              start = left / trackRect.width * newTrack.view.duration;
+              start = left / trackRect.width * newTrack.view.duration,
+              draggableType = droppedElement.getAttribute( "data-butter-draggable-type" );
 
-          newTrack.view.dispatch( "plugindropped", {
-            start: start,
-            track: newTrack,
-            type: dropped.getAttribute( "data-popcorn-plugin-type" )
-          });
+          if ( draggableType === "plugin" ) {
+            newTrack.view.dispatch( "plugindropped", {
+              start: start,
+              track: newTrack,
+              type: droppedElement.getAttribute( "data-popcorn-plugin-type" )
+            });
+          } else if ( draggableType === "trackevent" ) {
+            newTrack.view.dispatch( "trackeventdropped", {
+              start: dropped.data.start,
+              track: newTrack,
+              trackEvent: dropped.data.trackEvent
+            });
+          }
         }
       }
     });
