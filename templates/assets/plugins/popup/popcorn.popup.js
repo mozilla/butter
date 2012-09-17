@@ -100,14 +100,14 @@
         text: {
           elem: "textarea",
           label: "Text",
-          "default": "zoink!"
+          "default": "Pop!"
         },
         type: {
           elem: "select",
           options: [ "Popup", "Speech", "Thought Bubble" ],
           values: [ "popup", "speech", "thought" ],
           label: "Type",
-          "default": "thought"
+          "default": "popup"
         },
         triangle: {
           elem: "select",
