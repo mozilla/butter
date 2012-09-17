@@ -34,7 +34,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
     });
   });
 
-  app.get( '/api/delete/:id?',
+  app.post( '/api/delete/:id?',
     filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
     function( req, res ) {
 
