@@ -17,17 +17,6 @@
   "trackEvent": {
     "defaultDuration": 5
   },
-  "plugin": {
-    "plugins": [
-      {
-        "type": "text",
-        "path": "{{baseDir}}external/popcorn-js/plugins/text/popcorn.text.js"
-      }
-    ],
-    "defaults": [
-      "text"
-    ]
-  },
   "player": {
     "players": [
       {

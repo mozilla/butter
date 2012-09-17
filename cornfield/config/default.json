@@ -38,7 +38,6 @@
     "../external/popcorn-js/modules/player/popcorn.player.js",
     "../external/popcorn-js/players/youtube/popcorn.youtube.js",
     "../external/popcorn-js/players/vimeo/popcorn.vimeo.js",
-    "../external/popcorn-js/players/soundcloud/popcorn.soundcloud.js",
-    "../external/popcorn-js/plugins/text/popcorn.text.js"
+    "../external/popcorn-js/players/soundcloud/popcorn.soundcloud.js"
   ]
 }
