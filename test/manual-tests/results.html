@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Popcorn Maker Manual Test Results</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js"></script>
+    <style>
+      .passed {
+        color: green;
+      }
+
+      .failed {
+        color: red;
+      }
+    </style>
+    <script type="text/javascript">
+      document.addEventListener( "DOMContentLoaded", function( e ) {
+        var xhr = new XMLHttpRequest(),
+            server = location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" );
+
+        xhr.open( "GET", server + "/api/tests/", false );
+
+        xhr.onreadystatechange = function() {
+          if ( this.readyState === 4 ) {
+            var table,
+                data = JSON.parse( this.responseText );
+
+            data = data.testResults;
+            data.reverse();
+
+            YUI().use( "datatable", function( Y ) {
+              table = new Y.DataTable({
+                columns: [
+                  {
+                    key: "testName",
+                    label: "Test Name",
+                    sortable: true
+                  },
+                  {
+                    key: "butterVersion",
+                    label: "Butter Version",
+                    sortable: true
+                  },
+                  {
+                    key: "popcornVersion",
+                    label: "Popcorn Version",
+                    sortable: true
+                  },
+                  {
+                    key: "userAgent",
+                    label: "User Agent",
+                    sortable: true
+                  },
+                  {
+                    key: "result",
+                    label: "Test Result",
+                    formatter: function( o ) {
+                      if ( o.value === "Passed" ) {
+                        o.className = "passed";
+                      }
+                      else {
+                        o.className = "failed";
+                      }
+                    }
+                  }
+                ],
+                data: data
+              });
+
+              table.render( "#results" );
+            });
+          }
+        };
+
+        xhr.send();
+      }, false );
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Popcorn Maker Manual Test Suite - Results</h1>
+    <div class="yui3-skin-sam">
+      <div id="results"></div>
+    </div>
+  </body>
+</html>

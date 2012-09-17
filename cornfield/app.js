@@ -9,6 +9,7 @@ var express = require('express'),
     clientSessions = require('client-sessions'),
     lessMiddleware = require('less-middleware'),
     User = require( './lib/user' ),
+    TestResult = require( './lib/testresult' ),
     filter = require( './lib/filter' )( User.isDBOnline ),
     sanitizer = require( './lib/sanitizer' ),
     CONFIG = require('config'),
@@ -81,7 +82,7 @@ app.configure( function() {
 });
 
 require('express-browserid').plugAll(app);
-require('./routes')( app, User, filter, sanitizer );
+require('./routes')( app, User, TestResult, filter, sanitizer );
 
 function writeEmbedShell( path, res, url, data, callback ) {
   if( !writeEmbedShell.templateFn ) {
