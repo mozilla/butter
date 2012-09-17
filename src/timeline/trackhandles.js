@@ -46,6 +46,15 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
       }
     });
 
+    _media.listen( "trackorderchanged", function( e ) {
+      var tracks = e.data;
+      for ( var i = 0, l = tracks.length; i < l; i++ ) {
+        var track = tracks[ i ],
+            element = _tracks[ track.id ].element;
+        element.querySelector( "span.title" ).textContent = track.name + " " + track.order;
+      }
+    });
+
     function onTrackAdded( e ) {
       var track = e.data,
           trackId = track.id,
@@ -132,7 +141,7 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
       _menus.push( menuDiv );
 
       trackDiv.setAttribute( "data-butter-track-id", trackId );
-      trackDiv.querySelector( "span.title" ).appendChild( document.createTextNode( trackName ) );
+      trackDiv.querySelector( "span.title" ).appendChild( document.createTextNode( trackName + " " + track.order ) );
 
       _sortable.addItem( trackDiv );
 
