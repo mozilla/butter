@@ -1,12 +1,82 @@
 {
-  "name": "default-butter-test",
+  "name": "basic",
+  "template": "index.html",
   "baseDir": "../../",
-  "cornfield": {
-    "server": "http://localhost:8888",
-    "authtype": "browserid"
+  "savedDataUrl": "saved-data.json",
+  "plugin": {
+    "plugins": [
+      {
+        "type": "titles",
+        "path": "{{baseDir}}templates/assets/plugins/titles/popcorn.titles.js",
+        "icon": "{{baseDir}}templates/assets/plugins/titles/titles-icon.png"
+      },
+      {
+        "type": "popup",
+        "path": "{{baseDir}}templates/assets/plugins/popup/popcorn.popup.js",
+        "icon": "{{baseDir}}templates/assets/plugins/popup/popup-icon.png"
+      },
+      {
+        "type": "googlemap",
+        "path": "{{baseDir}}templates/assets/plugins/googlemap/popcorn.googlemap.js",
+        "icon": "{{baseDir}}resources/icons/map.png"
+      },
+      {
+        "type": "twitter",
+        "path": "{{baseDir}}templates/assets/plugins/twitter/popcorn.twitter.js",
+        "icon": "{{baseDir}}templates/assets/plugins/twitter/twitter-icon.png"
+      },
+      {
+        "type": "image",
+        "path": "{{baseDir}}templates/assets/plugins/image/popcorn.image.js",
+        "icon": "{{baseDir}}templates/assets/plugins/image/image-icon.png"
+      },
+      {
+        "type": "loopPlugin",
+        "displayName": "loop",
+        "path": "{{baseDir}}templates/assets/plugins/loopPlugin/popcorn.loopPlugin.js",
+        "icon": "{{baseDir}}templates/assets/plugins/loopPlugin/loop-icon.png"
+      },
+      {
+        "type": "skip",
+        "path": "{{baseDir}}templates/assets/plugins/skip/popcorn.skip.js",
+        "icon": "{{baseDir}}templates/assets/plugins/skip/skip-icon.png"
+      },
+      {
+        "type": "pausePlugin",
+        "displayName": "Pause",
+        "path": "{{baseDir}}templates/assets/plugins/pausePlugin/popcorn.pausePlugin.js",
+        "icon": "{{baseDir}}templates/assets/plugins/pausePlugin/pause-icon.png"
+      },
+      {
+        "type": "wikipedia",
+        "path": "{{baseDir}}templates/assets/plugins/wikipedia/popcorn.wikipedia.js",
+        "icon": "{{baseDir}}templates/assets/plugins/wikipedia/wikipedia-icon.png"
+      },
+      {
+        "type": "webpage",
+        "path": "{{baseDir}}templates/assets/plugins/webpage/popcorn.webpage.js",
+        "icon": "{{baseDir}}templates/assets/plugins/webpage/webpage-icon.png"
+      }
+    ],
+    "defaults": [
+      "titles",
+      "popup",
+      "googlemap",
+      "twitter",
+      "image",
+      "wikipedia",
+      "webpage",
+      "loopPlugin",
+      "pausePlugin",
+      "skip"
+    ]
   },
-  "ui": {
-    "trackEventHighlight": "click",
-    "title": "Popcorn Maker"
-  }
+  "editor": {
+    "googlemap": "{{baseDir}}editors/googlemap-editor.js",
+    "popup": "{{baseDir}}templates/assets/editors/popup/popup-editor.js",
+    "image": "{{baseDir}}templates/assets/editors/image/popcorn.image.editor.js",
+    "titles": "{{baseDir}}templates/assets/editors/titles/titles-editor.js",
+    "twitter": "{{baseDir}}templates/assets/editors/twitter/twitter-editor.js"
+  },
+  "maxPluginZIndex": 1000
 }

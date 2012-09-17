@@ -1,0 +1,120 @@
+button {
+  margin: 5px;
+  padding: 0.25em 0.75em 0.2em;
+  display: inline-block;
+  color: #000000;
+  font-size: 1.142em;
+  border: 0 none;
+  border-radius: 0.2em 0.2em 0.2em 0.2em;
+  box-shadow: 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.wrapper {
+  width: 560px;
+  border: 15px solid #FFF;
+  margin: 40px auto;
+  box-shadow: 0 0 0 1px #CCC,
+    0 25px 5px -20px rgba( 0, 0, 0, 0.5 );
+}
+
+/* body-wrapper required to circumvent this bug in webkit: https://bugs.webkit.org/show_bug.cgi?id=77811 */
+.butter-header-spacing .body-wrapper {
+  position: absolute;
+  left: 0;
+  top: 50px; /* compensate for header */
+  right: 350px;
+  bottom: 0;
+  -webkit-transition: right 0.25s;
+  -moz-transition: right 0.25s;
+  -ms-transition: right 0.25s;
+  -o-transition: right 0.25s;
+  transition: right 0.25s;
+}
+
+body.editor-minimized .body-wrapper {
+  right: 0;
+}
+
+/* VIDEO
+-------------------------------------------------- */
+.video-container {
+  position: relative;
+}
+
+.video {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+}
+
+.video > video,
+.video > iframe,
+.video > object {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video > video {
+  background: #000;
+}
+
+/* Sidebar Layout
+-------------------------------------------------- */
+
+.wrapper-sidebar .video-container {
+  width: 75%;
+  float: right;
+}
+.sidebar {
+  display: block;
+  position: relative;
+  width: 25%;
+  padding-bottom: 42.1875%;
+  color: #222;
+  height: 0;
+}
+.sidebar .sidebar-inner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: #FFF;
+  overflow: scroll;
+  word-wrap: break-word;
+}
+
+
+/* MEDIA QUERIES
+-------------------------------------------------- */
+/* 
+Magic numbers:
+350 is the horizontal offset
+300 is the vertical offset (tray + header)
+*/
+
+@media only screen and (min-width : 990px) and (min-height : 660px) {
+  .wrapper { width: 640px; }
+}
+
+@media only screen and (min-width : 1203px) and (min-height : 780px) {
+  .wrapper { width: 853px; }
+}
+
+@media only screen and (min-width : 1630px) and (min-height : 1020px) {
+  .wrapper { width: 1280px; }
+}
+
+/* Manual Tests */
+
+.manual-test-steps > ol {
+  margin-left: -15px;
+}
+
+#manual-test {
+  font-size: 0.8em;
+}

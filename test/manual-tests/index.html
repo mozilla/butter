@@ -66,11 +66,11 @@
       width: 100%;
     }
 
-    .PASS {
+    .Passed {
       color: green !important;
     }
 
-    .FAIL {
+    .Failed {
       color: red !important;
     }
   </style>
@@ -78,23 +78,35 @@
   <script>
     document.addEventListener( "DOMContentLoaded", function() {
 
+      var testResults = {},
+          server = location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" );
+
       window.addEventListener( "message", function(e) {
         var elem = document.getElementById( currentTest );
         if( elem ){
-          elem.className = e.data;
+          var test = e.data;
+          testResults[ test.testURL ] = test;
+          elem.className = test.result;
         }
       }, false );
 
+      window.addEventListener( "beforeunload", function( e ) {
+        var xhr = new XMLHttpRequest();
+        xhr.open( "POST", server + "/api/tests/", false );
+        xhr.setRequestHeader( "Content-Type", "application/json" );
+        xhr.send( JSON.stringify( testResults ) );
+      }, false );
+
       var test,
-          testList = document.getElementById("test-list"),
+          testList = document.getElementById( "test-list" ),
           testListItem,
           currentTest,
-          iframe = document.getElementById("butter"),
+          iframe = document.getElementById( "butter" ),
           i = tests.length;
 
       while( i-- ){
         test = tests[ i ];
-        testListItem = document.createElement("li");
+        testListItem = document.createElement( "li" );
         testListItem.innerHTML = '<a href="#"' +
                                  '   id="' + test.href + '">' +
                                  test.name + '</a>';
@@ -104,7 +116,10 @@
       testList.addEventListener( "click", function( e ){
         e.preventDefault();
         var li = e.target;
-        iframe.onload = iframe.contentWindow.focus();
+        iframe.onload = function() {
+          iframe.contentWindow.document.title = e.target.innerHTML;
+          iframe.contentWindow.focus();
+        };
         iframe.src = li.id;
         currentTest = li.id;
       }, false );

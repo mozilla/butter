@@ -23,7 +23,6 @@
     "hostname": "http://localhost:8888"
   },
   "templates": {
-    "test": "{{templateBase}}test-config.json",
     "basic": "{{templateBase}}basic/config.json"
   },
   "exportAssets": [

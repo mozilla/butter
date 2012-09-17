@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function routesCtor( app, User, filter, sanitizer ) {
+module.exports = function routesCtor( app, User, TestResult, filter, sanitizer ) {
   app.get( '/api/whoami', filter.isLoggedIn, function( req, res ) {
     var email = req.session.email;
 
@@ -86,6 +86,34 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
       projectJSON.name = "Remix of " + sanitizer.escapeHTML( project.name );
 
       res.json( projectJSON );
+    });
+  });
+
+  app.get( "/api/tests", filter.isStorageAvailable, function( req, res ) {
+    TestResult.getResults( function( err, doc ) {
+      if ( err ) {
+        res.json( { error: "internal db error" }, 500 );
+        return;
+      }
+
+      if ( !doc ) {
+        res.json( { error: "No data stored" }, 500 );
+        return;
+      }
+
+      res.json( { error: "okay", testResults: doc } );
+
+    });
+  });
+
+  app.post( "/api/tests/", filter.isStorageAvailable, function( req, res ) {
+    TestResult.saveResults( req.body, function( err ) {
+      if ( err ) {
+        res.json( { error: err }, 500 );
+        return;
+      }
+
+      res.json( { error: "okay" }, 200 );
     });
   });
 };

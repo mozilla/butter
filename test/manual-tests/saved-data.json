@@ -1,0 +1,27 @@
+{
+  "targets": [
+    {
+      "id": "video-container",
+      "name": "video-container",
+      "element": "video-container"
+    }
+  ],
+  "media": [
+    {
+      "id": "Media0",
+      "name": "Media0",
+      "url": [
+        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.mp4",
+        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.ogv",
+        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.webm"
+      ],
+      "target": "video",
+      "tracks": [
+        {
+          "name": "Layer0",
+          "id": "Layer0"
+        }
+      ]
+    }
+  ]
+}
