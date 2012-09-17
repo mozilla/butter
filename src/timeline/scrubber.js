@@ -11,7 +11,7 @@ define( [ "util/lang" ],
       MOUSE_SCRUBBER_PIXEL_WINDOW = 3;
 
   return function( butter, parentElement, media, tracksContainer ){
-    var _container = parentElement,
+    var _container = parentElement.querySelector( ".time-bar-scrubber-container" ),
         _node = _container.querySelector( ".time-bar-scrubber-node" ),
         _timeTooltip = _container.querySelector( ".butter-time-tooltip" ),
         _line = _container.querySelector( ".time-bar-scrubber-line" ),
@@ -95,6 +95,7 @@ define( [ "util/lang" ],
       clearInterval( _scrollInterval );
       _scrollInterval = -1;
 
+      _container.addEventListener( "mouseover", onMouseOver, false );
       window.removeEventListener( "mouseup", onMouseUp, false );
       window.removeEventListener( "mousemove", onMouseMove, false );
     } //onMouseUp
@@ -148,6 +149,7 @@ define( [ "util/lang" ],
         } //if
       } //if
 
+      onTimelineMouseMove( e );
       evalMousePosition();
       setNodePosition();
     } //onMouseMove
@@ -170,7 +172,7 @@ define( [ "util/lang" ],
         _isScrubbing = true;
       }
 
-      if ( _media.currentTime ) {
+      if ( _media.currentTime >= 0 ) {
         _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
       }
       _timeTooltip.classList.add( "tooltip-on" );
@@ -178,10 +180,44 @@ define( [ "util/lang" ],
       _seekCompleted = _seekMouseUp = false;
       _media.listen( "mediaseeked", onSeeked );
 
+      _container.removeEventListener( "mouseout", onMouseOut, false );
       _node.removeEventListener( "mousedown", onScrubberMouseDown, false );
+      _container.removeEventListener( "mousemove", onTimelineMouseMove, false );
       window.addEventListener( "mousemove", onMouseMove, false );
       window.addEventListener( "mouseup", onMouseUp, false );
     } //onMouseDown
+
+    function onTimelineMouseMove( e ){
+      var mousePos = e.clientX - parentElement.offsetLeft;
+
+      if ( mousePos < 0 ) {
+        mousePos = 0;
+      } else if ( mousePos > _container.offsetWidth ) {
+        mousePos = _container.offsetWidth;
+      }
+
+      _timeTooltip.style.left = mousePos + "px";
+      _timeTooltip.innerHTML = util.secondsToSMPTE( ( mousePos + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration );
+    }
+
+    function onMouseOver( e ){
+      onTimelineMouseMove( e );
+      _timeTooltip.classList.add( "tooltip-on" );
+
+      _container.addEventListener( "mousemove", onTimelineMouseMove, false );
+      _container.removeEventListener( "mouseover", onMouseOver, false );
+      _container.addEventListener( "mouseout", onMouseOut, false );
+    }
+
+    function onMouseOut( e ){
+      if ( e.originalTarget.parentNode !== _container && e.explicitOriginalTarget.parentNode !== _container ) {
+        _timeTooltip.classList.remove( "tooltip-on" );
+      }
+
+      _container.removeEventListener( "mousemove", onTimelineMouseMove, false );
+      _container.removeEventListener( "mouseout", onMouseOut, false );
+      _container.addEventListener( "mouseover", onMouseOver, false );
+    }
 
     var onMouseDown = this.onMouseDown = function( e ){
       var pos = e.pageX - _container.getBoundingClientRect().left;
@@ -190,6 +226,7 @@ define( [ "util/lang" ],
       onScrubberMouseDown( e );
     }; //onMouseDown
 
+    _container.addEventListener( "mouseover", onMouseOver, false );
     _node.addEventListener( "mousedown", onScrubberMouseDown, false );
     _container.addEventListener( "mousedown", onMouseDown, false );
 
@@ -201,10 +238,6 @@ define( [ "util/lang" ],
       setNodePosition();
     };
 
-    function checkMedia() {
-      setNodePosition();
-    }
-
     _media.listen( "mediaplaying", function( e ){
       _isPlaying = true;
     });
@@ -214,11 +247,5 @@ define( [ "util/lang" ],
         _isPlaying = false;
       }
     });
-
-    var _checkMediaInterval = setInterval( checkMedia, CHECK_MEDIA_INTERVAL );
-
-    this.destroy = function(){
-      clearInterval( _checkMediaInterval );
-    };
   };
 });
