@@ -13,11 +13,7 @@ define( [ "util/lang", "editor/editor", "util/uri", "ui/widget/textbox", "text!l
         __ALT_MEDIA_LABEL = LangUtils.domFragment( EDITOR_LAYOUT, ".alternate-media-label" ),
         _parentElement = LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
         _containerElement = _parentElement.querySelector( ".container" ),
-        _confirmNewMedia = _containerElement.querySelector( "#update-media-source-btn" ),
-        _cancelNewMedia = _containerElement.querySelector( "#cancel-media-source-btn" ),
-        _currentMediaDiv = _containerElement.querySelector( "#current-media-div" ),
         _currentMediaWrapper = _containerElement.querySelector( "#current-media-wrapper" ),
-        _alternateMediaWarning = _containerElement.querySelector( "#alternate-media-warning" ),
         _addAlternateSourceBtn = _containerElement.querySelector( "#add-alternate-media-source-btn" ),
         _mediaErrorMessage = _containerElement.querySelector( ".media-error-message" ),
         _media = butter.currentMedia,
@@ -161,28 +157,6 @@ define( [ "util/lang", "editor/editor", "util/uri", "ui/widget/textbox", "text!l
         _mediaErrorMessage.classList.remove( "hidden" );
       } else {
         _mediaErrorMessage.classList.add( "hidden" );
-      }
-    }
-
-    function toggleMediaInputs( state ) {
-      var inputs = _currentMediaWrapper.querySelectorAll( "textarea" );
-
-      for ( var i = 0, l = inputs.length; i < l; i++ ) {
-        if ( state ) {
-          inputs[ i ].removeAttribute( "disabled" );
-          inputs[ i ].nextElementSibling.addEventListener( "click", removeBtnHandler, false );
-        } else {
-          inputs[ i ].setAttribute( "disabled", "" );
-          inputs[ i ].nextElementSibling.removeEventListener( "click", removeBtnHandler, false );
-        }
-      }
-
-      if ( state ) {
-        _currentMediaDiv.classList.remove( "disabled" );
-        _addAlternateSourceBtn.addEventListener( "click", addAlternateSourceBtnHandler, false );
-      } else {
-        _currentMediaDiv.classList.add( "disabled" );
-        _addAlternateSourceBtn.removeEventListener( "click", addAlternateSourceBtnHandler, false );
       }
     }
 
