@@ -31,27 +31,6 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
     });
   });
 
-  app.get( '/api/projects', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
-    User.findAllProjects( req.session.email, function( err, doc ) {
-      if ( err ) {
-        res.json( { error: err, projects: [] }, 500 );
-        return;
-      }
-
-      if ( !doc ) {
-        res.json( { error: "no projects found" }, 404 );
-        return;
-      }
-
-      var projectData = [];
-      doc.forEach( function( value ) {
-        projectData.push( { name: value.name, id: value._id } );
-      });
-
-      res.json({ error: 'okay', projects: projectData });
-    });
-  });
-
   app.get( '/api/delete/:id?', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
     User.deleteProject( req.session.email, req.params.id, function( err ) {
       if ( err ) {

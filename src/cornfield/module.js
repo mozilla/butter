@@ -147,34 +147,6 @@ define(['util/xhr'], function(XHR) {
       });
     };
 
-    this.list = function(callback) {
-      XHR.get(server + "/api/projects", function() {
-        if (this.readyState === 4) {
-          var response;
-          try {
-            response = JSON.parse( this.response || this.responseText );
-          } catch (err) {
-            callback({ error: "an unknown error occured" });
-            return;
-          }
-          callback(response);
-        }
-      });
-    };
-
-    this.load = function(id, callback) {
-      XHR.get(server + "/api/project/" + id, function() {
-        if (this.readyState === 4) {
-          try {
-            var response = JSON.parse( this.response || this.responseText );
-            callback(response);
-          } catch (err) {
-            callback({ error: "an unknown error occured" });
-          }
-        }
-      });
-    };
-
     this.save = function(id, data, callback) {
       var url = server + "/api/project/";
 

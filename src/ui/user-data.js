@@ -50,11 +50,9 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/t
 
       butter.cornfield.login(function( response ) {
         if ( !response.error ) {
-          butter.cornfield.list(function( listResponse ) {
-            if ( successCallback ) {
-              successCallback();
-            }
-          });
+          if ( successCallback ) {
+            successCallback();
+          }
         } else {
           _this.showErrorDialog( "There was an error logging in. Please try again." );
           if ( errorCallback ) {
