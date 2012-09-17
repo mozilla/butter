@@ -20,6 +20,15 @@ filters = {
         error: 'storage service is not running'
       }, 500 );
     }
+  },
+  isXHR: function( req, res, next ) {
+    if ( req.header( 'X-Requested-With' ) === 'XMLHttpRequest' ) {
+      next();
+    } else {
+      res.json({
+        error: 'X-Requested-With is not set to XMLHttpRequest'
+      }, 412 );
+    }
   }
 };
 
