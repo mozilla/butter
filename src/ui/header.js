@@ -106,8 +106,8 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     function onBlur() {
       var node = _projectTitle.querySelector( ".butter-project-name" );
 
-      _projectName.innerHTML = node.value || _projectTitlePlaceHolderText;
-      butter.project.name = node.value;
+      _projectName.textContent = node.value || _projectTitlePlaceHolderText;
+      butter.project.name = _projectName.textContent;
 
       if ( checkProjectName() ) {
         _userData.save( publish );
@@ -146,7 +146,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
 
       input.placeholder = _projectTitlePlaceHolderText;
       input.classList.add( "butter-project-name" );
-      input.value = _projectName.innerHTML !== _projectTitlePlaceHolderText ? _projectName.innerHTML : "";
+      input.value = _projectName.textContent !== _projectTitlePlaceHolderText ? _projectName.textContent : "";
       _projectTitle.replaceChild( input, _projectName );
       _projectTitle.removeEventListener( "click", projectNameClick, false );
       input.focus();
@@ -206,11 +206,11 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       loginDisplay();
     });
     butter.listen( "projectsaved", function() {
-      _projectName.innerHTML = butter.project.name;
+      _projectName.textContent = butter.project.name;
     });
     butter.listen( "ready", function() {
       if ( butter.project.name ) {
-        _projectName.innerHTML = butter.project.name;
+        _projectName.textContent = butter.project.name;
       }
     });
   };
