@@ -5,13 +5,12 @@
 define( [ "util/lang" ],
   function( util ) {
 
-  var CHECK_MEDIA_INTERVAL = 50,
-      SCROLL_INTERVAL = 16,
+  var SCROLL_INTERVAL = 16,
       SCROLL_DISTANCE = 20,
       MOUSE_SCRUBBER_PIXEL_WINDOW = 3;
 
   return function( butter, parentElement, media, tracksContainer ){
-    var _container = parentElement,
+    var _container = parentElement.querySelector( ".time-bar-scrubber-container" ),
         _node = _container.querySelector( ".time-bar-scrubber-node" ),
         _timeTooltip = _container.querySelector( ".butter-time-tooltip" ),
         _line = _container.querySelector( ".time-bar-scrubber-line" ),
@@ -40,10 +39,10 @@ define( [ "util/lang" ],
           scrollLeft = tracksElement.scrollLeft,
           scrollWidth = tracksElement.scrollWidth;
 
-      _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
-
       // If we can avoid re-setting position and visibility, then do so
       if( _lastTime !== currentTime || _lastScrollLeft !== scrollLeft || _lastScrollWidth !== scrollWidth ){
+        _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
+
         // To prevent some scrubber jittering (from viewport centering), pos is rounded before
         // being used in calculation to account for possible precision issues.
         var pos = Math.round( currentTime / duration * _tracksContainerWidth ),
@@ -82,7 +81,7 @@ define( [ "util/lang" ],
     function onMouseUp( e ){
       _seekMouseUp = true;
 
-      _timeTooltip.classList.remove( "tooltip-on" );
+      _timeTooltip.classList.remove( "tooltip-no-transition-on" );
 
       if( _isPlaying && _seekCompleted ){
         _media.play();
@@ -95,6 +94,7 @@ define( [ "util/lang" ],
       clearInterval( _scrollInterval );
       _scrollInterval = -1;
 
+      parentElement.addEventListener( "mouseover", onMouseOver, false );
       window.removeEventListener( "mouseup", onMouseUp, false );
       window.removeEventListener( "mousemove", onMouseMove, false );
     } //onMouseUp
@@ -148,6 +148,7 @@ define( [ "util/lang" ],
         } //if
       } //if
 
+      onTimelineMouseMove( e );
       evalMousePosition();
       setNodePosition();
     } //onMouseMove
@@ -170,18 +171,50 @@ define( [ "util/lang" ],
         _isScrubbing = true;
       }
 
-      if ( _media.currentTime ) {
+      if ( _media.currentTime >= 0 ) {
         _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
       }
-      _timeTooltip.classList.add( "tooltip-on" );
+      _timeTooltip.classList.add( "tooltip-no-transition-on" );
 
       _seekCompleted = _seekMouseUp = false;
       _media.listen( "mediaseeked", onSeeked );
 
+      parentElement.removeEventListener( "mouseout", onMouseOut, false );
       _node.removeEventListener( "mousedown", onScrubberMouseDown, false );
+      parentElement.removeEventListener( "mousemove", onTimelineMouseMove, false );
       window.addEventListener( "mousemove", onMouseMove, false );
       window.addEventListener( "mouseup", onMouseUp, false );
     } //onMouseDown
+
+    function onTimelineMouseMove( e ){
+      var mousePos = e.clientX - parentElement.offsetLeft;
+
+      if ( mousePos < 0 ) {
+        mousePos = 0;
+      } else if ( mousePos > _container.offsetWidth ) {
+        mousePos = _container.offsetWidth;
+      }
+
+      _timeTooltip.style.left = mousePos + "px";
+      _timeTooltip.innerHTML = util.secondsToSMPTE( ( mousePos + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration );
+    }
+
+    function onMouseOver( e ){
+      onTimelineMouseMove( e );
+      _timeTooltip.classList.add( "tooltip-no-transition-on" );
+
+      parentElement.addEventListener( "mousemove", onTimelineMouseMove, false );
+      parentElement.removeEventListener( "mouseover", onMouseOver, false );
+      parentElement.addEventListener( "mouseout", onMouseOut, false );
+    }
+
+    function onMouseOut( e ){
+      _timeTooltip.classList.remove( "tooltip-no-transition-on" );
+
+      parentElement.removeEventListener( "mousemove", onTimelineMouseMove, false );
+      parentElement.removeEventListener( "mouseout", onMouseOut, false );
+      parentElement.addEventListener( "mouseover", onMouseOver, false );
+    }
 
     var onMouseDown = this.onMouseDown = function( e ){
       var pos = e.pageX - _container.getBoundingClientRect().left;
@@ -190,6 +223,7 @@ define( [ "util/lang" ],
       onScrubberMouseDown( e );
     }; //onMouseDown
 
+    parentElement.addEventListener( "mouseover", onMouseOver, false );
     _node.addEventListener( "mousedown", onScrubberMouseDown, false );
     _container.addEventListener( "mousedown", onMouseDown, false );
 
@@ -201,10 +235,6 @@ define( [ "util/lang" ],
       setNodePosition();
     };
 
-    function checkMedia() {
-      setNodePosition();
-    }
-
     _media.listen( "mediaplaying", function( e ){
       _isPlaying = true;
     });
@@ -215,10 +245,6 @@ define( [ "util/lang" ],
       }
     });
 
-    var _checkMediaInterval = setInterval( checkMedia, CHECK_MEDIA_INTERVAL );
-
-    this.destroy = function(){
-      clearInterval( _checkMediaInterval );
-    };
+    _media.listen( "mediatimeupdate", setNodePosition );
   };
 });

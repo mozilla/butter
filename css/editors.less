@@ -464,7 +464,7 @@
   &:hover > .butter-tooltip {
     opacity: 1;
     visibility: visible;
-    .transition( all 0.3s ease 0.5s );
+    .transition( opacity 0.3s ease 0.5s );
   }
 }
 
@@ -473,7 +473,11 @@
   &.tooltip-on {
     opacity: 1;
     visibility: visible;
-    .transition( all 0.3s ease 0.5s );
+    .transition( opacity 0.3s ease 0.5s );
+  }
+  &.tooltip-no-transition-on {
+    opacity: 1;
+    visibility: visible;
   }
   &.tooltip-error {
     color: red;
@@ -500,7 +504,7 @@
   border: 1px solid #CCC;
   box-shadow: 0 5px 6px -5px rgba( 0, 0, 0, .3 );
   pointer-events: none; /* csslint-ignore: better for browsers that support it, not critical for those that don't */
-  .transition( all 0.3s ease 0 );
+  .transition( opacity 0.3s ease 0 );
 
   &:after, 
   &:before {
