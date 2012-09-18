@@ -27,7 +27,8 @@ define( [ "util/lang" ],
         _isPlaying = false,
         _isScrubbing = false,
         _lastTime = -1,
-        _lastScroll = _tracksContainer.element.scrollLeft,
+        _lastScrollLeft = _tracksContainer.element.scrollLeft,
+        _lastScrollWidth = _tracksContainer.element.scrollWidth,
         _lineWidth = 0,
         _seekCompleted = false,
         _seekMouseUp = false;
@@ -36,11 +37,13 @@ define( [ "util/lang" ],
       var duration = _media.duration,
           currentTime = _media.currentTime,
           tracksElement = _tracksContainer.element,
-          scrollLeft = tracksElement.scrollLeft;
-          _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
+          scrollLeft = tracksElement.scrollLeft,
+          scrollWidth = tracksElement.scrollWidth;
+
+      _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
 
       // If we can avoid re-setting position and visibility, then do so
-      if( _lastTime !== currentTime || _lastScroll !== scrollLeft ){
+      if( _lastTime !== currentTime || _lastScrollLeft !== scrollLeft || _lastScrollWidth !== scrollWidth ){
         // To prevent some scrubber jittering (from viewport centering), pos is rounded before
         // being used in calculation to account for possible precision issues.
         var pos = Math.round( currentTime / duration * _tracksContainerWidth ),
@@ -72,7 +75,8 @@ define( [ "util/lang" ],
       } //if
 
       _lastTime = currentTime;
-      _lastScroll = scrollLeft;
+      _lastScrollLeft = scrollLeft;
+      _lastScrollWidth = scrollWidth;
     }
 
     function onMouseUp( e ){
