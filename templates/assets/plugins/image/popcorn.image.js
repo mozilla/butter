@@ -49,13 +49,26 @@
     return fallback;
   }
 
+  function createImageDiv( imageUrl, linkUrl ) {
+    var div = document.createElement( "div" ),
+        link = document.createElement( "a" );
+
+    div.style.backgroundImage = "url( \"" + imageUrl + "\" )";
+    div.classList.add( "image-plugin-img" );
+    
+    link.setAttribute( "href", linkUrl || imageUrl );
+    link.setAttribute( "target", "_blank" );
+    link.classList.add( "image-plugin-link" );
+
+    link.appendChild( div );
+    return link;
+  }
+
   Popcorn.plugin( "image", {
 
     _setup: function( options ) {
 
       var _target,
-          _link,
-          _image,
           _container,
           _flickrCallback,
           _this = this;
@@ -78,15 +91,7 @@
 
         if ( options.src ) {
 
-          _image = document.createElement( "img" );
-          _image.addEventListener( "load", function() {
-            _image.classList.add( "image-plugin-img" );
-
-            ( _link || _container ).appendChild( _image );
-
-          }, false );
-
-          _image.src = options.src;
+          _container.appendChild( createImageDiv( options.src ) );
 
         } else {
 
@@ -97,6 +102,7 @@
                 _inOuts,
                 _lastVisible,
                 _url,
+                _link,
                 _tagRefs = [],
                 _count = options.count || _photos.length;
 
@@ -109,16 +115,8 @@
               _url = ( item.media && item.media.m ) || window.unescape( item.url_m );
 
               if ( i < _count ) {
-                _link = document.createElement( "a" );
-                _link.setAttribute( "href", item.link || _url );
-                _link.setAttribute( "target", "_blank" );
-                _link.classList.add( "image-plugin-link" );
+                _link = createImageDiv( _url, item.link );
                 _link.classList.add( "image-plugin-hidden" );
-
-                _image = document.createElement( "img" );
-                _image.classList.add( "image-plugin-flickr-image" );
-                _image.setAttribute( "src", _url );
-                _link.appendChild( _image );
                 _container.appendChild( _link );
                 _tagRefs.push( _link );
               }
