@@ -138,15 +138,6 @@
         return _currentMedia.getManifest( name );
       }; //getManifest
 
-      this.getHTML = function() {
-        var media = [];
-        for( var i=0; i<_media.length; ++i ){
-          media.push( _media[ i ].generatePopcornString() );
-        } //for
-
-        return _page.getHTML( media );
-      }; //getHTML
-
       function trackEventRequested( element, media, target ){
         var track,
             type = element.getAttribute( "data-popcorn-plugin-type" ),
@@ -829,9 +820,6 @@
           preparePopcornScriptsAndCallbacks(function(){
             preparePage(function(){
               moduleCollection.ready(function(){
-                if( _config.value( "snapshotHTMLOnReady" ) ){
-                  _page.snapshotHTML();
-                }
                 attemptDataLoad(function(){
                   //fire the ready event
                   _this.dispatch( "ready", _this );

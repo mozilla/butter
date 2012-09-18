@@ -8,30 +8,20 @@
     <script src="../../butter.inject.js"></script>
     <script src="../../test-utils.js"></script>
     <script>
-      asyncTest( "Existence and execution", 6, function(){
+      asyncTest( "Existence and execution", 3, function(){
 
-        createButterCore( function( butter ){
+        createButterCore(function( butter ){
 
           var theZONE = "";
 
           window._testInitCallback = function(){ theZONE += "i"; };
           window._testBeforeCallback = function(){ theZONE += "b"; };
-          window._testAfterCallback = function(){ theZONE += "a" };
-
-          var initScript = document.createElement( "script" );
-          initScript.innerHTML = '"inline test init from element"';
-          initScript.id = "init-script";
-          document.head.appendChild( initScript );
+          window._testAfterCallback = function(){ theZONE += "a"; };
 
           var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../../../external/popcorn-js/test/trailer.ogv" } );
 
           m1.onReady(function(){
             butter.preparePopcornScriptsAndCallbacks(function(){
-              document.head.removeChild( initScript );
-              var exported = butter.getHTML();
-              ok( exported.indexOf( "inline test init from element" ) > -1, "found init script" );
-              ok( exported.indexOf( "inline test before" ) > -1, "found before script" );
-              ok( exported.indexOf( "inline test after" ) > -1, "found after script" );
               ok( theZONE.indexOf( "i" ) > -1, "init callback called" );
               ok( theZONE.indexOf( "b" ) > -1, "before callback called" );
               ok( theZONE.indexOf( "a" ) > -1, "after callback called" );
