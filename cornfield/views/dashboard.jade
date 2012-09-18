@@ -52,7 +52,7 @@ html
                 row;
             if ( currentDeletionId ) {
               req = new XMLHttpRequest();
-              req.open( 'GET', '/api/delete/' + currentDeletionId, false );
+              req.open( 'POST', '/api/delete/' + currentDeletionId, false );
               req.setRequestHeader( "X-Requested-With", "XMLHttpRequest" );
               row = document.querySelector( 'tr[data-project-id="' + currentDeletionId + '"]' );
               currentDeletionId = null;
