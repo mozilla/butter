@@ -77,12 +77,17 @@
         _target.appendChild( _container );
 
         if ( options.src ) {
+          _link = document.createElement( "a" );
+          _link.setAttribute( "href", options.src );
+          _link.setAttribute( "target", "_blank" );
+          _link.classList.add( "image-plugin-link" );
 
           _image = document.createElement( "img" );
           _image.addEventListener( "load", function() {
             _image.classList.add( "image-plugin-img" );
 
-            ( _link || _container ).appendChild( _image );
+            _link.appendChild( _image );
+            _container.appendChild( _link );
 
           }, false );
 
