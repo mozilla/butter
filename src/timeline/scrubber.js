@@ -244,5 +244,7 @@ define( [ "util/lang" ],
         _isPlaying = false;
       }
     });
+
+    _media.listen( "mediatimeupdate", setNodePosition );
   };
 });
