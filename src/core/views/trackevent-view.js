@@ -32,8 +32,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
     function toggleHandles( state ) {
       if ( _parent ) {
-        _handles[ 0 ].visibility = state ? "visible" : "hidden";
-        _handles[ 1 ].visibility = state ? "visible" : "hidden";
+        _handles[ 0 ].setAttribute( "visibility",  state ? "visible" : "hidden" );
+        _handles[ 1 ].setAttribute( "visibility", state ? "visible" : "hidden" );
       }
     }
 
