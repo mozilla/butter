@@ -234,11 +234,7 @@ function init( window, document ) {
           popcorn = Popcorn.byId( "Butter-Generated" ),
           config,
           qs = URI.parse( window.location.href ).queryKey,
-          container = document.querySelectorAll( ".container" )[ 0 ],
-          videoContainer = document.getElementById( "video-container" ),
-          controlsElement = document.getElementById( "controls" ),
-          autoHideTimeout,
-          hide = true;
+          container = document.querySelectorAll( ".container" )[ 0 ];
 
       /**
        * the embed can be configured via the query string:
@@ -249,7 +245,6 @@ function init( window, document ) {
        *   end        = {integer 0-end} time to end playing (default={end})
        *   fullscreen = 1{default}|0    whether to allow fullscreen mode (e.g., hide/show button)
        *   loop       = 1|0{default}    whether to loop when hitting the end
-       *   branding   = 1{default}|0    whether or not to show the mozilla popcorn branding
        *   showinfo   = 1{default}|0    whether to show video title, author, etc. before playing
        **/
       config = {
@@ -281,90 +276,26 @@ function init( window, document ) {
         showinfo: qs.showinfo === "0" ? false : true
       };
 
-      // if true, show media controls
-      if ( config.controls ) {
-        popcorn.controls( true );
-        Controls( "controls", popcorn, {
-          onShareClick: function() {
-            shareClick( popcorn );
-          },
-          onRemixClick: function() {
-            remixClick( popcorn );
-          },
-          onFullscreenClick: function() {
-            fullscreenClick();
-          }
-        });
-        show( "#controls" );
-      }
+      // Always show controls.  See #2284 and #2298 on supporting
+      // options.controls, options.autohide.
+      popcorn.controls( true );
+      Controls( "controls", popcorn, {
+        onShareClick: function() {
+          shareClick( popcorn );
+        },
+        onRemixClick: function() {
+          remixClick( popcorn );
+        },
+        onFullscreenClick: function() {
+          fullscreenClick();
+        }
+      });
 
       // Setup UI based on config options
-      if ( !config.branding ) {
-        container.removeChild( controlsElement );
-        videoContainer.removeChild( document.getElementById( "controls-big-play-button" ) );
-        videoContainer.removeChild( document.getElementById( "post-roll" ) );
-        videoContainer.removeChild( document.getElementById( "share" ) );
-        videoContainer.removeChild( document.getElementsByClassName( "embed-info" )[ 0 ] );
-        // since both `showinfo` and `autohide` both depend on pieces of our UI with branding on it
-        // only bother with it if `branding` was true
-      } else {
-        // if autohide is true, make sure that we hide the controls when the user isn't mousing over them or has left
-        // their mouse overtop of the video for to long
-        if ( config.autohide ) {
-          popcorn.on( "pause", function() {
-            controlsElement.classList.remove( "controls-hide" );
-          });
-          // only hide the controls initially if the video is playing
-          if ( !popcorn.paused() ) {
-            controlsElement.classList.add( "controls-hide" );
-          }
-
-          // as soon as playing occurs, add the neccessary timeouts and listeners
-          popcorn.on( "play", function onPlay() {
-            container.addEventListener( "mouseover", function() {
-              clearTimeout( autoHideTimeout );
-              // if we move outside of the controls we should ensure `hide` is true
-              hide = true;
-              controlsElement.classList.remove( "controls-hide" );
-            }, false);
-            container.addEventListener( "mouseout", function() {
-              clearTimeout( autoHideTimeout );
-              if ( !popcorn.paused() ) {
-                controlsElement.classList.add( "controls-hide" );
-              }
-            }, false);
-            container.addEventListener( "mousemove", function() {
-              controlsElement.classList.remove( "controls-hide" );
-              clearTimeout( autoHideTimeout );
-              autoHideTimeout = setTimeout(function() {
-                // check the boolean value `hide` to make sure we should still hide
-                if ( hide && !popcorn.paused() ) {
-                  controlsElement.classList.add( "controls-hide" );
-                  hide = true;
-                }
-              }, 1000);
-            }, false);
-            controlsElement.addEventListener( "mousemove", function() {
-              // if the user is mousing over the controls, ensure we don't hide them be setting `hide` to false
-              hide = false;
-            }, false);
-            autoHideTimeout = setTimeout(function() {
-              // check the boolean value `hide` to make sure we should still hide
-              if ( hide && !popcorn.paused() ) {
-                controlsElement.classList.add( "controls-hide" );
-                hide = true;
-              }
-            }, 1000);
-          });
-        }
-
-        // if false, do not show video title, author, etc. before playing
-        if ( !config.showinfo ) {
-          addStateClass( "embed-playing" );
-        }
+      if ( !config.showinfo ) {
+        var embedInfo = document.getElementById( "embed-info" );
+        embedInfo.parentNode.removeChild( embedInfo );
       }
-
-      // if true, continually loop media playback
       if ( config.loop ) {
         popcorn.loop( true );
       }
