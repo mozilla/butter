@@ -78,10 +78,9 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
      *
      */
     _this.closeEditor = function() {
-      if( _currentEditor ) {
-        _currentEditor.close();
-        _this.openEditor( DEFAULT_EDITOR_NAME );
-      }
+      _currentEditor.close();
+      _currentEditor = null;
+      _this.openEditor( DEFAULT_EDITOR_NAME );
     };
 
     /**
