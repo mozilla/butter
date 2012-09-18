@@ -87,6 +87,7 @@ define([], function(){
   function onMouseUp( e ){
     __mouseDown = false;
     window.removeEventListener( "mousemove", onDragged, false );
+    window.removeEventListener( "mousedown", onMouseUp, false );
 
     var selectedDraggable;
 
@@ -96,12 +97,13 @@ define([], function(){
     }
   }
 
-  function onMouseDown( e ){
-    e.stopPropagation();
-    if( e.which !== 1 ){
+  function onMouseDown( e ) {
+    if ( e.which !== 1 ) {
+      onMouseUp( e );
       return;
     }
     e.preventDefault();
+    e.stopPropagation();
     window.addEventListener( "mousemove", onDragged, false );
     window.addEventListener( "mouseup", onMouseUp, false );
   }
