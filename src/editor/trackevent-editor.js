@@ -74,7 +74,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
           extendObject.addScrollbar({
             inner: wrapper,
             outer: wrapper,
-            appendTo: rootElement.querySelector( ".scrollbar-append-to" )
+            appendTo: rootElement.querySelector( ".scrollbar-container" )
           });
         }
       }
