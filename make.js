@@ -361,9 +361,6 @@ target.server = function() {
 function butteredPopcorn() {
   var defaultConfig = require( DEFAULT_CONFIG ),
       popcornDir = defaultConfig.dirs['popcorn-js'].replace( '{{baseDir}}', './' ),
-      wrappers = defaultConfig.wrapper.wrappers,
-      players = defaultConfig.player.players,
-      plugins = defaultConfig.plugin.plugins,
       popcornFiles = [];
 
   // Popcorn License Header
@@ -379,25 +376,31 @@ function butteredPopcorn() {
   popcornFiles.push( popcornDir + '/popcorn.js' );
 
   // plugins
-  plugins.forEach( function( plugin ){
-    popcornFiles.push( plugin.path.replace( '{{baseDir}}', './' ) );
-  });
+  if ( defaultConfig.plugin && defaultConfig.plugin.plugins ) {
+    defaultConfig.plugin.plugins.forEach( function( plugin ){
+      popcornFiles.push( plugin.path.replace( '{{baseDir}}', './' ) );
+    });
+  }
 
   // wrapper base prototype
   popcornFiles.push( popcornDir + '/wrappers/common/popcorn._MediaElementProto.js' );
 
   // wrappers
-  wrappers.forEach( function( wrapper ){
-    popcornFiles.push( wrapper.path.replace( '{{baseDir}}', './' ) );
-  });
+  if ( defaultConfig.wrapper && defaultConfig.wrapper.wrappers ) {
+    defaultConfig.wrapper.wrappers.forEach( function( wrapper ){
+      popcornFiles.push( wrapper.path.replace( '{{baseDir}}', './' ) );
+    });
+  }
 
   // module for baseplayer
   popcornFiles.push( popcornDir + '/modules/player/popcorn.player.js' );
 
   // players
-  players.forEach( function( player ){
-    popcornFiles.push( player.path.replace( '{{baseDir}}', './' ) );
-  });
+  if ( defaultConfig.player && defaultConfig.player.players ) {
+    defaultConfig.player.players.forEach( function( player ){
+      popcornFiles.push( player.path.replace( '{{baseDir}}', './' ) );
+    });
+  }
 
   // Stamp Popcorn.version with the git commit sha we are using
   var cwd = pwd();
