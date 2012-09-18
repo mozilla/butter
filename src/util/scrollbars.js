@@ -20,7 +20,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
     EventManagerWrapper( _this );
 
-    _element.className = "butter-scroll-bar butter-scroll-bar-v";
+    _element.className = "butter-scroll-bar butter-scroll-bar-v butter-scrollbar-visible hidden";
     _handle.className = "butter-scroll-handle";
 
     _element.appendChild( _handle );
@@ -41,6 +41,8 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       window.removeEventListener( "mousemove", onMouseMove, false );
       _handle.addEventListener( "mousedown", onMouseDown, false );
       _handle.classList.remove( activeClass );
+      // Apply transition class to hide scrollbar
+      _element.classList.add( "hidden" );
     }
 
     function onMouseMove( e ){
@@ -54,6 +56,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
     function onMouseDown( e ){
       if( e.button === 0 ){
+        _element.classList.remove( "hidden" );
         var handleY = _handle.offsetTop;
         _mousePos = e.pageY - handleY;
         window.addEventListener( "mouseup", onMouseUp, false );
@@ -72,14 +75,21 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       else {
         _handle.style.top = "0px";
       }
+      
+      // Toggles a fadding transition for our scrollbar
+      if ( !_element.classList.contains( "hidden" ) ) {
+        _element.classList.add( "hidden" );
+      }
     }
 
     outerElement.addEventListener( "scroll", function( e ){
+      _element.classList.remove( "hidden" );
       setHandlePosition();
     }, false );
 
     outerElement.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaY ){
+        _element.classList.remove( "hidden" );
         outerElement.scrollTop -= e.wheelDeltaY;
         setHandlePosition();
         e.preventDefault();
@@ -89,6 +99,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
     // For Firefox
     outerElement.addEventListener( "DOMMouseScroll", function( e ){
       if( e.axis === e.VERTICAL_AXIS && !e.shiftKey ){
+        _element.classList.remove( "hidden" );
         outerElement.scrollTop += e.detail * 2;
         setHandlePosition();
         e.preventDefault();
@@ -100,6 +111,8 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       if( e.srcElement === _handle || e.button > 0 ) {
         return;
       }
+
+      _element.classList.remove( "hidden" );
 
       var posY = e.pageY,
           handleRect = _handle.getBoundingClientRect(),
@@ -114,7 +127,10 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
       p = _handle.offsetTop / ( _elementHeight - _handleHeight );
       outerElement.scrollTop = ( _scrollHeight - _elementHeight ) * p;
-    }, false);
+
+      // Apply transition class to hide scrollbar
+      _element.classList.add( "hidden" );
+    }, false );
 
     window.addEventListener( "resize", _this.update, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
@@ -145,7 +161,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
     EventManagerWrapper( _this );
 
-    _element.className = "butter-scroll-bar butter-scroll-bar-h";
+    _element.className = "butter-scroll-bar butter-scroll-bar-h butter-scrollbar-visible hidden";
     _handle.className = "butter-scroll-handle";
 
     _element.appendChild( _handle );
@@ -165,6 +181,8 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       window.removeEventListener( "mouseup", onMouseUp, false );
       window.removeEventListener( "mousemove", onMouseMove, false );
       _handle.addEventListener( "mousedown", onMouseDown, false );
+      // Apply transition class to hide scrollbar
+      _element.classList.add( "hidden" );
     }
 
     function onMouseMove( e ){
@@ -178,6 +196,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
     function onMouseDown( e ){
       if( e.button === 0 ){
+        _element.classList.remove( "hidden" );
         var handleX = _handle.offsetLeft;
         _mousePos = e.pageX - handleX;
         window.addEventListener( "mouseup", onMouseUp, false );
@@ -187,21 +206,28 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       e.preventDefault();
     }
 
-    function setHandlePosition(){
+    function setHandlePosition() {
       if( _scrollWidth - _elementWidth > 0 ) {
         _handle.style.left = ( _elementWidth - _handleWidth ) *
           ( outerElement.scrollLeft / ( _scrollWidth - _elementWidth ) ) + "px";
       } else {
         _handle.style.left = "0px";
       }
+      
+      // Toggles a fadding transition for our scrollbar
+      if ( !_element.classList.contains( "hidden" ) ) {
+        _element.classList.add( "hidden" );
+      }
     }
 
     outerElement.addEventListener( "scroll", function( e ){
+      _element.classList.remove( "hidden" );
       setHandlePosition();
     }, false );
 
     outerElement.addEventListener( "mousewheel", function( e ){
       if( e.wheelDeltaX ){
+        _element.classList.remove( "hidden" );
         outerElement.scrollLeft -= e.wheelDeltaX;
         setHandlePosition();
         e.preventDefault();
@@ -211,6 +237,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
     // For Firefox
     outerElement.addEventListener( "DOMMouseScroll", function( e ){
       if( e.axis === e.HORIZONTAL_AXIS || ( e.axis === e.VERTICAL_AXIS && e.shiftKey )){
+        _element.classList.remove( "hidden" );
         outerElement.scrollLeft += e.detail * 2;
         setHandlePosition();
         e.preventDefault();
@@ -222,6 +249,8 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       if( e.srcElement === _handle || e.button > 0 ) {
         return;
       }
+
+      _element.classList.remove( "hidden" );
 
       var posX = e.pageX,
           handleRect = _handle.getBoundingClientRect(),
@@ -237,7 +266,10 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
       p = _handle.offsetLeft / ( _elementWidth - _handleWidth );
       outerElement.scrollLeft = ( _scrollWidth - _elementWidth ) * p;
-    }, false);
+
+      // Apply transition on the scrollbar
+      _element.classList.add( "hidden" );
+    }, false );
 
     window.addEventListener( "resize", _this.update, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
