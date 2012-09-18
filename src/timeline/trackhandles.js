@@ -59,7 +59,6 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
       var track = e.data,
           trackId = track.id,
           trackName = track.name,
-          trackOrder = track.order,
           trackDiv = LangUtils.domFragment( TRACK_HANDLE_LAYOUT, ".track-handle" ),
           menuDiv = trackDiv.querySelector( ".menu" ),
           deleteButton = menuDiv.querySelector( ".delete" );
