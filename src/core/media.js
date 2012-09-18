@@ -311,7 +311,7 @@
         _orderedTracks = _tracks.slice();
         _orderedTracks.sort( compareTrackOrder );
         for ( var i = 0, l = _orderedTracks.length; i < l; ++i ) {
-          _orderedTracks.order = i;
+          _orderedTracks[ i ].order = i;
           _orderedTracks[ i ].updateTrackEvents();
         }
         if ( !suppressEvent ) {

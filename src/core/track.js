@@ -22,7 +22,7 @@ define( [
     var _trackEvents = [],
         _target = options.target,
         _id = "" + __guid++,
-        _name = options.name || "Layer" + _id,
+        _name = options.name || "Layer",
         _view = new TrackView( _id, this ),
         _popcornWrapper = null,
         _this = this;
