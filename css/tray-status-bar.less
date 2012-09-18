@@ -5,6 +5,7 @@
 @_mediaStatusContainerHeight: @_butterStatusHeight;
 @_playButtonHeight: 26px;
 @_scrubberBarHeight: 8px;
+@_scrubberBarHeight: 8px;
 @_scrubberHandleHeight: 10px;
 @_traySideWidth: 95px;
 @_timebarRight: 27px;
@@ -39,15 +40,15 @@
   left: @_traySideWidth + 10px;
   top: ( @_mediaStatusContainerHeight - @_scrubberBarHeight ) / 2;
   right: @_timebarRight;
-  height: @_scrubberBarHeight;
+  height: ( @_mediaStatusContainerHeight / 2 ) + ( @_scrubberBarHeight / 2 );
 }
 
 // Time ticks
 .time-bar-canvas-container {
   position: absolute;
   left: 0;
-  top: @_mediaStatusContainerHeight / 4;
-  height: @_mediaStatusContainerHeight / 2;
+  top: @_scrubberBarHeight;
+  height: ( @_mediaStatusContainerHeight / 2 ) - ( @_scrubberBarHeight / 2 );
   overflow: hidden;
   right: 0;
   opacity: 0.5;

@@ -95,7 +95,7 @@ define( [ "util/lang" ],
       clearInterval( _scrollInterval );
       _scrollInterval = -1;
 
-      _container.addEventListener( "mouseover", onMouseOver, false );
+      parentElement.addEventListener( "mouseover", onMouseOver, false );
       window.removeEventListener( "mouseup", onMouseUp, false );
       window.removeEventListener( "mousemove", onMouseMove, false );
     } //onMouseUp
@@ -180,9 +180,9 @@ define( [ "util/lang" ],
       _seekCompleted = _seekMouseUp = false;
       _media.listen( "mediaseeked", onSeeked );
 
-      _container.removeEventListener( "mouseout", onMouseOut, false );
+      parentElement.removeEventListener( "mouseout", onMouseOut, false );
       _node.removeEventListener( "mousedown", onScrubberMouseDown, false );
-      _container.removeEventListener( "mousemove", onTimelineMouseMove, false );
+      parentElement.removeEventListener( "mousemove", onTimelineMouseMove, false );
       window.addEventListener( "mousemove", onMouseMove, false );
       window.addEventListener( "mouseup", onMouseUp, false );
     } //onMouseDown
@@ -204,17 +204,17 @@ define( [ "util/lang" ],
       onTimelineMouseMove( e );
       _timeTooltip.classList.add( "tooltip-no-transition-on" );
 
-      _container.addEventListener( "mousemove", onTimelineMouseMove, false );
-      _container.removeEventListener( "mouseover", onMouseOver, false );
-      _container.addEventListener( "mouseout", onMouseOut, false );
+      parentElement.addEventListener( "mousemove", onTimelineMouseMove, false );
+      parentElement.removeEventListener( "mouseover", onMouseOver, false );
+      parentElement.addEventListener( "mouseout", onMouseOut, false );
     }
 
     function onMouseOut( e ){
       _timeTooltip.classList.remove( "tooltip-no-transition-on" );
 
-      _container.removeEventListener( "mousemove", onTimelineMouseMove, false );
-      _container.removeEventListener( "mouseout", onMouseOut, false );
-      _container.addEventListener( "mouseover", onMouseOver, false );
+      parentElement.removeEventListener( "mousemove", onTimelineMouseMove, false );
+      parentElement.removeEventListener( "mouseout", onMouseOut, false );
+      parentElement.addEventListener( "mouseover", onMouseOver, false );
     }
 
     var onMouseDown = this.onMouseDown = function( e ){
@@ -224,7 +224,7 @@ define( [ "util/lang" ],
       onScrubberMouseDown( e );
     }; //onMouseDown
 
-    _container.addEventListener( "mouseover", onMouseOver, false );
+    parentElement.addEventListener( "mouseover", onMouseOver, false );
     _node.addEventListener( "mousedown", onScrubberMouseDown, false );
     _container.addEventListener( "mousedown", onMouseDown, false );
 
