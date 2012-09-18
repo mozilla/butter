@@ -772,6 +772,7 @@
           savedDataUrl += "?noCache=" + Date.now();
 
           xhr.open( "GET", savedDataUrl, false );
+          xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest" );
 
           if( xhr.overrideMimeType ){
             // Firefox generates a misleading "syntax" error if we don't have this line.

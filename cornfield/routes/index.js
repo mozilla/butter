@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function routesCtor( app, User, filter, sanitizer ) {
-  app.get( '/api/whoami', filter.isLoggedIn, function( req, res ) {
+  app.get( '/api/whoami', filter.isLoggedIn, filter.isXHR, function( req, res ) {
     var email = req.session.email;
 
     res.json({
@@ -11,7 +11,10 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
     });
   });
 
-  app.get( '/api/project/:id?', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
+  app.get( '/api/project/:id?',
+    filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
+    function( req, res ) {
+
     User.findProject( req.session.email, req.params.id, function( err, doc ) {
       if ( err ) {
         res.json( { error: err }, 500 );
@@ -31,7 +34,10 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
     });
   });
 
-  app.get( '/api/delete/:id?', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
+  app.get( '/api/delete/:id?',
+    filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
+    function( req, res ) {
+
     User.deleteProject( req.session.email, req.params.id, function( err ) {
       if ( err ) {
         res.json( { error: 'project not found' }, 404 );
@@ -42,7 +48,10 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
     });
   });
 
-  app.post( '/api/project/:id?', filter.isLoggedIn, filter.isStorageAvailable, function( req, res ) {
+  app.post( '/api/project/:id?',
+    filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
+    function( req, res ) {
+
     if ( !req.body ) {
       res.json( {error: 'no project data received' }, 500 );
       return;
@@ -70,7 +79,10 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
   });
 
   // We have a separate remix API for unsecured and sanitized access to projects
-  app.get( '/api/remix/:id', filter.isStorageAvailable, function( req, res ) {
+  app.get( '/api/remix/:id',
+    filter.isStorageAvailable, filter.isXHR,
+    function( req, res ) {
+
     User.findById( req.params.id, function( err, project ) {
       if ( err ) {
         res.json( { error: err }, 500 );
