@@ -1,18 +1,19 @@
-a.image-plugin-link {
+.image-plugin-container {
+  position: absolute;
+}
+
+.image-plugin-link {
+  display: block;
   text-decoration: none;
   height: 100%;
   width: 100%;
-}
-
-img.image-plugin-img, img.image-plugin-flickr-image {
-  border-style: none;
-  height: 100%;
-  width: 100%;
-}
-
-div.image-plugin-container {
   overflow: hidden;
-  position: absolute;
+}
+
+.image-plugin-img,
+.image-plugin-flickr-image {
+  border-style: none;
+  width: 100%;
 }
 
 .image-plugin-hidden {
