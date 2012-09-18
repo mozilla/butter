@@ -42,7 +42,8 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
         _trackEventVisuals = {},
         _boundsChangedCallback = boundsChangedCallback,
         _transitionLock,
-        _zoomInterval;
+        _zoomInterval,
+        _this = this;
 
     var onViewMouseUp, onViewMouseDown, onViewMouseMove,
         onLeftMouseUp, onLeftMouseDown, onLeftMouseMove,
@@ -50,7 +51,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
         onElementMouseUp, onElementMouseDown, onElementMouseMove,
         updateView;
 
-    this.update = function() {
+    _this.update = function() {
       _rect = _element.getBoundingClientRect();
     };
 
@@ -361,6 +362,11 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     _media.listen( "mediaready", function( e ) {
       _duration = e.target.duration;
       updateView();
+    });
+
+    window.addEventListener( "resize", function() {
+      _this.update();
+      _boundsChangedCallback( -1, _viewPort.offsetWidth / _rect.width );
     });
 
     Object.defineProperties( this, {
