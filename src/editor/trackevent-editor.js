@@ -487,7 +487,9 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
 
       for ( i = 0, l = manifestKeys.length; i < l; ++i ) {
         option = manifestKeys[ i ];
-        units = manifestOptions[ option ].units;
+        if ( manifestOptions[ option ] ) {
+          units = manifestOptions[ option ].units;
+        }
 
         // Look for the element with the correct manifest-key which was attached to an element during creation of the editor
         element = extendObject.rootElement.querySelector( "[data-manifest-key='" + option + "']" );
