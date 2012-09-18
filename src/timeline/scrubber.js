@@ -82,7 +82,7 @@ define( [ "util/lang" ],
     function onMouseUp( e ){
       _seekMouseUp = true;
 
-      _timeTooltip.classList.remove( "tooltip-on" );
+      _timeTooltip.classList.remove( "tooltip-no-transition-on" );
 
       if( _isPlaying && _seekCompleted ){
         _media.play();
@@ -175,7 +175,7 @@ define( [ "util/lang" ],
       if ( _media.currentTime >= 0 ) {
         _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
       }
-      _timeTooltip.classList.add( "tooltip-on" );
+      _timeTooltip.classList.add( "tooltip-no-transition-on" );
 
       _seekCompleted = _seekMouseUp = false;
       _media.listen( "mediaseeked", onSeeked );
@@ -202,7 +202,7 @@ define( [ "util/lang" ],
 
     function onMouseOver( e ){
       onTimelineMouseMove( e );
-      _timeTooltip.classList.add( "tooltip-on" );
+      _timeTooltip.classList.add( "tooltip-no-transition-on" );
 
       _container.addEventListener( "mousemove", onTimelineMouseMove, false );
       _container.removeEventListener( "mouseover", onMouseOver, false );
@@ -210,9 +210,7 @@ define( [ "util/lang" ],
     }
 
     function onMouseOut( e ){
-      if ( e.originalTarget.parentNode !== _container && e.explicitOriginalTarget.parentNode !== _container ) {
-        _timeTooltip.classList.remove( "tooltip-on" );
-      }
+      _timeTooltip.classList.remove( "tooltip-no-transition-on" );
 
       _container.removeEventListener( "mousemove", onTimelineMouseMove, false );
       _container.removeEventListener( "mouseout", onMouseOut, false );
