@@ -43,7 +43,7 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
     _droppable = DragNDrop.droppable( _element, {
       drop: function( dropped, mousePosition ) {
         var tracks = butter.currentMedia.orderedTracks,
-            lastTrackBottom = tracks[ tracks.length - 1 ].view.element.getBoundingClientRect().bottom;
+            lastTrackBottom = tracks[ tracks.length - 1 ] ? tracks[ tracks.length - 1 ].view.element.getBoundingClientRect().bottom : 0;
 
         dropped = dropped.data ? dropped.data.element : dropped;
         // ensure its a plugin and that only the area under the last track is droppable
