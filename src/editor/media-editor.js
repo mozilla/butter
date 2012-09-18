@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.html" ],
-  function( LangUtils, Editor, Uri, EDITOR_LAYOUT ) {
+define( [ "util/lang", "editor/editor", "util/uri", "ui/widget/textbox", "text!layouts/media-editor.html" ],
+  function( LangUtils, Editor, Uri, TextboxWrapper, EDITOR_LAYOUT ) {
 
   return function( butter ) {
 
@@ -85,6 +85,8 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
           input.addEventListener( "focus", function() {
             oldValue = input.value;
           });
+
+          TextboxWrapper( input );
         }());
 
         wrapper = __URL_INPUT_INNER_WRAPPER.cloneNode( true );
@@ -132,6 +134,11 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
         createInput( "" );
         _emptyInputs--;
       }
+
+      // Wrap existing input boxes for click-to-select
+      TextboxWrapper( _newMediaInput );
+      TextboxWrapper( _alternateNewMediaInputA );
+      TextboxWrapper( _alternateNewMediaInputB );
     }
 
     function clearNewMediaInputs() {
