@@ -8,7 +8,8 @@ define([], function(){
       DEFAULT_SCROLL_AMOUNT = 10,
       SCROLL_WINDOW = 20,
       MAXIMUM_Z_INDEX = 2147483647,
-      MIN_WIDTH = 15;
+      MIN_WIDTH = 15,
+      RESIZABLE_CLASS = "butter-resizable";
 
   var __droppables = [],
       __mouseDown = false,
@@ -236,6 +237,7 @@ define([], function(){
         clearInterval( _updateInterval );
         _updateInterval = -1;
         _onStop();
+        element.classList.remove( RESIZABLE_CLASS );
       }
 
       function onMouseMove( e ){
@@ -249,6 +251,8 @@ define([], function(){
       _elementRect = element.getBoundingClientRect();
       mouseOffset = e.clientX - _elementRect.left;
       _scrollRect = _scroll.getBoundingClientRect();
+
+      element.classList.add( RESIZABLE_CLASS );
 
       window.addEventListener( "mousemove", onMouseMove, false );
       window.addEventListener( "mouseup", onMouseUp, false );
@@ -292,6 +296,7 @@ define([], function(){
         clearInterval( _updateInterval );
         _updateInterval = -1;
         _onStop();
+        element.classList.remove( RESIZABLE_CLASS );
       }
 
       function onMouseMove( e ){
@@ -308,8 +313,11 @@ define([], function(){
       }
       mouseOffset = e.clientX - _elementRect.left;
 
+      element.classList.add( RESIZABLE_CLASS );
+
       window.addEventListener( "mousemove", onMouseMove, false );
       window.addEventListener( "mouseup", onMouseUp, false );
+
     }
 
     _leftHandle.addEventListener( "mousedown", onLeftMouseDown, false );
