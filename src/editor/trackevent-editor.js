@@ -3,11 +3,9 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define([ "util/lang", "util/keys", "util/time", "./base-editor",
-          "text!layouts/trackevent-editor-defaults.html",
-          "util/scrollbars" ],
+          "text!layouts/trackevent-editor-defaults.html" ],
   function( LangUtils, KeysUtils, TimeUtils, BaseEditor,
-            DEFAULT_LAYOUT_SNIPPETS,
-            Scrollbars ) {
+            DEFAULT_LAYOUT_SNIPPETS ) {
 
   var __defaultLayouts = LangUtils.domFragment( DEFAULT_LAYOUT_SNIPPETS ),
       __googleFonts = [

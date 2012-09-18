@@ -1,4 +1,4 @@
-/*globals cat,cd,cp,env,exec,echo,find,ls,mkdir,mv,pwd,rm,sed,target*/
+/*global cat,cd,cp,env,exec,echo,find,ls,mkdir,mv,pwd,rm,sed,target*/
 
 var path = require( "path" ),
     spawn = require('child_process').spawn,
@@ -31,8 +31,7 @@ var path = require( "path" ),
     BUTTER_TRANSITIONS_LESS_FILE = join( CSS_DIR, "transitions.less" ),
     BUTTER_TRANSITIONS_CSS_FILE = join( CSS_DIR, "/transitions.css" ),
 
-    BUTTERED_POPCORN = join( DIST_DIR, '/buttered-popcorn.js' ),
-    BUTTERED_POPCORN_MIN = join( DIST_DIR, '/buttered-popcorn.min.js' );
+    BUTTERED_POPCORN = join( DIST_DIR, '/buttered-popcorn.js' );
 
 require('shelljs/make');
 
@@ -422,8 +421,8 @@ target.deploy = function(){
 
   // To get unminified butter.js, use the UNMINIFIED env variable:
   // $ UNMINIFIED=1 node make deploy
-  var compress = env['UNMINIFIED'] !== "1",
-      version = env['VERSION'];
+  var compress = env.UNMINIFIED !== "1",
+      version = env.VERSION;
 
   clean();
 

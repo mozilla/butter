@@ -4,6 +4,7 @@
 
 define([], function(){
 
+  /*global self, DOMException, Range */
   /*************************************************************************/
   // Support createContextualFragment when missing (IE9)
   if ( 'Range' in window &&
@@ -127,7 +128,7 @@ define([], function(){
    * Public Domain.
    * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
    */
-  /*global self, document, DOMException */
+
   if (typeof document !== "undefined" && !("classList" in document.createElement("a"))) {
     (function (view) {
       "use strict";

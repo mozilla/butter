@@ -2,8 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "util/lang" ],
-  function( LangUtils ){
+define( [], function() {
 
   return function( rootElement, clickHandler, elementTitle, startState ){
     var _element = rootElement;

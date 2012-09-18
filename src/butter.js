@@ -2,10 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-/*jshint white: false, strict: false, plusplus: false, evil: true,
-  onevar: false, nomen: false */
-/*global require: false, document: false, console: false, window: false,
-  setTimeout: false */
+/*jshint evil: true */
 
 /**
  * In the source case, use document.write to write out the require tag,
