@@ -217,6 +217,11 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       document.body.insertBefore( _rootElement, document.body.firstChild );
     };
 
+    _rootElement.querySelector( ".butter-feedback-btn" ).addEventListener( "click", function() {
+      var dialog = Dialog.spawn( "feedback" );
+      dialog.open();
+    }, false );
+    
     butter.listen( "authenticated", function() {
       loginDisplay();
     });

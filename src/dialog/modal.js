@@ -15,7 +15,7 @@ define( [], function(){
     }
 
     var _element = document.createElement( "div" );
-    _element.classList.add( "layer" );
+    _element.classList.add( "butter-modal-overlay" );
     __container.appendChild( _element );
 
     // need to wait an event-loop cycle to apply this class
