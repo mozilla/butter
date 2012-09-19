@@ -39,10 +39,10 @@ define( [ "util/lang" ],
           scrollLeft = tracksElement.scrollLeft,
           scrollWidth = tracksElement.scrollWidth;
 
-      _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
-
       // If we can avoid re-setting position and visibility, then do so
       if( _lastTime !== currentTime || _lastScrollLeft !== scrollLeft || _lastScrollWidth !== scrollWidth ){
+        _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
+
         // To prevent some scrubber jittering (from viewport centering), pos is rounded before
         // being used in calculation to account for possible precision issues.
         var pos = Math.round( currentTime / duration * _tracksContainerWidth ),
