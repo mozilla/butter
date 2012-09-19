@@ -591,10 +591,12 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
     butter.listen( "trackremoved", function( e ) {
       var i,
           len,
-          trackEvents = e.data.trackEvents;
+          trackEvents = e.data.trackEvents,
+          trackEvent;
 
       for ( i = 0, len = trackEvents.length; i < len; i++ ) {
-        if ( trackEvents[ i ].selected && trackEvents[ i ] === _trackEvent ) {
+        trackEvent = trackEvents[ i ];
+        if ( trackEvent.selected && trackEvent === _trackEvent ) {
           butter.editor.closeEditor();
         }
       }
