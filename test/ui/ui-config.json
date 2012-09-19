@@ -20,8 +20,8 @@
   "plugin": {
     "plugins": [
       {
-        "type": "titles",
-        "path": "../../templates/assets/plugins/titles/popcorn.titles.js"
+        "type": "text",
+        "path": "../../templates/assets/plugins/text/popcorn.text.js"
       },
       {
         "type": "image",
@@ -34,7 +34,7 @@
       }
     ],
     "defaults": [
-      "titles",
+      "text",
       "image",
       "googlemap"
     ]
