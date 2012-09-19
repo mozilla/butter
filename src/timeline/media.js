@@ -276,7 +276,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       if( _mediaStatusContainer && _mediaStatusContainer.parentNode ){
         _mediaStatusContainer.parentNode.removeChild( _mediaStatusContainer );
       }
-      _timebar.destroy();
       butter.editor.unlisten( "editorminimized", onEditorMinimized );
     };
 

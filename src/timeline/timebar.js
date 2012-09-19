@@ -115,10 +115,6 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       drawTicks();
     };
 
-    this.destroy = function(){
-      _scrubber.destroy();
-    }; //destroy
-
     Object.defineProperties( this, {
       element: {
         enumerable: true,
