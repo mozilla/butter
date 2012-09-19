@@ -254,7 +254,6 @@ define( [ "core/eventmanager", "./toggler",
           for( var i = 0; i < butter.selectedEvents.length; i++ ) {
             butter.selectedEvents[ i ].track.removeTrackEvent( butter.selectedEvents[ i ] );
           } // for
-          butter.editor.closeEditor();
         } // if
       }, // del key
       9: function( e ) { // tab key

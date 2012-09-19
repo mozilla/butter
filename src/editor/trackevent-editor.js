@@ -588,15 +588,19 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
       }
     };
 
-    butter.listen( "trackremoved", function( e ) {
-      var i,
-          len,
-          trackEvents = e.data.trackEvents,
-          trackEvent;
+    extendObject.getTrackEvent = function() {
+      return _trackEvent;
+    };
 
-      for ( i = 0, len = trackEvents.length; i < len; i++ ) {
-        trackEvent = trackEvents[ i ];
-        if ( trackEvent.selected && trackEvent === _trackEvent ) {
+    butter.listen( "trackeventremoved", function closeEditor( e ) {
+      butter.unlisten( "trackeventremoved", closeEditor );
+
+      var currentTrackEvent;
+
+      // Means the current editor is a track event editor
+      if ( butter.editor.currentEditor.getTrackEvent ) {
+        // Ensure event being deleted matches the one currently being used by the editor
+        if ( e.data.id === currentTrackEvent.id ) {
           butter.editor.closeEditor();
         }
       }

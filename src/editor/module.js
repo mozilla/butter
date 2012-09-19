@@ -212,6 +212,15 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         onModuleReady();
       }
     };
+
+    Object.defineProperties( _this, {
+      currentEditor: {
+        enumerable: true,
+        get: function() {
+          return _currentEditor;
+        }
+      }
+    });
   }
 
   this.register = Editor.register;
