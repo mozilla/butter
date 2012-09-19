@@ -34,12 +34,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
 
       DragNDrop.helper( element, {
         start: function() {
-          var targets = butter.targets,
-              iframeVideo = document.querySelector( "#" + butter.currentMedia.target + " > iframe" );
-
-          if ( iframeVideo ) {
-            iframeVideo.style.pointerEvents = "none";
-          }
+          var targets = butter.targets;
 
           for ( var i = 0, l = targets.length; i < l; ++i ) {
             targets[ i ].view.blink();
@@ -47,10 +42,12 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         },
         stop: function() {
 
-          var iframeVideo = document.querySelector( "#" + butter.currentMedia.target + " > iframe" );
+          var iframeVideo = document.querySelector( "#" + butter.currentMedia.target + " > iframe" ),
+              mediaTarget = document.getElementById( butter.currentMedia.target ).parentNode.id,
+              target = butter.getTargetByType( "elementID", mediaTarget );
 
           if ( iframeVideo ) {
-            iframeVideo.style.pointerEvents = "auto";
+            target.dispatch( "trackeventrequested", { element: element, target: target } );
           }
 
           butter.currentMedia.pause();
