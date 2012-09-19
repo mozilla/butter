@@ -100,6 +100,7 @@ body {
 
 @embedLogoWidth: 100px;
 @embedLogoHeight: 45px;
+@EMBED_HEADER_ZINDEX: 100000000;
 
 .embed-info {
   position: absolute;
@@ -108,6 +109,7 @@ body {
   padding: 10px;
   font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
   border-bottom: 1px solid rgba( 0, 0, 0, 0.2 );
+  z-index: @EMBED_HEADER_ZINDEX;
 }
 
 .embed-info {
