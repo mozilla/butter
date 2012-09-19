@@ -41,15 +41,6 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
           }
         },
         stop: function() {
-
-          var iframeVideo = document.querySelector( "#" + butter.currentMedia.target + " > iframe" ),
-              mediaTarget = document.getElementById( butter.currentMedia.target ).parentNode.id,
-              target = butter.getTargetByType( "elementID", mediaTarget );
-
-          if ( iframeVideo ) {
-            target.dispatch( "trackeventrequested", { element: element, target: target } );
-          }
-
           butter.currentMedia.pause();
         }
       });

@@ -51,6 +51,10 @@ body.editor-minimized .body-wrapper {
   height: 100%;
 }
 
+.video > iframe {
+  z-index: -1;
+}
+
 .video > video {
   background: #000;
 }
