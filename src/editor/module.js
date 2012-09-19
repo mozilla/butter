@@ -213,6 +213,8 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       }
     };
 
+    butter.listen( "trackremoved", this.closeEditor );
+
   }
 
   this.register = Editor.register;
