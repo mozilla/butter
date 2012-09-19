@@ -30,7 +30,12 @@ define( [ "util/lang" ],
         _lastScrollWidth = _tracksContainer.element.scrollWidth,
         _lineWidth = 0,
         _seekCompleted = false,
-        _seekMouseUp = false;
+        _seekMouseUp = false,
+        _checkMediaInterval = setInterval( checkMedia, CHECK_MEDIA_INTERVAL );
+
+    this.destroy = function(){
+      clearInterval( _checkMediaInterval );
+    };
 
     function setNodePosition() {
       var duration = _media.duration,
