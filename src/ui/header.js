@@ -32,7 +32,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       title: "header-title-tooltip",
       message: "Change the name of your project",
       element: _projectTitle,
-      top: "50px"
+      top: "60px"
     });
 
     // This is an easter egg to open a UI kit editor. Hurrah

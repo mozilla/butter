@@ -3,6 +3,9 @@
 */
 @_logoWidth: 230px;
 
+// Used to position absolute elements in the middle of our header bar area
+@HEADER_ALIGN_MIDDLE: 2.7;
+
 // Adds room to template to account for header
 .butter-header-spacing {
   padding-top: @HEADER_SPACING;
@@ -106,12 +109,24 @@
 }
 
 .butter-project-title {
+  max-width: 35%;
+  min-width: 8%;
+  height: 100%;
+
+  a {
+    &.butter-project-name {
+      display: block;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
   .icon {
     opacity: 0.4;
-    position: relative;
+    position: absolute;
     visibility: hidden;
-    left: 10px;
-    top: 2px;
+    right: 0;
+    top: @HEADER_SPACING / @HEADER_ALIGN_MIDDLE;
   }
   &:hover .icon {
     visibility: visible;
