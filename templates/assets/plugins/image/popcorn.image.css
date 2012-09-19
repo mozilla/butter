@@ -5,9 +5,19 @@
 .image-plugin-link {
   display: block;
   text-decoration: none;
-  height: 100%;
   width: 100%;
+  height: 100%;
   overflow: hidden;
+}
+
+
+.image-plugin-portrait {
+  text-align: center;
+}
+
+.image-plugin-portrait img {
+  width: auto;
+  height: 100%;
 }
 
 .image-plugin-img,

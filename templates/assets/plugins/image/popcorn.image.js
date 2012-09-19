@@ -88,6 +88,9 @@
 
             _link.appendChild( _image );
             _container.appendChild( _link );
+            if ( _image.getBoundingClientRect().height > _image.getBoundingClientRect().width  ) {
+              _link.classList.add( "image-plugin-portrait" );
+            }
 
           }, false );
 
@@ -126,6 +129,9 @@
                 _link.appendChild( _image );
                 _container.appendChild( _link );
                 _tagRefs.push( _link );
+                if ( +item.height_m > +item.width_m ) {
+                  _link.classList.add( "image-plugin-portrait" );
+                }
               }
             });
 
