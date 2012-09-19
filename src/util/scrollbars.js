@@ -5,7 +5,7 @@
 define( [ "core/eventmanager" ], function( EventManagerWrapper ){
 
   var VERTICAL_SIZE_REDUCTION_FACTOR = 3,
-      activeClass = "butter-scollbar-active";
+      ACTIVE_CLASS = "butter-scollbar-active";
 
   function Vertical( outerElement, innerElement ){
     var _element = document.createElement( "div" ),
@@ -40,7 +40,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       window.removeEventListener( "mouseup", onMouseUp, false );
       window.removeEventListener( "mousemove", onMouseMove, false );
       _handle.addEventListener( "mousedown", onMouseDown, false );
-      _handle.classList.remove( activeClass );
+      _handle.classList.remove( ACTIVE_CLASS );
     }
 
     function onMouseMove( e ){
@@ -59,7 +59,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
         window.addEventListener( "mouseup", onMouseUp, false );
         window.addEventListener( "mousemove", onMouseMove, false );
         _handle.removeEventListener( "mousedown", onMouseDown, false );
-        _handle.classList.add( activeClass );
+        _handle.classList.add( ACTIVE_CLASS );
       }
       e.preventDefault();
     }
