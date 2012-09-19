@@ -744,7 +744,52 @@
         }
       };
 
-      function attemptDataLoad( finishedCallback ){
+      /**
+       * loadFromSavedDataUrl
+       *
+       * Attempts to load project data from a specified url and parse it using JSON functionality.
+       *
+       * @param {String} savedDataUrl: The url from which to attempt to load saved project data.
+       * @param {Function} responseCallback: A callback function which is called upon completion (successful or not).
+       * @returns: If successfull, an object is returned containing project data. Otherwise, null.
+       */
+      function loadFromSavedDataUrl( savedDataUrl, responseCallback ) {
+        // if no valid url was provided, return early
+        if ( !savedDataUrl ) {
+          responseCallback();
+          return;
+        }
+
+        savedDataUrl += "?noCache=" + Date.now();
+
+        XHR.getUntilComplete(
+          savedDataUrl,
+          function() {
+            var savedData;
+            try{
+              savedData = JSON.parse( this.responseText );
+            }
+            catch( e ){
+              _this.dispatch( "loaddataerror", "Saved data not formatted properly." );
+            }
+            responseCallback( savedData );
+          },
+          "application/json",
+          {
+            "If-Modified-Since": "Fri, 01 Jan 1960 00:00:00 GMT"
+          },
+          true );
+      }
+
+      /**
+       * attemptDataLoad
+       *
+       * Attempts to identify a url from from the query string or supplied config. If one is
+       * found, an attempt to load data from the url is made which is imported as project data if successful.
+       *
+       * @param {Function} finishedCallback: Callback to be called when data loading has completed (successfully or not).
+       */
+      function attemptDataLoad( finishedCallback ) {
         var savedDataUrl;
 
         // see if savedDataUrl is in the page's query string
@@ -755,47 +800,31 @@
           }
         });
 
-        // otherwise, try to grab it from the config
-        savedDataUrl = savedDataUrl || _config.value( "savedDataUrl" );
-
-        // if either succeeded, proceed with XHR to load saved data
-        if ( savedDataUrl ) {
-
-          var xhr = new XMLHttpRequest(),
-              savedData;
-
-          savedDataUrl += "?noCache=" + Date.now();
-
-          xhr.open( "GET", savedDataUrl, false );
-          xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest" );
-
-          if( xhr.overrideMimeType ){
-            // Firefox generates a misleading "syntax" error if we don't have this line.
-            xhr.overrideMimeType( "application/json" );
-          }
-
-          // Deal with caching
-          xhr.setRequestHeader( "If-Modified-Since", "Fri, 01 Jan 1960 00:00:00 GMT" );
-          xhr.send( null );
-
-          if( xhr.status === 200 ){
-            try{
-              savedData = JSON.parse( xhr.responseText );
-            }
-            catch( e ){
-              _this.dispatch( "loaddataerror", "Saved data not formatted properly." );
-            }
-            _this.project.id = savedData.projectID;
-            _this.project.name = savedData.name;
-            _this.project.author = savedData.author;
-            _this.importProject( savedData );
-          }
-          else {
-            _logger.log( "Butter saved data not found: " + savedDataUrl );
-          }
+        function doImport( savedData ) {
+          _this.project.id = savedData.projectID;
+          _this.project.name = savedData.name;
+          _this.project.author = savedData.author;
+          _this.importProject( savedData );
         }
 
-        finishedCallback();
+        // attempt to load data from savedDataUrl in query string
+        loadFromSavedDataUrl( savedDataUrl, function( savedData ) {
+          if ( !savedData || savedData.error ) {
+            // if previous attempt failed, try loading data from the savedDataUrl value in the config
+            loadFromSavedDataUrl( _config.value( "savedDataUrl" ), function( savedData ) {
+              if ( savedData ) {
+                doImport( savedData );
+              }
+              finishedCallback();
+            });
+          }
+          else {
+            // otherwise, attempt import
+            doImport( savedData );
+            finishedCallback();
+          }
+        });
+
       }
 
       function readConfig( userConfig ){
