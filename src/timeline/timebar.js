@@ -115,6 +115,10 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       drawTicks();
     };
 
+    this.destroy = function(){
+      _scrubber.destroy();
+    };
+
     Object.defineProperties( this, {
       element: {
         enumerable: true,
@@ -123,6 +127,8 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
         }
       }
     });
+
+    _scrubber.init();
 
   }; //TimeBar
 

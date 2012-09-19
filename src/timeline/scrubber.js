@@ -31,11 +31,7 @@ define( [ "util/lang" ],
         _lineWidth = 0,
         _seekCompleted = false,
         _seekMouseUp = false,
-        _checkMediaInterval = setInterval( checkMedia, CHECK_MEDIA_INTERVAL );
-
-    this.destroy = function(){
-      clearInterval( _checkMediaInterval );
-    };
+        _checkMediaInterval;
 
     function setNodePosition() {
       var duration = _media.duration,
@@ -238,6 +234,14 @@ define( [ "util/lang" ],
       _rect = _container.getBoundingClientRect();
       _lineWidth = _line.clientWidth;
       setNodePosition();
+    };
+
+    this.init = function() {
+      _checkMediaInterval = setInterval( checkMedia, CHECK_MEDIA_INTERVAL );
+    };
+
+    this.destroy = function() {
+      clearInterval( _checkMediaInterval );
     };
 
     _media.listen( "mediaplaying", function( e ){
