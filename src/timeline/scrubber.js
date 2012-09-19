@@ -5,7 +5,8 @@
 define( [ "util/lang" ],
   function( util ) {
 
-  var SCROLL_INTERVAL = 16,
+  var CHECK_MEDIA_INTERVAL = 50,
+      SCROLL_INTERVAL = 16,
       SCROLL_DISTANCE = 20,
       MOUSE_SCRUBBER_PIXEL_WINDOW = 3;
 
@@ -237,7 +238,7 @@ define( [ "util/lang" ],
     };
 
     this.init = function() {
-      _checkMediaInterval = setInterval( checkMedia, CHECK_MEDIA_INTERVAL );
+      _checkMediaInterval = setInterval( setNodePosition, CHECK_MEDIA_INTERVAL );
     };
 
     this.destroy = function() {
@@ -253,7 +254,5 @@ define( [ "util/lang" ],
         _isPlaying = false;
       }
     });
-
-    _media.listen( "mediatimeupdate", setNodePosition );
   };
 });
