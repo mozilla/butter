@@ -378,6 +378,13 @@ function init( window, document ) {
 
         popcorn.off( "load", onLoad );
 
+        // update the currentTime to the embed options start value
+        // this is needed for mobile devices as attempting to listen for `canplay` or similar events
+        // that let us know it is safe to update the current time seem to be futile
+        function timeupdate() {
+          popcorn.currentTime( start );
+          popcorn.off( "timeupdate", timeupdate );
+        }
         // See if we should start playing at a time other than 0.
         // We combine this logic with autoplay, since you either
         // seek+play or play or neither.
@@ -388,10 +395,6 @@ function init( window, document ) {
               popcorn.play();
             }
           });
-          function timeupdate() {
-            popcorn.currentTime( start );
-            popcorn.off( "timeupdate", timeupdate );
-          }
           popcorn.on( "timeupdate", timeupdate );
         } else if ( config.autoplay ) {
           popcorn.play();
