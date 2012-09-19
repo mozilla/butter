@@ -87,7 +87,6 @@ define([], function(){
   function onMouseUp( e ){
     __mouseDown = false;
     window.removeEventListener( "mousemove", onDragged, false );
-    window.removeEventListener( "mousedown", onMouseUp, false );
 
     var selectedDraggable;
 

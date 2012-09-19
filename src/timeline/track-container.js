@@ -110,9 +110,7 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
           element = trackEventView.element,
           trackView = trackEventView.trackEvent.track.view;
 
-      if ( trackView.element === element.parentNode ) {
-        trackView.element.removeChild( element );
-      }
+      trackView.element.removeChild( element );
       _container.appendChild( element );
       _vScrollbar.update();
     }
