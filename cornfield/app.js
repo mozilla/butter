@@ -80,7 +80,9 @@ app.configure( function() {
     .set('view options', {layout: false});
 });
 
-require('express-browserid').plugAll(app);
+require( 'express-browserid' ).plugAll( app, {
+  audience: CONFIG.dirs.hostname
+});
 require('./routes')( app, User, filter, sanitizer );
 
 function writeEmbedShell( path, res, url, data, callback ) {
