@@ -45,6 +45,15 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         }
       });
 
+      element.addEventListener( "dblclick", function( e ) {
+        var media = butter.currentMedia;
+         media.tracks[0].view.dispatch( "plugindropped", {
+            start: media.currentTime,
+            track: media.tracks[ 0 ],
+            type: element.getAttribute( "data-popcorn-plugin-type" )
+          });
+      }, false );
+
       if ( iconImg ) {
         icon.style.backgroundImage = "url('" + iconImg.src + "')";
       }
