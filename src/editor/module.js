@@ -212,9 +212,6 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         onModuleReady();
       }
     };
-
-    butter.listen( "trackremoved", this.closeEditor );
-
   }
 
   this.register = Editor.register;

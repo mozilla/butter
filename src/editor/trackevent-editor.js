@@ -33,7 +33,8 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
    */
   return function( extendObject, butter, rootElement, events ) {
     // Wedge a check for scrollbars into the open event if it exists
-    var oldOpenEvent = events.open;
+    var oldOpenEvent = events.open,
+        _trackEvent;
 
     events.open = function( parentElement, trackEvent ) {
       var basicButton = rootElement.querySelector( ".basic-tab" ),
@@ -41,6 +42,8 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
           basicTab = rootElement.querySelector( ".editor-options" ),
           advancedTab = rootElement.querySelector( ".advanced-options" ),
           wrapper = rootElement.querySelector( ".scrollbar-outer" );
+
+      _trackEvent = trackEvent;
 
       if ( oldOpenEvent ) {
         oldOpenEvent.apply( this, arguments );
@@ -584,6 +587,18 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
         }
       }
     };
+
+    butter.listen( "trackremoved", function( e ) {
+      var i,
+          len,
+          trackEvents = e.data.trackEvents;
+
+      for ( i = 0, len = trackEvents.length; i < len; i++ ) {
+        if ( trackEvents[ i ].selected && trackEvents[ i ] === _trackEvent ) {
+          butter.editor.closeEditor();
+        }
+      }
+    });
 
   };
 
