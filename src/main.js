@@ -744,8 +744,62 @@
         }
       };
 
-      function attemptDataLoad( finishedCallback ){
-        var savedDataUrl;
+      /**
+       * loadFromSavedDataUrl
+       *
+       * Attempts to load project data from a specified url and parse it using JSON functionality.
+       *
+       * @param {String} savedDataUrl: The url from which to attempt to load saved project data.
+       * @returns: If successfull, an object is returned containing project data. Otherwise, null.
+       */
+      function loadFromSavedDataUrl( savedDataUrl ) {
+        var xhr = new XMLHttpRequest(),
+            savedData;
+
+        // if no valid url was provided, return early
+        if ( !savedDataUrl ) {
+          return null;
+        }
+
+        savedDataUrl += "?noCache=" + Date.now();
+
+        xhr.open( "GET", savedDataUrl, false );
+        xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest" );
+
+        if( xhr.overrideMimeType ){
+          // Firefox generates a misleading "syntax" error if we don't have this line.
+          xhr.overrideMimeType( "application/json" );
+        }
+
+        // Deal with caching
+        xhr.setRequestHeader( "If-Modified-Since", "Fri, 01 Jan 1960 00:00:00 GMT" );
+        xhr.send( null );
+
+        if( xhr.status === 200 ){
+          try{
+            savedData = JSON.parse( xhr.responseText );
+          }
+          catch( e ){
+            _this.dispatch( "loaddataerror", "Saved data not formatted properly." );
+          }
+          return savedData;
+        }
+        else {
+          _logger.log( "Butter saved data not found: " + savedDataUrl );
+          return null;
+        }
+      }
+
+      /**
+       * attemptDataLoad
+       *
+       * Attempts to identify a url from from the query string or supplied config. If one is
+       * found, an attempt to load data from the url is made which is imported as project data if successful.
+       *
+       * @param {Function} finishedCallback: Callback to be called when data loading has completed (successfully or not).
+       */
+      function attemptDataLoad( finishedCallback ) {
+        var savedDataUrl, savedData;
 
         // see if savedDataUrl is in the page's query string
         window.location.search.substring( 1 ).split( "&" ).forEach(function( item ){
@@ -755,46 +809,24 @@
           }
         });
 
-        // otherwise, try to grab it from the config
-        savedDataUrl = savedDataUrl || _config.value( "savedDataUrl" );
+        // attempt to load data from savedDataUrl in query string
+        savedData = loadFromSavedDataUrl( savedDataUrl );
 
-        // if either succeeded, proceed with XHR to load saved data
-        if ( savedDataUrl ) {
-
-          var xhr = new XMLHttpRequest(),
-              savedData;
-
-          savedDataUrl += "?noCache=" + Date.now();
-
-          xhr.open( "GET", savedDataUrl, false );
-          xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest" );
-
-          if( xhr.overrideMimeType ){
-            // Firefox generates a misleading "syntax" error if we don't have this line.
-            xhr.overrideMimeType( "application/json" );
-          }
-
-          // Deal with caching
-          xhr.setRequestHeader( "If-Modified-Since", "Fri, 01 Jan 1960 00:00:00 GMT" );
-          xhr.send( null );
-
-          if( xhr.status === 200 ){
-            try{
-              savedData = JSON.parse( xhr.responseText );
-            }
-            catch( e ){
-              _this.dispatch( "loaddataerror", "Saved data not formatted properly." );
-            }
-            _this.project.id = savedData.projectID;
-            _this.project.name = savedData.name;
-            _this.project.author = savedData.author;
-            _this.importProject( savedData );
-          }
-          else {
-            _logger.log( "Butter saved data not found: " + savedDataUrl );
-          }
+        // if previous attempt failed, try loading data from the savedDataUrl value in the config
+        if ( !savedData ) {
+          savedData = loadFromSavedDataUrl( _config.value( "savedDataUrl" ) );
         }
 
+        // if any data was collected, use it
+        if ( savedData ) {
+          _this.project.id = savedData.projectID;
+          _this.project.name = savedData.name;
+          _this.project.author = savedData.author;
+          _this.importProject( savedData );
+        }
+
+        // issue callback
+        // TODO: this should be async
         finishedCallback();
       }
 
