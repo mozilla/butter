@@ -1,7 +1,7 @@
 /*global Butter*/
 
 document.addEventListener( "DOMContentLoaded", function( e ){
-  Butter({
+  new Butter({
     config: 'test-config.json'
   });
 }, false );

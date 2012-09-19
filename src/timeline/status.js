@@ -4,7 +4,7 @@
 
 define( [], function(){
 
-  function Button( parentNode, className, onClick, toolTip ) {
+  function Button( parentNode, className, onClick ) {
     var _container = parentNode.querySelector( className ),
         _button = _container.querySelector( ".status-button" ),
         _state = true;

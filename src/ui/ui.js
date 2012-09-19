@@ -57,7 +57,7 @@ define( [ "core/eventmanager", "./toggler",
       document.body.classList.add( "butter-tray-spacing" );
     }
 
-    this.loadIcons = function( plugins, resourcesDir ) {
+    this.loadIcons = function( plugins ) {
       var path, img, div;
 
       plugins.forEach( function( plugin ) {
@@ -66,11 +66,11 @@ define( [ "core/eventmanager", "./toggler",
           if ( !path ) {
             return;
           }
-          
+
           img = new Image();
           img.id = plugin.type + "-icon";
           img.src = path;
-        
+
           // We can't use "display: none", since that makes it
           // invisible, and thus not load.  Opera also requires
           // the image be in the DOM before it will load.
@@ -106,11 +106,11 @@ define( [ "core/eventmanager", "./toggler",
         butter.loader.load( [ loadOptions ], function(){
           // icon preloading needs css to be loaded first
 
-          _this.loadIcons( _uiConfig.value( "plugin" ).plugins, _uiConfig.value( "dirs" ).resources || "" );
+          _this.loadIcons( _uiConfig.value( "plugin" ).plugins );
 
           onReady();
         });
-        
+
         _this.tray.attachToDOM();
       }
       else{

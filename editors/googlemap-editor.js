@@ -254,8 +254,8 @@
             option = pluginOptions[ key ];
 
             if ( key === "type" ) {
-              pitchObject = pluginOptions.pitch,
-              headingObject = pluginOptions.heading,
+              pitchObject = pluginOptions.pitch;
+              headingObject = pluginOptions.heading;
               currentMapType = option.trackEvent.popcornOptions.type;
 
               if ( currentMapType === "STREETVIEW" ) {

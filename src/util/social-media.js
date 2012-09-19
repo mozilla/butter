@@ -66,7 +66,7 @@ define(function() {
         // is trusted, but we may still want to do it.
         var html = socialMedium.html.replace(urlPlaceHolder, url);
         element.innerHTML = html;
-        (function(document, id, src, url) {
+        (function(document, id, src) {
           var script = document.createElement("script");
           script.type = "text/javascript";
           script.id = id;

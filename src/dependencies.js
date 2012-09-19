@@ -124,7 +124,7 @@ define([ 'util/xhr' ], function( XHR ){
                   }
 
                   var css, styles;
-                  css = document.createElement( "style" ),
+                  css = document.createElement( "style" );
                   css.type = "text/css";
                   document.head.appendChild( css );
                   styles = document.createTextNode( root.toCSS() );

@@ -1,7 +1,7 @@
 /*global Butter*/
 document.addEventListener( "DOMContentLoaded", function( e ){
 
-  Butter({
+  new Butter({
     config: "complete-config.json",
     ready: function( butter ){
       var media = butter.currentMedia;
@@ -163,7 +163,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             target: "Area1"
           }
         });
-  
+
         butter.tracks[ 1 ].addTrackEvent({
           type: "gml",
           popcornOptions: {
@@ -177,7 +177,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
       }
 
       media.onReady( start );
-      
+
     }
   }); //Butter
 }, false );

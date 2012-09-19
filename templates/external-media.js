@@ -1,7 +1,7 @@
 /*global Butter*/
 document.addEventListener( "DOMContentLoaded", function( e ){
 
-  Butter({
+  new Butter({
     ready: function( butter ){
       var media = butter.currentMedia;
 
