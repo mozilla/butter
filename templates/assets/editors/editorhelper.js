@@ -51,6 +51,8 @@
      *                    {String} handlePositions: describes where to position resize handles ( i.e. "n,s,e,w" )
      *                    {Function} start: Function to execute on resize start event
      *                    {Function} end: Fucntion to execute on resize end event
+     *                    {Number} minWidth: Minimum width that the resizeContainer should be
+     *                    {Number} minHeight: Minimum height that the resizeContainer should be
      */
     global.EditorHelper.resizable = function( trackEvent, resizeContainer, mediaContainer, options ) {
       var media = mediaContainer.getBoundingClientRect();
@@ -68,9 +70,15 @@
           if ( options.end ) {
             options.end();
           }
+
+          height = ( height / media.height ) * 100;
+          width = ( width / media.width ) * 100;
+          height = height >= options.minHeight ? height : options.minHeight;
+          width = width >= options.minWidth ? width : options.minWidth;
+
           trackEvent.update({
-            height: ( height / media.height ) * 100,
-            width: ( width / media.width ) * 100
+            height: height,
+            width: width
           });
         }
       });

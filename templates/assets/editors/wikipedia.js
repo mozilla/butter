@@ -11,7 +11,10 @@ EditorHelper.addPlugin( "wikipedia", function( trackEvent ) {
 
   if ( window.jQuery ) {
 
-    window.EditorHelper.resizable( trackEvent, _container, media );
+    window.EditorHelper.resizable( trackEvent, _container, media, {
+      minWidth: 40,
+      minHeight: 40
+    });
     window.EditorHelper.draggable( trackEvent, _container, media );
   }
 

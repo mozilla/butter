@@ -14,7 +14,10 @@ EditorHelper.addPlugin( "image", function( trackEvent ) {
       _container.innerHTML = "<span class=\"title\">Drag an image from your desktop</span>";
     }
 
-    window.EditorHelper.resizable( trackEvent, _container, _media );
+    window.EditorHelper.resizable( trackEvent, _container, _media, {
+      minWidth: 25,
+      minHeight: 25
+    });
     window.EditorHelper.draggable( trackEvent, _container, _media );
   }
 

@@ -24,7 +24,9 @@ EditorHelper.addPlugin( "webpage", function( trackEvent ) {
   window.EditorHelper.resizable( trackEvent, _wrapper, _media, {
     handlePositions: null,
     start: startFn,
-    end: endFn
+    end: endFn,
+    minHeight: 30,
+    minWidth: 30
   });
 
   window.EditorHelper.draggable( trackEvent, _wrapper, _media, {
