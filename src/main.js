@@ -750,44 +750,35 @@
        * Attempts to load project data from a specified url and parse it using JSON functionality.
        *
        * @param {String} savedDataUrl: The url from which to attempt to load saved project data.
+       * @param {Function} responseCallback: A callback function which is called upon completion (successful or not).
        * @returns: If successfull, an object is returned containing project data. Otherwise, null.
        */
-      function loadFromSavedDataUrl( savedDataUrl ) {
-        var xhr = new XMLHttpRequest(),
-            savedData;
-
+      function loadFromSavedDataUrl( savedDataUrl, responseCallback ) {
         // if no valid url was provided, return early
         if ( !savedDataUrl ) {
-          return null;
+          responseCallback();
+          return;
         }
 
         savedDataUrl += "?noCache=" + Date.now();
 
-        xhr.open( "GET", savedDataUrl, false );
-        xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest" );
-
-        if( xhr.overrideMimeType ){
-          // Firefox generates a misleading "syntax" error if we don't have this line.
-          xhr.overrideMimeType( "application/json" );
-        }
-
-        // Deal with caching
-        xhr.setRequestHeader( "If-Modified-Since", "Fri, 01 Jan 1960 00:00:00 GMT" );
-        xhr.send( null );
-
-        if( xhr.status === 200 ){
-          try{
-            savedData = JSON.parse( xhr.responseText );
-          }
-          catch( e ){
-            _this.dispatch( "loaddataerror", "Saved data not formatted properly." );
-          }
-          return savedData;
-        }
-        else {
-          _logger.log( "Butter saved data not found: " + savedDataUrl );
-          return null;
-        }
+        XHR.getUntilComplete(
+          savedDataUrl,
+          function() {
+            var savedData;
+            try{
+              savedData = JSON.parse( this.responseText );
+            }
+            catch( e ){
+              _this.dispatch( "loaddataerror", "Saved data not formatted properly." );
+            }
+            responseCallback( savedData );
+          },
+          "application/json",
+          {
+            "If-Modified-Since": "Fri, 01 Jan 1960 00:00:00 GMT"
+          },
+          true );
       }
 
       /**
@@ -799,7 +790,7 @@
        * @param {Function} finishedCallback: Callback to be called when data loading has completed (successfully or not).
        */
       function attemptDataLoad( finishedCallback ) {
-        var savedDataUrl, savedData;
+        var savedDataUrl;
 
         // see if savedDataUrl is in the page's query string
         window.location.search.substring( 1 ).split( "&" ).forEach(function( item ){
@@ -809,25 +800,31 @@
           }
         });
 
-        // attempt to load data from savedDataUrl in query string
-        savedData = loadFromSavedDataUrl( savedDataUrl );
-
-        // if previous attempt failed, try loading data from the savedDataUrl value in the config
-        if ( !savedData ) {
-          savedData = loadFromSavedDataUrl( _config.value( "savedDataUrl" ) );
-        }
-
-        // if any data was collected, use it
-        if ( savedData ) {
+        function doImport( savedData ) {
           _this.project.id = savedData.projectID;
           _this.project.name = savedData.name;
           _this.project.author = savedData.author;
           _this.importProject( savedData );
         }
 
-        // issue callback
-        // TODO: this should be async
-        finishedCallback();
+        // attempt to load data from savedDataUrl in query string
+        loadFromSavedDataUrl( savedDataUrl, function( savedData ) {
+          if ( !savedData || savedData.error ) {
+            // if previous attempt failed, try loading data from the savedDataUrl value in the config
+            loadFromSavedDataUrl( _config.value( "savedDataUrl" ), function( savedData ) {
+              if ( savedData ) {
+                doImport( savedData );
+              }
+              finishedCallback();
+            });
+          }
+          else {
+            // otherwise, attempt import
+            doImport( savedData );
+            finishedCallback();
+          }
+        });
+
       }
 
       function readConfig( userConfig ){
