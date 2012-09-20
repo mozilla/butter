@@ -56,6 +56,7 @@
       var _target,
           _link,
           _image,
+          _imageSize,
           _container,
           _flickrCallback,
           _this = this;
@@ -88,7 +89,9 @@
 
             _link.appendChild( _image );
             _container.appendChild( _link );
-            if ( _image.getBoundingClientRect().height > _image.getBoundingClientRect().width  ) {
+
+            _imageSize = _image.getBoundingClientRect();
+            if ( _imageSize.height > _imageSize.width  ) {
               _link.classList.add( "image-plugin-portrait" );
             }
 
