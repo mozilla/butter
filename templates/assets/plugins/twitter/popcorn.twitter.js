@@ -96,6 +96,9 @@
           query,
           numberOfTweets = options.numberOfTweets;
 
+      var MAX_TWEETS = 150,
+          MAX_USER_TWEETS = 20;
+
       if ( !target ) {
         target = this.media.parentNode;
       }
@@ -104,11 +107,10 @@
 
       if ( !numberOfTweets ) {
         numberOfTweets = options._natives.manifest.options.numberOfTweets[ "default" ];
-      } else if ( numberOfTweets === 0 ) {
-        numberOfTweets = 1;
-      } else if ( options.username && numberOfTweets > 20 ) {
-        // Requests for a specific user will only return a max of 20
-        numberOfTweets = 20;
+      } else if ( options.username && numberOfTweets > MAX_USER_TWEETS ) {
+        numberOfTweets = MAX_USER_TWEETS;
+      } else if ( numberOfTweets > MAX_TWEETS ) {
+        numberOfTweets = MAX_TWEETS;
       }
 
       // safeguard against no search/username being provided

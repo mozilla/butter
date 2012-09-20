@@ -27,6 +27,7 @@
             "ui/ui",
             "util/xhr",
             "util/lang",
+            "util/tutorial",
             "text!default-config.json",
             "text!layouts/ua-warning.html",
             "ui/widget/tooltip",
@@ -47,6 +48,7 @@
             UI,
             XHR,
             Lang,
+            Tutorial,
             DefaultConfigJSON,
             UA_WARNING_LAYOUT,
             ToolTip
@@ -368,6 +370,11 @@
           _media[ 0 ].destroy();
           _this.removeMedia( _media[ 0 ] );
         }
+      };
+
+      //importTutorial
+      this.importTutorial = function( butter, tutorialData ) {
+        Tutorial.build( butter, tutorialData );
       };
 
       /****************************************************************
@@ -789,6 +796,9 @@
             _this.project.name = savedData.name;
             _this.project.author = savedData.author;
             _this.importProject( savedData );
+            if ( savedData.tutorial ) {
+              _this.importTutorial( _this, savedData.tutorial );
+            }
           }
           else {
             _logger.log( "Butter saved data not found: " + savedDataUrl );
