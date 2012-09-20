@@ -213,13 +213,16 @@
       };
 
       this.removeTrack = function ( track ) {
-        var idx = _tracks.indexOf( track );
+        var idx = _tracks.indexOf( track ),
+            trackEvent;
         if ( idx > -1 ) {
           _tracks.splice( idx, 1 );
           var events = track.trackEvents;
           for ( var i=0, l=events.length; i<l; ++i ) {
-            events[ i ].selected = false;
-            track.dispatch( "trackeventremoved", events[ i ] );
+            trackEvent = events[ i ];
+            trackEvent.selected = false;
+            trackEvent.unbind();
+            track.dispatch( "trackeventremoved", trackEvent );
           } //for
           _this.unchain( track, [
             "tracktargetchanged",
