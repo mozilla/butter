@@ -82,7 +82,7 @@ function init( window, document ) {
   }
 
   function remixClick( popcorn ) {
-    $( "#remix-post" ).click();
+    window.location =  $( "#remix-post" ).href;
   }
 
   function fullscreenClick() {
