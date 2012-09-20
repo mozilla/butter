@@ -8,10 +8,7 @@
   },
   "session" : {
     "secret": "thisisareallyreallylongsecrettoencryptcookies",
-    "duration": "3600000",
-    "cookie": {
-      "maxAge": "3600000"
-    }
+    "duration": 2419200000
   },
   "staticMiddleware": {
     "maxAge": "0"
