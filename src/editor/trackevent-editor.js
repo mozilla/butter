@@ -33,7 +33,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
    */
   return function( extendObject, butter, rootElement, events ) {
     // Wedge a check for scrollbars into the open event if it exists
-    var oldOpenEvent = events.open,
+    var _oldOpenEvent = events.open,
         _trackEvent;
 
     events.open = function( parentElement, trackEvent ) {
@@ -45,8 +45,8 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
 
       _trackEvent = trackEvent;
 
-      if ( oldOpenEvent ) {
-        oldOpenEvent.apply( this, arguments );
+      if ( _oldOpenEvent ) {
+        _oldOpenEvent.apply( this, arguments );
 
         // Code for handling basic/advanced options tabs are going to be the same. If the user defined these buttons
         // handle it for them here rather than force them to write the code in their editor
@@ -592,13 +592,15 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
       return _trackEvent;
     };
 
-    butter.listen( "trackeventremoved", function closeEditor( e ) {
-      butter.unlisten( "trackeventremoved", closeEditor );
+    butter.listen( "trackeventremoved", function( e ) {
 
-      var currentTrackEvent;
+      var currentTrackEvent,
+          currentEditor = butter.editor.currentEditor;
 
       // Means the current editor is a track event editor
-      if ( butter.editor.currentEditor.getTrackEvent ) {
+      if ( currentEditor.getTrackEvent ) {
+
+        currentTrackEvent = currentEditor.getTrackEvent();
         // Ensure event being deleted matches the one currently being used by the editor
         if ( e.data.id === currentTrackEvent.id ) {
           butter.editor.closeEditor();
