@@ -3,6 +3,9 @@
 }
 
 .image-plugin-link {
+  position: absolute;
+  top: 0;
+  left: 0;
   display: block;
   text-decoration: none;
   width: 100%;
@@ -10,22 +13,15 @@
   overflow: hidden;
 }
 
-
-.image-plugin-portrait {
-  text-align: center;
-}
-
-.image-plugin-portrait img {
-  width: auto;
-  height: 100%;
-}
-
-.image-plugin-img,
-.image-plugin-flickr-image {
+.image-plugin-img {
   border-style: none;
   width: 100%;
+  height: 100%;
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .image-plugin-hidden {
-  display: none;
+  visibility: hidden;
 }
