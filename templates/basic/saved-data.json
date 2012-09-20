@@ -38,5 +38,20 @@
         }
       ]
     }
-  ]
+  ],
+  "tutorial": {
+    "tooltips": [
+      {
+        "start": 5,
+        "end": 15,
+        "name": "foo",
+        "element": ".butter-editor-header-media",
+        "message": "This is The Media Editor",
+        "top": "50px",
+        "left": "50px",
+        "hover": false,
+        "hidden": true
+      }
+    ]
+  }
 }
