@@ -11,6 +11,7 @@
         _messageContainer = _rootElement.querySelector( "div.error-message" ),
         _trackEvent,
         _butter,
+        _maxTweets,
         _this = this;
 
     /**
@@ -47,6 +48,14 @@
      * @param {Object} updateOptions: TrackEvent properties to update
      */
     function updateTrackEventWithoutTryCatch( trackEvent, updateOptions ) {
+      if ( updateOptions.numberOfTweets ) {
+        if ( updateOptions.numberOfTweets > _maxTweets ) {
+          updateOptions.numberOfTweets = _maxTweets;
+          setErrorState( "The maximum number of tweets you may retrieve is " + _maxTweets + "." );
+          return;
+        }
+      }
+
       trackEvent.update( updateOptions );
     }
 
@@ -86,6 +95,8 @@
             "end"
           ],
           startEndElement;
+
+      _maxTweets = trackEvent.manifest.options.numberOfTweets.maxTweets;
 
       function callback( elementType, element, trackEvent, name ) {
         pluginOptions[ name ] = {
