@@ -67,7 +67,6 @@ app.configure( function() {
     .use( express.static( WWW_ROOT, JSON.parse( JSON.stringify( CONFIG.staticMiddleware ) ) ) )
     .use( express.static( PUBLISH_DIR, JSON.parse( JSON.stringify( CONFIG.staticMiddleware ) ) ) )
     .use( express.bodyParser() )
-    .use( express.cookieParser() )
     .use( clientSessions( CONFIG.session ) )
     /* Show Zeus who's boss
      * This only affects requests under /api and /browserid, not static files
