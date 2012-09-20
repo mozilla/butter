@@ -235,8 +235,6 @@ define( [ "util/lang" ],
       setNodePosition();
     };
 
-    _media.listen( "mediatimeupdate", setNodePosition );
-
     _media.listen( "mediaplaying", function( e ){
       _isPlaying = true;
     });
@@ -246,5 +244,7 @@ define( [ "util/lang" ],
         _isPlaying = false;
       }
     });
+
+    _media.listen( "mediatimeupdate", setNodePosition );
   };
 });
