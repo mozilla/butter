@@ -4,7 +4,7 @@
 
 define(['util/xhr'], function(XHR) {
 
-  function audience() {
+  function hostname() {
     return location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" );
   }
 
@@ -14,7 +14,7 @@ define(['util/xhr'], function(XHR) {
         email = "",
         name = "",
         username = "",
-        server = audience();
+        server = hostname();
 
     if ( !navigator.id ) {
       var script = document.createElement( "script" );
@@ -28,7 +28,7 @@ define(['util/xhr'], function(XHR) {
       navigator.id.get(function(assertion) {
         if (assertion) {
           XHR.post(server + "/browserid/verify",
-            { audience: server, assertion: assertion },
+            { assertion: assertion },
             function() {
               if (this.readyState === 4) {
                 try {
