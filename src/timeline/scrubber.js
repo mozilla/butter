@@ -238,6 +238,9 @@ define( [ "util/lang" ],
     };
 
     this.init = function() {
+      // We use an interval here and *not* mediatimeupdate (or similar) because Popcorn
+      // has the ability to turn frameAnimation off, which will cause the update to fire too
+      // seldom. The scrubber won't glide along the timeline smoothly in that case.
       _checkMediaInterval = setInterval( setNodePosition, CHECK_MEDIA_INTERVAL );
     };
 

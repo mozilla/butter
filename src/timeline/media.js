@@ -277,6 +277,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _mediaStatusContainer.parentNode.removeChild( _mediaStatusContainer );
       }
       butter.editor.unlisten( "editorminimized", onEditorMinimized );
+      _timebar.destroy();
     };
 
     this.hide = function() {
