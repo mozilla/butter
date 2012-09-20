@@ -3,7 +3,7 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
-  function( EventManagerWrapper, Scrollbars, Tooltip ) {
+  function( EventManagerWrapper, Scrollbars, ToolTip ) {
 
   /**
    * Class: BaseEditor
@@ -136,7 +136,7 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
     * Add tooltips to all elements marked data-tooltip
     */
     extendObject.addTooltips = function()  {
-      Tooltip.apply( extendObject.rootElement );
+      ToolTip.apply( extendObject.rootElement );
     };
 
     /**

@@ -460,8 +460,8 @@
 * Tooltip
 */
 
-[data-tooltip] {
-  &:hover > .butter-tooltip {
+* {
+  &:hover > .butter-tooltip:not(.tooltip-no-hover) {
     opacity: 1;
     visibility: visible;
     .transition( opacity 0.3s ease 0.5s );

@@ -6,8 +6,8 @@
  * This file exposes various helper methods centered around user-data, such as logging in,
  * saving, and logging out.
  */
-define( [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/widget/tooltip" ],
-  function( Dialog, Lang, HEADER_TEMPLATE, ToolTip ) {
+define( [ "dialog/dialog", "util/lang", "ui/widget/tooltip", "text!layouts/header.html" ],
+  function( Dialog, Lang, ToolTip, HEADER_TEMPLATE ) {
 
   return function( butter ) {
     var _this = this,

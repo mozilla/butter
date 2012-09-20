@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Butter Tool-Tip Tests</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+    <script src="https://login.persona.org/include.js" type="text/javascript" data-butter-exclude></script>
+    <script src="../../src/butter.js" data-butter-exclude></script>
+
+    <script src="js/EventUtils.js" data-butter-exclude></script>
+    <script type="text/javascript" src="tool-tip.js" data-butter-exclude></script>
+
+    <!-- QUnit -->
+    <script type="text/javascript" src="../qunit/qunit.js" data-butter-exclude></script>
+    <script src="../butter.inject.js" data-butter-exclude></script>
+    <script type="text/javascript" src="../inject.js" data-butter-exclude></script>
+
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+
+    <style>
+        #main, .content-div {
+          float: left;
+        }
+        .content-div {
+          width: 200px;
+          height: 200px;
+          border: 3px solid #000;
+          margin: 5px;
+        }
+        .container-div {
+          float: left;
+          text-align: center;
+          font-family: helvetica;
+          font-style: bold;
+        }
+        #main {
+          min-width: 300px;
+          min-height: 200px;
+        }
+        video {
+          position: relative;
+          top: 30px;
+        }
+
+        #qunit-area {
+          clear: both;
+        }
+    </style>
+</head>
+<body>
+    <video id="main" data-butter="media" controls>
+      <source src="../../external/popcorn-js/test/trailer.ogv">
+      <source src="../../external/popcorn-js/test/trailer.mp4">
+    </video>
+    <div class="container-div">
+        <div class="content-div" data-butter="target" id="Area1"></div>
+        <p>Area 1</p>
+    </div>
+    <div class="container-div">
+        <div class="content-div" data-butter="target" id="Area2" data-butter-default></div>
+        <p>Area 2</p>
+    </div>
+    <div id="target-div"></div>
+
+    <div id="qunit-area">
+      <h1 id="qunit-header">Butter Tool-Tip Test Template</h1>
+      <h2 id="qunit-banner"></h2>
+      <div id="qunit-testrunner-toolbar"></div>
+      <h2 id="qunit-userAgent"></h2>
+      <ol id="qunit-tests"></ol>
+    </div>
+</body>
+</html>
