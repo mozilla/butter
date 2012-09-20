@@ -108,10 +108,9 @@
       if ( !numberOfTweets ) {
         numberOfTweets = options._natives.manifest.options.numberOfTweets[ "default" ];
       } else if ( options.username && numberOfTweets > MAX_USER_TWEETS ) {
-        // Requests for a specific user will only return a max of 20
         numberOfTweets = MAX_USER_TWEETS;
       } else if ( numberOfTweets > MAX_TWEETS ) {
-        numberOfTweets = MAX_USER_TWEETS;
+        numberOfTweets = MAX_TWEETS;
       }
 
       // safeguard against no search/username being provided
