@@ -5,8 +5,7 @@
 define( [ "util/lang" ],
   function( util ) {
 
-  var CHECK_MEDIA_INTERVAL = 50,
-      SCROLL_INTERVAL = 16,
+  var SCROLL_INTERVAL = 16,
       SCROLL_DISTANCE = 20,
       MOUSE_SCRUBBER_PIXEL_WINDOW = 3;
 
@@ -31,8 +30,7 @@ define( [ "util/lang" ],
         _lastScrollWidth = _tracksContainer.element.scrollWidth,
         _lineWidth = 0,
         _seekCompleted = false,
-        _seekMouseUp = false,
-        _checkMediaInterval;
+        _seekMouseUp = false;
 
     function setNodePosition() {
       var duration = _media.duration,
@@ -237,16 +235,7 @@ define( [ "util/lang" ],
       setNodePosition();
     };
 
-    this.init = function() {
-      // We use an interval here and *not* mediatimeupdate (or similar) because Popcorn
-      // has the ability to turn frameAnimation off, which will cause the update to fire too
-      // seldom. The scrubber won't glide along the timeline smoothly in that case.
-      _checkMediaInterval = setInterval( setNodePosition, CHECK_MEDIA_INTERVAL );
-    };
-
-    this.destroy = function() {
-      clearInterval( _checkMediaInterval );
-    };
+    _media.listen( "mediatimeupdate", setNodePosition );
 
     _media.listen( "mediaplaying", function( e ){
       _isPlaying = true;
