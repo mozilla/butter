@@ -113,6 +113,7 @@ define( [ "core/eventmanager", "./toggler",
         });
 
         _this.tray.attachToDOM();
+        _this.header.attachToDOM();
       }
       else{
         onReady();
@@ -327,9 +328,6 @@ define( [ "core/eventmanager", "./toggler",
       _this.loadIndicator.stop();
       _this.visible = true;
       _toggler.visible = true;
-      if( _uiConfig.value( "ui" ).enabled !== false ){
-        _this.header.attachToDOM();
-      }
     });
 
     _this.dialogDir = butter.config.value( "dirs" ).dialogs || "";

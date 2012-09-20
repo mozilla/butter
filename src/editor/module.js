@@ -68,6 +68,8 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
 
       _header.setFocus( editorName );
 
+      butter.dispatch( "editoropened", editorName );
+
       return _currentEditor;
     };
 
