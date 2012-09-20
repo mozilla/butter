@@ -115,22 +115,16 @@ define( [
       }
       updateOptions = updateOptions || {};
 
-      var newStart = _popcornOptions.start,
-          newEnd = _popcornOptions.end,
+      var newStart = updateOptions.start,
+          newEnd = updateOptions.end,
           manifestOptions,
           media;
 
-      if ( !isNaN( updateOptions.start ) ) {
-        newStart = TimeUtil.roundTime( updateOptions.start );
-      }
-      else if ( !!updateOptions.start ) {
+      if ( isNaN( newStart ) && updateOptions.hasOwnProperty( "start" ) ) {
         throw new TrackEventUpdateException( "invalid-start-time", "[start] is an invalid value." );
       }
 
-      if ( !isNaN( updateOptions.end ) ) {
-        newEnd = TimeUtil.roundTime( updateOptions.end );
-      }
-      else if ( updateOptions.end ) {
+      if ( isNaN( newEnd ) && updateOptions.hasOwnProperty( "end" ) ) {
         throw new TrackEventUpdateException( "invalid-end-time", "[end] is an invalid value." );
       }
 

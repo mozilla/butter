@@ -14,15 +14,13 @@
       var _id = "Target" + __guid++,
           _logger = new Logger( _id ),
           _name = options.name || _id,
-          _element = options.element,
+          _element,
           _pageElement,
           _this = this;
 
       EventManagerWrapper( _this );
 
-      if( typeof( _element ) === "string" ){
-        _element = document.getElementById( _element );
-      } //if
+      _element = document.getElementById( options.element );
 
       if( !_element ){
         _logger.log( "Warning: Target element is null." );
