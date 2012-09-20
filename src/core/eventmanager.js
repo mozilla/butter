@@ -23,13 +23,7 @@ define( [], function(){
    *
    * By default, all event dispatching is done asynchronously, meaning
    * calls to dispatch() return immediately, and callbacks are executed
-   * later.  It is also possible to force a synchronous, blocking call
-   * to dispatch() by passing `true` as the value of the optional third
-   * argument:
-   *
-   *    o.listen( "some-event", function handler(){...} );
-   *    o.dispatch( "some-event", data, true );
-   *    // the handler function will have executed by this point...
+   * later.
    *
    * Event source objects wrapped with EventManagerWrapper have the
    * following methods attached:
@@ -53,18 +47,14 @@ define( [], function(){
    *    a previous call to listen.  If you supply no listener argument, all
    *    listeners for the `eventName` event will be removed.
    *
-   * 3. object.dispatch( eventName, eventData, [optional] synchronous=false )
+   * 3. object.dispatch( eventName, eventData )
    *
    *    eventName [String] - the name of an event to dispatch
    *    eventData [Object] - an object to attach to the event's `data` property
-   *    synchronous [Boolean] - an optional argument indicating that the callback
-   *                            should be fired synchronously with dispatch(). By
-   *                            default this is `false` and done asynchronously.
    *
    *    Dispatch takes an `eventName` and creates a new event object, using
    *    `eventData` as its data property.  It then invokes any and all listeners
-   *    which were previously registered with `listen`.  Depending on the presence/
-   *    value of `synchronous`, this is either done synchronously or asynchronously.
+   *    which were previously registered with `listen`.
    *
    * 4. object.chain( eventManagerWrappedObject, events )
    *
@@ -85,6 +75,54 @@ define( [], function(){
    **/
 
   /**
+   * Class: ButterEvent
+   *
+   * An event to propagate within Butter which holds and protects data about the event
+   * instance. Propagation of the event can be stopped in the same manner as DOM events:
+   * by calling event.stopPropagation inside a handler, the dispatch loop will be
+   * interrupted.
+   *
+   * @param {String} type: Event type. Usually specified by a call to `object.dispatch`.
+   * @param {Object} target: The event target. Usually the object which dispatched the event.
+   * @param {*} data: Optional. Data to accompany the event.
+   */
+  function ButterEvent( type, target, data ) {
+    var _propagationStopped = false;
+
+    Object.defineProperties( this, {
+      type: {
+        value: type
+      },
+      target: {
+        value: target
+      },
+      data: {
+        value: data
+      },
+      propagationStopped: {
+        get: function() {
+          return _propagationStopped;
+        }
+      }
+    });
+
+    /**
+     * Member: stopPropagation
+     *
+     * Stops the propagation of this event during a dispatch. As a side-effect
+     * _propagationStopped is set to true and cannot be reset, thus notifying
+     * external bodies that the event dispatch should halt.
+     */
+    this.stopPropagation = function() {
+      _propagationStopped = true;
+    };
+
+    this.clone = function() {
+      return new ButterEvent( type, target, data );
+    };
+  }
+
+  /**
    * Static, shared functions for all event source wrapped objects.
    **/
   function __isWrapped( object ){
@@ -98,6 +136,8 @@ define( [], function(){
 
     var i = events.length;
     while( i-- ){
+      // Hook event directly to dispatch function so that new
+      // event object is not generated, simply propagated further.
       b.listen( events[ i ], a.dispatch );
     }
   }
@@ -113,58 +153,45 @@ define( [], function(){
     }
   }
 
-  function __invoke( eventName, listeners, data ){
-    var these, i, stopLoop = false;
-
-    // XXXsecretrobotron - A stopPropagation system similar to that of real events.
-    // Since our event system only uses one custom event to call an array of listeners,
-    // regular stopPropagation won't work. Until we're on a pur CustomEvent system,
-    // this will have to do.
-    var stopPropagation = function() {
-      stopLoop = true;
-    };
+  function __invoke( eventName, listeners, butterEvent ){
+    var these, i;
 
     if( listeners[ eventName ] ){
       these = listeners[ eventName ].slice();
       i = these.length;
-      while( i-- && !stopLoop ){
-        data.stopPropagation = stopPropagation;
-        these[ i ]( data );
+      // Progress through the loop of listeners until there are no more or until
+      // the propagationStopped flag has been raised.
+      while( i-- && !butterEvent.propagationStopped ){
+        these[ i ]( butterEvent );
       }
     }
   }
 
-  function __dispatch( target, namespace, eventName, eventData, listeners, sync ){
-    var customEvent, e, namespacedEventName;
+  function __dispatch( target, namespace, event, eventData, listeners ){
+    var customEvent, butterEvent,
+        namespacedEventName, eventName;
 
-    if( typeof( eventName ) === "object" ){
-      e = {
-        type: eventName.type,
-        target: eventName.target,
-        data: eventName.data
-      };
-      eventName = e.type;
-    } else {
-      e = {
-        type: eventName + "",
-        target: target,
-        data: eventData
-      };
+    if ( event instanceof ButterEvent ) {
+      // If an old event object was passed in, don't re-use it; clone it
+      // instead to provide a fresh slate (e.g. propagation flag is reset).
+      butterEvent = event.clone();
+      eventName = butterEvent.type;
+    } else if ( typeof( event ) === "string" ) {
+      // Otherwise, create a new event object from parameters to initialize dispatch process.
+      butterEvent = new ButterEvent( event + "", target, eventData );
+      eventName = event;
+    }
+    else {
+      // Protect from the use of object literals or other objects passed in as re-dispatched events.
+      throw "Invalid event dispatch parameters.";
     }
 
     namespacedEventName = namespace + eventName;
 
-    // XXXhumph - Force synchronous code path until we test more
-    // https://webmademovies.lighthouseapp.com/projects/65733/tickets/1130
-    sync = true;
-
-    if ( sync ){
-      __invoke( namespacedEventName, listeners, e );
-    } else /* async */ {
-      customEvent = document.createEvent( "CustomEvent" );
-      customEvent.initCustomEvent( namespacedEventName, false, false, e );
-      document.dispatchEvent( customEvent );
-    }
+    // Create custom DOM event and dispatch it.
+    customEvent = document.createEvent( "CustomEvent" );
+    customEvent.initCustomEvent( namespacedEventName, false, false, butterEvent );
+    document.dispatchEvent( customEvent );
   }
 
   function __listen( o, namespace, eventName, listener, listeners, handler ){
@@ -179,12 +206,16 @@ define( [], function(){
     } else {
       namespacedEventName = namespace + eventName;
 
+      // If there are no listeners yet for `eventName`, create a place to store them
+      // and add a DOM event listener to the document. Note that `handler` is the
+      // specified event handler, not listener, since we call all listeners in a loop
+      // in JS, relying on DOM events only for the initial dispatch/handle.
       if( !listeners[ namespacedEventName ] ){
         listeners[ namespacedEventName ] = [];
-        document.addEventListener( namespacedEventName, function( e ){
-          handler( namespacedEventName, e );
-        }, false );
+        document.addEventListener( namespacedEventName, handler, false );
       }
+
+      // Add the listener to the list so that it's called when a dispatch occurs.
       listeners[ namespacedEventName ].push( listener );
     }
   }
@@ -212,12 +243,11 @@ define( [], function(){
         }
       }
 
+      // If no listeners exist in the pool any longer, remove the pool and the
+      // DOM event listener.
       if ( !listener || these.length === 0 ){
         delete listeners[ namespacedEventName ];
-
-        document.removeEventListener( namespacedEventName, function( e ){
-          handler( namespacedEventName, e );
-        }, false );
+        document.removeEventListener( namespacedEventName, handler, false );
       }
     }
   }
@@ -248,8 +278,8 @@ define( [], function(){
 
         // An event handler used to invoke listeners, with scope
         // such that it can get at *this* object's listeners.
-        _handler = function( eventName, domEvent ){
-          __invoke( eventName, _listeners, domEvent.detail );
+        _handler = function( domEvent ){
+          __invoke( domEvent.type, _listeners, domEvent.detail );
         };
 
     // Thin wrapper around calls to static functions
@@ -262,8 +292,8 @@ define( [], function(){
       __unchain( this, eventManagerWrappedObject, events );
     };
 
-    object.dispatch = function( eventName, eventData, sync ){
-      __dispatch( this, _namespace, eventName, eventData, _listeners, !!sync );
+    object.dispatch = function( eventName, eventData ){
+      __dispatch( this, _namespace, eventName, eventData, _listeners );
     };
 
     object.listen = function( eventName, listener ){
