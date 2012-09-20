@@ -72,6 +72,18 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     };
 
     /**
+     * Member: closeEditor
+     *
+     * Closes the currently opened editor and opens the default one in it's place
+     *
+     */
+    _this.closeEditor = function() {
+      _currentEditor.close();
+      _currentEditor = null;
+      _this.openEditor( DEFAULT_EDITOR_NAME );
+    };
+
+    /**
      * Member: editTrackEvent
      *
      * Open the editor corresponding to the type of the given TrackEvent
@@ -184,7 +196,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
           butter.loader.load( editorsToLoad, function() {
             Editor.loadUrlSpecifiedLayouts( onModuleReady, butter.config.value( "baseDir" ) );
           }, function( e ) {
-            _logger.log( "Couldn't load editor " + e.srcElement.src );
+            _logger.log( "Couldn't load editor " + e.target.src );
             
             if ( ++editorsLoaded === editorsToLoad.length ) {
               onModuleReady();
@@ -201,6 +213,14 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       }
     };
 
+    Object.defineProperties( _this, {
+      currentEditor: {
+        enumerable: true,
+        get: function() {
+          return _currentEditor;
+        }
+      }
+    });
   }
 
   this.register = Editor.register;
