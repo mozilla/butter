@@ -1,20 +1,27 @@
-a.image-plugin-link {
-  text-decoration: none;
-  height: 100%;
-  width: 100%;
-}
-
-img.image-plugin-img, img.image-plugin-flickr-image {
-  border-style: none;
-  height: 100%;
-  width: 100%;
-}
-
-div.image-plugin-container {
-  overflow: hidden;
+.image-plugin-container {
   position: absolute;
 }
 
+.image-plugin-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  text-decoration: none;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.image-plugin-img {
+  border-style: none;
+  width: 100%;
+  height: 100%;
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
 .image-plugin-hidden {
-  display: none;
+  visibility: hidden;
 }

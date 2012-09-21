@@ -17,16 +17,19 @@
 }
 
 .ui-resizable .title { 
-  position:relative; 
-  font-weight: 700;
+  position: absolute;
+  top: -30px;
   display: block;
   color: #222;
-  font-size: 11px;
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
   background: #FFF83A;
-  padding: 5px 0;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 30px;
+  height: 30px;
   width: 100%;
   text-align: center;
+  border-radius: 2px 2px 0 0;
 }
 
 .ui-resizable .ui-icon { 
