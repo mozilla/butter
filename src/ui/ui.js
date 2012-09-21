@@ -247,15 +247,27 @@ define( [ "core/eventmanager", "./toggler",
       }, // down key
       27: function( e ) { // esc key
         butter.deselectAllTrackEvents();
-      }, // esc key
+      },
+
       8: function( e ) { // del key
+        var selectedEvent;
+
         if( butter.selectedEvents.length ) {
           e.preventDefault();
+
+          // If one event is being dragged, they all are, and we don't want to
+          // allow deletion while trackevent dragging is occurring.
+          if ( butter.selectedEvents[ 0 ].dragging ) {
+            return;
+          }
+
           for( var i = 0; i < butter.selectedEvents.length; i++ ) {
-            butter.selectedEvents[ i ].track.removeTrackEvent( butter.selectedEvents[ i ] );
-          } // for
-        } // if
-      }, // del key
+            selectedEvent = butter.selectedEvents[ i ];
+            selectedEvent.track.removeTrackEvent( selectedEvent );
+          }
+        }
+      },
+
       9: function( e ) { // tab key
         if( orderedTrackEvents.length && butter.selectedEvents.length <= 1 ){
           e.preventDefault();
