@@ -3,11 +3,11 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [ "core/eventmanager", "./toggler",
-          "./header", "./unload-dialog",
+          "./header", "./unload-dialog", "crashreporter",
           "./tray", "editor/ui-kit" ],
-  function( EventManager, Toggler,
-            Header, UnloadDialog,
-            Tray, UIKitDummy ) {
+  function( EventManager, Toggler, Header,
+            UnloadDialog, CrashReporter,
+            Tray, UIKitDummy ){
 
   var TRANSITION_DURATION = 500,
       // Butter's UI is written in LESS, but deployed as CSS.
@@ -33,6 +33,9 @@ define( [ "core/eventmanager", "./toggler",
         _uiOptions = _uiConfig.value( "ui" ),
         _unloadDialog,
         _this = this;
+
+    // Top-level way to test our crash reporter.
+    butter.simulateError = CrashReporter.simulateError;
 
     EventManager.extend( _this );
 
@@ -108,6 +111,9 @@ define( [ "core/eventmanager", "./toggler",
           // icon preloading needs css to be loaded first
 
           _this.loadIcons( _uiConfig.value( "plugin" ).plugins );
+
+          // Spin-up the crash reporter
+          CrashReporter.init( _uiConfig );
 
           onReady();
         });

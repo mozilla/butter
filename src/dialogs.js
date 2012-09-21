@@ -6,5 +6,6 @@ define([
   "dialog/dialogs/error-message",
   "dialog/dialogs/track-data",
   "dialog/dialogs/delete-track",
-  "dialog/dialogs/feedback"
+  "dialog/dialogs/feedback",
+  "dialog/dialogs/crash"
 ], function() {} );

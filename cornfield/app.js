@@ -19,6 +19,7 @@ var express = require('express'),
     PUBLISH_PREFIX = CONFIG.dirs.hostname,
     PUBLISH_PREFIX_V = CONFIG.dirs.hostname + "/v",
     PUBLISH_PREFIX_E = CONFIG.dirs.hostname + "/e",
+    REPORTS_DIR = path.join( PUBLISH_DIR, "crash" ),
     WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
     VALID_TEMPLATES = CONFIG.templates,
     EXPORT_ASSETS = CONFIG.exportAssets;
@@ -53,6 +54,9 @@ if ( !fs.existsSync( PUBLISH_DIR_V ) ) {
 }
 if ( !fs.existsSync( PUBLISH_DIR_E ) ) {
   fs.mkdirSync( PUBLISH_DIR_E );
+}
+if ( !fs.existsSync( REPORTS_DIR ) ) {
+  fs.mkdirSync( REPORTS_DIR );
 }
 
 app.configure( 'development', function() {
@@ -309,6 +313,25 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
         email: email,
       },
       projects: userProjects
+    });
+  });
+});
+
+// Simple crash reporter
+app.post( '/report', function( req, res ) {
+  var report = '';
+
+  req.addListener( 'data', function( data ) {
+    report += data;
+  });
+
+  req.addListener( 'end', function() {
+    // Make sure two reports don't have identical timestamp, add some noise
+    var noise = ( Math.random() * 1000 ) | 0,
+        filename = '' + Date.now() + '-' + noise + '.json';
+    fs.writeFile( path.join( REPORTS_DIR, filename ), report, function() {
+      res.writeHead( 200, { 'content-type': 'text/plain' } );
+      res.end();
     });
   });
 });

@@ -18,7 +18,7 @@
             "dialog/dialog", "editor/editor", "ui/ui",
             "util/xhr", "util/lang", "util/tutorial",
             "text!default-config.json", "text!layouts/ua-warning.html",
-            "ui/widget/tooltip",
+            "ui/widget/tooltip", "crashreporter",
             "util/shims"                  // keep this at the end so it doesn't need a spot in the function signature
           ],
           function(
@@ -27,7 +27,7 @@
             Dialog, Editor, UI,
             XHR, Lang, Tutorial,
             DEFAULT_CONFIG_JSON, UA_WARNING_LAYOUT,
-            ToolTip,
+            ToolTip, CrashReporter,
             Shims                         // placeholder
           ){
 

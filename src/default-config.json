@@ -1,6 +1,7 @@
 {
   "name": "default-config",
   "baseDir": "../",
+  "crashReporter": true,
   "cssRenderClientSide": false,
   "snapshotHTMLOnReady": false,
   "scrapePage": true,
