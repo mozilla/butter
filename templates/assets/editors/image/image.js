@@ -5,12 +5,15 @@ EditorHelper.addPlugin( "image", function( trackEvent ) {
       _popcornOptions = trackEvent.popcornTrackEvent,
       _container = _popcornOptions._container,
       _media = document.getElementById( trackEvent.track._media.target ),
+      _title = document.createElement( "span" ),
       _context;
 
   if ( window.jQuery ) {
     //Change default text to indicate draggable
-    if ( !_popcornOptions.src ){
-      _container.innerHTML = "<span class=\"title\">Drag an image from your desktop</span>";
+    if ( _popcornOptions.src && !/^data:image/.test( _popcornOptions.src ) ){
+      _title.classList.add( "title" );
+      _title.innerHTML = "Drag an image from your desktop";
+      _container.insertBefore( _title, _container.firstChild );
     }
 
     window.EditorHelper.resizable( trackEvent, _container, _media, {

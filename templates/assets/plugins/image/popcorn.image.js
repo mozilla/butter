@@ -6,12 +6,14 @@
 
   var APIKEY = "&api_key=b939e5bd8aa696db965888a31b2f1964",
       flickrUrl = "http://api.flickr.com/services/",
-      getPhotoCmd = flickrUrl + "rest/?method=flickr.photos.search&page=1&extras=url_m&media=photos&safe_search=1",
+      searchPhotosCmd = flickrUrl + "rest/?method=flickr.photos.search&page=1&extras=url_m&media=photos&safe_search=1",
       getPhotosetCmd = flickrUrl + "rest/?method=flickr.photosets.getPhotos&extras=url_m&media=photos",
-      jsonBits = "&format=json&jsoncallback=flickr";
+      getPhotoSizesCmd = flickrUrl + "rest/?method=flickr.photos.getSizes",
+      jsonBits = "&format=json&jsoncallback=flickr",
+      FLICKR_SINGLE_CHECK = "flickr.com/photos/";
 
-  function getFlickrData( tags, count, userId, ready ) {
-    var uri = getPhotoCmd + APIKEY + "&per_page=" + count + "&";
+  function searchImagesFlickr( tags, count, userId, ready ) {
+    var uri = searchPhotosCmd + APIKEY + "&per_page=" + count + "&";
     if ( userId && typeof userId !== "function" ) {
       uri += "&user_id=" + userId;
     }
@@ -22,8 +24,41 @@
     Popcorn.getJSONP( uri, ready || userId );
   }
 
-  function getPhotoSet( photosetId , ready ) {
-    var uri = getPhotosetCmd + "&photoset_id=" + photosetId + APIKEY + jsonBits;
+  function getPhotoSet( photosetId , ready, pluginInstance ) {
+    var photoSplit,
+        ln,
+        url,
+        uri,
+        i;
+
+    /* Allow for a direct gallery URL to be passed or just a gallery ID. This will accept:
+     *
+     * http://www.flickr.com/photos/etherworks/sets/72157630563520740/
+     * or
+     * 72157630563520740
+     */
+    if ( isNaN( photosetId ) ) {
+
+      if ( photosetId.indexOf( "flickr.com" ) === -1 ) {
+
+        pluginInstance.emit( "invalid-flickr-image" );
+        return;
+      }
+
+      photoSplit = photosetId.split( "/" );
+
+      // Can't always look for the ID in the same spot depending if the user includes the
+      // last slash
+      for ( i = 0, ln = photoSplit.length; i < ln; i++ ) {
+        url = photoSplit[ i ];
+        if ( !isNaN( url ) && url !== "" ) {
+          photosetId = url;
+          break;
+        }
+      }
+    }
+
+    uri = getPhotosetCmd + "&photoset_id=" + photosetId + APIKEY + jsonBits;
     Popcorn.getJSONP( uri, ready );
   }
 
@@ -55,8 +90,10 @@
 
     div.style.backgroundImage = "url( \"" + imageUrl + "\" )";
     div.classList.add( "image-plugin-img" );
-    
-    link.setAttribute( "href", linkUrl || imageUrl );
+
+    if ( linkUrl ) {
+      link.setAttribute( "href", linkUrl );
+    }
     link.setAttribute( "target", "_blank" );
     link.classList.add( "image-plugin-link" );
 
@@ -91,20 +128,61 @@
 
         if ( options.src ) {
 
-          _container.appendChild( createImageDiv( options.src ) );
+          if ( options.src.indexOf( FLICKR_SINGLE_CHECK ) > -1 ) {
+            var url = options.src,
+                urlSplit,
+                uri,
+                ln,
+                _flickrStaticImage,
+                photoId,
+                i;
+
+            urlSplit = url.split( "/" );
+
+            for ( i = 0, ln = urlSplit.length; i < ln; i++ ) {
+              url = urlSplit[ i ];
+              if ( !isNaN( url ) && url !== "" ) {
+                photoId = url;
+                break;
+              }
+            }
+
+            uri = getPhotoSizesCmd + APIKEY + "&photo_id=" + photoId + jsonBits;
+
+
+            _flickrStaticImage = function( data ) {
+
+              if ( data.stat === "ok" ) {
+
+                // Unfortunately not all requests contain an "Original" size option
+                // so I'm always taking the second last one. This has it's upsides and downsides
+                _container.appendChild( createImageDiv( data.sizes.size[ data.sizes.size.length - 2 ].source, options.linkSrc ) );
+              }
+            };
+
+            Popcorn.getJSONP( uri, _flickrStaticImage );
+          } else {
+            _container.appendChild( createImageDiv( options.src, options.linkSrc ) );
+          }
 
         } else {
 
           _flickrCallback = function( data ) {
 
             var _collection = ( data.photos || data.photoset ),
-                _photos = _collection.photo,
+                _photos,
                 _inOuts,
                 _lastVisible,
                 _url,
                 _link,
                 _tagRefs = [],
                 _count = options.count || _photos.length;
+
+            if ( !_collection ) {
+              return;
+            }
+
+            _photos = _collection.photo;
 
             if ( !_photos ) {
               return;
@@ -115,7 +193,7 @@
               _url = ( item.media && item.media.m ) || window.unescape( item.url_m );
 
               if ( i < _count ) {
-                _link = createImageDiv( _url, item.link );
+                _link = createImageDiv( _url, _url );
                 _link.classList.add( "image-plugin-hidden" );
                 _container.appendChild( _link );
                 _tagRefs.push( _link );
@@ -153,9 +231,9 @@
           };
 
           if ( options.tags ) {
-            getFlickrData( options.tags, options._count || 10, _flickrCallback );
+            searchImagesFlickr( options.tags, options.count || 10, _flickrCallback );
           } else if ( options.photosetId ) {
-            getPhotoSet( options.photosetId, _flickrCallback );
+            getPhotoSet( options.photosetId, _flickrCallback, _this );
           }
         }
 
@@ -214,6 +292,12 @@
           elem: "input",
           type: "url",
           label: "Source URL",
+          "default": "http://www.mozilla.org/media/img/home/firefox.png"
+        },
+        linkSrc: {
+          elem: "input",
+          type: "url",
+          label: "Link URL"
         },
         tags: {
           elem: "input",
@@ -226,14 +310,16 @@
           elem: "input",
           type: "text",
           label: "Flickr: Photoset Id",
-          optional: true
+          optional: true,
+          "default": "http://www.flickr.com/photos/etherworks/sets/72157630563520740/"
         },
         count: {
           elem: "input",
           type: "number",
           label: "Flickr: Count",
           optional: true,
-          "default": 1
+          "default": 3,
+          MAX_COUNT: 20
         },
         width: {
           elem: "input",
