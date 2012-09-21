@@ -31,9 +31,36 @@ var path = require( "path" ),
     BUTTER_TRANSITIONS_LESS_FILE = join( CSS_DIR, "transitions.less" ),
     BUTTER_TRANSITIONS_CSS_FILE = join( CSS_DIR, "/transitions.css" ),
 
-    BUTTERED_POPCORN = join( DIST_DIR, '/buttered-popcorn.js' );
+    BUTTERED_POPCORN = join( DIST_DIR, '/buttered-popcorn.js' ),
+
+    // We store version info about Popcorn and Butter when we deploy
+    VERSIONS_CONFIG = join( CORNFIELD_DIR, 'config', 'versions.json' );
 
 require('shelljs/make');
+
+// Get the git repo version info for a given repo root dir
+function gitDescribe( repoRoot ) {
+  var cwd = pwd();
+  cd( repoRoot );
+  var version = exec( 'git describe',
+                      { silent: true } ).output.replace( /\r?\n/m, '' );
+  cd( cwd );
+  return version;
+}
+
+// Write a version.json file for cornfield to use when saving data
+function publishVersionInfo( versionConfig ) {
+  var defaultConfig = require( DEFAULT_CONFIG ),
+      popcornDir = defaultConfig.dirs[ 'popcorn-js' ].replace( '{{baseDir}}', './' ),
+      butterDir = '.';
+
+  JSON.stringify({
+    date: Date.now(),
+    version: env.VERSION || 'development',
+    popcorn: gitDescribe( popcornDir ),
+    butter: gitDescribe( butterDir )
+  }, null, 2 ).to( versionConfig );
+}
 
 // To supress CSS warnings/errors for a particular line, end the line
 // with a comment indicating you want CSS Lint to ignore this line's
@@ -308,8 +335,7 @@ target.check = function() {
 
 function stampVersion( version, filename ){
   // Stamp embed.version with supplied version, or git info
-  version = version ||exec( 'git describe',
-                            {silent:true} ).output.replace( /\r?\n/m, "" );
+  version = version || gitDescribe( "." );
   sed( '-i', '@VERSION@', version, filename );
 }
 
@@ -336,6 +362,9 @@ function buildJS( version, compress ){
 
 target.server = function() {
   echo('### Serving butter');
+
+  // Write-out version info regarding Butter and Popcorn so cornfield knows what it's serving.
+  publishVersionInfo( VERSIONS_CONFIG );
 
   cd( CORNFIELD_DIR );
 
@@ -402,18 +431,11 @@ function butteredPopcorn() {
   }
 
   // Stamp Popcorn.version with the git commit sha we are using
-  var cwd = pwd();
-  cd( popcornDir );
-  var popcornVersion = exec('git describe',
-                       {silent:true}).output.replace(/\r?\n/m, "");
-  cd( cwd );
+  var popcornVersion = gitDescribe( popcornDir );
 
   // Write out dist/buttered-popcorn.js
   cat( popcornFiles ).to( BUTTERED_POPCORN );
   sed('-i', '@VERSION', popcornVersion, BUTTERED_POPCORN);
-
-  // Write out dist/buttered-popcorn.min.js
-
 }
 
 target.deploy = function(){
@@ -459,6 +481,9 @@ target.deploy = function(){
   // Move everything into the public folder
   cp( '-R', 'public', DIST_DIR );
   mv([ 'dist/css', 'dist/editors', 'dist/external', 'dist/resources', 'dist/src', 'dist/templates' ], 'dist/public/' );
+
+  // Write-out version info regarding Butter and Popcorn so cornfield knows what it's serving.
+  publishVersionInfo( join( DIST_DIR, VERSIONS_CONFIG ) );
 
   // It's important to use the production config
   echo( 'Run cornfield with `NODE_ENV=production node app.js`' );
