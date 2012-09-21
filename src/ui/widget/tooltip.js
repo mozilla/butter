@@ -148,9 +148,9 @@ define( [], function() {
         error = !!value;
 
         if ( error ) {
-          parentElement.classList.add( "tooltip-error" );
+          tooltipElement.classList.add( "tooltip-error" );
         } else {
-          parentElement.classList.remove( "tooltip-error" );
+          tooltipElement.classList.remove( "tooltip-error" );
         }
       },
       enumerable: true
