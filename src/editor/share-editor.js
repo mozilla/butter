@@ -201,7 +201,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       open: function() {
         if ( !butter.cornfield.authenticated() ) {
           displayLogin();
-        } else if ( !butter.project.name ) {
+        } else if ( !butter.project.name || !butter.project.id ) {
           displaySave();
         } else {
           displayEditor();
