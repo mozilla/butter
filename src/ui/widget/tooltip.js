@@ -35,6 +35,8 @@ define( [], function() {
         message,
         top,
         left,
+        error,
+        destroyed = false,
         tooltipElement = document.createElement( "div" );
 
     tooltipElement.classList.add( __tooltipClass );
@@ -138,9 +140,35 @@ define( [], function() {
       enumerable: true
     });
 
+    Object.defineProperty( this, "error", {
+      get: function() {
+        return error;
+      },
+      set: function( value ) {
+        error = !!value;
+
+        if ( error ) {
+          parentElement.classList.add( "tooltip-error" );
+        } else {
+          parentElement.classList.remove( "tooltip-error" );
+        }
+      },
+      enumerable: true
+    });
+
+    Object.defineProperty( this, "destroyed", {
+      get: function() {
+        return destroyed;
+      },
+      enumerable: true
+    });
+
     this.destroy = function() {
-      parentElement.removeChild( tooltipElement );
-      _registeredTooltips[ name ] = undefined;
+      if ( !destroyed ) {
+        parentElement.removeChild( tooltipElement );
+        _registeredTooltips[ name ] = undefined;
+        destroyed = true;
+      }
     };
 
     this.parent = options.element;
@@ -149,6 +177,7 @@ define( [], function() {
     this.message = options.message || parentElement.getAttribute( "data-tooltip" ) || parentElement.getAttribute( "title" ) || "";
     this.hidden = options.hidden;
     this.hover = options.hover;
+    this.error = options.error;
 
     name = options.name;
 
@@ -170,7 +199,8 @@ define( [], function() {
      *  top: 14px,
      *  left: 30px,
      *  hidden: true,
-     *  hover: true
+     *  hover: true,
+     *  error: true
      * });
      */
     create: function( options ) {

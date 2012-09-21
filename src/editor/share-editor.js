@@ -3,10 +3,12 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define([ "editor/editor", "editor/base-editor", "ui/user-data",
-          "text!layouts/share-editor.html", "util/social-media" ],
-  function( Editor, BaseEditor, UserData, LAYOUT_SRC, SocialMedia ) {
+          "text!layouts/share-editor.html", "util/social-media", "ui/widget/tooltip" ],
+  function( Editor, BaseEditor, UserData, LAYOUT_SRC, SocialMedia, ToolTip ) {
 
   Editor.register( "share-properties", LAYOUT_SRC, function( rootElement, butter, compiledLayout ) {
+    var TOOLTIP_NAME = "name-error-share-tooltip";
+
     var socialMedia = SocialMedia(),
         editorContainer = rootElement.querySelector( ".editor-container" ),
         saveContainer = rootElement.querySelector( ".save-container" ),
@@ -31,10 +33,10 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
 
     authorInput.value = butter.project.author === "Anonymous" || !butter.project.author ? "" : butter.project.author;
 
-    function onMouseOver() {
-      projectNameWrapper.removeEventListener( "mouseover", onMouseOver, false );
-      if ( tooltip ) {
-        projectNameWrapper.removeChild( tooltip );
+    function destroyToolTip() {
+      if ( tooltip && !tooltip.destroyed ) {
+        projectNameWrapper.removeEventListener( "mouseover", destroyToolTip, false );
+        tooltip.destroy();
       }
     }
 
@@ -152,12 +154,21 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       authorUpdateButton.classList.add( "disabled" );
 
       if ( !butter.project.name ) {
-        tooltip = userData.createErrorToolTip( projectNameWrapper, {
+
+        destroyToolTip();
+
+        projectNameWrapper.addEventListener( "mouseover", destroyToolTip, false );
+
+        ToolTip.create({
+          name: TOOLTIP_NAME,
           message: "Please give your project a name before saving",
           hidden: false,
           element: projectNameWrapper,
-          top: "33px"
-        }, onMouseOver );
+          top: "33px",
+          error: true
+        });
+
+        tooltip = ToolTip.get( TOOLTIP_NAME );
         return;
       }
 
