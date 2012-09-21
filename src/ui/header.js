@@ -8,6 +8,8 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
 
     options = options || {};
 
+    var TOOLTIP_NAME = "name-error-header-tooltip";
+
     var _this = this,
         _userData = new UserData( butter, options ),
         _rootElement = _userData.rootElement,
@@ -70,9 +72,11 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       });
     }
 
-    function onMouseOver() {
-      _projectTitle.removeEventListener( "mouseover", onMouseOver, false );
-      _projectTitle.removeChild( _noProjectNameToolTip );
+    function destroyToolTip() {
+      if ( _noProjectNameToolTip && !_noProjectNameToolTip.destroyed ) {
+        _projectTitle.removeEventListener( "mouseover", destroyToolTip, false );
+        _noProjectNameToolTip.destroy();
+      }
     }
 
     function prepare() {
@@ -105,6 +109,23 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       return true;
     }
 
+    function nameError() {
+      destroyToolTip();
+
+      _projectTitle.addEventListener( "mouseover", destroyToolTip, false );
+
+      ToolTip.create({
+        name: TOOLTIP_NAME,
+        message: "Please give your project a name before saving",
+        hidden: false,
+        element: _projectTitle,
+        top: "50px",
+        error: true
+      });
+
+      _noProjectNameToolTip = ToolTip.get( TOOLTIP_NAME );
+    }
+
     function onBlur() {
       var node = _projectTitle.querySelector( ".butter-project-name" );
 
@@ -114,12 +135,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       if ( checkProjectName() ) {
         _userData.save( publish );
       } else {
-        _noProjectNameToolTip = _userData.createErrorToolTip( _projectTitle, {
-          message: "Please give your project a name before saving",
-          hidden: false,
-          element: _projectTitle,
-          top: "43px"
-        }, onMouseOver );
+        nameError();
         butter.dispatch( "projectupdated" );
       }
       _projectTitle.replaceChild( _projectName, node );
@@ -132,12 +148,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
         login( prepare );
         return;
       } else {
-        _noProjectNameToolTip = _userData.createErrorToolTip( _projectTitle, {
-          message: "Please give your project a name before saving",
-          hidden: false,
-          element: _projectTitle,
-          top: "43px"
-        }, onMouseOver );
+        nameError();
       }
     }, false );
 

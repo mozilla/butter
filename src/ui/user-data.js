@@ -6,8 +6,8 @@
  * This file exposes various helper methods centered around user-data, such as logging in,
  * saving, and logging out.
  */
-define( [ "dialog/dialog", "util/lang", "ui/widget/tooltip", "text!layouts/header.html" ],
-  function( Dialog, Lang, ToolTip, HEADER_TEMPLATE ) {
+define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
+  function( Dialog, Lang, HEADER_TEMPLATE ) {
 
   return function( butter ) {
     var _this = this,
@@ -96,32 +96,6 @@ define( [ "dialog/dialog", "util/lang", "ui/widget/tooltip", "text!layouts/heade
       } else {
         execute();
       }
-    };
-
-    /*
-     * Method: createErrorToolTip
-     *
-     * Creates an error ToolTip for the specified element
-     *
-     * @param {DOMElement} element: the element in which to display the tooltip over
-     * @param {Object} options: An options object for the ToolTip that is to be created
-     * @param {Function} mouseOverListener: A callback function that is called when moused over the element passed in
-     * returns the ToolTip that was created
-     */
-    this.createErrorToolTip = function( element, options, mouseOverListener ) {
-      var tooltip;
-
-      element.removeEventListener( "mouseover", mouseOverListener, false );
-
-      if ( element.querySelector( ".tooltip-error" ) ) {
-        element.removeChild( element.querySelector( ".tooltip-error" ) );
-      }
-
-      tooltip = ToolTip.create( options );
-
-      tooltip.classList.add( "tooltip-error" );
-      element.addEventListener( "mouseover", mouseOverListener, false );
-      return tooltip;
     };
 
     this.logout = function( callback ) {
