@@ -58,13 +58,13 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
               trackRect = newTrack.view.element.getBoundingClientRect(),
               left = mousePosition[ 0 ] - trackRect.left,
               start = left / trackRect.width * newTrack.view.duration,
-              draggableType = droppedElement.getAttribute( "data-butter-draggable-type" );
+              draggableType = ( dropped.element ? dropped.element : dropped ).getAttribute( "data-butter-draggable-type" );
 
           if ( draggableType === "plugin" ) {
             newTrack.view.dispatch( "plugindropped", {
               start: start,
               track: newTrack,
-              type: droppedElement.getAttribute( "data-popcorn-plugin-type" )
+              type: dropped.getAttribute( "data-popcorn-plugin-type" )
             });
           } else if ( draggableType === "trackevent" ) {
             newTrack.view.dispatch( "trackeventdropped", {
