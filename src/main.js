@@ -18,7 +18,7 @@
             "dialog/dialog", "editor/editor", "ui/ui",
             "util/xhr", "util/lang", "util/tutorial",
             "text!default-config.json", "text!layouts/ua-warning.html",
-            "ui/widget/tooltip", "crashreporter",
+            "ui/widget/tooltip", "crashreporter", "core/project",
             "util/shims"                  // keep this at the end so it doesn't need a spot in the function signature
           ],
           function(
@@ -27,7 +27,7 @@
             Dialog, Editor, UI,
             XHR, Lang, Tutorial,
             DEFAULT_CONFIG_JSON, UA_WARNING_LAYOUT,
-            ToolTip, CrashReporter,
+            ToolTip, CrashReporter, Project,
             Shims                         // placeholder
           ){
 
@@ -102,13 +102,6 @@
       // Leave a reference on the instance to expose dialogs to butter users at runtime.
       // Especially good for letting people use/create dialogs without being in the butter core.
       _this.dialog = Dialog;
-
-      _this.project = {
-        id: null,
-        name: null,
-        data: null,
-        template: null,
-      };
 
       function checkMedia() {
         if ( !_currentMedia ) {
@@ -275,78 +268,6 @@
         }
         return undefined;
       }; //getTargetByType
-
-      /****************************************************************
-       * Project methods
-       ****************************************************************/
-      //importProject - Import project data
-      _this.importProject = function ( projectData ) {
-        var oldTarget,
-            targetData,
-            i, l;
-
-        if ( projectData.targets ) {
-          for ( i = 0, l = projectData.targets.length; i < l; ++i ) {
-            targetData = projectData.targets[ i ];
-            oldTarget = _this.getTargetByType( "elementID", targetData.element );
-            // Only add target if it's not already added.
-            if ( !oldTarget ) {
-              _this.addTarget( targetData );
-            }
-            else {
-              // If it was already added, just update its json.
-              oldTarget.json = targetData;
-            }
-          }
-        }
-
-        if ( projectData.media ) {
-          for ( i = 0, l = projectData.media.length; i < l; ++i ) {
-
-            var mediaData = projectData.media[ i ],
-                m = _this.getMediaByType( "target", mediaData.target );
-
-            if ( !m ) {
-              m = new Media();
-              m.json = mediaData;
-              _this.addMedia( m );
-            }
-            else {
-              m.json = mediaData;
-            }
-
-          } //for
-        } //if projectData.media
-      }; //importProject
-
-      //exportProject - Export project data
-      _this.exportProject = function () {
-        var exportJSONMedia = [];
-        for ( var m=0, lm=_media.length; m<lm; ++m ) {
-          exportJSONMedia.push( _media[ m ].json );
-        }
-        var projectData = {
-          targets: _this.serializeTargets(),
-          media: exportJSONMedia
-        };
-        return projectData;
-      };
-
-      _this.clearProject = function(){
-        var allTrackEvents = _this.orderedTrackEvents;
-
-        while( allTrackEvents.length > 0 ) {
-          allTrackEvents[ 0 ].track.removeTrackEvent( allTrackEvents[ 0 ] );
-        }
-        while( _targets.length > 0 ){
-          _targets[ 0 ].destroy();
-          _this.removeTarget( _targets[ 0 ] );
-        }
-        while( _media.length > 0 ){
-          _media[ 0 ].destroy();
-          _this.removeMedia( _media[ 0 ] );
-        }
-      };
 
       /****************************************************************
        * Media methods
@@ -772,6 +693,8 @@
       function attemptDataLoad( finishedCallback ) {
         var savedDataUrl;
 
+        var project = new Project( _this );
+
         // see if savedDataUrl is in the page's query string
         window.location.search.substring( 1 ).split( "&" ).forEach(function( item ){
           item = item.split( "=" );
@@ -781,10 +704,7 @@
         });
 
         function doImport( savedData ) {
-          _this.project.id = savedData.projectID;
-          _this.project.name = savedData.name;
-          _this.project.author = savedData.author;
-          _this.importProject( savedData );
+          project.import( savedData );
 
           if ( savedData.tutorial ) {
             Tutorial.build( _this, savedData.tutorial );
@@ -799,13 +719,13 @@
               if ( savedData ) {
                 doImport( savedData );
               }
-              finishedCallback();
+              finishedCallback( project );
             });
           }
           else {
             // otherwise, attempt import
             doImport( savedData );
-            finishedCallback();
+            finishedCallback( project );
           }
         });
 
@@ -819,8 +739,6 @@
 
         _config = _defaultConfig;
         _defaultTrackeventDuration = _config.value( "trackEvent" ).defaultDuration;
-
-        _this.project.template = _config.value( "name" );
 
         //prepare modules first
         var moduleCollection = new Modules( Butter, _this, _config ),
@@ -837,9 +755,25 @@
           preparePopcornScriptsAndCallbacks(function(){
             preparePage(function(){
               moduleCollection.ready(function(){
-                attemptDataLoad(function(){
-                  //fire the ready event
-                  _this.dispatch( "ready", _this );
+                // We look for stale data backups locally and prefer those.
+                // If there are none, we continue loading as normal. It's
+                // up to the user to do something with the data once we restore
+                // (i.e., we won't resotre again after this).
+                Project.checkForBackup( _this, function( project ) {
+                  function useProject( project ) {
+                    project.template = project.template || _config.value( "name" );
+                    _this.project = project;
+                    _this.chain( project, [ "projectchanged", "projectsaved" ] );
+
+                    // Fire the ready event
+                    _this.dispatch( "ready", _this );
+                  }
+
+                  if( project ) {
+                    useProject( project );
+                  } else {
+                    attemptDataLoad( useProject );
+                  }
                 });
               });
             });

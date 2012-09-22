@@ -35,7 +35,7 @@
           t4 = m2.addTrack();
           te1 = t4.addTrackEvent( { popcornOptions: { start: 2, end: 6 }, type: "test" } );
           butter.addTarget( { name: "beep" } );
-          exported = butter.exportProject();
+          exported = butter.project.export();
 
           createButterCore(function( secondButter ) {
             teEvents = tEvents = mEvents = 0;
@@ -49,7 +49,7 @@
               teEvents++;
             });
 
-            secondButter.importProject( exported );
+            secondButter.project.import( exported );
             allMedia = secondButter.media;
 
             ok( allMedia.length === 2, "right number of media objects" );

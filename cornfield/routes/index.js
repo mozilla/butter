@@ -83,7 +83,8 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
           return;
         }
 
-        res.json( { error: 'okay', project: doc } );
+        // Send back the newly added row's ID
+        res.json( { error: 'okay', projectId: doc.id } );
       });
     }
   });
