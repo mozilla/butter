@@ -135,6 +135,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       if ( checkProjectName() ) {
         _userData.save( publish );
       } else {
+        butter.project.name = "";
         nameError();
         butter.dispatch( "projectupdated" );
       }
