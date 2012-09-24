@@ -33,7 +33,7 @@ define( [ "core/eventmanager", "./toggler",
         _uiOptions = _uiConfig.value( "ui" ),
         _this = this;
 
-    EventManagerWrapper( _this );
+    new EventManagerWrapper( _this );
 
     this.contentStateLocked = false;
 
@@ -51,7 +51,7 @@ define( [ "core/eventmanager", "./toggler",
 
     if ( _uiOptions.enabled ) {
       if ( _uiOptions.onLeaveDialog ) {
-        UnloadDialog( butter );
+        new UnloadDialog( butter );
       }
       document.body.classList.add( "butter-header-spacing" );
       document.body.classList.add( "butter-tray-spacing" );
@@ -309,7 +309,7 @@ define( [ "core/eventmanager", "./toggler",
       _toggler.visible = true;
       if( _uiConfig.value( "ui" ).enabled !== false ){
         _this.header.attachToDOM();
-        MediaEditor( butter );
+        new MediaEditor( butter );
       }
     });
 

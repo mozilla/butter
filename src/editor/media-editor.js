@@ -86,7 +86,7 @@ define( [ "util/lang", "editor/editor", "util/uri", "ui/widget/textbox", "text!l
             oldValue = input.value;
           });
 
-          TextboxWrapper( input );
+          new TextboxWrapper( input );
         }());
 
         wrapper = __URL_INPUT_INNER_WRAPPER.cloneNode( true );
@@ -136,9 +136,9 @@ define( [ "util/lang", "editor/editor", "util/uri", "ui/widget/textbox", "text!l
       }
 
       // Wrap existing input boxes for click-to-select
-      TextboxWrapper( _newMediaInput );
-      TextboxWrapper( _alternateNewMediaInputA );
-      TextboxWrapper( _alternateNewMediaInputB );
+      new TextboxWrapper( _newMediaInput );
+      new TextboxWrapper( _alternateNewMediaInputA );
+      new TextboxWrapper( _alternateNewMediaInputB );
     }
 
     function clearNewMediaInputs() {
