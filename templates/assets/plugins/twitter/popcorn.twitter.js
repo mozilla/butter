@@ -4,6 +4,8 @@
 
   var CACHED_RESULTS = {};
 
+  var MAX_TWEETS = 150;
+
   Popcorn.plugin( "twitter", {
     manifest: {
       about: {
@@ -51,7 +53,8 @@
           type: "number",
           label: "Number of Tweets",
           "default": 10,
-          optional: true
+          optional: true,
+          maxTweets: MAX_TWEETS
         },
         transition: {
           elem: "select",
@@ -104,11 +107,8 @@
 
       if ( !numberOfTweets ) {
         numberOfTweets = options._natives.manifest.options.numberOfTweets[ "default" ];
-      } else if ( numberOfTweets === 0 ) {
-        numberOfTweets = 1;
-      } else if ( options.username && numberOfTweets > 20 ) {
-        // Requests for a specific user will only return a max of 20
-        numberOfTweets = 20;
+      } else if ( numberOfTweets > MAX_TWEETS ) {
+        numberOfTweets = MAX_TWEETS;
       }
 
       // safeguard against no search/username being provided
