@@ -88,7 +88,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
 
     };
 
-    BaseEditor( extendObject, butter, rootElement, events );
+    new BaseEditor( extendObject, butter, rootElement, events );
 
     extendObject.defaultLayouts = __defaultLayouts.cloneNode( true );
 

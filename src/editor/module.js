@@ -37,7 +37,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         _this = this,
         _logger = new Logger( butter.id );
 
-    EventManagerWrapper( _this );
+    new EventManagerWrapper( _this );
 
     ButterNamespace.Editor = Editor;
 
@@ -167,7 +167,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
           }
 
           LangUtils.applyTransitionEndListener( _editorAreaDOMRoot, onTransitionEnd );
-          
+
         }, "Show/Hide Editor", true );
 
       var editorsToLoad = [],
@@ -197,7 +197,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
             Editor.loadUrlSpecifiedLayouts( onModuleReady, butter.config.value( "baseDir" ) );
           }, function( e ) {
             _logger.log( "Couldn't load editor " + e.target.src );
-            
+
             if ( ++editorsLoaded === editorsToLoad.length ) {
               onModuleReady();
             }

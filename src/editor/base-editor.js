@@ -17,7 +17,7 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
    */
   return function( extendObject, butter, rootElement, events ) {
 
-    EventManagerWrapper( extendObject );
+    new EventManagerWrapper( extendObject );
 
     extendObject.butter = butter;
     extendObject.rootElement = rootElement;
