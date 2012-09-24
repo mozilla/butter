@@ -35,11 +35,6 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       top: "60px"
     });
 
-    // This is an easter egg to open a UI kit editor. Hurrah
-    _rootElement.querySelector( ".butter-logo" ).addEventListener( "dblclick", function( e ) {
-      butter.editor.openEditor( "ui-kit" );
-    }, false );
-
     _this.element = _rootElement;
     ToolTip.apply( _projectTitle );
 
