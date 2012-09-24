@@ -20,6 +20,7 @@ define( [ "util/lang" ],
         _media = media,
         _mouseDownPos,
         _currentMousePos,
+        _timelineMousePos,
         _scrollInterval = -1,
         _rect,
         _width = 0,
@@ -41,7 +42,7 @@ define( [ "util/lang" ],
 
       // If we can avoid re-setting position and visibility, then do so
       if( _lastTime !== currentTime || _lastScrollLeft !== scrollLeft || _lastScrollWidth !== scrollWidth ){
-        _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
+        setTimeTooltip();
 
         // To prevent some scrubber jittering (from viewport centering), pos is rounded before
         // being used in calculation to account for possible precision issues.
@@ -187,16 +188,20 @@ define( [ "util/lang" ],
     } //onMouseDown
 
     function onTimelineMouseMove( e ){
-      var mousePos = e.clientX - parentElement.offsetLeft;
+      _timelineMousePos = e.clientX - parentElement.offsetLeft;
 
-      if ( mousePos < 0 ) {
-        mousePos = 0;
-      } else if ( mousePos > _container.offsetWidth ) {
-        mousePos = _container.offsetWidth;
+      if ( _timelineMousePos < 0 ) {
+        _timelineMousePos = 0;
+      } else if ( _timelineMousePos > _container.offsetWidth ) {
+        _timelineMousePos = _container.offsetWidth;
       }
 
-      _timeTooltip.style.left = mousePos + "px";
-      _timeTooltip.innerHTML = util.secondsToSMPTE( ( mousePos + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration );
+      _timeTooltip.style.left = _timelineMousePos + "px";
+      setTimeTooltip();
+    }
+
+    function setTimeTooltip(){
+      _timeTooltip.innerHTML = util.secondsToSMPTE( ( _timelineMousePos + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration );
     }
 
     function onMouseOver( e ){
