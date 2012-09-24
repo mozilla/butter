@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
-  function( EventManagerWrapper, Scrollbars, ToolTip ) {
+define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip", "ui/widget/textbox" ],
+  function( EventManagerWrapper, Scrollbars, ToolTip, TextboxWrapper ) {
 
   /**
    * Class: BaseEditor
@@ -156,6 +156,19 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip" ],
         document.head.removeChild( _extraStyleTags[ x ] );
       }
       _extraStyleTags = [];
+    };
+
+    /**
+     * Member: wrapTextInputElement
+     *
+     * Force element to auto select the text of the element upon click.
+     *
+     * @param {DOMElement} element: Element that will be wrapped
+     * @param {Object} options: options that can be provided to customize functionality
+     *                   readOnly: Force input element to be read-only.
+     */
+    extendObject.wrapTextInputElement = function( element, options ) {
+      return TextboxWrapper( element, options );
     };
 
   };

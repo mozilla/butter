@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "util/lang", "editor/editor", "util/uri", "ui/widget/textbox", "text!layouts/media-editor.html" ],
-  function( LangUtils, Editor, Uri, TextboxWrapper, EDITOR_LAYOUT ) {
+define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.html" ],
+  function( LangUtils, Editor, Uri, EDITOR_LAYOUT ) {
 
   return function( butter ) {
 
@@ -29,7 +29,8 @@ define( [ "util/lang", "editor/editor", "util/uri", "ui/widget/textbox", "text!l
         _media = butter.currentMedia,
         __MAX_MEDIA_INPUTS = 4,
         _inputCount = 0,
-        _emptyInputs = 0;
+        _emptyInputs = 0,
+        _this;
 
     function updateButterMedia() {
       var urlInputs = _currentMediaWrapper.querySelectorAll( "input" ),
@@ -86,7 +87,7 @@ define( [ "util/lang", "editor/editor", "util/uri", "ui/widget/textbox", "text!l
             oldValue = input.value;
           });
 
-          TextboxWrapper( input );
+          _this.wrapTextInputElement( input );
         }());
 
         wrapper = __URL_INPUT_INNER_WRAPPER.cloneNode( true );
@@ -136,9 +137,9 @@ define( [ "util/lang", "editor/editor", "util/uri", "ui/widget/textbox", "text!l
       }
 
       // Wrap existing input boxes for click-to-select
-      TextboxWrapper( _newMediaInput );
-      TextboxWrapper( _alternateNewMediaInputA );
-      TextboxWrapper( _alternateNewMediaInputB );
+      _this.wrapTextInputElement( _newMediaInput );
+      _this.wrapTextInputElement( _alternateNewMediaInputA );
+      _this.wrapTextInputElement( _alternateNewMediaInputB );
     }
 
     function clearNewMediaInputs() {
@@ -278,7 +279,9 @@ define( [ "util/lang", "editor/editor", "util/uri", "ui/widget/textbox", "text!l
     Editor.register( "media-editor", null, function( rootElement, butter ) {
       rootElement = _parentElement;
 
-      Editor.BaseEditor( this, butter, rootElement, {
+      _this = this;
+
+      Editor.BaseEditor( _this, butter, rootElement, {
         open: function( parentElement ) {
           clearCurrentMediaList();
           setup();
