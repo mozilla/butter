@@ -10,7 +10,7 @@
 
   document.addEventListener( "DOMContentLoaded", function(){
 
-    var b = new Butter({
+    Butter.init({
       config: "cornfield-test-config.json",
         ready: function( butter ) {
           var filename = "test" + Date.now(),

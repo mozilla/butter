@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/eventmanager" ], function( EventManagerWrapper ){
+define( [ "core/eventmanager" ], function( EventManager ) {
 
   var VERTICAL_SIZE_REDUCTION_FACTOR = 3,
       ACTIVE_CLASS = "butter-scollbar-active";
@@ -18,7 +18,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
         _mousePos = 0,
         _this = this;
 
-    EventManagerWrapper( _this );
+    EventManager.extend( _this );
 
     _element.className = "butter-scroll-bar butter-scroll-bar-v";
     _handle.className = "butter-scroll-handle";
@@ -142,7 +142,7 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
         _mousePos = 0,
         _this = this;
 
-    EventManagerWrapper( _this );
+    EventManager.extend( _this );
 
     _element.className = "butter-scroll-bar butter-scroll-bar-h";
     _handle.className = "butter-scroll-handle";

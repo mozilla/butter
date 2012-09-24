@@ -92,7 +92,7 @@ define( [], function(){
 
   }
 
-  return function( media, statusArea ){
+  return function Status( media, statusArea ) {
 
     var _media = media,
         _statusContainer = statusArea.querySelector( ".status-container" ),

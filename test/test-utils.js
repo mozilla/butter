@@ -4,7 +4,7 @@ window._testAfterCallback = function(){};
 
 function createButterCore( callback ){
 
-  Butter({
+  Butter.init({
     config: "../test-config-core.json",
     debug: false,
     ready: function( butter ){
@@ -14,7 +14,7 @@ function createButterCore( callback ){
 }
 
 function createButterModule( callback ){
-  Butter({
+  Butter.init({
     config: "../test-config-module.json",
     debug: false,
     ready: function( butter ){

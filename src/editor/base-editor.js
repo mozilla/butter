@@ -3,7 +3,7 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip", "ui/widget/textbox" ],
-  function( EventManagerWrapper, Scrollbars, ToolTip, TextboxWrapper ) {
+  function( EventManager, Scrollbars, ToolTip, TextboxWrapper ) {
 
   /**
    * Class: BaseEditor
@@ -15,9 +15,9 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip", "ui/widge
    * @param {DOMElement} rootElement: The root element to which the editor's content will be attached
    * @param {Object} events: Events such as 'open' and 'close' can be defined on this object to be called at the appropriate times
    */
-  return function( extendObject, butter, rootElement, events ) {
+  function BaseEditor( extendObject, butter, rootElement, events ) {
 
-    EventManagerWrapper( extendObject );
+    EventManager.extend( extendObject );
 
     extendObject.butter = butter;
     extendObject.rootElement = rootElement;
@@ -168,9 +168,13 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip", "ui/widge
      *                   readOnly: Force input element to be read-only.
      */
     extendObject.wrapTextInputElement = function( element, options ) {
-      return TextboxWrapper( element, options );
+      return TextboxWrapper.applyTo( element, options );
     };
 
+  }
+
+  return {
+    extend: BaseEditor
   };
 
 });

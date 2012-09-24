@@ -1,6 +1,6 @@
-define([], function(){
+define([], function() {
 
-  return function( butter ){
+  return function( butter ) {
 
     var changed = false,
         events = [

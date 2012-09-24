@@ -4,7 +4,7 @@
 
 define( [ "core/logger", "core/eventmanager", "util/dragndrop",
           "util/lang", "text!layouts/trackevent.html" ],
-  function( Logger, EventManagerWrapper, DragNDrop,
+  function( Logger, EventManager, DragNDrop,
             LangUtils, TRACKEVENT_LAYOUT ) {
 
   var TRACKEVENT_MIN_WIDTH = 50;
@@ -30,7 +30,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         _onDrag,
         _this = this;
 
-    EventManagerWrapper( _this );
+    EventManager.extend( _this );
 
     function resetContainer() {
       if ( !_trackEvent.track || !_trackEvent.track._media ) {

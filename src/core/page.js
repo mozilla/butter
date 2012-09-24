@@ -2,13 +2,13 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManagerWrapper ) {
+define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
   return function( loader, config ) {
 
     var PLAYER_TYPE_URL = "{popcorn-js}/players/{type}/popcorn.{type}.js";
 
-    EventManagerWrapper( this );
+    EventManager.extend( this );
 
     this.scrape = function() {
       var rootNode = document.body,

@@ -8,7 +8,7 @@
  * Provides dialog functionality to Butter
  */
 define( [ "util/lang", "core/eventmanager", "./modal" ],
-  function( LangUtils, EventManagerWrapper, Modal ){
+  function( LangUtils, EventManager, Modal ){
 
   var __dialogs = {},
       __openDialogs = {},
@@ -313,8 +313,8 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
       };
 
       // Give both namespaces Event capabilities.
-      EventManagerWrapper( _internal );
-      EventManagerWrapper( _external );
+      EventManager.extend( _internal );
+      EventManager.extend( _external );
 
       // Register the "default-close" activity for immediate use.
       _internal.registerActivity( "default-close", function(){

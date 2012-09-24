@@ -212,7 +212,7 @@
     _this.scrollbar.update();
   }
 
-  Editor.TrackEventEditor( _this, butter, rootElement, {
+  Editor.TrackEventEditor.extend( _this, butter, rootElement, {
     open: function( parentElement, trackEvent ) {
       _this.applyExtraHeadTags( compiledLayout );
       _trackEvent = trackEvent;

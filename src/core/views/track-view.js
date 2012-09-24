@@ -3,7 +3,7 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
-  function( Logger, EventManagerWrapper, DragNDrop ) {
+  function( Logger, EventManager, DragNDrop ) {
 
   return function( id, track ) {
 
@@ -16,7 +16,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
         _parent,
         _droppable;
 
-    EventManagerWrapper( _this );
+    EventManager.extend( _this );
 
     _element.className = "butter-track";
 

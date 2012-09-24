@@ -18,16 +18,18 @@
         return true;
     }
 
-    var Butter = function() {
+    var Butter = {};
+
+    Butter.init = function() {
       if ( !Butter.__waiting ) {
         Butter.__waiting = [];
-      } //if
+      }
       Butter.__waiting.push( arguments );
     };
 
     if ( !window.Butter ) {
       window.Butter = Butter;
-    } //if
+    }
 
     if ( has( 'source-config' ) ) {
         // Get the location of the butter source.
@@ -42,7 +44,7 @@
 
         if ( !window.require ) {
           document.write( '<script data-main="' + path + 'config" data-butter-exclude="true" src="' + path + '../external/require/require.js"></' + 'script>' );
-        } //if
+        }
     }
 
 }());

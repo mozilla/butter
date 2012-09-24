@@ -1,7 +1,11 @@
 (function( global, $ ) {
   var plugins = {};
 
-  global.EditorHelper = function( butter ) {
+  var EditorHelper = function() {
+    throw "Do not use EditorHelper in this mannger. Use EditorHelper.init instead.";
+  };
+
+  EditorHelper.init = function( butter ) {
 
     /**
      * Member: draggable
@@ -165,8 +169,10 @@
     butter.listen( "trackeventupdated", _updateFunction );
   };
 
-  global.EditorHelper.addPlugin = function( plugin, callback ) {
+  EditorHelper.addPlugin = function( plugin, callback ) {
     plugins[ plugin ] = callback;
   };
+
+  global.EditorHelper = EditorHelper;
 
 }( window, window.jQuery ));

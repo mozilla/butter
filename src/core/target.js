@@ -4,7 +4,7 @@
 
 (function() {
   define( [ "core/logger", "core/eventmanager", "ui/page-element" ],
-          function( Logger, EventManagerWrapper, PageElement ) {
+          function( Logger, EventManager, PageElement ) {
 
     var __guid = 0;
 
@@ -18,7 +18,7 @@
           _pageElement,
           _this = this;
 
-      EventManagerWrapper( _this );
+      EventManager.extend( _this );
 
       _element = document.getElementById( options.element );
 

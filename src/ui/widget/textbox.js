@@ -21,44 +21,46 @@
  * Once the element receives `blur` the handlers are added back.
  **/
 
-define( [], function(){
+define( [], function() {
 
-  function __highlight( e ){
+  function __highlight( e ) {
     var input = e.target;
     input.select();
     input.removeEventListener( "focus", __highlight, false );
   }
 
-  function __ignoreMouseUp( e ){
+  function __ignoreMouseUp( e ) {
     e.preventDefault();
     var input = e.target;
     input.removeEventListener( "mouseup", __ignoreMouseUp, false );
   }
 
-  function __addListeners( input ){
+  function __addListeners( input ) {
     input.addEventListener( "focus", __highlight, false );
     input.addEventListener( "mouseup", __ignoreMouseUp, false );
   }
 
-  return function( input, options ){
-    if( !(input && (
-            input.type === "text" ||
-            input.type === "textarea" ||
-            input.type === "url" )
-         ) ){
-      throw "Textbox: Expected an input element of type text";
+  return {
+    applyTo: function( input, options ) {
+      if ( !(input && (
+              input.type === "text" ||
+              input.type === "textarea" ||
+              input.type === "url" )
+           ) ) {
+        throw "Textbox: Expected an input element of type text";
+      }
+
+      options = options || {};
+      input.readOnly = !!options.readOnly;
+
+      input.addEventListener( "blur", function( e ) {
+          __addListeners( e.target );
+      }, false);
+
+      __addListeners( input );
+
+      return input;
     }
-
-    options = options || {};
-    input.readOnly = !!options.readOnly;
-
-    input.addEventListener( "blur", function( e ){
-        __addListeners( e.target );
-    }, false);
-
-    __addListeners( input );
-
-    return input;
   };
 
 });

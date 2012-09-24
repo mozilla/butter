@@ -1,6 +1,6 @@
 document.addEventListener( "DOMContentLoaded", function( e ){
 
-  Butter({
+  Butter.init({
     config: "default-config.json",
     ready: function( butter ){
       var media = butter.media[ 0 ];

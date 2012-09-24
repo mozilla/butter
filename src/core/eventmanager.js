@@ -307,6 +307,8 @@ define( [], function(){
     return object;
   }
 
-  return EventManagerWrapper;
+  return {
+    extend: EventManagerWrapper
+  };
 
 });
