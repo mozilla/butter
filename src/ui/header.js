@@ -129,6 +129,8 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     function onBlur() {
       var node = _projectTitle.querySelector( ".butter-project-name" );
 
+      node.removeEventListener( "blur", onBlur, false );
+
       _projectName.textContent = node.value || _projectTitlePlaceHolderText;
       butter.project.name = _projectName.textContent;
 
@@ -139,7 +141,6 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
         butter.dispatch( "projectupdated" );
       }
       _projectTitle.replaceChild( _projectName, node );
-      node.removeEventListener( "blur", onBlur, false );
       _projectTitle.addEventListener( "click", projectNameClick, false );
     }
 
