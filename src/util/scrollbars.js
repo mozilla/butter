@@ -116,7 +116,6 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       outerElement.scrollTop = ( _scrollHeight - _elementHeight ) * p;
     }, false);
 
-    window.addEventListener( "resize", _this.update, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
 
     _this.update();
@@ -239,7 +238,6 @@ define( [ "core/eventmanager" ], function( EventManagerWrapper ){
       outerElement.scrollLeft = ( _scrollWidth - _elementWidth ) * p;
     }, false);
 
-    window.addEventListener( "resize", _this.update, false );
     _handle.addEventListener( "mousedown", onMouseDown, false );
 
     _this.update();

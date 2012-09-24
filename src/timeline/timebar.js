@@ -109,8 +109,6 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
     });
     _tracksContainer.element.addEventListener( "scroll", drawTicks, false );
 
-    window.addEventListener( "resize", drawTicks, false );
-
     this.update = function() {
       drawTicks();
     };

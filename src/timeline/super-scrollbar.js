@@ -364,10 +364,10 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       updateView();
     });
 
-    window.addEventListener( "resize", function() {
+    _this.resize = function() {
       _this.update();
       _boundsChangedCallback( _viewPort.offsetLeft / _rect.width, _viewPort.offsetWidth / _rect.width );
-    });
+    };
 
     Object.defineProperties( this, {
       element: {
