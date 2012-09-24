@@ -99,6 +99,11 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         return;
       }
 
+      if ( !butter.project.id ) {
+        displaySave();
+        return;
+      }
+
       embedSize.disabled = false;
       authorInput.disabled = false;
       saveContainer.classList.add( "hide-container" );
