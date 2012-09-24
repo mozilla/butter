@@ -27,7 +27,7 @@ define(['util/xhr'], function(XHR) {
     this.login = function(callback) {
       navigator.id.get(function(assertion) {
         if (assertion) {
-          XHR.post(server + "/browserid/verify",
+          XHR.post(server + "/persona/verify",
             { assertion: assertion },
             function() {
               if (this.readyState === 4) {
@@ -125,7 +125,7 @@ define(['util/xhr'], function(XHR) {
     };
 
     this.logout = function(callback) {
-      XHR.get(server + "/browserid/logout", function() {
+      XHR.post(server + "/persona/logout", null, function() {
         email = "";
         if (this.readyState === 4) {
           var response;

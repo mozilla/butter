@@ -63,8 +63,8 @@
         }
       }
     },
-    "express-browserid": {
-      "version": "0.0.2"
+    "express-persona": {
+      "version": "0.0.5"
     },
     "config": {
       "version": "0.4.16",
