@@ -121,6 +121,8 @@
           text = newlineToBreak( options.text ),
           container = options._container = document.createElement( "div" ),
           innerContainer = document.createElement( "div" ),
+          innerSpan = document.createElement( "span" ),
+          innerDiv = document.createElement( "div" ),
           fontSheet,
           fontDecorations = options.fontDecorations || options._natives.manifest.options.fontDecorations[ "default" ],
           position = options.position || options._natives.manifest.options.position[ "default" ],
@@ -149,8 +151,11 @@
       options._container.classList.add( "off" );
 
       // Handle all custom fonts/styling
-      innerContainer.innerHTML = "<span>" + text + "</span>";
-      container.style.zIndex = +options.zindex;
+      innerDiv.innerHTML = text;
+      innerDiv.style.zIndex = +options.zindex;
+      
+      innerSpan.appendChild( innerDiv );
+      innerContainer.appendChild( innerSpan );
       container.appendChild( innerContainer );
       target.appendChild( container );
 
