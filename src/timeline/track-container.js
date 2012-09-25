@@ -77,8 +77,8 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
       }
     });
 
-    this.setScrollbars = function( hScrollbar, vScrollbar ) {
-      _vScrollbar = vScrollbar;
+    this.setScrollbars = function( scrollbars ) {
+      _vScrollbar = scrollbars.vertical;
       _vScrollbar.update();
     };
 
