@@ -15,7 +15,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
   function MediaInstance( butter, media ) {
 
-    var _bounds;
+    var _bounds = DEFAULT_BOUNDS;
 
     function setContainerBounds( left, right ) {
       if ( _bounds[0] !== left || _bounds[1] !== right ) {
