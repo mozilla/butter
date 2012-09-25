@@ -4,7 +4,7 @@
 
 define( [ "core/eventmanager", "./toggler",
           "./header", "./unload-dialog",
-          "./tray", "../editor/media-editor" ],
+          "./tray", "../editor/media-editor", "editor/ui-kit" ],
   function( EventManagerWrapper, Toggler,
             Header, UnloadDialog,
             Tray, MediaEditor ){
@@ -326,6 +326,11 @@ define( [ "core/eventmanager", "./toggler",
     });
 
     _this.dialogDir = butter.config.value( "dirs" ).dialogs || "";
+
+    // This is an easter egg to open a UI kit editor. Hurrah
+    _this.showUIKit = function() {
+      butter.editor.openEditor( "ui-kit" );
+    };
 
   } //UI
 
