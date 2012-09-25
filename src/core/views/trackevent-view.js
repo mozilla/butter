@@ -30,13 +30,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
     EventManagerWrapper( _this );
 
-    function toggleHandles( state ) {
-      if ( _parent ) {
-        _handles[ 0 ].style.visibility = state ? "visible" : "hidden";
-        _handles[ 1 ].style.visibility = state ? "visible" : "hidden";
-      }
-    }
-
     function resetContainer() {
       if ( !_trackEvent.track || !_trackEvent.track._media ) {
         return;
@@ -197,7 +190,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
           }
 
           if( _resizable ){
-            toggleHandles( false );
             _resizable.destroy();
             _resizable = null;
             _handles = null;
@@ -262,12 +254,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                 _handles = _element.querySelectorAll( ".handle" );
                 if( _handles && _handles.length === 2 ){
                   _element.addEventListener( "mouseover", function( e ){
-                    toggleHandles( true );
                   }, false );
                   _element.addEventListener( "mouseout", function( e ){
-                    toggleHandles( false );
                   }, false );
-                  toggleHandles( false );
+
                 }
               }
 
