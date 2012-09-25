@@ -104,6 +104,10 @@ define( [ "util/lang", "editor/editor", "util/uri", "ui/widget/textbox", "text!l
 
         _currentMediaWrapper.appendChild( wrapper );
         _inputCount++;
+
+        if ( _inputCount === __MAX_MEDIA_INPUTS ) {
+          _addAlternateSourceBtn.classList.add( "butter-disabled" );
+        }
     }
 
     function clearCurrentMediaList() {
