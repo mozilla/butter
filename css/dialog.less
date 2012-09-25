@@ -2,263 +2,138 @@
 * DIALOGS
 */
 
-.butter-dialog {
-  position: relative;
-  .gradient( "vertical", #a5a5a5, #727272, true );
+@_overlayOpacity: 0.75; // How dark is the overlay?
+@_dialogWidth: 600px; // Width of dialog
+@_dialogPadding: 25px; // Inner padding
+@_dialogTopMargin: 100px; // How far should the dialog be from the top of the window?
 
-  .hbox {
-    display: box;
-    .boxOrient(horizontal);
-    .boxAlign(stretch);
+.butter-modal-overlay {
+  z-index: @MODAL_Z_INDEX;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba( 0, 0, 0, @_overlayOpacity );
+  opacity: 0;
+  &.fade-in {
+    opacity: 1;
+    .transition( opacity 0.3s );
   }
-  .vbox {
-    display: box;
-    .boxOrient(vertical);
-    .boxAlign(stretch);
+
+}
+
+.butter-dialog {
+  font-size: 14px;
+  line-height: 1.4;
+  color: @baseText;
+  position: relative;
+  width: @_dialogWidth;
+  padding: @_dialogPadding;
+  margin: @_dialogTopMargin auto;
+  background: #FFF;
+  border-radius: 2px;
+  box-shadow: 0 10px 10px -10px #000;
+  .box-sizing( border-box );
+
+  &.small {
+    width: 330px;
+    text-align: center;
   }
+
   .close-button {
     position: absolute;
     top: 10px;
     right: 10px;
-    width: 10px;
-    height: 20px;
-    display: inline-block;
-    padding: 4px 10px 4px;
-    margin-bottom: 0;
-    font-size: 13px;
-    line-height: 18px;
-    color: #333333;
-    text-align: center;
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-    vertical-align: middle;
     cursor: pointer;
-    background-color: #f5f5f5;
-    background-image: url("../resources/glyphicons-halflings.png"), -moz-linear-gradient(top, #ffffff, #e6e6e6);
-    background-image: url("../resources/glyphicons-halflings.png"), -ms-linear-gradient(top, #ffffff, #e6e6e6);
-    background-image: url("../resources/glyphicons-halflings.png"), -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
-    background-image: url("../resources/glyphicons-halflings.png"), -webkit-linear-gradient(top, #ffffff, #e6e6e6);
-    background-image: url("../resources/glyphicons-halflings.png"), -o-linear-gradient(top, #ffffff, #e6e6e6);
-    background-image: url("../resources/glyphicons-halflings.png"), linear-gradient(top, #ffffff, #e6e6e6);
-    background-position: -304px 8px, 0 0;
-    background-repeat: no-repeat;
-    border-color: #e6e6e6 #e6e6e6 #bfbfbf;
-    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-    border: 1px solid #cccccc;
-    border-bottom-color: #b3b3b3;
-    border-radius: 4px;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
-  }
-  .close-button {
-    &:active,
-    &.active,
-    &.disabled,
-    &:focus,
-    &[disabled] {
-       box-shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
-    }
-  }
-  .error {
-    display: none;
-    position: absolute;
-    width: 100%;
-    bottom: 42px;
-    height: 20px;
-    text-align: center;
-    color: #900;
-    z-index: 0;
-  }
-  &[data-error] {
-    .error {
-      display: block;
-    }
-    .container {
-      margin-bottom: 65px;
-    }
-  }
-  .center {
-    -webkit-box-pack: center;
-    -ms-box-pack: center;
-    -moz-box-pack: center;
-    box-pack: center;
-  }
-  .container {
-    position: absolute;
-    bottom: 0;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: 45px;
-    .transition(margin-bottom 0.5s);
-    z-index: 1;
-  }
-  .content {
-    width: 100%;
-    height: 100%;
-  }
-  .buttons {
-    position: absolute;
-    width: 100%;
-    bottom: 2px;
-    height: 35px;
-    text-align: center;
-  }
-  .main-textarea {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    resize: none;
-  }
-  h1 {
-    color: #fff;
-    line-height: 40px;
-    height: 40px;
-    width: 100%;
-    text-align: center;
-  }
-  > h1 {
-    position: absolute;
-    margin: 0;
-  }
-  .content {
-    > h1{
-    }
-  }
-  button {
-    margin: 0 5px 5px 5px;
-    height: 30px;
-    display: inline-block;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    min-width: 100px;
-  }
-  .json-export {
-    display: none;
-  }
-  .better {
-    display: none;
-    color: #fb1121;
-  }
-  .name-input {
-    width: 100%;
-  }
-  .project-list {
-    width: 100%;
-  }
-  &.share {
-    .url {
-      width: 100%;
-      text-align: center;
-      color: #fff;
-      font: 15px 'MetaBold';
-    }
-  }
-}
-
-.butter-dialog-button {
-  display: inline-block;
-  padding: 4px 10px 4px;
-  margin-bottom: 0;
-  font-size: 13px;
-  line-height: 18px;
-  color: #333333;
-  text-align: center;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-  vertical-align: middle;
-  cursor: pointer;
-  .gradient( "vertical", #FFF, #E6E6E6, true );
-  border-color: #e6e6e6 #e6e6e6 #bfbfbf;
-  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
-  border: 1px solid #cccccc;
-  border-bottom-color: #b3b3b3;
-  border-radius: 4px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
-
-  &:hover,
-  &:active,
-  &.active,
-  &.disabled,
-  &[disabled] {
-    background-color: #e6e6e6;
-  }
-  &:active,
-  &.active {
-    background-color: #cccccc;
-  }
-  &:hover {
-    color: #333333;
-    text-decoration: none;
-    background-color: #e6e6e6;
-    background-position: 0 -15px;
-    .transition(background-position 0.1s linear);
-  }
-  &:focus {
-    outline: thin dotted #333;
-    outline: 5px auto -webkit-focus-ring-color;
-    outline-offset: -2px;
-  }
-  &.active,
-  &:active {
-    background-color: #d9d9d9;
-    background-image: none;
-    outline: 0;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,.15), 0 1px 2px rgba(0,0,0,.05);
-  }
-  &.disabled,
-  &[disabled] {
-    cursor: default;
-    background-color: #e6e6e6;
-    background-image: none;
-    opacity: 0.65;
-    box-shadow: none;
-  }
-}
-
-.butter-modal-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  
-  .layer {
-    z-index: 2140000100;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba( 0, 0, 0, 0.7 );
-    position: fixed;
-    opacity: 0;
-    
-    .butter-dialog {
-      width: 60%;
-      height: 60%;
-      margin: 5% 20%;
-      background-color: #FFF;
-      border: 3px solid #FFF;
-      border-radius: 6px;
-      &.small {
-        height: 20%;
-      }
-      &.fade-in {
-        opacity: 1;
-        .transition(opacity 0.5s);
-      }
-    }
-    &.fade-in {
+    opacity: 0.5;
+    &:hover {
       opacity: 1;
-      .transition(opacity 0.5s);
-    }
-    &.behind-timeline {
-      z-index: @TRAY_Z_INDEX - 100;
     }
   }
+
+  .butter-dialog-title {
+    margin: 0 0 10px 0;
+  }
+
+  .butter-form {
+    margin-bottom: 10px;
+    textarea {
+      padding: 10px;
+      min-height: 150px;
+    }
+  }
+
+}
+
+.butter-feedback-form {
+  padding: 0;
+  background: lighten( #EEE, 3% );
+  font-size: 13px;
+  .butter-dialog-title {
+    border-bottom: 1px solid #CCC;
+    .gradient( "vertical", #FFF, #EEE );
+    box-shadow: 0 1px #FFF;
+    border-radius: 3px 3px 0 0;
+    padding: 10px 35px;
+    font-size: 18px;
+    margin: 0;
+    .icon-info-sign {
+      opacity: 0.2;
+      margin: 3px 0 0 3px;
+      cursor: pointer;
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+    p {
+      font-weight: normal;
+      font-size: 13px;
+    }
+  }
+  .butter-logo {
+    position: absolute;
+    top: -35px;
+    left: -36px;
+    width: 65px;
+  }
+  .butter-form {
+    padding: 8px 0;
+    label {
+      margin-bottom: 10px;
+    }
+    textarea {
+      font-size: 11px;
+      font-family: menlo, mono;
+      box-shadow: 0 1px 0 #FFF;
+      &:focus {
+        box-shadow: inset 0 2px 4px -2px #CCC,
+        0 1px 0 #FFF;
+        border-color: #AAA;
+        .transition( all 0.5s ease );
+      }
+    }
+  }
+  strong {
+    color: @red;
+  }
+  .butter-btn {
+    padding: 10px 20px;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+}
+
+.dialog-hidden {
+  display: none;
+}
+
+.ticket-icon {
+  display: block;
+  float: left;
+  margin-right: 15px;
+  height: 50px;
+  width: 50px;
+  background: url( "/resources/icons/ticket.png" ) top center no-repeat;
 }

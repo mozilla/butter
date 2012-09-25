@@ -13,27 +13,10 @@ define([ "text!dialog/dialogs/track-data.html", "dialog/dialog" ],
 
     var data = track.json;
 
-    dialog.listen( "error", function ( e ) {
-      dialog.showError( "Invalid JSON" );
-    });
-
-    dialog.registerActivity( "update", function ( e ){
-      dialog.hideError();
-      dialog.send( "submit", trackData.value );
-    });
-
-    dialog.assignButton( ".update", "update" );
-
     trackName.innerHTML = data.name;
     trackData.value = JSON.stringify( data );
     dialog.enableCloseButton();
-    dialog.enableElements( ".update" );
     dialog.assignEscapeKey( "default-close" );
-    dialog.assignEnterKey( "update" );
-    trackData.removeAttribute( "readonly" );
-    trackData.addEventListener( "keyup", function ( e ) {
-      dialog.hideError();
-    }, false );
 
   });
 });
