@@ -61,7 +61,6 @@ define( [ "core/eventmanager" ], function( EventManager ) {
         _handle.removeEventListener( "mousedown", onMouseDown, false );
         _handle.classList.add( ACTIVE_CLASS );
       }
-      e.preventDefault();
     }
 
     function setHandlePosition() {
@@ -167,6 +166,7 @@ define( [ "core/eventmanager" ], function( EventManager ) {
     }
 
     function onMouseMove( e ){
+      e.preventDefault();
       var diff = e.pageX - _mousePos;
       diff = Math.max( 0, Math.min( diff, _elementWidth - _handleWidth ) );
       _handle.style.left = diff + "px";
@@ -183,7 +183,6 @@ define( [ "core/eventmanager" ], function( EventManager ) {
         window.addEventListener( "mousemove", onMouseMove, false );
         _handle.removeEventListener( "mousedown", onMouseDown, false );
       }
-      e.preventDefault();
     }
 
     function setHandlePosition(){

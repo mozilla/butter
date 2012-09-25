@@ -140,10 +140,12 @@
         container.classList.add( "text-custom" );
         container.style.left = options.left + "%";
         container.style.top = options.top + "%";
+        container.style.zIndex = +options.zindex;
       }
       else {
         container.classList.add( "text-fixed" );
         innerContainer.classList.add( position );
+        innerDiv.style.zIndex = +options.zindex;
       }
 
       // Add transition class
@@ -152,7 +154,6 @@
 
       // Handle all custom fonts/styling
       innerDiv.innerHTML = text;
-      innerDiv.style.zIndex = +options.zindex;
       
       innerSpan.appendChild( innerDiv );
       innerContainer.appendChild( innerSpan );

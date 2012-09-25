@@ -151,7 +151,6 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       return;
     }
     __draggedOnce = false;
-    e.preventDefault();
     e.stopPropagation();
     window.addEventListener( "mousemove", onDragged, false );
     window.addEventListener( "mouseup", onMouseUp, false );
@@ -290,6 +289,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       }
 
       function onMouseMove( e ){
+        e.preventDefault();
         mousePosition = e.clientX;
         if( _updateInterval === -1 ){
           _updateInterval = setInterval( update, SCROLL_INTERVAL );
@@ -425,7 +425,6 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         _rememberedDraggables = [];
 
     function onDrop( e ) {
-      e.preventDefault();
       e.stopPropagation();
 
       if( _hoverClass ){
