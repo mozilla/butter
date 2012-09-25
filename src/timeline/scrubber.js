@@ -9,7 +9,7 @@ define( [ "util/lang" ],
       SCROLL_DISTANCE = 20,
       MOUSE_SCRUBBER_PIXEL_WINDOW = 3;
 
-  return function( butter, parentElement, media, tracksContainer ){
+  return function( butter, parentElement, media, tracksContainer ) {
     var _container = parentElement.querySelector( ".time-bar-scrubber-container" ),
         _node = _container.querySelector( ".time-bar-scrubber-node" ),
         _timeTooltip = _container.querySelector( ".butter-time-tooltip" ),
@@ -79,7 +79,7 @@ define( [ "util/lang" ],
       _lastScrollWidth = scrollWidth;
     }
 
-    function onMouseUp( e ){
+    function onMouseUp( e ) {
       _seekMouseUp = true;
 
       _timeTooltip.classList.remove( "tooltip-no-transition-on" );
@@ -100,9 +100,9 @@ define( [ "util/lang" ],
       window.removeEventListener( "mousemove", onMouseMove, false );
     } //onMouseUp
 
-    function scrollTracksContainer( direction ){
+    function scrollTracksContainer( direction ) {
       if( direction === "right" ){
-        _scrollInterval = setInterval(function(){
+        _scrollInterval = setInterval(function() {
           if( _currentMousePos < _rect.right - MOUSE_SCRUBBER_PIXEL_WINDOW ){
             clearInterval( _scrollInterval );
             _scrollInterval = -1;
@@ -116,7 +116,7 @@ define( [ "util/lang" ],
         }, SCROLL_INTERVAL );
       }
       else{
-        _scrollInterval = setInterval(function(){
+        _scrollInterval = setInterval(function() {
           if( _currentMousePos > _rect.left + MOUSE_SCRUBBER_PIXEL_WINDOW ){
             clearInterval( _scrollInterval );
             _scrollInterval = -1;
@@ -131,13 +131,13 @@ define( [ "util/lang" ],
       }
     } //scrollTracksContainer
 
-    function evalMousePosition(){
+    function evalMousePosition() {
       var diff = _currentMousePos - _mouseDownPos;
       diff = Math.max( 0, Math.min( diff, _width ) );
       _media.currentTime = ( diff + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration;
     } //evalMousePosition
 
-    function onMouseMove( e ){
+    function onMouseMove( e ) {
       _currentMousePos = e.pageX;
 
       if( _scrollInterval === -1 ){
@@ -154,7 +154,7 @@ define( [ "util/lang" ],
       setNodePosition();
     } //onMouseMove
 
-    function onSeeked( e ){
+    function onSeeked( e ) {
       _seekCompleted = true;
 
       _media.unlisten( "mediaseeked", onSeeked );
@@ -164,7 +164,7 @@ define( [ "util/lang" ],
       }
     }
 
-    function onScrubberMouseDown( e ){
+    function onScrubberMouseDown( e ) {
       _mouseDownPos = e.pageX - _node.offsetLeft;
 
       if( _isPlaying ){
@@ -187,7 +187,7 @@ define( [ "util/lang" ],
       window.addEventListener( "mouseup", onMouseUp, false );
     } //onMouseDown
 
-    function onTimelineMouseMove( e ){
+    function onTimelineMouseMove( e ) {
       _timelineMousePos = e.clientX - parentElement.offsetLeft;
 
       if ( _timelineMousePos < 0 ) {
@@ -200,11 +200,11 @@ define( [ "util/lang" ],
       setTimeTooltip();
     }
 
-    function setTimeTooltip(){
+    function setTimeTooltip() {
       _timeTooltip.innerHTML = util.secondsToSMPTE( ( _timelineMousePos + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration );
     }
 
-    function onMouseOver( e ){
+    function onMouseOver( e ) {
       onTimelineMouseMove( e );
       _timeTooltip.classList.add( "tooltip-no-transition-on" );
 
@@ -213,7 +213,7 @@ define( [ "util/lang" ],
       parentElement.addEventListener( "mouseout", onMouseOut, false );
     }
 
-    function onMouseOut( e ){
+    function onMouseOut( e ) {
       _timeTooltip.classList.remove( "tooltip-no-transition-on" );
 
       parentElement.removeEventListener( "mousemove", onTimelineMouseMove, false );
@@ -221,7 +221,7 @@ define( [ "util/lang" ],
       parentElement.addEventListener( "mouseover", onMouseOver, false );
     }
 
-    var onMouseDown = this.onMouseDown = function( e ){
+    var onMouseDown = this.onMouseDown = function( e ) {
       var pos = e.pageX - _container.getBoundingClientRect().left;
       _media.currentTime = ( pos + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration;
       setNodePosition();
@@ -240,11 +240,11 @@ define( [ "util/lang" ],
       setNodePosition();
     };
 
-    _media.listen( "mediaplaying", function( e ){
+    _media.listen( "mediaplaying", function( e ) {
       _isPlaying = true;
     });
 
-    _media.listen( "mediapause", function( e ){
+    _media.listen( "mediapause", function( e ) {
       if( !_isScrubbing ){
         _isPlaying = false;
       }
