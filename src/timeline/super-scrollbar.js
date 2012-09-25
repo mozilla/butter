@@ -171,7 +171,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       }
 
       _viewPort.style.right = position / _rect.width * 100 + "%";
-      _boundsChangedCallback( -1, _viewPort.offsetWidth / _rect.width );
+      _boundsChangedCallback( _viewPort.offsetLeft / _rect.width, _viewPort.offsetWidth / _rect.width );
     };
 
     updateView = function() {
@@ -366,7 +366,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
 
     window.addEventListener( "resize", function() {
       _this.update();
-      _boundsChangedCallback( -1, _viewPort.offsetWidth / _rect.width );
+      _boundsChangedCallback( _viewPort.offsetLeft / _rect.width, _viewPort.offsetWidth / _rect.width );
     });
 
     Object.defineProperties( this, {
