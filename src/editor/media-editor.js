@@ -8,24 +8,14 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
   return function( butter ) {
 
     var __URL_INPUT_INNER_WRAPPER = LangUtils.domFragment( "<div class=\"media-editor-inner-wrapper\"></div>", "div" ),
-        __URL_INPUT_FRAG = LangUtils.domFragment( "<input type=\"text\" class=\"current-media-input\" placeholder=\"http://\"/>", "input" ),
-        __URL_INPUT_DEL_FRAG = LangUtils.domFragment( "<a class=\"delete-media-btn\"><i class=\"icon icon-minus-sign\" ></i></a>", "a" ),
-        __PRIMARY_MEDIA_LABEL = LangUtils.domFragment( "<label class=\"alternate-media-label\">Alternates</label>", "label" ),
+        __URL_INPUT_FRAG = LangUtils.domFragment( "<textarea class=\"current-media-input\" placeholder=\"http://\"></textarea>", "textarea" ),
+        __URL_INPUT_DEL_FRAG = LangUtils.domFragment( "<a class=\"delete-media-btn\"><i class=\"icon icon-trash\" ></i></a>", "a" ),
+        __ALT_MEDIA_LABEL = LangUtils.domFragment( EDITOR_LAYOUT, ".alternate-media-label" ),
         _parentElement = LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
         _containerElement = _parentElement.querySelector( ".container" ),
-        _addNewMediaBtn = _containerElement.querySelector( "#new-media-source-btn" ),
-        _addNewMediaDiv = _containerElement.querySelector( "#add-new-media-source" ),
-        _newMediaInput = _containerElement.querySelector( "#new-media-input" ),
-        _confirmNewMedia = _containerElement.querySelector( "#update-media-source-btn" ),
-        _cancelNewMedia = _containerElement.querySelector( "#cancel-media-source-btn" ),
-        _currentMediaDiv = _containerElement.querySelector( "#current-media-div" ),
         _currentMediaWrapper = _containerElement.querySelector( "#current-media-wrapper" ),
-        _alternateNewMediaGroup = _containerElement.querySelector( "div.alternate-new-media-group" ),
-        _alternateMediaWarning = _containerElement.querySelector( "#alternate-media-warning" ),
-        _alternateNewMediaInputA = _containerElement.querySelector( "#alternate-media-input-a" ),
-        _alternateNewMediaInputB = _containerElement.querySelector( "#alternate-media-input-b" ),
         _addAlternateSourceBtn = _containerElement.querySelector( "#add-alternate-media-source-btn" ),
-        _mediaErrorMessage = _containerElement.querySelector( "label.media-error-message" ),
+        _mediaErrorMessage = _containerElement.querySelector( ".media-error-message" ),
         _media = butter.currentMedia,
         __MAX_MEDIA_INPUTS = 4,
         _inputCount = 0,
@@ -33,7 +23,7 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
         _this;
 
     function updateButterMedia() {
-      var urlInputs = _currentMediaWrapper.querySelectorAll( "input" ),
+      var urlInputs = _currentMediaWrapper.querySelectorAll( "textarea" ),
           newMediaArr = [],
           url;
 
@@ -47,11 +37,21 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
       _media.url = newMediaArr;
     }
 
+    function altMediaHandler( el ) {
+      el.addEventListener( "click", function() {
+        _parentElement.classList.toggle( "alternates-hidden" );
+      }, false );
+    }
+
     function removeMediaWrapper( mediaUrlWrapper ) {
+      var altMediaLabel;
+
       if ( _inputCount > 1 ) {
 
         if ( _currentMediaWrapper.firstChild === mediaUrlWrapper ) {
-          mediaUrlWrapper.nextElementSibling.appendChild( __PRIMARY_MEDIA_LABEL.cloneNode( true ) );
+          altMediaLabel = __ALT_MEDIA_LABEL.cloneNode( true );
+          mediaUrlWrapper.nextElementSibling.appendChild( altMediaLabel );
+          altMediaHandler( altMediaLabel );
         }
 
         _currentMediaWrapper.removeChild( mediaUrlWrapper );
@@ -68,7 +68,8 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
     function createInput( url ) {
       var urlInput,
           deleteBtn,
-          wrapper;
+          wrapper,
+          altMediaLabel = __ALT_MEDIA_LABEL.cloneNode( true );
 
         urlInput = __URL_INPUT_FRAG.cloneNode( true );
         urlInput.value = url;
@@ -94,7 +95,8 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
         wrapper.appendChild( urlInput );
 
         if ( !_currentMediaWrapper.firstChild ) {
-          wrapper.appendChild( __PRIMARY_MEDIA_LABEL.cloneNode( true ) );
+          wrapper.appendChild( altMediaLabel );
+          altMediaHandler( altMediaLabel );
         } else {
           deleteBtn = __URL_INPUT_DEL_FRAG.cloneNode( true );
           deleteBtn.addEventListener( "click", removeBtnHandler, false );
@@ -103,13 +105,17 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
 
         _currentMediaWrapper.appendChild( wrapper );
         _inputCount++;
+
+        if ( _inputCount === __MAX_MEDIA_INPUTS ) {
+          _addAlternateSourceBtn.classList.add( "butter-disabled" );
+        }
     }
 
     function clearCurrentMediaList() {
       var input;
 
       while( _currentMediaWrapper.firstChild ) {
-        input = _currentMediaWrapper.querySelector( "input" );
+        input = _currentMediaWrapper.querySelector( "textarea" );
 
         // count empty ones, so they can be added again
         if ( !input.value ) {
@@ -142,14 +148,8 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
       _this.wrapTextInputElement( _alternateNewMediaInputB );
     }
 
-    function clearNewMediaInputs() {
-      _newMediaInput.value = "";
-      _alternateNewMediaInputA.value = "";
-      _alternateNewMediaInputB.value = "";
-    }
-
     function showError( state ) {
-      var inputs = _currentMediaWrapper.querySelectorAll( "input" );
+      var inputs = _currentMediaWrapper.querySelectorAll( "textarea" );
 
       for ( var i = 0, l = inputs.length; i < l; i++ ) {
         if ( state ) {
@@ -165,101 +165,12 @@ define( [ "util/lang", "editor/editor", "util/uri", "text!layouts/media-editor.h
       }
     }
 
-    function toggleMediaInputs( state ) {
-      var inputs = _currentMediaWrapper.querySelectorAll( "input" );
-
-      for ( var i = 0, l = inputs.length; i < l; i++ ) {
-        if ( state ) {
-          inputs[ i ].removeAttribute( "disabled" );
-          inputs[ i ].nextElementSibling.addEventListener( "click", removeBtnHandler, false );
-        } else {
-          inputs[ i ].setAttribute( "disabled", "" );
-          inputs[ i ].nextElementSibling.removeEventListener( "click", removeBtnHandler, false );
-        }
-      }
-
-      if ( state ) {
-        _currentMediaDiv.classList.remove( "disabled" );
-        _addAlternateSourceBtn.addEventListener( "click", addAlternateSourceBtnHandler, false );
-      } else {
-        _currentMediaDiv.classList.add( "disabled" );
-        _addAlternateSourceBtn.removeEventListener( "click", addAlternateSourceBtnHandler, false );
-      }
-    }
-
     function addAlternateSourceBtnHandler() {
       if ( _inputCount < __MAX_MEDIA_INPUTS ) {
         createInput( "" );
       }
     }
 
-    function addNewMediaBtnHandler() {
-      _addNewMediaBtn.classList.add( "hidden" );
-      _addNewMediaDiv.classList.remove( "hidden" );
-      toggleMediaInputs( false );
-
-      _newMediaInput.addEventListener( "keyup", function() {
-
-        var url = _newMediaInput.value,
-            pUri = Uri.parse( url ),
-            ext,
-            message = "Note: You need {{replace}} versions for your media to work in all browsers " +
-                      "<a href=\"http://diveintohtml5.info/video.html\" target=\"_blank\">Learn more</a>";
-
-        if ( /(ogv|webm|mp4)/.test( pUri.file ) ) {
-          if ( pUri.file ) {
-              ext = pUri.file.split( "." )[ 1 ];
-            if ( ext === "ogv" ) {
-              message = message.replace( "{{replace}}", "webm and mp4" );
-            } else if ( ext === "webm" ) {
-              message = message.replace( "{{replace}}", "ogv and mp4" );
-            } else {
-              message = message.replace( "{{replace}}", "webm and ogv" );
-            }
-            _alternateMediaWarning.innerHTML = message;
-            _alternateMediaWarning.classList.remove( "hidden" );
-            _alternateNewMediaGroup.classList.remove( "hidden" );
-          }
-        } else {
-          _alternateMediaWarning.classList.add( "hidden" );
-        }
-      });
-    }
-
-    function confirmNewMediaHandler() {
-      if ( _newMediaInput.value ) {
-        clearCurrentMediaList();
-        createInput( _newMediaInput.value );
-
-        if ( _alternateNewMediaInputA.value ) {
-          createInput( _alternateNewMediaInputA.value );
-        }
-
-        if ( _alternateNewMediaInputB.value ) {
-          createInput( _alternateNewMediaInputB.value );
-        }
-
-        _addNewMediaBtn.classList.remove( "hidden" );
-        _addNewMediaDiv.classList.add( "hidden" );
-        _alternateNewMediaGroup.classList.add( "hidden" );
-        _newMediaInput.value = "";
-        updateButterMedia();
-        toggleMediaInputs( true );
-        clearNewMediaInputs();
-      }
-    }
-
-    function cancelNewMediaHandler() {
-      _addNewMediaBtn.classList.remove( "hidden" );
-      _addNewMediaDiv.classList.add( "hidden" );
-      _alternateNewMediaGroup.classList.add( "hidden" );
-      toggleMediaInputs( true );
-      clearNewMediaInputs();
-    }
-
-    _addNewMediaBtn.addEventListener( "click", addNewMediaBtnHandler, false );
-    _cancelNewMedia.addEventListener( "click", cancelNewMediaHandler, false );
-    _confirmNewMedia.addEventListener( "click", confirmNewMediaHandler, false );
     _addAlternateSourceBtn.addEventListener( "click", addAlternateSourceBtnHandler, false );
 
     _media.listen( "mediacontentchanged", function() {
