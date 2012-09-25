@@ -250,19 +250,26 @@ define( [ "core/eventmanager", "./toggler",
       },
 
       8: function( e ) { // del key
-        var selectedEvent;
+        var selectedEvents = butter.selectedEvents.slice(),             // Copy selectedEvents array to circumvent it changing
+                                                                        // if deletion actually occurs, while still taking
+                                                                        // advantage of caching.
+            selectedEvent,
+            i, l = selectedEvents.length;
 
-        if( butter.selectedEvents.length ) {
+        if( selectedEvents.length ) {
           e.preventDefault();
 
-          // If one event is being dragged, they all are, and we don't want to
-          // allow deletion while trackevent dragging is occurring.
-          if ( butter.selectedEvents[ 0 ].dragging ) {
-            return;
+          // If any event is being dragged or resized we don't want to
+          // allow deletion.
+          for( i = 0; i < l; i++ ) {
+            if ( selectedEvents[ i ].uiInUse ) {
+              return;
+            }
           }
 
-          for( var i = 0; i < butter.selectedEvents.length; i++ ) {
-            selectedEvent = butter.selectedEvents[ i ];
+          // Delete the events.
+          for( i = 0; i < l; i++ ) {
+            selectedEvent = selectedEvents[ i ];
             selectedEvent.track.removeTrackEvent( selectedEvent );
           }
         }
