@@ -302,14 +302,39 @@ define( [
       /**
        * Property: dragging
        *
-       * A dragging state of the track event.
+       * This TrackEvent's dragging state. True when TrackEvent is being dragged.
        * @malleable: No.
        */
       dragging: {
         enumerable: true,
-        configurable: false,
         get: function(){
           return _view.dragging;
+        }
+      },
+
+      /**
+       * Property: resizing
+       *
+       * This TrackEvent's resizing state. True when TrackEvent is being resized.
+       * @malleable: No.
+       */
+      resizing: {
+        enumerable: true,
+        get: function(){
+          return _view.resizing;
+        }
+      },
+
+      /**
+       * Property: uiInUse
+       *
+       * This TrackEvent's resizing state. True when TrackEvent is being resized.
+       * @malleable: No.
+       */
+      uiInUse: {
+        enumerable: true,
+        get: function(){
+          return _view.resizing || _view.dragging;
         }
       },
 
