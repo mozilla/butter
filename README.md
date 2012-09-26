@@ -66,9 +66,57 @@ _hostname_ and _environment_ are variable:
 To change the cornfield configuration for your deployment of Butter, it's best to create a
 new file called _hostname_-_environment_.json that overrides the cornfield defaults.
 
+### Configuration Options
+
+  - `server` settings for the cornfield server
+    - `bindIP` the IP or hostname to use for the server (e.g., localhost).
+    - `bindPort` the Port number to use for the server (e.g., 8888).  If using a port number lower than 1024, the server will have to be run as root.
+  - `logger` settings for server logging
+    - `format` the logging format to use.  Possible values include: default, short, tiny, dev.
+  - `session` settings for user sessions
+    - `secret` the sessions secret (i.e., some long string)
+    - `duration` the session's duration (e.g., 2419200000)
+  - `staticMiddleware` settings for cornfield Connect middleware
+    - `maxAge` the max age of static assests
+  - `dirs` settings for various directories, paths, hostnames
+    - `wwwRoot` the server's WWW root directory (e.g., `../`)
+    - `templates` the location of templates (e.g., `../templates`)
+    - `appHostname` the hostname URL for the application, usually the same as `server.bindIP` and `server.bindPort` (e.g., `http://localhost:8888`)
+    - `embedHostname` <i>[optional]</i> the hostname URL where published embed documents are stored, if different from `dirs.appHostname` (e.g., `http://s3.amazonaws.com/your-bucket`)
+  - `templates` list of templates to serve.  The format is as follows:
+    `<template-name>`: `{{templateBase}}<path/to/template/config.json>`.  The `{{templateBase}}` string will be replaced by the value in `dirs.templates` (e.g., "basic": "{{templateBase}}basic/config.json")
+
+  - `exportedAssets` list of scripts to include in exported assets.  These are things like popcorn.js or other scripts that your exported projects depend upon in order to run.
+
+  - `additionalStaticRoots` list of additional roots to use.
+
+  - `publishStore` a `fileStore` used to publish project HTML files (see `fileStore` below for details)
+
+  - `feedbackStore` a `fileStore` used to publish feedback from the user as JSON (see `fileStore` below for details)
+
+  - `crashStore` a `fileStore` used to publish crash reports from the user as JSON (see `fileStore` below for details)
+
+The `fileStore` type is used to setup a backend for storing data:
+
+   - `type` the type of file store to use.  Possible values include `local` (i.e., local file system) and `s3` (i.e., Amazon S3)
+   - `options` options for the file store, which depends on the type chosen.
+      - local options
+         - `root` the root directory under which all exported files are placed (e.g., `./view`)
+         - `namePrefix` <i>[optional]</i> the path prefix to add to any filenames passed to the local file store.  For example, if using "v" all filenames will become "v/<key>"
+         - `nameSuffix` <i>[optional]</i> the filename suffix to use for all filenames (e.g., ".html")
+      - s3 options
+       - `key` the AWS S3 key to use for authentication
+       - `secret` the AWS S3 secret to use for authentication
+       - `bucket` the AWS S3 bucket name to use for storing key/value pairs
+       - `namePrefix` <i>[optional]</i> the prefix to add to any key names passed to the s3 file store.  For example, if using "v" all keys will become "v/<key>"
+       - `nameSuffix` <i>[optional]</i> the suffix to add to any key names passed to the s3 file store.  For example, if using ".json" all keys will end in ".json"
+       - `contentType` <i>[optional]</i> the mime type to use for data written to S3. If none given `text/plain` is used.
+
 ### Sample production config
 
 `alice-production.json:`
+
+This sample config uses a mix of the local file system as well as Amazon S3 for storage.
 
 ```javascript
 {
@@ -86,7 +134,33 @@ new file called _hostname_-_environment_.json that overrides the cornfield defau
     "maxAge": "3600000"
   },
   "dirs": {
-    "hostname": "http://example.org"
+    "appHostname": "http://example.org",
+    "embedHostname": "http://s3.amazonaws.com/my-bucket"
+  },
+  "publishStore": {
+    "type": "s3",
+    "options": {
+      "namePrefix": "v",
+      "key": "my-s3-key",
+      "secret": "my-s3-secret",
+      "contentType": "text/html"
+    }
+  },
+  "feedbackStore": {
+    "type": "local",
+    "options": {
+      "root": "./view",
+      "namePrefix": "feedback",
+      "nameSuffix": ".json"
+    }
+  },
+  "crashStore": {
+    "type": "local",
+    "options": {
+      "root": "./view",
+      "namePrefix": "crash",
+      "nameSuffix": ".json"
+    }
   }
 }
 ```

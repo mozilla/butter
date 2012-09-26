@@ -159,6 +159,14 @@
         }
       }
     },
+    "knox": {
+      "version": "0.3.1",
+      "dependencies": {
+        "mime": {
+          "version": "1.2.7"
+        }
+      }
+    },
     "supertest": {
       "version": "0.3.1",
       "dependencies": {

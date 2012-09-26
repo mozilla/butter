@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function routesCtor( app, User, filter, sanitizer ) {
+module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBED_SUFFIX ) {
   app.get( '/api/whoami', filter.isLoggedIn, filter.isXHR, function( req, res ) {
     var email = req.session.email;
 
@@ -44,7 +44,22 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
         return;
       }
 
-      res.json( { error: 'okay' }, 200 );
+      // Delete published projects, too
+      var embedShell = req.params.id,
+          embedDoc = embedShell + EMBED_SUFFIX;
+      stores.publish.remove( embedShell, function( e ) {
+        if( e ) {
+          res.json( { error: 'unable to remove file: ' + embedShell }, 500 );
+          return;
+        }
+        stores.publish.remove( embedDoc, function( e ) {
+          if( e ) {
+            res.json( { error: 'unable to remove file: ' + embedDoc }, 500 );
+            return;
+          }
+          res.json( { error: 'okay' }, 200 );
+        });
+      });
     });
   });
 
@@ -95,4 +110,31 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
       res.json( projectJSON );
     });
   });
+
+  function storeData( req, res, store ) {
+    var s = '';
+
+    req.addListener( 'data', function( data ) {
+      s += data;
+    });
+
+    req.addListener( 'end', function() {
+      var id = Date.now();
+      store.write( id, s, function() {
+        res.writeHead( 200, { 'content-type': 'text/plain' } );
+        res.end();
+      });
+    });
+  }
+
+  // Store crash reports
+  app.post( '/crash', function( req, res ) {
+    storeData( req, res, stores.crash );
+  });
+
+  // Store feedback reports
+  app.post( '/feedback', function( req, res ) {
+    storeData( req, res, stores.feedback );
+  });
+
 };

@@ -1,6 +1,11 @@
 /*jshint eqeqeq:false */
 console.log( __dirname );
 
+// Given foo/ return foo
+function stripSlash( path ) {
+  return path.replace( /\/$/, '' );
+}
+
 var express = require('express'),
     fs = require('fs'),
     path = require('path'),
@@ -12,15 +17,14 @@ var express = require('express'),
     User = require( './lib/user' )( CONFIG.database ),
     filter = require( './lib/filter' )( User.isDBOnline ),
     sanitizer = require( './lib/sanitizer' ),
-    TEMPLATES_DIR =  CONFIG.dirs.templates,
-    PUBLISH_DIR = CONFIG.dirs.publish,
-    PUBLISH_DIR_V = path.join( PUBLISH_DIR, 'v' ),
-    PUBLISH_DIR_E = path.join( PUBLISH_DIR, 'e' ),
-    PUBLISH_PREFIX = CONFIG.dirs.hostname,
-    PUBLISH_PREFIX_V = CONFIG.dirs.hostname + "/v",
-    PUBLISH_PREFIX_E = CONFIG.dirs.hostname + "/e",
-    REPORTS_DIR = path.join( PUBLISH_DIR, "crash" ),
-    WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot ),
+    FileStore = require('./lib/file-store.js'),
+    stores = {},
+    TEMPLATES_DIR = CONFIG.dirs.templates,
+    APP_HOSTNAME = stripSlash( CONFIG.dirs.appHostname ),
+    // If a separate hostname is given for embed, use it, otherwise use app's hostname
+    EMBED_HOSTNAME = CONFIG.dirs.embedHostname ? stripSlash( CONFIG.dirs.embedHostname ) : APP_HOSTNAME,
+    EMBED_SUFFIX = 'e',
+    WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
     VALID_TEMPLATES = CONFIG.templates,
     EXPORT_ASSETS = CONFIG.exportAssets;
 
@@ -44,20 +48,6 @@ for ( var templateName in VALID_TEMPLATES ) {
 }
 
 console.log( "Templates Dir:", TEMPLATES_DIR );
-console.log( "Publish Dir:", PUBLISH_DIR );
-
-if ( !fs.existsSync( PUBLISH_DIR ) ) {
-  fs.mkdirSync( PUBLISH_DIR );
-}
-if ( !fs.existsSync( PUBLISH_DIR_V ) ) {
-  fs.mkdirSync( PUBLISH_DIR_V );
-}
-if ( !fs.existsSync( PUBLISH_DIR_E ) ) {
-  fs.mkdirSync( PUBLISH_DIR_E );
-}
-if ( !fs.existsSync( REPORTS_DIR ) ) {
-  fs.mkdirSync( REPORTS_DIR );
-}
 
 app.configure( 'development', function() {
   app.use( lessMiddleware( WWW_ROOT ));
@@ -66,10 +56,17 @@ app.configure( 'development', function() {
   });
 });
 
+function setupStore( config ) {
+  var store = FileStore.create( config.type, config.options );
+  if( store.requiresFileSystem ) {
+    app.use( express.static( store.root, JSON.parse( JSON.stringify( CONFIG.staticMiddleware ) ) ) );
+  }
+  return store;
+}
+
 app.configure( function() {
   app.use( express.logger( CONFIG.logger ) )
     .use( express.static( WWW_ROOT, JSON.parse( JSON.stringify( CONFIG.staticMiddleware ) ) ) )
-    .use( express.static( PUBLISH_DIR, JSON.parse( JSON.stringify( CONFIG.staticMiddleware ) ) ) )
     .use( express.bodyParser() )
     .use( clientSessions( CONFIG.session ) )
     /* Show Zeus who's boss
@@ -81,12 +78,17 @@ app.configure( function() {
       return next();
     })
     .set('view options', {layout: false});
+
+  // File Store types and options come from JSON config file.
+  stores.publish = setupStore( CONFIG.publishStore );
+  stores.crash = setupStore( CONFIG.crashStore );
+  stores.feedback = setupStore( CONFIG.feedbackStore );
 });
 
 require( 'express-persona' )( app, {
-  audience: CONFIG.dirs.hostname
+  audience: CONFIG.dirs.appHostname
 });
-require('./routes')( app, User, filter, sanitizer );
+require('./routes')( app, User, filter, sanitizer, stores, EMBED_SUFFIX );
 
 function writeEmbedShell( path, res, url, data, callback ) {
   if( !writeEmbedShell.templateFn ) {
@@ -94,7 +96,7 @@ function writeEmbedShell( path, res, url, data, callback ) {
                                           { filename: 'embed-shell.jade', pretty: true } );
   }
 
-  fs.writeFile( path, writeEmbedShell.templateFn( data ), function( err ){
+  stores.publish.write( path, writeEmbedShell.templateFn( data ), function( err ){
     if( err ){
       res.json({ error: 'internal file error' }, 500);
       return;
@@ -113,7 +115,7 @@ function writeEmbed( path, res, url, data, callback ) {
                                           { filename: 'embed.jade', pretty: true } );
   }
 
-  fs.writeFile( path, writeEmbed.templateFn( data ), function( err ){
+  stores.publish.write( path, writeEmbed.templateFn( data ), function( err ){
     if( err ){
       res.json({ error: 'internal file error' }, 500);
       return;
@@ -179,8 +181,8 @@ app.post( '/api/publish/:id',
           numSources,
           j, k, len;
 
-      templateURL = path.relative( WWW_ROOT, path.dirname( templateFile ) );
-      baseHref = PUBLISH_PREFIX + "/" + templateURL + "/";
+      templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
+      baseHref = APP_HOSTNAME + templateURL + "/";
       baseString = '\n  <base href="' + baseHref + '"/>';
 
       // look for script tags with data-butter-exclude in particular (e.g. butter's js script)
@@ -203,7 +205,7 @@ app.post( '/api/publish/:id',
       if ( templateConfig.plugin && templateConfig.plugin.plugins ) {
         var plugins = templateConfig.plugin.plugins;
         for ( i = 0, len = plugins.length; i < len; i++ ) {
-          externalAssetsString += '\n  <script src="' + PUBLISH_PREFIX + '/' + plugins[ i ].path.split( '{{baseDir}}' ).pop() + '"></script>';
+          externalAssetsString += '\n  <script src="' + APP_HOSTNAME + '/' + plugins[ i ].path.split( '{{baseDir}}' ).pop() + '"></script>';
         }
         externalAssetsString += '\n';
       }
@@ -252,12 +254,13 @@ app.post( '/api/publish/:id',
 
       function publishEmbedShell() {
         // Write out embed shell HTML
-        writeEmbedShell( path.join( PUBLISH_DIR_V, id + ".html" ),
-                         res, PUBLISH_PREFIX_V + "/" + id + ".html",
+        writeEmbedShell( id, res,
+                         EMBED_HOSTNAME + '/' + stores.publish.expand( id ),
                          {
                            author: project.author,
                            projectName: project.name,
-                           embedSrc: PUBLISH_PREFIX_E + "/" + id + ".html"
+                           embedSrc: EMBED_HOSTNAME + '/' + stores.publish.expand( id + EMBED_SUFFIX ),
+                           baseHref: APP_HOSTNAME
                          });
       }
 
@@ -266,13 +269,14 @@ app.post( '/api/publish/:id',
           mediaUrl = projectData.media[ 0 ].url,
           attribURL = Array.isArray( mediaUrl ) ? mediaUrl[ 0 ] : mediaUrl;
 
-      writeEmbed( path.join( PUBLISH_DIR_E, id + ".html" ),
-                  res, path.join( PUBLISH_PREFIX_E, id + ".html" ),
+      writeEmbed( id + EMBED_SUFFIX, res,
+                  EMBED_HOSTNAME + '/' + stores.publish.expand( id + EMBED_SUFFIX ),
                   {
                     id: id,
                     author: project.author,
                     title: project.name,
                     mediaSrc: attribURL,
+                    embedShellSrc: EMBED_HOSTNAME + '/' + stores.publish.expand( id ),
                     baseHref: baseHref,
                     remixUrl: remixUrl,
                     templateScripts: templateScripts,
@@ -313,28 +317,9 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
 
     res.render( 'dashboard.jade', {
       user: {
-        email: email,
+        email: email
       },
       projects: userProjects
-    });
-  });
-});
-
-// Simple crash reporter
-app.post( '/report', function( req, res ) {
-  var report = '';
-
-  req.addListener( 'data', function( data ) {
-    report += data;
-  });
-
-  req.addListener( 'end', function() {
-    // Make sure two reports don't have identical timestamp, add some noise
-    var noise = ( Math.random() * 1000 ) | 0,
-        filename = '' + Date.now() + '-' + noise + '.json';
-    fs.writeFile( path.join( REPORTS_DIR, filename ), report, function() {
-      res.writeHead( 200, { 'content-type': 'text/plain' } );
-      res.end();
     });
   });
 });

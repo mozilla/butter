@@ -5,7 +5,8 @@ var mockEmail = "test@example.org",
     mockSession = require("./mock.session"),
     mockUser = require("./mock.user")(),
     mockFilter = require("./mock.filter"),
-    mockSanitizer = require("./mock.sanitizer");
+    mockSanitizer = require("./mock.sanitizer"),
+    mockStore = require("./mock.store");
 
 var express = require("express");
 var app = express.createServer();
@@ -15,7 +16,7 @@ app.use(mockSession({
 }))
   .use(express.bodyParser());
 
-require("../routes")(app, mockUser, mockFilter, mockSanitizer);
+require("../routes")(app, mockUser, mockFilter, mockSanitizer, mockStore);
 
 test("whoami API valid", function(t) {
   request(app)

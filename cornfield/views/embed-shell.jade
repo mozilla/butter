@@ -6,6 +6,6 @@ html
     meta(name='author', content='#{author}')
     title #{projectName} - Mozilla Popcorn
     meta(name='viewport', content='width=device-width')
-    link(rel='stylesheet', href='/css/embed-shell.css')
+    link(rel='stylesheet', href='#{baseHref}/css/embed-shell.css')
   body
     iframe(src='#{embedSrc}', width='1280', height='745', frameborder='0', mozallowfullscreen='mozallowfullscreen', webkitallowfullscreen='webkitallowfullscreen', allowfullscreen='allowfullscreen')
