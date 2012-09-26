@@ -7,6 +7,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
   function( Logger, EventManagerWrapper, DragNDrop,
             LangUtils, TRACKEVENT_LAYOUT ) {
 
+  var TRACKEVENT_MIN_WIDTH = 50;
+
   return function( trackEvent, type, inputOptions ){
 
     var _element = LangUtils.domFragment( TRACKEVENT_LAYOUT, ".butter-track-event" ),
@@ -30,19 +32,17 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
     EventManagerWrapper( _this );
 
-    function toggleHandles( state ) {
-      if ( _parent ) {
-        _handles[ 0 ].style.visibility = state ? "visible" : "hidden";
-        _handles[ 1 ].style.visibility = state ? "visible" : "hidden";
-      }
-    }
-
     function resetContainer() {
       if ( !_trackEvent.track || !_trackEvent.track._media ) {
         return;
       }
       _element.style.left = _start  / _trackEvent.track._media.duration * 100 + "%";
       _element.style.width = ( _end - _start ) / _trackEvent.track._media.duration * 100 + "%";
+      if ( _element.getBoundingClientRect().width < TRACKEVENT_MIN_WIDTH ) {
+        _element.classList.add( "trackevent-small" );
+      } else {
+        _element.classList.remove( "trackevent-small" );
+      }
     }
 
     this.setToolTip = function( title ){
@@ -197,7 +197,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
           }
 
           if( _resizable ){
-            toggleHandles( false );
             _resizable.destroy();
             _resizable = null;
             _handles = null;
@@ -257,19 +256,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
               _element.setAttribute( "data-butter-draggable-type", "trackevent" );
               _element.setAttribute( "data-butter-trackevent-id", _trackEvent.id );
-
-              if( !_handles ){
-                _handles = _element.querySelectorAll( ".handle" );
-                if( _handles && _handles.length === 2 ){
-                  _element.addEventListener( "mouseover", function( e ){
-                    toggleHandles( true );
-                  }, false );
-                  _element.addEventListener( "mouseout", function( e ){
-                    toggleHandles( false );
-                  }, false );
-                  toggleHandles( false );
-                }
-              }
 
             }
 
