@@ -106,7 +106,8 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
       var newStart = updateOptions.start,
           newEnd = updateOptions.end,
           manifestOptions,
-          media;
+          media,
+          duration;
 
       if ( isNaN( newStart ) && updateOptions.hasOwnProperty( "start" ) ) {
         throw new TrackEventUpdateException( "invalid-start-time", "[start] is an invalid value." );
@@ -119,13 +120,21 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
       if ( newStart >= newEnd ) {
         throw new TrackEventUpdateException( "start-greater-than-end", "[start] must be less than [end]." );
       }
+
       if ( _track && _track._media ) {
         media = _track._media;
-        if( media.ready &&
-            ( newStart > media.duration ||
-            newEnd > media.duration ||
-            newStart < 0 ) ) {
-          throw new TrackEventUpdateException( "invalid-times", "[start] or [end] are not within the duration of media" );
+        duration = media.duration
+        if( media.ready ) {
+          if ( newStart < 0 ) {
+            newStart = 0;
+          } else if ( newStart > duration ) {
+            newStart = duration;
+          }
+          if ( newEnd < 0 ) {
+            newEnd = 0;
+          } else if ( newEnd > duration ) {
+            newEnd = duration;
+          }
         }
       }
 
@@ -152,10 +161,10 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
         }
       }
       
-      if( newStart ){
+      if( newStart != null ){
         _popcornOptions.start = newStart;
       }
-      if( newEnd ){
+      if( newEnd != null){
         _popcornOptions.end = newEnd;
       }
 
