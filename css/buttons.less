@@ -3,23 +3,37 @@
 */
 
 @_btnLineHeight: 14px;
+@_btnTotalHeight: 35px; // It turns out that the total height of our buttons is 50px.
 
 // Base
 .butter-btn {
   display: inline-block;
   text-decoration: none;
   font-size: 13px;
-  line-height: @_btnLineHeight + 4;
-  padding: 7px 10px 6px;
+  line-height: @_btnTotalHeight - 2; //borders
+  padding: 0 10px;
   border-radius: 2px;
   margin-bottom: 0;
   vertical-align: middle;
   border: 1px solid @baseLight;
   background: @baseLight;
   color: @baseText;
-  
   &:hover {
     cursor: pointer;
+  }
+}
+
+// Disabled states
+.butter-btn-slide-out {
+  display: block;
+  overflow: hidden;
+  .butter-btn {
+    float: left;
+    .transition( all 0.2s ease-in );
+  }
+  .butter-disabled {
+    margin-top: -@_btnTotalHeight;
+    float: left;
   }
 }
 
