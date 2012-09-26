@@ -13,6 +13,11 @@
   "staticMiddleware": {
     "maxAge": "0"
   },
+  "database": {
+    "databaseName": "popcornmaker",
+    "username": "popcornmaker",
+    "password": null
+  },
   "dirs": {
     "wwwRoot": "../",
     "templates": "../templates",
