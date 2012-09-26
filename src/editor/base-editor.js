@@ -140,6 +140,38 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip", "ui/widge
     };
 
     /**
+    * Member: createTooltip
+    *
+    * Create a tooltip that can be used in any editor.
+    *
+    * @param {DOMElement} element: The element that is being listened to.
+    * @param {Object} options: Configuration options for the tooltip. These include:
+    *                   name: The name of the Tooltip.
+    *                   element: The element that the Tooltip bases it's positioning around.
+    *                   message: The message that's displayed to users.
+    *                   top: The CSS top position of the Tooltip in relation to element.
+    *                   left: The CSS left position of the Tooltip in relation to element.
+    *                   hidden: The Tooltips initial visibility state.
+    *                   hover: Triggers if the tooltip displays on hover of element.
+    */
+    extendObject.createTooltip = function( element, options )  {
+      var tooltip;
+
+      if ( options && options.name ) {
+        ToolTip.create( options );
+
+        tooltip = ToolTip.get( options.name );
+
+        element.addEventListener( "focus", function( e ) {
+          tooltip.hidden = false;
+        }, false );
+        element.addEventListener( "blur", function( e ) {
+          tooltip.hidden = true;
+        }, false );
+      }
+    };
+
+    /**
      * Member: removeExtraHeadTags
      *
      * Remove all extra style/link tags that have been added to the document head.

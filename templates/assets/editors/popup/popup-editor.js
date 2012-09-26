@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-( function( Butter ) {
+(function( Butter ) {
 
   Butter.Editor.register( "popup", "load!{{baseDir}}templates/assets/editors/popup/popup-editor.html",
     function( rootElement, butter, compiledLayout ) {
@@ -96,7 +96,7 @@
 
         function toggleSpeech() {
           triangleObject.element.parentNode.style.display = "block";
-          flipObject.element.parentNode.style.display = "flip";
+          flipObject.element.parentNode.style.display = "block";
           soundObject.element.parentNode.style.display = "none";
           iconObject.element.parentNode.style.display = "none";
         }
@@ -162,10 +162,19 @@
             else if ( option.elementType === "select" && key !== "type" ) {
               _this.attachSelectChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
             }
-            else if ( option.elementType === "textarea" ) {
-              _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
-            }
             else if ( option.elementType === "input" ) {
+              if ( key === "linkUrl" ) {
+                _this.createTooltip( option.element, {
+                  name: "text-link-tooltip" + Date.now(),
+                  element: option.element.parentElement,
+                  message: "Links will be clickable when shared.",
+                  top: "105%",
+                  left: "50%",
+                  hidden: true,
+                  hover: false
+                });
+              }
+
               if ( option.element.type === "checkbox" ) {
                 _this.attachCheckboxChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
               }
@@ -178,9 +187,9 @@
             }
           }
         }
-      }
 
-      basicContainer.appendChild( _this.createStartEndInputs( trackEvent, updateTrackEventWithTryCatch ) );
+        basicContainer.insertBefore( _this.createStartEndInputs( trackEvent, updateTrackEventWithTryCatch ), basicContainer.firstChild );
+      }
 
       _this.createPropertiesFromManifest({
         trackEvent: trackEvent,
@@ -195,19 +204,40 @@
       _this.updatePropertiesFromManifest( trackEvent );
     }
 
+    function clicking( e ) {
+      e.preventDefault();
+    }
+
+    function anchorClickPrevention( anchorContainer ) {
+      if ( anchorContainer ) {
+        
+        anchorContainer.addEventListener( "click", clicking, false );
+      }
+    }
+
     // Extend this object to become a TrackEventEditor
     Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
+        var anchorContainer = trackEvent.popcornTrackEvent._container.querySelector( "a" );
+
+        anchorClickPrevention( anchorContainer );
+
         _butter = butter;
+
         // Update properties when TrackEvent is updated
         trackEvent.listen( "trackeventupdated", function ( e ) {
-          _this.updatePropertiesFromManifest( e.target );
+          _trackEvent = e.target;
+
+          anchorContainer = _trackEvent.popcornTrackEvent._container.querySelector( "a" );
+          anchorClickPrevention( anchorContainer );
+
+          _this.updatePropertiesFromManifest( _trackEvent );
           setErrorState( false );
         });
         setup( trackEvent );
       },
       close: function() {
-
+        _trackEvent.unlisten( "trackeventupdated" );
       }
     });
   });

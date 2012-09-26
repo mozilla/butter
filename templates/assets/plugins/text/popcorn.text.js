@@ -36,6 +36,11 @@
           label: "Text",
           "default": "Mozilla Popcorn"
         },
+        linkUrl: {
+          elem: "input",
+          type: "url",
+          label: "Link URL"
+        },
         position: {
           elem: "select",
           options: [ "Center", "Bottom", "Left", "Right", "Top", "Custom" ],
@@ -122,11 +127,12 @@
           container = options._container = document.createElement( "div" ),
           innerContainer = document.createElement( "div" ),
           innerSpan = document.createElement( "span" ),
-          innerDiv = document.createElement( "div" ),
           fontSheet,
           fontDecorations = options.fontDecorations || options._natives.manifest.options.fontDecorations[ "default" ],
           position = options.position || options._natives.manifest.options.position[ "default" ],
-          transition = options.transition || options._natives.manifest.options.transition[ "default" ];
+          transition = options.transition || options._natives.manifest.options.transition[ "default" ],
+          link,
+          context = this;
 
       if ( !target ) {
         target = this.media.parentNode;
@@ -145,7 +151,7 @@
       else {
         container.classList.add( "text-fixed" );
         innerContainer.classList.add( position );
-        innerDiv.style.zIndex = +options.zindex;
+        innerSpan.style.zIndex = +options.zindex;
       }
 
       // Add transition class
@@ -153,18 +159,35 @@
       options._container.classList.add( "off" );
 
       // Handle all custom fonts/styling
-      innerDiv.innerHTML = text;
-      
-      innerSpan.appendChild( innerDiv );
-      innerContainer.appendChild( innerSpan );
-      container.appendChild( innerContainer );
-      target.appendChild( container );
 
-      innerContainer.style.color = options.fontColor || DEFAULT_FONT_COLOR;
+      options.fontColor = options.fontColor || DEFAULT_FONT_COLOR;
+      innerContainer.classList.add( "text-inner-div" );
+      innerContainer.style.color = options.fontColor;
       innerContainer.style.fontStyle = fontDecorations.italics ? "italic" : "normal";
       innerContainer.style.textDecoration = fontDecorations.underline ? "underline" : "none";
       innerContainer.style.fontSize = options.fontSize ? normalize( options.fontSize, 8, 200 ) + "px" : "24px";
       innerContainer.style.fontWeight = fontDecorations.bold ? "bold" : "normal";
+
+      if ( options.linkUrl ) {
+        link = document.createElement( "a" );
+        link.href = options.linkUrl;
+        link.target = "_blank";
+        link.innerHTML = text;
+
+        link.addEventListener( "click", function( e ) {
+          context.media.pause();
+        }, false );
+
+        link.style.color = innerContainer.style.color;
+
+        innerSpan.appendChild( link );
+      } else {
+        innerSpan.innerHTML = text;
+      }
+
+      innerContainer.appendChild( innerSpan );
+      container.appendChild( innerContainer );
+      target.appendChild( container );
 
       fontSheet = document.createElement( "link" );
       fontSheet.rel = "stylesheet";
