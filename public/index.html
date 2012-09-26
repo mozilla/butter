@@ -1,80 +1,162 @@
-<!doctype html>
-<!-- ==========================================================================
-WE MADE THIS IN THIMBLE CUZ WE CAN! thimble.webmaker.org ========================================================================= -->
-
-
-
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>POPCORN</title>
-    <link href="//fonts.googleapis.com/css?family=Sue+Ellen+Francisco" rel="stylesheet" type="text/css">
-    <link href="//fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" type="text/css">
-    <style>
-    
-      body {
-        background-color: white;
-        color: black;
-        padding-top: 1em;
-        font-family: "Press Start 2P";
-        font-size: 20px;
-        text-align: center;
-        text-transform: uppercase;
-      }
-      .content {
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      #lesson {
-        font-size: 38px;
-      }
-
-      #lesson ol {
-        list-style-position: inside;
-        margin-bottom: 0px;
-      }
-
-      #lesson ol li {
-        padding-bottom: 20px;
-        padding-left: 10px;
-        text-align:left;
-        text-align: center;
-      }
-
-      #narrative {
-        font-family: "Press Start 2P";
-        font-size: 18px;
-        text-transform: uppercase;
-        text-align: center;
-        padding-top: 2em;
-      }
-      
-    </style>
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Mozilla Popcorn</title>
+  <link rel="stylesheet" href="/media/css/opensans/stylesheet.css">
+  <link rel="stylesheet" href="/media/css/press-start/stylesheet.css">
+  <link rel="stylesheet" href="/media/css/sandstone.css">
+  <link rel="stylesheet" href="/media/css/wpm.css">
+  <link href="//www.mozilla.org/tabzilla/media/css/tabzilla.css" rel="stylesheet">
+  <!--[if lt IE 9]>
+    <script src="/media/js/html5shiv.js"></script>
+  <![endif]-->
   </head>
-  <body>
-    <div class="content">
-      <img src="8bitcorn.png" width="150">
+<body id="home">
+  <div id="outer-wrapper">
+  <div id="wrapper">
+  
+    <section id="header">
+      <header id="masthead">
 
-      <section id="logo">
-        WELCOME TO POPCORN 
-      </section>
+        <div class="row">
+          <div class="span10">
+            <div class="logo">
+              <a href="/en-US/">
+                <img src="/media/img/thimble-logo.png" alt="Mozilla Thimble">
+              </a>
+            </div>
+            <a href="http://www.mozilla.org/" id="tabzilla">Mozilla</a>
+            <nav id="nav-main" role="navigation">
+              <ul>
+                <li class="home"><a href="/en-US/">Home</a></li>
+                <li class="projects"><a href="/en-US/projects">Projects</a></li>
+                <li class="about"><a href="/en-US/about">About</a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </header>
+    </section>
 
-      <section id="narrative">
-        <blink>This is a temporary page we are using to load projects!</blink><br /><br />
-        Choose one from below to see what popcorn can do
-      </section>
-
-      <section id="lesson">
-        <ol>
-          <li><a href="/templates/basic/">Blank Project</a></li>
-          <li><a href="/templates/basic/?savedDataUrl=tour.json">Neighbourhood tour</a></li>
-          <li><a href="/templates/basic/?savedDataUrl=meme.json">Video meme!</a></li>
-          <li><a href="/templates/basic/?savedDataUrl=soundscape.json">Soundscape</a></li>
-          <li><a href="/templates/basic/?savedDataUrl=lego.json">Lego MADLIB!</a></li>
-        </ol>
-      </section>
-
+    <section>
+        <div class="container divider">
+    <div class="row">
+      <div class="hero-unit span6">
+        <hgroup class="large">
+          <h2>Webmaking made easy</h2>
+          <h1>Mozilla Popcorn</h1>
+        </hgroup>
+        <p>
+          Thimble makes it ridiculously simple to create your own web
+          pages. Write and edit HTML and CSS right in your
+          browser. Instantly preview your work. Then host and share your
+          finished pages with a single click. Easy, huh?
+        </p>
+        <p class='intro-bar'>
+          <a class="button-blue start" href="/en-US/editor">Start from scratch</a>
+          <em>or</em>
+          <a class="button start" href="/en-US/projects">Pick a project</a>
+        </p>
+      </div>
+      <div class="pop span4">
+      </div>
     </div>
-  </body>
+  </div>
+
+  <div class="container">
+    <h2>Featured Projects</h2>
+    
+    <ul class="thumbnails">
+      <li class="span3 threeColumn">
+    <div class="thumbnail">
+      <a href="/en-US/projects/zoo">
+        <img src="/media/img/projects/Animalbuilder.jpg" alt="">
+      </a>
+      <div class="caption">
+        <p>London Zoological Society</p>
+        <h5 class="title"><a href="/en-US/projects/zoo">Build your own Creature</a></h5>
+      </div>
+    </div>
+  </li>
+
+      <li class="span3 threeColumn">
+    <div class="thumbnail">
+      <a href="/en-US/projects/soapbox/edit">
+        <img src="/media/img/projects/soapbox.png" alt="">
+      </a>
+      <div class="caption">
+        <p>Hive NYC</p>
+        <h5 class="title"><a href="/en-US/projects/soapbox/edit">Make Your Own Rant Page</a></h5>
+      </div>
+    </div>
+  </li>
+
+      <li class="span3 threeColumn">
+    <div class="thumbnail">
+      <a href="/en-US/webarcade">
+        <img src="/media/img/projects/Webarcade.png" alt="">
+      </a>
+      <div class="caption">
+        <p>Mozilla</p>
+        <h5 class="title"><a href="/en-US/webarcade">Level up your Web Skills</a></h5>
+      </div>
+    </div>
+  </li>
+    </ul>
+    <a class="more" href="/en-US/projects">See all projects...</a>
+  </div> 
+    </section>
+
+    <section id="page-bottom">
+      <footer id="colophon">
+        <div class="row">
+          <div class="span2">
+            <h2><img src="/media/img/footer-logo.png" alt="Mozilla Webmaker"></h2>
+          </div>
+
+          <nav class="span2">
+            <h3>About</h3>
+            <ul>
+              <li><a href="/en-US/about">About Us</a></li>
+              <li><a href="mailto:mozparty@mozilla.org">Contact Us</a></li>
+              <li><a href="//www.mozilla.org/en-US/privacy-policy">Privacy Policy</a></li>
+              <li><a href="//www.mozilla.org/en-US/about/legal.html">Legal Notices</a></li>
+            </ul>
+          </nav>
+          <nav class="span2">
+            <h3>Connect with us</h3>
+            <ul>
+              <li><a href="http://twitter.com/mozilla/">Twitter</a></li>
+              <li><a href="https://www.facebook.com/mozilla/">Facebook</a></li>
+            </ul>
+          </nav>
+
+          <nav class="span2">
+            <h3>Make something</h3>
+            <ul>
+              <li><a href="/en-US/projects">Projects</a></li>
+              <li><a href="https://webmaker.org/tools/">Tools</a></li>
+              <li><a href="https://webmaker.org/events/">Events</a></li>
+            </ul>
+          </nav>
+
+          <nav class="span2">
+            <h3>Support our work</h3>
+            <ul>
+              <li><a href="https://donate.mozilla.org/page/contribute/join-mozilla?source=join_link">Donate</a></li>
+              <li><a href="https://mozillalabs.com/en-US/">Contribute</a></li>
+              <li><a href="https://donate.mozilla.org/page/contribute/firefoxtshirt">Buy a t-shirt</a></li>
+            </ul>
+          </nav>
+        </div>
+      </footer>
+    </section>
+
+  </div>
+  </div>
+
+  <script src="//www.mozilla.org/media/js/libs/jquery-1.7.1.min.js"></script>
+  <script src="//www.mozilla.org/tabzilla/media/js/tabzilla.js"></script> 
+</body>
 </html>
