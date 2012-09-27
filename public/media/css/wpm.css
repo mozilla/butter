@@ -316,6 +316,10 @@ Layout styles
 Home styles
 */
 
+  .video-js {
+    background: transparent;
+  }
+
   .pop {
     background: url(/8bitcorn.png) no-repeat scroll center bottom;
     width: 289px;
