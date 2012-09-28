@@ -7,20 +7,8 @@
  *
  * Supports a single event in the Media > Track > TrackEvent model.
  */
-define( [
-          "./logger",
-          "./eventmanager",
-          "util/lang",
-          "util/time",
-          "./views/trackevent-view"
-        ],
-        function(
-          Logger,
-          EventManagerWrapper,
-          LangUtil,
-          TimeUtil,
-          TrackEventView
-        ){
+define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/trackevent-view" ],
+        function( Logger, EventManager, LangUtil, TimeUtil, TrackEventView ) {
 
   var __guid = 0,
       __MINIMUM_TRACKEVENT_SIZE = 0.2;
@@ -63,7 +51,7 @@ define( [
         _popcornWrapper = popcornWrapper,
         _selected = false;
 
-    EventManagerWrapper( _this );
+    EventManager.extend( _this );
 
     _this.popcornOptions = _popcornOptions;
     _this.popcornTrackEvent = null;

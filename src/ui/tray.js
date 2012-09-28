@@ -17,7 +17,7 @@ define( [ "util/lang",  "./logo-spinner",
 
     var _loadingContainer = trayRoot.querySelector( ".butter-loading-container" );
 
-    var _logoSpinner = LogoSpinner( _loadingContainer );
+    var _logoSpinner = new LogoSpinner( _loadingContainer );
 
     this.statusArea = trayRoot.querySelector( ".butter-status-area" );
     this.timelineArea = trayRoot.querySelector( ".butter-timeline-area" );

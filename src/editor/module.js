@@ -11,7 +11,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
           "ui/toggler", "util/lang", "text!layouts/editor-area.html",
           "./default", "core/logger", "./header",
           "./media-editor", "./share-editor" ],
-  function( EventManagerWrapper, TrackEvent, Editor,
+  function( EventManager, TrackEvent, Editor,
             Toggler, LangUtils, EDITOR_AREA_LAYOUT,
             DefaultEditor, Logger, Header,
 
@@ -37,7 +37,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         _this = this,
         _logger = new Logger( butter.id );
 
-    EventManagerWrapper( _this );
+    EventManager.extend( _this );
 
     ButterNamespace.Editor = Editor;
 

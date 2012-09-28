@@ -21,6 +21,7 @@ define( [ "core/logger", "./plugin-list", "./plugin" ],
   var PluginManager = function( butter, moduleOptions ) {
 
     var _plugins = this.plugins = [],
+        _pluginList,
         _this = this;
 
     /**
@@ -31,7 +32,7 @@ define( [ "core/logger", "./plugin-list", "./plugin" ],
      * @param {Function} onModuleReady: Callback to signify that this module is ready to run
      */
     this._start = function( onModuleReady ) {
-      PluginList( butter );
+      _pluginList = new PluginList( butter );
       if ( moduleOptions && moduleOptions.plugins ) {
         _this.add( moduleOptions.plugins, onModuleReady );
       }

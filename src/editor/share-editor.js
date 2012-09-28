@@ -9,7 +9,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
   Editor.register( "share-properties", LAYOUT_SRC, function( rootElement, butter, compiledLayout ) {
     var TOOLTIP_NAME = "name-error-share-tooltip";
 
-    var socialMedia = SocialMedia(),
+    var socialMedia = new SocialMedia(),
         editorContainer = rootElement.querySelector( ".editor-container" ),
         saveContainer = rootElement.querySelector( ".save-container" ),
         projectURL = editorContainer.querySelector( ".butter-project-url" ),
@@ -213,7 +213,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
     butter.listen( "logout", displayLogin );
     butter.listen( "projectupdated", login );
 
-    Editor.BaseEditor( this, butter, rootElement, {
+    Editor.BaseEditor.extend( this, butter, rootElement, {
       open: function() {
         if ( !butter.cornfield.authenticated() ) {
           displayLogin();

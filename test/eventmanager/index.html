@@ -8,23 +8,23 @@
     <script type="text/javascript" src="../../src/butter.js"></script>
     <script src="../butter.inject.js"></script>\
     <script>
-      require( [ "../src/core/eventmanager" ], function( EventManagerWrapper ){
-        EventManagerWrapper( window );
+      require( [ "../src/core/eventmanager" ], function( EventManager ){
+        EventManager.extend( window );
 
         test( "EventManagerWrapper existence" , function (){
-          ok( EventManagerWrapper, "EventManagerWrapper exists" );
+          ok( EventManager, "EventManagerWrapper exists" );
         });
 
 
         test( "EventManagerWrapper wrapping" , function (){
           var o = {};
-          EventManagerWrapper( o );
+          EventManager.extend( o );
 
-          ok( o.listen && typeof o.listen === "function", "EventManagerWrapper adds listen" );
-          ok( o.unlisten && typeof o.unlisten === "function", "EventManagerWrapper adds unlisten" );
-          ok( o.chain && typeof o.chain === "function", "EventManagerWrapper adds chain" );
-          ok( o.unchain && typeof o.unchain === "function", "EventManagerWrapper adds unchain" );
-          ok( o.dispatch && typeof o.dispatch === "function", "EventManagerWrapper adds dispatch" );
+          ok( o.listen && typeof o.listen === "function", "EventManager.extend adds listen" );
+          ok( o.unlisten && typeof o.unlisten === "function", "EventManager.extend adds unlisten" );
+          ok( o.chain && typeof o.chain === "function", "EventManager.extend adds chain" );
+          ok( o.unchain && typeof o.unchain === "function", "EventManager.extend adds unchain" );
+          ok( o.dispatch && typeof o.dispatch === "function", "EventManager.extend adds dispatch" );
         });
 
 
@@ -33,7 +33,7 @@
               name = "eventA",
               data = "eventA data";
 
-          EventManagerWrapper( a );
+          EventManager.extend( a );
 
           a.listen( name, function eventAHandler( e ){
             ok( true, "eventA handler fired" );
@@ -59,7 +59,7 @@
               data = "eventA data",
               evt = {};
 
-          EventManagerWrapper( a );
+          EventManager.extend( a );
 
           a.listen( name, function eventAHandler( e ){
             ok( true, "eventA handler fired" );
@@ -84,7 +84,7 @@
               name = "eventA",
               data = "eventA data";
 
-          EventManagerWrapper( a );
+          EventManager.extend( a );
 
           function eventHandler1() { count += 1; }
           function eventHandler2() {
@@ -116,7 +116,7 @@
               name = "eventA",
               data = "eventA data";
 
-          EventManagerWrapper( a );
+          EventManager.extend( a );
 
           function eventHandler1() { count += 1; }
           function eventHandler2() { count += 2; }
@@ -152,8 +152,8 @@
               bEvent1 = false,
               bEvent2 = false;
 
-          EventManagerWrapper( a );
-          EventManagerWrapper( b );
+          EventManager.extend( a );
+          EventManager.extend( b );
 
           a.listen( event1, function( e ) { aEvent1 = e.data === data; } );
           a.listen( event2, function( e ) { aEvent2 = e.data === data; } );
@@ -190,8 +190,8 @@
               bEvent1 = false,
               bEvent2 = false;
 
-          EventManagerWrapper( a );
-          EventManagerWrapper( b );
+          EventManager.extend( a );
+          EventManager.extend( b );
 
           a.listen( event1, function( e ) { aEvent1 = e.data === data; } );
           a.listen( event2, function( e ) { aEvent2 = e.data === data; } );

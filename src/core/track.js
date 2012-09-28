@@ -2,16 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [
-          "./eventmanager",
-          "./trackevent",
-          "./views/track-view"
-        ],
-        function(
-          EventManagerWrapper,
-          TrackEvent,
-          TrackView
-        ){
+define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
+        function( EventManager, TrackEvent, TrackView ){
 
   var __guid = 0,
       Track;
@@ -36,7 +28,7 @@ define( [
      */
     _this.ghost = null;
 
-    EventManagerWrapper( _this );
+    EventManager.extend( _this );
 
     /**
      * Member: setPopcornWrapper

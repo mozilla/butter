@@ -16,7 +16,7 @@
         // loaded, not "failure". Please keep this in mind when changing this test or the config file that
         // includes it.
 
-        Butter({
+        Butter.init({
           config: "../test-config-auto-load.json",
           ready: function( butter ){
             equal( butter.media.length, 1, "One media created" );

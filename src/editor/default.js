@@ -51,7 +51,7 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
     }
 
     // Extend this object to become a TrackEventEditor
-    Editor.TrackEventEditor( _this, butter, rootElement, {
+    Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function ( parentElement, trackEvent ) {
         var targetList,
             optionsContainer = _rootElement.querySelector( ".editor-options" ),

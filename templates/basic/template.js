@@ -4,11 +4,11 @@
 
 ( function( Butter, EditorHelper ) {
   document.addEventListener( "DOMContentLoaded", function() {
-    new Butter({
+    Butter.init({
       config: "config.json",
       ready: function( butter ) {
         var script;
-        new EditorHelper( butter );
+        EditorHelper.init( butter );
         script = document.createElement( "script" );
         script.src = "//www.mozilla.org/tabzilla/media/js/tabzilla.js";
         document.body.appendChild( script );

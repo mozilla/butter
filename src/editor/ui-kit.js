@@ -7,7 +7,7 @@ define( [ "editor/editor", "editor/base-editor", "text!layouts/ui-kit.html" ],
 
   Editor.register( "ui-kit", LAYOUT_SRC, function( rootElement, butter, compiledLayout ) {
 
-    Editor.BaseEditor( this, butter, rootElement, {
+    Editor.BaseEditor.extend( this, butter, rootElement, {
       open: function() {
     
       },

@@ -16,7 +16,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
     Editor.register( "plugin-list", null, function( rootElement, butter ) {
       rootElement = _parentElement;
 
-      Editor.BaseEditor( this, butter, rootElement, {
+      Editor.BaseEditor.extend( this, butter, rootElement, {
         open: function( parentElement ) {
 
         },

@@ -125,8 +125,8 @@
       _this.updatePropertiesFromManifest( trackEvent );
     }
 
-    // Extend this object to become a BaseEditor
-    Butter.Editor.TrackEventEditor( _this, butter, rootElement, {
+    // Extend this object to become a TrackEventEditor
+    Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
         _butter = butter;
         // Update properties when TrackEvent is updated

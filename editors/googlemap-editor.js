@@ -227,7 +227,7 @@
     }
 
     // Extend this object to become a BaseEditor
-    Butter.Editor.TrackEventEditor( _this, butter, rootElement, {
+    Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
         var popcorn = butter.currentMedia.popcorn.popcorn;
 

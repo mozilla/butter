@@ -6,7 +6,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           "./track-container", "util/scrollbars", "./timebar",
           "./status", "./trackhandles", "./super-scrollbar",
           "util/lang", "text!layouts/media-instance.html" ],
-  function( TrackEvent, Track, EventManagerWrapper,
+  function( TrackEvent, Track, EventManager,
             TrackContainer, Scrollbars, TimeBar,
             Status, TrackHandles, SuperScrollbar,
             LangUtils, MEDIA_INSTANCE_LAYOUT ) {
@@ -38,13 +38,14 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer ),
         _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
         _currentMouseDownTrackEvent,
-        _defaultTrackeventDuration = butter.config.value( "trackEvent" ).defaultDuration;
+        _defaultTrackeventDuration = butter.config.value( "trackEvent" ).defaultDuration,
+        _status;
 
-    Status( _media, butter.ui.tray.statusArea );
+    _status = new Status( _media, butter.ui.tray.statusArea );
 
     _tracksContainer.setScrollbars( null, _vScrollBar );
 
-    EventManagerWrapper( _this );
+    EventManager.extend( _this );
 
     function onEditorMinimized( e ) {
       _timebar.update();

@@ -276,7 +276,7 @@ function init( window, document ) {
       // Always show controls.  See #2284 and #2298 on supporting
       // options.controls, options.autohide.
       popcorn.controls( true );
-      Controls( "controls", popcorn, {
+      Controls.create( "controls", popcorn, {
         onShareClick: function() {
           shareClick( popcorn );
         },
@@ -352,8 +352,8 @@ function init( window, document ) {
         setupEventHandlers( popcorn, config );
 
         // Wrap textboxes so they click-to-highlight and are readonly
-        TextboxWrapper( $( "#share-url" ), { readOnly: true } );
-        TextboxWrapper( $( "#share-iframe" ), { readOnly: true } );
+        TextboxWrapper.applyTo( $( "#share-url" ), { readOnly: true } );
+        TextboxWrapper.applyTo( $( "#share-iframe" ), { readOnly: true } );
 
         // Write out the iframe HTML necessary to embed this
         $( "#share-iframe" ).value = buildIFrameHTML();

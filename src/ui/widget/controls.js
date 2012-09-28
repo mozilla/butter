@@ -5,7 +5,7 @@
 define( [ "util/lang", "text!layouts/controls.html" ],
   function( LangUtils, CONTROLS_LAYOUT ) {
 
-  return function( container, p, options ) {
+  function Controls( container, p, options ) {
 
     var _controls = LangUtils.domFragment( CONTROLS_LAYOUT ).querySelector( "#butter-controls" ),
         _container = typeof container === "string" ? document.getElementById( container ) : container,
@@ -432,5 +432,9 @@ define( [ "util/lang", "text!layouts/controls.html" ],
     }
 
     return _container;
-  }; //controls
+  }
+
+  return {
+    create: Controls
+  };
 });

@@ -13,51 +13,30 @@
   };
 
   define( [
-            "core/eventmanager",
-            "core/logger",
-            "core/config",
-            "core/target",
-            "core/media",
-            "core/page",
-            "./modules",
-            "./dependencies",
-            "./dialogs",
-            "dialog/dialog",
-            "editor/editor",
-            "ui/ui",
-            "util/xhr",
-            "util/lang",
-            "text!default-config.json",
-            "text!layouts/ua-warning.html",
+            "core/eventmanager", "core/logger", "core/config", "core/target", "core/media", "core/page",
+            "./modules", "./dependencies", "./dialogs",
+            "dialog/dialog", "editor/editor", "ui/ui",
+            "util/xhr", "util/lang",
+            "text!default-config.json", "text!layouts/ua-warning.html",
             "ui/widget/tooltip",
             "util/shims"                  // keep this at the end so it doesn't need a spot in the function signature
           ],
           function(
-            EventManagerWrapper,
-            Logger,
-            Config,
-            Target,
-            Media,
-            Page,
-            Modules,
-            Dependencies,
-            Dialogs,
-            Dialog,
-            Editor,
-            UI,
-            XHR,
-            Lang,
-            DefaultConfigJSON,
-            UA_WARNING_LAYOUT,
-            ToolTip
+            EventManager, Logger, Config, Target, Media, Page,
+            Modules, Dependencies, Dialogs,
+            Dialog, Editor, UI,
+            XHR, Lang,
+            DEFAULT_CONFIG_JSON, UA_WARNING_LAYOUT,
+            ToolTip,
+            Shims                         // placeholder
           ){
 
     var __guid = 0,
         __instances = [];
 
-    var Butter = function( options ){
-      return new ButterInit( options );
-    }; //Butter
+    var Butter = function() {
+      throw "Do not use Butter in this mannger. Call Butter.init instead.";
+    };
 
     Butter.ToolTip = ToolTip;
 
@@ -70,7 +49,7 @@
       };
     };
 
-    function ButterInit( butterOptions ){
+    Butter.init = function( butterOptions ) {
 
       var ua = navigator.userAgent,
           acceptedUA;
@@ -99,7 +78,7 @@
           _config,
           _defaultConfig,
           _defaultTarget,
-          _this = this,
+          _this = {},
           _selectedEvents = [],
           _defaultPopcornScripts = {},
           _defaultPopcornCallbacks = {},
@@ -109,7 +88,7 @@
       // a base, and override whatever the user provides in the
       // butterOptions.config file.
       try {
-        _defaultConfig = Config.parse( DefaultConfigJSON );
+        _defaultConfig = Config.parse( DEFAULT_CONFIG_JSON );
       } catch ( e) {
         throw "Butter Error: unable to find or parse default-config.json";
       }
@@ -118,13 +97,13 @@
         Logger.enabled( butterOptions.debug );
       }
 
-      EventManagerWrapper( _this );
+      EventManager.extend( _this );
 
       // Leave a reference on the instance to expose dialogs to butter users at runtime.
       // Especially good for letting people use/create dialogs without being in the butter core.
-      this.dialog = Dialog;
+      _this.dialog = Dialog;
 
-      this.project = {
+      _this.project = {
         id: null,
         name: null,
         data: null,
@@ -137,7 +116,7 @@
         } //if
       } //checkMedia
 
-      this.getManifest = function ( name ) {
+      _this.getManifest = function ( name ) {
         checkMedia();
         return _currentMedia.getManifest( name );
       }; //getManifest
@@ -232,7 +211,7 @@
         }
       }
 
-      this.deselectAllTrackEvents = function() {
+      _this.deselectAllTrackEvents = function() {
         // selectedEvents' length will change as each trackevent's selected property
         // is set to false, so use a while loop here to loop through the continually
         // shrinking selectedEvents array.
@@ -245,7 +224,7 @@
        * Target methods
        ****************************************************************/
       //addTarget - add a target object
-      this.addTarget = function ( target ) {
+      _this.addTarget = function ( target ) {
         if ( !(target instanceof Target ) ) {
           target = new Target( target );
         } //if
@@ -260,7 +239,7 @@
       }; //addTarget
 
       //removeTarget - remove a target object
-      this.removeTarget = function ( target ) {
+      _this.removeTarget = function ( target ) {
         if ( typeof(target) === "string" ) {
           target = _this.getTargetByType( "id", target );
         } //if
@@ -279,7 +258,7 @@
       }; //removeTarget
 
       //serializeTargets - get a list of targets objects
-      this.serializeTargets = function () {
+      _this.serializeTargets = function () {
         var sTargets = [];
         for ( var i=0, l=_targets.length; i<l; ++i ) {
           sTargets.push( _targets[ i ].json );
@@ -289,7 +268,7 @@
 
       //getTargetByType - get the target's information based on a valid type
       // if type is invalid, return undefined
-      this.getTargetByType = function( type, val ) {
+      _this.getTargetByType = function( type, val ) {
         for( var i = 0, l = _targets.length; i < l; i++ ) {
           if ( _targets[ i ][ type ] === val ) {
             return _targets[ i ];
@@ -302,7 +281,7 @@
        * Project methods
        ****************************************************************/
       //importProject - Import project data
-      this.importProject = function ( projectData ) {
+      _this.importProject = function ( projectData ) {
         var oldTarget,
             targetData,
             i, l;
@@ -342,7 +321,7 @@
       }; //importProject
 
       //exportProject - Export project data
-      this.exportProject = function () {
+      _this.exportProject = function () {
         var exportJSONMedia = [];
         for ( var m=0, lm=_media.length; m<lm; ++m ) {
           exportJSONMedia.push( _media[ m ].json );
@@ -354,8 +333,8 @@
         return projectData;
       };
 
-      this.clearProject = function(){
-        var allTrackEvents = this.orderedTrackEvents;
+      _this.clearProject = function(){
+        var allTrackEvents = _this.orderedTrackEvents;
 
         while( allTrackEvents.length > 0 ) {
           allTrackEvents[ 0 ].track.removeTrackEvent( allTrackEvents[ 0 ] );
@@ -375,7 +354,7 @@
        ****************************************************************/
       //getMediaByType - get the media's information based on a valid type
       // if type is invalid, return undefined
-      this.getMediaByType = function ( type, val ) {
+      _this.getMediaByType = function ( type, val ) {
        for( var i = 0, l = _media.length; i < l; i++ ) {
           if ( _media[ i ][ type ] === val ) {
             return _media[ i ];
@@ -385,7 +364,7 @@
       }; //getMediaByType
 
       //addMedia - add a media object
-      this.addMedia = function ( media ) {
+      _this.addMedia = function ( media ) {
         if ( !( media instanceof Media ) ) {
           if ( media ) {
             media.makeVideoURLsUnique = _config.value( "makeVideoURLsUnique" );
@@ -444,7 +423,7 @@
       }; //addMedia
 
       //removeMedia - forget a media object
-      this.removeMedia = function ( media ) {
+      _this.removeMedia = function ( media ) {
 
         var idx = _media.indexOf( media );
         if ( idx > -1 ) {
@@ -484,18 +463,14 @@
         return undefined;
       }; //removeMedia
 
-      this.extend = function(){
-        Butter.extend( _this, [].slice.call( arguments, 1 ) );
-      };
-
       /****************************************************************
        * Trackevents
        ****************************************************************/
       // Selects all track events for which TrackEvent.property === query.
       // If the third param is true, it selects track events for which TrackEvent.popcornOptions.property === query.
-      this.getTrackEvents = function ( property, query, popcornOption ) {
+      _this.getTrackEvents = function ( property, query, popcornOption ) {
 
-        var allTrackEvents = this.orderedTrackEvents,
+        var allTrackEvents = _this.orderedTrackEvents,
             _filterTrackEvents;
 
         if ( !property ) {
@@ -516,8 +491,8 @@
       };
 
       // Selects all track events for which TrackEvent.type === query
-      this.getTrackEventsByType = function ( query ) {
-        return this.getTrackEvents( "type", query );
+      _this.getTrackEventsByType = function ( query ) {
+        return _this.getTrackEvents( "type", query );
       };
 
       /****************************************************************
@@ -615,7 +590,7 @@
         }
       });
 
-      var preparePage = this.preparePage = function( callback ){
+      var preparePage = _this.preparePage = function( callback ){
         var scrapedObject = _page.scrape(),
             targets = scrapedObject.target,
             medias = scrapedObject.media;
@@ -669,7 +644,7 @@
         });
       }; //preparePage
 
-      __instances.push( this );
+      __instances.push( _this );
 
       if( butterOptions.ready ){
         _this.listen( "ready", function( e ){
@@ -677,7 +652,7 @@
         });
       } //if
 
-      var preparePopcornScriptsAndCallbacks = this.preparePopcornScriptsAndCallbacks = function( readyCallback ){
+      var preparePopcornScriptsAndCallbacks = _this.preparePopcornScriptsAndCallbacks = function( readyCallback ){
         var popcornConfig = _config.value( "popcorn" ) || {},
             callbacks = popcornConfig.callbacks,
             scripts = popcornConfig.scripts,
@@ -839,8 +814,8 @@
         _this.project.template = _config.value( "name" );
 
         //prepare modules first
-        var moduleCollection = Modules( Butter, _this, _config ),
-            loader = Dependencies( _config );
+        var moduleCollection = new Modules( Butter, _this, _config ),
+            loader = new Dependencies( _config );
 
         _this.loader = loader;
 
@@ -895,25 +870,25 @@
         readConfig( butterOptions.config );
       } //if
 
-      this.page = _page;
-
-    }
+      _this.page = _page;
+    };
 
     Butter.Editor = Editor;
 
     Butter.instances = __instances;
 
     // Butter will report a version, which is the git commit sha
-    // of the version we ship.  This happens in make.js's build target.
+    // of the version we ship. This happens in make.js's build target.
     Butter.version = "@VERSION@";
 
     if ( window.Butter.__waiting ) {
       for ( var i=0, l=window.Butter.__waiting.length; i<l; ++i ) {
-        Butter.apply( {}, window.Butter.__waiting[ i ] );
+        Butter.init.apply( this, window.Butter.__waiting[ i ] );
       }
       delete Butter._waiting;
-    } //if
+    }
     window.Butter = Butter;
+
     return Butter;
   });
 
