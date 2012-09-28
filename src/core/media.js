@@ -240,6 +240,15 @@
         } //if
       }; //removeTrack
 
+      this.cleanUpEmptyTracks = function() {
+        var oldTracks = _tracks.slice();
+        for( var i = oldTracks.length - 1; i >= 0; --i ) {
+          if ( oldTracks[ i ].trackEvents.length === 0 && _tracks.length > 1 ) {
+            _this.removeTrack( oldTracks[ i ] );
+          }
+        }
+      };
+
       this.findTrackWithTrackEventId = function( id ){
         for( var i=0, l=_tracks.length; i<l; ++i ){
           var te = _tracks[ i ].getTrackEventById( id );

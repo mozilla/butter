@@ -22,7 +22,10 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
           trackView = nextTrack.view;
         }
         nextTrack.addTrackEvent( trackEvent );
+        return true;
       }
+
+      return false;
     }
 
     this.correctOverlappingTrackEvents = correctOverlappingTrackEvents;
@@ -117,6 +120,7 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
           ghost = trackEvent.view.ghost,
           newTrackEvent,
           newTrack;
+
       if ( ghost && ghost.track ) {
         newTrack = ghost.track;
         if ( !newTrack.isGhost ) {
@@ -136,7 +140,7 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
         }
       }
       else {
-        correctOverlappingTrackEvents( trackEvent );
+        return correctOverlappingTrackEvents( trackEvent );
       }
 
       return !!newTrackEvent;
@@ -144,7 +148,6 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
 
     this.trackEventDropped = function( trackEvent, newTrack, startTime ) {
       var newTrackEvent,
-          oldTrack = trackEvent.track,
           popcornOptions = trackEvent.popcornOptions,
           ghost = trackEvent.view.ghost,
           ghostTrack,
@@ -162,7 +165,7 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
           }
           ghostTrack.resultantTrack = newTrack;
         }
-        trackEvent.track.removeTrackEvent( trackEvent );
+
         newTrackEvent = newTrack.addTrackEvent( trackEvent );
         trackEvent.view.cleanupGhost();
         if ( ghostTrack ) {
@@ -170,7 +173,6 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
         }
       }
       else {
-        oldTrack.removeTrackEvent( trackEvent );
         duration = popcornOptions.end - popcornOptions.start;
         popcornOptions.start = startTime;
         popcornOptions.end = popcornOptions.start + duration;

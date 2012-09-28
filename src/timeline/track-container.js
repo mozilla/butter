@@ -24,6 +24,8 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
     var _leftViewportBoundary = 0,
         _viewportWidthRatio = 0.1;
 
+    var _newTrackForDroppables;
+
     _this.trackEventDragManager = new TrackEventDragManager( media, _container );
 
     butter.listen( "trackorderchanged", function( e ) {
@@ -41,36 +43,52 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
     }, false );
 
     _droppable = DragNDrop.droppable( _element, {
+      startDrop: function() {
+        _newTrackForDroppables = null;
+      },
       drop: function( dropped, mousePosition ) {
         var tracks = butter.currentMedia.orderedTracks,
             lastTrack = tracks[ tracks.length - 1 ],
             // Set lastTrackBottom to 0 initially so that if there are no tracks, we can still add a TrackEvent to the track-container.
             lastTrackBottom = 0;
 
+        // Used if drop spawns a new track
+        var newTrack, draggableType, trackEvent, droppedLeftValue;
+
         // Otherwise, lastTrackBottom will be set to the bottom value of the rectangle of the bottom-most track.
         if ( lastTrack ) {
           lastTrackBottom = lastTrack.view.element.getBoundingClientRect().bottom;
         }
 
-        // ensure its a plugin and that only the area under the last track is droppable
+        // Ensure its a plugin and that only the area under the last track is droppable
         if ( mousePosition[ 1 ] > lastTrackBottom ) {
-          var newTrack = butter.currentMedia.addTrack(),
-              trackRect = newTrack.view.element.getBoundingClientRect(),
-              left = mousePosition[ 0 ] - trackRect.left,
-              start = left / trackRect.width * newTrack.view.duration,
-              draggableType = ( dropped.element ? dropped.element : dropped ).getAttribute( "data-butter-draggable-type" );
+
+          draggableType = ( dropped.element || dropped ).getAttribute( "data-butter-draggable-type" );
 
           if ( draggableType === "plugin" ) {
+            newTrack = butter.currentMedia.addTrack();
             newTrack.view.dispatch( "plugindropped", {
-              start: start,
+              start: ( mousePosition[ 0 ] - _container.getBoundingClientRect().left ) / _container.clientWidth * newTrack.view.duration,
               track: newTrack,
               type: dropped.getAttribute( "data-popcorn-plugin-type" )
             });
-          } else if ( draggableType === "trackevent" ) {
-            newTrack.view.dispatch( "trackeventdropped", {
-              start: dropped.data.start,
-              track: newTrack,
-              trackEvent: dropped.data.trackEvent
+          }
+          else if ( draggableType === "trackevent" ) {
+            trackEvent = dropped.data.trackEvent;
+            droppedLeftValue = dropped.element.offsetLeft;
+
+            // Make sure to remove the trackevent so that there are no
+            // conflicts with track manipulation.
+            trackEvent.track.removeTrackEvent( trackEvent );
+
+            if ( !_newTrackForDroppables ) {
+              _newTrackForDroppables = butter.currentMedia.addTrack();
+            }
+
+            _newTrackForDroppables.view.dispatch( "trackeventdropped", {
+              start: droppedLeftValue / _container.clientWidth * _media.duration,
+              track: _newTrackForDroppables,
+              trackEvent: trackEvent
             });
           }
         }

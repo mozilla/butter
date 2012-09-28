@@ -274,6 +274,10 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           newTrack = e.data.track;
 
       _tracksContainer.trackEventDragManager.trackEventDropped( trackEvent, newTrack, e.data.start );
+
+      // If there are empty tracks lying around, delete them.
+      _media.cleanUpEmptyTracks();
+
       _vScrollBar.update();
     }
 
