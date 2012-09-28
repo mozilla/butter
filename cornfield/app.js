@@ -69,7 +69,7 @@ app.configure( function() {
     .use( express.bodyParser() )
     .use( clientSessions( CONFIG.session ) )
     /* Show Zeus who's boss
-     * This only affects requests under /api and /browserid, not static files
+     * This only affects requests under /api and /persona, not static files
      * because the static file writes the response header before we hit this middleware
      */
     .use( function( req, res, next ) {
@@ -79,7 +79,7 @@ app.configure( function() {
     .set('view options', {layout: false});
 });
 
-require( 'express-browserid' ).plugAll( app, {
+require( 'express-persona' )( app, {
   audience: CONFIG.dirs.hostname
 });
 require('./routes')( app, User, filter, sanitizer );
