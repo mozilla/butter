@@ -17,10 +17,6 @@
     return Math.max( Math.min( value || 0, maxWidth ), minWidth );
   }
 
-  function validateHexColor( color ) {
-    return color.match ? color.match( /^#(?:[0-9a-fA-F]{3}){1,2}$/ ) : false;
-  }
-
   // From humph's text plugin
   var escapeMap = {
     "&": "&amp;",
@@ -101,7 +97,7 @@
         },
         fontColor: {
           elem: "input",
-          type: "text",
+          type: "color",
           label: "Font Colour",
           "default": DEFAULT_FONT_COLOR,
           group: "advanced"
@@ -173,7 +169,7 @@
       container.appendChild( innerContainer );
       target.appendChild( container );
 
-      options.fontColor = options.fontColor && validateHexColor( options.fontColor ) || DEFAULT_FONT_COLOR;
+      innerContainer.style.color = options.fontColor || DEFAULT_FONT_COLOR;
       innerContainer.style.fontStyle = fontDecorations.italics ? "italic" : "normal";
       innerContainer.style.textDecoration = fontDecorations.underline ? "underline" : "none";
       innerContainer.style.fontSize = options.fontSize ? normalize( options.fontSize, 8, 200 ) + "px" : "24px";
