@@ -17,21 +17,6 @@
     return Math.max( Math.min( value || 0, maxWidth ), minWidth );
   }
 
-  // From humph's text plugin
-  var escapeMap = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': '&quot;',
-    "'": '&#39;'
-  };
-
-  function escapeHTML( string ) {
-    return String( string ).replace( /&(?!\w+;)|[<>"']/g, function ( s ) {
-      return escapeMap[ s ] || s;
-    });
-  }
-
   function newlineToBreak( string ) {
     // Deal with both \r\n and \n
     return string.replace( /\r?\n/gm, "<br>" );
@@ -133,7 +118,7 @@
     _setup: function( options ) {
 
       var target = Popcorn.dom.find( options.target ),
-          text = newlineToBreak( escapeHTML( options.text ) ),
+          text = newlineToBreak( options.text ),
           container = options._container = document.createElement( "div" ),
           innerContainer = document.createElement( "div" ),
           fontSheet,
