@@ -45,6 +45,19 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
         _zoomInterval,
         _this = this;
 
+    /**
+     * isScrubberInViewport
+     *
+     * Based on values in bounding box (Rect) objects, this function will report whether or
+     * not the scrubber lies within the viewport.
+     *
+     * @param {Rect} viewportRect: Rect object representing bounding box of viewport
+     * @param {Rect} scrubberRect: Rect object representing bounding box of scrubber
+     */
+    function isScrubberInViewport( viewportRect, scrubberRect ) {
+      return scrubberRect.left > viewportRect.left && scrubberRect.right < viewportRect.right;
+    }
+
     var onViewMouseUp, onViewMouseDown, onViewMouseMove,
         onLeftMouseUp, onLeftMouseDown, onLeftMouseMove,
         onRightMouseUp, onRightMouseDown, onRightMouseMove,
@@ -241,20 +254,50 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
      * A left and right position are calculated by moving them a set amount from their current
      * positions away from the mid-point of the viewport. A new width value is also calculated
      * to provide _boundsChangedCallback with the necessary values: left & width.
+     *
+     * The distance the left and right bounds of the viewport move is a weighted value dictated
+     * by the ratio of the scrubber's distance across the viewport with respect to the viewport's
+     * width.
      */
     function zoomOut() {
-      var halfWidth = ( _viewPort.clientWidth * ZOOM_EXPAND_AMOUNT - _viewPort.clientWidth ) / 2,
-          viewportRect = _viewPort.getBoundingClientRect(),
-          leftPosition = _viewPort.offsetLeft - halfWidth,
-          rightPosition = _rect.right - viewportRect.right - halfWidth,
-          newWidth = viewportRect.width + halfWidth * 2;
+      var viewportRect = _viewPort.getBoundingClientRect(),
+          scrubberRect = _scrubber.getBoundingClientRect(),
+          widthGrowth = ( _viewPort.clientWidth * ZOOM_EXPAND_AMOUNT - _viewPort.clientWidth ),
+          leftGrowth,
+          rightGrowth,
+          leftPosition,
+          rightPosition,
+          newWidth,
+          p;
 
+      if ( !isScrubberInViewport( viewportRect, scrubberRect ) ) {
+        // If the scrubber does not lie within the viewport, just assign half the total width growth
+        // for left and right growth variables respectively.
+        leftGrowth = rightGrowth = widthGrowth / 2;
+      }
+      else {
+        // Otherwise, derive a ratio representing the distance from the viewport's left side to the
+        // scrubber's position with respect to the width of the viewport.
+        p = ( scrubberRect.left - viewportRect.left ) / viewportRect.width;
+
+        // Assign oppositely-weighted values to left and right growth variables.
+        leftGrowth = widthGrowth * p;
+        rightGrowth = widthGrowth * ( 1 - p );
+      }
+
+      // Come up with new pixel values for left, right and width of viewport.
+      leftPosition = _viewPort.offsetLeft - leftGrowth;
+      rightPosition = _rect.right - viewportRect.right - rightGrowth;
+      newWidth = viewportRect.width + widthGrowth;
+
+      // Find the ratio of left and right position width respect to the super-scrollbar's width.
       leftPosition = ( leftPosition < 0 ? 0 : leftPosition ) / _element.clientWidth;
-      rightPosition = ( rightPosition < 0 ? 0 : rightPosition) / _element.clientWidth;
+      rightPosition = ( rightPosition < 0 ? 0 : rightPosition ) / _element.clientWidth;
 
       // Proxy for applying viewport-transition so it happens safely and gets removed properly.
       refreshTransitionLock();
 
+      // Assign percentage values to viewport style (for most accuracy).
       _viewPort.style.right = rightPosition * 100 + "%";
       _viewPort.style.left = leftPosition * 100 + "%";
 
@@ -274,13 +317,40 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
      * A left and right position are calculated by moving them a set amount from their current
      * positions toward the mid-point of the viewport. A new width value is also calculated
      * to provide _boundsChangedCallback with the necessary values: left & width.
+     *
+     * The distance the left and right bounds of the viewport move is a weighted value dictated
+     * by the ratio of the scrubber's distance across the viewport with respect to the viewport's
+     * width.
      */
     function zoomIn() {
-      var halfWidth = ( _viewPort.clientWidth * ZOOM_EXPAND_AMOUNT - _viewPort.clientWidth ) / 2,
-          viewportRect = _viewPort.getBoundingClientRect(),
-          leftPosition = _viewPort.offsetLeft + halfWidth,
-          rightPosition = _rect.right - viewportRect.right + halfWidth,
-          newWidth = viewportRect.width - halfWidth * 2;
+      var viewportRect = _viewPort.getBoundingClientRect(),
+          scrubberRect = _scrubber.getBoundingClientRect(),
+          widthGrowth = ( _viewPort.clientWidth * ZOOM_EXPAND_AMOUNT - _viewPort.clientWidth ),
+          leftGrowth,
+          rightGrowth,
+          leftPosition,
+          rightPosition,
+          newWidth,
+          p;
+
+      if ( !isScrubberInViewport( viewportRect, scrubberRect ) ) {
+        // If the scrubber does not lie within the viewport, just assign half the total width growth
+        // for left and right growth variables respectively.
+        leftGrowth = rightGrowth = widthGrowth / 2;
+      }
+      else {
+        // Otherwise, derive a ratio representing the distance from the viewport's left side to the
+        // scrubber's position with respect to the width of the viewport.
+        p = ( scrubberRect.left - viewportRect.left ) / viewportRect.width;
+
+        // Assign oppositely-weighted values to left and right growth variables.
+        leftGrowth = widthGrowth * p;
+        rightGrowth = widthGrowth * ( 1 - p );
+      }
+
+      leftPosition = _viewPort.offsetLeft + leftGrowth;
+      rightPosition = _rect.right - viewportRect.right + rightGrowth;
+      newWidth = viewportRect.width - widthGrowth;
 
       leftPosition = ( leftPosition < 0 ? 0 : leftPosition ) / _element.clientWidth;
       rightPosition = ( rightPosition < 0 ? 0 : rightPosition) / _element.clientWidth;
