@@ -24,7 +24,8 @@
           butter.debug = true;
           equals( butter.debug, true, "debug setter working correctly" );
           butter.unlisten( "mediaready", ready );
-          butter.listen( "mediaready", function() {
+          butter.listen( "mediaready", function onMediaReady() {
+            butter.unlisten( "mediaready", onMediaReady );
             equals( count, 1, "1 log was caught, events are being logged again" );
             start();
             console.log = oldLog;
