@@ -1,10 +1,11 @@
 #butter-super-scrollbar-container {
-  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.1);
+  background: none rgba(0, 0, 0, 0.1);
   display: block;
-  height: 32.5px;
+  height: 32px;
   position: relative;
   left: 0;
   right: 0;
+  bottom: 1px;
   border-top: 1px solid @baseLightOutline;
 
   .butter-super-scrollbar-zoom-buttons {
@@ -47,9 +48,7 @@
 }
 
 #butter-super-scrollbar-viewport {
-  .gradient( "vertical", fade( #FFF, 20% ), fade( #FFF, 7% ), true );
-  border: 3px solid #FFFFFF;
-  box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.5) inset;
+  .gradient( "vertical", fade( #FFF, 65% ), fade( #FFF, 20% ), true );
   cursor: move;
   height: 28px;
   position: absolute;
@@ -58,31 +57,82 @@
   &.viewport-transition {
     .transition(left 0.1s linear, right 0.1s linear);
   }
+  &:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    left: 0;
+    display: block;
+    border: 4px solid #FFFFFF;
+    z-index: 1000;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2) inset;
+  }
 }
 
 .butter-super-scrollbar-trackevent {
-  background: none repeat scroll 0 0 #999999;
+  background: rgba( 0, 0, 0, 0.4 );
   height: 3px;
   position: absolute;
+  z-index: 1000;
 }
 
 .butter-super-scrollbar-handle {
-  background: none repeat scroll 0 0 #41BB92;
+  background: #41BB92;
   cursor: e-resize;
   display: block;
-  height: 14px;
-  margin-top: -7px;
+  height: 18px;
+  margin-top: -9px;
   position: absolute;
   top: 50%;
-  width: 4px;
+  width: 6px;
+  border: 1px solid #2A7B60;
+  box-shadow: 0 2px 3px -2px;
+  z-index: 1000;
+
+  &:after {
+    content: "";
+    opacity: 0;
+    position: absolute;
+    display: inline-block;
+    background-image: url( "../resources/glyphicons-halflings-green.png" );
+    width: 14px;
+    height: 14px;
+    top: 2px;
+  }
+}
+
+#butter-super-scrollbar-container:hover .butter-super-scrollbar-handle {
+  &:after {
+    opacity: 0.5;
+  }
+  &:before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    left: 2px;
+    width: 2px;
+    background: #2A7B60;
+  }
 }
 
 #butter-super-scrollbar-handle-left {
   left: -2px;
+  &:after {
+    left: -20px;
+    background-position: -240px -96px;
+  }
 }
 
 #butter-super-scrollbar-handle-right {
-  right: -2px;
+  right: -10px;
+  &:after {
+    right: -20px;
+    background-position: -264px -96px;
+  }
 }
 
 #buter-super-scrollbar-scrubber {
