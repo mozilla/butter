@@ -156,7 +156,7 @@
       } else {
         _trackEvent = e;
       }
-      if ( plugins[ _trackEvent.type ] ) {
+      if ( plugins[ _trackEvent.type ] && _trackEvent.track ) {
         plugins[ _trackEvent.type ]( _trackEvent, butter.currentMedia.popcorn.popcorn );
       }
     } //updateFunction
