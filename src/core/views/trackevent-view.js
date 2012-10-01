@@ -28,6 +28,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         _elementText,
         _ghost,
         _onDrag,
+        _onResize,
         _this = this;
 
     EventManager.extend( _this );
@@ -104,6 +105,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
     this.setDragHandler = function( dragHandler ) {
       _onDrag = dragHandler;
+    };
+
+    this.setResizeHandler = function( resizeHandler ) {
+      _onResize = resizeHandler;
     };
 
     Object.defineProperties( this, {
@@ -241,9 +246,14 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                 start: function() {
                   _resizing = true;
                 },
-                stop: function() {
+                stop: function( resizeEvent ) {
                   _resizing = false;
-                  movedCallback();
+                  _this.dispatch( "trackeventresizestopped", resizeEvent );
+                },
+                resize: function( x, w, resizeEvent ) {
+                  if ( _onResize ) {
+                    _onResize( _trackEvent, x, w, resizeEvent, resizeEvent.direction );
+                  }
                 }
               });
 
@@ -257,21 +267,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         } //set
       }
     });
-
-    function movedCallback() {
-      _element.style.top = "0px";
-
-      var track = _trackEvent.track,
-          trackView = track.view,
-          media = track._media,
-          start = ( _element.offsetLeft / trackView.element.offsetWidth ) * media.duration,
-          end = start + ( _element.clientWidth / trackView.element.offsetWidth ) * media.duration;
-
-      _this.dispatch( "trackeventmoved", {
-        start: start,
-        end: end
-      });
-    }
 
     _element.className = "butter-track-event";
     if ( _icon ) {

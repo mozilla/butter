@@ -169,37 +169,29 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       _element.removeChild( ghost.element );
     };
 
-    // utility function to check if two trackevents are overlapping
-    function isOverlapping( te1, te2 ) {
-      return !( te1.left > te2.right || te1.right < te2.left );
-    }
-
-    this.findOverlappingTrackEvent = function( trackEventView, fromRect ) {
+    this.findOverlappingTrackEvent = function( trackEventView, leftValue, widthValue ) {
       var otherTrackEventView,
           rect1 = trackEventView.element.getBoundingClientRect(),
-          rect2;
+          rect2,
+          left, right, width;
 
-      function findOverlap( teView1, teView2 ) {
-        if ( !fromRect ) {
-          return !!( teView1 !== teView2 && !teView2.dragging );
-        } else {
-          return !teView2.dragging;
-        }
-      }
+      left = leftValue || rect1.left;
+      width = widthValue || rect1.width;
+      right = left + width;
 
       // If the rect's width is 0 here, it's likely that we're not even attached to the DOM
-      if ( rect1.width === 0 ) {
+      if ( width === 0 ) {
         return null;
       }
 
       // loop over all the trackevents for this track and see if we overlap
       for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
         otherTrackEventView = _trackEvents[ i ];
-        // make sure that we don't check against the same trackEvent
-        if ( findOverlap( trackEventView, otherTrackEventView ) ) {
+        // make sure that we don't check against the same trackEvent or other dragging trackEvents
+        if ( !otherTrackEventView.dragging && trackEventView !== otherTrackEventView ) {
           rect2 = otherTrackEventView.element.getBoundingClientRect();
           // if a trackevent overlaps and it's not a ghost...
-          if ( !otherTrackEventView.isGhost && isOverlapping( rect1, rect2 ) ) {
+          if ( !otherTrackEventView.isGhost && !( left > rect2.right || right < rect2.left ) ) {
             return otherTrackEventView.trackEvent;
           }
         }
