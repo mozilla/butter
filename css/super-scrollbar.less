@@ -1,5 +1,5 @@
 #butter-super-scrollbar-container {
-  background: none rgba(0, 0, 0, 0.1);
+  background: none rgba( 0, 0, 0, 0.1 );
   display: block;
   height: 32px;
   position: relative;
@@ -21,12 +21,12 @@
       width: 100%;
       line-height: 100%;
       cursor: pointer;
-      background: #d9dddd;
+      background: @midGrey;
       color: @baseLight;
       border-radius: 3px;
-      background-image: url("../resources/glyphicons-halflings.png");
+      background-image: url( "../resources/glyphicons-halflings.png" );
       &:active {
-        background-color: darken( #d9dddd, 10% );
+        background-color: darken( @midGrey, 10% );
       }
     }
 
@@ -55,7 +55,7 @@
   top: 0;
   min-width: 5px;
   &.viewport-transition {
-    .transition(left 0.1s linear, right 0.1s linear);
+    .transition( left 0.1s linear, right 0.1s linear );
   }
   &:before {
     content: "";
@@ -66,9 +66,9 @@
     bottom: -2px;
     left: 0;
     display: block;
-    border: 4px solid #FFFFFF;
-    z-index: 1000;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2) inset;
+    border: 4px solid #FFF;
+    z-index: 1;
+    box-shadow: 0 2px 2px 0 rgba( 0, 0, 0, 0.2 ) inset;
   }
 }
 
@@ -76,21 +76,21 @@
   background: rgba( 0, 0, 0, 0.4 );
   height: 3px;
   position: absolute;
-  z-index: 1000;
+  z-index: 1;
 }
 
 .butter-super-scrollbar-handle {
   background: #41BB92;
-  cursor: e-resize;
   display: block;
   height: 18px;
   margin-top: -9px;
   position: absolute;
   top: 50%;
   width: 6px;
-  border: 1px solid #2A7B60;
+  border: 1px solid @green;
   box-shadow: 0 2px 3px -2px;
-  z-index: 1000;
+  z-index: 1;
+  cursor: ew-resize;
 
   &:after {
     content: "";
@@ -115,14 +115,14 @@
     bottom: 2px;
     left: 2px;
     width: 2px;
-    background: #2A7B60;
+    background: darken( @green, 10% );
   }
 }
 
 #butter-super-scrollbar-handle-left {
   left: -2px;
   &:after {
-    left: -20px;
+    left: 10px;
     background-position: -240px -96px;
   }
 }
@@ -130,13 +130,13 @@
 #butter-super-scrollbar-handle-right {
   right: -10px;
   &:after {
-    right: -20px;
+    right: 10px;
     background-position: -264px -96px;
   }
 }
 
 #buter-super-scrollbar-scrubber {
-  background: none repeat scroll 0 0 #CB2408;
+  background: none repeat scroll 0 0 @red;
   bottom: 0;
   cursor: move;
   position: absolute;
