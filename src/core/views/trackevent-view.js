@@ -222,12 +222,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                   _dragging = true;
                   _this.dispatch( "trackeventdragstarted" );
                 },
-                stop: function(){
+                stop: function() {
                   _dragging = false;
                   _this.dispatch( "trackeventdragstopped" );
 
                   // Prevent movedcallback if "trackeventdragstopped" removed this trackEvent
-                  if ( _element.parentNode ) {
+                  if ( _trackEvent.track.view.element === _draggable.droppable.element ) {
                     movedCallback();
                   }
                 },
@@ -297,12 +297,16 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
     }, false );
 
     function select() {
-      _draggable.selected = true;
+      if ( _draggable ) {
+        _draggable.selected = true;
+      }
       _element.setAttribute( "selected", true );
     } //select
 
     function deselect() {
-      _draggable.selected = false;
+      if ( _draggable ) {
+        _draggable.selected = false;
+      }
       _element.removeAttribute( "selected" );
     } //deselect
 

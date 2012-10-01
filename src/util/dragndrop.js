@@ -11,13 +11,16 @@ define([], function(){
       MIN_WIDTH = 15,
       RESIZABLE_CLASS = "butter-resizable";
 
+  var NULL_FUNCTION = function(){};
+
   var __droppables = [],
       __mouseDown = false,
       __selectedDraggables = [],
       __mousePos = [ 0, 0 ],
       __mouseLast = [ 0, 0 ],
       __scroll = false,
-      __helpers = [];
+      __helpers = [],
+      __draggedOnce = false;
 
   // for what seems like a bug in chrome. :/
   // dataTransfer.getData seems to report nothing
@@ -44,6 +47,7 @@ define([], function(){
     __mouseLast[ 0 ] = __mousePos[ 0 ];
     __mouseLast[ 1 ] = __mousePos[ 1 ];
     __mousePos = [ e.clientX, e.clientY ];
+    __draggedOnce = true;
 
     var remembers,
         droppable,
@@ -87,14 +91,42 @@ define([], function(){
 
   function onMouseUp( e ){
     __mouseDown = false;
+
     window.removeEventListener( "mousemove", onDragged, false );
 
-    var selectedDraggable;
+    var selectedDraggable,
+        droppables = [],
+        droppable,
+        i;
 
-    for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
-      selectedDraggable = __selectedDraggables[ i ];
-      selectedDraggable.stop();
+    if ( __draggedOnce ) {
+
+      // Collect all the droppables
+      for( i = __selectedDraggables.length - 1; i >= 0; --i ) {
+        selectedDraggable = __selectedDraggables[ i ];
+        droppable = selectedDraggable.droppable;
+        if ( droppable && droppables.indexOf( droppable ) === -1 ) {
+          droppables.push( droppable );
+        }
+      }
+
+      // Let droppable know that it's about to receive one or more items
+      for( i = droppables.length - 1; i >= 0; --i ) {
+        droppables[ i ].startDrop();
+      }
+
+      for( i = __selectedDraggables.length - 1; i >= 0; --i ) {
+        selectedDraggable = __selectedDraggables[ i ];
+        selectedDraggable.stop();
+      }
+
+      // Let droppable know that we're done dropping
+      for( i = droppables.length - 1; i >= 0; --i ) {
+        droppables[ i ].stopDrop();
+      }
     }
+
+    __draggedOnce = false;
   }
 
   function onMouseDown( e ) {
@@ -102,6 +134,7 @@ define([], function(){
       onMouseUp( e );
       return;
     }
+    __draggedOnce = false;
     e.preventDefault();
     e.stopPropagation();
     window.addEventListener( "mousemove", onDragged, false );
@@ -184,8 +217,8 @@ define([], function(){
   function Resizable( element, options ){
     var _leftHandle = element.querySelector( ".handle.left-handle" ),
         _rightHandle = element.querySelector( ".handle.right-handle" ),
-        _onStart = options.start || function(){},
-        _onStop = options.stop || function(){},
+        _onStart = options.start || NULL_FUNCTION,
+        _onStop = options.stop || NULL_FUNCTION,
         _padding = options.padding || 0,
         _updateInterval = -1,
         _scroll = options.scroll,
@@ -333,8 +366,8 @@ define([], function(){
 
   function Helper( element, options ){
     var _image = options.image,
-        _onStart = options.start || function(){},
-        _onStop = options.stop || function(){},
+        _onStart = options.start || NULL_FUNCTION,
+        _onStop = options.stop || NULL_FUNCTION,
         _id = __helpers.length;
 
     __helpers[ _id ] = element;
@@ -366,9 +399,11 @@ define([], function(){
   function Droppable( element, options ){
     options = options || {};
     var _hoverClass = options.hoverClass,
-        _onDrop = options.drop || function(){},
-        _onOver = options.over || function(){},
-        _onOut = options.out || function(){},
+        _onDrop = options.drop || NULL_FUNCTION,
+        _onOver = options.over || NULL_FUNCTION,
+        _onOut = options.out || NULL_FUNCTION,
+        _onStartDrop = options.startDrop || NULL_FUNCTION,
+        _onStopDrop = options.stopDrop || NULL_FUNCTION,
         _droppable = {},
         _data = options.data,
         _rememberedDraggables = [];
@@ -433,6 +468,8 @@ define([], function(){
 
     _droppable = {
       element: element,
+      startDrop: _onStartDrop,
+      stopDrop: _onStopDrop,
       remember: function( draggable ){
         var idx = _rememberedDraggables.indexOf( draggable );
         if( idx === -1 ){
@@ -516,9 +553,9 @@ define([], function(){
         _containmentRect,
         _scrollAmount = options.scrollAmount || DEFAULT_SCROLL_AMOUNT,
         _oldZIndex,
-        _onStart = options.start || function(){},
+        _onStart = options.start || NULL_FUNCTION,
         _onStop = options.stop || function(){ return false; },
-        _onDrag = options.drag || function(){},
+        _onDrag = options.drag || NULL_FUNCTION,
         _originalPosition,
         _draggable = {},
         _data = options.data,
@@ -699,7 +736,7 @@ define([], function(){
 
   function Sortable( parentElement, options ){
 
-    var _onChange = options.change || function(){},
+    var _onChange = options.change || NULL_FUNCTION,
         _elements = [],
         _instance = {},
         _mouseDownPosition = 0,
