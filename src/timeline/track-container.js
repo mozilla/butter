@@ -139,6 +139,24 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       }
     }
 
+    function onTrackEventResized( trackEvent, x, w, resizeEvent, direction ) {
+      var trackView = trackEvent.track.view,
+          overlappingTrackEvent,
+          leftOffset = _container.getBoundingClientRect().left,
+          trackEventView = trackEvent.view;
+
+      overlappingTrackEvent = trackView.findOverlappingTrackEvent( trackEventView, x + leftOffset, w );
+
+      if ( overlappingTrackEvent ) {
+        if ( direction === 'right' ) {
+          resizeEvent.block( overlappingTrackEvent.view.element.offsetLeft );
+        }
+        else {
+          resizeEvent.block( overlappingTrackEvent.view.element.offsetLeft + overlappingTrackEvent.view.element.offsetWidth );
+        }
+      }
+    }
+
     function onTrackEventDragStarted( e ) {
       var trackEventView = e.target,
           element = trackEventView.element,
@@ -190,6 +208,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
     _media.listen( "trackeventadded", function( e ) {
       var trackEventView = e.data.view;
       trackEventView.setDragHandler( onTrackEventDragged );
+      trackEventView.setResizeHandler( onTrackEventResized );
       trackEventView.listen( "trackeventdragstarted", onTrackEventDragStarted );
       _vScrollbar.update();
     });
@@ -197,6 +216,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
     _media.listen( "trackeventremoved", function( e ) {
       var trackEventView = e.data.view;
       trackEventView.setDragHandler( null );
+      trackEventView.setResizeHandler( null );
       trackEventView.unlisten( "trackeventdragstarted", onTrackEventDragStarted );
       _vScrollbar.update();
     });

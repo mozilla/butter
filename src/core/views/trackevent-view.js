@@ -28,6 +28,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         _elementText,
         _ghost,
         _onDrag,
+        _onResize,
         _this = this;
 
     EventManager.extend( _this );
@@ -104,6 +105,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
     this.setDragHandler = function( dragHandler ) {
       _onDrag = dragHandler;
+    };
+
+    this.setResizeHandler = function( resizeHandler ) {
+      _onResize = resizeHandler;
     };
 
     Object.defineProperties( this, {
@@ -244,6 +249,11 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                 stop: function() {
                   _resizing = false;
                   movedCallback();
+                },
+                resize: function( x, w, resizeEvent ) {
+                  if ( _onResize ) {
+                    _onResize( _trackEvent, x, w, resizeEvent, resizeEvent.direction );
+                  }
                 }
               });
 

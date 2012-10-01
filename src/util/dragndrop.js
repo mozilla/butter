@@ -234,11 +234,20 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         _rightHandle = element.querySelector( ".handle.right-handle" ),
         _onStart = options.start || NULL_FUNCTION,
         _onStop = options.stop || NULL_FUNCTION,
+        _onResize = options.resize || NULL_FUNCTION,
         _padding = options.padding || 0,
         _updateInterval = -1,
         _scroll = options.scroll,
         _scrollRect,
-        _elementRect;
+        _elementRect,
+        _lastDims,
+        _cancelIteration,
+        _resizeEvent = {
+          block: function( value ) {
+            _cancelIteration = value;
+          },
+          direction: null
+        };
 
     function onLeftMouseDown( e ){
       e.stopPropagation();
@@ -251,10 +260,11 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           mouseOffset;
 
       function update(){
-
         var diff = mousePosition - mouseDownPosition,
             newX = originalPosition + diff,
             newW = originalWidth - diff;
+
+        _cancelIteration = null;
 
         if( newW < MIN_WIDTH ){
           return;
@@ -274,9 +284,30 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           newX = 0;
         }
 
-        element.style.left = newX + "px";
-        element.style.width = newW - _padding + "px";
-        _elementRect = element.getBoundingClientRect();
+        if ( _lastDims[ 0 ] !== newX || _lastDims[ 1 ] !== newW ) {
+          _onResize( newX, newW, _resizeEvent );
+        }
+
+        if ( _cancelIteration === null ) {
+          element.style.left = newX + "px";
+          element.style.width = newW - _padding + "px";
+          _elementRect = element.getBoundingClientRect();
+
+          _lastDims[ 0 ] = newX;
+          _lastDims[ 1 ] = newW;
+        }
+        else {
+          newX = _cancelIteration;
+          newW = originalPosition + originalWidth - newX;
+
+          element.style.left = newX + "px";
+          element.style.width = newW - _padding + "px";
+          _elementRect = element.getBoundingClientRect();
+
+          _lastDims[ 0 ] = newX;
+          _lastDims[ 1 ] = newW;
+        }
+
       }
 
       function onMouseUp( e ){
@@ -292,6 +323,8 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         e.preventDefault();
         mousePosition = e.clientX;
         if( _updateInterval === -1 ){
+          _lastDims = [];
+          _resizeEvent.direction = 'left';
           _updateInterval = setInterval( update, SCROLL_INTERVAL );
           _onStart();
         }
@@ -320,6 +353,8 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         var diff = mousePosition - mouseDownPosition,
             newW = originalWidth + diff;
 
+        _cancelIteration = null;
+
         if( newW < MIN_WIDTH ){
           return;
         }
@@ -335,8 +370,21 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           newW = element.offsetParent.offsetWidth - originalPosition;
         }
 
-        element.style.width = newW + "px";
-        _elementRect = element.getBoundingClientRect();
+        if ( _lastDims[ 1 ] !== newW ) {
+          _onResize( originalPosition, newW, _resizeEvent );
+        }
+
+        if ( _cancelIteration === null ) {
+          element.style.width = newW + "px";
+          _elementRect = element.getBoundingClientRect();
+          _lastDims[ 1 ] = newW;
+        }
+        else {
+          newW = _cancelIteration - originalPosition;
+          element.style.width = newW + "px";
+          _elementRect = element.getBoundingClientRect();
+          _lastDims[ 1 ] = newW;
+        }
       }
 
       function onMouseUp( e ){
@@ -351,6 +399,8 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       function onMouseMove( e ){
         mousePosition = e.clientX;
         if( _updateInterval === -1 ){
+          _lastDims = [];
+          _resizeEvent.direction = 'right';
           _updateInterval = setInterval( update, SCROLL_INTERVAL );
           _onStart();
         }

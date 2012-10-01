@@ -27,12 +27,24 @@
               "type": "text",
               "popcornOptions": {
                 "start": 1,
-                "end": 6,
+                "end": 3,
                 "target": "video-container",
                 "text": "Pop some corn!"
               },
               "track": "Track0",
               "name": "TrackEvent3"
+            },
+            {
+              "id": "TrackEvent4",
+              "type": "text",
+              "popcornOptions": {
+                "start": 4,
+                "end": 6,
+                "target": "video-container",
+                "text": "Pop some corn!"
+              },
+              "track": "Track0",
+              "name": "TrackEvent4"
             }
           ]
         }
