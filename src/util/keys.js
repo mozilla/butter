@@ -5,6 +5,8 @@ define( [], function() {
     DELETE:     8,
     TAB:        9,
 
+    ENTER:      13,
+
     ESCAPE:     27,
 
     SPACE:      32,
