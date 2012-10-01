@@ -299,6 +299,12 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _rootElement.style.display = "block";
     };
 
+    function updateTrackEvents( media ) {
+      for ( var i = media.tracks.length - 1; i >= 0; i-- ) {
+        media.tracks[ i ].updateTrackEvents();
+      }
+    }
+
     function updateUI() {
       if( _media.duration ){
         _tracksContainer.update();
@@ -306,6 +312,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _vScrollBar.update();
         _superScrollbar.update();
         _trackHandles.update();
+        updateTrackEvents( butter.currentMedia );
       }
     }
 

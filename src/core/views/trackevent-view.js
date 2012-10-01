@@ -1,3 +1,4 @@
+/*global parseInt */
 /* This Source Code Form is subject to the terms of the MIT license
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
@@ -25,6 +26,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         _dragging = false,
         _resizing = false,
         _padding = 0,
+        _border = 0,
         _elementText,
         _ghost,
         _onDrag,
@@ -36,7 +38,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
       if ( !_trackEvent.track || !_trackEvent.track._media ) {
         return;
       }
-      _element.style.left = _start  / _trackEvent.track._media.duration * 100 + "%";
+
+      var widthCorrection = ( _border + _padding ) / _parent.element.clientWidth * 100;
+
+      _element.style.left = _start  / _trackEvent.track._media.duration * 100 - widthCorrection + "%";
       _element.style.width = ( _end - _start ) / _trackEvent.track._media.duration * 100 + "%";
       if ( _element.getBoundingClientRect().width < TRACKEVENT_MIN_WIDTH ) {
         _element.classList.add( "trackevent-small" );
@@ -208,11 +213,15 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
               // Capture the element's computed style on initialization
               var elementStyle = getComputedStyle( _element ),
-                  paddingLeft = elementStyle.paddingLeft ? +elementStyle.paddingLeft.substring( 0, elementStyle.paddingLeft.length - 2 ) : 0,
-                  paddingRight = elementStyle.paddingRight ? +elementStyle.paddingRight.substring( 0, elementStyle.paddingRight.length - 2 ) : 0;
+                  paddingLeft = elementStyle.paddingLeft ? parseInt( elementStyle.paddingLeft.length, 10 ) : 0,
+                  paddingRight = elementStyle.paddingRight ? parseInt( elementStyle.paddingRight.length, 10 ) : 0,
+                  borderLeft = elementStyle.borderLeftWidth ? parseInt( elementStyle.borderLeftWidth, 10 ) : 0,
+                  borderRight = elementStyle.borderRightWidth ? parseInt( elementStyle.borderRightWidth, 10 ) : 0;
 
-              // Store padding values to negate from width calculations
+              // Store padding and border values to negate from width calculations
               _padding = paddingLeft + paddingRight;
+
+              _border = borderRight + borderLeft;
 
               _draggable = DragNDrop.draggable( _element, {
                 containment: _parent.element.parentNode,
