@@ -242,7 +242,12 @@
         var vidContainerHeight = context.media.parentNode.getBoundingClientRect().height,
             paddingHeight = ( ( vidContainerHeight - 10 ) / vidContainerHeight ) * 100;
 
-        top = options.top > paddingHeight ? paddingHeight : options.top;
+        if ( vidContainerHeight && options.top > paddingHeight ) {
+          top = paddingHeight;
+        } else {
+          top = options.top;
+        }
+
         top += "%";
       } else {
         top = options.top + "%";
