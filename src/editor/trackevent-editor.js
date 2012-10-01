@@ -281,7 +281,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
         }
       }, false );
 
-      if ( element.type === "number" ) {
+      if ( element.type !== "text" ) {
         element.addEventListener( "change", function( e ) {
           var updateOptions = {};
           updateOptions[ propertyName ] = element.value;
