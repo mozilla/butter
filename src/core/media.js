@@ -347,6 +347,15 @@
         return null;
       };
 
+      this.findNextAvailableTrackFromTimes = function( start, end ) {
+        for ( var i = 0, l = _orderedTracks.length; i < l; ++i ) {
+          if ( !_orderedTracks[ i ].findOverlappingTrackEvent( start, end ) ) {
+            return _orderedTracks[ i ];
+          }
+        }
+        return null;
+      };
+
       Object.defineProperties( this, {
         ended: {
           enumerable: true,

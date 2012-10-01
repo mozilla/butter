@@ -198,6 +198,21 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       }
     };
 
+    this.findOverlappingTrackEvent = function( start, end ) {
+      var trackEvent, popcornOptions;
+
+      // loop over all the trackevents for this track and see if we overlap
+      for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
+        trackEvent = _trackEvents[ i ];
+        popcornOptions = trackEvent.popcornOptions;
+        // if a trackevent overlaps and it's not a ghost...
+        if ( !trackEvent.view.isGhost && !( start > popcornOptions.end || end < popcornOptions.start ) ) {
+          return trackEvent;
+        }
+      }
+      return null;
+    };
+
     this.deselectEvents = function( except ){
       for( var i=0, l=_trackEvents.length; i<l; ++i ){
         if( _trackEvents[ i ] !== except ){
