@@ -63,7 +63,7 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
       return item.type === "number" ? 0 : "";
     }
 
-    if( !_type ){
+    if ( !_type ){
       _logger.log( "Warning: " + _id + " has no type." );
     }
     else {
@@ -106,7 +106,8 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
       var newStart = updateOptions.start,
           newEnd = updateOptions.end,
           manifestOptions,
-          media;
+          media,
+          duration;
 
       if ( isNaN( newStart ) && updateOptions.hasOwnProperty( "start" ) ) {
         throw new TrackEventUpdateException( "invalid-start-time", "[start] is an invalid value." );
@@ -119,13 +120,21 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
       if ( newStart >= newEnd ) {
         throw new TrackEventUpdateException( "start-greater-than-end", "[start] must be less than [end]." );
       }
+
       if ( _track && _track._media ) {
         media = _track._media;
-        if( media.ready &&
-            ( newStart > media.duration ||
-            newEnd > media.duration ||
-            newStart < 0 ) ) {
-          throw new TrackEventUpdateException( "invalid-times", "[start] or [end] are not within the duration of media" );
+        duration = media.duration
+        if ( media.ready ) {
+          if ( newStart < 0 ) {
+            newStart = 0;
+          } else if ( newStart > duration ) {
+            newStart = duration;
+          }
+          if ( newEnd < 0 ) {
+            newEnd = 0;
+          } else if ( newEnd > duration ) {
+            newEnd = duration;
+          }
         }
       }
 
@@ -152,10 +161,10 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
         }
       }
       
-      if( newStart ){
+      if ( newStart != null ){
         _popcornOptions.start = newStart;
       }
-      if( newEnd ){
+      if ( newEnd != null){
         _popcornOptions.end = newEnd;
       }
 
@@ -187,8 +196,8 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
      * @event trackeventupdated: Occurs whenan update operation succeeded.
      */
     this.moveFrameLeft = function( inc, metaKey ){
-      if( !metaKey ) {
-        if( _popcornOptions.start > inc ) {
+      if ( !metaKey ) {
+        if ( _popcornOptions.start > inc ) {
           _popcornOptions.start -= inc;
           _popcornOptions.end -= inc;
         } else {
@@ -214,13 +223,13 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
      * @event trackeventupdated: Occurs whenan update operation succeeded.
      */
     this.moveFrameRight = function( inc, metaKey ){
-      if( _popcornOptions.end < _track._media.duration - inc ) {
+      if ( _popcornOptions.end < _track._media.duration - inc ) {
         _popcornOptions.end += inc;
-        if( !metaKey ) {
+        if ( !metaKey ) {
           _popcornOptions.start += inc;
         }
       } else {
-        if( !metaKey ) {
+        if ( !metaKey ) {
           _popcornOptions.start += _track._media.duration - _popcornOptions.end;
         }
         _popcornOptions.end = _track._media.duration;
@@ -380,10 +389,10 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
           return _selected;
         },
         set: function( val ){
-          if( val !== _selected ){
+          if ( val !== _selected ){
             _selected = val;
             _view.selected = _selected;
-            if( _selected ){
+            if ( _selected ){
               _this.dispatch( "trackeventselected" );
             }
             else {
@@ -415,7 +424,7 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
         set: function( importData ){
           _type = _popcornOptions.type = importData.type;
           this.manifest = Popcorn.manifest[ _type ];
-          if( importData.name ){
+          if ( importData.name ){
             _name = importData.name;
           }
           _popcornOptions = importData.popcornOptions;
