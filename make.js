@@ -462,6 +462,7 @@ target.deploy = function(){
   cp('-R', 'resources', DIST_DIR);
   cp('-R', 'templates', DIST_DIR);
   cp('-R', 'cornfield', DIST_DIR);
+  cp('-R', 'node_modules', DIST_DIR);
 
   // Copy the popcorn test videos over
   mkdir('-p', './dist/external/popcorn-js/test');
