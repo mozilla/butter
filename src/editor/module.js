@@ -107,10 +107,6 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       }
     });
 
-    butter.listen( "trackeventopened", function( e ) {
-      _this.editTrackEvent( e.data );
-    });
-
     butter.listen( "trackeventadded", function ( e ) {
       var trackEvent = e.data,
           view = trackEvent.view,

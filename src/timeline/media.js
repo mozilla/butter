@@ -166,12 +166,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           trackEvent.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
           trackEvent.view.unlisten( "trackeventmouseout", onTrackEventMouseOut );
         }
-        trackEvent.view.listen( "trackeventopened", onTrackEventOpen );
       });
-
-      function onTrackEventOpen( e ) {
-        butter.dispatch( "trackeventopened", e.data );
-      }
 
       function onTrackEventAdded( e ){
         var trackEvent = e.data;
@@ -182,7 +177,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           trackEvent.view.listen( "trackeventmouseover", onTrackEventMouseOver );
           trackEvent.view.listen( "trackeventmouseout", onTrackEventMouseOut );
         }
-        trackEvent.view.listen( "trackeventopened", onTrackEventOpen );
       }
 
       function onTrackAdded( e ){
@@ -232,41 +226,60 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     butter.editor.listen( "editorminimized", onEditorMinimized );
 
-    function onPluginDropped( e ){
+    function onPluginDropped( e ) {
 
       var type = e.data.type,
           track = e.data.track,
           start = e.data.start,
+          end,
+          nextTrack,
           trackEvent;
 
-      if( start + _defaultTrackeventDuration > _media.duration ){
-          start = _media.duration - _defaultTrackeventDuration;
+      if ( start + _defaultTrackeventDuration > _media.duration ) {
+        start = _media.duration - _defaultTrackeventDuration;
       }
 
+      end = start + _defaultTrackeventDuration;
+
       var defaultTarget = butter.defaultTarget;
-      if( !defaultTarget && butter.targets.length > 0 ){
+      if ( !defaultTarget && butter.targets.length > 0 ) {
         defaultTarget = butter.targets[ 0 ];
+      }
+
+      if ( track.findOverlappingTrackEvent( start, end ) ) {
+        nextTrack = _media.getNextTrack( track );
+        if ( nextTrack ) {
+          if ( nextTrack.findOverlappingTrackEvent( start, end ) ) {
+            track = _media.insertTrackBefore( null, nextTrack );
+          }
+          else {
+            track = nextTrack;
+          }
+        }
+        else {
+          track = _media.addTrack();
+        }
       }
 
       trackEvent = track.addTrackEvent({
         popcornOptions: {
           start: start,
-          end: start + _defaultTrackeventDuration,
+          end: end,
           target: defaultTarget.elementID
         },
         type: type
       });
 
-      // Call this first to make sure it's in the right place.
-      _tracksContainer.trackEventDragManager.correctOverlappingTrackEvents( trackEvent );
-
       trackEvent.update();
 
-      if( defaultTarget ){
+      if ( defaultTarget ) {
         defaultTarget.view.blink();
       }
 
-      trackEvent.view.open();
+      butter.dispatch( "trackeventcreated", {
+        trackEvent: trackEvent,
+        by: "media"
+      });
     }
 
     function onTrackEventDropped( e ) {
