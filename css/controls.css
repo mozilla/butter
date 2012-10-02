@@ -2,16 +2,15 @@
    http://ocupopdev.com/popcorn-embed/css/controls.css */
 
 .controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background: white;
   border: 1px solid #d5d6d5;
   height: 41px;
   visibility: visible;
   opacity: 1;
-  transition: opacity .5s ease-in-out;
-  -moz-transition: opacity .5s ease-in-out;
-  -webkit-transition: opacity .5s ease-in-out;
-  -o-transition: opacity .5s ease-in-out;
-  -ms-transition: opacity .5s ease-in-out;
 }
 
 .controls-hide {
