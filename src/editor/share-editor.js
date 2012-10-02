@@ -31,7 +31,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         embedHeight = embedDimensions[ 1 ],
         tooltip;
 
-    authorInput.value = butter.project.author === "Anonymous" || !butter.project.author ? "" : butter.project.author;
+    authorInput.value = butter.project.author ? butter.project.author : "";
 
     function destroyToolTip() {
       if ( tooltip && !tooltip.destroyed ) {
@@ -155,7 +155,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         projectName.value = butter.project.name;
       }
 
-      butter.project.author = authorInput.value || "Anonymous";
+      butter.project.author = authorInput.value || "";
       authorUpdateButton.classList.add( "disabled" );
 
       if ( !butter.project.name ) {
