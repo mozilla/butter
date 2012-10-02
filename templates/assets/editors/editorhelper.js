@@ -128,27 +128,29 @@
 
       var update = function() {
         newText = "";
-        for ( var i = 0; i < contentContainers.length; i++ ) {
+        for ( var i = 0, l = contentContainers.length; i < l; i++ ) {
           contentContainer = contentContainers[ i ];
           contentContainer.innerHTML = contentContainer.innerHTML.replace( /<br>/g, "\n" );
           newText += contentContainer.textContent;
-          if ( i < contentContainers.length - 1 ) {
+          if ( i < l - 1 ) {
             newText += "\n";
           }
         }
         trackEvent.update({
-          text: newText && newText !== "" ? newText : trackEvent.popcornOptions.text
+          text: newText
         });
       };
 
-      for ( var i = 0; i < contentContainers.length; i++ ) {
+      for ( var i = 0, l = contentContainers.length; i < l; i++ ) {
         contentContainer = contentContainers[ i ];
         if ( contentContainer ) {
           contentContainer.addEventListener( "blur", function( e ) {
             update();
           }, false );
           contentContainer.addEventListener( "keydown", function( e ) {
-            if ( e.keyCode === 13 ) {
+            // enter key for an update.
+            // shift + enter for newline.
+            if ( !e.shiftKey && e.keyCode === 13 ) {
               update();
             }
           }, false );
