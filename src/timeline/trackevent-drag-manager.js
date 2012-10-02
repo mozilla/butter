@@ -165,7 +165,9 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
           }
           ghostTrack.resultantTrack = newTrack;
         }
-
+        duration = popcornOptions.end - popcornOptions.start;
+        popcornOptions.start = startTime;
+        popcornOptions.end = popcornOptions.start + duration;
         newTrackEvent = newTrack.addTrackEvent( trackEvent );
         trackEvent.view.cleanupGhost();
         if ( ghostTrack ) {
