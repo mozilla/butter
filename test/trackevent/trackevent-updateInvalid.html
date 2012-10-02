@@ -29,12 +29,9 @@
                 } catch( e3 ) {
                   equal( e3.reason, "start-greater-than-end", "Correctly caught " + e3.reason );
 
-                  try {
-                    te.update( { start: 5, end: 800 } );
-                  } catch( e4 ) {
-                    equal( e4.reason, "invalid-times", "Correctly caught " + e4.reason );
-                    start();
-                  }
+                  te.update( { start: 5, end: 800 } );
+                  equal( te.popcornOptions.end, butter.currentMedia.duration, "Invalid end greater than duration is fixed to duration.");
+                  start();
                 }
               }
             }
