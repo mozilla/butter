@@ -6,7 +6,7 @@
 @_playButtonHeight: 26px;
 @_scrubberBarHeight: 8px;
 @_scrubberHandleHeight: 10px;
-@_traySideWidth: 95px;
+@_traySideWidth: 109px;
 @_timebarRight: 27px;
 
 /*********************************************************
@@ -36,7 +36,7 @@
 
 .time-bar {
   position: absolute;
-  left: @_traySideWidth + 10px;
+  left: @_traySideWidth;
   top: ( @_mediaStatusContainerHeight - @_scrubberBarHeight ) / 2;
   right: @_timebarRight;
   height: ( @_mediaStatusContainerHeight / 2 ) + ( @_scrubberBarHeight / 2 );
@@ -204,7 +204,7 @@
 .mute-button-container {
   position: absolute;
   top: 13px;
-  left: @_traySideWidth - 10px;
+  left: @_traySideWidth - 23px;
 
   .status-button {
     width: 20px;
