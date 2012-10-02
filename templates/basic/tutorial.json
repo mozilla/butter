@@ -1,0 +1,126 @@
+{
+  "targets": [
+    {
+      "id": "video-container",
+      "name": "video-container",
+      "element": "video-container"
+    }
+  ],
+  "media": [
+    {
+      "id": "Media0",
+      "name": "Media0",
+      "url": [
+        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.mp4",
+        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.ogv",
+        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.webm"
+      ],
+      "target": "video",
+      "duration": 64.54166412353516,
+      "tracks": [
+        {
+          "name": "Layer",
+          "id": "Layer0",
+          "trackEvents": [
+            {
+              "id": "TrackEvent3",
+              "type": "text",
+              "popcornOptions": {
+                "start": 1,
+                "end": 6,
+                "target": "video-container",
+                "text": "Pop some corn!"
+              },
+              "track": "Track0",
+              "name": "TrackEvent3"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "tutorial": {
+    "general": [
+      {
+        "start": 1,
+        "end": 6,
+        "name": "media-editor-button-tooltip",
+        "element": ".butter-editor-header-media",
+        "message": "This is The Media Editor",
+        "top": "50px",
+        "left": "50px",
+        "hover": false,
+        "hidden": true
+      },
+      {
+        "start": 1,
+        "end": 5,
+        "name": "save-button-tooltip",
+        "element": ".butter-save-btn",
+        "message": "Press to save your project",
+        "top": "45px",
+        "left": "50%",
+        "hover": false,
+        "hidden": true
+      }
+    ],
+    "plugin-list": [
+      {
+        "start": 1,
+        "end": 6,
+        "name": "image-plugin-button-tooltip",
+        "element": ".butter-plugin-tile[data-popcorn-plugin-type=image]",
+        "message": "Drag me to the timeline!",
+        "top": "50px",
+        "left": "50px",
+        "hover": false,
+        "hidden": true
+      },
+      {
+        "start": 15,
+        "end": 20,
+        "name": "skip-plugin-button-tooltip",
+        "element": ".butter-plugin-tile[data-popcorn-plugin-type=skip]",
+        "message": "I make the video skip forward!",
+        "top": "50px",
+        "left": "50px",
+        "hover": false,
+        "hidden": true
+      }
+    ],
+    "media-editor": [
+      {
+        "start": 8,
+        "end": 14,
+        "name": "new-media-button-tooltip",
+        "element": "#new-media-source-btn",
+        "message": "click me to add a new media source!",
+        "top": "50px",
+        "left": "50px",
+        "hover": false,
+        "hidden": true
+      },
+      {
+        "start": 10,
+        "end": 14,
+        "name": "alternate-media-button-tooltip",
+        "element": "#add-alternate-media-source-btn",
+        "message": "click me to add a fallback media!",
+        "top": "50px",
+        "left": "50px",
+        "hover": false,
+        "hidden": true
+      }
+    ],
+    "editorOpenEvents": [
+      {
+        "start": 7,
+        "type": "media-editor"
+      },
+      {
+        "start": 14,
+        "type": "plugin-list"
+      }
+    ]
+  }
+}

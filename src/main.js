@@ -16,7 +16,7 @@
             "core/eventmanager", "core/logger", "core/config", "core/target", "core/media", "core/page",
             "./modules", "./dependencies", "./dialogs",
             "dialog/dialog", "editor/editor", "ui/ui",
-            "util/xhr", "util/lang",
+            "util/xhr", "util/lang", "util/tutorial",
             "text!default-config.json", "text!layouts/ua-warning.html",
             "ui/widget/tooltip",
             "util/shims"                  // keep this at the end so it doesn't need a spot in the function signature
@@ -25,7 +25,7 @@
             EventManager, Logger, Config, Target, Media, Page,
             Modules, Dependencies, Dialogs,
             Dialog, Editor, UI,
-            XHR, Lang,
+            XHR, Lang, Tutorial,
             DEFAULT_CONFIG_JSON, UA_WARNING_LAYOUT,
             ToolTip,
             Shims                         // placeholder
@@ -780,6 +780,10 @@
           _this.project.name = savedData.name;
           _this.project.author = savedData.author;
           _this.importProject( savedData );
+
+          if ( savedData.tutorial ) {
+            Tutorial.build( _this, savedData.tutorial );
+          }
         }
 
         // attempt to load data from savedDataUrl in query string
