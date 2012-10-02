@@ -275,6 +275,7 @@ function checkHTML() {
 
   find([
     EDITORS_DIR,
+    join( SRC_DIR, "dialog", "dialogs" ),
     join( SRC_DIR, "layouts" ),
     join( SRC_DIR, "editor" ),
     TEMPLATES_DIR ] ).filter( function( file ) {
