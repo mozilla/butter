@@ -39,10 +39,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         return;
       }
 
-      var widthCorrection = ( _border + _padding ) / _parent.element.clientWidth * 100;
+      var trackEventOffset = ( _border + _padding ) / _parent.element.clientWidth * 100 / 2;
 
-      _element.style.left = _start  / _trackEvent.track._media.duration * 100 - widthCorrection + "%";
-      _element.style.width = ( _end - _start ) / _trackEvent.track._media.duration * 100 + "%";
+      _element.style.left = _start  / _trackEvent.track._media.duration * 100 - trackEventOffset + "%";
+      _element.style.width = ( _end - _start ) / _trackEvent.track._media.duration * 100 - trackEventOffset + "%";
       if ( _element.getBoundingClientRect().width < TRACKEVENT_MIN_WIDTH ) {
         _element.classList.add( "trackevent-small" );
       } else {
