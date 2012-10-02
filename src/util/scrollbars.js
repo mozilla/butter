@@ -5,7 +5,8 @@
 define( [ "core/eventmanager" ], function( EventManager ) {
 
   var VERTICAL_SIZE_REDUCTION_FACTOR = 3,
-      ACTIVE_CLASS = "butter-scollbar-active";
+      ACTIVE_CLASS = "butter-scollbar-active",
+      SCROLL_MODIFIER = 10;
 
   function Vertical( outerElement, innerElement ){
     var _element = document.createElement( "div" ),
@@ -78,11 +79,11 @@ define( [ "core/eventmanager" ], function( EventManager ) {
     }, false );
 
     outerElement.addEventListener( "mousewheel", function( e ){
-      if( e.wheelDeltaY ){
-        outerElement.scrollTop -= e.wheelDeltaY;
-        setHandlePosition();
-        e.preventDefault();
-      }
+      var delta = e.wheelDeltaY || e.wheelDelta;
+
+      outerElement.scrollTop -= delta / SCROLL_MODIFIER;
+      setHandlePosition();
+      e.preventDefault();
     }, false );
 
     // For Firefox
