@@ -93,9 +93,27 @@ Global styles and classes
     text-shadow: 1px 1px 0 rgba(255, 255, 255 0.5);
   }
   
-  h2 {
-    font-family: OpenSansLightItalic;
-    color: #676767;
+  h1 { 
+    font-family: "OpenSansLight", "OpenSansRegular", sans-serif; 
+    font-size: 36px; 
+    color: rgb(109, 110, 113); 
+    font-weight: 400px;
+    line-height: 50px;
+  }
+
+  h2 { 
+    font-family: "OpenSansRegular", sans-serif;
+    font-size: 16px;
+    color: rgb(109, 110, 113);
+    font-weight: 700px;
+    line-height: 23px
+  }
+
+  p { 
+    font-family: "OpenSansRegular",sans-serif;
+    font-size: 13px; 
+    color: rgb(147, 149, 152);
+    line-height: 23px; 
   }
 
   .hero-unit h2 {
@@ -103,8 +121,6 @@ Global styles and classes
   }
 
   .hero-unit h1 {
-    font-family: OpenSansBold;
-    color: #676767;
     text-transform: uppercase;
   }
 
@@ -144,7 +160,7 @@ Layout styles
   }
 
   #wrapper {
-    background: #FCF7ED url("/media/img/mozorg-gradient.png") repeat-x 0 0;
+    background: #F9F9F9 url("/media/img/sandstone/bg-stone.png") repeat-x 0 70px;
     padding-bottom: 0;
     display: table;
     width: 100%;
