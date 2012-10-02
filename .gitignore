@@ -18,6 +18,6 @@ css/butter.ui.css
 css/transitions.css
 css/embed-shell.css
 cornfield/config/runtime.json
-cornfield/config/version.json
+cornfield/config/versions.json
 docs
 css/embed.css
