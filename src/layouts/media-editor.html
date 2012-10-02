@@ -1,39 +1,42 @@
-<div class="media-editor butter-editor fadable">
+<div class="media-editor butter-editor fadable alternates-hidden allow-scrollbar">
   <h1>Change Media Source</h1>
-  <div class="container">
-    <a id="new-media-source-btn" class="butter-btn-green">
-      <i class="icon icon-white icon-plus-sign"></i>
-      New Media Source
-    </a>
-    <div id="add-new-media-source" class="editor-input hidden">
-      <label>New Media Source</label>
-      <input id="new-media-input" type="url" value="" placeholder="http://" />
-      <div class="alternate-new-media-group hidden">
-        <label id="alternate-media-warning"></label>
-        <input type="url" id="alternate-media-input-a" value="" placeholder="http://" />
-        <input type="url" id="alternate-media-input-b" value="" placeholder="http://" />
+  <div class="butter-editor-body scrollbar-container">
+    <div class="scrollbar-outer">
+      <div class="scrollbar-inner">
+        <fieldset>
+          <span class="current-media-wrapper"></span>
+          <p class="add-alternate-media-source-desc">You need .webm, .mp4, and .ogv versions of your HTML5 video to support all major browsers.</p>
+          <a class="add-alternate-media-source-btn butter-btn btn-light">Add Alternate</a>
+          <label class="media-error-message hidden">Error: one or more media sources failed to load!</label>
+        </fieldset>
       </div>
-      <div class="new-media-btn-group">
-        <p>
-          <label id="new-media-warning">Warning: Pressing change will replace all current media associated with your project!</label>
-          <a id="update-media-source-btn" class="butter-btn-green">
-            Change
-          </a>
-          <a id="cancel-media-source-btn" class="btn-light">
-            Cancel
-          </a>
-        </p>
-      </div>
-    </div>
-    <div id="current-media-div">
-      <label>Primary Media</label>
-      <span id="current-media-wrapper"></span>
-      <a id="add-alternate-media-source-btn" class="btn-light">
-        Add Alternate
-      </a>
-      <label class="media-error-message hidden">
-        Error: one or more media sources failed to load!
-      </label>
     </div>
   </div>
+</div>
+
+<div class="media-editor-inner-wrapper primary-media-wrapper">
+  <p>
+    <span class="fl-right">
+      <span class="media-icon youtube-icon"></span>
+      <span class="media-icon vimeo-icon"></span>
+      <span class="media-icon soundcloud-icon"></span>
+      <span class="media-icon html5-icon"></span>
+    </span>
+    Paste a link from Youtube, Vimeo, Soundcloud, or an HTML5 video
+  </p>
+  <textarea class="current-media-input" placeholder="Paste an HTML5, Youtube, or Soundcloud link here"></textarea>
+  <span class="butter-btn-slide-out">
+    <a class="butter-media-save butter-btn btn-green butter-disabled">Save</a>
+  </span>
+  <label class="alternate-media-label">Fallbacks<span class="icon icon-x"></span></label>
+</div>
+
+<div class="media-editor-inner-wrapper alt-media-wrapper">
+  <div class="alt-media-wrapper-inner">
+    <textarea class="current-media-input" placeholder="http://"></textarea>
+    <a class="delete-media-btn"><span class="icon icon-trash" ></span></a>
+  </div>
+  <span class="butter-btn-slide-out">
+    <a class="butter-media-save butter-btn btn-green butter-disabled">Save</a>
+  </span>
 </div>
