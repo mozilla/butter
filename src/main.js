@@ -121,35 +121,37 @@
         return _currentMedia.getManifest( name );
       }; //getManifest
 
-      function trackEventRequested( element, media, target ){
+      function trackEventRequested( element, media, target ) {
         var track,
             type = element.getAttribute( "data-popcorn-plugin-type" ),
             start = media.currentTime,
             end;
 
-        if( start > media.duration ){
+        if ( start > media.duration ) {
           start = media.duration - _defaultTrackeventDuration;
         }
 
-        if( start < 0 ){
+        if ( start < 0 ) {
           start = 0;
         }
 
         end = start + _defaultTrackeventDuration;
 
-        if( end > media.duration ){
+        if ( end > media.duration ) {
           end = media.duration;
         }
 
-        if( !type ){
+        if ( !type ) {
           _logger.log( "Invalid trackevent type requested." );
           return;
-        } //if
+        }
 
-        if( media.tracks.length === 0 ){
+        if ( media.tracks.length === 0 ) {
           media.addTrack();
-        } //if
-        track = media.tracks[ 0 ];
+        }
+
+        track = media.findNextAvailableTrackFromTimes( start, end ) || media.addTrack();
+
         var trackEvent = track.addTrackEvent({
           type: type,
           popcornOptions: {
@@ -166,8 +168,8 @@
         return trackEvent;
       }
 
-      function targetTrackEventRequested( e ){
-        if( _currentMedia ){
+      function targetTrackEventRequested( e ) {
+        if ( _currentMedia ) {
           var trackEvent = trackEventRequested( e.data.element, _currentMedia, e.target.elementID );
           _this.dispatch( "trackeventcreated", {
             trackEvent: trackEvent,
@@ -176,8 +178,8 @@
         }
         else {
           _logger.log( "Warning: No media to add dropped trackevent." );
-        } //if
-      } //targetTrackEventRequested
+        }
+      }
 
       function mediaPlayerTypeRequired( e ){
         _page.addPlayerType( e.data );
