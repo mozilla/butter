@@ -122,30 +122,43 @@
      * @param {TrackEvent} trackEvent: The trackEvent to update when content changes
      * @param {DOMElement} contentContainer: the container which to listen for changes and set as editable
      */
-    global.EditorHelper.contentEditable = function( trackEvent, contentContainer ) {
-      var newText = "";
+    global.EditorHelper.contentEditable = function( trackEvent, contentContainers ) {
+      var newText = "",
+          contentContainer;
 
-      if ( contentContainer ) {
-        contentContainer.addEventListener( "blur", function( e ) {
-          newText = contentContainer.textContent;
-          trackEvent.update({
-            text: newText && newText !== "" ? newText : trackEvent.popcornOptions.text
-          });
-        }, false );
-        contentContainer.addEventListener( "keydown", function( e ) {
-          if ( e.keyCode === 13 ) {
-            newText = contentContainer.textContent;
-            trackEvent.update({
-              text: newText && newText !== "" ? newText : trackEvent.popcornOptions.text
-            });
+      var update = function() {
+        newText = "";
+        for ( var i = 0; i < contentContainers.length; i++ ) {
+          contentContainer = contentContainers[ i ];
+          contentContainer.innerHTML = contentContainer.innerHTML.replace( /<br>/g, "\n" );
+          newText += contentContainer.textContent;
+          if ( i < contentContainers.length - 1 ) {
+            newText += "\n";
           }
-        }, false );
-        contentContainer.addEventListener( "mousedown", function( e ) {
-          if ( !e.shiftKey ) {
-            e.stopPropagation();
-          }
-        }, false );
-        contentContainer.setAttribute( "contenteditable", "true" );
+        }
+        trackEvent.update({
+          text: newText && newText !== "" ? newText : trackEvent.popcornOptions.text
+        });
+      };
+
+      for ( var i = 0; i < contentContainers.length; i++ ) {
+        contentContainer = contentContainers[ i ];
+        if ( contentContainer ) {
+          contentContainer.addEventListener( "blur", function( e ) {
+            update();
+          }, false );
+          contentContainer.addEventListener( "keydown", function( e ) {
+            if ( e.keyCode === 13 ) {
+              update();
+            }
+          }, false );
+          contentContainer.addEventListener( "mousedown", function( e ) {
+            if ( !e.shiftKey ) {
+              e.stopPropagation();
+            }
+          }, false );
+          contentContainer.setAttribute( "contenteditable", "true" );
+        }
       }
     };
 
