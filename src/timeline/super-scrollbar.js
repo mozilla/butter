@@ -18,6 +18,8 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
                                   // need one fix for both cases.
 
       MIN_WIDTH = 5,
+      ARROW_MIN_WIDTH = 50,       // The arrows have to change position at this point.
+      ARROW_MIN_WIDTH_CLASS = "super-scrollbar-small",
       ZOOM_EXPAND_AMOUNT = 1.05,  // Fraction representing the amount of zoom to use when zoom-in/out
                                   // buttons are clicked. Keeping this value near 1 is a good idea since
                                   // width = width * ZOOM_EXPAND_AMOUNT.
@@ -45,14 +47,23 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
         _zoomInterval,
         _this = this;
 
-    var onViewMouseUp, onViewMouseDown, onViewMouseMove,
+    var checkMinSize, onViewMouseUp, onViewMouseDown, onViewMouseMove,
         onLeftMouseUp, onLeftMouseDown, onLeftMouseMove,
         onRightMouseUp, onRightMouseDown, onRightMouseMove,
         onElementMouseUp, onElementMouseDown, onElementMouseMove,
         updateView;
 
+    checkMinSize = function () {
+      if ( _viewPort.getBoundingClientRect().width < ARROW_MIN_WIDTH ) {
+        _element.classList.add( ARROW_MIN_WIDTH_CLASS );
+      } else {
+        _element.classList.remove( ARROW_MIN_WIDTH_CLASS );
+      }
+    };
+
     _this.update = function() {
       _rect = _element.getBoundingClientRect();
+      checkMinSize();
     };
 
     onElementMouseUp = function( e ) {
