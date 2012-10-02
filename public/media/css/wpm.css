@@ -411,7 +411,72 @@ Home styles
     margin-bottom: 30px;
   }
 
+  .action {
+    text-align: center;
+  }
+
 /*
 Home styles
+================================
+Carousel styles
+*/
+
+.carousel {
+  position: relative;
+}
+.carousel li {
+  margin: 0 10px;
+}
+.carousel .control {
+  position: absolute;
+  top: 70px;
+  width: 40px;
+  height: 40px;
+  background: url(/media/img/slider-arrows.png) no-repeat;
+  overflow: hidden;
+  cursor: pointer;
+}
+.carousel .control span {
+  visibility: hidden;
+}
+.carousel .left {
+  left: 0;
+  background-position: 0 0;
+}
+.carousel .left:hover {
+  background-position: 0 -50px;
+}
+.carousel .left:active {
+  background-position: 0 -100px;
+}
+.carousel .right {
+  right: 0;
+  background-position: -50px 0;
+}
+.carousel .right:hover {
+  background-position: -50px -50px;
+}
+.carousel .right:active {
+  background-position: -50px -100px;
+}
+.carousel .carousel-items {
+  margin: 0 auto;
+}
+
+.no-js .carousel .control {
+  display: none;
+}
+.no-js .carousel ul {
+  list-style: none;
+  margin-left: -24px;
+}
+.no-js .carousel li {
+  float: left;
+  margin-left: 47px;
+  margin-right: 0;
+}
+  
+/*
+Carousel styles
 ================================
 */
