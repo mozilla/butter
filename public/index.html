@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US" dir="ltr">
+<html lang="en-US" dir="ltr" class="no-js">
 <head>
   <meta charset="utf-8">
   <title>Mozilla Popcorn</title>
@@ -15,8 +15,11 @@
   <!--[if lt IE 9]>
     <script src="/media/js/html5shiv.js"></script>
   <![endif]-->
-  </head>
+</head>
 <body id="home">
+  <script type="text/javascript">
+    document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/, '');
+  </script>
   <div id="outer-wrapper">
     <div id="wrapper">
       <section id="header">
