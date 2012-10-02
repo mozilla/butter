@@ -49,7 +49,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
             // Only rearrange trackEvent if it was moved *onto* this track
             if ( track && track !== _track ) {
               left = droppedElement.offsetLeft;
-              track.removeTrackEvent( dropped.data.trackEvent );
+              track.removeTrackEvent( dropped.data.trackEvent, null, true );
               start = left / trackRect.width * _duration;
               _this.dispatch( "trackeventdropped", {
                 start: start,
