@@ -123,7 +123,7 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
 
       if ( _track && _track._media ) {
         media = _track._media;
-        duration = media.duration
+        duration = media.duration;
         if ( media.ready ) {
           if ( newStart < 0 ) {
             newStart = 0;
@@ -161,10 +161,10 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
         }
       }
       
-      if ( newStart != null ){
+      if ( newStart !== null && newStart !== undefined ){
         _popcornOptions.start = newStart;
       }
-      if ( newEnd != null){
+      if ( newEnd !== null && newEnd !== undefined ){
         _popcornOptions.end = newEnd;
       }
 
