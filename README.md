@@ -20,6 +20,10 @@ Prerequisites
 * node v0.8 or higher
 * npm (comes with node v0.8 installer)
 * mongodb v2.0.8 or higher
+* A working build environment:
+  * Mac OS X - Xcode or Command Line Tools package
+  * Windows - Python 2.5+ and Visual Studio 2010 (C++ Express edition works fine)
+  * Linux - build-essential package on Debian/Ubuntu, or the equivalent for your distro
 
 Environment Setup
 -----------------
