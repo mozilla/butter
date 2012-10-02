@@ -47,6 +47,7 @@
           if ( options.end ) {
             options.end();
           }
+          document.activeElement.blur();
           trackEvent.update({
             top: ( ui.position.top / media.height ) * 100,
             left: ( ui.position.left / media.width ) * 100
@@ -126,7 +127,7 @@
       var newText = "",
           contentContainer;
 
-      var update = function() {
+      var updateText = function() {
         newText = "";
         for ( var i = 0, l = contentContainers.length; i < l; i++ ) {
           contentContainer = contentContainers[ i ];
@@ -136,6 +137,8 @@
             newText += "\n";
           }
         }
+      };
+      var updateTrackEvent = function() {
         trackEvent.update({
           text: newText
         });
@@ -145,13 +148,18 @@
         contentContainer = contentContainers[ i ];
         if ( contentContainer ) {
           contentContainer.addEventListener( "blur", function( e ) {
-            update();
-          }, false );
+            // store the new text.
+            updateText();
+            // update the text after any existing events are done.
+            // this way we do not revert any other event's changes.
+            setTimeout( updateTrackEvent, 0 );
+          }, true );
           contentContainer.addEventListener( "keydown", function( e ) {
             // enter key for an update.
             // shift + enter for newline.
             if ( !e.shiftKey && e.keyCode === 13 ) {
-              update();
+              updateText();
+              updateTrackEvent();
             }
           }, false );
           contentContainer.addEventListener( "mousedown", function( e ) {
