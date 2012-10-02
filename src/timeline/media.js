@@ -182,7 +182,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       function onTrackAdded( e ){
         var track = e.data;
         track.view.listen( "plugindropped", onPluginDropped );
-        track.view.listen( "trackeventdropped", onTrackEventDropped );
         track.view.listen( "trackeventmousedown", onTrackEventMouseDown );
         if( _trackEventHighlight === "hover" ){
           track.view.listen( "trackeventmouseover", onTrackEventMouseOver );
@@ -211,7 +210,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _media.listen( "trackremoved", function( e ){
         var track = e.data;
         track.view.unlisten( "plugindropped", onPluginDropped );
-        track.view.unlisten( "trackeventdropped", onTrackEventDropped );
         track.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
         if( _trackEventHighlight === "hover" ){
           track.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
@@ -232,7 +230,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           track = e.data.track,
           start = e.data.start,
           end,
-          nextTrack,
           trackEvent;
 
       if ( start + _defaultTrackeventDuration > _media.duration ) {
@@ -246,20 +243,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         defaultTarget = butter.targets[ 0 ];
       }
 
-      if ( track.findOverlappingTrackEvent( start, end ) ) {
-        nextTrack = _media.getNextTrack( track );
-        if ( nextTrack ) {
-          if ( nextTrack.findOverlappingTrackEvent( start, end ) ) {
-            track = _media.insertTrackBefore( null, nextTrack );
-          }
-          else {
-            track = nextTrack;
-          }
-        }
-        else {
-          track = _media.addTrack();
-        }
-      }
+      track = _media.forceEmptyTrackSpaceAtTime( track, start, end );
 
       trackEvent = track.addTrackEvent({
         popcornOptions: {
@@ -280,18 +264,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         trackEvent: trackEvent,
         by: "media"
       });
-    }
-
-    function onTrackEventDropped( e ) {
-      var trackEvent = e.data.trackEvent,
-          newTrack = e.data.track;
-
-      _tracksContainer.trackEventDragManager.trackEventDropped( trackEvent, newTrack, e.data.start );
-
-      // If there are empty tracks lying around, delete them.
-      _media.cleanUpEmptyTracks();
-
-      _vScrollBar.update();
     }
 
     this.destroy = function() {

@@ -198,7 +198,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       }
     };
 
-    this.findOverlappingTrackEvent = function( start, end ) {
+    this.findOverlappingTrackEvent = function( start, end, ignoreTrackEvent ) {
       var trackEvent, popcornOptions;
 
       // loop over all the trackevents for this track and see if we overlap
@@ -206,7 +206,9 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
         trackEvent = _trackEvents[ i ];
         popcornOptions = trackEvent.popcornOptions;
         // if a trackevent overlaps and it's not a ghost...
-        if ( !trackEvent.view.isGhost && !( start > popcornOptions.end || end < popcornOptions.start ) ) {
+        if (  trackEvent !== ignoreTrackEvent &&
+              !trackEvent.view.isGhost &&
+              !( start > popcornOptions.end || end < popcornOptions.start ) ) {
           return trackEvent;
         }
       }
