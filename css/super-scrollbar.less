@@ -1,31 +1,37 @@
+@_superScrollbarHeight: 32px;
+
 #butter-super-scrollbar-container {
-  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.1);
+  background: darken( @baseLight, 3% );
   display: block;
-  height: 32.5px;
-  position: relative;
-  left: 0;
-  right: 0;
-  border-top: 1px solid @baseLightOutline;
+  height: @_superScrollbarHeight;
+  position: absolute;
+  left: @_trackHandleWidth;
+  right: -7px;
+  bottom: -@_superScrollbarHeight;
+  border: 1px solid @baseLightOutline;
+  margin-right: 5px;
+  box-shadow: inset 2px 0 5px -2px rgba( 0, 0, 0, 0.2 );
 
   .butter-super-scrollbar-zoom-buttons {
     position: absolute;
+    background: #FFF;
     width: 14px;
     height: 26px;
-    right: -20px;
+    left: -25px;
     top: 3px;
+    z-index: 2;
 
-    & > div {
+    > div {
       text-align: center;
       height: 48%;
       width: 100%;
       line-height: 100%;
       cursor: pointer;
-      background: #d9dddd;
-      color: @baseLight;
+      opacity: 0.8;
       border-radius: 3px;
-      background-image: url("../resources/glyphicons-halflings.png");
+      background-image: url( "../resources/glyphicons-halflings.png" );
       &:active {
-        background-color: darken( #d9dddd, 10% );
+        background-image: url( "../resources/glyphicons-halflings-green.png" );
       }
     }
 
@@ -47,46 +53,118 @@
 }
 
 #butter-super-scrollbar-viewport {
-  .gradient( "vertical", fade( #FFF, 20% ), fade( #FFF, 7% ), true );
-  border: 3px solid #FFFFFF;
-  box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.5) inset;
+  .gradient( "vertical", fade( #FFF, 65% ), fade( #FFF, 20% ), true );
   cursor: move;
   height: 28px;
   position: absolute;
   top: 0;
   min-width: 5px;
   &.viewport-transition {
-    .transition(left 0.1s linear, right 0.1s linear);
+    .transition( left 0.1s linear, right 0.1s linear );
+  }
+  &:before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    left: -3px;
+    display: block;
+    border: 4px solid #FFF;
+    z-index: 1;
+    box-shadow: 0 2px 2px 0 rgba( 0, 0, 0, 0.2 ) inset, 0 0 0 1px @baseLightOutline;
   }
 }
 
 .butter-super-scrollbar-trackevent {
-  background: none repeat scroll 0 0 #999999;
+  background: rgba( 0, 0, 0, 0.4 );
   height: 3px;
   position: absolute;
+  z-index: 1;
 }
 
 .butter-super-scrollbar-handle {
-  background: none repeat scroll 0 0 #41BB92;
-  cursor: e-resize;
+  background: #41BB92;
   display: block;
-  height: 14px;
-  margin-top: -7px;
+  height: 18px;
+  margin-top: -9px;
   position: absolute;
   top: 50%;
-  width: 4px;
+  width: 6px;
+  border: 1px solid @green;
+  box-shadow: 0 2px 3px -2px;
+  z-index: 1;
+  cursor: ew-resize;
+
+  &:before { // The little center grip on the handle
+    content: "";
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    left: 2px;
+    width: 2px;
+    background: darken( @green, 10% );
+  }
+
+  .butter-super-arrow { // The green arrows
+    content: "";
+    opacity: 0;
+    position: absolute;
+    display: inline-block;
+    background-image: url( "../resources/glyphicons-halflings-green.png" );
+    width: 14px;
+    height: 14px;
+    top: 2px;
+    .transition( all 0.1s ease );
+  }
 }
 
 #butter-super-scrollbar-handle-left {
-  left: -2px;
+  left: -8px;
+  .butter-super-arrow {
+    left: 0;
+    background-position: -240px -96px;
+  }
 }
 
 #butter-super-scrollbar-handle-right {
-  right: -2px;
+  right: -10px;
+  .butter-super-arrow {
+    right: 0;
+    background-position: -264px -96px;
+  }
 }
 
+
+// Arrows - hover states
+// This allows the arrows to animate.
+#butter-super-scrollbar-container:hover  {
+  .butter-super-arrow {
+    opacity: 0.5;
+  }
+  #butter-super-scrollbar-handle-left .butter-super-arrow {
+    left: 10px;
+  }
+  #butter-super-scrollbar-handle-right .butter-super-arrow {
+    right: 10px;
+  }
+}
+
+// Arrows - minimum size states
+// At 50px wide, force the arrows to the outside
+#butter-super-scrollbar-container.super-scrollbar-small:hover {
+  #butter-super-scrollbar-handle-left .butter-super-arrow {
+    left: -16px;
+  }
+  #butter-super-scrollbar-handle-right .butter-super-arrow {
+    right: -16px;
+  }
+}
+
+// The little red scrubber
 #buter-super-scrollbar-scrubber {
-  background: none repeat scroll 0 0 #CB2408;
+  background: none repeat scroll 0 0 @red;
   bottom: 0;
   cursor: move;
   position: absolute;
