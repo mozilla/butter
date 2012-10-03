@@ -1,3 +1,4 @@
+// GLOBALS
 .transition(@transition1) {
   -webkit-transition: @transition1;
   -moz-transition: @transition1;
@@ -5,6 +6,10 @@
   -ms-transition: @transition1;
   transition: @transition1;
 }
+
+@creditsLogoSize: 25px;
+@creditsZindex: 100000000000000;
+@red: #CB3E21;
 
 html {
   height: 100%;
@@ -73,12 +78,9 @@ body {
   @_embedIconsSize: 50px;
   list-style: none;
   padding: 0;
-
   > li {
-
     display: inline-block;
     margin-right: 10px;
-
     > a {
       display: block;
       padding-top: @_embedIconsSize;
@@ -96,99 +98,206 @@ body {
 }
 
 /*********************************************************
-* EMBED INFO
+* Credits
 */
 
-@embedLogoWidth: 100px;
-@embedLogoHeight: 45px;
-@EMBED_HEADER_ZINDEX: 100000000;
-
-.embed-info {
-  position: absolute;
-  width: 100%;
-  background: rgba( 255, 255, 255, 0.85 );
-  padding: 10px;
+.attribution-info {
   font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
-  border-bottom: 1px solid rgba( 0, 0, 0, 0.2 );
-  z-index: @EMBED_HEADER_ZINDEX;
+  z-index: @creditsZindex;
 }
 
-.embed-info {
-
-  .embed-logo-small {
-    width: 90px;
-    height: 90px;
-    background: url( "../resources/controls/postroll_logo.png" ) center no-repeat;
-    background-size: contain;
-    float: left;
-    padding: 0;
-    margin-right: 10px;
-  }
-
-  .mozpop {
-    color: #58595B;
-    font-size: 1.1em;
-    font-weight: bold;
-    line-height: 1em;
-    text-decoration: none;
-  }
-
-  .embed-title {
-    font-size: 2em;
-    font-weight: bold;
-    line-height: 1.2em;
-    display: block;
-    text-decoration: none;
-    color: #002839;
-  }
-
-  .embed-author {
-    font-size: 1.4em;
-    line-height: 1em;
-    text-decoration: none;
-    color: #002839;
-  }
-
-  .embed-details {
-    float: left;
-    margin-top: 8px;
-  }
-
-}
-
-.embed-playing .embed-info {
-  background: none;
-  border-bottom: none;
-  .embed-logo-small {
-    opacity: 0.5;
-    .transition( opacity 0.4s ease );
-  }
-  .embed-details{
-    display: block;
-    opacity: 0;
-    .transition( opacity 0.2s ease );
+.attribution-logo {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: @creditsLogoSize;
+  height: @creditsLogoSize;
+  border-radius: @creditsLogoSize;
+  text-align: center;
+  background-color: @red;
+  color: #FFF;
+  z-index: 1;
+  opacity: 0.5;
+  cursor: pointer;
+  .transition( all 0.1s ease );
+  &:before {
+    position: relative;
+    top: 3px;
+    font-size: 30px;
+    font-family: Georgia, serif;
+    content: '\0201c';
   }
   &:hover {
-    .embed-logo-small {
-      opacity: 1;
-    }
-   .embed-details {
-      opacity: 1;
+    opacity: 1;
+    .attribution-text {
+      visibility: visible;
     }
   }
 }
+// "Credits"
+.attribution-text {
+  position: absolute;
+  height: @creditsLogoSize;
+  line-height: @creditsLogoSize;
+  left: @creditsLogoSize + 6;
+  visibility: hidden;
+  text-shadow: 0 0 5px rgba( 0, 0, 0, 0.3 );
+  .transition( all 0.1s ease );
+}
 
-.embed-dialog-open .embed-info {
-  display: none;
+@media only screen and ( min-width: @large ) {
+  .attribution-logo {
+    width: @creditsLogoSize + 5;
+    height: @creditsLogoSize + 5;
+    border-radius: @creditsLogoSize + 5;
+    &:before { font-size: 40px; }
+  }
+  .attribution-text {
+    left: @creditsLogoSize + 14;
+    line-height: @creditsLogoSize + 5;
+  }
+}
+
+.attribution-details {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding-left: 3.5em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  background: rgba( 255, 255, 255, 0.9 );
+  color: black;
+  border-bottom: 1px solid rgba( 0, 0, 0, 0.2 );
+  font-size: 16px;
+  .transition( opacity .1s ease );
+}
+// Adjust font size for other sizes
+@media only screen and ( min-width: @medium ) {
+  .attribution-details {
+    font-size: 18px;
+  }
+}
+@media only screen and ( min-width: @large ) {
+  .attribution-details {
+    font-size: 24px;
+  }
+}
+
+.attribution-mopop {
+  color: @red;
+  font-size: 0.9em;
+  font-weight: 700;
+}
+.attribution-title {
+  font-size: 1.3em;
+  line-height: 1.6;
+}
+.attribution-author {
+  font-style: italic;
+}
+.attribution-media {
+  margin-top: 0.5em;
+  font-size: 0.8em;
+   &:before {
+      display: block;
+      float: left;
+      content: "Media";
+      text-transform: uppercase;
+      font-size: 0.8em;
+      font-weight: 700;
+      margin-right: 2em;
+    }
+  .media-btn {
+    float: left;
+  }
+  .attribution-media-src {
+    float: left;
+    white-space: nowrap;
+    text-decoration: none;
+    color: #555;
+    max-width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+// The x in the top right corner
+.attribution-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 8px;
+  font-weight: 700;
+  opacity: 0.5;
+  cursor: pointer;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+// CREDITS STATES
+
+// State: default
+// hide credits panel
+.attribution-details {
+  opacity: 0;
+  visibility: hidden;
+}
+
+// State: attribution-on
+// when the logo is clicked, show the credits
+.attribution-on {
+  .attribution-logo {
+    opacity: 1;
+     .attribution-text {
+      visibility: hidden;
+    }
+  }
+  .attribution-details {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/*********************************************************
+* Icons for credits
+*/
+
+.media-icon {
+  position: relative;
+  float: left;
+  margin-right: 5px;
+  margin-top: 2px;
+  background: url( "../resources/media-icons.png" ) no-repeat;
+  height: 16px;
+  width: 16px;
+  &.html5-icon {
+    background-position: 0 0;
+  }
+  &.youtube-icon {
+    background-position: -16px 0;
+  }
+  &.vimeo-icon {
+    background-position: -32px 0;
+  }
+  &.soundcloud-icon {
+    background-position: -48px 0;
+  }
+}
+
+.attribution-close {
+  background-image: url("../resources/glyphicons-halflings-alt.png");
+  width: 14px;
+  height: 14px;
+  background-position: -432px -24px;
 }
 
 
 /*********************************************************
  SHARED STYLES BETWEEN POSTROLL AND SHARE STATES */
 
-
-#post-roll, #share {
-
+#post-roll,
+#share {
   font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
   text-shadow: 1px 1px 0 rgba( 255, 255, 255, 0.4 );
   font-size: 1.5em;
@@ -206,7 +315,7 @@ body {
     text-shadow: 1px 1px 0 rgba( 255, 255, 255, 0.4 );
   }
 
-  .embed-project, 
+  .embed-project,
   .share-options {
     margin-left: 30%;
     margin-top: 0;
@@ -346,7 +455,7 @@ body {
     background: #1eb771;
   }
 
-  .share-options input, 
+  .share-options input,
   .share-options textarea {
     font-size: 12px;
     resize: none;
@@ -360,35 +469,35 @@ body {
       outline: none;
       box-shadow: 0 0 0 1px #2BB673;
     }
-  } 
+  }
 
   .share-options textarea {
     height: 90px;
     font-family: menlo, monospace;
   }
-  
+
   .share-options fieldset {
     border: none;
     padding: 5px 0;
   }
-  
+
   .share-options label {
     display: block;
     padding-bottom: 0;
     font-size: 16px;
   }
-  
+
   .share-buttons {
     float: left;
     margin: 0;
     margin-left: 20px;
     display: none;
   }
-  
+
   .share-buttons > li > a {
     padding: 3px;
   }
-  
+
   .share-size {
     float: left;
     margin-left: 10px;
@@ -622,7 +731,7 @@ body {
 
   .post-roll-description {
     display: none;
-  } 
+  }
 
   #share {
 
@@ -633,7 +742,7 @@ body {
     .embed-project, .share-options {
       margin-left: 0;
     }
-      
+
     .share-options {
 
       fieldset {

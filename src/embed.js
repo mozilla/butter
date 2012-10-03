@@ -204,6 +204,40 @@ function init( window, document ) {
     }
   }
 
+  function setupAttribution( popcorn ) {
+    var icon = $( ".media-icon" ),
+        src = $( ".attribution-media-src" ),
+        toggler = $( ".attribution-logo" ),
+        closeBtn = $( ".attribution-close" ),
+        container = $( ".attribution-info" ),
+        classes = {
+          html5: "html5-icon",
+          youtube: "youtube-icon",
+          vimeo: "vimeo-icon",
+          soundcloud: "soundcloud-icon",
+          baseplayer: "html5-icon"
+        },
+        youtubeRegex = /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)youtu/,
+        type;
+
+    type = popcorn.media._util ? popcorn.media._util.type.toLowerCase() : "html5";
+
+    // Youtube currently won't have a popcorn.media._util this is a fallback check for YT
+    if ( type === "html5" ) {
+      type = youtubeRegex.test( src.href ) ? "youtube" : type;
+    }
+
+    icon.classList.add( classes[ type ] );
+
+    toggler.addEventListener( "click", function() {
+      container.classList.toggle( "attribution-on" );
+    }, false );
+
+    closeBtn.addEventListener( "click", function() {
+      container.classList.toggle( "attribution-on" );
+    }, false );
+  }
+
   var require = requirejs.config({
     context: "embed",
     baseUrl: "/src",
@@ -361,6 +395,8 @@ function init( window, document ) {
         // Get the page's cannonical URL and put in share URL
         $( "#share-url" ).value = getCannonicalURL();
       }
+
+      setupAttribution( popcorn );
 
       if ( window.Butter && console && console.warn ) {
         console.warn( "Butter Warning: page already contains Butter, removing." );
