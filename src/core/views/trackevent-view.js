@@ -103,11 +103,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
       _onDrag = dragHandler;
     };
 
-    // open an editor for this trackevent
-    this.open = function() {
-      _this.dispatch( "trackeventopened", _trackEvent );
-    };
-
     Object.defineProperties( this, {
       trackEvent: {
         enumerable: true,
