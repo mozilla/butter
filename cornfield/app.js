@@ -258,7 +258,8 @@ app.post( '/api/publish/:id',
       }
 
       // This is a query string-only URL because of the <base> tag
-      var remixUrl = "?savedDataUrl=/api/remix/" + project._id;
+      var remixUrl = "?savedDataUrl=/api/remix/" + project._id,
+          attribURL = Array.isArray( projectData.media[ 0 ].url ) ? projectData.media[ 0 ].url[ 0 ] : projectData.media[ 0 ].url;
 
       writeEmbed( path.join( PUBLISH_DIR_E, id + ".html" ),
                   res, path.join( PUBLISH_PREFIX_E, id + ".html" ),
@@ -266,6 +267,7 @@ app.post( '/api/publish/:id',
                     id: id,
                     author: project.author,
                     title: project.name,
+                    mediaSrc: attribURL,
                     baseHref: baseHref,
                     remixUrl: remixUrl,
                     templateScripts: templateScripts,

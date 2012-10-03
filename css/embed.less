@@ -99,89 +99,86 @@ body {
 * EMBED INFO
 */
 
-@embedLogoWidth: 100px;
-@embedLogoHeight: 45px;
+@embedLogoSize: 30px;
 @EMBED_HEADER_ZINDEX: 100000000;
 
-.embed-info {
+.attribution-info {
   position: absolute;
   width: 100%;
-  background: rgba( 255, 255, 255, 0.85 );
-  padding: 10px;
   font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
   border-bottom: 1px solid rgba( 0, 0, 0, 0.2 );
   z-index: @EMBED_HEADER_ZINDEX;
 }
 
-.embed-info {
+.attribution-info {
 
-  .embed-logo-small {
-    width: 90px;
-    height: 90px;
-    background: url( "../resources/controls/postroll_logo.png" ) center no-repeat;
-    background-size: contain;
+  .attribution-text {
+    visibility: hidden;
+  }
+
+  .attribution-logo {
+    width: @embedLogoSize;
+    height: @embedLogoSize;
+    border-radius: @embedLogoSize;
+    text-align: center;
+    background-color: red;
+    font-family: georgia;
+    font-size: 40px;
+    color: #000;
     float: left;
     padding: 0;
-    margin-right: 10px;
-  }
-
-  .mozpop {
-    color: #58595B;
-    font-size: 1.1em;
-    font-weight: bold;
-    line-height: 1em;
-    text-decoration: none;
-  }
-
-  .embed-title {
-    font-size: 2em;
-    font-weight: bold;
-    line-height: 1.2em;
-    display: block;
-    text-decoration: none;
-    color: #002839;
-  }
-
-  .embed-author {
-    font-size: 1.4em;
-    line-height: 1em;
-    text-decoration: none;
-    color: #002839;
-  }
-
-  .embed-details {
-    float: left;
-    margin-top: 8px;
-  }
-
-}
-
-.embed-playing .embed-info {
-  background: none;
-  border-bottom: none;
-  .embed-logo-small {
-    opacity: 0.5;
-    .transition( opacity 0.4s ease );
-  }
-  .embed-details{
-    display: block;
-    opacity: 0;
-    .transition( opacity 0.2s ease );
-  }
-  &:hover {
-    .embed-logo-small {
-      opacity: 1;
+    &:before {
+      content: '\0201c';
     }
-   .embed-details {
-      opacity: 1;
+  }
+
+  .attribution-details {
+    background: rgba( 255, 255, 255, 0.85 );
+    .transition( opacity .2s ease );
+    height: 100%;
+    width: 100%;
+    opacity: 1;
+    visibility: visible;
+    color: black
+
+    &.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .attribution-author {
+      font-size: 1.4em;
+      line-height: 1em;
+      text-decoration: italic;
     }
   }
 }
+
+// .embed-playing .embed-info {
+//   background: none;
+//   border-bottom: none;
+//   .embed-logo-small {
+//     opacity: 0.5;
+//     .transition( opacity 0.4s ease );
+//   }
+//   .embed-details{
+//     display: block;
+//     opacity: 0;
+//     .transition( opacity 0.2s ease );
+//   }
+//   &:hover {
+//     .embed-logo-small {
+//       opacity: 1;
+//     }
+//    .embed-details {
+//       opacity: 1;
+//     }
+//   }
+
 
 .embed-dialog-open .embed-info {
   display: none;
 }
-
 
 /*********************************************************
  SHARED STYLES BETWEEN POSTROLL AND SHARE STATES */
@@ -206,7 +203,7 @@ body {
     text-shadow: 1px 1px 0 rgba( 255, 255, 255, 0.4 );
   }
 
-  .embed-project, 
+  .embed-project,
   .share-options {
     margin-left: 30%;
     margin-top: 0;
@@ -346,7 +343,7 @@ body {
     background: #1eb771;
   }
 
-  .share-options input, 
+  .share-options input,
   .share-options textarea {
     font-size: 12px;
     resize: none;
@@ -360,35 +357,35 @@ body {
       outline: none;
       box-shadow: 0 0 0 1px #2BB673;
     }
-  } 
+  }
 
   .share-options textarea {
     height: 90px;
     font-family: menlo, monospace;
   }
-  
+
   .share-options fieldset {
     border: none;
     padding: 5px 0;
   }
-  
+
   .share-options label {
     display: block;
     padding-bottom: 0;
     font-size: 16px;
   }
-  
+
   .share-buttons {
     float: left;
     margin: 0;
     margin-left: 20px;
     display: none;
   }
-  
+
   .share-buttons > li > a {
     padding: 3px;
   }
-  
+
   .share-size {
     float: left;
     margin-left: 10px;
@@ -622,7 +619,7 @@ body {
 
   .post-roll-description {
     display: none;
-  } 
+  }
 
   #share {
 
@@ -633,7 +630,7 @@ body {
     .embed-project, .share-options {
       margin-left: 0;
     }
-      
+
     .share-options {
 
       fieldset {
@@ -701,4 +698,30 @@ body {
     margin-top: 0;
   }
 
+}
+
+/*********************************************************
+* Media Icons
+*/
+
+.media-icon {
+  position: relative;
+  display: block;
+  float: left;
+  margin-right: 5px;
+  background: url( "../resources/media-icons.png" ) no-repeat;
+  height: 16px;
+  width: 16px;
+  &.html5-icon {
+    background-position: 0 0;
+  }
+  &.youtube-icon {
+    background-position: -16px 0;
+  }
+  &.vimeo-icon {
+    background-position: -32px 0;
+  }
+  &.soundcloud-icon {
+    background-position: -48px 0;
+  }
 }

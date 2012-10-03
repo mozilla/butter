@@ -85,10 +85,15 @@ html(lang='en')
                       span.icon
                       span.size X-Large
                       span.dimensions 1280x763
-        #embed-info.embed-info
-          #embed-logo-small.embed-logo-small
-          #embed-details.embed-details
-            span.mozpop Mozilla Popcorn
-            span.embed-title #{title}
-            span.embed-author #{author}
+        #attribution-info.attribution-info
+          #attribution-logo.attribution-logo
+          span.attribution-text Credit
+          #attribution-details.attribution-details.hidden
+            a#share-close X
+            div.attribution-mopop Mozilla Popcorn
+            div.atttibution-title #{title}
+            if author
+              div.attribution-author #{author}
+            a.media-icon(href='#')
+            span.attribution-media-src #{mediaSrc}
       #controls.controls
