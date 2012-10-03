@@ -1,0 +1,23 @@
+<!-- This Source Code Form is subject to the terms of the MIT license
+If a copy of the MIT license was not distributed with this file, you can
+obtain one at http://www.mozillapopcorn.org/butter-license.txt -->
+
+<div class="butter-dialog butter-feedback-form">
+  <div class="butter-logo"></div>
+  <div class="butter-dialog-offset">
+    <div class="butter-dialog-title">Popcorn Maker encountered an error<span class="icon icon-info-sign"></span>
+      <p id="report" class="dialog-info dialog-hidden"></p>
+    </div>
+  </div>
+  <div class="butter-form">
+    <fieldset>
+      <label>Popcorn Maker needs to be reloaded. Your project was backed up and will be restored upon reloading. You can send an anonymous error report to Mozilla or skip this step and reload now. If you have any extra information you'd like to send, enter it below:</label>
+      <textarea id="comments" class="track-data main-textarea" placeholder="I was working and all of a sudden..."></textarea>
+    </fieldset>
+    <fieldset>
+      <button id="yes" class="butter-btn btn-green butter-dialog-button update">Yes, send anonymous report</button>
+      <button id="no" class="butter-btn btn-red butter-dialog-button update">No thanks, don't send</button>
+    </fieldset>
+  </div>
+  <a class="close-button"><span class="icon icon-only icon-x"></span></a>
+</div>

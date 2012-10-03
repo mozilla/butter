@@ -6,7 +6,26 @@ define( [ "./shims" ], function(){
 
   var DEFAULT_TRANSITION_TIMEOUT = 15;
 
+  /**
+   * HTML escape code from mustache.js, used under MIT Licence
+   * https://github.com/janl/mustache.js/blob/master/mustache.js
+   **/
+  var escapeMap = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': '&quot;',
+    "'": '&#39;'
+  };
+
   return {
+
+    // Escape HTML string so it is suitable for use in dom text
+    escapeHTML: function( str ) {
+      return String( str ).replace( /&(?!\w+;)|[<>"']/g, function ( s ) {
+        return escapeMap[ s ] || s;
+      });
+    },
 
     extend: function ( obj /* , extra arguments ... */) {
       var dest = obj, src = [].slice.call( arguments, 1 );
