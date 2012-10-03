@@ -2,9 +2,9 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define([ "util/lang", "util/keys", "util/time", "./base-editor",
+define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tooltip",
           "text!layouts/trackevent-editor-defaults.html" ],
-  function( LangUtils, KeysUtils, TimeUtils, BaseEditor,
+  function( LangUtils, KeysUtils, TimeUtils, BaseEditor, ToolTip,
             DEFAULT_LAYOUT_SNIPPETS ) {
 
   var __defaultLayouts = LangUtils.domFragment( DEFAULT_LAYOUT_SNIPPETS ),
@@ -191,8 +191,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
      * Member: attachSecondsChangeHandler
      *
      * Attaches handlers to an element (likely an <input>) and updates the TrackEvent corresponding to the given property name.
-     * Special consideration is given to properties like "start" and "end" that can't be blank. On keyup event, update only when
-     * appropriate.
+     * Special consideration is given to properties like "start" and "end" that can't be blank.
      *
      * @param {DOMElement} element: Element to which handler is attached
      * @param {TrackEvent} trackEvent: TrackEvent to update
@@ -271,25 +270,74 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor",
      * @param {Function} callback: OPTIONAL - Called when update is ready to occur
      */
      extendObject.attachInputChangeHandler = function( element, trackEvent, propertyName, callback ) {
-      element.addEventListener( "blur", function( e ) {
-        var updateOptions = {};
-        updateOptions[ propertyName ] = element.value;
+
+      function updateTrackEvent( trackEvent, callback, updateOptions ) {
         if ( callback ) {
           callback( trackEvent, updateOptions );
         } else {
           trackEvent.update( updateOptions );
         }
+      }
+
+      // ignoreBlur cuts down on unnecessary calls to a track event's update method
+      var ignoreBlur,
+          tooltipName,
+          tooltip;
+
+      element.addEventListener( "blur", function( e ) {
+        if ( ignoreBlur ) {
+          ignoreBlur = false;
+        } else {
+          var updateOptions = {};
+          updateOptions[ propertyName ] = element.value;
+          updateTrackEvent( trackEvent, callback, updateOptions );
+        }
+        if ( tooltip ) {
+          tooltip.hidden = true;
+        }
       }, false );
 
-      if ( element.type !== "text" ) {
+      element.addEventListener( "keypress", function( e ) {
+        var updateOptions = {};
+        if ( e.keyCode === KeysUtils.ENTER ) {
+          if ( !e.shiftKey ) {
+            e.preventDefault();
+            updateOptions[ propertyName ] = element.value;
+            updateTrackEvent( trackEvent, callback, updateOptions );
+            ignoreBlur = true;
+            element.blur();
+          }
+        }
+      }, false );
+
+      if ( element.type === "number" ) {
         element.addEventListener( "change", function( e ) {
           var updateOptions = {};
           updateOptions[ propertyName ] = element.value;
-          if ( callback ) {
-            callback( trackEvent, updateOptions );
-          } else {
-            trackEvent.update( updateOptions );
-          }
+          updateTrackEvent( trackEvent, callback, updateOptions );
+        }, false );
+      }
+
+      if ( element.type === "textarea" ) {
+        tooltipName = "shift-enter-tooltip-" + Date.now();
+
+        ToolTip.create({
+          name: tooltipName,
+          element: element.parentElement,
+          message: "Press Shift+Enter for a new line.",
+          top: "105%",
+          left: "50%",
+          hidden: true,
+          hover: false
+        });
+
+        tooltip = ToolTip.get( tooltipName );
+
+        element.addEventListener( "focus", function( e ) {
+          tooltip.hidden = false;
+        }, false );
+        element.addEventListener( "blur", function( e ) {
+          tooltip.hidden = true;
         }, false );
       }
     };
