@@ -53,7 +53,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
         onElementMouseUp, onElementMouseDown, onElementMouseMove,
         updateView;
 
-    checkMinSize = function () {
+    checkMinSize = function() {
       if ( _viewPort.getBoundingClientRect().width < ARROW_MIN_WIDTH ) {
         _element.classList.add( ARROW_MIN_WIDTH_CLASS );
       } else {
