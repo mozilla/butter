@@ -108,6 +108,27 @@ function writeEmbed( path, url, data, callback ) {
   stores.publish.write( path, writeEmbed.templateFn( data ), callback );
 }
 
+function generatePublishUrl( id ) {
+  return PUBLISH_PREFIX_V + "/" + id + ".html";
+}
+
+app.get( '/api/publishurl/:id',
+  filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
+  function( req, res ) {
+
+  var id = req.params.id,
+      url;
+
+  if ( !id ) {
+    res.json( { error: "No Project ID specified" }, 404 );
+    return;
+  }
+
+  url = generatePublishUrl( id );
+
+  res.json( { error: "okay", publishURL: url }, 200 );
+});
+
 app.post( '/api/publish/:id',
   filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
   function publishRoute( req, res ) {

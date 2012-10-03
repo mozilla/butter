@@ -257,6 +257,13 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     butter.listen( "ready", function() {
       if ( butter.project.name ) {
         _projectName.textContent = butter.project.name;
+
+        butter.cornfield.publishURL( butter.project.id, function( e ) {
+          if ( e.error === "okay" ) {
+            _previewBtn.classList.remove( "butter-hidden" );
+            _previewBtn.href = e.publishURL;
+          }
+        });
       }
     });
   };

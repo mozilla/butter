@@ -124,6 +124,23 @@ define(['util/xhr'], function(XHR) {
       });
     };
 
+    this.publishURL = function(id, callback) {
+      XHR.get(server + "/api/publishurl/" + id, function() {
+        if (this.readyState === 4) {
+          var response;
+
+          try {
+            response = JSON.parse( this.response || this.responseText );
+          } catch (err) {
+            callback({ error: "an unknown error occured" });
+            return;
+          }
+
+          callback(response);
+        }
+      });
+    }
+
     this.logout = function(callback) {
       XHR.post(server + "/persona/logout", null, function() {
         email = "";
