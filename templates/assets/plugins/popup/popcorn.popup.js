@@ -195,7 +195,7 @@
         fontColor: {
           elem: "input",
           type: "color",
-          label: "Font",
+          label: "Font colour",
           "default": "#668B8B",
           group: "advanced"
         },

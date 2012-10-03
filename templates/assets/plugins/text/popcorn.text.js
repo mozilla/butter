@@ -98,7 +98,7 @@
         fontColor: {
           elem: "input",
           type: "color",
-          label: "Font Colour",
+          label: "Font colour",
           "default": DEFAULT_FONT_COLOR,
           group: "advanced"
         },
