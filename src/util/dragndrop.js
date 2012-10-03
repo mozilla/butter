@@ -6,7 +6,7 @@ define([], function(){
 
   var SCROLL_INTERVAL = 16,
       DEFAULT_SCROLL_AMOUNT = 10,
-      SCROLL_WINDOW = 20,
+      SCROLL_WINDOW = 10,
       MAXIMUM_Z_INDEX = 2147483647,
       MIN_WIDTH = 15,
       RESIZABLE_CLASS = "butter-resizable";
@@ -589,15 +589,15 @@ define([], function(){
 
     function checkScroll(){
       if( !__scroll ){
-        if( _elementRect.right > _scrollRect.right + SCROLL_WINDOW ){
+        if( __mousePos[ 0 ] > _scrollRect.right + SCROLL_WINDOW ){
           __scroll = true;
           _scroll.scrollLeft += _scrollAmount;
         }
-        else if( _elementRect.left < _scrollRect.left - SCROLL_WINDOW ){
+        else if( __mousePos[ 0 ] < _scrollRect.left - SCROLL_WINDOW ){
           __scroll = true;
           _scroll.scrollLeft -= _scrollAmount;
-        } //if
-      } //if
+        }
+      }
       _draggable.updateRects();
     }
 
@@ -621,12 +621,16 @@ define([], function(){
 
       if( !_axis || _axis.indexOf( "x" ) > -1 ){
         if( r > _scrollRect.right + SCROLL_WINDOW ){
-          x = _scrollRect.right + SCROLL_WINDOW - _elementRect.width;
-          r = x + _elementRect.width;
+          if( x > _scrollRect.right - SCROLL_WINDOW ){
+            x = _scrollRect.right - SCROLL_WINDOW;
+            r = x + _elementRect.width;
+          }
         }
         else if( x < _scrollRect.left - SCROLL_WINDOW ){
-          x = _scrollRect.left - SCROLL_WINDOW;
-          r = x + _elementRect.width;
+          if( r < _scrollRect.left + SCROLL_WINDOW ){
+            r = _scrollRect.left + SCROLL_WINDOW;
+            x = r - _elementRect.width;
+          }
         }
         if( x < _containmentRect.left ){
           x = _containmentRect.left;
