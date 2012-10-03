@@ -268,7 +268,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
     function movedCallback() {
       _element.style.top = "0px";
       _start = ( _element.offsetLeft / _trackEvent.track.view.element.offsetWidth ) * _trackEvent.track._media.duration;
-      _end = _start + ( _element.offsetWidth / _trackEvent.track.view.element.offsetWidth ) * _trackEvent.track._media.duration;
+      _end = _start + ( _element.clientWidth / _trackEvent.track.view.element.offsetWidth ) * _trackEvent.track._media.duration;
       _trackEvent.update({
         start: _start,
         end: _end
