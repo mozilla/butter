@@ -47,6 +47,7 @@
           if ( options.end ) {
             options.end();
           }
+          document.activeElement.blur();
           trackEvent.update({
             top: ( ui.position.top / media.height ) * 100,
             left: ( ui.position.left / media.width ) * 100
@@ -122,30 +123,52 @@
      * @param {TrackEvent} trackEvent: The trackEvent to update when content changes
      * @param {DOMElement} contentContainer: the container which to listen for changes and set as editable
      */
-    global.EditorHelper.contentEditable = function( trackEvent, contentContainer ) {
-      var newText = "";
+    global.EditorHelper.contentEditable = function( trackEvent, contentContainers ) {
+      var newText = "",
+          contentContainer;
 
-      if ( contentContainer ) {
-        contentContainer.addEventListener( "blur", function( e ) {
-          newText = contentContainer.textContent;
-          trackEvent.update({
-            text: newText && newText !== "" ? newText : trackEvent.popcornOptions.text
-          });
-        }, false );
-        contentContainer.addEventListener( "keydown", function( e ) {
-          if ( e.keyCode === 13 ) {
-            newText = contentContainer.textContent;
-            trackEvent.update({
-              text: newText && newText !== "" ? newText : trackEvent.popcornOptions.text
-            });
+      var updateText = function() {
+        newText = "";
+        for ( var i = 0, l = contentContainers.length; i < l; i++ ) {
+          contentContainer = contentContainers[ i ];
+          contentContainer.innerHTML = contentContainer.innerHTML.replace( /<br>/g, "\n" );
+          newText += contentContainer.textContent;
+          if ( i < l - 1 ) {
+            newText += "\n";
           }
-        }, false );
-        contentContainer.addEventListener( "mousedown", function( e ) {
-          if ( !e.shiftKey ) {
-            e.stopPropagation();
-          }
-        }, false );
-        contentContainer.setAttribute( "contenteditable", "true" );
+        }
+      };
+      var updateTrackEvent = function() {
+        trackEvent.update({
+          text: newText
+        });
+      };
+
+      for ( var i = 0, l = contentContainers.length; i < l; i++ ) {
+        contentContainer = contentContainers[ i ];
+        if ( contentContainer ) {
+          contentContainer.addEventListener( "blur", function( e ) {
+            // store the new text.
+            updateText();
+            // update the text after any existing events are done.
+            // this way we do not revert any other event's changes.
+            setTimeout( updateTrackEvent, 0 );
+          }, true );
+          contentContainer.addEventListener( "keydown", function( e ) {
+            // enter key for an update.
+            // shift + enter for newline.
+            if ( !e.shiftKey && e.keyCode === 13 ) {
+              updateText();
+              updateTrackEvent();
+            }
+          }, false );
+          contentContainer.addEventListener( "mousedown", function( e ) {
+            if ( !e.shiftKey ) {
+              e.stopPropagation();
+            }
+          }, false );
+          contentContainer.setAttribute( "contenteditable", "true" );
+        }
       }
     };
 
