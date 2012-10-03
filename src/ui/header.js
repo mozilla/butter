@@ -207,9 +207,13 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       });
     }
 
-    this.attachToDOM = function() {
+    this.attachToDOM = function( el ) {
       document.body.classList.add( "butter-header-spacing" );
-      document.body.insertBefore( _rootElement, document.body.firstChild );
+      if ( el.firstChild ) {
+        el.insertBefore( _rootElement, el.firstChild );
+      } else {
+        el.appendChild( _rootElement );
+      }
     };
 
     _rootElement.querySelector( ".butter-feedback-btn" ).addEventListener( "click", function() {

@@ -27,8 +27,8 @@ define( [ "util/lang",  "./logo-spinner",
     this.statusArea.appendChild( statusAreaFragment );
     this.timelineArea.appendChild( timelineAreaFragment );
 
-    this.attachToDOM = function(){
-      document.body.appendChild( trayRoot );
+    this.attachToDOM = function( el ){
+      el.appendChild( trayRoot );
     };
 
     this.setMediaInstance = function( mediaInstanceRootElement ) {

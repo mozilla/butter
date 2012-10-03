@@ -32,11 +32,15 @@ define( [ "core/eventmanager", "./toggler",
         _uiConfig = butter.config,
         _uiOptions = _uiConfig.value( "ui" ),
         _unloadDialog,
+        _mainContainer,
         _this = this;
 
     EventManager.extend( _this );
 
     this.contentStateLocked = false;
+
+    _mainContainer = document.createElement( "div" );
+    _mainContainer.classList.add( "butter-main" );
 
     this.tray = new Tray();
     this.header = new Header( butter, _uiConfig );
@@ -86,7 +90,14 @@ define( [ "core/eventmanager", "./toggler",
 
     this.setEditor = function( editorAreaDOMRoot ) {
       _this.editor = editorAreaDOMRoot;
-      document.body.appendChild( editorAreaDOMRoot );
+      _mainContainer.appendChild( editorAreaDOMRoot );
+    };
+
+    this.moveTemplateInStage = function() {
+      var stage = document.querySelector( ".butter-stage" );
+      if ( stage ) {
+        _mainContainer.appendChild( stage );
+      }
     };
 
     this.load = function( onReady ){
@@ -112,8 +123,11 @@ define( [ "core/eventmanager", "./toggler",
           onReady();
         });
 
-        _this.tray.attachToDOM();
-        _this.header.attachToDOM();
+        document.body.appendChild( _mainContainer );
+        _this.moveTemplateInStage();
+        _this.tray.attachToDOM( _mainContainer );
+        _this.header.attachToDOM( document.body );
+
       }
       else{
         onReady();
