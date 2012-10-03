@@ -125,9 +125,14 @@
      */
     global.EditorHelper.contentEditable = function( trackEvent, contentContainers ) {
       var newText = "",
-          contentContainer;
+          contentContainer,
+          updateText,
+          updateTrackEvent,
+          onBlur,
+          onKeyDown,
+          onMouseDown;
 
-      var updateText = function() {
+      updateText = function() {
         newText = "";
         for ( var i = 0, l = contentContainers.length; i < l; i++ ) {
           contentContainer = contentContainers[ i ];
@@ -138,35 +143,38 @@
           }
         }
       };
-      var updateTrackEvent = function() {
+      updateTrackEvent = function() {
         trackEvent.update({
           text: newText
         });
+      };
+      onBlur = function( e ) {
+        // store the new text.
+        updateText();
+        // update the text after any existing events are done.
+        // this way we do not revert any other event's changes.
+        setTimeout( updateTrackEvent, 0 );
+      };
+      onKeyDown = function( e ) {
+        // enter key for an update.
+        // shift + enter for newline.
+        if ( !e.shiftKey && e.keyCode === 13 ) {
+          updateText();
+          updateTrackEvent();
+        }
+      };
+      onMouseDown = function( e ) {
+        if ( !e.shiftKey ) {
+          e.stopPropagation();
+        }
       };
 
       for ( var i = 0, l = contentContainers.length; i < l; i++ ) {
         contentContainer = contentContainers[ i ];
         if ( contentContainer ) {
-          contentContainer.addEventListener( "blur", function( e ) {
-            // store the new text.
-            updateText();
-            // update the text after any existing events are done.
-            // this way we do not revert any other event's changes.
-            setTimeout( updateTrackEvent, 0 );
-          }, true );
-          contentContainer.addEventListener( "keydown", function( e ) {
-            // enter key for an update.
-            // shift + enter for newline.
-            if ( !e.shiftKey && e.keyCode === 13 ) {
-              updateText();
-              updateTrackEvent();
-            }
-          }, false );
-          contentContainer.addEventListener( "mousedown", function( e ) {
-            if ( !e.shiftKey ) {
-              e.stopPropagation();
-            }
-          }, false );
+          contentContainer.addEventListener( "blur", onBlur, false );
+          contentContainer.addEventListener( "keydown", onKeyDown, false );
+          contentContainer.addEventListener( "mousedown", onMouseDown, false );
           contentContainer.setAttribute( "contenteditable", "true" );
         }
       }
