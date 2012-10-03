@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [], function(){
+define( [ "util/lang" ], function( util ){
 
   function Button( parentNode, className, onClick ) {
     var _container = parentNode.querySelector( className ),
@@ -51,13 +51,7 @@ define( [], function(){
           } //try
         } //if
 
-        var timeStamp = new Date( 1970, 0, 1 ),
-            timeParts;
-
-        timeStamp.setSeconds( time );
-        timeParts = timeStamp.toTimeString().split(" ")[ 0 ].split( ":" );
-
-        _timeBox.value = timeParts[ 1 ] + ":" + timeParts[ 2 ];
+        _timeBox.value = util.secondsToSMPTE( time );
       }
       else {
         _timeBox.value = _oldValue;
