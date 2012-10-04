@@ -356,6 +356,27 @@
         return null;
       };
 
+      this.forceEmptyTrackSpaceAtTime = function( track, start, end, ignoreTrackEvent ) {
+        var nextTrack;
+
+        if ( track.findOverlappingTrackEvent( start, end, ignoreTrackEvent ) ) {
+          nextTrack = _this.getNextTrack( track );
+          if ( nextTrack ) {
+            if ( nextTrack.findOverlappingTrackEvent( start, end, ignoreTrackEvent ) ) {
+              return _this.insertTrackBefore( null, nextTrack );
+            }
+            else {
+              return nextTrack;
+            }
+          }
+          else {
+            return this.addTrack();
+          }
+        }
+
+        return track;
+      };
+
       Object.defineProperties( this, {
         ended: {
           enumerable: true,

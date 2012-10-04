@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define([], function(){
+define( [ 'core/eventmanager' ], function( EventManager ) {
 
   var SCROLL_INTERVAL = 16,
       DEFAULT_SCROLL_AMOUNT = 10,
@@ -32,6 +32,8 @@ define([], function(){
     bottom: 0,
     right: 0
   };
+
+  var DragNDrop = {};
 
   function updateTimeout(){
     __scroll = false;
@@ -89,12 +91,13 @@ define([], function(){
     }
   }
 
-  function onMouseUp( e ){
+  function onMouseUp( e ) {
     __mouseDown = false;
 
     window.removeEventListener( "mousemove", onDragged, false );
 
     var selectedDraggable,
+        selectedDraggables = __selectedDraggables.slice(),
         droppables = [],
         droppable,
         i;
@@ -102,8 +105,8 @@ define([], function(){
     if ( __draggedOnce ) {
 
       // Collect all the droppables
-      for( i = __selectedDraggables.length - 1; i >= 0; --i ) {
-        selectedDraggable = __selectedDraggables[ i ];
+      for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
+        selectedDraggable = selectedDraggables[ i ];
         droppable = selectedDraggable.droppable;
         if ( droppable && droppables.indexOf( droppable ) === -1 ) {
           droppables.push( droppable );
@@ -111,19 +114,32 @@ define([], function(){
       }
 
       // Let droppable know that it's about to receive one or more items
-      for( i = droppables.length - 1; i >= 0; --i ) {
+      for ( i = droppables.length - 1; i >= 0; --i ) {
         droppables[ i ].startDrop();
       }
 
-      for( i = __selectedDraggables.length - 1; i >= 0; --i ) {
-        selectedDraggable = __selectedDraggables[ i ];
+      for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
+        selectedDraggable = selectedDraggables[ i ];
         selectedDraggable.stop();
       }
 
+      for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
+        selectedDraggable = selectedDraggables[ i ];
+        selectedDraggable.drop();
+      }
+
+      for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
+        selectedDraggable = selectedDraggables[ i ];
+        selectedDraggable.reset();
+      }
+
       // Let droppable know that we're done dropping
-      for( i = droppables.length - 1; i >= 0; --i ) {
+      for ( i = droppables.length - 1; i >= 0; --i ) {
         droppables[ i ].stopDrop();
       }
+
+      DragNDrop.dispatch( "dropfinished" );
+
     }
 
     __draggedOnce = false;
@@ -488,7 +504,6 @@ define([], function(){
       drop: function( draggable ){
         if ( removeDraggable( draggable ) ) {
           _onDrop( draggable, __mousePos );
-          draggable.droppable = null;
         }
       },
       drag: function( dragElementRect ){
@@ -661,6 +676,10 @@ define([], function(){
       checkContainment();
     };
 
+    _draggable.getLastRect = function() {
+      return _elementRect;
+    };
+
     _draggable.start = function( e ){
       _originalPosition = [ element.offsetLeft, element.offsetTop ];
       _draggable.updateRects();
@@ -678,19 +697,26 @@ define([], function(){
       }
     };
 
-    _draggable.stop = function(){
+    _draggable.drop = function( e ) {
+      if ( _draggable.droppable ) {
+        _draggable.droppable.drop( _draggable );
+      }
+    };
+
+    _draggable.stop = function() {
       // If originalPosition is not null, start() was called
       if ( _originalPosition ) {
         _onStop();
-        if ( !_draggable.droppable && _revert ) {
-          element.style.left = _originalPosition[ 0 ] + "px";
-          element.style.top = _originalPosition[ 1 ] + "px";
-        }
-        else if ( _draggable.droppable ) {
-          _draggable.droppable.drop( _draggable );
-        }
-        _originalPosition = null;
       }
+    };
+
+    _draggable.reset = function() {
+      if ( !_draggable.droppable && _revert && _originalPosition ) {
+        element.style.left = _originalPosition[ 0 ] + "px";
+        element.style.top = _originalPosition[ 1 ] + "px";
+      }
+      _draggable.droppable = null;
+      _originalPosition = null;
     };
 
     Object.defineProperties( _draggable, {
@@ -864,13 +890,15 @@ define([], function(){
     return _instance;
   }
 
-  return {
-    draggable: Draggable,
-    droppable: Droppable,
-    helper: Helper,
-    resizable: Resizable,
-    sortable: Sortable
-  };
+  DragNDrop.draggable = Draggable;
+  DragNDrop.droppable = Droppable;
+  DragNDrop.helper = Helper;
+  DragNDrop.resizable = Resizable;
+  DragNDrop.sortable = Sortable;
+
+  EventManager.extend( DragNDrop );
+
+  return DragNDrop;
 
 });
 

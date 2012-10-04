@@ -30,9 +30,8 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
    * @param {Object} options: Options for initialization. Can contain the properties type, name, and popcornOptions. If the popcornOptions property is specified, its contents will be used to initialize the plugin instance associated with this TrackEvent.
    * @param {Object} track: The track the trackevent will inhabit.
    * @param {Object} popcornWrapper: a reference to a popcornWrapper object the wraps various functionality for modifying Popcorn data.
-   * @param {Boolean} isGhost: refers to whether this trackevent is a ghost or not. If it is a ghost, it has no associated Popcorn event, but is rather an empty representation of a trackevent.
    */
-  var TrackEvent = function ( options, track, popcornWrapper, isGhost ) {
+  var TrackEvent = function ( options, track, popcornWrapper ) {
 
     options = options || {};
 
@@ -41,7 +40,6 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
         _name = options.name || _id,
         _logger = new Logger( _id ),
         _track = track,
-        _isGhost = isGhost,
         _type = options.type + "",
         _popcornOptions = options.popcornOptions || {
           start: 0,
@@ -83,9 +81,7 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
      * @param {Object} newPopcornWrapper: PopcornWrapper object or null
      */
     this.setPopcornWrapper = function ( newPopcornWrapper ) {
-      if ( !_isGhost ) {
-        _popcornWrapper = newPopcornWrapper;
-      }
+      _popcornWrapper = newPopcornWrapper;
     };
 
     /**
@@ -98,9 +94,6 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
      * @throws TrackEventUpdateException: When an update operation failed because of conflicting times or other serious property problems.
      */
     this.update = function( updateOptions, applyDefaults ) {
-      if ( !_track || _isGhost ) {
-        return;
-      }
       updateOptions = updateOptions || {};
 
       var newStart = updateOptions.start,
@@ -136,27 +129,27 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
             newEnd = duration;
           }
         }
-      }
 
-      if ( this.manifest ) {
-        manifestOptions = this.manifest.options;
-        if ( manifestOptions ) {
-          for ( var prop in manifestOptions ) {
-            if ( manifestOptions.hasOwnProperty( prop ) ) {
-              if ( updateOptions[ prop ] === undefined ) {
-                if ( applyDefaults ) {
-                  _popcornOptions[ prop ] = defaultValue( manifestOptions[ prop ] );
+        if ( this.manifest ) {
+          manifestOptions = this.manifest.options;
+          if ( manifestOptions ) {
+            for ( var prop in manifestOptions ) {
+              if ( manifestOptions.hasOwnProperty( prop ) ) {
+                if ( updateOptions[ prop ] === undefined ) {
+                  if ( applyDefaults ) {
+                    _popcornOptions[ prop ] = defaultValue( manifestOptions[ prop ] );
+                  }
+                } else {
+                  _popcornOptions[ prop ] = updateOptions[ prop ];
                 }
-              } else {
-                _popcornOptions[ prop ] = updateOptions[ prop ];
               }
             }
-          }
-          if ( !( "target" in manifestOptions ) && updateOptions.target ) {
-            _popcornOptions.target = updateOptions.target;
-          }
-          if ( "zindex" in manifestOptions && media ) {
-            _popcornOptions.zindex = media.maxPluginZIndex - _track.order;
+            if ( !( "target" in manifestOptions ) && updateOptions.target ) {
+              _popcornOptions.target = updateOptions.target;
+            }
+            if ( "zindex" in manifestOptions && media ) {
+              _popcornOptions.zindex = media.maxPluginZIndex - _track.order;
+            }
           }
         }
       }
@@ -170,7 +163,7 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
 
       // if PopcornWrapper exists, it means we're connected properly to a Popcorn instance,
       // and can update the corresponding Popcorn trackevent for this object
-      if ( _popcornWrapper && !_isGhost ) {
+      if ( _popcornWrapper ) {
         _popcornWrapper.updateEvent( _this );
       }
 
@@ -263,23 +256,6 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
         enumerable: true,
         get: function(){
           return _track;
-        }
-      },
-
-      /*
-       * Property: isGhost
-       *
-       * Specifies whether this trackEvent is a ghost or not. A ghost trackEvent has is created when two trackEvent's overlap one another,
-       * in which case a ghost trackEvent is created on the track below it. A ghost trackEvent contains no associated Popcorn event data, but is rather a shell of the trackEvent
-       * that is currently being dragged.
-       */
-      isGhost: {
-        enumerable: true,
-        get: function() {
-          return _isGhost;
-        },
-        set: function( val ) {
-          _isGhost = val;
         }
       },
 

@@ -36,6 +36,9 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
       if ( !_trackEvent.track || !_trackEvent.track._media ) {
         return;
       }
+      if ( _trackEvent.track.view.element !== _element.parentNode ) {
+        _trackEvent.track.view.element.appendChild( _element );
+      }
       _element.style.left = _start  / _trackEvent.track._media.duration * 100 + "%";
       _element.style.width = ( _end - _start ) / _trackEvent.track._media.duration * 100 + "%";
       if ( _element.getBoundingClientRect().width < TRACKEVENT_MIN_WIDTH ) {
@@ -220,11 +223,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                 stop: function() {
                   _dragging = false;
                   _this.dispatch( "trackeventdragstopped" );
-
-                  // Prevent movedcallback if "trackeventdragstopped" removed this trackEvent
-                  if ( _trackEvent.track.view.element === _draggable.droppable.element ) {
-                    movedCallback();
-                  }
                 },
                 drag: function( draggable, droppable ) {
                   if ( _onDrag ) {
@@ -262,11 +260,16 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
     function movedCallback() {
       _element.style.top = "0px";
-      _start = ( _element.offsetLeft / _trackEvent.track.view.element.offsetWidth ) * _trackEvent.track._media.duration;
-      _end = _start + ( _element.clientWidth / _trackEvent.track.view.element.offsetWidth ) * _trackEvent.track._media.duration;
-      _trackEvent.update({
-        start: _start,
-        end: _end
+
+      var track = _trackEvent.track,
+          trackView = track.view,
+          media = track._media,
+          start = ( _element.offsetLeft / trackView.element.offsetWidth ) * media.duration,
+          end = start + ( _element.clientWidth / trackView.element.offsetWidth ) * media.duration;
+
+      _this.dispatch( "trackeventmoved", {
+        start: start,
+        end: end
       });
     }
 

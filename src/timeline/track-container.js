@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
-  function( Logger, DragNDrop, TrackEventDragManager ) {
+define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
+  function( Logger, DragNDrop, GhostManager ) {
 
   var TWEEN_PERCENTAGE = 0.35,    // diminishing factor for tweening (see followCurrentTime)
       TWEEN_THRESHOLD = 10;       // threshold beyond which tweening occurs (see followCurrentTime)
@@ -18,15 +18,14 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
 
     var _vScrollbar;
 
-    var _droppable,
-        _justDropped = [];
+    var _droppable;
 
     var _leftViewportBoundary = 0,
         _viewportWidthRatio = 0.1;
 
     var _newTrackForDroppables;
 
-    _this.trackEventDragManager = new TrackEventDragManager( media, _container );
+    _this.ghostManager = new GhostManager( media, _container );
 
     butter.listen( "trackorderchanged", function( e ) {
       var orderedTracks = e.data;
@@ -38,6 +37,11 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
       }
     });
 
+    DragNDrop.listen( "dropfinished", function() {
+      _media.cleanUpEmptyTracks();
+      _vScrollbar.update();
+    });
+
     _container.addEventListener( "mousedown", function( e ) {
       butter.deselectAllTrackEvents();
     }, false );
@@ -47,50 +51,49 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
         _newTrackForDroppables = null;
       },
       drop: function( dropped, mousePosition ) {
-        var tracks = butter.currentMedia.orderedTracks,
-            lastTrack = tracks[ tracks.length - 1 ],
-            // Set lastTrackBottom to 0 initially so that if there are no tracks, we can still add a TrackEvent to the track-container.
-            lastTrackBottom = 0;
-
         // Used if drop spawns a new track
-        var newTrack, draggableType, trackEvent, droppedLeftValue;
+        var newTrack, draggableType,
+            trackEvent, trackEventRect,
+            droppedLeftValue, duration,
+            start, end,
+            containerRect = _container.getBoundingClientRect();
 
-        // Otherwise, lastTrackBottom will be set to the bottom value of the rectangle of the bottom-most track.
-        if ( lastTrack ) {
-          lastTrackBottom = lastTrack.view.element.getBoundingClientRect().bottom;
-        }
+        // XXX secretrobotron: I chopped out an if statement from this section
+        // which attempted to check whether or not trackevents were being dropped
+        // below the last track on the timeline. It was interfering with dropping multiple
+        // items, and we seem to have shaved off the space between tracks that was
+        // causing the need for this check to begin with. Here's the commit which spawned
+        // the check: https://github.com/mozilla/butter/commit/3952c02da32092433fb884cead0ba4e7e18ff988
 
         // Ensure its a plugin and that only the area under the last track is droppable
-        if ( mousePosition[ 1 ] > lastTrackBottom ) {
+        draggableType = ( dropped.element || dropped ).getAttribute( "data-butter-draggable-type" );
 
-          draggableType = ( dropped.element || dropped ).getAttribute( "data-butter-draggable-type" );
+        if ( draggableType === "plugin" ) {
+          newTrack = butter.currentMedia.addTrack();
+          newTrack.view.dispatch( "plugindropped", {
+            start: ( mousePosition[ 0 ] - containerRect.left ) / _container.clientWidth * newTrack.view.duration,
+            track: newTrack,
+            type: dropped.getAttribute( "data-popcorn-plugin-type" )
+          });
+        }
+        else if ( draggableType === "trackevent" ) {
+          trackEvent = dropped.data.trackEvent;
+          trackEventRect = dropped.getLastRect();
+          droppedLeftValue = trackEventRect.left - containerRect.left;
 
-          if ( draggableType === "plugin" ) {
-            newTrack = butter.currentMedia.addTrack();
-            newTrack.view.dispatch( "plugindropped", {
-              start: ( mousePosition[ 0 ] - _container.getBoundingClientRect().left ) / _container.clientWidth * newTrack.view.duration,
-              track: newTrack,
-              type: dropped.getAttribute( "data-popcorn-plugin-type" )
-            });
+          if ( !_newTrackForDroppables ) {
+            _newTrackForDroppables = butter.currentMedia.addTrack();
           }
-          else if ( draggableType === "trackevent" ) {
-            trackEvent = dropped.data.trackEvent;
-            droppedLeftValue = dropped.element.offsetLeft;
 
-            // Make sure to remove the trackevent so that there are no
-            // conflicts with track manipulation.
-            trackEvent.track.removeTrackEvent( trackEvent );
+          // Avoid using trackevent view width values here to circumvent padding/border
+          duration = trackEvent.popcornOptions.end - trackEvent.popcornOptions.start;
+          start = droppedLeftValue / _container.clientWidth * _media.duration;
+          end = start + duration;
 
-            if ( !_newTrackForDroppables ) {
-              _newTrackForDroppables = butter.currentMedia.addTrack();
-            }
-
-            _newTrackForDroppables.view.dispatch( "trackeventdropped", {
-              start: droppedLeftValue / _container.clientWidth * _media.duration,
-              track: _newTrackForDroppables,
-              trackEvent: trackEvent
-            });
-          }
+          createTrackEventFromDrop( trackEvent, {
+            start: start,
+            end: end
+          }, trackEvent.track, _newTrackForDroppables );
         }
       }
     });
@@ -125,17 +128,15 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
 
     function onTrackAdded( e ) {
       var trackView = e.data.view;
+
+      trackView.listen( "trackeventdropped", onTrackEventDropped );
+
       _container.appendChild( trackView.element );
       trackView.duration = _media.duration;
       trackView.parent = _this;
       if ( _vScrollbar ) {
         _vScrollbar.update();
       }
-    }
-
-    function onTrackEventDragged( draggable, droppable ) {
-      _this.trackEventDragManager.trackEventDragged( draggable.data, droppable.data );
-      _vScrollbar.update();
     }
 
     function onTrackEventDragStarted( e ) {
@@ -148,14 +149,9 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
       _vScrollbar.update();
     }
 
-    function onTrackEventDragStopped( e ) {
-      var trackEventView = e.target,
-          element = trackEventView.element,
-          trackView = trackEventView.trackEvent.track.view;
-      _container.removeChild( element );
-      trackView.element.appendChild( element );
+    function onTrackEventDragged( draggable, droppable ) {
+      _this.ghostManager.trackEventDragged( draggable.data, droppable.data );
       _vScrollbar.update();
-      _justDropped.push( trackEventView.trackEvent );
     }
 
     var existingTracks = _media.tracks;
@@ -165,31 +161,36 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
       });
     }
 
-    _media.listen( "trackeventupdated", function( e ) {
-      var trackEvent = e.target,
-          idx = _justDropped.indexOf( trackEvent );
+    function createTrackEventFromDrop( trackEvent, popcornOptions, oldTrack, desiredTrack ) {
+      var newTrack = _media.forceEmptyTrackSpaceAtTime( desiredTrack, popcornOptions.start, popcornOptions.end, trackEvent );
 
-      // Make sure not every trackevent update comes through here. Only care about
-      // the ones that were just dragging.
-      if ( idx > -1 ) {
-        _justDropped.splice( idx, 1 );
-        var newEventOccurred = _this.trackEventDragManager.trackEventUpdated( trackEvent );
-
-        // If a new event was created through updating, the old one should be forgotten about, and more updates
-        // for it should not occur.
-        if ( newEventOccurred ) {
-          e.stopPropagation();
+      if ( oldTrack !== newTrack ) {
+        if ( oldTrack ) {
+          oldTrack.removeTrackEvent( trackEvent );
         }
-
-        _vScrollbar.update();
+        trackEvent.update( popcornOptions );
+        newTrack.addTrackEvent( trackEvent );
+        _this.ghostManager.removeGhostsAfterDrop( trackEvent, oldTrack );
       }
-    });
+      else {
+        trackEvent.update( popcornOptions );
+        _this.ghostManager.removeGhostsAfterDrop( trackEvent, oldTrack );
+      }
+    }
+
+    function onTrackEventDropped( e ) {
+      var trackEvent = e.data.trackEvent,
+          popcornOptions = e.data,
+          desiredTrack = e.data.track,
+          oldTrack = trackEvent.track;
+
+      createTrackEventFromDrop( trackEvent, popcornOptions, oldTrack, desiredTrack );
+    }
 
     _media.listen( "trackeventadded", function( e ) {
       var trackEventView = e.data.view;
       trackEventView.setDragHandler( onTrackEventDragged );
       trackEventView.listen( "trackeventdragstarted", onTrackEventDragStarted );
-      trackEventView.listen( "trackeventdragstopped", onTrackEventDragStopped );
       _vScrollbar.update();
     });
 
@@ -197,7 +198,6 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
       var trackEventView = e.data.view;
       trackEventView.setDragHandler( null );
       trackEventView.unlisten( "trackeventdragstarted", onTrackEventDragStarted );
-      trackEventView.unlisten( "trackeventdragstopped", onTrackEventDragStopped );
       _vScrollbar.update();
     });
 
@@ -205,6 +205,9 @@ define( [ "core/logger", "util/dragndrop", "./trackevent-drag-manager" ],
 
     _media.listen( "trackremoved", function( e ) {
       var trackView = e.data.view;
+
+      trackView.listen( "trackeventdropped", onTrackEventDropped );
+
       _container.removeChild( trackView.element );
       if ( _vScrollbar ) {
         _vScrollbar.update();

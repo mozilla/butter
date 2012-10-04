@@ -26,12 +26,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
         data: _this,
         drop: function( dropped, mousePosition ) {
           var droppedElement = dropped.data ? dropped.data.element : dropped,
-              trackEventView,
-              track,
               draggableType = droppedElement.getAttribute( "data-butter-draggable-type" ),
-              start,
-              left,
-              trackRect = _element.getBoundingClientRect();
+              duration, start, end, left,
+              trackRect = _element.getBoundingClientRect(),
+              trackEvent, trackEventView, trackEventRect;
 
           if ( draggableType === "plugin" ) {
             left = mousePosition[ 0 ] - trackRect.left;
@@ -43,20 +41,22 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
             });
           }
           else if ( draggableType === "trackevent" ) {
+            trackEventRect = dropped.getLastRect();
             trackEventView = dropped.data;
-            track = trackEventView.trackEvent.track;
+            trackEvent = trackEventView.trackEvent;
 
-            // Only rearrange trackEvent if it was moved *onto* this track
-            if ( track && track !== _track ) {
-              left = droppedElement.offsetLeft;
-              track.removeTrackEvent( dropped.data.trackEvent );
-              start = left / trackRect.width * _duration;
-              _this.dispatch( "trackeventdropped", {
-                start: start,
-                track: _track,
-                trackEvent: trackEventView.trackEvent
-              });
-            }
+            // Avoid using width values to derive end value to circumvent padding/border issues.
+            duration = trackEvent.popcornOptions.end - trackEvent.popcornOptions.start;
+            left = trackEventRect.left - trackRect.left;
+            start = left / trackRect.width * _duration;
+            end = start + duration;
+
+            _this.dispatch( "trackeventdropped", {
+              start: start,
+              end: end,
+              track: _track,
+              trackEvent: trackEventView.trackEvent
+            });
           }
         }
       });
@@ -117,6 +117,10 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       }
     });
 
+    function onTrackEventDragStopped( e ) {
+      _track.removeTrackEvent( e.target.trackEvent );
+    }
+
     this.addTrackEvent = function( trackEvent ) {
       var trackEventElement = trackEvent.view.element;
       _element.appendChild( trackEventElement );
@@ -125,20 +129,31 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       _this.chain( trackEvent, [
         "trackeventmousedown",
         "trackeventmouseover",
-        "trackeventmouseout"
+        "trackeventmouseout",
+        "trackeventmoved"
       ]);
+
+      trackEvent.view.listen( "trackeventdragstopped", onTrackEventDragStopped );
     };
 
     this.removeTrackEvent = function( trackEvent ){
       var trackEventElement = trackEvent.view.element;
-      _element.removeChild( trackEventElement );
+
+      // When `trackeventdragstarted` occurs, TrackEvents views are removed from their Track's view
+      // to avoid unnecessary collisions while dragging. So, it may be the case that the TrackEvent's view
+      // is no longer parented by this Track's view.
+      trackEventElement.parentNode.removeChild( trackEventElement );
+
       _trackEvents.splice( _trackEvents.indexOf( trackEvent.view ), 1 );
       trackEvent.view.parent = null;
       _this.unchain( trackEvent, [
         "trackeventmousedown",
         "trackeventmouseover",
-        "trackeventmouseout"
+        "trackeventmouseout",
+        "trackeventmoved"
       ]);
+
+      trackEvent.view.unlisten( "trackeventdragstopped", onTrackEventDragStopped );
     };
 
     // Creates a ghost trackEvent on this track. This means a cloned representation of a currently overlapping trackEvent
