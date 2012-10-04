@@ -154,11 +154,6 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
     var id = req.params.id,
         url;
 
-    if ( !id ) {
-      res.json( { error: "No Project ID specified" }, 404 );
-      return;
-    }
-
     url = utils.generatePublishUrl( id );
 
     res.json( url );
