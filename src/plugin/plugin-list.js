@@ -45,11 +45,13 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         }
       });
 
-      // request a new trackEvent on the currentMedia
+      // request a new trackEvent on the first Target
       element.addEventListener( "dblclick", function() {
-        butter.targets[ 0 ].dispatch( "trackeventrequested", {
-          element: element
-        });
+        if ( butter.targets[ 0 ] ) {
+          butter.targets[ 0 ].dispatch( "trackeventrequested", {
+            element: element
+          });
+        }
       }, false );
 
       if ( iconImg ) {
