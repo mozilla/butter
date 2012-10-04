@@ -52,11 +52,6 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
     filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
     function( req, res ) {
 
-    if ( !req.body ) {
-      res.json( {error: 'no project data received' }, 500 );
-      return;
-    }
-
     if ( req.body.id ) {
       User.updateProject( req.session.email, req.body.id, req.body, function( err, doc ) {
         if ( err ) {
