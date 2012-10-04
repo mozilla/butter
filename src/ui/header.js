@@ -258,10 +258,10 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       if ( butter.project.name ) {
         _projectName.textContent = butter.project.name;
 
-        butter.cornfield.publishURL( butter.project.id, function( e ) {
-          if ( e.error === "okay" ) {
+        butter.cornfield.publishURL( butter.project.id, function( url ) {
+          if ( url ) {
             _previewBtn.classList.remove( "butter-hidden" );
-            _previewBtn.href = e.publishURL;
+            _previewBtn.href = url;
           }
         });
       }

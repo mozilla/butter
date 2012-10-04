@@ -23,7 +23,12 @@ var express = require('express'),
     APP_HOSTNAME = stripSlash( CONFIG.dirs.appHostname ),
     // If a separate hostname is given for embed, use it, otherwise use app's hostname
     EMBED_HOSTNAME = CONFIG.dirs.embedHostname ? stripSlash( CONFIG.dirs.embedHostname ) : APP_HOSTNAME,
+<<<<<<< HEAD
     EMBED_SUFFIX = '_',
+=======
+    EMBED_SUFFIX = 'e',
+    utils = require( './lib/utils' ),
+>>>>>>> [#2297] Moved API endpoint into index. Added a utils module for URL generator + future stuff
     WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
     VALID_TEMPLATES = CONFIG.templates,
     EXPORT_ASSETS = CONFIG.exportAssets;
@@ -88,7 +93,7 @@ app.configure( function() {
 require( 'express-persona' )( app, {
   audience: CONFIG.dirs.appHostname
 });
-require('./routes')( app, User, filter, sanitizer, stores, EMBED_SUFFIX );
+require('./routes')( app, User, filter, sanitizer, stores, EMBED_SUFFIX, utils );
 
 function writeEmbedShell( path, url, data, callback ) {
   if( !writeEmbedShell.templateFn ) {
@@ -107,27 +112,6 @@ function writeEmbed( path, url, data, callback ) {
 
   stores.publish.write( path, writeEmbed.templateFn( data ), callback );
 }
-
-function generatePublishUrl( id ) {
-  return PUBLISH_PREFIX_V + "/" + id + ".html";
-}
-
-app.get( '/api/publishurl/:id',
-  filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
-  function( req, res ) {
-
-  var id = req.params.id,
-      url;
-
-  if ( !id ) {
-    res.json( { error: "No Project ID specified" }, 404 );
-    return;
-  }
-
-  url = generatePublishUrl( id );
-
-  res.json( { error: "okay", publishURL: url }, 200 );
-});
 
 app.post( '/api/publish/:id',
   filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,

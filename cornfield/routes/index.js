@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBED_SUFFIX ) {
+module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBED_SUFFIX, utils ) {
   app.get( '/api/whoami', filter.isLoggedIn, filter.isXHR, function( req, res ) {
     var email = req.session.email;
 
@@ -147,4 +147,20 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
     storeData( req, res, stores.feedback );
   });
 
+  app.get( '/api/publishurl/:id',
+    filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
+    function( req, res ) {
+
+    var id = req.params.id,
+        url;
+
+    if ( !id ) {
+      res.json( { error: "No Project ID specified" }, 404 );
+      return;
+    }
+
+    url = utils.generatePublishUrl( id );
+
+    res.json( url );
+  });
 };
