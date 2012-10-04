@@ -7,6 +7,7 @@ define( [ "util/lang", "util/keys", "editor/editor", "util/uri", "text!layouts/m
 
   var MAX_MEDIA_INPUTS = 4,
       _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
+      _loadingSpinner = _parentElement.querySelector( ".media-loading-spinner" ),
       _primaryMediaWrapper = LangUtils.domFragment( EDITOR_LAYOUT, ".primary-media-wrapper" ),
       _altMediaWrapper = LangUtils.domFragment( EDITOR_LAYOUT, ".alt-media-wrapper" ),
       _containerElement = _parentElement.querySelector( ".butter-editor-body" ),
@@ -29,8 +30,11 @@ define( [ "util/lang", "util/keys", "editor/editor", "util/uri", "text!layouts/m
         newMediaArr.push( urlInputs[ i ].value );
       }
     }
-    showError( false );
-    _media.url = newMediaArr;
+    if ( newMediaArr.length ) {
+      showError( false );
+      setLoadSpinner( true );
+      _media.url = newMediaArr;
+    }
   }
 
   function createInput( url, isPrimaryInput ) {
@@ -50,7 +54,7 @@ define( [ "util/lang", "util/keys", "editor/editor", "util/uri", "text!layouts/m
           _addAlternateSourceBtn.classList.remove( "butter-disabled" );
         }
       }
-    
+
       function updateMediaOnChange() {
         if ( oldValue !== urlInput.value ) {
             updateButterMedia();
@@ -107,6 +111,15 @@ define( [ "util/lang", "util/keys", "editor/editor", "util/uri", "text!layouts/m
       _currentMediaWrapper.appendChild( wrapper );
       _inputCount++;
       checkInputMax();
+  }
+
+
+  function setLoadSpinner( on ) {
+    if ( on ) {
+      _loadingSpinner.classList.remove( "hidden" );
+    } else {
+      _loadingSpinner.classList.add( "hidden" );
+    }
   }
 
   function clearCurrentMediaList() {
@@ -170,10 +183,12 @@ define( [ "util/lang", "util/keys", "editor/editor", "util/uri", "text!layouts/m
 
   function onMediaFailed() {
     showError( true );
+    setLoadSpinner( false );
   }
 
   function onMediaReady() {
     showError( false );
+    setLoadSpinner( false );
   }
 
   Editor.register( "media-editor", null, function( rootElement, butter ) {
