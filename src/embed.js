@@ -205,11 +205,11 @@ function init( window, document ) {
   }
 
   function setupAttribution() {
-    var icon = $( ".attribution-media-icon" ),
-        src = $( ".attribution-media-src"),
+    var icon = $( ".media-icon" ),
+        src = $( ".attribution-media-src" ),
         toggler = $( ".attribution-logo" ),
-        closeBtn = $( ".attribution-details > a#share-close" ),
-        details = $( ".attribution-details" ),
+        closeBtn = $( ".attribution-close" ),
+        container = $( ".attribution-info" ),
         classes = {
           html5: "html5-icon",
           youtube: "youtube-icon",
@@ -219,7 +219,7 @@ function init( window, document ) {
         mediaRegex = /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)(youtu|vimeo|soundcloud)/,
         type;
 
-    type = mediaRegex.exec( src.innerText );
+    type = mediaRegex.exec( src.href );
     if ( type ) {
       type = /youtu/.test( type ) ? "youtube" : type;
     } else {
@@ -229,18 +229,12 @@ function init( window, document ) {
     icon.classList.add( classes[ type ] );
 
     toggler.addEventListener( "click", function() {
-      if ( details.classList.contains( "hidden" ) ) {
-        details.classList.remove( "hidden" );
-      } else {
-        details.classList.add( "hidden" );
-      }
+      container.classList.toggle( "attribution-on" );
     }, false );
 
-    closeBtn.addEventListener( "click", function () {
-      if ( !details.classList.contains( "hidden" ) ) {
-        details.classList.add( "hidden" );
-      }
-    });
+    closeBtn.addEventListener( "click", function() {
+      container.classList.toggle( "attribution-on" );
+    }, false );
   }
 
   var require = requirejs.config({

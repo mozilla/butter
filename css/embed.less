@@ -1,3 +1,4 @@
+// GLOBALS
 .transition(@transition1) {
   -webkit-transition: @transition1;
   -moz-transition: @transition1;
@@ -5,6 +6,10 @@
   -ms-transition: @transition1;
   transition: @transition1;
 }
+
+@creditsLogoSize: 25px;
+@creditsZindex: 100000000000000;
+@red: #CB3E21;
 
 html {
   height: 100%;
@@ -73,12 +78,9 @@ body {
   @_embedIconsSize: 50px;
   list-style: none;
   padding: 0;
-
   > li {
-
     display: inline-block;
     margin-right: 10px;
-
     > a {
       display: block;
       padding-top: @_embedIconsSize;
@@ -96,96 +98,205 @@ body {
 }
 
 /*********************************************************
-* EMBED INFO
+* Credits
 */
 
-@embedLogoSize: 30px;
-@EMBED_HEADER_ZINDEX: 100000000;
-
 .attribution-info {
-  position: absolute;
-  width: 100%;
   font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
-  border-bottom: 1px solid rgba( 0, 0, 0, 0.2 );
-  z-index: @EMBED_HEADER_ZINDEX;
+  z-index: @creditsZindex;
 }
 
-.attribution-info {
-
-  .attribution-text {
-    visibility: hidden;
+.attribution-logo {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: @creditsLogoSize;
+  height: @creditsLogoSize;
+  border-radius: @creditsLogoSize;
+  text-align: center;
+  background-color: @red;
+  color: #FFF;
+  z-index: 1;
+  opacity: 0.5;
+  cursor: pointer;
+  .transition( all 0.1s ease );
+  &:before {
+    position: relative;
+    top: 3px;
+    font-size: 30px;
+    font-family: Georgia, serif;
+    content: '\0201c';
   }
-
-  .attribution-logo {
-    width: @embedLogoSize;
-    height: @embedLogoSize;
-    border-radius: @embedLogoSize;
-    text-align: center;
-    background-color: red;
-    font-family: georgia;
-    font-size: 40px;
-    color: #000;
-    float: left;
-    padding: 0;
-    &:before {
-      content: '\0201c';
+  &:hover {
+    opacity: 1;
+    .attribution-text {
+      visibility: visible;
     }
   }
+}
+.attribution-text { // "Credits"
+  position: absolute;
+  height: @creditsLogoSize;
+  line-height: @creditsLogoSize;
+  left: @creditsLogoSize + 6;
+  visibility: hidden;
+  text-shadow: 0 0 5px rgba( 0, 0, 0, 0.3 );
+  .transition( all 0.1s ease );
+}
 
+@media only screen and ( min-width: @large ) {
+  .attribution-logo {
+    width: @creditsLogoSize + 5;
+    height: @creditsLogoSize + 5;
+    border-radius: @creditsLogoSize + 5;
+    &:before { font-size: 40px; }
+  }
+  .attribution-text {
+    left: @creditsLogoSize + 14;
+    line-height: @creditsLogoSize + 5;
+  }
+}
+
+.attribution-details {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding-left: 3.5em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  background: rgba( 255, 255, 255, 0.9 );
+  color: black;
+  border-bottom: 1px solid rgba( 0, 0, 0, 0.2 );
+  font-size: 16px;
+  .transition( opacity .1s ease );
+}
+// Adjust font size for other sizes
+@media only screen and ( min-width: @medium ) {
   .attribution-details {
-    background: rgba( 255, 255, 255, 0.85 );
-    .transition( opacity .2s ease );
-    height: 100%;
-    width: 100%;
-    opacity: 1;
-    visibility: visible;
-    color: black
+    font-size: 18px;
+  }
+}
+@media only screen and ( min-width: @large ) {
+  .attribution-details {
+    font-size: 24px;
+  }
+}
 
-    &.hidden {
-      opacity: 0;
+.attribution-mopop {
+  color: @red;
+  font-size: 0.9em;
+  font-weight: 700;
+}
+.attribution-title {
+  font-size: 1.3em;
+  line-height: 1.6;
+}
+.attribution-author {
+  font-style: italic;
+}
+.attribution-media {
+  margin-top: 0.5em;
+  font-size: 0.8em;
+   &:before {
+      display: block;
+      float: left;
+      content: "Media";
+      text-transform: uppercase;
+      font-size: 0.8em;
+      font-weight: 700;
+      margin-right: 2em;
+    }
+  .media-btn {
+    float: left;
+  }
+  .attribution-media-src {
+    float: left;
+    white-space: nowrap;
+    text-decoration: none;
+    color: #555;
+    max-width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+// The x in the top right corner
+.attribution-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 8px;
+  font-weight: 700;
+  opacity: 0.5;
+  cursor: pointer;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+// CREDITS STATES
+
+// State: default
+// hide credits panel
+.attribution-details {
+  opacity: 0;
+  visibility: hidden;
+}
+
+// State: attribution-on
+// when the logo is clicked, show the credits
+.attribution-on {
+  .attribution-logo {
+    opacity: 1;
+     .attribution-text {
       visibility: hidden;
     }
-
-    .attribution-author {
-      font-size: 1.4em;
-      line-height: 1em;
-      text-decoration: italic;
-    }
+  }
+  .attribution-details {
+    opacity: 1;
+    visibility: visible;
   }
 }
 
-// .embed-playing .embed-info {
-//   background: none;
-//   border-bottom: none;
-//   .embed-logo-small {
-//     opacity: 0.5;
-//     .transition( opacity 0.4s ease );
-//   }
-//   .embed-details{
-//     display: block;
-//     opacity: 0;
-//     .transition( opacity 0.2s ease );
-//   }
-//   &:hover {
-//     .embed-logo-small {
-//       opacity: 1;
-//     }
-//    .embed-details {
-//       opacity: 1;
-//     }
-//   }
+/*********************************************************
+* Icons for credits
+*/
 
-
-.embed-dialog-open .embed-info {
-  display: none;
+.media-icon {
+  position: relative;
+  float: left;
+  margin-right: 5px;
+  margin-top: 2px;
+  background: url( "../resources/media-icons.png" ) no-repeat;
+  height: 16px;
+  width: 16px;
+  &.html5-icon {
+    background-position: 0 0;
+  }
+  &.youtube-icon {
+    background-position: -16px 0;
+  }
+  &.vimeo-icon {
+    background-position: -32px 0;
+  }
+  &.soundcloud-icon {
+    background-position: -48px 0;
+  }
 }
+
+.attribution-close {
+  background-image: url("../resources/glyphicons-halflings-alt.png");
+  width: 14px;
+  height: 14px;
+  background-position: -432px -24px;
+}
+
 
 /*********************************************************
  SHARED STYLES BETWEEN POSTROLL AND SHARE STATES */
 
-
-#post-roll, #share {
-
+#post-roll,
+#share {
   font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
   text-shadow: 1px 1px 0 rgba( 255, 255, 255, 0.4 );
   font-size: 1.5em;
@@ -698,30 +809,4 @@ body {
     margin-top: 0;
   }
 
-}
-
-/*********************************************************
-* Media Icons
-*/
-
-.media-icon {
-  position: relative;
-  display: block;
-  float: left;
-  margin-right: 5px;
-  background: url( "../resources/media-icons.png" ) no-repeat;
-  height: 16px;
-  width: 16px;
-  &.html5-icon {
-    background-position: 0 0;
-  }
-  &.youtube-icon {
-    background-position: -16px 0;
-  }
-  &.vimeo-icon {
-    background-position: -32px 0;
-  }
-  &.soundcloud-icon {
-    background-position: -48px 0;
-  }
 }
