@@ -111,7 +111,7 @@ body {
   border-top: 2px solid #fff;
 }
 #wrapper {
-  background: #f9f9f9 url(/media/img/sandstone/bg-stone.png) 0 0 repeat-x;
+  background: #f9f9f9 url(/media/img/bg-stone.png) 0 0 repeat-x;
   padding-bottom: 48px;
 }
 a {
@@ -370,14 +370,6 @@ px      68    160    252    344    436    528    620    712    804    896    */
   display: inline-block;
   padding: 12px;
   font-weight: normal;
-}
-#masthead nav ol li b,
-#masthead nav ul li b,
-#masthead nav ol li .current,
-#masthead nav ul li .current {
-  background-position: 50% 0;
-  background-repeat: no-repeat;
-  background-image: url(/media/img/sandstone/menu-current.png);
 }
 #masthead nav ol li a,
 #masthead nav ul li a,

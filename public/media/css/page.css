@@ -79,7 +79,7 @@ Layout styles
   }
 
   #wrapper {
-    background: #F9F9F9 url("/media/img/sandstone/bg-stone.png") repeat-x 0 70px;
+    background: #F9F9F9 url("/media/img/bg-stone.png") repeat-x 0 70px;
     padding-bottom: 0;
     display: table;
     width: 100%;
