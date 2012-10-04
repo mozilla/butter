@@ -107,6 +107,7 @@
           height = height >= options.minHeight ? height : options.minHeight;
           width = width >= options.minWidth ? width : options.minWidth;
 
+          document.activeElement.blur();
           trackEvent.update({
             height: height,
             width: width

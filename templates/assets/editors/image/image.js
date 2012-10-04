@@ -21,12 +21,6 @@ EditorHelper.addPlugin( "image", function( trackEvent ) {
     window.EditorHelper.draggable( trackEvent, _container, _media );
   }
 
-  if ( _image ) {
-    _image.addEventListener( "mousedown", function( e ) {
-      e.preventDefault();
-    }, false);
-  }
-
   _container.addEventListener( "dragover", function( e ) {
     e.preventDefault();
     _container.classList.add( "butter-dragover" );

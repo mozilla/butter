@@ -67,21 +67,18 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     };
 
     onElementMouseUp = function( e ) {
-      e.preventDefault();
       e.stopPropagation();
       window.removeEventListener( "mouseup", onElementMouseUp, false );
       window.removeEventListener( "mousemove", onElementMouseMove, false );
     };
 
     onViewMouseUp = function( e ) {
-      e.preventDefault();
       e.stopPropagation();
       window.removeEventListener( "mouseup", onViewMouseUp, false );
       window.removeEventListener( "mousemove", onViewMouseMove, false );
     };
 
     onLeftMouseUp = function( e ) {
-      e.preventDefault();
       e.stopPropagation();
       outerElement.addEventListener( "scroll", updateView, false );
       window.removeEventListener( "mouseup", onLeftMouseUp, false );
@@ -89,7 +86,6 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     };
 
     onRightMouseUp = function( e ) {
-      e.preventDefault();
       e.stopPropagation();
       outerElement.addEventListener( "scroll", updateView, false );
       window.removeEventListener( "mouseup", onRightMouseUp, false );
@@ -97,7 +93,6 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     };
 
     onElementMouseDown = function( e ) {
-      e.preventDefault();
       e.stopPropagation();
       media.currentTime = ( e.clientX - _rect.left ) / _rect.width * _duration;
       _viewPort.classList.remove( "viewport-transition" );
@@ -106,7 +101,6 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     };
 
     onViewMouseDown = function( e ) {
-      e.preventDefault();
       e.stopPropagation();
       _viewPort.classList.remove( "viewport-transition" );
       _offset = e.clientX - _rect.left - _viewPort.offsetLeft;
@@ -116,7 +110,6 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     };
 
     onLeftMouseDown = function( e ) {
-      e.preventDefault();
       e.stopPropagation();
       _media.pause();  // pause the media here to diffuse confusion with scrolling & playing
       _viewPort.classList.remove( "viewport-transition" );
@@ -126,7 +119,6 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     };
 
     onRightMouseDown = function( e ) {
-      e.preventDefault();
       e.stopPropagation();
       _media.pause();  // pause the media here to diffuse confusion with scrolling & playing
       outerElement.removeEventListener( "scroll", updateView, false );
@@ -169,7 +161,6 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     };
 
     onRightMouseMove = function( e ) {
-
       e.preventDefault();
       e.stopPropagation();
 
@@ -199,11 +190,9 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     // Prevent _element from receiving mousedown events, since _zoomInButton and
     // _zoomOutButton are contained by _element.
     _zoomInButton.addEventListener( "mousedown", function( e ) {
-      e.preventDefault();
       e.stopPropagation();
     }, false );
     _zoomOutButton.addEventListener( "mousedown", function( e ) {
-      e.preventDefault();
       e.stopPropagation();
     }, false );
 

@@ -11,6 +11,6 @@ EditorHelper.addPlugin( "text", function( trackEvent ) {
     if ( trackEvent.popcornOptions.position === "custom" ) {
       EditorHelper.draggable( trackEvent, _container, media );
     }
-    EditorHelper.contentEditable( trackEvent, _container.querySelectorAll( "span" ) );
+    EditorHelper.contentEditable( trackEvent, _container.querySelectorAll( "span div" ) );
   }
 });

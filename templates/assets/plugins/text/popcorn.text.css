@@ -26,6 +26,11 @@
   padding: 20px;
 }
 
+.text-fixed > div > span > div {
+  position: relative;
+  display: inline-block;
+}
+
 .center > span {
   vertical-align: middle; 
   text-align: center;

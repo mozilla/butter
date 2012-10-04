@@ -121,6 +121,8 @@
           text = newlineToBreak( options.text ),
           container = options._container = document.createElement( "div" ),
           innerContainer = document.createElement( "div" ),
+          innerSpan = document.createElement( "span" ),
+          innerDiv = document.createElement( "div" ),
           fontSheet,
           fontDecorations = options.fontDecorations || options._natives.manifest.options.fontDecorations[ "default" ],
           position = options.position || options._natives.manifest.options.position[ "default" ],
@@ -138,10 +140,12 @@
         container.classList.add( "text-custom" );
         container.style.left = options.left + "%";
         container.style.top = options.top + "%";
+        container.style.zIndex = +options.zindex;
       }
       else {
         container.classList.add( "text-fixed" );
         innerContainer.classList.add( position );
+        innerDiv.style.zIndex = +options.zindex;
       }
 
       // Add transition class
@@ -149,8 +153,10 @@
       options._container.classList.add( "off" );
 
       // Handle all custom fonts/styling
-      innerContainer.innerHTML = "<span>" + text + "</span>";
-      container.style.zIndex = +options.zindex;
+      innerDiv.innerHTML = text;
+      
+      innerSpan.appendChild( innerDiv );
+      innerContainer.appendChild( innerSpan );
       container.appendChild( innerContainer );
       target.appendChild( container );
 
