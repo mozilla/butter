@@ -64,94 +64,6 @@
 /*********************************************************
 * Ticker
 */
-@-webkit-keyframes ticker {
-  0% {
-    margin-top: 0;
-  }
-  25% {
-    margin-top: -55px;
-  }
-  50% {
-    margin-top: -110px;
-  }
-  75% {
-    margin-top: -165px;
-  }
-  100% {
-    margin-top: 0;
-  }
-}
-@-moz-keyframes ticker {
-  0% {
-    margin-top: 0;
-  }
-  25% {
-    margin-top: -55px;
-  }
-  50% {
-    margin-top: -110px;
-  }
-  75% {
-    margin-top: -165px;
-  }
-  100% {
-    margin-top: 0;
-  }
-}
-@-o-keyframes ticker {
-  0% {
-    margin-top: 0;
-  }
-  25% {
-    margin-top: -55px;
-  }
-  50% {
-    margin-top: -110px;
-  }
-  75% {
-    margin-top: -165px;
-  }
-  100% {
-    margin-top: 0;
-  }
-}
-@-ms-keyframes ticker {
-  0% {
-    margin-top: 0;
-  }
-  25% {
-    margin-top: -55px;
-  }
-  50% {
-    margin-top: -110px;
-  }
-  75% {
-    margin-top: -165px;
-  }
-  100% {
-    margin-top: 0;
-  }
-}
-@keyframes ticker {
-  0% {
-    margin-top: 0;
-  }
-  25% {
-    margin-top: -55px;
-  }
-  50% {
-    margin-top: -110px;
-  }
-  75% {
-    margin-top: -165px;
-  }
-  100% {
-    margin-top: 0;
-  }
-}
-/*********************************************************
-* Ticker
-*/
 .popcorn-twitter.ticker {
   position: absolute;
   top: auto !important;
@@ -190,24 +102,16 @@
   padding: 0;
   margin: 0;
   margin-right: 10px;
-  -webkit-animation: ticker 10s cubic-bezier(1, 0, 0.5, 0) infinite;
-  -moz-animation: ticker 10s cubic-bezier(1, 0, 0.5, 0) infinite;
-  -o-animation: ticker 10s cubic-bezier(1, 0, 0.5, 0) infinite;
-  -ms-animation: ticker 10s cubic-bezier(1, 0, 0.5, 0) infinite;
-  animation: ticker 10s cubic-bezier(1, 0, 0.5, 0) infinite;
-}
-.popcorn-twitter.ticker ul:hover {
-  -webkit-animation-play-state: paused;
-  -moz-animation-play-state: paused;
-  -o-animation-play-state: paused;
-  -ms-animation-play-state: paused;
-  animation-play-state: paused;
 }
 .popcorn-twitter.ticker ul > li {
   height: 55px;
   border: none;
   padding: 0;
   padding-left: 10px;
+  -webkit-transition: margin-top 1s ease;
+  -moz-transition: margin-top 1s ease;
+  -o-transition: margin-top 1s ease;
+  -ms-transition: margin-top 1s ease;
 }
 .popcorn-twitter.ticker ul > li > div {
   padding: 5px;
