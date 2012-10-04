@@ -9,17 +9,35 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
 
   var __defaultLayouts = LangUtils.domFragment( DEFAULT_LAYOUT_SNIPPETS ),
       __googleFonts = [
-                        "Gentium Book Basic",
-                        "Lato",
-                        "Vollkorn",
-                        "Merriweather",
-                        "Gravitas One",
-                        "PT Sans",
-                        "Open Sans",
-                        "Bangers",
-                        "Fredoka One",
-                        "Covered By Your Grace"
-                      ];
+        "Gentium Book Basic",
+        "Lato",
+        "Vollkorn",
+        "Merriweather",
+        "Gravitas One",
+        "PT Sans",
+        "Open Sans",
+        "Bangers",
+        "Fredoka One",
+        "Covered By Your Grace"
+      ],
+      __colorHexCodes = {
+        "black": "#000000",
+        "silver": "#c0c0c0",
+        "gray": "#808080",
+        "white": "#ffffff",
+        "maroon": "#800000",
+        "red": "#ff00000",
+        "purple": "#800080",
+        "fuchsia": "#ff00ff",
+        "green": "#008000",
+        "lime": "#00ff00",
+        "olive": "#808000",
+        "yellow": "#ffff00",
+        "navy": "#000080",
+        "blue": "#0000ff",
+        "teal": "#008080",
+        "aqua": "#00ffff"
+      };
 
   /**
    * Class: TrackEventEditor
@@ -183,6 +201,51 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
         }
         else {
           extendObject.butter.currentMedia.view.blink();
+        }
+      }, false );
+    };
+
+    extendObject.attachColorChangeHandler = function( element, trackEvent, propertyName, callback ) {
+      element.addEventListener( "change", function( e ) {
+        var value = element.value,
+            message,
+            updateOptions = {},
+            i,
+            flag = true;
+
+        if ( value.indexOf( "#" ) === -1 ) {
+
+          for ( i in __colorHexCodes ) {
+            if ( __colorHexCodes.hasOwnProperty( i ) ) {
+              if ( i === value.toLowerCase() ) {
+                flag = false;
+                break;
+              }
+            }
+          }
+
+          if ( flag ) {
+
+            message = "Invalid Color update. Must start with a hex (#) or be one of the following: ";
+            for ( i in __colorHexCodes ) {
+              if ( __colorHexCodes.hasOwnProperty( i ) ) {
+                message += i + ", ";
+              }
+            }
+
+            message = message.substring( 0, message.lastIndexOf( "," ) ) + ".";
+          }
+        } else {
+          if ( !value.match( /^#(?:[0-9a-fA-F]{3}){1,2}$/ ) ) {
+            message = "Invalid Hex Color format. Must be a hash (#) followed by 3 or 6 digits/letters.";
+          }
+        }
+
+        updateOptions[ propertyName ] = value;
+        if ( callback ) {
+          callback( trackEvent, updateOptions, message );
+        } else {
+          trackEvent.update( updateOptions );
         }
       }, false );
     };

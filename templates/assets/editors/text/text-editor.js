@@ -87,12 +87,22 @@
         var key,
             option;
 
+        function colorCallback( te, prop, message ) {
+          if ( message ) {
+            setErrorState( message );
+            return;
+          } else {
+            te.update({
+              fontColor: prop.fontColor
+            });
+          }
+        }
 
         for ( key in pluginOptions ) {
           if ( pluginOptions.hasOwnProperty( key ) ) {
             option = pluginOptions[ key ];
 
-            if ( option.elementType === "select" && key !== "type" ) {
+            if ( option.elementType === "select" ) {
               _this.attachSelectChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
             }
             else if ( option.elementType === "textarea" ) {
@@ -101,6 +111,8 @@
             else if ( option.elementType === "input" ) {
               if ( option.element.type === "checkbox" ) {
                 _this.attachCheckboxChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
+              } else if ( key === "fontColor" ) {
+                _this.attachColorChangeHandler( option.element, option.trackEvent, key, colorCallback );
               }
               else {
                 _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
