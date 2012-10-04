@@ -65,37 +65,36 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
 
       if ( _oldOpenEvent ) {
         _oldOpenEvent.apply( this, arguments );
+      }
+      // Code for handling basic/advanced options tabs are going to be the same. If the user defined these buttons
+      // handle it for them here rather than force them to write the code in their editor
+      if ( basicButton && advancedButton ) {
+        basicButton.addEventListener( "mouseup", function( e ) {
+          if ( basicTab.classList.contains( "display-off" ) ) {
+            basicTab.classList.toggle( "display-off" );
+            advancedTab.classList.toggle( "display-off" );
+            basicButton.classList.add( "butter-active" );
+            advancedButton.classList.remove( "butter-active" );
+            extendObject.scrollbar.update();
+          }
+        });
 
-        // Code for handling basic/advanced options tabs are going to be the same. If the user defined these buttons
-        // handle it for them here rather than force them to write the code in their editor
-        if ( basicButton && advancedButton ) {
-          basicButton.addEventListener( "mouseup", function( e ) {
-            if ( basicTab.classList.contains( "display-off" ) ) {
-              basicTab.classList.toggle( "display-off" );
-              advancedTab.classList.toggle( "display-off" );
-              basicButton.classList.add( "butter-active" );
-              advancedButton.classList.remove( "butter-active" );
-              extendObject.scrollbar.update();
-            }
-          });
+        advancedButton.addEventListener( "mouseup", function( e ) {
+          if ( !basicTab.classList.contains( "display-off" ) ) {
+            basicTab.classList.toggle( "display-off" );
+            advancedTab.classList.toggle( "display-off" );
+            basicButton.classList.remove( "butter-active" );
+            advancedButton.classList.add( "butter-active" );
+            extendObject.scrollbar.update();
+          }
+        });
 
-          advancedButton.addEventListener( "mouseup", function( e ) {
-            if ( !basicTab.classList.contains( "display-off" ) ) {
-              basicTab.classList.toggle( "display-off" );
-              advancedTab.classList.toggle( "display-off" );
-              basicButton.classList.remove( "butter-active" );
-              advancedButton.classList.add( "butter-active" );
-              extendObject.scrollbar.update();
-            }
-          });
-
-          // Override default scrollbar to account for both tab containers
-          extendObject.addScrollbar({
-            inner: wrapper,
-            outer: wrapper,
-            appendTo: rootElement.querySelector( ".scrollbar-container" )
-          });
-        }
+        // Override default scrollbar to account for both tab containers
+        extendObject.addScrollbar({
+          inner: wrapper,
+          outer: wrapper,
+          appendTo: rootElement.querySelector( ".scrollbar-container" )
+        });
       }
 
       if ( extendObject.scrollbar ) {
@@ -722,7 +721,8 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
   }
 
   return {
-    extend: TrackEventEditor
+    extend: TrackEventEditor,
+    EDITOR_FRAGMENTS: __defaultLayouts
   };
 
 });
