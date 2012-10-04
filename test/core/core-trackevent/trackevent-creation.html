@@ -8,9 +8,9 @@
     <script src="../../butter.inject.js"></script>
     <script src="../../test-utils.js"></script>
     <script>
-      asyncTest( "Create TrackEvent object", 2, function(){
+      asyncTest( "Create TrackEvent object", 2, function() {
 
-        createButterCore( function( butter ){
+        createButterCore( function( butter ) {
 
           Popcorn.plugin( "createTrackEventTest", function() {} );
 
@@ -26,6 +26,49 @@
           start();
         });
       });
+
+      asyncTest( "Create TrackEvent using generateSafeTrackEvent", 5, function() {
+
+        createButterCore( function( butter ) {
+
+          var defaultTrackeventDuration = butter.defaultTrackeventDuration;
+
+          Popcorn.plugin( "generateTrackEventTest", function() {
+            return {
+              start: function() {
+
+              },
+              end: function() {
+
+              }
+            };
+          });
+
+          var m = butter.addMedia({ url: "../../../external/popcorn-js/test/italia.ogg", target: "mediaDiv" }),
+              t1 = m.addTrack(),
+              t2 = m.addTrack(),
+              target = butter.addTarget({
+                element: "targetDiv"
+              });
+
+          m.listen( "mediaready", function() {
+            var te1 = butter.generateSafeTrackEvent( "generateTrackEventTest", 0 ),
+                te2 = butter.generateSafeTrackEvent( "generateTrackEventTest", defaultTrackeventDuration * 0.5 ),
+                te3 = butter.generateSafeTrackEvent( "generateTrackEventTest", defaultTrackeventDuration * 0.75 ),
+                te4 = butter.generateSafeTrackEvent( "generateTrackEventTest", defaultTrackeventDuration * 2, t2 ),
+                te5 = butter.generateSafeTrackEvent( "generateTrackEventTest", defaultTrackeventDuration * 2 );
+
+            ok( te1.track === t1, "First trackevent was placed on first track" );
+            ok( te2.track === t2, "Second trackevent avoided collision with first trackevent, and was placed on second track." );
+            ok( te3.track !== t2 && te3.track !== t1, "Third trackevent avoided collision with second & first trackevents, and was placed on a new track." );
+            ok( te4.track === t2, "Trackevent placed in open space on second track." );
+            ok( te5.track === t1, "Trackevent placed in open space, with no explicit track." );
+
+            Popcorn.removePlugin( "generateTrackEventTest" );
+            start();
+          });
+        });
+      });
     </script>
   </head>
   <body>
@@ -36,6 +79,7 @@
     <ol id="qunit-tests"></ol>
     <div id="qunit-fixture">
       <div id="mediaDiv"></div>
+      <div id="targetDiv"></div>
     </div>
   </body>
 </html>

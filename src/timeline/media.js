@@ -38,7 +38,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer ),
         _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
         _currentMouseDownTrackEvent,
-        _defaultTrackeventDuration = butter.config.value( "trackEvent" ).defaultDuration,
         _status;
 
     _status = new Status( _media, butter.ui.tray.statusArea );
@@ -225,45 +224,13 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
     butter.editor.listen( "editorminimized", onEditorMinimized );
 
     function onPluginDropped( e ) {
-
       var type = e.data.type,
           track = e.data.track,
           start = e.data.start,
-          end,
           trackEvent;
 
-      if ( start + _defaultTrackeventDuration > _media.duration ) {
-        start = _media.duration - _defaultTrackeventDuration;
-      }
-
-      end = start + _defaultTrackeventDuration;
-
-      var defaultTarget = butter.defaultTarget;
-      if ( !defaultTarget && butter.targets.length > 0 ) {
-        defaultTarget = butter.targets[ 0 ];
-      }
-
-      track = _media.forceEmptyTrackSpaceAtTime( track, start, end );
-
-      trackEvent = track.addTrackEvent({
-        popcornOptions: {
-          start: start,
-          end: end,
-          target: defaultTarget.elementID
-        },
-        type: type
-      });
-
-      trackEvent.update();
-
-      if ( defaultTarget ) {
-        defaultTarget.view.blink();
-      }
-
-      butter.dispatch( "trackeventcreated", {
-        trackEvent: trackEvent,
-        by: "media"
-      });
+      trackEvent = butter.generateSafeTrackEvent( type, start, track );
+      butter.editor.editTrackEvent( trackEvent );
     }
 
     this.destroy = function() {
