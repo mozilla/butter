@@ -111,5 +111,14 @@ module.exports = {
         callback( err, doc );
       });
     });
+  },
+  closeDBConnection: function( callback ) {
+    mongoose.connection.close(function() {
+      dbOnline = false;
+
+      if ( callback ) {
+        callback();
+      }
+    });
   }
 };
