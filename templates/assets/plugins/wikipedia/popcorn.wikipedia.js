@@ -63,7 +63,8 @@
           _mainContentDiv,
           _contentArea,
           _toWikipedia,
-          _container,
+          _inner,
+          _outer,
           _href,
           _guid = Popcorn.guid( "wikiCallback" );
 
@@ -73,15 +74,17 @@
         return;
       }
 
-      options._container = _container = create( "div" );
+      options._container = _outer = create( "div" );
+      _outer.classList.add( "wikipedia-outer-container" );
 
-      _container.classList.add( "wikipedia-inner-container" );
+      _outer.style.width = validateDimension( options.width, "100" ) + "%";
+      _outer.style.height = validateDimension( options.height, "100" ) + "%";
+      _outer.style.top = validateDimension( options.top, "0" ) + "%";
+      _outer.style.left = validateDimension( options.left, "0" ) + "%";
+      _outer.style.zIndex = +options.zindex;
 
-      _container.style.width = validateDimension( options.width, "100" ) + "%";
-      _container.style.height = validateDimension( options.height, "100" ) + "%";
-      _container.style.top = validateDimension( options.top, "0" ) + "%";
-      _container.style.left = validateDimension( options.left, "0" ) + "%";
-      _container.style.zIndex = +options.zindex;
+      _inner = create( "div" );
+      _inner.classList.add( "wikipedia-inner-container" );
 
       _titleDiv = create( "div" );
       _titleDiv.classList.add( "wikipedia-title" );
@@ -100,16 +103,18 @@
 
       _mainContentDiv.appendChild( _contentArea );
 
-      _toWikipedia = create( "div" );
+      _toWikipedia = create( "a" );
       _toWikipedia.classList.add( "wikipedia-to-wiki" );
 
-      _container.appendChild( _titleDiv );
-      _container.appendChild( _mainContentDiv );
-      _container.appendChild( _toWikipedia );
-      _container.classList.add( options.transition );
-      _container.classList.add( "off" );
+      _inner.appendChild( _titleDiv );
+      _inner.appendChild( _mainContentDiv );
+      _inner.appendChild( _toWikipedia );
 
-      options._target.appendChild( _container );
+      _outer.classList.add( options.transition );
+      _outer.classList.add( "off" );
+
+      _outer.appendChild( _inner );
+      options._target.appendChild( _outer );
 
       if ( !options.lang ) {
         options.lang = "en";
@@ -129,7 +134,8 @@
             mainText = "";
 
         _titleTextArea.appendChild( getFragment( "<a href=\"" + options._link + "\" target=\"_blank\">" + sanitize( data.parse.title ) + "</a>" ) );
-        _toWikipedia.appendChild( getFragment( "<div>Read more on <a href=\"" + options._link + "\" target=\"_blank\">Wikipedia</a></div>" ) );
+        _toWikipedia.href = options._link;
+        _toWikipedia.setAttribute( "target", "_blank" );
 
         while ( !areValidElements( element ) ) {
           element = responseFragment.querySelector( "div > p:nth-of-type(" + ( ++childIndex ) + ")" );

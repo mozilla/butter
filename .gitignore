@@ -21,3 +21,4 @@ cornfield/config/runtime.json
 cornfield/config/versions.json
 docs
 css/embed.css
+templates/assets/plugins/wikipedia/popcorn.wikipedia.css
