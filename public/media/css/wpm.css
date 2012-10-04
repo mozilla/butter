@@ -11,106 +11,25 @@ Global styles and classes
   .threeColumn {
     margin-left: 47px;
   }
-
-  .button,
-  .button:link,
-  .button:visited {
-    font-family: OpenSansLightItalic;
-    line-height: 2.5em;
-    height: 2.5em;
-  }
-
-  .button-orange,
-  .button-orange:link,
-  .button-orange:visited {
-    background-color: #ea9407;
-
-    background-image: -khtml-gradient(linear, left top, left bottom, from(#f9ab2b), to(#ea9407));
-    /* Konqueror */
-
-    background-image: -moz-linear-gradient(#f9ab2b, #ea9407);
-    /* FF 3.6+ */
-
-    background-image: -ms-linear-gradient(#f9ab2b, #ea9407);
-    /* IE10 */
-
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f9ab2b), color-stop(100%, #ea9407));
-    /* Safari 4+, Chrome 2+ */
-
-    background-image: -webkit-linear-gradient(#f9ab2b, #ea9407);
-    /* Safari 5.1+, Chrome 10+ */
-
-    background-image: -o-linear-gradient(#f9ab2b, #ea9407);
-    /* Opera 11.10 */
-
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9ab2b', endColorstr='#ea9407', GradientType=0);
-    /* IE6 & IE7 */
-
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#f9ab2b', endColorstr='#ea9407', GradientType=0)";
-    /* IE8+ */
-
-    background-image: linear-gradient(#f9ab2b, #ea9407);
-    /* the standard */
-  }
-
-  .button-orange:hover,
-  .button-orange:link:hover,
-  .button-orange:visited:hover {
-    -webkit-box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.1), inset 0px -2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 2px #ffb63f;
-    -moz-box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.1), inset 0px -2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 2px #ffb63f;
-    box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.1), inset 0px -2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 2px #ffb63f;
-  }
-
-  .button:active,
-  .button:link:active,
-  .button:visited:active {
-    -webkit-box-shadow: inset 0px 2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 6px rgba(0, 0, 0, 0.2), inset 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: inset 0px 2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 6px rgba(0, 0, 0, 0.2), inset 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
-    box-shadow: inset 0px 2px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 12px 24px 6px rgba(0, 0, 0, 0.2), inset 0px 0px 2px 2px rgba(0, 0, 0, 0.2);
-  }
-
-  .button:after,
-  .button-blue:after {
-    content: " ▸";
-  }
-
-  .button.start,
-  .button-blue.start {
-    height: 48px;
-    line-height: 48px;
-    font-size: 1.4em;
-    font-family: OpenSansLightItalic; 
-  }
-  
-  .intro-bar em {
-    color: #939598;
-    margin: 0 15px;
-    font-family: OpenSansLight;
-    font-size: 1.5em;
-    font-style: normal;
-    font-weight: 400;
-    text-align: center;
-    text-shadow: 1px 1px 0 rgba(255, 255, 255 0.5);
-  }
-  
+ 
   h1 { 
-    font-family: "OpenSansLight", "OpenSansRegular", sans-serif; 
+    font-family: "Open Sans", sans-serif; 
     font-size: 36px; 
     color: rgb(109, 110, 113); 
-    font-weight: 400px;
+    font-weight: 100;
     line-height: 50px;
   }
 
   h2 { 
-    font-family: "OpenSansRegular", sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 16px;
     color: rgb(109, 110, 113);
-    font-weight: 700px;
+    font-weight: 500;
     line-height: 23px
   }
 
   p { 
-    font-family: "OpenSansRegular",sans-serif;
+    font-family: "Open Sans",sans-serif;
     font-size: 13px; 
     color: rgb(147, 149, 152);
     line-height: 23px; 
@@ -199,7 +118,7 @@ Layout styles
   }
 
   .logo {
-    font-family: OpenSansLight, sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 2.2em;
     font-weight: 200;
     line-height: normal;
@@ -305,14 +224,16 @@ Layout styles
   }
 
   #colophon h2 {
-    font-family: OpenSansLight;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 100;
     color: #999; 
     font-size: 2em;
   }
 
   #colophon h3 {
     color: #999;
-    font-family: OpenSansSemibold;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
     font-size: 1em;
     margin-top: 1em;
   }

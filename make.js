@@ -325,6 +325,12 @@ function buildCSS(compress) {
     cssFile: "css/embed-shell.css",
     compress: compress
   });
+
+  lessToCSS({
+    lessFile: "css/webfonts.less",
+    cssFile: "public/media/css/webfonts.css",
+    compress: compress
+  });
 }
 
 target.check = function() {
