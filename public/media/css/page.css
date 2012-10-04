@@ -187,11 +187,7 @@ Layout styles
     background: rgba(28,144,193,0.1);
   }
 
-  #home #nav-main .home a,
-  #projects #nav-main .projects a,
-  #webarcade #nav-main .projects a,
-  #gallery #nav-main .gallery a,
-  #about #nav-main .about a {
+  #home #nav-main .home a {
     background: #4199D6;
     color: #FFF;
     border: none;
@@ -199,11 +195,7 @@ Layout styles
     text-shadow: -1px -1px #347DB0;
   }
 
-  #home #nav-main .home a:after,
-  #projects #nav-main .projects a:after,
-  #webarcade #nav-main .projects a:after,
-  #gallery #nav-main .gallery a:after,
-  #about #nav-main .about a:after {
+  #home #nav-main .home a:after {
     content: "";
     position: absolute;
     top: 100%;
@@ -252,75 +244,6 @@ Layout styles
 ================================
 Home styles
 */
-
-  .pop {
-    background: url(/8bitcorn.png) no-repeat scroll center bottom;
-    width: 289px;
-    height: 203px;
-    position: relative;
-    top: 99px;
-    left: 35px;
-    -webkit-animation: pop 30s infinite;
-    -moz-animation: pop 30s infinite;
-    -ms-animation: pop 30s infinite;
-    -o-animation: pop 30s infinite;
-    animation: pop 30s infinite;
-  }
-
-  @-webkit-keyframes pop {
-    0% { -webkit-transform: translateY(0px); }
-    98% { -webkit-transform: translateY(0px) rotate(0deg); -webkit-animation-timing-function: ease-out; }
-    98.5% { -webkit-transform: translateY(-20px) rotate(2deg); -webkit-animation-timing-function: ease-in; }
-    99% { -webkit-transform: translateY(0px) rotate(0deg); -webkit-animation-timing-function: ease-out; }
-    99.25% { -webkit-transform: translateY(-3px) rotate(-1deg); -webkit-animation-timing-function: ease-in; }
-    99.5% { -webkit-transform: translateY(0px) rotate(0deg); -webkit-animation-timing-function: ease-out; }
-    99.75% { -webkit-transform: translateY(-2px) rotate(0.5deg); -webkit-animation-timing-function: ease-in; }
-    100% { -webkit-transform: translateY(0px) rotate(0deg); }
-  }
-
-  @-moz-keyframes pop {
-    0% { -moz-transform: translateY(0px); }
-    98% { -moz-transform: translateY(0px) rotate(0deg); -moz-animation-timing-function: ease-out; }
-    98.5% { -moz-transform: translateY(-20px) rotate(2deg); -moz-animation-timing-function: ease-in; }
-    99% { -moz-transform: translateY(0px) rotate(0deg); -moz-animation-timing-function: ease-out; }
-    99.25% { -moz-transform: translateY(-3px) rotate(-1deg); -moz-animation-timing-function: ease-in; }
-    99.5% { -moz-transform: translateY(0px) rotate(0deg); -moz-animation-timing-function: ease-out; }
-    99.75% { -moz-transform: translateY(-2px) rotate(0.5deg); -moz-animation-timing-function: ease-in; }
-    100% { -moz-transform: translateY(0px) rotate(0deg); }
-  }
-
-  @-ms-keyframes pop {
-    0% { -ms-transform: translateY(0px); }
-    98% { -ms-transform: translateY(0px) rotate(0deg); -ms-animation-timing-function: ease-out; }
-    98.5% { -ms-transform: translateY(-20px) rotate(2deg); -ms-animation-timing-function: ease-in; }
-    99% { -ms-transform: translateY(0px) rotate(0deg); -ms-animation-timing-function: ease-out; }
-    99.25% { -ms-transform: translateY(-3px) rotate(-1deg); -ms-animation-timing-function: ease-in; }
-    99.5% { -ms-transform: translateY(0px) rotate(0deg); -ms-animation-timing-function: ease-out; }
-    99.75% { -ms-transform: translateY(-2px) rotate(0.5deg); -ms-animation-timing-function: ease-in; }
-    100% { -ms-transform: translateY(0px) rotate(0deg); }
-  }
-
-  @-o-keyframes pop {
-    0% { -o-transform: translateY(0px); }
-    98% { -o-transform: translateY(0px) rotate(0deg); -o-animation-timing-function: ease-out; }
-    98.5% { -o-transform: translateY(-20px) rotate(2deg); -o-animation-timing-function: ease-in; }
-    99% { -o-transform: translateY(0px) rotate(0deg); -o-animation-timing-function: ease-out; }
-    99.25% { -o-transform: translateY(-3px) rotate(-1deg); -o-animation-timing-function: ease-in; }
-    99.5% { -o-transform: translateY(0px) rotate(0deg); -o-animation-timing-function: ease-out; }
-    99.75% { -o-transform: translateY(-2px) rotate(0.5deg); -o-animation-timing-function: ease-in; }
-    100% { -o-transform: translateY(0px) rotate(0deg); }
-  }
-
-  @keyframes pop {
-    0% { transform: translateY(0px); }
-    98% { transform: translateY(0px) rotate(0deg); animation-timing-function: ease-out; }
-    98.5% { transform: translateY(-20px) rotate(2deg); animation-timing-function: ease-in; }
-    99% { transform: translateY(0px) rotate(0deg); animation-timing-function: ease-out; }
-    99.25% { transform: translateY(-3px) rotate(-1deg); animation-timing-function: ease-in; }
-    99.5% { transform: translateY(0px) rotate(0deg); animation-timing-function: ease-out; }
-    99.75% { transform: translateY(-2px) rotate(0.5deg); animation-timing-function: ease-in; }
-    100% { transform: translateY(0px) rotate(0deg); }
-  }
 
   #home .caption p {
     margin-bottom: 0;
