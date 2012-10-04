@@ -47,7 +47,9 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
 
       // request a new trackEvent on the currentMedia
       element.addEventListener( "dblclick", function() {
-        butter.currentMedia.dispatch( "trackeventrequested", element );
+        butter.targets[ 0 ].dispatch( "trackeventrequested", {
+          element: element
+        });
       }, false );
 
       if ( iconImg ) {

@@ -88,9 +88,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           target.view.blink();
         }
       }
-      else {
-        _media.view.blink();
-      }
     }
 
     function onTrackEventMouseOver( e ){
