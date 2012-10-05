@@ -36,6 +36,15 @@
         });
       } //if
 
+      this.createTrackEvent = function( trackEventElement ) {
+        if ( trackEventElement ) {
+          _this.dispatch( "trackeventrequested", {
+            element: trackEventElement,
+            target: _this
+          });
+        }
+      };
+
       this.destroy = function () {
         if ( _pageElement ) {
           _pageElement.destroy();
