@@ -97,21 +97,29 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
      *
      * Closes the currently opened editor and opens the default one in it's place
      *
+     */
+    _this.closeEditor = function() {
+      _currentEditor.close();
+      _currentEditor = null;
+      _this.openEditor( DEFAULT_EDITOR_NAME );
+    };
+
+    /**
+     * Member: closeEditor
+     *
+     * Closes the currently opened editor and opens the default one in it's place
+     *
      * @param {TrackEvent} trackEvent: When specified will check if it matches the current editors track event and
      *                                 will prevent it from closing if so.
      */
-    _this.closeEditor = function( trackEvent ) {
-      var currentEditor,
-          isTrackEventEditor;
+    _this.closeTrackEventEditor = function( trackEvent ) {
+      var isTrackEventEditor = _currentEditor.getTrackEvent;
 
       if ( trackEvent && isTrackEventEditor &&
           isTrackEventEditor().id === trackEvent.id ) {
 
-        return;
+        _this.closeEditor();
       }
-      _currentEditor.close();
-      _currentEditor = null;
-      _this.openEditor( DEFAULT_EDITOR_NAME );
     };
 
     /**
