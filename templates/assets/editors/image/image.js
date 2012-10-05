@@ -4,7 +4,6 @@ EditorHelper.addPlugin( "image", function( trackEvent ) {
   var _canvas = document.createElement( "canvas" ),
       _popcornOptions = trackEvent.popcornTrackEvent,
       _container = _popcornOptions._container,
-      _image = _popcornOptions._image,
       _media = document.getElementById( trackEvent.track._media.target ),
       _context;
 
