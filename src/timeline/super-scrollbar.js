@@ -19,32 +19,31 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
 
       MIN_WIDTH = 5,
       ARROW_MIN_WIDTH = 50,       // The arrows have to change position at this point.
-      ARROW_MIN_WIDTH_CLASS = "super-scrollbar-small",
-      ZOOM_EXPAND_AMOUNT = 1.05,  // Fraction representing the amount of zoom to use when zoom-in/out
-                                  // buttons are clicked. Keeping this value near 1 is a good idea since
-                                  // width = width * ZOOM_EXPAND_AMOUNT.
-
-      TRANSITION_TIMEOUT = 100,   // Length of timeout for viewport-transition to stay alive.
-      ZOOM_PULSE_DURATION = 250;  // Length of time between zoom pulses.
+      ARROW_MIN_WIDTH_CLASS = "super-scrollbar-small";
 
   return function( outerElement, innerElement, boundsChangedCallback, media ) {
-    var _element = LangUtils.domFragment( SUPER_SCROLLBAR_LAYOUT ).querySelector( "#butter-super-scrollbar-container" ),
+    var _outer = LangUtils.domFragment( SUPER_SCROLLBAR_LAYOUT, "#butter-super-scrollbar-outer-container" ),
+        _inner = _outer.querySelector( "#butter-super-scrollbar-inner-container" ),
         _rect, _duration,
         _media = media,
         // viewport is the draggable, resizable, representation of the viewable track container.
-        _viewPort = _element.querySelector( "#butter-super-scrollbar-viewport" ),
+        _viewPort = _inner.querySelector( "#butter-super-scrollbar-viewport" ),
         _leftHandle = _viewPort.querySelector( "#butter-super-scrollbar-handle-left" ),
         _rightHandle = _viewPort.querySelector( "#butter-super-scrollbar-handle-right" ),
         // visuals is the container for the visual representations for track events.
-        _visuals = _element.querySelector( "#butter-super-scrollbar-visuals" ),
-        _scrubber = _element.querySelector( "#buter-super-scrollbar-scrubber" ),
-        _zoomInButton = _element.querySelector( ".butter-super-scrollbar-zoom-in" ),
-        _zoomOutButton = _element.querySelector( ".butter-super-scrollbar-zoom-out" ),
+        _visuals = _inner.querySelector( "#butter-super-scrollbar-visuals" ),
+        _scrubber = _inner.querySelector( "#buter-super-scrollbar-scrubber" ),
+        _zoomSlider = _outer.querySelector( ".butter-super-scrollbar-zoom-slider" ),
+        _zoomSliderContainer = _outer.querySelector( ".butter-super-scrollbar-zoom-slider-container" ),
+        _zoomSliderHandle = _outer.querySelector( ".butter-super-scrollbar-zoom-handle" ),
         _offset = 0,
         _trackEventVisuals = {},
-        _boundsChangedCallback = boundsChangedCallback,
-        _transitionLock,
-        _zoomInterval,
+        _boundsChangedCallback = function( left, width ) {
+          if ( width !== -1 ) {
+            _zoomSliderHandle.style.left = width * 100 + "%";
+          }
+          boundsChangedCallback( left, width );
+        },
         _this = this;
 
     var checkMinSize, onViewMouseUp, onViewMouseDown, onViewMouseMove,
@@ -55,14 +54,14 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
 
     checkMinSize = function() {
       if ( _viewPort.getBoundingClientRect().width < ARROW_MIN_WIDTH ) {
-        _element.classList.add( ARROW_MIN_WIDTH_CLASS );
+        _inner.classList.add( ARROW_MIN_WIDTH_CLASS );
       } else {
-        _element.classList.remove( ARROW_MIN_WIDTH_CLASS );
+        _inner.classList.remove( ARROW_MIN_WIDTH_CLASS );
       }
     };
 
     _this.update = function() {
-      _rect = _element.getBoundingClientRect();
+      _rect = _inner.getBoundingClientRect();
       checkMinSize();
     };
 
@@ -181,136 +180,112 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       _viewPort.style.right = ( 1 - ( outerElement.scrollLeft + outerElement.offsetWidth ) / innerElement.offsetWidth ) * 100 + "%";
     };
 
-    _element.addEventListener( "mousedown", onElementMouseDown, false );
+    _inner.addEventListener( "mousedown", onElementMouseDown, false );
     outerElement.addEventListener( "scroll", updateView, false );
     _viewPort.addEventListener( "mousedown", onViewMouseDown, false );
     _leftHandle.addEventListener( "mousedown", onLeftMouseDown, false );
     _rightHandle.addEventListener( "mousedown", onRightMouseDown, false );
 
-    // Prevent _element from receiving mousedown events, since _zoomInButton and
-    // _zoomOutButton are contained by _element.
-    _zoomInButton.addEventListener( "mousedown", function( e ) {
-      e.stopPropagation();
-    }, false );
-    _zoomOutButton.addEventListener( "mousedown", function( e ) {
-      e.stopPropagation();
-    }, false );
-
     /**
-     * refreshTransitionLock
+     * scaleViewPort
      *
-     * Ensures that only the most recent addition of the viewport-transition is removed
-     * after TRANSITION_TIMEOUT milliseconds. If _transitionLock is not null, the old object
-     * is "destroyed" and replaced with a new one. If the object persists for the lifetime
-     * the setTimeout (i.e. TRANSITION_TIMEOUT milliseconds), it will remove the
-     * viewport-transition class and delete itself.
+     * Scales the viewport by a percentage value (0 - 1). The viewport grows or shrinks
+     * to cover less or more area, and calls _boundsChangedCallback with the new (left, width) combination
+     * as percentage values (0 - 1). This action has the consequence of zooming the
+     * track container viewport in or out.
+     *
+     * A left and right position are calculated by moving them a set amount from their current
+     * positions around the mid-point of the viewport. A new width value is also calculated
+     * to provide _boundsChangedCallback with the necessary values: left & width.
+     *
+     * If the growth or shrink rate results in less than a pixel on both ends, nothing happens.
+     *
+     * @param {Number} scale: Percentage (0 - 1) to grow or shrink the viewport
      */
-    function refreshTransitionLock() {
-      if ( _transitionLock ) {
-        _transitionLock.destroy();
+    function scaleViewPort( scale ) {
+
+      var viewWidth = _viewPort.clientWidth,
+          viewLeft = _viewPort.offsetLeft,
+          rectWidth = _rect.width,
+          oldScale = viewWidth / rectWidth,
+          scaleDiff = oldScale - scale,
+          halfScale = scaleDiff / 2,
+          pixelGrowth = halfScale * rectWidth,
+          rightPosition,
+          leftPosition;
+
+      // make sure our growth is at least a pixel on either side.
+      if ( ( pixelGrowth > -1 && pixelGrowth < 1 ) ) {
+        return;
       }
 
-      _transitionLock = (function(){
-        var active = true;
+      rightPosition = ( 1 - ( ( viewLeft + viewWidth ) / rectWidth ) ) + halfScale;
+      leftPosition = ( viewLeft / rectWidth ) + halfScale;
 
-        _viewPort.classList.add( "viewport-transition" );
-
-        setTimeout( function() {
-          if ( active ) {
-            _viewPort.classList.remove( "viewport-transition" );
-            _transitionLock = null;
-          }
-        }, TRANSITION_TIMEOUT );
-
-        return {
-          destroy: function() {
-            active = false;
-          }
-        };
-      }());
-    }
-
-    /**
-     * zoomOut
-     *
-     * Expands the viewport by a maximum of ZOOM_EXPAND_AMOUNT. The viewport is expanded
-     * to cover more area, and calls _boundsChangedCallback with the new (left, width) combination
-     * as percentage values (0 - 1). This action has the consequence of zooming out the
-     * track container viewport, since more viewable area is desired.
-     *
-     * A left and right position are calculated by moving them a set amount from their current
-     * positions away from the mid-point of the viewport. A new width value is also calculated
-     * to provide _boundsChangedCallback with the necessary values: left & width.
-     */
-    function zoomOut() {
-      var halfWidth = ( _viewPort.clientWidth * ZOOM_EXPAND_AMOUNT - _viewPort.clientWidth ) / 2,
-          viewportRect = _viewPort.getBoundingClientRect(),
-          leftPosition = _viewPort.offsetLeft - halfWidth,
-          rightPosition = _rect.right - viewportRect.right - halfWidth,
-          newWidth = viewportRect.width + halfWidth * 2;
-
-      leftPosition = ( leftPosition < 0 ? 0 : leftPosition ) / _element.clientWidth;
-      rightPosition = ( rightPosition < 0 ? 0 : rightPosition) / _element.clientWidth;
-
-      // Proxy for applying viewport-transition so it happens safely and gets removed properly.
-      refreshTransitionLock();
+      if ( rightPosition < 0 ) {
+        leftPosition += rightPosition;
+        rightPosition = 0;
+      }
+      if ( leftPosition < 0 ) {
+        rightPosition += leftPosition;
+        leftPosition = 0;
+      }
 
       _viewPort.style.right = rightPosition * 100 + "%";
       _viewPort.style.left = leftPosition * 100 + "%";
 
-      // newWidth is used here because the transition will tween the real width value,
-      // causing _boundsChangedCallback to receive an incorrect width ratio.
-      _boundsChangedCallback( leftPosition, newWidth / _rect.width );
+      _boundsChangedCallback( leftPosition, scale );
     }
 
-    /**
-     * zoomIn
-     *
-     * Shrinks the viewport by a maximum of ZOOM_EXPAND_AMOUNT. The viewport is diminished
-     * to cover less area, and calls _boundsChangedCallback with the new (left, width) combination
-     * as percentage values (0 - 1). This action has the consequence of zooming in the
-     * track container viewport, since less viewable area is desired.
-     *
-     * A left and right position are calculated by moving them a set amount from their current
-     * positions toward the mid-point of the viewport. A new width value is also calculated
-     * to provide _boundsChangedCallback with the necessary values: left & width.
-     */
-    function zoomIn() {
-      var halfWidth = ( _viewPort.clientWidth * ZOOM_EXPAND_AMOUNT - _viewPort.clientWidth ) / 2,
-          viewportRect = _viewPort.getBoundingClientRect(),
-          leftPosition = _viewPort.offsetLeft + halfWidth,
-          rightPosition = _rect.right - viewportRect.right + halfWidth,
-          newWidth = viewportRect.width - halfWidth * 2;
-
-      leftPosition = ( leftPosition < 0 ? 0 : leftPosition ) / _element.clientWidth;
-      rightPosition = ( rightPosition < 0 ? 0 : rightPosition) / _element.clientWidth;
-
-      // Proxy for applying viewport-transition so it happens safely and gets removed properly.
-      refreshTransitionLock();
-
-      _viewPort.style.right = rightPosition * 100 + "%";
-      _viewPort.style.left = leftPosition * 100 + "%";
-
-      // newWidth is used here because the transition will tween the real width value,
-      // causing _boundsChangedCallback to receive an incorrect width ratio.
-      _boundsChangedCallback( leftPosition, newWidth / _rect.width );
+    function zoomSliderMouseUp( e ) {
+      _viewPort.classList.remove( "viewport-transition" );
+      window.removeEventListener( "mouseup", zoomSliderMouseUp, false );
+      window.removeEventListener( "mousemove", zoomSliderMouseMove, false );
+      _zoomSliderContainer.addEventListener( "mousedown", zoomSliderContainerMouseDown, false );
+      _zoomSliderHandle.addEventListener( "mousedown", zoomSliderHanldeMouseDown, false );
     }
 
-    _zoomOutButton.addEventListener( "mousedown", function( e ) {
-      zoomOut();
-      _zoomInterval = setInterval( zoomOut, ZOOM_PULSE_DURATION );
-      window.addEventListener( "mouseup", function( e ) {
-        clearInterval( _zoomInterval );
-      }, false );
-    }, false );
+    function zoomSliderMouseMove( e ) {
+      e.preventDefault();
+      updateZoomSlider( e );
+    }
 
-    _zoomInButton.addEventListener( "mousedown", function( e ) {
-      zoomIn();
-      _zoomInterval = setInterval( zoomIn, ZOOM_PULSE_DURATION );
-      window.addEventListener( "mouseup", function( e ) {
-        clearInterval( _zoomInterval );
-      }, false );
-    }, false );
+    function updateZoomSlider( e ) {
+      var position = e.clientX - ( _zoomSliderContainer.offsetLeft + ( _zoomSliderHandle.offsetWidth / 2 ) ),
+          scale;
+
+      if ( position < 0 ) {
+        position = 0;
+      } else if ( position > _zoomSlider.offsetWidth ) {
+        position = _zoomSlider.offsetWidth;
+      }
+      scale = position / _zoomSlider.offsetWidth;
+      if ( scale * _rect.width < MIN_WIDTH ) {
+        scale = MIN_WIDTH / _rect.width;
+      }
+      scaleViewPort( scale );
+      _zoomSliderHandle.style.left = position / _zoomSlider.offsetWidth * 100 + "%";
+    }
+
+    function zoomSliderContainerMouseDown( e ) {
+      _viewPort.classList.add( "viewport-transition" );
+      updateZoomSlider( e );
+      _zoomSliderHandle.removeEventListener( "mousedown", zoomSliderHanldeMouseDown, false );
+      _zoomSliderContainer.removeEventListener( "mousedown", zoomSliderContainerMouseDown, false );
+      window.addEventListener( "mousemove", zoomSliderMouseMove, false );
+      window.addEventListener( "mouseup", zoomSliderMouseUp, false );
+    }
+
+    function zoomSliderHanldeMouseDown( e ) {
+      _viewPort.classList.add( "viewport-transition" );
+      _zoomSliderHandle.removeEventListener( "mousedown", zoomSliderHanldeMouseDown, false );
+      _zoomSliderContainer.removeEventListener( "mousedown", zoomSliderContainerMouseDown, false );
+      window.addEventListener( "mousemove", zoomSliderMouseMove, false );
+      window.addEventListener( "mouseup", zoomSliderMouseUp, false );
+    }
+
+    _zoomSliderContainer.addEventListener( "mousedown", zoomSliderContainerMouseDown, false );
+    _zoomSliderHandle.addEventListener( "mousedown", zoomSliderHanldeMouseDown, false );
 
     _media.listen( "trackeventadded", function( e ) {
       var trackEvent = document.createElement( "div" ),
@@ -373,7 +348,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       element: {
         enumerable: true,
         get: function(){
-          return _element;
+          return _outer;
         }
       }
     });
