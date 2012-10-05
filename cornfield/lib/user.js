@@ -2,9 +2,8 @@
 
 var
 dbOnline = false,
-configDB = require( "config" ).database,
 Sequelize = require( "sequelize" ),
-sequelize = new Sequelize( configDB.databaseName, configDB.username, configDB.password, {
+sequelize = new Sequelize( "popcorn", "test", null, {
   dialect: "sqlite"
 }),
 
@@ -73,7 +72,7 @@ module.exports = {
     });
 
     project.save()
-    .success( function() {
+    .success( function() {console.log(project);
       callback( null, project );
     })
     .error( function( err ) {
