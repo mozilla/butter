@@ -704,6 +704,10 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
         currentTrackEvent = currentEditor.getTrackEvent();
         // Ensure event being deleted matches the one currently being used by the editor
         if ( e.data.id === currentTrackEvent.id ) {
+          // Ugly work around for Bug #2334 on Lighthouse
+          // https://webmademovies.lighthouseapp.com/projects/65733/tickets/2334-moving-an-event-to-a-new-track-will-close-its-editor
+          // Please remove when possible.
+          e.data.editorOpen = true;
           butter.editor.closeEditor();
         }
       }
