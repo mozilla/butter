@@ -149,7 +149,8 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
 
       if ( overlappingTrackEvent ) {
         if ( direction === 'right' ) {
-          resizeEvent.block( overlappingTrackEvent.view.element.offsetLeft );
+          // Use clientLeft to compensate for border (https://developer.mozilla.org/en-US/docs/DOM/element.clientLeft)
+          resizeEvent.block( overlappingTrackEvent.view.element.offsetLeft - overlappingTrackEvent.view.element.clientLeft * 2 );
         }
         else {
           resizeEvent.block( overlappingTrackEvent.view.element.offsetLeft + overlappingTrackEvent.view.element.offsetWidth );
