@@ -121,14 +121,11 @@
         return _currentMedia.getManifest( name );
       }; //getManifest
 
-      function trackEventRequested( element, media, target ) {
-        var track,
-            type = element.getAttribute( "data-popcorn-plugin-type" ),
-            start = media.currentTime,
-            end;
+      _this.generateSafeTrackEvent = function( type, start, track ) {
+        var end, trackEvent;
 
-        if ( start > media.duration ) {
-          start = media.duration - _defaultTrackeventDuration;
+        if ( start + _defaultTrackeventDuration > _currentMedia.duration ) {
+          start = _currentMedia.duration - _defaultTrackeventDuration;
         }
 
         if ( start < 0 ) {
@@ -137,60 +134,61 @@
 
         end = start + _defaultTrackeventDuration;
 
-        if ( end > media.duration ) {
-          end = media.duration;
+        if ( end > _currentMedia.duration ) {
+          end = _currentMedia.duration;
         }
 
-        if ( !type ) {
-          _logger.log( "Invalid trackevent type requested." );
+        if ( !_defaultTarget ) {
+          console.warn( "No targets to drop events!" );
           return;
         }
 
-        if ( media.tracks.length === 0 ) {
-          media.addTrack();
+        if ( !track ) {
+          track = _currentMedia.findNextAvailableTrackFromTimes( start, end );
+        }
+        else {
+          track = _currentMedia.forceEmptyTrackSpaceAtTime( track, start, end );
         }
 
-        track = media.findNextAvailableTrackFromTimes( start, end ) || media.addTrack();
+        track = track || _currentMedia.addTrack();
 
-        var trackEvent = track.addTrackEvent({
-          type: type,
+        trackEvent = track.addTrackEvent({
           popcornOptions: {
             start: start,
             end: end,
-            target: target
-          }
+            target: _defaultTarget.elementID
+          },
+          type: type
         });
 
-        if( media.currentTime < media.duration - DEFAULT_TRACKEVENT_OFFSET ){
-          media.currentTime += DEFAULT_TRACKEVENT_OFFSET;
+        if( _currentMedia.currentTime < _currentMedia.duration - DEFAULT_TRACKEVENT_OFFSET ){
+          _currentMedia.currentTime += DEFAULT_TRACKEVENT_OFFSET;
         }
 
+        _defaultTarget.view.blink();
+
         return trackEvent;
-      }
+      };
 
       function targetTrackEventRequested( e ) {
+        var trackEvent;
+
         if ( _currentMedia ) {
-          var trackEvent = trackEventRequested( e.data.element, _currentMedia, e.target.elementID );
-          _this.dispatch( "trackeventcreated", {
-            trackEvent: trackEvent,
-            by: "target"
-          });
+          trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime );
+          _this.editor.editTrackEvent( trackEvent );
         }
         else {
           _logger.log( "Warning: No media to add dropped trackevent." );
         }
       }
 
-      function mediaPlayerTypeRequired( e ){
-        _page.addPlayerType( e.data );
+      function mediaTrackEventRequested( e ) {
+        var trackEvent = _this.generateSafeTrackEvent( e.data.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime );
+        _this.editor.editTrackEvent( trackEvent );
       }
 
-      function mediaTrackEventRequested( e ){
-        var trackEvent = trackEventRequested( e.data, e.target, _currentMedia.target );
-        _this.dispatch( "trackeventcreated", {
-          trackEvent: trackEvent,
-          by: "media"
-        });
+      function mediaPlayerTypeRequired( e ){
+        _page.addPlayerType( e.data );
       }
 
       function onTrackEventSelected( e ) {
@@ -234,9 +232,9 @@
         target.listen( "trackeventrequested", targetTrackEventRequested );
         _logger.log( "Target added: " + target.name );
         _this.dispatch( "targetadded", target );
-        if( target.isDefault ){
+        if ( target.isDefault || !_defaultTarget ) {
           _defaultTarget = target;
-        } //if
+        }
         return target;
       }; //addTarget
 
@@ -249,15 +247,14 @@
         if ( idx > -1 ) {
           target.unlisten( "trackeventrequested", targetTrackEventRequested );
           _targets.splice( idx, 1 );
-          delete _targets[ target.name ];
           _this.dispatch( "targetremoved", target );
-          if( _defaultTarget === target ){
-            _defaultTarget = undefined;
-          } //if
+          if ( _defaultTarget === target ) {
+            _defaultTarget = _targets.length > 0 ? _targets[ 0 ] : null;
+          }
           return target;
-        } //if
-        return undefined;
-      }; //removeTarget
+        }
+        return null;
+      };
 
       //serializeTargets - get a list of targets objects
       _this.serializeTargets = function () {
@@ -589,6 +586,12 @@
             Logger.enabled( value );
           },
           enumerable: true
+        },
+        defaultTrackeventDuration: {
+          enumerable: true,
+          get: function() {
+            return _defaultTrackeventDuration;
+          }
         }
       });
 
