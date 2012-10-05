@@ -43,8 +43,6 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
           }
           boundsChangedCallback( left, width );
         },
-        _transitionLock,
-        _zoomInterval,
         _this = this;
 
     var checkMinSize, onViewMouseUp, onViewMouseDown, onViewMouseMove,
@@ -207,7 +205,6 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
 
       var viewWidth = _viewPort.clientWidth,
           viewLeft = _viewPort.offsetLeft,
-          widthPadding = _viewPort.offsetWidth - viewWidth,
           rectWidth = _rect.width,
           oldScale = viewWidth / rectWidth,
           scaleDiff = oldScale - scale,
