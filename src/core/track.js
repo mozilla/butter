@@ -40,7 +40,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
     this.setPopcornWrapper = function ( newPopcornWrapper ) {
       _popcornWrapper = newPopcornWrapper;
       for ( var i = 0, l = _trackEvents.length; i < l; ++i ){
-        _trackEvents[ i ].setPopcornWrapper( newPopcornWrapper );
+        _trackEvents[ i ].bind( _this, newPopcornWrapper );
       }
     };
 
@@ -140,12 +140,18 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       } //for
     }; //getTrackEventByName
 
-    this.addTrackEvent = function ( trackEvent ) {
+    this.addTrackEvent = function( trackEvent ) {
       var oldSelected = trackEvent ? !!trackEvent.selected : false;
 
-      // Never absorb a track object. Only create new ones.
-      // Keeps track->trackevent ownership simple! :)
-      trackEvent = new TrackEvent( trackEvent, _this, _popcornWrapper );
+      if ( !( trackEvent instanceof TrackEvent ) ) {
+        trackEvent = new TrackEvent( trackEvent );
+      }
+
+      if ( trackEvent.track ) {
+        throw "TrackEvent still bound to track. Please use `track.removeTrackEvent` first.";
+      }
+
+      trackEvent.bind( _this, _popcornWrapper );
 
       // Update the trackevent with defaults (if necessary)
       if ( _this._media ) {
