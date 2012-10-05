@@ -15,11 +15,20 @@
   -ms-transition: @transition1;
   transition: @transition1;
 }
+.box-sizing( @property ) {
+  // https://developer.mozilla.org/En/CSS/Box-sizing
+  -webkit-box-sizing: @property; // Chrome 10-
+  -moz-box-sizing: @property;
+  -ms-box-sizing: @property; // IE 8+
+  box-sizing: @property; // Opera, Safari 5.1+, Chrome 10+
+}
+
 
 @highlight: #3FB58E; //3FB58E;
-@offset: 3px;
-@handlesize: 5px;
-@handlehoversize: 7px;
+@offset: 8px;
+@handlesmall: 8px;
+@handlecorner: 10px;
+@handlelarge: 25px;
 
 .ui-resizable,
 .ui-droppable,
@@ -46,54 +55,46 @@
 
 .ui-resizable .ui-icon,
 [class^="ui-resizable-"] {
-  border: 1px solid @highlight;
-  background: none;
-  height: @handlesize;
-  width: @handlesize;
+  border: 3px solid @highlight;
+  background: darken(@highlight, 10% );
   opacity: 0;
-  .ui-resizable:hover &,
-  .ui-resizable-resizing & {
-    height: @handlehoversize;
-    width: @handlehoversize;
+  .box-sizing( border-box );
+  &:hover {
+    border-color: lighten( @highlight, 10% );
   }
 }
 
 .ui-resizable-s { 
+  height: @handlesmall;
+  width: @handlelarge;
   cursor: s-resize;
-  bottom: -( @offset + @handlesize/2 );
+  bottom: -( @offset + @handlesmall/2 ) - 2;
   left: 50%;
-  margin-left: -@handlesize/2;
-  .ui-resizable:hover &,
-  .ui-resizable-resizing & {
-    bottom: -( @offset + @handlehoversize/2 );
-    margin-left: -@handlehoversize/2;
-  }
+  margin-left: -@handlelarge/2;
 }
 .ui-resizable-e { 
+  height: @handlelarge;
+  width: @handlesmall;
   cursor: e-resize;
-  right: -( @offset + @handlesize/2 );
-  margin-top: -@handlesize/2;
+  right: -( @offset + @handlesmall/2 );
+  margin-top: -@handlelarge/2;
   top: 50%; 
-  .ui-resizable:hover &,
-  .ui-resizable-resizing & {
-    right: -( @offset + @handlehoversize/2 );
-    margin-top: -@handlehoversize/2;
-  }
 }
 .ui-resizable-se { 
   cursor: se-resize;
-  right: -( @offset + @handlehoversize/2 );
-  bottom: -( @offset + @handlehoversize/2 );
+  height: @handlecorner;
+  width: @handlecorner;
+  right: -( @offset + @handlecorner/2 );
+  bottom: -( @offset + @handlecorner/2 );
 }
 
 /* HOVER STYLES
 -------------------------------------------------- */
-#embed-wrapper:hover,
-.ui-draggable-dragging {
-  .ui-resizable,
-  .ui-draggable {
-    &:before {
-      opacity: 0.7;
+.ui-resizable,
+.ui-draggable {
+  &:hover { 
+    &:after{
+      opacity: 1;
       content: "";
       display: block;
       position: absolute;
@@ -101,24 +102,18 @@
       right: -@offset;
       bottom: -@offset;
       left: -@offset;
-      border: 1px dashed @highlight;
+      opacity: 1;
+      border: @offset solid #FFF;
+      box-shadow: 0 0 0 1px #CCC,
+        inset 0 0 0 1px #CCC,
+        inset 0 0 3px 2px rgba( 0, 0, 0, 0.2 );
+      pointer-events: none;
     }
-    &:hover:before {
+    .ui-resizable .ui-icon,
+    [class^="ui-resizable-"] { 
       opacity: 1;
     }
   }
-  .ui-draggable-grip {
-    height: 5px;
-    .ui-draggable-dragging &,
-    &:hover {
-      height: 10px;
-    }
-  }
-}
-
-#embed-wrapper:hover .ui-resizable .ui-icon,
-#embed-wrapper:hover [class^="ui-resizable-"] { 
-  opacity: 1;
 }
 
 
@@ -146,7 +141,7 @@
 .ui-draggable-left {
   width: @offset * 2;
   bottom: -@offset*2;
-  top: -@offset*2;
+  top: 0;
   left: -@offset*2;
 }
 .ui-draggable-right {
@@ -157,15 +152,38 @@
 }
 
 .ui-draggable-grip {
-  height: 0;
+  #embed-wrapper:hover & {
+    display: block;
+  }
+  display: none;
+  height: 30px;
   width: 30px;
   border: none;
-  border-radius: 2px 2px 0 0;
-  left: 50%;
-  bottom: 100%;
+  /*
+  border-radius: 2px 0 0 2px;
+  right: 100%;
+  margin-right: @offset + 1px;
+  top: 0;
   margin-left: -15px;
-  background: @highlight;
-  .transition( height 0.05s linear );
+  */
+  border-radius: 0;
+  top: -1px;
+  //margin-bottom: 1px;
+  left: -1px;
+  background: rgba( 255, 255, 255, 0.8 );
+  text-align: centers;
+  &:before {
+    content: "";
+    display: inline-block;
+    height: 14px;
+    width: 14px;
+    margin-top: 7px;
+    margin-left: 8px;
+    background: url( "../../../../resources/glyphicons-halflings-green.png" ) -168px -72px;
+  }
+  &:hover {
+   // background-color: lighten( @highlight, 10% );
+  }
 }
 
 .butter-dragover {

@@ -172,9 +172,8 @@
         }
       };
       onMouseDown = function( e ) {
-        if ( !e.shiftKey ) {
-          e.stopPropagation();
-        }
+        e.stopPropagation();
+        $( contentContainer ).draggable( "destroy" );
       };
 
       for ( var i = 0, l = contentContainers.length; i < l; i++ ) {
