@@ -2,9 +2,11 @@
 
 (function ( Popcorn, global ) {
 
-  var CACHED_RESULTS = {};
-
-  var MAX_TWEETS = 150;
+  var CACHED_RESULTS = {},
+      MAX_TWEETS = 150,
+      TWEETS_TIMER = 4000,
+      TRANSITION_MARGIN_TOP = "-55px",
+      TRANSITION_TIMEOUT = 700;
 
   Popcorn.plugin( "twitter", {
     manifest: {
@@ -184,6 +186,19 @@
         // Set layout class for container
         if ( options.layout ) {
           options._container.classList.add( options.layout );
+          if ( options.layout === "ticker" ) {
+            var elem;
+
+            options._tickerInterval = setInterval(function() {
+              elem = tweetsContainer.firstChild;
+              elem.style.marginTop = TRANSITION_MARGIN_TOP;
+              setTimeout(function() {
+                tweetsContainer.removeChild( elem );
+                tweetsContainer.appendChild( elem );
+                elem.style.marginTop = "";
+              }, TRANSITION_TIMEOUT );
+            }, TWEETS_TIMER );
+          }
         }
 
         outerTweetsContainer.classList.add( "popcorn-twitter-tweets" );
@@ -270,6 +285,10 @@
       // Remove the plugins container when being destroyed
       if ( options._container && options._target ) {
         options._target.removeChild( options._container );
+      }
+
+      if ( options._tickerInterval ) {
+        clearInterval( options._tickerInterval );
       }
     }
   });
