@@ -22,6 +22,7 @@ var path = require( "path" ),
     DIST_DIR = 'dist',
     CSS_DIR = 'css',
     CORNFIELD_DIR = 'cornfield',
+    PUBLIC_DIR = 'public',
 
     DEFAULT_CONFIG = './src/default-config',
 
@@ -275,6 +276,7 @@ function checkHTML() {
 
   find([
     EDITORS_DIR,
+    PUBLIC_DIR,
     join( SRC_DIR, "dialog", "dialogs" ),
     join( SRC_DIR, "layouts" ),
     join( SRC_DIR, "editor" ),
