@@ -92,7 +92,8 @@
 .ui-draggable-dragging {
   .ui-resizable,
   .ui-draggable {
-    &:after {
+    &:before {
+      opacity: 0.7;
       content: "";
       display: block;
       position: absolute;
@@ -102,9 +103,16 @@
       left: -@offset;
       border: 1px dashed @highlight;
     }
+    &:hover:before {
+      opacity: 1;
+    }
   }
   .ui-draggable-grip {
     height: 5px;
+    .ui-draggable-dragging &,
+    &:hover {
+      height: 10px;
+    }
   }
 }
 
