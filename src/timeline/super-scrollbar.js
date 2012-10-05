@@ -221,7 +221,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
         return;
       }
 
-      rightPosition = ( 1 - ( ( viewLeft + viewWidth ) / rectWidth ) ) + halfScale,
+      rightPosition = ( 1 - ( ( viewLeft + viewWidth ) / rectWidth ) ) + halfScale;
       leftPosition = ( viewLeft / rectWidth ) + halfScale;
 
       rightPosition = ( rightPosition < 0 ? 0 : ( rightPosition > 1 ? 1 : rightPosition ) );
