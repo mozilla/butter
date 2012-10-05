@@ -11,9 +11,7 @@
       "id": "Media0",
       "name": "Media0",
       "url": [
-        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.mp4",
-        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.ogv",
-        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.webm"
+        "http://videos-cdn.mozilla.net/serv/webmademovies/tutorialruff.webm"
       ],
       "target": "video",
       "duration": 64.54166412353516,
@@ -42,8 +40,8 @@
   "tutorial": {
     "general": [
       {
-        "start": 1,
-        "end": 6,
+        "start": 21,
+        "end": 43,
         "name": "media-editor-button-tooltip",
         "element": ".butter-editor-header-media",
         "message": "This is The Media Editor",
@@ -52,6 +50,30 @@
         "hover": false,
         "hidden": true
       },
+      {
+        "start": 46,
+        "end": 53,
+        "name": "events-editor-button-tooltip",
+        "element": ".butter-editor-header-popcorn",
+        "message": "This is The Events Editor",
+        "top": "50px",
+        "left": "50px",
+        "hover": false,
+        "hidden": true
+      },
+      
+     {
+        "start": 101,
+        "end": 116,
+        "name": "login-button-tooltip",
+        "element": ".butter-login-btn",
+        "message": "Use this to Login and Share",
+        "top": "50px",
+        "left": "50px",
+        "hover": false,
+        "hidden": true
+      },     
+      
       {
         "start": 1,
         "end": 5,
@@ -62,7 +84,18 @@
         "left": "50%",
         "hover": false,
         "hidden": true
-      }
+      },
+    {
+        "start": 120,
+        "end": 128,
+        "name": "share-editor-tooltip",
+        "element": ".butter-editor-header-share",
+        "message": "This is the share editor",
+        "top": "50px",
+        "left": "50px",
+        "hover": false,
+        "hidden": true
+    }
     ],
     "plugin-list": [
       {
@@ -90,11 +123,11 @@
     ],
     "media-editor": [
       {
-        "start": 8,
-        "end": 14,
-        "name": "new-media-button-tooltip",
-        "element": "#new-media-source-btn",
-        "message": "click me to add a new media source!",
+        "start": 32,
+        "end": 40,
+        "name": "current-media-tooltip",
+        "element": ".media-editor-inner-wrapper.primary-media-wrapper",
+        "message": "Paste your media files in here!",
         "top": "50px",
         "left": "50px",
         "hover": false,
@@ -114,12 +147,16 @@
     ],
     "editorOpenEvents": [
       {
-        "start": 7,
+        "start": 21,
         "type": "media-editor"
       },
       {
-        "start": 14,
+        "start": 46,
         "type": "plugin-list"
+      },
+      {
+        "start": 120,
+        "type": "share-properties"
       }
     ]
   }
