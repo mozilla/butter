@@ -87,7 +87,7 @@
     "requirejs": "2.0.6",
     "express": "2.5.11",
     "jade": "0.27.2",
-    "express-persona": "~0.0.5",
+    "express-persona": "~0.0.6",
     "config": "0.4.16",
     "mongoose": "2.8.3",
     "client-sessions": "0.0.9",
