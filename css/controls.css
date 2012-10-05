@@ -108,27 +108,6 @@
   border-radius: 0;
 }
 
-#controls-scrubber {
-  height: 100%;
-  width: 2px;
-  background: #EEE;
-  position: absolute;
-  cursor: pointer;
-  display: none;
-}
-
-#controls-scrubber:after {
-  content: "";
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  border-radius: 15px;
-  background: #EEE;
-  top: -2px;
-  left: -5px;
-}
-
-
 /* Time */
 
 .time {
@@ -167,62 +146,49 @@
 
 /* Volume */
 
+#controls-volume-container {
+  position: absolute;
+  right: 165px;
+  width: 38px;
+}
+
 #controls-volume {
   position: absolute;
-  width: 30px;
-  height: 30px;
-  right: 175px;
-  top: 11px;
-}
-
-#controls-volume div {
-  float: left;
-  width: 5px;
-  height: 18px;
-  padding-left: 1px;
-  padding-right: 2px;
+  background: #e4e4e4;
+  height: 15px;
+  left: 7px;
+  right: 0;
+  top: 12px;
+  margin-right: 8px;
+  border-radius: 0;
+  box-shadow: none;
   cursor: pointer;
-  position: relative;
 }
 
-#controls-volume div span {
-  background: #d5d5d6;
-  display: block;
-  position: absolute;
-  width: 5px;
-  bottom: 0;
-}
-
-#controls-volume div.active span {
-  background: #1eb771;
-}
-
-#controls-volume div:hover span {
-  background-color: #b5b5b5;
-}
-
-#controls-volume div:last-child {
-  padding-right: 0;
-}
-
-#controls-volume #controls-volume-one span {
-  height: 25%;
-}
-
-#controls-volume #controls-volume-two span {
-  height: 50%;
-}
-
-#controls-volume #controls-volume-three span {
-  height: 75%;
-}
-
-#controls-volume #controls-volume-four span {
+#controls-volume-progressbar {
   height: 100%;
+  background: #1eb771;
+  position: absolute;
+  border-radius: 0;
 }
 
-#controls-volume #controls-volume-one {
+#controls-volume-scrubber {
+  height: 100%;
+  width: 2px;
+  background: #EEE;
+  position: absolute;
+  cursor: pointer;
+}
 
+#controls-volume-scrubber:after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 15px;
+  border-radius: 15px;
+  background: #EEE;
+  top: -2px;
+  left: -5px;
 }
 
 /* Buttons */
@@ -236,6 +202,16 @@
   margin-top: 7px;
   margin-left: 7px;
   cursor: pointer;
+}
+
+#controls-mute {
+  width: 14px;
+  height: 14px;
+  background-image: url(../resources/glyphicons-halflings.png);
+  cursor: pointer;
+  padding: 0;
+  left: -8px;
+  top: 12px;
 }
 
 .controls-btn {
@@ -254,11 +230,11 @@
 }
 
 .controls-muted {
-  background-position: 0 -21px;
+  background-position: -360px -24px;
 }
 
 .controls-unmuted {
-  background-position: -25px -21px;
+  background-position: -384px -24px;
 }
 
 .controls-right div {
