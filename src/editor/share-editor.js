@@ -18,7 +18,6 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         projectEmbedURL = editorContainer.querySelector( ".butter-project-embed-url" ),
         embedSize = editorContainer.querySelector( ".butter-embed-size" ),
         previewBtn = editorContainer.querySelector( ".butter-preview-link" ),
-        shareFacebook = editorContainer.querySelector( ".butter-share-facebook" ),
         shareTwitter = editorContainer.querySelector( ".butter-share-twitter" ),
         shareGoogle = editorContainer.querySelector( ".butter-share-google" ),
         projectNameWrapper = saveContainer.querySelector( ".butter-project-name-wrapper" ),
@@ -123,9 +122,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
 
         updateEmbed( projectURL.value.replace( "/v/", "/e/" ) );
         // if any of the buttons haven't loaded, or if we aren't logged in
-        if ( !shareFacebook.childNodes.length || !shareTwitter.childNodes.length ||
-             !shareGoogle.childNodes.length || !butter.cornfield.authenticated() ) {
-          socialMedia.hotLoad( shareFacebook, socialMedia.facebook, url );
+        if ( !shareTwitter.childNodes.length || !shareGoogle.childNodes.length || !butter.cornfield.authenticated() ) {
           socialMedia.hotLoad( shareTwitter, socialMedia.twitter, url );
           socialMedia.hotLoad( shareGoogle, socialMedia.google, url );
         }
