@@ -315,7 +315,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
         _updateInterval = -1;
-        _onStop();
+        _onStop( _resizeEvent );
         element.classList.remove( RESIZABLE_CLASS );
       }
 
@@ -392,7 +392,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
         _updateInterval = -1;
-        _onStop();
+        _onStop( _resizeEvent );
         element.classList.remove( RESIZABLE_CLASS );
       }
 

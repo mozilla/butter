@@ -205,11 +205,28 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       createTrackEventFromDrop( trackEvent, popcornOptions, oldTrack, desiredTrack );
     }
 
+    function onTrackEventResizeStopped( e ) {
+      var trackEventView = e.target,
+          trackEvent = trackEventView.trackEvent,
+          direction = e.data.direction,
+          popcornOptions = {};
+
+      if ( direction === "right" ) {
+        popcornOptions.end = trackEvent.popcornOptions.start + trackEventView.element.clientWidth / _container.clientWidth * _media.duration;
+      }
+      else {
+        popcornOptions.start = trackEventView.element.offsetLeft / _container.clientWidth * _media.duration;
+      }
+
+      trackEvent.update( popcornOptions );
+    }
+
     _media.listen( "trackeventadded", function( e ) {
       var trackEventView = e.data.view;
       trackEventView.setDragHandler( onTrackEventDragged );
       trackEventView.setResizeHandler( onTrackEventResized );
       trackEventView.listen( "trackeventdragstarted", onTrackEventDragStarted );
+      trackEventView.listen( "trackeventresizestopped", onTrackEventResizeStopped );
       _vScrollbar.update();
     });
 
@@ -218,6 +235,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       trackEventView.setDragHandler( null );
       trackEventView.setResizeHandler( null );
       trackEventView.unlisten( "trackeventdragstarted", onTrackEventDragStarted );
+      trackEventView.unlisten( "trackeventresizestopped", onTrackEventResizeStopped );
       _vScrollbar.update();
     });
 

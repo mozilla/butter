@@ -246,9 +246,9 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                 start: function() {
                   _resizing = true;
                 },
-                stop: function() {
+                stop: function( resizeEvent ) {
                   _resizing = false;
-                  movedCallback();
+                  _this.dispatch( "trackeventresizestopped", resizeEvent );
                 },
                 resize: function( x, w, resizeEvent ) {
                   if ( _onResize ) {
@@ -267,21 +267,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         } //set
       }
     });
-
-    function movedCallback() {
-      _element.style.top = "0px";
-
-      var track = _trackEvent.track,
-          trackView = track.view,
-          media = track._media,
-          start = ( _element.offsetLeft / trackView.element.offsetWidth ) * media.duration,
-          end = start + ( _element.clientWidth / trackView.element.offsetWidth ) * media.duration;
-
-      _this.dispatch( "trackeventmoved", {
-        start: start,
-        end: end
-      });
-    }
 
     _element.className = "butter-track-event";
     if ( _icon ) {
