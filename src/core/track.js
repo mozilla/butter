@@ -180,9 +180,8 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
      * Method removeTrackEvent
      *
      * @param {Object} trackEvent: The trackEvent to be removed from this track
-     * @param {Boolean} expectingTrackEvent: if true means we should not remove this track if it is empty as we are expecting a new trackEvent soon. This mostly comes in to play when adding/removing ghost trackEvents.
      */
-    this.removeTrackEvent = function( trackEvent, expectingTrackEvent ){
+    this.removeTrackEvent = function( trackEvent ) {
       var idx = _trackEvents.indexOf( trackEvent );
       if ( idx > -1 ) {
         _trackEvents.splice( idx, 1 );
