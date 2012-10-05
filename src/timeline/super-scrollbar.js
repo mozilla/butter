@@ -34,6 +34,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
         _visuals = _inner.querySelector( "#butter-super-scrollbar-visuals" ),
         _scrubber = _inner.querySelector( "#buter-super-scrollbar-scrubber" ),
         _zoomSlider = _outer.querySelector( ".butter-super-scrollbar-zoom-slider" ),
+        _zoomSliderContainer = _outer.querySelector( ".butter-super-scrollbar-zoom-slider-container" ),
         _zoomSliderHandle = _outer.querySelector( ".butter-super-scrollbar-zoom-handle" ),
         _offset = 0,
         _trackEventVisuals = {},
@@ -235,15 +236,16 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       _viewPort.classList.remove( "viewport-transition" );
       window.removeEventListener( "mouseup", zoomSliderMouseDown, false );
       window.removeEventListener( "mousemove", zoomSliderMouseMove, false );
-      _zoomSlider.addEventListener( "mousedown", zoomSliderMouseDown, false );
+      _zoomSliderContainer.addEventListener( "mousedown", zoomSliderMouseDown, false );
     }
 
     function zoomSliderMouseMove( e ) {
       e.preventDefault();
       e.stopPropagation();
 
-      var position = e.clientX - _zoomSlider.offsetLeft,
+      var position = e.clientX - ( _zoomSliderContainer.offsetLeft + ( _zoomSliderHandle.offsetWidth / 2 ) ),
           scale;
+
       if ( position < 0 ) {
         position = 0;
       } else if ( position > _zoomSlider.offsetWidth ) {
@@ -254,18 +256,19 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
         scale = MIN_WIDTH / _rect.width;
       }
       scaleViewPort( scale );
-      _zoomSliderHandle.style.left = scale * 100 + "%";
+      _zoomSliderHandle.style.left = position / _zoomSlider.offsetWidth * 100 + "%";
     }
 
     function zoomSliderMouseDown( e ) {
       e.stopPropagation();
       _viewPort.classList.add( "viewport-transition" );
-      _zoomSlider.removeEventListener( "mousedown", zoomSliderMouseDown, false );
+      zoomSliderMouseMove( e );
+      _zoomSliderContainer.removeEventListener( "mousedown", zoomSliderMouseDown, false );
       window.addEventListener( "mousemove", zoomSliderMouseMove, false );
       window.addEventListener( "mouseup", zoomSliderMouseUp, false );
     }
 
-    _zoomSlider.addEventListener( "mousedown", zoomSliderMouseDown, false );
+    _zoomSliderContainer.addEventListener( "mousedown", zoomSliderMouseDown, false );
 
     _media.listen( "trackeventadded", function( e ) {
       var trackEvent = document.createElement( "div" ),
