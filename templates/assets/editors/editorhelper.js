@@ -5,6 +5,13 @@
     throw "Do not use EditorHelper in this mannger. Use EditorHelper.init instead.";
   };
 
+  // This fix is to ensure content-editable still updates correctly, and deals with ie9 not reading document.activeElement properly
+  function blurActiveEl() {
+   if ( document.activeElement ) {
+      document.activeElement.blur();
+    }
+  }
+
   EditorHelper.init = function( butter ) {
 
     /**
@@ -27,8 +34,21 @@
 
       options = options || {};
 
+      function createHelper( suffix ) {
+        var el = document.createElement( "div" );
+        el.classList.add( "ui-draggable-handle" );
+        el.classList.add( "ui-draggable-" + suffix );
+        return el;
+      }
+
+      dragContainer.appendChild( createHelper( "top" ) );
+      dragContainer.appendChild( createHelper( "bottom" ) );
+      dragContainer.appendChild( createHelper( "left" ) );
+      dragContainer.appendChild( createHelper( "right" ) );
+      dragContainer.appendChild( createHelper( "grip" ) );
+
       $( dragContainer ).draggable({
-        handle: options.handle,
+        handle: ".ui-draggable-handle",
         containment: "parent",
         start: function() {
           if ( iframeVideo ) {
@@ -40,14 +60,12 @@
           }
         },
         stop: function( event, ui ) {
-          if ( iframeVideo ) {
-            iframeVideo.style.pointerEvents = "auto";
-          }
-
           if ( options.end ) {
             options.end();
           }
-          document.activeElement.blur();
+
+          blurActiveEl();
+
           trackEvent.update({
             top: ( ui.position.top / media.height ) * 100,
             left: ( ui.position.left / media.width ) * 100
@@ -55,6 +73,8 @@
         }
       });
     };
+
+
 
     /**
      * Member: resizable
@@ -92,7 +112,9 @@
         containment: "parent",
         stop: function( event, ui ) {
           var height = ( ui.size.height + resizeContainer.offsetTop ) <= media.height ? ui.size.height : media.height - resizeContainer.offsetTop,
-              width = ( ui.size.width + resizeContainer.offsetLeft ) <= media.width ? ui.size.width : media.width - resizeContainer.offsetLeft;
+              width = ( ui.size.width + resizeContainer.offsetLeft ) <= media.width ? ui.size.width : media.width - resizeContainer.offsetLeft,
+              top = ( ui.position.top / media.height ) * 100,
+              left = ( ui.position.left / media.width ) * 100;
 
           if ( iframeVideo ) {
             iframeVideo.style.pointerEvents = "auto";
@@ -107,10 +129,13 @@
           height = height >= options.minHeight ? height : options.minHeight;
           width = width >= options.minWidth ? width : options.minWidth;
 
-          document.activeElement.blur();
+          blurActiveEl();
+
           trackEvent.update({
             height: height,
-            width: width
+            width: width,
+            top: top,
+            left: left
           });
         }
       });
@@ -165,9 +190,8 @@
         }
       };
       onMouseDown = function( e ) {
-        if ( !e.shiftKey ) {
-          e.stopPropagation();
-        }
+        e.stopPropagation();
+        $( contentContainer ).draggable( "destroy" );
       };
 
       for ( var i = 0, l = contentContainers.length; i < l; i++ ) {

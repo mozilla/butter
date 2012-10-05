@@ -41,7 +41,9 @@
                 "start": 3,
                 "end": 5,
                 "target": "video-container",
-                "text": "Pop some corn!"
+                "text": "Pop some corn!",
+                "top": "20",
+                "left": "20"
               },
               "track": "Track0",
               "name": "TrackEvent3"
