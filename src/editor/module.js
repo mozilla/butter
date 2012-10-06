@@ -93,7 +93,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     };
 
     /**
-     * Member: closeEditor
+     * Member: closeTrackEventEditor
      *
      * Closes the currently opened editor and opens the default one in it's place
      *
