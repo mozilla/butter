@@ -22,7 +22,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       ARROW_MIN_WIDTH_CLASS = "super-scrollbar-small";
 
   return function( outerElement, innerElement, boundsChangedCallback, media ) {
-    var _outer = LangUtils.domFragment( SUPER_SCROLLBAR_LAYOUT ).querySelector( "#butter-super-scrollbar-outer-container" ),
+    var _outer = LangUtils.domFragment( SUPER_SCROLLBAR_LAYOUT, "#butter-super-scrollbar-outer-container" ),
         _inner = _outer.querySelector( "#butter-super-scrollbar-inner-container" ),
         _rect, _duration,
         _media = media,
@@ -195,7 +195,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
      * track container viewport in or out.
      *
      * A left and right position are calculated by moving them a set amount from their current
-     * positions toward the mid-point of the viewport. A new width value is also calculated
+     * positions around the mid-point of the viewport. A new width value is also calculated
      * to provide _boundsChangedCallback with the necessary values: left & width.
      *
      * If the growth or shrink rate results in less than a pixel on both ends, nothing happens.
@@ -222,8 +222,14 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       rightPosition = ( 1 - ( ( viewLeft + viewWidth ) / rectWidth ) ) + halfScale;
       leftPosition = ( viewLeft / rectWidth ) + halfScale;
 
-      rightPosition = ( rightPosition < 0 ? 0 : ( rightPosition > 1 ? 1 : rightPosition ) );
-      leftPosition = ( leftPosition < 0 ? 0 : ( leftPosition > 1 ? 1 : leftPosition ) );
+      if ( rightPosition < 0 ) {
+        leftPosition += rightPosition;
+        rightPosition = 0;
+      }
+      if ( leftPosition < 0 ) {
+        rightPosition += leftPosition;
+        leftPosition = 0;
+      }
 
       _viewPort.style.right = rightPosition * 100 + "%";
       _viewPort.style.left = leftPosition * 100 + "%";
@@ -232,17 +238,19 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     }
 
     function zoomSliderMouseUp( e ) {
-      e.stopPropagation();
       _viewPort.classList.remove( "viewport-transition" );
-      window.removeEventListener( "mouseup", zoomSliderMouseDown, false );
+      window.removeEventListener( "mouseup", zoomSliderMouseUp, false );
       window.removeEventListener( "mousemove", zoomSliderMouseMove, false );
-      _zoomSliderContainer.addEventListener( "mousedown", zoomSliderMouseDown, false );
+      _zoomSliderContainer.addEventListener( "mousedown", zoomSliderContainerMouseDown, false );
+      _zoomSliderHandle.addEventListener( "mousedown", zoomSliderHanldeMouseDown, false );
     }
 
     function zoomSliderMouseMove( e ) {
       e.preventDefault();
-      e.stopPropagation();
+      updateZoomSlider( e );
+    }
 
+    function updateZoomSlider( e ) {
       var position = e.clientX - ( _zoomSliderContainer.offsetLeft + ( _zoomSliderHandle.offsetWidth / 2 ) ),
           scale;
 
@@ -259,16 +267,23 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       _zoomSliderHandle.style.left = position / _zoomSlider.offsetWidth * 100 + "%";
     }
 
-    function zoomSliderMouseDown( e ) {
-      e.stopPropagation();
+    function zoomSliderContainerMouseDown( e ) {
       _viewPort.classList.add( "viewport-transition" );
-      zoomSliderMouseMove( e );
-      _zoomSliderContainer.removeEventListener( "mousedown", zoomSliderMouseDown, false );
+      updateZoomSlider( e );
+      _zoomSliderContainer.removeEventListener( "mousedown", zoomSliderContainerMouseDown, false );
       window.addEventListener( "mousemove", zoomSliderMouseMove, false );
       window.addEventListener( "mouseup", zoomSliderMouseUp, false );
     }
 
-    _zoomSliderContainer.addEventListener( "mousedown", zoomSliderMouseDown, false );
+    function zoomSliderHanldeMouseDown( e ) {
+      _viewPort.classList.add( "viewport-transition" );
+      _zoomSliderHandle.removeEventListener( "mousedown", zoomSliderHanldeMouseDown, false );
+      window.addEventListener( "mousemove", zoomSliderMouseMove, false );
+      window.addEventListener( "mouseup", zoomSliderMouseUp, false );
+    }
+
+    _zoomSliderContainer.addEventListener( "mousedown", zoomSliderContainerMouseDown, false );
+    _zoomSliderHandle.addEventListener( "mousedown", zoomSliderHanldeMouseDown, false );
 
     _media.listen( "trackeventadded", function( e ) {
       var trackEvent = document.createElement( "div" ),

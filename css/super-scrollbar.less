@@ -19,7 +19,7 @@
       line-height: 100%;
       cursor: pointer;
       background: #EEE;
-      border: 1px solid #CCC;
+      border: 1px solid #999;
       border-radius: 6px;
     }
   }
@@ -27,7 +27,7 @@
   .butter-super-scrollbar-zoom-slider-container {
     position: absolute;
     background: #EEE;
-    border: 1px solid #CCC;
+    border: 1px solid #999;
     width: 100px;
     height: 6px;
     border-radius: 6px;
@@ -36,28 +36,28 @@
     z-index: 2;
 
     > .tick {
-        height: 6px;
-        width: 1px;
-        float: left;
-        border-left: 1px solid #CCC;
+      height: 6px;
+      width: 1px;
+      float: left;
+      border-left: 1px solid #CCC;
     }
     > .tick:first-child {
-        margin-left: 1px;
+      margin-left: 1px;
     }
     > .tick:nth-child( 2 ) {
-        margin-left: 2px;
+      margin-left: 2px;
     }
     > .tick:nth-child( 3 ) {
-        margin-left: 4px;
+      margin-left: 4px;
     }
     > .tick:nth-child( 4 ) {
-        margin-left: 8px;
+      margin-left: 8px;
     }
     > .tick:nth-child( 5 ) {
-        margin-left: 16px;
+      margin-left: 16px;
     }
     > .tick:nth-child( 6 ) {
-        margin-left: 32px;
+      margin-left: 32px;
     }
   }
 }
@@ -65,7 +65,6 @@
 
 #butter-super-scrollbar-inner-container {
   background: darken( @baseLight, 3% );
-  display: block;
   height: @_superScrollbarHeight;
   position: absolute;
   left: @_trackHandleWidth;
