@@ -203,6 +203,12 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip", "ui/widge
       return TextboxWrapper.applyTo( element, options );
     };
 
+    window.addEventListener( "resize", function() {
+      if ( extendObject.scrollbar ) {
+        extendObject.scrollbar.update();
+      }
+    }, false );
+
   }
 
   return {
