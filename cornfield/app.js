@@ -262,7 +262,7 @@ app.post( '/api/publish/:id',
       }
 
       // This is a query string-only URL because of the <base> tag
-      var remixUrl = "?savedDataUrl=/api/remix/" + project._id;
+      var remixUrl = "?savedDataUrl=/api/remix/" + project.id;
 
       writeEmbed( path.join( PUBLISH_DIR_E, id + ".html" ),
                   res, path.join( PUBLISH_PREFIX_E, id + ".html" ),
@@ -299,11 +299,11 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
       if ( project.template && VALID_TEMPLATES[ project.template ] ) {
         userProjects.push({
           // make sure _id is a string. saw some strange double-quotes on output otherwise
-          _id: String(project._id),
+          _id: String(project.id),
           name: sanitizer.escapeHTML( project.name ),
           template: project.template,
           href: path.relative( WWW_ROOT, templateConfigs[ project.template ].template ) +
-            "?savedDataUrl=/api/project/" + project._id
+            "?savedDataUrl=/api/project/" + project.id
         });
       }
     });

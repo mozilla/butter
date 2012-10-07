@@ -28,7 +28,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer ) {
 
       var projectJSON = JSON.parse( doc.data );
       projectJSON.name = doc.name;
-      projectJSON.projectID = doc._id;
+      projectJSON.projectID = doc.id;
       projectJSON.author = doc.author;
       res.json( projectJSON );
     });

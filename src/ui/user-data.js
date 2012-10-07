@@ -79,11 +79,11 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
         butter.ui.loadIndicator.start();
         butter.cornfield.save( butter.project.id, saveString, function( e ) {
           butter.ui.loadIndicator.stop();
-          if ( e.error !== "okay" || !e.project || !e.project._id ) {
+          if ( e.error !== "okay" || !e.project || !e.project.id ) {
             _this.showErrorDialog( "There was a problem saving your project. Please try again." );
             return;
           }
-          butter.project.id = e.project._id;
+          butter.project.id = e.project.id;
           if ( successCallback ) {
             successCallback();
           }

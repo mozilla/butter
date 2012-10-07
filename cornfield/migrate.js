@@ -72,7 +72,7 @@ function migrateData() {
               return;
             }
 
-            console.log( "Done converting " + project._id );
+            console.log( "Done converting " + project.id );
           });
         });
       });
