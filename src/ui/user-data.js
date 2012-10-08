@@ -77,7 +77,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
         butter.project.data = butter.exportProject();
         saveString = JSON.stringify( butter.project, null, 4 );
         butter.ui.loadIndicator.start();
-        butter.cornfield.save( butter.project.id, saveString, function( e ) {
+        butter.cornfield.save( butter.project.id, saveString, function( e ) {console.log(e);
           butter.ui.loadIndicator.stop();
           if ( e.error !== "okay" || !e.project || !e.project.id ) {
             _this.showErrorDialog( "There was a problem saving your project. Please try again." );

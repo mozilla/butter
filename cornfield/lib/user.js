@@ -4,7 +4,9 @@ var
 dbOnline = false,
 Sequelize = require( "sequelize" ),
 sequelize = new Sequelize( "popcorn", "test", null, {
-  dialect: "sqlite"
+  dialect: "sqlite",
+  logging: true,
+  storage: "popcorn.sqlite"
 }),
 
 Project = sequelize.define( "Project", {
@@ -20,7 +22,6 @@ Project = sequelize.define( "Project", {
   email: {
     type: Sequelize.STRING,
     allowNull: false,
-    unique: true,
     validate: {
       isEmail: true
     }
@@ -72,10 +73,10 @@ module.exports = {
     });
 
     project.save()
-    .success( function() {console.log(project);
+    .success(function() {
       callback( null, project );
     })
-    .error( function( err ) {
+    .error(function( err ) {
       callback( err );
     });
   },
@@ -86,12 +87,12 @@ module.exports = {
     }
 
     Project.find( { where: { id: pid } } )
-    .success( function( project ) {
+    .success(function( project ) {
       project.destroy().success( function( success ) {
         callback();
       });
     })
-    .error( function( error ) {
+    .error(function( error ) {
       callback( error );
     });
 
@@ -103,10 +104,10 @@ module.exports = {
     }
 
     Project.findAll( { where: { email: email } } )
-    .success( function( projects ) {
+    .success(function( projects ) {
       callback( null, projects );
     })
-    .error( function( err ) {
+    .error(function( err ) {
       callback( err );
     });
 
@@ -118,10 +119,10 @@ module.exports = {
     }
 
     Project.find( { where: { id: pid } } )
-    .success( function( project ) {
+    .success(function( project ) {
       callback( null, project );
     })
-    .error( function( error ) {
+    .error(function( error ) {
       callback( error );
     });
 
@@ -132,11 +133,11 @@ module.exports = {
       return;
     }
 
-    Project.find( { where: { id: pid } } )
-    .success( function( project ) {
+    Project.find({ where: { id: pid } } )
+    .success(function( project ) {
       callback( null, project );
     })
-    .error( function( error ) {
+    .error(function( error ) {
       callback( error );
     });
 
@@ -151,7 +152,7 @@ module.exports = {
     }
 
     Project.find( { where: { id: pid } } )
-    .success( function( project ) {
+    .success(function( project ) {console.log(project);
       project.updateAttributes({
         data: JSON.stringify( data.data ),
         email: email,
@@ -159,11 +160,11 @@ module.exports = {
         author: data.author || "",
         template: data.template
       })
-      .success( function() {
+      .success(function() {
         callback( null, project );
       });
     })
-    .error( function( error ) {
+    .error(function( error ) {console.log(error);
       callback( error );
     });
   },
