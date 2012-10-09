@@ -265,21 +265,11 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       updateUI();
     });
 
+    this.trackContainer = _tracksContainer;
+    this.element = _rootElement;
+    this.media = _media;
+
     Object.defineProperties( this, {
-      element: {
-        enumerable: true,
-        configurable: false,
-        get: function(){
-          return _rootElement;
-        }
-      },
-      media: {
-        enumerable: true,
-        configurable: false,
-        get: function(){
-          return _media;
-        }
-      },
       shrunken: {
         enumerable: true,
         configurable: false,

@@ -10,8 +10,7 @@
 define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/trackevent-view" ],
         function( Logger, EventManager, LangUtil, TimeUtil, TrackEventView ) {
 
-  var __guid = 0,
-      __MINIMUM_TRACKEVENT_SIZE = 0.2;
+  var __guid = 0;
 
   var TrackEventUpdateException = function ( reason, message ) {
     this.type = "trackevent-update";
@@ -102,16 +101,22 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
           media,
           duration;
 
-      if ( isNaN( newStart ) && updateOptions.hasOwnProperty( "start" ) ) {
-        throw new TrackEventUpdateException( "invalid-start-time", "[start] is an invalid value." );
+      if ( isNaN( newStart ) ) {
+        if ( updateOptions.hasOwnProperty( "start" ) ) {
+          throw new TrackEventUpdateException( "invalid-start-time", "[start] is an invalid value." );
+        }
+        else {
+          newStart = _popcornOptions.start;
+        }
       }
 
-      if ( isNaN( newEnd ) && updateOptions.hasOwnProperty( "end" ) ) {
-        throw new TrackEventUpdateException( "invalid-end-time", "[end] is an invalid value." );
-      }
-
-      if ( newStart >= newEnd ) {
-        throw new TrackEventUpdateException( "start-greater-than-end", "[start] must be less than [end]." );
+      if ( isNaN( newEnd ) ) {
+        if ( updateOptions.hasOwnProperty( "end" ) ) {
+          throw new TrackEventUpdateException( "invalid-end-time", "[end] is an invalid value." );
+        }
+        else {
+          newEnd = _popcornOptions.end;
+        }
       }
 
       if ( _track && _track._media ) {
@@ -153,13 +158,13 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
           }
         }
       }
-      
-      if ( newStart !== null && newStart !== undefined ){
-        _popcornOptions.start = newStart;
+
+      if ( newStart >= newEnd ) {
+        throw new TrackEventUpdateException( "start-greater-than-end", "[start] must be less than [end]." );
       }
-      if ( newEnd !== null && newEnd !== undefined ){
-        _popcornOptions.end = newEnd;
-      }
+
+      _popcornOptions.start = newStart;
+      _popcornOptions.end = newEnd;
 
       // if PopcornWrapper exists, it means we're connected properly to a Popcorn instance,
       // and can update the corresponding Popcorn trackevent for this object
@@ -178,58 +183,6 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
       // we should only get here if no exceptions happened
       _this.dispatch( "trackeventupdated", _this );
     };
-
-    /**
-     * Member: moveFrameLeft
-     *
-     * Moves the event to the left, or shrinks it by a specified amount.
-     *
-     * @param {Number} inc: Amount by which the event is to move or grow.
-     * @param {Boolean} metaKey: State of the metaKey (windows, command, etc.). When true, the event duration is shortened.
-     * @event trackeventupdated: Occurs whenan update operation succeeded.
-     */
-    this.moveFrameLeft = function( inc, metaKey ){
-      if ( !metaKey ) {
-        if ( _popcornOptions.start > inc ) {
-          _popcornOptions.start -= inc;
-          _popcornOptions.end -= inc;
-        } else {
-          _popcornOptions.end = _popcornOptions.end - _popcornOptions.start;
-          _popcornOptions.start = 0;
-        }
-      } else if ( _popcornOptions.end - _popcornOptions.start > ( inc + __MINIMUM_TRACKEVENT_SIZE ) ) {
-        _popcornOptions.end -= inc;
-      } else {
-        _popcornOptions.end = _popcornOptions.start + __MINIMUM_TRACKEVENT_SIZE;
-      }
-      _this.dispatch( "trackeventupdated", _this );
-      _this.update( _popcornOptions );
-    };
-
-    /**
-     * Member: moveFrameRight
-     *
-     * Moves the event to the right, or elongates it by a specified amount.
-     *
-     * @param {Number} inc: Amount by which the event is to move or grow.
-     * @param {Boolean} metaKey: State of the metaKey (windows, command, etc.). When true, the event duration is lengthened.
-     * @event trackeventupdated: Occurs whenan update operation succeeded.
-     */
-    this.moveFrameRight = function( inc, metaKey ){
-      if ( _popcornOptions.end < _track._media.duration - inc ) {
-        _popcornOptions.end += inc;
-        if ( !metaKey ) {
-          _popcornOptions.start += inc;
-        }
-      } else {
-        if ( !metaKey ) {
-          _popcornOptions.start += _track._media.duration - _popcornOptions.end;
-        }
-        _popcornOptions.end = _track._media.duration;
-      }
-      _this.dispatch( "trackeventupdated", _this );
-      _this.update( _popcornOptions );
-    }; //moveFrameRight
 
     /**
      * Member: unbind
@@ -413,6 +366,8 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
     }); //properties
 
   }; //TrackEvent
+
+  TrackEvent.MINIMUM_TRACKEVENT_SIZE = 0.02;
 
   return TrackEvent;
 

@@ -80,6 +80,7 @@
           _defaultTarget,
           _this = {},
           _selectedEvents = [],
+          _sortedSelectedEvents = [],
           _defaultPopcornScripts = {},
           _defaultPopcornCallbacks = {},
           _defaultTrackeventDuration;
@@ -184,8 +185,17 @@
         _page.addPlayerType( e.data );
       }
 
+      function trackEventTimeSortingFunction( a, b ) {
+        return a.popcornOptions.start < b.popcornOptions.start ? 1 : -1;
+      }
+
+      function sortSelectedEvents() {
+        _sortedSelectedEvents = _selectedEvents.slice().sort( trackEventTimeSortingFunction );
+      }
+
       function onTrackEventSelected( e ) {
         _selectedEvents.push( e.target );
+        sortSelectedEvents();
       }
 
       function onTrackEventDeSelected( e ) {
@@ -193,6 +203,7 @@
             idx = _selectedEvents.indexOf( trackEvent );
         if ( idx > -1 ) {
           _selectedEvents.splice( idx, 1 );
+          sortSelectedEvents();
         }
       }
 
@@ -201,6 +212,7 @@
             idx = _selectedEvents.indexOf( trackEvent );
         if ( idx > -1 ) {
           _selectedEvents.splice( idx, 1 );
+          sortSelectedEvents();
         }
       }
 
@@ -211,6 +223,7 @@
         while ( _selectedEvents.length ) {
           _selectedEvents[ 0 ].selected = false;
         }
+        _sortedSelectedEvents = [];
       };
 
        /****************************************************************
@@ -496,6 +509,12 @@
         selectedEvents: {
           get: function() {
             return _selectedEvents;
+          },
+          enumerable: true
+        },
+        sortedSelectedEvents: {
+          get: function() {
+            return _sortedSelectedEvents;
           },
           enumerable: true
         },

@@ -200,6 +200,19 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
     this.findOverlappingTrackEvent = function( start, end, ignoreTrackEvent ) {
       var trackEvent, popcornOptions;
 
+      // If a TrackEvent was passed in, we can derive the rest from less arguments.
+      if ( start instanceof TrackEvent ) {
+        // If only two args were passed in, treat the last one as ignoreTrackEvent.
+        if ( arguments.length === 2 ) {
+          ignoreTrackEvent = end;
+        }
+
+        // Sort out the args again.
+        trackEvent = start;
+        start = trackEvent.popcornOptions.start;
+        end = trackEvent.popcornOptions.end;
+      }
+
       // loop over all the trackevents for this track and see if we overlap
       for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
         trackEvent = _trackEvents[ i ];
