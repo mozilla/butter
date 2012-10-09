@@ -45,5 +45,15 @@
     "../templates/assets/plugins/pausePlugin/popcorn.pausePlugin.js",
     "../templates/assets/plugins/wikipedia/popcorn.wikipedia.js",
     "../templates/assets/plugins/webpage/popcorn.webpage.js"
-  ]
+  ],
+  "database": {
+    "database": "popcorn",
+    "username": null,
+    "password": null,
+    "options": {
+      "logging": false,
+      "dialect": "sqlite",
+      "storage": "popcorn.sqlite"
+    }
+  }
 }

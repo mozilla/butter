@@ -77,7 +77,7 @@ test("project data get valid", function(t) {
       var mockData = mockUser.generateMockData(1234);
       mockData.data = JSON.parse(mockData.data);
       mockData.data.name = mockData.name;
-      mockData.data.projectID = mockData._id;
+      mockData.data.projectID = mockData.id;
       mockData.data.author = mockData.author;
       mockData = mockData.data;
       t.deepEqual(res.body, mockData, "saved data is equal");
@@ -124,7 +124,7 @@ test("create project with error", function(t) {
   mockUser.error = true;
 
   var mockData = mockUser.generateMockData(1234);
-  delete mockData._id;
+  delete mockData.id;
 
   request(app)
     .post("/api/project/1234")
@@ -142,7 +142,7 @@ test("create project with no data", function(t) {
   mockUser.error = false;
 
   var mockData = mockUser.generateMockData(1234);
-  delete mockData._id;
+  delete mockData.id;
   delete mockData.data;
 
   request(app)
@@ -162,7 +162,7 @@ test("create project valid", function(t) {
 
   var mockData = mockUser.generateMockData(1234);
   mockData.data = JSON.parse(mockData.data);
-  delete mockData._id;
+  delete mockData.id;
 
   request(app)
     .post("/api/project/1234")
@@ -172,9 +172,9 @@ test("create project valid", function(t) {
       t.equal(res.type, "application/json", "response type is json");
       t.equal(res.body.error, "okay");
 
-      var id = res.body.project._id;
+      var id = res.body.project.id;
       t.ok(id, "id is present");
-      delete res.body.project._id;
+      delete res.body.project.id;
 
       mockData.data = JSON.stringify(mockData.data);
       t.deepEqual(res.body.project, mockData, "saved data is equal");
@@ -189,7 +189,7 @@ test("update project with error", function(t) {
 
   var mockData = mockUser.generateMockData(1234);
   mockData.data = JSON.parse(mockData.data);
-  mockData.id = mockData._id;
+  mockData.id = mockData.id;
 
   request(app)
     .post("/api/project/1234")
@@ -209,7 +209,7 @@ test("update project with no matching id", function(t) {
 
   var mockData = mockUser.generateMockData(1234);
   mockData.data = JSON.parse(mockData.data);
-  mockData.id = mockData._id;
+  mockData.id = mockData.id;
 
   request(app)
     .post("/api/project/1234")
@@ -229,7 +229,7 @@ test("update project valid", function(t) {
 
   var mockData = mockUser.generateMockData(1234);
   mockData.data = JSON.parse(mockData.data);
-  mockData.id = mockData._id;
+  mockData.id = mockData.id;
 
   request(app)
     .post("/api/project/1234")

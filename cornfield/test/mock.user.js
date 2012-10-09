@@ -2,7 +2,7 @@ function generateMockData(id) {
   id = id || (Math.random()*1000000000).toFixed(0);
 
   return {
-    _id: id,
+    id: id,
     data: JSON.stringify({
       hello: "world",
       adventure: "bill & ted's"
@@ -64,7 +64,7 @@ module.exports = function() {
         return;
       }
 
-      data._id = (Math.random()*1000000000).toFixed(0);
+      data.id = (Math.random()*1000000000).toFixed(0);
       data.data = JSON.stringify( data.data );
 
       callback(null, data);
