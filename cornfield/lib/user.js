@@ -5,7 +5,7 @@ dbOnline = false,
 Sequelize = require( "sequelize" ),
 sequelize = new Sequelize( "popcorn", "test", null, {
   dialect: "sqlite",
-  logging: true,
+  logging: false,
   storage: "popcorn.sqlite"
 }),
 
