@@ -8,7 +8,7 @@
  * Modified by @k88hudson for Popcorn Maker
  */
 
- .transition(@transition1) {
+ .transition( @transition1 ) {
   -webkit-transition: @transition1;
   -moz-transition: @transition1;
   -o-transition: @transition1;
@@ -16,15 +16,14 @@
   transition: @transition1;
 }
 .box-sizing( @property ) {
-  // https://developer.mozilla.org/En/CSS/Box-sizing
-  -webkit-box-sizing: @property; // Chrome 10-
+  -webkit-box-sizing: @property;
   -moz-box-sizing: @property;
-  -ms-box-sizing: @property; // IE 8+
-  box-sizing: @property; // Opera, Safari 5.1+, Chrome 10+
+  -ms-box-sizing: @property;
+  box-sizing: @property;
 }
 
 
-@highlight: #3FB58E; //3FB58E;
+@highlight: #3FB58E;
 @offset: 8px;
 @handlesmall: 8px;
 @handlecorner: 10px;
@@ -56,7 +55,7 @@
 .ui-resizable .ui-icon,
 [class^="ui-resizable-"] {
   border: 3px solid @highlight;
-  background: darken(@highlight, 10% );
+  background: darken( @highlight, 10% );
   opacity: 0;
   .box-sizing( border-box );
   &:hover {
@@ -128,27 +127,27 @@
 }
 .ui-draggable-top {
   height: @offset * 2;
-  top: -@offset*2;
+  top: -@offset * 2;
   left: -@offset;
   right: -@offset;
 }
 .ui-draggable-bottom {
   height: @offset * 2;
-  bottom: -@offset*2;
+  bottom: -@offset * 2;
   left: -@offset;
   right: -@offset;
 }
 .ui-draggable-left {
   width: @offset * 2;
-  bottom: -@offset*2;
+  bottom: -@offset * 2;
   top: 0;
   left: -@offset*2;
 }
 .ui-draggable-right {
   width: @offset * 2;
-  bottom: -@offset*2;
-  top: -@offset*2;
-  right: -@offset*2;
+  bottom: -@offset * 2;
+  top: -@offset * 2;
+  right: -@offset * 2;
 }
 
 .ui-draggable-grip {
@@ -159,16 +158,8 @@
   height: 30px;
   width: 30px;
   border: none;
-  /*
-  border-radius: 2px 0 0 2px;
-  right: 100%;
-  margin-right: @offset + 1px;
-  top: 0;
-  margin-left: -15px;
-  */
   border-radius: 0;
   top: -1px;
-  //margin-bottom: 1px;
   left: -1px;
   background: rgba( 255, 255, 255, 0.8 );
   text-align: centers;
@@ -180,9 +171,6 @@
     margin-top: 7px;
     margin-left: 8px;
     background: url( "../../../../resources/glyphicons-halflings-green.png" ) -168px -72px;
-  }
-  &:hover {
-   // background-color: lighten( @highlight, 10% );
   }
 }
 
