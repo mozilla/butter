@@ -83,10 +83,16 @@ html(lang='en')
                       span.icon
                       span.size X-Large
                       span.dimensions 1280x763
-        #embed-info.embed-info
-          #embed-logo-small.embed-logo-small
-          #embed-details.embed-details
-            span.mozpop Mozilla Popcorn
-            span.embed-title #{title}
-            span.embed-author #{author}
+        #attribution-info.attribution-info
+          #attribution-logo.attribution-logo
+            span.attribution-text Credits
+          #attribution-details.attribution-details
+            span.attribution-close
+            div.attribution-mopop mozilla Popcorn
+            div.attribution-title #{title}
+            if author
+              div.attribution-author #{author}
+            div.attribution-media
+              span.media-icon
+              a.attribution-media-src(href='#{mediaSrc}', target='_blank') #{mediaSrc}
       #controls.controls

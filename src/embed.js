@@ -204,6 +204,39 @@ function init( window, document ) {
     }
   }
 
+  function setupAttribution() {
+    var icon = $( ".media-icon" ),
+        src = $( ".attribution-media-src" ),
+        toggler = $( ".attribution-logo" ),
+        closeBtn = $( ".attribution-close" ),
+        container = $( ".attribution-info" ),
+        classes = {
+          html5: "html5-icon",
+          youtube: "youtube-icon",
+          vimeo: "vimeo-icon",
+          soundcloud: "soundcloud-icon"
+        },
+        mediaRegex = /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)(youtu|vimeo|soundcloud)/,
+        type;
+
+    type = mediaRegex.exec( src.href );
+    if ( type ) {
+      type = /youtu/.test( type ) ? "youtube" : type;
+    } else {
+      type = "html5";
+    }
+
+    icon.classList.add( classes[ type ] );
+
+    toggler.addEventListener( "click", function() {
+      container.classList.toggle( "attribution-on" );
+    }, false );
+
+    closeBtn.addEventListener( "click", function() {
+      container.classList.toggle( "attribution-on" );
+    }, false );
+  }
+
   var require = requirejs.config({
     context: "embed",
     baseUrl: "/src",
@@ -361,6 +394,8 @@ function init( window, document ) {
         // Get the page's cannonical URL and put in share URL
         $( "#share-url" ).value = getCannonicalURL();
       }
+
+      setupAttribution();
 
       if ( window.Butter && console && console.warn ) {
         console.warn( "Butter Warning: page already contains Butter, removing." );
