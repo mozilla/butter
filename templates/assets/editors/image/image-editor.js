@@ -420,9 +420,16 @@
         });
 
         _trackEvent.listen( "trackeventupdated", function( e ) {
+          var link;
+
           _trackEvent = e.target;
           calcImageTime();
           _this.updatePropertiesFromManifest( _trackEvent );
+
+          link = _trackEvent.popcornTrackEvent._container.querySelector( "a" );
+          link.addEventListener( "click", function( e ) {
+            e.preventDefault();
+          }, false);
 
           // Ensure right group is displayed
           // Mode is flipped here to ensure cached values aren't placed right back in after updating
@@ -436,7 +443,7 @@
 
           _this.scrollbar.update();
         });
-        
+
         setup( trackEvent );
       },
       close: function() {
