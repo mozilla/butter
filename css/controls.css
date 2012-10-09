@@ -69,7 +69,7 @@
 
 .controls-middle {
   margin-top: 0;
-  height: 36px;
+  height: 41px;
   position: absolute;
   left: 185px;
   right: 215px;
@@ -81,7 +81,7 @@
   padding-top: 0;
   height: 41px;
   position: absolute;
-  width: 120px;
+  width: 108px;
   right: 45px;
   background: #f2f2f2;
   border-right: 1px solid #d5d6d5;
@@ -159,7 +159,6 @@
   left: 7px;
   right: 0;
   top: 12px;
-  margin-right: 8px;
   border-radius: 0;
   box-shadow: none;
   cursor: pointer;
@@ -240,7 +239,7 @@
 .controls-right div {
   background: #cecfcf url(../resources/controls/controls_icons.png) no-repeat;
   margin-top: 6px;
-  margin-left: 9px;
+  margin-left: 6px;
   width: 28px;
   height: 28px;
   border-radius: 3px;
