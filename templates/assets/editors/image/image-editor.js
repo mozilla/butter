@@ -252,6 +252,16 @@
           });
         });
 
+        _this.createTooltip( _linkInput, {
+          name: "image-link-tooltip" + Date.now(),
+          element: _linkInput.parentElement,
+          message: "Links will be clickable when shared.",
+          top: "105%",
+          left: "50%",
+          hidden: true,
+          hover: false
+        });
+
         _this.attachInputChangeHandler( _linkInput, trackEvent, "linkSrc", function( te, prop ) {
           _cachedValues.linkSrc.data = prop.linkSrc;
 
@@ -359,10 +369,17 @@
       _this.scrollbar.update();
     }
 
+    function clickPrevention() {
+      return false;
+    }
+
     Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
         var popcornOptions = trackEvent.popcornOptions,
-            manifestOpts = trackEvent.popcornTrackEvent._natives.manifest.options;
+            manifestOpts = trackEvent.popcornTrackEvent._natives.manifest.options,
+            i,
+            ln,
+            links;
 
         if ( !_cachedValues ) {
           _cachedValues = {
@@ -405,6 +422,14 @@
           calcImageTime();
           _this.updatePropertiesFromManifest( _trackEvent );
 
+          links = _trackEvent.popcornTrackEvent._container.querySelectorAll( "a" );
+
+          if ( links ) {
+            for ( i = 0, ln = links.length; i < ln; i++ ) {
+              links[ i ].onclick = clickPrevention;
+            }
+          }
+
           // Ensure right group is displayed
           // Mode is flipped here to ensure cached values aren't placed right back in after updating
           if ( _trackEvent.popcornOptions.src && !_flickrActive ) {
@@ -417,7 +442,7 @@
 
           _this.scrollbar.update();
         });
-        
+
         setup( trackEvent );
       },
       close: function() {

@@ -94,14 +94,12 @@
       _this.setTrackEventUpdateErrorCallback( _this.setErrorState );
     }
 
-    function clicking( e ) {
-      e.preventDefault();
-    }
-
     function anchorClickPrevention( anchorContainer ) {
       if ( anchorContainer ) {
         
-        anchorContainer.addEventListener( "click", clicking, false );
+        anchorContainer.onclick = function() {
+          return false;
+        };
       }
     }
 
