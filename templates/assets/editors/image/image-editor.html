@@ -1,0 +1,107 @@
+<!--  This Source Code Form is subject to the terms of the MIT license
+      If a copy of the MIT license was not distributed with this file, you can
+      obtain one at http://www.mozillapopcorn.org/butter-license.txt -->
+
+<div class="butter-editor image-editor allow-scrollbar">
+  <h1>Image Editor</h1>
+  <div class="butter-editor-body scrollbar-container">
+    <div class="editor-options-wrapper scrollbar-outer">
+      <div class="error-message-container">
+        <div class="error-message"></div>
+      </div>
+      <div class="editor-options scrollbar-inner">
+        <fieldset class="image-toggler">
+          <label>Select the kind of Image you want to add</label>
+          <select id="image-toggler">
+            <option value="image-single">Single Image</option>
+            <option value="image-flickr">Flickr Slideshow</option>
+          </select>
+        </fieldset>
+        <hr>
+        <div class="image-single">
+          <fieldset class="trackevent-property default input">
+            <label class="property-name">Image URL</label>
+            <input class="value" type="text" id="image-url-input" data-manifest-key="src">
+          </fieldset>
+          <fieldset class="trackevent-property default input">
+            <label class="property-name">Link URL</label>
+            <input class="value" type="url" id="image-link-input" data-manifest-key="linkSrc">
+          </fieldset>
+          <fieldset>
+            <div class="image-droparea">
+              <div class="droparea-text">Drag an image here from your desktop.</div>
+              <img src="../assets/editors/image/watermark.png" alt="Water Mark">
+            </div>
+          </fieldset>
+        </div>
+        <div class="image-flickr display-off">
+          <fieldset>
+            <span class="image-text">
+              This event will display a slideshow from Flickr over the duration of the event.
+            </span>
+          </fieldset>
+          <fieldset>
+            <label>Number of Images</label>
+            <div class="image-number">
+              <input type="number" id="image-count-input" data-manifest-key="count" />
+              <div class="flickr-image-time">
+                Each image will show for <br/><span class="image-time-bold">0.0 seconds</span>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <div class="butter-form-radio">
+              <label>Search for a Tag</label>
+              <div class="image-radio">
+                <input type="radio" name="source-type" id="image-tag-radio" checked>
+                <input type="text" id="image-tag-input" data-manifest-key="tags" placeholder="Mozilla"/>
+              </div>
+            </div>
+            <div class="butter-form-radio">
+              <label>Enter a Gallery URL</label>
+              <div class="image-radio">
+                <input type="radio" name="source-type" id="image-gallery-radio" >
+                <input type="url" id="image-gallery-input" data-manifest-key="photosetId" />
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .image-droparea {
+    border: dashed 2px #ABABAB;
+    text-align: center;
+    height: 170px;
+  }
+
+  .droparea-text {
+    margin-top: 10px;
+  }
+
+  .image-toggler > select {
+    width: 50%;
+  }
+
+  .image-number > input {
+    width: 35%;
+  }
+
+  .flickr-image-time {
+    float: right;
+    padding-right: 10px;
+  }
+
+  .image-time-bold {
+    font-weight: bold;
+  }
+
+  .image-text {
+    font-size: 10px;
+  }
+
+</style>
