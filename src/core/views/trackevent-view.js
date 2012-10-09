@@ -290,7 +290,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
     }, false );
 
     function select() {
-      console.log(2);
       if ( _draggable ) {
         _draggable.selected = true;
       }
