@@ -43,7 +43,7 @@
   }
 
   function areValidElements( element ) {
-    while( !element.textContent ){
+    while( element && !element.textContent ){
       element = element.nextElementSibling;
       if ( !element || element.nodeName !== "P" ) {
         return false;
