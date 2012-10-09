@@ -234,11 +234,30 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         _rightHandle = element.querySelector( ".handle.right-handle" ),
         _onStart = options.start || NULL_FUNCTION,
         _onStop = options.stop || NULL_FUNCTION,
+        _onResize = options.resize || NULL_FUNCTION,
         _padding = options.padding || 0,
         _updateInterval = -1,
         _scroll = options.scroll,
         _scrollRect,
-        _elementRect;
+        _elementRect,
+        _lastDims,
+        _iterationBlockX,
+        _resizeEvent = {                                                      // Exposed on callbacks of Resizable
+
+          /**
+           * blockIteration
+           *
+           * Blocks one iteration of the resize loop at the specified value. This function will be exposed and be active
+           * on the `resize` callback of a Resizable.
+           *
+           * @param {Number} value: The value at which resizing should be stopped. For resizing start by the right-handle,
+           *                        this is treated as a width value. For the left-handle, it's a left value.
+           */
+          blockIteration: function( value ) {
+            _iterationBlockX = value;
+          },
+          direction: null
+        };
 
     function onLeftMouseDown( e ){
       e.stopPropagation();
@@ -251,10 +270,12 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           mouseOffset;
 
       function update(){
-
         var diff = mousePosition - mouseDownPosition,
             newX = originalPosition + diff,
             newW = originalWidth - diff;
+
+        // At the beginning of this iteration, _iterationBlockX should be null, assuming no block occured.
+        _iterationBlockX = null;
 
         if( newW < MIN_WIDTH ){
           return;
@@ -274,9 +295,35 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           newX = 0;
         }
 
-        element.style.left = newX + "px";
-        element.style.width = newW - _padding + "px";
-        _elementRect = element.getBoundingClientRect();
+        // If the size actually changed, use the _onResize callback to notify handlers of this Resizable,
+        // and expose the opportunity to block this iteration from actually resizing the element.
+        if ( _lastDims[ 0 ] !== newX || _lastDims[ 1 ] !== newW ) {
+          _onResize( newX, newW, _resizeEvent );
+        }
+
+        // If _iterationBlockX is non-null, this iteration was meant to be blocked at that value. Since
+        // we're resizing wrt the left side of the element here, _iterationBlockX is used to find the
+        // left side of the resizing element, and subsequently, a corresponding width value.
+        if ( _iterationBlockX === null ) {
+          element.style.left = newX + "px";
+          element.style.width = newW - _padding + "px";
+          _elementRect = element.getBoundingClientRect();
+
+          _lastDims[ 0 ] = newX;
+          _lastDims[ 1 ] = newW;
+        }
+        else {
+          newX = _iterationBlockX;
+          newW = originalPosition + originalWidth - newX;
+
+          element.style.left = newX + "px";
+          element.style.width = newW - _padding + "px";
+          _elementRect = element.getBoundingClientRect();
+
+          _lastDims[ 0 ] = newX;
+          _lastDims[ 1 ] = newW;
+        }
+
       }
 
       function onMouseUp( e ){
@@ -284,7 +331,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
         _updateInterval = -1;
-        _onStop();
+        _onStop( _resizeEvent );
         element.classList.remove( RESIZABLE_CLASS );
       }
 
@@ -292,6 +339,8 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         e.preventDefault();
         mousePosition = e.clientX;
         if( _updateInterval === -1 ){
+          _lastDims = [];
+          _resizeEvent.direction = 'left';
           _updateInterval = setInterval( update, SCROLL_INTERVAL );
           _onStart();
         }
@@ -320,6 +369,9 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         var diff = mousePosition - mouseDownPosition,
             newW = originalWidth + diff;
 
+        // At the beginning of this iteration, _iterationBlockX should be null, assuming no block occured.
+        _iterationBlockX = null;
+
         if( newW < MIN_WIDTH ){
           return;
         }
@@ -335,8 +387,26 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           newW = element.offsetParent.offsetWidth - originalPosition;
         }
 
-        element.style.width = newW + "px";
-        _elementRect = element.getBoundingClientRect();
+        // If the size actually changed, use the _onResize callback to notify handlers of this Resizable,
+        // and expose the opportunity to block this iteration from actually resizing the element.
+        if ( _lastDims[ 1 ] !== newW ) {
+          _onResize( originalPosition, newW, _resizeEvent );
+        }
+
+        // If _iterationBlockX is non-null, this iteration was meant to be blocked at that value. Since
+        // we're resizing wrt the right side of the element here, _iterationBlockX is used to find the
+        // width of the resizing element.
+        if ( _iterationBlockX === null ) {
+          element.style.width = newW + "px";
+          _elementRect = element.getBoundingClientRect();
+          _lastDims[ 1 ] = newW;
+        }
+        else {
+          newW = _iterationBlockX - originalPosition;
+          element.style.width = newW + "px";
+          _elementRect = element.getBoundingClientRect();
+          _lastDims[ 1 ] = newW;
+        }
       }
 
       function onMouseUp( e ){
@@ -344,13 +414,15 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
         _updateInterval = -1;
-        _onStop();
+        _onStop( _resizeEvent );
         element.classList.remove( RESIZABLE_CLASS );
       }
 
       function onMouseMove( e ){
         mousePosition = e.clientX;
         if( _updateInterval === -1 ){
+          _lastDims = [];
+          _resizeEvent.direction = 'right';
           _updateInterval = setInterval( update, SCROLL_INTERVAL );
           _onStart();
         }

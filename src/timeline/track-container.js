@@ -139,6 +139,26 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       }
     }
 
+    function onTrackEventResized( trackEvent, x, w, resizeEvent, direction ) {
+      var trackView = trackEvent.track.view,
+          overlappingTrackEvent,
+          leftOffset = _container.getBoundingClientRect().left,
+          trackEventView = trackEvent.view,
+          trackEventSpacing = trackEventView.element.clientLeft;              // Compensate for border width
+
+      overlappingTrackEvent = trackView.findOverlappingTrackEvent( trackEventView, x + leftOffset + trackEventSpacing, w );
+
+      if ( overlappingTrackEvent ) {
+        if ( direction === 'right' ) {
+          // Use clientLeft to compensate for border (https://developer.mozilla.org/en-US/docs/DOM/element.clientLeft)
+          resizeEvent.blockIteration( overlappingTrackEvent.view.element.offsetLeft - trackEventSpacing * 2 );
+        }
+        else {
+          resizeEvent.blockIteration( overlappingTrackEvent.view.element.offsetLeft + overlappingTrackEvent.view.element.offsetWidth );
+        }
+      }
+    }
+
     function onTrackEventDragStarted( e ) {
       var trackEventView = e.target,
           element = trackEventView.element,
@@ -187,17 +207,37 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       createTrackEventFromDrop( trackEvent, popcornOptions, oldTrack, desiredTrack );
     }
 
+    function onTrackEventResizeStopped( e ) {
+      var trackEventView = e.target,
+          trackEvent = trackEventView.trackEvent,
+          direction = e.data.direction,
+          popcornOptions = {};
+
+      if ( direction === "right" ) {
+        popcornOptions.end = trackEvent.popcornOptions.start + trackEventView.element.clientWidth / _container.clientWidth * _media.duration;
+      }
+      else {
+        popcornOptions.start = trackEventView.element.offsetLeft / _container.clientWidth * _media.duration;
+      }
+
+      trackEvent.update( popcornOptions );
+    }
+
     _media.listen( "trackeventadded", function( e ) {
       var trackEventView = e.data.view;
       trackEventView.setDragHandler( onTrackEventDragged );
+      trackEventView.setResizeHandler( onTrackEventResized );
       trackEventView.listen( "trackeventdragstarted", onTrackEventDragStarted );
+      trackEventView.listen( "trackeventresizestopped", onTrackEventResizeStopped );
       _vScrollbar.update();
     });
 
     _media.listen( "trackeventremoved", function( e ) {
       var trackEventView = e.data.view;
       trackEventView.setDragHandler( null );
+      trackEventView.setResizeHandler( null );
       trackEventView.unlisten( "trackeventdragstarted", onTrackEventDragStarted );
+      trackEventView.unlisten( "trackeventresizestopped", onTrackEventResizeStopped );
       _vScrollbar.update();
     });
 
