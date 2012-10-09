@@ -8,6 +8,8 @@ sequelize = new Sequelize( "popcorn", "test", null, {
   logging: false,
   storage: "popcorn.sqlite"
 }),
+dbReadyFn,
+user,
 
 Project = sequelize.define( "Project", {
   id: {
@@ -52,12 +54,16 @@ Project = sequelize.define( "Project", {
 sequelize.sync()
 .on( "success", function() {
   dbOnline = true;
+
+  if ( dbReadyFn ) {
+    dbReadyFn();
+  }
 })
 .on( "failure", function( err ) {
   console.log( err );
 });
 
-module.exports = {
+user = {
   createProject: function( email, data, callback ) {
     if ( !email || !data ) {
       callback( "not enough parameters to update" );
@@ -167,14 +173,10 @@ module.exports = {
     .error(function( error ) {console.log(error);
       callback( error );
     });
-  },
-  closeDBConnection: function( callback ) {
-    sequelize.close(function() {
-      dbOnline = false;
-
-      if ( callback ) {
-        callback();
-      }
-    });
   }
 };
+
+module.exports = function( fn ) {
+  dbReadyFn = fn;
+  return user;
+}
