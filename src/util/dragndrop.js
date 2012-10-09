@@ -241,10 +241,10 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         _scrollRect,
         _elementRect,
         _lastDims,
-        _cancelIteration,
+        _iterationBlockValue,
         _resizeEvent = {
-          block: function( value ) {
-            _cancelIteration = value;
+          blockIteration: function( value ) {
+            _iterationBlockValue = value;
           },
           direction: null
         };
@@ -264,7 +264,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
             newX = originalPosition + diff,
             newW = originalWidth - diff;
 
-        _cancelIteration = null;
+        _iterationBlockValue = null;
 
         if( newW < MIN_WIDTH ){
           return;
@@ -288,7 +288,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           _onResize( newX, newW, _resizeEvent );
         }
 
-        if ( _cancelIteration === null ) {
+        if ( _iterationBlockValue === null ) {
           element.style.left = newX + "px";
           element.style.width = newW - _padding + "px";
           _elementRect = element.getBoundingClientRect();
@@ -297,7 +297,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           _lastDims[ 1 ] = newW;
         }
         else {
-          newX = _cancelIteration;
+          newX = _iterationBlockValue;
           newW = originalPosition + originalWidth - newX;
 
           element.style.left = newX + "px";
@@ -311,6 +311,8 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       }
 
       function onMouseUp( e ){
+        e.stopPropagation();
+        e.preventDefault();
         window.removeEventListener( "mousemove", onMouseMove, false );
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
@@ -353,7 +355,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         var diff = mousePosition - mouseDownPosition,
             newW = originalWidth + diff;
 
-        _cancelIteration = null;
+        _iterationBlockValue = null;
 
         if( newW < MIN_WIDTH ){
           return;
@@ -374,13 +376,13 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           _onResize( originalPosition, newW, _resizeEvent );
         }
 
-        if ( _cancelIteration === null ) {
+        if ( _iterationBlockValue === null ) {
           element.style.width = newW + "px";
           _elementRect = element.getBoundingClientRect();
           _lastDims[ 1 ] = newW;
         }
         else {
-          newW = _cancelIteration - originalPosition;
+          newW = _iterationBlockValue - originalPosition;
           element.style.width = newW + "px";
           _elementRect = element.getBoundingClientRect();
           _lastDims[ 1 ] = newW;
