@@ -44,9 +44,9 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         }
       });
 
-      // request a new trackEvent on the currentMedia
+      // Generate Track Events from double clicks
       element.addEventListener( "dblclick", function() {
-        butter.currentMedia.dispatch( "trackeventrequested", element );
+        butter.generateSafeTrackEvent( e.data.type, butter.currentTime );
       }, false );
 
       if ( iconImg ) {
