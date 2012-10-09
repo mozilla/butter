@@ -256,13 +256,20 @@
 
 .butter-form {
 
-// Fieldset
+  // Container building blocks
   .trackevent-property,
+  .trackevent-warning,
   fieldset {
     border: none;
     margin: 10px 20px;
     padding: 0;
     .clearfix();
+  }
+
+  .trackevent-warning {
+    background: darken( @baseLight, 10% );
+    padding: 10px;
+    border-radius: 5px;
   }
 
   // Label

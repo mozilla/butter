@@ -8,6 +8,7 @@
       var manifest = options._natives.manifest,
           target = Popcorn.dom.find( options.target || manifest.options.target[ "default" ] ),
           wrapper,
+          safeText,
           iframe;
 
       options._wrapper = wrapper = document.createElement( "div" );
@@ -16,16 +17,43 @@
         target.appendChild( wrapper );
       }
 
-      // make src an iframe acceptable string
-      options.src = options.src.replace( /^(https?:)?(\/\/)?/, "//" );
-
       // make an iframe
       options._iframe = iframe = document.createElement( "iframe" );
 
       iframe.setAttribute( "width", "100%" );
       iframe.setAttribute( "height", "100%" );
       iframe.id = options.id || Popcorn.guid();
-      iframe.src = options.src;
+
+      // check the browser's ability to ensure security against frame-busting and other bad apples' hacks
+      if ( "sandbox" in iframe || options.trustIframes ) {
+        iframe.src = options.src;
+
+        // The value of the sandbox attribute is set here only to avoid letting iframes escape into the parent page
+        // (where) this plugin resides. The MDN article (https://developer.mozilla.org/en-US/docs/HTML/Element/iframe#Attributes)
+        // explicitly discourages using "allow-scripts allow-same-origin", because it offers little real security from iframes,
+        // but in our case, it's just enough of a block to stop sites from using JavaScript to framebust (lazily), but causes less
+        // errors in sites that attempt to use LocalStorage and other same-origin-dependent functionality.
+        iframe.setAttribute( "sandbox", "allow-scripts allow-same-origin" );
+      }
+      else {
+        safeText = document.createElement( "div" );
+        iframe = document.createElement( "div" );
+        iframe.appendChild( safeText );
+        safeText.innerHTML = "Popcorn Maker could not display the requested webpage, " +
+          "<a target=\"_blank\" href=\"" + options.src + "\">" + options.src + "</a>." +
+          "<br />For more information, see " +
+          "<a target=\"_blank\" href=\"https://developer.mozilla.org/en-US/docs/HTML/Element/iframe#Attributes\">this MDN article</a>. ";
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+        iframe.style.background = "#fff";
+        iframe.style.textAlign = "center";
+        iframe.style.color = "#000";
+        iframe.style.display = "table";
+        safeText.style.padding = "15px";
+        safeText.style.display = "table-cell";
+        safeText.style.verticalAlign = "middle";
+      }
+      
       wrapper.classList.add( options.transition );
       wrapper.classList.add( "off" );
 
@@ -129,6 +157,12 @@
           values: [ "popcorn-none", "popcorn-pop", "popcorn-fade", "popcorn-slide-up", "popcorn-slide-down" ],
           label: "Transition",
           "default": "popcorn-fade"
+        },
+        trustIframes: {
+          elem: "input",
+          type: "checkbox",
+          label: "Trust iframes",
+          "default": true
         },
         zindex: {
           hidden: true

@@ -20,6 +20,9 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
 
   var DEFAULT_EDITOR_NAME = "plugin-list";
 
+  // Expose DefaultEditor to external editors
+  Editor.DefaultEditor = DefaultEditor;
+
   /**
    * Class: EventEditor
    *
@@ -203,7 +206,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
 
         if ( editorsToLoad.length > 0 ){
           butter.loader.load( editorsToLoad, function() {
-            Editor.loadUrlSpecifiedLayouts( onModuleReady, butter.config.value( "baseDir" ) );
+            Editor.initialize( onModuleReady, butter.config.value( "baseDir" ) );
           }, function( e ) {
             _logger.log( "Couldn't load editor " + e.target.src );
             

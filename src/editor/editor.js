@@ -12,6 +12,22 @@ define( [ "util/lang", "util/xhr",
 
   var __editors = {};
 
+  function DeferredLayout( src ) {
+
+    this.load = function( baseDir, readyCallback ) {
+      baseDir = baseDir || "";
+      if ( src.indexOf( "{{baseDir}}" ) > -1 ) {
+        src = src.replace( "{{baseDir}}", baseDir );
+      }
+
+      XHRUtils.get( src, function( e ) {
+        if ( e.target.readyState === 4 ){
+          readyCallback( e.target.responseText );
+        }
+      }, "text/plain" );
+    };
+ }
+
   /**
    * Namespace: Editor
    */
@@ -33,12 +49,36 @@ define( [ "util/lang", "util/xhr",
       __editors[ name ] = {
         create: ctor,
         persist: !!persist,
-        layout: layoutSrc
+        layout: layoutSrc || "",
+        deferredLayouts: []
       };
+
+      function processLayoutEntry( src ) {
+        var deferredLayout;
+        if ( src.indexOf( "load!" ) === 0 ) {
+           deferredLayout = new DeferredLayout( src.substring( 5 ) );
+           __editors[ name ].deferredLayouts.push( deferredLayout );
+           return true;
+        }
+        return false;
+      }
+
+      if ( layoutSrc ) {
+        if ( Array.isArray( layoutSrc ) ) {
+          layoutSrc.forEach( processLayoutEntry );
+        }
+        else {
+          if ( processLayoutEntry( layoutSrc ) ) {
+            __editors[ name ].layout = "";
+          }
+        }
+      }
     },
 
     /**
-     * Function: loadUrlSpecifiedLayouts
+     * Function: initialize
+     *
+     * Initializes the Editor module.
      *
      * For layouts that were specified as `load!<url>`, replace the url with actual layout content by loading
      * it through XHR. This is useful for editors specified in Butter config files, since using `Butter.Editor`
@@ -46,34 +86,36 @@ define( [ "util/lang", "util/xhr",
      *
      * https://webmademovies.lighthouseapp.com/projects/65733/tickets/1245-remove-instances-have-butter-become-a-singleton
      *
-     * @param {Function} readyCallback: After all layouts have been loaded, call this function
+     * @param {Function} readyCallback: After all layouts have been loaded, call this function.
+     * @param {String} baseDir: The baseDir found in Butter's config which is used to replace {{baseDir}} in urls.
      */
-    loadUrlSpecifiedLayouts: function( readyCallback, baseDir ) {
-      var layoutsToLoad = [],
-          loadedLayouts = 0;
+    initialize: function( readyCallback, baseDir ) {
+      var editorName,
+          editorsLoaded = 0,
+          editorsToLoad = [];
 
-      for ( var editor in __editors ) {
-        if (  __editors.hasOwnProperty( editor ) &&
-              __editors[ editor ].layout &&
-              __editors[ editor ].layout.indexOf( "load!" ) === 0 ) {
-          layoutsToLoad.push( __editors[ editor ] );
+      for ( editorName in __editors ) {
+        if ( __editors.hasOwnProperty( editorName ) && __editors[ editorName ].deferredLayouts.length > 0 ) {
+          editorsToLoad.push( __editors[ editorName ] );
         }
       }
 
-      if ( layoutsToLoad.length === 0 ) {
-        readyCallback();
-      }
-      else {
-        layoutsToLoad.forEach( function( editorHusk ) {
-          Editor.loadLayout( editorHusk.layout.substring( 5 ), function( layoutSrc ){
-            editorHusk.layout = layoutSrc;
-            ++loadedLayouts;
-            if ( loadedLayouts === layoutsToLoad.length ) {
-              readyCallback();
+      editorsToLoad.forEach( function( editor ) {
+        var finishedLayouts = 0;
+        editor.deferredLayouts.forEach( function( deferredLayout ) {
+          deferredLayout.load( baseDir, function( layoutData ) {
+            ++finishedLayouts;
+            editor.layout += layoutData;
+            if ( finishedLayouts === editor.deferredLayouts.length ) {
+              editor.deferredLayouts = null;
+              ++editorsLoaded;
+              if ( editorsLoaded === editorsToLoad.length ) {
+                readyCallback();
+              }
             }
-          }, baseDir );
+          });
         });
-      }
+      });
     },
 
     /**
@@ -125,31 +167,11 @@ define( [ "util/lang", "util/xhr",
       return !!__editors[ name ];
     },
 
-    /**
-     * Function: loadLayout
-     *
-     * Loads a layout from the specified src
-     *
-     * @param {String} src: The source from which the layout will be loaded
-     * @param {Function} readyCallback: Called once layout is loaded
-     * @param {String} baseDir: Optional. Can be specified to replace {{baseDir}} in url variables
-     */
-    loadLayout: function( src, readyCallback, baseDir ) {
-      baseDir = baseDir || "";
-      if ( src.indexOf( "{{baseDir}}" ) > -1 ) {
-        src = src.replace( "{{baseDir}}", baseDir );
-      }
-      XHRUtils.get( src, function( e ) {
-        if ( e.target.readyState === 4 ){
-          readyCallback( e.target.responseText );
-        }
-      }, "text/plain" );
-
-    },
 
     isPersistant: function( editorName ) {
       return __editors[ editorName ].persist;
     },
+
     // will be set by Editor module when it loads
     baseDir: null
 
