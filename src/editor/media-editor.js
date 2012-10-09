@@ -40,7 +40,7 @@ define( [ "util/lang", "util/keys", "editor/editor", "util/uri", "text!layouts/m
   function createInput( url, isPrimaryInput ) {
     var wrapper = isPrimaryInput ? _primaryMediaWrapper.cloneNode( true ) : _altMediaWrapper.cloneNode( true ),
         urlInput = wrapper.querySelector( ".current-media-input" ),
-        saveBtn = wrapper.querySelector( ".butter-media-save" ),
+        applyBtn = wrapper.querySelector( ".butter-media-apply" ),
         altMediaLabel,
         deleteBtn,
         oldValue = "";
@@ -71,9 +71,9 @@ define( [ "util/lang", "util/keys", "editor/editor", "util/uri", "text!layouts/m
 
       function onInput() {
        if ( oldValue !== urlInput.value ) {
-          saveBtn.classList.remove( "butter-disabled" );
+          applyBtn.classList.remove( "butter-disabled" );
         } else {
-          saveBtn.classList.add( "butter-disabled" );
+          applyBtn.classList.add( "butter-disabled" );
         }
       }
 
@@ -103,7 +103,7 @@ define( [ "util/lang", "util/keys", "editor/editor", "util/uri", "text!layouts/m
         oldValue = urlInput.value;
       });
 
-      saveBtn.addEventListener( "click", updateMediaOnChange, false );
+      applyBtn.addEventListener( "click", updateMediaOnChange, false );
       urlInput.addEventListener( "keydown", onEnter, false );
       urlInput.addEventListener( "input",  onInput, false );
 
