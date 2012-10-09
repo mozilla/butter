@@ -175,7 +175,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
 
       if ( currentTime < startTime || currentTime > endTime ) {
         // Account for accuracy
-        butter.currentTime = Math.ceil( startTime * accuracy ) / accuracy;
+        butter.currentTime = startTime === 0 ? startTime : Math.ceil( startTime * accuracy ) / accuracy;
       }
     };
 
