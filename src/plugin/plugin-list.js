@@ -45,9 +45,12 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         }
       });
 
-      // request a new trackEvent on the currentMedia
+      // Create a new trackEvent on the defaultTarget
       element.addEventListener( "dblclick", function() {
-        butter.currentMedia.dispatch( "trackeventrequested", element );
+        // Make sure it exists ( It doesn't if it's not specified in the template's html )
+        if ( butter.defaultTarget ) {
+          butter.defaultTarget.createTrackEvent( element );
+        }
       }, false );
 
       if ( iconImg ) {
