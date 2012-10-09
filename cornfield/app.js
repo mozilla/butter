@@ -20,7 +20,7 @@ var express = require('express'),
     PUBLISH_PREFIX_V = CONFIG.dirs.hostname + "/v",
     PUBLISH_PREFIX_E = CONFIG.dirs.hostname + "/e",
     REPORTS_DIR = path.join( PUBLISH_DIR, "crash" ),
-    WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
+    WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot );
     VALID_TEMPLATES = CONFIG.templates,
     EXPORT_ASSETS = CONFIG.exportAssets;
 
@@ -179,8 +179,8 @@ app.post( '/api/publish/:id',
           numSources,
           j, k, len;
 
-      templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
-      baseHref = PUBLISH_PREFIX + templateURL + "/";
+      templateURL = path.relative( WWW_ROOT, path.dirname( templateFile ) );
+      baseHref = PUBLISH_PREFIX + "/" + templateURL + "/";
       baseString = '\n  <base href="' + baseHref + '"/>';
 
       // look for script tags with data-butter-exclude in particular (e.g. butter's js script)
@@ -196,7 +196,7 @@ app.post( '/api/publish/:id',
 
       externalAssetsString += '\n';
       for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
-        externalAssetsString += '  <script src="' + path.relative( templateFile, path.resolve( EXPORT_ASSETS[ i ] ) ) + '"></script>\n';
+        externalAssetsString += '  <script src="' + path.relative( path.dirname( templateFile ), EXPORT_ASSETS[ i ] ) + '"></script>\n';
       }
 
       // If the template has custom plugins defined in it's config, add them to our exported page
