@@ -6,19 +6,11 @@ EditorHelper.addPlugin( "googlemap", function( trackEvent, popcornInstance ) {
   var container,
       media,
       hotspot,
-      hotspotIcon,
-      hotspotIconContainer,
       popcorn = popcornInstance,
       popcornEventMapReference;
 
   function setup() {
     container = trackEvent.popcornTrackEvent._container;
-
-    hotspot = container.querySelector( ".butter-dragging-hotspot" );
-
-    if ( hotspot ) {
-      container.removeChild( hotspot );
-    }
 
     if ( trackEvent.popcornOptions.fullscreen ) {
       return;
@@ -29,7 +21,7 @@ EditorHelper.addPlugin( "googlemap", function( trackEvent, popcornInstance ) {
     EditorHelper.draggable( trackEvent, container, media );
     
     EditorHelper.resizable( trackEvent, container, media, {
-      handlePositions: "e, se, s, nw",
+      handlePositions: "e, se, s",
       minHeight: 20,
       minWidth: 20
     });
