@@ -311,8 +311,6 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       }
 
       function onMouseUp( e ){
-        e.stopPropagation();
-        e.preventDefault();
         window.removeEventListener( "mousemove", onMouseMove, false );
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
