@@ -241,10 +241,20 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         _scrollRect,
         _elementRect,
         _lastDims,
-        _iterationBlockValue,
-        _resizeEvent = {
+        _iterationBlockX,
+        _resizeEvent = {                                                      // Exposed on callbacks of Resizable
+
+          /**
+           * blockIteration
+           *
+           * Blocks one iteration of the resize loop at the specified value. This function will be exposed and be active
+           * on the `resize` callback of a Resizable.
+           *
+           * @param {Number} value: The value at which resizing should be stopped. For resizing start by the right-handle,
+           *                        this is treated as a width value. For the left-handle, it's a left value.
+           */
           blockIteration: function( value ) {
-            _iterationBlockValue = value;
+            _iterationBlockX = value;
           },
           direction: null
         };
@@ -264,7 +274,8 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
             newX = originalPosition + diff,
             newW = originalWidth - diff;
 
-        _iterationBlockValue = null;
+        // At the beginning of this iteration, _iterationBlockX should be null, assuming no block occured.
+        _iterationBlockX = null;
 
         if( newW < MIN_WIDTH ){
           return;
@@ -284,11 +295,16 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           newX = 0;
         }
 
+        // If the size actually changed, use the _onResize callback to notify handlers of this Resizable,
+        // and expose the opportunity to block this iteration from actually resizing the element.
         if ( _lastDims[ 0 ] !== newX || _lastDims[ 1 ] !== newW ) {
           _onResize( newX, newW, _resizeEvent );
         }
 
-        if ( _iterationBlockValue === null ) {
+        // If _iterationBlockX is non-null, this iteration was meant to be blocked at that value. Since
+        // we're resizing wrt the left side of the element here, _iterationBlockX is used to find the
+        // left side of the resizing element, and subsequently, a corresponding width value.
+        if ( _iterationBlockX === null ) {
           element.style.left = newX + "px";
           element.style.width = newW - _padding + "px";
           _elementRect = element.getBoundingClientRect();
@@ -297,7 +313,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           _lastDims[ 1 ] = newW;
         }
         else {
-          newX = _iterationBlockValue;
+          newX = _iterationBlockX;
           newW = originalPosition + originalWidth - newX;
 
           element.style.left = newX + "px";
@@ -353,7 +369,8 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         var diff = mousePosition - mouseDownPosition,
             newW = originalWidth + diff;
 
-        _iterationBlockValue = null;
+        // At the beginning of this iteration, _iterationBlockX should be null, assuming no block occured.
+        _iterationBlockX = null;
 
         if( newW < MIN_WIDTH ){
           return;
@@ -370,17 +387,22 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           newW = element.offsetParent.offsetWidth - originalPosition;
         }
 
+        // If the size actually changed, use the _onResize callback to notify handlers of this Resizable,
+        // and expose the opportunity to block this iteration from actually resizing the element.
         if ( _lastDims[ 1 ] !== newW ) {
           _onResize( originalPosition, newW, _resizeEvent );
         }
 
-        if ( _iterationBlockValue === null ) {
+        // If _iterationBlockX is non-null, this iteration was meant to be blocked at that value. Since
+        // we're resizing wrt the right side of the element here, _iterationBlockX is used to find the
+        // width of the resizing element.
+        if ( _iterationBlockX === null ) {
           element.style.width = newW + "px";
           _elementRect = element.getBoundingClientRect();
           _lastDims[ 1 ] = newW;
         }
         else {
-          newW = _iterationBlockValue - originalPosition;
+          newW = _iterationBlockX - originalPosition;
           element.style.width = newW + "px";
           _elementRect = element.getBoundingClientRect();
           _lastDims[ 1 ] = newW;
