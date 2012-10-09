@@ -5,7 +5,6 @@ EditorHelper.addPlugin( "googlemap", function( trackEvent, popcornInstance ) {
 
   var container,
       media,
-      hotspot,
       popcorn = popcornInstance,
       popcornEventMapReference;
 

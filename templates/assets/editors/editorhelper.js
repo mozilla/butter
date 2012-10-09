@@ -27,7 +27,7 @@
       options = options || {};
 
       function createHelper( suffix ) {
-        var el = document.createElement( "div");
+        var el = document.createElement( "div" );
         el.classList.add( "ui-draggable-handle" );
         el.classList.add( "ui-draggable-" + suffix );
         return el;
@@ -47,7 +47,6 @@
           if ( options.start ) {
             options.start();
           }
-        
         },
         stop: function( event, ui ) {
           if ( options.end ) {
