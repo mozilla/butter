@@ -381,7 +381,14 @@
     Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
         var popcornOptions = trackEvent.popcornOptions,
-            manifestOpts = trackEvent.popcornTrackEvent._natives.manifest.options;
+            manifestOpts = trackEvent.popcornTrackEvent._natives.manifest.options,
+            link = trackEvent.popcornTrackEvent._container.querySelector( "a" );
+
+        function linkClick( e ) {
+          e.preventDefault();
+        }
+
+        link.addEventListener( "click", linkClick, false );
 
         if ( !_cachedValues ) {
           _cachedValues = {
@@ -421,8 +428,11 @@
 
         _trackEvent.listen( "trackeventupdated", function( e ) {
           _trackEvent = e.target;
+          link = _trackEvent.popcornTrackEvent._container.querySelector( "a" );
           calcImageTime();
           _this.updatePropertiesFromManifest( _trackEvent );
+
+          link.addEventListener( "click", linkClicked, false );
 
           // Ensure right group is displayed
           // Mode is flipped here to ensure cached values aren't placed right back in after updating
@@ -436,7 +446,7 @@
 
           _this.scrollbar.update();
         });
-        
+
         setup( trackEvent );
       },
       close: function() {
