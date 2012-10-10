@@ -10,7 +10,6 @@
                    function( rootElement, butter, compiledLayout ) {
 
     var _rootElement = rootElement,
-        _messageContainer = _rootElement.querySelector( "div.error-message" ),
         _tagRadio = _rootElement.querySelector( "#image-tag-radio" ),
         _galleryRadio = _rootElement.querySelector( "#image-gallery-radio" ),
         _tagInput = _rootElement.querySelector( "#image-tag-input" ),
@@ -32,27 +31,9 @@
         _popcornInstance,
         _cachedValues;
 
-    function setErrorState( message ) {
-      if ( message ) {
-        _messageContainer.innerHTML = message;
-        _messageContainer.parentNode.style.height = _messageContainer.offsetHeight + "px";
-        _messageContainer.parentNode.style.visibility = "visible";
-        _messageContainer.parentNode.classList.add( "open" );
-      } else {
-        _messageContainer.innerHTML = "";
-        _messageContainer.parentNode.style.height = "0px";
-        _messageContainer.parentNode.style.visibility = "hidden";
-        _messageContainer.parentNode.classList.remove( "open" );
-      }
-    }
-
     function updateTrackEvent( te, props ) {
-      setErrorState();
-      try {
-        te.update( props );
-      } catch ( e ) {
-        setErrorState( e.toString() );
-      }
+      _this.setErrorState();
+      _this.updateTrackEventSafe( te, props );
     }
 
     function toggleTabs() {
@@ -81,7 +62,7 @@
       } else if ( window.webkitURL ) {
         imgSrc = window.webkitURL.createObjectURL( file );
       } else {
-        setErrorState( "Sorry, but your browser doesn't support this feature." );
+        _this.setErrorState( "Sorry, but your browser doesn't support this feature." );
       }
 
       image = document.createElement( "img" );
@@ -313,7 +294,7 @@
           var count = prop.count > 0 ? prop.count : 1;
 
           if ( count > _maxImageCount ) {
-            setErrorState( "Error: Image count must be less than " + _maxImageCount + "." );
+            _this.setErrorState( "Error: Image count must be less than " + _maxImageCount + "." );
             return;
           }
 
@@ -346,13 +327,13 @@
         trackEvent: trackEvent,
         callback: callback,
         basicContainer: container,
-        manifestKeys: [ "transition" ],
-        safeCallback: updateTrackEvent
+        manifestKeys: [ "transition" ]
       });
 
       attachHandlers();
 
       _this.updatePropertiesFromManifest( trackEvent );
+      _this.setTrackEventUpdateErrorCallback( _this.setErrorState );
 
       if ( trackEvent.popcornOptions.src ) {
         _singleActive = true;
@@ -416,7 +397,7 @@
 
         // The current popcorn instance
         _popcornInstance.on( "invalid-flickr-image", function() {
-          setErrorState( "Invalid Flicker Gallery URL. E.G: http://www.flickr.com/photos/etherworks/sets/72157630563520740/" );
+          _this.setErrorState( "Invalid Flicker Gallery URL. E.G: http://www.flickr.com/photos/etherworks/sets/72157630563520740/" );
         });
 
         _trackEvent.listen( "trackeventupdated", function( e ) {

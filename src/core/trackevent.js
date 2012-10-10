@@ -7,17 +7,26 @@
  *
  * Supports a single event in the Media > Track > TrackEvent model.
  */
-define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/trackevent-view" ],
-        function( Logger, EventManager, LangUtil, TimeUtil, TrackEventView ) {
+define( [ "./logger", "./eventmanager", "./observer",
+          "util/lang", "util/time", "./views/trackevent-view" ],
+  function( Logger, EventManager, Observer,
+            LangUtil, TimeUtil, TrackEventView ) {
 
   var __guid = 0;
 
-  var TrackEventUpdateException = function ( reason, message ) {
+  var __trackEventExceptionStrings = {
+    "trackevent-overlap": "The times you have entered cause trackevents to overlap.",
+    "invalid-start-time": "[start] is an invalid value.",
+    "invalid-end-time": "[end] is an invalid value.",
+    "start-greater-than-end": "[start] must be less than [end]."
+  };
+
+  var TrackEventUpdateException = function ( reason ) {
     this.type = "trackevent-update";
     this.reason = reason;
-    this.message = message;
+    this.message = __trackEventExceptionStrings[ reason ];
     this.toString = function () {
-      return "TrackEvent update failed: " + message;
+      return "TrackEvent update failed: " + this.message;
     };
   };
 
@@ -49,6 +58,7 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
         _selected = false;
 
     EventManager.extend( _this );
+    Observer.extend( _this );
 
     _this.popcornOptions = _popcornOptions;
     _this.popcornTrackEvent = null;
@@ -99,6 +109,7 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
           newEnd = updateOptions.end,
           manifestOptions,
           media,
+          updateNotification,
           duration;
 
       if ( isNaN( newStart ) ) {
@@ -117,6 +128,15 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
         else {
           newEnd = _popcornOptions.end;
         }
+      }
+
+      // Synchronously notify observers that an update is happening.
+      // This action gives observers a chance to stop the trackevent from updating
+      // if a problem is detected. If `notify` returns `false`, the update is cancelled
+      // because some subscriber wished to prevent it from being committed.
+      updateNotification = _this.notify( "update", updateOptions );
+      if ( updateNotification.cancelled ) {
+        return;
       }
 
       if ( _track && _track._media ) {

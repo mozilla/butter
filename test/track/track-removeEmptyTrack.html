@@ -24,14 +24,15 @@
               t2 = butter.tracks[ 1 ];
 
           butter.listen( "trackremoved", function( e ) {
-            equal( butter.tracks.length, 1, "Track was removed when it no longer had any trackEvents left" );
             equal( butter.tracks[ 0 ].id, t2.id, "Track 1 was removed, only track 2 exists now" );
             start();
           });
+
           t.addTrackEvent( defaultEvent );
-          t2.addTrackEvent( defaultEvent );
           t.removeTrackEvent( t.trackEvents[ 0 ] );
           butter.currentMedia.cleanUpEmptyTracks();
+
+          equal( butter.tracks.length, 1, "Track was removed when it no longer had any trackEvents left" );
         });
       });
     </script>
