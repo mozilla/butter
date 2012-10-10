@@ -173,7 +173,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       embedDimensions = embedSize.value.split( "x" );
       embedWidth = embedDimensions[ 0 ];
       embedHeight = embedDimensions[ 1 ];
-      updateEmbed( projectURL.value.replace( "/v/", "/e/" ) );
+      updateEmbed( butter.project.iframeUrl );
     }, false);
 
     authorInput.addEventListener( "input", function( e ) {

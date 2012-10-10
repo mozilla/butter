@@ -252,8 +252,8 @@ define( [ 'core/eventmanager', 'core/media' ],
             if ( e.error === "okay" ) {
               // Save + Publish is OK
               _isPublished = true;
-              _publishUrl = e.url;
-              _iframeUrl = _publishUrl.replace( "/v/", "/e/" );
+              _publishUrl = e.publishUrl;
+              _iframeUrl = e.iframeUrl;
             }
 
             // Let consumers know that the project is now saved;
