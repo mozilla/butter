@@ -23,7 +23,7 @@ var express = require('express'),
     APP_HOSTNAME = stripSlash( CONFIG.dirs.appHostname ),
     // If a separate hostname is given for embed, use it, otherwise use app's hostname
     EMBED_HOSTNAME = CONFIG.dirs.embedHostname ? stripSlash( CONFIG.dirs.embedHostname ) : APP_HOSTNAME,
-    EMBED_SUFFIX = 'e',
+    EMBED_SUFFIX = '_',
     WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
     VALID_TEMPLATES = CONFIG.templates,
     EXPORT_ASSETS = CONFIG.exportAssets;
