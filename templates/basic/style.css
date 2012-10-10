@@ -14,7 +14,7 @@
 .butter-header-spacing .body-wrapper {
   position: absolute;
   left: 0;
-  top: 50px; /* compensate for header */
+  top: 80px; /* compensate for header */
   right: 350px;
   bottom: 0;
   -webkit-transition: right 0.25s;

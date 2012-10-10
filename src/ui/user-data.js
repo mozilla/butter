@@ -3,22 +3,13 @@
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
 /*
- * This file exposes various helper methods centered around user-data, such as logging in,
  * saving, and logging out.
  */
-define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
-  function( Dialog, Lang, HEADER_TEMPLATE ) {
+define( [ "dialog/dialog" ],
+  function( Dialog ) {
 
   return function( butter ) {
-    var _this = this,
-        _rootElement = Lang.domFragment( HEADER_TEMPLATE, ".butter-header" ),
-        _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
-        _buttonGroup = _rootElement.querySelector( ".butter-login-project-info" ),
-        _authButton = _rootElement.querySelector( ".butter-login-btn" ),
-        _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
-        _projectName = _projectTitle.querySelector( ".butter-project-name" );
-
-    this.element = _rootElement;
+    var _this = this;
 
     /*
      * Method: showErrorDialog
@@ -31,9 +22,9 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
       var dialog = Dialog.spawn( "error-message", {
         data: message,
         events: {
-          cancel: function( e ) {
+          cancel: function() {
             dialog.close();
-            if ( callback ) {
+            if ( callback && typeof callback === "function" ) {
               callback();
             }
           }
@@ -43,21 +34,26 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
     };
 
     this.authenticationRequired = function( successCallback, errorCallback ) {
-      if ( butter.cornfield.authenticated() && successCallback && typeof successCallback === "function" ) {
-        successCallback();
-        return;
+      if ( butter.cornfield.authenticated() ) {
+        butter.dispatch( "authenticated" );
+        if ( successCallback && typeof successCallback === "function" ) {
+          successCallback();
+          return;
+        }
       }
 
-      butter.cornfield.login(function( response ) {
+      butter.cornfield.login( function( response ) {
         if ( response.status === "okay" ) {
-          if ( successCallback ) {
+          butter.dispatch( "authenticated" );
+          if ( successCallback && typeof successCallback === "function" ) {
             successCallback();
+            return;
           }
         } else {
           _this.showErrorDialog( "There was an error logging in. Please try again." );
-          if ( errorCallback ) {
-            errorCallback();
-          }
+            if ( errorCallback && typeof errorCallback === "function" )  {
+              errorCallback();
+            }
         }
       });
     };
@@ -91,47 +87,13 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
     };
 
     this.logout = function( callback ) {
-      butter.dispatch( "logout" );
-      butter.cornfield.logout( callback );
+      butter.cornfield.logout( function() {
+        if ( callback && typeof callback === "function" ) {
+          callback();
+        }
+        butter.dispatch( "logout" );
+      });
     };
 
-    Object.defineProperties( this, {
-      rootElement: {
-        enumerable: true,
-        get: function() {
-          return _rootElement;
-        }
-      },
-      saveButton: {
-        enumerable: true,
-        get: function() {
-          return _saveButton;
-        }
-      },
-      buttonGroup: {
-        enumerable: true,
-        get: function() {
-          return _buttonGroup;
-        }
-      },
-      authButton: {
-        enumerable: true,
-        get: function() {
-          return _authButton;
-        }
-      },
-      projectTitle: {
-        enumerable: true,
-        get: function() {
-          return _projectTitle;
-        }
-      },
-      projectName: {
-        enumerable: true,
-        get: function() {
-          return _projectName;
-        }
-      }
-    });
   };
 });
