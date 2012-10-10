@@ -77,7 +77,7 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
      * Binds the TrackEvent to its dependencies.
      *
      * @param {Object} track: The track the trackevent will inhabit.
-     * @param {Object} popcornWrapper: a reference to a popcornWrapper object the wraps various functionality for modifying Popcorn data.
+     * @param {Object} popcornWrapper: a reference to a PopcornWrapper object that wraps various functionality for modifying Popcorn data.
      */
     this.bind = function( track, popcornWrapper ) {
       _track = track;
