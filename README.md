@@ -36,7 +36,7 @@ Running Butter in development mode
 ----------------------------------
 
 1. Run `node make server`.
-2. Navigate to http://localhost:8888/ in your favourite browser.
+2. Navigate to [http://localhost:8888/](http://localhost:8888/) in your favourite browser.
 
 If you want to change the bind IP or port check the Configuration section below.
 
@@ -89,6 +89,20 @@ new file called _hostname_-_environment_.json that overrides the cornfield defau
   - `exportedAssets` list of scripts to include in exported assets.  These are things like popcorn.js or other scripts that your exported projects depend upon in order to run.
 
   - `additionalStaticRoots` list of additional roots to use.
+
+  - `database` database configuration options
+    - `database` the database name. Used by mysql and postgresql
+    - `username` the username to use when connecting to the database. Used by mysql and postgresql
+    - `password` the password for the username. Used by mysql and postgresql
+    - `options` additional sequelize options. Please see the [sequelize manual](http://www.sequelizejs.com/#usage-options) for the complete listing.
+      - `dialect` the sql dialect of the database. Default is `mysql`, must be one of `mysql`, `sqlite`, or `postgresql`
+      - `storage` the storage engine for sqlite. Default is `:memory:`, an in-memory db, must be a string representing a file path or `:memory:`
+      - `logging` function to print sql queries to console. Default is `console.log`, must be a function or `false`
+      - `host` hostname of the mysql or postgresql server. Default is `localhost`
+      - `port` port of the mysql or postgresql server. Default is `3306`
+      - `pool` connection pooling options for mysql and postgresql. Default is none
+        - `maxConnections` - maximum number of connections open in the pool
+        - `maxIdleTime` - maximum time in seconds to leave an idle connection open in the pool
 
   - `publishStore` a `fileStore` used to publish project HTML files (see `fileStore` below for details)
 
