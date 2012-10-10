@@ -40,8 +40,8 @@
   "tutorial": {
     "general": [
       {
-        "start": 21,
-        "end": 43,
+        "start": 150,
+        "end": 160,
         "name": "media-editor-button-tooltip",
         "element": ".butter-editor-header-media",
         "message": "This is The Media Editor",
@@ -51,8 +51,8 @@
         "hidden": true
       },
       {
-        "start": 46,
-        "end": 53,
+        "start": 29,
+        "end": 36,
         "name": "events-editor-button-tooltip",
         "element": ".butter-editor-header-popcorn",
         "message": "This is The Events Editor",
@@ -63,8 +63,8 @@
       },
       
      {
-        "start": 101,
-        "end": 116,
+        "start": 103,
+        "end": 115,
         "name": "login-button-tooltip",
         "element": ".butter-login-btn",
         "message": "Use this to Login and Share",
@@ -86,8 +86,8 @@
         "hidden": true
       },
     {
-        "start": 120,
-        "end": 128,
+        "start": 116,
+        "end": 125,
         "name": "share-editor-tooltip",
         "element": ".butter-editor-header-share",
         "message": "This is the share editor",
@@ -99,10 +99,10 @@
     ],
     "plugin-list": [
       {
-        "start": 1,
-        "end": 6,
-        "name": "image-plugin-button-tooltip",
-        "element": ".butter-plugin-tile[data-popcorn-plugin-type=image]",
+        "start": 65,
+        "end": 71,
+        "name": "text-plugin-button-tooltip",
+        "element": ".butter-plugin-tile[data-popcorn-plugin-type=text]",
         "message": "Drag me to the timeline!",
         "top": "50px",
         "left": "50px",
@@ -123,22 +123,11 @@
     ],
     "media-editor": [
       {
-        "start": 32,
-        "end": 40,
+        "start": 160,
+        "end": 170,
         "name": "current-media-tooltip",
         "element": ".media-editor-inner-wrapper.primary-media-wrapper",
         "message": "Paste your media files in here!",
-        "top": "50px",
-        "left": "50px",
-        "hover": false,
-        "hidden": true
-      },
-      {
-        "start": 10,
-        "end": 14,
-        "name": "alternate-media-button-tooltip",
-        "element": "#add-alternate-media-source-btn",
-        "message": "click me to add a fallback media!",
         "top": "50px",
         "left": "50px",
         "hover": false,
@@ -147,15 +136,15 @@
     ],
     "editorOpenEvents": [
       {
-        "start": 21,
+        "start": 149,
         "type": "media-editor"
       },
       {
-        "start": 46,
+        "start": 29,
         "type": "plugin-list"
       },
       {
-        "start": 120,
+        "start": 116,
         "type": "share-properties"
       }
     ]
