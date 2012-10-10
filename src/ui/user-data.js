@@ -71,29 +71,22 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
      * @param {function} errorCallback: A callback function that is fired when the user attempts to save with no project name
      */
     this.save = function( successCallback, errorCallback ) {
-      function execute(){
-        var saveString;
+      successCallback = successCallback || function(){};
+      errorCallback = errorCallback || function(){};
 
-        butter.project.data = butter.exportProject();
-        saveString = JSON.stringify( butter.project, null, 4 );
-        butter.ui.loadIndicator.start();
-        butter.cornfield.save( butter.project.id, saveString, function( e ) {
-          butter.ui.loadIndicator.stop();
-          if ( e.error !== "okay" || !e.project || !e.project.id ) {
-            _this.showErrorDialog( "There was a problem saving your project. Please try again." );
-            return;
-          }
-          butter.project.id = e.project.id;
-          if ( successCallback ) {
-            successCallback();
-          }
-        });
-      }
-
-      if ( !butter.project.name && errorCallback ) {
+      if ( !butter.project.name ) {
         errorCallback();
       } else {
-        execute();
+        butter.ui.loadIndicator.start();
+        butter.project.save( function( e ){
+          butter.ui.loadIndicator.stop();
+          if ( e.error !== "okay" ) {
+            _this.showErrorDialog(  "There was a problem saving your project, so it was backed up to your browser's storage (i.e., you can close or reload this page and it will be recovered). Please try again." );
+            errorCallback();
+            return;
+          }
+          successCallback();
+        });
       }
     };
 

@@ -63,21 +63,10 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       fadeEditorContainer();
     }
 
-    function projectSaved( e ) {
-      if ( e.data ) {
-        return;
-      }
-      userData.save(function() {
-        butter.unlisten( "projectsaved", projectSaved );
-        displayEditor();
-      });
-    }
-
     function displaySave() {
       resetInput();
       embedSize.disabled = true;
       authorInput.disabled = true;
-      butter.listen( "projectsaved", projectSaved );
       loginBtn.classList.add( "hide-container" );
       loginBtn.removeEventListener( "click", login, false );
       saveBtn.classList.remove( "hide-container" );
@@ -91,44 +80,40 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
     }
 
     function displayEditor() {
-
       if ( !butter.cornfield.authenticated() ) {
         displayLogin();
         return;
       }
 
-      if ( !butter.project.id ) {
+      if ( !butter.project.isSaved ) {
         displaySave();
         return;
       }
+
+      var project = butter.project,
+          headerPreviewBtn = document.querySelector( ".butter-header .butter-preview-btn" );
 
       embedSize.disabled = false;
       authorInput.disabled = false;
       saveContainer.classList.add( "hide-container" );
       editorContainer.classList.remove( "fade-container" );
-      projectName.value = "";
 
-      butter.cornfield.publish( butter.project.id, function( e ) {
-        var headerPreviewBtn = document.querySelector( ".butter-header .butter-preview-btn" ),
-            url = e.url;
+      projectName.value = project.name;
+      projectURL.value = project.publishUrl;
+      previewBtn.href = project.publishUrl;
 
-        if ( e.error !== "okay" ) {
-          userData.showErrorDialog( "There was a problem saving your project. Please try again." );
-          return;
-        }
+      headerPreviewBtn.classList.remove( "butter-hidden" );
+      headerPreviewBtn.href = project.publishUrl;
 
-        projectURL.value = url;
-        previewBtn.href = url;
-        headerPreviewBtn.classList.remove( "butter-hidden" );
-        headerPreviewBtn.href = url;
+      updateEmbed( project.iframeUrl );
 
-        updateEmbed( projectURL.value.replace( "/v/", "/e/" ) );
-        // if any of the buttons haven't loaded, or if we aren't logged in
-        if ( !shareTwitter.childNodes.length || !shareGoogle.childNodes.length || !butter.cornfield.authenticated() ) {
-          socialMedia.hotLoad( shareTwitter, socialMedia.twitter, url );
-          socialMedia.hotLoad( shareGoogle, socialMedia.google, url );
-        }
-      });
+      // if any of the buttons haven't loaded, or if we aren't logged in
+      if ( !shareTwitter.childNodes.length ||
+           !shareGoogle.childNodes.length ||
+           !butter.cornfield.authenticated() ) {
+        socialMedia.hotLoad( shareTwitter, socialMedia.twitter, project.publishUrl );
+        socialMedia.hotLoad( shareGoogle, socialMedia.google, project.publishUrl );
+      }
     }
 
     function login() {
@@ -179,10 +164,9 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         return;
       }
 
-      butter.dispatch( "projectsaved", true );
       userData.save(function() {
         displayEditor();
-      }, null );
+      });
     }
 
     embedSize.addEventListener( "change", function() {

@@ -23,6 +23,9 @@
   // provides. Path is relative to baseUrl.
   name: '../tools/almond',
 
+  // Strip extra licenses
+  preserveLicenseComments: false,
+
   // Files to include along with almond. Their nested dependencies will also be
   // included. Subsystems are listed explicitly because butter-src.js does not
   // have explicit dependencies for them, but uses them on demand. Also,
@@ -40,5 +43,5 @@
   },
 
   // The built butter.js file for use by web sites.
-  out: '../dist/src/butter.js',
+  out: '../dist/src/butter.js'
 })

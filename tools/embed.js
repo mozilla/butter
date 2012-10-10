@@ -17,6 +17,9 @@
   // provides. Path is relative to baseUrl.
   name: '../tools/almond',
 
+  // Strip extra licenses
+  preserveLicenseComments: false,
+
   // Files to include along with almond. Their nested dependencies will also be
   // included.
   include: [ 'embed' ],
@@ -28,5 +31,5 @@
   },
 
   // The built embed.js file for use by web sites.
-  out: '../dist/src/embed.js',
+  out: '../dist/src/embed.js'
 })

@@ -54,17 +54,20 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
 
     _authButton.addEventListener( "click", login, false );
 
-    function publish() {
-      butter.cornfield.publish( butter.project.id, function( e ){
-        if( e.error !== "okay" ){
-          _userData.showErrorDialog( "There was a problem saving your project. Please try again." );
-          return;
-        } else {
-          butter.editor.openEditor( "share-properties" );
-          _previewBtn.classList.remove( "butter-hidden" );
-          _previewBtn.href = e.url;
-        }
-      });
+    // XXXhumph: this needs better UI, from Bobby:
+    // When the "Save" button is grey, removing the cursor: pointer
+    // property altogether and turning the font grey are probably good
+    // ideas. Least confusing UI.
+    function toggleSaveButton( on ) {
+      if ( on ) {
+        _saveButton.classList.remove( "butter-disabled" );
+        _saveButton.classList.remove( "btn-light" );
+        _saveButton.classList.add( "btn-green" );
+      } else {
+        _saveButton.classList.add( "butter-disabled" );
+        _saveButton.classList.remove( "btn-green" );
+        _saveButton.classList.add( "btn-light" );
+      }
     }
 
     function destroyToolTip() {
@@ -75,8 +78,19 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     }
 
     function prepare() {
-      butter.dispatch( "projectsaved" );
-      _userData.save( publish );
+      function afterSave() {
+        butter.editor.openEditor( "share-properties" );
+        _previewBtn.classList.remove( "butter-hidden" );
+        _previewBtn.href = butter.project.publishUrl;
+      }
+
+      if( !butter.project.isSaved ) {
+        // If saving fails, restore the "Save" button so the user can try again.
+        _userData.save( function() { afterSave(); },
+                        function() { toggleSaveButton( true ); } );
+      } else {
+        afterSave();
+      }
     }
 
     function onKeyPress( e ) {
@@ -97,11 +111,8 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
      * Checks whether the current projects name is a valid one or not.
      * @returns boolean value representing whether or not the current project name is valid
      */
-    function checkProjectName() {
-      if ( !butter.project.name || butter.project.name === _projectTitlePlaceHolderText ) {
-        return false;
-      }
-      return true;
+    function checkProjectName( name ) {
+      return !!name && name !== _projectTitlePlaceHolderText;
     }
 
     function nameError() {
@@ -123,27 +134,26 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
 
     function onBlur() {
       var node = _projectTitle.querySelector( ".butter-project-name" );
-
       node.removeEventListener( "blur", onBlur, false );
 
       _projectName.textContent = node.value || _projectTitlePlaceHolderText;
-      butter.project.name = _projectName.textContent;
-
-      if ( checkProjectName() ) {
-        _userData.save( publish );
+      if( checkProjectName( _projectName.textContent ) ) {
+        butter.project.name = _projectName.textContent;
       } else {
-        butter.project.name = "";
         nameError();
-        butter.dispatch( "projectupdated" );
       }
+
       _projectTitle.replaceChild( _projectName, node );
       _projectTitle.addEventListener( "click", projectNameClick, false );
     }
 
     _saveButton.addEventListener( "click", function( e ){
-      if ( checkProjectName() ) {
-        login( prepare );
+      if( butter.project.isSaved ) {
         return;
+      }
+
+      if ( checkProjectName( butter.project.name ) ) {
+        login( prepare );
       } else {
         nameError();
       }
@@ -169,7 +179,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     function toggleDropDown() {
       _nameDropDown.classList.toggle( "butter-dropdown-off" );
     }
-  
+
     function doLogout() {
       _userData.logout( logoutDisplay );
       _nameDropDown.classList.add( "butter-dropdown-off" );
@@ -216,12 +226,19 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       var dialog = Dialog.spawn( "feedback" );
       dialog.open();
     }, false );
-    
+
     butter.listen( "authenticated", function() {
       loginDisplay();
     });
     butter.listen( "projectsaved", function() {
+      // Disable "Save" button
+      toggleSaveButton( false );
       _projectName.textContent = butter.project.name;
+    });
+    butter.listen( "projectchanged", function() {
+      // Re-enable "Save" button to indicate things are not saved
+      toggleSaveButton( true );
+      _saveButton.classList.add( "btn-green" );
     });
     butter.listen( "ready", function() {
       if ( butter.project.name ) {
