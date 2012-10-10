@@ -11,30 +11,293 @@
       "id": "Media0",
       "name": "Media0",
       "url": [
-        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.mp4",
-        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.ogv",
-        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.webm"
+        "http://videos-cdn.mozilla.net/serv/webmademovies/tutorialruff3.webm"
       ],
       "target": "video",
       "duration": 64.54166412353516,
-      "tracks": [
-        {
-          "name": "Layer",
-          "id": "Layer0",
-          "trackEvents": [
-            {
-              "id": "TrackEvent3",
-              "type": "text",
-              "popcornOptions": {
-                "start": 1,
-                "end": 6,
-                "target": "video-container",
-                "text": "Pop some corn!"
-              },
-              "track": "Track0",
-              "name": "TrackEvent3"
-            }
-          ]
+  "tracks": [{
+            "name": "Layer",
+            "id": "0",
+            "trackEvents": [{
+                "id": "TrackEvent7",
+                "type": "text",
+                "popcornOptions": {
+                    "start": 38.759,
+                    "end": 40.93687979966611,
+                    "target": "video-container",
+                    "text": "Hello!",
+                    "position": "center",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Merriweather",
+                    "fontSize": 48,
+                    "fontColor": "#000",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "left": 30,
+                    "top": 30,
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent2"
+            }, {
+                "id": "TrackEvent9",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 43.4124,
+                    "end": 44.719772736590365,
+                    "target": "video-container",
+                    "text": "Hello!",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "info",
+                    "flip": "",
+                    "top": 5,
+                    "left": 20,
+                    "width": 30,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": 12,
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent8"
+            }, {
+                "id": "TrackEvent11",
+                "type": "image",
+                "popcornOptions": {
+                    "start": 44.75061,
+                    "end": 45.91021,
+                    "target": "video-container",
+                    "src": "http://www.mozilla.org/media/img/home/firefox.png",
+                    "linkSrc": "",
+                    "tags": "Mozilla",
+                    "photosetId": "http://www.flickr.com/photos/etherworks/sets/72157630563520740/",
+                    "count": 3,
+                    "width": 29.28571428571429,
+                    "height": 34.285714285714285,
+                    "top": 10,
+                    "left": 10,
+                    "transition": "popcorn-fade",
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent10"
+            }, {
+                "id": "TrackEvent13",
+                "type": "wikipedia",
+                "popcornOptions": {
+                    "start": 45.94879,
+                    "end": 48.58688,
+                    "target": "video-container",
+                    "lang": "en",
+                    "src": "Africa",
+                    "width": 51.24999999999999,
+                    "height": 86.98412698412699,
+                    "top": 6.904761904761905,
+                    "left": 13.392857142857142,
+                    "transition": "popcorn-fade",
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent12"
+            }, {
+                "id": "TrackEvent14",
+                "type": "googlemap",
+                "popcornOptions": {
+                    "start": 48.64615,
+                    "end": 57.16921,
+                    "target": "video-container",
+                    "type": "ROADMAP",
+                    "location": "",
+                    "fullscreen": "",
+                    "heading": 0,
+                    "pitch": 1,
+                    "zoom": 2,
+                    "transition": "popcorn-fade",
+                    "left": 5,
+                    "top": 5,
+                    "width": 55.714285714285715,
+                    "height": 79.04761904761905,
+                    "lat": 3.4847384220005946,
+                    "lng": 24.313210499999958,
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent14"
+            }, {
+                "id": "TrackEvent15",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 57.78552,
+                    "end": 63.69948,
+                    "target": "video-container",
+                    "text": "Hello",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "info",
+                    "flip": "",
+                    "top": 74.52380952380952,
+                    "left": 66.42857142857143,
+                    "width": 30,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": 12,
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent15"
+            }, {
+                "id": "TrackEvent18",
+                "type": "text",
+                "popcornOptions": {
+                    "start": 77.84744,
+                    "end": 82.84744,
+                    "target": "video-container",
+                    "text": "Hello",
+                    "position": "custom",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Bangers",
+                    "fontSize": "120",
+                    "fontColor": "#000",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "left": 39.285714285714285,
+                    "top": 4.920634920634921,
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent18"
+            }]
+        }, {
+            "name": "Layer",
+            "id": "1",
+            "trackEvents": [{
+                "id": "TrackEvent16",
+                "type": "text",
+                "popcornOptions": {
+                    "start": 58.72585,
+                    "end": 63.700534000000005,
+                    "target": "video-container",
+                    "text": "Hello",
+                    "position": "custom",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Merriweather",
+                    "fontSize": 48,
+                    "fontColor": "#000",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "left": 64.64285714285715,
+                    "top": 0.7936507936507936,
+                    "zindex": 999
+                },
+                "track": "Layer",
+                "name": "TrackEvent16"
+            }, {
+                "id": "TrackEvent25",
+                "type": "image",
+                "popcornOptions": {
+                    "start": 83.99956,
+                    "end": 90.67681020419276,
+                    "target": "video-container",
+                    "src": "http://openmatt.org/wp-content/uploads/2012/05/Mozilla-Webmaker-logo.png",
+                    "linkSrc": "",
+                    "tags": "",
+                    "photosetId": "",
+                    "count": 3,
+                    "width": 80,
+                    "height": 80,
+                    "top": 10,
+                    "left": 10,
+                    "transition": "popcorn-fade",
+                    "zindex": 999
+                },
+                "track": "Layer",
+                "name": "TrackEvent24"
+            }, {
+                "id": "TrackEvent26",
+                "type": "twitter",
+                "popcornOptions": {
+                    "start": 79.60939,
+                    "end": 82.35606,
+                    "target": "video-container",
+                    "search": "",
+                    "username": "@popcornjs",
+                    "searchType": "mixed",
+                    "numberOfTweets": 10,
+                    "transition": "popcorn-fade",
+                    "layout": "feed",
+                    "left": 0,
+                    "zindex": 999
+                },
+                "track": "Layer",
+                "name": "TrackEvent19"
+            }]
+        }, {
+            "name": "Layer",
+            "id": "2",
+            "trackEvents": [{
+                "id": "TrackEvent17",
+                "type": "image",
+                "popcornOptions": {
+                    "start": 60.10647,
+                    "end": 63.715725,
+                    "target": "video-container",
+                    "src": "http://www.mozilla.org/media/img/home/firefox.png",
+                    "linkSrc": "",
+                    "tags": "Mozilla",
+                    "photosetId": "http://www.flickr.com/photos/etherworks/sets/72157630563520740/",
+                    "count": 3,
+                    "width": 83.91428571428573,
+                    "height": 83.80952380952381,
+                    "top": 9.047619047619047,
+                    "left": 0,
+                    "transition": "popcorn-fade",
+                    "zindex": 998
+                },
+                "track": "Layer",
+                "name": "TrackEvent17"
+            }, {
+                "id": "TrackEvent23",
+                "type": "twitter",
+                "popcornOptions": {
+                    "start": 82.09686,
+                    "end": 90.71572196569562,
+                    "target": "video-container",
+                    "search": "#mozparty",
+                    "username": "",
+                    "searchType": "mixed",
+                    "numberOfTweets": 10,
+                    "transition": "popcorn-fade",
+                    "layout": "ticker",
+                    "left": 0,
+                    "zindex": 998
+                },
+                "track": "Layer",
+                "name": "TrackEvent22"
+            }]
         }
       ]
     }
@@ -42,8 +305,8 @@
   "tutorial": {
     "general": [
       {
-        "start": 1,
-        "end": 6,
+        "start": 150,
+        "end": 160,
         "name": "media-editor-button-tooltip",
         "element": ".butter-editor-header-media",
         "message": "This is The Media Editor",
@@ -52,6 +315,30 @@
         "hover": false,
         "hidden": true
       },
+      {
+        "start": 29,
+        "end": 36,
+        "name": "events-editor-button-tooltip",
+        "element": ".butter-editor-header-popcorn",
+        "message": "This is The Events Editor",
+        "top": "50px",
+        "left": "50px",
+        "hover": false,
+        "hidden": true
+      },
+      
+     {
+        "start": 103,
+        "end": 115,
+        "name": "login-button-tooltip",
+        "element": ".butter-login-btn",
+        "message": "Use this to Login and Share",
+        "top": "50px",
+        "left": "50px",
+        "hover": false,
+        "hidden": true
+      },     
+      
       {
         "start": 1,
         "end": 5,
@@ -62,14 +349,25 @@
         "left": "50%",
         "hover": false,
         "hidden": true
-      }
+      },
+    {
+        "start": 116,
+        "end": 125,
+        "name": "share-editor-tooltip",
+        "element": ".butter-editor-header-share",
+        "message": "This is the share editor",
+        "top": "50px",
+        "left": "50px",
+        "hover": false,
+        "hidden": true
+    }
     ],
     "plugin-list": [
       {
-        "start": 1,
-        "end": 6,
-        "name": "image-plugin-button-tooltip",
-        "element": ".butter-plugin-tile[data-popcorn-plugin-type=image]",
+        "start": 65,
+        "end": 71,
+        "name": "text-plugin-button-tooltip",
+        "element": ".butter-plugin-tile[data-popcorn-plugin-type=text]",
         "message": "Drag me to the timeline!",
         "top": "50px",
         "left": "50px",
@@ -90,22 +388,11 @@
     ],
     "media-editor": [
       {
-        "start": 8,
-        "end": 14,
-        "name": "new-media-button-tooltip",
-        "element": "#new-media-source-btn",
-        "message": "click me to add a new media source!",
-        "top": "50px",
-        "left": "50px",
-        "hover": false,
-        "hidden": true
-      },
-      {
-        "start": 10,
-        "end": 14,
-        "name": "alternate-media-button-tooltip",
-        "element": "#add-alternate-media-source-btn",
-        "message": "click me to add a fallback media!",
+        "start": 160,
+        "end": 170,
+        "name": "current-media-tooltip",
+        "element": ".media-editor-inner-wrapper.primary-media-wrapper",
+        "message": "Paste your media files in here!",
         "top": "50px",
         "left": "50px",
         "hover": false,
@@ -114,12 +401,16 @@
     ],
     "editorOpenEvents": [
       {
-        "start": 7,
+        "start": 149,
         "type": "media-editor"
       },
       {
-        "start": 14,
+        "start": 29,
         "type": "plugin-list"
+      },
+      {
+        "start": 116,
+        "type": "share-properties"
       }
     ]
   }
