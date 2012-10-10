@@ -239,7 +239,7 @@ app.post( '/api/publish/:id',
 
       function finished( err ) {
         if ( err ) {
-          res.json({ error: "internal server error" }, 500);
+          res.json({ error: 'internal server error' }, 500);
         } else {
           res.json({ error: 'okay', publishUrl: publishUrl, iframeUrl: iframeUrl });
         }
