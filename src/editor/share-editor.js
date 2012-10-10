@@ -7,7 +7,8 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
   function( Editor, BaseEditor, UserData, LAYOUT_SRC, SocialMedia, ToolTip ) {
 
   Editor.register( "share-properties", LAYOUT_SRC, function( rootElement, butter, compiledLayout ) {
-    var TOOLTIP_NAME = "name-error-share-tooltip";
+    var TOOLTIP_NAME = "name-error-share-tooltip",
+        _this;
 
     var socialMedia = new SocialMedia(),
         editorContainer = rootElement.querySelector( ".editor-container" ),
@@ -42,6 +43,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
     function fadeEditorContainer() {
       editorContainer.classList.add( "fade-container" );
       saveContainer.classList.remove( "hide-container" );
+      _this.scrollbar.update();
     }
 
     function displayLogin() {
@@ -215,6 +217,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
 
     Editor.BaseEditor.extend( this, butter, rootElement, {
       open: function() {
+        _this = this;
         if ( !butter.cornfield.authenticated() ) {
           displayLogin();
         } else if ( !butter.project.name || !butter.project.id ) {
