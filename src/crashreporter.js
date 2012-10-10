@@ -58,7 +58,7 @@ define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI 
           delete crashReport.onSendReport;
           delete crashReport.onNoReport;
           crashReport.comments = comments;
-          XHR.post( "/report", JSON.stringify( crashReport, null, 4 ),
+          XHR.post( "/crash", JSON.stringify( crashReport, null, 4 ),
                     attemptRecovery, "text/json" );
         }
 

@@ -27,10 +27,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     author: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        isAlphanumeric: true
-      }
+      allowNull: false
     },
     template: {
       type: DataTypes.STRING,

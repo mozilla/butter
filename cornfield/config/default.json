@@ -16,8 +16,31 @@
   "dirs": {
     "wwwRoot": "../",
     "templates": "../templates",
-    "publish": "view",
-    "hostname": "http://localhost:8888"
+    "appHostname": "http://localhost:8888"
+  },
+  "publishStore": {
+    "type": "local",
+    "options": {
+      "root": "./view",
+      "namePrefix": "v",
+      "nameSuffix": ".html"
+    }
+  },
+  "feedbackStore": {
+    "type": "local",
+    "options": {
+      "root": "./view",
+      "namePrefix": "feedback",
+      "nameSuffix": ".json"
+    }
+  },
+  "crashStore": {
+    "type": "local",
+    "options": {
+      "root": "./view",
+      "namePrefix": "crash",
+      "nameSuffix": ".json"
+    }
   },
   "templates": {
     "basic": "{{templateBase}}basic/config.json"
