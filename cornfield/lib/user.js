@@ -1,124 +1,114 @@
-'use strict';
+"use strict";
 
-var
-dbOnline = false,
-mongoose = require('mongoose'),
-Schema = mongoose.Schema,
+module.exports = function( config, dbReadyFn ) {
+  config = config || {};
 
-Project = new Schema({
-  data: String,
-  email: String,
-  name: String,
-  author: String,
-  template: String
-}),
-ProjectModel = mongoose.model( 'Project2', Project );
+  var dbOnline = false,
+      Sequelize = require( "sequelize" ),
+      sequelize = new Sequelize( config.database, config.username, config.password, config.options ),
+      Project = sequelize.import( __dirname + "/models/project" );
 
-mongoose.connect( 'mongodb://localhost/test', function( err ) {
-  if ( !err ) {
-    dbOnline = true;
-  }
-});
-
-module.exports = {
-  createProject: function( email, data, callback ) {
-    if ( !email || !data ) {
-      callback( 'not enough parameters to update' );
-      return;
+  sequelize.sync().complete(function( err ) {
+    if ( !err) {
+      dbOnline = true;
     }
 
-    var project = new ProjectModel({
-      data: JSON.stringify( data.data ),
-      email: email,
-      name: data.name,
-      author: data.author || "",
-      template: data.template
-    });
-
-    project.save( function( err ) {
-      callback( err, project );
-    });
-  },
-  deleteProject: function( email, pid, callback ) {
-    if ( !email || !pid ) {
-      callback( 'not enough parameters to delete' );
-      return;
+    if ( dbReadyFn ) {
+      dbReadyFn( err );
     }
+  });
 
-    ProjectModel.remove( { email: email, _id: pid }, callback );
-  },
-  findAllProjects: function findAllProjects( email, callback ) {
-    if ( !email ) {
-      callback( 'not enough parameters to search' );
-      return;
-    }
-
-    ProjectModel.find( { email: email }, callback );
-  },
-  findProject: function findProject( email, pid, callback ) {
-    if ( !email || !pid ) {
-      callback( 'not enough parameters to search' );
-      return;
-    }
-
-    ProjectModel.find( { email: email, _id: pid }, function( err, doc ) {
-      if ( err ) {
-        callback( err );
+  return {
+    createProject: function( email, data, callback ) {
+      if ( !email || !data ) {
+        callback( "not enough parameters to update" );
         return;
       }
 
-      // .find() returns an array, but this API expects a single document or null
-      doc = doc.length > 0 ? doc[ 0 ] : null;
-      callback( err, doc );
-    });
-  },
-  findById: function findById( pid, callback ) {
-    if ( !pid ) {
-      callback( 'not enough parameters for search' );
-      return;
-    }
-
-    ProjectModel.findById( pid, callback );
-  },
-  isDBOnline: function isDBOnline() {
-    return dbOnline;
-  },
-  updateProject: function updateProject( email, pid, data, callback ) {
-    if ( !email || !pid || !data ) {
-      callback( 'not enough parameters to update' );
-      return;
-    }
-
-    ProjectModel.find( { email: email, _id: pid }, function( err, doc ) {
-      if ( err ) {
-        callback( err );
-        return;
-      }
-
-      if ( doc.length !== 1 ) {
-        callback( 'project id not found' );
-        return;
-      }
-
-      doc = doc[ 0 ];
-      doc.data = JSON.stringify( data.data );
-      doc.email = email;
-      doc.name = data.name;
-      doc.author = data.author || "";
-      doc.template = data.template;
-
-      doc.save( function( err ) {
-        callback( err, doc );
+      var project = Project.build({
+        data: JSON.stringify( data.data ),
+        email: email,
+        name: data.name,
+        author: data.author || "",
+        template: data.template
       });
-    });
-  },
-  closeDBConnection: function( callback ) {
-    mongoose.connection.close(function() {
-      dbOnline = false;
 
-      if ( callback ) {
-        callback();
+      project.save().complete(function( err, result ) {
+        callback( err, result );
+      });
+    },
+    deleteProject: function( email, pid, callback ) {
+      if ( !email || !pid ) {
+        callback( "not enough parameters to delete" );
+        return;
       }
-    });
-  }
+
+      Project.find( { where: { email: email, id: pid } } )
+      .success(function( project ) {
+        project.destroy().complete( function( err ) {
+          callback( err );
+        });
+      })
+      .error(function( error ) {
+        callback( error );
+      });
+    },
+    findAllProjects: function findAllProjects( email, callback ) {
+      if ( !email ) {
+        callback( "not enough parameters to search" );
+        return;
+      }
+
+      Project.findAll( { where: { email: email } } ).complete( function( err, projects ) {
+        callback( err, projects );
+      });
+    },
+    findProject: function findProject( email, pid, callback ) {
+      if ( !email || !pid ) {
+        callback( "not enough parameters to search" );
+        return;
+      }
+
+      Project.find( { where: { email: email, id: pid } } ).complete( function( err, project ) {
+        callback( err, project );
+      });
+    },
+    findById: function findById( pid, callback ) {
+      if ( !pid ) {
+        callback( "not enough parameters for search" );
+        return;
+      }
+
+      Project.find({ where: { id: pid } } ).complete( function( err, project ) {
+        callback( err, project );
+      });
+
+    },
+    isDBOnline: function isDBOnline() {
+      return dbOnline;
+    },
+    updateProject: function updateProject( email, pid, data, callback ) {
+      if ( !email || !pid || !data ) {
+        callback( "not enough parameters to update" );
+        return;
+      }
+
+      Project.find( { where: { email: email, id: pid } } )
+      .success(function( project ) {
+        project.updateAttributes({
+          data: JSON.stringify( data.data ),
+          email: email,
+          name: data.name,
+          author: data.author || "",
+          template: data.template
+        })
+        .complete( function(err, result) {
+          callback( err, result );
+        });
+      })
+      .error(function( error ) {
+        callback( error );
+      });
+    }
+  };
 };

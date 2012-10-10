@@ -12,6 +12,7 @@ dist
 *.mp4
 *.wav
 *.mp3
+*.sqlite
 node_modules
 cornfield/view
 css/butter.ui.css

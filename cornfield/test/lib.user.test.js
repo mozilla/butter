@@ -1,5 +1,5 @@
 var test = require( "tap" ).test,
-    user = require( "../lib/user" ),
+    user,
     mockEmail = "test@example.org",
     mockData = {
       data: {
@@ -10,14 +10,28 @@ var test = require( "tap" ).test,
       author: "Test User",
       template: "basic"
     },
-    id;
+    id,
+    callback;
+
+test( "db setup", function( t ) {
+  user = require( "../lib/user" )({
+    database: "popcorn",
+    options: {
+      dialect: "sqlite",
+      storage: ":memory:",
+      logging: false
+    }
+  }, function( err ) {
+    t.end();
+  });
+});
 
 test( "createProject valid parameters", function( t ) {
   t.plan( 6 );
 
   var mockCallback = function( err, project ) {
         // Store ID for later tests
-        id = project._id;
+        id = project.id;
 
         t.ok( project, "Project has data" );
         t.equal( project.data, JSON.stringify( mockData.data ), "Properly Set Data of Project" );
@@ -94,7 +108,7 @@ test( "deleteProject valid parameters", function( t ) {
           t.end();
         };
 
-        user.deleteProject( mockEmail, project._id, deleteCallback );
+        user.deleteProject( mockEmail, project.id, deleteCallback );
       };
 
   user.createProject( mockEmail, mockData, mockCallback );
@@ -131,7 +145,7 @@ test( "findById valid parameters", function( t ) {
 
   var mockCallback = function( err, project ) {
         t.ok( project, "Successfully received a project" );
-        t.deepEqual( project._id, id, "ID of retrieved project matches." );
+        t.deepEqual( project.id, id, "ID of retrieved project matches." );
 
         t.end();
       };
@@ -157,7 +171,7 @@ test( "findProject valid parameters", function( t ) {
 
   var mockCallback = function( err, project ) {
         t.ok( project, "Project was retrieved" );
-        t.deepEqual( project._id, id, "Project has correct id" );
+        t.deepEqual( project.id, id, "Project has correct id" );
         t.equal( project.data, JSON.stringify( mockData.data ), "Properly Set Data of Project" );
         t.equal( project.email, mockData.email, "Properly Set Email of Project" );
         t.equal( project.name, mockData.name, "Properly Set Name of Project" );
@@ -257,13 +271,3 @@ test( "updateProject invalid parameters - Email", function( t ) {
 
   user.updateProject( null, id, mockData, mockCallback );
 });
-
-test( "close DBConnection", function( t ) {
-  t.plan( 1 );
-
-  user.closeDBConnection(function() {
-    t.ok( true, "DB Connection was closed" );
-    t.end();
-  });
-});
-

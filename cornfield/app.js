@@ -8,10 +8,10 @@ var express = require('express'),
     app = express.createServer(),
     clientSessions = require('client-sessions'),
     lessMiddleware = require('less-middleware'),
-    User = require( './lib/user' ),
+    CONFIG = require('config'),
+    User = require( './lib/user' )( CONFIG.database ),
     filter = require( './lib/filter' )( User.isDBOnline ),
     sanitizer = require( './lib/sanitizer' ),
-    CONFIG = require('config'),
     TEMPLATES_DIR =  CONFIG.dirs.templates,
     PUBLISH_DIR = CONFIG.dirs.publish,
     PUBLISH_DIR_V = path.join( PUBLISH_DIR, 'v' ),
@@ -20,7 +20,7 @@ var express = require('express'),
     PUBLISH_PREFIX_V = CONFIG.dirs.hostname + "/v",
     PUBLISH_PREFIX_E = CONFIG.dirs.hostname + "/e",
     REPORTS_DIR = path.join( PUBLISH_DIR, "crash" ),
-    WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot );
+    WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot ),
     VALID_TEMPLATES = CONFIG.templates,
     EXPORT_ASSETS = CONFIG.exportAssets;
 
@@ -262,7 +262,7 @@ app.post( '/api/publish/:id',
       }
 
       // This is a query string-only URL because of the <base> tag
-      var remixUrl = "?savedDataUrl=/api/remix/" + project._id;
+      var remixUrl = "?savedDataUrl=/api/remix/" + project.id;
 
       writeEmbed( path.join( PUBLISH_DIR_E, id + ".html" ),
                   res, path.join( PUBLISH_PREFIX_E, id + ".html" ),
@@ -299,11 +299,11 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
       if ( project.template && VALID_TEMPLATES[ project.template ] ) {
         userProjects.push({
           // make sure _id is a string. saw some strange double-quotes on output otherwise
-          _id: String(project._id),
+          _id: String(project.id),
           name: sanitizer.escapeHTML( project.name ),
           template: project.template,
           href: path.relative( WWW_ROOT, templateConfigs[ project.template ].template ) +
-            "?savedDataUrl=/api/project/" + project._id
+            "?savedDataUrl=/api/project/" + project.id
         });
       }
     });
