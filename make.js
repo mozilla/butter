@@ -56,7 +56,7 @@ function publishVersionInfo( versionConfig ) {
       butterDir = '.';
 
   JSON.stringify({
-    date: Date.now(),
+    date: (new Date()).toJSON(),
     version: env.VERSION || 'development',
     popcorn: gitDescribe( popcornDir ),
     butter: gitDescribe( butterDir )

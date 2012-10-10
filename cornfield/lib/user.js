@@ -6,7 +6,8 @@ module.exports = function( config, dbReadyFn ) {
   var dbOnline = false,
       Sequelize = require( "sequelize" ),
       sequelize = new Sequelize( config.database, config.username, config.password, config.options ),
-      Project = sequelize.import( __dirname + "/models/project" );
+      Project = sequelize.import( __dirname + "/models/project" ),
+      versions = require( "../config/versions.json" );
 
   sequelize.sync().complete(function( err ) {
     if ( !err) {
@@ -30,7 +31,9 @@ module.exports = function( config, dbReadyFn ) {
         email: email,
         name: data.name,
         author: data.author || "",
-        template: data.template
+        template: data.template,
+        originalButterVersion: versions.butter,
+        latestButterVersion: versions.butter
       });
 
       project.save().complete(function( err, result ) {
@@ -100,7 +103,8 @@ module.exports = function( config, dbReadyFn ) {
           email: email,
           name: data.name,
           author: data.author || "",
-          template: data.template
+          template: data.template,
+          latestButterVersion: versions.butter
         })
         .complete( function(err, result) {
           callback( err, result );
