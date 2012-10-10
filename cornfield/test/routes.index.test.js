@@ -161,7 +161,7 @@ test("create project with no data", function(t) {
 test("create project valid", function(t) {
   mockUser.error = false;
 
-  var mockData = mockUser.generateMockData(1234);
+  var mockData = mockUser.generateMockData();
   mockData.data = JSON.parse(mockData.data);
   delete mockData.id;
 
@@ -171,14 +171,8 @@ test("create project valid", function(t) {
     .end(function(err, res) {
       t.equal(res.statusCode, 200, "status code is 200");
       t.equal(res.type, "application/json", "response type is json");
-      t.equal(res.body.error, "okay");
-
-      var id = res.body.project.id;
-      t.ok(id, "id is present");
-      delete res.body.project.id;
-
-      mockData.data = JSON.stringify(mockData.data);
-      t.deepEqual(res.body.project, mockData, "saved data is equal");
+      t.equal(res.body.error, "okay", "status is okay");
+      t.ok(res.body.projectId, "id is present");
 
       t.end();
     });
