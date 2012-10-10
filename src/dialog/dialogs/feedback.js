@@ -2,22 +2,40 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define( [ "text!dialog/dialogs/feedback.html", "dialog/dialog" ],
-  function( LAYOUT_SRC, Dialog ) {
+define( [ "text!dialog/dialogs/feedback.html", "dialog/dialog", "util/xhr" ],
+  function( LAYOUT_SRC, Dialog, XHR ) {
     Dialog.register( "feedback", LAYOUT_SRC, function ( dialog ) {
       var rootElement = dialog.rootElement,
           updateBtn = rootElement.querySelector( ".update" ),
           infoBtn = rootElement.querySelector( ".icon-info-sign" ),
-          dialogInfo = rootElement.querySelector( ".dialog-info" );
+          dialogInfo = rootElement.querySelector( ".dialog-info" ),
+          browserSpan = rootElement.querySelector( "#browser" ),
+          browserInfo = navigator.userAgent,
+          dateSpan = rootElement.querySelector( "#date" ),
+          dateInfo = (new Date()).toDateString(),
+          commentsTextArea = rootElement.querySelector( "#comments" );
+
+      // Show the user what we're collecting
+      browserSpan.innerHTML = browserInfo;
+      dateSpan.innerHTML = dateInfo;
 
       updateBtn.addEventListener( "click", function() {
-        dialog.activity( "default-close" );
+        if( commentsTextArea.value ) {
+          var commentsReport = {
+            date: dateInfo,
+            browser: browserInfo,
+            comments: commentsTextArea.value
+          };
+          XHR.post( "/feedback", JSON.stringify( commentsReport, null, 4 ),
+                    function(){ /* fire and forget */ }, "text/json" );
+          dialog.activity( "default-close" );
+        }
       }, false );
 
       infoBtn.addEventListener( "click", function() {
         dialogInfo.classList.toggle( "dialog-hidden" );
       }, false );
-      
+
       dialog.enableCloseButton();
       dialog.assignEscapeKey( "default-close" );
     });
