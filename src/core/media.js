@@ -47,7 +47,6 @@
                 _this.dispatch( "mediavolumechange", _popcornWrapper.volume );
               },
               timeupdate: function(){
-                _currentTime = _popcornWrapper.currentTime;
                 _this.dispatch( "mediatimeupdate", _this );
               },
               pause: function(){
@@ -65,6 +64,10 @@
               },
               seeked: function(){
                 _this.dispatch( "mediaseeked" );
+              },
+              seeking: function() {
+                _currentTime = _popcornWrapper.currentTime;
+                _this.dispatch( "mediaseeking" );
               }
             },
             prepare: function(){
