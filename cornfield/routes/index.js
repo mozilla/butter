@@ -1,6 +1,11 @@
 'use strict';
 
 module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBED_SUFFIX ) {
+
+  var uuid = require( "node-uuid" ),
+      // Keep track of whether this is production or development
+      deploymentType = app.settings.env === "production" ? "production" : "development";
+
   app.get( '/api/whoami', filter.isLoggedIn, filter.isXHR, function( req, res ) {
     var email = req.session.email;
 
@@ -123,6 +128,35 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
     });
   });
 
+  function formatDate( d ) {
+    // YYYY-MM-DD
+    d = d || new Date();
+
+    function pad( n ) {
+      return n < 10 ? '0' + n : n;
+    }
+    return ( d.getUTCFullYear() + '-' +
+             pad( d.getUTCMonth() + 1 ) + '-' +
+             pad( d.getUTCDate() ) );
+  }
+
+  function generateUniqueName( keys ) {
+    // Generate a unique name, with formatting to support analysis later on.
+    // The format is:
+    // <key1>=<value1>/<key2>=<value2>/<key..>=<value..>/<unique blob name>
+    // For example:
+    // dt=2012-05-31T20:00/deployment=production/64432AE8-7132-4C01-BD5E-AE49BC343CC8
+
+    // Serialize keys array
+    var keysString = '';
+    keys.forEach( function( key ) {
+      keysString += key.name + '=' + key.value + '/';
+    });
+    keysString = keysString.replace( /\/$/, '' );
+
+    return keysString + '/' + uuid.v4();
+  }
+
   function storeData( req, res, store ) {
     var s = '';
 
@@ -131,8 +165,11 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
     });
 
     req.addListener( 'end', function() {
-      var id = Date.now();
-      store.write( id, s, function() {
+      var name = generateUniqueName([
+        { name: 'dt', value: formatDate() },
+        { name: 'deployment', value: deploymentType }
+      ]);
+      store.write( name, s, function() {
         res.writeHead( 200, { 'content-type': 'text/plain' } );
         res.end();
       });

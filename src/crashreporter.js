@@ -66,6 +66,7 @@ define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI 
         var popcornVersion = window.Popcorn ? window.Popcorn.version : "unknown",
             butterVersion = window.Butter ? window.Butter.version : "unknown",
             crashReport = {
+              date: (new Date()).toDateString(),
               message: message,
               url: url,
               lineno: lineno,

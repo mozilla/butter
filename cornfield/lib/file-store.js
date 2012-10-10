@@ -2,8 +2,15 @@ var fs = require( 'fs' ),
     knox = require( 'knox' ),
     Path = require( 'path' );
 
-// Make sure the path exists, and if not create
+// Make sure the dir exists, and its parent. Create if not.
 function ensurePathExists( path ) {
+  var parent = Path.dirname( path );
+
+  // Build paths above too, if not present.
+  if( parent !== "." ) {
+    ensurePathExists( parent );
+  }
+
   if( !fs.existsSync( path ) ) {
     fs.mkdirSync( path );
   }
@@ -37,8 +44,6 @@ function LocalFileStore( options ) {
     throw 'LocalFileStore Error: expected root';
   }
   this.root = options.root;
-  // Make sure the root dir exists, and if not create
-  ensurePathExists( this.root );
 
   // An optional prefix for all filenames.  Will be joined with /
   // For example: filename=foo namePrefix=v becomes v/foo
@@ -58,7 +63,15 @@ LocalFileStore.prototype = Object.create( BaseFileStore );
 
 LocalFileStore.prototype.write = function( path, data, callback ) {
   path = Path.join( this.root, this.expand( path ) );
-  fs.writeFile( path, data, callback );
+  ensurePathExists( Path.dirname( path ) );
+
+  fs.writeFile( path, data, function( err ) {
+    if (err) {
+      callback( err );
+    } else {
+      callback();
+    }
+  });
 };
 
 LocalFileStore.prototype.remove = function( path, callback ) {
