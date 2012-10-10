@@ -4,6 +4,7 @@
   "debug": true,
   "scrapePage": false,
   "makeVideoURLsUnique": false,
+  "recover": "purge",
   "ui": {
     "enabled": false,
     "trackEventHighlight": "click"
