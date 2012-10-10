@@ -111,6 +111,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           blinkTarget( corn.target );
         }
       }
+      butter.editor.editTrackEvent( e.data.trackEvent );
     }
 
     function onTrackEventDragStarted( e ){

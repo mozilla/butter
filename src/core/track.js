@@ -108,9 +108,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
           if( importData.trackEvents ){
             var importTrackEvents = importData.trackEvents;
             for( var i=0, l=importTrackEvents.length; i<l; ++i ){
-              var newTrackEvent = new TrackEvent();
-              newTrackEvent.json = importTrackEvents[ i ];
-              _this.addTrackEvent( newTrackEvent );
+              _this.addTrackEvent( importTrackEvents[ i ] );
             }
           }
         }
