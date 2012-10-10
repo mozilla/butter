@@ -22,28 +22,33 @@
      *                    {Function} end: Fucntion to execute on drag end event
      */
     global.EditorHelper.draggable = function( trackEvent, dragContainer, mediaContainer, options ) {
-      var media = mediaContainer.getBoundingClientRect(),
-          iframeVideo = mediaContainer.querySelector( "iframe" );
+      var media = mediaContainer.getBoundingClientRect();
 
       options = options || {};
 
-      $( dragContainer ).draggable({
-        handle: options.handle,
-        containment: "parent",
-        start: function() {
-          if ( iframeVideo ) {
-            iframeVideo.style.pointerEvents = "none";
-          }
+      function createHelper( suffix ) {
+        var el = document.createElement( "div" );
+        el.classList.add( "ui-draggable-handle" );
+        el.classList.add( "ui-draggable-" + suffix );
+        return el;
+      }
 
+      dragContainer.appendChild( createHelper( "top" ) );
+      dragContainer.appendChild( createHelper( "bottom" ) );
+      dragContainer.appendChild( createHelper( "left" ) );
+      dragContainer.appendChild( createHelper( "right" ) );
+      dragContainer.appendChild( createHelper( "grip" ) );
+
+      $( dragContainer ).draggable({
+        handle: ".ui-draggable-handle",
+        containment: "parent",
+        iframeFix: true,
+        start: function() {
           if ( options.start ) {
             options.start();
           }
         },
         stop: function( event, ui ) {
-          if ( iframeVideo ) {
-            iframeVideo.style.pointerEvents = "auto";
-          }
-
           if ( options.end ) {
             options.end();
           }
@@ -55,6 +60,8 @@
         }
       });
     };
+
+
 
     /**
      * Member: resizable
@@ -165,9 +172,8 @@
         }
       };
       onMouseDown = function( e ) {
-        if ( !e.shiftKey ) {
-          e.stopPropagation();
-        }
+        e.stopPropagation();
+        $( contentContainer ).draggable( "destroy" );
       };
 
       for ( var i = 0, l = contentContainers.length; i < l; i++ ) {

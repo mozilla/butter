@@ -323,6 +323,12 @@ function buildCSS(compress) {
   });
 
   lessToCSS({
+    lessFile: "templates/assets/css/jquery-ui/jquery.ui.butter.less",
+    cssFile: "templates/assets/css/jquery-ui/jquery.ui.butter.css",
+    compress: compress
+  });
+
+  lessToCSS({
     lessFile: "css/embed.less",
     cssFile: "css/embed.css",
     compress: compress

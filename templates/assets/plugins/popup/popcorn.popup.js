@@ -223,7 +223,7 @@
           context = this,
           audio,
           width = options.width + "%",
-          top,
+          top = options.top + "%",
           left = options.left + "%",
           i,
           fontSheet,
@@ -241,23 +241,6 @@
 
       if ( !target ) {
         target = context.media.parentNode;
-      }
-
-      // There is a bug with jQueryUI dragging with Chrome allowing us to be able to drag it beyond the
-      // parent element.
-      if ( options.type !== "popup" ) {
-        var vidContainerHeight = context.media.parentNode.getBoundingClientRect().height,
-            paddingHeight = ( ( vidContainerHeight - 10 ) / vidContainerHeight ) * 100;
-
-        if ( vidContainerHeight && options.top > paddingHeight ) {
-          top = paddingHeight;
-        } else {
-          top = options.top;
-        }
-
-        top += "%";
-      } else {
-        top = options.top + "%";
       }
 
       options._target = target;
