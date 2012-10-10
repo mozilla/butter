@@ -321,6 +321,10 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       }
     };
 
+    this.getTrackWidth = function() {
+      return _container.offsetWidth;
+    };
+
     Object.defineProperties( this, {
       element: {
         enumerable: true,

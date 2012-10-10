@@ -35,19 +35,9 @@ define( [
       });
     } //if
 
-    this.findAbsolutePosition = function( obj ){
-      var curleft = 0,
-          curtop = 0;
-
-      if( obj.offsetParent ) {
-        do {
-          curleft += obj.offsetLeft;
-          curtop += obj.offsetTop;
-        } while ( ( obj = obj.offsetParent ) );
-      }
-      //returns an array
-      return [ curleft, curtop ];
-    }; //findAbsolutePosition
+    this.getCurrentTrackWidth = function() {
+      return _currentMedia.trackContainer.getTrackWidth();
+    };
 
     butter.listen( "mediaadded", function( event ){
       var mediaObject = event.data,
@@ -85,6 +75,7 @@ define( [
       butter.listen( "mediachanged", mediaChanged );
       butter.listen( "mediaremoved", mediaRemoved );
     });
+
   }; //Timeline
 
   Timeline.__moduleName = "timeline";
