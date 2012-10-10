@@ -102,6 +102,11 @@
           label: "Text",
           "default": "Pop!"
         },
+        linkUrl: {
+          elem: "input",
+          type: "url",
+          label: "Link URL"
+        },
         type: {
           elem: "select",
           options: [ "Popup", "Speech", "Thought Bubble" ],
@@ -227,7 +232,9 @@
           innerDiv = document.createElement( "div" ),
           textContainer = document.createElement( "div" ),
           text = options.text,
-          node,
+          node = document.createElement( "span" ),
+          link = document.createElement( "a" ),
+          linkUrl = options.linkUrl,
           img,
           TRIANGLE_WIDTH = 40,
           TRIANGLE_HEIGHT = 60;
@@ -359,21 +366,42 @@
       innerDiv = document.createElement( "div" );
       textContainer = document.createElement( "div" );
 
-      text = text.split( /[\n\r]/ );
-      for ( i = 0; i < text.length; i++ ) {
-        if ( i ) {
-          textContainer.appendChild( document.createElement( "br" ) );
-        }
-        node = document.createElement( "span" );
-        node.appendChild( document.createTextNode( text[ i ] ) );
-        textContainer.appendChild( node );
-      }
-
       textContainer.style.fontStyle = options.fontDecorations.italics ? "italic" : "normal";
       textContainer.style.color = options.fontColor ? options.fontColor : "#668B8B";
       textContainer.style.textDecoration = options.fontDecorations.underline ? "underline" : "none";
       textContainer.style.fontSize = options.fontSize ? options.fontSize + "px" : "12px";
       textContainer.style.fontWeight = options.fontDecorations.bold ? "bold" : "normal";
+
+      text = text.split( /[\n\r]/ );
+      for ( i = 0; i < text.length; i++ ) {
+        node = document.createElement( "span" );
+        node.appendChild( document.createTextNode( text[ i ] ) );
+        
+        if ( linkUrl ) {
+          if ( i ) {
+            link.appendChild( document.createElement( "br" ) );
+          }
+          link.appendChild( node );
+        } else {
+          if ( i ) {
+            textContainer.appendChild( document.createElement( "br" ) );
+          }
+          textContainer.appendChild( node );
+        }
+      }
+
+      if ( linkUrl ) {
+        link.href = linkUrl;
+        link.target = "_blank";
+
+        link.addEventListener( "click", function( e ) {
+          context.media.pause();
+        }, false );
+
+        link.style.color = options.fontColor;
+
+        textContainer.appendChild( link );
+      }
 
       innerDiv.appendChild( textContainer );
       container.appendChild( innerDiv );

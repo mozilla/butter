@@ -7,6 +7,25 @@
   visibility: hidden;
 }
 
+.text-inner-div a {
+  text-decoration: none;
+}
+.text-inner-div a:after {
+  content: "";
+  display: inline-block;
+  opacity: 0.2;
+  background-position: -336px -96px;
+  background-image: url( "../../../../resources/glyphicons-halflings-green.png" );
+  width: 14px;
+  height: 14px;
+}
+.text-inner-div a:hover {
+  text-decoration: underline;
+}
+.text-inner-div a:hover:after {
+  opacity: 1;
+}
+
 .text-fixed {
   position: absolute;
   width: 100%;
@@ -26,7 +45,7 @@
   padding: 20px;
 }
 
-.text-fixed > div > span > div {
+.text-fixed > div > span > a {
   position: relative;
   display: inline-block;
 }
@@ -65,19 +84,6 @@
   padding: 0;
 }
 
-/* Placeholders */
-.popcorn-text .sparkly {
-
-}
-
-.popcorn-text .shiny {
-
-}
-
-.popcorn-text .big {
-
-}
-
-.popcorn-text .small {
-
+[contenteditable="true"]:focus {
+  outline: none;
 }

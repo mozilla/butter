@@ -383,7 +383,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
       if ( element.type === "textarea" ) {
         tooltipName = "shift-enter-tooltip-" + Date.now();
 
-        ToolTip.create({
+        extendObject.createTooltip( element, {
           name: tooltipName,
           element: element.parentElement,
           message: "Press Shift+Enter for a new line.",
@@ -392,15 +392,6 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
           hidden: true,
           hover: false
         });
-
-        tooltip = ToolTip.get( tooltipName );
-
-        element.addEventListener( "focus", function( e ) {
-          tooltip.hidden = false;
-        }, false );
-        element.addEventListener( "blur", function( e ) {
-          tooltip.hidden = true;
-        }, false );
       }
     };
 

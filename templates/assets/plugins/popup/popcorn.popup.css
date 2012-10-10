@@ -117,6 +117,25 @@
   word-wrap: break-word;
 }
 
+.popup-inner-div a {
+  text-decoration: none;
+}
+.popup-inner-div a:after {
+  content: "";
+  display: inline-block;
+  opacity: 0.2;
+  background-position: -336px -96px;
+  background-image: url( "../../../../resources/glyphicons-halflings-green.png" );
+  width: 14px;
+  height: 14px;
+}
+.popup-inner-div a:hover {
+  text-decoration: underline;
+}
+.popup-inner-div a:hover:after {
+  opacity: 1;
+}
+
 .popcorn-popup .popup-icon { 
   position: absolute; 
   z-index: 2; 
@@ -125,4 +144,8 @@
 
 .popcorn-popup .popup-icon + div {
   padding-left: 12px;
+}
+
+[contenteditable="true"]:focus {
+  outline: none;
 }
