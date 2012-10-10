@@ -35,6 +35,21 @@ module.exports = function(sequelize, DataTypes) {
       validate: {
         isAlphanumeric: true
       }
+    },
+    // The original version of Butter that was used when project
+    // was first created. This will usually be the same as
+    // latestButterVersion, but could be different (i.e., a newer
+    // version of Butter was used to edit a project), and gives
+    // some insight into what was used originally, in case of
+    // breaking changes.
+    originalButterVersion: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    // The latest version of Butter that was used to save the project.
+    latestButterVersion: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
   });
 };
