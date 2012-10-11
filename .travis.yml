@@ -1,3 +1,9 @@
 language: node_js
 node_js:
   - 0.8
+before_script: node make check
+notifications:
+  irc:
+    channels:
+      - "irc.mozilla.org#popcorn"
+    on_success: change
