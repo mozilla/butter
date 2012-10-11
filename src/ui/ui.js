@@ -480,6 +480,7 @@ define( [ "core/eventmanager", "./toggler",
           // Delete the events.
           for( i = 0; i < l; i++ ) {
             selectedEvent = selectedEvents[ i ];
+            butter.editor.closeTrackEventEditor( selectedEvent );
             selectedEvent.track.removeTrackEvent( selectedEvent );
           }
         }

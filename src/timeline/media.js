@@ -172,6 +172,9 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         trackEvent.view.listen( "trackeventdragstarted", onTrackEventDragStarted );
         trackEvent.view.listen( "trackeventmouseup", onTrackEventMouseUp );
         trackEvent.view.listen( "trackeventmousedown", onTrackEventMouseDown );
+        trackEvent.view.element.addEventListener( "click", function( e ) {
+          butter.editor.editTrackEvent( trackEvent );
+        });
         if( _trackEventHighlight === "hover" ){
           trackEvent.view.listen( "trackeventmouseover", onTrackEventMouseOver );
           trackEvent.view.listen( "trackeventmouseout", onTrackEventMouseOut );
