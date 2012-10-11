@@ -45,8 +45,9 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
     };
 
     this.updateTrackEvents = function() {
-      for ( var i = 0, l = _trackEvents.length; i < l; i++ ) {
-        _trackEvents[ i ].update();
+      var trackEvents = _trackEvents.slice();
+      for ( var i = 0, l = trackEvents.length; i < l; i++ ) {
+        trackEvents[ i ].update();
       }
     };
 
@@ -140,6 +141,35 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       } //for
     }; //getTrackEventByName
 
+    function trackEventUpdateNotificationHandler( notification ) {
+      var trackEvent = notification.origin,
+          updateOptions = notification.data,
+          currentOptions = trackEvent.popcornOptions,
+          start = updateOptions.start || updateOptions.start === 0 ? updateOptions.start : currentOptions.start,
+          end = updateOptions.end || updateOptions.end === 0 ? updateOptions.end : currentOptions.end,
+          destinationTrack,
+          nextTrack;
+
+      // If the update will cause this event to overlap with another ...
+      if ( trackEvent.track.findOverlappingTrackEvent( start, end, trackEvent ) ) {
+        // reject the update by cancelling the notifiction;
+        notification.cancel( "trackevent-overlap" );
+
+        // remove the incriminating trackEvent to avoid conflicts;
+        _this.removeTrackEvent( trackEvent );
+
+        // find another track for the trackEvent to live on;
+        nextTrack = _this._media.getNextTrack( _this );
+        destinationTrack = nextTrack ? _this._media.forceEmptyTrackSpaceAtTime( nextTrack, start, end ) : _this._media.addTrack();
+
+        // update the track with the updateOptions that were first issued;
+        trackEvent.update( updateOptions );
+
+        // and, finally, place the track in its new home.
+        destinationTrack.addTrackEvent( trackEvent );
+      }
+    }
+
     this.addTrackEvent = function ( trackEvent ) {
       var oldSelected = trackEvent ? !!trackEvent.selected : false;
 
@@ -171,6 +201,8 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
 
       trackEvent.selected = oldSelected;
 
+      trackEvent.subscribe( "update", trackEventUpdateNotificationHandler );
+
       _this.dispatch( "trackeventadded", trackEvent );
 
       return trackEvent;
@@ -190,6 +222,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
           "trackeventselected",
           "trackeventdeselected"
         ]);
+        trackEvent.unsubscribe( "update", trackEventUpdateNotificationHandler );
         _view.removeTrackEvent( trackEvent );
         trackEvent.unbind();
         _this.dispatch( "trackeventremoved", trackEvent );

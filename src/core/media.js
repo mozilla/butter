@@ -71,11 +71,7 @@
               _this.duration = _popcornWrapper.duration;
               _ready = true;
               for( var i = 0, l = _tracks.length; i < l; i++ ) {
-                var te = _tracks[ i ].trackEvents;
-                for( var j = 0, k = te.length; j < k; j++ ) {
-                  // should call _popcornWrapper.updateEvent( te[ j ] ) circuitously
-                  te[ j ].update();
-                }
+                _tracks[ i ].updateTrackEvents();
               }
 
               // If the target element has a `data-butter-media-controls` property,

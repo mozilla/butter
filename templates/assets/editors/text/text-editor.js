@@ -10,60 +10,8 @@
     var _this = this;
 
     var _rootElement = rootElement,
-        _messageContainer = _rootElement.querySelector( "div.error-message" ),
         _trackEvent,
         _butter;
-
-    /**
-     * Member: setErrorState
-     *
-     * Sets the error state of the editor, making an error message visible
-     *
-     * @param {String} message: Error message to display
-     */
-    function setErrorState( message ) {
-      if ( message ) {
-        _messageContainer.innerHTML = message;
-        _messageContainer.parentNode.style.height = _messageContainer.offsetHeight + "px";
-        _messageContainer.parentNode.style.visibility = "visible";
-        _messageContainer.parentNode.classList.add( "open" );
-      }
-      else {
-        _messageContainer.innerHTML = "";
-        _messageContainer.parentNode.style.height = "";
-        _messageContainer.parentNode.style.visibility = "";
-        _messageContainer.parentNode.classList.remove( "open" );
-      }
-    }
-
-    /**
-     * Member: updateTrackEventWithoutTryCatch
-     *
-     * Simple handler for updating a TrackEvent when needed
-     *
-     * @param {TrackEvent} trackEvent: TrackEvent to update
-     * @param {Object} updateOptions: TrackEvent properties to update
-     */
-    function updateTrackEventWithoutTryCatch( trackEvent, updateOptions ) {
-      trackEvent.update( updateOptions );
-    }
-
-    /**
-     * Member: updateTrackEventWithTryCatch
-     *
-     * Attempt to update the properties of a TrackEvent; set the error state if a failure occurs.
-     *
-     * @param {TrackEvent} trackEvent: TrackEvent to update
-     * @param {Object} properties: TrackEvent properties to update
-     */
-    function updateTrackEventWithTryCatch( trackEvent, properties ) {
-      try {
-        trackEvent.update( properties );
-      }
-      catch ( e ) {
-        setErrorState( e.toString() );
-      }
-    }
 
     /**
      * Member: setup
@@ -89,7 +37,7 @@
 
         function colorCallback( te, prop, message ) {
           if ( message ) {
-            setErrorState( message );
+            _this.setErrorState( message );
             return;
           } else {
             te.update({
@@ -103,7 +51,7 @@
             option = pluginOptions[ key ];
 
             if ( option.elementType === "select" ) {
-              _this.attachSelectChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
+              _this.attachSelectChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
             }
             else if ( option.elementType === "input" ) {
               if ( key === "linkUrl" ) {
@@ -119,18 +67,18 @@
               }
 
               if ( option.element.type === "checkbox" ) {
-                _this.attachCheckboxChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
+                _this.attachCheckboxChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
               } else if ( key === "fontColor" ) {
                 _this.attachColorChangeHandler( option.element, option.trackEvent, key, colorCallback );
               }
               else {
-                _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
+                _this.attachInputChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
               }
             }
           }
         }
 
-        basicContainer.insertBefore( _this.createStartEndInputs( trackEvent, updateTrackEventWithTryCatch ), basicContainer.firstChild );
+        basicContainer.insertBefore( _this.createStartEndInputs( trackEvent, _this.updateTrackEventSafe ), basicContainer.firstChild );
       }
 
       _this.createPropertiesFromManifest({
@@ -138,12 +86,12 @@
         callback: callback,
         basicContainer: basicContainer,
         advancedContainer: advancedContainer,
-        safeCallback: updateTrackEventWithTryCatch,
         ignoreManifestKeys: [ "start", "end" ]
       });
 
       attachHandlers();
       _this.updatePropertiesFromManifest( trackEvent );
+      _this.setTrackEventUpdateErrorCallback( _this.setErrorState );
     }
 
     function clicking( e ) {
@@ -174,7 +122,7 @@
           anchorClickPrevention( anchorContainer );
 
           _this.updatePropertiesFromManifest( _trackEvent );
-          setErrorState( false );
+          _this.setErrorState( false );
         });
         setup( trackEvent );
       },

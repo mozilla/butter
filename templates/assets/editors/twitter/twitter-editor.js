@@ -8,72 +8,29 @@
     function( rootElement, butter, compiledLayout ) {
 
     var _rootElement = rootElement,
-        _messageContainer = _rootElement.querySelector( "div.error-message" ),
         _trackEvent,
         _butter,
         _maxTweets,
         _this = this;
 
     /**
-     * Member: setErrorState
+     * Member: updateTrackEvent
      *
-     * Sets the error state of the editor, making an error message visible
-     *
-     * @param {String} message: Error message to display
-     */
-    function setErrorState( message ) {
-      var messageParent = _messageContainer.parentNode,
-          messageStyle = messageParent.style;
-
-      if ( message ) {
-        _messageContainer.innerHTML = message;
-        messageStyle.height = _messageContainer.offsetHeight + "px";
-        messageStyle.visibility = "visible";
-        messageParent.classList.add( "open" );
-      }
-      else {
-        _messageContainer.innerHTML = "";
-        messageStyle.height = "";
-        messageStyle.visibility = "";
-        messageParent.classList.remove( "open" );
-      }
-    }
-
-    /**
-     * Member: updateTrackEventWithoutTryCatch
-     *
-     * Simple handler for updating a TrackEvent when needed
+     * Simple handler for updating a TrackEvent when needed.
      *
      * @param {TrackEvent} trackEvent: TrackEvent to update
      * @param {Object} updateOptions: TrackEvent properties to update
      */
-    function updateTrackEventWithoutTryCatch( trackEvent, updateOptions ) {
+    function updateTrackEvent( trackEvent, updateOptions ) {
       if ( updateOptions.numberOfTweets ) {
         if ( updateOptions.numberOfTweets > _maxTweets ) {
           updateOptions.numberOfTweets = _maxTweets;
-          setErrorState( "The maximum number of tweets you may retrieve is " + _maxTweets + "." );
+          _this.setErrorState( "The maximum number of tweets you may retrieve is " + _maxTweets + "." );
           return;
         }
       }
 
-      trackEvent.update( updateOptions );
-    }
-
-    /**
-     * Member: updateTrackEventWithTryCatch
-     *
-     * Attempt to update the properties of a TrackEvent; set the error state if a failure occurs.
-     *
-     * @param {TrackEvent} trackEvent: TrackEvent to update
-     * @param {Object} properties: TrackEvent properties to update
-     */
-    function updateTrackEventWithTryCatch( trackEvent, properties ) {
-      try {
-        trackEvent.update( properties );
-      }
-      catch ( e ) {
-        setErrorState( e.toString() );
-      }
+      _this.updateTrackEventSafe( trackEvent, updateOptions );
     }
 
     /**
@@ -159,28 +116,28 @@
             option = pluginOptions[ key ];
 
             if ( option.elementType === "select" ) {
-              _this.attachSelectChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
+              _this.attachSelectChangeHandler( option.element, option.trackEvent, key, updateTrackEvent );
             }
             else if ( option.elementType === "input" ) {
-              _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEventWithoutTryCatch );
+              _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateTrackEvent );
             }
           }
         }
       }
 
-      startEndElement = _this.createStartEndInputs( trackEvent, updateTrackEventWithTryCatch );
+      startEndElement = _this.createStartEndInputs( trackEvent, _this.updateTrackEventSafe );
       container.insertBefore( startEndElement, container.firstChild );
 
       _this.createPropertiesFromManifest({
         trackEvent: trackEvent,
         callback: callback,
         basicContainer: container,
-        ignoreManifestKeys: ignoreKeys,
-        safeCallback: updateTrackEventWithTryCatch
+        ignoreManifestKeys: ignoreKeys
       });
 
       attachHandlers();
       _this.updatePropertiesFromManifest( trackEvent );
+      _this.setTrackEventUpdateErrorCallback( _this.setErrorState );
 
     }
 
@@ -191,7 +148,7 @@
         // Update properties when TrackEvent is updated
         trackEvent.listen( "trackeventupdated", function ( e ) {
           _this.updatePropertiesFromManifest( e.target );
-          setErrorState( false );
+          _this.setErrorState( false );
         });
         setup( trackEvent );
       },

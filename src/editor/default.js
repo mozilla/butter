@@ -27,31 +27,9 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
         _oldOpenEvent = events.open,
         _oldCloseEvent = events.close;
 
-    /**
-     * Member: setErrorState
-     *
-     * Sets the error state of the editor, making an error message visible
-     *
-     * @param {String} message: Error message to display
-     */
-    function setErrorState ( message ) {
-      if ( message ) {
-        _messageContainer.innerHTML = message;
-        _messageContainer.parentNode.style.height = _messageContainer.offsetHeight + "px";
-        _messageContainer.parentNode.style.visibility = "visible";
-        _messageContainer.parentNode.classList.add( "open" );
-      }
-      else {
-        _messageContainer.innerHTML = "";
-        _messageContainer.parentNode.style.height = "";
-        _messageContainer.parentNode.style.visibility = "";
-        _messageContainer.parentNode.classList.remove( "open" );
-      }
-    }
-
     function onTrackEventUpdated( e ) {
       _this.updatePropertiesFromManifest( e.target );
-      setErrorState( false );
+      _this.setErrorState( false );
     }
 
     // Extend this object to become a TrackEventEditor
@@ -64,26 +42,25 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
 
       _trackEvent = trackEvent;
 
-      optionsContainer.appendChild( _this.createStartEndInputs( trackEvent, updateTrackEvent ) );
+      optionsContainer.appendChild( _this.createStartEndInputs( trackEvent, _this.updateTrackEventSafe ) );
 
       _this.createPropertiesFromManifest({
         trackEvent: trackEvent,
         callback: function( elementType, element, trackEvent, name ) {
           if ( elementType === "select" ) {
-            _this.attachSelectChangeHandler( element, trackEvent, name, updateTrackEvent );
+            _this.attachSelectChangeHandler( element, trackEvent, name, _this.updateTrackEventSafe );
           }
           else {
             if ( element.type === "checkbox" ) {
-              _this.attachCheckboxChangeHandler( element, trackEvent, name, updateTrackEvent );
+              _this.attachCheckboxChangeHandler( element, trackEvent, name, _this.updateTrackEventSafe );
             }
             else {
-              _this.attachInputChangeHandler( element, trackEvent, name, updateTrackEvent );
+              _this.attachInputChangeHandler( element, trackEvent, name, _this.updateTrackEventSafe );
             }
           }
         },
         basicContainer: optionsContainer,
-        ignoreManifestKeys: [ "target", "start", "end" ],
-        safeCallback: updateTrackEvent
+        ignoreManifestKeys: [ "target", "start", "end" ]
       });
 
       if ( trackEvent.manifest.options.target && !trackEvent.manifest.options.target.hidden ) {
@@ -103,6 +80,8 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
 
       _this.scrollbar.update();
 
+      _this.setTrackEventUpdateErrorCallback( _this.setErrorState );
+
       // Update properties when TrackEvent is updated
       trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
 
@@ -118,24 +97,6 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
     };
 
     Editor.TrackEventEditor.extend( _this, butter, rootElement, events );
-
-    /**
-     * Member: updateTrackEvent
-     *
-     * Attempt to update the properties of a TrackEvent; set the error state if a failure occurs.
-     *
-     * @param {TrackEvent} trackEvent: TrackEvent to update
-     * @param {Object} properties: TrackEvent properties to update
-     */
-    function updateTrackEvent( trackEvent, properties ) {
-      try {
-        trackEvent.update( properties );
-      }
-      catch ( e ) {
-        setErrorState( e.toString() );
-      }
-    }
-
   }
 
   Editor.register( "default", LAYOUT_SRC, DefaultEditor );

@@ -324,12 +324,14 @@ define( [ "core/eventmanager", "./toggler",
         };
 
     butter.listen( "trackeventadded", function( e ) {
-      orderedTrackEvents.push( e.data );
+      var trackEvent = e.data;
+      orderedTrackEvents.push( trackEvent );
       orderedTrackEvents.sort( sortTrackEvents );
     }); // listen
 
     butter.listen( "trackeventremoved", function( e ) {
-      var index = orderedTrackEvents.indexOf( e.data );
+      var trackEvent = e.data,
+          index = orderedTrackEvents.indexOf( trackEvent );
       if( index > -1 ){
         orderedTrackEvents.splice( index, 1 );
       } // if
