@@ -243,9 +243,13 @@ define( [], function(){
         }
       }
 
+      if ( !listener ) {
+        throw "Removing listeners without specifying a listener explicitly is prohibited. Please remove listeners directly.";
+      }
+
       // If no listeners exist in the pool any longer, remove the pool and the
       // DOM event listener.
-      if ( !listener || these.length === 0 ){
+      if ( these.length === 0 ){
         delete listeners[ namespacedEventName ];
         document.removeEventListener( namespacedEventName, handler, false );
       }

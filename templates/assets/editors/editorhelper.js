@@ -213,9 +213,8 @@
         _trackEvent = e.data;
       } else if ( e.type === "trackeventupdated" ) {
         _trackEvent = e.target;
-      } else {
-        _trackEvent = e;
       }
+
       if ( plugins[ _trackEvent.type ] ) {
         plugins[ _trackEvent.type ]( _trackEvent, butter.currentMedia.popcorn.popcorn );
       }

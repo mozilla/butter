@@ -23,8 +23,8 @@
           var t = butter.tracks[ 0 ],
               te = t.addTrackEvent( defaultEvent );
 
-          butter.listen( "trackeventremoved", function( e ) {
-            butter.unlisten( "trackeventremoved" );
+          butter.listen( "trackeventremoved", function onTrackEventRemoved( e ) {
+            butter.unlisten( "trackeventremoved", onTrackEventRemoved );
 
             equal( e.data.id, te.id, "Removed correct track event" );
             start();

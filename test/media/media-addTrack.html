@@ -13,9 +13,8 @@
         createButterModule( function( butter ) {
             var track = { name: "TestTrack" };
 
-          butter.listen( "trackadded", function( e ) {
-
-            butter.unlisten( "trackadded" );
+          butter.listen( "trackadded", function onTrackAdded( e ) {
+            butter.unlisten( "trackadded", onTrackAdded );
             equal( e.data.name, track.name, "addTrack returned expected track" );
             start();
           });

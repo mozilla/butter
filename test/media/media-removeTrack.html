@@ -16,12 +16,11 @@
               trackTwo = tracks[ 1 ],
               trackEvent = trackTwo.trackEvents[ 0 ];
 
-          butter.listen( "trackremoved", function( e ) {
+          butter.listen( "trackremoved", function onTrackRemoved( e ) {
+            butter.unlisten( "trackremoved", onTrackRemoved );
+            butter.listen( "trackeventremoved", function onTrackEventRemoved( e ) {
 
-            butter.unlisten( "trackremoved" );
-            butter.listen( "trackeventremoved", function( e ) {
-
-              butter.unlisten( "trackeventremoved" );
+              butter.unlisten( "trackeventremoved", onTrackEventRemoved );
               equal( e.data.id, trackEvent.id, "Successfully sent trackeventremoved for the trackevent on the track" );
               start();
             });

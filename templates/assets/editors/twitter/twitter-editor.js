@@ -141,20 +141,22 @@
 
     }
 
+    function onTrackEventUpdated( e ) {
+      _this.updatePropertiesFromManifest( e.target );
+      _this.setErrorState( false );
+    }
+
     // Extend this object to become a TrackEventEditor
     Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
         _butter = butter;
         // Update properties when TrackEvent is updated
-        trackEvent.listen( "trackeventupdated", function ( e ) {
-          _this.updatePropertiesFromManifest( e.target );
-          _this.setErrorState( false );
-        });
+        trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
         setup( trackEvent );
       },
       close: function() {
         _this.removeExtraHeadTags();
-        _trackEvent.unlisten( "trackeventupdated" );
+        _trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
       }
     });
   });
