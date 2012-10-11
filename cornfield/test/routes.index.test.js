@@ -25,10 +25,11 @@ test("whoami API valid", function(t) {
       t.equal(res.statusCode, 200, "status code is 200");
       t.equal(res.type, "application/json", "response type is json");
       t.deepEqual(res.body, {
+        status: "okay",
         email: mockEmail,
         name: mockEmail,
         username: mockEmail
-      }, "response should have 3 attributes");
+      }, "response should have 4 attributes");
 
       t.end();
     });

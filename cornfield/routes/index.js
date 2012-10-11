@@ -5,6 +5,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
     var email = req.session.email;
 
     res.json({
+      status: "okay",
       email: email,
       name: email,
       username: email
