@@ -12,11 +12,7 @@ define( [ "core/eventmanager", "./toggler",
             TrackEvent ){
 
   var TRANSITION_DURATION = 500,
-      // Butter's UI is written in LESS, but deployed as CSS.
-      // Depending on the config file, we'll use a pre-built
-      // CSS file, or build CSS from LESS in the browser.
-      BUTTER_CSS_FILE = "{css}/butter.ui.css",
-      BUTTER_LESS_FILE = "{css}/butter.ui.less";
+      BUTTER_CSS_FILE = "{css}/butter.ui.css";
 
   var __unwantedKeyPressElements = [
     "TEXTAREA",
@@ -94,22 +90,14 @@ define( [ "core/eventmanager", "./toggler",
       document.body.appendChild( editorAreaDOMRoot );
     };
 
-    this.load = function( onReady ){
-      if( _uiOptions.enabled ){
-        var loadOptions = {};
+    this.load = function( onReady ) {
+      var loadOptions = {
+        type: "css",
+        url: BUTTER_CSS_FILE
+      };
 
-        // Determine if we should load a pre-built CSS file for Butter (e.g.,
-        // the deployment case, post `node make`), or whether we need to load
-        // the LESS file directly and parse it into CSS (e.g., the dev case).
-        if( _uiConfig.value( "cssRenderClientSide" ) ){
-          loadOptions.type = "less";
-          loadOptions.url = BUTTER_LESS_FILE;
-        } else {
-          loadOptions.type = "css";
-          loadOptions.url = BUTTER_CSS_FILE;
-        }
-
-        butter.loader.load( [ loadOptions ], function(){
+      function loadUI() {
+        butter.loader.load( [ loadOptions ], function() {
           // icon preloading needs css to be loaded first
 
           _this.loadIcons( _uiConfig.value( "plugin" ).plugins );
@@ -121,11 +109,15 @@ define( [ "core/eventmanager", "./toggler",
 
           onReady();
         });
+      }
+
+      if ( _uiOptions.enabled ) {
+        loadUI();
 
         _this.tray.attachToDOM();
         _this.header.attachToDOM();
       }
-      else{
+      else {
         onReady();
       }
     };
