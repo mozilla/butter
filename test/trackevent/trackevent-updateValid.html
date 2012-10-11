@@ -23,13 +23,13 @@
           var t = butter.currentMedia.tracks[ 0 ],
               te;
 
-          butter.listen( "trackeventupdated", function( e ) {
-            butter.unlisten( "trackeventupdated" );
+          butter.listen( "trackeventupdated", function onTrackEventUpdatedA( e ) {
+            butter.unlisten( "trackeventupdated", onTrackEventUpdatedA );
             equal( e.data.popcornOptions.start, 0, "Applied correct default start time" );
             equal( e.data.popcornOptions.end, 1, "Applied correct default end time" );
 
-            butter.listen( "trackeventupdated", function( e ) {
-              butter.unlisten( "trackeventupdated" );
+            butter.listen( "trackeventupdated", function onTrackEventUpdatedB( e ) {
+              butter.unlisten( "trackeventupdated", onTrackEventUpdatedB );
               equal( e.data.popcornOptions.start, 5, "Correctly applied new start time" );
               equal( e.data.popcornOptions.end, 10, "Correctly applied new end time" );
               equal( e.data.popcornOptions.text, "This is a test", "Correctly applied new text value" );

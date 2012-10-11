@@ -23,10 +23,10 @@
           var t = butter.tracks[ 0 ],
               numTrackEvents = t.trackEvents.length;
 
-          butter.listen( "trackeventadded", function( e ) {
+          butter.listen( "trackeventadded", function onTrackEventAdded( e ) {
             var popcornOptions = e.data.popcornOptions;
 
-            butter.unlisten( "trackeventadded" );
+            butter.unlisten( "trackeventadded", onTrackEventAdded );
             equal( ++numTrackEvents, t.trackEvents.length, "Total number of track events increased" );
             equal( e.data.type, defaultEvent.type, "Correct trackevent type of text" );
             equal( popcornOptions.start, defaultEvent.popcornOptions.start, "Correct start time of 2" );
