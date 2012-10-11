@@ -1,0 +1,255 @@
+/*!
+ * jQuery UI
+ *
+ * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * Modified by @k88hudson for Popcorn Maker
+ */
+
+.transition(@transition1) {
+  -webkit-transition: @transition1;
+  -moz-transition: @transition1;
+  -o-transition: @transition1;
+  -ms-transition: @transition1;
+  transition: @transition1;
+}
+.box-sizing( @property ) {
+  // https://developer.mozilla.org/En/CSS/Box-sizing
+  -webkit-box-sizing: @property; // Chrome 10-
+  -moz-box-sizing: @property;
+  -ms-box-sizing: @property; // IE 8+
+  box-sizing: @property; // Opera, Safari 5.1+, Chrome 10+
+}
+
+
+@highlight: #3FB58E; //3FB58E;
+@handleWidth: 4px;
+@offset: 0px;
+@handlesmall: 8px;
+@handlecorner: 18px;
+@handlelarge: 25px;
+
+.ui-resizable,
+.ui-droppable,
+.ui-draggable {
+  position: relative;
+  color: #FFF83A;
+}
+
+/*********************************************************
+* Resizable
+*/
+@resizeSmall: 10px;
+@resizeBig: 24px;
+@resizeCorner: 14px;
+
+.ui-resizable-handle {
+  position: absolute;
+  display: block;
+  z-index: 2;
+  background: darken( @highlight, 10% );
+  border: 3px solid #3fb58e;
+  opacity: 0;
+  .box-sizing( border-box );
+  .transition( opacity 0.3s ease 0s );
+}
+
+.ui-draggable:hover,
+.ui-resizable:hover {
+  .ui-resizable-handle,
+  .ui-draggable-handle,
+  .title {
+    opacity: 1;
+  }
+}
+
+.ui-draggable .title {
+  position: absolute;
+  background: #FFF;
+  bottom: -30px;
+  left: 50%;
+  margin-left: -50px;
+  height: 30px;
+  width: 100px;
+  line-height: 1.1;
+  text-align: center;
+  font-size: 11px;
+  padding: 0 10px;
+  color: @highlight;
+  border-radius: 0 0 3px 3px;
+  opacity: 0;
+}
+
+.ui-resizable-resizing {
+  .ui-resizable-handle {
+    opacity: 1;
+  }
+  .ui-draggable-handle {
+    display: none;
+  }
+}
+
+.ui-draggable-dragging {
+  .ui-draggable-handle {
+    opacity: 1;
+  }
+  .ui-resizable-handle {
+    display: none;
+  }
+}
+
+.ui-resizable-w {
+  width:  @resizeSmall;
+  height: @resizeBig;
+  cursor: w-resize;
+  left: 0;
+  bottom: 50%;
+  margin-bottom: -@resizeBig/2;
+}
+.ui-resizable-n {
+  height: @resizeSmall;
+  width: @resizeBig;
+  cursor: n-resize;
+  top: 0;
+  left: 50%;
+  margin-left: -@resizeBig/2;
+}
+.ui-resizable-s {
+  height: @resizeSmall;
+  width: @resizeBig;
+  cursor: s-resize;
+  bottom: 0;
+  left: 50%;
+  margin-left: -@resizeBig/2;
+}
+.ui-resizable-e {
+  height: @resizeBig;
+  width: @resizeSmall;
+  cursor: e-resize;
+  right: 0;
+  margin-top: -@resizeBig/2;
+  top: 50%;
+}
+
+.ui-resizable-se {
+  cursor: se-resize;
+  border: none;
+  background: none;
+  height: @resizeCorner;
+  width: @resizeCorner;
+  bottom: 0;
+  right: 0;
+  border: 6px solid @highlight;
+  border-left: 0;
+  border-top: 0;
+}
+.ui-resizable-sw {
+  cursor: sw-resize;
+  background: none;
+  border: 6px solid @highlight;
+  border-right: 0;
+  border-top: 0;
+  height: @resizeCorner;
+  width: @resizeCorner;
+  bottom: 0;
+  left: 0;
+}
+
+.ui-resizable-ne {
+  cursor: ne-resize;
+  border: none;
+  background: none;
+  height: @resizeCorner;
+  width: @resizeCorner;
+  top: 0;
+  right: 0;
+  border: 6px solid @highlight;
+  border-left: 0;
+  border-bottom: 0;
+}
+
+
+/* DRAGGABLE
+-------------------------------------------------- */
+.ui-draggable-handle {
+  position: absolute;
+  cursor: move;
+  opacity: 0;
+  &:before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #FFF;
+    z-index: 1;
+  }
+}
+.ui-draggable-top {
+  height: @handleWidth;
+  top: @offset;
+  left: @offset;
+  right: @offset;
+  box-shadow: 0 @handleWidth @handleWidth 0 rgba(0, 0, 0, 0.2);
+}
+.ui-draggable-bottom {
+  height: @handleWidth;
+  bottom: @offset;
+  left: @offset;
+  right: @offset;
+  box-shadow: 0 -@handleWidth @handleWidth 0 rgba(0, 0, 0, 0.2);
+}
+.ui-draggable-left {
+  width: @handleWidth;
+  bottom: @offset;
+  top: @offset;
+  left: @offset;
+  box-shadow: @handleWidth 0 @handleWidth 0 rgba(0, 0, 0, 0.2);
+}
+.ui-draggable-right {
+  width: @handleWidth;
+  bottom: @offset;
+  top: @offset;
+  right: @offset;
+  box-shadow: -@handleWidth 0 @handleWidth rgba(0, 0, 0, 0.2);
+}
+
+.ui-draggable-grip {
+  position: absolute;
+  cursor: move;
+  height: 20px;
+  width: 20px;
+  border: none;
+  border-radius: 2px;
+  top: 0;
+  left: 0;
+  background: @highlight;
+  box-shadow: -2px -2px 0 2px @highlight;
+  z-index: 1;
+  .ui-draggable:hover &,
+  .ui-draggable-dragging & {
+    opacity: 1;
+    .transition( opacity 0.1s ease 0s );
+  }
+  &:before {
+    display: none;
+  }
+  &:after {
+    position: relative;
+    content: "";
+    display: block;
+    height: 14px;
+    width: 14px;
+    top: 1px;
+    left: 1px;
+    background: url( "../../../../resources/glyphicons-halflings-white.png" ) -168px -72px;
+    z-index: 1;
+  }
+}
+
+.butter-dragover {
+  border: 3px dashed @highlight;
+}
+

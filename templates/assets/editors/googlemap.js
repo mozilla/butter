@@ -5,49 +5,22 @@ EditorHelper.addPlugin( "googlemap", function( trackEvent, popcornInstance ) {
 
   var container,
       media,
-      hotspot,
-      hotspotIcon,
-      hotspotIconContainer,
       popcorn = popcornInstance,
       popcornEventMapReference;
 
   function setup() {
     container = trackEvent.popcornTrackEvent._container;
 
-    hotspot = container.querySelector( ".butter-dragging-hotspot" );
-
-    if ( hotspot ) {
-      container.removeChild( hotspot );
-    }
-
     if ( trackEvent.popcornOptions.fullscreen ) {
       return;
     }
 
-    hotspot = document.createElement( "div" );
-    hotspotIconContainer = document.createElement( "a" );
-    hotspotIconContainer.className = "butter-btn btn-light";
-
-    hotspotIcon = document.createElement( "span" );
-    hotspotIcon.className = "icon icon-only icon-move";
-
-    hotspot.style.left = "0px";
-    hotspot.style.bottom = "0px";
-    hotspot.style.position = "absolute";
-    hotspot.className = "butter-dragging-hotspot";
-
-    hotspotIconContainer.appendChild( hotspotIcon );
-    hotspot.appendChild( hotspotIconContainer );
-    container.appendChild( hotspot );
-
     media = document.getElementById( trackEvent.track._media.target );
 
-    hotspot.addEventListener( "mousedown", function( e ) {
-      EditorHelper.draggable( trackEvent, container, media );
-    }, false );
-
+    EditorHelper.draggable( trackEvent, container, media );
+    
     EditorHelper.resizable( trackEvent, container, media, {
-      handlePositions: "e, se, s, nw",
+      handlePositions: "e, se, s, sw, w, n, ne",
       minHeight: 20,
       minWidth: 20
     });

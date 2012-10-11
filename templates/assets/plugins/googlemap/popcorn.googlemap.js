@@ -114,7 +114,7 @@ var googleCallback;
    *
    */
   Popcorn.plugin( "googlemap", function ( options ) {
-    var newdiv, map, location,
+    var outerdiv, innerdiv, map, location,
         target = Popcorn.dom.find( options.target ),
         that = this,
         ranOnce = false;
@@ -141,46 +141,51 @@ var googleCallback;
 
     // create a new div this way anything in the target div is left intact
     // this is later passed on to the maps api
-    newdiv = document.createElement( "div" );
-    newdiv.id = Popcorn.guid( "googlemap" );
-    newdiv.style.width = options.width;
-    newdiv.style.height = options.height;
-    newdiv.style.left = options.left;
-    newdiv.style.top = options.top;
-    newdiv.style.zIndex = +options.zindex;
-    newdiv.style.position = "absolute";
-    newdiv.classList.add( options.transition );
-    newdiv.classList.add( "off" );
+    innerdiv = document.createElement( "div" );
+    innerdiv.style.width = "100%";
+    innerdiv.style.height = "100%";
 
-    options._container = newdiv;
+    outerdiv = document.createElement( "div" );
+    outerdiv.id = Popcorn.guid( "googlemap" );
+    outerdiv.style.width = options.width;
+    outerdiv.style.height = options.height;
+    outerdiv.style.left = options.left;
+    outerdiv.style.top = options.top;
+    outerdiv.style.zIndex = +options.zindex;
+    outerdiv.style.position = "absolute";
+    outerdiv.classList.add( options.transition );
+    outerdiv.classList.add( "off" );
+
+    outerdiv.appendChild( innerdiv );
+    options._container = outerdiv;
 
     if ( target ) {
-      target.appendChild( newdiv );
+      target.appendChild( outerdiv );
     }
 
     // ensure that google maps and its functions are loaded
     // before setting up the map parameters
     var isMapReady = function () {
       if ( _mapLoaded ) {
-        if ( newdiv ) {
+        if ( innerdiv ) {
           if ( options.location ) {
             // calls an anonymous google function called on separate thread
             geocoder.geocode({
               "address": options.location
             },
             function ( results, status ) {
-              // second check for newdiv since it could have disappeared before
+              // second check for innerdiv since it could have disappeared before
               // this callback is actual run
-              if ( newdiv && status === google.maps.GeocoderStatus.OK ) {
+              if ( innerdiv && status === google.maps.GeocoderStatus.OK ) {
                 options.lat = results[ 0 ].geometry.location.lat();
                 options.lng = results[ 0 ].geometry.location.lng();
                 location = new google.maps.LatLng( options.lat, options.lng );
-                map = buildMap( options, newdiv, that );
+                map = buildMap( options, innerdiv, that );
               }
             });
           } else {
             location = new google.maps.LatLng( options.lat, options.lng );
-            map = map = buildMap( options, newdiv, that );
+            map = map = buildMap( options, innerdiv, that );
           }
         }
       } else {
@@ -275,8 +280,8 @@ var googleCallback;
             options._map = map;
             ranOnce = true;
             // reset the location and zoom just in case the user played with the map
-            newdiv.classList.remove( "off" );
-            newdiv.classList.add( "on" );
+            outerdiv.classList.remove( "off" );
+            outerdiv.classList.add( "on" );
             google.maps.event.trigger( map, "resize" );
             map.setCenter( location );
 
@@ -300,7 +305,7 @@ var googleCallback;
               // Switch this map into streeview mode
               map.setStreetView(
                 // Pass a new StreetViewPanorama instance into our map
-                sView = new google.maps.StreetViewPanorama( newdiv, {
+                sView = new google.maps.StreetViewPanorama( innerdiv, {
                   position: location,
                   pov: {
                     heading: options.heading,
@@ -378,8 +383,8 @@ var googleCallback;
             }
 
           } else if ( ranOnce ) {
-            newdiv.classList.remove( "off" );
-            newdiv.classList.add( "on" );
+            outerdiv.classList.remove( "off" );
+            outerdiv.classList.add( "on" );
           } else {
             setTimeout(function () {
               isMapSetup();
@@ -399,14 +404,14 @@ var googleCallback;
         // if the map exists hide it do not delete the map just in
         // case the user seeks back to time b/w start and end
         if ( map ) {
-          newdiv.classList.remove( "on" );
-          newdiv.classList.add( "off" );
+          outerdiv.classList.remove( "on" );
+          outerdiv.classList.add( "off" );
         }
       },
       _teardown: function ( options ) {
         // the map must be manually removed
-        options._target.removeChild( newdiv );
-        newdiv = map = location = null;
+        options._target.removeChild( outerdiv );
+        innerdiv = map = location = null;
 
         options._map = null;
       }
