@@ -1,12 +1,23 @@
 'use strict';
 
 var utils,
-    config = require('config');
+    stores,
+    CONSTANTS = {};
 
 utils = {
-  generatePublishUrl: function( id ) {
-    return config.dirs.hostname + "/v/" + id + ".html";
+  generatePublishURL: function( id ) {
+    return CONSTANTS.EMBED_HOSTNAME + '/' + stores.publish.expand( id );
+  },
+  generateEmbedURL: function( id ) {
+    return CONSTANTS.EMBED_HOSTNAME + '/' + stores.publish.expand( id + CONSTANTS.EMBED_SUFFIX );
+  },
+  generateId: function( id ) {
+    return id.toString( 36 );
   }
 };
 
-module.exports = utils;
+module.exports = function( consts, store ) {
+  CONSTANTS = consts;
+  stores = store;
+  return utils;
+};

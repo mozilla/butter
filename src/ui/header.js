@@ -260,7 +260,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
 
         butter.cornfield.publishURL( butter.project.id, function( url ) {
           if ( url ) {
-            _previewBtn.classList.remove( "butter-hidden" );
+            _previewBtn.classList.remove( "butter-disabled" );
             _previewBtn.href = url;
           }
         });
