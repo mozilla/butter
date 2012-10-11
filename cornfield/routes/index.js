@@ -31,6 +31,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
       projectJSON.name = doc.name;
       projectJSON.projectID = doc.id;
       projectJSON.author = doc.author;
+      projectJSON.template = doc.template;
       res.json( projectJSON );
     });
   });
@@ -116,6 +117,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
 
       var projectJSON = JSON.parse( project.data, sanitizer.escapeHTMLinJSON );
       projectJSON.name = "Remix of " + sanitizer.escapeHTML( project.name );
+      projectJSON.template = sanitizer.escapeHTML( project.template );
 
       res.json( projectJSON );
     });

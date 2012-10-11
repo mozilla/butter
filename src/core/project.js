@@ -167,6 +167,22 @@ define( [ 'core/eventmanager', 'core/media' ],
         }
       }
 
+      if ( json.projectID ) {
+        _id = json.projectID;
+      }
+
+      if ( json.name ) {
+        _name = json.name;
+      }
+
+      if ( json.template ) {
+        _template = json.template;
+      }
+
+      if ( json.author ) {
+        _author = json.author;
+      }
+
       targets = json.targets;
       if ( targets ) {
         for ( i = 0, l = targets.length; i < l; ++i ) {
@@ -197,6 +213,12 @@ define( [ 'core/eventmanager', 'core/media' ],
           }
         }
       }
+
+      // If we're loading data from the server, then save it again so stuff works
+      // This is a bad hack and I should feel bad
+      if ( json.projectID ) {
+        _this.save();
+      }
     };
 
     // Export project data as JSON string (e.g., for use with project.import())
@@ -210,6 +232,10 @@ define( [ 'core/eventmanager', 'core/media' ],
         return;
       }
       var data = _this.data;
+      data.projectID = _id;
+      data.name = _name;
+      data.template = _template;
+      data.author = _author;
       data.backupDate = (new Date()).toJSON();
       __butterStorage.setItem( "butter-backup-project", JSON.stringify( data ) );
     };
@@ -218,6 +244,10 @@ define( [ 'core/eventmanager', 'core/media' ],
     // to be saved (i.e., it has been changed since last save, or was never
     // saved before).
     _this.save = function( callback ) {
+      if ( !callback ) {
+        callback = function() {};
+      }
+
       // Don't save if there is nothing new to save.
       if ( _this.isSaved ) {
         callback({ error: "okay" });

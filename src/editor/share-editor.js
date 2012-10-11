@@ -2,9 +2,9 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at http://www.mozillapopcorn.org/butter-license.txt */
 
-define([ "editor/editor", "editor/base-editor", "ui/user-data",
+define([ "editor/editor", "editor/base-editor",
           "text!layouts/share-editor.html", "util/social-media", "ui/widget/tooltip" ],
-  function( Editor, BaseEditor, UserData, LAYOUT_SRC, SocialMedia, ToolTip ) {
+  function( Editor, BaseEditor, LAYOUT_SRC, SocialMedia, ToolTip ) {
 
   Editor.register( "share-properties", LAYOUT_SRC, function( rootElement, butter, compiledLayout ) {
     var TOOLTIP_NAME = "name-error-share-tooltip",
@@ -26,7 +26,6 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         projectName = projectNameWrapper.querySelector( ".butter-project-name" ),
         loginBtn = saveContainer.querySelector( ".butter-login-btn" ),
         saveBtn = saveContainer.querySelector( ".butter-save-btn" ),
-        userData = new UserData( butter ),
         embedDimensions = embedSize.value.split( "x" ),
         embedWidth = embedDimensions[ 0 ],
         embedHeight = embedDimensions[ 1 ],
@@ -113,11 +112,6 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
     }
 
     function displayEditor() {
-      if ( !butter.cornfield.authenticated() ) {
-        displayLogin();
-        return;
-      }
-
       if ( !butter.project.isSaved ) {
         displaySave();
         return;
@@ -152,16 +146,14 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       } else {
         projectName.value = butter.project.name;
       }
-      var doNotUpdate = true;
 
-      userData.authenticationRequired(function() {
+      butter.cornfield.login(function() {
         if ( !butter.project.name ) {
           displaySave();
-          doNotUpdate = false;
         } else {
           save();
         }
-        butter.dispatch( "authenticated", doNotUpdate );
+        butter.dispatch( "authenticated" );
       });
     }
 
@@ -194,7 +186,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         return;
       }
 
-      userData.save(function() {
+      butter.project.save(function() {
         displayEditor();
       });
     }
@@ -216,16 +208,6 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       }
     }, false );
 
-    butter.listen( "authenticated", function( e ) {
-      if ( e.data ) {
-        return;
-      }
-      if ( !butter.project.name ) {
-        displaySave();
-      } else {
-        save();
-      }
-    });
     butter.listen( "logout", displayLogin );
     butter.listen( "projectupdated", login );
 
