@@ -7,7 +7,16 @@ module.exports = function( config, dbReadyFn ) {
       Sequelize = require( "sequelize" ),
       sequelize = new Sequelize( config.database, config.username, config.password, config.options ),
       Project = sequelize.import( __dirname + "/models/project" ),
-      versions = require( "../config/versions.json" );
+      versions;
+
+  // travis-ci doesn't create this file when running `npm test` so we need a workaround
+  try {
+    versions = require( "../config/versions.json" );
+  } catch (ex) {
+    versions = {
+      butter: "travis-ci"
+    };
+  }
 
   sequelize.sync().complete(function( err ) {
     if ( !err) {
