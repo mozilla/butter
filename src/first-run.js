@@ -7,11 +7,16 @@
  *
  * Determines whether or not a user should be shown a first-run dialog
  */
-define( [ "dialog/dialog" ], function( Dialog ) {
+define( [ "dialog/dialog", "util/cookie" ], function( Dialog, Cookie ) {
   return {
     init: function( config ) {
-      var _dialog = Dialog.spawn( "first-run", {data:"foo"} );
-      _dialog.open();
+
+      var _dialog;
+      if ( !Cookie.isPopcornCookieSet() ) {
+        Cookie.setPopcornCookie();
+        _dialog = Dialog.spawn( "first-run", {data:"foo"} );
+        _dialog.open();
+      }
     }
   };
 });
