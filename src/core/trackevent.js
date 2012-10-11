@@ -27,8 +27,10 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
    * Represents and governs a single popcorn event.
    *
    * @param {Object} options: Options for initialization. Can contain the properties type, name, and popcornOptions. If the popcornOptions property is specified, its contents will be used to initialize the plugin instance associated with this TrackEvent.
+   * @param {Object} track: The track the trackevent will inhabit.
+   * @param {Object} popcornWrapper: a reference to a popcornWrapper object the wraps various functionality for modifying Popcorn data.
    */
-  var TrackEvent = function ( options ) {
+  var TrackEvent = function ( options, track, popcornWrapper ) {
 
     options = options || {};
 
@@ -36,14 +38,14 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
         _id = "TrackEvent" + __guid++,
         _name = options.name || _id,
         _logger = new Logger( _id ),
-        _track = null,
+        _track = track,
         _type = options.type + "",
         _popcornOptions = options.popcornOptions || {
           start: 0,
           end: 1
         },
         _view = new TrackEventView( this, _type, _popcornOptions ),
-        _popcornWrapper = null,
+        _popcornWrapper = popcornWrapper,
         _selected = false;
 
     EventManager.extend( _this );
@@ -70,18 +72,15 @@ define( [ "./logger", "./eventmanager", "util/lang", "util/time", "./views/track
     _popcornOptions.end = _popcornOptions.end || _popcornOptions.start + 1;
     _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
 
-
     /**
-     * Member: bind
+     * Member: setPopcornWrapper
      *
-     * Binds the TrackEvent to its dependencies.
+     * Sets the PopcornWrapper object. Subsequently, PopcornWrapper can be used to directly manipulate Popcorn track events.
      *
-     * @param {Object} track: The track the trackevent will inhabit.
-     * @param {Object} popcornWrapper: a reference to a PopcornWrapper object that wraps various functionality for modifying Popcorn data.
+     * @param {Object} newPopcornWrapper: PopcornWrapper object or null
      */
-    this.bind = function( track, popcornWrapper ) {
-      _track = track;
-      _popcornWrapper = popcornWrapper;
+    this.setPopcornWrapper = function ( newPopcornWrapper ) {
+      _popcornWrapper = newPopcornWrapper;
     };
 
     /**
