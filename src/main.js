@@ -207,6 +207,13 @@
         }
       }
 
+      function onTrackEventAdded( e ) {
+        var trackEvent = e.data;
+        if ( trackEvent.selected && _selectedEvents.indexOf( trackEvent ) === -1 ) {
+          _selectedEvents.push( trackEvent );
+        }
+      }
+
       function onTrackEventRemoved( e ) {
         var trackEvent = e.data,
             idx = _selectedEvents.indexOf( trackEvent );
@@ -340,6 +347,7 @@
           } //for
         } //if
 
+        media.listen( "trackeventadded", onTrackEventAdded );
         media.listen( "trackeventremoved", onTrackEventRemoved );
         media.listen( "trackeventselected", onTrackEventSelected );
         media.listen( "trackeventdeselected", onTrackEventDeSelected );
@@ -383,6 +391,7 @@
             _currentMedia = undefined;
           } //if
 
+          media.unlisten( "trackeventadded", onTrackEventAdded );
           media.unlisten( "trackeventremoved", onTrackEventRemoved );
           media.unlisten( "trackeventselected", onTrackEventSelected );
           media.unlisten( "trackeventdeselected", onTrackEventDeSelected );

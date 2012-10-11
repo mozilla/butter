@@ -75,6 +75,9 @@
                 _this.attachInputChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
               }
             }
+            else if ( option.elementType === "textarea" ) {
+              _this.attachInputChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
+            }
           }
         }
 

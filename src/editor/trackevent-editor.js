@@ -755,22 +755,6 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
       return _trackEvent;
     };
 
-    butter.listen( "trackeventremoved", function( e ) {
-
-      var currentTrackEvent,
-          currentEditor = butter.editor.currentEditor;
-
-      // Means the current editor is a track event editor
-      if ( currentEditor.getTrackEvent ) {
-
-        currentTrackEvent = currentEditor.getTrackEvent();
-        // Ensure event being deleted matches the one currently being used by the editor
-        if ( e.data.id === currentTrackEvent.id ) {
-          butter.editor.closeEditor();
-        }
-      }
-    });
-
   }
 
   return {
