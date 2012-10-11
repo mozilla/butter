@@ -47,7 +47,7 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
       // Make sure we have a handle to the butter-dialog div. If there are comments or extra elements
       // described in layoutSrc, we don't care about them.
       if ( !( _rootElement.classList && _rootElement.classList.contains( "butter-dialog" ) ) ) {
-        _rootElement = _rootElement.querySelector( ".butter-dialog" );
+        _rootElement = _rootElement.querySelector( ".butter-dialog" ) || _rootElement.querySelector( ".butter-first-run-dialog" );
       }
 
       /**

@@ -66,7 +66,7 @@
 
 }
 
-.butter-feedback-form, .butter-first-run {
+.butter-feedback-form {
   padding: 0;
   background: lighten( #EEE, 3% );
   font-size: 13px;
@@ -126,21 +126,6 @@
     font-size: 11px;
     text-transform: uppercase;
   }
-  .butter-btn-first-run {
-    font-size: 14px;
-    padding: 1px 2px;
-  }
-  .butter-first-run-img {
-    height: 200px;
-    width: 350px;
-    border: 1px solid #000;
-  }
-  .butter-first-run-editor-img {
-    background: url('../resources/first-run.png') no-repeat;
-  }
-  .butter-first-run-media-img {
-    background: url('../resources/first-run-media.png') no-repeat;
-  }
 }
 
 .dialog-hidden {
@@ -155,4 +140,21 @@
   height: 50px;
   width: 50px;
   background: url( "/resources/icons/ticket.png" ) top center no-repeat;
+}
+
+.butter-dialog {
+  font-size: 14px;
+  line-height: 1.4;
+  color: @baseText;
+  position: relative;
+  width: @_dialogWidth;
+  padding: @_dialogPadding;
+  margin: @_dialogTopMargin auto;
+  background: #FFF;
+  border-radius: 2px;
+  box-shadow: 0 10px 10px -10px #000;
+  .box-sizing( border-box );
+}
+
+.overlay-highlight {
 }
