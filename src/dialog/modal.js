@@ -6,7 +6,7 @@ define( [], function(){
 
   var __container = document.createElement( "div" );
 
-  var Modal = function( childElement ){
+  var Modal = function( childElement, createOverlay ){
 
     if( !__container.parentNode ){
       __container.className = "butter-modal-container";
@@ -14,9 +14,14 @@ define( [], function(){
       document.body.appendChild( __container );
     }
 
-    var _element = document.createElement( "div" );
-    _element.classList.add( "butter-modal-overlay" );
-    __container.appendChild( _element );
+
+      var _element = document.createElement( "div" );
+
+      _element.classList.add( "butter-modal-overlay" );
+      if ( createOverlay || createOverlay === undefined ) {
+        _element.classList.add( "butter-modal-overlay-dark-bg" );
+      }
+      __container.appendChild( _element );
 
     // need to wait an event-loop cycle to apply this class
     // ow, opacity transition fails to render
