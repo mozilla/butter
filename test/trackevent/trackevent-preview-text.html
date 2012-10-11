@@ -20,10 +20,10 @@
                 }
               },
               t = butter.currentMedia.tracks[ 0 ],
-              previewStrings = [ "This is a test", defaultEvent.popcornOptions.text ],
-              te;
+              previewStrings = [ "This is a test", defaultEvent.popcornOptions.text ];
 
           butter.listen( "trackeventupdated", function( e ) {
+            var te = e.target;
             equal( previewStrings.pop(), e.data.popcornOptions.text, "TrackEvent preview text is set correctly" );
             if ( !previewStrings.length ) {
               butter.unlisten( "trackeventupdated" );
@@ -36,7 +36,7 @@
               });
             }
           });
-          te = t.addTrackEvent( defaultEvent );
+          t.addTrackEvent( defaultEvent );
         });
       });
     </script>

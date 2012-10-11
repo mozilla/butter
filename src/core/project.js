@@ -276,17 +276,21 @@ define( [ 'core/eventmanager', 'core/media' ],
   // Returns new Project object if found, otherwise null.
   Project.checkForBackup = function( butter, callback ) {
     // See if we already have a project autosaved from another session.
-    var obj = __butterStorage.getItem( "butter-backup-project" );
+    var obj = __butterStorage.getItem( "butter-backup-project" ),
+        p;
+
     if ( !obj ){
       callback();
       return;
     }
 
-    var p = new Project( butter );
-    p.import( obj );
+    if ( butter.config.value( "recover" ) !== "purge" ) {
+      p = new Project( butter );
+      p.import( obj );
+    }
 
     // Delete since user can save if he/she wants.
-    __butterStorage.removeItem ( "butter-backup-project" );
+    __butterStorage.removeItem( "butter-backup-project" );
     callback( p );
   };
 

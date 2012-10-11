@@ -4,6 +4,7 @@
   "scrapePage": false,
   "baseDir": "../../",
   "makeVideoURLsUnique": false,
+  "recover": "purge",
   "ui": {
     "enabled": false
   },

@@ -402,25 +402,24 @@
       // Selects all track events for which TrackEvent.property === query.
       // If the third param is true, it selects track events for which TrackEvent.popcornOptions.property === query.
       _this.getTrackEvents = function ( property, query, popcornOption ) {
-
         var allTrackEvents = _this.orderedTrackEvents,
-            _filterTrackEvents;
+            filterTrackEvents;
 
         if ( !property ) {
           return allTrackEvents;
         }
 
         if ( popcornOption ) {
-           _filterTrackEvents = function ( el ) {
+           filterTrackEvents = function ( el ) {
               return ( el.popcornOptions[ property ] === query );
             };
         } else {
-          _filterTrackEvents = function ( el ) {
+          filterTrackEvents = function ( el ) {
             return ( el[ property ] === query );
           };
         }
 
-        return allTrackEvents.filter( _filterTrackEvents );
+        return allTrackEvents.filter( filterTrackEvents );
       };
 
       // Selects all track events for which TrackEvent.type === query
