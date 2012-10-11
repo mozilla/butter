@@ -8,8 +8,7 @@
     "popup": "{{baseDir}}templates/assets/editors/popup/popup-editor.js",
     "image": "{{baseDir}}templates/assets/editors/image/image-editor.js",
     "text": "{{baseDir}}templates/assets/editors/text/text-editor.js",
-    "twitter": "{{baseDir}}templates/assets/editors/twitter/twitter-editor.js",
-    "webpage": "{{baseDir}}templates/assets/editors/webpage/webpage-editor.js"
+    "twitter": "{{baseDir}}templates/assets/editors/twitter/twitter-editor.js"
   },
   "maxPluginZIndex": 1000
 }

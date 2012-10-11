@@ -55,23 +55,6 @@
                 "track": "Layer1",
                 "name": "TrackEvent5"
             }, {
-                "id": "TrackEvent5",
-                "type": "webpage",
-                "popcornOptions": {
-                    "start": 26.79779,
-                    "end": 32.02886,
-                    "target": "video-container",
-                    "top": 0,
-                    "left": 0,
-                    "width": 100,
-                    "height": 100,
-                    "src": "http://www.vpl.ca/ccg/WWII.html",
-                    "transition": "popcorn-fade",
-                    "zindex": 1000
-                },
-                "track": "Layer1",
-                "name": "TrackEvent7"
-            }, {
                 "id": "TrackEvent7",
                 "type": "wikipedia",
                 "popcornOptions": {
