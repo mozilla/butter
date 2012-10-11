@@ -66,8 +66,7 @@
     "../templates/assets/plugins/loopPlugin/popcorn.loopPlugin.js",
     "../templates/assets/plugins/skip/popcorn.skip.js",
     "../templates/assets/plugins/pausePlugin/popcorn.pausePlugin.js",
-    "../templates/assets/plugins/wikipedia/popcorn.wikipedia.js",
-    "../templates/assets/plugins/webpage/popcorn.webpage.js"
+    "../templates/assets/plugins/wikipedia/popcorn.wikipedia.js"
   ],
   "database": {
     "database": "popcorn",
