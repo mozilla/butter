@@ -39,7 +39,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
     filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
     function( req, res ) {
 
-    var id = parseInt( req.params.id );
+    var id = parseInt( req.params.id, 10 );
 
     if ( isNaN( id ) ) {
       res.json( { error: "ID was not a number" }, 500 );

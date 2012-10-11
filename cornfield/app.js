@@ -113,7 +113,7 @@ app.post( '/api/publish/:id',
   function publishRoute( req, res ) {
 
   var email = req.session.email,
-      id = parseInt( req.params.id );
+      id = parseInt( req.params.id, 10 );
 
   if ( isNaN( id ) ) {
     res.json( { error: "ID was not a number" }, 500 );
