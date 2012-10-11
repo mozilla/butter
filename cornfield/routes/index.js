@@ -6,6 +6,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
 
     res.json({
       status: "okay",
+      csrf: req.session._csrf,
       email: email,
       name: email,
       username: email

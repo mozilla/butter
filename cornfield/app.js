@@ -69,6 +69,7 @@ app.configure( function() {
     .use( express.static( WWW_ROOT, JSON.parse( JSON.stringify( CONFIG.staticMiddleware ) ) ) )
     .use( express.bodyParser() )
     .use( clientSessions( CONFIG.session ) )
+    .use( express.csrf() )
     /* Show Zeus who's boss
      * This only affects requests under /api and /persona, not static files
      * because the static file writes the response header before we hit this middleware

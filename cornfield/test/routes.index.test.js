@@ -12,9 +12,10 @@ var express = require("express");
 var app = express.createServer();
 
 app.use(mockSession({
-  email: mockEmail
+  email: mockEmail,
+  _csrf: "FDaS435D2z"
 }))
-  .use(express.bodyParser());
+.use(express.bodyParser());
 
 require("../routes")(app, mockUser, mockFilter, mockSanitizer, mockStore);
 
@@ -28,8 +29,9 @@ test("whoami API valid", function(t) {
         status: "okay",
         email: mockEmail,
         name: mockEmail,
-        username: mockEmail
-      }, "response should have 4 attributes");
+        username: mockEmail,
+        csrf: "FDaS435D2z"
+      }, "response should have 5 attributes");
 
       t.end();
     });
