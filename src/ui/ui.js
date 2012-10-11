@@ -4,11 +4,11 @@
 
 define( [ "core/eventmanager", "./toggler",
           "./header", "./unload-dialog", "crashreporter",
-          "./tray", "editor/ui-kit",
+          "first-run", "./tray", "editor/ui-kit",
           "core/trackevent" ],
   function( EventManager, Toggler, Header,
             UnloadDialog, CrashReporter,
-            Tray, UIKitDummy,
+            FirstRun, Tray, UIKitDummy,
             TrackEvent ){
 
   var TRANSITION_DURATION = 500,
@@ -117,6 +117,8 @@ define( [ "core/eventmanager", "./toggler",
           // Spin-up the crash reporter
           CrashReporter.init( _uiConfig );
 
+          butter.listen( "ready", FirstRun.init );
+
           onReady();
         });
 
@@ -164,7 +166,7 @@ define( [ "core/eventmanager", "./toggler",
 
       if ( overlappingTrackEvent ) {
         overlappingTrackEventElement = overlappingTrackEvent.view.element;
-        
+
         // Be pixel-precise when finding the start time, accounting for trackevent UI border spacing, etc.
         proportionalStartTime = ( overlappingTrackEventElement.offsetLeft + overlappingTrackEventElement.clientWidth + overlappingTrackEventElement.clientLeft * 2 ) /
           butter.timeline.getCurrentTrackWidth() * currentMediaDuration;
