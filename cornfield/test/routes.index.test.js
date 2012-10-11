@@ -81,6 +81,7 @@ test("project data get valid", function(t) {
       mockData.data.name = mockData.name;
       mockData.data.projectID = mockData.id;
       mockData.data.author = mockData.author;
+      mockData.data.template = mockData.template;
       mockData = mockData.data;
       t.deepEqual(res.body, mockData, "saved data is equal");
 
@@ -286,6 +287,7 @@ test("remix project valid", function(t) {
       var mockData = mockUser.generateMockData(1234);
       mockData.data = JSON.parse(mockData.data);
       mockData.data.name = "Remix of " + mockData.name;
+      mockData.data.template = "basic";
       mockData = mockData.data;
       t.deepEqual(res.body, mockData, "saved data is equal");
 
