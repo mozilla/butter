@@ -19,6 +19,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         projectEmbedURL = editorContainer.querySelector( ".butter-project-embed-url" ),
         embedSize = editorContainer.querySelector( ".butter-embed-size" ),
         previewBtn = editorContainer.querySelector( ".butter-preview-link" ),
+        viewSourceBtn = editorContainer.querySelector( ".butter-view-source-link" ),
         shareTwitter = editorContainer.querySelector( ".butter-share-twitter" ),
         shareGoogle = editorContainer.querySelector( ".butter-share-google" ),
         projectNameWrapper = saveContainer.querySelector( ".butter-project-name-wrapper" ),
@@ -95,6 +96,22 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       }
     }
 
+    function toggleViewSourceButton( on ) {
+      if ( on ) {
+        viewSourceBtn.classList.remove( "butter-disabled" );
+        viewSourceBtn.href = "view-source:" + butter.project.iframeUrl;
+        viewSourceBtn.onclick = function() {
+          return true;
+        };
+      } else {
+        viewSourceBtn.classList.add( "butter-disabled" );
+        viewSourceBtn.href = "";
+        viewSourceBtn.onclick = function() {
+          return false;
+        };
+      }
+    }
+
     function displayEditor() {
       if ( !butter.cornfield.authenticated() ) {
         displayLogin();
@@ -116,6 +133,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       projectName.value = project.name;
       projectURL.value = project.publishUrl;
       togglePreviewButton( true );
+      toggleViewSourceButton( true );
 
       updateEmbed( project.iframeUrl );
 
@@ -213,9 +231,11 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
 
     butter.listen( "projectsaved", function() {
       togglePreviewButton( true );
+      toggleViewSourceButton( true );
     });
     butter.listen( "projectchanged", function() {
       togglePreviewButton( false );
+      toggleViewSourceButton( false );
     });
 
     Editor.BaseEditor.extend( this, butter, rootElement, {
