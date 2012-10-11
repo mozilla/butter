@@ -61,12 +61,24 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     function toggleSaveButton( on ) {
       if ( on ) {
         _saveButton.classList.remove( "butter-disabled" );
-        _saveButton.classList.remove( "btn-light" );
-        _saveButton.classList.add( "btn-green" );
       } else {
         _saveButton.classList.add( "butter-disabled" );
-        _saveButton.classList.remove( "btn-green" );
-        _saveButton.classList.add( "btn-light" );
+      }
+    }
+
+    function togglePreviewButton( on ) {
+      if ( on ) {
+        _previewBtn.classList.remove( "butter-disabled" );
+        _previewBtn.href = butter.project.publishUrl;
+        _previewBtn.onclick = function() {
+          return true;
+        };
+      } else {
+        _previewBtn.classList.add( "butter-disabled" );
+        _previewBtn.href = "";
+        _previewBtn.onclick = function() {
+          return false;
+        };
       }
     }
 
@@ -80,14 +92,14 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     function prepare() {
       function afterSave() {
         butter.editor.openEditor( "share-properties" );
-        _previewBtn.classList.remove( "butter-hidden" );
-        _previewBtn.href = butter.project.publishUrl;
+        togglePreviewButton( true );
       }
 
       if( !butter.project.isSaved ) {
         // If saving fails, restore the "Save" button so the user can try again.
         _userData.save( function() { afterSave(); },
-                        function() { toggleSaveButton( true ); } );
+                        function() { toggleSaveButton( true );
+                                     togglePreviewButton( false ); } );
       } else {
         afterSave();
       }
@@ -139,6 +151,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       _projectName.textContent = node.value || _projectTitlePlaceHolderText;
       if( checkProjectName( _projectName.textContent ) ) {
         butter.project.name = _projectName.textContent;
+        login( prepare );
       } else {
         nameError();
       }
@@ -202,8 +215,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       _authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
       _authButton.title = DEFAULT_AUTH_BUTTON_TITLE;
       _authButton.addEventListener( "click", login, false );
-      _previewBtn.classList.add( "butter-hidden" );
-      _previewBtn.href = "";
+      togglePreviewButton( false );
       _authButton.removeEventListener( "click", toggleDropDown, false );
     }
 
@@ -233,11 +245,13 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     butter.listen( "projectsaved", function() {
       // Disable "Save" button
       toggleSaveButton( false );
+      togglePreviewButton( true );
       _projectName.textContent = butter.project.name;
     });
     butter.listen( "projectchanged", function() {
       // Re-enable "Save" button to indicate things are not saved
       toggleSaveButton( true );
+      togglePreviewButton( false );
       _saveButton.classList.add( "btn-green" );
     });
     butter.listen( "ready", function() {
