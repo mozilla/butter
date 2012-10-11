@@ -49,7 +49,7 @@ define( [ "dialog/dialog", "util/lang", "text!layouts/header.html" ],
       }
 
       butter.cornfield.login(function( response ) {
-        if ( !response.error ) {
+        if ( response.status !== "failure" ) {
           if ( successCallback ) {
             successCallback();
           }
