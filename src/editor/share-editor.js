@@ -79,6 +79,22 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       " frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>";
     }
 
+    function togglePreviewButton( on ) {
+      if ( on ) {
+        previewBtn.classList.remove( "butter-disabled" );
+        previewBtn.href = butter.project.publishUrl;
+        previewBtn.onclick = function() {
+          return true;
+        };
+      } else {
+        previewBtn.classList.add( "butter-disabled" );
+        previewBtn.href = "";
+        previewBtn.onclick = function() {
+          return false;
+        };
+      }
+    }
+
     function displayEditor() {
       if ( !butter.cornfield.authenticated() ) {
         displayLogin();
@@ -90,8 +106,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
         return;
       }
 
-      var project = butter.project,
-          headerPreviewBtn = document.querySelector( ".butter-header .butter-preview-btn" );
+      var project = butter.project;
 
       embedSize.disabled = false;
       authorInput.disabled = false;
@@ -100,10 +115,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
 
       projectName.value = project.name;
       projectURL.value = project.publishUrl;
-      previewBtn.href = project.publishUrl;
-
-      headerPreviewBtn.classList.remove( "butter-hidden" );
-      headerPreviewBtn.href = project.publishUrl;
+      togglePreviewButton( true );
 
       updateEmbed( project.iframeUrl );
 
@@ -143,7 +155,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
       }
 
       butter.project.author = authorInput.value || "";
-      authorUpdateButton.classList.add( "disabled" );
+      authorUpdateButton.classList.add( "butter-disabled" );
 
       if ( !butter.project.name ) {
 
@@ -177,7 +189,7 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
     }, false);
 
     authorInput.addEventListener( "input", function( e ) {
-      authorUpdateButton.classList.remove( "disabled" );
+      authorUpdateButton.classList.remove( "butter-disabled" );
     }, false );
 
     authorInput.addEventListener( "blur", function( e ) {
@@ -198,6 +210,13 @@ define([ "editor/editor", "editor/base-editor", "ui/user-data",
     });
     butter.listen( "logout", displayLogin );
     butter.listen( "projectupdated", login );
+
+    butter.listen( "projectsaved", function() {
+      togglePreviewButton( true );
+    });
+    butter.listen( "projectchanged", function() {
+      togglePreviewButton( false );
+    });
 
     Editor.BaseEditor.extend( this, butter, rootElement, {
       open: function() {
