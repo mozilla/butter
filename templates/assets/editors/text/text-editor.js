@@ -106,6 +106,16 @@
       }
     }
 
+    function onTrackEventUpdated( e ) {
+      _trackEvent = e.target;
+
+      var anchorContainer = _trackEvent.popcornTrackEvent._container.querySelector( "a" );
+      anchorClickPrevention( anchorContainer );
+
+      _this.updatePropertiesFromManifest( _trackEvent );
+      _this.setErrorState( false );
+    }
+
     // Extend this object to become a TrackEventEditor
     Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
@@ -116,19 +126,11 @@
         _butter = butter;
 
         // Update properties when TrackEvent is updated
-        trackEvent.listen( "trackeventupdated", function ( e ) {
-          _trackEvent = e.target;
-
-          anchorContainer = _trackEvent.popcornTrackEvent._container.querySelector( "a" );
-          anchorClickPrevention( anchorContainer );
-
-          _this.updatePropertiesFromManifest( _trackEvent );
-          _this.setErrorState( false );
-        });
+        trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
         setup( trackEvent );
       },
       close: function() {
-        _trackEvent.unlisten( "trackeventupdated" );
+        _trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
       }
     });
   });
