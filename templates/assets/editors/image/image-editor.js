@@ -373,13 +373,40 @@
       return false;
     }
 
+    function onTrackEventUpdated( e ) {
+      _trackEvent = e.target;
+      calcImageTime();
+      _this.updatePropertiesFromManifest( _trackEvent );
+
+      var links, i, ln;
+
+      if ( _trackEvent.popcornTrackEvent._container ) {
+        links = _trackEvent.popcornTrackEvent._container.querySelectorAll( "a" );
+
+        if ( links ) {
+          for ( i = 0, ln = links.length; i < ln; i++ ) {
+            links[ i ].onclick = clickPrevention;
+          }
+        }
+      }
+
+      // Ensure right group is displayed
+      // Mode is flipped here to ensure cached values aren't placed right back in after updating
+      if ( _trackEvent.popcornOptions.src && !_flickrActive ) {
+        singleImageHandler();
+        displayCachedValues( "flickr" );
+      } else if ( _flickrActive ) {
+        flickrHandler();
+        displayCachedValues( "single" );
+      }
+
+      _this.scrollbar.update();
+    }
+
     Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
         var popcornOptions = trackEvent.popcornOptions,
-            manifestOpts = trackEvent.popcornTrackEvent._natives.manifest.options,
-            i,
-            ln,
-            links;
+            manifestOpts = trackEvent.popcornTrackEvent._natives.manifest.options;
 
         if ( !_cachedValues ) {
           _cachedValues = {
@@ -417,31 +444,7 @@
           _this.setErrorState( "Invalid Flicker Gallery URL. E.G: http://www.flickr.com/photos/etherworks/sets/72157630563520740/" );
         });
 
-        _trackEvent.listen( "trackeventupdated", function( e ) {
-          _trackEvent = e.target;
-          calcImageTime();
-          _this.updatePropertiesFromManifest( _trackEvent );
-
-          links = _trackEvent.popcornTrackEvent._container.querySelectorAll( "a" );
-
-          if ( links ) {
-            for ( i = 0, ln = links.length; i < ln; i++ ) {
-              links[ i ].onclick = clickPrevention;
-            }
-          }
-
-          // Ensure right group is displayed
-          // Mode is flipped here to ensure cached values aren't placed right back in after updating
-          if ( _trackEvent.popcornOptions.src && !_flickrActive ) {
-            singleImageHandler();
-            displayCachedValues( "flickr" );
-          } else if ( _flickrActive ) {
-            flickrHandler();
-            displayCachedValues( "single" );
-          }
-
-          _this.scrollbar.update();
-        });
+        _trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
 
         setup( trackEvent );
       },
@@ -449,7 +452,7 @@
         _imageToggler.removeEventListener( "change", toggleHandler, false );
         _this.removeExtraHeadTags();
         _popcornInstance.off( "invalid-flickr-image" );
-        _trackEvent.unlisten( "trackeventupdated" );
+        _trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
       }
     });
   });
