@@ -23,7 +23,7 @@ var express = require('express'),
     APP_HOSTNAME = stripSlash( CONFIG.dirs.appHostname ),
     // If a separate hostname is given for embed, use it, otherwise use app's hostname
     EMBED_HOSTNAME = CONFIG.dirs.embedHostname ? stripSlash( CONFIG.dirs.embedHostname ) : APP_HOSTNAME,
-    EMBED_SUFFIX = 'e',
+    EMBED_SUFFIX = '_',
     WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
     VALID_TEMPLATES = CONFIG.templates,
     EXPORT_ASSETS = CONFIG.exportAssets;
@@ -90,42 +90,22 @@ require( 'express-persona' )( app, {
 });
 require('./routes')( app, User, filter, sanitizer, stores, EMBED_SUFFIX );
 
-function writeEmbedShell( path, res, url, data, callback ) {
+function writeEmbedShell( path, url, data, callback ) {
   if( !writeEmbedShell.templateFn ) {
     writeEmbedShell.templateFn = jade.compile( fs.readFileSync( 'views/embed-shell.jade', 'utf8' ),
                                           { filename: 'embed-shell.jade', pretty: true } );
   }
 
-  stores.publish.write( path, writeEmbedShell.templateFn( data ), function( err ){
-    if( err ){
-      res.json({ error: 'internal file error' }, 500);
-      return;
-    }
-    if( callback ) {
-      callback();
-    } else {
-      res.json({ error: 'okay', url: url });
-    }
-  });
+  stores.publish.write( path, writeEmbedShell.templateFn( data ), callback );
 }
 
-function writeEmbed( path, res, url, data, callback ) {
+function writeEmbed( path, url, data, callback ) {
   if( !writeEmbed.templateFn ) {
     writeEmbed.templateFn = jade.compile( fs.readFileSync( 'views/embed.jade', 'utf8' ),
                                           { filename: 'embed.jade', pretty: true } );
   }
 
-  stores.publish.write( path, writeEmbed.templateFn( data ), function( err ){
-    if( err ){
-      res.json({ error: 'internal file error' }, 500);
-      return;
-    }
-    if( callback ) {
-      callback();
-    } else {
-      res.json({ error: 'okay', url: url });
-    }
-  });
+  stores.publish.write( path, writeEmbed.templateFn( data ), callback );
 }
 
 app.post( '/api/publish/:id',
@@ -133,7 +113,12 @@ app.post( '/api/publish/:id',
   function publishRoute( req, res ) {
 
   var email = req.session.email,
-      id = req.params.id;
+      id = parseInt( req.params.id );
+
+  if ( isNaN( id ) ) {
+    res.json( { error: "ID was not a number" }, 500 );
+    return;
+  }
 
   User.findProject( email, id, function( err, project ) {
     if ( err ) {
@@ -252,16 +237,29 @@ app.post( '/api/publish/:id',
              data.substring( headEndTagIndex, bodyEndTagIndex ) +
              popcornString + data.substring( bodyEndTagIndex );
 
+      // Convert 1234567890 => "kf12oi"
+      var idBase36 = id.toString( 36 ),
+          publishUrl = EMBED_HOSTNAME + '/' + stores.publish.expand( idBase36 ),
+          iframeUrl = EMBED_HOSTNAME + '/' + stores.publish.expand( idBase36 + EMBED_SUFFIX );
+
+      function finished( err ) {
+        if ( err ) {
+          res.json({ error: 'internal server error' }, 500);
+        } else {
+          res.json({ error: 'okay', publishUrl: publishUrl, iframeUrl: iframeUrl });
+        }
+      }
+
       function publishEmbedShell() {
         // Write out embed shell HTML
-        writeEmbedShell( id, res,
-                         EMBED_HOSTNAME + '/' + stores.publish.expand( id ),
+        writeEmbedShell( idBase36, publishUrl,
                          {
                            author: project.author,
                            projectName: project.name,
-                           embedSrc: EMBED_HOSTNAME + '/' + stores.publish.expand( id + EMBED_SUFFIX ),
+                           embedSrc: iframeUrl,
                            baseHref: APP_HOSTNAME
-                         });
+                         },
+                         finished );
       }
 
       // This is a query string-only URL because of the <base> tag
@@ -269,14 +267,13 @@ app.post( '/api/publish/:id',
           mediaUrl = projectData.media[ 0 ].url,
           attribURL = Array.isArray( mediaUrl ) ? mediaUrl[ 0 ] : mediaUrl;
 
-      writeEmbed( id + EMBED_SUFFIX, res,
-                  EMBED_HOSTNAME + '/' + stores.publish.expand( id + EMBED_SUFFIX ),
+      writeEmbed( idBase36 + EMBED_SUFFIX, iframeUrl,
                   {
                     id: id,
                     author: project.author,
                     title: project.name,
                     mediaSrc: attribURL,
-                    embedShellSrc: EMBED_HOSTNAME + '/' + stores.publish.expand( id ),
+                    embedShellSrc: publishUrl,
                     baseHref: baseHref,
                     remixUrl: remixUrl,
                     templateScripts: templateScripts,

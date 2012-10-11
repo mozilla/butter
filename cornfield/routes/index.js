@@ -39,6 +39,13 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
     filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
     function( req, res ) {
 
+    var id = parseInt( req.params.id );
+
+    if ( isNaN( id ) ) {
+      res.json( { error: "ID was not a number" }, 500 );
+      return;
+    }
+
     User.deleteProject( req.session.email, req.params.id, function( err ) {
       if ( err ) {
         res.json( { error: 'project not found' }, 404 );
@@ -46,8 +53,9 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
       }
 
       // Delete published projects, too
-      var embedShell = req.params.id,
+      var embedShell = id.toString( 36 ),
           embedDoc = embedShell + EMBED_SUFFIX;
+
       stores.publish.remove( embedShell, function( e ) {
         if( e ) {
           res.json( { error: 'unable to remove file: ' + embedShell }, 500 );
