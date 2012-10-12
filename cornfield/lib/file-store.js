@@ -3,15 +3,15 @@ var fs = require( 'fs' ),
     Path = require( 'path' );
 
 // Make sure the dir exists, and its parent. Create if not.
-function ensurePathExists( path ) {
+function ensurePathExistsSync( path ) {
   var parent = Path.dirname( path );
 
-  // Build paths above too, if not present.
-  if( parent !== "." ) {
-    ensurePathExists( parent );
+  // Build paths above too, if not present. Check for relative or absolute paths
+  if ( parent !== "." && parent !== "/" ) {
+    ensurePathExistsSync( parent );
   }
 
-  if( !fs.existsSync( path ) ) {
+  if ( !fs.existsSync( path ) ) {
     fs.mkdirSync( path );
   }
 }
@@ -50,7 +50,7 @@ function LocalFileStore( options ) {
   if( options.namePrefix ) {
     this.namePrefix = options.namePrefix;
   }
-  ensurePathExists( Path.join( this.root, this.namePrefix ) );
+  ensurePathExistsSync( Path.join( this.root, this.namePrefix ) );
 
   // An optional suffix for all filenames.  Will be joined directly
   // For example: filename=foo nameSuffix=.html becomes foo.html
@@ -63,7 +63,7 @@ LocalFileStore.prototype = Object.create( BaseFileStore );
 
 LocalFileStore.prototype.write = function( path, data, callback ) {
   path = Path.join( this.root, this.expand( path ) );
-  ensurePathExists( Path.dirname( path ) );
+  ensurePathExistsSync( Path.dirname( path ) );
 
   fs.writeFile( path, data, function( err ) {
     if (err) {
