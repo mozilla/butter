@@ -1,11 +1,23 @@
 "use strict";
 
+function defaultDBReadyFunction( err ) {
+  if ( err ) {
+    err = Array.isArray( err ) ? err[ 0 ] : err;
+    console.warn( "lib/user.js: DB setup error\n", err.number ? err.number : '[No Error Number]', err.message );
+  }
+}
+
 module.exports = function( config, dbReadyFn ) {
   config = config || {};
 
+  dbReadyFn = dbReadyFn || defaultDBReadyFunction;
+
+  var username = config.username || "";
+  var password = config.password || "";
+
   var dbOnline = false,
       Sequelize = require( "sequelize" ),
-      sequelize = new Sequelize( config.database, config.username, config.password, config.options ),
+      sequelize = new Sequelize( config.database, username, password, config.options ),
       Project = sequelize.import( __dirname + "/models/project" ),
       versions;
 
@@ -17,18 +29,19 @@ module.exports = function( config, dbReadyFn ) {
       butter: "travis-ci"
     };
   }
-
   sequelize.sync().complete(function( err ) {
-    if ( !err) {
+    if ( !err ) {
       dbOnline = true;
     }
 
-    if ( dbReadyFn ) {
-      dbReadyFn( err );
-    }
+    dbReadyFn( err );
   });
 
   return {
+    getSequelizeInstance: function(){
+      return sequelize;
+    },
+
     createProject: function( email, data, callback ) {
       if ( !email || !data ) {
         callback( "not enough parameters to update" );

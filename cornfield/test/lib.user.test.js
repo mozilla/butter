@@ -13,7 +13,26 @@ var test = require( "tap" ).test,
     id,
     callback;
 
-test( "db setup", function( t ) {
+test( "sqlite db setup with incorrect pool params", function( t ) {
+  var poolUser = require( "../lib/user" )({
+    database: "popcorn",
+    options: {
+      dialect: "sqlite",
+      storage: ":memory:",
+      logging: false,
+      pool: {
+        maxConnections: 5,
+        maxIdleTime: 1
+      }
+    }
+  }, function( err ) {
+    t.ok( !poolUser.getSequelizeInstance().connectorManager.pool, "No pool exists" );
+    t.ok( !err, "User created with sqlite db and ignored pool param" );
+    t.end();
+  });
+});
+
+test( "sqlite db setup", function( t ) {
   user = require( "../lib/user" )({
     database: "popcorn",
     options: {
@@ -22,6 +41,7 @@ test( "db setup", function( t ) {
       logging: false
     }
   }, function( err ) {
+    t.ok( !err, "User created with sqlite db" );
     t.end();
   });
 });
@@ -30,18 +50,18 @@ test( "createProject valid parameters", function( t ) {
   t.plan( 6 );
 
   var mockCallback = function( err, project ) {
-        // Store ID for later tests
-        id = project.id;
+    // Store ID for later tests
+    id = project.id;
 
-        t.ok( project, "Project has data" );
-        t.equal( project.data, JSON.stringify( mockData.data ), "Properly Set Data of Project" );
-        t.equal( project.email, mockData.email, "Properly Set Email of Project" );
-        t.equal( project.name, mockData.name, "Properly Set Name of Project" );
-        t.equal( project.author, mockData.author, "Properly Set Author of Project" );
-        t.equal( project.template, mockData.template, "Properly Set Template of Project" );
+    t.ok( project, "Project has data" );
+    t.equal( project.data, JSON.stringify( mockData.data ), "Properly Set Data of Project" );
+    t.equal( project.email, mockData.email, "Properly Set Email of Project" );
+    t.equal( project.name, mockData.name, "Properly Set Name of Project" );
+    t.equal( project.author, mockData.author, "Properly Set Author of Project" );
+    t.equal( project.template, mockData.template, "Properly Set Template of Project" );
 
-        t.end();
-      };
+    t.end();
+  };
 
   user.createProject( mockEmail, mockData, mockCallback );
 });
