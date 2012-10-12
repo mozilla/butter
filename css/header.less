@@ -1,7 +1,7 @@
 /*********************************************************
 * HEADER
 */
-@_logoWidth: 230px;
+@_logoWidth: 180px;
 
 // Used to position absolute elements in the middle of our header bar area
 @HEADER_ALIGN_MIDDLE: 2.7;
@@ -24,13 +24,21 @@
   top: 0;
   right: 0;
   height: @HEADER_SPACING;
+  .transition( all .2s ease-in-out );
+}
+
+/*********************************************************
+* Primary white nav bar
+*/
+
+.butter-header-primary {
+  position: relative;
   background: #FFF;
   color: lighten( @baseText, 10% );
   text-shadow: 0 1px 0 #FFF;
   font-size: 0.95em;
   border-bottom: 1px solid darken( @editorOutline, 10% );
   box-shadow: 0 -1px 10px 0 rgba( 0, 0, 0, 0.1 );
-  .transition( all .2s ease-in-out );
   .clearfix();
 }
 
@@ -43,30 +51,32 @@
   background: url( "../resources/logo.png" ) no-repeat;
 }
 
-
 .butter-nav {
   position: relative;
-  left: @_logoWidth;
-  list-style: none;
-  padding: 0;
   margin: 0;
-  height: @HEADER_SPACING;
-  line-height: @HEADER_SPACING;
+  padding: 0;
+  margin-left: @_logoWidth + 50;
+  list-style: none;
+  height: @PRIMARYHEADER_SPACING;
+  line-height: @PRIMARYHEADER_SPACING;
   > li {
     float: left;
-    box-shadow: inset -1px 0 #FFF;
     padding: 0 20px;
-    border-right: 1px solid lighten( @baseLightOutline, 10% );
-    &:first-child {
+    &.butter-breadcrumbs {
+      position: relative;
+      padding: 0;
+      margin-right: 10px;
+      width: 1px;
+      height: 100%;
+      border-right: 1px solid @baseLightOutline;
+      .triangle( "right", 5px, #FFF, 1px, @baseLightOutline );
+    }
+    &.butter-project-title {
+      text-align: center;
       font-weight: 600;
-      padding-left: 0;
       font-size: 16px;
       color: @green;
       cursor: pointer;
-    }
-    &:last-child {
-      border-right: none;
-      box-shadow: none;
     }
   }
 }
@@ -75,7 +85,7 @@
   display: block;
   position: absolute;
   top: 0;
-  right: 30px;
+  right: 0;
   z-index: @HEADER_Z_INDEX + 100;
 }
 
@@ -126,7 +136,7 @@
     position: absolute;
     visibility: hidden;
     right: 0;
-    top: @HEADER_SPACING / @HEADER_ALIGN_MIDDLE;
+    top: @PRIMARYHEADER_SPACING / @HEADER_ALIGN_MIDDLE;
   }
   &:hover .icon {
     visibility: visible;
@@ -171,43 +181,5 @@
     &:hover {
       color: @green;
     }
-  }
-}
-
-// Hide these until login is true.
-.butter-project-title,
-.butter-save-btn,
-.butter-badges-btn,
-.butter-my-projects-btn {
-  display: none;
-}
-
-.butter-login-true {
-  .butter-login-btn.btn-light {
-    border: none;
-    background: none;
-    box-shadow: none;
-  }
-  .butter-project-title,
-  .butter-save-btn,
-  .butter-badges-btn,
-  .butter-my-projects-btn {
-    display: inline-block;
-  }
-
-  .butter-badges-btn {
-    font-size: 12px;
-    font-weight: 700;
-    background: darken( @baseLight, 5% );
-    border: 1px solid @baseLightOutline;
-    color: @baseText;
-    &:hover {
-      background: #27AAE1;
-      border: 1px solid #316BBF;
-      color: #FFF;
-    }
-    padding: 4px 10px;
-    border-radius: 3px;
-    text-shadow: none;
   }
 }

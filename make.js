@@ -280,6 +280,7 @@ function checkHTML() {
     join( SRC_DIR, "dialog", "dialogs" ),
     join( SRC_DIR, "layouts" ),
     join( SRC_DIR, "editor" ),
+    join( SRC_DIR, "ui", "webmakernav" ),
     TEMPLATES_DIR ] ).filter( function( file ) {
     return file.match( /\.html$/ );
   }).forEach( function( filename ) {
@@ -325,6 +326,12 @@ function buildCSS(compress) {
   lessToCSS({
     lessFile: "templates/assets/css/jquery-ui/jquery.ui.butter.less",
     cssFile: "templates/assets/css/jquery-ui/jquery.ui.butter.css",
+    compress: compress
+  });
+
+  lessToCSS({
+    lessFile: "src/ui/webmakernav/webmakernav.less",
+    cssFile: "src/ui/webmakernav/webmakernav.css",
     compress: compress
   });
 

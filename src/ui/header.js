@@ -1,8 +1,5 @@
-define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
-  function( Dialog, Lang, UserData, ToolTip ) {
-
-  var DEFAULT_AUTH_BUTTON_TEXT = "<span class='icon-user'></span> Sign In / Sign Up",
-      DEFAULT_AUTH_BUTTON_TITLE = "Sign in or sign up with Persona";
+define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/tooltip" ],
+  function( Dialog, Lang, HEADER_TEMPLATE, UserData, WebmakerBar, ToolTip ) {
 
   return function( butter, options ){
 
@@ -12,22 +9,18 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
 
     var _this = this,
         _userData = new UserData( butter, options ),
-        _rootElement = _userData.rootElement,
-        _saveButton = _userData.saveButton,
-        _buttonGroup = _userData.buttonGroup,
-        _authButton = _userData.authButton,
-        _projectTitle = _userData.projectTitle,
-        _projectName = _userData.projectName,
+        _rootElement = Lang.domFragment( HEADER_TEMPLATE, ".butter-header" ),
+        _webmakerNavBar = _rootElement.querySelector( "#webmaker-nav" ),
+        _saveButton = _rootElement.querySelector( ".butter-save-btn"),
+        _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
+        _projectName = _projectTitle.querySelector( ".butter-project-name" ),
         _previewBtn = _rootElement.querySelector( ".butter-preview-btn" ),
-        _nameDropDown = _buttonGroup.querySelector( "ul" ),
-        _logoutBtn = _nameDropDown.querySelector( ".butter-logout-btn" ),
         _tabzilla = _rootElement.querySelector( "#tabzilla" ),
-        _loginClass = "butter-login-true",
-        _activeClass = "btn-green",
         _noProjectNameToolTip,
-        _projectTitlePlaceHolderText = _projectName.innerHTML;
+        _projectTitlePlaceHolderText = _projectName.innerHTML,
+        _webmakerNav;
 
-    // create a tooltip for the projectName element
+    // create a tooltip for the plrojectName element
     ToolTip.create({
       title: "header-title-tooltip",
       message: "Change the name of your project",
@@ -36,28 +29,13 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
     });
 
     _this.element = _rootElement;
+    
     ToolTip.apply( _projectTitle );
 
-    _tabzilla.addEventListener( "click", function( e ) {
+    _tabzilla.addEventListener( "click", function() {
       document.body.classList.toggle( "tabzilla-open" );
     }, false );
 
-    function login( successCallback, errorCallback ) {
-      _userData.authenticationRequired(function() {
-        loginDisplay();
-        butter.dispatch( "authenticated" );
-        if ( successCallback && typeof successCallback === "function" ) {
-          successCallback();
-        }
-      }, errorCallback );
-    }
-
-    _authButton.addEventListener( "click", login, false );
-
-    // XXXhumph: this needs better UI, from Bobby:
-    // When the "Save" button is grey, removing the cursor: pointer
-    // property altogether and turning the font grey are probably good
-    // ideas. Least confusing UI.
     function toggleSaveButton( on ) {
       if ( on ) {
         _saveButton.classList.remove( "butter-disabled" );
@@ -82,6 +60,43 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       }
     }
 
+    this.views = {
+      dirty: function() {
+        togglePreviewButton( false );
+        toggleSaveButton( true );
+      },
+      clean: function() {
+        togglePreviewButton( true );
+        toggleSaveButton( false );
+      },
+      login: function() {
+        togglePreviewButton( false );
+        toggleSaveButton( false );
+        _previewBtn.style.display = "";
+        _projectTitle.style.display = "";
+        _saveButton.innerHTML = "Save";
+      },
+      logout: function() {
+        togglePreviewButton( false );
+        toggleSaveButton( true );
+        _previewBtn.style.display = "none";
+        _projectTitle.style.display = "none";
+        _saveButton.innerHTML = "Sign in to save";
+      }
+    };
+
+    function feedbackCallback() {
+      var dialog = Dialog.spawn( "feedback" );
+      dialog.open();
+    }
+
+    _webmakerNav = new WebmakerBar( butter, {
+      container: _webmakerNavBar,
+      onLogin: _userData.authenticationRequired,
+      onLogout: _userData.logout,
+      feedbackCallback: feedbackCallback
+    });
+
     function destroyToolTip() {
       if ( _noProjectNameToolTip && !_noProjectNameToolTip.destroyed ) {
         _projectTitle.removeEventListener( "mouseover", destroyToolTip, false );
@@ -95,7 +110,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
         togglePreviewButton( true );
       }
 
-      if( !butter.project.isSaved ) {
+      if ( !butter.project.isSaved ) {
         // If saving fails, restore the "Save" button so the user can try again.
         _userData.save( function() { afterSave(); },
                         function() { toggleSaveButton( true );
@@ -151,7 +166,7 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       _projectName.textContent = node.value || _projectTitlePlaceHolderText;
       if( checkProjectName( _projectName.textContent ) ) {
         butter.project.name = _projectName.textContent;
-        login( prepare );
+        _userData.authenticationRequired( prepare );
       } else {
         nameError();
       }
@@ -160,14 +175,18 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
       _projectTitle.addEventListener( "click", projectNameClick, false );
     }
 
-    _saveButton.addEventListener( "click", function( e ){
-      if( butter.project.isSaved ) {
+    _saveButton.addEventListener( "click", function( e ) {
+      if ( !butter.cornfield.authenticated() ) {
+        _userData.authenticationRequired();
+      }
+      else if ( butter.project.isSaved ) {
         return;
       }
-
-      if ( checkProjectName( butter.project.name ) ) {
-        login( prepare );
-      } else {
+      else if ( checkProjectName( butter.project.name ) ) {
+        _userData.authenticationRequired( prepare, nameError );
+        return;
+      }
+      else {
         nameError();
       }
     }, false );
@@ -189,75 +208,32 @@ define([ "dialog/dialog", "util/lang", "ui/user-data", "ui/widget/tooltip" ],
 
     _projectName.addEventListener( "click", projectNameClick, false );
 
-    function toggleDropDown() {
-      _nameDropDown.classList.toggle( "butter-dropdown-off" );
-    }
-
-    function doLogout() {
-      _userData.logout( logoutDisplay );
-      _nameDropDown.classList.add( "butter-dropdown-off" );
-    }
-
-    function loginDisplay() {
-      _rootElement.classList.add( _loginClass );
-      _authButton.classList.remove( _activeClass );
-      _authButton.innerHTML = "<span class='icon icon-user'></span> " + butter.cornfield.name() + "<i class=\"icon icon-downtick\"></i>";
-      _authButton.title = "This is you!";
-      _authButton.addEventListener( "click", toggleDropDown, false );
-      _logoutBtn.addEventListener( "click", doLogout, false );
-    }
-
-    function logoutDisplay() {
-      _rootElement.classList.remove( _loginClass );
-      _buttonGroup.classList.remove( "btn-group" );
-      _authButton.classList.add( _activeClass );
-      _authButton.removeEventListener( "click", doLogout, false );
-      _authButton.innerHTML = DEFAULT_AUTH_BUTTON_TEXT;
-      _authButton.title = DEFAULT_AUTH_BUTTON_TITLE;
-      _authButton.addEventListener( "click", login, false );
-      togglePreviewButton( false );
-      _authButton.removeEventListener( "click", toggleDropDown, false );
-    }
-
-    if ( butter.cornfield.authenticated() ) {
-      loginDisplay();
-    } else {
-      logoutDisplay();
-      butter.listen( "autologinsucceeded", function onAutoLoginSucceeded( e ) {
-        butter.unlisten( "autologinsucceeded", onAutoLoginSucceeded );
-        loginDisplay();
-      });
-    }
-
     this.attachToDOM = function() {
       document.body.classList.add( "butter-header-spacing" );
       document.body.insertBefore( _rootElement, document.body.firstChild );
     };
 
-    _rootElement.querySelector( ".butter-feedback-btn" ).addEventListener( "click", function() {
-      var dialog = Dialog.spawn( "feedback" );
-      dialog.open();
-    }, false );
+    butter.listen( "autologinsucceeded", _this.views.login, false );
+    butter.listen( "authenticated", _this.views.login, false );
+    butter.listen( "logout", _this.views.logout, false );
 
-    butter.listen( "authenticated", function() {
-      loginDisplay();
-    });
+    //Default view
+    _this.views.logout();
+
     butter.listen( "projectsaved", function() {
       // Disable "Save" button
-      toggleSaveButton( false );
-      togglePreviewButton( true );
+      _this.views.clean();
       _projectName.textContent = butter.project.name;
     });
     butter.listen( "projectchanged", function() {
       // Re-enable "Save" button to indicate things are not saved
-      toggleSaveButton( true );
-      togglePreviewButton( false );
-      _saveButton.classList.add( "btn-green" );
+      _this.views.dirty();
     });
     butter.listen( "ready", function() {
       if ( butter.project.name ) {
         _projectName.textContent = butter.project.name;
       }
     });
+
   };
 });
