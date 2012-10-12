@@ -22,19 +22,25 @@
 
   define( [], function() {
 
-    var __csrf_token;
+    var __csrf_token = "";
 
-    function setCSRFToken() {
-      var element = document.getElementById("csrf_token_id");
-      if ( element ) {
-        __csrf_token = element.value;
-      }
-    }
+    function generateCSRFOnReadyStateHandler( callback ) {
+      return function() {
+        var xhrJSON;
 
-    if ( document.readyState !== "loading" ) {
-      setCSRFToken();
-    } else {
-      document.addEventListener( "DOMContentLoaded", setCSRFToken, false );
+        if ( this.readyState <= 2 ) {
+          return;
+        }
+
+        try {
+          xhrJSON = JSON.parse( this.response || this.responseText );
+          __csrf_token = xhrJSON.csrf;
+        }
+        catch( e ) {
+        }
+
+        callback.apply( this, arguments );
+      };
     }
 
     var XHR = {
@@ -75,7 +81,7 @@
       "get": function( url, callback, mimeTypeOverride, extraRequestHeaders ) {
         var xhr = new XMLHttpRequest();
         xhr.open( "GET", url, true );
-        xhr.onreadystatechange = callback;
+        xhr.onreadystatechange = generateCSRFOnReadyStateHandler( callback );
         xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest" );
         if ( extraRequestHeaders ) {
           for ( var requestHeader in extraRequestHeaders ) {
@@ -102,10 +108,10 @@
       "post": function( url, data, callback, type ) {
         var xhr = new XMLHttpRequest();
         xhr.open( "POST", url, true );
-        xhr.onreadystatechange = callback;
+        xhr.onreadystatechange = generateCSRFOnReadyStateHandler( callback );
         xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest" );
         if ( __csrf_token ) {
-          xhr.setRequestHeader( "X-CSRFToken", __csrf_token );
+          xhr.setRequestHeader( "x-csrf-token", __csrf_token );
         }
         if ( !type ) {
           xhr.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded" );

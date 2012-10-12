@@ -8,7 +8,8 @@ filters = {
       next();
     } else {
       res.json({
-        error: 'unauthorized'
+        error: 'unauthorized',
+        csrf: req.session._csrf
       }, 403 );
     }
   },

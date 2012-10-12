@@ -14,7 +14,6 @@ define(['util/xhr'], function(XHR) {
         email = "",
         name = "",
         username = "",
-        csrf = "",
         server = hostname();
 
     if ( !navigator.id ) {
