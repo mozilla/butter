@@ -57,9 +57,13 @@ module.exports = function( config, dbReadyFn ) {
 
       Project.find( { where: { email: email, id: pid } } )
       .success(function( project ) {
-        project.destroy().complete( function( err ) {
-          callback( err );
-        });
+        if ( project ) {
+          project.destroy().complete( function( err ) {
+            callback( err );
+          });
+        } else {
+          callback( "the project has already been deleted" );
+        }
       })
       .error(function( error ) {
         callback( error );
