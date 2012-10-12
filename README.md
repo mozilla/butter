@@ -44,7 +44,21 @@ Packaging and Distributing Butter
 --------------------------------
 
 Running `node make deploy` will compile all the necessary files into the `dist/` folder.
-Run `NODE_ENV=production node app.js` in the dist/cornfield directory in order to run the server in production mode.
+Run `NODE_ENV=production node app.js` in the `dist/cornfield` directory in order to run the server in production mode.
+
+Cornfield
+---------
+
+Cornfield is PopcornMaker's back-end server system, designed to serve content to users, store their ongoing work, and publish what they've done.
+
+### Storage
+
+There are two types of storage Cornfield needs to run: 
+
+* A database: To store user project data, a database is required. Cornfield uses the `Sequelize` middleware, so multiple database options are available. You are responsible for setting up and maintaining a PostgreSQL or MySQL database enrivonment if you choose to use either, so make sure a user has access to a database called `popcorn` for cornfield to run correctly.
+
+* A data-blob store: To store published projects, Cornfield can use the filesystem, or Amazon's S3. See the configuration options below for setting up this feature for your environment.
+
 
 ### Configuration
 
@@ -66,7 +80,7 @@ _hostname_ and _environment_ are variable:
 To change the cornfield configuration for your deployment of Butter, it's best to create a
 new file called _hostname_-_environment_.json that overrides the cornfield defaults.
 
-### Configuration Options
+#### Configuration Options
 
   - `server` settings for the cornfield server
     - `bindIP` the IP or hostname to use for the server (e.g., localhost).
@@ -185,7 +199,15 @@ Testing
 Before contributing a new patch be sure to run the following:
 
 * Run `node make check` to lint butter
-* Run `node make server` and navigate to http://localhost:8888/test to run the browser tests
+* Run `node make server` and navigate to `http://localhost:8888/test` to run the browser tests
+
+If you are contributing changes to cornfield, make sure you run the cornfield tests from the butter root directory this command:
+
+```
+npm test
+```
+
+Cornfield will attempt to run tests for using a mysql backend, but they will not run if mysql is not set up properly. To ensure that they run, use the `DB_HOST`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD` environment variables to tell the tests which host, database, username, and password to use respectively. If `DB_HOST` is left blank, `localhost` is assumed.
 
 Getting Involved
 ----------------
