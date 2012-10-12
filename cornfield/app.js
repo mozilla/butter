@@ -315,6 +315,7 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
 
     res.render( 'dashboard.jade', {
       user: {
+        csrf: req.session._csrf,
         email: email
       },
       projects: userProjects
