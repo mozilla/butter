@@ -169,10 +169,15 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
     }
 
     this.addTrackEvent = function( trackEvent ) {
-      var oldSelected = trackEvent ? !!trackEvent.selected : false;
+      var oldSelected = false;
 
       if ( !( trackEvent instanceof TrackEvent ) ) {
         trackEvent = new TrackEvent( trackEvent );
+      } else if ( trackEvent.selected ) {
+        // cache the track event's selected state
+        oldSelected = true;
+        // a selected track event cannot be selected again, so we deselect it
+        trackEvent.selected = false;
       }
 
       if ( trackEvent.track ) {
