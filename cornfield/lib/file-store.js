@@ -8,7 +8,7 @@ function ensurePathExistsSync( path ) {
 
   // Build paths above too, if not present. Check for relative or absolute paths
   if( parent !== "." && parent !== "/" ) {
-    ensurePathExists( parent );
+    ensurePathExistsSync( parent );
   }
 
   if( !fs.existsSync( path ) ) {
