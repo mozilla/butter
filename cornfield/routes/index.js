@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBED_SUFFIX ) {
+module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBED_SUFFIX, utils ) {
   app.get( '/api/whoami', filter.isLoggedIn, filter.isXHR, function( req, res ) {
     var email = req.session.email;
 
@@ -53,7 +53,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
       }
 
       // Delete published projects, too
-      var embedShell = id.toString( 36 ),
+      var embedShell = utils.generateId( id ),
           embedDoc = embedShell + EMBED_SUFFIX;
 
       stores.publish.remove( embedShell, function( e ) {
@@ -147,4 +147,20 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
     storeData( req, res, stores.feedback );
   });
 
+  app.get( '/api/publishurl/:id',
+    filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
+    function( req, res ) {
+
+    var id = parseInt( req.params.id, 10 ),
+        url;
+
+    if ( isNaN( id ) ) {
+      res.json( { error: "ID was not a number" }, 500 );
+      return;
+    }
+
+    url = utils.generatePublishURL( utils.generateId( id ) );
+
+    res.json( url );
+  });
 };

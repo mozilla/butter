@@ -158,6 +158,14 @@ define( [ 'core/eventmanager', 'core/media' ],
       var oldTarget, targets, targetData,
           mediaData, media, m, i, l;
 
+      if ( json.name ) {
+        _this.name = json.name;
+      }
+
+      if ( json.projectID ) {
+        _id = json.projectID;
+      }
+
       // If JSON, convert to Object
       if ( typeof json === "string" ) {
         try {

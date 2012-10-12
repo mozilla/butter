@@ -24,6 +24,12 @@ var express = require('express'),
     // If a separate hostname is given for embed, use it, otherwise use app's hostname
     EMBED_HOSTNAME = CONFIG.dirs.embedHostname ? stripSlash( CONFIG.dirs.embedHostname ) : APP_HOSTNAME,
     EMBED_SUFFIX = '_',
+    constants = {
+      APP_HOSTNAME: APP_HOSTNAME,
+      EMBED_HOSTNAME: EMBED_HOSTNAME,
+      EMBED_SUFFIX: EMBED_SUFFIX
+    },
+    utils,
     WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
     VALID_TEMPLATES = CONFIG.templates,
     EXPORT_ASSETS = CONFIG.exportAssets;
@@ -83,12 +89,14 @@ app.configure( function() {
   stores.publish = setupStore( CONFIG.publishStore );
   stores.crash = setupStore( CONFIG.crashStore );
   stores.feedback = setupStore( CONFIG.feedbackStore );
+
+  utils = require( './lib/utils' )( constants, stores );
 });
 
 require( 'express-persona' )( app, {
   audience: CONFIG.dirs.appHostname
 });
-require('./routes')( app, User, filter, sanitizer, stores, EMBED_SUFFIX );
+require('./routes')( app, User, filter, sanitizer, stores, EMBED_SUFFIX, utils );
 
 function writeEmbedShell( path, url, data, callback ) {
   if( !writeEmbedShell.templateFn ) {
@@ -233,14 +241,10 @@ app.post( '/api/publish/:id',
       }
       popcornString += '</script>\n';
 
-      data = startString + baseString + templateScripts + externalAssetsString +
-             data.substring( headEndTagIndex, bodyEndTagIndex ) +
-             popcornString + data.substring( bodyEndTagIndex );
-
       // Convert 1234567890 => "kf12oi"
-      var idBase36 = id.toString( 36 ),
-          publishUrl = EMBED_HOSTNAME + '/' + stores.publish.expand( idBase36 ),
-          iframeUrl = EMBED_HOSTNAME + '/' + stores.publish.expand( idBase36 + EMBED_SUFFIX );
+      var idBase36 = utils.generateId( id ),
+          publishUrl = utils.generatePublishURL( idBase36 ),
+          iframeUrl = utils.generateEmbedURL( idBase36 );
 
       function finished( err ) {
         if ( err ) {
