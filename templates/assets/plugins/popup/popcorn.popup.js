@@ -135,7 +135,7 @@
                      "Eye", "Heart", "Info", "Man", "Money", "Music", "Net",
                      "Skull", "Star", "Thumbs Down", "Thumbs Up", "Time",
                      "Trophy", "Tv", "User", "Virus", "Women" ],
-          values: [ "error", "audio", "broken heart", "cone", "earth",
+          values: [ "error", "audio", "brokenheart", "cone", "earth",
                      "eye", "heart", "info", "man", "money", "music", "net",
                      "skull", "star", "thumbsdown", "thumbsup", "time",
                      "trophy", "tv", "user", "virus", "women" ],
