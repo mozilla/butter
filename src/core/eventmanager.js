@@ -236,15 +236,13 @@ define( [], function(){
         return;
       }
 
-      if ( listener ){
-        idx = these.indexOf( listener );
-        if ( idx > -1 ){
-          these.splice( idx, 1 );
-        }
-      }
-
       if ( !listener ) {
         throw "Removing listeners without specifying a listener explicitly is prohibited. Please remove listeners directly.";
+      }
+
+      idx = these.indexOf( listener );
+      if ( idx > -1 ){
+        these.splice( idx, 1 );
       }
 
       // If no listeners exist in the pool any longer, remove the pool and the
