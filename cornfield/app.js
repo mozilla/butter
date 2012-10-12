@@ -256,6 +256,7 @@ app.post( '/api/publish/:id',
                          {
                            author: project.author,
                            projectName: project.name,
+                           embedShellSrc: publishUrl,
                            embedSrc: iframeUrl,
                            baseHref: APP_HOSTNAME
                          },

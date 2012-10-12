@@ -4,10 +4,18 @@ html
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
     meta(name='author', content='#{author}')
-    meta(name='title', content='#{projectName} - Mozilla Popcorn')
-    meta(name='description', content='This was created with Mozilla Popcorn')
-    link(rel='image_src', href='#{baseHref}/resources/logo/popcorn.png')
-    title #{projectName} - Mozilla Popcorn
+    meta(name='title', content='#{projectName}')
+    meta(name='og:title', content='#{projectName}')
+    meta(name='og:type', content='video.other')
+    meta(name='og:url', content='#{embedShellSrc}')
+    meta(name='og:image', content='#{baseHref}/resources/logo/popcorn.png')
+    meta(name='og:image:type', content='image/png')
+    meta(name='og:image:width', content='33')
+    meta(name='og:image:width', content='50')
+    meta(name='og:description', content='This was created with Popcorn Maker - part of the Mozilla Webmaker initiative')
+    meta(name='og:site_name', content='https://webmaker.org')
+    meta(name='description', content='This was created with Popcorn Maker - part of the Mozilla Webmaker initiative')
+    title #{projectName} - Popcorn Maker
     meta(name='viewport', content='width=device-width')
     link(rel='stylesheet', href='#{baseHref}/css/embed-shell.css')
   body
