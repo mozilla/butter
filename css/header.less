@@ -1,7 +1,7 @@
 /*********************************************************
 * HEADER
 */
-@_logoWidth: 180px;
+@_logoWidth: 200px;
 
 // Used to position absolute elements in the middle of our header bar area
 @HEADER_ALIGN_MIDDLE: 2.7;
@@ -18,6 +18,7 @@
 }
 
 .butter-header {
+  position: relative;
   z-index: @HEADER_Z_INDEX;
   position: fixed;
   left: 0;
@@ -45,17 +46,27 @@
 .butter-logo {
   position: absolute;
   top: 0;
-  left: 30px;
-  height: 100px;
+  left: 0;
+  height: 100%;
   width: @_logoWidth;
-  background: url( "../resources/logo.png" ) no-repeat;
+  background: url( "../resources/logo.png" ) 45px 0 no-repeat;
+   // Beta
+  &:after {
+    position: absolute;
+    bottom: -5px;
+    content: "";
+    display: block;
+    height: 71px;
+    width: 71px;
+    background: url( "../resources/beta.png" ) no-repeat;
+  }
 }
 
 .butter-nav {
   position: relative;
   margin: 0;
   padding: 0;
-  margin-left: @_logoWidth + 50;
+  margin-left: @_logoWidth + 20px;
   list-style: none;
   height: @PRIMARYHEADER_SPACING;
   line-height: @PRIMARYHEADER_SPACING;
