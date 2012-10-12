@@ -6,15 +6,23 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
       // Keep track of whether this is production or development
       deploymentType = app.settings.env === "production" ? "production" : "development";
 
-  app.get( '/api/whoami', filter.isLoggedIn, filter.isXHR, function( req, res ) {
+  app.get( '/api/whoami', filter.isXHR, function( req, res ) {
     var email = req.session.email;
 
-    res.json({
-      status: "okay",
-      email: email,
-      name: email,
-      username: email
-    });
+    if (email) {
+      res.json({
+        status: "okay",
+        csrf: req.session._csrf,
+        email: email,
+        name: email,
+        username: email
+      });
+    } else {
+      res.json({
+        error: 'unauthorized',
+        csrf: req.session._csrf,
+      }, 403 );
+    }
   });
 
   app.get( '/api/project/:id?',
