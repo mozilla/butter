@@ -217,9 +217,7 @@ define( [ 'core/eventmanager', 'core/media' ],
       // If we're loading data from the server, then save it again so stuff works
       // This is a bad hack and I should feel bad
       if ( json.projectID ) {
-        _this.save(function(e) {
-
-        });
+        _this.save();
       }
     };
 
@@ -246,6 +244,10 @@ define( [ 'core/eventmanager', 'core/media' ],
     // to be saved (i.e., it has been changed since last save, or was never
     // saved before).
     _this.save = function( callback ) {
+      if ( !callback ) {
+        callback = function() {};
+      }
+
       // Don't save if there is nothing new to save.
       if ( _this.isSaved ) {
         callback({ error: "okay" });
