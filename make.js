@@ -484,21 +484,14 @@ target.deploy = function(){
   cp('-R', 'resources', DIST_DIR);
   cp('-R', 'templates', DIST_DIR);
   cp('-R', 'cornfield', DIST_DIR);
-  cp('-R', 'node_modules', DIST_DIR);
-
-  // Copy the popcorn test videos over
-  mkdir('-p', './dist/external/popcorn-js/test');
-  cp('external/popcorn-js/test/trailer.*', './dist/external/popcorn-js/test');
-
-  // Copy the rest of the popcorn plugins over in case templates look for them
-  mkdir('-p', './dist/external/popcorn-js/plugins');
-  cp('-R', 'external/popcorn-js/plugins/*', './dist/external/popcorn-js/plugins');
+  cp('package.json', 'README.md', DIST_DIR);
 
   // Export will need a version of popcorn.js where the templates expect it
   // at dist/external/popcorn-js/popcorn.js
   if ( compress ) {
     exec( UGLIFY + ' --output ' + BUTTERED_POPCORN + ' ' + BUTTERED_POPCORN );
   }
+  mkdir( '-p', 'dist/external/popcorn-js/' );
   mv( BUTTERED_POPCORN, './dist/external/popcorn-js/popcorn.js' );
 
   // Move everything into the public folder
@@ -507,6 +500,11 @@ target.deploy = function(){
 
   // Write-out version info regarding Butter and Popcorn so cornfield knows what it's serving.
   publishVersionInfo( join( DIST_DIR, VERSIONS_CONFIG ) );
+
+  // Create a tar archive
+  var tarName = 'butter-' + gitDescribe( '.' ) + '.tar';
+  exec( 'tar -cyf "' + tarName + '" dist' );
+  mv( tarName, 'dist' );
 
   // It's important to use the production config
   echo( 'Run cornfield with `NODE_ENV=production node app.js`' );
