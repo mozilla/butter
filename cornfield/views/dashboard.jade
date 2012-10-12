@@ -54,6 +54,7 @@ html
               req = new XMLHttpRequest();
               req.open( 'POST', '/api/delete/' + currentDeletionId, false );
               req.setRequestHeader( "X-Requested-With", "XMLHttpRequest" );
+              req.setRequestHeader( "x-csrf-token", document.getElementById( "csrf" ).value );
               row = document.querySelector( 'tr[data-project-id="' + currentDeletionId + '"]' );
               currentDeletionId = null;
               req.send( null );
@@ -219,3 +220,4 @@ html
           td
             a(href= "#", data-project-id=project._id, data-project-name=project.name).butter-delete-button
               | Delete
+    input(id="csrf", type="hidden", value=user.csrf)

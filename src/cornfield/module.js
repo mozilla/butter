@@ -36,7 +36,7 @@ define(['util/xhr'], function(XHR) {
                   if (response.status === "okay") {
 
                     // Get email, name, and username after logging in successfully
-                    butter.cornfield.whoami( function( data ) {
+                    whoami( function( data ) {
                       callback( data );
                     });
                     return;
@@ -55,7 +55,7 @@ define(['util/xhr'], function(XHR) {
       });
     };
 
-    this.whoami = function( callback ) {
+    function whoami( callback ) {
       XHR.get( server + "/api/whoami", function() {
         if ( this.readyState === 4 ) {
           var response;
@@ -79,13 +79,13 @@ define(['util/xhr'], function(XHR) {
           }
         }
       });
-    };
+    }
 
     // Check to see if we're already logged in
     butter.listen( "ready", function onMediaReady() {
       butter.unlisten( "ready", onMediaReady );
 
-      butter.cornfield.whoami( function( response ) {
+      whoami( function( response ) {
         if ( !response.error ) {
           butter.dispatch( "autologinsucceeded", response );
         }
