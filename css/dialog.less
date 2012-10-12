@@ -12,13 +12,15 @@
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba( 0, 0, 0, @_overlayOpacity );
   opacity: 0;
   &.fade-in {
     opacity: 1;
     .transition( opacity 0.3s );
+  }
+  &.butter-modal-overlay-dark-bg {
+    right: 0;
+    bottom: 0;
+    background: rgba( 0, 0, 0, @_overlayOpacity );
   }
 
 }
@@ -62,6 +64,9 @@
       padding: 10px;
       min-height: 150px;
     }
+  }
+  .butter-dialog-body {
+    padding: 20px;
   }
 
 }
@@ -139,4 +144,98 @@
   height: 50px;
   width: 50px;
   background: url( "/resources/icons/ticket.png" ) top center no-repeat;
+}
+
+/*********************************************************
+* First-run
+*/
+
+.first-run {
+  .butter-editor-area {
+    z-index: @MODAL_Z_INDEX + 1;
+  }
+  .butter-modal-container {
+    position: relative;
+    z-index: @MODAL_Z_INDEX + 1;
+  }
+}
+
+.butter-first-run-dialog {
+  position: fixed;
+  right: 360px;
+  top: 80px;
+  -moz-animation: bounce 1s infinite;
+  -webkit-animation: bounce 1s infinite;
+  -o-animation: bounce 1s infinite;
+  animation: bounce 1s infinite;
+
+  .butter-logo {
+    top: -15px;
+    left: 0;
+  }
+
+  .triangle( "right", 20px, @baseLight, 1px, #CCC );
+
+  .butter-dialog-title {
+    padding: 10px 0 10px 50px;
+  }
+  p {
+    margin-top: 0;
+  }
+  width: 400px;
+}
+
+.overlay-highlight {
+  z-index: @MODAL_Z_INDEX + 1;
+  position: relative;
+}
+
+.butter-tooltip.tooltip-popup,
+.butter-tooltip.tooltip-media {
+  background: #F8EDAB;
+  h3 {
+    margin: 0 0 5px 0;
+    font-style: normal;
+    font-weight: 700;
+    border-radius: 3px;
+  }
+  &:after {
+    border-bottom-color: #F8EDAB;
+  }
+}
+
+.butter-tooltip.tooltip-popup {
+  text-transform: none;
+}
+
+.butter-tooltip.tooltip-media {
+  width: 150px;
+  margin-left: -75px;
+  .center-div {
+    display: inline-block;
+  }
+}
+
+@-moz-keyframes bounce {
+  0% { right: 360px; }
+  50% { right: 345px; }
+  100% { right: 360px; }
+}
+
+@-webkit-keyframes bounce {
+  0% { right: 360px; }
+  50% { right: 345px; }
+  100% { right: 360px; }
+}
+
+@-o-keyframes bounce {
+  0% { right: 360px; }
+  50% { right: 345px; }
+  100% { right: 360px; }
+}
+
+@keyframes bounce {
+  0% { right: 360px; }
+  50% { right: 345px; }
+  100% { right: 360px; }
 }

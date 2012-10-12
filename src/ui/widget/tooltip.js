@@ -40,6 +40,7 @@ define( [], function() {
         tooltipElement = document.createElement( "div" );
 
     tooltipElement.classList.add( __tooltipClass );
+    tooltipElement.classList.add( options.name );
 
     Object.defineProperty( this, "message", {
       get: function() {
@@ -122,7 +123,7 @@ define( [], function() {
       set: function( newParent ) {
         if ( newParent ) {
           // Parent must be relative or absolute for tooltip to be positioned properly
-          if ( [ "absolute", "relative" ].indexOf( getComputedStyle( newParent ).getPropertyValue( "position" ) ) === -1 ) {
+          if ( [ "absolute", "relative", "fixed" ].indexOf( getComputedStyle( newParent ).getPropertyValue( "position" ) ) === -1 ) {
             newParent.style.position = "relative";
           }
 

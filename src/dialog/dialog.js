@@ -47,7 +47,7 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
       // Make sure we have a handle to the butter-dialog div. If there are comments or extra elements
       // described in layoutSrc, we don't care about them.
       if ( !( _rootElement.classList && _rootElement.classList.contains( "butter-dialog" ) ) ) {
-        _rootElement = _rootElement.querySelector( ".butter-dialog" );
+        _rootElement = _rootElement.querySelector( ".butter-dialog" ) || _rootElement.querySelector( ".butter-first-run-dialog" );
       }
 
       /**
@@ -252,13 +252,13 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
          *
          * Opens the dialog. If listeners were supplied during construction, they are attached now.
          */
-        open: function() {
+        open: function( overlay ) {
           for ( var e in _listeners ) {
             if ( _listeners.hasOwnProperty( e ) ) {
               _external.listen( e, _listeners[ e ] );
             }
           }
-          _modal = new Modal( _rootElement );
+          _modal = new Modal( _rootElement, overlay );
           setTimeout( function() {
             _external.focus();
           }, 0 );
