@@ -6,7 +6,8 @@ define( [ "text!dialog/dialogs/crash.html", "dialog/dialog", "util/lang" ],
   function( LAYOUT_SRC, Dialog, LangUtil ) {
 
     function formatReport( report ) {
-      return "<b>URL</b>: " + report.url + ":" + report.lineno + "<br>" +
+      return "<b>Date</b>: " + report.date + "<br>" +
+             "<b>URL</b>: " + report.url + ":" + report.lineno + "<br>" +
              "<b>Error</b>: " + LangUtil.escapeHTML( report.message ) + "<br>" +
              "<b>Browser</b>: " + report.userAgent + "<br>" +
              "<b>Versions</b>: Popcorn=" + report.popcornVersion + ", Butter=" + report.butterVersion;
