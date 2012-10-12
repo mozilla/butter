@@ -7,11 +7,11 @@ function ensurePathExistsSync( path ) {
   var parent = Path.dirname( path );
 
   // Build paths above too, if not present. Check for relative or absolute paths
-  if( parent !== "." && parent !== "/" ) {
+  if ( parent !== "." && parent !== "/" ) {
     ensurePathExistsSync( parent );
   }
 
-  if( !fs.existsSync( path ) ) {
+  if ( !fs.existsSync( path ) ) {
     fs.mkdirSync( path );
   }
 }
