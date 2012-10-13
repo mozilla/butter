@@ -1,3 +1,5 @@
+/*global Butter,test,ok,strictEqual,notStrictEqual,equal*/
+
 document.addEventListener( "DOMContentLoaded", function( e ){
 
   Butter.init({
@@ -19,7 +21,7 @@ document.addEventListener( "DOMContentLoaded", function( e ){
             message: "This is a ToolTip",
             left: "25%",
             top: "55%"
-          })
+          });
 
           fooTip = Butter.ToolTip.get( "foo-tip" );
 
