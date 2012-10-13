@@ -1,6 +1,6 @@
 (function() {
 
-  var TestRunner = window.TestRunner = function() {
+  window.TestRunner = function() {
     var id = function( name ) {
           return document.getElementById( name );
         },
@@ -45,7 +45,6 @@
     function receiveResults( data ) {
       var message = JSON.parse( data ),
           li,
-          b,
           ol,
           a,
           time,
@@ -186,11 +185,7 @@
       xhr.onreadystatechange = function() {
         if ( xhr.readyState === 4 ) {
           var allTests = JSON.parse( xhr.responseText ),
-              testGroup,
-              testLinks = id( "test-links" ),
-              anchor,
-              anchorText,
-              testName;
+              testGroup;
 
           for ( var x in allTests ) {
             if ( allTests[ x ] ) {

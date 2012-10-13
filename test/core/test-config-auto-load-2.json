@@ -2,7 +2,7 @@
   "name": "test-config-auto-load",
   "makeVideoURLsUnique": false,
   "baseDir": "../../../",
-  "scrapePage": false,  
+  "scrapePage": false,
   "ui": {
     "enabled": false
   },

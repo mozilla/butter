@@ -1,3 +1,5 @@
+/*global Butter*/
+
 window._testInitCallback = function(){};
 window._testBeforeCallback = function(){};
 window._testAfterCallback = function(){};

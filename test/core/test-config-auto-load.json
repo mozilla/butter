@@ -3,7 +3,7 @@
   "makeVideoURLsUnique": false,
   "baseDir": "../../../",
   "savedDataUrl": "../saved-data-0000.json",
-  "scrapePage": false,  
+  "scrapePage": false,
   "ui": {
     "enabled": false
   },
