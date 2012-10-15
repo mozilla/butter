@@ -273,6 +273,9 @@ li {
   margin-left: -24px;
   zoom: 1;
 }
+.row {
+  margin-bottom: 24px;
+}
 .row:after {
   display: block;
   visibility: hidden;

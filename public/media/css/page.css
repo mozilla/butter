@@ -28,7 +28,8 @@ Global styles and classes
     line-height: 23px
   }
 
-  p {
+  p,
+  ul {
     font-family: "Open Sans",sans-serif;
     font-size: 13px;
     color: rgb(147, 149, 152);
@@ -274,6 +275,7 @@ Home styles
   .action {
     text-align: center;
   }
+
 
 /*
 Home styles
