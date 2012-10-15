@@ -61,7 +61,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       options = options || {};
 
       var persist = options.persist;
-      persist = persist === true || persist === false ? persist : Editor.isPersistant( editorName );
+      persist = persist === true || persist === false ? persist : Editor.isPersistent( editorName );
 
       // If the editor has never been used before, open it now
       _editorAreaDOMRoot.classList.remove( "minimized" );

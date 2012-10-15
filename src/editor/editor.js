@@ -168,12 +168,9 @@ define( [ "util/lang", "util/xhr",
     },
 
 
-    isPersistant: function( editorName ) {
+    isPersistent: function( editorName ) {
       return __editors[ editorName ].persist;
-    },
-
-    // will be set by Editor module when it loads
-    baseDir: null
+    }
 
   };
 
