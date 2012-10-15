@@ -11,7 +11,7 @@
     <script>
       asyncTest( "addTrack functionality", 1, function() {
         createButterModule( function( butter ) {
-            var track = { name: "TestTrack" };
+          var track = { name: "TestTrack" };
 
           butter.listen( "trackadded", function onTrackAdded( e ) {
             butter.unlisten( "trackadded", onTrackAdded );
@@ -20,6 +20,30 @@
           });
 
           butter.currentMedia.addTrack( track );
+        });
+      });
+
+      asyncTest( "addTrack protection for owned tracks", 2, function() {
+        createButterModule( function( butter ) {
+          var track = butter.currentMedia.addTrack(),
+              threw = false;
+
+          raises( function() {
+            butter.currentMedia.addTrack( track );
+          }, "Track with _media cannot be added until its removed from its Media." );
+
+          butter.currentMedia.removeTrack( track );
+
+          try {
+            butter.currentMedia.addTrack( track );
+          }
+          catch( e ) {
+            threw = true;
+          }
+
+          ok( !threw, "Track added without throwing after being removed from its Media." );
+
+          start();
         });
       });
     </script>
