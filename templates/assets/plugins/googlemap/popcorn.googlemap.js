@@ -496,7 +496,7 @@ var googleCallback;
         type: "number",
         label: "Left",
         units: "%",
-        "default": 5,
+        "default": 15,
         hidden: true
       },
       top: {
@@ -504,7 +504,7 @@ var googleCallback;
         type: "number",
         label: "Top",
         units: "%",
-        "default": 5,
+        "default": 15,
         hidden: true
       },
       width: {
@@ -512,7 +512,7 @@ var googleCallback;
         type: "number",
         label: "Width",
         units: "%",
-        "default": 20,
+        "default": 70,
         hidden: true
       },
       height: {
@@ -520,7 +520,7 @@ var googleCallback;
         type: "number",
         label: "height",
         units: "%",
-        "default": 20,
+        "default": 70,
         hidden: true
       },
       lat: {
