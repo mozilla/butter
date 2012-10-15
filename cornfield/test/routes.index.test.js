@@ -6,7 +6,11 @@ var mockEmail = "test@example.org",
     mockUser = require("./mock.user")(),
     mockFilter = require("./mock.filter"),
     mockSanitizer = require("./mock.sanitizer"),
-    mockStore = require("./mock.store");
+    mockStore = require("./mock.store"),
+    utils = require("../lib/utils")({
+      EMBED_HOSTNAME: "http://localhost:8888",
+      EMBED_SUFFIX: "_"
+    }, mockStore);
 
 var express = require("express");
 var app = express.createServer();
@@ -17,7 +21,7 @@ app.use(mockSession({
 }))
 .use(express.bodyParser());
 
-require("../routes")(app, mockUser, mockFilter, mockSanitizer, mockStore);
+require("../routes")(app, mockUser, mockFilter, mockSanitizer, mockStore, utils);
 
 test("whoami API valid", function(t) {
   request(app)
@@ -84,6 +88,8 @@ test("project data get valid", function(t) {
       mockData.data.projectID = mockData.id;
       mockData.data.author = mockData.author;
       mockData.data.template = mockData.template;
+      mockData.data.publishUrl = mockData.publishUrl;
+      mockData.data.iframeUrl = mockData.iframeUrl;
       mockData = mockData.data;
       t.deepEqual(res.body, mockData, "saved data is equal");
 

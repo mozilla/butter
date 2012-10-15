@@ -188,10 +188,7 @@ define( [ 'core/eventmanager', 'core/media' ],
 
       if ( json.projectID ) {
         _id = json.projectID;
-
-        // If there's an ID on a project, it means it's ours, and we've reloaded.
-        // Since we saved it once in the past, start doing backups.
-        startBackups();
+        _isPublished = true;
       }
 
       if ( json.name ) {
@@ -204,6 +201,14 @@ define( [ 'core/eventmanager', 'core/media' ],
 
       if ( json.author ) {
         _author = json.author;
+      }
+
+      if ( json.publishUrl ) {
+        _publishUrl = json.publishUrl;
+      }
+
+      if ( json.iframeUrl ) {
+        _iframeUrl = json.iframeUrl;
       }
 
       targets = json.targets;
@@ -247,11 +252,6 @@ define( [ 'core/eventmanager', 'core/media' ],
         startBackups();
       }
 
-      // If we're loading data from the server, then save it again so stuff works
-      // This is a bad hack and I should feel bad
-      if ( json.projectID ) {
-        _this.save();
-      }
     };
 
     // Export project data as JSON string (e.g., for use with project.import())
