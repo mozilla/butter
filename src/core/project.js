@@ -309,19 +309,18 @@ define( [ 'core/eventmanager', 'core/media' ],
     var obj = __butterStorage.getItem( "butter-backup-project" ),
         p;
 
-    if ( !obj ){
-      callback();
-      return;
-    }
-
-    if ( butter.config.value( "recover" ) !== "purge" ) {
-      p = new Project( butter );
-      p.import( obj );
-    }
+    try {
+      obj = JSON.parse( obj );
+      if ( obj && butter.config.value( "recover" ) !== "purge" ) {
+        p = new Project( butter );
+        p.import( obj );
+      }
+    } catch( e ) { }
 
     // Delete since user can save if he/she wants.
     __butterStorage.removeItem( "butter-backup-project" );
     callback( p );
+
   };
 
   return Project;
