@@ -2,15 +2,15 @@
 
 EditorHelper.addPlugin( "text", function( trackEvent ) {
   var _container,
-      media;
+      target;
 
   _container = trackEvent.popcornTrackEvent._container;
-  media = document.getElementById( trackEvent.track._media.target );
+  target = trackEvent.popcornTrackEvent._target;
 
   if ( window.jQuery ) {
     if ( trackEvent.popcornOptions.position === "custom" ) {
-      EditorHelper.draggable( trackEvent, _container, media );
-      EditorHelper.resizable( trackEvent, _container, media, {
+      EditorHelper.draggable( trackEvent, _container, target );
+      EditorHelper.resizable( trackEvent, _container, target, {
         minWidth: 10,
         handlePositions: "e"
       });

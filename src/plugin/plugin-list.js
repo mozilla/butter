@@ -8,7 +8,17 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
   return function( butter ) {
 
     var _parentElement = LangUtils.domFragment( EDITOR_LAYOUT, ".plugin-list-editor" ),
-        _containerElement = _parentElement.querySelector( ".plugin-container" );
+        _containerElement = _parentElement.querySelector( ".plugin-container" ),
+        _targets = butter.targets,
+        _iframeCovers = [],
+        _iframeCover;
+
+    for ( var i = 0, l = _targets.length; i < l; i++ ) {
+      _iframeCover = document.createElement( "div" );
+      _iframeCover.classList.add( "butter-iframe-fix" );
+      _targets[ i ].element.appendChild( _iframeCover );
+      _iframeCovers.push( _iframeCover );
+    }
 
     var _pluginArchetype = _containerElement.querySelector( ".butter-plugin-tile" );
     _pluginArchetype.parentNode.removeChild( _pluginArchetype );
@@ -33,14 +43,16 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
 
       DragNDrop.helper( element, {
         start: function() {
-          var targets = butter.targets;
-
-          for ( var i = 0, l = targets.length; i < l; ++i ) {
-            targets[ i ].view.blink();
+          for ( var i = 0, l = _targets.length; i < l; ++i ) {
+            _targets[ i ].view.blink();
+            _iframeCovers[ i ].style.display = "block";
           }
         },
         stop: function() {
           butter.currentMedia.pause();
+          for ( var i = 0, l = _targets.length; i < l; ++i ) {
+            _iframeCovers[ i ].style.display = "none";
+          }
         }
       });
 

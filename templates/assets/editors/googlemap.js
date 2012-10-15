@@ -4,7 +4,7 @@ EditorHelper.addPlugin( "googlemap", function( trackEvent, popcornInstance ) {
   var UPDATE_TIMEOUT = 250;
 
   var container,
-      media,
+      target,
       popcorn = popcornInstance,
       popcornEventMapReference;
 
@@ -15,11 +15,11 @@ EditorHelper.addPlugin( "googlemap", function( trackEvent, popcornInstance ) {
       return;
     }
 
-    media = document.getElementById( trackEvent.track._media.target );
+    target = trackEvent.popcornTrackEvent._target;
 
-    EditorHelper.draggable( trackEvent, container, media );
-    
-    EditorHelper.resizable( trackEvent, container, media, {
+    EditorHelper.draggable( trackEvent, container, target );
+
+    EditorHelper.resizable( trackEvent, container, target, {
       handlePositions: "e, se, s, sw, w, n, ne",
       minHeight: 20,
       minWidth: 20

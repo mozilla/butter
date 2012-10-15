@@ -40,6 +40,7 @@ body.editor-minimized .body-wrapper {
   width: 100%;
   padding-bottom: 56.25%;
   height: 0;
+  z-index: 1;
 }
 
 .video > video,
@@ -50,10 +51,6 @@ body.editor-minimized .body-wrapper {
   left: 0;
   width: 100%;
   height: 100%;
-}
-
-.video > iframe {
-  z-index: -1;
 }
 
 .video > video {
