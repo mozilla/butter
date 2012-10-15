@@ -32,7 +32,7 @@
   display: none;
   width: 57px;
   height: 66px;
-  background: url(../resources/controls/icon_play.png) no-repeat;
+  background: url( "../resources/controls/icon_play.png" ) no-repeat;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -114,7 +114,7 @@
   position: absolute;
   left: 43px;
   height: 27px;
-  background: url(../resources/controls/controls_time_arrowL.gif) no-repeat left top, url(../resources/controls/controls_time_arrowR.gif) right top no-repeat;
+  background: url( "../resources/controls/controls_time_arrowL.gif" ) no-repeat left top, url( "../resources/controls/controls_time_arrowR.gif" ) right top no-repeat;
   background-color: #f2f2f2;
   font-size: 12px;
   line-height: 1em;
@@ -195,7 +195,7 @@
 #controls-play {
   width: 28px;
   height: 28px;
-  background: #1eb771 url(../resources/controls/controls_icon_playPause.png) no-repeat;
+  background: #1eb771 url( "../resources/controls/controls_icon_playPause.png" ) no-repeat;
   padding: 0;
   border-radius: 3px;
   margin-top: 7px;
@@ -206,7 +206,7 @@
 #controls-mute {
   width: 14px;
   height: 14px;
-  background-image: url(../resources/glyphicons-halflings.png);
+  background-image: url( "../resources/icons/glyphiconshalflings-alt.png" );
   cursor: pointer;
   padding: 0;
   left: -8px;
@@ -237,7 +237,7 @@
 }
 
 .controls-right div {
-  background: #cecfcf url(../resources/controls/controls_icons.png) no-repeat;
+  background: #cecfcf url( "../resources/controls/controls_icons.png" ) no-repeat;
   margin-top: 6px;
   margin-left: 6px;
   width: 28px;
@@ -266,7 +266,7 @@
 #controls-logo {
   width: 45px;
   height: 42px;
-  background: url(../resources/controls/controls_icons.png) no-repeat -85px 2px;
+  background: url( "../resources/controls/controls_icons.png" ) no-repeat -85px 2px;
   position: absolute;
   right: 0;
   cursor: pointer;
