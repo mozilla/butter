@@ -2,16 +2,20 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ 'core/eventmanager' ], function( EventManager ) {
+define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
+  function( EventManager, LangUtils, ScrollGroup ) {
 
   var SCROLL_INTERVAL = 16,
       DEFAULT_SCROLL_AMOUNT = 10,
       SCROLL_WINDOW = 10,
+      MIN_SCROLL_ELEMENT_ONSCREEN_WIDTH = 50,
       MAXIMUM_Z_INDEX = 2147483647,
       MIN_WIDTH = 15,
       RESIZABLE_CLASS = "butter-resizable";
 
   var NULL_FUNCTION = function() {};
+
+  var DEFAULT_ONSTOP_DRAGGABLE_FUNCTION = function() { return false; };
 
   var __droppables = [],
       __mouseDown = false,
@@ -20,7 +24,9 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       __mouseLast = [ 0, 0 ],
       __scroll = false,
       __helpers = [],
-      __draggedOnce = false;
+      __draggedOnce = false,
+      __scrollGroups = [],
+      __nullScrollGroup = new ScrollGroup.NullScrollGroup();
 
   // for what seems like a bug in chrome. :/
   // dataTransfer.getData seems to report nothing
@@ -35,66 +41,97 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
 
   var DragNDrop = {};
 
-  function updateTimeout() {
-    __scroll = false;
-    if ( __mouseDown ) {
-      for ( var i = __selectedDraggables.length - 1; i >= 0; --i ) {
-        __selectedDraggables[ i ].update();
+  function __getScrollGroup( scrollElement ) {
+    var i, newScrollGroup;
+
+    if ( scrollElement ) {
+      for ( i = __scrollGroups.length - 1; i >= 0; --i ) {
+        if ( __scrollGroups[ i ].scrollElement === scrollElement ) {
+          return __scrollGroups[ i ];
+        }
       }
-      window.setTimeout( updateTimeout, SCROLL_INTERVAL );
+      newScrollGroup = new ScrollGroup.ScrollGroup( scrollElement );
+      __scrollGroups.push( newScrollGroup );
+      return newScrollGroup;
+    }
+    else {
+      return __nullScrollGroup;
     }
   }
 
-  function onDragged( e ) {
+  function __draggableUpdateTimeout() {
+    var i, j,
+        draggables = __selectedDraggables,
+        draggable,
+        droppable;
+
+    __scroll = false;
+
+    if ( __mouseDown ) {
+      for ( i = __selectedDraggables.length - 1; i >= 0; --i ) {
+        __selectedDraggables[ i ].update();
+      }
+      for ( i = __scrollGroups.length - 1; i >= 0; --i ) {
+        __scrollGroups[ i ].processIteration();
+      }
+
+      for ( i = draggables.length - 1; i >= 0; --i ) {
+        draggable = draggables[ i ];
+        draggable.drag();
+        for ( j = __droppables.length - 1; j >= 0; --j ) {
+          droppable = __droppables[ j ];
+          if ( draggable.element === droppable.element ||
+              !droppable.drag( draggable.element.getBoundingClientRect() ) ) {
+            droppable.forget( draggable );
+          }
+          else {
+            // If we stumbled on a valid droppable early in the array
+            // and the draggable has a droppable already that is, perhaps
+            // further along in the array, forcefully forget the draggable
+            // before telling another droppable to remember it.
+            if ( draggable.droppable && draggable.droppable !== droppable ) {
+              draggable.droppable.forget( draggable );
+            }
+            droppable.remember( draggable );
+            break;
+          }
+        }
+      }
+
+      window.setTimeout( __draggableUpdateTimeout, SCROLL_INTERVAL );
+    }
+  }
+
+  function __onDraggableDragged( e ) {
     __mouseLast[ 0 ] = __mousePos[ 0 ];
     __mouseLast[ 1 ] = __mousePos[ 1 ];
     __mousePos = [ e.clientX, e.clientY ];
     __draggedOnce = true;
 
-    var remembers,
-        droppable,
-        remember,
-        i,
-        j;
+    var draggables = __selectedDraggables,
+        i;
 
-    remembers = __selectedDraggables.slice();
-
+    // If this is the first drag iteration, update bounding rects
     if ( !__mouseDown ) {
       __mouseDown = true;
-      window.setTimeout( updateTimeout, SCROLL_INTERVAL );
-      for ( i = remembers.length - 1; i >= 0; --i ) {
-        remembers[ i ].start( e );
+
+      for ( i = __scrollGroups.length - 1; i >= 0; --i ) {
+        __scrollGroups[ i ].updateBounds();
       }
+
+      for ( i = draggables.length - 1; i >= 0; --i ) {
+        draggables[ i ].start( e );
+      }
+
+      window.setTimeout( __draggableUpdateTimeout, SCROLL_INTERVAL );
     }
 
-    for ( i = remembers.length - 1; i >= 0; --i ) {
-      remember = remembers[ i ];
-      remember.drag( e );
-      for ( j = __droppables.length - 1; j >= 0; --j ) {
-        droppable = __droppables[ j ];
-        if ( remember.element === droppable.element ||
-            !droppable.drag( remember.element.getBoundingClientRect() ) ) {
-          droppable.forget( remember );
-        }
-        else {
-          // If we stumbled on a valid droppable early in the array
-          // and the draggable has a droppable already that is, perhaps
-          // further along in the array, forcefully forget the draggable
-          // before telling another droppable to remember it.
-          if ( remember.droppable && remember.droppable !== droppable ) {
-            remember.droppable.forget( remember );
-          }
-          droppable.remember( remember );
-          break;
-        }
-      }
-    }
   }
 
-  function onMouseUp( e ) {
+  function __onDraggableMouseUp( e ) {
     __mouseDown = false;
 
-    window.removeEventListener( "mousemove", onDragged, false );
+    window.removeEventListener( "mousemove", __onDraggableDragged, false );
 
     var selectedDraggable,
         selectedDraggables = __selectedDraggables.slice(),
@@ -145,18 +182,18 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     __draggedOnce = false;
   }
 
-  function onMouseDown( e ) {
-    if ( e.which !== 1 ) {
-      onMouseUp( e );
+  function __onDraggableMouseDown( e ) {
+    if ( e.which !== 1 || e.ctrlKey ) {
+      __onDraggableMouseUp( e );
       return;
     }
     __draggedOnce = false;
     e.stopPropagation();
-    window.addEventListener( "mousemove", onDragged, false );
-    window.addEventListener( "mouseup", onMouseUp, false );
+    window.addEventListener( "mousemove", __onDraggableDragged, false );
+    window.addEventListener( "mouseup", __onDraggableMouseUp, false );
   }
 
-  function getPaddingRect( element ) {
+  function __getPaddingRect( element ) {
     var style = getComputedStyle( element ),
           top = style.getPropertyValue( "padding-top" ),
           left = style.getPropertyValue( "padding-left" ),
@@ -171,16 +208,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       };
   }
 
-  function __getWindowRect() {
-    return {
-      top: 0,
-      left: 0,
-      right: window.innerWidth,
-      bottom: window.innerHeight
-    };
-  }
-
-  function checkParent ( parent, child ) {
+  function __checkParent( parent, child ) {
     var parentNode = child.parentNode;
     while ( parentNode ) {
       if ( parentNode === parent ) {
@@ -191,7 +219,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     return false;
   }
 
-  function getHighestZIndex ( element ) {
+  function __getHighestZIndex( element ) {
     var z = getComputedStyle( element ).zIndex;
     if ( isNaN( z ) ) {
       z = 0;
@@ -207,7 +235,6 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         parentNode = parentNode.parentNode;
       }
     }
-
   }
 
   function __sortDroppables() {
@@ -215,13 +242,13 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
 
       var elementA = a.element,
           elementB = b.element,
-          zA = getHighestZIndex( elementA ),
-          zB = getHighestZIndex( elementB );
+          zA = __getHighestZIndex( elementA ),
+          zB = __getHighestZIndex( elementB );
 
-      if ( checkParent( elementA, elementB ) ) {
+      if ( __checkParent( elementA, elementB ) ) {
         return -1;
       }
-      else if ( checkParent( elementB, elementA ) ) {
+      else if ( __checkParent( elementB, elementA ) ) {
         return 1;
       }
 
@@ -657,141 +684,212 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     options = options || {};
 
     var _containment = options.containment,
-        _scroll = options.scroll,
-        _axis = options.axis,
+        _scrollGroup = __getScrollGroup( options.scroll ),
+        _xAxis = !options.axis || options.axis.indexOf( "x" ) > -1 ? true : false,
+        _yAxis = !options.axis || options.axis.indexOf( "y" ) > -1 ? true : false,
+        _xOffsetBounds = [],
+        _yOffsetBounds = [],
+        _xOffsetScrollBounds = [],
+        _yOffsetScrollBounds = [],
+        _draggingPositionOffset = [],
         _revert = options.revert,
         _mouseOffset,
         _element = element,
         _elementRect,
-        _scrollRect,
-        _offsetParentRect,
-        _containmentRect,
         _scrollAmount = options.scrollAmount || DEFAULT_SCROLL_AMOUNT,
         _oldZIndex,
         _onStart = options.start || NULL_FUNCTION,
-        _onStop = options.stop || function() { return false; },
+        _onStop = options.stop || DEFAULT_ONSTOP_DRAGGABLE_FUNCTION,
         _onDrag = options.drag || NULL_FUNCTION,
         _originalPosition,
         _draggable = {},
         _data = options.data,
-        _containmentPadding = __nullRect;
+        _containmentPadding = __nullRect,
+        _diffRect = {
+          top: 0, bottom: 0, left: 0, right: 0
+        };
 
     if ( _containment ) {
-      _containmentPadding = getPaddingRect( _containment );
+      _containmentPadding = __getPaddingRect( _containment );
     }
 
     _draggable.updateRects = function() {
-      _containmentRect = _containment ? _containment.getBoundingClientRect() : __getWindowRect();
-      _offsetParentRect = element.offsetParent ? element.offsetParent.getBoundingClientRect() : _containmentRect;
-      _scrollRect = _scroll ? _scroll.getBoundingClientRect() : _containmentRect;
+      var containmentRect, scrollRect;
+
       _elementRect = element.getBoundingClientRect();
+
+      if ( _containment ) {
+        // If a containment element is specified, we need to create some offset boundaries to
+        // prevent draggable elements from leaving a defined space. These are offset values because
+        // transform: translate is used to re-position elements during a drag.
+        containmentRect = _containment.getBoundingClientRect();
+        _xOffsetBounds[ 0 ] = containmentRect.left - _elementRect.left;
+        _xOffsetBounds[ 1 ] = containmentRect.right - _elementRect.right;
+        _yOffsetBounds[ 0 ] = containmentRect.top - _elementRect.top;
+        _yOffsetBounds[ 1 ] = containmentRect.bottom - _elementRect.bottom;
+      }
+
+      if ( _scrollGroup ) {
+        // If a scroll container element is specified, we need to store its bounding rect to know when
+        // to start/stop scrolling for a comparison similar to that of bounds checking above.
+        scrollRect = _scrollGroup.boundingClientRect;
+        _xOffsetScrollBounds[ 0 ] = scrollRect.left - _elementRect.left - _elementRect.width + MIN_SCROLL_ELEMENT_ONSCREEN_WIDTH;
+        _xOffsetScrollBounds[ 1 ] = scrollRect.right - _elementRect.right + _elementRect.width - MIN_SCROLL_ELEMENT_ONSCREEN_WIDTH;
+        _yOffsetScrollBounds[ 0 ] = scrollRect.top - _elementRect.top + _elementRect.height - MIN_SCROLL_ELEMENT_ONSCREEN_WIDTH;
+        _yOffsetScrollBounds[ 1 ] = scrollRect.bottom - _elementRect.bottom - _elementRect.height + MIN_SCROLL_ELEMENT_ONSCREEN_WIDTH;
+      }
     };
 
     function updatePosition() {
-      var x = __mousePos[ 0 ] - _mouseOffset[ 0 ],
-          y = __mousePos[ 1 ] - _mouseOffset[ 1 ];
+      var x = __mousePos[ 0 ] - _mouseOffset[ 0 ] + _scrollGroup.scrollDiff[ 0 ],
+          y = __mousePos[ 1 ] - _mouseOffset[ 1 ] + _scrollGroup.scrollDiff[ 1 ];
 
-      if ( !_axis || _axis.indexOf( "x" ) > -1 ) {
-        element.style.left = ( x - _offsetParentRect.left ) + "px";
-      }
-
-      if ( !_axis || _axis.indexOf( "y" ) > -1 ) {
-        element.style.top = ( y - _offsetParentRect.top ) + "px";
-      }
-
-      _elementRect = element.getBoundingClientRect();
+      // Only accept offsets for axes for which we need to provide movement
+      _draggingPositionOffset[ 0 ] = _xAxis ? x : 0;
+      _draggingPositionOffset[ 1 ] = _yAxis ? y : 0;
     }
 
     function checkScroll() {
-      if ( !__scroll ) {
-        if ( __mousePos[ 0 ] > _scrollRect.right + SCROLL_WINDOW ) {
-          __scroll = true;
-          _scroll.scrollLeft += _scrollAmount;
-        }
-        else if ( __mousePos[ 0 ] < _scrollRect.left - SCROLL_WINDOW ) {
-          __scroll = true;
-          _scroll.scrollLeft -= _scrollAmount;
-        }
+      var scrollRect;
+      scrollRect = _scrollGroup.boundingClientRect;
+
+      // If the mouse crosses the right scroll barrier, begin to scroll to the right.
+      if ( __mousePos[ 0 ] > scrollRect.right + SCROLL_WINDOW ) {
+        __scroll = true;
+        _scrollGroup.iterationScrollX = _scrollAmount;
       }
-      _draggable.updateRects();
+
+      // Otherwise, if the mouse crosses the left scroll barrier, begin to scroll left.
+      else if ( __mousePos[ 0 ] < scrollRect.left - SCROLL_WINDOW ) {
+        __scroll = true;
+        _scrollGroup.iterationScrollX = -_scrollAmount;
+      }
+
+      // If the mouse crosses the bottom scroll barrier, begin to scroll down.
+      if ( __mousePos[ 1 ] > scrollRect.bottom + SCROLL_WINDOW ) {
+        __scroll = true;
+        _scrollGroup.iterationScrollY = _scrollAmount;
+      }
+
+      // Otherwise, if the mouse crosses the top scroll barrier, begin to scroll up.
+      else if ( __mousePos[ 1 ] < scrollRect.top - SCROLL_WINDOW ) {
+        __scroll = true;
+        _scrollGroup.iterationScrollY = -_scrollAmount;
+      }
     }
 
     function checkContainment() {
-      var x = _elementRect.left,
-          y = _elementRect.top,
-          r = x + _elementRect.width,
-          b = y + _elementRect.height;
+      var x = _draggingPositionOffset[ 0 ],
+          y = _draggingPositionOffset[ 1 ];
 
-      if ( !_axis || _axis.indexOf( "y" ) > -1 ) {
+      // If y axis is allowed to move, check it.
+      if ( !_yAxis && !_xAxis || _yAxis ) {
 
-        if ( y < _containmentRect.top ) {
-          y = _containmentRect.top;
+        // If the y scrolling bound is crossed, lock the element's y movement.
+        if ( y < _yOffsetScrollBounds[ 0 ] + _scrollGroup.scrollDiff[ 1 ] ) {
+          y = _yOffsetScrollBounds[ 0 ] + _scrollGroup.scrollDiff[ 1 ] + _scrollGroup.iterationScrollY;
         }
-        else if ( b > _containmentRect.bottom ) {
-          y = _containmentRect.bottom - _elementRect.height;
+        else if ( y > _yOffsetScrollBounds[ 1 ] + _scrollGroup.scrollDiff[ 1 ] ) {
+          y = _yOffsetScrollBounds[ 1 ] + _scrollGroup.scrollDiff[ 1 ] + _scrollGroup.iterationScrollY;
         }
-        //TODO: Scrolling for Y
-        element.style.top = ( y - _offsetParentRect.top - _containmentPadding.top ) + "px";
+
+        // If the y containment bound is crossed, lock the element's y movement.
+        if ( y < _yOffsetBounds[ 0 ] ) {
+          y = _yOffsetBounds[ 0 ];
+        }
+        else if ( y > _yOffsetBounds[ 1 ] ) {
+          y = _yOffsetBounds[ 1 ];
+        }
+
+        // Store the adjusted y value.
+        _draggingPositionOffset[ 1 ] = y;
       }
 
-      if ( !_axis || _axis.indexOf( "x" ) > -1 ) {
-        if ( r > _scrollRect.right + SCROLL_WINDOW ) {
-          if ( x > _scrollRect.right - SCROLL_WINDOW ) {
-            x = _scrollRect.right - SCROLL_WINDOW;
-            r = x + _elementRect.width;
-          }
-        }
-        else if ( x < _scrollRect.left - SCROLL_WINDOW ) {
-          if ( r < _scrollRect.left + SCROLL_WINDOW ) {
-            r = _scrollRect.left + SCROLL_WINDOW;
-            x = r - _elementRect.width;
-          }
-        }
-        if ( x < _containmentRect.left ) {
-          x = _containmentRect.left;
-        }
-        else if ( r > _containmentRect.right ) {
-          x = _containmentRect.right - _elementRect.width;
-        }
-        element.style.left = ( x - _offsetParentRect.left - _containmentPadding.left ) + "px";
-      }
+      // If x axis is allowed to move, check it.
+      if ( !_yAxis && !_xAxis || _xAxis ) {
 
-      _elementRect = element.getBoundingClientRect();
+        // If the x scrolling bound is crossed, lock the element's x movement.
+        if ( x < _xOffsetScrollBounds[ 0 ] + _scrollGroup.scrollDiff[ 0 ] ) {
+          x = _xOffsetScrollBounds[ 0 ] + _scrollGroup.scrollDiff[ 0 ] + _scrollGroup.iterationScrollX;
+        }
+        else if ( x > _xOffsetScrollBounds[ 1 ] + _scrollGroup.scrollDiff[ 0 ] ) {
+          x = _xOffsetScrollBounds[ 1 ] + _scrollGroup.scrollDiff[ 0 ] + _scrollGroup.iterationScrollX;
+        }
+
+        // If the x containment bound is crossed, lock the element's x movement.
+        if ( x < _xOffsetBounds[ 0 ] ) {
+          x = _xOffsetBounds[ 0 ];
+        }
+        else if ( x > _xOffsetBounds[ 1 ] ) {
+          x = _xOffsetBounds[ 1 ];
+        }
+
+        // Store the adjusted x value.
+        _draggingPositionOffset[ 0 ] = x;
+      }
     }
 
-    element.addEventListener( "mousedown", onMouseDown, false );
+    element.addEventListener( "mousedown", __onDraggableMouseDown, false );
 
     _draggable.droppable = null;
 
     _draggable.destroy = function() {
       _draggable.selected = false;
-      element.removeEventListener( "mousedown", onMouseDown, false );
+      element.removeEventListener( "mousedown", __onDraggableMouseDown, false );
     };
 
     _draggable.update = function() {
+      // Find new potential (x,y) for element.
       updatePosition();
-      if ( _scroll ) {
+
+      // Adjust for scrolling.
+      if ( _scrollGroup ) {
         checkScroll();
       }
-      checkContainment();
+
+      // See if (x,y) needs to be contained.
+      if ( _containment ) {
+        checkContainment();
+      }
+
+      // Set the transform on element.
+      LangUtils.setTransformProperty( element, "translate(" + _draggingPositionOffset[ 0 ] + "px, " + _draggingPositionOffset[ 1 ] + "px)" );
+
+      // Set values for diffRect so that position updates are easily reported to listeners.
+      _diffRect.top = _elementRect.top + _draggingPositionOffset[ 1 ] - _scrollGroup.scrollDiff[ 1 ];
+      _diffRect.bottom = _elementRect.bottom + _draggingPositionOffset[ 1 ] - _scrollGroup.scrollDiff[ 1 ];
+      _diffRect.left = _elementRect.left + _draggingPositionOffset[ 0 ] - _scrollGroup.scrollDiff[ 0 ];
+      _diffRect.right = _elementRect.right + _draggingPositionOffset[ 0 ] - _scrollGroup.scrollDiff[ 0 ];
     };
 
     _draggable.getLastRect = function() {
-      return _elementRect;
+      return _diffRect;
+    };
+
+    _draggable.getLastOffset = function() {
+      return _draggingPositionOffset;
     };
 
     _draggable.start = function( e ) {
+      // Store original position of the element and the offset of the mouse wrt the window. These values are used
+      // in calculations elsewhere (e.g. update, containment, etc.) to figure out exactly how many pixels the user
+      // moved the element. Later, _originalPosition is used to revert the element to its original position if
+      // required.
       _originalPosition = [ element.offsetLeft, element.offsetTop ];
-      _draggable.updateRects();
-      _mouseOffset = [ e.clientX - _elementRect.left, e.clientY - _elementRect.top ];
+      _mouseOffset = [ e.clientX, e.clientY ];
+
+      // Notify listeners that dragging is starting now.
       _onStart();
+
       // Make sure the position is up to date after this call because the user may
       // have moved the element around in the DOM tree.
       _draggable.updateRects();
+
+      // Update position right away.
       updatePosition();
     };
 
-    _draggable.drag = function( e ) {
+    _draggable.drag = function() {
       if ( _draggable.droppable ) {
         _onDrag( _draggable, _draggable.droppable );
       }
@@ -806,6 +904,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     _draggable.stop = function() {
       // If originalPosition is not null, start() was called
       if ( _originalPosition ) {
+        LangUtils.setTransformProperty( _element, "" );
         _onStop();
       }
     };
