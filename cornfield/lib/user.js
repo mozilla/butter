@@ -124,6 +124,11 @@ module.exports = function( config, dbReadyFn ) {
 
       Project.find( { where: { email: email, id: pid } } )
       .success(function( project ) {
+        if ( !project ) {
+          callback( "project not found" );
+          return;
+        }
+
         project.updateAttributes({
           data: JSON.stringify( data.data ),
           email: email,
