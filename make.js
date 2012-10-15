@@ -1,4 +1,4 @@
-/*global cat,cd,cp,env,exec,echo,find,ls,mkdir,mv,pwd,rm,sed,target*/
+/*global cat,cd,cp,echo,env,exec,exit,find,ls,mkdir,mv,pwd,rm,sed,target*/
 
 var path = require( "path" ),
     spawn = require('child_process').spawn,
@@ -35,7 +35,10 @@ var path = require( "path" ),
     BUTTERED_POPCORN = join( DIST_DIR, '/buttered-popcorn.js' ),
 
     // We store version info about Popcorn and Butter when we deploy
-    VERSIONS_CONFIG = join( CORNFIELD_DIR, 'config', 'versions.json' );
+    VERSIONS_CONFIG = join( CORNFIELD_DIR, 'config', 'versions.json' ),
+
+    // Global var for exit code
+    passed = true;
 
 require('shelljs/make');
 
@@ -79,6 +82,8 @@ function checkCSSFile( filename, warnings, errors ) {
     // Errors look like: "css/butter.ui.css: line 186, col 3, Error..."
     lineRegex = /\: line (\d+),/;
 
+  echo( "## `" + filename + "`" );
+
   // Build a map of lines to ignore: "|14||27|" means ignore lines 14 and 27
   for( var i=0; i < fileLines.length; i++ ){
     if( ignoreRegex.test( fileLines[ i ] ) ) {
@@ -106,9 +111,11 @@ function checkCSSFile( filename, warnings, errors ) {
       if( !!lineNumber ) {
         if( ignoreLines.indexOf( "|" + lineNumber + "|" ) === -1 ) {
           echo( line );
+          passed = false;
         }
       } else {
         echo( line );
+        passed = false;
       }
   });
 }
@@ -145,6 +152,8 @@ function checkCSS( dir ) {
     "vendor-prefix"
   ].join(",");
 
+  echo( "" );
+  echo( "# Linting CSS files" );
 
   var files = ls( dir );
   files.forEach( function( filename ) {
@@ -160,6 +169,11 @@ function checkJS(){
   // Takes a string or an array of strings referring to directories.
   var dirs = SLICE.call( arguments );
 
+  echo( "# Linting JS files" );
+  dirs.forEach( function( value ) {
+    echo( "## `" + value + "`" );
+  });
+
   // Get all js and json files in dirs
   var files = "";
   [ /\.js$/, /\.json$/ ].forEach( function( regexp ){
@@ -169,7 +183,7 @@ function checkJS(){
   });
 
   // jshint with non-errors plus linting of json files
-  exec(JSLINT + ' ' + files + ' --show-non-errors --extra-ext json');
+  passed = !exec( JSLINT + " " + files + " --show-non-errors --extra-ext json" ).code && passed;
 }
 
 var desc = {
@@ -196,6 +210,8 @@ function clean() {
 function checkHTMLFile( filename, ignoreList ) {
   var printedHeader = false,
     printFooter = false;
+
+  echo( "## `" + filename + "`" );
 
   var out = exec( HTML5LINT + " -h " + filename, { silent: true } ).output;
 
@@ -236,6 +252,7 @@ function checkHTMLFile( filename, ignoreList ) {
 
     if ( printFooter ) {
       echo( "\n" );
+      passed = false;
     }
   }
 }
@@ -274,6 +291,9 @@ function checkHTML() {
     }
   ];
 
+  echo( "" );
+  echo( "# Linting HTML Files" );
+
   find([
     EDITORS_DIR,
     PUBLIC_DIR,
@@ -293,6 +313,8 @@ function lessToCSS( options ){
       lessFile = options.lessFile,
       cssFile = options.cssFile;
 
+  echo( "## `" + lessFile + "` => `" + cssFile + "`" + ( compress ? " with compression" : "" ));
+
   var args = compress ? " --yui-compress " : " ",
   result = exec(LESS + args + lessFile, {silent:true});
 
@@ -301,10 +323,14 @@ function lessToCSS( options ){
     css.to( cssFile );
   } else {
     echo( result.output );
+    passed = false;
   }
 }
 
 function buildCSS(compress) {
+  echo( "" );
+  echo( "# Compiling CSS Files" );
+
   lessToCSS({
     lessFile: BUTTER_LESS_FILE,
     cssFile: BUTTER_CSS_FILE,
@@ -353,6 +379,8 @@ target.check = function() {
   buildCSS();
   checkCSS( CSS_DIR, TEMPLATES_DIR );
   checkHTML();
+
+  exit( passed ? 0 : 1 );
 };
 
 function stampVersion( version, filename ){
