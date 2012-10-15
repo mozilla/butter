@@ -37,15 +37,13 @@ Global styles and classes
   }
 
   .hero-unit h2 {
-    text-transform: lowercase;
-    font-style: italic;
     line-height: 50px;
     font-family: "Open Sans Light", sans-serif;
   }
 
   .hero-unit h1 {
-    text-transform: uppercase;
     font-weight: bold;
+    margin-bottom: 24px;
   }
 
   a.top,
@@ -276,6 +274,44 @@ Home styles
     text-align: center;
   }
 
+
+#projects {
+  padding-top: 24px;
+  border-top: 1px dashed #CCC;
+  border-bottom: 1px dashed #CCC;
+}
+#projects .row {
+  margin-bottom: 24px;
+}
+
+#projects h4 {
+  margin-bottom: 24px;
+}
+
+.thumbnail {
+  width: 130px;
+  height: 130px;
+  margin-right: 24px;
+  background: #CCC;
+  float: left;
+}
+.thumbnail img {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 12px;
+}
+.caption {
+  float: left;
+  width: 260px;
+}
+
+#bottom-section {
+  padding-top: 48px;
+}
+
+#bottom-section img {
+  display: none; /* for now */
+}
 
 /*
 Home styles
