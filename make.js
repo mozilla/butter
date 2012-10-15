@@ -17,7 +17,6 @@ var path = require( "path" ),
     LESS = nodeExec( normalize( "./node_modules/less/bin/lessc" ) ),
 
     SRC_DIR = 'src',
-    EDITORS_DIR = 'editors',
     TEMPLATES_DIR = 'templates',
     DIST_DIR = 'dist',
     CSS_DIR = 'css',
@@ -295,7 +294,6 @@ function checkHTML() {
   echo( "# Linting HTML Files" );
 
   find([
-    EDITORS_DIR,
     PUBLIC_DIR,
     join( SRC_DIR, "dialog", "dialogs" ),
     join( SRC_DIR, "layouts" ),
@@ -375,7 +373,7 @@ function buildCSS(compress) {
 }
 
 target.check = function() {
-  checkJS( 'make.js', SRC_DIR, EDITORS_DIR, CORNFIELD_DIR, TEMPLATES_DIR );
+  checkJS( 'make.js', SRC_DIR, CORNFIELD_DIR, TEMPLATES_DIR );
   buildCSS();
   checkCSS( CSS_DIR, TEMPLATES_DIR );
   checkHTML();
@@ -508,7 +506,6 @@ target.deploy = function(){
   // Copy other assets over
   mkdir( join( DIST_DIR, 'css' ) );
   cp('css/*.css', join( DIST_DIR, 'css' ) );
-  cp('-R', 'editors', DIST_DIR);
   cp('-R', 'resources', DIST_DIR);
   cp('-R', 'templates', DIST_DIR);
   cp('-R', 'cornfield', DIST_DIR);
@@ -524,7 +521,7 @@ target.deploy = function(){
 
   // Move everything into the public folder
   cp( '-R', 'public', DIST_DIR );
-  mv([ 'dist/css', 'dist/editors', 'dist/external', 'dist/resources', 'dist/src', 'dist/templates' ], 'dist/public/' );
+  mv([ 'dist/css', 'dist/external', 'dist/resources', 'dist/src', 'dist/templates' ], 'dist/public/' );
 
   // Write-out version info regarding Butter and Popcorn so cornfield knows what it's serving.
   publishVersionInfo( join( DIST_DIR, VERSIONS_CONFIG ) );
