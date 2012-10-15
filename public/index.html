@@ -135,7 +135,7 @@
               </div>
             </div>
         </div>
-        <div id="bottom-section" class="container">
+        <div id="bottom-section">
           <div class="row">
             <div class="span10">
               <ul class="thumbnails">
@@ -239,28 +239,33 @@
   <script>
 
     (function() {
-      var IFRAME_WIDTH = 560,
-          IFRAME_HEIGHT = 340,
-          modal = document.querySelector( "#modal-overlay" ),
+      var modal = document.querySelector( "#modal-overlay" ),
           modalInner = modal.querySelector( "#modal" ),
+          iframeTemplate = modal.querySelector( "iframe" ),
           previews = document.querySelectorAll( ".preview-thumbnail" ),
           i, l;
 
       function spawniFrame( e ) {
-        var src = this.querySelector( "img" ).getAttribute( "alt" );
+        var newiFrame = iframeTemplate.cloneNode( true );
+        newiFrame.src = this.querySelector( "img" ).getAttribute( "alt" );
 
-        modalInner.querySelector( "iframe" ).src = src;
+        modalInner.appendChild( newiFrame );
         modal.style.opacity = 1;
         modal.style.visibility = "visible";
+
+        modal.addEventListener( "click", function closeModal() {
+          this.style.opacity = "";
+          this.style.visibility = "";
+          console.log( modalInner );
+          modal.removeEventListener( "click", closeModal, false );
+        }, false );
       }
+
+      modalInner.removeChild( iframeTemplate );
 
       for ( i = 0, l = previews.length; i < l ; i++ ) {
         previews[ i ].addEventListener( "click", spawniFrame, false );
       }
-      modal.addEventListener( "click", function() {
-        this.style.opacity = "";
-        this.style.visibility = "";
-      }, false );
 
     }());
 
