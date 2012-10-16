@@ -22,6 +22,9 @@ define( [ 'core/eventmanager', 'core/media' ],
         // Whether or not to save (project data has changed)
         _isDirty = false,
 
+        // Whether or not localStorage quota (typically 5M) has been exceeded
+        _quotaExceeded = false,
+
         // Whether or not the project is saved to the db and published.
         // The notion of "saving" to consumers of this code is unware of
         // the save vs. publish distinction. As such, we use isSaved externally
@@ -228,7 +231,9 @@ define( [ 'core/eventmanager', 'core/media' ],
 
     // Expose backupData() to make testing possible
     var backupData = _this.backupData = function() {
-      if ( !_isDirty ) {
+      // If the project isn't different from last time, or if it's known
+      // to not fit in storage, don't bother trying.
+      if ( !_isDirty || _quotaExceeded ) {
         return;
       }
       var data = _this.data;
@@ -237,7 +242,16 @@ define( [ 'core/eventmanager', 'core/media' ],
       data.template = _template;
       data.author = _author;
       data.backupDate = (new Date()).toJSON();
-      __butterStorage.setItem( "butter-backup-project", JSON.stringify( data ) );
+      try {
+        __butterStorage.setItem( "butter-backup-project", JSON.stringify( data ) );
+      } catch ( e ) {
+        // Deal with QUOTA_EXCEEDED_ERR when localStorage is full.
+        // Flag and stop trying to backup, since we can't.  This can
+        // happen when users include a lot of images as Data URIs.
+        _quotaExceeded = true;
+        // Purge the saved project, since it won't be complete.
+        __butterStorage.removeItem( "butter-backup-project" );
+      }
     };
 
     // Save and Publish a project.  Saving only happens if project data needs
