@@ -52,25 +52,6 @@
         });
       });
 
-      asyncTest( "insert track", 3, function() {
-        createButterModule( function( butter ) {
-          var track1 = butter.currentMedia.tracks[ 0 ];
-          var track2 = butter.currentMedia.tracks[ 1 ];
-
-          track1.order = 1;
-          track2.order = 0;
-
-          butter.currentMedia.insertTrackBefore( butter.currentMedia.addTrack(), track1 );
-
-          var tracks = butter.currentMedia.orderedTracks;
-
-          ok( tracks[ 0 ] === track2, "first track correct." );
-          ok( tracks[ 2 ] === track1, "last track correct." );
-          ok( tracks[ 1 ] !== track1 && tracks[ 1 ] !== track2, "middle track correct." );
-
-          start();
-        });
-      });
     </script>
   </head>
   <body>

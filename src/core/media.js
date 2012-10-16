@@ -147,6 +147,11 @@
 
       this.addTrack = function ( track ) {
         track = ensureNewTrackIsTrack( track );
+
+        if ( track._media ) {
+          throw "Track already belongs to a Media object. Use `media.removeTrack` prior to this function.";
+        }
+
         // Sort tracks first, so we can guarantee their ordering
         _this.sortTracks( true );
 
@@ -166,8 +171,12 @@
         return track;
       };
 
-      this.insertTrackBefore = function( newTrack, otherTrack ) {
+      this.insertTrackBefore = function( otherTrack, newTrack ) {
         newTrack = ensureNewTrackIsTrack( newTrack );
+
+        if ( newTrack._media ) {
+          throw "Track already belongs to a Media object. Use `media.removeTrack` prior to this function.";
+        }
 
         // Sort tracks first, so we can guarantee their ordering
         _this.sortTracks( true );
@@ -359,7 +368,7 @@
           nextTrack = _this.getNextTrack( track );
           if ( nextTrack ) {
             if ( nextTrack.findOverlappingTrackEvent( start, end, ignoreTrackEvent ) ) {
-              return _this.insertTrackBefore( null, nextTrack );
+              return _this.insertTrackBefore( nextTrack );
             }
             else {
               return nextTrack;

@@ -49,7 +49,7 @@
           ok( butter.tracks.length === 0, "There are no Tracks" );
 
           t3 = m.addTrack( { name: "Track 3", target: "Target 1" } );
-          m.addTrack( t3 );
+
           t3.addTrackEvent( { name: "TrackEvent 49", type: "test" } );
           ok( t3.target === "Target 1", "TrackEvents inherit target when track target is set" );
 
