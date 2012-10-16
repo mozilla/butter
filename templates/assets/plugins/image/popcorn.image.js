@@ -84,7 +84,7 @@
     return fallback;
   }
 
-  function createImageDiv( imageUrl, linkUrl ) {
+  function createImageDiv( imageUrl, linkUrl, instance ) {
     var div = document.createElement( "div" ),
         link = document.createElement( "a" );
 
@@ -93,6 +93,10 @@
 
     if ( linkUrl ) {
       link.setAttribute( "href", linkUrl );
+
+      link.onclick = function() {
+        instance.media.pause();
+      };
     }
     link.setAttribute( "target", "_blank" );
     link.classList.add( "image-plugin-link" );
@@ -156,13 +160,13 @@
 
                 // Unfortunately not all requests contain an "Original" size option
                 // so I'm always taking the second last one. This has it's upsides and downsides
-                _container.appendChild( createImageDiv( data.sizes.size[ data.sizes.size.length - 2 ].source, options.linkSrc ) );
+                _container.appendChild( createImageDiv( data.sizes.size[ data.sizes.size.length - 2 ].source, options.linkSrc, _this ) );
               }
             };
 
             Popcorn.getJSONP( uri, _flickrStaticImage );
           } else {
-            _container.appendChild( createImageDiv( options.src, options.linkSrc ) );
+            _container.appendChild( createImageDiv( options.src, options.linkSrc, _this ) );
           }
 
         } else {
@@ -193,7 +197,7 @@
               _url = ( item.media && item.media.m ) || window.unescape( item.url_m );
 
               if ( i < _count ) {
-                _link = createImageDiv( _url, _url );
+                _link = createImageDiv( _url, _url, _this );
                 _link.classList.add( "image-plugin-hidden" );
                 _container.appendChild( _link );
                 _tagRefs.push( _link );
