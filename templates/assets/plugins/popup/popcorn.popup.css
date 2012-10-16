@@ -7,7 +7,7 @@
   border-radius: 5px;
   box-shadow: 3px 3px 7px rgba(0,0,0,.2);
   background: #FFF;
-  z-index: 1000;
+  z-index: 2;
   word-wrap: break-word;
 }
 
@@ -18,7 +18,7 @@
   -o-transform-origin: 30% 0;
   -ms-transform-origin: 30% 0;
   transform-origin: 30% 0;
-  z-index: 1001;
+  z-index: 3;
 }
 
 /* HORIZONTAL POSITIONING */
@@ -26,7 +26,7 @@
 .speechBubble.left .canvas { left: 15px; }
 
 /* BOTTOM */
-.speechBubble .canvas { 
+.speechBubble .canvas {
   bottom: -59px;
   -webkit-transform: scale(1, 1);
   -moz-transform: scale(1, 1);
@@ -35,82 +35,82 @@
   transform: scale(1, 1);
 }
 
-.speechBubble.flip .canvas { 
+.speechBubble.flip .canvas {
   -webkit-transform: scale(-1, 1);
   -moz-transform: scale(-1, 1);
   -o-transform: scale(-1, 1);
   -ms-transform: scale(-1, 1);
-  transform: scale(-1, 1); 
+  transform: scale(-1, 1);
 }
 
-.speechBubble.thought .canvas { 
-  bottom: -65px; 
+.speechBubble.thought .canvas {
+  bottom: -65px;
 }
-.speechBubble.long .canvas { 
+.speechBubble.long .canvas {
   bottom: -58px;
   -webkit-transform: scale(1, 1.5);
   -moz-transform: scale(1, 1.5);
   -o-transform: scale(1, 1.5);
   -ms-transform: scale(1, 1.5);
-  transform: scale(1, 1.5); 
+  transform: scale(1, 1.5);
 }
 
-.speechBubble.long.flip .canvas { 
+.speechBubble.long.flip .canvas {
   -webkit-transform: scale(-1, 1.5);
   -moz-transform: scale(-1, 1.5);
   -o-transform: scale(-1, 1.5);
   -ms-transform: scale(-1, 1.5);
-  transform: scale(-1, 1.5); 
+  transform: scale(-1, 1.5);
 }
 
 /*TOP*/
 
-.speechBubble.top .canvas {  
+.speechBubble.top .canvas {
   top: 1px;
   -webkit-transform: scale(1, -1);
   -moz-transform: scale(1, -1);
   -o-transform: scale(1, -1);
   -ms-transform: scale(1, -1);
-  transform: scale(1, -1); 
+  transform: scale(1, -1);
 }
 
-.speechBubble.top.flip .canvas { 
+.speechBubble.top.flip .canvas {
   -webkit-transform: scale(-1, -1);
   -moz-transform: scale(-1, -1);
   -o-transform: scale(-1, -1);
   -ms-transform: scale(-1, -1);
-  transform: scale(-1, -1); 
+  transform: scale(-1, -1);
 }
 
 .speechBubble.thought.top .canvas { top: -5px; }
 
-.speechBubble.long.top .canvas { 
+.speechBubble.long.top .canvas {
   top: 2px;
   -webkit-transform: scale(-1, -1.5);
   -moz-transform: scale(-1, -1.5);
   -o-transform: scale(-1, -1.5);
   -ms-transform: scale(-1, -1.5);
-  transform: scale(-1, -1.5); 
+  transform: scale(-1, -1.5);
 }
 
-.speechBubble.long.top.flip .canvas { 
+.speechBubble.long.top.flip .canvas {
   -webkit-transform: scale(1, -1.5);
   -moz-transform: scale(1, -1.5);
   -o-transform: scale(1, -1.5);
   -ms-transform: scale(1, -1.5);
-  transform: scale(1, -1.5); 
+  transform: scale(1, -1.5);
 }
 
-.popcorn-popup { 
-  background-color: black; 
+.popcorn-popup {
+  background-color: black;
   border-radius: 12px;
   padding: 4px 9px;
 }
 
-.popcorn-popup .popup-inner-div { 
-  background-color: white; 
-  border-radius: 8px; 
-  padding: 8px; 
+.popcorn-popup .popup-inner-div {
+  background-color: white;
+  border-radius: 8px;
+  padding: 8px;
   position: relative;
   text-align: center;
   overflow: hidden;
@@ -136,9 +136,9 @@
   opacity: 1;
 }
 
-.popcorn-popup .popup-icon { 
-  position: absolute; 
-  z-index: 2; 
+.popcorn-popup .popup-icon {
+  position: absolute;
+  z-index: 2;
   top: -50%;
 }
 
