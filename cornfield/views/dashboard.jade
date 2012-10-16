@@ -58,7 +58,7 @@ html
               row = document.querySelector( 'tr[data-project-id="' + currentDeletionId + '"]' );
               currentDeletionId = null;
               req.send( null );
-              if ( req.status == 200 ) {
+              if ( req.status == 200 || req.status == 404 ) {
                 row.parentNode.removeChild( row );
               }
               setDeletionHeaderState( false );
