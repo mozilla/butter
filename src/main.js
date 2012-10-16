@@ -740,7 +740,9 @@
 
         // attempt to load data from savedDataUrl in query string
         loadFromSavedDataUrl( savedDataUrl, function( savedData ) {
-          if ( !savedData || savedData.error ) {
+          // if there's no savedData returned, or the returned object does not
+          // contain a media attribute, load the config specified saved data
+          if ( !savedData || savedData.error || !savedData.media ) {
             // if previous attempt failed, try loading data from the savedDataUrl value in the config
             loadFromSavedDataUrl( _config.value( "savedDataUrl" ), function( savedData ) {
               if ( savedData ) {
