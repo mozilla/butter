@@ -231,8 +231,8 @@ define( [ 'core/eventmanager', 'core/media' ],
       if ( !_isDirty ) {
         return;
       }
+      // Save everything but the project id
       var data = _this.data;
-      data.projectID = _id;
       data.name = _name;
       data.template = _template;
       data.author = _author;
