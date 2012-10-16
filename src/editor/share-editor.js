@@ -208,8 +208,17 @@ define([ "editor/editor", "editor/base-editor",
       }
     }, false );
 
+    function checkProjectState() {
+      if ( !butter.project.name || !butter.project.id ) {
+        displaySave();
+      } else {
+        displayEditor();
+      }
+    }
+
     butter.listen( "logout", displayLogin );
     butter.listen( "projectupdated", login );
+    butter.listen( "authenticated", checkProjectState );
 
     butter.listen( "projectsaved", function() {
       togglePreviewButton( true );
@@ -225,10 +234,8 @@ define([ "editor/editor", "editor/base-editor",
         _this = this;
         if ( !butter.cornfield.authenticated() ) {
           displayLogin();
-        } else if ( !butter.project.name || !butter.project.id ) {
-          displaySave();
         } else {
-          displayEditor();
+          checkProjectState();
         }
       },
       close: function() {
