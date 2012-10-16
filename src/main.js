@@ -9,7 +9,8 @@
   var ACCEPTED_UA_LIST = {
     "Chrome": 17,
     "Firefox": 10,
-    "MSIE": 9
+    "MSIE": 9,
+    "Safari": 6
   };
 
   define( [
