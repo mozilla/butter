@@ -75,6 +75,7 @@ LocalFileStore.prototype.write = function( path, data, callback ) {
 };
 
 LocalFileStore.prototype.remove = function( path, callback ) {
+  callback = callback || function(){};
   path = Path.join( this.root, this.expand( path ) );
   fs.unlink( path, callback );
 };
@@ -127,6 +128,7 @@ S3FileStore.prototype.write = function( key, data, callback ) {
 };
 
 S3FileStore.prototype.remove = function( key, callback ) {
+  callback = callback || function(){};
   this.client.del( this.expand( key ) )
   .on( 'response', function( res ) {
     if( res.statusCode === 200 ) {

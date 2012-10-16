@@ -70,19 +70,11 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
       var embedShell = id.toString( 36 ),
           embedDoc = embedShell + EMBED_SUFFIX;
 
-      stores.publish.remove( embedShell, function( e ) {
-        if( e ) {
-          res.json( { error: 'unable to remove file: ' + embedShell }, 500 );
-          return;
-        }
-        stores.publish.remove( embedDoc, function( e ) {
-          if( e ) {
-            res.json( { error: 'unable to remove file: ' + embedDoc }, 500 );
-            return;
-          }
-          res.json( { error: 'okay' }, 200 );
-        });
-      });
+      // If we can't delete the file, it's already gone, ignore errors.
+      // Fire-and-forget.
+      stores.publish.remove( embedShell );
+      stores.publish.remove( embedDoc );
+      res.json( { error: 'okay' }, 200 );
     });
   });
 
