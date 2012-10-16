@@ -1,12 +1,15 @@
 /*global EditorHelper*/
 
 EditorHelper.addPlugin( "image", function( trackEvent ) {
-  var _canvas = document.createElement( "canvas" ),
-      _popcornOptions = trackEvent.popcornTrackEvent,
+
+  // Sizes of our max embed size
+  var MAX_IMAGE_WIDTH = 1280,
+      MAX_IMAGE_HEIGHT = 740;
+
+  var _popcornOptions = trackEvent.popcornTrackEvent,
       _container = _popcornOptions._container,
       _media = document.getElementById( trackEvent.track._media.target ),
-      _title = document.createElement( "span" ),
-      _context;
+      _title = document.createElement( "span" );
 
   if ( window.jQuery ) {
     //Change default text to indicate draggable
@@ -53,13 +56,41 @@ EditorHelper.addPlugin( "image", function( trackEvent ) {
 
     image = document.createElement( "img" );
     image.onload = function() {
-      _canvas.width = this.width;
-      _canvas.height = this.height;
-      _context = _canvas.getContext( "2d" );
-      _context.drawImage( this, 0, 0, this.width, this.height );
-      imgURI = _canvas.toDataURL();
+      var canvas = document.createElement( "canvas" ),
+          width = this.width,
+          height = this.height,
+          aspectRatio = width / height,
+          scaledWidth, scaledHeight, context;
+
+      // Fit image nicely into our largest embed size, using
+      // the longest side and aspect ratio.
+      if ( width > height ) {
+        scaledWidth = MAX_IMAGE_WIDTH;
+        scaledHeight = Math.round( scaledWidth * aspectRatio );
+      } else {
+        scaledHeight = MAX_IMAGE_HEIGHT;
+        scaledWidth = Math.round( scaledHeight * aspectRatio );
+      }
+
+      canvas.width = scaledWidth;
+      canvas.height = scaledHeight;
+      context = canvas.getContext( "2d" );
+      context.drawImage( this, 0, 0, scaledWidth, scaledHeight );
+
+      imgURI = canvas.toDataURL();
       trackEvent.update( { src: imgURI } );
     };
     image.src = imgSrc;
+
+    // Force image to download, esp. Opera. We can't use
+    // "display: none", since that makes it invisible, and
+    // thus not load.  Opera also requires the image be
+    // in the DOM before it will load.
+    div = document.createElement( "div" );
+    div.setAttribute( "data-butter-exclude", "true" );
+    div.className = "butter-image-preload";
+    div.appendChild( img );
+    document.body.appendChild( div );
+
   }, false );
 });
