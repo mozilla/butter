@@ -40,9 +40,7 @@ EditorHelper.addPlugin( "image", function( trackEvent ) {
     _container.classList.add( "butter-dropped" );
     e.preventDefault();
     var file = e.dataTransfer.files[ 0 ],
-        imgSrc,
-        image,
-        imgURI;
+        imgSrc, image, imgURI, div;
 
     if ( !file ) {
       return;
@@ -52,6 +50,9 @@ EditorHelper.addPlugin( "image", function( trackEvent ) {
       imgSrc = window.URL.createObjectURL( file );
     } else if ( window.webkitURL ) {
       imgSrc = window.webkitURL.createObjectURL( file );
+    } else {
+      // Not supported, so bail
+      return;
     }
 
     image = document.createElement( "img" );
@@ -89,7 +90,7 @@ EditorHelper.addPlugin( "image", function( trackEvent ) {
     div = document.createElement( "div" );
     div.setAttribute( "data-butter-exclude", "true" );
     div.className = "butter-image-preload";
-    div.appendChild( img );
+    div.appendChild( image );
     document.body.appendChild( div );
 
   }, false );

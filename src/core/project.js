@@ -249,7 +249,7 @@ define( [ 'core/eventmanager', 'core/media' ],
         // Flag and stop trying to backup, since we can't.  This can
         // happen when users include a lot of images as Data URIs.
         _quotaExceeded = true;
-        // Purge the saved projecct, since it won't be complete.
+        // Purge the saved project, since it won't be complete.
         __butterStorage.removeItem( "butter-backup-project" );
       }
     };
