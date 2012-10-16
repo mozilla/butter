@@ -56,7 +56,7 @@ define( [ "./shims" ], function(){
     }, //smpteToSeconds
 
     secondsToSMPTE: function( time ){
-      var timeStamp = new Date( 1970,0,1 ),
+      var timeStamp = new Date( 1970, 0, 1 ),
           seconds;
       timeStamp.setSeconds( time );
       seconds = timeStamp.toTimeString().substr( 0, 8 );
@@ -134,7 +134,21 @@ define( [ "./shims" ], function(){
 
       // Fallback on setTimeout
       return function( element, listener ) {
-        setTimeout( listener, DEFAULT_TRANSITION_TIMEOUT );
+
+        // If there was already a timeout waiting on this element, remove it.
+        var currentTimeout = element.getAttribute( "data-butter-transition-end" );
+        if ( typeof currentTimeout === "string" && currentTimeout !== "" ) {
+          clearTimeout( currentTimeout | 0 );
+        }
+
+        // Set a timeout which will clear the `data-butter-transition-end` by itself and call the listener when it expires.
+        currentTimeout = setTimeout( function() {
+          element.removeAttribute( "data-butter-transition-end" );
+          listener.apply( this, arguments );
+        } , DEFAULT_TRANSITION_TIMEOUT );
+
+        // Add the `data-butter-transition-end` attribute to the element with the value of currentTimeout.
+        element.setAttribute( "data-butter-transition-end", currentTimeout );
       };
     }()),
 
