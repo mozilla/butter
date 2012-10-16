@@ -10,6 +10,9 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
     var email = req.session.email;
 
     if (email) {
+      // Resetting the users session extends the login period
+      req.session.reset([ "_csrf", "email" ]);
+
       res.json({
         status: "okay",
         csrf: req.session._csrf,
