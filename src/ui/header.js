@@ -90,12 +90,21 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       dialog.open();
     }
 
-    _webmakerNav = new WebmakerBar( butter, {
+    _webmakerNav = new WebmakerBar({
       container: _webmakerNavBar,
       onLogin: _userData.authenticationRequired,
       onLogout: _userData.logout,
       feedbackCallback: feedbackCallback
     });
+
+
+    function onLogin() {
+      _webmakerNav.views.login( butter.cornfield.username() );
+    }
+    
+    butter.listen( "autologinsucceeded", onLogin, false );
+    butter.listen( "authenticated", onLogin, false );
+    butter.listen( "logout", _webmakerNav.views.logout, false );
 
     function destroyToolTip() {
       if ( _noProjectNameToolTip && !_noProjectNameToolTip.destroyed ) {
