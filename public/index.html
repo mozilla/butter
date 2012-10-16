@@ -99,21 +99,20 @@
                   <img src="http://dl.dropbox.com/u/29163874/Screenshots/7l.png" alt="http://dev.butyr.org/v/gh_.html">
                   <a class="button-blue start" href="/templates/basic">Remix it!</a>
                 </div>
-              </div>
-              <div class="caption">
-                <p>by Mozilla</p>
-                <p>Take a tour of my neighbourhood! Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                  tempor inci
-                  cillum doloreidatat non
-                  proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                <ul>
-                  <li>Uses soundcloud</li>
-                  <li>Other stuff</li>
-                </ul>
+                <div class="caption">
+                  <p>by Mozilla</p>
+                  <p>Take a tour of my neighbourhood! Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor inci
+                    cillum doloreidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                  <ul>
+                    <li>Uses soundcloud</li>
+                    <li>Other stuff</li>
+                  </ul>
+                </div>
               </div>
               <div class="span5">
                 <h4><a href="/templates/basic/?savedDataUrl=tour.json">Lego</a></h4>
-                <div class="span2">
                   <div class="thumbnail preview-thumbnail">
                     <img src="http://dl.dropbox.com/u/29163874/Screenshots/7m.png" alt="http://dev.butyr.org/v/gh_.html">
                     <a class="button-blue start" href="/templates/basic">Remix it!</a>
@@ -132,7 +131,6 @@
                 </div>
               </div>
             </div>
-          </div>
           <div id="bottom-section">
             <div class="row">
               <div class="span10">
@@ -258,8 +256,6 @@
           modal.removeEventListener( "click", closeModal, false );
         }, false );
       }
-
-      modalInner.removeChild( iframeTemplate );
 
       for ( i = 0, l = previews.length; i < l ; i++ ) {
         previews[ i ].addEventListener( "click", spawniFrame, false );
