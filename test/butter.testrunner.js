@@ -21,16 +21,7 @@
         testList = [],
         userAgent = id( "qunit-userAgent" ),
         firstTest = true,
-        testBase;
-
-    // Test base needs to be configured differently depending on if someone is running any of the test runners with Node or
-    // with Apache. When using Apache the assumption is made that their repo was named butter
-    if ( location.href.indexOf( "butter" ) ) {
-      testBase = location.href.substring( 0, location.href.indexOf( "butter" ) + 6 ) + "/";
-    }
-    else {
-      testBase = location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" );
-    }
+        testBase = location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" ) + "/";
 
     if ( userAgent ) {
       userAgent.innerHTML = navigator.userAgent;
