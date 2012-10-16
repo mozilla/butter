@@ -10,7 +10,9 @@ define( [ "util/lang", "text!./webmakernav.html", "text!./webmakernav.css" ],
       // Added to body when secondary nav is expanded
       EXPANDED_CLASS = "webmaker-expanded",
        // The class prefix for each individual tab
-      TAB_PREFIX = "tab-";
+      TAB_PREFIX = "tab-",
+      // Transition used for the user menu dropdown
+      USER_MENU_TRANSITION = "tooltip-no-transition-on";
 
   return function( options ) {
     options = options || {};
@@ -43,8 +45,6 @@ define( [ "util/lang", "text!./webmakernav.html", "text!./webmakernav.css" ],
       logout: function() {
         personaBtnGroup.style.display = "";
         usernameContainer.style.display = "none";
-        userMenu.classList.remove( "tooltip-no-transition-on" );
-        username.classList.remove( BTN_ACTIVE_CLASS );
       }
     };
 
@@ -94,9 +94,14 @@ define( [ "util/lang", "text!./webmakernav.html", "text!./webmakernav.css" ],
         e.stopPropagation();
       }, false );
       
-      username.addEventListener( "click", function() {
-        userMenu.classList.toggle( "tooltip-no-transition-on" );
-        username.classList.toggle( BTN_ACTIVE_CLASS );
+      username.addEventListener( "mouseout", function() {
+        userMenu.classList.remove( USER_MENU_TRANSITION );
+        username.classList.remove( BTN_ACTIVE_CLASS );
+      }, false );
+
+      username.addEventListener( "mouseover", function() {
+        userMenu.classList.add( USER_MENU_TRANSITION );
+        username.classList.add( BTN_ACTIVE_CLASS );
       }, false );
     };
 
