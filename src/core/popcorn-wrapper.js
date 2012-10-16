@@ -127,14 +127,19 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
     this.prepare = function( url, target, popcornOptions, callbacks, scripts ){
       var urlsFromString;
 
-      // called when timeout occurs preparing popcorn or the media
-      function timeoutWrapper( e ){
+      // called when timeout occurs preparing popcorn
+      function popcornTimeoutWrapper( e ) {
         _interruptLoad = true;
         _onTimeout( e );
       }
 
+      // called when timeout occurs preparing media
+      function mediaTimeoutWrapper( e ) {
+        _onTimeout( e );
+      }
+
       // called when there's a serious failure in preparing popcorn
-      function failureWrapper( e ){
+      function failureWrapper( e ) {
         _interruptLoad = true;
         _logger.log( e );
         _onFail( e );
@@ -177,8 +182,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
             // once popcorn is created, attach listeners to it to detect state
             addPopcornHandlers();
             // wait for the media to become available and notify the user, or timeout
-            waitForMedia( _onPrepare, timeoutWrapper );
-          }, timeoutWrapper );
+            waitForMedia( _onPrepare, mediaTimeoutWrapper );
+          }, popcornTimeoutWrapper );
         }
         catch( e ) {
           // if we've reached here, we have an internal failure in butter or popcorn
@@ -320,7 +325,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         if ( trackEvents ) {
           for ( i = trackEvents.length - 1; i >= 0; i-- ) {
             popcornOptions = trackEvents[ i ].popcornOptions;
-          
+
             saveOptions = {};
             for ( option in popcornOptions ) {
               if ( popcornOptions.hasOwnProperty( option ) ) {

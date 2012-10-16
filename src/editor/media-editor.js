@@ -5,8 +5,9 @@
 define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/media-editor.html" ],
   function( LangUtils, URI, KeysUtils, Editor, EDITOR_LAYOUT ) {
 
-  var MAX_MEDIA_INPUTS = 4,
-      _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
+  var MAX_MEDIA_INPUTS = 4;
+
+  var _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
       _loadingSpinner = _parentElement.querySelector( ".media-loading-spinner" ),
       _primaryMediaWrapper = LangUtils.domFragment( EDITOR_LAYOUT, ".primary-media-wrapper" ),
       _altMediaWrapper = LangUtils.domFragment( EDITOR_LAYOUT, ".alt-media-wrapper" ),
@@ -189,9 +190,8 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/m
 
   _addAlternateSourceBtn.addEventListener( "click", addAlternateSourceBtnHandler, false );
 
-  function onMediaFailed() {
+  function onMediaTimeout() {
     showError( true );
-    setLoadSpinner( false );
   }
 
   function onMediaReady() {
@@ -214,7 +214,7 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/m
 
         _media.listen( "mediaready", onMediaReady );
         _media.listen( "mediacontentchanged", onMediaContentChanged );
-        _media.listen( "mediafailed", onMediaFailed );
+        _media.listen( "mediatimeout", onMediaTimeout );
 
         // Ensure the loading spinner is off when the media is ready. Otherwise, keep it spinning.
         if ( _media.ready ) {
@@ -229,7 +229,7 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/m
       close: function() {
         _media.unlisten( "mediaready", onMediaReady );
         _media.unlisten( "mediacontentchanged", onMediaContentChanged );
-        _media.unlisten( "mediafailed", onMediaFailed );
+        _media.unlisten( "mediatimeout", onMediaTimeout );
         document.querySelector( ".butter-editor-header-media" ).classList.remove( "butter-active" );
       }
     });
