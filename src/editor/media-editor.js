@@ -197,7 +197,6 @@ define( [ "util/lang", "util/keys", "editor/editor", "util/uri", "text!layouts/m
 
     function onMediaContentChanged() {
       _media = butter.currentMedia;
-      _media.dispatch( "mediachanged" );
       setup();
     }
 

@@ -168,7 +168,6 @@
       function targetTrackEventRequested( e ) {
         var trackEvent;
 
-        console.log( _currentMedia );
         if ( _currentMedia && _currentMedia.ready ) {
           trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime );
           _this.editor.editTrackEvent( trackEvent );
