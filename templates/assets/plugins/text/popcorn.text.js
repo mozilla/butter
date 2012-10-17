@@ -13,10 +13,6 @@
 
   var DEFAULT_FONT_COLOR = "#000";
 
-  function normalize( value, minWidth, maxWidth ) {
-    return Math.max( Math.min( value || 0, maxWidth ), minWidth );
-  }
-
   function newlineToBreak( string ) {
     // Deal with both \r\n and \n
     return string.replace( /\r?\n/gm, "<br>" );
