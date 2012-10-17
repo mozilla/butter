@@ -517,6 +517,10 @@ target.deploy = function(){
   mkdir( '-p', 'dist/external/popcorn-js/' );
   mv( BUTTERED_POPCORN, './dist/external/popcorn-js/popcorn.js' );
 
+  // We host our own version of the stamen map tile script, copy that over.
+  mkdir( '-p', 'dist/external/stamen/' );
+  cp( 'external/stamen/tile.stamen-1.2.0.js', './dist/external/stamen' );
+
   // Move everything into the public folder
   cp( '-R', 'public', DIST_DIR );
   mv([ 'dist/css', 'dist/external', 'dist/resources', 'dist/src', 'dist/templates' ], 'dist/public/' );
@@ -524,8 +528,13 @@ target.deploy = function(){
   // Write-out version info regarding Butter and Popcorn so cornfield knows what it's serving.
   publishVersionInfo( join( DIST_DIR, VERSIONS_CONFIG ) );
 
+  // Copy RPM spec files and stamp with version
+  var rpmVersion = ( version ? version : gitDescribe( '.' ) ).replace( /-/g, '_' );
+  cp( 'tools/rpmspec/*', DIST_DIR );
+  stampVersion( rpmVersion, 'dist/butter.spec' );
+
   // Create a tar archive
-  var tarName = 'butter-' + gitDescribe( '.' ) + '.tar';
+  var tarName = 'butter-' + rpmVersion + '.tar';
   exec( 'tar -cyf "' + tarName + '" dist' );
   mv( tarName, 'dist' );
 
