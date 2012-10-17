@@ -28,23 +28,39 @@ Global styles and classes
     line-height: 23px
   }
 
-  p {
+  p,
+  ul {
     font-family: "Open Sans",sans-serif;
     font-size: 13px;
     color: rgb(147, 149, 152);
     line-height: 23px;
   }
 
-  .hero-unit h2 {
-    text-transform: lowercase;
-    font-style: italic;
-    line-height: 50px;
-    font-family: "Open Sans Light", sans-serif;
+  video {
+    width: 100%;
   }
 
+  hgroup {
+    padding-top: 30px;
+    padding-bottom: 24px;
+  }
+
+  .hero-unit p {
+    font-family: "Open Sans Light", sans-serif;
+    font-size: 16px;
+    line-height: 28px;
+  }
   .hero-unit h1 {
-    text-transform: uppercase;
-    font-weight: bold;
+    margin-left: -12px;
+    width: 500px;
+    height: 140px;
+    background: url( "../../logo-big.png" ) no-repeat;
+    margin-bottom: 20px;
+  }
+  .hero-unit h2 {
+    font-size: 42px;
+    line-height: 1;
+    font-family: "Open Sans Light", sans-serif;
   }
 
   a.top,
@@ -79,11 +95,11 @@ Layout styles
 */
 
   #outer-wrapper {
-    border-top: 1px;
+    position: relative;
+    border-top: 2px solid #FFF;
   }
 
   #wrapper {
-    background: #F9F9F9 url("/media/img/bg-stone.png") repeat-x 0 70px;
     padding-bottom: 0;
     display: table;
     width: 100%;
@@ -95,7 +111,11 @@ Layout styles
     left: 0;
     z-index: 2;
   }
-
+  #tabzilla {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
   #tabzilla-panel {
     z-index: 2;
   }
@@ -114,7 +134,7 @@ Layout styles
   }
 
   #masthead {
-    margin-bottom: 90px;
+    margin-bottom: 35px;
   }
 
   #masthead .row {
@@ -249,13 +269,46 @@ Layout styles
 Home styles
 */
 
+  #modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    background: rgba( 0, 0, 0, 0.8 );
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    -ms-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+  }
+  #modal {
+    position: absolute;
+    width: 560px;
+    height: 340px;
+    top: 50%;
+    left: 50%;
+    margin-left: -280px;
+    margin-top: -170px;
+    box-shadow: 0 10px 10px -5px #000;
+  }
+
+  #modal a {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 10px;
+  }
   #home .caption p {
     margin-bottom: 0;
   }
 
   .thumbnail img {
-    width: 240px;
-    height: 147px;
+    width: 560px;
+    height: 340px;
     border: 6px solid white;
     -webkit-box-shadow: 0 2px 2px 3px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0 2px 2px 3px rgba(0, 0, 0, 0.1);
@@ -268,75 +321,74 @@ Home styles
   }
 
   .thumbnail {
+    position: relative;
     margin-bottom: 30px;
+    cursor: pointer;
   }
 
   .action {
     text-align: center;
   }
 
-/*
-Home styles
-================================
-Carousel styles
-*/
 
-.carousel {
-  position: relative;
+#projects {
+  padding-top: 24px;
+  border-top: 1px dashed #CCC;
+  border-bottom: 1px dashed #CCC;
 }
-.carousel li {
-  margin: 0 10px;
-}
-.carousel .control {
-  position: absolute;
-  top: 70px;
-  width: 40px;
-  height: 40px;
-  background: url(/media/img/slider-arrows.png) no-repeat;
-  overflow: hidden;
-  cursor: pointer;
-}
-.carousel .control span {
-  visibility: hidden;
-}
-.carousel .left {
-  left: 0;
-  background-position: 0 0;
-}
-.carousel .left:hover {
-  background-position: 0 -50px;
-}
-.carousel .left:active {
-  background-position: 0 -100px;
-}
-.carousel .right {
-  right: 0;
-  background-position: -50px 0;
-}
-.carousel .right:hover {
-  background-position: -50px -50px;
-}
-.carousel .right:active {
-  background-position: -50px -100px;
-}
-.carousel .carousel-items {
-  margin: 0 auto;
+#projects .row {
+  margin-bottom: 24px;
 }
 
-.no-js .carousel .control {
-  display: none;
+#projects .project-items {
+  min-height: 270px;
 }
-.no-js .carousel ul {
-  list-style: none;
-  margin-left: -24px;
+
+#projects .row:after,
+#projects .row:before {
+  content: "";
+  display: table;
+  clear: both;
 }
-.no-js .carousel li {
+
+#projects h4 {
+  margin-bottom: 24px;
+}
+
+.thumbnail {
+  width: 130px;
+  height: 130px;
+  margin-right: 24px;
+  background: #CCC;
   float: left;
-  margin-left: 47px;
-  margin-right: 0;
+}
+.thumbnail img {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 12px;
 }
 
-/*
-Carousel styles
-================================
-*/
+.thumbnail:hover:after {
+  content: "Preview";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 25px;
+  padding: 5px;
+  border-radius: 3px;
+  margin-left: -35px;
+  margin-top: -15px;
+  background: rgba( 0, 0, 0, 0.5 );
+  color: #FFF;
+  text-align: center;
+}
+.caption {
+  float: left;
+  width: 260px;
+}
+
+#bottom-section {
+  padding-top: 48px;
+}
