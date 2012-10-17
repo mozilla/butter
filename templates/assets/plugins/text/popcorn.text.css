@@ -42,6 +42,8 @@
 .text-fixed > div > span {
   display: table-cell;
   padding: 20px;
+  font-size: 1em;
+  line-height: 1;
 }
 
 .text-fixed > div > span > a {
@@ -76,13 +78,68 @@
 
 .text-custom {
   display: inline-block;
-  max-width: 500px;
 }
 
 .text-custom > div > span {
-  padding: 0;
+  display: block;
+  font-size: 1em;
+  width: 100%;
+  text-align: center;
+  line-height: 1;
 }
 
 [contenteditable="true"]:focus {
   outline: none;
+}
+
+@media only screen and (min-width : 0px) and (min-height : 0px) {
+  .popcorn-text {
+    font-size: 358px;
+  }
+}
+
+@media only screen and (min-width : 640px) and (min-height : 360px) {
+  .popcorn-text {
+    font-size: 403px;
+  }
+}
+
+@media only screen and (min-width : 853px) and (min-height : 480px) {
+  .popcorn-text {
+    font-size: 522.8125px;
+  }
+}
+
+@media only screen and (min-width : 1280px) and (min-height : 720px) {
+  .popcorn-text {
+    font-size: 763px;
+  }
+}
+
+/*********************************************************
+* Butter-specific. Ugh....
+*/
+
+@media only screen and (min-width : 0px) and (min-height : 0px) {
+  .butter-header-spacing .popcorn-text {
+    font-size: 315px;
+  }
+}
+
+@media only screen and (min-width : 990px) and (min-height : 660px) {
+  .butter-header-spacing .popcorn-text {
+    font-size: 350px;
+  }
+}
+
+@media only screen and (min-width : 1203px) and (min-height : 780px) {
+  .butter-header-spacing .popcorn-text {
+    font-size: 480px;
+  }
+}
+
+@media only screen and (min-width : 1630px) and (min-height : 1020px) {
+  .butter-header-spacing .popcorn-text {
+    font-size: 720px;
+  }
 }

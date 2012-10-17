@@ -81,8 +81,8 @@
           elem: "input",
           type: "number",
           label: "Font Size",
-          "default": 48,
-          units: "px",
+          "default": 10,
+          units: "%",
           group: "advanced"
         },
         fontColor: {
@@ -103,7 +103,7 @@
           type: "number",
           label: "Left",
           units: "%",
-          "default": 30,
+          "default": 0,
           hidden: true
         },
         top: {
@@ -111,7 +111,15 @@
           type: "number",
           label: "Top",
           units: "%",
-          "default": 30,
+          "default": 0,
+          hidden: true
+        },
+        width: {
+          elem: "input",
+          type: "number",
+          units: "%",
+          label: "Width",
+          "default": 100,
           hidden: true
         },
         zindex: {
@@ -142,17 +150,9 @@
       container.style.position = "absolute";
       container.classList.add( "popcorn-text" );
 
-      if ( position === "custom" ) {
-        container.classList.add( "text-custom" );
-        container.style.left = options.left + "%";
-        container.style.top = options.top + "%";
-        container.style.zIndex = +options.zindex;
-      }
-      else {
-        container.classList.add( "text-fixed" );
-        innerContainer.classList.add( position );
-        innerSpan.style.zIndex = +options.zindex;
-      }
+      innerContainer.appendChild( innerSpan );
+      container.appendChild( innerContainer );
+      target.appendChild( container );
 
       // Add transition class
       options._container.classList.add( transition );
@@ -165,29 +165,7 @@
       innerContainer.style.color = options.fontColor;
       innerContainer.style.fontStyle = fontDecorations.italics ? "italic" : "normal";
       innerContainer.style.textDecoration = fontDecorations.underline ? "underline" : "none";
-      innerContainer.style.fontSize = options.fontSize ? normalize( options.fontSize, 8, 200 ) + "px" : "24px";
       innerContainer.style.fontWeight = fontDecorations.bold ? "bold" : "normal";
-
-      if ( options.linkUrl ) {
-        link = document.createElement( "a" );
-        link.href = options.linkUrl;
-        link.target = "_blank";
-        link.innerHTML = text;
-
-        link.addEventListener( "click", function( e ) {
-          context.media.pause();
-        }, false );
-
-        link.style.color = innerContainer.style.color;
-
-        innerSpan.appendChild( link );
-      } else {
-        innerSpan.innerHTML = text;
-      }
-
-      innerContainer.appendChild( innerSpan );
-      container.appendChild( innerContainer );
-      target.appendChild( container );
 
       fontSheet = document.createElement( "link" );
       fontSheet.rel = "stylesheet";
@@ -199,6 +177,38 @@
 
       fontSheet.onload = function ( e ) {
         innerContainer.style.fontFamily = options.fontFamily;
+        innerContainer.style.fontSize = options.fontSize + "%";
+        if ( position === "custom" ) {
+          container.classList.add( "text-custom" );
+          container.style.left = options.left + "%";
+          container.style.top = options.top + "%";
+          if ( options.width ) {
+            container.style.width = options.width + "%";
+          }
+          container.style.zIndex = +options.zindex;
+        }
+        else {
+          container.classList.add( "text-fixed" );
+          innerContainer.classList.add( position );
+          innerSpan.style.zIndex = +options.zindex;
+        }
+
+        if ( options.linkUrl ) {
+          link = document.createElement( "a" );
+          link.href = options.linkUrl;
+          link.target = "_blank";
+          link.innerHTML = text;
+
+          link.addEventListener( "click", function( e ) {
+            context.media.pause();
+          }, false );
+
+          link.style.color = innerContainer.style.color;
+
+          innerSpan.appendChild( link );
+        } else {
+          innerSpan.innerHTML = text;
+        }
       };
       fontSheet.href = "http://fonts.googleapis.com/css?family=" + options.fontFamily.replace( /\s/g, "+" );
 
