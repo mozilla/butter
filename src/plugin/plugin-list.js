@@ -22,7 +22,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         close: function() {
         }
       });
-    });
+    }, true );
 
     butter.listen( "pluginadded", function( e ) {
       var element = _pluginArchetype.cloneNode( true ),
