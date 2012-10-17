@@ -1,0 +1,1415 @@
+{
+    "targets": [
+        {
+            "id": "Target0",
+            "name": "video-container",
+            "element": "video-container"
+        }
+    ],
+    "media": [
+        {
+            "id": "Media0",
+            "name": "Media0",
+            "url": [
+                "http://www.youtube.com/watch?v=0g2WE1qXiKM&butteruid=1350497258392",
+                "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.ogv?butteruid=1350497258393",
+                "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.webm?butteruid=1350497258394"
+            ],
+            "target": "video",
+            "duration": 925.08,
+            "controls": false,
+            "tracks": [
+                {
+                    "name": "Layer",
+                    "id": "0",
+                    "trackEvents": [
+                        {
+                            "id": "TrackEvent0",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 0.90296,
+                                "end": 4.86411,
+                                "target": "video-container",
+                                "text": "Welcome to the first publicly available\nPopcorn Maker project!",
+                                "linkUrl": "",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 68.80952380952381,
+                                "left": 9.285714285714286,
+                                "width": 30,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent2"
+                        },
+                        {
+                            "id": "TrackEvent1",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 18.06741,
+                                "end": 27.22757,
+                                "target": "video-container",
+                                "text": "Beau Lotto is the Head Misfit\nand founder of Lottolab.org\nclick here to visit!",
+                                "linkUrl": "http://www.lottolab.org/index.asp",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "user",
+                                "flip": "",
+                                "top": 47.22222222222222,
+                                "left": 66.78571428571428,
+                                "width": 30,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent3"
+                        },
+                        {
+                            "id": "TrackEvent2",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 31.19196,
+                                "end": 37.38126,
+                                "target": "video-container",
+                                "text": "Much of Beau's work explores human perception",
+                                "linkUrl": "",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "eye",
+                                "flip": "",
+                                "top": 5,
+                                "left": 20,
+                                "width": 30,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent4"
+                        },
+                        {
+                            "id": "TrackEvent3",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 46.54039,
+                                "end": 51.54039,
+                                "target": "video-container",
+                                "text": "Click here to watch Beau's\n2009 TED talk\n\"Optical illusions show how we see\"",
+                                "linkUrl": "http://www.ted.com/talks/beau_lotto_optical_illusions_show_how_we_see.html",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "tv",
+                                "flip": "",
+                                "top": 56.42857142857143,
+                                "left": 66.78571428571428,
+                                "width": 30,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent5"
+                        },
+                        {
+                            "id": "TrackEvent4",
+                            "type": "wikipedia",
+                            "popcornOptions": {
+                                "start": 60.89859,
+                                "end": 65.89859,
+                                "target": "video-container",
+                                "lang": "en",
+                                "src": "http://en.wikipedia.org/wiki/Perception",
+                                "width": 45,
+                                "height": 100,
+                                "top": 0,
+                                "left": 0,
+                                "transition": "popcorn-fade",
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent6"
+                        },
+                        {
+                            "id": "TrackEvent5",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 78.47502,
+                                "end": 100.75648,
+                                "target": "video-container",
+                                "text": "Watch this frog on Youtube",
+                                "linkUrl": "http://www.youtube.com/watch?v=LwrNy2lgITY",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "tv",
+                                "flip": "",
+                                "top": 83.17460317460318,
+                                "left": 13.928571428571429,
+                                "width": 35.892857142857146,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent7"
+                        },
+                        {
+                            "id": "TrackEvent6",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 114.43069,
+                                "end": 119.43069,
+                                "target": "video-container",
+                                "text": "Beau is a Doctor of Philosophy",
+                                "linkUrl": "",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 68.17460317460318,
+                                "left": 9.285714285714286,
+                                "width": 30,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent9"
+                        },
+                        {
+                            "id": "TrackEvent7",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 129.56776,
+                                "end": 133.87285,
+                                "target": "video-container",
+                                "text": "He is a member of the Vision Network\nResearch Group at\nUniversity College London",
+                                "linkUrl": "https://iris.ucl.ac.uk/iris/browse/researchGroup/67",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 49.76190476190476,
+                                "left": 66.07142857142857,
+                                "width": 30,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent10"
+                        },
+                        {
+                            "id": "TrackEvent8",
+                            "type": "wikipedia",
+                            "popcornOptions": {
+                                "start": 159.28802,
+                                "end": 165.22054,
+                                "target": "video-container",
+                                "lang": "en",
+                                "src": "Seasickness",
+                                "width": 40,
+                                "height": 60,
+                                "top": 0,
+                                "left": 0,
+                                "transition": "popcorn-fade",
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent11"
+                        },
+                        {
+                            "id": "TrackEvent9",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 235.11296,
+                                "end": 241.91777,
+                                "target": "video-container",
+                                "text": "Stuart Brown: \n\"Plenty of play in childhood makes for happy, smart adults -- and keeping it up can make us smarter at any age. \"",
+                                "linkUrl": "",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "PT Sans",
+                                "fontSize": "24",
+                                "fontColor": "#ffffff",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 2.5,
+                                "top": 59.83598012772817,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent14"
+                        },
+                        {
+                            "id": "TrackEvent10",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 243.02879,
+                                "end": 248.99789,
+                                "target": "video-container",
+                                "text": "\"It is paradoxical that many educators and parents still differentiate between a time for learning and a time for play without seeing the vital connection between them.” \n- Leo F Buscaglia",
+                                "linkUrl": "",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "18",
+                                "fontColor": "#fffbf6",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 1.9642857142857142,
+                                "top": 63.33333333333333,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent15"
+                        },
+                        {
+                            "id": "TrackEvent11",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 267.1928,
+                                "end": 274.27266,
+                                "target": "video-container",
+                                "text": "\"Play-based learning can take a key role in the teaching of science and can encourage scientific enquiry skills\" - Robert Sinclair",
+                                "linkUrl": "http://www.teachingexpertise.com/articles/playful-science-3287",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "18",
+                                "fontColor": "#ffffff",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 1.607142857142857,
+                                "top": 71.58730158730158,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent16"
+                        },
+                        {
+                            "id": "TrackEvent12",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 281.21903,
+                                "end": 289.55145,
+                                "target": "video-container",
+                                "text": "Early Childhood News:\n\"Promoting the development of scientific thinking\"",
+                                "linkUrl": "http://www.earlychildhoodnews.com/earlychildhood/article_view.aspx?ArticleId=409",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 58.333333333333336,
+                                "left": 9.285714285714286,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent17"
+                        },
+                        {
+                            "id": "TrackEvent13",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 293.29809,
+                                "end": 303.48165,
+                                "target": "video-container",
+                                "text": "Visit Blackawton School",
+                                "linkUrl": "http://www.our-school.org.uk/blackawton",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "earth",
+                                "flip": "",
+                                "top": 67.53968253968254,
+                                "left": 17.857142857142858,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent18"
+                        },
+                        {
+                            "id": "TrackEvent14",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 219.69815,
+                                "end": 227.75282,
+                                "target": "video-container",
+                                "text": "Watch the TED talk\n\"Evolution's gift of play, from bonobo apes to humans\"",
+                                "linkUrl": "http://www.ted.com/talks/isabel_behncke_evolution_s_gift_of_play_from_bonobo_apes_to_humans.html",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "tv",
+                                "flip": "",
+                                "top": 58.333333333333336,
+                                "left": 63.39285714285714,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent13"
+                        },
+                        {
+                            "id": "TrackEvent15",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 228.03045,
+                                "end": 234.278,
+                                "target": "video-container",
+                                "text": "Scientific American:\n\"So you think you know why animals play\"",
+                                "linkUrl": "http://blogs.scientificamerican.com/guest-blog/2011/05/17/so-you-think-you-know-why-animals-play/ ",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 63.73015873015873,
+                                "left": 65.89285714285714,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent19"
+                        },
+                        {
+                            "id": "TrackEvent16",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 306.00719,
+                                "end": 314.57363,
+                                "target": "video-container",
+                                "text": "Why Teaching Science is Important:\nwhyscience.co.uk",
+                                "linkUrl": "http://whyscience.co.uk/about/index.php",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 74.92063492063492,
+                                "left": 61.42857142857143,
+                                "width": 34.82142857142857,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent20"
+                        },
+                        {
+                            "id": "TrackEvent17",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 350.07286,
+                                "end": 355.07286,
+                                "target": "video-container",
+                                "text": "Teaching Times: \nPrimary schools lack quality science teachers",
+                                "linkUrl": "http://www.teachingtimes.com/articles/primary-schools-science-teachers.htm",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 31.746031746031743,
+                                "left": 69.28571428571428,
+                                "width": 22.857142857142858,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent22"
+                        },
+                        {
+                            "id": "TrackEvent18",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 364.52472,
+                                "end": 372.6554,
+                                "target": "video-container",
+                                "text": "A New Challenge for Teachers: \nEncouraging Girls in Science, Math and IT Related Studies and Careers",
+                                "linkUrl": "http://ezinearticles.com/?A-New-Challenge-for-Teachers:-Encouraging-Girls-in-Science,-Math-and-IT-Related-Studies-and-Careers&id=44420",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 82.53968253968253,
+                                "left": 2.142857142857143,
+                                "width": 96.07142857142857,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent23"
+                        },
+                        {
+                            "id": "TrackEvent19",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 387.27773,
+                                "end": 398.09279,
+                                "target": "video-container",
+                                "text": "\"A survey of over a thousand 8–11 year-old children in primary schools indicated that children in the more senior classes showed a marked decline in their enjoyment of school science. \" - Association for Science Education",
+                                "linkUrl": "https://www.google.com/search?q=SSR308Mar2003p109.pdf&ie=utf-8&oe=utf-8&aq=t&rls=org.mozilla:en-US:official&client=firefox-a",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "18",
+                                "fontColor": "#ffffff",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 0.7142857142857143,
+                                "top": 63.33333333333333,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent24"
+                        },
+                        {
+                            "id": "TrackEvent20",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 419.8409,
+                                "end": 434.96005,
+                                "target": "video-container",
+                                "text": "\"(49% of all co-ed maintained schools in England do not send even one girl on to do physics A-level\" \n- Institute of Physics",
+                                "linkUrl": "http://www.iop.org/news/12/oct/page_58519.html",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "18",
+                                "fontColor": "#ffffff",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 3.9285714285714284,
+                                "top": 73.01587301587301,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent25"
+                        },
+                        {
+                            "id": "TrackEvent21",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 329.63049,
+                                "end": 341.74673,
+                                "target": "video-container",
+                                "text": "Watch a video about Lottolab's\niScientist program for youth",
+                                "linkUrl": "https://vimeo.com/17584010",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "tv",
+                                "flip": "",
+                                "top": 66.9047619047619,
+                                "left": 65.17857142857143,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent26"
+                        },
+                        {
+                            "id": "TrackEvent22",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 402.53587,
+                                "end": 411.55318,
+                                "target": "video-container",
+                                "text": "Why Science Is Vital\nscienceisvital.org.uk",
+                                "linkUrl": "http://scienceisvital.org.uk/2010/09/28/key-messages/",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 64.04761904761904,
+                                "left": 10.714285714285714,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent21"
+                        },
+                        {
+                            "id": "TrackEvent23",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 455.06315,
+                                "end": 485.62061,
+                                "target": "video-container",
+                                "text": "Watch a video of Beau and\nthe students conducting research",
+                                "linkUrl": "http://www.youtube.com/watch?v=vqbG05SHpoI&t=3m17s",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "tv",
+                                "flip": "",
+                                "top": 65,
+                                "left": 7.321428571428572,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent27"
+                        },
+                        {
+                            "id": "TrackEvent24",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 501.9546,
+                                "end": 505.87931,
+                                "target": "video-container",
+                                "text": "Linkedin Profile of\nDave Strudwick",
+                                "linkUrl": "http://uk.linkedin.com/pub/dave-strudwick/28/521/a61?trk=pub-pbmap",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "man",
+                                "flip": "",
+                                "top": 5,
+                                "left": 20,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent28"
+                        },
+                        {
+                            "id": "TrackEvent25",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 506.41069,
+                                "end": 511.09016,
+                                "target": "video-container",
+                                "text": "Read the full paper here",
+                                "linkUrl": "http://rsbl.royalsocietypublishing.org/content/7/2/168.full",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 68.80952380952381,
+                                "left": 65.17857142857143,
+                                "width": 30,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent29"
+                        },
+                        {
+                            "id": "TrackEvent26",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 517.90287,
+                                "end": 521.52568,
+                                "target": "video-container",
+                                "text": "\"Knowing the right answer ... is not one of the primary objectives of science in the early childhood curriculum...\"",
+                                "linkUrl": "",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "18",
+                                "fontColor": "#ffffff",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 1.9642857142857142,
+                                "top": 73.4920634920635,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent30"
+                        },
+                        {
+                            "id": "TrackEvent27",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 521.82752,
+                                "end": 525.29938,
+                                "target": "video-container",
+                                "text": "“Knowing the right answer requires no decisions, carries no risks, and makes no demands\"",
+                                "linkUrl": "",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "18",
+                                "fontColor": "#ffffff",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 1.7857142857142856,
+                                "top": 77.3015873015873,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent31"
+                        },
+                        {
+                            "id": "TrackEvent28",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 525.60122,
+                                "end": 530.60122,
+                                "target": "video-container",
+                                "text": "\"A far more important objective is to help children realize that answers about the world can be discovered through their own investigations.\" - Eleanor Duckworth",
+                                "linkUrl": "http://www.goodreads.com/book/show/684911.The_Having_of_Wonderful_Ideas",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "18",
+                                "fontColor": "#ffffff",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 2.5,
+                                "top": 70.63492063492063,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent32"
+                        },
+                        {
+                            "id": "TrackEvent29",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 555.4965,
+                                "end": 557.76075,
+                                "target": "video-container",
+                                "text": "The George Inn, Blackawton",
+                                "linkUrl": "",
+                                "position": "center",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 48,
+                                "fontColor": "#ffffff",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 30,
+                                "top": 30,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent34"
+                        },
+                        {
+                            "id": "TrackEvent30",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 565.14962,
+                                "end": 573.4519,
+                                "target": "video-container",
+                                "text": "How to Write a Scientific Paper",
+                                "linkUrl": "http://www.nmas.org/JAhowto.html",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 77.6984126984127,
+                                "left": 64.82142857142857,
+                                "width": 30,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent35"
+                        },
+                        {
+                            "id": "TrackEvent31",
+                            "type": "wikipedia",
+                            "popcornOptions": {
+                                "start": 640.47021,
+                                "end": 645.47021,
+                                "target": "video-container",
+                                "lang": "en",
+                                "src": "http://en.wikipedia.org/wiki/Dale_Purves",
+                                "width": 40,
+                                "height": 97.77777777777777,
+                                "top": 2.2222222222222223,
+                                "left": 61.42857142857143,
+                                "transition": "popcorn-fade",
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent36"
+                        },
+                        {
+                            "id": "TrackEvent32",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 650.29496,
+                                "end": 657.08773,
+                                "target": "video-container",
+                                "text": "Larry Maloney",
+                                "linkUrl": "http://www.psych.nyu.edu/maloney/",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "man",
+                                "flip": "",
+                                "top": 92.3015873015873,
+                                "left": 68.21428571428572,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent37"
+                        },
+                        {
+                            "id": "TrackEvent33",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 664.9263,
+                                "end": 672.32288,
+                                "target": "video-container",
+                                "text": "Read the commentary paper by \nNatalie Hempel de Ibarra and \nLaurence T. Maloney",
+                                "linkUrl": "",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 69.12698412698413,
+                                "left": 63.92857142857142,
+                                "width": 30,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent38"
+                        },
+                        {
+                            "id": "TrackEvent34",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 675.79206,
+                                "end": 686.50955,
+                                "target": "video-container",
+                                "text": "Read the final published article",
+                                "linkUrl": "http://rsbl.royalsocietypublishing.org/content/7/2/168.full",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 73.65079365079366,
+                                "left": 12.5,
+                                "width": 36.607142857142854,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent39"
+                        },
+                        {
+                            "id": "TrackEvent35",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 706.58797,
+                                "end": 711.58797,
+                                "target": "video-container",
+                                "text": "Article in The Guardian",
+                                "linkUrl": "http://www.guardian.co.uk/science/blog/2010/dec/22/schoolchildren-bumble-bee-research-journal",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "net",
+                                "flip": "",
+                                "top": 73.88888888888889,
+                                "left": 11.607142857142858,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent40"
+                        },
+                        {
+                            "id": "TrackEvent36",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 712.62589,
+                                "end": 717.62589,
+                                "target": "video-container",
+                                "text": "Article in Discover Magazine",
+                                "linkUrl": "http://blogs.discovermagazine.com/notrocketscience/2010/12/21/eight-year-old-children-publish-bee-study-in-royal-society-journal/",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 69.76190476190476,
+                                "left": 64.10714285714286,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent41"
+                        },
+                        {
+                            "id": "TrackEvent37",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 727.26786,
+                                "end": 732.26786,
+                                "target": "video-container",
+                                "text": "Article on BBC.co.uk ",
+                                "linkUrl": "http://news.bbc.co.uk/local/devon/hi/people_and_places/nature/newsid_9312000/9312350.stm",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "net",
+                                "flip": "",
+                                "top": 6.349206349206349,
+                                "left": 76.42857142857142,
+                                "width": 13.928571428571429,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent42"
+                        },
+                        {
+                            "id": "TrackEvent38",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 776.17504,
+                                "end": 781.17504,
+                                "target": "video-container",
+                                "text": "\"Why Play is vital,\nno matter what your age\"\nTED 2008, Stuart Brown",
+                                "linkUrl": "http://blog.ted.com/2009/03/12/stuart_brown_play/",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "tv",
+                                "flip": "",
+                                "top": 49.76190476190476,
+                                "left": 8.928571428571429,
+                                "width": 30,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent44"
+                        },
+                        {
+                            "id": "TrackEvent39",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 845.15831,
+                                "end": 850.15831,
+                                "target": "video-container",
+                                "text": "The Centre for Education in Science and Technology:\nImportance of science in schools",
+                                "linkUrl": "http://www.cest.org.uk/importance-of-science-in-schools/",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "net",
+                                "flip": "",
+                                "top": 67.22222222222223,
+                                "left": 8.928571428571429,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent45"
+                        },
+                        {
+                            "id": "TrackEvent40",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 853.6114,
+                                "end": 857.08327,
+                                "target": "video-container",
+                                "text": "\"It is human to have a long childhood\"",
+                                "linkUrl": "",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "32",
+                                "fontColor": "#ffffff",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 4.285714285714286,
+                                "top": 10.952380952380953,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent46"
+                        },
+                        {
+                            "id": "TrackEvent41",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 857.23416,
+                                "end": 862.21552,
+                                "target": "video-container",
+                                "text": "\"it is civilized to have an even longer childhood.\" - Erik Erikson",
+                                "linkUrl": "",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "32",
+                                "fontColor": "#ffffff",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 6.964285714285714,
+                                "top": 7.4603174603174605,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent47"
+                        },
+                        {
+                            "id": "TrackEvent42",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 867.95147,
+                                "end": 872.95147,
+                                "target": "video-container",
+                                "text": "Some studies have shown that investment in girls education raised the GDP of the entire country by 0.2%",
+                                "linkUrl": "http://goodintents.org/uncategorized/skills-for-life",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "24",
+                                "fontColor": "#ffffff",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 4.642857142857143,
+                                "top": 66.5079365079365,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent48"
+                        },
+                        {
+                            "id": "TrackEvent43",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 873.98939,
+                                "end": 878.98939,
+                                "target": "video-container",
+                                "text": "Children of women who have completed primary school are 40% less likely to die before age five",
+                                "linkUrl": "http://goodintents.org/uncategorized/skills-for-life",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "24",
+                                "fontColor": "#ffffff",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 5.178571428571429,
+                                "top": 68.0952380952381,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent49"
+                        },
+                        {
+                            "id": "TrackEvent44",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 881.83869,
+                                "end": 886.83869,
+                                "target": "video-container",
+                                "text": "An extra year of primary school boosts girls’ eventual wages by 10 to 20 percent. An extra year of secondary school: 15 to 25 percent\n",
+                                "linkUrl": "",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "24",
+                                "fontColor": "#ffffff",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 4.642857142857143,
+                                "top": 60.63492063492063,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent50"
+                        },
+                        {
+                            "id": "TrackEvent45",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 901.46194,
+                                "end": 908.70757,
+                                "target": "video-container",
+                                "text": "To discover more about Dr. Beau Lotto's work\nvisit lottolab.org",
+                                "linkUrl": "http://www.lottolab.org",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "net",
+                                "flip": "",
+                                "top": 58.96825396825397,
+                                "left": 12.5,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "18",
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent51"
+                        },
+                        {
+                            "id": "TrackEvent46",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 911.89226,
+                                "end": 925.08,
+                                "target": "video-container",
+                                "text": "To try remixing other videos with \nPopcorn Maker, click me!",
+                                "linkUrl": "https://popcorn.webmaker.org/templates/basic/",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "thumbsup",
+                                "flip": "",
+                                "top": 67.22222222222223,
+                                "left": 65.53571428571429,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "18",
+                                "fontColor": "#000000",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent52"
+                        }
+                    ]
+                },
+                {
+                    "name": "Layer",
+                    "id": "1",
+                    "trackEvents": [
+                        {
+                            "id": "TrackEvent47",
+                            "type": "image",
+                            "popcornOptions": {
+                                "start": 555.49801,
+                                "end": 557.76227,
+                                "target": "video-container",
+                                "src": "http://www.blackawton.com/images/pub.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3,
+                                "width": 100,
+                                "height": 100,
+                                "top": 0,
+                                "left": 0,
+                                "transition": "popcorn-fade",
+                                "zindex": 999
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent33"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "projectID": 37,
+    "name": "Beau Lotto TED talk",
+    "template": "basic",
+    "author": "",
+    "backupDate": "2012-10-17T18:07:55.227Z"
+}

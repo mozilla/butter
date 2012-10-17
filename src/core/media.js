@@ -492,10 +492,10 @@
           enumerable: true
         },
         json: {
-          get: function(){
+          get: function() {
             var exportJSONTracks = [];
-            for( var i=0, l=_tracks.length; i<l; ++i ){
-              exportJSONTracks.push( _tracks[ i ].json );
+            for ( var i = 0, l = _orderedTracks.length; i < l; ++i ) {
+              exportJSONTracks.push( _orderedTracks[ i ].json );
             }
             return {
               id: _id,

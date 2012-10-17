@@ -6,7 +6,7 @@
       events = [],
       soundIndex = 0,
       MAX_AUDIO_TIME = 2,
-      _pluginRoot = location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" ) + "/templates/assets/plugins/popup/",
+      _pluginRoot = "/templates/assets/plugins/popup/",
       FILL_STYLE = "rgb(255, 255, 255)",
       innerDivTriangles = {},
       DEFAULT_FONT = "Tangerine";

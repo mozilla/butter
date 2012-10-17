@@ -8,8 +8,9 @@
 }
 
 @creditsLogoSize: 25px;
-@creditsZindex: 100000000000000;
 @red: #CB3E21;
+@postRollZIndex: 2;
+@videoZIndex: 1;
 
 html {
   height: 100%;
@@ -36,7 +37,7 @@ body {
   left: 50%;
   margin-top: -33px;
   margin-left: -26px;
-  z-index: 9999;
+  z-index: @postRollZIndex;
   cursor: pointer;
 }
 
@@ -49,6 +50,7 @@ body {
   position: relative;
   width: 100%;
   height: 100%;
+  z-index: @videoZIndex;
 }
 
 .video {
@@ -103,7 +105,6 @@ body {
 
 .attribution-info {
   font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
-  z-index: @creditsZindex;
 }
 
 .attribution-logo {
@@ -295,6 +296,15 @@ body {
 
 /*********************************************************
  SHARED STYLES BETWEEN POSTROLL AND SHARE STATES */
+
+#post-roll-container {
+  z-index: @postRollZIndex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 
 #post-roll,
 #share {

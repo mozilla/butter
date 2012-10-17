@@ -1,6 +1,8 @@
 define( [ "util/lang", "text!./webmakernav.html", "text!./webmakernav.css" ],
   function( Lang,  BASE_LAYOUT, BASE_CSS ) {
 
+  var NULL_FUNCTION = function() {};
+
       // Added to tab when it's open
   var TAB_ACTIVE_CLASS = "webmaker-tab-active",
       // Added to elements in primary nav when they are active
@@ -10,9 +12,10 @@ define( [ "util/lang", "text!./webmakernav.html", "text!./webmakernav.css" ],
        // The class prefix for each individual tab
       TAB_PREFIX = "tab-";
 
-  return function( butter, options ) {
-    var _this = this,
-        container = options.container,
+  return function( options ) {
+    options = options || {};
+
+    var container = options.container,
         root = Lang.domFragment( BASE_LAYOUT ),
         feedbackBtn = root.querySelector( ".webmaker-feedback-btn" ),
         personaBtnGroup = root.querySelector( ".login-join" ),
@@ -32,10 +35,10 @@ define( [ "util/lang", "text!./webmakernav.html", "text!./webmakernav.css" ],
         userMenuSetup;
 
     this.views = {
-      login: function() {
+      login: function( usernameContainerText ) {
         personaBtnGroup.style.display = "none";
         usernameContainer.style.display = "";
-        usernameInner.innerHTML = butter.cornfield.username();
+        usernameInner.innerHTML = usernameContainerText;
       },
       logout: function() {
         personaBtnGroup.style.display = "";
@@ -46,8 +49,8 @@ define( [ "util/lang", "text!./webmakernav.html", "text!./webmakernav.css" ],
     };
 
     feedbackCallback = options.feedbackCallback;
-    onLogin = options.onLogin;
-    onLogout = options.onLogout;
+    onLogin = options.onLogin || NULL_FUNCTION;
+    onLogout = options.onLogout || NULL_FUNCTION;
 
     appendStyles = function() {
       var styleTag = document.createElement( "style" ),
@@ -106,12 +109,16 @@ define( [ "util/lang", "text!./webmakernav.html", "text!./webmakernav.css" ],
     logoutBtn.addEventListener( "click", onLogout, false );
     primary.addEventListener( "click", webmakerTabSetup, false );
 
-    butter.listen( "autologinsucceeded", _this.views.login, false );
-    butter.listen( "authenticated", _this.views.login, false );
-    butter.listen( "logout", _this.views.logout, false );
-
     // Default view
     this.views.logout();
+
+    if ( options.hideLogin ) {
+      loginBtn.parentNode.removeChild( loginBtn );
+    }
+
+    if ( options.hideFeedback ) {
+      feedbackBtn.parentNode.removeChild( feedbackBtn );
+    }
 
   };
 });

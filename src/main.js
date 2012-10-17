@@ -791,9 +791,11 @@
                 // (i.e., we won't resotre again after this).
                 Project.checkForBackup( _this, function( project ) {
                   function useProject( project ) {
-                    project.template = project.template || _config.value( "name" );
-                    _this.project = project;
-                    _this.chain( project, [ "projectchanged", "projectsaved" ] );
+                    if ( project ) {
+                      project.template = project.template || _config.value( "name" );
+                      _this.project = project;
+                      _this.chain( project, [ "projectchanged", "projectsaved" ] );
+                    }
 
                     // Fire the ready event
                     _this.dispatch( "ready", _this );

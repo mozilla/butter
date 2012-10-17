@@ -1,4 +1,5 @@
 @import "../../../css/globals";
+@import "../../../css/editors";
 
 // *********************************************************
 // Globals
@@ -30,6 +31,8 @@
 * Webmaker nav
 */
 .webmaker-nav-container {
+  font-family: "Open Sans", sans-serif;
+  color: #FFF;
   font-size: @fontsize;
   border-bottom: 1px solid darken( @darkgrey, 5% );
   a {
@@ -37,6 +40,12 @@
     &:hover {
       color: @green;
     }
+  }
+  .h3 {
+    color: #FFF;
+    margin: 0;
+    font-weight: 700;
+    font-size: 19px;
   }
 }
 .webmaker-nav-top {
@@ -51,6 +60,8 @@
   font-size: 1em;
   color: #FFF;
   > li {
+    padding: 0;
+    margin: 0;
     float: left;
     height: 100%;
   }
@@ -94,6 +105,8 @@
   > li {
     border-right: 1px solid lighten( @darkgrey, 5% );
     border-left: 1px solid darken( @darkgrey, 5% );
+    margin-left: 0;
+
     .webmaker-expanded & {
       border-color: transparent;
     }
@@ -157,11 +170,8 @@
     margin-left: -100px;
     z-index: 100;
 
-    h3 {
+    .h3 {
       margin: 5px 0
-    }
-    h2 {
-      margin-top: 0;
     }
     .login {
       display: inline-block;
@@ -172,7 +182,7 @@
       top: 50px;
       left: 4px;
     }
-    p {
+    .info {
       text-align: left;
       margin-left: 40px;
     }
@@ -344,8 +354,9 @@
       height: 100%;
       font-size: 15px;
       line-height: 1.3;
-      p {
+      .info {
         margin: 0;
+        font-weight: 400;
       }
    }
    .webmaker-button {
@@ -375,7 +386,7 @@
       margin: 24px 0 6px 0;
     }
 
-    p {
+    .info {
       margin: 0;
       line-height: 1.4;
     }

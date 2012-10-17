@@ -282,6 +282,15 @@ function checkHTML() {
       text: "Warning: The character encoding of the document was not declared."
     },
     {
+      text: "Attribute “mozallowfullscreen” not allowed on element “iframe” at this point."
+    },
+    {
+      text: "Attribute “webkitallowfullscreen” not allowed on element “iframe” at this point."
+    },
+    {
+      text: "Attribute “allowfullscreen” not allowed on element “iframe” at this point."
+    },
+    {
       // Let <style> be in fragments.
       text: "Error: Element “style” not allowed as child of element “body” in this context. (Suppressing further errors from this subtree.)",
       when: isHTMLFragment
@@ -368,6 +377,12 @@ function buildCSS(compress) {
     cssFile: "css/embed-shell.css",
     compress: compress
   });
+
+  lessToCSS({
+    lessFile: "css/webfonts.less",
+    cssFile: "css/webfonts.css",
+    compress: compress
+  });
 }
 
 target.check = function() {
@@ -404,6 +419,11 @@ function buildJS( version, compress ){
     echo(result.output);
   }
   stampVersion( version, 'dist/src/embed.js' );
+
+  result = exec(RJS + ' -o tools/webmakernav.js ' + doCompress, {silent: true});
+  if (!!result.code) {
+    echo(result.output);
+  }
 }
 
 target.server = function() {

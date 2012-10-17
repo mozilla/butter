@@ -66,7 +66,8 @@
           _inner,
           _outer,
           _href,
-          _guid = Popcorn.guid( "wikiCallback" );
+          _guid = Popcorn.guid( "wikiCallback" ),
+          _this = this;
 
       options._target = Popcorn.dom.find( options.target );
 
@@ -135,6 +136,9 @@
 
         _titleTextArea.appendChild( getFragment( "<a href=\"" + options._link + "\" target=\"_blank\">" + sanitize( data.parse.title ) + "</a>" ) );
         _toWikipedia.href = options._link;
+        _toWikipedia.onclick = function() {
+          _this.media.pause();
+        };
         _toWikipedia.setAttribute( "target", "_blank" );
 
         while ( !areValidElements( element ) ) {

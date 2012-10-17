@@ -84,6 +84,9 @@
 
             if ( elementVal === "STREETVIEW" ) {
               toggleStreetView();
+              // Set zoom to one because the behaviour of this value differs
+              // between streetview and map view
+              updateOptions.zoom = 1;
             } else {
               toggleMaps();
             }
