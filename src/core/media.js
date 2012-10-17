@@ -384,17 +384,15 @@
 
       this.fixTrackEventBounds = function() {
         var i, j,
-            tLength,
-            teLength,
             trackEvents,
             trackEvent,
             trackEventOptions,
             start, end;
         // loop through all tracks
-        for ( i = 0, tLength = _tracks.length; i < tLength; i++ ) {
+        for ( i = 0; i < _tracks.length; i++ ) {
           trackEvents = _tracks[ i ].trackEvents;
           // loop through all track events
-          for ( j = 0, teLength = trackEvents.length; j < teLength; j++ ) {
+          for ( j = 0; j < trackEvents.length; j++ ) {
             trackEvent = trackEvents[ j ];
             trackEventOptions = trackEvent.popcornOptions;
             start = trackEventOptions.start;
