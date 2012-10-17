@@ -435,7 +435,7 @@
         // Apply all the styles
         textContainer.style.fontFamily = options.fontFamily ? originalFamily : DEFAULT_FONT;
       };
-      fontSheet.href = "http://fonts.googleapis.com/css?family=" + options.fontFamily.replace( /\s/g, "+" );
+      fontSheet.href = "//fonts.googleapis.com/css?family=" + options.fontFamily.replace( /\s/g, "+" );
 
       options.toString = function() {
         return options.text || options._natives.manifest.options.text[ "default" ];
