@@ -225,19 +225,17 @@
           width = options.width + "%",
           top = options.top + "%",
           left = options.left + "%",
-          i,
           fontSheet,
           originalFamily = options.fontFamily,
           flip = options.flip ? " flip" : "",
           innerDiv = document.createElement( "div" ),
           textContainer = document.createElement( "div" ),
-          text = options.text,
-          node = document.createElement( "span" ),
           link = document.createElement( "a" ),
-          linkUrl = options.linkUrl,
           img,
           TRIANGLE_WIDTH = 40,
-          TRIANGLE_HEIGHT = 60;
+          TRIANGLE_HEIGHT = 60,
+          text = options.text.replace( /\r?\n/gm, "<br>" ),
+          innerSpan = document.createElement( "span" );
 
       if ( !target ) {
         target = context.media.parentNode;
@@ -355,37 +353,24 @@
       textContainer.style.fontSize = options.fontSize ? options.fontSize + "px" : "12px";
       textContainer.style.fontWeight = options.fontDecorations.bold ? "bold" : "normal";
 
-      text = text.split( /[\n\r]/ );
-      for ( i = 0; i < text.length; i++ ) {
-        node = document.createElement( "span" );
-        node.appendChild( document.createTextNode( text[ i ] ) );
-        
-        if ( linkUrl ) {
-          if ( i ) {
-            link.appendChild( document.createElement( "br" ) );
-          }
-          link.appendChild( node );
-        } else {
-          if ( i ) {
-            textContainer.appendChild( document.createElement( "br" ) );
-          }
-          textContainer.appendChild( node );
-        }
-      }
-
-      if ( linkUrl ) {
-        link.href = linkUrl;
+      if ( options.linkUrl ) {
+        link = document.createElement( "a" );
+        link.href = options.linkUrl;
         link.target = "_blank";
+        link.innerHTML = text;
 
         link.addEventListener( "click", function( e ) {
           context.media.pause();
         }, false );
 
-        link.style.color = options.fontColor;
+        link.style.color = textContainer.style.color;
 
-        textContainer.appendChild( link );
+        innerSpan.appendChild( link );
+      } else {
+        innerSpan.innerHTML = text;
       }
 
+      textContainer.appendChild( innerSpan );
       innerDiv.appendChild( textContainer );
       container.appendChild( innerDiv );
 
