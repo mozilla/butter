@@ -382,6 +382,35 @@
         return track;
       };
 
+      this.fixTrackEventBounds = function() {
+        var i, j,
+            tLength,
+            teLength,
+            trackEvents,
+            trackEvent,
+            trackEventOptions,
+            start, end;
+        // loop through all tracks
+        for ( i = 0, tLength = _tracks.length; i < tLength; i++ ) {
+          trackEvents = _tracks[ i ].trackEvents;
+          // loop through all track events                
+          for ( j = 0, teLength = trackEvents.length; j < teLength; j++ ) {
+            trackEvent = trackEvents[ j ];
+            trackEventOptions = trackEvent.popcornOptions;
+            start = trackEventOptions.start;
+            end = trackEventOptions.end;
+            // check if track event if out of bounds
+            if ( end > _duration  ) {
+              // fix broken track event
+              trackEvent.update({
+                start: _duration - ( end - start ),
+                end: _duration
+              });
+            }
+          }
+        }
+      };
+
       Object.defineProperties( this, {
         ended: {
           enumerable: true,
@@ -486,6 +515,7 @@
             if( time ){
               _duration = time;
               _logger.log( "duration changed to " + _duration );
+              _this.fixTrackEventBounds();
               _this.dispatch( "mediadurationchanged", _this );
             }
           },
