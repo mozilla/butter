@@ -4,6 +4,12 @@
 var googleCallback;
 (function ( Popcorn ) {
 
+  // We load our own cached copy of this in order to deal with mix-content (http vs. https).
+  // At some point the stamen API is going to change, and this will break.
+  // We'll need to watch for this. NOTE: if you change the location of this file, the path
+  // below needs to reflect that change.
+  var STAMEN_BUTTER_CACHED_URL = "/external/stamen/tile.stamen-1.2.0.js";
+
   var _mapFired = false,
       _mapLoaded = false,
       geocoder;
@@ -14,7 +20,7 @@ var googleCallback;
     // before setting _maploaded to true
     if ( typeof google !== "undefined" && google.maps && google.maps.Geocoder && google.maps.LatLng ) {
       geocoder = new google.maps.Geocoder();
-      Popcorn.getScript( "//maps.stamen.com/js/tile.stamen.js", function() {
+      Popcorn.getScript( STAMEN_BUTTER_CACHED_URL, function() {
         _mapLoaded = true;
       });
     } else {

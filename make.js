@@ -517,6 +517,10 @@ target.deploy = function(){
   mkdir( '-p', 'dist/external/popcorn-js/' );
   mv( BUTTERED_POPCORN, './dist/external/popcorn-js/popcorn.js' );
 
+  // We host our own version of the stamen map tile script, copy that over.
+  mkdir( '-p', 'dist/external/stamen/' );
+  cp( 'external/stamen/tile.stamen-1.2.0.js', './dist/external/stamen' );
+
   // Move everything into the public folder
   cp( '-R', 'public', DIST_DIR );
   mv([ 'dist/css', 'dist/external', 'dist/resources', 'dist/src', 'dist/templates' ], 'dist/public/' );
