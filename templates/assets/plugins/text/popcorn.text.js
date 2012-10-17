@@ -103,7 +103,7 @@
           type: "number",
           label: "Left",
           units: "%",
-          "default": 0,
+          "default": 25,
           hidden: true
         },
         top: {
@@ -119,7 +119,7 @@
           type: "number",
           units: "%",
           label: "Width",
-          "default": 100,
+          "default": 50,
           hidden: true
         },
         zindex: {

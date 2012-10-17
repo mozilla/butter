@@ -78,6 +78,8 @@
 
 .text-custom {
   display: inline-block;
+  max-height: 100%;
+  max-width: 100%;
 }
 
 .text-custom > div > span {

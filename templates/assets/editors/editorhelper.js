@@ -60,17 +60,29 @@
           }
         },
         stop: function( event, ui ) {
+
+          var top = ui.position.top,
+              left = ui.position.left;
+
           media = mediaContainer.getBoundingClientRect();
           
           if ( options.end ) {
             options.end();
           }
 
+          if ( top < 0 ) {
+            top = 0;
+          }
+
+          if ( left < 0 ) {
+            left = 0;
+          }
+
           blurActiveEl();
 
           trackEvent.update({
-            top: ( ui.position.top / media.height ) * 100,
-            left: ( ui.position.left / media.width ) * 100
+            top: ( top / media.height ) * 100,
+            left: ( left / media.width ) * 100
           });
         }
       });

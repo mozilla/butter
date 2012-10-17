@@ -31,9 +31,9 @@
                 "target": "video-container",
                 "text": "Pop some corn!",
                 "top": "0",
-                "left": "0",
+                "left": "25",
                 "fontSize": "10",
-                "width": "100"
+                "width": "50"
               },
               "track": "Track0",
               "name": "TrackEvent3"
@@ -47,9 +47,9 @@
                 "target": "video-container",
                 "text": "Pop some corn!",
                 "top": "0",
-                "left": "0",
+                "left": "25",
                 "fontSize": "10",
-                "width": "100"
+                "width": "50"
               },
               "track": "Track0",
               "name": "TrackEvent3"
