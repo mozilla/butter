@@ -393,7 +393,7 @@
         // loop through all tracks
         for ( i = 0, tLength = _tracks.length; i < tLength; i++ ) {
           trackEvents = _tracks[ i ].trackEvents;
-          // loop through all track events                
+          // loop through all track events
           for ( j = 0, teLength = trackEvents.length; j < teLength; j++ ) {
             trackEvent = trackEvents[ j ];
             trackEventOptions = trackEvent.popcornOptions;
