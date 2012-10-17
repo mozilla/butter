@@ -28,14 +28,14 @@ npm install
 mkdir -p $RPM_BUILD_ROOT/opt/butter/%{version}
 rsync -av ./ $RPM_BUILD_ROOT/opt/butter/%{version}
 ln -s %{version} $RPM_BUILD_ROOT/opt/butter/current
-mkdir -p $RPM_BUILD_ROOT/etc/init.d
-cp butter.init $RPM_BUILD_ROOT/etc/init.d/butter.conf
+mkdir -p $RPM_BUILD_ROOT/etc/init
+cp butter.init $RPM_BUILD_ROOT/etc/init/butter.conf
 
 %files
 %defattr(-,root,root,-)
 /opt/butter/%{version}
 /opt/butter/current
-/etc/init.d/butter.conf
+/etc/init/butter.conf
 %doc README.md
 
 
