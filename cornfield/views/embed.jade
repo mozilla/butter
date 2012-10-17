@@ -20,79 +20,80 @@ html(lang='en')
     #container.container
       #video-container.video
         #video
-        #controls-big-play-button
-        #post-roll.embed-overlay(style='display: none;')
-          .post-roll-inner
-            a(href='#').embed-logo
-            .embed-project
-              div
-                .mozpopcorn Mozilla Popcorn
-                .embed-title #{title}
-                .embed-author #{author}
-              .post-roll-description
-                | This was created with Mozilla Popcorn.
-                br
-                a(href='/', target='_blank') Create a project like this!
-              ul.embed-nav.post-roll-options
+    #controls-big-play-button
+    #post-roll-container
+      #post-roll.embed-overlay(style='display: none;')
+        .post-roll-inner
+          a.embed-logo
+          .embed-project
+            div
+              .mozpopcorn Mozilla Popcorn
+              .embed-title #{title}
+              .embed-author #{author}
+            .post-roll-description
+              | This was created with Mozilla Popcorn.
+              br
+              a(href='/', target='_blank') Create a project like this!
+            ul.embed-nav.post-roll-options
+              li
+                a#replay-post
+                  span Replay
+              li
+                a(href='#{remixUrl}', target='_blank')#remix-post
+                  span Remix
+              li
+                a#share-post
+                  span Share
+      #share.embed-overlay(style='display: none;')
+        .share-inner
+          a#share-close X
+          a.embed-logo
+          .embed-project
+            div
+              .mozpopcorn Mozilla Popcorn
+              .embed-title #{title}
+              .embed-author #{author}
+          #share-options.share-options
+            fieldset
+              label URL
+              input#share-url.share-ul(type='url')
+              ul.embed-nav.share-buttons
                 li
-                  a#replay-post
-                    span Replay
+                  a#replay-share(href='#') Twitter
                 li
-                  a(href='#{remixUrl}', target='_blank')#remix-post
-                    span Remix
-                li
-                  a#share-post
-                    span Share
-        #share.embed-overlay(style='display: none;')
-          .share-inner
-            a#share-close X
-            a.embed-logo
-            .embed-project
-              div
-                .mozpopcorn Mozilla Popcorn
-                .embed-title #{title}
-                .embed-author #{author}
-            #share-options.share-options
-              fieldset
-                label URL
-                input#share-url.share-ul(type='url')
-                ul.embed-nav.share-buttons
-                  li
-                    a#replay-share(href='#') Twitter
-                  li
-                    a#share-share(href='#') Google+
-              fieldset
-                label Embed
-                textarea#share-iframe
-                  iframe
-                .share-size
-                  div.size-options
-                    a.small.option(href='#')
-                      span.icon
-                      span.size Small
-                      span.dimensions 560x358
-                    a.medium.option.current(href='#')
-                      span.icon
-                      span.size Medium
-                      span.dimensions 640x403
-                    a.large.option(href='#')
-                      span.icon
-                      span.size Large
-                      span.dimensions 853x523
-                    a.xlarge.option(href='#')
-                      span.icon
-                      span.size X-Large
-                      span.dimensions 1280x763
-        #attribution-info.attribution-info
-          #attribution-logo.attribution-logo
-            span.attribution-text Credits
-          #attribution-details.attribution-details
-            span.attribution-close
-            div.attribution-mopop mozilla Popcorn
-            div.attribution-title #{title}
-            if author
-              div.attribution-author #{author}
-            div.attribution-media
-              span.media-icon
-              a.attribution-media-src(href='#{mediaSrc}', target='_blank') #{mediaSrc}
+                  a#share-share(href='#') Google+
+            fieldset
+              label Embed
+              textarea#share-iframe
+                iframe
+              .share-size
+                div.size-options
+                  a.small.option(href='#')
+                    span.icon
+                    span.size Small
+                    span.dimensions 560x358
+                  a.medium.option.current(href='#')
+                    span.icon
+                    span.size Medium
+                    span.dimensions 640x403
+                  a.large.option(href='#')
+                    span.icon
+                    span.size Large
+                    span.dimensions 853x523
+                  a.xlarge.option(href='#')
+                    span.icon
+                    span.size X-Large
+                    span.dimensions 1280x763
+      #attribution-info.attribution-info
+        #attribution-logo.attribution-logo
+          span.attribution-text Credits
+        #attribution-details.attribution-details
+          span.attribution-close
+          div.attribution-mopop mozilla Popcorn
+          div.attribution-title #{title}
+          if author
+            div.attribution-author #{author}
+          div.attribution-media
+            span.media-icon
+            a.attribution-media-src(href='#{mediaSrc}', target='_blank') #{mediaSrc}
       #controls.controls
