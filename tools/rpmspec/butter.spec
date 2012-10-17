@@ -3,13 +3,13 @@
 
 
 Name:		butter
-Version:	0.9
+Version:	@VERSION@
 Release:	1
-Summary:	Buttered Popcorn
+Summary:	An SDK for authoring Popcorn projects
 Packager:   Mozilla
-License:	MPL
-URL:		http://nodejs.org/
-Source0:	https://github.com/downloads/mozilla/%{name}/%{name}-v%{version}.tar
+License:	MIT
+URL:		https://github.com/mozilla/butter
+Source0:	https://github.com/downloads/mozilla/%{name}/%{name}-%{version}.tar
 ExclusiveArch:  %{ix86} x86_64
 
 BuildRequires:	nodejs = %{node_version}

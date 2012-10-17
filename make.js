@@ -528,8 +528,13 @@ target.deploy = function(){
   // Write-out version info regarding Butter and Popcorn so cornfield knows what it's serving.
   publishVersionInfo( join( DIST_DIR, VERSIONS_CONFIG ) );
 
+  // Copy RPM spec files and stamp with version
+  var rpmVersion = ( version ? version : gitDescribe( '.' ) ).replace( /-/g, '_' );
+  cp( 'tools/rpmspec/*', DIST_DIR );
+  stampVersion( rpmVersion, 'dist/butter.spec' );
+
   // Create a tar archive
-  var tarName = 'butter-' + gitDescribe( '.' ) + '.tar';
+  var tarName = 'butter-' + rpmVersion + '.tar';
   exec( 'tar -cyf "' + tarName + '" dist' );
   mv( tarName, 'dist' );
 
