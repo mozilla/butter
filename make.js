@@ -404,6 +404,11 @@ function buildJS( version, compress ){
     echo(result.output);
   }
   stampVersion( version, 'dist/src/embed.js' );
+
+  result = exec(RJS + ' -o tools/webmakernav.js ' + doCompress, {silent: true});
+  if (!!result.code) {
+    echo(result.output);
+  }
 }
 
 target.server = function() {
