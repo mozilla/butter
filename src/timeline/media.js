@@ -38,7 +38,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer ),
         _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
         _currentMouseDownTrackEvent,
-        _ready = false,
         _status;
 
     _status = new Status( _media, butter.ui.tray.statusArea );
@@ -143,13 +142,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _bounds = DEFAULT_BOUNDS;
       _tracksContainer.setViewportBounds( _bounds[ 0 ], _bounds[ 1 ] );
       updateUI();
-      _ready = true;
       _this.dispatch( "ready" );
-    }
-
-    // Update our flag when we change media to ensure we always report and accurate ready state
-    function onMediaChanged() {
-      _ready = false;
     }
 
     function onMediaReadyFirst(){
@@ -230,7 +223,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
     }
 
     _media.listen( "mediaready", onMediaReadyFirst );
-    _media.listen( "mediachanged", onMediaChanged );
 
     butter.editor.listen( "editorminimized", onEditorMinimized );
 
@@ -240,7 +232,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           start = e.data.start,
           trackEvent;
 
-      if ( _ready ) {
+      if ( _media.ready ) {
         trackEvent = butter.generateSafeTrackEvent( type, start, track );
         butter.editor.editTrackEvent( trackEvent );
       }
