@@ -47,7 +47,7 @@
   line-height: 1;
 }
 
-.text-fixed > div > span > a {
+.text-fixed > div > span > div {
   position: relative;
   display: inline-block;
 }
