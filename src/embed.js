@@ -133,7 +133,7 @@ function init( window, document ) {
   }
 
   function addStateClass( state ) {
-    var el = $( "#container" );
+    var el = $( "#post-roll-container" );
 
     if ( el.classList.contains( state ) ) {
       return;
