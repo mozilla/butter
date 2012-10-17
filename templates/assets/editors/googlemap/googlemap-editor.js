@@ -5,7 +5,7 @@
 
 ( function( Butter ) {
 
-  Butter.Editor.register( "googlemap", "load!{{baseDir}}editors/googlemap-editor.html",
+  Butter.Editor.register( "googlemap", "load!{{baseDir}}templates/assets/editors/googlemap/googlemap-editor.html",
     function( rootElement, butter, compiledLayout ) {
 
     var _this = this;
