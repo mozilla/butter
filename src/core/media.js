@@ -22,7 +22,7 @@
       EventManager.extend( this );
 
       var _tracks = [],
-          _orderedTracks,
+          _orderedTracks = [],
           _id = "Media" + __guid++,
           _logger = new Logger( _id ),
           _name = mediaOptions.name || _id,
@@ -382,6 +382,42 @@
         return track;
       };
 
+      this.fixTrackEventBounds = function() {
+        var i, j,
+            tracks = _orderedTracks.slice(),
+            tracksLength,
+            trackEventsLength,
+            trackEvents,
+            trackEvent,
+            trackEventOptions,
+            start, end;
+        // loop through all tracks
+        for ( i = 0, tracksLength = tracks.length; i < tracksLength; i++ ) {
+          trackEvents = tracks[ i ].trackEvents.slice();
+          // loop through all track events
+          for ( j = 0, trackEventsLength = trackEvents.length; j < trackEventsLength; j++ ) {
+            trackEvent = trackEvents[ j ];
+            trackEventOptions = trackEvent.popcornOptions;
+            start = trackEventOptions.start;
+            end = trackEventOptions.end;
+            // check if track event if out of bounds
+            if ( end > _duration  ) {
+              start = _duration - ( end - start );
+              // if start is negative, we now have a track event longer than the duration
+              if ( start < 0 ) {
+                // setting this to zero makes it the duration
+                start = 0;
+              }
+              // fix broken track event
+              trackEvent.update({
+                start: start,
+                end: _duration
+              });
+            }
+          }
+        }
+      };
+
       Object.defineProperties( this, {
         ended: {
           enumerable: true,
@@ -486,6 +522,7 @@
             if( time ){
               _duration = time;
               _logger.log( "duration changed to " + _duration );
+              _this.fixTrackEventBounds();
               _this.dispatch( "mediadurationchanged", _this );
             }
           },
