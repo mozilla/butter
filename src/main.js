@@ -168,7 +168,7 @@
       function targetTrackEventRequested( e ) {
         var trackEvent;
 
-        if ( _currentMedia ) {
+        if ( _currentMedia && _currentMedia.ready ) {
           trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime );
           _this.editor.editTrackEvent( trackEvent );
         }
@@ -178,8 +178,11 @@
       }
 
       function mediaTrackEventRequested( e ) {
-        var trackEvent = _this.generateSafeTrackEvent( e.data.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime );
-        _this.editor.editTrackEvent( trackEvent );
+        var trackEvent;
+        if ( _currentMedia.ready ) {
+          trackEvent = _this.generateSafeTrackEvent( e.data.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime );
+          _this.editor.editTrackEvent( trackEvent );
+        }
       }
 
       function mediaPlayerTypeRequired( e ){
