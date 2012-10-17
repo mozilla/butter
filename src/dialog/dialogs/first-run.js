@@ -6,9 +6,6 @@ define( [ "text!dialog/dialogs/first-run.html", "dialog/dialog",
           "ui/widget/tooltip", "util/shims" ],
   function( LAYOUT_SRC, Dialog, ToolTip ) {
 
-
-    var TOOLTIP_DELAY = 3000;
-
     Dialog.register( "first-run", LAYOUT_SRC, function ( dialog, data ) {
 
       var editor = document.querySelector( ".butter-editor-area" ),
@@ -28,44 +25,25 @@ define( [ "text!dialog/dialogs/first-run.html", "dialog/dialog",
       popupTile.classList.add( "overlay-highlight" );
 
       function closeFirstRunDialog() {
-        window.removeEventListener( "click", secondStep, false );
-        mediaEditorButton.classList.remove( "overlay-highlight" );
-        popupTile.classList.remove( "overlay-highlight" );
+        window.removeEventListener( "click", close, false );
+        //popupTile.removeEventListener( "mouseover", close, false );
+        //mediaEditorButton.classList.remove( "overlay-highlight" );
+        //popupTile.classList.remove( "overlay-highlight" );
         editor.removeChild( overlayDiv );
         document.body.classList.remove( "first-run" );
+      }
+
+      dialog.listen('close', function farp(e){
+        dialog.unlisten('close', farp);
+        closeFirstRunDialog();
+      });
+
+      function close() {
         dialog.activity( "default-close" );
       }
-   
-      function secondStep() {
-        closeFirstRunDialog();
-        popupTooltip = ToolTip.create({
-          name: "tooltip-popup",
-          element: popupTile,
-          message: "<h3>Event</h3>Try dragging this to the stage",
-          hidden: false
-        });
-        mediaTooltip = ToolTip.create({
-          name: "tooltip-media",
-          element: mediaEditorButton,
-          top: "60px",
-          message: "<h3>Media Editor</h3>Change your media source here!<span class=\"center-div\"><span class=\"media-icon youtube-icon\"></span><span class=\"media-icon vimeo-icon\"></span><span class=\"media-icon soundcloud-icon\"></span><span class=\"media-icon html5-icon\"></span></span>",
-          hidden: false
-        });
 
-        setTimeout( function() {
-          if ( mediaTooltip ) {
-            mediaTooltip.parentNode.removeChild( mediaTooltip );
-          }
-          if ( popupTooltip ) {
-            popupTooltip.parentNode.removeChild( popupTooltip );
-          }
-        }, TOOLTIP_DELAY );
-
-        popupTile.removeEventListener( "mouseover", secondStep, false );
-      }
-
-      popupTile.addEventListener( "mouseover", secondStep, false );
-      window.addEventListener( "click", secondStep, false );
+      popupTile.addEventListener( "mouseover", close, false );
+      window.addEventListener( "click", close, false );
 
       dialog.assignEscapeKey( "default-close" );
     });
