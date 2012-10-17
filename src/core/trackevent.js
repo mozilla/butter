@@ -143,18 +143,6 @@ define( [ "./logger", "./eventmanager", "./observer",
       if ( _track && _track._media ) {
         media = _track._media;
         duration = media.duration;
-        if ( media.ready ) {
-          if ( newStart < 0 ) {
-            newStart = 0;
-          } else if ( newStart > duration ) {
-            newStart = duration;
-          }
-          if ( newEnd < 0 ) {
-            newEnd = 0;
-          } else if ( newEnd > duration ) {
-            newEnd = duration;
-          }
-        }
 
         if ( this.manifest ) {
           manifestOptions = this.manifest.options;

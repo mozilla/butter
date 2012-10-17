@@ -163,6 +163,16 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
      * @param {Object} properties: TrackEvent properties to update
      */
     extendObject.updateTrackEventSafe = function( trackEvent, properties ) {
+      if ( properties.hasOwnProperty( "start" ) ) {
+        if ( properties.start < 0 ) {
+          properties.start = 0;
+        }
+      }
+      if ( properties.hasOwnProperty( "end" ) ) {
+        if ( properties.end > butter.duration ) {
+          properties.end = butter.duration;
+        }
+      }
       try {
         trackEvent.update( properties );
       }
