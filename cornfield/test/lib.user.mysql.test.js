@@ -1,11 +1,10 @@
 var test = require( "tap" ).test,
-    userLibrary = require( "../lib/user" ),
-    Sequelize = require( "sequelize" );
+    userLibrary = require( "../lib/user" );
 
-var DB_USERNAME = process.env.DB_USERNAME || "popcorntest";
-var DB_DATABASE = process.env.DB_DATABASE || "popcorntest";
+var DB_USERNAME = process.env.DB_USERNAME || "root";
+var DB_DATABASE = process.env.DB_DATABASE || "popcorn";
 var DB_PASSWORD = process.env.DB_PASSWORD || "";
-var DB_HOST = process.env.DB_HOST;
+var DB_HOST = process.env.DB_HOST || "127.0.0.1";
 
 var mockEmail = "test@example.org",
     mockData = {
