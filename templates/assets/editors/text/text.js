@@ -10,6 +10,10 @@ EditorHelper.addPlugin( "text", function( trackEvent ) {
   if ( window.jQuery ) {
     if ( trackEvent.popcornOptions.position === "custom" ) {
       EditorHelper.draggable( trackEvent, _container, media );
+      EditorHelper.resizable( trackEvent, _container, media, {
+        minWidth: 10,
+        handlePositions: "e"
+      });
     }
     EditorHelper.contentEditable( trackEvent, _container.querySelectorAll( "span" ) );
   }
