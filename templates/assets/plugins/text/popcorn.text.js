@@ -200,7 +200,7 @@
       fontSheet.onload = function ( e ) {
         innerContainer.style.fontFamily = options.fontFamily;
       };
-      fontSheet.href = "http://fonts.googleapis.com/css?family=" + options.fontFamily.replace( /\s/g, "+" );
+      fontSheet.href = "//fonts.googleapis.com/css?family=" + options.fontFamily.replace( /\s/g, "+" );
 
       options.toString = function() {
         // use the default option if it doesn't exist

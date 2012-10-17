@@ -87,7 +87,7 @@
     },
     _setup: function( options ) {
       var target = Popcorn.dom.find( options.target ),
-          requestString = "http://api.twitter.com/1/statuses/user_timeline.json?screen_name=",
+          requestString = "//api.twitter.com/1/statuses/user_timeline.json?screen_name=",
           titleText = document.createElement( "span" ),
           outerTweetsContainer = document.createElement( "div" ),
           tweetsContainer = document.createElement( "ul" ),
@@ -234,7 +234,7 @@
       if ( !CACHED_RESULTS[ query ] ) {
         if ( options.username ) {
           Popcorn.xhr({
-            url: "https://api.twitter.com/1/account/rate_limit_status.json",
+            url: "//api.twitter.com/1/account/rate_limit_status.json",
             dataType: "jsonp",
             success: function( e ) {
               if ( e.remaining_hits === 0 ) {
@@ -253,7 +253,7 @@
               }
           }});
         } else if ( options.search ) {
-          requestString = "http://search.twitter.com/search.json?q=";
+          requestString = "//search.twitter.com/search.json?q=";
 
           requestString += escape( options.search ) +
                          "&result_type=" + options.searchType;

@@ -12,6 +12,10 @@
       jsonBits = "&format=json&jsoncallback=flickr",
       FLICKR_SINGLE_CHECK = "flickr.com/photos/";
 
+  if ( window.location.protocol === "https:" ) {
+    flickrUrl = "https://secure.flickr.com/services/";
+  }
+
   function searchImagesFlickr( tags, count, userId, ready ) {
     var uri = searchPhotosCmd + APIKEY + "&per_page=" + count + "&";
     if ( userId && typeof userId !== "function" ) {
