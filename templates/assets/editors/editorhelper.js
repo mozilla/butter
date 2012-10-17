@@ -29,8 +29,8 @@
      *                    {Function} end: Fucntion to execute on drag end event
      */
     global.EditorHelper.draggable = function( trackEvent, dragContainer, mediaContainer, options ) {
-      var media = mediaContainer.getBoundingClientRect(),
-          iframeVideo = mediaContainer.querySelector( "iframe" );
+      var iframeVideo = mediaContainer.querySelector( "iframe" ),
+          media;
 
       options = options || {};
 
@@ -60,15 +60,29 @@
           }
         },
         stop: function( event, ui ) {
+
+          var top = ui.position.top,
+              left = ui.position.left;
+
+          media = mediaContainer.getBoundingClientRect();
+          
           if ( options.end ) {
             options.end();
+          }
+
+          if ( top < 0 ) {
+            top = 0;
+          }
+
+          if ( left < 0 ) {
+            left = 0;
           }
 
           blurActiveEl();
 
           trackEvent.update({
-            top: ( ui.position.top / media.height ) * 100,
-            left: ( ui.position.left / media.width ) * 100
+            top: ( top / media.height ) * 100,
+            left: ( left / media.width ) * 100
           });
         }
       });
@@ -93,8 +107,7 @@
      *                    {Number} minHeight: Minimum height that the resizeContainer should be
      */
     global.EditorHelper.resizable = function( trackEvent, resizeContainer, mediaContainer, options ) {
-      var media = mediaContainer.getBoundingClientRect(),
-          iframeVideo = mediaContainer.querySelector( "iframe" );
+      var iframeVideo = mediaContainer.querySelector( "iframe" );
 
       options = options || {};
 
@@ -111,7 +124,8 @@
         },
         containment: "parent",
         stop: function( event, ui ) {
-          var height = ( ui.size.height + resizeContainer.offsetTop ) <= media.height ? ui.size.height : media.height - resizeContainer.offsetTop,
+          var media = mediaContainer.getBoundingClientRect(),
+              height = ( ui.size.height + resizeContainer.offsetTop ) <= media.height ? ui.size.height : media.height - resizeContainer.offsetTop,
               width = ( ui.size.width + resizeContainer.offsetLeft ) <= media.width ? ui.size.width : media.width - resizeContainer.offsetLeft,
               top = ( ui.position.top / media.height ) * 100,
               left = ( ui.position.left / media.width ) * 100;
@@ -170,6 +184,7 @@
         }
       };
       updateTrackEvent = function() {
+        blurActiveEl();
         trackEvent.update({
           text: newText
         });
