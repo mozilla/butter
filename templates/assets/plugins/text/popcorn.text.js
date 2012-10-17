@@ -131,6 +131,7 @@
           container = options._container = document.createElement( "div" ),
           innerContainer = document.createElement( "div" ),
           innerSpan = document.createElement( "span" ),
+          innerDiv = document.createElement( "div" ),
           fontSheet,
           fontDecorations = options.fontDecorations || options._natives.manifest.options.fontDecorations[ "default" ],
           position = options.position || options._natives.manifest.options.position[ "default" ],
@@ -146,6 +147,9 @@
       container.style.position = "absolute";
       container.classList.add( "popcorn-text" );
 
+      // innerDiv inside innerSpan is to allow zindex from layers to work properly.
+      // if you mess with this code, make sure to check for zindex issues.
+      innerSpan.appendChild( innerDiv );
       innerContainer.appendChild( innerSpan );
       container.appendChild( innerContainer );
       target.appendChild( container );
@@ -186,7 +190,7 @@
         else {
           container.classList.add( "text-fixed" );
           innerContainer.classList.add( position );
-          innerSpan.style.zIndex = +options.zindex;
+          innerDiv.style.zIndex = +options.zindex;
         }
 
         if ( options.linkUrl ) {
@@ -201,9 +205,9 @@
 
           link.style.color = innerContainer.style.color;
 
-          innerSpan.appendChild( link );
+          innerDiv.appendChild( link );
         } else {
-          innerSpan.innerHTML = text;
+          innerDiv.innerHTML = text;
         }
       };
       fontSheet.href = "//fonts.googleapis.com/css?family=" + options.fontFamily.replace( /\s/g, "+" );
