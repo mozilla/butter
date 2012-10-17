@@ -282,15 +282,6 @@ function checkHTML() {
       text: "Warning: The character encoding of the document was not declared."
     },
     {
-      text: "Attribute “mozallowfullscreen” not allowed on element “iframe” at this point."
-    },
-    {
-      text: "Attribute “webkitallowfullscreen” not allowed on element “iframe” at this point."
-    },
-    {
-      text: "Attribute “allowfullscreen” not allowed on element “iframe” at this point."
-    },
-    {
       // Let <style> be in fragments.
       text: "Error: Element “style” not allowed as child of element “body” in this context. (Suppressing further errors from this subtree.)",
       when: isHTMLFragment
