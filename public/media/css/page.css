@@ -83,7 +83,7 @@ Layout styles
   }
 
   #wrapper {
-    background: #F9F9F9 url("/media/img/bg-stone.png") repeat-x 0 69px;
+    background: #F9F9F9 url("/media/img/bg-stone.png") repeat-x 0 70px;
     padding-bottom: 0;
     display: table;
     width: 100%;
@@ -114,7 +114,7 @@ Layout styles
   }
 
   #masthead {
-    margin-bottom: 35px;
+    margin-bottom: 90px;
   }
 
   #masthead .row {
@@ -254,8 +254,8 @@ Home styles
   }
 
   .thumbnail img {
-    width: 560px;
-    height: 340px;
+    width: 240px;
+    height: 147px;
     border: 6px solid white;
     -webkit-box-shadow: 0 2px 2px 3px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0 2px 2px 3px rgba(0, 0, 0, 0.1);
