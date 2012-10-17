@@ -31,6 +31,17 @@ ln -s %{version} $RPM_BUILD_ROOT/opt/butter/current
 mkdir -p $RPM_BUILD_ROOT/etc/init
 cp butter.init $RPM_BUILD_ROOT/etc/init/butter.conf
 
+# restart the job after upgrade or migrate to init script on removal
+# cannot be stopped with 'service' as /etc/init/$name.conf may be missing
+# at this point
+%define        upstart_postun() \
+       if [ -x /sbin/initctl ] && /sbin/initctl status "%1" 2>/dev/null | grep -q 'running' ; then \
+               /sbin/initctl stop "%1" >/dev/null 2>&1 \
+               [ -f "/etc/rc.d/init.d/%1" -o -f "/etc/init/%1.conf" ] && { echo -n "Re-" ; /sbin/service "%1" start ; } ; \+       fi
+
+%postun
+%upstart_postun butter
+
 %files
 %defattr(-,root,root,-)
 /opt/butter/%{version}
