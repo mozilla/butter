@@ -36,14 +36,23 @@ Global styles and classes
     line-height: 23px;
   }
 
-  .hero-unit h2 {
-    line-height: 50px;
-    font-family: "Open Sans Light", sans-serif;
+  #logo {
+    margin-left: -12px;
   }
 
-  .hero-unit h1 {
-    font-weight: bold;
-    margin-bottom: 24px;
+  hgroup {
+    padding-bottom: 24px;
+  }
+
+  .hero-unit p {
+    font-family: "Open Sans Light", sans-serif;
+    font-size: 16px;
+    line-height: 28px;
+  }
+  .hero-unit h2 {
+    font-size: 42px;
+    line-height: 1;
+    font-family: "Open Sans Light", sans-serif;
   }
 
   a.top,
@@ -78,14 +87,15 @@ Layout styles
 */
 
   #outer-wrapper {
-    border-top: 1px;
+    position: relative;
+    border-top: 2px solid #FFF;
   }
 
   #wrapper {
-    background: #F9F9F9 url("/media/img/bg-stone.png") repeat-x 0 69px;
     padding-bottom: 0;
     display: table;
     width: 100%;
+    padding-top: 30px;
   }
 
   #test-ribbon {
@@ -94,7 +104,11 @@ Layout styles
     left: 0;
     z-index: 2;
   }
-
+  #tabzilla {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
   #tabzilla-panel {
     z-index: 2;
   }

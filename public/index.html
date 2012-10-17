@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <title>Mozilla Popcorn</title>
   <link rel="stylesheet" href="media/css/sandstone.css">
-  <link rel="stylesheet" href="media/css/page.css">
   <link href="//www.mozilla.org/tabzilla/media/css/tabzilla.css" rel="stylesheet">
+  <link rel="stylesheet" href="media/css/page.css">
   <!--[if lt IE 9]>
     <script src="/media/js/html5shiv.js"></script>
   <![endif]-->
@@ -15,56 +15,32 @@
     document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/, '');
   </script>
   <div id="outer-wrapper">
+    <a href="http://www.mozilla.org/" id="tabzilla">Mozilla</a>
     <div id="wrapper">
-      <section id="header">
-        <header id="masthead">
+      <section>
+        <div class="container">
           <div class="row">
-            <div class="span10">
-              <div class="logo">
-                <a href="/en-US/">
-                  <img src="/popcornlogo-small.png" alt="Mozilla Popcorn">
-                </a>
-              </div>
-              <a href="http://www.mozilla.org/" id="tabzilla">Mozilla</a>
-              <!--
-              <nav id="nav-main" role="navigation">
-                <ul>
-                  <li class="home"><a href="/">Home</a></li>
-                </ul>
-              </nav>
-              -->
+            <div class="hero-unit span12">
+              <hgroup class="large">
+                <img id="logo" src="logo-big.png">
+                <h2>Video beyond the box</h2>
+              </hgroup>
             </div>
           </div>
-        </header>
-      </section>
-
-      <section>
-        <div class="container divider">
           <div class="row">
-            <div class="hero-unit span6">
-              <hgroup class="large">
-                <h2>Video beyond the box</h2>
-                <h1>Popcorn Maker</h1>
-              </hgroup>
+            <div class="hero-unit span5">
               <p>
                 Popcorn Maker makes it easy to enhance, remix and share web video. Use your web browser to combine video and audio with content from the rest of the web — from text, links and maps to pictures and live feeds.
               </p>
               <p>
                 Use Popcorn Maker to create your own interactive newscasts, pop-up videos, multimedia reports, fan videos, guided web tours and more. Remix your favorite videos on YouTube or sounds on SoundCloud, add your own comments and links, or drag and drop in content from across the web.
               </p>
-              <p>
-                The result is a whole new way to tell stories on the web, with videos that are dynamic, full of links, and unique each time you watch them. It's video beyond the box.
-              </p>
               <p class="intro-bar">
                 <a class="button-blue start" href="/templates/basic">Start from scratch</a><em>&nbsp;or&nbsp;</em><a class="button start" href="#">Take the tutorial</a>
 			         </p>
             </div>
-            <div class="span4">
-              <video controls preload="none" width="344" height="232"
-                poster="media/img/poster.png">
-                  <source src="http://videos.mozilla.org/serv/webmademovies/popcornsite.webm" type="video/webm">
-                  <source src="http://videos.mozilla.org/serv/webmademovies/popcornsite.mp4" type="video/mp4">
-              </video>
+            <div class="span5">
+              <iframe class="iframe-template" src='http://dev.butyr.org/v/gh_.html' width='560' height='340' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
             </div>
           </div>
           <div id="projects">
@@ -252,7 +228,7 @@
         modal.addEventListener( "click", function closeModal() {
           this.style.opacity = "";
           this.style.visibility = "";
-          console.log( modalInner );
+          newiFrame.parentNode.removeChild( newiFrame );
           modal.removeEventListener( "click", closeModal, false );
         }, false );
       }
