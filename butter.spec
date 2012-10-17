@@ -28,8 +28,8 @@ npm install
 mkdir -p $RPM_BUILD_ROOT/opt/butter/%{version}
 rsync -av ./ $RPM_BUILD_ROOT/opt/butter/%{version}
 ln -s %{version} $RPM_BUILD_ROOT/opt/butter/current
-mkdir -p $RPM_BUILD_ROOT/etc/init
-cp butter.init $RPM_BUILD_ROOT/etc/init/butter.conf
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init
+cp butter.init $RPM_BUILD_ROOT%{_sysconfdir}/init/butter.conf
 
 # restart the job after upgrade or migrate to init script on removal
 # cannot be stopped with 'service' as /etc/init/$name.conf may be missing
@@ -46,7 +46,7 @@ cp butter.init $RPM_BUILD_ROOT/etc/init/butter.conf
 %defattr(-,root,root,-)
 /opt/butter/%{version}
 /opt/butter/current
-/etc/init/butter.conf
+%{_sysconfdir}/init/butter.conf
 %doc README.md
 
 
