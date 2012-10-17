@@ -119,7 +119,7 @@ function checkCSSFile( filename, warnings, errors ) {
   });
 }
 
-function checkCSS( dir ) {
+function checkCSS() {
   // see cli.js --list-rules.
   var warnings = [
 //    "important",
@@ -154,12 +154,10 @@ function checkCSS( dir ) {
   echo( "" );
   echo( "# Linting CSS files" );
 
-  var files = ls( dir );
-  files.forEach( function( filename ) {
-    filename = join( dir, filename );
-    if( /\.css$/.test( filename ) ) {
-      checkCSSFile( filename, warnings, errors );
-    }
+  find( SLICE.call( arguments ) ).filter(function( filename ) {
+    return (/\.css$/).test( filename );
+  }).forEach(function( filename ) {
+    checkCSSFile( filename, warnings, errors );
   });
 
 }
@@ -375,7 +373,7 @@ function buildCSS(compress) {
 target.check = function() {
   checkJS( 'make.js', SRC_DIR, CORNFIELD_DIR, TEMPLATES_DIR );
   buildCSS();
-  checkCSS( CSS_DIR, TEMPLATES_DIR );
+  checkCSS( 'css', 'public', 'src', 'templates' );
   checkHTML();
 
   exit( passed ? 0 : 1 );
