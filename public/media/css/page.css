@@ -6,6 +6,7 @@ Global styles and classes
 
   body {
     color: #555;
+    -webkit-font-smoothing: antialiased;
   }
 
   .threeColumn {
@@ -36,8 +37,8 @@ Global styles and classes
     line-height: 23px;
   }
 
-  video {
-    width: 100%;
+  .hero-unit iframe {
+    float: right;
   }
 
   hgroup {
@@ -46,9 +47,9 @@ Global styles and classes
   }
 
   .hero-unit p {
-    font-family: "Open Sans Light", sans-serif;
-    font-size: 16px;
-    line-height: 28px;
+    font-family: "Open Sans", sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
   }
   .hero-unit h1 {
     margin-left: -12px;
@@ -269,66 +270,87 @@ Layout styles
 Home styles
 */
 
-  #modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 10000;
-    background: rgba( 0, 0, 0, 0.8 );
-    opacity: 0;
-    visibility: hidden;
-    -webkit-transition: all 0.2s linear;
-    -moz-transition: all 0.2s linear;
-    -o-transition: all 0.2s linear;
-    -ms-transition: all 0.2s linear;
-    transition: all 0.2s linear;
-  }
-  #modal {
-    position: absolute;
-    width: 560px;
-    height: 340px;
-    top: 50%;
-    left: 50%;
-    margin-left: -280px;
-    margin-top: -170px;
-    box-shadow: 0 10px 10px -5px #000;
-  }
+#modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  background: rgba( 0, 0, 0, 0.8 );
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  -ms-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+}
+#modal {
+  position: absolute;
+  width: 560px;
+  height: 358px;
+  top: 50%;
+  left: 50%;
+  margin-left: -280px;
+  margin-top: -170px;
+  box-shadow: 0 10px 10px -5px #000;
+}
 
-  #modal a {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    margin-top: 10px;
-  }
-  #home .caption p {
-    margin-bottom: 0;
-  }
+#modal a {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 10px;
+}
+#home .caption p {
+  margin-bottom: 0;
+}
 
-  .thumbnail img {
-    width: 560px;
-    height: 340px;
-    border: 6px solid white;
-    -webkit-box-shadow: 0 2px 2px 3px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: 0 2px 2px 3px rgba(0, 0, 0, 0.1);
-    box-shadow: 0 2px 2px 3px rgba(0, 0, 0, 0.1);
-  }
+.close-btn {
+  background: #000;
+  height: 20px;
+  width: 20px;
+  border-radius: 20px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+}
+.close-btn:after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  display: block;
+  background: url( "../img/glyphiconshalflings-white.png" ) -432px -24px no-repeat;
+  width: 14px;
+  height: 14px;
+}
 
-  .thumbnails {
-    margin-left: -24px;
-    list-style: none;
-  }
+.thumbnail img {
+  width: 560px;
+  height: 340px;
+  border: 6px solid white;
+  -webkit-box-shadow: 0 2px 2px 3px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 2px 2px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 2px 3px rgba(0, 0, 0, 0.1);
+}
 
-  .thumbnail {
-    position: relative;
-    margin-bottom: 30px;
-    cursor: pointer;
-  }
+.thumbnails {
+  margin-left: -24px;
+  list-style: none;
+}
 
-  .action {
-    text-align: center;
-  }
+.thumbnail {
+  position: relative;
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+.action {
+  text-align: center;
+}
 
 
 #projects {

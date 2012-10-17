@@ -11,12 +11,10 @@
             "id": "Media0",
             "name": "Media0",
             "url": [
-                "http://www.youtube.com/watch?v=0g2WE1qXiKM&butteruid=1350497258392",
-                "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.ogv?butteruid=1350497258393",
-                "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.webm?butteruid=1350497258394"
+                "https://www.youtube.com/watch?v=0g2WE1qXiKM&butteruid=1350599002541&butteruid=1350599883758"
             ],
             "target": "video",
-            "duration": 925.08,
+            "duration": 925.2310180664062,
             "controls": false,
             "tracks": [
                 {
@@ -30,7 +28,7 @@
                                 "start": 0.90296,
                                 "end": 4.86411,
                                 "target": "video-container",
-                                "text": "Welcome to the first publicly available\nPopcorn Maker project!",
+                                "text": "This video has been augmented\nwith Popcorn Maker!",
                                 "linkUrl": "",
                                 "type": "popup",
                                 "triangle": "bottom left",
@@ -58,37 +56,6 @@
                             "id": "TrackEvent1",
                             "type": "popup",
                             "popcornOptions": {
-                                "start": 18.06741,
-                                "end": 27.22757,
-                                "target": "video-container",
-                                "text": "Beau Lotto is the Head Misfit\nand founder of Lottolab.org\nclick here to visit!",
-                                "linkUrl": "http://www.lottolab.org/index.asp",
-                                "type": "popup",
-                                "triangle": "bottom left",
-                                "sound": "",
-                                "icon": "user",
-                                "flip": "",
-                                "top": 47.22222222222222,
-                                "left": 66.78571428571428,
-                                "width": 30,
-                                "transition": "popcorn-pop",
-                                "fontFamily": "Merriweather",
-                                "fontSize": 12,
-                                "fontColor": "#668B8B",
-                                "fontDecorations": {
-                                    "bold": false,
-                                    "italics": false,
-                                    "underline": false
-                                },
-                                "zindex": 1000
-                            },
-                            "track": "Layer",
-                            "name": "TrackEvent3"
-                        },
-                        {
-                            "id": "TrackEvent2",
-                            "type": "popup",
-                            "popcornOptions": {
                                 "start": 31.19196,
                                 "end": 37.38126,
                                 "target": "video-container",
@@ -99,10 +66,10 @@
                                 "sound": "",
                                 "icon": "eye",
                                 "flip": "",
-                                "top": 5,
-                                "left": 20,
+                                "top": 8.174603174603174,
+                                "left": 62.857142857142854,
                                 "width": 30,
-                                "transition": "popcorn-pop",
+                                "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
                                 "fontSize": 12,
                                 "fontColor": "#668B8B",
@@ -117,57 +84,7 @@
                             "name": "TrackEvent4"
                         },
                         {
-                            "id": "TrackEvent3",
-                            "type": "popup",
-                            "popcornOptions": {
-                                "start": 46.54039,
-                                "end": 51.54039,
-                                "target": "video-container",
-                                "text": "Click here to watch Beau's\n2009 TED talk\n\"Optical illusions show how we see\"",
-                                "linkUrl": "http://www.ted.com/talks/beau_lotto_optical_illusions_show_how_we_see.html",
-                                "type": "popup",
-                                "triangle": "bottom left",
-                                "sound": "",
-                                "icon": "tv",
-                                "flip": "",
-                                "top": 56.42857142857143,
-                                "left": 66.78571428571428,
-                                "width": 30,
-                                "transition": "popcorn-pop",
-                                "fontFamily": "Merriweather",
-                                "fontSize": 12,
-                                "fontColor": "#668B8B",
-                                "fontDecorations": {
-                                    "bold": false,
-                                    "italics": false,
-                                    "underline": false
-                                },
-                                "zindex": 1000
-                            },
-                            "track": "Layer",
-                            "name": "TrackEvent5"
-                        },
-                        {
-                            "id": "TrackEvent4",
-                            "type": "wikipedia",
-                            "popcornOptions": {
-                                "start": 60.89859,
-                                "end": 65.89859,
-                                "target": "video-container",
-                                "lang": "en",
-                                "src": "http://en.wikipedia.org/wiki/Perception",
-                                "width": 45,
-                                "height": 100,
-                                "top": 0,
-                                "left": 0,
-                                "transition": "popcorn-fade",
-                                "zindex": 1000
-                            },
-                            "track": "Layer",
-                            "name": "TrackEvent6"
-                        },
-                        {
-                            "id": "TrackEvent5",
+                            "id": "TrackEvent2",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 78.47502,
@@ -180,8 +97,8 @@
                                 "sound": "",
                                 "icon": "tv",
                                 "flip": "",
-                                "top": 83.17460317460318,
-                                "left": 13.928571428571429,
+                                "top": 77.77777777777779,
+                                "left": 13.750000000000002,
                                 "width": 35.892857142857146,
                                 "transition": "popcorn-pop",
                                 "fontFamily": "Merriweather",
@@ -198,7 +115,7 @@
                             "name": "TrackEvent7"
                         },
                         {
-                            "id": "TrackEvent6",
+                            "id": "TrackEvent3",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 114.43069,
@@ -229,7 +146,7 @@
                             "name": "TrackEvent9"
                         },
                         {
-                            "id": "TrackEvent7",
+                            "id": "TrackEvent4",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 129.56776,
@@ -242,8 +159,8 @@
                                 "sound": "",
                                 "icon": "info",
                                 "flip": "",
-                                "top": 49.76190476190476,
-                                "left": 66.07142857142857,
+                                "top": 54.84126984126985,
+                                "left": 61.07142857142858,
                                 "width": 30,
                                 "transition": "popcorn-pop",
                                 "fontFamily": "Merriweather",
@@ -260,7 +177,7 @@
                             "name": "TrackEvent10"
                         },
                         {
-                            "id": "TrackEvent8",
+                            "id": "TrackEvent5",
                             "type": "wikipedia",
                             "popcornOptions": {
                                 "start": 159.28802,
@@ -269,9 +186,9 @@
                                 "lang": "en",
                                 "src": "Seasickness",
                                 "width": 40,
-                                "height": 60,
-                                "top": 0,
-                                "left": 0,
+                                "height": 52.38095238095239,
+                                "top": 2.5396825396825395,
+                                "left": 60,
                                 "transition": "popcorn-fade",
                                 "zindex": 1000
                             },
@@ -279,7 +196,7 @@
                             "name": "TrackEvent11"
                         },
                         {
-                            "id": "TrackEvent9",
+                            "id": "TrackEvent6",
                             "type": "text",
                             "popcornOptions": {
                                 "start": 235.11296,
@@ -290,22 +207,23 @@
                                 "position": "custom",
                                 "transition": "popcorn-fade",
                                 "fontFamily": "PT Sans",
-                                "fontSize": "24",
+                                "fontSize": "6",
                                 "fontColor": "#ffffff",
                                 "fontDecorations": {
                                     "bold": true,
                                     "italics": false,
                                     "underline": false
                                 },
-                                "left": 2.5,
-                                "top": 59.83598012772817,
-                                "zindex": 1000
+                                "left": 4.642857142857143,
+                                "top": 71.42328171502976,
+                                "zindex": 1000,
+                                "width": 92.85714285714286
                             },
                             "track": "Layer",
                             "name": "TrackEvent14"
                         },
                         {
-                            "id": "TrackEvent10",
+                            "id": "TrackEvent7",
                             "type": "text",
                             "popcornOptions": {
                                 "start": 243.02879,
@@ -316,22 +234,23 @@
                                 "position": "custom",
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
-                                "fontSize": "18",
+                                "fontSize": "6",
                                 "fontColor": "#fffbf6",
                                 "fontDecorations": {
                                     "bold": true,
                                     "italics": false,
                                     "underline": false
                                 },
-                                "left": 1.9642857142857142,
-                                "top": 63.33333333333333,
-                                "zindex": 1000
+                                "left": 4.461310250418526,
+                                "top": 66.66666666666666,
+                                "zindex": 1000,
+                                "width": 93.92857142857143
                             },
                             "track": "Layer",
                             "name": "TrackEvent15"
                         },
                         {
-                            "id": "TrackEvent11",
+                            "id": "TrackEvent8",
                             "type": "text",
                             "popcornOptions": {
                                 "start": 267.1928,
@@ -342,22 +261,23 @@
                                 "position": "custom",
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
-                                "fontSize": "18",
+                                "fontSize": "6",
                                 "fontColor": "#ffffff",
                                 "fontDecorations": {
                                     "bold": true,
                                     "italics": false,
                                     "underline": false
                                 },
-                                "left": 1.607142857142857,
-                                "top": 71.58730158730158,
-                                "zindex": 1000
+                                "left": 4.464285714285714,
+                                "top": 77.14285714285715,
+                                "zindex": 1000,
+                                "width": 92.32142857142858
                             },
                             "track": "Layer",
                             "name": "TrackEvent16"
                         },
                         {
-                            "id": "TrackEvent12",
+                            "id": "TrackEvent9",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 281.21903,
@@ -388,7 +308,7 @@
                             "name": "TrackEvent17"
                         },
                         {
-                            "id": "TrackEvent13",
+                            "id": "TrackEvent10",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 293.29809,
@@ -401,9 +321,9 @@
                                 "sound": "",
                                 "icon": "earth",
                                 "flip": "",
-                                "top": 67.53968253968254,
-                                "left": 17.857142857142858,
-                                "width": 30,
+                                "top": 80,
+                                "left": 17.32142857142857,
+                                "width": 32.67857142857143,
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
                                 "fontSize": 12,
@@ -419,13 +339,13 @@
                             "name": "TrackEvent18"
                         },
                         {
-                            "id": "TrackEvent14",
+                            "id": "TrackEvent11",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 219.69815,
                                 "end": 227.75282,
                                 "target": "video-container",
-                                "text": "Watch the TED talk\n\"Evolution's gift of play, from bonobo apes to humans\"",
+                                "text": "Watch the TED talk\n\"Evolution's Gift of Play, from Bonobo Apes to Humans\"",
                                 "linkUrl": "http://www.ted.com/talks/isabel_behncke_evolution_s_gift_of_play_from_bonobo_apes_to_humans.html",
                                 "type": "popup",
                                 "triangle": "bottom left",
@@ -450,38 +370,7 @@
                             "name": "TrackEvent13"
                         },
                         {
-                            "id": "TrackEvent15",
-                            "type": "popup",
-                            "popcornOptions": {
-                                "start": 228.03045,
-                                "end": 234.278,
-                                "target": "video-container",
-                                "text": "Scientific American:\n\"So you think you know why animals play\"",
-                                "linkUrl": "http://blogs.scientificamerican.com/guest-blog/2011/05/17/so-you-think-you-know-why-animals-play/ ",
-                                "type": "popup",
-                                "triangle": "bottom left",
-                                "sound": "",
-                                "icon": "info",
-                                "flip": "",
-                                "top": 63.73015873015873,
-                                "left": 65.89285714285714,
-                                "width": 30,
-                                "transition": "popcorn-fade",
-                                "fontFamily": "Merriweather",
-                                "fontSize": 12,
-                                "fontColor": "#668B8B",
-                                "fontDecorations": {
-                                    "bold": false,
-                                    "italics": false,
-                                    "underline": false
-                                },
-                                "zindex": 1000
-                            },
-                            "track": "Layer",
-                            "name": "TrackEvent19"
-                        },
-                        {
-                            "id": "TrackEvent16",
+                            "id": "TrackEvent12",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 306.00719,
@@ -512,7 +401,7 @@
                             "name": "TrackEvent20"
                         },
                         {
-                            "id": "TrackEvent17",
+                            "id": "TrackEvent13",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 350.07286,
@@ -525,9 +414,9 @@
                                 "sound": "",
                                 "icon": "info",
                                 "flip": "",
-                                "top": 31.746031746031743,
+                                "top": 31.428571428571427,
                                 "left": 69.28571428571428,
-                                "width": 22.857142857142858,
+                                "width": 24.285714285714285,
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
                                 "fontSize": 12,
@@ -543,7 +432,7 @@
                             "name": "TrackEvent22"
                         },
                         {
-                            "id": "TrackEvent18",
+                            "id": "TrackEvent14",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 364.52472,
@@ -556,9 +445,9 @@
                                 "sound": "",
                                 "icon": "info",
                                 "flip": "",
-                                "top": 82.53968253968253,
-                                "left": 2.142857142857143,
-                                "width": 96.07142857142857,
+                                "top": 71.74603174603175,
+                                "left": 10.535714285714286,
+                                "width": 75.71428571428571,
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
                                 "fontSize": 12,
@@ -574,7 +463,7 @@
                             "name": "TrackEvent23"
                         },
                         {
-                            "id": "TrackEvent19",
+                            "id": "TrackEvent15",
                             "type": "text",
                             "popcornOptions": {
                                 "start": 387.27773,
@@ -585,48 +474,50 @@
                                 "position": "custom",
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
-                                "fontSize": "18",
+                                "fontSize": "6",
                                 "fontColor": "#ffffff",
                                 "fontDecorations": {
                                     "bold": true,
                                     "italics": false,
                                     "underline": false
                                 },
-                                "left": 0.7142857142857143,
-                                "top": 63.33333333333333,
-                                "zindex": 1000
+                                "left": 8.214285714285714,
+                                "top": 64.12698412698413,
+                                "zindex": 1000,
+                                "width": 86.60714285714286
                             },
                             "track": "Layer",
                             "name": "TrackEvent24"
                         },
                         {
-                            "id": "TrackEvent20",
+                            "id": "TrackEvent16",
                             "type": "text",
                             "popcornOptions": {
                                 "start": 419.8409,
                                 "end": 434.96005,
                                 "target": "video-container",
-                                "text": "\"(49% of all co-ed maintained schools in England do not send even one girl on to do physics A-level\" \n- Institute of Physics",
+                                "text": "\"49% of all co-ed maintained schools in England do not send even one girl on to do physics A-level\" \n- Institute of Physics",
                                 "linkUrl": "http://www.iop.org/news/12/oct/page_58519.html",
                                 "position": "custom",
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
-                                "fontSize": "18",
+                                "fontSize": "6",
                                 "fontColor": "#ffffff",
                                 "fontDecorations": {
                                     "bold": true,
                                     "italics": false,
                                     "underline": false
                                 },
-                                "left": 3.9285714285714284,
-                                "top": 73.01587301587301,
-                                "zindex": 1000
+                                "left": 3.214285714285714,
+                                "top": 77.77777777777779,
+                                "zindex": 1000,
+                                "width": 94.46428571428571
                             },
                             "track": "Layer",
                             "name": "TrackEvent25"
                         },
                         {
-                            "id": "TrackEvent21",
+                            "id": "TrackEvent17",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 329.63049,
@@ -657,7 +548,7 @@
                             "name": "TrackEvent26"
                         },
                         {
-                            "id": "TrackEvent22",
+                            "id": "TrackEvent18",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 402.53587,
@@ -688,7 +579,7 @@
                             "name": "TrackEvent21"
                         },
                         {
-                            "id": "TrackEvent23",
+                            "id": "TrackEvent19",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 455.06315,
@@ -701,9 +592,9 @@
                                 "sound": "",
                                 "icon": "tv",
                                 "flip": "",
-                                "top": 65,
-                                "left": 7.321428571428572,
-                                "width": 30,
+                                "top": 74.91534520709325,
+                                "left": 7.678571428571429,
+                                "width": 32.5,
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
                                 "fontSize": 12,
@@ -719,7 +610,7 @@
                             "name": "TrackEvent27"
                         },
                         {
-                            "id": "TrackEvent24",
+                            "id": "TrackEvent20",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 501.9546,
@@ -750,7 +641,7 @@
                             "name": "TrackEvent28"
                         },
                         {
-                            "id": "TrackEvent25",
+                            "id": "TrackEvent21",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 506.41069,
@@ -763,9 +654,9 @@
                                 "sound": "",
                                 "icon": "info",
                                 "flip": "",
-                                "top": 68.80952380952381,
-                                "left": 65.17857142857143,
-                                "width": 30,
+                                "top": 80.95238095238095,
+                                "left": 57.85714285714286,
+                                "width": 39.285714285714285,
                                 "transition": "popcorn-pop",
                                 "fontFamily": "Merriweather",
                                 "fontSize": 12,
@@ -781,10 +672,10 @@
                             "name": "TrackEvent29"
                         },
                         {
-                            "id": "TrackEvent26",
+                            "id": "TrackEvent22",
                             "type": "text",
                             "popcornOptions": {
-                                "start": 517.90287,
+                                "start": 517.8921,
                                 "end": 521.52568,
                                 "target": "video-container",
                                 "text": "\"Knowing the right answer ... is not one of the primary objectives of science in the early childhood curriculum...\"",
@@ -792,22 +683,23 @@
                                 "position": "custom",
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
-                                "fontSize": "18",
+                                "fontSize": "6",
                                 "fontColor": "#ffffff",
                                 "fontDecorations": {
                                     "bold": true,
                                     "italics": false,
                                     "underline": false
                                 },
-                                "left": 1.9642857142857142,
-                                "top": 73.4920634920635,
-                                "zindex": 1000
+                                "left": 4.642857142857143,
+                                "top": 77.46031746031747,
+                                "zindex": 1000,
+                                "width": 90.71428571428571
                             },
                             "track": "Layer",
                             "name": "TrackEvent30"
                         },
                         {
-                            "id": "TrackEvent27",
+                            "id": "TrackEvent23",
                             "type": "text",
                             "popcornOptions": {
                                 "start": 521.82752,
@@ -818,22 +710,23 @@
                                 "position": "custom",
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
-                                "fontSize": "18",
+                                "fontSize": "6",
                                 "fontColor": "#ffffff",
                                 "fontDecorations": {
                                     "bold": true,
                                     "italics": false,
                                     "underline": false
                                 },
-                                "left": 1.7857142857142856,
-                                "top": 77.3015873015873,
-                                "zindex": 1000
+                                "left": 6.785714285714286,
+                                "top": 77.77777777777779,
+                                "zindex": 1000,
+                                "width": 91.07142857142857
                             },
                             "track": "Layer",
                             "name": "TrackEvent31"
                         },
                         {
-                            "id": "TrackEvent28",
+                            "id": "TrackEvent24",
                             "type": "text",
                             "popcornOptions": {
                                 "start": 525.60122,
@@ -844,48 +737,23 @@
                                 "position": "custom",
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
-                                "fontSize": "18",
+                                "fontSize": "6",
                                 "fontColor": "#ffffff",
                                 "fontDecorations": {
                                     "bold": true,
                                     "italics": false,
                                     "underline": false
                                 },
-                                "left": 2.5,
-                                "top": 70.63492063492063,
-                                "zindex": 1000
+                                "left": 4.642857142857143,
+                                "top": 71.10582139756944,
+                                "zindex": 1000,
+                                "width": 93.03571428571429
                             },
                             "track": "Layer",
                             "name": "TrackEvent32"
                         },
                         {
-                            "id": "TrackEvent29",
-                            "type": "text",
-                            "popcornOptions": {
-                                "start": 555.4965,
-                                "end": 557.76075,
-                                "target": "video-container",
-                                "text": "The George Inn, Blackawton",
-                                "linkUrl": "",
-                                "position": "center",
-                                "transition": "popcorn-fade",
-                                "fontFamily": "Merriweather",
-                                "fontSize": 48,
-                                "fontColor": "#ffffff",
-                                "fontDecorations": {
-                                    "bold": false,
-                                    "italics": false,
-                                    "underline": false
-                                },
-                                "left": 30,
-                                "top": 30,
-                                "zindex": 1000
-                            },
-                            "track": "Layer",
-                            "name": "TrackEvent34"
-                        },
-                        {
-                            "id": "TrackEvent30",
+                            "id": "TrackEvent25",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 565.14962,
@@ -901,7 +769,7 @@
                                 "top": 77.6984126984127,
                                 "left": 64.82142857142857,
                                 "width": 30,
-                                "transition": "popcorn-pop",
+                                "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
                                 "fontSize": 12,
                                 "fontColor": "#668B8B",
@@ -916,7 +784,7 @@
                             "name": "TrackEvent35"
                         },
                         {
-                            "id": "TrackEvent31",
+                            "id": "TrackEvent26",
                             "type": "wikipedia",
                             "popcornOptions": {
                                 "start": 640.47021,
@@ -935,7 +803,7 @@
                             "name": "TrackEvent36"
                         },
                         {
-                            "id": "TrackEvent32",
+                            "id": "TrackEvent27",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 650.29496,
@@ -966,7 +834,7 @@
                             "name": "TrackEvent37"
                         },
                         {
-                            "id": "TrackEvent33",
+                            "id": "TrackEvent28",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 664.9263,
@@ -979,9 +847,9 @@
                                 "sound": "",
                                 "icon": "info",
                                 "flip": "",
-                                "top": 69.12698412698413,
-                                "left": 63.92857142857142,
-                                "width": 30,
+                                "top": 66.66666666666666,
+                                "left": 59.64285714285714,
+                                "width": 33.035714285714285,
                                 "transition": "popcorn-pop",
                                 "fontFamily": "Merriweather",
                                 "fontSize": 12,
@@ -997,7 +865,7 @@
                             "name": "TrackEvent38"
                         },
                         {
-                            "id": "TrackEvent34",
+                            "id": "TrackEvent29",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 675.79206,
@@ -1028,7 +896,7 @@
                             "name": "TrackEvent39"
                         },
                         {
-                            "id": "TrackEvent35",
+                            "id": "TrackEvent30",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 706.58797,
@@ -1059,7 +927,7 @@
                             "name": "TrackEvent40"
                         },
                         {
-                            "id": "TrackEvent36",
+                            "id": "TrackEvent31",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 712.62589,
@@ -1090,7 +958,7 @@
                             "name": "TrackEvent41"
                         },
                         {
-                            "id": "TrackEvent37",
+                            "id": "TrackEvent32",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 727.26786,
@@ -1103,9 +971,9 @@
                                 "sound": "",
                                 "icon": "net",
                                 "flip": "",
-                                "top": 6.349206349206349,
-                                "left": 76.42857142857142,
-                                "width": 13.928571428571429,
+                                "top": 6.031746031746032,
+                                "left": 74.46428571428572,
+                                "width": 20.357142857142858,
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
                                 "fontSize": 12,
@@ -1121,7 +989,7 @@
                             "name": "TrackEvent42"
                         },
                         {
-                            "id": "TrackEvent38",
+                            "id": "TrackEvent33",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 776.17504,
@@ -1152,7 +1020,7 @@
                             "name": "TrackEvent44"
                         },
                         {
-                            "id": "TrackEvent39",
+                            "id": "TrackEvent34",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 845.15831,
@@ -1183,7 +1051,7 @@
                             "name": "TrackEvent45"
                         },
                         {
-                            "id": "TrackEvent40",
+                            "id": "TrackEvent35",
                             "type": "text",
                             "popcornOptions": {
                                 "start": 853.6114,
@@ -1194,7 +1062,7 @@
                                 "position": "custom",
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
-                                "fontSize": "32",
+                                "fontSize": "6",
                                 "fontColor": "#ffffff",
                                 "fontDecorations": {
                                     "bold": true,
@@ -1209,33 +1077,33 @@
                             "name": "TrackEvent46"
                         },
                         {
-                            "id": "TrackEvent41",
+                            "id": "TrackEvent36",
                             "type": "text",
                             "popcornOptions": {
                                 "start": 857.23416,
                                 "end": 862.21552,
                                 "target": "video-container",
-                                "text": "\"it is civilized to have an even longer childhood.\" - Erik Erikson",
+                                "text": "\"it is civilized to have an even longer childhood.\"\n - Erik Erikson",
                                 "linkUrl": "",
                                 "position": "custom",
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
-                                "fontSize": "32",
+                                "fontSize": "6",
                                 "fontColor": "#ffffff",
                                 "fontDecorations": {
                                     "bold": true,
                                     "italics": false,
                                     "underline": false
                                 },
-                                "left": 6.964285714285714,
-                                "top": 7.4603174603174605,
+                                "left": 4.107142857142857,
+                                "top": 11.26984126984127,
                                 "zindex": 1000
                             },
                             "track": "Layer",
                             "name": "TrackEvent47"
                         },
                         {
-                            "id": "TrackEvent42",
+                            "id": "TrackEvent37",
                             "type": "text",
                             "popcornOptions": {
                                 "start": 867.95147,
@@ -1246,22 +1114,22 @@
                                 "position": "custom",
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
-                                "fontSize": "24",
+                                "fontSize": "6",
                                 "fontColor": "#ffffff",
                                 "fontDecorations": {
                                     "bold": true,
                                     "italics": false,
                                     "underline": false
                                 },
-                                "left": 4.642857142857143,
-                                "top": 66.5079365079365,
+                                "left": 1.7857142857142856,
+                                "top": 79.2063492063492,
                                 "zindex": 1000
                             },
                             "track": "Layer",
                             "name": "TrackEvent48"
                         },
                         {
-                            "id": "TrackEvent43",
+                            "id": "TrackEvent38",
                             "type": "text",
                             "popcornOptions": {
                                 "start": 873.98939,
@@ -1272,22 +1140,22 @@
                                 "position": "custom",
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
-                                "fontSize": "24",
+                                "fontSize": "6",
                                 "fontColor": "#ffffff",
                                 "fontDecorations": {
                                     "bold": true,
                                     "italics": false,
                                     "underline": false
                                 },
-                                "left": 5.178571428571429,
-                                "top": 68.0952380952381,
+                                "left": 3.032738821847098,
+                                "top": 81.74603174603175,
                                 "zindex": 1000
                             },
                             "track": "Layer",
                             "name": "TrackEvent49"
                         },
                         {
-                            "id": "TrackEvent44",
+                            "id": "TrackEvent39",
                             "type": "text",
                             "popcornOptions": {
                                 "start": 881.83869,
@@ -1298,22 +1166,23 @@
                                 "position": "custom",
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
-                                "fontSize": "24",
+                                "fontSize": "6",
                                 "fontColor": "#ffffff",
                                 "fontDecorations": {
                                     "bold": true,
                                     "italics": false,
                                     "underline": false
                                 },
-                                "left": 4.642857142857143,
-                                "top": 60.63492063492063,
-                                "zindex": 1000
+                                "left": 2.5,
+                                "top": 79.36507936507937,
+                                "zindex": 1000,
+                                "width": 94.82142857142857
                             },
                             "track": "Layer",
                             "name": "TrackEvent50"
                         },
                         {
-                            "id": "TrackEvent45",
+                            "id": "TrackEvent40",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 901.46194,
@@ -1326,8 +1195,8 @@
                                 "sound": "",
                                 "icon": "net",
                                 "flip": "",
-                                "top": 58.96825396825397,
-                                "left": 12.5,
+                                "top": 42.142857142857146,
+                                "left": 9.107142857142856,
                                 "width": 30,
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
@@ -1344,21 +1213,21 @@
                             "name": "TrackEvent51"
                         },
                         {
-                            "id": "TrackEvent46",
+                            "id": "TrackEvent41",
                             "type": "popup",
                             "popcornOptions": {
                                 "start": 911.89226,
-                                "end": 925.08,
+                                "end": 919.31217,
                                 "target": "video-container",
-                                "text": "To try remixing other videos with \nPopcorn Maker, click me!",
-                                "linkUrl": "https://popcorn.webmaker.org/templates/basic/",
+                                "text": "To remix this video with \nPopcorn Maker, click here!",
+                                "linkUrl": "https://popcorn.webmaker.org/templates/basic/?savedDataUrl=/api/remix/37",
                                 "type": "popup",
                                 "triangle": "bottom left",
                                 "sound": "",
                                 "icon": "thumbsup",
                                 "flip": "",
-                                "top": 67.22222222222223,
-                                "left": 65.53571428571429,
+                                "top": 31.349206349206348,
+                                "left": 66.78571428571428,
                                 "width": 30,
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
@@ -1373,6 +1242,155 @@
                             },
                             "track": "Layer",
                             "name": "TrackEvent52"
+                        },
+                        {
+                            "id": "TrackEvent42",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 5.51771,
+                                "end": 10.51771,
+                                "target": "video-container",
+                                "text": "Some text will include links \n- for example, this links to the original on TED.com",
+                                "linkUrl": "http://www.youtube.com/watch?v=0g2WE1qXiKM&butteruid=1350582205652",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "error",
+                                "flip": "",
+                                "top": 74.92063492063492,
+                                "left": 14.821428571428571,
+                                "width": 77.14285714285715,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent48"
+                        },
+                        {
+                            "id": "TrackEvent43",
+                            "type": "twitter",
+                            "popcornOptions": {
+                                "start": 172.42847,
+                                "end": 201.24143,
+                                "target": "video-container",
+                                "search": "#uncertainty",
+                                "username": "",
+                                "searchType": "mixed",
+                                "numberOfTweets": "50",
+                                "transition": "popcorn-fade",
+                                "layout": "ticker",
+                                "left": 0,
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent51"
+                        },
+                        {
+                            "id": "TrackEvent44",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 46.79577,
+                                "end": 51.79577,
+                                "target": "video-container",
+                                "text": "Click here to watch Beau's\n2009 TED talk\n\"Optical illusions show how we see\"",
+                                "linkUrl": "http://www.ted.com/talks/beau_lotto_optical_illusions_show_how_we_see.html",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "tv",
+                                "flip": "",
+                                "top": 56.74603174603175,
+                                "left": 61.7827388218471,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": 12,
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent5"
+                        },
+                        {
+                            "id": "TrackEvent45",
+                            "type": "image",
+                            "popcornOptions": {
+                                "start": 16.85484,
+                                "end": 21.85484,
+                                "target": "video-container",
+                                "src": "http://www.ucl.ac.uk/~uccaati/UCLlogo.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3,
+                                "width": 25,
+                                "height": 25,
+                                "top": 26.026456318204367,
+                                "left": 75,
+                                "transition": "popcorn-fade",
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent56"
+                        },
+                        {
+                            "id": "TrackEvent46",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 555.69474,
+                                "end": 557.95899,
+                                "target": "video-container",
+                                "text": "The George Inn, \nBlackawton",
+                                "linkUrl": "",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "6",
+                                "fontColor": "#ffffff",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 13.211310250418526,
+                                "top": 83.33333333333334,
+                                "zindex": 1000,
+                                "width": 50
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent34"
+                        },
+                        {
+                            "id": "TrackEvent47",
+                            "type": "wikipedia",
+                            "popcornOptions": {
+                                "start": 59.82126,
+                                "end": 64.82126,
+                                "target": "video-container",
+                                "lang": "en",
+                                "src": "http://en.wikipedia.org/wiki/Perception",
+                                "width": 44.82142857142858,
+                                "height": 86.66666666666667,
+                                "top": 13.333333333333334,
+                                "left": 0,
+                                "transition": "popcorn-fade",
+                                "zindex": 1000
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent6"
                         }
                     ]
                 },
@@ -1381,35 +1399,248 @@
                     "id": "1",
                     "trackEvents": [
                         {
-                            "id": "TrackEvent47",
+                            "id": "TrackEvent48",
+                            "type": "googlemap",
+                            "popcornOptions": {
+                                "start": 293.51157,
+                                "end": 303.32024,
+                                "target": "video-container",
+                                "type": "ROADMAP",
+                                "location": "",
+                                "fullscreen": false,
+                                "heading": 0,
+                                "pitch": 1,
+                                "zoom": 11,
+                                "transition": "popcorn-fade",
+                                "left": 0.8928571428571428,
+                                "top": 27.936507936507937,
+                                "width": 36.25,
+                                "height": 52.38095238095239,
+                                "lat": 50.34691535671606,
+                                "lng": -3.6859852275390526,
+                                "zindex": 999
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent53"
+                        },
+                        {
+                            "id": "TrackEvent49",
+                            "type": "googlemap",
+                            "popcornOptions": {
+                                "start": 555.71524,
+                                "end": 558.01414,
+                                "target": "video-container",
+                                "type": "ROADMAP",
+                                "location": "The George Inn Blackawton UK",
+                                "fullscreen": "",
+                                "heading": 0,
+                                "pitch": 1,
+                                "zoom": 16,
+                                "transition": "popcorn-fade",
+                                "left": 51.60714285714286,
+                                "top": 48.888888888888886,
+                                "width": 40.2332361516035,
+                                "height": 50.79365079365079,
+                                "lat": 50.34494353136311,
+                                "lng": -3.681629320098867,
+                                "zindex": 999
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent54"
+                        },
+                        {
+                            "id": "TrackEvent50",
                             "type": "image",
                             "popcornOptions": {
-                                "start": 555.49801,
-                                "end": 557.76227,
+                                "start": 46.76733,
+                                "end": 51.76733,
+                                "target": "video-container",
+                                "src": "http://i.ytimg.com/vi/dQsYtF3wnIs/0.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3,
+                                "width": 30.892857142857146,
+                                "height": 46.34920634920635,
+                                "top": 14.920634920634921,
+                                "left": 62.857142857142854,
+                                "transition": "popcorn-fade",
+                                "zindex": 999
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent57"
+                        },
+                        {
+                            "id": "TrackEvent51",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 173.15049,
+                                "end": 202.11671,
+                                "target": "video-container",
+                                "text": "What the world feels now about #uncertainty:",
+                                "linkUrl": "",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "6",
+                                "fontColor": "white",
+                                "fontDecorations": {
+                                    "bold": true,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 2.5,
+                                "top": 67.77777777777779,
+                                "zindex": 999,
+                                "width": 50
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent52"
+                        },
+                        {
+                            "id": "TrackEvent52",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "start": 227.68817,
+                                "end": 234.278,
+                                "target": "video-container",
+                                "text": "Scientific American:\n\"So you think you know why animals play\"",
+                                "linkUrl": "http://blogs.scientificamerican.com/guest-blog/2011/05/17/so-you-think-you-know-why-animals-play/ ",
+                                "type": "popup",
+                                "triangle": "bottom left",
+                                "sound": "",
+                                "icon": "info",
+                                "flip": "",
+                                "top": 65.63492063492063,
+                                "left": 63.035714285714285,
+                                "width": 30,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "12",
+                                "fontColor": "#668B8B",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "zindex": 999
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent19"
+                        },
+                        {
+                            "id": "TrackEvent53",
+                            "type": "image",
+                            "popcornOptions": {
+                                "start": 22.25405,
+                                "end": 27.2528,
+                                "target": "video-container",
+                                "src": "http://stephaniejerey.com/img/holding/lotto-lab.png",
+                                "linkSrc": "http://www.lottolab.org/index.asp",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3,
+                                "width": 25,
+                                "height": 25,
+                                "top": 35.86772615947421,
+                                "left": 75,
+                                "transition": "popcorn-fade",
+                                "zindex": 999
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent55"
+                        }
+                    ]
+                },
+                {
+                    "name": "Layer",
+                    "id": "2",
+                    "trackEvents": [
+                        {
+                            "id": "TrackEvent54",
+                            "type": "image",
+                            "popcornOptions": {
+                                "start": 555.72035,
+                                "end": 558.06679,
                                 "target": "video-container",
                                 "src": "http://www.blackawton.com/images/pub.jpg",
                                 "linkSrc": "",
                                 "tags": "",
                                 "photosetId": "",
                                 "count": 3,
-                                "width": 100,
+                                "width": 82.32142857142857,
                                 "height": 100,
                                 "top": 0,
-                                "left": 0,
+                                "left": 11.071428571428571,
                                 "transition": "popcorn-fade",
-                                "zindex": 999
+                                "zindex": 998
                             },
                             "track": "Layer",
                             "name": "TrackEvent33"
                         }
                     ]
+                },
+                {
+                    "name": "Layer",
+                    "id": "3",
+                    "trackEvents": [
+                        {
+                            "id": "TrackEvent55",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 16.86542,
+                                "end": 21.86542,
+                                "target": "video-container",
+                                "text": "Dr. Beau Lotto is a professor\nat University College London\nin the Department of Opthamology",
+                                "linkUrl": "",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "6",
+                                "fontColor": "white",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 47.85714285714286,
+                                "top": 51.746031746031754,
+                                "width": 50,
+                                "zindex": 997
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent58"
+                        },
+                        {
+                            "id": "TrackEvent56",
+                            "type": "text",
+                            "popcornOptions": {
+                                "start": 22.31474,
+                                "end": 27.27271,
+                                "target": "video-container",
+                                "text": "Beau is also the Head Misfit\nand founder of Lottolab.org",
+                                "linkUrl": "",
+                                "position": "custom",
+                                "transition": "popcorn-fade",
+                                "fontFamily": "Merriweather",
+                                "fontSize": "6",
+                                "fontColor": "white",
+                                "fontDecorations": {
+                                    "bold": false,
+                                    "italics": false,
+                                    "underline": false
+                                },
+                                "left": 45,
+                                "top": 62.857142857142854,
+                                "width": 49.28571428571429,
+                                "zindex": 997
+                            },
+                            "track": "Layer",
+                            "name": "TrackEvent59"
+                        }
+                    ]
                 }
             ]
         }
-    ],
-    "projectID": 37,
-    "name": "Beau Lotto TED talk",
-    "template": "basic",
-    "author": "",
-    "backupDate": "2012-10-17T18:07:55.227Z"
+    ]
 }

@@ -1,186 +1,212 @@
 {
-    "targets": [{
-        "id": "Target0",
-        "name": "video-container",
-        "element": "video-container"
-    }],
-    "media": [{
-        "id": "Media0",
-        "name": "Media0",
-        "url": ["http://videos-origin.mozilla.org/serv/webmademovies/neighbourhood2.webm?butteruid=1346973383492", "http://videos-origin.mozilla.org/serv/webmademovies/neighbourhood2.mp4?butteruid=1346973383493"],
-        "target": "video",
-        "duration": 31.949,
-        "controls": true,
-        "tracks": [{
-            "name": "Layer0",
-            "id": "0",
-            "trackEvents": [{
-                "id": "TrackEvent1",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 0,
-                    "end": 1.98768,
-                    "target": "video-container",
-                    "text": "Three things about my neighbourhood",
-                    "position": "center",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "Merriweather",
-                    "fontSize": 48,
-                    "fontColor": "#fff000",
-                    "fontWeight": "",
-                    "fontItalics": "",
-                    "textUnderline": "",
-                    "left": 30,
-                    "top": 30,
-                    "zindex": 1000
+  "targets": [
+    {
+      "id": "Target0",
+      "name": "video-container",
+      "element": "video-container"
+    }
+  ],
+  "media": [
+    {
+      "id": "Media0",
+      "name": "Media0",
+      "url": [
+        "https://videos-cdn.mozilla.net/serv/webmademovies/neighbourhood2.webm",
+        "https://videos-cdn.mozilla.org/serv/webmademovies/neighbourhood2.mp4"
+      ],
+      "target": "video",
+      "duration": 31.948999404907227,
+      "controls": false,
+      "tracks": [
+        {
+          "name": "Layer0",
+          "id": "0",
+          "trackEvents": [
+            {
+              "id": "TrackEvent0",
+              "type": "text",
+              "popcornOptions": {
+                "start": 2.07537,
+                "end": 4.42843,
+                "target": "video-container",
+                "text": "By Orville Redenbacher",
+                "position": "center",
+                "transition": "popcorn-fade",
+                "fontFamily": "Merriweather",
+                "fontSize": "24",
+                "fontColor": "#FFF000",
+                "fontWeight": "",
+                "fontItalics": "",
+                "textUnderline": "",
+                "left": 30,
+                "top": 30,
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent3"
+            },
+            {
+              "id": "TrackEvent1",
+              "type": "wikipedia",
+              "popcornOptions": {
+                "start": 5.48073,
+                "end": 7.9361,
+                "target": "video-container",
+                "lang": "en",
+                "src": "http://en.wikipedia.org/wiki/Fernwood,_Greater_Victoria",
+                "width": 40,
+                "height": 50,
+                "top": 2.282200339064422,
+                "left": 59.191089554101325,
+                "transition": "popcorn-fade",
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent5"
+            },
+            {
+              "id": "TrackEvent2",
+              "type": "wikipedia",
+              "popcornOptions": {
+                "start": 9.58762,
+                "end": 12.42299,
+                "target": "video-container",
+                "lang": "en",
+                "src": "http://en.wikipedia.org/wiki/Belfry_Theatre",
+                "width": 40,
+                "height": 96.66666666666667,
+                "top": 0.8333333333333334,
+                "left": 60,
+                "transition": "popcorn-fade",
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent6"
+            },
+            {
+              "id": "TrackEvent3",
+              "type": "googlemap",
+              "popcornOptions": {
+                "start": 14.0599,
+                "end": 20.09601,
+                "target": "video-container",
+                "type": "ROADMAP",
+                "location": "gladstone and fernwood victoria",
+                "fullscreen": "",
+                "heading": 0,
+                "pitch": 1,
+                "zoom": 17,
+                "transition": "popcorn-fade",
+                "left": 5,
+                "top": 5,
+                "width": 41.090269636576785,
+                "height": 66.59024762999006,
+                "lat": 0,
+                "lng": 0,
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent8"
+            },
+            {
+              "id": "TrackEvent4",
+              "type": "wikipedia",
+              "popcornOptions": {
+                "start": 21.98138,
+                "end": 26.27827,
+                "target": "video-container",
+                "lang": "en",
+                "src": "http://en.wikipedia.org/wiki/Permaculture",
+                "width": 40,
+                "height": 50,
+                "top": 45.00833731605336,
+                "left": 59.07385625984577,
+                "transition": "popcorn-fade",
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent9"
+            },
+            {
+              "id": "TrackEvent5",
+              "type": "text",
+              "popcornOptions": {
+                "start": 27.72518,
+                "end": 29.11364,
+                "target": "video-container",
+                "text": "Tell us about your neighbourhood!",
+                "position": "center",
+                "transition": "popcorn-fade",
+                "fontFamily": "Merriweather",
+                "fontSize": "18",
+                "fontColor": "#FFF",
+                "fontWeight": "",
+                "fontItalics": "",
+                "textUnderline": "",
+                "left": 30,
+                "top": 30,
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent10"
+            },
+            {
+              "id": "TrackEvent6",
+              "type": "text",
+              "popcornOptions": {
+                "start": 29.19692,
+                "end": 30.19322,
+                "target": "video-container",
+                "text": "Remix this video!",
+                "position": "center",
+                "transition": "popcorn-fade",
+                "fontFamily": "Merriweather",
+                "fontSize": "18",
+                "fontColor": "#FFF",
+                "fontWeight": "",
+                "fontItalics": "",
+                "textUnderline": "",
+                "left": 30,
+                "top": 30,
+                "zindex": 1000,
+                "linkUrl": "https://popcorn.webmaker.org/templates/basic/?savedDataUrl=/api/remix/59"
+              },
+              "track": "Layer0",
+              "name": "TrackEvent11"
+            },
+            {
+              "id": "TrackEvent7",
+              "type": "text",
+              "popcornOptions": {
+                "start": 0.04138,
+                "end": 2.02906,
+                "target": "video-container",
+                "text": "Three things about my neighbourhood",
+                "position": "center",
+                "transition": "popcorn-fade",
+                "fontFamily": "Merriweather",
+                "fontSize": "18",
+                "fontColor": "#fff000",
+                "fontWeight": "",
+                "fontItalics": "",
+                "textUnderline": "",
+                "left": 30,
+                "top": 30,
+                "zindex": 1000,
+                "linkUrl": "",
+                "fontDecorations": {
+                  "bold": false,
+                  "italics": false,
+                  "underline": false
                 },
-                "track": "Layer0",
-                "name": "TrackEvent3"
-            }, {
-                "id": "TrackEvent3",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 2.07537,
-                    "end": 4.42843,
-                    "target": "video-container",
-                    "text": "By Orville Redenbacher",
-                    "position": "center",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "Merriweather",
-                    "fontSize": 48,
-                    "fontColor": "#FFF000",
-                    "fontWeight": "",
-                    "fontItalics": "",
-                    "textUnderline": "",
-                    "left": 30,
-                    "top": 30,
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent3"
-            }, {
-                "id": "TrackEvent5",
-                "type": "wikipedia",
-                "popcornOptions": {
-                    "start": 5.48073,
-                    "end": 7.9361,
-                    "target": "video-container",
-                    "lang": "en",
-                    "src": "http://en.wikipedia.org/wiki/Fernwood,_Greater_Victoria",
-                    "width": 40,
-                    "height": 50,
-                    "top": 2.282200339064422,
-                    "left": 59.191089554101325,
-                    "transition": "popcorn-fade",
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent5"
-            }, {
-                "id": "TrackEvent7",
-                "type": "wikipedia",
-                "popcornOptions": {
-                    "start": 9.58762,
-                    "end": 12.42299,
-                    "target": "video-container",
-                    "lang": "en",
-                    "src": "http://en.wikipedia.org/wiki/Belfry_Theatre",
-                    "width": 40,
-                    "height": 96.66666666666667,
-                    "top": 0.8333333333333334,
-                    "left": 60,
-                    "transition": "popcorn-fade",
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent6"
-            }, {
-                "id": "TrackEvent9",
-                "type": "googlemap",
-                "popcornOptions": {
-                    "start": 14.0599,
-                    "end": 20.09601,
-                    "target": "video-container",
-                    "type": "ROADMAP",
-                    "location": "gladstone and fernwood victoria",
-                    "fullscreen": "",
-                    "heading": 0,
-                    "pitch": 1,
-                    "zoom": 17,
-                    "transition": "popcorn-fade",
-                    "left": 5,
-                    "top": 5,
-                    "width": 41.090269636576785,
-                    "height": 66.59024762999006,
-                    "lat": 0,
-                    "lng": 0,
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent8"
-            }, {
-                "id": "TrackEvent11",
-                "type": "wikipedia",
-                "popcornOptions": {
-                    "start": 21.98138,
-                    "end": 26.27827,
-                    "target": "video-container",
-                    "lang": "en",
-                    "src": "http://en.wikipedia.org/wiki/Permaculture",
-                    "width": 40,
-                    "height": 50,
-                    "top": 45.00833731605336,
-                    "left": 59.07385625984577,
-                    "transition": "popcorn-fade",
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent9"
-            }, {
-                "id": "TrackEvent13",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 27.72518,
-                    "end": 29.11364,
-                    "target": "video-container",
-                    "text": "Tell us about your neighbourhood!",
-                    "position": "center",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "Merriweather",
-                    "fontSize": 48,
-                    "fontColor": "#FFF",
-                    "fontWeight": "",
-                    "fontItalics": "",
-                    "textUnderline": "",
-                    "left": 30,
-                    "top": 30,
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent10"
-            }, {
-                "id": "TrackEvent15",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 29.19322,
-                    "end": 30.19322,
-                    "target": "video-container",
-                    "text": "Remix this video!",
-                    "position": "center",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "Merriweather",
-                    "fontSize": 48,
-                    "fontColor": "#FFF",
-                    "fontWeight": "",
-                    "fontItalics": "",
-                    "textUnderline": "",
-                    "left": 30,
-                    "top": 30,
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent11"
-            }]
-        }]
-    }]
+                "width": 50
+              },
+              "track": "Layer0",
+              "name": "TrackEvent3"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

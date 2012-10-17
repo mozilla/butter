@@ -378,11 +378,6 @@ function buildCSS(compress) {
     compress: compress
   });
 
-  lessToCSS({
-    lessFile: "css/webfonts.less",
-    cssFile: "css/webfonts.css",
-    compress: compress
-  });
 }
 
 target.check = function() {
