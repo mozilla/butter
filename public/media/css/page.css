@@ -96,7 +96,7 @@ Layout styles
 
   #outer-wrapper {
     position: relative;
-    border-top: 2px solid #FFF;
+    border-top: none;
   }
 
   #wrapper {
