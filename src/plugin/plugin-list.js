@@ -48,16 +48,20 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         butter.generateSafeTrackEvent( e.data.type, butter.currentTime );
       }
 
-      butter.currentMedia.listen( "mediaready", function() {
-        // Generate Track Events from double clicks
-        element.addEventListener( "dblclick", onDoubleClick, false );
-      });
+      // This is to ensure our test suite doesn't blow up with errors because we test the plugin-list
+      // functionality without using any media.
+      if ( butter.currentmedia ) {
+        butter.currentMedia.listen( "mediaready", function() {
+          // Generate Track Events from double clicks
+          element.addEventListener( "dblclick", onDoubleClick, false );
+        });
 
-      // Remove the given elements listener whenever the media changes to ensure we don't setup too many
-      // and the listener is only setup when the media is ready
-      butter.currentMedia.listen( "mediachanged", function() {
-        element.removeEventListener( "dblclick", onDoubleClick, false );
-      });
+        // Remove the given elements listener whenever the media changes to ensure we don't setup too many
+        // and the listener is only setup when the media is ready
+        butter.currentMedia.listen( "mediachanged", function() {
+          element.removeEventListener( "dblclick", onDoubleClick, false );
+        });
+      }
 
 
       if ( iconImg ) {
