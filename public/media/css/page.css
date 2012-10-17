@@ -36,31 +36,14 @@ Global styles and classes
     line-height: 23px;
   }
 
-  video {
-    width: 100%;
-  }
-
-  hgroup {
-    padding-top: 30px;
-    padding-bottom: 24px;
-  }
-
-  .hero-unit p {
-    font-family: "Open Sans Light", sans-serif;
-    font-size: 16px;
-    line-height: 28px;
-  }
-  .hero-unit h1 {
-    margin-left: -12px;
-    width: 500px;
-    height: 140px;
-    background: url( "../../logo-big.png" ) no-repeat;
-    margin-bottom: 20px;
-  }
   .hero-unit h2 {
-    font-size: 42px;
-    line-height: 1;
+    line-height: 50px;
     font-family: "Open Sans Light", sans-serif;
+  }
+
+  .hero-unit h1 {
+    font-weight: bold;
+    margin-bottom: 24px;
   }
 
   a.top,
@@ -95,11 +78,11 @@ Layout styles
 */
 
   #outer-wrapper {
-    position: relative;
-    border-top: 2px solid #FFF;
+    border-top: 1px;
   }
 
   #wrapper {
+    background: #F9F9F9 url("/media/img/bg-stone.png") repeat-x 0 69px;
     padding-bottom: 0;
     display: table;
     width: 100%;
@@ -111,11 +94,7 @@ Layout styles
     left: 0;
     z-index: 2;
   }
-  #tabzilla {
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
+
   #tabzilla-panel {
     z-index: 2;
   }
@@ -323,7 +302,6 @@ Home styles
   .thumbnail {
     position: relative;
     margin-bottom: 30px;
-    cursor: pointer;
   }
 
   .action {
@@ -340,17 +318,6 @@ Home styles
   margin-bottom: 24px;
 }
 
-#projects .project-items {
-  min-height: 270px;
-}
-
-#projects .row:after,
-#projects .row:before {
-  content: "";
-  display: table;
-  clear: both;
-}
-
 #projects h4 {
   margin-bottom: 24px;
 }
@@ -361,6 +328,7 @@ Home styles
   margin-right: 24px;
   background: #CCC;
   float: left;
+  cursor: pointer;
 }
 .thumbnail img {
   width: 120px;
@@ -392,3 +360,73 @@ Home styles
 #bottom-section {
   padding-top: 48px;
 }
+
+#bottom-section img {
+  display: none; /* for now */
+}
+
+/*
+Home styles
+================================
+Carousel styles
+*/
+
+.carousel {
+  position: relative;
+}
+.carousel li {
+  margin: 0 10px;
+}
+.carousel .control {
+  position: absolute;
+  top: 70px;
+  width: 40px;
+  height: 40px;
+  background: url(/media/img/slider-arrows.png) no-repeat;
+  overflow: hidden;
+  cursor: pointer;
+}
+.carousel .control span {
+  visibility: hidden;
+}
+.carousel .left {
+  left: 0;
+  background-position: 0 0;
+}
+.carousel .left:hover {
+  background-position: 0 -50px;
+}
+.carousel .left:active {
+  background-position: 0 -100px;
+}
+.carousel .right {
+  right: 0;
+  background-position: -50px 0;
+}
+.carousel .right:hover {
+  background-position: -50px -50px;
+}
+.carousel .right:active {
+  background-position: -50px -100px;
+}
+.carousel .carousel-items {
+  margin: 0 auto;
+}
+
+.no-js .carousel .control {
+  display: none;
+}
+.no-js .carousel ul {
+  list-style: none;
+  margin-left: -24px;
+}
+.no-js .carousel li {
+  float: left;
+  margin-left: 47px;
+  margin-right: 0;
+}
+
+/*
+Carousel styles
+================================
+*/
