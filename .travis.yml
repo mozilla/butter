@@ -1,7 +1,9 @@
 language: node_js
 node_js:
   - 0.8
-before_script: node make check
+before_script:
+  - mysql -e 'CREATE DATABASE popcorn;'
+  - node make check
 notifications:
   irc:
     channels:
