@@ -72,6 +72,7 @@
 
       var _media = [],
           _currentMedia,
+          _mediaReady = false,
           _targets = [],
           _id = "Butter" + __guid++,
           _logger = new Logger( _id ),
@@ -168,7 +169,7 @@
       function targetTrackEventRequested( e ) {
         var trackEvent;
 
-        if ( _currentMedia ) {
+        if ( _currentMedia && _mediaReady ) {
           trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime );
           _this.editor.editTrackEvent( trackEvent );
         }
@@ -178,8 +179,11 @@
       }
 
       function mediaTrackEventRequested( e ) {
-        var trackEvent = _this.generateSafeTrackEvent( e.data.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime );
-        _this.editor.editTrackEvent( trackEvent );
+        var trackEvent;
+        if ( _mediaReady ) {
+          trackEvent = _this.generateSafeTrackEvent( e.data.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime );
+          _this.editor.editTrackEvent( trackEvent );
+        }
       }
 
       function mediaPlayerTypeRequired( e ){
@@ -222,6 +226,16 @@
           _selectedEvents.splice( idx, 1 );
           sortSelectedEvents();
         }
+      }
+
+      // ensure we don't attempt to load add any new trackEvents or perform other actions that depend on
+      // the media before it actually is.
+      function onMediaReady( e ) {
+        _mediaReady = true;
+      }
+
+      function onMediaChanged( e ) {
+        _mediaReady = false;
       }
 
       _this.deselectAllTrackEvents = function() {
@@ -355,6 +369,8 @@
 
         media.listen( "trackeventrequested", mediaTrackEventRequested );
         media.listen( "mediaplayertyperequired", mediaPlayerTypeRequired );
+        media.listen( "mediaready", onMediaReady );
+        media.listen( "mediachanged", onMediaChanged );
 
         _this.dispatch( "mediaadded", media );
         if ( !_currentMedia ) {
