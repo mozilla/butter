@@ -1,7 +1,6 @@
 %define node_version 0.8.12
 %define node_prefix /opt/node/%{node_version}
 
-
 Name:		butter
 Version:	@VERSION@
 Release:	1
@@ -13,12 +12,12 @@ Source0:	https://github.com/downloads/mozilla/%{name}/%{name}-%{version}.tar.bz2
 ExclusiveArch:  %{ix86} x86_64
 
 BuildRequires:	nodejs = %{node_version}
+Requires: upstart
 
 %description
 
 %prep
 %setup -q  -n dist
-
 
 %build
 export PATH=%{node_prefix}/bin:$PATH
@@ -28,14 +27,19 @@ npm install
 mkdir -p $RPM_BUILD_ROOT/opt/butter/%{version}
 rsync -av ./ $RPM_BUILD_ROOT/opt/butter/%{version}
 ln -s %{version} $RPM_BUILD_ROOT/opt/butter/current
-mkdir -p $RPM_BUILD_ROOT/etc/init
-cp butter.init $RPM_BUILD_ROOT/etc/init/butter.conf
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init
+cp butter.init $RPM_BUILD_ROOT%{_sysconfdir}/init/butter.conf
+
+%postun
+if [ $1 -ge 1 ] ; then
+  /sbin/restart %{name}
+fi
 
 %files
 %defattr(-,root,root,-)
 /opt/butter/%{version}
 /opt/butter/current
-/etc/init/butter.conf
+%{_sysconfdir}/init/butter.conf
 %doc README.md
 
 
