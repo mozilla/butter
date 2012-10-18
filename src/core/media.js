@@ -190,11 +190,6 @@
           // Insert new track
           _orderedTracks.splice( idx, 0, newTrack );
 
-          // Fix all the order properties on subsequent tracks
-          //for ( var i = idx, l = _orderedTracks.length; i < l; ++i ) {
-          //  _orderedTracks[ i ].order = i;
-          //}
-
           setupNewTrack( newTrack );
 
           _this.dispatch( "trackadded", newTrack );
