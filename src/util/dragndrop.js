@@ -502,7 +502,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       if( _hoverClass ){
         element.classList.remove( _hoverClass );
       }
-      if ( e.dataTransfer.effectAllowed !== "all" ) {
+      if ( !e.dataTransfer || e.dataTransfer.effectAllowed !== "all" ) {
         return;
       }
       var transferData = e.dataTransfer.getData( "text" ),
@@ -522,7 +522,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       if( _hoverClass ) {
         element.classList.add( _hoverClass );
       }
-      if ( e.dataTransfer.effectAllowed !== "all" ) {
+      if ( !e.dataTransfer || e.dataTransfer.effectAllowed !== "all" ) {
         return;
       }
       var transferData = e.dataTransfer.getData( "text" ),
@@ -536,7 +536,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       if ( _hoverClass ) {
         element.classList.remove( _hoverClass );
       }
-      if ( e.dataTransfer.effectAllowed !== "all" ) {
+      if ( !e.dataTransfer || e.dataTransfer.effectAllowed !== "all" ) {
         return;
       }
       var transferData = e.dataTransfer.getData( "text" ),
