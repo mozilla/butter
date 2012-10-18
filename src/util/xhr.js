@@ -20,7 +20,8 @@
     return s.join("&").replace("/%20/g", "+");
   }
 
-  var __csrfToken = "";
+  var __csrfToken = "",
+      __onCSRFTokenAcquired;
 
   define( [], function() {
 
@@ -33,12 +34,16 @@
         if ( !__csrfToken ) {
           try {
             __csrfToken = JSON.parse( this.response || this.responseText ).csrf;
+            if ( __csrfToken && __onCSRFTokenAcquired ) {
+              __onCSRFTokenAcquired();
+            }
           } catch (e) {}
         }
 
         if ( callback ) {
           callback.apply( this, arguments );
         }
+
       };
     }
 
@@ -119,6 +124,10 @@
           xhr.setRequestHeader( "Content-Type", type );
           xhr.send( data );
         }
+      },
+
+      setCSRFTokenAcquiredCallback: function( callback ) {
+        __onCSRFTokenAcquired = callback;
       }
     };
 
