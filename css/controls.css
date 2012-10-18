@@ -9,6 +9,7 @@
   background: white;
   border: 1px solid #d5d6d5;
   height: 41px;
+  z-index: 9999;
   visibility: visible;
   opacity: 1;
   z-index: 2;
