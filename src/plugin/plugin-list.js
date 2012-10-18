@@ -44,10 +44,13 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         }
       });
 
-      // Generate Track Events from double clicks
-      element.addEventListener( "dblclick", function() {
-        butter.generateSafeTrackEvent( e.data.type, butter.currentTime );
-      }, false );
+      function onDoubleClick () {
+        if ( butter.currentMedia.ready ) {
+          butter.generateSafeTrackEvent( e.data.type, butter.currentTime );
+        }
+      }
+
+      element.addEventListener( "dblclick", onDoubleClick, false );
 
       if ( iconImg ) {
         icon.style.backgroundImage = "url('" + iconImg.src + "')";
