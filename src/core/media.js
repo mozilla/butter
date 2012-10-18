@@ -22,7 +22,7 @@
       EventManager.extend( this );
 
       var _tracks = [],
-          _orderedTracks,
+          _orderedTracks = [],
           _id = "Media" + __guid++,
           _logger = new Logger( _id ),
           _name = mediaOptions.name || _id,
