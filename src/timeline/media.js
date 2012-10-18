@@ -232,8 +232,10 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           start = e.data.start,
           trackEvent;
 
-      trackEvent = butter.generateSafeTrackEvent( type, start, track );
-      butter.editor.editTrackEvent( trackEvent );
+      if ( _media.ready ) {
+        trackEvent = butter.generateSafeTrackEvent( type, start, track );
+        butter.editor.editTrackEvent( trackEvent );
+      }
     }
 
     this.destroy = function() {
