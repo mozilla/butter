@@ -41,61 +41,12 @@
       _flickrImageTab.classList.toggle( "display-off" );
     }
 
-    function dropHandler( e ) {
-      e.preventDefault();
-
-      var file,
-          imgSrc,
-          imgURI,
-          image,
-          canvas = document.createElement( "canvas" ),
-          context;
-
-      if ( !e.dataTransfer || !e.dataTransfer.files[ 0 ] ) {
-        return;
-      }
-
-      file = e.dataTransfer.files[ 0 ];
-
-      if ( window.URL ) {
-        imgSrc = window.URL.createObjectURL( file );
-      } else if ( window.webkitURL ) {
-        imgSrc = window.webkitURL.createObjectURL( file );
-      } else {
-        _this.setErrorState( "Sorry, but your browser doesn't support this feature." );
-      }
-
-      image = document.createElement( "img" );
-      image.onload = function() {
-        canvas.width = this.width;
-        canvas.height = this.height;
-        context = canvas.getContext( "2d" );
-        context.drawImage( this, 0, 0, this.width, this.height );
-        imgURI = canvas.toDataURL();
-        _cachedValues.src.data = imgURI;
-        _trackEvent.update({
-          src: imgURI
-        });
-        
-        if ( window.URL ) {
-          window.URL.revokeObjectURL( imgSrc );
-        } else if ( window.webkitURL ) {
-          window.webkitURL.revokeObjectURL( imgSrc );
-        }
-      };
-      image.src = imgSrc;
-    }
-
     function attachDropHandlers() {
-      _dropArea.addEventListener( "dragover", function( e ) {
-        e.preventDefault();
-      }, false );
+      window.EditorHelper.droppable( _trackEvent, _dropArea );
 
-      _dropArea.addEventListener( "dragleave", function( e ) {
-        e.preventDefault();
-      }, false );
-
-      _dropArea.addEventListener( "drop", dropHandler, false );
+      butter.listen( "droppable-unsupported", function error() {
+        _this.setErrorState( "Sorry, but your browser doesn't support this feature." );
+      });
     }
 
     function calcImageTime() {
@@ -378,7 +329,8 @@
       calcImageTime();
       _this.updatePropertiesFromManifest( _trackEvent );
 
-      var links, i, ln;
+      var links, i, ln,
+          src = _trackEvent.popcornOptions.src;
 
       if ( _trackEvent.popcornTrackEvent._container ) {
         links = _trackEvent.popcornTrackEvent._container.querySelectorAll( "a" );
@@ -390,9 +342,15 @@
         }
       }
 
+      // Droppable images aren't getting their data URIs cached so just perform a double check here
+      // on updating
+      if ( src ) {
+        _cachedValues.src.data = src;
+      }
+
       // Ensure right group is displayed
       // Mode is flipped here to ensure cached values aren't placed right back in after updating
-      if ( _trackEvent.popcornOptions.src && !_flickrActive ) {
+      if ( src && !_flickrActive ) {
         singleImageHandler();
         displayCachedValues( "flickr" );
       } else if ( _flickrActive ) {
