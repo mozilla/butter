@@ -14,7 +14,8 @@ define(['util/xhr'], function(XHR) {
         email = "",
         name = "",
         username = "",
-        server = hostname();
+        server = hostname(),
+        xhrPostQueue = [];
 
     if ( !navigator.id ) {
       var script = document.createElement( "script" );
@@ -24,10 +25,28 @@ define(['util/xhr'], function(XHR) {
       document.head.appendChild( script );
     }
 
+    var sendXHRPost = function() {
+      console.warn( "XHR.post occurred without a CSRF token. Buffering request." );
+      xhrPostQueue.push( arguments );
+    };
+
+    XHR.setCSRFTokenAcquiredCallback( function() {
+      var args;
+
+      while ( xhrPostQueue.length ) {
+        args = xhrPostQueue.shift();
+        XHR.post.apply( this, args );
+      }
+
+      XHR.setCSRFTokenAcquiredCallback( null );
+
+      sendXHRPost = XHR.post;
+    });
+
     this.login = function(callback) {
       navigator.id.get(function(assertion) {
         if (assertion) {
-          XHR.post(server + "/persona/verify",
+          sendXHRPost(server + "/persona/verify",
             { assertion: assertion },
             function() {
               if (this.readyState === 4) {
@@ -109,7 +128,7 @@ define(['util/xhr'], function(XHR) {
     };
 
     this.publish = function(id, callback) {
-      XHR.post(server + "/api/publish/" + id, null, function() {
+      sendXHRPost(server + "/api/publish/" + id, null, function() {
         if (this.readyState === 4) {
           var response;
           try {
@@ -125,7 +144,7 @@ define(['util/xhr'], function(XHR) {
     };
 
     this.logout = function(callback) {
-      XHR.post(server + "/persona/logout", null, function() {
+      sendXHRPost(server + "/persona/logout", null, function() {
         email = "";
         if (this.readyState === 4) {
           var response;
@@ -154,7 +173,7 @@ define(['util/xhr'], function(XHR) {
         url += id;
       }
 
-      XHR.post( url, data, function() {
+      sendXHRPost( url, data, function() {
         if (this.readyState === 4) {
           try {
             var response = JSON.parse( this.response || this.responseText );
@@ -165,6 +184,7 @@ define(['util/xhr'], function(XHR) {
         }
       }, "application/json" );
     };
+
   };
 
   Cornfield.__moduleName = "cornfield";
