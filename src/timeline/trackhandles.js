@@ -43,6 +43,7 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
           _tracks[ id ].track.order = i;
         }
         butter.currentMedia.sortTracks();
+        butter.currentMedia.updateTrackEvents();
       }
     });
 
