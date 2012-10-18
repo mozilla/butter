@@ -9,7 +9,7 @@
     <script src="../butter.inject.js"></script>
     <script src="../test-utils.js"></script>
     <script>
-      asyncTest( "update w/ invalid options", 4, function() {
+      asyncTest( "update w/ invalid options", 3, function() {
         createButterModule( function( butter ) {
           butter.currentMedia.onReady( function() {
             var te = butter.currentMedia.tracks[ 1 ].trackEvents[ 0 ];
@@ -29,8 +29,6 @@
                 } catch( e3 ) {
                   equal( e3.reason, "start-greater-than-end", "Correctly caught " + e3.reason );
 
-                  te.update( { start: 5, end: 800 } );
-                  equal( te.popcornOptions.end, butter.currentMedia.duration, "Invalid end greater than duration is fixed to duration.");
                   start();
                 }
               }
