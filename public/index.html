@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <title>Popcorn Maker</title>
   <link rel="stylesheet" href="media/css/sandstone.css">
-  <link rel="stylesheet" href="/css/webfonts.css">
   <link href="//www.mozilla.org/tabzilla/media/css/tabzilla.css" rel="stylesheet">
   <script src="src/webmakernav.js"></script>
   <link rel="stylesheet" href="media/css/page.css">
@@ -41,8 +40,8 @@
               </hgroup>
             </div>
           </div>
-          <div class="row">
-            <div class="hero-unit span5">
+          <div class="hero-unit row">
+            <div class="span3">
               <p>
                 Popcorn Maker makes it easy to enhance, remix and share web video. Use your web browser to combine video and audio with content from the rest of the web — from text, links and maps to pictures and live feeds.
               </p>
@@ -51,13 +50,10 @@
               </p>
               <p class="intro-bar">
                 <a class="button-blue start" href="/templates/basic">Start from scratch</a>
-			         </p>
+              </p>
             </div>
-            <div class="span5">
-              <video controls preload="none" poster="media/img/poster.png">
-                <source src="http://videos.mozilla.org/serv/webmademovies/popcornsite.webm" type="video/webm">
-                <source src="http://videos.mozilla.org/serv/webmademovies/popcornsite.mp4" type="video/mp4">
-              </video>
+            <div class="span7">
+              <iframe class="iframe-template" src="http://popcorn.webmadecontent.org/15_" width="560" height="358" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
             </div>
           </div>
           <div id="projects">
@@ -66,37 +62,35 @@
                 <h3>Remix and explore these great projects</h3>
               </div>
             </div>
-            <div class="row">
-              <div class="span10">
+            <div class="row project-items">
+              <div class="span5">
                 <h4><a href="/templates/basic/?savedDataUrl=ted.json">Beau Lotto at TED</a></h4>
-              </div>
-              <div class="span7">
-                <iframe class="iframe-template" src="http://popcorn.webmadecontent.org/11_" width="560" height="340" mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>
-              </div>
-              <div class="span3">
+                <div class="thumbnail preview-thumbnail">
+                  <img src="thumbnail-ted.png" alt="" data-butter-preview="http://popcorn.webmadecontent.org/11_">
+                  <a class="button-blue start" href="/templates/basic/?savedDataUrl=ted.json">Remix it!</a>
+                </div>
                 <div class="caption">
                   <p>by TED</p>
                   <p>Remixes this fascinating TED talk by layering in links, quotes, WikiPedia articles, and maps of the locations mentioned in the talk.</p>
-                  <p><a class="button-blue start" href="/templates/basic?savedDataUrl=ted.json">Remix it!</a></p>
                 </div>
               </div>
-            </div>
-            <div class="row project-items">
               <div class="span5">
-                <h4><a href="/templates/basic/?savedDataUrl=tour.json">Soundscape</a></h4>
+                <h4><a href="/templates/basic/?savedDataUrl=soundscape.json">Soundscape</a></h4>
                 <div class="thumbnail preview-thumbnail">
-                  <img src="thumbnail-soundscape.png" alt="" data-butter-preview="http://dev.butyr.org/v/gh_.html">
-                  <a class="button-blue start" href="/templates/basic/?savedDataUrl=tour.json">Remix it!</a>
+                  <img src="thumbnail-soundscape.png" alt="" data-butter-preview="http://popcorn.webmadecontent.org/17_">
+                  <a class="button-blue start" href="/templates/basic/?savedDataUrl=soundscape.json">Remix it!</a>
                 </div>
                 <div class="caption">
                   <p>by Mozilla</p>
                   <p>With a soundcloud sound as a guide, explore a place with photos from Flickr, Google Maps and Wikipedia articles.</p>
                 </div>
               </div>
+            </div>
+            <div class="row project-items">
               <div class="span5">
                 <h4><a href="/templates/basic/?savedDataUrl=lego.json">Lego Madlib</a></h4>
                 <div class="thumbnail preview-thumbnail">
-                  <img src="thumbnail-lego.png" alt="" data-butter-preview="http://dev.butyr.org/v/gh_.html">
+                  <img src="thumbnail-lego.png" alt="" data-butter-preview="http://popcorn.webmadecontent.org/1l_">
                   <a class="button-blue start" href="/templates/basic/?savedDataUrl=lego.json">Remix it!</a>
                 </div>
                 <div class="caption">
@@ -104,12 +98,10 @@
                   <p>Tell the story of a minifig hero by changing the location of Google Maps, text and images.  A great way to learn the concepts of "Web Native Cinema!"</p>
                 </div>
               </div>
-            </div>
-            <div class="row project-items">
               <div class="span5">
                 <h4><a href="/templates/basic/?savedDataUrl=tour.json">Neighbourhood Tour</a></h4>
                 <div class="thumbnail preview-thumbnail">
-                  <img src="thumbnail-tour.png" alt="http://dev.butyr.org/v/gh_.html">
+                  <img src="thumbnail-tour.png" data-butter-preview="http://popcorn.webmadecontent.org/1n_" alt="">
                   <a class="button-blue start" href="/templates/basic/?savedDataUrl=tour.json">Remix it!</a>
                 </div>
                 <div class="caption">
@@ -145,7 +137,7 @@
                     <div class="action">
                       <div class="caption">
                         <h5 class="title">
-                          <a href="http://yeswecanhas.com/files/2008/02/bammacat.jpg">Some sort of get involved link here</a>
+                          <a href="https://wiki.mozilla.org/PopcornMaker/QA">Help us beta test this site!</a>
                         </h5>
                       </div>
                     </div>
@@ -204,6 +196,7 @@
     <div id="modal-overlay">
       <div id="modal">
        <a class="iframe-link button-blue start" href="/templates/basic">Remix it!</a>
+       <span class="close-btn"></span>
       </div>
     </div>
   </div>

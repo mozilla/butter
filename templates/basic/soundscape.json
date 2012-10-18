@@ -1,276 +1,301 @@
 {
-    "targets": [{
-        "id": "Target0",
-        "name": "video-container",
-        "element": "video-container"
-    }],
-    "media": [{
-        "id": "Media0",
-        "name": "Media0",
-        "url": ["http://soundcloud.com/brettgaylor/chinatown-tour?butteruid=1346972768767"],
-        "target": "video",
-        "duration": 128.299,
-        "controls": true,
-        "tracks": [{
-            "name": "Layer1",
-            "id": "0",
-            "trackEvents": [{
-                "id": "TrackEvent1",
-                "type": "image",
-                "popcornOptions": {
-                    "start": 0,
-                    "end": 8.94789,
-                    "target": "video-container",
-                    "src": "http://farm5.staticflickr.com/4097/4822261716_54e0cc3338_b.jpg",
-                    "tags": "",
-                    "photosetId": "",
-                    "count": "",
-                    "width": 80,
-                    "height": 80,
-                    "top": 10,
-                    "left": 10,
-                    "transition": "popcorn-fade",
-                    "zindex": 1000
-                },
-                "track": "Layer1",
-                "name": "TrackEvent2"
-            }, {
-                "id": "TrackEvent3",
-                "type": "image",
-                "popcornOptions": {
-                    "start": 13.35301,
-                    "end": 18.58408,
-                    "target": "video-container",
-                    "src": "http://farm2.staticflickr.com/1071/1200161954_4d4a4df8b9_b.jpg",
-                    "tags": "",
-                    "photosetId": "",
-                    "count": "",
-                    "width": 80,
-                    "height": 80,
-                    "top": 20.008337316053353,
-                    "left": 20.046893317702228,
-                    "transition": "popcorn-fade",
-                    "zindex": 1000
-                },
-                "track": "Layer1",
-                "name": "TrackEvent5"
-            }, {
-                "id": "TrackEvent7",
-                "type": "wikipedia",
-                "popcornOptions": {
-                    "start": 31.8912,
-                    "end": 45.65719,
-                    "target": "video-container",
-                    "lang": "en",
-                    "src": "http://en.wikipedia.org/wiki/History_of_Chinese_immigration_to_Canada",
-                    "width": 97.42086752637749,
-                    "height": 70.61275456704664,
-                    "top": 29.585243968262226,
-                    "left": 0.45721270973769046,
-                    "transition": "popcorn-fade",
-                    "zindex": 1000
-                },
-                "track": "Layer1",
-                "name": "TrackEvent8"
-            }, {
-                "id": "TrackEvent9",
-                "type": "googlemap",
-                "popcornOptions": {
-                    "start": 123.299,
-                    "end": 128.299,
-                    "target": "video-container",
-                    "type": "STREETVIEW",
-                    "location": "pandora street and government victoria bc",
-                    "fullscreen": true,
-                    "heading": 0,
-                    "pitch": 1,
-                    "zoom": 10,
-                    "transition": "popcorn-fade",
-                    "left": 0,
-                    "top": 0,
-                    "width": 100,
-                    "height": 100,
-                    "lat": 0,
-                    "lng": 0,
-                    "zindex": 1000
-                },
-                "track": "Layer1",
-                "name": "TrackEvent22"
-            }]
-        }, {
-            "name": "Layer2",
-            "id": "1",
-            "trackEvents": [{
-                "id": "TrackEvent11",
-                "type": "image",
-                "popcornOptions": {
-                    "start": 9.13144,
-                    "end": 13.35301,
-                    "target": "video-container",
-                    "src": "http://farm3.staticflickr.com/2629/3850719023_d7b222e47e_b.jpg",
-                    "tags": "",
-                    "photosetId": "",
-                    "count": "",
-                    "width": 80,
-                    "height": 80,
-                    "top": 20.008337316053353,
-                    "left": 0,
-                    "transition": "popcorn-fade",
-                    "zindex": 999
-                },
-                "track": "Layer2",
-                "name": "TrackEvent3"
-            }, {
-                "id": "TrackEvent13",
-                "type": "image",
-                "popcornOptions": {
-                    "start": 18.72174,
-                    "end": 26.79779,
-                    "target": "video-container",
-                    "src": "http://farm4.staticflickr.com/3448/3851511272_b9617e06a9_b.jpg",
-                    "tags": "",
-                    "photosetId": "",
-                    "count": "",
-                    "width": 80,
-                    "height": 80,
-                    "top": 0,
-                    "left": 20.046893317702228,
-                    "transition": "popcorn-fade",
-                    "zindex": 999
-                },
-                "track": "Layer2",
-                "name": "TrackEvent6"
-            }, {
-                "id": "TrackEvent15",
-                "type": "googlemap",
-                "popcornOptions": {
-                    "start": 46.07017,
-                    "end": 65.34255,
-                    "target": "video-container",
-                    "type": "STREETVIEW",
-                    "location": "fan tan alley",
-                    "fullscreen": true,
-                    "heading": 0,
-                    "pitch": 1,
-                    "zoom": "1",
-                    "transition": "popcorn-fade",
-                    "left": 0,
-                    "top": 0,
-                    "width": 100,
-                    "height": 100,
-                    "lat": 48.429188302782684,
-                    "lng": -123.36828567553255,
-                    "zindex": 999
-                },
-                "track": "Layer2",
-                "name": "TrackEvent10"
-            }, {
-                "id": "TrackEvent17",
-                "type": "image",
-                "popcornOptions": {
-                    "start": 65.75553,
-                    "end": 71.62902,
-                    "target": "video-container",
-                    "src": "http://farm5.staticflickr.com/4014/4534030270_54e52cce54_b.jpg",
-                    "tags": "",
-                    "photosetId": "",
-                    "count": "",
-                    "width": 44.4314185228605,
-                    "height": 80.03334926421341,
-                    "top": 14.578990981222212,
-                    "left": 24.417740351150353,
-                    "transition": "popcorn-fade",
-                    "zindex": 999
-                },
-                "track": "Layer2",
-                "name": "TrackEvent11"
-            }, {
-                "id": "TrackEvent19",
-                "type": "image",
-                "popcornOptions": {
-                    "start": 82.59592,
-                    "end": 88.28586,
-                    "target": "video-container",
-                    "src": "http://farm8.staticflickr.com/7193/6836329278_6c98168e97_b.jpg",
-                    "tags": "",
-                    "photosetId": "",
-                    "count": "",
-                    "width": 49.0625,
-                    "height": 79.16666666666666,
-                    "top": 10,
-                    "left": 10,
-                    "transition": "popcorn-fade",
-                    "zindex": 999
-                },
-                "track": "Layer2",
-                "name": "TrackEvent18"
-            }, {
-                "id": "TrackEvent21",
-                "type": "image",
-                "popcornOptions": {
-                    "start": 77.06658,
-                    "end": 82.06658,
-                    "target": "video-container",
-                    "src": "http://farm8.staticflickr.com/7166/6549277201_594aa4ba1a_b.jpg",
-                    "tags": "",
-                    "photosetId": "",
-                    "count": "",
-                    "width": 42.96875,
-                    "height": 90,
-                    "top": 10,
-                    "left": 10,
-                    "transition": "popcorn-fade",
-                    "zindex": 999
-                },
-                "track": "Layer2",
-                "name": "TrackEvent19"
-            }, {
-                "id": "TrackEvent23",
-                "type": "wikipedia",
-                "popcornOptions": {
-                    "start": 98.88567,
-                    "end": 123.1597,
-                    "target": "video-container",
-                    "lang": "en",
-                    "src": "http://en.wikipedia.org/wiki/Fan_Tan_Alley",
-                    "width": 100,
-                    "height": 70.55555555555556,
-                    "top": 29.444444444444446,
-                    "left": 0,
-                    "transition": "popcorn-fade",
-                    "zindex": 999
-                },
-                "track": "Layer2",
-                "name": "TrackEvent21"
-            }]
-        }, {
-            "name": "Layer2",
-            "id": "2",
-            "trackEvents": [{
-                "id": "TrackEvent25",
-                "type": "googlemap",
-                "popcornOptions": {
-                    "start": 71.85845,
-                    "end": 77.08953,
-                    "target": "video-container",
-                    "type": "STAMEN-TERRAIN",
-                    "location": "",
-                    "fullscreen": true,
-                    "heading": 0,
-                    "pitch": 1,
-                    "zoom": "19",
-                    "transition": "popcorn-fade",
-                    "left": 0,
-                    "top": 0,
-                    "width": 100,
-                    "height": 100,
-                    "lat": 48.42885717902951,
-                    "lng": -123.36792541534425,
-                    "zindex": 998
-                },
-                "track": "Layer2",
-                "name": "TrackEvent16"
-            }]
-        }]
-    }]
+  "targets": [
+    {
+      "id": "Target0",
+      "name": "video-container",
+      "element": "video-container"
+    }
+  ],
+  "media": [
+    {
+      "id": "Media0",
+      "name": "Media0",
+      "url": [
+        "https://soundcloud.com/brettgaylor/chinatown-tour"
+      ],
+      "target": "video",
+      "duration": 128.299,
+      "controls": false,
+      "tracks": [
+        {
+          "name": "Layer1",
+          "id": "0",
+          "trackEvents": [
+            {
+              "id": "TrackEvent0",
+              "type": "image",
+              "popcornOptions": {
+                "start": 0,
+                "end": 8.94789,
+                "target": "video-container",
+                "src": "http://farm5.staticflickr.com/4097/4822261716_54e0cc3338_b.jpg",
+                "tags": "",
+                "photosetId": "",
+                "count": "",
+                "width": 80,
+                "height": 80,
+                "top": 10,
+                "left": 10,
+                "transition": "popcorn-fade",
+                "zindex": 1000
+              },
+              "track": "Layer1",
+              "name": "TrackEvent2"
+            },
+            {
+              "id": "TrackEvent1",
+              "type": "image",
+              "popcornOptions": {
+                "start": 13.35301,
+                "end": 18.58408,
+                "target": "video-container",
+                "src": "http://farm2.staticflickr.com/1071/1200161954_4d4a4df8b9_b.jpg",
+                "tags": "",
+                "photosetId": "",
+                "count": "",
+                "width": 80,
+                "height": 80,
+                "top": 20.008337316053353,
+                "left": 20.046893317702228,
+                "transition": "popcorn-fade",
+                "zindex": 1000
+              },
+              "track": "Layer1",
+              "name": "TrackEvent5"
+            },
+            {
+              "id": "TrackEvent2",
+              "type": "wikipedia",
+              "popcornOptions": {
+                "start": 31.8912,
+                "end": 45.65719,
+                "target": "video-container",
+                "lang": "en",
+                "src": "http://en.wikipedia.org/wiki/History_of_Chinese_immigration_to_Canada",
+                "width": 100,
+                "height": 86.66666666666667,
+                "top": 0,
+                "left": 0,
+                "transition": "popcorn-fade",
+                "zindex": 1000
+              },
+              "track": "Layer1",
+              "name": "TrackEvent8"
+            },
+            {
+              "id": "TrackEvent3",
+              "type": "googlemap",
+              "popcornOptions": {
+                "start": 123.299,
+                "end": 128.299,
+                "target": "video-container",
+                "type": "STREETVIEW",
+                "location": "",
+                "fullscreen": true,
+                "heading": 0,
+                "pitch": 1,
+                "zoom": 5,
+                "transition": "popcorn-fade",
+                "left": 0,
+                "top": 0,
+                "width": 100,
+                "height": 100,
+                "lat": 48.428545,
+                "lng": -123.36707999999999,
+                "zindex": 1000
+              },
+              "track": "Layer1",
+              "name": "TrackEvent22"
+            }
+          ]
+        },
+        {
+          "name": "Layer2",
+          "id": "1",
+          "trackEvents": [
+            {
+              "id": "TrackEvent4",
+              "type": "image",
+              "popcornOptions": {
+                "start": 9.13144,
+                "end": 13.35301,
+                "target": "video-container",
+                "src": "http://farm3.staticflickr.com/2629/3850719023_d7b222e47e_b.jpg",
+                "tags": "",
+                "photosetId": "",
+                "count": "",
+                "width": 80,
+                "height": 80,
+                "top": 20.008337316053353,
+                "left": 0,
+                "transition": "popcorn-fade",
+                "zindex": 999
+              },
+              "track": "Layer2",
+              "name": "TrackEvent3"
+            },
+            {
+              "id": "TrackEvent5",
+              "type": "image",
+              "popcornOptions": {
+                "start": 18.72174,
+                "end": 26.79779,
+                "target": "video-container",
+                "src": "http://farm4.staticflickr.com/3448/3851511272_b9617e06a9_b.jpg",
+                "tags": "",
+                "photosetId": "",
+                "count": "",
+                "width": 80,
+                "height": 80,
+                "top": 0,
+                "left": 20.046893317702228,
+                "transition": "popcorn-fade",
+                "zindex": 999
+              },
+              "track": "Layer2",
+              "name": "TrackEvent6"
+            },
+            {
+              "id": "TrackEvent6",
+              "type": "googlemap",
+              "popcornOptions": {
+                "start": 46.07017,
+                "end": 65.34255,
+                "target": "video-container",
+                "type": "STREETVIEW",
+                "location": "",
+                "fullscreen": true,
+                "heading": 0,
+                "pitch": 1,
+                "zoom": 1,
+                "transition": "popcorn-fade",
+                "left": 0,
+                "top": 0,
+                "width": 100,
+                "height": 100,
+                "lat": 48.429375,
+                "lng": -123.367909,
+                "zindex": 999
+              },
+              "track": "Layer2",
+              "name": "TrackEvent10"
+            },
+            {
+              "id": "TrackEvent7",
+              "type": "image",
+              "popcornOptions": {
+                "start": 65.75553,
+                "end": 71.62902,
+                "target": "video-container",
+                "src": "http://farm5.staticflickr.com/4014/4534030270_54e52cce54_b.jpg",
+                "tags": "",
+                "photosetId": "",
+                "count": "",
+                "width": 44.4314185228605,
+                "height": 80.03334926421341,
+                "top": 14.578990981222212,
+                "left": 24.417740351150353,
+                "transition": "popcorn-fade",
+                "zindex": 999
+              },
+              "track": "Layer2",
+              "name": "TrackEvent11"
+            },
+            {
+              "id": "TrackEvent8",
+              "type": "image",
+              "popcornOptions": {
+                "start": 82.59592,
+                "end": 88.28586,
+                "target": "video-container",
+                "src": "http://farm8.staticflickr.com/7193/6836329278_6c98168e97_b.jpg",
+                "tags": "",
+                "photosetId": "",
+                "count": "",
+                "width": 49.0625,
+                "height": 79.16666666666666,
+                "top": 10,
+                "left": 10,
+                "transition": "popcorn-fade",
+                "zindex": 999
+              },
+              "track": "Layer2",
+              "name": "TrackEvent18"
+            },
+            {
+              "id": "TrackEvent9",
+              "type": "image",
+              "popcornOptions": {
+                "start": 77.06658,
+                "end": 82.06658,
+                "target": "video-container",
+                "src": "http://farm8.staticflickr.com/7166/6549277201_594aa4ba1a_b.jpg",
+                "tags": "",
+                "photosetId": "",
+                "count": "",
+                "width": 74.28571428571429,
+                "height": 90.15873015873017,
+                "top": 9.841269841269842,
+                "left": 10,
+                "transition": "popcorn-fade",
+                "zindex": 999
+              },
+              "track": "Layer2",
+              "name": "TrackEvent19"
+            },
+            {
+              "id": "TrackEvent10",
+              "type": "wikipedia",
+              "popcornOptions": {
+                "start": 98.88567,
+                "end": 123.1597,
+                "target": "video-container",
+                "lang": "en",
+                "src": "http://en.wikipedia.org/wiki/Fan_Tan_Alley",
+                "width": 100,
+                "height": 99.36507936507937,
+                "top": 0,
+                "left": 0,
+                "transition": "popcorn-fade",
+                "zindex": 999
+              },
+              "track": "Layer2",
+              "name": "TrackEvent21"
+            }
+          ]
+        },
+        {
+          "name": "Layer2",
+          "id": "2",
+          "trackEvents": [
+            {
+              "id": "TrackEvent11",
+              "type": "googlemap",
+              "popcornOptions": {
+                "start": 71.85845,
+                "end": 77.08953,
+                "target": "video-container",
+                "type": "STAMEN-TERRAIN",
+                "location": "",
+                "fullscreen": true,
+                "heading": 0,
+                "pitch": 1,
+                "zoom": "19",
+                "transition": "popcorn-fade",
+                "left": 0,
+                "top": 0,
+                "width": 100,
+                "height": 100,
+                "lat": 48.42885717902951,
+                "lng": -123.36792541534425,
+                "zindex": 998
+              },
+              "track": "Layer2",
+              "name": "TrackEvent16"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

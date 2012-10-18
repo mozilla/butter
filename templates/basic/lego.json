@@ -1,341 +1,381 @@
 {
-    "targets": [{
-        "id": "Target0",
-        "name": "video-container",
-        "element": "video-container"
-    }],
-    "media": [{
-        "id": "Media0",
-        "name": "Media0",
-        "url": ["http://videos-origin.mozilla.org/serv/webmademovies/legorough02.webm?butteruid=1347050894047", "http://videos-origin.mozilla.org/serv/webmademovies/legorough02.mp4?butteruid=1347050894048"],
-        "target": "video",
-        "duration": 78.908,
-        "controls": true,
-        "tracks": [{
-            "name": "Layer0",
-            "id": "0",
-            "trackEvents": [{
-                "id": "TrackEvent1",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 0,
-                    "end": 3.44305,
-                    "target": "video-container",
-                    "text": "Molly Presents",
-                    "zindex": 1000,
-                    "fontColor": "#ffffff",
-                    "position": "center",
-                    "fontSize": "120"
+  "targets": [
+    {
+      "id": "Target0",
+      "name": "video-container",
+      "element": "video-container"
+    }
+  ],
+  "media": [
+    {
+      "id": "Media0",
+      "name": "Media0",
+      "url": [
+        "https://videos-cdn.mozilla.net.mozilla.org/serv/webmademovies/legorough02.webm",
+        "https://videos-origin.mozilla.org/serv/webmademovies/legorough02.mp4"
+      ],
+      "target": "video",
+      "duration": 78.90799713134766,
+      "controls": false,
+      "tracks": [
+        {
+          "name": "Layer0",
+          "id": "0",
+          "trackEvents": [
+            {
+              "id": "TrackEvent0",
+              "type": "text",
+              "popcornOptions": {
+                "start": 0,
+                "end": 3.44305,
+                "target": "video-container",
+                "text": "Molly Presents",
+                "zindex": 1000,
+                "fontColor": "#ffffff",
+                "position": "center",
+                "fontSize": "24"
+              },
+              "track": "Layer0",
+              "name": "TrackEvent3"
+            },
+            {
+              "id": "TrackEvent1",
+              "type": "text",
+              "popcornOptions": {
+                "start": 3.66883,
+                "end": 5.95479,
+                "target": "video-container",
+                "text": "The Lego Madlib Adventure",
+                "position": "center",
+                "transition": "popcorn-fade",
+                "fontFamily": "Merriweather",
+                "fontSize": "24",
+                "fontColor": "#ffffff",
+                "fontWeight": true,
+                "fontItalics": "",
+                "textUnderline": "",
+                "left": 30,
+                "top": 30,
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent2"
+            },
+            {
+              "id": "TrackEvent2",
+              "type": "text",
+              "popcornOptions": {
+                "start": 8.35364,
+                "end": 9.22851,
+                "target": "video-container",
+                "text": "Molly!",
+                "position": "center",
+                "transition": "popcorn-fade",
+                "fontFamily": "Fredoka One",
+                "fontSize": "24",
+                "fontColor": "#000",
+                "fontWeight": "",
+                "fontItalics": "",
+                "textUnderline": "",
+                "left": 30,
+                "top": 30,
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent3"
+            },
+            {
+              "id": "TrackEvent3",
+              "type": "googlemap",
+              "popcornOptions": {
+                "start": 11.11736,
+                "end": 13.92197,
+                "target": "video-container",
+                "type": "ROADMAP",
+                "location": "",
+                "fullscreen": "",
+                "heading": 0,
+                "pitch": 1,
+                "zoom": 13,
+                "transition": "popcorn-fade",
+                "left": 5,
+                "top": 5,
+                "width": 34.81828839390387,
+                "height": 71.90496222956673,
+                "lat": 48.37139427955219,
+                "lng": -123.73325814282224,
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent4"
+            },
+            {
+              "id": "TrackEvent4",
+              "type": "text",
+              "popcornOptions": {
+                "start": 15.86411,
+                "end": 17.58928,
+                "target": "video-container",
+                "text": "Magic",
+                "position": "custom",
+                "transition": "popcorn-fade",
+                "fontFamily": "Merriweather",
+                "fontSize": "32",
+                "fontColor": "#ccc000",
+                "fontWeight": "",
+                "fontItalics": "",
+                "textUnderline": "",
+                "left": 5.675593784877233,
+                "top": 58.14285520523313,
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent5"
+            },
+            {
+              "id": "TrackEvent5",
+              "type": "wikipedia",
+              "popcornOptions": {
+                "start": 21.52718,
+                "end": 25.84012,
+                "target": "video-container",
+                "lang": "en",
+                "src": "http://en.wikipedia.org/wiki/Boredom",
+                "width": 50.9375,
+                "height": 87.77777777777777,
+                "top": 2.7777777777777777,
+                "left": 2.1875,
+                "transition": "popcorn-fade",
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent10"
+            },
+            {
+              "id": "TrackEvent6",
+              "type": "text",
+              "popcornOptions": {
+                "start": 44.51221,
+                "end": 45.84833,
+                "target": "video-container",
+                "text": "Dude",
+                "position": "center",
+                "transition": "popcorn-fade",
+                "fontFamily": "Merriweather",
+                "fontSize": "32",
+                "fontColor": "#fff",
+                "fontWeight": "",
+                "fontItalics": true,
+                "textUnderline": "",
+                "left": 30,
+                "top": 30,
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent14"
+            },
+            {
+              "id": "TrackEvent7",
+              "type": "wikipedia",
+              "popcornOptions": {
+                "start": 53.48336,
+                "end": 59.01876,
+                "target": "video-container",
+                "lang": "en",
+                "src": "http://en.wikipedia.org/wiki/Mushroom",
+                "width": 40.3125,
+                "height": 84.44444444444444,
+                "top": 4.444444444444445,
+                "left": 0.3125,
+                "transition": "popcorn-fade",
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent15"
+            },
+            {
+              "id": "TrackEvent8",
+              "type": "text",
+              "popcornOptions": {
+                "start": 35.07671,
+                "end": 36.18562,
+                "target": "video-container",
+                "text": "Queen awesomesauce",
+                "position": "center",
+                "transition": "popcorn-fade",
+                "fontFamily": "Bangers",
+                "fontSize": "14",
+                "fontColor": "#000",
+                "fontWeight": false,
+                "fontItalics": "",
+                "textUnderline": "",
+                "left": 30,
+                "top": 30,
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent12"
+            },
+            {
+              "id": "TrackEvent9",
+              "type": "text",
+              "popcornOptions": {
+                "start": 41.95447,
+                "end": 42.90885,
+                "target": "video-container",
+                "text": "The bad guy",
+                "position": "center",
+                "transition": "popcorn-fade",
+                "fontFamily": "Vollkorn",
+                "fontSize": "18",
+                "fontColor": "#000000",
+                "fontWeight": "",
+                "fontItalics": true,
+                "textUnderline": "",
+                "left": 30,
+                "top": 30,
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent13"
+            },
+            {
+              "id": "TrackEvent10",
+              "type": "text",
+              "popcornOptions": {
+                "start": 68.21896,
+                "end": 73.33443,
+                "target": "video-container",
+                "text": "Make your own story!",
+                "position": "center",
+                "transition": "popcorn-fade",
+                "fontFamily": "Bangers",
+                "fontSize": "18",
+                "fontColor": "#ffffff",
+                "fontWeight": false,
+                "fontItalics": "",
+                "textUnderline": "",
+                "left": 30,
+                "top": 30,
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent16"
+            },
+            {
+              "id": "TrackEvent11",
+              "type": "text",
+              "popcornOptions": {
+                "start": 76.80837,
+                "end": 78.64077,
+                "target": "video-container",
+                "text": "Music: \"Harvestfred\" - Primavara - CC-BY",
+                "position": "center",
+                "transition": "popcorn-fade",
+                "fontFamily": "Bangers",
+                "fontSize": "18",
+                "fontColor": "#ffffff",
+                "fontWeight": "",
+                "fontItalics": "",
+                "textUnderline": "",
+                "left": 30,
+                "top": 30,
+                "zindex": 1000
+              },
+              "track": "Layer0",
+              "name": "TrackEvent30"
+            }
+          ]
+        },
+        {
+          "name": "Layer",
+          "id": "1",
+          "trackEvents": [
+            {
+              "id": "TrackEvent12",
+              "type": "text",
+              "popcornOptions": {
+                "start": 73.29626,
+                "end": 76.57932,
+                "target": "video-container",
+                "text": "Change the timeline in popcorn!",
+                "position": "center",
+                "transition": "popcorn-fade",
+                "fontFamily": "Bangers",
+                "fontSize": "18",
+                "fontColor": "#ffffff",
+                "fontWeight": "",
+                "fontItalics": "",
+                "textUnderline": "",
+                "left": 30,
+                "top": 30,
+                "zindex": 999,
+                "linkUrl": "",
+                "fontDecorations": {
+                  "bold": false,
+                  "italics": false,
+                  "underline": false
                 },
-                "track": "Layer0",
-                "name": "TrackEvent3"
-            }, {
-                "id": "TrackEvent3",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 3.66883,
-                    "end": 5.95479,
-                    "target": "video-container",
-                    "text": "The Lego Madlib Adventure",
-                    "position": "center",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "Merriweather",
-                    "fontSize": "100",
-                    "fontColor": "#ffffff",
-                    "fontWeight": true,
-                    "fontItalics": "",
-                    "textUnderline": "",
-                    "left": 30,
-                    "top": 30,
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent2"
-            }, {
-                "id": "TrackEvent5",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 8.35364,
-                    "end": 9.22851,
-                    "target": "video-container",
-                    "text": "Molly!",
-                    "position": "center",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "Fredoka One",
-                    "fontSize": "100",
-                    "fontColor": "#000",
-                    "fontWeight": "",
-                    "fontItalics": "",
-                    "textUnderline": "",
-                    "left": 30,
-                    "top": 30,
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent3"
-            }, {
-                "id": "TrackEvent7",
-                "type": "googlemap",
-                "popcornOptions": {
-                    "start": 11.11736,
-                    "end": 13.92197,
-                    "target": "video-container",
-                    "type": "ROADMAP",
-                    "location": "",
-                    "fullscreen": "",
-                    "heading": 0,
-                    "pitch": 1,
-                    "zoom": 13,
-                    "transition": "popcorn-fade",
-                    "left": 5,
-                    "top": 5,
-                    "width": 34.81828839390387,
-                    "height": 71.90496222956673,
-                    "lat": 48.37139427955219,
-                    "lng": -123.73325814282224,
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent4"
-            }, {
-                "id": "TrackEvent9",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 15.86411,
-                    "end": 17.58928,
-                    "target": "video-container",
-                    "text": "Magic",
-                    "position": "custom",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "Merriweather",
-                    "fontSize": 48,
-                    "fontColor": "#ccc000",
-                    "fontWeight": "",
-                    "fontItalics": "",
-                    "textUnderline": "",
-                    "left": 47.8194635889874,
-                    "top": 9.573433830599832,
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent5"
-            }, {
-                "id": "TrackEvent11",
-                "type": "wikipedia",
-                "popcornOptions": {
-                    "start": 21.52718,
-                    "end": 25.84012,
-                    "target": "video-container",
-                    "lang": "en",
-                    "src": "http://en.wikipedia.org/wiki/Boredom",
-                    "width": 50.9375,
-                    "height": 87.77777777777777,
-                    "top": 2.7777777777777777,
-                    "left": 2.1875,
-                    "transition": "popcorn-fade",
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent10"
-            }, {
-                "id": "TrackEvent13",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 44.51221,
-                    "end": 45.84833,
-                    "target": "video-container",
-                    "text": "Dude",
-                    "position": "center",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "Merriweather",
-                    "fontSize": 48,
-                    "fontColor": "#fff",
-                    "fontWeight": "",
-                    "fontItalics": true,
-                    "textUnderline": "",
-                    "left": 30,
-                    "top": 30,
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent14"
-            }, {
-                "id": "TrackEvent15",
-                "type": "wikipedia",
-                "popcornOptions": {
-                    "start": 53.48336,
-                    "end": 59.01876,
-                    "target": "video-container",
-                    "lang": "en",
-                    "src": "http://en.wikipedia.org/wiki/Mushroom",
-                    "width": 40.3125,
-                    "height": 84.44444444444444,
-                    "top": 4.444444444444445,
-                    "left": 0.3125,
-                    "transition": "popcorn-fade",
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent15"
-            }, {
-                "id": "TrackEvent21",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 35.07671,
-                    "end": 36.18562,
-                    "target": "video-container",
-                    "text": "Queen awesomesauce",
-                    "position": "center",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "Bangers",
-                    "fontSize": "36",
-                    "fontColor": "#000",
-                    "fontWeight": false,
-                    "fontItalics": "",
-                    "textUnderline": "",
-                    "left": 30,
-                    "top": 30,
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent12"
-            }, {
-                "id": "TrackEvent23",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 41.95447,
-                    "end": 42.90885,
-                    "target": "video-container",
-                    "text": "The bad guy",
-                    "position": "center",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "Vollkorn",
-                    "fontSize": 48,
-                    "fontColor": "#000000",
-                    "fontWeight": "",
-                    "fontItalics": true,
-                    "textUnderline": "",
-                    "left": 30,
-                    "top": 30,
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent13"
-            }, {
-                "id": "TrackEvent28",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 73.29626,
-                    "end": 76.57932,
-                    "target": "video-container",
-                    "text": "Change the timeline in popcorn!",
-                    "position": "center",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "Bangers",
-                    "fontSize": "80",
-                    "fontColor": "#ffffff",
-                    "fontWeight": "",
-                    "fontItalics": "",
-                    "textUnderline": "",
-                    "left": 30,
-                    "top": 30,
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent17"
-            }, {
-                "id": "TrackEvent29",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 68.21896,
-                    "end": 73.33443,
-                    "target": "video-container",
-                    "text": "Make your own story!",
-                    "position": "center",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "Bangers",
-                    "fontSize": "120",
-                    "fontColor": "#ffffff",
-                    "fontWeight": false,
-                    "fontItalics": "",
-                    "textUnderline": "",
-                    "left": 30,
-                    "top": 30,
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent16"
-            }, {
-                "id": "TrackEvent33",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 76.80837,
-                    "end": 78.64077,
-                    "target": "video-container",
-                    "text": "Music: \"Harvestfred\" - Primavara - CC-BY",
-                    "position": "center",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "Bangers",
-                    "fontSize": 48,
-                    "fontColor": "#ffffff",
-                    "fontWeight": "",
-                    "fontItalics": "",
-                    "textUnderline": "",
-                    "left": 30,
-                    "top": 30,
-                    "zindex": 1000
-                },
-                "track": "Layer0",
-                "name": "TrackEvent30"
-            }]
-        }, {
-            "name": "Layer1",
-            "id": "1",
-            "trackEvents": [{
-                "id": "TrackEvent25",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 11.14625,
-                    "end": 13.75247,
-                    "target": "video-container",
-                    "text": "Sooke",
-                    "position": "bottom",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "Merriweather",
-                    "fontSize": 48,
-                    "fontColor": "#000",
-                    "fontWeight": "",
-                    "fontItalics": "",
-                    "textUnderline": "",
-                    "left": 30,
-                    "top": 30,
-                    "zindex": 999
-                },
-                "track": "Layer1",
-                "name": "TrackEvent18"
-            }, {
-                "id": "TrackEvent27",
-                "type": "text",
-                "popcornOptions": {
-                    "start": 28.09035,
-                    "end": 30.37808,
-                    "target": "video-container",
-                    "text": "Señor jerkpants",
-                    "position": "center",
-                    "transition": "popcorn-fade",
-                    "fontFamily": "PT Sans",
-                    "fontSize": "42",
-                    "fontColor": "#000",
-                    "fontWeight": "",
-                    "fontItalics": "",
-                    "textUnderline": "",
-                    "left": 30,
-                    "top": 30,
-                    "zindex": 999
-                },
-                "track": "Layer1",
-                "name": "TrackEvent11"
-            }]
-        }]
-    }]
+                "width": 50
+              },
+              "track": "Layer",
+              "name": "TrackEvent17"
+            }
+          ]
+        },
+        {
+          "name": "Layer1",
+          "id": "2",
+          "trackEvents": [
+            {
+              "id": "TrackEvent13",
+              "type": "text",
+              "popcornOptions": {
+                "start": 11.14625,
+                "end": 13.75247,
+                "target": "video-container",
+                "text": "Sooke",
+                "position": "right",
+                "transition": "popcorn-fade",
+                "fontFamily": "Merriweather",
+                "fontSize": "24",
+                "fontColor": "#000",
+                "fontWeight": "",
+                "fontItalics": "",
+                "textUnderline": "",
+                "left": 30,
+                "top": 30,
+                "zindex": 998
+              },
+              "track": "Layer1",
+              "name": "TrackEvent18"
+            },
+            {
+              "id": "TrackEvent14",
+              "type": "text",
+              "popcornOptions": {
+                "start": 28.09035,
+                "end": 30.37808,
+                "target": "video-container",
+                "text": "Señor jerkpants",
+                "position": "center",
+                "transition": "popcorn-fade",
+                "fontFamily": "PT Sans",
+                "fontSize": "14",
+                "fontColor": "#000",
+                "fontWeight": "",
+                "fontItalics": "",
+                "textUnderline": "",
+                "left": 30,
+                "top": 30,
+                "zindex": 998
+              },
+              "track": "Layer1",
+              "name": "TrackEvent11"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
