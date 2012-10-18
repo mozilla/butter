@@ -30,7 +30,7 @@
         text: {
           elem: "textarea",
           label: "Text",
-          "default": "Mozilla Popcorn"
+          "default": "Popcorn Maker"
         },
         linkUrl: {
           elem: "input",
