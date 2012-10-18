@@ -124,7 +124,7 @@ body {
   text-align: center;
   background-color: @red;
   color: #FFF;
-  z-index: 1;
+  z-index: @creditsZindex;
   opacity: 0.5;
   cursor: pointer;
   .transition( all 0.1s ease );
@@ -179,6 +179,7 @@ body {
   border-bottom: 1px solid rgba( 0, 0, 0, 0.2 );
   font-size: 16px;
   .transition( opacity .1s ease );
+  z-index: @creditsZindex;
 }
 // Adjust font size for other sizes
 @media only screen and ( min-width: @medium ) {
@@ -226,6 +227,7 @@ body {
     color: #555;
     max-width: 70%;
     overflow: hidden;
+    z-index: @creditsZindex;
     text-overflow: ellipsis;
   }
 }
