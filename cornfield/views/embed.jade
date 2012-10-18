@@ -22,7 +22,7 @@ html(lang='en')
         #video
     #controls-big-play-button
     #post-roll-container
-      #post-roll.embed-overlay(style='display: none;')
+      #post-roll.embed-overlay
         .post-roll-inner
           a.embed-logo
           .embed-project
@@ -44,7 +44,8 @@ html(lang='en')
               li
                 a#share-post
                   span Share
-      #share.embed-overlay(style='display: none;')
+    #share-container
+      #share.embed-overlay
         .share-inner
           a#share-close X
           a.embed-logo
@@ -84,16 +85,16 @@ html(lang='en')
                     span.icon
                     span.size X-Large
                     span.dimensions 1280x763
-      #attribution-info.attribution-info
-        #attribution-logo.attribution-logo
-          span.attribution-text Credits
-        #attribution-details.attribution-details
-          span.attribution-close
-          div.attribution-mopop Popcorn Maker
-          div.attribution-title #{title}
-          if author
-            div.attribution-author #{author}
-          div.attribution-media
-            span.media-icon
-            a.attribution-media-src(href='#{mediaSrc}', target='_blank') #{mediaSrc}
-      #controls.controls
+    #attribution-info.attribution-info
+      #attribution-logo.attribution-logo
+        span.attribution-text Credits
+      #attribution-details.attribution-details
+        span.attribution-close
+        div.attribution-mopop mozilla Popcorn
+        div.attribution-title #{title}
+        if author
+          div.attribution-author #{author}
+        div.attribution-media
+          span.media-icon
+          a.attribution-media-src(href='#{mediaSrc}', target='_blank') #{mediaSrc}
+    #controls.controls

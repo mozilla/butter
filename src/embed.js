@@ -77,8 +77,8 @@ function init( window, document ) {
 
     addStateClass( "embed-dialog-open" );
     hide( "#controls-big-play-button" );
-    hide( "#post-roll" );
-    show( "#share" );
+    hide( "#post-roll-container" );
+    show( "#share-container" );
   }
 
   function remixClick( popcorn ) {
@@ -151,11 +151,11 @@ function init( window, document ) {
         i, l;
 
     $( "#share-close" ).addEventListener( "click", function() {
-      hide( "#share" );
+      hide( "#share-container" );
 
       // If the video is done, go back to the postroll
       if ( popcorn.ended() ) {
-        show( "#post-roll" );
+        show( "#post-roll-container" );
       }
     }, false );
 
@@ -171,7 +171,7 @@ function init( window, document ) {
     }
 
     popcorn.on( "ended", function() {
-      show( "#post-roll" );
+      show( "#post-roll-container" );
       addStateClass( "embed-dialog-open" );
     });
 
@@ -185,8 +185,8 @@ function init( window, document ) {
     });
 
     popcorn.on( "playing", function() {
-      hide( "#share" );
-      hide( "#post-roll" );
+      hide( "#share-container" );
+      hide( "#post-roll-container" );
       addStateClass( "embed-playing" );
     });
 

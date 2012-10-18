@@ -9,6 +9,7 @@
 
 @creditsLogoSize: 25px;
 @red: #CB3E21;
+@attributionZIndex: 3;
 @postRollZIndex: 2;
 @videoZIndex: 1;
 
@@ -105,6 +106,12 @@ body {
 
 .attribution-info {
   font-family: "Meta", "Open Sans", "Helvetica Neue", sans-serif;
+  z-index: @attributionZIndex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1%;
 }
 
 .attribution-logo {
@@ -304,6 +311,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
+  display: none;
 }
 
 #post-roll,
@@ -430,6 +438,16 @@ body {
 /*********************************************************
 * SHARE
 */
+
+#share-container {
+  z-index: @postRollZIndex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
 
 #share {
 
