@@ -25,10 +25,11 @@
     padding: 0;
     width: 100%;
     list-style: none;
-    .clearfix();
 
-    > li {
+    > .butter-editor-header-li {
       float: left;
+      position: relative;
+      top: 0;
     }
   }
 } // .butter-editor-header
@@ -197,7 +198,7 @@
     background: #F0DDDD;
   }
 
-  // Spacing 
+  // Spacing
  .butter-editor-spacing {
     padding-right: @EDITOR_WIDTH;
   }
@@ -513,17 +514,17 @@
   pointer-events: none; /* csslint-ignore: better for browsers that support it, not critical for those that don't */
   .transition( opacity 0.3s ease 0 );
 
-  &:after, 
+  &:after,
   &:before {
     content: "";
     position: absolute;
     top: -5px;
     left: 50%;
     margin-left: -5px;
-    width: 0; 
-    height: 0; 
+    width: 0;
+    height: 0;
     border-left: 5px solid transparent;
-    border-right: 5px solid transparent;  
+    border-right: 5px solid transparent;
     border-bottom: 5px solid #FFF;
   }
   &:after {
