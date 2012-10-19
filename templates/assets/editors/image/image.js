@@ -4,7 +4,7 @@ EditorHelper.addPlugin( "image", function( trackEvent ) {
 
   var _popcornOptions = trackEvent.popcornTrackEvent,
       _container = _popcornOptions._container,
-      _media = document.getElementById( trackEvent.track._media.target ),
+      _target = _popcornOptions._target,
       _title = document.createElement( "span" );
 
   if ( window.jQuery ) {
@@ -19,10 +19,10 @@ EditorHelper.addPlugin( "image", function( trackEvent ) {
       window.EditorHelper.droppable( trackEvent, _container );
     }
 
-    window.EditorHelper.resizable( trackEvent, _container, _media, {
+    window.EditorHelper.resizable( trackEvent, _container, _target, {
       minWidth: 25,
       minHeight: 25
     });
-    window.EditorHelper.draggable( trackEvent, _container, _media );
+    window.EditorHelper.draggable( trackEvent, _container, _target );
   }
 });

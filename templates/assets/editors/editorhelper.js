@@ -30,9 +30,9 @@
      *                    {Function} start: Function to execute on drag start event
      *                    {Function} end: Fucntion to execute on drag end event
      */
-    global.EditorHelper.draggable = function( trackEvent, dragContainer, mediaContainer, options ) {
-      var iframeVideo = mediaContainer.querySelector( "iframe" ),
-          media;
+    global.EditorHelper.draggable = function( trackEvent, dragContainer, targetContainer, options ) {
+      var target = targetContainer.getBoundingClientRect(),
+          iframeCover = targetContainer.querySelector( ".butter-iframe-fix" );
 
       options = options || {};
 
@@ -53,9 +53,7 @@
         handle: ".ui-draggable-handle",
         containment: "parent",
         start: function() {
-          if ( iframeVideo ) {
-            iframeVideo.style.pointerEvents = "none";
-          }
+          iframeCover.style.display = "block";
 
           if ( options.start ) {
             options.start();
@@ -66,8 +64,8 @@
           var top = ui.position.top,
               left = ui.position.left;
 
-          media = mediaContainer.getBoundingClientRect();
-          
+          target = targetContainer.getBoundingClientRect();
+
           if ( options.end ) {
             options.end();
           }
@@ -80,11 +78,12 @@
             left = 0;
           }
 
+          iframeCover.style.display = "none";
           blurActiveEl();
 
           trackEvent.update({
-            top: ( top / media.height ) * 100,
-            left: ( left / media.width ) * 100
+            top: ( top / target.height ) * 100,
+            left: ( left / target.width ) * 100
           });
         }
       });
@@ -108,17 +107,15 @@
      *                    {Number} minWidth: Minimum width that the resizeContainer should be
      *                    {Number} minHeight: Minimum height that the resizeContainer should be
      */
-    global.EditorHelper.resizable = function( trackEvent, resizeContainer, mediaContainer, options ) {
-      var iframeVideo = mediaContainer.querySelector( "iframe" );
+    global.EditorHelper.resizable = function( trackEvent, resizeContainer, targetContainer, options ) {
+      var iframeCover = targetContainer.querySelector( ".butter-iframe-fix" );
 
       options = options || {};
 
       $( resizeContainer ).resizable({
         handles: options.handlePositions,
         start: function() {
-          if ( iframeVideo ) {
-            iframeVideo.style.pointerEvents = "none";
-          }
+          iframeCover.style.display = "block";
 
           if ( options.start ) {
             options.start();
@@ -126,15 +123,13 @@
         },
         containment: "parent",
         stop: function( event, ui ) {
-          var media = mediaContainer.getBoundingClientRect(),
+          var media = targetContainer.getBoundingClientRect(),
               height = ( ui.size.height + resizeContainer.offsetTop ) <= media.height ? ui.size.height : media.height - resizeContainer.offsetTop,
               width = ( ui.size.width + resizeContainer.offsetLeft ) <= media.width ? ui.size.width : media.width - resizeContainer.offsetLeft,
               top = ( ui.position.top / media.height ) * 100,
               left = ( ui.position.left / media.width ) * 100;
 
-          if ( iframeVideo ) {
-            iframeVideo.style.pointerEvents = "auto";
-          }
+          iframeCover.style.display = "none";
 
           if ( options.end ) {
             options.end();
