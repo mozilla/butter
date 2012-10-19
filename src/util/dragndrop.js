@@ -497,16 +497,23 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         _rememberedDraggables = [];
 
     function onDrop( e ) {
+      var transferData, helper;
       e.stopPropagation();
+      e.preventDefault();
 
       if( _hoverClass ){
         element.classList.remove( _hoverClass );
       }
-      if ( !e.dataTransfer || e.dataTransfer.effectAllowed !== "all" ) {
+      try {
+        // This can throw a "SecurityError: The operation is insecure."
+        // error if dataTransfer.effectAllowed is "uninitialized"
+        // unfortunatly, checking effectAllowed in ie9 throws
+        // a "Unexpected call to method or property access."
+        transferData = e.dataTransfer.getData( "text" );
+      } catch ( err ) {
         return;
       }
-      var transferData = e.dataTransfer.getData( "text" ),
-          helper = __helpers[ transferData ] || __currentDraggingElement;
+      helper = __helpers[ transferData ] || __currentDraggingElement;
       if( helper ){
         _onDrop( helper, [ e.clientX, e.clientY ] );
       }
@@ -519,28 +526,40 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     }
 
     function onDragEnter( e ) {
+      var transferData, helper;
       if( _hoverClass ) {
         element.classList.add( _hoverClass );
       }
-      if ( !e.dataTransfer || e.dataTransfer.effectAllowed !== "all" ) {
+      try {
+        // This can throw a "SecurityError: The operation is insecure."
+        // error if dataTransfer.effectAllowed is "uninitialized"
+        // unfortunatly, checking effectAllowed in ie9 throws
+        // a "Unexpected call to method or property access."
+        transferData = e.dataTransfer.getData( "text" );
+      } catch ( err ) {
         return;
       }
-      var transferData = e.dataTransfer.getData( "text" ),
-          helper = __helpers[ transferData ] || __currentDraggingElement;
+      helper = __helpers[ transferData ] || __currentDraggingElement;
       if( helper ){
         _onOver( helper, [ e.clientX, e.clientY ] );
       }
     }
 
     function onDragLeave( e ) {
+      var transferData, helper;
       if ( _hoverClass ) {
         element.classList.remove( _hoverClass );
       }
-      if ( !e.dataTransfer || e.dataTransfer.effectAllowed !== "all" ) {
+      try {
+        // This can throw a "SecurityError: The operation is insecure."
+        // error if dataTransfer.effectAllowed is "uninitialized"
+        // unfortunatly, checking effectAllowed in ie9 throws
+        // a "Unexpected call to method or property access."
+        transferData = e.dataTransfer.getData( "text" );
+      } catch ( err ) {
         return;
       }
-      var transferData = e.dataTransfer.getData( "text" ),
-          helper = __helpers[ transferData ] || __currentDraggingElement;
+      helper = __helpers[ transferData ] || __currentDraggingElement;
       if( helper ){
         _onOut( helper, [ e.clientX, e.clientY ] );
       }
