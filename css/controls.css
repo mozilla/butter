@@ -204,6 +204,10 @@
   cursor: pointer;
 }
 
+#controls-play:hover {
+  background-color: #60c7a5;
+}
+
 #controls-mute {
   width: 14px;
   height: 14px;
@@ -238,7 +242,7 @@
 }
 
 .controls-right div {
-  background: #cecfcf url( "../resources/controls/controls_icons.png" ) no-repeat;
+  background: #9EAFBA url( "../resources/controls/controls_icons.png" ) no-repeat;
   margin-top: 6px;
   margin-left: 6px;
   width: 28px;
