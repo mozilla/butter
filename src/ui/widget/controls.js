@@ -29,10 +29,10 @@ define( [ "util/lang", "text!layouts/controls.html" ],
         onFullscreenClick = options.onFullscreenClick || nop,
         onLogoClick = options.onLogoClick || nop;
 
+    p.controls( false );
+    _container.appendChild( _controls );
+
     var ready = function() {
-
-      _container.appendChild( _controls );
-
       p.media.removeEventListener( "loadedmetadata", ready, false );
 
       muteButton = document.getElementById( "controls-mute" );
@@ -60,8 +60,6 @@ define( [ "util/lang", "text!layouts/controls.html" ],
       controlsRemix.addEventListener( "click", onRemixClick, false );
       controlsFullscreen.addEventListener( "click", onFullscreenClick, false );
       controlsLogo.addEventListener( "click", onLogoClick, false );
-
-      p.controls( false );
 
       if ( bigPlayButton ) {
 
