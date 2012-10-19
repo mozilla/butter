@@ -204,18 +204,22 @@ body {
 .attribution-author {
   font-style: italic;
 }
-.attribution-media {
+
+
+.attribution-media,
+.attribution-extra {
   margin-top: 0.5em;
   font-size: 0.8em;
-   &:before {
-      display: block;
-      float: left;
-      content: "Media";
-      text-transform: uppercase;
-      font-size: 0.8em;
-      font-weight: 700;
-      margin-right: 2em;
-    }
+  height: 1.4em;
+  &:before {
+    display: block;
+    float: left;
+    content: "Media";
+    text-transform: uppercase;
+    font-size: 0.8em;
+    font-weight: 700;
+    margin-right: 2em;
+  }
   .media-btn {
     float: left;
   }
@@ -229,6 +233,14 @@ body {
     text-overflow: ellipsis;
   }
 }
+.attribution-extra {
+  color: #555;
+  &:before {
+    color: #000;
+    content: "Maps"
+  }
+}
+
 // The x in the top right corner
 .attribution-close {
   position: absolute;
