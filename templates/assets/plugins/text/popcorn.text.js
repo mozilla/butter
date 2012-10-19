@@ -8,7 +8,7 @@
    * @param {Object} options
    *
    * Example:
-  
+
    **/
 
   var DEFAULT_FONT_COLOR = "#000";
@@ -90,8 +90,8 @@
         },
         fontDecorations: {
           elem: "checkbox-group",
-          labels: { bold: "Bold", italics: "Italics", underline: "Underline" },
-          "default": { bold: false, italics: false, underline: false },
+          labels: { bold: "Bold", italics: "Italics", shadow: "Shadow" },
+          "default": { bold: false, italics: false, shadow: false },
           group: "advanced"
         },
         left: {
@@ -164,8 +164,11 @@
       innerContainer.classList.add( "text-inner-div" );
       innerContainer.style.color = options.fontColor;
       innerContainer.style.fontStyle = fontDecorations.italics ? "italic" : "normal";
-      innerContainer.style.textDecoration = fontDecorations.underline ? "underline" : "none";
       innerContainer.style.fontWeight = fontDecorations.bold ? "bold" : "normal";
+
+      if ( fontDecorations.shadow ) {
+        innerContainer.classList.add( "popcorn-text-shadow" );
+      }
 
       fontSheet = document.createElement( "link" );
       fontSheet.rel = "stylesheet";

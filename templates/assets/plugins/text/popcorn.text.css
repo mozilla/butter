@@ -6,6 +6,10 @@
   visibility: hidden;
 }
 
+.popcorn-text-shadow {
+  text-shadow: 0 1px 5px #000, 0 1px 10px #000;
+}
+
 .text-inner-div a {
   text-decoration: none;
 }
@@ -94,54 +98,49 @@
   outline: none;
 }
 
-@media only screen and (min-width : 0px) and (min-height : 0px) {
+@media only screen and (max-width : 640px) and (max-height : 360px) {
   .popcorn-text {
-    font-size: 358px;
+    font-size: 315px;
   }
 }
-
-@media only screen and (min-width : 640px) and (min-height : 360px) {
-  .popcorn-text {
-    font-size: 403px;
-  }
-}
-
-@media only screen and (min-width : 853px) and (min-height : 480px) {
-  .popcorn-text {
-    font-size: 522.8125px;
-  }
-}
-
-@media only screen and (min-width : 1280px) and (min-height : 720px) {
-  .popcorn-text {
-    font-size: 763px;
-  }
-}
-
-/*********************************************************
-* Butter-specific. Ugh....
-*/
-
 @media only screen and (min-width : 0px) and (min-height : 0px) {
   .butter-header-spacing .popcorn-text {
     font-size: 315px;
   }
 }
 
+@media only screen and (min-width : 640px) and (min-height : 360px) {
+  .popcorn-text {
+    font-size: 360px;
+  }
+}
 @media only screen and (min-width : 990px) and (min-height : 660px) {
   .butter-header-spacing .popcorn-text {
-    font-size: 350px;
+    font-size: 360px;
   }
 }
 
+
+@media only screen and (min-width : 853px) and (min-height : 480px) {
+  .popcorn-text {
+    font-size: 480px;
+  }
+}
 @media only screen and (min-width : 1203px) and (min-height : 780px) {
   .butter-header-spacing .popcorn-text {
     font-size: 480px;
   }
 }
 
+@media only screen and (min-width : 1280px) and (min-height : 720px) {
+  .popcorn-text {
+    font-size: 720px;
+  }
+}
 @media only screen and (min-width : 1630px) and (min-height : 1020px) {
   .butter-header-spacing .popcorn-text {
     font-size: 720px;
   }
 }
+
+
