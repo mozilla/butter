@@ -210,6 +210,7 @@ function init( window, document ) {
         toggler = $( ".attribution-logo" ),
         closeBtn = $( ".attribution-close" ),
         container = $( ".attribution-info" ),
+        extraAttribution = $( ".attribution-extra" ),
         classes = {
           html5: "html5-icon",
           youtube: "youtube-icon",
@@ -221,6 +222,8 @@ function init( window, document ) {
         type;
 
     type = popcorn.media._util ? popcorn.media._util.type.toLowerCase() : "html5";
+
+    extraAttribution.innerHTML = Popcorn.manifest.googlemap.about.attribution;
 
     // Youtube currently won't have a popcorn.media._util this is a fallback check for YT
     if ( type === "html5" ) {
