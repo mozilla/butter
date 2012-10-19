@@ -10,13 +10,14 @@ html
     meta(name='og:url', content='#{embedShellSrc}')
     meta(name='og:image', content='#{baseHref}/resources/logo.png')
     meta(name='og:image:type', content='image/png')
-    meta(name='og:image:width', content='33')
-    meta(name='og:image:width', content='50')
+    meta(name='og:image:width', content='216')
+    meta(name='og:image:height', content='62')
     meta(name='og:description', content='This was created with Popcorn Maker - part of the Mozilla Webmaker initiative')
     meta(name='og:site_name', content='https://webmaker.org')
     meta(name='description', content='This was created with Popcorn Maker - part of the Mozilla Webmaker initiative')
     title #{projectName} - Popcorn Maker
     meta(name='viewport', content='width=device-width')
     link(rel='stylesheet', href='#{baseHref}/css/embed-shell.css')
+    link(rel='image_src', href='#{baseHref}/resources/logo.png')
   body
     iframe(src='#{embedSrc}', width='1280', height='745', frameborder='0', mozallowfullscreen='mozallowfullscreen', webkitallowfullscreen='webkitallowfullscreen', allowfullscreen='allowfullscreen')
