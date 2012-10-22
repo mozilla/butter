@@ -245,13 +245,18 @@
         dropContainer.classList.remove( "butter-dragover" );
       }, false );
 
+      dropContainer.addEventListener( "mousedown", function( e ) {
+        // Prevent being able to drag the images inside and re drop them
+        e.preventDefault();
+      }, false );
+
       dropContainer.addEventListener( "drop", function( e ) {
         var file, imgSrc, imgURI, image, div;
 
         e.preventDefault();
         e.stopPropagation();
 
-        dropContainer.classList.add( "butter-dropped" );
+        dropContainer.classList.remove( "butter-dragover" );
 
         if ( !e.dataTransfer || !e.dataTransfer.files || !e.dataTransfer.files[ 0 ] ) {
           butter.dispatch( "droppable-unsupported" );
