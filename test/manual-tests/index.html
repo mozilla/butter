@@ -1,126 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Popcorn Maker Manual Tests</title>
-  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  <style type="text/css">
-    body {
-      margin: 0;
-      padding: 0;
-      border: 0;
-      overflow: hidden;
-      height: 100%;
-      max-height: 100%;
-    }
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    #tests {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      width: 200px; /*Width of frame div*/
-      height: 100%;
-      overflow: hidden; /* hidden | scroll Disable scrollbars. Set to "scroll" to enable*/
-      background: #2c2c2c; /* Old browsers */
-      background: -moz-linear-gradient(top,  #2c2c2c 0pt, #4c4c4c 100%); /* FF3.6+ */
-      background: -webkit-gradient(linear, left top, left bottom, color-stop(0pt,#2c2c2c), color-stop(100%,#4c4c4c)); /* Chrome,Safari4+ */
-      background: -webkit-linear-gradient(top,  #2c2c2c 0pt,#4c4c4c 100%); /* Chrome10+,Safari5.1+ */
-      background: -o-linear-gradient(top,  #2c2c2c 0pt,#4c4c4c 100%); /* Opera 11.10+ */
-      background: -ms-linear-gradient(top,  #2c2c2c 0pt,#4c4c4c 100%); /* IE10+ */
-      background: linear-gradient(top,  #2c2c2c 0pt,#4c4c4c 100%); /* W3C */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c2c2c', endColorstr='#4c4c4c',GradientType=0 ); /* IE6-9 */
-      color: white;
-      font-family: "MetaBold";
-      font-size: 14px;
-      padding: 3px;
-    }
+  <title>Popcorn Maker</title>
 
-    #tests a {
-      padding-top: 3px;
-      color: white;
-      font-size: 12pt;
-    }
+  <meta name="viewport" content="width=device-width">
 
-    #butter-container {
-      position: fixed;
-      top: 0;
-      left: 200px; /*Set left value to WidthOfFrameDiv*/
-      right: 0;
-      bottom: 0;
-      overflow: auto;
-      background: #fff;
-    }
+  <link rel="stylesheet" href="../../templates/basic/style.css">
+  <link rel="stylesheet" href="../../templates/assets/css/jquery-ui/jquery.ui.butter.css">
+  <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+  <script type="text/javascript" src="../qunit/qunit.js"></script>
 
-    #butter {
-      position: absolute;
-      width: 100%;
-      height: 100%
-    }
+  <link rel="stylesheet" href="../../../css/transitions.css">
+  <link rel="stylesheet" href="../../templates/assets/plugins/popup/popcorn.popup.css">
+  <link rel="stylesheet" href="../../templates/assets/plugins/image/popcorn.image.css">
+  <link rel="stylesheet" href="../../templates/assets/plugins/twitter/popcorn.twitter.css">
+  <link rel="stylesheet" href="../../templates/assets/plugins/text/popcorn.text.css">
+  <link rel="stylesheet" href="../../templates/assets/plugins/wikipedia/popcorn.wikipedia.css">
 
-    * html body{ /*IE6 hack*/
-      padding: 0 0 0 200px; /*Set value to (0 0 0 WidthOfFrameDiv)*/
-    }
+  <link href="//www.mozilla.org/tabzilla/media/css/tabzilla.css" rel="stylesheet">
 
-    * html { /*IE6 hack*/
-      height: 100%;
-      width: 100%;
-    }
+  <script src="../../src/butter.js" data-butter-exclude></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.js"></script>
+  <script src="../../templates/assets/editors/editorhelper.js" data-butter-exclude></script>
+  <script src="../../templates/assets/editors/wikipedia.js" data-butter-exclude></script>
+  <script src="../../templates/assets/editors/popup/popup.js" data-butter-exclude></script>
+  <script src="../../templates/assets/editors/image/image.js" data-butter-exclude></script>
+  <script src="../../templates/assets/editors/text/text.js" data-butter-exclude></script>
+  <script src="../../templates/assets/editors/googlemap.js" data-butter-exclude></script>
+  <script src="../../templates/assets/editors/twitter/twitter.js" data-butter-exclude></script>
+  <script src="template.js" data-butter-exclude></script>
 
-    .PASS {
-      color: green !important;
-    }
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35433268-2']);
+    _gaq.push(['_trackPageview']);
 
-    .FAIL {
-      color: red !important;
-    }
-  </style>
-  <script src="tests.js"></script>
-  <script>
-    document.addEventListener( "DOMContentLoaded", function() {
-
-      window.addEventListener( "message", function(e) {
-        var elem = document.getElementById( currentTest );
-        if( elem ){
-          elem.className = e.data;
-        }
-      }, false );
-
-      var test,
-          testList = document.getElementById("test-list"),
-          testListItem,
-          currentTest,
-          iframe = document.getElementById("butter"),
-          i = tests.length;
-
-      while( i-- ){
-        test = tests[ i ];
-        testListItem = document.createElement("li");
-        testListItem.innerHTML = '<a href="#"' +
-                                 '   id="' + test.href + '">' +
-                                 test.name + '</a>';
-        testList.appendChild( testListItem );
-      }
-
-      testList.addEventListener( "click", function( e ){
-        e.preventDefault();
-        var li = e.target;
-        iframe.onload = iframe.contentWindow.focus();
-        iframe.src = li.id;
-        currentTest = li.id;
-      }, false );
-    }, false );
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
   </script>
 </head>
 <body>
-
-  <div id="butter-container">
-    <iframe id="butter" name="butter-frame" frameborder="0" noresize="noresize"></iframe>
+  <div class="body-wrapper">
+    <div id="embed-wrapper" class="wrapper cf">
+      <div id="video-container" class="video-container" data-butter="target">
+        <div id="video" class="video" data-butter="media"></div>
+      </div>
+      <h1 id="qunit-header">Popcorn Maker QA Tests</h1>
+      <ol id="qunit-tests"></ol>
+    </div>
   </div>
-
-  <div id="tests">
-    <h1>Manual Tests</h1>
-    <ol id="test-list"></ol>
-  </div>
-
 </body>
 </html>
