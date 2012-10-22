@@ -61,13 +61,19 @@ define([ 'util/xhr' ], function( XHR ){
       // CSS Loader
       css: function( url, exclude, callback, checkFn, error ){
         var link,
-            interval;
+            interval,
+            img,
+            alreadyFired = false;
 
         checkFn = checkFn || function(){
           return !!link;
         };
 
         function runCheckFn() {
+          if ( alreadyFired ) {
+            return;
+          }
+          alreadyFired = true;
           interval = setInterval( function(){
             if( checkFn() ){
               clearInterval( interval );
@@ -88,6 +94,11 @@ define([ 'util/xhr' ], function( XHR ){
           link.onload = runCheckFn;
           link.href = url;
           document.head.appendChild( link );
+
+          // Crazy image onerror fallback for Safari 5.1.7 on Windows - Bug #2627
+          img = document.createElement( "img" );
+          img.onerror = runCheckFn;
+          img.src = url;
         }
         else if( callback ){
           callback();
