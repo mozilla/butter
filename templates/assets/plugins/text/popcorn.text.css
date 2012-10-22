@@ -43,7 +43,6 @@
 .text-fixed > div > span {
   display: table-cell;
   padding: 20px;
-  font-size: 1em;
   line-height: 1;
 }
 
@@ -84,7 +83,6 @@
 
 .text-custom > div > span {
   display: block;
-  font-size: 1em;
   width: 100%;
   line-height: 1;
 }
@@ -92,50 +90,4 @@
 [contenteditable="true"]:focus {
   outline: none;
 }
-
-@media only screen and (max-width : 640px) and (max-height : 360px) {
-  .popcorn-text {
-    font-size: 315px;
-  }
-}
-@media only screen and (min-width : 0px) and (min-height : 0px) {
-  .butter-header-spacing .popcorn-text {
-    font-size: 315px;
-  }
-}
-
-@media only screen and (min-width : 640px) and (min-height : 360px) {
-  .popcorn-text {
-    font-size: 360px;
-  }
-}
-@media only screen and (min-width : 990px) and (min-height : 660px) {
-  .butter-header-spacing .popcorn-text {
-    font-size: 360px;
-  }
-}
-
-
-@media only screen and (min-width : 853px) and (min-height : 480px) {
-  .popcorn-text {
-    font-size: 480px;
-  }
-}
-@media only screen and (min-width : 1203px) and (min-height : 780px) {
-  .butter-header-spacing .popcorn-text {
-    font-size: 480px;
-  }
-}
-
-@media only screen and (min-width : 1280px) and (min-height : 720px) {
-  .popcorn-text {
-    font-size: 720px;
-  }
-}
-@media only screen and (min-width : 1630px) and (min-height : 1020px) {
-  .butter-header-spacing .popcorn-text {
-    font-size: 720px;
-  }
-}
-
 

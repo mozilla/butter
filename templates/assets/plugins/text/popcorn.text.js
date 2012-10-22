@@ -11,9 +11,10 @@
 
    **/
 
-  var DEFAULT_FONT_COLOR = "#000000",
+  var DEFAULT_FONT_COLOR = "#000",
       DEFAULT_SHADOW_COLOR = "#444444",
       DEFAULT_BACKGROUND_COLOR = "#888888";
+      FONT_FACTOR = 22.5;
 
   function newlineToBreak( string ) {
     // Deal with both \r\n and \n
@@ -232,7 +233,7 @@
 
       fontSheet.onload = function ( e ) {
         innerContainer.style.fontFamily = options.fontFamily;
-        innerContainer.style.fontSize = options.fontSize + "%";
+        innerContainer.style.fontSize = options.fontSize * FONT_FACTOR + "%";
         if ( position === "custom" ) {
           container.classList.add( "text-custom" );
           innerContainer.classList.add( alignment );

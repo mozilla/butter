@@ -349,6 +349,12 @@ function buildCSS(compress) {
   });
 
   lessToCSS({
+    lessFile: "templates/basic/style.less",
+    cssFile: "templates/basic/style.css",
+    compress: compress
+  });
+
+  lessToCSS({
     lessFile: "templates/assets/plugins/wikipedia/popcorn.wikipedia.less",
     cssFile: "templates/assets/plugins/wikipedia/popcorn.wikipedia.css",
     compress: compress
