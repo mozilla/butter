@@ -54,7 +54,7 @@ body.editor-minimized .body-wrapper {
 }
 
 .video > video {
-  background: #000;
+  background: #FFF;
 }
 
 /* Use this class for a full overlay */
@@ -98,7 +98,7 @@ body.editor-minimized .body-wrapper {
 
 /* MEDIA QUERIES
 -------------------------------------------------- */
-/* 
+/*
 Magic numbers:
 350 is the horizontal offset
 300 is the vertical offset (tray + header)
