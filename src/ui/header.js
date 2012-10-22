@@ -36,11 +36,29 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       document.body.classList.toggle( "tabzilla-open" );
     }, false );
 
+    function saveProject( e ) {
+      if ( !butter.cornfield.authenticated() ) {
+        _userData.authenticationRequired();
+      }
+      else if ( butter.project.isSaved ) {
+        return;
+      }
+      else if ( checkProjectName( butter.project.name ) ) {
+        _userData.authenticationRequired( prepare, nameError );
+        return;
+      }
+      else {
+        nameError();
+      }
+    }
+
     function toggleSaveButton( on ) {
       if ( on ) {
         _saveButton.classList.remove( "butter-disabled" );
+        _saveButton.addEventListener( "click", saveProject, false );
       } else {
         _saveButton.classList.add( "butter-disabled" );
+        _saveButton.removeEventListener( "click", saveProject, false );
       }
     }
 
@@ -70,11 +88,14 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         toggleSaveButton( false );
       },
       login: function() {
-        togglePreviewButton( false );
-        toggleSaveButton( false );
+        var isSaved = butter.project.isSaved;
+
         _previewBtn.style.display = "";
         _projectTitle.style.display = "";
         _saveButton.innerHTML = "Save";
+
+        togglePreviewButton( isSaved );
+        toggleSaveButton( !isSaved );
       },
       logout: function() {
         togglePreviewButton( false );
@@ -183,22 +204,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       _projectTitle.replaceChild( _projectName, node );
       _projectTitle.addEventListener( "click", projectNameClick, false );
     }
-
-    _saveButton.addEventListener( "click", function( e ) {
-      if ( !butter.cornfield.authenticated() ) {
-        _userData.authenticationRequired();
-      }
-      else if ( butter.project.isSaved ) {
-        return;
-      }
-      else if ( checkProjectName( butter.project.name ) ) {
-        _userData.authenticationRequired( prepare, nameError );
-        return;
-      }
-      else {
-        nameError();
-      }
-    }, false );
 
     function projectNameClick( e ) {
       var input = document.createElement( "input" );
