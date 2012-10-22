@@ -4,7 +4,7 @@
       MAX_IMAGE_HEIGHT = 740;
 
   var EditorHelper = function() {
-    throw "Do not use EditorHelper in this mannger. Use EditorHelper.init instead.";
+    throw "Do not use EditorHelper in this manner. Use EditorHelper.init instead.";
   };
 
   // This fix is to ensure content-editable still updates correctly, and deals with ie9 not reading document.activeElement properly
@@ -55,6 +55,9 @@
         start: function() {
           iframeCover.style.display = "block";
 
+          // Open the editor
+          butter.editor.editTrackEvent( trackEvent );
+
           if ( options.start ) {
             options.start();
           }
@@ -89,8 +92,6 @@
       });
     };
 
-
-
     /**
      * Member: resizable
      *
@@ -116,6 +117,9 @@
         handles: options.handlePositions,
         start: function() {
           iframeCover.style.display = "block";
+
+          // Open the editor
+          butter.editor.editTrackEvent( trackEvent );
 
           if ( options.start ) {
             options.start();
@@ -203,6 +207,10 @@
       };
       onMouseDown = function( e ) {
         e.stopPropagation();
+
+        // Open the editor
+        butter.editor.editTrackEvent( trackEvent );
+
         $( contentContainer ).draggable( "destroy" );
       };
 
@@ -320,6 +328,9 @@
             }
           };
           image.src = imgSrc;
+
+          // Open the editor
+          butter.editor.editTrackEvent( trackEvent );
 
           // Force image to download, esp. Opera. We can't use
           // "display: none", since that makes it invisible, and
