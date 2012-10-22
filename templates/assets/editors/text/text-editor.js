@@ -11,7 +11,8 @@
 
     var _rootElement = rootElement,
         _trackEvent,
-        _butter;
+        _butter,
+        _popcornOptions;
 
     /**
      * Member: setup
@@ -22,6 +23,7 @@
      */
     function setup( trackEvent ) {
       _trackEvent = trackEvent;
+      _popcornOptions = _trackEvent.popcornOptions;
 
       var basicContainer = _rootElement.querySelector( ".editor-options" ),
           advancedContainer = _rootElement.querySelector( ".advanced-options" ),
@@ -82,6 +84,12 @@
         }
 
         basicContainer.insertBefore( _this.createStartEndInputs( trackEvent, _this.updateTrackEventSafe ), basicContainer.firstChild );
+      }
+
+      // backwards comp
+      if ( "center left right".match( _popcornOptions.position ) ) {
+        _popcornOptions.alignment = _popcornOptions.position;
+        _popcornOptions.position = "middle";
       }
 
       _this.createPropertiesFromManifest({

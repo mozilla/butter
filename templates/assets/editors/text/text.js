@@ -12,7 +12,7 @@ EditorHelper.addPlugin( "text", function( trackEvent ) {
       EditorHelper.draggable( trackEvent, _container, target );
       EditorHelper.resizable( trackEvent, _container, target, {
         minWidth: 10,
-        handlePositions: "e"
+        handlePositions: "e,w"
       });
     }
     EditorHelper.contentEditable( trackEvent, _container.querySelectorAll( "span" ) );
