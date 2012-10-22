@@ -246,13 +246,18 @@
         }
 
         options.toString = function() {
-          if ( options.photosetId ) {
-            return "Photoset Id: " + options.photosetId;
-          } else if ( /^data:/.test( options.src ) ) {
+          if ( /^data:/.test( options.src ) ) {
             // might ba a data URI
             return options.src.substring( 0 , 30 ) + "...";
+          } else if ( options.src ) {
+            return options.src;
+          } else if ( options.tags ) {
+            return options.tags;
+          } else if ( options.photosetId ) {
+            return options.photosetId;
           }
-          return options.src || options.tags || "Image Plugin";
+
+          return "Image Plugin";
         };
       }
     },
