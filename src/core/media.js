@@ -571,11 +571,15 @@
             }
             if( importData.tracks ){
               var importTracks = importData.tracks;
-              for( var i=0, l=importTracks.length; i<l; ++i ){
-                var newTrack = new Track();
-                newTrack.json = importTracks[ i ];
-                _this.addTrack( newTrack );
-                newTrack.updateTrackEvents();
+              if( Array.isArray( importTracks ) ) {
+                for ( var i = 0, l = importTracks.length; i < l; ++i ) {
+                  var newTrack = new Track();
+                  newTrack.json = importTracks[ i ];
+                  _this.addTrack( newTrack );
+                  newTrack.updateTrackEvents();
+                }
+              } else if ( console ) {
+                console.warn( "Ignoring imported track data. Must be in an Array." );
               }
             }
           },

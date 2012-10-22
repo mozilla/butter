@@ -8,10 +8,10 @@ define( [ 'core/eventmanager', 'core/media' ],
   // Local storage provider for backups.  All the browsers we support also
   // support localStorage, but fail in such a way that we don't crash.
   var __butterStorage = "localStorage" in window ?
-        window.localStorage :
-        { getItem: function(){},
-          setItem: function(){},
-          removeItem: function(){} };
+    window.localStorage :
+    { getItem: function(){},
+      setItem: function(){},
+      removeItem: function(){} };
 
   function Project( butter ) {
 
@@ -207,7 +207,7 @@ define( [ 'core/eventmanager', 'core/media' ],
       }
 
       targets = json.targets;
-      if ( targets ) {
+      if ( targets && Array.isArray( targets ) ) {
         for ( i = 0, l = targets.length; i < l; ++i ) {
           targetData = targets[ i ];
           oldTarget = butter.getTargetByType( "elementID", targetData.element );
@@ -219,10 +219,12 @@ define( [ 'core/eventmanager', 'core/media' ],
             oldTarget.json = targetData;
           }
         }
+      } else if ( console ) {
+        console.warn( "Ignored imported target data. Must be in an Array." );
       }
 
       media = json.media;
-      if ( media ) {
+      if ( media && Array.isArray( media ) ) {
         for ( i = 0, l = media.length; i < l; ++i ) {
           mediaData = media[ i ];
           m = butter.getMediaByType( "target", mediaData.target );
@@ -235,6 +237,8 @@ define( [ 'core/eventmanager', 'core/media' ],
             m.json = mediaData;
           }
         }
+      } else if ( console ) {
+        console.warn( "Ignored imported media data. Must be in an Array." );
       }
 
       // If this is a restored backup, restart backups now (vs. on first save)
