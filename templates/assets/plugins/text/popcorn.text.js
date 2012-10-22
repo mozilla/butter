@@ -39,17 +39,19 @@
         },
         position: {
           elem: "select",
-          options: [ "Middle", "Bottom", "Top", "Custom" ],
-          values: [ "middle", "bottom", "top", "custom"  ],
+          options: [ "Custom", "Center", "Bottom", "Top" ],
+          values: [ "custom", "center", "bottom", "top" ],
           label: "Text Position",
           "default": "custom"
         },
         alignment: {
           elem: "select",
-          options: [ "Center", "Left", "Right" ],
-          values: [ "center", "left", "right" ],
+          options: [ "Default", "Center", "Left", "Right" ],
+          values: [ "default", "center", "left", "right" ],
           label: "Text Alignment",
-          "default": "left"
+          // position custom defaults to alignment left,
+          // position fixed defaults to alignment center
+          "default": "Default" 
         },
         start: {
           elem: "input",
@@ -142,7 +144,7 @@
           fontSheet,
           fontDecorations = options.fontDecorations || options._natives.manifest.options.fontDecorations[ "default" ],
           position = options.position || options._natives.manifest.options.position[ "default" ],
-          alignment = options.alignment || options._natives.manifest.options.alignment[ "default" ],
+          alignment = options.alignment,
           transition = options.transition || options._natives.manifest.options.transition[ "default" ],
           link,
           context = this;
@@ -155,9 +157,18 @@
       container.style.position = "absolute";
       container.classList.add( "popcorn-text" );
 
-      // backwards comp
       if ( position === "center" ) {
         position = "middle";
+      }
+
+      // handle conditional defaulting
+      if ( !alignment || alignment === "default" ) {
+        if ( position === "custom" ) {
+          alignment = "left";
+        } else {
+          // backwards comp
+          alignment = "center";
+        }
       }
 
       // innerDiv inside innerSpan is to allow zindex from layers to work properly.
