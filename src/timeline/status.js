@@ -111,6 +111,9 @@ define( [ "util/lang" ], function( util ){
       }
     });
 
+    // Ensure default state is correct
+    _playButton.state = true;
+
     _media.listen( "mediamuted", function( e ){
       _muteButton.state = false;
     });
@@ -132,6 +135,10 @@ define( [ "util/lang" ], function( util ){
     });
 
     _media.listen( "mediapause", function( e ){
+      _playButton.state = true;
+    });
+
+    _media.listen( "mediacontentchanged", function( e ){
       _playButton.state = true;
     });
 
