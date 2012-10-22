@@ -11,8 +11,8 @@
       "id": "Media0",
       "name": "Media0",
       "url": [
-        "https://videos-cdn.mozilla.net.mozilla.org/serv/webmademovies/legorough02.webm",
-        "https://videos-origin.mozilla.org/serv/webmademovies/legorough02.mp4"
+        "https://videos-cdn.mozilla.net/serv/webmademovies/legorough02.webm",
+        "https://videos-cdn.mozilla.net/serv/webmademovies/legorough02.mp4"
       ],
       "target": "video",
       "duration": 78.90799713134766,
