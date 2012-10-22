@@ -39,10 +39,17 @@
         },
         position: {
           elem: "select",
-          options: [ "Center", "Bottom", "Left", "Right", "Top", "Custom" ],
-          values: [ "center", "bottom", "left", "right", "top", "custom"  ],
+          options: [ "Middle", "Bottom", "Top", "Custom" ],
+          values: [ "middle", "bottom", "top", "custom"  ],
           label: "Text Position",
           "default": "custom"
+        },
+        alignment: {
+          elem: "select",
+          options: [ "Center", "Left", "Right" ],
+          values: [ "center", "left", "right" ],
+          label: "Text Alignment",
+          "default": "left"
         },
         start: {
           elem: "input",
@@ -135,6 +142,7 @@
           fontSheet,
           fontDecorations = options.fontDecorations || options._natives.manifest.options.fontDecorations[ "default" ],
           position = options.position || options._natives.manifest.options.position[ "default" ],
+          alignment = options.alignment || options._natives.manifest.options.alignment[ "default" ],
           transition = options.transition || options._natives.manifest.options.transition[ "default" ],
           link,
           context = this;
@@ -146,6 +154,11 @@
       options._target = target;
       container.style.position = "absolute";
       container.classList.add( "popcorn-text" );
+
+      // backwards comp
+      if ( position === "center" ) {
+        position = "middle";
+      }
 
       // innerDiv inside innerSpan is to allow zindex from layers to work properly.
       // if you mess with this code, make sure to check for zindex issues.
@@ -183,6 +196,7 @@
         innerContainer.style.fontSize = options.fontSize + "%";
         if ( position === "custom" ) {
           container.classList.add( "text-custom" );
+          innerContainer.classList.add( alignment );
           container.style.left = options.left + "%";
           container.style.top = options.top + "%";
           if ( options.width ) {
@@ -193,6 +207,7 @@
         else {
           container.classList.add( "text-fixed" );
           innerContainer.classList.add( position );
+          innerContainer.classList.add( alignment );
           innerDiv.style.zIndex = +options.zindex;
         }
 
