@@ -39,19 +39,17 @@
         },
         position: {
           elem: "select",
-          options: [ "Custom", "Center", "Bottom", "Top" ],
-          values: [ "custom", "center", "bottom", "top" ],
+          options: [ "Custom", "Middle", "Bottom", "Top" ],
+          values: [ "custom", "middle", "bottom", "top" ],
           label: "Text Position",
           "default": "custom"
         },
         alignment: {
           elem: "select",
-          options: [ "Default", "Center", "Left", "Right" ],
-          values: [ "default", "center", "left", "right" ],
+          options: [ "Center", "Left", "Right" ],
+          values: [ "center", "left", "right" ],
           label: "Text Alignment",
-          // position custom defaults to alignment left,
-          // position fixed defaults to alignment center
-          "default": "Default" 
+          "default": "left"
         },
         start: {
           elem: "input",
@@ -157,18 +155,16 @@
       container.style.position = "absolute";
       container.classList.add( "popcorn-text" );
 
+      // backwards comp
       if ( position === "center" ) {
         position = "middle";
-      }
-
-      // handle conditional defaulting
-      if ( !alignment || alignment === "default" ) {
-        if ( position === "custom" ) {
-          alignment = "left";
-        } else {
-          // backwards comp
-          alignment = "center";
-        }
+        alignment = "center";
+      } else if ( position === "left" ) {
+        position = "middle";
+        alignment = "left";
+      } else if ( position === "right" ) {
+        position = "middle";
+        alignment = "right";
       }
 
       // innerDiv inside innerSpan is to allow zindex from layers to work properly.

@@ -84,6 +84,18 @@
         basicContainer.insertBefore( _this.createStartEndInputs( trackEvent, _this.updateTrackEventSafe ), basicContainer.firstChild );
       }
 
+      // backwards comp
+      if ( trackEvent.popcornOptions.position === "left" ) {
+        trackEvent.popcornOptions.position = "middle";
+        trackEvent.popcornOptions.alignment = "left";
+      } else if ( trackEvent.popcornOptions.position === "center" ) {
+        trackEvent.popcornOptions.position = "middle";
+        trackEvent.popcornOptions.alignment = "center";
+      } else if ( trackEvent.popcornOptions.position === "right" ) {
+        trackEvent.popcornOptions.position = "middle";
+        trackEvent.popcornOptions.alignment = "right";
+      } 
+
       _this.createPropertiesFromManifest({
         trackEvent: trackEvent,
         callback: callback,
