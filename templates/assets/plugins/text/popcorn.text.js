@@ -42,7 +42,7 @@
           options: [ "Center", "Bottom", "Left", "Right", "Top", "Custom" ],
           values: [ "center", "bottom", "left", "right", "top", "custom"  ],
           label: "Text Position",
-          "default": "center"
+          "default": "custom"
         },
         start: {
           elem: "input",
