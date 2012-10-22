@@ -11,29 +11,27 @@
     <script>
       asyncTest( "update w/ invalid options", 3, function() {
         createButterModule( function( butter ) {
-          butter.currentMedia.onReady( function() {
-            var te = butter.currentMedia.tracks[ 1 ].trackEvents[ 0 ];
+          var te = butter.currentMedia.tracks[ 1 ].trackEvents[ 0 ];
+
+          try {
+            te.update( { start: "m", end: 3 } );
+          } catch( e ) {
+            equal( e.reason, "invalid-start-time", "Correctly caught " + e.reason );
 
             try {
-              te.update( { start: "m", end: 3 } );
-            } catch( e ) {
-              equal( e.reason, "invalid-start-time", "Correctly caught " + e.reason );
+              te.update( { start: 1, end: "m" } );
+            } catch( e2 ) {
+              equal( e2.reason, "invalid-end-time", "Correctly caught " + e2.reason );
 
               try {
-                te.update( { start: 1, end: "m" } );
-              } catch( e2 ) {
-                equal( e2.reason, "invalid-end-time", "Correctly caught " + e2.reason );
+                te.update( { start: 10, end: 8 } );
+              } catch( e3 ) {
+                equal( e3.reason, "start-greater-than-end", "Correctly caught " + e3.reason );
 
-                try {
-                  te.update( { start: 10, end: 8 } );
-                } catch( e3 ) {
-                  equal( e3.reason, "start-greater-than-end", "Correctly caught " + e3.reason );
-
-                  start();
-                }
+                start();
               }
             }
-          });
+          }
         });
       });
     </script>
