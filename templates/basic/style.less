@@ -1,9 +1,36 @@
+@import "../../css/globals.less";
+
 /* ===== Primary Styles ========================================================
    Author: @k88hudson
    ========================================================================== */
 
 .wrapper {
-  width: 560px;
+  @media @small {
+    width: @small-w-px;
+  }
+  @media @medium {
+    width: @medium-w-px;
+  }
+  @media @large {
+    width: @large-w-px;
+  }
+  @media @xlarge {
+    width: @xlarge-w-px;
+  }
+  .butter-header-spacing & {
+    @media @small-in-editor {
+      width: @small-w-px;
+    }
+    @media @medium-in-editor {
+      width: @medium-w-px;
+    }
+    @media @large-in-editor {
+      width: @large-w-px;
+    }
+    @media @xlarge-in-editor {
+      width: @xlarge-w-px;
+    }
+  }
   border: 15px solid #FFF;
   margin: 40px auto;
   box-shadow: 0 0 0 1px #CCC,
@@ -31,8 +58,34 @@ body.editor-minimized .body-wrapper {
 /* VIDEO
 -------------------------------------------------- */
 .video-container {
+  @baseFontSize: 14px;
   position: relative;
-  font-size: 16px;
+  @media @small {
+    font-size: @baseFontSize;
+  }
+  @media @medium {
+    font-size: @baseFontSize * ( @medium-w / @small-w );
+  }
+  @media @large {
+    font-size: @baseFontSize * ( @large-w / @small-w );
+  }
+  @media @xlarge {
+    font-size: @baseFontSize * ( @xlarge-w / @small-w );
+  }
+  .butter-header-spacing & {
+    @media @small-in-editor {
+      font-size: @baseFontSize;
+    }
+    @media @medium-in-editor {
+      font-size: @baseFontSize * ( @medium-w / @small-w );
+    }
+    @media @large-in-editor {
+      font-size: @baseFontSize * ( @large-w / @small-w );
+    }
+    @media @xlarge-in-editor {
+      font-size: @baseFontSize * ( @xlarge-w / @small-w );
+    }
+  }
 }
 
 .video {
@@ -66,53 +119,4 @@ body.editor-minimized .body-wrapper {
   left: 0;
   width: 100%;
   overflow: hidden;
-}
-
-/* Sidebar Layout
--------------------------------------------------- */
-
-.wrapper-sidebar .video-container,
-.wrapper-sidebar .sidebar {
-  float: left;
-}
-.wrapper-sidebar .video-container {
-  width: 75%;
-}
-.wrapper-sidebar .sidebar {
-  display: block;
-  position: relative;
-  width: 25%;
-  padding-bottom: 42.1875%;
-  color: #222;
-  height: 0;
-}
-.wrapper-sidebar .sidebar > .sidebar-inner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #FFF;
-  overflow: scroll;
-}
-
-
-/* MEDIA QUERIES
--------------------------------------------------- */
-/*
-Magic numbers:
-350 is the horizontal offset
-300 is the vertical offset (tray + header)
-*/
-
-@media only screen and (min-width : 990px) and (min-height : 660px) {
-  .wrapper { width: 640px; }
-}
-
-@media only screen and (min-width : 1203px) and (min-height : 780px) {
-  .wrapper { width: 853px; }
-}
-
-@media only screen and (min-width : 1630px) and (min-height : 1020px) {
-  .wrapper { width: 1280px; }
 }
