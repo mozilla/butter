@@ -26,8 +26,14 @@ define( [ "util/lang", "util/keys", "editor/editor", "util/uri", "text!layouts/m
 
     for ( var i = 0, l = urlInputs.length; i < l; i++ ) {
       url = urlInputs[ i ].value;
+      url = url.trim();
+
+      // Deal with https://soundcloud URLs, which should actually be http://soundcloud (#2631)
+      url = url.replace( /^https\:\/\/soundcloud\.com/, "http://soundcloud.com" );
+
+      // Don't bother with empty strings
       if ( url ) {
-        newMediaArr.push( urlInputs[ i ].value );
+        newMediaArr.push( url );
       }
     }
     if ( newMediaArr.length ) {
