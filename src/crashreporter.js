@@ -9,15 +9,41 @@
  */
 define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI ) {
 
+  var STATE_EVENT_QUEUE_LENGTH = 10;
+
+  var __stateEventNames = [
+    "ready",
+    "mediacontentchanged",
+    "mediaready",
+    "trackeventadded",
+    "trackeventremoved",
+    "trackadded",
+    "trackremoved"
+  ];
+
+  var __stateEventQueue = [];
+
   // Only deal with errors we cause (i.e., same origin scripts).
   function shouldHandle( url ) {
     var uriScript = URI.parse( url );
     return uriScript.host === window.location.hostname;
   }
 
+  // Record a handfull of recently-triggered state-changing events.
+  function butterStateChangedOnEvent( e ) {
+    __stateEventQueue.push( e.type );
+    if ( __stateEventQueue.length > STATE_EVENT_QUEUE_LENGTH ) {
+      __stateEventQueue.shift();
+    }
+  }
+
   return {
 
-    init: function( config ) {
+    init: function( butter, config ) {
+
+      __stateEventNames.forEach( function( eventName ) {
+        butter.listen( eventName, butterStateChangedOnEvent );
+      });
 
       // Don't start the crash reporter if told not to. If you want to debug
       // you can do ?crashReporter=0 to disable it in the current page.
@@ -70,6 +96,7 @@ define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI 
               message: message,
               url: url,
               lineno: lineno,
+              stateList: __stateEventQueue,
               userAgent: navigator.userAgent,
               popcornVersion: popcornVersion,
               butterVersion: butterVersion,
