@@ -136,10 +136,48 @@ define( [], function(){
     return isNegative + timeString;
   }
 
+  /**
+   * Member: toPrettyString
+   *
+   * toPrettyString converts a time in ms to something pretty for display.
+   *
+   * Examples:
+   * 12341 -> "less than a minute"
+   * 123411 -> "2 minutes"
+   * 123411234 -> "10 hours"
+   * 1234112341 -> "14 days"
+   *
+   * @param {Number} ms: A number of ms
+   */
+  function toPrettyString( ms ) {
+    var round = Math.round,
+        t, seconds, minutes, hours, days;
+
+    t = ms / 1000;
+    seconds = round( t % 60 );
+    t /= 60;
+    minutes = round( t % 60 );
+    t /= 60;
+    hours = round( t % 24 );
+    t /= 24;
+    days = round( t );
+
+    if( days >= 1 ) {
+      return "" + days + ( days === 1 ? " day" : " days" );
+    } else if( hours >= 1 ) {
+      return "" + hours + ( hours === 1 ? " hour" : " hours" );
+    } else if( minutes >= 1 ) {
+      return "" + minutes + ( minutes === 1 ? " minute" : " minutes" );
+    } else {
+      return "less than a minute";
+    }
+  }
+
   var utils = {
     roundTime: roundTime,
     toSeconds: toSeconds,
-    toTimecode: toTimecode
+    toTimecode: toTimecode,
+    toPrettyString: toPrettyString
   }; //utils
 
   Object.defineProperties( utils, {
