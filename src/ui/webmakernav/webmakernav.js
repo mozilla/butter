@@ -118,7 +118,7 @@ define( [ "util/lang", "text!./webmakernav.html", "text!./webmakernav.css" ],
     this.views.logout();
 
     if ( options.hideLogin ) {
-      loginBtn.parentNode.removeChild( loginBtn );
+      personaBtnGroup.parentNode.removeChild( personaBtnGroup );
     }
 
     if ( options.hideFeedback ) {
