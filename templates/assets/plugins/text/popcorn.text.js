@@ -34,7 +34,7 @@
         },
         linkUrl: {
           elem: "input",
-          type: "url",
+          type: "text",
           label: "Link URL"
         },
         position: {
@@ -145,7 +145,8 @@
           alignment = options.alignment,
           transition = options.transition || options._natives.manifest.options.transition[ "default" ],
           link,
-          context = this;
+          context = this,
+          linkUrl = options.linkUrl;
 
       if ( !target ) {
         target = this.media.parentNode;
@@ -212,9 +213,14 @@
           innerDiv.style.zIndex = +options.zindex;
         }
 
-        if ( options.linkUrl ) {
+        if ( linkUrl ) {
+
+          if ( !linkUrl.match( /^http(|s):\/\// ) ) {
+            linkUrl = "//" + linkUrl;
+          }
+
           link = document.createElement( "a" );
-          link.href = options.linkUrl;
+          link.href = linkUrl;
           link.target = "_blank";
           link.innerHTML = text;
 

@@ -104,7 +104,7 @@
         },
         linkUrl: {
           elem: "input",
-          type: "url",
+          type: "text",
           label: "Link URL"
         },
         type: {
@@ -235,7 +235,8 @@
           TRIANGLE_WIDTH = 40,
           TRIANGLE_HEIGHT = 60,
           text = options.text.replace( /\r?\n/gm, "<br>" ),
-          innerSpan = document.createElement( "span" );
+          innerSpan = document.createElement( "span" ),
+          linkUrl = options.linkUrl;
 
       if ( !target ) {
         target = context.media.parentNode;
@@ -353,9 +354,14 @@
       textContainer.style.fontSize = options.fontSize ? options.fontSize + "px" : "12px";
       textContainer.style.fontWeight = options.fontDecorations.bold ? "bold" : "normal";
 
-      if ( options.linkUrl ) {
+      if ( linkUrl ) {
+
+        if ( !linkUrl.match( /^http(|s):\/\// ) ) {
+          linkUrl = "//" + linkUrl;
+        }
+
         link = document.createElement( "a" );
-        link.href = options.linkUrl;
+        link.href = linkUrl;
         link.target = "_blank";
         link.innerHTML = text;
 
