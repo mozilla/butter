@@ -8,13 +8,15 @@
     <script src="../../butter.inject.js"></script>
     <script src="../../test-utils.js"></script>
     <script>
-      asyncTest( "Create Track object", 1, function(){
+      asyncTest( "Create Track object", 2, function(){
 
         createButterCore( function( butter ){
 
           var m = butter.addMedia();
-          var t1 = m.addTrack( { name: "Track 1" } );
-          ok( t1.name === "Track 1", "Track name is correct" );
+          var t1 = m.addTrack( { target: "test" } );
+          ok( t1.target === "test", "Track Target is correct" );
+          ok( t1.name === "Layer 0", "Track Name is correct" );
+
 
           start();
         });

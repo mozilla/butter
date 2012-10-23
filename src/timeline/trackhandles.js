@@ -51,21 +51,20 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
       for ( var i = 0, l = tracks.length; i < l; i++ ) {
         var track = tracks[ i ],
             element = _tracks[ track.id ].element;
-        element.querySelector( "span.title" ).textContent = track.name + " " + track.order;
+        element.querySelector( "span.title" ).textContent = track.name;
       }
     });
 
     function onTrackAdded( e ) {
       var track = e.data,
           trackId = track.id,
-          trackName = track.name,
           trackDiv = LangUtils.domFragment( TRACK_HANDLE_LAYOUT, ".track-handle" ),
           menuDiv = trackDiv.querySelector( ".menu" ),
           deleteButton = menuDiv.querySelector( ".delete" );
 
       deleteButton.addEventListener( "click", function( e ) {
         var dialog = Dialog.spawn( "delete-track", {
-          data: trackName,
+          data: track.name,
           events: {
             submit: function( e ){
               if( e.data === true ){
@@ -145,7 +144,7 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
       _menus.push( menuDiv );
 
       trackDiv.setAttribute( "data-butter-track-id", trackId );
-      trackDiv.querySelector( "span.title" ).appendChild( document.createTextNode( trackName + " " + track.order ) );
+      trackDiv.querySelector( "span.title" ).appendChild( document.createTextNode( track.name ) );
 
       _sortable.addItem( trackDiv );
 
