@@ -66,6 +66,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         remembers[ i ].start( e );
       }
     }
+
     for( i = remembers.length - 1; i >= 0; --i ){
       remember = remembers[ i ];
       remember.drag( e );
@@ -590,7 +591,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
 
         var overlapDims = [ minR - maxL, minB - maxT ];
 
-        if( overlapDims[ 0 ] * overlapDims[ 1 ] > dragElementRect.width * dragElementRect.height / 4 ){
+        if( overlapDims[ 1 ] / 2 > dragElementRect.height / 4 ){
           return true;
         }
 
@@ -730,6 +731,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     }
 
     element.addEventListener( "mousedown", onMouseDown, false );
+
     _draggable.droppable = null;
 
     _draggable.destroy = function() {
