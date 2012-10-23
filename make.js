@@ -549,7 +549,7 @@ target.deploy = function(){
   stampVersion( rpmVersion, 'dist/butter.spec' );
 
   // Create a tar archive
-  var tarName = 'butter-' + rpmVersion + '.tar';
+  var tarName = 'butter-' + rpmVersion + '.tar.bz2';
   exec( 'tar -cjf "' + tarName + '" dist' );
   mv( tarName, 'dist' );
 
