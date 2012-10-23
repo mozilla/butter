@@ -589,9 +589,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           return false;
         }
 
-        var overlapDims = [ minR - maxL, minB - maxT ];
-
-        if( overlapDims[ 1 ] / 2 > dragElementRect.height / 4 ){
+        if( ( minB - maxT ) / 2 > dragElementRect.height / 4 ){
           return true;
         }
 
