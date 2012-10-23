@@ -589,7 +589,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           return false;
         }
 
-        if( ( minB - maxT ) / 2 > dragElementRect.height / 4 ){
+        if( ( minB - maxT ) > dragElementRect.height / 2 ){
           return true;
         }
 
