@@ -123,7 +123,7 @@
 .popup-inner-div a:after {
   content: "";
   display: inline-block;
-  opacity: 0.2;
+  opacity: 0.6;
   background-position: -336px -96px;
   background-image: url( "../../../../resources/icons/glyphiconshalflings-green.png" );
   width: 14px;
