@@ -9,6 +9,7 @@ define( [ "text!dialog/dialogs/crash.html", "dialog/dialog", "util/lang" ],
       return "<b>Date</b>: " + report.date + "<br>" +
              "<b>URL</b>: " + report.url + ":" + report.lineno + "<br>" +
              "<b>Error</b>: " + LangUtil.escapeHTML( report.message ) + "<br>" +
+             "<b>Butter State</b>: " + report.stateList.slice().reverse().join( ", " ) + "<br>" +
              "<b>Browser</b>: " + report.userAgent + "<br>" +
              "<b>Versions</b>: Popcorn=" + report.popcornVersion + ", Butter=" + report.butterVersion;
     }
