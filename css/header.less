@@ -58,6 +58,7 @@
   padding: 0;
   margin-left: @_logoWidth + 50;
   list-style: none;
+  width: 60%;
   height: @PRIMARYHEADER_SPACING;
   line-height: @PRIMARYHEADER_SPACING;
   > li {
@@ -72,13 +73,45 @@
       border-right: 1px solid @baseLightOutline;
       .triangle( "right", 5px, #FFF, 1px, @baseLightOutline );
     }
-    &.butter-project-title {
-      text-align: center;
-      font-weight: 600;
-      font-size: 16px;
-      color: @green;
-      cursor: pointer;
+  }
+}
+
+.butter-project-title {
+  text-align: left;
+  font-weight: 600;
+  font-size: 16px;
+  color: @green;
+  cursor: pointer;
+  max-width: 55%;
+  min-width: 10%;
+  height: 100%;
+
+  > input {
+    font-size: 14px;
+    border: 1px solid @green;
+    border-radius: 2px;
+    padding: 5px;
+    color: @green;
+    &:focus {
+      outline: none;
     }
+  }
+
+  a.butter-project-name {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .icon {
+    opacity: 0.4;
+    position: absolute;
+    visibility: hidden;
+    right: -5px;
+    top: @PRIMARYHEADER_SPACING / @HEADER_ALIGN_MIDDLE;
+  }
+  &:hover .icon {
+    visibility: visible;
   }
 }
 
@@ -105,42 +138,6 @@
 .butter-header {
   .butter-btn {
     text-shadow: none;
-  }
-}
-
-.butter-project-title > input {
-  font-size: 14px;
-  border: 1px solid @green;
-  border-radius: 2px;
-  padding: 5px;
-  color: @green;
-  &:focus {
-    outline: none;
-  }
-}
-
-.butter-project-title {
-  max-width: 35%;
-  min-width: 8%;
-  height: 100%;
-
-  a {
-    &.butter-project-name {
-      display: block;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-  }
-  .icon {
-    opacity: 0.4;
-    position: absolute;
-    visibility: hidden;
-    right: 0;
-    top: @PRIMARYHEADER_SPACING / @HEADER_ALIGN_MIDDLE;
-  }
-  &:hover .icon {
-    visibility: visible;
   }
 }
 
