@@ -57,28 +57,27 @@
 }
 
 .center > span {
-  vertical-align: middle; 
   text-align: center;
 }
 
+.middle > span {
+  vertical-align: middle; 
+}
+
 .right > span {
-  vertical-align: middle;
   text-align: right;
 }
 
 .left > span {
-  vertical-align: middle;
   text-align: left;
 }
 
 .bottom > span {
   vertical-align: bottom;
-  text-align: center;
 }
 
 .top > span {
   vertical-align: top;
-  text-align: center;
 }
 
 .text-custom {
