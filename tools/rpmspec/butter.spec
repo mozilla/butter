@@ -9,7 +9,7 @@ Summary:	An SDK for authoring Popcorn projects
 Packager:   Mozilla
 License:	MIT
 URL:		https://github.com/mozilla/butter
-Source0:	https://github.com/downloads/mozilla/%{name}/%{name}-%{version}.tar
+Source0:	https://github.com/downloads/mozilla/%{name}/%{name}-%{version}.tar.bz2
 ExclusiveArch:  %{ix86} x86_64
 
 BuildRequires:	nodejs = %{node_version}
