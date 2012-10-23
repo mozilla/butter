@@ -83,21 +83,11 @@
   opacity: 0;
 }
 
-.ui-resizable-resizing {
-  .ui-resizable-handle {
-    opacity: 1;
-  }
-  .ui-draggable-handle {
-    display: none;
-  }
-}
-
+.ui-resizable-resizing,
 .ui-draggable-dragging {
+  .ui-resizable-handle,
   .ui-draggable-handle {
     opacity: 1;
-  }
-  .ui-resizable-handle {
-    display: none;
   }
 }
 
@@ -191,28 +181,32 @@
   top: @offset;
   left: @offset;
   right: @offset;
-  box-shadow: 0 @handleWidth @handleWidth 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0 1px #CCC,
+    0 1px 4px 0 rgba(0, 0, 0, 0.2);
 }
 .ui-draggable-bottom {
   height: @handleWidth;
   bottom: @offset;
   left: @offset;
   right: @offset;
-  box-shadow: 0 -@handleWidth @handleWidth 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0 1px #CCC,
+    0 -1px 4px 0 rgba(0, 0, 0, 0.2);
 }
 .ui-draggable-left {
   width: @handleWidth;
   bottom: @offset;
   top: @offset;
   left: @offset;
-  box-shadow: @handleWidth 0 @handleWidth 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0 1px #CCC,
+    1px 0 4px 0 rgba(0, 0, 0, 0.2);
 }
 .ui-draggable-right {
   width: @handleWidth;
   bottom: @offset;
   top: @offset;
   right: @offset;
-  box-shadow: -@handleWidth 0 @handleWidth rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 0 1px #CCC,
+    -1px 0 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 .ui-draggable-grip {
