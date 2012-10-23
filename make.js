@@ -392,7 +392,7 @@ target.check = function() {
 function stampVersion( version, filename ){
   // Stamp embed.version with supplied version, or git info
   version = version || gitDescribe( "." );
-  sed( '-i', '@VERSION@', version, filename );
+  sed( '-i', /@VERSION@/g, version, filename );
 }
 
 target.css = function() {
@@ -496,7 +496,7 @@ function butteredPopcorn() {
 
   // Write out dist/buttered-popcorn.js
   cat( popcornFiles ).to( BUTTERED_POPCORN );
-  sed('-i', '@VERSION', popcornVersion, BUTTERED_POPCORN);
+  sed('-i', /@VERSION/g, popcornVersion, BUTTERED_POPCORN);
 }
 
 target.deploy = function(){
