@@ -10,6 +10,7 @@ define( [ "text!dialog/dialogs/crash.html", "dialog/dialog", "util/lang" ],
              "<b>App URL</b>: " + window.location.href + "<br>" +
              "<b>Script URL</b>: " + report.url + ":" + report.lineno + "<br>" +
              "<b>Error</b>: " + LangUtil.escapeHTML( report.message ) + "<br>" +
+             "<b>Butter State</b>: " + report.stateList.slice().reverse().join( ", " ) + "<br>" +
              "<b>Browser</b>: " + report.userAgent + "<br>" +
              "<b>Null DOM Nodes</b>: " + report.nullDomNodes + "<br>" +
              "<b>Versions</b>: Popcorn=" + report.popcornVersion + ", Butter=" + report.butterVersion;

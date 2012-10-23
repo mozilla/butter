@@ -115,7 +115,7 @@ define( [ "core/eventmanager", "./toggler",
           _this.loadIcons( _uiConfig.value( "plugin" ).plugins );
 
           // Spin-up the crash reporter
-          CrashReporter.init( _uiConfig );
+          CrashReporter.init( butter, _uiConfig );
 
           butter.listen( "ready", FirstRun.init );
 
