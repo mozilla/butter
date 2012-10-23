@@ -7,9 +7,10 @@
             "core/logger",
             "core/eventmanager",
             "core/track",
-            "core/popcorn-wrapper"
+            "core/popcorn-wrapper",
+            "util/uri"
           ],
-          function( Logger, EventManager, Track, PopcornWrapper ){
+          function( Logger, EventManager, Track, PopcornWrapper, URI ) {
 
     var MEDIA_ELEMENT_SAFETY_POLL_INTERVAL = 500,
         MEDIA_ELEMENT_SAFETY_POLL_ATTEMPTS = 10;
@@ -411,6 +412,27 @@
         }
       };
 
+      // Internally we decorate URLs with a unique butteruid, strip it when exporting
+      function sanitizeUrl() {
+        var sanitized;
+
+        function sanitize( url ) {
+          return URI.stripUnique( url ).toString();
+        }
+
+        // Deal with url being single or array of multiple
+        if ( Array.isArray( _url ) ) {
+          sanitized = [];
+          _url.forEach( function( url ) {
+            sanitized.push( sanitize( url ) );
+          });
+          return sanitized;
+        }
+        else {
+          return sanitize( _url );
+        }
+      }
+
       Object.defineProperties( this, {
         ended: {
           enumerable: true,
@@ -530,7 +552,7 @@
             return {
               id: _id,
               name: _name,
-              url: _url,
+              url: sanitizeUrl(),
               target: _target,
               duration: _duration,
               controls: _popcornWrapper.popcorn ? _popcornWrapper.popcorn.controls() : false,

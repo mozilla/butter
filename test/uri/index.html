@@ -51,6 +51,24 @@
 
         });
 
+        test( "URI.stripUnique", function() {
+          // Set a seed for testing
+          URI.seed = 1;
+
+          var original = "http://videos-cdn.mozilla.net/serv/webmademovies/trailer.mp4",
+              original2 = "http://videos-cdn.mozilla.net/serv/webmademovies/trailer.mp4?butter=great#foo=bar",
+              url = URI.makeUnique( original ),
+              url2 = URI.makeUnique( original2 );
+
+          equal( url.toString(), "http://videos-cdn.mozilla.net/serv/webmademovies/trailer.mp4?butteruid=1", "makeUnique works" );
+          equal( URI.stripUnique( url ).toString(), original, "stripUnique undoes makeUnique additions" );
+
+          equal( url2.toString(), "http://videos-cdn.mozilla.net/serv/webmademovies/trailer.mp4?butter=great&butteruid=2#foo=bar",
+                 "makeUnique works for complex url" );
+          equal( URI.stripUnique( url2 ).toString(), original2, "stripUnique undoes makeUnique additions" );
+
+        });
+
         var testURLs = [
           /* I'm adding // here, where parseUri doesn't: "http://" */
           "http://",

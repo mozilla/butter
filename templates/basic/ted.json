@@ -11,7 +11,7 @@
             "id": "Media0",
             "name": "Media0",
             "url": [
-                "https://www.youtube.com/watch?v=0g2WE1qXiKM&butteruid=1350599002541&butteruid=1350599883758"
+                "https://www.youtube.com/watch?v=0g2WE1qXiKM"
             ],
             "target": "video",
             "duration": 925.2310180664062,
@@ -1251,7 +1251,7 @@
                                 "end": 10.51771,
                                 "target": "video-container",
                                 "text": "Some text will include links \n- for example, this links to the original on TED.com",
-                                "linkUrl": "http://www.youtube.com/watch?v=0g2WE1qXiKM&butteruid=1350582205652",
+                                "linkUrl": "http://www.youtube.com/watch?v=0g2WE1qXiKM",
                                 "type": "popup",
                                 "triangle": "bottom left",
                                 "sound": "",
