@@ -550,7 +550,7 @@ target.deploy = function(){
 
   // Create a tar archive
   var tarName = 'butter-' + rpmVersion + '.tar';
-  exec( 'tar -cyf "' + tarName + '" dist' );
+  exec( 'tar -cjf "' + tarName + '" dist' );
   mv( tarName, 'dist' );
 
   // It's important to use the production config
