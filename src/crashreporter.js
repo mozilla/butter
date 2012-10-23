@@ -15,6 +15,56 @@ define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI 
     return uriScript.host === window.location.hostname;
   }
 
+  // Wrap DOM accessor methods so we can track when nulls are returned.  This helps
+  // when trying to sort out what happened with crashes.
+  function overrideDomMembers( doc, elemProto, nullList ) {
+
+    // Wrap a function that returns a single node
+    function wrappedFnNode( id, fn, obj ) {
+      var elem = fn.call( obj, id );
+      if( !elem ) {
+        nullList.push( id );
+      }
+      return elem;
+    }
+
+    // Wrap a function that returns a node list
+    function wrappedFnNodeList( id, fn, obj ) {
+      var list = fn.call( obj, id );
+      if( !list.length ) {
+        nullList.push( id );
+      }
+      return list;
+    }
+
+    // Wrap Document functions
+    var getElementById$ = doc.getElementById;
+    doc.getElementById = function( id ) {
+      return wrappedFnNode( id, getElementById$, doc );
+    };
+
+    var querySelector$doc = doc.querySelector;
+    doc.querySelector = function( selectors ) {
+      return wrappedFnNode( selectors, querySelector$doc, doc );
+    };
+
+    var querySelectorAll$doc = doc.querySelectorAll;
+    doc.querySelectorAll = function( selectors ) {
+      return wrappedFnNodeList( selectors, querySelectorAll$doc, doc );
+    };
+
+    // Wrap Element prototype functions
+    var querySelector$elem = elemProto.querySelector;
+    elemProto.querySelector = function( selectors ) {
+      return wrappedFnNode( selectors, querySelector$elem, this );
+    };
+
+    var querySelectorAll$elem = elemProto.querySelectorAll;
+    elemProto.querySelectorAll = function( selectors ) {
+      return wrappedFnNodeList( selectors, querySelectorAll$elem, this );
+    };
+  }
+
   return {
 
     init: function( config ) {
@@ -28,7 +78,10 @@ define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI 
 
       // Cache existing window.onerror
       var _onerror = window.onerror ? window.onerror : function(){ return true; },
-          _dialog;
+          _dialog, _nullDomList = [];
+
+      // Keep track of DOM accessors that get back null nodes
+      overrideDomMembers( document, HTMLElement.prototype, _nullDomList );
 
       window.onerror = function( message, url, lineno ) {
         if ( !window.XMLHttpRequest ) {
@@ -73,6 +126,8 @@ define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI 
               userAgent: navigator.userAgent,
               popcornVersion: popcornVersion,
               butterVersion: butterVersion,
+              // Grab the last 5 null dom nodes, if any
+              nullDomNodes: _nullDomList.slice( -5 ).join( ", " ) || "N/A",
               onSendReport: sendErrorReport,
               onNoReport: attemptRecovery
             };
