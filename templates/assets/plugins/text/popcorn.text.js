@@ -156,15 +156,9 @@
       container.classList.add( "popcorn-text" );
 
       // backwards comp
-      if ( position === "center" ) {
+      if ( "center left right".match( position ) ) {
+        alignment = position;
         position = "middle";
-        alignment = "center";
-      } else if ( position === "left" ) {
-        position = "middle";
-        alignment = "left";
-      } else if ( position === "right" ) {
-        position = "middle";
-        alignment = "right";
       }
 
       // innerDiv inside innerSpan is to allow zindex from layers to work properly.

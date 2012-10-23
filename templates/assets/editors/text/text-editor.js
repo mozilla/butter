@@ -11,7 +11,8 @@
 
     var _rootElement = rootElement,
         _trackEvent,
-        _butter;
+        _butter,
+        _popcornOptions;
 
     /**
      * Member: setup
@@ -22,6 +23,7 @@
      */
     function setup( trackEvent ) {
       _trackEvent = trackEvent;
+      _popcornOptions = _trackEvent.popcornOptions;
 
       var basicContainer = _rootElement.querySelector( ".editor-options" ),
           advancedContainer = _rootElement.querySelector( ".advanced-options" ),
@@ -85,16 +87,10 @@
       }
 
       // backwards comp
-      if ( trackEvent.popcornOptions.position === "left" ) {
-        trackEvent.popcornOptions.position = "middle";
-        trackEvent.popcornOptions.alignment = "left";
-      } else if ( trackEvent.popcornOptions.position === "center" ) {
-        trackEvent.popcornOptions.position = "middle";
-        trackEvent.popcornOptions.alignment = "center";
-      } else if ( trackEvent.popcornOptions.position === "right" ) {
-        trackEvent.popcornOptions.position = "middle";
-        trackEvent.popcornOptions.alignment = "right";
-      } 
+      if ( "center left right".match( _popcornOptions.position ) ) {
+        _popcornOptions.alignment = _popcornOptions.position;
+        _popcornOptions.position = "middle";
+      }
 
       _this.createPropertiesFromManifest({
         trackEvent: trackEvent,
