@@ -214,6 +214,13 @@ define( [ "util/lang", "util/keys", "editor/editor", "util/uri", "text!layouts/m
         _media.listen( "mediacontentchanged", onMediaContentChanged );
         _media.listen( "mediafailed", onMediaFailed );
 
+        // Ensure the loading spinner is off when the media is ready. Otherwise, keep it spinning.
+        if ( _media.ready ) {
+          setLoadSpinner( false );
+        } else {
+          setLoadSpinner( true );
+        }
+
         setup();
         document.querySelector( ".butter-editor-header-media" ).classList.add( "butter-active" );
       },
