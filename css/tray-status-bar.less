@@ -3,7 +3,7 @@
 */
 @_butterStatusHeight: 45px;
 @_mediaStatusContainerHeight: @_butterStatusHeight;
-@_playButtonHeight: 26px;
+@_playButtonHeight: 27px;
 @_scrubberBarHeight: 8px;
 @_scrubberHandleHeight: 10px;
 @_traySideWidth: 129px;
@@ -173,9 +173,11 @@
   text-align: center;
   border-radius: 4px;
   background: @green;
+  padding: 0;
+  margin: 0;
   &:active {
     background-color: lighten( @green, 10% );
-  } 
+  }
 }
 
 .play-button-container {
@@ -191,10 +193,6 @@
     top: 50%;
     left: 5px;
     margin-top: -@_playButtonHeight / 2;
-    border-bottom: 1px solid #FFF;
-  }
-  .icon {
-    margin-top: 3px;
   }
   .status-button[data-state="true"] > .icon {
     background-position: -288px -72px;
