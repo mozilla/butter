@@ -169,7 +169,7 @@
                 "left": 30,
                 "top": 30,
                 "zindex": 1000,
-                "linkUrl": "https://popcorn.webmaker.org/templates/basic/?savedDataUrl=/api/remix/59"
+                "linkUrl": "https://popcorn.webmaker.org/templates/basic/?savedDataUrl=tour.json"
               },
               "track": "Layer0",
               "name": "TrackEvent11"
