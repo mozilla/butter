@@ -416,14 +416,39 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
       // ignoreBlur cuts down on unnecessary calls to a track event's update method
       var ignoreBlur,
           tooltipName,
-          tooltip;
+          tooltip,
+          manifestType,
+          isNumber;
+
+      if ( trackEvent.popcornTrackEvent ) {
+        manifestType = trackEvent.popcornTrackEvent._natives.manifest.options[ propertyName ].type;
+      }
+
+      isNumber = manifestType === "number" ? true : false;
+
+      function validateNumber( val ) {
+        var popcornOptions = trackEvent.popcornOptions;
+
+        // Not so pretty looking workaround for Firefox not implementing input type=number
+        if ( isNaN( val ) || val === "" ) {
+          val = popcornOptions[ propertyName ];
+        }
+        return val;
+      }
 
       element.addEventListener( "blur", function( e ) {
+        var val = element.value;
+
         if ( ignoreBlur ) {
           ignoreBlur = false;
         } else {
           var updateOptions = {};
-          updateOptions[ propertyName ] = element.value;
+
+          if ( isNumber ) {
+            val = validateNumber( val );
+          }
+
+          updateOptions[ propertyName ] = val;
           updateTrackEvent( trackEvent, callback, updateOptions );
         }
         if ( tooltip ) {
@@ -432,11 +457,18 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
       }, false );
 
       element.addEventListener( "keypress", function( e ) {
-        var updateOptions = {};
+        var updateOptions = {},
+            val = element.value;
+
         if ( e.keyCode === KeysUtils.ENTER ) {
           if ( !e.shiftKey ) {
             e.preventDefault();
-            updateOptions[ propertyName ] = element.value;
+            
+            if ( isNumber ) {
+              val = validateNumber( val );
+            }
+
+            updateOptions[ propertyName ] = val;
             updateTrackEvent( trackEvent, callback, updateOptions );
             ignoreBlur = true;
             element.blur();
@@ -444,10 +476,14 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
         }
       }, false );
 
-      if ( element.type === "number" ) {
+      if ( element.type === "number" || isNumber ) {
         element.addEventListener( "change", function( e ) {
-          var updateOptions = {};
-          updateOptions[ propertyName ] = element.value;
+          var updateOptions = {},
+              val = element.value;
+
+          val = validateNumber( val );
+
+          updateOptions[ propertyName ] = val;
           updateTrackEvent( trackEvent, callback, updateOptions );
         }, false );
       }
