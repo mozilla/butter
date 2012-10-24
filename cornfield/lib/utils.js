@@ -1,10 +1,19 @@
 'use strict';
 
+var uuid = require( "node-uuid" );
+
 var utils,
     stores,
     CONSTANTS;
 
 utils = {
+  generateDataURIPair: function() {
+    var filename = uuid.v4();
+    return {
+      filename: filename,
+      url: CONSTANTS.EMBED_HOSTNAME + '/' + stores.images.expand( filename )
+    };
+  },
   generatePublishUrl: function( id ) {
     return CONSTANTS.EMBED_HOSTNAME + '/' + stores.publish.expand( utils.generateIdString( id ) );
   },

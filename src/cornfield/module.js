@@ -2,7 +2,13 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define(['util/xhr'], function(XHR) {
+define([ "util/xhr", "jsSHA/sha1" ],
+  function( XHR, SHA1 ) {
+
+  // Shortcut to make lint happy. Constructor is capitalized, and reference is non-global.
+  var JSSHA = window.jsSHA;
+
+  var IMAGE_DATA_URI_PREFIX_REGEX = "data:image/(jpeg|png);base64,";
 
   function hostname() {
     return location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" );
@@ -158,18 +164,48 @@ define(['util/xhr'], function(XHR) {
       });
     };
 
-    this.save = function(id, data, callback) {
+    this.save = function( id, data, callback ) {
       var url = server + "/api/project/";
 
       if ( id ) {
         url += id;
       }
 
+      var hashedTrackEvents = {};
+
+      butter.orderedTrackEvents.forEach( function( trackEvent ) {
+        var hash, regexMatch;
+
+        if ( trackEvent.popcornOptions.src ) {
+          regexMatch = trackEvent.popcornOptions.src.match( IMAGE_DATA_URI_PREFIX_REGEX );
+          if ( regexMatch ) {
+            hash = new JSSHA( trackEvent.popcornOptions.src.substr( regexMatch[ 0 ].length ), "TEXT" ).getHash( "SHA-1", "HEX" );
+            hashedTrackEvents[ hash ] = trackEvent;
+          }
+        }
+      });
+
       sendXHRPost( url, data, function() {
         if (this.readyState === 4) {
           try {
             var response = JSON.parse( this.response || this.responseText );
+
+            if ( Array.isArray( response.imageURLs ) ) {
+              response.imageURLs.forEach( function( image ) {
+                var hashedTrackEvent = hashedTrackEvents[ image.hash ];
+                if ( hashedTrackEvent ) {
+                  hashedTrackEvent.update({
+                    src: image.url
+                  });
+                }
+                else {
+                  console.warn( "Cornfield responded with invalid image hash:", image.hash );
+                }
+              });
+            }
+
             callback(response);
+
           } catch (err) {
             callback({ error: "an unknown error occured" });
           }

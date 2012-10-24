@@ -42,6 +42,14 @@
       "nameSuffix": ".json"
     }
   },
+  "imageStore": {
+    "type": "local",
+    "options": {
+      "root": "./view",
+      "namePrefix": "images",
+      "nameSuffix": ""
+    }
+  },
   "templates": {
     "basic": "{{templateBase}}basic/config.json"
   },

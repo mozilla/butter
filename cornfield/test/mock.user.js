@@ -1,12 +1,15 @@
-function generateMockData(id) {
+function generateMockData(id, mediaData) {
   id = id || parseInt( Math.random()*10000, 10 );
+
+  var projectData = {
+    hello: "world",
+    adventure: "bill & ted's",
+    media: mediaData
+  };
 
   return {
     id: id,
-    data: JSON.stringify({
-      hello: "world",
-      adventure: "bill & ted's"
-    }),
+    data: JSON.stringify( projectData ),
     email: "test@example.org",
     name: "My Mock Project",
     author: "Test User",
@@ -85,6 +88,12 @@ module.exports = function() {
       data.data = JSON.stringify( data.data );
 
       callback(null, data);
+    },
+    linkImageFilesToProject: function( files, projectId, callback ) {
+      callback();
+    },
+    createImageReferencesForProject: function( imageFiles, projectId, callback ) {
+      callback();
     }
   };
 };

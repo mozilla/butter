@@ -10,7 +10,8 @@ define(function( require, exports, module ){
     baseUrl: module.uri.substring(0, module.uri.lastIndexOf('/')),
     // Paths are relative to the baseUrl
     paths: {
-      'text': '../external/require/text'
+      'text': '../external/require/text',
+      'jsSHA': '../external/jsSHA'
     }
   });
 

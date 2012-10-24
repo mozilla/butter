@@ -125,6 +125,8 @@ new file called _hostname_-_environment_.json that overrides the cornfield defau
 
   - `crashStore` a `fileStore` used to publish crash reports from the user as JSON (see `fileStore` below for details)
 
+  - `imageStore` a `fileStore` used to retain converted data-uri images for published projects (see the `ImageStore` section below for details)
+
 The `fileStore` type is used to setup a backend for storing data:
 
    - `type` the type of file store to use.  Possible values include `local` (i.e., local file system) and `s3` (i.e., Amazon S3)
@@ -140,6 +142,10 @@ The `fileStore` type is used to setup a backend for storing data:
        - `namePrefix` <i>[optional]</i> the prefix to add to any key names passed to the s3 file store.  For example, if using "v" all keys will become "v/<key>"
        - `nameSuffix` <i>[optional]</i> the suffix to add to any key names passed to the s3 file store.  For example, if using ".json" all keys will end in ".json"
        - `contentType` <i>[optional]</i> the mime type to use for data written to S3. If none given `text/plain` is used.
+
+#### ImageStore
+
+As part of the configuration, an `imageStore` should be specified to store converted data-uri images for published projects. When a project is saved, the project data is scanned for data-uris which are converted into binary blobs and stored on the server in the `imageStore`. Currently, there are no special checks or functionality for image store content-types. However, the only images which will be converted are jpegs and pngs. Everything else is ignored. See below for an example `imageStore` configuration.
 
 ### Sample production config
 
@@ -170,6 +176,7 @@ This sample config uses a mix of the local file system as well as Amazon S3 for 
     "type": "s3",
     "options": {
       "namePrefix": "v",
+      "bucket": "my-bucket",
       "key": "my-s3-key",
       "secret": "my-s3-secret",
       "contentType": "text/html"
@@ -189,6 +196,14 @@ This sample config uses a mix of the local file system as well as Amazon S3 for 
       "root": "./view",
       "namePrefix": "crash",
       "nameSuffix": ".json"
+    }
+  },
+  "imageStore": {
+    "type": "local",
+    "options": {
+      "root": "./view",
+      "namePrefix": "images",
+      "nameSuffix": ".png",
     }
   }
 }

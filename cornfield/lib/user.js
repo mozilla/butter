@@ -1,5 +1,7 @@
 "use strict";
 
+var datauri = require('./datauri');
+
 function defaultDBReadyFunction( err ) {
   if ( err ) {
     err = Array.isArray( err ) ? err[ 0 ] : err;
@@ -19,6 +21,7 @@ module.exports = function( config, dbReadyFn ) {
       Sequelize = require( "sequelize" ),
       sequelize = new Sequelize( config.database, username, password, config.options ),
       Project = sequelize.import( __dirname + "/models/project" ),
+      ImageReference = sequelize.import( __dirname + "/models/image" ),
       versions;
 
   // travis-ci doesn't create this file when running `npm test` so we need a workaround
@@ -38,6 +41,55 @@ module.exports = function( config, dbReadyFn ) {
   });
 
   return {
+    linkImageFilesToProject: function( files, projectId, callback ) {
+      var finishedItems = 0;
+      var errs = [];
+
+      function itemCallback( err ) {
+        if ( err ) {
+          errs.push( err );
+        }
+
+        if ( ++finishedItems == files.length ) {
+          callback( errs.length > 0 ? errs : null );
+        }
+      }
+
+      Project.find( { where: { id: projectId } } )
+        .success( function( project ) {
+          if ( project ) {
+            files.forEach( function( file ) {
+              file.createDBReference( ImageReference, projectId, itemCallback );
+            });
+          }
+          else {
+            callback( "Project not found" );
+          }
+        })
+        .error( callback );
+    },
+
+    createImageReferencesForProject: function( imageFiles, projectId, callback ) {
+      var savedImages = 0;
+      var errs = [];
+
+      imageFiles.forEach( function( imageFile ) {
+        ImageReference.build({
+          filename: imageFile.filename,
+          url: imageFile.url,
+          project: projectId
+        }).save().complete( function( err, imageResult ) {
+          if ( err ) {
+            errs.push( err );
+          }
+
+          if ( ++savedImages === imageFiles.length ) {
+            callback( errs.length > 0 ? errs : null );
+          }
+        });
+      });
+    },
+
     getSequelizeInstance: function(){
       return sequelize;
     },
@@ -58,10 +110,9 @@ module.exports = function( config, dbReadyFn ) {
         latestButterVersion: versions.butter
       });
 
-      project.save().complete(function( err, result ) {
-        callback( err, result );
-      });
+      project.save().complete( callback );
     },
+
     deleteProject: function( email, pid, callback ) {
       if ( !email || !pid ) {
         callback( "not enough parameters to delete" );
@@ -70,10 +121,20 @@ module.exports = function( config, dbReadyFn ) {
 
       Project.find( { where: { email: email, id: pid } } )
       .success(function( project ) {
+
         if ( project ) {
-          project.destroy().complete( function( err ) {
-            callback( err );
+          ImageReference.findAll( { where: { project: pid } } ).complete( function( err, imageReferences ) {
+
+            imageReferences.forEach( function( imageReference ) {
+              imageReference.destroy();
+            });
+
+            project.destroy().complete( function( err ) {
+              callback( err, imageReferences );
+            });
+
           });
+
         } else {
           callback( "the project has already been deleted" );
         }
@@ -82,6 +143,7 @@ module.exports = function( config, dbReadyFn ) {
         callback( error );
       });
     },
+
     findAllProjects: function findAllProjects( email, callback ) {
       if ( !email ) {
         callback( "not enough parameters to search" );
@@ -92,6 +154,7 @@ module.exports = function( config, dbReadyFn ) {
         callback( err, projects );
       });
     },
+
     findProject: function findProject( email, pid, callback ) {
       if ( !email || !pid ) {
         callback( "not enough parameters to search" );
@@ -116,6 +179,7 @@ module.exports = function( config, dbReadyFn ) {
     isDBOnline: function isDBOnline() {
       return dbOnline;
     },
+
     updateProject: function updateProject( email, pid, data, callback ) {
       if ( !email || !pid || !data ) {
         callback( "not enough parameters to update" );
@@ -129,16 +193,32 @@ module.exports = function( config, dbReadyFn ) {
           return;
         }
 
+        var projectDataJSON = data.data;
+        var projectDataString = JSON.stringify( projectDataJSON );
+
         project.updateAttributes({
-          data: JSON.stringify( data.data ),
+          data: projectDataString,
           email: email,
           name: data.name,
           author: data.author || "",
           template: data.template,
           latestButterVersion: versions.butter
         })
-        .complete( function(err, result) {
-          callback( err, result );
+        .error( function( err ) {
+          callback( err );
+        })
+        .success( function( projectUpdateResult ) {
+
+          ImageReference.findAll( { where: { project: pid } } ).complete( function( imageReferenceErr, imageReferences ) {
+
+            var imagesToDestroy = datauri.compareImageReferencesInProject( imageReferences, projectDataJSON );
+
+            imagesToDestroy.forEach( function( imageReference ) {
+              imageReference.destroy();
+            });
+
+            callback( null, projectUpdateResult, imagesToDestroy );
+          });
         });
       })
       .error(function( error ) {
