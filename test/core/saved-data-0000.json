@@ -10,12 +10,9 @@
     {
       "id": "Media0",
       "name": "Media0",
-      "url": [
-        "../../external/popcorn-js/test/trailer.ogv",
-        "../../external/popcorn-js/test/trailer.mp4"
-      ],
+      "url": "#t=,200",
       "target": "mediaDiv",
-      "duration": 64.54166412353516,
+      "duration": 200,
       "tracks": [
         {
           "name": "Track0",

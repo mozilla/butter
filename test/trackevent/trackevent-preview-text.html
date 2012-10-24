@@ -20,7 +20,8 @@
                 }
               },
               t = butter.currentMedia.tracks[ 0 ],
-              previewStrings = [ "This is a test", defaultEvent.popcornOptions.text ];
+              previewStrings = [ "This is a test", defaultEvent.popcornOptions.text ],
+              te;
 
           butter.listen( "trackeventupdated", function onTrackEventUpdated( e ) {
             var te = e.target;
@@ -36,7 +37,8 @@
               });
             }
           });
-          t.addTrackEvent( defaultEvent );
+          te = t.addTrackEvent( defaultEvent );
+          te.update();
         });
       });
     </script>
