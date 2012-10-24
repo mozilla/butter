@@ -11,9 +11,8 @@
       "id": "Media0",
       "name": "Media0",
       "url": [
-        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.mp4",
-        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.ogv",
-        "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.webm"
+        "http://popcorn.webmadecontent.org/videos/makecorn.mp4",
+        "http://popcorn.webmadecontent.org/videos/makecorn.webm"
       ],
       "target": "video",
       "duration": 64.54166412353516,
