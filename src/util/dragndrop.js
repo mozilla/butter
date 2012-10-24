@@ -497,6 +497,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         _rememberedDraggables = [];
 
     function onDrop( e ) {
+      e.preventDefault();
       e.stopPropagation();
 
       if( _hoverClass ){
@@ -519,6 +520,19 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       if( _hoverClass ) {
         element.classList.add( _hoverClass );
       }
+
+      // Protection against unecessary crash on certain Firefox linux environments and IE9
+      try {
+        if ( e.dataTransfer.effectAllowed === "uninitialized" ) {
+          console.warn( "Drag operation failed. Bad effectAllowed property." );
+          return;
+        }
+      }
+      catch( e ) {
+        console.warn( "Drag operation failed. Bad effectAllowed property." );
+        return;
+      }
+
       var transferData = e.dataTransfer.getData( "text" ),
           helper = __helpers[ transferData ] || __currentDraggingElement;
       if( helper ){
@@ -530,6 +544,19 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       if ( _hoverClass ) {
         element.classList.remove( _hoverClass );
       }
+
+      // Protection against unecessary crash on certain Firefox linux environments and IE9
+      try {
+        if ( e.dataTransfer.effectAllowed === "uninitialized" ) {
+          console.warn( "Drag operation failed. Bad effectAllowed property." );
+          return;
+        }
+      }
+      catch( e ) {
+        console.warn( "Drag operation failed. Bad effectAllowed property." );
+        return;
+      }
+
       var transferData = e.dataTransfer.getData( "text" ),
           helper = __helpers[ transferData ] || __currentDraggingElement;
       if( helper ){
