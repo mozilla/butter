@@ -465,7 +465,6 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     element.addEventListener( "dragstart", function( e ){
       __currentDraggingElement = element;
       e.dataTransfer.effectAllowed = "all";
-      console.log(e.dataTransfer.effectAllowed);
       // coerce to string so IE9 doesn't throw
       e.dataTransfer.setData( "text", _id + "" );
       if( _image ){
@@ -522,7 +521,15 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         element.classList.add( _hoverClass );
       }
 
-      if ( e.dataTransfer.effectAllowed === "uninitialized" ) {
+      // Protection against unecessary crash on certain Firefox linux environments and IE9
+      try {
+        if ( e.dataTransfer.effectAllowed === "uninitialized" ) {
+          console.warn( "Drag operation failed. Bad effectAllowed property." );
+          return;
+        }
+      }
+      catch( e ) {
+        console.warn( "Drag operation failed. Bad effectAllowed property." );
         return;
       }
 
@@ -538,7 +545,15 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         element.classList.remove( _hoverClass );
       }
 
-      if ( e.dataTransfer.effectAllowed === "uninitialized" ) {
+      // Protection against unecessary crash on certain Firefox linux environments and IE9
+      try {
+        if ( e.dataTransfer.effectAllowed === "uninitialized" ) {
+          console.warn( "Drag operation failed. Bad effectAllowed property." );
+          return;
+        }
+      }
+      catch( e ) {
+        console.warn( "Drag operation failed. Bad effectAllowed property." );
         return;
       }
 
