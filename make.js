@@ -509,8 +509,8 @@ target.deploy = function(){
 
   clean();
 
-  buildJS( version, compress );
   buildCSS( compress );
+  buildJS( version, compress );
   butteredPopcorn();
 
   // We'll mirror src/butter.js and src/embed.js to mimic exploded install
