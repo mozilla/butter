@@ -19,7 +19,7 @@
       "controls": false,
       "tracks": [
         {
-          "name": "Layer0",
+          "name": "Layer",
           "id": "0",
           "trackEvents": [
             {
@@ -42,7 +42,7 @@
                 "top": 30,
                 "zindex": 1000
               },
-              "track": "Layer0",
+              "track": "0",
               "name": "TrackEvent3"
             },
             {
@@ -61,7 +61,7 @@
                 "transition": "popcorn-fade",
                 "zindex": 1000
               },
-              "track": "Layer0",
+              "track": "0",
               "name": "TrackEvent5"
             },
             {
@@ -80,7 +80,7 @@
                 "transition": "popcorn-fade",
                 "zindex": 1000
               },
-              "track": "Layer0",
+              "track": "0",
               "name": "TrackEvent6"
             },
             {
@@ -105,7 +105,7 @@
                 "lng": 0,
                 "zindex": 1000
               },
-              "track": "Layer0",
+              "track": "0",
               "name": "TrackEvent8"
             },
             {
@@ -124,7 +124,7 @@
                 "transition": "popcorn-fade",
                 "zindex": 1000
               },
-              "track": "Layer0",
+              "track": "0",
               "name": "TrackEvent9"
             },
             {
@@ -147,7 +147,7 @@
                 "top": 30,
                 "zindex": 1000
               },
-              "track": "Layer0",
+              "track": "0",
               "name": "TrackEvent10"
             },
             {
@@ -171,7 +171,7 @@
                 "zindex": 1000,
                 "linkUrl": "https://popcorn.webmaker.org/templates/basic/?savedDataUrl=tour.json"
               },
-              "track": "Layer0",
+              "track": "0",
               "name": "TrackEvent11"
             },
             {
@@ -201,7 +201,7 @@
                 },
                 "width": 50
               },
-              "track": "Layer0",
+              "track": "0",
               "name": "TrackEvent3"
             }
           ]

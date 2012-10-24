@@ -355,7 +355,7 @@ define( [ "./logger", "./eventmanager", "./observer",
             id: _id,
             type: _type,
             popcornOptions: LangUtil.clone( _popcornOptions ),
-            track: _track ? _track.name : undefined,
+            track: _track ? _track.id : undefined,
             name: _name
           };
         },

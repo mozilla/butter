@@ -18,7 +18,7 @@
       "controls": false,
       "tracks": [
         {
-          "name": "Layer1",
+          "name": "Layer",
           "id": "0",
           "trackEvents": [
             {
@@ -39,7 +39,7 @@
                 "transition": "popcorn-fade",
                 "zindex": 1000
               },
-              "track": "Layer1",
+              "track": "0",
               "name": "TrackEvent2"
             },
             {
@@ -60,7 +60,7 @@
                 "transition": "popcorn-fade",
                 "zindex": 1000
               },
-              "track": "Layer1",
+              "track": "0",
               "name": "TrackEvent5"
             },
             {
@@ -79,7 +79,7 @@
                 "transition": "popcorn-fade",
                 "zindex": 1000
               },
-              "track": "Layer1",
+              "track": "0",
               "name": "TrackEvent8"
             },
             {
@@ -104,13 +104,13 @@
                 "lng": -123.36707999999999,
                 "zindex": 1000
               },
-              "track": "Layer1",
+              "track": "0",
               "name": "TrackEvent22"
             }
           ]
         },
         {
-          "name": "Layer2",
+          "name": "Layer",
           "id": "1",
           "trackEvents": [
             {
@@ -131,7 +131,7 @@
                 "transition": "popcorn-fade",
                 "zindex": 999
               },
-              "track": "Layer2",
+              "track": "1",
               "name": "TrackEvent3"
             },
             {
@@ -152,7 +152,7 @@
                 "transition": "popcorn-fade",
                 "zindex": 999
               },
-              "track": "Layer2",
+              "track": "1",
               "name": "TrackEvent6"
             },
             {
@@ -177,7 +177,7 @@
                 "lng": -123.367909,
                 "zindex": 999
               },
-              "track": "Layer2",
+              "track": "1",
               "name": "TrackEvent10"
             },
             {
@@ -198,7 +198,7 @@
                 "transition": "popcorn-fade",
                 "zindex": 999
               },
-              "track": "Layer2",
+              "track": "1",
               "name": "TrackEvent11"
             },
             {
@@ -219,7 +219,7 @@
                 "transition": "popcorn-fade",
                 "zindex": 999
               },
-              "track": "Layer2",
+              "track": "1",
               "name": "TrackEvent18"
             },
             {
@@ -240,7 +240,7 @@
                 "transition": "popcorn-fade",
                 "zindex": 999
               },
-              "track": "Layer2",
+              "track": "1",
               "name": "TrackEvent19"
             },
             {
@@ -259,13 +259,13 @@
                 "transition": "popcorn-fade",
                 "zindex": 999
               },
-              "track": "Layer2",
+              "track": "1",
               "name": "TrackEvent21"
             }
           ]
         },
         {
-          "name": "Layer2",
+          "name": "Layer",
           "id": "2",
           "trackEvents": [
             {
@@ -290,7 +290,7 @@
                 "lng": -123.36792541534425,
                 "zindex": 998
               },
-              "track": "Layer2",
+              "track": "2",
               "name": "TrackEvent16"
             }
           ]
