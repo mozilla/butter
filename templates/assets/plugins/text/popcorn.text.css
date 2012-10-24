@@ -6,10 +6,6 @@
   visibility: hidden;
 }
 
-.popcorn-text-shadow {
-  text-shadow: 0 1px 5px #000, 0 1px 10px #000;
-}
-
 .text-inner-div a {
   text-decoration: none;
 }

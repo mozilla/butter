@@ -314,7 +314,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
 
         updateOptions[ propertyName ] = value;
         if ( callback ) {
-          callback( trackEvent, updateOptions, message );
+          callback( trackEvent, updateOptions, message, propertyName );
         } else {
           trackEvent.update( updateOptions );
         }
@@ -355,11 +355,14 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
      * @param {TrackEvent} trackEvent: TrackEvent to update
      * @param {String} propertyName: Name of property to update when change is detected
      */
-    extendObject.attachCheckboxChangeHandler = function( element, trackEvent, propertyName ) {
+    extendObject.attachCheckboxChangeHandler = function( element, trackEvent, propertyName, callBack ) {
+      callBack = callBack || function( trackEvent, prop, updateOptions ) {
+        trackEvent.update( updateOptions );
+      };
       element.addEventListener( "click", function( e ) {
         var updateOptions = {};
         updateOptions[ propertyName ] = element.checked;
-        trackEvent.update( updateOptions );
+        callBack( trackEvent, propertyName, updateOptions );
       }, false );
     };
 

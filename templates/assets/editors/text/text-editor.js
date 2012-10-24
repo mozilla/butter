@@ -27,7 +27,8 @@
 
       var basicContainer = _rootElement.querySelector( ".editor-options" ),
           advancedContainer = _rootElement.querySelector( ".advanced-options" ),
-          pluginOptions = {};
+          pluginOptions = {},
+          pickers = {};
 
       function callback( elementType, element, trackEvent, name ) {
         pluginOptions[ name ] = { element: element, trackEvent: trackEvent, elementType: elementType };
@@ -37,15 +38,31 @@
         var key,
             option;
 
-        function colorCallback( te, prop, message ) {
+        function colorCallback( te, options, message, prop ) {
+          var newOpts = {};
           if ( message ) {
             _this.setErrorState( message );
             return;
           } else {
-            te.update({
-              fontColor: prop.fontColor
-            });
+            newOpts[ prop ] = options[ prop ];
+            te.update( newOpts );
           }
+        }
+        function checkboxCallback( trackEvent, prop, updateOptions ) {
+          if ( "background shadow".match( prop ) ) {
+            if ( updateOptions[ prop ] ) {
+              pickers[ prop ].classList.remove( "butter-editor-disabled" );
+              pickers[ prop ].onclick = function() {
+                return true;
+              };
+            } else {
+              pickers[ prop ].classList.add( "butter-editor-disabled" );
+              pickers[ prop ].onclick = function() {
+                return false;
+              };
+            }
+          }
+          trackEvent.update( updateOptions );
         }
 
         for ( key in pluginOptions ) {
@@ -69,8 +86,28 @@
               }
 
               if ( option.element.type === "checkbox" ) {
-                _this.attachCheckboxChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
+                _this.attachCheckboxChangeHandler( option.element, option.trackEvent, key, checkboxCallback );
               } else if ( key === "fontColor" ) {
+                _this.attachColorChangeHandler( option.element, option.trackEvent, key, colorCallback );
+              } else if ( key === "backgroundColor" ) {
+                pickers[ "background" ] = option.element;
+                // set initial state
+                if ( !_popcornOptions.background ) {
+                  option.element.classList.add( "butter-editor-disabled" );
+                  option.element.onclick = function() {
+                    return false;
+                  };
+                }
+                _this.attachColorChangeHandler( option.element, option.trackEvent, key, colorCallback );
+              } else if ( key === "shadowColor" ) {
+                pickers[ "shadow" ] = option.element;
+                // set initial state
+                if ( !_popcornOptions.shadow ) {
+                  option.element.classList.add( "butter-editor-disabled" );
+                  option.element.onclick = function() {
+                    return false;
+                  };
+                }
                 _this.attachColorChangeHandler( option.element, option.trackEvent, key, colorCallback );
               }
               else {
