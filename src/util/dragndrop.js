@@ -11,7 +11,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       MIN_WIDTH = 15,
       RESIZABLE_CLASS = "butter-resizable";
 
-  var NULL_FUNCTION = function(){};
+  var NULL_FUNCTION = function() {};
 
   var __droppables = [],
       __mouseDown = false,
@@ -35,10 +35,10 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
 
   var DragNDrop = {};
 
-  function updateTimeout(){
+  function updateTimeout() {
     __scroll = false;
-    if( __mouseDown ){
-      for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
+    if ( __mouseDown ) {
+      for ( var i = __selectedDraggables.length - 1; i >= 0; --i ) {
         __selectedDraggables[ i ].update();
       }
       window.setTimeout( updateTimeout, SCROLL_INTERVAL );
@@ -59,21 +59,21 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
 
     remembers = __selectedDraggables.slice();
 
-    if( !__mouseDown ){
+    if ( !__mouseDown ) {
       __mouseDown = true;
       window.setTimeout( updateTimeout, SCROLL_INTERVAL );
-      for( i = remembers.length - 1; i >= 0; --i ){
+      for ( i = remembers.length - 1; i >= 0; --i ) {
         remembers[ i ].start( e );
       }
     }
 
-    for( i = remembers.length - 1; i >= 0; --i ){
+    for ( i = remembers.length - 1; i >= 0; --i ) {
       remember = remembers[ i ];
       remember.drag( e );
-      for( j = __droppables.length - 1; j >= 0; --j ){
+      for ( j = __droppables.length - 1; j >= 0; --j ) {
         droppable = __droppables[ j ];
-        if( remember.element === droppable.element ||
-            !droppable.drag( remember.element.getBoundingClientRect() ) ){
+        if ( remember.element === droppable.element ||
+            !droppable.drag( remember.element.getBoundingClientRect() ) ) {
           droppable.forget( remember );
         }
         else {
@@ -156,7 +156,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     window.addEventListener( "mouseup", onMouseUp, false );
   }
 
-  function getPaddingRect( element ){
+  function getPaddingRect( element ) {
     var style = getComputedStyle( element ),
           top = style.getPropertyValue( "padding-top" ),
           left = style.getPropertyValue( "padding-left" ),
@@ -171,7 +171,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       };
   }
 
-  function __getWindowRect(){
+  function __getWindowRect() {
     return {
       top: 0,
       left: 0,
@@ -182,7 +182,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
 
   function checkParent ( parent, child ) {
     var parentNode = child.parentNode;
-    while( parentNode ) {
+    while ( parentNode ) {
       if ( parentNode === parent ) {
         return true;
       }
@@ -210,7 +210,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
 
   }
 
-  function __sortDroppables(){
+  function __sortDroppables() {
     __droppables = __droppables.sort( function ( a, b ) {
 
       var elementA = a.element,
@@ -229,7 +229,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     });
   }
 
-  function Resizable( element, options ){
+  function Resizable( element, options ) {
     var _leftHandle = element.querySelector( ".handle.left-handle" ),
         _rightHandle = element.querySelector( ".handle.right-handle" ),
         _onStart = options.start || NULL_FUNCTION,
@@ -259,7 +259,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           direction: null
         };
 
-    function onLeftMouseDown( e ){
+    function onLeftMouseDown( e ) {
       e.stopPropagation();
 
       var originalRect = element.getBoundingClientRect(),
@@ -269,7 +269,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           mousePosition,
           mouseOffset;
 
-      function update(){
+      function update() {
         var diff = mousePosition - mouseDownPosition,
             newX = originalPosition + diff,
             newW = originalWidth - diff;
@@ -277,12 +277,12 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         // At the beginning of this iteration, _iterationBlockX should be null, assuming no block occured.
         _iterationBlockX = null;
 
-        if( newW < MIN_WIDTH ){
+        if ( newW < MIN_WIDTH ) {
           return;
         }
 
-        if( _scroll && _scroll.scrollLeft > 0 ){
-          if( originalRect.left + diff < _scrollRect.left - SCROLL_WINDOW ){
+        if ( _scroll && _scroll.scrollLeft > 0 ) {
+          if ( originalRect.left + diff < _scrollRect.left - SCROLL_WINDOW ) {
             _scroll.scrollLeft -= DEFAULT_SCROLL_AMOUNT;
             newX -= DEFAULT_SCROLL_AMOUNT;
             newW += DEFAULT_SCROLL_AMOUNT;
@@ -290,7 +290,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           }
         }
 
-        if( newX < 0 ){
+        if ( newX < 0 ) {
           newW += newX;
           newX = 0;
         }
@@ -326,7 +326,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
 
       }
 
-      function onMouseUp( e ){
+      function onMouseUp( e ) {
         window.removeEventListener( "mousemove", onMouseMove, false );
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
@@ -335,10 +335,10 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         element.classList.remove( RESIZABLE_CLASS );
       }
 
-      function onMouseMove( e ){
+      function onMouseMove( e ) {
         e.preventDefault();
         mousePosition = e.clientX;
-        if( _updateInterval === -1 ){
+        if ( _updateInterval === -1 ) {
           _lastDims = [];
           _resizeEvent.direction = 'left';
           _updateInterval = setInterval( update, SCROLL_INTERVAL );
@@ -356,7 +356,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       window.addEventListener( "mouseup", onMouseUp, false );
     }
 
-    function onRightMouseDown( e ){
+    function onRightMouseDown( e ) {
       e.stopPropagation();
 
       var originalPosition = element.offsetLeft,
@@ -365,25 +365,25 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           mousePosition,
           mouseOffset;
 
-      function update(){
+      function update() {
         var diff = mousePosition - mouseDownPosition,
             newW = originalWidth + diff;
 
         // At the beginning of this iteration, _iterationBlockX should be null, assuming no block occured.
         _iterationBlockX = null;
 
-        if( newW < MIN_WIDTH ){
+        if ( newW < MIN_WIDTH ) {
           return;
         }
 
-        if( _scroll && _scroll.scrollLeft < _scroll.scrollWidth - _scrollRect.width ){
-          if( mousePosition > _scrollRect.right + SCROLL_WINDOW ){
+        if ( _scroll && _scroll.scrollLeft < _scroll.scrollWidth - _scrollRect.width ) {
+          if ( mousePosition > _scrollRect.right + SCROLL_WINDOW ) {
             _scroll.scrollLeft += DEFAULT_SCROLL_AMOUNT;
             mouseDownPosition -= DEFAULT_SCROLL_AMOUNT;
           }
         }
 
-        if( newW + originalPosition > element.offsetParent.offsetWidth ){
+        if ( newW + originalPosition > element.offsetParent.offsetWidth ) {
           newW = element.offsetParent.offsetWidth - originalPosition;
         }
 
@@ -409,7 +409,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         }
       }
 
-      function onMouseUp( e ){
+      function onMouseUp( e ) {
         window.removeEventListener( "mousemove", onMouseMove, false );
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
@@ -418,9 +418,9 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         element.classList.remove( RESIZABLE_CLASS );
       }
 
-      function onMouseMove( e ){
+      function onMouseMove( e ) {
         mousePosition = e.clientX;
-        if( _updateInterval === -1 ){
+        if ( _updateInterval === -1 ) {
           _lastDims = [];
           _resizeEvent.direction = 'right';
           _updateInterval = setInterval( update, SCROLL_INTERVAL );
@@ -429,7 +429,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       }
 
       _elementRect = element.getBoundingClientRect();
-      if( _scroll ){
+      if ( _scroll ) {
         _scrollRect = _scroll.getBoundingClientRect();
       }
       mouseOffset = e.clientX - _elementRect.left;
@@ -445,14 +445,14 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     _rightHandle.addEventListener( "mousedown", onRightMouseDown, false );
 
     return {
-      destroy: function(){
+      destroy: function() {
         _leftHandle.removeEventListener( "mousedown", onLeftMouseDown, false );
         _rightHandle.removeEventListener( "mousedown", onRightMouseDown, false );
       }
     };
   }
 
-  function Helper( element, options ){
+  function Helper( element, options ) {
     var _image = options.image,
         _onStart = options.start || NULL_FUNCTION,
         _onStop = options.stop || NULL_FUNCTION,
@@ -462,12 +462,12 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
 
     element.setAttribute( "draggable", true );
 
-    element.addEventListener( "dragstart", function( e ){
+    element.addEventListener( "dragstart", function( e ) {
       __currentDraggingElement = element;
       e.dataTransfer.effectAllowed = "all";
       // coerce to string so IE9 doesn't throw
       e.dataTransfer.setData( "text", _id + "" );
-      if( _image ){
+      if ( _image ) {
         var img = document.createElement( "img" );
         img.src = _image.src;
         e.dataTransfer.setDragImage( img, img.width / 2, img.height / 2 );
@@ -475,16 +475,16 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       _onStart();
     });
 
-    element.addEventListener( "dragend", function( e ){
+    element.addEventListener( "dragend", function( e ) {
       __currentDraggingElement = null;
       _onStop();
     });
 
-    element.addEventListener( "drop", function( e ){
+    element.addEventListener( "drop", function( e ) {
     });
   }
 
-  function Droppable( element, options ){
+  function Droppable( element, options ) {
     options = options || {};
     var _hoverClass = options.hoverClass,
         _onDrop = options.drop || NULL_FUNCTION,
@@ -499,12 +499,12 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     function onDrop( e ) {
       e.stopPropagation();
 
-      if( _hoverClass ){
+      if ( _hoverClass ) {
         element.classList.remove( _hoverClass );
       }
       var transferData = e.dataTransfer.getData( "text" ),
           helper = __helpers[ transferData ] || __currentDraggingElement;
-      if( helper ){
+      if ( helper ) {
         _onDrop( helper, [ e.clientX, e.clientY ] );
       }
     }
@@ -516,12 +516,12 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     }
 
     function onDragEnter( e ) {
-      if( _hoverClass ) {
+      if ( _hoverClass ) {
         element.classList.add( _hoverClass );
       }
       var transferData = e.dataTransfer.getData( "text" ),
           helper = __helpers[ transferData ] || __currentDraggingElement;
-      if( helper ){
+      if ( helper ) {
         _onOver( helper, [ e.clientX, e.clientY ] );
       }
     }
@@ -532,7 +532,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       }
       var transferData = e.dataTransfer.getData( "text" ),
           helper = __helpers[ transferData ] || __currentDraggingElement;
-      if( helper ){
+      if ( helper ) {
         _onOut( helper, [ e.clientX, e.clientY ] );
       }
     }
@@ -544,9 +544,9 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
 
     function removeDraggable( draggable ) {
       var idx = _rememberedDraggables.indexOf( draggable );
-      if( idx > -1 ){
+      if ( idx > -1 ) {
         _rememberedDraggables.splice( idx, 1 );
-        if( _rememberedDraggables.length === 0 ){
+        if ( _rememberedDraggables.length === 0 ) {
           element.classList.remove( _hoverClass );
         }
       }
@@ -557,27 +557,27 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       element: element,
       startDrop: _onStartDrop,
       stopDrop: _onStopDrop,
-      remember: function( draggable ){
+      remember: function( draggable ) {
         var idx = _rememberedDraggables.indexOf( draggable );
-        if( idx === -1 ){
+        if ( idx === -1 ) {
           _rememberedDraggables.push( draggable );
           element.classList.add( _hoverClass );
           draggable.droppable = _droppable;
           _onOver( draggable.element );
         }
       },
-      forget: function( draggable ){
+      forget: function( draggable ) {
         if ( removeDraggable( draggable ) ) {
           draggable.droppable = null;
           _onOut( draggable.element );
         }
       },
-      drop: function( draggable ){
+      drop: function( draggable ) {
         if ( removeDraggable( draggable ) ) {
           _onDrop( draggable, __mousePos );
         }
       },
-      drag: function( dragElementRect ){
+      drag: function( dragElementRect ) {
         var rect = element.getBoundingClientRect();
 
         var maxL = Math.max( dragElementRect.left, rect.left ),
@@ -585,19 +585,20 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
             minR = Math.min( dragElementRect.right, rect.right ),
             minB = Math.min( dragElementRect.bottom, rect.bottom );
 
-        if( minR < maxL || minB < maxT ){
+        if ( minR < maxL || minB < maxT ) {
           return false;
         }
 
-        var overlapDims = [ minR - maxL, minB - maxT ];
-
-        if( overlapDims[ 0 ] * overlapDims[ 1 ] / 2 > dragElementRect.width * dragElementRect.height / 4 ){
+        // TODO: to check for half x-axis overlap
+        // use ( minR - maxL ) > dragElementRect.width / 2
+        // or height * width / 2 for area check.
+        if ( ( minB - maxT ) > dragElementRect.height / 2 ) {
           return true;
         }
 
         return false;
       },
-      destroy: function(){
+      destroy: function() {
         var idx = __droppables.indexOf( _droppable );
         if ( idx > -1 ) {
           __droppables.splice( idx, 1 );
@@ -624,7 +625,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     return _droppable;
   }
 
-  function Draggable( element, options ){
+  function Draggable( element, options ) {
     options = options || {};
 
     var _containment = options.containment,
@@ -640,46 +641,46 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         _scrollAmount = options.scrollAmount || DEFAULT_SCROLL_AMOUNT,
         _oldZIndex,
         _onStart = options.start || NULL_FUNCTION,
-        _onStop = options.stop || function(){ return false; },
+        _onStop = options.stop || function() { return false; },
         _onDrag = options.drag || NULL_FUNCTION,
         _originalPosition,
         _draggable = {},
         _data = options.data,
         _containmentPadding = __nullRect;
 
-    if( _containment ){
+    if ( _containment ) {
       _containmentPadding = getPaddingRect( _containment );
     }
 
-    _draggable.updateRects = function(){
+    _draggable.updateRects = function() {
       _containmentRect = _containment ? _containment.getBoundingClientRect() : __getWindowRect();
       _offsetParentRect = element.offsetParent ? element.offsetParent.getBoundingClientRect() : _containmentRect;
       _scrollRect = _scroll ? _scroll.getBoundingClientRect() : _containmentRect;
       _elementRect = element.getBoundingClientRect();
     };
 
-    function updatePosition(){
+    function updatePosition() {
       var x = __mousePos[ 0 ] - _mouseOffset[ 0 ],
           y = __mousePos[ 1 ] - _mouseOffset[ 1 ];
 
-      if( !_axis || _axis.indexOf( "x" ) > -1 ){
+      if ( !_axis || _axis.indexOf( "x" ) > -1 ) {
         element.style.left = ( x - _offsetParentRect.left ) + "px";
       }
 
-      if( !_axis || _axis.indexOf( "y" ) > -1 ){
+      if ( !_axis || _axis.indexOf( "y" ) > -1 ) {
         element.style.top = ( y - _offsetParentRect.top ) + "px";
       }
 
       _elementRect = element.getBoundingClientRect();
     }
 
-    function checkScroll(){
-      if( !__scroll ){
-        if( __mousePos[ 0 ] > _scrollRect.right + SCROLL_WINDOW ){
+    function checkScroll() {
+      if ( !__scroll ) {
+        if ( __mousePos[ 0 ] > _scrollRect.right + SCROLL_WINDOW ) {
           __scroll = true;
           _scroll.scrollLeft += _scrollAmount;
         }
-        else if( __mousePos[ 0 ] < _scrollRect.left - SCROLL_WINDOW ){
+        else if ( __mousePos[ 0 ] < _scrollRect.left - SCROLL_WINDOW ) {
           __scroll = true;
           _scroll.scrollLeft -= _scrollAmount;
         }
@@ -687,41 +688,41 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       _draggable.updateRects();
     }
 
-    function checkContainment(){
+    function checkContainment() {
       var x = _elementRect.left,
           y = _elementRect.top,
           r = x + _elementRect.width,
           b = y + _elementRect.height;
 
-      if( !_axis || _axis.indexOf( "y" ) > -1 ){
+      if ( !_axis || _axis.indexOf( "y" ) > -1 ) {
 
-        if( y < _containmentRect.top ){
+        if ( y < _containmentRect.top ) {
           y = _containmentRect.top;
         }
-        else if( b > _containmentRect.bottom ){
+        else if ( b > _containmentRect.bottom ) {
           y = _containmentRect.bottom - _elementRect.height;
         }
         //TODO: Scrolling for Y
         element.style.top = ( y - _offsetParentRect.top - _containmentPadding.top ) + "px";
       }
 
-      if( !_axis || _axis.indexOf( "x" ) > -1 ){
-        if( r > _scrollRect.right + SCROLL_WINDOW ){
-          if( x > _scrollRect.right - SCROLL_WINDOW ){
+      if ( !_axis || _axis.indexOf( "x" ) > -1 ) {
+        if ( r > _scrollRect.right + SCROLL_WINDOW ) {
+          if ( x > _scrollRect.right - SCROLL_WINDOW ) {
             x = _scrollRect.right - SCROLL_WINDOW;
             r = x + _elementRect.width;
           }
         }
-        else if( x < _scrollRect.left - SCROLL_WINDOW ){
-          if( r < _scrollRect.left + SCROLL_WINDOW ){
+        else if ( x < _scrollRect.left - SCROLL_WINDOW ) {
+          if ( r < _scrollRect.left + SCROLL_WINDOW ) {
             r = _scrollRect.left + SCROLL_WINDOW;
             x = r - _elementRect.width;
           }
         }
-        if( x < _containmentRect.left ){
+        if ( x < _containmentRect.left ) {
           x = _containmentRect.left;
         }
-        else if( r > _containmentRect.right ){
+        else if ( r > _containmentRect.right ) {
           x = _containmentRect.right - _elementRect.width;
         }
         element.style.left = ( x - _offsetParentRect.left - _containmentPadding.left ) + "px";
@@ -741,7 +742,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
 
     _draggable.update = function() {
       updatePosition();
-      if( _scroll ){
+      if ( _scroll ) {
         checkScroll();
       }
       checkContainment();
@@ -751,7 +752,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       return _elementRect;
     };
 
-    _draggable.start = function( e ){
+    _draggable.start = function( e ) {
       _originalPosition = [ element.offsetLeft, element.offsetTop ];
       _draggable.updateRects();
       _mouseOffset = [ e.clientX - _elementRect.left, e.clientY - _elementRect.top ];
@@ -799,15 +800,15 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       },
       selected: {
         enumerable: true,
-        get: function(){
-          for( var i = __selectedDraggables.length - 1; i >= 0; --i ){
-            if( __selectedDraggables[ i ].element === _element ){
+        get: function() {
+          for ( var i = __selectedDraggables.length - 1; i >= 0; --i ) {
+            if ( __selectedDraggables[ i ].element === _element ) {
               return true;
             }
           }
           return false;
         },
-        set: function( val ){
+        set: function( val ) {
           if ( val ) {
             _oldZIndex = getComputedStyle( element ).getPropertyValue( "z-index" );
             element.style.zIndex = MAXIMUM_Z_INDEX;
@@ -826,7 +827,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       },
       element: {
         enumerable: true,
-        get: function(){
+        get: function() {
           return _element;
         }
       }
@@ -835,7 +836,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     return _draggable;
   }
 
-  function Sortable( parentElement, options ){
+  function Sortable( parentElement, options ) {
 
     var _onChange = options.change || NULL_FUNCTION,
         _elements = [],
@@ -849,19 +850,19 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         _oldZIndex;
 
 
-    function createPlaceholder( victim ){
+    function createPlaceholder( victim ) {
       var placeholder = victim.cloneNode( false );
       placeholder.classList.add( "placeholder" );
       parentElement.replaceChild( placeholder, victim );
       return placeholder;
     }
 
-    function positionElement( diff ){
+    function positionElement( diff ) {
       _draggingElement.style.top = _draggingOriginalPosition - diff + "px";
     }
 
-    function onElementMouseMove( e ){
-      if( !_moved ){
+    function onElementMouseMove( e ) {
+      if ( !_moved ) {
         _moved = true;
         _placeHolder = createPlaceholder( _draggingElement );
         parentElement.appendChild( _draggingElement );
@@ -873,10 +874,10 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         var diff = _mouseDownPosition - e.clientY;
         positionElement( diff );
         var dragElementRect = _draggingElement.getBoundingClientRect();
-        for( var i=_elements.length - 1; i>=0; --i ){
+        for ( var i=_elements.length - 1; i>=0; --i ) {
           var element = _elements[ i ];
 
-          if( element === _draggingElement ){
+          if ( element === _draggingElement ) {
             continue;
           }
 
@@ -887,23 +888,21 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
               minR = Math.min( dragElementRect.right, rect.right ),
               minB = Math.min( dragElementRect.bottom, rect.bottom );
 
-          if( minR < maxL || minB < maxT ){
+          if ( minR < maxL || minB < maxT ) {
             continue;
           }
 
-          var overlapDims = [ minR - maxL, minB - maxT ];
-
-          if( overlapDims[ 0 ] * overlapDims[ 1 ] / 2 > dragElementRect.width * dragElementRect.height / 4 ){
+          if ( minB - maxT > dragElementRect.height / 2 ) {
             _hoverElement = element;
             var newPlaceHolder = createPlaceholder( _hoverElement );
             parentElement.replaceChild( _hoverElement, _placeHolder );
             _placeHolder = newPlaceHolder;
             var orderedElements = [],
                 childNodes = parentElement.childNodes;
-            for( var j=0, l=childNodes.length; j<l; ++j ){
+            for ( var j=0, l=childNodes.length; j<l; ++j ) {
               var child = childNodes[ j ];
-              if( child !== _draggingElement ){
-                if( child !== _placeHolder ){
+              if ( child !== _draggingElement ) {
+                if ( child !== _placeHolder ) {
                   orderedElements.push( child );
                 }
                 else{
@@ -917,8 +916,8 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       }
     }
 
-    function onElementMouseDown( e ){
-      if( e.which !== 1 ){
+    function onElementMouseDown( e ) {
+      if ( e.which !== 1 ) {
         return;
       }
       _moved = false;
@@ -934,12 +933,12 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       window.addEventListener( "mousemove", onElementMouseMove, false );
     }
 
-    function onElementMouseUp( e ){
+    function onElementMouseUp( e ) {
       _draggingElement.style.zIndex = _oldZIndex;
       window.removeEventListener( "mouseup", onElementMouseUp, false );
       window.removeEventListener( "mousemove", onElementMouseMove, false );
       _moved = false;
-      if( _placeHolder ){
+      if ( _placeHolder ) {
         _draggingElement.style.zIndex = "";
         _draggingElement.style.position = "";
         _draggingElement.style.top = "";
@@ -948,12 +947,12 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       }
     }
 
-    _instance.addItem = function( item ){
+    _instance.addItem = function( item ) {
       _elements.push( item );
       item.addEventListener( "mousedown", onElementMouseDown, false );
     };
 
-    _instance.removeItem = function( item ){
+    _instance.removeItem = function( item ) {
       _elements.splice( _elements.indexOf( item ), 1 );
       item.removeEventListener( "mousedown", onElementMouseDown, false );
     };
