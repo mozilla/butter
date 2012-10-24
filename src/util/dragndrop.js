@@ -506,8 +506,8 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       }
       try {
         // This can throw a "SecurityError: The operation is insecure."
-        // error if dataTransfer.effectAllowed is "uninitialized"
-        // unfortunatly, checking effectAllowed in ie9 throws
+        // error if dataTransfer.effectAllowed is "uninitialized".
+        // Unfortunately, checking effectAllowed in ie9 throws
         // a "Unexpected call to method or property access."
         transferData = e.dataTransfer.getData( "text" );
       } catch ( err ) {
@@ -532,8 +532,8 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       }
       try {
         // This can throw a "SecurityError: The operation is insecure."
-        // error if dataTransfer.effectAllowed is "uninitialized"
-        // unfortunatly, checking effectAllowed in ie9 throws
+        // error if dataTransfer.effectAllowed is "uninitialized".
+        // Unfortunately, checking effectAllowed in ie9 throws
         // a "Unexpected call to method or property access."
         transferData = e.dataTransfer.getData( "text" );
       } catch ( err ) {
@@ -552,8 +552,8 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       }
       try {
         // This can throw a "SecurityError: The operation is insecure."
-        // error if dataTransfer.effectAllowed is "uninitialized"
-        // unfortunatly, checking effectAllowed in ie9 throws
+        // error if dataTransfer.effectAllowed is "uninitialized".
+        // Unfortunately, checking effectAllowed in ie9 throws
         // a "Unexpected call to method or property access."
         transferData = e.dataTransfer.getData( "text" );
       } catch ( err ) {
