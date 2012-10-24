@@ -11,8 +11,8 @@
       "id": "Media0",
       "name": "Media0",
       "url": [
-        "https://videos-cdn.mozilla.net/serv/webmademovies/getstarted.mp4",
-        "https://videos-cdn.mozilla.net/serv/webmademovies/getstarted.webm"
+        "http://popcorn.webmadecontent.org/videos/getstarted.mp4",
+        "http://popcorn.webmadecontent.org/videos/getstarted.webm"
       ],
       "target": "video",
       "duration": 11.222000122070312,

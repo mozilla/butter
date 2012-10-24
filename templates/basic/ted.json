@@ -1220,7 +1220,7 @@
                                 "end": 919.31217,
                                 "target": "video-container",
                                 "text": "To remix this video with \nPopcorn Maker, click here!",
-                                "linkUrl": "https://popcorn.webmaker.org/templates/basic/?savedDataUrl=/api/remix/37",
+                                "linkUrl": "https://popcorn.webmaker.org/templates/basic/?savedDataUrl=ted.json",
                                 "type": "popup",
                                 "triangle": "bottom left",
                                 "sound": "",
