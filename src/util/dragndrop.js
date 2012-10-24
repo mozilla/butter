@@ -589,8 +589,8 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
           return false;
         }
 
-        // check for half y-axis overlap
-        // use ( minR - maxL ) > dragElementRect.width / 2 for x-axis
+        // TODO: to check for half x-axis overlap
+        // use ( minR - maxL ) > dragElementRect.width / 2
         // or height * width / 2 for area check.
         if ( ( minB - maxT ) > dragElementRect.height / 2 ) {
           return true;
