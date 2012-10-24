@@ -3,16 +3,12 @@
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
 define([ "editor/editor", "editor/base-editor",
-          "text!layouts/share-editor.html", "util/social-media", "ui/widget/tooltip" ],
-  function( Editor, BaseEditor, LAYOUT_SRC, SocialMedia, ToolTip ) {
+          "text!layouts/share-editor.html", "util/social-media" ],
+  function( Editor, BaseEditor, LAYOUT_SRC, SocialMedia ) {
 
   Editor.register( "share-properties", LAYOUT_SRC, function( rootElement, butter, compiledLayout ) {
-    var TOOLTIP_NAME = "name-error-share-tooltip",
-        _this;
-
     var socialMedia = new SocialMedia(),
         editorContainer = rootElement.querySelector( ".editor-container" ),
-        saveContainer = rootElement.querySelector( ".save-container" ),
         projectURL = editorContainer.querySelector( ".butter-project-url" ),
         authorInput = editorContainer.querySelector( ".butter-project-author" ),
         authorUpdateButton = editorContainer.querySelector( ".butter-project-author-update" ),
@@ -22,57 +18,11 @@ define([ "editor/editor", "editor/base-editor",
         viewSourceBtn = editorContainer.querySelector( ".butter-view-source-link" ),
         shareTwitter = editorContainer.querySelector( ".butter-share-twitter" ),
         shareGoogle = editorContainer.querySelector( ".butter-share-google" ),
-        projectNameWrapper = saveContainer.querySelector( ".butter-project-name-wrapper" ),
-        projectName = projectNameWrapper.querySelector( ".butter-project-name" ),
-        loginBtn = saveContainer.querySelector( ".butter-login-btn" ),
-        saveBtn = saveContainer.querySelector( ".butter-save-btn" ),
         embedDimensions = embedSize.value.split( "x" ),
         embedWidth = embedDimensions[ 0 ],
-        embedHeight = embedDimensions[ 1 ],
-        tooltip;
+        embedHeight = embedDimensions[ 1 ];
 
     authorInput.value = butter.project.author ? butter.project.author : "";
-
-    function destroyToolTip() {
-      if ( tooltip && !tooltip.destroyed ) {
-        projectNameWrapper.removeEventListener( "mouseover", destroyToolTip, false );
-        tooltip.destroy();
-      }
-    }
-
-    function fadeEditorContainer() {
-      editorContainer.classList.add( "fade-container" );
-      saveContainer.classList.remove( "hide-container" );
-      _this.scrollbar.update();
-    }
-
-    function displayLogin() {
-      resetInput();
-      embedSize.disabled = true;
-      authorInput.disabled = true;
-      saveBtn.removeEventListener( "click", save, false );
-      saveBtn.classList.add( "hide-container" );
-      saveContainer.classList.remove( "butter-login-true" );
-      loginBtn.classList.remove( "hide-container" );
-      loginBtn.addEventListener( "click", login, false );
-    }
-
-    function resetInput() {
-      projectURL.value = "";
-      projectEmbedURL.value = "";
-      fadeEditorContainer();
-    }
-
-    function displaySave() {
-      resetInput();
-      embedSize.disabled = true;
-      authorInput.disabled = true;
-      loginBtn.classList.add( "hide-container" );
-      loginBtn.removeEventListener( "click", login, false );
-      saveBtn.classList.remove( "hide-container" );
-      saveContainer.classList.add( "butter-login-true" );
-      saveBtn.addEventListener( "click", save, false );
-    }
 
     function updateEmbed( url ) {
       projectEmbedURL.value = "<iframe src='" + url + "' width='" + embedWidth + "' height='" + embedHeight + "'" +
@@ -111,83 +61,43 @@ define([ "editor/editor", "editor/base-editor",
       }
     }
 
-    function displayEditor() {
-      if ( !butter.project.isSaved ) {
-        displaySave();
-        return;
-      }
-
+    function displayEditor( on ) {
       var project = butter.project;
 
-      embedSize.disabled = false;
-      authorInput.disabled = false;
-      saveContainer.classList.add( "hide-container" );
-      editorContainer.classList.remove( "fade-container" );
+      if ( project.id ) {
+        embedSize.disabled = !on;
+        authorInput.disabled = !on;
 
-      projectName.value = project.name;
-      projectURL.value = project.publishUrl;
-      togglePreviewButton( true );
-      toggleViewSourceButton( true );
+        if ( on ) {
+          editorContainer.classList.remove( "fade-container" );
 
-      updateEmbed( project.iframeUrl );
+          projectURL.value = project.publishUrl;
+          togglePreviewButton( on );
+          toggleViewSourceButton( on );
 
-      // if any of the buttons haven't loaded, or if we aren't logged in
-      if ( !shareTwitter.childNodes.length ||
-           !shareGoogle.childNodes.length ||
-           !butter.cornfield.authenticated() ) {
-        socialMedia.hotLoad( shareTwitter, socialMedia.twitter, project.publishUrl );
-        socialMedia.hotLoad( shareGoogle, socialMedia.google, project.publishUrl );
-      }
-    }
+          updateEmbed( project.iframeUrl );
 
-    function login() {
-      if ( !butter.project.name ) {
-        butter.project.name = projectName.value;
-      } else {
-        projectName.value = butter.project.name;
-      }
-
-      butter.cornfield.login(function() {
-        if ( !butter.project.name ) {
-          displaySave();
+          // if any of the buttons haven't loaded, or if we aren't logged in
+          if ( !shareTwitter.childNodes.length ||
+               !shareGoogle.childNodes.length ) {
+            socialMedia.hotLoad( shareTwitter, socialMedia.twitter, project.publishUrl );
+            socialMedia.hotLoad( shareGoogle, socialMedia.google, project.publishUrl );
+          }
         } else {
-          save();
+          editorContainer.classList.add( "fade-container" );
         }
-        butter.dispatch( "authenticated" );
-      });
+      } else {
+        togglePreviewButton( false );
+        toggleViewSourceButton( false );
+      }
     }
 
     function save() {
-      if ( !butter.project.name ) {
-        butter.project.name = projectName.value;
-      } else {
-        projectName.value = butter.project.name;
-      }
-
       butter.project.author = authorInput.value || "";
       authorUpdateButton.classList.add( "butter-disabled" );
 
-      if ( !butter.project.name ) {
-
-        destroyToolTip();
-
-        projectNameWrapper.addEventListener( "mouseover", destroyToolTip, false );
-
-        ToolTip.create({
-          name: TOOLTIP_NAME,
-          message: "Please give your project a name before saving",
-          hidden: false,
-          element: projectNameWrapper,
-          top: "33px",
-          error: true
-        });
-
-        tooltip = ToolTip.get( TOOLTIP_NAME );
-        return;
-      }
-
       butter.project.save(function() {
-        displayEditor();
+        displayEditor( true );
       });
     }
 
@@ -208,35 +118,29 @@ define([ "editor/editor", "editor/base-editor",
       }
     }, false );
 
-    function checkProjectState() {
-      if ( !butter.project.name || !butter.project.id ) {
-        displaySave();
-      } else {
-        displayEditor();
-      }
-    }
+    butter.listen( "logout", function onLogout() {
+      displayEditor( false );
+      togglePreviewButton( false );
+      toggleViewSourceButton( false );
+    });
 
-    butter.listen( "logout", displayLogin );
-    butter.listen( "projectupdated", login );
-    butter.listen( "authenticated", checkProjectState );
+    butter.listen( "authenticated", function onAuthenticated() {
+      displayEditor( true );
+    });
 
-    butter.listen( "projectsaved", function() {
+    butter.listen( "projectsaved", function onSaved() {
       togglePreviewButton( true );
       toggleViewSourceButton( true );
     });
-    butter.listen( "projectchanged", function() {
+
+    butter.listen( "projectchanged", function onChanged() {
       togglePreviewButton( false );
       toggleViewSourceButton( false );
     });
 
     Editor.BaseEditor.extend( this, butter, rootElement, {
       open: function() {
-        _this = this;
-        if ( !butter.cornfield.authenticated() ) {
-          displayLogin();
-        } else {
-          checkProjectState();
-        }
+        displayEditor( butter.cornfield.authenticated() );
       },
       close: function() {
       }
