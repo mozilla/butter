@@ -46,7 +46,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     EventManager.extend( _this );
 
-    function onEditorMinimized( e ) {
+    function onEditorToggled( e ) {
       _timebar.update();
       _tracksContainer.update();
       _superScrollbar.resize();
@@ -224,7 +224,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     _media.listen( "mediaready", onMediaReadyFirst );
 
-    butter.editor.listen( "editorminimized", onEditorMinimized );
+    butter.editor.listen( "editortoggled", onEditorToggled );
+    butter.listen( "editoropened", onEditorToggled );
 
     function onPluginDropped( e ) {
       var type = e.data.type,
@@ -245,7 +246,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       if( _mediaStatusContainer && _mediaStatusContainer.parentNode ){
         _mediaStatusContainer.parentNode.removeChild( _mediaStatusContainer );
       }
-      butter.editor.unlisten( "editorminimized", onEditorMinimized );
+      butter.editor.unlisten( "editortoggled", onEditorToggled );
+      butter.unlisten( "editoropened", onEditorToggled );
     };
 
     this.hide = function() {
