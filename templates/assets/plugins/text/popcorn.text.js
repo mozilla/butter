@@ -11,7 +11,9 @@
 
    **/
 
-  var DEFAULT_FONT_COLOR = "#000";
+  var DEFAULT_FONT_COLOR = "#000000",
+      DEFAULT_SHADOW_COLOR = "#444444",
+      DEFAULT_BACKGROUND_COLOR = "#888888";
 
   function newlineToBreak( string ) {
     // Deal with both \r\n and \n
@@ -95,10 +97,38 @@
           "default": DEFAULT_FONT_COLOR,
           group: "advanced"
         },
+        shadow: {
+          elem: "input",
+          type: "checkbox",
+          label: "Shadow",
+          "default": false,
+          group: "advanced"
+        },
+        shadowColor: {
+          elem: "input",
+          type: "color",
+          label: "Shadow colour",
+          "default": DEFAULT_SHADOW_COLOR,
+          group: "advanced"
+        },
+        background: {
+          elem: "input",
+          type: "checkbox",
+          label: "Background",
+          "default": false,
+          group: "advanced"
+        },
+        backgroundColor: {
+          elem: "input",
+          type: "color",
+          label: "Background colour",
+          "default": DEFAULT_BACKGROUND_COLOR,
+          group: "advanced"
+        },
         fontDecorations: {
           elem: "checkbox-group",
-          labels: { bold: "Bold", italics: "Italics", shadow: "Shadow" },
-          "default": { bold: false, italics: false, shadow: false },
+          labels: { bold: "Bold", italics: "Italics" },
+          "default": { bold: false, italics: false },
           group: "advanced"
         },
         left: {
@@ -132,7 +162,6 @@
     },
 
     _setup: function( options ) {
-
       var target = Popcorn.dom.find( options.target ),
           text = newlineToBreak( options.text ),
           container = options._container = document.createElement( "div" ),
@@ -145,8 +174,10 @@
           alignment = options.alignment,
           transition = options.transition || options._natives.manifest.options.transition[ "default" ],
           link,
-          context = this,
-          linkUrl = options.linkUrl;
+          linkUrl = options.linkUrl,
+          shadowColor = options.shadowColor || DEFAULT_SHADOW_COLOR,
+          backgroundColor = options.backgroundColor || DEFAULT_BACKGROUND_COLOR,
+          context = this;
 
       if ( !target ) {
         target = this.media.parentNode;
@@ -181,8 +212,11 @@
       innerContainer.style.fontStyle = fontDecorations.italics ? "italic" : "normal";
       innerContainer.style.fontWeight = fontDecorations.bold ? "bold" : "normal";
 
-      if ( fontDecorations.shadow ) {
-        innerContainer.classList.add( "popcorn-text-shadow" );
+      if ( options.background ) {
+        innerDiv.style.backgroundColor = backgroundColor;
+      }
+      if ( options.shadow ) {
+        innerDiv.style.textShadow = "0 1px 5px " + shadowColor + ", 0 1px 10px " + shadowColor;
       }
 
       fontSheet = document.createElement( "link" );
