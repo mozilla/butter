@@ -118,13 +118,13 @@ function init( window, document ) {
   }
 
   // We put the embed's cannoncial URL in a <link rel="cannoncial" href="...">
-  function getCannonicalURL() {
+  function getCanonicalURL() {
     var links = document.querySelectorAll( "link" ),
         link;
 
     for ( var i = 0; i < links.length; i++ ) {
       link = links[ i ];
-      if ( link.rel === "cannonical" ) {
+      if ( link.rel === "canonical" ) {
         return link.href;
       }
     }
@@ -395,8 +395,8 @@ function init( window, document ) {
         // Write out the iframe HTML necessary to embed this
         $( "#share-iframe" ).value = buildIFrameHTML();
 
-        // Get the page's cannonical URL and put in share URL
-        $( "#share-url" ).value = getCannonicalURL();
+        // Get the page's canonical URL and put in share URL
+        $( "#share-url" ).value = getCanonicalURL();
       }
 
       setupAttribution( popcorn );
