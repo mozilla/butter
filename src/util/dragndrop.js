@@ -465,6 +465,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
     element.addEventListener( "dragstart", function( e ){
       __currentDraggingElement = element;
       e.dataTransfer.effectAllowed = "all";
+      console.log(e.dataTransfer.effectAllowed);
       // coerce to string so IE9 doesn't throw
       e.dataTransfer.setData( "text", _id + "" );
       if( _image ){
@@ -497,6 +498,7 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
         _rememberedDraggables = [];
 
     function onDrop( e ) {
+      e.preventDefault();
       e.stopPropagation();
 
       if( _hoverClass ){
@@ -519,6 +521,11 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       if( _hoverClass ) {
         element.classList.add( _hoverClass );
       }
+
+      if ( e.dataTransfer.effectAllowed === "uninitialized" ) {
+        return;
+      }
+
       var transferData = e.dataTransfer.getData( "text" ),
           helper = __helpers[ transferData ] || __currentDraggingElement;
       if( helper ){
@@ -530,6 +537,11 @@ define( [ 'core/eventmanager' ], function( EventManager ) {
       if ( _hoverClass ) {
         element.classList.remove( _hoverClass );
       }
+
+      if ( e.dataTransfer.effectAllowed === "uninitialized" ) {
+        return;
+      }
+
       var transferData = e.dataTransfer.getData( "text" ),
           helper = __helpers[ transferData ] || __currentDraggingElement;
       if( helper ){
