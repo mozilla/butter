@@ -1,125 +1,221 @@
 {
-  "targets": [
-    {
-      "id": "video-container",
-      "name": "video-container",
-      "element": "video-container"
-    }
-  ],
-  "media": [
-    {
-      "id": "Media0",
-      "name": "Media0",
-      "url": [
-        "http://popcorn.webmadecontent.org/videos/makecorn.mp4",
-        "http://popcorn.webmadecontent.org/videos/makecorn.webm"
-      ],
-      "target": "video",
-      "duration": 64.54166412353516,
-      "tracks": [
-        {
-          "name": "Layer",
-          "id": "Layer0",
-          "trackEvents": [
-            {
-              "id": "TrackEvent3",
-              "type": "text",
-              "popcornOptions": {
-                "start": 1,
-                "end": 6,
-                "target": "video-container",
-                "text": "Pop some corn!"
-              },
-              "track": "Track0",
-              "name": "TrackEvent3"
-            }
-          ]
-        }
-      ]
-    }
-  ],
-  "tutorial": {
-    "general": [
-      {
-        "start": 1,
-        "end": 6,
-        "name": "media-editor-button-tooltip",
-        "element": ".butter-editor-header-media",
-        "message": "This is The Media Editor",
-        "top": "50px",
-        "left": "50px",
-        "hover": false,
-        "hidden": true
-      },
-      {
-        "start": 1,
-        "end": 5,
-        "name": "save-button-tooltip",
-        "element": ".butter-save-btn",
-        "message": "Press to save your project",
-        "top": "45px",
-        "left": "50%",
-        "hover": false,
-        "hidden": true
-      }
-    ],
-    "plugin-list": [
-      {
-        "start": 1,
-        "end": 6,
-        "name": "image-plugin-button-tooltip",
-        "element": ".butter-plugin-tile[data-popcorn-plugin-type=image]",
-        "message": "Drag me to the timeline!",
-        "top": "50px",
-        "left": "50px",
-        "hover": false,
-        "hidden": true
-      },
-      {
-        "start": 15,
-        "end": 20,
-        "name": "skip-plugin-button-tooltip",
-        "element": ".butter-plugin-tile[data-popcorn-plugin-type=skip]",
-        "message": "I make the video skip forward!",
-        "top": "50px",
-        "left": "50px",
-        "hover": false,
-        "hidden": true
-      }
-    ],
-    "media-editor": [
-      {
-        "start": 8,
-        "end": 14,
-        "name": "new-media-button-tooltip",
-        "element": "#new-media-source-btn",
-        "message": "click me to add a new media source!",
-        "top": "50px",
-        "left": "50px",
-        "hover": false,
-        "hidden": true
-      },
-      {
-        "start": 10,
-        "end": 14,
-        "name": "alternate-media-button-tooltip",
-        "element": "#add-alternate-media-source-btn",
-        "message": "click me to add a fallback media!",
-        "top": "50px",
-        "left": "50px",
-        "hover": false,
-        "hidden": true
-      }
-    ],
-    "editorOpenEvents": [
-      {
-        "start": 7,
-        "type": "media-editor"
-      },
-      {
-        "start": 14,
-        "type": "plugin-list"
-      }
-    ]
-  }
+    "targets": [{
+        "id": "Target0",
+        "name": "video-container",
+        "element": "video-container"
+    }],
+    "media": [{
+        "id": "Media0",
+        "name": "Media0",
+        "url": ["https://videos-cdn.mozilla.net/serv/webmademovies/popcornmakertutorial.mp4?butteruid=1351198637443", "https://videos-cdn.mozilla.net/serv/webmademovies/popcornmakertutorial.webm?butteruid=1351198637444"],
+        "target": "video",
+        "duration": -1,
+        "controls": false,
+        "tracks": [{
+            "name": "Layer",
+            "id": "0",
+            "trackEvents": [{
+                "id": "TrackEvent0",
+                "type": "text",
+                "popcornOptions": {
+                    "start": 32.17996,
+                    "end": 34.83223,
+                    "target": "video-container",
+                    "text": "This is a text event!",
+                    "linkUrl": "",
+                    "position": "middle",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Lato",
+                    "fontSize": "12",
+                    "fontColor": "#000",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "left": 25,
+                    "top": 0,
+                    "width": 50,
+                    "zindex": 1000,
+                    "alignment": "center"
+                },
+                "track": "Layer",
+                "name": "TrackEvent4"
+            }, {
+                "id": "TrackEvent1",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 36.84861,
+                    "end": 38.58131,
+                    "target": "video-container",
+                    "text": "Breaking News!",
+                    "linkUrl": "",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "info",
+                    "flip": "",
+                    "top": 13.65079365079365,
+                    "left": 11.428571428571429,
+                    "width": 35,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "36",
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent3"
+            }, {
+                "id": "TrackEvent2",
+                "type": "wikipedia",
+                "popcornOptions": {
+                    "start": 40.54502,
+                    "end": 42.27772,
+                    "target": "video-container",
+                    "lang": "en",
+                    "src": "Africa",
+                    "width": 45.357142857142854,
+                    "height": 75.55555555555556,
+                    "top": 0,
+                    "left": 1.607142857142857,
+                    "transition": "popcorn-fade",
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent5"
+            }, {
+                "id": "TrackEvent3",
+                "type": "pausePlugin",
+                "popcornOptions": {
+                    "start": 65.14927,
+                    "end": 67.92158,
+                    "target": "video-container",
+                    "duration": "0"
+                },
+                "track": "Layer",
+                "name": "TrackEvent7"
+            }, {
+                "id": "TrackEvent4",
+                "type": "image",
+                "popcornOptions": {
+                    "start": 84.32249,
+                    "end": 94.25659,
+                    "target": "video-container",
+                    "src": "http://wpmu.org/wp-content/uploads/2012/05/cat-big.jpg",
+                    "linkSrc": "",
+                    "tags": "",
+                    "photosetId": "",
+                    "count": 3,
+                    "width": 56.07142857142857,
+                    "height": 62.53968253968254,
+                    "top": 0,
+                    "left": 3.0357142857142856,
+                    "transition": "popcorn-fade",
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent8"
+            }, {
+                "id": "TrackEvent5",
+                "type": "pausePlugin",
+                "popcornOptions": {
+                    "start": 165.41446,
+                    "end": 168.07147,
+                    "target": "video-container",
+                    "duration": "0"
+                },
+                "track": "Layer",
+                "name": "TrackEvent10"
+            }, {
+                "id": "TrackEvent6",
+                "type": "image",
+                "popcornOptions": {
+                    "start": 132.63454,
+                    "end": 135.65344,
+                    "target": "video-container",
+                    "src": "http://solarsystem.nasa.gov/images/VIIRS_4Jan2012_708x432.jpg",
+                    "linkSrc": "",
+                    "tags": "",
+                    "photosetId": "",
+                    "count": 3,
+                    "width": 97.67857142857143,
+                    "height": 100,
+                    "top": 0,
+                    "left": 2.3214285714285716,
+                    "transition": "popcorn-fade",
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent11"
+            }]
+        }, {
+            "name": "Layer",
+            "id": "1",
+            "trackEvents": [{
+                "id": "TrackEvent7",
+                "type": "image",
+                "popcornOptions": {
+                    "start": 38.58131,
+                    "end": 40.54502,
+                    "target": "video-container",
+                    "src": "http://static.bbci.co.uk/podcasts/artwork/266/africa.jpg",
+                    "linkSrc": "",
+                    "tags": "",
+                    "photosetId": "",
+                    "count": 3,
+                    "width": 58.50691244239632,
+                    "height": 58.41269841269842,
+                    "top": 0,
+                    "left": 0,
+                    "transition": "popcorn-fade",
+                    "zindex": 999
+                },
+                "track": "Layer",
+                "name": "TrackEvent4"
+            }, {
+                "id": "TrackEvent8",
+                "type": "googlemap",
+                "popcornOptions": {
+                    "start": 42.27772,
+                    "end": 44.12592,
+                    "target": "video-container",
+                    "type": "ROADMAP",
+                    "location": "",
+                    "fullscreen": "",
+                    "heading": 0,
+                    "pitch": 1,
+                    "zoom": 1,
+                    "transition": "popcorn-fade",
+                    "left": 4.464285714285714,
+                    "top": 1.2698412698412698,
+                    "width": 29.642857142857142,
+                    "height": 54.6031746031746,
+                    "lat": 12.869476408482024,
+                    "lng": 23.258522999999958,
+                    "zindex": 999
+                },
+                "track": "Layer",
+                "name": "TrackEvent6"
+            }, {
+                "id": "TrackEvent9",
+                "type": "pausePlugin",
+                "popcornOptions": {
+                    "start": 92.17929,
+                    "end": 97.17929,
+                    "target": "video-container",
+                    "duration": "0"
+                },
+                "track": "Layer",
+                "name": "TrackEvent9"
+            }]
+        }]
+    }],
+    "name": "Remix of Tutorial",
+    "template": "basic"
 }
