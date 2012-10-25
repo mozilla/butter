@@ -7,7 +7,7 @@
     "media": [{
         "id": "Media0",
         "name": "Media0",
-        "url": ["https://videos-cdn.mozilla.net/serv/webmademovies/popcornmakertutorial.mp4?butteruid=1351198637443", "https://videos-cdn.mozilla.net/serv/webmademovies/popcornmakertutorial.webm?butteruid=1351198637444"],
+        "url": ["http://popcorn.webmadecontent.org/videos/popcornmakertutorial.mp4", "http://popcorn.webmadecontent.org/videos/popcornmakertutorial.webm"],
         "target": "video",
         "duration": -1,
         "controls": false,
@@ -216,6 +216,6 @@
             }]
         }]
     }],
-    "name": "Remix of Tutorial",
+    "name": "Tutorial",
     "template": "basic"
 }
