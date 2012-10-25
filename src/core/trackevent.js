@@ -131,6 +131,10 @@ define( [ "./logger", "./eventmanager", "./observer",
         }
       }
 
+      if ( newStart >= newEnd ) {
+        throw new TrackEventUpdateException( "start-greater-than-end", "[start] must be less than [end]." );
+      }
+
       // Synchronously notify observers that an update is happening.
       // This action gives observers a chance to stop the trackevent from updating
       // if a problem is detected. If `notify` returns `false`, the update is cancelled
@@ -166,10 +170,6 @@ define( [ "./logger", "./eventmanager", "./observer",
             }
           }
         }
-      }
-
-      if ( newStart >= newEnd ) {
-        throw new TrackEventUpdateException( "start-greater-than-end", "[start] must be less than [end]." );
       }
 
       _popcornOptions.start = newStart;
