@@ -1,0 +1,708 @@
+{
+    "targets": [{
+        "id": "Target0",
+        "name": "video-container",
+        "element": "video-container"
+    }],
+    "media": [{
+        "id": "Media0",
+        "name": "Media0",
+        "url": ["http://www.youtube.com/watch?v=PMXa8zx4wek&amp;butteruid=1351103767039", "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.ogv?butteruid=1351103767040", "http://videos-cdn.mozilla.net/serv/webmademovies/makecorn.webm?butteruid=1351103767041"],
+        "target": "video",
+        "duration": 107.483,
+        "controls": false,
+        "tracks": [{
+            "name": "Layer",
+            "id": "0",
+            "trackEvents": [{
+                "id": "TrackEvent0",
+                "type": "text",
+                "popcornOptions": {
+                    "start": 0,
+                    "end": 3.00145,
+                    "target": "video-container",
+                    "text": "wikiHow to\nMake Chocolate Bacon",
+                    "linkUrl": "http://www.wikihow.com/Make-Chocolate-Bacon",
+                    "position": "center",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "10",
+                    "fontColor": "black",
+                    "fontDecorations": {
+                        "bold": true,
+                        "italics": false,
+                        "shadow": false
+                    },
+                    "left": 25,
+                    "top": 0,
+                    "width": 50,
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent2"
+            }, {
+                "id": "TrackEvent1",
+                "type": "text",
+                "popcornOptions": {
+                    "start": 3.57673,
+                    "end": 8.57673,
+                    "target": "video-container",
+                    "text": "Cut the bacon in half.",
+                    "linkUrl": "",
+                    "position": "custom",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "9",
+                    "fontColor": "white",
+                    "fontDecorations": {
+                        "bold": true,
+                        "italics": false,
+                        "shadow": false
+                    },
+                    "left": 13.571428571428571,
+                    "top": 78.0952380952381,
+                    "width": 69.28571428571428,
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent4"
+            }, {
+                "id": "TrackEvent2",
+                "type": "text",
+                "popcornOptions": {
+                    "start": 8.81676,
+                    "end": 13.81676,
+                    "target": "video-container",
+                    "text": "Fry up\nsome nice,\ncrispy bacon.",
+                    "linkUrl": "",
+                    "position": "custom",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "9",
+                    "fontColor": "white",
+                    "fontDecorations": {
+                        "bold": true,
+                        "italics": false,
+                        "shadow": false
+                    },
+                    "left": 13.214285714285715,
+                    "top": 41.904761904761905,
+                    "width": 43.392857142857146,
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent7"
+            }, {
+                "id": "TrackEvent3",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 15.13232,
+                    "end": 19.495,
+                    "target": "video-container",
+                    "text": "Flip it often to\nminimize wrinkles",
+                    "linkUrl": "",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "error",
+                    "flip": "",
+                    "top": 30.396825396825395,
+                    "left": 9.107142857142856,
+                    "width": 30,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "25",
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent9"
+            }, {
+                "id": "TrackEvent4",
+                "type": "image",
+                "popcornOptions": {
+                    "start": 20.50992,
+                    "end": 25.50992,
+                    "target": "video-container",
+                    "src": "http://blog.usaseopros.com/wp-content/uploads/2009/08/homer-simpson-drooling-261x300.jpg",
+                    "linkSrc": "",
+                    "tags": "",
+                    "photosetId": "",
+                    "count": 3,
+                    "width": 34.464285714285715,
+                    "height": 36.19047619047619,
+                    "top": 22.851853143601193,
+                    "left": 65.53571428571429,
+                    "transition": "popcorn-fade",
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent11"
+            }, {
+                "id": "TrackEvent5",
+                "type": "text",
+                "popcornOptions": {
+                    "start": 30.499,
+                    "end": 35.499,
+                    "target": "video-container",
+                    "text": "Dry the bacon on paper towels.",
+                    "linkUrl": "",
+                    "position": "custom",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Merriweather",
+                    "fontSize": 10,
+                    "fontColor": "white",
+                    "fontDecorations": {
+                        "bold": true,
+                        "italics": false,
+                        "shadow": false
+                    },
+                    "left": 8.75,
+                    "top": 5.396825396825397,
+                    "width": 50,
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent13"
+            }, {
+                "id": "TrackEvent6",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 36.07994,
+                    "end": 41.07994,
+                    "target": "video-container",
+                    "text": "Save those greasy paper towels! Click here to learn how to use them to make a bacon grease fire starter.",
+                    "linkUrl": "http://www.wikihow.com/Make-a-Bacon-Grease-Fire-Starter",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "info",
+                    "flip": "",
+                    "top": 11.11111111111111,
+                    "left": 8.392857142857142,
+                    "width": 37.5,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "25",
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent14"
+            }, {
+                "id": "TrackEvent7",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 43.231,
+                    "end": 48.231,
+                    "target": "video-container",
+                    "text": "Keep blotting till it&#39;s nice and dry.",
+                    "linkUrl": "",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "error",
+                    "flip": "",
+                    "top": 5,
+                    "left": 20,
+                    "width": 30,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "25",
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent16"
+            }, {
+                "id": "TrackEvent8",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 53.40499,
+                    "end": 58.40499,
+                    "target": "video-container",
+                    "text": "200g of chocolate is more than enough for 4 full slices of bacon.",
+                    "linkUrl": "",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "error",
+                    "flip": "",
+                    "top": 39.6031746031746,
+                    "left": 8.75,
+                    "width": 30,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "25",
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent18"
+            }, {
+                "id": "TrackEvent9",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 60.664,
+                    "end": 65.664,
+                    "target": "video-container",
+                    "text": "Click here to learn how to set up a double boiler (bain marie).",
+                    "linkUrl": "http://www.wikihow.com/Make-a-Double-Boiler-%28Bain-Marie%29",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "info",
+                    "flip": "",
+                    "top": 46.904761904761905,
+                    "left": 35,
+                    "width": 30,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "25",
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent20"
+            }, {
+                "id": "TrackEvent10",
+                "type": "text",
+                "popcornOptions": {
+                    "start": 78.158,
+                    "end": 83.158,
+                    "target": "video-container",
+                    "text": "Coat the bacon pieces in chocolate.",
+                    "linkUrl": "",
+                    "position": "custom",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "9",
+                    "fontColor": "white",
+                    "fontDecorations": {
+                        "bold": true,
+                        "italics": false,
+                        "shadow": false
+                    },
+                    "left": 4.464285714285714,
+                    "top": 1.2698412698412698,
+                    "width": 95.53571428571429,
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent22"
+            }, {
+                "id": "TrackEvent11",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 84.75,
+                    "end": 89.75,
+                    "target": "video-container",
+                    "text": "Scraping off the excess chocolate is optional. It depends on your preferred chocolate to bacon ratio.",
+                    "linkUrl": "",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "error",
+                    "flip": "",
+                    "top": 57.38095238095238,
+                    "left": 12.678571428571427,
+                    "width": 30,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "25",
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent23"
+            }, {
+                "id": "TrackEvent12",
+                "type": "text",
+                "popcornOptions": {
+                    "start": 94.27058,
+                    "end": 98.33504,
+                    "target": "video-container",
+                    "text": "Put the chocolate bacon on wax paper.",
+                    "linkUrl": "",
+                    "position": "custom",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "9",
+                    "fontColor": "white",
+                    "fontDecorations": {
+                        "bold": true,
+                        "italics": false,
+                        "shadow": false
+                    },
+                    "left": 0.7142857142857143,
+                    "top": 1.5873015873015872,
+                    "width": 99.10714285714286,
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent24"
+            }, {
+                "id": "TrackEvent13",
+                "type": "text",
+                "popcornOptions": {
+                    "start": 98.36006,
+                    "end": 103.36006,
+                    "target": "video-container",
+                    "text": "Place in freezer until chocolate hardens.",
+                    "linkUrl": "",
+                    "position": "custom",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "8",
+                    "fontColor": "white",
+                    "fontDecorations": {
+                        "bold": true,
+                        "italics": false,
+                        "shadow": false
+                    },
+                    "left": 3.75,
+                    "top": 2.857142857142857,
+                    "width": 95,
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent26"
+            }]
+        }, {
+            "name": "Layer",
+            "id": "1",
+            "trackEvents": [{
+                "id": "TrackEvent14",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 0.59821,
+                    "end": 2.97435,
+                    "target": "video-container",
+                    "text": "Click to read the full wikiHow instructions!",
+                    "linkUrl": "http://www.wikihow.com/Make-Chocolate-Bacon",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "info",
+                    "flip": "",
+                    "top": 64.36507936507937,
+                    "left": 57.67857142857142,
+                    "width": 30,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "25",
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 999
+                },
+                "track": "Layer",
+                "name": "TrackEvent3"
+            }, {
+                "id": "TrackEvent15",
+                "type": "wikipedia",
+                "popcornOptions": {
+                    "start": 5.32507,
+                    "end": 9.26447,
+                    "target": "video-container",
+                    "lang": "en",
+                    "src": "Bacon_mania",
+                    "width": 40,
+                    "height": 60.63492063492063,
+                    "top": 0,
+                    "left": 60,
+                    "transition": "popcorn-fade",
+                    "zindex": 999
+                },
+                "track": "Layer",
+                "name": "TrackEvent6"
+            }, {
+                "id": "TrackEvent16",
+                "type": "image",
+                "popcornOptions": {
+                    "start": 10.38002,
+                    "end": 13.81918,
+                    "target": "video-container",
+                    "src": "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQLzGUcA2RaLq9Tc8_yRBFmGVZCNGtmnlfs6C26eZRc9aTZShpR",
+                    "linkSrc": "http://www.youtube.com/watch?v=S7cI5sagPco",
+                    "tags": "",
+                    "photosetId": "",
+                    "count": 3,
+                    "width": 29.82142857142857,
+                    "height": 25.396825396825395,
+                    "top": 72.05820234995039,
+                    "left": 12.857142857142856,
+                    "transition": "popcorn-fade",
+                    "zindex": 999
+                },
+                "track": "Layer",
+                "name": "TrackEvent8"
+            }, {
+                "id": "TrackEvent17",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 18.6955,
+                    "end": 23.6955,
+                    "target": "video-container",
+                    "text": "If only videos could convey the smell of bacon frying!",
+                    "linkUrl": "",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "error",
+                    "flip": "",
+                    "top": 66.9047619047619,
+                    "left": 60.89285714285714,
+                    "width": 30,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "25",
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 999
+                },
+                "track": "Layer",
+                "name": "TrackEvent10"
+            }, {
+                "id": "TrackEvent18",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 25.336,
+                    "end": 28.96275,
+                    "target": "video-container",
+                    "text": "Squish the bacon to encourage it to stay as flat as possible.",
+                    "linkUrl": "",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "error",
+                    "flip": "",
+                    "top": 54.2063492063492,
+                    "left": 13.571428571428571,
+                    "width": 30,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "25",
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 999
+                },
+                "track": "Layer",
+                "name": "TrackEvent12"
+            }, {
+                "id": "TrackEvent19",
+                "type": "image",
+                "popcornOptions": {
+                    "start": 36.07994,
+                    "end": 41.07994,
+                    "target": "video-container",
+                    "src": "http://pad3.whstatic.com/images/thumb/d/d7/Make-a-Bacon-Grease-Fire-Starter-Step-3.jpg/400px-Make-a-Bacon-Grease-Fire-Starter-Step-3.jpg",
+                    "linkSrc": "http://www.wikihow.com/Image:Make-a-Bacon-Grease-Fire-Starter-Step-3.jpg",
+                    "tags": "",
+                    "photosetId": "",
+                    "count": 3,
+                    "width": 36.07142857142857,
+                    "height": 48.888888888888886,
+                    "top": 34.91534520709325,
+                    "left": 0,
+                    "transition": "popcorn-fade",
+                    "zindex": 999
+                },
+                "track": "Layer",
+                "name": "TrackEvent15"
+            }, {
+                "id": "TrackEvent20",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 49.03,
+                    "end": 54.03,
+                    "target": "video-container",
+                    "text": "Substitute about half the chocolate for peanut butter chips for optional awesomeness.",
+                    "linkUrl": "",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "thumbsup",
+                    "flip": "",
+                    "top": 54.285714285714285,
+                    "left": 50.535714285714285,
+                    "width": 30,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "25",
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 999
+                },
+                "track": "Layer",
+                "name": "TrackEvent19"
+            }, {
+                "id": "TrackEvent21",
+                "type": "text",
+                "popcornOptions": {
+                    "start": 65.9694,
+                    "end": 74.22339,
+                    "target": "video-container",
+                    "text": "Melt the chocolate. Stir constantly.",
+                    "linkUrl": "",
+                    "position": "custom",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Merriweather",
+                    "fontSize": 10,
+                    "fontColor": "white",
+                    "fontDecorations": {
+                        "bold": true,
+                        "italics": false,
+                        "shadow": false
+                    },
+                    "left": 0.7142857142857143,
+                    "top": 2.5396825396825395,
+                    "width": 99.28571428571429,
+                    "zindex": 999
+                },
+                "track": "Layer",
+                "name": "TrackEvent21"
+            }, {
+                "id": "TrackEvent22",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 103.425,
+                    "end": 106.36393,
+                    "target": "video-container",
+                    "text": "Click here to remix this video using Mozilla Popcorn!",
+                    "linkUrl": "https://popcorn.webmaker.org/templates/basic/?savedDataUrl=/api/remix/571",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "net",
+                    "flip": "",
+                    "top": 38.333333333333336,
+                    "left": 66.78571428571428,
+                    "width": 30,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "25",
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 999
+                },
+                "track": "Layer",
+                "name": "TrackEvent31"
+            }]
+        }, {
+            "name": "Layer",
+            "id": "2",
+            "trackEvents": [{
+                "id": "TrackEvent23",
+                "type": "popup",
+                "popcornOptions": {
+                    "start": 101.23957,
+                    "end": 105.49163,
+                    "target": "video-container",
+                    "text": "You might also enjoy learning how to make bacon chocolate chip cookies!",
+                    "linkUrl": "",
+                    "type": "popup",
+                    "triangle": "bottom left",
+                    "sound": "",
+                    "icon": "info",
+                    "flip": "",
+                    "top": 49.523809523809526,
+                    "left": 6.25,
+                    "width": 93.75,
+                    "transition": "popcorn-pop",
+                    "fontFamily": "Merriweather",
+                    "fontSize": "25",
+                    "fontColor": "#668B8B",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "underline": false
+                    },
+                    "zindex": 998
+                },
+                "track": "Layer",
+                "name": "TrackEvent29"
+            }]
+        }, {
+            "name": "Layer",
+            "id": "3",
+            "trackEvents": [{
+                "id": "TrackEvent24",
+                "type": "image",
+                "popcornOptions": {
+                    "start": 102.1744,
+                    "end": 105.4885,
+                    "target": "video-container",
+                    "src": "http://www.wikihow.com/images/1/1f/Make-Bacon-Chocolate-Chip-Cookies-Glaze-Step-10.jpg",
+                    "linkSrc": "http://www.wikihow.com/Make-Bacon-Chocolate-Chip-Cookies",
+                    "tags": "",
+                    "photosetId": "",
+                    "count": 3,
+                    "width": 36.25,
+                    "height": 35.55555555555556,
+                    "top": 64.44444444444444,
+                    "left": 0,
+                    "transition": "popcorn-fade",
+                    "zindex": 997
+                },
+                "track": "Layer",
+                "name": "TrackEvent30"
+            }]
+        }, {
+            "name": "Layer",
+            "id": "4",
+            "trackEvents": []
+        }]
+    }],
+    "name": "Remix of Chocolate Bacon",
+    "template": "basic"
+}
