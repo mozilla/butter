@@ -255,7 +255,7 @@
           var count = prop.count > 0 ? prop.count : 1;
 
           if ( count > _maxImageCount ) {
-            _this.setErrorState( "Error: Image count must be less than " + _maxImageCount + "." );
+            _this.setErrorState( "Error: Image count must not be greater than " + _maxImageCount + "." );
             return;
           }
 
