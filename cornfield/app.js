@@ -110,7 +110,7 @@ function writeEmbed( path, url, data, callback ) {
 }
 
 app.post( '/api/publish/:id',
-  filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
+  filter.isLoggedIn, filter.isStorageAvailable,
   function publishRoute( req, res ) {
 
   var email = req.session.email,
