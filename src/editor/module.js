@@ -60,12 +60,21 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     _this.openEditor = function( editorName, options ) {
       options = options || {};
 
-      var persist = options.persist;
+      var persist = options.persist,
+          onTransitionEnd,
+          onEditorOpened;
+
+      onEditorOpened = function() {
+        butter.dispatch( "editoropened", editorName );
+      };
+
+      onTransitionEnd = function() {
+        LangUtils.removeTransitionEndListener( _editorAreaDOMRoot, onTransitionEnd );
+        onEditorOpened();
+      };
+
       persist = persist === true || persist === false ? persist : Editor.isPersistent( editorName );
 
-      // If the editor has never been used before, open it now
-      _editorAreaDOMRoot.classList.remove( "minimized" );
-      document.body.classList.remove( "editor-minimized" );
       _toggler.state = false;
 
       if ( _currentEditor ) {
@@ -80,14 +89,20 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       }
 
       _currentEditor.open( _editorContentArea, options.openData );
-
       _currentEditor.listen( "back", function( e ) {
         _this.openEditor( DEFAULT_EDITOR_NAME );
       });
 
       _header.setFocus( editorName );
 
-      butter.dispatch( "editoropened", editorName );
+      // If the editor was closed when this was called, remove classes keeping it hidden
+      if ( _editorAreaDOMRoot.classList.contains( "minimized" ) ) {
+        LangUtils.applyTransitionEndListener( _editorAreaDOMRoot, onTransitionEnd );
+        _editorAreaDOMRoot.classList.remove( "minimized" );
+        document.body.classList.remove( "editor-minimized" );
+      } else {
+        onEditorOpened();
+      }
 
       return _currentEditor;
     };
@@ -183,7 +198,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
 
           var onTransitionEnd = function(){
             LangUtils.removeTransitionEndListener( _editorAreaDOMRoot, onTransitionEnd );
-            _this.dispatch( "editorminimized", newState );
+            _this.dispatch( "editortoggled", newState );
           };
 
           _toggler.state = newState;
