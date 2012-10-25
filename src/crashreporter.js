@@ -31,12 +31,12 @@ define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI 
 
   // Wrap DOM accessor methods so we can track when nulls are returned.  This helps
   // when trying to sort out what happened with crashes.
-  function overrideDomMembers( doc, elemProto, nullList ) {
+  function overrideDomMembers( doc, elemProtos, nullList ) {
 
     // Wrap a function that returns a single node
     function wrappedFnNode( id, fn, obj ) {
       var elem = fn.call( obj, id );
-      if( !elem ) {
+      if( !elem && nullList[ nullList.length -1 ] !== id ) {
         nullList.push( id );
       }
       return elem;
@@ -45,7 +45,7 @@ define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI 
     // Wrap a function that returns a node list
     function wrappedFnNodeList( id, fn, obj ) {
       var list = fn.call( obj, id );
-      if( !list.length ) {
+      if( !list.length && nullList[ nullList.length -1 ] !== id ) {
         nullList.push( id );
       }
       return list;
@@ -67,16 +67,19 @@ define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI 
       return wrappedFnNodeList( selectors, querySelectorAll$doc, doc );
     };
 
-    // Wrap Element prototype functions
-    var querySelector$elem = elemProto.querySelector;
-    elemProto.querySelector = function( selectors ) {
-      return wrappedFnNode( selectors, querySelector$elem, this );
-    };
+    // Wrap various HTML Element prototype functions. We have to do this
+    // multiple times due to how some browsers implement the type hierarchy.
+    elemProtos.forEach( function( proto ) {
+      var querySelector$elem = proto.querySelector;
+      proto.querySelector = function( selectors ) {
+        return wrappedFnNode( selectors, querySelector$elem, this );
+      };
 
-    var querySelectorAll$elem = elemProto.querySelectorAll;
-    elemProto.querySelectorAll = function( selectors ) {
-      return wrappedFnNodeList( selectors, querySelectorAll$elem, this );
-    };
+      var querySelectorAll$elem = proto.querySelectorAll;
+      proto.querySelectorAll = function( selectors ) {
+        return wrappedFnNodeList( selectors, querySelectorAll$elem, this );
+      };
+    });
   }
 
   // Record a handfull of recently-triggered state-changing events.
@@ -106,8 +109,16 @@ define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI 
       var _onerror = window.onerror ? window.onerror : function(){ return true; },
           _dialog, _nullDomList = [];
 
-      // Keep track of DOM accessors that get back null nodes
-      overrideDomMembers( document, HTMLElement.prototype, _nullDomList );
+      // Keep track of DOM accessors that get back null nodes.  We wrap
+      // Document, as well as a few HTML Elements, in order to deal with impl
+      // differences across browsers.
+      overrideDomMembers( window.document,
+                          [
+                            window.HTMLElement.prototype,
+                            window.HTMLDivElement.prototype,
+                            window.DocumentFragment.prototype
+                          ],
+                          _nullDomList );
 
       window.onerror = function( message, url, lineno ) {
         if ( !window.XMLHttpRequest ) {
