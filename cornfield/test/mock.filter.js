@@ -4,6 +4,5 @@ function mockFilter(req, res, next) {
 
 module.exports = {
   isLoggedIn: mockFilter,
-  isStorageAvailable: mockFilter,
-  isXHR: mockFilter
+  isStorageAvailable: mockFilter
 };

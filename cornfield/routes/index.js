@@ -6,7 +6,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
       // Keep track of whether this is production or development
       deploymentType = app.settings.env === "production" ? "production" : "development";
 
-  app.get( '/api/whoami', filter.isXHR, function( req, res ) {
+  app.get( '/api/whoami', function( req, res ) {
     var email = req.session.email;
 
     if (email) {
@@ -26,7 +26,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
   });
 
   app.get( '/api/project/:id?',
-    filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
+    filter.isLoggedIn, filter.isStorageAvailable,
     function( req, res ) {
 
     User.findProject( req.session.email, req.params.id, function( err, doc ) {
@@ -50,7 +50,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
   });
 
   app.post( '/api/delete/:id?',
-    filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
+    filter.isLoggedIn, filter.isStorageAvailable,
     function( req, res ) {
 
     var id = parseInt( req.params.id, 10 );
@@ -79,7 +79,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
   });
 
   app.post( '/api/project/:id?',
-    filter.isLoggedIn, filter.isStorageAvailable, filter.isXHR,
+    filter.isLoggedIn, filter.isStorageAvailable,
     function( req, res ) {
 
     if ( req.body.id ) {
@@ -106,7 +106,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
 
   // We have a separate remix API for unsecured and sanitized access to projects
   app.get( '/api/remix/:id',
-    filter.isStorageAvailable, filter.isXHR,
+    filter.isStorageAvailable,
     function( req, res ) {
 
     User.findById( req.params.id, function( err, project ) {

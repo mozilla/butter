@@ -53,7 +53,6 @@ html
             if ( currentDeletionId ) {
               req = new XMLHttpRequest();
               req.open( 'POST', '/api/delete/' + currentDeletionId, false );
-              req.setRequestHeader( "X-Requested-With", "XMLHttpRequest" );
               req.setRequestHeader( "x-csrf-token", document.getElementById( "csrf" ).value );
               row = document.querySelector( 'tr[data-project-id="' + currentDeletionId + '"]' );
               currentDeletionId = null;

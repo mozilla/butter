@@ -86,7 +86,6 @@
         var xhr = new XMLHttpRequest();
         xhr.open( "GET", url, true );
         xhr.onreadystatechange = generateCSRFOnReadyStateHandler( callback );
-        xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest" );
         if ( extraRequestHeaders ) {
           for ( var requestHeader in extraRequestHeaders ) {
             if ( extraRequestHeaders.hasOwnProperty( requestHeader ) ) {
@@ -113,7 +112,6 @@
         var xhr = new XMLHttpRequest();
         xhr.open( "POST", url, true );
         xhr.onreadystatechange = generateCSRFOnReadyStateHandler( callback );
-        xhr.setRequestHeader( "X-Requested-With", "XMLHttpRequest" );
         if ( __csrfToken ) {
           xhr.setRequestHeader( "x-csrf-token", __csrfToken );
         }
