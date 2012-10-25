@@ -692,7 +692,6 @@
           responseCallback();
           return;
         }
-
         savedDataUrl += "?noCache=" + Date.now();
 
         XHR.getUntilComplete(
@@ -723,9 +722,8 @@
        * @param {Function} finishedCallback: Callback to be called when data loading has completed (successfully or not).
        */
       function attemptDataLoad( finishedCallback ) {
-        var savedDataUrl;
-
-        var project = new Project( _this );
+        var savedDataUrl,
+            project = new Project( _this );
 
         // see if savedDataUrl is in the page's query string
         window.location.search.substring( 1 ).split( "&" ).forEach(function( item ){
@@ -786,28 +784,44 @@
 
         _this.ui.load(function(){
           //prepare the page next
-          preparePopcornScriptsAndCallbacks(function(){
-            preparePage(function(){
-              moduleCollection.ready(function(){
-                // We look for stale data backups locally and prefer those.
-                // If there are none, we continue loading as normal. It's
-                // up to the user to do something with the data once we restore
-                // (i.e., we won't resotre again after this).
-                Project.checkForBackup( _this, function( project ) {
+          preparePopcornScriptsAndCallbacks( function(){
+            preparePage( function(){
+              moduleCollection.ready( function(){
+                // We look for an old project backup in localStorage and give the user
+                // a chance to load or discard. If there isn't a backup, we continue
+                // loading as normal.
+                Project.checkForBackup( _this, function( projectBackup, backupDate ) {
+
                   function useProject( project ) {
-                    if ( project ) {
-                      project.template = project.template || _config.value( "name" );
-                      _this.project = project;
-                      _this.chain( project, [ "projectchanged", "projectsaved" ] );
-                    }
+                    project.template = project.template || _config.value( "name" );
+                    _this.project = project;
+                    _this.chain( project, [ "projectchanged", "projectsaved" ] );
 
                     // Fire the ready event
                     _this.dispatch( "ready", _this );
                   }
 
-                  if( project ) {
-                    useProject( project );
+                  if( projectBackup ) {
+                    // Found backup, ask user what to do
+                    var _dialog = Dialog.spawn( "backup", {
+                      data: {
+                        backupDate: backupDate,
+                        projectName: projectBackup.name,
+                        loadProject: function() {
+                          // Build a new Project and import projectBackup data
+                          var project = new Project( _this );
+                          project.import( projectBackup );
+                          useProject( project );
+                        },
+                        discardProject: function() {
+                          projectBackup = null;
+                          attemptDataLoad( useProject );
+                        }
+                      }
+                    });
+                    _dialog.open();
                   } else {
+                    // No backup found, keep loading
                     attemptDataLoad( useProject );
                   }
                 });
