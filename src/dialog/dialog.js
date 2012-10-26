@@ -268,9 +268,9 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
         },
 
         /**
-         * Member: open
+         * Member: close
          *
-         * Opens the dialog. If listeners were supplied during construction, they are removed now.
+         * Closes the dialog. If listeners were supplied during construction, they are removed now.
          */
         close: function() {
           for( var e in _listeners ){

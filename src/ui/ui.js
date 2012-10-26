@@ -5,11 +5,11 @@
 define( [ "core/eventmanager", "./toggler",
           "./header", "./unload-dialog", "crashreporter",
           "first-run", "./tray", "editor/ui-kit",
-          "core/trackevent" ],
+          "core/trackevent", "dialog/dialog" ],
   function( EventManager, Toggler, Header,
             UnloadDialog, CrashReporter,
             FirstRun, Tray, UIKitDummy,
-            TrackEvent ){
+            TrackEvent, Dialog ){
 
   var TRANSITION_DURATION = 500,
       BUTTER_CSS_FILE = "{css}/butter.ui.css";
@@ -460,6 +460,7 @@ define( [ "core/eventmanager", "./toggler",
                                                                         // if deletion actually occurs, while still taking
                                                                         // advantage of caching.
             selectedEvent,
+            dialog,
             i, l = selectedEvents.length;
 
         if( selectedEvents.length ) {
@@ -474,11 +475,23 @@ define( [ "core/eventmanager", "./toggler",
           }
 
           // Delete the events.
-          for( i = 0; i < l; i++ ) {
-            selectedEvent = selectedEvents[ i ];
-            butter.editor.closeTrackEventEditor( selectedEvent );
-            selectedEvent.track.removeTrackEvent( selectedEvent );
-          }
+          dialog = Dialog.spawn( "delete-track", {
+            data: selectedEvents.length + ( selectedEvents.length === 1 ? " track event" : " track events" ),
+            events: {
+              submit: function( e ) {
+                for( i = 0; i < l; i++ ) {
+                  selectedEvent = selectedEvents[ i ];
+                  butter.editor.closeTrackEventEditor( selectedEvent );
+                  selectedEvent.track.removeTrackEvent( selectedEvent );
+                }
+                dialog.close();
+              },
+              cancel: function( e ) {
+                dialog.close();
+              }
+            }
+          });
+          dialog.open();
         }
       },
 
