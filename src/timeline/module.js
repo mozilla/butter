@@ -55,7 +55,6 @@ define( [
           if ( _currentMedia ) {
             _currentMedia.show();
           }
-          butter.dispatch( "timelineready" );
         }
       }
 

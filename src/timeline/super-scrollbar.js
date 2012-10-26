@@ -287,16 +287,16 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     _zoomSliderContainer.addEventListener( "mousedown", zoomSliderContainerMouseDown, false );
     _zoomSliderHandle.addEventListener( "mousedown", zoomSliderHanldeMouseDown, false );
 
-    _media.listen( "trackeventadded", function( e ) {
-      var trackEvent = document.createElement( "div" ),
-          style = e.data.view.element.style;
-      trackEvent.classList.add( "butter-super-scrollbar-trackevent" );
-      _trackEventVisuals[ e.data.id ] = trackEvent;
-      _visuals.appendChild( trackEvent );
-      trackEvent.style.width = style.width;
-      trackEvent.style.left = style.left;
-      trackEvent.style.top = ( trackEvent.offsetHeight + TRACK_PADDING ) * e.target.order + "px";
-    });
+    function updateTrackEventVisual( trackEvent, order ) {
+      var trackEventVisual = document.createElement( "div" ),
+          style = trackEvent.view.element.style;
+      trackEventVisual.classList.add( "butter-super-scrollbar-trackevent" );
+      _trackEventVisuals[ trackEvent.id ] = trackEventVisual;
+      _visuals.appendChild( trackEventVisual );
+      trackEventVisual.style.width = style.width;
+      trackEventVisual.style.left = style.left;
+      trackEventVisual.style.top = ( trackEventVisual.offsetHeight + TRACK_PADDING ) * order + "px";
+    }
 
     _media.listen( "trackeventremoved", function( e ) {
       var trackEvent = _trackEventVisuals[ e.data.id ];
@@ -333,6 +333,25 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     _media.listen( "mediatimeupdate", function( e ) {
       _scrubber.style.left = e.data.currentTime / _duration * 100 + "%";
     });
+
+    _this.initialize = function() {
+      var i, j, tl, tel,
+          trackEvents,
+          order,
+          track,
+          tracks = _media.tracks;
+      for ( i = 0, tl = tracks.length; i < tl; i++ ) {
+        track = tracks[ i ];
+        trackEvents = track.trackEvents;
+        order = track.order;
+        for ( j = 0, tel = trackEvents.length; j < tel; j++ ) {
+          updateTrackEventVisual( trackEvents[ j ], order );
+        }
+      }
+      _media.listen( "trackeventadded", function( e ) {
+        updateTrackEventVisual( e.data, e.target.order );
+      });
+    };
 
     _media.listen( "mediaready", function( e ) {
       _duration = e.target.duration;
