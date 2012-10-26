@@ -6,6 +6,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
         function( EventManager, TrackEvent, TrackView ){
 
   var __guid = 0,
+      NAME_PREFIX = "Layer ",
       Track;
 
   Track = function( options ) {
@@ -14,13 +15,14 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
     var _trackEvents = [],
         _target = options.target,
         _id = "" + __guid++,
-        _name = options.name || "Layer",
         _view = new TrackView( _id, this ),
         _popcornWrapper = null,
-        _this = this;
+        _this = this,
+        _order = 0,
+        _name = NAME_PREFIX + _order;
 
     _this._media = null;
-    _this.order = 0;
+
     /*
      * ghost stores a reference to the current track's ghost.
      * A ghost track is created when a trackevent overlaps another trackevent and there is
@@ -119,6 +121,16 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
         configurable: false,
         get: function(){
           return _trackEvents;
+        }
+      },
+      order: {
+        enumerable: true,
+        get: function() {
+          return _order;
+        },
+        set: function( val ) {
+          _order = val;
+          _name = NAME_PREFIX + val;
         }
       }
     });

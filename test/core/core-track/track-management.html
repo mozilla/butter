@@ -25,17 +25,19 @@
             trackState = [ 0, track.data ];
           });
 
-          t1 = m.addTrack( { name: "Track 1" } );
+          t1 = m.addTrack( { target: "test1" } );
           ok( trackState[ 0 ] === 1 && trackState[ 1 ] === t1, "trackadded event received" );
 
-          t2 = m.addTrack( { name: "Track 2" } );
+          t2 = m.addTrack( { target: "test2" } );
           ok( trackState[ 0 ] === 1 && trackState[ 1 ] === t2, "trackadded event received" );
 
           ok( m.getTrackById( t1.id ) === t1 &&
-              m.getTrackById( t1.id ).name === "Track 1",
+              m.getTrackById( t1.id ).target === "test1" &&
+              m.getTrackById( t1.id ).name === "Layer 0",
               "Track generation method 1");
           ok( m.getTrackById( t2.id ) === t2 &&
-              m.getTrackById( t2.id ).name === "Track 2",
+              m.getTrackById( t2.id ).target === "test2" &&
+              m.getTrackById( t2.id ).name === "Layer 1",
               "Track generation method 2");
 
           m.removeTrack( t1 );

@@ -9,13 +9,14 @@
     <script src="../butter.inject.js"></script>
     <script src="../test-utils.js"></script>
     <script>
-      asyncTest( "addTrack functionality", 1, function() {
+      asyncTest( "addTrack functionality", 2, function() {
         createButterModule( function( butter ) {
-          var track = { name: "TestTrack" };
+          var track = { target: "test", name: "Layer 2" };
 
           butter.listen( "trackadded", function onTrackAdded( e ) {
             butter.unlisten( "trackadded", onTrackAdded );
-            equal( e.data.name, track.name, "addTrack returned expected track" );
+            equal( e.data.target, track.target, "addTrack returned expected track target" );
+            equal( e.data.name, track.name, "addTrack returned expected track name" );
             start();
           });
 
