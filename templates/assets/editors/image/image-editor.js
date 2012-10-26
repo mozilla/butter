@@ -328,6 +328,7 @@
       _trackEvent = e.target;
       calcImageTime();
       _this.updatePropertiesFromManifest( _trackEvent );
+      _this.setErrorState( false );
 
       var links, i, ln,
           src = _trackEvent.popcornOptions.src;
