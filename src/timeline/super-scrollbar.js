@@ -26,6 +26,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
         _inner = _outer.querySelector( "#butter-super-scrollbar-inner-container" ),
         _rect, _duration,
         _media = media,
+        _ready = false,
         // viewport is the draggable, resizable, representation of the viewable track container.
         _viewPort = _inner.querySelector( "#butter-super-scrollbar-viewport" ),
         _leftHandle = _viewPort.querySelector( "#butter-super-scrollbar-handle-left" ),
@@ -287,15 +288,25 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     _zoomSliderContainer.addEventListener( "mousedown", zoomSliderContainerMouseDown, false );
     _zoomSliderHandle.addEventListener( "mousedown", zoomSliderHanldeMouseDown, false );
 
+    function updateTrackEventView( trackEvent, order ) {
+      // once we're ready here, we'll always be ready.
+      if ( _ready ) {
+        updateTrackEventView = function( trackEvent, order ) {
+          var trackEventView = document.createElement( "div" ),
+              style = trackEvent.view.element.style;
+          trackEventView.classList.add( "butter-super-scrollbar-trackevent" );
+          _trackEventVisuals[ trackEvent.id ] = trackEventView;
+          _visuals.appendChild( trackEventView );
+          trackEventView.style.width = style.width;
+          trackEventView.style.left = style.left;
+          trackEventView.style.top = ( trackEventView.offsetHeight + TRACK_PADDING ) * order + "px";
+        };
+        updateTrackEventView( trackEvent, order );
+      }
+    }
+
     _media.listen( "trackeventadded", function( e ) {
-      var trackEvent = document.createElement( "div" ),
-          style = e.data.view.element.style;
-      trackEvent.classList.add( "butter-super-scrollbar-trackevent" );
-      _trackEventVisuals[ e.data.id ] = trackEvent;
-      _visuals.appendChild( trackEvent );
-      trackEvent.style.width = style.width;
-      trackEvent.style.left = style.left;
-      trackEvent.style.top = ( trackEvent.offsetHeight + TRACK_PADDING ) * e.target.order + "px";
+      updateTrackEventView( e.data, e.target.order );
     });
 
     _media.listen( "trackeventremoved", function( e ) {
@@ -335,7 +346,21 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     });
 
     _media.listen( "mediaready", function( e ) {
+      var i, j, tl, tel,
+          trackEvents,
+          order,
+          track,
+          tracks = _media.tracks;
+      _ready = true;
       _duration = e.target.duration;
+      for ( i = 0, tl = tracks.length; i < tl; i++ ) {
+        track = tracks[ i ];
+        trackEvents = track.trackEvents;
+        order = track.order;
+        for ( j = 0, tel = trackEvents.length; j < tel; j++ ) {
+          updateTrackEventView( trackEvents[ j ], order );
+        }
+      }
       updateView();
     });
 
