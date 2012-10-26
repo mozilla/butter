@@ -105,12 +105,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
     }
 
     function onTrackEventMouseUp( e ){
-      if( _currentMouseDownTrackEvent && _trackEventHighlight === "click" ){
-        var corn = _currentMouseDownTrackEvent.popcornOptions;
-        if( corn.target ){
-          blinkTarget( corn.target );
-        }
-      }
     }
 
     function onTrackEventDragStarted( e ){
