@@ -444,12 +444,26 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
         }
       }, false );
 
-      if ( element.type === "number" ) {
-        element.addEventListener( "change", function( e ) {
-          var updateOptions = {};
-          updateOptions[ propertyName ] = element.value;
+      function onChange( e ) {
+          var updateOptions = {},
+              val = element.value;
+
+          if ( e.type !== "change" && ( !e.keyCode || e.keyCode !== 13 ) ) {
+            return;
+          }
+          if ( val === "" || isNaN( val ) ) {
+            element.value = updateOptions[ propertyName ];
+          } else {
+            updateOptions[ propertyName ] = val;
+          }
           updateTrackEvent( trackEvent, callback, updateOptions );
-        }, false );
+      }
+
+      // Since Firefox doesn't implement type=number, we have to check if this was suppposed to be an input
+      // element with a type of number and handle accordingly
+      if ( trackEvent.manifest.options[ element.getAttribute( "data-manifest-key" ) ].type === "number" ) {
+        element.addEventListener( "change", onChange, false );
+        element.addEventListener( "keypress", onChange, false );
       }
 
       if ( element.type === "textarea" ) {
