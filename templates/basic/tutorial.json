@@ -9,7 +9,7 @@
         "name": "Media0",
         "url": ["http://popcorn.webmadecontent.org/videos/popcornmakertutorial.mp4", "http://popcorn.webmadecontent.org/videos/popcornmakertutorial.webm"],
         "target": "video",
-        "duration": -1,
+        "duration": 170.266,
         "controls": false,
         "tracks": [{
             "name": "Layer",
@@ -153,6 +153,33 @@
                 },
                 "track": "Layer",
                 "name": "TrackEvent11"
+            }, {
+                "id": "TrackEvent10",
+                "type": "text",
+                "popcornOptions": {
+                    "start": 0,
+                    "end": 0.01,
+                    "target": "video-container",
+                    "text": "Press play to get started!",
+                    "linkUrl": "",
+                    "position": "custom",
+                    "alignment": "center",
+                    "transition": "popcorn-fade",
+                    "fontFamily": "Merriweather",
+                    "fontSize": 10,
+                    "fontColor": "#000",
+                    "fontDecorations": {
+                        "bold": false,
+                        "italics": false,
+                        "shadow": false
+                    },
+                    "left": 25.357142857142854,
+                    "top": 42.21693250868056,
+                    "width": 50,
+                    "zindex": 1000
+                },
+                "track": "Layer",
+                "name": "TrackEvent10"
             }]
         }, {
             "name": "Layer",
@@ -216,6 +243,6 @@
             }]
         }]
     }],
-    "name": "Tutorial",
+    "name": "Remix of Tutorial",
     "template": "basic"
 }
