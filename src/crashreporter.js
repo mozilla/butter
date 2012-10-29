@@ -144,11 +144,14 @@ define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI 
         // Be careful about trusting our objects if we've crashed.
         var popcornVersion = window.Popcorn ? window.Popcorn.version : "unknown",
             butterVersion = window.Butter ? window.Butter.version : "unknown",
+            currentMedia = butter.currentMedia || { url: "unknown" },
             crashReport = {
               date: (new Date()).toDateString(),
               message: message,
-              url: url,
+              appUrl: window.location.href,
+              scriptUrl: url,
               lineno: lineno,
+              mediaUrl: currentMedia.url,
               stateList: __stateEventQueue,
               userAgent: navigator.userAgent,
               popcornVersion: popcornVersion,
