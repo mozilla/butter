@@ -201,8 +201,11 @@
       target.appendChild( container );
 
       // Add transition class
-      options._container.classList.add( transition );
-      options._container.classList.add( "off" );
+      // There is a special case where popup has to be added to the innerDiv, not the outer container.
+      options._transitionContainer = ( position !== "custom" && ( transition === "popcorn-pop" || "popcorn-fade" ) ) ? innerDiv : container;
+
+      options._transitionContainer.classList.add( transition );
+      options._transitionContainer.classList.add( "off" );
 
       // Handle all custom fonts/styling
 
@@ -278,16 +281,16 @@
     },
 
     start: function( event, options ) {
-      if ( options._container ) {
-        options._container.classList.add( "on" );
-        options._container.classList.remove( "off" );
+      if ( options._transitionContainer ) {
+        options._transitionContainer.classList.add( "on" );
+        options._transitionContainer.classList.remove( "off" );
       }
     },
 
     end: function( event, options ) {
-      if ( options._container ) {
-        options._container.classList.add( "off" );
-        options._container.classList.remove( "on" );
+      if ( options._transitionContainer ) {
+        options._transitionContainer.classList.add( "off" );
+        options._transitionContainer.classList.remove( "on" );
       }
     },
 
