@@ -124,7 +124,7 @@
               }
 
               if ( option.element.type === "checkbox" ) {
-                _this.attachCheckboxChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
+                _this.attachCheckboxChangeHandler( option.element, option.trackEvent, key );
               }
               else if ( key === "fontColor" ) {
                 _this.attachColorChangeHandler( option.element, option.trackEvent, key, colorCallback );
