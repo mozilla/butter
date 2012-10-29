@@ -213,6 +213,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         }
       });
 
+      _media.dispatch( "timelineready" );
       onMediaReady();
     }
 
