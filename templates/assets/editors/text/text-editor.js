@@ -12,7 +12,13 @@
     var _rootElement = rootElement,
         _trackEvent,
         _butter,
-        _popcornOptions;
+        _popcornOptions,
+        _falseClick = function() {
+          return false;
+        },
+        _trueClick = function() {
+          return true;
+        };
 
     /**
      * Member: setup
@@ -52,14 +58,12 @@
           if ( "background shadow".match( prop ) ) {
             if ( updateOptions[ prop ] ) {
               pickers[ prop ].classList.remove( "butter-editor-disabled" );
-              pickers[ prop ].onclick = function() {
-                return true;
-              };
+              pickers[ prop ].onclick = _trueClick;
+              pickers[ prop ].removeAttribute("disabled");
             } else {
               pickers[ prop ].classList.add( "butter-editor-disabled" );
-              pickers[ prop ].onclick = function() {
-                return false;
-              };
+              pickers[ prop ].onclick = _falseClick;
+              pickers[ prop ].setAttribute( "disabled", "true" );
             }
           }
           trackEvent.update( updateOptions );
@@ -90,23 +94,21 @@
               } else if ( key === "fontColor" ) {
                 _this.attachColorChangeHandler( option.element, option.trackEvent, key, colorCallback );
               } else if ( key === "backgroundColor" ) {
-                pickers[ "background" ] = option.element;
+                pickers.background = option.element;
                 // set initial state
                 if ( !_popcornOptions.background ) {
                   option.element.classList.add( "butter-editor-disabled" );
-                  option.element.onclick = function() {
-                    return false;
-                  };
+                  option.element.onclick = _falseClick;
+                  option.element.setAttribute( "disabled", "true" );
                 }
                 _this.attachColorChangeHandler( option.element, option.trackEvent, key, colorCallback );
               } else if ( key === "shadowColor" ) {
-                pickers[ "shadow" ] = option.element;
+                pickers.shadow = option.element;
                 // set initial state
                 if ( !_popcornOptions.shadow ) {
                   option.element.classList.add( "butter-editor-disabled" );
-                  option.element.onclick = function() {
-                    return false;
-                  };
+                  option.element.onclick = _falseClick;
+                  option.element.setAttribute( "disabled", "true" );
                 }
                 _this.attachColorChangeHandler( option.element, option.trackEvent, key, colorCallback );
               }
@@ -145,9 +147,7 @@
     function anchorClickPrevention( anchorContainer ) {
       if ( anchorContainer ) {
         
-        anchorContainer.onclick = function() {
-          return false;
-        };
+        anchorContainer.onclick = _falseClick;
       }
     }
 
