@@ -14,6 +14,48 @@
     }
   }
 
+  function calculateFinalPositions( event, ui, trackEvent, targetContainer, container, options ) {
+    var target = targetContainer.getBoundingClientRect(),
+        cont = container.getBoundingClientRect(),
+        height = cont.height,
+        width = cont.width,
+        top = ui.position.top,
+        left = ui.position.left,
+        targetHeight = target.height,
+        targetWidth = target.width,
+        minHeightPix = targetHeight * ( ( options.minHeight || 0 ) / 100 ),
+        minWidthPix = targetWidth * ( ( options.minWidth || 0 ) / 100 );
+
+    top = Math.max( 0, top );
+    left = Math.max( 0, left );
+    height = Math.max( minHeightPix, height );
+    width = Math.max( minWidthPix, width );
+
+    if ( ( container.offsetTop + height ) > targetHeight ) {
+      top = targetHeight - height;
+    }
+
+    if ( ( container.offsetLeft + width ) > targetWidth ) {
+      left = targetWidth - width;
+    }
+
+    height = ( height / targetHeight ) * 100;
+    width = ( width / targetWidth ) * 100;
+
+    if ( options.end ) {
+      options.end();
+    }
+
+    blurActiveEl();
+
+    trackEvent.update({
+      height: height,
+      width: width,
+      top: ( top / targetHeight ) * 100,
+      left: ( left / targetWidth ) * 100
+    });
+  }
+
   EditorHelper.init = function( butter ) {
 
     /**
@@ -31,8 +73,7 @@
      *                    {Function} end: Fucntion to execute on drag end event
      */
     global.EditorHelper.draggable = function( trackEvent, dragContainer, targetContainer, options ) {
-      var target = targetContainer.getBoundingClientRect(),
-          iframeCover = targetContainer.querySelector( ".butter-iframe-fix" );
+      var iframeCover = targetContainer.querySelector( ".butter-iframe-fix" );
 
       options = options || {};
 
@@ -63,31 +104,9 @@
           }
         },
         stop: function( event, ui ) {
-
-          var top = ui.position.top,
-              left = ui.position.left;
-
-          target = targetContainer.getBoundingClientRect();
-
-          if ( options.end ) {
-            options.end();
-          }
-
-          if ( top < 0 ) {
-            top = 0;
-          }
-
-          if ( left < 0 ) {
-            left = 0;
-          }
-
           iframeCover.style.display = "none";
-          blurActiveEl();
 
-          trackEvent.update({
-            top: ( top / target.height ) * 100,
-            left: ( left / target.width ) * 100
-          });
+          calculateFinalPositions( event, ui, trackEvent, targetContainer, dragContainer, options );
         }
       });
     };
@@ -127,31 +146,9 @@
         },
         containment: "parent",
         stop: function( event, ui ) {
-          var media = targetContainer.getBoundingClientRect(),
-              height = ( ui.size.height + resizeContainer.offsetTop ) <= media.height ? ui.size.height : media.height - resizeContainer.offsetTop,
-              width = ( ui.size.width + resizeContainer.offsetLeft ) <= media.width ? ui.size.width : media.width - resizeContainer.offsetLeft,
-              top = ( ui.position.top / media.height ) * 100,
-              left = ( ui.position.left / media.width ) * 100;
-
           iframeCover.style.display = "none";
 
-          if ( options.end ) {
-            options.end();
-          }
-
-          height = ( height / media.height ) * 100;
-          width = ( width / media.width ) * 100;
-          height = height >= options.minHeight ? height : options.minHeight;
-          width = width >= options.minWidth ? width : options.minWidth;
-
-          blurActiveEl();
-
-          trackEvent.update({
-            height: height,
-            width: width,
-            top: top,
-            left: left
-          });
+          calculateFinalPositions( event, ui, trackEvent, targetContainer, resizeContainer, options );
         }
       });
     };
