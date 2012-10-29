@@ -5,6 +5,4 @@ before_script:
   - mysql -e 'CREATE DATABASE popcorn;'
   - node make check
 notifications:
-  irc:
-    channels:
-      - "irc.mozilla.org#popcorn"
+  irc: "irc.mozilla.org#popcorn"
