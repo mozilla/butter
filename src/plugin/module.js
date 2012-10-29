@@ -99,6 +99,8 @@ define( [ "core/logger", "./plugin-list", "./plugin" ],
           butter.dispatch( "pluginadded", plugin );
         }
         onReadyCallback();
+      }, function() {
+        console.warn( "Failed to load all plugins. Please check logs and file paths." );
       });
 
       return newPlugins;

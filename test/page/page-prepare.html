@@ -25,7 +25,7 @@
                 }
               }
             )),
-            _loader = Dependencies( _config ),
+            _loader = new Dependencies( _config ),
             _page = new Page( _loader, _config );
 
         asyncTest( "prepare script loading", 2, function() {
