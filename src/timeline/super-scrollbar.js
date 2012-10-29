@@ -288,7 +288,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     _zoomSliderContainer.addEventListener( "mousedown", zoomSliderContainerMouseDown, false );
     _zoomSliderHandle.addEventListener( "mousedown", zoomSliderHanldeMouseDown, false );
 
-    function updateTrackEventView( trackEvent, order ) {
+    var  updateTrackEventView = function( trackEvent, order ) {
       // once we're ready here, we'll always be ready.
       if ( _ready ) {
         updateTrackEventView = function( trackEvent, order ) {
@@ -303,7 +303,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
         };
         updateTrackEventView( trackEvent, order );
       }
-    }
+    };
 
     _media.listen( "trackeventadded", function( e ) {
       updateTrackEventView( e.data, e.target.order );
@@ -351,14 +351,16 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
           order,
           track,
           tracks = _media.tracks;
-      _ready = true;
       _duration = e.target.duration;
-      for ( i = 0, tl = tracks.length; i < tl; i++ ) {
-        track = tracks[ i ];
-        trackEvents = track.trackEvents;
-        order = track.order;
-        for ( j = 0, tel = trackEvents.length; j < tel; j++ ) {
-          updateTrackEventView( trackEvents[ j ], order );
+      if ( !_ready ) {
+        _ready = true;
+        for ( i = 0, tl = tracks.length; i < tl; i++ ) {
+          track = tracks[ i ];
+          trackEvents = track.trackEvents;
+          order = track.order;
+          for ( j = 0, tel = trackEvents.length; j < tel; j++ ) {
+            updateTrackEventView( trackEvents[ j ], order );
+          }
         }
       }
       updateView();
