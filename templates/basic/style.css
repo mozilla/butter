@@ -41,6 +41,7 @@ body.editor-minimized .body-wrapper {
   padding-bottom: 56.25%;
   height: 0;
   z-index: 1;
+  background: #FFF;
 }
 
 .video > video,
