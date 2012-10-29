@@ -8,4 +8,3 @@ notifications:
   irc:
     channels:
       - "irc.mozilla.org#popcorn"
-    on_success: change
