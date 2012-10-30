@@ -11,7 +11,6 @@ define([ "editor/editor", "editor/base-editor",
         editorContainer = rootElement.querySelector( ".editor-container" ),
         projectURL = editorContainer.querySelector( ".butter-project-url" ),
         authorInput = editorContainer.querySelector( ".butter-project-author" ),
-        authorUpdateButton = editorContainer.querySelector( ".butter-project-author-update" ),
         projectEmbedURL = editorContainer.querySelector( ".butter-project-embed-url" ),
         embedSize = editorContainer.querySelector( ".butter-embed-size" ),
         previewBtn = editorContainer.querySelector( ".butter-preview-link" ),
@@ -92,15 +91,6 @@ define([ "editor/editor", "editor/base-editor",
       }
     }
 
-    function save() {
-      butter.project.author = authorInput.value || "";
-      authorUpdateButton.classList.add( "butter-disabled" );
-
-      butter.project.save(function() {
-        displayEditor( true );
-      });
-    }
-
     embedSize.addEventListener( "change", function() {
       embedDimensions = embedSize.value.split( "x" );
       embedWidth = embedDimensions[ 0 ];
@@ -108,13 +98,9 @@ define([ "editor/editor", "editor/base-editor",
       updateEmbed( butter.project.iframeUrl );
     }, false);
 
-    authorInput.addEventListener( "input", function( e ) {
-      authorUpdateButton.classList.remove( "butter-disabled" );
-    }, false );
-
     authorInput.addEventListener( "blur", function( e ) {
       if ( authorInput.value !== butter.project.author ) {
-        save();
+        butter.project.author = authorInput.value;
       }
     }, false );
 

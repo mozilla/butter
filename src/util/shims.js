@@ -6,6 +6,18 @@ define([], function(){
 
   /*global self, DOMException, Range */
 
+  // Provide a global console method for browsers that don't always have one
+  // available (e.g. IE9).
+  if ( !window.console ) {
+    window.console = {
+      log: function(){},
+      warn: function(){},
+      debug: function(){},
+      info: function(){},
+      error: function(){}
+    };
+  }
+
   /*************************************************************************/
   // Support BrowserID when missing (everyone but Firefox Mobile)
   if ( !navigator.id ) {

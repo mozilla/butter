@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define([ "util/xhr", "jsSHA/sha1" ],
+define([ "util/xhr", "jsSHA/sha1", "util/shims" ],
   function( XHR, SHA1 ) {
 
   // Shortcut to make lint happy. Constructor is capitalized, and reference is non-global.
@@ -21,7 +21,8 @@ define([ "util/xhr", "jsSHA/sha1" ],
         name = "",
         username = "",
         server = hostname(),
-        xhrPostQueue = [];
+        xhrPostQueue = [],
+        self = this;
 
     var sendXHRPost = function() {
       console.warn( "XHR.post occurred without a CSRF token. Buffering request." );
@@ -125,21 +126,32 @@ define([ "util/xhr", "jsSHA/sha1" ],
       return authenticated;
     };
 
-    this.publish = function(id, callback) {
+    function publishPlaceholder( id, callback ) {
+      console.warn( "Warning: Popcorn Maker publish is already in progress. Ignoring request." );
+      callback( { error: "Publish is already in progress. Ignoring request." } );
+    }
+
+    function publishFunction( id, callback ) {
+      // Re-route successive calls to `publish` until a complete response has been
+      // received from the server.
+      self.publish = publishPlaceholder;
+
       sendXHRPost(server + "/api/publish/" + id, null, function() {
         if (this.readyState === 4) {
           var response;
+
+          // Reset publish function to its original incarnation.
+          self.publish = publishFunction;
+
           try {
             response = JSON.parse( this.response || this.responseText );
+            callback(response);
           } catch (err) {
             callback({ error: "an unknown error occured" });
-            return;
           }
-
-          callback(response);
         }
       });
-    };
+    }
 
     this.logout = function(callback) {
       sendXHRPost(server + "/persona/logout", null, function() {
@@ -164,7 +176,16 @@ define([ "util/xhr", "jsSHA/sha1" ],
       });
     };
 
-    this.save = function( id, data, callback ) {
+    function savePlaceholder( id, data, callback ) {
+      console.warn( "Warning: Popcorn Maker save is already in progress. Ignoring request." );
+      callback( { error: "Save is already in progress. Ignoring request." } );
+    }
+
+    function saveFunction( id, data, callback ) {
+      // Re-route successive calls to `save` until a complete response has been
+      // received from the server.
+      self.save = savePlaceholder;
+
       var url = server + "/api/project/";
 
       if ( id ) {
@@ -187,6 +208,10 @@ define([ "util/xhr", "jsSHA/sha1" ],
 
       sendXHRPost( url, data, function() {
         if (this.readyState === 4) {
+
+          // Reset save function to its original incarnation.
+          self.save = saveFunction;
+
           try {
             var response = JSON.parse( this.response || this.responseText );
 
@@ -205,13 +230,15 @@ define([ "util/xhr", "jsSHA/sha1" ],
             }
 
             callback(response);
-
           } catch (err) {
             callback({ error: "an unknown error occured" });
           }
         }
       }, "application/json" );
-    };
+    }
+
+    this.save = saveFunction;
+    this.publish = publishFunction;
 
   };
 

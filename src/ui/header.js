@@ -175,6 +175,8 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       }
 
       if ( !butter.project.isSaved ) {
+        toggleSaveButton( false );
+
         // If saving fails, restore the "Save" button so the user can try again.
         _userData.save( function() { afterSave(); },
                         function() { toggleSaveButton( true );
@@ -236,7 +238,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       }
 
       _projectTitle.replaceChild( _projectName, node );
-      _projectTitle.addEventListener( "click", projectNameClick, false );
     }
 
     function projectNameClick( e ) {
@@ -272,11 +273,14 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       // Disable "Save" button
       _this.views.clean();
       _projectName.textContent = butter.project.name;
+      _projectTitle.addEventListener( "click", projectNameClick, false );
     });
+
     butter.listen( "projectchanged", function() {
       // Re-enable "Save" button to indicate things are not saved
       _this.views.dirty();
     });
+
     butter.listen( "ready", function() {
       if ( butter.project.name ) {
         _projectName.textContent = butter.project.name;
