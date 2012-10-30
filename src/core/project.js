@@ -186,11 +186,6 @@ define( [ 'core/eventmanager', 'core/media' ],
         }
       }
 
-      if ( json.projectID ) {
-        _id = json.projectID;
-        _isPublished = true;
-      }
-
       if ( json.name ) {
         _name = json.name;
       }
@@ -246,9 +241,14 @@ define( [ 'core/eventmanager', 'core/media' ],
         console.warn( "Ignored imported media data. Must be in an Array." );
       }
 
+      if ( json.projectID ) {
+        _id = json.projectID;
+        _isPublished = true;
+      }
+
       // If this is a restored backup, restart backups now (vs. on first save)
       // since the user indicated they want it.
-      if( json.backupDate ) {
+      if( json.backupDate || ( json.projectID && json.backupDate  ) ) {
         startBackups();
       }
 
