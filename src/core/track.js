@@ -110,8 +110,12 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
           }
           if( importData.trackEvents ){
             var importTrackEvents = importData.trackEvents;
-            for( var i=0, l=importTrackEvents.length; i<l; ++i ){
-              _this.addTrackEvent( importTrackEvents[ i ] );
+            if ( Array.isArray( importTrackEvents ) ) {
+              for( var i = 0, l = importTrackEvents.length; i < l; ++i ) {
+                _this.addTrackEvent( importTrackEvents[ i ] );
+              }
+            } else if ( console ) {
+              console.warn( "Ignored imported track event data. Must be in an Array." );
             }
           }
         }
