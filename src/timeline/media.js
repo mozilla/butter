@@ -66,7 +66,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _timebar.update();
     }
 
-    _media.listen( "mediaplaying", function(){
+    _media.listen( "mediaplay", function(){
       // Make sure the viewport contains the scrubber
       _tracksContainer.snapTo( _media.currentTime );
       // Listen for timeupdate to attempt to center the viewport around the scrubber
