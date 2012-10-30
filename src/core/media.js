@@ -54,9 +54,6 @@
                 clearInterval( _mediaUpdateInterval );
                 _this.dispatch( "mediapause" );
               },
-              playing: function(){
-                _this.dispatch( "mediaplaying" );
-              },
               play: function(){
                 _mediaUpdateInterval = setInterval( function(){
                   _currentTime = _popcornWrapper.currentTime;
