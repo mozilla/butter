@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBED_SUFFIX ) {
+module.exports = function routesCtor( app, User, filter, sanitizer, stores, utils ) {
 
   var uuid = require( "node-uuid" ),
       // Keep track of whether this is production or development
@@ -41,10 +41,13 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
       }
 
       var projectJSON = JSON.parse( doc.data );
+
       projectJSON.name = doc.name;
       projectJSON.projectID = doc.id;
       projectJSON.author = doc.author;
       projectJSON.template = doc.template;
+      projectJSON.publishUrl = utils.generatePublishUrl( doc.id );
+      projectJSON.iframeUrl = utils.generateIframeUrl( doc.id );
       res.json( projectJSON );
     });
   });
@@ -67,8 +70,8 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, EMBE
       }
 
       // Delete published projects, too
-      var embedShell = id.toString( 36 ),
-          embedDoc = embedShell + EMBED_SUFFIX;
+      var embedShell = utils.generateIdString( id ),
+          embedDoc = embedShell + utils.constants().EMBED_SUFFIX;
 
       // If we can't delete the file, it's already gone, ignore errors.
       // Fire-and-forget.

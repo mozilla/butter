@@ -10,7 +10,9 @@ function generateMockData(id) {
     email: "test@example.org",
     name: "My Mock Project",
     author: "Test User",
-    template: "basic"
+    template: "basic",
+    publishUrl: "http://localhost:8888/v/" + id + ".html",
+    iframeUrl: "http://localhost:8888/v/" + id + "_.html"
   };
 }
 

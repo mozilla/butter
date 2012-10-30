@@ -18,12 +18,11 @@ var express = require('express'),
     filter = require( './lib/filter' )( User.isDBOnline ),
     sanitizer = require( './lib/sanitizer' ),
     FileStore = require('./lib/file-store.js'),
+    utils,
     stores = {},
     TEMPLATES_DIR = CONFIG.dirs.templates,
     APP_HOSTNAME = stripSlash( CONFIG.dirs.appHostname ),
     // If a separate hostname is given for embed, use it, otherwise use app's hostname
-    EMBED_HOSTNAME = CONFIG.dirs.embedHostname ? stripSlash( CONFIG.dirs.embedHostname ) : APP_HOSTNAME,
-    EMBED_SUFFIX = '_',
     WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
     VALID_TEMPLATES = CONFIG.templates,
     EXPORT_ASSETS = CONFIG.exportAssets;
@@ -84,12 +83,18 @@ app.configure( function() {
   stores.publish = setupStore( CONFIG.publishStore );
   stores.crash = setupStore( CONFIG.crashStore );
   stores.feedback = setupStore( CONFIG.feedbackStore );
+
+  utils = require( './lib/utils' )({
+    EMBED_HOSTNAME: CONFIG.dirs.embedHostname ? stripSlash( CONFIG.dirs.embedHostname ) : APP_HOSTNAME,
+    EMBED_SUFFIX: '_'
+  }, stores );
+
 });
 
 require( 'express-persona' )( app, {
   audience: CONFIG.dirs.appHostname
 });
-require('./routes')( app, User, filter, sanitizer, stores, EMBED_SUFFIX );
+require('./routes')( app, User, filter, sanitizer, stores, utils );
 
 function writeEmbedShell( path, url, data, callback ) {
   if( !writeEmbedShell.templateFn ) {
@@ -239,9 +244,9 @@ app.post( '/api/publish/:id',
              popcornString + data.substring( bodyEndTagIndex );
 
       // Convert 1234567890 => "kf12oi"
-      var idBase36 = id.toString( 36 ),
-          publishUrl = EMBED_HOSTNAME + '/' + stores.publish.expand( idBase36 ),
-          iframeUrl = EMBED_HOSTNAME + '/' + stores.publish.expand( idBase36 + EMBED_SUFFIX );
+      var idBase36 = utils.generateIdString( id ),
+          publishUrl = utils.generatePublishUrl( id ),
+          iframeUrl = utils.generateIframeUrl( id );
 
       function finished( err ) {
         if ( err ) {
@@ -269,7 +274,7 @@ app.post( '/api/publish/:id',
           mediaUrl = projectData.media[ 0 ].url,
           attribURL = Array.isArray( mediaUrl ) ? mediaUrl[ 0 ] : mediaUrl;
 
-      writeEmbed( idBase36 + EMBED_SUFFIX, iframeUrl,
+      writeEmbed( idBase36 + utils.constants().EMBED_SUFFIX, iframeUrl,
                   {
                     id: id,
                     author: project.author,
