@@ -47,6 +47,22 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
 
     _header = new Header( _editorAreaDOMRoot, _this );
 
+    function setupHeader() {
+      if ( butter.project.isSaved ) {
+        _header.views.saved();
+      } else {
+        _header.views.unSaved();
+      }
+    }
+
+    // Set up views for share editor
+    butter.listen( "ready", setupHeader );
+    butter.listen( "autologinsucceeded", setupHeader );
+    butter.listen( "authenticated", setupHeader );
+
+    butter.listen( "projectsaved", _header.views.saved );
+    butter.listen( "logout", _header.views.unSaved );
+
     /**
      * Member: openEditor
      *

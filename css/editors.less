@@ -51,6 +51,12 @@
   &.butter-active {
     background: @green;
   }
+  &.butter-editor-btn-disabled {
+    color: rgba( 255, 255, 255, 0.3 );
+    > .icon {
+      opacity: 0.3;
+    }
+  }
 }
 
 .butter-editor-close-btn {
@@ -482,6 +488,9 @@
     opacity: 1;
     visibility: visible;
     .transition( opacity 0.3s ease 0.5s );
+  }
+  &.tooltip-off {
+    display: none;
   }
   &.tooltip-no-transition-on {
     opacity: 1;
