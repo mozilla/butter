@@ -334,8 +334,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       _scrubber.style.left = e.data.currentTime / _duration * 100 + "%";
     });
 
-    function onTimelineReady() {
-      _media.unlisten( "timelineready", onTimelineReady );
+    _this.initialize = function() {
       var i, j, tl, tel,
           trackEvents,
           order,
@@ -352,14 +351,12 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       _media.listen( "trackeventadded", function( e ) {
         updateTrackEventVisual( e.data, e.target.order );
       });
-    }
+    };
 
     _media.listen( "mediaready", function( e ) {
       _duration = e.target.duration;
       updateView();
     });
-
-    _media.listen( "timelineready", onTimelineReady );
 
     _this.resize = function() {
       _this.update();
