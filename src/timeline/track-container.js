@@ -162,10 +162,17 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
     function onTrackEventDragStarted( e ) {
       var trackEventView = e.target,
           element = trackEventView.element,
-          trackView = trackEventView.trackEvent.track.view;
+          trackView = trackEventView.trackEvent.track.view,
+          topOffset = element.getBoundingClientRect().top - _container.getBoundingClientRect().top;
 
       trackView.element.removeChild( element );
+
+      // After the trackevent view element is removed, we need to set its top value manually so that dragging & scrolling can happen
+      // starting with the correct Y value. Otherwise, it would be reset to 0 (the top of _container), which is incorrect.
+      element.style.top = topOffset + "px";
+
       _container.appendChild( element );
+
       _vScrollbar.update();
     }
 

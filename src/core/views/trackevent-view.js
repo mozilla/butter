@@ -79,8 +79,13 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
       var clone = _element.cloneNode( false );
       clone.style.top = "";
-      clone.style.left = "";
+
+      // Copy the `left` attribute here, once. Successive updates are done using
+      // the translate transform property.
+      clone.style.left = _element.style.left;
+
       clone.classList.add( "butter-track-event-ghost" );
+      LangUtils.setTransformProperty( clone, "" );
 
       _ghost = {
         element: clone
@@ -100,7 +105,9 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
     };
 
     this.updateGhost = function() {
-      _ghost.element.style.left = _element.style.left;
+      // Don't touch top or left style attributes. Just adjust transform through translate(x, 0) to match
+      // the draggable element.
+      LangUtils.setTransformProperty( _ghost.element, "translate(" + _draggable.getLastOffset()[ 0 ] + "px, 0px)" );
     };
 
     this.setDragHandler = function( dragHandler ) {

@@ -6,6 +6,19 @@ define( [ "./shims" ], function(){
 
   var DEFAULT_TRANSITION_TIMEOUT = 15;
 
+  var TRANSFORM_PROPERTY = (function(){
+    var div = document.createElement( "div" );
+    var choices = "Webkit Moz O ms".split( " " ).map( function( prefix ) { return prefix + "Transform"; } );
+
+    for ( var i = choices.length; i >= 0; --i ) {
+      if ( div.style[ choices[ i ] ] !== undefined ) {
+        return choices[ i ];
+      }
+    }
+
+    return "transform";
+  }());
+
   /**
    * HTML escape code from mustache.js, used under MIT Licence
    * https://github.com/janl/mustache.js/blob/master/mustache.js
@@ -156,6 +169,14 @@ define( [ "./shims" ], function(){
       element.removeEventListener( "transitionend", listener, false );
       element.removeEventListener( "oTransitionEnd", listener, false );
       element.removeEventListener( "webkitTransitionEnd", listener, false );
+    },
+
+    setTransformProperty: function( element, transform ) {
+      element.style[ TRANSFORM_PROPERTY ] = transform;
+    },
+
+    getTransformProperty: function( element ) {
+      return element.style[ TRANSFORM_PROPERTY ];
     }
   };
 
