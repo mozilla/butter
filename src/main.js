@@ -10,7 +10,7 @@
     "Chrome": 17,
     "Firefox": 10,
     "MSIE": 9,
-    "Safari": 5,
+    "Safari": 6,
     "Opera": 9
   };
 
