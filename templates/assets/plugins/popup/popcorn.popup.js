@@ -9,7 +9,9 @@
       _pluginRoot = "/templates/assets/plugins/popup/",
       FILL_STYLE = "rgb(255, 255, 255)",
       innerDivTriangles = {},
-      DEFAULT_FONT = "Tangerine";
+      DEFAULT_FONT = "Tangerine",
+      // Since this plugin originally set font sizes in px, we have to set a base font size to calculate percentages against.
+      BASE_FONT_SIZE = 14;
 
   // Set up speech innerDiv triangles
   innerDivTriangles.speech = document.createElement( "canvas" );
@@ -351,7 +353,7 @@
       textContainer.style.fontStyle = options.fontDecorations.italics ? "italic" : "normal";
       textContainer.style.color = options.fontColor ? options.fontColor : "#668B8B";
       textContainer.style.textDecoration = options.fontDecorations.underline ? "underline" : "none";
-      textContainer.style.fontSize = options.fontSize ? options.fontSize + "px" : "12px";
+      textContainer.style.fontSize = options.fontSize ? options.fontSize / BASE_FONT_SIZE + "em" : "0.86em";
       textContainer.style.fontWeight = options.fontDecorations.bold ? "bold" : "normal";
 
       if ( linkUrl ) {

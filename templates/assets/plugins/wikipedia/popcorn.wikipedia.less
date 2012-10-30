@@ -1,6 +1,6 @@
 
 .wikipedia-outer-container {
-  @titleheight: 43px;
+  @titleheight: 2.2em;
 
   position: absolute;
   background: #FFF;
@@ -25,12 +25,12 @@
     display: block;
     color: #666;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 1em;
     font-weight: 600;
     border-left: 1px solid #E6E6E6;
-    padding-left: 10px;
+    padding-left: 0.7em;
     overflow: hidden;
-    margin-right: 30px;
+    margin-right: 0.467em;
     height: 100%;
     text-overflow: ellipsis;
   }
@@ -60,7 +60,7 @@
     height: 100%;
     overflow-y: scroll;
     color: #000;
-    font-size: 11.5px;
+    font-size: 0.7em;
     line-height: 1.5;
     font-family: georgia;
     -moz-box-sizing: border-box;
@@ -80,72 +80,5 @@
 
   .wikipedia-to-wiki:hover  {
     opacity: 1;
-  }
-}
-
-._mediumMediaQueries() {
-  @titleheight: 55px;
-  .wikipedia-title {
-    height:@titleheight;
-    line-height:@titleheight;
-  }
-  .wikipedia-title a {
-    font-size: 18px;
-    font-weight: 400;
-  }
-  .wikipedia-title:before {
-    height: @titleheight;
-    width:@titleheight;
-    background-position: -32px 0;
-  }
-  .wikipedia-main-content {
-    padding-left: 40px;
-    padding-top: @titleheight;
-  }
-  .wikipedia-content {
-    font-size: 14px;
-    line-height: 1.8;
-    padding-right: 20px;
-  }
-}
-
-._largeMediaQueries() {
-   .wikipedia-title a {
-    font-size: 20px;
-    font-weight: 400;
-  }
-  .wikipedia-main-content {
-    padding-left: 50px;
-    padding-top: 75px;
-  }
-  .wikipedia-content {
-    font-size: 18px;
-    line-height: 1.8;
-    padding-right: 40px;
-  }
-}
-
-
-@media only screen and (min-width: 853px) and (min-height : 480px) {
-   ._mediumMediaQueries();
-}
-
-@media only screen and (min-width: 1280px) and (min-height : 720px) {
-  ._largeMediaQueries();
-}
-
-/*********************************************************
-* Butter-specific. Ugh....
-*/
-
-@media only screen and (min-width : 1203px) and (min-height : 780px) {
-  .butter-header-spacing {
-    ._mediumMediaQueries()
-  }
-}
-
-@media only screen and (min-width : 1630px) and (min-height : 1020px) {
-  .butter-header-spacing {
-    ._largeMediaQueries()
   }
 }
