@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang", "util/keys", "editor/editor", "util/uri", "text!layouts/media-editor.html" ],
-  function( LangUtils, KeysUtils, Editor, Uri, EDITOR_LAYOUT ) {
+define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/media-editor.html" ],
+  function( LangUtils, URI, KeysUtils, Editor, EDITOR_LAYOUT ) {
 
   var MAX_MEDIA_INPUTS = 4,
       _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
@@ -145,16 +145,18 @@ define( [ "util/lang", "util/keys", "editor/editor", "util/uri", "text!layouts/m
   }
 
   function setup() {
-    var url = _media.url;
+    var urls = _media.url,
+        url;
 
     clearCurrentMediaList();
 
-    if ( !Array.isArray( url ) ) {
-      url = [ url ];
+    if ( !Array.isArray( urls ) ) {
+      urls = [ urls ];
     }
 
-    for ( var i = 0, l = url.length; i < l; i++ ) {
-      createInput( url[ i ], i === 0 );
+    for ( var i = 0, l = urls.length; i < l; i++ ) {
+      url = urls[ i ];
+      createInput( URI.stripUnique( url ).toString(), i === 0 );
     }
     while ( _emptyInputs ) {
       createInput( "" );

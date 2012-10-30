@@ -68,6 +68,27 @@ define( [], function(){
     return s;
   }
 
+  // Rebuild the query string for a uri
+  function updateQuery( uriObject ) {
+    var queryKey = uriObject.queryKey,
+        queryString = "",
+        queryKeyCount = 0,
+        key, value;
+
+    for ( key in queryKey ) {
+      if ( queryKey.hasOwnProperty( key ) ) {
+        value = queryKey[ key ];
+        queryString += queryKeyCount > 0 ? "&" : "";
+        queryString += key;
+        // Allow value=0
+        queryString += ( !!value || value === 0 ) ? "=" + value : "";
+        queryKeyCount++;
+      }
+    }
+    uriObject.query = queryString;
+    return uriObject;
+  }
+
   var URI = {
 
     // Allow overriding the initial seed (mostly for testing).
@@ -90,34 +111,26 @@ define( [], function(){
     // Make a URI object (or URI string, turned into a URI object) unique.
     // This will turn http://foo.com into http://foo.com?<UID_KEY_NAME>=<seed number++>.
     makeUnique: function( uriObject ){
-      var key,
-          value,
-          queryKey,
-          queryString = "",
-          queryKeyCount = 0;
-
       if( typeof uriObject === "string" ){
         uriObject = this.parse( uriObject );
       }
 
-      queryKey = uriObject.queryKey;
-
+      var queryKey = uriObject.queryKey;
       queryKey[ UID_KEY_NAME ] = seed++;
+      return updateQuery( uriObject );
+    },
 
-      // Update query string to reflect change
-      for( key in queryKey ){
-        if( queryKey.hasOwnProperty( key ) ){
-          value = queryKey[ key ];
-          queryString += queryKeyCount > 0 ? "&" : "";
-          queryString += key;
-          // Allow value=0
-          queryString += ( !!value || value === 0 ) ? "=" + value : "";
-          queryKeyCount++;
-        }
+    // Remove the butteruid unique identifier from a URL, that is, undo makeUnique
+    stripUnique: function( uriObject ) {
+      if( typeof uriObject === "string" ){
+        uriObject = this.parse( uriObject );
       }
-      uriObject.query = queryString;
 
-      return uriObject;
+      var queryKey = uriObject.queryKey;
+      if( queryKey ) {
+        delete queryKey[ UID_KEY_NAME ];
+      }
+      return updateQuery( uriObject );
     }
   };
 
