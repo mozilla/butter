@@ -220,30 +220,33 @@
 // }
 
 // These are the widths chosen for each supported size.
-@small-w: 560px;
-@medium-w: 640px;
-@large-w: 853px;
-@xlarge-w: 1280px;
+@small-w: 560;
+@medium-w: 640;
+@large-w: 853;
+@xlarge-w: 1280;
+
+@small-w-px: @small-w + 0px;
+@medium-w-px: @medium-w + 0px;
+@large-w-px: @large-w + 0px;
+@xlarge-w-px: @xlarge-w + 0px;
 
 // Heights are calculated based on 16:9 standard video aspect ratio.
 @aspectratio: 0.5625;
 
 // Editor width
-@in-editor-offset-w: @EDITOR_WIDTH;
-@in-editor-offset-h: @TRAY_HEIGHT + @HEADER_SPACING;
+@in-editor-offset-w: ~`parseInt( "@{EDITOR_WIDTH}" )`;
+@in-editor-offset-h: ~`parseInt( "@{TRAY_HEIGHT}" ) + parseInt( "@{HEADER_SPACING}" )`;
 
 // ~`...` is javascript evaluation in LESS http://lesscss.org/#-javascript-evaluation
 // This has to use parseInt because the LESS variables have px in them
 @small: ~`"only screen and (min-width : 0px) and (min-width: 0px)"`;
 // This can't actually be replaced by (max-width: @medium-w) and (max-height: @medium-h) because there would be a case where
 // width > @medium-w` (out of range) but `height < @medium-h` (in-range) or vice versa that isn't covered by any media query.
-@medium: ~`"only screen and (min-width : " + parseInt("@{medium-w}") + "px) and (min-height : " + (parseInt("@{medium-w}") * @{aspectratio}) + "px)"`;
-@large: ~`"only screen and (min-width : " + parseInt("@{large-w}")+ "px) and (min-height : " + (parseInt("@{large-w}")* @{aspectratio}) + "px)"`;
-@xlarge: ~`"only screen and (min-width : " + parseInt("@{xlarge-w}") + "px) and (min-height : " + (parseInt("@{xlarge-w}") * @{aspectratio}) + "px)"`;
+@medium: ~`"only screen and (min-width : @{medium-w}px) and (min-height : " + (@{medium-w} * @{aspectratio}) + "px)"`;
+@large: ~`"only screen and (min-width : @{large-w}px) and (min-height : " + (@{large-w} * @{aspectratio}) + "px)"`;
+@xlarge: ~`"only screen and (min-width : @{xlarge-w}px) and (min-height : " + (@{xlarge-w} * @{aspectratio}) + "px)"`;
 
 @small-in-editor: ~`"only screen and (min-width : 0px) and (min-width: 0px)"`;
-@medium-in-editor: ~`"only screen and (min-width : " + (parseInt("@{medium-w}") + parseInt("@{in-editor-offset-w}") ) + "px) and (min-height : " + (parseInt("@{medium-w}") * @{aspectratio} + parseInt("@{in-editor-offset-h}")) + "px)"`;
-@large-in-editor: ~`"only screen and (min-width : " + (parseInt("@{large-w}")+ parseInt("@{in-editor-offset-w}") ) + "px) and (min-height : " + (parseInt("@{large-w}")* @{aspectratio} + parseInt("@{in-editor-offset-h}")) + "px)"`;
-@xlarge-in-editor: ~`"only screen and (min-width : " + (parseInt("@{xlarge-w}") + parseInt("@{in-editor-offset-w}") ) + "px) and (min-height : " + (parseInt("@{xlarge-w}") * @{aspectratio} + parseInt("@{in-editor-offset-h}")) + "px)"`;
-
-
+@medium-in-editor: ~`"only screen and (min-width : " + (@{medium-w} + @{in-editor-offset-w} ) + "px) and (min-height : " + (@{medium-w} * @{aspectratio} + @{in-editor-offset-h}) + "px)"`;
+@large-in-editor: ~`"only screen and (min-width : " + (@{large-w} + @{in-editor-offset-w}) + "px) and (min-height : " + (@{large-w} * @{aspectratio} + @{in-editor-offset-h}) + "px)"`;
+@xlarge-in-editor: ~`"only screen and (min-width : " + (@{xlarge-w} + @{in-editor-offset-w}) + "px) and (min-height : " + (@{xlarge-w} * @{aspectratio} + @{in-editor-offset-h}) + "px)"`;
