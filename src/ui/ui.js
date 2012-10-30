@@ -484,7 +484,7 @@ define( [ "core/eventmanager", "./toggler",
 
           // Delete the events with warning dialog.
           dialog = Dialog.spawn( "delete-track", {
-            data: selectedEvents.length + ( selectedEvents.length === 1 ? " track event" : " track events" ),
+            data: selectedEvents.length + " track events",
             events: {
               submit: function( e ) {
                 for( i = 0; i < l; i++ ) {
