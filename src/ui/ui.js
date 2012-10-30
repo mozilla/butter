@@ -474,9 +474,17 @@ define( [ "core/eventmanager", "./toggler",
             }
           }
 
-          // Delete the events.
+          // If we have one track event just delete it, otherwise display a warning dialog.
+          if ( selectedEvents.length === 1 ) {
+            selectedEvent = selectedEvents[ 0 ];
+            butter.editor.closeTrackEventEditor( selectedEvent );
+            selectedEvent.track.removeTrackEvent( selectedEvent );
+            return;
+          }
+
+          // Delete the events with warning dialog.
           dialog = Dialog.spawn( "delete-track", {
-            data: selectedEvents.length + ( selectedEvents.length === 1 ? " track event" : " track events" ),
+            data: selectedEvents.length + " track events",
             events: {
               submit: function( e ) {
                 for( i = 0; i < l; i++ ) {
