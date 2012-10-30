@@ -130,7 +130,7 @@ define( [ "util/lang" ], function( util ){
       _playButton.state = true;
     });
 
-    _media.listen( "mediaplaying", function( e ){
+    _media.listen( "mediaplay", function( e ){
       _playButton.state = false;
     });
 

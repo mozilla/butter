@@ -55,11 +55,11 @@
                 clearInterval( _mediaUpdateInterval );
                 _this.dispatch( "mediapause" );
               },
-              playing: function(){
+              play: function(){
                 _mediaUpdateInterval = setInterval( function(){
                   _currentTime = _popcornWrapper.currentTime;
                 }, 10 );
-                _this.dispatch( "mediaplaying" );
+                _this.dispatch( "mediaplay" );
               },
               ended: function(){
                 _this.dispatch( "mediaended" );

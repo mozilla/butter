@@ -240,7 +240,7 @@ define( [ "util/lang" ],
       setNodePosition();
     };
 
-    _media.listen( "mediaplaying", function( e ) {
+    _media.listen( "mediaplay", function( e ) {
       _isPlaying = true;
     });
 
