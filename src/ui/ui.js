@@ -474,7 +474,7 @@ define( [ "core/eventmanager", "./toggler",
             }
           }
 
-          // if we have one track event just delete it, otherwise display a warning dialog.
+          // If we have one track event just delete it, otherwise display a warning dialog.
           if ( selectedEvents.length === 1 ) {
             selectedEvent = selectedEvents[ 0 ];
             butter.editor.closeTrackEventEditor( selectedEvent );
