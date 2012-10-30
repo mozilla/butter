@@ -223,6 +223,7 @@ define( [ "util/lang" ],
 
     var onMouseDown = this.onMouseDown = function( e ) {
       var pos = e.pageX - _container.getBoundingClientRect().left;
+      e.preventDefault();
       _media.currentTime = ( pos + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration;
       setNodePosition();
       onScrubberMouseDown( e );

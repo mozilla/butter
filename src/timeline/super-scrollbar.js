@@ -101,6 +101,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
 
     onViewMouseDown = function( e ) {
       e.stopPropagation();
+      e.preventDefault();
       _viewPort.classList.remove( "viewport-transition" );
       _offset = e.clientX - _rect.left - _viewPort.offsetLeft;
       _media.pause();  // pause the media here to diffuse confusion with scrolling & playing
@@ -110,6 +111,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
 
     onLeftMouseDown = function( e ) {
       e.stopPropagation();
+      e.preventDefault();
       _media.pause();  // pause the media here to diffuse confusion with scrolling & playing
       _viewPort.classList.remove( "viewport-transition" );
       outerElement.removeEventListener( "scroll", updateView, false );
@@ -119,6 +121,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
 
     onRightMouseDown = function( e ) {
       e.stopPropagation();
+      e.preventDefault();
       _media.pause();  // pause the media here to diffuse confusion with scrolling & playing
       outerElement.removeEventListener( "scroll", updateView, false );
       _viewPort.classList.remove( "viewport-transition" );
@@ -277,6 +280,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     }
 
     function zoomSliderHanldeMouseDown( e ) {
+      e.preventDefault();
       _viewPort.classList.add( "viewport-transition" );
       _zoomSliderHandle.removeEventListener( "mousedown", zoomSliderHanldeMouseDown, false );
       _zoomSliderContainer.removeEventListener( "mousedown", zoomSliderContainerMouseDown, false );
