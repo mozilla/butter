@@ -10,6 +10,7 @@
       FILL_STYLE = "rgb(255, 255, 255)",
       innerDivTriangles = {},
       DEFAULT_FONT = "Tangerine",
+      // Since this plugin originally set font sizes in px, we have to set a base font size to calculate percentages against.
       BASE_FONT_SIZE = 14;
 
   // Set up speech innerDiv triangles
