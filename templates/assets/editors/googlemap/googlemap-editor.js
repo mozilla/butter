@@ -13,7 +13,8 @@
     var _rootElement = rootElement,
         _trackEvent,
         _popcornEventMapReference,
-        _butter;
+        _butter,
+        _popcorn;
 
     /**
      * Member: getMapFromTrackEvent
@@ -178,34 +179,36 @@
 
     }
 
+    function mapLoaded() {
+      _popcorn.off( "googlemaps-loaded", mapLoaded );
+      getMapFromTrackEvent();
+    }
+
+    function onTrackEventUpdated( e ) {
+      _this.updatePropertiesFromManifest( e.target );
+      _this.setErrorState( false );
+
+      // Now we REALLY know that we can try setting up listeners
+      _popcorn.on( "googlemaps-loaded", mapLoaded );
+    }
+
     // Extend this object to become a BaseEditor
     Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
-        var popcorn = butter.currentMedia.popcorn.popcorn;
+        _popcorn = butter.currentMedia.popcorn.popcorn;
 
         _butter = butter;
         // Update properties when TrackEvent is updated
-        trackEvent.listen( "trackeventupdated", function ( e ) {
-          _this.updatePropertiesFromManifest( e.target );
-          _this.setErrorState( false );
-
-          // Now we REALLY know that we can try setting up listeners
-          popcorn.on( "googlemaps-loaded", function() {
-            popcorn.off( "googlemaps-loaded" );
-            getMapFromTrackEvent();
-          });
-        });
+        trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
 
         // Now we REALLY know that we can try setting up listeners
-        popcorn.on( "googlemaps-loaded", function() {
-          popcorn.off( "googlemaps-loaded" );
-          getMapFromTrackEvent();
-        });
+        _popcorn.on( "googlemaps-loaded", mapLoaded );
 
         setup( trackEvent );
 
       },
       close: function() {
+        _trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
       }
     });
   });
