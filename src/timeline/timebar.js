@@ -104,7 +104,7 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
     _media.listen( "mediapause", function() {
       _tracksContainer.element.addEventListener( "scroll", drawTicks, false );
     });
-    _media.listen( "mediaplaying", function() {
+    _media.listen( "mediaplay", function() {
       _tracksContainer.element.removeEventListener( "scroll", drawTicks, false );
     });
     _tracksContainer.element.addEventListener( "scroll", drawTicks, false );

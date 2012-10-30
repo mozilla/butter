@@ -7,7 +7,7 @@
         
         options.skipRange = function() {
           var ct = this.currentTime();
-          if ( ct > options.start && ct < options.end ) {
+          if ( !this.paused() && ct > options.start && ct < options.end ) {
             this.currentTime( skipTime );
           }
         };
