@@ -193,10 +193,9 @@ S3FileStore.prototype.find = function( prefix, callback ) {
     }
 
     S3Files.forEach( function( S3File ) {
-      if ( S3File.Key ) {
-        found.push( S3File );
-      }
+      found.push( S3File.Key );
     });
+
     callback( found );
   });
 };
