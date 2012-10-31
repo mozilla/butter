@@ -19,6 +19,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _projectMenu = _rootElement.querySelector( ".butter-project-menu" ),
         _projectMenuControl = _rootElement.querySelector( ".butter-project-menu-control" ),
         _projectMenuList = _projectMenu.querySelector( ".butter-btn-menu" ),
+        _projectAutoSave = _rootElement.querySelector( ".butter-project-autosave" ),
         _tabzilla = _rootElement.querySelector( "#tabzilla" ),
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML,
@@ -259,6 +260,17 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     this.attachToDOM = function() {
       document.body.classList.add( "butter-header-spacing" );
       document.body.insertBefore( _rootElement, document.body.firstChild );
+    };
+
+    this.attachProjectBackup = function( project, location ) {
+
+      // Ensure the given project is indeed from a backup
+      if ( project && project.backupDate ) {
+        var queryString = location.substring( 0, location.lastIndexOf( "?" ) );
+
+        _projectAutoSave.classList.remove( "hidden" );
+        _projectAutoSave.href = queryString + "?savedDataUrl=/api/project/" + project.projectID;
+      }
     };
 
     butter.listen( "autologinsucceeded", _this.views.login, false );

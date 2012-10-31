@@ -798,25 +798,22 @@
                     _this.dispatch( "ready", _this );
                   }
 
-                  if( projectBackup ) {
-                    // Found backup, ask user what to do
-                    var _dialog = Dialog.spawn( "backup", {
-                      data: {
-                        backupDate: backupDate,
-                        projectName: projectBackup.name,
-                        loadProject: function() {
-                          // Build a new Project and import projectBackup data
-                          var project = new Project( _this );
+                  if ( projectBackup ) {
+                    var location = window.location.href,
+                        id = location.substring( location.lastIndexOf( "/" ) + 1 );
+
+                    id = parseInt( id, 10 );
+
+                    if ( !isNaN( id ) && ( projectBackup.projectID === id ) ) {
+                      var project = new Project( _this );
                           project.import( projectBackup );
                           useProject( project );
-                        },
-                        discardProject: function() {
-                          projectBackup = null;
-                          attemptDataLoad( useProject );
-                        }
-                      }
-                    });
-                    _dialog.open();
+                    } else {
+                      // Backup found doesn't match project being loaded. Proceed loading
+                      // current project
+                      _this.ui.header.attachProjectBackup( projectBackup, location );
+                      attemptDataLoad( useProject );
+                    }
                   } else {
                     // No backup found, keep loading
                     attemptDataLoad( useProject );
