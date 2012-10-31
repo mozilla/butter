@@ -222,6 +222,12 @@
       }
     };
 
+    var mimeTypeMapping = {
+      "image/gif": "image/png",
+      "image/jpeg": "image/jpeg",
+      "image/png": "image/png"
+    };
+
     /**
      * Member: droppable
      *
@@ -320,7 +326,21 @@
             context = canvas.getContext( "2d" );
             context.drawImage( this, 0, 0, scaledWidth, scaledHeight );
 
-            imgURI = canvas.toDataURL();
+            // If we can't reasonably convert whatever they're dropping on us then bail
+            var exportAs = mimeTypeMapping[ file.type ];
+            if ( !exportAs ) {
+              butter.dispatch( "droppable-unsupported" );
+              return;
+            }
+
+            imgURI = canvas.toDataURL( exportAs );
+
+            // If the browser's canvas impl. doesn't support whatever we requested then bail
+            if ( imgURI.indexOf( exportAs ) === -1 ) {
+              butter.dispatch( "droppable-unsupported" );
+              return;
+            }
+
             trackEvent.update( { src: imgURI } );
 
             if ( window.URL && window.URL.revokeObjectURL ) {
