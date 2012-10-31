@@ -63,7 +63,7 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/m
 
       function updateMediaOnChange() {
         if ( oldValue !== urlInput.value ) {
-            updateButterMedia();
+          updateButterMedia();
         }
       }
 
