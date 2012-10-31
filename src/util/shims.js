@@ -5,6 +5,24 @@
 define([], function(){
 
   /*global self, DOMException, Range */
+
+  /*************************************************************************/
+  // Support BrowserID when missing (everyone but Firefox Mobile)
+  if ( !navigator.id ) {
+    var script = document.createElement( "script" );
+    script.src = "https://login.persona.org/include.js";
+    script.type = "text/javascript";
+    script.setAttribute( "data-butter-exclude", true );
+    document.head.appendChild( script );
+
+    // If the BrowserID shim isn't loaded when Cornfield.login tries to use it, then we'll crash
+    // This shim will be replaced by the real BrowserID shim when it loads
+    navigator.id = {
+      _shimmed: true,
+      get: function() {}
+    };
+  }
+
   /*************************************************************************/
   // Support createContextualFragment when missing (IE9)
   if ( 'Range' in window &&
