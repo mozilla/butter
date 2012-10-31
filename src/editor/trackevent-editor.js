@@ -20,7 +20,8 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
         "Open Sans",
         "Bangers",
         "Fredoka One",
-        "Covered By Your Grace"
+        "Covered By Your Grace",
+        "Coda"
       ],
       __colorHexCodes = {
         "black": "#000000",
@@ -599,6 +600,8 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
           var font,
               m,
               fLen;
+
+          __googleFonts = __googleFonts.sort();
 
           for ( m = 0, fLen = __googleFonts.length; m < fLen; m++ ) {
             font = document.createElement( "option" );
