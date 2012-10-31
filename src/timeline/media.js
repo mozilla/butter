@@ -136,6 +136,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _bounds = DEFAULT_BOUNDS;
       _tracksContainer.setViewportBounds( _bounds[ 0 ], _bounds[ 1 ] );
       updateUI();
+      _timebar.enable();
       _this.dispatch( "ready" );
     }
 
@@ -221,6 +222,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     butter.editor.listen( "editortoggled", onEditorToggled );
     butter.listen( "editoropened", onEditorToggled );
+    _media.listen( "mediacontentchanged", _timebar.disable );
 
     function onPluginDropped( e ) {
       var type = e.data.type,

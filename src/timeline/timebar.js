@@ -15,8 +15,6 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
         _tracksContainer = tracksContainer,
         _scrubber = new Scrubber( butter, _element, _media, _tracksContainer, hScrollbar );
 
-    _canvas.addEventListener( "mousedown", _scrubber.onMouseDown, false );
-
     function drawTicks() {
       var tracksContainerWidth = tracksContainer.container.getBoundingClientRect().width,
           width = Math.min( tracksContainerWidth, _tracksContainer.container.scrollWidth ),
@@ -111,6 +109,16 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
 
     this.update = function() {
       drawTicks();
+    };
+
+    this.enable = function() {
+      _canvas.addEventListener( "mousedown", _scrubber.onMouseDown, false );
+      _scrubber.enable();
+    };
+
+    this.disable = function() {
+      _canvas.removeEventListener( "mousedown", _scrubber.onMouseDown, false );
+      _scrubber.disable();
     };
 
     Object.defineProperties( this, {
