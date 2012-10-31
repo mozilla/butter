@@ -63,6 +63,9 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     butter.listen( "projectsaved", _header.views.saved );
     butter.listen( "logout", _header.views.unSaved );
 
+    butter.listen( "mediacontentchanged", _header.views.disablePlugins );
+    butter.listen( "mediaready", _header.views.enablePlugins );
+
     /**
      * Member: openEditor
      *

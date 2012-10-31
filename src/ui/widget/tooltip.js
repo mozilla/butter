@@ -26,7 +26,7 @@ define( [], function() {
 
   // ToolTip Constructor
   ToolTipObj = function( options ) {
-    if ( options && isRegistered( options.name ) ) {
+    if ( options && options.name && isRegistered( options.name ) ) {
       return;
     }
 
@@ -182,7 +182,9 @@ define( [], function() {
 
     name = options.name;
 
-    register( this );
+    if ( name ) {
+      register( this );
+    }
 
     return this;
   };

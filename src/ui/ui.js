@@ -553,7 +553,18 @@ define( [ "core/eventmanager", "./toggler",
     butter.listen( "ready", function(){
       _this.loadIndicator.stop();
       _this.visible = true;
+    });
+
+    butter.listen( "mediacontentchanged", function() {
+      _toggler.visible = false;
+      butter.ui.visible = false;
+      _toggler.state = false;
+    });
+
+    butter.listen( "mediaready", function() {
       _toggler.visible = true;
+      butter.ui.visible = true;
+      _toggler.state = true;
     });
 
     _this.dialogDir = butter.config.value( "dirs" ).dialogs || "";
