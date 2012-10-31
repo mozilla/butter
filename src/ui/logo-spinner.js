@@ -1,10 +1,10 @@
 define( [ "util/lang", "text!layouts/logo-spinner.html" ],
   function( LangUtils, LAYOUT_SRC ) {
-  
+
   return function( parentElement ) {
 
     var outerElement = LangUtils.domFragment( LAYOUT_SRC, ".butter-logo-spin-outer" ),
-        innerElement = outerElement.querySelector( ".butter-logo-spin-inner" );
+        innerElement = outerElement.querySelector( ".butter-spinner" );
 
     if( parentElement ){
       parentElement.appendChild( outerElement );
