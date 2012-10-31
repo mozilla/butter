@@ -20,7 +20,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
     } else {
       res.json({
         error: 'unauthorized',
-        csrf: req.session._csrf,
+        csrf: req.session._csrf
       }, 403 );
     }
   });
@@ -40,14 +40,15 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
         return;
       }
 
-      var projectJSON = JSON.parse( doc.data );
+      var projectJSON = JSON.parse( doc.data ),
+          uniqueId = utils.generateUniqueId( doc.id, doc.updatedAt );
 
       projectJSON.name = doc.name;
       projectJSON.projectID = doc.id;
       projectJSON.author = doc.author;
       projectJSON.template = doc.template;
-      projectJSON.publishUrl = utils.generatePublishUrl( doc.id );
-      projectJSON.iframeUrl = utils.generateIframeUrl( doc.id );
+      projectJSON.publishUrl = uniqueId.publishUrl;
+      projectJSON.iframeUrl = uniqueId.iframeUrl;
       res.json( projectJSON );
     });
   });
@@ -69,15 +70,16 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
         return;
       }
 
-      // Delete published projects, too
-      var embedShell = utils.generateIdString( id ),
-          embedDoc = embedShell + utils.constants().EMBED_SUFFIX;
-
-      // If we can't delete the file, it's already gone, ignore errors.
-      // Fire-and-forget.
-      stores.publish.remove( embedShell );
-      stores.publish.remove( embedDoc );
-      res.json( { error: 'okay' }, 200 );
+      // Delete all existing published projects, too, using ID prefix.
+      // All versions of the embed and embed-shell HTML docs will start
+      // with this prefix.
+      var uniqueId = utils.generateUniqueId( id );
+      stores.publish.find( uniqueId.idPrefix, function( files ) {
+        if ( files && files.length ) {
+          stores.publish.remove( files );
+        }
+        res.json( { error: 'okay' }, 200 );
+      });
     });
   });
 

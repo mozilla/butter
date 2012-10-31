@@ -74,10 +74,44 @@ LocalFileStore.prototype.write = function( path, data, callback ) {
   });
 };
 
+// Delete a single path (String) or list of paths (Array of String).
 LocalFileStore.prototype.remove = function( path, callback ) {
-  callback = callback || function(){};
-  path = Path.join( this.root, this.expand( path ) );
-  fs.unlink( path, callback );
+  var emptyFn = function(){},
+      instance = this;
+  callback = callback || emptyFn;
+
+  var paths = Array.isArray( path ) ? path : [ path ],
+      pathsRemaining = paths.length;
+
+  paths.forEach( function( p ) {
+    p = Path.join( this.root, this.expand( p ) );
+    fs.unlink( p, ( --pathsRemaining === 0 ? callback : emptyFn ) );
+  }, instance);
+};
+
+// Return a list of filenames for the given path prefix.  The
+// prefix is like a wildcard, so "foo" is like saying "foo*".
+// The list could be [ "foo-1", "foo-2", ... ] or [].  If there is an
+// error, null is passed back to the callback instead.
+LocalFileStore.prototype.find = function( prefix, callback ) {
+  var path = Path.join( this.root, this.namePrefix ),
+      instance = this;
+  fs.readdir( path, function( err, files ) {
+    var found = [],
+        suffixRegexp = new RegExp( instance.nameSuffix + "$" );
+
+    if ( err ) {
+      callback();
+    }
+
+    files.forEach( function( file ) {
+      if ( file.indexOf( prefix ) === 0 ) {
+        // Strip file suffix, so we just return filename portion that went in
+        found.push( file.replace( suffixRegexp, '' ) );
+      }
+    });
+    callback( found );
+  });
 };
 
 
@@ -127,9 +161,15 @@ S3FileStore.prototype.write = function( key, data, callback ) {
   .end( data );
 };
 
-S3FileStore.prototype.remove = function( key, callback ) {
+S3FileStore.prototype.remove = function( keys, callback ) {
   callback = callback || function(){};
-  this.client.del( this.expand( key ) )
+  keys = Array.isArray( keys ) ? keys : [ keys ];
+
+  for( var i = 0; i < keys.length; i++ ) {
+    keys[ i ] = this.expand( keys[ i ] );
+  }
+
+  this.client.del( keys )
   .on( 'response', function( res ) {
     if( res.statusCode === 200 ) {
       callback();
@@ -140,6 +180,25 @@ S3FileStore.prototype.remove = function( key, callback ) {
   .end();
 };
 
+S3FileStore.prototype.find = function( prefix, callback ) {
+  this.client.list({ prefix: prefix }, function( err, data ) {
+    if ( err ) {
+      callback();
+    }
+
+    var S3Files = data.Contents,
+        found = [];
+    if ( !S3Files ) {
+      callback( found );
+    }
+
+    S3Files.forEach( function( S3File ) {
+      found.push( S3File.Key );
+    });
+
+    callback( found );
+  });
+};
 
 var FileStores = {
   'S3': S3FileStore,
