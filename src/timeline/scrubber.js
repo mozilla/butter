@@ -229,8 +229,6 @@ define( [ "util/lang" ],
     }; //onMouseDown
 
     parentElement.addEventListener( "mouseover", onMouseOver, false );
-    _node.addEventListener( "mousedown", onScrubberMouseDown, false );
-    _container.addEventListener( "mousedown", onMouseDown, false );
 
     this.update = function( containerWidth ) {
       _width = containerWidth || _width;
@@ -239,6 +237,17 @@ define( [ "util/lang" ],
       _lineWidth = _line.clientWidth;
       setNodePosition();
     };
+
+    this.enable = function() {
+      _node.addEventListener( "mousedown", onScrubberMouseDown, false );
+      _container.addEventListener( "mousedown", onMouseDown, false );
+    };
+
+    this.disable = function() {
+      _node.removeEventListener( "mousedown", onScrubberMouseDown, false );
+      _container.removeEventListener( "mousedown", onMouseDown, false );
+    };
+
 
     _media.listen( "mediaplay", function( e ) {
       _isPlaying = true;

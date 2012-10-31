@@ -8,7 +8,8 @@ define([ "ui/widget/tooltip" ], function( Tooltip ) {
     var _mediaButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-media" ),
         _popcornButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-popcorn" ),
         _shareButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-share" ),
-        _loginToShareTooltip;
+        _loginToShareTooltip,
+        _waitForMediaTooltip;
 
     var _focusMap = {
       "media-properties": _mediaButton,
@@ -20,9 +21,17 @@ define([ "ui/widget/tooltip" ], function( Tooltip ) {
 
     // Create a message for the disabled share editor.
     _loginToShareTooltip = Tooltip.create({
-      title: "login-to-share",
+      name: "login-to-share",
       message: "Login and Save your project to share",
       element: _shareButton,
+      top: "60px"
+    });
+
+    // Create a message for the disabled plugin list.
+    _waitForMediaTooltip = Tooltip.create({
+      name: "wait-for-media",
+      message: "Waiting for media to load",
+      element: _popcornButton,
       top: "60px"
     });
 
@@ -30,13 +39,15 @@ define([ "ui/widget/tooltip" ], function( Tooltip ) {
       editorModule.openEditor( "media-editor" );
     }, false );
 
-    _popcornButton.addEventListener( "click", function( e ) {
+    function openPluginList() {
       editorModule.openEditor( "plugin-list" );
-    }, false );
+    }
 
     function openShareEditor() {
       editorModule.openEditor( "share-properties" );
     }
+
+    _popcornButton.classList.add( "butter-editor-btn-disabled" );
 
     this.setFocus = function( editorName ) {
       var focusCandidate = _focusMap[ editorName ];
@@ -63,6 +74,16 @@ define([ "ui/widget/tooltip" ], function( Tooltip ) {
         _loginToShareTooltip.classList.add( "tooltip-off" );
         _shareButton.classList.remove( "butter-editor-btn-disabled" );
         _shareButton.addEventListener( "click", openShareEditor, false );
+      },
+      enablePlugins: function() {
+        _waitForMediaTooltip.classList.add( "tooltip-off" );
+        _popcornButton.classList.remove( "butter-editor-btn-disabled" );
+        _popcornButton.addEventListener( "click", openPluginList, false );
+      },
+      disablePlugins: function() {
+        _waitForMediaTooltip.classList.remove( "tooltip-off" );
+        _popcornButton.classList.add( "butter-editor-btn-disabled" );
+        _popcornButton.removeEventListener( "click", openPluginList, false );
       }
     };
 
