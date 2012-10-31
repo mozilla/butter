@@ -2,7 +2,9 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define([ "ui/widget/tooltip" ], function( Tooltip ) {
+define([ "ui/widget/tooltip",
+         // keep this at the end so it doesn't need a spot in the function signature
+         "util/shims" ], function( Tooltip ) {
 
   return function( editorAreaDOMRoot, editorModule ) {
     var _mediaButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-media" ),
@@ -20,6 +22,8 @@ define([ "ui/widget/tooltip" ], function( Tooltip ) {
     var _currentFocus;
 
     // Create a message for the disabled share editor.
+    // Note: this can return null if the `login-to-share` Tooltip isn't registered
+    // (e.g. in tests). So, null checks need to be performed below.
     _loginToShareTooltip = Tooltip.create({
       name: "login-to-share",
       message: "Login and Save your project to share",
@@ -62,7 +66,9 @@ define([ "ui/widget/tooltip" ], function( Tooltip ) {
 
     this.views = {
       unSaved: function() {
-        _loginToShareTooltip.classList.remove( "tooltip-off" );
+        if ( _loginToShareTooltip ) {
+          _loginToShareTooltip.classList.remove( "tooltip-off" );
+        }
         _shareButton.classList.add( "butter-editor-btn-disabled" );
         _shareButton.removeEventListener( "click", openShareEditor, false );
         // If the share editor is open, open the media editor instead.
@@ -71,7 +77,9 @@ define([ "ui/widget/tooltip" ], function( Tooltip ) {
         }
       },
       saved: function() {
-        _loginToShareTooltip.classList.add( "tooltip-off" );
+        if ( _loginToShareTooltip ) {
+          _loginToShareTooltip.classList.add( "tooltip-off" );
+        }
         _shareButton.classList.remove( "butter-editor-btn-disabled" );
         _shareButton.addEventListener( "click", openShareEditor, false );
       },
