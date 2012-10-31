@@ -17,14 +17,6 @@ define(['util/xhr'], function(XHR) {
         server = hostname(),
         xhrPostQueue = [];
 
-    if ( !navigator.id ) {
-      var script = document.createElement( "script" );
-      script.src = "https://login.persona.org/include.js";
-      script.type = "text/javascript";
-      script.setAttribute( "data-butter-exclude", true );
-      document.head.appendChild( script );
-    }
-
     var sendXHRPost = function() {
       console.warn( "XHR.post occurred without a CSRF token. Buffering request." );
       xhrPostQueue.push( arguments );
