@@ -236,6 +236,10 @@ app.post( '/api/publish/:id',
           }
         }
 
+        // if this is a soundcloud url, make sure we add a class that gives it a background-image
+        if ( mediaUrlsString.indexOf( "soundcloud" ) > -1 ) {
+          popcornString += '\ndocument.getElementById( "' + JSON.parse( project.data ).targets[ 0 ].name +'" ).classList.add( "video-soundcloud" );\n';
+        }
         popcornString += '}());\n';
       }
       popcornString += '</script>\n';
