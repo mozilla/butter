@@ -301,8 +301,11 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       if( _mediaType === "baseplayer" ) {
         popcornString +=  "Popcorn.player( 'baseplayer' );\n" +
                           "var popcorn = Popcorn.baseplayer( '#" + target + "' " + popcornOptions + " );\n";
-      }
-      else{
+      } else {
+        // if this is a soundcloud url, make sure we add a class that gives it a background-image
+        if ( url.indexOf( "soundcloud" ) > -1 ) {
+          document.getElementById( target ).classList.add( "video-soundcloud" );
+        }
         // just try to use Popcorn.smart to detect/setup video
         popcornString += "var popcorn = Popcorn.smart( '#" + target + "', " + url + popcornOptions + " );\n";
       }
