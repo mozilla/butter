@@ -23,19 +23,23 @@
 
 /* Spinny */
 .butter-logo-spin-outer {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   .transition( opacity 0.5s );
   opacity: 1;
   &.fade-out {
     opacity: 0;
   }
 }
-.butter-logo-spin-inner {
-  width: 20px;
-  height: 20px;
-  background-size: cover;
+
+.butter-spinner {
+  height: 16px;
+  width: 16px;
+  display: inline-block;
   background-image: url( "../resources/icons/spinny.gif" );
+  &.hidden {
+    display: none;
+  }
 }
 /* Toggle hide/show button for editor and tray */
 
