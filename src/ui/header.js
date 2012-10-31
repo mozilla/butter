@@ -15,6 +15,10 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
         _previewBtn = _rootElement.querySelector( ".butter-preview-btn" ),
+        _shareBtn = _rootElement.querySelector( ".butter-share-btn" ),
+        _projectMenu = _rootElement.querySelector( ".butter-project-menu" ),
+        _projectMenuControl = _rootElement.querySelector( ".butter-project-menu-control" ),
+        _projectMenuList = _projectMenu.querySelector( ".butter-btn-menu" ),
         _tabzilla = _rootElement.querySelector( "#tabzilla" ),
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML,
@@ -52,6 +56,10 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       }
     }
 
+    function openShareEditor() {
+      butter.editor.openEditor( "share-properties" );
+    }
+
     function toggleSaveButton( on ) {
       if ( on ) {
         _saveButton.classList.remove( "butter-disabled" );
@@ -78,14 +86,26 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       }
     }
 
+    function toggleShareButton( on ) {
+      if ( on ) {
+        _shareBtn.classList.remove( "butter-disabled" );
+        _shareBtn.addEventListener( "click", openShareEditor, false );
+      } else {
+        _shareBtn.classList.add( "butter-disabled" );
+        _shareBtn.removeEventListener( "click", openShareEditor, false );
+      }
+    }
+
     this.views = {
       dirty: function() {
         togglePreviewButton( false );
         toggleSaveButton( true );
+        toggleShareButton( true );
       },
       clean: function() {
         togglePreviewButton( true );
         toggleSaveButton( false );
+        toggleShareButton( true );
       },
       login: function() {
         var isSaved = butter.project.isSaved;
@@ -96,15 +116,29 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
 
         togglePreviewButton( isSaved );
         toggleSaveButton( !isSaved );
+        toggleShareButton( isSaved );
       },
       logout: function() {
         togglePreviewButton( false );
         toggleSaveButton( true );
+        toggleShareButton( false );
         _previewBtn.style.display = "none";
         _projectTitle.style.display = "none";
         _saveButton.innerHTML = "Sign in to save";
       }
     };
+
+    // Set up the project menu
+    _projectMenuControl.addEventListener( "click", function() {
+      _projectMenu.classList.toggle( "butter-btn-menu-expanded" );
+    }, false );
+
+    _projectMenuList.addEventListener( "click", function( e ) {
+      if ( e.target.classList.contains( "butter-disabled" ) ) {
+        return;
+      }
+      _projectMenu.classList.remove( "butter-btn-menu-expanded" );
+    }, true );
 
     function feedbackCallback() {
       var dialog = Dialog.spawn( "feedback" );
