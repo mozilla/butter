@@ -18,6 +18,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _shareBtn = _rootElement.querySelector( ".butter-share-btn" ),
         _projectMenu = _rootElement.querySelector( ".butter-project-menu" ),
         _projectMenuControl = _rootElement.querySelector( ".butter-project-menu-control" ),
+        _projectMenuList = _projectMenu.querySelector( ".butter-btn-menu" ),
         _tabzilla = _rootElement.querySelector( "#tabzilla" ),
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML,
@@ -57,7 +58,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
 
     function openShareEditor() {
       butter.editor.openEditor( "share-properties" );
-      _projectMenu.classList.remove( "butter-btn-menu-expanded" );
     }
 
     function toggleSaveButton( on ) {
@@ -133,6 +133,12 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       _projectMenu.classList.toggle( "butter-btn-menu-expanded" );
     }, false );
 
+    _projectMenuList.addEventListener( "click", function( e ) {
+      if ( e.target.classList.contains( "butter-disabled" ) ) {
+        return;
+      }
+      _projectMenu.classList.remove( "butter-btn-menu-expanded" );
+    }, true );
 
     function feedbackCallback() {
       var dialog = Dialog.spawn( "feedback" );
