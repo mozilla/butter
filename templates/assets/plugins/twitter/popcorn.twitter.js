@@ -5,7 +5,7 @@
   var CACHED_RESULTS = {},
       MAX_TWEETS = 150,
       TWEETS_TIMER = 4000,
-      TRANSITION_MARGIN_TOP = "-55px",
+      TRANSITION_MARGIN_TOP = "-4.8em",
       TRANSITION_TIMEOUT = 700;
 
   Popcorn.plugin( "twitter", {
