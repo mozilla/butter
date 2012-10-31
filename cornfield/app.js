@@ -87,7 +87,7 @@ app.configure( function() {
   utils = require( './lib/utils' )({
     EMBED_HOSTNAME: CONFIG.dirs.embedHostname ? stripSlash( CONFIG.dirs.embedHostname ) : APP_HOSTNAME,
     EMBED_SUFFIX: '_'
-  }, stores );
+  }, stores.publish );
 
 });
 
@@ -243,27 +243,25 @@ app.post( '/api/publish/:id',
              data.substring( headEndTagIndex, bodyEndTagIndex ) +
              popcornString + data.substring( bodyEndTagIndex );
 
-      // Convert 1234567890 => "kf12oi"
-      var idBase36 = utils.generateIdString( id ),
-          publishUrl = utils.generatePublishUrl( id ),
-          iframeUrl = utils.generateIframeUrl( id );
+      // Convert id to a unique id, and build id and url strings
+      var uniqueId = utils.generateUniqueId( id, project.updatedAt );
 
       function finished( err ) {
         if ( err ) {
           res.json({ error: 'internal server error' }, 500);
         } else {
-          res.json({ error: 'okay', publishUrl: publishUrl, iframeUrl: iframeUrl });
+          res.json({ error: 'okay', publishUrl: uniqueId.publishUrl, iframeUrl: uniqueId.iframeUrl });
         }
       }
 
       function publishEmbedShell() {
         // Write out embed shell HTML
-        writeEmbedShell( idBase36, publishUrl,
+        writeEmbedShell( uniqueId.publishId, uniqueId.publishUrl,
                          {
                            author: project.author,
                            projectName: project.name,
-                           embedShellSrc: publishUrl,
-                           embedSrc: iframeUrl,
+                           embedShellSrc: uniqueId.publishUrl,
+                           embedSrc: uniqueId.iframeUrl,
                            baseHref: APP_HOSTNAME
                          },
                          finished );
@@ -274,13 +272,13 @@ app.post( '/api/publish/:id',
           mediaUrl = projectData.media[ 0 ].url,
           attribURL = Array.isArray( mediaUrl ) ? mediaUrl[ 0 ] : mediaUrl;
 
-      writeEmbed( idBase36 + utils.constants().EMBED_SUFFIX, iframeUrl,
+      writeEmbed( uniqueId.embedId, uniqueId.iframeUrl,
                   {
                     id: id,
                     author: project.author,
                     title: project.name,
                     mediaSrc: attribURL,
-                    embedShellSrc: publishUrl,
+                    embedShellSrc: uniqueId.publishUrl,
                     baseHref: baseHref,
                     remixUrl: remixUrl,
                     templateScripts: templateScripts,
