@@ -51,7 +51,9 @@ define([ "ui/widget/tooltip" ], function( Tooltip ) {
 
     this.views = {
       unSaved: function() {
-        _loginToShareTooltip.classList.remove( "tooltip-off" );
+        if ( _loginToShareTooltip ) {
+          _loginToShareTooltip.classList.remove( "tooltip-off" );
+        }
         _shareButton.classList.add( "butter-editor-btn-disabled" );
         _shareButton.removeEventListener( "click", openShareEditor, false );
         // If the share editor is open, open the media editor instead.
@@ -60,7 +62,9 @@ define([ "ui/widget/tooltip" ], function( Tooltip ) {
         }
       },
       saved: function() {
-        _loginToShareTooltip.classList.add( "tooltip-off" );
+        if ( _loginToShareTooltip ) {
+          _loginToShareTooltip.classList.add( "tooltip-off" );
+        }
         _shareButton.classList.remove( "butter-editor-btn-disabled" );
         _shareButton.addEventListener( "click", openShareEditor, false );
       }
