@@ -259,7 +259,7 @@ define( [ 'core/eventmanager', 'core/media' ],
 
       // If this is a restored backup, restart backups now (vs. on first save)
       // since the user indicated they want it.
-      if( json.backupDate ) {
+      if ( json.backupDate || json.projectID ) {
         startBackups();
       }
 
@@ -274,7 +274,7 @@ define( [ 'core/eventmanager', 'core/media' ],
     var backupData = _this.backupData = function() {
       // If the project isn't different from last time, or if it's known
       // to not fit in storage, don't bother trying.
-      if ( !_needsBackup ) {
+      if ( !_needsBackup || _this.isSaved ) {
         return;
       }
       // Save everything but the project id
