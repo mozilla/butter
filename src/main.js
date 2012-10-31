@@ -33,8 +33,7 @@
             Shims                         // placeholder
           ){
 
-    var __guid = 0,
-        __instances = [];
+    var __guid = 0;
 
     var Butter = function() {
       throw "Do not use Butter in this mannger. Call Butter.init instead.";
@@ -602,8 +601,6 @@
         });
       }; //preparePage
 
-      __instances.push( _this );
-
       if( butterOptions.ready ){
         _this.listen( "ready", function( e ){
           butterOptions.ready( e.data );
@@ -864,11 +861,11 @@
       } //if
 
       _this.page = _page;
+
+      return _this;
     };
 
     Butter.Editor = Editor;
-
-    Butter.instances = __instances;
 
     // Butter will report a version, which is the git commit sha
     // of the version we ship. This happens in make.js's build target.
@@ -876,7 +873,7 @@
 
     if ( window.Butter.__waiting ) {
       for ( var i=0, l=window.Butter.__waiting.length; i<l; ++i ) {
-        Butter.init.apply( this, window.Butter.__waiting[ i ] );
+        Butter.app = Butter.init.apply( this, window.Butter.__waiting[ i ] );
       }
       delete Butter._waiting;
     }
