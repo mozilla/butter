@@ -21,6 +21,13 @@ define([], function(){
 
     var dom = {
       getDocument: function getDocument( node ) {
+
+        // "If the context object's start's node is null, raise an INVALID_STATE_ERR
+        // exception and abort these steps."
+        if ( !node ) {
+          throw new DOMException( "INVALID_STATE_ERR" );
+        }
+
         if ( node.nodeType === 9 ) {
           return node;
         } else if ( typeof node.ownerDocument !== "undefined" ) {
@@ -55,7 +62,9 @@ define([], function(){
       },
 
       fragmentFromNodeChildren: function( node ) {
-        var fragment = this.getDocument( node ).createDocumentFragment(), child;
+        var fragment = this.getDocument( node ).createDocumentFragment(),
+            child;
+
         while ( !!( child = node.firstChild ) ) {
           fragment.appendChild(child);
         }
@@ -65,14 +74,8 @@ define([], function(){
 
     Range.prototype.createContextualFragment = function( fragmentStr ) {
       // "Let node the context object's start's node."
-      var node = this.startContainer,
-        doc = dom.getDocument(node);
-
-      // "If the context object's start's node is null, raise an INVALID_STATE_ERR
-      // exception and abort these steps."
-      if (!node) {
-        throw new DOMException( "INVALID_STATE_ERR" );
-      }
+      var node = this.startContainer;
+          doc = dom.getDocument( node );
 
       // "Let element be as follows, depending on node's interface:"
       // Document, Document Fragment: null
