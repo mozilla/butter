@@ -788,6 +788,9 @@
                 // a chance to load or discard. If there isn't a backup, we continue
                 // loading as normal.
                 Project.checkForBackup( _this, function( projectBackup, backupDate ) {
+                  var location = window.location.search,
+                      loadAutoSave = location.indexOf( "loadAutoSave" ) > -1 ? true : false,
+                      project;
 
                   function useProject( project ) {
                     project.template = project.template || _config.value( "name" );
@@ -798,16 +801,20 @@
                     _this.dispatch( "ready", _this );
                   }
 
-                  if ( projectBackup ) {
-                    var location = window.location.href,
+                  if ( projectBackup && loadAutoSave ) {
+                    project = new Project( _this );
+                    project.import( projectBackup );
+                    useProject( project );
+                  } else if ( projectBackup ) {
+                    var location = window.location.search,
                         id = location.substring( location.lastIndexOf( "/" ) + 1 );
 
                     id = parseInt( id, 10 );
 
                     if ( !isNaN( id ) && ( projectBackup.projectID === id ) ) {
-                      var project = new Project( _this );
-                          project.import( projectBackup );
-                          useProject( project );
+                      project = new Project( _this );
+                      project.import( projectBackup );
+                      useProject( project );
                     } else {
                       // Backup found doesn't match project being loaded. Proceed loading
                       // current project

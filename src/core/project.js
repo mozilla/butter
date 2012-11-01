@@ -255,6 +255,7 @@ define( [ 'core/eventmanager', 'core/media' ],
       if ( json.projectID ) {
         _id = json.projectID;
 
+        // This means the project we imported as a back up as well for an existing project
         if ( json.backupDate ) {
           _this.save();
         }
@@ -276,14 +277,14 @@ define( [ 'core/eventmanager', 'core/media' ],
     };
 
     // Expose backupData() to make testing possible
-    var backupData = _this.backupData = function() {
+    var backupData = _this.backupData = function( backup ) {
       // If the project isn't different from last time, or if it's known
       // to not fit in storage, don't bother trying.
-      if ( !_needsBackup || _this.isSaved ) {
+      if ( !_needsBackup || _this.isSaved && !backup ) {
         return;
       }
       // Save everything but the project id
-      var data = _this.data;
+      var data = backup || _this.data;
       data.projectID = _id;
       data.name = _name;
       data.template = _template;
