@@ -90,25 +90,17 @@ html
         margin: 0;
         overflow: hidden;
         white-space: nowrap;
-        max-width: 350px;
       }
       .table-container {
-        border: 1px solid #CCC;
-        margin-top: 20px;
-        margin-bottom: 40px;
+        border: 1px solid #DDD;
         display: inline-block;
       }
       table {
-        -moz-transition: margin-top 0.3s;
-        -webkit-transition: margin-top 0.3s;
-        -ms-transition: margin-top 0.3s;
-        -o-transition: margin-top 0.3s;
-        transition: margin-top 0.3s;
         color: #555;
       }
       th {
         text-align: left;
-        border-bottom: 1px solid #CCC;
+        border-bottom: 1px solid #DDD;
         font-size: 1em;
         background: #FFF;
         color: #777;
@@ -116,7 +108,8 @@ html
         font-weight: 600;
       }
       td, th {
-        padding: 0.2em 1em;
+        box-sizing: border-box;
+        padding: 0.7em 1em;
         vertical-align: middle;
       }
       td:first-child:hover a {
@@ -129,12 +122,19 @@ html
         background: #FFF;
       }
 
+      .butter-delete-button {
+        opacity: 0.5
+      }
+      .butter-delete-button:hover {
+        opacity: 1;
+      }
+
       .butter-projects-title {
         display: block;
         text-align: left;
         text-decoration: none;
         color: #555;
-        width: 100%;
+        max-width: 350px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -161,6 +161,8 @@ html
         border: 1px solid #DDD;
         border-radius: 3px;
         opacity: 0;
+        z-index: 10;
+        visibility: hidden;
       }
       .butter-delete-confirmation span {
         max-width: 200px;
@@ -170,6 +172,7 @@ html
       }
       .butter-delete-confirmation.open {
         opacity: 1;
+        visibility: visible;
       }
     script
       var _gaq = _gaq || [];
@@ -204,7 +207,6 @@ html
       table
         tr
           th Project Title
-          th Template
           th
         each project in projects
           tr(data-project-id=project._id)
@@ -212,9 +214,7 @@ html
               a(href= project.href).butter-projects-title
                 = project.name
             td
-              = project.template
-            td
-              a(href= "#", data-project-id=project._id, data-project-name=project.name).butter-btn.btn-light.butter-delete-button
+              a(href= "#", data-project-id=project._id, data-project-name=project.name).butter-delete-button
                 span.icon.icon-trash.icon-only
 
     input(id="csrf", type="hidden", value=user.csrf)
