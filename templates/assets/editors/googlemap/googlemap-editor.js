@@ -14,7 +14,8 @@
         _trackEvent,
         _popcornEventMapReference,
         _butter,
-        _popcorn;
+        _popcorn,
+        _cachedValues = {};
 
     /**
      * Member: getMapFromTrackEvent
@@ -39,7 +40,7 @@
      *
      * @param {TrackEvent} trackEvent: The TrackEvent being edited
      */
-    function setup( trackEvent ){
+    function setup( trackEvent ) {
       _trackEvent = trackEvent;
 
       var pluginOptions = {},
@@ -81,15 +82,36 @@
           option.element.addEventListener( "change", function( e ) {
             var elementVal = e.target.value,
                 updateOptions = {},
+                popcornOptions = _trackEvent.popcornOptions,
                 target;
 
             if ( elementVal === "STREETVIEW" ) {
               toggleStreetView();
+
+              // If current map is using custom positions vs static
+              if ( popcornOptions.lat && popcornOptions.lng ) {
+                _cachedValues.lat = popcornOptions.lat;
+                _cachedValues.lng = popcornOptions.lng;
+              } else {
+                _cachedValues.location = popcornOptions.location;
+              }
+
               // Set zoom to one because the behaviour of this value differs
               // between streetview and map view
+              _cachedValues.zoom = popcornOptions.zoom;
               updateOptions.zoom = 1;
             } else {
               toggleMaps();
+
+              // If current map is using custom positions vs static
+              if ( _cachedValues.lat && _cachedValues.lng ) {
+                updateOptions.lat = _cachedValues.lat;
+                updateOptions.lng = _cachedValues.lng;
+              } else if ( _cachedValues.location ) {
+                updateOptions.location = _cachedValues.location;
+              }
+
+              updateOptions.zoom = _cachedValues.zoom;
             }
 
             updateOptions.type = elementVal;
@@ -109,9 +131,14 @@
           option.element.addEventListener( "click", function( e ) {
             var srcElement = e.target,
                 updateOptions = {},
-                manifestOpts = trackEvent.manifest.options;
+                popcornOptions = _trackEvent.popcornOptions;
 
             if ( srcElement.checked ) {
+              _cachedValues.width = popcornOptions.width;
+              _cachedValues.height = popcornOptions.height;
+              _cachedValues.top = popcornOptions.top;
+              _cachedValues.left = popcornOptions.left;
+
               updateOptions = {
                 height: 100,
                 width: 100,
@@ -122,10 +149,10 @@
 
             } else {
               updateOptions = {
-                height: manifestOpts.height[ "default" ],
-                width: manifestOpts.width[ "default" ],
-                left: manifestOpts.left[ "default" ],
-                top: manifestOpts.top[ "default" ],
+                height: _cachedValues.height,
+                width: _cachedValues.width,
+                left: _cachedValues.left,
+                top: _cachedValues.top,
                 fullscreen: false
               };
             }
@@ -195,7 +222,18 @@
     // Extend this object to become a BaseEditor
     Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
-        _popcorn = butter.currentMedia.popcorn.popcorn;
+        var popcornOptions = trackEvent.popcornOptions;
+
+        _cachedValues = {
+          width: popcornOptions.width,
+          height: popcornOptions.height,
+          top: popcornOptions.top,
+          left: popcornOptions.left,
+          location: popcornOptions.location,
+          zoom: popcornOptions.zoom,
+          lat: popcornOptions.lat,
+          lng: popcornOptions.lng
+        };
 
         _butter = butter;
         // Update properties when TrackEvent is updated
