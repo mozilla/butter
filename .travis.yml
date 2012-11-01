@@ -4,5 +4,3 @@ node_js:
 before_script:
   - mysql -e 'CREATE DATABASE popcorn;'
   - node make check
-notifications:
-  irc: "irc.mozilla.org#popcorn"
