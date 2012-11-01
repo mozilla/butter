@@ -1,5 +1,7 @@
 'use strict';
 
+var datauri = require('../lib/datauri');
+
 module.exports = function routesCtor( app, User, filter, sanitizer, stores, utils ) {
 
   var uuid = require( "node-uuid" ),
@@ -63,7 +65,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
       return;
     }
 
-    User.deleteProject( req.session.email, req.params.id, function( err ) {
+    User.deleteProject( req.session.email, req.params.id, function( err, imagesToDestroy ) {
       if ( err ) {
         res.json( { error: 'project not found' }, 404 );
         return;
@@ -77,32 +79,88 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
       // Fire-and-forget.
       stores.publish.remove( embedShell );
       stores.publish.remove( embedDoc );
+
+      if ( imagesToDestroy ) {
+        imagesToDestroy.forEach( function( imageReference ) {
+          stores.images.remove( imageReference.filename );
+        });
+      }
+
       res.json( { error: 'okay' }, 200 );
     });
   });
+
+  function linkAndSaveImageFiles( files, projectId, callback ) {
+    User.linkImageFilesToProject( files, projectId, function( err ) {
+      if ( err ) {
+        callback( err );
+        return;
+      }
+
+      datauri.saveImageFilesToStore( stores.images, files, callback );
+    });
+  }
 
   app.post( '/api/project/:id?',
     filter.isLoggedIn, filter.isStorageAvailable,
     function( req, res ) {
 
+    var files;
+
+    var projectData = req.body;
+
     if ( req.body.id ) {
-      User.updateProject( req.session.email, req.body.id, req.body, function( err, doc ) {
+      files = datauri.filterProjectDataURIs( projectData.data, utils.generateDataURIPair );
+      
+      User.updateProject( req.session.email, req.body.id, projectData, function( err, doc, imagesToDestroy ) {
         if ( err ) {
           res.json( { error: err }, 500 );
           return;
         }
 
-        res.json( { error: 'okay', project: doc } );
+        if ( imagesToDestroy ) {
+          imagesToDestroy.forEach( function( imageReference ) {
+            stores.images.remove( imageReference.filename );
+          });
+        }
+
+        if ( files && files.length > 0 ) {
+          linkAndSaveImageFiles( files, doc.id, function( err ) {
+            if ( err ) {
+              res.json( { error: 'Unable to store data-uris.', }, 500 );
+              return;
+            }
+            res.json( { error: 'okay', project: doc, imageURLs: files.map( function( file ) { return file.getJSONMetaData(); } ) }, 200 );
+          });
+        }
+        else {
+          res.json( { error: 'okay', project: doc } );
+        }
+
       });
     } else {
-      User.createProject( req.session.email, req.body, function( err, doc ) {
+      files = datauri.filterProjectDataURIs( projectData.data, utils.generateDataURIPair );
+
+      User.createProject( req.session.email, projectData, function( err, doc ) {
         if ( err ) {
           res.json( { error: err }, 500 );
           return;
         }
 
-        // Send back the newly added row's ID
-        res.json( { error: 'okay', projectId: doc.id } );
+        if ( files && files.length > 0 ) {
+          linkAndSaveImageFiles( files, doc.id, function( err ) {
+            if ( err ) {
+              res.json( { error: 'Unable to store data-uris.', }, 500 );
+              return;
+            }
+            res.json( { error: 'okay', projectId: doc.id, imageURLs: files.map( function( file ) { return file.getJSONMetaData(); } ) }, 200 );
+          });
+        }
+        else {
+          // Send back the newly added row's ID
+          res.json( { error: 'okay', projectId: doc.id }, 200 );
+        }
+
       });
     }
   });

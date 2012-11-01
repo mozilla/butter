@@ -83,17 +83,18 @@ app.configure( function() {
   stores.publish = setupStore( CONFIG.publishStore );
   stores.crash = setupStore( CONFIG.crashStore );
   stores.feedback = setupStore( CONFIG.feedbackStore );
+  stores.images = setupStore( CONFIG.imageStore );
 
   utils = require( './lib/utils' )({
     EMBED_HOSTNAME: CONFIG.dirs.embedHostname ? stripSlash( CONFIG.dirs.embedHostname ) : APP_HOSTNAME,
     EMBED_SUFFIX: '_'
   }, stores );
-
 });
 
 require( 'express-persona' )( app, {
   audience: CONFIG.dirs.appHostname
 });
+
 require('./routes')( app, User, filter, sanitizer, stores, utils );
 
 function writeEmbedShell( path, url, data, callback ) {

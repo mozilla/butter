@@ -7,5 +7,13 @@ module.exports = {
       callback = callback || function(){};
       callback();
     }
+  },
+  images: {
+    expand: function(path) {
+      return path;
+    },
+    write: function(filename, data, callback){
+      callback();
+    }
   }
 };
