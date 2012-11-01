@@ -179,7 +179,7 @@
           options: [ "None", "Pop", "Fade", "Slide Up", "Slide Down" ],
           values: [ "popcorn-none", "popcorn-pop", "popcorn-fade", "popcorn-slide-up", "popcorn-slide-down" ],
           label: "Transition",
-          "default": "popcorn-pop"
+          "default": "popcorn-fade"
         },
         fontFamily: {
           elem: "select",
@@ -189,12 +189,20 @@
           "default": "Merriweather",
           group: "advanced"
         },
+        // font size is deprecated
         fontSize: {
           elem: "input",
           type: "number",
           label: "Font Size",
-          "default": 12,
           units: "px",
+          group: "advanced"
+        },
+        fontPercentage: {
+          elem: "input",
+          type: "number",
+          label: "Font Size",
+          "default": 4,
+          units: "%",
           group: "advanced"
         },
         fontColor: {
@@ -351,7 +359,11 @@
       textContainer.style.fontStyle = options.fontDecorations.italics ? "italic" : "normal";
       textContainer.style.color = options.fontColor ? options.fontColor : "#668B8B";
       textContainer.style.textDecoration = options.fontDecorations.underline ? "underline" : "none";
-      textContainer.style.fontSize = options.fontSize ? options.fontSize + "px" : "12px";
+      if ( options.fontSize ) {
+        textContainer.style.fontSize = options.fontSize + "px";
+      } else {
+        textContainer.style.fontSize = options.fontPercentage + "%";
+      }
       textContainer.style.fontWeight = options.fontDecorations.bold ? "bold" : "normal";
 
       if ( linkUrl ) {
@@ -391,20 +403,23 @@
             var width = img.width || img.naturalWidth,
               height = img.height || img.naturalHeight;
 
-            if ( height > 60 ) {
-              width = 60 * width / height;
-              height = 60;
-              img.style.width = width + "px";
-            }
-
-            img.style.left = -( width - 16 ) + "px";
-
-            // make sure container is still non-null
-            // if _teardown is called too quickly, it will become null before img loads
-            if ( container ){
-              if ( container.offsetHeight ) {
+            if ( options.fontSize ) {
+              if ( height > 60 ) {
+                width = 60 * width / height;
+                height = 60;
+                img.style.width = width + "px";
+              }
+              img.style.left = -( width - 16 ) + "px";
+              // make sure container is still non-null
+              // if _teardown is called too quickly, it will become null before img loads
+              if ( container && container.offsetHeight ) {
                 img.style.top = ( container.offsetHeight - height ) / 2 - 4 + "px";
               }
+            } else {
+              img.classList.add( "popcorn-responsive-image-position" );
+            }
+
+            if ( container ) {
               container.insertBefore( img, container.firstChild );
             }
           }, false );

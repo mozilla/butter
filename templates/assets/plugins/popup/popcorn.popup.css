@@ -1,5 +1,6 @@
 .speechBubble {
   line-height: 1.2;
+  font-size: 22.5em;
   text-align: center;
   position: relative;
   border: 2px solid black;
@@ -103,17 +104,26 @@
 
 .popcorn-popup {
   background-color: black;
-  border-radius: 12px;
-  padding: 4px 9px;
+  border-radius: 1em;
+  padding: 0.2em 0.6em;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
+.popcorn-responsive-image-position {
+  height: 3em;
+  right: 100%;
+  top: 50%;
+  margin-top: -1.5em;
+  margin-right: -1em;
+}
+
 .popcorn-popup .popup-inner-div {
+  font-size: 22.5em;
   background-color: white;
-  border-radius: 8px;
-  padding: 8px;
+  border-radius: 0.03em;
+  padding: 0.026em;
   position: relative;
   text-align: center;
   overflow: hidden;
@@ -142,7 +152,6 @@
 .popcorn-popup .popup-icon {
   position: absolute;
   z-index: 2;
-  top: -50%;
 }
 
 .popcorn-popup .popup-icon + div {

@@ -11,7 +11,9 @@
 
     var _rootElement = rootElement,
         _trackEvent,
-        _butter;
+        _manifestOptions,
+        _butter,
+        _popcornOptions;
 
     /**
      * Member: setup
@@ -22,6 +24,8 @@
      */
     function setup( trackEvent ) {
       _trackEvent = trackEvent;
+      _manifestOptions = _trackEvent.manifest.options;
+      _popcornOptions = _trackEvent.popcornOptions;
 
       var basicContainer = _rootElement.querySelector( ".editor-options" ),
           advancedContainer = _rootElement.querySelector( ".advanced-options" ),
@@ -140,6 +144,14 @@
         }
 
         basicContainer.insertBefore( _this.createStartEndInputs( trackEvent, _this.updateTrackEventSafe ), basicContainer.firstChild );
+      }
+
+      if ( _popcornOptions.fontSize ) {
+        _manifestOptions.fontPercentage.hidden = true;
+        _manifestOptions.fontSize.hidden = false;
+      } else {
+        _manifestOptions.fontSize.hidden = true;
+        _manifestOptions.fontPercentage.hidden = false;
       }
 
       _this.createPropertiesFromManifest({
