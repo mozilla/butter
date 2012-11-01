@@ -11,7 +11,8 @@
 
     var _rootElement = rootElement,
         _trackEvent,
-        _butter;
+        _butter,
+        _popcornOptions;
 
     /**
      * Member: setup
@@ -21,7 +22,8 @@
      * @param {TrackEvent} trackEvent: The TrackEvent being edited
      */
     function setup( trackEvent ) {
-      _trackEvent = trackEvent;
+      _trackEvent = trackEvent,
+      _popcornOptions = _trackEvent.popcornOptions;
 
       var basicContainer = _rootElement.querySelector( ".editor-options" ),
           advancedContainer = _rootElement.querySelector( ".advanced-options" ),
@@ -140,6 +142,12 @@
         }
 
         basicContainer.insertBefore( _this.createStartEndInputs( trackEvent, _this.updateTrackEventSafe ), basicContainer.firstChild );
+      }
+
+      if ( _popcornOptions.fontSize ) {
+        trackEvent.manifest.options.fontPercentage.hidden = true;
+      } else {
+        trackEvent.manifest.options.fontSize.hidden = true;
       }
 
       _this.createPropertiesFromManifest({

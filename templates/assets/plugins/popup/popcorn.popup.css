@@ -110,6 +110,10 @@
   box-sizing: border-box;
 }
 
+.popcorn-pop {
+  font-size: 22.5em;
+}
+
 .popcorn-popup .popup-inner-div {
   background-color: white;
   border-radius: 8px;
@@ -142,7 +146,6 @@
 .popcorn-popup .popup-icon {
   position: absolute;
   z-index: 2;
-  top: -50%;
 }
 
 .popcorn-popup .popup-icon + div {

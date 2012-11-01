@@ -193,8 +193,16 @@
           elem: "input",
           type: "number",
           label: "Font Size",
-          "default": 12,
           units: "px",
+          group: "advanced",
+          depricated: true
+        },
+        fontPercentage: {
+          elem: "input",
+          type: "number",
+          label: "Font Size",
+          "default": 5,
+          units: "%",
           group: "advanced"
         },
         fontColor: {
@@ -232,6 +240,7 @@
           textContainer = document.createElement( "div" ),
           link = document.createElement( "a" ),
           img,
+          fontSize,
           TRIANGLE_WIDTH = 40,
           TRIANGLE_HEIGHT = 60,
           text = options.text.replace( /\r?\n/gm, "<br>" ),
@@ -351,7 +360,11 @@
       textContainer.style.fontStyle = options.fontDecorations.italics ? "italic" : "normal";
       textContainer.style.color = options.fontColor ? options.fontColor : "#668B8B";
       textContainer.style.textDecoration = options.fontDecorations.underline ? "underline" : "none";
-      textContainer.style.fontSize = options.fontSize ? options.fontSize + "px" : "12px";
+      if ( options.fontSize ) {
+        textContainer.style.fontSize = options.fontSize + "px";
+      } else {
+        textContainer.style.fontSize = options.fontPercentage + "%";
+      }
       textContainer.style.fontWeight = options.fontDecorations.bold ? "bold" : "normal";
 
       if ( linkUrl ) {
@@ -391,20 +404,26 @@
             var width = img.width || img.naturalWidth,
               height = img.height || img.naturalHeight;
 
-            if ( height > 60 ) {
-              width = 60 * width / height;
-              height = 60;
-              img.style.width = width + "px";
-            }
-
-            img.style.left = -( width - 16 ) + "px";
-
-            // make sure container is still non-null
-            // if _teardown is called too quickly, it will become null before img loads
-            if ( container ){
-              if ( container.offsetHeight ) {
+            if ( options.fontSize ) {
+              if ( height > 60 ) {
+                width = 60 * width / height;
+                height = 60;
+                img.style.width = width + "px";
+              }
+              img.style.left = -( width - 16 ) + "px";
+              // make sure container is still non-null
+              // if _teardown is called too quickly, it will become null before img loads
+              if ( container && container.offsetHeight ) {
                 img.style.top = ( container.offsetHeight - height ) / 2 - 4 + "px";
               }
+            } else {
+              img.style.height = "110%";
+              img.style.right = "100%";
+              img.style.top = "-5%";
+              img.style.marginRight = "-10px";
+            }
+
+            if ( container ) {
               container.insertBefore( img, container.firstChild );
             }
           }, false );
