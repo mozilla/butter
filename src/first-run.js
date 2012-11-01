@@ -36,14 +36,15 @@ define( [ "dialog/dialog", "util/cookie", "ui/widget/tooltip" ], function( Dialo
           hidden: false
         });
 
-        setTimeout( function() {
-          if ( mediaTooltip ) {
-            mediaTooltip.parentNode.removeChild( mediaTooltip );
+        document.body.addEventListener( "click", function() {
+           if ( mediaTooltip ) {
+            mediaTooltip.classList.remove( "tooltip-on" );
           }
           if ( popupTooltip ) {
             popupTooltip.parentNode.removeChild( popupTooltip );
           }
-        }, TOOLTIP_DELAY );
+        }, true );
+
       }
 
       function onDialogClose() {
