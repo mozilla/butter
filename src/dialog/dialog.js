@@ -61,6 +61,7 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
        */
       function onKeyDown( e ) {
         e.stopPropagation();
+        e.preventDefault();
         if (  _enterKeyActivity &&
               __keyboardAvoidElements.indexOf( e.target.nodeName ) === -1 &&
               ( e.which === 13 || e.keyCode === 13 ) ) {
