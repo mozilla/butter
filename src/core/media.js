@@ -87,7 +87,6 @@
             },
             timeout: function(){
               _this.dispatch( "mediatimeout" );
-              _this.dispatch( "mediafailed", "timeout" );
             },
             fail: function( e ){
               _this.dispatch( "mediafailed", "error" );
