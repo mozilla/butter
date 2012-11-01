@@ -24,7 +24,6 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       __mouseLast = [ 0, 0 ],
       __scroll = false,
       __helpers = [],
-      __draggedOnce = false,
       __scrollGroups = [],
       __nullScrollGroup = new ScrollGroup.NullScrollGroup();
 
@@ -102,11 +101,16 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
     }
   }
 
+  function __onWindowDragStart( e ) {
+    e.preventDefault();
+  }
+
   function __onDraggableDragged( e ) {
+    e.preventDefault();
+
     __mouseLast[ 0 ] = __mousePos[ 0 ];
     __mouseLast[ 1 ] = __mousePos[ 1 ];
     __mousePos = [ e.clientX, e.clientY ];
-    __draggedOnce = true;
 
     var draggables = __selectedDraggables,
         i;
@@ -124,14 +128,23 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       }
 
       window.setTimeout( __draggableUpdateTimeout, SCROLL_INTERVAL );
-    }
 
+      // Prevent drags from happening while we're dragging around objects, since
+      // it's not an HTML5 drag and it'll interfere.
+      window.addEventListener( "dragstart", __onWindowDragStart, false );
+    }
   }
 
   function __onDraggableMouseUp( e ) {
-    __mouseDown = false;
-
+    window.removeEventListener( "dragstart", __onWindowDragStart, false );
     window.removeEventListener( "mousemove", __onDraggableDragged, false );
+    window.removeEventListener( "mousemove", __onDraggableMouseUp, false );
+
+    if ( !__mouseDown ) {
+      return;
+    }
+
+    __mouseDown = false;
 
     var selectedDraggable,
         selectedDraggables = __selectedDraggables.slice(),
@@ -139,47 +152,41 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
         droppable,
         i;
 
-    if ( __draggedOnce ) {
-
-      // Collect all the droppables
-      for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
-        selectedDraggable = selectedDraggables[ i ];
-        droppable = selectedDraggable.droppable;
-        if ( droppable && droppables.indexOf( droppable ) === -1 ) {
-          droppables.push( droppable );
-        }
+    // Collect all the droppables
+    for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
+      selectedDraggable = selectedDraggables[ i ];
+      droppable = selectedDraggable.droppable;
+      if ( droppable && droppables.indexOf( droppable ) === -1 ) {
+        droppables.push( droppable );
       }
-
-      // Let droppable know that it's about to receive one or more items
-      for ( i = droppables.length - 1; i >= 0; --i ) {
-        droppables[ i ].startDrop();
-      }
-
-      for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
-        selectedDraggable = selectedDraggables[ i ];
-        selectedDraggable.stop();
-      }
-
-      for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
-        selectedDraggable = selectedDraggables[ i ];
-        selectedDraggable.drop();
-      }
-
-      for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
-        selectedDraggable = selectedDraggables[ i ];
-        selectedDraggable.reset();
-      }
-
-      // Let droppable know that we're done dropping
-      for ( i = droppables.length - 1; i >= 0; --i ) {
-        droppables[ i ].stopDrop();
-      }
-
-      DragNDrop.dispatch( "dropfinished" );
-
     }
 
-    __draggedOnce = false;
+    // Let droppable know that it's about to receive one or more items
+    for ( i = droppables.length - 1; i >= 0; --i ) {
+      droppables[ i ].startDrop();
+    }
+
+    for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
+      selectedDraggable = selectedDraggables[ i ];
+      selectedDraggable.stop();
+    }
+
+    for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
+      selectedDraggable = selectedDraggables[ i ];
+      selectedDraggable.drop();
+    }
+
+    for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
+      selectedDraggable = selectedDraggables[ i ];
+      selectedDraggable.reset();
+    }
+
+    // Let droppable know that we're done dropping
+    for ( i = droppables.length - 1; i >= 0; --i ) {
+      droppables[ i ].stopDrop();
+    }
+
+    DragNDrop.dispatch( "dropfinished" );
   }
 
   function __onDraggableMouseDown( e ) {
@@ -187,7 +194,6 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       __onDraggableMouseUp( e );
       return;
     }
-    __draggedOnce = false;
     e.stopPropagation();
     window.addEventListener( "mousemove", __onDraggableDragged, false );
     window.addEventListener( "mouseup", __onDraggableMouseUp, false );
