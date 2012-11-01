@@ -378,35 +378,65 @@ define( [ 'core/eventmanager', 'core/media' ],
         }
       });
     };
-  }
 
-  // Check for an existing project that was autosaved but not saved.
-  // Returns project backup data as JS object if found, otherwise null.
-  // NOTE: caller must create a new Project object and call import.
-  Project.checkForBackup = function( butter, callback ) {
-    // See if we already have a project autosaved from another session.
-    var projectBackup, backupDate;
+    // Check for an existing project that was autosaved but not saved.
+    // Returns project backup data as JS object if found, otherwise null.
+    _this.checkForBackup = function( readyCB, fallbackCB ) {
+      // See if we already have a project autosaved from another session.
+      var projectBackup, backupDate,
+          location = window.location.search,
+          loadAutoSave = location.indexOf( "loadAutoSave" ) > -1 ? true : false;
 
-    // For testing purposes, we can skip backup recovery
-    if ( butter.config.value( "recover" ) === "purge" ) {
-      callback( null, null );
-      return;
-    }
-
-    try {
-      projectBackup = __butterStorage.getItem( "butter-backup-project" );
-      projectBackup = JSON.parse( projectBackup );
-
-      // Delete since user can save if he/she wants.
-      __butterStorage.removeItem( "butter-backup-project" );
-
-      if ( projectBackup ) {
-        backupDate = projectBackup.backupDate;
+      if ( !fallbackCB ) {
+        fallbackCB = function() {};
       }
-    } catch( e ) { }
 
-    callback( projectBackup, backupDate );
-  };
+      if ( !readyCB ) {
+        readyCB = function() {};
+      }
+
+      // For testing purposes, we can skip backup recovery
+      if ( butter.config.value( "recover" ) === "purge" ) {
+        callback( null, null );
+        return;
+      }
+
+      try {
+        projectBackup = __butterStorage.getItem( "butter-backup-project" );
+        projectBackup = JSON.parse( projectBackup );
+
+        // Delete since user can save if he/she wants.
+        __butterStorage.removeItem( "butter-backup-project" );
+
+        if ( projectBackup ) {
+          backupDate = projectBackup.backupDate;
+        }
+      } catch( e ) { }
+
+      if ( projectBackup && loadAutoSave ) {
+        _this.import( projectBackup );
+        readyCB( _this );
+      } else if ( projectBackup ) {
+        var id = location.substring( location.lastIndexOf( "/" ) + 1 );
+
+        id = parseInt( id, 10 );
+
+        if ( !isNaN( id ) && ( projectBackup.projectID === id ) ) {
+          _this.import( projectBackup );
+          readyCB( _this );
+        } else {
+          // Backup found doesn't match project being loaded. Proceed loading
+          // current project and store the project backup
+          _this.autosave = projectBackup;
+          fallbackCB( readyCB );
+        }
+      } else {
+        // No backup found, keep loading
+        fallbackCB( readyCB );
+      }
+
+    };
+  }
 
   return Project;
 });

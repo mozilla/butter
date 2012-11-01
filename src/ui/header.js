@@ -124,15 +124,17 @@ define(
         toggleSaveButton( !isSaved );
         toggleShareButton( isSaved );
 
-        if ( butter.autosave ) {
-          var project = butter.autosave,
+        if ( butter.project.autosave ) {
+          var project = butter.project.autosave,
               location = window.location.search,
-              queryString = location.substring( 0, location.lastIndexOf( "?" ) );
+              queryString = location.substring( 0, location.lastIndexOf( "?" ) ),
+              autoSaveName = _projectAutoSave.querySelector( ".autosave-name" ),
+              autoSaveTime = _projectAutoSave.querySelector( ".autosave-time" );
 
           _projectAutoSave.classList.remove( "hidden" );
           _projectAutoSave.href = queryString + "?loadAutoSave=true";
-          _projectAutoSave.innerHTML = "Hey! We found an auto save for <span class='autosave-name'>" + project.name + "</span>, last saved " +
-            TimeUtil.toPrettyString( Date.now() - project.backupDate ) + " ago.";
+          autoSaveName.innerHTML = project.name;
+          autoSaveTime.innerHTML = TimeUtil.toPrettyString( Date.now() - project.backupDate );
 
           _projectAutoSave.onclick = function() {
             // Project has to be resaved into local storage

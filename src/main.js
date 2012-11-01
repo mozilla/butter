@@ -720,7 +720,7 @@
        */
       function attemptDataLoad( finishedCallback ) {
         var savedDataUrl,
-            project = new Project( _this );
+            project = _this.project;
 
         // see if savedDataUrl is in the page's query string
         window.location.search.substring( 1 ).split( "&" ).forEach(function( item ){
@@ -784,47 +784,18 @@
           preparePopcornScriptsAndCallbacks( function(){
             preparePage( function(){
               moduleCollection.ready( function(){
+
+                _this.project = new Project( _this );
                 // We look for an old project backup in localStorage and give the user
                 // a chance to load or discard. If there isn't a backup, we continue
                 // loading as normal.
-                Project.checkForBackup( _this, function( projectBackup, backupDate ) {
-                  var location = window.location.search,
-                      loadAutoSave = location.indexOf( "loadAutoSave" ) > -1 ? true : false,
-                      project;
+                _this.project.checkForBackup( function( project ) {
+                  project.template = project.template || _config.value( "name" );
+                  _this.chain( project, [ "projectchanged", "projectsaved" ] );
 
-                  function useProject( project ) {
-                    project.template = project.template || _config.value( "name" );
-                    _this.project = project;
-                    _this.chain( project, [ "projectchanged", "projectsaved" ] );
-
-                    // Fire the ready event
-                    _this.dispatch( "ready", _this );
-                  }
-
-                  if ( projectBackup && loadAutoSave ) {
-                    project = new Project( _this );
-                    project.import( projectBackup );
-                    useProject( project );
-                  } else if ( projectBackup ) {
-                    var id = location.substring( location.lastIndexOf( "/" ) + 1 );
-
-                    id = parseInt( id, 10 );
-
-                    if ( !isNaN( id ) && ( projectBackup.projectID === id ) ) {
-                      project = new Project( _this );
-                      project.import( projectBackup );
-                      useProject( project );
-                    } else {
-                      // Backup found doesn't match project being loaded. Proceed loading
-                      // current project and store the project backup
-                      _this.autosave = projectBackup;
-                      attemptDataLoad( useProject );
-                    }
-                  } else {
-                    // No backup found, keep loading
-                    attemptDataLoad( useProject );
-                  }
-                });
+                  // Fire the ready event
+                  _this.dispatch( "ready", _this );
+                }, attemptDataLoad );
               });
             });
           });
