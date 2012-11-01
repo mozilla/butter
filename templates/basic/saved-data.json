@@ -7,44 +7,19 @@
     "media": [{
         "id": "Media0",
         "name": "Media0",
-        "url": ["#t=,15"],
+        "url": ["http://popcorn.webmadecontent.org/videos/getstarted.mp4", "http://popcorn.webmadecontent.org/videos/getstarted.webm"],
         "target": "video",
-        "duration": "15",
-        "controls": true,
+        "duration": 11.22,
+        "controls": false,
         "tracks": [{
-            "name": "Layer",
+            "name": "Layer 0",
             "id": "0",
             "trackEvents": [{
                 "id": "TrackEvent0",
-                "type": "image",
-                "popcornOptions": {
-                    "start": 0,
-                    "end": 15,
-                    "target": "video-container",
-                    "src": "http://popcorn.webmadecontent.org/images/Popcorn_Maker_wordmark_white.png",
-                    "linkSrc": "",
-                    "tags": "",
-                    "photosetId": "",
-                    "count": 3,
-                    "width": 53.035714285714285,
-                    "height": 28.888888888888886,
-                    "top": 1.5820118737599205,
-                    "left": 0.17857142857142858,
-                    "transition": "popcorn-fade",
-                    "zindex": 1000
-                },
-                "track": "Layer",
-                "name": "TrackEvent2"
-            }]
-        }, {
-            "name": "Layer",
-            "id": "1",
-            "trackEvents": [{
-                "id": "TrackEvent1",
                 "type": "text",
                 "popcornOptions": {
                     "start": 0,
-                    "end": 4.99403,
+                    "end": 7.68228,
                     "target": "video-container",
                     "text": "Use the Media tab to import\nyour audio or video files",
                     "linkUrl": "",
@@ -61,17 +36,17 @@
                     "left": 26.96428571428571,
                     "top": 37.77777777777778,
                     "width": 50,
-                    "zindex": 999,
+                    "zindex": 1000,
                     "alignment": "center"
                 },
-                "track": "Layer",
+                "track": "0",
                 "name": "TrackEvent3"
             }, {
-                "id": "TrackEvent2",
+                "id": "TrackEvent1",
                 "type": "text",
                 "popcornOptions": {
-                    "start": 5,
-                    "end": 10,
+                    "start": 7.7081,
+                    "end": 9.924149822064058,
                     "target": "video-container",
                     "text": "Open the events tab to begin adding\nevents to your media",
                     "linkUrl": "",
@@ -89,55 +64,91 @@
                     "left": 29.107142857142858,
                     "top": 36.507936507936506,
                     "width": 50,
-                    "zindex": 999
+                    "zindex": 1000,
+                    "shadow": "",
+                    "shadowColor": "#444444",
+                    "background": "",
+                    "backgroundColor": "#888888"
                 },
-                "track": "Layer",
+                "track": "0",
                 "name": "TrackEvent3"
-            }, {
-                "id": "TrackEvent4",
+            }]
+        }, {
+            "name": "Layer 1",
+            "id": "4",
+            "trackEvents": [{
+                "id": "TrackEvent3",
                 "type": "text",
                 "popcornOptions": {
-                    "start": 10.048350423988875,
-                    "end": 14.96402240301433,
+                    "start": 9.942277580071176,
+                    "end": 10.880604982206407,
                     "target": "video-container",
-                    "text": "Delete these events by pressing the delete key!\n",
+                    "text": "Delete these events after importing\nyour media!",
                     "linkUrl": "",
                     "position": "custom",
                     "alignment": "center",
                     "transition": "popcorn-fade",
                     "fontFamily": "Gentium Book Basic",
                     "fontSize": 10,
-                    "fontColor": "#000",
+                    "fontColor": "#000000",
+                    "shadow": "",
+                    "shadowColor": "#444444",
+                    "background": "",
+                    "backgroundColor": "#888888",
                     "fontDecorations": {
                         "bold": true,
-                        "italics": false,
-                        "shadow": false
+                        "italics": false
                     },
-                    "left": 27.857142857142858,
-                    "top": 38.41269841269842,
+                    "left": 29.82142857142857,
+                    "top": 33.33333333333333,
                     "width": 50,
                     "zindex": 999
                 },
-                "track": "Layer",
-                "name": "TrackEvent4"
+                "track": "4",
+                "name": "TrackEvent6"
             }]
         }, {
-            "name": "Layer",
-            "id": "2",
+            "name": "Layer 2",
+            "id": "1",
             "trackEvents": [{
-                "id": "TrackEvent3",
+                "id": "TrackEvent2",
                 "type": "pausePlugin",
                 "popcornOptions": {
-                    "start": 14.500786105231752,
-                    "end": 14.691946105231752,
+                    "start": 10.541209659780048,
+                    "end": 11.219999695367237,
                     "target": "video-container",
                     "duration": "0"
                 },
-                "track": "Layer",
-                "name": "TrackEvent4"
+                "track": "1",
+                "name": "TrackEvent5"
+            }]
+        }, {
+            "name": "Layer 3",
+            "id": "3",
+            "trackEvents": [{
+                "id": "TrackEvent4",
+                "type": "image",
+                "popcornOptions": {
+                    "start": 0,
+                    "end": 11.22,
+                    "target": "video-container",
+                    "src": "http://popcorn.webmadecontent.org/images/Popcorn_Maker_wordmark_white.png",
+                    "linkSrc": "",
+                    "tags": "",
+                    "photosetId": "",
+                    "count": 3,
+                    "width": 50.71428571428571,
+                    "height": 27.613757905505953,
+                    "top": 0,
+                    "left": 0,
+                    "transition": "popcorn-fade",
+                    "zindex": 997
+                },
+                "track": "3",
+                "name": "TrackEvent7"
             }]
         }]
     }],
-    "name": "My cool project",
+    "name": "My new project",
     "template": "basic"
 }
