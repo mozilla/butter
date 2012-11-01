@@ -11,14 +11,18 @@ utils = {
     var filename = uuid.v4();
     return {
       filename: filename,
-      url: CONSTANTS.EMBED_HOSTNAME + '/' + stores.images.expand( filename )
+      url: ( stores.images.hostname || CONSTANTS.EMBED_HOSTNAME ) +
+        '/' + stores.images.expand( filename )
     };
   },
   generatePublishUrl: function( id ) {
-    return CONSTANTS.EMBED_HOSTNAME + '/' + stores.publish.expand( utils.generateIdString( id ) );
+    return ( stores.publish.hostname || CONSTANTS.EMBED_HOSTNAME ) +
+      '/' + stores.publish.expand( utils.generateIdString( id ) );
   },
   generateIframeUrl: function( id ) {
-    return CONSTANTS.EMBED_HOSTNAME + '/' + stores.publish.expand( utils.generateIdString( id ) + CONSTANTS.EMBED_SUFFIX );
+    return ( stores.publish.hostname || CONSTANTS.EMBED_HOSTNAME ) +
+      '/' + stores.publish.expand( utils.generateIdString( id ) +
+      CONSTANTS.EMBED_SUFFIX );
   },
   generateIdString: function( id ) {
     return id.toString( 36 );

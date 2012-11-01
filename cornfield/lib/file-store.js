@@ -57,6 +57,9 @@ function LocalFileStore( options ) {
   if( options.nameSuffix ) {
     this.nameSuffix = options.nameSuffix;
   }
+
+  // If embedHostname isn't appropriate, a hostname can be provided to override it.
+  this.hostname = options.hostname;
 }
 
 LocalFileStore.prototype = Object.create( BaseFileStore );
@@ -79,7 +82,6 @@ LocalFileStore.prototype.remove = function( path, callback ) {
   path = Path.join( this.root, this.expand( path ) );
   fs.unlink( path, callback );
 };
-
 
 /**
  * S3FileStore - store data using Amazon S3
@@ -107,6 +109,9 @@ function S3FileStore( options ) {
   // An optional mime type for the files to be written.  Defaults to
   // text/plain if none given.
   this.contentType = options.contentType || 'text/plain';
+
+  // If embedHostname isn't appropriate, a hostname can be provided to override it.
+  this.hostname = options.hostname;
 }
 
 S3FileStore.prototype = Object.create( BaseFileStore );

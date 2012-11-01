@@ -46,8 +46,7 @@
     "type": "local",
     "options": {
       "root": "./view",
-      "namePrefix": "images",
-      "nameSuffix": ""
+      "namePrefix": "images"
     }
   },
   "templates": {

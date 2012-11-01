@@ -131,6 +131,7 @@ The `fileStore` type is used to setup a backend for storing data:
 
    - `type` the type of file store to use.  Possible values include `local` (i.e., local file system) and `s3` (i.e., Amazon S3)
    - `options` options for the file store, which depends on the type chosen.
+      - `hostname` the hostname to use for constructing urls if different than `embedHostname`
       - local options
          - `root` the root directory under which all exported files are placed (e.g., `./view`)
          - `namePrefix` <i>[optional]</i> the path prefix to add to any filenames passed to the local file store.  For example, if using "v" all filenames will become "v/<key>"
