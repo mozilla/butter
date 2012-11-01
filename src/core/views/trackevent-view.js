@@ -41,12 +41,13 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         _trackEvent.track.view.element.appendChild( _element );
       }
       _element.style.left = _start  / _trackEvent.track._media.duration * 100 + "%";
-      _element.style.width = ( _end - _start ) / _trackEvent.track._media.duration * 100 + "%";
+      _element.style.width = ( ( ( _end - _start ) / _trackEvent.track._media.duration ) - ( 2 / _element.parentNode.getBoundingClientRect().width ) ) * 100 + "%";
       if ( _element.getBoundingClientRect().width < TRACKEVENT_MIN_WIDTH ) {
         _element.classList.add( "trackevent-small" );
       } else {
         _element.classList.remove( "trackevent-small" );
       }
+      _trackEvent.track._media.dispatch( "trackeventviewupdated", _trackEvent );
     }
 
     this.setToolTip = function( title ){
