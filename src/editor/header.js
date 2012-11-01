@@ -4,7 +4,7 @@
 
 define([ "ui/widget/tooltip",
          // keep this at the end so it doesn't need a spot in the function signature
-         "src/util/shims" ], function( Tooltip ) {
+         "util/shims" ], function( Tooltip ) {
 
   return function( editorAreaDOMRoot, editorModule ) {
     var _mediaButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-media" ),
@@ -21,6 +21,8 @@ define([ "ui/widget/tooltip",
     var _currentFocus;
 
     // Create a message for the disabled share editor.
+    // Note: this can return null if the `login-to-share` Tooltip isn't registered
+    // (e.g. in tests). So, null checks need to be performed below.
     _loginToShareTooltip = Tooltip.create({
       title: "login-to-share",
       message: "Login and Save your project to share",
