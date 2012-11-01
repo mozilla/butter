@@ -21,4 +21,9 @@ html
     title #{projectName} - Popcorn Maker
     link(rel='stylesheet', href='#{baseHref}/css/embed-shell.css')
   body
-    iframe(src='#{embedSrc}', width='1280', height='745', mozallowfullscreen='mozallowfullscreen', webkitallowfullscreen='webkitallowfullscreen', allowfullscreen='allowfullscreen')
+    iframe(id='embed', src='#{embedSrc}', width='1280', height='745', mozallowfullscreen='mozallowfullscreen', webkitallowfullscreen='webkitallowfullscreen', allowfullscreen='allowfullscreen')
+    script
+      if ( location.search ) {
+        var embed = document.querySelector('#embed');
+        embed.src = embed.src + location.search;
+      }

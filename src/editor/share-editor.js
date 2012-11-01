@@ -32,7 +32,7 @@ define([ "editor/editor", "editor/base-editor",
     function togglePreviewButton( on ) {
       if ( on ) {
         previewBtn.classList.remove( "butter-disabled" );
-        previewBtn.href = butter.project.publishUrl;
+        previewBtn.href = butter.project.previewUrl;
         previewBtn.onclick = function() {
           return true;
         };

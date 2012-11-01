@@ -97,7 +97,7 @@ new file called _hostname_-_environment_.json that overrides the cornfield defau
     - `wwwRoot` the server's WWW root directory (e.g., `../`)
     - `templates` the location of templates (e.g., `../templates`)
     - `appHostname` the hostname URL for the application, usually the same as `server.bindIP` and `server.bindPort` (e.g., `http://localhost:8888`)
-    - `embedHostname` <i>[optional]</i> the hostname URL where published embed documents are stored, if different from `dirs.appHostname` (e.g., `http://s3.amazonaws.com/your-bucket`)
+    - `embedHostname` *[optional]* the hostname URL where published embed documents are stored, if different from `dirs.appHostname` (e.g., `http://s3.amazonaws.com/your-bucket`)
   - `templates` list of templates to serve.  The format is as follows:
     `<template-name>`: `{{templateBase}}<path/to/template/config.json>`.  The `{{templateBase}}` string will be replaced by the value in `dirs.templates` (e.g., "basic": "{{templateBase}}basic/config.json")
 
@@ -134,15 +134,16 @@ The `fileStore` type is used to setup a backend for storing data:
       - `hostname` the hostname to use for constructing urls if different than `embedHostname`
       - local options
          - `root` the root directory under which all exported files are placed (e.g., `./view`)
-         - `namePrefix` <i>[optional]</i> the path prefix to add to any filenames passed to the local file store.  For example, if using "v" all filenames will become "v/<key>"
-         - `nameSuffix` <i>[optional]</i> the filename suffix to use for all filenames (e.g., ".html")
+         - `namePrefix` *[optional]* the path prefix to add to any filenames passed to the local file store.  For example, if using "v" all filenames will become "v/<key>"
+         - `nameSuffix` *[optional]* the filename suffix to use for all filenames (e.g., ".html")
       - s3 options
        - `key` the AWS S3 key to use for authentication
        - `secret` the AWS S3 secret to use for authentication
        - `bucket` the AWS S3 bucket name to use for storing key/value pairs
-       - `namePrefix` <i>[optional]</i> the prefix to add to any key names passed to the s3 file store.  For example, if using "v" all keys will become "v/<key>"
-       - `nameSuffix` <i>[optional]</i> the suffix to add to any key names passed to the s3 file store.  For example, if using ".json" all keys will end in ".json"
-       - `contentType` <i>[optional]</i> the mime type to use for data written to S3. If none given `text/plain` is used.
+       - `namePrefix` *[optional]* the prefix to add to any key names passed to the s3 file store.  For example, if using "v" all keys will become "v/<key>"
+       - `nameSuffix` *[optional]* the suffix to add to any key names passed to the s3 file store.  For example, if using ".json" all keys will end in ".json"
+       - `contentType` *[optional]* the mime type to use for data written to S3. If none given `text/plain` is used.
+       - `headers` *[optional]* any additional headers to use for data written to S3. For example, setting cache control headers with `{ 'Cache-Control': 'max-age=1800' }`.
 
 #### ImageStore
 

@@ -129,6 +129,13 @@ define( [ 'core/eventmanager', 'core/media' ],
         enumerable: true
       },
 
+      "previewUrl": {
+        get: function() {
+          return _publishUrl + "?previewTime=" + Date.now();
+        },
+        enumerable: true
+      },
+
       "iframeUrl": {
         get: function() {
           return _iframeUrl;
