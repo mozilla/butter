@@ -179,7 +179,7 @@
           options: [ "None", "Pop", "Fade", "Slide Up", "Slide Down" ],
           values: [ "popcorn-none", "popcorn-pop", "popcorn-fade", "popcorn-slide-up", "popcorn-slide-down" ],
           label: "Transition",
-          "default": "popcorn-pop"
+          "default": "popcorn-fade"
         },
         fontFamily: {
           elem: "select",
@@ -417,7 +417,7 @@
                 img.style.top = ( container.offsetHeight - height ) / 2 - 4 + "px";
               }
             } else {
-              img.classList.add( "responsive-image-position" );
+              img.classList.add( "popcorn-responsive-image-position" );
             }
 
             if ( container ) {
