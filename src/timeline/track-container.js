@@ -139,26 +139,6 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       }
     }
 
-    function onTrackEventResized( trackEvent, x, w, resizeEvent, direction ) {
-      var trackView = trackEvent.track.view,
-          overlappingTrackEvent,
-          leftOffset = _container.getBoundingClientRect().left,
-          trackEventView = trackEvent.view,
-          trackEventSpacing = trackEventView.element.clientLeft;              // Compensate for border width
-
-      overlappingTrackEvent = trackView.findOverlappingTrackEvent( trackEventView, x + leftOffset + trackEventSpacing, w );
-
-      if ( overlappingTrackEvent ) {
-        if ( direction === 'right' ) {
-          // Use clientLeft to compensate for border (https://developer.mozilla.org/en-US/docs/DOM/element.clientLeft)
-          resizeEvent.blockIteration( overlappingTrackEvent.view.element.offsetLeft - trackEventSpacing * 2 );
-        }
-        else {
-          resizeEvent.blockIteration( overlappingTrackEvent.view.element.offsetLeft + overlappingTrackEvent.view.element.offsetWidth );
-        }
-      }
-    }
-
     function onTrackEventDragStarted( e ) {
       var trackEventView = e.target,
           element = trackEventView.element,
@@ -214,37 +194,106 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       createTrackEventFromDrop( trackEvent, popcornOptions, oldTrack, desiredTrack );
     }
 
-    function onTrackEventResizeStopped( e ) {
+    function onTrackEventResizeStarted( e ) {
       var trackEventView = e.target,
           trackEvent = trackEventView.trackEvent,
           direction = e.data.direction,
-          popcornOptions = {};
+          trackEventStart = trackEvent.popcornOptions.start,
+          trackEventEnd = trackEvent.popcornOptions.end,
+          min, max,
+          trackEvents = trackEvent.track.trackEvents;
 
-      if ( direction === "right" ) {
-        popcornOptions.end = trackEvent.popcornOptions.start + trackEventView.element.clientWidth / _container.clientWidth * _media.duration;
+      // Only one of these two functions, onTrackEventResizedLeft or onTrackEventResizedRight,
+      // is run during resizing. Since all the max/min data is prepared ahead of time, we know
+      // the w/x values shouldn't grow/shrink past certain points.
+      function onTrackEventResizedLeft( trackEvent, x, w, resizeEvent, direction ) {
+        if ( x < min ) {
+          resizeEvent.blockIteration( min );
+        }
+      }
+
+      function onTrackEventResizedRight( trackEvent, x, w, resizeEvent, direction ) {
+        if ( x + w > max ) {
+          resizeEvent.blockIteration( max );
+        }
+      }
+
+      // Slightly different code paths for left and right resizing.
+      if ( direction === "left" ) {
+        // Use trackEvents.reduce to find a valid minimum left value.
+        min = trackEvents.reduce( function( previousValue, otherTrackEvent ) {
+          var popcornOptions = otherTrackEvent.popcornOptions;
+
+          // [ otherEvent ] [ otherEvent ] |<-- [ thisEvent ] [ otherEvent ]
+          return (  otherTrackEvent !== trackEvent &&
+                    popcornOptions.end > previousValue &&
+                    popcornOptions.end < trackEventStart  ) ?
+              popcornOptions.end : previousValue;
+        }, 0 );
+
+        // Rebase min value on pixels instead of time.
+        // Use clientLeft to compensate for border (https://developer.mozilla.org/en-US/docs/DOM/element.clientLeft).
+        min = min / _media.duration * _container.offsetWidth + trackEventView.element.clientLeft * 2;
+
+        // Only use the left handler.
+        trackEventView.setResizeHandler( onTrackEventResizedLeft );
       }
       else {
-        popcornOptions.start = trackEventView.element.offsetLeft / _container.clientWidth * _media.duration;
+        // Use trackEvents.reduce to find a valid maximum right value.
+        max = trackEvents.reduce( function( previousValue, otherTrackEvent ) {
+          var popcornOptions = otherTrackEvent.popcornOptions;
+
+          // [ otherEvent ] [ otherEvent ] [ thisEvent ] -->| [ otherEvent ]
+          return (  otherTrackEvent !== trackEvent &&
+                    popcornOptions.start < previousValue &&
+                    popcornOptions.start > trackEventEnd ) ?
+              popcornOptions.start : previousValue;
+        }, _media.duration );
+
+        // Rebase min value on pixels instead of time.
+        // Use clientLeft to compensate for border (https://developer.mozilla.org/en-US/docs/DOM/element.clientLeft).
+        max = max / _media.duration * _container.offsetWidth - trackEventView.element.clientLeft * 2;
+
+        // Only use the right handler.
+        trackEventView.setResizeHandler( onTrackEventResizedRight );
       }
 
-      trackEvent.update( popcornOptions );
+      function onTrackEventResizeStopped( e ) {
+        var popcornOptions = {};
+
+        // Finish off by making sure the values are correct depending on the direction.
+        if ( direction === "right" ) {
+          popcornOptions.end = ( trackEvent.popcornOptions.start + trackEventView.element.clientWidth ) /
+            _container.clientWidth * _media.duration;
+        }
+        else {
+          popcornOptions.start = trackEventView.element.offsetLeft / _container.clientWidth * _media.duration;
+        }
+
+        trackEvent.update( popcornOptions );
+
+        // Stop using the handler set above.
+        trackEventView.setResizeHandler( null );
+
+        trackEventView.unlisten( "trackeventresizestopped", onTrackEventResizeStopped );
+      }
+
+      trackEventView.listen( "trackeventresizestopped", onTrackEventResizeStopped );
     }
 
     _media.listen( "trackeventadded", function( e ) {
       var trackEventView = e.data.view;
       trackEventView.setDragHandler( onTrackEventDragged );
-      trackEventView.setResizeHandler( onTrackEventResized );
       trackEventView.listen( "trackeventdragstarted", onTrackEventDragStarted );
-      trackEventView.listen( "trackeventresizestopped", onTrackEventResizeStopped );
+      trackEventView.listen( "trackeventresizestarted", onTrackEventResizeStarted );
       _vScrollbar.update();
     });
 
     _media.listen( "trackeventremoved", function( e ) {
       var trackEventView = e.data.view;
       trackEventView.setDragHandler( null );
-      trackEventView.setResizeHandler( null );
       trackEventView.unlisten( "trackeventdragstarted", onTrackEventDragStarted );
-      trackEventView.unlisten( "trackeventresizestopped", onTrackEventResizeStopped );
+      trackEventView.unlisten( "trackeventresizestarted", onTrackEventResizeStarted );
       _vScrollbar.update();
     });
 

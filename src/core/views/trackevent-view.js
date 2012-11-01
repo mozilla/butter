@@ -250,8 +250,9 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                 containment: _parent.element.parentNode,
                 scroll: _parent.element.parentNode.parentNode,
                 padding: _padding,
-                start: function() {
+                start: function( resizeEvent ) {
                   _resizing = true;
+                  _this.dispatch( "trackeventresizestarted", resizeEvent );
                 },
                 stop: function( resizeEvent ) {
                   _resizing = false;

@@ -380,7 +380,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
           _lastDims = [];
           _resizeEvent.direction = 'left';
           _updateInterval = setInterval( update, SCROLL_INTERVAL );
-          _onStart();
+          _onStart( _resizeEvent );
         }
       }
 
@@ -465,7 +465,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
           _lastDims = [];
           _resizeEvent.direction = 'right';
           _updateInterval = setInterval( update, SCROLL_INTERVAL );
-          _onStart();
+          _onStart( _resizeEvent );
         }
       }
 
