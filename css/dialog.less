@@ -163,15 +163,21 @@
 .butter-first-run-dialog {
   position: fixed;
   right: 360px;
-  top: 80px;
+  top: 150px;
   -moz-animation: bounce ease 1s;
   -webkit-animation: bounce ease 1s;
   -o-animation: bounce ease 1s;
   animation: bounce ease 1s;
 
+  h2 {
+    font-size: 1.2em;
+    margin: 0;
+    margin-left: 10px;
+    font-weight: 400;
+  }
   .butter-logo {
-    top: -15px;
-    left: 0;
+    top: 50%;
+    margin-top: -40px;
   }
 
   .triangle( "right", 20px, @baseLight, 1px, #CCC );
@@ -192,13 +198,17 @@
 
 .butter-tooltip.tooltip-popup,
 .butter-tooltip.tooltip-media {
-  background: #F8EDAB;
   h3 {
     margin: 0 0 5px 0;
     font-style: normal;
     font-weight: 700;
     border-radius: 3px;
   }
+}
+
+.butter-tooltip.tooltip-popup.tooltip-on,
+.butter-tooltip.tooltip-media.tooltip-on {
+  background: #F8EDAB;
   &:after {
     border-bottom-color: #F8EDAB;
   }

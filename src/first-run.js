@@ -11,8 +11,6 @@ define( [ "dialog/dialog", "util/cookie", "ui/widget/tooltip" ], function( Dialo
   return {
     init: function( config ) {
 
-      var TOOLTIP_DELAY = 3000;
-
       var dialog,
           popupTooltip,
           mediaTooltip,
@@ -36,14 +34,12 @@ define( [ "dialog/dialog", "util/cookie", "ui/widget/tooltip" ], function( Dialo
           hidden: false
         });
 
-        setTimeout( function() {
-          if ( mediaTooltip ) {
-            mediaTooltip.parentNode.removeChild( mediaTooltip );
-          }
-          if ( popupTooltip ) {
-            popupTooltip.parentNode.removeChild( popupTooltip );
-          }
-        }, TOOLTIP_DELAY );
+        document.body.addEventListener( "mousedown", function removeTooltips() {
+          mediaTooltip.classList.remove( "tooltip-on" );
+          popupTooltip.parentNode.removeChild( popupTooltip );
+          document.body.removeEventListener( "mousedown", removeTooltips, true );
+        }, true );
+
       }
 
       function onDialogClose() {
