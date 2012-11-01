@@ -1,6 +1,17 @@
 /*********************************************************
 * Popcorn Twitter Plugin
 */
+@scrollbaroffset: 20px;
+@hpadding: 5%;
+@titleheight: 10%;
+
+.box-sizing( @property ) {
+  -webkit-box-sizing: @property;
+  -moz-box-sizing: @property;
+  -ms-box-sizing: @property;
+  box-sizing: @property;
+}
+
 .popcorn-twitter {
   position: absolute;
   text-align: left;
@@ -11,28 +22,22 @@
   background: #FEFEFE;
   background-clip: padding-box;
   border: 1px solid #DDD;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
+  .box-sizing( border-box );
 }
 .popcorn-twitter-title {
   display: block;
-  padding: 0 5%;
-  height: 10%;
+  padding: 0 @hpadding;
+  height: @titleheight;
   line-height: 2;
   font-weight: 700;
-  background: #ffffff url("twitter-icon.png") 95% center no-repeat;
+  background: #FFF url("twitter-icon.png") ( 100% - @hpadding ) center no-repeat;
   border-bottom: 1px solid #CCC;
-  box-shadow: 0 2px 4px -2px #dddddd;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
+  box-shadow: 0 2px 4px -2px #DDD;
+ .box-sizing( border-box );
 }
 .popcorn-twitter-tweets {
   overflow-y: scroll;
-  height: 90%;
+  height: 100% - @titleheight;
   line-height: 1.4;
 }
 .popcorn-twitter ul {
@@ -45,7 +50,7 @@
 }
 /* Tweet */
 .popcorn-twitter ul > li {
-  padding: 5%;
+  padding: @hpadding;
   border-bottom: 1px solid #EFEFEF;
   font-size: 0.8em;
 }
@@ -54,9 +59,9 @@
   width: 2.3em;
   margin-right: 0.5em;
   border-radius: 3px;
-}
-.popcorn-twitter-tweet-image img {
-  width: 100%;
+  img {
+    width: 100%;
+  }
 }
 .popcorn-twitter-tweet-user {
   font-weight: 700;
@@ -83,7 +88,7 @@
   color: #F1E79F;
   font-size: 0.86em;
   width: 100%;
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#222222', endColorstr='#1a1a1a', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr='#222222', endColorstr='#1a1a1a', GradientType=0);
   background: -webkit-gradient(linear, top, bottom, color-stop(0%, #222222), color-stop(100%, #1a1a1a));
   background: -webkit-linear-gradient(top, #222222 0%, #1a1a1a 100%);
   background: -moz-linear-gradient(top, #222222 0%, #1a1a1a 100%);
@@ -116,10 +121,7 @@
   height: 4.8em;
   border: none;
   padding: 0.8em;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  box-sizing: border-box;
+  .box-sizing( border-box );
   -webkit-transition: margin-top 1s ease;
   -moz-transition: margin-top 1s ease;
   -o-transition: margin-top 1s ease;

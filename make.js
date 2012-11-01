@@ -361,6 +361,12 @@ function buildCSS(compress) {
   });
 
   lessToCSS({
+    lessFile: "templates/assets/plugins/twitter/popcorn.twitter.less",
+    cssFile: "templates/assets/plugins/twitter/popcorn.twitter.css",
+    compress: compress
+  });
+
+  lessToCSS({
     lessFile: "templates/assets/css/jquery-ui/jquery.ui.butter.less",
     cssFile: "templates/assets/css/jquery-ui/jquery.ui.butter.css",
     compress: compress
