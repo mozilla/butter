@@ -319,9 +319,25 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
           name: sanitizer.escapeHTML( project.name ),
           template: project.template,
           href: path.relative( WWW_ROOT, templateConfigs[ project.template ].template ) +
-            "?savedDataUrl=/api/project/" + project.id
+            "?savedDataUrl=/api/project/" + project.id,
+          updatedAt: project.updatedAt
         });
       }
+    });
+
+    userProjects.sort( function( a, b ) {
+      var aDate = Date.parse( a.updatedAt ),
+          bDate = Date.parse( b.updatedAt );
+
+      if ( aDate < bDate ) {
+        return 1;
+      }
+
+      if ( aDate > bDate ) {
+        return -1;
+      }
+
+      return 0;
     });
 
     res.render( 'dashboard.jade', {
