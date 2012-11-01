@@ -266,6 +266,16 @@ define(
 
     this.attachProjectBackup = function( project, location ) {
 
+      function onProjectChanged() {
+        _projectAutoSave.onclick = null;
+        _projectAutoSave.classList.add( "hidden" );
+
+        // Stop listening, since the user now manipulated their data
+        changingEvents.forEach( function( event ) {
+          butter.unlisten( event, onProjectChanged );
+        });
+      }
+
       // Ensure the given project is indeed from a backup
       if ( project && project.backupDate ) {
         var queryString = location.substring( 0, location.lastIndexOf( "?" ) ),
@@ -290,16 +300,6 @@ define(
           butter.project.backupData( project );
           _projectAutoSave.classList.add( "hidden" );
         };
-
-        function onProjectChanged() {
-          _projectAutoSave.onclick = null;
-          _projectAutoSave.classList.add( "hidden" );
-
-          // Stop listening, since the user now manipulated their data
-          changingEvents.forEach( function( event ) {
-            butter.unlisten( event, onProjectChanged );
-          });
-        }
 
         // Listen for changes in the project data so we know when to save.
         changingEvents.forEach( function( event ) {

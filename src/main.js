@@ -806,8 +806,7 @@
                     project.import( projectBackup );
                     useProject( project );
                   } else if ( projectBackup ) {
-                    var location = window.location.search,
-                        id = location.substring( location.lastIndexOf( "/" ) + 1 );
+                    var id = location.substring( location.lastIndexOf( "/" ) + 1 );
 
                     id = parseInt( id, 10 );
 
