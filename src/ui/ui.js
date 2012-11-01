@@ -5,11 +5,13 @@
 define( [ "core/eventmanager", "./toggler",
           "./header", "./unload-dialog", "crashreporter",
           "first-run", "./tray", "editor/ui-kit",
-          "core/trackevent", "dialog/dialog" ],
+          "core/trackevent", "dialog/dialog",
+          "util/dragndrop" ],
   function( EventManager, Toggler, Header,
             UnloadDialog, CrashReporter,
             FirstRun, Tray, UIKitDummy,
-            TrackEvent, Dialog ){
+            TrackEvent, Dialog,
+            DragNDrop ){
 
   var TRANSITION_DURATION = 500,
       BUTTER_CSS_FILE = "{css}/butter.ui.css";
@@ -452,7 +454,9 @@ define( [ "core/eventmanager", "./toggler",
       },
 
       27: function( e ) { // esc key
-        butter.deselectAllTrackEvents();
+        if ( !DragNDrop.isDragging ) {
+          butter.deselectAllTrackEvents();
+        }
       },
 
       8: function( e ) { // del key
@@ -524,7 +528,7 @@ define( [ "core/eventmanager", "./toggler",
       } // tab key
     };
 
-    window.addEventListener( "keydown", function( e ){
+    function onKeyDown( e ){
       var key = e.which || e.keyCode,
           eTarget = e.target;
       // this allows backspace and del to do the same thing on windows and mac keyboards
@@ -532,7 +536,24 @@ define( [ "core/eventmanager", "./toggler",
       if( processKey[ key ] && !eTarget.isContentEditable && __unwantedKeyPressElements.indexOf( eTarget.nodeName ) === -1 ){
         processKey[ key ]( e );
       } // if
-    }, false );
+    }
+
+    function unbindKeyDownListener() {
+      window.removeEventListener( "keydown", onKeyDown, false );
+    }
+
+    function bindKeyDownListener() {
+      window.addEventListener( "keydown", onKeyDown, false );
+    }
+
+    DragNDrop.listen( "dragstarted", unbindKeyDownListener );
+    DragNDrop.listen( "dragstopped", bindKeyDownListener );
+    DragNDrop.listen( "resizestarted", unbindKeyDownListener );
+    DragNDrop.listen( "resizestopped", bindKeyDownListener );
+    DragNDrop.listen( "sortstarted", unbindKeyDownListener );
+    DragNDrop.listen( "sortstopped", bindKeyDownListener );
+
+    bindKeyDownListener();
 
     this.TRANSITION_DURATION = TRANSITION_DURATION;
 

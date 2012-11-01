@@ -132,6 +132,8 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       // Prevent drags from happening while we're dragging around objects, since
       // it's not an HTML5 drag and it'll interfere.
       window.addEventListener( "dragstart", __onWindowDragStart, false );
+
+      DragNDrop.dispatch( "dragstarted" );
     }
   }
 
@@ -143,6 +145,8 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
     if ( !__mouseDown ) {
       return;
     }
+
+    DragNDrop.dispatch( "dragstopped" );
 
     __mouseDown = false;
 
@@ -366,6 +370,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
         _updateInterval = -1;
         _onStop( _resizeEvent );
         element.classList.remove( RESIZABLE_CLASS );
+        DragNDrop.dispatch( "resizestopped" );
       }
 
       function onMouseMove( e ) {
@@ -387,6 +392,8 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
 
       window.addEventListener( "mousemove", onMouseMove, false );
       window.addEventListener( "mouseup", onMouseUp, false );
+
+      DragNDrop.dispatch( "resizestarted" );
     }
 
     function onRightMouseDown( e ) {
@@ -449,6 +456,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
         _updateInterval = -1;
         _onStop( _resizeEvent );
         element.classList.remove( RESIZABLE_CLASS );
+        DragNDrop.dispatch( "resizestopped" );
       }
 
       function onMouseMove( e ) {
@@ -472,6 +480,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       window.addEventListener( "mousemove", onMouseMove, false );
       window.addEventListener( "mouseup", onMouseUp, false );
 
+      DragNDrop.dispatch( "resizestarted" );
     }
 
     _leftHandle.addEventListener( "mousedown", onLeftMouseDown, false );
@@ -1064,6 +1073,8 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
 
       window.addEventListener( "mouseup", onElementMouseUp, false );
       window.addEventListener( "mousemove", onElementMouseMove, false );
+
+      DragNDrop.dispatch( "sortstarted" );
     }
 
     function onElementMouseUp( e ) {
@@ -1078,6 +1089,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
         parentElement.replaceChild( _draggingElement, _placeHolder );
         _placeHolder = null;
       }
+      DragNDrop.dispatch( "sortstopped" );
     }
 
     _instance.addItem = function( item ) {
@@ -1098,6 +1110,14 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
   DragNDrop.helper = Helper;
   DragNDrop.resizable = Resizable;
   DragNDrop.sortable = Sortable;
+
+  Object.defineProperties( DragNDrop, {
+    isDragging: {
+      get: function() {
+        return __mouseDown;
+      }
+    }
+  });
 
   EventManager.extend( DragNDrop );
 
