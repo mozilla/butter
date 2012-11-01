@@ -11,7 +11,8 @@ define(function( require, exports, module ){
     // Paths are relative to the baseUrl
     paths: {
       'text': '../external/require/text',
-      'jsSHA': '../external/jsSHA'
+      'jsSHA': '../external/jsSHA',
+      'UAParser': '../external/ua-parser'
     }
   });
 
