@@ -23,8 +23,9 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
    *
    * @param {String} layoutSrc: String from which the dialog's DOM fragment is created
    * @param {Funtion} dialogCtor: Constructor to run after mandatory dialog constituents are created
+   * @param {String} name: Name of the dialog that was constructed when spawn was called
    */
-  function __createDialog( layoutSrc, dialogCtor ) {
+  function __createDialog( layoutSrc, dialogCtor, name ) {
 
     /**
      * Class: Dialog
@@ -42,7 +43,8 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
           _rootElement = LangUtils.domFragment( layoutSrc ),
           _enterKeyActivity,
           _escapeKeyActivity,
-          _modal;
+          _modal,
+          _name = name;
 
       // Make sure we have a handle to the butter-dialog div. If there are comments or extra elements
       // described in layoutSrc, we don't care about them.
@@ -58,6 +60,8 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
        * @param {Event} e: Standard DOM Event from a keydown occurrence
        */
       function onKeyDown( e ) {
+        e.stopPropagation();
+        e.preventDefault();
         if (  _enterKeyActivity &&
               __keyboardAvoidElements.indexOf( e.target.nodeName ) === -1 &&
               ( e.which === 13 || e.keyCode === 13 ) ) {
@@ -253,6 +257,11 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
          * Opens the dialog. If listeners were supplied during construction, they are attached now.
          */
         open: function( overlay ) {
+          if ( __openDialogs[ _name ] ) {
+            _external.focus();
+            return;
+          }
+          __openDialogs[ _name ] = true;
           for ( var e in _listeners ) {
             if ( _listeners.hasOwnProperty( e ) ) {
               _external.listen( e, _listeners[ e ] );
@@ -273,6 +282,7 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
          * Closes the dialog. If listeners were supplied during construction, they are removed now.
          */
         close: function() {
+          __openDialogs[ _name ] = false;
           for( var e in _listeners ){
             if ( _listeners.hasOwnProperty( e ) ) {
               if ( e !== "close" ) {
@@ -351,6 +361,7 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
      */
     register: function( name, layoutSrc, dialogCtor ) {
       __dialogs[ name ] = __createDialog( layoutSrc, dialogCtor );
+      __openDialogs[ name ] = false;
     },
 
     /**
@@ -363,17 +374,7 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
      */
     spawn: function( name, spawnOptions ) {
       if ( __dialogs[ name ] ) {
-        // If the dialog is already open, just focus it.
-        if ( __openDialogs[ name ] ) {
-          __openDialogs[ name ].focus();
-        }
-        else {
-          __openDialogs[ name ] = __dialogs[ name ]( spawnOptions );
-          __openDialogs[ name ].listen( "close", function() {
-            __openDialogs[ name ] = null;
-          });
-        }
-        return __openDialogs[ name ];
+        return __dialogs[ name ]( spawnOptions );
       }
       else {
         throw "Dialog '" + name + "' does not exist.";
