@@ -104,6 +104,9 @@ define(
         togglePreviewButton( false );
         toggleSaveButton( true );
         toggleShareButton( true );
+
+        butter.autosave = _projectAutoSave.onclick = null;
+        _projectAutoSave.classList.add( "hidden" );
       },
       clean: function() {
         togglePreviewButton( true );
@@ -120,6 +123,23 @@ define(
         togglePreviewButton( isSaved );
         toggleSaveButton( !isSaved );
         toggleShareButton( isSaved );
+
+        if ( butter.autosave ) {
+          var project = butter.autosave,
+              location = window.location.search,
+              queryString = location.substring( 0, location.lastIndexOf( "?" ) );
+
+          _projectAutoSave.classList.remove( "hidden" );
+          _projectAutoSave.href = queryString + "?loadAutoSave=true";
+          _projectAutoSave.innerHTML = "Hey! We found an auto save for <span class='autosave-name'>" + project.name + "</span>, last saved " +
+            TimeUtil.toPrettyString( Date.now() - project.backupDate ) + " ago.";
+
+          _projectAutoSave.onclick = function() {
+            // Project has to be resaved into local storage
+            butter.project.backupData( project );
+            _projectAutoSave.classList.add( "hidden" );
+          };
+        }
       },
       logout: function() {
         togglePreviewButton( false );
@@ -262,50 +282,6 @@ define(
     this.attachToDOM = function() {
       document.body.classList.add( "butter-header-spacing" );
       document.body.insertBefore( _rootElement, document.body.firstChild );
-    };
-
-    this.attachProjectBackup = function( project, location ) {
-
-      function onProjectChanged() {
-        _projectAutoSave.onclick = null;
-        _projectAutoSave.classList.add( "hidden" );
-
-        // Stop listening, since the user now manipulated their data
-        changingEvents.forEach( function( event ) {
-          butter.unlisten( event, onProjectChanged );
-        });
-      }
-
-      // Ensure the given project is indeed from a backup
-      if ( project && project.backupDate ) {
-        var queryString = location.substring( 0, location.lastIndexOf( "?" ) ),
-            changingEvents = [
-              "mediacontentchanged",
-              "mediatargetchanged",
-              "trackadded",
-              "trackremoved",
-              "tracktargetchanged",
-              "trackeventadded",
-              "trackeventremoved",
-              "trackeventupdated"
-            ];
-
-        _projectAutoSave.classList.remove( "hidden" );
-        _projectAutoSave.href = queryString + "?loadAutoSave=true";
-        _projectAutoSave.innerHTML = "Hey! We found an auto save for <span class='autosave-name'>" + project.name + "</span>, last saved " +
-          TimeUtil.toPrettyString( Date.now() - project.backupDate ) + " ago.";
-
-        _projectAutoSave.onclick = function() {
-          // Project has to be resaved into local storage
-          butter.project.backupData( project );
-          _projectAutoSave.classList.add( "hidden" );
-        };
-
-        // Listen for changes in the project data so we know when to save.
-        changingEvents.forEach( function( event ) {
-          butter.listen( event, onProjectChanged );
-        });
-      }
     };
 
     butter.listen( "autologinsucceeded", _this.views.login, false );

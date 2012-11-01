@@ -816,8 +816,8 @@
                       useProject( project );
                     } else {
                       // Backup found doesn't match project being loaded. Proceed loading
-                      // current project
-                      _this.ui.header.attachProjectBackup( projectBackup, location );
+                      // current project and store the project backup
+                      _this.autosave = projectBackup;
                       attemptDataLoad( useProject );
                     }
                   } else {

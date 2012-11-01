@@ -278,18 +278,24 @@ define( [ 'core/eventmanager', 'core/media' ],
 
     // Expose backupData() to make testing possible
     var backupData = _this.backupData = function( backup ) {
+      var data;
       // If the project isn't different from last time, or if it's known
       // to not fit in storage, don't bother trying.
       if ( !_needsBackup || _this.isSaved && !backup ) {
         return;
       }
       // Save everything but the project id
-      var data = backup || _this.data;
-      data.projectID = _id;
-      data.name = _name;
-      data.template = _template;
-      data.author = _author;
-      data.backupDate = Date.now();
+      if ( !backup ) {
+        data = _this.data;
+        data.projectID = _id;
+        data.name = _name;
+        data.template = _template;
+        data.author = _author;
+        data.backupDate = Date.now();
+      } else {
+        data = backup;
+      }
+
       try {
         __butterStorage.setItem( "butter-backup-project", JSON.stringify( data ) );
         _needsBackup = false;
