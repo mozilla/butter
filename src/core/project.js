@@ -277,25 +277,23 @@ define( [ 'core/eventmanager', 'core/media' ],
     };
 
     // Expose backupData() to make testing possible
-    var backupData = _this.backupData = function( backup ) {
-      var data;
+    var backupData = _this.backupData = function() {
       // If the project isn't different from last time, or if it's known
       // to not fit in storage, don't bother trying.
+<<<<<<< HEAD
       if ( !_needsBackup || _this.isSaved && !backup ) {
+=======
+      if ( !_needsBackup || _quotaExceeded || _this.isSaved ) {
+>>>>>>> Fix bugs with when auto project was being used in header and also if auto save was selected when there was no project used
         return;
       }
       // Save everything but the project id
-      if ( !backup ) {
-        data = _this.data;
-        data.projectID = _id;
-        data.name = _name;
-        data.template = _template;
-        data.author = _author;
-        data.backupDate = Date.now();
-      } else {
-        data = backup;
-      }
-
+      var data = _this.data;
+      data.projectID = _id;
+      data.name = _name;
+      data.template = _template;
+      data.author = _author;
+      data.backupDate = Date.now();
       try {
         __butterStorage.setItem( "butter-backup-project", JSON.stringify( data ) );
         _needsBackup = false;
@@ -317,7 +315,6 @@ define( [ 'core/eventmanager', 'core/media' ],
     // to be saved (i.e., it has been changed since last save, or was never
     // saved before).
     _this.save = function( callback ) {
-      var history = window.history;
 
       if ( !callback ) {
         callback = function() {};
@@ -364,8 +361,8 @@ define( [ 'core/eventmanager', 'core/media' ],
             // Start keeping backups in storage, if not already started
             startBackups();
 
-            if ( history ) {
-              history.pushState( {}, "popcorn-maker-" + _id, "?savedDataUrl=/api/project/" + _id );
+            if ( window.history ) {
+              window.history.pushState( {}, "popcorn-maker", "?savedDataUrl=/api/project/" + _id );
             }
 
             // Let consumers know that the project is now saved;
@@ -383,7 +380,7 @@ define( [ 'core/eventmanager', 'core/media' ],
     // Returns project backup data as JS object if found, otherwise null.
     _this.checkForBackup = function( readyCB, fallbackCB ) {
       // See if we already have a project autosaved from another session.
-      var projectBackup, backupDate,
+      var projectBackup,
           location = window.location.search,
           loadAutoSave = location.indexOf( "loadAutoSave" ) > -1 ? true : false;
 
@@ -397,20 +394,13 @@ define( [ 'core/eventmanager', 'core/media' ],
 
       // For testing purposes, we can skip backup recovery
       if ( butter.config.value( "recover" ) === "purge" ) {
-        callback( null, null );
+        fallbackCB( readyCB );
         return;
       }
 
       try {
         projectBackup = __butterStorage.getItem( "butter-backup-project" );
         projectBackup = JSON.parse( projectBackup );
-
-        // Delete since user can save if he/she wants.
-        __butterStorage.removeItem( "butter-backup-project" );
-
-        if ( projectBackup ) {
-          backupDate = projectBackup.backupDate;
-        }
       } catch( e ) { }
 
       if ( projectBackup && loadAutoSave ) {

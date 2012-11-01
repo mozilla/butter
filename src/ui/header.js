@@ -137,8 +137,7 @@ define(
           autoSaveTime.innerHTML = TimeUtil.toPrettyString( Date.now() - project.backupDate );
 
           _projectAutoSave.onclick = function() {
-            // Project has to be resaved into local storage
-            butter.project.backupData( project );
+            butter.project.autosave = null;
             _projectAutoSave.classList.add( "hidden" );
           };
         }
@@ -150,6 +149,16 @@ define(
         _previewBtn.style.display = "none";
         _projectTitle.style.display = "none";
         _saveButton.innerHTML = "Sign in to save";
+
+        if ( window.history ) {
+          var location = window.location,
+              query = location.search;
+
+          if ( query ) {
+            location = location.href.substring( 0, location.href.indexOf( query ) );
+            window.history.replaceState( {}, "popcorn-maker", location );
+          }
+        }
       }
     };
 

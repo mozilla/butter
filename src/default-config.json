@@ -5,7 +5,7 @@
   "cssRenderClientSide": false,
   "snapshotHTMLOnReady": false,
   "scrapePage": true,
-  "backupInterval": 100,
+  "backupInterval": 10000,
   "title": "Popcorn Maker",
   "ui": {
     "enabled": true,
