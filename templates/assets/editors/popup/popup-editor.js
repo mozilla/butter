@@ -146,8 +146,10 @@
 
       if ( _popcornOptions.fontSize ) {
         trackEvent.manifest.options.fontPercentage.hidden = true;
+        trackEvent.manifest.options.fontSize.hidden = false;
       } else {
         trackEvent.manifest.options.fontSize.hidden = true;
+        trackEvent.manifest.options.fontPercentage.hidden = false;
       }
 
       _this.createPropertiesFromManifest({

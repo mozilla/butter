@@ -110,6 +110,13 @@
   box-sizing: border-box;
 }
 
+.popcorn-pop .responsive-image-position {
+  height: 110%;
+  right: 100%;
+  top: -5%;
+  margin-right: -15px;
+}
+
 .popcorn-pop {
   font-size: 22.5em;
 }

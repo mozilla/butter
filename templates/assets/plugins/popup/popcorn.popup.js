@@ -201,7 +201,7 @@
           elem: "input",
           type: "number",
           label: "Font Size",
-          "default": 5,
+          "default": 4,
           units: "%",
           group: "advanced"
         },
@@ -417,10 +417,7 @@
                 img.style.top = ( container.offsetHeight - height ) / 2 - 4 + "px";
               }
             } else {
-              img.style.height = "110%";
-              img.style.right = "100%";
-              img.style.top = "-5%";
-              img.style.marginRight = "-10px";
+              img.classList.add( "responsive-image-position" );
             }
 
             if ( container ) {
