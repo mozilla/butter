@@ -305,6 +305,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         // if this is a soundcloud url, make sure we add a class that gives it a background-image
         if ( url.indexOf( "soundcloud" ) > -1 ) {
           document.getElementById( target ).classList.add( "video-soundcloud" );
+        } else {
+          document.getElementById( target ).classList.remove( "video-soundcloud" );
         }
         // just try to use Popcorn.smart to detect/setup video
         popcornString += "var popcorn = Popcorn.smart( '#" + target + "', " + url + popcornOptions + " );\n";
