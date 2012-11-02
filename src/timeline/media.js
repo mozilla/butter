@@ -46,8 +46,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
     EventManager.extend( _this );
 
     function onEditorToggled( e ) {
-      _timebar.update();
       _tracksContainer.update();
+      _timebar.update();
       _superScrollbar.resize();
     }
 
@@ -137,7 +137,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       updateUI();
       _timebar.enable();
       _media.currentTime = 0;
-      _this.dispatch( "ready" );
     }
 
     function onMediaReadyFirst(){
