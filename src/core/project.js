@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ 'core/eventmanager', 'core/media' ],
-        function( EventManager, Media ){
+define( [ "core/eventmanager", "core/media", "util/uri" ],
+        function( EventManager, Media, URI ){
 
   // Local storage provider for backups.  All the browsers we support also
   // support localStorage, but fail in such a way that we don't crash.
@@ -387,17 +387,17 @@ define( [ 'core/eventmanager', 'core/media' ],
 
     // Check for an existing project that was autosaved but not saved.
     // Returns project backup data as JS object if found, otherwise null.
-    _this.checkForBackup = function( readyCB, fallbackCB ) {
+    _this.checkForBackup = function( readyCallback, fallbackCallback ) {
       var projectBackup,
           location = window.location.search;
 
-      fallbackCB = fallbackCB || function() {};
+      fallbackCallback = fallbackCallback || function() {};
 
-      readyCB = readyCB || function() {};
+      readyCallback = readyCallback || function() {};
 
       // For testing purposes, we can skip backup recovery
       if ( butter.config.value( "recover" ) === "purge" ) {
-        fallbackCB();
+        fallbackCallback();
         return;
       }
 
@@ -414,26 +414,26 @@ define( [ 'core/eventmanager', 'core/media' ],
       if ( projectBackup ) {
         if ( projectBackup.isAutoSave ) {
           _this.import( projectBackup );
-          readyCB( _this );
+          readyCallback( _this );
         } else {
-          var id = location.substring( location.lastIndexOf( "/" ) + 1 );
+          var id = URI.parse( location ).queryKey.savedDataUrl.match( /\/api\/project\/(\d+)/ )[ 1 ];
 
           id = parseInt( id, 10 );
 
           if ( !isNaN( id ) && ( projectBackup.projectID === id ) ) {
             _this.import( projectBackup );
             _this.projectsMatched = true;
-            readyCB( _this );
+            readyCallback( _this );
           } else {
             // Backup found doesn't match project being loaded. Proceed loading
             // current project and store the project backup
             _this.autosave = projectBackup;
-            fallbackCB();
+            fallbackCallback();
           }
         }
       } else {
         // No backup found, keep loading
-        fallbackCB();
+        fallbackCallback();
       }
 
     };
