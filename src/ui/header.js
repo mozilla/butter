@@ -33,7 +33,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     });
 
     _this.element = _rootElement;
-    
+
     ToolTip.apply( _projectTitle );
 
     _tabzilla.addEventListener( "click", function() {
@@ -73,7 +73,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     function togglePreviewButton( on ) {
       if ( on ) {
         _previewBtn.classList.remove( "butter-disabled" );
-        _previewBtn.href = butter.project.publishUrl;
+        _previewBtn.href = butter.project.previewUrl;
         _previewBtn.onclick = function() {
           return true;
         };
@@ -156,7 +156,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     function onLogin() {
       _webmakerNav.views.login( butter.cornfield.username() );
     }
-    
+
     butter.listen( "autologinsucceeded", onLogin, false );
     butter.listen( "authenticated", onLogin, false );
     butter.listen( "logout", _webmakerNav.views.logout, false );

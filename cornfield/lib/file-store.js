@@ -112,16 +112,27 @@ function S3FileStore( options ) {
 
   // If embedHostname isn't appropriate, a hostname can be provided to override it.
   this.hostname = options.hostname;
+
+  // Append any additional headers to send with a write request
+  if ( options.headers ) {
+    this.headers = options.headers;
+  }
 }
 
 S3FileStore.prototype = Object.create( BaseFileStore );
 
 S3FileStore.prototype.write = function( key, data, callback ) {
-  this.client.put( this.expand( key ), {
+  var headers = {
     'x-amz-acl': 'public-read',
     'Content-Length': data.length,
     'Content-Type': this.contentType
-  })
+  };
+
+  Object.keys( this.headers ).forEach(function( key ) {
+    headers[ key ] = this.headers[ key ];
+  });
+
+  this.client.put( this.expand( key ), headers )
   .on( 'response', function( res ) {
     if( res.statusCode === 200 ) {
       callback();
