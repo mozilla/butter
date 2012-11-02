@@ -64,7 +64,7 @@
         }
       }
 
-      if ( acceptedUA ) {
+      if ( !acceptedUA ) {
         Butter.showUAWarning();
       }
 
