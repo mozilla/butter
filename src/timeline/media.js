@@ -33,7 +33,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _mediaStatusContainer = _rootElement.querySelector( ".media-status-container" ),
         _superScrollbar = new SuperScrollbar( _tracksContainer.element, _tracksContainer.container, setContainerBounds, _media ),
         _vScrollBar = new Scrollbars.Vertical( _tracksContainer.element, _tracksContainer.container ),
-        _shrunken = false,
         _timebar = new TimeBar( butter, _media, butter.ui.tray.statusArea, _tracksContainer ),
         _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer ),
         _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
@@ -273,23 +272,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
     this.trackContainer = _tracksContainer;
     this.element = _rootElement;
     this.media = _media;
-
-    Object.defineProperties( this, {
-      shrunken: {
-        enumerable: true,
-        configurable: false,
-        get: function(){
-          return _shrunken;
-        },
-        set: function( val ){
-          if( val !== _shrunken ){
-            _shrunken = val;
-
-          }
-        }
-      }
-    });
-
   }
 
   return MediaInstance;

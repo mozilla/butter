@@ -107,7 +107,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       if ( _editorAreaDOMRoot.classList.contains( "minimized" ) ) {
         LangUtils.applyTransitionEndListener( _editorAreaDOMRoot, onTransitionEnd );
         _editorAreaDOMRoot.classList.remove( "minimized" );
-        document.body.classList.remove( "editor-minimized" );
+        document.body.classList.add( "editor-open" );
       } else {
         onEditorOpened();
       }
@@ -211,11 +211,11 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
 
           _toggler.state = newState;
           if ( newState ) {
-            document.body.classList.add( "editor-minimized" );
+            document.body.classList.remove( "editor-open" );
             _editorAreaDOMRoot.classList.add( "minimized" );
           }
           else {
-            document.body.classList.remove( "editor-minimized" );
+            document.body.classList.add( "editor-open" );
             _editorAreaDOMRoot.classList.remove( "minimized" );
           }
 
@@ -243,7 +243,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
 
         // Start minimized
         _editorAreaDOMRoot.classList.add( "minimized" );
-        document.body.classList.add( "editor-minimized" );
+        document.body.classList.remove( "editor-open" );
 
         butter.ui.setEditor( _editorAreaDOMRoot );
 

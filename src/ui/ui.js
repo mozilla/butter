@@ -300,14 +300,10 @@ define( [ "core/eventmanager", "./toggler",
           if( _visibility !== val ){
             _visibility = val;
             if( _visibility ){
-              document.body.classList.remove( "tray-minimized" );
-              this.tray.rootElement.classList.remove( "minimized" );
-              _this.dispatch( "uivisibilitychanged", true );
+              this.tray.minimized = false;
             }
             else {
-              document.body.classList.add( "tray-minimized" );
-              this.tray.rootElement.classList.add( "minimized" );
-              _this.dispatch( "uivisibilitychanged", true );
+              this.tray.minimized = true;
             }
           }
         }
@@ -574,6 +570,7 @@ define( [ "core/eventmanager", "./toggler",
     butter.listen( "ready", function(){
       _this.loadIndicator.stop();
       _this.visible = true;
+      _this.tray.show();
     });
 
     butter.listen( "mediacontentchanged", function() {
