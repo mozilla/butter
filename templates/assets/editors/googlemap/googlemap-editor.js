@@ -224,6 +224,8 @@
       open: function( parentElement, trackEvent ) {
         var popcornOptions = trackEvent.popcornOptions;
 
+        _popcorn = butter.currentMedia.popcorn.popcorn;
+
         _cachedValues = {
           width: popcornOptions.width,
           height: popcornOptions.height,
