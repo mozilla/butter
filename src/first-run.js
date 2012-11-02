@@ -36,13 +36,10 @@ define( [ "dialog/dialog", "util/cookie", "ui/widget/tooltip" ], function( Dialo
           hidden: false
         });
 
-        document.body.addEventListener( "click", function() {
-           if ( mediaTooltip ) {
-            mediaTooltip.classList.remove( "tooltip-on" );
-          }
-          if ( popupTooltip ) {
-            popupTooltip.parentNode.removeChild( popupTooltip );
-          }
+        document.body.addEventListener( "mousedown", function removeTooltips() {
+          mediaTooltip.classList.remove( "tooltip-on" );
+          popupTooltip.parentNode.removeChild( popupTooltip );
+          document.body.removeEventListener( "mousedown", removeTooltips, true );
         }, true );
 
       }
