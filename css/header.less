@@ -117,20 +117,25 @@
   }
 }
 
-.butter-project-autosave {
-  color: #000;
-  font-weight: 500;
-  font-size: 12px;
-  text-decoration: none;
+.hidden {
+  display: none;
+}
 
-  &.hidden {
-    display: none;
+.butter-project-autosave {
+  .backup-available,
+  .backup-used {
+    color: #000;
+    font-weight: 500;
+    font-size: 12px;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
-  &:hover {
-    text-decoration: underline;
-  }
-  .autosave-name,
-  .autosave-time {
+
+  .backup-name,
+  .backup-time {
     font-weight: 700;
   }
 }

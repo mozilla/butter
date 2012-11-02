@@ -259,14 +259,9 @@ define( [ 'core/eventmanager', 'core/media' ],
       if ( json.projectID ) {
         _id = json.projectID;
 
-        // This means the project we imported as a back up as well for an existing project.
-        // However, if the recovered auto save doesn't match the id of the project the user loaded
-        // we shouldn't auto save the backup.
-        _isPublished = !json.isAutoSave;
-        if ( json.backupDate && _isPublished ) {
-          _this.save();
+        if ( !json.backupDate ) {
+          _isPublished = true;
         }
-
       }
 
       // If this is a restored backup, restart backups now (vs. on first save)
@@ -379,6 +374,9 @@ define( [ 'core/eventmanager', 'core/media' ],
             // Let consumers know that the project is now saved;
             _this.dispatch( "projectsaved" );
 
+            // If a backed up project was used and then saved, turn this flag off
+            _this.projectsMatched = false;
+
             callback( e );
           });
         } else {
@@ -424,6 +422,7 @@ define( [ 'core/eventmanager', 'core/media' ],
 
           if ( !isNaN( id ) && ( projectBackup.projectID === id ) ) {
             _this.import( projectBackup );
+            _this.projectsMatched = true;
             readyCB( _this );
           } else {
             // Backup found doesn't match project being loaded. Proceed loading
