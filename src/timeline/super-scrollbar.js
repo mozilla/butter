@@ -298,6 +298,13 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       trackEventVisual.style.top = ( trackEventVisual.offsetHeight + TRACK_PADDING ) * order + "px";
     }
 
+    _media.listen( "trackeventviewupdated", function( e ) {
+      var trackEvent = e.data;
+      if ( _trackEventVisuals[ trackEvent.id ] ) {
+        _trackEventVisuals[ trackEvent.id ].style.width = trackEvent.view.element.style.width;
+      }
+    });
+
     _media.listen( "trackeventremoved", function( e ) {
       var trackEvent = _trackEventVisuals[ e.data.id ];
       if ( trackEvent ) {
