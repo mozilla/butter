@@ -263,11 +263,14 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
 
         // Finish off by making sure the values are correct depending on the direction.
         if ( direction === "right" ) {
-          popcornOptions.end = ( trackEvent.popcornOptions.start + trackEventView.element.clientWidth ) /
-            _container.clientWidth * _media.duration;
+          popcornOptions.end = trackEvent.popcornOptions.start +
+            ( trackEventView.element.clientWidth / _container.clientWidth ) *
+            _media.duration;
         }
         else {
-          popcornOptions.start = trackEventView.element.offsetLeft / _container.clientWidth * _media.duration;
+          popcornOptions.start = trackEventView.element.offsetLeft /
+            _container.clientWidth *
+            _media.duration;
         }
 
         trackEvent.update( popcornOptions );
