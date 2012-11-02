@@ -55,6 +55,46 @@ body.editor-minimized .body-wrapper {
   right: 0;
 }
 
+#embed-wrapper {
+  position: relative;
+
+  background: #FFF;
+
+  .video-container {
+    .transition( opacity 0.35s );
+    opacity: 1;
+  }
+
+  .loading-message {
+    position: absolute;
+
+    color: #000;
+    opacity: 0;
+    visibility: hidden;
+
+    .transition( opacity 0.35s, visibility 0.35s );
+
+    text-align: center;
+    font-size: 3em;
+
+    width: 100%;
+    line-height: 1;
+    top: 50%;
+
+    margin-top: -.5em;
+  }
+
+  &.faded .loading-message {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &.faded .video-container {
+    opacity: 0;
+  }
+
+}
+
 /* VIDEO
 -------------------------------------------------- */
 .video-container {

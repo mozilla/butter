@@ -27,8 +27,14 @@ define( [ "util/lang",  "./logo-spinner",
     this.statusArea.appendChild( statusAreaFragment );
     this.timelineArea.appendChild( timelineAreaFragment );
 
-    this.attachToDOM = function(){
+    this.attachToDOM = function() {
       document.body.appendChild( trayRoot );
+    };
+
+    this.show = function() {
+      // This function's only purpose is to avoid having transitions on the tray while it's attached to the DOM,
+      // since Chrome doesn't display the element where it should be on load.
+      trayRoot.classList.add( "butter-tray-transitions" );
     };
 
     this.setMediaInstance = function( mediaInstanceRootElement ) {
@@ -48,6 +54,25 @@ define( [ "util/lang",  "./logo-spinner",
         });
       }
     };
+
+    Object.defineProperties( this, {
+      minimized: {
+        enumerable: true,
+        set: function( val ) {
+          if ( val ) {
+            document.body.classList.add( "tray-minimized" );
+            trayRoot.classList.add( "butter-tray-minimized" );
+          }
+          else {
+            document.body.classList.remove( "tray-minimized" );
+            trayRoot.classList.remove( "butter-tray-minimized" );
+          }
+        },
+        get: function() {
+          return trayRoot.classList.contains( "butter-tray-minimized" );
+        }
+      }
+    });
 
   };
 

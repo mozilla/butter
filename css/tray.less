@@ -12,8 +12,8 @@
   padding-bottom: @TRAY_SPACING_MINIMIZED;
 }
 
-.butter-editor-spacing.editor-minimized .butter-tray {
-  right: 0;
+.butter-editor-spacing.editor-open .butter-tray {
+  right: @EDITOR_WIDTH;
 }
 
 .butter-tray {
@@ -22,17 +22,20 @@
   z-index: @TRAY_Z_INDEX;
   bottom: 0;
   left: 0;
-  right: @EDITOR_WIDTH;
+  right: 0;
   height: @TRAY_HEIGHT;
   .selectable( none );
-  .transition( bottom 0.35s, right 0.35s );
 
   * {
     .selectable( none );
   }
 
-  &.minimized {
+  &.butter-tray-minimized {
     bottom: -@TRAY_HEIGHT + @_butterStatusHeight;
+  }
+
+  &.butter-tray-transitions {
+    .transition( bottom 0.35s, right 0.35s );
   }
 
   .butter-toggle-button {
