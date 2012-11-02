@@ -41,12 +41,16 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         _trackEvent.track.view.element.appendChild( _element );
       }
       _element.style.left = _start  / _trackEvent.track._media.duration * 100 + "%";
-      _element.style.width = ( ( ( _end - _start ) / _trackEvent.track._media.duration ) - ( 2 / _element.parentNode.getBoundingClientRect().width ) ) * 100 + "%";
+      // In order to get an accurate position for a trackEvents element, we need to be sure
+      // we incorporate the 1px border on both the left and the right of any given trackEvent.
+      _element.style.width = ( ( ( _end - _start ) / _trackEvent.track._media.duration ) -
+                             ( 2 / _element.parentNode.getBoundingClientRect().width ) ) * 100 + "%";
       if ( _element.getBoundingClientRect().width < TRACKEVENT_MIN_WIDTH ) {
         _element.classList.add( "trackevent-small" );
       } else {
         _element.classList.remove( "trackevent-small" );
       }
+      // Ensure we keep the super scrollbar visual display up to date
       _trackEvent.track._media.dispatch( "trackeventviewupdated", _trackEvent );
     }
 
