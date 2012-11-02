@@ -25,9 +25,6 @@ define( [ 'core/eventmanager', 'core/media' ],
         // Whether or not a backup to storage is required (project data has changed)
         _needsBackup = false,
 
-        // Whether or not localStorage quota (typically 5M) has been exceeded
-        _quotaExceeded = false,
-
         // Whether or not the project is saved to the db and published.
         // The notion of "saving" to consumers of this code is unware of
         // the save vs. publish distinction. As such, we use isSaved externally
@@ -39,12 +36,19 @@ define( [ 'core/eventmanager', 'core/media' ],
         _backupIntervalMS = butter.config.value( "backupInterval" )|0,
 
         // Interval for backups, starts first time user clicks Save.
-        _backupInterval;
+        _backupInterval = -1;
 
     function invalidate() {
       // Project is dirty, needs save, backup
       _isDirty = true;
       _needsBackup = true;
+
+      // If the project has an id (if it was saved), start backups again
+      // since they may have been stopped if LocalStorage size limits were
+      // exceeded.
+      if ( _id ) {
+        startBackups();
+      }
 
       // Let consumers know that the project changed
       _this.dispatch( "projectchanged" );
@@ -164,7 +168,7 @@ define( [ 'core/eventmanager', 'core/media' ],
     });
 
     function startBackups() {
-      if ( !_backupInterval && _backupIntervalMS > 0 ) {
+      if ( _backupInterval === -1 && _backupIntervalMS > 0 ) {
         _needsBackup = true;
         _backupInterval = setInterval( backupData, _backupIntervalMS );
         // Do a backup now so we don't miss anything
@@ -263,7 +267,7 @@ define( [ 'core/eventmanager', 'core/media' ],
     var backupData = _this.backupData = function() {
       // If the project isn't different from last time, or if it's known
       // to not fit in storage, don't bother trying.
-      if ( !_needsBackup || _quotaExceeded ) {
+      if ( !_needsBackup ) {
         return;
       }
       // Save everything but the project id
@@ -277,11 +281,15 @@ define( [ 'core/eventmanager', 'core/media' ],
         _needsBackup = false;
       } catch ( e ) {
         // Deal with QUOTA_EXCEEDED_ERR when localStorage is full.
-        // Flag and stop trying to backup, since we can't.  This can
-        // happen when users include a lot of images as Data URIs.
-        _quotaExceeded = true;
+        // Stop the backup loop because we know we can't save anymore until the
+        // user changes something about the project.
+        clearInterval( _backupInterval );
+        _backupInterval = -1;
+
         // Purge the saved project, since it won't be complete.
         __butterStorage.removeItem( "butter-backup-project" );
+
+        console.warn( "Warning: Popcorn Maker LocalStorage quota exceeded. Stopping automatic backup. Will be restarted when project changes again." );
       }
     };
 
