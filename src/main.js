@@ -4,12 +4,13 @@
 
 (function () {
 
-  var DEFAULT_TRACKEVENT_OFFSET = 0.01;
+  var DEFAULT_TRACKEVENT_OFFSET = 0.01,
+      WARNING_WAIT_TIME = 500;
 
   var ACCEPTED_UA_LIST = {
     "Chrome": 17,
     "Firefox": 10,
-    "IE": 9,
+    "MSIE": 9,
     "Safari": 6,
     "Opera": 9
   };
@@ -21,7 +22,7 @@
             "util/xhr", "util/lang", "util/tutorial",
             "text!default-config.json", "text!layouts/ua-warning.html",
             "ui/widget/tooltip", "crashreporter", "core/project",
-            "UAParser/ua-parser", "util/shims"    // keep these at the end so they don't need a spot in the function signature
+            "util/shims"                  // keep this at the end so it doesn't need a spot in the function signature
           ],
           function(
             EventManager, Logger, Config, Target, Media, Page,
@@ -29,11 +30,9 @@
             Dialog, Editor, UI,
             XHR, Lang, Tutorial,
             DEFAULT_CONFIG_JSON, UA_WARNING_LAYOUT,
-            ToolTip, CrashReporter, Project
+            ToolTip, CrashReporter, Project,
+            Shims                         // placeholder
           ){
-
-    // Satisfy lint by making reference non-global
-    var UAParser = window.UAParser;
 
     var __guid = 0;
 
@@ -46,7 +45,9 @@
     Butter.showUAWarning = function() {
       var uaWarningDiv = Lang.domFragment( UA_WARNING_LAYOUT, ".butter-ua-warning" );
       document.body.appendChild( uaWarningDiv );
-      uaWarningDiv.classList.add( "slide-out" );
+      setTimeout(function() {
+        uaWarningDiv.classList.add( "slide-out" );
+      }, WARNING_WAIT_TIME );
       uaWarningDiv.getElementsByClassName( "close-button" )[0].onclick = function () {
         document.body.removeChild( uaWarningDiv );
       };
@@ -54,16 +55,14 @@
 
     Butter.init = function( butterOptions ) {
 
-      // ua-parser uses the current browsers UA by default
-      var ua = new UAParser().getResult(),
-          name = ua.browser.name,
-          major  = ua.browser.major,
-          acceptedUA = false;
-
+      var ua = navigator.userAgent,
+          acceptedUA;
       for ( var uaName in ACCEPTED_UA_LIST ) {
-        if ( name === uaName ) {
-          if ( +major >= ACCEPTED_UA_LIST[ uaName ] ) {
-            acceptedUA = true;
+        if( ACCEPTED_UA_LIST.hasOwnProperty( uaName ) ) {
+          var uaRegex = new RegExp( uaName + "(?:/|\\s)([0-9]+)\\.", "g" ),
+              match = uaRegex.exec( ua );
+          if ( match && match.length === 2 && Number( match[ 1 ] ) >= ACCEPTED_UA_LIST[ uaName ] ) {
+            acceptedUA = uaName + "/" + match[ 1 ];
           }
         }
       }
