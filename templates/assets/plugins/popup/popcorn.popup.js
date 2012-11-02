@@ -189,13 +189,13 @@
           "default": "Merriweather",
           group: "advanced"
         },
+        // font size is deprecated
         fontSize: {
           elem: "input",
           type: "number",
           label: "Font Size",
           units: "px",
-          group: "advanced",
-          depricated: true
+          group: "advanced"
         },
         fontPercentage: {
           elem: "input",

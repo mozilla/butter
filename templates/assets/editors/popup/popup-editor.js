@@ -11,6 +11,7 @@
 
     var _rootElement = rootElement,
         _trackEvent,
+        _manifestOptions,
         _butter,
         _popcornOptions;
 
@@ -23,6 +24,7 @@
      */
     function setup( trackEvent ) {
       _trackEvent = trackEvent;
+      _manifestOptions = _trackEvent.manifest.options;
       _popcornOptions = _trackEvent.popcornOptions;
 
       var basicContainer = _rootElement.querySelector( ".editor-options" ),
@@ -145,11 +147,11 @@
       }
 
       if ( _popcornOptions.fontSize ) {
-        trackEvent.manifest.options.fontPercentage.hidden = true;
-        trackEvent.manifest.options.fontSize.hidden = false;
+        _manifestOptions.fontPercentage.hidden = true;
+        _manifestOptions.fontSize.hidden = false;
       } else {
-        trackEvent.manifest.options.fontSize.hidden = true;
-        trackEvent.manifest.options.fontPercentage.hidden = false;
+        _manifestOptions.fontSize.hidden = true;
+        _manifestOptions.fontPercentage.hidden = false;
       }
 
       _this.createPropertiesFromManifest({
