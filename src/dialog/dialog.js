@@ -61,16 +61,16 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
        */
       function onKeyDown( e ) {
         e.stopPropagation();
-        e.preventDefault();
-        if (  _enterKeyActivity &&
-              __keyboardAvoidElements.indexOf( e.target.nodeName ) === -1 &&
-              ( e.which === 13 || e.keyCode === 13 ) ) {
-          _activities[ _enterKeyActivity ]( e );
-        }
-        else if ( _escapeKeyActivity &&
-                  __keyboardAvoidElements.indexOf( e.target.nodeName ) === -1 &&
-                  ( e.which === 27 || e.keyCode === 27 ) ) {
-          _activities[ _escapeKeyActivity ]( e );
+        if ( __keyboardAvoidElements.indexOf( e.target.nodeName ) === -1 ) {
+          e.preventDefault();
+          if (  _enterKeyActivity &&
+                ( e.which === 13 || e.keyCode === 13 ) ) {
+            _activities[ _enterKeyActivity ]( e );
+          }
+          else if ( _escapeKeyActivity &&
+                    ( e.which === 27 || e.keyCode === 27 ) ) {
+            _activities[ _escapeKeyActivity ]( e );
+          }
         }
       }
 
