@@ -137,6 +137,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _tracksContainer.setViewportBounds( _bounds[ 0 ], _bounds[ 1 ] );
       updateUI();
       _timebar.enable();
+      _media.currentTime = 0;
       _this.dispatch( "ready" );
     }
 
