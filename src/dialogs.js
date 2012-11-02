@@ -8,6 +8,5 @@ define([
   "dialog/dialogs/delete-track",
   "dialog/dialogs/feedback",
   "dialog/dialogs/crash",
-  "dialog/dialogs/first-run",
-  "dialog/dialogs/backup"
+  "dialog/dialogs/first-run"
 ], function() {} );

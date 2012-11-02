@@ -723,7 +723,7 @@
        */
       function attemptDataLoad( finishedCallback ) {
         var savedDataUrl,
-            project = new Project( _this );
+            project = _this.project;
 
         // see if savedDataUrl is in the page's query string
         window.location.search.substring( 1 ).split( "&" ).forEach(function( item ){
@@ -787,43 +787,21 @@
           preparePopcornScriptsAndCallbacks( function(){
             preparePage( function(){
               moduleCollection.ready( function(){
+
+                function readyCallback( project ) {
+                  project.template = project.template || _config.value( "name" );
+                  _this.chain( project, [ "projectchanged", "projectsaved" ] );
+
+                  // Fire the ready event
+                  _this.dispatch( "ready", _this );
+                }
+
+                _this.project = new Project( _this );
                 // We look for an old project backup in localStorage and give the user
                 // a chance to load or discard. If there isn't a backup, we continue
                 // loading as normal.
-                Project.checkForBackup( _this, function( projectBackup, backupDate ) {
-
-                  function useProject( project ) {
-                    project.template = project.template || _config.value( "name" );
-                    _this.project = project;
-                    _this.chain( project, [ "projectchanged", "projectsaved" ] );
-
-                    // Fire the ready event
-                    _this.dispatch( "ready", _this );
-                  }
-
-                  if( projectBackup ) {
-                    // Found backup, ask user what to do
-                    var _dialog = Dialog.spawn( "backup", {
-                      data: {
-                        backupDate: backupDate,
-                        projectName: projectBackup.name,
-                        loadProject: function() {
-                          // Build a new Project and import projectBackup data
-                          var project = new Project( _this );
-                          project.import( projectBackup );
-                          useProject( project );
-                        },
-                        discardProject: function() {
-                          projectBackup = null;
-                          attemptDataLoad( useProject );
-                        }
-                      }
-                    });
-                    _dialog.open();
-                  } else {
-                    // No backup found, keep loading
-                    attemptDataLoad( useProject );
-                  }
+                _this.project.checkForBackup( readyCallback, function() {
+                  attemptDataLoad( readyCallback );
                 });
               });
             });

@@ -1,5 +1,8 @@
-define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/tooltip" ],
-  function( Dialog, Lang, HEADER_TEMPLATE, UserData, WebmakerBar, ToolTip ) {
+define(
+  [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data", "ui/webmakernav/webmakernav",
+    "ui/widget/tooltip", "util/time" ],
+  function( Dialog, Lang, HEADER_TEMPLATE, UserData, WebmakerBar,
+            ToolTip, TimeUtil ) {
 
   return function( butter, options ){
 
@@ -11,7 +14,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _userData = new UserData( butter, options ),
         _rootElement = Lang.domFragment( HEADER_TEMPLATE, ".butter-header" ),
         _webmakerNavBar = _rootElement.querySelector( "#webmaker-nav" ),
-        _saveButton = _rootElement.querySelector( ".butter-save-btn"),
+        _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
         _previewBtn = _rootElement.querySelector( ".butter-preview-btn" ),
@@ -19,6 +22,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _projectMenu = _rootElement.querySelector( ".butter-project-menu" ),
         _projectMenuControl = _rootElement.querySelector( ".butter-project-menu-control" ),
         _projectMenuList = _projectMenu.querySelector( ".butter-btn-menu" ),
+        _projectAutoSave = _rootElement.querySelector( ".backup-available" ),
         _tabzilla = _rootElement.querySelector( "#tabzilla" ),
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML,
@@ -101,6 +105,8 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         togglePreviewButton( false );
         toggleSaveButton( true );
         toggleShareButton( true );
+
+        _projectAutoSave.classList.add( "hidden" );
       },
       clean: function() {
         togglePreviewButton( true );
@@ -108,7 +114,8 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         toggleShareButton( true );
       },
       login: function() {
-        var isSaved = butter.project.isSaved;
+        var isSaved = butter.project.isSaved,
+            project;
 
         _previewBtn.style.display = "";
         _projectTitle.style.display = "";
@@ -117,6 +124,31 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         togglePreviewButton( isSaved );
         toggleSaveButton( !isSaved );
         toggleShareButton( isSaved );
+
+        if ( butter.project ) {
+          project = butter.project;
+
+          if ( window.history && project.id && !project.projectHistoryState ) {
+            project.projectHistoryState = true;
+            window.history.pushState( {}, "popcorn-maker", "?savedDataUrl=/api/project/" + project.id );
+          }
+
+          if ( project.autosave ) {
+            var autoSaveProject = project.autosave,
+                autoSaveName = _projectAutoSave.querySelector( ".backup-name" ),
+                autoSaveTime = _projectAutoSave.querySelector( ".backup-time" );
+
+            _projectAutoSave.classList.remove( "hidden" );
+            _projectAutoSave.href = "?savedDataUrl=/api/project/" + autoSaveProject.projectID;
+            autoSaveName.innerHTML = autoSaveProject.name;
+            autoSaveTime.innerHTML = TimeUtil.toPrettyString( Date.now() - autoSaveProject.backupDate );
+
+            _projectAutoSave.onclick = function() {
+              project.backupData( autoSaveProject );
+              _projectAutoSave.classList.add( "hidden" );
+            };
+          }
+        }
       },
       logout: function() {
         togglePreviewButton( false );
@@ -125,6 +157,18 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _previewBtn.style.display = "none";
         _projectTitle.style.display = "none";
         _saveButton.innerHTML = "Sign in to save";
+        _projectAutoSave.classList.add( "hidden" );
+
+        if ( window.history ) {
+          var location = window.location,
+              query = location.search;
+
+          if ( query && !butter.cornfield.authenticated() ) {
+            butter.project.projectHistoryState = false;
+            location = location.href.substring( 0, location.href.indexOf( query ) );
+            window.history.replaceState( {}, "popcornmaker", location );
+          }
+        }
       }
     };
 
@@ -266,8 +310,8 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     butter.listen( "authenticated", _this.views.login, false );
     butter.listen( "logout", _this.views.logout, false );
 
-    //Default view
-    _this.views.logout();
+    // Default state is the save button should be active
+    toggleSaveButton( true );
 
     butter.listen( "projectsaved", function() {
       // Disable "Save" button
