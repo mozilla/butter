@@ -7,6 +7,14 @@ Global styles and classes
   body {
     color: #555;
     -webkit-font-smoothing: antialiased;
+    overflow: auto;
+  }
+
+  a {
+    color: #3FB58E;
+  }
+  a:hover {
+    color: #00BA91;
   }
 
   .threeColumn {
@@ -39,6 +47,23 @@ Global styles and classes
 
   .hero-unit iframe {
     float: right;
+    margin-bottom: 20px;
+  }
+
+  .intro-bar {
+    position: absolute;
+    width: 110%;
+  }
+  .butter-btn:hover {
+    text-decoration: none;
+  }
+  .butter-btn.btn-green {
+    border: 1px solid transparent;
+  }
+
+  .byline {
+    font-style: italic;
+    margin-bottom: 0.5em;
   }
 
   hgroup {
@@ -53,15 +78,17 @@ Global styles and classes
   }
   .hero-unit h1 {
     margin-left: -12px;
+    margin-top: 40px;
     width: 500px;
     height: 140px;
     background: url( "../../logo-big.png" ) no-repeat;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
   .hero-unit h2 {
     font-size: 42px;
     line-height: 1;
     font-family: "Open Sans Light", sans-serif;
+    margin-bottom: 0.5em;
   }
 
   a.top,
@@ -413,4 +440,24 @@ Home styles
 
 #bottom-section {
   padding-top: 48px;
+}
+
+#projects .span5 {
+  padding: 20px;
+  height: 280px;
+  background: #FFF;
+  border: 1px solid #DDD;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#projects .span5 .caption {
+  width: 200px;
+}
+
+.episode .butter-btn {
+  line-height: 15px;
+  padding: 5px 10px;
 }
