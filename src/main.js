@@ -44,7 +44,9 @@
     Butter.showUAWarning = function() {
       var uaWarningDiv = Lang.domFragment( UA_WARNING_LAYOUT, ".butter-ua-warning" );
       document.body.appendChild( uaWarningDiv );
-      uaWarningDiv.classList.add( "slide-out" );
+      setTimeout( function() {
+        uaWarningDiv.classList.add( "slide-out" );
+      }, 500 );
       uaWarningDiv.getElementsByClassName( "close-button" )[0].onclick = function () {
         document.body.removeChild( uaWarningDiv );
       };
@@ -64,7 +66,7 @@
         }
       }
 
-      if ( !acceptedUA ) {
+      if ( acceptedUA ) {
         Butter.showUAWarning();
       }
 
