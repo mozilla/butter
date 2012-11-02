@@ -4,7 +4,8 @@
 
 (function () {
 
-  var DEFAULT_TRACKEVENT_OFFSET = 0.01;
+  var DEFAULT_TRACKEVENT_OFFSET = 0.01,
+      WARNING_WAIT_TIME = 500;
 
   var ACCEPTED_UA_LIST = {
     "Chrome": 17,
@@ -46,7 +47,7 @@
       document.body.appendChild( uaWarningDiv );
       setTimeout( function() {
         uaWarningDiv.classList.add( "slide-out" );
-      }, 500 );
+      }, WARNING_WAIT_TIME );
       uaWarningDiv.getElementsByClassName( "close-button" )[0].onclick = function () {
         document.body.removeChild( uaWarningDiv );
       };
@@ -66,7 +67,7 @@
         }
       }
 
-      if ( acceptedUA ) {
+      if ( !acceptedUA ) {
         Butter.showUAWarning();
       }
 
