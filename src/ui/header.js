@@ -23,7 +23,6 @@ define(
         _projectMenuControl = _rootElement.querySelector( ".butter-project-menu-control" ),
         _projectMenuList = _projectMenu.querySelector( ".butter-btn-menu" ),
         _projectAutoSave = _rootElement.querySelector( ".backup-available" ),
-        _projectBackup = _rootElement.querySelector( ".backup-used" ),
         _tabzilla = _rootElement.querySelector( "#tabzilla" ),
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML,
@@ -113,8 +112,6 @@ define(
         togglePreviewButton( true );
         toggleSaveButton( false );
         toggleShareButton( true );
-
-        _projectBackup.classList.add( "hidden" );
       },
       login: function() {
         var isSaved = butter.project.isSaved,
@@ -138,26 +135,18 @@ define(
 
           if ( project.autosave ) {
             var autoSaveProject = project.autosave,
-                location = window.location.search,
-                queryString = location.substring( 0, location.lastIndexOf( "?" ) ),
                 autoSaveName = _projectAutoSave.querySelector( ".backup-name" ),
                 autoSaveTime = _projectAutoSave.querySelector( ".backup-time" );
 
             _projectAutoSave.classList.remove( "hidden" );
-            _projectAutoSave.href = queryString + "?savedDataUrl=/api/project/" + autoSaveProject.projectID;
+            _projectAutoSave.href = "?savedDataUrl=/api/project/" + autoSaveProject.projectID;
             autoSaveName.innerHTML = autoSaveProject.name;
             autoSaveTime.innerHTML = TimeUtil.toPrettyString( Date.now() - autoSaveProject.backupDate );
 
             _projectAutoSave.onclick = function() {
-              // Rebackup the project with a flag attached for loading it
               project.backupData( autoSaveProject );
               _projectAutoSave.classList.add( "hidden" );
             };
-          } else if ( project.projectsMatched ) {
-            var projectName = _projectBackup.querySelector( ".backup-name" );
-
-            _projectBackup.classList.remove( "hidden" );
-            projectName.innerHTML = project.name;
           }
         }
       },
