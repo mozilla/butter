@@ -416,9 +416,13 @@ define( [ "core/eventmanager", "core/media", "util/uri" ],
           _this.import( projectBackup );
           readyCallback( _this );
         } else {
-          var id = URI.parse( location ).queryKey.savedDataUrl.match( /\/api\/project\/(\d+)/ )[ 1 ];
+          var savedDataUrl = URI.parse( location ).queryKey.savedDataUrl,
+              id;
 
-          id = parseInt( id, 10 );
+          if ( savedDataUrl ) {
+            id = savedDataUrl.match( /\/api\/project\/(\d+)/ )[ 1 ];
+            id = parseInt( id, 10 );
+          }
 
           if ( !isNaN( id ) && ( projectBackup.projectID === id ) ) {
             _this.import( projectBackup );

@@ -785,7 +785,7 @@
             preparePage( function(){
               moduleCollection.ready( function(){
 
-                function readyCB( project ) {
+                function readyCallback( project ) {
                   project.template = project.template || _config.value( "name" );
                   _this.chain( project, [ "projectchanged", "projectsaved" ] );
 
@@ -797,8 +797,8 @@
                 // We look for an old project backup in localStorage and give the user
                 // a chance to load or discard. If there isn't a backup, we continue
                 // loading as normal.
-                _this.project.checkForBackup( readyCB, function() {
-                  attemptDataLoad( readyCB );
+                _this.project.checkForBackup( readyCallback, function() {
+                  attemptDataLoad( readyCallback );
                 });
               });
             });
