@@ -444,7 +444,7 @@ Home styles
 
 #projects .span5 {
   padding: 20px;
-  height: 270px;
+  height: 280px;
   background: #FFF;
   border: 1px solid #DDD;
   -webkit-box-sizing: border-box;
@@ -455,4 +455,9 @@ Home styles
 
 #projects .span5 .caption {
   width: 200px;
+}
+
+.episode .butter-btn {
+  line-height: 15px;
+  padding: 5px 10px;
 }
