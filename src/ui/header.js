@@ -105,7 +105,7 @@ define(
         toggleSaveButton( true );
         toggleShareButton( true );
 
-        butter.autosave = _projectAutoSave.onclick = null;
+        butter.project.autosave = _projectAutoSave.onclick = null;
         _projectAutoSave.classList.add( "hidden" );
       },
       clean: function() {
@@ -124,25 +124,31 @@ define(
         toggleSaveButton( !isSaved );
         toggleShareButton( isSaved );
 
-        if ( butter.project.autosave ) {
-          var project = butter.project.autosave,
-              location = window.location.search,
-              queryString = location.substring( 0, location.lastIndexOf( "?" ) ),
-              autoSaveName = _projectAutoSave.querySelector( ".autosave-name" ),
-              autoSaveTime = _projectAutoSave.querySelector( ".autosave-time" );
+        if ( butter.project ) {
+          if ( window.history && butter.project.id ) {
+            window.history.pushState( {}, "popcorn-maker", "?savedDataUrl=/api/project/" + butter.project.id );
+          }
 
-          _projectAutoSave.classList.remove( "hidden" );
-          _projectAutoSave.href = queryString + "?savedDataUrl=/api/project/" + project.projectID;
-          project.isAutoSave = true;
-          autoSaveName.innerHTML = project.name;
-          autoSaveTime.innerHTML = TimeUtil.toPrettyString( Date.now() - project.backupDate );
+          if ( butter.project.autosave ) {
+            var project = butter.project.autosave,
+                location = window.location.search,
+                queryString = location.substring( 0, location.lastIndexOf( "?" ) ),
+                autoSaveName = _projectAutoSave.querySelector( ".autosave-name" ),
+                autoSaveTime = _projectAutoSave.querySelector( ".autosave-time" );
 
-          _projectAutoSave.onclick = function() {
-            // Rebackup the project with a flag attached for loading it
-            butter.project.backupData( project );
-            butter.project.autosave = null;
-            _projectAutoSave.classList.add( "hidden" );
-          };
+            _projectAutoSave.classList.remove( "hidden" );
+            _projectAutoSave.href = queryString + "?savedDataUrl=/api/project/" + project.projectID;
+            project.isAutoSave = true;
+            autoSaveName.innerHTML = project.name;
+            autoSaveTime.innerHTML = TimeUtil.toPrettyString( Date.now() - project.backupDate );
+
+            _projectAutoSave.onclick = function() {
+              // Rebackup the project with a flag attached for loading it
+              butter.project.backupData( project );
+              butter.project.autosave = null;
+              _projectAutoSave.classList.add( "hidden" );
+            };
+          }
         }
       },
       logout: function() {
@@ -157,9 +163,9 @@ define(
           var location = window.location,
               query = location.search;
 
-          if ( query ) {
+          if ( query && !butter.cornfield.authenticated() ) {
             location = location.href.substring( 0, location.href.indexOf( query ) );
-            window.history.replaceState( location );
+            window.history.replaceState( {}, "popcornmaker", location );
           }
         }
       }

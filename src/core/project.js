@@ -183,12 +183,6 @@ define( [ 'core/eventmanager', 'core/media' ],
       }
     }
 
-    function pushToHistory() {
-      if ( window.history ) {
-        window.history.pushState( "?savedDataUrl=/api/project/" + _id );
-      }
-    }
-
     // Import project data from JSON (i.e., created with project.export())
     _this.import = function( json ) {
       var oldTarget, targets, targetData,
@@ -269,7 +263,6 @@ define( [ 'core/eventmanager', 'core/media' ],
           _this.save();
         }
 
-        pushToHistory();
       }
 
       // If this is a restored backup, restart backups now (vs. on first save)
@@ -373,7 +366,9 @@ define( [ 'core/eventmanager', 'core/media' ],
             startBackups();
 
             // Use History Push state to add project information to browser URL
-            pushToHistory();
+            if ( window.history ) {
+              window.history.pushState( {}, "popcorn-maker", "?savedDataUrl=/api/project/" + _id );
+            }
 
             // Let consumers know that the project is now saved;
             _this.dispatch( "projectsaved" );
