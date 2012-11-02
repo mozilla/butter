@@ -9,7 +9,7 @@
   var ACCEPTED_UA_LIST = {
     "Chrome": 17,
     "Firefox": 10,
-    "MSIE": 9,
+    "IE": 9,
     "Safari": 6,
     "Opera": 9
   };
@@ -21,7 +21,7 @@
             "util/xhr", "util/lang", "util/tutorial",
             "text!default-config.json", "text!layouts/ua-warning.html",
             "ui/widget/tooltip", "crashreporter", "core/project",
-            "util/shims"                  // keep this at the end so it doesn't need a spot in the function signature
+            "UAParser/ua-parser", "util/shims"    // keep these at the end so they don't need a spot in the function signature
           ],
           function(
             EventManager, Logger, Config, Target, Media, Page,
@@ -29,9 +29,11 @@
             Dialog, Editor, UI,
             XHR, Lang, Tutorial,
             DEFAULT_CONFIG_JSON, UA_WARNING_LAYOUT,
-            ToolTip, CrashReporter, Project,
-            Shims                         // placeholder
+            ToolTip, CrashReporter, Project
           ){
+
+    // Satisfy lint by making reference non-global
+    var UAParser = window.UAParser;
 
     var __guid = 0;
 
@@ -52,14 +54,16 @@
 
     Butter.init = function( butterOptions ) {
 
-      var ua = navigator.userAgent,
-          acceptedUA;
+      // ua-parser uses the current browsers UA by default
+      var ua = new UAParser().getResult(),
+          name = ua.browser.name,
+          major  = ua.browser.major,
+          acceptedUA = false;
+
       for ( var uaName in ACCEPTED_UA_LIST ) {
-        if( ACCEPTED_UA_LIST.hasOwnProperty( uaName ) ) {
-          var uaRegex = new RegExp( uaName + "(?:/|\\s)([0-9]+)\\.", "g" ),
-              match = uaRegex.exec( ua );
-          if ( match && match.length === 2 && Number( match[ 1 ] ) >= ACCEPTED_UA_LIST[ uaName ] ) {
-            acceptedUA = uaName + "/" + match[ 1 ];
+        if ( name === uaName ) {
+          if ( +major >= ACCEPTED_UA_LIST[ uaName ] ) {
+            acceptedUA = true;
           }
         }
       }
