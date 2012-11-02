@@ -131,7 +131,7 @@ S3FileStore.prototype.write = function( key, data, callback ) {
 
   Object.keys( this.headers ).forEach(function( key ) {
     headers[ key ] = this.headers[ key ];
-  });
+  }, this );
 
   this.client.put( this.expand( key ), headers )
   .on( 'response', function( res ) {
