@@ -560,6 +560,9 @@ target.deploy = function(){
   cp( 'tools/rpmspec/*', DIST_DIR );
   stampVersion( rpmVersion, 'dist/butter.spec' );
 
+  // Add a rev.txt file that's web-accessible
+  gitDescribe( '.' ).to('dist/public/rev.txt');
+
   // Create a tar archive
   var tarName = 'butter-' + rpmVersion + '.tar.bz2';
   exec( 'tar -cjf "' + tarName + '" dist' );
