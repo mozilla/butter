@@ -54,6 +54,7 @@ define( [ 'core/eventmanager', 'core/media' ],
         startBackups();
       }
 
+      // Clear the autosaved project we were holding since the user doesn't want to use it
       _this.autosave = null;
 
       // Let consumers know that the project changed
