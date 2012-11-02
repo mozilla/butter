@@ -789,13 +789,15 @@
                 // We look for an old project backup in localStorage and give the user
                 // a chance to load or discard. If there isn't a backup, we continue
                 // loading as normal.
-                _this.project.checkForBackup( function( project ) {
+                _this.project.checkForBackup( function readyCB( project ) {
                   project.template = project.template || _config.value( "name" );
                   _this.chain( project, [ "projectchanged", "projectsaved" ] );
 
                   // Fire the ready event
                   _this.dispatch( "ready", _this );
-                }, attemptDataLoad );
+                }, function() {
+                  attemptDataLoad( readyCB );
+                });
               });
             });
           });

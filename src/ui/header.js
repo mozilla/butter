@@ -1,7 +1,8 @@
 define(
   [ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data", "ui/webmakernav/webmakernav",
     "ui/widget/tooltip", "util/time" ],
-  function( Dialog, Lang, HEADER_TEMPLATE, UserData, WebmakerBar, ToolTip, TimeUtil ) {
+  function( Dialog, Lang, HEADER_TEMPLATE, UserData, WebmakerBar,
+            ToolTip, TimeUtil ) {
 
   return function( butter, options ){
 
@@ -13,7 +14,7 @@ define(
         _userData = new UserData( butter, options ),
         _rootElement = Lang.domFragment( HEADER_TEMPLATE, ".butter-header" ),
         _webmakerNavBar = _rootElement.querySelector( "#webmaker-nav" ),
-        _saveButton = _rootElement.querySelector( ".butter-save-btn"),
+        _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
         _previewBtn = _rootElement.querySelector( ".butter-preview-btn" ),
@@ -105,7 +106,6 @@ define(
         toggleSaveButton( true );
         toggleShareButton( true );
 
-        butter.project.autosave = _projectAutoSave.onclick = null;
         _projectAutoSave.classList.add( "hidden" );
       },
       clean: function() {
@@ -114,7 +114,8 @@ define(
         toggleShareButton( true );
       },
       login: function() {
-        var isSaved = butter.project.isSaved;
+        var isSaved = butter.project.isSaved,
+            project;
 
         _previewBtn.style.display = "";
         _projectTitle.style.display = "";
@@ -125,27 +126,28 @@ define(
         toggleShareButton( isSaved );
 
         if ( butter.project ) {
-          if ( window.history && butter.project.id ) {
-            window.history.pushState( {}, "popcorn-maker", "?savedDataUrl=/api/project/" + butter.project.id );
+          project = butter.project;
+
+          if ( window.history && project.id && !project.projectHistoryState ) {
+            project.projectHistoryState = true;
+            window.history.pushState( {}, "popcorn-maker", "?savedDataUrl=/api/project/" + project.id );
           }
 
-          if ( butter.project.autosave ) {
-            var project = butter.project.autosave,
+          if ( project.autosave ) {
+            var autoSaveProject = project.autosave,
                 location = window.location.search,
                 queryString = location.substring( 0, location.lastIndexOf( "?" ) ),
                 autoSaveName = _projectAutoSave.querySelector( ".autosave-name" ),
                 autoSaveTime = _projectAutoSave.querySelector( ".autosave-time" );
 
             _projectAutoSave.classList.remove( "hidden" );
-            _projectAutoSave.href = queryString + "?savedDataUrl=/api/project/" + project.projectID;
-            project.isAutoSave = true;
-            autoSaveName.innerHTML = project.name;
-            autoSaveTime.innerHTML = TimeUtil.toPrettyString( Date.now() - project.backupDate );
+            _projectAutoSave.href = queryString + "?savedDataUrl=/api/project/" + autoSaveProject.projectID;
+            autoSaveName.innerHTML = autoSaveProject.name;
+            autoSaveTime.innerHTML = TimeUtil.toPrettyString( Date.now() - autoSaveProject.backupDate );
 
             _projectAutoSave.onclick = function() {
               // Rebackup the project with a flag attached for loading it
-              butter.project.backupData( project );
-              butter.project.autosave = null;
+              project.backupData( autoSaveProject );
               _projectAutoSave.classList.add( "hidden" );
             };
           }
@@ -164,6 +166,7 @@ define(
               query = location.search;
 
           if ( query && !butter.cornfield.authenticated() ) {
+            butter.project.projectHistoryState = false;
             location = location.href.substring( 0, location.href.indexOf( query ) );
             window.history.replaceState( {}, "popcornmaker", location );
           }
@@ -308,8 +311,8 @@ define(
     butter.listen( "authenticated", _this.views.login, false );
     butter.listen( "logout", _this.views.logout, false );
 
-    //Default view
-    _this.views.logout();
+    // Default state is the save button should be active
+    _saveButton.addEventListener( "click", saveProject, false );
 
     butter.listen( "projectsaved", function() {
       // Disable "Save" button

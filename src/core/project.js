@@ -32,6 +32,9 @@ define( [ 'core/eventmanager', 'core/media' ],
         // more correct.
         _isPublished = false,
 
+        // Keeps track if we have already pushed the project into history
+        _projectHistoryState = false,
+
         // How often to backup data in ms. If 0, no backups are done.
         _backupIntervalMS = butter.config.value( "backupInterval" )|0,
 
@@ -43,12 +46,15 @@ define( [ 'core/eventmanager', 'core/media' ],
       _isDirty = true;
       _needsBackup = true;
 
+
       // If the project has an id (if it was saved), start backups again
       // since they may have been stopped if LocalStorage size limits were
       // exceeded.
       if ( _id ) {
         startBackups();
       }
+
+      _this.autosave = null;
 
       // Let consumers know that the project changed
       _this.dispatch( "projectchanged" );
@@ -147,6 +153,16 @@ define( [ 'core/eventmanager', 'core/media' ],
       "isSaved": {
         get: function() {
           return _isPublished && !_isDirty;
+        },
+        enumerable: true
+      },
+
+      "projectHistoryState": {
+        get: function() {
+          return _projectHistoryState;
+        },
+        set: function( val ) {
+          _projectHistoryState = val;
         },
         enumerable: true
       }
@@ -255,9 +271,9 @@ define( [ 'core/eventmanager', 'core/media' ],
       if ( json.projectID ) {
         _id = json.projectID;
 
-        // This means the project we imported as a back up as well for an existing project
-        // However, if the recovered auto save doesn't match the id of the project they loaded
-        // we shouldn't auto save the backup
+        // This means the project we imported as a back up as well for an existing project.
+        // However, if the recovered auto save doesn't match the id of the project the user loaded
+        // we shouldn't auto save the backup.
         _isPublished = !json.isAutoSave;
         if ( json.backupDate && _isPublished ) {
           _this.save();
@@ -297,6 +313,7 @@ define( [ 'core/eventmanager', 'core/media' ],
         data.backupDate = Date.now();
       } else {
         data = backup;
+        data.isAutoSave = true;
       }
       try {
         __butterStorage.setItem( "butter-backup-project", JSON.stringify( data ) );
@@ -366,7 +383,8 @@ define( [ 'core/eventmanager', 'core/media' ],
             startBackups();
 
             // Use History Push state to add project information to browser URL
-            if ( window.history ) {
+            if ( window.history && !_projectHistoryState ) {
+              _projectHistoryState = true;
               window.history.pushState( {}, "popcorn-maker", "?savedDataUrl=/api/project/" + _id );
             }
 
@@ -389,17 +407,13 @@ define( [ 'core/eventmanager', 'core/media' ],
           location = window.location.search,
           loadAutoSave = location.indexOf( "loadAutoSave" ) > -1 ? true : false;
 
-      if ( !fallbackCB ) {
-        fallbackCB = function() {};
-      }
+      fallbackCB = fallbackCB || function() {};
 
-      if ( !readyCB ) {
-        readyCB = function() {};
-      }
+      readyCB = readyCB || function() {};
 
       // For testing purposes, we can skip backup recovery
       if ( butter.config.value( "recover" ) === "purge" ) {
-        fallbackCB( readyCB );
+        fallbackCB();
         return;
       }
 
@@ -423,11 +437,11 @@ define( [ 'core/eventmanager', 'core/media' ],
           // Backup found doesn't match project being loaded. Proceed loading
           // current project and store the project backup
           _this.autosave = projectBackup;
-          fallbackCB( readyCB );
+          fallbackCB();
         }
       } else {
         // No backup found, keep loading
-        fallbackCB( readyCB );
+        fallbackCB();
       }
 
     };
