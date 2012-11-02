@@ -83,6 +83,7 @@
                 _popcornWrapper.popcorn.controls( true );
               }
 
+              _this.currentTime = 0;
               _this.dispatch( "mediaready" );
             },
             timeout: function(){
