@@ -240,7 +240,6 @@
           textContainer = document.createElement( "div" ),
           link = document.createElement( "a" ),
           img,
-          fontSize,
           TRIANGLE_WIDTH = 40,
           TRIANGLE_HEIGHT = 60,
           text = options.text.replace( /\r?\n/gm, "<br>" ),

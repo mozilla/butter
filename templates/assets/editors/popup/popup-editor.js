@@ -22,7 +22,7 @@
      * @param {TrackEvent} trackEvent: The TrackEvent being edited
      */
     function setup( trackEvent ) {
-      _trackEvent = trackEvent,
+      _trackEvent = trackEvent;
       _popcornOptions = _trackEvent.popcornOptions;
 
       var basicContainer = _rootElement.querySelector( ".editor-options" ),
