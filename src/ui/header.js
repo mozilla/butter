@@ -160,6 +160,7 @@ define(
         _previewBtn.style.display = "none";
         _projectTitle.style.display = "none";
         _saveButton.innerHTML = "Sign in to save";
+        _projectAutoSave.classList.add( "hidden" );
 
         if ( window.history ) {
           var location = window.location,
@@ -312,7 +313,7 @@ define(
     butter.listen( "logout", _this.views.logout, false );
 
     // Default state is the save button should be active
-    _saveButton.addEventListener( "click", saveProject, false );
+    toggleSaveButton( true );
 
     butter.listen( "projectsaved", function() {
       // Disable "Save" button

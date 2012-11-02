@@ -32,9 +32,6 @@ define( [ 'core/eventmanager', 'core/media' ],
         // more correct.
         _isPublished = false,
 
-        // Keeps track if we have already pushed the project into history
-        _projectHistoryState = false,
-
         // How often to backup data in ms. If 0, no backups are done.
         _backupIntervalMS = butter.config.value( "backupInterval" )|0,
 
@@ -154,16 +151,6 @@ define( [ 'core/eventmanager', 'core/media' ],
       "isSaved": {
         get: function() {
           return _isPublished && !_isDirty;
-        },
-        enumerable: true
-      },
-
-      "projectHistoryState": {
-        get: function() {
-          return _projectHistoryState;
-        },
-        set: function( val ) {
-          _projectHistoryState = val;
         },
         enumerable: true
       }
@@ -384,8 +371,8 @@ define( [ 'core/eventmanager', 'core/media' ],
             startBackups();
 
             // Use History Push state to add project information to browser URL
-            if ( window.history && !_projectHistoryState ) {
-              _projectHistoryState = true;
+            if ( window.history && !_this.projectHistoryState ) {
+              _this.projectHistoryState = true;
               window.history.pushState( {}, "popcorn-maker", "?savedDataUrl=/api/project/" + _id );
             }
 
@@ -403,10 +390,8 @@ define( [ 'core/eventmanager', 'core/media' ],
     // Check for an existing project that was autosaved but not saved.
     // Returns project backup data as JS object if found, otherwise null.
     _this.checkForBackup = function( readyCB, fallbackCB ) {
-      // See if we already have a project autosaved from another session.
       var projectBackup,
-          location = window.location.search,
-          loadAutoSave = location.indexOf( "loadAutoSave" ) > -1 ? true : false;
+          location = window.location.search;
 
       fallbackCB = fallbackCB || function() {};
 
@@ -418,27 +403,34 @@ define( [ 'core/eventmanager', 'core/media' ],
         return;
       }
 
+      // See if we already have a project autosaved from another session.
       try {
         projectBackup = __butterStorage.getItem( "butter-backup-project" );
         projectBackup = JSON.parse( projectBackup );
-      } catch( e ) { }
+      } catch( e ) {
+        if ( console ) {
+          console.warn( "Failed to retrieve butter project backup." );
+        }
+      }
 
-      if ( projectBackup && projectBackup.isAutoSave ) {
-        _this.import( projectBackup );
-        readyCB( _this );
-      } else if ( projectBackup ) {
-        var id = location.substring( location.lastIndexOf( "/" ) + 1 );
-
-        id = parseInt( id, 10 );
-
-        if ( !isNaN( id ) && ( projectBackup.projectID === id ) ) {
+      if ( projectBackup ) {
+        if ( projectBackup.isAutoSave ) {
           _this.import( projectBackup );
           readyCB( _this );
         } else {
-          // Backup found doesn't match project being loaded. Proceed loading
-          // current project and store the project backup
-          _this.autosave = projectBackup;
-          fallbackCB();
+          var id = location.substring( location.lastIndexOf( "/" ) + 1 );
+
+          id = parseInt( id, 10 );
+
+          if ( !isNaN( id ) && ( projectBackup.projectID === id ) ) {
+            _this.import( projectBackup );
+            readyCB( _this );
+          } else {
+            // Backup found doesn't match project being loaded. Proceed loading
+            // current project and store the project backup
+            _this.autosave = projectBackup;
+            fallbackCB();
+          }
         }
       } else {
         // No backup found, keep loading

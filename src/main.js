@@ -785,17 +785,19 @@
             preparePage( function(){
               moduleCollection.ready( function(){
 
-                _this.project = new Project( _this );
-                // We look for an old project backup in localStorage and give the user
-                // a chance to load or discard. If there isn't a backup, we continue
-                // loading as normal.
-                _this.project.checkForBackup( function readyCB( project ) {
+                function readyCB( project ) {
                   project.template = project.template || _config.value( "name" );
                   _this.chain( project, [ "projectchanged", "projectsaved" ] );
 
                   // Fire the ready event
                   _this.dispatch( "ready", _this );
-                }, function() {
+                }
+
+                _this.project = new Project( _this );
+                // We look for an old project backup in localStorage and give the user
+                // a chance to load or discard. If there isn't a backup, we continue
+                // loading as normal.
+                _this.project.checkForBackup( readyCB, function() {
                   attemptDataLoad( readyCB );
                 });
               });
