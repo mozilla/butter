@@ -467,12 +467,16 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
 
     // Passthrough to the Popcorn instances play method
     this.play = function(){
-      _popcorn.play();
+      if ( _popcorn.paused() ) {
+        _popcorn.play();
+      }
     };
 
     // Passthrough to the Popcorn instances pause method
     this.pause = function(){
-      _popcorn.pause();
+      if ( !_popcorn.paused() ) {
+        _popcorn.pause();
+      }
     };
 
     // XXX: SoundCloud has a bug (reported by us, but as yet unfixed) which blocks
