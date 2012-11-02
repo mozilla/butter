@@ -15,14 +15,12 @@ html
           if ( !state ) {
             //avoid shim problems completely
             header.className = 'butter-delete-confirmation';
-            table.className = '';
           }
           else {
             nameSpan.innerHTML = projectName;
 
-            //avoid shim problems completely
+            //avoid shim problems completel
             header.className = 'butter-delete-confirmation open';
-            table.className = 'confirm-delete';
           }
         }
 
@@ -39,8 +37,8 @@ html
         document.addEventListener( 'DOMContentLoaded', function( e ) {
           var deleteButtons = document.querySelectorAll( 'td > a.butter-delete-button' ),
               i = deleteButtons ? deleteButtons.length : 0,
-              noButton = document.querySelector( 'div.butter-delete-confirmation > button.no' ),
-              yesButton = document.querySelector( 'div.butter-delete-confirmation > button.yes' );
+              noButton = document.querySelector( 'div.butter-delete-confirmation button.no' ),
+              yesButton = document.querySelector( 'div.butter-delete-confirmation button.yes' );
 
           noButton.addEventListener( 'click', function( e ) {
             setDeletionHeaderState( false );
@@ -72,15 +70,18 @@ html
     style
       body {
         font-family: "Open Sans", "Helvetica Neue", sans-serif;
-        background: #3D3F44;
+        background: #F4F5F5;
         color: #888;
-        width: 650px;
         margin: 0 auto;
         font-size: .9em;
         overflow: scroll;
+        text-align: center;
       }
-      .butter-logo {
-        background: url( "logo-words.png" ) no-repeat;
+      .butter-nav {
+        width: 100%;
+      }
+      .butter-project-title {
+        max-width: none;
       }
       table, th, tr, td {
         border: none;
@@ -89,97 +90,79 @@ html
         margin: 0;
         overflow: hidden;
         white-space: nowrap;
-        max-width: 350px;
+      }
+      .table-container {
+        border: 1px solid #DDD;
+        display: inline-block;
       }
       table {
-        margin-top: 20px;
-        margin-bottom: 40px;
-        -moz-transition: margin-top 0.3s;
-        -webkit-transition: margin-top 0.3s;
-        -ms-transition: margin-top 0.3s;
-        -o-transition: margin-top 0.3s;
-        transition: margin-top 0.3s;
-      }
-      table.confirm-delete {
-        margin-top: 45px;
+        color: #555;
       }
       th {
         text-align: left;
-        color: #EEE;
-        border-bottom: 1px solid #222;
-        font-size: 1.2em;
+        border-bottom: 1px solid #DDD;
+        font-size: 1em;
+        background: #FFF;
+        color: #777;
+        line-height: 2;
+        font-weight: 600;
       }
       td, th {
-        padding: 5px 10px;
-      }
-      td a {
-        text-decoration: none;
-        color: #fff;
-      }
-      td a:hover {
-        text-decoration: underline;
-        color: #fff;
-      }
-      td:first-child {
-        width: 350px;
-      }
-      td:first-child:hover {
-        background: rgb(255,239,158);
-        -webkit-transition: .2s all;
-        -moz-transition: .2s all;
-        -ms-transition: .2s all;
-        -o-transition: .2s all;
-        transition: .2s all;
+        box-sizing: border-box;
+        padding: 0.7em 1em;
+        vertical-align: middle;
       }
       td:first-child:hover a {
-        color: #242428;
-      }
-      td:nth-child(2) {
-        width: 300px;
+        color: #00BA91;
       }
       tr:nth-child(odd) {
-        background: rgba(0,0,0,.3);
+        background: #F4F5F5;
       }
       tr:nth-child(even) {
-        background: rgba(0,0,0,.4);
+        background: #FFF;
+      }
+
+      .butter-delete-button {
+        opacity: 0.5
+      }
+      .butter-delete-button:hover {
+        opacity: 1;
       }
 
       .butter-projects-title {
         display: block;
         text-align: left;
         text-decoration: none;
-        color: #EEE;
-        width: 100%;
+        color: #555;
+        max-width: 350px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-      }
-      .butter-projects-title:hover {
-        color: #FFF;
+        margin: 0;
       }
       .butter-delete-confirmation {
         position: fixed;
-        width: 100%;
-        left: 0;
-        top: 51px;
-        background: rgb(241,218,54); /* Old browsers */
-        background: -moz-linear-gradient(top,  rgba(241,218,54,1) 0%, rgba(252,239,118,1) 100%); /* FF3.6+ */
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(241,218,54,1)), color-stop(100%,rgba(252,239,118,1))); /* Chrome,Safari4+ */
-        background: -webkit-linear-gradient(top,  rgba(241,218,54,1) 0%,rgba(252,239,118,1) 100%); /* Chrome10+,Safari5.1+ */
-        background: -o-linear-gradient(top,  rgba(241,218,54,1) 0%,rgba(252,239,118,1) 100%); /* Opera 11.10+ */
-        background: -ms-linear-gradient(top,  rgba(241,218,54,1) 0%,rgba(252,239,118,1) 100%); /* IE10+ */
-        background: linear-gradient(top,  rgba(241,218,54,1) 0%,rgba(252,239,118,1) 100%); /* W3C */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f1da36', endColorstr='#fcef76',GradientType=0 ); /* IE6-9 */
+        width: 300px;
+        height: 50px;
+        padding: 50px;
+        left: 50%;
+        top: 50%;
+        margin-top: -50px;
+        margin-left: -175px;
+        background: #FFF;
         -moz-transition: all 0.3s;
         -webkit-transition: all 0.3s;
         -ms-transition: all 0.3s;
         -o-transition: all 0.3s;
         transition: all 0.3s;
-        padding: 0px;
         color: #000;
         text-align: center;
-        height: 0px;
         overflow: hidden;
+        border: 1px solid #DDD;
+        border-radius: 3px;
+        opacity: 0;
+        z-index: 10;
+        visibility: hidden;
       }
       .butter-delete-confirmation span {
         max-width: 200px;
@@ -188,8 +171,8 @@ html
         white-space: nowrap;
       }
       .butter-delete-confirmation.open {
-        height: 20px;
-        padding: 8px;
+        opacity: 1;
+        visibility: visible;
       }
     script
       var _gaq = _gaq || [];
@@ -202,31 +185,36 @@ html
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
       })();
   body.butter-header-spacing
-    div#butter-header
-      div.butter-header-inner
+    div#butter-header.butter-header
+      div.butter-header-primary
         div.butter-logo
-        span.butter-name My Dashboard &ndash;
-          = user.email
+        ul.butter-nav
+          li.butter-breadcrumbs
+          li.butter-project-title
+            span.butter-name
+              = user.email
+              |'s projects
     div.butter-delete-confirmation
       | Are you sure you want to delete "
       span.project-name
       | "?
-      button.yes Yes
-      button.no No
+      p
+        button.yes.butter-btn.btn-green Yes
+        | 
+        button.no.butter-btn.btn-red No
 
-    table
-      tr
-        th Project Title
-        th Template
-        th
-      each project in projects
-        tr(data-project-id=project._id)
-          td
-            a(href= project.href).butter-projects-title
-              = project.name
-          td
-            = project.template
-          td
-            a(href= "#", data-project-id=project._id, data-project-name=project.name).butter-delete-button
-              | Delete
+    .table-container
+      table
+        tr
+          th Project Title
+          th
+        each project in projects
+          tr(data-project-id=project._id)
+            td
+              a(href= project.href).butter-projects-title
+                = project.name
+            td
+              a(href= "#", data-project-id=project._id, data-project-name=project.name).butter-delete-button
+                span.icon.icon-trash.icon-only
+
     input(id="csrf", type="hidden", value=user.csrf)
