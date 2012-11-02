@@ -183,6 +183,12 @@ define( [ 'core/eventmanager', 'core/media' ],
       }
     }
 
+    function pushToHistory() {
+      if ( window.history ) {
+        window.history.pushState( "?savedDataUrl=/api/project/" + _id );
+      }
+    }
+
     // Import project data from JSON (i.e., created with project.export())
     _this.import = function( json ) {
       var oldTarget, targets, targetData,
@@ -256,11 +262,14 @@ define( [ 'core/eventmanager', 'core/media' ],
         _id = json.projectID;
 
         // This means the project we imported as a back up as well for an existing project
-        if ( json.backupDate ) {
+        // However, if the recovered auto save doesn't match the id of the project they loaded
+        // we shouldn't auto save the backup
+        _isPublished = !json.isAutoSave;
+        if ( json.backupDate && _isPublished ) {
           _this.save();
         }
 
-        _isPublished = true;
+        pushToHistory();
       }
 
       // If this is a restored backup, restart backups now (vs. on first save)
@@ -277,23 +286,25 @@ define( [ 'core/eventmanager', 'core/media' ],
     };
 
     // Expose backupData() to make testing possible
-    var backupData = _this.backupData = function() {
+    var backupData = _this.backupData = function( backup ) {
+      var data;
+
       // If the project isn't different from last time, or if it's known
       // to not fit in storage, don't bother trying.
-<<<<<<< HEAD
-      if ( !_needsBackup || _this.isSaved && !backup ) {
-=======
-      if ( !_needsBackup || _quotaExceeded || _this.isSaved ) {
->>>>>>> Fix bugs with when auto project was being used in header and also if auto save was selected when there was no project used
+      if ( ( !_needsBackup || _this.isSaved ) && !backup ) {
         return;
       }
       // Save everything but the project id
-      var data = _this.data;
-      data.projectID = _id;
-      data.name = _name;
-      data.template = _template;
-      data.author = _author;
-      data.backupDate = Date.now();
+      if ( !backup ) {
+        data = _this.data;
+        data.projectID = _id;
+        data.name = _name;
+        data.template = _template;
+        data.author = _author;
+        data.backupDate = Date.now();
+      } else {
+        data = backup;
+      }
       try {
         __butterStorage.setItem( "butter-backup-project", JSON.stringify( data ) );
         _needsBackup = false;
@@ -361,9 +372,8 @@ define( [ 'core/eventmanager', 'core/media' ],
             // Start keeping backups in storage, if not already started
             startBackups();
 
-            if ( window.history ) {
-              window.history.pushState( {}, "popcorn-maker", "?savedDataUrl=/api/project/" + _id );
-            }
+            // Use History Push state to add project information to browser URL
+            pushToHistory();
 
             // Let consumers know that the project is now saved;
             _this.dispatch( "projectsaved" );
@@ -403,7 +413,7 @@ define( [ 'core/eventmanager', 'core/media' ],
         projectBackup = JSON.parse( projectBackup );
       } catch( e ) { }
 
-      if ( projectBackup && loadAutoSave ) {
+      if ( projectBackup && projectBackup.isAutoSave ) {
         _this.import( projectBackup );
         readyCB( _this );
       } else if ( projectBackup ) {

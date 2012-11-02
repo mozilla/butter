@@ -132,11 +132,14 @@ define(
               autoSaveTime = _projectAutoSave.querySelector( ".autosave-time" );
 
           _projectAutoSave.classList.remove( "hidden" );
-          _projectAutoSave.href = queryString + "?loadAutoSave=true";
+          _projectAutoSave.href = queryString + "?savedDataUrl=/api/project/" + project.projectID;
+          project.isAutoSave = true;
           autoSaveName.innerHTML = project.name;
           autoSaveTime.innerHTML = TimeUtil.toPrettyString( Date.now() - project.backupDate );
 
           _projectAutoSave.onclick = function() {
+            // Rebackup the project with a flag attached for loading it
+            butter.project.backupData( project );
             butter.project.autosave = null;
             _projectAutoSave.classList.add( "hidden" );
           };
@@ -156,7 +159,7 @@ define(
 
           if ( query ) {
             location = location.href.substring( 0, location.href.indexOf( query ) );
-            window.history.replaceState( {}, "popcorn-maker", location );
+            window.history.replaceState( location );
           }
         }
       }
