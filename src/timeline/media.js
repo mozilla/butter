@@ -266,7 +266,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       }
     }
 
-    butter.listen( "ready", function(){
+    butter.listen( "mediaready", function(){
       updateUI();
     });
 
