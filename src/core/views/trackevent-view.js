@@ -225,10 +225,12 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                 data: _this,
                 start: function(){
                   _dragging = true;
+                  _element.classList.add( "trackevent-dragging" );
                   _this.dispatch( "trackeventdragstarted" );
                 },
                 stop: function() {
                   _dragging = false;
+                  _element.classList.remove( "trackevent-dragging" );
                   _this.dispatch( "trackeventdragstopped" );
                 },
                 drag: function( draggable, droppable ) {

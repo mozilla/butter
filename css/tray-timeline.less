@@ -59,6 +59,7 @@
 .tracks-container {
   padding-bottom: @_trackHeight;  //must have padding to account for add popcorn button
   position: relative;
+  overflow: hidden;
 }
 
 /*********************************************************
@@ -204,6 +205,10 @@
         right: -2px;
       }
     }
+  }
+
+  &.trackevent-dragging {
+    overflow: hidden;
   }
 
   &.butter-track-event-ghost {

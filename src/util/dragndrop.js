@@ -8,7 +8,8 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
   var SCROLL_INTERVAL = 16,
       DEFAULT_SCROLL_AMOUNT = 10,
       SCROLL_WINDOW = 10,
-      MIN_SCROLL_ELEMENT_ONSCREEN_WIDTH = 50,
+      MIN_SCROLL_ELEMENT_ONSCREEN_HEIGHT = 50,
+      MIN_SCROLL_ELEMENT_ONSCREEN_WIDTH = 10,
       MAXIMUM_Z_INDEX = 2147483647,
       MIN_WIDTH = 15,
       RESIZABLE_CLASS = "butter-resizable";
@@ -750,8 +751,8 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
         scrollRect = _scrollGroup.boundingClientRect;
         _xOffsetScrollBounds[ 0 ] = scrollRect.left - _elementRect.left - _elementRect.width + MIN_SCROLL_ELEMENT_ONSCREEN_WIDTH;
         _xOffsetScrollBounds[ 1 ] = scrollRect.right - _elementRect.right + _elementRect.width - MIN_SCROLL_ELEMENT_ONSCREEN_WIDTH;
-        _yOffsetScrollBounds[ 0 ] = scrollRect.top - _elementRect.top + _elementRect.height - MIN_SCROLL_ELEMENT_ONSCREEN_WIDTH;
-        _yOffsetScrollBounds[ 1 ] = scrollRect.bottom - _elementRect.bottom - _elementRect.height + MIN_SCROLL_ELEMENT_ONSCREEN_WIDTH;
+        _yOffsetScrollBounds[ 0 ] = scrollRect.top - _elementRect.top + _elementRect.height - MIN_SCROLL_ELEMENT_ONSCREEN_HEIGHT;
+        _yOffsetScrollBounds[ 1 ] = scrollRect.bottom - _elementRect.bottom - _elementRect.height + MIN_SCROLL_ELEMENT_ONSCREEN_HEIGHT;
       }
     };
 
