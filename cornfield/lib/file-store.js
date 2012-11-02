@@ -114,6 +114,7 @@ function S3FileStore( options ) {
   this.hostname = options.hostname;
 
   // Append any additional headers to send with a write request
+  this.headers = {};
   if ( options.headers ) {
     this.headers = options.headers;
   }
