@@ -46,7 +46,7 @@
                 "type": "text",
                 "popcornOptions": {
                     "start": 7.7081,
-                    "end": 10.80146,
+                    "end": 9.924149822064058,
                     "target": "video-container",
                     "text": "Open the events tab to begin adding\nevents to your media",
                     "linkUrl": "",
@@ -75,28 +75,13 @@
             }]
         }, {
             "name": "Layer 1",
-            "id": "1",
-            "trackEvents": [{
-                "id": "TrackEvent2",
-                "type": "pausePlugin",
-                "popcornOptions": {
-                    "start": 10.87139,
-                    "end": 11.22,
-                    "target": "video-container",
-                    "duration": "0"
-                },
-                "track": "1",
-                "name": "TrackEvent5"
-            }]
-        }, {
-            "name": "Layer 2",
-            "id": "2",
+            "id": "4",
             "trackEvents": [{
                 "id": "TrackEvent3",
                 "type": "text",
                 "popcornOptions": {
-                    "start": 10.814615384615385,
-                    "end": 11,
+                    "start": 9.942277580071176,
+                    "end": 10.880604982206407,
                     "target": "video-container",
                     "text": "Delete these events after importing\nyour media!",
                     "linkUrl": "",
@@ -117,10 +102,25 @@
                     "left": 29.82142857142857,
                     "top": 33.33333333333333,
                     "width": 50,
-                    "zindex": 998
+                    "zindex": 999
                 },
-                "track": "2",
+                "track": "4",
                 "name": "TrackEvent6"
+            }]
+        }, {
+            "name": "Layer 2",
+            "id": "1",
+            "trackEvents": [{
+                "id": "TrackEvent2",
+                "type": "pausePlugin",
+                "popcornOptions": {
+                    "start": 10.541209659780048,
+                    "end": 11.219999695367237,
+                    "target": "video-container",
+                    "duration": "0"
+                },
+                "track": "1",
+                "name": "TrackEvent5"
             }]
         }, {
             "name": "Layer 3",
