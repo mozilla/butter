@@ -186,11 +186,15 @@
         // Set layout class for container
         if ( options.layout ) {
           options._container.classList.add( options.layout );
-          if ( options.layout === "ticker" ) {
+          if ( options.layout === "ticker" && tweetsContainer.childNodes.length ) {
             var elem;
 
             options._tickerInterval = setInterval(function() {
               elem = tweetsContainer.firstChild;
+              if ( !elem ) {
+                return;
+              }
+
               elem.style.marginTop = TRANSITION_MARGIN_TOP;
               setTimeout(function() {
                 tweetsContainer.removeChild( elem );
