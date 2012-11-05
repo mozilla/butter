@@ -128,7 +128,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
         draggables[ i ].start( e );
       }
 
-      window.setTimeout( __draggableUpdateTimeout, SCROLL_INTERVAL );
+      __draggableUpdateTimeout();
 
       // Prevent drags from happening while we're dragging around objects, since
       // it's not an HTML5 drag and it'll interfere.
