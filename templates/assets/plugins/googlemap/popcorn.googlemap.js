@@ -12,6 +12,9 @@ var googleCallback;
 
   var _mapFired = false,
       _mapLoaded = false,
+      // Store location objects in case the same string location is used multiple times.
+      _cachedGeoCode = {},
+      MAP_FAILURE_TIMEOUT = 100,
       geocoder;
 
   //google api callback
@@ -169,26 +172,49 @@ var googleCallback;
       target.appendChild( outerdiv );
     }
 
+    function geoCodeCallback( results, status ) {
+      // second check for innerdiv since it could have disappeared before
+      // this callback is actually run
+      if ( !innerdiv ) {
+        return;
+      }
+
+      if ( status === google.maps.GeocoderStatus.OK ) {
+        options.lat = results[ 0 ].geometry.location.lat();
+        options.lng = results[ 0 ].geometry.location.lng();
+        _cachedGeoCode[ options.location ] = location = new google.maps.LatLng( options.lat, options.lng );
+
+        map = buildMap( options, innerdiv, that );
+      } else if ( status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT ) {
+        setTimeout(function() {
+          // calls an anonymous google function called on separate thread
+          geocoder.geocode({
+            "address": options.location
+          }, geoCodeCallback );
+        }, MAP_FAILURE_TIMEOUT );
+      } else {
+        // Some other failure occured
+        console.warn( "Google maps geocoder returned status: " + status );
+      }
+    }
+
     // ensure that google maps and its functions are loaded
     // before setting up the map parameters
     var isMapReady = function () {
       if ( _mapLoaded ) {
         if ( innerdiv ) {
           if ( options.location ) {
-            // calls an anonymous google function called on separate thread
-            geocoder.geocode({
-              "address": options.location
-            },
-            function ( results, status ) {
-              // second check for innerdiv since it could have disappeared before
-              // this callback is actual run
-              if ( innerdiv && status === google.maps.GeocoderStatus.OK ) {
-                options.lat = results[ 0 ].geometry.location.lat();
-                options.lng = results[ 0 ].geometry.location.lng();
-                location = new google.maps.LatLng( options.lat, options.lng );
-                map = buildMap( options, innerdiv, that );
-              }
-            });
+            location = _cachedGeoCode[ options.location ];
+
+            if ( location ) {
+              map = buildMap( options, innerdiv, that );
+            } else {
+              // calls an anonymous google function called on separate thread
+              geocoder.geocode({
+                "address": options.location
+              }, geoCodeCallback );
+            }
+
           } else {
             location = new google.maps.LatLng( options.lat, options.lng );
             map = map = buildMap( options, innerdiv, that );
