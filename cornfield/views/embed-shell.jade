@@ -25,5 +25,5 @@ html
     script
       if ( location.search ) {
         var embed = document.querySelector('#embed');
-        embed.src = embed.src + location.search;
+        embed.src = embed.src + "?previewTime=" + Date.now();
       }
