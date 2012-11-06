@@ -131,7 +131,7 @@ define( [ 'core/eventmanager', 'core/media' ],
 
       "previewUrl": {
         get: function() {
-          return _publishUrl + "?previewTime=" + Date.now();
+          return _publishUrl + "?preview=true";
         },
         enumerable: true
       },
