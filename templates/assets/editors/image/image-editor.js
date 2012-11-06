@@ -29,6 +29,7 @@
         _flickrActive = false,
         _singleActive = false,
         _popcornInstance,
+        _inSetup,
         _cachedValues;
 
     function updateTrackEvent( te, props ) {
@@ -62,7 +63,7 @@
     }
 
     function galleryHandler() {
-      if ( !_galleryActive ) {
+      if ( !_galleryActive && !_inSetup ) {
         _galleryActive = true;
         _trackEvent.update({
           src: "",
@@ -78,7 +79,7 @@
     }
 
     function tagHandler() {
-      if ( !_tagsActive ) {
+      if ( !_tagsActive && !_inSetup ) {
         _tagsActive = true;
         _trackEvent.update({
           tags: _cachedValues.tags.data,
@@ -127,7 +128,7 @@
     function singleImageHandler() {
       _galleryActive = _tagsActive = _flickrActive = false;
 
-      if ( !_singleActive ) {
+      if ( !_singleActive && !_inSetup ) {
         _singleActive = true;
         _trackEvent.update({
           src: _cachedValues.src.data,
@@ -172,6 +173,7 @@
           startEndElement,
           manifestOpts = trackEvent.popcornTrackEvent._natives.manifest.options;
 
+      _inSetup = true;
       _maxImageCount = manifestOpts.count.MAX_COUNT ? manifestOpts.count.MAX_COUNT : 20;
 
       function callback( elementType, element, trackEvent, name ) {
@@ -306,6 +308,7 @@
       }
 
       _this.scrollbar.update();
+      _inSetup = false;
     }
 
     function toggleHandler( e ) {
