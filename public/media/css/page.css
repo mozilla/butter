@@ -125,6 +125,7 @@ Layout styles
   #outer-wrapper {
     position: relative;
     border-top: none;
+    overflow: hidden;
   }
 
   #wrapper {
