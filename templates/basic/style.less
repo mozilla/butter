@@ -61,27 +61,26 @@ body.editor-minimized .body-wrapper {
   background: #FFF;
 
   .video-container {
-    .transition( opacity 0.35s );
+    .transition( opacity 0.5s );
     opacity: 1;
   }
 
   .loading-message {
     position: absolute;
 
-    color: #000;
     opacity: 0;
     visibility: hidden;
 
     .transition( opacity 0.35s, visibility 0.35s );
 
-    text-align: center;
-    font-size: 3em;
+    height: 3em;
+    background: url( "/resources/icons/big-loader.gif" ) center no-repeat;
 
     width: 100%;
     line-height: 1;
     top: 50%;
 
-    margin-top: -.5em;
+    margin-top: -1.5em;
   }
 
   &.faded .loading-message {
