@@ -2,16 +2,10 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ 'core/eventmanager', 'core/media' ],
-        function( EventManager, Media ){
+define( [ "core/eventmanager", "core/media", "util/shims" ],
+        function( EventManager, Media, Shims ) {
 
-  // Local storage provider for backups.  All the browsers we support also
-  // support localStorage, but fail in such a way that we don't crash.
-  var __butterStorage = "localStorage" in window ?
-    window.localStorage :
-    { getItem: function(){},
-      setItem: function(){},
-      removeItem: function(){} };
+  var __butterStorage = window.localStorage;
 
   function Project( butter ) {
 

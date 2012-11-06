@@ -7,7 +7,10 @@
  *
  * Determines whether or not a user should be shown a first-run dialog
  */
-define( [ "dialog/dialog", "util/cookie", "ui/widget/tooltip" ], function( Dialog, Cookie, ToolTip ) {
+define( [ "dialog/dialog", "ui/widget/tooltip", "util/shims" ], function( Dialog, ToolTip, Shims ) {
+
+  var __butterStorage = window.localStorage;
+
   return {
     init: function( config ) {
 
@@ -81,13 +84,17 @@ define( [ "dialog/dialog", "util/cookie", "ui/widget/tooltip" ], function( Dialo
         document.body.classList.add( "first-run" );
       }
 
-      if ( !Cookie.isPopcornCookieSet() || window.location.search.match( "alwaysFirst" ) ) {
-        Cookie.setPopcornCookie();
-        setupFirstRun();
-        dialog = Dialog.spawn( "first-run" );
-        dialog.open( false );
-        dialog.listen( "close", onDialogClose );
-      }
+      try {
+        var data = __butterStorage.getItem( "butter-first-run" );
+
+        if ( !data ) {
+          __butterStorage.setItem( "butter-first-run", true );
+          setupFirstRun();
+          dialog = Dialog.spawn( "first-run" );
+          dialog.open( false );
+          dialog.listen( "close", onDialogClose );
+        }
+      } catch( e ) {}
     }
   };
 });
