@@ -73,8 +73,8 @@
       }
       _tagsActive = _galleryInput.disabled = false;
       _tagInput.disabled = _galleryRadio.checked = true;
-      _galleryInput.classList.remove( "butter-editor-disabled" );
-      _tagInput.classList.add( "butter-editor-disabled" );
+      _galleryInput.classList.remove( "butter-disabled" );
+      _tagInput.classList.add( "butter-disabled" );
     }
 
     function tagHandler() {
@@ -89,9 +89,9 @@
       }
 
       _galleryActive = _tagInput.disabled = false;
-      _tagInput.classList.remove( "butter-editor-disabled" );
+      _tagInput.classList.remove( "butter-disabled" );
       _galleryInput.disabled = _tagRadio.checked = true;
-      _galleryInput.classList.add( "butter-editor-disabled" );
+      _galleryInput.classList.add( "butter-disabled" );
     }
 
     function isEmptyInput( value ) {

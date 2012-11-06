@@ -57,11 +57,11 @@
         function checkboxCallback( trackEvent, prop, updateOptions ) {
           if ( "background shadow".match( prop ) ) {
             if ( updateOptions[ prop ] ) {
-              pickers[ prop ].classList.remove( "butter-editor-disabled" );
+              pickers[ prop ].classList.remove( "butter-disabled" );
               pickers[ prop ].onclick = _trueClick;
               pickers[ prop ].removeAttribute("disabled");
             } else {
-              pickers[ prop ].classList.add( "butter-editor-disabled" );
+              pickers[ prop ].classList.add( "butter-disabled" );
               pickers[ prop ].onclick = _falseClick;
               pickers[ prop ].setAttribute( "disabled", "true" );
             }
@@ -97,7 +97,7 @@
                 pickers.background = option.element;
                 // set initial state
                 if ( !_popcornOptions.background ) {
-                  option.element.classList.add( "butter-editor-disabled" );
+                  option.element.classList.add( "butter-disabled" );
                   option.element.onclick = _falseClick;
                   option.element.setAttribute( "disabled", "true" );
                 }
@@ -106,7 +106,7 @@
                 pickers.shadow = option.element;
                 // set initial state
                 if ( !_popcornOptions.shadow ) {
-                  option.element.classList.add( "butter-editor-disabled" );
+                  option.element.classList.add( "butter-disabled" );
                   option.element.onclick = _falseClick;
                   option.element.setAttribute( "disabled", "true" );
                 }
