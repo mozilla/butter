@@ -502,7 +502,7 @@ var googleCallback;
       },
       pitch: {
         elem: "input",
-        type: "text",
+        type: "number",
         label: "Pitch",
         "default": 1,
         optional: true

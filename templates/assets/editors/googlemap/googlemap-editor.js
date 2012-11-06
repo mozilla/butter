@@ -161,6 +161,22 @@
           }, false );
         }
 
+        function updateLocation( te, prop ) {
+          _cachedValues.location = prop.location;
+
+          _this.updateTrackEventSafe( te, {
+            location: prop.location
+          });
+        }
+
+        function updateZoom( te, prop ) {
+          _cachedValues.zoom = prop.zoom;
+
+          _this.updateTrackEventSafe( te, {
+            zoom: prop.zoom
+          });
+        }
+
         for ( key in pluginOptions ) {
           if ( pluginOptions.hasOwnProperty( key ) ) {
             option = pluginOptions[ key ];
@@ -181,11 +197,16 @@
               _this.attachSelectChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
             } else if ( key === "fullscreen" ) {
               attachFullscreenHandler( option );
+            } else if ( key === "location" ) {
+              _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateLocation );
+            } else if ( key === "zoom" ) {
+              _this.attachInputChangeHandler( option.element, option.trackEvent, key, updateZoom );
             } else if ( option.elementType === "input" ) {
               _this.attachInputChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
             }
           }
         }
+
       }
 
       optionsContainer.appendChild( _this.createStartEndInputs( trackEvent, _this.updateTrackEventSafe ) );
@@ -212,8 +233,18 @@
     }
 
     function onTrackEventUpdated( e ) {
-      _this.updatePropertiesFromManifest( e.target );
+      var popcornOptions;
+
+      _trackEvent = e.target;
+      _this.updatePropertiesFromManifest( _trackEvent );
       _this.setErrorState( false );
+      popcornOptions = _trackEvent.popcornOptions;
+
+      // We have to store lat/lng values on track event update because
+      // we update these with events from dragging the map and not fields
+      // in the editor.
+      _cachedValues.lat = popcornOptions.lat;
+      _cachedValues.lng = popcornOptions.lng;
 
       // Now we REALLY know that we can try setting up listeners
       _popcorn.on( "googlemaps-loaded", mapLoaded );
