@@ -450,6 +450,7 @@
           set: function( val ) {
             if ( _url !== val ) {
               _url = val;
+              _ready = false;
               _popcornWrapper.clear( _target );
               setupContent();
               _this.dispatch( "mediacontentchanged", _this );
