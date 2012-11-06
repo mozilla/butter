@@ -8,7 +8,7 @@
     <script src="../../butter.inject.js"></script>
     <script src="../../test-utils.js"></script>
     <script>
-      asyncTest( "Debug enables/disables logging", 4, function() {
+      asyncTest( "Debug enables/disables logging", 5, function() {
 
       createButterCore(function( butter ) {
 
@@ -31,6 +31,8 @@
             console.log = oldLog;
           });
           butter.addMedia({ url: "../../../external/popcorn-js/test/trailer.ogv", target: "mediaDiv" });
+
+          ok( Butter.app, "Butter.app exposes the instance for debugging" );
         }
         butter.listen( "mediaready", ready );
         butter.addMedia({ url: "../../../external/popcorn-js/test/trailer.ogv", target: "mediaDiv" });
