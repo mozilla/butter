@@ -11,7 +11,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _userData = new UserData( butter, options ),
         _rootElement = Lang.domFragment( HEADER_TEMPLATE, ".butter-header" ),
         _webmakerNavBar = _rootElement.querySelector( "#webmaker-nav" ),
-        _saveButton = _rootElement.querySelector( ".butter-save-btn"),
+        _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
         _previewBtn = _rootElement.querySelector( ".butter-preview-btn" ),
@@ -22,10 +22,11 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _tabzilla = _rootElement.querySelector( "#tabzilla" ),
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML,
-        _webmakerNav;
+        _webmakerNav,
+        _toolTip;
 
     // create a tooltip for the plrojectName element
-    ToolTip.create({
+    _toolTip = ToolTip.create({
       title: "header-title-tooltip",
       message: "Change the name of your project",
       element: _projectTitle,
@@ -96,6 +97,21 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       }
     }
 
+    function projectNameClick( e ) {
+      var input = document.createElement( "input" );
+
+      input.type = "text";
+
+      input.placeholder = _projectTitlePlaceHolderText;
+      input.classList.add( "butter-project-name" );
+      input.value = _projectName.textContent !== _projectTitlePlaceHolderText ? _projectName.textContent : "";
+      _projectTitle.replaceChild( input, _projectName );
+      _projectTitle.removeEventListener( "click", projectNameClick, false );
+      input.focus();
+      input.addEventListener( "blur", onBlur, false );
+      input.addEventListener( "keypress", onKeyPress, false );
+    }
+
     this.views = {
       dirty: function() {
         togglePreviewButton( false );
@@ -125,6 +141,21 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _previewBtn.style.display = "none";
         _projectTitle.style.display = "none";
         _saveButton.innerHTML = "Sign in to save";
+      },
+      mediaReady: function() {
+        toggleSaveButton( true );
+        _toolTip.hidden = false;
+        _projectTitle.classList.remove( "butter-disabled" );
+        _projectTitle.addEventListener( "click", projectNameClick, false );
+        _projectName.addEventListener( "click", projectNameClick, false );
+      },
+      mediaChanging: function() {
+        toggleSaveButton( false );
+        _toolTip.hidden = true;
+        _projectTitle.classList.add( "butter-disabled" );
+        _projectTitle.removeEventListener( "click", projectNameClick, false );
+        _projectName.removeEventListener( "click", projectNameClick, false );
+
       }
     };
 
@@ -240,23 +271,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       _projectTitle.replaceChild( _projectName, node );
     }
 
-    function projectNameClick( e ) {
-      var input = document.createElement( "input" );
-
-      input.type = "text";
-
-      input.placeholder = _projectTitlePlaceHolderText;
-      input.classList.add( "butter-project-name" );
-      input.value = _projectName.textContent !== _projectTitlePlaceHolderText ? _projectName.textContent : "";
-      _projectTitle.replaceChild( input, _projectName );
-      _projectTitle.removeEventListener( "click", projectNameClick, false );
-      input.focus();
-      input.addEventListener( "blur", onBlur, false );
-      input.addEventListener( "keypress", onKeyPress, false );
-    }
-
-    _projectName.addEventListener( "click", projectNameClick, false );
-
     this.attachToDOM = function() {
       document.body.classList.add( "butter-header-spacing" );
       document.body.insertBefore( _rootElement, document.body.firstChild );
@@ -265,6 +279,8 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     butter.listen( "autologinsucceeded", _this.views.login, false );
     butter.listen( "authenticated", _this.views.login, false );
     butter.listen( "logout", _this.views.logout, false );
+    butter.listen( "mediaready", _this.views.mediaReady );
+    butter.listen( "mediacontentchanged", _this.views.mediaChanging );
 
     //Default view
     _this.views.logout();
