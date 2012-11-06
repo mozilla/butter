@@ -1,1305 +1,1305 @@
 {
-  "template": "basic",
-  "name": "Remix of Radio Rookies Stop and Frisk CALL OUT",
-  "media": [
-    {
-      "tracks": [
+    "targets": [
         {
-          "trackEvents": [
-            {
-              "name": "TrackEvent49",
-              "track": "Layer",
-              "popcornOptions": {
-                "linkSrc": "",
-                "zindex": 1000,
-                "transition": "popcorn-fade",
-                "left": 23.712385385564737,
-                "top": 61.06016402658019,
-                "height": 37.47394588733327,
-                "start": 20.21633,
-                "end": 21.83364,
-                "target": "video-container",
-                "src": "http://atlantablackstar.com/wp-content/uploads/2012/06/racial-profiling.jpg",
-                "tags": "",
-                "photosetId": "",
-                "count": "",
-                "width": 51.69988276670574
-              },
-              "type": "image",
-              "id": "TrackEvent0"
-            },
-            {
-              "name": "TrackEvent13",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 1000,
-                "pitch": 11.125000000000004,
-                "heading": -132.47954475121762,
-                "fullscreen": "",
-                "location": "",
-                "type": "STREETVIEW",
-                "target": "video-container",
-                "end": 5.84361,
-                "start": 0.0933,
-                "zoom": 1,
-                "transition": "popcorn-fade",
-                "left": 34.30441960360493,
-                "top": 0,
-                "width": 35.16998827667057,
-                "height": 100,
-                "lat": 40.84541,
-                "lng": -73.86520300000001
-              },
-              "type": "googlemap",
-              "id": "TrackEvent1"
-            },
-            {
-              "name": "TrackEvent34",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 1000,
-                "fontDecorations": {
-                  "underline": false,
-                  "italics": false,
-                  "bold": true
-                },
-                "fontColor": "#b000b0",
-                "sound": false,
-                "triangle": "bottom left",
-                "type": "popup",
-                "linkUrl": "http://www.thenation.com/article/170413/stopped-and-frisked-being-fking-mutt-video?_r=hpyr",
-                "text": "Hear a recording of a stop-and-frisk in action",
-                "target": "video-container",
-                "end": 65.30527,
-                "start": 54.44689,
-                "icon": "audio",
-                "flip": "",
-                "top": 86.38888888888889,
-                "left": 2.96875,
-                "width": 97.03125,
-                "transition": "popcorn-pop",
-                "fontFamily": "PT Sans",
-                "fontSize": "18"
-              },
-              "type": "popup",
-              "id": "TrackEvent2"
-            },
-            {
-              "name": "TrackEvent38",
-              "track": "Layer",
-              "popcornOptions": {
-                "linkSrc": "",
-                "zindex": 1000,
-                "transition": "popcorn-fade",
-                "left": 10,
-                "top": 10,
-                "height": 80,
-                "start": 29.63857,
-                "end": 34.63857,
-                "target": "video-container",
-                "src": "http://assets.nydailynews.com/polopoly_fs/1.1169405.1348760348!/img/httpImage/image.jpg_gen/derivatives/landscape_635/church28n-1-web.jpg",
-                "tags": "",
-                "photosetId": "",
-                "count": "",
-                "width": 80
-              },
-              "type": "image",
-              "id": "TrackEvent3"
-            },
-            {
-              "name": "TrackEvent60",
-              "track": "Layer",
-              "popcornOptions": {
-                "linkUrl": "http://www.nytimes.com/interactive/2012/08/16/nyregion/new-york-police-stop-and-frisk-use-of-force-map.html?ref=nyregion",
-                "zindex": 1000,
-                "fontDecorations": {
-                  "underline": false,
-                  "italics": false,
-                  "bold": true
-                },
-                "icon": "star",
-                "sound": "",
-                "triangle": "bottom left",
-                "type": "popup",
-                "text": "See the NY Times investigation",
-                "target": "video-container",
-                "end": 110.68783,
-                "start": 102.97621,
-                "flip": "",
-                "top": 88.68625957140802,
-                "left": 63.305978898007034,
-                "width": 36.71875,
-                "transition": "popcorn-slide-up",
-                "fontFamily": "PT Sans",
-                "fontSize": "12",
-                "fontColor": "#c6682b"
-              },
-              "type": "popup",
-              "id": "TrackEvent4"
-            },
-            {
-              "name": "TrackEvent42",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 1000,
-                "transition": "popcorn-fade",
-                "left": 0,
-                "top": 0,
-                "height": 100,
-                "width": 100,
-                "start": 119.97171,
-                "end": 126.73554,
-                "target": "video-container",
-                "src": "http://i.imgur.com/s4jqg.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent5"
-            },
-            {
-              "name": "TrackEvent33",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 1000,
-                "fontDecorations": {
-                  "underline": false,
-                  "italics": false,
-                  "bold": false
-                },
-                "fontColor": "#0070a6",
-                "sound": "",
-                "triangle": "bottom left",
-                "type": "popup",
-                "linkUrl": "http://www.youtube.com/watch?feature=player_embedded&v=7rWtDMPaRD8",
-                "text": "WATCH: One teenager's story of being stopped and frisked",
-                "target": "video-container",
-                "end": 154.3269,
-                "start": 145.43639,
-                "icon": "tv",
-                "flip": "",
-                "top": 87.39405508912749,
-                "left": 2.6963657678780772,
-                "width": 97.34375,
-                "transition": "popcorn-pop",
-                "fontFamily": "PT Sans",
-                "fontSize": "16"
-              },
-              "type": "popup",
-              "id": "TrackEvent6"
-            },
-            {
-              "name": "TrackEvent53",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 1000,
-                "fontDecorations": {
-                  "underline": false,
-                  "italics": false,
-                  "bold": false
-                },
-                "fontColor": "#ff0000",
-                "sound": "",
-                "triangle": "bottom left",
-                "type": "thought",
-                "linkUrl": "",
-                "text": "What are relations like between teenagers and police where you live?",
-                "target": "video-container",
-                "end": 167.17974,
-                "start": 162.48314,
-                "icon": "info",
-                "flip": "",
-                "top": 53.56398635651784,
-                "left": 3.1652989449003512,
-                "width": 36.928487690504106,
-                "transition": "popcorn-pop",
-                "fontFamily": "PT Sans",
-                "fontSize": "18"
-              },
-              "type": "popup",
-              "id": "TrackEvent7"
-            },
-            {
-              "name": "TrackEvent54",
-              "track": "Layer",
-              "popcornOptions": {
-                "linkUrl": "",
-                "zindex": 1000,
-                "fontDecorations": {
-                  "underline": false,
-                  "italics": false,
-                  "bold": false
-                },
-                "icon": "error",
-                "sound": "",
-                "triangle": "top left",
-                "type": "speech",
-                "text": "And cause my pants sag \n",
-                "target": "video-container",
-                "end": 43.38608,
-                "start": 37.88502,
-                "flip": "",
-                "top": 8.055555555555555,
-                "left": 20.625,
-                "width": 24.375,
-                "transition": "popcorn-slide-down",
-                "fontFamily": "PT Sans",
-                "fontSize": "12",
-                "fontColor": "#ff0000"
-              },
-              "type": "popup",
-              "id": "TrackEvent8"
-            },
-            {
-              "name": "TrackEvent56",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 1000,
-                "transition": "popcorn-fade",
-                "left": 4.0625,
-                "top": 0,
-                "height": 99.16666666666667,
-                "width": 96.09375,
-                "start": 69.58736,
-                "end": 72.60591,
-                "target": "video-container",
-                "src": "http://gothamist.com/assets_c/2012/07/072512owsmain-thumb-640xauto-730062.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent9"
-            }
-          ],
-          "id": "0",
-          "name": "Layer"
-        },
-        {
-          "trackEvents": [
-            {
-              "name": "TrackEvent20",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 999,
-                "transition": "popcorn-fade",
-                "left": 10,
-                "top": 10,
-                "height": 80,
-                "start": 34.94855,
-                "end": 37.70381,
-                "target": "video-container",
-                "src": "http://sfbayview.com/wp-content/uploads/2011/08/Driving-while-black.jpg",
-                "tags": "",
-                "photosetId": "",
-                "count": "",
-                "width": 80
-              },
-              "type": "image",
-              "id": "TrackEvent10"
-            },
-            {
-              "name": "TrackEvent31",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 999,
-                "transition": "popcorn-fade",
-                "left": 60.375146541617816,
-                "top": 35.43143384408405,
-                "height": 63.359734834168954,
-                "start": 19.59924,
-                "end": 21.8124,
-                "target": "video-container",
-                "src": "http://gspp.berkeley.edu/news-events/eDigests/june2012_files/image018.jpg",
-                "tags": "",
-                "photosetId": "",
-                "count": "",
-                "width": 39.624853458382184
-              },
-              "type": "image",
-              "id": "TrackEvent11"
-            },
-            {
-              "name": "TrackEvent3",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 999,
-                "pitch": 1,
-                "heading": 0,
-                "fullscreen": "",
-                "location": "",
-                "type": "ROADMAP",
-                "target": "video-container",
-                "end": 5.90743,
-                "start": 0.17861,
-                "zoom": 16,
-                "transition": "popcorn-fade",
-                "left": 69.86908996510478,
-                "top": 56.690289062151166,
-                "width": 30.246189917936693,
-                "height": 43.309710937848834,
-                "lat": 40.85780670395874,
-                "lng": -73.88402625674439
-              },
-              "type": "googlemap",
-              "id": "TrackEvent12"
-            },
-            {
-              "name": "TrackEvent47",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 999,
-                "fontDecorations": {
-                  "underline": false,
-                  "italics": false,
-                  "bold": false
-                },
-                "fontColor": "#ff0000",
-                "sound": "",
-                "triangle": "top right",
-                "type": "speech",
-                "linkUrl": "",
-                "text": "I got a hat on",
-                "target": "video-container",
-                "end": 43.43171,
-                "start": 39.26424,
-                "icon": "error",
-                "flip": "",
-                "top": 33.33333333333333,
-                "left": 21.09375,
-                "width": 19.53125,
-                "transition": "popcorn-pop",
-                "fontFamily": "PT Sans",
-                "fontSize": "12"
-              },
-              "type": "popup",
-              "id": "TrackEvent13"
-            },
-            {
-              "name": "TrackEvent33",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 999,
-                "transition": "popcorn-fade",
-                "left": 0,
-                "top": 0,
-                "height": 100,
-                "width": 100,
-                "start": 72.77849,
-                "end": 77.41169,
-                "target": "video-container",
-                "src": "http://i.imgur.com/iwveM.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent14"
-            },
-            {
-              "name": "TrackEvent65",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 999,
-                "transition": "popcorn-fade",
-                "left": 0,
-                "top": 0,
-                "height": 100,
-                "width": 100,
-                "start": 98.67175,
-                "end": 108.16549,
-                "target": "video-container",
-                "src": "/templates/assets/images/stopsmap.gif",
-                "linkSrc": "",
-                "tags": "Mozilla",
-                "photosetId": "http://www.flickr.com/photos/etherworks/sets/72157630563520740/",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent15"
-            },
-            {
-              "name": "TrackEvent57",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 999,
-                "transition": "popcorn-fade",
-                "left": 63.65767878077374,
-                "top": 43.3513975181156,
-                "height": 58.94122446601552,
-                "width": 37.63188745603752,
-                "start": 82.01525,
-                "end": 84.3243,
-                "target": "video-container",
-                "src": "http://disinfo.s3.amazonaws.com/wp-content/uploads/2012/03/Magnum.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent16"
-            },
-            {
-              "name": "TrackEvent41",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 999,
-                "transition": "popcorn-fade",
-                "left": 10,
-                "top": 10,
-                "height": 80,
-                "width": 80,
-                "start": 126.96835,
-                "end": 132.56445,
-                "target": "video-container",
-                "src": "http://i.imgur.com/hHTtv.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent17"
-            },
-            {
-              "name": "TrackEvent43",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 999,
-                "transition": "popcorn-fade",
-                "left": 10,
-                "top": 10,
-                "height": 80,
-                "width": 80,
-                "start": 144.62163,
-                "end": 154.22575,
-                "target": "video-container",
-                "src": "http://i.imgur.com/9I87T.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent18"
-            },
-            {
-              "name": "TrackEvent54",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 999,
-                "fontDecorations": {
-                  "underline": false,
-                  "italics": false,
-                  "bold": true
-                },
-                "fontColor": "#ff0000",
-                "sound": "",
-                "triangle": "bottom left",
-                "type": "popup",
-                "linkUrl": "",
-                "text": "Tell Your Story Here!",
-                "target": "video-container",
-                "end": 167.19875,
-                "start": 164.23021,
-                "icon": "error",
-                "flip": "",
-                "top": 82.11407824635994,
-                "left": 15.42790223956807,
-                "width": 30,
-                "transition": "popcorn-pop",
-                "fontFamily": "PT Sans",
-                "fontSize": "18"
-              },
-              "type": "popup",
-              "id": "TrackEvent19"
-            },
-            {
-              "name": "TrackEvent63",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 999,
-                "transition": "popcorn-fade",
-                "left": 10,
-                "top": 10,
-                "height": 80,
-                "width": 80,
-                "start": 13.38598,
-                "end": 17.97366,
-                "target": "video-container",
-                "src": "/templates/assets/images/stoppercent.gif",
-                "linkSrc": "",
-                "tags": "Mozilla",
-                "photosetId": "http://www.flickr.com/photos/etherworks/sets/72157630563520740/",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent20"
-            },
-            {
-              "name": "TrackEvent51",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 999,
-                "transition": "popcorn-fade",
-                "left": 31.18405627198124,
-                "top": 26.886203268446696,
-                "height": 74.19758421369785,
-                "width": 67.5263774912075,
-                "start": 23.95447,
-                "end": 29.63495,
-                "target": "video-container",
-                "src": "http://www.rawstory.com/rs/wp-content/uploads/2012/03/NYPD-via-AFP.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent21"
-            },
-            {
-              "name": "TrackEvent55",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 999,
-                "transition": "popcorn-fade",
-                "left": 27.500000000000004,
-                "top": 0.2777777777777778,
-                "height": 88.88888888888889,
-                "width": 73.75,
-                "start": 67.57042,
-                "end": 69.03504,
-                "target": "video-container",
-                "src": "http://gothamist.com/assets_c/2012/07/072512owsmain-thumb-640xauto-730062.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent22"
-            }
-          ],
-          "id": "1",
-          "name": "Layer"
-        },
-        {
-          "trackEvents": [
-            {
-              "name": "TrackEvent29",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 998,
-                "transition": "popcorn-fade",
-                "left": 31.21726962913522,
-                "top": 0,
-                "height": 51.27136437238672,
-                "start": 19.09226,
-                "end": 21.82487,
-                "target": "video-container",
-                "src": "http://rt.com/files/usa/news/beat-tourettes-amusement-device-614/hold-batons-officers-police.n.jpg",
-                "tags": "",
-                "photosetId": "",
-                "count": "",
-                "width": 43.61078546307151
-              },
-              "type": "image",
-              "id": "TrackEvent23"
-            },
-            {
-              "name": "TrackEvent53",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 998,
-                "transition": "popcorn-fade",
-                "left": 23.477920585891706,
-                "top": 57.305127958211145,
-                "height": 35.01459030309337,
-                "start": 9.86666,
-                "end": 13.65069,
-                "target": "video-container",
-                "src": "http://www.bbc.co.uk/blogs/monthwithoutplastic/toilet_sign203.jpg",
-                "tags": "",
-                "photosetId": "",
-                "count": "",
-                "width": 25
-              },
-              "type": "image",
-              "id": "TrackEvent24"
-            },
-            {
-              "name": "TrackEvent4",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 998,
-                "pitch": 1,
-                "heading": 0,
-                "fullscreen": "",
-                "location": "",
-                "type": "ROADMAP",
-                "target": "video-container",
-                "end": 5.876,
-                "start": 0.37707,
-                "zoom": 16,
-                "transition": "popcorn-fade",
-                "left": 69.71278129121484,
-                "top": 0,
-                "width": 30.363423212192263,
-                "height": 56.273448701400056,
-                "lat": 40.84587716980881,
-                "lng": -73.86527225131226
-              },
-              "type": "googlemap",
-              "id": "TrackEvent25"
-            },
-            {
-              "name": "TrackEvent47",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 998,
-                "transition": "popcorn-fade",
-                "left": 0,
-                "top": 0,
-                "height": 100,
-                "width": 100,
-                "start": 52.16138,
-                "end": 57.16138,
-                "target": "video-container",
-                "src": "http://thinkprogress.org/wp-content/uploads/2012/08/nypd-stop-and-frisk.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent26"
-            },
-            {
-              "name": "TrackEvent48",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 998,
-                "transition": "popcorn-fade",
-                "left": 0,
-                "top": 0,
-                "height": 52.5,
-                "width": 42.1875,
-                "start": 59.46162,
-                "end": 65.2427,
-                "target": "video-container",
-                "src": "http://i.imgur.com/d4hrY.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent27"
-            },
-            {
-              "name": "TrackEvent45",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 998,
-                "transition": "popcorn-fade",
-                "left": 36.811254396248536,
-                "top": 45.85243968262227,
-                "height": 54.14756031737773,
-                "width": 27.549824150058615,
-                "start": 81.06382,
-                "end": 83.90573,
-                "target": "video-container",
-                "src": "https://electedface.com/images/Artical_Images/6%20stop%20and%20frisk.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent28"
-            },
-            {
-              "name": "TrackEvent55",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 998,
-                "transition": "popcorn-fade",
-                "left": 3.751465416178194,
-                "top": 0,
-                "height": 100,
-                "width": 96.01406799531067,
-                "start": 132.58174,
-                "end": 144.70956,
-                "target": "video-container",
-                "src": "http://media.wnyc.org/media/photologue/photos/cache/Ephraigm_Kelly_max_enlarge.JPG",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent29"
-            },
-            {
-              "name": "TrackEvent58",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 998,
-                "transition": "popcorn-fade",
-                "left": 0,
-                "top": 0,
-                "height": 100,
-                "width": 100,
-                "start": 160.56343,
-                "end": 167.199,
-                "target": "video-container",
-                "src": "/templates/assets/images/graffiti.jpg",
-                "linkSrc": "",
-                "tags": "Mozilla",
-                "photosetId": "http://www.flickr.com/photos/etherworks/sets/72157630563520740/",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent30"
-            }
-          ],
-          "id": "2",
-          "name": "Layer"
-        },
-        {
-          "trackEvents": [
-            {
-              "name": "TrackEvent21",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 997,
-                "transition": "popcorn-fade",
-                "left": 20.046893317702228,
-                "top": 11.664581277573474,
-                "height": 80,
-                "start": 22.08904,
-                "end": 23.68507,
-                "target": "video-container",
-                "src": "http://images02.olx.com/ui/10/73/70/f_246647370-3566339749.jpeg",
-                "tags": "",
-                "photosetId": "",
-                "count": "",
-                "width": 80
-              },
-              "type": "image",
-              "id": "TrackEvent31"
-            },
-            {
-              "name": "TrackEvent54",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 997,
-                "transition": "popcorn-fade",
-                "left": 55.68581298255697,
-                "top": 57.51007531697766,
-                "height": 35.84827102459559,
-                "start": 9.89808,
-                "end": 13.65069,
-                "target": "video-container",
-                "src": "http://www.bbc.co.uk/blogs/monthwithoutplastic/toilet_sign203.jpg",
-                "tags": "",
-                "photosetId": "",
-                "count": "",
-                "width": 25
-              },
-              "type": "image",
-              "id": "TrackEvent32"
-            },
-            {
-              "name": "TrackEvent34",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 997,
-                "fontDecorations": {
-                  "underline": false,
-                  "italics": false,
-                  "bold": true
-                },
-                "fontColor": "#00ff00",
-                "sound": "",
-                "triangle": "top left",
-                "type": "speech",
-                "linkUrl": "",
-                "text": "Of course!",
-                "target": "video-container",
-                "end": 50.27854,
-                "start": 46.65284,
-                "icon": "broken heart",
-                "flip": true,
-                "top": 38.557733369477816,
-                "left": 80.06838656533924,
-                "width": 17.35052754982415,
-                "transition": "popcorn-pop",
-                "fontFamily": "PT Sans",
-                "fontSize": "18"
-              },
-              "type": "popup",
-              "id": "TrackEvent33"
-            },
-            {
-              "name": "TrackEvent48",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 997,
-                "fontDecorations": {
-                  "underline": false,
-                  "italics": false,
-                  "bold": false
-                },
-                "fontColor": "#ff0000",
-                "sound": "",
-                "triangle": "top left",
-                "type": "speech",
-                "linkUrl": "",
-                "text": "I got braids",
-                "target": "video-container",
-                "end": 43.30004,
-                "start": 40.21611,
-                "icon": "error",
-                "flip": true,
-                "top": 58.611111111111114,
-                "left": 26.875,
-                "width": 17.65625,
-                "transition": "popcorn-pop",
-                "fontFamily": "PT Sans",
-                "fontSize": 12
-              },
-              "type": "popup",
-              "id": "TrackEvent34"
-            },
-            {
-              "name": "TrackEvent52",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 997,
-                "transition": "popcorn-fade",
-                "left": 0,
-                "top": 46.06085986299782,
-                "height": 56.690289062151166,
-                "width": 39.273153575615474,
-                "start": 80.31887,
-                "end": 83.58412,
-                "target": "video-container",
-                "src": "http://gothamist.com/attachments/nyc_arts_john/053012cuffs.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent35"
-            },
-            {
-              "name": "TrackEvent60",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 997,
-                "transition": "popcorn-fade",
-                "left": 0,
-                "top": 0,
-                "height": 100,
-                "width": 100,
-                "start": 154.32797,
-                "end": 160.65074,
-                "target": "video-container",
-                "src": "/templates/assets/images/stopandfrisk.gif",
-                "linkSrc": "",
-                "tags": "Mozilla",
-                "photosetId": "http://www.flickr.com/photos/etherworks/sets/72157630563520740/",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent36"
-            },
-            {
-              "name": "TrackEvent12",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 997,
-                "pitch": 1,
-                "heading": 0,
-                "fullscreen": "",
-                "location": "Bronx, New York, NY",
-                "type": "ROADMAP",
-                "target": "video-container",
-                "end": 5.83092,
-                "start": 0.73429,
-                "zoom": 15,
-                "transition": "popcorn-fade",
-                "left": 0,
-                "top": 0,
-                "width": 34.11488862837045,
-                "height": 55.43976797989784,
-                "lat": 0,
-                "lng": 0
-              },
-              "type": "googlemap",
-              "id": "TrackEvent37"
-            },
-            {
-              "name": "TrackEvent46",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 997,
-                "transition": "popcorn-fade",
-                "left": 40,
-                "top": 0.8333333333333334,
-                "height": 85.55555555555556,
-                "width": 60.46875000000001,
-                "start": 57.18296,
-                "end": 65.22852,
-                "target": "video-container",
-                "src": "http://revolutionaryfrontlines.files.wordpress.com/2012/05/stopfrisk.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent38"
-            },
-            {
-              "name": "TrackEvent54",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 997,
-                "transition": "popcorn-fade",
-                "left": 21.25,
-                "top": 10,
-                "height": 75,
-                "width": 49.21875,
-                "start": 66.46161,
-                "end": 68.85501,
-                "target": "video-container",
-                "src": "http://gothamist.com/assets_c/2012/07/072512owsmain-thumb-640xauto-730062.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent39"
-            }
-          ],
-          "id": "3",
-          "name": "Layer"
-        },
-        {
-          "trackEvents": [
-            {
-              "name": "TrackEvent9",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 996,
-                "pitch": 1,
-                "heading": 0,
-                "fullscreen": "",
-                "location": "",
-                "type": "ROADMAP",
-                "target": "video-container",
-                "end": 5.84458,
-                "start": 1.1312,
-                "zoom": 16,
-                "transition": "popcorn-fade",
-                "left": 0,
-                "top": 56.273448701400056,
-                "width": 34.11488862837045,
-                "height": 43.726551298599944,
-                "lat": 40.85425241435317,
-                "lng": -73.86065885180665
-              },
-              "type": "googlemap",
-              "id": "TrackEvent40"
-            },
-            {
-              "name": "TrackEvent72",
-              "track": "Layer",
-              "popcornOptions": {
-                "linkUrl": "",
-                "zindex": 996,
-                "fontDecorations": {
-                  "underline": false,
-                  "italics": false,
-                  "bold": true
-                },
-                "icon": "broken heart",
-                "sound": "",
-                "triangle": "top left",
-                "type": "speech",
-                "text": "Plenty of times.",
-                "target": "video-container",
-                "end": 50.29891,
-                "start": 47.40837,
-                "flip": "",
-                "top": 65.23551645754895,
-                "left": 73.03634232121922,
-                "width": 24.970691676436108,
-                "transition": "popcorn-fade",
-                "fontFamily": "PT Sans",
-                "fontSize": "18",
-                "fontColor": "#00ff00"
-              },
-              "type": "popup",
-              "id": "TrackEvent41"
-            },
-            {
-              "name": "TrackEvent51",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 996,
-                "transition": "popcorn-fade",
-                "left": 51.40625,
-                "top": 0,
-                "height": 52.77777777777778,
-                "width": 49.84375,
-                "start": 78.74243,
-                "end": 83.78816,
-                "target": "video-container",
-                "src": "http://www.crownheights.info/media/30/20110412-nypd_tickets.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent43"
-            },
-            {
-              "name": "TrackEvent50",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 996,
-                "transition": "popcorn-fade",
-                "left": 1.5625,
-                "top": 42.22222222222222,
-                "height": 56.94444444444444,
-                "width": 39.21875,
-                "start": 62.06447,
-                "end": 68.6374,
-                "target": "video-container",
-                "src": "http://gothamist.com/assets_c/2012/07/072512owsmain-thumb-640xauto-730062.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent44"
-            }
-          ],
-          "id": "4",
-          "name": "Layer"
-        },
-        {
-          "trackEvents": [
-            {
-              "name": "TrackEvent16",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 995,
-                "transition": "popcorn-fade",
-                "left": 6.096131301289566,
-                "top": 4.585243968262227,
-                "height": 48.14506166675338,
-                "start": 5.3104,
-                "end": 13.44228,
-                "target": "video-container",
-                "src": "http://conorbyrne.files.wordpress.com/2008/12/20people.jpg",
-                "tags": "",
-                "photosetId": "",
-                "count": "",
-                "width": 85.69753810082064
-              },
-              "type": "image",
-              "id": "TrackEvent45"
-            },
-            {
-              "name": "TrackEvent51",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 995,
-                "transition": "popcorn-fade",
-                "left": 0,
-                "top": 0,
-                "height": 68.61111111111111,
-                "width": 57.49999999999999,
-                "start": 76.61663,
-                "end": 83.35462,
-                "target": "video-container",
-                "src": "http://slowfacts.files.wordpress.com/2012/03/knock.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent46"
-            },
-            {
-              "name": "TrackEvent26",
-              "track": "Layer",
-              "popcornOptions": {
-                "linkSrc": "",
-                "zindex": 995,
-                "transition": "popcorn-fade",
-                "left": 4.138332067312976,
-                "top": 10.414060195320138,
-                "height": 51.06294419201116,
-                "start": 18.15201,
-                "end": 29.59475,
-                "target": "video-container",
-                "src": "http://images.babytidings.com/images/11/1178835988930_76/img_1178835988930_761.jpg ",
-                "tags": "",
-                "photosetId": "",
-                "count": "",
-                "width": 26.963657678780773
-              },
-              "type": "image",
-              "id": "TrackEvent47"
-            }
-          ],
-          "id": "5",
-          "name": "Layer"
-        },
-        {
-          "trackEvents": [
-            {
-              "name": "TrackEvent64",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 994,
-                "transition": "popcorn-fade",
-                "left": 0,
-                "top": 0,
-                "height": 100,
-                "width": 100,
-                "start": 43.21252,
-                "end": 51.63421,
-                "target": "video-container",
-                "src": "/templates/assets/images/arrest.gif",
-                "linkSrc": "",
-                "tags": "Mozilla",
-                "photosetId": "http://www.flickr.com/photos/etherworks/sets/72157630563520740/",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent48"
-            }
-          ],
-          "id": "6",
-          "name": "Layer"
-        },
-        {
-          "trackEvents": [
-            {
-              "name": "TrackEvent52",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 993,
-                "transition": "popcorn-fade",
-                "left": 0,
-                "top": 0,
-                "height": 100,
-                "width": 97.88980070339977,
-                "start": 84.78275,
-                "end": 92.94894,
-                "target": "video-container",
-                "src": "http://media.wnyc.org/media/photologue/images/12/cache/Temi_Kelly_storyslide_image.JPG",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent49"
-            }
-          ],
-          "id": "7",
-          "name": "Layer"
-        },
-        {
-          "trackEvents": [
-            {
-              "name": "TrackEvent50",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 992,
-                "transition": "popcorn-fade",
-                "left": 0,
-                "top": 0,
-                "height": 100,
-                "width": 100,
-                "start": 92.01208,
-                "end": 100.77901,
-                "target": "video-container",
-                "src": "http://i.imgur.com/AgUt4.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent50"
-            }
-          ],
-          "id": "8",
-          "name": "Layer"
-        },
-        {
-          "trackEvents": [
-            {
-              "name": "TrackEvent38",
-              "track": "Layer",
-              "popcornOptions": {
-                "zindex": 991,
-                "transition": "popcorn-fade",
-                "left": 8.792497069167643,
-                "top": 1.8757816233800018,
-                "height": 82.9512317894712,
-                "width": 82.063305978898,
-                "start": 108.52331,
-                "end": 119.73851,
-                "target": "video-container",
-                "src": "http://i.imgur.com/z9tQR.jpg",
-                "linkSrc": "",
-                "tags": "",
-                "photosetId": "",
-                "count": 3
-              },
-              "type": "image",
-              "id": "TrackEvent51"
-            }
-          ],
-          "id": "9",
-          "name": "Layer"
+            "id": "Target0",
+            "name": "video-container",
+            "element": "video-container"
         }
-      ],
-      "controls": false,
-      "duration": -1,
-      "target": "video",
-      "url": [
-        "http://soundcloud.com/wnyc-radio-rookies/radio-rookies-stop-and-frisk?butteruid=1350674318058"
-      ],
-      "name": "Media0",
-      "id": "Media0"
-    }
-  ],
-  "targets": [
-    {
-      "element": "video-container",
-      "name": "video-container",
-      "id": "Target0"
-    }
-  ]
+    ],
+    "media": [
+        {
+            "id": "Media0",
+            "name": "Media0",
+            "url": [
+                "http://soundcloud.com/wnyc-radio-rookies/radio-rookies-stop-and-frisk"
+            ],
+            "target": "video",
+            "duration": 167.199,
+            "controls": false,
+            "tracks": [
+                {
+                    "name": "Layer 0",
+                    "id": "0",
+                    "trackEvents": [
+                        {
+                            "id": "TrackEvent0",
+                            "type": "image",
+                            "popcornOptions": {
+                                "linkSrc": "",
+                                "zindex": 1000,
+                                "transition": "popcorn-fade",
+                                "left": 23.712385385564737,
+                                "top": 61.06016402658019,
+                                "height": 37.47394588733327,
+                                "start": 20.21633,
+                                "end": 21.83364,
+                                "target": "video-container",
+                                "src": "http://atlantablackstar.com/wp-content/uploads/2012/06/racial-profiling.jpg",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": "",
+                                "width": 51.69988276670574
+                            },
+                            "track": "0",
+                            "name": "TrackEvent49"
+                        },
+                        {
+                            "id": "TrackEvent1",
+                            "type": "googlemap",
+                            "popcornOptions": {
+                                "zindex": 1000,
+                                "pitch": 11.125000000000004,
+                                "heading": -132.47954475121762,
+                                "fullscreen": "",
+                                "location": "",
+                                "type": "STREETVIEW",
+                                "target": "video-container",
+                                "end": 5.84361,
+                                "start": 0.0933,
+                                "zoom": 1,
+                                "transition": "popcorn-fade",
+                                "left": 34.30441960360493,
+                                "top": 0,
+                                "width": 35.16998827667057,
+                                "height": 100,
+                                "lat": 40.84541,
+                                "lng": -73.86520300000001
+                            },
+                            "track": "0",
+                            "name": "TrackEvent13"
+                        },
+                        {
+                            "id": "TrackEvent2",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "zindex": 1000,
+                                "fontDecorations": {
+                                    "underline": false,
+                                    "italics": false,
+                                    "bold": true
+                                },
+                                "fontColor": "#b000b0",
+                                "sound": false,
+                                "triangle": "bottom left",
+                                "type": "popup",
+                                "linkUrl": "http://www.thenation.com/article/170413/stopped-and-frisked-being-fking-mutt-video?_r=hpyr",
+                                "text": "Hear a recording of a stop-and-frisk in action",
+                                "target": "video-container",
+                                "end": 65.30527,
+                                "start": 54.44689,
+                                "icon": "audio",
+                                "flip": "",
+                                "top": 83.17460317460318,
+                                "left": 9.779761178152901,
+                                "width": 88.9672633579799,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "PT Sans",
+                                "fontSize": "18"
+                            },
+                            "track": "0",
+                            "name": "TrackEvent34"
+                        },
+                        {
+                            "id": "TrackEvent3",
+                            "type": "image",
+                            "popcornOptions": {
+                                "linkSrc": "",
+                                "zindex": 1000,
+                                "transition": "popcorn-fade",
+                                "left": 10,
+                                "top": 10,
+                                "height": 80,
+                                "start": 29.63857,
+                                "end": 34.63857,
+                                "target": "video-container",
+                                "src": "http://assets.nydailynews.com/polopoly_fs/1.1169405.1348760348!/img/httpImage/image.jpg_gen/derivatives/landscape_635/church28n-1-web.jpg",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": "",
+                                "width": 80
+                            },
+                            "track": "0",
+                            "name": "TrackEvent38"
+                        },
+                        {
+                            "id": "TrackEvent4",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "linkUrl": "http://www.nytimes.com/interactive/2012/08/16/nyregion/new-york-police-stop-and-frisk-use-of-force-map.html?ref=nyregion",
+                                "zindex": 1000,
+                                "fontDecorations": {
+                                    "underline": false,
+                                    "italics": false,
+                                    "bold": true
+                                },
+                                "icon": "star",
+                                "sound": "",
+                                "triangle": "bottom left",
+                                "type": "popup",
+                                "text": "See the NY Times investigation",
+                                "target": "video-container",
+                                "end": 110.68783,
+                                "start": 102.97621,
+                                "flip": "",
+                                "top": 81.69841463603672,
+                                "left": 62.05357142857143,
+                                "width": 36.71726771763393,
+                                "transition": "popcorn-slide-up",
+                                "fontFamily": "PT Sans",
+                                "fontSize": "12",
+                                "fontColor": "#c6682b"
+                            },
+                            "track": "0",
+                            "name": "TrackEvent60"
+                        },
+                        {
+                            "id": "TrackEvent5",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 1000,
+                                "transition": "popcorn-fade",
+                                "left": 0,
+                                "top": 0,
+                                "height": 100,
+                                "width": 100,
+                                "start": 119.97171,
+                                "end": 126.73554,
+                                "target": "video-container",
+                                "src": "http://i.imgur.com/s4jqg.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "0",
+                            "name": "TrackEvent42"
+                        },
+                        {
+                            "id": "TrackEvent6",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "zindex": 1000,
+                                "fontDecorations": {
+                                    "underline": false,
+                                    "italics": false,
+                                    "bold": false
+                                },
+                                "fontColor": "#0070a6",
+                                "sound": "",
+                                "triangle": "bottom left",
+                                "type": "popup",
+                                "linkUrl": "http://www.youtube.com/watch?feature=player_embedded&amp;v=7rWtDMPaRD8",
+                                "text": "WATCH: One teenager's story of being stopped and frisked",
+                                "target": "video-container",
+                                "end": 154.3269,
+                                "start": 145.43639,
+                                "icon": "tv",
+                                "flip": "",
+                                "top": 83.80952380952381,
+                                "left": 9.821428571428571,
+                                "width": 87.00297764369421,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "PT Sans",
+                                "fontSize": "16"
+                            },
+                            "track": "0",
+                            "name": "TrackEvent33"
+                        },
+                        {
+                            "id": "TrackEvent7",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "zindex": 1000,
+                                "fontDecorations": {
+                                    "underline": false,
+                                    "italics": false,
+                                    "bold": false
+                                },
+                                "fontColor": "#ff0000",
+                                "sound": "",
+                                "triangle": "bottom left",
+                                "type": "thought",
+                                "linkUrl": "",
+                                "text": "What are relations like between teenagers and police where you live?",
+                                "target": "video-container",
+                                "end": 167.17974,
+                                "start": 162.48314,
+                                "icon": "info",
+                                "flip": "",
+                                "top": 35.14815073164683,
+                                "left": 4.056547709873745,
+                                "width": 36.92559378487723,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "PT Sans",
+                                "fontSize": "18"
+                            },
+                            "track": "0",
+                            "name": "TrackEvent53"
+                        },
+                        {
+                            "id": "TrackEvent8",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "linkUrl": "",
+                                "zindex": 1000,
+                                "fontDecorations": {
+                                    "underline": false,
+                                    "italics": false,
+                                    "bold": false
+                                },
+                                "icon": "error",
+                                "sound": "",
+                                "triangle": "top left",
+                                "type": "speech",
+                                "text": "And cause my pants sag \n",
+                                "target": "video-container",
+                                "end": 43.38608,
+                                "start": 37.88502,
+                                "flip": "",
+                                "top": 8.055555555555555,
+                                "left": 20.625,
+                                "width": 24.375,
+                                "transition": "popcorn-slide-down",
+                                "fontFamily": "PT Sans",
+                                "fontSize": "12",
+                                "fontColor": "#ff0000"
+                            },
+                            "track": "0",
+                            "name": "TrackEvent54"
+                        },
+                        {
+                            "id": "TrackEvent9",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 1000,
+                                "transition": "popcorn-fade",
+                                "left": 4.0625,
+                                "top": 0,
+                                "height": 99.16666666666667,
+                                "width": 96.09375,
+                                "start": 69.58736,
+                                "end": 72.60591,
+                                "target": "video-container",
+                                "src": "http://gothamist.com/assets_c/2012/07/072512owsmain-thumb-640xauto-730062.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "0",
+                            "name": "TrackEvent56"
+                        }
+                    ]
+                },
+                {
+                    "name": "Layer 1",
+                    "id": "1",
+                    "trackEvents": [
+                        {
+                            "id": "TrackEvent10",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 999,
+                                "transition": "popcorn-fade",
+                                "left": 10,
+                                "top": 10,
+                                "height": 80,
+                                "start": 34.94855,
+                                "end": 37.70381,
+                                "target": "video-container",
+                                "src": "http://sfbayview.com/wp-content/uploads/2011/08/Driving-while-black.jpg",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": "",
+                                "width": 80
+                            },
+                            "track": "1",
+                            "name": "TrackEvent20"
+                        },
+                        {
+                            "id": "TrackEvent11",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 999,
+                                "transition": "popcorn-fade",
+                                "left": 60.375146541617816,
+                                "top": 35.43143384408405,
+                                "height": 63.359734834168954,
+                                "start": 19.59924,
+                                "end": 21.8124,
+                                "target": "video-container",
+                                "src": "http://gspp.berkeley.edu/news-events/eDigests/june2012_files/image018.jpg",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": "",
+                                "width": 39.624853458382184
+                            },
+                            "track": "1",
+                            "name": "TrackEvent31"
+                        },
+                        {
+                            "id": "TrackEvent12",
+                            "type": "googlemap",
+                            "popcornOptions": {
+                                "zindex": 999,
+                                "pitch": 1,
+                                "heading": 0,
+                                "fullscreen": "",
+                                "location": "",
+                                "type": "ROADMAP",
+                                "target": "video-container",
+                                "end": 5.90743,
+                                "start": 0.17861,
+                                "zoom": 16,
+                                "transition": "popcorn-fade",
+                                "left": 69.86908996510478,
+                                "top": 56.690289062151166,
+                                "width": 30.246189917936693,
+                                "height": 43.309710937848834,
+                                "lat": 40.85780670395874,
+                                "lng": -73.88402625674439
+                            },
+                            "track": "1",
+                            "name": "TrackEvent3"
+                        },
+                        {
+                            "id": "TrackEvent13",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "zindex": 999,
+                                "fontDecorations": {
+                                    "underline": false,
+                                    "italics": false,
+                                    "bold": false
+                                },
+                                "fontColor": "#ff0000",
+                                "sound": "",
+                                "triangle": "top right",
+                                "type": "speech",
+                                "linkUrl": "",
+                                "text": "I got a hat on",
+                                "target": "video-container",
+                                "end": 43.43171,
+                                "start": 39.26424,
+                                "icon": "error",
+                                "flip": "",
+                                "top": 33.33333333333333,
+                                "left": 21.09375,
+                                "width": 19.53125,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "PT Sans",
+                                "fontSize": "12"
+                            },
+                            "track": "1",
+                            "name": "TrackEvent47"
+                        },
+                        {
+                            "id": "TrackEvent14",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 999,
+                                "transition": "popcorn-fade",
+                                "left": 0,
+                                "top": 0,
+                                "height": 100,
+                                "width": 100,
+                                "start": 72.77849,
+                                "end": 77.41169,
+                                "target": "video-container",
+                                "src": "http://i.imgur.com/iwveM.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "1",
+                            "name": "TrackEvent33"
+                        },
+                        {
+                            "id": "TrackEvent15",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 999,
+                                "transition": "popcorn-fade",
+                                "left": 0,
+                                "top": 0,
+                                "height": 100,
+                                "width": 100,
+                                "start": 98.67175,
+                                "end": 108.16549,
+                                "target": "video-container",
+                                "src": "/templates/assets/images/stopsmap.gif",
+                                "linkSrc": "",
+                                "tags": "Mozilla",
+                                "photosetId": "http://www.flickr.com/photos/etherworks/sets/72157630563520740/",
+                                "count": 3
+                            },
+                            "track": "1",
+                            "name": "TrackEvent65"
+                        },
+                        {
+                            "id": "TrackEvent16",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 999,
+                                "transition": "popcorn-fade",
+                                "left": 63.65767878077374,
+                                "top": 43.3513975181156,
+                                "height": 58.94122446601552,
+                                "width": 37.63188745603752,
+                                "start": 82.01525,
+                                "end": 84.3243,
+                                "target": "video-container",
+                                "src": "http://disinfo.s3.amazonaws.com/wp-content/uploads/2012/03/Magnum.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "1",
+                            "name": "TrackEvent57"
+                        },
+                        {
+                            "id": "TrackEvent17",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 999,
+                                "transition": "popcorn-fade",
+                                "left": 10,
+                                "top": 10,
+                                "height": 80,
+                                "width": 80,
+                                "start": 126.96835,
+                                "end": 132.56445,
+                                "target": "video-container",
+                                "src": "http://i.imgur.com/hHTtv.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "1",
+                            "name": "TrackEvent41"
+                        },
+                        {
+                            "id": "TrackEvent18",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 999,
+                                "transition": "popcorn-fade",
+                                "left": 10,
+                                "top": 10,
+                                "height": 80,
+                                "width": 80,
+                                "start": 144.62163,
+                                "end": 154.22575,
+                                "target": "video-container",
+                                "src": "http://i.imgur.com/9I87T.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "1",
+                            "name": "TrackEvent43"
+                        },
+                        {
+                            "id": "TrackEvent19",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "zindex": 999,
+                                "fontDecorations": {
+                                    "underline": false,
+                                    "italics": false,
+                                    "bold": true
+                                },
+                                "fontColor": "#ff0000",
+                                "sound": "",
+                                "triangle": "bottom left",
+                                "type": "popup",
+                                "linkUrl": "",
+                                "text": "Tell Your Story Here!",
+                                "target": "video-container",
+                                "end": 167.19875,
+                                "start": 164.23021,
+                                "icon": "error",
+                                "flip": "",
+                                "top": 77.03174409412202,
+                                "left": 13.997023446219309,
+                                "width": 30,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "PT Sans",
+                                "fontSize": "18"
+                            },
+                            "track": "1",
+                            "name": "TrackEvent54"
+                        },
+                        {
+                            "id": "TrackEvent20",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 999,
+                                "transition": "popcorn-fade",
+                                "left": 10,
+                                "top": 10,
+                                "height": 80,
+                                "width": 80,
+                                "start": 13.38598,
+                                "end": 17.97366,
+                                "target": "video-container",
+                                "src": "/templates/assets/images/stoppercent.gif",
+                                "linkSrc": "",
+                                "tags": "Mozilla",
+                                "photosetId": "http://www.flickr.com/photos/etherworks/sets/72157630563520740/",
+                                "count": 3
+                            },
+                            "track": "1",
+                            "name": "TrackEvent63"
+                        },
+                        {
+                            "id": "TrackEvent21",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 999,
+                                "transition": "popcorn-fade",
+                                "left": 31.18405627198124,
+                                "top": 26.886203268446696,
+                                "height": 74.19758421369785,
+                                "width": 67.5263774912075,
+                                "start": 23.95447,
+                                "end": 29.63495,
+                                "target": "video-container",
+                                "src": "http://www.rawstory.com/rs/wp-content/uploads/2012/03/NYPD-via-AFP.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "1",
+                            "name": "TrackEvent51"
+                        },
+                        {
+                            "id": "TrackEvent22",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 999,
+                                "transition": "popcorn-fade",
+                                "left": 27.500000000000004,
+                                "top": 0.2777777777777778,
+                                "height": 88.88888888888889,
+                                "width": 73.75,
+                                "start": 67.57042,
+                                "end": 69.03504,
+                                "target": "video-container",
+                                "src": "http://gothamist.com/assets_c/2012/07/072512owsmain-thumb-640xauto-730062.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "1",
+                            "name": "TrackEvent55"
+                        }
+                    ]
+                },
+                {
+                    "name": "Layer 2",
+                    "id": "2",
+                    "trackEvents": [
+                        {
+                            "id": "TrackEvent23",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 998,
+                                "transition": "popcorn-fade",
+                                "left": 31.21726962913522,
+                                "top": 0,
+                                "height": 51.27136437238672,
+                                "start": 19.09226,
+                                "end": 21.82487,
+                                "target": "video-container",
+                                "src": "http://rt.com/files/usa/news/beat-tourettes-amusement-device-614/hold-batons-officers-police.n.jpg",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": "",
+                                "width": 43.61078546307151
+                            },
+                            "track": "2",
+                            "name": "TrackEvent29"
+                        },
+                        {
+                            "id": "TrackEvent24",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 998,
+                                "transition": "popcorn-fade",
+                                "left": 23.477920585891706,
+                                "top": 57.305127958211145,
+                                "height": 35.01459030309337,
+                                "start": 9.86666,
+                                "end": 13.65069,
+                                "target": "video-container",
+                                "src": "http://www.bbc.co.uk/blogs/monthwithoutplastic/toilet_sign203.jpg",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": "",
+                                "width": 25
+                            },
+                            "track": "2",
+                            "name": "TrackEvent53"
+                        },
+                        {
+                            "id": "TrackEvent25",
+                            "type": "googlemap",
+                            "popcornOptions": {
+                                "zindex": 998,
+                                "pitch": 1,
+                                "heading": 0,
+                                "fullscreen": "",
+                                "location": "",
+                                "type": "ROADMAP",
+                                "target": "video-container",
+                                "end": 5.876,
+                                "start": 0.37707,
+                                "zoom": 16,
+                                "transition": "popcorn-fade",
+                                "left": 69.71278129121484,
+                                "top": 0,
+                                "width": 30.363423212192263,
+                                "height": 56.273448701400056,
+                                "lat": 40.84587716980881,
+                                "lng": -73.86527225131226
+                            },
+                            "track": "2",
+                            "name": "TrackEvent4"
+                        },
+                        {
+                            "id": "TrackEvent26",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 998,
+                                "transition": "popcorn-fade",
+                                "left": 0,
+                                "top": 0,
+                                "height": 100,
+                                "width": 100,
+                                "start": 52.16138,
+                                "end": 57.16138,
+                                "target": "video-container",
+                                "src": "http://thinkprogress.org/wp-content/uploads/2012/08/nypd-stop-and-frisk.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "2",
+                            "name": "TrackEvent47"
+                        },
+                        {
+                            "id": "TrackEvent27",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 998,
+                                "transition": "popcorn-fade",
+                                "left": 0,
+                                "top": 0,
+                                "height": 52.5,
+                                "width": 42.1875,
+                                "start": 59.46162,
+                                "end": 65.2427,
+                                "target": "video-container",
+                                "src": "http://i.imgur.com/d4hrY.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "2",
+                            "name": "TrackEvent48"
+                        },
+                        {
+                            "id": "TrackEvent28",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 998,
+                                "transition": "popcorn-fade",
+                                "left": 36.811254396248536,
+                                "top": 45.85243968262227,
+                                "height": 54.14756031737773,
+                                "width": 27.549824150058615,
+                                "start": 81.06382,
+                                "end": 83.90573,
+                                "target": "video-container",
+                                "src": "https://electedface.com/images/Artical_Images/6%20stop%20and%20frisk.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "2",
+                            "name": "TrackEvent45"
+                        },
+                        {
+                            "id": "TrackEvent29",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 998,
+                                "transition": "popcorn-fade",
+                                "left": 3.751465416178194,
+                                "top": 0,
+                                "height": 100,
+                                "width": 96.01406799531067,
+                                "start": 132.58174,
+                                "end": 144.70956,
+                                "target": "video-container",
+                                "src": "http://media.wnyc.org/media/photologue/photos/cache/Ephraigm_Kelly_max_enlarge.JPG",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "2",
+                            "name": "TrackEvent55"
+                        },
+                        {
+                            "id": "TrackEvent30",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 998,
+                                "transition": "popcorn-fade",
+                                "left": 0,
+                                "top": 0,
+                                "height": 100,
+                                "width": 100,
+                                "start": 160.56343,
+                                "end": 167.199,
+                                "target": "video-container",
+                                "src": "/templates/assets/images/graffiti.jpg",
+                                "linkSrc": "",
+                                "tags": "Mozilla",
+                                "photosetId": "http://www.flickr.com/photos/etherworks/sets/72157630563520740/",
+                                "count": 3
+                            },
+                            "track": "2",
+                            "name": "TrackEvent58"
+                        }
+                    ]
+                },
+                {
+                    "name": "Layer 3",
+                    "id": "3",
+                    "trackEvents": [
+                        {
+                            "id": "TrackEvent31",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 997,
+                                "transition": "popcorn-fade",
+                                "left": 20.046893317702228,
+                                "top": 11.664581277573474,
+                                "height": 80,
+                                "start": 22.08904,
+                                "end": 23.68507,
+                                "target": "video-container",
+                                "src": "http://images02.olx.com/ui/10/73/70/f_246647370-3566339749.jpeg",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": "",
+                                "width": 80
+                            },
+                            "track": "3",
+                            "name": "TrackEvent21"
+                        },
+                        {
+                            "id": "TrackEvent32",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 997,
+                                "transition": "popcorn-fade",
+                                "left": 55.68581298255697,
+                                "top": 57.51007531697766,
+                                "height": 35.84827102459559,
+                                "start": 9.89808,
+                                "end": 13.65069,
+                                "target": "video-container",
+                                "src": "http://www.bbc.co.uk/blogs/monthwithoutplastic/toilet_sign203.jpg",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": "",
+                                "width": 25
+                            },
+                            "track": "3",
+                            "name": "TrackEvent54"
+                        },
+                        {
+                            "id": "TrackEvent33",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "zindex": 997,
+                                "fontDecorations": {
+                                    "underline": false,
+                                    "italics": false,
+                                    "bold": true
+                                },
+                                "fontColor": "#00ff00",
+                                "sound": "",
+                                "triangle": "top left",
+                                "type": "speech",
+                                "linkUrl": "",
+                                "text": "Of course!",
+                                "target": "video-container",
+                                "end": 50.27854,
+                                "start": 46.65284,
+                                "icon": "broken heart",
+                                "flip": true,
+                                "top": 38.557733369477816,
+                                "left": 80.06838656533924,
+                                "width": 17.35052754982415,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "PT Sans",
+                                "fontSize": "18"
+                            },
+                            "track": "3",
+                            "name": "TrackEvent34"
+                        },
+                        {
+                            "id": "TrackEvent34",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "zindex": 997,
+                                "fontDecorations": {
+                                    "underline": false,
+                                    "italics": false,
+                                    "bold": false
+                                },
+                                "fontColor": "#ff0000",
+                                "sound": "",
+                                "triangle": "top left",
+                                "type": "speech",
+                                "linkUrl": "",
+                                "text": "I got braids",
+                                "target": "video-container",
+                                "end": 43.30004,
+                                "start": 40.21611,
+                                "icon": "error",
+                                "flip": true,
+                                "top": 58.611111111111114,
+                                "left": 26.875,
+                                "width": 17.65625,
+                                "transition": "popcorn-pop",
+                                "fontFamily": "PT Sans",
+                                "fontSize": 12
+                            },
+                            "track": "3",
+                            "name": "TrackEvent48"
+                        },
+                        {
+                            "id": "TrackEvent35",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 997,
+                                "transition": "popcorn-fade",
+                                "left": 0,
+                                "top": 46.06085986299782,
+                                "height": 56.690289062151166,
+                                "width": 39.273153575615474,
+                                "start": 80.31887,
+                                "end": 83.58412,
+                                "target": "video-container",
+                                "src": "http://gothamist.com/attachments/nyc_arts_john/053012cuffs.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "3",
+                            "name": "TrackEvent52"
+                        },
+                        {
+                            "id": "TrackEvent36",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 997,
+                                "transition": "popcorn-fade",
+                                "left": 0,
+                                "top": 0,
+                                "height": 100,
+                                "width": 100,
+                                "start": 154.32797,
+                                "end": 160.65074,
+                                "target": "video-container",
+                                "src": "/templates/assets/images/stopandfrisk.gif",
+                                "linkSrc": "",
+                                "tags": "Mozilla",
+                                "photosetId": "http://www.flickr.com/photos/etherworks/sets/72157630563520740/",
+                                "count": 3
+                            },
+                            "track": "3",
+                            "name": "TrackEvent60"
+                        },
+                        {
+                            "id": "TrackEvent37",
+                            "type": "googlemap",
+                            "popcornOptions": {
+                                "zindex": 997,
+                                "pitch": 1,
+                                "heading": 0,
+                                "fullscreen": "",
+                                "location": "Bronx, New York, NY",
+                                "type": "ROADMAP",
+                                "target": "video-container",
+                                "end": 5.83092,
+                                "start": 0.73429,
+                                "zoom": 15,
+                                "transition": "popcorn-fade",
+                                "left": 0,
+                                "top": 0,
+                                "width": 34.11488862837045,
+                                "height": 55.43976797989784,
+                                "lat": 0,
+                                "lng": 0
+                            },
+                            "track": "3",
+                            "name": "TrackEvent12"
+                        },
+                        {
+                            "id": "TrackEvent38",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 997,
+                                "transition": "popcorn-fade",
+                                "left": 40,
+                                "top": 0.8333333333333334,
+                                "height": 85.55555555555556,
+                                "width": 60.46875000000001,
+                                "start": 57.18296,
+                                "end": 65.22852,
+                                "target": "video-container",
+                                "src": "http://revolutionaryfrontlines.files.wordpress.com/2012/05/stopfrisk.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "3",
+                            "name": "TrackEvent46"
+                        },
+                        {
+                            "id": "TrackEvent39",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 997,
+                                "transition": "popcorn-fade",
+                                "left": 21.25,
+                                "top": 10,
+                                "height": 75,
+                                "width": 49.21875,
+                                "start": 66.46161,
+                                "end": 68.85501,
+                                "target": "video-container",
+                                "src": "http://gothamist.com/assets_c/2012/07/072512owsmain-thumb-640xauto-730062.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "3",
+                            "name": "TrackEvent54"
+                        }
+                    ]
+                },
+                {
+                    "name": "Layer 4",
+                    "id": "4",
+                    "trackEvents": [
+                        {
+                            "id": "TrackEvent40",
+                            "type": "googlemap",
+                            "popcornOptions": {
+                                "zindex": 996,
+                                "pitch": 1,
+                                "heading": 0,
+                                "fullscreen": "",
+                                "location": "",
+                                "type": "ROADMAP",
+                                "target": "video-container",
+                                "end": 5.84458,
+                                "start": 1.1312,
+                                "zoom": 16,
+                                "transition": "popcorn-fade",
+                                "left": 0,
+                                "top": 56.273448701400056,
+                                "width": 34.11488862837045,
+                                "height": 43.726551298599944,
+                                "lat": 40.85425241435317,
+                                "lng": -73.86065885180665
+                            },
+                            "track": "4",
+                            "name": "TrackEvent9"
+                        },
+                        {
+                            "id": "TrackEvent41",
+                            "type": "popup",
+                            "popcornOptions": {
+                                "linkUrl": "",
+                                "zindex": 996,
+                                "fontDecorations": {
+                                    "underline": false,
+                                    "italics": false,
+                                    "bold": true
+                                },
+                                "icon": "broken heart",
+                                "sound": "",
+                                "triangle": "top left",
+                                "type": "speech",
+                                "text": "Plenty of times.",
+                                "target": "video-container",
+                                "end": 50.29891,
+                                "start": 47.40837,
+                                "flip": "",
+                                "top": 65.23551645754895,
+                                "left": 73.03634232121922,
+                                "width": 24.970691676436108,
+                                "transition": "popcorn-fade",
+                                "fontFamily": "PT Sans",
+                                "fontSize": "18",
+                                "fontColor": "#00ff00"
+                            },
+                            "track": "4",
+                            "name": "TrackEvent72"
+                        },
+                        {
+                            "id": "TrackEvent42",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 996,
+                                "transition": "popcorn-fade",
+                                "left": 51.40625,
+                                "top": 0,
+                                "height": 52.77777777777778,
+                                "width": 49.84375,
+                                "start": 78.74243,
+                                "end": 83.78816,
+                                "target": "video-container",
+                                "src": "http://www.crownheights.info/media/30/20110412-nypd_tickets.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "4",
+                            "name": "TrackEvent51"
+                        },
+                        {
+                            "id": "TrackEvent43",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 996,
+                                "transition": "popcorn-fade",
+                                "left": 1.5625,
+                                "top": 42.22222222222222,
+                                "height": 56.94444444444444,
+                                "width": 39.21875,
+                                "start": 62.06447,
+                                "end": 68.6374,
+                                "target": "video-container",
+                                "src": "http://gothamist.com/assets_c/2012/07/072512owsmain-thumb-640xauto-730062.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "4",
+                            "name": "TrackEvent50"
+                        }
+                    ]
+                },
+                {
+                    "name": "Layer 5",
+                    "id": "5",
+                    "trackEvents": [
+                        {
+                            "id": "TrackEvent44",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 995,
+                                "transition": "popcorn-fade",
+                                "left": 6.096131301289566,
+                                "top": 4.585243968262227,
+                                "height": 48.14506166675338,
+                                "start": 5.3104,
+                                "end": 13.44228,
+                                "target": "video-container",
+                                "src": "http://conorbyrne.files.wordpress.com/2008/12/20people.jpg",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": "",
+                                "width": 85.69753810082064
+                            },
+                            "track": "5",
+                            "name": "TrackEvent16"
+                        },
+                        {
+                            "id": "TrackEvent45",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 995,
+                                "transition": "popcorn-fade",
+                                "left": 0,
+                                "top": 0,
+                                "height": 68.61111111111111,
+                                "width": 57.49999999999999,
+                                "start": 76.61663,
+                                "end": 83.35462,
+                                "target": "video-container",
+                                "src": "http://slowfacts.files.wordpress.com/2012/03/knock.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "5",
+                            "name": "TrackEvent51"
+                        },
+                        {
+                            "id": "TrackEvent46",
+                            "type": "image",
+                            "popcornOptions": {
+                                "linkSrc": "",
+                                "zindex": 995,
+                                "transition": "popcorn-fade",
+                                "left": 4.138332067312976,
+                                "top": 10.414060195320138,
+                                "height": 51.06294419201116,
+                                "start": 18.15201,
+                                "end": 29.59475,
+                                "target": "video-container",
+                                "src": "http://images.babytidings.com/images/11/1178835988930_76/img_1178835988930_761.jpg ",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": "",
+                                "width": 26.963657678780773
+                            },
+                            "track": "5",
+                            "name": "TrackEvent26"
+                        }
+                    ]
+                },
+                {
+                    "name": "Layer 6",
+                    "id": "6",
+                    "trackEvents": [
+                        {
+                            "id": "TrackEvent47",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 994,
+                                "transition": "popcorn-fade",
+                                "left": 0,
+                                "top": 0,
+                                "height": 100,
+                                "width": 100,
+                                "start": 43.21252,
+                                "end": 51.63421,
+                                "target": "video-container",
+                                "src": "/templates/assets/images/arrest.gif",
+                                "linkSrc": "",
+                                "tags": "Mozilla",
+                                "photosetId": "http://www.flickr.com/photos/etherworks/sets/72157630563520740/",
+                                "count": 3
+                            },
+                            "track": "6",
+                            "name": "TrackEvent64"
+                        }
+                    ]
+                },
+                {
+                    "name": "Layer 7",
+                    "id": "7",
+                    "trackEvents": [
+                        {
+                            "id": "TrackEvent48",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 993,
+                                "transition": "popcorn-fade",
+                                "left": 0,
+                                "top": 0,
+                                "height": 100,
+                                "width": 97.88980070339977,
+                                "start": 84.78275,
+                                "end": 92.94894,
+                                "target": "video-container",
+                                "src": "http://media.wnyc.org/media/photologue/images/12/cache/Temi_Kelly_storyslide_image.JPG",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "7",
+                            "name": "TrackEvent52"
+                        }
+                    ]
+                },
+                {
+                    "name": "Layer 8",
+                    "id": "8",
+                    "trackEvents": [
+                        {
+                            "id": "TrackEvent49",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 992,
+                                "transition": "popcorn-fade",
+                                "left": 0,
+                                "top": 0,
+                                "height": 100,
+                                "width": 100,
+                                "start": 92.01208,
+                                "end": 100.77901,
+                                "target": "video-container",
+                                "src": "http://i.imgur.com/AgUt4.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "8",
+                            "name": "TrackEvent50"
+                        }
+                    ]
+                },
+                {
+                    "name": "Layer 9",
+                    "id": "9",
+                    "trackEvents": [
+                        {
+                            "id": "TrackEvent50",
+                            "type": "image",
+                            "popcornOptions": {
+                                "zindex": 991,
+                                "transition": "popcorn-fade",
+                                "left": 8.792497069167643,
+                                "top": 1.8757816233800018,
+                                "height": 82.9512317894712,
+                                "width": 82.063305978898,
+                                "start": 108.52331,
+                                "end": 119.73851,
+                                "target": "video-container",
+                                "src": "http://i.imgur.com/z9tQR.jpg",
+                                "linkSrc": "",
+                                "tags": "",
+                                "photosetId": "",
+                                "count": 3
+                            },
+                            "track": "9",
+                            "name": "TrackEvent38"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "name": "Radio Rookies Stop and Frisk CALL OUT",
+    "template": "basic"
 }

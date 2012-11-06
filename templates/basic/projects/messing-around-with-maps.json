@@ -11,14 +11,14 @@
             "id": "Media0",
             "name": "Media0",
             "url": [
-                "http://soundcloud.com/benmoskowitz/popcorn-maps-plugin?butteruid=1351848974759"
+                "http://soundcloud.com/benmoskowitz/popcorn-maps-plugin"
             ],
             "target": "video",
             "duration": 57.421,
             "controls": false,
             "tracks": [
                 {
-                    "name": "Layer",
+                    "name": "Layer 0",
                     "id": "0",
                     "trackEvents": [
                         {
@@ -43,7 +43,7 @@
                                 "lng": -79.27881418281247,
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent3"
                         },
                         {
@@ -68,7 +68,7 @@
                                 "lng": 0,
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent5"
                         },
                         {
@@ -93,7 +93,7 @@
                                 "lng": -73.98443700000001,
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent7"
                         },
                         {
@@ -118,7 +118,7 @@
                                 "lng": 0,
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent6"
                         },
                         {
@@ -143,7 +143,7 @@
                                 "lng": 0,
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent8"
                         },
                         {
@@ -151,7 +151,7 @@
                             "type": "googlemap",
                             "popcornOptions": {
                                 "start": 27.19092,
-                                "end": 38.2259080952381,
+                                "end": 38.22591,
                                 "target": "video-container",
                                 "type": "ROADMAP",
                                 "location": "New York City",
@@ -168,14 +168,14 @@
                                 "lng": 0,
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent11"
                         },
                         {
-                            "id": "TrackEvent7",
+                            "id": "TrackEvent6",
                             "type": "popup",
                             "popcornOptions": {
-                                "start": 41.949439999999996,
+                                "start": 41.94944,
                                 "end": 43.81069,
                                 "target": "video-container",
                                 "text": "Best cheesecake ever!",
@@ -199,15 +199,15 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent16"
                         },
                         {
-                            "id": "TrackEvent6",
+                            "id": "TrackEvent7",
                             "type": "googlemap",
                             "popcornOptions": {
-                                "start": 52.29087063598633,
-                                "end": 57.322579434632694,
+                                "start": 52.29087,
+                                "end": 57.32258,
                                 "target": "video-container",
                                 "type": "ROADMAP",
                                 "location": "",
@@ -224,13 +224,13 @@
                                 "lng": 0,
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent19"
                         }
                     ]
                 },
                 {
-                    "name": "Layer",
+                    "name": "Layer 1",
                     "id": "1",
                     "trackEvents": [
                         {
@@ -255,7 +255,7 @@
                                 "lng": 0,
                                 "zindex": 999
                             },
-                            "track": "Layer",
+                            "track": "1",
                             "name": "TrackEvent6"
                         },
                         {
@@ -280,7 +280,7 @@
                                 "lng": 0,
                                 "zindex": 999
                             },
-                            "track": "Layer",
+                            "track": "1",
                             "name": "TrackEvent4"
                         },
                         {
@@ -305,7 +305,7 @@
                                 "lng": -73.98443700000001,
                                 "zindex": 999
                             },
-                            "track": "Layer",
+                            "track": "1",
                             "name": "TrackEvent9"
                         },
                         {
@@ -330,15 +330,15 @@
                                 "lng": 0,
                                 "zindex": 999
                             },
-                            "track": "Layer",
+                            "track": "1",
                             "name": "TrackEvent7"
                         },
                         {
-                            "id": "TrackEvent13",
+                            "id": "TrackEvent12",
                             "type": "wikipedia",
                             "popcornOptions": {
                                 "start": 38.27209,
-                                "end": 52.33437571428571,
+                                "end": 52.33438,
                                 "target": "video-container",
                                 "lang": "en",
                                 "src": "Carnegie Deli",
@@ -349,15 +349,15 @@
                                 "transition": "popcorn-fade",
                                 "zindex": 999
                             },
-                            "track": "Layer",
+                            "track": "1",
                             "name": "TrackEvent13"
                         },
                         {
-                            "id": "TrackEvent12",
+                            "id": "TrackEvent13",
                             "type": "popup",
                             "popcornOptions": {
-                                "start": 32.50682886904762,
-                                "end": 38.121977678571426,
+                                "start": 32.50683,
+                                "end": 38.12198,
                                 "target": "video-container",
                                 "text": "Click here to see an example of a newscast!",
                                 "linkUrl": "",
@@ -366,8 +366,8 @@
                                 "sound": true,
                                 "icon": "info",
                                 "flip": "",
-                                "top": 85.83333333333333,
-                                "left": 17.1875,
+                                "top": 82.338624984499,
+                                "left": 16.830357142857146,
                                 "width": 52.5,
                                 "transition": "popcorn-pop",
                                 "fontFamily": "Open Sans",
@@ -380,15 +380,15 @@
                                 },
                                 "zindex": 999
                             },
-                            "track": "Layer",
+                            "track": "1",
                             "name": "TrackEvent10"
                         },
                         {
-                            "id": "TrackEvent20",
+                            "id": "TrackEvent14",
                             "type": "googlemap",
                             "popcornOptions": {
                                 "start": 0.01,
-                                "end": 8.984238095238096,
+                                "end": 8.98424,
                                 "target": "video-container",
                                 "type": "ROADMAP",
                                 "location": "",
@@ -405,21 +405,21 @@
                                 "lng": 0,
                                 "zindex": 999
                             },
-                            "track": "Layer",
+                            "track": "1",
                             "name": "TrackEvent20"
                         }
                     ]
                 },
                 {
-                    "name": "Layer",
+                    "name": "Layer 2",
                     "id": "2",
                     "trackEvents": [
                         {
-                            "id": "TrackEvent14",
+                            "id": "TrackEvent15",
                             "type": "image",
                             "popcornOptions": {
-                                "start": 27.265901861252114,
-                                "end": 38.203235194585446,
+                                "start": 27.2659,
+                                "end": 38.20324,
                                 "target": "video-container",
                                 "src": "http://popcorn.webmadecontent.org/images/project-assets/serious-newscaster.jpg",
                                 "linkSrc": "",
@@ -433,15 +433,15 @@
                                 "transition": "popcorn-none",
                                 "zindex": 998
                             },
-                            "track": "Layer",
+                            "track": "2",
                             "name": "TrackEvent9"
                         },
                         {
-                            "id": "TrackEvent15",
+                            "id": "TrackEvent16",
                             "type": "googlemap",
                             "popcornOptions": {
                                 "start": 45.37182,
-                                "end": 52.35413547619048,
+                                "end": 52.35414,
                                 "target": "video-container",
                                 "type": "STREETVIEW",
                                 "location": "",
@@ -458,11 +458,11 @@
                                 "lng": -73.98117500000001,
                                 "zindex": 998
                             },
-                            "track": "Layer",
+                            "track": "2",
                             "name": "TrackEvent17"
                         },
                         {
-                            "id": "TrackEvent16",
+                            "id": "TrackEvent17",
                             "type": "googlemap",
                             "popcornOptions": {
                                 "start": 44.37191,
@@ -483,14 +483,14 @@
                                 "lng": -73.98117500000001,
                                 "zindex": 998
                             },
-                            "track": "Layer",
+                            "track": "2",
                             "name": "TrackEvent18"
                         },
                         {
-                            "id": "TrackEvent17",
+                            "id": "TrackEvent18",
                             "type": "googlemap",
                             "popcornOptions": {
-                                "start": 40.372240000000005,
+                                "start": 40.37224,
                                 "end": 44.24626,
                                 "target": "video-container",
                                 "type": "ROADMAP",
@@ -508,14 +508,14 @@
                                 "lng": 0,
                                 "zindex": 998
                             },
-                            "track": "Layer",
+                            "track": "2",
                             "name": "TrackEvent15"
                         },
                         {
-                            "id": "TrackEvent18",
+                            "id": "TrackEvent19",
                             "type": "googlemap",
                             "popcornOptions": {
-                                "start": 39.375569999999996,
+                                "start": 39.37557,
                                 "end": 40.27193,
                                 "target": "video-container",
                                 "type": "ROADMAP",
@@ -533,11 +533,11 @@
                                 "lng": 0,
                                 "zindex": 998
                             },
-                            "track": "Layer",
+                            "track": "2",
                             "name": "TrackEvent14"
                         },
                         {
-                            "id": "TrackEvent19",
+                            "id": "TrackEvent20",
                             "type": "googlemap",
                             "popcornOptions": {
                                 "start": 38.27209,
@@ -558,7 +558,7 @@
                                 "lng": -79.42987619453122,
                                 "zindex": 998
                             },
-                            "track": "Layer",
+                            "track": "2",
                             "name": "TrackEvent12"
                         }
                     ]
@@ -566,6 +566,6 @@
             ]
         }
     ],
-    "name": "Remix of Messing with Maps in Popcorn",
+    "name": "Messing with Maps in Popcorn",
     "template": "basic"
 }
