@@ -34,7 +34,6 @@
   // butter.js references butter-src in a document.write string, so it will
   // not be found by the AST analysis done in the optimizer.
   include: [
-            'butter',
             'main'
            ],
 
