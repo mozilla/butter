@@ -36,9 +36,7 @@
 
     var __guid = 0;
 
-    var Butter = function() {
-      throw "Do not use Butter in this mannger. Call Butter.init instead.";
-    };
+    var Butter = {};
 
     Butter.ToolTip = ToolTip;
 
@@ -82,7 +80,7 @@
           _config,
           _defaultConfig,
           _defaultTarget,
-          _this = {},
+          _this = Object.create( Butter ),
           _selectedEvents = [],
           _sortedSelectedEvents = [],
           _defaultPopcornScripts = {},
@@ -865,6 +863,9 @@
 
       _this.page = _page;
 
+      // Attach the instance to Butter so we can debug
+      Butter.app = _this;
+
       return _this;
     };
 
@@ -874,16 +875,18 @@
     // of the version we ship. This happens in make.js's build target.
     Butter.version = "@VERSION@";
 
-    if ( window.Butter.__waiting ) {
-      for ( var i=0, l=window.Butter.__waiting.length; i<l; ++i ) {
-        Butter.app = Butter.init.apply( this, window.Butter.__waiting[ i ] );
+    // See if we have any waiting init calls that happened before we loaded require.
+    if ( window.Butter ) {
+      var args = window.Butter.__waiting;
+      delete window.Butter;
+      if ( args ) {
+        Butter.init.apply( this, args );
       }
-      delete Butter._waiting;
     }
+
     window.Butter = Butter;
 
     return Butter;
   });
 
 }());
-
