@@ -21,9 +21,13 @@ html
     title #{projectName} - Popcorn Maker
     link(rel='stylesheet', href='#{baseHref}/css/embed-shell.css')
   body
-    iframe(id='embed', src='#{embedSrc}', width='1280', height='745', mozallowfullscreen='mozallowfullscreen', webkitallowfullscreen='webkitallowfullscreen', allowfullscreen='allowfullscreen')
+    .preview-message This is a preview URL only. When sharing, please use the following URL: 
+        a(href='#{embedShellSrc}') #{embedShellSrc}
+    .iframe-container
+        iframe(id='embed', src='#{embedSrc}', width='1280', height='745', mozallowfullscreen='mozallowfullscreen', webkitallowfullscreen='webkitallowfullscreen', allowfullscreen='allowfullscreen')
     script
       if ( location.search && location.search.search(/(\?|&)preview=true(&|$)/) > -1 ) {
         var embed = document.querySelector('#embed');
         embed.src = embed.src + ( embed.src.indexOf( "?" ) === -1 ? "?" : "&" ) + "previewTime=" + Date.now();
+        document.body.className = "preview";
       }
