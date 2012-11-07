@@ -28,6 +28,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         _onPlayerTypeRequired = options.playerTypeRequired || function(){},
         _onTimeout = options.timeout || function(){},
         _popcorn,
+        _mediaReady = false,
         _mediaType,
         _butterEventMap = {},
         _interruptLoad = false,
@@ -126,6 +127,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
      */
     this.prepare = function( url, target, popcornOptions, callbacks, scripts ){
       var urlsFromString;
+
+      _mediaReady = false;
 
       // called when timeout occurs preparing popcorn
       function popcornTimeoutWrapper( e ) {
@@ -436,11 +439,11 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
      */
     function waitForMedia( readyCallback, timeoutCallback ){
       checkTimeoutLoop(function(){
-        return ( _popcorn && /* Make sure _popcorn still exists (e.g., destroy() hasn't been called) */
-                 ( _popcorn.media.readyState >= 1 &&
-                   _popcorn.duration() > 0
-                 )
-               );
+        // Make sure _popcorn still exists (e.g., destroy() hasn't been called),
+        // that we're ready, and that we have a duration.
+        _mediaReady = ( _popcorn && ( _popcorn.media.readyState >= 1 && _popcorn.duration() > 0 ) );
+
+        return _mediaReady;
       }, readyCallback, timeoutCallback, MEDIA_WAIT_DURATION );
     }
 
@@ -461,14 +464,14 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
 
     // Passthrough to the Popcorn instances play method
     this.play = function(){
-      if ( _popcorn.paused() ) {
+      if ( _popcorn.paused() && _mediaReady ) {
         _popcorn.play();
       }
     };
 
     // Passthrough to the Popcorn instances pause method
     this.pause = function(){
-      if ( !_popcorn.paused() ) {
+      if ( !_popcorn.paused() && _mediaReady ) {
         _popcorn.pause();
       }
     };
@@ -572,7 +575,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       currentTime: {
         enumerable: true,
         set: function( val ){
-          if( _popcorn ){
+          if( _popcorn && _mediaReady ){
             _popcorn.currentTime( val );
           } //if
         },
@@ -609,10 +612,10 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         set: function( val ){
           if( _popcorn ){
             if( val ){
-              _popcorn.pause();
+              _this.pause();
             }
             else {
-              _popcorn.play();
+              _this.play();
             } //if
           } //if
         }
