@@ -464,14 +464,14 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
 
     // Passthrough to the Popcorn instances play method
     this.play = function(){
-      if ( _popcorn.paused() && _mediaReady ) {
+      if ( _mediaReady && _popcorn.paused() ) {
         _popcorn.play();
       }
     };
 
     // Passthrough to the Popcorn instances pause method
     this.pause = function(){
-      if ( !_popcorn.paused() && _mediaReady ) {
+      if ( _mediaReady && !_popcorn.paused() ) {
         _popcorn.pause();
       }
     };
@@ -575,7 +575,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       currentTime: {
         enumerable: true,
         set: function( val ){
-          if( _popcorn && _mediaReady ){
+          if( _mediaReady && _popcorn ){
             _popcorn.currentTime( val );
           } //if
         },
