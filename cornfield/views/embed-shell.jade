@@ -29,5 +29,5 @@ html
       if ( location.search && location.search.search(/(\?|&)preview=true(&|$)/) > -1 ) {
         var embed = document.querySelector('#embed');
         embed.src = embed.src + ( embed.src.indexOf( "?" ) === -1 ? "?" : "&" ) + "previewTime=" + Date.now();
-        document.body.classList.add( "preview" );
+        document.body.className = "preview";
       }
