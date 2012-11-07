@@ -23,7 +23,14 @@ html
   body
     iframe(id='embed', src='#{embedSrc}', width='1280', height='745', mozallowfullscreen='mozallowfullscreen', webkitallowfullscreen='webkitallowfullscreen', allowfullscreen='allowfullscreen')
     script
-      if ( location.search && location.search.search(/(\?|&)preview=true(&|$)/) > -1 ) {
-        var embed = document.querySelector('#embed');
-        embed.src = embed.src + ( embed.src.indexOf( "?" ) === -1 ? "?" : "&" ) + "previewTime=" + Date.now();
-      }
+      var previewRegex = /(\?|&)preview=true(&|$)/,
+          query = location.search;
+      if ( query && query.search( previewRegex ) > -1 ) {
+        var embed = document.querySelector( '#embed' ),
+            warning = document.createElement( 'div' ),
+            url = embed.src.replace( previewRegex, '' ),
+            a = '<a href="' + url + '">' + url + '</a>';
+        embed.src = embed.src + ( embed.src.indexOf( '?' ) === -1 ? '?' : '&' ) + 'previewTime=' + Date.now();
+        warning.innerHTML = 'This is a preview URL only. When sharing, please use the following URL: ' + a;
+        document.body.appendChild( warning );
+       }

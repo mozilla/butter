@@ -17,26 +17,31 @@ iframe {
   margin: 60px auto;
 }
 
+div {
+  display: block;
+  margin: 60px auto;
+}
+
 @media only screen and ( max-width: @medium ) {
-  iframe {
+  iframe, div {
     .height-width( @small );
   }
 }
 
 @media only screen and ( min-width: @medium ) {
-  iframe {
+  iframe, div {
     .height-width( @medium );
   }
 }
 
 @media only screen and ( min-width: @large ) {
-  iframe {
+  iframe, div {
     .height-width( @large );
   }
 }
 
 @media only screen and ( min-width: @xlarge ) {
-  iframe {
+  iframe, div {
     .height-width( @xlarge );
   }
 }
