@@ -549,8 +549,6 @@ define( [ "core/eventmanager", "./toggler",
     DragNDrop.listen( "sortstarted", unbindKeyDownListener );
     DragNDrop.listen( "sortstopped", bindKeyDownListener );
 
-    bindKeyDownListener();
-
     this.TRANSITION_DURATION = TRANSITION_DURATION;
 
     _toggler.visible = false;
@@ -574,6 +572,7 @@ define( [ "core/eventmanager", "./toggler",
     });
 
     butter.listen( "mediacontentchanged", function() {
+      unbindKeyDownListener();
       _this.loadIndicator.start();
       _toggler.visible = false;
       butter.ui.visible = false;
@@ -585,6 +584,7 @@ define( [ "core/eventmanager", "./toggler",
       _toggler.visible = true;
       butter.ui.visible = true;
       _toggler.state = false;
+      bindKeyDownListener();
     });
 
     _this.dialogDir = butter.config.value( "dirs" ).dialogs || "";
