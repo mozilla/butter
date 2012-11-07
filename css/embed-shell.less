@@ -13,6 +13,7 @@
 }
 
 body {
+  -webkit-font-smoothing: antialiased;
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
   padding: 0;
   margin: 0;
@@ -32,13 +33,13 @@ body {
   .box-sizing( border-box );
 
   //Red bar and link
-  background: rgba( 215,83,45, 0.5 );
-  color: #B04121;
-  border-bottom: 1px solid #D7532D;
+  background: @green;
+  color: #FFF;
+  border-bottom: 1px solid darken( @green, 10% );
   a {
-    color: #B04121;
+    color: fade( #FFF, 80% );
     &:hover {
-      color: #D75A3C;
+      color: #FFF;
     }
   }
 
