@@ -282,9 +282,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     butter.listen( "mediaready", _this.views.mediaReady );
     butter.listen( "mediacontentchanged", _this.views.mediaChanging );
 
-    //Default view
-    _this.views.logout();
-
     butter.listen( "projectsaved", function() {
       // Disable "Save" button
       _this.views.clean();
