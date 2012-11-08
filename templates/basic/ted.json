@@ -14,11 +14,11 @@
                 "https://www.youtube.com/watch?v=0g2WE1qXiKM"
             ],
             "target": "video",
-            "duration": 925.2310180664062,
+            "duration": 925.08,
             "controls": false,
             "tracks": [
                 {
-                    "name": "Layer",
+                    "name": "Layer 0",
                     "id": "0",
                     "trackEvents": [
                         {
@@ -49,7 +49,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent2"
                         },
                         {
@@ -80,7 +80,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent4"
                         },
                         {
@@ -111,7 +111,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent7"
                         },
                         {
@@ -142,7 +142,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent9"
                         },
                         {
@@ -173,7 +173,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent10"
                         },
                         {
@@ -192,7 +192,7 @@
                                 "transition": "popcorn-fade",
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent11"
                         },
                         {
@@ -219,7 +219,7 @@
                                 "zindex": 1000,
                                 "width": 92.85714285714286
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent14"
                         },
                         {
@@ -246,7 +246,7 @@
                                 "zindex": 1000,
                                 "width": 93.92857142857143
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent15"
                         },
                         {
@@ -273,7 +273,7 @@
                                 "zindex": 1000,
                                 "width": 92.32142857142858
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent16"
                         },
                         {
@@ -304,7 +304,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent17"
                         },
                         {
@@ -335,7 +335,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent18"
                         },
                         {
@@ -366,7 +366,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent13"
                         },
                         {
@@ -397,7 +397,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent20"
                         },
                         {
@@ -428,7 +428,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent22"
                         },
                         {
@@ -439,7 +439,7 @@
                                 "end": 372.6554,
                                 "target": "video-container",
                                 "text": "A New Challenge for Teachers: \nEncouraging Girls in Science, Math and IT Related Studies and Careers",
-                                "linkUrl": "http://ezinearticles.com/?A-New-Challenge-for-Teachers:-Encouraging-Girls-in-Science,-Math-and-IT-Related-Studies-and-Careers&id=44420",
+                                "linkUrl": "http://ezinearticles.com/?A-New-Challenge-for-Teachers:-Encouraging-Girls-in-Science,-Math-and-IT-Related-Studies-and-Careers&amp;id=44420",
                                 "type": "popup",
                                 "triangle": "bottom left",
                                 "sound": "",
@@ -459,7 +459,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent23"
                         },
                         {
@@ -470,7 +470,7 @@
                                 "end": 398.09279,
                                 "target": "video-container",
                                 "text": "\"A survey of over a thousand 8–11 year-old children in primary schools indicated that children in the more senior classes showed a marked decline in their enjoyment of school science. \" - Association for Science Education",
-                                "linkUrl": "https://www.google.com/search?q=SSR308Mar2003p109.pdf&ie=utf-8&oe=utf-8&aq=t&rls=org.mozilla:en-US:official&client=firefox-a",
+                                "linkUrl": "https://www.google.com/search?q=SSR308Mar2003p109.pdf&amp;ie=utf-8&amp;oe=utf-8&amp;aq=t&amp;rls=org.mozilla:en-US:official&amp;client=firefox-a",
                                 "position": "custom",
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
@@ -486,7 +486,7 @@
                                 "zindex": 1000,
                                 "width": 86.60714285714286
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent24"
                         },
                         {
@@ -513,7 +513,7 @@
                                 "zindex": 1000,
                                 "width": 94.46428571428571
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent25"
                         },
                         {
@@ -544,7 +544,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent26"
                         },
                         {
@@ -575,7 +575,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent21"
                         },
                         {
@@ -586,7 +586,7 @@
                                 "end": 485.62061,
                                 "target": "video-container",
                                 "text": "Watch a video of Beau and\nthe students conducting research",
-                                "linkUrl": "http://www.youtube.com/watch?v=vqbG05SHpoI&t=3m17s",
+                                "linkUrl": "http://www.youtube.com/watch?v=vqbG05SHpoI&amp;t=3m17s",
                                 "type": "popup",
                                 "triangle": "bottom left",
                                 "sound": "",
@@ -606,7 +606,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent27"
                         },
                         {
@@ -637,7 +637,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent28"
                         },
                         {
@@ -668,7 +668,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent29"
                         },
                         {
@@ -695,7 +695,7 @@
                                 "zindex": 1000,
                                 "width": 90.71428571428571
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent30"
                         },
                         {
@@ -722,7 +722,7 @@
                                 "zindex": 1000,
                                 "width": 91.07142857142857
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent31"
                         },
                         {
@@ -749,7 +749,7 @@
                                 "zindex": 1000,
                                 "width": 93.03571428571429
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent32"
                         },
                         {
@@ -780,7 +780,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent35"
                         },
                         {
@@ -792,14 +792,14 @@
                                 "target": "video-container",
                                 "lang": "en",
                                 "src": "http://en.wikipedia.org/wiki/Dale_Purves",
-                                "width": 40,
-                                "height": 97.77777777777777,
-                                "top": 2.2222222222222223,
-                                "left": 61.42857142857143,
+                                "width": 41.785714285714285,
+                                "height": 100.95238095238095,
+                                "top": -0.9523809523809524,
+                                "left": 58.214285714285715,
                                 "transition": "popcorn-fade",
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent36"
                         },
                         {
@@ -816,8 +816,8 @@
                                 "sound": "",
                                 "icon": "man",
                                 "flip": "",
-                                "top": 92.3015873015873,
-                                "left": 68.21428571428572,
+                                "top": 81.91534133184524,
+                                "left": 70,
                                 "width": 30,
                                 "transition": "popcorn-fade",
                                 "fontFamily": "Merriweather",
@@ -830,7 +830,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent37"
                         },
                         {
@@ -847,7 +847,7 @@
                                 "sound": "",
                                 "icon": "info",
                                 "flip": "",
-                                "top": 66.66666666666666,
+                                "top": 64.12698412698413,
                                 "left": 59.64285714285714,
                                 "width": 33.035714285714285,
                                 "transition": "popcorn-pop",
@@ -861,7 +861,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent38"
                         },
                         {
@@ -892,7 +892,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent39"
                         },
                         {
@@ -923,7 +923,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent40"
                         },
                         {
@@ -954,7 +954,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent41"
                         },
                         {
@@ -985,7 +985,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent42"
                         },
                         {
@@ -1016,7 +1016,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent44"
                         },
                         {
@@ -1047,7 +1047,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent45"
                         },
                         {
@@ -1073,7 +1073,7 @@
                                 "top": 10.952380952380953,
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent46"
                         },
                         {
@@ -1099,7 +1099,7 @@
                                 "top": 11.26984126984127,
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent47"
                         },
                         {
@@ -1125,7 +1125,7 @@
                                 "top": 79.2063492063492,
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent48"
                         },
                         {
@@ -1151,7 +1151,7 @@
                                 "top": 81.74603174603175,
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent49"
                         },
                         {
@@ -1178,7 +1178,7 @@
                                 "zindex": 1000,
                                 "width": 94.82142857142857
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent50"
                         },
                         {
@@ -1209,7 +1209,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent51"
                         },
                         {
@@ -1240,7 +1240,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent52"
                         },
                         {
@@ -1271,7 +1271,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent48"
                         },
                         {
@@ -1290,7 +1290,7 @@
                                 "left": 0,
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent51"
                         },
                         {
@@ -1321,7 +1321,7 @@
                                 },
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent5"
                         },
                         {
@@ -1343,7 +1343,7 @@
                                 "transition": "popcorn-fade",
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent56"
                         },
                         {
@@ -1370,7 +1370,7 @@
                                 "zindex": 1000,
                                 "width": 50
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent34"
                         },
                         {
@@ -1389,13 +1389,13 @@
                                 "transition": "popcorn-fade",
                                 "zindex": 1000
                             },
-                            "track": "Layer",
+                            "track": "0",
                             "name": "TrackEvent6"
                         }
                     ]
                 },
                 {
-                    "name": "Layer",
+                    "name": "Layer 1",
                     "id": "1",
                     "trackEvents": [
                         {
@@ -1420,7 +1420,7 @@
                                 "lng": -3.6859852275390526,
                                 "zindex": 999
                             },
-                            "track": "Layer",
+                            "track": "1",
                             "name": "TrackEvent53"
                         },
                         {
@@ -1445,7 +1445,7 @@
                                 "lng": -3.681629320098867,
                                 "zindex": 999
                             },
-                            "track": "Layer",
+                            "track": "1",
                             "name": "TrackEvent54"
                         },
                         {
@@ -1467,7 +1467,7 @@
                                 "transition": "popcorn-fade",
                                 "zindex": 999
                             },
-                            "track": "Layer",
+                            "track": "1",
                             "name": "TrackEvent57"
                         },
                         {
@@ -1494,7 +1494,7 @@
                                 "zindex": 999,
                                 "width": 50
                             },
-                            "track": "Layer",
+                            "track": "1",
                             "name": "TrackEvent52"
                         },
                         {
@@ -1525,7 +1525,7 @@
                                 },
                                 "zindex": 999
                             },
-                            "track": "Layer",
+                            "track": "1",
                             "name": "TrackEvent19"
                         },
                         {
@@ -1547,13 +1547,13 @@
                                 "transition": "popcorn-fade",
                                 "zindex": 999
                             },
-                            "track": "Layer",
+                            "track": "1",
                             "name": "TrackEvent55"
                         }
                     ]
                 },
                 {
-                    "name": "Layer",
+                    "name": "Layer 2",
                     "id": "2",
                     "trackEvents": [
                         {
@@ -1575,13 +1575,13 @@
                                 "transition": "popcorn-fade",
                                 "zindex": 998
                             },
-                            "track": "Layer",
+                            "track": "2",
                             "name": "TrackEvent33"
                         }
                     ]
                 },
                 {
-                    "name": "Layer",
+                    "name": "Layer 3",
                     "id": "3",
                     "trackEvents": [
                         {
@@ -1608,7 +1608,7 @@
                                 "width": 50,
                                 "zindex": 997
                             },
-                            "track": "Layer",
+                            "track": "3",
                             "name": "TrackEvent58"
                         },
                         {
@@ -1635,12 +1635,14 @@
                                 "width": 49.28571428571429,
                                 "zindex": 997
                             },
-                            "track": "Layer",
+                            "track": "3",
                             "name": "TrackEvent59"
                         }
                     ]
                 }
             ]
         }
-    ]
+    ],
+    "name": "ted",
+    "template": "basic"
 }
