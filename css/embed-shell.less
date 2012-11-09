@@ -58,38 +58,49 @@ body {
   position: relative;
 }
 
-iframe {
+.iframe-container > iframe {
   width: 100%;
   height: 100%;
+}
+
+iframe {
   border: 0;
   padding: 0;
   overflow: hidden;
   display: block;
 }
 
+body > iframe {
+  margin: 6em auto;
+}
+
 /*********************************************************
 * Media queries
 */
 @media only screen and ( max-width: @medium ) {
-  .iframe-container {
+  .iframe-container,
+  body > iframe {
     .height-width( @small );
   }
 }
 
 @media only screen and ( min-width: @medium ) {
-  .iframe-container {
+  .iframe-container,
+  body > iframe {
     .height-width( @medium );
   }
 }
 
 @media only screen and ( min-width: @large ) {
-  .iframe-container {
+  .iframe-container,
+  body > iframe {
     .height-width( @large );
   }
 }
 
 @media only screen and ( min-width: @xlarge ) {
-  .iframe-container {
+  .iframe-container,
+  body iframe {
     .height-width( @xlarge );
   }
 }
