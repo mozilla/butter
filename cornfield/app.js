@@ -213,6 +213,7 @@ app.post( '/api/publish/:id',
         // Turn a single url into an array of 1 string.
         mediaUrls = typeof currentMedia.url === "string" ? [ currentMedia.url ] : currentMedia.url;
         mediaPopcornOptions = currentMedia.popcornOptions || {};
+        mediaPopcornOptions.frameAnimation = true;
         // Force the Popcorn instance we generate to have an ID we can query.
         mediaPopcornOptions.id = "Butter-Generated";
 

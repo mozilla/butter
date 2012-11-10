@@ -267,12 +267,12 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
         trackEvent.update( updateOptions );
 
         // Attempt to make the trackEvent's target blink
-        var target = extendObject.butter.getTargetByType( "elementID", trackEvent.popcornOptions.target );
+        var target = document.getElementById( trackEvent.popcornOptions.target );
         if( target ) {
-          target.view.blink();
+          //target.view.blink();
         }
         else {
-          extendObject.butter.currentMedia.view.blink();
+          //extendObject.butter.currentMedia.view.blink();
         }
       }, false );
     };

@@ -1,0 +1,164 @@
+@import "../../css/globals.less";
+
+/* ===== Primary Styles ========================================================
+   Author: @k88hudson
+   ========================================================================== */
+
+.wrapper {
+  @media @small {
+    width: @small-w-px;
+  }
+  @media @medium {
+    width: @medium-w-px;
+  }
+  @media @large {
+    width: @large-w-px;
+  }
+  @media @xlarge {
+    width: @xlarge-w-px;
+  }
+  .butter-header-spacing & {
+    @media @small-in-editor {
+      width: @small-w-px;
+    }
+    @media @medium-in-editor {
+      width: @medium-w-px;
+    }
+    @media @large-in-editor {
+      width: @large-w-px;
+    }
+    @media @xlarge-in-editor {
+      width: @xlarge-w-px;
+    }
+  }
+  border: 15px solid #FFF;
+  margin: 40px auto;
+  box-shadow: 0 0 0 1px #CCC,
+    0 25px 5px -20px rgba( 0, 0, 0, 0.5 );
+}
+
+/* body-wrapper required to circumvent this bug in webkit: https://bugs.webkit.org/show_bug.cgi?id=77811 */
+.butter-header-spacing .body-wrapper {
+  position: absolute;
+  left: 0;
+  top: 80px; /* compensate for header */
+  right: 350px;
+  bottom: 0;
+  -webkit-transition: right 0.25s;
+  -moz-transition: right 0.25s;
+  -ms-transition: right 0.25s;
+  -o-transition: right 0.25s;
+  transition: right 0.25s;
+}
+
+body.editor-minimized .body-wrapper {
+  right: 0;
+}
+
+#embed-wrapper {
+  position: relative;
+
+  background: #FFF;
+
+  .video-container {
+    .transition( opacity 0.5s );
+    opacity: 1;
+  }
+
+  .loading-message {
+    position: absolute;
+
+    opacity: 0;
+    visibility: hidden;
+
+    .transition( opacity 0.35s, visibility 0.35s );
+
+    height: 3em;
+    background: url( "/resources/icons/big-loader.gif" ) center no-repeat;
+
+    width: 100%;
+    line-height: 1;
+    top: 50%;
+
+    margin-top: -1.5em;
+  }
+
+  &.faded .loading-message {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  &.faded .video-container {
+    opacity: 0;
+  }
+
+}
+
+/* VIDEO
+-------------------------------------------------- */
+.video-container {
+  @baseFontSize: 14px;
+  position: relative;
+  @media @small {
+    font-size: @baseFontSize;
+  }
+  @media @medium {
+    font-size: @baseFontSize * ( @medium-w / @small-w );
+  }
+  @media @large {
+    font-size: @baseFontSize * ( @large-w / @small-w );
+  }
+  @media @xlarge {
+    font-size: @baseFontSize * ( @xlarge-w / @small-w );
+  }
+  .butter-header-spacing & {
+    @media @small-in-editor {
+      font-size: @baseFontSize;
+    }
+    @media @medium-in-editor {
+      font-size: @baseFontSize * ( @medium-w / @small-w );
+    }
+    @media @large-in-editor {
+      font-size: @baseFontSize * ( @large-w / @small-w );
+    }
+    @media @xlarge-in-editor {
+      font-size: @baseFontSize * ( @xlarge-w / @small-w );
+    }
+  }
+}
+
+.video {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+  z-index: 1;
+  background: #FFF;
+  .butter-header-spacing & {
+    box-shadow: inset 0 0 0 1px #DDD;
+  }
+}
+
+.video > video,
+.video > iframe,
+.video > object {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.video > video {
+  background: #FFF;
+}
+
+/* Use this class for a full overlay */
+.video-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+}
