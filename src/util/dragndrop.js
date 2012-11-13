@@ -200,6 +200,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       return;
     }
     e.stopPropagation();
+    e.preventDefault();
     window.addEventListener( "mousemove", __onDraggableDragged, false );
     window.addEventListener( "mouseup", __onDraggableMouseUp, false );
   }
@@ -299,6 +300,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
 
     function onLeftMouseDown( e ) {
       e.stopPropagation();
+      e.preventDefault();
 
       var originalRect = element.getBoundingClientRect(),
           originalPosition = element.offsetLeft,
@@ -399,6 +401,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
 
     function onRightMouseDown( e ) {
       e.stopPropagation();
+      e.preventDefault();
 
       var originalPosition = element.offsetLeft,
           originalWidth = element.offsetWidth,
@@ -1063,6 +1066,8 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       if ( e.which !== 1 ) {
         return;
       }
+      e.preventDefault();
+
       _moved = false;
       _draggingElement = this;
       _draggingOriginalPosition = _draggingElement.offsetTop;

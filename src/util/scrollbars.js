@@ -55,6 +55,7 @@ define( [ "core/eventmanager" ], function( EventManager ) {
 
     function onMouseDown( e ){
       if( e.button === 0 ){
+        e.preventDefault();
         var handleY = _handle.offsetTop;
         _mousePos = e.pageY - handleY;
         window.addEventListener( "mouseup", onMouseUp, false );
