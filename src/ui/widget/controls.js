@@ -295,15 +295,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
       if ( durationDialog ) {
 
         durationchange = function() {
-
-          var timeStamp = new Date( 1970, 0, 1 ),
-              time = p.duration(),
-              seconds;
-
-          timeStamp.setSeconds( Math.round( time ) );
-          seconds = timeStamp.toTimeString().substr( 0, 8 );
-
-          durationDialog.innerHTML = seconds;
+          durationDialog.innerHTML = LangUtils.secondsToSMPTE( p.duration() );
         };
 
         durationchange();
@@ -390,9 +382,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
 
         p.on( "timeupdate", function() {
 
-          var timeStamp = new Date( 1970, 0, 1 ),
-              time = p.currentTime(),
-              seconds,
+          var time = p.currentTime(),
               width = ( time / p.duration() * 100 * timebar.offsetWidth / 100 );
 
           if ( progressBar ) {
@@ -405,12 +395,9 @@ define( [ "util/lang", "text!layouts/controls.html" ],
             scrubber.style.left = ( ( width - ( scrubber.offsetWidth / 2 ) ) / timebar.offsetWidth * 100 ) + "%";
           }
 
-          timeStamp.setSeconds( Math.round( time ) );
-          seconds = timeStamp.toTimeString().substr( 0, 8 );
-
           if ( currentTimeDialog ) {
 
-            currentTimeDialog.innerHTML = seconds;
+            currentTimeDialog.innerHTML = LangUtils.secondsToSMPTE( time );
           }
         });
       }
