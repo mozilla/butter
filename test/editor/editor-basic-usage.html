@@ -11,7 +11,7 @@
     <script>
       asyncTest( "Basic usage", 6, function() {
         createButterModule( function( butter ) {
-          var media = butter.addMedia(),
+          var media = butter.currentMedia,
               track = media.addTrack(),
               trackEvent = track.addTrackEvent({
                 type: "text",
@@ -22,17 +22,47 @@
               });
 
           var editor = butter.editor.editTrackEvent( trackEvent );
+
           ok( editor, "Got Editor back from edit call." );
+
           ok( editor.rootElement.querySelectorAll( ".trackevent-property" ).length, "Default Editor created properties properly." );
-          equal( editor.rootElement.querySelector( ".butter-form-append > input[data-manifest-key='start']" ).value, 3, "[start] input box has correct value." );
-          equal( editor.rootElement.querySelector( ".butter-form-append > input[data-manifest-key='end']" ).value, 6, "[end] input box has correct value." );
+
+          var startTextbox = editor.rootElement.querySelector( ".butter-form-append > input[data-manifest-key='start']" ),
+              endTextBox = editor.rootElement.querySelector( ".butter-form-append > input[data-manifest-key='end']" );
+
+          startTextbox._value = startTextbox.value;
+          Object.defineProperty( startTextbox, "value", {
+            get: function() {
+              return startTextbox._value;
+            },
+            set: function( value ) {
+              startTextbox._value = value;
+              equal( startTextbox.value, 1, "[start] input box has correct value after update." );
+            }
+          });
+
+          endTextBox._value = endTextBox.value;
+          Object.defineProperty( endTextBox, "value", {
+            get: function() {
+              return endTextBox._value;
+            },
+            set: function( value ) {
+              endTextBox._value = value;
+              equal( endTextBox.value, 10, "[end] input box has correct value after update." );
+            }
+          });
+
+          equal( startTextbox.value, 3, "[start] input box has correct value." );
+          equal( endTextBox.value, 6, "[end] input box has correct value." );
+
+          trackEvent.listen( "trackeventupdated", function(){
+            start();
+          });
+
           trackEvent.update({
             start: 1,
             end: 10
           });
-          equal( editor.rootElement.querySelector( ".butter-form-append > input[data-manifest-key='start']" ).value, 1, "[start] input box has correct value after update." );
-          equal( editor.rootElement.querySelector( ".butter-form-append > input[data-manifest-key='end']" ).value, 10, "[end] input box has correct value after update." );
-          start();
         });
       });
     </script>
@@ -44,5 +74,6 @@
     <h2 id="qunit-userAgent"></h2>
     <ol id="qunit-tests"></ol>
     <div id="test-target-1"></div>
+    <div id="mediaDiv"></div>
   </body>
 </html>
