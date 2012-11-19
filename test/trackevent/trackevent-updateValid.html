@@ -9,24 +9,17 @@
     <script src="../butter.inject.js"></script>
     <script src="../test-utils.js"></script>
     <script>
-      var defaultEvent = {
-            type: "text",
-            popcornOptions: {
-              start: 2,
-              end: 5,
-              text: "This is"
-            }
-          };
 
       asyncTest( "update w/ valid options", 5, function() {
         createButterModule( function( butter ) {
-          var t = butter.currentMedia.tracks[ 0 ],
-              te;
+          var te;
 
           butter.listen( "trackeventupdated", function onTrackEventUpdatedA( e ) {
             butter.unlisten( "trackeventupdated", onTrackEventUpdatedA );
+
+            te = e.data;
             equal( e.data.popcornOptions.start, 0, "Applied correct default start time" );
-            equal( e.data.popcornOptions.end, 1, "Applied correct default end time" );
+            equal( e.data.popcornOptions.end, 3, "Applied correct default end time" );
 
             butter.listen( "trackeventupdated", function onTrackEventUpdatedB( e ) {
               butter.unlisten( "trackeventupdated", onTrackEventUpdatedB );
@@ -37,13 +30,8 @@
               start();
             });
 
-            te = t.addTrackEvent( defaultEvent );
             te.update( { start: 5, end: 10, text: "This is a test" } );
           });
-
-          te = t.addTrackEvent( { name: "TestEvent" } );
-          // Checking Defaults
-          te.update();
         });
       });
     </script>
