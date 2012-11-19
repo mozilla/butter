@@ -87,7 +87,7 @@ define( [ "dialog/dialog", "ui/widget/tooltip", "util/shims" ], function( Dialog
       try {
         var data = __butterStorage.getItem( "butter-first-run" );
 
-        if ( !data ) {
+        if ( !data || window.location.search.match( "forceFirstRun" ) ) {
           __butterStorage.setItem( "butter-first-run", true );
           setupFirstRun();
           dialog = Dialog.spawn( "first-run" );
