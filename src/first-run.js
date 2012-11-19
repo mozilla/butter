@@ -23,13 +23,13 @@ define( [ "dialog/dialog", "ui/widget/tooltip", "util/shims" ], function( Dialog
           popupTile = document.querySelector( ".butter-plugin-tile[data-popcorn-plugin-type=popup]" );
 
       function showFirstRunTooltips() {
-        popupTooltip = ToolTip.create({
+        ToolTip.create({
           name: "tooltip-popup",
           element: popupTile,
           message: "<h3>Event</h3>Try dragging this to the stage",
           hidden: false
         });
-        mediaTooltip = ToolTip.create({
+        ToolTip.create({
           name: "tooltip-media",
           element: mediaEditorButton,
           top: "60px",
@@ -37,9 +37,12 @@ define( [ "dialog/dialog", "ui/widget/tooltip", "util/shims" ], function( Dialog
           hidden: false
         });
 
+        popupTooltip = ToolTip.get( "tooltip-popup" );
+        mediaTooltip = ToolTip.get( "tooltip-media" );
+
         document.body.addEventListener( "mousedown", function removeTooltips() {
-          mediaTooltip.classList.remove( "tooltip-on" );
-          popupTooltip.parentNode.removeChild( popupTooltip );
+          mediaTooltip.hidden = true;
+          popupTooltip.destroy();
           document.body.removeEventListener( "mousedown", removeTooltips, true );
         }, true );
 
