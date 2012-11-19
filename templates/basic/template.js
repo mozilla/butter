@@ -4,8 +4,6 @@
 
 ( function( Butter, EditorHelper ) {
   document.addEventListener( "DOMContentLoaded", function() {
-    document.querySelector( "#embed-wrapper" ).classList.add( "faded" );
-
     Butter.init({
       config: "config.json",
       ready: function( butter ) {
