@@ -384,18 +384,17 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       return _container.offsetWidth;
     };
 
+    // The properties `element` and `conainer` do not have getter functions, but are immediately assigned
+    // values to prevent a Safari crash; a function which solely returns `_container` fails to accomplish its task
+    // (likely a hidden webkit/safari bug).
     Object.defineProperties( this, {
       element: {
         enumerable: true,
-        get: function(){
-          return _element;
-        }
+        value: _element
       },
       container: {
         enumerable: true,
-        get: function(){
-          return _container;
-        }
+        value: _container
       }
     });
 
