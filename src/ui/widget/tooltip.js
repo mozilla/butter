@@ -166,7 +166,9 @@ define( [], function() {
 
     this.destroy = function() {
       if ( !destroyed ) {
-        parentElement.removeChild( tooltipElement );
+        if ( parentElement && tooltipElement.parentNode === parentElement ) {
+          parentElement.removeChild( tooltipElement );
+        }
         _registeredTooltips[ name ] = undefined;
         destroyed = true;
       }
