@@ -30,7 +30,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _rootElement = LangUtils.domFragment( MEDIA_INSTANCE_LAYOUT, ".media-instance" ),
         _tracksContainer = new TrackContainer( butter, media, _rootElement ),
         _container = _rootElement.querySelector( ".media-container" ),
-        _mediaStatusContainer = _rootElement.querySelector( ".media-status-container" ),
         _superScrollbar = new SuperScrollbar( _tracksContainer.element, _tracksContainer.container, setContainerBounds, _media ),
         _vScrollBar = new Scrollbars.Vertical( _tracksContainer.element, _tracksContainer.container ),
         _timebar = new TimeBar( butter, _media, butter.ui.tray.statusArea, _tracksContainer ),
@@ -238,9 +237,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
     this.destroy = function() {
       if ( _rootElement.parentNode ) {
         _rootElement.parentNode.removeChild( _rootElement );
-      }
-      if( _mediaStatusContainer && _mediaStatusContainer.parentNode ){
-        _mediaStatusContainer.parentNode.removeChild( _mediaStatusContainer );
       }
       butter.editor.unlisten( "editortoggled", onEditorToggled );
       butter.unlisten( "editoropened", onEditorToggled );
