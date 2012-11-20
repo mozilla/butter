@@ -65,9 +65,12 @@ define([ "ui/widget/tooltip",
     };
 
     Object.defineProperty( this, "focusMap", {
+      enumerable: true,
       writeable: false,
       configurable: false,
-      value: _focusMap
+      get: function() {
+        return _focusMap;
+      }
     });
 
     this.views = {
