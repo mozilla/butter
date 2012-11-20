@@ -23,13 +23,13 @@
             eventState = [ 0, trackEvent.data ];
           });
 
-          var te1 = t.addTrackEvent( { name: "TrackEvent 1", type: "test", start: 0, end: 1 } );
+          var te1 = t.addTrackEvent( { name: "TrackEvent 1", type: "test", popcornOptions: { start: 0, end: 1 } } );
           ok( eventState[ 0 ] === 1 && eventState[ 1 ] === te1, "trackeventadded event received" );
 
-          var te2 = t.addTrackEvent( { name: "TrackEvent 2", type: "test", start: 1, end: 2 } );
+          var te2 = t.addTrackEvent( { name: "TrackEvent 2", type: "test", popcornOptions: { start: 2, end: 3 } } );
           ok( eventState[ 0 ] === 1 && eventState[ 1 ] === te2, "trackeventadded event received" );
 
-          var te3 = t.addTrackEvent( { name: "TrackEvent 3", type: "test", start: 2, end: 3 } );
+          var te3 = t.addTrackEvent( { name: "TrackEvent 3", type: "test", popcornOptions: { start: 4, end: 5 } } );
           ok( eventState[ 0 ] === 1 && eventState[ 1 ] === te3, "trackeventadded event received" );
 
           ok( te1 === t.getTrackEventByName( "TrackEvent 1" ), "TrackEvent method 1 is correct" );

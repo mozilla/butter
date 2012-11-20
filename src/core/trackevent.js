@@ -187,10 +187,10 @@ define( [ "./logger", "./eventmanager", "./observer",
       // make sure we have a reference to the trackevent before calling toString
       if ( _this.popcornTrackEvent ) {
         _view.elementText = _this.popcornTrackEvent.toString();
+        // we should only get here if no exceptions happened
+        _this.dispatch( "trackeventupdated", _this );
       }
 
-      // we should only get here if no exceptions happened
-      _this.dispatch( "trackeventupdated", _this );
     };
 
     /**

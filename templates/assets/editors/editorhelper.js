@@ -367,23 +367,16 @@
       }, false );
     };
 
-    function _updateFunction( e ) {
+    function updateFunction( e ) {
 
-      var _trackEvent;
+      var trackEvent = e.target;
 
-      if ( e.type === "trackeventadded" ) {
-        _trackEvent = e.data;
-      } else if ( e.type === "trackeventupdated" ) {
-        _trackEvent = e.target;
+      if ( trackEvent.popcornTrackEvent && plugins[ trackEvent.type ] ) {
+        plugins[ trackEvent.type ]( trackEvent, butter.currentMedia.popcorn.popcorn );
       }
+    }
 
-      if ( plugins[ _trackEvent.type ] ) {
-        plugins[ _trackEvent.type ]( _trackEvent, butter.currentMedia.popcorn.popcorn );
-      }
-    } //updateFunction
-
-    butter.listen( "trackeventadded", _updateFunction );
-    butter.listen( "trackeventupdated", _updateFunction );
+    butter.listen( "trackeventupdated", updateFunction );
   };
 
   EditorHelper.addPlugin = function( plugin, callback ) {

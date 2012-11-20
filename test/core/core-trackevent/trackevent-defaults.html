@@ -16,7 +16,8 @@
               t = m.addTrack();
 
           butter.listen( "mediaready", function( e ) {
-            butter.listen( "trackeventupdated", function( e ) {
+            butter.listen( "trackeventupdated", function onTrackEventUpdated( e ) {
+              butter.unlisten( "trackeventupdated", onTrackEventUpdated );
               equal( e.data.popcornOptions.text, "Popcorn.js", "Trackevent is given proper plugin defaults" );
               start();
             });
