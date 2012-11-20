@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite [Track Event]</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../inject.js"></script>
+    <script type="text/javascript" src="../../src/butter.js"></script>
+    <script src="../butter.inject.js"></script>
+    <script src="../test-utils.js"></script>
+    <script>
+      asyncTest( "TrackEvent copy and paste", 14, function() {
+        createButterModule(function( butter ) {
+          var te1Options = {
+                type: "text",
+                popcornOptions: {
+                  start: 1,
+                  end: 5,
+                  text: "te1"
+                }
+              },
+              te2Options = {
+                type: "text",
+                popcornOptions: {
+                  start: 2,
+                  end: 6,
+                  text: "te2"
+                }
+              },
+              t = butter.currentMedia.tracks[ 0 ],
+              te1, te2;
+
+          butter.listen( "mediaready", function() {
+
+            te1 = t.addTrackEvent( te1Options );
+            te2 = t.addTrackEvent( te2Options );
+
+            // test that the paste works with two events, and that they are both selected.
+            // check butter.copiedEvents
+            te1.selected = true;
+            te2.selected = true;
+
+            butter.currentMedia.currentTime = 20;
+
+            equal( butter.copiedEvents.length, 0, "Initially no track events are copied." );
+            butter.copyTrackEvents();
+            equal( butter.copiedEvents.length, 2, "After copy, two track events are copied." );
+
+            equal( butter.copiedEvents[ 0 ].popcornOptions.text, "te1", "track event 1 is copied." );
+            equal( butter.copiedEvents[ 1 ].popcornOptions.text, "te2", "track event 2 is copied." );
+
+            equal( butter.copiedEvents[ 0 ].popcornOptions.start, 1, "track event 1 has original start time" );
+            equal( butter.copiedEvents[ 1 ].popcornOptions.start, 2, "track event 2 has original start time." );
+
+            butter.pasteTrackEvents();
+
+            equal( butter.orderedTrackEvents[ 3 ].popcornOptions.text, "te1", "track event 1 is pasted." );
+            equal( butter.orderedTrackEvents[ 4 ].popcornOptions.text, "te2", "track event 2 is pasted." );
+
+            equal( butter.orderedTrackEvents[ 3 ].popcornOptions.start, 20, "pasted track event 1 has updated start time." );
+            equal( butter.orderedTrackEvents[ 4 ].popcornOptions.start, 21, "pasted track event 2 has updated start time." );
+            ok( butter.orderedTrackEvents[ 3 ].selected, "pasted track event 1 is selected." );
+            ok( butter.orderedTrackEvents[ 4 ].selected, "pasted track event 2 is selected." );
+
+            ok( !te1.selected, "track event 1 is no longer selected after a paste" );
+            ok( !te2.selected, "track event 2 is no longer selected after a paste" );
+            start();
+          });
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite [Track Event]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+      <div id="mediaDiv"></div>
+      <div id="test-target-1"></div>
+    </div>
+  </body>
+</html>

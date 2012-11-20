@@ -89,6 +89,7 @@
           _defaultTarget,
           _this = Object.create( Butter ),
           _selectedEvents = [],
+          _copiedEvents = [],
           _sortedSelectedEvents = [],
           _defaultPopcornScripts = {},
           _defaultPopcornCallbacks = {},
@@ -243,6 +244,47 @@
           _selectedEvents[ 0 ].selected = false;
         }
         _sortedSelectedEvents = [];
+      };
+
+      _this.copyTrackEvents = function() {
+        if ( _sortedSelectedEvents.length ) {
+          _copiedEvents = [];
+          for ( var i = 0; i < _sortedSelectedEvents.length; i++ ) {
+            _copiedEvents.unshift( _sortedSelectedEvents[ i ].copy() );
+          }
+        }
+      };
+
+      _this.pasteTrackEvents = function() {
+        var popcornOptions,
+            offset = 0,
+            trackEvent;
+        // get the first events start time to compare with the current time,
+        // to find the paste offset.
+        if ( _copiedEvents[ 0 ] ) {
+          _this.deselectAllTrackEvents();
+          offset = _currentMedia.currentTime - _copiedEvents[ 0 ].popcornOptions.start;
+          for ( var i = 0; i < _copiedEvents.length; i++ ) {
+            popcornOptions = {};
+            for ( var prop in _copiedEvents[ i ].popcornOptions ) {
+              if ( _copiedEvents[ i ].popcornOptions.hasOwnProperty( prop ) ) {
+                popcornOptions[ prop ] = _copiedEvents[ i ].popcornOptions[ prop ];
+              }
+            }
+            popcornOptions.start = popcornOptions.start + offset;
+            popcornOptions.end = popcornOptions.end + offset;
+            if ( popcornOptions.start > _currentMedia.duration ) {
+              // do not paste events outside of the duration
+              break;
+            } else if ( popcornOptions.end > _currentMedia.duration ) {
+              // cut off events that overlap the duration
+              popcornOptions.end = _currentMedia.duration;
+            }
+            trackEvent = _this.generateSafeTrackEvent( _copiedEvents[ i ].type, popcornOptions.start );
+            trackEvent.update( popcornOptions );
+            trackEvent.selected = true;
+          }
+        }
       };
 
        /****************************************************************
@@ -529,6 +571,12 @@
         selectedEvents: {
           get: function() {
             return _selectedEvents;
+          },
+          enumerable: true
+        },
+        copiedEvents: {
+          get: function() {
+            return _copiedEvents;
           },
           enumerable: true
         },
