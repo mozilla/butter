@@ -101,7 +101,14 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         _this.openEditor( DEFAULT_EDITOR_NAME );
       });
 
-      _header.setFocus( editorName );
+      // Check if this is a top-level editor
+      if ( _header.focusMap[ editorName ] ) {
+        _header.setFocus( editorName );
+      } else {
+        // Otherwise, it is an event editor, so focus the default editor
+        _header.setFocus( DEFAULT_EDITOR_NAME );
+      }
+
 
       // If the editor was closed when this was called, remove classes keeping it hidden
       if ( _editorAreaDOMRoot.classList.contains( "minimized" ) ) {
@@ -220,14 +227,14 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
           }
 
           LangUtils.applyTransitionEndListener( _editorAreaDOMRoot, onTransitionEnd );
-          
+
         }, "Show/Hide Editor", true );
 
       var editorsToLoad = [],
           editorsLoaded = 0;
 
       if ( butter.config.value( "ui" ).enabled !== false ) {
- 
+
         // Set up views for share editor
         butter.listen( "ready", setupHeader );
         butter.listen( "autologinsucceeded", setupHeader );
@@ -262,7 +269,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
             Editor.initialize( onModuleReady, butter.config.value( "baseDir" ) );
           }, function( e ) {
             _logger.log( "Couldn't load editor " + e.target.src );
-            
+
             if ( ++editorsLoaded === editorsToLoad.length ) {
               onModuleReady();
             }

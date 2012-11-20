@@ -224,7 +224,6 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/m
         }
 
         setup();
-        document.querySelector( ".butter-editor-header-media" ).classList.add( "butter-active" );
       },
       close: function() {
         _media.unlisten( "mediaready", onMediaReady );
