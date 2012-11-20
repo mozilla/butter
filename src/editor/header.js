@@ -14,7 +14,7 @@ define([ "ui/widget/tooltip",
         _waitForMediaTooltip;
 
     var _focusMap = {
-      "media-properties": _mediaButton,
+      "media-editor": _mediaButton,
       "plugin-list": _popcornButton,
       "share-properties": _shareButton
     };
@@ -63,6 +63,15 @@ define([ "ui/widget/tooltip",
         _currentFocus = focusCandidate;
       }
     };
+
+    Object.defineProperty( this, "focusMap", {
+      enumerable: true,
+      writeable: false,
+      configurable: false,
+      get: function() {
+        return _focusMap;
+      }
+    });
 
     this.views = {
       unSaved: function() {
