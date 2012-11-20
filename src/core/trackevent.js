@@ -207,6 +207,32 @@ define( [ "./logger", "./eventmanager", "./observer",
       _track = null;
     };
 
+    /**
+     * Member: copy
+     *
+     * Returns a copy of the data needed to create a track event just like this one.
+     * Does not copy state or unique data.
+     */
+    this.copy = function() {
+      var popcornOptions = {},
+          manifestOptions = {};
+      if ( this.manifest ) {
+        manifestOptions = _this.manifest.options;
+        if ( manifestOptions ) {
+          for ( var prop in manifestOptions ) {
+            if ( manifestOptions.hasOwnProperty( prop ) ) {
+              popcornOptions[ prop ] = _popcornOptions[ prop ];
+            }
+          }
+        }
+      }
+      return {
+        popcornOptions: popcornOptions,
+        type: _type,
+        track: _track
+      };
+    };
+
     Object.defineProperties( this, {
 
       /**

@@ -247,7 +247,6 @@ define( [ "core/eventmanager", "./toggler",
         popcornOptions.end = proportionalEndTime;
         popcornOptions.start = proportionalEndTime - currentDuration;
       }
-
       trackEvent.update( popcornOptions );
     }
 
@@ -526,7 +525,19 @@ define( [ "core/eventmanager", "./toggler",
           butter.deselectAllTrackEvents();
           orderedTrackEvents[ index ].selected = true;
         } // if
-      } // tab key
+      }, // tab key
+
+      67: function( e ) { // c key
+        if ( e.ctrlKey || e.metaKey ) {
+          butter.copyTrackEvents();
+        }
+      }, // c key
+
+      86: function( e ) { // v key
+        if ( e.ctrlKey || e.metaKey ) {
+          butter.pasteTrackEvents();
+        }
+      }, // v key
     };
 
     function onKeyDown( e ){
