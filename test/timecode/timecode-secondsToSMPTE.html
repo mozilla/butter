@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Butter Test Suite [timecode]</title>
+    <link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
+    <script type="text/javascript" src="../qunit/qunit.js"></script>
+    <script type="text/javascript" src="../inject.js"></script>
+    <script type="text/javascript" src="../../src/butter.js"></script>
+    <script src="../butter.inject.js"></script>
+    <script>
+      require([ "../src/util/lang" ], function( LangUtils ) {
+        test( "timecode.secondsToSMPTE", function() {
+
+          var secondsToSMPTE = LangUtils.secondsToSMPTE;
+
+          strictEqual( typeof secondsToSMPTE, "function", "pass" );
+          strictEqual( typeof secondsToSMPTE( "1" ), "string", "pass" );
+          strictEqual( typeof secondsToSMPTE( "0" ), "string", "pass" );
+          strictEqual( typeof secondsToSMPTE( 0 ), "string", "pass" );
+
+          strictEqual( secondsToSMPTE( 0 ), "00:00:00", "pass" );
+          strictEqual( secondsToSMPTE( 1.1 ), "00:00:01", "pass" );
+          strictEqual( secondsToSMPTE( 10 ), "00:00:10", "pass" );
+          strictEqual( secondsToSMPTE( 60 ), "00:01:00", "pass" );
+          strictEqual( secondsToSMPTE( 3600 ), "01:00:00", "pass" );
+          strictEqual( secondsToSMPTE( 86401 ), "24:00:01", "pass" );
+          strictEqual( secondsToSMPTE( 172800 ), "48:00:00", "pass" );
+          strictEqual( secondsToSMPTE( 518400 ), "144:00:00", "pass" );
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1 id="qunit-header">Butter API Test Suite [timecode]</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+  </body>
+</html>
