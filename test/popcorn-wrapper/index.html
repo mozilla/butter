@@ -23,13 +23,14 @@
             _butter,
             _trackEventData = { start: 2, end: 3, text: "Updated with updateEvent" };
 
-        function prepare( events ) {
+        function prepare( events, ready ) {
+          events.prepare = ready;
+
           var popcornWrapper = new PopcornWrapper( "video", events );
 
           popcornWrapper.prepare(
             [
-              "../../external/popcorn-js/test/trailer.ogv",
-              "../../external/popcorn-js/test/trailer.mp4"
+              "#t=,200"
             ],
             "video",
             [
@@ -132,9 +133,11 @@
                   }
                 }
               },
-              _pPlay = prepare( _eventsPlay );
+              _pPlay;
 
-          _pPlay.play();
+          _pPlay = prepare( _eventsPlay, function() {
+            _pPlay.play();
+          });
         });
 
         asyncTest( "pause passthrough", 1, function() {
@@ -146,11 +149,13 @@
                   }
                 }
               },
-              _pPause = prepare( _eventsPause );
+              _pPause;
 
           // Seems to require a play fired first of some sort
-          _pPause.play();
-          _pPause.pause();
+          _pPause = prepare( _eventsPause, function() {
+            _pPause.play();
+            _pPause.pause();
+          });
         });
 
       });
