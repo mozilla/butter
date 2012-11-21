@@ -574,9 +574,15 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       },
       currentTime: {
         enumerable: true,
-        set: function( val ){
-          if( _mediaReady && _popcorn ){
-            _popcorn.currentTime( val );
+        set: function( val ) {
+          if ( _mediaReady && _popcorn ) {
+            try {
+              _popcorn.currentTime( val );
+            } catch ( e ) {
+              if ( e.message !== "DOM Exception: INDEX_SIZE_ERR (1)" ) {
+                throw e;
+              }
+            }
           } //if
         },
         get: function(){
