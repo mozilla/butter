@@ -579,6 +579,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
             try {
               _popcorn.currentTime( val );
             } catch ( e ) {
+              // IE9 throws this error when trying to seek outside of buffered range.
+              // Happens with mp4.
               if ( e.message !== "DOM Exception: INDEX_SIZE_ERR (1)" ) {
                 throw e;
               }
