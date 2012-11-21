@@ -149,6 +149,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
 
       // attempt to grab the first url for a type inspection
+      // In the case of URL being a string, check that it doesn't follow our format for
+      // Null Video (EG #t=,200). Without the check it incorrectly will splice on the comma.
       var firstUrl = url;
       if ( typeof( url ) !== "string" ) {
         if ( !url.length ) {
@@ -158,7 +160,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
           firstUrl = url[ 0 ];
         }
       }
-      else if ( url.indexOf( "," ) > -1 ) {
+      else if ( url.indexOf( "#t" ) !== 0 && url.indexOf( "," ) > -1 ) {
         urlsFromString = url.split( "," );
         firstUrl = urlsFromString[ 0 ];
         url = urlsFromString;

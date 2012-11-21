@@ -369,20 +369,19 @@
 
     function _updateFunction( e ) {
 
-      var _trackEvent;
+      var trackEvent;
 
       if ( e.type === "trackeventadded" ) {
-        _trackEvent = e.data;
+        trackEvent = e.data;
       } else if ( e.type === "trackeventupdated" ) {
-        _trackEvent = e.target;
+        trackEvent = e.target;
       }
 
-      if ( plugins[ _trackEvent.type ] ) {
-        plugins[ _trackEvent.type ]( _trackEvent, butter.currentMedia.popcorn.popcorn );
+      if ( trackEvent.popcornTrackEvent && plugins[ trackEvent.type ] ) {
+        plugins[ trackEvent.type ]( trackEvent, butter.currentMedia.popcorn.popcorn );
       }
     } //updateFunction
 
-    butter.listen( "trackeventadded", _updateFunction );
     butter.listen( "trackeventupdated", _updateFunction );
   };
 
