@@ -69,33 +69,22 @@ define( [ "./shims" ], function(){
     }, //smpteToSeconds
 
     secondsToSMPTE: function( time ) {
-      var timeStamp = new Date( 0, 0, 0 ),
+      // Ensure every portion of our new Date is zeroed out ( Year, Month, Day, Hour, Minute, Second, Millisecond )
+      var timeStamp = new Date( 0, 0, 0, 0, 0, 0, 0 ),
           days,
-          hours,
-          minutes,
-          seconds,
           timeString = "";
 
       timeStamp.setSeconds( +time );
-
-      // Because we can't rely on .toLocaleTimeString() on the Date object, getting the individual values
-      // for each portion of the time stamp and constructing it ourself should suffice.
       days = timeStamp.getDay();
-      hours = timeStamp.getHours();
-      minutes = timeStamp.getMinutes();
-      seconds = timeStamp.getSeconds();
+      timeString = timeStamp.toTimeString().split( " " )[ 0 ];
 
       // If the video is for some reason longer than 24 hours, we need to make sure we handle it accordingly.
       if ( days > 0 ) {
-        hours = +hours + ( days * 24 );
+        (function( timeArr ) {
+          timeArr[ 0 ] = +timeArr[ 0 ] + ( days * 24 );
+          timeString = timeArr.join( ":" );
+        })( timeString.split( ":" ) );
       }
-
-      [ hours, minutes, seconds ].forEach(function( element, index, array ) {
-        var trailingChar = ( index === array.length - 1 ) ? "" : ":";
-
-        timeString += element >= 10 ? element : "0" + element;
-        timeString += trailingChar;
-      });
 
       return timeString;
     },
