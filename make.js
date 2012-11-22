@@ -15,6 +15,8 @@ var path = require( "path" ),
     UGLIFY = nodeExec( normalize( "./node_modules/uglify-js/bin/uglifyjs" ) ),
     RJS = nodeExec( normalize( "./node_modules/requirejs/bin/r.js" ) ),
     LESS = nodeExec( normalize( "./node_modules/less/bin/lessc" ) ),
+    DOX = nodeExec( normalize( "./node_modules/dox/bin/dox" ) ),
+    DOXPARSER = nodeExec( normalize( "./tools/dox-parser" ) ),
 
     SRC_DIR = 'src',
     TEMPLATES_DIR = 'templates',
@@ -22,6 +24,7 @@ var path = require( "path" ),
     CSS_DIR = 'css',
     CORNFIELD_DIR = 'cornfield',
     PUBLIC_DIR = 'public',
+    DOCS_DIR = 'docs',
 
     DEFAULT_CONFIG = './src/default-config',
 
@@ -187,7 +190,8 @@ var desc = {
   check: 'Lint CSS, HTML, and JS',
   css: 'Build LESS files to CSS',
   deploy: 'Build Butter suitable for production',
-  server: 'Run the development server'
+  server: 'Run the development server',
+  docs: 'Build documentation'
 };
 
 target.all = function() {
@@ -570,4 +574,29 @@ target.deploy = function(){
 
   // It's important to use the production config
   echo( 'Run cornfield with `NODE_ENV=production node app.js`' );
+};
+
+target.docs = function(){
+  echo('### Building documentation from source files');
+  
+  var jsRegex = /\.js$/;
+
+  var files = find( SRC_DIR ).filter( function( file ) {
+    return file.match( jsRegex );
+  });
+
+  [files[4]].forEach( function( file ) {
+    var doxOutput = exec( DOX + ' < ' + file, { silent: true } ).output;
+    var parser = exec( DOXPARSER, { async: true, silent: true }, function( code, output ) {
+      var filenameIndex = file.lastIndexOf( '/' ) + 1;
+      var filename = file.substr( filenameIndex ).replace( jsRegex, '.html' );
+      var path = file.substr( 0, filenameIndex ).replace( SRC_DIR, DOCS_DIR );
+      mkdir( '-p', path );
+      console.log( path, filename );
+      console.log( output );
+    });
+    parser.stdin.write( doxOutput );
+    parser.stdin.end();
+  });
+
 };
