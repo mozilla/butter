@@ -25,7 +25,14 @@
               te2;
 
           te1 = t.addTrackEvent( defaultEvent );
-          te2 = t.addTrackEvent( defaultEvent );
+          te2 = t.addTrackEvent({
+            type: "text",
+            popcornOptions: {
+              start: 6,
+              end: 8,
+              text: "This is a test"
+            }
+          });
 
           //Set both track events to being selected
           te1.selected = te2.selected = true;

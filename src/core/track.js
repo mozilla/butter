@@ -202,11 +202,6 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
 
       trackEvent.bind( _this, _popcornWrapper );
 
-      // Update the trackevent with defaults (if necessary)
-      if ( _this._media ) {
-        trackEvent.update( trackEvent.popcornOptions, true );
-      }
-
       // If the track itself has a target, give it to the trackevent as well.
       if( _target ){
         trackEvent.target = _target;
@@ -229,6 +224,11 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       trackEvent.subscribe( "update", trackEventUpdateNotificationHandler );
 
       _this.dispatch( "trackeventadded", trackEvent );
+
+      // Update the trackevent with defaults (if necessary)
+      if ( _this._media ) {
+        trackEvent.update( trackEvent.popcornOptions, true );
+      }
 
       return trackEvent;
     }; //addTrackEvent
