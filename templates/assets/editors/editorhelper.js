@@ -369,13 +369,7 @@
 
     function _updateFunction( e ) {
 
-      var trackEvent;
-
-      if ( e.type === "trackeventadded" ) {
-        trackEvent = e.data;
-      } else if ( e.type === "trackeventupdated" ) {
-        trackEvent = e.target;
-      }
+      var trackEvent = e.target;
 
       if ( trackEvent.popcornTrackEvent && plugins[ trackEvent.type ] ) {
         plugins[ trackEvent.type ]( trackEvent, butter.currentMedia.popcorn.popcorn );
