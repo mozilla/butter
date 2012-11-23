@@ -3,7 +3,7 @@
 var path = require( "path" ),
     child_process = require('child_process'),
     spawn = child_process.spawn,
-    exec = child_process.exec,
+    nativeExec = child_process.exec,
     normalize = function( p ){ return '"' + path.normalize( p ) + '"'; },
     join = path.join,
     // Make Windows happy, use `node <path>`
@@ -594,7 +594,7 @@ target.docs = function(){
   function nextFile(){
     var file = files[fileIndex];
 
-    var doxOutput = exec( DOX + ' -r < ' + file + ' | ' + DOXPARSER, { silent: true }, function(code, doxOutput){
+    nativeExec( DOX + ' -r < ' + file + ' | ' + DOXPARSER, { silent: true }, function(code, doxOutput){
       if(doxOutput){
         var filenameIndex = file.lastIndexOf( '/' ) + 1;
         var filename = file.substr( filenameIndex ).replace( jsRegex, '.md' );
