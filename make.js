@@ -1,7 +1,9 @@
 /*global cat,cd,cp,echo,env,exec,exit,find,ls,mkdir,mv,pwd,rm,sed,target*/
 
 var path = require( "path" ),
-    spawn = require('child_process').spawn,
+    child_process = require('child_process'),
+    spawn = child_process.spawn,
+    exec = child_process.exec,
     normalize = function( p ){ return '"' + path.normalize( p ) + '"'; },
     join = path.join,
     // Make Windows happy, use `node <path>`
@@ -578,6 +580,8 @@ target.deploy = function(){
 
 target.docs = function(){
   echo('### Building documentation from source files');
+
+  rm( '-rf', DOCS_DIR );
   
   var jsRegex = /\.js$/;
 
@@ -585,18 +589,26 @@ target.docs = function(){
     return file.match( jsRegex );
   });
 
-  [files[4]].forEach( function( file ) {
-    var doxOutput = exec( DOX + ' < ' + file, { silent: true } ).output;
-    var parser = exec( DOXPARSER, { async: true, silent: true }, function( code, output ) {
-      var filenameIndex = file.lastIndexOf( '/' ) + 1;
-      var filename = file.substr( filenameIndex ).replace( jsRegex, '.html' );
-      var path = file.substr( 0, filenameIndex ).replace( SRC_DIR, DOCS_DIR );
-      mkdir( '-p', path );
-      console.log( path, filename );
-      console.log( output );
+  var fileIndex = 0;
+
+  function nextFile(){
+    var file = files[fileIndex];
+
+    var doxOutput = exec( DOX + ' -r < ' + file + ' | ' + DOXPARSER, { silent: true }, function(code, doxOutput){
+      if(doxOutput){
+        var filenameIndex = file.lastIndexOf( '/' ) + 1;
+        var filename = file.substr( filenameIndex ).replace( jsRegex, '.md' );
+        var path = file.substr( 0, filenameIndex ).replace( SRC_DIR, DOCS_DIR );
+        mkdir( '-p', path );
+        doxOutput.to( path + filename );
+      }
+  
+      if(++fileIndex < files.length -1){
+        process.nextTick(nextFile);
+      }
     });
-    parser.stdin.write( doxOutput );
-    parser.stdin.end();
-  });
+  }
+
+  nextFile();
 
 };

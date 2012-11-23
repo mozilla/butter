@@ -8,27 +8,33 @@
   var __debug = false;
 
   /**
-   * Module: Logger
+   * Document: Logger
    *
    * Supplies customized logging functionality to Butter.
+   *
+   * @structure Module
    */
   define( [], function() {
 
     /**
-     * Class: Logger
+     * Document: Logger::Logger
      *
      * Controls logging for a specific object instance.
      *
-     * @param {String} name: Name of the object to report in the log.
+     * @structure Class
+     * @param {String} name Name of the object to report in the log.
+     * @api public
      */
     function Logger( name ) {
 
       /**
-       * Member: log
+       * Document: Logger::Logger::log
        *
        * Logs a message to the console prefixed by the given name.
        *
-       * @param {String} message: Contents of the log message
+       * @structure Member Function
+       * @api public
+       * @param {String} message Contents of the log message
        */
       this.log = function( message ) {
         if ( __debug ) {
@@ -37,12 +43,14 @@
       };
 
       /**
-       * Member: error
+       * Document: Logger::Logger::error
        *
        * Throws an error with the given message prefixed by the given name.
        *
-       * @param {String} message: Contents of the error
-       * @throws: Obligatory, since this is an error
+       * @structure Member Function
+       * @api public
+       * @param {String} message Contents of the error
+       * @throws Obligatory, since this is an error.
        */
       this.error = function( message ) {
         if ( __debug ) {
@@ -53,11 +61,12 @@
     }
 
     /**
-     * Class Function: enabled
+     * Document: Logger::Logger::enabled
      *
      * Whether the logger is enabled or not.
      *
-     * @param {Boolean} value: State of the logger.
+     * @structure Class Function
+     * @param {Boolean} value State of the logger.
      */
     Logger.enabled = function( value ) {
       if ( value !== undefined ) {

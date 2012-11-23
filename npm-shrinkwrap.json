@@ -178,6 +178,17 @@
         }
       }
     },
+    "dox": {
+      "version": "0.4.1",
+      "dependencies": {
+        "github-flavored-markdown": {
+          "version": "1.0.1"
+        },
+        "commander": {
+          "version": "0.6.1"
+        }
+      }
+    },
     "supertest": {
       "version": "0.3.1",
       "dependencies": {
