@@ -3,6 +3,7 @@ process.stdin.setEncoding('utf8');
 
 var input = '';
 var depthHashes = '##########################';
+var documentationPrefix = 'Document:';
 
 process.stdin.on('data', function(chunk){
   input += chunk;
@@ -13,11 +14,11 @@ var rootNode = {
 };
 
 function processBlock(block){
-  if(block.description.summary.indexOf('Document:') !== 0){
+  if(block.description.summary.indexOf(documentationPrefix) !== 0){
     return;
   }
 
-  var path = block.description.summary.split('::');
+  var path = block.description.summary.substr(documentationPrefix.length + 1).split('::');
   var name = path[path.length-1];
 
   var parentNode = rootNode;
@@ -34,6 +35,9 @@ function processBlock(block){
     else if(tag.type === 'param'){
       block._params.push(tag);
     }
+    else if(tag.type === 'usage'){
+      block._usage = tag.string;
+    }
   });
 
   for(var i = 0, l = path.length - 1; i < l; ++i){
@@ -45,7 +49,7 @@ function processBlock(block){
 
 function generateMD(node, depth){
   var output = '';
-  var ignoreTags = ['structure', 'api', 'param'];
+  var ignoreTags = ['usage', 'structure', 'api', 'param'];
 
   depth = depth || 1;
 
@@ -62,35 +66,48 @@ function generateMD(node, depth){
       });
     }
 
-    var extraTags = 0;
+    var extraTags = '';
     node.tags.forEach(function(tag){
-      ++extraTags;
+      var prefix, suffix;
       if(ignoreTags.indexOf(tag.type) === -1){
-        output += tag.type + ': ' + tag.string + '\n';  
+        if(tag.type === 'see'){
+          prefix = 'see';
+          suffix = tag.local ? tag.local : tag.url;
+        }
+        else {
+          prefix = tag.type;
+          suffix = tag.string;
+        }
+        extraTags += '__' + prefix + '__: ' + suffix + '\n';
       }
     });
 
-    if(extraTags > 0){
-      output += '\n';
+    if(extraTags.length > 0){
+      output += '\n' + extraTags + '\n';
     }
 
     if(node.ctx){
-      output += 'Usage:\n\n';
-      var prefix = '';
-      if(node._type === 'Class'){
-        prefix = node.ctx.name[0].toLowerCase() + ' = ';
+      output += '\nUsage:\n\n';
+      if(node._usage){
+        output += '    ' + node._usage + '\n';
       }
-      else if(node.ctx.receiver){
-        prefix = (node.ctx.receiver === 'this' ? (node._parent[0].toLowerCase() + node._parent.substr(1)) : node.ctx.receiver) + '.';
-      }
-      
-      var argString = node._params.map(function(param){
-        return param.name;
-      }).join(', ');
+      else {
+        var prefix = '';
+        if(node._type === 'Class'){
+          prefix = 'var ' + node.ctx.name[0].toLowerCase() + ' = new ';
+        }
+        else if(node.ctx.receiver){
+          prefix = (node.ctx.receiver === 'this' ? (node._parent[0].toLowerCase() + node._parent.substr(1)) : node.ctx.receiver) + '.';
+        }
+        
+        var argString = node._params.map(function(param){
+          return param.name;
+        }).join(', ');
 
-      output += '\n';
-      output += '    ' + prefix + node.ctx.name + '(' + argString +  ');' + '\n';
-      output += '\n';
+        output += '\n';
+        output += '    ' + prefix + node.ctx.name + '(' + argString +  ');' + '\n';
+        output += '\n';
+      }
     }
 
     ++depth;
