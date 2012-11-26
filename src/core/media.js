@@ -505,12 +505,32 @@
             return _url;
           },
           set: function( val ) {
+            var command,
+                oldUrl = _url,
+                newUrl = val;
             if ( _url !== val ) {
               _url = val;
               _ready = false;
               _popcornWrapper.clear( _target );
               setupContent();
               _this.dispatch( "mediacontentchanged", _this );
+              command = {
+                execute: function() {
+                  _url = newUrl;
+                  _ready = false;
+                  _popcornWrapper.clear( _target );
+                  setupContent();
+                  _this.dispatch( "mediacontentchanged", _this );
+                },
+                undo: function() {
+                  _url = oldUrl;
+                  _ready = false;
+                  _popcornWrapper.clear( _target );
+                  setupContent();
+                  _this.dispatch( "mediacontentchanged", _this );
+                }
+              };
+              UndoRedo.register( command );
             }
           }
         },
