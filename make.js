@@ -595,6 +595,7 @@ target.docs = function(){
     var file = files[fileIndex];
 
     nativeExec( DOX + ' -r < ' + file + ' | ' + DOXPARSER, { silent: true }, function(code, doxOutput){
+      //console.log(code, doxOutput);
       if(doxOutput){
         var filenameIndex = file.lastIndexOf( '/' ) + 1;
         var filename = file.substr( filenameIndex ).replace( jsRegex, '.md' );

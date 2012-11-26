@@ -13,6 +13,10 @@ var rootNode = {
   _children: {}
 };
 
+function escapeString(str){
+  return str.replace(/\</g, '&lt;').replace(/\>/g, '&gt;');
+}
+
 function processBlock(block){
   if(block.description.summary.indexOf(documentationPrefix) !== 0){
     return;
@@ -24,7 +28,7 @@ function processBlock(block){
   var parentNode = rootNode;
 
   block._children = {};
-  block._name = name.replace(/_/g, '\\_');
+  block._name = escapeString(name).replace(/_/g, '\\_');
   block._params = [];
   block._parent = path[path.length-2] || '';
 
@@ -55,28 +59,52 @@ function processBlock(block){
 function generateMD(node, depth){
   var output = '';
   var ignoreTags = ['usage', 'structure', 'api', 'param'];
+  var signature;
+  var usageString = '';
+  var extraTagsString = '';
+  var paramString = '';
 
   depth = depth || 1;
 
   if(node._name){
-    output += depthHashes.substr(0, depth) + ' ';
-    if(node._type !== 'Property'){
-      output += node._name + ' (_' + (node.isPrivate ? 'Private' : 'Public') + ' ' + node._type + '_)' + '\n';
+
+    if(node.ctx){
+      usageString += 'Usage: ';
+      if(node._usage){
+        usageString += '`' + node._usage + '`';
+      }
+      else {
+        var prefix = '';
+        if(node._type === 'Class'){
+          prefix = 'var ' + node.ctx.name[0].toLowerCase() + ' = new ';
+        }
+        else if(node.ctx.receiver){
+          prefix = node._parent[0].toLowerCase() + node._parent.substr(1) + '.';
+        }
+        
+        var argString = node._params.map(function(param){
+          return param.name;
+        }).join(', ');
+
+        signature = node.ctx.name + '(' + argString +  ');';
+        usageString += '`' + prefix + signature + '`';
+      }
+
+      usageString += '  \n';
     }
     else {
-      output += node._name + ' (_' + (node._access ? node._access + ' ' : '' ) + 'Property_)' + '\n'; 
+      signature = node._name;
     }
-    output += '\n';
-    output += node.description.body + '\n';
 
     if(node._params.length > 0){
-      output += 'Arguments:\n\n';
+      //paramString += 'Arguments:\n\n';
       node._params.forEach(function(param){
-        output += '* __' + param.name + '__ ' + '[_' + param.types.join('_ or _') + '_]: ' + param.description + '\n';
+        paramString += '* __' + param.name + '__ ' + '[_' + param.types.join('_ or _') + '_]: ' + param.description + '  \n';
       });
+      paramString += '  \n';
     }
 
-    var extraTags = '';
+    var extraTagsString = '';
     node.tags.forEach(function(tag){
       var prefix, suffix;
       if(ignoreTags.indexOf(tag.type) === -1){
@@ -86,43 +114,34 @@ function generateMD(node, depth){
         }
         else if(tag.type === 'return'){
           prefix = 'return';
-          suffix = '[_' + tag.types.join('_ or _') + '_] ' + tag.description + '\n';
+          suffix = '[_' + tag.types.join('_ or _') + '_] ' + tag.description;
         }
         else {
           prefix = tag.type;
           suffix = tag.string;
         }
-        extraTags += '__' + prefix + '__: ' + suffix + '\n';
+        extraTagsString += '__' + prefix + '__: ' + suffix + '  \n';
       }
     });
 
-    if(extraTags.length > 0){
-      output += '\n' + extraTags + '\n';
+    if(extraTagsString.length > 0){
+      extraTagsString = '\n' + extraTagsString + '  \n\n';
     }
 
-    if(node.ctx){
-      output += '\nUsage:\n\n';
-      if(node._usage){
-        output += '    ' + node._usage + '\n';
-      }
-      else {
-        var prefix = '';
-        if(node._type === 'Class'){
-          prefix = 'var ' + node.ctx.name[0].toLowerCase() + ' = new ';
-        }
-        else if(node.ctx.receiver){
-          prefix = (node.ctx.receiver === 'this' ? (node._parent[0].toLowerCase() + node._parent.substr(1)) : node.ctx.receiver) + '.';
-        }
-        
-        var argString = node._params.map(function(param){
-          return param.name;
-        }).join(', ');
 
-        output += '\n';
-        output += '    ' + prefix + node.ctx.name + '(' + argString +  ');' + '\n';
-        output += '\n';
-      }
+    output += depthHashes.substr(0, depth) + ' ';
+
+    output += signature;
+    if(node._type !== 'Property'){
+      output += ' [_' + (node.isPrivate ? 'Private' : 'Public') + ' ' + node._type + '_]' + '\n';
     }
+    else {
+      output += ' [_' + (node._access ? node._access + ' ' : '' ) + 'Property_]' + '\n'; 
+    }
+    output += '\n';
+    output += escapeString(node.description.body) + '\n';
+
+    output += paramString + extraTagsString + usageString + '  \n';
 
     ++depth;
   }

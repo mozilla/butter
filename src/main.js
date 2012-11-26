@@ -783,7 +783,7 @@
 
         _this.loader = loader;
 
-        _page = new Page( loader, _config );
+        _page = new Page( loader );
 
         _this.ui = new UI( _this  );
 

@@ -8,6 +8,7 @@
  * Manages configuration info for the app.
  *
  * @structure Module
+ * @expose parse
  */
 define( [], function() {
 
@@ -189,19 +190,24 @@ define( [], function() {
   }
 
   /**
-   * Class: Config
+   * Document: Config::Config
    *
-   * Manages creation of Configuration objects
+   * Manages creation of Configuration objects.
+   *
+   * @structure Factory for Configuration.
+   * @usage Config.parse(json);
    */
   var Config = {
 
     /**
-     * Member: parse
+     * Document: Config::Config::parse
      *
      * Parses a JSON config string, creating a Configuration object.
      *
-     * @param {String} configJSON: The config's JSON string.
-     * @throws JSON is malformed or otherwise can't be parsed.
+     * @param {String} configJSON The config's JSON string.
+     * @throw JSON is malformed or otherwise can't be parsed.
+     * @structure Class Function
+     * @api public
      */
     parse: function( configJSON ){
       try {

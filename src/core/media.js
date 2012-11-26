@@ -30,6 +30,7 @@ define( [
    * Supplies access to Popcorn and the Butter Tracks and TrackEvents
    * that comprise a Popcorn experience for one media element (one set of urls).
    *
+   * @param {Dictionary} mediaOptions Initialization options, such as name, url, and target.
    * @structure Class
    * @api public
    */

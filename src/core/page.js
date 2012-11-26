@@ -2,14 +2,40 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
+/**
+ * Document: Page
+ *
+ * Exposes some page manipulation and information gathering functionality to Butter.
+ *
+ * @structure Module
+ */
 define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
-  return function( loader, config ) {
+  /**
+   * Document: Page::Page
+   *
+   * Supplies some utility functions for scraping/preparing an HTML page to make Butter & Popcorn
+   * operate smoothly.
+   *
+   * @param {Loader} loader Loader to use for retrieving assets for running Popcorn.
+   * @structure Class
+   * @api public
+   */
+  return function( loader ) {
 
     var PLAYER_TYPE_URL = "{popcorn-js}/players/{type}/popcorn.{type}.js";
 
     EventManager.extend( this );
 
+    /**
+     * Document: Page::Page::scrape
+     *
+     * Scrapes the page to look for elements marked as targets or medias.
+     *
+     * @structure Member Function
+     * @api public
+     * @return {Object} A collection of media and target elements.
+     */
     this.scrape = function() {
       var rootNode = document.body,
           targets = rootNode.querySelectorAll("*[data-butter='target']"),
@@ -21,6 +47,15 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       };
     }; // scrape
 
+    /**
+     * Document: Page::Page::prepare
+     *
+     * Loads the assets required to make Popcorn work as expected for Butter.
+     *
+     * @param {Function} readyCallback Callback to execute when loading has finished.
+     * @structure Member Function
+     * @api public
+     */
     this.prepare = function( readyCallback ){
       loader.load([
         {
@@ -82,6 +117,16 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       ], readyCallback, null, true );
     };
 
+    /**
+     * Document: Page::Page::addPlayerType
+     *
+     * Loads a specific type of Popcorn player.
+     *
+     * @param {String} type Popcorn player type.
+     * @param {Function} callback Callback to execute when loading has finished.
+     * @structure Member Function
+     * @api public
+     */
     this.addPlayerType = function( type, callback ){
       loader.load({
         type: "js",
@@ -92,5 +137,5 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
       }, callback );
     };
 
-  }; // page
+  };
 });
