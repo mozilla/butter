@@ -83,7 +83,7 @@ define( [ "./shims" ], function(){
         (function( timeArr ) {
           timeArr[ 0 ] = +timeArr[ 0 ] + ( days * 24 );
           timeString = timeArr.join( ":" );
-        })( timeString.split( ":" ) );
+        }( timeString.split( ":" ) ) );
       }
 
       return timeString;
