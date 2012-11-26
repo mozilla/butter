@@ -8,9 +8,10 @@
             "core/eventmanager",
             "core/track",
             "core/popcorn-wrapper",
-            "util/uri"
+            "util/uri",
+            "util/undoredo"
           ],
-          function( Logger, EventManager, Track, PopcornWrapper, URI ) {
+          function( Logger, EventManager, Track, PopcornWrapper, URI, UndoRedo ) {
 
     var MEDIA_ELEMENT_SAFETY_POLL_INTERVAL = 500,
         MEDIA_ELEMENT_SAFETY_POLL_ATTEMPTS = 10;
@@ -145,7 +146,7 @@
         }
       }
 
-      this.addTrack = function ( track ) {
+      var _addTrack = function ( track ) {
         track = ensureNewTrackIsTrack( track );
 
         if ( track._media ) {
@@ -171,7 +172,21 @@
         return track;
       };
 
-      this.insertTrackBefore = function( otherTrack, newTrack ) {
+      this.addTrack = function ( track, node ) {
+        track = _addTrack( track );
+        node = node || UndoRedo;
+        node.register({
+          execute: function() {
+            _addTrack( track );
+          },
+          undo: function() {
+            _removeTrack( track );
+          }
+        });
+        return track;
+      };
+
+      var _insertTrackBefore = function( otherTrack, newTrack ) {
         newTrack = ensureNewTrackIsTrack( newTrack );
 
         if ( newTrack._media ) {
@@ -205,8 +220,22 @@
           return newTrack;
         }
         else {
-          throw "inserTrackBefore must be passed a valid relative track.";
+          throw "insertTrackBefore must be passed a valid relative track.";
         }
+      };
+
+      this.insertTrackBefore = function( otherTrack, newTrack, node ) {
+        newTrack = _insertTrackBefore( otherTrack, newTrack );
+        node = node || UndoRedo;
+        node.register({
+          execute: function() {
+            _insertTrackBefore( otherTrack, newTrack )
+          },
+          undo: function() {
+            _removeTrack( newTrack );
+          }
+        });
+        return newTrack;
       };
 
       this.getTrackById = function( id ) {
@@ -217,7 +246,7 @@
         }
       };
 
-      this.removeTrack = function ( track ) {
+      var _removeTrack = function ( track ) {
         var idx = _tracks.indexOf( track ),
             trackEvent;
         if ( idx > -1 ) {
@@ -243,13 +272,31 @@
           _this.dispatch( "trackremoved", track );
           return track;
         } //if
+      };
+
+      this.removeTrack = function ( track, node ) {
+        track = _removeTrack( track );
+        node = node || UndoRedo;
+        node.register({
+          execute: function() {
+            _removeTrack( track );
+          },
+          undo: function() {
+            if ( _orderedTracks[ track.order ] ) {
+              _insertTrackBefore( _orderedTracks[ track.order ], track );
+            } else {
+              _addTrack( track );
+            }
+          }
+        });
+        return track;
       }; //removeTrack
 
-      this.cleanUpEmptyTracks = function() {
+      this.cleanUpEmptyTracks = function( node ) {
         var oldTracks = _tracks.slice();
         for( var i = oldTracks.length - 1; i >= 0; --i ) {
           if ( oldTracks[ i ].trackEvents.length === 0 && _tracks.length > 1 ) {
-            _this.removeTrack( oldTracks[ i ] );
+            _this.removeTrack( oldTracks[ i ], node );
           }
         }
       };
@@ -363,21 +410,21 @@
         return null;
       };
 
-      this.forceEmptyTrackSpaceAtTime = function( track, start, end, ignoreTrackEvent ) {
+      this.forceEmptyTrackSpaceAtTime = function( track, start, end, ignoreTrackEvent, node ) {
         var nextTrack;
 
         if ( track.findOverlappingTrackEvent( start, end, ignoreTrackEvent ) ) {
           nextTrack = _this.getNextTrack( track );
           if ( nextTrack ) {
             if ( nextTrack.findOverlappingTrackEvent( start, end, ignoreTrackEvent ) ) {
-              return _this.insertTrackBefore( nextTrack );
+              return _this.insertTrackBefore( nextTrack, null, node );
             }
             else {
               return nextTrack;
             }
           }
           else {
-            return this.addTrack();
+            return this.addTrack( null, node );
           }
         }
 

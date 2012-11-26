@@ -37,8 +37,8 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       }
     });
 
-    DragNDrop.listen( "dropfinished", function() {
-      _media.cleanUpEmptyTracks();
+    DragNDrop.listen( "dropfinished", function( e ) {
+      _media.cleanUpEmptyTracks( e.data.node );
       _vScrollbar.update();
     });
 
@@ -50,7 +50,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       startDrop: function() {
         _newTrackForDroppables = null;
       },
-      drop: function( dropped, mousePosition ) {
+      drop: function( dropped, mousePosition, node ) {
         // Used if drop spawns a new track
         var newTrack, draggableType,
             trackEvent, trackEventRect,
@@ -82,7 +82,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
           droppedLeftValue = trackEventRect.left - containerRect.left;
 
           if ( !_newTrackForDroppables ) {
-            _newTrackForDroppables = butter.currentMedia.addTrack();
+            _newTrackForDroppables = butter.currentMedia.addTrack( null, node );
           }
 
           // Avoid using trackevent view width values here to circumvent padding/border
@@ -92,8 +92,8 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
 
           createTrackEventFromDrop( trackEvent, {
             start: start,
-            end: end
-          }, trackEvent.track, _newTrackForDroppables );
+            end: end,
+          }, trackEvent.track, _newTrackForDroppables, node );
         }
       }
     });
@@ -168,19 +168,19 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       });
     }
 
-    function createTrackEventFromDrop( trackEvent, popcornOptions, oldTrack, desiredTrack ) {
-      var newTrack = _media.forceEmptyTrackSpaceAtTime( desiredTrack, popcornOptions.start, popcornOptions.end, trackEvent );
+    function createTrackEventFromDrop( trackEvent, popcornOptions, oldTrack, desiredTrack, node ) {
+      var newTrack = _media.forceEmptyTrackSpaceAtTime( desiredTrack, popcornOptions.start, popcornOptions.end, trackEvent, node );
 
       if ( oldTrack !== newTrack ) {
         if ( oldTrack ) {
-          oldTrack.removeTrackEvent( trackEvent );
+          oldTrack.removeTrackEvent( trackEvent, node );
         }
-        trackEvent.update( popcornOptions );
-        newTrack.addTrackEvent( trackEvent );
+        trackEvent.update( popcornOptions, false, node );
+        newTrack.addTrackEvent( trackEvent, node );
         _this.ghostManager.removeGhostsAfterDrop( trackEvent, oldTrack );
       }
       else {
-        trackEvent.update( popcornOptions );
+        trackEvent.update( popcornOptions, false, node );
         _this.ghostManager.removeGhostsAfterDrop( trackEvent, oldTrack );
       }
     }
@@ -191,7 +191,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
           desiredTrack = e.data.track,
           oldTrack = trackEvent.track;
 
-      createTrackEventFromDrop( trackEvent, popcornOptions, oldTrack, desiredTrack );
+      createTrackEventFromDrop( trackEvent, popcornOptions, oldTrack, desiredTrack, e.data.node );
     }
 
     function onTrackEventResizeStarted( e ) {

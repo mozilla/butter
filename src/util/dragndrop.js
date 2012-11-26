@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
-  function( EventManager, LangUtils, ScrollGroup ) {
+define( [ "core/eventmanager", "util/lang", "util/scroll-group", "util/undoredo" ],
+  function( EventManager, LangUtils, ScrollGroup, UndoRedo ) {
 
   var SCROLL_INTERVAL = 16,
       DEFAULT_SCROLL_AMOUNT = 10,
@@ -139,6 +139,8 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
   }
 
   function __onDraggableMouseUp( e ) {
+    var node = new UndoRedo.Node();
+// TODO: find out where overlap screws up the undo.
     window.removeEventListener( "dragstart", __onWindowDragStart, false );
     window.removeEventListener( "mousemove", __onDraggableDragged, false );
     window.removeEventListener( "mousemove", __onDraggableMouseUp, false );
@@ -173,12 +175,12 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
 
     for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
       selectedDraggable = selectedDraggables[ i ];
-      selectedDraggable.stop();
+      selectedDraggable.stop( node );
     }
 
     for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
       selectedDraggable = selectedDraggables[ i ];
-      selectedDraggable.drop();
+      selectedDraggable.drop( node );
     }
 
     for ( i = selectedDraggables.length - 1; i >= 0; --i ) {
@@ -191,7 +193,10 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       droppables[ i ].stopDrop();
     }
 
-    DragNDrop.dispatch( "dropfinished" );
+    DragNDrop.dispatch( "dropfinished", {
+      node: node
+    });
+    UndoRedo.register( node );
   }
 
   function __onDraggableMouseDown( e ) {
@@ -643,9 +648,9 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
           _onOut( draggable.element );
         }
       },
-      drop: function( draggable ) {
+      drop: function( draggable, node ) {
         if ( removeDraggable( draggable ) ) {
-          _onDrop( draggable, __mousePos );
+          _onDrop( draggable, __mousePos, node );
         }
       },
       drag: function( dragElementRect ) {
@@ -911,17 +916,17 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       }
     };
 
-    _draggable.drop = function( e ) {
+    _draggable.drop = function( node ) {
       if ( _draggable.droppable ) {
-        _draggable.droppable.drop( _draggable );
+        _draggable.droppable.drop( _draggable, node );
       }
     };
 
-    _draggable.stop = function() {
+    _draggable.stop = function( node ) {
       // If originalPosition is not null, start() was called
       if ( _originalPosition ) {
         LangUtils.setTransformProperty( _element, "" );
-        _onStop();
+        _onStop( node );
       }
     };
 
@@ -1005,6 +1010,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
     }
 
     function onElementMouseMove( e ) {
+      var command;
       if ( !_moved ) {
         _moved = true;
         _placeHolder = createPlaceholder( _draggingElement );
@@ -1036,12 +1042,26 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
           }
 
           if ( minB - maxT > dragElementRect.height / 2 ) {
+            var orderedElements = [],
+                oldIndex, newIndex,
+                oldOrderedElements = [],
+                childNodes = parentElement.childNodes;
+            for ( var j=0, l=childNodes.length; j<l; ++j ) {
+              var child = childNodes[ j ];
+              if ( child !== _draggingElement ) {
+                if ( child !== _placeHolder ) {
+                  oldOrderedElements.push( child );
+                }
+                else{
+                  oldIndex = j;
+                  oldOrderedElements.push( _draggingElement );
+                }
+              }
+            }
             _hoverElement = element;
             var newPlaceHolder = createPlaceholder( _hoverElement );
             parentElement.replaceChild( _hoverElement, _placeHolder );
             _placeHolder = newPlaceHolder;
-            var orderedElements = [],
-                childNodes = parentElement.childNodes;
             for ( var j=0, l=childNodes.length; j<l; ++j ) {
               var child = childNodes[ j ];
               if ( child !== _draggingElement ) {
@@ -1049,11 +1069,31 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
                   orderedElements.push( child );
                 }
                 else{
+                  newIndex = j;
                   orderedElements.push( _draggingElement );
                 }
               }
             }
             _onChange( orderedElements );
+            command = {
+              execute: function() {
+                _onChange( orderedElements );
+                var oldNode = parentElement.childNodes[ oldIndex ],
+                    placeHolder = createPlaceholder( oldNode ),
+                    newNode = parentElement.childNodes[ newIndex ];
+                parentElement.replaceChild( oldNode, newNode );
+                parentElement.replaceChild( newNode, placeHolder );
+              },
+              undo: function() {
+                _onChange( oldOrderedElements );
+                var oldNode = parentElement.childNodes[ oldIndex ],
+                    placeHolder = createPlaceholder( oldNode ),
+                    newNode = parentElement.childNodes[ newIndex ];
+                parentElement.replaceChild( oldNode, newNode );
+                parentElement.replaceChild( newNode, placeHolder );
+              }
+            };
+            UndoRedo.register( command );
           }
         }
       }

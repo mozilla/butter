@@ -8,9 +8,9 @@
  * Supports a single event in the Media > Track > TrackEvent model.
  */
 define( [ "./logger", "./eventmanager", "./observer",
-          "util/lang", "util/time", "./views/trackevent-view" ],
+          "util/lang", "util/time", "./views/trackevent-view", "util/undoredo" ],
   function( Logger, EventManager, Observer,
-            LangUtil, TimeUtil, TrackEventView ) {
+            LangUtil, TimeUtil, TrackEventView, UndoRedo ) {
 
   var __guid = 0;
 
@@ -58,6 +58,7 @@ define( [ "./logger", "./eventmanager", "./observer",
     EventManager.extend( _this );
     Observer.extend( _this );
 
+    _this.command = {};
     _this.popcornOptions = _popcornOptions;
     _this.popcornTrackEvent = null;
 
@@ -103,7 +104,7 @@ define( [ "./logger", "./eventmanager", "./observer",
      * @event trackeventupdated: Occurs when an update operation succeeded.
      * @throws TrackEventUpdateException: When an update operation failed because of conflicting times or other serious property problems.
      */
-    this.update = function( updateOptions, applyDefaults ) {
+    this.command.update = function( updateOptions, applyDefaults ) {
       updateOptions = updateOptions || {};
 
       var newStart = updateOptions.start,
@@ -148,8 +149,8 @@ define( [ "./logger", "./eventmanager", "./observer",
         media = _track._media;
         duration = media.duration;
 
-        if ( this.manifest ) {
-          manifestOptions = this.manifest.options;
+        if ( _this.manifest ) {
+          manifestOptions = _this.manifest.options;
           if ( manifestOptions ) {
             for ( var prop in manifestOptions ) {
               if ( manifestOptions.hasOwnProperty( prop ) ) {
@@ -190,9 +191,28 @@ define( [ "./logger", "./eventmanager", "./observer",
         // we should only get here if no exceptions happened
         _this.dispatch( "trackeventupdated", _this );
       }
-
     };
 
+    this.update = function( updateOptions, applyDefaults, node ) {
+      var oldOptions = LangUtil.clone( _popcornOptions ),
+          newOptions = LangUtil.clone( updateOptions ),
+          command = {};
+      _this.command.update( updateOptions, applyDefaults );
+      command.execute = function() {
+        _this.command.update( newOptions, applyDefaults );
+      };
+      command.undo = function() {
+        _this.command.update( oldOptions, applyDefaults );
+      };
+      // Do not bother adding a command if there is nothing to update.
+      if ( updateOptions ) {
+        if ( !node ) {
+          UndoRedo.register( command );
+        } else {
+          node.register( command );
+        }
+      }
+    };
     /**
      * Member: unbind
      *
