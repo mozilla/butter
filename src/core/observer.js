@@ -2,10 +2,18 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
+/**
+ * Document: Observer
+ *
+ * An observer/notification system.
+ *
+ * @structure Module
+ * @expose `extend`
+ */
 define([], function(){
 
   /**
-   * Notification
+   * Document: Observer::Notification
    *
    * A Notification object is passed to subscribers when a notification occurs. It
    * describes the notification, encompassing references to the notification origin,
@@ -13,19 +21,23 @@ define([], function(){
    * cancelled by calling the `cancel` function, and a reason can be specified to
    * pass on to the body which issued the notification.
    *
-   * @param {Object} origin: The object which issued the notification.
-   * @param {String} type: The type of notification.
-   * @param {Object} data: Arbitrary data to associate with the notification.
+   * @param {Object} origin The object which issued the notification.
+   * @param {String} type The type of notification.
+   * @param {Object} data Arbitrary data to associate with the notification.
+   * @structure Class
+   * @api public
    */
   function Notification( origin, type, data ) {
     var _cancelledReason;
 
     /**
-     * cancel
+     * Document: Observer::Notification::cancel
      *
      * Cancels a notification and records a reason for doing so.
      *
-     * @param {String} reason: The reason for canceling the notification.
+     * @param {String} reason The reason for canceling the notification.
+     * @structure Member Function
+     * @api public
      */
     this.cancel = function( reason ) {
       _cancelledReason = reason || true;
@@ -60,14 +72,15 @@ define([], function(){
   }
 
   /**
-   * __subscribe
+   * Document: Observer::__subscribe
    *
-   * A class function which adds a subscriber to a group of subscribers
-   * corresponding to a given notification type.
+   * Adds a subscriber to a group of subscribers corresponding to a given notification type.
    *
    * @param {String} type: The type of notification that the given subscriber should receive.
    * @param {Function} subscriber: A function which will be called when notification occurs.
    * @param {Object} subscriberDict: The group of subscribers for an object.
+   * @structure Class Function
+   * @api private
    */
   function __subscribe( type, subscriber, subscriberDict ) {
     if ( !subscriberDict[ type ] ) {
@@ -77,14 +90,15 @@ define([], function(){
   }
 
   /**
-   * __unsubscribe
+   * Document: Observer::__unsubscribe
    *
-   * A class function which removes a subscriber from a group of subscribers
-   * corresponding to a given notification type.
+   * Removes a subscriber from a group of subscribers corresponding to a given notification type.
    *
    * @param {String} type: The type of notification that the given subscriber was set up to receive.
    * @param {Function} subscriber: A function which will be called when notification occurs.
    * @param {Object} subscriberDict: The group of subscribers for an object.
+   * @structure Class Function
+   * @api private
    */
   function __unsubscribe( type, subscriber, subscriberDict ) {
     var idx, subscribers = subscriberDict[ type ];
@@ -98,14 +112,16 @@ define([], function(){
   }
 
   /**
-   * __notify
+   * Document: Observer::__notify
    *
-   * A class function which calls all the subscribers of a given notification type.
+   * Calls all the subscribers of a given notification type.
    *
    * @param {String} type: The type of notification identifying a group of subscribers.
    * @param {Function} subscriber: A function which will be called when notification occurs.
    * @param {Object} subscriberDict: The group of subscribers for an object.
    * @param {Object} object: The object issuing the notification.
+   * @structure Class Function
+   * @api private
    */
   function __notify( type, data, subscriberDict, object ) {
     var i, l,
@@ -125,35 +141,68 @@ define([], function(){
   }
 
   /**
-   * extendObject
+   * Document: Observer::Observer
    *
    * Gives an object the functionality to record and notify subscribers for typed notifications
    * (simple implementation of Observer pattern).
    *
    * @param {Object} object: The object to extend with Observer functionality.
+   * @structure Class
+   * @usage Observer.extend(object);
+   * @api public
    */
-  function extendObject( object ) {
+  function Observer( object ) {
     var _subscribers = {};
 
     if ( object.subscribe ) {
       throw "Object already has Observer properties.";
     }
 
+    /**
+     * Document: Observer::Observer::subscribe
+     *
+     * Executes subscription procedure for the given subscriber on this Observer object.
+     * 
+     * @param {Object} object The object to extend with Observer functionality.
+     * @see Observer::__subscribe
+     * @structure Member Function
+     * @api public
+     */
     object.subscribe = function( type, subscriber ) {
       __subscribe( type, subscriber, _subscribers );
     };
 
+    /**
+     * Document: Observer::Observer::unsubscribe
+     *
+     * Executes unsubscription procedure for the given subscriber on this Observer object.
+     *
+     * @param {Object} object The object to extend with Observer functionality.
+     * @see Observer::__unsubscribe
+     * @structure Member Function
+     * @api public
+     */
     object.unsubscribe = function( type, subscriber ) {
       __unsubscribe( type, subscriber, _subscribers );
     };
 
+    /**
+     * Document: Observer::Observer::notify
+     *
+     * Executes notification procedure for the given subscriber on this Observer object.
+     *
+     * @param {Object} object The object to extend with Observer functionality.
+     * @see Observer::__notify
+     * @structure Member Function
+     * @api public
+     */
     object.notify = function( type, data ) {
       return __notify( type, data, _subscribers, object );
     };
   }
 
   return {
-    extend: extendObject
+    extend: Observer
   };
 
 });

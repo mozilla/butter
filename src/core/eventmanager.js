@@ -8,6 +8,7 @@
  * An event management system.
  *
  * @structure Module
+ * @expose `extend`
  */
 define( [], function(){
 
@@ -286,7 +287,7 @@ define( [], function(){
    *
    * @structure Class
    * @param {Object} object Object to wrap with event management functionality.
-   * @usage EventManagerWrapper(object);
+   * @usage EventManager.extend(object);
    * @api public
    **/
   function EventManagerWrapper( object ){

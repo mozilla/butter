@@ -2,7 +2,14 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-(function( undefined ) {
+/**
+ * Document: Config
+ *
+ * Manages configuration info for the app.
+ *
+ * @structure Module
+ */
+define( [], function() {
 
   /**
    * Shared config for all Configuration instances, keyed on configID below
@@ -101,116 +108,111 @@
     return property;
   }
 
+
   /**
-   * Module: Config
+   * Document: Config::Configuration
    *
-   * Manages configuration info for the app.
+   * Manages access to config properties, doing variable substitution.
+   *
+   * @param {String} configID: A unique ID for this config, used as key into __config.
+   * @param {Object} configObject: A parsed config object, see config.parse().
+   * @throw config is not a parsed object (e.g., if string is passed).
+   * @structure Class
    */
-  define( [], function() {
+  function Configuration( configID, configObject ) {
 
-    /**
-     * Class: Configuration
-     *
-     * Manages access to config properties, doing variable substitution.
-     *
-     * @param {String} configID: A unique ID for this config, used as key into __config.
-     * @param {Object} configObject: A parsed config object, see config.parse().
-     * @throws config is not a parsed object (e.g., if string is passed).
-     */
-    function Configuration( configID, configObject ) {
-
-      // Constructor should be called by Config.parse()
-      if (typeof configObject !== "object"){
-        throw "Config Error: expected parsed config object";
-      }
-
-      // Register configuration info centrally
-      __config[ configID ] = configObject;
-
-      /**
-       * Member: value
-       *
-       * Gets or overrides the value of a config property, doing
-       * variable replacement as needed. If only one argument is passed,
-       * the name of a property, the value is returned. If two arguments
-       * are passed, the second is used in order to override the property's
-       * value. If a known variable is overriden, its validate() method
-       * is called (if any). The value is returned in both cases.
-       *
-       * @param {String} property: The config property to get.
-       * @param {Object} newValue: [Optional] A new value to use.
-       */
-      this.value = function( property, newValue ){
-        var configValue;
-
-        if( newValue !== undefined ){
-          configObject[ property ] = __validateVariable( property, newValue );
-        }
-
-        // If we're giving back a property branch, replace values deep before
-        // handing it back to the user.
-        configValue = configObject[ property ];
-        if( typeof configValue === "object" ){
-          return __replaceVariableBranch( configValue, configObject );
-        } else {
-          return __replaceVariable( configValue, configObject );
-        }
-      };
-
-      /**
-       * Member: override
-       *
-       * Overrides this Configuration object's top-level config with values
-       * in another, leaving any values in this object alone which aren't
-       * in the other. You typically override a default configuration with
-       * a user's extra settings.
-       */
-      this.override = function( configuration ){
-        var configA = configObject,
-            configB = __config[ configuration.id ];
-
-        for( var propName in configB ){
-          if( configB.hasOwnProperty( propName ) ){
-            configA[ propName ] = configB[ propName ];
-          }
-        }
-      };
-
-      /**
-       * Member: id
-       *
-       * An internal-use getter for keying config information.
-       */
-      Object.defineProperty( this, "id", { get: function(){ return configID; } } );
+    // Constructor should be called by Config.parse()
+    if (typeof configObject !== "object"){
+      throw "Config Error: expected parsed config object";
     }
 
-    /**
-     * Class: Config
-     *
-     * Manages creation of Configuration objects
-     */
-    var Config = {
+    // Register configuration info centrally
+    __config[ configID ] = configObject;
 
-      /**
-       * Member: parse
-       *
-       * Parses a JSON config string, creating a Configuration object.
-       *
-       * @param {String} configJSON: The config's JSON string.
-       * @throws JSON is malformed or otherwise can't be parsed.
-       */
-      parse: function( configJSON ){
-        try {
-          var config = JSON.parse( configJSON );
-          return new Configuration( "config-" + __id++, config );
-        } catch( e ){
-          throw "Config.parse Error: unable to parse config string. Error was: " + e.message;
-        }
+    /**
+     * Document: Config::Configuration::value
+     *
+     * Gets or overrides the value of a config property, doing
+     * variable replacement as needed. If only one argument is passed,
+     * the name of a property, the value is returned. If two arguments
+     * are passed, the second is used in order to override the property's
+     * value. If a known variable is overriden, its validate() method
+     * is called (if any). The value is returned in both cases.
+     *
+     * @param {String} property: The config property to get.
+     * @param {Object} newValue: [Optional] A new value to use.
+     * @structure Member Function
+     */
+    this.value = function( property, newValue ){
+      var configValue;
+
+      if( newValue !== undefined ){
+        configObject[ property ] = __validateVariable( property, newValue );
       }
 
+      // If we're giving back a property branch, replace values deep before
+      // handing it back to the user.
+      configValue = configObject[ property ];
+      if( typeof configValue === "object" ){
+        return __replaceVariableBranch( configValue, configObject );
+      } else {
+        return __replaceVariable( configValue, configObject );
+      }
     };
 
-    return Config;
-  });
+    /**
+     * Document: Config::Configuration::override
+     *
+     * Overrides this Configuration object's top-level config with values
+     * in another, leaving any values in this object alone which aren't
+     * in the other. You typically override a default configuration with
+     * a user's extra settings.
+     *
+     * @param {Object} configuration Values to overwrite old configuration.
+     * @structure Member Function
+     */
+    this.override = function( configuration ){
+      var configA = configObject,
+          configB = __config[ configuration.id ];
 
-}());
+      for( var propName in configB ){
+        if( configB.hasOwnProperty( propName ) ){
+          configA[ propName ] = configB[ propName ];
+        }
+      }
+    };
+
+    /**
+     * An internal-use getter for keying config information.
+     */
+    Object.defineProperty( this, "id", { get: function(){ return configID; } } );
+  }
+
+  /**
+   * Class: Config
+   *
+   * Manages creation of Configuration objects
+   */
+  var Config = {
+
+    /**
+     * Member: parse
+     *
+     * Parses a JSON config string, creating a Configuration object.
+     *
+     * @param {String} configJSON: The config's JSON string.
+     * @throws JSON is malformed or otherwise can't be parsed.
+     */
+    parse: function( configJSON ){
+      try {
+        var config = JSON.parse( configJSON );
+        return new Configuration( "config-" + __id++, config );
+      } catch( e ){
+        throw "Config.parse Error: unable to parse config string. Error was: " + e.message;
+      }
+    }
+
+  };
+
+  return Config;
+});

@@ -24,7 +24,7 @@ function processBlock(block){
   var parentNode = rootNode;
 
   block._children = {};
-  block._name = name;
+  block._name = name.replace(/_/g, '\\_');
   block._params = [];
   block._parent = path[path.length-2] || '';
 
@@ -38,7 +38,12 @@ function processBlock(block){
     else if(tag.type === 'usage'){
       block._usage = tag.string;
     }
+    else if(tag.type === 'access'){
+      block._access = tag.string;
+    }
   });
+
+  block._type = block._type || '';
 
   for(var i = 0, l = path.length - 1; i < l; ++i){
     parentNode = parentNode._children[path[i]] || parentNode;
@@ -54,15 +59,20 @@ function generateMD(node, depth){
   depth = depth || 1;
 
   if(node._name){
-    output += depthHashes.substr(0, depth) + ' ' +
-      node._name + ' (_' + ( node.isPrivate ? 'Private' : 'Public' ) + ' ' + node._type + '_)' + '\n';
+    output += depthHashes.substr(0, depth) + ' ';
+    if(node._type !== 'Property'){
+      output += node._name + ' (_' + (node.isPrivate ? 'Private' : 'Public') + ' ' + node._type + '_)' + '\n';
+    }
+    else {
+      output += node._name + ' (_' + (node._access ? node._access + ' ' : '' ) + 'Property_)' + '\n'; 
+    }
     output += '\n';
     output += node.description.body + '\n';
 
     if(node._params.length > 0){
       output += 'Arguments:\n\n';
       node._params.forEach(function(param){
-        output += '* __' + param.name + '__ ' + '[_' + param.types.join('|') + '_]: ' + param.description + '\n';
+        output += '* __' + param.name + '__ ' + '[_' + param.types.join('_ or _') + '_]: ' + param.description + '\n';
       });
     }
 
@@ -72,7 +82,11 @@ function generateMD(node, depth){
       if(ignoreTags.indexOf(tag.type) === -1){
         if(tag.type === 'see'){
           prefix = 'see';
-          suffix = tag.local ? tag.local : tag.url;
+          suffix = tag.local ? ('`' + tag.local + '`') : tag.url;
+        }
+        else if(tag.type === 'return'){
+          prefix = 'return';
+          suffix = '[_' + tag.types.join('_ or _') + '_] ' + tag.description + '\n';
         }
         else {
           prefix = tag.type;
@@ -114,8 +128,18 @@ function generateMD(node, depth){
   }
 
   if(node._children){
+    var properties = [];
+    var nonProperties = [];
     Object.keys(node._children).forEach(function(childName){
       var child = node._children[childName];
+      if(child._type === 'Property'){
+        properties.push(child);
+      }
+      else {
+        nonProperties.push(child);
+      }
+    });
+    properties.concat(nonProperties).forEach(function(child){
       output += generateMD(child, depth);
     });
   }
