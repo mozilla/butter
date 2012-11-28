@@ -109,10 +109,9 @@ function writeEmbedShell( path, url, data, callback ) {
 function writeEmbed( path, url, data, callback ) {
   if( !writeEmbed.templateFn ) {
     writeEmbed.templateFn = jade.compile( fs.readFileSync( 'views/embed.jade', 'utf8' ),
-                                          { filename: 'embed.jade', pretty: true, debug: true } );
-    console.log( writeEmbed.templateFn );
+                                          { filename: 'embed.jade', pretty: true } );
   }
-console.log( writeEmbed.templateFn( data ) );
+
   stores.publish.write( path, writeEmbed.templateFn( data ), callback );
 }
 
