@@ -125,7 +125,7 @@ S3FileStore.prototype = Object.create( BaseFileStore );
 S3FileStore.prototype.write = function( key, data, callback ) {
   var headers = {
     'x-amz-acl': 'public-read',
-    'Content-Length': data.length,
+    'Content-Length': Buffer.byteLength(data, 'utf8'),
     'Content-Type': this.contentType
   };
 
