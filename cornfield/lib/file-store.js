@@ -123,9 +123,13 @@ function S3FileStore( options ) {
 S3FileStore.prototype = Object.create( BaseFileStore );
 
 S3FileStore.prototype.write = function( key, data, callback ) {
+  // If the data we're writing is a string, then we want the byte count in UTF-8
+  // Otherwise, assume it's already a Buffer object
+  var contentLength = typeof data === "string" ? Buffer.byteLength( data, 'utf8' ) : data.length;
+
   var headers = {
     'x-amz-acl': 'public-read',
-    'Content-Length': Buffer.byteLength(data, 'utf8'),
+    'Content-Length': contentLength,
     'Content-Type': this.contentType
   };
 
