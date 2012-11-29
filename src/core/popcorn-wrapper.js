@@ -402,19 +402,19 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
      * calling readyCallback when it succeeds, or calling timeoutCallback after timeoutDuration milliseconds.
      */
     function checkTimeoutLoop( checkFunction, readyCallback, timeoutCallback, timeoutDuration ){
-      var stop = false,
-          ready = false;
+      var ready = false;
 
       // perform one check
       function doCheck(){
-        // if timeout occurred already, bail
-        if ( stop ) {
+
+        if ( _interruptLoad ) {
           return;
         }
+
         // run the check function
-        if ( checkFunction() ) {
-          // if success, raise the ready flag and call the ready callback
-          ready = true;
+        ready = checkFunction();
+        if ( ready ) {
+          // if success, call the ready callback
           readyCallback();
         }
         else {
@@ -425,9 +425,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
 
       // set a timeout to occur after timeoutDuration milliseconds
       setTimeout(function(){
-        // if success hasn't already occured, raise the stop flag and call timeoutCallback
+        // if success hasn't already occured, call timeoutCallback
         if ( !ready ) {
-          stop = true;
           timeoutCallback();
         }
       }, MEDIA_WAIT_DURATION );
