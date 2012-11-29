@@ -172,7 +172,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         trackEvent.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
         if( _trackEventHighlight === "hover" ){
           trackEvent.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
-          trackEvent.view.unlisten( "trackeventmouseout", onTrackEventMouseOut );
         }
       });
 
@@ -186,7 +185,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         });
         if( _trackEventHighlight === "hover" ){
           trackEvent.view.listen( "trackeventmouseover", onTrackEventMouseOver );
-          trackEvent.view.listen( "trackeventmouseout", onTrackEventMouseOut );
         }
       }
 
@@ -196,7 +194,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         track.view.listen( "trackeventmousedown", onTrackEventMouseDown );
         if( _trackEventHighlight === "hover" ){
           track.view.listen( "trackeventmouseover", onTrackEventMouseOver );
-          track.view.listen( "trackeventmouseout", onTrackEventMouseOut );
         }
 
         var existingEvents = track.trackEvents;
