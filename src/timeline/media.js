@@ -221,7 +221,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         track.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
         if( _trackEventHighlight === "hover" ){
           track.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
-          track.view.unlisten( "trackeventmouseout", onTrackEventMouseOut );
         }
       });
 
