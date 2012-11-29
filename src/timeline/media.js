@@ -36,6 +36,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer ),
         _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
         _currentMouseDownTrackEvent,
+        _currentMouseDownTrackEventWasSelected = false,
         _status;
 
     _status = new Status( _media, butter.ui.tray.statusArea );
@@ -99,35 +100,50 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       }
     }
 
-    function onTrackEventMouseOut( e ){
-    }
-
-    function onTrackEventMouseUp( e ){
-    }
-
-    function onTrackEventDragStarted( e ){
-      _currentMouseDownTrackEvent = null;
-    }
-
-    function onTrackEventMouseDown( e ){
+    function onTrackEventMouseUp( e ) {
       var trackEvent = e.data.trackEvent,
-          originalEvent = e.data.originalEvent,
-          isHandle = originalEvent.target.classList.contains( "handle" );
+          tracks,
+          originalEvent = e.data.originalEvent;
 
-      _currentMouseDownTrackEvent = trackEvent;
-
-      if ( !isHandle ) {
-        trackEvent.selected = true;
+      if ( trackEvent === _currentMouseDownTrackEvent ) {
+        if ( !originalEvent.shiftKey ) {
+          tracks = _media.tracks;
+          for ( var t in tracks ) {
+            if( tracks.hasOwnProperty( t ) ) {
+              tracks[ t ].deselectEvents( trackEvent );
+            }
+          }
+        } else if ( trackEvent.selected && _currentMouseDownTrackEventWasSelected ) {
+          trackEvent.selected = false;
+        }
+        _currentMouseDownTrackEvent = null;
+        _currentMouseDownTrackEventWasSelected = false;
       }
+    }
 
-      if( !originalEvent.shiftKey && !isHandle ){
-        var tracks = _media.tracks;
-        for( var t in tracks ){
-          if( tracks.hasOwnProperty( t ) ){
+    function onTrackEventDragStarted( e ) {
+      _currentMouseDownTrackEvent = null;
+      _currentMouseDownTrackEventWasSelected = false;
+    }
+
+    function onTrackEventMouseDown( e ) {
+      var trackEvent = e.data.trackEvent,
+          tracks,
+          originalEvent = e.data.originalEvent;
+
+      // track the mousedown event and previous selected state for mouseup.
+      _currentMouseDownTrackEvent = trackEvent;
+      _currentMouseDownTrackEventWasSelected = trackEvent.selected;
+
+      if ( !originalEvent.shiftKey && !trackEvent.selected ) {
+        tracks = _media.tracks;
+        for ( var t in tracks ) {
+          if ( tracks.hasOwnProperty( t ) ) {
             tracks[ t ].deselectEvents( trackEvent );
           }
         }
       }
+      trackEvent.selected = true;
     }
 
     function onMediaReady(){
