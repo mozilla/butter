@@ -1,125 +1,139 @@
-var esprima = require('esprima');
 var fs = require('fs');
 
-var filename = process.argv[2];
+var inputFilename = process.argv[2];
+var depthHashes = '##########################';
 
-function parseFunctionDeclaration(json){
-  return {
-    name: json.id ? json.id.name : undefined,
-    line: json.loc.start.line,
-    params: parseFunctionParams(json)
-  };
+function generateMD(objectTree, depth){
+  var output = '';
+
+  depth = depth === undefined ? 1 : depth;
+
+  output += depthHashes.substr(0, depth);
+  output += objectTree.title;
+
+  objectTree.children.forEach(function(child){
+    output += '\n\n';
+    output += generateMD(child, depth+1);
+  });
+
+  return output;
 }
 
-function parseFunctionParams(json){
-  var params;
-
-  if(json.params){
-    params = [];
-    json.params.forEach(function(param){
-      params.push(param.name)
-    });
-  }
-
-  return params;
-}
-
-function parseMemberFunction(json){
-  var parsed = parseFunctionDeclaration(json);
-  parsed.name = json.left.property.name;
-  return parsed;
-}
-
-var parsers = {
-  'AssignmentExpression': function(json){
-    if(json.left.type === 'MemberExpression'){
-      if(json.right.type === 'FunctionExpression'){
-        return parseMemberFunction(json);
-      }
-    }
-  },
-  'ExpressionStatement': function(json){
-  },
-  'FunctionExpression': function(json){
-    if(json.body && Array.isArray(json.body.body) && json.body.body[0] && json.body.body[0].type === 'FunctionDeclaration'){
-      return parseFunctionDeclaration(json.body.body[0]);
+function findEndOfBlockComment(data, startIndex){
+  for(var i = startIndex, l = data.length; i < l; ++i){
+    if(data.indexOf('*/', i) === i){
+      return data.substring(startIndex, i);
     }
   }
-};
+}
 
-var validBlockCommentTypes = [
-  'CallExpression',
-  'FunctionDeclaration'
-];
+function parseBlockComment(inputString){
+  var prefixRegex = /(^|\n)\s*\*\s*/;
+  while(inputString.search(prefixRegex) > -1){
+    inputString = inputString.replace(prefixRegex, '\n');
+  }
 
-function walk(object, comments){
-  var children = [];
-  var parser;
-  var data;
-  var blockComment;
+  inputString = inputString.replace(/\n\s*$/, '');
 
-  if(object.type){
-    parser = parsers[object.type];
-    if(parser){
-      data = parser(object);
-    }
+  inputString = inputString.substr(1);
 
-    if(object.loc){
-      comments.forEach(function(comment){
-        if(comment.loc.end.line === object.loc.start.line - 1){
-          blockComment = comment.value;
-        }
+  var title = inputString.substr(0, inputString.indexOf('\n'));
+  var descriptionEndIndex = inputString.indexOf('\n@');
+
+  descriptionEndIndex = descriptionEndIndex === -1 ? inputString.length -1 : descriptionEndIndex;
+
+  var description = inputString.substring(title.length + 1, descriptionEndIndex);
+
+  var options = [];
+  var index = descriptionEndIndex;
+  var option;
+  var endIndex;
+
+  while(index < inputString.length){
+    if(inputString.indexOf('\n@', index) === index){
+      endIndex = inputString.indexOf('\n@', index + 2);
+      endIndex = endIndex === -1 ? inputString.length : endIndex;
+      option = inputString.substring(index + 2, endIndex).match(/([^\s]+)\s?(\{([^\}]+)\})?\s?([^\s]+)?\s?([^$]+)?$/);
+      options.push({
+        type: option[1],
+        varTypes: option[3] ? option[3].split('|') : [],
+        name: option[4],
+        description: option[5]
       });
+      index = endIndex;
     }
-  }
-
-  function doChildItem(item){
-    var parsed;
-    if(item){
-      parsed = walk(item, comments);
-      if(parsed.children.length > 0 || parsed.data){
-        children.push(parsed);
-      }
+    else {
+      ++index;
     }
-  }
-
-  if(Array.isArray(object)){
-    object.forEach(doChildItem);
-  }
-  else if(typeof object === 'object'){
-    Object.keys(object).forEach(function(item){
-      doChildItem(object[item]);
-    });
-  }
-
-  if(!data && !blockComment && children.length === 1){
-    if(blockComment && !children[0].comment){
-      children[0].comment = blockComment;
-    }
-    return children[0];
-  }
-
-  if(children.length === 1 && !children[0].data){
-    children = children[0].children;
   }
 
   return {
-    data: data,
-    children: children,
-    comment: blockComment
-  };
+    title: title,
+    description: description,
+    options: options
+  }
 }
 
-fs.readFile(filename, 'utf8', function(err, data){
-  var syntax;
+function findBlockComments(data){
+  var blockComment;
+  var objectTreeDepth = 0;
+
+  var objectTree = {comments:[], children: [], parent: null};
+  var currentObject = objectTree;
+  var tempObject;
+
+  for(var i = 0, l = data.length; i < l; ++i){
+    if(data.indexOf('/**$', i) === i){
+      blockComment = findEndOfBlockComment(data, i + 5);
+      i += blockComment.length;
+      currentObject.comments.push(parseBlockComment(blockComment));
+    }
+    if(data.indexOf('//', i) === i){
+      i = data.indexOf('\n', i);
+    }
+    if(i === -1){
+      break;
+    }
+    if(data[i] === '{'){
+      ++objectTreeDepth;
+      tempObject = {
+        comments: [],
+        children: [],
+        parent: currentObject
+      };
+      currentObject.children.push(tempObject);
+      currentObject = tempObject;
+    }
+    else if(data[i] === '}'){
+      --objectTreeDepth;
+      tempObject = currentObject.parent;
+      if(currentObject.comments.length === 0 && currentObject.children.length === 0){
+        currentObject.parent.children.splice(currentObject.parent.children.indexOf(currentObject));
+      }
+      currentObject = tempObject;
+    }
+  }
+
+  if(objectTree.comments.length === 0 && objectTree.children.length === 1){
+    return objectTree.children[0];
+  }
+
+  return objectTree;
+}
+
+if(!inputFilename){
+  console.log('Must supply an input filename.');
+  console.log('Usage: docutron <input>');
+  return;
+}
+
+fs.readFile(inputFilename, 'utf8', function(err, data){
+  var objectTree;
 
   if(!err){
-    syntax = esprima.parse(data, {
-      comment: true,
-      loc: true
-    });
-
-    console.log(JSON.stringify(walk(syntax, syntax.comments), null, 4));
-    //console.log(JSON.stringify(syntax, null, 4));
+    objectTree = findBlockComments(data);
+    console.log(objectTree);
+    var mdString = generateMD(objectTree) + '\n';
+    process.stdout.write(mdString);
   }
 });
