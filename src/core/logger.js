@@ -14,7 +14,8 @@
    *
    * @structure Module
    */
-  define( [], function() {
+  define( [],
+    function() {
 
     /**
      * Document: Logger::Logger
@@ -74,6 +75,24 @@
       }
       return __debug;
     };
+
+    /**
+     * Flarf
+     */
+    var foo1 = function foo2(){
+
+    };
+
+    Object.defineProperties(Logger, {
+      /**
+       * Heebie
+       */
+      blop: {
+        get: function(){
+          'snurp'
+        }
+      }
+    });
 
     return Logger;
   });
