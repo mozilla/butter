@@ -35,8 +35,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _timebar = new TimeBar( butter, _media, butter.ui.tray.statusArea, _tracksContainer ),
         _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer ),
         _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
-        _currentMouseDownTrackEvent,
-        _currentMouseDownTrackEventWasSelected = false,
         _status;
 
     _status = new Status( _media, butter.ui.tray.statusArea );
@@ -100,50 +98,47 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       }
     }
 
-    function onTrackEventMouseUp( e ) {
-      var trackEvent = e.data.trackEvent,
-          tracks,
-          originalEvent = e.data.originalEvent;
-
-      if ( trackEvent === _currentMouseDownTrackEvent ) {
-        if ( !originalEvent.shiftKey ) {
-          tracks = _media.tracks;
-          for ( var t in tracks ) {
-            if( tracks.hasOwnProperty( t ) ) {
-              tracks[ t ].deselectEvents( trackEvent );
-            }
-          }
-        } else if ( trackEvent.selected && _currentMouseDownTrackEventWasSelected ) {
-          trackEvent.selected = false;
-        }
-        _currentMouseDownTrackEvent = null;
-        _currentMouseDownTrackEventWasSelected = false;
-      }
-    }
-
-    function onTrackEventDragStarted( e ) {
-      _currentMouseDownTrackEvent = null;
-      _currentMouseDownTrackEventWasSelected = false;
-    }
-
     function onTrackEventMouseDown( e ) {
       var trackEvent = e.data.trackEvent,
-          tracks,
+          tracks, i, length,
+          wasSelected = false,
+          onTrackEventMouseUp,
+          onTrackEventDragStarted,
           originalEvent = e.data.originalEvent;
 
-      // track the mousedown event and previous selected state for mouseup.
-      _currentMouseDownTrackEvent = trackEvent;
-      _currentMouseDownTrackEventWasSelected = trackEvent.selected;
+      wasSelected = trackEvent.selected;
 
       if ( !originalEvent.shiftKey && !trackEvent.selected ) {
         tracks = _media.tracks;
-        for ( var t in tracks ) {
-          if ( tracks.hasOwnProperty( t ) ) {
-            tracks[ t ].deselectEvents( trackEvent );
-          }
+          for ( i = 0, length = tracks.length; i < length; i++ ) {
+          tracks[ i ].deselectEvents( trackEvent );
         }
       }
       trackEvent.selected = true;
+
+      onTrackEventMouseUp = function() {
+
+        window.removeEventListener( "mouseup", onTrackEventMouseUp, false );
+        window.removeEventListener( "mousemove", onTrackEventDragStarted, false );
+
+        if ( !originalEvent.shiftKey ) {
+          tracks = _media.tracks;
+          for ( i = 0, length = tracks.length; i < length; i++ ) {
+            tracks[ i ].deselectEvents( trackEvent );
+          }
+        } else if ( trackEvent.selected && wasSelected ) {
+          trackEvent.selected = false;
+        }
+      };
+
+      onTrackEventDragStarted = function() {
+
+        window.removeEventListener( "mousemove", onTrackEventDragStarted, false );
+        window.removeEventListener( "mouseup", onTrackEventMouseUp, false );
+      };
+
+      window.addEventListener( "mouseup", onTrackEventMouseUp, false );
+      window.addEventListener( "mousemove", onTrackEventDragStarted, false );
     }
 
     function onMediaReady(){
@@ -167,8 +162,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
       _media.listen( "trackeventremoved", function( e ){
         var trackEvent = e.data;
-        trackEvent.view.unlisten( "trackeventdragstarted", onTrackEventDragStarted );
-        trackEvent.view.unlisten( "trackeventmouseup", onTrackEventMouseUp );
         trackEvent.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
         if( _trackEventHighlight === "hover" ){
           trackEvent.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
@@ -177,8 +170,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
       function onTrackEventAdded( e ){
         var trackEvent = e.data;
-        trackEvent.view.listen( "trackeventdragstarted", onTrackEventDragStarted );
-        trackEvent.view.listen( "trackeventmouseup", onTrackEventMouseUp );
         trackEvent.view.listen( "trackeventmousedown", onTrackEventMouseDown );
         trackEvent.view.element.addEventListener( "click", function( e ) {
           butter.editor.editTrackEvent( trackEvent );
