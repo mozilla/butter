@@ -12,26 +12,8 @@
 
     var _rootElement = rootElement,
         _trackEvent,
-        _popcornEventMapReference,
         _butter,
-        _popcorn,
         _cachedValues = {};
-
-    /**
-     * Member: getMapFromTrackEvent
-     *
-     * Retrieves a handle to the map associated with the trackevent.
-     */
-    function getMapFromTrackEvent() {
-      if ( !_trackEvent.popcornTrackEvent._map ) {
-        _trackEvent.popcornTrackEvent.onmaploaded = function( options, map ){
-          _popcornEventMapReference = map;
-        };
-      }
-      else {
-        _popcornEventMapReference = _trackEvent.popcornTrackEvent._map;
-      }
-    }
 
     /**
      * Member: setup
@@ -227,11 +209,6 @@
 
     }
 
-    function mapLoaded() {
-      _popcorn.off( "googlemaps-loaded", mapLoaded );
-      getMapFromTrackEvent();
-    }
-
     function onTrackEventUpdated( e ) {
       var popcornOptions;
 
@@ -245,17 +222,12 @@
       // in the editor.
       _cachedValues.lat = popcornOptions.lat;
       _cachedValues.lng = popcornOptions.lng;
-
-      // Now we REALLY know that we can try setting up listeners
-      _popcorn.on( "googlemaps-loaded", mapLoaded );
     }
 
     // Extend this object to become a BaseEditor
     Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
         var popcornOptions = trackEvent.popcornOptions;
-
-        _popcorn = butter.currentMedia.popcorn.popcorn;
 
         _cachedValues = {
           width: popcornOptions.width,
@@ -271,9 +243,6 @@
         _butter = butter;
         // Update properties when TrackEvent is updated
         trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
-
-        // Now we REALLY know that we can try setting up listeners
-        _popcorn.on( "googlemaps-loaded", mapLoaded );
 
         setup( trackEvent );
 
