@@ -169,36 +169,6 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       });
     };
 
-    butter.listen( "trackeventadded", function ( e ) {
-      var trackEvent = e.data,
-          view = trackEvent.view,
-          element = trackEvent.view.element;
-
-      // Open a new editor on a single click
-      var trackEventMouseUp = function ( e ) {
-        if( butter.selectedEvents.length === 1 && !trackEvent.uiInUse ) {
-          trackEvent.selected = true;
-          _this.editTrackEvent( trackEvent );
-        }
-      };
-
-      element.addEventListener( "mouseup", trackEventMouseUp, true );
-
-      view.listen( "trackeventdragstarted", function() {
-        element.removeEventListener( "mouseup", trackEventMouseUp, true );
-      });
-
-      view.listen( "trackeventdragstopped", function() {
-        element.addEventListener( "mouseup", trackEventMouseUp, true );
-      });
-
-      butter.listen( "trackeventremoved", function ( e ) {
-        if ( e.data === trackEvent ) {
-          element.removeEventListener( "mouseup", trackEventMouseUp, true );
-        }
-      });
-    });
-
     /**
      * Member: _start
      *

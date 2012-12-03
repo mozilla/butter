@@ -35,7 +35,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _timebar = new TimeBar( butter, _media, butter.ui.tray.statusArea, _tracksContainer ),
         _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer ),
         _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
-        _currentMouseDownTrackEvent,
         _status;
 
     _status = new Status( _media, butter.ui.tray.statusArea );
@@ -99,35 +98,43 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       }
     }
 
-    function onTrackEventMouseOut( e ){
-    }
-
-    function onTrackEventMouseUp( e ){
-    }
-
-    function onTrackEventDragStarted( e ){
-      _currentMouseDownTrackEvent = null;
-    }
-
-    function onTrackEventMouseDown( e ){
+    function onTrackEventMouseDown( e ) {
       var trackEvent = e.data.trackEvent,
-          originalEvent = e.data.originalEvent,
-          isHandle = originalEvent.target.classList.contains( "handle" );
+          tracks, i, length,
+          wasSelected = trackEvent.selected,
+          onTrackEventDragStarted,
+          originalEvent = e.data.originalEvent;
 
-      _currentMouseDownTrackEvent = trackEvent;
-
-      if ( !isHandle ) {
-        trackEvent.selected = true;
-      }
-
-      if( !originalEvent.shiftKey && !isHandle ){
-        var tracks = _media.tracks;
-        for( var t in tracks ){
-          if( tracks.hasOwnProperty( t ) ){
-            tracks[ t ].deselectEvents( trackEvent );
-          }
+      if ( !originalEvent.shiftKey && !trackEvent.selected ) {
+        tracks = _media.tracks;
+          for ( i = 0, length = tracks.length; i < length; i++ ) {
+          tracks[ i ].deselectEvents( trackEvent );
         }
       }
+
+      trackEvent.selected = true;
+
+      function onTrackEventMouseUp() {
+        window.removeEventListener( "mouseup", onTrackEventMouseUp, false );
+        window.removeEventListener( "mousemove", onTrackEventDragStarted, false );
+
+        if ( !originalEvent.shiftKey ) {
+          tracks = _media.tracks;
+          for ( i = 0, length = tracks.length; i < length; i++ ) {
+            tracks[ i ].deselectEvents( trackEvent );
+          }
+        } else if ( trackEvent.selected && wasSelected ) {
+          trackEvent.selected = false;
+        }
+      }
+
+      function onTrackEventDragStarted() {
+        window.removeEventListener( "mousemove", onTrackEventDragStarted, false );
+        window.removeEventListener( "mouseup", onTrackEventMouseUp, false );
+      }
+
+      window.addEventListener( "mouseup", onTrackEventMouseUp, false );
+      window.addEventListener( "mousemove", onTrackEventDragStarted, false );
     }
 
     function onMediaReady(){
@@ -151,26 +158,20 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
       _media.listen( "trackeventremoved", function( e ){
         var trackEvent = e.data;
-        trackEvent.view.unlisten( "trackeventdragstarted", onTrackEventDragStarted );
-        trackEvent.view.unlisten( "trackeventmouseup", onTrackEventMouseUp );
         trackEvent.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
         if( _trackEventHighlight === "hover" ){
           trackEvent.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
-          trackEvent.view.unlisten( "trackeventmouseout", onTrackEventMouseOut );
         }
       });
 
       function onTrackEventAdded( e ){
         var trackEvent = e.data;
-        trackEvent.view.listen( "trackeventdragstarted", onTrackEventDragStarted );
-        trackEvent.view.listen( "trackeventmouseup", onTrackEventMouseUp );
         trackEvent.view.listen( "trackeventmousedown", onTrackEventMouseDown );
         trackEvent.view.element.addEventListener( "click", function( e ) {
           butter.editor.editTrackEvent( trackEvent );
         });
         if( _trackEventHighlight === "hover" ){
           trackEvent.view.listen( "trackeventmouseover", onTrackEventMouseOver );
-          trackEvent.view.listen( "trackeventmouseout", onTrackEventMouseOut );
         }
       }
 
@@ -180,7 +181,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         track.view.listen( "trackeventmousedown", onTrackEventMouseDown );
         if( _trackEventHighlight === "hover" ){
           track.view.listen( "trackeventmouseover", onTrackEventMouseOver );
-          track.view.listen( "trackeventmouseout", onTrackEventMouseOut );
         }
 
         var existingEvents = track.trackEvents;
@@ -208,7 +208,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         track.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
         if( _trackEventHighlight === "hover" ){
           track.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
-          track.view.unlisten( "trackeventmouseout", onTrackEventMouseOut );
         }
       });
 
