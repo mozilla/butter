@@ -340,8 +340,35 @@ function walk(object, comments){
         }
       });
     }
-
     if(root.description){
+      root._description = {
+        params: [],
+        options: []
+      };
+      root.description.comment.options.forEach(function(option){
+        if(option.type === 'param'){
+          root._description.params.push(option);
+        }
+        else {
+          root._description.options[option.type] = option;
+        }
+
+        switch(option.type){
+          case 'usage':
+            root._description.usage = option.description;
+            break;
+          case 'type':
+            root._description.structureType = option.description;
+            break;
+          case 'api':
+            root._description.api = option.description;
+            break;
+          case 'access':
+            root._description.access = option.description;
+            break;
+        }
+      });
+      console.log(root._description);
       return root;
     }
     else if(root.children.length > 0){
@@ -362,6 +389,7 @@ fs.readFile(inputFilename, 'utf8', function(err, data){
       return comment.type === 'Block' && comment.value.indexOf('*$') === 0;
     });
     // console.log(JSON.stringify(syntax, null, 2));
-    process.stdout.write(generateMD(walk(syntax.body, comments)));
+    //process.stdout.write(generateMD(walk(syntax.body, comments)));
+    generateMD(walk(syntax.body, comments));
   }
 });
