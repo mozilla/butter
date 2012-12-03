@@ -81,7 +81,7 @@ function generateMD(objectTree, depth, parent){
 
           if(objectTree.description.namespace){
             if(objectTree.description.namespace === 'this'){
-              prefix = parent.description.name[0].toLowerCase() + parent.description.name.substr(1);
+              prefix = parent.description.name[0].toLowerCase();
             }
             else {
               prefix = objectTree.description.namespace;
@@ -288,25 +288,36 @@ function walk(object, comments){
             };
           }
           else if(object.type === 'Property' && object.key.type === 'Identifier'){
-            root.description = {
-              type: 'property',
-              comment: parseBlockComment(comment.value),
-              name: object.key.name
-            };
 
             var getter, setter, configurable;
-
             if(object.value){
-              object.value.properties.forEach(function(prop){
-                if(prop.key.name === 'get'){
-                  getter = true;
-                }
-                else if(prop.key.name === 'set'){
-                  setter = true;
-                }
-              });
+              if(object.value.type === 'ObjectExpression'){
 
-              root.access = getter && !setter ? 'read-only' : (!getter && setter ? 'write-only' : 'read-write');
+                root.description = {
+                  type: 'property',
+                  comment: parseBlockComment(comment.value),
+                  name: object.key.name
+                };
+
+                object.value.properties.forEach(function(prop){
+                  if(prop.key.name === 'get'){
+                    getter = true;
+                  }
+                  else if(prop.key.name === 'set'){
+                    setter = true;
+                  }
+                });
+
+                root.access = getter && !setter ? 'read-only' : (!getter && setter ? 'write-only' : 'read-write');
+              }
+              else if(object.value.type === 'FunctionExpression'){
+                root.description = {
+                  type: 'function',
+                  comment: parseBlockComment(comment.value),
+                  name: object.key.name,
+                  params: getParams(object.value.params)
+                };
+              }
             }
           }
         }
