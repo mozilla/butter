@@ -17,8 +17,7 @@ var path = require( "path" ),
     UGLIFY = nodeExec( normalize( "./node_modules/uglify-js/bin/uglifyjs" ) ),
     RJS = nodeExec( normalize( "./node_modules/requirejs/bin/r.js" ) ),
     LESS = nodeExec( normalize( "./node_modules/less/bin/lessc" ) ),
-    DOX = nodeExec( normalize( "./node_modules/dox/bin/dox" ) ),
-    DOXPARSER = nodeExec( normalize( "./tools/dox-parser" ) ),
+    DOCUTRON = nodeExec( normalize( "./tools/docutron" ) ),
 
     SRC_DIR = 'src',
     TEMPLATES_DIR = 'templates',
@@ -594,14 +593,13 @@ target.docs = function(){
   function nextFile(){
     var file = files[fileIndex];
 
-    nativeExec( DOX + ' -r < ' + file + ' | ' + DOXPARSER, { silent: true }, function(code, doxOutput){
-      //console.log(code, doxOutput);
-      if(doxOutput){
+    nativeExec( DOCUTRON + ' ' + file, { silent: true }, function( code, output ){
+      if ( output ) {
         var filenameIndex = file.lastIndexOf( '/' ) + 1;
         var filename = file.substr( filenameIndex ).replace( jsRegex, '.md' );
         var path = file.substr( 0, filenameIndex ).replace( SRC_DIR, DOCS_DIR );
         mkdir( '-p', path );
-        doxOutput.to( path + filename );
+        output.to( path + filename );
       }
   
       if(++fileIndex < files.length -1){
