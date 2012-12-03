@@ -101,12 +101,9 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
     function onTrackEventMouseDown( e ) {
       var trackEvent = e.data.trackEvent,
           tracks, i, length,
-          wasSelected = false,
-          onTrackEventMouseUp,
+          wasSelected = trackEvent.selected,
           onTrackEventDragStarted,
           originalEvent = e.data.originalEvent;
-
-      wasSelected = trackEvent.selected;
 
       if ( !originalEvent.shiftKey && !trackEvent.selected ) {
         tracks = _media.tracks;
@@ -114,10 +111,10 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           tracks[ i ].deselectEvents( trackEvent );
         }
       }
+
       trackEvent.selected = true;
 
-      onTrackEventMouseUp = function() {
-
+      function onTrackEventMouseUp() {
         window.removeEventListener( "mouseup", onTrackEventMouseUp, false );
         window.removeEventListener( "mousemove", onTrackEventDragStarted, false );
 
@@ -129,13 +126,12 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         } else if ( trackEvent.selected && wasSelected ) {
           trackEvent.selected = false;
         }
-      };
+      }
 
-      onTrackEventDragStarted = function() {
-
+      function onTrackEventDragStarted() {
         window.removeEventListener( "mousemove", onTrackEventDragStarted, false );
         window.removeEventListener( "mouseup", onTrackEventMouseUp, false );
-      };
+      }
 
       window.addEventListener( "mouseup", onTrackEventMouseUp, false );
       window.addEventListener( "mousemove", onTrackEventDragStarted, false );
