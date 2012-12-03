@@ -2,25 +2,25 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-/**
- * Document: Project
+/**$
+ * Project
  *
  * Provides Project management functionality to Butter.
  *
- * @structure Module
+ * @type Module
  */
 define( [ "core/eventmanager", "core/media", "util/shims" ],
   function( EventManager, Media, Shims ) {
 
   var __butterStorage = window.localStorage;
 
-  /**
-   * Document: Project::Project
+  /**$
+   * Project::Project
    *
    * Maintains the state and persistence for a Butter project.
    *
    * @param {Butter} butter A Butter instance.
-   * @structure Class
+   * @type Class
    * @api public
    */
   function Project( butter ) {
@@ -48,12 +48,12 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
         // Interval for backups, starts first time user clicks Save.
         _backupInterval = -1;
 
-    /**
-     * Document: Project::Project::invalidate
+    /**$
+     * Project::Project::invalidate
      *
      * Places this project in a dirty state.
      *
-     * @structure Member Function
+     * @type Member Function
      * @dispatch projectchanged
      * @api private
      */
@@ -77,12 +77,12 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
     // to be read (and managed by db/butter), others we want to
     // affect save logic.
     Object.defineProperties( _this, {
-      /**
-       * Document: Project::Project::id
+      /**$
+       * Project::Project::id
        *
        * Project id.
        *
-       * @structure Property
+       * @type Property
        * @return {String}
        * @access read-only
        */
@@ -93,12 +93,12 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
         enumerable: true
       },
 
-      /**
-       * Document: Project::Project::name
+      /**$
+       * Project::Project::name
        *
        * Project name. Changing this property invalidates the Project.
        *
-       * @structure Property
+       * @type Property
        * @return {String}
        * @access read-write
        */
@@ -115,12 +115,12 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
         enumerable: true
       },
 
-      /**
-       * Document: Project::Project::template
+      /**$
+       * Project::Project::template
        *
        * Template url on which the project was based. Changing this property invalidates the Project.
        *
-       * @structure Property
+       * @type Property
        * @return {String}
        * @access read-write
        */
@@ -137,12 +137,12 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
         enumerable: true
       },
 
-      /**
-       * Document: Project::Project::author
+      /**$
+       * Project::Project::author
        *
        * Project author. Changing this property invalidates the Project.
        *
-       * @structure Property
+       * @type Property
        * @return {String}
        * @access read-write
        */
@@ -159,13 +159,13 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
         enumerable: true
       },
 
-      /**
-       * Document: Project::Project::data
+      /**$
+       * Project::Project::data
        *
        * Compilation of project data (media, tracks, trackevents, etc.) as a json blob. If project has changed, results are compiled on-demand.
        * Otherwise, old data is returned.
        *
-       * @structure Property
+       * @type Property
        * @return {JSON}
        * @access read-only
        */
@@ -187,12 +187,12 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
         enumerable: true
       },
 
-      /**
-       * Document: Project::Project::publishUrl
+      /**$
+       * Project::Project::publishUrl
        *
        * URL at which the project was published.
        *
-       * @structure Property
+       * @type Property
        * @return {String}
        * @access read-only
        */
@@ -203,12 +203,12 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
         enumerable: true
       },
 
-      /**
-       * Document: Project::Project::previewUrl
+      /**$
+       * Project::Project::previewUrl
        *
        * URL at which the project can be previewed.
        *
-       * @structure Property
+       * @type Property
        * @return {String}
        * @access read-only
        */
@@ -219,12 +219,12 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
         enumerable: true
       },
 
-      /**
-       * Document: Project::Project::iframeUrl
+      /**$
+       * Project::Project::iframeUrl
        *
        * URL for viewing project where iframes are prefered.
        *
-       * @structure Property
+       * @type Property
        * @return {String}
        * @access read-only
        */
@@ -235,12 +235,12 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
         enumerable: true
       },
 
-      /**
-       * Document: Project::Project::isSaved
+      /**$
+       * Project::Project::isSaved
        *
        * True when changes made it to the db and been project was published.
        *
-       * @structure Property
+       * @type Property
        * @return {String}
        * @access read-only
        */
@@ -275,12 +275,12 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
     });
 
 
-    /**
-     * Document: Project::Project::startBackups
+    /**$
+     * Project::Project::startBackups
      *
      * Starts backup ticker which issues backup requests on a timeout.
      *
-     * @structure Member Function
+     * @type Member Function
      * @api private
      */
     function startBackups() {
@@ -292,14 +292,14 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
       }
     }
 
-    /**
-     * Document: Project::Project::import
+    /**$
+     * Project::Project::import
      *
      * Prepares a project from the description provided within the given JSON object.
      *
      * @param {String} json Stringified JSON structure to import as project data.
      * @see Project::Project::export
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     _this.import = function( json ) {
@@ -383,13 +383,13 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
 
     };
 
-    /**
-     * Document: Project::Project::export
+    /**$
+     * Project::Project::export
      *
      * Constructs a string from a JSON object which represents the current project.
      *
      * @see Project::Project::import
-     * @structure Member Function
+     * @type Member Function
      * @return {String} Stringified JSON.
      * @api public
      */
@@ -427,15 +427,15 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
       }
     };
 
-    /**
-     * Document: Project::Project::save
+    /**$
+     * Project::Project::save
      *
      * Saves and publishes a project. Saving only happens if project data needs
      * to be saved (i.e., it has been changed since last save, or was never
      * saved before).
      *
      * @param {Function} callback Called when save operation (success or failure) has completed.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     _this.save = function( callback ) {
@@ -496,8 +496,8 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
     };
   }
 
-  /**
-   * Document: Project::Project::save
+  /**$
+   * Project::Project::save
    *
    * Check for an existing project that was autosaved but not saved.
    * Returns project backup data as JS object if found, otherwise null.
@@ -505,7 +505,7 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
    *
    * @param {Butter} butter A Butter instance.
    * @param {Function} callback Called when save operation (success or failure) has completed.
-   * @structure Class Function
+   * @type Class Function
    * @api public
    */
   Project.checkForBackup = function( butter, callback ) {

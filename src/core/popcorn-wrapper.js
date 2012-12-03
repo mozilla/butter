@@ -3,12 +3,12 @@
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 /*jshint evil:true*/
 
-/**
- * Document: PopcornWrapper
+/**$
+ * PopcornWrapper
  *
  * Provides Popcorn-wrapping functionality to Butter.
  *
- * @structure Module
+ * @type Module
  */
 define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, EventManager, URI ) {
 
@@ -22,8 +22,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       // timeout duration to wait for media to be ready
       MEDIA_WAIT_DURATION = 10000;
 
-  /**
-   * Document: PopcornWrapper::PopcornWrapper
+  /**$
+   * PopcornWrapper::PopcornWrapper
    * 
    * Wraps various functionality and setup associated with creating, updating, and removing data with Popcorn.js.
    * Several event handlers can be supplied through the `options` parameter, including _prepare_, _fail_, _timeout_, and.
@@ -34,7 +34,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
    *
    * @param {String} mediaId Id of DOM element to wrap.
    * @param {Dictionary} options Various options for initialization. See description.
-   * @structure Module
+   * @type Module
    */
   return function ( mediaId, options ){
 
@@ -53,12 +53,12 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         _this = this,
         _makeVideoURLsUnique = options.makeVideoURLsUnique;
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::unbind
+    /**$
+     * PopcornWrapper::PopcornWrapper::unbind
      *
      * Destroy popcorn bindings without touching other discovered settings.
      *
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.unbind = function(){
@@ -73,13 +73,13 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
     };
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::addPopcornHandlers
+    /**$
+     * PopcornWrapper::PopcornWrapper::addPopcornHandlers
      *
      * Setup any handlers that were defined in the options passed into
      * popcorn wrapper. e.g. timeupdate, paused, etc.
      *
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     function addPopcornHandlers(){
@@ -90,25 +90,25 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
     }
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::interruptLoad
+    /**$
+     * PopcornWrapper::PopcornWrapper::interruptLoad
      *
      * Cancel loading or preparing of media whilst attempting to setup.
      *
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.interruptLoad = function(){
       _interruptLoad = true;
     };
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::updateEvent
+    /**$
+     * PopcornWrapper::PopcornWrapper::updateEvent
      *
      * Updates a Popcorn event with data from a Butter TrackEvent.
      *
      * @param {TrackEvent} trackEvent Butter TrackEvent containing data to pass through to a Popcorn event.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.updateEvent = function( trackEvent ){
@@ -148,13 +148,13 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       } //if
     }; //updateEvent
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::destroyEvent
+    /**$
+     * PopcornWrapper::PopcornWrapper::destroyEvent
      *
      * Destroys a Popcorn trackevent.
      *
      * @param {TrackEvent} trackEvent Butter TrackEvent referencing the desired Popcorn event.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
      this.destroyEvent = function( trackEvent ){
@@ -172,8 +172,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       } //if
     }; //destroyEvent
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::prepare
+    /**$
+     * PopcornWrapper::PopcornWrapper::prepare
      *
      * Creates functions for various failure and success cases,
      * generates the Popcorn string, and ensures our player is ready
@@ -185,7 +185,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
      * @param {Dictionary} popcornOptions Other Popcorn options.
      * @param {Dictionary} callbacks Callback functions to call at various times during string generation.
      * @param {Dictionary} scripts Scripts to run at various times during string generation.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.prepare = function( url, target, popcornOptions, callbacks, scripts ){
@@ -261,14 +261,14 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
 
     };
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::findMediaType
+    /**$
+     * PopcornWrapper::PopcornWrapper::findMediaType
      *
      * Determines the type of media that is going to be used
      * based on the specified url.
      *
      * @param {String} url URL to use as a basis for deriving a media type.
-     * @structure Member Function
+     * @type Member Function
      * @api private
      */
     function findMediaType( url ){
@@ -287,15 +287,15 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       return _mediaType;
     }
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::constructPlayer
+    /**$
+     * PopcornWrapper::PopcornWrapper::constructPlayer
      *
      * If possible and necessary, reformats the dom to conform to the url type specified
      * for the media. For example, youtube/vimeo players like <div>'s, not <video>'s to
      * dwell in.
      *
      * @param {String} target Id of the target element to prepare.
-     * @structure Member Function
+     * @type Member Function
      * @api private
      */
     function constructPlayer( target ){
@@ -327,8 +327,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
     }
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::prepare
+    /**$
+     * PopcornWrapper::PopcornWrapper::prepare
      *
      * Determines which player is needed (usually based on the result of findMediaType)
      * and creates a stringified representation of the Popcorn constructor (usually to
@@ -341,7 +341,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
      * @param {Dictionary} callbacks Callback functions to call at various times during string generation.
      * @param {Dictionary} scripts Scripts to run at various times during string generation.
      * @param {Array} trackEvents Butter TrackEvents to record in the resultant Popcorn environment.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     var generatePopcornString = this.generatePopcornString = function( popcornOptions, url, target, method, callbacks, scripts, trackEvents ){
@@ -473,14 +473,14 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       return popcornString;
     };
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::createPopcorn
+    /**$
+     * PopcornWrapper::PopcornWrapper::createPopcorn
      * 
      * Creates a Popcorn instance in the page. Tries running the generated function first (from popcornString)
      * and inserts it as a script in the head if that fails.
      *
      * @param {String} popcornString String to convert into a Function.
-     * @structure Member Function
+     * @type Member Function
      * @api private
      */
     function createPopcorn( popcornString ){
@@ -495,8 +495,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       _popcorn = popcorn;
     }
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::checkTimeoutLoop
+    /**$
+     * PopcornWrapper::PopcornWrapper::checkTimeoutLoop
      * 
      * Abstracts the problem of waiting for some condition to occur with a timeout. Loops on checkFunction,
      * calling readyCallback when it succeeds, or calls timeoutCallback after timeoutDuration milliseconds.
@@ -505,7 +505,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
      * @param {Function} readyCallback Function to call when conditions are met.
      * @param {Function} timeoutCallback Function to call after time has expired.
      * @param {Number} timeoutDuration Amount of time to wait before aborting and calling timeoutCallback.
-     * @structure Member Function
+     * @type Member Function
      * @api private
      */
     function checkTimeoutLoop( checkFunction, readyCallback, timeoutCallback, timeoutDuration ){
@@ -542,15 +542,15 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       doCheck();
     }
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::waitForMedia
+    /**$
+     * PopcornWrapper::PopcornWrapper::waitForMedia
      *
      * Waits for the media to return a sane readyState and duration so Butter can interact
      * with it (uses checkTimeoutLoop).
      *
      * @param {Function} readyCallback Function to call when media is ready.
      * @param {Function} timeoutCallback Function to call after timeout occurs.
-     * @structure Member Function
+     * @type Member Function
      * @api private
      */
     function waitForMedia( readyCallback, timeoutCallback ){
@@ -563,14 +563,14 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }, readyCallback, timeoutCallback, MEDIA_WAIT_DURATION );
     }
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::waitForPopcorn
+    /**$
+     * PopcornWrapper::PopcornWrapper::waitForPopcorn
      *
      * Waits for Popcorn and required players load to be initialized (uses checkTimeoutLoop).
      *
      * @param {Function} readyCallback Function to call when media is ready.
      * @param {Function} timeoutCallback Function to call after timeout occurs.
-     * @structure Member Function
+     * @type Member Function
      * @api private
      */
     function waitForPopcorn( readyCallback, timeoutCallback ){
@@ -585,14 +585,14 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
     }
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::play
+    /**$
+     * PopcornWrapper::PopcornWrapper::play
      *
      * Passthrough to Popcorn's play method.
      *
      * @param {Function} readyCallback Function to call when media is ready.
      * @param {Function} timeoutCallback Function to call after timeout occurs.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.play = function(){
@@ -601,14 +601,14 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
     };
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::pause
+    /**$
+     * PopcornWrapper::PopcornWrapper::pause
      *
      * Passthrough to Popcorn's pause method.
      *
      * @param {Function} readyCallback Function to call when media is ready.
      * @param {Function} timeoutCallback Function to call after timeout occurs.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.pause = function(){
@@ -617,15 +617,15 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
     };
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::getSoundCloudQuarantine
+    /**$
+     * PopcornWrapper::PopcornWrapper::getSoundCloudQuarantine
      *
      * XXX: SoundCloud has a bug (reported by us, but as yet unfixed) which blocks
      * loading of a second iframe/player if the iframe for the first is removed
      * from the DOM.  We can simply move old ones to a quarantine div, hidden from
      * the user for now (see #2630).  We lazily create and memoize the instance.
      *
-     * @structure Member Function
+     * @type Member Function
      * @api private
      */
     function getSoundCloudQuarantine() {
@@ -644,13 +644,13 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       return quarantine;
     }
 
-    /**
-     * Document: PopcornWrapper::PopcornWrapper::clear
+    /**$
+     * PopcornWrapper::PopcornWrapper::clear
      *
      * Wipes the current Popcorn instance and anything it created.
      *
      * @param {String|DOMElement} container Element (or an id of one) to clear.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.clear = function( container ) {
@@ -695,12 +695,12 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
     };
 
     Object.defineProperties( this, {
-      /**
-       * Document: PopcornWrapper::PopcornWrapper::volume
+      /**$
+       * PopcornWrapper::PopcornWrapper::volume
        *
        * Wraps Popcorn's volume controls.
        *
-       * @structure Property
+       * @type Property
        * @return {Boolean}
        * @access read-write
        */
@@ -719,12 +719,12 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         }
       },
 
-      /**
-       * Document: PopcornWrapper::PopcornWrapper::muted
+      /**$
+       * PopcornWrapper::PopcornWrapper::muted
        *
        * Wraps Popcorn's muted controls.
        *
-       * @structure Property
+       * @type Property
        * @return {Boolean}
        * @access read-write
        */
@@ -748,12 +748,12 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         }
       },
 
-      /**
-       * Document: PopcornWrapper::PopcornWrapper::currentTime
+      /**$
+       * PopcornWrapper::PopcornWrapper::currentTime
        *
        * Wraps Popcorn's currentTime controls. On operational when media is ready and Popcorn is initialized.
        *
-       * @structure Property
+       * @type Property
        * @return {Number}
        * @access read-write
        */
@@ -772,12 +772,12 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         }
       },
 
-      /**
-       * Document: PopcornWrapper::PopcornWrapper::duration
+      /**$
+       * PopcornWrapper::PopcornWrapper::duration
        *
        * Duration of Popcorn media.
        *
-       * @structure Property
+       * @type Property
        * @return {Number}
        * @access read-only
        */
@@ -791,12 +791,12 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         }
       },
 
-      /**
-       * Document: PopcornWrapper::PopcornWrapper::popcorn
+      /**$
+       * PopcornWrapper::PopcornWrapper::popcorn
        *
        * Reference to Popcorn instance.
        *
-       * @structure Property
+       * @type Property
        * @return {Popcorn}
        * @access read-only
        */
@@ -807,12 +807,12 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         }
       },
 
-      /**
-       * Document: PopcornWrapper::PopcornWrapper::paused
+      /**$
+       * PopcornWrapper::PopcornWrapper::paused
        *
        * Wraps Popcorn's pause controls. Reports true when Popcorn is not initialized.
        *
-       * @structure Property
+       * @type Property
        * @return {Boolean}
        * @access read-write
        */

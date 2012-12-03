@@ -29,10 +29,12 @@ function generateMD(objectTree, depth, parent){
     structureType = otherOptions.type ? otherOptions.type.description : null;
     api = otherOptions.api ? otherOptions.api.description : null;
     access = otherOptions.access ? otherOptions.access.description : null;
+    usage = otherOptions.usage ? otherOptions.usage.description : null;
 
     delete otherOptions.api;
     delete otherOptions.type;
     delete otherOptions.access;
+    delete otherOptions.usage;
 
     output += depthHashes.substr(0, depth);
 
@@ -51,16 +53,13 @@ function generateMD(objectTree, depth, parent){
 
     if(params.length > 0){
       params.forEach(function(param){
-        output += '* _' + param.name + '_ [__' + param.varTypes.join('__ or __') + '__]: ' + param.description + '\n';
+        output += '* __' + param.name + '__ [_' + param.varTypes.join('_ or _') + '_]: ' + param.description + '\n';
       });
       output += '\n';
     }
 
     var otherOptionKeys = Object.keys(otherOptions);
     if(otherOptionKeys.length > 0){
-      usage = otherOptions.usage;
-      delete otherOptions.usage;
-
       otherOptionKeys.forEach(function(key){
         output += '__@' + key + '__';
         if(otherOptions[key].varTypes.length > 0){
@@ -89,7 +88,7 @@ function generateMD(objectTree, depth, parent){
             }
             prefix += '.';
           }
-          else if(structureType.toLowerCase() === 'class'){
+          else if(structureType && structureType.toLowerCase() === 'class'){
             prefix += 'var ' + objectTree.description.name[0].toLowerCase() + ' = new ';
           }
 
@@ -99,7 +98,7 @@ function generateMD(objectTree, depth, parent){
         }
       }
       else{
-        output += '\n\n';
+        output += '\n\nUsage:  \n\n';
         output += '    ' + usage;
         output += '  \n\n';
       }

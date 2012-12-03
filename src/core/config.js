@@ -2,12 +2,12 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-/**
- * Document: Config
+/**$
+ * Config
  *
  * Manages configuration info for the app.
  *
- * @structure Module
+ * @type Module
  * @expose parse
  */
 define( [], function() {
@@ -110,15 +110,15 @@ define( [], function() {
   }
 
 
-  /**
-   * Document: Config::Configuration
+  /**$
+   * Config::Configuration
    *
    * Manages access to config properties, doing variable substitution.
    *
    * @param {String} configID: A unique ID for this config, used as key into __config.
    * @param {Object} configObject: A parsed config object, see config.parse().
    * @throw config is not a parsed object (e.g., if string is passed).
-   * @structure Class
+   * @type Class
    */
   function Configuration( configID, configObject ) {
 
@@ -130,8 +130,8 @@ define( [], function() {
     // Register configuration info centrally
     __config[ configID ] = configObject;
 
-    /**
-     * Document: Config::Configuration::value
+    /**$
+     * Config::Configuration::value
      *
      * Gets or overrides the value of a config property, doing
      * variable replacement as needed. If only one argument is passed,
@@ -142,7 +142,7 @@ define( [], function() {
      *
      * @param {String} property: The config property to get.
      * @param {Object} newValue: [Optional] A new value to use.
-     * @structure Member Function
+     * @type Member Function
      */
     this.value = function( property, newValue ){
       var configValue;
@@ -161,8 +161,8 @@ define( [], function() {
       }
     };
 
-    /**
-     * Document: Config::Configuration::override
+    /**$
+     * Config::Configuration::override
      *
      * Overrides this Configuration object's top-level config with values
      * in another, leaving any values in this object alone which aren't
@@ -170,7 +170,7 @@ define( [], function() {
      * a user's extra settings.
      *
      * @param {Object} configuration Values to overwrite old configuration.
-     * @structure Member Function
+     * @type Member Function
      */
     this.override = function( configuration ){
       var configA = configObject,
@@ -189,24 +189,24 @@ define( [], function() {
     Object.defineProperty( this, "id", { get: function(){ return configID; } } );
   }
 
-  /**
-   * Document: Config::Config
+  /**$
+   * Config::Config
    *
    * Manages creation of Configuration objects.
    *
-   * @structure Factory for Configuration.
+   * @type Factory for Configuration.
    * @usage Config.parse(json);
    */
   var Config = {
 
-    /**
-     * Document: Config::Config::parse
+    /**$
+     * Config::Config::parse
      *
      * Parses a JSON config string, creating a Configuration object.
      *
      * @param {String} configJSON The config's JSON string.
      * @throw JSON is malformed or otherwise can't be parsed.
-     * @structure Class Function
+     * @type Class Function
      * @api public
      */
     parse: function( configJSON ){
