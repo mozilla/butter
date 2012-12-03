@@ -9,11 +9,13 @@ function generateMD(objectTree, depth){
 
   depth = depth === undefined ? 1 : depth;
 
-  output += depthHashes.substr(0, depth);
-  output += objectTree.title;
+  if(objectTree.description){
+    output += depthHashes.substr(0, depth);
+    output += objectTree.description.comment.title;
+    output += '\n\n';
+  }
 
   objectTree.children.forEach(function(child){
-    output += '\n\n';
     output += generateMD(child, depth+1);
   });
 
@@ -24,6 +26,55 @@ if(!inputFilename){
   console.log('Must supply an input filename.');
   console.log('Usage: docutron <input>');
   return;
+}
+
+function parseBlockComment(inputString){
+  inputString = inputString.substr(inputString.indexOf('$\n') + 2);
+
+  var prefixRegex = /(^|\n)\s*\*\s*/;
+  while(inputString.search(prefixRegex) > -1){
+    inputString = inputString.replace(prefixRegex, '\n');
+  }
+
+  inputString = inputString.replace(/\n\s*$/, '');
+
+  inputString = inputString.substr(1);
+
+  var title = inputString.substr(0, inputString.indexOf('\n'));
+  var descriptionEndIndex = inputString.indexOf('\n@');
+
+  descriptionEndIndex = descriptionEndIndex === -1 ? inputString.length -1 : descriptionEndIndex;
+
+  var description = inputString.substring(title.length + 1, descriptionEndIndex);
+
+  var options = [];
+  var index = descriptionEndIndex;
+  var option;
+  var endIndex;
+
+  while(index < inputString.length){
+    if(inputString.indexOf('\n@', index) === index){
+      endIndex = inputString.indexOf('\n@', index + 2);
+      endIndex = endIndex === -1 ? inputString.length : endIndex;
+      option = inputString.substring(index + 2, endIndex).match(/([^\s]+)\s?(\{([^\}]+)\})?\s?([^\s]+)?\s?([^$]+)?$/);
+      options.push({
+        type: option[1],
+        varTypes: option[3] ? option[3].split('|') : [],
+        name: option[4],
+        description: option[5]
+      });
+      index = endIndex;
+    }
+    else {
+      ++index;
+    }
+  }
+
+  return {
+    title: title,
+    description: description,
+    options: options
+  }
 }
 
 function getParams(obj){
@@ -50,7 +101,7 @@ function walk(object, comments){
         if(!root.description && comment.loc.end.line === object.loc.start.line - 1){
           if(object.type === 'FunctionDeclaration'){
             root.description = {
-              comment: comment.value,
+              comment: parseBlockComment(comment.value),
               type: 'function',
               name: object.id.name,
               params: getParams(object.params)
@@ -58,7 +109,7 @@ function walk(object, comments){
           }
           else if(object.type === 'CallExpression'){
             root.description = {
-              comment: comment.value,
+              comment: parseBlockComment(comment.value),
               type: 'function'
             };
             object.arguments.forEach(function(arg){
@@ -73,7 +124,7 @@ function walk(object, comments){
 
             if(object.expression.right.type === 'FunctionExpression'){
               root.description = {
-                comment: comment.value,
+                comment: parseBlockComment(comment.value),
                 type: 'function',
                 namespace: getNamespace(object.expression.left),
                 name: object.expression.left.property.name,
@@ -82,7 +133,7 @@ function walk(object, comments){
             }
             else {
               root.description = {
-                comment: comment.value,
+                comment: parseBlockComment(comment.value),
                 type: 'property',
                 namespace: getNamespace(object.expression.left),
                 name: object.expression.left.property.name
@@ -92,7 +143,7 @@ function walk(object, comments){
           else if(object.type === 'VariableDeclaration' && object.declarations[0].init && object.declarations[0].init.type === 'FunctionExpression'){
             root.description = {
               type: 'function',
-              comment: comment.value,
+              comment: parseBlockComment(comment.value),
               name: object.declarations[0].id.name,
               params: getParams(object.declarations[0].init.params)
             };
@@ -100,7 +151,7 @@ function walk(object, comments){
           else if(object.type === 'Property' && object.key.type === 'Identifier'){
             root.description = {
               type: 'property',
-              comment: comment.value,
+              comment: parseBlockComment(comment.value),
               name: object.key.name
             };
 
@@ -161,6 +212,6 @@ fs.readFile(inputFilename, 'utf8', function(err, data){
       return comment.type === 'Block' && comment.value.indexOf('*$') === 0;
     });
     // console.log(JSON.stringify(syntax, null, 2));
-    console.log(JSON.stringify(walk(syntax.body, comments), null, 2));
+    process.stdout.write(generateMD(walk(syntax.body, comments)));
   }
 });
