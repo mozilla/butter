@@ -59,6 +59,25 @@
         }
       };
 
+      /**$
+       * Logger::Logger::beep
+       *
+       * Throws an error with the given message prefixed by the given name.
+       *
+       * @type member
+       * @api private
+       * @param {String} message Contents of the error
+       * @throws Obligatory, since this is an error.
+       */
+      var beep = function( flarp ) {
+
+      };
+
+      /**$
+       * LOL!!ZZ!
+       */
+      this.barp = 2;
+
     }
 
     /**$

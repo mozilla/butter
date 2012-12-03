@@ -1,4 +1,5 @@
 var fs = require('fs');
+var esprima = require('esprima');
 
 var inputFilename = process.argv[2];
 var depthHashes = '##########################';
@@ -19,121 +20,147 @@ function generateMD(objectTree, depth){
   return output;
 }
 
-function findEndOfBlockComment(data, startIndex){
-  for(var i = startIndex, l = data.length; i < l; ++i){
-    if(data.indexOf('*/', i) === i){
-      return data.substring(startIndex, i);
-    }
-  }
-}
-
-function parseBlockComment(inputString){
-  var prefixRegex = /(^|\n)\s*\*\s*/;
-  while(inputString.search(prefixRegex) > -1){
-    inputString = inputString.replace(prefixRegex, '\n');
-  }
-
-  inputString = inputString.replace(/\n\s*$/, '');
-
-  inputString = inputString.substr(1);
-
-  var title = inputString.substr(0, inputString.indexOf('\n'));
-  var descriptionEndIndex = inputString.indexOf('\n@');
-
-  descriptionEndIndex = descriptionEndIndex === -1 ? inputString.length -1 : descriptionEndIndex;
-
-  var description = inputString.substring(title.length + 1, descriptionEndIndex);
-
-  var options = [];
-  var index = descriptionEndIndex;
-  var option;
-  var endIndex;
-
-  while(index < inputString.length){
-    if(inputString.indexOf('\n@', index) === index){
-      endIndex = inputString.indexOf('\n@', index + 2);
-      endIndex = endIndex === -1 ? inputString.length : endIndex;
-      option = inputString.substring(index + 2, endIndex).match(/([^\s]+)\s?(\{([^\}]+)\})?\s?([^\s]+)?\s?([^$]+)?$/);
-      options.push({
-        type: option[1],
-        varTypes: option[3] ? option[3].split('|') : [],
-        name: option[4],
-        description: option[5]
-      });
-      index = endIndex;
-    }
-    else {
-      ++index;
-    }
-  }
-
-  return {
-    title: title,
-    description: description,
-    options: options
-  }
-}
-
-function findBlockComments(data){
-  var blockComment;
-  var objectTreeDepth = 0;
-
-  var objectTree = {comments:[], children: [], parent: null};
-  var currentObject = objectTree;
-  var tempObject;
-
-  for(var i = 0, l = data.length; i < l; ++i){
-    if(data.indexOf('/**$', i) === i){
-      blockComment = findEndOfBlockComment(data, i + 5);
-      i += blockComment.length;
-      currentObject.comments.push(parseBlockComment(blockComment));
-    }
-    if(data.indexOf('//', i) === i){
-      i = data.indexOf('\n', i);
-    }
-    if(i === -1){
-      break;
-    }
-    if(data[i] === '{'){
-      ++objectTreeDepth;
-      tempObject = {
-        comments: [],
-        children: [],
-        parent: currentObject
-      };
-      currentObject.children.push(tempObject);
-      currentObject = tempObject;
-    }
-    else if(data[i] === '}'){
-      --objectTreeDepth;
-      tempObject = currentObject.parent;
-      if(currentObject.comments.length === 0 && currentObject.children.length === 0){
-        currentObject.parent.children.splice(currentObject.parent.children.indexOf(currentObject));
-      }
-      currentObject = tempObject;
-    }
-  }
-
-  if(objectTree.comments.length === 0 && objectTree.children.length === 1){
-    return objectTree.children[0];
-  }
-
-  return objectTree;
-}
-
 if(!inputFilename){
   console.log('Must supply an input filename.');
   console.log('Usage: docutron <input>');
   return;
 }
 
+function getParams(obj){
+  return obj.map(function(paramObject){
+      return paramObject.name;
+  });
+}
+
+function getNamespace(obj){
+  return obj.object.type === 'ThisExpression' ? 'this' : obj.object.name;
+}
+
+function walk(object, comments){
+  var root;
+
+  if(object){
+    root = {
+      description: null,
+      children: []
+    };
+
+    if(object.type){
+      comments.forEach(function(comment){
+        if(!root.description && comment.loc.end.line === object.loc.start.line - 1){
+          if(object.type === 'FunctionDeclaration'){
+            root.description = {
+              comment: comment.value,
+              type: 'function',
+              name: object.id.name,
+              params: getParams(object.params)
+            };
+          }
+          else if(object.type === 'CallExpression'){
+            root.description = {
+              comment: comment.value,
+              type: 'function'
+            };
+            object.arguments.forEach(function(arg){
+              if(!root.description.params && arg.type === 'FunctionExpression'){
+                root.params = getParams(arg.params);
+              }
+            });
+          }
+          else if(object.type === 'ExpressionStatement' &&
+            object.expression.type === 'AssignmentExpression' &&
+            object.expression.left.type === 'MemberExpression'){
+
+            if(object.expression.right.type === 'FunctionExpression'){
+              root.description = {
+                comment: comment.value,
+                type: 'function',
+                namespace: getNamespace(object.expression.left),
+                name: object.expression.left.property.name,
+                params: getParams(object.expression.right.params)
+              };
+            }
+            else {
+              root.description = {
+                comment: comment.value,
+                type: 'property',
+                namespace: getNamespace(object.expression.left),
+                name: object.expression.left.property.name
+              };
+            }
+          }
+          else if(object.type === 'VariableDeclaration' && object.declarations[0].init && object.declarations[0].init.type === 'FunctionExpression'){
+            root.description = {
+              type: 'function',
+              comment: comment.value,
+              name: object.declarations[0].id.name,
+              params: getParams(object.declarations[0].init.params)
+            };
+          }
+          else if(object.type === 'Property' && object.key.type === 'Identifier'){
+            root.description = {
+              type: 'property',
+              comment: comment.value,
+              name: object.key.name
+            };
+
+            var getter, setter, configurable;
+
+            if(object.value){
+              object.value.properties.forEach(function(prop){
+                if(prop.key.name === 'get'){
+                  getter = true;
+                }
+                else if(prop.key.name === 'set'){
+                  setter = true;
+                }
+              });
+
+              root.access = getter && !setter ? 'read-only' : (!getter && setter ? 'write-only' : 'read-write');
+            }
+          }
+        }
+      });
+    }
+
+    if(Array.isArray(object)){
+      object.forEach(function(child){
+        var result = walk(child, comments);
+        if(result){
+          root.children.push(result);
+        }
+      });
+    }
+    else if(typeof object === 'object'){
+      Object.keys(object).forEach(function(key){
+        var result = walk(object[key], comments);
+        if(result){
+          root.children.push(result);
+        }
+      });
+    }
+
+    if(root.description){
+      return root;
+    }
+    else if(root.children.length > 0){
+      if(root.children.length === 1){
+        return root.children[0];
+      }
+      return root;
+    }
+  }
+}
+
 fs.readFile(inputFilename, 'utf8', function(err, data){
-  var objectTree;
+  var objectTree, syntax, comments;
 
   if(!err){
-    objectTree = findBlockComments(data);
-    console.log(objectTree);
-    var mdString = generateMD(objectTree) + '\n';
-    process.stdout.write(mdString);
+    syntax = esprima.parse(data, {loc: true, comment: true});
+    comments = syntax.comments.filter(function(comment){
+      return comment.type === 'Block' && comment.value.indexOf('*$') === 0;
+    });
+    // console.log(JSON.stringify(syntax, null, 2));
+    console.log(JSON.stringify(walk(syntax.body, comments), null, 2));
   }
 });
