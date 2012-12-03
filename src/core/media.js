@@ -2,12 +2,12 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-/**
- * Document: Media
+/**$
+ * Media
  *
  * Provides Media functionality to Butter.
  *
- * @structure Module
+ * @type Module
  * @api public
  */
 define( [
@@ -24,14 +24,14 @@ define( [
 
   var __guid = 0;
 
-  /**
-   * Document: Media::Media
+  /**$
+   * Media::Media
    *
    * Supplies access to Popcorn and the Butter Tracks and TrackEvents
    * that comprise a Popcorn experience for one media element (one set of urls).
    *
    * @param {Dictionary} mediaOptions Initialization options, such as name, url, and target.
-   * @structure Class
+   * @type Class
    * @api public
    */
   var Media = function ( mediaOptions ) {
@@ -122,24 +122,24 @@ define( [
     this.popcornScripts = null;
     this.maxPluginZIndex = 0;
 
-    /**
-     * Document: Media::Media::destroy
+    /**$
+     * Media::Media::destroy
      *
      * Disengages this Media object from use by severing link to Popcorn.
      * 
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.destroy = function(){
       _popcornWrapper.unbind();
     };
 
-    /**
-     * Document: Media::Media::clear
+    /**$
+     * Media::Media::clear
      *
      * Removes all tracks from this Media object.
      * 
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.clear = function(){
@@ -148,15 +148,15 @@ define( [
       }
     };
 
-    /**
-     * Document: Media::Media::ensureNewTrackIsTrack
+    /**$
+     * Media::Media::ensureNewTrackIsTrack
      *
      * Ensures that the provided object is a Track object. If it isn't,
      * a new Track object is created and returned. Otherwise, the original
      * object is returned.
      *
      * @param {Track|Object} track Track object to inspect.
-     * @structure Member Function
+     * @type Member Function
      * @return {Track} A Track object
      * @api private
      */
@@ -167,14 +167,14 @@ define( [
       return track;
     }
 
-    /**
-     * Document: Media::Media::setupNewTrack
+    /**$
+     * Media::Media::setupNewTrack
      *
      * Prepares a Track for use with this Media by setting up chain listeners,
      * storing a reference to the Track, and providing access to a Popcorn wrapper.
      * 
      * @param {Track} track Track object to setup.
-     * @structure Member Function
+     * @type Member Function
      * @api private
      */
     function setupNewTrack( track ) {
@@ -191,15 +191,15 @@ define( [
       track.setPopcornWrapper( _popcornWrapper );
     }
 
-    /**
-     * Document: Media::Media::addNewTrackTrackEvents
+    /**$
+     * Media::Media::addNewTrackTrackEvents
      *
      * Loops through TrackEvents on a each Track, dispatching a `trackeventadded` event. This functionality
      * is used to notify other objects when a Track gets re-inserted or re-added to a Media object, since there
      * may be TrackEvents on a Track before it is added.
      *
      * @param {Track} track Track object from which TrackEvents are read.
-     * @structure Member Function
+     * @type Member Function
      * @dispatch trackeventadded
      * @api private
      */
@@ -212,13 +212,13 @@ define( [
       }
     }
 
-    /**
-     * Document: Media::Media::addTrack
+    /**$
+     * Media::Media::addTrack
      *
      * Adds a Track object to this Media object _in order_.
      *
      * @param {Track|Object} track Track to be added. If _track_ is an basic object, it will be converted to a Track.
-     * @structure Member Function
+     * @type Member Function
      * @dispatch trackadded, trackorderchanged
      * @api public
      */
@@ -248,15 +248,15 @@ define( [
       return track;
     };
 
-    /**
-     * Document: Media::Media::insertTrackBefore
+    /**$
+     * Media::Media::insertTrackBefore
      *
      * Inserts a Track object before another Track object already attached to this Media object.
      * Order is preserved.
      *
      * @param {Track} otherTrack Reference Track in front of which the new track will be added.
      * @param {Track|Object} newTrack Track to be added. If _track_ is an basic object, it will be converted to a Track.
-     * @structure Member Function
+     * @type Member Function
      * @dispatch trackadded, trackorderchanged
      * @api public
      */
@@ -298,13 +298,13 @@ define( [
       }
     };
 
-    /**
-     * Document: Media::Media::getTrackById
+    /**$
+     * Media::Media::getTrackById
      *
      * Loops over all Tracks and returns the first (if any) that has an id equal to that which is provided.
      * 
      * @param {String} id Id of Track to find.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.getTrackById = function( id ) {
@@ -315,13 +315,13 @@ define( [
       }
     };
 
-    /**
-     * Document: Media::Media::removeTrack
+    /**$
+     * Media::Media::removeTrack
      *
      * Removes a Track from this Media object. 
      *
      * @param {Track} track Track to remove.
-     * @structure Member Function
+     * @type Member Function
      * @dispatch trackremoved, trackeventremoved
      * @api public
      */
@@ -353,12 +353,12 @@ define( [
       }
     };
 
-    /**
-     * Document: Media::Media::cleanUpEmptyTracks
+    /**$
+     * Media::Media::cleanUpEmptyTracks
      *
      * Removes Tracks which contain no TrackEvents.
      *
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.cleanUpEmptyTracks = function() {
@@ -370,13 +370,13 @@ define( [
       }
     };
 
-    /**
-     * Document: Media::Media::findTrackWithTrackEventId
+    /**$
+     * Media::Media::findTrackWithTrackEventId
      *
      * Checks each Track for the existence of a TrackEvent with a specific id.
      *
      * @param {String} id Id of TrackEvent to look for.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.findTrackWithTrackEventId = function( id ){
@@ -391,25 +391,25 @@ define( [
       }
     };
 
-    /**
-     * Document: Media::Media::getManifest
+    /**$
+     * Media::Media::getManifest
      *
      * Returns the Popcorn manifest for the specified plugin type.
      *
      * @param {String} type Type of Popcorn plugin; e.g. text, footnote, googlemap
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.getManifest = function( type ) {
       return _registry[ type ];
     };
 
-    /**
-     * Document: Media::Media::setupContent
+    /**$
+     * Media::Media::setupContent
      *
      * Begins the process of initializing Popcorn with the URL given to this Media object.
      *
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     function setupContent(){
@@ -425,14 +425,14 @@ define( [
 
     this.setupContent = setupContent;
 
-    /**
-     * Document: Media::Media::onReady
+    /**$
+     * Media::Media::onReady
      *
      * Calls the provided callback function when this Media object is ready to use. If this Media is not immediately ready,
      * the callback will be called after the _mediaready_ event is fired.
      *
      * @param {Function} callback Callback to execute when ready.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
      this.onReady = function( callback ){
@@ -448,41 +448,41 @@ define( [
       }
     };
 
-    /**
-     * Document: Media::Media::pause
+    /**$
+     * Media::Media::pause
      *
      * Pauses the attached media; proxied through Popcorn using PopcornWrapper.
      *
      * @param {Function} callback Callback to execute when ready.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.pause = function(){
       _popcornWrapper.pause();
     };
 
-    /**
-     * Document: Media::Media::play
+    /**$
+     * Media::Media::play
      *
      * Plays the attached media; proxied through Popcorn using PopcornWrapper.
      *
      * @param {Function} callback Callback to execute when ready.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.play = function(){
       _popcornWrapper.play();
     };
 
-    /**
-     * Document: Media::Media::generatePopcornString
+    /**$
+     * Media::Media::generatePopcornString
      *
      * Uses the current state of this Media object to generate a string representing the complete setup of
      * a Popcorn environment containing all the TrackEvent contents attached to Tracks on this Media object.
      *
      * @param {Dictionary} callbacks Named callbacks to run for different stages of string generation (see PopcornWrapper).
      * @param {Dictionary} scripts Named scripts to insert at different stages of string generation (see PopcornWrapper).
-     * @structure Member Function
+     * @type Member Function
      * @return {String} A string representing a complete Popcorn environment mirroring the functionality of this Media object.
      * @api public
      */
@@ -504,27 +504,27 @@ define( [
       return _popcornWrapper.generatePopcornString( popcornOptions, _url, _target, null, callbacks, scripts, collectedEvents );
     };
 
-    /**
-     * Document: Media::Media::compareTrackOrder
+    /**$
+     * Media::Media::compareTrackOrder
      *
      * Helper function for sorting Tracks by their order.
      *
      * @param {Track} a A Track to compare with another.
      * @param {Track} b A Track to compare with another.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     function compareTrackOrder( a, b ) {
       return a.order - b.order;
     }
 
-    /**
-     * Document: Media::Media::sortTracks
+    /**$
+     * Media::Media::sortTracks
      *
      * Sorts attached Tracks based on their order property using `compareTrackOrder`.
      *
      * @param {Boolean} suppressEvent If `true`, _trackorderchanged_ event is not dispatched.
-     * @structure Member Function
+     * @type Member Function
      * @dispatch trackorderchanged
      * @api public
      */
@@ -540,14 +540,14 @@ define( [
       }
     };
 
-    /**
-     * Document: Media::Media::getNextTrack
+    /**$
+     * Media::Media::getNextTrack
      *
      * Returns the next Track object with respect to Track order. If the specified Track is the last
      * Track, _null_ is returned.
      *
      * @param {Track} currentTrack Reference Track. The Track after _currentTrack_ will be returned.
-     * @structure Member Function
+     * @type Member Function
      * @return {Track|null} The next Track.
      * @api public
      */
@@ -559,14 +559,14 @@ define( [
       return null;
     };
 
-    /**
-     * Document: Media::Media::getLastTrack
+    /**$
+     * Media::Media::getLastTrack
      *
      * Returns the previous Track object with respect to Track order. If the specified Track is the
      * first Track, _null_ is returned.
      *
      * @param {Track} currentTrack Reference Track. The Track before _currentTrack_ will be returned.
-     * @structure Member Function
+     * @type Member Function
      * @return {Track|null} The next Track.
      * @api public
      */
@@ -578,15 +578,15 @@ define( [
       return null;
     };
 
-    /**
-     * Document: Media::Media::findNextAvailableTrackFromTimes
+    /**$
+     * Media::Media::findNextAvailableTrackFromTimes
      *
      * Returns a Track with an available space between the specified start and end times. If no such
      * Track exists, _null_ is returned.
      *
      * @param {Number} start Low bound of time window to search for.
      * @param {Number} end High bound of time window to search for.
-     * @structure Member Function
+     * @type Member Function
      * @return {Track|null} A Track with space available between the specified times.
      * @api public
      */
@@ -599,8 +599,8 @@ define( [
       return null;
     };
 
-    /**
-     * Document: Media::Media::forceEmptyTrackSpaceAtTime
+    /**$
+     * Media::Media::forceEmptyTrackSpaceAtTime
      *
      * Searches for a space on the specified Track between the given times. If the Track does not
      * have space available, a new Track is added after the specified Track.
@@ -609,7 +609,7 @@ define( [
      * @param {Number} start Low bound of time window to search for.
      * @param {Number} end High bound of time window to search for.
      * @param {TrackEvent} ignoreTrackEvent Optional. When specified, this TrackEvent is ignored during a search.
-     * @structure Member Function
+     * @type Member Function
      * @return {Track} A Track with available space between the specified times.
      * @api public
      */
@@ -634,13 +634,13 @@ define( [
       return track;
     };
 
-    /**
-     * Document: Media::Media::fixTrackEventBounds
+    /**$
+     * Media::Media::fixTrackEventBounds
      *
      * Checks TrackEvents on Tracks to ensure that they have valid start and end times, 0 -> duration.
      * If a TrackEvent is found to have an invalid start or end time, it is removed.
      *
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     this.fixTrackEventBounds = function() {
@@ -672,12 +672,12 @@ define( [
       }
     };
 
-    /**
-     * Document: Media::Media::sanitizeUrl
+    /**$
+     * Media::Media::sanitizeUrl
      *
      * Internally, URLs are decorated with a unique butteruid. This function strips it. Useful for exporting.
      *
-     * @structure Member Function
+     * @type Member Function
      * @return {String} Sanitized url.
      * @api public
      */
@@ -702,12 +702,12 @@ define( [
     }
 
     Object.defineProperties( this, {
-      /**
-       * Document: Media::Media::ended
+      /**$
+       * Media::Media::ended
        *
        * Safely wraps Popcorn's `ended()` getter function, reporting the "ended" state for this Media object.
        *
-       * @structure Property
+       * @type Property
        * @return {Boolean} If Popcorn is not initialized, or the media it wraps has not ended, `false` is returned. Otherwise, true.
        * @access read-only
        */
@@ -721,12 +721,12 @@ define( [
         }
       },
 
-      /**
-       * Document: Media::Media::url
+      /**$
+       * Media::Media::url
        *
        * Url used to initialize Popcorn. Whenever this property changes, Popcorn is re-initialized.
        *
-       * @structure Property
+       * @type Property
        * @dispatch mediacontentchanged
        * @return {String} String containing comma-delimited urls to be passed to Popcorn for initialization.
        * @access read-write
@@ -747,12 +747,12 @@ define( [
         }
       },
 
-      /**
-       * Document: Media::Media::target
+      /**$
+       * Media::Media::target
        *
        * Target for Popcorn media. Whenever this property changes, Popcorn is re-initialized.
        *
-       * @structure Property
+       * @type Property
        * @dispatch mediatargetchanged
        * @return {String} Id of the element Popcorn will use for its media source.
        * @access read-write
@@ -772,12 +772,12 @@ define( [
         enumerable: true
       },
 
-      /**
-       * Document: Media::Media::muted
+      /**$
+       * Media::Media::muted
        *
        * Mute state of this Media object.
        *
-       * @structure Property
+       * @type Property
        * @return {Boolean} True if muted, false otherwise.
        * @access read-write
        */
@@ -791,12 +791,12 @@ define( [
         }
       },
 
-      /**
-       * Document: Media::Media::ready
+      /**$
+       * Media::Media::ready
        *
        * Ready state of this Media object.
        *
-       * @structure Property
+       * @type Property
        * @return {Boolean} True if media is in the ready state; false otherwise.
        * @access read-only
        */
@@ -807,12 +807,12 @@ define( [
         }
       },
 
-      /**
-       * Document: Media::Media::name
+      /**$
+       * Media::Media::name
        *
        * Name of this Media object.
        *
-       * @structure Property
+       * @type Property
        * @return {String}
        * @access read-only
        */
@@ -823,13 +823,13 @@ define( [
         enumerable: true
       },
 
-      /**
-       * Document: Media::Media::id
+      /**$
+       * Media::Media::id
        *
        * Id of this Media object.
        *
-       * @structure Property
-       * @return {String}.
+       * @type Property
+       * @return {String}
        * @access read-only
        */
       id: {
@@ -839,12 +839,12 @@ define( [
         enumerable: true
       },
 
-      /**
-       * Document: Media::Media::tracks
+      /**$
+       * Media::Media::tracks
        *
        * Array of Tracks attached to this Media object. Not ordered.
        *
-       * @structure Property
+       * @type Property
        * @return {Array} Array of Tracks.
        * @access read-only
        */
@@ -855,12 +855,12 @@ define( [
         enumerable: true
       },
 
-      /**
-       * Document: Media::Media::orderedTracks
+      /**$
+       * Media::Media::orderedTracks
        *
        * Ordered array of Tracks attached to this Media object. Should always be ordered.
        *
-       * @structure Property
+       * @type Property
        * @return {Array} Array of Tracks.
        * @access read-only
        */
@@ -871,12 +871,12 @@ define( [
         enumerable: true
       },
 
-      /**
-       * Document: Media::Media::currentTime
+      /**$
+       * Media::Media::currentTime
        *
        * Current time of this Media and underlying Popcorn object. Safe proxy for Popcorn.
        *
-       * @structure Property
+       * @type Property
        * @dispatch mediatimeupdate
        * @return {Number} Current time of Popcorn media.
        * @access read-write
@@ -901,12 +901,12 @@ define( [
         enumerable: true
       },
 
-      /**
-       * Document: Media::Media::duration
+      /**$
+       * Media::Media::duration
        *
        * Duration of this Media. __Rarely needs to be set manually__.
        *
-       * @structure Property
+       * @type Property
        * @dispatch mediadurationchanged
        * @return {Number} Length of media in seconds.
        * @access read-write
@@ -926,12 +926,12 @@ define( [
         enumerable: true
       },
 
-      /**
-       * Document: Media::Media::json
+      /**$
+       * Media::Media::json
        *
        * JSON object representing the current state of this Media object.
        *
-       * @structure Property
+       * @type Property
        * @return {JSON} Portable state of this object.
        * @access read-write
        */
@@ -978,13 +978,13 @@ define( [
         enumerable: true
       },
 
-      /**
-       * Document: Media::Media::registry
+      /**$
+       * Media::Media::registry
        *
        * Shortcut to Popcorn plugin registry.
        *
-       * @structure Property
-       * @return {Dictionary}.
+       * @type Property
+       * @return {Dictionary}
        * @access read-write
        */
       registry: {
@@ -997,13 +997,13 @@ define( [
         enumerable: true
       },
 
-      /**
-       * Document: Media::Media::popcorn
+      /**$
+       * Media::Media::popcorn
        *
        * PopcornWrapper object housing an instance of Popcorn.
        *
-       * @structure Property
-       * @return {PopcornWrapper}.
+       * @type Property
+       * @return {PopcornWrapper}
        * @access read-only
        */
       popcorn: {
@@ -1013,12 +1013,12 @@ define( [
         }
       },
 
-      /**
-       * Document: Media::Media::paused
+      /**$
+       * Media::Media::paused
        *
        * Paused state of this Media object.
        *
-       * @structure Property
+       * @type Property
        * @return {Boolean} True if paused, false otherwise.
        * @access read-write
        */
@@ -1032,13 +1032,13 @@ define( [
         }
       },
 
-      /**
-       * Document: Media::Media::volume
+      /**$
+       * Media::Media::volume
        *
        * Volume of this Media object.
        *
-       * @structure Property
-       * @return {Number}.
+       * @type Property
+       * @return {Number}
        * @access read-write
        */
       volume: {
@@ -1051,14 +1051,14 @@ define( [
         }
       },
 
-      /**
-       * Document: Media::Media::popcornOptions
+      /**$
+       * Media::Media::popcornOptions
        *
        * Options object used to initialize Popcorn media.
        *
-       * @structure Property
+       * @type Property
        * @dispatch mediapopcornsettingschanged
-       * @return {Dictionary}.
+       * @return {Dictionary}
        * @access read-write
        */
       popcornOptions: {
@@ -1074,13 +1074,13 @@ define( [
       }
     });
 
-    /**
-     * Document: Media::Media::retrieveSrc
+    /**$
+     * Media::Media::retrieveSrc
      *
      * Checks to see if there are any child source elements and uses them if neccessary.
      *
      * @param {DOMElement} targetElement Element to check for a source.
-     * @structure Member Function
+     * @type Member Function
      * @api public
      */
     function retrieveSrc( targetElement ) {
