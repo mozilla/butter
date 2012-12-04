@@ -296,7 +296,7 @@ var scrapers = [
 
   function(tree, comment){
     if(tree.type === 'VariableDeclaration' && tree.declarations[0].init && tree.declarations[0].init.type === 'FunctionExpression'){
-      root.description = {
+      return {
         blockType: 'function',
         comment: parseBlockComment(comment.value),
         name: tree.declarations[0].id.name,
@@ -428,6 +428,7 @@ fs.readFile(inputPath, 'utf8', function(err, data){
     });
     
     process.stdout.write(generateMD(walk(syntax.body, comments)));
-    //console.log(generateMD(walk(syntax.body, comments)));
+    // generateMD(walk(syntax.body, comments));
+    // console.log(JSON.stringify(syntax, null, 2));
   }
 });

@@ -126,7 +126,7 @@ define( [
      * Media::Media::destroy
      *
      * Disengages this Media object from use by severing link to Popcorn.
-     * 
+     *
      * @type Member Function
      * @api public
      */
@@ -138,7 +138,7 @@ define( [
      * Media::Media::clear
      *
      * Removes all tracks from this Media object.
-     * 
+     *
      * @type Member Function
      * @api public
      */
@@ -172,7 +172,7 @@ define( [
      *
      * Prepares a Track for use with this Media by setting up chain listeners,
      * storing a reference to the Track, and providing access to a Popcorn wrapper.
-     * 
+     *
      * @param {Track} track Track object to setup.
      * @type Member Function
      * @api private
@@ -200,7 +200,7 @@ define( [
      *
      * @param {Track} track Track object from which TrackEvents are read.
      * @type Member Function
-     * @dispatch trackeventadded
+     * @event trackeventadded
      * @api private
      */
     function addNewTrackTrackEvents( track ) {
@@ -219,7 +219,7 @@ define( [
      *
      * @param {Track|Object} track Track to be added. If _track_ is an basic object, it will be converted to a Track.
      * @type Member Function
-     * @dispatch trackadded, trackorderchanged
+     * @event trackadded, trackorderchanged
      * @api public
      */
     this.addTrack = function ( track ) {
@@ -257,7 +257,7 @@ define( [
      * @param {Track} otherTrack Reference Track in front of which the new track will be added.
      * @param {Track|Object} newTrack Track to be added. If _track_ is an basic object, it will be converted to a Track.
      * @type Member Function
-     * @dispatch trackadded, trackorderchanged
+     * @event trackadded, trackorderchanged
      * @api public
      */
     this.insertTrackBefore = function( otherTrack, newTrack ) {
@@ -302,7 +302,7 @@ define( [
      * Media::Media::getTrackById
      *
      * Loops over all Tracks and returns the first (if any) that has an id equal to that which is provided.
-     * 
+     *
      * @param {String} id Id of Track to find.
      * @type Member Function
      * @api public
@@ -318,11 +318,11 @@ define( [
     /**$
      * Media::Media::removeTrack
      *
-     * Removes a Track from this Media object. 
+     * Removes a Track from this Media object.
      *
      * @param {Track} track Track to remove.
      * @type Member Function
-     * @dispatch trackremoved, trackeventremoved
+     * @event trackremoved, trackeventremoved
      * @api public
      */
     this.removeTrack = function ( track ) {
@@ -525,7 +525,7 @@ define( [
      *
      * @param {Boolean} suppressEvent If `true`, _trackorderchanged_ event is not dispatched.
      * @type Member Function
-     * @dispatch trackorderchanged
+     * @event trackorderchanged
      * @api public
      */
     this.sortTracks = function( suppressEvent ) {
@@ -727,7 +727,7 @@ define( [
        * Url used to initialize Popcorn. Whenever this property changes, Popcorn is re-initialized.
        *
        * @type Property
-       * @dispatch mediacontentchanged
+       * @event mediacontentchanged
        * @return {String} String containing comma-delimited urls to be passed to Popcorn for initialization.
        * @access read-write
        */
@@ -753,7 +753,7 @@ define( [
        * Target for Popcorn media. Whenever this property changes, Popcorn is re-initialized.
        *
        * @type Property
-       * @dispatch mediatargetchanged
+       * @event mediatargetchanged
        * @return {String} Id of the element Popcorn will use for its media source.
        * @access read-write
        */
@@ -877,7 +877,7 @@ define( [
        * Current time of this Media and underlying Popcorn object. Safe proxy for Popcorn.
        *
        * @type Property
-       * @dispatch mediatimeupdate
+       * @event mediatimeupdate
        * @return {Number} Current time of Popcorn media.
        * @access read-write
        */
@@ -907,7 +907,7 @@ define( [
        * Duration of this Media. __Rarely needs to be set manually__.
        *
        * @type Property
-       * @dispatch mediadurationchanged
+       * @event mediadurationchanged
        * @return {Number} Length of media in seconds.
        * @access read-write
        */
@@ -1057,7 +1057,7 @@ define( [
        * Options object used to initialize Popcorn media.
        *
        * @type Property
-       * @dispatch mediapopcornsettingschanged
+       * @event mediapopcornsettingschanged
        * @return {Dictionary}
        * @access read-write
        */

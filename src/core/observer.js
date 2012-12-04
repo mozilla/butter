@@ -162,7 +162,7 @@ define([], function(){
      * Observer::Observer::subscribe
      *
      * Executes subscription procedure for the given subscriber on this Observer object.
-     * 
+     *
      * @param {Object} object The object to extend with Observer functionality.
      * @see Observer::__subscribe
      * @type Member Function

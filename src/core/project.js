@@ -54,7 +54,7 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
      * Places this project in a dirty state.
      *
      * @type Member Function
-     * @dispatch projectchanged
+     * @event projectchanged
      * @api private
      */
     function invalidate() {

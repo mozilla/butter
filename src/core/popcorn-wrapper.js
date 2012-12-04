@@ -24,7 +24,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
 
   /**$
    * PopcornWrapper::PopcornWrapper
-   * 
+   *
    * Wraps various functionality and setup associated with creating, updating, and removing data with Popcorn.js.
    * Several event handlers can be supplied through the `options` parameter, including _prepare_, _fail_, _timeout_, and.
    * _playerTypeRequired_. These are all functions that are called when corresponding Popcorn events occur. Other
@@ -475,7 +475,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
 
     /**$
      * PopcornWrapper::PopcornWrapper::createPopcorn
-     * 
+     *
      * Creates a Popcorn instance in the page. Tries running the generated function first (from popcornString)
      * and inserts it as a script in the head if that fails.
      *
@@ -497,7 +497,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
 
     /**$
      * PopcornWrapper::PopcornWrapper::checkTimeoutLoop
-     * 
+     *
      * Abstracts the problem of waiting for some condition to occur with a timeout. Loops on checkFunction,
      * calling readyCallback when it succeeds, or calls timeoutCallback after timeoutDuration milliseconds.
      *

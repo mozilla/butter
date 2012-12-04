@@ -102,7 +102,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
        * The target object for this Track. When specified, TrackEvents have the option of using this property to decide their own target.
        *
        * @type property
-       * @dispatch tracktargetchanged
+       * @event tracktargetchanged
        * @return {String} Current target identifier.
        */
       target: {
@@ -126,7 +126,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
        * Name of this Track.
        *
        * @type property
-       * @dispatch tracknamechanged
+       * @event tracknamechanged
        * @return {String}
        */
       name: {
@@ -320,7 +320,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
      * @param {TrackEvent|Object} trackEvent TrackEvent or manifest object to create one. If an non TrackEvent object is passed in, it is
      *                                       assumed to be a dictionary containing options for a new TrackEvent.
      * @type member function
-     * @dispatch trackeventadded
+     * @event trackeventadded
      * @return {TrackEvent} The TrackEvent that was provided, or a manifestation of one described by the provided dictionary.
      * @api public
      */
@@ -380,7 +380,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
      *
      * @param {TrackEvent|Object} trackEvent TrackEvent to be removed. Unlick `addTrackEvent`, this must be a TrackEvent object.
      * @type member function
-     * @dispatch trackeventremoved
+     * @event trackeventremoved
      * @api public
      */
     this.removeTrackEvent = function( trackEvent ) {
