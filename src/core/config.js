@@ -5,10 +5,9 @@
 /**$
  * Config
  *
- * Manages configuration info for the app.
+ * Provides mergeable config functionality to Butter.
  *
  * @type Module
- * @expose parse
  */
 define( [], function() {
 
@@ -189,24 +188,16 @@ define( [], function() {
     Object.defineProperty( this, "id", { get: function(){ return configID; } } );
   }
 
-  /**$
-   * Config::Config
-   *
-   * Manages creation of Configuration objects.
-   *
-   * @type Factory for Configuration.
-   * @usage Config.parse(json);
-   */
   var Config = {
 
     /**$
      * Config::Config::parse
      *
-     * Parses a JSON config string, creating a Configuration object.
+     * Factory for Configuration. Parses a JSON config string, creating a Configuration object.
      *
      * @param {String} configJSON The config's JSON string.
      * @throw JSON is malformed or otherwise can't be parsed.
-     * @type Class Function
+     * @type Factory
      * @api public
      */
     parse: function( configJSON ){

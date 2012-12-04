@@ -1,111 +1,117 @@
 var fs = require('fs');
 var esprima = require('esprima');
 
-var inputFilename = process.argv[2];
+var inputPath = process.argv[2];
 var depthHashes = '##########################';
 
-function generateMD(objectTree, depth, parent){
+var filename = inputPath.lastIndexOf('/') > -1 ? inputPath.substr(inputPath.lastIndexOf('/') + 1) : inputPath;
+
+function generateUsage(objectTree){
+  var description = objectTree.description;
+  if(description.usage){
+    return description.usage;
+  }
+
+  if(description.name){
+    var prefix = '';
+    var args = description.signatureParams ? description.signatureParams.join(', ') : '';
+    var parent;
+
+    if(description.type.toLowerCase() === 'module'){
+      return 'var ' + description.name + ' = require(\'path/to/module/' + filename + '\');';
+    }
+    else if(description.namespace){
+      if(description.namespace === 'this'){
+        parent = findParentWithDescription(objectTree._parent);
+        if(parent){
+          prefix = parent.description.name[0].toLowerCase();
+        }
+      }
+      else {
+        prefix = description.namespace;
+      }
+      prefix += '.';
+    }
+    else if(description.type && description.type.toLowerCase() === 'class'){
+      prefix += 'var ' + description.name[0].toLowerCase() + ' = new ';
+    }
+
+    return prefix + description.name + '(' + args + ');';
+  }
+}
+
+function generateMD(objectTree, depth){
+  function parseMultilineDescription(description){
+    var lines = description.split('\n-');
+
+    if(lines.length > 1){
+      lines[0] = lines[0] + '  ';
+      lines = lines.map(function(line, index){
+        var match;
+        if(index > 0){
+          match = line.match(/^\s*([^\s]+)\s\{([^\}]+)\}\s([^$]*)$/);
+          if(match){
+            return '> __' + match[1] + '__ [_' + match[2].split('|').join('_ or _') + '_] ' + match[3] + '  '; 
+          }
+        }
+        return line + '  ';
+      });
+    }
+
+    return lines.join('\n');
+  }
+
   var output = '';
   var newDepth = depth;
-  var newParent = parent;
+  var description = objectTree.description;
+  var usage;
 
   depth = depth || 1;
 
-  if(objectTree.description){
-    var params = objectTree.description.comment.params;
-    var otherOptions = {};
-    var usage, structureType, api, access;
-    var title;
-
-    objectTree.description.comment.options.forEach(function(option){
-      if(option.type === 'param'){
-        params.push(option);
-      }
-      else {
-        otherOptions[option.type] = option;
-      }
-    });
-
-    structureType = otherOptions.type ? otherOptions.type.description : null;
-    api = otherOptions.api ? otherOptions.api.description : null;
-    access = otherOptions.access ? otherOptions.access.description : null;
-    usage = otherOptions.usage ? otherOptions.usage.description : null;
-
-    delete otherOptions.api;
-    delete otherOptions.type;
-    delete otherOptions.access;
-    delete otherOptions.usage;
+  if(description){
+    newDepth = depth + 1;
 
     output += depthHashes.substr(0, depth);
 
-    title = objectTree.description.comment.title;
-    if(title.indexOf('::') > -1){
-      title = title.substr(title.lastIndexOf('::') + 2);      
-    }
-
-    output += title;
-    if(api || structureType){
-      output += ' (' + [access, api, structureType].filter(function(p){return !!p}).join(' ') + ')';
+    output += description.name;
+    if(description.api || description.type || description.access){
+      output += ' (' + [description.access, description.api, description.type].filter(function(p){return !!p}).join(' ') + ')';
     }
     output += '\n\n';
-    output += objectTree.description.comment.description;
+    output += description.comment.description;
     output += '\n\n';
 
-    if(params.length > 0){
-      params.forEach(function(param){
-        output += '* __' + param.name + '__ [_' + param.varTypes.join('_ or _') + '_]: ' + param.description + '\n';
+    if(description.params.length > 0){
+      description.params.forEach(function(param){
+        output += '* __' + param.name + '__ [_' + param.varTypes.join('_ or _') + '_]: ' + parseMultilineDescription(param.description) + '\n';
       });
       output += '\n';
     }
 
-    var otherOptionKeys = Object.keys(otherOptions);
-    if(otherOptionKeys.length > 0){
-      otherOptionKeys.forEach(function(key){
-        output += '__@' + key + '__';
-        if(otherOptions[key].varTypes.length > 0){
-          output += ' [_' + otherOptions[key].varTypes.join('_ or _') + '_]';
+    if(description.options.length > 0){
+      description.options.forEach(function(option){
+        output += '__@' + option.type + '__';
+        if(option.varTypes.length > 0){
+          output += ' [_' + option.varTypes.join('_ or _') + '_]';
         }
-        if(otherOptions[key].description){
-          output += ': ' + otherOptions[key].description;
+        if(option.description){
+          output += ': ' + option.description;
         }
         output += '  \n';
       });
       output += '  \n';
     }
 
-    if(objectTree.description.type === 'function'){
-      if(!usage){
-        if(objectTree.description.name){
-          var prefix = '';
-          var args = objectTree.description.params ? objectTree.description.params.join(', ') : '';
-
-          if(objectTree.description.namespace){
-            if(objectTree.description.namespace === 'this'){
-              prefix = parent.description.name[0].toLowerCase();
-            }
-            else {
-              prefix = objectTree.description.namespace;
-            }
-            prefix += '.';
-          }
-          else if(structureType && structureType.toLowerCase() === 'class'){
-            prefix += 'var ' + objectTree.description.name[0].toLowerCase() + ' = new ';
-          }
-
-          output += '\n\nUsage:  \n\n';
-          output += '    ' + prefix + objectTree.description.name + '(' + args + ');';
-          output += '  \n\n';
-        }
-      }
-      else{
+    if(description.blockType === 'function' && !description.noUsage){
+      usage = generateUsage(objectTree);
+      if(usage){
         output += '\n\nUsage:  \n\n';
         output += '    ' + usage;
-        output += '  \n\n';
+        output += '\n\n';
       }
     }
 
-    newParent = objectTree;
-    newDepth = depth + 1;
+    output += '  \n\n';
   }
 
   var functionChildren = [];
@@ -114,7 +120,7 @@ function generateMD(objectTree, depth, parent){
 
   objectTree.children.forEach(function(child){
     if(child.description){
-      if(child.description.type === 'function'){
+      if(child.description.blockType === 'function'){
         functionChildren.push(child);
       }
       else {
@@ -134,13 +140,13 @@ function generateMD(objectTree, depth, parent){
   functionChildren = functionChildren.sort(alphaSort);
 
   output += otherChildren.concat(propertyChildren).concat(functionChildren).reduce(function(prev, child){
-    return prev + generateMD(child, newDepth, newParent);
+    return prev + generateMD(child, newDepth);
   }, '');
 
   return output;
 }
 
-if(!inputFilename){
+if(!inputPath){
   console.log('Must supply an input filename.');
   console.log('Usage: docutron <input>');
   return;
@@ -226,7 +232,121 @@ function getNamespace(obj){
   return obj.object.type === 'ThisExpression' ? 'this' : obj.object.name;
 }
 
-function walk(object, comments){
+function findParentWithDescription(parent){
+  while(parent){
+    if(parent.description){
+      return parent;
+    }
+    parent = parent._parent;
+  }
+}
+
+var scrapers = [
+  function(tree, comment){
+    if(tree.type === 'FunctionDeclaration'){
+      return {
+        comment: parseBlockComment(comment.value),
+        blockType: 'function',
+        name: tree.id.name,
+        signatureParams: getParams(tree.params)
+      };
+    }
+  },
+
+  function(tree, comment){
+    var params;
+    if(tree.type === 'CallExpression'){
+      tree.arguments.forEach(function(arg){
+        if(arg.type === 'FunctionExpression'){
+          params = getParams(arg.params);
+        }
+      });
+      return {
+        comment: parseBlockComment(comment.value),
+        blockType: 'function',
+        signatureParams: params
+      };
+    }
+  },
+
+  function(tree, comment){
+    if(tree.type === 'ExpressionStatement' &&
+      tree.expression.type === 'AssignmentExpression' &&
+      tree.expression.left.type === 'MemberExpression'){
+
+      if(tree.expression.right.type === 'FunctionExpression'){
+        return {
+          comment: parseBlockComment(comment.value),
+          blockType: 'function',
+          namespace: getNamespace(tree.expression.left),
+          name: tree.expression.left.property.name,
+          signatureParams: getParams(tree.expression.right.params)
+        };
+      }
+      else {
+        return {
+          comment: parseBlockComment(comment.value),
+          blockType: 'property',
+          namespace: getNamespace(tree.expression.left),
+          name: tree.expression.left.property.name
+        };
+      }
+    }
+  },
+
+  function(tree, comment){
+    if(tree.type === 'VariableDeclaration' && tree.declarations[0].init && tree.declarations[0].init.type === 'FunctionExpression'){
+      root.description = {
+        blockType: 'function',
+        comment: parseBlockComment(comment.value),
+        name: tree.declarations[0].id.name,
+        signatureParams: getParams(tree.declarations[0].init.params)
+      };
+    }
+  },
+
+  function(tree, comment, parent){
+    var getter, setter, configurable;
+    var parent;
+
+    if(tree.type === 'Property' && tree.key.type === 'Identifier'){
+      if(tree.value){
+        if(tree.value.type === 'ObjectExpression'){
+
+          tree.value.properties.forEach(function(prop){
+            if(prop.key.name === 'get'){
+              getter = true;
+            }
+            else if(prop.key.name === 'set'){
+              setter = true;
+            }
+          });
+
+          return {
+            blockType: 'property',
+            comment: parseBlockComment(comment.value),
+            name: tree.key.name,
+            access: getter && !setter ? 'read-only' : (!getter && setter ? 'write-only' : 'read-write')
+          };
+
+        }
+        else if(tree.value.type === 'FunctionExpression'){
+          parent = findParentWithDescription(parent);
+
+          return {
+            blockType: 'function',
+            comment: parseBlockComment(comment.value),
+            name: tree.key.name,
+            signatureParams: getParams(tree.value.params),
+            namespace: parent ? parent.description.name : null
+          };
+        }
+      }
+    }
+  }
+];
+
+function walk(object, comments, parent){
   var root;
 
   if(object){
@@ -238,95 +358,40 @@ function walk(object, comments){
     if(object.type){
       comments.forEach(function(comment){
         if(!root.description && comment.loc.end.line === object.loc.start.line - 1){
-          if(object.type === 'FunctionDeclaration'){
-            root.description = {
-              comment: parseBlockComment(comment.value),
-              type: 'function',
-              name: object.id.name,
-              params: getParams(object.params)
-            };
-          }
-          else if(object.type === 'CallExpression'){
-            root.description = {
-              comment: parseBlockComment(comment.value),
-              type: 'function'
-            };
-            object.arguments.forEach(function(arg){
-              if(!root.description.params && arg.type === 'FunctionExpression'){
-                root.params = getParams(arg.params);
-              }
-            });
-          }
-          else if(object.type === 'ExpressionStatement' &&
-            object.expression.type === 'AssignmentExpression' &&
-            object.expression.left.type === 'MemberExpression'){
-
-            if(object.expression.right.type === 'FunctionExpression'){
-              root.description = {
-                comment: parseBlockComment(comment.value),
-                type: 'function',
-                namespace: getNamespace(object.expression.left),
-                name: object.expression.left.property.name,
-                params: getParams(object.expression.right.params)
-              };
-            }
-            else {
-              root.description = {
-                comment: parseBlockComment(comment.value),
-                type: 'property',
-                namespace: getNamespace(object.expression.left),
-                name: object.expression.left.property.name
-              };
-            }
-          }
-          else if(object.type === 'VariableDeclaration' && object.declarations[0].init && object.declarations[0].init.type === 'FunctionExpression'){
-            root.description = {
-              type: 'function',
-              comment: parseBlockComment(comment.value),
-              name: object.declarations[0].id.name,
-              params: getParams(object.declarations[0].init.params)
-            };
-          }
-          else if(object.type === 'Property' && object.key.type === 'Identifier'){
-
-            var getter, setter, configurable;
-            if(object.value){
-              if(object.value.type === 'ObjectExpression'){
-
-                root.description = {
-                  type: 'property',
-                  comment: parseBlockComment(comment.value),
-                  name: object.key.name
-                };
-
-                object.value.properties.forEach(function(prop){
-                  if(prop.key.name === 'get'){
-                    getter = true;
-                  }
-                  else if(prop.key.name === 'set'){
-                    setter = true;
-                  }
-                });
-
-                root.access = getter && !setter ? 'read-only' : (!getter && setter ? 'write-only' : 'read-write');
-              }
-              else if(object.value.type === 'FunctionExpression'){
-                root.description = {
-                  type: 'function',
-                  comment: parseBlockComment(comment.value),
-                  name: object.key.name,
-                  params: getParams(object.value.params)
-                };
-              }
-            }
-          }
+          scrapers.forEach(function(scraper){
+            root.description = root.description || scraper(object, comment, parent);
+          });
         }
       });
+
+      if(root.description){
+        root.description.params = root.description.comment.params;
+        root.description.options = [];
+        root.description.name = root.description.comment.title;
+
+        if(root.description.name.indexOf('::') > -1){
+          root.description.name = root.description.name.substr(root.description.name.lastIndexOf('::') + 2);
+        }
+
+        root.description.comment.options.forEach(function(option){
+          if(['usage', 'type', 'api', 'access'].indexOf(option.type) > -1){
+            root.description[option.type] = option.description;
+          }
+          else if(option.type === 'nousage'){
+            root.description.noUsage = true;
+          }
+          else {
+            (option.type === 'param' ? root.description.params : root.description.options).push(option);
+          }
+        });        
+      }
+      root._parent = parent;
+      parent = root;
     }
 
     if(Array.isArray(object)){
       object.forEach(function(child){
-        var result = walk(child, comments);
+        var result = walk(child, comments, parent);
         if(result){
           root.children.push(result);
         }
@@ -334,41 +399,14 @@ function walk(object, comments){
     }
     else if(typeof object === 'object'){
       Object.keys(object).forEach(function(key){
-        var result = walk(object[key], comments);
+        var result = walk(object[key], comments, parent);
         if(result){
           root.children.push(result);
         }
       });
     }
-    if(root.description){
-      root._description = {
-        params: [],
-        options: []
-      };
-      root.description.comment.options.forEach(function(option){
-        if(option.type === 'param'){
-          root._description.params.push(option);
-        }
-        else {
-          root._description.options[option.type] = option;
-        }
 
-        switch(option.type){
-          case 'usage':
-            root._description.usage = option.description;
-            break;
-          case 'type':
-            root._description.structureType = option.description;
-            break;
-          case 'api':
-            root._description.api = option.description;
-            break;
-          case 'access':
-            root._description.access = option.description;
-            break;
-        }
-      });
-      console.log(root._description);
+    if(root.description){
       return root;
     }
     else if(root.children.length > 0){
@@ -380,7 +418,7 @@ function walk(object, comments){
   }
 }
 
-fs.readFile(inputFilename, 'utf8', function(err, data){
+fs.readFile(inputPath, 'utf8', function(err, data){
   var objectTree, syntax, comments;
 
   if(!err){
@@ -388,8 +426,8 @@ fs.readFile(inputFilename, 'utf8', function(err, data){
     comments = syntax.comments.filter(function(comment){
       return comment.type === 'Block' && comment.value.indexOf('*$') === 0;
     });
-    // console.log(JSON.stringify(syntax, null, 2));
-    //process.stdout.write(generateMD(walk(syntax.body, comments)));
-    generateMD(walk(syntax.body, comments));
+    
+    process.stdout.write(generateMD(walk(syntax.body, comments)));
+    //console.log(generateMD(walk(syntax.body, comments)));
   }
 });
