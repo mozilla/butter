@@ -1,11 +1,9 @@
-/*global EditorHelper,google,clearTimeout,setTimeout*/
+/*global EditorHelper,google*/
 
-EditorHelper.addPlugin( "googlemap", function( trackEvent, popcornInstance ) {
-  var UPDATE_TIMEOUT = 250;
+EditorHelper.addPlugin( "googlemap", function( trackEvent, popcorn ) {
 
   var container,
       target,
-      popcorn = popcornInstance,
       popcornEventMapReference;
 
   function setup() {
@@ -26,76 +24,100 @@ EditorHelper.addPlugin( "googlemap", function( trackEvent, popcornInstance ) {
     });
   }
 
-  // Plugin emits this event when googlemaps fires it's idle event. We have to wait until
-  // Google considers the map done loading
-  popcorn.on( "googlemaps-loaded", function() {
-    popcorn.off( "googlemaps-loaded" );
+  // prevent duplicate map listeners
+  if ( !trackEvent.popcornTrackEvent.listenersSetup ) {
+    trackEvent.popcornTrackEvent.listenersSetup = true;
 
-    // We need to setup listeners on the maps for the following events incase the user decides
-    // to manipulate the map before opening the editor
-    function setupMapListeners() {
+    // Plugin emits this event when googlemaps fires it's idle event. We have to wait until
+    // Google considers the map done loading
+    popcorn.on( "googlemaps-loaded", function() {
+      popcorn.off( "googlemaps-loaded" );
 
-      var updateTimeout;
+      // We need to setup listeners on the maps for the following events incase the user decides
+      // to manipulate the map before opening the editor
+      function setupMapListeners() {
 
-      google.maps.event.addListener( popcornEventMapReference, "dragend", function() {
-        var center = popcornEventMapReference.getCenter();
+        // Timeouts protect us from a flood of update requests from the Google API
+        var locationTimeout,
+            streetViewTimeout,
+            zoomTimeout;
 
-        trackEvent.update({
-          lat: center.lat(),
-          lng: center.lng(),
-          location: ""
-        });
-      });
+        function locationChanged() {
 
-      google.maps.event.addListener( popcornEventMapReference, "zoom_changed", function() {
-        trackEvent.update({
-          zoom: popcornEventMapReference.getZoom()
-        });
-      });
+          if ( locationTimeout ) {
+            clearTimeout( locationTimeout );
+          }
 
-      function doUpdate() {
-        // setTimeout is used because the maps API fires a ridiculous amount of events as it animates
-        // zooming and panning, which causes the trackEvent to flicker and sometimes disappear.
-        // This will likely be fixed when the silent popcorn update function lands
-        // TODO: refactor this when silent updating is enabled in Popcorn.
-        if ( updateTimeout ) {
-          clearTimeout( updateTimeout );
+          locationTimeout = setTimeout(function() {
+            var center = popcornEventMapReference.getCenter();
+
+            trackEvent.update({
+              lat: center.lat(),
+              lng: center.lng(),
+              location: ""
+            });
+          }, 50 );
         }
 
-        updateTimeout = setTimeout(function() {
-          var pov = popcornEventMapReference.streetView.pov,
-              latlng = popcornEventMapReference.streetView.getPosition();
+        function streetViewUpdate() {
+
+          if ( streetViewTimeout ) {
+            clearTimeout( streetViewTimeout );
+          }
+
+          streetViewTimeout = setTimeout(function() {
+
+            var pov = popcornEventMapReference.streetView.pov,
+                latlng = popcornEventMapReference.streetView.getPosition(),
+                updateOptions = {};
+
+            updateOptions.heading = pov.heading;
+            updateOptions.pitch = pov.pitch;
+            updateOptions.zoom = pov.zoom;
+            updateOptions.lat = latlng.lat();
+            updateOptions.lng = latlng.lng();
+            updateOptions.location = "";
+
+            trackEvent.update( updateOptions );
+          }, 100 );
+        }
+
+        function zoomChange() {
+
+          if ( zoomTimeout ) {
+            clearTimeout( zoomTimeout );
+          }
+
+          zoomTimeout = setTimeout(function() {
+            trackEvent.update({
+              zoom: popcornEventMapReference.getZoom()
+            });
+          }, 50 );
+        }
+
+        function closeClick() {
           trackEvent.update({
-            heading: pov.heading,
-            pitch: pov.pitch,
-            zoom: pov.zoom,
-            lat: latlng.lat(),
-            lng: latlng.lng(),
-            location: ""
+            type: trackEvent._cachedValues.type || "ROADMAP",
+            zoom: trackEvent._cachedValues.zoom || 0
           });
-        }, UPDATE_TIMEOUT );
+        }
+
+        // Regular map event listeners
+        google.maps.event.addListener( popcornEventMapReference, "drag", locationChanged );
+        google.maps.event.addListener( popcornEventMapReference, "dragend", locationChanged );
+        google.maps.event.addListener( popcornEventMapReference, "zoom_changed", zoomChange );
+
+        // StreetView event listeners
+        google.maps.event.addListener( popcornEventMapReference.streetView, "pov_changed", streetViewUpdate );
+        google.maps.event.addListener( popcornEventMapReference.streetView, "position_changed", streetViewUpdate );
+        google.maps.event.addListener( popcornEventMapReference.streetView, "pano_changed", streetViewUpdate );
+        google.maps.event.addListener( popcornEventMapReference.streetView, "closeclick", closeClick );
+
+        setup();
       }
 
-      // If this is a street view, apply streetview specific listeners
-      if ( popcornEventMapReference.streetView ) {
-
-        google.maps.event.addListener( popcornEventMapReference.streetView, "pov_changed", doUpdate );
-        google.maps.event.addListener( popcornEventMapReference.streetView, "position_changed", doUpdate );
-        google.maps.event.addListener( popcornEventMapReference.streetView, "pano_changed", doUpdate );
-      }
-
-      setup();
-    }
-
-    if ( !trackEvent.popcornTrackEvent._map ) {
-      trackEvent.popcornTrackEvent.onmaploaded = function( options, map ) {
-        popcornEventMapReference = map;
-        setupMapListeners();
-      };
-    }
-    else {
       popcornEventMapReference = trackEvent.popcornTrackEvent._map;
       setupMapListeners();
-    }
-  });
+    });
+  }
 });
