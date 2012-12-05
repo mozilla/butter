@@ -590,15 +590,23 @@ target.docs = function(){
 
   var fileIndex = 0;
 
+  mkdir( '-p', DOCS_DIR );
+
   function nextFile(){
     var file = files[fileIndex];
-
+    
     nativeExec( DOCUTRON + ' ' + file, { silent: true }, function( code, output ){
       if ( output ) {
         var filenameIndex = file.lastIndexOf( '/' ) + 1;
         var filename = file.substr( filenameIndex ).replace( jsRegex, '.md' );
-        var path = file.substr( 0, filenameIndex ).replace( SRC_DIR, DOCS_DIR );
-        mkdir( '-p', path );
+        var path = file.substr( 0, filenameIndex );
+
+        while ( path.indexOf('/') > -1 ) {
+          path = path.replace( '/', '_' );
+        }
+
+        path = DOCS_DIR + '/' + path;
+        
         output.to( path + filename );
       }
   
