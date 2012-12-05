@@ -51,7 +51,7 @@ function generateMD(objectTree, depth){
         if(index > 0){
           match = line.match(/^\s*([^\s]+)\s\{([^\}]+)\}\s([^$]*)$/);
           if(match){
-            return '> __' + match[1] + '__ [_' + match[2].split('|').join('_ or _') + '_] ' + match[3] + '  '; 
+            return '> __' + match[1] + '__ [ _' + match[2].split('|').join('_ or _') + '_ ] ' + match[3] + '  ';
           }
         }
         return line + '  ';
