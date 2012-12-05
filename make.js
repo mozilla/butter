@@ -602,7 +602,7 @@ target.docs = function(){
         var path = file.substr( 0, filenameIndex );
 
         while ( path.indexOf('/') > -1 ) {
-          path = path.replace( '/', '_' );
+          path = path.replace( '/', '.' );
         }
 
         path = DOCS_DIR + '/' + path;
