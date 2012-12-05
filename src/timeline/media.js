@@ -34,7 +34,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _vScrollBar = new Scrollbars.Vertical( _tracksContainer.element, _tracksContainer.container ),
         _timebar = new TimeBar( butter, _media, butter.ui.tray.statusArea, _tracksContainer ),
         _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer ),
-        _trackEventHighlight = butter.config.value( "ui" ).trackEventHighlight || "click",
         _status;
 
     _status = new Status( _media, butter.ui.tray.statusArea );
@@ -77,28 +76,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _media.unlisten( "mediatimeupdate", onMediaTimeUpdate );
     });
 
-    function blinkTarget( target ){
-      if( target !== _media.target ){
-        target = butter.getTargetByType( "elementID", target );
-        if( target ){
-          target.view.blink();
-        }
-      }
-      else {
-        _media.view.blink();
-      }
-    }
-
-    function onTrackEventMouseOver( e ){
-      var trackEvent = e.trackEvent,
-          corn = trackEvent.popcornOptions;
-
-      if( corn.target ){
-        blinkTarget( corn.target );
-      }
-    }
-
-    function onTrackEventMouseDown( e ) {
+    function onTrackEventMouseDown( e ){
       var trackEvent = e.data.trackEvent,
           tracks, i, length,
           wasSelected = trackEvent.selected,
@@ -158,9 +136,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _media.listen( "trackeventremoved", function( e ){
         var trackEvent = e.data;
         trackEvent.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
-        if( _trackEventHighlight === "hover" ){
-          trackEvent.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
-        }
       });
 
       function onTrackEventAdded( e ){
@@ -169,18 +144,12 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         trackEvent.view.element.addEventListener( "click", function( e ) {
           butter.editor.editTrackEvent( trackEvent );
         });
-        if( _trackEventHighlight === "hover" ){
-          trackEvent.view.listen( "trackeventmouseover", onTrackEventMouseOver );
-        }
       }
 
       function onTrackAdded( e ){
         var track = e.data;
         track.view.listen( "plugindropped", onPluginDropped );
         track.view.listen( "trackeventmousedown", onTrackEventMouseDown );
-        if( _trackEventHighlight === "hover" ){
-          track.view.listen( "trackeventmouseover", onTrackEventMouseOver );
-        }
 
         var existingEvents = track.trackEvents;
         for( var i=0; i<existingEvents.length; ++i ){
@@ -205,9 +174,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         var track = e.data;
         track.view.unlisten( "plugindropped", onPluginDropped );
         track.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
-        if( _trackEventHighlight === "hover" ){
-          track.view.unlisten( "trackeventmouseover", onTrackEventMouseOver );
-        }
       });
 
       _superScrollbar.initialize();
