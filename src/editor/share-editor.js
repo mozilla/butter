@@ -47,7 +47,7 @@ define([ "editor/editor", "editor/base-editor",
     function toggleViewSourceButton( on ) {
       if ( on ) {
         viewSourceBtn.classList.remove( "butter-disabled" );
-        viewSourceBtn.href = "view-source:" + butter.project.iframeUrl;
+        viewSourceBtn.href = "view-source:" + butter.project.iframeUrl + "?cacheBuster3000=" + Date.now();
         viewSourceBtn.onclick = function() {
           return true;
         };
