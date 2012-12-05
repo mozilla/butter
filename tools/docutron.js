@@ -83,7 +83,7 @@ function generateMD(objectTree, depth){
 
     if(description.params.length > 0){
       description.params.forEach(function(param){
-        output += '* __' + param.name + '__ [_' + param.varTypes.join('_ or _') + '_]: ' + parseMultilineDescription(param.description) + '\n';
+        output += '* __' + param.name + '__ [ _' + param.varTypes.join('_ or _') + '_ ]: ' + parseMultilineDescription(param.description) + '\n';
       });
       output += '\n';
     }
