@@ -86,6 +86,9 @@ new file called _hostname_-_environment_.json that overrides the cornfield defau
   - `server` settings for the cornfield server
     - `bindIP` the IP or hostname to use for the server (e.g., localhost).
     - `bindPort` the Port number to use for the server (e.g., 8888).  If using a port number lower than 1024, the server will have to be run as root.
+  - `sentry` settings for [sentry error reporting](https://www.getsentry.com/welcome/)
+    - `dsn` the DSN to send events to. Look at your sentry client configuration page for this value.
+    - `options` pass any [additional options](https://github.com/mattrobenolt/raven-node) to raven
   - `logger` settings for server logging
     - `format` the logging format to use.  Possible values include: default, short, tiny, dev.
   - `session` settings for user sessions
