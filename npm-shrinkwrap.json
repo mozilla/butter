@@ -1,6 +1,6 @@
 {
   "name": "butter",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "dependencies": {
     "shelljs": {
       "version": "0.0.6"
@@ -64,7 +64,7 @@
       }
     },
     "express-persona": {
-      "version": "0.0.6"
+      "version": "0.0.7"
     },
     "config": {
       "version": "0.4.16",
@@ -169,6 +169,14 @@
     },
     "node-uuid": {
       "version": "1.3.3"
+    },
+    "raven": {
+      "version": "0.4.5",
+      "dependencies": {
+        "node-uuid": {
+          "version": "1.4.0"
+        }
+      }
     },
     "supertest": {
       "version": "0.3.1",

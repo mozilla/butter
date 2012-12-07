@@ -18,6 +18,7 @@ var express = require('express'),
     filter = require( './lib/filter' )( User.isDBOnline ),
     sanitizer = require( './lib/sanitizer' ),
     FileStore = require('./lib/file-store.js'),
+    raven = require('raven'),
     utils,
     stores = {},
     TEMPLATES_DIR = CONFIG.dirs.templates,
@@ -77,7 +78,17 @@ app.configure( function() {
       res.header( 'Cache-Control', 'no-store' );
       return next();
     })
+    .use( app.router )
     .set('view options', {layout: false});
+
+  // Error handling
+  if ( CONFIG.sentry ) {
+    var ravenClient = new raven.Client( CONFIG.sentry.dsn, CONFIG.sentry.options );
+    app.use( raven.middleware.express( ravenClient ) );
+    ravenClient.patchGlobal( function() {
+      process.exit(1);
+    });
+  }
 
   // File Store types and options come from JSON config file.
   stores.publish = setupStore( CONFIG.publishStore );
