@@ -194,10 +194,18 @@
       }
     },
     "knox": {
-      "version": "0.3.1",
+      "version": "0.4.4",
       "dependencies": {
         "mime": {
           "version": "1.2.7"
+        },
+        "xml2js": {
+          "version": "0.2.2",
+          "dependencies": {
+            "sax": {
+              "version": "0.4.2"
+            }
+          }
         }
       }
     },
