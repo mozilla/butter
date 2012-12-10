@@ -3,8 +3,8 @@
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
 define([ "editor/editor", "editor/base-editor",
-          "text!layouts/share-editor.html", "util/social-media" ],
-  function( Editor, BaseEditor, LAYOUT_SRC, SocialMedia ) {
+          "text!layouts/share-editor.html", "util/social-media", "ui/widget/textbox" ],
+  function( Editor, BaseEditor, LAYOUT_SRC, SocialMedia, TextboxWrapper ) {
 
   Editor.register( "share-properties", LAYOUT_SRC, function( rootElement, butter, compiledLayout ) {
     var socialMedia = new SocialMedia(),
@@ -123,6 +123,10 @@ define([ "editor/editor", "editor/base-editor",
       togglePreviewButton( false );
       toggleViewSourceButton( false );
     });
+
+    TextboxWrapper.applyTo( projectURL, { readOnly: true } );
+    TextboxWrapper.applyTo( projectEmbedURL, { readOnly: true } );
+    TextboxWrapper.applyTo( authorInput );
 
     Editor.BaseEditor.extend( this, butter, rootElement, {
       open: function() {
