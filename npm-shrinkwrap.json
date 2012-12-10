@@ -85,13 +85,16 @@
       }
     },
     "jade": {
-      "version": "0.27.2",
+      "version": "0.27.7",
       "dependencies": {
         "commander": {
           "version": "0.6.1"
         },
         "mkdirp": {
-          "version": "0.3.0"
+          "version": "0.3.4"
+        },
+        "coffee-script": {
+          "version": "1.4.0"
         }
       }
     },

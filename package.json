@@ -86,7 +86,7 @@
     "jshint": "0.6.2",
     "requirejs": "2.0.6",
     "express": "~3.0.4",
-    "jade": "0.27.2",
+    "jade": "~0.27.7",
     "express-persona": "~0.0.6",
     "config": "0.4.16",
     "sqlite3": "~2.1.5",
