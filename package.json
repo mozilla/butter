@@ -102,7 +102,7 @@
   },
   "devDependencies": {
     "tap": "~0.3.3",
-    "supertest": "~0.3.1"
+    "supertest": "~0.5.1"
   },
   "scripts": {
     "test": "./node_modules/.bin/tap cornfield/test/*.test.js"
