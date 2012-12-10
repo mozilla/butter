@@ -102,26 +102,7 @@
       "version": "0.0.7"
     },
     "config": {
-      "version": "0.4.16",
-      "dependencies": {
-        "js-yaml": {
-          "version": "0.3.7"
-        },
-        "coffee-script": {
-          "version": "1.3.3"
-        },
-        "vows": {
-          "version": "0.6.4",
-          "dependencies": {
-            "eyes": {
-              "version": "0.1.8"
-            },
-            "diff": {
-              "version": "1.0.3"
-            }
-          }
-        }
-      }
+      "version": "0.4.18"
     },
     "sqlite3": {
       "version": "2.1.5"
