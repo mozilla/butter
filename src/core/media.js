@@ -413,6 +413,14 @@
         }
       };
 
+      this.hasTrackEvents = function() {
+        for ( var i = 0, l = _tracks.length; i < l; ++i ) {
+          if ( _tracks[ i ].trackEvents.length ) {
+            return true;
+          }
+        }
+      };
+
       // Internally we decorate URLs with a unique butteruid, strip it when exporting
       function sanitizeUrl() {
         var sanitized;

@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/media-editor.html" ],
-  function( LangUtils, URI, KeysUtils, Editor, EDITOR_LAYOUT ) {
+define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "dialog/dialog", "text!layouts/media-editor.html" ],
+  function( LangUtils, URI, KeysUtils, Editor, Dialog, EDITOR_LAYOUT ) {
 
   var MAX_MEDIA_INPUTS = 4;
 
@@ -16,8 +16,10 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/m
       _addAlternateSourceBtn = _containerElement.querySelector( ".add-alternate-media-source-btn" ),
       _mediaErrorMessage = _containerElement.querySelector( ".media-error-message" ),
       _media,
+      _butter,
       _inputCount = 0,
       _emptyInputs = 0,
+      _clearEventsOnReady = false,
       _this;
 
   function updateButterMedia() {
@@ -48,6 +50,7 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/m
     var wrapper = isPrimaryInput ? _primaryMediaWrapper.cloneNode( true ) : _altMediaWrapper.cloneNode( true ),
         urlInput = wrapper.querySelector( ".current-media-input" ),
         applyBtn = wrapper.querySelector( ".butter-media-apply" ),
+        clearEvents = wrapper.querySelector( ".butter-clear-track-events" ),
         altMediaLabel,
         deleteBtn,
         oldValue = "";
@@ -64,6 +67,7 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/m
 
       function updateMediaOnChange() {
         if ( oldValue !== urlInput.value ) {
+          _clearEventsOnReady = clearEvents.firstElementChild.checked;
           updateButterMedia();
         }
       }
@@ -79,8 +83,12 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/m
       function onInput() {
        if ( oldValue !== urlInput.value ) {
           applyBtn.classList.remove( "butter-disabled" );
+          if ( _media.hasTrackEvents() ) {
+            clearEvents.classList.remove( "butter-disabled" );
+          }
         } else {
           applyBtn.classList.add( "butter-disabled" );
+          clearEvents.classList.add( "butter-disabled" );
         }
       }
 
@@ -119,7 +127,6 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/m
       _inputCount++;
       checkInputMax();
   }
-
 
   function setLoadSpinner( on ) {
     if ( on ) {
@@ -195,6 +202,16 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/m
   }
 
   function onMediaReady() {
+    var dialog;
+
+    if ( _clearEventsOnReady && _media.hasTrackEvents() ) {
+
+      dialog = Dialog.spawn( "delete-track-events", {
+        data: _butter
+      });
+
+      dialog.open();
+    }
     showError( false );
     setLoadSpinner( false );
   }
@@ -202,6 +219,7 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "text!layouts/m
   Editor.register( "media-editor", null, function( rootElement, butter ) {
     rootElement = _parentElement;
     _this = this;
+    _butter = butter;
 
     function onMediaContentChanged() {
       _media = butter.currentMedia;
