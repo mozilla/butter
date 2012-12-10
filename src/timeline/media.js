@@ -114,6 +114,14 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       window.addEventListener( "mousemove", onTrackEventDragStarted, false );
     }
 
+    function onTrackEventSelected( e ) {
+      butter.editor.editTrackEvent( e.target );
+    }
+
+    function onTrackEventDeselected( e ) {
+      butter.editor.closeTrackEventEditor( e.target );
+    }
+
     function onMediaReady(){
       _bounds = DEFAULT_BOUNDS;
       _tracksContainer.setViewportBounds( _bounds[ 0 ], _bounds[ 1 ] );
@@ -136,14 +144,15 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _media.listen( "trackeventremoved", function( e ){
         var trackEvent = e.data;
         trackEvent.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
+        trackEvent.unlisten( "trackeventselected", onTrackEventSelected );
+        trackEvent.unlisten( "trackeventdeselected", onTrackEventDeselected );
       });
 
       function onTrackEventAdded( e ){
         var trackEvent = e.data;
         trackEvent.view.listen( "trackeventmousedown", onTrackEventMouseDown );
-        trackEvent.view.element.addEventListener( "click", function( e ) {
-          butter.editor.editTrackEvent( trackEvent );
-        });
+        trackEvent.listen( "trackeventselected", onTrackEventSelected);
+        trackEvent.listen( "trackeventdeselected", onTrackEventDeselected);
       }
 
       function onTrackAdded( e ){
