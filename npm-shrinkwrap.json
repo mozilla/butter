@@ -249,7 +249,7 @@
       }
     },
     "tap": {
-      "version": "0.3.1",
+      "version": "0.3.3",
       "dependencies": {
         "inherits": {
           "version": "1.0.0"
