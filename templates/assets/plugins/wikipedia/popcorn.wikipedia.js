@@ -67,7 +67,8 @@
           _outer,
           _href,
           _guid = Popcorn.guid( "wikiCallback" ),
-          _this = this;
+          _this = this,
+          _selector;
 
       options._target = Popcorn.dom.find( options.target );
 
@@ -123,18 +124,74 @@
 
       window[ _guid ] = function ( data ) {
 
+        var childIndex = 1,
+            wrapperDiv = document.createElement( "div" ),
+            referenceSpan,
+            nextSectionSpan,
+            articleSections,
+            sectionIndex,
+            childElements,
+            newElements,
+            responseFragment,
+            element,
+            elem,
+            title = sanitize( data.parse.title ),
+            mainText = "";
+
         if ( data.error ) {
           _titleTextArea.innerHTML = "Article Not Found";
           _contentArea.innerHTML = data.error.info;
           return;
         }
 
-        var childIndex = 1,
-            responseFragment = getFragment( "<div>" + data.parse.text + "</div>" ),
-            element = responseFragment.querySelector( "div > p:nth-of-type(" + childIndex + ")" ),
-            mainText = "";
+        responseFragment = getFragment( data.parse.text );
+        wrapperDiv.appendChild( responseFragment );
 
-        _titleTextArea.appendChild( getFragment( "<a href=\"" + options._link + "\" target=\"_blank\">" + sanitize( data.parse.title ) + "</a>" ) );
+        if ( _selector ) {
+          referenceSpan = wrapperDiv.querySelector( _selector );
+          articleSections = data.parse.sections;
+
+          for ( var i = 0; i < articleSections.length; i++ ) {
+            if ( articleSections[ i ].anchor === _selector.substring( 1 ) ) {
+              sectionIndex = i;
+              break;
+            }
+          }
+
+          nextSectionSpan = wrapperDiv.querySelector( "#" + articleSections[ sectionIndex + 1 ].anchor );
+
+          childElements = wrapperDiv.childNodes;
+
+          for ( var k = 0; k < childElements.length; k++ ) {
+            elem = childElements[ k ].id !== referenceSpan.id ?
+                   childElements[ k ].querySelector && childElements[ k ].querySelector( _selector ) : childElements[ k ];
+
+            if ( elem ) {
+
+              newElements = document.createElement( "div" );
+              for ( var v = k; v < childElements.length; v++ ) {
+
+                if ( childElements[ v ] !== nextSectionSpan ||
+                      ( childElements[ v ].firstChild && childElements[ v ].firstChild !== nextSectionSpan ) ) {
+                  newElements.appendChild( childElements[ v ] );
+                } else {
+                  break;
+                }
+
+              }
+              break;
+            }
+          }
+
+          responseFragment = newElements || wrapperDiv;
+          title = title + " - " + articleSections[ sectionIndex ].line;
+        } else {
+          responseFragment = wrapperDiv;
+        }
+
+        element = responseFragment.querySelector( "div > p:nth-of-type(" + childIndex + ")" );
+
+        _titleTextArea.appendChild( getFragment( "<a href=\"" + options._link + "\" target=\"_blank\">" + title + "</a>" ) );
         _toWikipedia.href = options._link;
         _toWikipedia.onclick = function() {
           _this.media.pause();
@@ -157,10 +214,11 @@
 
         _href = "//" + window.escape( options.lang ) + ".wikipedia.org/w/";
         _title = options.src.slice( options.src.lastIndexOf( "/" ) + 1 );
+        _selector = _title.indexOf( "#" ) > -1 ? _title.substring( _title.lastIndexOf( "#" ) ) : "";
         options._link = "//" + window.escape( options.lang + ".wikipedia.org/wiki/" + _title );
 
         // gets the mobile format, so that we don't load unwanted images when the respose is turned into a documentFragment
-        Popcorn.getScript( _href + "api.php?action=parse&prop=text&redirects&page=" +
+        Popcorn.getScript( _href + "api.php?action=parse&prop=text|sections&redirects&page=" +
           window.escape( _title ) + "&noimages=1&mobileformat=html&format=json&callback=" + _guid );
       }
 
