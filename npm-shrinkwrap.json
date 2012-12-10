@@ -178,17 +178,6 @@
         }
       }
     },
-    "dox": {
-      "version": "0.4.1",
-      "dependencies": {
-        "github-flavored-markdown": {
-          "version": "1.0.1"
-        },
-        "commander": {
-          "version": "0.6.1"
-        }
-      }
-    },
     "esprima": {
       "version": "1.0.2"
     },
