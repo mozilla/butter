@@ -82,7 +82,7 @@
     "url": "https://github.com/mozilla/butter.git"
   },
   "dependencies": {
-    "shelljs": "0.0.6",
+    "shelljs": "~0.0.9",
     "jshint": "0.6.2",
     "requirejs": "2.0.6",
     "express": "2.5.11",

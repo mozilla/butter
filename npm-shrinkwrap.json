@@ -3,7 +3,7 @@
   "version": "1.0.8",
   "dependencies": {
     "shelljs": {
-      "version": "0.0.6"
+      "version": "0.0.9"
     },
     "jshint": {
       "version": "0.6.2",
