@@ -10,7 +10,7 @@ var express = require('express'),
     fs = require('fs'),
     path = require('path'),
     jade = require('jade'),
-    app = express.createServer(),
+    app = express(),
     clientSessions = require('client-sessions'),
     lessMiddleware = require('less-middleware'),
     CONFIG = require('config'),
@@ -78,8 +78,7 @@ app.configure( function() {
       res.header( 'Cache-Control', 'no-store' );
       return next();
     })
-    .use( app.router )
-    .set('view options', {layout: false});
+    .use( app.router );
 
   // Error handling
   if ( CONFIG.sentry ) {
@@ -358,8 +357,8 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
 
 var port = process.env.PORT || CONFIG.server.bindPort;
 
-app.listen(port, CONFIG.server.bindIP, function() {
-  var addy = app.address();
+var server = app.listen(port, CONFIG.server.bindIP, function() {
+  var addy = server.address();
   console.log('HTTP Server started on http://' + CONFIG.server.bindIP + ':' + addy.port);
   console.log('Press Ctrl+C to stop');
 });

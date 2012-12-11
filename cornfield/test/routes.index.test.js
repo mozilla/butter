@@ -13,7 +13,7 @@ var mockEmail = "test@example.org",
     }, mockStore);
 
 var express = require("express");
-var app = express.createServer();
+var app = express();
 
 app.use(mockSession({
   email: mockEmail,
@@ -336,6 +336,5 @@ test("remix project valid", function(t) {
 });
 
 test("clean up server connections", function(t) {
-  app.close();
-  t.end();
+  process.exit();
 });
