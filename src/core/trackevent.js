@@ -1,11 +1,13 @@
-/* This Source Code Form is subject to the terms of the MIT license
+/* This Source Code Form is subject to the terms of the MIT license.
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-/**
- * Module: TrackEvent
+/**$
+ * TrackEvent
  *
- * Supports a single event in the Media > Track > TrackEvent model.
+ * Provides Popcorn-wrapping TrackEvent functionality to Butter.
+ *
+ * @type module
  */
 define( [ "./logger", "./eventmanager", "./observer",
           "util/lang", "util/time", "./views/trackevent-view" ],
@@ -21,21 +23,36 @@ define( [ "./logger", "./eventmanager", "./observer",
     "start-greater-than-end": "[start] must be less than [end]."
   };
 
-  var TrackEventUpdateException = function ( reason ) {
+  /**$
+   * TrackEvent::TrackEventUpdateException
+   *
+   * TrackEvent-specific exception system. When something goes wrong during an update or creation,
+   * TrackEventUpdateExceptions can be raised to provide more context than a basic Error.
+   *
+   * @type class
+   * @param {String} reason Reason for exception.
+   * @api private
+   */
+  function TrackEventUpdateException( reason ) {
     this.type = "trackevent-update";
     this.reason = reason;
     this.message = __trackEventExceptionStrings[ reason ];
     this.toString = function () {
       return "TrackEvent update failed: " + this.message;
     };
-  };
+  }
 
-  /**
-   * Class: TrackEvent
+  /**$
+   * TrackEvent::TrackEvent
    *
-   * Represents and governs a single popcorn event.
+   * Wraps Popcorn events and fits into Butter's Media/Track driven structure.
    *
-   * @param {Object} options: Options for initialization. Can contain the properties type, name, and popcornOptions. If the popcornOptions property is specified, its contents will be used to initialize the plugin instance associated with this TrackEvent.
+   * @type class
+   * @param {Object} options: Options for initialization:
+   *    - type {String} Popcorn event type
+   *    - name {String} Name of this TrackEvent
+   *    - popcornOptions {Dictionary} Popcorn event initialization options.
+   * @api public
    */
   var TrackEvent = function ( options ) {
 
@@ -81,27 +98,29 @@ define( [ "./logger", "./eventmanager", "./observer",
     _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
 
 
-    /**
-     * Member: bind
+    /**$
+     * TrackEvent::TrackEvent::bind
      *
      * Binds the TrackEvent to its dependencies.
      *
-     * @param {Object} track: The track the trackevent will inhabit.
-     * @param {Object} popcornWrapper: a reference to a PopcornWrapper object that wraps various functionality for modifying Popcorn data.
+     * @type member function
+     * @param {Track} track The track this TrackEvent will inhabit.
+     * @param {PopcornWrapper} popcornWrapper A reference to a PopcornWrapper object that wraps various functionality for modifying Popcorn data.
      */
     this.bind = function( track, popcornWrapper ) {
       _track = track;
       _popcornWrapper = popcornWrapper;
     };
 
-    /**
-     * Member: update
+    /**$
+     * TrackEvent::TrackEvent::update
      *
-     * Updates the event properties and runs sanity checks on input.
+     * Updates Popcorn event properties and runs sanity checks on input.
      *
-     * @param {Object} updateOptions: Object containing plugin-specific properties to be updated for this TrackEvent.
-     * @event trackeventupdated: Occurs when an update operation succeeded.
-     * @throws TrackEventUpdateException: When an update operation failed because of conflicting times or other serious property problems.
+     * @type member function
+     * @param {Object} updateOptions Object containing plugin-specific properties to be updated for this TrackEvent.
+     * @event trackeventupdated Occurs when an update operation succeeded.
+     * @throws {TrackEventUpdateException} When an update operation failed because of conflicting times or other serious property problems.
      */
     this.update = function( updateOptions, applyDefaults ) {
       updateOptions = updateOptions || {};
@@ -193,11 +212,13 @@ define( [ "./logger", "./eventmanager", "./observer",
 
     };
 
-    /**
-     * Member: unbind
+    /**$
+     * TrackEvent::TrackEvent::unbind
      *
-     * Kills references to popcornWrapper and track which are necessary to function. TrackEvent becomes
+     * Kills references to PopcornWrapper and Track which are necessary to function. TrackEvent becomes
      * a husk for popcorn data at this point.
+     *
+     * @type member function
      */
     this.unbind = function() {
       if ( _popcornWrapper ) {
@@ -209,10 +230,13 @@ define( [ "./logger", "./eventmanager", "./observer",
 
     Object.defineProperties( this, {
 
-      /**
-       * Property: track
+      /**$
+       * TrackEvent::TrackEvent::track
        *
-       * Specifies the track on which this TrackEvent currently sites.
+       * Specifies the Track on which this TrackEvent currently sits.
+       *
+       * @type property
+       * @return {Track}
        */
       track: {
         enumerable: true,
@@ -221,11 +245,13 @@ define( [ "./logger", "./eventmanager", "./observer",
         }
       },
 
-      /**
-       * Property: view
+      /**$
+       * TrackEvent::TrackEvent::view
        *
        * A reference to the view object generated for this TrackEvent.
-       * @malleable: No.
+       *
+       * @type property
+       * @return {TrackEventView}
        */
       view: {
         enumerable: true,
@@ -234,11 +260,14 @@ define( [ "./logger", "./eventmanager", "./observer",
           return _view;
         }
       },
-      /**
-       * Property: dragging
+
+      /**$
+       * TrackEvent::TrackEvent::dragging
        *
        * This TrackEvent's dragging state. True when TrackEvent is being dragged.
-       * @malleable: No.
+       *
+       * @return {Boolean}
+       * @type property
        */
       dragging: {
         enumerable: true,
@@ -247,11 +276,13 @@ define( [ "./logger", "./eventmanager", "./observer",
         }
       },
 
-      /**
-       * Property: resizing
+      /**$
+       * TrackEvent::TrackEvent::resizing
        *
        * This TrackEvent's resizing state. True when TrackEvent is being resized.
-       * @malleable: No.
+       *
+       * @return {Boolean}
+       * @type property
        */
       resizing: {
         enumerable: true,
@@ -260,11 +291,13 @@ define( [ "./logger", "./eventmanager", "./observer",
         }
       },
 
-      /**
-       * Property: uiInUse
+      /**$
+       * TrackEvent::TrackEvent::uiInUse
        *
        * This TrackEvent's resizing state. True when TrackEvent is being resized.
-       * @malleable: No.
+       *
+       * @type property
+       * @return {Boolean}
        */
       uiInUse: {
         enumerable: true,
@@ -273,11 +306,13 @@ define( [ "./logger", "./eventmanager", "./observer",
         }
       },
 
-      /**
-       * Property: type
+      /**$
+       * TrackEvent::TrackEvent::type
        *
        * The type representing the popcorn plugin created and manipulated by this TrackEvent.
-       * @malleable: No.
+       *
+       * @type property
+       * @return {String}
        */
       type: {
         enumerable: true,
@@ -286,11 +321,13 @@ define( [ "./logger", "./eventmanager", "./observer",
         }
       },
 
-      /**
-       * Property: name
+      /**$
+       * TrackEvent::TrackEvent::name
        *
        * Name of this TrackEvent.
-       * @malleable: No.
+       *
+       * @type property
+       * @return {String}
        */
       name: {
         enumerable: true,
@@ -299,11 +336,13 @@ define( [ "./logger", "./eventmanager", "./observer",
         }
       },
 
-      /**
-       * Property: id
+      /**$
+       * TrackEvent::TrackEvent::id
        *
        * Name of this TrackEvent.
-       * @malleable: No.
+       *
+       * @type property
+       * @return {String}
        */
       id: {
         enumerable: true,
@@ -312,14 +351,14 @@ define( [ "./logger", "./eventmanager", "./observer",
         }
       },
 
-      /**
-       * Property: selected
+      /**$
+       * TrackEvent::TrackEvent::selected
        *
        * Specifies the state of selection. When true, this TrackEvent is selected.
        *
-       * @malleable: Yes.
-       * @event trackeventselected: Dispatched when selected state changes to true.
-       * @event trackeventdeselected: Dispatched when selected state changes to false.
+       * @type property
+       * @event trackeventselected Dispatched when selected state changes to true.
+       * @event trackeventdeselected Dispatched when selected state changes to false.
        */
       selected: {
         enumerable: true,
@@ -335,18 +374,18 @@ define( [ "./logger", "./eventmanager", "./observer",
             }
             else {
               _this.dispatch( "trackeventdeselected" );
-            } //if
-          } //if
+            }
+          }
         }
       },
 
-      /**
-       * Property: json
+      /**$
+       * TrackEvent::TrackEvent::json
        *
        * Represents this TrackEvent in a portable JSON format.
        *
-       * @malleable: Yes. Will import JSON in the same format that it was exported.
-       * @event trackeventupdated: When this property is set, the TrackEvent's data will change, so a trackeventupdated event will be dispatched.
+       * @type property
+       * @event trackeventupdated When this property is set, the TrackEvent's data will change, so a trackeventupdated event will be dispatched.
        */
       json: {
         enumerable: true,
@@ -372,12 +411,12 @@ define( [ "./logger", "./eventmanager", "./observer",
           _this.dispatch( "trackeventupdated", _this );
         }
       }
-    }); //properties
+    });
 
-  }; //TrackEvent
+  };
 
   TrackEvent.MINIMUM_TRACKEVENT_SIZE = 0.02;
 
   return TrackEvent;
 
-}); //define
+});

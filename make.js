@@ -1,7 +1,9 @@
 /*global cat,cd,cp,echo,env,exec,exit,find,ls,mkdir,mv,pwd,rm,sed,target*/
 
 var path = require( "path" ),
-    spawn = require('child_process').spawn,
+    child_process = require('child_process'),
+    spawn = child_process.spawn,
+    nativeExec = child_process.exec,
     normalize = function( p ){ return '"' + path.normalize( p ) + '"'; },
     join = path.join,
     // Make Windows happy, use `node <path>`
@@ -15,6 +17,7 @@ var path = require( "path" ),
     UGLIFY = nodeExec( normalize( "./node_modules/uglify-js/bin/uglifyjs" ) ),
     RJS = nodeExec( normalize( "./node_modules/requirejs/bin/r.js" ) ),
     LESS = nodeExec( normalize( "./node_modules/less/bin/lessc" ) ),
+    DOCUTRON = nodeExec( normalize( "./tools/docutron" ) ),
 
     SRC_DIR = 'src',
     TEMPLATES_DIR = 'templates',
@@ -22,6 +25,7 @@ var path = require( "path" ),
     CSS_DIR = 'css',
     CORNFIELD_DIR = 'cornfield',
     PUBLIC_DIR = 'public',
+    DOCS_DIR = 'docs',
 
     DEFAULT_CONFIG = './src/default-config',
 
@@ -187,7 +191,8 @@ var desc = {
   check: 'Lint CSS, HTML, and JS',
   css: 'Build LESS files to CSS',
   deploy: 'Build Butter suitable for production',
-  server: 'Run the development server'
+  server: 'Run the development server',
+  docs: 'Build documentation'
 };
 
 target.all = function() {
@@ -570,4 +575,47 @@ target.deploy = function(){
 
   // It's important to use the production config
   echo( 'Run cornfield with `NODE_ENV=production node app.js`' );
+};
+
+target.docs = function(){
+  echo('### Building documentation from source files');
+
+  rm( '-rf', DOCS_DIR );
+  
+  var jsRegex = /\.js$/;
+
+  var files = find( SRC_DIR ).filter( function( file ) {
+    return file.match( jsRegex );
+  });
+
+  var fileIndex = 0;
+
+  mkdir( '-p', DOCS_DIR );
+
+  function nextFile(){
+    var file = files[fileIndex];
+    
+    nativeExec( DOCUTRON + ' ' + file, { silent: true }, function( code, output ){
+      if ( output ) {
+        var filenameIndex = file.lastIndexOf( '/' ) + 1;
+        var filename = file.substr( filenameIndex ).replace( jsRegex, '.md' );
+        var path = file.substr( 0, filenameIndex );
+
+        while ( path.indexOf('/') > -1 ) {
+          path = path.replace( '/', '.' );
+        }
+
+        path = DOCS_DIR + '/' + path;
+        
+        output.to( path + filename );
+      }
+  
+      if(++fileIndex < files.length -1){
+        process.nextTick(nextFile);
+      }
+    });
+  }
+
+  nextFile();
+
 };

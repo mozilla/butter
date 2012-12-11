@@ -1,15 +1,30 @@
-/* This Source Code Form is subject to the terms of the MIT license
+/* This Source Code Form is subject to the terms of the MIT license.
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
+/**$
+ * Track
+ *
+ * Butter Track
+ *
+ * @type module
+ */
 define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
         function( EventManager, TrackEvent, TrackView ){
 
   var __guid = 0,
-      NAME_PREFIX = "Layer ",
-      Track;
+      NAME_PREFIX = "Layer ";
 
-  Track = function( options ) {
+  /**$
+   * Track::Track
+   *
+   * A container for TrackEvents which preserves and facilitates order among other Track objects.
+   *
+   * @type class
+   * @param {Dictionary} options Initialization options:
+   *    - target {String} Optional. Target to suggest to TrackEvents as they are added to this Track. See `Track::Track::target`.
+   */
+  function Track( options ) {
     options = options || {};
 
     var _trackEvents = [],
@@ -32,12 +47,14 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
 
     EventManager.extend( _this );
 
-    /**
-     * Member: setPopcornWrapper
+    /**$
+     * Track::Track::setPopcornWrapper
      *
      * Sets the PopcornWrapper object. Subsequently, PopcornWrapper can be used to directly manipulate Popcorn track events.
      *
-     * @param {Object} newPopcornWrapper: PopcornWrapper object or null
+     * @param {Object} newPopcornWrapper PopcornWrapper object or null
+     * @type member function
+     * @api public
      */
     this.setPopcornWrapper = function ( newPopcornWrapper ) {
       _popcornWrapper = newPopcornWrapper;
@@ -46,6 +63,15 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       }
     };
 
+    /**$
+     * Track::Track::updateTrackEvents
+     *
+     * Updates each constituent TrackEvent without specifying new options. Usually, this has the effect of simply
+     * causing a 'trackeventupdated' event to be propagated if subtle updates around Butter are necessary.
+     *
+     * @type member function
+     * @api public
+     */
     this.updateTrackEvents = function() {
       var trackEvents = _trackEvents.slice();
       for ( var i = 0, l = trackEvents.length; i < l; i++ ) {
@@ -54,6 +80,14 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
     };
 
     Object.defineProperties( this, {
+      /**$
+       * Track::Track::view
+       *
+       * TrackEventView object associated with this Track.
+       *
+       * @type property
+       * @return {TrackEventView}
+       */
       view: {
         enumerable: true,
         configurable: false,
@@ -61,6 +95,16 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
           return _view;
         }
       },
+
+      /**$
+       * Track::Track::target
+       *
+       * The target object for this Track. When specified, TrackEvents have the option of using this property to decide their own target.
+       *
+       * @type property
+       * @event tracktargetchanged
+       * @return {String} Current target identifier.
+       */
       target: {
         enumerable: true,
         get: function(){
@@ -75,6 +119,16 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
           }
         }
       },
+
+      /**$
+       * Track::Track::name
+       *
+       * Name of this Track.
+       *
+       * @type property
+       * @event tracknamechanged
+       * @return {String}
+       */
       name: {
         enumerable: true,
         get: function(){
@@ -85,12 +139,31 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
           _this.dispatch( "tracknamechanged", _this );
         }
       },
+
+      /**$
+       * Track::Track::id
+       *
+       * Unique identifier for this Track.
+       *
+       * @type property
+       * @return {String}
+       */
       id: {
         enumerable: true,
         get: function() {
           return _id;
         }
       },
+
+      /**$
+       * Track::Track::json
+       *
+       * Portable JSON description for this Track. JSON is constructed lazily, so each access of this property will roll up data
+       * from this Track into a new object (so use sparingly). When set, internal changes to this Track will occur to reflect the input JSON.
+       *
+       * @type property
+       * @return {JSON}
+       */
       json: {
         enumerable: true,
         get: function(){
@@ -120,6 +193,16 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
           }
         }
       },
+
+      /**$
+       * Track::Track::trackEvents
+       *
+       * Array of TrackEvents attached to this Track. This property provides a direct pointer to the private `_trackEvents` variable.
+       * Manipulating the contents of the returned array may cause unexpected or undefined behaviour.
+       *
+       * @type property
+       * @return {Array}
+       */
       trackEvents: {
         enumerable: true,
         configurable: false,
@@ -127,6 +210,17 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
           return _trackEvents;
         }
       },
+
+      /**$
+       * Track::Track::order
+       *
+       * Order of this Track with respect to other Tracks on the parent Media object. Media's `sortTracks` function uses the value of
+       * this property to sort the Track objects it holds. This should almost always be used in coorperation with `sortTracks`.
+       *
+       * @type property
+       * @see Media::Media::sortTracks
+       * @return {Number}
+       */
       order: {
         enumerable: true,
         get: function() {
@@ -139,22 +233,55 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       }
     });
 
+    /**$
+     * Track::Track::getTrackEventById
+     *
+     * Attempts to find a TrackEvent in the collection of TrackEvent objects attached to this Track by comparing id's of
+     * constituent TrackEvents to the specified `id` argument.
+     *
+     * @param {String} id TrackEvent identifier to search for.
+     * @type member function
+     * @return {TrackEvent|null}
+     * @api public
+     */
     this.getTrackEventById = function( id ){
       for ( var i=0, l=_trackEvents.length; i<l; ++i) {
         if( _trackEvents[ i ].id === id ) {
           return _trackEvents[ i ];
-        } //if
-      } //for
-    }; //getTrackEventById
+        }
+      }
+    };
 
+    /**$
+     * Track::Track::getTrackEventByName
+     *
+     * Attempts to find a TrackEvent in the collection of TrackEvent objects attached to this Track by comparing names of
+     * constituent TrackEvents to the specified `name` argument.
+     *
+     * @param {String} name TrackEvent identifier to search for.
+     * @type member function
+     * @return {TrackEvent|null}
+     * @api public
+     */
     this.getTrackEventByName = function( name ){
       for ( var i=0, l=_trackEvents.length; i<l; ++i) {
         if( _trackEvents[ i ].name === name ) {
           return _trackEvents[ i ];
-        } //if
-      } //for
-    }; //getTrackEventByName
+        }
+      }
+    };
 
+    /**$
+     * Track::Track::trackEventUpdateNotificationHandler
+     *
+     * Handles update notifications from TrackEvents to prevent overlapping. When overlapping occurs, this handler will
+     * attempt to resolve it by using an empty space on the next track or adding a completely new track.
+     *
+     * @param {Notification} notification Notification object from observer subscription.
+     * @see Observer::Notification
+     * @type member function
+     * @api private
+     */
     function trackEventUpdateNotificationHandler( notification ) {
       var trackEvent = notification.origin,
           updateOptions = notification.data,
@@ -184,6 +311,19 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       }
     }
 
+    /**$
+     * Track::Track::addTrackEvent
+     *
+     * Attaches a TrackEvent to this Track. Listeners/handlers are applied here, and, if this Track belongs to a Media with a PopcornWrapper,
+     * the TrackEvent is bound to that PopcornWrapper, giving it access to Popcorn directly (so it can create/delete Popcorn trackevents).
+     *
+     * @param {TrackEvent|Object} trackEvent TrackEvent or manifest object to create one. If an non TrackEvent object is passed in, it is
+     *                                       assumed to be a dictionary containing options for a new TrackEvent.
+     * @type member function
+     * @event trackeventadded
+     * @return {TrackEvent} The TrackEvent that was provided, or a manifestation of one described by the provided dictionary.
+     * @api public
+     */
     this.addTrackEvent = function( trackEvent ) {
       var oldSelected = false;
 
@@ -233,10 +373,15 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       return trackEvent;
     }; //addTrackEvent
 
-    /*
-     * Method removeTrackEvent
+    /**$
+     * Track::Track::removeTrackEvent
      *
-     * @param {Object} trackEvent: The trackEvent to be removed from this track
+     * Removes a TrackEvent from this Track.
+     *
+     * @param {TrackEvent|Object} trackEvent TrackEvent to be removed. Unlick `addTrackEvent`, this must be a TrackEvent object.
+     * @type member function
+     * @event trackeventremoved
+     * @api public
      */
     this.removeTrackEvent = function( trackEvent ) {
       var idx = _trackEvents.indexOf( trackEvent );
@@ -255,6 +400,21 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       }
     };
 
+    /**$
+     * Track::Track::findOverlappingTrackEvent
+     *
+     * Finds TrackEvent on attached to this Track that overlaps with the window defined by the start and end times provided.
+     *
+     * @param {Number|TrackEvent} start If a TrackEvent, start and end times are derived from this argument.
+     *                                  Otherwise, a Number representing the beginning of the time window used to search.
+     * @param {Number|TrackEvent} end If the `start` parameter (above) is a TrackEvent, this parameter is interpretted as the `ignoreTrackEvent` parameter (below).
+     *                                Otherwise, a Number representing the end of time window used to search.
+     * @param {TrackEvent} ignoreTrackEvent Optional. TrackEvent which should be ignored during search.
+     * @type member function
+     * @return {TrackEvent|null} A TrackEvent that overlaps with the specified time window. `null` if no such TrackEvent exists.
+     * @usage t.findOverlappingTrackEvent(start, end, ignoreTrackEvent); or t.findOverlappingTrackEvent(trackEvent, ignoreTrackEvent);
+     * @api public
+     */
     this.findOverlappingTrackEvent = function( start, end, ignoreTrackEvent ) {
       var trackEvent, popcornOptions;
 
@@ -285,16 +445,25 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       return null;
     };
 
+    /**$
+     * Track::Track::deselectEvents
+     *
+     * Deselects all attached TrackEvents setting the `selected` property of each to false.
+     *
+     * @param {TrackEvent} except TrackEvent to ignore.
+     * @type member function
+     * @api public
+     */
     this.deselectEvents = function( except ){
       for( var i=0, l=_trackEvents.length; i<l; ++i ){
         if( _trackEvents[ i ] !== except ){
           _trackEvents[ i ].selected = false;
-        } //if
-      } //for
-    }; //deselectEvents
+        }
+      }
+    };
 
-  }; //Track
+  }
 
   return Track;
 
-}); //define
+});

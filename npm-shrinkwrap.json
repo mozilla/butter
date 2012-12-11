@@ -178,6 +178,9 @@
         }
       }
     },
+    "esprima": {
+      "version": "1.0.2"
+    },
     "supertest": {
       "version": "0.3.1",
       "dependencies": {

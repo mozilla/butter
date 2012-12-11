@@ -1,7 +1,15 @@
-/* This Source Code Form is subject to the terms of the MIT license
+/* This Source Code Form is subject to the terms of the MIT license.
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
+/**$
+ * EventManager
+ *
+ * An event management system.
+ *
+ * @type Module
+ * @expose `extend`
+ */
 define( [], function(){
 
   /**
@@ -74,17 +82,19 @@ define( [], function(){
    *    which was previously chained using `chain`.
    **/
 
-  /**
-   * Class: ButterEvent
+  /**$
+   * EventManager::ButterEvent
    *
    * An event to propagate within Butter which holds and protects data about the event
    * instance. Propagation of the event can be stopped in the same manner as DOM events:
    * by calling event.stopPropagation inside a handler, the dispatch loop will be
    * interrupted.
    *
-   * @param {String} type: Event type. Usually specified by a call to `object.dispatch`.
-   * @param {Object} target: The event target. Usually the object which dispatched the event.
-   * @param {*} data: Optional. Data to accompany the event.
+   * @type Class
+   * @param {String} type Event type. Usually specified by a call to `object.dispatch`.
+   * @param {Object} target The event target. Usually the object which dispatched the event.
+   * @param {*} data Optional. Data to accompany the event.
+   * @api private
    */
   function ButterEvent( type, target, data ) {
     var _propagationStopped = false;
@@ -106,17 +116,27 @@ define( [], function(){
       }
     });
 
-    /**
-     * Member: stopPropagation
+    /**$
+     * EventManager::ButterEvent::stopPropagation
      *
      * Stops the propagation of this event during a dispatch. As a side-effect
      * _propagationStopped is set to true and cannot be reset, thus notifying
      * external bodies that the event dispatch should halt.
+     *
+     * @type Member Function
      */
     this.stopPropagation = function() {
       _propagationStopped = true;
     };
 
+    /**$
+     * EventManager::ButterEvent::clone
+     *
+     * Clones the event object using the stored data, type, and target
+     * as params for the new object.
+     *
+     * @type Member Function
+     */
     this.clone = function() {
       return new ButterEvent( type, target, data );
     };
@@ -256,12 +276,19 @@ define( [], function(){
 
   var __seed = Date.now();
 
-  /**
+  /**$
+   * EventManager::EventManagerWrapper
+   *
    * EventManagerWrapper objects maintain a few internal items.
    * First, a list of listeners is kept for this object's events.
    * Second, all event names are namespaced so there is no
    * leakage into other event sources.  Third, an event handler
    * is created, which has access to the appropriate listeners.
+   *
+   * @type Class
+   * @param {Object} object Object to wrap with event management functionality.
+   * @usage EventManager.extend(object);
+   * @api public
    **/
   function EventManagerWrapper( object ){
 
@@ -286,22 +313,76 @@ define( [], function(){
 
     // Thin wrapper around calls to static functions
 
-    object.chain = function( eventManagerWrappedObject , events ){
+    /**$
+     * EventManager::EventManagerWrapper::chain
+     *
+     * Attaches event listeners in such a way that they are automatically
+     * re-dispatched by the parent object when the specified child object
+     * dispatches one.
+     *
+     * @type Member Function
+     * @param {EventManagerWrapper} eventManagerWrappedObject Object which will dispatch desired events.
+     * @param {Array} events Array of event names to re-dispatch when `eventManagerWrappedObject` dispatches them.
+     * @api public
+     */
+    object.chain = function( eventManagerWrappedObject, events ){
       __chain( this, eventManagerWrappedObject, events );
     };
 
+    /**$
+     * EventManager::EventManagerWrapper::unchain
+     *
+     * Detaches event listeners attached using `chain`.
+     *
+     * @type Member Function
+     * @param {EventManagerWrapper} eventManagerWrappedObject Previously chained object.
+     * @param {Array} events Array of event names to unchain.
+     * @see EventManager::EventManagerWrapper::chain
+     * @api public
+     */
     object.unchain = function( eventManagerWrappedObject, events ){
       __unchain( this, eventManagerWrappedObject, events );
     };
 
+    /**$
+     * EventManager::EventManagerWrapper::dispatch
+     *
+     * Dispatches an event to listeners.
+     *
+     * @type Member Function
+     * @param {String} eventName Name of event to dispatch.
+     * @param {Object} eventData Object containing event-specific data. Will be received by listeners.
+     * @api public
+     */
     object.dispatch = function( eventName, eventData ){
       __dispatch( this, _namespace, eventName, eventData, _listeners );
     };
 
+    /**$
+     * EventManager::EventManagerWrapper::listen
+     *
+     * Attaches a listener for a specified event.
+     *
+     * @type Member Function
+     * @param {String} eventName Name of event for which the specified listener should be called.
+     * @param {Function} listener Function to call when specified event is dispatched.
+     * @api public
+     */
     object.listen = function( eventName, listener ){
       __listen( this, _namespace, eventName , listener, _listeners, _handler );
     };
 
+    /**$
+     * EventManager::EventManagerWrapper::unlisten
+     *
+     * Detaches a listener for a specified event.
+     *
+     * @type Member Function
+     * @param {String} eventName Name of event from which the specified listener should be disengaged.
+     * @param {Function} listener Function to disengage.
+     * @see EventManager::EventManagerWrapper::listen
+     * @api public
+     */
     object.unlisten = function( eventName, listener ){
       __unlisten( this, _namespace, eventName, listener, _listeners, _handler );
     };
