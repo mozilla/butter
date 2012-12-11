@@ -30,7 +30,7 @@ define( [ "util/lang" ],
         _lastScrollLeft = _tracksContainer.element.scrollLeft,
         _lastScrollWidth = _tracksContainer.element.scrollWidth,
         _lineWidth = 0,
-        _seekCompleted = false,
+        _isSeeking = false,
         _seekMouseUp = false;
 
     function setNodePosition() {
@@ -84,7 +84,7 @@ define( [ "util/lang" ],
 
       _timeTooltip.classList.remove( "tooltip-no-transition-on" );
 
-      if( _isPlaying && _seekCompleted ){
+      if( _isPlaying && !_isSeeking ){
         _media.play();
       }
 
@@ -155,7 +155,7 @@ define( [ "util/lang" ],
     } //onMouseMove
 
     function onSeeked( e ) {
-      _seekCompleted = true;
+      _isSeeking = false;
 
       _media.unlisten( "mediaseeked", onSeeked );
 
@@ -177,7 +177,8 @@ define( [ "util/lang" ],
       }
       _timeTooltip.classList.add( "tooltip-no-transition-on" );
 
-      _seekCompleted = _seekMouseUp = false;
+      _isSeeking = true;
+      _seekMouseUp = false;
       _media.listen( "mediaseeked", onSeeked );
 
       parentElement.removeEventListener( "mouseout", onMouseOut, false );
@@ -254,7 +255,10 @@ define( [ "util/lang" ],
     });
 
     _media.listen( "mediapause", function( e ) {
-      if( !_isScrubbing ){
+      // scrubbing is for the mouseup and mousedown state.
+      // seeking is the media's state.
+      // these are not always the same.
+      if( !_isScrubbing && !_isSeeking ){
         _isPlaying = false;
       }
     });
