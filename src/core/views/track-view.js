@@ -2,9 +2,26 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
+/**$
+ * TrackView
+ *
+ * View controller for Tracks.
+ *
+ * @type module
+ */
 define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
   function( Logger, EventManager, DragNDrop ) {
 
+  /**$
+   * TrackView::TrackView
+   *
+   * Interface for controlling the view of a Track (on a timeline).
+   *
+   * @type class
+   * @param {String} id Identifier for this Track.
+   * @param {Track} track Track object to represent.
+   * @api public
+   */
   return function( id, track ) {
 
     var _id = id,
@@ -20,6 +37,17 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
 
     _element.className = "butter-track";
 
+    /**$
+     * TrackView::TrackView::setupDroppable
+     *
+     * Prepares this TrackView to be droppable. Elements from the plugin tray can be dragged onto this TrackView
+     * and turned into corresponding TrackEvents. TrackEventView objects can also be dropped which changes their ownership.
+     *
+     * @type member function
+     * @dispatch trackeventdropped When a TrackEventView object is dropped on this TrackView.
+     * @dispatch plugindropped When a plugin element is dropped (from the plugin tray).
+     * @api private
+     */
     function setupDroppable(){
       _droppable = DragNDrop.droppable( _element, {
         hoverClass: "draggable-hover",
@@ -65,12 +93,29 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
     _element.setAttribute( "data-butter-track-id", _id );
 
     Object.defineProperties( this, {
+      /**$
+       * TrackView::TrackView::id
+       *
+       * Identifier for this TrackView.
+       *
+       * @type Property
+       * @return {String}
+       */
       id: {
         enumerable: true,
         get: function() {
           return _id;
         }
       },
+
+      /**$
+       * TrackView::TrackView::element
+       *
+       * DOM element controlled by this TrackView.
+       *
+       * @type Property
+       * @return {DOMElement}
+       */
       element: {
         enumerable: true,
         configurable: false,
@@ -78,6 +123,16 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
           return _element;
         }
       },
+
+      /**$
+       * TrackView::TrackView::duration
+       *
+       * Duration of the current media. Replicated here for speed and to avoid conflicts. When set, update is
+       * bubbled to TrackEvent children.
+       *
+       * @type Property
+       * @return {Number}
+       */
       duration: {
         enumerable: true,
         get: function(){
@@ -87,9 +142,18 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
           _duration = val;
           for( var i=0, l=_trackEvents.length; i<l; ++i ){
             _trackEvents[ i ].update();
-          } //for
+          }
         }
       },
+
+      /**$
+       * TrackView::TrackView::parent
+       *
+       * Parent container (Media in timeline module). When this property is set, UI initialization may occur.
+       *
+       * @type Property
+       * @return {Object}
+       */
       parent: {
         enumerable: true,
         get: function(){
@@ -109,6 +173,15 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
           }
         }
       },
+
+      /**$
+       * TrackView::TrackView::track
+       *
+       * Track object represented by this TrackView.
+       *
+       * @type Property
+       * @return {Track}
+       */
       track: {
         enumerable: true,
         get: function() {
@@ -158,17 +231,48 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
 
     // Creates a ghost trackEvent on this track. This means a cloned representation of a currently overlapping trackEvent
     // is added to this track.
+
+    /**$
+     * TrackView::TrackView::addTrackEventGhost
+     *
+     * Adds the ghost object to the DOM as a child of the DOM element controlled by this TrackView. Note that no TrackEvent functionality
+     * is meant to be attached to the ghost object. It is purely a visual assistant.
+     *
+     * @type member function
+     * @param {Object} ghost Ghost obejct to add.
+     * @api public
+     */
     this.addTrackEventGhost = function( ghost ) {
       ghost.track = _track;
       _element.appendChild( ghost.element );
     };
 
-    // Removes a ghost trackEvent from this track
+    /**$
+     * TrackView::TrackView::removeTrackEventGhost
+     *
+     * Removes a ghost object from this TrackView.
+     *
+     * @type member function
+     * @param {Object} ghost Ghost obejct to remove.
+     * @api public
+     */
     this.removeTrackEventGhost = function( ghost ) {
       ghost.track = null;
       _element.removeChild( ghost.element );
     };
 
+    /**$
+     * TrackView::TrackView::findOverlappingTrackEvent
+     *
+     * Find overlapping TrackEvents by comparing left and right pixel boundaries.
+     *
+     * @type member function
+     * @param {TrackEventView} trackEventView TrackEventView object to use for comparison with other TrackEventViews on this TrackView object.
+     * @param {Number} leftValue When supplied TrackEventView's element cannot provide a bounding rect, this value is used to establish a left boundary.
+     * @param {Number} widthValue When supplied TrackEventView's element cannot provide a bounding rect, this value is used to establish a right boundary.
+     * @return {TrackEvent}
+     * @api public
+     */
     this.findOverlappingTrackEvent = function( trackEventView, leftValue, widthValue ) {
       var otherTrackEventView,
           rect1 = trackEventView.element.getBoundingClientRect(),
@@ -198,5 +302,5 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       }
       return null;
     };
-  }; //TrackView
+  };
 });

@@ -2,6 +2,13 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
+/**$
+ * TrackEventView
+ *
+ * View controller for TrackEvents.
+ *
+ * @type module
+ */
 define( [ "core/logger", "core/eventmanager", "util/dragndrop",
           "util/lang", "text!layouts/trackevent.html" ],
   function( Logger, EventManager, DragNDrop,
@@ -9,6 +16,18 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
   var TRACKEVENT_MIN_WIDTH = 50;
 
+
+  /**$
+   * TrackEventView::TrackEventView
+   *
+   * Interface for controlling the view of a TrackEvent (on a timeline).
+   *
+   * @type class
+   * @param {TrackEvent} trackEvent TrackEvent object to represent.
+   * @param {String} type Type of TrackEvent.
+   * @param {Dictionary} Options to pass to update immediately to initialize this view.
+   * @api public
+   */
   return function( trackEvent, type, inputOptions ){
 
     var _element = LangUtils.domFragment( TRACKEVENT_LAYOUT, ".butter-track-event" ),
@@ -33,6 +52,14 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
 
     EventManager.extend( _this );
 
+    /**$
+     * TrackEventView::TrackEventView::resetContainer
+     *
+     * Adjusts the element's visual properties to be in accordance with current event settings.
+     *
+     * @type member function
+     * @api private
+     */
     function resetContainer() {
       if ( !_trackEvent.track || !_trackEvent.track._media ) {
         return;
@@ -44,10 +71,30 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
       _element.style.width = ( _end - _start ) / _trackEvent.track._media.duration * 100 + "%";
     }
 
+    /**$
+     * TrackEventView::TrackEventView::setToolTip
+     *
+     * Sets the `title` attribute of this view's dom element, thereby allowing a tooltip to become visible
+     * with appropriate browser support.
+     *
+     * @type member function
+     * @param {String} title Title to show on view element.
+     * @api public
+     */
     this.setToolTip = function( title ){
       _element.title = title;
     };
 
+    /**$
+     * TrackEventView::TrackEventView::update
+     *
+     * Updates the internal references to corresponding TrackEvent properties (like start & end). Calls
+     * `resetContainer` before finishing.
+     *
+     * @type member function
+     * @param {Dictionary} options TrackEvent (Popcorn) options to reference when collecting data for this view.
+     * @api public
+     */
     this.update = function( options ){
       options = options || {};
       _element.style.top = "0px";
@@ -58,16 +105,20 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         _end = options.end;
       }
       resetContainer();
-    }; //update
+    };
 
-    /**
-     * Member: createGhost
+    /**$
+     * TrackEventView::TrackEventView::createGhost
      *
-     * Creates a clone of the current trackEvent that does not have an associated Popcorn trackevent.
-     * Used to notify the user when a trackevent overlaps and where the new location will be
-     * when the trackevent is dropped
+     * Creates a clone of the current TrackEvent that does not have an associated Popcorn event.
+     * Used to notify the user when a TrackEvent overlaps and where the new location will be
+     * when the TrackEvent is dropped.
+     *
+     * @type member function
+     * @return {Object} An object which represents a TrackEvent's ghost 
+     * @api public
      */
-    this.createGhost = function( track ) {
+    this.createGhost = function() {
       if ( _ghost ) {
         return _ghost;
       }
@@ -89,71 +140,173 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
       return _ghost;
     };
 
-    /*
-     * Member: cleanupGhost
+    /**$
+     * TrackEventView::TrackEventView::cleanupGhost
      *
-     * Removes this trackEvent's ghost and makes sure isGhost is set to false
+     * Removes this TrackEvent's ghost and makes sure `isGhost` is set to `false`.
+     *
+     * @type member function
+     * @api public
      */
     this.cleanupGhost = function() {
       _ghost.track.view.removeTrackEventGhost( _ghost );
       _ghost = null;
     };
 
+    /**$
+     * TrackEventView::TrackEventView::updateGhost
+     *
+     * Updates the positional properties on the ghost element for this TrackEvent view.
+     *
+     * @type member function
+     * @api public
+     */
     this.updateGhost = function() {
       // Don't touch top or left style attributes. Just adjust transform through translate(x, 0) to match
       // the draggable element.
       LangUtils.setTransformProperty( _ghost.element, "translate(" + _draggable.getLastOffset()[ 0 ] + "px, 0px)" );
     };
 
+    /**$
+     * TrackEventView::TrackEventView::setDragHandler
+     *
+     * Sets the handler function for dragging. This handler system is provided to circumvent a potentially costly
+     * event-calling process. Instead, the provided function is accessed directly when dragging occurs (perhaps many times/second).
+     *
+     * @type member function
+     * @param {Function} dragHandler Handler to call when drag event occurs.
+     * @api public
+     */
     this.setDragHandler = function( dragHandler ) {
       _onDrag = dragHandler;
     };
 
+    /**$
+     * TrackEventView::TrackEventView::setResizeHandler
+     *
+     * Sets the handler function for resizing. This handler system is provided to circumvent a potentially costly
+     * event-calling process. Instead, the provided function is accessed directly when resizing occurs (perhaps many times/second).
+     *
+     * @type member function
+     * @param {Function} dragHandler Handler to call when resize event occurs.
+     * @api public
+     */
     this.setResizeHandler = function( resizeHandler ) {
       _onResize = resizeHandler;
     };
 
     Object.defineProperties( this, {
+      /**$
+       * TrackEventView::TrackEventView::trackEvent
+       *
+       * TrackEvent this TrackEventView object represents.
+       *
+       * @type Property
+       * @return {TrackEvent}
+       */
       trackEvent: {
         enumerable: true,
         get: function(){
           return _trackEvent;
         }
       },
+
+      /**$
+       * TrackEventView::TrackEventView::ghost
+       *
+       * Ghost object referenced during TrackEvent overlapping.
+       *
+       * @type Property
+       * @return {Object}
+       */
       ghost: {
         enumerable: true,
         get: function() {
           return _ghost;
         }
       },
+
+      /**$
+       * TrackEventView::TrackEventView::element
+       *
+       * DOM element used by this TrackEventView.
+       *
+       * @type Property
+       * @return {DOMElement}
+       */
       element: {
         enumerable: true,
-        get: function(){ return _element; }
+        get: function(){
+          return _element;
+        }
       },
+
+      /**$
+       * TrackEventView::TrackEventView::start
+       *
+       * `start` value for the associated TrackEvent. Referenced internally to avoid conflicts.
+       *
+       * @type Property
+       * @return {Number}
+       */
       start: {
         enumerable: true,
-        get: function(){ return _start; },
+        get: function(){
+          return _start;
+        },
         set: function( val ){
           _start = val;
           resetContainer();
         }
       },
+
+      /**$
+       * TrackEventView::TrackEventView::end
+       *
+       * `end` value for the associated TrackEvent. Referenced internally to avoid conflicts.
+       *
+       * @type Property
+       * @return {Number}
+       */
       end: {
         enumerable: true,
-        get: function(){ return _end; },
+        get: function(){
+          return _end; 
+        },
         set: function( val ){
           _end = val;
           resetContainer();
         }
       },
+
+      /**$
+       * TrackEventView::TrackEventView::type
+       *
+       * `type` value for the associated TrackEvent. Referenced internally to avoid conflicts.
+       *
+       * @type Property
+       * @return {String}
+       */
       type: {
         enumerable: true,
-        get: function(){ return _type; },
+        get: function(){
+          return _type;
+        },
         set: function( val ){
           _type = val;
           _element.setAttribute( "data-butter-trackevent-type", _type );
         }
       },
+
+      /**$
+       * TrackEventView::TrackEventView::elementText
+       *
+       * String to display on the TrackEventView DOM element. This will be reflected on the timeline if
+       * this TrackEventView is being displayed.
+       *
+       * @type Property
+       * @return {String}
+       */
       elementText: {
         enumerable: true,
         get: function() {
@@ -164,30 +317,69 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
           _typeElement.innerHTML = _elementText;
         }
       },
+
+      /**$
+       * TrackEventView::TrackEventView::selected
+       *
+       * Reflects the current selection state of this TrackEventView. When selected, this property is `true` and vice-versa. `false` otherwise.
+       *
+       * @type Property
+       * @return {Boolean}
+       */
       selected: {
         enumerable: true,
-        get: function(){ return _draggable.selected; },
+        get: function(){
+          return _draggable.selected;
+        },
         set: function( val ){
           if( val ){
             select();
           }
           else {
             deselect();
-          } //if
+          }
         }
       },
+
+      /**$
+       * TrackEventView::TrackEventView::dragging
+       *
+       * Reflects the current dragging state of this TrackEventView. When being dragged, this property is `true`. `false` otherwise.
+       *
+       * @type Property
+       * @return {Boolean}
+       */
       dragging: {
         enumerable: true,
         get: function(){
           return _dragging;
         }
       },
+
+      /**$
+       * TrackEventView::TrackEventView::resizing
+       *
+       * Reflects the current resizing state of this TrackEventView. When being resized, this property is `true`. `false` otherwise.
+       *
+       * @type Property
+       * @return {Object}
+       */
       resizing: {
         enumerable: true,
         get: function() {
           return _resizing;
         }
       },
+
+      /**$
+       * TrackEventView::TrackEventView::parent
+       *
+       * Parent TrackView on which this TrackEventView resides. Setting this property causes UI initialization to occur since
+       * the TrackEvent may be newly added to the DOM.
+       *
+       * @type Property
+       * @return {TrackView}
+       */
       parent: {
         enumerabled: true,
         get: function(){
@@ -273,8 +465,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
             }
 
             resetContainer();
-          } //if
-        } //set
+          }
+        }
       }
     });
 
@@ -299,19 +491,35 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
       _this.dispatch( "trackeventmouseout", { originalEvent: e, trackEvent: _trackEvent } );
     }, false );
 
+    /**$
+     * TrackEventView::TrackEventView::select
+     *
+     * Changes this TrackEventView's element to a selected state, and notifies the `draggable` manager.
+     *
+     * @type member function
+     * @api private
+     */
     function select() {
       if ( _draggable ) {
         _draggable.selected = true;
       }
       _element.setAttribute( "selected", true );
-    } //select
+    }
 
-    function deselect() {
+    /**$
+     * TrackEventView::TrackEventView::deselect
+     *
+     * Changes this TrackEventView's element to an unselected state, and notifies the `draggable` manager.
+     *
+     * @type member function
+     * @api private
+     */
+     function deselect() {
       if ( _draggable ) {
         _draggable.selected = false;
       }
       _element.removeAttribute( "selected" );
-    } //deselect
+    }
 
   };
 

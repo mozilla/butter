@@ -709,7 +709,6 @@ define( [
        *
        * @type Property
        * @return {Boolean} If Popcorn is not initialized, or the media it wraps has not ended, `false` is returned. Otherwise, true.
-       * @access read-only
        */
       ended: {
         enumerable: true,
@@ -729,7 +728,6 @@ define( [
        * @type Property
        * @event mediacontentchanged
        * @return {String} String containing comma-delimited urls to be passed to Popcorn for initialization.
-       * @access read-write
        */
       url: {
         enumerable: true,
@@ -755,7 +753,6 @@ define( [
        * @type Property
        * @event mediatargetchanged
        * @return {String} Id of the element Popcorn will use for its media source.
-       * @access read-write
        */
       target: {
         get: function() {
@@ -779,7 +776,6 @@ define( [
        *
        * @type Property
        * @return {Boolean} True if muted, false otherwise.
-       * @access read-write
        */
       muted: {
         enumerable: true,
@@ -798,7 +794,6 @@ define( [
        *
        * @type Property
        * @return {Boolean} True if media is in the ready state; false otherwise.
-       * @access read-only
        */
       ready:{
         enumerable: true,
@@ -814,7 +809,6 @@ define( [
        *
        * @type Property
        * @return {String}
-       * @access read-only
        */
       name: {
         get: function(){
@@ -830,7 +824,6 @@ define( [
        *
        * @type Property
        * @return {String}
-       * @access read-only
        */
       id: {
         get: function(){
@@ -846,7 +839,6 @@ define( [
        *
        * @type Property
        * @return {Array} Array of Tracks.
-       * @access read-only
        */
       tracks: {
         get: function(){
@@ -862,7 +854,6 @@ define( [
        *
        * @type Property
        * @return {Array} Array of Tracks.
-       * @access read-only
        */
       orderedTracks: {
         get: function() {
@@ -879,7 +870,6 @@ define( [
        * @type Property
        * @event mediatimeupdate
        * @return {Number} Current time of Popcorn media.
-       * @access read-write
        */
       currentTime: {
         get: function(){
@@ -909,7 +899,6 @@ define( [
        * @type Property
        * @event mediadurationchanged
        * @return {Number} Length of media in seconds.
-       * @access read-write
        */
       duration: {
         get: function(){
@@ -933,7 +922,6 @@ define( [
        *
        * @type Property
        * @return {JSON} Portable state of this object.
-       * @access read-write
        */
       json: {
         get: function() {
@@ -985,7 +973,6 @@ define( [
        *
        * @type Property
        * @return {Dictionary}
-       * @access read-write
        */
       registry: {
         get: function(){
@@ -1004,7 +991,6 @@ define( [
        *
        * @type Property
        * @return {PopcornWrapper}
-       * @access read-only
        */
       popcorn: {
         enumerable: true,
@@ -1020,7 +1006,6 @@ define( [
        *
        * @type Property
        * @return {Boolean} True if paused, false otherwise.
-       * @access read-write
        */
       paused: {
         enumerable: true,
@@ -1039,7 +1024,6 @@ define( [
        *
        * @type Property
        * @return {Number}
-       * @access read-write
        */
       volume: {
         enumerable: true,
@@ -1059,7 +1043,6 @@ define( [
        * @type Property
        * @event mediapopcornsettingschanged
        * @return {Dictionary}
-       * @access read-write
        */
       popcornOptions: {
         enumerable: true,

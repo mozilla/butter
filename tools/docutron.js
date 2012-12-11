@@ -2,7 +2,6 @@ var fs = require('fs');
 var esprima = require('esprima');
 
 var inputPath = process.argv[2];
-var depthHashes = '##########################';
 
 var filename = inputPath.lastIndexOf('/') > -1 ? inputPath.substr(inputPath.lastIndexOf('/') + 1) : inputPath;
 
@@ -65,15 +64,25 @@ function generateMD(objectTree, depth){
   var newDepth = depth;
   var description = objectTree.description;
   var usage;
+  var tmpParent;
 
   depth = depth || 1;
 
   if(description){
     newDepth = depth + 1;
+    namePrefix = '';
 
-    output += depthHashes.substr(0, depth);
+    output += ['class', 'module'].indexOf(description.type.toLowerCase()) > -1 ? '#' : '##';
 
-    output += description.name;
+    tmpParent = objectTree._parent;
+    while(tmpParent){
+      if(tmpParent.description && tmpParent.description.name){
+        namePrefix = tmpParent.description.name + '::' + namePrefix;
+      }
+      tmpParent = tmpParent._parent;
+    }
+
+    output += namePrefix + description.name;
     if(description.api || description.type || description.access){
       output += ' (' + [description.access, description.api, description.type].filter(function(p){return !!p}).join(' ') + ')';
     }
@@ -92,7 +101,7 @@ function generateMD(objectTree, depth){
       description.options.forEach(function(option){
         output += '__@' + option.type + '__';
         if(option.varTypes.length > 0){
-          output += ' [_' + option.varTypes.join('_ or _') + '_]';
+          output += ' [ _' + option.varTypes.join('_ or _') + '_ ]';
         }
         if(option.description){
           output += ': ' + option.description;
