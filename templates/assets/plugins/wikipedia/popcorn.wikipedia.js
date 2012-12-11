@@ -158,33 +158,36 @@
             }
           }
 
-          nextSectionSpan = wrapperDiv.querySelector( "#" + articleSections[ sectionIndex + 1 ].anchor );
+          if ( sectionIndex >= 0 ) {
+            nextSectionSpan = wrapperDiv.querySelector( "#" + articleSections[ sectionIndex + 1 ].anchor );
 
-          childElements = wrapperDiv.childNodes;
+            childElements = wrapperDiv.childNodes;
 
-          for ( var k = 0; k < childElements.length; k++ ) {
-            elem = childElements[ k ].id !== referenceSpan.id ?
-                   childElements[ k ].querySelector && childElements[ k ].querySelector( _selector ) : childElements[ k ];
+            for ( var k = 0; k < childElements.length; k++ ) {
+              elem = childElements[ k ].id !== referenceSpan.id ?
+                     childElements[ k ].querySelector && childElements[ k ].querySelector( _selector ) : childElements[ k ];
 
-            if ( elem ) {
+              if ( elem ) {
 
-              newElements = document.createElement( "div" );
-              for ( var v = k; v < childElements.length; v++ ) {
+                newElements = document.createElement( "div" );
+                for ( var v = k; v < childElements.length; v++ ) {
 
-                if ( childElements[ v ] !== nextSectionSpan ||
-                      ( childElements[ v ].firstChild && childElements[ v ].firstChild !== nextSectionSpan ) ) {
-                  newElements.appendChild( childElements[ v ] );
-                } else {
-                  break;
+                  if ( childElements[ v ] !== nextSectionSpan ||
+                        ( childElements[ v ].firstChild && childElements[ v ].firstChild !== nextSectionSpan ) ) {
+                    newElements.appendChild( childElements[ v ] );
+                  } else {
+                    break;
+                  }
+
                 }
-
+                break;
               }
-              break;
             }
+
+            title = title + " - " + articleSections[ sectionIndex ].line;
           }
 
           responseFragment = newElements || wrapperDiv;
-          title = title + " - " + articleSections[ sectionIndex ].line;
         } else {
           responseFragment = wrapperDiv;
         }
