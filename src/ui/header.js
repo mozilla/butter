@@ -147,7 +147,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       login: function() {
         var isSaved = butter.project.isSaved;
 
-        _previewBtn.style.display = "";
         _projectTitle.style.display = "";
         _saveButton.innerHTML = "Save";
 
@@ -159,7 +158,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         togglePreviewButton( false );
         toggleSaveButton( true );
         toggleShareButton( false );
-        _previewBtn.style.display = "none";
         _projectTitle.style.display = "none";
         _saveButton.innerHTML = "Sign in to save";
       },
