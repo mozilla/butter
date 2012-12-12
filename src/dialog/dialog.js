@@ -360,7 +360,7 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
      * @param {Function} dialogCtor: Function to be run after dialog internals are in place
      */
     register: function( name, layoutSrc, dialogCtor ) {
-      __dialogs[ name ] = __createDialog( layoutSrc, dialogCtor );
+      __dialogs[ name ] = __createDialog( layoutSrc, dialogCtor, name );
       __openDialogs[ name ] = false;
     },
 
