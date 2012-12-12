@@ -5,7 +5,7 @@
 (function( Butter ) {
 
   Butter.Editor.register( "twitter", "load!{{baseDir}}templates/assets/editors/twitter/twitter-editor.html",
-    function( rootElement, butter, compiledLayout ) {
+    function( rootElement, butter ) {
 
     var _rootElement = rootElement,
         _trackEvent,

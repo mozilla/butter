@@ -6,10 +6,34 @@
       "version": "0.0.9"
     },
     "jshint": {
-      "version": "0.6.2",
+      "version": "0.9.1",
       "dependencies": {
-        "argsparser": {
-          "version": "0.0.6"
+        "cli": {
+          "version": "0.4.3",
+          "dependencies": {
+            "glob": {
+              "version": "3.1.14",
+              "dependencies": {
+                "minimatch": {
+                  "version": "0.2.9",
+                  "dependencies": {
+                    "lru-cache": {
+                      "version": "2.0.4"
+                    },
+                    "sigmund": {
+                      "version": "1.0.0"
+                    }
+                  }
+                },
+                "graceful-fs": {
+                  "version": "1.1.14"
+                },
+                "inherits": {
+                  "version": "1.0.0"
+                }
+              }
+            }
+          }
         },
         "minimatch": {
           "version": "0.0.5",

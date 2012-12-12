@@ -112,7 +112,7 @@ define( [ "util/lang", "core/eventmanager", "./modal" ],
         enableCloseButton: function(){
           var closeButton = _rootElement.querySelector( ".close-button" );
           if( closeButton ){
-            closeButton.addEventListener( "click", function closeClickHandler( e ){
+            closeButton.addEventListener( "click", function closeClickHandler(){
               _internal.activity( "default-close" );
               closeButton.removeEventListener( "click", closeClickHandler, false );
             }, false );

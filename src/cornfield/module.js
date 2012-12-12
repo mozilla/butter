@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define([ "util/xhr", "jsSHA/sha1", "util/shims" ],
-  function( XHR, SHA1 ) {
+define( [ "util/xhr" ],
+  function( XHR ) {
 
   // Shortcut to make lint happy. Constructor is capitalized, and reference is non-global.
   var JSSHA = window.jsSHA;
@@ -14,7 +14,7 @@ define([ "util/xhr", "jsSHA/sha1", "util/shims" ],
     return location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" );
   }
 
-  var Cornfield = function( butter, config ) {
+  var Cornfield = function( butter ) {
 
     var authenticated = false,
         email = "",

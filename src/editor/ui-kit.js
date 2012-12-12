@@ -25,7 +25,7 @@ define( [ "editor/editor", "editor/base-editor", "text!layouts/ui-kit.html" ],
       }
     }
 
-  Editor.register( "ui-kit", LAYOUT_SRC, function( rootElement, butter, compiledLayout ) {
+  Editor.register( "ui-kit", LAYOUT_SRC, function( rootElement, butter ) {
     Editor.BaseEditor.extend( this, butter, rootElement, {
       open: function() {
         var radios = rootElement.querySelectorAll( ".butter-btn-radio" ),

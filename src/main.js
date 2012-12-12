@@ -21,9 +21,7 @@
             "dialog/dialog", "editor/editor", "ui/ui",
             "util/xhr", "util/lang", "util/tutorial",
             "text!default-config.json", "text!layouts/ua-warning.html",
-            "ui/widget/tooltip", "crashreporter", "core/project",
-            // keep these at the end so they don't need a spot in the function signature
-            "UAParser/ua-parser", "util/shims"
+            "ui/widget/tooltip", "crashreporter", "core/project"
           ],
           function(
             EventManager, Logger, Config, Target, Media, Page,
@@ -672,7 +670,7 @@
 
         // wrap the load function to remember the script
         function genLoadFunction( script ){
-          return function( e ){
+          return function(){
             // this = XMLHttpRequest object
             if( this.readyState === 4 ){
 
@@ -831,7 +829,7 @@
 
         _this.loader = loader;
 
-        _page = new Page( loader, _config );
+        _page = new Page( loader );
 
         _this.ui = new UI( _this  );
 

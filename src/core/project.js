@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "core/eventmanager", "core/media", "util/shims" ],
-        function( EventManager, Media, Shims ) {
+define( [ "core/eventmanager", "core/media" ],
+        function( EventManager, Media ) {
 
   var __butterStorage = window.localStorage;
 

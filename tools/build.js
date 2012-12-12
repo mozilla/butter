@@ -8,9 +8,7 @@
   baseUrl: '../src',
 
   paths: {
-    'text': '../external/require/text',
-    'jsSHA': '../external/jsSHA',
-    'UAParser': '../external/ua-parser'
+    'text': '../external/require/text'
   },
 
   // Use has branch trimming in the build to remove the document.write
@@ -34,6 +32,9 @@
   // butter.js references butter-src in a document.write string, so it will
   // not be found by the AST analysis done in the optimizer.
   include: [
+            '../external/ua-parser/ua-parser',
+            '../external/jsSHA/sha1',
+            'util/shims',
             'main'
            ],
 

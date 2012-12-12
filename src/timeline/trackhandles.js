@@ -17,7 +17,7 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
         _menus = [],
         _this = this;
 
-    _addTrackButton.addEventListener( "click", function( e ) {
+    _addTrackButton.addEventListener( "click", function() {
       butter.currentMedia.addTrack();
     }, false );
 
@@ -62,7 +62,7 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
           menuDiv = trackDiv.querySelector( ".menu" ),
           deleteButton = menuDiv.querySelector( ".delete" );
 
-      deleteButton.addEventListener( "click", function( e ) {
+      deleteButton.addEventListener( "click", function() {
         var dialog = Dialog.spawn( "delete-track", {
           data: track.name,
           events: {
@@ -76,7 +76,7 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
               } //if
               dialog.close();
             },
-            cancel: function( e ){
+            cancel: function(){
               dialog.close();
             }
           }
@@ -84,7 +84,7 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
         dialog.open();
       }, false );
 
-      trackDiv.addEventListener( "dblclick", function( e ){
+      trackDiv.addEventListener( "dblclick", function(){
         var dialog = Dialog.spawn( "track-data", {
           data: track,
           events: {
@@ -180,7 +180,7 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
       _addTrackButton.style.top = _listElement.offsetHeight - ADD_TRACK_BUTTON_Y_ADJUSTMENT + "px";
     });
 
-    tracksContainer.element.addEventListener( "scroll", function( e ){
+    tracksContainer.element.addEventListener( "scroll", function(){
       _container.scrollTop = tracksContainer.element.scrollTop;
     }, false );
 

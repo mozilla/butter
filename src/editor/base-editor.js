@@ -162,10 +162,10 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip", "ui/widge
 
         tooltip = ToolTip.get( options.name );
 
-        element.addEventListener( "focus", function( e ) {
+        element.addEventListener( "focus", function() {
           tooltip.hidden = false;
         }, false );
-        element.addEventListener( "blur", function( e ) {
+        element.addEventListener( "blur", function() {
           tooltip.hidden = true;
         }, false );
       }

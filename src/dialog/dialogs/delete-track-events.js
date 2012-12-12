@@ -8,7 +8,7 @@ define([ "text!dialog/dialogs/delete-track-events.html", "dialog/dialog" ],
   Dialog.register( "delete-track-events", LAYOUT_SRC, function( dialog, data ) {
     var butter = data;
 
-    dialog.registerActivity( "ok", function( e ){
+    dialog.registerActivity( "ok", function(){
       butter.currentMedia.clear();
       butter.currentMedia.addTrack();
       dialog.send( "ok" );

@@ -88,7 +88,7 @@
             timeout: function(){
               _this.dispatch( "mediatimeout" );
             },
-            fail: function( e ){
+            fail: function(){
               _this.dispatch( "mediafailed", "error" );
             },
             playerTypeRequired: function( type ){

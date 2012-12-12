@@ -22,7 +22,7 @@ document.addEventListener( "DOMContentLoaded", function() {
   if ( typeof require === "undefined" ) {
     var requireScript = document.createElement( "script" );
     requireScript.src = "../../external/require/require.js";
-    requireScript.onload = function( e ) {
+    requireScript.onload = function() {
       init( window, window.document );
     };
     document.head.appendChild( requireScript );

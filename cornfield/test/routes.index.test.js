@@ -335,6 +335,6 @@ test("remix project valid", function(t) {
     });
 });
 
-test("clean up server connections", function(t) {
+test("clean up server connections", function() {
   process.exit();
 });

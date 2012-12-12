@@ -81,7 +81,7 @@ function init( window, document ) {
     show( "#share-container" );
   }
 
-  function remixClick( popcorn ) {
+  function remixClick() {
     window.open( $( "#remix-post" ).href, "_blank" );
   }
 

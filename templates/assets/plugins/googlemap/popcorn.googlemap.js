@@ -382,7 +382,7 @@ var googleCallback;
 
                 });
 
-                var showSteps = function ( directionResult, that ) {
+                var showSteps = function ( directionResult ) {
 
                   //  Push new google map lat and lng values into an array from our list of lat and lng values
                   var routes = directionResult.routes[ 0 ].overview_path;
@@ -432,7 +432,7 @@ var googleCallback;
        * of the video reaches the end time provided by the
        * options variable
        */
-      end: function ( event, options ) {
+      end: function () {
         // if the map exists hide it do not delete the map just in
         // case the user seeks back to time b/w start and end
         if ( map ) {

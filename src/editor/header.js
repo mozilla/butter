@@ -2,9 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define([ "ui/widget/tooltip",
-         // keep this at the end so it doesn't need a spot in the function signature
-         "util/shims" ], function( Tooltip ) {
+define([ "ui/widget/tooltip" ], function( Tooltip ) {
 
   return function( editorAreaDOMRoot, editorModule ) {
     var _mediaButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-media" ),
@@ -39,7 +37,7 @@ define([ "ui/widget/tooltip",
       top: "60px"
     });
 
-    _mediaButton.addEventListener( "click", function( e ) {
+    _mediaButton.addEventListener( "click", function() {
       editorModule.openEditor( "media-editor" );
     }, false );
 

@@ -237,7 +237,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       _boundsChangedCallback( leftPosition, scale );
     }
 
-    function zoomSliderMouseUp( e ) {
+    function zoomSliderMouseUp() {
       _viewPort.classList.remove( "viewport-transition" );
       window.removeEventListener( "mouseup", zoomSliderMouseUp, false );
       window.removeEventListener( "mousemove", zoomSliderMouseMove, false );
@@ -276,7 +276,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
       window.addEventListener( "mouseup", zoomSliderMouseUp, false );
     }
 
-    function zoomSliderHanldeMouseDown( e ) {
+    function zoomSliderHanldeMouseDown() {
       _viewPort.classList.add( "viewport-transition" );
       _zoomSliderHandle.removeEventListener( "mousedown", zoomSliderHanldeMouseDown, false );
       _zoomSliderContainer.removeEventListener( "mousedown", zoomSliderContainerMouseDown, false );

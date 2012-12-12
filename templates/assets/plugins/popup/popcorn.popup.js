@@ -377,7 +377,7 @@
         link.target = "_blank";
         link.innerHTML = text;
 
-        link.addEventListener( "click", function( e ) {
+        link.addEventListener( "click", function() {
           context.media.pause();
         }, false );
 
@@ -452,7 +452,7 @@
       options._fontSheet = fontSheet;
       document.head.appendChild( fontSheet );
 
-      fontSheet.onload = function ( e ) {
+      fontSheet.onload = function () {
         // Apply all the styles
         textContainer.style.fontFamily = options.fontFamily ? originalFamily : DEFAULT_FONT;
       };

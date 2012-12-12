@@ -58,15 +58,15 @@ define( [ "util/lang" ], function( util ){
       } //if
     } //setTime
 
-    _media.listen( "mediatimeupdate", function( e ){
+    _media.listen( "mediatimeupdate", function(){
       setTime( _media.currentTime, false );
     });
 
-    _timeBox.addEventListener( "focus", function( e ){
+    _timeBox.addEventListener( "focus", function(){
       _oldValue = _timeBox.value;
     }, false );
 
-    _timeBox.addEventListener( "blur", function( e ){
+    _timeBox.addEventListener( "blur", function(){
       if( _timeBox.value !== _oldValue ){
         setTime( _timeBox.value, true );
       } //if
@@ -98,11 +98,11 @@ define( [ "util/lang" ], function( util ){
 
     _time = new Time( statusArea, _media );
 
-    _muteButton = new Button( statusArea, ".mute-button-container", function( e ) {
+    _muteButton = new Button( statusArea, ".mute-button-container", function() {
       _media.muted = !_media.muted;
     });
 
-    _playButton = new Button( statusArea, ".play-button-container", function( e ) {
+    _playButton = new Button( statusArea, ".play-button-container", function() {
       if ( _media.ended ) {
         _media.paused = false;
       }
@@ -114,31 +114,31 @@ define( [ "util/lang" ], function( util ){
     // Ensure default state is correct
     _playButton.state = true;
 
-    _media.listen( "mediamuted", function( e ){
+    _media.listen( "mediamuted", function(){
       _muteButton.state = false;
     });
 
-    _media.listen( "mediaunmuted", function( e ){
+    _media.listen( "mediaunmuted", function(){
       _muteButton.state = true;
     });
 
-    _media.listen( "mediavolumechange", function( e ){
+    _media.listen( "mediavolumechange", function(){
       _muteButton.state = !_media.muted;
     });
 
-    _media.listen( "mediaended", function( e ){
+    _media.listen( "mediaended", function(){
       _playButton.state = true;
     });
 
-    _media.listen( "mediaplay", function( e ){
+    _media.listen( "mediaplay", function(){
       _playButton.state = false;
     });
 
-    _media.listen( "mediapause", function( e ){
+    _media.listen( "mediapause", function(){
       _playButton.state = true;
     });
 
-    _media.listen( "mediacontentchanged", function( e ){
+    _media.listen( "mediacontentchanged", function(){
       _playButton.state = true;
     });
 

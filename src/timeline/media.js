@@ -42,7 +42,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
     EventManager.extend( _this );
 
-    function onEditorToggled( e ) {
+    function onEditorToggled() {
       _tracksContainer.update();
       _timebar.update();
       _superScrollbar.resize();

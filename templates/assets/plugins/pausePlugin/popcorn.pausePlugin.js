@@ -26,7 +26,7 @@
           }, options.duration * 1000 );
         }
       },
-      end: function( event, options ) {
+      end: function() {
         // we need to add this on end instead of start because when seeking outside of an active trackevent,
         // end automatically gets fired
         this.on( "seeked", _seekedFunc );

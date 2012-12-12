@@ -18,9 +18,9 @@
         this.on( "timeupdate", options.skipRange );
        
       },
-      start: function( event, options ) {
+      start: function() {
       },
-      end: function( event, options ) {
+      end: function() {
       },
       _teardown: function( options ) {
         this.off( "timeupdate", options.skipRange );

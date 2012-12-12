@@ -230,7 +230,7 @@
       options._fontSheet = fontSheet;
       document.head.appendChild( fontSheet );
 
-      fontSheet.onload = function ( e ) {
+      fontSheet.onload = function () {
         innerContainer.style.fontFamily = options.fontFamily;
         innerContainer.style.fontSize = options.fontSize + "%";
         if ( position === "custom" ) {
@@ -261,7 +261,7 @@
           link.target = "_blank";
           link.innerHTML = text;
 
-          link.addEventListener( "click", function( e ) {
+          link.addEventListener( "click", function() {
             context.media.pause();
           }, false );
 

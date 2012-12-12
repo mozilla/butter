@@ -77,7 +77,7 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
       }
     };
 
-    this.removeGhostsAfterDrop = function( trackEvent, track ) {
+    this.removeGhostsAfterDrop = function( trackEvent ) {
       var currentTrack = trackEvent.track,
           ghost = trackEvent.view.ghost;
 

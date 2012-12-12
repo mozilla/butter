@@ -74,7 +74,7 @@ define( [ "core/eventmanager" ], function( EventManager ) {
       }
     }
 
-    outerElement.addEventListener( "scroll", function( e ){
+    outerElement.addEventListener( "scroll", function(){
       setHandlePosition();
     }, false );
 
@@ -195,7 +195,7 @@ define( [ "core/eventmanager" ], function( EventManager ) {
       }
     }
 
-    outerElement.addEventListener( "scroll", function( e ){
+    outerElement.addEventListener( "scroll", function(){
       setHandlePosition();
     }, false );
 

@@ -8,7 +8,7 @@
           return "Loop: " + ( options.loop > 0 ? options.count : "forever" );
         };
       },
-      start: function( event, options ) {
+      start: function() {
       },
       end: function( event, options ) {
           if ( ( this.currentTime() > options.end + 1 || this.currentTime() < options.end - 1 ) || this.seeking() || this.paused() ) {

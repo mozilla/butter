@@ -42,7 +42,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       _vScrollbar.update();
     });
 
-    _container.addEventListener( "mousedown", function( e ) {
+    _container.addEventListener( "mousedown", function() {
       butter.deselectAllTrackEvents();
     }, false );
 
@@ -206,13 +206,13 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       // Only one of these two functions, onTrackEventResizedLeft or onTrackEventResizedRight,
       // is run during resizing. Since all the max/min data is prepared ahead of time, we know
       // the w/x values shouldn't grow/shrink past certain points.
-      function onTrackEventResizedLeft( trackEvent, x, w, resizeEvent, direction ) {
+      function onTrackEventResizedLeft( trackEvent, x, w, resizeEvent ) {
         if ( x < min ) {
           resizeEvent.blockIteration( min );
         }
       }
 
-      function onTrackEventResizedRight( trackEvent, x, w, resizeEvent, direction ) {
+      function onTrackEventResizedRight( trackEvent, x, w, resizeEvent ) {
         if ( x + w > max ) {
           resizeEvent.blockIteration( max );
         }
@@ -258,7 +258,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
         trackEventView.setResizeHandler( onTrackEventResizedRight );
       }
 
-      function onTrackEventResizeStopped( e ) {
+      function onTrackEventResizeStopped() {
         var popcornOptions = {};
 
         // Finish off by making sure the values are correct depending on the direction.

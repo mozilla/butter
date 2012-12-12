@@ -78,7 +78,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
       // Code for handling basic/advanced options tabs are going to be the same. If the user defined these buttons
       // handle it for them here rather than force them to write the code in their editor
       if ( basicButton && advancedButton ) {
-        basicButton.addEventListener( "mouseup", function( e ) {
+        basicButton.addEventListener( "mouseup", function() {
           if ( basicTab.classList.contains( "display-off" ) ) {
             basicTab.classList.toggle( "display-off" );
             advancedTab.classList.toggle( "display-off" );
@@ -88,7 +88,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
           }
         });
 
-        advancedButton.addEventListener( "mouseup", function( e ) {
+        advancedButton.addEventListener( "mouseup", function() {
           if ( !basicTab.classList.contains( "display-off" ) ) {
             basicTab.classList.toggle( "display-off" );
             advancedTab.classList.toggle( "display-off" );
@@ -194,11 +194,11 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
         return;
       }
 
-      closeEditorLink.addEventListener( "click", function( e ) {
+      closeEditorLink.addEventListener( "click", function() {
         extendObject.dispatch( "back" );
       }, false );
 
-      backLink.addEventListener( "click", function( e ) {
+      backLink.addEventListener( "click", function() {
         extendObject.dispatch( "back" );
       }, false );
 
@@ -261,7 +261,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
      * @param {String} propertyName: Name of property to update when change is detected
      */
     extendObject.attachSelectChangeHandler = function( element, trackEvent, propertyName ) {
-      element.addEventListener( "change", function( e ) {
+      element.addEventListener( "change", function() {
         var updateOptions = {};
         updateOptions[ propertyName ] = element.value;
         trackEvent.update( updateOptions );
@@ -278,7 +278,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
     };
 
     extendObject.attachColorChangeHandler = function( element, trackEvent, propertyName, callback ) {
-      element.addEventListener( "change", function( e ) {
+      element.addEventListener( "change", function() {
         var value = element.value,
             message,
             updateOptions = {},
@@ -334,13 +334,13 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
      * @param {Function} callback: Called when update is ready to occur
      */
     extendObject.attachSecondsChangeHandler = function( element, trackEvent, propertyName, callback ) {
-      element.addEventListener( "blur", function( e ) {
+      element.addEventListener( "blur", function() {
         var updateOptions = {};
         updateOptions[ propertyName ] = TimeUtils.toSeconds( element.value );
         callback( trackEvent, updateOptions );
       }, false );
 
-      element.addEventListener( "change", function( e ) {
+      element.addEventListener( "change", function() {
         var updateOptions = {};
         updateOptions[ propertyName ] = TimeUtils.toSeconds( element.value );
         callback( trackEvent, updateOptions );
@@ -360,7 +360,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
       callBack = callBack || function( trackEvent, updateOptions, prop ) {
         trackEvent.update( updateOptions );
       };
-      element.addEventListener( "click", function( e ) {
+      element.addEventListener( "click", function() {
         var updateOptions = {};
         updateOptions[ propertyName ] = element.checked;
         callBack( trackEvent, updateOptions, propertyName );
@@ -376,7 +376,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
      * @param {String} propertyName: Name of property to update when change is detected
      */
     function attachCheckboxGroupChangeHandler( element, trackEvent, propertyName ) {
-      element.addEventListener( "click", function( e ) {
+      element.addEventListener( "click", function() {
         var updateOption = {},
             updateOptions = {},
             i,
@@ -440,7 +440,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
         return val;
       }
 
-      element.addEventListener( "blur", function( e ) {
+      element.addEventListener( "blur", function() {
         var val = element.value;
 
         if ( ignoreBlur ) {
@@ -481,7 +481,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
       }, false );
 
       if ( element.type === "number" || isNumber ) {
-        element.addEventListener( "change", function( e ) {
+        element.addEventListener( "change", function() {
           var updateOptions = {},
               val = element.value;
 

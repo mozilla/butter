@@ -11,10 +11,11 @@ define(function( require, exports, module ){
     // Paths are relative to the baseUrl
     paths: {
       'text': '../external/require/text',
-      'jsSHA': '../external/jsSHA',
-      'UAParser': '../external/ua-parser'
+      'jsSHA': '../external/jsSHA/sha1',
+      'UAParser': '../external/ua-parser/ua-parser',
+      'shims': 'util/shims'
     }
   });
 
-  ctx( [ "main" ] );
+  ctx( [ "main", "jsSHA", "shims", "UAParser" ] );
 });
