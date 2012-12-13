@@ -218,6 +218,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
 
         butter.listen( "projectsaved", _header.views.saved );
         butter.listen( "logout", _header.views.unSaved );
+        butter.listen( "projectchanged", _header.views.unSaved );
 
         // Set up views for plugin list editor
         butter.listen( "mediacontentchanged", _header.views.disablePlugins );
