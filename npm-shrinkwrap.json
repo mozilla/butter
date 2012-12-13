@@ -84,6 +84,14 @@
         }
       }
     },
+    "ducksnode": {
+      "version": "0.1.0",
+      "dependencies": {
+        "request": {
+          "version": "2.9.203"
+        }
+      }
+    },
     "jade": {
       "version": "0.27.7",
       "dependencies": {

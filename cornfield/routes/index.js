@@ -1,6 +1,19 @@
 'use strict';
 
-var datauri = require('../lib/datauri');
+var datauri = require('../lib/datauri'),
+    ducksnode = require('ducksnode').create({ api_key: "KSqFZGbhBom1w3Wg4b9CvcyqLlSqELuCdvs57GGRgrg8uu6U61" }),
+    ducksboard_widgets = {
+      newProjects: [
+        "popcorn_maker_new_projects_24hrs",
+        "popcorn_maker_new_projects_7days",
+        "popcorn_maker_new_projects_30days"
+      ],
+      updatedProjects: [
+        "popcorn_maker_updated_projects_24hrs",
+        "popcorn_maker_updated_projects_7days",
+        "popcorn_maker_updated_projects_30days"
+      ]
+    };
 
 module.exports = function routesCtor( app, User, filter, sanitizer, stores, utils ) {
 
@@ -107,7 +120,9 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
 
     var files;
 
-    var projectData = req.body;
+    var projectData = req.body,
+        updateProjects = ducksboard_widgets.updatedProjects,
+        newProjects = ducksboard_widgets.newProjects;
 
     if ( req.body.id ) {
       files = datauri.filterProjectDataURIs( projectData.data, utils.generateDataURIPair );
@@ -122,6 +137,10 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
           imagesToDestroy.forEach( function( imageReference ) {
             stores.images.remove( imageReference.filename );
           });
+        }
+
+        for ( var i = 0; i < updateProjects.length; i++ ) {
+          ducksnode.push( updateProjects[ i ], { "delta": 1 } );
         }
 
         if ( files && files.length > 0 ) {
@@ -145,6 +164,10 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
         if ( err ) {
           res.json( { error: err }, 500 );
           return;
+        }
+
+        for ( var i = 0; i < newProjects.length; i++ ) {
+          ducksnode.push( newProjects[ i ], { "delta": 1 } );
         }
 
         if ( files && files.length > 0 ) {
