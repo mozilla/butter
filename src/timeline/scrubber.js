@@ -164,30 +164,6 @@ define( [ "util/lang" ],
       }
     }
 
-    function onScrubberMouseDown( e ) {
-      _mouseDownPos = e.pageX - _node.offsetLeft;
-
-      if( _isPlaying ){
-        _media.pause();
-        _isScrubbing = true;
-      }
-
-      if ( _media.currentTime >= 0 ) {
-        _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
-      }
-      _timeTooltip.classList.add( "tooltip-no-transition-on" );
-
-      _isSeeking = true;
-      _seekMouseUp = false;
-      _media.listen( "mediaseeked", onSeeked );
-
-      parentElement.removeEventListener( "mouseout", onMouseOut, false );
-      _node.removeEventListener( "mousedown", onScrubberMouseDown, false );
-      parentElement.removeEventListener( "mousemove", onTimelineMouseMove, false );
-      window.addEventListener( "mousemove", onMouseMove, false );
-      window.addEventListener( "mouseup", onMouseUp, false );
-    } //onMouseDown
-
     function onTimelineMouseMove( e ) {
       _timelineMousePos = e.clientX - parentElement.offsetLeft;
 
@@ -224,9 +200,29 @@ define( [ "util/lang" ],
 
     var onMouseDown = this.onMouseDown = function( e ) {
       var pos = e.pageX - _container.getBoundingClientRect().left;
+
+      if( _isPlaying ){
+        _media.pause();
+      }
+      _isScrubbing = true;
+
       _media.currentTime = ( pos + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration;
       setNodePosition();
-      onScrubberMouseDown( e );
+      _mouseDownPos = e.pageX - _node.offsetLeft;
+
+      if ( _media.currentTime >= 0 ) {
+        _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
+      }
+      _timeTooltip.classList.add( "tooltip-no-transition-on" );
+
+      _isSeeking = true;
+      _seekMouseUp = false;
+      _media.listen( "mediaseeked", onSeeked );
+
+      parentElement.removeEventListener( "mouseout", onMouseOut, false );
+      parentElement.removeEventListener( "mousemove", onTimelineMouseMove, false );
+      window.addEventListener( "mousemove", onMouseMove, false );
+      window.addEventListener( "mouseup", onMouseUp, false );
     }; //onMouseDown
 
     parentElement.addEventListener( "mouseover", onMouseOver, false );
@@ -240,12 +236,10 @@ define( [ "util/lang" ],
     };
 
     this.enable = function() {
-      _node.addEventListener( "mousedown", onScrubberMouseDown, false );
       _container.addEventListener( "mousedown", onMouseDown, false );
     };
 
     this.disable = function() {
-      _node.removeEventListener( "mousedown", onScrubberMouseDown, false );
       _container.removeEventListener( "mousedown", onMouseDown, false );
     };
 

@@ -70,8 +70,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
     });
 
     _media.listen( "mediapause", function(){
-      // Make sure the viewport contains the scrubber
-      _tracksContainer.snapTo( _media.currentTime );
       // Stop listening for timeupdates so that the user can scroll around freely
       _media.unlisten( "mediatimeupdate", onMediaTimeUpdate );
     });
