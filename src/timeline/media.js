@@ -151,8 +151,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       function onTrackEventAdded( e ){
         var trackEvent = e.data;
         trackEvent.view.listen( "trackeventmousedown", onTrackEventMouseDown );
-        trackEvent.listen( "trackeventselected", onTrackEventSelected);
-        trackEvent.listen( "trackeventdeselected", onTrackEventDeselected);
+        trackEvent.listen( "trackeventselected", onTrackEventSelected );
+        trackEvent.listen( "trackeventdeselected", onTrackEventDeselected );
       }
 
       function onTrackAdded( e ){
