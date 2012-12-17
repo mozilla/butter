@@ -6,8 +6,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
 
   var uuid = require( "node-uuid" ),
       // Keep track of whether this is production or development
-      deploymentType = app.settings.env === "production" ? "production" : "development",
-      wm_metrics = require('../lib/webmaker_metrics')( deploymentType );
+      deploymentType = app.settings.env === "production" ? "production" : "development";
 
   app.get( '/api/whoami', function( req, res ) {
     var email = req.session.email;
@@ -125,11 +124,6 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
           });
         }
 
-        wm_metrics.pushToBoard( "updatedProject", {
-          "delta": 1,
-          "timestamp": Date.now()
-        });
-
         if ( files && files.length > 0 ) {
           linkAndSaveImageFiles( files, doc.id, function( err ) {
             if ( err ) {
@@ -152,11 +146,6 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
           res.json( { error: err }, 500 );
           return;
         }
-
-        wm_metrics.pushToBoard( "newProject", {
-          "delta": 1,
-          "timestamp": Date.now()
-        });
 
         if ( files && files.length > 0 ) {
           linkAndSaveImageFiles( files, doc.id, function( err ) {

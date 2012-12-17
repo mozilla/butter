@@ -9,7 +9,7 @@ function defaultDBReadyFunction( err ) {
   }
 }
 
-module.exports = function( config, dbReadyFn ) {
+module.exports = function( config, dbReadyFn, environment ) {
   config = config || {};
 
   dbReadyFn = dbReadyFn || defaultDBReadyFunction;
@@ -22,7 +22,10 @@ module.exports = function( config, dbReadyFn ) {
       sequelize = new Sequelize( config.database, username, password, config.options ),
       Project = sequelize.import( __dirname + "/models/project" ),
       ImageReference = sequelize.import( __dirname + "/models/image" ),
-      versions;
+      versions,
+      user,
+      wm_metrics = require( "./webmaker_metrics" )( environment ),
+      DAILY_TIMER = 86400000;
 
   // travis-ci doesn't create this file when running `npm test` so we need a workaround
   try {
@@ -37,10 +40,24 @@ module.exports = function( config, dbReadyFn ) {
       dbOnline = true;
     }
 
+    function projectCountCallback() {
+      Project.findAll().success(function( models ) {
+        wm_metrics.pushToBoard( "totalProjects", {
+          value: models.length ? models.length : 0,
+          timestamp: Date.now()
+        });
+      });
+    }
+
+    // Push total projects in storage to dashboard once a day.
+    // Immediately call it once for initial setup.
+    projectCountCallback();
+    setInterval( projectCountCallback, DAILY_TIMER );
+
     dbReadyFn( err );
   });
 
-  return {
+  user = {
     linkImageFilesToProject: function( files, projectId, callback ) {
       var finishedItems = 0;
       var errs = [];
@@ -110,7 +127,17 @@ module.exports = function( config, dbReadyFn ) {
         latestButterVersion: versions.butter
       });
 
-      project.save().complete( callback );
+      project.save().complete(function( err, doc ) {
+
+        if ( !err ) {
+          wm_metrics.pushToBoard( "newProject", {
+            delta: 1,
+            timestamp: Date.now()
+          });
+        }
+
+        callback( err, doc );
+      });
     },
 
     deleteProject: function( email, pid, callback ) {
@@ -165,6 +192,7 @@ module.exports = function( config, dbReadyFn ) {
         callback( err, project );
       });
     },
+
     findById: function findById( pid, callback ) {
       if ( !pid ) {
         callback( "not enough parameters for search" );
@@ -176,6 +204,7 @@ module.exports = function( config, dbReadyFn ) {
       });
 
     },
+
     isDBOnline: function isDBOnline() {
       return dbOnline;
     },
@@ -226,4 +255,6 @@ module.exports = function( config, dbReadyFn ) {
       });
     }
   };
+
+  return user;
 };
