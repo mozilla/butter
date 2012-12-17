@@ -41,18 +41,22 @@ module.exports = function( config, dbReadyFn, environment ) {
     }
 
     function projectCountCallback() {
-      Project.findAll().success(function( models ) {
-        wm_metrics.pushToBoard( "totalProjects", {
-          value: models.length ? models.length : 0,
-          timestamp: Date.now()
+      if ( !err ) {
+        Project.findAll().success(function( models ) {
+          wm_metrics.pushToBoard( "totalProjects", {
+            value: models.length ? models.length : 0,
+            timestamp: Date.now()
+          });
         });
-      });
+      }
     }
 
     // Push total projects in storage to dashboard once a day.
     // Immediately call it once for initial setup.
-    projectCountCallback();
-    setInterval( projectCountCallback, DAILY_TIMER );
+    if ( environment === "production" ) {
+      projectCountCallback();
+      setInterval( projectCountCallback, DAILY_TIMER );
+    }
 
     dbReadyFn( err );
   });
