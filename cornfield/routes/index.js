@@ -1,25 +1,13 @@
 'use strict';
 
-var datauri = require('../lib/datauri'),
-    ducksnode = require('ducksnode').create({ api_key: "KSqFZGbhBom1w3Wg4b9CvcyqLlSqELuCdvs57GGRgrg8uu6U61" }),
-    ducksboard_widgets = {
-      newProjects: [
-        "popcorn_maker_new_projects_24hrs",
-        "popcorn_maker_new_projects_7days",
-        "popcorn_maker_new_projects_30days"
-      ],
-      updatedProjects: [
-        "popcorn_maker_updated_projects_24hrs",
-        "popcorn_maker_updated_projects_7days",
-        "popcorn_maker_updated_projects_30days"
-      ]
-    };
+var datauri = require('../lib/datauri');
 
 module.exports = function routesCtor( app, User, filter, sanitizer, stores, utils ) {
 
   var uuid = require( "node-uuid" ),
       // Keep track of whether this is production or development
-      deploymentType = app.settings.env === "production" ? "production" : "development";
+      deploymentType = app.settings.env === "production" ? "production" : "development",
+      wm_metrics = require('../lib/webmaker_metrics')( deploymentType );
 
   app.get( '/api/whoami', function( req, res ) {
     var email = req.session.email;
@@ -120,9 +108,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
 
     var files;
 
-    var projectData = req.body,
-        updateProjects = ducksboard_widgets.updatedProjects,
-        newProjects = ducksboard_widgets.newProjects;
+    var projectData = req.body;
 
     if ( req.body.id ) {
       files = datauri.filterProjectDataURIs( projectData.data, utils.generateDataURIPair );
@@ -139,9 +125,10 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
           });
         }
 
-        for ( var i = 0; i < updateProjects.length; i++ ) {
-          ducksnode.push( updateProjects[ i ], { "delta": 1 } );
-        }
+        wm_metrics.pushToBoard( "updatedProject", {
+          "delta": 1,
+          "timestamp": Date.now()
+        });
 
         if ( files && files.length > 0 ) {
           linkAndSaveImageFiles( files, doc.id, function( err ) {
@@ -166,9 +153,10 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
           return;
         }
 
-        for ( var i = 0; i < newProjects.length; i++ ) {
-          ducksnode.push( newProjects[ i ], { "delta": 1 } );
-        }
+        wm_metrics.pushToBoard( "newProject", {
+          "delta": 1,
+          "timestamp": Date.now()
+        });
 
         if ( files && files.length > 0 ) {
           linkAndSaveImageFiles( files, doc.id, function( err ) {
