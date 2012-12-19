@@ -25,7 +25,7 @@ npm install
 
 %install
 mkdir -p $RPM_BUILD_ROOT/opt/butter/%{version}
-rsync -av ./ $RPM_BUILD_ROOT/opt/butter/%{version}
+rsync -av --exclude 'sax/examples/' ./ $RPM_BUILD_ROOT/opt/butter/%{version}
 ln -s %{version} $RPM_BUILD_ROOT/opt/butter/current
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/init
 cp butter.init $RPM_BUILD_ROOT%{_sysconfdir}/init/butter.conf
