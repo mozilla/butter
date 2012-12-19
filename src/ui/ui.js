@@ -107,7 +107,12 @@ define( [ "core/eventmanager", "./toggler",
           // Spin-up the crash reporter
           CrashReporter.init( butter, _uiConfig );
 
-          butter.listen( "mediaready", FirstRun.init );
+          function firstRunInit() {
+            butter.unlisten( "mediaready", firstRunInit );
+            FirstRun.init();
+          }
+
+          butter.listen( "mediaready", firstRunInit );
 
           onReady();
         });
