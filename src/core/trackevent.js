@@ -38,7 +38,6 @@ define( [ "./logger", "./eventmanager", "./observer",
    * @param {Object} options: Options for initialization. Can contain the properties type, name, and popcornOptions. If the popcornOptions property is specified, its contents will be used to initialize the plugin instance associated with this TrackEvent.
    */
   var TrackEvent = function ( options ) {
-
     options = options || {};
 
     var _this = this,
@@ -79,7 +78,6 @@ define( [ "./logger", "./eventmanager", "./observer",
     _popcornOptions.start = TimeUtil.roundTime( _popcornOptions.start );
     _popcornOptions.end = _popcornOptions.end || _popcornOptions.start + 1;
     _popcornOptions.end = TimeUtil.roundTime( _popcornOptions.end );
-
 
     /**
      * Member: bind
@@ -205,6 +203,18 @@ define( [ "./logger", "./eventmanager", "./observer",
       }
       _popcornWrapper = null;
       _track = null;
+    };
+
+    /**
+     * Member: destroy
+     *
+     * Completely destroys a track event, that should never be added again.
+     * Unlike unbind, the husk of popcorn data is also gone.
+     */
+    this.destroy = function() {
+      _this.unbind();
+      _this.dispatch( "trackeventdestroyed", _this );
+      delete _this;
     };
 
     Object.defineProperties( this, {

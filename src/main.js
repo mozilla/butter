@@ -329,7 +329,6 @@
         media.popcornScripts = _defaultPopcornScripts;
 
         _media.push( media );
-
         _this.chain( media, [
           "mediacontentchanged",
           "mediadurationchanged",
@@ -342,7 +341,9 @@
           "trackeventadded",
           "trackeventremoved",
           "trackeventupdated",
-          "trackorderchanged"
+          "trackorderchanged",
+          "trackeventcreated",
+          "trackeventdestroyed"
         ]);
 
         var trackEvents;
@@ -393,7 +394,9 @@
             "trackeventadded",
             "trackeventremoved",
             "trackeventupdated",
-            "trackorderchanged"
+            "trackorderchanged",
+            "trackeventcreated",
+            "trackeventdestroyed"
           ]);
           var tracks = media.tracks;
           for ( var i=0, l=tracks.length; i<l; ++i ) {

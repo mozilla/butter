@@ -189,6 +189,14 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
 
       if ( !( trackEvent instanceof TrackEvent ) ) {
         trackEvent = new TrackEvent( trackEvent );
+        _this.chain( trackEvent, [
+          "trackeventupdated",
+          "trackeventselected",
+          "trackeventdeselected",
+          "trackeventcreated",
+          "trackeventdestroyed"
+        ]);
+        trackEvent.dispatch( "trackeventcreated", trackEvent );
       } else if ( trackEvent.selected ) {
         // cache the track event's selected state
         oldSelected = true;
@@ -210,11 +218,6 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       _trackEvents.push( trackEvent );
 
       // Listen for a handful of events that affect functionality in and outside of this track.
-      _this.chain( trackEvent, [
-        "trackeventupdated",
-        "trackeventselected",
-        "trackeventdeselected"
-      ]);
 
       // Add it to the view.
       _view.addTrackEvent( trackEvent );
@@ -242,17 +245,29 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       var idx = _trackEvents.indexOf( trackEvent );
       if ( idx > -1 ) {
         _trackEvents.splice( idx, 1 );
-        _this.unchain( trackEvent, [
-          "trackeventupdated",
-          "trackeventselected",
-          "trackeventdeselected"
-        ]);
         trackEvent.unsubscribe( "update", trackEventUpdateNotificationHandler );
         _view.removeTrackEvent( trackEvent );
         trackEvent.unbind();
         _this.dispatch( "trackeventremoved", trackEvent );
         return trackEvent;
       }
+    };
+
+    /*
+     * Method removeTrackEvent
+     *
+     * @param {Object} trackEvent: The trackEvent to be removed from this track
+     */
+    this.destroyTrackEvent = function( trackEvent ) {
+      _this.removeTrackEvent( trackEvent );
+      trackEvent.destroy();
+      _this.unchain( trackEvent, [
+        "trackeventupdated",
+        "trackeventselected",
+        "trackeventdeselected",
+        "trackeventcreated",
+        "trackeventdestroyed"
+      ]);
     };
 
     this.findOverlappingTrackEvent = function( start, end, ignoreTrackEvent ) {

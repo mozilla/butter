@@ -162,7 +162,9 @@ define( [ "core/eventmanager", "core/media", "util/shims" ],
         "tracktargetchanged",
         "trackeventadded",
         "trackeventremoved",
-        "trackeventupdated"
+        "trackeventupdated",
+        "trackeventcreated",
+        "trackeventdestroyed"
       ].forEach( function( event ) {
         butter.listen( event, invalidate );
       });
