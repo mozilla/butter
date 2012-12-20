@@ -321,14 +321,6 @@ define( [ "core/eventmanager", "./toggler",
       orderedTrackEvents.sort( sortTrackEvents );
     }); // listen
 
-    butter.listen( "trackeventcreated", function( e ) {
-      console.log( "der?" );
-    }); // listen
-
-    butter.listen( "trackeventdestroyed", function( e ) {
-      console.log( "e" );
-    }); // listen
-
     butter.listen( "trackeventremoved", function( e ) {
       var trackEvent = e.data,
           index = orderedTrackEvents.indexOf( trackEvent );
