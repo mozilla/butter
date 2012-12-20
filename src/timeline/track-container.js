@@ -334,7 +334,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
           target = p * _container.scrollWidth - halfWidth;
 
       // If the currentTime surpasses half of the width of the track container...
-      if ( xOffset >= halfWidth ) {
+      if ( xOffset >= halfWidth && !_media.paused ) {
         // ... by more than TWEEN_THRESHOLD...
         if ( xOffset - halfWidth > TWEEN_THRESHOLD ) {
           // then perform a simple tween on scrollLeft to slide the scrubber back into the middle.
