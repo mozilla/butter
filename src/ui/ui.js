@@ -483,7 +483,7 @@ define( [ "core/eventmanager", "./toggler",
           if ( selectedEvents.length === 1 ) {
             selectedEvent = selectedEvents[ 0 ];
             butter.editor.closeTrackEventEditor( selectedEvent );
-            selectedEvent.track.removeTrackEvent( selectedEvent );
+            selectedEvent.track.destroyTrackEvent( selectedEvent );
             return;
           }
 
@@ -495,7 +495,7 @@ define( [ "core/eventmanager", "./toggler",
                 for( i = 0; i < l; i++ ) {
                   selectedEvent = selectedEvents[ i ];
                   butter.editor.closeTrackEventEditor( selectedEvent );
-                  selectedEvent.track.removeTrackEvent( selectedEvent );
+                  selectedEvent.track.destroyTrackEvent( selectedEvent );
                 }
                 dialog.close();
               },

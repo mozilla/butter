@@ -111,13 +111,23 @@
 
       this.clear = function(){
         while( _tracks.length > 0 ){
-          _this.removeTrack( _tracks[ 0 ] );
+          _this.destroyTrack( _tracks[ 0 ] );
         }
       };
 
       function ensureNewTrackIsTrack( track ) {
         if ( !( track instanceof Track ) ) {
           track = new Track( track );
+          _this.chain( track, [
+            "tracktargetchanged",
+            "trackeventadded",
+            "trackeventremoved",
+            "trackeventupdated",
+            "trackeventselected",
+            "trackeventdeselected",
+            "trackeventcreated",
+            "trackeventdestroyed"
+          ]);
         }
         return track;
       }
@@ -125,14 +135,6 @@
       function setupNewTrack( track ) {
         track._media = _this;
         _tracks.push( track );
-        _this.chain( track, [
-          "tracktargetchanged",
-          "trackeventadded",
-          "trackeventremoved",
-          "trackeventupdated",
-          "trackeventselected",
-          "trackeventdeselected"
-        ]);
         track.setPopcornWrapper( _popcornWrapper );
       }
 
@@ -229,14 +231,6 @@
             trackEvent.unbind();
             track.dispatch( "trackeventremoved", trackEvent );
           } //for
-          _this.unchain( track, [
-            "tracktargetchanged",
-            "trackeventadded",
-            "trackeventremoved",
-            "trackeventupdated",
-            "trackeventselected",
-            "trackeventdeselected"
-          ]);
           track.setPopcornWrapper( null );
           _this.sortTracks();
           track._media = null;
@@ -245,11 +239,26 @@
         } //if
       }; //removeTrack
 
+      this.destroyTrack = function ( track ) {
+        _this.removeTrack( track );
+        _this.unchain( track, [
+          "tracktargetchanged",
+          "trackeventadded",
+          "trackeventremoved",
+          "trackeventupdated",
+          "trackeventselected",
+          "trackeventdeselected",
+          "trackeventcreated",
+          "trackeventdestroyed"
+        ]);
+        delete track;
+      }; //destroyTrack
+
       this.cleanUpEmptyTracks = function() {
         var oldTracks = _tracks.slice();
         for( var i = oldTracks.length - 1; i >= 0; --i ) {
           if ( oldTracks[ i ].trackEvents.length === 0 && _tracks.length > 1 ) {
-            _this.removeTrack( oldTracks[ i ] );
+            _this.destroyTrack( oldTracks[ i ] );
           }
         }
       };
@@ -408,6 +417,7 @@
             if ( end > _duration  ) {
               // remove offending track event
               trackEvent.track.removeTrackEvent( trackEvent );
+              trackEvent.track.destroyTrackEvent( trackEvent );
             }
           }
         }
@@ -562,6 +572,7 @@
             };
           },
           set: function( importData ){
+                  var newTrack;
             if( importData.name ) {
               _name = importData.name;
             }
@@ -575,7 +586,8 @@
               var importTracks = importData.tracks;
               if( Array.isArray( importTracks ) ) {
                 for ( var i = 0, l = importTracks.length; i < l; ++i ) {
-                  var newTrack = new Track();
+                  newTrack = null;
+                  newTrack = ensureNewTrackIsTrack( newTrack );
                   newTrack.json = importTracks[ i ];
                   _this.addTrack( newTrack );
                   newTrack.updateTrackEvents();
