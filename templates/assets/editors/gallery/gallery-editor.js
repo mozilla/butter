@@ -13,8 +13,6 @@
         _dropArea = _rootElement.querySelector( ".image-droparea" ),
         _this = this,
         _trackEvent,
-        _addGallerySection = _rootElement.querySelector( ".gallery-add" ),
-        _addGalleryButton = _rootElement.querySelector( "#gallery-toggle" ),
         _cachedValues;
 
     function updateTrackEvent( te, props ) {
@@ -85,10 +83,6 @@
 
       _this.scrollbar.update();
     }
-
-    _addGalleryButton.addEventListener( "click", function() {
-      _addGallerySection.classList.toggle( "hidden" );
-    }, false );
 
     Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {

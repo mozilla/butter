@@ -1,4 +1,4 @@
-// PLUGIN: text
+// PLUGIN: gallery
 
 (function ( Popcorn ) {
 

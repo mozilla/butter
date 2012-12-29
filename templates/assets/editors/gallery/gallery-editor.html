@@ -4,29 +4,33 @@
 
 <div class="butter-editor default-editor allow-scrollbar">
   <h1>Gallery Editor</h1>
-  <div class="butter-editor-body scrollbar-container">
+  <ul class="butter-editor-tabs">
+    <li><a class="butter-btn basic-tab butter-active">Add</a></li>
+    <li><a class="butter-btn advanced-tab">Manage Images</a></li>
+  </ul>
+  <div class="butter-editor-body butter-tabs-spacing scrollbar-container">
     <div class="editor-options-wrapper scrollbar-outer">
-      <div class="editor-options scrollbar-inner">
-        <div class="error-message-container">
-          <div class="error-message"></div>
-        </div>
-        <div>
-        <fieldset>
-          <a id="gallery-toggle" class="butter-preview-btn butter-btn btn-light" style="" target="_blank" >Add Gallery<span class="icon icon-only icon-add-alt"></span></a>
-        </fieldset>
-        <div class="gallery-add hidden">
-          <fieldset class="trackevent-property default input" style="position: relative;">
-            <label class="property-name">Gallery URL</label>
-            <input class="value" type="text">
-          </fieldset>
-          <fieldset>
-            <div class="image-droparea">
-              <div class="droparea-text">Drag an image here from your desktop.</div>
-              <img src="../assets/editors/image/watermark.png" alt="Water Mark">
-            </div>
-          </fieldset>
-        <div>
+      <div class="error-message-container">
+        <div class="error-message"></div>
       </div>
+      <div class="editor-options scrollbar-inner">
+        <fieldset class="trackevent-property default input" style="position: relative;">
+          <label class="property-name">Gallery URL</label>
+          <input class="value" type="text">
+        </fieldset>
+        <fieldset class="trackevent-property default input" style="position: relative;">
+          <label class="property-name">Number of Images</label>
+          <input class="value" type="number">
+        </fieldset>
+        <fieldset>
+          <div class="image-droparea">
+            <div class="droparea-text">Drag an image here from your desktop.</div>
+            <img src="../assets/editors/image/watermark.png" alt="Water Mark">
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="advanced-options scrollbar-inner display-off"></div>
     </div>
   </div>
 </div>
@@ -43,23 +47,4 @@
     margin-top: 10px;
   }
 
-  .gallery-add {
-    visibility: visible;
-    opacity: 1;
-    -webkit-transition: opacity 0.3s ease, visibility 0.3s ease;
-    -moz-transition: opacity 0.3s ease, visibility 0.3s ease;
-    -o-transition: opacity 0.3s ease, visibility 0.3s ease;
-    -ms-transition: opacity 0.3s ease, visibility 0.3s ease;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-  }
-
-  .gallery-add.hidden {
-    visibility: none;
-    opacity: 0;
-  }
-
-  .icon-add-alt {
-    margin-left: 2px;
-    background-position: -406px -96px;
-  }
 </style>
