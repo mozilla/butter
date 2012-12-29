@@ -1,0 +1,65 @@
+<!--  This Source Code Form is subject to the terms of the MIT license
+      If a copy of the MIT license was not distributed with this file, you can
+      obtain one at https://raw.github.com/mozilla/butter/master/LICENSE -->
+
+<div class="butter-editor default-editor allow-scrollbar">
+  <h1>Gallery Editor</h1>
+  <div class="butter-editor-body scrollbar-container">
+    <div class="editor-options-wrapper scrollbar-outer">
+      <div class="editor-options scrollbar-inner">
+        <div class="error-message-container">
+          <div class="error-message"></div>
+        </div>
+        <div>
+        <fieldset>
+          <a id="gallery-toggle" class="butter-preview-btn butter-btn btn-light" style="" target="_blank" >Add Gallery<span class="icon icon-only icon-add-alt"></span></a>
+        </fieldset>
+        <div class="gallery-add hidden">
+          <fieldset class="trackevent-property default input" style="position: relative;">
+            <label class="property-name">Gallery URL</label>
+            <input class="value" type="text">
+          </fieldset>
+          <fieldset>
+            <div class="image-droparea">
+              <div class="droparea-text">Drag an image here from your desktop.</div>
+              <img src="../assets/editors/image/watermark.png" alt="Water Mark">
+            </div>
+          </fieldset>
+        <div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<style>
+  .image-droparea {
+    border: dashed 2px #ABABAB;
+    text-align: center;
+    height: 170px;
+  }
+
+  .droparea-text {
+    margin-top: 10px;
+  }
+
+  .gallery-add {
+    visibility: visible;
+    opacity: 1;
+    -webkit-transition: opacity 0.3s ease, visibility 0.3s ease;
+    -moz-transition: opacity 0.3s ease, visibility 0.3s ease;
+    -o-transition: opacity 0.3s ease, visibility 0.3s ease;
+    -ms-transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .gallery-add.hidden {
+    visibility: none;
+    opacity: 0;
+  }
+
+  .icon-add-alt {
+    margin-left: 2px;
+    background-position: -406px -96px;
+  }
+</style>

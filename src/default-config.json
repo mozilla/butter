@@ -67,6 +67,10 @@
         "type": "wikipedia",
         "path": "{{baseDir}}templates/assets/plugins/wikipedia/popcorn.wikipedia.js",
         "icon": "{{baseDir}}templates/assets/plugins/wikipedia/wikipedia-icon.png"
+      },
+      {
+        "type": "gallery",
+        "path": "{{baseDir}}templates/assets/plugins/gallery/popcorn.gallery.js"
       }
     ],
     "defaults": [
@@ -78,7 +82,8 @@
       "wikipedia",
       "loopPlugin",
       "pausePlugin",
-      "skip"
+      "skip",
+      "gallery"
     ]
   },
   "player": {
