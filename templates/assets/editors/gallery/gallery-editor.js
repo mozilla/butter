@@ -22,9 +22,7 @@
         _this = this,
         _trackEvent,
         _cachedValues,
-        _listContainer = _rootElement.querySelector( "#gallery-fieldset" ),
-        _manageList,
-        _media;
+        _manageList = _rootElement.querySelector( "#gallery-sortable" );
 
     function updateTrackEvent( te, props ) {
       _this.setErrorState();
@@ -42,10 +40,12 @@
           left: DEFAULT_LEFT,
           width: DEFAULT_WIDTH,
           height: DEFAULT_HEIGHT,
-          transition: DEFAULT_TRANSITION
+          transition: DEFAULT_TRANSITION,
+          id: Popcorn.guid( "gallery-image" )
         };
 
         currentImages.push( newImage );
+        addToList( newImage );
         _trackEvent.update( currentImages );
       });
 
@@ -66,21 +66,22 @@
       imageTime.innerHTML = time + " seconds";
     }
 
-    function onSortableChange( event, ui ) {
-      console.log(event, ui.helper, ui.item);
+    function addToList( image ) {
+      var li = document.createElement( "li" );
+
+      li.id = image.id;
+      li.style.backgroundImage = "url( \"" + image.src + "\" )";
+      _manageList.appendChild( li );
+    }
+
+    function removeFromList( id ) {
+
     }
 
     function generateManageList() {
       var li,
           images = _trackEvent.popcornOptions.images,
           img;
-
-      if ( _manageList ) {
-        _manageList.parentNode.removeChild( _manageList );
-      }
-
-      _manageList = document.createElement( "ul" );
-      _manageList.id = "gallery-sortable";
 
       for ( var i = 0; i < images.length; i++ ) {
         img = images[ i ];
@@ -94,8 +95,7 @@
       window.jQuery( _manageList ).sortable({
         scroll: true,
         scrollSensitivity: 300,
-        scrollSpeed: 100,
-        update: onSortableChange
+        scrollSpeed: 100  
       });
 
       var list = _manageList.querySelectorAll( "li" );
@@ -110,8 +110,6 @@
           e.target.classList.add( HIGHLIGHT_CLASS );
         }; 
       }
-
-      _listContainer.appendChild( _manageList );
     }
 
     function setup( trackEvent ) {
@@ -152,11 +150,6 @@
       _this.updatePropertiesFromManifest( _trackEvent );
       _this.setErrorState( false );
 
-      /*
-        I originally went with seperate add/remove methods that I would call in callbacks. Apparently however
-        this isn't kosher for some reason. I would add new list items to the UL but they would never appear.
-        */
-      generateManageList();
       _this.scrollbar.update();
     }
 
@@ -169,7 +162,7 @@
 
         setup( trackEvent );
       },
-      close: function() {
+      close: function() {console.log("in close");
         _this.removeExtraHeadTags();
         _trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
       }

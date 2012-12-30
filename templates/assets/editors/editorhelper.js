@@ -98,10 +98,18 @@
         handle: ".ui-draggable-handle",
         containment: "parent",
         start: function() {
+          var currentEditor = butter.editor.currentEditor;
+
           iframeCover.style.display = "block";
 
-          // Open the editor
-          butter.editor.editTrackEvent( trackEvent );
+          if ( currentEditor.getTrackEvent ) {
+            var editorTrackEvent = currentEditor.getTrackEvent();
+
+            if ( editorTrackEvent.id !== trackEvent.id ) {
+              // Open the editor
+              butter.editor.editTrackEvent( trackEvent );
+            }
+          }
 
           if ( options.start ) {
             options.start();
@@ -145,10 +153,18 @@
       $( resizeContainer ).resizable({
         handles: options.handlePositions,
         start: function() {
+          var currentEditor = butter.editor.currentEditor;
+
           iframeCover.style.display = "block";
 
-          // Open the editor
-          butter.editor.editTrackEvent( trackEvent );
+          if ( currentEditor.getTrackEvent ) {
+            var editorTrackEvent = currentEditor.getTrackEvent();
+
+            if ( editorTrackEvent.id !== trackEvent.id ) {
+              // Open the editor
+              butter.editor.editTrackEvent( trackEvent );
+            }
+          }
 
           if ( options.start ) {
             options.start();
@@ -215,8 +231,16 @@
       onMouseDown = function( e ) {
         e.stopPropagation();
 
-        // Open the editor
-        butter.editor.editTrackEvent( trackEvent );
+        var currentEditor = butter.editor.currentEditor;
+
+        if ( currentEditor.getTrackEvent ) {
+          var editorTrackEvent = currentEditor.getTrackEvent();
+
+          if ( editorTrackEvent.id !== trackEvent.id ) {
+            // Open the editor
+            butter.editor.editTrackEvent( trackEvent );
+          }
+        }
 
         $( contentContainer ).draggable( "destroy" );
       };
@@ -264,7 +288,7 @@
       }, false );
 
       dropContainer.addEventListener( "drop", function( e ) {
-        var file, imgSrc, imgURI, image, div;
+        var file, imgSrc, imgURI, image, div, currentEditor;
 
         e.preventDefault();
         e.stopPropagation();
@@ -365,8 +389,16 @@
           };
           image.src = imgSrc;
 
-          // Open the editor
-          butter.editor.editTrackEvent( trackEvent );
+          currentEditor = butter.editor.currentEditor;
+
+          if ( currentEditor.getTrackEvent ) {
+            var editorTrackEvent = currentEditor.getTrackEvent();
+
+            if ( editorTrackEvent.id !== trackEvent.id ) {
+              // Open the editor
+              butter.editor.editTrackEvent( trackEvent );
+            }
+          }
 
           // Force image to download, esp. Opera. We can't use
           // "display: none", since that makes it invisible, and
