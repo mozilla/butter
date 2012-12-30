@@ -30,13 +30,17 @@
         </fieldset>
       </div>
 
-      <div class="advanced-options scrollbar-inner display-off"></div>
+      <div class="advanced-options scrollbar-inner display-off">
+        <fieldset id="gallery-fieldset">
+        </fieldset>
+      </div>
     </div>
   </div>
 </div>
 
 
 <style>
+
   .image-droparea {
     border: dashed 2px #ABABAB;
     text-align: center;
@@ -45,6 +49,29 @@
 
   .droparea-text {
     margin-top: 10px;
+  }
+
+  #gallery-sortable {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 60%;
+    overflow: scroll;
+  }
+
+  #gallery-sortable li {
+    margin: 6px 6px 4px 0;
+    padding: 1px;
+    float: left;
+    width: 30%;
+    height: 90px;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .ui-state-sortable-highlight {
+    box-shadow: 0 0 0 2px #993300;
   }
 
 </style>

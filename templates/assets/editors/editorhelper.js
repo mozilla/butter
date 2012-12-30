@@ -247,7 +247,7 @@
      * @param {DOMElement} dropContainer: The container that listens for the drop events
      */
 
-    global.EditorHelper.droppable = function( trackEvent, dropContainer ) {
+    global.EditorHelper.droppable = function( trackEvent, dropContainer, callback ) {
       dropContainer.addEventListener( "dragover", function( e ) {
         e.preventDefault();
         dropContainer.classList.add( "butter-dragover" );
@@ -351,7 +351,11 @@
               return;
             }
 
-            trackEvent.update( { src: imgURI } );
+            if ( typeof callback === "function" ) {
+              callback( imgURI );
+            } else {
+              trackEvent.update( { src: imgURI } );
+            }
 
             if ( window.URL && window.URL.revokeObjectURL ) {
               window.URL.revokeObjectURL( imgSrc );

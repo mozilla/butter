@@ -13,6 +13,7 @@
     div.style.left = imageInfo.left + "%";
     div.style.height = imageInfo.height + "%";
     div.style.width = imageInfo.width + "%";
+    div.id = imageInfo.id;
 
     return div;
   }
@@ -104,12 +105,13 @@
 
       for ( var i = 0; i < count; i++ ) {
         imageInfo = options.images[ i ];
+        imageInfo.id = imageInfo.id || Popcorn.guid( "gallery-image" );
         image = createImageDiv( imageInfo );
         container.appendChild( image );
         imageRefs.push( image );
       }
 
-      inOuts = calculateInOutTimes( options.start, options.end - options.start, count );
+      options._inOuts = inOuts = calculateInOutTimes( options.start, options.end - options.start, count );
 
       options._updateImage = function() {
         var io,
