@@ -22,7 +22,8 @@
         _this = this,
         _trackEvent,
         _cachedValues,
-        _manageList = _rootElement.querySelector( "#gallery-sortable" );
+        _manageList = _rootElement.querySelector( "#gallery-sortable" ),
+        _media;
 
     function updateTrackEvent( te, props ) {
       _this.setErrorState();
@@ -45,8 +46,8 @@
         };
 
         currentImages.push( newImage );
-        addToList( newImage );
         _trackEvent.update( currentImages );
+        addToList( newImage );
       });
 
       butter.listen( "droppable-unsupported", function error() {
@@ -66,16 +67,49 @@
       imageTime.innerHTML = time + " seconds";
     }
 
+    function attachImageHandlers() {
+      var list = _manageList.querySelectorAll( "li" ),
+          inOutTimes = _trackEvent.popcornTrackEvent._inOuts;
+
+      function addMouseDown( element, index ) {
+        element.onmousedown = function( e ) {
+          imageTimes = inOutTimes[ index ];
+
+          for ( var i = 0; i < list.length; i++ ) {
+            list[ i ].classList.remove( HIGHLIGHT_CLASS );
+          }
+
+          _media.currentTime = imageTimes[ "in" ];
+          e.target.classList.add( HIGHLIGHT_CLASS );
+        };
+      }
+
+      for ( var k = 0; k < list.length; k++ ) {
+        addMouseDown( list[ k ], k );
+      }
+    }
+
+    function onSortableUpdate( event, ui ) {
+      var element = ui.item[ 0 ],
+          images = _trackEvent.popcornOptions.images;
+    }
+
     function addToList( image ) {
       var li = document.createElement( "li" );
 
       li.id = image.id;
       li.style.backgroundImage = "url( \"" + image.src + "\" )";
       _manageList.appendChild( li );
+      attachImageHandlers();
     }
 
     function removeFromList( id ) {
+      var element = _manageList.querySelector( "#" + id );
 
+      if ( element && element.parentNode === _manageList ) {
+        _manageList.removeChild( element );
+      }
+      attachImageHandlers();
     }
 
     function generateManageList() {
@@ -93,23 +127,10 @@
       }
 
       window.jQuery( _manageList ).sortable({
-        scroll: true,
-        scrollSensitivity: 300,
-        scrollSpeed: 100  
+        update: onSortableUpdate
       });
 
-      var list = _manageList.querySelectorAll( "li" );
-
-      for ( var item in list ) {
-        list[ item ].onmousedown = function( e ) {
-
-          for ( var i = 0; i < list.length; i++ ) {
-            list[ i ].classList.remove( HIGHLIGHT_CLASS );
-          }
-
-          e.target.classList.add( HIGHLIGHT_CLASS );
-        }; 
-      }
+      attachImageHandlers();
     }
 
     function setup( trackEvent ) {
@@ -157,12 +178,12 @@
       open: function( parentElement, trackEvent ) {
         _this.applyExtraHeadTags( compiledLayout );
         _trackEvent = trackEvent;
-
+        _media = butter.currentMedia;
         _trackEvent.listen( "trackeventupdated", onTrackEventUpdated );
 
         setup( trackEvent );
       },
-      close: function() {console.log("in close");
+      close: function() {
         _this.removeExtraHeadTags();
         _trackEvent.unlisten( "trackeventupdated", onTrackEventUpdated );
       }
