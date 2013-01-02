@@ -16,7 +16,7 @@
       <div class="editor-options scrollbar-inner">
         <fieldset class="trackevent-property default input" style="position: relative;">
           <label class="property-name">Gallery URL</label>
-          <input class="value" type="text">
+          <input class="value" type="text" id="gallery-url">
         </fieldset>
         <fieldset class="trackevent-property default input" style="position: relative;">
           <label class="property-name">Number of Images</label>
@@ -31,8 +31,19 @@
       </div>
 
       <div class="advanced-options scrollbar-inner display-off">
-        <fieldset id="gallery-fieldset">
-          <ul id="gallery-sortable"></ul>
+        <div id="gallery-fieldset">
+          <div id="gallery-sortable">
+          </div>
+        </div>
+        <fieldset class="trackevent-property select">
+          <label class="property-name">Transition</label>
+          <select id="transition-setter">
+            <option value="popcorn-none">None</option>
+            <option value="popcorn-pop">Pop</option>
+            <option value="popcorn-fade">Fade</option>
+            <option value="popcorn-slide-up">Slide Up</option>
+            <option value="popcorn-slide-down">Slide Down</option>
+          </select>
         </fieldset>
       </div>
     </div>
@@ -53,13 +64,16 @@
   }
 
   #gallery-sortable {
-    list-style-type: none;
-    margin: 0;
+    height: 300px;
+    width: 316px;
+    overflow: scroll;
     padding-left: 3px;
-    width: 100%;
+    border: 1px solid lightGrey;
+    margin-bottom: 20px;
+    margin:10px;
   }
 
-  #gallery-sortable li {
+  #gallery-sortable div {
     margin: 6px 6px 4px 0;
     padding: 1px;
     float: left;
@@ -70,7 +84,7 @@
   }
 
   .ui-state-sortable-highlight {
-    box-shadow: 0 0 0 2px #993300;
+    box-shadow: 0 0 0 2px #3FB58E;
   }
 
 </style>

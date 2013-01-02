@@ -15,7 +15,8 @@
         DEFAULT_TOP = 20,
         DEFAULT_LEFT = 20,
         HIGHLIGHT_CLASS = "ui-state-sortable-highlight",
-        DEFAULT_TRANSITION = "popcorn-fade";
+        DEFAULT_TRANSITION = "popcorn-fade",
+        API_HANDLERS;
 
     var _rootElement = rootElement,
         _dropArea = _rootElement.querySelector( ".image-droparea" ),
@@ -23,7 +24,26 @@
         _trackEvent,
         _cachedValues,
         _manageList = _rootElement.querySelector( "#gallery-sortable" ),
+        _listContainer = _rootElement.querySelector( "#gallery-fieldset" ),
+        _selectedImageId,
+        _transitions = _rootElement.querySelector( "#transition-setter" ),
+        _galleryURL = _rootElement.querySelector( "#gallery-url" ),
         _media;
+
+    API_HANDLERS = {
+      parse: function() {
+        // PLACEHOLDER
+      },
+      imgur: function() {
+        // PLACEHOLDER
+      },
+      flickr: function() {
+        // PLACEHOLDER
+      },
+      dropbox: function() {
+        // PLACEHOLDER
+      }
+    };
 
     function updateTrackEvent( te, props ) {
       _this.setErrorState();
@@ -68,7 +88,7 @@
     }
 
     function attachImageHandlers() {
-      var list = _manageList.querySelectorAll( "li" ),
+      var list = _manageList.querySelectorAll( "div" ),
           inOutTimes = _trackEvent.popcornTrackEvent._inOuts;
 
       function addMouseDown( element, index ) {
@@ -81,6 +101,7 @@
 
           _media.currentTime = imageTimes[ "in" ];
           e.target.classList.add( HIGHLIGHT_CLASS );
+          _selectedImageId = e.target.id;
         };
       }
 
@@ -90,16 +111,39 @@
     }
 
     function onSortableUpdate( event, ui ) {
-      var element = ui.item[ 0 ],
-          images = _trackEvent.popcornOptions.images;
+      var sortedElement = ui.item[ 0 ],
+          images = _trackEvent.popcornOptions.images,
+          elementPosition,
+          oldImage,
+          elements = _manageList.querySelectorAll( "div" );
+
+      for ( var i = 0; i < elements.length; i++ ) {
+        if ( elements[ i ].id === sortedElement.id ) {
+          elementPosition = i;
+          break;
+        }
+      }
+
+      for ( var k = 0; k < images.length; k++ ) {
+        if ( images[ k ].id === sortedElement.id ) {
+          oldImage = images[ k ];
+          images.splice( k, 1 );
+          break;
+        }
+      }
+
+      images.splice( elementPosition, 0, oldImage );
+      _trackEvent.update( images );
+      _media.currentTime = _trackEvent.popcornTrackEvent._inOuts[ elementPosition ].in;
+      attachImageHandlers();
     }
 
     function addToList( image ) {
-      var li = document.createElement( "li" );
+      var item = document.createElement( "div" );
 
-      li.id = image.id;
-      li.style.backgroundImage = "url( \"" + image.src + "\" )";
-      _manageList.appendChild( li );
+      item.id = image.id;
+      item.style.backgroundImage = "url( \"" + image.src + "\" )";
+      _manageList.appendChild( item );
       attachImageHandlers();
     }
 
@@ -113,21 +157,25 @@
     }
 
     function generateManageList() {
-      var li,
+      var item,
           images = _trackEvent.popcornOptions.images,
           img;
 
       for ( var i = 0; i < images.length; i++ ) {
         img = images[ i ];
-        li = document.createElement( "li" );
+        item = document.createElement( "div" );
 
-        li.id = img.id;
-        li.style.backgroundImage = "url( " + img.src + " )";
-        _manageList.appendChild( li );
+        item.id = img.id;
+        item.style.backgroundImage = "url( " + img.src + " )";
+        _manageList.appendChild( item );
       }
 
       window.jQuery( _manageList ).sortable({
-        update: onSortableUpdate
+        update: onSortableUpdate,
+        containment: _listContainer,
+        scroll: true,
+        scrollSensitivity: 50,
+        scrollSpeed: 30
       });
 
       attachImageHandlers();
@@ -161,9 +209,49 @@
       attachHandlers();
       generateManageList();
 
+      _transitions.addEventListener( "change", function( e ) {
+        var newTransition = e.target.value,
+            images = _trackEvent.popcornOptions.images;
+
+        for ( var i = 0; i < images.length; i++ ) {
+          if ( _selectedImageId && images[ i ].id === _selectedImageId ) {
+            images[ i ].transition = newTransition;
+            break;
+          }
+        }
+
+        _trackEvent.update( images );
+        attachImageHandlers();
+      }, false );
+
+      function addGallery( e ) {
+        var currentImages = _trackEvent.popcornOptions.images,
+            newImage;
+
+        newImage = {
+          src: e.target.value,
+          top: DEFAULT_TOP,
+          left: DEFAULT_LEFT,
+          width: DEFAULT_WIDTH,
+          height: DEFAULT_HEIGHT,
+          transition: DEFAULT_TRANSITION,
+          id: Popcorn.guid( "gallery-image" )
+        };
+
+        currentImages.push( newImage );
+        _trackEvent.update( currentImages );
+        addToList( newImage );
+      }
+
+      _galleryURL.addEventListener( "blur", addGallery, false );
+      _galleryURL.addEventListener( "keypress", function( e ) {
+        if ( e.keyCode === 13 ) {
+          addGallery( e );
+        }
+      }, false );
+
       _this.updatePropertiesFromManifest( trackEvent );
       _this.setTrackEventUpdateErrorCallback( _this.setErrorState );
-
     }
 
     function onTrackEventUpdated( e ) {
