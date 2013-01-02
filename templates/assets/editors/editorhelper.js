@@ -14,7 +14,7 @@
     }
   }
 
-  function calculateFinalPositions( event, ui, trackEvent, targetContainer, container, options ) {
+  function calculateFinalPositions( event, ui, trackEvent, targetContainer, container, options, callback ) {
     var target = targetContainer.getBoundingClientRect(),
         cont = container.getBoundingClientRect(),
         height = cont.height,
@@ -24,7 +24,8 @@
         targetHeight = target.height,
         targetWidth = target.width,
         minHeightPix = targetHeight * ( ( options.minHeight || 0 ) / 100 ),
-        minWidthPix = targetWidth * ( ( options.minWidth || 0 ) / 100 );
+        minWidthPix = targetWidth * ( ( options.minWidth || 0 ) / 100 ),
+        updateOptions;
 
     top = Math.max( 0, top );
     left = Math.max( 0, left );
@@ -48,12 +49,19 @@
 
     blurActiveEl();
 
-    trackEvent.update({
+    updateOptions = {
       height: height,
       width: width,
       top: ( top / targetHeight ) * 100,
-      left: ( left / targetWidth ) * 100
-    });
+      left: ( left / targetWidth ) * 100,
+      _elementId: container.id
+    };
+
+    if ( typeof callback === "function" ) {
+      callback( updateOptions );
+    } else {
+      trackEvent.update( updateOptions );
+    }
   }
 
   EditorHelper.init = function( butter ) {
@@ -72,7 +80,7 @@
      *                    {Function} start: Function to execute on drag start event
      *                    {Function} end: Fucntion to execute on drag end event
      */
-    global.EditorHelper.draggable = function( trackEvent, dragContainer, targetContainer, options ) {
+    global.EditorHelper.draggable = function( trackEvent, dragContainer, targetContainer, options, callback ) {
       if ( $( dragContainer ).data( "draggable" ) ) {
         return;
       }
@@ -118,7 +126,7 @@
         stop: function( event, ui ) {
           iframeCover.style.display = "none";
 
-          calculateFinalPositions( event, ui, trackEvent, targetContainer, dragContainer, options );
+          calculateFinalPositions( event, ui, trackEvent, targetContainer, dragContainer, options, callback );
         }
       });
     };
@@ -141,7 +149,7 @@
      *                    {Number} minWidth: Minimum width that the resizeContainer should be
      *                    {Number} minHeight: Minimum height that the resizeContainer should be
      */
-    global.EditorHelper.resizable = function( trackEvent, resizeContainer, targetContainer, options ) {
+    global.EditorHelper.resizable = function( trackEvent, resizeContainer, targetContainer, options, callback ) {
       if ( $( resizeContainer ).data( "resizable" ) ) {
         return;
       }
@@ -174,7 +182,7 @@
         stop: function( event, ui ) {
           iframeCover.style.display = "none";
 
-          calculateFinalPositions( event, ui, trackEvent, targetContainer, resizeContainer, options );
+          calculateFinalPositions( event, ui, trackEvent, targetContainer, resizeContainer, options, callback );
         }
       });
     };
