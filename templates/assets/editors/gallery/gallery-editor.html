@@ -35,7 +35,7 @@
           <div id="gallery-sortable">
           </div>
         </div>
-        <fieldset class="trackevent-property select">
+        <fieldset class="trackevent-property select transitions hidden">
           <label class="property-name">Transition</label>
           <select id="transition-setter">
             <option value="popcorn-none">None</option>
@@ -63,6 +63,21 @@
     margin-top: 10px;
   }
 
+  .transitions {
+    visibility: visible;
+    opacity: 1;
+    -webkit-transition: all 0.2s ease-in;
+    -moz-transition: all 0.2s ease-in;
+    -o-transition: all 0.2s ease-in;
+    -ms-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
+  }
+
+  .transitions.hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
+
   #gallery-sortable {
     height: 300px;
     width: 316px;
@@ -85,6 +100,21 @@
 
   .ui-state-sortable-highlight {
     box-shadow: 0 0 0 2px #3FB58E;
+  }
+
+  #gallery-sortable div:hover > .close-button {
+    display: block;
+  }
+
+  .close-button {
+    display: none;
+    position: relative;
+    margin-left: 80%;
+    height: 18px;
+    width: 18px;
+    background-color: #000000;
+    background-image: url( "../../resources/icons/glyphiconshalflings-white.png" );
+    background-position: -430px -22px;
   }
 
 </style>

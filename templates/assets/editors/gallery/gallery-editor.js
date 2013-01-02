@@ -26,6 +26,7 @@
         _manageList = _rootElement.querySelector( "#gallery-sortable" ),
         _listContainer = _rootElement.querySelector( "#gallery-fieldset" ),
         _selectedImageId,
+        _transitionsContainer = _rootElement.querySelector( ".transitions" ),
         _transitions = _rootElement.querySelector( "#transition-setter" ),
         _galleryURL = _rootElement.querySelector( "#gallery-url" ),
         _media;
@@ -93,6 +94,8 @@
 
       function addMouseDown( element, index ) {
         element.onmousedown = function( e ) {
+          var images = _trackEvent.popcornOptions.images;
+
           imageTimes = inOutTimes[ index ];
 
           for ( var i = 0; i < list.length; i++ ) {
@@ -102,6 +105,13 @@
           _media.currentTime = imageTimes[ "in" ];
           e.target.classList.add( HIGHLIGHT_CLASS );
           _selectedImageId = e.target.id;
+          _transitionsContainer.classList.remove( "hidden" );
+
+          for ( var k = 0; k < images.length; k++ ) {
+            if ( images[ k ].id === _selectedImageId ) {
+              _transitions.value = images[ k ].transition;
+            }
+          }
         };
       }
 
@@ -148,24 +158,43 @@
     }
 
     function removeFromList( id ) {
-      var element = _manageList.querySelector( "#" + id );
+      var element = _manageList.querySelector( "#" + id ),
+          images = _trackEvent.popcornOptions.images;
 
       if ( element && element.parentNode === _manageList ) {
         _manageList.removeChild( element );
       }
+
+      for ( var i = 0; i < images.length; i++ ) {
+        if ( images[ i ].id === id ) {
+          images.splice( i, 1 );
+          _transitionsContainer.classList.add( "hidden" );
+          break;
+        }
+      }
+
+      _trackEvent.update( images );
       attachImageHandlers();
     }
 
     function generateManageList() {
       var item,
           images = _trackEvent.popcornOptions.images,
-          img;
+          img,
+          closeButton;
 
       for ( var i = 0; i < images.length; i++ ) {
         img = images[ i ];
         item = document.createElement( "div" );
+        closeButton = document.createElement( "span" );
+
+        closeButton.classList.add( "close-button" );
+        closeButton.addEventListener( "click", function( e ) {
+          removeFromList( e.target.parentNode.id );
+        }, false );
 
         item.id = img.id;
+        item.appendChild( closeButton );
         item.style.backgroundImage = "url( " + img.src + " )";
         _manageList.appendChild( item );
       }
@@ -184,7 +213,6 @@
     function setup( trackEvent ) {
       var container = _rootElement.querySelector( ".editor-options" ),
           manifestOpts = trackEvent.popcornTrackEvent._natives.manifest.options,
-          $ = window.jQuery,
           sortable = document.getElementById( "sortable" );
 
       function callback( elementType, element, trackEvent, name ) {
