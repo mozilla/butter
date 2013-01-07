@@ -29,7 +29,56 @@
         _transitionsContainer = _rootElement.querySelector( ".transitions" ),
         _transitions = _rootElement.querySelector( "#transition-setter" ),
         _galleryURL = _rootElement.querySelector( "#gallery-url" ),
-        _media;
+        _media,
+        _APIKEY = "&api_key=b939e5bd8aa696db965888a31b2f1964",
+        _flickrUrl = window.location.protocol === "https:" ? "https://secure.flickr.com/services/" : "http://api.flickr.com/services/",
+        _searchPhotosCmd = _flickrUrl + "rest/?method=flickr.photos.search&page=1&extras=url_m&media=photos&safe_search=1",
+        _getPhotosetCmd = _flickrUrl + "rest/?method=flickr.photosets.getPhotos&extras=url_m&media=photos",
+        _getPhotoSizesCmd = _flickrUrl + "rest/?method=flickr.photos.getSizes",
+        _jsonBits = "&format=json&jsoncallback=flickr",
+        _flickrCallback;
+
+    _flickrCallback = function( data ) {
+
+      var _collection = ( data.photos || data.photoset ),
+          _photos;
+
+      if ( !_collection ) {
+        return;
+      }
+
+      _photos = _collection.photo;
+
+      if ( !_photos ) {
+        return;
+      }
+
+      var currentImages = _trackEvent.popcornOptions.images,
+          newImage,
+          newImages = [];
+
+      Popcorn.forEach( _photos, function ( item, i ) {
+
+        newImage = {
+          src: item.url_m,
+          top: DEFAULT_TOP,
+          left: DEFAULT_LEFT,
+          width: DEFAULT_WIDTH,
+          height: DEFAULT_HEIGHT,
+          transition: DEFAULT_TRANSITION,
+          id: Popcorn.guid( "gallery-image" )
+        };
+        currentImages.push( newImage );
+        newImages.push( newImage );
+      });
+
+      _trackEvent.update( currentImages );
+
+      // Add all of them to our editors list.
+      for ( var i = 0; i < newImages.length; i++ ) {
+        addToList( newImages[ i ] );
+      }
+    };
 
     API_HANDLERS = {
       parse: function( url ) {
@@ -38,8 +87,41 @@
       imgur: function( url ) {
         // PLACEHOLDER
       },
-      flickr: function( url ) {
-        // PLACEHOLDER
+      /*
+       * EG: http://www.flickr.com/photos/etherworks/sets/72157630563520740/
+       */
+      flickr_url: function( url ) {
+        var photoSplit,
+            ln,
+            url,
+            uri,
+            photosetId,
+            i;
+
+        if ( url.indexOf( "flickr.com" ) === -1 ) {
+
+          _this.setErrorState( "Invalid Flicker Gallery URL. E.G: http://www.flickr.com/photos/etherworks/sets/72157630563520740/" );
+          return;
+        }
+
+        photoSplit = url.split( "/" );
+
+        // Can't always look for the ID in the same spot depending if the user includes the
+        // last slash
+        for ( i = 0, ln = photoSplit.length; i < ln; i++ ) {
+          url = photoSplit[ i ];
+          if ( !isNaN( url ) && url !== "" ) {
+            photosetId = url;
+            break;
+          }
+        }
+
+        uri = _getPhotosetCmd + "&photoset_id=" + photosetId + _APIKEY + _jsonBits;
+        Popcorn.getJSONP( uri, _flickrCallback );
+      },
+      flickr_tags: function( tag ) {
+        var uri = _searchPhotosCmd + _APIKEY + "&per_page=" + 5 + "&tags=" + tag.substring( 1 ) + _jsonBits;
+        Popcorn.getJSONP( uri, _flickrCallback );
       },
       dropbox: function( url ) {
         // PLACEHOLDER
@@ -149,10 +231,17 @@
     }
 
     function addToList( image ) {
-      var item = document.createElement( "div" );
+      var item = document.createElement( "div" ),
+          closeButton = document.createElement( "span" );
+
+      closeButton.classList.add( "close-button" );
+      closeButton.addEventListener( "click", function( e ) {
+        removeFromList( e.target.parentNode.id );
+      }, false );
 
       item.id = image.id;
       item.style.backgroundImage = "url( \"" + image.src + "\" )";
+      item.appendChild( closeButton );
       _manageList.appendChild( item );
       attachImageHandlers();
     }
@@ -173,7 +262,9 @@
         }
       }
 
-      _trackEvent.update( images );
+      _trackEvent.update({
+        images: images
+      });
       attachImageHandlers();
     }
 
@@ -253,22 +344,30 @@
       }, false );
 
       function addGallery( e ) {
-        var currentImages = _trackEvent.popcornOptions.images,
-            newImage;
+        var val = e.target.value;
 
-        newImage = {
-          src: e.target.value,
-          top: DEFAULT_TOP,
-          left: DEFAULT_LEFT,
-          width: DEFAULT_WIDTH,
-          height: DEFAULT_HEIGHT,
-          transition: DEFAULT_TRANSITION,
-          id: Popcorn.guid( "gallery-image" )
-        };
+        if ( val.indexOf( "flickr.com" ) >= 0 ) {
+          API_HANDLERS.flickr_url( val );
+        } else if ( val.indexOf( "#" ) === 0 ) {
+          API_HANDLERS.flickr_tags( val );
+        } else {
+          var currentImages = _trackEvent.popcornOptions.images,
+              newImage;
 
-        currentImages.push( newImage );
-        _trackEvent.update( currentImages );
-        addToList( newImage );
+          newImage = {
+            src: e.target.value,
+            top: DEFAULT_TOP,
+            left: DEFAULT_LEFT,
+            width: DEFAULT_WIDTH,
+            height: DEFAULT_HEIGHT,
+            transition: DEFAULT_TRANSITION,
+            id: Popcorn.guid( "gallery-image" )
+          };
+
+          currentImages.push( newImage );
+          _trackEvent.update( currentImages );
+          addToList( newImage );
+        }
       }
 
       _galleryURL.addEventListener( "blur", addGallery, false );
