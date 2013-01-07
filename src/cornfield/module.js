@@ -80,7 +80,7 @@ define([ "util/xhr", "jsSHA/sha1", "util/shims" ],
 
           try {
             response = JSON.parse( this.response || this.responseText );
-            if ( this.status === 200 ) {
+            if ( response.status === "okay" ) {
               authenticated = true;
               email = response.email;
               username = response.username;
