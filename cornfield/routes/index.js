@@ -23,7 +23,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
       res.json({
         error: 'unauthorized',
         csrf: req.session._csrf,
-      }, 403 );
+      });
     }
   });
 
@@ -111,7 +111,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
 
     if ( req.body.id ) {
       files = datauri.filterProjectDataURIs( projectData.data, utils.generateDataURIPair );
-      
+
       User.updateProject( req.session.email, req.body.id, projectData, function( err, doc, imagesToDestroy ) {
         if ( err ) {
           res.json( { error: err }, 500 );
