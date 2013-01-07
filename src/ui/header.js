@@ -14,6 +14,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
+        _clearEvents = _rootElement.querySelector( ".butter-clear-events-btn" ),
         _previewBtn = _rootElement.querySelector( ".butter-preview-btn" ),
         _shareBtn = _rootElement.querySelector( ".butter-share-btn" ),
         _projectMenu = _rootElement.querySelector( ".butter-project-menu" ),
@@ -87,6 +88,16 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       }
     }
 
+    function toggleClearButton( on ) {
+      if ( on ) {
+        _clearEvents.classList.remove( "butter-disabled" );
+        _clearEvents.addEventListener( "click", clearEventsClick, false );
+      } else {
+        _clearEvents.classList.add( "butter-disabled" );
+        _clearEvents.removeEventListener( "click", clearEventsClick, false );
+      }
+    }
+
     function toggleShareButton( on ) {
       if ( on ) {
         _shareBtn.classList.remove( "butter-disabled" );
@@ -110,6 +121,16 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       input.focus();
       input.addEventListener( "blur", onBlur, false );
       input.addEventListener( "keypress", onKeyPress, false );
+    }
+
+    function clearEventsClick( e ) {
+      var dialog;
+      if ( butter.currentMedia && butter.currentMedia.hasTrackEvents() ) {
+        dialog = Dialog.spawn( "delete-track-events", {
+          data: butter
+        });
+        dialog.open();
+      }
     }
 
     this.views = {
@@ -155,12 +176,16 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _projectTitle.classList.add( "butter-disabled" );
         _projectTitle.removeEventListener( "click", projectNameClick, false );
         _projectName.removeEventListener( "click", projectNameClick, false );
-
       }
     };
 
     // Set up the project menu
     _projectMenuControl.addEventListener( "click", function() {
+      if ( butter.currentMedia.hasTrackEvents() ) {
+        toggleClearButton( true );
+      } else {
+        toggleClearButton( false );
+      }
       _projectMenu.classList.toggle( "butter-btn-menu-expanded" );
     }, false );
 
