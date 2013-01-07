@@ -2,18 +2,18 @@
       If a copy of the MIT license was not distributed with this file, you can
       obtain one at https://raw.github.com/mozilla/butter/master/LICENSE -->
 
-<div class="butter-editor default-editor allow-scrollbar">
+<div class="butter-editor default-editor">
   <h1>Gallery Editor</h1>
   <ul class="butter-editor-tabs">
     <li><a class="butter-btn basic-tab butter-active">Add</a></li>
     <li><a class="butter-btn advanced-tab">Manage Images</a></li>
   </ul>
-  <div class="butter-editor-body butter-tabs-spacing scrollbar-container">
-    <div class="editor-options-wrapper scrollbar-outer">
+  <div class="butter-editor-body butter-tabs-spacing">
+    <div class="editor-options-wrapper">
       <div class="error-message-container">
         <div class="error-message"></div>
       </div>
-      <div class="editor-options scrollbar-inner">
+      <div class="editor-options">
         <fieldset class="trackevent-property default input" style="position: relative;">
           <label class="property-name">Gallery URL</label>
           <input class="value" type="text" id="gallery-url">
@@ -30,7 +30,7 @@
         </fieldset>
       </div>
 
-      <div class="advanced-options scrollbar-inner display-off">
+      <div class="advanced-options display-off">
         <div id="gallery-fieldset">
           <div id="gallery-sortable">
           </div>
@@ -80,12 +80,12 @@
 
   #gallery-sortable {
     height: 300px;
-    width: 316px;
-    overflow: scroll;
+    width: 93%;
+    overflow-x: hidden;
+    overflow-y: scroll;
     padding-left: 3px;
     border: 1px solid lightGrey;
-    margin-bottom: 20px;
-    margin:10px;
+    margin: 10px;
   }
 
   #gallery-sortable div {

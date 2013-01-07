@@ -32,16 +32,16 @@
         _media;
 
     API_HANDLERS = {
-      parse: function() {
+      parse: function( url ) {
         // PLACEHOLDER
       },
-      imgur: function() {
+      imgur: function( url ) {
         // PLACEHOLDER
       },
-      flickr: function() {
+      flickr: function( url ) {
         // PLACEHOLDER
       },
-      dropbox: function() {
+      dropbox: function( url ) {
         // PLACEHOLDER
       }
     };
@@ -286,8 +286,6 @@
       _trackEvent = e.target;
       _this.updatePropertiesFromManifest( _trackEvent );
       _this.setErrorState( false );
-
-      _this.scrollbar.update();
     }
 
     Editor.TrackEventEditor.extend( _this, butter, rootElement, {
