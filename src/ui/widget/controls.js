@@ -7,6 +7,9 @@ define( [ "util/lang", "text!layouts/controls.html" ],
 
   function Controls( container, p, options ) {
 
+    var LEFT_MOUSE_BUTTON = 0,
+        SPACE_BAR = 32;
+
     var _controls = LangUtils.domFragment( CONTROLS_LAYOUT ).querySelector( "#butter-controls" ),
         _container = typeof container === "string" ? document.getElementById( container ) : container,
         // variables
@@ -112,8 +115,8 @@ define( [ "util/lang", "text!layouts/controls.html" ],
 
       togglePlay = function( e ) {
 
-        if ( e.button !== 0 ) {
-
+        // Only continue if event was triggered by the left mouse button or the spacebar
+        if ( e.button !== LEFT_MOUSE_BUTTON && e.which !== SPACE_BAR ) {
           return;
         }
 
@@ -127,6 +130,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
       };
 
       p.media.addEventListener( "click", togglePlay, false );
+      window.addEventListener( "keypress", togglePlay, false );
 
       if ( playButton ) {
 
