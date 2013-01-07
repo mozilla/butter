@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
-        function( EventManager, TrackEvent, TrackView ){
+define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/undoredo" ],
+        function( EventManager, TrackEvent, TrackView, UndoRedo ){
 
   var __guid = 0,
       NAME_PREFIX = "Layer ",
@@ -184,7 +184,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       }
     }
 
-    this.addTrackEvent = function( trackEvent ) {
+    var _addTrackEvent = function( trackEvent ) {
       var oldSelected = false;
 
       if ( !( trackEvent instanceof TrackEvent ) ) {
@@ -227,18 +227,27 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
 
       // Update the trackevent with defaults (if necessary)
       if ( _this._media ) {
-        trackEvent.update( trackEvent.popcornOptions, true );
+        trackEvent.command.update( trackEvent.popcornOptions, true );
       }
 
       return trackEvent;
+    };
+
+    this.addTrackEvent = function( trackEvent, node ) {
+      trackEvent = _addTrackEvent( trackEvent );
+      node = node || UndoRedo;
+      node.register({
+        execute: function() {
+          _addTrackEvent( trackEvent );
+        },
+        undo: function() {
+          _removeTrackEvent( trackEvent );
+        }
+      });
+      return trackEvent;
     }; //addTrackEvent
 
-    /*
-     * Method removeTrackEvent
-     *
-     * @param {Object} trackEvent: The trackEvent to be removed from this track
-     */
-    this.removeTrackEvent = function( trackEvent ) {
+    var _removeTrackEvent = function( trackEvent ) {
       var idx = _trackEvents.indexOf( trackEvent );
       if ( idx > -1 ) {
         _trackEvents.splice( idx, 1 );
@@ -251,8 +260,28 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
         _view.removeTrackEvent( trackEvent );
         trackEvent.unbind();
         _this.dispatch( "trackeventremoved", trackEvent );
+
         return trackEvent;
       }
+    };
+
+    /*
+     * Method removeTrackEvent
+     *
+     * @param {Object} trackEvent: The trackEvent to be removed from this track
+     */
+    this.removeTrackEvent = function( trackEvent, node ) {
+      trackEvent = _removeTrackEvent( trackEvent );
+      node = node || UndoRedo;
+      node.register({
+        execute: function() {
+          _removeTrackEvent( trackEvent );
+        },
+        undo: function() {
+          _addTrackEvent( trackEvent );
+        }
+      });
+      return trackEvent;
     };
 
     this.findOverlappingTrackEvent = function( start, end, ignoreTrackEvent ) {
