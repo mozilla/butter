@@ -405,9 +405,15 @@
             end = trackEventOptions.end;
 
             // check if track event if out of bounds
-            if ( end > _duration  ) {
-              // remove offending track event
-              trackEvent.track.removeTrackEvent( trackEvent );
+            if ( end > _duration ) {
+              if ( start > _duration ) {
+                // remove offending track event
+                trackEvent.track.removeTrackEvent( trackEvent );
+              } else {
+                trackEvent.update({
+                  end: _duration
+                });
+              }
             }
           }
         }
