@@ -1,15 +1,17 @@
 /* This Source Code Form is subject to the terms of the MIT license
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
+/*global YT */
 
 define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "dialog/dialog", "text!layouts/media-editor.html" ],
   function( LangUtils, URI, KeysUtils, Editor, Dialog, EDITOR_LAYOUT ) {
 
   var MAX_MEDIA_INPUTS = 4;
 
-  var _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
+  var _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT, ".media-editor" ),
       _loadingSpinner = _parentElement.querySelector( ".media-loading-spinner" ),
       _primaryMediaWrapper = LangUtils.domFragment( EDITOR_LAYOUT, ".primary-media-wrapper" ),
+      _recordWebcam = _parentElement.querySelector( ".record-webcam a" ),
       _altMediaWrapper = LangUtils.domFragment( EDITOR_LAYOUT, ".alt-media-wrapper" ),
       _containerElement = _parentElement.querySelector( ".butter-editor-body" ),
       _currentMediaWrapper = _containerElement.querySelector( ".current-media-wrapper" ),
@@ -21,6 +23,48 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "dialog/dialog"
       _emptyInputs = 0,
       _clearEventsOnReady = false,
       _this;
+
+  var loadYouTubeRecorder = function() {
+    var widget = new YT.UploadWidget( "youtube-upload", {
+      width: 295,
+      height: 295,
+      events: {
+        "onApiReady": function() {
+          widget.setVideoKeywords([ "webcam", "video", "popcorn" ]);
+          widget.setVideoPrivacy( "unlisted" );
+        },
+        "onUploadSuccess": function( event ) {
+          _parentElement.querySelector( ".record-webcam p" ).classList.remove( "hidden" );
+        },
+        "onProcessingComplete": function( event ) {
+          widget.destroy();
+          widget = null;
+
+          _recordWebcam.classList.remove( "hidden" );
+          _parentElement.querySelector( ".record-webcam p" ).classList.add( "hidden" );
+
+          _media.url = "http://www.youtube.com/watch?v=" + event.data.videoId;
+        }
+      }
+    });
+  };
+
+  _recordWebcam.addEventListener( "click", function() {
+    _recordWebcam.classList.add( "hidden" );
+
+    if ( window.YT ) {
+      loadYouTubeRecorder();
+    } else {
+      var tag = document.createElement('script');
+      tag.src = "//www.youtube.com/iframe_api";
+      document.head.appendChild( tag );
+
+      window.onYouTubeIframeAPIReady = function() {
+        loadYouTubeRecorder();
+        delete window.onYouTubeIframeAPIReady;
+      };
+    }
+  }, false );
 
   function updateButterMedia() {
     var urlInputs = _currentMediaWrapper.querySelectorAll( "textarea" ),
