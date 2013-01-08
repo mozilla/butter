@@ -30,12 +30,12 @@
             start();
             console.log = oldLog;
           });
-          butter.addMedia({ url: "../../../external/popcorn-js/test/trailer.ogv", target: "mediaDiv" });
+          butter.addMedia({ url: "../../../external/popcorn-js/test/trailer.ogv,../../../external/popcorn-js/test/trailer.mp4", target: "mediaDiv" });
 
           ok( Butter.app, "Butter.app exposes the instance for debugging" );
         }
         butter.listen( "mediaready", ready );
-        butter.addMedia({ url: "../../../external/popcorn-js/test/trailer.ogv", target: "mediaDiv" });
+        butter.addMedia({ url: "../../../external/popcorn-js/test/trailer.ogv,../../../external/popcorn-js/test/trailer.mp4", target: "mediaDiv" });
 
       });
     });

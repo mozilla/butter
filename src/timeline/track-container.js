@@ -32,7 +32,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       for ( var i = 0, l = orderedTracks.length; i < l; ++i ) {
         var trackElement = orderedTracks[ i ].view.element;
         if ( trackElement !== _container.childNodes[ i ] ) {
-          _container.insertBefore( trackElement, _container.childNodes[ i ] );
+          _container.insertBefore( trackElement, _container.childNodes[ i ] || null );
         }
       }
     });
