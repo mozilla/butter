@@ -23,7 +23,12 @@ Prerequisites
 * npm (comes with node v0.8 installer)
 * A working build environment:
   * Mac OS X - Xcode or Command Line Tools package
-  * Windows - Python 2.5+ and Visual Studio 2010 (C++ Express edition works fine)
+  * Windows - Python 2.5+ and Visual Studio 2010; specifically:
+    * uninstall *any and all* "Microsoft Visual C++ 2010 x86/64 Redistributable" copies
+    * install Microsoft Visual C++ 2010 (Express edition is fine)
+    * install Microsoft Visual Studio 2010 SP1
+    * install Microsoft Windows SDK v7.1
+    * install Microsoft Visual C++ 2010 SP1 Compiler Update for Windows SDK v7.1
   * Linux - build-essential package on Debian/Ubuntu, or the equivalent for your distro
 
 Environment Setup
