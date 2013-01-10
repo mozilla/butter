@@ -36,13 +36,15 @@
       }
 
       options.readyEvent = function() {
-        var targetTime = that.currentTime() - options.start + options.from;
-        options.ready = true;
-        if ( targetTime !== options.p.currentTime() ) {
-          options.p.currentTime( targetTime );
-        }
-        if ( !that.paused() ) {
-          options.p.play();
+        if ( !options.ready ) {
+          var targetTime = that.currentTime() - options.start + options.from;
+          options.ready = true;
+          if ( targetTime !== options.p.currentTime() ) {
+            options.p.currentTime( targetTime );
+          }
+          if ( !that.paused() ) {
+            options.p.play();
+          }
         }
       };
 
