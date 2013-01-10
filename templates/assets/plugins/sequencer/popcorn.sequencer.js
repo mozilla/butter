@@ -37,8 +37,9 @@
 
       options.readyEvent = function() {
         if ( !options.ready ) {
-          var targetTime = that.currentTime() - options.start + options.from;
+          var targetTime = that.currentTime() - options.start + ( +options.from );
           options.ready = true;
+          options.p.volume( options.volume );
           if ( targetTime !== options.p.currentTime() ) {
             options.p.currentTime( targetTime );
           }
@@ -50,7 +51,6 @@
 
       if ( options.source ) {
         options.p = Popcorn.smart( container, options.source, {frameAnimation: true} );
-        options.p.volume = options.volume;
         if ( options.p.media.readyState >= 4 ) {
           options.readyEvent();
         } else {
@@ -59,7 +59,7 @@
       }
 
       options._playEvent = function() {
-        options.p.play( that.currentTime() - options.start + options.from );
+        options.p.play( that.currentTime() - options.start + (+options.from) );
       };
 
       options._pauseEvent = function() {
@@ -77,12 +77,12 @@
           if ( options.p.paused() && !that.paused() ) {
             options.p.play();
           }
-          options.p.currentTime( that.currentTime() - options.start + options.from );
+          options.p.currentTime( that.currentTime() - options.start + (+options.from) );
         }
       };
     },
     _teardown: function( options ) {
-      options._target.removeChild( options._container );
+//      options._target.removeChild( options._container );
     },
     start: function( event, options ) {
       var targetTime;
@@ -91,7 +91,7 @@
   		this.on( "seeking", options._seekingEvent );
 			this.on( "seeked", options._seekedEvent );
       if ( options.ready ) {
-        targetTime = this.currentTime() - options.start + options.from;
+        targetTime = this.currentTime() - options.start + (+options.from);
         if ( targetTime !== options.p.currentTime() ) {
           options.p.currentTime( targetTime );
         }
@@ -162,10 +162,11 @@
           hidden: true
         },
         from: {
-          elem: "input",
-          type: "seconds",
-          label: "Start at",
-          "default": 0
+          "elem": "input",
+          "type": "number",
+          "label": "Start at",
+          "units": "seconds",
+          "default": "0"
         },
         volume: {
           elem: "input",
