@@ -54,7 +54,7 @@
             te.update( newOpts );
           }
         }
-        function checkboxCallback( trackEvent, prop, updateOptions ) {
+        function checkboxCallback( trackEvent, updateOptions, prop ) {
           if ( "background shadow".match( prop ) ) {
             if ( updateOptions[ prop ] ) {
               pickers[ prop ].classList.remove( "butter-disabled" );
