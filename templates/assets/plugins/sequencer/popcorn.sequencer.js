@@ -177,7 +177,7 @@
         },
         from: {
           elem: "input",
-          type: "text",
+          type: "seconds",
           "units": "seconds",
           "label": "Start at",
           "default": "0"
