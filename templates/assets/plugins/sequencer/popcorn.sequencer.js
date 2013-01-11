@@ -12,6 +12,7 @@
   Popcorn.plugin( 'sequencer', {
     _setup: function( options ) {
       var container = document.createElement( "div" ),
+          mouseDiv = document.createElement( "div" ),
           target = Popcorn.dom.find( options.target ),
           that = this;
 
@@ -21,6 +22,7 @@
 
       options._target = target;
       options._container = container;
+      options._mouseDiv = mouseDiv;
 
       container.style.zIndex = +options.zindex;
       container.className = "popcorn-sequencer";
@@ -30,9 +32,15 @@
       container.style.height = validateDimension( options.height, "100" ) + "%";
       container.style.top = validateDimension( options.top, "0" ) + "%";
       container.style.left = validateDimension( options.left, "0" ) + "%";
+      mouseDiv.style.position = "absolute";
+      mouseDiv.style.width = "100%";
+      mouseDiv.style.height = "100%";
+      mouseDiv.style.top = "0";
+      mouseDiv.style.left = "0";
 
       if ( target ) {
         target.appendChild( container );
+        container.appendChild( mouseDiv );
       }
 
       options.readyEvent = function() {
@@ -51,6 +59,10 @@
 
       if ( options.source ) {
         options.p = Popcorn.smart( container, options.source, {frameAnimation: true} );
+        options.p.media.style.width = "100%";
+        options.p.media.style.height = "100%";
+        container.style.width = validateDimension( options.width, "100" ) + "%";
+        container.style.height = validateDimension( options.height, "100" ) + "%";
         if ( options.p.media.readyState >= 4 ) {
           options.readyEvent();
         } else {
