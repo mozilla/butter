@@ -128,13 +128,15 @@
       options: {
         start: {
           elem: "input",
-          type: "seconds",
-          label: "Start"
+          type: "text",
+          label: "In",
+          "units": "seconds"
         },
         end: {
           elem: "input",
-          type: "seconds",
-          label: "End"
+          type: "text",
+          label: "Out",
+          "units": "seconds"
         },
         source: {
           elem: "input",
@@ -174,10 +176,10 @@
           hidden: true
         },
         from: {
-          "elem": "input",
-          "type": "number",
-          "label": "Start at",
+          elem: "input",
+          type: "text",
           "units": "seconds",
+          "label": "Start at",
           "default": "0"
         },
         volume: {
