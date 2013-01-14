@@ -187,8 +187,8 @@ app.post( '/api/publish/:id',
       baseHref = APP_HOSTNAME + templateURL + "/";
       baseString = '\n  <base href="' + baseHref + '"/>';
 
-      // look for script tags with data-butter-exclude in particular (e.g. butter's js script)
-      data = data.replace( /\s*<script[\.\/='":_\-\w\s]*data-butter-exclude[\.\/='":_\-\w\s]*><\/script>/g, '' );
+      // look for script and link tags with data-butter-exclude in particular (e.g. butter's js script)
+      data = data.replace( /\s*<(script|link)[\.\/='":_\-\w\s]*data-butter-exclude[\.\/='":_\-\w\s]*>(<\/script>)?/g, '' );
 
       // Adding  to cut out the actual head tag
       headStartTagIndex = data.indexOf( '<head>' ) + 6;
