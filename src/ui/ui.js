@@ -137,7 +137,7 @@ define( [ "core/eventmanager", "./toggler",
      * @param {TrackEvent} trackEvent: TrackEvent to move
      * @param {Number} amount: Amount by which the event is to move.
      */
-    function moveTrackEventLeft( trackEvent, amount ) {
+    var moveTrackEventLeft = _this.moveTrackEventLeft = function( trackEvent, amount ) {
       var currentPopcornOptions = trackEvent.popcornOptions,
           currentMediaDuration = butter.currentMedia.duration,
           currentDuration = currentPopcornOptions.end - currentPopcornOptions.start,
@@ -184,7 +184,7 @@ define( [ "core/eventmanager", "./toggler",
      * @param {TrackEvent} trackEvent: TrackEvent to move
      * @param {Number} amount: Amount by which the event is to shrink.
      */
-    function shrinkTrackEvent( trackEvent, amount ) {
+    var shrinkTrackEvent = _this.shrinkTrackEvent = function( trackEvent, amount ) {
       var currentPopcornOptions = trackEvent.popcornOptions,
           popcornOptions;
 
@@ -212,7 +212,7 @@ define( [ "core/eventmanager", "./toggler",
      * @param {TrackEvent} trackEvent: TrackEvent to move
      * @param {Number} amount: Amount by which the event is to move.
      */
-    function moveTrackEventRight( trackEvent, amount ) {
+    var moveTrackEventRight = _this.moveTrackEventRight = function( trackEvent, amount ) {
       var currentPopcornOptions = trackEvent.popcornOptions,
           currentMediaDuration = butter.currentMedia.duration,
           currentDuration = currentPopcornOptions.end - currentPopcornOptions.start,
@@ -257,7 +257,7 @@ define( [ "core/eventmanager", "./toggler",
      *
      * @param {TrackEvent} trackEvent: TrackEvent to grow is to shrink.
      */
-    function growTrackEvent( trackEvent, amount ) {
+    var growTrackEvent = _this.growTrackEvent = function( trackEvent, amount ) {
       var currentPopcornOptions = trackEvent.popcornOptions,
           overlappingTrackEvent,
           overlappingTrackEventElement,
