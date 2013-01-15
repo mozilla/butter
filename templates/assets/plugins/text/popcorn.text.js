@@ -295,12 +295,15 @@
     },
 
     _teardown: function( options ) {
-      if ( options._target ) {
-        options._target.removeChild( options._container );
+      var target = options._target,
+          fontSheet = options._fontSheet;
+
+      if ( target && options._container.parentNode === target ) {
+        target.removeChild( options._container );
       }
 
-      if ( options._fontSheet ) {
-        document.head.removeChild( options._fontSheet );
+      if ( fontSheet && fontSheet.parentNode === document.head ) {
+        document.head.removeChild( fontSheet );
       }
     }
   });
