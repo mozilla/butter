@@ -123,11 +123,7 @@ html
       }
 
       .butter-delete-button {
-        opacity: 0.5;
-        margin-left: 10px;
-      }
-      .butter-delete-button:hover {
-        opacity: 1;
+        margin-left: 3px;
       }
 
       .butter-projects-title {
@@ -217,10 +213,9 @@ html
               a(href= project.href).butter-projects-title
                 = project.name
             td
-              a(href=project.projectURL, target="_blank").butter-btn.btn-light.butter-preview-link
-                span.icon.icon-share-alt
-                | Preview
-              a(href= "#", data-project-id=project._id, data-project-name=project.name).butter-delete-button
+              a(href=project.projectURL, target="_blank").butter-btn.btn-light
+                span.icon.icon-eye-open.icon-only
+              a(href= "#", data-project-id=project._id, data-project-name=project.name).butter-btn.btn-light.butter-delete-button
                 span.icon.icon-trash.icon-only
 
     input(id="csrf", type="hidden", value=user.csrf)
