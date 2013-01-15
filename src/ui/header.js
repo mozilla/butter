@@ -137,7 +137,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       dirty: function() {
         togglePreviewButton( false );
         toggleSaveButton( true );
-        toggleShareButton( true );
+        toggleShareButton( false );
       },
       clean: function() {
         togglePreviewButton( true );
