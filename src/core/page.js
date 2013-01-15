@@ -59,6 +59,13 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         },
         {
           type: "js",
+          url: "{popcorn-js}/wrappers/youtube/popcorn.HTMLYouTubeVideoElement.js",
+          check: function(){
+            return !!window.Popcorn && !!window.Popcorn.HTMLVimeoVideoElement;
+          }
+        },
+        {
+          type: "js",
           url: "{popcorn-js}/wrappers/vimeo/popcorn.HTMLVimeoVideoElement.js",
           check: function(){
             return !!window.Popcorn && !!window.Popcorn.HTMLVimeoVideoElement;
