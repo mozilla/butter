@@ -575,9 +575,22 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       },
       currentTime: {
         enumerable: true,
-        set: function( val ){
-          if( _mediaReady && _popcorn ){
-            _popcorn.currentTime( val );
+        set: function( val ) {
+          if ( _mediaReady && _popcorn ) {
+            try {
+              _popcorn.currentTime( val );
+            } catch ( e ) {
+              // IE9 throws this error when trying to seek outside of buffered range.
+              // Happens with mp4.
+              if ( e.message !== "DOM Exception: INDEX_SIZE_ERR (1)" ) {
+                throw e;
+              }
+              // If this is true, we've forgotten previously buffered data, and need to go back.
+              // 0 is the only safe place to go and does not fail.
+              if ( val < _popcorn.currentTime() ) {
+                _popcorn.currentTime( 0 );
+              }
+            }
           } //if
         },
         get: function(){
