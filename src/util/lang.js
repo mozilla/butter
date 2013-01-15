@@ -68,16 +68,26 @@ define( [ "./shims" ], function(){
       }
     }, //smpteToSeconds
 
-    secondsToSMPTE: function( time ){
-      var timeStamp = new Date( 1970, 0, 1 ),
-          seconds;
-      timeStamp.setSeconds( time );
-      seconds = timeStamp.toTimeString().substr( 0, 8 );
-      if( seconds > 86399 ){
-        seconds = Math.floor( (timeStamp - Date.parse("1/1/70") ) / 3600000) + seconds.substr(2);
+    secondsToSMPTE: function( time ) {
+      // Ensure every portion of our new Date is zeroed out ( Year, Month, Day, Hour, Minute, Second, Millisecond )
+      var timeStamp = new Date( 0, 0, 0, 0, 0, 0, 0 ),
+          days,
+          timeString = "";
+
+      timeStamp.setSeconds( +time );
+      days = timeStamp.getDay();
+      timeString = timeStamp.toTimeString().split( " " )[ 0 ];
+
+      // If the video is for some reason longer than 24 hours, we need to make sure we handle it accordingly.
+      if ( days > 0 ) {
+        (function( timeArr ) {
+          timeArr[ 0 ] = +timeArr[ 0 ] + ( days * 24 );
+          timeString = timeArr.join( ":" );
+        }( timeString.split( ":" ) ) );
       }
-      return seconds;
-    }, //secondsToSMPTE
+
+      return timeString;
+    },
 
     clone: function( obj ) {
       var newObj = {};
