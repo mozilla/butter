@@ -160,13 +160,19 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
      * @param {TrackEvent} trackEvent: TrackEvent to edit
      */
     _this.editTrackEvent = function( trackEvent ) {
+      var editorType = Editor.isRegistered( trackEvent.type ) ? trackEvent.type : "default";
+
       if ( !trackEvent || !( trackEvent instanceof TrackEvent ) ) {
         throw new Error( "trackEvent must be valid to start an editor." );
       }
-      var editorType = Editor.isRegistered( trackEvent.type ) ? trackEvent.type : "default";
-      return _this.openEditor( editorType, {
-        openData: trackEvent
-      });
+
+      if ( _currentEditor && _currentEditor.getTrackEvent ) {
+        if ( trackEvent.id === _currentEditor.getTrackEvent().id ) {
+          return _currentEditor;
+        }
+      }
+
+      return _this.openEditor( editorType, { openData: trackEvent } );
     };
 
     /**
