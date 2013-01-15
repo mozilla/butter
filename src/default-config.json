@@ -113,6 +113,10 @@
         "path": "{{baseDir}}external/popcorn-js/wrappers/soundcloud/popcorn.HTMLSoundCloudAudioElement.js"
       },
       {
+        "type": "youtube",
+        "path": "{{baseDir}}external/popcorn-js/wrappers/youtube/popcorn.HTMLYouTubeVideoElement.js"
+      },
+      {
         "type": "vimeo",
         "path": "{{baseDir}}external/popcorn-js/wrappers/vimeo/popcorn.HTMLVimeoVideoElement.js"
       },
