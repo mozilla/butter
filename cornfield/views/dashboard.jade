@@ -123,7 +123,8 @@ html
       }
 
       .butter-delete-button {
-        opacity: 0.5
+        opacity: 0.5;
+        margin-left: 10px;
       }
       .butter-delete-button:hover {
         opacity: 1;
@@ -216,6 +217,9 @@ html
               a(href= project.href).butter-projects-title
                 = project.name
             td
+              a(href=project.projectURL, target="_blank").butter-btn.btn-light.butter-preview-link
+                span.icon.icon-share-alt
+                | Preview
               a(href= "#", data-project-id=project._id, data-project-name=project.name).butter-delete-button
                 span.icon.icon-trash.icon-only
 

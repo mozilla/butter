@@ -325,7 +325,8 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
           template: project.template,
           href: path.relative( WWW_ROOT, templateConfigs[ project.template ].template ) +
             "?savedDataUrl=/api/project/" + project.id,
-          updatedAt: project.updatedAt
+          updatedAt: project.updatedAt,
+          projectURL: utils.generatePublishUrl( project.id )
         });
       }
     });
