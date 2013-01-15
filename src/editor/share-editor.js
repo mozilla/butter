@@ -28,69 +28,6 @@ define([ "editor/editor", "editor/base-editor",
       " frameborder='0' mozallowfullscreen webkitallowfullscreen allowfullscreen></iframe>";
     }
 
-    function togglePreviewButton( on ) {
-      if ( on ) {
-        previewBtn.classList.remove( "butter-disabled" );
-        previewBtn.href = butter.project.previewUrl;
-        previewBtn.onclick = function() {
-          return true;
-        };
-      } else {
-        previewBtn.classList.add( "butter-disabled" );
-        previewBtn.href = "";
-        previewBtn.onclick = function() {
-          return false;
-        };
-      }
-    }
-
-    function toggleViewSourceButton( on ) {
-      if ( on ) {
-        viewSourceBtn.classList.remove( "butter-disabled" );
-        viewSourceBtn.href = "view-source:" + butter.project.iframeUrl;
-        viewSourceBtn.onclick = function() {
-          return true;
-        };
-      } else {
-        viewSourceBtn.classList.add( "butter-disabled" );
-        viewSourceBtn.href = "";
-        viewSourceBtn.onclick = function() {
-          return false;
-        };
-      }
-    }
-
-    function displayEditor( on ) {
-      var project = butter.project;
-
-      if ( project.id ) {
-        embedSize.disabled = !on;
-        authorInput.disabled = !on;
-
-        if ( on ) {
-          editorContainer.classList.remove( "fade-container" );
-
-          projectURL.value = project.publishUrl;
-          togglePreviewButton( on );
-          toggleViewSourceButton( on );
-
-          updateEmbed( project.iframeUrl );
-
-          // if any of the buttons haven't loaded, or if we aren't logged in
-          if ( !shareTwitter.childNodes.length ||
-               !shareGoogle.childNodes.length ) {
-            socialMedia.hotLoad( shareTwitter, socialMedia.twitter, project.publishUrl );
-            socialMedia.hotLoad( shareGoogle, socialMedia.google, project.publishUrl );
-          }
-        } else {
-          editorContainer.classList.add( "fade-container" );
-        }
-      } else {
-        togglePreviewButton( false );
-        toggleViewSourceButton( false );
-      }
-    }
-
     embedSize.addEventListener( "change", function() {
       embedDimensions = embedSize.value.split( "x" );
       embedWidth = embedDimensions[ 0 ];
@@ -107,33 +44,33 @@ define([ "editor/editor", "editor/base-editor",
       }
     }, false );
 
-    butter.listen( "logout", function onLogout() {
-      displayEditor( false );
-      togglePreviewButton( false );
-      toggleViewSourceButton( false );
-    });
-
-    butter.listen( "authenticated", function onAuthenticated() {
-      displayEditor( true );
-    });
-
-    butter.listen( "projectsaved", function onSaved() {
-      togglePreviewButton( true );
-      toggleViewSourceButton( true );
-    });
-
-    butter.listen( "projectchanged", function onChanged() {
-      togglePreviewButton( false );
-      toggleViewSourceButton( false );
-    });
-
     TextboxWrapper.applyTo( projectURL, { readOnly: true } );
     TextboxWrapper.applyTo( projectEmbedURL, { readOnly: true } );
     TextboxWrapper.applyTo( authorInput );
 
     Editor.BaseEditor.extend( this, butter, rootElement, {
       open: function() {
-        displayEditor( butter.cornfield.authenticated() );
+        var project = butter.project;
+
+        projectURL.value = project.publishUrl;
+
+        previewBtn.href = butter.project.previewUrl;
+        previewBtn.onclick = function() {
+          return true;
+        };
+
+        viewSourceBtn.href = "view-source:" + butter.project.iframeUrl;
+        viewSourceBtn.onclick = function() {
+          return true;
+        };
+        updateEmbed( project.iframeUrl );
+
+        // if any of the buttons haven't loaded
+        if ( !shareTwitter.childNodes.length ||
+             !shareGoogle.childNodes.length ) {
+          socialMedia.hotLoad( shareTwitter, socialMedia.twitter, project.publishUrl );
+          socialMedia.hotLoad( shareGoogle, socialMedia.google, project.publishUrl );
+        }
       },
       close: function() {
       }
