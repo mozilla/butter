@@ -46,13 +46,16 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
 
       _this.createPropertiesFromManifest({
         trackEvent: trackEvent,
-        callback: function( elementType, element, trackEvent, name ) {
+        callback: function( elementType, element, trackEvent, name, units ) {
           if ( elementType === "select" ) {
             _this.attachSelectChangeHandler( element, trackEvent, name, _this.updateTrackEventSafe );
           }
           else {
             if ( element.type === "checkbox" ) {
               _this.attachCheckboxChangeHandler( element, trackEvent, name, _this.updateTrackEventSafe );
+            }
+            else if ( units === "seconds" ) {
+              _this.attachSecondsChangeHandler( element, trackEvent, name, _this.updateTrackEventSafe );
             }
             else {
               _this.attachInputChangeHandler( element, trackEvent, name, _this.updateTrackEventSafe );

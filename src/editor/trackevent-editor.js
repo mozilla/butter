@@ -674,7 +674,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
       }
 
       if ( itemCallback ) {
-        itemCallback( manifestEntry.elem, editorElement, trackEvent, name );
+        itemCallback( manifestEntry.elem, editorElement, trackEvent, name, manifestEntry.type );
       }
 
       return propertyArchetype;
