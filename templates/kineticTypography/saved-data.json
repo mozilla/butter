@@ -1,0 +1,17 @@
+{
+    "targets": [{
+        "id": "Target0",
+        "name": "video-container",
+        "element": "video-container"
+    }],
+    "media": [{
+        "id": "Media0",
+        "name": "Media0",
+        "url": ["http://popcorn.webmadecontent.org/videos/getstarted.mp4", "http://popcorn.webmadecontent.org/videos/getstarted.webm"],
+        "target": "video",
+        "duration": 11.22,
+        "controls": false
+    }],
+    "name": "My new project",
+    "template": "basic"
+}

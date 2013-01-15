@@ -1,0 +1,178 @@
+/* ===== Primary Styles ========================================================
+   Author: @k88hudson
+   ========================================================================== */
+.wrapper {
+  border: 15px solid #FFF;
+  margin: 40px auto;
+  box-shadow: 0 0 0 1px #cccccc, 0 25px 5px -20px rgba(0, 0, 0, 0.5);
+}
+@media only screen and (min-width : 0px) and (min-width: 0px) {
+  .wrapper {
+    width: 560px;
+  }
+}
+@media only screen and (min-width : 640px) and (min-height : 360px) {
+  .wrapper {
+    width: 640px;
+  }
+}
+@media only screen and (min-width : 853px) and (min-height : 479.8125px) {
+  .wrapper {
+    width: 853px;
+  }
+}
+@media only screen and (min-width : 1280px) and (min-height : 720px) {
+  .wrapper {
+    width: 1280px;
+  }
+}
+@media only screen and (min-width : 0px) and (min-width: 0px) {
+  .butter-header-spacing .wrapper {
+    width: 560px;
+  }
+}
+@media only screen and (min-width : 990px) and (min-height : 670px) {
+  .butter-header-spacing .wrapper {
+    width: 640px;
+  }
+}
+@media only screen and (min-width : 1203px) and (min-height : 789.8125px) {
+  .butter-header-spacing .wrapper {
+    width: 853px;
+  }
+}
+@media only screen and (min-width : 1630px) and (min-height : 1030px) {
+  .butter-header-spacing .wrapper {
+    width: 1280px;
+  }
+}
+/* body-wrapper required to circumvent this bug in webkit: https://bugs.webkit.org/show_bug.cgi?id=77811 */
+.butter-header-spacing .body-wrapper {
+  position: absolute;
+  left: 0;
+  top: 80px;
+  /* compensate for header */
+
+  right: 350px;
+  bottom: 0;
+  -webkit-transition: right 0.25s;
+  -moz-transition: right 0.25s;
+  -ms-transition: right 0.25s;
+  -o-transition: right 0.25s;
+  transition: right 0.25s;
+}
+body.editor-minimized .body-wrapper {
+  right: 0;
+}
+#embed-wrapper {
+  position: relative;
+  background: #FFF;
+}
+#embed-wrapper .video-container {
+  -webkit-transition: opacity 0.5s;
+  -moz-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
+  -ms-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+  opacity: 1;
+}
+#embed-wrapper .loading-message {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: opacity 0.35s, visibility 0.35s;
+  -moz-transition: opacity 0.35s, visibility 0.35s;
+  -o-transition: opacity 0.35s, visibility 0.35s;
+  -ms-transition: opacity 0.35s, visibility 0.35s;
+  transition: opacity 0.35s, visibility 0.35s;
+  height: 3em;
+  background: url("/resources/icons/big-loader.gif") center no-repeat;
+  width: 100%;
+  line-height: 1;
+  top: 50%;
+  margin-top: -1.5em;
+}
+#embed-wrapper.faded .loading-message {
+  opacity: 1;
+  visibility: visible;
+}
+#embed-wrapper.faded .video-container {
+  opacity: 0;
+}
+/* VIDEO
+-------------------------------------------------- */
+.video-container {
+  position: relative;
+}
+@media only screen and (min-width : 0px) and (min-width: 0px) {
+  .video-container {
+    font-size: 14px;
+  }
+}
+@media only screen and (min-width : 640px) and (min-height : 360px) {
+  .video-container {
+    font-size: 16px;
+  }
+}
+@media only screen and (min-width : 853px) and (min-height : 479.8125px) {
+  .video-container {
+    font-size: 21.325px;
+  }
+}
+@media only screen and (min-width : 1280px) and (min-height : 720px) {
+  .video-container {
+    font-size: 32px;
+  }
+}
+@media only screen and (min-width : 0px) and (min-width: 0px) {
+  .butter-header-spacing .video-container {
+    font-size: 14px;
+  }
+}
+@media only screen and (min-width : 990px) and (min-height : 670px) {
+  .butter-header-spacing .video-container {
+    font-size: 16px;
+  }
+}
+@media only screen and (min-width : 1203px) and (min-height : 789.8125px) {
+  .butter-header-spacing .video-container {
+    font-size: 21.325px;
+  }
+}
+@media only screen and (min-width : 1630px) and (min-height : 1030px) {
+  .butter-header-spacing .video-container {
+    font-size: 32px;
+  }
+}
+.video {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+  z-index: 1;
+  background: #FFF;
+}
+.butter-header-spacing .video {
+  box-shadow: inset 0 0 0 1px #DDD;
+}
+.video > video,
+.video > iframe,
+.video > object {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.video > video {
+  background: #FFF;
+}
+/* Use this class for a full overlay */
+.video-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+}

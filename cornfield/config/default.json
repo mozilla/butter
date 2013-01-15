@@ -73,7 +73,10 @@
     "../templates/assets/plugins/loopPlugin/popcorn.loopPlugin.js",
     "../templates/assets/plugins/skip/popcorn.skip.js",
     "../templates/assets/plugins/pausePlugin/popcorn.pausePlugin.js",
-    "../templates/assets/plugins/wikipedia/popcorn.wikipedia.js"
+    "../templates/assets/plugins/wikipedia/popcorn.wikipedia.js",
+    "../templates/kineticTypography/plugins/rotate/popcorn.rotate.js",
+    "../templates/kineticTypography/plugins/container/popcorn.container.js",
+    "../templates/kineticTypography/plugins/text/popcorn.text.js"
   ],
   "database": {
     "database": "popcorn",

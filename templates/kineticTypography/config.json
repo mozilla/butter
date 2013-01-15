@@ -1,0 +1,31 @@
+{
+  "name": "kineticTypography",
+  "template": "index.html",
+  "baseDir": "../../",
+  "savedDataUrl": "saved-data.json",
+  "plugin": {
+    "plugins": [
+      {
+        "type": "text",
+        "path": "plugins/text/popcorn.text.js",
+        "icon": "plugins/text/text-icon.png"
+      },
+      {
+        "type": "container",
+        "path": "plugins/container/popcorn.container.js",
+        "icon": "plugins/text/text-icon.png"
+      },
+      {
+        "type": "rotate",
+        "path": "plugins/rotate/popcorn.rotate.js",
+        "icon": "plugins/text/text-icon.png"
+      }
+    ],
+    "defaults": [
+      "text",
+      "container",
+      "rotate"
+    ]
+  },
+  "maxPluginZIndex": 1000
+}

@@ -60,15 +60,15 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
           }
         },
         basicContainer: optionsContainer,
-        ignoreManifestKeys: [ "target", "start", "end" ]
+        ignoreManifestKeys: [ "start", "end" ]
       });
 
       if ( trackEvent.manifest.options.target && !trackEvent.manifest.options.target.hidden ) {
-        targetList = _this.createTargetsList( _targets );
-        selectElement = targetList.querySelector( "select" );
+        //targetList = _this.createTargetsList( _targets );
+        //selectElement = targetList.querySelector( "select" );
         // Attach the onchange handler to trackEvent is updated when <select> is changed
-        _this.attachSelectChangeHandler( selectElement, trackEvent, "target" );
-        optionsContainer.appendChild( targetList );
+        //_this.attachSelectChangeHandler( selectElement, trackEvent, "target" );
+        //optionsContainer.appendChild( targetList );
       }
 
       _this.updatePropertiesFromManifest( trackEvent, null, true );
