@@ -201,6 +201,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
       if ( _media.ready ) {
         trackEvent = butter.generateSafeTrackEvent( type, start, track );
+        _media.updateTrackEvents();
         butter.editor.editTrackEvent( trackEvent );
       }
     }

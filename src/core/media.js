@@ -190,11 +190,6 @@
           // Insert new track
           _orderedTracks.splice( idx, 0, newTrack );
 
-          // Fix all the order properties on subsequent tracks
-          for ( var i = idx, l = _orderedTracks.length; i < l; ++i ) {
-            _orderedTracks[ i ].order = i;
-          }
-
           setupNewTrack( newTrack );
 
           _this.dispatch( "trackadded", newTrack );
@@ -329,10 +324,6 @@
       this.sortTracks = function( suppressEvent ) {
         _orderedTracks = _tracks.slice();
         _orderedTracks.sort( compareTrackOrder );
-        for ( var i = 0, l = _orderedTracks.length; i < l; ++i ) {
-          _orderedTracks[ i ].order = i;
-          _orderedTracks[ i ].updateTrackEvents();
-        }
         if ( !suppressEvent ) {
           _this.dispatch( "trackorderchanged", _orderedTracks );
         }
@@ -370,11 +361,12 @@
           nextTrack = _this.getNextTrack( track );
           if ( nextTrack ) {
             if ( nextTrack.findOverlappingTrackEvent( start, end, ignoreTrackEvent ) ) {
-              return _this.insertTrackBefore( nextTrack );
+              nextTrack = _this.insertTrackBefore( nextTrack );
+              //return _this.insertTrackBefore( nextTrack );
             }
-            else {
+            //else {
               return nextTrack;
-            }
+            //}
           }
           else {
             return this.addTrack();
@@ -416,6 +408,14 @@
               }
             }
           }
+        }
+        _this.updateTrackEvents();
+      };
+
+      this.updateTrackEvents = function() {
+        for ( var i = 0, l = _orderedTracks.length; i < l; ++i ) {
+          _orderedTracks[ i ].order = i;
+          _orderedTracks[ i ].updateTrackEvents();
         }
       };
 
