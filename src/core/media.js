@@ -25,6 +25,7 @@
       var _tracks = [],
           _orderedTracks = [],
           _id = "Media" + __guid++,
+          _fallback = false,
           _logger = new Logger( _id ),
           _name = mediaOptions.name || _id,
           _url = mediaOptions.url,
@@ -281,6 +282,15 @@
         }
       }
 
+      this.listen( "mediatimeout", function() {
+        // If we have a duration from saved data, we can load up the media with that instead of spinning forever.
+        if ( _fallback && _target ) {
+          _popcornWrapper.interruptLoad();
+          _popcornWrapper.clear( _target );
+          _popcornWrapper.prepare( "#t=," + _duration, _target, _popcornOptions, _this.popcornCallbacks, _this.popcornScripts );
+        }
+      });
+
       this.setupContent = setupContent;
 
       this.onReady = function( callback ){
@@ -467,6 +477,7 @@
             if ( _url !== val ) {
               _url = val;
               _ready = false;
+              _fallback = false;
               _popcornWrapper.clear( _target );
               setupContent();
               _this.dispatch( "mediacontentchanged", _this );
@@ -584,6 +595,10 @@
             }
             if( importData.url ){
               _this.url = importData.url;
+            }
+            if ( importData.duration >= 0 ) {
+              _duration = importData.duration;
+              _fallback = true;
             }
             if( importData.tracks ){
               var importTracks = importData.tracks;
