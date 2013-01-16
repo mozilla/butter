@@ -170,17 +170,11 @@ app.post( '/api/publish/:id',
       var headEndTagIndex,
           bodyEndTagIndex,
           externalAssetsString = '',
-          popcornString = '',
-          currentMedia,
-          currentTrack,
-          currentTrackEvent,
-          mediaPopcornOptions,
           templateURL,
           baseString,
           headStartTagIndex,
           templateScripts,
           startString,
-          numSources,
           j, k, len;
 
       templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
@@ -212,51 +206,16 @@ app.post( '/api/publish/:id',
         externalAssetsString += '\n';
       }
 
-      popcornString += '<script>';
-
-      for ( i = 0; i < projectData.media.length; ++i ) {
-        var mediaUrls,
-            mediaUrlsString = '[ "';
-
-        currentMedia = projectData.media[ i ];
-        // We expect a string (one url) or an array of url strings.
-        // Turn a single url into an array of 1 string.
-        mediaUrls = typeof currentMedia.url === "string" ? [ currentMedia.url ] : currentMedia.url;
-        mediaPopcornOptions = currentMedia.popcornOptions || {};
-        // Force the Popcorn instance we generate to have an ID we can query.
-        mediaPopcornOptions.id = "Butter-Generated";
-
-        numSources = mediaUrls.length;
-
-        for ( k = 0; k < numSources - 1; k++ ) {
-          mediaUrlsString += mediaUrls[ k ] + '" , "';
-        }
-        mediaUrlsString += mediaUrls[ numSources - 1 ] + '" ]';
-
-        popcornString += '\n(function(){';
-        popcornString += '\nvar popcorn = Popcorn.smart("#' + currentMedia.target + '", ' +
-                         mediaUrlsString + ', ' + JSON.stringify( mediaPopcornOptions ) + ');';
-        for ( j = 0; j < currentMedia.tracks.length; ++ j ) {
-          currentTrack = currentMedia.tracks[ j ];
-          for ( k = 0; k < currentTrack.trackEvents.length; ++k ) {
-            currentTrackEvent = currentTrack.trackEvents[ k ];
-            popcornString += '\npopcorn.' + currentTrackEvent.type + '(';
-            popcornString += JSON.stringify( currentTrackEvent.popcornOptions, null, 2 );
-            popcornString += ');';
-          }
-        }
-        popcornString += '}());\n';
-      }
-      popcornString += '</script>\n';
-
       data = startString + baseString + templateScripts + externalAssetsString +
              data.substring( headEndTagIndex, bodyEndTagIndex ) +
-             popcornString + data.substring( bodyEndTagIndex );
+             data.substring( bodyEndTagIndex );
 
       // Convert 1234567890 => "kf12oi"
       var idBase36 = utils.generateIdString( id ),
           publishUrl = utils.generatePublishUrl( id ),
           iframeUrl = utils.generateIframeUrl( id );
+
+      fs.writeFile( "view/v/" + idBase36 + ".json", JSON.stringify( projectData, null, 2 ) );
 
       function finished( err ) {
         if ( err ) {
@@ -294,10 +253,7 @@ app.post( '/api/publish/:id',
                     baseHref: baseHref,
                     remixUrl: remixUrl,
                     templateScripts: templateScripts,
-                    externalAssets: externalAssetsString,
-                    // XXX: need a better way to wrap function, DOM needs to be ready
-                    popcorn: popcornString.replace( /^\(function\(\)\{/m, "Popcorn( function(){" )
-                                          .replace( /\}\(\)\);$/m, "});" )
+                    externalAssets: externalAssetsString
                   },
                   publishEmbedShell );
 
