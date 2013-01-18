@@ -50,7 +50,7 @@ module.exports = function( config, dbReadyFn ) {
           errs.push( err );
         }
 
-        if ( ++finishedItems == files.length ) {
+        if ( ++finishedItems === files.length ) {
           callback( errs.length > 0 ? errs : null );
         }
       }
