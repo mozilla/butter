@@ -88,6 +88,16 @@
             },
             timeout: function(){
               _this.dispatch( "mediatimeout" );
+              // _fallback is for a failed media load from saved data.
+              // A media fail from the media editor should not trigger this.
+              // Thus, a media cannot be saved if it is invalid,
+              // so this means it used to be valid, but is no longer finding the media.
+              // Instead, we load a null wrapper using the previously working media's duration.
+              if ( _fallback && _target ) {
+                _popcornWrapper.interruptLoad();
+                _popcornWrapper.clear( _target );
+                _popcornWrapper.prepare( "#t=," + _duration, _target, _popcornOptions, _this.popcornCallbacks, _this.popcornScripts );
+              }
             },
             fail: function( e ){
               _this.dispatch( "mediafailed", "error" );
@@ -281,15 +291,6 @@
           _popcornWrapper.prepare( _url, _target, _popcornOptions, _this.popcornCallbacks, _this.popcornScripts );
         }
       }
-
-      this.listen( "mediatimeout", function() {
-        // If we have a duration from saved data, we can load up the media with that instead of spinning forever.
-        if ( _fallback && _target ) {
-          _popcornWrapper.interruptLoad();
-          _popcornWrapper.clear( _target );
-          _popcornWrapper.prepare( "#t=," + _duration, _target, _popcornOptions, _this.popcornCallbacks, _this.popcornScripts );
-        }
-      });
 
       this.setupContent = setupContent;
 

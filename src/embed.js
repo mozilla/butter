@@ -271,7 +271,7 @@ function init( window, document ) {
           config,
           uri = URI.parse( window.location.href ),
           qs = uri.queryKey,
-          id = uri.file.replace( "_.html", "" );
+          id = uri.file.replace( "_.html", "" ),
           container = document.querySelectorAll( ".container" )[ 0 ];
 
       /**
@@ -333,9 +333,12 @@ function init( window, document ) {
             i, il, ready;
 
         function buildPopcorn() {
-          for ( j = 0; j < currentMedia.tracks.length; ++ j ) {
+          var currentTrack,
+              currentTrackEvent,
+              j, jl, k, kl;
+          for ( j = 0, jl = currentMedia.tracks.length; j < jl; ++ j ) {
             currentTrack = currentMedia.tracks[ j ];
-            for ( k = 0; k < currentTrack.trackEvents.length; ++k ) {
+            for ( k = 0, kl = currentTrack.trackEvents.length; k < kl; ++k ) {
               currentTrackEvent = currentTrack.trackEvents[ k ];
               popcorn[ currentTrackEvent.type ]( currentTrackEvent.popcornOptions );
             }
@@ -358,37 +361,6 @@ function init( window, document ) {
 
           if ( config.loop ) {
             popcorn.loop( true );
-          }
-        };
-
-        for ( i = 0, il = projectData.media.length; i < il; ++i ) {
-          mediaUrls = "";
-
-          currentMedia = projectData.media[ i ];
-          // We expect a string (one url) or an array of url strings.
-          // Turn a single url into an array of 1 string.
-          mediaUrls = typeof currentMedia.url === "string" ? [ currentMedia.url ] : currentMedia.url;
-          mediaPopcornOptions = currentMedia.popcornOptions || {};
-
-          // set a timeout to occur after timeoutDuration milliseconds
-          setTimeout(function(){
-            // if success hasn't already occured, call timeoutCallback
-            if ( !ready ) {
-              popcorn.destroy();
-              popcorn = Popcorn.smart( "#" + currentMedia.target, "#t=," + currentMedia.duration, mediaPopcornOptions );
-
-              // A null media loads instantly
-              onLoad();
-            }
-          }, MEDIA_WAIT_DURATION );
-
-          popcorn = Popcorn.smart( "#" + currentMedia.target, mediaUrls, mediaPopcornOptions );
-
-          // Either the video is ready, or we need to wait.
-          if ( popcorn.readyState() >= 1 ) {
-            onLoad();
-          } else {
-            popcorn.media.addEventListener( "canplay", onLoad );
           }
         }
 
@@ -436,6 +408,39 @@ function init( window, document ) {
               popcorn.pause();
               popcorn.emit( "ended" );
             });
+          }
+        }
+
+        function mediaTimeOut() {
+          // if success hasn't already occured, call timeoutCallback
+          if ( !ready ) {
+            popcorn.destroy();
+            popcorn = Popcorn.smart( "#" + currentMedia.target, "#t=," + currentMedia.duration, mediaPopcornOptions );
+
+            // A null media loads instantly
+            onLoad();
+          }
+        }
+
+        for ( i = 0, il = projectData.media.length; i < il; ++i ) {
+          mediaUrls = "";
+
+          currentMedia = projectData.media[ i ];
+          // We expect a string (one url) or an array of url strings.
+          // Turn a single url into an array of 1 string.
+          mediaUrls = typeof currentMedia.url === "string" ? [ currentMedia.url ] : currentMedia.url;
+          mediaPopcornOptions = currentMedia.popcornOptions || {};
+
+          // set a timeout to occur after timeoutDuration milliseconds
+          setTimeout( mediaTimeOut, MEDIA_WAIT_DURATION );
+
+          popcorn = Popcorn.smart( "#" + currentMedia.target, mediaUrls, mediaPopcornOptions );
+
+          // Either the video is ready, or we need to wait.
+          if ( popcorn.readyState() >= 1 ) {
+            onLoad();
+          } else {
+            popcorn.media.addEventListener( "canplay", onLoad );
           }
         }
 

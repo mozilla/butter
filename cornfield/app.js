@@ -175,7 +175,7 @@ app.post( '/api/publish/:id',
           headStartTagIndex,
           templateScripts,
           startString,
-          j, k, len;
+          len;
 
       templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
       baseHref = APP_HOSTNAME + templateURL + "/";
