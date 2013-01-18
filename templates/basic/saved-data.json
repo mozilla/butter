@@ -18,7 +18,7 @@
                 "id": "TrackEvent0",
                 "type": "sequencer",
                 "popcornOptions": {
-                    "start": 0,
+                    "start": 3,
                     "end": 70,
                     "target": "video-container",
                     "source": "http://www.youtube.com/watch?v=JLO1YIWQuXE",
