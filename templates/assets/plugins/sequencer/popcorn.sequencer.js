@@ -2,6 +2,26 @@
 
 (function (Popcorn) {
 
+  // XXX: SoundCloud has a bug (reported by us, but as yet unfixed) which blocks
+  // loading of a second iframe/player if the iframe for the first is removed
+  // from the DOM.  We can simply move old ones to a quarantine div, hidden from
+  // the user for now (see #2630).  We lazily create and memoize the instance.
+  function getSoundCloudQuarantine() {
+    if ( getSoundCloudQuarantine.instance ) {
+      return getSoundCloudQuarantine.instance;
+    }
+
+    var quarantine = document.createElement( "div" );
+    quarantine.style.width = "0px";
+    quarantine.style.height = "0px";
+    quarantine.style.overflow = "hidden";
+    quarantine.style.visibility = "hidden";
+    document.body.appendChild( quarantine );
+
+    getSoundCloudQuarantine.instance = quarantine;
+    return quarantine;
+  }
+
   var MEDIA_LOAD_TIMEOUT = 10000;
  
   Popcorn.plugin( 'sequencer', {
@@ -23,7 +43,6 @@
       container.style.zIndex = 0;
       container.className = "popcorn-sequencer";
       container.style.position = "absolute";
-      //container.style.display = "none";
       container.style.width = ( options.width || "100" ) + "%";
       container.style.height = ( options.height || "100" ) + "%";
       container.style.top = ( options.top || "0" ) + "%";
@@ -68,15 +87,17 @@
       }
 
       options._startEvent = function() {
-        _this.on( "play", options._playEvent );
-        _this.on( "pause", options._pauseEvent );
-        //_this.on( "seeking", options._seekingEvent );
         // wait for this seek to finish before displaying it
         // we then wait for a play as well, because youtube has no seek event,
         // but it does have a play, and won't play until after the seek.
+        // so we know if the play has finished, the seek is also finished.
         var seekedEvent = function () {
           var playedEvent = function() {
             options.p.off( "play", playedEvent );
+            _this.on( "play", options._playEvent );
+            _this.on( "pause", options._pauseEvent );
+            _this.on( "seeking", options._seekingEvent );
+            _this.on( "seeked", options._seekedEvent );
             options._container.style.zIndex = +options.zindex;
             if ( options.playWhenReady ) {
               _this.play();
@@ -85,6 +106,7 @@
             }
             if ( options.startWhenReady ) {
               options.p.unmute();
+              options.p.volume( options.volume );
             }
           };
           options.p.off( "seeked", seekedEvent );
@@ -99,6 +121,10 @@
         options.p.play();
       };
 
+      options._suppressPlayEvent = function() {
+        _this.pause();
+      };
+
       options._pauseEvent = function() {
         options.p.pause();
       };
@@ -110,21 +136,37 @@
         options.p.currentTime( _this.currentTime() - options.start + (+options.from) );
       };
 
-      /*options._seekedEvent = function() {
+      options._seekedEvent = function() {
         if ( options.ready ) {
           if ( options.p.paused() && !that.paused() ) {
             options.p.play();
           }
           options.p.currentTime( that.currentTime() - options.start + (+options.from) );
         }
-      };*/
+      };
     },
     _teardown: function( options ) {
-//      options._target.removeChild( options._container );
+      if ( options.p ) {
+        if ( /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)(soundcloud)/.test( options.source ) ) {
+          // XXX: pull the SoundCloud iframe element out of our video div, and quarantine
+          // so we don't delete it, and block loading future SoundCloud instances. See above.
+          var soundCloudParent = options.p.media.parentNode,
+              soundCloudIframe = soundCloudParent.querySelector( "iframe" );
+          if ( soundCloudIframe ) {
+            getSoundCloudQuarantine().appendChild( soundCloudIframe );
+          }
+          return;
+        }
+        options.p.destroy();
+
+        // Tear-down old instances, special-casing SoundCloud removal, see above.
+        while( options._container && options._container.parentNode ) {
+          options._container.parentNode.removeChild( options._container );
+        }
+      }
     },
     start: function( event, options ) {
       if ( options.failed ) {
-        // consider some dialog to inform of the fail.
         return;
       }
       if ( !this.paused() ) {
@@ -133,35 +175,19 @@
         options.p.pause();
       }
       options.startWhenReady = true;
-      // need to display a loading bar if start before ready.
       if ( options.ready ) {
         options._startEvent();
+      } else {
+        // TODO
+        // loading bar here
+        // turn it off on fail or ready.
       }
-        /*if ( options.p.media.readyState >= 4 ) {
-          options.readyEvent();
-        } else {
-          options.p.on( "canplaythrough", options.readyEvent );
-        }*/
-      /*var targetTime;
-      this.on( "play", options._playEvent );
-      this.on( "pause", options._pauseEvent );
-  		this.on( "seeking", options._seekingEvent );
-			this.on( "seeked", options._seekedEvent );
-      if ( options.ready ) {
-        targetTime = this.currentTime() - options.start + (+options.from);
-        if ( targetTime !== options.p.currentTime() ) {
-          options.p.currentTime( targetTime );
-        }
-        if ( !this.paused() ) {
-          options.p.play();
-        }
-      }*/
     },
     end: function( event, options ) {
       this.off( "play", options._playEvent );
       this.off( "pause", options._pauseEvent );
-  		//this.off( "seeking", options._seekingEvent );
-			/*this.off( "seeked", options._seekedEvent );*/
+  		this.off( "seeking", options._seekingEvent );
+			this.off( "seeked", options._seekedEvent );
       if ( options.ready ) {
         if ( !options.p.paused() ) {
           options.p.pause();
