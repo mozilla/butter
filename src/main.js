@@ -911,7 +911,7 @@
         } //if
       }
       else {
-        readConfig( butterOptions.config );
+        readConfig( Config.reincarnate( butterOptions.config ) );
       } //if
 
       _this.page = _page;
