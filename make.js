@@ -1,4 +1,4 @@
-/*global cat,cd,cp,echo,env,exec,exit,find,ls,mkdir,mv,pwd,rm,sed,target*/
+/*global cat,cd,cp,echo,env,exec,exit,find,mkdir,mv,pwd,rm,sed,target*/
 
 var path = require( "path" ),
     spawn = require('child_process').spawn,
@@ -180,7 +180,7 @@ function checkJS(){
   });
 
   // jshint with non-errors plus linting of json files
-  passed = !exec( JSLINT + " " + files + " --show-non-errors --extra-ext json" ).code && passed;
+  passed = !exec( JSLINT + " " + files + " --extra-ext json" ).code && passed;
 }
 
 var desc = {

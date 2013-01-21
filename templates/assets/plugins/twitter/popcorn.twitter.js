@@ -1,6 +1,6 @@
 // PLUGIN: Twitter
 
-(function ( Popcorn, global ) {
+(function ( Popcorn ) {
 
   var CACHED_RESULTS = {},
       MAX_TWEETS = 150,

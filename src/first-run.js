@@ -7,12 +7,12 @@
  *
  * Determines whether or not a user should be shown a first-run dialog
  */
-define( [ "dialog/dialog", "ui/widget/tooltip", "util/shims" ], function( Dialog, ToolTip, Shims ) {
+define( [ "dialog/dialog", "ui/widget/tooltip" ], function( Dialog, ToolTip ) {
 
   var __butterStorage = window.localStorage;
 
   return {
-    init: function( config ) {
+    init: function() {
 
       var dialog,
           popupTooltip,

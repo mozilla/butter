@@ -187,7 +187,7 @@
           text: newText
         });
       };
-      onBlur = function( e ) {
+      onBlur = function() {
         // store the new text.
         updateText();
         // update the text after any existing events are done.

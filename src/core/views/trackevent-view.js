@@ -67,7 +67,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
      * Used to notify the user when a trackevent overlaps and where the new location will be
      * when the trackevent is dropped
      */
-    this.createGhost = function( track ) {
+    this.createGhost = function() {
       if ( _ghost ) {
         return _ghost;
       }

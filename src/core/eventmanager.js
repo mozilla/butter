@@ -167,7 +167,7 @@ define( [], function(){
     }
   }
 
-  function __dispatch( target, namespace, event, eventData, listeners ){
+  function __dispatch( target, namespace, event, eventData ){
     var customEvent, butterEvent,
         namespacedEventName, eventName;
 

@@ -79,7 +79,7 @@ define( [ "util/lang" ],
       _lastScrollWidth = scrollWidth;
     }
 
-    function onMouseUp( e ) {
+    function onMouseUp() {
       _seekMouseUp = true;
 
       _timeTooltip.classList.remove( "tooltip-no-transition-on" );
@@ -154,7 +154,7 @@ define( [ "util/lang" ],
       setNodePosition();
     } //onMouseMove
 
-    function onSeeked( e ) {
+    function onSeeked() {
       _isSeeking = false;
 
       _media.unlisten( "mediaseeked", onSeeked );
@@ -190,7 +190,7 @@ define( [ "util/lang" ],
       parentElement.addEventListener( "mouseout", onMouseOut, false );
     }
 
-    function onMouseOut( e ) {
+    function onMouseOut() {
       _timeTooltip.classList.remove( "tooltip-no-transition-on" );
 
       parentElement.removeEventListener( "mousemove", onTimelineMouseMove, false );
@@ -244,11 +244,11 @@ define( [ "util/lang" ],
     };
 
 
-    _media.listen( "mediaplay", function( e ) {
+    _media.listen( "mediaplay", function() {
       _isPlaying = true;
     });
 
-    _media.listen( "mediapause", function( e ) {
+    _media.listen( "mediapause", function() {
       // scrubbing is for the mouseup and mousedown state.
       // seeking is the media's state.
       // these are not always the same.

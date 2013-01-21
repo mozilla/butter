@@ -138,7 +138,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
     }
   }
 
-  function __onDraggableMouseUp( e ) {
+  function __onDraggableMouseUp() {
     window.removeEventListener( "dragstart", __onWindowDragStart, false );
     window.removeEventListener( "mousemove", __onDraggableDragged, false );
     window.removeEventListener( "mousemove", __onDraggableMouseUp, false );
@@ -364,7 +364,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
 
       }
 
-      function onMouseUp( e ) {
+      function onMouseUp() {
         window.removeEventListener( "mousemove", onMouseMove, false );
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
@@ -450,7 +450,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
         }
       }
 
-      function onMouseUp( e ) {
+      function onMouseUp() {
         window.removeEventListener( "mousemove", onMouseMove, false );
         window.removeEventListener( "mouseup", onMouseUp, false );
         clearInterval( _updateInterval );
@@ -518,12 +518,12 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       _onStart();
     });
 
-    element.addEventListener( "dragend", function( e ) {
+    element.addEventListener( "dragend", function() {
       __currentDraggingElement = null;
       _onStop();
     });
 
-    element.addEventListener( "drop", function( e ) {
+    element.addEventListener( "drop", function() {
     });
   }
 
@@ -911,7 +911,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       }
     };
 
-    _draggable.drop = function( e ) {
+    _draggable.drop = function() {
       if ( _draggable.droppable ) {
         _draggable.droppable.drop( _draggable );
       }
@@ -1078,7 +1078,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       DragNDrop.dispatch( "sortstarted" );
     }
 
-    function onElementMouseUp( e ) {
+    function onElementMouseUp() {
       _draggingElement.style.zIndex = _oldZIndex;
       window.removeEventListener( "mouseup", onElementMouseUp, false );
       window.removeEventListener( "mousemove", onElementMouseMove, false );

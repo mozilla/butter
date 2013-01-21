@@ -6,7 +6,7 @@ define([ "text!dialog/dialogs/delete-track.html", "dialog/dialog" ],
   function( LAYOUT_SRC, Dialog ){
 
   Dialog.register( "delete-track", LAYOUT_SRC, function( dialog, trackName ) {
-    dialog.registerActivity( "ok", function( e ){
+    dialog.registerActivity( "ok", function(){
       dialog.send( "submit", true );
     });
 

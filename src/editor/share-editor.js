@@ -6,7 +6,7 @@ define([ "editor/editor", "editor/base-editor",
           "text!layouts/share-editor.html", "util/social-media", "ui/widget/textbox" ],
   function( Editor, BaseEditor, LAYOUT_SRC, SocialMedia, TextboxWrapper ) {
 
-  Editor.register( "share-properties", LAYOUT_SRC, function( rootElement, butter, compiledLayout ) {
+  Editor.register( "share-properties", LAYOUT_SRC, function( rootElement, butter ) {
     var socialMedia = new SocialMedia(),
         editorContainer = rootElement.querySelector( ".editor-container" ),
         projectURL = editorContainer.querySelector( ".butter-project-url" ),
@@ -98,7 +98,7 @@ define([ "editor/editor", "editor/base-editor",
       updateEmbed( butter.project.iframeUrl );
     }, false);
 
-    authorInput.addEventListener( "blur", function( e ) {
+    authorInput.addEventListener( "blur", function() {
       if ( authorInput.value !== butter.project.author ) {
         butter.project.author = authorInput.value;
       }

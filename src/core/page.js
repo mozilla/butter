@@ -4,7 +4,7 @@
 
 define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
 
-  return function( loader, config ) {
+  return function( loader ) {
 
     var PLAYER_TYPE_URL = "{popcorn-js}/players/{type}/popcorn.{type}.js";
 

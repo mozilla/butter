@@ -10,8 +10,7 @@ var test = require( "tap" ).test,
       author: "Test User",
       template: "basic"
     },
-    id,
-    callback;
+    id;
 
 test( "sqlite db setup with incorrect pool params", function( t ) {
   var poolUser = require( "../lib/user" )({
@@ -69,7 +68,7 @@ test( "createProject valid parameters", function( t ) {
 test( "createProject invalid parameters - Project Data", function( t ) {
   t.plan( 2 );
 
-  var mockCallback = function( err, project ) {
+  var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
         t.equal( err, "not enough parameters to update", "Reported expected error message" );
 
@@ -82,7 +81,7 @@ test( "createProject invalid parameters - Project Data", function( t ) {
 test( "createProject invalid parameters - Email", function( t ) {
   t.plan( 2 );
 
-  var mockCallback = function( err, project ) {
+  var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
         t.equal( err, "not enough parameters to update", "Reported expected error message for creation" );
 
@@ -150,7 +149,7 @@ test( "findAllProjects valid parameters", function( t ) {
 test( "findAllProjects invalid parameters", function( t ) {
   t.plan( 2 );
 
-  var mockCallback = function( err, docs ) {
+  var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
         t.equal( err, "not enough parameters to search", "Reported expected error message for retrieving all projects" );
 
@@ -176,7 +175,7 @@ test( "findById valid parameters", function( t ) {
 test( "findById invalid parameters", function( t ) {
   t.plan( 2 );
 
-  var mockCallback = function( err, project ) {
+  var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
         t.equal( err, "not enough parameters for search", "Reported expected error message for retrieving by ID" );
 
@@ -207,7 +206,7 @@ test( "findProject valid parameters", function( t ) {
 test( "findProject invalid parameters - Project ID", function( t ) {
   t.plan( 2 );
 
-  var mockCallback = function( err, project ) {
+  var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
         t.equal( err, "not enough parameters to search", "Reported expected error message for project retrieval" );
 
@@ -220,7 +219,7 @@ test( "findProject invalid parameters - Project ID", function( t ) {
 test( "findProject invalid parameters - Email", function( t ) {
   t.plan( 2 );
 
-  var mockCallback = function( err, project ) {
+  var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
         t.equal( err, "not enough parameters to search", "Reported expected error message for project retrieval" );
 
@@ -256,7 +255,7 @@ test( "updateProject valid parameters", function( t ) {
 test( "updateProject invalid parameters - Project Data", function( t ) {
   t.plan( 2 );
 
-  var mockCallback = function( err, project ) {
+  var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
         t.equal( err, "not enough parameters to update", "Reported expected error message for project updating" );
 
@@ -269,7 +268,7 @@ test( "updateProject invalid parameters - Project Data", function( t ) {
 test( "updateProject invalid parameters - Project ID", function( t ) {
   t.plan( 2 );
 
-  var mockCallback = function( err, project ) {
+  var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
         t.equal( err, "not enough parameters to update", "Reported expected error message for project updating" );
 
@@ -282,7 +281,7 @@ test( "updateProject invalid parameters - Project ID", function( t ) {
 test( "updateProject invalid parameters - Email", function( t ) {
   t.plan( 2 );
 
-  var mockCallback = function( err, project ) {
+  var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
         t.equal( err, "not enough parameters to update", "Reported expected error message for project updating" );
 

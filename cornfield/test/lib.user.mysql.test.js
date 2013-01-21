@@ -85,13 +85,13 @@ test( "mysql db pooling", function( t ) {
           t.end();
         });
 
-      poolingUser.createProject( mockEmail, mockData, projectWaiter.wait( function( err, project ) {
+      poolingUser.createProject( mockEmail, mockData, projectWaiter.wait( function( err ) {
         t.ok( !err, "Pooling project created" );
         if ( err ) {
           projectWaiter.cancel();
         }
       }));
-      nonPoolingUser.createProject( mockEmail, mockData, projectWaiter.wait( function( err, project ) {
+      nonPoolingUser.createProject( mockEmail, mockData, projectWaiter.wait( function( err ) {
         t.ok( !err, "Non-pooling project created" );
         if ( err ) {
           projectWaiter.cancel();

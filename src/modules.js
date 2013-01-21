@@ -14,7 +14,7 @@ define(
 
   var moduleList = Array.prototype.slice.apply( arguments );
 
-  return function( Butter, butter, config, onReady ){
+  return function( Butter, butter, config ){
 
     var modules = [],
         loadedModules = 0,

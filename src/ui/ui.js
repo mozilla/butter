@@ -48,7 +48,7 @@ define( [ "core/eventmanager", "./toggler",
     this.editor = null;
 
     var _toggler = new Toggler( this.tray.rootElement.querySelector( ".butter-toggle-button" ),
-        function ( e ) {
+        function () {
           butter.ui.visible = !butter.ui.visible;
           _toggler.state = !_toggler.state;
         }, "Show/Hide Timeline" );
@@ -333,7 +333,7 @@ define( [ "core/eventmanager", "./toggler",
       } // if
     }); // listen
 
-    butter.listen( "trackeventupdated", function( e ) {
+    butter.listen( "trackeventupdated", function() {
       orderedTrackEvents.sort( sortTrackEvents );
     }); // listen
 
@@ -453,7 +453,7 @@ define( [ "core/eventmanager", "./toggler",
         }
       },
 
-      27: function( e ) { // esc key
+      27: function() { // esc key
         if ( !DragNDrop.isDragging ) {
           butter.deselectAllTrackEvents();
         }
@@ -490,7 +490,7 @@ define( [ "core/eventmanager", "./toggler",
           dialog = Dialog.spawn( "delete-track", {
             data: selectedEvents.length + " track events",
             events: {
-              submit: function( e ) {
+              submit: function() {
                 for( i = 0; i < l; i++ ) {
                   selectedEvent = selectedEvents[ i ];
                   butter.editor.closeTrackEventEditor( selectedEvent );
@@ -498,7 +498,7 @@ define( [ "core/eventmanager", "./toggler",
                 }
                 dialog.close();
               },
-              cancel: function( e ) {
+              cancel: function() {
                 dialog.close();
               }
             }

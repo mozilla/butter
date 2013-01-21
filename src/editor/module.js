@@ -10,13 +10,11 @@
 define( [ "core/eventmanager", "core/trackevent", "./editor",
           "ui/toggler", "util/lang", "text!layouts/editor-area.html",
           "./default", "core/logger", "./header",
+          // Included here to register themselves.
           "./media-editor", "./share-editor" ],
   function( EventManager, TrackEvent, Editor,
             Toggler, LangUtils, EDITOR_AREA_LAYOUT,
-            DefaultEditor, Logger, Header,
-
-            //included here to register themselves
-            MediaEditor, ShareEditor ){
+            DefaultEditor, Logger, Header ){
 
   var DEFAULT_EDITOR_NAME = "plugin-list";
 
@@ -97,7 +95,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       }
 
       _currentEditor.open( _editorContentArea, options.openData );
-      _currentEditor.listen( "back", function( e ) {
+      _currentEditor.listen( "back", function() {
         _this.openEditor( DEFAULT_EDITOR_NAME );
       });
 
@@ -184,7 +182,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
      */
     this._start = function( onModuleReady ){
       _toggler = new Toggler( _editorAreaDOMRoot.querySelector( ".butter-editor-close-btn" ),
-        function( e ) {
+        function() {
           var newState = !_editorAreaDOMRoot.classList.contains( "minimized" );
 
           var onTransitionEnd = function(){

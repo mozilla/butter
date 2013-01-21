@@ -399,9 +399,9 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
     }
 
     /* Abstract the problem of waiting for some condition to occur with a timeout. Loop on checkFunction,
-     * calling readyCallback when it succeeds, or calling timeoutCallback after timeoutDuration milliseconds.
+     * calling readyCallback when it succeeds, or calling timeoutCallback after MEDIA_WAIT_DURATION milliseconds.
      */
-    function checkTimeoutLoop( checkFunction, readyCallback, timeoutCallback, timeoutDuration ){
+    function checkTimeoutLoop( checkFunction, readyCallback, timeoutCallback ){
       var ready = false;
 
       // perform one check

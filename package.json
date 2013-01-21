@@ -83,7 +83,7 @@
   },
   "dependencies": {
     "shelljs": "~0.0.9",
-    "jshint": "0.6.2",
+    "jshint": "~0.9.1",
     "requirejs": "2.0.6",
     "express": "~3.0.4",
     "jade": "~0.27.7",

@@ -42,7 +42,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       document.body.classList.toggle( "tabzilla-open" );
     }, false );
 
-    function saveProject( e ) {
+    function saveProject() {
       if ( !butter.cornfield.authenticated() ) {
         _userData.authenticationRequired();
       }
@@ -108,7 +108,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       }
     }
 
-    function projectNameClick( e ) {
+    function projectNameClick() {
       var input = document.createElement( "input" );
 
       input.type = "text";
@@ -123,7 +123,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       input.addEventListener( "keypress", onKeyPress, false );
     }
 
-    function clearEventsClick( e ) {
+    function clearEventsClick() {
       var dialog;
       if ( butter.currentMedia && butter.currentMedia.hasTrackEvents() ) {
         dialog = Dialog.spawn( "delete-track-events", {

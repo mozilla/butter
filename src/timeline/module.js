@@ -11,7 +11,7 @@ define( [
           Media
         ){
 
-  var Timeline = function( butter, options ){
+  var Timeline = function( butter ){
 
     var _media = {},
         _currentMedia,

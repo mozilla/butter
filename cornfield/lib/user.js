@@ -78,7 +78,7 @@ module.exports = function( config, dbReadyFn ) {
           filename: imageFile.filename,
           url: imageFile.url,
           project: projectId
-        }).save().complete( function( err, imageResult ) {
+        }).save().complete( function( err ) {
           if ( err ) {
             errs.push( err );
           }
