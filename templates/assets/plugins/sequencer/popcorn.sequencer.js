@@ -157,7 +157,7 @@
           //}
           return;
         }
-        options.p.destroy();
+        //options.p.destroy();
 
         // Tear-down old instances, special-casing SoundCloud removal, see above.
         //while( options._container && options._container.parentNode ) {
