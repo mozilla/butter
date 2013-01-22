@@ -357,7 +357,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
      * @param {String} propertyName: Name of property to update when change is detected
      */
     extendObject.attachCheckboxChangeHandler = function( element, trackEvent, propertyName, callBack ) {
-      callBack = callBack || function( trackEvent, updateOptions, prop ) {
+      callBack = callBack || function( trackEvent, updateOptions ) {
         trackEvent.update( updateOptions );
       };
       element.addEventListener( "click", function() {
