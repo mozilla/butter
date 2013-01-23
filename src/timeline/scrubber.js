@@ -205,6 +205,9 @@ define( [ "util/lang" ],
         _media.pause();
       }
       _isScrubbing = true;
+      _isSeeking = true;
+      _seekMouseUp = false;
+      _media.listen( "mediaseeked", onSeeked );
 
       _media.currentTime = ( pos + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration;
       setNodePosition();
@@ -214,10 +217,6 @@ define( [ "util/lang" ],
         _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
       }
       _timeTooltip.classList.add( "tooltip-no-transition-on" );
-
-      _isSeeking = true;
-      _seekMouseUp = false;
-      _media.listen( "mediaseeked", onSeeked );
 
       parentElement.removeEventListener( "mouseout", onMouseOut, false );
       parentElement.removeEventListener( "mousemove", onTimelineMouseMove, false );
