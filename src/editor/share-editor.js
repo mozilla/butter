@@ -101,6 +101,9 @@ define([ "editor/editor", "editor/base-editor",
     authorInput.addEventListener( "blur", function() {
       if ( authorInput.value !== butter.project.author ) {
         butter.project.author = authorInput.value;
+        butter.project.save(function() {
+          butter.editor.openEditor( "share-properties" );
+        });
       }
     }, false );
 
