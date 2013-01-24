@@ -8,7 +8,7 @@ EditorHelper.addPlugin( "sequencer", function( trackEvent ) {
   _popcornOptions = trackEvent.popcornTrackEvent;
   _container = _popcornOptions._container;
   _target = _popcornOptions._target;
-console.log( _target, _container );
+
   if ( window.jQuery ) {
 
     window.EditorHelper.resizable( trackEvent, _container, _target, {
