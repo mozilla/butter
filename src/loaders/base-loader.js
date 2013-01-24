@@ -13,12 +13,17 @@ define( [], function() {
     var match,
         replacement;
 
+    // Replace {variables}
     while ( VAR_REGEX.test( url ) ) {
       match = VAR_REGEX.exec( url );
       replacement = configDirs[ match[ 1 ] ] || "";
       url = url.replace( match[0], replacement );
     }
-    return url.replace( "//", "/" );
+
+    // Replace non-protocol double slashes
+    url = url.replace( /([^:])\/\//g, "$1/" );
+
+    return url;
   }
 
   function BaseLoader( configDirs ) {
