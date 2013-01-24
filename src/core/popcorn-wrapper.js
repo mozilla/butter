@@ -53,8 +53,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
      * popcorn wrapper. Events such as timeupdate, paused, etc
      */
     function addPopcornHandlers(){
-      for( var eventName in _popcornEvents ){
-        if( _popcornEvents.hasOwnProperty( eventName ) ) {
+      for ( var eventName in _popcornEvents ){
+        if ( _popcornEvents.hasOwnProperty( eventName ) ) {
           _popcorn.on( eventName, _popcornEvents[ eventName ] );
         }
       } //for
@@ -71,26 +71,56 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
           popcornId = trackEvent.id,
           popcornEvent = null;
 
+      function createTrackEvent() {
+
+        if ( _popcorn.getTrackEvent( popcornId ) ) {
+          _popcorn[ trackEvent.type ]( popcornId, newOptions );
+        } else {
+          _popcorn[ trackEvent.type ]( popcornId, options );
+        }
+
+        popcornEvent = _popcorn.getTrackEvent( popcornId );
+        trackEvent.popcornTrackEvent = popcornEvent;
+
+        trackEvent.popcornOptions.start = +popcornEvent.start;
+        trackEvent.popcornOptions.end = +popcornEvent.end;
+
+        if ( trackEvent.view ) {
+          if ( popcornEvent.toString ) {
+            trackEvent.view.setToolTip( popcornEvent.toString() );
+            if ( trackEvent.type === "sequencer" ) {
+              if ( !trackEvent.popcornOptions.hidden ) {
+                trackEvent.view.element.classList.add( "sequencer-video" );
+                trackEvent.view.element.classList.remove( "sequencer-audio" );
+              } else {
+                trackEvent.view.element.classList.add( "sequencer-audio" );
+                trackEvent.view.element.classList.remove( "sequencer-video" );
+              }
+            }
+          } else {
+            trackEvent.view.setToolTip( JSON.stringify( options ) );
+          }
+        }
+
+        trackEvent.view.update( trackEvent.popcornOptions );
+
+        // make sure we have a reference to the trackevent before calling toString
+        if ( trackEvent.popcornTrackEvent ) {
+          trackEvent.view.elementText = trackEvent.popcornTrackEvent.toString();
+          // we should only get here if no exceptions happened
+          trackEvent.dispatch( "trackeventupdated", trackEvent );
+        }
+      }
+
       if ( _popcorn ) {
         // make sure the plugin is still included
         if ( _popcorn[ trackEvent.type ] ) {
-
-          if ( _popcorn.getTrackEvent( popcornId ) ) {
-            _popcorn[ trackEvent.type ]( popcornId, newOptions );
+          if ( trackEvent.type === "sequencer" ) {
+            waitForPopcorn( createTrackEvent, function() {
+              throw "Your media seems to be taking a long time to load. Review your media URL(s) or continue waiting.";
+            }, findMediaType( trackEvent.popcornOptions.source ) );
           } else {
-            _popcorn[ trackEvent.type ]( popcornId, options );
-          }
-
-          popcornEvent = _popcorn.getTrackEvent( popcornId );
-          trackEvent.popcornTrackEvent = popcornEvent;
-
-          if ( trackEvent.view ) {
-            if ( popcornEvent.toString ) {
-              trackEvent.view.setToolTip( popcornEvent.toString() );
-            }
-            else {
-              trackEvent.view.setToolTip( JSON.stringify( options ) );
-            }
+            createTrackEvent();
           }
         }
       }
@@ -101,8 +131,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       var popcornId = trackEvent.id;
 
       // ensure the trackevent actually exists before we remove it
-      if( _popcorn ){
-        if( popcornId && _popcorn.getTrackEvent( popcornId ) ){
+      if ( _popcorn ) {
+        if ( popcornId && _popcorn.getTrackEvent( popcornId ) ) {
           _popcorn.removeTrackEvent( popcornId );
         } //if
 
@@ -156,16 +186,16 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
 
       // discover and stash the type of media as dictated by the url
-      findMediaType( firstUrl );
+      setMediaType( firstUrl );
 
       // if there isn't a target, we can't really set anything up, so stop here
-      if( !target ){
+      if ( !target ) {
         _logger.log( "Warning: tried to prepare media with null target." );
         return;
       }
 
       // only enter this block if popcorn doesn't already exist (call clear() first to destroy it)
-      if( !_popcorn ) {
+      if ( !_popcorn ) {
         try {
           // make sure popcorn is setup properly: players, etc
           waitForPopcorn( function(){
@@ -177,7 +207,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
             addPopcornHandlers();
             // wait for the media to become available and notify the user, or timeout
             waitForMedia( _onPrepare, mediaTimeoutWrapper );
-          }, popcornTimeoutWrapper );
+          }, popcornTimeoutWrapper, _mediaType );
         }
         catch( e ) {
           // if we've reached here, we have an internal failure in butter or popcorn
@@ -187,22 +217,28 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
 
     };
 
-    /* Determine the type of media that is going to be used
+    /* Return the type of media that is going to be used
      * based on the specified url
      */
     function findMediaType( url ){
-      var regexResult = __urlRegex.exec( url );
+      var regexResult = __urlRegex.exec( url ),
+          // if the regex didn't return anything we know it's an HTML5 source
+          mediaType = "object";
       if ( regexResult ) {
-        _mediaType = regexResult[ 1 ];
+        mediaType = regexResult[ 1 ];
         // our regex only handles youtu ( incase the url looks something like youtu.be )
-        if ( _mediaType === "youtu" ) {
-          _mediaType = "youtube";
+        if ( mediaType === "youtu" ) {
+          mediaType = "youtube";
         }
       }
-      else {
-        // if the regex didn't return anything we know it's an HTML5 source
-        _mediaType = "object";
-      }
+      return mediaType;
+    }
+
+    /* Sets the type of media that is going to be used
+     * based on the specified url
+     */
+    function setMediaType( url ) {
+      _mediaType = findMediaType( url );
       return _mediaType;
     }
 
@@ -213,8 +249,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
     function constructPlayer( target ){
       var targetElement = document.getElementById( target );
 
-      if( _mediaType !== "object" && targetElement ) {
-        if( [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) !== -1 ) {
+      if ( _mediaType !== "object" && targetElement ) {
+        if ( [ "VIDEO", "AUDIO" ].indexOf( targetElement.nodeName ) !== -1 ) {
           var parentNode = targetElement.parentNode,
               newElement = document.createElement( "div" ),
               videoAttributes = [ "controls", "preload", "autoplay", "loop", "muted", "poster", "src" ],
@@ -230,7 +266,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
               }
             }
           }
-          if( targetElement.className ){
+          if ( targetElement.className ) {
             newElement.className = targetElement.className;
           }
           parentNode.replaceChild( newElement, targetElement );
@@ -239,7 +275,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
     }
 
-    /* Determine which player is needed (usually based on the result of findMediaType)
+    /* Determine which player is needed (usually based on the result of setMediaType)
      * and create a stringified representation of the Popcorn constructor (usually to
      * insert in a script tag).
      */
@@ -275,8 +311,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
 
       // attempt to get the target element, and continue with a warning if a failure occurs
-      if( typeof( target ) !== "string" ){
-        if( target && target.id ){
+      if ( typeof( target ) !== "string" ) {
+        if ( target && target.id ) {
           target = target.id;
         }
         else{
@@ -285,19 +321,19 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       } //if
 
       // if the media type hasn't been discovered yet, bail, since it's pointless to continue
-      if( !_mediaType ){
+      if ( !_mediaType ) {
         throw new Error( "Media type not generated yet. Please specify a url for media objects before generating a popcorn string." );
       }
 
-      if( scripts.init ){
+      if ( scripts.init ) {
         popcornString += scripts.init + "\n";
       }
-      if( callbacks.init ){
+      if ( callbacks.init ) {
         popcornString += callbacks.init + "();\n";
       }
 
       // special case for basePlayer, since it doesn't require as much of a harness
-      if( _mediaType === "baseplayer" ) {
+      if ( _mediaType === "baseplayer" ) {
         popcornString +=  "Popcorn.player( 'baseplayer' );\n" +
                           "var popcorn = Popcorn.baseplayer( '#" + target + "' " + popcornOptions + " );\n";
       } else {
@@ -305,10 +341,10 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         popcornString += "var popcorn = Popcorn.smart( '#" + target + "', " + url + popcornOptions + " );\n";
       }
 
-      if( scripts.beforeEvents ){
+      if ( scripts.beforeEvents ) {
         popcornString += scripts.beforeEvents + "\n";
       }
-      if( callbacks.beforeEvents ){
+      if ( callbacks.beforeEvents ) {
         popcornString += callbacks.beforeEvents + "( popcorn );\n";
       }
 
@@ -348,10 +384,10 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
 
       }
 
-      if( scripts.afterEvents ){
+      if ( scripts.afterEvents ) {
         popcornString += scripts.afterEvents + "\n";
       }
-      if( callbacks.afterEvents ){
+      if ( callbacks.afterEvents ) {
         popcornString += callbacks.afterEvents + "( popcorn );\n";
       }
 
@@ -440,11 +476,11 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
     /* Wait for Popcorn to be set up and to have the required players load (uses
      * checkTimeoutLoop).
      */
-    function waitForPopcorn( readyCallback, timeoutCallback ){
-      if( _mediaType !== "object" ){
-        _onPlayerTypeRequired( _mediaType );
+    function waitForPopcorn( readyCallback, timeoutCallback, mediaType ) {
+      if ( mediaType !== "object" ) {
+        _onPlayerTypeRequired( mediaType );
         checkTimeoutLoop(function(){
-          return ( !!window.Popcorn[ _mediaType ] );
+          return ( !!window.Popcorn[ mediaType ] );
         }, readyCallback, timeoutCallback, PLAYER_WAIT_DURATION );
       }
       else{
@@ -488,10 +524,10 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
 
     // Wipe the current Popcorn instance and anything it created
     this.clear = function( container ) {
-      if( typeof( container ) === "string" ){
+      if ( typeof( container ) === "string" ) {
         container = document.getElementById( container );
       }
-      if( !container ){
+      if ( !container ) {
         _logger.log( "Warning: tried to clear media with null target." );
         return;
       }
@@ -532,12 +568,12 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       volume: {
         enumerable: true,
         set: function( val ){
-          if( _popcorn ){
+          if ( _popcorn ) {
             _popcorn.volume( val );
           } //if
         },
-        get: function(){
-          if( _popcorn ){
+        get: function() {
+          if ( _popcorn ) {
             return _popcorn.volume();
           }
           return false;
@@ -545,9 +581,9 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       },
       muted: {
         enumerable: true,
-        set: function( val ){
-          if( _popcorn ){
-            if( val ){
+        set: function( val ) {
+          if ( _popcorn ) {
+            if ( val ) {
               _popcorn.mute();
             }
             else {
@@ -555,8 +591,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
             } //if
           } //if
         },
-        get: function(){
-          if( _popcorn ){
+        get: function() {
+          if ( _popcorn ) {
             return _popcorn.muted();
           }
           return false;
@@ -564,13 +600,13 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       },
       currentTime: {
         enumerable: true,
-        set: function( val ){
-          if( _mediaReady && _popcorn ){
+        set: function( val ) {
+          if ( _mediaReady && _popcorn ) {
             _popcorn.currentTime( val );
           } //if
         },
-        get: function(){
-          if( _popcorn ){
+        get: function() {
+          if ( _popcorn ) {
             return _popcorn.currentTime();
           }
           return 0;
@@ -578,8 +614,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       },
       duration: {
         enumerable: true,
-        get: function(){
-          if( _popcorn ){
+        get: function() {
+          if ( _popcorn ) {
             return _popcorn.duration();
           } //if
           return 0;
@@ -593,15 +629,15 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       },
       paused: {
         enumerable: true,
-        get: function(){
-          if( _popcorn ){
+        get: function() {
+          if ( _popcorn ) {
             return _popcorn.paused();
           } //if
           return true;
         },
-        set: function( val ){
-          if( _popcorn ){
-            if( val ){
+        set: function( val ) {
+          if ( _popcorn ) {
+            if ( val ) {
               _this.pause();
             }
             else {

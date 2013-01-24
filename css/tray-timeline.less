@@ -224,6 +224,39 @@
   }
 }
 
+.butter-track-event[data-butter-trackevent-type="sequencer"] {
+  background: #424242;
+  border: 1px solid #424242;
+  border-bottom-color: lighten( #424242, 7% );
+  .title {
+    font-weight: normal;
+    color: #FFF;
+    .sequencer-audio&:before,
+    .sequencer-video&:before {
+      text-transform: uppercase;
+      margin-right: 5px;
+      font-weight: 700;
+      font-size: 0.9em;
+    }
+    .sequencer-audio&:before {
+      content: "audio";
+    }
+    .sequencer-video&:before {
+      content: "video";
+    }
+  }
+  &[selected="true"] {
+    border-color: @green;
+    box-shadow: 1px 5px 2px -3px rgba( 0, 0, 0, 0.2 );
+  }
+  .butter-track-event-icon {
+    background-image: url( ../resources/icons/media-white.png ) !important;
+  }
+  .handle {
+    background: #424242;
+  }
+}
+
 /*********************************************************
 * Track Handle Container - Left-hand side panel
 */

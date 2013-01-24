@@ -30,7 +30,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
 
   // for what seems like a bug in chrome. :/
   // dataTransfer.getData seems to report nothing
-  var __currentDraggingElement;
+  var __currentDraggingHelper;
 
   var __nullRect = {
     top: 0,
@@ -496,17 +496,24 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
   }
 
   function Helper( element, options ) {
+    options = options || {};
     var _image = options.image,
         _onStart = options.start || NULL_FUNCTION,
         _onStop = options.stop || NULL_FUNCTION,
         _id = __helpers.length;
 
-    __helpers[ _id ] = element;
+    __helpers[ _id ] = {
+      element: element,
+      pluginOptions: options.pluginOptions
+    };
 
     element.setAttribute( "draggable", true );
 
     element.addEventListener( "dragstart", function( e ) {
-      __currentDraggingElement = element;
+      __currentDraggingHelper = {
+        element: element,
+        pluginOptions: options.pluginOptions
+      };
       e.dataTransfer.effectAllowed = "all";
       // coerce to string so IE9 doesn't throw
       e.dataTransfer.setData( "text", _id + "" );
@@ -519,7 +526,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
     });
 
     element.addEventListener( "dragend", function() {
-      __currentDraggingElement = null;
+      __currentDraggingHelper = null;
       _onStop();
     });
 
@@ -556,9 +563,9 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       } catch ( err ) {
         return;
       }
-      helper = __helpers[ transferData ] || __currentDraggingElement;
+      helper = __helpers[ transferData ] || __currentDraggingHelper;
       if ( helper ) {
-        _onDrop( helper, [ e.clientX, e.clientY ] );
+        _onDrop( helper.element, [ e.clientX, e.clientY ], helper.pluginOptions );
       }
     }
 
@@ -582,9 +589,9 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       } catch ( err ) {
         return;
       }
-      helper = __helpers[ transferData ] || __currentDraggingElement;
+      helper = __helpers[ transferData ] || __currentDraggingHelper;
       if ( helper ) {
-        _onOver( helper, [ e.clientX, e.clientY ] );
+        _onOver( helper.element, [ e.clientX, e.clientY ] );
       }
     }
 
@@ -602,9 +609,9 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       } catch ( err ) {
         return;
       }
-      helper = __helpers[ transferData ] || __currentDraggingElement;
+      helper = __helpers[ transferData ] || __currentDraggingHelper;
       if ( helper ) {
-        _onOut( helper, [ e.clientX, e.clientY ] );
+        _onOut( helper.element, [ e.clientX, e.clientY ] );
       }
     }
 

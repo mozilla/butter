@@ -401,7 +401,7 @@
             start = trackEventOptions.start;
             end = trackEventOptions.end;
 
-            // check if track event if out of bounds
+            // check if track event is out of bounds
             if ( end > _duration ) {
               if ( start > _duration ) {
                 // remove offending track event
@@ -548,7 +548,7 @@
           },
           set: function( time ){
             if( time ){
-              _duration = time;
+              _duration = +time;
               _logger.log( "duration changed to " + _duration );
               _this.fixTrackEventBounds();
               _this.dispatch( "mediadurationchanged", _this );
@@ -573,23 +573,59 @@
             };
           },
           set: function( importData ){
+            var newTrack,
+                url,
+                i, l,
+                fallbacks = [],
+                source = [];
             if( importData.name ) {
               _name = importData.name;
             }
             if( importData.target ){
               _this.target = importData.target;
             }
-            if( importData.url ){
-              _this.url = importData.url;
+            if ( importData.duration >= 0 ) {
+              _duration = importData.duration;
+              _this.url = "#t=," + _duration;
             }
             if( importData.tracks ){
               var importTracks = importData.tracks;
               if( Array.isArray( importTracks ) ) {
-                for ( var i = 0, l = importTracks.length; i < l; ++i ) {
-                  var newTrack = new Track();
+                for ( i = 0, l = importTracks.length; i < l; ++i ) {
+                  newTrack = new Track();
                   newTrack.json = importTracks[ i ];
                   _this.addTrack( newTrack );
                   newTrack.updateTrackEvents();
+                }
+                // Backwards comp for old base media.
+                // Insert previous base media as a sequence event as the last track.
+                if ( importData.url && _duration >= 0 ) {
+                  url = importData.url;
+                  if ( !Array.isArray( url ) ) {
+                    url = [ url ];
+                  }
+                  // If source is a single array and of type null player, don't bother making a sequence.
+                  if ( url.length > 1 || !( /#t=\d*,?\d+?/ ).test( url[ 0 ] ) ) {
+                    // grab first source as main source.
+                    source.push( URI.makeUnique( url.shift() ).toString() );
+                    for ( i = 0; i < url.length; i++ ) {
+                      fallbacks.push( URI.makeUnique( url[ i ] ).toString() );
+                    }
+                    newTrack = new Track();
+                    _this.addTrack( newTrack );
+                    newTrack.addTrackEvent({
+                      type: "sequencer",
+                      popcornOptions: {
+                        start: 0,
+                        end: _duration,
+                        source: source,
+                        title: URI.stripUnique( source[ 0 ] ).path,
+                        fallback: fallbacks,
+                        duration: _duration,
+                        target: "video-container"
+                      }
+                    });
+                  }
                 }
               } else if ( console ) {
                 console.warn( "Ignoring imported track data. Must be in an Array." );

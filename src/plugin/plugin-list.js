@@ -76,14 +76,12 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
       element.setAttribute( "data-popcorn-plugin-type", e.data.type );
       element.setAttribute( "data-butter-draggable-type", "plugin" );
 
+      if ( e.data.hidden ) {
+        element.style.display = "none";
+      }
+
       _containerElement.appendChild( element );
     });
 
-    // Open the plugin-list editor right after butter is finished starting up
-    butter.listen( "mediaready", function() {
-      if ( butter.ui.enabled ) {
-        butter.editor.openEditor( "plugin-list" );
-      }
-    });
   };
 });

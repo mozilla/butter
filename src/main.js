@@ -156,8 +156,8 @@
         return _currentMedia.getManifest( name );
       }; //getManifest
 
-      _this.generateSafeTrackEvent = function( type, start, track, position ) {
-        var end, trackEvent,
+      _this.generateSafeTrackEvent = function( type, start, end, track, position ) {
+        var trackEvent,
             relativePosition,
             popcornOptions = {};
 
@@ -169,7 +169,9 @@
           start = 0;
         }
 
-        end = start + _defaultTrackeventDuration;
+        if ( !end && end !== 0 ) {
+          end = start + _defaultTrackeventDuration;
+        }
 
         if ( end > _currentMedia.duration ) {
           end = _currentMedia.duration;
@@ -214,10 +216,31 @@
       };
 
       function targetTrackEventRequested( e ) {
-        var trackEvent;
+        var trackEvent,
+            popcornOptions,
+            start = _currentMedia.currentTime,
+            end;
+
+        if ( e.data.popcornOptions ) {
+          popcornOptions = {};
+          for ( var prop in e.data.popcornOptions ) {
+            if ( e.data.popcornOptions.hasOwnProperty( prop ) ) {
+              popcornOptions[ prop ] = e.data.popcornOptions[ prop ];
+            }
+          }
+        }
 
         if ( _currentMedia && _currentMedia.ready ) {
-          trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime, e.data.position );
+          if ( popcornOptions && popcornOptions.end ) {
+            end = popcornOptions.end + start;
+          }
+          trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), start, end, e.data.position );
+          if ( popcornOptions ) {
+            if ( popcornOptions.end ) {
+              popcornOptions.end = trackEvent.popcornOptions.end;
+            }
+            trackEvent.update( popcornOptions );
+          }
           _this.editor.editTrackEvent( trackEvent );
         }
         else {
@@ -334,7 +357,7 @@
               // cut off events that overlap the duration
               popcornOptions.end = _currentMedia.duration;
             }
-            trackEvent = _this.generateSafeTrackEvent( _copiedEvents[ i ].type, popcornOptions.start );
+            trackEvent = _this.generateSafeTrackEvent( _copiedEvents[ i ].type, popcornOptions.start, popcornOptions.end );
             trackEvent.update( popcornOptions );
             trackEvent.selected = true;
           }

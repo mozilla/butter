@@ -294,6 +294,11 @@ function checkHTML() {
       // Let <style> be in fragments.
       text: "Error: Element “style” not allowed as child of element “body” in this context. (Suppressing further errors from this subtree.)",
       when: isHTMLFragment
+    },
+    {
+      // Let <li> be in fragments.
+      text: "Error: Element “li” not allowed as child of element “body” in this context. (Suppressing further errors from this subtree.)",
+      when: isHTMLFragment
     }
   ];
 
