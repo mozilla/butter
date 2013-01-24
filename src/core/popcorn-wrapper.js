@@ -66,31 +66,44 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
     }; //interrupt
 
     // Update Popcorn events with data from a butter trackevent
-    this.synchronizeEvent = function( trackEvent, newOptions ) {
+    this.synchronizeEvent = function( trackEvent, newOptions, callBack ) {
       var options = trackEvent.popcornOptions,
           popcornId = trackEvent.id,
           popcornEvent = null;
 
-      if ( _popcorn ) {
-        // make sure the plugin is still included
-        if ( _popcorn[ trackEvent.type ] ) {
+      function createTrackEvent() {
 
-          if ( _popcorn.getTrackEvent( popcornId ) ) {
-            _popcorn[ trackEvent.type ]( popcornId, newOptions );
-          } else {
-            _popcorn[ trackEvent.type ]( popcornId, options );
+        if ( _popcorn.getTrackEvent( popcornId ) ) {
+          _popcorn[ trackEvent.type ]( popcornId, newOptions );
+        } else {
+          _popcorn[ trackEvent.type ]( popcornId, options );
+        }
+
+        trackEvent.popcornTrackEvent = popcornEvent;
+
+        if( trackEvent.view ){
+          if( popcornEvent.toString ){
+            trackEvent.view.setToolTip( popcornEvent.toString() );
           }
+          else{
+            trackEvent.view.setToolTip( JSON.stringify( options ) );
+          }
+        }
 
-          popcornEvent = _popcorn.getTrackEvent( popcornId );
-          trackEvent.popcornTrackEvent = popcornEvent;
+        if ( callBack ) {
+          callBack();
+        }
+      }
 
-          if ( trackEvent.view ) {
-            if ( popcornEvent.toString ) {
-              trackEvent.view.setToolTip( popcornEvent.toString() );
-            }
-            else {
-              trackEvent.view.setToolTip( JSON.stringify( options ) );
-            }
+      if( _popcorn ){
+        // make sure the plugin is still included
+        if( _popcorn[ trackEvent.type ] ){
+          if ( trackEvent.type === "sequencer" ) {
+            waitForPopcorn( createTrackEvent, function() {
+              throw "Your media seems to be taking a long time to load. Review your media URL(s) or continue waiting.";
+            }, findMediaType( trackEvent.popcornOptions.source ) );
+          } else {
+            createTrackEvent();
           }
         }
       }
@@ -156,7 +169,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
 
       // discover and stash the type of media as dictated by the url
-      findMediaType( firstUrl );
+      setMediaType( firstUrl );
 
       // if there isn't a target, we can't really set anything up, so stop here
       if( !target ){
@@ -177,7 +190,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
             addPopcornHandlers();
             // wait for the media to become available and notify the user, or timeout
             waitForMedia( _onPrepare, mediaTimeoutWrapper );
-          }, popcornTimeoutWrapper );
+          }, popcornTimeoutWrapper, _mediaType );
         }
         catch( e ) {
           // if we've reached here, we have an internal failure in butter or popcorn
@@ -187,22 +200,28 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
 
     };
 
-    /* Determine the type of media that is going to be used
+    /* Return the type of media that is going to be used
      * based on the specified url
      */
     function findMediaType( url ){
-      var regexResult = __urlRegex.exec( url );
+      var regexResult = __urlRegex.exec( url ),
+          // if the regex didn't return anything we know it's an HTML5 source
+          mediaType = "object";
       if ( regexResult ) {
-        _mediaType = regexResult[ 1 ];
+        mediaType = regexResult[ 1 ];
         // our regex only handles youtu ( incase the url looks something like youtu.be )
-        if ( _mediaType === "youtu" ) {
-          _mediaType = "youtube";
+        if ( mediaType === "youtu" ) {
+          mediaType = "youtube";
         }
       }
-      else {
-        // if the regex didn't return anything we know it's an HTML5 source
-        _mediaType = "object";
-      }
+      return mediaType;
+    }
+
+    /* Sets the type of media that is going to be used
+     * based on the specified url
+     */
+    function setMediaType( url ) {
+      _mediaType = findMediaType( url );
       return _mediaType;
     }
 
@@ -239,7 +258,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       }
     }
 
-    /* Determine which player is needed (usually based on the result of findMediaType)
+    /* Determine which player is needed (usually based on the result of setMediaType)
      * and create a stringified representation of the Popcorn constructor (usually to
      * insert in a script tag).
      */
@@ -440,11 +459,11 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
     /* Wait for Popcorn to be set up and to have the required players load (uses
      * checkTimeoutLoop).
      */
-    function waitForPopcorn( readyCallback, timeoutCallback ){
-      if( _mediaType !== "object" ){
-        _onPlayerTypeRequired( _mediaType );
+    function waitForPopcorn( readyCallback, timeoutCallback, mediaType ){
+      if( mediaType !== "object" ){
+        _onPlayerTypeRequired( mediaType );
         checkTimeoutLoop(function(){
-          return ( !!window.Popcorn[ _mediaType ] );
+          return ( !!window.Popcorn[ mediaType ] );
         }, readyCallback, timeoutCallback, PLAYER_WAIT_DURATION );
       }
       else{
