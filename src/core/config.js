@@ -206,8 +206,18 @@
         } catch( e ){
           throw "Config.parse Error: unable to parse config string. Error was: " + e.message;
         }
+      },
+      
+      /**
+       * Member: reincarnate
+       *
+       * Constructs a Configuration object based on a JSON object.
+       *
+       * @param {Object} configObj: The config JSON object.
+       */
+      reincarnate: function( configObj ){
+        return new Configuration( "config-" + __id++, configObj );
       }
-
     };
 
     return Config;
