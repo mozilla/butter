@@ -236,14 +236,6 @@
     "node-uuid": {
       "version": "1.4.0"
     },
-    "raven": {
-      "version": "0.4.5",
-      "dependencies": {
-        "node-uuid": {
-          "version": "1.4.0"
-        }
-      }
-    },
     "supertest": {
       "version": "0.5.1",
       "dependencies": {
