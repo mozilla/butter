@@ -72,7 +72,11 @@
       if ( options.source ) {
         setTimeout( function() {
           if ( !options.ready ) {
+            _this.off( "play", options._surpressPlayEvent );
             options.failed = true;
+            if ( options.playWhenReady ) {
+              _this.play();
+            }
           }
         }, MEDIA_LOAD_TIMEOUT );
         options.source = options.source.replace( /^https\:\/\/soundcloud\.com/, "http://soundcloud.com" );
@@ -96,6 +100,7 @@
         var seekedEvent = function () {
           var playedEvent = function() {
             options.p.off( "play", playedEvent );
+            _this.off( "play", options._surpressPlayEvent );
             _this.on( "play", options._playEvent );
             _this.on( "pause", options._pauseEvent );
             _this.on( "seeking", options._seekingEvent );
@@ -117,6 +122,10 @@
         };
         options.p.on( "seeked", seekedEvent);
         options.p.currentTime( _this.currentTime() - options.start + (+options.from) );
+      };
+
+      options._surpressPlayEvent = function() {
+        _this.pause();
       };
 
       options._playEvent = function() {
@@ -163,24 +172,28 @@
       }
     },
     start: function( event, options ) {
-      if ( options.failed ) {
-        return;
-      }
-      if ( !this.paused() ) {
-        options.playWhenReady = true;
-        this.pause();
-        options.p.pause();
-      }
-      options.startWhenReady = true;
-      if ( options.ready ) {
-        options._startEvent();
-      } else {
-        // TODO
-        // loading bar here
-        // turn it off on fail or ready.
+      if ( options.source ) {
+        if ( options.failed ) {
+          return;
+        }
+        this.on( "play", options._surpressPlayEvent );
+        if ( !this.paused() ) {
+          options.playWhenReady = true;
+          this.pause();
+          options.p.pause();
+        }
+        options.startWhenReady = true;
+        if ( options.ready ) {
+          options._startEvent();
+        } else {
+          // TODO
+          // loading bar here
+          // turn it off on fail or ready.
+        }
       }
     },
     end: function( event, options ) {
+      this.off( "play", options._surpressPlayEvent );
       this.off( "play", options._playEvent );
       this.off( "pause", options._pauseEvent );
   		this.off( "seeking", options._seekingEvent );
