@@ -40,7 +40,8 @@
       options._mouseDiv = mouseDiv;
       options.from = options.from || 0;
 
-      container.style.zIndex = 0;
+      container.style.zIndex = +options.zindex;
+      container.style.visibility = "hidden";
       container.className = "popcorn-sequencer";
       container.style.position = "absolute";
       container.style.width = ( options.width || "100" ) + "%";
@@ -74,6 +75,7 @@
             options.failed = true;
           }
         }, MEDIA_LOAD_TIMEOUT );
+        options.source = options.source.replace( /^https\:\/\/soundcloud\.com/, "http://soundcloud.com" );
         options.p = Popcorn.smart( container, options.source, {frameAnimation: true} );
         options.p.media.style.width = "100%";
         options.p.media.style.height = "100%";
@@ -98,7 +100,7 @@
             _this.on( "pause", options._pauseEvent );
             _this.on( "seeking", options._seekingEvent );
             _this.on( "seeked", options._seekedEvent );
-            options._container.style.zIndex = +options.zindex;
+            container.style.visibility = "visible";
             if ( options.playWhenReady ) {
               _this.play();
             } else {
@@ -198,7 +200,7 @@
       // cancel any pending starts
       options.startWhenReady = false;
       options.playWhenReady = false;
-      options._container.style.zIndex = 0;
+      options._container.style.visibility = "hidden";
       if ( options.ready ) {
         options.p.mute();
       }
