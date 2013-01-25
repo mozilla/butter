@@ -91,9 +91,6 @@ new file called _hostname_-_environment_.json that overrides the cornfield defau
   - `server` settings for the cornfield server
     - `bindIP` the IP or hostname to use for the server (e.g., localhost).
     - `bindPort` the Port number to use for the server (e.g., 8888).  If using a port number lower than 1024, the server will have to be run as root.
-  - `sentry` settings for [sentry error reporting](https://www.getsentry.com/welcome/)
-    - `dsn` the DSN to send events to. Look at your sentry client configuration page for this value.
-    - `options` pass any [additional options](https://github.com/mattrobenolt/raven-node) to raven
   - `logger` settings for server logging
     - `format` the logging format to use.  Possible values include: default, short, tiny, dev.
   - `session` settings for user sessions
@@ -218,6 +215,16 @@ This sample config uses a mix of the local file system as well as Amazon S3 for 
   }
 }
 ```
+
+Server Monitoring
+-----------------
+
+Popcorn Maker supports server monitoring with [New Relic](https://newrelic.com/). It is implemented by the [newrelic npm module](https://github.com/newrelic/node-newrelic/).
+Configuration is done entirely with environment variables. See the [https://github.com/newrelic/node-newrelic/#configuring-the-agent](README) for a comprehensive list.
+To enable New Relic monitoring with Popcorn Maker, the following environment variables *must* be set:
+
+* NEW\_RELIC\_NO\_CONFIG\_FILE
+* NEW\_RELIC\_LICENSE\_KEY
 
 Getting Involved
 ----------------

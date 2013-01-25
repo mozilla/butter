@@ -236,11 +236,11 @@
     "node-uuid": {
       "version": "1.4.0"
     },
-    "raven": {
-      "version": "0.4.5",
+    "newrelic": {
+      "version": "0.9.17-132",
       "dependencies": {
-        "node-uuid": {
-          "version": "1.4.0"
+        "bunyan": {
+          "version": "0.14.6"
         }
       }
     },

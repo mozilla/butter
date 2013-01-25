@@ -1,5 +1,7 @@
-/*jshint eqeqeq:false */
-console.log( __dirname );
+// Newrelic *must* be the first module loaded. Do not move this require module!
+if ( process.env.NEW_RELIC_NO_CONFIG_FILE && process.env.NEW_RELIC_LICENSE_KEY ) {
+  require( 'newrelic' );
+}
 
 // Given foo/ return foo
 function stripSlash( path ) {
@@ -18,7 +20,6 @@ var express = require('express'),
     filter = require( './lib/filter' )( User.isDBOnline ),
     sanitizer = require( './lib/sanitizer' ),
     FileStore = require('./lib/file-store.js'),
-    raven = require('raven'),
     utils,
     stores = {},
     TEMPLATES_DIR = CONFIG.dirs.templates,
@@ -46,8 +47,6 @@ for ( var templateName in VALID_TEMPLATES ) {
     readTemplateConfig( templateName, VALID_TEMPLATES[ templateName ] );
   }
 }
-
-console.log( "Templates Dir:", TEMPLATES_DIR );
 
 app.configure( 'development', function() {
   app.use( lessMiddleware( WWW_ROOT ));
@@ -79,15 +78,6 @@ app.configure( function() {
       return next();
     })
     .use( app.router );
-
-  // Error handling
-  if ( CONFIG.sentry ) {
-    var ravenClient = new raven.Client( CONFIG.sentry.dsn, CONFIG.sentry.options );
-    app.use( raven.middleware.express( ravenClient ) );
-    ravenClient.patchGlobal( function() {
-      process.exit(1);
-    });
-  }
 
   // File Store types and options come from JSON config file.
   stores.publish = setupStore( CONFIG.publishStore );
