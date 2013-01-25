@@ -154,14 +154,13 @@
     },
     _teardown: function( options ) {
       if ( options.p ) {
-        if ( /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)(soundcloud)/.test( options.source ) ) {
-          // XXX: pull the SoundCloud iframe element out of our video div, and quarantine
-          // so we don't delete it, and block loading future SoundCloud instances. See above.
-          var soundCloudParent = options.p.media.parentNode,
-              soundCloudIframe = soundCloudParent.querySelector( "iframe" );
-          if ( soundCloudIframe ) {
-            getSoundCloudQuarantine().appendChild( soundCloudIframe );
-          }
+        // XXX: pull the SoundCloud iframe element out of our video div, and quarantine
+        // so we don't delete it, and block loading future SoundCloud instances. See above.
+        // this is also fixing an issue in youtube, so we do it for all medias with iframes now.
+        var soundCloudParent = options.p.media.parentNode,
+            soundCloudIframe = soundCloudParent.querySelector( "iframe" );
+        if ( soundCloudIframe ) {
+          getSoundCloudQuarantine().appendChild( soundCloudIframe );
         }
         options.p.destroy();
       }
