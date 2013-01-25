@@ -123,10 +123,6 @@
         options.p.play();
       };
 
-      options._suppressPlayEvent = function() {
-        _this.pause();
-      };
-
       options._pauseEvent = function() {
         options.p.pause();
       };
