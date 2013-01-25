@@ -1,5 +1,7 @@
-/*jshint eqeqeq:false */
-console.log( __dirname );
+// Newrelic *must* be the first module loaded. Do not move this require module!
+if ( process.env.NEW_RELIC_NO_CONFIG_FILE && process.env.NEW_RELIC_LICENSE_KEY ) {
+  require( 'newrelic' );
+}
 
 // Given foo/ return foo
 function stripSlash( path ) {
@@ -45,8 +47,6 @@ for ( var templateName in VALID_TEMPLATES ) {
     readTemplateConfig( templateName, VALID_TEMPLATES[ templateName ] );
   }
 }
-
-console.log( "Templates Dir:", TEMPLATES_DIR );
 
 app.configure( 'development', function() {
   app.use( lessMiddleware( WWW_ROOT ));
