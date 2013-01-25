@@ -148,19 +148,18 @@
         if ( /(?:http:\/\/www\.|http:\/\/|www\.|\.|^)(soundcloud)/.test( options.source ) ) {
           // XXX: pull the SoundCloud iframe element out of our video div, and quarantine
           // so we don't delete it, and block loading future SoundCloud instances. See above.
-          //var soundCloudParent = options.p.media.parentNode,
-          //    soundCloudIframe = soundCloudParent.querySelector( "iframe" );
-          //if ( soundCloudIframe ) {
-          //  getSoundCloudQuarantine().appendChild( soundCloudIframe );
-          //}
-          return;
+          var soundCloudParent = options.p.media.parentNode,
+              soundCloudIframe = soundCloudParent.querySelector( "iframe" );
+          if ( soundCloudIframe ) {
+            getSoundCloudQuarantine().appendChild( soundCloudIframe );
+          }
         }
-        //options.p.destroy();
+        options.p.destroy();
+      }
 
-        // Tear-down old instances, special-casing SoundCloud removal, see above.
-        //while( options._container && options._container.parentNode ) {
-        //  options._container.parentNode.removeChild( options._container );
-        //}
+      // Tear-down old instances, special-casing SoundCloud removal, see above.
+      if ( options._container && options._container.parentNode ) {
+        options._container.parentNode.removeChild( options._container );
       }
     },
     start: function( event, options ) {
