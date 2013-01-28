@@ -79,6 +79,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
           _popcorn[ trackEvent.type ]( popcornId, options );
         }
 
+        popcornEvent = _popcorn.getTrackEvent( popcornId );
         trackEvent.popcornTrackEvent = popcornEvent;
 
         if( trackEvent.view ){
