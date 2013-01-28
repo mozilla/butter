@@ -9,7 +9,7 @@
 
   // This fix is to ensure content-editable still updates correctly, and deals with ie9 not reading document.activeElement properly
   function blurActiveEl() {
-   if ( document.activeElement ) {
+   if ( document.activeElement && document.activeElement.blur ) {
       document.activeElement.blur();
     }
   }
