@@ -22,6 +22,54 @@
     }
   }
 
+  .media-gallery > h3 {
+    background: #FFF;
+    padding: 15px 20px;
+    margin: 0;
+    border: 0 solid @baseLightOutline;
+    border-bottom-width: 1px;
+    border-top-width: 1px;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+  .media-gallery-list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 2px;
+  }
+
+  .media-gallery-item {
+    padding: 10px 20px;
+    border: 0px solid @baseLightOutline;
+    border-top-width: 1px;
+    background-color: @baseLight;
+    .transition( background-color 0.2s linear );
+    &:first-child {
+      margin-top: -1px;
+    }
+    &:last-child {
+      border-bottom-width: 1px;
+    }
+    &.new {
+      background: @green;
+      color: #FFF;
+      > .icon {
+        display: none;
+      }
+    }
+    > label {
+      display: inline;
+    }
+    > .icon {
+      float: right;
+      opacity: 0.5;
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
   .alt-media-wrapper {
     textarea {
       height: 70px;
@@ -56,7 +104,7 @@
     input {
       margin: 2px 5px 0 10px;
     }
-    &.butter-disabled {
+    &.hidden {
       margin-top: -35px;
     }
   }
@@ -66,6 +114,7 @@
       float: left;
     }
     .alternate-media-label {
+      display: none; // TODO: add alternate source UI to new media track event system
       font-size: 12px;
       float: right;
       margin: 0;
@@ -92,7 +141,8 @@
     .transition( right 0.2s ease );
   }
 
-  .error {
+  .error,
+  .error:focus {
     border: 1px inset #ff0000;
   }
 

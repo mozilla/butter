@@ -1,52 +1,43 @@
 <div class="media-editor butter-editor fadable alternates-hidden allow-scrollbar">
-  <h1>Change Media Source
-    <span class="media-loading-spinner butter-spinner" ></span>
+  <h1 class="add-new-media">Add new media
+    <span class="media-loading-spinner butter-spinner hidden" ></span>
   </h1>
   <div class="butter-editor-body scrollbar-container">
     <div class="scrollbar-outer">
       <div class="scrollbar-inner">
-        <fieldset>
-          <label class="media-error-message hidden">Your media seems to be taking a long time to load. Review your media URL(s) or continue waiting.</label>
-          <span class="current-media-wrapper"></span>
-          <p class="add-alternate-media-source-desc">You need .webm, .mp4, and .ogv versions of your HTML5 video to support all major browsers.</p>
-          <a class="add-alternate-media-source-btn butter-btn btn-light">Add Alternate</a>
+
+        <fieldset class="add-media-panel">
+          <div class="media-editor-inner-wrapper primary-media-wrapper">
+            <p>
+              <span class="fl-right">
+                <span class="media-icon youtube-icon"></span>
+                <span class="media-icon vimeo-icon"></span>
+                <span class="media-icon soundcloud-icon"></span>
+                <span class="media-icon html5-icon"></span>
+              </span>
+              Paste a link from Youtube, Vimeo, Soundcloud, or an HTML5 video
+            </p>
+            <textarea class="add-media-input" placeholder="Paste an HTML5, Youtube, or Soundcloud link here"></textarea>
+            <label class="media-error-message hidden">Your media seems to be taking a long time to load. Review your media URL(s) or continue waiting.</label>
+            <span class="butter-btn-slide-out">
+              <a class="add-media-btn butter-btn btn-green hidden">Create clip</a>
+              <a class="add-media-cancel-btn butter-btn btn-light hidden">Cancel</a>
+            </span>
+          </div>
         </fieldset>
+
+        <div class="media-gallery">
+          <h3 class="editor-inner">Media Gallery</h3>
+          <ul class="media-gallery-list"></ul>
+        </div>
+
       </div>
     </div>
   </div>
 </div>
 
-<div class="media-editor-inner-wrapper primary-media-wrapper">
-  <p>
-    <span class="fl-right">
-      <span class="media-icon youtube-icon"></span>
-      <span class="media-icon vimeo-icon"></span>
-      <span class="media-icon soundcloud-icon"></span>
-      <span class="media-icon html5-icon"></span>
-    </span>
-    Paste a link from Youtube, Vimeo, Soundcloud, or an HTML5 video
-  </p>
-  <textarea class="current-media-input" placeholder="Paste an HTML5, Youtube, or Soundcloud link here"></textarea>
-  <span class="butter-btn-slide-out">
-    <a class="butter-media-apply butter-btn btn-green butter-disabled">Apply</a>
-    <label class="butter-clear-track-events butter-disabled" >
-      <input type="checkbox"/>
-      Clear track events
-    </label>
-  </span>
-  <label class="alternate-media-label">Fallbacks<span class="icon icon-x"></span></label>
-</div>
-
-<div class="media-editor-inner-wrapper alt-media-wrapper">
-  <div class="alt-media-wrapper-inner">
-    <textarea class="current-media-input" placeholder="http://"></textarea>
-    <a class="delete-media-btn"><span class="icon icon-trash" ></span></a>
-  </div>
-  <span class="butter-btn-slide-out">
-    <a class="butter-media-apply butter-btn btn-green butter-disabled">Apply</a>
-    <label class="butter-clear-track-events butter-disabled" >
-      <input type="checkbox"/>
-      Clear track events
-    </label>
-  </span>
-</div>
+<!-- This is added to media-gallery for each new media item -->
+<li class="media-gallery-item editor-inner">
+  <label></label>
+  <span class="delete-btn icon icon-trash"></span>
+</li>
