@@ -1,5 +1,5 @@
 // Newrelic *must* be the first module loaded. Do not move this require module!
-if ( process.env.NEW_RELIC_NO_CONFIG_FILE && process.env.NEW_RELIC_LICENSE_KEY ) {
+if ( process.env.NEW_RELIC_APP_NAME && process.env.NEW_RELIC_LICENSE_KEY ) {
   require( 'newrelic' );
 }
 
