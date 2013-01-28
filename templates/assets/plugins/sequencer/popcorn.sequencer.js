@@ -63,7 +63,6 @@
         options.failed = false;
         options.p.off( "loadedmetadata", options.readyEvent );
         options.ready = true;
-console.log( "on" );
         _this.on( "volumechange", options._volumeEvent );
         //options._volumeEvent();
         if ( options.startWhenReady ) {
@@ -71,7 +70,30 @@ console.log( "on" );
         }
       };
 
-      if ( options.source ) {
+      options.tearDown = function() {
+        _this.off( "volumechange", options._volumeEvent );
+        if ( options.p ) {
+          // XXX: pull the SoundCloud iframe element out of our video div, and quarantine
+          // so we don't delete it, and block loading future SoundCloud instances. See above.
+          // this is also fixing an issue in youtube, so we do it for all medias with iframes now.
+          var soundCloudParent = options.p.media.parentNode,
+              soundCloudIframe = soundCloudParent.querySelector( "iframe" );
+          if ( soundCloudIframe ) {
+            getSoundCloudQuarantine().appendChild( soundCloudIframe );
+          }
+          options.p.destroy();
+        }
+      };
+
+      options.clearEvents = function() {
+        _this.off( "play", options._surpressPlayEvent );
+        _this.off( "play", options._playEvent );
+        _this.off( "pause", options._pauseEvent );
+    		_this.off( "seeking", options._seekingEvent );
+			  _this.off( "seeked", options._seekedEvent );
+      };
+
+      options.addSource = function( source ) {
         setTimeout( function() {
           if ( !options.ready ) {
             _this.off( "play", options._surpressPlayEvent );
@@ -81,17 +103,21 @@ console.log( "on" );
             }
           }
         }, MEDIA_LOAD_TIMEOUT );
-        options.source = options.source.replace( /^https\:\/\/soundcloud\.com/, "http://soundcloud.com" );
-        options.p = Popcorn.smart( container, options.source, {frameAnimation: true} );
+        source = source.replace( /^https\:\/\/soundcloud\.com/, "http://soundcloud.com" );
+        options.p = Popcorn.smart( options._container, source, {frameAnimation: true} );
         options.p.media.style.width = "100%";
         options.p.media.style.height = "100%";
-        container.style.width = ( options.width || "100" ) + "%";
-        container.style.height = ( options.height || "100" ) + "%";
+        options._container.style.width = ( options.width || "100" ) + "%";
+        options._container.style.height = ( options.height || "100" ) + "%";
         if ( options.p.media.readyState >= 1 ) {
           options.readyEvent();
         } else {
           options.p.on( "loadedmetadata", options.readyEvent );
         }
+      };
+
+      if ( options.source ) {
+        options.addSource( options.source );
       }
 
       options._startEvent = function() {
@@ -102,19 +128,23 @@ console.log( "on" );
         var seekedEvent = function () {
           var playedEvent = function() {
             options.p.off( "play", playedEvent );
-            _this.off( "play", options._surpressPlayEvent );
-            _this.on( "play", options._playEvent );
-            _this.on( "pause", options._pauseEvent );
-            _this.on( "seeking", options._seekingEvent );
-            _this.on( "seeked", options._seekedEvent );
-            container.style.visibility = "visible";
-            if ( options.playWhenReady ) {
-              _this.play();
+            if ( options.active ) {
+              _this.off( "play", options._surpressPlayEvent );
+              _this.on( "play", options._playEvent );
+              _this.on( "pause", options._pauseEvent );
+              _this.on( "seeking", options._seekingEvent );
+              _this.on( "seeked", options._seekedEvent );
+              container.style.visibility = "visible";
+              if ( options.playWhenReady ) {
+                _this.play();
+              } else {
+                options.p.pause();
+              }
+              if ( options.startWhenReady ) {
+                options._volumeEvent();
+              }
             } else {
               options.p.pause();
-            }
-            if ( options.startWhenReady ) {
-              options._volumeEvent();
             }
           };
           options.p.off( "seeked", seekedEvent );
@@ -134,13 +164,12 @@ console.log( "on" );
       };
 
       options._volumeEvent = function() {
-        /*if ( _this.muted() ) {
+        if ( _this.muted() ) {
           options.p.mute();
         } else {
           options.p.unmute();
           options.p.volume( options.volume );
-        }*/
-        console.log( "volume changed" );
+        }
       };
 
       options._pauseEvent = function() {
@@ -163,19 +192,26 @@ console.log( "on" );
         }
       };
     },
-    _teardown: function( options ) {
-      this.off( "volumechange", options._volumeEvent );
-      if ( options.p ) {
-        // XXX: pull the SoundCloud iframe element out of our video div, and quarantine
-        // so we don't delete it, and block loading future SoundCloud instances. See above.
-        // this is also fixing an issue in youtube, so we do it for all medias with iframes now.
-        var soundCloudParent = options.p.media.parentNode,
-            soundCloudIframe = soundCloudParent.querySelector( "iframe" );
-        if ( soundCloudIframe ) {
-          getSoundCloudQuarantine().appendChild( soundCloudIframe );
-        }
-        options.p.destroy();
+    _update: function( options, updates ) {
+      if ( updates.source ) {
+        options.clearEvents();
+        options.tearDown();
+        options.addSource( updates.source );
       }
+      if ( updates.zindex != null ) {
+        options._container.style.zIndex = +options.zindex;
+      }
+      if ( updates.from != null ) {
+        options.from = updates.from;
+      }
+      if ( updates.volume != null ) {
+        options.volume = updates.volume;
+        options._volumeEvent();
+      }
+      options.p.currentTime( this.currentTime() - options.start + (+options.from) );
+    },
+    _teardown: function( options ) {
+      options.tearDown();
 
       // Tear-down old instances, special-casing SoundCloud removal, see above.
       if ( options._container && options._container.parentNode ) {
@@ -183,6 +219,7 @@ console.log( "on" );
       }
     },
     start: function( event, options ) {
+      options.active = true;
       if ( options.source ) {
         if ( options.failed ) {
           return;
@@ -204,11 +241,11 @@ console.log( "on" );
       }
     },
     end: function( event, options ) {
-      this.off( "play", options._surpressPlayEvent );
-      this.off( "play", options._playEvent );
-      this.off( "pause", options._pauseEvent );
-  		this.off( "seeking", options._seekingEvent );
-			this.off( "seeked", options._seekedEvent );
+      options.active = false;
+      options.clearEvents();
+      // cancel any pending or future starts
+      options.startWhenReady = false;
+      options.playWhenReady = false;
       if ( options.ready ) {
         if ( !options.p.paused() ) {
           options.p.pause();
@@ -216,9 +253,6 @@ console.log( "on" );
         // reset current time so next play from start is smooth. We've pre seeked.
         options.p.currentTime( +options.from );
       }
-      // cancel any pending starts
-      options.startWhenReady = false;
-      options.playWhenReady = false;
       options._container.style.visibility = "hidden";
       if ( options.ready ) {
         options.p.mute();
