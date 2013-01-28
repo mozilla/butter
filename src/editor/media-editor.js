@@ -2,10 +2,11 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "dialog/dialog", "text!layouts/media-editor.html" ],
-  function( LangUtils, URI, KeysUtils, Editor, Dialog, EDITOR_LAYOUT ) {
+define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/editor", "text!layouts/media-editor.html" ],
+  function( LangUtils, XHR, KeysUtils, MediaUtils, Editor, EDITOR_LAYOUT ) {
 
   var _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
+      _addMediaTitle = _parentElement.querySelector( ".add-new-media" ),
       _addMediaPanel = _parentElement.querySelector( ".add-media-panel" ),
 
       _urlInput = _addMediaPanel.querySelector( ".add-media-input" ),
@@ -21,6 +22,10 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "dialog/dialog"
 
       _butter,
       _this;
+
+  function toggleAddNewMediaPanel() {
+    _parentElement.classList.toggle( "add-media-collapsed" );
+  }
 
   function resetInput() {
     _urlInput.value = "";
@@ -52,9 +57,24 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "dialog/dialog"
 
   function onSuccess( data ) {
     var el = _GALLERYITEM.cloneNode( true ),
-        deleteBtn = el.querySelector( ".delete-btn" );
+        deleteBtn = el.querySelector( ".mg-delete-btn" ),
+        thumbnailEl;
 
-    el.querySelector( "label" ).innerHTML = data.source;
+    _loadingSpinner.classList.add( "hidden" );
+
+    el.querySelector( ".mg-title" ).innerHTML = data.title;
+    el.querySelector( ".mg-url" ).innerHTML = data.source;
+    el.querySelector( ".mg-duration" ).innerHTML = data.duration;
+    if ( data.type === "html5" ) {
+      thumbnailEl = data.thumbnail;
+    } else {
+      thumbnailEl = document.createElement( "img" );
+      thumbnailEl.src = data.thumbnail;
+    }
+    el.querySelector( ".mg-thumbnail" ).appendChild( thumbnailEl );
+    el.querySelector( ".mg-thumbnail" ).src = data.thumbnail;
+
+    el.classList.add( "mg-" + data.type );
     el.classList.add( "new" );
 
     setTimeout( function() {
@@ -74,10 +94,10 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "dialog/dialog"
       trackEvent.selected = true;
     }
 
-    el.addEventListener( "dblclick", addEvent, false );
+    el.addEventListener( "click", addEvent, false );
 
     deleteBtn.addEventListener( "click", function( e ) {
-      el.removeEventListener( "dblclick", addEvent, false );
+      el.removeEventListener( "click", addEvent, false );
       _galleryList.removeChild( el );
     }, false );
 
@@ -103,20 +123,7 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "dialog/dialog"
     data.type = "sequencer";
 
     _loadingSpinner.classList.remove( "hidden" );
-
-    // This is fake -- should be where we actually get the media metadata
-    if ( data.source !== "error" ) {
-      setTimeout( function() {
-        _loadingSpinner.classList.add( "hidden" );
-        data.duration = 30;
-        onSuccess( data );
-      }, 1000 );
-    } else {
-      setTimeout( function() {
-        onError( data );
-      }, 2000 );
-    }
-
+    MediaUtils.getMetaData( data.source, onSuccess );
   }
 
   function onFocus( e ) {
@@ -141,6 +148,8 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "dialog/dialog"
   }
 
   function setup() {
+    _addMediaTitle.addEventListener( "click", toggleAddNewMediaPanel, false );
+
     _urlInput.addEventListener( "focus", onFocus, false );
     _urlInput.addEventListener( "input", onInput, false );
     _urlInput.addEventListener( "keydown", onEnter, false );
