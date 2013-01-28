@@ -107,7 +107,8 @@ module.exports = function( config, dbReadyFn ) {
         author: data.author || "",
         template: data.template,
         originalButterVersion: versions.butter,
-        latestButterVersion: versions.butter
+        latestButterVersion: versions.butter,
+        remixedFrom: data.remixedFrom
       });
 
       project.save().complete( callback );
@@ -202,7 +203,8 @@ module.exports = function( config, dbReadyFn ) {
           name: data.name,
           author: data.author || "",
           template: data.template,
-          latestButterVersion: versions.butter
+          latestButterVersion: versions.butter,
+          remixedFrom: data.remixedFrom
         })
         .error( function( err ) {
           callback( err );

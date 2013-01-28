@@ -50,6 +50,9 @@ module.exports = function(sequelize, DataTypes) {
     latestButterVersion: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    remixedFrom: {
+      type: DataTypes.INTEGER
     }
   });
 };

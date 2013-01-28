@@ -11,7 +11,7 @@ define( [ "core/eventmanager", "core/media" ],
 
     var _this = this,
         _id, _name, _template, _author, _dataObject,
-        _publishUrl, _iframeUrl,
+        _publishUrl, _iframeUrl, _remixedFrom,
 
         // Whether or not a save to server is required (project data has changed)
         _isDirty = false,
@@ -216,6 +216,10 @@ define( [ "core/eventmanager", "core/media" ],
         _iframeUrl = json.iframeUrl;
       }
 
+      if ( json.remixedFrom ) {
+        _remixedFrom = json.remixedFrom;
+      }
+
       targets = json.targets;
       if ( targets && Array.isArray( targets ) ) {
         for ( i = 0, l = targets.length; i < l; ++i ) {
@@ -313,7 +317,8 @@ define( [ "core/eventmanager", "core/media" ],
         name: _name,
         template: _template,
         author: _author,
-        data: _this.data
+        data: _this.data,
+        remixedFrom: _remixedFrom
       });
 
       // Save to local storage first in case network is down.
