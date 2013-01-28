@@ -201,13 +201,14 @@ define( [ "util/lang" ],
     var onMouseDown = this.onMouseDown = function( e ) {
       var pos = e.pageX - _container.getBoundingClientRect().left;
 
-      if( _isPlaying ){
-        _media.pause();
-      }
       _isScrubbing = true;
       _isSeeking = true;
       _seekMouseUp = false;
       _media.listen( "mediaseeked", onSeeked );
+
+      if( _isPlaying ){
+        _media.pause();
+      }
 
       _media.currentTime = ( pos + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration;
       setNodePosition();

@@ -61,9 +61,11 @@
 
       options.readyEvent = function() {
         options.failed = false;
-        options.p.off( "canplaythrough", options.readyEvent );
+        options.p.off( "loadedmetadata", options.readyEvent );
         options.ready = true;
-        options.p.volume( options.volume );
+console.log( "on" );
+        _this.on( "volumechange", options._volumeEvent );
+        //options._volumeEvent();
         if ( options.startWhenReady ) {
           options._startEvent();
         }
@@ -85,10 +87,10 @@
         options.p.media.style.height = "100%";
         container.style.width = ( options.width || "100" ) + "%";
         container.style.height = ( options.height || "100" ) + "%";
-        if ( options.p.media.readyState >= 4 ) {
+        if ( options.p.media.readyState >= 1 ) {
           options.readyEvent();
         } else {
-          options.p.on( "canplaythrough", options.readyEvent );
+          options.p.on( "loadedmetadata", options.readyEvent );
         }
       }
 
@@ -112,8 +114,7 @@
               options.p.pause();
             }
             if ( options.startWhenReady ) {
-              options.p.unmute();
-              options.p.volume( options.volume );
+              options._volumeEvent();
             }
           };
           options.p.off( "seeked", seekedEvent );
@@ -130,6 +131,16 @@
 
       options._playEvent = function() {
         options.p.play();
+      };
+
+      options._volumeEvent = function() {
+        /*if ( _this.muted() ) {
+          options.p.mute();
+        } else {
+          options.p.unmute();
+          options.p.volume( options.volume );
+        }*/
+        console.log( "volume changed" );
       };
 
       options._pauseEvent = function() {
@@ -153,6 +164,7 @@
       };
     },
     _teardown: function( options ) {
+      this.off( "volumechange", options._volumeEvent );
       if ( options.p ) {
         // XXX: pull the SoundCloud iframe element out of our video div, and quarantine
         // so we don't delete it, and block loading future SoundCloud instances. See above.
