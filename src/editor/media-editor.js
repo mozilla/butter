@@ -83,13 +83,9 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
 
     function addEvent() {
       var trackEvent = _butter.generateSafeTrackEvent( "sequencer", _butter.currentTime );
-      trackEvent.update({
-        start: _butter.currentTime,
-        end: _butter.currentTime + data.duration,
-      });
-      trackEvent.update({
-        source: data.source
-      });
+      trackEvent.popcornOptions.source = data.source;
+      trackEvent.popcornOptions.end = Math.min.apply( Math, [ _butter.currentTime + data.duration, _butter.media.duration ] );
+      trackEvent.update( trackEvent.popcornOptions );
       trackEvent.selected = true;
     }
 
