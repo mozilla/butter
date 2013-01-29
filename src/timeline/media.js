@@ -199,10 +199,11 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       var type = e.data.type,
           track = e.data.track,
           start = e.data.start,
+          end = e.data.end,
           trackEvent;
 
       if ( _media.ready ) {
-        trackEvent = butter.generateSafeTrackEvent( type, start, track );
+        trackEvent = butter.generateSafeTrackEvent( type, start, end, track );
         butter.editor.editTrackEvent( trackEvent );
       }
     }

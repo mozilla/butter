@@ -156,8 +156,8 @@
         return _currentMedia.getManifest( name );
       }; //getManifest
 
-      _this.generateSafeTrackEvent = function( type, start, track, position ) {
-        var end, trackEvent,
+      _this.generateSafeTrackEvent = function( type, start, end, track, position ) {
+        var trackEvent,
             relativePosition,
             popcornOptions = {};
 
@@ -169,7 +169,9 @@
           start = 0;
         }
 
-        end = start + _defaultTrackeventDuration;
+        if ( end != null ) {
+          end = start + _defaultTrackeventDuration;
+        }
 
         if ( end > _currentMedia.duration ) {
           end = _currentMedia.duration;
@@ -217,7 +219,7 @@
         var trackEvent;
 
         if ( _currentMedia && _currentMedia.ready ) {
-          trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime, e.data.position );
+          trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime, null, e.data.position );
           _this.editor.editTrackEvent( trackEvent );
         }
         else {
@@ -334,7 +336,7 @@
               // cut off events that overlap the duration
               popcornOptions.end = _currentMedia.duration;
             }
-            trackEvent = _this.generateSafeTrackEvent( _copiedEvents[ i ].type, popcornOptions.start );
+            trackEvent = _this.generateSafeTrackEvent( _copiedEvents[ i ].type, popcornOptions.start, popcornOptions.end );
             trackEvent.update( popcornOptions );
             trackEvent.selected = true;
           }
