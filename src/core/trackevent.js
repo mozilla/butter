@@ -353,15 +353,13 @@ define( [ "./logger", "./eventmanager", "./observer",
           return _selected;
         },
         set: function( val ){
-          if ( val !== _selected ){
-            _selected = val;
-            _view.selected = _selected;
-            if ( _selected ){
-              _this.dispatch( "trackeventselected" );
-            }
-            else {
-              _this.dispatch( "trackeventdeselected" );
-            } //if
+          _selected = val;
+          _view.selected = _selected;
+          if ( _selected ){
+            _this.dispatch( "trackeventselected" );
+          }
+          else {
+            _this.dispatch( "trackeventdeselected" );
           } //if
         }
       },
