@@ -64,7 +64,6 @@
         options.p.off( "loadedmetadata", options.readyEvent );
         options.ready = true;
         _this.on( "volumechange", options._volumeEvent );
-        //options._volumeEvent();
         if ( options.startWhenReady ) {
           options._startEvent();
         }
@@ -93,7 +92,7 @@
 			  _this.off( "seeked", options._seekedEvent );
       };
 
-      options.addSource = function( source ) {
+      options.addSource = function() {
         setTimeout( function() {
           if ( !options.ready ) {
             _this.off( "play", options._surpressPlayEvent );
@@ -103,8 +102,8 @@
             }
           }
         }, MEDIA_LOAD_TIMEOUT );
-        source = source.replace( /^https\:\/\/soundcloud\.com/, "http://soundcloud.com" );
-        options.p = Popcorn.smart( options._container, source, {frameAnimation: true} );
+        options.source = options.source.replace( /^https\:\/\/soundcloud\.com/, "http://soundcloud.com" );
+        options.p = Popcorn.smart( options._container, options.source, {frameAnimation: true} );
         options.p.media.style.width = "100%";
         options.p.media.style.height = "100%";
         options._container.style.width = ( options.width || "100" ) + "%";
@@ -117,7 +116,7 @@
       };
 
       if ( options.source ) {
-        options.addSource( options.source );
+        options.addSource();
       }
 
       options._startEvent = function() {
@@ -194,21 +193,26 @@
     },
     _update: function( options, updates ) {
       if ( updates.source ) {
+        options.ready = false;
+        options.source = updates.source;
         options.clearEvents();
         options.tearDown();
-        options.addSource( updates.source );
+        options.addSource();
       }
       if ( updates.zindex != null ) {
+        options.zindex = updates.zindex;
         options._container.style.zIndex = +options.zindex;
       }
       if ( updates.from != null ) {
         options.from = updates.from;
       }
-      if ( updates.volume != null ) {
-        options.volume = updates.volume;
-        options._volumeEvent();
+      if ( options.ready ) {
+        if ( updates.volume != null ) {
+          options.volume = updates.volume;
+          options._volumeEvent();
+        }
+       options.p.currentTime( this.currentTime() - options.start + (+options.from) );
       }
-      options.p.currentTime( this.currentTime() - options.start + (+options.from) );
     },
     _teardown: function( options ) {
       options.tearDown();
