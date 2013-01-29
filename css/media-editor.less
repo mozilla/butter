@@ -53,6 +53,7 @@
     .add-media-panel {
       margin: 0;
       height: 0;
+      opacity: 0;
     }
     .media-gallery {
       top: 0;
@@ -63,14 +64,14 @@
     height: @addClipHeight;
     .transition( all 0.2s ease );
     overflow: hidden;
+    opacity: 1;
   }
 
   .media-gallery {
     position: absolute;
     bottom: 0;
-    top: @addClipHeight;
+    top: @addClipHeight + 20px;
     width: 100%;
-    overflow-y: scroll;
   }
 
   .media-gallery-heading {
