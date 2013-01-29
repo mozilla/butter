@@ -82,15 +82,14 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     }, 2000 );
 
     function addEvent() {
-       var trackEvent = _butter.generateSafeTrackEvent( "sequencer", _butter.currentTime );
-
-       trackEvent.update({
+      var trackEvent = _butter.generateSafeTrackEvent( "sequencer", _butter.currentTime );
+      trackEvent.update({
         start: _butter.currentTime,
         end: _butter.currentTime + data.duration,
-        type: data.type,
+      });
+      trackEvent.update({
         source: data.source
       });
-
       trackEvent.selected = true;
     }
 

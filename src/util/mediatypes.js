@@ -35,6 +35,10 @@ define( [ "util/xhr" ],
           xhrURL,
           testEl;
 
+      if ( baseUrl === "test" ) {
+        baseUrl = EXAMPLES.youtube;
+      }
+
       type = data.type = type || this.checkUrl( baseUrl );
       callback = callback || function(){};
 
