@@ -73,6 +73,10 @@
      *                    {Function} end: Fucntion to execute on drag end event
      */
     global.EditorHelper.draggable = function( trackEvent, dragContainer, targetContainer, options ) {
+      if ( $( dragContainer ).data( "draggable" ) ) {
+        return;
+      }
+
       var iframeCover = targetContainer.querySelector( ".butter-iframe-fix" );
 
       options = options || {};
@@ -130,6 +134,10 @@
      *                    {Number} minHeight: Minimum height that the resizeContainer should be
      */
     global.EditorHelper.resizable = function( trackEvent, resizeContainer, targetContainer, options ) {
+      if ( $( resizeContainer ).data( "resizable" ) ) {
+        return;
+      }
+
       var iframeCover = targetContainer.querySelector( ".butter-iframe-fix" );
 
       options = options || {};
