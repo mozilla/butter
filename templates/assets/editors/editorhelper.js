@@ -218,7 +218,9 @@
         // Open the editor
         butter.editor.editTrackEvent( trackEvent );
 
-        $( contentContainer ).draggable( "destroy" );
+        if ( $( contentContainer ).data( "draggable" ) ) {
+          $( contentContainer ).draggable( "destroy" );
+        }
       };
 
       for ( var i = 0, l = contentContainers.length; i < l; i++ ) {
@@ -375,6 +377,25 @@
           document.body.appendChild( div );
         }
       }, false );
+    };
+
+    global.EditorHelper.removeUIElements = function( container ) {
+      var element,
+          draggingElements = container.querySelectorAll( ".ui-draggable-handle" );
+
+      for ( var k = 0; k < draggingElements.length; k++ ) {
+        element = draggingElements[ k ];
+        container.removeChild( element );
+      }
+
+      if ( $( container ).data( "draggable" ) ) {
+        $( container ).draggable( "destroy" );
+      }
+
+      if ( $( container ).data( "resizable" ) ) {
+        $( container ).resizable( "destroy" );
+      }
+
     };
 
     function _updateFunction( e ) {
