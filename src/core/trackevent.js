@@ -175,20 +175,10 @@ define( [ "./logger", "./eventmanager", "./observer",
       _popcornOptions.start = newStart;
       _popcornOptions.end = newEnd;
 
-      function trackEventUpdated() {
-
-        // make sure we have a reference to the trackevent before calling toString
-        if ( _this.popcornTrackEvent ) {
-          _view.elementText = _this.popcornTrackEvent.toString();
-          // we should only get here if no exceptions happened
-          _this.dispatch( "trackeventupdated", _this );
-        }
-      }
-
       // if PopcornWrapper exists, it means we're connected properly to a Popcorn instance,
       // and can update the corresponding Popcorn trackevent for this object
       if ( _popcornWrapper ) {
-        _popcornWrapper.synchronizeEvent( _this, updateOptions, trackEventUpdated );
+        _popcornWrapper.synchronizeEvent( _this, updateOptions );
       }
 
       _view.update( _popcornOptions );

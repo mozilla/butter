@@ -26,38 +26,41 @@
  
   Popcorn.plugin( 'sequencer', {
     _setup: function( options ) {
-      var container = document.createElement( "div" ),
-          mouseDiv = document.createElement( "div" ),
-          target = Popcorn.dom.find( options.target ),
-          _this = this;
+      var _this = this;
 
-      if ( !target ) {
-        target = _this.media.parentNode;
-      }
+      options.setupContainer = function() {
+        var container = document.createElement( "div" ),
+            mouseDiv = document.createElement( "div" ),
+            target = Popcorn.dom.find( options.target );
 
-      options._target = target;
-      options._container = container;
-      options._mouseDiv = mouseDiv;
+        if ( !target ) {
+          target = _this.media.parentNode;
+        }
+
+        options._target = target;
+        options._container = container;
+        options._mouseDiv = mouseDiv;
+
+        container.style.zIndex = +options.zindex;
+        container.style.visibility = "hidden";
+        container.className = "popcorn-sequencer";
+        container.style.position = "absolute";
+        container.style.width = ( options.width || "100" ) + "%";
+        container.style.height = ( options.height || "100" ) + "%";
+        container.style.top = ( options.top || "0" ) + "%";
+        container.style.left = ( options.left || "0" ) + "%";
+        mouseDiv.style.position = "absolute";
+        mouseDiv.style.width = "100%";
+        mouseDiv.style.height = "100%";
+        mouseDiv.style.top = "0";
+        mouseDiv.style.left = "0";
+
+        if ( target ) {
+          target.appendChild( container );
+          container.appendChild( mouseDiv );
+        }
+      };
       options.from = options.from || 0;
-
-      container.style.zIndex = +options.zindex;
-      container.style.visibility = "hidden";
-      container.className = "popcorn-sequencer";
-      container.style.position = "absolute";
-      container.style.width = ( options.width || "100" ) + "%";
-      container.style.height = ( options.height || "100" ) + "%";
-      container.style.top = ( options.top || "0" ) + "%";
-      container.style.left = ( options.left || "0" ) + "%";
-      mouseDiv.style.position = "absolute";
-      mouseDiv.style.width = "100%";
-      mouseDiv.style.height = "100%";
-      mouseDiv.style.top = "0";
-      mouseDiv.style.left = "0";
-
-      if ( target ) {
-        target.appendChild( container );
-        container.appendChild( mouseDiv );
-      }
 
       options.readyEvent = function() {
         options.failed = false;
@@ -76,11 +79,16 @@
           // so we don't delete it, and block loading future SoundCloud instances. See above.
           // this is also fixing an issue in youtube, so we do it for all medias with iframes now.
           var soundCloudParent = options.p.media.parentNode,
-              soundCloudIframe = soundCloudParent.querySelector( "iframe" );
+              soundCloudIframe = soundCloudParent.querySelector( "iframe" ) || soundCloudParent.querySelector( "video" ) || soundCloudParent.querySelector( "audio" );
           if ( soundCloudIframe ) {
             getSoundCloudQuarantine().appendChild( soundCloudIframe );
           }
           options.p.destroy();
+        }
+
+        // Tear-down old instances, special-casing SoundCloud removal, see above.
+        if ( options._container && options._container.parentNode ) {
+          options._container.parentNode.removeChild( options._container );
         }
       };
 
@@ -114,7 +122,7 @@
           options.p.on( "loadedmetadata", options.readyEvent );
         }
       };
-
+      options.setupContainer();
       if ( options.source ) {
         options.addSource();
       }
@@ -133,7 +141,7 @@
               _this.on( "pause", options._pauseEvent );
               _this.on( "seeking", options._seekingEvent );
               _this.on( "seeked", options._seekedEvent );
-              container.style.visibility = "visible";
+              options._container.style.visibility = "visible";
               if ( options.playWhenReady ) {
                 _this.play();
               } else {
@@ -197,7 +205,24 @@
         options.source = updates.source;
         options.clearEvents();
         options.tearDown();
+        options.setupContainer();
         options.addSource();
+      }
+      if ( updates.top != null ) {
+        options.top = updates.top;
+        options._container.style.top = ( options.top || "0" ) + "%";
+      }
+      if ( updates.left != null ) {
+        options.left = updates.left;
+        options._container.style.left = ( options.left || "0" ) + "%";
+      }
+      if ( updates.height != null ) {
+        options.height = updates.height;
+        options._container.style.height = ( options.height || "100" ) + "%";
+      }
+      if ( updates.width != null ) {
+        options.width = updates.width;
+        options._container.style.width = ( options.width || "100" ) + "%";
       }
       if ( updates.zindex != null ) {
         options.zindex = updates.zindex;
@@ -216,11 +241,6 @@
     },
     _teardown: function( options ) {
       options.tearDown();
-
-      // Tear-down old instances, special-casing SoundCloud removal, see above.
-      if ( options._container && options._container.parentNode ) {
-        options._container.parentNode.removeChild( options._container );
-      }
     },
     start: function( event, options ) {
       options.active = true;

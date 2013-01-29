@@ -66,7 +66,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
     }; //interrupt
 
     // Update Popcorn events with data from a butter trackevent
-    this.synchronizeEvent = function( trackEvent, newOptions, callBack ) {
+    this.synchronizeEvent = function( trackEvent, newOptions ) {
       var options = trackEvent.popcornOptions,
           popcornId = trackEvent.id,
           popcornEvent = null;
@@ -91,8 +91,11 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
           }
         }
 
-        if ( callBack ) {
-          callBack();
+        // make sure we have a reference to the trackevent before calling toString
+        if ( trackEvent.popcornTrackEvent ) {
+          trackEvent.view.elementText = trackEvent.popcornTrackEvent.toString();
+          // we should only get here if no exceptions happened
+          trackEvent.dispatch( "trackeventupdated", trackEvent );
         }
       }
 
