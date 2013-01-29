@@ -205,6 +205,10 @@
       options._seekedEvent = function() {
         options.p.currentTime( _this.currentTime() - options.start + (+options.from) );
       };
+
+      options.toString = function() {
+        return options.title || options.source || "";;
+      };
     },
     _update: function( options, updates ) {
       if ( updates.hidden != null ) {

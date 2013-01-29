@@ -85,5 +85,6 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         butter.editor.openEditor( "plugin-list" );
       }
     });
+
   };
 });

@@ -72,18 +72,52 @@
     bottom: 0;
     top: @addClipHeight + 20px;
     width: 100%;
+    margin-top: -1px;
   }
 
   .media-gallery-heading {
     background: #FFF;
     padding: 15px 20px;
-    margin-top: -1px;
     border: 0 solid @baseLightOutline;
     border-bottom-width: 1px;
     border-top-width: 1px;
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .media-gallery-base-media.butter-form-inline.form-single {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 5px 20px;
+    background: @baseLight;
+    border-top: 1px solid @baseLightOutline;
+    > label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 22px;
+    }
+    > input {
+      float: right;
+    }
+  }
+
+  .media-gallery-scroll-container {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    right: 0;
+    bottom: 46px;
+    overflow-y: scroll;
   }
   .media-gallery-list{
     list-style: none;
@@ -103,9 +137,6 @@
     .transition( background-color 0.2s linear );
     &:first-child {
       margin-top: -1px;
-    }
-    &:last-child {
-      border-bottom-width: 1px;
     }
     &.new {
       background: @green;

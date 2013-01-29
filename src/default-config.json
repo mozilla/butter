@@ -70,7 +70,8 @@
       },
       {
         "type": "sequencer",
-        "path": "{{baseDir}}templates/assets/plugins/sequencer/popcorn.sequencer.js"
+        "path": "{{baseDir}}templates/assets/plugins/sequencer/popcorn.sequencer.js",
+        "icon": "{{baseDir}}resources/icons/media.png"
       }
     ],
     "defaults": [

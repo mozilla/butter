@@ -20,7 +20,10 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       _galleryList = _galleryPanel.querySelector( ".media-gallery-list" ),
       _GALLERYITEM = LangUtils.domFragment( EDITOR_LAYOUT, ".media-gallery-item" ),
 
+      _durationInput = _parentElement.querySelector( ".media-base-duration" ),
+
       _butter,
+      _media,
       _this;
 
   function toggleAddNewMediaPanel() {
@@ -82,10 +85,10 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     }, 2000 );
 
     function addEvent() {
-      var trackEvent = _butter.generateSafeTrackEvent( "sequencer", _butter.currentTime );
-      trackEvent.popcornOptions.source = data.source;
-      trackEvent.popcornOptions.end = Math.min.apply( Math, [ _butter.currentTime + data.duration, _butter.media.duration ] );
-      trackEvent.update( trackEvent.popcornOptions );
+      var trackEvent = _butter.generateSafeTrackEvent( "sequencer", _butter.currentTime, _butter.currentTime + data.duration );
+      trackEvent.update({
+        source: data.source
+      });
       trackEvent.selected = true;
     }
 
@@ -111,7 +114,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     _errorMessage.classList.remove( "hidden" );
   }
 
- function addMediaToGallery() {
+  function addMediaToGallery() {
     var data = {};
 
     data.source = _urlInput.value;
@@ -119,6 +122,18 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
 
     _loadingSpinner.classList.remove( "hidden" );
     MediaUtils.getMetaData( data.source, onSuccess );
+  }
+
+  function changeBaseMedia( e ) {
+    if (  e.keyCode === KeysUtils.ENTER ) {
+      e.preventDefault();
+      var newMedia = _durationInput.value;
+      if ( /[0-9]{1,9}/.test( newMedia ) ) {
+        _media.url = "#t=," + newMedia;
+      } else {
+        _media.url = newMedia;
+      }
+    }
   }
 
   function onFocus( e ) {
@@ -142,6 +157,11 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     }
   }
 
+
+  function onMediaReady() {
+    _butter.editor.openEditor( "media-editor" );
+  }
+
   function setup() {
     _addMediaTitle.addEventListener( "click", toggleAddNewMediaPanel, false );
 
@@ -151,7 +171,21 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
 
     _addBtn.addEventListener( "click", addMediaToGallery, false );
     _cancelBtn.addEventListener( "click", resetInput, false );
+
+    _durationInput.addEventListener( "keydown", changeBaseMedia, false );
+
+    //_butter.listen( "mediaready", onMediaReady );
   }
+
+  // For main media source. Should generally be null video for new projects.
+  function setBaseMedia() {
+    if ( Array.isArray( _media.url ) ) {
+      _durationInput.value = _media.url[ 0 ];
+    } else {
+      _durationInput.value = _media.url.split( "," )[ 1 ];
+    }
+  }
+
 
   Editor.register( "media-editor", null, function( rootElement, butter ) {
     rootElement = _parentElement;
@@ -162,9 +196,23 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
 
     Editor.BaseEditor.extend( _this, butter, rootElement, {
       open: function() {
+        _media = butter.currentMedia;
+
+        setBaseMedia();
+
+        _media.listen( "mediaready", setBaseMedia );
+        _media.listen( "mediacontentchanged", setBaseMedia );
+        _media.listen( "mediatimeout", setBaseMedia );
+
       },
       close: function() {
+
+        _media.unlisten( "mediaready", setBaseMedia );
+        _media.unlisten( "mediacontentchanged", setBaseMedia );
+        _media.unlisten( "mediatimeout", setBaseMedia );
+
       }
     });
+
   });
 });

@@ -225,11 +225,25 @@
 }
 
 .butter-track-event[data-butter-trackevent-type="sequencer"] {
-  background: #555;
-  border: 1px solid #444;
+  background: #424242;
+  border: 1px solid #424242;
+  border-bottom-color: lighten( #424242, 7% );
   .title {
     font-weight: normal;
     color: #FFF;
+    &:before {
+      content: "video";
+      text-transform: uppercase;
+      margin-right: 5px;
+      font-weight: 700;
+      font-size: 0.9em;
+    }
+  }
+  .butter-track-event-icon {
+    background-image: url( ../resources/icons/media-white.png ) !important;
+  }
+  .handle {
+    background: #424242;
   }
 }
 

@@ -11,12 +11,12 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
           "ui/toggler", "util/lang", "text!layouts/editor-area.html",
           "./default", "core/logger", "./header",
           // Included here to register themselves.
-          "./media-editor", "./share-editor" ],
+          "./media-gallery-editor", "./share-editor" ],
   function( EventManager, TrackEvent, Editor,
             Toggler, LangUtils, EDITOR_AREA_LAYOUT,
             DefaultEditor, Logger, Header ){
 
-  var DEFAULT_EDITOR_NAME = "plugin-list";
+  var DEFAULT_EDITOR_NAME = "media-editor";
 
   // Expose DefaultEditor to external editors
   Editor.DefaultEditor = DefaultEditor;
