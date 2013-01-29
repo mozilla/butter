@@ -855,6 +855,12 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
     };
 
     _draggable.update = function() {
+
+      // Make sure the position is up to date after this call because there are edge
+      // cases where _elementRect can be undefined here
+      // https://webmademovies.lighthouseapp.com/projects/65733-popcorn-maker/tickets/2945
+      _draggable.updateRects();
+
       // Find new potential (x,y) for element.
       updatePosition();
 
