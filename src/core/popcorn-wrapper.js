@@ -91,6 +91,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
           }
         }
 
+        trackEvent.view.update( trackEvent.popcornOptions );
+
         // make sure we have a reference to the trackevent before calling toString
         if ( trackEvent.popcornTrackEvent ) {
           trackEvent.view.elementText = trackEvent.popcornTrackEvent.toString();
