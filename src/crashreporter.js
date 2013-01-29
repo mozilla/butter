@@ -147,8 +147,8 @@ define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI 
         function sendErrorReport( comments ) {
           delete crashReport.onSendReport;
           delete crashReport.onNoReport;
-          crashReport.comments = comments;
-          XHR.post( "/crash", JSON.stringify( crashReport, null, 4 ),
+          crashReport.commentsxs = comments;
+          XHR.post( "/crash", JSON.stringify( crashReport ),
                     attemptRecovery, "text/json" );
         }
 
