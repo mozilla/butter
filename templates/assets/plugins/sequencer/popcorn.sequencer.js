@@ -60,12 +60,20 @@
           container.appendChild( mouseDiv );
         }
       };
+
+      options.displayLoading = function() {
+        document.querySelector( ".loading-message" ).classList.add( "show" );
+      };
+      options.hideLoading = function() {
+        document.querySelector( ".loading-message" ).classList.remove( "show" );
+      };
       options.from = options.from || 0;
 
       options.readyEvent = function() {
         options.failed = false;
         options.p.off( "loadedmetadata", options.readyEvent );
         options.ready = true;
+        options.hideLoading();
         _this.on( "volumechange", options._volumeEvent );
         if ( options.startWhenReady ) {
           options._startEvent();
@@ -101,16 +109,22 @@
       };
 
       options.addSource = function() {
+        options.displayLoading();
         setTimeout( function() {
           if ( !options.ready ) {
             _this.off( "play", options._surpressPlayEvent );
             options.failed = true;
+            options.hideLoading();
             if ( options.playWhenReady ) {
               _this.play();
             }
           }
         }, MEDIA_LOAD_TIMEOUT );
-        options.source = options.source.replace( /^https\:\/\/soundcloud\.com/, "http://soundcloud.com" );
+        // If our src is not an array, create an array of one.
+        options.source = typeof options.source === "string" ? [ options.source ] : options.source;
+        for ( var i = 0; i < options.source.length; i++ ) {
+          options.source[ i ] = options.source[ i ].replace( /^https\:\/\/soundcloud\.com/, "http://soundcloud.com" );
+        }
         options.p = Popcorn.smart( options._container, options.source, {frameAnimation: true} );
         options.p.media.style.width = "100%";
         options.p.media.style.height = "100%";
@@ -163,6 +177,7 @@
       };
 
       options._surpressPlayEvent = function() {
+        options.playWhenReady = true;
         _this.pause();
       };
 
@@ -175,7 +190,7 @@
           options.p.mute();
         } else {
           options.p.unmute();
-          options.p.volume( options.volume );
+          options.p.volume( options.volume * _this.volume() );
         }
       };
 
@@ -236,7 +251,7 @@
           options.volume = updates.volume;
           options._volumeEvent();
         }
-       options.p.currentTime( this.currentTime() - options.start + (+options.from) );
+        options.p.currentTime( this.currentTime() - options.start + (+options.from) );
       }
     },
     _teardown: function( options ) {
@@ -258,13 +273,12 @@
         if ( options.ready ) {
           options._startEvent();
         } else {
-          // TODO
-          // loading bar here
-          // turn it off on fail or ready.
+          options.displayLoading();
         }
       }
     },
     end: function( event, options ) {
+      // can remove this state once #1423 lands.
       options.active = false;
       options.clearEvents();
       // cancel any pending or future starts

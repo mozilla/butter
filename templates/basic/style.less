@@ -55,6 +55,30 @@ body.editor-minimized .body-wrapper {
   right: 0;
 }
 
+.loading-message {
+  position: absolute;
+
+  opacity: 0;
+  visibility: hidden;
+
+  .transition( opacity 0.35s, visibility 0.35s );
+
+  height: 3em;
+  background: rgba(0,0,0,0.2) url( "/resources/icons/big-loader.gif" ) center no-repeat;
+
+  width: 100%;
+  height: 100%;
+  top: 0;
+  line-height: 1;
+
+  &.show {
+    opacity: 1;
+    // this zindex puts it above all track events
+    z-index: 1000;
+    visibility: visible;
+  }
+}
+
 #embed-wrapper {
   position: relative;
 
@@ -65,33 +89,9 @@ body.editor-minimized .body-wrapper {
     opacity: 1;
   }
 
-  .loading-message {
-    position: absolute;
-
-    opacity: 0;
-    visibility: hidden;
-
-    .transition( opacity 0.35s, visibility 0.35s );
-
-    height: 3em;
-    background: url( "/resources/icons/big-loader.gif" ) center no-repeat;
-
-    width: 100%;
-    line-height: 1;
-    top: 50%;
-
-    margin-top: -1.5em;
-  }
-
-  &.faded .loading-message {
-    opacity: 1;
-    visibility: visible;
-  }
-
   &.faded .video-container {
     opacity: 0;
   }
-
 }
 
 /* VIDEO
