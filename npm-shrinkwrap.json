@@ -170,18 +170,6 @@
         }
       }
     },
-    "client-sessions": {
-      "version": "0.0.9",
-      "dependencies": {
-        "cookies": {
-          "version": "0.1.7",
-          "from": "https://github.com/benadida/cookies/tarball/d2f0f0b3"
-        },
-        "node-proxy": {
-          "version": "0.6.0"
-        }
-      }
-    },
     "csslint": {
       "version": "0.9.9"
     },
