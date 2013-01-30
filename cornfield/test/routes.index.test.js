@@ -23,6 +23,8 @@ app.use(mockSession({
 
 require("../routes")(app, mockUser, mockFilter, mockSanitizer, mockStore, utils);
 
+app = app.listen(0);
+
 test("whoami API valid", function(t) {
   request(app)
     .get("/api/whoami")
@@ -328,6 +330,7 @@ test("remix project valid", function(t) {
       mockData.data = JSON.parse(mockData.data);
       mockData.data.name = "Remix of " + mockData.name;
       mockData.data.template = "basic";
+      mockData.data.remixedFrom = mockData.id;
       mockData = mockData.data;
       t.deepEqual(res.body, mockData, "saved data is equal");
 
@@ -335,6 +338,7 @@ test("remix project valid", function(t) {
     });
 });
 
-test("clean up server connections", function() {
-  process.exit();
+test("clean up server connections", function(t) {
+  app.close();
+  t.end();
 });
