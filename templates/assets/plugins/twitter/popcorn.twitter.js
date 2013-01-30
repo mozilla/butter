@@ -80,6 +80,10 @@
           units: "%",
           "default": 0
         },
+        width: {
+          hidden: true,
+          "default": 35,
+        },
         zindex: {
           hidden: true
         }
