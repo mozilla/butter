@@ -109,7 +109,6 @@
       };
 
       options.addSource = function() {
-        options.displayLoading();
         setTimeout( function() {
           if ( !options.ready ) {
             _this.off( "play", options._surpressPlayEvent );
@@ -281,6 +280,7 @@
       // can remove this state once #1423 lands.
       options.active = false;
       options.clearEvents();
+      options.hideLoading();
       // cancel any pending or future starts
       options.startWhenReady = false;
       options.playWhenReady = false;
