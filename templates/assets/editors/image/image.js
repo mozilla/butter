@@ -20,8 +20,9 @@ EditorHelper.addPlugin( "image", function( trackEvent ) {
     }
 
     window.EditorHelper.resizable( trackEvent, _container, _target, {
-      minWidth: 25,
-      minHeight: 25
+      minWidth: 5,
+      minHeight: 5,
+      handlePositions: "e,s,se"
     });
     window.EditorHelper.draggable( trackEvent, _container, _target );
   }

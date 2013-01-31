@@ -122,6 +122,8 @@
      * @param {Object} extra options to apply to the resizeable call
      *                 Options are:
      *                    {String} handlePositions: describes where to position resize handles ( i.e. "n,s,e,w" )
+     *                              - Recommended that this option is specified due to a bug in z-indexing with
+     *                                jQueryUI Resizable.
      *                    {Function} start: Function to execute on resize start event
      *                    {Function} end: Fucntion to execute on resize end event
      *                    {Number} minWidth: Minimum width that the resizeContainer should be
