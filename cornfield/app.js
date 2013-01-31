@@ -69,7 +69,7 @@ app.configure( function() {
     .use( express.static( WWW_ROOT, JSON.parse( JSON.stringify( CONFIG.staticMiddleware ) ) ) )
     .use( express.bodyParser() )
     .use( express.cookieParser() )
-    .use( express.cookieSession( env.get( 'session', CONFIG.session ) )
+    .use( express.cookieSession( env.get( 'session', CONFIG.session ) ) )
     .use( express.csrf() )
     /* Show Zeus who's boss
      * This only affects requests under /api and /persona, not static files

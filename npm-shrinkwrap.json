@@ -232,6 +232,9 @@
         }
       }
     },
+    "habitat": {
+      "version": "0.4.0"
+    },
     "supertest": {
       "version": "0.5.1",
       "dependencies": {
