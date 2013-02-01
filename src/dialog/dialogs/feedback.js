@@ -26,7 +26,7 @@ define( [ "text!dialog/dialogs/feedback.html", "dialog/dialog", "util/xhr" ],
             browser: browserInfo,
             comments: commentsTextArea.value
           };
-          XHR.post( "/feedback", JSON.stringify( commentsReport, null, 4 ),
+          XHR.post( "/feedback", JSON.stringify( commentsReport ),
                     function(){ /* fire and forget */ }, "text/json" );
           dialog.activity( "default-close" );
         }
