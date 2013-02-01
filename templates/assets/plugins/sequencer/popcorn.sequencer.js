@@ -73,7 +73,6 @@
         options.failed = false;
         options.p.off( "loadedmetadata", options.readyEvent );
         options.ready = true;
-        options.hideLoading();
         _this.on( "volumechange", options._volumeEvent );
         if ( options.startWhenReady ) {
           options._startEvent();
@@ -104,12 +103,14 @@
         _this.off( "play", options._surpressPlayEvent );
         _this.off( "play", options._playEvent );
         _this.off( "pause", options._pauseEvent );
-    		_this.off( "seeking", options._seekingEvent );
-			  _this.off( "seeked", options._seekedEvent );
+        _this.off( "seeked", options._seekedEvent );
       };
 
       options.addSource = function() {
-        setTimeout( function() {
+        if ( options.loadTimeout ) {
+          clearTimeout( options.loadTimeout );
+        }
+        options.loadTimeout = setTimeout( function() {
           if ( !options.ready ) {
             _this.off( "play", options._surpressPlayEvent );
             options.failed = true;
@@ -148,23 +149,23 @@
         var seekedEvent = function () {
           var playedEvent = function() {
             options.p.off( "play", playedEvent );
-            if ( options.active ) {
-              _this.off( "play", options._surpressPlayEvent );
-              _this.on( "play", options._playEvent );
-              _this.on( "pause", options._pauseEvent );
-              _this.on( "seeking", options._seekingEvent );
-              _this.on( "seeked", options._seekedEvent );
+            _this.off( "play", options._surpressPlayEvent );
+            _this.on( "play", options._playEvent );
+            _this.on( "pause", options._pauseEvent );
+            _this.on( "seeked", options._seekedEvent );
+            options.hideLoading();
+            if ( !options.hidden ) {
               options._container.style.visibility = "visible";
-              if ( options.playWhenReady ) {
-                _this.play();
-              } else {
-                options.p.pause();
-              }
-              if ( options.startWhenReady ) {
-                options._volumeEvent();
-              }
+            } else {
+              options._container.style.visibility = "hidden";
+            }
+            if ( options.playWhenReady ) {
+              _this.play();
             } else {
               options.p.pause();
+            }
+            if ( options.startWhenReady ) {
+              options._volumeEvent();
             }
           };
           options.p.off( "seeked", seekedEvent );
@@ -188,7 +189,11 @@
         if ( _this.muted() ) {
           options.p.mute();
         } else {
-          options.p.unmute();
+          if ( !options.mute ) {
+            options.p.unmute();
+          } else {
+            options.p.mute();
+          }
           options.p.volume( options.volume * _this.volume() );
         }
       };
@@ -197,29 +202,37 @@
         options.p.pause();
       };
 
-      options._seekingEvent = function() {
-        if ( options.ready && !options.p.paused() ) {
-          options.p.pause();
-        }
-        options.p.currentTime( _this.currentTime() - options.start + (+options.from) );
-      };
-
       options._seekedEvent = function() {
-        if ( options.ready ) {
-          if ( options.p.paused() && !_this.paused() ) {
-            options.p.play();
-          }
-          options.p.currentTime( _this.currentTime() - options.start + (+options.from) );
-        }
+        options.p.currentTime( _this.currentTime() - options.start + (+options.from) );
       };
     },
     _update: function( options, updates ) {
+      if ( updates.hidden != null ) {
+        options.hidden = updates.hidden;
+        if ( !options.hidden ) {
+          options._container.style.visibility = "visible";
+        } else {
+          options._container.style.visibility = "hidden";
+        }
+      }
+      if ( updates.mute != null ) {
+        options.mute = updates.mute;
+        options._volumeEvent();
+      }
       if ( updates.source ) {
         options.ready = false;
+        options.playWhenReady = false;
+        options.displayLoading();
         options.source = updates.source;
         options.clearEvents();
         options.tearDown();
         options.setupContainer();
+        this.on( "play", options._surpressPlayEvent );
+        if ( !this.paused() ) {
+          options.playWhenReady = true;
+          this.pause();
+          options.p.pause();
+        }
         options.addSource();
       }
       if ( updates.top != null ) {
@@ -257,7 +270,6 @@
       options.tearDown();
     },
     start: function( event, options ) {
-      options.active = true;
       if ( options.source ) {
         if ( options.failed ) {
           return;
@@ -277,8 +289,6 @@
       }
     },
     end: function( event, options ) {
-      // can remove this state once #1423 lands.
-      options.active = false;
       options.clearEvents();
       options.hideLoading();
       // cancel any pending or future starts
@@ -360,6 +370,18 @@
           type: "number",
           label: "Volume",
           "default": 1
+        },
+        hidden: {
+          elem: "input",
+          type: "checkbox",
+          label: "Sound only",
+          "default": false
+        },
+        mute: {
+          elem: "input",
+          type: "checkbox",
+          label: "Mute",
+          "default": false
         },
         zindex: {
           hidden: true
