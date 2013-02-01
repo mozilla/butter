@@ -12,7 +12,7 @@
     "Firefox": 10,
     "IE": 9,
     "Safari": 6,
-    "Opera": 9
+    "Opera": 12
   };
 
   define( [
