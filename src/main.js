@@ -16,7 +16,8 @@
   };
 
   define( [
-            "core/eventmanager", "core/logger", "core/config", "core/target", "core/media", "core/page",
+            "core/eventmanager", "core/logger", "core/config", "core/track",
+            "core/target", "core/media", "core/page",
             "./modules", "./dependencies", "./dialogs",
             "dialog/dialog", "editor/editor", "ui/ui",
             "util/xhr", "util/lang", "util/tutorial",
@@ -24,7 +25,8 @@
             "ui/widget/tooltip", "crashreporter", "core/project"
           ],
           function(
-            EventManager, Logger, Config, Target, Media, Page,
+            EventManager, Logger, Config, Track,
+            Target, Media, Page,
             Modules, Dependencies, Dialogs,
             Dialog, Editor, UI,
             XHR, Lang, Tutorial,
@@ -118,13 +120,35 @@
         } //if
       } //checkMedia
 
+      function getRelativePosition( position, type ) {
+
+        var mediaPosition = _currentMedia.popcorn.popcorn.position(),
+            manifestOptions = Popcorn.manifest[ type ].options,
+            minWidth = manifestOptions.width ? manifestOptions.width.default : 0,
+            minHeight = manifestOptions.height ? manifestOptions.height.default : 0,
+            calculatedLeft = ( ( position[ 0 ] - mediaPosition.left ) / mediaPosition.width ) * 100,
+            calculatedTop = ( ( position[ 1 ] - mediaPosition.top ) / mediaPosition.height ) * 100;
+
+        if ( calculatedLeft + minWidth > 100 ) {
+          calculatedLeft = 100 - minWidth;
+        }
+
+        if ( calculatedTop + minHeight > 100 ) {
+          calculatedTop = 100 - minHeight;
+        }
+
+        return [ calculatedLeft, calculatedTop ];
+      }
+
       _this.getManifest = function ( name ) {
         checkMedia();
         return _currentMedia.getManifest( name );
       }; //getManifest
 
-      _this.generateSafeTrackEvent = function( type, start, track ) {
-        var end, trackEvent;
+      _this.generateSafeTrackEvent = function( type, start, track, position ) {
+        var end, trackEvent,
+            relativePosition,
+            popcornOptions = {};
 
         if ( start + _defaultTrackeventDuration > _currentMedia.duration ) {
           start = _currentMedia.duration - _defaultTrackeventDuration;
@@ -145,21 +169,29 @@
           return;
         }
 
-        if ( !track ) {
+        if ( !( track instanceof Track ) ) {
+          if ( track && track.constructor === Array ) {
+            position = track;
+          }
           track = _currentMedia.findNextAvailableTrackFromTimes( start, end );
-        }
-        else {
+        } else {
           track = _currentMedia.forceEmptyTrackSpaceAtTime( track, start, end );
         }
 
         track = track || _currentMedia.addTrack();
 
+        popcornOptions.start = start;
+        popcornOptions.end = end;
+        popcornOptions.target = _defaultTarget.elementID;
+
+        if ( position ) {
+          relativePosition = getRelativePosition( position, type );
+          popcornOptions.left = relativePosition[ 0 ];
+          popcornOptions.top = relativePosition[ 1 ];
+        }
+
         trackEvent = track.addTrackEvent({
-          popcornOptions: {
-            start: start,
-            end: end,
-            target: _defaultTarget.elementID
-          },
+          popcornOptions: popcornOptions,
           type: type
         });
 
@@ -176,7 +208,7 @@
         var trackEvent;
 
         if ( _currentMedia && _currentMedia.ready ) {
-          trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime );
+          trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime, e.data.position );
           _this.editor.editTrackEvent( trackEvent );
         }
         else {
