@@ -122,8 +122,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
     }
 
     function onMediaReady(){
-      _bounds = DEFAULT_BOUNDS;
-      _tracksContainer.setViewportBounds( _bounds[ 0 ], _bounds[ 1 ] );
       updateUI();
       _timebar.enable();
       _media.currentTime = 0;
@@ -186,6 +184,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       });
 
       _superScrollbar.initialize();
+      _bounds = DEFAULT_BOUNDS;
+      _tracksContainer.setViewportBounds( _bounds[ 0 ], _bounds[ 1 ] );
       onMediaReady();
     }
 
