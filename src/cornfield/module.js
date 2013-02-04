@@ -45,7 +45,7 @@ define( [ "util/xhr" ],
     this.login = function(callback) {
       navigator.id.get(function(assertion) {
         if (assertion) {
-          sendXHRPost(server + "/persona/verify",
+          sendXHRPost(server + "/login",
             { assertion: assertion },
             function() {
               if (this.readyState === 4) {
@@ -154,7 +154,7 @@ define( [ "util/xhr" ],
     }
 
     this.logout = function(callback) {
-      sendXHRPost(server + "/persona/logout", null, function() {
+      sendXHRPost(server + "/logout", null, function() {
         email = "";
         if (this.readyState === 4) {
           var response;

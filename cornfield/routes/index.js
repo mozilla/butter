@@ -1,6 +1,7 @@
 'use strict';
 
-var datauri = require('../lib/datauri');
+var datauri = require('../lib/datauri'),
+    passport = require( 'passport' );
 
 module.exports = function routesCtor( app, User, filter, sanitizer, stores, utils ) {
 
@@ -9,7 +10,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
       deploymentType = app.settings.env === "production" ? "production" : "development";
 
   app.get( '/api/whoami', function( req, res ) {
-    var email = req.session.email;
+    var email = req.session.passport.user;
 
     if (email) {
       res.json({
@@ -31,7 +32,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
     filter.isLoggedIn, filter.isStorageAvailable,
     function( req, res ) {
 
-    User.findProject( req.session.email, req.params.id, function( err, doc ) {
+    User.findProject( req.session.passport.user, req.params.id, function( err, doc ) {
       if ( err ) {
         res.json( { error: err }, 500 );
         return;
@@ -66,7 +67,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
       return;
     }
 
-    User.deleteProject( req.session.email, req.params.id, function( err, imagesToDestroy ) {
+    User.deleteProject( req.session.passport.user, req.params.id, function( err, imagesToDestroy ) {
       if ( err ) {
         res.json( { error: 'project not found' }, 404 );
         return;
@@ -113,7 +114,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
     if ( req.body.id ) {
       files = datauri.filterProjectDataURIs( projectData.data, utils.generateDataURIPair );
 
-      User.updateProject( req.session.email, req.body.id, projectData, function( err, doc, imagesToDestroy ) {
+      User.updateProject( req.session.passport.user, req.body.id, projectData, function( err, doc, imagesToDestroy ) {
         if ( err ) {
           res.json( { error: err }, 500 );
           return;
@@ -142,7 +143,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
     } else {
       files = datauri.filterProjectDataURIs( projectData.data, utils.generateDataURIPair );
 
-      User.createProject( req.session.email, projectData, function( err, doc ) {
+      User.createProject( req.session.passport.user, projectData, function( err, doc ) {
         if ( err ) {
           res.json( { error: err }, 500 );
           return;
@@ -249,4 +250,13 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
     storeData( req, res, stores.feedback );
   });
 
+  // Login requests are sent through here
+  app.post( '/login', passport.authenticate( 'browserid' ), function( req, res ) {
+    res.json({ "email": req.session.passport.user, "status": "okay" }, 200 );
+  });
+
+  app.post( '/logout', function( req, res ) {
+    req.logout();
+    res.json({}, 200 );
+  });
 };

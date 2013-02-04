@@ -20,6 +20,8 @@ var express = require('express'),
     sanitizer = require( './lib/sanitizer' ),
     FileStore = require('./lib/file-store.js'),
     habitat = require('habitat'),
+    passport = require( 'passport' ),
+    browserid = require( 'passport-browserid' ),
     utils,
     env = new habitat( 'butter' ),
     stores = {},
@@ -64,12 +66,22 @@ function setupStore( config ) {
   return store;
 }
 
+passport.serializeUser(function(user, done, req, res ) {
+  done(null, user.email);
+});
+
+passport.deserializeUser(function(email, done) {
+    done(null, { email: email });
+});
+
 app.configure( function() {
   app.use( express.logger( CONFIG.logger ) )
     .use( express.static( WWW_ROOT, JSON.parse( JSON.stringify( CONFIG.staticMiddleware ) ) ) )
     .use( express.bodyParser() )
     .use( express.cookieParser() )
     .use( express.cookieSession( env.get( 'session', CONFIG.session ) ) )
+    .use( passport.initialize() )
+    .use( passport.session() )
     .use( express.csrf() )
     /* Show Zeus who's boss
      * This only affects requests under /api and /persona, not static files
@@ -93,9 +105,11 @@ app.configure( function() {
   }, stores );
 });
 
-require( 'express-persona' )( app, {
+passport.use( new browserid.Strategy({
   audience: CONFIG.dirs.appHostname
-});
+}, function( email, done ) {
+  return done(null, { email: email });
+}));
 
 require('./routes')( app, User, filter, sanitizer, stores, utils );
 
@@ -121,7 +135,7 @@ app.post( '/api/publish/:id',
   filter.isLoggedIn, filter.isStorageAvailable,
   function publishRoute( req, res ) {
 
-  var email = req.session.email,
+  var email = req.session.passport.user,
       id = parseInt( req.params.id, 10 );
 
   if ( isNaN( id ) ) {
@@ -298,7 +312,7 @@ app.post( '/api/publish/:id',
 });
 
 app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
-  var email = req.session.email;
+  var email = req.session.passport.user;
 
   if ( !email ) {
     res.render( 'dashboard-unauthorized.jade' );

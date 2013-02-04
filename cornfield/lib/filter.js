@@ -4,7 +4,7 @@ var dbCheckFn, filters;
 
 filters = {
   isLoggedIn: function( req, res, next ) {
-    if ( req.session.email ) {
+    if ( req.session.passport.user ) {
       next();
     } else {
       res.json({
