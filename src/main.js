@@ -13,7 +13,18 @@
     "IE": 9,
     "Safari": 6,
     "Opera": 12
-  };
+  },
+
+  MOBILE_OS_BLACKLIST = [
+    "Android",
+    "iOS",
+    "BlackBerry",
+    "MeeGo",
+    "Windows Phone OS",
+    "Firefox OS",
+    // For BB Playbook
+    "RIM Tablet OS"
+  ];
 
   define( [
             "core/eventmanager", "core/logger", "core/config", "core/track",
@@ -60,10 +71,11 @@
       var ua = new UAParser().getResult(),
           name = ua.browser.name,
           major = ua.browser.major,
+          os = ua.os.name,
           acceptedUA = false;
 
       for ( var uaName in ACCEPTED_UA_LIST ) {
-        if ( ACCEPTED_UA_LIST.hasOwnProperty( uaName ) ) {
+        if ( ACCEPTED_UA_LIST.hasOwnProperty( uaName ) && MOBILE_OS_BLACKLIST.indexOf( os ) === -1 ) {
           if ( name === uaName ) {
             if ( +major >= ACCEPTED_UA_LIST[ uaName ] ) {
               acceptedUA = true;
