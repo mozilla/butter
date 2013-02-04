@@ -249,6 +249,11 @@
       }
 
       function onTrackEventSelected( e ) {
+        for ( var i = _selectedEvents.length - 1; i >= 0; i-- ) {
+          if ( _selectedEvents[ i ] === e.target ) {
+            return;
+          }
+        }
         _selectedEvents.push( e.target );
         sortSelectedEvents();
       }
