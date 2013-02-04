@@ -25,6 +25,7 @@
       var _tracks = [],
           _orderedTracks = [],
           _id = "Media" + __guid++,
+          _fallback = false,
           _logger = new Logger( _id ),
           _name = mediaOptions.name || _id,
           _url = mediaOptions.url,
@@ -87,6 +88,16 @@
             },
             timeout: function(){
               _this.dispatch( "mediatimeout" );
+              // _fallback is for a failed media load from saved data.
+              // A media fail from the media editor should not trigger this.
+              // Thus, a media cannot be saved if it is invalid,
+              // so this means it used to be valid, but is no longer finding the media.
+              // Instead, we load a null wrapper using the previously working media's duration.
+              if ( _fallback && _target ) {
+                _popcornWrapper.interruptLoad();
+                _popcornWrapper.clear( _target );
+                _popcornWrapper.prepare( "#t=," + _duration, _target, _popcornOptions, _this.popcornCallbacks, _this.popcornScripts );
+              }
             },
             fail: function(){
               _this.dispatch( "mediafailed", "error" );
@@ -467,6 +478,7 @@
             if ( _url !== val ) {
               _url = val;
               _ready = false;
+              _fallback = false;
               _popcornWrapper.clear( _target );
               setupContent();
               _this.dispatch( "mediacontentchanged", _this );
@@ -584,6 +596,10 @@
             }
             if( importData.url ){
               _this.url = importData.url;
+            }
+            if ( importData.duration >= 0 ) {
+              _duration = importData.duration;
+              _fallback = true;
             }
             if( importData.tracks ){
               var importTracks = importData.tracks;

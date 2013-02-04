@@ -4,7 +4,6 @@ html(lang='en')
     base(href='#{baseHref}')
     !{templateScripts}
     !{externalAssets}
-    !{popcorn}
     link(rel='stylesheet', href='/css/embed.css')
     link(rel='stylesheet', href="/css/controls.css")
     // This is the embed, the actual content is at the following URL
@@ -20,6 +19,7 @@ html(lang='en')
     #container.container
       #video-container.video.video-container
         #video
+    #media-loading-spinner
     #controls-big-play-button
     #post-roll-container
       #post-roll.embed-overlay

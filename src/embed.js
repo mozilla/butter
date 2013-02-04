@@ -8,7 +8,9 @@ function init( window, document ) {
 
   // Sometimes we want to show the info div when we pause, sometimes
   // we don't (e.g., when we open the share dialog).
-  var hideInfoDiv = false;
+  var hideInfoDiv = false,
+      // timeout duration to wait for media to be ready
+      MEDIA_WAIT_DURATION = 10000;
 
   /**
    * embed.js is a separate, top-level entry point into the requirejs
@@ -265,9 +267,11 @@ function init( window, document ) {
       var Butter = {
             version: "Butter-Embed-@VERSION@"
           },
-          popcorn = Popcorn.byId( "Butter-Generated" ),
+          popcorn,
           config,
-          qs = URI.parse( window.location.href ).queryKey,
+          uri = URI.parse( window.location.href ),
+          qs = uri.queryKey,
+          id = uri.file.replace( "_.html", "" ),
           container = document.querySelectorAll( ".container" )[ 0 ];
 
       /**
@@ -310,102 +314,160 @@ function init( window, document ) {
         showinfo: qs.showinfo === "0" ? false : true
       };
 
-      // Always show controls.  See #2284 and #2298 on supporting
-      // options.controls, options.autohide.
-      popcorn.controls( true );
-      Controls.create( "controls", popcorn, {
-        onShareClick: function() {
-          shareClick( popcorn );
-        },
-        onRemixClick: function() {
-          remixClick( popcorn );
-        },
-        onFullscreenClick: function() {
-          fullscreenClick();
-        }
-      });
-
       // Setup UI based on config options
       if ( !config.showinfo ) {
         var embedInfo = document.getElementById( "embed-info" );
         embedInfo.parentNode.removeChild( embedInfo );
       }
-      if ( config.loop ) {
-        popcorn.loop( true );
-      }
 
-      // Some config options want the video to be ready before we do anything.
-      function onLoad() {
-        var start = config.start,
-            end = config.end;
+      var req = new XMLHttpRequest();
 
-        if ( config.fullscreen ) {
-          // dispatch an event to let the controls know we want to setup a click listener for the fullscreen button
-          popcorn.emit( "butter-fullscreen-allowed", container );
-        }
+      // find a way to remove the ../../v/
+      req.open( "GET", "../../v/" + id + ".json", true );
+      req.onload = function() {
 
-        popcorn.off( "load", onLoad );
+        var projectData = JSON.parse( req.responseText ),
+            currentMedia,
+            mediaUrls,
+            mediaPopcornOptions,
+            i, il, ready;
 
-        // update the currentTime to the embed options start value
-        // this is needed for mobile devices as attempting to listen for `canplay` or similar events
-        // that let us know it is safe to update the current time seem to be futile
-        function timeupdate() {
-          popcorn.currentTime( start );
-          popcorn.off( "timeupdate", timeupdate );
-        }
-        // See if we should start playing at a time other than 0.
-        // We combine this logic with autoplay, since you either
-        // seek+play or play or neither.
-        if ( start > 0 && start < popcorn.duration() ) {
-          popcorn.on( "seeked", function onSeeked() {
-            popcorn.off( "seeked", onSeeked );
-            if ( config.autoplay ) {
-              popcorn.play();
+        function buildPopcorn() {
+          var currentTrack,
+              currentTrackEvent,
+              j, jl, k, kl;
+          for ( j = 0, jl = currentMedia.tracks.length; j < jl; ++ j ) {
+            currentTrack = currentMedia.tracks[ j ];
+            for ( k = 0, kl = currentTrack.trackEvents.length; k < kl; ++k ) {
+              currentTrackEvent = currentTrack.trackEvents[ k ];
+              popcorn[ currentTrackEvent.type ]( currentTrackEvent.popcornOptions );
+            }
+          }
+
+          // Always show controls.  See #2284 and #2298 on supporting
+          // options.controls, options.autohide.
+          popcorn.controls( true );
+          Controls.create( "controls", popcorn, {
+            onShareClick: function() {
+              shareClick( popcorn );
+            },
+            onRemixClick: function() {
+              remixClick( popcorn );
+            },
+            onFullscreenClick: function() {
+              fullscreenClick();
             }
           });
-          popcorn.on( "timeupdate", timeupdate );
-        } else if ( config.autoplay ) {
-          popcorn.play();
+
+          if ( config.loop ) {
+            popcorn.loop( true );
+          }
         }
 
-        // See if we should pause at some time other than duration.
-        if ( end > 0 && end > start && end <= popcorn.duration() ) {
-          popcorn.cue( end, function() {
-            popcorn.pause();
-            popcorn.emit( "ended" );
-          });
+        // Some config options want the video to be ready before we do anything.
+        function onLoad() {
+          var start = config.start,
+              end = config.end;
+
+          $( "#media-loading-spinner" ).className = "hidden";
+          ready = true;
+          buildPopcorn();
+
+          if ( config.fullscreen ) {
+            // dispatch an event to let the controls know we want to setup a click listener for the fullscreen button
+            popcorn.emit( "butter-fullscreen-allowed", container );
+          }
+
+          popcorn.off( "load", onLoad );
+
+          // update the currentTime to the embed options start value
+          // this is needed for mobile devices as attempting to listen for `canplay` or similar events
+          // that let us know it is safe to update the current time seem to be futile
+          function timeupdate() {
+            popcorn.currentTime( start );
+            popcorn.off( "timeupdate", timeupdate );
+          }
+          // See if we should start playing at a time other than 0.
+          // We combine this logic with autoplay, since you either
+          // seek+play or play or neither.
+          if ( start > 0 && start < popcorn.duration() ) {
+            popcorn.on( "seeked", function onSeeked() {
+              popcorn.off( "seeked", onSeeked );
+              if ( config.autoplay ) {
+                popcorn.play();
+              }
+            });
+            popcorn.on( "timeupdate", timeupdate );
+          } else if ( config.autoplay ) {
+            popcorn.play();
+          }
+
+          // See if we should pause at some time other than duration.
+          if ( end > 0 && end > start && end <= popcorn.duration() ) {
+            popcorn.cue( end, function() {
+              popcorn.pause();
+              popcorn.emit( "ended" );
+            });
+          }
         }
-      }
 
-      // Either the video is ready, or we need to wait.
-      if ( popcorn.readyState() >= 1 ) {
-        onLoad();
-      } else {
-        popcorn.media.addEventListener( "canplay", onLoad );
-      }
+        function mediaTimeOut() {
+          // if success hasn't already occured, call timeoutCallback
+          if ( !ready ) {
+            popcorn.destroy();
+            popcorn = Popcorn.smart( "#" + currentMedia.target, "#t=," + currentMedia.duration, mediaPopcornOptions );
 
-      if ( config.branding ) {
-        setupClickHandlers( popcorn, config );
-        setupEventHandlers( popcorn, config );
+            // A null media loads instantly
+            onLoad();
+          }
+        }
 
-        // Wrap textboxes so they click-to-highlight and are readonly
-        TextboxWrapper.applyTo( $( "#share-url" ), { readOnly: true } );
-        TextboxWrapper.applyTo( $( "#share-iframe" ), { readOnly: true } );
+        for ( i = 0, il = projectData.media.length; i < il; ++i ) {
+          mediaUrls = "";
 
-        // Write out the iframe HTML necessary to embed this
-        $( "#share-iframe" ).value = buildIFrameHTML();
+          currentMedia = projectData.media[ i ];
+          // We expect a string (one url) or an array of url strings.
+          // Turn a single url into an array of 1 string.
+          mediaUrls = typeof currentMedia.url === "string" ? [ currentMedia.url ] : currentMedia.url;
+          mediaPopcornOptions = currentMedia.popcornOptions || {};
 
-        // Get the page's canonical URL and put in share URL
-        $( "#share-url" ).value = getCanonicalURL();
-      }
+          // set a timeout to occur after timeoutDuration milliseconds
+          setTimeout( mediaTimeOut, MEDIA_WAIT_DURATION );
 
-      setupAttribution( popcorn );
+          popcorn = Popcorn.smart( "#" + currentMedia.target, mediaUrls, mediaPopcornOptions );
 
-      if ( window.Butter && console && console.warn ) {
-        console.warn( "Butter Warning: page already contains Butter, removing." );
-        delete window.Butter;
-      }
-      window.Butter = Butter;
+          // Either the video is ready, or we need to wait.
+          if ( popcorn.readyState() >= 1 ) {
+            onLoad();
+          } else {
+            popcorn.media.addEventListener( "canplay", onLoad );
+          }
+        }
+
+        if ( config.branding ) {
+          setupClickHandlers( popcorn, config );
+          setupEventHandlers( popcorn, config );
+
+          // Wrap textboxes so they click-to-highlight and are readonly
+          TextboxWrapper.applyTo( $( "#share-url" ), { readOnly: true } );
+          TextboxWrapper.applyTo( $( "#share-iframe" ), { readOnly: true } );
+
+          // Write out the iframe HTML necessary to embed this
+          $( "#share-iframe" ).value = buildIFrameHTML();
+
+          // Get the page's canonical URL and put in share URL
+          $( "#share-url" ).value = getCanonicalURL();
+        }
+
+        setupAttribution( popcorn );
+
+        if ( window.Butter && console && console.warn ) {
+          console.warn( "Butter Warning: page already contains Butter, removing." );
+          delete window.Butter;
+        }
+        window.Butter = Butter;
+      };
+      req.send();
     }
   );
 }

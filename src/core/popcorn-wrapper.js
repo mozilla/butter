@@ -118,6 +118,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       var urlsFromString;
 
       _mediaReady = false;
+      _interruptLoad = false;
 
       // called when timeout occurs preparing popcorn
       function popcornTimeoutWrapper( e ) {
