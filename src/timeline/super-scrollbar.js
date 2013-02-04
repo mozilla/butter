@@ -44,7 +44,8 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
           }
           boundsChangedCallback( left, width );
         },
-        _this = this;
+        _this = this,
+        _mediaLoadedOnce = false;
 
     var checkMinSize, onViewMouseUp, onViewMouseDown, onViewMouseMove,
         onLeftMouseUp, onLeftMouseDown, onLeftMouseMove,
@@ -355,7 +356,11 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
 
     _media.listen( "mediaready", function( e ) {
       _duration = e.target.duration;
-      updateView();
+
+      if ( !_mediaLoadedOnce ) {
+        updateView();
+      }
+      _mediaLoadedOnce = true;
     });
 
     _this.resize = function() {
