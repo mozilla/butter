@@ -32,13 +32,14 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         _container = _rootElement.querySelector( ".media-container" ),
         _superScrollbar = new SuperScrollbar( _tracksContainer.element, _tracksContainer.container, setContainerBounds, _media ),
         _vScrollBar = new Scrollbars.Vertical( _tracksContainer.element, _tracksContainer.container ),
+        _hScrollBar = new Scrollbars.Horizontal( _tracksContainer.element, _tracksContainer.container ),
         _timebar = new TimeBar( butter, _media, butter.ui.tray.statusArea, _tracksContainer ),
         _trackHandles = new TrackHandles( butter, _media, _rootElement, _tracksContainer ),
         _status;
 
     _status = new Status( _media, butter.ui.tray.statusArea );
 
-    _tracksContainer.setVerticalScrollbar( _vScrollBar );
+    _tracksContainer.setScrollbars( _vScrollBar, _hScrollBar );
 
     EventManager.extend( _this );
 
@@ -135,6 +136,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _container.appendChild( _tracksContainer.element );
       _rootElement.appendChild( _superScrollbar.element );
       _container.appendChild( _vScrollBar.element );
+      _container.appendChild( _hScrollBar.element );
       _rootElement.appendChild( _trackHandles.element );
 
       butter.ui.tray.setMediaInstance( _rootElement );

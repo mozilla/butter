@@ -16,7 +16,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
     var _element = mediaInstanceRootElement.querySelector( ".tracks-container-wrapper" ),
         _container = mediaInstanceRootElement.querySelector( ".tracks-container" );
 
-    var _vScrollbar;
+    var _vScrollbar, _hScrollbar;
 
     var _droppable;
 
@@ -98,8 +98,10 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       }
     });
 
-    this.setVerticalScrollbar = function( vertical ) {
+    this.setScrollbars = function( vertical, horizontal ) {
       _vScrollbar = vertical;
+      _hScrollbar = horizontal;
+      _hScrollbar.update();
       _vScrollbar.update();
     };
 
@@ -107,6 +109,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       _element.scrollLeft = _container.scrollWidth * _leftViewportBoundary;
       _container.style.width = _element.clientWidth / _viewportWidthRatio + "px";
       _vScrollbar.update();
+      _hScrollbar.update();
     }
 
     _media.listen( "mediaready", function(){
