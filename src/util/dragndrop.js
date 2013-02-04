@@ -1075,7 +1075,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       window.addEventListener( "mouseup", onElementMouseUp, false );
       window.addEventListener( "mousemove", onElementMouseMove, false );
 
-      DragNDrop.dispatch( "sortstarted" );
+      DragNDrop.dispatch( "sortstarted", e );
     }
 
     function onElementMouseUp() {

@@ -17,11 +17,16 @@ define( [ "core/eventmanager", "./toggler",
       BUTTER_CSS_FILE = "{css}/butter.ui.css";
 
   var __unwantedKeyPressElements = [
-    "TEXTAREA",
-    "INPUT",
-    "VIDEO",
-    "AUDIO"
-  ];
+        "TEXTAREA",
+        "INPUT",
+        "VIDEO",
+        "AUDIO"
+      ],
+      __disabledKeyRepeats = [
+        32, // space key
+        27, // esc key
+        8   // del key
+      ];
 
   var NUDGE_INCREMENT_SMALL = 0.25,
       NUDGE_INCREMENT_LARGE = 1;
@@ -546,8 +551,19 @@ define( [ "core/eventmanager", "./toggler",
       // this allows backspace and del to do the same thing on windows and mac keyboards
       key = key === 46 ? 8 : key;
       if( processKey[ key ] && !eTarget.isContentEditable && __unwantedKeyPressElements.indexOf( eTarget.nodeName ) === -1 ){
+
+        if ( __disabledKeyRepeats.indexOf( key ) > -1 ) {
+          window.removeEventListener( "keydown", onKeyDown, false );
+          window.addEventListener( "keyup", onKeyUp, false );
+        }
+
         processKey[ key ]( e );
       } // if
+    }
+
+    function onKeyUp() {
+      window.removeEventListener( "keyup", onKeyUp, false );
+      window.addEventListener( "keydown", onKeyDown, false );
     }
 
     function unbindKeyDownListener() {

@@ -15,7 +15,9 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
         _addTrackButton = _container.querySelector( "button.add-track" ),
         _tracks = {},
         _menus = [],
-        _this = this;
+        _this = this,
+        _draggingHandleIndex,
+        _draggingHandleId;
 
     _addTrackButton.addEventListener( "click", function() {
       butter.currentMedia.addTrack();
@@ -36,13 +38,52 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
       }
     }
 
-    var _sortable = DragNDrop.sortable( _listElement, {
-      change: function( elements ){
-        for( var i=0, l=elements.length; i<l; ++i ){
-          var id = elements[ i ].getAttribute( "data-butter-track-id" );
-          _tracks[ id ].track.order = i;
+    DragNDrop.listen( "sortstarted", function onSortStarted( e ) {
+      var originalEvent = e.data,
+          orderedTracks = butter.currentMedia.orderedTracks,
+          id = originalEvent.target.getAttribute( "data-butter-track-id" );
+
+      for ( var i = 0; i < orderedTracks.length; i++ ) {
+        if ( orderedTracks[ i ].id === id ) {
+          _draggingHandleIndex = i;
+          _draggingHandleId = id;
         }
-        butter.currentMedia.sortTracks();
+      }
+
+    });
+
+    var _sortable = DragNDrop.sortable( _listElement, {
+      change: function( elements ) {
+        var newIndex, id,
+            orderedTracks = butter.currentMedia.orderedTracks,
+            track,
+            indexCache;
+
+        for( var i = 0, l = elements.length; i < l; ++i ) {
+          id = elements[ i ].getAttribute( "data-butter-track-id" );
+          if ( id === _draggingHandleId ) {
+            newIndex = i;
+            break;
+          }
+        }
+
+        track = orderedTracks[ _draggingHandleIndex ];
+        orderedTracks.splice( _draggingHandleIndex, 1 );
+        orderedTracks.splice( newIndex, 0, track );
+
+        indexCache = newIndex;
+        if ( newIndex < _draggingHandleIndex ) {
+          var temp = _draggingHandleIndex;
+
+          _draggingHandleIndex = newIndex;
+          newIndex = temp;
+        }
+
+        butter.currentMedia.sortTracks( _draggingHandleIndex, newIndex );
+
+        // We now need to set the values of "current index" to where we replaced since sortstarted
+        // won't fire again until the mouse is let go and then an element is selected again.
+        _draggingHandleIndex = indexCache;
       }
     });
 
@@ -144,6 +185,7 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
       _menus.push( menuDiv );
 
       trackDiv.setAttribute( "data-butter-track-id", trackId );
+      trackDiv.querySelector( "span.track-handle-icon" ).setAttribute( "data-butter-track-id", trackId );
       trackDiv.querySelector( "span.title" ).appendChild( document.createTextNode( track.name ) );
 
       _sortable.addItem( trackDiv );
