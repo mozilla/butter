@@ -74,7 +74,7 @@
         options.p.off( "loadedmetadata", options.readyEvent );
         options.ready = true;
         _this.on( "volumechange", options._volumeEvent );
-        if ( options.startWhenReady ) {
+        if ( options.active ) {
           options._startEvent();
         }
       };
@@ -164,7 +164,7 @@
             } else {
               options.p.pause();
             }
-            if ( options.startWhenReady ) {
+            if ( options.active ) {
               options._volumeEvent();
             }
           };
@@ -270,6 +270,7 @@
       options.tearDown();
     },
     start: function( event, options ) {
+      options.active = true;
       if ( options.source ) {
         if ( options.failed ) {
           return;
@@ -280,7 +281,6 @@
           this.pause();
           options.p.pause();
         }
-        options.startWhenReady = true;
         if ( options.ready ) {
           options._startEvent();
         } else {
@@ -292,7 +292,7 @@
       options.clearEvents();
       options.hideLoading();
       // cancel any pending or future starts
-      options.startWhenReady = false;
+      options.active = false;
       options.playWhenReady = false;
       if ( options.ready ) {
         if ( !options.p.paused() ) {
