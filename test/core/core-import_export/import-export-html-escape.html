@@ -11,7 +11,7 @@
       asyncTest( "Exported HTML Escape", 1, function() {
 
         createButterCore( function( butter ){
-          var m1 = butter.addMedia( { url:"../../../external/popcorn-js/test/trailer.ogv", target:"mediaDiv" } );
+          var m1 = butter.addMedia( { url:"../../../external/popcorn-js/test/trailer.ogv,../../../external/popcorn-js/test/trailer.mp4", target:"mediaDiv" } );
 
           butter.listen( "mediaready", function( e ) {
             t1 = m1.addTrack();
@@ -37,6 +37,7 @@
     <h2 id="qunit-userAgent"></h2>
     <ol id="qunit-tests"></ol>
     <div id="qunit-fixture">
+      <div id="stringsanity"></div>
       <div id="mediaDiv"></div>
     </div>
   </body>

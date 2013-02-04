@@ -16,7 +16,8 @@
             ok( false, "Timeout! Ready not called. Script load skipping failed." );
             start();
           }
-        }, 2000);
+        //IE9 can take a while to complete this test
+        }, 8000);
 
         Butter.init({
           config: "../test-simple-config.json",

@@ -12,7 +12,7 @@
 
         createButterCore(function( butter ) {
           var te1,
-              m = butter.addMedia({ url: "../../../external/popcorn-js/test/italia.ogg", target: "mediaDiv" }),
+              m = butter.addMedia({ url: "../../../external/popcorn-js/test/italia.ogg,../../../external/popcorn-js/test/italia.mp4", target: "mediaDiv" }),
               t = m.addTrack();
 
           butter.listen( "mediaready", function( e ) {

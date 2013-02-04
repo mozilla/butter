@@ -18,7 +18,7 @@
           window._testBeforeCallback = function(){ theZONE += "b"; };
           window._testAfterCallback = function(){ theZONE += "a"; };
 
-          var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../../../external/popcorn-js/test/trailer.ogv" } );
+          var m1 = butter.addMedia( { name: "Media 1", target: "audio-test", url: "../../../external/popcorn-js/test/trailer.ogv,../../../external/popcorn-js/test/trailer.mp4" } );
 
           m1.onReady(function(){
             butter.preparePopcornScriptsAndCallbacks(function(){
