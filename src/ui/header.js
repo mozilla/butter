@@ -164,7 +164,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _saveButton.innerHTML = "Sign in to save";
       },
       mediaReady: function() {
-        toggleSaveButton( true );
+        toggleSaveButton( !butter.project.isSaved );
         _toolTip.hidden = false;
         _projectTitle.classList.remove( "butter-disabled" );
         _projectTitle.addEventListener( "click", projectNameClick, false );
