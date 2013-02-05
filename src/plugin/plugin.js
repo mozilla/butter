@@ -13,6 +13,7 @@ define( [], function() {
     this.type = pluginOptions.type;
     this.name = pluginOptions.displayName || pluginOptions.type;
     this.path = pluginOptions.path;
+    this.hidden = pluginOptions.hidden;
 
     this.generateHelper = function() {
       _helper = document.getElementById( _this.type + "-icon" ) || document.getElementById( "default-icon" );

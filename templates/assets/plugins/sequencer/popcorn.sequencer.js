@@ -191,10 +191,10 @@
         } else {
           if ( !options.mute ) {
             options.p.unmute();
+            options.p.volume( options.volume * _this.volume() );
           } else {
             options.p.mute();
           }
-          options.p.volume( options.volume * _this.volume() );
         }
       };
 
