@@ -286,9 +286,11 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
     };
 
     this.deselectEvents = function( except ){
-      for( var i=0, l=_trackEvents.length; i<l; ++i ){
-        if( _trackEvents[ i ] !== except ){
-          _trackEvents[ i ].selected = false;
+      var trackEvent;
+      for ( var i = 0, l = _trackEvents.length; i < l; ++i ) {
+        trackEvent = _trackEvents[ i ];
+        if( trackEvent !== except && trackEvent.selected ){
+          trackEvent.selected = false;
         } //if
       } //for
     }; //deselectEvents

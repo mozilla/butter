@@ -300,14 +300,14 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
     }, false );
 
     function select() {
-      if ( _draggable ) {
+      if ( _draggable && !_draggable.selected ) {
         _draggable.selected = true;
       }
       _element.setAttribute( "selected", true );
     } //select
 
     function deselect() {
-      if ( _draggable ) {
+      if ( _draggable && _draggable.selected ) {
         _draggable.selected = false;
       }
       _element.removeAttribute( "selected" );

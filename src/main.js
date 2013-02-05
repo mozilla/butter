@@ -248,13 +248,19 @@
         _sortedSelectedEvents = _selectedEvents.slice().sort( trackEventTimeSortingFunction );
       }
 
-      function onTrackEventSelected( e ) {
-        _selectedEvents.push( e.target );
+      function onTrackEventSelected( notification ) {
+        var trackEvent = notification.origin;
+        for ( var i = _selectedEvents.length - 1; i >= 0; i-- ) {
+          if ( _selectedEvents[ i ] === trackEvent ) {
+            return;
+          }
+        }
+        _selectedEvents.push( trackEvent );
         sortSelectedEvents();
       }
 
-      function onTrackEventDeSelected( e ) {
-        var trackEvent = e.target,
+      function onTrackEventDeSelected( notification ) {
+        var trackEvent = notification.origin,
             idx = _selectedEvents.indexOf( trackEvent );
         if ( idx > -1 ) {
           _selectedEvents.splice( idx, 1 );
@@ -264,6 +270,10 @@
 
       function onTrackEventAdded( e ) {
         var trackEvent = e.data;
+
+        trackEvent.subscribe( "selected", onTrackEventSelected );
+        trackEvent.subscribe( "deselected", onTrackEventDeSelected );
+
         if ( trackEvent.selected && _selectedEvents.indexOf( trackEvent ) === -1 ) {
           _selectedEvents.push( trackEvent );
         }
@@ -272,6 +282,10 @@
       function onTrackEventRemoved( e ) {
         var trackEvent = e.data,
             idx = _selectedEvents.indexOf( trackEvent );
+
+        trackEvent.unsubscribe( "selected", onTrackEventSelected );
+        trackEvent.unsubscribe( "deselected", onTrackEventDeSelected );
+
         if ( idx > -1 ) {
           _selectedEvents.splice( idx, 1 );
           sortSelectedEvents();
@@ -445,8 +459,6 @@
 
         media.listen( "trackeventadded", onTrackEventAdded );
         media.listen( "trackeventremoved", onTrackEventRemoved );
-        media.listen( "trackeventselected", onTrackEventSelected );
-        media.listen( "trackeventdeselected", onTrackEventDeSelected );
 
         media.listen( "trackeventrequested", mediaTrackEventRequested );
         media.listen( "mediaplayertyperequired", mediaPlayerTypeRequired );
@@ -489,8 +501,6 @@
 
           media.unlisten( "trackeventadded", onTrackEventAdded );
           media.unlisten( "trackeventremoved", onTrackEventRemoved );
-          media.unlisten( "trackeventselected", onTrackEventSelected );
-          media.unlisten( "trackeventdeselected", onTrackEventDeSelected );
 
           media.unlisten( "trackeventrequested", mediaTrackEventRequested );
           media.unlisten( "mediaplayertyperequired", mediaPlayerTypeRequired );
