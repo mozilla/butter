@@ -283,10 +283,9 @@
           this.pause();
           options.p.pause();
         }
+        options.displayLoading();
         if ( options.ready ) {
           options._startEvent();
-        } else {
-          options.displayLoading();
         }
       }
     },
