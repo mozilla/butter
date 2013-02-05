@@ -356,9 +356,11 @@ define( [ "./logger", "./eventmanager", "./observer",
           _selected = val;
           _view.selected = _selected;
           if ( _selected ){
+            _this.notify( "selected" );
             _this.dispatch( "trackeventselected" );
           }
           else {
+            _this.notify( "deselected" );
             _this.dispatch( "trackeventdeselected" );
           } //if
         }
