@@ -62,10 +62,10 @@
       };
 
       options.displayLoading = function() {
-        document.querySelector( ".loading-message" ).classList.add( "show" );
+        document.querySelector( ".loading-message" ).classList.add( "show-media" );
       };
       options.hideLoading = function() {
-        document.querySelector( ".loading-message" ).classList.remove( "show" );
+        document.querySelector( ".loading-message" ).classList.remove( "show-media" );
       };
       options.from = options.from || 0;
 
@@ -215,14 +215,12 @@
           options._container.style.visibility = "hidden";
         }
       }
-      if ( updates.mute != null ) {
-        options.mute = updates.mute;
-        options._volumeEvent();
-      }
       if ( updates.source ) {
         options.ready = false;
         options.playWhenReady = false;
-        options.displayLoading();
+        if ( options.active ) {
+          options.displayLoading();
+        }
         options.source = updates.source;
         options.clearEvents();
         options.tearDown();
@@ -234,6 +232,10 @@
           options.p.pause();
         }
         options.addSource();
+      }
+      if ( updates.mute != null ) {
+        options.mute = updates.mute;
+        options._volumeEvent();
       }
       if ( updates.top != null ) {
         options.top = updates.top;

@@ -16,7 +16,7 @@
         butter.listen( "mediaready", function mediaReady() {
           butter.unlisten( "mediaready", mediaReady );
           document.querySelector( "#embed-wrapper" ).classList.remove( "faded" );
-          document.querySelector( ".loading-message" ).classList.remove( "show" );
+          document.querySelector( ".loading-message" ).classList.remove( "show-global" );
         });
       }
     });
