@@ -79,9 +79,9 @@ function init() {
       popcorn.pause();
     }
 
-    addStateClass( "embed-dialog-open" );
+    setStateClass( "embed-dialog-open" );
     hide( "#controls-big-play-button" );
-    hide( "#post-roll-container" );
+    clearStateClass();
     show( "#share-container" );
   }
 
@@ -136,18 +136,26 @@ function init() {
     return "";
   }
 
-  function addStateClass( state ) {
+  // indicate which state the post roll is in
+  function setStateClass( state ) {
     var el = $( "#post-roll-container" );
 
     if ( el.classList.contains( state ) ) {
       return;
     }
 
+    clearStateClass( el );
+
+    el.classList.add( state );
+  }
+
+  // clear the state class indicator for the post roll container
+  function clearStateClass( el ) {
+    var el = el || $( "#post-roll-container" );
+
     for ( var i = 0; i < stateClasses.length; i++ ) {
       el.classList.remove( stateClasses[ i ] );
     }
-
-    el.classList.add( state );
   }
 
   function setupEventHandlers( popcorn, config ) {
@@ -159,7 +167,7 @@ function init() {
 
       // If the video is done, go back to the postroll
       if ( popcorn.ended() ) {
-        show( "#post-roll-container" );
+        setStateClass( "embed-dialog-open" );
       }
     }, false );
 
@@ -175,23 +183,21 @@ function init() {
     }
 
     popcorn.on( "ended", function() {
-      show( "#post-roll-container" );
-      addStateClass( "embed-dialog-open" );
+      setStateClass( "embed-dialog-open" );
     });
 
     popcorn.on( "pause", function() {
       if ( hideInfoDiv ) {
-        addStateClass( "embed-dialog-open" );
+        setStateClass( "embed-dialog-open" );
         hideInfoDiv = false;
       } else {
-        addStateClass( "embed-paused" );
+        setStateClass( "embed-paused" );
       }
     });
 
     popcorn.on( "playing", function() {
       hide( "#share-container" );
-      hide( "#post-roll-container" );
-      addStateClass( "embed-playing" );
+      setStateClass( "embed-playing" );
     });
 
     function onCanPlay() {
