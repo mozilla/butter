@@ -191,8 +191,6 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
             // construct the correct dom infrastructure if required
             constructPlayer( target );
             // generate a function which will create a popcorn instance when entered into the page
-            // Deal with https://soundcloud URLs, which should actually be http://soundcloud (#2631)
-            url = url.toString().replace( /^https\:\/\/soundcloud\.com/, "http://soundcloud.com" ).split( "," );
             createPopcorn( generatePopcornString( popcornOptions, url, target, null, callbacks, scripts ) );
             // once popcorn is created, attach listeners to it to detect state
             addPopcornHandlers();

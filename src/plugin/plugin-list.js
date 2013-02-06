@@ -83,12 +83,5 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
       _containerElement.appendChild( element );
     });
 
-    // Open the plugin-list editor right after butter is finished starting up
-    butter.listen( "mediaready", function() {
-      if ( butter.ui.enabled ) {
-        butter.editor.openEditor( "media-editor" );
-      }
-    });
-
   };
 });
