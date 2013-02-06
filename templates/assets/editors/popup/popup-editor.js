@@ -66,7 +66,7 @@
               toggleSpeech();
             }
 
-            updateOptions.type = elementVal;
+            updateOptions.bubbleType = elementVal;
             option.trackEvent.update( updateOptions );
 
             // Attempt to make the trackEvent's target blink
@@ -95,12 +95,12 @@
           if ( pluginOptions[ key ] ) {
             option = pluginOptions[ key ];
 
-            if ( key === "type" ) {
+            if ( key === "bubbleType" ) {
               var triangleObject = pluginOptions.triangle,
                   soundObject = pluginOptions.sound,
                   iconObject = pluginOptions.icon,
                   flipObject = pluginOptions.flip,
-                  currentType = option.trackEvent.popcornOptions.type;
+                  currentType = option.trackEvent.popcornOptions.bubbleType;
 
               if ( currentType === "popup" ) {
                 togglePopup();
@@ -111,7 +111,7 @@
 
               attachTypeHandler( option );
             }
-            else if ( option.elementType === "select" && key !== "type" ) {
+            else if ( option.elementType === "select" && key !== "bubbleType" ) {
               _this.attachSelectChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
             }
             else if ( option.elementType === "input" ) {
