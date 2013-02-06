@@ -107,7 +107,7 @@
           type: "text",
           label: "Link URL"
         },
-        type: {
+        bubbleType: {
           elem: "select",
           options: [ "Popup", "Speech", "Thought Bubble" ],
           values: [ "popup", "speech", "thought" ],
@@ -250,6 +250,12 @@
         target = context.media.parentNode;
       }
 
+      // Fallback for old options.type being used.
+      if ( options.type && [ "popup", "speech", "thought" ].indexOf( options.type ) > -1 &&
+           !options.bubbleType ) {
+        options.bubbleType = options.type;
+      }
+
       options._target = target;
 
       function selectAudio( id, sources ) {
@@ -328,7 +334,7 @@
             ctx;
 
         //Set the base classes
-        innerDiv.className =  "speechBubble " + options.type + " " + options.triangle + " " + flip;
+        innerDiv.className =  "speechBubble " + options.bubbleType + " " + options.triangle + " " + flip;
  
         triangle = document.createElement( "canvas" );
         ctx = triangle.getContext( "2d" );
@@ -339,10 +345,10 @@
         innerDiv.appendChild( triangle );
 
         //Draw according to the style
-        if ( options.type === "speech" ) {
+        if ( options.bubbleType === "speech" ) {
           triangle.getContext( "2d" ).drawImage( innerDivTriangles.speech, 0, 0 );
         }
-        if ( options.type === "thought" ) {
+        if ( options.bubbleType === "thought" ) {
           triangle.getContext( "2d" ).drawImage( innerDivTriangles.thought, 0, 0 );
         }
       } //makeTriangle
@@ -392,7 +398,7 @@
       innerDiv.appendChild( textContainer );
       container.appendChild( innerDiv );
 
-      if ( options.type === "popup" ) {
+      if ( options.bubbleType === "popup" ) {
         innerDiv.classList.add( "popup-inner-div" );
         container.classList.add( "popcorn-popup" );
 
