@@ -49,7 +49,18 @@
         container.style.height = ( options.height || "100" ) + "%";
         container.style.top = ( options.top || "0" ) + "%";
         container.style.left = ( options.left || "0" ) + "%";
+
+        // this mouse div allows mousemove events to be fired while on top of youtube.
         mouseDiv.style.position = "absolute";
+        mouseDiv.addEventListener( "click", function() {
+          if ( options.p ) {
+            if ( _this.paused() ) {
+              _this.play();
+            } else {
+              _this.pause();
+            }
+          }
+        }, false );
         mouseDiv.style.width = "100%";
         mouseDiv.style.height = "100%";
         mouseDiv.style.top = "0";
