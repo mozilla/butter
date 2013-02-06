@@ -45,8 +45,12 @@
     function attachDropHandlers() {
       window.EditorHelper.droppable( _trackEvent, _dropArea );
 
-      butter.listen( "droppable-unsupported", function error() {
+      butter.listen( "droppable-unsupported", function unSupported() {
         _this.setErrorState( "Sorry, but your browser doesn't support this feature." );
+      });
+
+      butter.listen( "filetype-unsupported", function invalidType() {
+        _this.setErrorState( "Sorry but that file type isn't supported. Please use JPEG, PNG or GIF." );
       });
     }
 

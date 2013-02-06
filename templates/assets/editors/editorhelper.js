@@ -278,6 +278,13 @@
 
         file = e.dataTransfer.files[ 0 ];
 
+        // If we can't reasonably convert whatever they're dropping on us then bail
+        var exportAs = mimeTypeMapping[ file.type ];
+        if ( !exportAs ) {
+          butter.dispatch( "filetype-unsupported" );
+          return;
+        }
+
         if ( window.URL && window.URL.createObjectURL ) {
           imgSrc = window.URL.createObjectURL( file );
         } else if ( window.webkitURL && window.webkitURL.createObjectURL ) {
@@ -335,13 +342,6 @@
             canvas.height = scaledHeight;
             context = canvas.getContext( "2d" );
             context.drawImage( this, 0, 0, scaledWidth, scaledHeight );
-
-            // If we can't reasonably convert whatever they're dropping on us then bail
-            var exportAs = mimeTypeMapping[ file.type ];
-            if ( !exportAs ) {
-              butter.dispatch( "droppable-unsupported" );
-              return;
-            }
 
             imgURI = canvas.toDataURL( exportAs );
 
