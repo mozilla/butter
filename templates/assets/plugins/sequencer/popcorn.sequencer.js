@@ -90,6 +90,14 @@
         }
       };
 
+      options.sourceToArray = function() {
+        // If our src is not an array, create an array of one.
+        options.source = typeof options.source === "string" ? [ options.source ] : options.source;
+        for ( var i = 0; i < options.source.length; i++ ) {
+          options.source[ i ] = options.source[ i ].replace( /^https\:\/\/soundcloud\.com/, "http://soundcloud.com" );
+        }
+      };
+
       options.tearDown = function() {
         _this.off( "volumechange", options._volumeEvent );
         if ( options.p ) {
@@ -131,11 +139,6 @@
             }
           }
         }, MEDIA_LOAD_TIMEOUT );
-        // If our src is not an array, create an array of one.
-        options.source = typeof options.source === "string" ? [ options.source ] : options.source;
-        for ( var i = 0; i < options.source.length; i++ ) {
-          options.source[ i ] = options.source[ i ].replace( /^https\:\/\/soundcloud\.com/, "http://soundcloud.com" );
-        }
         options.p = Popcorn.smart( options._container, options.source, {frameAnimation: true} );
         options.p.media.style.width = "100%";
         options.p.media.style.height = "100%";
@@ -149,6 +152,7 @@
       };
       options.setupContainer();
       if ( options.source ) {
+        options.sourceToArray();
         options.addSource();
       }
 
@@ -231,22 +235,25 @@
         }
       }
       if ( updates.source ) {
-        options.ready = false;
-        options.playWhenReady = false;
-        if ( options.active ) {
-          options.displayLoading();
+        options.sourceToArray();
+        if ( updates.source.toString() !== options.source.toString() ) {
+          options.ready = false;
+          options.playWhenReady = false;
+          if ( options.active ) {
+            options.displayLoading();
+          }
+          options.source = updates.source;
+          options.clearEvents();
+          options.tearDown();
+          options.setupContainer();
+          this.on( "play", options._surpressPlayEvent );
+          if ( !this.paused() ) {
+            options.playWhenReady = true;
+            this.pause();
+            options.p.pause();
+          }
+          options.addSource();
         }
-        options.source = updates.source;
-        options.clearEvents();
-        options.tearDown();
-        options.setupContainer();
-        this.on( "play", options._surpressPlayEvent );
-        if ( !this.paused() ) {
-          options.playWhenReady = true;
-          this.pause();
-          options.p.pause();
-        }
-        options.addSource();
       }
       if ( updates.mute != null ) {
         options.mute = updates.mute;
