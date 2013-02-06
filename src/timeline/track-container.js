@@ -176,7 +176,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
 
       if ( oldTrack !== newTrack ) {
         if ( oldTrack ) {
-          oldTrack.removeTrackEvent( trackEvent );
+          oldTrack.removeTrackEvent( trackEvent, true );
         }
         trackEvent.update( popcornOptions );
         newTrack.addTrackEvent( trackEvent );

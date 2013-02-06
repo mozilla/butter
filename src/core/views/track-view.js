@@ -118,7 +118,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
     });
 
     function onTrackEventDragStopped( e ) {
-      _track.removeTrackEvent( e.target.trackEvent );
+      _track.removeTrackEvent( e.target.trackEvent, true );
     }
 
     this.addTrackEvent = function( trackEvent ) {

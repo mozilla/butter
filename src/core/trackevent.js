@@ -199,11 +199,11 @@ define( [ "./logger", "./eventmanager", "./observer",
      * Kills references to popcornWrapper and track which are necessary to function. TrackEvent becomes
      * a husk for popcorn data at this point.
      */
-    this.unbind = function() {
-      if ( _popcornWrapper ) {
+    this.unbind = function( preventRemove ) {
+      if ( !preventRemove && _popcornWrapper ) {
         _popcornWrapper.destroyEvent( _this );
+        _popcornWrapper = null;
       }
-      _popcornWrapper = null;
       _track = null;
     };
 

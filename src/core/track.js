@@ -238,7 +238,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
      *
      * @param {Object} trackEvent: The trackEvent to be removed from this track
      */
-    this.removeTrackEvent = function( trackEvent ) {
+    this.removeTrackEvent = function( trackEvent, preventRemove ) {
       var idx = _trackEvents.indexOf( trackEvent );
       if ( idx > -1 ) {
         _trackEvents.splice( idx, 1 );
@@ -249,7 +249,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
         ]);
         trackEvent.unsubscribe( "update", trackEventUpdateNotificationHandler );
         _view.removeTrackEvent( trackEvent );
-        trackEvent.unbind();
+        trackEvent.unbind( preventRemove );
         _this.dispatch( "trackeventremoved", trackEvent );
         return trackEvent;
       }
