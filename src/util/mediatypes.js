@@ -4,8 +4,8 @@
 
 "use strict";
 
-define( [ "util/xhr" ],
-  function( XHR ) {
+define( [ "util/xhr", "util/uri" ],
+  function( XHR, URI ) {
 
   var REGEX_MAP = {
     youtube: /(?:https?:\/\/www\.|https?:\/\/|www\.|\.|^)youtu/,
@@ -55,7 +55,10 @@ define( [ "util/xhr" ],
           data.duration = raw.duration;
           callback( data );
         });
-
+      } else if ( type === "soundcloud" ) {
+        data.source = baseUrl;
+        data.title = URI.parse( baseUrl ).path;
+        callback( data );
       } else if ( type === "html5" ) {
         testEl = document.createElement( "video" );
         testEl.src = baseUrl;

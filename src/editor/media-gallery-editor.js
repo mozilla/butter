@@ -67,7 +67,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
 
     el.querySelector( ".mg-title" ).innerHTML = data.title;
     el.querySelector( ".mg-url" ).innerHTML = data.source;
-    el.querySelector( ".mg-duration" ).innerHTML = data.duration;
+    el.querySelector( ".mg-duration" ).innerHTML = data.duration || "???";
     if ( data.type === "html5" ) {
       thumbnailEl = data.thumbnail;
     } else {
