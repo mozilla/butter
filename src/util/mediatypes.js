@@ -44,9 +44,10 @@ define( [ "util/xhr" ],
 
       if ( type === "youtube" ) {
         id = baseUrl.split( "v=" )[ 1 ].split( "&" )[ 0 ];
-        xhrURL = "https://gdata.youtube.com/feeds/api/videos?q=" + id + "&v=2&alt=jsonc";
+        xhrURL = "https://gdata.youtube.com/feeds/api/videos/" + id + "?v=2&alt=jsonc";
         XHR.get( xhrURL, function( resp ) {
-          var raw = JSON.parse( resp.target.responseText ).data.items[ 0 ];
+
+          var raw = JSON.parse( resp.target.responseText ).data;
           data.source = "http://www.youtube.com/v=" + id;
           data.title = raw.title;
           data.thumbnail = raw.thumbnail.hqDefault;
