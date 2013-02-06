@@ -21,6 +21,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       _GALLERYITEM = LangUtils.domFragment( EDITOR_LAYOUT, ".media-gallery-item" ),
 
       _durationInput = _parentElement.querySelector( ".media-base-duration" ),
+      _baseMediaInput = _parentElement.querySelector( ".media-base-source" ),
 
       _butter,
       _media,
@@ -124,7 +125,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     MediaUtils.getMetaData( data.source, onSuccess );
   }
 
-  function changeBaseMedia( e ) {
+  function changeBaseDuration( e ) {
     if (  e.keyCode === KeysUtils.ENTER ) {
       e.preventDefault();
       var newMedia = _durationInput.value;
@@ -133,6 +134,13 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       } else {
         _media.url = newMedia;
       }
+    }
+  }
+
+  function changeBaseMedia( e ) {
+    if (  e.keyCode === KeysUtils.ENTER ) {
+      e.preventDefault();
+      _media.url = _baseMediaInput.value;
     }
   }
 
@@ -172,7 +180,8 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     _addBtn.addEventListener( "click", addMediaToGallery, false );
     _cancelBtn.addEventListener( "click", resetInput, false );
 
-    _durationInput.addEventListener( "keydown", changeBaseMedia, false );
+    _durationInput.addEventListener( "keydown", changeBaseDuration, false );
+    _baseMediaInput.addEventListener( "keydown", changeBaseMedia, false );
 
     //_butter.listen( "mediaready", onMediaReady );
   }
@@ -180,10 +189,14 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
   // For main media source. Should generally be null video for new projects.
   function setBaseMedia() {
     if ( Array.isArray( _media.url ) ) {
-      _durationInput.value = _media.url[ 0 ];
+      _baseMediaInput.value = _media.url[ 0 ];
     } else {
-      _durationInput.value = _media.url.split( "," )[ 1 ];
+      _baseMediaInput.value = _media.url;
     }
+  }
+
+  function setBaseDuration() {
+    _durationInput.value = _media.duration;
   }
 
 
@@ -199,6 +212,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
         _media = butter.currentMedia;
 
         setBaseMedia();
+        setBaseDuration();
 
         _media.listen( "mediaready", setBaseMedia );
         _media.listen( "mediacontentchanged", setBaseMedia );

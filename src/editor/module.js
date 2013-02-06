@@ -16,7 +16,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
             Toggler, LangUtils, EDITOR_AREA_LAYOUT,
             DefaultEditor, Logger, Header ){
 
-  var DEFAULT_EDITOR_NAME = "media-editor";
+  var DEFAULT_EDITOR_NAME = "plugin-list";
 
   // Expose DefaultEditor to external editors
   Editor.DefaultEditor = DefaultEditor;
