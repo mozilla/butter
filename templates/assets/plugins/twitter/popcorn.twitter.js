@@ -235,19 +235,17 @@
           container.classList.add( options.transition );
           container.classList.add( "off" );
         }
+
         container.appendChild( titleText );
-
         buildCacheQuery( options );
-
         target.appendChild( container );
-
         retrieveTweets( options );
 
         options.toString = function() {
           return options.username || options.search || options._natives.manifest.options.search[ "default" ];
         };
       },
-      start: function( event, options ) {
+      start: function() {
         var redrawBug;
 
         if ( container ) {
@@ -260,13 +258,13 @@
           container.style.display = "";
         }
       },
-      end: function( event, options ) {
+      end: function() {
         if ( container ) {
           container.classList.add( "off" );
           container.classList.remove( "on" );
         }
       },
-      _teardown: function( options ) {
+      _teardown: function() {
         // Remove the plugins container when being destroyed
         if ( container && target ) {
           target.removeChild( container );
@@ -282,7 +280,7 @@
         // Search Update
         if ( newOptions.hasOwnProperty( "search" ) ) {
           trackEvent.search = newOptions.search;
-          
+
           if ( newOptions.hasOwnProperty( "numberOfTweets" ) ) {
             numberOfTweets = trackEvent.numberOfTweets = newOptions.numberOfTweets;
             validateNumTweets();
