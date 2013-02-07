@@ -72,6 +72,12 @@
         }
       };
 
+      options.displayWaiting = function() {
+        document.querySelector( ".loading-message" ).classList.add( "show-waiting" );
+      };
+      options.hideWaiting = function() {
+        document.querySelector( ".loading-message" ).classList.remove( "show-waiting" );
+      };
       options.displayLoading = function() {
         document.querySelector( ".loading-message" ).classList.add( "show-media" );
       };
@@ -134,6 +140,7 @@
             _this.off( "play", options._surpressPlayEvent );
             options.failed = true;
             options.hideLoading();
+            options.hideWaiting();
             if ( options.playWhenReady ) {
               _this.play();
             }
@@ -169,6 +176,7 @@
             _this.on( "pause", options._pauseEvent );
             _this.on( "seeked", options._seekedEvent );
             options.hideLoading();
+            options.hideWaiting();
             if ( !options.hidden && options.active ) {
               options._container.style.visibility = "visible";
             } else {
@@ -222,7 +230,7 @@
       };
 
       options.toString = function() {
-        return options.title || options.source || "";;
+        return options.title || options.source || "";
       };
     },
     _update: function( options, updates ) {
@@ -305,15 +313,18 @@
           this.pause();
           options.p.pause();
         }
-        options.displayLoading();
+        options.displayWaiting();
         if ( options.ready ) {
           options._startEvent();
+        } else {
+          options.displayLoading();
         }
       }
     },
     end: function( event, options ) {
       options.clearEvents();
       options.hideLoading();
+      options.hideWaiting();
       // cancel any pending or future starts
       options.active = false;
       options.playWhenReady = false;
