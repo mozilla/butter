@@ -4,8 +4,7 @@
 
 (function () {
 
-  var DEFAULT_TRACKEVENT_OFFSET = 0.01,
-      WARNING_WAIT_TIME = 500;
+  var WARNING_WAIT_TIME = 500;
 
   var ACCEPTED_UA_LIST = {
     "Chrome": 17,
@@ -206,10 +205,6 @@
           popcornOptions: popcornOptions,
           type: type
         });
-
-        if( _currentMedia.currentTime < _currentMedia.duration - DEFAULT_TRACKEVENT_OFFSET ){
-          _currentMedia.currentTime += DEFAULT_TRACKEVENT_OFFSET;
-        }
 
         _defaultTarget.view.blink();
 
