@@ -12,6 +12,7 @@ define( [ "core/eventmanager", "core/media" ],
     var _this = this,
         _id, _name, _template, _author, _dataObject,
         _publishUrl, _iframeUrl, _remixedFrom,
+        _deleteDefaultEventsOnMediaChange,
 
         // Whether or not a save to server is required (project data has changed)
         _isDirty = false,
@@ -36,6 +37,10 @@ define( [ "core/eventmanager", "core/media" ],
       // Project is dirty, needs save, backup
       _isDirty = true;
       _needsBackup = true;
+
+      if ( _deleteDefaultEventsOnMediaChange ) {
+        _deleteDefaultEventsOnMediaChange = false;
+      }
 
       // If the project has an id (if it was saved), start backups again
       // since they may have been stopped if LocalStorage size limits were
@@ -143,6 +148,16 @@ define( [ "core/eventmanager", "core/media" ],
           return _isPublished && !_isDirty;
         },
         enumerable: true
+      },
+
+      "deleteDefaultEventsOnMediaChange": {
+        get: function() {
+          return !!_deleteDefaultEventsOnMediaChange;
+        },
+        set: function( val ) {
+          _deleteDefaultEventsOnMediaChange = !!val;
+        },
+        enumerable: true
       }
 
     });
@@ -218,6 +233,10 @@ define( [ "core/eventmanager", "core/media" ],
 
       if ( json.remixedFrom ) {
         _remixedFrom = json.remixedFrom;
+      }
+
+      if ( json.deleteDefaultEventsOnMediaChange ) {
+        _deleteDefaultEventsOnMediaChange = json.deleteDefaultEventsOnMediaChange;
       }
 
       targets = json.targets;
@@ -310,6 +329,10 @@ define( [ "core/eventmanager", "core/media" ],
       if ( _this.isSaved ) {
         callback({ error: "okay" });
         return;
+      }
+
+      if ( _deleteDefaultEventsOnMediaChange ) {
+        _deleteDefaultEventsOnMediaChange = false;
       }
 
       var projectJSON = JSON.stringify({
