@@ -89,7 +89,6 @@
     "jade": "~0.27.7",
     "express-persona": "~0.0.7",
     "config": "~0.4.18",
-    "sqlite3": "~2.1.5",
     "sequelize": "~1.5.0",
     "csslint": "0.9.9",
     "uglify-js": "~2.2.2",
@@ -99,6 +98,9 @@
     "node-uuid": "~1.4.0",
     "newrelic": "~0.9.17-132",
     "habitat": "~0.4"
+  },
+  "optionalDependencies": {
+    "sqlite3": "~2.1.5"
   },
   "devDependencies": {
     "tap": "~0.3.3",
