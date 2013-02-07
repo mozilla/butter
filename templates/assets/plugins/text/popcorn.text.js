@@ -16,7 +16,7 @@
       DEFAULT_BACKGROUND_COLOR = "#888888",
       TEXT_SHADOW = "0 1px 5px {{shadowColor}}, 0 1px 10px {{shadowColor}}";
 
-  Popcorn.plugin( "text", function( options ) {
+  Popcorn.plugin( "text", function() {
 
     var target, container, innerContainer, innerSpan,
         innerDiv, fontDecorations, position, alignment,
@@ -193,14 +193,14 @@
         }
       },
 
-      end: function( event, options ) {
+      end: function() {
         if ( transitionContainer ) {
           transitionContainer.classList.add( "off" );
           transitionContainer.classList.remove( "on" );
         }
       },
 
-      _teardown: function( options ) {
+      _teardown: function() {
         if ( target ) {
           target.removeChild( container );
         }
