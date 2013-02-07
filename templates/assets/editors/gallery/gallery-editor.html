@@ -1,0 +1,120 @@
+<!--  This Source Code Form is subject to the terms of the MIT license
+      If a copy of the MIT license was not distributed with this file, you can
+      obtain one at https://raw.github.com/mozilla/butter/master/LICENSE -->
+
+<div class="butter-editor default-editor">
+  <h1>Gallery Editor</h1>
+  <ul class="butter-editor-tabs">
+    <li><a class="butter-btn basic-tab butter-active">Add</a></li>
+    <li><a class="butter-btn advanced-tab">Manage Images</a></li>
+  </ul>
+  <div class="butter-editor-body butter-tabs-spacing">
+    <div class="editor-options-wrapper">
+      <div class="error-message-container">
+        <div class="error-message"></div>
+      </div>
+      <div class="editor-options">
+        <fieldset class="trackevent-property default input" style="position: relative;">
+          <label class="property-name">Gallery URL</label>
+          <input class="value" type="text" id="gallery-url">
+        </fieldset>
+        <fieldset class="trackevent-property default input" style="position: relative;">
+          <label class="property-name">Number of Images</label>
+          <input class="value" type="number">
+        </fieldset>
+        <fieldset>
+          <div class="image-droparea">
+            <div class="droparea-text">Drag an image here from your desktop.</div>
+            <img src="../assets/editors/image/watermark.png" alt="Water Mark">
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="advanced-options display-off">
+        <div id="gallery-fieldset">
+          <div id="gallery-sortable">
+          </div>
+        </div>
+        <fieldset class="trackevent-property select transitions hidden">
+          <label class="property-name">Transition</label>
+          <select id="transition-setter">
+            <option value="popcorn-none">None</option>
+            <option value="popcorn-pop">Pop</option>
+            <option value="popcorn-fade">Fade</option>
+            <option value="popcorn-slide-up">Slide Up</option>
+            <option value="popcorn-slide-down">Slide Down</option>
+          </select>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<style>
+
+  .image-droparea {
+    border: dashed 2px #ABABAB;
+    text-align: center;
+    height: 170px;
+  }
+
+  .droparea-text {
+    margin-top: 10px;
+  }
+
+  .transitions {
+    visibility: visible;
+    opacity: 1;
+    -webkit-transition: all 0.2s ease-in;
+    -moz-transition: all 0.2s ease-in;
+    -o-transition: all 0.2s ease-in;
+    -ms-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
+  }
+
+  .transitions.hidden {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  #gallery-sortable {
+    height: 300px;
+    width: 93%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-left: 3px;
+    border: 1px solid lightGrey;
+    margin: 10px;
+  }
+
+  #gallery-sortable div {
+    margin: 6px 6px 4px 0;
+    padding: 1px;
+    float: left;
+    width: 30%;
+    height: 90px;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .ui-state-sortable-highlight {
+    box-shadow: 0 0 0 2px #3FB58E;
+  }
+
+  #gallery-sortable div:hover > .close-button {
+    display: block;
+  }
+
+  .close-button {
+    display: none;
+    position: relative;
+    margin-left: 80%;
+    height: 18px;
+    width: 18px;
+    background-color: #000000;
+    background-image: url( "../../resources/icons/glyphiconshalflings-white.png" );
+    background-position: -430px -22px;
+  }
+
+</style>

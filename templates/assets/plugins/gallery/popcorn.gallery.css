@@ -1,0 +1,15 @@
+.gallery-plugin-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.gallery-plugin-img {
+  position: absolute;
+  border-style: none;
+  background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}

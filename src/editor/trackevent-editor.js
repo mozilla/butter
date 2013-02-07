@@ -84,7 +84,10 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
             advancedTab.classList.toggle( "display-off" );
             basicButton.classList.add( "butter-active" );
             advancedButton.classList.remove( "butter-active" );
-            extendObject.scrollbar.update();
+
+            if ( extendObject.scrollbar ) {
+              extendObject.scrollbar.update();
+            }
           }
         });
 
@@ -94,16 +97,21 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
             advancedTab.classList.toggle( "display-off" );
             basicButton.classList.remove( "butter-active" );
             advancedButton.classList.add( "butter-active" );
-            extendObject.scrollbar.update();
+
+            if ( extendObject.scrollbar ) {
+              extendObject.scrollbar.update();
+            }
           }
         });
 
-        // Override default scrollbar to account for both tab containers
-        extendObject.addScrollbar({
-          inner: wrapper,
-          outer: wrapper,
-          appendTo: rootElement.querySelector( ".scrollbar-container" )
-        });
+        if ( wrapper ) {
+          // Override default scrollbar to account for both tab containers
+          extendObject.addScrollbar({
+            inner: wrapper,
+            outer: wrapper,
+            appendTo: rootElement.querySelector( ".scrollbar-container" )
+          });
+        }
       }
 
       if ( extendObject.scrollbar ) {
