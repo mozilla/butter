@@ -169,7 +169,7 @@
             _this.on( "pause", options._pauseEvent );
             _this.on( "seeked", options._seekedEvent );
             options.hideLoading();
-            if ( !options.hidden ) {
+            if ( !options.hidden && options.active ) {
               options._container.style.visibility = "visible";
             } else {
               options._container.style.visibility = "hidden";
@@ -228,7 +228,7 @@
     _update: function( options, updates ) {
       if ( updates.hidden != null ) {
         options.hidden = updates.hidden;
-        if ( !options.hidden ) {
+        if ( !options.hidden && options.active ) {
           options._container.style.visibility = "visible";
         } else {
           options._container.style.visibility = "hidden";
