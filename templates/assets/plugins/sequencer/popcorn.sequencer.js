@@ -41,8 +41,7 @@
         options._container = container;
         options._mouseDiv = mouseDiv;
 
-        container.style.zIndex = +options.zindex;
-        container.style.visibility = "hidden";
+        container.style.zIndex = 0;
         container.className = "popcorn-sequencer";
         container.style.position = "absolute";
         container.style.width = ( options.width || "100" ) + "%";
@@ -178,9 +177,9 @@
             options.hideLoading();
             options.hideWaiting();
             if ( !options.hidden && options.active ) {
-              options._container.style.visibility = "visible";
+              options._container.style.zIndex = +options.zindex;
             } else {
-              options._container.style.visibility = "hidden";
+              options._container.style.zIndex = 0;
             }
             if ( options.playWhenReady ) {
               _this.play();
@@ -234,12 +233,15 @@
       };
     },
     _update: function( options, updates ) {
+      if ( updates.zindex != null ) {
+        options.zindex = updates.zindex;
+      }
       if ( updates.hidden != null ) {
         options.hidden = updates.hidden;
         if ( !options.hidden && options.active ) {
-          options._container.style.visibility = "visible";
+          options._container.style.zIndex = +options.zindex;
         } else {
-          options._container.style.visibility = "hidden";
+          options._container.style.zIndex = 0;
         }
       }
       if ( updates.source ) {
@@ -282,10 +284,6 @@
       if ( updates.width != null ) {
         options.width = updates.width;
         options._container.style.width = ( options.width || "100" ) + "%";
-      }
-      if ( updates.zindex != null ) {
-        options.zindex = updates.zindex;
-        options._container.style.zIndex = +options.zindex;
       }
       if ( updates.from != null ) {
         options.from = updates.from;
@@ -335,7 +333,7 @@
         // reset current time so next play from start is smooth. We've pre seeked.
         options.p.currentTime( +options.from );
       }
-      options._container.style.visibility = "hidden";
+      options._container.style.zIndex = 0;
       if ( options.ready ) {
         options.p.mute();
       }
