@@ -278,7 +278,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
         // if a trackevent overlaps and it's not a ghost...
         if (  trackEvent !== ignoreTrackEvent &&
               !trackEvent.view.isGhost &&
-              !( start > popcornOptions.end || end < popcornOptions.start ) ) {
+              !( start >= popcornOptions.end || end <= popcornOptions.start ) ) {
           return trackEvent;
         }
       }
