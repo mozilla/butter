@@ -70,13 +70,6 @@
           container.appendChild( mouseDiv );
         }
       };
-
-      options.displayWaiting = function() {
-        document.querySelector( ".loading-message" ).classList.add( "show-waiting" );
-      };
-      options.hideWaiting = function() {
-        document.querySelector( ".loading-message" ).classList.remove( "show-waiting" );
-      };
       options.displayLoading = function() {
         document.querySelector( ".loading-message" ).classList.add( "show-media" );
       };
@@ -139,7 +132,9 @@
             _this.off( "play", options._surpressPlayEvent );
             options.failed = true;
             options.hideLoading();
-            options.hideWaiting();
+            if ( options.active ) {
+              options._container.style.zIndex = +options.zindex;
+            }
             if ( options.playWhenReady ) {
               _this.play();
             }
@@ -175,7 +170,6 @@
             _this.on( "pause", options._pauseEvent );
             _this.on( "seeked", options._seekedEvent );
             options.hideLoading();
-            options.hideWaiting();
             if ( !options.hidden && options.active ) {
               options._container.style.zIndex = +options.zindex;
             } else {
@@ -303,6 +297,7 @@
       options.active = true;
       if ( options.source ) {
         if ( options.failed ) {
+          options._container.style.zIndex = +options.zindex;
           return;
         }
         this.on( "play", options._surpressPlayEvent );
@@ -311,7 +306,6 @@
           this.pause();
           options.p.pause();
         }
-        options.displayWaiting();
         if ( options.ready ) {
           options._startEvent();
         } else {
@@ -322,7 +316,6 @@
     end: function( event, options ) {
       options.clearEvents();
       options.hideLoading();
-      options.hideWaiting();
       // cancel any pending or future starts
       options.active = false;
       options.playWhenReady = false;
