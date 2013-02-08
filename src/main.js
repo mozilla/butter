@@ -271,6 +271,7 @@
 
         if ( trackEvent.selected && _selectedEvents.indexOf( trackEvent ) === -1 ) {
           _selectedEvents.push( trackEvent );
+          sortSelectedEvents();
         }
       }
 
