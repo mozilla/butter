@@ -22,7 +22,16 @@
     return quarantine;
   }
 
-  var MEDIA_LOAD_TIMEOUT = 10000;
+  var MEDIA_LOAD_TIMEOUT = 10000,
+      // This is slack we have for a seek.
+      // Higher this is, the longer out of sync we'll accept a clip.
+      // 0 forces seeks to wait.
+      // When one clip changes over to another, there is a moment where the video needs to play.
+      // We can assume this is going to be fast enough in most cases.
+      // If the seek doesn't finish in this time, we pause the video to continue to wait.
+      // This means in best cases our sequence is smooth, but slightly out of sync,
+      // In worst cases it pauses.
+      WAIT_FOR_SEEK_BEFORE_PAUSE = 350;
  
   Popcorn.plugin( 'sequencer', {
     _setup: function( options ) {
@@ -158,12 +167,15 @@
       }
 
       options._startEvent = function() {
+        var seekTimeout;
         // wait for this seek to finish before displaying it
         // we then wait for a play as well, because youtube has no seek event,
         // but it does have a play, and won't play until after the seek.
         // so we know if the play has finished, the seek is also finished.
         var seekedEvent = function () {
           var playedEvent = function() {
+            // We've managed to seek, clear any pause fallbacks.
+            clearTimeout( seekTimeout );
             options.p.off( "play", playedEvent );
             _this.off( "play", options._surpressPlayEvent );
             _this.on( "play", options._playEvent );
@@ -189,6 +201,10 @@
           options.p.play();
         };
         options.p.on( "seeked", seekedEvent);
+        // assume the is fast, but if not, puse the main video and wait.
+        seekTimeout = setTimeout( function() {
+          _this.pause();
+        }, WAIT_FOR_SEEK_BEFORE_PAUSE );
         options.p.currentTime( _this.currentTime() - options.start + (+options.from) );
       };
 
@@ -297,18 +313,20 @@
       options.active = true;
       if ( options.source ) {
         if ( options.failed ) {
+          // display player in case any external players show a fail message.
+          // eg. youtube embed disabled by uploader.
           options._container.style.zIndex = +options.zindex;
           return;
         }
         this.on( "play", options._surpressPlayEvent );
         if ( !this.paused() ) {
           options.playWhenReady = true;
-          this.pause();
           options.p.pause();
         }
         if ( options.ready ) {
           options._startEvent();
         } else {
+          this.pause();
           options.displayLoading();
         }
       }
