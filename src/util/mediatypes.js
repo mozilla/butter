@@ -32,6 +32,7 @@ define( [ "util/xhr", "util/uri" ],
     getMetaData: function( baseUrl, callback, type ) {
       var data = {},
           id,
+          parsedUri,
           xhrURL,
           testEl;
 
@@ -43,11 +44,18 @@ define( [ "util/xhr", "util/uri" ],
       callback = callback || function(){};
 
       if ( type === "youtube" ) {
-        id = baseUrl.split( "v=" )[ 1 ].split( "&" )[ 0 ];
+        parsedUri = URI.parse( baseUrl );
+        id = parsedUri.queryKey.v || parsedUri.directory.replace( "/", "" );
+        if ( !id ) {
+          return;
+        }
         xhrURL = "https://gdata.youtube.com/feeds/api/videos/" + id + "?v=2&alt=jsonc";
         XHR.get( xhrURL, function( resp ) {
-
           var raw = JSON.parse( resp.target.responseText ).data;
+
+          if ( !raw ) {
+            return;
+          }
           data.source = "http://www.youtube.com/v=" + id;
           data.title = raw.title;
           data.thumbnail = raw.thumbnail.hqDefault;
