@@ -81,6 +81,10 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     el.classList.add( "mg-" + data.type );
     el.classList.add( "new" );
 
+    if ( data.denied ) {
+     el.querySelector( ".mg-error" ).innerHTML = "Embedding disabled by request";
+    }
+
     setTimeout( function() {
       el.classList.remove( "new" );
     }, 2000 );
@@ -88,7 +92,8 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     function addEvent() {
       var trackEvent = _butter.generateSafeTrackEvent( "sequencer", _butter.currentTime, _butter.currentTime + data.duration );
       trackEvent.update({
-        source: data.source
+        source: data.source,
+        denied: data.denied
       });
       trackEvent.selected = true;
     }

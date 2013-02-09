@@ -61,6 +61,7 @@ define( [ "util/xhr", "util/uri" ],
           data.thumbnail = raw.thumbnail.hqDefault;
           data.author = raw.uploader;
           data.duration = raw.duration;
+          data.denied = raw.accessControl.embed === "denied";
           callback( data );
         });
       } else if ( type === "soundcloud" ) {

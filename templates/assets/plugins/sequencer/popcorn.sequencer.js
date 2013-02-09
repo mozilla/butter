@@ -105,6 +105,18 @@
         }
       };
 
+      options.fail = function() {
+        _this.off( "play", options._surpressPlayEvent );
+        options.failed = true;
+        options.hideLoading();
+        if ( options.active ) {
+          options._container.style.zIndex = +options.zindex;
+        }
+        if ( options.playWhenReady ) {
+          _this.play();
+        }
+      };
+
       options.tearDown = function() {
         _this.off( "volumechange", options._volumeEvent );
         if ( options.p ) {
@@ -136,19 +148,13 @@
         if ( options.loadTimeout ) {
           clearTimeout( options.loadTimeout );
         }
-        options.loadTimeout = setTimeout( function() {
-          if ( !options.ready ) {
-            _this.off( "play", options._surpressPlayEvent );
-            options.failed = true;
-            options.hideLoading();
-            if ( options.active ) {
-              options._container.style.zIndex = +options.zindex;
-            }
-            if ( options.playWhenReady ) {
-              _this.play();
-            }
-          }
-        }, MEDIA_LOAD_TIMEOUT );
+        // if the video is denied for any reason, most cases youtube embedding disabled,
+        // don't bother waiting and display fail case.
+        if ( options.denied ) {
+          options.fail();
+        } else {
+          options.loadTimeout = setTimeout( function() options.fail, MEDIA_LOAD_TIMEOUT );
+        }
         options.p = Popcorn.smart( options._container, options.source, {frameAnimation: true} );
         options.p.media.style.width = "100%";
         options.p.media.style.height = "100%";
@@ -245,6 +251,14 @@
     _update: function( options, updates ) {
       if ( updates.zindex != null ) {
         options.zindex = updates.zindex;
+        if ( !options.hidden && options.active ) {
+          options._container.style.zIndex = +options.zindex;
+        } else {
+          options._container.style.zIndex = 0;
+        }
+      }
+      if ( updates.denied ) {
+        options.denied = updates.denied;
       }
       if ( updates.hidden != null ) {
         options.hidden = updates.hidden;
@@ -427,6 +441,9 @@
           "default": false
         },
         zindex: {
+          hidden: true
+        },
+        denied: {
           hidden: true
         }
       }
