@@ -69,14 +69,14 @@ define( [ "util/xhr", "util/uri" ],
         callback( data );
       } else if ( type === "html5" ) {
         testEl = document.createElement( "video" );
-        testEl.src = baseUrl;
-        testEl.addEventListener( "canplaythrough", function( e ) {
+        testEl.addEventListener( "loadedmetadata", function( e ) {
           data.source = baseUrl;
           data.title = baseUrl.substring( baseUrl.lastIndexOf( "/" ) + 1 );
           data.thumbnail = testEl;
           data.duration = testEl.duration;
           callback ( data );
         }, false );
+        testEl.src = baseUrl;
       }
     }
   };
