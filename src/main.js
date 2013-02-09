@@ -184,12 +184,14 @@
           if ( track && track.constructor === Array ) {
             position = track;
           }
-          track = _currentMedia.findNextAvailableTrackFromTimes( start, end );
-        } else {
-          track = _currentMedia.forceEmptyTrackSpaceAtTime( track, start, end );
+          track = _currentMedia.orderedTracks[ 0 ];
         }
 
         track = track || _currentMedia.addTrack();
+
+        if ( track.findOverlappingTrackEvent( start, end ) ) {
+          track = _currentMedia.insertTrackBefore( track );
+        }
 
         popcornOptions.start = start;
         popcornOptions.end = end;
