@@ -191,6 +191,8 @@
           track = _currentMedia.insertTrackBefore( track );
         }
 
+        track = track || _currentMedia.addTrack();
+
         popcornOptions.start = start;
         popcornOptions.end = end;
         popcornOptions.target = _defaultTarget.elementID;
