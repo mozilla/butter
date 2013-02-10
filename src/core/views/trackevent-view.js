@@ -72,7 +72,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
         return _ghost;
       }
 
-      var clone = _element.cloneNode( false );
+      var clone = _element.cloneNode( true );
       clone.style.top = "";
 
       // Copy the `left` attribute here, once. Successive updates are done using
