@@ -257,6 +257,9 @@
           options._container.style.zIndex = 0;
         }
       }
+      if ( updates.title ) {
+        options.title = updates.title;
+      }
       if ( updates.denied ) {
         options.denied = updates.denied;
       }
@@ -382,6 +385,11 @@
           elem: "input",
           type: "url",
           label: "Source URL"
+        },
+        title: {
+          elem: "input",
+          type: "text",
+          label: "Clip title"
         },
         width: {
           elem: "input",

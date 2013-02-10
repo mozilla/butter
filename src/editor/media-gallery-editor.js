@@ -93,7 +93,8 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       var trackEvent = _butter.generateSafeTrackEvent( "sequencer", _butter.currentTime, _butter.currentTime + data.duration );
       trackEvent.update({
         source: data.source,
-        denied: data.denied
+        denied: data.denied,
+        title: data.title
       });
       trackEvent.selected = true;
     }

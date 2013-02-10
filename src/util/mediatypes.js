@@ -77,7 +77,7 @@ define( [ "util/xhr", "util/uri" ],
           data.duration = testEl.duration;
           callback ( data );
         }, false );
-        testEl.src = baseUrl;
+        testEl.src = URI.makeUnique( baseUrl ).toString();
       }
     }
   };
