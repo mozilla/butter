@@ -33,10 +33,7 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
 
     function cleanUpGhostTrackEvents() {
       for ( var i = 0; i < _overlappingTrackEvents.length; i++ ) {
-        // Bandaid fix. Need to have this array cleared on drop.
-        if ( _overlappingTrackEvents[ i ].view.ghost ) {
-          _overlappingTrackEvents[ i ].view.cleanupGhost();
-        }
+        _overlappingTrackEvents[ i ].view.cleanupGhost();
       }
       _overlappingTrackEvents = [];
     }
@@ -111,6 +108,8 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
           }
         }
       }
+
+      _overlappingTrackEvents = [];
     };
 
   }
