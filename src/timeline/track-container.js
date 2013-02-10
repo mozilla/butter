@@ -172,8 +172,9 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
     }
 
     function createTrackEventFromDrop( trackEvent, popcornOptions, oldTrack, desiredTrack ) {
+      var overlappingEvents = desiredTrack.findOverlappingTrackEvent( popcornOptions.start, popcornOptions.end );
 
-      if ( desiredTrack.findOverlappingTrackEvent( popcornOptions.start, popcornOptions.end ) ) {
+      if ( overlappingEvents ) {
         desiredTrack = _media.insertTrackBefore( desiredTrack );
       }
 
@@ -183,7 +184,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
 
       trackEvent.update( popcornOptions );
       desiredTrack.addTrackEvent( trackEvent );
-      _this.ghostManager.removeGhostsAfterDrop( trackEvent );
+      _this.ghostManager.removeGhostsAfterDrop( overlappingEvents );
 
     }
 

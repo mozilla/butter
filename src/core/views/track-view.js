@@ -173,7 +173,8 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       var otherTrackEventView,
           rect1 = trackEventView.element.getBoundingClientRect(),
           rect2,
-          left, right, width;
+          left, right, width,
+          overlappingEvents = [];
 
       left = leftValue || rect1.left;
       width = widthValue || rect1.width;
@@ -192,11 +193,19 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
           rect2 = otherTrackEventView.element.getBoundingClientRect();
           // if a trackevent overlaps and it's not a ghost...
           if ( !otherTrackEventView.isGhost && !( left > rect2.right || right < rect2.left ) ) {
-            return otherTrackEventView.trackEvent;
+            overlappingEvents.push( otherTrackEventView.trackEvent );
           }
         }
       }
-      return null;
+
+      // Backwards compatability for calls that are expecting only one trackevent to be returned.
+      if ( overlappingEvents.length && overlappingEvents.length === 1 ) {
+        overlappingEvents = overlappingEvents[ 0 ];
+      } else if ( !overlappingEvents.length ) {
+        overlappingEvents = null;
+      }
+
+      return overlappingEvents;
     };
   }; //TrackView
 });

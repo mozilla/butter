@@ -7,7 +7,8 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
   function GhostManager( media, tracksContainerElement ) {
     
     var _media = media,
-        _tracksContainerElement = tracksContainerElement;
+        _tracksContainerElement = tracksContainerElement,
+        _overlappingTrackEvents = [];
 
     function createGhostTrackForTrack( track, nextTrack ) {
       var ghostTrack;
@@ -30,6 +31,16 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
       }
     }
 
+    function cleanUpGhostTrackEvents() {
+      for ( var i = 0; i < _overlappingTrackEvents.length; i++ ) {
+        // Bandaid fix. Need to have this array cleared on drop.
+        if ( _overlappingTrackEvents[ i ].view.ghost ) {
+          _overlappingTrackEvents[ i ].view.cleanupGhost();
+        }
+      }
+      _overlappingTrackEvents = [];
+    }
+
     function cleanUpGhostTrack( track ) {
       var ghostTrack = track.ghost;
       if ( ghostTrack && ghostTrack.numGhostTrackEvents === 0 ) {
@@ -40,70 +51,65 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
     
     this.trackEventDragged = function( trackEventView, trackView ) {
       var track, nextTrack, ghostTrack,
-          overlappingTrackEvent, overlappingTrackEventView;
+          overlappingTrackEvent, overlappingTrackEvents,
+          overlappingTrackEventView;
 
       if ( trackView ) {
         track = trackView.track;
 
-        overlappingTrackEvent = trackView.findOverlappingTrackEvent( trackEventView );
+        overlappingTrackEvents = trackView.findOverlappingTrackEvent( trackEventView );
 
-        if ( overlappingTrackEvent ) {
-          overlappingTrackEventView = overlappingTrackEvent.view;
-          nextTrack = _media.getNextTrack( track );
-          
-          if ( !overlappingTrackEventView.ghost ) {
-            nextTrack = createGhostTrackForTrack( track, nextTrack );
-            nextTrack.view.addTrackEventGhost( overlappingTrackEventView.createGhost() );
+        if ( overlappingTrackEvents ) {
+
+          if ( !overlappingTrackEvents.length ) {
+            overlappingTrackEvents = [ overlappingTrackEvents ];
+          }
+
+          for ( var i = 0; i < overlappingTrackEvents.length; i++ ) {
+            overlappingTrackEvent = overlappingTrackEvents[ i ];
+            overlappingTrackEventView = overlappingTrackEvent.view;
+
+            nextTrack = _media.getNextTrack( track );
+
+            if ( !overlappingTrackEventView.ghost ) {
+              if ( _overlappingTrackEvents.indexOf( overlappingTrackEvent ) === -1 ) {
+                _overlappingTrackEvents.push( overlappingTrackEvent );
+              }
+
+              nextTrack = createGhostTrackForTrack( track, nextTrack );
+              nextTrack.view.addTrackEventGhost( overlappingTrackEventView.createGhost() );
+            }
           }
         } else {
+          cleanUpGhostTrackEvents();
           cleanUpGhostTracks();
         }
       } else {
+        cleanUpGhostTrackEvents();
         cleanUpGhostTracks();
       }
 
-      // if ( trackView ) {
-      //   track = trackView.track;
-
-      //   overlappingTrackEvent = trackView.findOverlappingTrackEvent( trackEventView );
-
-      //   if ( overlappingTrackEvent ) {
-      //     nextTrack = _media.getNextTrack( track );
-      //     if ( !nextTrack || nextTrack.view.findOverlappingTrackEvent( trackEventView ) ) {
-      //       nextTrack = createGhostTrackForTrack( track, nextTrack );
-      //       if ( trackEventView.ghost && trackEventView.ghost.track !== nextTrack ) {
-      //         ghostTrack = trackEventView.ghost.track;
-      //         trackEventView.cleanupGhost();
-      //         if ( ghostTrack.lastTrack ) {
-      //           cleanUpGhostTrack( ghostTrack.lastTrack );
-      //         }
-      //       }
-      //     }
-      //     if ( !trackEventView.ghost ) {
-      //       nextTrack.view.addTrackEventGhost( trackEventView.createGhost() );
-      //     }
-      //     trackEventView.updateGhost();
-      //   }
-      //   else if ( trackEventView.ghost ) {
-      //     track = trackEventView.ghost.track;
-      //     trackEventView.cleanupGhost();
-      //     cleanUpGhostTracks();
-      //   }
-      // }
-      // else if ( trackEventView.ghost ) {
-      //   track = trackEventView.ghost.track;
-      //   trackEventView.cleanupGhost();
-      //   cleanUpGhostTracks();
-      // }
     };
 
-    this.removeGhostsAfterDrop = function( trackEvent ) {
-      var currentTrack = trackEvent.track,
+    this.removeGhostsAfterDrop = function( trackEvents ) {
+      var currentTrack, ghost, trackEvent;
+
+      if ( trackEvents ) {
+
+        if ( !trackEvents.length ) {
+          trackEvents = [ trackEvents ];
+        }
+
+        for ( var i = 0; i < trackEvents.length; i++ ) {
+          trackEvent = trackEvents[ i ];
+          currentTrack = trackEvent.track;
           ghost = trackEvent.view.ghost;
 
-      if ( ghost && ghost.track ) {
-        trackEvent.view.cleanupGhost( currentTrack );
-        cleanUpGhostTracks();
+          if ( ghost && ghost.track ) {
+            trackEvent.view.cleanupGhost( currentTrack );
+            cleanUpGhostTracks();
+          }
+        }
       }
     };
 

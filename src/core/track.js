@@ -256,7 +256,8 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
     };
 
     this.findOverlappingTrackEvent = function( start, end, ignoreTrackEvent ) {
-      var trackEvent, popcornOptions;
+      var trackEvent, popcornOptions,
+          overlappingEvents = [];
 
       // If a TrackEvent was passed in, we can derive the rest from less arguments.
       if ( start instanceof TrackEvent ) {
@@ -279,10 +280,18 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
         if (  trackEvent !== ignoreTrackEvent &&
               !trackEvent.view.isGhost &&
               !( start > popcornOptions.end || end < popcornOptions.start ) ) {
-          return trackEvent;
+          overlappingEvents.push( trackEvent );
         }
       }
-      return null;
+
+      // Backwards compatability for calls that are expecting only one trackevent to be returned.
+      if ( overlappingEvents.length && overlappingEvents.length === 1 ) {
+        overlappingEvents = overlappingEvents[ 0 ];
+      } else if ( !overlappingEvents.length ) {
+        overlappingEvents = null;
+      }
+
+      return overlappingEvents;
     };
 
     this.deselectEvents = function( except ){
