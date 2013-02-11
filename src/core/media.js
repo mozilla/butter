@@ -595,19 +595,17 @@
                 }
                 // Backwards comp for old base media.
                 // Insert previous base media as a sequence event as the last track.
-                if ( importData.url && _duration >= 0 ) {
-                  if ( Array.isArray( importData.url ) || !( /#t=\d*,?\d+?/ ).test( importData.url ) ) {
-                    newTrack = new Track();
-                    _this.addTrack( newTrack );
-                    newTrack.addTrackEvent({
-                      type: "sequencer",
-                      popcornOptions: {
-                        start: 0,
-                        end: _duration,
-                        source: importData.url
-                      }
-                    });
-                  }
+                if ( importData.url && _duration >= 0 && !( /#t=\d*,?\d+?/ ).test( _url )) {
+                  newTrack = new Track();
+                  _this.addTrack( newTrack );
+                  newTrack.addTrackEvent({
+                    type: "sequencer",
+                    popcornOptions: {
+                      start: 0,
+                      end: _duration,
+                      source: importData.url
+                    }
+                  });
                 }
               } else if ( console ) {
                 console.warn( "Ignoring imported track data. Must be in an Array." );
