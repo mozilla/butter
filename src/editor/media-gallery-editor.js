@@ -95,6 +95,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
         denied: data.denied,
         title: data.title
       });
+      _butter.deselectAllTrackEvents();
       trackEvent.selected = true;
     }
 
