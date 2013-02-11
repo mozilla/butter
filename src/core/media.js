@@ -573,7 +573,8 @@
             };
           },
           set: function( importData ){
-            var newTrack;
+            var newTrack,
+                url;
             if( importData.name ) {
               _name = importData.name;
             }
@@ -595,17 +596,24 @@
                 }
                 // Backwards comp for old base media.
                 // Insert previous base media as a sequence event as the last track.
-                if ( importData.url && _duration >= 0 && !( /#t=\d*,?\d+?/ ).test( _url )) {
-                  newTrack = new Track();
-                  _this.addTrack( newTrack );
-                  newTrack.addTrackEvent({
-                    type: "sequencer",
-                    popcornOptions: {
-                      start: 0,
-                      end: _duration,
-                      source: importData.url
-                    }
-                  });
+                if ( importData.url && _duration >= 0 ) {
+                  url = importData.url;
+                  if ( !Array.isArray( url ) ) {
+                    url = [ url ];
+                  }
+                  // If source is a single array and of type null player, don't bother making a sequence.
+                  if ( url.length > 1 || !( /#t=\d*,?\d+?/ ).test( url[ 0 ] ) ) {
+                    newTrack = new Track();
+                    _this.addTrack( newTrack );
+                    newTrack.addTrackEvent({
+                      type: "sequencer",
+                      popcornOptions: {
+                        start: 0,
+                        end: _duration,
+                        source: importData.url
+                      }
+                    });
+                  }
                 }
               } else if ( console ) {
                 console.warn( "Ignoring imported track data. Must be in an Array." );
