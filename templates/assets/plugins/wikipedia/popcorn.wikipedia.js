@@ -170,9 +170,17 @@
     },
 
     start: function( event, options ){
-      if ( options._container ) {
-        options._container.classList.add( "on" );
-        options._container.classList.remove( "off" );
+      var container = options._container,
+          redrawBug;
+
+      if ( container ) {
+        container.classList.add( "on" );
+        container.classList.remove( "off" );
+
+        // Safari Redraw hack - #3066
+        container.style.display = "none";
+        redrawBug = container.offsetHeight;
+        container.style.display = "block";
       }
     },
 

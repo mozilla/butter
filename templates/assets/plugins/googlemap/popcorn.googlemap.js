@@ -243,6 +243,7 @@ var googleCallback;
       start: function( event, options ) {
         var that = this,
             sView,
+            redrawBug,
             MAX_MAP_ZOOM_VALUE = 22,
             DEFAULT_MAP_ZOOM_VALUE = options._natives.manifest.options.zoom[ "default" ],
             MAX_MAP_PITCH_VALUE = 12,
@@ -417,6 +418,11 @@ var googleCallback;
           } else if ( ranOnce ) {
             outerdiv.classList.remove( "off" );
             outerdiv.classList.add( "on" );
+
+            // Safari Redraw hack - #3066
+            outerdiv.style.display = "none";
+            redrawBug = outerdiv.offsetHeight;
+            outerdiv.style.display = "block";
           } else {
             setTimeout(function () {
               isMapSetup();

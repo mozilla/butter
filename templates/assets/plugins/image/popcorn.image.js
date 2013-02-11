@@ -259,13 +259,21 @@
     },
 
     start: function( event, options ) {
-      if ( options._container ) {
+      var container = options._container,
+          redrawBug;
+
+      if ( container ) {
         if ( options._updateImage ) {
           this.on( "timeupdate", options._updateImage );
         }
 
-        options._container.classList.add( "on" );
-        options._container.classList.remove( "off" );
+        container.classList.add( "on" );
+        container.classList.remove( "off" );
+
+        // Safari Redraw hack - #3066
+        container.style.display = "none";
+        redrawBug = container.offsetHeight;
+        container.style.display = "block";
       }
     },
 
