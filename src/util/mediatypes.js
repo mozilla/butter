@@ -81,6 +81,10 @@ define( [ "util/xhr", "util/uri" ],
           data.title = raw.title;
           callback( data );
         });
+      } else if ( type === "vimeo" ) {
+          data.title = baseUrl;
+          data.source = baseUrl;
+          callback( data );
       } else if ( type === "html5" ) {
         testEl = document.createElement( "video" );
         testEl.addEventListener( "loadedmetadata", function() {
