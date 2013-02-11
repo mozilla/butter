@@ -57,7 +57,7 @@ define( [ "util/xhr", "util/uri" ],
           if ( !raw ) {
             return;
           }
-          data.source = "http://www.youtube.com/v=" + id;
+          data.source = "http://www.youtube.com/watch?v=" + id;
           data.title = raw.title;
           data.thumbnail = raw.thumbnail.hqDefault;
           data.author = raw.uploader;
