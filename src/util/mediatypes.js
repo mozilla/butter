@@ -33,6 +33,7 @@ define( [ "util/xhr", "util/uri" ],
       var data = {},
           id,
           parsedUri,
+          splitUriDirectory,
           xhrURL,
           testEl;
 
@@ -65,9 +66,21 @@ define( [ "util/xhr", "util/uri" ],
           callback( data );
         });
       } else if ( type === "soundcloud" ) {
-        data.source = baseUrl;
-        data.title = URI.parse( baseUrl ).path;
-        callback( data );
+        parsedUri = URI.parse( baseUrl );
+        splitUriDirectory = parsedUri.directory.split( "/" );
+        id = splitUriDirectory[ splitUriDirectory.length - 1 ];
+        xhrURL = "http://api.soundcloud.com/tracks/" + id + ".json?client_id=PRaNFlda6Bhf5utPjUsptg";
+        XHR.get( xhrURL, function( resp ) {
+          var raw = JSON.parse( resp.target.responseText );
+          if ( !raw ) {
+            return;
+          }
+          data.source = baseUrl;
+          data.thumbnail = raw.artwork_url;
+          data.duration = raw.duration;
+          data.title = raw.title;
+          callback( data );
+        });
       } else if ( type === "html5" ) {
         testEl = document.createElement( "video" );
         testEl.addEventListener( "loadedmetadata", function() {
