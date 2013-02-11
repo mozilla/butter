@@ -70,7 +70,7 @@ define( [ "util/xhr", "util/uri" ],
         callback( data );
       } else if ( type === "html5" ) {
         testEl = document.createElement( "video" );
-        testEl.addEventListener( "loadedmetadata", function( e ) {
+        testEl.addEventListener( "loadedmetadata", function() {
           data.source = baseUrl;
           data.title = baseUrl.substring( baseUrl.lastIndexOf( "/" ) + 1 );
           data.thumbnail = testEl;

@@ -100,7 +100,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
 
     el.addEventListener( "click", addEvent, false );
 
-    deleteBtn.addEventListener( "click", function( e ) {
+    deleteBtn.addEventListener( "click", function() {
       el.removeEventListener( "click", addEvent, false );
       _galleryList.removeChild( el );
     }, false );
@@ -112,12 +112,6 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     }
 
     resetInput();
-  }
-
-  function onError( data ) {
-    console.log( "There was an error", data );
-    _urlInput.classList.add( "error" );
-    _errorMessage.classList.remove( "hidden" );
   }
 
   function addMediaToGallery() {
@@ -142,7 +136,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     }
   }
 
-  function onFocus( e ) {
+  function onFocus() {
     _oldValue = _urlInput.value;
   }
 
@@ -161,11 +155,6 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       e.preventDefault();
       addMediaToGallery();
     }
-  }
-
-
-  function onMediaReady() {
-    _butter.editor.openEditor( "media-editor" );
   }
 
   function setup() {
