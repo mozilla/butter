@@ -21,7 +21,6 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       _GALLERYITEM = LangUtils.domFragment( EDITOR_LAYOUT, ".media-gallery-item" ),
 
       _durationInput = _parentElement.querySelector( ".media-base-duration" ),
-      _baseMediaInput = _parentElement.querySelector( ".media-base-source" ),
 
       _butter,
       _media,
@@ -143,13 +142,6 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     }
   }
 
-  function changeBaseMedia( e ) {
-    if (  e.keyCode === KeysUtils.ENTER ) {
-      e.preventDefault();
-      _media.url = _baseMediaInput.value;
-    }
-  }
-
   function onFocus( e ) {
     _oldValue = _urlInput.value;
   }
@@ -187,18 +179,6 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     _cancelBtn.addEventListener( "click", resetInput, false );
 
     _durationInput.addEventListener( "keydown", changeBaseDuration, false );
-    _baseMediaInput.addEventListener( "keydown", changeBaseMedia, false );
-
-    //_butter.listen( "mediaready", onMediaReady );
-  }
-
-  // For main media source. Should generally be null video for new projects.
-  function setBaseMedia() {
-    if ( Array.isArray( _media.url ) ) {
-      _baseMediaInput.value = _media.url[ 0 ];
-    } else {
-      _baseMediaInput.value = _media.url;
-    }
   }
 
   function setBaseDuration() {
@@ -217,21 +197,10 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       open: function() {
         _media = butter.currentMedia;
 
-        setBaseMedia();
         setBaseDuration();
 
-        _media.listen( "mediaready", setBaseMedia );
-        _media.listen( "mediacontentchanged", setBaseMedia );
-        _media.listen( "mediatimeout", setBaseMedia );
-
       },
-      close: function() {
-
-        _media.unlisten( "mediaready", setBaseMedia );
-        _media.unlisten( "mediacontentchanged", setBaseMedia );
-        _media.unlisten( "mediatimeout", setBaseMedia );
-
-      }
+      close: function() {}
     });
 
   });

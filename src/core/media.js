@@ -573,23 +573,41 @@
             };
           },
           set: function( importData ){
+            var newTrack;
             if( importData.name ) {
               _name = importData.name;
             }
             if( importData.target ){
               _this.target = importData.target;
             }
-            if( importData.url ){
-              _this.url = importData.url;
+            if ( importData.duration >= 0 ) {
+              _duration = importData.duration;
+              _this.url = "#t=," + _duration;
             }
             if( importData.tracks ){
               var importTracks = importData.tracks;
               if( Array.isArray( importTracks ) ) {
                 for ( var i = 0, l = importTracks.length; i < l; ++i ) {
-                  var newTrack = new Track();
+                  newTrack = new Track();
                   newTrack.json = importTracks[ i ];
                   _this.addTrack( newTrack );
                   newTrack.updateTrackEvents();
+                }
+                // Backwards comp for old base media.
+                // Insert previous base media as a sequence event as the last track.
+                if ( importData.url && _duration >= 0 ) {
+                  if ( Array.isArray( importData.url ) || !( /#t=\d*,?\d+?/ ).test( importData.url ) ) {
+                    newTrack = new Track();
+                    _this.addTrack( newTrack );
+                    newTrack.addTrackEvent({
+                      type: "sequencer",
+                      popcornOptions: {
+                        start: 0,
+                        end: _duration,
+                        source: importData.url
+                      }
+                    });
+                  }
                 }
               } else if ( console ) {
                 console.warn( "Ignoring imported track data. Must be in an Array." );
