@@ -106,10 +106,13 @@
       };
 
       options.fail = function() {
+        if ( options.ready && !options.denied ) {
+          return;
+        }
         _this.off( "play", options._surpressPlayEvent );
         options.failed = true;
         options.hideLoading();
-        if ( options.active ) {
+        if ( !options.hidden && options.active ) {
           options._container.style.zIndex = +options.zindex;
         }
         if ( options.playWhenReady ) {
@@ -329,7 +332,7 @@
     start: function( event, options ) {
       options.active = true;
       if ( options.source ) {
-        if ( options.failed ) {
+        if ( !options.hidden && options.failed ) {
           // display player in case any external players show a fail message.
           // eg. youtube embed disabled by uploader.
           options._container.style.zIndex = +options.zindex;
