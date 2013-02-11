@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/editor", "text!layouts/media-editor.html" ],
-  function( LangUtils, XHR, KeysUtils, MediaUtils, Editor, EDITOR_LAYOUT ) {
+define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/editor", "util/time", "text!layouts/media-editor.html" ],
+  function( LangUtils, XHR, KeysUtils, MediaUtils, Editor, Time, EDITOR_LAYOUT ) {
 
   var _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
       _addMediaTitle = _parentElement.querySelector( ".add-new-media" ),
@@ -127,7 +127,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
   function changeBaseDuration( e ) {
     if (  e.keyCode === KeysUtils.ENTER ) {
       e.preventDefault();
-      var newMedia = _durationInput.value;
+      var newMedia = Time.toSeconds( _durationInput.value );
       if ( /[0-9]{1,9}/.test( newMedia ) ) {
         _media.url = "#t=," + newMedia;
       } else {
@@ -171,7 +171,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
   }
 
   function setBaseDuration() {
-    _durationInput.value = _media.duration;
+    _durationInput.value = Time.toTimecode( _media.duration );
   }
 
 
