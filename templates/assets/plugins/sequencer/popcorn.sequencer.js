@@ -153,7 +153,7 @@
         if ( options.denied ) {
           options.fail();
         } else {
-          options.loadTimeout = setTimeout( function() options.fail, MEDIA_LOAD_TIMEOUT );
+          options.loadTimeout = setTimeout( options.fail, MEDIA_LOAD_TIMEOUT );
         }
         options.p = Popcorn.smart( options._container, options.source, {frameAnimation: true} );
         options.p.media.style.width = "100%";
