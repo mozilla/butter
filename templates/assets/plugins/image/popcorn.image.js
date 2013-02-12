@@ -273,7 +273,7 @@
         // Safari Redraw hack - #3066
         container.style.display = "none";
         redrawBug = container.offsetHeight;
-        container.style.display = "block";
+        container.style.display = "";
       }
     },
 
