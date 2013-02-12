@@ -39,14 +39,6 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         _createdEditors = {},
         _logger = new Logger( butter.id );
 
-
-    // Open the media-editor editor right after butter is finished starting up
-    butter.listen( "mediaready", function() {
-      if ( butter.ui.enabled ) {
-        butter.editor.openEditor( "media-editor" );
-      }
-    });
-
     EventManager.extend( _this );
 
     ButterNamespace.Editor = Editor;

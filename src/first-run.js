@@ -15,34 +15,25 @@ define( [ "dialog/dialog", "ui/widget/tooltip" ], function( Dialog, ToolTip ) {
     init: function() {
 
       var dialog,
-          popupTooltip,
           mediaTooltip,
           overlayDiv,
           editor = document.querySelector( ".butter-editor-area" ),
-          mediaEditorButton = document.querySelector( ".butter-editor-header-media" ),
-          popupTile = document.querySelector( ".butter-plugin-tile[data-popcorn-plugin-type=popup]" );
+          eventsEditorButton = document.querySelector( ".butter-editor-header-popcorn" ),
+          mediaInput = document.querySelector( ".add-media-input" );
 
       function showFirstRunTooltips() {
         ToolTip.create({
-          name: "tooltip-popup",
-          element: popupTile,
-          message: "<h3>Event</h3>Try dragging this to the stage",
-          hidden: false
-        });
-        ToolTip.create({
           name: "tooltip-media",
-          element: mediaEditorButton,
+          element: eventsEditorButton,
           top: "60px",
-          message: "<h3>Media Editor</h3>Change your media source here!<span class=\"center-div\"><span class=\"media-icon youtube-icon\"></span><span class=\"media-icon vimeo-icon\"></span><span class=\"media-icon soundcloud-icon\"></span><span class=\"media-icon html5-icon\"></span></span>",
+          message: "<h3>Events Editor</h3>Augment your media with track events here!",
           hidden: false
         });
 
-        popupTooltip = ToolTip.get( "tooltip-popup" );
         mediaTooltip = ToolTip.get( "tooltip-media" );
 
         document.body.addEventListener( "mousedown", function removeTooltips() {
           mediaTooltip.hidden = true;
-          popupTooltip.destroy();
           document.body.removeEventListener( "mousedown", removeTooltips, true );
         }, true );
 
@@ -52,11 +43,10 @@ define( [ "dialog/dialog", "ui/widget/tooltip" ], function( Dialog, ToolTip ) {
         // Remove Listeners
         dialog.unlisten( "close", onDialogClose );
         window.removeEventListener( "click", closeDialog, false );
-        popupTile.removeEventListener( "mouseover", closeDialog, false );
 
         // Remove Classes
-        mediaEditorButton.classList.remove( "overlay-highlight" );
-        popupTile.classList.remove( "overlay-highlight" );
+        eventsEditorButton.classList.remove( "overlay-highlight" );
+        mediaInput.classList.remove( "overlay-highlight" );
         document.body.classList.remove( "first-run" );
 
         // Remove Overlay
@@ -78,12 +68,11 @@ define( [ "dialog/dialog", "ui/widget/tooltip" ], function( Dialog, ToolTip ) {
         overlayDiv.classList.add( "fade-in" );
         editor.appendChild( overlayDiv );
 
-        // Add Listeners
-        popupTile.addEventListener( "mouseover", closeDialog, false );
+        // Add Listener
         window.addEventListener( "click", closeDialog, false );
 
         // Add Classes
-        popupTile.classList.add( "overlay-highlight" );
+        mediaInput.classList.add( "overlay-highlight" );
         document.body.classList.add( "first-run" );
       }
 
