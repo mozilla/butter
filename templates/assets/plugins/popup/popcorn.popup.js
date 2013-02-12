@@ -329,7 +329,7 @@
 
         //Set the base classes
         innerDiv.className =  "speechBubble " + options.type + " " + options.triangle + " " + flip;
- 
+
         triangle = document.createElement( "canvas" );
         ctx = triangle.getContext( "2d" );
 
@@ -465,11 +465,18 @@
 
     start: function( event, options ) {
       var audio = options.audio,
-          video = this.media;
+          video = this.media,
+          container = options._container,
+          redrawBug;
 
-      if ( options._container ) {
-        options._container.classList.add( "on" );
-        options._container.classList.remove( "off" );
+      if ( container ) {
+        container.classList.add( "on" );
+        container.classList.remove( "off" );
+
+        // Safari Redraw hack - #3066
+        container.style.display = "none";
+        redrawBug = container.offsetHeight;
+        container.style.display = "block";
       }
 
       if ( audio && audio.duration && !video.paused &&
@@ -493,7 +500,7 @@
         options._container.classList.remove( "on" );
       }
     },
-    
+
     _teardown: function( options ) {
       if ( options._container && options._target ) {
         options._target.removeChild( options._container );
