@@ -30,6 +30,7 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         _popcorn,
         _mediaReady = false,
         _mediaType,
+        _butterEventMap = {},
         _interruptLoad = false,
         _this = this,
         _makeVideoURLsUnique = options.makeVideoURLsUnique;
@@ -66,39 +67,47 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
     }; //interrupt
 
     // Update Popcorn events with data from a butter trackevent
-    this.synchronizeEvent = function( trackEvent, newOptions ) {
+    this.updateEvent = function( trackEvent ){
       var options = trackEvent.popcornOptions,
-          popcornId = trackEvent.id,
+          butterId = trackEvent.id,
+          popcornId = _butterEventMap[ butterId ],
           popcornEvent = null;
-
-      if ( _popcorn ) {
+      /* ensure that the trackevent actually exists before removal.
+      * we remove the trackevent because there is no easy way
+      * to ensure what data has changed on any given track. It
+      * is easier to remove the old and create a new trackevent with the updated
+      * options
+      */
+      if( _popcorn ){
+        if( popcornId && _popcorn.getTrackEvent( popcornId ) ){
+          _popcorn.removeTrackEvent( popcornId );
+        } //if
         // make sure the plugin is still included
-        if ( _popcorn[ trackEvent.type ] ) {
+        if( _popcorn[ trackEvent.type ] ){
+          // create the trackevent
+          _popcorn[ trackEvent.type ]( options );
+          // store a local reference to the newly created trackevent
+          _butterEventMap[ butterId ] = _popcorn.getLastTrackEventId();
 
-          if ( _popcorn.getTrackEvent( popcornId ) ) {
-            _popcorn[ trackEvent.type ]( popcornId, newOptions );
-          } else {
-            _popcorn[ trackEvent.type ]( popcornId, options );
-          }
-
-          popcornEvent = _popcorn.getTrackEvent( popcornId );
+          popcornEvent = _popcorn.getTrackEvent( _butterEventMap[ butterId ] );
           trackEvent.popcornTrackEvent = popcornEvent;
 
-          if ( trackEvent.view ) {
-            if ( popcornEvent.toString ) {
+          if( trackEvent.view ){
+            if( popcornEvent.toString ){
               trackEvent.view.setToolTip( popcornEvent.toString() );
             }
-            else {
+            else{
               trackEvent.view.setToolTip( JSON.stringify( options ) );
             }
           }
-        }
-      }
-    };
+        } //if
+      } //if
+    }; //updateEvent
 
     // Destroy a Popcorn trackevent
     this.destroyEvent = function( trackEvent ){
-      var popcornId = trackEvent.id;
+      var butterId = trackEvent.id,
+          popcornId = _butterEventMap[ butterId ];
 
       // ensure the trackevent actually exists before we remove it
       if( _popcorn ){
@@ -106,6 +115,8 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
           _popcorn.removeTrackEvent( popcornId );
         } //if
 
+        // remove the reference to the trackevent id that we stored in updateEvent
+        delete _butterEventMap[ butterId ];
       } //if
     }; //destroyEvent
 
