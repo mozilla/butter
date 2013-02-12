@@ -44,7 +44,8 @@ define( [ "util/lang" ], function( util ){
       if( typeof( time ) === "string" || !isNaN( time ) ){
         if( setCurrentTime ){
           try {
-            _media.currentTime = Popcorn.util.toSeconds( time );
+            time = Popcorn.util.toSeconds( time );
+            _media.currentTime = time;
           }
           catch( e ){
             time = _media.currentTime;
