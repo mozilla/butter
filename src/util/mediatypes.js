@@ -50,10 +50,10 @@ define( [ "util/xhr", "util/uri" ],
         if ( !id ) {
           return;
         }
-        xhrURL = "https://gdata.youtube.com/feeds/api/videos/" + id + "?v=2&alt=jsonc";
-        XHR.get( xhrURL, function( resp ) {
-          var raw = JSON.parse( resp.target.responseText ).data;
 
+        xhrURL = "https://gdata.youtube.com/feeds/api/videos/" + id + "?v=2&alt=jsonc&callback=?";
+        Popcorn.getJSONP( xhrURL, function( resp ) {
+          var raw = resp.data;
           if ( !raw ) {
             return;
           }
@@ -69,9 +69,8 @@ define( [ "util/xhr", "util/uri" ],
         parsedUri = URI.parse( baseUrl );
         splitUriDirectory = parsedUri.directory.split( "/" );
         id = splitUriDirectory[ splitUriDirectory.length - 1 ];
-        xhrURL = "http://api.soundcloud.com/tracks/" + id + ".json?client_id=PRaNFlda6Bhf5utPjUsptg";
-        XHR.get( xhrURL, function( resp ) {
-          var raw = JSON.parse( resp.target.responseText );
+        xhrURL = "http://api.soundcloud.com/tracks/" + id + ".json?callback=?&client_id=PRaNFlda6Bhf5utPjUsptg";
+        Popcorn.getJSONP( xhrURL, function( raw ) {
           if ( !raw ) {
             return;
           }
@@ -82,9 +81,21 @@ define( [ "util/xhr", "util/uri" ],
           callback( data );
         });
       } else if ( type === "vimeo" ) {
-          data.title = baseUrl;
+        parsedUri = URI.parse( baseUrl );
+        splitUriDirectory = parsedUri.directory.split( "/" );
+        id = splitUriDirectory[ splitUriDirectory.length - 1 ];
+        xhrURL = "http://vimeo.com/api/v2/video/" + id + ".json?callback=?";
+        Popcorn.getJSONP( xhrURL, function( raw ) {
+          raw = raw && raw[ 0 ];
+          if ( !raw ) {
+            return;
+          }
           data.source = baseUrl;
+          data.thumbnail = raw.thumbnail_small;
+          data.duration = raw.duration;
+          data.title = raw.title;
           callback( data );
+        });
       } else if ( type === "html5" ) {
         testEl = document.createElement( "video" );
         testEl.addEventListener( "loadedmetadata", function() {
