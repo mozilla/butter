@@ -61,21 +61,22 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
   function onSuccess( data ) {
     var el = _GALLERYITEM.cloneNode( true ),
         deleteBtn = el.querySelector( ".mg-delete-btn" ),
-        thumbnailEl;
+        thumbnailBtn = el.querySelector( ".mg-thumbnail" ),
+        thumbnailImg;
 
     _loadingSpinner.classList.add( "hidden" );
 
     el.querySelector( ".mg-title" ).innerHTML = data.title;
     el.querySelector( ".mg-url" ).innerHTML = data.source;
-    el.querySelector( ".mg-duration" ).innerHTML = data.duration || "???";
+    el.querySelector( ".mg-duration" ).innerHTML = Time.toTimecode( data.duration ) || "???";
     if ( data.type === "html5" ) {
-      thumbnailEl = data.thumbnail;
+      thumbnailImg = data.thumbnail;
     } else {
-      thumbnailEl = document.createElement( "img" );
-      thumbnailEl.src = data.thumbnail;
+      thumbnailImg = document.createElement( "img" );
+      thumbnailImg.src = data.thumbnail;
     }
-    el.querySelector( ".mg-thumbnail" ).appendChild( thumbnailEl );
-    el.querySelector( ".mg-thumbnail" ).src = data.thumbnail;
+    thumbnailBtn.appendChild( thumbnailImg );
+    thumbnailBtn.src = data.thumbnail;
 
     el.classList.add( "mg-" + data.type );
     el.classList.add( "new" );
@@ -99,10 +100,10 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       trackEvent.selected = true;
     }
 
-    el.addEventListener( "click", addEvent, false );
+    thumbnailBtn.addEventListener( "click", addEvent, false );
 
     deleteBtn.addEventListener( "click", function() {
-      el.removeEventListener( "click", addEvent, false );
+      thumbnailBtn.removeEventListener( "click", addEvent, false );
       _galleryList.removeChild( el );
     }, false );
 
