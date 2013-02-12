@@ -7,7 +7,7 @@
     "media": [{
         "id": "Media0",
         "name": "Media0",
-        "url": ["http://popcorn.webmadecontent.org/videos/getstarted.mp4", "http://popcorn.webmadecontent.org/videos/getstarted.webm"],
+        "url": ["https://videos-cdn.mozilla.net/serv/webmademovies/popcorn/getstarted.mp4", "https://videos-cdn.mozilla.net/serv/webmademovies/popcorn/getstarted.webm"],
         "target": "video",
         "duration": 11.22,
         "controls": false,
