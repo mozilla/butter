@@ -77,7 +77,7 @@ define( [ "util/xhr", "util/uri" ],
           }
           data.source = baseUrl;
           data.thumbnail = raw.artwork_url;
-          data.duration = raw.duration;
+          data.duration = raw.duration / 1000;
           data.title = raw.title;
           callback( data );
         });
