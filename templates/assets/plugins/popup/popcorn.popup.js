@@ -134,11 +134,11 @@
           options: [ "Error", "Audio", "Broken Heart", "Cone", "Earth",
                      "Eye", "Heart", "Info", "Man", "Money", "Music", "Net",
                      "Skull", "Star", "Thumbs Down", "Thumbs Up", "Time",
-                     "Trophy", "Tv", "User", "Virus", "Women" ],
+                     "Trophy", "Tv", "User", "Virus", "Women", "None" ],
           values: [ "error", "audio", "brokenheart", "cone", "earth",
                      "eye", "heart", "info", "man", "money", "music", "net",
                      "skull", "star", "thumbsdown", "thumbsup", "time",
-                     "trophy", "tv", "user", "virus", "women" ],
+                     "trophy", "tv", "user", "virus", "women", "none" ],
           label: "Pop Icon",
           "default": "error",
           optional: true
@@ -396,7 +396,7 @@
         innerDiv.classList.add( "popup-inner-div" );
         container.classList.add( "popcorn-popup" );
 
-        if ( options.icon ) {
+        if ( options.icon && options.icon !== "none" ) {
           img = document.createElement( "img" );
           img.setAttribute( "class", "popup-icon" );
           img.addEventListener( "load", function() {
