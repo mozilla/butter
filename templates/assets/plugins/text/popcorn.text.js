@@ -291,7 +291,7 @@
         // Safari Redraw hack - #3066
         transitionContainer.style.display = "none";
         redrawBug = transitionContainer.offsetHeight;
-        transitionContainer.style.display = "block";
+        transitionContainer.style.display = "";
       }
     },
 

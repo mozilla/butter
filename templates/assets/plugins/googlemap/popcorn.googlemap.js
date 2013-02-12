@@ -422,7 +422,7 @@ var googleCallback;
             // Safari Redraw hack - #3066
             outerdiv.style.display = "none";
             redrawBug = outerdiv.offsetHeight;
-            outerdiv.style.display = "block";
+            outerdiv.style.display = "";
           } else {
             setTimeout(function () {
               isMapSetup();
