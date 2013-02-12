@@ -11,8 +11,8 @@
       "id": "Media0",
       "name": "Media0",
       "url": [
-        "http://popcorn.webmadecontent.org/videos/neighbourhood2.webm",
-        "http://popcorn.webmadecontent.org/videos/neighbourhood2.mp4"
+        "https://videos-cdn.mozilla.net/serv/webmademovies/popcorn/neighbourhood2.webm",
+        "https://videos-cdn.mozilla.net/serv/webmademovies/popcorn/neighbourhood2.mp4"
       ],
       "target": "video",
       "duration": 31.948999404907227,

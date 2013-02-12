@@ -7,7 +7,7 @@
     "media": [{
         "id": "Media0",
         "name": "Media0",
-        "url": ["http://popcorn.webmadecontent.org/videos/popcornmakertutorial.mp4", "http://popcorn.webmadecontent.org/videos/popcornmakertutorial.webm"],
+        "url": ["https://videos-cdn.mozilla.net/serv/webmademovies/popcorn/popcornmakertutorial.mp4", "https://videos-cdn.mozilla.net/serv/webmademovies/popcorn/popcornmakertutorial.webm"],
         "target": "video",
         "duration": 170.266,
         "controls": false,
