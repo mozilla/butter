@@ -137,10 +137,6 @@ var googleCallback;
     options.type = options.type || "ROADMAP";
     options.lat = options.lat || 0;
     options.lng = options.lng || 0;
-    options.height = options.height + "%";
-    options.width = options.width + "%";
-    options.left = options.left + "%";
-    options.top = options.top + "%";
 
     // if this is the first time running the plugins
     // call the function that gets the sctipt
@@ -156,10 +152,10 @@ var googleCallback;
 
     outerdiv = document.createElement( "div" );
     outerdiv.id = Popcorn.guid( "googlemap" );
-    outerdiv.style.width = options.width;
-    outerdiv.style.height = options.height;
-    outerdiv.style.left = options.left;
-    outerdiv.style.top = options.top;
+    outerdiv.style.width = options.width + "%";
+    outerdiv.style.height = options.height + "%";
+    outerdiv.style.left = options.left + "%";
+    outerdiv.style.top = options.top + "%";
     outerdiv.style.zIndex = +options.zindex;
     outerdiv.style.position = "absolute";
     outerdiv.classList.add( options.transition );
