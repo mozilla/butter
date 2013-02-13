@@ -110,8 +110,8 @@
       };
 
       this.clear = function(){
-        while( _tracks.length > 0 ){
-          _this.removeTrack( _tracks[ 0 ] );
+        for ( var i = _tracks.length - 1; i >= 0; i-- ) {
+          _this.removeTrack( _tracks[ i ] );
         }
       };
 
@@ -152,9 +152,6 @@
           throw "Track already belongs to a Media object. Use `media.removeTrack` prior to this function.";
         }
 
-        // Sort tracks first, so we can guarantee their ordering
-        _this.sortTracks( true );
-
         // Give new track last order since it's newest
         track.order = _tracks.length;
 
@@ -178,27 +175,21 @@
           throw "Track already belongs to a Media object. Use `media.removeTrack` prior to this function.";
         }
 
-        // Sort tracks first, so we can guarantee their ordering
-        _this.sortTracks( true );
-
         var idx = _orderedTracks.indexOf( otherTrack );
 
         if ( idx > -1 ) {
           // Give new track last order since it's newest
-          newTrack.order = _tracks.length;
+          newTrack.order = idx;
 
           // Insert new track
           _orderedTracks.splice( idx, 0, newTrack );
 
-          // Fix all the order properties on subsequent tracks
-          for ( var i = idx, l = _orderedTracks.length; i < l; ++i ) {
-            _orderedTracks[ i ].order = i;
-          }
-
           setupNewTrack( newTrack );
 
           _this.dispatch( "trackadded", newTrack );
-          _this.dispatch( "trackorderchanged", _orderedTracks );
+
+          // Sort tracks after added one to update their order.
+          _this.sortTracks( idx + 1 );
 
           addNewTrackTrackEvents( newTrack );
 
@@ -219,9 +210,11 @@
 
       this.removeTrack = function ( track ) {
         var idx = _tracks.indexOf( track ),
-            trackEvent;
+            trackEvent,
+            orderedIndex;
         if ( idx > -1 ) {
           _tracks.splice( idx, 1 );
+          orderedIndex = _orderedTracks.indexOf( track );
           var events = track.trackEvents;
           for ( var i=0, l=events.length; i<l; ++i ) {
             trackEvent = events[ i ];
@@ -238,9 +231,10 @@
             "trackeventdeselected"
           ]);
           track.setPopcornWrapper( null );
-          _this.sortTracks();
           track._media = null;
+          _orderedTracks.splice( orderedIndex, 1 );
           _this.dispatch( "trackremoved", track );
+          _this.sortTracks( orderedIndex );
           return track;
         } //if
       }; //removeTrack
@@ -326,16 +320,19 @@
         return a.order - b.order;
       }
 
-      this.sortTracks = function( suppressEvent ) {
-        _orderedTracks = _tracks.slice();
+      this.sortTracks = function( startIndex, endIndex ) {
+        var i = startIndex || 0,
+            l = endIndex || _orderedTracks.length;
+
+        for ( ; i <= l; ++i ) {
+          if ( _orderedTracks[ i ] ) {
+            _orderedTracks[ i ].order = i;
+            _orderedTracks[ i ].updateTrackEvents();
+          }
+        }
+
         _orderedTracks.sort( compareTrackOrder );
-        for ( var i = 0, l = _orderedTracks.length; i < l; ++i ) {
-          _orderedTracks[ i ].order = i;
-          _orderedTracks[ i ].updateTrackEvents();
-        }
-        if ( !suppressEvent ) {
-          _this.dispatch( "trackorderchanged", _orderedTracks );
-        }
+        _this.dispatch( "trackorderchanged", _orderedTracks );
       };
 
       this.getNextTrack = function( currentTrack ) {
