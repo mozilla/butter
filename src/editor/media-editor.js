@@ -40,6 +40,12 @@ define( [ "util/lang", "util/uri", "util/keys", "editor/editor", "dialog/dialog"
       }
     }
     if ( newMediaArr.length ) {
+      // Delete events before media updates, otherwise the project will be in a dirty state
+      if ( _butter.project.deleteDefaultEventsOnMediaChange ) {
+        _butter.currentMedia.clear();
+        _butter.currentMedia.addTrack();
+      }
+
       showError( false );
       setLoadSpinner( true );
       _media.url = newMediaArr;
