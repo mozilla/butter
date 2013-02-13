@@ -238,9 +238,7 @@
     },
     _update: function( options, updates ) {
       if ( updates.from != null ) {
-        var fromDiff = options.from - updates.from;
         options.from = updates.from;
-        options.end = options.end + fromDiff;
       }
       if ( updates.duration != null ) {
         options.duration = updates.duration;
