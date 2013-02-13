@@ -103,7 +103,8 @@
           tweetText,
           allTweets = [],
           query,
-          numberOfTweets = options.numberOfTweets;
+          numberOfTweets = options.numberOfTweets,
+          searchType = options.searchType || "recent";
 
       if ( !target ) {
         target = this.media.parentNode;
@@ -142,7 +143,7 @@
       }
       options._container.appendChild( titleText );
 
-      query = ( options.search || options.username ) + numberOfTweets;
+      query = ( options.search || options.username ) + numberOfTweets + searchType;
 
       function buildTheTweets( tweets ) {
         var currTweet,
@@ -225,7 +226,7 @@
 
         // Search API doesn't simply return count of tweets. It returns up to 100
         // and then provides a link to query the next "Page" of the same results
-        if ( allTweets.length < options.numberOfTweets && options.search ) {
+        if ( allTweets.length < options.numberOfTweets && options.search && results.length && e.next_page ) {
           Popcorn.xhr({
             url: requestString.substring( 0, requestString.indexOf( "?" ) ) + e.next_page,
             dataType: "jsonp",
