@@ -50,62 +50,48 @@
           start();
         });
         
-        asyncTest( "destroyEvent", 1, function() {
-          var id,
+        asyncTest( "synchronizeEvent - new TrackEvent", 2, function() {
+          var id = "Sample Event",
+              options = {
+                text: "Sample Text"
+              },
               trackEvent,
-              _pDestroy = prepare( {} );
+              _pCreate = prepare( {} );
 
-          // Add some dummy text events
-          _pDestroy.popcorn.text( defaultEvent );
-          id = _pDestroy.popcorn.getLastTrackEventId();
-         
-          // Need to update an event first since it's id won't be in the butterMap until then
-          _pDestroy.updateEvent({
-            type: "text",
+          _pCreate.synchronizeEvent({
             id: id,
-            popcornOptions: _trackEventData
+            type: "text",
+            popcornOptions: options
           });
-          
-          _pDestroy.destroyEvent( { id: id } );
+          trackEvent = _pCreate.popcorn.getTrackEvent( id );
 
-          /*
-           * Since we are doing this outside of the butter instance itself, we wind up with a second track event
-           * because the TrackEvent Id hasn't been stored in the _butterMap object yet, which causes it to create
-           * a new one. This means we will still have one track event left with the original data before the update.
-           */
-          equal( _pDestroy.popcorn.getTrackEvents().length, 1, "Successfully removed trackevent with destroyEvent" );
-          _pDestroy.popcorn.destroy();
+          equal( trackEvent.id, id, "TrackEvent created with expected ID" );
+          deepEqual( trackEvent.text, options.text, "TrackEvent created with expected text" );
           start();
         });
-        
-        asyncTest( "updateEvent", 3, function() {
-          var id,
+
+        asyncTest( "synchronizeEvent - TrackEvent updated", 2, function() {
+          var id = "Sample Event",
+              options = {
+                text: "Sample Text"
+              },
+              updateOptions = {
+                text: "Updated Text"
+              },
               trackEvent,
               _pUpdate = prepare( {} );
 
-          // Add some dummy text events
-          _pUpdate.popcorn.text( defaultEvent );
-          id = _pUpdate.popcorn.getLastTrackEventId();
-          
-          _pUpdate.updateEvent({
-            type: "text",
+          _pUpdate.synchronizeEvent({
             id: id,
-            popcornOptions: _trackEventData
+            type: "text",
+            popcornOptions: options
           });
 
-          /*
-           * Since we are doing this outside of the butter instance itself, we wind up with a second track event
-           * because the TrackEvent Id hasn't been stored in the _butterMap object yet, which causes it to create
-           * a new one.
-           */
-          trackEvent = _pUpdate.popcorn.getTrackEvents()[ 1 ];
+          _pUpdate.synchronizeEvent( { id: id, type: "text" }, updateOptions );
+          trackEvent = _pUpdate.popcorn.getTrackEvent( id );
 
-          // Check new data vs stored values
-          equal( trackEvent.start, _trackEventData.start, "Successfully updated start time to " + _trackEventData.start );
-          equal( trackEvent.end, _trackEventData.end, "Successfully updated end time to " + _trackEventData.end );
-          equal( trackEvent.text, _trackEventData.text, "Successfully updated text to " + _trackEventData.text );
-
-          _pUpdate.popcorn.destroy();
+          equal( trackEvent.id, id, "ID of track event is correct" );
+          deepEqual( trackEvent.text, updateOptions.text, "TrackEvent updated with expected text" );
           start();
         });
 
