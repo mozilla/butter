@@ -85,6 +85,15 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         if( trackEvent.view ){
           if( popcornEvent.toString ){
             trackEvent.view.setToolTip( popcornEvent.toString() );
+            if ( trackEvent.type === "sequencer" ) {
+              if ( !trackEvent.popcornOptions.hidden ) {
+                trackEvent.view.element.classList.add( "sequencer-video" );
+                trackEvent.view.element.classList.remove( "sequencer-audio" );
+              } else {
+                trackEvent.view.element.classList.add( "sequencer-audio" );
+                trackEvent.view.element.classList.remove( "sequencer-video" );
+              }
+            }
           }
           else{
             trackEvent.view.setToolTip( JSON.stringify( options ) );

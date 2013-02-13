@@ -231,12 +231,18 @@
   .title {
     font-weight: normal;
     color: #FFF;
-    &:before {
-      content: "video";
+    .sequencer-audio&:before,
+    .sequencer-video&:before {
       text-transform: uppercase;
       margin-right: 5px;
       font-weight: 700;
       font-size: 0.9em;
+    }
+    .sequencer-audio&:before {
+      content: "audio";
+    }
+    .sequencer-video&:before {
+      content: "video";
     }
   }
   &[selected="true"] {
