@@ -101,7 +101,6 @@
     }
 
     return {
-
       _setup: function( options ) {
 
         target = Popcorn.dom.find( options.target );
