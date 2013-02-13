@@ -82,6 +82,9 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         popcornEvent = _popcorn.getTrackEvent( popcornId );
         trackEvent.popcornTrackEvent = popcornEvent;
 
+        trackEvent.popcornOptions.start = +popcornEvent.start;
+        trackEvent.popcornOptions.end = +popcornEvent.end;
+
         if( trackEvent.view ){
           if( popcornEvent.toString ){
             trackEvent.view.setToolTip( popcornEvent.toString() );

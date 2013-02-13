@@ -94,7 +94,10 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       trackEvent.update({
         source: data.source,
         denied: data.denied,
-        title: data.title
+        start: _butter.currentTime,
+        end: _butter.currentTime + data.duration,
+        title: data.title,
+        duration: data.duration
       });
       _butter.deselectAllTrackEvents();
       trackEvent.selected = true;

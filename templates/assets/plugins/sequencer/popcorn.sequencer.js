@@ -33,7 +33,7 @@
       // In worst cases it pauses.
       WAIT_FOR_SEEK_BEFORE_PAUSE = 350;
  
-  Popcorn.plugin( 'sequencer', {
+  Popcorn.plugin( "sequencer", {
     _setup: function( options ) {
       var _this = this;
 
@@ -231,8 +231,23 @@
       options.toString = function() {
         return options.title || options.source || "";
       };
+
+      if ( options.duration != null && options.end - ( options.start - ( +options.from ) ) > options.duration ) {
+        options.end = options.duration + ( options.start - ( +options.from ) );
+      }
     },
     _update: function( options, updates ) {
+      if ( updates.from != null ) {
+        var fromDiff = options.from - updates.from;
+        options.from = updates.from;
+        options.end = options.end + fromDiff;
+      }
+      if ( updates.duration != null ) {
+        options.duration = updates.duration;
+      }
+      if ( options.end - ( options.start - ( +options.from ) ) > options.duration ) {
+        options.end = options.duration + ( options.start - ( +options.from ) );
+      }
       if ( updates.zindex != null ) {
         options.zindex = updates.zindex;
         if ( !options.hidden && options.active ) {
@@ -295,9 +310,6 @@
       if ( updates.width != null ) {
         options.width = updates.width;
         options._container.style.width = ( options.width || "100" ) + "%";
-      }
-      if ( updates.from != null ) {
-        options.from = updates.from;
       }
       if ( options.ready ) {
         if ( updates.volume != null ) {
@@ -436,6 +448,9 @@
           hidden: true
         },
         denied: {
+          hidden: true
+        },
+        duration: {
           hidden: true
         }
       }

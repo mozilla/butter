@@ -610,7 +610,8 @@
                       popcornOptions: {
                         start: 0,
                         end: _duration,
-                        source: importData.url
+                        source: importData.url,
+                        duration: _duration
                       }
                     });
                   }
