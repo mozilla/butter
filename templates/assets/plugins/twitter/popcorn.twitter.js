@@ -123,7 +123,7 @@
       }
 
       // We have data from twitter so assign it an appropriate title now.
-      titleText.innerText = options.search || options.username;
+      titleText.textContent = options.search || options.username;
 
       for ( k = 0, rLen = results.length; k < rLen && allTweets.length < options.numberOfTweets; k++ ) {
         allTweets.push( results[ k ] );
@@ -157,6 +157,8 @@
 
                 warningText.innerHTML = "You have hit the request limit for the hour. This will reset at " +
                   e.reset_time.substring( 0, e.reset_time.indexOf( "+" ) ) + " GMT.";
+
+                titleText.textContent = "Failed";
 
                 container.appendChild( warningText );
               } else {
@@ -223,7 +225,6 @@
         container.style.left = options.left + "%";
         container.style.zIndex = +options.zindex;
         titleText.classList.add( "popcorn-twitter-title" );
-        titleText.innerText = "Twitter";
 
         // Set layout class for container
         if ( options.layout ) {
