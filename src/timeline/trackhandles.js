@@ -185,7 +185,10 @@ define( [ "dialog/dialog", "util/dragndrop", "util/lang", "text!layouts/track-ha
       _menus.push( menuDiv );
 
       trackDiv.setAttribute( "data-butter-track-id", trackId );
+      menuDiv.setAttribute( "data-butter-track-id", trackId );
+      menuDiv.querySelector( ".delete" ).setAttribute( "data-butter-track-id", trackId );
       trackDiv.querySelector( "span.track-handle-icon" ).setAttribute( "data-butter-track-id", trackId );
+      trackDiv.querySelector( "span.title" ).setAttribute( "data-butter-track-id", trackId );
       trackDiv.querySelector( "span.title" ).appendChild( document.createTextNode( track.name ) );
 
       _sortable.addItem( trackDiv );
