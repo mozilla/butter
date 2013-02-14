@@ -220,6 +220,9 @@
 
         if ( _currentMedia && _currentMedia.ready ) {
           trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime, null, e.data.position );
+          if ( e.data.popcornOptions ) {
+            trackEvent.update( e.data.popcornOptions );
+          }
           _this.editor.editTrackEvent( trackEvent );
         }
         else {

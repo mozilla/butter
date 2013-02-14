@@ -200,10 +200,14 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           track = e.data.track,
           start = e.data.start,
           end = e.data.end,
+          popcornOptions = e.data.popcornOptions,
           trackEvent;
 
       if ( _media.ready ) {
         trackEvent = butter.generateSafeTrackEvent( type, start, end, track );
+        if ( popcornOptions ) {
+          trackEvent.update( popcornOptions );
+        }
         butter.editor.editTrackEvent( trackEvent );
       }
     }

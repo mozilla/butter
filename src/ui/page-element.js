@@ -83,13 +83,13 @@ define( [ "core/logger", "util/dragndrop" ],
             _events.out();
           }
         },
-        drop: function( dragElement, position ) {
+        drop: function( dragElement, position, popcornOptions ) {
           if ( !dragElement.getAttribute || dragElement.getAttribute( "data-butter-draggable-type" ) !== "plugin" ) {
             return;
           }
           _this.highlight( false );
           if ( _events.drop ) {
-            _events.drop( dragElement, position );
+            _events.drop( dragElement, position, popcornOptions );
           }
         }
       });

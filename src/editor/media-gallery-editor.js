@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/editor", "util/time", "text!layouts/media-editor.html" ],
-  function( LangUtils, XHR, KeysUtils, MediaUtils, Editor, Time, EDITOR_LAYOUT ) {
+define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/editor", "util/time", "util/dragndrop", "text!layouts/media-editor.html" ],
+  function( LangUtils, XHR, KeysUtils, MediaUtils, Editor, Time, DragNDrop, EDITOR_LAYOUT ) {
 
   var _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
       _addMediaTitle = _parentElement.querySelector( ".add-new-media" ),
@@ -81,6 +81,20 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
         deleteBtn = el.querySelector( ".mg-delete-btn" ),
         thumbnailBtn = el.querySelector( ".mg-thumbnail" ),
         thumbnailImg;
+
+    DragNDrop.helper( thumbnailBtn, {
+      pluginOptions: {
+        source: data.source,
+        denied: data.denied,
+        end: data.duration,
+        title: data.title,
+        duration: data.duration,
+        hidden: data.hidden
+      }
+    });
+
+    thumbnailBtn.setAttribute( "data-popcorn-plugin-type", "sequencer" );
+    thumbnailBtn.setAttribute( "data-butter-draggable-type", "plugin" );
 
     _loadingSpinner.classList.add( "hidden" );
 

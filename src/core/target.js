@@ -27,11 +27,12 @@
       }
       else {
         _pageElement = new PageElement( _element, {
-          drop: function( element, position ){
+          drop: function( element, position, popcornOptions ){
             _this.dispatch( "trackeventrequested", {
               element: element,
               target: _this,
-              position: position
+              position: position,
+              popcornOptions: popcornOptions
             });
           }
         });

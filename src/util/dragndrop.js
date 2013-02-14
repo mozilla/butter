@@ -496,12 +496,16 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
   }
 
   function Helper( element, options ) {
+    options = options || {};
     var _image = options.image,
         _onStart = options.start || NULL_FUNCTION,
         _onStop = options.stop || NULL_FUNCTION,
         _id = __helpers.length;
 
-    __helpers[ _id ] = element;
+    __helpers[ _id ] = {
+      element: element,
+      pluginOptions: options.pluginOptions
+    };
 
     element.setAttribute( "draggable", true );
 
@@ -558,7 +562,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       }
       helper = __helpers[ transferData ] || __currentDraggingElement;
       if ( helper ) {
-        _onDrop( helper, [ e.clientX, e.clientY ] );
+        _onDrop( helper.element, [ e.clientX, e.clientY ], helper.pluginOptions );
       }
     }
 
@@ -584,7 +588,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       }
       helper = __helpers[ transferData ] || __currentDraggingElement;
       if ( helper ) {
-        _onOver( helper, [ e.clientX, e.clientY ] );
+        _onOver( helper.element, [ e.clientX, e.clientY ] );
       }
     }
 
@@ -604,7 +608,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
       }
       helper = __helpers[ transferData ] || __currentDraggingElement;
       if ( helper ) {
-        _onOut( helper, [ e.clientX, e.clientY ] );
+        _onOut( helper.element, [ e.clientX, e.clientY ] );
       }
     }
 
