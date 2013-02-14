@@ -136,7 +136,8 @@
     "popcorn-js": "{{baseDir}}external/popcorn-js/",
     "css": "{{baseDir}}css/",
     "resources": "{{baseDir}}resources/",
-    "tools": "{{baseDir}}tools/"
+    "tools": "{{baseDir}}tools/",
+    "util": "{{baseDir}}src/util/"
   },
   "icons": {
     "default": "popcorn-icon.png",

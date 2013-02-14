@@ -278,23 +278,13 @@
       };
     },
     start: function( event, options ) {
-      var container = options._container,
-          redrawBug;
-
-      if ( container ) {
-        container.classList.add( "on" );
-        container.classList.remove( "off" );
-
-        // Safari Redraw hack - #3066
-        container.style.display = "none";
-        redrawBug = container.offsetHeight;
-        container.style.display = "";
+      if ( options._container ) {
+        Popcorn.toggleOn( options._container );
       }
     },
     end: function( event, options ) {
       if ( options._container ) {
-        options._container.classList.add( "off" );
-        options._container.classList.remove( "on" );
+        Popcorn.toggleOff( options._container );
       }
     },
     _teardown: function( options ) {

@@ -259,21 +259,12 @@
     },
 
     start: function( event, options ) {
-      var container = options._container,
-          redrawBug;
-
-      if ( container ) {
+      if ( options._container ) {
         if ( options._updateImage ) {
           this.on( "timeupdate", options._updateImage );
         }
 
-        container.classList.add( "on" );
-        container.classList.remove( "off" );
-
-        // Safari Redraw hack - #3066
-        container.style.display = "none";
-        redrawBug = container.offsetHeight;
-        container.style.display = "";
+        Popcorn.toggleOn( options._container );
       }
     },
 
@@ -283,8 +274,7 @@
           this.off( "timeupdate", options._updateImage );
         }
 
-        options._container.classList.add( "off" );
-        options._container.classList.remove( "on" );
+        Popcorn.toggleOff( options._container );
       }
     },
 

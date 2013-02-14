@@ -32,6 +32,13 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         },
         {
           type: "js",
+          url: "{util}butterOnOff.js",
+          check: function() {
+            return !!Popcorn.toggleOn && Popcorn.toggleOff;
+          }
+        },
+        {
+          type: "js",
           url: "{popcorn-js}/modules/player/popcorn.player.js",
           check: function(){
             return !!window.Popcorn && !!window.Popcorn.player;

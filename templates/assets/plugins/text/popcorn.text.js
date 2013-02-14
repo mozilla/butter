@@ -281,24 +281,16 @@
     },
 
     start: function( event, options ) {
-      var transitionContainer = options._transitionContainer,
-          redrawBug;
+      var transitionContainer = options._transitionContainer;
 
       if ( transitionContainer ) {
-        transitionContainer.classList.add( "on" );
-        transitionContainer.classList.remove( "off" );
-
-        // Safari Redraw hack - #3066
-        transitionContainer.style.display = "none";
-        redrawBug = transitionContainer.offsetHeight;
-        transitionContainer.style.display = "";
+        Popcorn.toggleOn( transitionContainer );
       }
     },
 
     end: function( event, options ) {
       if ( options._transitionContainer ) {
-        options._transitionContainer.classList.remove( "on" );
-        options._transitionContainer.classList.add( "off" );
+        Popcorn.toggleOff( options._transitionContainer );
       }
     },
 

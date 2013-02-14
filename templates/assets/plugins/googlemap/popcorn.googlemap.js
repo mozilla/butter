@@ -412,13 +412,7 @@ var googleCallback;
             }
 
           } else if ( ranOnce ) {
-            outerdiv.classList.remove( "off" );
-            outerdiv.classList.add( "on" );
-
-            // Safari Redraw hack - #3066
-            outerdiv.style.display = "none";
-            redrawBug = outerdiv.offsetHeight;
-            outerdiv.style.display = "";
+            Popcorn.toggleOn( outerdiv );
           } else {
             setTimeout(function () {
               isMapSetup();
@@ -438,8 +432,7 @@ var googleCallback;
         // if the map exists hide it do not delete the map just in
         // case the user seeks back to time b/w start and end
         if ( map ) {
-          outerdiv.classList.remove( "on" );
-          outerdiv.classList.add( "off" );
+          Popcorn.toggleOff( outerdiv );
         }
       },
       _teardown: function ( options ) {
