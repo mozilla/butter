@@ -11,10 +11,11 @@ EditorHelper.addPlugin( "sequencer", function( trackEvent ) {
 
   if ( window.jQuery ) {
 
+    window.EditorHelper.draggable( trackEvent, _container, _target );
     window.EditorHelper.resizable( trackEvent, _container, _target, {
+      handlePositions: "e, se, s, sw, w, n, ne",
       minWidth: 40,
       minHeight: 40
     });
-    window.EditorHelper.draggable( trackEvent, _container, _target );
   }
 });
