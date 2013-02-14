@@ -46,6 +46,10 @@ define( [ "util/mediatypes", "editor/editor", ],
           });
         }
 
+        function checkboxCallback( trackEvent, updateOptions ) {
+          trackEvent.update( updateOptions );
+        }
+
         for ( key in pluginOptions ) {
           if ( pluginOptions.hasOwnProperty( key ) ) {
             option = pluginOptions[ key ];
@@ -56,6 +60,8 @@ define( [ "util/mediatypes", "editor/editor", ],
             else if ( option.elementType === "input" ) {
               if ( key === "source" ) {
                 _this.attachInputChangeHandler( option.element, option.trackEvent, key, sourceCallback );
+              } else if ( option.element.type === "checkbox" ) {
+                _this.attachCheckboxChangeHandler( option.element, option.trackEvent, key, checkboxCallback );
               } else {
                 _this.attachInputChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
               }

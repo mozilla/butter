@@ -78,6 +78,7 @@ define( [ "util/xhr", "util/uri" ],
           data.thumbnail = raw.artwork_url;
           data.duration = raw.duration / 1000;
           data.title = raw.title;
+          data.hidden = true;
           callback( data );
         });
       } else if ( type === "vimeo" ) {

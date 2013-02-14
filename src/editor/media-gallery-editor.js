@@ -97,7 +97,8 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
         start: _butter.currentTime,
         end: _butter.currentTime + data.duration,
         title: data.title,
-        duration: data.duration
+        duration: data.duration,
+        hidden: data.hidden
       });
       _butter.deselectAllTrackEvents();
       trackEvent.selected = true;
