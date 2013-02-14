@@ -215,7 +215,7 @@
         } else {
           if ( !options.mute ) {
             options.p.unmute();
-            options.p.volume( options.volume * _this.volume() );
+            options.p.volume( ( options.volume / 100 ) * _this.volume() );
           } else {
             options.p.mute();
           }
@@ -429,8 +429,9 @@
         volume: {
           elem: "input",
           type: "number",
+          units: "%",
           label: "Volume",
-          "default": 1
+          "default": 100
         },
         hidden: {
           elem: "input",
