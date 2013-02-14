@@ -130,18 +130,6 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     MediaUtils.getMetaData( data.source, onSuccess );
   }
 
-  function changeBaseDuration( e ) {
-    if (  e.keyCode === KeysUtils.ENTER ) {
-      e.preventDefault();
-      var newMedia = Time.toSeconds( _durationInput.value );
-      if ( /[0-9]{1,9}/.test( newMedia ) ) {
-        _media.url = "#t=," + newMedia;
-      } else {
-        _media.url = newMedia;
-      }
-    }
-  }
-
   function onFocus() {
     _oldValue = _urlInput.value;
   }
@@ -173,11 +161,31 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     _addBtn.addEventListener( "click", addMediaToGallery, false );
     _cancelBtn.addEventListener( "click", resetInput, false );
 
-    _durationInput.addEventListener( "keydown", changeBaseDuration, false );
+    _durationInput.addEventListener( "keydown", onDurationChange, false );
+    _durationInput.addEventListener( "blur", function( e ) {
+      e.preventDefault();
+      setBaseDuration( _durationInput.value );
+    }, false );
   }
 
-  function setBaseDuration() {
-    _durationInput.value = Time.toTimecode( _media.duration );
+  function onDurationChange( e ) {
+    if (  e.keyCode === KeysUtils.ENTER ) {
+      e.preventDefault();
+      setBaseDuration( _durationInput.value );
+    }
+  }
+
+  function setBaseDuration( duration ) {
+    _durationInput.value = Time.toTimecode( duration );
+    duration = Time.toSeconds( duration );
+    if ( duration === _media.duration ) {
+      return;
+    }
+    if ( /[0-9]{1,9}/.test( duration ) ) {
+      _media.url = "#t=," + duration;
+    } else {
+      _media.url = duration;
+    }
   }
 
 
@@ -192,7 +200,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       open: function() {
         _media = butter.currentMedia;
 
-        setBaseDuration();
+        setBaseDuration( _media.duration );
 
       },
       close: function() {}

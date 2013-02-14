@@ -401,7 +401,7 @@
             start = trackEventOptions.start;
             end = trackEventOptions.end;
 
-            // check if track event if out of bounds
+            // check if track event is out of bounds
             if ( end > _duration ) {
               if ( start > _duration ) {
                 // remove offending track event
