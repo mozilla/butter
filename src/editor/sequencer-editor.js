@@ -40,13 +40,18 @@ define( [ "util/mediatypes", "editor/editor", ],
           MediaUtils.getMetaData( updateOptions.source, function( data ) {
             updateOptions.duration = data.duration;
             updateOptions.denied = data.denied;
-            // TODO: probably do not need this line.
-            //updateOptions.end = trackEvent.popcornOptions.start + data.duration;
             trackEvent.update( updateOptions );
           });
         }
 
         function checkboxCallback( trackEvent, updateOptions ) {
+          trackEvent.update( updateOptions );
+        }
+
+        function fromCallback( trackEvent, updateOptions ) {
+          if ( updateOptions.from >= trackEvent.popcornOptions.duration ) {
+            updateOptions.from = trackEvent.popcornOptions.from
+          }
           trackEvent.update( updateOptions );
         }
 
@@ -60,6 +65,8 @@ define( [ "util/mediatypes", "editor/editor", ],
             else if ( option.elementType === "input" ) {
               if ( key === "source" ) {
                 _this.attachInputChangeHandler( option.element, option.trackEvent, key, sourceCallback );
+              } else if ( key === "from" ) {
+                _this.attachInputChangeHandler( option.element, option.trackEvent, key, fromCallback );
               } else if ( option.element.type === "checkbox" ) {
                 _this.attachCheckboxChangeHandler( option.element, option.trackEvent, key, checkboxCallback );
               } else {

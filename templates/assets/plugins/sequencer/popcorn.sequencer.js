@@ -66,7 +66,9 @@
       options.hideLoading = function() {
         document.querySelector( ".loading-message" ).classList.remove( "show-media" );
       };
-      options.from = options.from || 0;
+      if ( !options.from || options.from < options.duration ) {
+        options.from = 0;
+      }
 
       options.readyEvent = function() {
         options.failed = false;
@@ -237,7 +239,7 @@
       }
     },
     _update: function( options, updates ) {
-      if ( updates.from != null ) {
+      if ( updates.from != null && updates.from < options.duration ) {
         options.from = updates.from;
       }
       if ( updates.duration != null ) {
