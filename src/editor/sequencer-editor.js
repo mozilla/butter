@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/mediatypes", "editor/editor", ],
-  function( MediaUtils, Editor ) {
+define( [ "util/mediatypes", "editor/editor", "util/time" ],
+  function( MediaUtils, Editor, Time ) {
 
   Editor.register( "sequencer", "load!{{baseDir}}src/editor/default.html",
     function( rootElement, butter ) {
@@ -49,6 +49,7 @@ define( [ "util/mediatypes", "editor/editor", ],
         }
 
         function fromCallback( trackEvent, updateOptions ) {
+          updateOptions.from = Time.toSeconds( updateOptions.from );
           if ( updateOptions.from >= trackEvent.popcornOptions.duration ) {
             updateOptions.from = trackEvent.popcornOptions.from
           }
