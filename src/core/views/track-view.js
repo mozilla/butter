@@ -5,6 +5,8 @@
 define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
   function( Logger, EventManager, DragNDrop ) {
 
+  var TRACKEVENT_BORDER_OFFSET = 2;
+
   return function( id, track ) {
 
     var _id = id,
@@ -191,7 +193,9 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
         if ( !otherTrackEventView.dragging && trackEventView !== otherTrackEventView ) {
           rect2 = otherTrackEventView.element.getBoundingClientRect();
           // if a trackevent overlaps and it's not a ghost...
-          if ( !otherTrackEventView.isGhost && !( left > rect2.right || right < rect2.left ) ) {
+          if ( !otherTrackEventView.isGhost &&
+               !( left >= ( rect2.right - TRACKEVENT_BORDER_OFFSET ) ||
+                ( right <= rect2.left + TRACKEVENT_BORDER_OFFSET ) ) ) {
             return otherTrackEventView.trackEvent;
           }
         }

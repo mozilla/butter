@@ -144,11 +144,8 @@ define( [ "core/eventmanager", "./toggler",
      */
     function moveTrackEventLeft( trackEvent, amount ) {
       var currentPopcornOptions = trackEvent.popcornOptions,
-          currentMediaDuration = butter.currentMedia.duration,
           currentDuration = currentPopcornOptions.end - currentPopcornOptions.start,
           overlappingTrackEvent,
-          overlappingTrackEventElement,
-          proportionalStartTime,
           popcornOptions;
 
       if ( currentPopcornOptions.start > amount ) {
@@ -169,13 +166,8 @@ define( [ "core/eventmanager", "./toggler",
       overlappingTrackEvent = trackEvent.track.findOverlappingTrackEvent( popcornOptions.start, popcornOptions.end, trackEvent );
 
       if ( overlappingTrackEvent ) {
-        overlappingTrackEventElement = overlappingTrackEvent.view.element;
-
-        // Be pixel-precise when finding the start time, accounting for trackevent UI border spacing, etc.
-        proportionalStartTime = ( overlappingTrackEventElement.offsetLeft + overlappingTrackEventElement.clientWidth + overlappingTrackEventElement.clientLeft * 2 ) /
-          butter.timeline.getCurrentTrackWidth() * currentMediaDuration;
-        popcornOptions.start = proportionalStartTime;
-        popcornOptions.end = proportionalStartTime + currentDuration;
+        popcornOptions.start = overlappingTrackEvent.popcornOptions.end;
+        popcornOptions.end = popcornOptions.start + currentDuration;
       }
 
       trackEvent.update( popcornOptions );
@@ -222,8 +214,6 @@ define( [ "core/eventmanager", "./toggler",
           currentMediaDuration = butter.currentMedia.duration,
           currentDuration = currentPopcornOptions.end - currentPopcornOptions.start,
           overlappingTrackEvent,
-          overlappingTrackEventElement,
-          proportionalEndTime,
           popcornOptions;
 
       if ( currentPopcornOptions.end <= currentMediaDuration - amount ) {
@@ -244,13 +234,8 @@ define( [ "core/eventmanager", "./toggler",
       // If an overlapping trackevent was found, position this trackevent such that its right side is snug against the left side
       // of the overlapping trackevent.
       if ( overlappingTrackEvent ) {
-        overlappingTrackEventElement = overlappingTrackEvent.view.element;
-
-        // Be pixel-precise when finding the end time, accounting for trackevent UI border spacing, etc.
-        proportionalEndTime = ( overlappingTrackEventElement.offsetLeft - overlappingTrackEventElement.clientLeft * 2 ) /
-          butter.timeline.getCurrentTrackWidth() * currentMediaDuration;
-        popcornOptions.end = proportionalEndTime;
-        popcornOptions.start = proportionalEndTime - currentDuration;
+        popcornOptions.end = overlappingTrackEvent.popcornOptions.start;
+        popcornOptions.start = popcornOptions.end - currentDuration;
       }
       trackEvent.update( popcornOptions );
     }
@@ -265,7 +250,6 @@ define( [ "core/eventmanager", "./toggler",
     function growTrackEvent( trackEvent, amount ) {
       var currentPopcornOptions = trackEvent.popcornOptions,
           overlappingTrackEvent,
-          overlappingTrackEventElement,
           popcornOptions;
 
       if ( currentPopcornOptions.end <= butter.currentMedia.duration - amount ) {
@@ -284,11 +268,7 @@ define( [ "core/eventmanager", "./toggler",
       overlappingTrackEvent = trackEvent.track.findOverlappingTrackEvent( currentPopcornOptions.start, popcornOptions.end, trackEvent );
 
       if ( overlappingTrackEvent ) {
-        overlappingTrackEventElement = overlappingTrackEvent.view.element;
-
-        // Be pixel-precise when finding the start time, accounting for trackevent UI border spacing, etc.
-        popcornOptions.end = ( overlappingTrackEventElement.offsetLeft - overlappingTrackEventElement.clientLeft * 2 ) /
-          butter.timeline.getCurrentTrackWidth() * butter.currentMedia.duration;
+        popcornOptions.end = overlappingTrackEvent.popcornOptions.end;
       }
 
       trackEvent.update( popcornOptions );
