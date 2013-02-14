@@ -200,12 +200,27 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           track = e.data.track,
           start = e.data.start,
           end = e.data.end,
-          popcornOptions = e.data.popcornOptions,
+          popcornOptions,
           trackEvent;
 
+      if ( e.data.popcornOptions ) {
+        popcornOptions = {};
+        for ( var prop in e.data.popcornOptions ) {
+          if ( e.data.popcornOptions.hasOwnProperty( prop ) ) {
+            popcornOptions[ prop ] = e.data.popcornOptions[ prop ];
+          }
+        }
+      }
+
       if ( _media.ready ) {
+        if ( popcornOptions && popcornOptions.end ) {
+          end = popcornOptions.end + start;
+        }
         trackEvent = butter.generateSafeTrackEvent( type, start, end, track );
         if ( popcornOptions ) {
+          if ( popcornOptions.end ) {
+            popcornOptions.end = trackEvent.popcornOptions.end;
+          }
           trackEvent.update( popcornOptions );
         }
         butter.editor.editTrackEvent( trackEvent );

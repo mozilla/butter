@@ -234,7 +234,7 @@
         return options.title || options.source || "";
       };
 
-      if ( options.duration != null && options.end - ( options.start - ( +options.from ) ) > options.duration ) {
+      if ( options.duration > 0 && options.end - ( options.start - ( +options.from ) ) > options.duration ) {
         options.end = options.duration + ( options.start - ( +options.from ) );
       }
     },

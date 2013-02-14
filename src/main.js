@@ -216,12 +216,30 @@
       };
 
       function targetTrackEventRequested( e ) {
-        var trackEvent;
+        var trackEvent,
+            popcornOptions,
+            start = _currentMedia.currentTime,
+            end;
+
+        if ( e.data.popcornOptions ) {
+          popcornOptions = {};
+          for ( var prop in e.data.popcornOptions ) {
+            if ( e.data.popcornOptions.hasOwnProperty( prop ) ) {
+              popcornOptions[ prop ] = e.data.popcornOptions[ prop ];
+            }
+          }
+        }
 
         if ( _currentMedia && _currentMedia.ready ) {
-          trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime, null, e.data.position );
-          if ( e.data.popcornOptions ) {
-            trackEvent.update( e.data.popcornOptions );
+          if ( popcornOptions && popcornOptions.end ) {
+            end = popcornOptions.end + start;
+          }
+          trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), start, end, e.data.position );
+          if ( popcornOptions ) {
+            if ( popcornOptions.end ) {
+              popcornOptions.end = trackEvent.popcornOptions.end;
+            }
+            trackEvent.update( popcornOptions );
           }
           _this.editor.editTrackEvent( trackEvent );
         }
