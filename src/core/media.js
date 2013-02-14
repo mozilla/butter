@@ -548,7 +548,7 @@
           },
           set: function( time ){
             if( time ){
-              _duration = time;
+              _duration = +time;
               _logger.log( "duration changed to " + _duration );
               _this.fixTrackEventBounds();
               _this.dispatch( "mediadurationchanged", _this );

@@ -58,6 +58,24 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     _cancelBtn.classList.add( "hidden" );
   }
 
+  function setBaseDuration( duration ) {
+    if ( _durationInput.value !== duration ) {
+      _durationInput.value = Time.toTimecode( duration );
+    }
+    if ( duration !== _media.duration ) {
+      duration = Time.toSeconds( duration );
+    }
+    if ( duration === _media.duration ) {
+      return;
+    }
+    if ( /[0-9]{1,9}/.test( duration ) ) {
+      _media.url = "#t=," + duration;
+    } else {
+      _media.url = duration;
+    }
+  }
+
+
   function onSuccess( data ) {
     var el = _GALLERYITEM.cloneNode( true ),
         deleteBtn = el.querySelector( ".mg-delete-btn" ),
@@ -90,12 +108,17 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     }, 2000 );
 
     function addEvent() {
-      var trackEvent = _butter.generateSafeTrackEvent( "sequencer", _butter.currentTime, _butter.currentTime + data.duration );
+      var start = _butter.currentTime,
+          end = start + data.duration,
+          trackEvent = _butter.generateSafeTrackEvent( "sequencer", start, end );
+      if ( end > _media.duration ) {
+        setBaseDuration( end );
+      }
       trackEvent.update({
         source: data.source,
         denied: data.denied,
-        start: _butter.currentTime,
-        end: _butter.currentTime + data.duration,
+        start: start,
+        end: end,
         title: data.title,
         duration: data.duration,
         hidden: data.hidden
@@ -174,20 +197,6 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       setBaseDuration( _durationInput.value );
     }
   }
-
-  function setBaseDuration( duration ) {
-    _durationInput.value = Time.toTimecode( duration );
-    duration = Time.toSeconds( duration );
-    if ( duration === _media.duration ) {
-      return;
-    }
-    if ( /[0-9]{1,9}/.test( duration ) ) {
-      _media.url = "#t=," + duration;
-    } else {
-      _media.url = duration;
-    }
-  }
-
 
   Editor.register( "media-editor", null, function( rootElement, butter ) {
     rootElement = _parentElement;
