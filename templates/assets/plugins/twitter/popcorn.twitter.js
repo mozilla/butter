@@ -3,7 +3,7 @@
 (function ( Popcorn ) {
 
   var CACHED_RESULTS = {},
-      MAX_TWEETS = 150,
+      MAX_TWEETS = 100,
       TWEETS_TIMER = 4000,
       TRANSITION_MARGIN_TOP = "-4.8em",
       TRANSITION_TIMEOUT = 700;
@@ -151,12 +151,12 @@
             twitterName,
             imageLinkSource,
             i,
-            len;
+            len = tweets.length;
 
-        // If we made it here, the query was a new one so store it in our cache
-        CACHED_RESULTS[ query ] = tweets;
-
-        len = tweets.length;
+        if ( len ) {
+          // If we made it here, the query was a new one so store it in our cache
+          CACHED_RESULTS[ query ] = tweets;
+        }
 
         for ( i = 0; i < len; i++ ) {
           currTweet = tweets[ i ];
@@ -218,23 +218,13 @@
       function twitterCallback( e ) {
         var results = e.results || e,
             k,
-            rLen;
+            rLen = results.length;
 
-        for ( k = 0, rLen = results.length; k < rLen && allTweets.length < options.numberOfTweets; k++ ) {
+        for ( k = 0; k < rLen && allTweets.length < numberOfTweets; k++ ) {
           allTweets.push( results[ k ] );
         }
 
-        // Search API doesn't simply return count of tweets. It returns up to 100
-        // and then provides a link to query the next "Page" of the same results
-        if ( allTweets.length < options.numberOfTweets && options.search && results.length && e.next_page ) {
-          Popcorn.xhr({
-            url: requestString.substring( 0, requestString.indexOf( "?" ) ) + e.next_page,
-            dataType: "jsonp",
-            success: twitterCallback
-          });
-        } else {
-          buildTheTweets( allTweets );
-        }
+        buildTheTweets( allTweets );
       }
 
       target.appendChild( options._container );
@@ -256,7 +246,7 @@
               } else {
                 // Append various query options here
                 requestString += options.username +
-                               "&count=" + options.numberOfTweets + "&include_rts=true";
+                               "&count=" + numberOfTweets + "&include_rts=true";
 
                 Popcorn.xhr( { url: requestString, dataType: "jsonp", success: twitterCallback } );
               }
@@ -265,7 +255,7 @@
           requestString = "//search.twitter.com/search.json?q=";
 
           requestString += escape( options.search ) +
-                         "&result_type=" + options.searchType;
+                         "&result_type=" + options.searchType + "&rpp=" + numberOfTweets;
 
           Popcorn.xhr( { url: requestString, dataType: "jsonp", success: twitterCallback } );
 
