@@ -7,16 +7,6 @@
   // Where to find the module names listed below.
   baseUrl: '../src',
 
-  paths: {
-    'text': '../external/require/text'
-  },
-
-  // Use has branch trimming in the build to remove the document.write
-  // code in src/butter.js after a minification is done.
-  has: {
-    'source-config': false
-  },
-
   // Target the AMD loader shim as the main module to optimize,
   // so it shows up first in the built file,
   // since the butter modules use the define/require APIs that the almond
@@ -31,12 +21,11 @@
   // have explicit dependencies for them, but uses them on demand. Also,
   // butter.js references butter-src in a document.write string, so it will
   // not be found by the AST analysis done in the optimizer.
-  include: [
-            '../external/ua-parser/ua-parser',
-            '../external/jsSHA/sha1',
-            'util/shims',
-            'main'
-           ],
+  include: [ 'butter' ],
+
+  // Have the analyzer include the requirejs config from that particular file
+  // Must be kept in sync with baseUrl + include
+  mainConfigFile: '../src/butter.js',
 
   // Wraps Butter in a closure and adds license information
   wrap: {

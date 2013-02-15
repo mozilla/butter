@@ -1,7 +1,11 @@
+/*! This Source Code Form is subject to the terms of the MIT license
+ * If a copy of the MIT license was not distributed with this file, you can
+ * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
+
 function init( window, document ) {
   var require = requirejs.config({
-    context: "webmakernav",
     baseUrl: "/src",
+    deps: [ "util/shims" ],
     paths: {
       text: "../external/require/text"
     }
