@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/mediatypes", "editor/editor", "util/time" ],
-  function( MediaUtils, Editor, Time ) {
+define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
+  function( MediaUtils, Editor, Time, URI ) {
 
   Editor.register( "sequencer", "load!{{baseDir}}src/editor/default.html",
     function( rootElement, butter ) {
@@ -29,6 +29,11 @@ define( [ "util/mediatypes", "editor/editor", "util/time" ],
           pluginOptions = {};
 
       function callback( elementType, element, trackEvent, name ) {
+        if ( name === "source" ) {
+          element.value = URI.stripUnique( trackEvent.popcornOptions.source[ 0 ] ).toString();
+        } else if ( name === "fallback" ) {
+          element.value = URI.stripUnique( trackEvent.popcornOptions.fallback[ 0 ] ).toString();
+        }
         pluginOptions[ name ] = { element: element, trackEvent: trackEvent, elementType: elementType };
       }
 
@@ -37,11 +42,21 @@ define( [ "util/mediatypes", "editor/editor", "util/time" ],
             option;
 
         function sourceCallback( trackEvent, updateOptions, prop ) {
+          var element = pluginOptions[ "source" ].element;
+          updateOptions.source = URI.makeUnique( updateOptions.source ).toString();
           MediaUtils.getMetaData( updateOptions.source, function( data ) {
             updateOptions.duration = data.duration;
             updateOptions.denied = data.denied;
             trackEvent.update( updateOptions );
           });
+          element.value = URI.stripUnique( updateOptions.source ).toString();
+        }
+
+        function fallbackCallback( trackEvent, updateOptions, prop ) {
+          var element = pluginOptions[ "fallback" ].element;
+          updateOptions.fallback = URI.makeUnique( updateOptions.fallback ).toString();
+          trackEvent.update( updateOptions );
+          element.value = URI.stripUnique( updateOptions.fallback ).toString();
         }
 
         function checkboxCallback( trackEvent, updateOptions ) {
@@ -66,6 +81,8 @@ define( [ "util/mediatypes", "editor/editor", "util/time" ],
             else if ( option.elementType === "input" ) {
               if ( key === "source" ) {
                 _this.attachInputChangeHandler( option.element, option.trackEvent, key, sourceCallback );
+              } else if ( key === "fallback" ) {
+                _this.attachInputChangeHandler( option.element, option.trackEvent, key, fallbackCallback );
               } else if ( key === "from" ) {
                 _this.attachInputChangeHandler( option.element, option.trackEvent, key, fromCallback );
               } else if ( option.element.type === "checkbox" ) {
@@ -92,6 +109,12 @@ define( [ "util/mediatypes", "editor/editor", "util/time" ],
 
       attachHandlers();
       _this.updatePropertiesFromManifest( trackEvent );
+      if ( trackEvent.popcornOptions.source ) {
+        pluginOptions.source.element.value = URI.stripUnique( trackEvent.popcornOptions.source[ 0 ] ).toString();
+      }
+      if ( trackEvent.popcornOptions.fallback ) {
+        pluginOptions.fallback.element.value = URI.stripUnique( trackEvent.popcornOptions.fallback[ 0 ] ).toString();
+      }
       _this.setTrackEventUpdateErrorCallback( _this.setErrorState );
     }
 
@@ -109,6 +132,12 @@ define( [ "util/mediatypes", "editor/editor", "util/time" ],
       anchorClickPrevention( anchorContainer );
 
       _this.updatePropertiesFromManifest( _trackEvent );
+      if ( _trackEvent.popcornOptions.source ) {
+        pluginOptions.source.element.value = URI.stripUnique( _trackEvent.popcornOptions.source[ 0 ] ).toString();
+      }
+      if ( _trackEvent.popcornOptions.fallback ) {
+        pluginOptions.fallback.element.value = URI.stripUnique( _trackEvent.popcornOptions.fallback[ 0 ] ).toString();
+      }
       _this.setErrorState( false );
     }
 

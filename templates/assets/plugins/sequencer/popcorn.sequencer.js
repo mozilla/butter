@@ -83,9 +83,6 @@
       options.sourceToArray = function() {
         // If our src is not an array, create an array of one.
         options.source = typeof options.source === "string" ? [ options.source ] : options.source;
-        for ( var i = 0; i < options.source.length; i++ ) {
-          options.source[ i ] = options.source[ i ].replace( /^https\:\/\/soundcloud\.com/, "http://soundcloud.com" );
-        }
       };
 
       options.fail = function() {
@@ -155,6 +152,12 @@
       options.setupContainer();
       if ( options.source ) {
         options.sourceToArray();
+        if ( options.fallback ) {
+          if( !Array.isArray( options.fallback ) ) {
+            options.fallback = [ options.fallback ];
+          }
+          options.source = options.source.concat( options.fallback );
+        }
         options.addSource();
       }
 
@@ -270,8 +273,17 @@
           options._container.style.zIndex = 0;
         }
       }
+      if ( updates.fallback ) {
+        options.fallback = updates.fallback;
+      }
       if ( updates.source ) {
         options.sourceToArray();
+        if ( options.fallback ) {
+          if( !Array.isArray( options.fallback ) ) {
+            options.fallback = [ options.fallback ];
+          }
+          options.source = options.source.concat( options.fallback );
+        }
         if ( updates.source.toString() !== options.source.toString() ) {
           options.ready = false;
           options.playWhenReady = false;
@@ -381,6 +393,11 @@
           elem: "input",
           type: "url",
           label: "Source URL"
+        },
+        fallback: {
+          elem: "input",
+          type: "url",
+          label: "Fallback URL (only applies to exported projects)"
         },
         title: {
           elem: "input",

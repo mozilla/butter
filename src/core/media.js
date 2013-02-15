@@ -574,7 +574,9 @@
           },
           set: function( importData ){
             var newTrack,
-                url;
+                url,
+                fallbacks = [],
+                source = [];
             if( importData.name ) {
               _name = importData.name;
             }
@@ -603,6 +605,11 @@
                   }
                   // If source is a single array and of type null player, don't bother making a sequence.
                   if ( url.length > 1 || !( /#t=\d*,?\d+?/ ).test( url[ 0 ] ) ) {
+                    // grab first source as main source.
+                    source.push( URI.makeUnique( url.shift() ).toString() );
+                    for ( var i = 0; i < url.length; i++ ) {
+                      fallbacks.push( URI.makeUnique( url[ i ] ).toString() );
+                    }
                     newTrack = new Track();
                     _this.addTrack( newTrack );
                     newTrack.addTrackEvent({
@@ -610,7 +617,9 @@
                       popcornOptions: {
                         start: 0,
                         end: _duration,
-                        source: importData.url,
+                        source: source,
+                        title: URI.stripUnique( source[ 0 ] ).path,
+                        fallback: fallbacks,
                         duration: _duration
                       }
                     });
