@@ -93,6 +93,9 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
       attachHandlers();
       _this.updatePropertiesFromManifest( trackEvent );
       if ( trackEvent.popcornOptions.source ) {
+        if( !Array.isArray( trackEvent.popcornOptions.source ) ) {
+          trackEvent.popcornOptions.source = [ trackEvent.popcornOptions.source ];
+        }
         pluginOptions.source.element.value = URI.stripUnique( trackEvent.popcornOptions.source[ 0 ] ).toString();
       }
       if ( trackEvent.popcornOptions.fallback ) {
@@ -116,6 +119,9 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
 
       _this.updatePropertiesFromManifest( _trackEvent );
       if ( _trackEvent.popcornOptions.source ) {
+        if( !Array.isArray( _trackEvent.popcornOptions.source ) ) {
+          _trackEvent.popcornOptions.source = [ _trackEvent.popcornOptions.source ];
+        }
         pluginOptions.source.element.value = URI.stripUnique( _trackEvent.popcornOptions.source[ 0 ] ).toString();
       }
       if ( _trackEvent.popcornOptions.fallback ) {

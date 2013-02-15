@@ -282,6 +282,9 @@
           if( !Array.isArray( options.fallback ) ) {
             options.fallback = [ options.fallback ];
           }
+          if( !Array.isArray( updates.source ) ) {
+            updates.source = [ updates.source ];
+          }
           options.source = options.source.concat( options.fallback );
         }
         if ( updates.source.toString() !== options.source.toString() ) {
