@@ -14,7 +14,10 @@ EditorHelper.addPlugin( "text", function( trackEvent ) {
         minWidth: 10,
         handlePositions: "e,w"
       });
+    } else {
+      EditorHelper.removeUIElements( _container );
     }
+
     EditorHelper.contentEditable( trackEvent, _container.querySelectorAll( "span" ) );
   }
 });
