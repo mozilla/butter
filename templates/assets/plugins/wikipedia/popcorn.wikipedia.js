@@ -1,6 +1,7 @@
 (function ( Popcorn ) {
 
-  var allWikiLangLinks, allWikiLangNames;
+  var allWikiLangLinks, allWikiLangNames,
+      cachedArticles = [];
 
   // shortcut
   function create( type ) {
@@ -52,22 +53,118 @@
     return true;
   }
 
+  function setupWiki( options ) {
+    // declare needed variables
+    // get a guid to use for the global wikicallback function
+    var _title,
+        _titleDiv,
+        _titleTextArea,
+        _mainContentDiv,
+        _contentArea,
+        _toWikipedia,
+        _inner,
+        _href,
+        _query,
+        _guid = Popcorn.guid( "wikiCallback" ),
+        _this = this;
+
+    if ( options._container && options._inner ) {
+      options._container.removeChild( options._inner );
+    }
+
+    options._inner = _inner = create( "div" );
+    _inner.classList.add( "wikipedia-inner-container" );
+
+    _titleDiv = create( "div" );
+    _titleDiv.classList.add( "wikipedia-title" );
+
+    _titleTextArea = create( "div" );
+    _titleTextArea.classList.add( "wikipedia-title-text" );
+    _titleTextArea.classList.add( "wikipedia-ellipsis" );
+
+    _titleDiv.appendChild( _titleTextArea );
+
+    _mainContentDiv = create( "div" );
+    _mainContentDiv.classList.add( "wikipedia-main-content" );
+
+    _contentArea = create( "div" );
+    _contentArea.classList.add( "wikipedia-content" );
+
+    _mainContentDiv.appendChild( _contentArea );
+
+    _toWikipedia = create( "a" );
+    _toWikipedia.classList.add( "wikipedia-to-wiki" );
+
+    _inner.appendChild( _titleDiv );
+    _inner.appendChild( _mainContentDiv );
+    _inner.appendChild( _toWikipedia );
+
+    options._container.appendChild( _inner );
+    options._target.appendChild( options._container );
+
+    if ( !options.lang ) {
+      options.lang = "en";
+    }
+
+    function buildArticle( data ) {
+      var childIndex = 1,
+          responseFragment = getFragment( "<div>" + data.parse.text + "</div>" ),
+          element = responseFragment.querySelector( "div > p:nth-of-type(" + childIndex + ")" ),
+          mainText = "";
+
+      _titleTextArea.appendChild( getFragment( "<a href=\"" + options._link + "\" target=\"_blank\">" + sanitize( data.parse.title ) + "</a>" ) );
+      _toWikipedia.href = options._link;
+      _toWikipedia.onclick = function() {
+        _this.media.pause();
+      };
+      _toWikipedia.setAttribute( "target", "_blank" );
+
+      while ( !areValidElements( element ) ) {
+        element = responseFragment.querySelector( "div > p:nth-of-type(" + ( ++childIndex ) + ")" );
+      }
+
+      while ( element && element.nodeName === "P" ) {
+        mainText += element.textContent + "<br />";
+        element = element.nextElementSibling;
+      }
+
+      _contentArea.innerHTML = mainText;
+    }
+
+    window[ _guid ] = function ( data ) {
+
+      cachedArticles[ _query ] = data;
+
+      if ( data.error ) {
+        _titleTextArea.innerHTML = "Article Not Found";
+        _contentArea.innerHTML = data.error.info;
+        return;
+      }
+
+      buildArticle( data );
+    };
+
+    if ( options.src ) {
+
+      _query = options.src + options.lang;
+      _href = "//" + window.escape( options.lang ) + ".wikipedia.org/w/";
+      _title = options.src.slice( options.src.lastIndexOf( "/" ) + 1 );
+      options._link = "//" + window.escape( options.lang + ".wikipedia.org/wiki/" + _title );
+
+      if ( !cachedArticles[ _query ] ) {
+        // gets the mobile format, so that we don't load unwanted images when the respose is turned into a documentFragment
+        Popcorn.getScript( _href + "api.php?action=parse&prop=text&redirects&page=" +
+          window.escape( _title ) + "&noimages=1&mobileformat=html&format=json&callback=" + _guid );
+      } else {
+        buildArticle( cachedArticles[ _query ] );
+      }
+    }
+  }
+
   var WikipediaDefinition = {
 
     _setup : function( options ) {
-      // declare needed variables
-      // get a guid to use for the global wikicallback function
-      var _title,
-          _titleDiv,
-          _titleTextArea,
-          _mainContentDiv,
-          _contentArea,
-          _toWikipedia,
-          _inner,
-          _outer,
-          _href,
-          _guid = Popcorn.guid( "wikiCallback" ),
-          _this = this;
+      var _outer;
 
       options._target = Popcorn.dom.find( options.target );
 
@@ -77,6 +174,8 @@
 
       options._container = _outer = create( "div" );
       _outer.classList.add( "wikipedia-outer-container" );
+      _outer.classList.add( options.transition );
+      _outer.classList.add( "off" );
 
       _outer.style.width = validateDimension( options.width, "100" ) + "%";
       _outer.style.height = validateDimension( options.height, "100" ) + "%";
@@ -84,85 +183,7 @@
       _outer.style.left = validateDimension( options.left, "0" ) + "%";
       _outer.style.zIndex = +options.zindex;
 
-      _inner = create( "div" );
-      _inner.classList.add( "wikipedia-inner-container" );
-
-      _titleDiv = create( "div" );
-      _titleDiv.classList.add( "wikipedia-title" );
-
-      _titleTextArea = create( "div" );
-      _titleTextArea.classList.add( "wikipedia-title-text" );
-      _titleTextArea.classList.add( "wikipedia-ellipsis" );
-
-      _titleDiv.appendChild( _titleTextArea );
-
-      _mainContentDiv = create( "div" );
-      _mainContentDiv.classList.add( "wikipedia-main-content" );
-
-      _contentArea = create( "div" );
-      _contentArea.classList.add( "wikipedia-content" );
-
-      _mainContentDiv.appendChild( _contentArea );
-
-      _toWikipedia = create( "a" );
-      _toWikipedia.classList.add( "wikipedia-to-wiki" );
-
-      _inner.appendChild( _titleDiv );
-      _inner.appendChild( _mainContentDiv );
-      _inner.appendChild( _toWikipedia );
-
-      _outer.classList.add( options.transition );
-      _outer.classList.add( "off" );
-
-      _outer.appendChild( _inner );
-      options._target.appendChild( _outer );
-
-      if ( !options.lang ) {
-        options.lang = "en";
-      }
-
-      window[ _guid ] = function ( data ) {
-
-        if ( data.error ) {
-          _titleTextArea.innerHTML = "Article Not Found";
-          _contentArea.innerHTML = data.error.info;
-          return;
-        }
-
-        var childIndex = 1,
-            responseFragment = getFragment( "<div>" + data.parse.text + "</div>" ),
-            element = responseFragment.querySelector( "div > p:nth-of-type(" + childIndex + ")" ),
-            mainText = "";
-
-        _titleTextArea.appendChild( getFragment( "<a href=\"" + options._link + "\" target=\"_blank\">" + sanitize( data.parse.title ) + "</a>" ) );
-        _toWikipedia.href = options._link;
-        _toWikipedia.onclick = function() {
-          _this.media.pause();
-        };
-        _toWikipedia.setAttribute( "target", "_blank" );
-
-        while ( !areValidElements( element ) ) {
-          element = responseFragment.querySelector( "div > p:nth-of-type(" + ( ++childIndex ) + ")" );
-        }
-
-        while ( element && element.nodeName === "P" ) {
-          mainText += element.textContent + "<br />";
-          element = element.nextElementSibling;
-        }
-
-        _contentArea.innerHTML = mainText;
-      };
-
-      if ( options.src ) {
-
-        _href = "//" + window.escape( options.lang ) + ".wikipedia.org/w/";
-        _title = options.src.slice( options.src.lastIndexOf( "/" ) + 1 );
-        options._link = "//" + window.escape( options.lang + ".wikipedia.org/wiki/" + _title );
-
-        // gets the mobile format, so that we don't load unwanted images when the respose is turned into a documentFragment
-        Popcorn.getScript( _href + "api.php?action=parse&prop=text&redirects&page=" +
-          window.escape( _title ) + "&noimages=1&mobileformat=html&format=json&callback=" + _guid );
-      }
+      setupWiki( options );
 
       options.toString = function() {
         return options.src || options._natives.manifest.options.src[ "default" ];
@@ -195,6 +216,46 @@
       if ( options._target && options._container ) {
         options._target.removeChild( options._container );
       }
+    },
+
+    _update: function( trackEvent, options ) {
+
+      if ( options.transition && options.transition !== trackEvent.transition ) {
+        trackEvent._container.classList.remove( trackEvent.transition );
+        trackEvent.transition = options.transition;
+        trackEvent._container.classList.add( trackEvent.transition );
+      }
+
+      if ( options.src && options.src !== trackEvent.src ) {
+        trackEvent.src = options.src;
+        setupWiki( trackEvent );
+      }
+
+      if ( options.lang && options.lang !== trackEvent.lang ) {
+        trackEvent.lang = options.lang;
+        setupWiki( trackEvent );
+      }
+
+      if ( options.top && options.top !== trackEvent.top ) {
+        trackEvent.top = options.top;
+        trackEvent._container.style.top = trackEvent.top + "%";
+      }
+
+      if ( options.left && options.left !== trackEvent.left ) {
+        trackEvent.left = options.left;
+        trackEvent._container.style.left = trackEvent.left + "%";
+      }
+
+      if ( options.width && options.width !== trackEvent.width ) {
+        trackEvent.width = options.width;
+        trackEvent._container.style.width = trackEvent.width + "%";
+      }
+
+      if ( options.height && options.height !== trackEvent.height ) {
+        trackEvent.height = options.height;
+        trackEvent._container.style.height = trackEvent.height + "%";
+      }
+
     }
   };
 
