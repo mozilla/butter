@@ -193,7 +193,7 @@
           options.p.play();
         };
         options.p.on( "seeked", seekedEvent);
-        // assume the is fast, but if not, puse the main video and wait.
+        // assume the seek is fast, but if not, pause the main video and wait.
         seekTimeout = setTimeout( function() {
           _this.pause();
         }, WAIT_FOR_SEEK_BEFORE_PAUSE );
