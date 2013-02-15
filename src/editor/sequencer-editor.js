@@ -29,11 +29,6 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
           pluginOptions = {};
 
       function callback( elementType, element, trackEvent, name ) {
-        if ( name === "source" ) {
-          element.value = URI.stripUnique( trackEvent.popcornOptions.source[ 0 ] ).toString();
-        } else if ( name === "fallback" ) {
-          element.value = URI.stripUnique( trackEvent.popcornOptions.fallback[ 0 ] ).toString();
-        }
         pluginOptions[ name ] = { element: element, trackEvent: trackEvent, elementType: elementType };
       }
 
@@ -42,21 +37,11 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
             option;
 
         function sourceCallback( trackEvent, updateOptions, prop ) {
-          var element = pluginOptions[ "source" ].element;
-          updateOptions.source = URI.makeUnique( updateOptions.source ).toString();
           MediaUtils.getMetaData( updateOptions.source, function( data ) {
             updateOptions.duration = data.duration;
             updateOptions.denied = data.denied;
             trackEvent.update( updateOptions );
           });
-          element.value = URI.stripUnique( updateOptions.source ).toString();
-        }
-
-        function fallbackCallback( trackEvent, updateOptions, prop ) {
-          var element = pluginOptions[ "fallback" ].element;
-          updateOptions.fallback = URI.makeUnique( updateOptions.fallback ).toString();
-          trackEvent.update( updateOptions );
-          element.value = URI.stripUnique( updateOptions.fallback ).toString();
         }
 
         function checkboxCallback( trackEvent, updateOptions ) {
@@ -81,8 +66,6 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
             else if ( option.elementType === "input" ) {
               if ( key === "source" ) {
                 _this.attachInputChangeHandler( option.element, option.trackEvent, key, sourceCallback );
-              } else if ( key === "fallback" ) {
-                _this.attachInputChangeHandler( option.element, option.trackEvent, key, fallbackCallback );
               } else if ( key === "from" ) {
                 _this.attachInputChangeHandler( option.element, option.trackEvent, key, fromCallback );
               } else if ( option.element.type === "checkbox" ) {
