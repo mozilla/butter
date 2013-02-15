@@ -36,6 +36,8 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         _header,
         _toggler,
         _this = this,
+        _trackEventTitle = _editorAreaDOMRoot.querySelector( "#trackevent-title" ),
+        _trackEventTitleArea = _editorAreaDOMRoot.querySelector( ".trackevent-title" ),
         _createdEditors = {},
         _logger = new Logger( butter.id );
 
@@ -44,6 +46,30 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     ButterNamespace.Editor = Editor;
 
     _header = new Header( _editorAreaDOMRoot, _this );
+
+    _trackEventTitle.addEventListener( "keypress", function( e ) {
+      if ( e.keyCode === 13 ) {
+        if ( _currentEditor.getTrackEvent ) {
+          var trackEvent = _currentEditor.getTrackEvent(),
+              val = e.target.value;
+
+          if ( val !== "" ) {
+            trackEvent.view.elementText = val;
+          }
+        }
+      }
+    }, false );
+
+    _trackEventTitle.addEventListener( "blur", function( e ) {
+      if ( _currentEditor.getTrackEvent ) {
+        var trackEvent = _currentEditor.getTrackEvent(),
+            val = e.target.value;
+
+        if ( val !== "" ) {
+          trackEvent.view.elementText = val;
+        }
+      }
+    }, false );
 
     function setupHeader() {
       if ( butter.project.isSaved ) {
@@ -92,6 +118,14 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         _currentEditor = _createdEditors[ editorName ];
       } else {
         _currentEditor = _createdEditors[ editorName ] = Editor.create( editorName, butter );
+      }
+
+      if ( _currentEditor.getTrackEvent ) {
+        _editorContentArea.classList.add( "on" );
+        _trackEventTitleArea.classList.add( "on" );
+      } else {
+        _editorContentArea.classList.remove( "on" );
+        _trackEventTitleArea.classList.remove( "on" );
       }
 
       _currentEditor.open( _editorContentArea, options.openData );
