@@ -19,11 +19,11 @@ EditorHelper.addPlugin( "image", function( trackEvent ) {
       window.EditorHelper.droppable( trackEvent, _container );
     }
 
+    window.EditorHelper.draggable( trackEvent, _container, _target );
     window.EditorHelper.resizable( trackEvent, _container, _target, {
       minWidth: 5,
       minHeight: 5,
-      handlePositions: "e,s,se"
+      handlePositions: "e,s,se,n,w"
     });
-    window.EditorHelper.draggable( trackEvent, _container, _target );
   }
 });
