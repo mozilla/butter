@@ -242,11 +242,11 @@
       }
     },
     _update: function( options, updates ) {
-      if ( updates.from != null && updates.from < options.duration ) {
-        options.from = updates.from;
-      }
       if ( updates.duration != null ) {
         options.duration = updates.duration;
+      }
+      if ( updates.from != null && updates.from < options.duration ) {
+        options.from = updates.from;
       }
       if ( options.end - ( options.start - ( +options.from ) ) > options.duration ) {
         options.end = options.duration + ( options.start - ( +options.from ) );
