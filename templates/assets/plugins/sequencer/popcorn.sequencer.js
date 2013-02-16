@@ -66,7 +66,7 @@
       options.hideLoading = function() {
         document.querySelector( ".loading-message" ).classList.remove( "show-media" );
       };
-      if ( !options.from || options.from < options.duration ) {
+      if ( !options.from || options.from > options.duration ) {
         options.from = 0;
       }
 
