@@ -172,6 +172,9 @@
             // We've managed to seek, clear any pause fallbacks.
             clearTimeout( seekTimeout );
             options.p.off( "play", playedEvent );
+            // video element can be clicked on. Keep them in sync with the main timeline.
+            options.p.on( "play", options._seqPlayEvent );
+            options.p.on( "pause", options._seqPauseEvent );
             _this.off( "play", options._surpressPlayEvent );
             _this.on( "play", options._playEvent );
             _this.on( "pause", options._pauseEvent );
@@ -212,6 +215,10 @@
         options.p.play();
       };
 
+      options._seqPlayEvent = function() {
+        _this.play();
+      };
+
       options._volumeEvent = function() {
         if ( _this.muted() ) {
           options.p.mute();
@@ -227,6 +234,10 @@
 
       options._pauseEvent = function() {
         options.p.pause();
+      };
+
+      options._seqPauseEvent = function() {
+        _this.pause();
       };
 
       options._seekedEvent = function() {
@@ -366,6 +377,10 @@
       options.active = false;
       options.playWhenReady = false;
       if ( options.ready ) {
+        // video element can be clicked on. Keep them in sync with the main timeline.
+        // We need to also clear these events.
+        options.p.off( "play", options._seqPlayEvent );
+        options.p.off( "pause", options._seqPauseEvent );
         if ( !options.p.paused() ) {
           options.p.pause();
         }
