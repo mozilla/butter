@@ -166,6 +166,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
 
       if ( _currentEditor && _currentEditor.getTrackEvent ) {
         if ( trackEvent.id === _currentEditor.getTrackEvent().id ) {
+          _currentEditor.showPluginPreview( trackEvent );
           return _currentEditor;
         }
       }
