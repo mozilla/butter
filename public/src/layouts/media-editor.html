@@ -21,8 +21,23 @@
       </div>
     </fieldset>
 
+    <fieldset class="yt-upload-panel">
+      <div class="record-webcam">
+        <a class="butter-btn btn-light">
+          <span class="icon icon-facetime-video"></span>
+          Record From Webcam
+        </a>
+        <a class="close-btn hidden">
+          <span class="icon icon-only icon-x"></span>
+        </a>
+        <div id="youtube-upload"></div>
+        <p class="youtube-upload-error hidden">There was an error uploading your video to YouTube. Please try again.</p>
+        <p class="youtube-upload-progress hidden">Video successfully uploaded. It will be added to the gallery once YouTube finishes processing it... <img src="/resources/icons/spinny.gif" alt="Loading spinner"></p>
+      </div>
+    </fieldset>
+
     <div class="media-gallery">
-      <div class="media-gallery-heading">
+      <div class="media-gallery-heading editor-inner">
         Media Gallery
       </div>
       <div class="media-gallery-scroll-container scrollbar-container">
@@ -34,16 +49,16 @@
       <label>Duration</label>
       <input type="text" class="media-base-duration" value="">
     </fieldset>
-
   </div>
 </div>
 
 <!-- This is added to media-gallery for each new media item -->
-<li class="media-gallery-item">
+<li class="media-gallery-item editor-inner">
   <div class="mg-thumbnail"></div>
   <div class="mg-meta-data">
     <div class="mg-title"></div>
     <div class="mg-type"></div>
+    <div class="mg-url"></div>
     <div class="mg-duration"></div>
     <div class="mg-error"></div>
   </div>
