@@ -187,6 +187,10 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
         trackEvent.update( popcornOptions );
         _this.ghostManager.removeGhostsAfterDrop( trackEvent, oldTrack );
       }
+
+      if ( trackEvent.selected ) {
+        butter.editor.editTrackEvent( trackEvent );
+      }
     }
 
     function onTrackEventDropped( e ) {
