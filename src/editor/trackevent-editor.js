@@ -419,6 +419,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
 
       // ignoreBlur cuts down on unnecessary calls to a track event's update method
       var ignoreBlur,
+          ignoreChange,
           tooltipName,
           tooltip,
           manifestType,
@@ -475,6 +476,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
             updateOptions[ propertyName ] = val;
             updateTrackEvent( trackEvent, callback, updateOptions );
             ignoreBlur = true;
+            ignoreChange = true;
             element.blur();
           }
         }
@@ -482,13 +484,21 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
 
       if ( element.type === "number" || isNumber ) {
         element.addEventListener( "change", function() {
+
           var updateOptions = {},
               val = element.value;
 
-          val = validateNumber( val );
+          if ( ignoreChange ) {
+            ignoreChange = false;
+          } else {
 
-          updateOptions[ propertyName ] = val;
-          updateTrackEvent( trackEvent, callback, updateOptions );
+            ignoreBlur = true;
+
+            val = validateNumber( val );
+
+            updateOptions[ propertyName ] = val;
+            updateTrackEvent( trackEvent, callback, updateOptions );
+          }
         }, false );
       }
 
