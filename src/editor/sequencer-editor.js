@@ -12,6 +12,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
     var _rootElement = rootElement,
         _trackEvent,
         _butter,
+        _pluginOptions,
         _popcornOptions;
 
     /**
@@ -25,11 +26,11 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
       _trackEvent = trackEvent;
       _popcornOptions = _trackEvent.popcornOptions;
 
-      var basicContainer = _rootElement.querySelector( ".editor-options" ),
-          pluginOptions = {};
+      var basicContainer = _rootElement.querySelector( ".editor-options" );
+      _pluginOptions = {};
 
       function callback( elementType, element, trackEvent, name ) {
-        pluginOptions[ name ] = { element: element, trackEvent: trackEvent, elementType: elementType };
+        _pluginOptions[ name ] = { element: element, trackEvent: trackEvent, elementType: elementType };
       }
 
       function attachHandlers() {
@@ -56,9 +57,9 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
           trackEvent.update( updateOptions );
         }
 
-        for ( key in pluginOptions ) {
-          if ( pluginOptions.hasOwnProperty( key ) ) {
-            option = pluginOptions[ key ];
+        for ( key in _pluginOptions ) {
+          if ( _pluginOptions.hasOwnProperty( key ) ) {
+            option = _pluginOptions[ key ];
 
             if ( option.elementType === "select" ) {
               _this.attachSelectChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
@@ -96,10 +97,10 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
         if( !Array.isArray( trackEvent.popcornOptions.source ) ) {
           trackEvent.popcornOptions.source = [ trackEvent.popcornOptions.source ];
         }
-        pluginOptions.source.element.value = URI.stripUnique( trackEvent.popcornOptions.source[ 0 ] ).toString();
+        _pluginOptions.source.element.value = URI.stripUnique( trackEvent.popcornOptions.source[ 0 ] ).toString();
       }
       if ( trackEvent.popcornOptions.fallback ) {
-        pluginOptions.fallback.element.value = URI.stripUnique( trackEvent.popcornOptions.fallback[ 0 ] ).toString();
+        _pluginOptions.fallback.element.value = URI.stripUnique( trackEvent.popcornOptions.fallback[ 0 ] ).toString();
       }
       _this.setTrackEventUpdateErrorCallback( _this.setErrorState );
     }
@@ -122,10 +123,10 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
         if( !Array.isArray( _trackEvent.popcornOptions.source ) ) {
           _trackEvent.popcornOptions.source = [ _trackEvent.popcornOptions.source ];
         }
-        pluginOptions.source.element.value = URI.stripUnique( _trackEvent.popcornOptions.source[ 0 ] ).toString();
+        _pluginOptions.source.element.value = URI.stripUnique( _trackEvent.popcornOptions.source[ 0 ] ).toString();
       }
       if ( _trackEvent.popcornOptions.fallback ) {
-        pluginOptions.fallback.element.value = URI.stripUnique( _trackEvent.popcornOptions.fallback[ 0 ] ).toString();
+        _pluginOptions.fallback.element.value = URI.stripUnique( _trackEvent.popcornOptions.fallback[ 0 ] ).toString();
       }
       _this.setErrorState( false );
     }
