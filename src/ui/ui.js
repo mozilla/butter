@@ -452,8 +452,9 @@ define( [ "core/eventmanager", "./toggler",
             dialog,
             i, l = selectedEvents.length;
 
+        e.preventDefault();
+
         if( selectedEvents.length ) {
-          e.preventDefault();
 
           // If any event is being dragged or resized we don't want to
           // allow deletion.
