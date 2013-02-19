@@ -53,7 +53,8 @@ define( [ "./logger", "./eventmanager", "./observer",
         },
         _view = new TrackEventView( this, _type, _popcornOptions ),
         _popcornWrapper = null,
-        _selected = false;
+        _selected = false,
+        _ignoreToString = false;
 
     EventManager.extend( _this );
     Observer.extend( _this );
@@ -186,7 +187,12 @@ define( [ "./logger", "./eventmanager", "./observer",
 
       // make sure we have a reference to the trackevent before calling toString
       if ( _this.popcornTrackEvent ) {
-        _view.elementText = _this.popcornTrackEvent.toString();
+
+        if ( !_ignoreToString ) {
+          _ignoreToString = true;
+          _view.elementText = _this.popcornTrackEvent.toString();
+        }
+
         // we should only get here if no exceptions happened
         _this.dispatch( "trackeventupdated", _this );
       }

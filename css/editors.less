@@ -6,6 +6,7 @@
   @_editorTitle: 50px;
   @_editorTabs: 30px;
   @_editorScrollbarWidth: 15px;
+  @_trackEventTitleOffset: 80px;
 
 /*********************************************************
 * Editor Header
@@ -209,11 +210,26 @@
     padding-right: @EDITOR_WIDTH;
   }
 
+  .butter-trackevent-title .trackevent-title {
+    visibility: hidden;
+
+    &.on {
+      visibility: visible;
+      position: absolute;
+      top: @_editorHeaderHeight + @_editorHeaderBorder;
+    }
+  }
+
   .butter-editor-content {
     position: absolute;
     top: @_editorHeaderHeight + @_editorHeaderBorder;
     bottom: 0;
     width: 100%;
+    .transition( top 0.3s ease );
+
+    &.on {
+      top: @_editorHeaderHeight + @_editorHeaderBorder + @_trackEventTitleOffset;
+    }
   }
 
   .butter-editor-body {
