@@ -476,6 +476,9 @@ function butteredPopcorn() {
   // popcorn.js
   popcornFiles.push( popcornDir + '/popcorn.js' );
 
+  // Safari iframe fix
+  popcornFiles.push( './src/util/butterOnOff.js' );
+
   // plugins
   if ( defaultConfig.plugin && defaultConfig.plugin.plugins ) {
     defaultConfig.plugin.plugins.forEach( function( plugin ){
