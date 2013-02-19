@@ -55,6 +55,7 @@
   "exportAssets": [
     "../external/popcorn-js/ie8/popcorn.ie8.js",
     "../external/popcorn-js/popcorn.js",
+    "../src/util/butterOnOff.js",
     "../external/popcorn-js/wrappers/common/popcorn._MediaElementProto.js",
     "../external/popcorn-js/wrappers/html5/popcorn.HTMLMediaElement.js",
     "../external/popcorn-js/wrappers/null/popcorn.HTMLNullVideoElement.js",
