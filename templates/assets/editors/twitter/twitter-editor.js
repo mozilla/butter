@@ -11,7 +11,8 @@
         _trackEvent,
         _butter,
         _maxTweets,
-        _this = this;
+        _this = this,
+        _searchType = _rootElement.querySelector( "#search-type" );
 
     /**
      * Member: updateTrackEvent
@@ -71,8 +72,11 @@
             searchText = _rootElement.querySelector( "#search-text" ),
             userText = _rootElement.querySelector( "#user-text" );
 
-        // Disable the user search box immediately
-        userText.disabled = true;
+        _searchType.addEventListener( "change", function onChange( e ) {
+          trackEvent.update({
+            searchType: e.target.value
+          });
+        }, false );
 
         function updateSearch( e ) {
           trackEvent.update({
@@ -93,15 +97,21 @@
 
           if ( target.id === "search-radio" ) {
             userText.removeEventListener( "blur", updateUser, false );
-            userText.disabled = true;
-            searchText.disabled = false;
+            userText.classList.add( "butter-disabled" );
+            searchText.classList.remove( "butter-disabled" );
+            _searchType.classList.remove( "butter-disabled" );
+            // Our butter-disabled class doesn't handle this.
+            _searchType.disabled = false;
 
             searchText.addEventListener( "blur", updateSearch, false );
           }
           else {
             searchText.removeEventListener( "blur", updateSearch, false );
-            searchText.disabled = true;
-            userText.disabled = false;
+            userText.classList.remove( "butter-disabled" );
+            searchText.classList.add( "butter-disabled" );
+            _searchType.classList.add( "butter-disabled" );
+            // Our butter-disabled class doesn't handle this.
+            _searchType.disabled = true;
 
             userText.addEventListener( "blur", updateUser, false );
           }
