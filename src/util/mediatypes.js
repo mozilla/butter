@@ -15,7 +15,9 @@ define( [ "util/xhr", "util/uri" ],
 
   var EXAMPLES = {
     youtube: "http://www.youtube.com/watch?v=CLg2JbELs9o",
-    html5: "http://popcorn.webmadecontent.org/videos/getstarted.mp4"
+    html5: "http://popcorn.webmadecontent.org/videos/getstarted.mp4",
+    soundcloud: "https://soundcloud.com/kahloun/mozart-symphony-40",
+    vimeo: "http://vimeo.com/32397612"
   };
 
   return {
@@ -35,10 +37,13 @@ define( [ "util/xhr", "util/uri" ],
           parsedUri,
           splitUriDirectory,
           xhrURL,
-          testEl;
+          testEl,
+          checkTest;
 
-      if ( baseUrl === "test" ) {
-        baseUrl = EXAMPLES.youtube;
+      checkTest = baseUrl.split( "#" );
+
+      if ( checkTest[ 0 ] === "test" ) {
+        baseUrl = EXAMPLES[ checkTest[ 1 ] ] || EXAMPLES.youtube;
       }
 
       type = data.type = type || this.checkUrl( baseUrl );
