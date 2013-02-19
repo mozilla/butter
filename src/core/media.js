@@ -620,7 +620,8 @@
                         source: source,
                         title: URI.stripUnique( source[ 0 ] ).path,
                         fallback: fallbacks,
-                        duration: _duration
+                        duration: _duration,
+                        target: "video-container"
                       }
                     });
                   }
