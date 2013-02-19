@@ -212,9 +212,7 @@
       };
 
       options._playEvent = function() {
-        if ( options.p.paused() ) {
-          options.p.play();
-        }
+        options.p.play();
       };
 
       options._seqPlayEvent = function() {
@@ -227,9 +225,7 @@
       };
 
       options._pauseEvent = function() {
-        if ( !options.p.paused() ) {
-          options.p.pause();
-        }
+        options.p.pause();
       };
 
       options._seqPauseEvent = function() {
