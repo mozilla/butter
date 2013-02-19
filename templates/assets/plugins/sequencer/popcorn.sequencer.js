@@ -212,11 +212,33 @@
       };
 
       options._playEvent = function() {
-        options.p.play();
+        if ( options.p.paused() ) {
+          options.p.play();
+        }
       };
 
       options._seqPlayEvent = function() {
-        _this.play();
+        // Ensure the player is not already in this state.
+        // This essentially tests if the play call
+        // happened from youtube UI and not popcorn maker UI.
+        if ( _this.paused() ) {
+          _this.play();
+        }
+      };
+
+      options._pauseEvent = function() {
+        if ( !options.p.paused() ) {
+          options.p.pause();
+        }
+      };
+
+      options._seqPauseEvent = function() {
+        // Ensure the player is not already in this state.
+        // This essentially tests if the play call
+        // happened from youtube UI and not popcorn maker UI.
+        if ( !_this.paused() ) {
+          _this.pause();
+        }
       };
 
       options._volumeEvent = function() {
@@ -230,14 +252,6 @@
             options.p.mute();
           }
         }
-      };
-
-      options._pauseEvent = function() {
-        options.p.pause();
-      };
-
-      options._seqPauseEvent = function() {
-        _this.pause();
       };
 
       options._seekedEvent = function() {
