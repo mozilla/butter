@@ -14,7 +14,7 @@ define( [ "util/xhr", "util/uri" ],
   };
 
   var EXAMPLES = {
-    youtube: "http://www.youtube.com/watch?v=CLg2JbELs9o",
+    youtube: "http://www.youtube.com/watch?v=p_7Qi3mprKQ",
     html5: "http://popcorn.webmadecontent.org/videos/getstarted.mp4",
     soundcloud: "https://soundcloud.com/kahloun/mozart-symphony-40",
     vimeo: "http://vimeo.com/32397612"

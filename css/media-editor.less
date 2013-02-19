@@ -5,7 +5,8 @@
 .media-editor {
 
   @titleBarHeight: 60px;
-  @addClipHeight: 190px;
+  @addClipHeight: 160px;
+  @durationInputHeight: 48px;
 
   .butter-editor-body {
     top: @titleBarHeight;
@@ -70,7 +71,7 @@
 
   .media-gallery {
     position: absolute;
-    bottom: 0;
+    bottom: @durationInputHeight;
     top: @addClipHeight + 20px;
     width: 100%;
     margin-top: -1px;
@@ -119,7 +120,7 @@
 
   .media-gallery-scroll-container {
     position: absolute;
-    top: 45px;
+    top: 46px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -151,7 +152,7 @@
         display: none;
       }
       > .mg-meta-data {
-        > .mg-duration {
+        > .mg-type {
           color: #FFF;
         }
       }
@@ -160,14 +161,14 @@
 
   .mg-thumbnail {
     position: relative;
-    width: 80px;
-    height: 60px;
     overflow: hidden;
     float: left;
     margin-right: 10px;
     border: 1px solid @baseLightOutline;
     > img, video {
-      width: 100%;
+      display: block;
+      width: 80px;
+      height: 60px;
     }
     &:hover {
       border-color: @green;
@@ -195,32 +196,35 @@
     }
   }
   .mg-html5 .mg-thumbnail {
-    height: 60px;
+    > video {
+      height: auto;
+    }
     background-image: url( "../resources/icons/media.png" ) center no-repeat;
   }
 
   .mg-meta-data {
     float: left;
     width: 190px;
-    height: 100%;
-  }
-  .mg-title,
-  .mg-url {
-    overflow: hidden;
-  }
-  .mg-url {
-    line-height: 1em;
-    height: 2em
+    height: 60px;
+    line-height: 1.2em;
   }
   .mg-title {
-    white-space: nowrap;
+    overflow: hidden;
     font-weight: 700;
+    max-height: 3.6em; // 3 lines
+  }
+  .mg-type {
+    &:after {
+      content: " clip";
+      text-transform: lowercase;
+    }
+    color: #999;
+    text-transform: capitalize;
   }
   .mg-error {
     color: #FF0000;
   }
   .mg-duration {
-    color: #999;
     &:before {
       content: "Duration: "
     }

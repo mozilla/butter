@@ -82,7 +82,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     _loadingSpinner.classList.add( "hidden" );
 
     el.querySelector( ".mg-title" ).innerHTML = data.title;
-    el.querySelector( ".mg-url" ).innerHTML = data.source;
+    el.querySelector( ".mg-type" ).innerHTML = data.type;
     el.querySelector( ".mg-duration" ).innerHTML = Time.toTimecode( data.duration ) || "???";
     if ( data.type === "html5" ) {
       thumbnailImg = data.thumbnail;
