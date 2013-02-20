@@ -74,6 +74,10 @@ define( [ "util/xhr", "util/uri" ],
           if ( !raw ) {
             return;
           }
+
+          if ( raw.sharing === "private" || raw.embeddable_by === "none" ) {
+            data.denied = true;
+          }
           data.source = baseUrl;
           data.thumbnail = raw.artwork_url;
           data.duration = raw.duration / 1000;
