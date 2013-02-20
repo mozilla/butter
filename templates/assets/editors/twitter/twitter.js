@@ -6,5 +6,10 @@ EditorHelper.addPlugin( "twitter", function( trackEvent ) {
 
   if ( trackEvent.popcornTrackEvent.layout === "feed" ) {
     EditorHelper.draggable( trackEvent, container, target );
+    EditorHelper.resizable( trackEvent, container, target, {
+      handlePositions: "e,se,s",
+      minWidth: 30,
+      minHeight: 65
+    });
   }
 });

@@ -80,9 +80,20 @@
           units: "%",
           "default": 0
         },
+        top: {
+          hidden: true,
+          elem: "input",
+          type: "number",
+          units: "%",
+          "default": 0
+        },
         width: {
           hidden: true,
-          "default": 35,
+          "default": 35
+        },
+        height: {
+          hidden: true,
+          "default": 100
         },
         zindex: {
           hidden: true
@@ -126,7 +137,14 @@
       options._container = document.createElement( "div" );
       options._container.classList.add( "popcorn-twitter" );
       options._container.id = Popcorn.guid( "twitter" );
-      options._container.style.left = options.left + "%";
+
+      if ( options.layout && options.layout !== "ticker" ) {
+        options._container.style.left = ( options.left || options._natives.manifest.options.left.default ) + "%";
+        options._container.style.top = ( options.top || options._natives.manifest.options.top.default ) + "%";
+        options._container.style.height = ( options.height || options._natives.manifest.options.height.default ) + "%";
+        options._container.style.width = ( options.width || options._natives.manifest.options.width.default ) + "%";
+      }
+
       options._container.style.zIndex = +options.zindex;
       titleText.classList.add( "popcorn-twitter-title" );
       titleText.appendChild( document.createTextNode( options.search || options.username || "Twitter" ) );
