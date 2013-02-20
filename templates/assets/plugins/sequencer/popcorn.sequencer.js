@@ -51,10 +51,10 @@
         container.style.zIndex = 0;
         container.className = "popcorn-sequencer";
         container.style.position = "absolute";
-        container.style.width = ( options.width || "100" ) + "%";
-        container.style.height = ( options.height || "100" ) + "%";
-        container.style.top = ( options.top || "0" ) + "%";
-        container.style.left = ( options.left || "0" ) + "%";
+        container.style.width = "100%";
+        container.style.height = "100%";
+        container.style.top = 0;
+        container.style.left = 0;
 
         if ( target ) {
           target.appendChild( container );
@@ -74,6 +74,10 @@
         options.failed = false;
         options.p.off( "loadedmetadata", options.readyEvent );
         options.ready = true;
+        options._container.style.width = ( options.width || "100" ) + "%";
+        options._container.style.height = ( options.height || "100" ) + "%";
+        options._container.style.top = ( options.top || "0" ) + "%";
+        options._container.style.left = ( options.left || "0" ) + "%";
         _this.on( "volumechange", options._volumeEvent );
         if ( options.active ) {
           options._startEvent();
@@ -141,8 +145,8 @@
         options.p = Popcorn.smart( options._container, options.source, {frameAnimation: true} );
         options.p.media.style.width = "100%";
         options.p.media.style.height = "100%";
-        options._container.style.width = ( options.width || "100" ) + "%";
-        options._container.style.height = ( options.height || "100" ) + "%";
+        options._container.style.width = "100%";
+        options._container.style.height = "100%";
         if ( options.p.media.readyState >= 1 ) {
           options.readyEvent();
         } else {
