@@ -37,23 +37,6 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     _errorMessage.classList.add( "hidden" );
     _loadingSpinner.classList.add( "hidden" );
 
-      // Don't bother with empty strings
-      if ( url ) {
-        newMediaArr.push( url );
-      }
-    }
-    if ( newMediaArr.length ) {
-      // Delete events before media updates, otherwise the project will be in a dirty state
-      if ( _butter.project.deleteDefaultEventsOnMediaChange ) {
-        _butter.currentMedia.clear();
-        _butter.currentMedia.addTrack();
-      }
-
-      showError( false );
-      setLoadSpinner( true );
-      _media.url = newMediaArr;
-    }
-
     _addBtn.classList.add( "hidden" );
     _cancelBtn.classList.add( "hidden" );
   }
