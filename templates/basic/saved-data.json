@@ -150,6 +150,5 @@
         }]
     }],
     "name": "My new project",
-    "template": "basic",
-    "deleteDefaultEventsOnMediaChange": true
+    "template": "basic"
 }
