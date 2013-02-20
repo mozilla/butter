@@ -107,21 +107,34 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     function addEvent() {
       var start = _butter.currentTime,
           end = start + data.duration,
-          trackEvent = _butter.generateSafeTrackEvent( "sequencer", start, end );
+          trackEvent;
+
+      function addTrackEvent() {
+        trackEvent = _butter.generateSafeTrackEvent( "sequencer", start, end );
+
+        trackEvent.update({
+          source: data.source,
+          denied: data.denied,
+          start: start,
+          end: end,
+          title: data.title,
+          duration: data.duration,
+          hidden: data.hidden
+        });
+        _butter.deselectAllTrackEvents();
+        trackEvent.selected = true;
+      }
+
       if ( end > _media.duration ) {
         setBaseDuration( end );
+
+        _butter.listen( "mediaready", function onMediaReady() {
+          _butter.unlisten( "mediaready", onMediaReady );
+          addTrackEvent();
+        });
+      } else {
+        addTrackEvent();
       }
-      trackEvent.update({
-        source: data.source,
-        denied: data.denied,
-        start: start,
-        end: end,
-        title: data.title,
-        duration: data.duration,
-        hidden: data.hidden
-      });
-      _butter.deselectAllTrackEvents();
-      trackEvent.selected = true;
     }
 
     thumbnailBtn.addEventListener( "click", addEvent, false );
