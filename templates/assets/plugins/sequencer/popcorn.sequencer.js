@@ -326,7 +326,9 @@
           if ( !this.paused() ) {
             options.playWhenReady = true;
             this.pause();
-            options.p.pause();
+            if ( options.p && !options.p.paused() ) {
+              options.p.pause();
+            }
           }
           options.addSource();
         }
