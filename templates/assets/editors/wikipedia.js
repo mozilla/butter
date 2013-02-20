@@ -10,12 +10,12 @@ EditorHelper.addPlugin( "wikipedia", function( trackEvent ) {
  target = _popcornOptions._target;
 
   if ( window.jQuery ) {
-
+    window.EditorHelper.draggable( trackEvent, _container, target );
     window.EditorHelper.resizable( trackEvent, _container, target, {
       minWidth: 40,
-      minHeight: 40
+      minHeight: 40,
+      handlePositions: "n,ne,e,se,s,sw,w"
     });
-    window.EditorHelper.draggable( trackEvent, _container, target );
   }
 
 });
