@@ -1,6 +1,6 @@
 {
   "name": "butter",
-  "version": "1.0.8",
+  "version": "1.0.15",
   "dependencies": {
     "shelljs": {
       "version": "0.0.9"
@@ -234,6 +234,14 @@
     },
     "habitat": {
       "version": "0.4.0"
+    },
+    "node-statsd": {
+      "version": "0.0.3",
+      "dependencies": {
+        "mersenne": {
+          "version": "0.0.3"
+        }
+      }
     },
     "supertest": {
       "version": "0.5.1",

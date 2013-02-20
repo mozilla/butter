@@ -20,6 +20,7 @@ var express = require('express'),
     sanitizer = require( './lib/sanitizer' ),
     FileStore = require('./lib/file-store.js'),
     habitat = require('habitat'),
+    metrics,
     utils,
     env = new habitat( 'butter' ),
     stores = {},
@@ -87,6 +88,10 @@ app.configure( function() {
   stores.feedback = setupStore( CONFIG.feedbackStore );
   stores.images = setupStore( CONFIG.imageStore );
 
+  // Metrics [optional]: allow data to be collected during runtime.
+  // See JSON config file for details on metrics setup.
+  metrics = require('./lib/metrics.js').create( CONFIG.metrics, app.settings.env );
+
   utils = require( './lib/utils' )({
     EMBED_HOSTNAME: CONFIG.dirs.embedHostname ? stripSlash( CONFIG.dirs.embedHostname ) : APP_HOSTNAME,
     EMBED_SUFFIX: '_'
@@ -97,7 +102,7 @@ require( 'express-persona' )( app, {
   audience: CONFIG.dirs.appHostname
 });
 
-require('./routes')( app, User, filter, sanitizer, stores, utils );
+require('./routes')( app, User, filter, sanitizer, stores, utils, metrics );
 
 function writeEmbedShell( path, url, data, callback ) {
   if( !writeEmbedShell.templateFn ) {
@@ -255,6 +260,7 @@ app.post( '/api/publish/:id',
           res.json({ error: 'internal server error' }, 500);
         } else {
           res.json({ error: 'okay', publishUrl: publishUrl, iframeUrl: iframeUrl });
+          metrics.increment( 'project.publish' );
         }
       }
 

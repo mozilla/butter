@@ -2,7 +2,7 @@
 
 var datauri = require('../lib/datauri');
 
-module.exports = function routesCtor( app, User, filter, sanitizer, stores, utils ) {
+module.exports = function routesCtor( app, User, filter, sanitizer, stores, utils, metrics ) {
 
   var uuid = require( "node-uuid" ),
       // Keep track of whether this is production or development
@@ -19,6 +19,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
         name: email,
         username: email
       });
+      metrics.increment( 'user.login' );
     } else {
       res.json({
         error: 'unauthorized',
@@ -41,7 +42,6 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
         res.json( { error: "project not found" }, 404 );
         return;
       }
-
       var projectJSON = JSON.parse( doc.data );
 
       projectJSON.name = doc.name;
@@ -88,6 +88,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
       }
 
       res.json( { error: 'okay' }, 200 );
+      metrics.increment( 'project.delete' );
     });
   });
 
@@ -137,7 +138,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
         else {
           res.json( { error: 'okay', project: doc } );
         }
-
+        metrics.increment( 'project.save' );
       });
     } else {
       files = datauri.filterProjectDataURIs( projectData.data, utils.generateDataURIPair );
@@ -145,6 +146,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
       User.createProject( req.session.email, projectData, function( err, doc ) {
         if ( err ) {
           res.json( { error: err }, 500 );
+          metrics.increment( 'error.save' );
           return;
         }
 
@@ -152,9 +154,11 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
           linkAndSaveImageFiles( files, doc.id, function( err ) {
             if ( err ) {
               res.json( { error: 'Unable to store data-uris.', }, 500 );
+              metrics.incremenet( 'error.save.store-data-uris' );
               return;
             }
             res.json( { error: 'okay', projectId: doc.id, imageURLs: files.map( function( file ) { return file.getJSONMetaData(); } ) }, 200 );
+            metrics.increment( 'project.images-upload', files.length );
           });
         }
         else {
@@ -162,6 +166,10 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
           res.json( { error: 'okay', projectId: doc.id }, 200 );
         }
 
+        metrics.increment( 'project.create' );
+        if ( doc.remixedFrom ) {
+          metrics.increment( 'project.remix' );
+        }
       });
     }
   });
@@ -179,6 +187,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
 
       if ( !project ) {
         res.json( { error: 'project not found' }, 404 );
+        metrics.increment( 'error.remix.project-not-found' );
         return;
       }
 
@@ -188,6 +197,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
       projectJSON.remixedFrom = project.id;
 
       res.json( projectJSON );
+      metrics.increment( 'user.remix' );
     });
   });
 
@@ -242,11 +252,13 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
   // Store crash reports
   app.post( '/crash', function( req, res ) {
     storeData( req, res, stores.crash );
+    metrics.increment( 'user.crash' );
   });
 
   // Store feedback reports
   app.post( '/feedback', function( req, res ) {
     storeData( req, res, stores.feedback );
+    metrics.increment( 'user.feedback' );
   });
 
 };
