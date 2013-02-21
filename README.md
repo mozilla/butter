@@ -124,6 +124,13 @@ new file called _hostname_-_environment_.json that overrides the cornfield defau
         - `maxConnections` - maximum number of connections open in the pool
         - `maxIdleTime` - maximum time in seconds to leave an idle connection open in the pool
 
+  - `metrics` *[optional]* metric server configuration options for a [StatsD](https://github.com/etsy/statsd/) server
+    - `host` The host to connect to. Default is `localhost`
+    - `port` The port to connect to. Default is `8125`
+    - `prefix` *[optional]* prefix to assign to each stat name sent. If not given a default of `<NODE_ENV>.butter.` will be used, for example: pr`oduction.butter`
+    - `suffix` *[optional]* suffix to assign to each stat name sent.
+    - `globalize` *[optional]* boolean to add `statsd` as an object in the global namespace
+
   - `publishStore` a `fileStore` used to publish project HTML files (see `fileStore` below for details)
 
   - `feedbackStore` a `fileStore` used to publish feedback from the user as JSON (see `fileStore` below for details)
