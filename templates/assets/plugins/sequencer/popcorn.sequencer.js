@@ -6,9 +6,11 @@
   // loading of a second iframe/player if the iframe for the first is removed
   // from the DOM.  We can simply move old ones to a quarantine div, hidden from
   // the user for now (see #2630).  We lazily create and memoize the instance.
-  function getSoundCloudQuarantine() {
-    if ( getSoundCloudQuarantine.instance ) {
-      return getSoundCloudQuarantine.instance;
+
+  // I am seeing this on other iframes as well. Going to do this on all cases.
+  function getIframeQuarantine() {
+    if ( getIframeQuarantine.instance ) {
+      return getIframeQuarantine.instance;
     }
 
     var quarantine = document.createElement( "div" );
@@ -18,7 +20,7 @@
     quarantine.style.visibility = "hidden";
     document.body.appendChild( quarantine );
 
-    getSoundCloudQuarantine.instance = quarantine;
+    getIframeQuarantine.instance = quarantine;
     return quarantine;
   }
 
@@ -100,11 +102,12 @@
         if ( options.p ) {
           // XXX: pull the SoundCloud iframe element out of our video div, and quarantine
           // so we don't delete it, and block loading future SoundCloud instances. See above.
+
           // this is also fixing an issue in youtube, so we do it for all medias with iframes now.
-          var soundCloudParent = options.p.media.parentNode,
-              soundCloudIframe = soundCloudParent.querySelector( "iframe" ) || soundCloudParent.querySelector( "video" ) || soundCloudParent.querySelector( "audio" );
-          if ( soundCloudIframe ) {
-            getSoundCloudQuarantine().appendChild( soundCloudIframe );
+          var iframeParent = options.p.media.parentNode,
+              iframe = iframeParent.querySelector( "iframe" ) || iframeParent.querySelector( "video" ) || iframeParent.querySelector( "audio" );
+          if ( iframe ) {
+            getIframeQuarantine().appendChild( iframe );
           }
           options.p.destroy();
         }
@@ -133,7 +136,7 @@
         } else {
           options.loadTimeout = setTimeout( options.fail, MEDIA_LOAD_TIMEOUT );
         }
-        options.p = Popcorn.smart( options._container, options.source, {frameAnimation: true} );
+        options.p = Popcorn.smart( options._container, options.source, { frameAnimation: true } );
         options.p.media.style.width = "100%";
         options.p.media.style.height = "100%";
         options._container.style.width = "100%";
@@ -148,7 +151,7 @@
       if ( options.source ) {
         options.sourceToArray();
         if ( options.fallback ) {
-          if( !Array.isArray( options.fallback ) ) {
+          if ( !Array.isArray( options.fallback ) ) {
             options.fallback = [ options.fallback ];
           }
           options.source = options.source.concat( options.fallback );
@@ -294,10 +297,10 @@
       if ( updates.source ) {
         options.sourceToArray();
         if ( options.fallback ) {
-          if( !Array.isArray( options.fallback ) ) {
+          if ( !Array.isArray( options.fallback ) ) {
             options.fallback = [ options.fallback ];
           }
-          if( !Array.isArray( updates.source ) ) {
+          if ( !Array.isArray( updates.source ) ) {
             updates.source = [ updates.source ];
           }
           options.source = options.source.concat( options.fallback );

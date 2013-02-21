@@ -2,7 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/editor", "util/time", "util/dragndrop", "text!layouts/media-editor.html" ],
+define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/editor",
+ "util/time", "util/dragndrop", "text!layouts/media-editor.html" ],
   function( LangUtils, XHR, KeysUtils, MediaUtils, Editor, Time, DragNDrop, EDITOR_LAYOUT ) {
 
   var _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
@@ -63,7 +64,6 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     }
   }
 
-
   function onSuccess( data ) {
     var el = _GALLERYITEM.cloneNode( true ),
         deleteBtn = el.querySelector( ".mg-delete-btn" ),
@@ -102,7 +102,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     el.classList.add( "new" );
 
     if ( data.denied ) {
-     el.querySelector( ".mg-error" ).innerHTML = "Embedding disabled by request";
+      el.querySelector( ".mg-error" ).innerHTML = "Embedding disabled by request";
     }
 
     setTimeout( function() {
@@ -183,7 +183,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
   }
 
   function onEnter( e ) {
-    if (  e.keyCode === KeysUtils.ENTER ) {
+    if ( e.keyCode === KeysUtils.ENTER ) {
       e.preventDefault();
       addMediaToGallery();
     }
@@ -225,7 +225,6 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
         _media = butter.currentMedia;
 
         setBaseDuration( _media.duration );
-
       },
       close: function() {}
     });

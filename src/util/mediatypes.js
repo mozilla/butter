@@ -13,13 +13,6 @@ define( [ "util/xhr", "util/uri" ],
     soundcloud: /(?:https?:\/\/www\.|https?:\/\/|www\.|\.|^)(soundcloud)/
   };
 
-  var EXAMPLES = {
-    youtube: "http://www.youtube.com/watch?v=p_7Qi3mprKQ",
-    html5: "http://popcorn.webmadecontent.org/videos/getstarted.mp4",
-    soundcloud: "https://soundcloud.com/kahloun/mozart-symphony-40",
-    vimeo: "http://vimeo.com/32397612"
-  };
-
   return {
     checkUrl: function( url ) {
       for ( var type in REGEX_MAP ) {
@@ -32,25 +25,22 @@ define( [ "util/xhr", "util/uri" ],
       return "html5";
     },
     getMetaData: function( baseUrl, callback, type ) {
-      var data = {},
-          id,
+      var id,
           parsedUri,
           splitUriDirectory,
           xhrURL,
-          testEl,
-          checkTest;
+          testEl;
 
-      checkTest = baseUrl.split( "#" );
-
-      if ( checkTest[ 0 ] === "test" ) {
-        baseUrl = EXAMPLES[ checkTest[ 1 ] ] || EXAMPLES.youtube;
-      }
-
-      type = data.type = type || this.checkUrl( baseUrl );
+      type = type || this.checkUrl( baseUrl );
+      data.type = type;
       callback = callback || function(){};
 
       if ( type === "youtube" ) {
         parsedUri = URI.parse( baseUrl );
+        // youtube id can either be a query under v, example:
+        // http://www.youtube.com/watch?v=p_7Qi3mprKQ
+        // Or at the end of the url like this:
+        // http://youtu.be/p_7Qi3mprKQ
         id = parsedUri.queryKey.v || parsedUri.directory.replace( "/", "" );
         if ( !id ) {
           return;
@@ -58,62 +48,72 @@ define( [ "util/xhr", "util/uri" ],
 
         xhrURL = "https://gdata.youtube.com/feeds/api/videos/" + id + "?v=2&alt=jsonc&callback=?";
         Popcorn.getJSONP( xhrURL, function( resp ) {
-          var raw = resp.data;
-          if ( !raw ) {
+          var respData = resp.data;
+          if ( !respData ) {
             return;
           }
-          data.source = "http://www.youtube.com/watch?v=" + id;
-          data.title = raw.title;
-          data.thumbnail = raw.thumbnail.hqDefault;
-          data.author = raw.uploader;
-          data.duration = raw.duration;
-          data.denied = raw.accessControl.embed === "denied";
-          callback( data );
+          callback({
+            source: "http://www.youtube.com/watch?v=" + id,
+            title: respData.title,
+            thumbnail: respData.thumbnail.hqDefault,
+            author: respData.uploader,
+            duration: respData.duration,
+            // This informs the plugin that embed is not allowed.
+            // The plugin's action of what to do with this is up to the plugin.
+            denied: respData.accessControl.embed === "denied"
+          });
         });
       } else if ( type === "soundcloud" ) {
         parsedUri = URI.parse( baseUrl );
         splitUriDirectory = parsedUri.directory.split( "/" );
         id = splitUriDirectory[ splitUriDirectory.length - 1 ];
         xhrURL = "http://api.soundcloud.com/tracks/" + id + ".json?callback=?&client_id=PRaNFlda6Bhf5utPjUsptg";
-        Popcorn.getJSONP( xhrURL, function( raw ) {
-          if ( !raw ) {
+        Popcorn.getJSONP( xhrURL, function( respData ) {
+          var denied;
+          if ( !respData ) {
             return;
           }
 
-          if ( raw.sharing === "private" || raw.embeddable_by === "none" ) {
-            data.denied = true;
+          if ( respData.sharing === "private" || respData.embeddable_by === "none" ) {
+            // This informs the plugin that embed is not allowed.
+            // The plugin's action of what to do with this is up to the plugin.
+            denied = true;
           }
-          data.source = baseUrl;
-          data.thumbnail = raw.artwork_url;
-          data.duration = raw.duration / 1000;
-          data.title = raw.title;
-          data.hidden = true;
-          callback( data );
+          callback({
+            source: baseUrl,
+            denied: denied,
+            thumbnail: respData.artwork_url,
+            duration: respData.duration / 1000,
+            title: respData.title,
+            hidden: true
+          });
         });
       } else if ( type === "vimeo" ) {
         parsedUri = URI.parse( baseUrl );
         splitUriDirectory = parsedUri.directory.split( "/" );
         id = splitUriDirectory[ splitUriDirectory.length - 1 ];
         xhrURL = "http://vimeo.com/api/v2/video/" + id + ".json?callback=?";
-        Popcorn.getJSONP( xhrURL, function( raw ) {
-          raw = raw && raw[ 0 ];
-          if ( !raw ) {
+        Popcorn.getJSONP( xhrURL, function( respData ) {
+          respData = respData && respData[ 0 ];
+          if ( !respData ) {
             return;
           }
-          data.source = baseUrl;
-          data.thumbnail = raw.thumbnail_small;
-          data.duration = raw.duration;
-          data.title = raw.title;
-          callback( data );
+          callback({
+            source: baseUrl,
+            thumbnail: respData.thumbnail_small,
+            duration: respData.duration,
+            title: respData.title
+          });
         });
       } else if ( type === "html5" ) {
         testEl = document.createElement( "video" );
         testEl.addEventListener( "loadedmetadata", function() {
-          data.source = baseUrl;
-          data.title = baseUrl.substring( baseUrl.lastIndexOf( "/" ) + 1 );
-          data.thumbnail = testEl;
-          data.duration = testEl.duration;
-          callback ( data );
+          callback ({
+            source: baseUrl,
+            title: baseUrl.substring( baseUrl.lastIndexOf( "/" ) + 1 ),
+            thumbnail: testEl,
+            duration: testEl.duration
+          });
         }, false );
         testEl.src = URI.makeUnique( baseUrl ).toString();
       }

@@ -63,8 +63,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
 
             if ( option.elementType === "select" ) {
               _this.attachSelectChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
-            }
-            else if ( option.elementType === "input" ) {
+            } else if ( option.elementType === "input" ) {
               if ( key === "source" ) {
                 _this.attachInputChangeHandler( option.element, option.trackEvent, key, sourceCallback );
               } else if ( key === "from" ) {
@@ -74,8 +73,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
               } else {
                 _this.attachInputChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
               }
-            }
-            else if ( option.elementType === "textarea" ) {
+            } else if ( option.elementType === "textarea" ) {
               _this.attachInputChangeHandler( option.element, option.trackEvent, key, _this.updateTrackEventSafe );
             }
           }
@@ -94,7 +92,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
       attachHandlers();
       _this.updatePropertiesFromManifest( trackEvent );
       if ( trackEvent.popcornOptions.source ) {
-        if( !Array.isArray( trackEvent.popcornOptions.source ) ) {
+        if ( !Array.isArray( trackEvent.popcornOptions.source ) ) {
           trackEvent.popcornOptions.source = [ trackEvent.popcornOptions.source ];
         }
         _pluginOptions.source.element.value = URI.stripUnique( trackEvent.popcornOptions.source[ 0 ] ).toString();
@@ -120,7 +118,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
 
       _this.updatePropertiesFromManifest( _trackEvent );
       if ( _trackEvent.popcornOptions.source ) {
-        if( !Array.isArray( _trackEvent.popcornOptions.source ) ) {
+        if ( !Array.isArray( _trackEvent.popcornOptions.source ) ) {
           _trackEvent.popcornOptions.source = [ _trackEvent.popcornOptions.source ];
         }
         _pluginOptions.source.element.value = URI.stripUnique( _trackEvent.popcornOptions.source[ 0 ] ).toString();

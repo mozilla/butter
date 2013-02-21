@@ -10,7 +10,6 @@ EditorHelper.addPlugin( "sequencer", function( trackEvent ) {
   _target = _popcornOptions._target;
 
   if ( window.jQuery ) {
-
     window.EditorHelper.draggable( trackEvent, _container, _target );
     window.EditorHelper.resizable( trackEvent, _container, _target, {
       handlePositions: "e, se, s, sw, w, n, ne",
