@@ -1,6 +1,6 @@
 // PLUGIN: sequencer
 
-(function (Popcorn) {
+(function ( Popcorn ) {
 
   // XXX: SoundCloud has a bug (reported by us, but as yet unfixed) which blocks
   // loading of a second iframe/player if the iframe for the first is removed
@@ -502,5 +502,5 @@
     }
   });
 
-}(Popcorn));
+}( Popcorn ));
 
