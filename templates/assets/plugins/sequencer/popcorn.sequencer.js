@@ -260,16 +260,16 @@
       }
     },
     _update: function( options, updates ) {
-      if ( updates.duration != null ) {
+      if ( updates.hasOwnProperty( "duration" ) ) {
         options.duration = updates.duration;
       }
-      if ( updates.from != null && updates.from < options.duration ) {
+      if ( updates.hasOwnProperty( "from" ) && updates.from < options.duration ) {
         options.from = updates.from;
       }
       if ( options.end - ( options.start - ( +options.from ) ) > options.duration ) {
         options.end = options.duration + ( options.start - ( +options.from ) );
       }
-      if ( updates.zindex != null ) {
+      if ( updates.hasOwnProperty( "zindex" ) ) {
         options.zindex = updates.zindex;
         if ( !options.hidden && options.active ) {
           options._container.style.zIndex = +options.zindex;
@@ -283,7 +283,7 @@
       if ( updates.denied ) {
         options.denied = updates.denied;
       }
-      if ( updates.hidden != null ) {
+      if ( updates.hasOwnProperty( "hidden" ) ) {
         options.hidden = updates.hidden;
         if ( !options.hidden && options.active ) {
           options._container.style.zIndex = +options.zindex;
@@ -326,28 +326,28 @@
           options.addSource();
         }
       }
-      if ( updates.mute != null ) {
+      if ( updates.hasOwnProperty( "mute" ) ) {
         options.mute = updates.mute;
         options._volumeEvent();
       }
-      if ( updates.top != null ) {
+      if ( updates.hasOwnProperty( "top" ) ) {
         options.top = updates.top;
         options._container.style.top = ( options.top || "0" ) + "%";
       }
-      if ( updates.left != null ) {
+      if ( updates.hasOwnProperty( "left" ) ) {
         options.left = updates.left;
         options._container.style.left = ( options.left || "0" ) + "%";
       }
-      if ( updates.height != null ) {
+      if ( updates.hasOwnProperty( "height" ) ) {
         options.height = updates.height;
         options._container.style.height = ( options.height || "100" ) + "%";
       }
-      if ( updates.width != null ) {
+      if ( updates.hasOwnProperty( "width" ) ) {
         options.width = updates.width;
         options._container.style.width = ( options.width || "100" ) + "%";
       }
       if ( options.ready ) {
-        if ( updates.volume != null ) {
+        if ( updates.hasOwnProperty( "volume" ) ) {
           options.volume = updates.volume;
           options._volumeEvent();
         }

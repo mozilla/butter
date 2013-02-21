@@ -32,7 +32,6 @@ define( [ "util/xhr", "util/uri" ],
           testEl;
 
       type = type || this.checkUrl( baseUrl );
-      data.type = type;
       callback = callback || function(){};
 
       if ( type === "youtube" ) {
@@ -55,6 +54,7 @@ define( [ "util/xhr", "util/uri" ],
           callback({
             source: "http://www.youtube.com/watch?v=" + id,
             title: respData.title,
+            type: type,
             thumbnail: respData.thumbnail.hqDefault,
             author: respData.uploader,
             duration: respData.duration,
@@ -82,6 +82,7 @@ define( [ "util/xhr", "util/uri" ],
           callback({
             source: baseUrl,
             denied: denied,
+            type: type,
             thumbnail: respData.artwork_url,
             duration: respData.duration / 1000,
             title: respData.title,
@@ -100,6 +101,7 @@ define( [ "util/xhr", "util/uri" ],
           }
           callback({
             source: baseUrl,
+            type: type,
             thumbnail: respData.thumbnail_small,
             duration: respData.duration,
             title: respData.title
@@ -110,6 +112,7 @@ define( [ "util/xhr", "util/uri" ],
         testEl.addEventListener( "loadedmetadata", function() {
           callback ({
             source: baseUrl,
+            type: type,
             title: baseUrl.substring( baseUrl.lastIndexOf( "/" ) + 1 ),
             thumbnail: testEl,
             duration: testEl.duration
