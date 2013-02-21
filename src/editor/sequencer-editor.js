@@ -103,18 +103,8 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
       _this.setTrackEventUpdateErrorCallback( _this.setErrorState );
     }
 
-    function anchorClickPrevention( anchorContainer ) {
-      if ( anchorContainer ) {
-        
-        anchorContainer.onclick = _falseClick;
-      }
-    }
-
     function onTrackEventUpdated( e ) {
       _trackEvent = e.target;
-
-      var anchorContainer = _trackEvent.popcornTrackEvent._container.querySelector( "a" );
-      anchorClickPrevention( anchorContainer );
 
       _this.updatePropertiesFromManifest( _trackEvent );
       if ( _trackEvent.popcornOptions.source ) {
@@ -132,9 +122,6 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
     // Extend this object to become a TrackEventEditor
     Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
-        var anchorContainer = trackEvent.popcornTrackEvent._container.querySelector( "a" );
-
-        anchorClickPrevention( anchorContainer );
 
         _butter = butter;
 
