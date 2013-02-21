@@ -169,7 +169,7 @@
           start = 0;
         }
 
-        if ( end == null ) {
+        if ( !end && end !== 0 ) {
           end = start + _defaultTrackeventDuration;
         }
 
