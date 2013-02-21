@@ -176,9 +176,6 @@
             // We've managed to seek, clear any pause fallbacks.
             clearTimeout( seekTimeout );
             options.p.off( "play", playedEvent );
-            // video element can be clicked on. Keep them in sync with the main timeline.
-            options.p.on( "play", options._seqPlayEvent );
-            options.p.on( "pause", options._seqPauseEvent );
             _this.off( "play", options._surpressPlayEvent );
             _this.on( "play", options._playEvent );
             _this.on( "pause", options._pauseEvent );
@@ -191,8 +188,10 @@
             }
             if ( options.playWhenReady ) {
               _this.play();
+              options.p.on( "pause", options._seqPauseEvent );
             } else {
               options.p.pause();
+              options.p.on( "play", options._seqPlayEvent );
             }
             if ( options.active ) {
               options._volumeEvent();
@@ -215,33 +214,35 @@
         _this.pause();
       };
 
-      options._playEvent = function() {
-        if ( options.p.paused() ) {
-          options.p.play();
+      options._seqPlayEvent = function() {
+        if ( _this.paused() ) {
+          setTimeout( function() {
+            _this.play();
+          }, 0 );
         }
       };
 
-      options._seqPlayEvent = function() {
-        // Ensure the player is not already in this state.
-        // This essentially tests if the play call
-        // happened from youtube UI and not popcorn maker UI.
-        if ( _this.paused() ) {
-          _this.play();
+      options._playEvent = function() {
+        if ( options.p.paused() ) {
+          options.p.off( "play", options._seqPlayEvent );
+          options.p.play();
+          options.p.on( "pause", options._seqPauseEvent );
+        }
+      };
+
+      options._seqPauseEvent = function() {
+        if ( !_this.paused() ) {
+          setTimeout( function() {
+            _this.pause();
+          }, 0 );
         }
       };
 
       options._pauseEvent = function() {
         if ( !options.p.paused() ) {
+          options.p.off( "pause", options._seqPauseEvent );
           options.p.pause();
-        }
-      };
-
-      options._seqPauseEvent = function() {
-        // Ensure the player is not already in this state.
-        // This essentially tests if the play call
-        // happened from youtube UI and not popcorn maker UI.
-        if ( !_this.paused() ) {
-          _this.pause();
+          options.p.on( "play", options._seqPlayEvent );
         }
       };
 
