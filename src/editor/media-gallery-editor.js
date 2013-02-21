@@ -42,6 +42,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
   }
 
   function setBaseDuration( duration ) {
+    duration = Time.toTimecode( duration );
     if ( _durationInput.value !== duration ) {
       _durationInput.value = Time.toTimecode( duration );
     }
