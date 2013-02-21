@@ -202,32 +202,32 @@
       options._seqPlayEvent = function() {
         if ( _this.paused() ) {
           setTimeout( function() {
+            options.p.off( "play", options._seqPlayEvent );
             _this.play();
+            options.p.on( "pause", options._seqPauseEvent );
           }, 0 );
         }
       };
 
       options._playEvent = function() {
         if ( options.p.paused() ) {
-          options.p.off( "play", options._seqPlayEvent );
           options.p.play();
-          options.p.on( "pause", options._seqPauseEvent );
         }
       };
 
       options._seqPauseEvent = function() {
         if ( !_this.paused() ) {
           setTimeout( function() {
+            options.p.off( "pause", options._seqPauseEvent );
             _this.pause();
+            options.p.on( "play", options._seqPlayEvent );
           }, 0 );
         }
       };
 
       options._pauseEvent = function() {
         if ( !options.p.paused() ) {
-          options.p.off( "pause", options._seqPauseEvent );
           options.p.pause();
-          options.p.on( "play", options._seqPlayEvent );
         }
       };
 
