@@ -5,7 +5,7 @@ var datauri = require('./datauri');
 function defaultDBReadyFunction( err ) {
   if ( err ) {
     err = Array.isArray( err ) ? err[ 0 ] : err;
-    console.warn( "lib/user.js: DB setup error\n", err.number ? err.number : '[No Error Number]', err.message );
+    console.warn( "lib/user.js: DB setup error\n", err.number ? err.number : err.code, err.message );
   }
 }
 
@@ -14,12 +14,23 @@ module.exports = function( config, dbReadyFn ) {
 
   dbReadyFn = dbReadyFn || defaultDBReadyFunction;
 
-  var username = config.username || "";
-  var password = config.password || "";
+  var username = config.username || "",
+      password = config.password || "",
+      Sequelize = require( "sequelize" ),
+      sequelize;
+
+  try {
+    sequelize = new Sequelize( config.database, username, password, config.options );
+  } catch (e) {
+    dbReadyFn(e);
+    return {
+      isDBOnline: function isDBOnline() {
+        return false;
+      }
+    };
+  }
 
   var dbOnline = false,
-      Sequelize = require( "sequelize" ),
-      sequelize = new Sequelize( config.database, username, password, config.options ),
       Project = sequelize.import( __dirname + "/models/project" ),
       ImageReference = sequelize.import( __dirname + "/models/image" ),
       versions;
