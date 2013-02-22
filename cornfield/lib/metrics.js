@@ -21,17 +21,19 @@ NP.sendAll = NP.send = function( stat, value, type, sampleRate, callback ) {
 };
 
 module.exports = {
-  create: function( options, env ) {
-    var StatsD;
+  create: function( options ) {
+    var StatsD,
+        env = process.env.NODE_ENV;
 
     // If no metrics setup is given, use a null StatsD client.
     if( !options ) {
       options = {};
       StatsD = NullStatsDClient;
     } else {
-      StatsD = require('node-statsd').StatsD;
+      StatsD = require( 'node-statsd' ).StatsD;
       // If a prefix is given, use it. Otherwise use `<env>.butter.'
-      options.prefix = options.prefix || env + ".butter.";
+      options.prefix = options.prefix ||
+                       ( env === 'production' ? 'production' : 'development' ) + ".butter.";
     }
 
     return new StatsD( options.host, options.port, options.prefix,
