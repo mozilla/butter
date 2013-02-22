@@ -49,9 +49,7 @@
         container.style.top = 0;
         container.style.left = 0;
 
-        if ( target ) {
-          target.appendChild( container );
-        }
+        target.appendChild( container );
       };
       options.displayLoading = function() {
         document.querySelector( ".loading-message" ).classList.add( "show-media" );
@@ -59,13 +57,33 @@
       options.hideLoading = function() {
         document.querySelector( ".loading-message" ).classList.remove( "show-media" );
       };
+
       if ( !options.from || options.from > options.duration ) {
         options.from = 0;
       }
 
+      options._volumeEvent = function() {
+        if ( _this.muted() ) {
+          options._clip.mute();
+        } else {
+          if ( !options.mute ) {
+            options._clip.unmute();
+            options._clip.volume( ( options.volume / 100 ) * _this.volume() );
+          } else {
+            options._clip.mute();
+          }
+        }
+      };
+
       options.readyEvent = function() {
+        clearTimeout( options.loadTimeout );
+        // If teardown was hit before ready, ensure we teardown.
+        if ( options._cancelLoad ) {
+          options._cancelLoad = false;
+          options.tearDown();
+        }
         options.failed = false;
-        options.p.off( "loadedmetadata", options.readyEvent );
+        options._clip.off( "loadedmetadata", options.readyEvent );
         options.ready = true;
         options._container.style.width = ( options.width || "100" ) + "%";
         options._container.style.height = ( options.height || "100" ) + "%";
@@ -83,9 +101,6 @@
       };
 
       options.fail = function() {
-        if ( options.ready && !options.denied ) {
-          return;
-        }
         _this.off( "play", options._playWhenReadyEvent );
         options.failed = true;
         options.hideLoading();
@@ -99,20 +114,23 @@
 
       options.tearDown = function() {
         _this.off( "volumechange", options._volumeEvent );
-        if ( options.p ) {
+        // If we have no options._clip, no source was given to this track event,
+        // and it is being torn down.
+        if ( options._clip ) {
           // XXX: pull the SoundCloud iframe element out of our video div, and quarantine
           // so we don't delete it, and block loading future SoundCloud instances. See above.
-
-          // this is also fixing an issue in youtube, so we do it for all medias with iframes now.
-          var iframeParent = options.p.media.parentNode,
+          // This is also fixing an issue in youtube, so we do it for all medias with iframes now.
+          // If you remove the iframe, there is potential that other services
+          // are still referencing these iframes. Keeping them around protects us.
+          var iframeParent = options._clip.media.parentNode,
               iframe = iframeParent.querySelector( "iframe" ) || iframeParent.querySelector( "video" ) || iframeParent.querySelector( "audio" );
           if ( iframe ) {
             getIframeQuarantine().appendChild( iframe );
           }
-          options.p.destroy();
+          options._clip.destroy();
         }
 
-        // Tear-down old instances, special-casing SoundCloud removal, see above.
+        // Tear-down old instances, special-casing iframe removal, see above.
         if ( options._container && options._container.parentNode ) {
           options._container.parentNode.removeChild( options._container );
         }
@@ -136,15 +154,15 @@
         } else {
           options.loadTimeout = setTimeout( options.fail, MEDIA_LOAD_TIMEOUT );
         }
-        options.p = Popcorn.smart( options._container, options.source, { frameAnimation: true } );
-        options.p.media.style.width = "100%";
-        options.p.media.style.height = "100%";
+        options._clip = Popcorn.smart( options._container, options.source, { frameAnimation: true } );
+        options._clip.media.style.width = "100%";
+        options._clip.media.style.height = "100%";
         options._container.style.width = "100%";
         options._container.style.height = "100%";
-        if ( options.p.media.readyState >= 1 ) {
+        if ( options._clip.media.readyState >= 1 ) {
           options.readyEvent();
         } else {
-          options.p.on( "loadedmetadata", options.readyEvent );
+          options._clip.on( "loadedmetadata", options.readyEvent );
         }
       };
       options.setupContainer();
@@ -166,9 +184,7 @@
         // so we know if the play has finished, the seek is also finished.
         var seekedEvent = function () {
           var playedEvent = function() {
-            // We've managed to seek, clear any pause fallbacks.
-            //clearTimeout( seekTimeout );
-            options.p.off( "play", playedEvent );
+            options._clip.off( "play", playedEvent );
             _this.off( "play", options._playWhenReadyEvent );
             _this.on( "play", options._playEvent );
             _this.on( "pause", options._pauseEvent );
@@ -181,21 +197,21 @@
             }
             if ( options.playWhenReady ) {
               _this.play();
-              options.p.on( "pause", options._seqPauseEvent );
+              options._clip.on( "pause", options._seqPauseEvent );
             } else {
-              options.p.pause();
-              options.p.on( "play", options._seqPlayEvent );
+              options._clip.pause();
+              options._clip.on( "play", options._seqPlayEvent );
             }
             if ( options.active ) {
               options._volumeEvent();
             }
           };
-          options.p.off( "seeked", seekedEvent );
-          options.p.on( "play", playedEvent );
-          options.p.play();
+          options._clip.off( "seeked", seekedEvent );
+          options._clip.on( "play", playedEvent );
+          options._clip.play();
         };
-        options.p.on( "seeked", seekedEvent);
-        options.p.currentTime( _this.currentTime() - options.start + (+options.from) );
+        options._clip.on( "seeked", seekedEvent);
+        options._clip.currentTime( _this.currentTime() - options.start + (+options.from) );
       };
 
       options._playWhenReadyEvent = function() {
@@ -205,50 +221,37 @@
       options._seqPlayEvent = function() {
         if ( _this.paused() ) {
           setTimeout( function() {
-            options.p.off( "play", options._seqPlayEvent );
+            options._clip.off( "play", options._seqPlayEvent );
             _this.play();
-            options.p.on( "pause", options._seqPauseEvent );
+            options._clip.on( "pause", options._seqPauseEvent );
           }, 0 );
         }
       };
 
       options._playEvent = function() {
-        if ( options.p.paused() ) {
-          options.p.play();
+        if ( options._clip.paused() ) {
+          options._clip.play();
         }
       };
 
       options._seqPauseEvent = function() {
         if ( !_this.paused() ) {
           setTimeout( function() {
-            options.p.off( "pause", options._seqPauseEvent );
+            options._clip.off( "pause", options._seqPauseEvent );
             _this.pause();
-            options.p.on( "play", options._seqPlayEvent );
+            options._clip.on( "play", options._seqPlayEvent );
           }, 0 );
         }
       };
 
       options._pauseEvent = function() {
-        if ( !options.p.paused() ) {
-          options.p.pause();
-        }
-      };
-
-      options._volumeEvent = function() {
-        if ( _this.muted() ) {
-          options.p.mute();
-        } else {
-          if ( !options.mute ) {
-            options.p.unmute();
-            options.p.volume( ( options.volume / 100 ) * _this.volume() );
-          } else {
-            options.p.mute();
-          }
+        if ( !options._clip.paused() ) {
+          options._clip.pause();
         }
       };
 
       options._seekedEvent = function() {
-        options.p.currentTime( _this.currentTime() - options.start + (+options.from) );
+        options._clip.currentTime( _this.currentTime() - options.start + (+options.from) );
       };
 
       options.toString = function() {
@@ -319,8 +322,8 @@
           if ( !this.paused() ) {
             options.playWhenReady = true;
             this.pause();
-            if ( options.p && !options.p.paused() ) {
-              options.p.pause();
+            if ( options._clip && !options._clip.paused() ) {
+              options._clip.pause();
             }
           }
           options.addSource();
@@ -351,11 +354,17 @@
           options.volume = updates.volume;
           options._volumeEvent();
         }
-        options.p.currentTime( this.currentTime() - options.start + (+options.from) );
+        options._clip.currentTime( this.currentTime() - options.start + (+options.from) );
       }
     },
     _teardown: function( options ) {
-      options.tearDown();
+      // If we're ready, or never going to be, simply teardown.
+      if ( options.ready || !options.source ) {
+        options.tearDown();
+      } else {
+        // If we're not ready yet, ensure we do the proper teardown once ready.
+        options._cancelLoad = true;
+      }
     },
     start: function( event, options ) {
       options.active = true;
@@ -369,7 +378,7 @@
         this.on( "play", options._playWhenReadyEvent );
         if ( !this.paused() ) {
           options.playWhenReady = true;
-          options.p.pause();
+          options._clip.pause();
         }
         if ( options.ready ) {
           options._startEvent();
@@ -388,17 +397,17 @@
       if ( options.ready ) {
         // video element can be clicked on. Keep them in sync with the main timeline.
         // We need to also clear these events.
-        options.p.off( "play", options._seqPlayEvent );
-        options.p.off( "pause", options._seqPauseEvent );
-        if ( !options.p.paused() ) {
-          options.p.pause();
+        options._clip.off( "play", options._seqPlayEvent );
+        options._clip.off( "pause", options._seqPauseEvent );
+        if ( !options._clip.paused() ) {
+          options._clip.pause();
         }
         // reset current time so next play from start is smooth. We've pre seeked.
-        options.p.currentTime( +options.from );
+        options._clip.currentTime( +options.from );
       }
       options._container.style.zIndex = 0;
       if ( options.ready ) {
-        options.p.mute();
+        options._clip.mute();
       }
     },
     manifest: {

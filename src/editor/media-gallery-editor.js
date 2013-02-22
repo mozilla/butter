@@ -105,7 +105,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       el.querySelector( ".mg-error" ).innerHTML = "Embedding disabled by request";
     }
 
-    setTimeout( function() {
+    setTimeout(function() {
       el.classList.remove( "new" );
     }, 2000 );
 
@@ -149,11 +149,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       _galleryList.removeChild( el );
     }, false );
 
-    if ( _galleryList.firstChild ) {
-      _galleryList.insertBefore( el, _galleryList.firstChild );
-    } else {
-      _galleryList.appendChild( el );
-    }
+    _galleryList.insertBefore( el, _galleryList.firstChild );
 
     resetInput();
   }
@@ -189,6 +185,11 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     }
   }
 
+  function onBlur( e ) {
+    e.preventDefault();
+    setBaseDuration( _durationInput.value );
+  }
+
   function setup() {
     _addMediaTitle.addEventListener( "click", toggleAddNewMediaPanel, false );
 
@@ -200,10 +201,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     _cancelBtn.addEventListener( "click", resetInput, false );
 
     _durationInput.addEventListener( "keydown", onDurationChange, false );
-    _durationInput.addEventListener( "blur", function( e ) {
-      e.preventDefault();
-      setBaseDuration( _durationInput.value );
-    }, false );
+    _durationInput.addEventListener( "blur", onBlur, false );
   }
 
   function onDurationChange( e ) {
