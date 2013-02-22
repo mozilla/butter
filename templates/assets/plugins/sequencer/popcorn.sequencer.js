@@ -25,7 +25,7 @@
   }
 
   var MEDIA_LOAD_TIMEOUT = 10000;
- 
+
   Popcorn.plugin( "sequencer", {
     _setup: function( options ) {
       var _this = this;
@@ -258,7 +258,8 @@
         return options.title || options.source || "";
       };
 
-      if ( options.duration > 0 && options.end - ( options.start - ( +options.from ) ) > options.duration ) {
+      if ( options.duration > 0 &&
+           options.end - ( options.start - ( +options.from ) ) > options.duration ) {
         options.end = options.duration + ( options.start - ( +options.from ) );
       }
     },

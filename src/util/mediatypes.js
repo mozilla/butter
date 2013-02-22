@@ -108,17 +108,17 @@ define( [ "util/xhr", "util/uri" ],
           });
         });
       } else if ( type === "html5" ) {
-        testEl = document.createElement( "video" );
-        testEl.addEventListener( "loadedmetadata", function() {
+        videoElem = document.createElement( "video" );
+        videoElem.addEventListener( "loadedmetadata", function() {
           callback ({
             source: baseUrl,
             type: type,
             title: baseUrl.substring( baseUrl.lastIndexOf( "/" ) + 1 ),
-            thumbnail: testEl,
-            duration: testEl.duration
+            thumbnail: videoElem,
+            duration: videoElem.duration
           });
         }, false );
-        testEl.src = URI.makeUnique( baseUrl ).toString();
+        videoElem.src = URI.makeUnique( baseUrl ).toString();
       }
     }
   };
