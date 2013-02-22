@@ -90,7 +90,7 @@ app.configure( function() {
 
   // Metrics [optional]: allow data to be collected during runtime.
   // See JSON config file for details on metrics setup.
-  metrics = require('./lib/metrics.js').create( CONFIG.metrics, app.settings.env );
+  metrics = require('./lib/metrics.js').create( CONFIG.metrics );
 
   utils = require( './lib/utils' )({
     EMBED_HOSTNAME: CONFIG.dirs.embedHostname ? stripSlash( CONFIG.dirs.embedHostname ) : APP_HOSTNAME,
