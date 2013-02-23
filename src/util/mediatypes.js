@@ -29,7 +29,7 @@ define( [ "util/xhr", "util/uri" ],
           parsedUri,
           splitUriDirectory,
           xhrURL,
-          testEl;
+          videoElem;
 
       type = type || this.checkUrl( baseUrl );
       callback = callback || function(){};

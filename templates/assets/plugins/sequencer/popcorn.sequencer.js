@@ -174,6 +174,17 @@
           options._clip.on( "loadedmetadata", options.readyEvent );
         }
       };
+
+      options._setClipCurrentTime = function( time ) {
+        if ( !time && time !== 0 ) {
+          time = _this.currentTime() - options.start + (+options.from);
+        }
+        if ( time !== options._clip.currentTime() &&
+             time >= (+options.from) && time <= options.duration ) {
+          options._clip.currentTime( time );
+        }
+      };
+
       options.setupContainer();
       if ( options.source ) {
         options.sourceToArray();
@@ -214,7 +225,7 @@
           options._clip.play();
         };
         options._clip.on( "seeked", seekedEvent);
-        options._clip.currentTime( _this.currentTime() - options.start + (+options.from) );
+        options._setClipCurrentTime();
       };
 
       options._playWhenReadyEvent = function() {
@@ -254,7 +265,7 @@
       };
 
       options._seekedEvent = function() {
-        options._clip.currentTime( _this.currentTime() - options.start + (+options.from) );
+        options._setClipCurrentTime();
       };
 
       options.toString = function() {
@@ -311,6 +322,7 @@
           }
           options.source = updates.source;
           options.clearEvents();
+          // TODO: ensure any pending loads are torn down.
           options.tearDown();
           options.setupContainer();
           this.on( "play", options._playWhenReadyEvent );
@@ -349,7 +361,7 @@
           options.volume = updates.volume;
           options._volumeEvent();
         }
-        options._clip.currentTime( this.currentTime() - options.start + (+options.from) );
+        options._setClipCurrentTime();
       }
     },
     _teardown: function( options ) {
@@ -398,7 +410,7 @@
           options._clip.pause();
         }
         // reset current time so next play from start is smooth. We've pre seeked.
-        options._clip.currentTime( +options.from );
+        options._setClipCurrentTime( +options.from );
       }
       options._container.style.zIndex = 0;
       if ( options.ready ) {
