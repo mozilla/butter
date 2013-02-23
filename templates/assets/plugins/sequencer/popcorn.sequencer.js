@@ -95,9 +95,18 @@
         }
       };
 
-      options.sourceToArray = function() {
+      options.sourceToArray = function( updates ) {
         // If our src is not an array, create an array of one.
         options.source = typeof options.source === "string" ? [ options.source ] : options.source;
+        if ( options.fallback ) {
+          if ( !Array.isArray( options.fallback ) ) {
+            options.fallback = [ options.fallback ];
+          }
+          if ( updates && !Array.isArray( updates.source ) ) {
+            updates.source = [ updates.source ];
+          }
+          options.source = options.source.concat( options.fallback );
+        }
       };
 
       options.fail = function() {
@@ -168,12 +177,6 @@
       options.setupContainer();
       if ( options.source ) {
         options.sourceToArray();
-        if ( options.fallback ) {
-          if ( !Array.isArray( options.fallback ) ) {
-            options.fallback = [ options.fallback ];
-          }
-          options.source = options.source.concat( options.fallback );
-        }
         options.addSource();
       }
 
@@ -299,16 +302,7 @@
         options.fallback = updates.fallback;
       }
       if ( updates.source ) {
-        options.sourceToArray();
-        if ( options.fallback ) {
-          if ( !Array.isArray( options.fallback ) ) {
-            options.fallback = [ options.fallback ];
-          }
-          if ( !Array.isArray( updates.source ) ) {
-            updates.source = [ updates.source ];
-          }
-          options.source = options.source.concat( options.fallback );
-        }
+        options.sourceToArray( updates );
         if ( updates.source.toString() !== options.source.toString() ) {
           options.ready = false;
           options.playWhenReady = false;
