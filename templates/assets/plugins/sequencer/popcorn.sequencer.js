@@ -6,11 +6,10 @@
   // loading of a second iframe/player if the iframe for the first is removed
   // from the DOM.  We can simply move old ones to a quarantine div, hidden from
   // the user for now (see #2630).  We lazily create and memoize the instance.
-
   // I am seeing this on other iframes as well. Going to do this on all cases.
-  function getIframeQuarantine() {
-    if ( getIframeQuarantine.instance ) {
-      return getIframeQuarantine.instance;
+  function getElementQuarantine() {
+    if ( getElementQuarantine.instance ) {
+      return getElementQuarantine.instance;
     }
 
     var quarantine = document.createElement( "div" );
@@ -20,7 +19,7 @@
     quarantine.style.visibility = "hidden";
     document.body.appendChild( quarantine );
 
-    getIframeQuarantine.instance = quarantine;
+    getElementQuarantine.instance = quarantine;
     return quarantine;
   }
 
@@ -131,10 +130,12 @@
           // This is also fixing an issue in youtube, so we do it for all medias with iframes now.
           // If you remove the iframe, there is potential that other services
           // are still referencing these iframes. Keeping them around protects us.
-          var iframeParent = options._clip.media.parentNode,
-              iframe = iframeParent.querySelector( "iframe" ) || iframeParent.querySelector( "video" ) || iframeParent.querySelector( "audio" );
-          if ( iframe ) {
-            getIframeQuarantine().appendChild( iframe );
+          var elementParent = options._clip.media.parentNode,
+              element = elementParent.querySelector( "iframe" ) ||
+                        elementParent.querySelector( "video" ) ||
+                        elementParent.querySelector( "audio" );
+          if ( element ) {
+            getElementQuarantine().appendChild( element );
           }
           options._clip.destroy();
         }
