@@ -51,9 +51,11 @@
         target.appendChild( container );
       };
       options.displayLoading = function() {
+        _this.on( "play", options._surpressPlayEvent );
         document.querySelector( ".loading-message" ).classList.add( "show-media" );
       };
       options.hideLoading = function() {
+        _this.off( "play", options._surpressPlayEvent );
         document.querySelector( ".loading-message" ).classList.remove( "show-media" );
       };
 
@@ -94,6 +96,8 @@
         }
       };
 
+      // Function to ensure the mixup as to if a clip is an array
+      // or string is normalized to an array as often as possible.
       options.sourceToArray = function( updates ) {
         // If our src is not an array, create an array of one.
         options.source = typeof options.source === "string" ? [ options.source ] : options.source;
@@ -108,6 +112,9 @@
         }
       };
 
+      // If loading times out, we want to let the media continue to play.
+      // The clip that failed to load would be ignored,
+      // and everything else playable.
       options.fail = function() {
         _this.off( "play", options._playWhenReadyEvent );
         options.failed = true;
@@ -176,6 +183,8 @@
         }
       };
 
+      // Ensures seek time is seekable, and not already seeked.
+      // Returns true for successful seeks.
       options._setClipCurrentTime = function( time ) {
         if ( !time && time !== 0 ) {
           time = _this.currentTime() - options.start + (+options.from);
@@ -183,7 +192,14 @@
         if ( time !== options._clip.currentTime() &&
              time >= (+options.from) && time <= options.duration ) {
           options._clip.currentTime( time );
+          // Seek was successful.
+          return true;
         }
+      };
+
+      // While clip is loading, do not let the timeline play.
+      options._surpressPlayEvent = function() {
+        _this.pause();
       };
 
       options.setupContainer();
@@ -212,11 +228,11 @@
             }
             if ( options.playWhenReady ) {
               _this.play();
-              options._clip.on( "pause", options._seqPauseEvent );
             } else {
               options._clip.pause();
-              options._clip.on( "play", options._seqPlayEvent );
             }
+            options._clip.on( "play", options._clipPlayEvent );
+            options._clip.on( "pause", options._clipPauseEvent );
             if ( options.active ) {
               options._volumeEvent();
             }
@@ -226,45 +242,78 @@
           options._clip.play();
         };
         options._clip.on( "seeked", seekedEvent);
-        options._setClipCurrentTime();
+        // If the seek failed, we're already at the desired time.
+        // fire the seekedEvent right away.
+        if ( !options._setClipCurrentTime() ) {
+          seekedEvent();
+        }
       };
 
       options._playWhenReadyEvent = function() {
         options.playWhenReady = true;
       };
 
-      options._seqPlayEvent = function() {
+      // Two events for playing the main timeline if the clip is playing.
+      options._clipPlayEvent = function() {
         if ( _this.paused() ) {
-          setTimeout( function() {
-            options._clip.off( "play", options._seqPlayEvent );
-            _this.play();
-            options._clip.on( "pause", options._seqPauseEvent );
-          }, 0 );
+          _this.off( "play", options._playEvent );
+          _this.on( "play", options._playEventSwitch );
+          _this.play();
         }
       };
 
+      // Switch event is used to ensure we don't listen in loops.
+      options._clipPlayEventSwitch = function() {
+        options._clip.off( "play", options._clipPlayEventSwitch );
+        options._clip.on( "play", options._clipPlayEvent );
+      };
+
+      // Two events for playing the clip timeline if the main is playing.
       options._playEvent = function() {
         if ( options._clip.paused() ) {
+          options._clip.off( "play", options._clipPlayEvent );
+          options._clip.on( "play", options._clipPlayEventSwitch );
           options._clip.play();
         }
       };
 
-      options._seqPauseEvent = function() {
+      // Switch event is used to ensure we don't listen in loops.
+      options._playEventSwitch = function() {
+        _this.off( "play", options._playEventSwitch );
+        _this.on( "play", options._playEvent );
+      };
+
+      // Two events for pausing the main timeline if the clip is paused.
+      options._clipPauseEvent = function() {
         if ( !_this.paused() ) {
-          setTimeout( function() {
-            options._clip.off( "pause", options._seqPauseEvent );
-            _this.pause();
-            options._clip.on( "play", options._seqPlayEvent );
-          }, 0 );
+          _this.off( "pause", options._pauseEvent );
+          _this.on( "pause", options._pauseEventSwitch );
+          _this.pause();
         }
       };
 
+      // Switch event is used to ensure we don't listen in loops.
+      options._clipPauseEventSwitch = function() {
+        options._clip.off( "pause", options._clipPauseEventSwitch );
+        options._clip.on( "pause", options._clipPauseEvent );
+      };
+
+      // Two events for pausing the clip timeline if the main is paused.
       options._pauseEvent = function() {
         if ( !options._clip.paused() ) {
+          options._clip.off( "pause", options._clipPauseEvent );
+          options._clip.on( "pause", options._clipPauseEventSwitch );
           options._clip.pause();
         }
       };
 
+      // Switch event is used to ensure we don't listen in loops.
+      options._pauseEventSwitch = function() {
+        _this.off( "pause", options._pauseEventSwitch );
+        _this.on( "pause", options._pauseEvent );
+      };
+
+      // event to seek the slip if the main timeline seeked.
       options._seekedEvent = function() {
         options._setClipCurrentTime();
       };
@@ -405,8 +454,8 @@
       if ( options.ready ) {
         // video element can be clicked on. Keep them in sync with the main timeline.
         // We need to also clear these events.
-        options._clip.off( "play", options._seqPlayEvent );
-        options._clip.off( "pause", options._seqPauseEvent );
+        options._clip.off( "play", options._clipPlayEvent );
+        options._clip.off( "pause", options._clipPauseEvent );
         if ( !options._clip.paused() ) {
           options._clip.pause();
         }
