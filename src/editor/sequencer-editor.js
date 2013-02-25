@@ -98,7 +98,11 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
         }
         _pluginOptions.source.element.value = URI.stripUnique( trackEvent.popcornOptions.source[ 0 ] ).toString();
       }
+
       if ( trackEvent.popcornOptions.fallback ) {
+        if ( !Array.isArray( trackEvent.popcornOptions.fallback ) ) {
+          trackEvent.popcornOptions.fallback = [ trackEvent.popcornOptions.fallback ];
+        }
         _pluginOptions.fallback.element.value = URI.stripUnique( trackEvent.popcornOptions.fallback[ 0 ] ).toString();
       }
       _this.setTrackEventUpdateErrorCallback( _this.setErrorState );
@@ -115,6 +119,9 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
         _pluginOptions.source.element.value = URI.stripUnique( _trackEvent.popcornOptions.source[ 0 ] ).toString();
       }
       if ( _trackEvent.popcornOptions.fallback ) {
+        if ( !Array.isArray( _trackEvent.popcornOptions.fallback ) ) {
+          _trackEvent.popcornOptions.fallback = [ _trackEvent.popcornOptions.fallback ];
+        }
         _pluginOptions.fallback.element.value = URI.stripUnique( _trackEvent.popcornOptions.fallback[ 0 ] ).toString();
       }
       _this.setErrorState( false );
