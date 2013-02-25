@@ -37,7 +37,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
         var key,
             option;
 
-        function sourceCallback( trackEvent, updateOptions, prop ) {
+        function sourceCallback( trackEvent, updateOptions ) {
           MediaUtils.getMetaData( updateOptions.source, function( data ) {
             updateOptions.duration = data.duration;
             updateOptions.denied = data.denied;
@@ -52,7 +52,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
         function fromCallback( trackEvent, updateOptions ) {
           updateOptions.from = Time.toSeconds( updateOptions.from );
           if ( updateOptions.from >= trackEvent.popcornOptions.duration ) {
-            updateOptions.from = trackEvent.popcornOptions.from
+            updateOptions.from = trackEvent.popcornOptions.from;
           }
           trackEvent.update( updateOptions );
         }
@@ -120,7 +120,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
     }
 
     // Extend this object to become a TrackEventEditor
-    Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
+    window.Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
 
         _butter = butter;

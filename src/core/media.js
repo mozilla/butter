@@ -575,7 +575,7 @@
           set: function( importData ){
             var newTrack,
                 url,
-                i,
+                i, l,
                 fallbacks = [],
                 source = [];
             if( importData.name ) {
