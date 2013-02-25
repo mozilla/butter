@@ -2,10 +2,11 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
-  function( MediaUtils, Editor, Time, URI ) {
+define( [ "util/mediatypes", "editor/editor", "util/time",
+          "util/uri", "text!editor/default.html"  ],
+  function( MediaUtils, Editor, Time, URI, LAYOUT_SRC ) {
 
-  Editor.register( "sequencer", "load!{{baseDir}}src/editor/default.html",
+  Editor.register( "sequencer", LAYOUT_SRC,
     function( rootElement, butter ) {
     var _this = this;
 
@@ -120,7 +121,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time", "util/uri" ],
     }
 
     // Extend this object to become a TrackEventEditor
-    window.Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
+    Editor.TrackEventEditor.extend( _this, butter, rootElement, {
       open: function( parentElement, trackEvent ) {
 
         _butter = butter;
