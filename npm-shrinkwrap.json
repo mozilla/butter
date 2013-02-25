@@ -225,7 +225,7 @@
       "version": "1.4.0"
     },
     "newrelic": {
-      "version": "0.9.17-132",
+      "version": "0.9.18-138",
       "dependencies": {
         "bunyan": {
           "version": "0.14.6"

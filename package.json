@@ -96,7 +96,7 @@
     "less-middleware": "~0.1.9",
     "knox": "~0.4.4",
     "node-uuid": "~1.4.0",
-    "newrelic": "~0.9.17-132",
+    "newrelic": "~0.9.18-138",
     "habitat": "~0.4",
     "node-statsd": "~0.0.3"
   },
