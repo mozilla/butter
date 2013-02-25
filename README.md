@@ -228,10 +228,9 @@ Server Monitoring
 
 Popcorn Maker supports server monitoring with [New Relic](https://newrelic.com/). It is implemented by the [newrelic npm module](https://github.com/newrelic/node-newrelic/).
 Configuration is done entirely with environment variables. See the [https://github.com/newrelic/node-newrelic/#configuring-the-agent](README) for a comprehensive list.
-To enable New Relic monitoring with Popcorn Maker, the following environment variables *must* be set:
+To enable New Relic monitoring with Popcorn Maker, the following environment variable *must* be set:
 
-* NEW\_RELIC\_APP\_NAME
-* NEW\_RELIC\_LICENSE\_KEY
+* NEW\_RELIC\_HOME
 
 Getting Involved
 ----------------

@@ -9,5 +9,5 @@ respawn limit 2 30
 
 script
   cd /opt/butter/current/cornfield
-  PATH=/opt/node/current/bin:$PATH NODE_CONFIG_DIR=/etc/popcorn NODE_ENV=production node app.js | rotatelogs -l /var/log/butter.log.%Y.%m.%d 86400 2>&1
+  PATH=/opt/node/current/bin:$PATH NODE_CONFIG_DIR=/etc/popcorn NEW_RELIC_HOME=/etc/popcorn NODE_ENV=production node app.js | rotatelogs -l /var/log/butter.log.%Y.%m.%d 86400 2>&1
 end script
