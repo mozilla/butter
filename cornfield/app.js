@@ -184,7 +184,7 @@ app.post( '/api/publish/:id',
       // Converter for paths, which may either use \ or / as
       // delimiter, to URLs, which must use / as delimiter.
       function pathToURL( s ) {
-        return s.replace(/\\/g,'/');
+        return s.replace( /\\/g, '/' );
       }
 
       templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
