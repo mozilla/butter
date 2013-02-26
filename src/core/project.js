@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "core/eventmanager", "core/media" ],
-        function( EventManager, Media ) {
+define( [ "core/eventmanager", "core/media", "util/sanitizer" ],
+        function( EventManager, Media, Sanitizer ) {
 
   var __butterStorage = window.localStorage;
 
@@ -199,7 +199,10 @@ define( [ "core/eventmanager", "core/media" ],
       }
 
       if ( json.name ) {
-        _name = json.name;
+        // replace HTML entities ("&amp;", etc), possibly introduced by
+        // templating rules being applied to project metadata, with
+        // their plain form counterparts ("&", etc).
+        _name = Sanitizer.reconstituteHTML( json.name );
       }
 
       if ( json.template ) {

@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
-        function( EventManager, TrackEvent, TrackView ){
+define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitizer" ],
+        function( EventManager, TrackEvent, TrackView, Sanitizer ){
 
   var __guid = 0,
       NAME_PREFIX = "Layer ",
@@ -184,6 +184,41 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       }
     }
 
+    /**
+     * Sanitize a trackEvent's popcornOptions data, so that we do not
+     * build any elements in the editor that might contain hidden
+     * DOM nodes. Practically, this means scrubbing textarea and
+     * input[type=text] plugin fields for content that spanws DOM
+     * nodes when assigned through .innerHTML or as contentEditable
+     * user-generated content.
+     */
+    this.sanitizeTrackEventData = function( trackEvent ) {
+      // Step 1: find all properties that may lead to problems
+      var manifestOptions = trackEvent.manifest.options,
+          sanitizationList = [],
+          propertyName,
+          option;
+      for ( propertyName in manifestOptions) {
+        if ( manifestOptions.hasOwnProperty(propertyName) ) {
+          option = manifestOptions[propertyName];
+          if ( option.elem === "textarea" || option.elem === "input" ) {
+            // sanitize the input for this element
+            sanitizationList.push(propertyName);
+          }
+        }
+      }
+
+      // Step 2: with the properties known, find their
+      // content, and ensure it's clean prior to UI building.
+      sanitizationList.forEach(function( optionName ) {
+        var content = trackEvent.popcornOptions[optionName];
+        if ( typeof content !== "string" ) {
+          return;
+        }
+        trackEvent.popcornOptions[optionName] = Sanitizer.reconstituteHTML(content);
+      });
+    },
+
     this.addTrackEvent = function( trackEvent ) {
       var oldSelected = false;
 
@@ -199,6 +234,9 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       if ( trackEvent.track ) {
         throw "TrackEvent still bound to track. Please use `track.removeTrackEvent` first.";
       }
+
+      // Sanitize the track even data prior to building the UI.
+      this.sanitizeTrackEventData(trackEvent);
 
       trackEvent.bind( _this, _popcornWrapper );
 
