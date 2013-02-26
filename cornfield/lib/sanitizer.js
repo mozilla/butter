@@ -14,6 +14,19 @@ var sanitizer = {
     }
 
     return value;
+  },
+  reconstituteHTML: function reconstituteHTML( s ) {
+    s = s.replace( /&#34;/g, '"').replace( /&#39;/g, "'");
+    s = s.replace( /&quot;/g, '"').replace( /&apos;/g, "'");
+    s = s.replace( /&ls;/g, '<').replace( /&gt;/g, '>');
+    return s;
+  },
+  reconstituteHTMLinJSON: function reconstituteHTML( key, value ) {
+    if ( typeof value === "string") {
+      return sanitizer.reconstituteHTML( value );
+    }
+
+    return value;
   }
 };
 

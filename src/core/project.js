@@ -182,6 +182,13 @@ define( [ "core/eventmanager", "core/media" ],
       var oldTarget, targets, targetData,
           mediaData, media, m, i, l;
 
+      // convert text with HTML entities into plain text.
+      function reconstituteHTML( htmlString ) {
+        var _ = document.createElement("div");
+        _.innerHTML = htmlString;
+        return _.textContent;
+      }
+
       // If JSON, convert to Object
       if ( typeof json === "string" ) {
         try {
@@ -197,7 +204,9 @@ define( [ "core/eventmanager", "core/media" ],
       }
 
       if ( json.name ) {
-        _name = json.name;
+        // undo HTML entities possibly introduced by templating
+        // rules being  applied to project metadata.
+        _name = reconstituteHTML( json.name );
       }
 
       if ( json.template ) {

@@ -191,9 +191,9 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
         return;
       }
 
-      var projectJSON = JSON.parse( project.data, sanitizer.escapeHTMLinJSON );
-      projectJSON.name = "Remix of " + sanitizer.escapeHTML( project.name );
-      projectJSON.template = sanitizer.escapeHTML( project.template );
+      var projectJSON = JSON.parse( project.data, sanitizer.reconstituteHTMLinJSON );
+      projectJSON.name = "Remix of " + project.name;
+      projectJSON.template = project.template;
       projectJSON.remixedFrom = project.id;
 
       res.json( projectJSON );
