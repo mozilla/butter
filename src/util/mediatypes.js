@@ -48,12 +48,17 @@ define( [ "util/xhr", "util/uri" ],
         xhrURL = "https://gdata.youtube.com/feeds/api/videos/" + id + "?v=2&alt=jsonc&callback=?";
         Popcorn.getJSONP( xhrURL, function( resp ) {
           var respData = resp.data,
-              from = 0;
+              from = parsedUri.queryKey.t;
           if ( !respData ) {
             return;
           }
-          if ( parsedUri.queryKey.t ) {
-            from = parsedUri.queryKey.t.replace( "s", "" );
+          if ( from ) {
+            from = from.replace( /(?:(\d+)m)?(?:(\d+)s)?/, function( all, minutes, seconds ) {
+              // Make sure we have real zeros
+              minutes = minutes | 0; // bit-wise OR
+              seconds = seconds | 0; // bit-wise OR
+              return ( +seconds + ( minutes * 60 ) );
+            });
           }
           callback({
             source: "http://www.youtube.com/watch?v=" + id,
