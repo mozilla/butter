@@ -309,10 +309,6 @@
           collectedEvents = collectedEvents.concat( _tracks[ i ].trackEvents );
         }
 
-        /* TODO: determine if we need to turn on frameAnimation or not before calling generatePopcornString
-         * for now we default to off when exporting by setting frameAnimation to false. This should be handled in #1370.
-         */
-        popcornOptions.frameAnimation = false;
         return _popcornWrapper.generatePopcornString( popcornOptions, _url, _target, null, callbacks, scripts, collectedEvents );
       };
 
@@ -568,6 +564,7 @@
               url: sanitizeUrl(),
               target: _target,
               duration: _duration,
+              popcornOptions: _popcornOptions,
               controls: _popcornWrapper.popcorn ? _popcornWrapper.popcorn.controls() : false,
               tracks: exportJSONTracks
             };
