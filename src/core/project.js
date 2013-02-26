@@ -156,6 +156,8 @@ define( [ "core/eventmanager", "core/media" ],
 
       // Listen for changes in the project data so we know when to save.
       [ "mediacontentchanged",
+        "mediaclipadded",
+        "mediaclipremoved",
         "mediatargetchanged",
         "trackadded",
         "trackremoved",
