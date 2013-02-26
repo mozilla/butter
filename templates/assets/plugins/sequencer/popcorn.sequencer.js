@@ -241,6 +241,7 @@
           options._clip.on( "play", playedEvent );
           options._clip.play();
         };
+        options._clip.mute();
         options._clip.on( "seeked", seekedEvent);
         // If the seek failed, we're already at the desired time.
         // fire the seekedEvent right away.
