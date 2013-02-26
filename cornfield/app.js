@@ -104,12 +104,6 @@ require( 'express-persona' )( app, {
 
 require('./routes')( app, User, filter, sanitizer, stores, utils, metrics );
 
-// Converter for paths, which may either use \ or / as
-// delimiter, to URLs, which must use / as delimiter.
-function pathToURL( s ) {
-  return s.replace( /\\/g, '/' );
-}
-
 function writeEmbedShell( path, url, data, callback ) {
   if( !writeEmbedShell.templateFn ) {
     writeEmbedShell.templateFn = jade.compile( fs.readFileSync( 'views/embed-shell.jade', 'utf8' ),
@@ -204,7 +198,7 @@ app.post( '/api/publish/:id',
 
       externalAssetsString += '\n';
       for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
-        externalAssetURL = pathToURL( path.relative( path.dirname( templateFile ), EXPORT_ASSETS[ i ] ) );
+        externalAssetURL = utils.pathToURL( path.relative( path.dirname( templateFile ), EXPORT_ASSETS[ i ] ) );
         externalAssetsString += '  <script src="' + externalAssetURL + '"></script>\n';
       }
 
@@ -212,7 +206,7 @@ app.post( '/api/publish/:id',
       if ( templateConfig.plugin && templateConfig.plugin.plugins ) {
         var plugins = templateConfig.plugin.plugins;
         for ( i = 0, len = plugins.length; i < len; i++ ) {
-          externalAssetURL = pathToURL( APP_HOSTNAME + '/' + plugins[ i ].path.split( '{{baseDir}}' ).pop() );
+          externalAssetURL = utils.pathToURL( APP_HOSTNAME + '/' + plugins[ i ].path.split( '{{baseDir}}' ).pop() );
           externalAssetsString += '\n  <script src="' + externalAssetURL + '"></script>';
         }
         externalAssetsString += '\n';
@@ -330,7 +324,7 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
           _id: String(project.id),
           name: sanitizer.escapeHTML( project.name ),
           template: project.template,
-          href: pathToURL( path.relative( WWW_ROOT, templateConfigs[ project.template ].template ) +
+          href: utils.pathToURL( path.relative( WWW_ROOT, templateConfigs[ project.template ].template ) +
             "?savedDataUrl=/api/project/" + project.id ),
           updatedAt: project.updatedAt
         });

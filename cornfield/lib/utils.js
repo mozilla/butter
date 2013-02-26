@@ -7,22 +7,27 @@ var utils,
     CONSTANTS;
 
 utils = {
+  // Converter for paths, which may either use \ or / as
+  // delimiter, to URLs, which must use / as delimiter.
+  pathToURL: function ( s ) {
+    return s.replace( /\\/g, '/' );
+  },
   generateDataURIPair: function() {
     var filename = uuid.v4();
     return {
       filename: filename,
-      url: ( stores.images.hostname || CONSTANTS.EMBED_HOSTNAME ) +
-        '/' + stores.images.expand( filename )
+      url: utils.pathToURL( (stores.images.hostname || CONSTANTS.EMBED_HOSTNAME ) +
+           '/' + stores.images.expand( filename ) )
     };
   },
   generatePublishUrl: function( id ) {
-    return ( stores.publish.hostname || CONSTANTS.EMBED_HOSTNAME ) +
-      '/' + stores.publish.expand( utils.generateIdString( id ) );
+    return utils.pathToURL( ( stores.publish.hostname || CONSTANTS.EMBED_HOSTNAME ) +
+      '/' + stores.publish.expand( utils.generateIdString( id ) ) );
   },
   generateIframeUrl: function( id ) {
-    return ( stores.publish.hostname || CONSTANTS.EMBED_HOSTNAME ) +
+    return utils.pathToURL( ( stores.publish.hostname || CONSTANTS.EMBED_HOSTNAME ) +
       '/' + stores.publish.expand( utils.generateIdString( id ) +
-      CONSTANTS.EMBED_SUFFIX );
+      CONSTANTS.EMBED_SUFFIX ) );
   },
   generateIdString: function( id ) {
     return id.toString( 36 );
