@@ -166,6 +166,7 @@ app.post( '/api/publish/:id',
 
       var headEndTagIndex,
           bodyEndTagIndex,
+          externalAssetURL = '',
           externalAssetsString = '',
           popcornString = '',
           currentMedia,
@@ -179,6 +180,12 @@ app.post( '/api/publish/:id',
           startString,
           numSources,
           j, k, len;
+
+      // Converter for paths, which may either use \ or / as
+      // delimiter, to URLs, which must use / as delimiter.
+      function pathToURL( s ) {
+        return s.replace(/\\/g,'/');
+      }
 
       templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
       baseHref = APP_HOSTNAME + templateURL + "/";
@@ -197,14 +204,16 @@ app.post( '/api/publish/:id',
 
       externalAssetsString += '\n';
       for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
-        externalAssetsString += '  <script src="' + path.relative( path.dirname( templateFile ), EXPORT_ASSETS[ i ] ) + '"></script>\n';
+        externalAssetURL = pathToURL( path.relative( path.dirname( templateFile ), EXPORT_ASSETS[ i ] ) );
+        externalAssetsString += '  <script src="' + externalAssetURL + '"></script>\n';
       }
 
       // If the template has custom plugins defined in it's config, add them to our exported page
       if ( templateConfig.plugin && templateConfig.plugin.plugins ) {
         var plugins = templateConfig.plugin.plugins;
         for ( i = 0, len = plugins.length; i < len; i++ ) {
-          externalAssetsString += '\n  <script src="' + APP_HOSTNAME + '/' + plugins[ i ].path.split( '{{baseDir}}' ).pop() + '"></script>';
+          externalAssetURL = pathToURL( APP_HOSTNAME + '/' + plugins[ i ].path.split( '{{baseDir}}' ).pop() );
+          externalAssetsString += '\n  <script src="' + externalAssetURL + '"></script>';
         }
         externalAssetsString += '\n';
       }
@@ -321,8 +330,8 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
           _id: String(project.id),
           name: sanitizer.escapeHTML( project.name ),
           template: project.template,
-          href: path.relative( WWW_ROOT, templateConfigs[ project.template ].template ) +
-            "?savedDataUrl=/api/project/" + project.id,
+          href: (path.relative( WWW_ROOT, templateConfigs[ project.template ].template ) +
+            "?savedDataUrl=/api/project/" + project.id).replace("\\","/"),
           updatedAt: project.updatedAt
         });
       }
