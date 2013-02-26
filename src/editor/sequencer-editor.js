@@ -42,6 +42,8 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           MediaUtils.getMetaData( updateOptions.source, function( data ) {
             updateOptions.duration = data.duration;
             updateOptions.denied = data.denied;
+            updateOptions.from = data.from || 0;
+            updateOptions.source = data.source;
             trackEvent.update( updateOptions );
           });
         }

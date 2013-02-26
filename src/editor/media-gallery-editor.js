@@ -75,6 +75,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
         source: data.source,
         denied: data.denied,
         end: data.duration,
+        from: data.from,
         title: data.title,
         duration: data.duration,
         hidden: data.hidden
@@ -122,6 +123,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
           denied: data.denied,
           start: start,
           end: end,
+          from: data.from,
           title: data.title,
           duration: data.duration,
           hidden: data.hidden
