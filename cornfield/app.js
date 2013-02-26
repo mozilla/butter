@@ -104,6 +104,12 @@ require( 'express-persona' )( app, {
 
 require('./routes')( app, User, filter, sanitizer, stores, utils, metrics );
 
+// Converter for paths, which may either use \ or / as
+// delimiter, to URLs, which must use / as delimiter.
+function pathToURL( s ) {
+  return s.replace( /\\/g, '/' );
+}
+
 function writeEmbedShell( path, url, data, callback ) {
   if( !writeEmbedShell.templateFn ) {
     writeEmbedShell.templateFn = jade.compile( fs.readFileSync( 'views/embed-shell.jade', 'utf8' ),
@@ -180,12 +186,6 @@ app.post( '/api/publish/:id',
           startString,
           numSources,
           j, k, len;
-
-      // Converter for paths, which may either use \ or / as
-      // delimiter, to URLs, which must use / as delimiter.
-      function pathToURL( s ) {
-        return s.replace( /\\/g, '/' );
-      }
 
       templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
       baseHref = APP_HOSTNAME + templateURL + "/";
@@ -330,8 +330,8 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
           _id: String(project.id),
           name: sanitizer.escapeHTML( project.name ),
           template: project.template,
-          href: (path.relative( WWW_ROOT, templateConfigs[ project.template ].template ) +
-            "?savedDataUrl=/api/project/" + project.id).replace("\\","/"),
+          href: pathToURL( path.relative( WWW_ROOT, templateConfigs[ project.template ].template ) +
+            "?savedDataUrl=/api/project/" + project.id ),
           updatedAt: project.updatedAt
         });
       }
