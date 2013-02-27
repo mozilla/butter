@@ -91,6 +91,7 @@
         options._container.style.top = ( options.top || "0" ) + "%";
         options._container.style.left = ( options.left || "0" ) + "%";
         _this.on( "volumechange", options._volumeEvent );
+        options._clip.on( "progress", options._onProgress )
         if ( options.active ) {
           options._startEvent();
         }
@@ -118,10 +119,10 @@
       options.fail = function() {
         _this.off( "play", options._playWhenReadyEvent );
         options.failed = true;
-        options.hideLoading();
         if ( !options.hidden && options.active ) {
           options._container.style.zIndex = +options.zindex;
         }
+        options.hideLoading();
         if ( options.playWhenReady ) {
           _this.play();
         }
@@ -157,7 +158,7 @@
         _this.off( "play", options._playWhenReadyEvent );
         _this.off( "play", options._playEvent );
         _this.off( "pause", options._pauseEvent );
-        _this.off( "seeked", options._seekedEvent );
+        _this.off( "seeked", options._onSeeked );
       };
 
       options.addSource = function() {
@@ -183,6 +184,40 @@
         }
       };
 
+      options._onProgress = function() {
+        var i, l,
+            buffered = options._clip.media.buffered;
+
+        // We're likely in a wrapper that does not support buffered.
+        // Assume we are buffered.
+        // Once these wrappers have a buffered time range object, it should just work.
+        if ( buffered.length === 0 ) {
+          return;
+        }
+
+        for ( var i = 0, l = buffered.length; i < l; i++ ) {
+          // Check if a range is valid, if so, return early.
+          if ( buffered.start( i ) <= options._clip.currentTime() &&
+               buffered.end( i ) > options._clip.currentTime() ) {
+            // We found a valid range so playing can resume.
+            options.hideLoading();
+            if ( options.playWhenReady ) {
+              options.playWhenReady = false;
+              _this.play();
+            }
+            return;
+          }
+        }
+
+        // If we hit here, we failed to find a valid range,
+        // so we should probably stop everything. We'll get out of sync.
+        if ( !_this.paused() ) {
+          options.playWhenReady = true;
+          _this.pause();
+        }
+        options.displayLoading();
+      };
+
       // Ensures seek time is seekable, and not already seeked.
       // Returns true for successful seeks.
       options._setClipCurrentTime = function( time ) {
@@ -199,6 +234,7 @@
 
       // While clip is loading, do not let the timeline play.
       options._surpressPlayEvent = function() {
+        options.playWhenReady = true;
         _this.pause();
       };
 
@@ -219,7 +255,7 @@
             _this.off( "play", options._playWhenReadyEvent );
             _this.on( "play", options._playEvent );
             _this.on( "pause", options._pauseEvent );
-            _this.on( "seeked", options._seekedEvent );
+            _this.on( "seeked", options._onSeeked );
             options.hideLoading();
             if ( !options.hidden && options.active ) {
               options._container.style.zIndex = +options.zindex;
@@ -315,7 +351,7 @@
       };
 
       // event to seek the slip if the main timeline seeked.
-      options._seekedEvent = function() {
+      options._onSeeked = function() {
         options._setClipCurrentTime();
       };
 
@@ -447,11 +483,11 @@
       }
     },
     end: function( event, options ) {
-      options.clearEvents();
-      options.hideLoading();
       // cancel any pending or future starts
       options.active = false;
       options.playWhenReady = false;
+      options.clearEvents();
+      options.hideLoading();
       if ( options.ready ) {
         // video element can be clicked on. Keep them in sync with the main timeline.
         // We need to also clear these events.
