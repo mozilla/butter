@@ -502,7 +502,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
         }, false );
       }
 
-      if ( element.type === "textarea" ) {
+      if ( element.type === "textarea" && manifestType !== "url" ) {
         tooltipName = "shift-enter-tooltip-" + Date.now();
 
         extendObject.createTooltip( element, {

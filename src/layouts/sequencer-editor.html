@@ -1,0 +1,95 @@
+<!--  This Source Code Form is subject to the terms of the MIT license
+      If a copy of the MIT license was not distributed with this file, you can
+      obtain one at https://raw.github.com/mozilla/butter/master/LICENSE -->
+
+<div class="butter-editor sequencer-editor allow-scrollbar">
+  <h1>Clip editor</h1>
+  <div class="butter-editor-body scrollbar-container">
+    <div class="editor-options-wrapper scrollbar-outer">
+      <div class="editor-options scrollbar-inner">
+
+        <fieldset class="butter-editor-section media-properties">
+          <label>URL</label>
+           <textarea class="url two-lines" data-manifest-key="source"></textarea>
+
+          <div class="fallback-container">
+            <label>Fallback
+              <span class="icon icon-only icon-question-sign">
+                <span class="butter-tooltip">
+                  To support all browsers, include both <strong>.mp4</strong> and <strong>.webm</strong> versions of your HTML5 video.
+                </span>
+              </span>
+            </label>
+            <textarea class="url two-lines" data-manifest-key="fallback"></textarea>
+          </div>
+        </fieldset>
+
+        <fieldset class="butter-editor-section in-out butter-form-inline form-half">
+          <div class="clip-duration" data-manifest-key="from">
+            <label class="clip-start">0:00</label>
+            <label class="clip-end"></label>
+            <div class="clip-section">
+              <span class="trimmer-resizable-handle trimmer-resizable-e"></span>
+              <span class="trimmer-resizable-handle trimmer-resizable-w"></span>
+            </div>
+          </div>
+          <div class="butter-form-append">
+            <label>In</label>
+              <input class="trimmer-input-left">
+          </div>
+          <div class="butter-form-append">
+            <label>Out</label>
+            <input class="trimmer-input-right">
+          </div>
+        </fieldset>
+
+        <fieldset class="butter-editor-section">
+          <div class="butter-editor-inline">
+            <label><span class="icon icon-film"></span>Video</label>
+            <div>
+              <div class="switch on" id="hidden-toggler">
+                <input type="checkbox" data-manifest-key="hidden">
+                <span class="switch-on">on</span>
+                <span class="switch-off">off</span>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="butter-editor-section">
+          <div class="butter-editor-inline">
+            <label><span class="icon icon-music"></span>Audio</label>
+            <div>
+              <div class="switch on" id="mute-toggler">
+                <input type="checkbox" data-manifest-key="mute">
+                <span class="switch-on">on</span>
+                <span class="switch-off">off</span>
+              </div>
+            </div>
+          </div>
+          <div class="butter-editor-inline volume-slider-container">
+            <label>Volume</label>
+            <div>
+                <div class="butter-slider" data-manifest-key="volume" data-max="100">
+                  <span class="butter-slider-scrubber"></span>
+                  <label class="slider-start">0</label>
+                  <label class="slider-end">100%</label>
+                </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="butter-editor-section">
+          <label>Clip title</label>
+          <input data-manifest-key="title">
+        </fieldset>
+
+        <div class="start-end-container"></div>
+
+        <div class="error-message-container">
+          <div class="error-message"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
