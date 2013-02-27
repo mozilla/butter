@@ -23,7 +23,8 @@
     return quarantine;
   }
 
-  var MEDIA_LOAD_TIMEOUT = 10000;
+  var MEDIA_LOAD_TIMEOUT = 10000,
+      SYNC_MARGIN_SECONDS = 1;
 
   Popcorn.plugin( "sequencer", {
     _setup: function( options ) {
@@ -51,11 +52,20 @@
         target.appendChild( container );
       };
       options.displayLoading = function() {
+        if ( !_this.paused() ) {
+          options.playWhenReady = true;
+          _this.pause();
+        }
         _this.on( "play", options._surpressPlayEvent );
+        _this.on( "pause", options._surpressPauseEvent );
         document.querySelector( ".loading-message" ).classList.add( "show-media" );
       };
       options.hideLoading = function() {
+        if ( options.playWhenReady ) {
+          _this.play();
+        }
         _this.off( "play", options._surpressPlayEvent );
+        _this.off( "pause", options._surpressPauseEvent );
         document.querySelector( ".loading-message" ).classList.remove( "show-media" );
       };
 
@@ -91,6 +101,7 @@
         options._container.style.top = ( options.top || "0" ) + "%";
         options._container.style.left = ( options.left || "0" ) + "%";
         _this.on( "volumechange", options._volumeEvent );
+        options._clip.on( "progress", options._onProgress )
         if ( options.active ) {
           options._startEvent();
         }
@@ -118,13 +129,10 @@
       options.fail = function() {
         _this.off( "play", options._playWhenReadyEvent );
         options.failed = true;
-        options.hideLoading();
         if ( !options.hidden && options.active ) {
           options._container.style.zIndex = +options.zindex;
         }
-        if ( options.playWhenReady ) {
-          _this.play();
-        }
+        options.hideLoading();
       };
 
       options.tearDown = function() {
@@ -157,7 +165,7 @@
         _this.off( "play", options._playWhenReadyEvent );
         _this.off( "play", options._playEvent );
         _this.off( "pause", options._pauseEvent );
-        _this.off( "seeked", options._seekedEvent );
+        _this.off( "timeupdate", options._onTimeUpdate );
       };
 
       options.addSource = function() {
@@ -183,6 +191,24 @@
         }
       };
 
+      options._onProgress = function() {
+        var i, l,
+            buffered = options._clip.media.buffered;
+        for ( var i = 0, l = buffered.length; i < l; i++ ) {
+          // Check if a range is valid, if so, return early.
+          if ( buffered.start( i) <= options._clip.currentTime() &&
+               buffered.end( i ) > options._clip.currentTime() ) {
+            // We found a valid range, keep on rolling.
+            options.hideLoading();
+            return;
+          }
+        }
+
+        // If we hit here, we failed ot find a valid range,
+        // so we should probably stop everything. We'll get out of sync.
+        options.displayLoading();
+      };
+
       // Ensures seek time is seekable, and not already seeked.
       // Returns true for successful seeks.
       options._setClipCurrentTime = function( time ) {
@@ -197,9 +223,19 @@
         }
       };
 
+      // Ensures seek time is seekable, and not already seeked.
+      // Returns true for successful seeks.
+      options._getClipCurrentTime = function() {
+        return options._clip.currentTime() - (+options.from) + options.start;
+      };
+
       // While clip is loading, do not let the timeline play.
       options._surpressPlayEvent = function() {
+        options.playWhenReady = true;
         _this.pause();
+      };
+      options._surpressPauseEvent = function() {
+        options.playWhenReady = false;
       };
 
       options.setupContainer();
@@ -219,18 +255,16 @@
             _this.off( "play", options._playWhenReadyEvent );
             _this.on( "play", options._playEvent );
             _this.on( "pause", options._pauseEvent );
-            _this.on( "seeked", options._seekedEvent );
-            options.hideLoading();
+            _this.on( "timeupdate", options._onTimeUpdate );
             if ( !options.hidden && options.active ) {
               options._container.style.zIndex = +options.zindex;
             } else {
               options._container.style.zIndex = 0;
             }
-            if ( options.playWhenReady ) {
-              _this.play();
-            } else {
+            if ( !options.playWhenReady ) {
               options._clip.pause();
             }
+            options.hideLoading();
             options._clip.on( "play", options._clipPlayEvent );
             options._clip.on( "pause", options._clipPauseEvent );
             if ( options.active ) {
@@ -276,6 +310,17 @@
           options._clip.on( "play", options._clipPlayEventSwitch );
           options._clip.play();
         }
+      };
+
+      options._onTimeUpdate = function() {
+        /*var clipTime = options._getClipCurrentTime(),
+            targetTime = _this.currentTime();
+        if ( clipTime >= targetTime - SYNC_MARGIN_SECONDS && clipTime <= targetTime ) {
+          // we're within a second each way of the main media.
+          // do nothing.
+          return;
+        }*/
+        options._setClipCurrentTime();
       };
 
       // Switch event is used to ensure we don't listen in loops.
@@ -441,17 +486,16 @@
         if ( options.ready ) {
           options._startEvent();
         } else {
-          this.pause();
           options.displayLoading();
         }
       }
     },
     end: function( event, options ) {
-      options.clearEvents();
-      options.hideLoading();
       // cancel any pending or future starts
       options.active = false;
       options.playWhenReady = false;
+      options.clearEvents();
+      options.hideLoading();
       if ( options.ready ) {
         // video element can be clicked on. Keep them in sync with the main timeline.
         // We need to also clear these events.
