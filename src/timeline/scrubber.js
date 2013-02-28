@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang" ],
+define( [ "util/time" ],
   function( util ) {
 
   var SCROLL_INTERVAL = 16,
@@ -178,7 +178,7 @@ define( [ "util/lang" ],
     }
 
     function setTimeTooltip() {
-      _timeTooltip.innerHTML = util.secondsToSMPTE( ( _timelineMousePos + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration );
+      _timeTooltip.innerHTML = util.toTimecode( ( _timelineMousePos + _tracksContainer.element.scrollLeft ) / _tracksContainerWidth * _media.duration, 0 );
     }
 
     function onMouseOver( e ) {
@@ -215,7 +215,7 @@ define( [ "util/lang" ],
       _mouseDownPos = e.pageX - _node.offsetLeft;
 
       if ( _media.currentTime >= 0 ) {
-        _timeTooltip.innerHTML = util.secondsToSMPTE( _media.currentTime );
+        _timeTooltip.innerHTML = util.toTimecode( _media.currentTime, 0 );
       }
       _timeTooltip.classList.add( "tooltip-no-transition-on" );
 

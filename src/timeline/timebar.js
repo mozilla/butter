@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
+define( [ "./scrubber" ], function( Scrubber ) {
 
   var CANVAS_CONTAINER_PADDING = 5,
       TICK_COLOR = "#999999";
@@ -30,10 +30,8 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
       }
 
       var inc = _tracksContainer.container.clientWidth / _media.duration,
-          textWidth = context.measureText( util.secondsToSMPTE( 5 ) ).width,
           padding = 20,
           lastPosition = 0,
-          lastTimeDisplayed = -( ( textWidth + padding ) / 2 ),
           start = _tracksContainer.element.scrollLeft / inc,
           end = ( _tracksContainer.element.scrollLeft + containerWidth ) / inc;
 
@@ -76,13 +74,6 @@ define( [ "util/lang", "./scrubber" ], function( util, Scrubber ) {
           }
           context.moveTo( -~position, 0 );
           context.lineTo( -~position, 10 );
-
-          if ( ( position - lastTimeDisplayed ) > textWidth + padding ) {
-
-            lastTimeDisplayed = position;
-            // text color
-            context.fillStyle = TICK_COLOR;
-          }
 
           lastPosition = position;
         }

@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang" ], function( util ){
+define( [ "util/time" ], function( util ){
 
   function Button( parentNode, className, onClick ) {
     var _container = parentNode.querySelector( className ),
@@ -44,7 +44,7 @@ define( [ "util/lang" ], function( util ){
       if( typeof( time ) === "string" || !isNaN( time ) ){
         if( setCurrentTime ){
           try {
-            time = Popcorn.util.toSeconds( time );
+            time = util.toSeconds( time );
             _media.currentTime = time;
           }
           catch( e ){
@@ -52,7 +52,7 @@ define( [ "util/lang" ], function( util ){
           } //try
         } //if
 
-        _timeBox.value = util.secondsToSMPTE( time );
+        _timeBox.value = util.toTimecode( time, 0 );
       }
       else {
         _timeBox.value = _oldValue;
