@@ -69,22 +69,22 @@
           var toTimecode = TimeUtils.toTimecode;
 
           strictEqual( toTimecode( "01:01:01" ), "1:01:01", "pass" );
-          strictEqual( toTimecode( "00:00:01" ), "1", "pass" );
-          strictEqual( toTimecode( "1" ), "1", "pass" );
+          strictEqual( toTimecode( "00:00:01" ), "0:01", "pass" );
+          strictEqual( toTimecode( "1" ), "0:01", "pass" );
           strictEqual( toTimecode( "3661" ), "1:01:01", "pass" );
-          strictEqual( toTimecode( "00:04.132412341234" ), "4.13", "pass" );
-          strictEqual( toTimecode( "0" ), "0", "pass" );
-          strictEqual( toTimecode( "00:01" ), "1", "pass" );
+          strictEqual( toTimecode( "00:04.132412341234" ), "0:04.13", "pass" );
+          strictEqual( toTimecode( "0" ), "0:00", "pass" );
+          strictEqual( toTimecode( "00:01" ), "0:01", "pass" );
 
           strictEqual( typeof toTimecode( "0" ), "string", "pass" );
           strictEqual( typeof toTimecode( "1" ), "string", "pass" );
           strictEqual( typeof toTimecode( 1 ), "string", "pass" );
           strictEqual( typeof toTimecode( 0 ), "string", "pass" );
 
-          strictEqual( toTimecode( 1 ), "1", "pass" );
+          strictEqual( toTimecode( 1 ), "0:01", "pass" );
           strictEqual( toTimecode( 120 ), "2:00", "pass" );
           strictEqual( toTimecode( 3600 ), "1:00:00", "pass" );
-          strictEqual( toTimecode( -1 ), "-1", "pass" );
+          strictEqual( toTimecode( -1 ), "-0:01", "pass" );
           strictEqual( toTimecode( -3600 ), "-1:00:00", "pass" );
           strictEqual( toTimecode( -120 ), "-2:00", "pass" );
 
@@ -98,15 +98,15 @@
           strictEqual( toTimecode( "-1:01:01" ), "-1:01:01", "pass" );
 
           strictEqual( toTimecode( "  01:01:01" ), "1:01:01", "pass" );
-          strictEqual( toTimecode( " 000:00:01" ), "1", "pass" );
+          strictEqual( toTimecode( " 000:00:01" ), "0:01", "pass" );
           strictEqual( toTimecode( "  000:01:01.00" ), "1:01", "pass" );
 
-          strictEqual( toTimecode( 0.01 ), "0.01", "pass" );
-          strictEqual( toTimecode( 0.001 ), "0", "pass" );
+          strictEqual( toTimecode( 0.01 ), "0:00.01", "pass" );
+          strictEqual( toTimecode( 0.001 ), "0:00", "pass" );
           strictEqual( toTimecode( "01:01.10" ), "1:01.1", "pass" );
 
-          strictEqual( toTimecode( "" ), "0", "pass" );
-          strictEqual( toTimecode( "invalid" ), "0", "pass" );
+          strictEqual( toTimecode( "" ), "0:00", "pass" );
+          strictEqual( toTimecode( "invalid" ), "0:00", "pass" );
           strictEqual( toTimecode( null ), 0, "pass" );
           strictEqual( toTimecode( undefined ), 0, "pass" );
           strictEqual( toTimecode( {} ), 0, "pass" );
@@ -119,6 +119,8 @@
           strictEqual( toTimecode( 60.10001, 1 ), "1:00.1", "pass" );
           strictEqual( toTimecode( 60.10001, 2 ), "1:00.1", "pass" );
           strictEqual( toTimecode( 60.10001 ), "1:00.1", "pass" );
+
+          strictEqual( toTimecode( 129670 ), "36:01:10", "pass" );
         });
       });
     </script>
