@@ -53,11 +53,12 @@ define( [ "util/xhr", "util/uri" ],
             return;
           }
           if ( from ) {
-            from = from.replace( /(?:(\d+)m)?(?:(\d+)s)?/, function( all, minutes, seconds ) {
+            from = from.replace( /(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/, function( all, hours, minutes, seconds ) {
               // Make sure we have real zeros
+              hours = hours | 0; // bit-wise OR
               minutes = minutes | 0; // bit-wise OR
               seconds = seconds | 0; // bit-wise OR
-              return ( +seconds + ( minutes * 60 ) );
+              return ( +seconds + ( ( ( hours * 60 ) + minutes ) * 60 ) );
             });
           }
           callback({
