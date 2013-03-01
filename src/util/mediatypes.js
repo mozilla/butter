@@ -47,9 +47,19 @@ define( [ "util/xhr", "util/uri" ],
 
         xhrURL = "https://gdata.youtube.com/feeds/api/videos/" + id + "?v=2&alt=jsonc&callback=?";
         Popcorn.getJSONP( xhrURL, function( resp ) {
-          var respData = resp.data;
+          var respData = resp.data,
+              from = parsedUri.queryKey.t;
           if ( !respData ) {
             return;
+          }
+          if ( from ) {
+            from = from.replace( /(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/, function( all, hours, minutes, seconds ) {
+              // Make sure we have real zeros
+              hours = hours | 0; // bit-wise OR
+              minutes = minutes | 0; // bit-wise OR
+              seconds = seconds | 0; // bit-wise OR
+              return ( +seconds + ( ( ( hours * 60 ) + minutes ) * 60 ) );
+            });
           }
           callback({
             source: "http://www.youtube.com/watch?v=" + id,
@@ -58,6 +68,7 @@ define( [ "util/xhr", "util/uri" ],
             thumbnail: respData.thumbnail.hqDefault,
             author: respData.uploader,
             duration: respData.duration,
+            from: from,
             // This informs the plugin that embed is not allowed.
             // The plugin's action of what to do with this is up to the plugin.
             denied: respData.accessControl.embed === "denied"
