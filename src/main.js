@@ -173,10 +173,6 @@
           end = start + _defaultTrackeventDuration;
         }
 
-        if ( end > _currentMedia.duration ) {
-          end = _currentMedia.duration;
-        }
-
         if ( !_defaultTarget ) {
           console.warn( "No targets to drop events!" );
           return;

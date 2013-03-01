@@ -147,17 +147,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
         _butter.deselectAllTrackEvents();
         trackEvent.selected = true;
       }
-
-      if ( end > _media.duration ) {
-        _butter.listen( "mediaready", function onMediaReady() {
-          _butter.unlisten( "mediaready", onMediaReady );
-          addTrackEvent();
-        });
-
-        setBaseDuration( end );
-      } else {
-        addTrackEvent();
-      }
+      addTrackEvent();
     }
 
     thumbnailBtn.addEventListener( "click", addEvent, false );
