@@ -50,7 +50,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       startDrop: function() {
         _newTrackForDroppables = null;
       },
-      drop: function( dropped, mousePosition ) {
+      drop: function( dropped, mousePosition, popcornOptions ) {
         // Used if drop spawns a new track
         var newTrack, draggableType,
             trackEvent, trackEventRect,
@@ -73,7 +73,8 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
           newTrack.view.dispatch( "plugindropped", {
             start: ( mousePosition[ 0 ] - containerRect.left ) / _container.clientWidth * newTrack.view.duration,
             track: newTrack,
-            type: dropped.getAttribute( "data-popcorn-plugin-type" )
+            type: dropped.getAttribute( "data-popcorn-plugin-type" ),
+            popcornOptions: popcornOptions
           });
         }
         else if ( draggableType === "trackevent" ) {
