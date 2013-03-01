@@ -42,7 +42,6 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
      * settings
      */
     this.unbind = function(){
-console.log( "unbind" );
       if ( _popcorn ) {
         try{
           _popcorn.destroy();
