@@ -51,18 +51,11 @@
         target.appendChild( container );
       };
       options.displayLoading = function() {
-        //if ( !_this.paused() ) {
-        //  options.playWhenReady = true;
-        //  _this.pause();
-        //}
         _this.on( "play", options._surpressPlayEvent );
         _this.on( "pause", options._surpressPauseEvent );
         document.querySelector( ".loading-message" ).classList.add( "show-media" );
       };
       options.hideLoading = function() {
-        //if ( options.playWhenReady ) {
-        //  _this.play();
-        //}
         _this.off( "play", options._surpressPlayEvent );
         _this.off( "pause", options._surpressPauseEvent );
         document.querySelector( ".loading-message" ).classList.remove( "show-media" );
@@ -230,6 +223,8 @@
         options.playWhenReady = true;
         _this.pause();
       };
+
+      // Ensure if a player was paused last, do not play it.
       options._surpressPauseEvent = function() {
         options.playWhenReady = false;
       };
@@ -252,15 +247,17 @@
             _this.on( "play", options._playEvent );
             _this.on( "pause", options._pauseEvent );
             _this.on( "seeked", options._onSeeked );
+            options.hideLoading();
             if ( !options.hidden && options.active ) {
               options._container.style.zIndex = +options.zindex;
             } else {
               options._container.style.zIndex = 0;
             }
-            if ( !options.playWhenReady ) {
+            if ( options.playWhenReady ) {
+              _this.play();
+            } else {
               options._clip.pause();
             }
-            options.hideLoading();
             options._clip.on( "play", options._clipPlayEvent );
             options._clip.on( "pause", options._clipPauseEvent );
             if ( options.active ) {
@@ -308,11 +305,6 @@
         }
       };
 
-      // event to seek the slip if the main timeline seeked.
-      options._onSeeked = function() {
-        options._setClipCurrentTime();
-      };
-
       // Switch event is used to ensure we don't listen in loops.
       options._playEventSwitch = function() {
         _this.off( "play", options._playEventSwitch );
@@ -347,6 +339,11 @@
       options._pauseEventSwitch = function() {
         _this.off( "pause", options._pauseEventSwitch );
         _this.on( "pause", options._pauseEvent );
+      };
+
+      // event to seek the slip if the main timeline seeked.
+      options._onSeeked = function() {
+        options._setClipCurrentTime();
       };
 
       options.toString = function() {
