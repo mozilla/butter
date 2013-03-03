@@ -52,12 +52,10 @@
       };
       options.displayLoading = function() {
         _this.on( "play", options._surpressPlayEvent );
-        _this.on( "pause", options._surpressPauseEvent );
         document.querySelector( ".loading-message" ).classList.add( "show-media" );
       };
       options.hideLoading = function() {
         _this.off( "play", options._surpressPlayEvent );
-        _this.off( "pause", options._surpressPauseEvent );
         document.querySelector( ".loading-message" ).classList.remove( "show-media" );
       };
 
@@ -195,12 +193,20 @@
                buffered.end( i ) > options._clip.currentTime() ) {
             // We found a valid range, keep on rolling.
             options.hideLoading();
+            if ( options.playWhenReady ) {
+              options.playWhenReady = false;
+              _this.play();
+            }
             return;
           }
         }
 
-        // If we hit here, we failed ot find a valid range,
+        // If we hit here, we failed to find a valid range,
         // so we should probably stop everything. We'll get out of sync.
+        if ( !_this.paused() ) {
+          options.playWhenReady = true;
+          _this.pause();
+        }
         options.displayLoading();
       };
 
@@ -222,11 +228,6 @@
       options._surpressPlayEvent = function() {
         options.playWhenReady = true;
         _this.pause();
-      };
-
-      // Ensure if a player was paused last, do not play it.
-      options._surpressPauseEvent = function() {
-        options.playWhenReady = false;
       };
 
       options.setupContainer();
