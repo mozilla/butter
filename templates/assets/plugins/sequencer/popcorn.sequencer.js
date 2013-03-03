@@ -165,7 +165,7 @@
         _this.off( "play", options._playWhenReadyEvent );
         _this.off( "play", options._playEvent );
         _this.off( "pause", options._pauseEvent );
-        _this.off( "timeupdate", options._onTimeUpdate );
+        _this.off( "seeked", options._onSeeked );
       };
 
       options.addSource = function() {
@@ -223,12 +223,6 @@
         }
       };
 
-      // Ensures seek time is seekable, and not already seeked.
-      // Returns true for successful seeks.
-      options._getClipCurrentTime = function() {
-        return options._clip.currentTime() - (+options.from) + options.start;
-      };
-
       // While clip is loading, do not let the timeline play.
       options._surpressPlayEvent = function() {
         options.playWhenReady = true;
@@ -255,7 +249,7 @@
             _this.off( "play", options._playWhenReadyEvent );
             _this.on( "play", options._playEvent );
             _this.on( "pause", options._pauseEvent );
-            _this.on( "timeupdate", options._onTimeUpdate );
+            _this.on( "seeked", options._onSeeked );
             if ( !options.hidden && options.active ) {
               options._container.style.zIndex = +options.zindex;
             } else {
@@ -312,14 +306,7 @@
         }
       };
 
-      options._onTimeUpdate = function() {
-        /*var clipTime = options._getClipCurrentTime(),
-            targetTime = _this.currentTime();
-        if ( clipTime >= targetTime - SYNC_MARGIN_SECONDS && clipTime <= targetTime ) {
-          // we're within a second each way of the main media.
-          // do nothing.
-          return;
-        }*/
+      options._onSeeked = function() {
         options._setClipCurrentTime();
       };
 
