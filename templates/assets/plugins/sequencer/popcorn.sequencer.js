@@ -187,6 +187,14 @@
       options._onProgress = function() {
         var i, l,
             buffered = options._clip.media.buffered;
+
+        // We're likely in a wrapper that does not suppor buffered.
+        // Assume we are buffered.
+        // Once these wrappers have a buffered taime range object, it should just work.
+        if ( buffered.length === 0 ) {
+          return;
+        }
+
         for ( var i = 0, l = buffered.length; i < l; i++ ) {
           // Check if a range is valid, if so, return early.
           if ( buffered.start( i) <= options._clip.currentTime() &&
