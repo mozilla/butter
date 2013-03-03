@@ -23,8 +23,7 @@
     return quarantine;
   }
 
-  var MEDIA_LOAD_TIMEOUT = 10000,
-      SYNC_MARGIN_SECONDS = 1;
+  var MEDIA_LOAD_TIMEOUT = 10000;
 
   Popcorn.plugin( "sequencer", {
     _setup: function( options ) {
@@ -52,18 +51,18 @@
         target.appendChild( container );
       };
       options.displayLoading = function() {
-        if ( !_this.paused() ) {
-          options.playWhenReady = true;
-          _this.pause();
-        }
+        //if ( !_this.paused() ) {
+        //  options.playWhenReady = true;
+        //  _this.pause();
+        //}
         _this.on( "play", options._surpressPlayEvent );
         _this.on( "pause", options._surpressPauseEvent );
         document.querySelector( ".loading-message" ).classList.add( "show-media" );
       };
       options.hideLoading = function() {
-        if ( options.playWhenReady ) {
-          _this.play();
-        }
+        //if ( options.playWhenReady ) {
+        //  _this.play();
+        //}
         _this.off( "play", options._surpressPlayEvent );
         _this.off( "pause", options._surpressPauseEvent );
         document.querySelector( ".loading-message" ).classList.remove( "show-media" );
@@ -133,6 +132,9 @@
           options._container.style.zIndex = +options.zindex;
         }
         options.hideLoading();
+        if ( options.playWhenReady ) {
+          _this.play();
+        }
       };
 
       options.tearDown = function() {
@@ -306,6 +308,7 @@
         }
       };
 
+      // event to seek the slip if the main timeline seeked.
       options._onSeeked = function() {
         options._setClipCurrentTime();
       };
@@ -344,11 +347,6 @@
       options._pauseEventSwitch = function() {
         _this.off( "pause", options._pauseEventSwitch );
         _this.on( "pause", options._pauseEvent );
-      };
-
-      // event to seek the slip if the main timeline seeked.
-      options._seekedEvent = function() {
-        options._setClipCurrentTime();
       };
 
       options.toString = function() {
@@ -473,6 +471,7 @@
         if ( options.ready ) {
           options._startEvent();
         } else {
+          this.pause();
           options.displayLoading();
         }
       }
