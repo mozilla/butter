@@ -571,3 +571,258 @@
     opacity: 1;
   }
 }
+
+
+/*********************************************************
+* Sequencer Editor -- src/layouts/sequencer-editor.html
+*/
+
+textarea {
+  &.two-lines {
+    height: 42px;
+  }
+  &.url {
+    font-size: 11px;
+    font-family: menlo, monospace;
+    word-break: break-all;
+  }
+}
+
+.butter-form .butter-editor-section {
+  margin: 0;
+  padding: 10px 20px;
+  border-bottom: 1px solid @baseLightOutline;
+}
+
+.butter-form .switch {
+  border: 1px solid @baseLightOutline;
+  float: left;
+  border-radius: 2px;
+  color: #CCC;
+  line-height: 1;
+  &:hover {
+    color: #999;
+  }
+  > input {
+    display: none;
+  }
+  > span {
+    float: left;
+    padding: 8px;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    &:first-of-type {
+      border-right: 1px solid @baseLightOutline;
+    }
+  }
+  &.on .switch-on {
+    background: #FFF;
+    color: @green;
+  }
+  &:not(.on) .switch-off {
+    background: #FFF;
+    color: @red;
+  }
+}
+
+.fallback-container {
+  display: none;
+  &.show {
+    display: block;
+  }
+  .icon {
+    position: relative;
+  }
+  .butter-tooltip {
+    margin-top: 5px;
+    width: 150px;
+    margin-left: -75px;
+  }
+}
+
+
+.butter-editor-inline {
+  > label,
+  > div,
+  > textarea,
+  > input {
+    float: left;
+    line-height: 24px;
+    padding: 0;
+    > .icon {
+      margin-right: 8px;
+    }
+    &:first-child {
+      width: 33%;
+    }
+    &:last-child {
+      width: 66%;
+    }
+  }
+  > textarea {
+    padding: 5px;
+    height: 50px;
+    line-height: 1;
+    width: 66%
+  }
+  .clearfix();
+}
+
+/*********************************************************
+* Trimmer
+*/
+
+.clip-duration {
+  position: relative;
+  height: 28px;
+  border-radius: 3px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  &:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    left: 0;
+    right: 0;
+    background: #FFF;
+    border: 1px dashed @baseLightOutline;
+    border-radius: 3px;
+  }
+  > label {
+    position: absolute;
+    bottom: 100%;
+    font-size: 10px;
+    font-family: menlo;
+    &.clip-end {
+      right: 0;
+    }
+  }
+}
+
+.clip-section {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  left: 28px;
+  width: 60px;
+  cursor: move;
+  box-shadow: inset 0 0 0 1px black;
+  .box-sizing( border-box );
+  background: #333;
+  border-radius: 3px;
+  &:hover,
+  .editing & {
+    box-shadow: inset 0 0 0 2px @green;
+  }
+  .editing & {
+    border-width: 2px;
+    cursor: ew-resize;
+  }
+
+  &.small {
+    background: none;
+    border: none;
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: #333;
+      width: 6px;
+      height: 100%;
+      border-radius: 2px;
+    }
+    .trimmer-resizable-w {
+      left: -4px;
+    }
+    .trimmer-resizable-e {
+      right: auto;
+      left: 4px;
+    }
+  }
+}
+
+/*********************************************************
+* UI
+*/
+
+.trimmer-resizable-handle {
+  position: absolute;
+  background: darken( @green, 10% );
+  border: 2px solid @green;
+  height: 9px;
+  width: 6px;
+  top: 50%;
+  margin-top: -5px;
+  cursor: ew-resize;
+  .box-sizing( border-box );
+}
+.trimmer-resizable-w {
+  left: -2px;
+  z-index: 1;
+}
+.trimmer-resizable-e {
+  right: -2px;
+  z-index: 2;
+}
+
+.volume-slider-container {
+  margin-top: 10px;
+  > label {
+    text-indent: 18px;
+  }
+  > div {
+    position: relative;
+    width: 100%;
+    padding: 10px 0;
+  }
+  &.disabled {
+    display: none;
+  }
+}
+
+.butter-slider {
+  position: relative;
+  height: 5px;
+  border-radius: 2px;
+  background: @baseLightOutline;
+  border: 1px solid darken( @baseLightOutline, 5% );
+
+  > label {
+    position: absolute;
+    top: 100%;
+    font-size: 10px;
+    line-height: 1.5;
+    font-family: menlo;
+    width: 30px;
+  }
+  > .slider-start {
+    margin-left: -3px;
+  }
+  > .slider-end {
+    left: auto;
+    right: 0;
+    text-align: right;
+    margin-right: -3px;
+  }
+
+}
+
+.butter-slider-scrubber {
+  position: absolute;
+  top: 0;
+  margin-top: -4px;
+  margin-left: -4px;
+  height: 15px;
+  width: 15px;
+  border-radius: 5px;
+  background: #FFF;
+  border: 1px solid @baseLightOutline;
+  cursor: pointer;
+  .box-sizing( border-box );
+}
