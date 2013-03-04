@@ -14,7 +14,8 @@ define( [ "text!dialog/dialogs/crash.html", "dialog/dialog", "util/lang" ],
              "<b>Butter State</b>: " + report.stateList.slice().reverse().join( ", " ) + "<br>" +
              "<b>Browser</b>: " + report.userAgent + "<br>" +
              "<b>Null DOM Nodes</b>: " + report.nullDomNodes + "<br>" +
-             "<b>Versions</b>: Popcorn=" + report.popcornVersion + ", Butter=" + report.butterVersion;
+             "<b>Versions</b>: Popcorn=" + report.popcornVersion + ", Butter=" + report.butterVersion + "<br>" +
+             "<b>Project Data</b>:<br><pre>" + report.projectData + "</pre>";
     }
 
     Dialog.register( "crash", LAYOUT_SRC, function ( dialog, data ) {
