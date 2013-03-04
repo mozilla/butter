@@ -2,7 +2,8 @@
 
 var datauri = require('../lib/datauri');
 
-module.exports = function routesCtor( app, User, filter, sanitizer, stores, utils, metrics ) {
+module.exports = function routesCtor( app, Project, filter, sanitizer,
+                                      stores, utils, metrics ) {
 
   var uuid = require( "node-uuid" ),
       // Keep track of whether this is production or development
@@ -23,16 +24,65 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
     } else {
       res.json({
         error: 'unauthorized',
-        csrf: req.session._csrf,
+        csrf: req.session._csrf
       });
     }
+  });
+
+  // Strip away project data, email, etc.
+  function pruneSearchResults( results ) {
+    var pruned = [];
+    results.forEach( function( result ) {
+      pruned.push({
+        id: result.id,
+        name: result.name,
+        author: result.author,
+        remixedFrom: result.remixedFrom,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt
+      });
+    });
+    return pruned;
+  }
+
+  app.get( '/api/projects/recentlyCreated/:limit?',
+    filter.isStorageAvailable,
+    function( req, res ) {
+      Project.findRecentlyCreated( { limit: req.params.limit }, function( err, projects ) {
+        if ( err ) {
+          res.json( { error: err }, 500 );
+        }
+        res.json( { error: 'okay', results: pruneSearchResults( projects ) } );
+      });
+  });
+
+  app.get( '/api/projects/recentlyUpdated/:limit?',
+    filter.isStorageAvailable,
+    function( req, res ) {
+      Project.findRecentlyUpdated( { limit: req.params.limit }, function( err, projects ) {
+        if ( err ) {
+          res.json( { error: err }, 500 );
+        }
+        res.json( { error: 'okay', results: pruneSearchResults( projects ) } );
+      });
+  });
+
+  app.get( '/api/project/:id/remixes',
+    filter.isStorageAvailable,
+    function( req, res ) {
+      Project.findRemixes( { id: req.params.id }, function( err, projects ) {
+        if ( err ) {
+          res.json( { error: err }, 500 );
+        }
+        res.json( { error: 'okay', results: pruneSearchResults( projects ) } );
+      });
   });
 
   app.get( '/api/project/:id?',
     filter.isLoggedIn, filter.isStorageAvailable,
     function( req, res ) {
 
-    User.findProject( req.session.email, req.params.id, function( err, doc ) {
+    Project.find( { email: req.session.email, id: req.params.id }, function( err, doc ) {
       if ( err ) {
         res.json( { error: err }, 500 );
         return;
@@ -55,6 +105,33 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
     });
   });
 
+  // We have a separate remix API for unsecured and sanitized access to projects
+  app.get( '/api/remix/:id',
+    filter.isStorageAvailable,
+    function( req, res ) {
+
+    Project.find( { id: req.params.id }, function( err, project ) {
+      if ( err ) {
+        res.json( { error: err }, 500 );
+        return;
+      }
+
+      if ( !project ) {
+        res.json( { error: 'project not found' }, 404 );
+        metrics.increment( 'error.remix.project-not-found' );
+        return;
+      }
+
+      var projectJSON = JSON.parse( project.data, sanitizer.reconstituteHTMLinJSON );
+      projectJSON.name = "Remix of " + project.name;
+      projectJSON.template = project.template;
+      projectJSON.remixedFrom = project.id;
+
+      res.json( projectJSON );
+      metrics.increment( 'user.remix' );
+    });
+  });
+
   app.post( '/api/delete/:id?',
     filter.isLoggedIn, filter.isStorageAvailable,
     function( req, res ) {
@@ -66,7 +143,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
       return;
     }
 
-    User.deleteProject( req.session.email, req.params.id, function( err, imagesToDestroy ) {
+    Project.delete( { email: req.session.email, id: req.params.id }, function( err, imagesToDestroy ) {
       if ( err ) {
         res.json( { error: 'project not found' }, 404 );
         return;
@@ -93,7 +170,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
   });
 
   function linkAndSaveImageFiles( files, projectId, callback ) {
-    User.linkImageFilesToProject( files, projectId, function( err ) {
+    Project.linkImageFilesToProject( { files: files, id: projectId }, function( err ) {
       if ( err ) {
         callback( err );
         return;
@@ -114,7 +191,8 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
     if ( req.body.id ) {
       files = datauri.filterProjectDataURIs( projectData.data, utils.generateDataURIPair );
 
-      User.updateProject( req.session.email, req.body.id, projectData, function( err, doc, imagesToDestroy ) {
+      Project.update( { email: req.session.email, id: req.body.id, data: projectData },
+                      function( err, doc, imagesToDestroy ) {
         if ( err ) {
           res.json( { error: err }, 500 );
           return;
@@ -129,7 +207,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
         if ( files && files.length > 0 ) {
           linkAndSaveImageFiles( files, doc.id, function( err ) {
             if ( err ) {
-              res.json( { error: 'Unable to store data-uris.', }, 500 );
+              res.json( { error: 'Unable to store data-uris.' }, 500 );
               return;
             }
             res.json( { error: 'okay', project: doc, imageURLs: files.map( function( file ) { return file.getJSONMetaData(); } ) }, 200 );
@@ -143,7 +221,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
     } else {
       files = datauri.filterProjectDataURIs( projectData.data, utils.generateDataURIPair );
 
-      User.createProject( req.session.email, projectData, function( err, doc ) {
+      Project.create( { email: req.session.email, data: projectData }, function( err, doc ) {
         if ( err ) {
           res.json( { error: err }, 500 );
           metrics.increment( 'error.save' );
@@ -153,7 +231,7 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
         if ( files && files.length > 0 ) {
           linkAndSaveImageFiles( files, doc.id, function( err ) {
             if ( err ) {
-              res.json( { error: 'Unable to store data-uris.', }, 500 );
+              res.json( { error: 'Unable to store data-uris.' }, 500 );
               metrics.incremenet( 'error.save.store-data-uris' );
               return;
             }
@@ -172,33 +250,6 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
         }
       });
     }
-  });
-
-  // We have a separate remix API for unsecured and sanitized access to projects
-  app.get( '/api/remix/:id',
-    filter.isStorageAvailable,
-    function( req, res ) {
-
-    User.findById( req.params.id, function( err, project ) {
-      if ( err ) {
-        res.json( { error: err }, 500 );
-        return;
-      }
-
-      if ( !project ) {
-        res.json( { error: 'project not found' }, 404 );
-        metrics.increment( 'error.remix.project-not-found' );
-        return;
-      }
-
-      var projectJSON = JSON.parse( project.data, sanitizer.reconstituteHTMLinJSON );
-      projectJSON.name = "Remix of " + project.name;
-      projectJSON.template = project.template;
-      projectJSON.remixedFrom = project.id;
-
-      res.json( projectJSON );
-      metrics.increment( 'user.remix' );
-    });
   });
 
   function formatDate( d ) {
