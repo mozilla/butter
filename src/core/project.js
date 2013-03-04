@@ -205,7 +205,7 @@ define( [ "core/eventmanager", "core/media" ],
 
       if ( json.name ) {
         // replace HTML entities ("&amp;", etc), possibly introduced by
-        // templating rules being  applied to project metadata, with
+        // templating rules being applied to project metadata, with
         // their plain form counterparts ("&", etc).
         _name = reconstituteHTML( json.name );
       }
