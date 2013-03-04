@@ -110,8 +110,7 @@ define( [ "./logger", "./eventmanager", "./observer",
           newEnd = updateOptions.end,
           manifestOptions,
           media,
-          updateNotification,
-          duration;
+          updateNotification;
 
       if ( isNaN( newStart ) ) {
         if ( updateOptions.hasOwnProperty( "start" ) ) {
@@ -146,7 +145,6 @@ define( [ "./logger", "./eventmanager", "./observer",
 
       if ( _track && _track._media ) {
         media = _track._media;
-        duration = media.duration;
 
         if ( this.manifest ) {
           manifestOptions = this.manifest.options;

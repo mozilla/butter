@@ -44,6 +44,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
             updateOptions.denied = data.denied;
             updateOptions.from = data.from || 0;
             updateOptions.source = data.source;
+            updateOptions.end = trackEvent.popcornOptions.start + data.duration;
             trackEvent.update( updateOptions );
           });
         }

@@ -28,6 +28,10 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         _onPlayerTypeRequired = options.playerTypeRequired || function(){},
         _onTimeout = options.timeout || function(){},
         _popcorn,
+        _target,
+        _popcornOptions,
+        _callbacks,
+        _scripts,
         _mediaReady = false,
         _mediaType,
         _interruptLoad = false,
@@ -115,12 +119,16 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
       if ( _popcorn ) {
         // make sure the plugin is still included
         if ( _popcorn[ trackEvent.type ] ) {
+          if ( trackEvent.popcornOptions.end > _this.duration ) {
+            _this.clear( _target );
+            _this.prepare( "#t=," + trackEvent.popcornOptions.end, _target, _popcornOptions, _callbacks, _scripts );
+          }
           if ( trackEvent.type === "sequencer" ) {
             waitForPopcorn( createTrackEvent, function() {
               throw "Your media seems to be taking a long time to load. Review your media URL(s) or continue waiting.";
             }, findMediaType( trackEvent.popcornOptions.source ) );
           } else {
-            createTrackEvent();
+            waitForMedia( createTrackEvent, function() {});
           }
         }
       }
@@ -147,6 +155,11 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
     this.prepare = function( url, target, popcornOptions, callbacks, scripts ){
       var urlsFromString;
 
+      _target = target;
+      _popcornOptions = popcornOptions;
+      _callbacks = callbacks;
+      _scripts = scripts;
+      
       _mediaReady = false;
 
       // called when timeout occurs preparing popcorn
