@@ -169,7 +169,7 @@ define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI 
               butterVersion: butterVersion,
               // Grab the last 5 null dom nodes, if any
               nullDomNodes: _nullDomList.slice( -5 ).join( ", " ) || "N/A",
-              projectData: JSON.stringify( butter.project.data ),
+              projectData: JSON.stringify( butter.project.data, null, 2 ),
               onSendReport: sendErrorReport,
               onNoReport: attemptRecovery
             };
