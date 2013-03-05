@@ -168,9 +168,15 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
   }
 
   function addMediaToGallery() {
-    var data = {};
+    var data = {},
+        val = _urlInput.value;
 
-    data.source = _urlInput.value;
+    // Don't trigger with empty inputs
+    if ( !val ) {
+      return;
+    }
+
+    data.source = val;
     data.type = "sequencer";
 
     _loadingSpinner.classList.remove( "hidden" );
