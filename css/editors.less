@@ -588,6 +588,33 @@ textarea {
   }
 }
 
+.butter-slider-tooltip {
+  @_tooltipHeight: 30px;
+  @_tooltipWidth: 70px;
+  width: @_tooltipWidth;
+  margin-left: -@_tooltipWidth / 2;
+  padding: @_tooltipHeight / 3;
+  font-size: 11px;
+  line-height: @_tooltipHeight / 3;
+  top: -( @_tooltipHeight + 4px );
+  height: @_tooltipHeight;
+  &.tooltip-on {
+    .transition( all 0.1s ease 0 );
+  }
+  &:after, &:before{
+    top: 100%;
+    border-bottom: none;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #FFF;
+  }
+  &:before {
+    top: 100%;
+    border-bottom: none;
+    border-top: 5px solid #CCC;
+  }
+}
+
 .butter-form .butter-editor-section {
   margin: 0;
   padding: 10px 20px;
