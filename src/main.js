@@ -210,6 +210,9 @@
           type: type
         });
 
+        _this.deselectAllTrackEvents();
+        trackEvent.selected = true;
+
         _defaultTarget.view.blink();
 
         return trackEvent;
