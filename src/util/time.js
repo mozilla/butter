@@ -84,12 +84,16 @@ define( [], function(){
    *
    * @param {Number} time: Seconds to be converted to timecode
    */
-  function toTimecode( time ){
+  function toTimecode( time, accuracy ){
     var hours,
         minutes,
         seconds,
         timeString,
         isNegative = "";
+
+    if ( !accuracy && accuracy !== 0 ) {
+      accuracy = 2;
+    }
 
     if ( typeof time === "string" ) {
       time = toSeconds( time );
@@ -106,7 +110,7 @@ define( [], function(){
 
     hours = Math.floor( time / 3600 );
     minutes = Math.floor( ( time % 3600 ) / 60 );
-    seconds = roundTime( time % 60, 2 );
+    seconds = roundTime( time % 60, accuracy );
     timeString = seconds + "";
 
     if ( !minutes && !hours ) {

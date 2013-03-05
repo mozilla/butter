@@ -110,7 +110,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
 
     el.querySelector( ".mg-title" ).innerHTML = data.title;
     el.querySelector( ".mg-type" ).innerHTML = data.type;
-    el.querySelector( ".mg-duration" ).innerHTML = Time.toTimecode( data.duration ) || "???";
+    el.querySelector( ".mg-duration" ).innerHTML = Time.toTimecode( data.duration, 0 );
     if ( data.type === "html5" ) {
       thumbnailImg = data.thumbnail;
     } else {
