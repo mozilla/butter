@@ -111,6 +111,14 @@
           strictEqual( toTimecode( undefined ), 0, "pass" );
           strictEqual( toTimecode( {} ), 0, "pass" );
           strictEqual( toTimecode( {start:10,end:20} ), 0, "pass" );
+
+          strictEqual( toTimecode( 60.01, 0 ), "1:00", "pass" );
+          strictEqual( toTimecode( 60.001, 1 ), "1:00", "pass" );
+          strictEqual( toTimecode( 60.01, 3 ), "1:00.01", "pass" );
+          strictEqual( toTimecode( 60.10001, 5 ), "1:00.10001", "pass" );
+          strictEqual( toTimecode( 60.10001, 1 ), "1:00.1", "pass" );
+          strictEqual( toTimecode( 60.10001, 2 ), "1:00.1", "pass" );
+          strictEqual( toTimecode( 60.10001 ), "1:00.1", "pass" );
         });
       });
     </script>
