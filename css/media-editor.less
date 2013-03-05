@@ -132,112 +132,6 @@
     border-radius: 2px;
   }
 
-  .media-gallery-item {
-    position: relative;
-    padding: 10px 20px;
-    height: 60px;
-    border: 0 solid @baseLightOutline;
-    border-top-width: 1px;
-    background-color: @baseLight;
-    font-size: 11px;
-    .transition( background-color 0.2s linear );
-    &:first-child {
-      margin-top: -1px;
-    }
-    &.new {
-      background: @green;
-      color: #FFF;
-      > .delete-btn {
-        display: none;
-      }
-      > .mg-meta-data {
-        > .mg-type {
-          color: #FFF;
-        }
-      }
-    }
-  }
-
-  .mg-thumbnail {
-    position: relative;
-    overflow: hidden;
-    float: left;
-    margin-right: 10px;
-    border: 1px solid @baseLightOutline;
-    > img, video {
-      display: block;
-      width: 80px;
-      height: 60px;
-    }
-    &:hover {
-      border-color: @green;
-    }
-    &:hover:before {
-      content: "";
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      background: fade( @green, 60% );
-    }
-    &:hover:after {
-      content: "";
-      height: 14px;
-      width: 14px;
-      position: absolute;
-      top: 50%;
-      margin-top: -7px;
-      margin-left: -7px;
-      left: 50%;
-      background: url( "../resources/icons/glyphiconshalflings-white.png" ) -408px -96px no-repeat;
-    }
-  }
-  .mg-html5 .mg-thumbnail {
-    > video {
-      height: auto;
-    }
-    background: url( "../resources/icons/media.png" ) center no-repeat;
-  }
-
-  .mg-meta-data {
-    float: left;
-    width: 190px;
-    height: 60px;
-    line-height: 1.2em;
-  }
-  .mg-title {
-    overflow: hidden;
-    font-weight: 700;
-    max-height: 3.6em; // 3 lines
-  }
-  .mg-type {
-    &:after {
-      content: " clip";
-      text-transform: lowercase;
-    }
-    color: #999;
-    text-transform: capitalize;
-  }
-  .mg-error {
-    color: #FF0000;
-  }
-  .mg-duration {
-    &:before {
-      content: "Duration: "
-    }
-  }
-  .mg-delete-btn {
-    position: absolute;
-    top: 10px;
-    right: 5px;
-    opacity: 0.5;
-    &:hover {
-      opacity: 1;
-    }
-  }
-
   .add-media-input {
     height: 50px;
   }
@@ -258,6 +152,115 @@
     left: 10px;
     position: relative;
     top: 3px;
+  }
+}
+
+
+.media-gallery-item {
+  position: relative;
+  padding: 10px 20px;
+  height: 60px;
+  border: 0 solid @baseLightOutline;
+  border-top-width: 1px;
+  background-color: @baseLight;
+  font-size: 11px;
+  .transition( background-color 0.2s linear );
+  &:first-child {
+    margin-top: -1px;
+  }
+  &.new {
+    background: @green;
+    color: #FFF;
+    > .delete-btn {
+      display: none;
+    }
+    > .mg-meta-data {
+      > .mg-type {
+        color: #FFF;
+      }
+    }
+  }
+}
+
+.mg-thumbnail {
+  position: relative;
+  overflow: hidden;
+  float: left;
+  margin-right: 10px;
+  border: 1px solid @baseLightOutline;
+  width: 80px;
+  height: 60px;
+  > img, video {
+    display: block;
+    width: 80px;
+    height: 60px;
+  }
+  &:hover {
+    border-color: @green;
+  }
+  &:hover:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: fade( @green, 60% );
+  }
+  &:hover:after {
+    content: "";
+    height: 14px;
+    width: 14px;
+    position: absolute;
+    top: 50%;
+    margin-top: -7px;
+    margin-left: -7px;
+    left: 50%;
+    background: url( "../resources/icons/glyphiconshalflings-white.png" ) -408px -96px no-repeat;
+  }
+}
+.mg-html5 .mg-thumbnail {
+  > video {
+    height: auto;
+  }
+  background: url( "../resources/icons/media.png" ) center no-repeat;
+}
+
+.mg-meta-data {
+  float: left;
+  width: 190px;
+  height: 60px;
+  line-height: 1.2em;
+}
+.mg-title {
+  overflow: hidden;
+  font-weight: 700;
+  max-height: 3.6em; // 3 lines
+}
+.mg-type {
+  &:after {
+    content: " clip";
+    text-transform: lowercase;
+  }
+  color: #999;
+  text-transform: capitalize;
+}
+.mg-error {
+  color: #FF0000;
+}
+.mg-duration {
+  &:before {
+    content: "Duration: "
+  }
+}
+.mg-delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  opacity: 0.5;
+  &:hover {
+    opacity: 1;
   }
 }
 
