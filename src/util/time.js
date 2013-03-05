@@ -82,7 +82,14 @@ define( [], function(){
    * "  000:01:01.00" -> "1:01"
    * "3600" -> "1:00:00"
    *
+   * Accuracy of 5:
+   * 1.012345 -> "0:01.01234"
+   * Accuracy of 2:
+   * 1.012345 -> "0:01.01"
+   * Defaults to 2
+   *
    * @param {Number} time: Seconds to be converted to timecode
+   * @param {Number} accuracy: A one time accuracy to round to
    */
   function toTimecode( time, accuracy ){
     var hours,
@@ -114,7 +121,10 @@ define( [], function(){
     timeString = seconds + "";
 
     if ( !minutes && !hours ) {
-      return isNegative + timeString;
+      if ( seconds < 10 ) {
+        timeString = "0" + timeString;
+      }
+      return isNegative + "0:" + timeString;
     }
 
     if ( !seconds ) {
