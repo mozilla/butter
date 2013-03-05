@@ -385,7 +385,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
       };
     }
 
-    function metaDataBox( el ) {
+    function MetadataBox( el ) {
       function updateUI() {
         if ( !Array.isArray( _popcornOptions.source ) ) {
           _popcornOptions.source = [ _popcornOptions.source ];
@@ -395,7 +395,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           var titleEl = el.querySelector( ".mg-title" ),
               typeEl = el.querySelector( ".mg-type" ),
               durationEl = el.querySelector( ".mg-duration" ),
-              thumbnailEl.querySelector( ".mg-thumbnail" ),
+              thumbnailEl = el.querySelector( ".mg-thumbnail" ),
               thumbnailImg;
 
           el.classList.add( "loaded" );
@@ -419,6 +419,8 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           }, false );
 
         });
+      }
+      updateUI();
       return {
         el: el,
         updateUI: updateUI
@@ -465,9 +467,6 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
       _fields.hidden = new Toggler( hiddenEl, "hidden", "reverse" );
       _fields.from = new Trimmer( clipTrimmerEl );
       _fields.source = new MetadataBox( sourceEl );
-      };
-
-      _fields.source.updateUI();
 
     } //setup
 
