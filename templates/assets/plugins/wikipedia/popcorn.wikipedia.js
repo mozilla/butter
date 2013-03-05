@@ -53,7 +53,7 @@
     return true;
   }
 
-  function setupWiki( options ) {
+  function setupWiki( options, instance ) {
     // declare needed variables
     // get a guid to use for the global wikicallback function
     var _title,
@@ -66,7 +66,7 @@
         _href,
         _query,
         _guid = Popcorn.guid( "wikiCallback" ),
-        _this = this;
+        _this = instance;
 
     if ( options._container && options._inner ) {
       options._container.removeChild( options._inner );
@@ -183,7 +183,7 @@
       _outer.style.left = validateDimension( options.left, "0" ) + "%";
       _outer.style.zIndex = +options.zindex;
 
-      setupWiki( options );
+      setupWiki( options, this );
 
       options.toString = function() {
         return options.src || options._natives.manifest.options.src[ "default" ];
@@ -228,12 +228,12 @@
 
       if ( options.src && options.src !== trackEvent.src ) {
         trackEvent.src = options.src;
-        setupWiki( trackEvent );
+        setupWiki( trackEvent, this );
       }
 
       if ( options.lang && options.lang !== trackEvent.lang ) {
         trackEvent.lang = options.lang;
-        setupWiki( trackEvent );
+        setupWiki( trackEvent, this );
       }
 
       if ( options.top && options.top !== trackEvent.top ) {
