@@ -12,18 +12,30 @@
 
         createButterCore( function( butter ) {
 
-          Popcorn.plugin( "createTrackEventTest", function() {} );
-
           var m = butter.addMedia({ url: "../../../external/popcorn-js/test/italia.ogg,../../../external/popcorn-js/test/italia.mp4", target: "mediaDiv" }),
               t = m.addTrack(),
-              te1 = t.addTrackEvent( { name: "TrackEvent 1", type: "test", popcornOptions: { start: 0, end: 1 } } ),
-              te2 = t.addTrackEvent( { name: "TrackEvent 2", type: "createTrackEventTest", popcornOptions: { start: 1 } } );
+              te1, te2;
 
-          ok( te1.name === "TrackEvent 1" && te1.popcornOptions.start ===  0 && te1.popcornOptions.end === 1, "TrackEvent name is setup correctly" );
-          ok( te2.popcornTrackEvent._natives.type === "createTrackEventTest" && te2.popcornTrackEvent.start === 1, "TrackEvent has correct popcornTrackEvent reference" );
+          butter.listen( "trackeventupdated", function onFirstUpdate( e ) {
+            butter.unlisten( "trackeventupdated", onFirstUpdate );
 
-          Popcorn.removePlugin( "createTrackEventTest" );
-          start();
+            te1 = e.data;
+
+            ok( te1.name === "TrackEvent 1" && te1.popcornOptions.start ===  0 && te1.popcornOptions.end === 1, "TrackEvent name is setup correctly" );
+
+            butter.listen( "trackeventupdated", function onSecondUpdate( e ) {
+              butter.unlisten( "trackeventupdated", onSecondUpdate );
+
+              te2 = e.data;
+
+              ok( te2.popcornTrackEvent._natives.type === "text" && te2.popcornTrackEvent.start === 1, "TrackEvent has correct popcornTrackEvent reference" );
+              start();
+            });
+
+            t.addTrackEvent( { name: "TrackEvent 2", type: "text", popcornOptions: { start: 1 } } );
+          });
+
+          t.addTrackEvent( { name: "TrackEvent 1", type: "text", popcornOptions: { start: 0, end: 1 } } );
         });
       });
 

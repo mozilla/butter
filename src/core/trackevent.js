@@ -104,14 +104,22 @@ define( [ "./logger", "./eventmanager", "./observer",
      * @throws TrackEventUpdateException: When an update operation failed because of conflicting times or other serious property problems.
      */
     this.update = function( updateOptions, applyDefaults ) {
-      updateOptions = updateOptions || {};
 
-      var newStart = updateOptions.start,
-          newEnd = updateOptions.end,
+      var newStart,
+          newEnd,
           manifestOptions,
           media,
+          preventUpdate = true,
           updateNotification,
           duration;
+
+      if ( !updateOptions ) {
+        updateOptions = {};
+        preventUpdate = false;
+      }
+
+      newStart = updateOptions.start;
+      newEnd = updateOptions.end;
 
       if ( isNaN( newStart ) ) {
         if ( updateOptions.hasOwnProperty( "start" ) ) {
@@ -156,17 +164,35 @@ define( [ "./logger", "./eventmanager", "./observer",
                 if ( updateOptions[ prop ] === undefined ) {
                   if ( applyDefaults ) {
                     _popcornOptions[ prop ] = defaultValue( manifestOptions[ prop ] );
+                    preventUpdate = false;
                   }
                 } else {
+
+                  // If we find an instance were the two properties differ, it means we need to update.
+                  if ( _popcornOptions[ prop ] !== updateOptions[ prop ] ) {
+                    preventUpdate = false;
+                  }
+
                   _popcornOptions[ prop ] = updateOptions[ prop ];
                 }
               }
             }
             if ( !( "target" in manifestOptions ) && updateOptions.target ) {
+
+              if ( _popcornOptions.target !== updateOptions.target ) {
+                preventUpdate = false;
+              }
+
               _popcornOptions.target = updateOptions.target;
             }
             if ( "zindex" in manifestOptions && media ) {
-              _popcornOptions.zindex = updateOptions.zindex = media.maxPluginZIndex - _track.order;
+              var newZIndex = media.maxPluginZIndex - _track.order;
+
+              if ( _popcornOptions.zindex !== newZIndex ) {
+                preventUpdate = false;
+              }
+
+              _popcornOptions.zindex = updateOptions.zindex = newZIndex;
             }
           }
         }
@@ -178,7 +204,7 @@ define( [ "./logger", "./eventmanager", "./observer",
 
       // if PopcornWrapper exists, it means we're connected properly to a Popcorn instance,
       // and can update the corresponding Popcorn trackevent for this object
-      if ( _popcornWrapper ) {
+      if ( _popcornWrapper && !preventUpdate ) {
         _popcornWrapper.synchronizeEvent( _this, updateOptions );
       }
     };
