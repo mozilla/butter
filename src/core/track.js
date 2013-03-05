@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
-        function( EventManager, TrackEvent, TrackView ){
+define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitizer" ],
+        function( EventManager, TrackEvent, TrackView, Sanitizer ){
 
   var __guid = 0,
       NAME_PREFIX = "Layer ",
@@ -214,23 +214,9 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view" ],
       // Step 2: with the properties known, find their
       // content, and ensure it's clean prior to UI building.
       sanitizationList.forEach(function( optionName ) {
-        var content = trackEvent.popcornOptions[optionName],
-            children,
-            textNode;
-
-        if ( typeof content !== "string" ) return; 
-
-        safety.innerHTML = content;
-        children = safety.childNodes;
-
-        // If this content introduces anything other than
-        // TEXT nodes (nodeType==3), remove those nodes.
-        for( var i = children.length - 1; i >= 0; i-- ) {
-          if ( children[ i ].nodeType !== 3 ) {
-            safety.removeChild( children[ i ] );
-          }
-        }
-        trackEvent.popcornOptions[optionName] = safety.textContent;
+        var content = trackEvent.popcornOptions[optionName];
+        if ( typeof content !== "string" ) return;
+        trackEvent.popcornOptions[optionName] = Sanitizer.reconstituteHTML(content);
       });
     },
 

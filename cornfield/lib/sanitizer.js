@@ -21,7 +21,8 @@ var sanitizer = {
             .replace( /&quot;/g, '"' )
             .replace( /&apos;/g, "'" )
             .replace( /&lt;/g, '<' )
-            .replace( /&gt;/g, '>' );
+            .replace( /&gt;/g, '>' )
+            .replace( /&amp;/g, '&' );
   },
   reconstituteHTMLinJSON: function reconstituteHTML( key, value ) {
     if ( typeof value === "string") {

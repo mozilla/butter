@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "core/eventmanager", "core/media" ],
-        function( EventManager, Media ) {
+define( [ "core/eventmanager", "core/media", "util/sanitizer" ],
+        function( EventManager, Media, Sanitizer ) {
 
   var __butterStorage = window.localStorage;
 
@@ -182,20 +182,6 @@ define( [ "core/eventmanager", "core/media" ],
       var oldTarget, targets, targetData,
           mediaData, media, m, i, l;
 
-      // convert text with HTML entities into plain text.
-      function reconstituteHTML( htmlString ) {
-        var unpackDiv = document.implementation.createHTMLDocument("").createElement("div");
-        unpackDiv.innerHTML = htmlString;
-        // strip any non-text DOM nodes that this introduces.
-        var children = unpackDiv.childNodes;
-        for( var i = children.length - 1; i >= 0; i-- ) {
-          if ( children[ i ].nodeType !== 3 ) {
-            unpackDiv.removeChild( children[ i ] );
-          }
-        }
-        return unpackDiv.textContent;
-      }
-
       // If JSON, convert to Object
       if ( typeof json === "string" ) {
         try {
@@ -214,7 +200,7 @@ define( [ "core/eventmanager", "core/media" ],
         // replace HTML entities ("&amp;", etc), possibly introduced by
         // templating rules being applied to project metadata, with
         // their plain form counterparts ("&", etc).
-        _name = reconstituteHTML( json.name );
+        _name = Sanitizer.reconstituteHTML( json.name );
       }
 
       if ( json.template ) {
