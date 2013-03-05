@@ -91,7 +91,7 @@
         options._container.style.top = ( options.top || "0" ) + "%";
         options._container.style.left = ( options.left || "0" ) + "%";
         _this.on( "volumechange", options._volumeEvent );
-        options._clip.on( "progress", options._onProgress )
+        options._clip.on( "progress", options._onProgress );
         if ( options.active ) {
           options._startEvent();
         }
@@ -195,7 +195,7 @@
           return;
         }
 
-        for ( var i = 0, l = buffered.length; i < l; i++ ) {
+        for ( i = 0, l = buffered.length; i < l; i++ ) {
           // Check if a range is valid, if so, return early.
           if ( buffered.start( i ) <= options._clip.currentTime() &&
                buffered.end( i ) > options._clip.currentTime() ) {
