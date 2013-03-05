@@ -193,9 +193,6 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
      * user-generated content.
      */
     this.sanitizeTrackEventData = function( trackEvent ) {
-      var doc = document.implementation.createHTMLDocument(""),
-          safety = doc.createElement("div");
-
       // Step 1: find all properties that may lead to problems
       var manifestOptions = trackEvent.manifest.options,
           sanitizationList = [],
@@ -204,7 +201,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
       for ( propertyName in manifestOptions) {
         if ( manifestOptions.hasOwnProperty(propertyName) ) {
           option = manifestOptions[propertyName];
-          if ( option.elem === "textarea" || ( option.elem === "input" && option.type === "text" )) {
+          if ( option.elem === "textarea" || option.elem === "input" ) {
             // sanitize the input for this element
             sanitizationList.push(propertyName);
           }
@@ -215,7 +212,9 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
       // content, and ensure it's clean prior to UI building.
       sanitizationList.forEach(function( optionName ) {
         var content = trackEvent.popcornOptions[optionName];
-        if ( typeof content !== "string" ) return;
+        if ( typeof content !== "string" ) {
+          return;
+        }
         trackEvent.popcornOptions[optionName] = Sanitizer.reconstituteHTML(content);
       });
     },
