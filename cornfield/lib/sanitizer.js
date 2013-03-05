@@ -20,7 +20,7 @@ var sanitizer = {
             .replace( /&#39;/g, "'" )
             .replace( /&quot;/g, '"' )
             .replace( /&apos;/g, "'" )
-            .replace( /&ls;/g, '<' )
+            .replace( /&lt;/g, '<' )
             .replace( /&gt;/g, '>' );
   },
   reconstituteHTMLinJSON: function reconstituteHTML( key, value ) {
