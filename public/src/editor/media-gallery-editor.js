@@ -96,6 +96,17 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
         title: data.title,
         duration: data.duration,
         hidden: data.hidden
+      },
+      start: function() {
+        for ( var i = 0, l = _butter.targets.length; i < l; ++i ) {
+          _butter.targets[ i ].iframeDiv.style.display = "block";
+        }
+      },
+      stop: function() {
+        _butter.currentMedia.pause();
+        for ( var i = 0, l = _butter.targets.length; i < l; ++i ) {
+          _butter.targets[ i ].iframeDiv.style.display = "none";
+        }
       }
     });
 
