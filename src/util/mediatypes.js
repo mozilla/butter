@@ -94,7 +94,7 @@ define( [ "util/xhr", "util/uri" ],
             source: baseUrl,
             denied: denied,
             type: type,
-            thumbnail: respData.artwork_url,
+            thumbnail: respData.artwork_url || "../../resources/icons/soundcloud-small.png",
             duration: respData.duration / 1000,
             title: respData.title,
             hidden: true
