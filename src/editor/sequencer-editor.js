@@ -250,8 +250,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           el.classList.remove( "editing" );
 
           if ( activeHandle === "left" ) {
-            accuracy = start * Math.pow( 10, Time.timeAccuracy - 1 );
-            butter.currentTime = start === 0 ? start : Math.ceil( start * accuracy ) / accuracy;
+            butter.currentTime = start;
           } else if ( activeHandle === "right" ) {
             accuracy = end * Math.pow( 10, Time.timeAccuracy - 1 );
             butter.currentTime = Math.floor( end * accuracy ) / accuracy;
