@@ -225,8 +225,9 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           track.addTrackEvent( _trackEvent );
           _this.updateTrackEventSafe( _trackEvent, updateOptions );
           _butter.unlisten( "mediaready", updateEndAfterExpand );
+          _butter.currentTime = _popcornOptions.start;
+          updateUI( updateOptions );
           updateOptions = {};
-          updateUI();
         }
 
         function updateTrackEvent( options ) {
@@ -433,7 +434,6 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
         } else {
           fallbackContainer.classList.remove( "show" );
         }
-        console.log( _popcornOptions.source[ 0 ] );
         el.value = URI.stripUnique( _popcornOptions.source[ 0 ] ).toString();
       },
       fallbackUpdateUI = function( el ) {
