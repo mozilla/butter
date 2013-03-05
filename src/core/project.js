@@ -184,8 +184,15 @@ define( [ "core/eventmanager", "core/media" ],
 
       // convert text with HTML entities into plain text.
       function reconstituteHTML( htmlString ) {
-        var unpackDiv = document.createElement("div");
+        var unpackDiv = document.implementation.createHTMLDocument("").createElement("div");
         unpackDiv.innerHTML = htmlString;
+        // strip any non-text DOM nodes that this introduces.
+        var children = unpackDiv.childNodes;
+        for( var i = children.length - 1; i >= 0; i-- ) {
+          if ( children[ i ].nodeType !== 3 ) {
+            unpackDiv.removeChild( children[ i ] );
+          }
+        }
         return unpackDiv.textContent;
       }
 
