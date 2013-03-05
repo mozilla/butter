@@ -226,7 +226,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           _this.updateTrackEventSafe( _trackEvent, updateOptions );
           _butter.unlisten( "mediaready", updateEndAfterExpand );
           _butter.currentTime = _popcornOptions.start;
-          updateUI( updateOptions );
+          updateUI();
           updateOptions = {};
         }
 
