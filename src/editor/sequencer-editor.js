@@ -451,16 +451,48 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
       };
 
       _fields.startEnd = new StartEnd( startEndContainer, "start", _this.updateTrackEventSafe );
-      _fields.source = new Input( sourceEl, "source", sourceCallback, sourceUpdateUI );
+     // _fields.source = new Input( sourceEl, "source", sourceCallback, sourceUpdateUI );
       _fields.fallback = new Input( fallbackEl, "fallback", _this.updateTrackEventSafe, fallbackUpdateUI );
       _fields.title = new Input( titleEl, "title", _this.updateTrackEventSafe );
       _fields.mute = new Toggler( muteEl, "mute", "reverse", muteUpdateUI );
       _fields.volume = new Slider( sliderEl, "volume" );
       _fields.hidden = new Toggler( hiddenEl, "hidden", "reverse" );
       _fields.from = new Trimmer( clipTrimmerEl );
+      _fields.source = {
+        el: sourceEl,
+        updateUI: function() {
+          if ( !Array.isArray( _popcornOptions.source ) ) {
+            _popcornOptions.source = [ _popcornOptions.source ];
+          }
 
-      Textbox.applyTo( _fields.source.el, "textarea" );
-      Textbox.applyTo( _fields.fallback.el, "textarea" );
+          if ( MediaUtils.checkUrl( _popcornOptions.source[ 0 ] ) === "html5" ) {
+            fallbackContainer.classList.add( "show" );
+          } else {
+            fallbackContainer.classList.remove( "show" );
+          }
+
+          MediaUtils.getMetaData( _popcornOptions.source[ 0 ], function( data ) {
+            var thumbnailImg;
+            sourceEl.classList.add( "loaded" );
+            sourceEl.querySelector( ".mg-title" ).innerHTML = data.title;
+            sourceEl.querySelector( ".mg-type" ).innerHTML = data.type;
+            sourceEl.querySelector( ".mg-duration" ).innerHTML = Time.toTimecode( data.duration ) || "???";
+            if ( data.type === "html5" ) {
+              thumbnailImg = data.thumbnail;
+            } else {
+              thumbnailImg = document.createElement( "img" );
+              thumbnailImg.src = data.thumbnail;
+              sourceEl.querySelector( ".mg-thumbnail" ).appendChild( thumbnailImg );
+            }
+            sourceEl.classList.add( "mg-" + data.type );
+            sourceEl.querySelector( ".mg-title" ).addEventListener( "click", function( e ) {
+              _butter.editor.openEditor( "media-editor" );
+            }, false );
+          });
+        }
+      };
+
+      _fields.source.updateUI();
 
     } //setup
 
@@ -478,6 +510,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           }
         }
       }
+
       _this.setErrorState( false );
     }
 

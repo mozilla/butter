@@ -592,6 +592,20 @@ textarea {
   margin: 0;
   padding: 10px 20px;
   border-bottom: 1px solid @baseLightOutline;
+  &.media-properties {
+    font-size: 11px;
+    background: darken( @baseLight, 5% );
+    .clearfix();
+  }
+}
+
+.source-container {
+  display: none;
+  margin-bottom: 5px;
+  &.loaded {
+    display: block;
+  }
+  .clearfix();
 }
 
 .butter-form .switch {
