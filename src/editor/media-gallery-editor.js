@@ -101,7 +101,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
 
       thumbnailBtn.removeEventListener( "click", addEvent, false );
       _galleryList.removeChild( el );
-
+      _this.scrollbar.update();
       delete _media.clipData[ idx ];
       _butter.dispatch( "mediaclipremoved" );
     }, false );
@@ -161,7 +161,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     thumbnailBtn.addEventListener( "click", addEvent, false );
 
     _galleryList.insertBefore( el, _galleryList.firstChild );
-
+    _this.scrollbar.update();
     resetInput();
   }
 
