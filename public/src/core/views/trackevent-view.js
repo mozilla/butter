@@ -42,7 +42,17 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
       }
       _element.style.left = _start  / _trackEvent.track._media.duration * 100 + "%";
       _element.style.width = ( _end - _start ) / _trackEvent.track._media.duration * 100 + "%";
+
+      _this.setResizeArrows();
     }
+
+    this.setResizeArrows = function() {
+      if ( _element.offsetWidth < TRACKEVENT_MIN_WIDTH ) {
+        _element.classList.add( "trackevent-small" );
+      } else {
+        _element.classList.remove( "trackevent-small" );
+      }
+    };
 
     this.setToolTip = function( title ){
       _element.title = title;
@@ -256,11 +266,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
                   _this.dispatch( "trackeventresizestopped", resizeEvent );
                 },
                 resize: function( x, w, resizeEvent ) {
-                  if ( w < TRACKEVENT_MIN_WIDTH ) {
-                    _element.classList.add( "trackevent-small" );
-                  } else {
-                    _element.classList.remove( "trackevent-small" );
-                  }
+                  _this.setResizeArrows();
                   if ( _onResize ) {
                     _onResize( _trackEvent, x, w, resizeEvent, resizeEvent.direction );
                   }

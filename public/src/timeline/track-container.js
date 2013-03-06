@@ -112,6 +112,19 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
     function resetContainer() {
       _element.scrollLeft = _container.scrollWidth * _leftViewportBoundary;
       _container.style.width = _element.clientWidth / _viewportWidthRatio + "px";
+
+      var tracks = _media.tracks,
+          trackEvents;
+
+      // We want to update the resize arrows used as the size of trackevents increase
+      for ( var i = 0; i < tracks.length; i++ ) {
+        trackEvents = tracks[ i ].trackEvents;
+
+        for ( var k = 0; k < trackEvents.length; k++ ) {
+          trackEvents[ k ].view.setResizeArrows();
+        }
+      }
+
       _vScrollbar.update();
       _hScrollbar.update();
     }
