@@ -79,7 +79,8 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       var trackEvent = e.data.trackEvent,
           tracks, i, length,
           wasSelected = trackEvent.selected,
-          originalEvent = e.data.originalEvent;
+          originalEvent = e.data.originalEvent,
+          isDragging = false;
 
       if ( !originalEvent.shiftKey && !trackEvent.selected ) {
         tracks = _media.tracks;
@@ -94,6 +95,10 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
         window.removeEventListener( "mouseup", onTrackEventMouseUp, false );
         window.removeEventListener( "mousemove", onTrackEventDragStarted, false );
 
+        if ( !isDragging ) {
+          butter.editor.editTrackEvent( trackEvent );
+        }
+
         if ( !originalEvent.shiftKey ) {
           tracks = _media.tracks;
           for ( i = 0, length = tracks.length; i < length; i++ ) {
@@ -105,16 +110,13 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       }
 
       function onTrackEventDragStarted() {
+        isDragging = true;
         window.removeEventListener( "mousemove", onTrackEventDragStarted, false );
         window.removeEventListener( "mouseup", onTrackEventMouseUp, false );
       }
 
       window.addEventListener( "mouseup", onTrackEventMouseUp, false );
       window.addEventListener( "mousemove", onTrackEventDragStarted, false );
-    }
-
-    function onTrackEventSelected( e ) {
-      butter.editor.editTrackEvent( e.target );
     }
 
     function onTrackEventDeselected( e ) {
@@ -142,14 +144,12 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
       _media.listen( "trackeventremoved", function( e ){
         var trackEvent = e.data;
         trackEvent.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
-        trackEvent.unlisten( "trackeventselected", onTrackEventSelected );
         trackEvent.unlisten( "trackeventdeselected", onTrackEventDeselected );
       });
 
       function onTrackEventAdded( e ){
         var trackEvent = e.data;
         trackEvent.view.listen( "trackeventmousedown", onTrackEventMouseDown );
-        trackEvent.listen( "trackeventselected", onTrackEventSelected );
         trackEvent.listen( "trackeventdeselected", onTrackEventDeselected );
       }
 
