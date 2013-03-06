@@ -30,7 +30,6 @@ define( [ "./scrubber" ], function( Scrubber ) {
       }
 
       var inc = _tracksContainer.container.clientWidth / _media.duration,
-          padding = 20,
           lastPosition = 0,
           start = _tracksContainer.element.scrollLeft / inc,
           end = ( _tracksContainer.element.scrollLeft + containerWidth ) / inc;
