@@ -220,7 +220,7 @@
     text-transform: capitalize;
   }
   .mg-error {
-    color: #FF0000;
+    color: @red;
   }
   .mg-duration {
     &:before {
@@ -243,20 +243,19 @@
 
   .error,
   .error:focus {
-    border: 1px inset #ff0000;
+    border: 1px inset @red;
   }
 
   .media-error-message {
-    color: #ff0000;
+    color: @red;
     &.hidden {
       display: none;
     }
   }
 
   .media-loading-spinner {
-    left: 10px;
-    position: relative;
-    top: 3px;
+    float: left;
+    margin-right: 10px;
   }
 }
 

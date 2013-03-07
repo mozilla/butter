@@ -348,9 +348,14 @@
   }
 
   // Error/Invalid
-  input:invalid,
-  textarea:invalid,
-  input:invalid + .butter-unit {
+  :invalid,
+  :invalid + .butter-unit,
+  .invalid,
+  .invalid + .butter-unit,
+  .invalid:focus,
+  .invalid-field input,
+  .invalid-field textarea,
+  .invalid-field select {
     border-color: @red;
   }
 
