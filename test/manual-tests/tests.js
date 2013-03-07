@@ -6,10 +6,10 @@ var tests = [
   { href: "test-delete.html", name: "Delete Events" },
   { href: "test-tracks.html", name: "Add Tracks" },
   { href: "test-vimeo.html", name: "Change Media to Vimeo" },
-  { href: "test-youtube.html", name: "Change Media to Youtube" },
+  { href: "test-youtube.html", name: "Change Media to YouTube" },
   { href: "test-save.html", name: "Save and Load" },
   { href: "test-share.html", name: "Share HTML5 project" },
   { href: "test-sharevimeo.html", name: "Share Vimeo project" },
-  { href: "test-shareyoutube.html", name: "Share Youtube project" },
+  { href: "test-shareyoutube.html", name: "Share YouTube project" },
   { href: "test-export.html", name: "Export HTML5 project" }
 ].reverse();
