@@ -18,6 +18,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
         _view = new TrackView( _id, this ),
         _popcornWrapper = null,
         _this = this,
+        _mediaClips = 0,
         _order = 0,
         _name = NAME_PREFIX + _order;
 
@@ -198,12 +199,12 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
           sanitizationList = [],
           propertyName,
           option;
-      for ( propertyName in manifestOptions) {
-        if ( manifestOptions.hasOwnProperty(propertyName) ) {
-          option = manifestOptions[propertyName];
+      for ( propertyName in manifestOptions ) {
+        if ( manifestOptions.hasOwnProperty( propertyName ) ) {
+          option = manifestOptions[ propertyName ];
           if ( option.elem === "textarea" || option.elem === "input" ) {
             // sanitize the input for this element
-            sanitizationList.push(propertyName);
+            sanitizationList.push( propertyName );
           }
         }
       }
@@ -211,11 +212,11 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
       // Step 2: with the properties known, find their
       // content, and ensure it's clean prior to UI building.
       sanitizationList.forEach(function( optionName ) {
-        var content = trackEvent.popcornOptions[optionName];
+        var content = trackEvent.popcornOptions[ optionName ];
         if ( typeof content !== "string" ) {
           return;
         }
-        trackEvent.popcornOptions[optionName] = Sanitizer.reconstituteHTML(content);
+        trackEvent.popcornOptions[ optionName ] = Sanitizer.reconstituteHTML( content );
       });
     },
 
@@ -236,7 +237,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
       }
 
       // Sanitize the track even data prior to building the UI.
-      this.sanitizeTrackEventData(trackEvent);
+      this.sanitizeTrackEventData( trackEvent );
 
       trackEvent.bind( _this, _popcornWrapper );
 
@@ -279,11 +280,15 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
     this.removeTrackEvent = function( trackEvent, preventRemove ) {
       var idx = _trackEvents.indexOf( trackEvent );
       if ( idx > -1 ) {
+        if ( trackEvent.type === "sequencer" ) {
+          _mediaClips = _mediaClips - 1;
+        }
         _trackEvents.splice( idx, 1 );
         _this.unchain( trackEvent, [
           "trackeventupdated",
           "trackeventselected",
-          "trackeventdeselected"
+          "trackeventdeselected",
+          "sequencerready"
         ]);
         trackEvent.unsubscribe( "update", trackEventUpdateNotificationHandler );
         _view.removeTrackEvent( trackEvent );

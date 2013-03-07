@@ -221,10 +221,10 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
 
         function updateEndAfterExpand() {
           var track = _trackEvent.track;
-          track.removeTrackEvent( _trackEvent );
+          track.removeTrackEvent( _trackEvent, true );
           track.addTrackEvent( _trackEvent );
           _this.updateTrackEventSafe( _trackEvent, updateOptions );
-          _butter.unlisten( "mediaready", updateEndAfterExpand );
+          _butter.unlisten( "mediadurationchanged", updateEndAfterExpand );
           _butter.currentTime = _popcornOptions.start;
           updateUI();
           updateOptions = {};
@@ -235,7 +235,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           // We have to set an event listener on "mediaready" to update the trackevent after the base duration has been changed
           if ( options.end && options.end > _butter.duration ) {
             _butter.currentMedia.url = "#t=," + options.end;
-            _butter.listen( "mediaready", updateEndAfterExpand );
+            _butter.listen( "mediadurationchanged", updateEndAfterExpand );
           } else {
             _this.updateTrackEventSafe( _trackEvent, options );
             updateOptions = {};

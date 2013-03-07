@@ -37,6 +37,9 @@
           _mediaUpdateInterval,
           _clipData = {},
           _this = this,
+          _mediaClipsLoaded = 0,
+          _mediaClips = [],
+          _projectImport = true,
           _popcornWrapper = new PopcornWrapper( _id, {
             popcornEvents: {
               muted: function(){
@@ -84,7 +87,6 @@
                 _popcornWrapper.popcorn.controls( true );
               }
 
-              _this.dispatch( "mediaready" );
             },
             timeout: function(){
               _this.dispatch( "mediatimeout" );
@@ -105,6 +107,43 @@
       this.popcornCallbacks = null;
       this.popcornScripts = null;
       this.maxPluginZIndex = 0;
+
+      function onSequencerReady( e ) {
+        var type = e.data.type;
+
+        if ( type === "sequencer" ) {
+          if ( _projectImport ) {
+            _mediaClipsLoaded += 1;
+          }
+
+          if ( _projectImport && _mediaClipsLoaded === _mediaClips.length ) {
+            _projectImport = false;
+          }
+
+          if ( !_projectImport ) {
+            _this.dispatch( "mediaready" );
+          }
+        }
+      }
+
+      function onSequencerAdded( e ) {
+        var trackEvent = e.data;
+
+        if ( trackEvent.type === "sequencer" ) {
+          _mediaClips.push( trackEvent );
+          _this.dispatch( "mediacontentchanged", _this );
+        }
+      }
+
+      function onSequencerRemoved( e ) {
+        if ( e.data.type === "sequencer" ) {
+          _mediaClips.splice( _mediaClips.indexOf( e.data ), 1 );
+        }
+      }
+
+      _this.listen( "trackeventadded", onSequencerAdded );
+      _this.listen( "trackeventremoved", onSequencerRemoved );
+      _this.listen( "trackeventupdated", onSequencerReady );
 
       this.destroy = function(){
         _popcornWrapper.unbind();
@@ -226,6 +265,7 @@
           _this.unchain( track, [
             "tracktargetchanged",
             "trackeventadded",
+            "sequencerready",
             "trackeventremoved",
             "trackeventupdated",
             "trackeventselected",
@@ -583,6 +623,12 @@
                 i, l,
                 fallbacks = [],
                 source = [];
+
+            // Reset Media Clips variables for new data being loaded into project.
+            _projectImport = true;
+            _mediaClips = [];
+            _mediaClipsLoaded = 0;
+
             if( importData.name ) {
               _name = importData.name;
             }
@@ -603,7 +649,6 @@
                   newTrack = new Track();
                   newTrack.json = importTracks[ i ];
                   _this.addTrack( newTrack );
-                  newTrack.updateTrackEvents();
                 }
                 // Backwards comp for old base media.
                 // Insert previous base media as a sequence event as the last track.
@@ -638,6 +683,9 @@
               } else if ( console ) {
                 console.warn( "Ignoring imported track data. Must be in an Array." );
               }
+            } else {
+              // There was no track data here, therefore no trackevents. We can safely flip our flag.
+              _projectImport = false;
             }
           },
           enumerable: true

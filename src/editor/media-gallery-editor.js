@@ -149,8 +149,8 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       }
 
       if ( end > _media.duration ) {
-        _butter.listen( "mediaready", function onMediaReady() {
-          _butter.unlisten( "mediaready", onMediaReady );
+        _media.listen( "mediadurationchanged", function onDurationChange() {
+          _butter.unlisten( "mediadurationchanged", onDurationChange );
           addTrackEvent();
         });
 
