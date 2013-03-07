@@ -87,6 +87,13 @@
                 _popcornWrapper.popcorn.controls( true );
               }
 
+              // At this point if a project had sequencer events they would have been added
+              // to butter internals and we would know they exist. If none have been found this means
+              // there were none and we can safely fire mediaready here.
+              if ( _projectImport && !_mediaClips.length ) {
+                _projectImport = false;
+                _this.dispatch( "mediaready" );
+              }
             },
             timeout: function(){
               _this.dispatch( "mediatimeout" );
@@ -126,7 +133,7 @@
         }
       }
 
-      function onSequencerAdded( e ) {
+      function onSequencerAdded( e ) {console.log("a");
         var trackEvent = e.data;
 
         if ( trackEvent.type === "sequencer" ) {
