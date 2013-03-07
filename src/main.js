@@ -2,7 +2,28 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-(function () {
+// Since template.js will be ready before Butter, prepare a shim
+window.Butter = {
+  init: function() {
+    if ( window.Butter.__waiting ) {
+      throw "Butter: can't create more than one instance per document.";
+    }
+    window.Butter.__waiting = arguments;
+  }
+};
+
+(function init() {
+
+  // If we need to load requirejs before loading butter, make it so
+  if ( typeof define === "undefined" ) {
+    var rscript = document.createElement( "script" );
+    rscript.onload = function() {
+      init();
+    };
+    rscript.src = "/external/require/require.js";
+    document.head.appendChild( rscript );
+    return;
+  }
 
   var WARNING_WAIT_TIME = 500;
 
@@ -25,7 +46,12 @@
     "RIM Tablet OS"
   ];
 
-  define( [
+  var require = requirejs.config({
+    baseUrl: "/src"
+  });
+
+  define( "butter-main",
+          [
             "core/eventmanager", "core/logger", "core/config", "core/track",
             "core/target", "core/media", "core/page",
             "./modules", "./dependencies", "./dialogs",
@@ -1017,6 +1043,13 @@
     window.Butter = Butter;
 
     return Butter;
+  });
+
+  // butter depends on popcorn, so don't change this unless you know what you're doing
+  require([ "util/shims", "../external/jsSHA/sha1" ], function() {
+    require([ "popcorn" ], function() {
+      require([ "butter-main" ]);
+    });
   });
 
 }());
