@@ -225,7 +225,7 @@ function init( window, document ) {
 
     extraAttribution.innerHTML = Popcorn.manifest.googlemap.about.attribution;
 
-    // Youtube currently won't have a popcorn.media._util this is a fallback check for YT
+    // YouTube currently won't have a popcorn.media._util this is a fallback check for YT
     if ( type === "html5" ) {
       type = youtubeRegex.test( src.href ) ? "youtube" : type;
     }
