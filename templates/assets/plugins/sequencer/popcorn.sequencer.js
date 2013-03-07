@@ -158,7 +158,6 @@
         _this.off( "play", options._playEvent );
         _this.off( "pause", options._pauseEvent );
         _this.off( "seeked", options._onSeeked );
-        options._clip.off( "progress", options._onProgress );
       };
 
       options.addSource = function() {
@@ -496,6 +495,7 @@
         // We need to also clear these events.
         options._clip.off( "play", options._clipPlayEvent );
         options._clip.off( "pause", options._clipPauseEvent );
+        options._clip.off( "progress", options._onProgress );
         if ( !options._clip.paused() ) {
           options._clip.pause();
         }
