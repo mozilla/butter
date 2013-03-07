@@ -16,7 +16,7 @@
               receivedTrack;
 
           // None of my tracks have events right now, adding a new one
-          track.addTrackEvent();
+          track.addTrackEvent({ type: "text" });
           trackEvent = track.trackEvents[ 0 ];
 
           receivedTrack = butter.currentMedia.findTrackWithTrackEventId( trackEvent.id );

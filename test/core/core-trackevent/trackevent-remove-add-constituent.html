@@ -20,7 +20,7 @@
           m = butter.addMedia();
 
           t1 = m.addTrack(),
-          te = t1.addTrackEvent( { name: "TrackEvent 3", type: "test", start: 2, end: 3 } ),
+          te = t1.addTrackEvent( { name: "TrackEvent 3", type: "text", start: 2, end: 3 } ),
           state = undefined;
 
           butter.listen( "trackeventremoved", function( trackEvent ){

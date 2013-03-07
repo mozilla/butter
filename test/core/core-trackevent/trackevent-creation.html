@@ -39,7 +39,7 @@
         });
       });
 
-      asyncTest( "Create TrackEvent using generateSafeTrackEvent", 5, function() {
+      asyncTest( "Create TrackEvent using generateSafeTrackEvent", 4, function() {
 
         createButterCore( function( butter ) {
 
@@ -57,8 +57,6 @@
           });
 
           var m = butter.addMedia({ url: "../../../external/popcorn-js/test/italia.ogg,../../../external/popcorn-js/test/italia.mp4", target: "mediaDiv" }),
-              t1 = m.addTrack(),
-              t2 = m.addTrack(),
               target = butter.addTarget({
                 element: "targetDiv"
               });
@@ -66,15 +64,16 @@
           m.listen( "mediaready", function() {
             var te1 = butter.generateSafeTrackEvent( "generateTrackEventTest", 0 ),
                 te2 = butter.generateSafeTrackEvent( "generateTrackEventTest", defaultTrackeventDuration * 0.5 ),
-                te3 = butter.generateSafeTrackEvent( "generateTrackEventTest", defaultTrackeventDuration * 0.75 ),
-                te4 = butter.generateSafeTrackEvent( "generateTrackEventTest", defaultTrackeventDuration * 2, t2 ),
-                te5 = butter.generateSafeTrackEvent( "generateTrackEventTest", defaultTrackeventDuration * 2 );
+                orderedTracks = butter.currentMedia.orderedTracks,
+                te3;
 
-            ok( te1.track === t1, "First trackevent was placed on first track" );
-            ok( te2.track === t2, "Second trackevent avoided collision with first trackevent, and was placed on second track." );
-            ok( te3.track !== t2 && te3.track !== t1, "Third trackevent avoided collision with second & first trackevents, and was placed on a new track." );
-            ok( te4.track === t2, "Trackevent placed in open space on second track." );
-            ok( te5.track === t1, "Trackevent placed in open space, with no explicit track." );
+            ok( te1.track === orderedTracks[ 1 ], "First Trackevent was bumped down a track after second added and is now on second track" );
+            ok( te2.track === orderedTracks[ 0 ], "Second trackevent collided with the first causing the first to be moved" );
+
+            te3 = butter.generateSafeTrackEvent( "generateTrackEventTest", 0, defaultTrackeventDuration, orderedTracks[ 1 ] );
+
+            ok( te3.track === orderedTracks[ 1 ], "When given a track, generateSafeTrackEvent forces trackevent on that track" );
+            ok( te1.track === orderedTracks[ 2 ], "Second trackevent was forced onto a new track" );
 
             Popcorn.removePlugin( "generateTrackEventTest" );
             start();

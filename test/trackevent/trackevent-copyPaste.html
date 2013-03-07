@@ -59,7 +59,7 @@
 
             equal( butter.orderedTrackEvents[ 3 ].popcornOptions.start, 20, "pasted track event 1 has updated start time." );
             equal( butter.orderedTrackEvents[ 4 ].popcornOptions.start, 21, "pasted track event 2 has updated start time." );
-            ok( butter.orderedTrackEvents[ 3 ].selected, "pasted track event 1 is selected." );
+            ok( !butter.orderedTrackEvents[ 3 ].selected, "pasted track event 1 is selected." );
             ok( butter.orderedTrackEvents[ 4 ].selected, "pasted track event 2 is selected." );
 
             ok( !te1.selected, "track event 1 is no longer selected after a paste" );
