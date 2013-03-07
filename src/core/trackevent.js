@@ -95,6 +95,29 @@ define( [ "./logger", "./eventmanager", "./observer",
     };
 
     /**
+     * Member: applyDefaults
+     *
+     * Creates a diff of updatable options and applies them to update.
+     */
+    this.applyDefaults = function() {
+      var newOptions = {},
+          manifestOptions = {},
+          popcornOptions = this.popcornOptions;
+      if ( !this.manifest ) {
+        return;
+      }
+      manifestOptions = this.manifest.options;
+      for ( var prop in manifestOptions ) {
+        if ( manifestOptions.hasOwnProperty( prop ) ) {
+          if ( !popcornOptions.hasOwnProperty( prop ) ) {
+            newOptions[ prop ] = defaultValue( manifestOptions[ prop ] );
+          }
+        }
+      }
+      this.update( newOptions );
+    };
+
+    /**
      * Member: update
      *
      * Updates the event properties and runs sanity checks on input.
@@ -103,7 +126,7 @@ define( [ "./logger", "./eventmanager", "./observer",
      * @event trackeventupdated: Occurs when an update operation succeeded.
      * @throws TrackEventUpdateException: When an update operation failed because of conflicting times or other serious property problems.
      */
-    this.update = function( updateOptions, applyDefaults ) {
+    this.update = function( updateOptions ) {
 
       var newStart,
           newEnd,
@@ -164,21 +187,14 @@ define( [ "./logger", "./eventmanager", "./observer",
           manifestOptions = this.manifest.options;
           if ( manifestOptions ) {
             for ( var prop in manifestOptions ) {
-              if ( manifestOptions.hasOwnProperty( prop ) ) {
-                if ( updateOptions[ prop ] === undefined ) {
-                  if ( applyDefaults ) {
-                    _popcornOptions[ prop ] = defaultValue( manifestOptions[ prop ] );
-                    preventUpdate = false;
-                  }
-                } else {
+              if ( manifestOptions.hasOwnProperty( prop ) &&
+                   updateOptions.hasOwnProperty( prop ) ) {
 
-                  // If we find an instance were the two properties differ, it means we need to update.
-                  if ( _popcornOptions[ prop ] !== updateOptions[ prop ] ) {
-                    preventUpdate = false;
-                  }
-
-                  _popcornOptions[ prop ] = updateOptions[ prop ];
+                // If we find an instance were the two properties differ, it means we need to update.
+                if ( _popcornOptions[ prop ] !== updateOptions[ prop ] ) {
+                  preventUpdate = false;
                 }
+                _popcornOptions[ prop ] = updateOptions[ prop ];
               }
             }
             if ( !( "target" in manifestOptions ) && updateOptions.target ) {
@@ -204,7 +220,6 @@ define( [ "./logger", "./eventmanager", "./observer",
 
       _popcornOptions.start = newStart;
       _popcornOptions.end = newEnd;
-      _this.popcornOptions = _popcornOptions;
 
       // if PopcornWrapper exists, it means we're connected properly to a Popcorn instance,
       // and can update the corresponding Popcorn trackevent for this object
