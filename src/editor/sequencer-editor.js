@@ -202,16 +202,10 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
             clipSection.classList.remove( "small" );
           }
 
-          if ( options.from ) {
-            clipSection.style.left = timeToPosition( from ) + "px";
-            inInput.value = Time.toTimecode( from );
-            outInput.value = Time.toTimecode( from + end - start );
-          }
-
-          if ( options.end || options.start ) {
-            clipSection.style.width = timeToPosition( end - start ) + "px";
-            outInput.value = Time.toTimecode( from + end - start );
-          }
+          clipSection.style.left = timeToPosition( from ) + "px";
+          clipSection.style.width = timeToPosition( end - start ) + "px";
+          inInput.value = Time.toTimecode( from );
+          outInput.value = Time.toTimecode( from + end - start );
 
           if ( options.duration ) {
             clipEndLable.innerHTML = Time.toTimecode( options.duration );
