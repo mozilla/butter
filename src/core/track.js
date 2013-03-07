@@ -18,7 +18,6 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
         _view = new TrackView( _id, this ),
         _popcornWrapper = null,
         _this = this,
-        _mediaClips = 0,
         _order = 0,
         _name = NAME_PREFIX + _order;
 
@@ -280,15 +279,11 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
     this.removeTrackEvent = function( trackEvent, preventRemove ) {
       var idx = _trackEvents.indexOf( trackEvent );
       if ( idx > -1 ) {
-        if ( trackEvent.type === "sequencer" ) {
-          _mediaClips = _mediaClips - 1;
-        }
         _trackEvents.splice( idx, 1 );
         _this.unchain( trackEvent, [
           "trackeventupdated",
           "trackeventselected",
-          "trackeventdeselected",
-          "sequencerready"
+          "trackeventdeselected"
         ]);
         trackEvent.unsubscribe( "update", trackEventUpdateNotificationHandler );
         _view.removeTrackEvent( trackEvent );

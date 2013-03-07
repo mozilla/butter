@@ -90,7 +90,7 @@
               // At this point if a project had sequencer events they would have been added
               // to butter internals and we would know they exist. If none have been found this means
               // there were none and we can safely fire mediaready here.
-              if ( _projectImport && !_mediaClips.length ) {
+              if ( !_mediaClips.length ) {
                 _projectImport = false;
                 _this.dispatch( "mediaready" );
               }
@@ -272,7 +272,6 @@
           _this.unchain( track, [
             "tracktargetchanged",
             "trackeventadded",
-            "sequencerready",
             "trackeventremoved",
             "trackeventupdated",
             "trackeventselected",
