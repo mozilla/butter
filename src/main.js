@@ -32,7 +32,8 @@
             "dialog/dialog", "editor/editor", "ui/ui",
             "util/xhr", "util/lang", "util/tutorial",
             "text!default-config.json", "text!layouts/ua-warning.html",
-            "ui/widget/tooltip", "crashreporter", "core/project"
+            "ui/widget/tooltip", "crashreporter", "core/project",
+            "../external/ua-parser/ua-parser"
           ],
           function(
             EventManager, Logger, Config, Track,
@@ -41,11 +42,9 @@
             Dialog, Editor, UI,
             XHR, Lang, Tutorial,
             DEFAULT_CONFIG_JSON, UA_WARNING_LAYOUT,
-            ToolTip, CrashReporter, Project
+            ToolTip, CrashReporter, Project,
+            UAParser
           ){
-
-    // Satisfy lint by making reference non-global
-    var UAParser = window.UAParser;
 
     var __guid = 0;
 

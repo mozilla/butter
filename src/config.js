@@ -12,10 +12,9 @@ define(function( require, exports, module ){
     paths: {
       'text': '../external/require/text',
       'jsSHA': '../external/jsSHA/sha1',
-      'UAParser': '../external/ua-parser/ua-parser',
       'shims': 'util/shims'
     }
   });
 
-  ctx( [ "main", "jsSHA", "shims", "UAParser" ] );
+  ctx( [ "main", "jsSHA", "shims" ] );
 });
