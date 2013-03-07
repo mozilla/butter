@@ -437,7 +437,9 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
         el.value = URI.stripUnique( _popcornOptions.source[ 0 ] ).toString();
       },
       fallbackUpdateUI = function( el ) {
-        if ( !Array.isArray( _popcornOptions.fallback ) ) {
+        if ( !_popcornOptions.fallback || !_popcornOptions.fallback.length ) {
+          return;
+        } else if ( !Array.isArray( _popcornOptions.fallback ) ) {
           _popcornOptions.fallback = [ _popcornOptions.fallback ];
         }
         el.value = URI.stripUnique( _popcornOptions.fallback[ 0 ] ).toString();
