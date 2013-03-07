@@ -144,8 +144,6 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
           duration: data.duration,
           hidden: data.hidden
         });
-        _butter.deselectAllTrackEvents();
-        trackEvent.selected = true;
       }
 
       if ( end > _media.duration ) {
