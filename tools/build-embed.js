@@ -22,7 +22,7 @@
 
   // Have the analyzer include the requirejs config from that particular file
   // Must be kept in sync with baseUrl + include
-  mainConfigFile: '../src/embed.js',
+  mainConfigFile: '../src/popcorn.js',
 
   // Wraps Butter in a closure and adds license information
   wrap: {

@@ -253,71 +253,8 @@ function init() {
 
   var require = requirejs.config({
     baseUrl: "/src",
-    // Paths are aliases to other modules
     paths: {
-      // Core
-      "popcorn": "../external/popcorn-js/popcorn",
-      "popcorn.ie8": "../external/popcorn-js/ie8/popcorn.ie8",
-
-      // Wrappers
-      "popcorn._MediaElementProto": "../external/popcorn-js/wrappers/common/popcorn._MediaElementProto",
-      "popcorn.HTMLMediaElement": "../external/popcorn-js/wrappers/html5/popcorn.HTMLMediaElement",
-      "popcorn.HTMLNullVideoElement": "../external/popcorn-js/wrappers/null/popcorn.HTMLNullVideoElement",
-      "popcorn.HTMLSoundCloudAudioElement": "../external/popcorn-js/wrappers/soundcloud/popcorn.HTMLSoundCloudAudioElement",
-      "popcorn.HTMLVimeoVideoElement": "../external/popcorn-js/wrappers/vimeo/popcorn.HTMLVimeoVideoElement",
-      "popcorn.HTMLYouTubeVideoElement": "../external/popcorn-js/wrappers/youtube/popcorn.HTMLYouTubeVideoElement",
-
-      // Players
-      "popcorn.player": "../external/popcorn-js/modules/player/popcorn.player",
-      "popcorn.youtube": "../external/popcorn-js/players/youtube/popcorn.youtube",
-      "popcorn.vimeo": "../external/popcorn-js/players/vimeo/popcorn.vimeo",
-      "popcorn.soundcloud": "../external/popcorn-js/players/soundcloud/popcorn.soundcloud",
-
-      // Plugins
-      "popcorn.googlemap": "../templates/assets/plugins/googlemap/popcorn.googlemap",
-      "popcorn.image": "../templates/assets/plugins/image/popcorn.image",
-      "popcorn.loopPlugin": "../templates/assets/plugins/loopPlugin/popcorn.loopPlugin",
-      "popcorn.pausePlugin": "../templates/assets/plugins/pausePlugin/popcorn.pausePlugin",
-      "popcorn.popup": "../templates/assets/plugins/popup/popcorn.popup",
-      "popcorn.sequencer": "../templates/assets/plugins/sequencer/popcorn.sequencer",
-      "popcorn.skip": "../templates/assets/plugins/skip/popcorn.skip",
-      "popcorn.text": "../templates/assets/plugins/text/popcorn.text",
-      "popcorn.twitter": "../templates/assets/plugins/twitter/popcorn.twitter",
-      "popcorn.wikipedia": "../templates/assets/plugins/wikipedia/popcorn.wikipedia",
-
-      // RequireJS
       "text": "../external/require/text"
-    },
-    // shim config defines dependencies between non-AMD modules, which is all of the Popcorn code
-    shim: {
-      // Core
-      "popcorn": [ "popcorn.ie8" ],
-
-      // Wrappers
-      "popcorn._MediaElementProto": [ "popcorn" ],
-      "popcorn.HTMLMediaElement": [ "popcorn" ],
-      "popcorn.HTMLNullVideoElement": [ "popcorn", "popcorn._MediaElementProto" ],
-      "popcorn.HTMLSoundCloudAudioElement": [ "popcorn", "popcorn._MediaElementProto" ],
-      "popcorn.HTMLVimeoVideoElement": [ "popcorn", "popcorn._MediaElementProto" ],
-      "popcorn.HTMLYouTubeVideoElement": [ "popcorn", "popcorn._MediaElementProto" ],
-
-      // Players
-      "popcorn.player": [ "popcorn" ],
-      "popcorn.soundcloud": [ "popcorn", "popcorn.player", "popcorn.HTMLSoundCloudAudioElement" ],
-      "popcorn.vimeo":  [ "popcorn", "popcorn.player", "popcorn.HTMLVimeoVideoElement" ],
-      "popcorn.youtube":  [ "popcorn", "popcorn.player", "popcorn.HTMLYouTubeVideoElement" ],
-
-      // Plugins
-      "popcorn.googlemap": [ "popcorn" ],
-      "popcorn.image": [ "popcorn" ],
-      "popcorn.loopPlugin": [ "popcorn" ],
-      "popcorn.pausePlugin": [ "popcorn" ],
-      "popcorn.popup": [ "popcorn"],
-      "popcorn.sequencer": [ "popcorn", "popcorn.player" ],
-      "popcorn.skip": [ "popcorn" ],
-      "popcorn.text": [ "popcorn" ],
-      "popcorn.twitter": [ "popcorn" ],
-      "popcorn.wikipedia": [ "popcorn" ]
     }
   });
 
@@ -326,27 +263,7 @@ function init() {
       "util/uri",
       "ui/widget/controls",
       "ui/widget/textbox",
-
-      // We must list all of the popcorn files that get used
-      // shim config will handle dependency order
-      "popcorn.soundcloud",
-      "popcorn.vimeo",
-      "popcorn.youtube",
-      "popcorn.googlemap",
-      "popcorn.image",
-      "popcorn.loopPlugin",
-      "popcorn.pausePlugin",
-      "popcorn.popup",
-      "popcorn.sequencer",
-      "popcorn.skip",
-      "popcorn.text",
-      "popcorn.twitter",
-      "popcorn.wikipedia",
-      "popcorn.HTMLMediaElement",
-      "popcorn.HTMLNullVideoElement",
-      "popcorn.HTMLSoundCloudAudioElement",
-      "popcorn.HTMLVimeoVideoElement",
-      "popcorn.HTMLYouTubeVideoElement"
+      "popcorn"
     ],
     function( URI, Controls, TextboxWrapper ) {
       // cornfield writes out the Popcorn initialization code as popcornDataFn()
