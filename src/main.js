@@ -925,8 +925,12 @@
                     _this.project = project;
                     _this.chain( project, [ "projectchanged", "projectsaved" ] );
 
-                    // Fire the ready event
-                    _this.dispatch( "ready", _this );
+                    _this.listen( "mediaready", function onMediaReady() {
+                      _this.unlisten( "mediaready", onMediaReady );
+
+                      // Fire the ready event
+                      _this.dispatch( "ready", _this );
+                    });
                   }
 
                   if( projectBackup ) {

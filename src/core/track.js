@@ -198,12 +198,12 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
           sanitizationList = [],
           propertyName,
           option;
-      for ( propertyName in manifestOptions) {
-        if ( manifestOptions.hasOwnProperty(propertyName) ) {
-          option = manifestOptions[propertyName];
+      for ( propertyName in manifestOptions ) {
+        if ( manifestOptions.hasOwnProperty( propertyName ) ) {
+          option = manifestOptions[ propertyName ];
           if ( option.elem === "textarea" || option.elem === "input" ) {
             // sanitize the input for this element
-            sanitizationList.push(propertyName);
+            sanitizationList.push( propertyName );
           }
         }
       }
@@ -211,11 +211,11 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
       // Step 2: with the properties known, find their
       // content, and ensure it's clean prior to UI building.
       sanitizationList.forEach(function( optionName ) {
-        var content = trackEvent.popcornOptions[optionName];
+        var content = trackEvent.popcornOptions[ optionName ];
         if ( typeof content !== "string" ) {
           return;
         }
-        trackEvent.popcornOptions[optionName] = Sanitizer.reconstituteHTML(content);
+        trackEvent.popcornOptions[ optionName ] = Sanitizer.reconstituteHTML( content );
       });
     },
 
@@ -236,7 +236,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
       }
 
       // Sanitize the track even data prior to building the UI.
-      this.sanitizeTrackEventData(trackEvent);
+      this.sanitizeTrackEventData( trackEvent );
 
       trackEvent.bind( _this, _popcornWrapper );
 

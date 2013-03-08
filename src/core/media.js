@@ -37,6 +37,9 @@
           _mediaUpdateInterval,
           _clipData = {},
           _this = this,
+          _sequencerEventsLoaded = 0,
+          _sequencerEvents = [],
+          _projectImport = true,
           _popcornWrapper = new PopcornWrapper( _id, {
             popcornEvents: {
               muted: function(){
@@ -67,6 +70,19 @@
               },
               seeked: function(){
                 _this.dispatch( "mediaseeked" );
+              },
+              sequencer_loadedmetadata: function() {
+                if ( _projectImport ) {
+                  _sequencerEventsLoaded++;
+                }
+
+                if ( _projectImport && _sequencerEventsLoaded === _sequencerEvents.length ) {
+                  _projectImport = false;
+                }
+
+                if ( !_projectImport ) {
+                  _this.dispatch( "mediaready" );
+                }
               }
             },
             prepare: function(){
@@ -84,7 +100,13 @@
                 _popcornWrapper.popcorn.controls( true );
               }
 
-              _this.dispatch( "mediaready" );
+              // At this point if a project had sequencer events they would have been added
+              // to butter internals and we would know they exist. If none have been found this means
+              // there were none and we can safely fire mediaready here.
+              if ( !_sequencerEvents.length ) {
+                _projectImport = false;
+                _this.dispatch( "mediaready" );
+              }
             },
             timeout: function(){
               _this.dispatch( "mediatimeout" );
@@ -105,6 +127,24 @@
       this.popcornCallbacks = null;
       this.popcornScripts = null;
       this.maxPluginZIndex = 0;
+
+      function onSequencerAdded( e ) {
+        var trackEvent = e.data;
+
+        if ( trackEvent.type === "sequencer" ) {
+          _sequencerEvents.push( trackEvent );
+          _this.dispatch( "mediacontentchanged", _this );
+        }
+      }
+
+      function onSequencerRemoved( e ) {
+        if ( e.data.type === "sequencer" ) {
+          _sequencerEvents.splice( _sequencerEvents.indexOf( e.data ), 1 );
+        }
+      }
+
+      _this.listen( "trackeventadded", onSequencerAdded );
+      _this.listen( "trackeventremoved", onSequencerRemoved );
 
       this.destroy = function(){
         _popcornWrapper.unbind();
@@ -583,6 +623,12 @@
                 i, l,
                 fallbacks = [],
                 source = [];
+
+            // Reset Media Clips variables for new data being loaded into project.
+            _projectImport = true;
+            _mediaClips = [];
+            _mediaClipsLoaded = 0;
+
             if( importData.name ) {
               _name = importData.name;
             }
@@ -603,7 +649,6 @@
                   newTrack = new Track();
                   newTrack.json = importTracks[ i ];
                   _this.addTrack( newTrack );
-                  newTrack.updateTrackEvents();
                 }
                 // Backwards comp for old base media.
                 // Insert previous base media as a sequence event as the last track.
@@ -638,6 +683,9 @@
               } else if ( console ) {
                 console.warn( "Ignoring imported track data. Must be in an Array." );
               }
+            } else {
+              // There was no track data here, therefore no trackevents. We can safely flip our flag.
+              _projectImport = false;
             }
           },
           enumerable: true
