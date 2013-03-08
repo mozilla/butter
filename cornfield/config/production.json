@@ -2,8 +2,5 @@
   "dirs": {
     "wwwRoot": "../public",
     "templates": "../public/templates"
-  },
-  "exportAssets": [
-    "../external/popcorn-js/popcorn.js"
-  ]
+  }
 }

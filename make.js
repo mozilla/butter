@@ -426,7 +426,7 @@ function buildJS( version, compress ){
   }
   stampVersion( version, 'dist/src/butter.js' );
 
-  result = exec(RJS + ' -o tools/embed.js ' + doCompress, {silent: true});
+  result = exec(RJS + ' -o tools/build-embed.js ' + doCompress, {silent: true});
   if (!!result.code) {
     echo(result.output);
   }

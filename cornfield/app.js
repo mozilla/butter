@@ -28,8 +28,7 @@ var express = require('express'),
     APP_HOSTNAME = stripSlash( CONFIG.dirs.appHostname ),
     // If a separate hostname is given for embed, use it, otherwise use app's hostname
     WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
-    VALID_TEMPLATES = CONFIG.templates,
-    EXPORT_ASSETS = CONFIG.exportAssets;
+    VALID_TEMPLATES = CONFIG.templates;
 
 var templateConfigs = {};
 
@@ -196,12 +195,6 @@ app.post( '/api/publish/:id',
       templateScripts = data.substring( headStartTagIndex, headEndTagIndex );
       startString = data.substring( 0, headStartTagIndex );
 
-      externalAssetsString += '\n';
-      for ( i = 0; i < EXPORT_ASSETS.length; ++i ) {
-        externalAssetURL = utils.pathToURL( path.relative( path.dirname( templateFile ), EXPORT_ASSETS[ i ] ) );
-        externalAssetsString += '  <script src="' + externalAssetURL + '"></script>\n';
-      }
-
       // If the template has custom plugins defined in it's config, add them to our exported page
       if ( templateConfig.plugin && templateConfig.plugin.plugins ) {
         var plugins = templateConfig.plugin.plugins;
@@ -233,7 +226,8 @@ app.post( '/api/publish/:id',
         }
         mediaUrlsString += mediaUrls[ numSources - 1 ] + '" ]';
 
-        popcornString += '\n(function(){';
+        // src/embed.js initializes Popcorn by executing the global popcornDataFn()
+        popcornString += '\nvar popcornDataFn = function(){';
         popcornString += '\nvar popcorn = Popcorn.smart("#' + currentMedia.target + '", ' +
                          mediaUrlsString + ', ' + JSON.stringify( mediaPopcornOptions ) + ');';
         for ( j = 0; j < currentMedia.tracks.length; ++ j ) {
@@ -245,7 +239,7 @@ app.post( '/api/publish/:id',
             popcornString += ');';
           }
         }
-        popcornString += '}());\n';
+        popcornString += '};\n';
       }
       popcornString += '</script>\n';
 
@@ -296,9 +290,7 @@ app.post( '/api/publish/:id',
                     remixUrl: remixUrl,
                     templateScripts: templateScripts,
                     externalAssets: externalAssetsString,
-                    // XXX: need a better way to wrap function, DOM needs to be ready
-                    popcorn: popcornString.replace( /^\(function\(\)\{/m, "Popcorn( function(){" )
-                                          .replace( /\}\(\)\);$/m, "});" )
+                    popcorn: popcornString
                   },
                   publishEmbedShell );
 

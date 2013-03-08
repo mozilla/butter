@@ -52,30 +52,6 @@
   "templates": {
     "basic": "{{templateBase}}basic/config.json"
   },
-  "exportAssets": [
-    "../external/popcorn-js/ie8/popcorn.ie8.js",
-    "../external/popcorn-js/popcorn.js",
-    "../external/popcorn-js/wrappers/common/popcorn._MediaElementProto.js",
-    "../external/popcorn-js/wrappers/html5/popcorn.HTMLMediaElement.js",
-    "../external/popcorn-js/wrappers/null/popcorn.HTMLNullVideoElement.js",
-    "../external/popcorn-js/wrappers/soundcloud/popcorn.HTMLSoundCloudAudioElement.js",
-    "../external/popcorn-js/wrappers/vimeo/popcorn.HTMLVimeoVideoElement.js",
-    "../external/popcorn-js/wrappers/youtube/popcorn.HTMLYouTubeVideoElement.js",
-    "../external/popcorn-js/modules/player/popcorn.player.js",
-    "../external/popcorn-js/players/youtube/popcorn.youtube.js",
-    "../external/popcorn-js/players/vimeo/popcorn.vimeo.js",
-    "../external/popcorn-js/players/soundcloud/popcorn.soundcloud.js",
-    "../templates/assets/plugins/text/popcorn.text.js",
-    "../templates/assets/plugins/popup/popcorn.popup.js",
-    "../templates/assets/plugins/googlemap/popcorn.googlemap.js",
-    "../templates/assets/plugins/twitter/popcorn.twitter.js",
-    "../templates/assets/plugins/image/popcorn.image.js",
-    "../templates/assets/plugins/loopPlugin/popcorn.loopPlugin.js",
-    "../templates/assets/plugins/skip/popcorn.skip.js",
-    "../templates/assets/plugins/pausePlugin/popcorn.pausePlugin.js",
-    "../templates/assets/plugins/wikipedia/popcorn.wikipedia.js",
-    "../templates/assets/plugins/sequencer/popcorn.sequencer.js"
-  ],
   "database": {
     "database": "popcorn",
     "username": null,
