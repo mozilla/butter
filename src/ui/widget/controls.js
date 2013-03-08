@@ -299,7 +299,7 @@ define( [ "util/lang", "util/time", "text!layouts/controls.html" ],
       if ( durationDialog ) {
 
         durationchange = function() {
-          durationDialog.innerHTML = Time.toTimecode( p.duration() );
+          durationDialog.innerHTML = Time.toTimecode( p.duration(), 0 );
         };
 
         durationchange();
@@ -402,7 +402,7 @@ define( [ "util/lang", "util/time", "text!layouts/controls.html" ],
 
           if ( currentTimeDialog ) {
 
-            currentTimeDialog.innerHTML = Time.toTimecode( time );
+            currentTimeDialog.innerHTML = Time.toTimecode( time, 0 );
           }
         });
       }
