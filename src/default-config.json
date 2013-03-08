@@ -38,6 +38,7 @@
       },
       {
         "type": "twitter",
+        "hidden": true,
         "path": "{{baseDir}}templates/assets/plugins/twitter/popcorn.twitter.js",
         "icon": "{{baseDir}}templates/assets/plugins/twitter/twitter-icon.png"
       },
