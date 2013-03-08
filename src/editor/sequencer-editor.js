@@ -457,7 +457,8 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           titleEl = _rootElement.querySelector( "[data-manifest-key=title]" ),
           clipTrimmerEl = _rootElement.querySelector( ".clip-duration" ),
           sliderEl = _rootElement.querySelector( ".butter-slider" ),
-          sliderContainer = _rootElement.querySelector( ".volume-slider-container" );
+          sliderContainer = _rootElement.querySelector( ".volume-slider-container" ),
+          videoToggleContainer = _rootElement.querySelector( ".video-toggler" );
 
       // Custom callbacks and UI updating functions
       var sourceCallback = function( trackEvent, updateOptions ) {
@@ -475,6 +476,12 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           updateOptions.denied = data.denied;
           if ( _mediaType === "html5" ) {
             updateOptions.source[ 0 ] = URI.makeUnique( updateOptions.source[ 0 ] ).toString();
+          } else if ( _mediaType === "soundcloud" ) {
+            videoToggleContainer.classList.add( "butter-hidden" );
+            updateOptions.hidden = true;
+          } else {
+            videoToggleContainer.classList.remove( "butter-hidden" );
+            updateOptions.hidden = false;
           }
           trackEvent.update( updateOptions );
         });
@@ -485,11 +492,18 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           _popcornOptions.source = [ _popcornOptions.source ];
         }
 
-        if ( MediaUtils.checkUrl( _popcornOptions.source[ 0 ] ) === "html5" ) {
+        _mediaType = MediaUtils.checkUrl( _popcornOptions.source[ 0 ] );
+
+        if ( _mediaType === "html5" ) {
           fallbackContainer.classList.add( "show" );
+        } else if ( _mediaType === "soundcloud" ) {
+          videoToggleContainer.classList.add( "butter-hidden" );
+          fallbackContainer.classList.remove( "show" );
         } else {
+          videoToggleContainer.classList.remove( "butter-hidden" );
           fallbackContainer.classList.remove( "show" );
         }
+
         el.value = URI.stripUnique( _popcornOptions.source[ 0 ] ).toString();
       },
       fallbackUpdateUI = function( el ) {
@@ -523,7 +537,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
     } //setup
 
     function onTrackEventUpdated( e ) {
-      _trackEvent = e.target,
+      _trackEvent = e.target;
       _popcornOptions = _trackEvent.popcornOptions;
 
       for ( var key in _manifest ) {
