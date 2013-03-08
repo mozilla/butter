@@ -13,11 +13,8 @@
         script.src = "//www.mozilla.org/tabzilla/media/js/tabzilla.js";
         document.body.appendChild( script );
 
-        butter.listen( "mediaready", function mediaReady() {
-          butter.unlisten( "mediaready", mediaReady );
-          document.querySelector( "#embed-wrapper" ).classList.remove( "faded" );
-          document.querySelector( ".loading-message" ).classList.remove( "show-global" );
-        });
+        document.querySelector( "#embed-wrapper" ).classList.remove( "faded" );
+        document.querySelector( ".loading-message" ).classList.remove( "show-global" );
       }
     });
   }, false );

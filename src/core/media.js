@@ -37,8 +37,8 @@
           _mediaUpdateInterval,
           _clipData = {},
           _this = this,
-          _mediaClipsLoaded = 0,
-          _mediaClips = [],
+          _sequencerEventsLoaded = 0,
+          _sequencerEvents = [],
           _projectImport = true,
           _popcornWrapper = new PopcornWrapper( _id, {
             popcornEvents: {
@@ -70,6 +70,19 @@
               },
               seeked: function(){
                 _this.dispatch( "mediaseeked" );
+              },
+              sequencer_loadedmetadata: function() {
+                if ( _projectImport ) {
+                  _sequencerEventsLoaded++;
+                }
+
+                if ( _projectImport && _sequencerEventsLoaded === _sequencerEvents.length ) {
+                  _projectImport = false;
+                }
+
+                if ( !_projectImport ) {
+                  _this.dispatch( "mediaready" );
+                }
               }
             },
             prepare: function(){
@@ -90,7 +103,7 @@
               // At this point if a project had sequencer events they would have been added
               // to butter internals and we would know they exist. If none have been found this means
               // there were none and we can safely fire mediaready here.
-              if ( !_mediaClips.length ) {
+              if ( !_sequencerEvents.length ) {
                 _projectImport = false;
                 _this.dispatch( "mediaready" );
               }
@@ -115,42 +128,23 @@
       this.popcornScripts = null;
       this.maxPluginZIndex = 0;
 
-      function onSequencerReady( e ) {
-        var type = e.data.type;
-
-        if ( type === "sequencer" ) {
-          if ( _projectImport ) {
-            _mediaClipsLoaded += 1;
-          }
-
-          if ( _projectImport && _mediaClipsLoaded === _mediaClips.length ) {
-            _projectImport = false;
-          }
-
-          if ( !_projectImport ) {
-            _this.dispatch( "mediaready" );
-          }
-        }
-      }
-
       function onSequencerAdded( e ) {
         var trackEvent = e.data;
 
         if ( trackEvent.type === "sequencer" ) {
-          _mediaClips.push( trackEvent );
+          _sequencerEvents.push( trackEvent );
           _this.dispatch( "mediacontentchanged", _this );
         }
       }
 
       function onSequencerRemoved( e ) {
         if ( e.data.type === "sequencer" ) {
-          _mediaClips.splice( _mediaClips.indexOf( e.data ), 1 );
+          _sequencerEvents.splice( _sequencerEvents.indexOf( e.data ), 1 );
         }
       }
 
       _this.listen( "trackeventadded", onSequencerAdded );
       _this.listen( "trackeventremoved", onSequencerRemoved );
-      _this.listen( "trackeventupdated", onSequencerReady );
 
       this.destroy = function(){
         _popcornWrapper.unbind();

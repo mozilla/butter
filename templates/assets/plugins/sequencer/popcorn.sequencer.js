@@ -85,6 +85,7 @@
         }
         options.failed = false;
         options._clip.off( "loadedmetadata", options.readyEvent );
+        _this.emit( "sequencer_loadedmetadata", options );
         options.ready = true;
         options._container.style.width = ( options.width || "100" ) + "%";
         options._container.style.height = ( options.height || "100" ) + "%";
