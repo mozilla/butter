@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang", "text!layouts/controls.html" ],
-  function( LangUtils, CONTROLS_LAYOUT ) {
+define( [ "util/lang", "util/time", "text!layouts/controls.html" ],
+  function( LangUtils, Time, CONTROLS_LAYOUT ) {
 
   function Controls( container, p, options ) {
 
@@ -299,15 +299,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
       if ( durationDialog ) {
 
         durationchange = function() {
-
-          var timeStamp = new Date( 1970, 0, 1 ),
-              time = p.duration(),
-              seconds;
-
-          timeStamp.setSeconds( Math.round( time ) );
-          seconds = timeStamp.toTimeString().substr( 0, 8 );
-
-          durationDialog.innerHTML = seconds;
+          durationDialog.innerHTML = Time.toTimecode( p.duration(), 0 );
         };
 
         durationchange();
@@ -394,8 +386,7 @@ define( [ "util/lang", "text!layouts/controls.html" ],
 
         p.on( "timeupdate", function() {
 
-          var timeStamp = new Date( 1970, 0, 1 ),
-              time = p.currentTime(),
+          var time = p.currentTime(),
               seconds,
               width = ( time / p.duration() * 100 * timebar.offsetWidth / 100 );
 
@@ -409,12 +400,9 @@ define( [ "util/lang", "text!layouts/controls.html" ],
             scrubber.style.left = ( ( width - ( scrubber.offsetWidth / 2 ) ) / timebar.offsetWidth * 100 ) + "%";
           }
 
-          timeStamp.setSeconds( Math.round( time ) );
-          seconds = timeStamp.toTimeString().substr( 0, 8 );
-
           if ( currentTimeDialog ) {
 
-            currentTimeDialog.innerHTML = seconds;
+            currentTimeDialog.innerHTML = Time.toTimecode( time, 0 );
           }
         });
       }
