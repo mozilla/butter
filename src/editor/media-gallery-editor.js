@@ -139,10 +139,10 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
           denied: data.denied,
           start: start,
           end: end,
-          from: data.from,
+          from: data.from || 0,
           title: data.title,
           duration: data.duration,
-          hidden: data.hidden
+          hidden: data.hidden || false
         });
       }
 

@@ -525,17 +525,20 @@
         source: {
           elem: "input",
           type: "url",
-          label: "Source URL"
+          label: "Source URL",
+          "default": ""
         },
         fallback: {
           elem: "input",
           type: "url",
-          label: "Fallback URL (only applies to exported projects)"
+          label: "Fallback URL (only applies to exported projects)",
+          "default": ""
         },
         title: {
           elem: "input",
           type: "text",
-          label: "Clip title"
+          label: "Clip title",
+          "default": ""
         },
         width: {
           elem: "input",
@@ -574,7 +577,7 @@
           type: "seconds",
           "units": "seconds",
           "label": "Start at",
-          "default": "0"
+          "default": 0
         },
         volume: {
           elem: "input",
@@ -596,13 +599,16 @@
           "default": false
         },
         zindex: {
-          hidden: true
+          hidden: true,
+          "default": 0
         },
         denied: {
-          hidden: true
+          hidden: true,
+          "default": false
         },
         duration: {
-          hidden: true
+          hidden: true,
+          "default": 0
         }
       }
     }

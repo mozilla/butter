@@ -62,7 +62,7 @@ define( [ "./logger", "./eventmanager", "./observer",
     _this.popcornTrackEvent = null;
 
     function defaultValue( item ) {
-      if ( item.default ) {
+      if ( item.hasOwnProperty( "default" ) ) {
         return item.default;
       }
       return item.type === "number" ? 0 : "";

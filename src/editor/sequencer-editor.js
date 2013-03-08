@@ -202,7 +202,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
             clipSection.classList.remove( "small" );
           }
 
-          if ( options.from ) {
+          if ( options.from || options.from === 0 ) {
             clipSection.style.left = timeToPosition( from ) + "px";
             inInput.value = Time.toTimecode( from );
             outInput.value = Time.toTimecode( from + end - start );
