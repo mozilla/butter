@@ -15,7 +15,7 @@
           var m = butter.addMedia({ url: "../../../external/popcorn-js/test/italia.ogg,../../../external/popcorn-js/test/italia.mp4", target: "mediaDiv" }),
               t = m.addTrack(),
               te1 = t.addTrackEvent( { name: "TrackEvent 1", type: "text", popcornOptions: { start: 0, end: 1, target: "mediaDiv" } } ),
-              te2 = t.addTrackEvent( { name: "TrackEvent 2", type: "test", popcornOptions: { start: 0, end: 3, target: "mediaDiv" } } );
+              te2 = t.addTrackEvent( { name: "TrackEvent 2", type: "image", popcornOptions: { start: 0, end: 3, target: "mediaDiv" } } );
 
           ok( butter.getTrackEvents( "type", "text" ).length === 1, "One text track event exists." );
           ok( butter.getTrackEvents().length === 2, "Selecting all track events by not providing parameters works." );

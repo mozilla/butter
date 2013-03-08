@@ -32,7 +32,7 @@
           _target = mediaOptions.target,
           _registry,
           _currentTime = 0,
-          _duration = -1,
+          _duration = mediaOptions.duration || -1,
           _popcornOptions = mediaOptions.popcornOptions,
           _mediaUpdateInterval,
           _clipData = {},

@@ -100,15 +100,15 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
           } else {
             trackEvent.view.setToolTip( JSON.stringify( options ) );
           }
-        }
 
-        trackEvent.view.update( trackEvent.popcornOptions );
+          trackEvent.view.update( trackEvent.popcornOptions );
 
-        // make sure we have a reference to the trackevent before calling toString
-        if ( trackEvent.popcornTrackEvent ) {
-          trackEvent.view.elementText = trackEvent.popcornTrackEvent.toString();
-          // we should only get here if no exceptions happened
-          trackEvent.dispatch( "trackeventupdated", trackEvent );
+          // make sure we have a reference to the trackevent before calling toString
+          if ( trackEvent.popcornTrackEvent ) {
+            trackEvent.view.elementText = trackEvent.popcornTrackEvent.toString();
+            // we should only get here if no exceptions happened
+            trackEvent.dispatch( "trackeventupdated", trackEvent );
+          }
         }
       }
 

@@ -87,7 +87,12 @@
             popcornOptions: options
           });
 
-          _pUpdate.synchronizeEvent( { id: id, type: "text" }, updateOptions );
+          _pUpdate.synchronizeEvent({
+            id: id,
+            type: "text",
+            popcornOptions: options
+          }, updateOptions );
+
           trackEvent = _pUpdate.popcorn.getTrackEvent( id );
 
           equal( trackEvent.id, id, "ID of track event is correct" );

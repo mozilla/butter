@@ -12,7 +12,7 @@
       asyncTest( "getTrackEventByName", 1, function() {
         createButterModule( function( butter ) {
           var t = butter.tracks[ 0 ],
-              te = t.addTrackEvent( { name: "test" } ),
+              te = t.addTrackEvent( { name: "test", type: "text" } ),
               retrievedEvent;
 
           retrievedEvent = t.getTrackEventByName( te.name );
