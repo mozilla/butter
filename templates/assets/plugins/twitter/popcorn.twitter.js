@@ -67,7 +67,7 @@
       options._container.id = Popcorn.guid( "twitter" );
       options._container.style.left = options.left + "%";
       options._container.style.zIndex = +options.zindex;
-      options._container.innerHTML = '<span class="popcorn-twitter-title">Twitter</span><div class="popcorn-twitter-tweets"><ul><li><a href="https://si0.twimg.com/profile_images/1577180475/Screen_Shot_2011-10-07_at_11.52.39_AM_bigger.png" class="popcorn-twitter-tweet-image"><img src="https://si0.twimg.com/profile_images/1577180475/Screen_Shot_2011-10-07_at_11.52.39_AM_bigger.png"></a><div><div class="popcorn-twitter-tweet-user"><a href="http://www.twitter.com/webmaker" target="_blank">Mozilla Webmaker</a>&nbsp;@webmaker</div><div class="popcorn-twitter-tweet-text">Due to recent changes in the Twitter API, these tweets are no longer available.</div></div></li></ul></div>'
+      options._container.innerHTML = '<span class="popcorn-twitter-title">Twitter</span><div class="popcorn-twitter-tweets"><ul><li><a href="https://si0.twimg.com/profile_images/1577180475/Screen_Shot_2011-10-07_at_11.52.39_AM_bigger.png" class="popcorn-twitter-tweet-image"><img src="https://si0.twimg.com/profile_images/1577180475/Screen_Shot_2011-10-07_at_11.52.39_AM_bigger.png"></a><div><div class="popcorn-twitter-tweet-user"><a href="http://www.twitter.com/webmaker" target="_blank">Mozilla Webmaker</a>&nbsp;@webmaker</div><div class="popcorn-twitter-tweet-text">Due to recent changes in the Twitter API, these tweets are no longer available.</div></div></li></ul></div>';
 
       // Set layout class for container
       if ( options.layout ) {
@@ -83,7 +83,7 @@
       target.appendChild( options._container );
 
       options.toString = function() {
-        return "Twitter is no longer available"
+        return "Twitter is no longer available";
       };
     },
     start: function( event, options ) {
