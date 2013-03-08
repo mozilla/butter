@@ -133,7 +133,7 @@
         }
       }
 
-      function onSequencerAdded( e ) {console.log("a");
+      function onSequencerAdded( e ) {
         var trackEvent = e.data;
 
         if ( trackEvent.type === "sequencer" ) {
