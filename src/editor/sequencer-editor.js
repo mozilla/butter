@@ -99,7 +99,12 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
 
       function Slider( el, property ) {
         var scrubber = el.querySelector( ".butter-slider-scrubber" ),
-            MAX_VAL = el.getAttribute( "data-max" ) || 100;
+            MAX_VAL = 100,
+            SCRUBBER_OFFSET = 4,
+            SCRUBBER_TOOLTIP_OFFSET = 3,
+            firstX, startLeft,
+            sliderToolTip = _rootElement.querySelector( ".butter-slider-tooltip" ),
+            rects = el.getBoundingClientRect();
 
         function toReal( n ) {
           var maxUI = el.offsetWidth;
@@ -120,39 +125,91 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           return n;
         }
 
-        function updateUI() {
-          scrubber.style.left = toUI( _popcornOptions[ property ] ) + "px";
+        function setSliderToolTip( val ) {
+          val = normalize( toReal( val - rects.left ) );
+          sliderToolTip.style.left = toUI( val ) + "px";
+          sliderToolTip.innerHTML = val.toFixed( 0 ) + "%";
         }
 
-        function updateTrackEvent( options) {
+        function setScrubber( val ) {
+          val = normalize( toReal( val - rects.left ) );
+          scrubber.style.left = toUI( val ) - SCRUBBER_OFFSET + "px";
+        }
+
+        function updateUI() {
+          var left = toUI( _popcornOptions[ property ] ) - SCRUBBER_OFFSET;
+          scrubber.style.left = left + "px";
+          sliderToolTip.style.left = left + SCRUBBER_TOOLTIP_OFFSET + "px";
+          sliderToolTip.innerHTML = _popcornOptions.volume.toFixed( 0 ) + "%";
+        }
+
+        function updateTrackEvent( options ) {
           _this.updateTrackEventSafe( _trackEvent, options );
           updateUI();
         }
 
-        var firstX,
-            startLeft;
+        function onSlideStop( e ) {
+          var left = e.clientX - rects.left,
+              properties = {};
 
-        function onSlideStop() {
+          properties[ property ] = normalize( toReal( left ) );
+          updateTrackEvent( properties );
+
+          sliderToolTip.classList.remove( "tooltip-no-transition-on" );
+          el.addEventListener( "mousedown", onSliderMouseDown, false );
+          onMouseOut();
           document.removeEventListener( "mousemove", onSliding, false );
           document.removeEventListener( "mouseup", onSlideStop, false );
         }
 
         function onSliding( e ) {
-          var left = startLeft + e.clientX - firstX,
-              properties = {};
-          properties[ property ] = normalize( toReal( left ) );
-          updateTrackEvent( properties );
+          setSliderToolTip( e.clientX );
+          setScrubber( e.clientX );
         }
 
         function onSlideStart( e ) {
           e.preventDefault();
-          firstX = e.clientX;
-          startLeft = scrubber.offsetLeft;
+          el.removeEventListener( "mouseover", onMouseOver, false );
+          el.removeEventListener( "mousemove", onMouseMove, false );
+          el.removeEventListener( "mouseout", onMouseOut, false );
+          el.removeEventListener( "mousedown", onSliderMouseDown, false );
+          sliderToolTip.classList.add( "tooltip-no-transition-on" );
           document.addEventListener( "mousemove", onSliding, false );
           document.addEventListener( "mouseup", onSlideStop, false );
         }
 
+        function onSliderMouseDown( e ) {
+          e.preventDefault();
+
+          document.addEventListener( "mousemove", onSliding, false );
+          document.addEventListener( "mouseup", onSlideStop, false );
+          el.removeEventListener( "mouseout", onMouseOut, false );
+          sliderToolTip.classList.add( "tooltip-no-transition-on" );
+          setScrubber( e.clientX );
+        }
+
+        function onMouseMove( e ) {
+          setSliderToolTip( e.clientX );
+        }
+
+        function onMouseOver( e ) {
+          sliderToolTip.classList.add( "tooltip-no-transition-on" );
+          setSliderToolTip( e.clientX );
+          el.removeEventListener( "mouseover", onMouseOver, false );
+          el.addEventListener( "mouseout", onMouseOut, false );
+          el.addEventListener( "mousemove", onMouseMove, false );
+        }
+
+        function onMouseOut() {
+          sliderToolTip.classList.remove( "tooltip-no-transition-on" );
+          el.removeEventListener( "mouseout", onMouseOut, false );
+          el.removeEventListener( "mousemove", onMouseMove, false );
+          el.addEventListener( "mouseover", onMouseOver, false );
+        }
+
         scrubber.addEventListener( "mousedown", onSlideStart, false );
+        el.addEventListener( "mouseover", onMouseOver, false );
+        el.addEventListener( "mousedown", onSliderMouseDown, false );
         updateUI();
       }
 
@@ -400,7 +457,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           hiddenEl = _rootElement.querySelector( "#hidden-toggler" ),
           titleEl = _rootElement.querySelector( "[data-manifest-key=title]" ),
           clipTrimmerEl = _rootElement.querySelector( ".clip-duration" ),
-          sliderEl = _rootElement.querySelector( "[data-manifest-key=volume]" ),
+          sliderEl = _rootElement.querySelector( ".butter-slider" ),
           sliderContainer = _rootElement.querySelector( ".volume-slider-container" );
 
       // Custom callbacks and UI updating functions
