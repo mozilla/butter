@@ -7,10 +7,6 @@
   // Where to find the module names listed below.
   baseUrl: '../src',
 
-  paths: {
-    'text': '../external/require/text'
-  },
-
   // Target the AMD loader shim as the main module to optimize,
   // so it shows up first in the built file,
   // since the embed modules use the define/require APIs that the almond
@@ -23,6 +19,10 @@
   // Files to include along with almond. Their nested dependencies will also be
   // included.
   include: [ 'webmakernav' ],
+
+  // Have the analyzer include the requirejs config from that particular file
+  // Must be kept in sync with baseUrl + include
+  mainConfigFile: '../src/webmakernav.js',
 
   // Wraps Butter in a closure and adds license information
   wrap: {
