@@ -102,7 +102,6 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
             MAX_VAL = 100,
             SCRUBBER_OFFSET = 4,
             SCRUBBER_TOOLTIP_OFFSET = 3,
-            firstX, startLeft,
             sliderToolTip = _rootElement.querySelector( ".butter-slider-tooltip" ),
             rects = el.getBoundingClientRect();
 
