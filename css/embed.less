@@ -341,7 +341,17 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  display: none;
+  display: block;
+  opacity: 0;
+
+  // No transition from "visible" to "invisible"
+  .transition( none );
+
+  &.embed-dialog-open {
+    opacity: 1;
+    // Fade-in transition from "invisible" to visible"
+    .transition( opacity 1s ease 1s );
+  }
 }
 
 #post-roll,
@@ -471,6 +481,7 @@ body {
   }
 
 } // post-roll
+
 
 
 /*********************************************************
