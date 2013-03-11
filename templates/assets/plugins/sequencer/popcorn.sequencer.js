@@ -23,11 +23,69 @@
     return quarantine;
   }
 
+  var bufferMap = {};
+
+  var BufferManager = function( p ) {
+    var _clipMap = {},
+        _buffering = 0,
+        _bufferedArray = [],
+        _buffered = {
+          start: function( index ) {
+            return _bufferedArray( index ).start;
+          },
+          end: function( index ) {
+            return _bufferedArray( index ).end;
+          },
+          length: 0
+        };
+    function onProgress() {
+      var buffered = this.buffered(),
+          clipOptions = _clipMap[ this.id ],
+          buffering = false;
+      for ( var i = 0; i < buffered.length; i++ ) {
+        if ( buffered.start( i ) <= this.currentTime &&
+             buffered.start( i ) > this.currentTime ) {
+        } else {
+          buffering = true;
+        }
+      }
+      if ( buffering ) {
+        _buffering++;
+      } else {
+        _buffering--;
+      }
+      if ( _buffering === 0 ) {
+        // replay everything, if needed.
+        // enable play and pause events
+      } else {
+        // pause just this... maybe pause everything
+        // disable play and pause events
+      }
+
+      // figure out what to put in _buffered
+      this.trigger( "clipwrapperprogress", _buffered );
+    };
+    this.addClip = function( clipOptions ) {
+      _clipMap[ clipOptions._clip.id ] = clipOptions;
+      clipOptions._clip.on( "progress", onProgress );
+    };
+    this.removeClip = function( clipOptions ) {
+      clipOptions._clip.off( "progress", onProgress );
+    };
+  };
+
   var MEDIA_LOAD_TIMEOUT = 10000;
 
   Popcorn.plugin( "sequencer", {
     _setup: function( options ) {
       var _this = this;
+
+      if ( !bufferMap[ _this.id ] ) {
+        options.bufferManager = new BufferManager( _this );
+        bufferMap[ _this.id ] = options.bufferManager;
+      } else {
+        options.bufferManager = bufferMap[ _this.id ];
+      }
 
       options.setupContainer = function() {
         var container = document.createElement( "div" ),
@@ -132,6 +190,7 @@
         // If we have no options._clip, no source was given to this track event,
         // and it is being torn down.
         if ( options._clip ) {
+          options.bufferManager.removeClip( options );
           // XXX: pull the SoundCloud iframe element out of our video div, and quarantine
           // so we don't delete it, and block loading future SoundCloud instances. See above.
           // This is also fixing an issue in youtube, so we do it for all medias with iframes now.
@@ -172,6 +231,7 @@
           options.loadTimeout = setTimeout( options.fail, MEDIA_LOAD_TIMEOUT );
         }
         options._clip = Popcorn.smart( options._container, options.source, { frameAnimation: true } );
+        options.bufferManager.addClip( options );
         options._clip.media.style.width = "100%";
         options._clip.media.style.height = "100%";
         options._container.style.width = "100%";
