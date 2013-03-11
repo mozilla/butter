@@ -18,11 +18,15 @@
 
   // Files to include along with almond. Their nested dependencies will also be
   // included.
-  include: [ 'embed', 'embed-main' ],
+  include: [ 'embed' ],
 
   // Have the analyzer include the requirejs config from that particular file
   // Must be kept in sync with baseUrl + include
-  mainConfigFile: '../src/embed.js',
+  mainConfigFile: '../src/popcorn.js',
+
+  // The require optimizer only looks at the first level of require/define
+  // statements by default. This forces it to look further down the tree
+  findNestedDependencies: true,
 
   // Wraps Butter in a closure and adds license information
   wrap: {

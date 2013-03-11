@@ -420,7 +420,7 @@ function buildJS( version, compress ){
   var doCompress = compress ? "" : "optimize=none";
   var result = "";
 
-  result = exec(RJS + ' -o tools/build.js ' + doCompress, {silent: true});
+  result = exec(RJS + ' -o tools/build-butter.js ' + doCompress, {silent: true});
   if (!!result.code) {
     echo(result.output);
   }
