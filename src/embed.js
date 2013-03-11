@@ -151,7 +151,7 @@ function init() {
 
   // clear the state class indicator for the post roll container
   function clearStateClass( el ) {
-    var el = el || $( "#post-roll-container" );
+    el = el || $( "#post-roll-container" );
 
     for ( var i = 0; i < stateClasses.length; i++ ) {
       el.classList.remove( stateClasses[ i ] );
