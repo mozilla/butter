@@ -379,7 +379,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
         if ( !Array.isArray( updateOptions.source ) ) {
           updateOptions.source = [ updateOptions.source ];
         }
-        if ( _mediaType && _mediaType !== "html5" ) {
+        if ( _mediaType && _mediaType !== "HTML5" ) {
           updateOptions.fallback = [ "" ];
         }
         updateOptions.source[ 0 ] = updateOptions.source[ 0 ] || _popcornOptions.source[ 0 ];
@@ -395,7 +395,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           updateOptions.duration = data.duration;
           updateOptions.denied = data.denied;
           updateOptions.title = data.title;
-          if ( _mediaType === "soundcloud" ) {
+          if ( _mediaType === "SoundCloud" ) {
             videoToggleContainer.classList.add( "butter-hidden" );
             updateOptions.hidden = true;
           } else {
@@ -415,9 +415,9 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
 
         _mediaType = MediaUtils.checkUrl( _popcornOptions.source[ 0 ] );
 
-        if ( _mediaType === "html5" ) {
+        if ( _mediaType === "HTML5" ) {
           fallbackContainer.classList.add( "show" );
-        } else if ( _mediaType === "soundcloud" ) {
+        } else if ( _mediaType === "SoundCloud" ) {
           videoToggleContainer.classList.add( "butter-hidden" );
           fallbackContainer.classList.remove( "show" );
         } else {

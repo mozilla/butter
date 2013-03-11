@@ -8,9 +8,9 @@ define( [ "util/uri" ],
   function( URI ) {
 
   var REGEX_MAP = {
-        youtube: /(?:https?:\/\/www\.|https?:\/\/|www\.|\.|^)youtu/,
-        vimeo: /https?:\/\/(www\.)?vimeo.com\/(\d+)($|\/)/,
-        soundcloud: /(?:https?:\/\/www\.|https?:\/\/|www\.|\.|^)(soundcloud)/,
+        YouTube: /(?:https?:\/\/www\.|https?:\/\/|www\.|\.|^)youtu/,
+        Vimeo: /https?:\/\/(www\.)?vimeo.com\/(\d+)($|\/)/,
+        SoundCloud: /(?:https?:\/\/www\.|https?:\/\/|www\.|\.|^)(soundcloud)/,
         // supports #t=<start>,<duration>
         // where start or duration can be: X, X.X or XX:XX
         "null": /^\s*#t=(?:\d*(?:(?:\.|\:)?\d+)?),?(\d+(?:(?:\.|\:)\d+)?)\s*$/
@@ -27,7 +27,7 @@ define( [ "util/uri" ],
           }
         }
       }
-      return "html5";
+      return "HTML5";
     },
     getMetaData: function( baseUrl, successCallback, errorCallback ) {
       var id,
@@ -40,7 +40,7 @@ define( [ "util/uri" ],
       successCallback = successCallback || function(){};
       errorCallback = errorCallback || function(){};
 
-      if ( type === "youtube" ) {
+      if ( type === "YouTube" ) {
         parsedUri = URI.parse( baseUrl );
         // youtube id can either be a query under v, example:
         // http://www.youtube.com/watch?v=p_7Qi3mprKQ
@@ -109,7 +109,7 @@ define( [ "util/uri" ],
             popcorn.on( "loadedmetadata", readyEvent );
           }
         });
-      } else if ( type === "soundcloud" ) {
+      } else if ( type === "SoundCloud" ) {
         parsedUri = URI.parse( baseUrl );
         splitUriDirectory = parsedUri.directory.split( "/" );
         id = splitUriDirectory[ splitUriDirectory.length - 1 ];
@@ -132,7 +132,7 @@ define( [ "util/uri" ],
             hidden: true
           });
         });
-      } else if ( type === "vimeo" ) {
+      } else if ( type === "Vimeo" ) {
         parsedUri = URI.parse( baseUrl );
         splitUriDirectory = parsedUri.directory.split( "/" );
         id = splitUriDirectory[ splitUriDirectory.length - 1 ];
@@ -157,7 +157,7 @@ define( [ "util/uri" ],
           title: baseUrl,
           duration: REGEX_MAP[ "null" ].exec( baseUrl )[ 1 ]
         });
-      } else if ( type === "html5" ) {
+      } else if ( type === "HTML5" ) {
         videoElem = document.createElement( "video" );
         videoElem.addEventListener( "loadedmetadata", function() {
           successCallback ({

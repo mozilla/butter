@@ -128,9 +128,10 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
     _loadingSpinner.classList.add( "hidden" );
 
     el.querySelector( ".mg-title" ).innerHTML = data.title;
-    el.querySelector( ".mg-type" ).innerHTML = data.type;
+    el.querySelector( ".mg-type" ).classList.add( data.type.toLowerCase() + "-icon" );
+    el.querySelector( ".mg-type-text" ).innerHTML = data.type;
     el.querySelector( ".mg-duration" ).innerHTML = Time.toTimecode( data.duration, 0 );
-    if ( data.type === "html5" ) {
+    if ( data.type === "HTML5" ) {
       thumbnailImg = data.thumbnail;
     } else {
       thumbnailImg = document.createElement( "img" );
@@ -139,7 +140,7 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
     thumbnailBtn.appendChild( thumbnailImg );
     thumbnailBtn.src = data.thumbnail;
 
-    el.classList.add( "mg-" + data.type );
+    el.classList.add( "mg-" + data.type.toLowerCase() );
 
     if ( data.denied ) {
       el.querySelector( ".mg-error" ).innerHTML = "Embedding disabled by request";
