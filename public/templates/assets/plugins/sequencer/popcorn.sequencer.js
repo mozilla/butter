@@ -581,9 +581,12 @@
         },
         volume: {
           elem: "input",
-          type: "number",
+          type: "range",
           units: "%",
           label: "Volume",
+          slider_unit: "%",
+          min: 0,
+          max: 100,
           "default": 100
         },
         hidden: {

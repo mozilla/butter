@@ -367,6 +367,131 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
       }, false );
     };
 
+    extendObject.attachSliderChangeHandler = function( element, trackEvent, propertyName, callback ) {
+      var scrubber = element.querySelector( ".butter-slider-scrubber" ),
+          manifestOptions = trackEvent.manifest.options[ propertyName ],
+          MAX_VAL = manifestOptions.max || 100,
+          MIN_VAL = manifestOptions.min || 0,
+          sliderUnit = manifestOptions.slider_unit || "",
+          precision = manifestOptions.precision || 0,
+          SCRUBBER_OFFSET = 4,
+          SCRUBBER_TOOLTIP_OFFSET = 3,
+          sliderToolTip = element.querySelector( ".butter-slider-tooltip" ),
+          rects = element.getBoundingClientRect();
+
+      callback = callback || extendObject.updateTrackEventSafe;
+
+      function toReal( n ) {
+        var maxUI = element.offsetWidth;
+        return ( n / maxUI ) * MAX_VAL;
+      }
+
+      function toUI( n ) {
+        var maxUI = element.offsetWidth;
+        return ( n / MAX_VAL ) * maxUI;
+      }
+
+      function normalize( n ) {
+        if ( n < MIN_VAL ) {
+          n = MIN_VAL;
+        } else if ( n > MAX_VAL ) {
+          n = MAX_VAL;
+        }
+
+        n = n.toFixed( manifestOptions.precision );
+
+        return n;
+      }
+
+      function setSliderToolTip( val ) {
+        val = parseFloat( normalize( toReal( val - rects.left ) ) );
+        sliderToolTip.style.left = toUI( val ) + "px";
+        sliderToolTip.innerHTML = val.toFixed( precision ) + sliderUnit;
+      }
+
+      function setScrubber( val ) {
+        val = normalize( toReal( val - rects.left ) );
+        scrubber.style.left = toUI( val ) - SCRUBBER_OFFSET + "px";
+      }
+
+      function updateUI() {
+        var val = parseFloat( trackEvent.popcornOptions[ propertyName ] ),
+            left = toUI( val ) - SCRUBBER_OFFSET;
+        scrubber.style.left = left + "px";
+        sliderToolTip.style.left = left + SCRUBBER_TOOLTIP_OFFSET + "px";
+        sliderToolTip.innerHTML = val.toFixed( precision ) + sliderUnit;
+      }
+
+      function updateTrackEvent( options ) {
+        callback( trackEvent, options );
+        updateUI();
+      }
+
+      function onSlideStop( e ) {
+        var left = e.clientX - rects.left,
+            properties = {};
+
+        properties[ propertyName ] = normalize( toReal( left ) );
+        updateTrackEvent( properties );
+
+        sliderToolTip.classList.remove( "tooltip-no-transition-on" );
+        element.addEventListener( "mousedown", onSliderMouseDown, false );
+        onMouseOut();
+        document.removeEventListener( "mousemove", onSliding, false );
+        document.removeEventListener( "mouseup", onSlideStop, false );
+      }
+
+      function onSliding( e ) {
+        setSliderToolTip( e.clientX );
+        setScrubber( e.clientX );
+      }
+
+      function onSlideStart( e ) {
+        e.preventDefault();
+        element.removeEventListener( "mouseover", onMouseOver, false );
+        element.removeEventListener( "mousemove", onMouseMove, false );
+        element.removeEventListener( "mouseout", onMouseOut, false );
+        element.removeEventListener( "mousedown", onSliderMouseDown, false );
+        sliderToolTip.classList.add( "tooltip-no-transition-on" );
+        document.addEventListener( "mousemove", onSliding, false );
+        document.addEventListener( "mouseup", onSlideStop, false );
+      }
+
+      function onSliderMouseDown( e ) {
+        e.preventDefault();
+
+        document.addEventListener( "mousemove", onSliding, false );
+        document.addEventListener( "mouseup", onSlideStop, false );
+        element.removeEventListener( "mouseout", onMouseOut, false );
+        sliderToolTip.classList.add( "tooltip-no-transition-on" );
+        setScrubber( e.clientX );
+      }
+
+      function onMouseMove( e ) {
+        setSliderToolTip( e.clientX );
+      }
+
+      function onMouseOver( e ) {
+        sliderToolTip.classList.add( "tooltip-no-transition-on" );
+        setSliderToolTip( e.clientX );
+        element.removeEventListener( "mouseover", onMouseOver, false );
+        element.addEventListener( "mouseout", onMouseOut, false );
+        element.addEventListener( "mousemove", onMouseMove, false );
+      }
+
+      function onMouseOut() {
+        sliderToolTip.classList.remove( "tooltip-no-transition-on" );
+        element.removeEventListener( "mouseout", onMouseOut, false );
+        element.removeEventListener( "mousemove", onMouseMove, false );
+        element.addEventListener( "mouseover", onMouseOver, false );
+      }
+
+      scrubber.addEventListener( "mousedown", onSlideStart, false );
+      element.addEventListener( "mouseover", onMouseOver, false );
+      element.addEventListener( "mousedown", onSliderMouseDown, false );
+      updateUI();
+    };
+
     /**
      * Member: attachCheckboxGroupChangeHandler
      *
@@ -562,6 +687,9 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
       if ( manifestEntry.type === "radio" ) {
         propertyArchetypeSelector += ".radio";
       }
+      if ( manifestEntry.type === "range" ) {
+        propertyArchetypeSelector += ".range";
+      }
 
       propertyArchetype = __defaultLayouts.querySelector( propertyArchetypeSelector ).cloneNode( true );
 
@@ -664,27 +792,34 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
         }
       }
       else {
-        editorElement = propertyArchetype.querySelector( "input" );
-        if ( data ) {
-          // Don't print "undefined" or the like
-          if ( data === undefined || typeof data === "object" ) {
-            data = manifestEntry.type === "number" ? 0 : "";
-          }
-          editorElement.placeholder = editorElement.value = data;
-        }
-        try {
-          editorElement.type = manifestEntry.type;
-          // step="any" will stop the :invalid pseudo class in Chrome from being applied if the value is a not a "whole" number. i.e. 1.234
-          if ( editorElement.type === "number" ) {
-            editorElement.step = manifestEntry.step || "any";
-          }
-        }
-        catch ( e ) {
-          // Suppress IE9 errors
-        }
-        // data-manifest-key is used to update this property later on
-        editorElement.setAttribute( "data-manifest-key", name );
+        if ( manifestEntry.type === "range" ) {
+          var tooltip = propertyArchetype.querySelector( ".butter-slider-tooltip" );
 
+          propertyArchetype.querySelector( ".slider-start" ).innerHTML = manifestEntry.min || 0;
+          propertyArchetype.querySelector( ".slider-end" ).innerHTML = ( manifestEntry.max || 100 ) + ( manifestEntry.slider_unit || "" );
+
+          tooltip.setAttribute( "data-manifest-key", name );
+
+          editorElement = propertyArchetype.querySelector( ".butter-slider" );
+        } else {
+          editorElement = propertyArchetype.querySelector( "input" );
+          if ( data ) {
+            // Don't print "undefined" or the like
+            if ( data === undefined || typeof data === "object" ) {
+              data = manifestEntry.type === "number" ? 0 : "";
+            }
+            editorElement.placeholder = editorElement.value = data;
+          }
+
+          try {
+            editorElement.type = manifestEntry.type;
+          }
+          catch ( e ) {
+            // Suppress IE9 errors
+          }
+          // data-manifest-key is used to update this property later on
+          editorElement.setAttribute( "data-manifest-key", name );
+        }
       }
 
       if ( itemCallback ) {
@@ -705,6 +840,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
       var element,
           popcornOptions = trackEvent.popcornOptions,
           manifestOptions = trackEvent.manifest.options,
+          manifestEntry,
           option,
           units,
           i, l;
@@ -718,7 +854,8 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
       for ( i = 0, l = manifestKeys.length; i < l; ++i ) {
         option = manifestKeys[ i ];
         if ( manifestOptions[ option ] ) {
-          units = manifestOptions[ option ].units;
+          manifestEntry = manifestOptions[ option ];
+          units = manifestEntry.units;
         }
 
         // Look for the element with the correct manifest-key which was attached to an element during creation of the editor
@@ -728,6 +865,9 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
           // Checkbox elements need to be treated specially to manipulate the 'checked' property
           if ( element.type === "checkbox" ) {
             element.checked = popcornOptions[ option ];
+          }
+          else if ( manifestEntry.type === "range" ) {
+            element.innerHTML = parseFloat( popcornOptions[ option ] ).toFixed( manifestEntry.precision ) + ( manifestEntry.slider_unit || "" );
           }
           else {
             if ( typeof popcornOptions[ option ] !== "undefined" ) {

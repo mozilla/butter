@@ -47,6 +47,8 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
       _this.createPropertiesFromManifest({
         trackEvent: trackEvent,
         callback: function( elementType, element, trackEvent, name ) {
+          var manifestOptions = trackEvent.manifest.options;
+
           if ( elementType === "select" ) {
             _this.attachSelectChangeHandler( element, trackEvent, name, _this.updateTrackEventSafe );
           }
@@ -54,7 +56,9 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
             if ( element.type === "checkbox" ) {
               _this.attachCheckboxChangeHandler( element, trackEvent, name, _this.updateTrackEventSafe );
             }
-            else {
+            else if ( manifestOptions[ name ].type === "range" ) {
+              _this.attachSliderChangeHandler( element, trackEvent, name, _this.updateTrackEventSafe );
+            } else {
               _this.attachInputChangeHandler( element, trackEvent, name, _this.updateTrackEventSafe );
             }
           }
