@@ -46,7 +46,7 @@
       }
     },
     "requirejs": {
-      "version": "2.0.6"
+      "version": "2.1.5"
     },
     "express": {
       "version": "3.0.4",
