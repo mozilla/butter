@@ -1,6 +1,6 @@
-[submodule "external/popcorn-js"]
-	path = external/popcorn-js
+[submodule "public/external/popcorn-js"]
+	path = public/external/popcorn-js
 	url = git://github.com/mozilla/popcorn-js.git
-[submodule "external/html5-lint"]
-	path = external/html5-lint
+[submodule "public/external/html5-lint"]
+	path = public/external/html5-lint
 	url = git://github.com/mozilla/html5-lint.git
