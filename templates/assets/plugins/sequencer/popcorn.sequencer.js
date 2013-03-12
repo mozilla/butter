@@ -317,7 +317,7 @@
             _this.on( "seeked", options._onSeeked );
             // Setup on progress after initial load.
             // This way if an initial load never happens, we never pause.
-            options._clip.on( "progress", options._onProgress );
+            //options._clip.on( "progress", options._onProgress );
             options.hideLoading();
             if ( !options.hidden && options.active ) {
               options._container.style.zIndex = +options.zindex;
