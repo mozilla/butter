@@ -387,7 +387,6 @@ define( [ "util/lang", "util/time", "text!layouts/controls.html" ],
         p.on( "timeupdate", function() {
 
           var time = p.currentTime(),
-              seconds,
               width = ( time / p.duration() * 100 * timebar.offsetWidth / 100 );
 
           if ( progressBar ) {
