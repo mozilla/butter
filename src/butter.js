@@ -284,10 +284,6 @@ window.Butter = {
         }
       }
 
-      function mediaPlayerTypeRequired( e ){
-        _page.addPlayerType( e.data );
-      }
-
       function trackEventTimeSortingFunction( a, b ) {
         return a.popcornOptions.start < b.popcornOptions.start ? 1 : -1;
       }
@@ -510,7 +506,6 @@ window.Butter = {
         media.listen( "trackeventremoved", onTrackEventRemoved );
 
         media.listen( "trackeventrequested", mediaTrackEventRequested );
-        media.listen( "mediaplayertyperequired", mediaPlayerTypeRequired );
 
         _this.dispatch( "mediaadded", media );
         if ( !_currentMedia ) {
@@ -552,7 +547,6 @@ window.Butter = {
           media.unlisten( "trackeventremoved", onTrackEventRemoved );
 
           media.unlisten( "trackeventrequested", mediaTrackEventRequested );
-          media.unlisten( "mediaplayertyperequired", mediaPlayerTypeRequired );
 
           _this.dispatch( "mediaremoved", media );
           return media;
@@ -929,7 +923,7 @@ window.Butter = {
 
         _this.loader = loader;
 
-        _page = new Page( loader );
+        _page = new Page();
 
         _this.ui = new UI( _this  );
 

@@ -25,7 +25,6 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
         _popcornEvents = options.popcornEvents || {},
         _onPrepare = options.prepare || function(){},
         _onFail = options.fail || function(){},
-        _onPlayerTypeRequired = options.playerTypeRequired || function(){},
         _onTimeout = options.timeout || function(){},
         _popcorn,
         _mediaReady = false,
@@ -478,7 +477,6 @@ define( [ "core/logger", "core/eventmanager", "util/uri" ], function( Logger, Ev
      */
     function waitForPopcorn( readyCallback, timeoutCallback, mediaType ) {
       if ( mediaType !== "object" ) {
-        _onPlayerTypeRequired( mediaType );
         checkTimeoutLoop(function(){
           return ( !!window.Popcorn[ mediaType ] );
         }, readyCallback, timeoutCallback, PLAYER_WAIT_DURATION );

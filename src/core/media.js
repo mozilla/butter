@@ -92,9 +92,6 @@
             fail: function(){
               _this.dispatch( "mediafailed", "error" );
             },
-            playerTypeRequired: function( type ){
-              _this.dispatch( "mediaplayertyperequired", type );
-            },
             setup: {
               target: _target,
               url: _url

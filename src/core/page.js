@@ -2,13 +2,9 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager ) {
+define( function() {
 
-  return function( loader ) {
-
-    var PLAYER_TYPE_URL = "{popcorn-js}/players/{type}/popcorn.{type}.js";
-
-    EventManager.extend( this );
+  return function() {
 
     this.scrape = function() {
       var rootNode = document.body,
@@ -20,16 +16,5 @@ define( [ "core/logger", "core/eventmanager" ], function( Logger, EventManager )
         target: targets
       };
     }; // scrape
-
-    this.addPlayerType = function( type, callback ){
-      loader.load({
-        type: "js",
-        url: PLAYER_TYPE_URL.replace( /\{type\}/g, type ),
-        check: function(){
-          return !!Popcorn[ type ];
-        }
-      }, callback );
-    };
-
   }; // page
 });
