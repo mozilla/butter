@@ -42,20 +42,6 @@ define( [ "core/logger", "./plugin-list", "./plugin" ],
     };
 
     /**
-     * Member: generatePluginTypeCheckFunction
-     *
-     * Generates a check function for the given plugin type specifically for the butter loader to use.
-     *
-     * @param {String} pluginType: Name of plugin
-     */
-    function generatePluginTypeCheckFunction( pluginType ) {
-      return function(){
-        // Does Popcorn know about this plugin type yet?
-        return !!Popcorn.manifest[ pluginType ];
-      };
-    }
-
-    /**
      * Member: add
      *
      * Add a plugin to Butter
@@ -65,7 +51,6 @@ define( [ "core/logger", "./plugin-list", "./plugin" ],
      */
     this.add = function( plugins, onReadyCallback ) {
       var newPlugins = [],
-          pluginLoadDescriptors = [],
           plugin,
           i,
           l;
@@ -77,14 +62,6 @@ define( [ "core/logger", "./plugin-list", "./plugin" ],
 
       for ( i = 0, l = plugins.length; i < l; i++ ) {
         plugin = new Plugin( plugins[ i ] );
-
-        // Create a loader descriptor for this plugin type for the Butter loader
-        pluginLoadDescriptors.push({
-          type: "js",
-          url: plugin.path,
-          check: generatePluginTypeCheckFunction( plugin.type )
-        });
-
         newPlugins.push( plugin );
 
         if ( butter.ui.enabled ) {
@@ -92,16 +69,14 @@ define( [ "core/logger", "./plugin-list", "./plugin" ],
         }
       }
 
-      butter.loader.load( pluginLoadDescriptors, function() {
+      setTimeout(function() {
         for ( i = 0, l = newPlugins.length; i < l; i++ ) {
           plugin = newPlugins[ i ];
           _plugins.push( plugin );
           butter.dispatch( "pluginadded", plugin );
         }
         onReadyCallback();
-      }, function() {
-        console.warn( "Failed to load all plugins. Please check logs and file paths." );
-      });
+      }, 4 );
 
       return newPlugins;
     };

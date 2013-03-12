@@ -23,127 +23,52 @@
     "plugins": [
       {
         "type": "text",
-        "path": "{{baseDir}}templates/assets/plugins/text/popcorn.text.js",
         "icon": "{{baseDir}}templates/assets/plugins/text/text-icon.png"
       },
       {
         "type": "popup",
-        "path": "{{baseDir}}templates/assets/plugins/popup/popcorn.popup.js",
         "icon": "{{baseDir}}templates/assets/plugins/popup/popup-icon.png"
       },
       {
         "type": "googlemap",
-        "path": "{{baseDir}}templates/assets/plugins/googlemap/popcorn.googlemap.js",
         "icon": "{{baseDir}}resources/icons/map.png"
       },
       {
         "type": "twitter",
-        "path": "{{baseDir}}templates/assets/plugins/twitter/popcorn.twitter.js",
         "icon": "{{baseDir}}templates/assets/plugins/twitter/twitter-icon.png"
       },
       {
         "type": "image",
-        "path": "{{baseDir}}templates/assets/plugins/image/popcorn.image.js",
         "icon": "{{baseDir}}templates/assets/plugins/image/image-icon.png"
       },
       {
         "type": "loopPlugin",
         "displayName": "loop",
-        "path": "{{baseDir}}templates/assets/plugins/loopPlugin/popcorn.loopPlugin.js",
         "icon": "{{baseDir}}templates/assets/plugins/loopPlugin/loop-icon.png"
       },
       {
         "type": "skip",
-        "path": "{{baseDir}}templates/assets/plugins/skip/popcorn.skip.js",
         "icon": "{{baseDir}}templates/assets/plugins/skip/skip-icon.png"
       },
       {
         "type": "pausePlugin",
         "displayName": "Pause",
-        "path": "{{baseDir}}templates/assets/plugins/pausePlugin/popcorn.pausePlugin.js",
         "icon": "{{baseDir}}templates/assets/plugins/pausePlugin/pause-icon.png"
       },
       {
         "type": "wikipedia",
-        "path": "{{baseDir}}templates/assets/plugins/wikipedia/popcorn.wikipedia.js",
         "icon": "{{baseDir}}templates/assets/plugins/wikipedia/wikipedia-icon.png"
       },
       {
         "type": "sequencer",
         "hidden": true,
-        "path": "{{baseDir}}templates/assets/plugins/sequencer/popcorn.sequencer.js",
         "icon": "{{baseDir}}resources/icons/media.png"
       }
-    ],
-    "defaults": [
-      "text",
-      "popup",
-      "googlemap",
-      "twitter",
-      "image",
-      "wikipedia",
-      "loopPlugin",
-      "pausePlugin",
-      "skip",
-      "sequencer"
-    ]
-  },
-  "player": {
-    "players": [
-      {
-        "type": "youtube",
-        "path": "{{baseDir}}external/popcorn-js/players/youtube/popcorn.youtube.js"
-      },
-      {
-        "type": "soundcloud",
-        "path": "{{baseDir}}external/popcorn-js/players/soundcloud/popcorn.soundcloud.js"
-      },
-      {
-        "type": "vimeo",
-        "path": "{{baseDir}}external/popcorn-js/players/vimeo/popcorn.vimeo.js"
-      }
-    ],
-    "defaults": [
-      "youtube",
-      "soundcloud",
-      "vimeo"
-    ]
-  },
-  "wrapper": {
-    "wrappers": [
-      {
-        "type": "html5",
-        "path": "{{baseDir}}external/popcorn-js/wrappers/html5/popcorn.HTMLMediaElement.js"
-      },
-      {
-        "type": "soundcloud",
-        "path": "{{baseDir}}external/popcorn-js/wrappers/soundcloud/popcorn.HTMLSoundCloudAudioElement.js"
-      },
-      {
-        "type": "youtube",
-        "path": "{{baseDir}}external/popcorn-js/wrappers/youtube/popcorn.HTMLYouTubeVideoElement.js"
-      },
-      {
-        "type": "vimeo",
-        "path": "{{baseDir}}external/popcorn-js/wrappers/vimeo/popcorn.HTMLVimeoVideoElement.js"
-      },
-      {
-        "type": "null",
-        "path": "{{baseDir}}external/popcorn-js/wrappers/null/popcorn.HTMLNullVideoElement.js"
-      }
-    ],
-    "defaults": [
-      "html5",
-      "soundcloud",
-      "vimeo",
-      "null"
     ]
   },
   "dirs": {
-    "popcorn-js": "{{baseDir}}external/popcorn-js/",
     "css": "{{baseDir}}css/",
-    "resources": "{{baseDir}}resources/",
-    "tools": "{{baseDir}}tools/"
+    "resources": "{{baseDir}}resources/"
   },
   "icons": {
     "default": "popcorn-icon.png",
