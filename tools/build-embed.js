@@ -7,6 +7,10 @@
   // Where to find the module names listed below.
   baseUrl: '../src',
 
+  paths: {
+    'text': '../external/require/text'
+  },
+
   // Target the AMD loader shim as the main module to optimize,
   // so it shows up first in the built file,
   // since the embed modules use the define/require APIs that the almond
@@ -22,7 +26,7 @@
 
   // Have the analyzer include the requirejs config from that particular file
   // Must be kept in sync with baseUrl + include
-  mainConfigFile: '../src/popcorn.js',
+  mainConfigFile: '../src/embed.js',
 
   // The require optimizer only looks at the first level of require/define
   // statements by default. This forces it to look further down the tree

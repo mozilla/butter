@@ -1,8 +1,4 @@
-/*! This Source Code Form is subject to the terms of the MIT license
- *  If a copy of the MIT license was not distributed with this file, you can
- *  obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
-
-function init() {
+function init( window, document ) {
 
   var stateClasses = [
     "embed-playing",
@@ -254,20 +250,18 @@ function init() {
   var require = requirejs.config({
     baseUrl: "/src",
     paths: {
-      "text": "../external/require/text"
+      text: "../external/require/text"
     }
   });
 
-  define("embed-main",
-    [
+  require([
       "util/uri",
       "ui/widget/controls",
       "ui/widget/textbox",
-      "popcorn"
+      // keep this at the end so it doesn't need a spot in the function signature
+      "util/shims"
     ],
     function( URI, Controls, TextboxWrapper ) {
-      // cornfield writes out the Popcorn initialization code as popcornDataFn()
-      window.popcornDataFn();
       /**
        * Expose Butter so we can get version info out of the iframe doc's embed.
        * This "butter" is never meant to live in a page with the full "butter".
@@ -419,22 +413,15 @@ function init() {
       window.Butter = Butter;
     }
   );
-
-  require(["util/shims"], function() {
-    require(["embed-main"]);
-  });
 }
 
 document.addEventListener( "DOMContentLoaded", function() {
   // Source tree case vs. require-built case.
   if ( typeof require === "undefined" ) {
-    var rscript = document.createElement( "script" );
-    rscript.onload = function() {
-      init();
-    };
-    rscript.src = "/external/require/require.js";
-    document.head.appendChild( rscript );
+    Popcorn.getScript( "../../external/require/require.js", function() {
+      init( window, window.document );
+    });
   } else {
-    init();
+    init( window, window.document );
   }
 }, false );
