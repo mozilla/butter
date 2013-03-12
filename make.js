@@ -31,8 +31,6 @@ var path = require( "path" ),
     BUTTER_TRANSITIONS_LESS_FILE = join( CSS_DIR, "transitions.less" ),
     BUTTER_TRANSITIONS_CSS_FILE = join( CSS_DIR, "/transitions.css" ),
 
-    BUTTERED_POPCORN = join( DIST_DIR, '/buttered-popcorn.js' ),
-
     // We store version info about Popcorn and Butter when we deploy
     VERSIONS_CONFIG = join( CORNFIELD_DIR, 'config', 'versions.json' ),
 
@@ -464,58 +462,6 @@ target.server = function() {
   });
 };
 
-function butteredPopcorn() {
-  var defaultConfig = require( DEFAULT_CONFIG ),
-      popcornDir = defaultConfig.dirs['popcorn-js'].replace( '{{baseDir}}', './' ),
-      popcornFiles = [];
-
-  // Popcorn License Header
-  popcornFiles.push( popcornDir + '/LICENSE_HEADER' );
-
-  // classList shim
-  popcornFiles.push( './tools/classlist-shim.js' );
-
-  // popcorn IE8 shim
-  popcornFiles.push( popcornDir + '/ie8/popcorn.ie8.js' );
-
-  // popcorn.js
-  popcornFiles.push( popcornDir + '/popcorn.js' );
-
-  // plugins
-  if ( defaultConfig.plugin && defaultConfig.plugin.plugins ) {
-    defaultConfig.plugin.plugins.forEach( function( plugin ){
-      popcornFiles.push( plugin.path.replace( '{{baseDir}}', './' ) );
-    });
-  }
-
-  // wrapper base prototype
-  popcornFiles.push( popcornDir + '/wrappers/common/popcorn._MediaElementProto.js' );
-
-  // wrappers
-  if ( defaultConfig.wrapper && defaultConfig.wrapper.wrappers ) {
-    defaultConfig.wrapper.wrappers.forEach( function( wrapper ){
-      popcornFiles.push( wrapper.path.replace( '{{baseDir}}', './' ) );
-    });
-  }
-
-  // module for baseplayer
-  popcornFiles.push( popcornDir + '/modules/player/popcorn.player.js' );
-
-  // players
-  if ( defaultConfig.player && defaultConfig.player.players ) {
-    defaultConfig.player.players.forEach( function( player ){
-      popcornFiles.push( player.path.replace( '{{baseDir}}', './' ) );
-    });
-  }
-
-  // Stamp Popcorn.version with the git commit sha we are using
-  var popcornVersion = gitDescribe( popcornDir );
-
-  // Write out dist/buttered-popcorn.js
-  cat( popcornFiles ).to( BUTTERED_POPCORN );
-  sed('-i', /@VERSION/g, popcornVersion, BUTTERED_POPCORN);
-}
-
 target.deploy = function(){
   echo('### Making deployable versions of butter, embed, popcorn, etc. in dist/ (use UNMINIFIED=1 for unminified)');
 
@@ -528,7 +474,6 @@ target.deploy = function(){
 
   buildCSS( compress );
   buildJS( version, compress );
-  butteredPopcorn();
 
   // We'll mirror src/butter.js and src/embed.js to mimic exploded install
   mkdir('-p', './dist/src');
@@ -541,13 +486,8 @@ target.deploy = function(){
   cp('-R', 'cornfield', DIST_DIR);
   cp('package.json', 'README.md', DIST_DIR);
 
-  // Export will need a version of popcorn.js where the templates expect it
-  // at dist/external/popcorn-js/popcorn.js
-  if ( compress ) {
-    exec( UGLIFY + ' --output ' + BUTTERED_POPCORN + ' ' + BUTTERED_POPCORN );
-  }
   mkdir( '-p', 'dist/external/popcorn-js/' );
-  mv( BUTTERED_POPCORN, './dist/external/popcorn-js/popcorn.js' );
+  cp( 'tools/oldprojectshim.js', 'dist/external/popcorn-js/popcorn.js' );
 
   // We host our own version of the stamen map tile script, copy that over.
   mkdir( '-p', 'dist/external/stamen/' );
