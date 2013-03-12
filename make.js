@@ -12,7 +12,6 @@ var path = require( "path" ),
     JSLINT = nodeExec( normalize( "./node_modules/jshint/bin/hint" ) ),
     HTML5LINT = pythonExec( normalize( "./external/html5-lint/html5check.py" ) ),
     CSSLINT = nodeExec( normalize( "./node_modules/csslint/cli.js" ) ),
-    UGLIFY = nodeExec( normalize( "./node_modules/uglify-js/bin/uglifyjs" ) ),
     RJS = nodeExec( normalize( "./node_modules/requirejs/bin/r.js" ) ),
     LESS = nodeExec( normalize( "./node_modules/less/bin/lessc" ) ),
 
