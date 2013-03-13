@@ -118,7 +118,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
 
     _media.listen( "mediaready", function(){
       resetContainer();
-      var tracks = _media.tracks;
+      var tracks = _media.orderedTracks;
       for ( var i = 0, il = tracks.length; i < il; ++i ) {
         var trackView = tracks[ i ].view;
         _container.appendChild( trackView.element );
