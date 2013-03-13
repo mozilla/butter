@@ -618,6 +618,7 @@
                 // Backwards comp for old base media.
                 // Insert previous base media as a sequence event as the last track.
                 if ( importData.url && _duration >= 0 ) {
+                  var firstSource;
                   url = importData.url;
                   if ( !Array.isArray( url ) ) {
                     url = [ url ];
@@ -629,6 +630,8 @@
                     for ( i = 0; i < url.length; i++ ) {
                       fallbacks.push( URI.makeUnique( url[ i ] ).toString() );
                     }
+
+                    firstSource = sources[ 0 ];
                     newTrack = new Track();
                     _this.addTrack( newTrack );
                     newTrack.addTrackEvent({
@@ -637,12 +640,13 @@
                         start: 0,
                         end: _duration,
                         source: sources,
-                        title: URI.stripUnique( sources[ 0 ] ).path,
+                        title: URI.stripUnique( firstSource ).path,
                         fallback: fallbacks,
                         duration: _duration,
                         target: "video-container"
                       }
                     });
+                    _clipData[ firstSource ] = firstSource;
                   }
                 }
               } else if ( console ) {
