@@ -591,7 +591,20 @@
               _this.url = "#t=," + _duration;
             }
             if ( importData.clipData ) {
-              _clipData = importData.clipData;
+              var tempClipData = importData.clipData,
+                  source;
+
+              // We have changed how we use the clip data by keying differently.
+              // This is to prevent duplicate clips being added via the old way by keying them
+              // our new way on import.
+              for ( var key in tempClipData ) {
+                if ( tempClipData.hasOwnProperty( key ) ) {
+                  source = tempClipData[ key ];
+                  if ( !_clipData[ source ] ) {
+                    _clipData[ source ] = source;
+                  }
+                }
+              }
             }
             if( importData.tracks ){
               var importTracks = importData.tracks;
