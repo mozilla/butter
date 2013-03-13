@@ -53,7 +53,7 @@ window.Butter = {
   define( "butter-main",
           [
             "core/eventmanager", "core/logger", "core/config", "core/track",
-            "core/target", "core/media", "core/page",
+            "core/target", "core/media",
             "./modules", "./dependencies", "./dialogs",
             "dialog/dialog", "editor/editor", "ui/ui",
             "util/xhr", "util/lang", "util/tutorial",
@@ -63,7 +63,7 @@ window.Butter = {
           ],
           function(
             EventManager, Logger, Config, Track,
-            Target, Media, Page,
+            Target, Media,
             Modules, Dependencies, Dialogs,
             Dialog, Editor, UI,
             XHR, Lang, Tutorial,
@@ -119,7 +119,6 @@ window.Butter = {
           _targets = [],
           _id = "Butter" + __guid++,
           _logger = new Logger( _id ),
-          _page,
           _config,
           _defaultConfig,
           _defaultTarget,
@@ -282,10 +281,6 @@ window.Butter = {
           trackEvent = _this.generateSafeTrackEvent( e.data.getAttribute( "data-popcorn-plugin-type" ), _currentMedia.currentTime );
           _this.editor.editTrackEvent( trackEvent );
         }
-      }
-
-      function mediaPlayerTypeRequired( e ){
-        _page.addPlayerType( e.data );
       }
 
       function trackEventTimeSortingFunction( a, b ) {
@@ -510,7 +505,6 @@ window.Butter = {
         media.listen( "trackeventremoved", onTrackEventRemoved );
 
         media.listen( "trackeventrequested", mediaTrackEventRequested );
-        media.listen( "mediaplayertyperequired", mediaPlayerTypeRequired );
 
         _this.dispatch( "mediaadded", media );
         if ( !_currentMedia ) {
@@ -552,7 +546,6 @@ window.Butter = {
           media.unlisten( "trackeventremoved", onTrackEventRemoved );
 
           media.unlisten( "trackeventrequested", mediaTrackEventRequested );
-          media.unlisten( "mediaplayertyperequired", mediaPlayerTypeRequired );
 
           _this.dispatch( "mediaremoved", media );
           return media;
@@ -705,64 +698,60 @@ window.Butter = {
       });
 
       var preparePage = _this.preparePage = function( callback ){
-        var scrapedObject = _page.scrape(),
-            targets = scrapedObject.target,
-            medias = scrapedObject.media;
+        var targets = document.body.querySelectorAll("*[data-butter='target']"),
+            medias = document.body.querySelectorAll("*[data-butter='media']");
 
-        _page.prepare(function() {
-          if ( !!_config.value( "scrapePage" ) ) {
-            var i, j, il, jl, url, oldTarget, oldMedia, mediaPopcornOptions, mediaObj;
-            for( i = 0, il = targets.length; i < il; ++i ) {
-              // Only add targets that don't already exist.
-              oldTarget = _this.getTargetByType( "elementID", targets[ i ].element );
-              if( !oldTarget ){
-                _this.addTarget({ element: targets[ i ].id });
+        if ( !!_config.value( "scrapePage" ) ) {
+          var i, j, il, jl, url, oldTarget, oldMedia, mediaPopcornOptions, mediaObj;
+          for ( i = 0, il = targets.length; i < il; ++i ) {
+            // Only add targets that don't already exist.
+            oldTarget = _this.getTargetByType( "elementID", targets[ i ].element );
+            if ( !oldTarget ) {
+              _this.addTarget({ element: targets[ i ].id });
+            }
+          }
+
+          for ( i = 0, il = medias.length; i < il; i++ ) {
+            oldMedia = null;
+            mediaPopcornOptions = null;
+            url = "";
+            mediaObj = medias[ i ];
+
+            if ( mediaObj.getAttribute( "data-butter-source" ) ) {
+              url = mediaObj.getAttribute( "data-butter-source" );
+            }
+
+            if ( _media.length > 0 ) {
+              for ( j = 0, jl = _media.length; j < jl; ++j ) {
+                if ( _media[ j ].id !== medias[ i ].id && _media[ j ].url !== url ) {
+                  oldMedia = _media[ j ];
+                  break;
+                }
+              }
+            } else {
+              if ( _config.value( "mediaDefaults" ) ) {
+                mediaPopcornOptions = _config.value( "mediaDefaults" );
               }
             }
 
-            for( i = 0, il = medias.length; i < il; i++ ) {
-              oldMedia = null;
-              mediaPopcornOptions = null;
-              url = "";
-              mediaObj = medias[ i ];
-
-              if( mediaObj.getAttribute( "data-butter-source" ) ){
-                url = mediaObj.getAttribute( "data-butter-source" );
-              }
-
-              if( _media.length > 0 ){
-                for( j = 0, jl = _media.length; j < jl; ++j ){
-                  if( _media[ j ].id !== medias[ i ].id && _media[ j ].url !== url ){
-                    oldMedia = _media[ j ];
-                    break;
-                  } //if
-                } //for
-              }
-              else{
-                if( _config.value( "mediaDefaults" ) ){
-                  mediaPopcornOptions = _config.value( "mediaDefaults" );
-                }
-              } //if
-
-              if( !oldMedia ){
-                _this.addMedia({ target: medias[ i ].id, url: url, popcornOptions: mediaPopcornOptions });
-              }
-            } //for
+            if ( !oldMedia ) {
+              _this.addMedia({ target: medias[ i ].id, url: url, popcornOptions: mediaPopcornOptions });
+            }
           }
+        }
 
-          if( callback ){
-            callback();
-          } //if
+        if ( callback ) {
+          callback();
+        }
 
-          _this.dispatch( "pageready" );
-        });
-      }; //preparePage
+        _this.dispatch( "pageready" );
+      };
 
-      if( butterOptions.ready ){
-        _this.listen( "ready", function( e ){
+      if ( butterOptions.ready ) {
+        _this.listen( "ready", function( e ) {
           butterOptions.ready( e.data );
         });
-      } //if
+      }
 
       var preparePopcornScriptsAndCallbacks = _this.preparePopcornScriptsAndCallbacks = function( readyCallback ){
         var popcornConfig = _config.value( "popcorn" ) || {},
@@ -932,8 +921,6 @@ window.Butter = {
 
         _this.loader = loader;
 
-        _page = new Page( loader );
-
         _this.ui = new UI( _this  );
 
         _this.ui.load(function(){
@@ -1016,8 +1003,6 @@ window.Butter = {
       else {
         readConfig( Config.reincarnate( butterOptions.config ) );
       } //if
-
-      _this.page = _page;
 
       // Attach the instance to Butter so we can debug
       Butter.app = _this;

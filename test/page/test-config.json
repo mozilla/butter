@@ -1,9 +1,0 @@
-{
-  "name": "pageTest",
-  "savedDataUrl": "saved-data.json",
-  "baseDir": "../../",
-  "makeVideoURLsUnique": false,
-  "ui": {
-    "enabled": false
-  }
-}
