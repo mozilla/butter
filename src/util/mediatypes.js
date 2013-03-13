@@ -51,7 +51,18 @@ define( [ "util/xhr", "util/uri" ],
         xhrURL = "https://gdata.youtube.com/feeds/api/videos/" + id + "?v=2&alt=jsonc&callback=?";
         Popcorn.getJSONP( xhrURL, function( resp ) {
           var respData = resp.data,
-              from = parsedUri.queryKey.t;
+              from = parsedUri.queryKey.t,
+              popcorn,
+              div = document.createElement( "div" ),
+              source;
+
+          div.style.height = "400px";
+          div.style.width = "400px";
+          div.style.left = "-400px";
+          div.style.position = "absolute";
+
+          document.body.appendChild( div );
+
           if ( !respData ) {
             return;
           }
@@ -59,6 +70,22 @@ define( [ "util/xhr", "util/uri" ],
           if ( respData.accessControl.embed === "denied" ) {
             errorCallback( YOUTUBE_EMBED_DISABLED );
             return;
+          }
+
+          function readyEvent() {
+            popcorn.off( "loadedmetadata", readyEvent );
+            document.body.removeChild( div );
+            popcorn.destroy();
+
+            successCallback({
+              source: source,
+              title: respData.title,
+              type: type,
+              thumbnail: respData.thumbnail.hqDefault,
+              author: respData.uploader,
+              duration: popcorn.duration(),
+              from: from
+            });
           }
 
           if ( from ) {
@@ -71,15 +98,13 @@ define( [ "util/xhr", "util/uri" ],
             });
           }
 
-          successCallback({
-            source: "http://www.youtube.com/watch?v=" + id,
-            title: respData.title,
-            type: type,
-            thumbnail: respData.thumbnail.hqDefault,
-            author: respData.uploader,
-            from: from,
-            duration: respData.duration
-          });
+          source = "http://www.youtube.com/watch?v=" + id;
+          popcorn = Popcorn.smart( div, source );
+          if ( popcorn.media.readyState >= 1 ) {
+            readyEvent();
+          } else {
+            popcorn.on( "loadedmetadata", readyEvent );
+          }
         });
       } else if ( type === "soundcloud" ) {
         parsedUri = URI.parse( baseUrl );
