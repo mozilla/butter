@@ -23,9 +23,12 @@
     return quarantine;
   }
 
-  var bufferMap = {};
+  var clipMap = {};
 
-  var BufferManager = function( p ) {
+  // ClipManager is a thing that has a concept of all other clips.
+  // There is one for every popcorn object.
+  var ClipManager = function( p ) {
+    var _clips = [];
     /*var _unbufferedArray = [],
         _clipMap = {},
         // in general this needs to be more dynamic.
@@ -154,21 +157,38 @@
       addToRange( this, options.start, options.end );
       p.media.dispatchEvent( "progress" );
     };*/
-
-    this.addClip = function( options ) {
-      //var clip = options_clip,
-      //    media = clip.media;
-      //_clipMap[ media.id ] = options;
-      //addToRange( media, options.start, options.end );
-      //clip.on( "progress", onProgress );
+    function onCanplay() {
+      if ( p.media._unWait ) {
+        p.media._unWait();
+      }
+      for ( var i = 0; i < _clips.length; i++ ) {
+        if ( this.id === _clips[ i ].media.id ) {
+          _clips[ i ].off( "canplay", onCanplay );
+        } else if (  _clips[ i ].media._unWait ) {
+          _clips[ i ].media._unWait();
+        }
+      }
     };
 
-    this.removeClip = function( options ) {
-      //var clip = options._clip,
-      //    media = clip.media;
-      //delete _clipMap[ media.id ];
-      //removeFromRange( media );
-      //clip.off( "progress", onProgress );
+    this.onWaiting = function() {
+console.log( "calling wait" );
+      if ( p.media._wait ) {
+        p.media._wait();
+      }
+      for ( var i = 0; i < _clips.length; i++ ) {
+        if ( this.id === _clips[ i ].media.id ) {
+          _clips[ i ].on( "canplay", onCanplay );
+        } else if (  _clips[ i ].media._wait ) {
+          _clips[ i ].media._wait();
+        }
+      }
+    };
+
+    this.addClip = function( clip ) {
+      _clips.push( clip );
+    };
+    this.removeClip = function( clip ) {
+      _clips.splice( _clips.indexOf( clip ), 1 );
     };
   };
 
@@ -178,11 +198,11 @@
     _setup: function( options ) {
       var _this = this;
 
-      if ( !bufferMap[ _this.id ] ) {
-        options.bufferManager = new BufferManager( _this );
-        bufferMap[ _this.id ] = options.bufferManager;
+      if ( !clipMap[ _this.id ] ) {
+        options.clipManager = new ClipManager( _this );
+        clipMap[ _this.id ] = options.clipManager;
       } else {
-        options.bufferManager = bufferMap[ _this.id ];
+        options.clipManager = clipMap[ _this.id ];
       }
 
       options.setupContainer = function() {
@@ -288,7 +308,7 @@
         // If we have no options._clip, no source was given to this track event,
         // and it is being torn down.
         if ( options._clip ) {
-          options.bufferManager.removeClip( options );
+          options.clipManager.removeClip( options._clip );
           // XXX: pull the SoundCloud iframe element out of our video div, and quarantine
           // so we don't delete it, and block loading future SoundCloud instances. See above.
           // This is also fixing an issue in youtube, so we do it for all medias with iframes now.
@@ -329,7 +349,7 @@
           options.loadTimeout = setTimeout( options.fail, MEDIA_LOAD_TIMEOUT );
         }
         options._clip = Popcorn.smart( options._container, options.source, { frameAnimation: true } );
-        options.bufferManager.addClip( options );
+        options.clipManager.addClip( options._clip );
         options._clip.media.style.width = "100%";
         options._clip.media.style.height = "100%";
         options._container.style.width = "100%";
@@ -415,7 +435,7 @@
             _this.on( "seeked", options._onSeeked );
             // Setup on waiting after initial load.
             // This way if an initial load never happens, we never wait.
-            options._clip.on( "waiting", options._onWaiting );
+            options._clip.on( "waiting", options.clipManager.onWaiting );
             options.hideLoading();
             if ( !options.hidden && options.active ) {
               options._container.style.zIndex = +options.zindex;
@@ -653,7 +673,7 @@
         // We need to also clear these events.
         options._clip.off( "play", options._clipPlayEvent );
         options._clip.off( "pause", options._clipPauseEvent );
-        options._clip.off( "waiting", options._onWaiting );
+        options._clip.off( "waiting", options.clipManager.onWaiting );
         if ( !options._clip.paused() ) {
           options._clip.pause();
         }
