@@ -53,7 +53,7 @@ window.Butter = {
   define( "butter-main",
           [
             "core/eventmanager", "core/logger", "core/config", "core/track",
-            "core/target", "core/media", "core/page",
+            "core/target", "core/media",
             "./modules", "./dependencies", "./dialogs",
             "dialog/dialog", "editor/editor", "ui/ui",
             "util/xhr", "util/lang", "util/tutorial",
@@ -63,7 +63,7 @@ window.Butter = {
           ],
           function(
             EventManager, Logger, Config, Track,
-            Target, Media, Page,
+            Target, Media,
             Modules, Dependencies, Dialogs,
             Dialog, Editor, UI,
             XHR, Lang, Tutorial,
@@ -119,7 +119,6 @@ window.Butter = {
           _targets = [],
           _id = "Butter" + __guid++,
           _logger = new Logger( _id ),
-          _page,
           _config,
           _defaultConfig,
           _defaultTarget,
@@ -699,9 +698,8 @@ window.Butter = {
       });
 
       var preparePage = _this.preparePage = function( callback ){
-        var scrapedObject = _page.scrape(),
-            targets = scrapedObject.target,
-            medias = scrapedObject.media;
+        var targets = document.body.querySelectorAll("*[data-butter='target']"),
+            medias = document.body.querySelectorAll("*[data-butter='media']");
 
         if ( !!_config.value( "scrapePage" ) ) {
           var i, j, il, jl, url, oldTarget, oldMedia, mediaPopcornOptions, mediaObj;
@@ -923,8 +921,6 @@ window.Butter = {
 
         _this.loader = loader;
 
-        _page = new Page();
-
         _this.ui = new UI( _this  );
 
         _this.ui.load(function(){
@@ -1007,8 +1003,6 @@ window.Butter = {
       else {
         readConfig( Config.reincarnate( butterOptions.config ) );
       } //if
-
-      _this.page = _page;
 
       // Attach the instance to Butter so we can debug
       Butter.app = _this;
