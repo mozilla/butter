@@ -26,51 +26,149 @@
   var bufferMap = {};
 
   var BufferManager = function( p ) {
-    var _clipMap = {},
-        _buffering = 0,
-        _bufferedArray = [],
+    /*var _unbufferedArray = [],
+        _clipMap = {},
+        // in general this needs to be more dynamic.
         _buffered = {
+          // Move the getStart and getEnd above into here.
           start: function( index ) {
-            return _bufferedArray( index ).start;
+            //return mergeClipsRanges().start( index );
           },
           end: function( index ) {
-            return _bufferedArray( index ).end;
-          },
-          length: 0
+            //return mergeClipsRanges().end( index );
+          }
         };
-    function onProgress() {
-      var buffered = this.buffered(),
-          clipOptions = _clipMap[ this.id ],
-          buffering = false;
-      for ( var i = 0; i < buffered.length; i++ ) {
-        if ( buffered.start( i ) <= this.currentTime &&
-             buffered.start( i ) > this.currentTime ) {
-        } else {
-          buffering = true;
+
+    ///*_clipArray.push({
+    //  start: 0,
+    //  end: p.duration(),
+    //  id: p.media.id
+    //});
+
+    Object.defineProperties( _buffered, {
+      length: function() {
+        //return mergeClipsRanges().length;
+      }
+    });
+
+    // Ensure we are a null wrapper.
+    Object.defineProperties( p.media, {
+
+      buffered: {
+        get: function() {
+          return _buffered;
         }
       }
-      if ( buffering ) {
-        _buffering++;
-      } else {
-        _buffering--;
+    });
+
+    // Might not need these arrays if I only use them in one spot. Would be nice to remove them.
+
+    // Turns a single array of buffered regions
+    // into a single array of unbuffered regions.
+    function toUnbufferedArray( array, id ) {
+      var newArray = [],
+          unBufferedStart,
+          unBufferedEnd;
+
+      if ( array.length ) {
+        unBufferedStart = 0;
+        for ( var i = 0; i < array.length; i++ ) {
+          unBufferedEnd = array[ i ].start;
+          if ( unBufferedStart < unBufferedEnd ) {
+            newArray.push({
+              start: unBufferedStart,
+              end: unBufferedEnd,
+              id: id
+            });
+          }
+          unBufferedStart = array[ i ].end;
+        }
+        if ( unBufferedStart < p.duration() ) {
+          newArray.push({
+            start: unBufferedStart,
+            end: p.duration(),
+            id: id
+          });
+        }
       }
-      if ( _buffering === 0 ) {
-        // replay everything, if needed.
-        // enable play and pause events
-      } else {
-        // pause just this... maybe pause everything
-        // disable play and pause events
+      return newArray;
+    }
+
+    // Turns a single array of unbuffered regions
+    // into a single array of buffered regions.
+    function toBufferedArray( array ) {
+      var newArray = [];
+
+      return newArray;
+    }
+
+    function addToRange( media, start, end ) {
+      var newClipArray = {};
+
+      // Assume parts before this clip are buffered.
+      if ( start > 0 ) {
+        newClipArray.push({
+          start: 0,
+          end: start
+        });
       }
 
-      // figure out what to put in _buffered
-      this.trigger( "clipwrapperprogress", _buffered );
+      // Assume parts after this clip are buffered
+      if ( end < p.duration() ) {
+        newClipArray.push({
+          start: end,
+          end: p.duration()
+        });
+      }
+
+      for ( for var i = 0; i < media.buffered.length; i++ ) {
+        newClipArray.push({
+          start: media.buffered.start( i ) + start,
+          end: media.buffered.end( i ) + start
+        });
+      }
+
+      // We now have an array of buffered ranges offset.
+      _unbufferedArray = _unbufferedArray.concat( toUnbufferedArray( newClipArray, media.id ) );
+    }
+
+    // Instead of removing, we're going to add the items we want to a new array.
+    // This way we don't have to re index after a removal.
+    // Could also go backwards, but meh, code is already written.
+    function removeFromRange( media ) {
+      var newClipArray = [];
+      for( var i = 0; i < _unbufferedArray.length; i++ ) {
+        if ( _unbufferedArray[ i ].id !== media.id ) {
+          newClipArray.push( _unbufferedArray[ i ] );
+        }
+      }
+      _unbufferedArray = newClipArray;
+    }
+
+    // Making it work.
+    // Hopefully this isn't too slow,
+    // but may need to find a way to only update the range diff.
+    function onProgress() {
+      var options = _clipMap[ this.id ];
+      removeFromRange( this );
+      addToRange( this, options.start, options.end );
+      p.media.dispatchEvent( "progress" );
+    };*/
+
+    this.addClip = function( options ) {
+      //var clip = options_clip,
+      //    media = clip.media;
+      //_clipMap[ media.id ] = options;
+      //addToRange( media, options.start, options.end );
+      //clip.on( "progress", onProgress );
     };
-    this.addClip = function( clipOptions ) {
-      _clipMap[ clipOptions._clip.id ] = clipOptions;
-      clipOptions._clip.on( "progress", onProgress );
-    };
-    this.removeClip = function( clipOptions ) {
-      clipOptions._clip.off( "progress", onProgress );
+
+    this.removeClip = function( options ) {
+      //var clip = options._clip,
+      //    media = clip.media;
+      //delete _clipMap[ media.id ];
+      //removeFromRange( media );
+      //clip.off( "progress", onProgress );
     };
   };
 
@@ -243,8 +341,8 @@
         }
       };
 
-      options._onProgress = function() {
-        var i, l,
+      options._onWaiting = function() {
+        /*var i, l,
             buffered = options._clip.media.buffered;
 
         // We're likely in a wrapper that does not support buffered.
@@ -274,7 +372,7 @@
           options.playWhenReady = true;
           _this.pause();
         }
-        options.displayLoading();
+        options.displayLoading();*/
       };
 
       // Ensures seek time is seekable, and not already seeked.
@@ -315,9 +413,9 @@
             _this.on( "play", options._playEvent );
             _this.on( "pause", options._pauseEvent );
             _this.on( "seeked", options._onSeeked );
-            // Setup on progress after initial load.
-            // This way if an initial load never happens, we never pause.
-            //options._clip.on( "progress", options._onProgress );
+            // Setup on waiting after initial load.
+            // This way if an initial load never happens, we never wait.
+            options._clip.on( "waiting", options._onWaiting );
             options.hideLoading();
             if ( !options.hidden && options.active ) {
               options._container.style.zIndex = +options.zindex;
@@ -555,7 +653,7 @@
         // We need to also clear these events.
         options._clip.off( "play", options._clipPlayEvent );
         options._clip.off( "pause", options._clipPauseEvent );
-        options._clip.off( "progress", options._onProgress );
+        options._clip.off( "waiting", options._onWaiting );
         if ( !options._clip.paused() ) {
           options._clip.pause();
         }
