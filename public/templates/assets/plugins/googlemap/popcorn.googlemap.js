@@ -63,7 +63,9 @@ var googleCallback;
       // Hide the layer selection UI
       mapTypeControlOptions: {
         mapTypeIds: []
-      }
+      },
+      streetViewControl: false,
+      panControl: false
     });
 
     // Used to notify any users of the plugin when the maps has completely loaded
@@ -123,50 +125,15 @@ var googleCallback;
    *
    */
   Popcorn.plugin( "googlemap", function ( options ) {
+    // if this is defined, this is an update and we can return early.
+    if ( options._map ) {
+      return;
+    }
+
     var outerdiv, innerdiv, map, location,
         target = Popcorn.dom.find( options.target ),
         that = this,
         ranOnce = false;
-
-    if ( !target ) {
-      target = that.media.parentNode;
-    }
-
-    options._target = target;
-
-    options.type = options.type || "ROADMAP";
-    options.lat = options.lat || 0;
-    options.lng = options.lng || 0;
-
-    // if this is the first time running the plugins
-    // call the function that gets the sctipt
-    if ( !_mapFired ) {
-      loadMaps();
-    }
-
-    // create a new div this way anything in the target div is left intact
-    // this is later passed on to the maps api
-    innerdiv = document.createElement( "div" );
-    innerdiv.style.width = "100%";
-    innerdiv.style.height = "100%";
-
-    outerdiv = document.createElement( "div" );
-    outerdiv.id = Popcorn.guid( "googlemap" );
-    outerdiv.style.width = options.width + "%";
-    outerdiv.style.height = options.height + "%";
-    outerdiv.style.left = options.left + "%";
-    outerdiv.style.top = options.top + "%";
-    outerdiv.style.zIndex = +options.zindex;
-    outerdiv.style.position = "absolute";
-    outerdiv.classList.add( options.transition );
-    outerdiv.classList.add( "off" );
-
-    outerdiv.appendChild( innerdiv );
-    options._container = outerdiv;
-
-    if ( target ) {
-      target.appendChild( outerdiv );
-    }
 
     function geoCodeCallback( results, status ) {
       // second check for innerdiv since it could have disappeared before
@@ -178,7 +145,7 @@ var googleCallback;
       if ( status === google.maps.GeocoderStatus.OK ) {
         options.lat = results[ 0 ].geometry.location.lat();
         options.lng = results[ 0 ].geometry.location.lng();
-        _cachedGeoCode[ options.location ] = location = new google.maps.LatLng( options.lat, options.lng );
+        _cachedGeoCode[ options.location ] = location = results[ 0 ].geometry.location;
 
         map = buildMap( options, innerdiv, that );
       } else if ( status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT ) {
@@ -217,21 +184,65 @@ var googleCallback;
           }
         }
       } else {
-          setTimeout(function () {
-            isMapReady();
-          }, 5);
-        }
-      };
-
-    isMapReady();
-
-    options.toString = function() {
-      return options.location || ( ( options.lat && options.lng ) ? options.lat + ", " + options.lng : options._natives.manifest.options.location[ "default" ] );
+        setTimeout(function() {
+          isMapReady();
+        }, 5 );
+      }
     };
 
     return {
+      _setup: function( options ) {
+        if ( !target ) {
+          target = that.media.parentNode;
+        }
+
+        options._target = target;
+
+        options.type = options.type || "ROADMAP";
+        options.lat = options.lat || 0;
+        options.lng = options.lng || 0;
+
+        // if this is the first time running the plugins
+        // call the function that gets the sctipt
+        if ( !_mapFired ) {
+          loadMaps();
+        }
+
+        // create a new div this way anything in the target div is left intact
+        // this is later passed on to the maps api
+        innerdiv = document.createElement( "div" );
+        innerdiv.style.width = "100%";
+        innerdiv.style.height = "100%";
+
+        outerdiv = document.createElement( "div" );
+        outerdiv.id = Popcorn.guid( "googlemap" );
+        outerdiv.style.width = options.width + "%";
+        outerdiv.style.height = options.height + "%";
+        outerdiv.style.left = options.left + "%";
+        outerdiv.style.top = options.top + "%";
+        outerdiv.style.zIndex = +options.zindex;
+        outerdiv.style.position = "absolute";
+        outerdiv.classList.add( options.transition );
+        outerdiv.classList.add( "off" );
+
+        outerdiv.appendChild( innerdiv );
+        options._container = outerdiv;
+
+        if ( target ) {
+          target.appendChild( outerdiv );
+        }
+
+        isMapReady();
+
+        options.toString = function() {
+          if ( options.type === "STREETVIEW" ) {
+            return "Streeview";
+          }
+          return options.location || ( ( options.lat && options.lng ) ? options.lat + ", " + options.lng : options._natives.manifest.options.location[ "default" ] );
+        };
+      },
       /**
-       * @member webpage
+       * @member googlemap
        * The start function will be executed when the currentTime
        * of the video reaches the start time provided by the
        * options variable
@@ -340,7 +351,8 @@ var googleCallback;
                     heading: options.heading,
                     pitch: options.pitch,
                     zoom: options.zoom
-                  }
+                  },
+                  enableCloseButton: false
                 })
               );
 
@@ -448,6 +460,197 @@ var googleCallback;
         innerdiv = map = location = null;
 
         options._map = null;
+      },
+      _update: function ( trackEvent, options ) {
+        var updateLocation = false,
+            map = trackEvent._map,
+            triggerResize = false,
+            ignoreValue = false,
+            clearLocation = false,
+            location,
+            layer,
+            oldType;
+
+        function streetViewSearch( latLng, res, errorMsg, toggleMaps, success ) {
+          var streetViewService = new google.maps.StreetViewService();
+
+          streetViewService.getPanoramaByLocation( latLng, res, function( data, status ) {
+            if ( status === google.maps.StreetViewStatus.OK ) {
+              success( data.location.latLng );
+            } else {
+              that.emit( "googlemaps-zero-results", {
+                error: errorMsg,
+                toggleMaps: toggleMaps
+              });
+            }
+          });
+        }
+
+        if ( options.type && options.type !== trackEvent.type ) {
+          oldType = trackEvent.type;
+
+          if ( options.type !== "STREETVIEW" ) {
+            trackEvent.type = options.type;
+            if ( oldType === "STREETVIEW" ) {
+              map.streetView.setVisible( false );
+            }
+            if ( /STAMEN/.test( trackEvent.type ) ) {
+              layer = trackEvent.type.toLowerCase();
+            }
+            map.setMapTypeId( layer ? layer : google.maps.MapTypeId[ trackEvent.type ] );
+            if ( layer ) {
+              map.mapTypes.set( layer, new google.maps.StamenMapType( layer.replace( "stamen-", "" ) ) );
+            }
+          } else {
+            ignoreValue = true;
+            trackEvent.location = "";
+
+            streetViewSearch(
+              map.getCenter(),
+              5000,
+              "There is no Street View data available within 5 kilometres of your map's centre. Try moving the map and selecting Street View again.",
+              true,
+              function( latLng ) {
+                trackEvent.type = options.type;
+                trackEvent.heading = 0;
+                trackEvent.pitch = 0;
+                trackEvent.zoom = options.zoom;
+                map.streetView.setVisible( true );
+                map.streetView.setPosition( latLng );
+                map.streetView.setPov({
+                  heading: trackEvent.heading,
+                  pitch: trackEvent.pitch,
+                  zoom: trackEvent.zoom
+                });
+              }
+            );
+          }
+        }
+
+        if ( !ignoreValue && options.zoom && options.zoom !== trackEvent.zoom ) {
+          trackEvent.zoom = options.zoom;
+
+          if ( trackEvent.type !== "STREETVIEW" ) {
+            map.setZoom( +trackEvent.zoom );
+          } else {
+            map.streetView.setPov({
+              heading: trackEvent.heading,
+              pitch: trackEvent.pitch,
+              zoom: +trackEvent.zoom
+            });
+          }
+
+        }
+
+        if ( !ignoreValue && options.location && options.location !== trackEvent.location ) {
+          updateLocation = true;
+          location = _cachedGeoCode[ options.location ];
+          trackEvent.location = options.location;
+          if ( location ) {
+            if ( trackEvent.type === "STREETVIEW" ) {
+              streetViewSearch(
+                location,
+                250,
+                false,
+                "There is no Street View data available within 250 metres of the searched location. Try another location",
+                function( latLng ) {
+                  map.streetView.setPosition( latLng );
+                }
+              );
+            } else {
+              map.panTo( location );
+            }
+          } else {
+            geocoder.geocode({ "address": trackEvent.location }, function( results, status ) {
+              if ( status === google.maps.GeocoderStatus.OK ) {
+                _cachedGeoCode[ trackEvent.location ] = location = results[ 0 ].geometry.location;
+                if ( trackEvent.type === "STREETVIEW" ) {
+                  streetViewSearch(
+                    location,
+                    250,
+                    "There is no Street View data available within 250 metres of the searched location. Try another location",
+                    false,
+                    function( latLng ) {
+                      map.streetView.setPosition( latLng );
+                    }
+                  );
+                } else {
+                  map.panTo( location );
+                }
+              }
+            });
+          }
+        }
+
+        if ( !ignoreValue && !updateLocation && options.lat && options.lat !== trackEvent.lat ) {
+          trackEvent.lat = options.lat;
+          clearLocation = true;
+        }
+
+        if ( !ignoreValue && !updateLocation && options.lng && options.lng !== trackEvent.lng ) {
+          trackEvent.lng = options.lng;
+          clearLocation = true;
+        }
+
+        if ( clearLocation ) {
+          trackEvent.location = "";
+        }
+
+        if ( !ignoreValue && trackEvent.type === "STREETVIEW" && options.heading && options.heading !== trackEvent.heading ) {
+          trackEvent.heading = options.heading;
+          map.getStreetView().setPov({
+            heading: +trackEvent.heading,
+            pitch: +trackEvent.pitch || 0,
+            zoom: +trackEvent.zoom || 0
+          });
+        }
+
+        if ( !ignoreValue && trackEvent.type === "STREETVIEW" && options.pitch && options.pitch !== trackEvent.pitch ) {
+          trackEvent.pitch = options.pitch;
+          map.getStreetView().setPov({
+            heading: +trackEvent.heading || 0,
+            pitch: +trackEvent.pitch,
+            zoom: +trackEvent.zoom || 0
+          });
+        }
+
+        if ( ( options.left || options.left === 0 ) && options.left !== trackEvent.left ) {
+          trackEvent.left = options.left;
+          trackEvent._container.style.left = trackEvent.left + "%";
+        }
+
+        if ( ( options.top || options.top === 0 ) && options.top !== trackEvent.top ) {
+          trackEvent.top = options.top;
+          trackEvent._container.style.top = trackEvent.top + "%";
+        }
+
+        if ( options.fullscreen ) {
+          trackEvent.fullscreen = true;
+        } else {
+          trackEvent.fullscreen = false;
+        }
+
+        if ( ( options.height || options.height === 0 ) && options.height !== trackEvent.height ) {
+          trackEvent.height = options.height;
+          trackEvent._container.style.height = trackEvent.height + "%";
+          triggerResize = true;
+        }
+
+        if ( ( options.width || options.width === 0 ) && options.width !== trackEvent.width ) {
+          trackEvent.width = options.width;
+          trackEvent._container.style.width = trackEvent.width + "%";
+          triggerResize = true;
+        }
+
+        if ( triggerResize ) {
+          google.maps.event.trigger( map, "resize" );
+        }
+
+        if ( options.transition && options.transition !== trackEvent.transition ) {
+          outerdiv.classList.remove( trackEvent.transition );
+          trackEvent.transition = options.transition;
+          outerdiv.classList.add( trackEvent.transition );
+        }
       }
     };
   }, {
@@ -512,6 +715,7 @@ var googleCallback;
       zoom: {
         elem: "input",
         type: "number",
+        step: "1",
         label: "Zoom",
         "default": 10,
         optional: true

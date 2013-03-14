@@ -14,7 +14,9 @@
         _popcornEventMapReference,
         _butter,
         _popcorn,
-        _cachedValues = {};
+        _cachedValues = {},
+        _toggleMaps,
+        _toggleStreetView;
 
     /**
      * Member: getMapFromTrackEvent
@@ -42,6 +44,8 @@
     function setup( trackEvent ) {
       _trackEvent = trackEvent;
 
+      _trackEvent._cachedValues = {};
+
       var pluginOptions = {},
           ignoreKeys = [
             "target",
@@ -65,27 +69,41 @@
             headingObject,
             currentMapType;
 
-        function toggleStreetView() {
+        _toggleStreetView = function() {
           pitchObject.element.parentNode.style.display = "block";
           headingObject.element.parentNode.style.display = "block";
           _this.scrollbar.update();
-        }
+        };
 
-        function toggleMaps() {
+        _toggleMaps = function() {
           pitchObject.element.parentNode.style.display = "none";
           headingObject.element.parentNode.style.display = "none";
           _this.scrollbar.update();
+        };
+
+        function streetviewSearchFailed( e ) {
+          _popcorn.off( "googlemaps-zero-results", streetviewSearchFailed );
+          if ( e.toggleMaps ) {
+            pluginOptions.type.element.value = _trackEvent.popcornOptions.type = _cachedValues.type;
+            pluginOptions.zoom.element.value = _trackEvent.popcornOptions.zoom = _cachedValues.zoom;
+            _toggleMaps();
+          }
+          _this.setErrorState( e.error );
         }
 
         function attachTypeHandler( option ) {
           option.element.addEventListener( "change", function( e ) {
+
             var elementVal = e.target.value,
                 updateOptions = {},
                 popcornOptions = _trackEvent.popcornOptions,
                 target;
 
             if ( elementVal === "STREETVIEW" ) {
-              toggleStreetView();
+              _popcorn.on( "googlemaps-zero-results", streetviewSearchFailed );
+              _trackEvent._cachedValues.type = _cachedValues.type = popcornOptions.type;
+
+              _toggleStreetView();
 
               // If current map is using custom positions vs static
               if ( popcornOptions.lat && popcornOptions.lng ) {
@@ -97,10 +115,10 @@
 
               // Set zoom to one because the behaviour of this value differs
               // between streetview and map view
-              _cachedValues.zoom = popcornOptions.zoom;
-              updateOptions.zoom = 1;
+              _trackEvent._cachedValues.zoom = _cachedValues.zoom = popcornOptions.zoom;
+              updateOptions.zoom = 0;
             } else {
-              toggleMaps();
+              _toggleMaps();
 
               // If current map is using custom positions vs static
               if ( _cachedValues.lat && _cachedValues.lng ) {
@@ -110,7 +128,9 @@
                 updateOptions.location = _cachedValues.location;
               }
 
-              updateOptions.zoom = _cachedValues.zoom;
+              if ( popcornOptions.type === "STREETVIEW" ) {
+                updateOptions.zoom = _cachedValues.zoom;
+              }
             }
 
             updateOptions.type = elementVal;
@@ -169,10 +189,18 @@
         }
 
         function updateZoom( te, prop ) {
-          _cachedValues.zoom = prop.zoom;
+          var zoom = +prop.zoom;
+
+          // zoom can only be an integer, except in streetview
+          if ( _trackEvent.popcornOptions.type !== "STREETVIEW" && zoom !== zoom >> 0 ) {
+            _this.setErrorState( "Zoom cannot be a decimal number." );
+            return;
+          }
+
+          _cachedValues.zoom = zoom;
 
           _this.updateTrackEventSafe( te, {
-            zoom: prop.zoom
+            zoom: zoom
           });
         }
 
@@ -186,9 +214,9 @@
               currentMapType = option.trackEvent.popcornOptions.type;
 
               if ( currentMapType === "STREETVIEW" ) {
-                toggleStreetView();
+                _toggleStreetView();
               } else {
-                toggleMaps();
+                _toggleMaps();
               }
 
               attachTypeHandler( option );
@@ -238,6 +266,12 @@
       _this.updatePropertiesFromManifest( _trackEvent );
       _this.setErrorState( false );
       popcornOptions = _trackEvent.popcornOptions;
+
+      if ( _trackEvent.popcornOptions.type === "STREETVIEW" ) {
+        _toggleStreetView();
+      } else {
+        _toggleMaps();
+      }
 
       // We have to store lat/lng values on track event update because
       // we update these with events from dragging the map and not fields

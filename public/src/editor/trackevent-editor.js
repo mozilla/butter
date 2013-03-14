@@ -468,7 +468,7 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
         if ( e.keyCode === KeysUtils.ENTER ) {
           if ( !e.shiftKey ) {
             e.preventDefault();
-            
+
             if ( isNumber ) {
               val = validateNumber( val );
             }
@@ -674,6 +674,10 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
         }
         try {
           editorElement.type = manifestEntry.type;
+          // step="any" will stop the :invalid pseudo class in Chrome from being applied if the value is a not a "whole" number. i.e. 1.234
+          if ( editorElement.type === "number" ) {
+            editorElement.step = manifestEntry.step || "any";
+          }
         }
         catch ( e ) {
           // Suppress IE9 errors
