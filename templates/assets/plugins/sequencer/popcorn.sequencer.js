@@ -162,7 +162,7 @@
         p.media._unWait();
       }
       for ( var i = 0; i < _clips.length; i++ ) {
-        if ( this.id === _clips[ i ].media.id ) {
+        if ( this.id === _clips[ i ].id ) {
           _clips[ i ].off( "canplay", onCanplay );
         } else if (  _clips[ i ].media._unWait ) {
           _clips[ i ].media._unWait();
@@ -171,12 +171,14 @@
     };
 
     this.onWaiting = function() {
-console.log( "calling wait" );
       if ( p.media._wait ) {
         p.media._wait();
       }
+console.log( "starting loop" );
       for ( var i = 0; i < _clips.length; i++ ) {
-        if ( this.id === _clips[ i ].media.id ) {
+console.log( this.id, _clips[ i ].id );
+        if ( this.id === _clips[ i ].id ) {
+console.log( "setting canplay" );
           _clips[ i ].on( "canplay", onCanplay );
         } else if (  _clips[ i ].media._wait ) {
           _clips[ i ].media._wait();
@@ -188,6 +190,7 @@ console.log( "calling wait" );
       _clips.push( clip );
     };
     this.removeClip = function( clip ) {
+      // Ensure when this is removed we are not waiting on it.
       _clips.splice( _clips.indexOf( clip ), 1 );
     };
   };
