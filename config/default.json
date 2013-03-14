@@ -14,14 +14,14 @@
     "maxAge": "0"
   },
   "dirs": {
-    "wwwRoot": "../",
-    "templates": "../templates",
+    "wwwRoot": "public",
+    "templates": "public/templates",
     "appHostname": "http://localhost:8888"
   },
   "publishStore": {
     "type": "local",
     "options": {
-      "root": "./view",
+      "root": "./user_published",
       "namePrefix": "v",
       "nameSuffix": ".html"
     }
@@ -29,7 +29,7 @@
   "feedbackStore": {
     "type": "local",
     "options": {
-      "root": "./view",
+      "root": "./user_published",
       "namePrefix": "feedback",
       "nameSuffix": ".json"
     }
@@ -37,7 +37,7 @@
   "crashStore": {
     "type": "local",
     "options": {
-      "root": "./view",
+      "root": "./user_published",
       "namePrefix": "crash",
       "nameSuffix": ".json"
     }
@@ -45,7 +45,7 @@
   "imageStore": {
     "type": "local",
     "options": {
-      "root": "./view",
+      "root": "./user_published",
       "namePrefix": "images"
     }
   },

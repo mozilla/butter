@@ -6,10 +6,6 @@ An SDK for authoring Popcorn projects.
 Supported Platforms
 -------------------
 
-We're writing Butter so that it runs in modern, HTML5 compatible browsers.
-For version 1.0, we're targeting modern HTML5 desktop browsers.
-In the current version we are supporting:
-
 ### Desktop:
 * Chrome stable
 * Firefox stable
@@ -50,7 +46,7 @@ Packaging and Distributing Butter
 --------------------------------
 
 Running `node make deploy` will compile all the necessary files into the `dist/` folder.
-Run `NODE_ENV=production node app.js` in the `dist/cornfield` directory in order to run the server in production mode.
+Run `NODE_ENV=production node server.js` in the `dist/` directory in order to run the server in production mode.
 
 Cornfield
 ---------

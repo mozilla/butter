@@ -1,6 +1,0 @@
-{
-  "dirs": {
-    "wwwRoot": "../public",
-    "templates": "../public/templates"
-  }
-}

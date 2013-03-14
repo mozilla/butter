@@ -5,13 +5,13 @@
  */
 ({
   // Where to find the module names listed below.
-  baseUrl: '../src',
+  baseUrl: '../public/src/',
 
   // Target the AMD loader shim as the main module to optimize,
   // so it shows up first in the built file,
   // since the embed modules use the define/require APIs that the almond
   // provides. Path is relative to baseUrl.
-  name: '../tools/almond',
+  name: '../../tools/almond',
 
   // Strip extra licenses
   preserveLicenseComments: false,
@@ -22,7 +22,7 @@
 
   // Have the analyzer include the requirejs config from that particular file
   // Must be kept in sync with baseUrl + include
-  mainConfigFile: '../src/popcorn.js',
+  mainConfigFile: '../public/src/popcorn.js',
 
   // The require optimizer only looks at the first level of require/define
   // statements by default. This forces it to look further down the tree
@@ -30,10 +30,10 @@
 
   // Wraps Butter in a closure and adds license information
   wrap: {
-    startFile: '../tools/wrap.start',
-    endFile: '../tools/wrap.end'
+    startFile: 'wrap.start',
+    endFile: 'wrap.end'
   },
 
   // The built embed.js file for use by web sites.
-  out: '../dist/src/embed.js'
+  out: '../dist/public/src/embed.js'
 })
