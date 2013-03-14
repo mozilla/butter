@@ -5,8 +5,10 @@
 define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
   function( Logger, DragNDrop, GhostManager ) {
 
-  var TWEEN_PERCENTAGE = 0.35,    // diminishing factor for tweening (see followCurrentTime)
-      TWEEN_THRESHOLD = 10;       // threshold beyond which tweening occurs (see followCurrentTime)
+  var TWEEN_PERCENTAGE = 0.35,      // diminishing factor for tweening (see followCurrentTime)
+      TWEEN_THRESHOLD = 10,         // threshold beyond which tweening occurs (see followCurrentTime)
+      TRACKEVENT_BORDER_OFFSET = 2; // clientLeft prevents track events from being positioned side by
+                                    // side, so factor it into our calculations.
 
   return function( butter, media, mediaInstanceRootElement ) {
 
@@ -21,7 +23,8 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
     var _droppable;
 
     var _leftViewportBoundary = 0,
-        _viewportWidthRatio = 0.1;
+        _viewportWidthRatio = 0.1,
+        _nextEventMin, _nextEventMax;
 
     var _newTrackForDroppables;
 
@@ -211,13 +214,13 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       // is run during resizing. Since all the max/min data is prepared ahead of time, we know
       // the w/x values shouldn't grow/shrink past certain points.
       function onTrackEventResizedLeft( trackEvent, x, w, resizeEvent ) {
-        if ( x < min ) {
+        if ( x <= min ) {
           resizeEvent.blockIteration( min );
         }
       }
 
       function onTrackEventResizedRight( trackEvent, x, w, resizeEvent ) {
-        if ( x + w > max ) {
+        if ( x + w >= max ) {
           resizeEvent.blockIteration( max );
         }
       }
@@ -225,56 +228,66 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       // Slightly different code paths for left and right resizing.
       if ( direction === "left" ) {
         // Use trackEvents.reduce to find a valid minimum left value.
-        min = trackEvents.reduce( function( previousValue, otherTrackEvent ) {
+        _nextEventMin = trackEvents.reduce( function( previousValue, otherTrackEvent ) {
           var popcornOptions = otherTrackEvent.popcornOptions;
 
           // [ otherEvent ] [ otherEvent ] |<-- [ thisEvent ] [ otherEvent ]
           return (  otherTrackEvent !== trackEvent &&
-                    popcornOptions.end > previousValue &&
-                    popcornOptions.end < trackEventStart  ) ?
+                    popcornOptions.end >= previousValue &&
+                    popcornOptions.end <= trackEventStart  ) ?
               popcornOptions.end : previousValue;
         }, 0 );
 
         // Rebase min value on pixels instead of time.
         // Use clientLeft to compensate for border (https://developer.mozilla.org/en-US/docs/DOM/element.clientLeft).
-        min = min / _media.duration * _container.offsetWidth + trackEventView.element.clientLeft * 2;
+        min = _nextEventMin / _media.duration * ( _container.offsetWidth + trackEventView.element.clientLeft - TRACKEVENT_BORDER_OFFSET );
 
         // Only use the left handler.
         trackEventView.setResizeHandler( onTrackEventResizedLeft );
       }
       else {
         // Use trackEvents.reduce to find a valid maximum right value.
-        max = trackEvents.reduce( function( previousValue, otherTrackEvent ) {
+        _nextEventMax = trackEvents.reduce( function( previousValue, otherTrackEvent ) {
           var popcornOptions = otherTrackEvent.popcornOptions;
 
           // [ otherEvent ] [ otherEvent ] [ thisEvent ] -->| [ otherEvent ]
           return (  otherTrackEvent !== trackEvent &&
-                    popcornOptions.start < previousValue &&
-                    popcornOptions.start > trackEventEnd ) ?
+                    popcornOptions.start <= previousValue &&
+                    popcornOptions.start >= trackEventEnd ) ?
               popcornOptions.start : previousValue;
         }, _media.duration );
 
         // Rebase min value on pixels instead of time.
         // Use clientLeft to compensate for border (https://developer.mozilla.org/en-US/docs/DOM/element.clientLeft).
-        max = max / _media.duration * _container.offsetWidth - trackEventView.element.clientLeft * 2;
+        max = _nextEventMax / _media.duration * ( _container.offsetWidth - trackEventView.element.clientLeft + TRACKEVENT_BORDER_OFFSET );
 
         // Only use the right handler.
         trackEventView.setResizeHandler( onTrackEventResizedRight );
       }
 
       function onTrackEventResizeStopped() {
-        var popcornOptions = {};
+        var popcornOptions = {},
+            newEnd, newStart;
 
         // Finish off by making sure the values are correct depending on the direction.
         if ( direction === "right" ) {
-          popcornOptions.end = trackEvent.popcornOptions.start +
-            ( trackEventView.element.clientWidth / _container.clientWidth ) *
-            _media.duration;
+          newEnd = trackEvent.popcornOptions.start +
+                   ( ( trackEventView.element.clientWidth / _container.clientWidth ) * _media.duration );
+
+          if ( newEnd > _nextEventMax ) {
+            newEnd = _nextEventMax;
+          }
+
+          popcornOptions.end = newEnd;
         }
         else {
-          popcornOptions.start = trackEventView.element.offsetLeft /
-            _container.clientWidth *
-            _media.duration;
+          newStart = trackEventView.element.offsetLeft / _container.clientWidth * _media.duration;
+
+          if ( newStart < _nextEventMin ) {
+            newStart = _nextEventMin;
+          }
+
+          popcornOptions.start = newStart;
         }
 
         trackEvent.update( popcornOptions );
