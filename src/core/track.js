@@ -265,7 +265,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
 
       // Update the trackevent with defaults (if necessary)
       if ( _this._media ) {
-        trackEvent.update( trackEvent.popcornOptions, true );
+        trackEvent.applyDefaults();
       }
 
       return trackEvent;
