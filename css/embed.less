@@ -341,16 +341,17 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  display: block;
+  visibility: hidden;
   opacity: 0;
 
   // No transition from "visible" to "invisible"
   .transition( none );
 
   &.embed-dialog-open {
+    visibility: visible;
     opacity: 1;
     // Fade-in transition from "invisible" to visible"
-    .transition( opacity 1s ease 1s );
+    .transition( all 1s ease 1s );
   }
 }
 
