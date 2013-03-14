@@ -165,7 +165,7 @@
         if ( this.id === _clips[ i ].id ) {
           _clips[ i ].off( "canplay", onCanplay );
         } else if (  _clips[ i ].media._unWait ) {
-          _clips[ i ].media._unWait();
+          //_clips[ i ].media._unWait();
         }
       }
     };
@@ -174,14 +174,11 @@
       if ( p.media._wait ) {
         p.media._wait();
       }
-console.log( "starting loop" );
       for ( var i = 0; i < _clips.length; i++ ) {
-console.log( this.id, _clips[ i ].id );
         if ( this.id === _clips[ i ].id ) {
-console.log( "setting canplay" );
           _clips[ i ].on( "canplay", onCanplay );
         } else if (  _clips[ i ].media._wait ) {
-          _clips[ i ].media._wait();
+          //_clips[ i ].media._wait();
         }
       }
     };
@@ -364,40 +361,6 @@ console.log( "setting canplay" );
         }
       };
 
-      options._onWaiting = function() {
-        /*var i, l,
-            buffered = options._clip.media.buffered;
-
-        // We're likely in a wrapper that does not support buffered.
-        // Assume we are buffered.
-        // Once these wrappers have a buffered time range object, it should just work.
-        if ( buffered.length === 0 ) {
-          return;
-        }
-
-        for ( i = 0, l = buffered.length; i < l; i++ ) {
-          // Check if a range is valid, if so, return early.
-          if ( buffered.start( i ) <= options._clip.currentTime() &&
-               buffered.end( i ) > options._clip.currentTime() ) {
-            // We found a valid range so playing can resume.
-            options.hideLoading();
-            if ( options.playWhenReady ) {
-              options.playWhenReady = false;
-              _this.play();
-            }
-            return;
-          }
-        }
-
-        // If we hit here, we failed to find a valid range,
-        // so we should probably stop everything. We'll get out of sync.
-        if ( !_this.paused() ) {
-          options.playWhenReady = true;
-          _this.pause();
-        }
-        options.displayLoading();*/
-      };
-
       // Ensures seek time is seekable, and not already seeked.
       // Returns true for successful seeks.
       options._setClipCurrentTime = function( time ) {
@@ -430,14 +393,14 @@ console.log( "setting canplay" );
         // but it does have a play, and won't play until after the seek.
         // so we know if the play has finished, the seek is also finished.
         var seekedEvent = function () {
+console.log( "seeked" );
           var playedEvent = function() {
+console.log( "played" );
             options._clip.off( "play", playedEvent );
             _this.off( "play", options._playWhenReadyEvent );
             _this.on( "play", options._playEvent );
             _this.on( "pause", options._pauseEvent );
             _this.on( "seeked", options._onSeeked );
-            // Setup on waiting after initial load.
-            // This way if an initial load never happens, we never wait.
             options._clip.on( "waiting", options.clipManager.onWaiting );
             options.hideLoading();
             if ( !options.hidden && options.active ) {
@@ -644,6 +607,7 @@ console.log( "setting canplay" );
       }
     },
     start: function( event, options ) {
+console.log( "start" );
       options.active = true;
       if ( options.source ) {
         if ( !options.hidden && options.failed ) {
@@ -658,6 +622,7 @@ console.log( "setting canplay" );
           options._clip.pause();
         }
         if ( options.ready ) {
+console.log( "start ready" );
           options._startEvent();
         } else {
           this.pause();
