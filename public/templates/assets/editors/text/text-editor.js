@@ -146,7 +146,7 @@
 
     function anchorClickPrevention( anchorContainer ) {
       if ( anchorContainer ) {
-        
+
         anchorContainer.onclick = _falseClick;
       }
     }

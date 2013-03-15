@@ -169,7 +169,7 @@
 
     function anchorClickPrevention( anchorContainer ) {
       if ( anchorContainer ) {
-        
+
         anchorContainer.onclick = function() {
           return false;
         };

@@ -4,7 +4,7 @@
     return {
       _setup: function( options ) {
         var skipTime = options.end;
-        
+
         options.skipRange = function() {
           var ct = this.currentTime();
           if ( !this.paused() && ct > options.start && ct < options.end ) {
@@ -16,7 +16,7 @@
         };
 
         this.on( "timeupdate", options.skipRange );
-       
+
       },
       start: function() {
       },

@@ -21,7 +21,7 @@ define( [ "util/lang",  "./logo-spinner",
 
     this.statusArea = trayRoot.querySelector( ".butter-status-area" );
     this.timelineArea = trayRoot.querySelector( ".butter-timeline-area" );
-    
+
     this.rootElement = trayRoot;
 
     this.statusArea.appendChild( statusAreaFragment );
