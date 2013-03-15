@@ -38,11 +38,11 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
         _zoomSliderHandle = _outer.querySelector( ".butter-super-scrollbar-zoom-handle" ),
         _offset = 0,
         _trackEventVisuals = {},
-        _boundsChangedCallback = function( left, width ) {
+        _boundsChangedCallback = function( right, width ) {
           if ( width !== -1 ) {
-            _zoomSliderHandle.style.left = width * 100 + "%";
+            _zoomSliderHandle.style.right = width * 100 + "%";
           }
-          boundsChangedCallback( left, width );
+          boundsChangedCallback( right, width );
         },
         _this = this;
 
@@ -251,7 +251,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
     }
 
     function updateZoomSlider( e ) {
-      var position = e.clientX - ( _zoomSliderContainer.offsetLeft + ( _zoomSliderHandle.offsetWidth / 2 ) ),
+      var position = _zoomSlider.offsetWidth - ( e.clientX - ( _zoomSliderContainer.offsetLeft + ( _zoomSliderHandle.offsetWidth / 2 ) ) ),
           scale;
 
       if ( position < 0 ) {
@@ -264,7 +264,7 @@ define( [ "util/lang", "text!layouts/super-scrollbar.html" ],
         scale = MIN_WIDTH / _rect.width;
       }
       scaleViewPort( scale );
-      _zoomSliderHandle.style.left = position / _zoomSlider.offsetWidth * 100 + "%";
+      _zoomSliderHandle.style.right = position / _zoomSlider.offsetWidth * 100 + "%";
     }
 
     function zoomSliderContainerMouseDown( e ) {
