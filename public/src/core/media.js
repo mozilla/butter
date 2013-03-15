@@ -521,16 +521,18 @@
             }
 
             if ( _url !== newUrl ) {
+              if ( _ready ) {
+                command = {
+                  execute: function() {
+                    setUrl( newUrl );
+                  },
+                  undo: function() {
+                    setUrl( oldUrl );
+                  }
+                };
+                UndoRedo.register( command );
+              }
               setUrl( newUrl );
-              command = {
-                execute: function() {
-                  setUrl( newUrl );
-                },
-                undo: function() {
-                  setUrl( oldUrl );
-                }
-              };
-              UndoRedo.register( command );
             }
           }
         },

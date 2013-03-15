@@ -247,12 +247,18 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
 
     _durationInput.addEventListener( "keydown", onDurationChange, false );
     _durationInput.addEventListener( "blur", onBlur, false );
+
+    _media.listen( "mediadurationchanged", onDurationChange );
   }
 
   function onDurationChange( e ) {
     if ( e.keyCode === KeysUtils.ENTER ) {
       e.preventDefault();
-      setBaseDuration( _durationInput.value );
+      setBaseDuration( e.target.value );
+    } else {
+      if ( e.data ) {
+        setBaseDuration( e.data.duration );
+      }
     }
   }
 
