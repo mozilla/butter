@@ -5,7 +5,7 @@
 define( [ "./base-loader" ], function( BaseLoader ) {
 
   var CSS_POLL_INTERVAL = 10;
-  
+
   function CSSLoader( configDirs ) {
     BaseLoader.call( this, configDirs );
   }

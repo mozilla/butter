@@ -5,7 +5,7 @@
 define( [ "./ghost-track" ], function( GhostTrack ) {
 
   function GhostManager( media, tracksContainerElement ) {
-    
+
     var _media = media,
         _tracksContainerElement = tracksContainerElement;
 
@@ -37,7 +37,7 @@ define( [ "./ghost-track" ], function( GhostTrack ) {
         track.ghost = null;
       }
     }
-    
+
     this.trackEventDragged = function( trackEventView, trackView ) {
       var track, nextTrack, ghostTrack,
           overlappingTrackEvent;

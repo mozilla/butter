@@ -1,12 +1,12 @@
 /*global cat,cd,cp,echo,env,exec,exit,find,mkdir,mv,pwd,rm,sed,target,test */
 
 var path = require( "path" ),
-    normalize = function( p ){ return "'" + path.normalize( p ) + "'"; },
+    normalize = function( p ){ return path.normalize( p ); },
     // Make Windows happy, use `node <path>`
     nodeExec = function( p ){ return 'node "' + p + '"'; },
     pythonExec = function( p ){ return 'python "' + p + '"'; },
 
-    JSLINT = nodeExec( normalize( "./node_modules/jshint/bin/hint" ) ),
+    JSLINT = nodeExec( normalize( "./node_modules/jshint/bin/jshint" ) ),
     HTML5LINT = pythonExec( normalize( "./public/external/html5-lint/html5check.py" ) ),
     CSSLINT = nodeExec( normalize( "./node_modules/csslint/cli.js" ) ),
     RJS = nodeExec( normalize( "./node_modules/requirejs/bin/r.js" ) ),

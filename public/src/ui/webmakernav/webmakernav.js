@@ -96,7 +96,7 @@ define( [ "util/lang", "text!./webmakernav.html", "text!./webmakernav.css" ],
       userMenu.addEventListener( "click", function( e ) {
         e.stopPropagation();
       }, false );
-      
+
       username.addEventListener( "mouseout", function() {
         userMenu.classList.remove( USER_MENU_TRANSITION );
         username.classList.remove( BTN_ACTIVE_CLASS );

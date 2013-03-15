@@ -207,7 +207,7 @@
           throw "Config.parse Error: unable to parse config string. Error was: " + e.message;
         }
       },
-      
+
       /**
        * Member: reincarnate
        *
