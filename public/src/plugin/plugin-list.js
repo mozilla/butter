@@ -52,7 +52,9 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         var trackEvent;
 
         if ( butter.currentMedia.ready ) {
-          trackEvent = butter.generateSafeTrackEvent( e.data.type, butter.currentTime );
+          trackEvent = butter.generateSafeTrackEvent( e.data.type, {
+            start: butter.currentTime
+          });
           butter.editor.editTrackEvent( trackEvent );
         }
       }

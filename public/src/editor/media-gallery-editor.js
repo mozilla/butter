@@ -149,9 +149,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
           trackEvent;
 
       function addTrackEvent() {
-        trackEvent = _butter.generateSafeTrackEvent( "sequencer", start, end );
-
-        trackEvent.update({
+        var popcornOptions = {
           source: data.source,
           denied: data.denied,
           start: start,
@@ -160,7 +158,9 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
           title: data.title,
           duration: data.duration,
           hidden: data.hidden || false
-        });
+        };
+
+        trackEvent = _butter.generateSafeTrackEvent( "sequencer", popcornOptions );
       }
 
       if ( end > _media.duration ) {
