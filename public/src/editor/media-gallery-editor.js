@@ -230,6 +230,8 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     } else {
       _addBtn.classList.add( "hidden" );
     }
+    clearTimeout( _cancelSpinner );
+    clearTimeout( _mediaLoadTimeout );
     _addMediaPanel.classList.remove( "invalid-field" );
     _loadingSpinner.classList.add( "hidden" );
     _errorMessage.classList.add( "hidden" );
