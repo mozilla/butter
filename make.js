@@ -379,7 +379,6 @@ target.deploy = function(){
   // Copy server assets
   cp( "-R", [
     "README.md",
-    "config",
     "lib",
     "package.json",
     "routes",
