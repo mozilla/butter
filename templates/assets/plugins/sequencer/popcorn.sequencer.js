@@ -28,160 +28,42 @@
   // ClipManager is a thing that has a concept of all other clips.
   // There is one for every popcorn object.
   var ClipManager = function( p ) {
-    var _clips = [];
-    /*var _unbufferedArray = [],
-        _clipMap = {},
-        // in general this needs to be more dynamic.
-        _buffered = {
-          // Move the getStart and getEnd above into here.
-          start: function( index ) {
-            //return mergeClipsRanges().start( index );
-          },
-          end: function( index ) {
-            //return mergeClipsRanges().end( index );
-          }
-        };
-
-    ///*_clipArray.push({
-    //  start: 0,
-    //  end: p.duration(),
-    //  id: p.media.id
-    //});
-
-    Object.defineProperties( _buffered, {
-      length: function() {
-        //return mergeClipsRanges().length;
-      }
-    });
-
-    // Ensure we are a null wrapper.
-    Object.defineProperties( p.media, {
-
-      buffered: {
-        get: function() {
-          return _buffered;
-        }
-      }
-    });
-
-    // Might not need these arrays if I only use them in one spot. Would be nice to remove them.
-
-    // Turns a single array of buffered regions
-    // into a single array of unbuffered regions.
-    function toUnbufferedArray( array, id ) {
-      var newArray = [],
-          unBufferedStart,
-          unBufferedEnd;
-
-      if ( array.length ) {
-        unBufferedStart = 0;
-        for ( var i = 0; i < array.length; i++ ) {
-          unBufferedEnd = array[ i ].start;
-          if ( unBufferedStart < unBufferedEnd ) {
-            newArray.push({
-              start: unBufferedStart,
-              end: unBufferedEnd,
-              id: id
-            });
-          }
-          unBufferedStart = array[ i ].end;
-        }
-        if ( unBufferedStart < p.duration() ) {
-          newArray.push({
-            start: unBufferedStart,
-            end: p.duration(),
-            id: id
-          });
-        }
-      }
-      return newArray;
-    }
-
-    // Turns a single array of unbuffered regions
-    // into a single array of buffered regions.
-    function toBufferedArray( array ) {
-      var newArray = [];
-
-      return newArray;
-    }
-
-    function addToRange( media, start, end ) {
-      var newClipArray = {};
-
-      // Assume parts before this clip are buffered.
-      if ( start > 0 ) {
-        newClipArray.push({
-          start: 0,
-          end: start
-        });
-      }
-
-      // Assume parts after this clip are buffered
-      if ( end < p.duration() ) {
-        newClipArray.push({
-          start: end,
-          end: p.duration()
-        });
-      }
-
-      for ( for var i = 0; i < media.buffered.length; i++ ) {
-        newClipArray.push({
-          start: media.buffered.start( i ) + start,
-          end: media.buffered.end( i ) + start
-        });
-      }
-
-      // We now have an array of buffered ranges offset.
-      _unbufferedArray = _unbufferedArray.concat( toUnbufferedArray( newClipArray, media.id ) );
-    }
-
-    // Instead of removing, we're going to add the items we want to a new array.
-    // This way we don't have to re index after a removal.
-    // Could also go backwards, but meh, code is already written.
-    function removeFromRange( media ) {
-      var newClipArray = [];
-      for( var i = 0; i < _unbufferedArray.length; i++ ) {
-        if ( _unbufferedArray[ i ].id !== media.id ) {
-          newClipArray.push( _unbufferedArray[ i ] );
-        }
-      }
-      _unbufferedArray = newClipArray;
-    }
-
-    // Making it work.
-    // Hopefully this isn't too slow,
-    // but may need to find a way to only update the range diff.
-    function onProgress() {
-      var options = _clipMap[ this.id ];
-      removeFromRange( this );
-      addToRange( this, options.start, options.end );
-      p.media.dispatchEvent( "progress" );
-    };*/
+    var _clips = [],
+        _this = this;
+   
     function onCanplay() {
-      if ( p.media._unWait ) {
-        p.media._unWait();
-      }
-      for ( var i = 0; i < _clips.length; i++ ) {
-        if ( this.id === _clips[ i ].id ) {
-          _clips[ i ].off( "canplay", onCanplay );
-        } else if (  _clips[ i ].media._unWait ) {
-          //_clips[ i ].media._unWait();
-        }
-      }
+      _this.unWait( this );
     };
 
     this.onWaiting = function() {
+      _this.wait( this );
+    };
+
+    this.wait = function( media ) {
+      for ( var i = 0; i < _clips.length; i++ ) {
+        if ( media.id === _clips[ i ].id ) {
+          _clips[ i ].on( "canplay", onCanplay );
+        } else if (  _clips[ i ].media._wait ) {
+          _clips[ i ].media._wait();
+        }
+      }
       if ( p.media._wait ) {
         p.media._wait();
       }
+    }
+
+    this.unWait = function( media ) {
       for ( var i = 0; i < _clips.length; i++ ) {
-        if ( this.id === _clips[ i ].id ) {
-          _clips[ i ].on( "canplay", onCanplay );
-        } else if (  _clips[ i ].media._wait ) {
-          //_clips[ i ].media._wait();
+        if ( media.id === _clips[ i ].id ) {
+          _clips[ i ].off( "canplay", onCanplay );
+        } else if (  _clips[ i ].media._unWait ) {
+          _clips[ i ].media._unWait();
         }
       }
-    };
+      if ( p.media._unWait ) {
+        p.media._unWait();
+      }
+    }
 
     this.addClip = function( clip ) {
       _clips.push( clip );
@@ -227,11 +109,17 @@
         target.appendChild( container );
       };
       options.displayLoading = function() {
-        _this.on( "play", options._surpressPlayEvent );
+        var bigPlay = document.getElementById( "controls-big-play-button" );
+        if ( bigPlay ) {
+          bigPlay.classList.add( "hide-button" );
+        }
         document.querySelector( ".loading-message" ).classList.add( "show-media" );
       };
       options.hideLoading = function() {
-        _this.off( "play", options._surpressPlayEvent );
+        var bigPlay = document.getElementById( "controls-big-play-button" );
+        if ( bigPlay ) {
+          bigPlay.classList.remove( "hide-button" );
+        }
         document.querySelector( ".loading-message" ).classList.remove( "show-media" );
       };
 
@@ -260,6 +148,7 @@
           options.tearDown();
         }
         options.failed = false;
+        options.clipManager.unWait( options._clip );
         options._clip.off( "loadedmetadata", options.readyEvent );
         options.ready = true;
         options._container.style.width = ( options.width || "100" ) + "%";
@@ -292,15 +181,12 @@
       // The clip that failed to load would be ignored,
       // and everything else playable.
       options.fail = function() {
-        _this.off( "play", options._playWhenReadyEvent );
         options.failed = true;
         if ( !options.hidden && options.active ) {
           options._container.style.zIndex = +options.zindex;
         }
         options.hideLoading();
-        if ( options.playWhenReady ) {
-          _this.play();
-        }
+        options.clipManager.unWait( options._clip );
       };
 
       options.tearDown = function() {
@@ -331,13 +217,17 @@
       };
 
       options.clearEvents = function() {
-        _this.off( "play", options._playWhenReadyEvent );
         _this.off( "play", options._playEvent );
         _this.off( "pause", options._pauseEvent );
         _this.off( "seeked", options._onSeeked );
       };
 
       options.addSource = function() {
+        if ( _this.media.readyState < 1 ) {
+          _this.on( "loadedmetadata", options.addSource );
+          return;
+        }
+        _this.off( "loadedmetadata", options.addSource );
         if ( options.loadTimeout ) {
           clearTimeout( options.loadTimeout );
         }
@@ -349,6 +239,7 @@
           options.loadTimeout = setTimeout( options.fail, MEDIA_LOAD_TIMEOUT );
         }
         options._clip = Popcorn.smart( options._container, options.source, { frameAnimation: true } );
+        options.clipManager.wait( options._clip );
         options.clipManager.addClip( options._clip );
         options._clip.media.style.width = "100%";
         options._clip.media.style.height = "100%";
@@ -375,12 +266,6 @@
         }
       };
 
-      // While clip is loading, do not let the timeline play.
-      options._surpressPlayEvent = function() {
-        options.playWhenReady = true;
-        _this.pause();
-      };
-
       options.setupContainer();
       if ( options.source ) {
         options.sourceToArray();
@@ -393,47 +278,33 @@
         // but it does have a play, and won't play until after the seek.
         // so we know if the play has finished, the seek is also finished.
         var seekedEvent = function () {
-console.log( "seeked" );
-          var playedEvent = function() {
-console.log( "played" );
-            options._clip.off( "play", playedEvent );
-            _this.off( "play", options._playWhenReadyEvent );
-            _this.on( "play", options._playEvent );
-            _this.on( "pause", options._pauseEvent );
-            _this.on( "seeked", options._onSeeked );
-            options._clip.on( "waiting", options.clipManager.onWaiting );
-            options.hideLoading();
-            if ( !options.hidden && options.active ) {
-              options._container.style.zIndex = +options.zindex;
-            } else {
-              options._container.style.zIndex = 0;
-            }
-            if ( options.playWhenReady ) {
-              _this.play();
-            } else {
-              options._clip.pause();
-            }
-            options._clip.on( "play", options._clipPlayEvent );
-            options._clip.on( "pause", options._clipPauseEvent );
-            if ( options.active ) {
-              options._volumeEvent();
-            }
-          };
           options._clip.off( "seeked", seekedEvent );
-          options._clip.on( "play", playedEvent );
-          options._clip.play();
+          _this.on( "play", options._playEvent );
+          _this.on( "pause", options._pauseEvent );
+          _this.on( "seeked", options._onSeeked );
+          options.hideLoading();
+          if ( !options.hidden && options.active ) {
+            options._container.style.zIndex = +options.zindex;
+          } else {
+            options._container.style.zIndex = 0;
+          }
+          if ( !_this.paused() ) {
+            options._clip.play();
+          }
+          options._clip.on( "play", options._clipPlayEvent );
+          options._clip.on( "pause", options._clipPauseEvent );
+          if ( options.active ) {
+            options._volumeEvent();
+          }
         };
         options._clip.mute();
         options._clip.on( "seeked", seekedEvent);
+        options._clip.on( "waiting", options.clipManager.onWaiting );
         // If the seek failed, we're already at the desired time.
         // fire the seekedEvent right away.
         if ( !options._setClipCurrentTime() ) {
           seekedEvent();
         }
-      };
-
-      options._playWhenReadyEvent = function() {
-        options.playWhenReady = true;
       };
 
       // Two events for playing the main timeline if the clip is playing.
@@ -549,7 +420,6 @@ console.log( "played" );
         options.sourceToArray( updates );
         if ( updates.source.toString() !== options.source.toString() ) {
           options.ready = false;
-          options.playWhenReady = false;
           if ( options.active ) {
             options.displayLoading();
           }
@@ -558,14 +428,6 @@ console.log( "played" );
           // TODO: ensure any pending loads are torn down.
           options.tearDown();
           options.setupContainer();
-          this.on( "play", options._playWhenReadyEvent );
-          if ( !this.paused() ) {
-            options.playWhenReady = true;
-            this.pause();
-            if ( options._clip && !options._clip.paused() ) {
-              options._clip.pause();
-            }
-          }
           options.addSource();
         }
       }
@@ -607,7 +469,6 @@ console.log( "played" );
       }
     },
     start: function( event, options ) {
-console.log( "start" );
       options.active = true;
       if ( options.source ) {
         if ( !options.hidden && options.failed ) {
@@ -616,16 +477,12 @@ console.log( "start" );
           options._container.style.zIndex = +options.zindex;
           return;
         }
-        this.on( "play", options._playWhenReadyEvent );
-        if ( !this.paused() ) {
-          options.playWhenReady = true;
-          options._clip.pause();
-        }
         if ( options.ready ) {
-console.log( "start ready" );
           options._startEvent();
         } else {
-          this.pause();
+          if ( this.media.readyState > 1 ) {
+            options.clipManager.wait( options._clip );
+          }
           options.displayLoading();
         }
       }
@@ -633,7 +490,6 @@ console.log( "start ready" );
     end: function( event, options ) {
       // cancel any pending or future starts
       options.active = false;
-      options.playWhenReady = false;
       options.clearEvents();
       options.hideLoading();
       if ( options.ready ) {
