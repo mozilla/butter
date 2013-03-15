@@ -219,7 +219,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
       });
     };
 
-    var _addTrackEvent = function( trackEvent ) {
+    var _addTrackEvent = this._addTrackEvent = function( trackEvent ) {
       var oldSelected = false;
 
       if ( !( trackEvent instanceof TrackEvent ) ) {
@@ -236,7 +236,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
       }
 
       // Sanitize the track even data prior to building the UI.
-      this.sanitizeTrackEventData(trackEvent);
+      _this.sanitizeTrackEventData( trackEvent );
 
       trackEvent.bind( _this, _popcornWrapper );
 
@@ -277,10 +277,17 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
 
       node.register({
         execute: function() {
-          _addTrackEvent( trackEvent );
+          if ( !trackEvent.track ) {
+            _addTrackEvent( trackEvent );
+          } else if ( trackEvent.track !== _this ) {
+            trackEvent.track._removeTrackEvent( trackEvent, true );
+            _addTrackEvent( trackEvent );
+          }
         },
         undo: function() {
-          _removeTrackEvent( trackEvent );
+          if ( trackEvent.track === _this ) {console.log(2)
+            _removeTrackEvent( trackEvent );
+          }
         }
       });
 
@@ -292,7 +299,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
      *
      * @param {Object} trackEvent: The trackEvent to be removed from this track
      */
-    var _removeTrackEvent = function( trackEvent, preventRemove ) {
+    var _removeTrackEvent = this._removeTrackEvent = function( trackEvent, preventRemove ) {
       var idx = _trackEvents.indexOf( trackEvent );
       if ( idx > -1 ) {
         _trackEvents.splice( idx, 1 );
@@ -311,14 +318,20 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
     };
 
     this.removeTrackEvent = function( trackEvent, preventRemove, node ) {
+      var oldTrack = trackEvent.track;
       trackEvent = _removeTrackEvent( trackEvent, preventRemove );
       node = node || UndoRedo;
 
       node.register({
         execute: function() {
-          _removeTrackEvent( trackEvent, preventRemove );
+          if ( trackEvent.track && trackEvent.track === _this ) {
+            _removeTrackEvent( trackEvent, preventRemove );
+          }
         },
         undo: function() {
+          if ( trackEvent.track && trackEvent.track !== _this ) {
+            trackEvent.track._removeTrackEvent( trackEvent, true );
+          }
           _addTrackEvent( trackEvent );
         }
       });

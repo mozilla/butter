@@ -237,6 +237,8 @@ window.Butter = {
         _this.deselectAllTrackEvents();
         trackEvent.selected = true;
 
+        _this.editor.editTrackEvent( trackEvent );
+
         _defaultTarget.view.blink();
 
         return trackEvent;

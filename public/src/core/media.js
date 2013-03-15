@@ -279,8 +279,8 @@
             _removeTrack( track );
           },
           undo: function() {
-            if ( orderedTracks[ track.order ] ) {
-              _insertTrackBefore( orderedTracks[ track.order ], track );
+            if ( _orderedTracks[ track.order ] ) {
+              _insertTrackBefore( _orderedTracks[ track.order ], track );
             } else {
               _addTrack( track );
             }

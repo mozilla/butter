@@ -51,7 +51,7 @@ define(function() {
   };
   UndoRedo.undo = function() {
     var command;
-    if ( this.canUndo() ) {
+    if ( this.canUndo() ) {debugger;
       command = _undoStack.pop();
       _redoStack.push( command );
       command.undo();
