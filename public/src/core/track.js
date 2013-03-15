@@ -285,7 +285,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
           }
         },
         undo: function() {
-          if ( trackEvent.track === _this ) {console.log(2)
+          if ( trackEvent.track === _this ) {
             _removeTrackEvent( trackEvent );
           }
         }
