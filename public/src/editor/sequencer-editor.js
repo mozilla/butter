@@ -359,6 +359,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           _mediaType = data.type;
           updateOptions.duration = data.duration;
           updateOptions.denied = data.denied;
+          updateOptions.title = data.title;
           if ( _mediaType === "html5" ) {
             updateOptions.source[ 0 ] = URI.makeUnique( updateOptions.source[ 0 ] ).toString();
           } else if ( _mediaType === "soundcloud" ) {
