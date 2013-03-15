@@ -26,7 +26,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
       _droppable = DragNDrop.droppable( _element, {
         hoverClass: "draggable-hover",
         data: _this,
-        drop: function( dropped, mousePosition, popcornOptions ) {
+        drop: function( dropped, mousePosition, popcornOptions, node ) {
           var droppedElement = dropped.data ? dropped.data.element : dropped,
               draggableType = droppedElement.getAttribute( "data-butter-draggable-type" ),
               duration, start, end, left,
@@ -39,6 +39,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
             _this.dispatch( "plugindropped", {
               start: start,
               track: _track,
+              node: node,
               type: droppedElement.getAttribute( "data-popcorn-plugin-type" ),
               popcornOptions: popcornOptions
             });
@@ -121,7 +122,7 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop" ],
     });
 
     function onTrackEventDragStopped( e ) {
-      _track.removeTrackEvent( e.target.trackEvent, true );
+      _track.removeTrackEvent( e.target.trackEvent, true, e.data.node );
     }
 
     this.addTrackEvent = function( trackEvent ) {

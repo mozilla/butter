@@ -339,12 +339,6 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
         updateOptions[ propertyName ] = TimeUtils.toSeconds( element.value );
         callback( trackEvent, updateOptions );
       }, false );
-
-      element.addEventListener( "change", function() {
-        var updateOptions = {};
-        updateOptions[ propertyName ] = TimeUtils.toSeconds( element.value );
-        callback( trackEvent, updateOptions );
-      }, false );
     };
 
     /**

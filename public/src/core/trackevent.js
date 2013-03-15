@@ -8,9 +8,9 @@
  * Supports a single event in the Media > Track > TrackEvent model.
  */
 define( [ "./logger", "./eventmanager", "./observer",
-          "util/lang", "util/time", "./views/trackevent-view" ],
+          "util/lang", "util/time", "./views/trackevent-view", "util/undoredo" ],
   function( Logger, EventManager, Observer,
-            LangUtil, TimeUtil, TrackEventView ) {
+            LangUtil, TimeUtil, TrackEventView, UndoRedo ) {
 
   var __guid = 0;
 
@@ -58,6 +58,7 @@ define( [ "./logger", "./eventmanager", "./observer",
     EventManager.extend( _this );
     Observer.extend( _this );
 
+    _this.command = {};
     _this.popcornOptions = _popcornOptions;
     _this.popcornTrackEvent = null;
 
@@ -114,7 +115,7 @@ define( [ "./logger", "./eventmanager", "./observer",
           }
         }
       }
-      this.update( newOptions );
+      this.command.update( newOptions );
     };
 
     /**
@@ -126,7 +127,7 @@ define( [ "./logger", "./eventmanager", "./observer",
      * @event trackeventupdated: Occurs when an update operation succeeded.
      * @throws TrackEventUpdateException: When an update operation failed because of conflicting times or other serious property problems.
      */
-    this.update = function( updateOptions ) {
+    this.command.update = function( updateOptions ) {
 
       var newStart,
           newEnd,
@@ -183,8 +184,8 @@ define( [ "./logger", "./eventmanager", "./observer",
         media = _track._media;
         duration = media.duration;
 
-        if ( this.manifest ) {
-          manifestOptions = this.manifest.options;
+        if ( _this.manifest ) {
+          manifestOptions = _this.manifest.options;
           if ( manifestOptions ) {
             for ( var prop in manifestOptions ) {
               if ( manifestOptions.hasOwnProperty( prop ) &&
@@ -225,6 +226,29 @@ define( [ "./logger", "./eventmanager", "./observer",
       // and can update the corresponding Popcorn trackevent for this object
       if ( _popcornWrapper && !preventUpdate ) {
         _popcornWrapper.synchronizeEvent( _this, updateOptions );
+      }
+    };
+
+    this.update = function( updateOptions, node ) {
+      var oldOptions = LangUtil.clone( _popcornOptions ),
+          newOptions = LangUtil.clone( updateOptions ),
+          command = {};
+
+      _this.command.update( updateOptions );
+
+      command.execute = function() {
+        _this.command.update( newOptions );
+      };
+      command.undo = function() {
+        _this.command.update( oldOptions );
+      };
+      // If no options are provided, don't store a command.
+      if ( updateOptions ) {
+        if ( !node ) {
+          UndoRedo.register( command );
+        } else {
+          node.register( command );
+        }
       }
     };
 
