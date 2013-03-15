@@ -65,7 +65,7 @@ There are two types of storage Cornfield needs to run:
 The default server configuration can be found in [lib/default-config.json](lib/default-config.json). To override any of these settings you can:
 
 1. Use environment variables e.g. (`PORT=1337 node server.js`)
-2. Add a file named `local.json` to the repo root
+2. Add a file named `local.json`. `server.js` will recurse up the directory tree looking for it
 3. Use the `BUTTER_CONFIG_FILE` environment variable e.g. (`BUTTER_CONFIG_FILE=/etc/popcorn/local.json node server.js`)
 
 #### Configuration Options
