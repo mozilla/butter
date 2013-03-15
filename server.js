@@ -45,9 +45,9 @@ app.configure( 'development', function() {
   app.use( lessMiddleware( WWW_ROOT ));
 });
 
-function setupStore( config ) {
-  var store = FileStore.create( config.type, config.options );
-  if( store.requiresFileSystem ) {
+function setupStore( storeConfig ) {
+  var store = FileStore.create( storeConfig.type, storeConfig.options );
+  if ( store.requiresFileSystem ) {
     app.use( express.static( store.root, JSON.parse( JSON.stringify( config.staticMiddleware ) ) ) );
   }
   return store;
