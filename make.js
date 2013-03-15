@@ -381,7 +381,6 @@ target.deploy = function(){
     "README.md",
     "config",
     "lib",
-    "npm-shrinkwrap.json",
     "package.json",
     "routes",
     "server.js",
