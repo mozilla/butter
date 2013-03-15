@@ -128,7 +128,7 @@ function checkCSS() {
 }
 
 function checkJS() {
-  var dirs = [ "*.js", "config/", "lib/", "public/src/", "public/templates/", "routes/", "test/" ];
+  var dirs = [ "*.js", "lib/", "public/src/", "public/templates/", "routes/", "test/" ];
 
   echo( "# Linting JS files" );
   dirs.forEach( function( value ) {

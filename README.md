@@ -48,39 +48,25 @@ Packaging and Distributing Butter
 Running `node make deploy` will compile all the necessary files into the `dist/` folder.
 Run `NODE_ENV=production node server.js` in the `dist/` directory in order to run the server in production mode.
 
-Cornfield
----------
+Server Configuration
+--------------------
 
-Cornfield is PopcornMaker's back-end server system, designed to serve content to users, store their ongoing work, and publish what they've done.
+Cornfield is Popcorn Maker's back-end server system, designed to serve content to users, store their ongoing work, and publish what they've done.
 
 ### Storage
 
 There are two types of storage Cornfield needs to run:
 
-* A database: To store user project data, a database is required. Cornfield uses the `Sequelize` middleware, so multiple database options are available. You are responsible for setting up and maintaining a PostgreSQL or MySQL database enrivonment if you choose to use either, so make sure a user has access to a database called `popcorn` for cornfield to run correctly.
-
-* A data-blob store: To store published projects, Cornfield can use the filesystem, or Amazon's S3. See the configuration options below for setting up this feature for your environment.
-
+* A database: To store user project data, a database is required. Popcorn Maker currently supports MySQL, PostgreSQL, and Sqlite.
+* A data-blob store: To store published projects, Cornfield can use the filesystem, or Amazon's S3.
 
 ### Configuration
 
-There are several configuration files in cornfield/config/ that control how cornfield works.
-They are applied in order from most general to most specific to present one configuration
-to the server:
+The default server configuration can be found in [lib/default-config.json](lib/default-config.json). To override any of these settings you can:
 
-1. default.json
-2. _hostname_.json
-3. _environment_.json
-4. _hostname_-_environment_.json
-5. runtime.json
-
-_hostname_ and _environment_ are variable:
-
-* _hostname_ - The hostname of the machine. Defaults to the output of `hostname` on the cli.
-* _environment_ - The value of the `NODE_ENV` environment variable. Defaults to `development`.
-
-To change the cornfield configuration for your deployment of Butter, it's best to create a
-new file called _hostname_-_environment_.json that overrides the cornfield defaults.
+1. Use environment variables e.g. (`PORT=1337 node server.js`)
+2. Add a file named `local.json` to the repo root
+3. Use the `BUTTER_CONFIG_FILE` environment variable e.g. (`BUTTER_CONFIG_FILE=/etc/popcorn/local.json node server.js`)
 
 #### Configuration Options
 
@@ -156,68 +142,6 @@ The `fileStore` type is used to setup a backend for storing data:
 #### ImageStore
 
 As part of the configuration, an `imageStore` should be specified to store converted data-uri images for published projects. When a project is saved, the project data is scanned for data-uris which are converted into binary blobs and stored on the server in the `imageStore`. Currently, there are no special checks or functionality for image store content-types. However, the only images which will be converted are jpegs and pngs. Everything else is ignored. See below for an example `imageStore` configuration.
-
-### Sample production config
-
-`alice-production.json:`
-
-This sample config uses a mix of the local file system as well as Amazon S3 for storage.
-
-```javascript
-{
-  "server" : {
-    "bindIP" : "0.0.0.0",
-    "bindPort" : "80"
-  },
-  "logger" : {
-    "format" : "default"
-  },
-  "session" : {
-    "secret": "1721f7a15316469fa4a9-5117d0d20e9f"
-  },
-  "staticMiddleware": {
-    "maxAge": "3600000"
-  },
-  "dirs": {
-    "appHostname": "http://example.org",
-    "embedHostname": "http://s3.amazonaws.com/my-bucket"
-  },
-  "publishStore": {
-    "type": "s3",
-    "options": {
-      "namePrefix": "v",
-      "bucket": "my-bucket",
-      "key": "my-s3-key",
-      "secret": "my-s3-secret",
-      "contentType": "text/html"
-    }
-  },
-  "feedbackStore": {
-    "type": "local",
-    "options": {
-      "root": "./view",
-      "namePrefix": "feedback",
-      "nameSuffix": ".json"
-    }
-  },
-  "crashStore": {
-    "type": "local",
-    "options": {
-      "root": "./view",
-      "namePrefix": "crash",
-      "nameSuffix": ".json"
-    }
-  },
-  "imageStore": {
-    "type": "local",
-    "options": {
-      "root": "./view",
-      "namePrefix": "images",
-      "nameSuffix": ".png",
-    }
-  }
-}
-```
 
 Server Monitoring
 -----------------

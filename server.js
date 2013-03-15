@@ -3,37 +3,29 @@ if ( process.env.NEW_RELIC_HOME ) {
   require( 'newrelic' );
 }
 
-// Given foo/ return foo
-function stripSlash( path ) {
-  return path.replace( /\/$/, '' );
-}
-
 var express = require('express'),
     fs = require('fs'),
     path = require('path'),
     jade = require('jade'),
     app = express(),
     lessMiddleware = require('less-middleware'),
-    CONFIG = require('config'),
-    User = require( './lib/user' )( CONFIG.database ),
+    config = require( './lib/config' ),
+    User = require( './lib/user' )( config.database ),
     filter = require( './lib/filter' )( User.isDBOnline ),
     sanitizer = require( './lib/sanitizer' ),
     FileStore = require('./lib/file-store.js'),
-    habitat = require('habitat'),
     metrics,
     utils,
-    env = new habitat( 'butter' ),
     stores = {},
-    TEMPLATES_DIR = CONFIG.dirs.templates,
-    APP_HOSTNAME = stripSlash( CONFIG.dirs.appHostname ),
+    APP_HOSTNAME = config.dirs.appHostname,
     // If a separate hostname is given for embed, use it, otherwise use app's hostname
-    WWW_ROOT = path.resolve( CONFIG.dirs.wwwRoot || path.join( __dirname, ".." ) ),
-    VALID_TEMPLATES = CONFIG.templates;
+    WWW_ROOT = path.resolve( config.dirs.wwwRoot || path.join( __dirname, ".." ) ),
+    VALID_TEMPLATES = config.templates;
 
 var templateConfigs = {};
 
 function readTemplateConfig( templateName, templatedPath ) {
-  var configPath = templatedPath.replace( '{{templateBase}}', TEMPLATES_DIR + '/' );
+  var configPath = templatedPath.replace( '{{templateBase}}', config.dirs.templates + '/' );
   fs.readFile( configPath, 'utf8', function( err, conf ) {
     var configPathBase = configPath.substring( 0, configPath.lastIndexOf( '/' ) );
     conf = JSON.parse( conf );
@@ -56,17 +48,17 @@ app.configure( 'development', function() {
 function setupStore( config ) {
   var store = FileStore.create( config.type, config.options );
   if( store.requiresFileSystem ) {
-    app.use( express.static( store.root, JSON.parse( JSON.stringify( CONFIG.staticMiddleware ) ) ) );
+    app.use( express.static( store.root, JSON.parse( JSON.stringify( config.staticMiddleware ) ) ) );
   }
   return store;
 }
 
 app.configure( function() {
-  app.use( express.logger( CONFIG.logger ) )
-    .use( express.static( WWW_ROOT, JSON.parse( JSON.stringify( CONFIG.staticMiddleware ) ) ) )
+  app.use( express.logger( config.logger ) )
+    .use( express.static( WWW_ROOT, JSON.parse( JSON.stringify( config.staticMiddleware ) ) ) )
     .use( express.bodyParser() )
     .use( express.cookieParser() )
-    .use( express.cookieSession( env.get( 'session', CONFIG.session ) ) )
+    .use( express.cookieSession( config.session ) )
     .use( express.csrf() )
     /* Show Zeus who's boss
      * This only affects requests under /api and /persona, not static files
@@ -79,23 +71,23 @@ app.configure( function() {
     .use( app.router );
 
   // File Store types and options come from JSON config file.
-  stores.publish = setupStore( CONFIG.publishStore );
-  stores.crash = setupStore( CONFIG.crashStore );
-  stores.feedback = setupStore( CONFIG.feedbackStore );
-  stores.images = setupStore( CONFIG.imageStore );
+  stores.publish = setupStore( config.publishStore );
+  stores.crash = setupStore( config.crashStore );
+  stores.feedback = setupStore( config.feedbackStore );
+  stores.images = setupStore( config.imageStore );
 
   // Metrics [optional]: allow data to be collected during runtime.
   // See JSON config file for details on metrics setup.
-  metrics = require('./lib/metrics.js').create( CONFIG.metrics );
+  metrics = require('./lib/metrics.js').create( config.metrics );
 
   utils = require( './lib/utils' )({
-    EMBED_HOSTNAME: CONFIG.dirs.embedHostname ? stripSlash( CONFIG.dirs.embedHostname ) : APP_HOSTNAME,
+    EMBED_HOSTNAME: config.dirs.embedHostname ? config.dirs.embedHostname : APP_HOSTNAME,
     EMBED_SUFFIX: '_'
   }, stores );
 });
 
 require( 'express-persona' )( app, {
-  audience: CONFIG.dirs.appHostname
+  audience: config.dirs.appHostname
 });
 
 require('./routes')( app, User, filter, sanitizer, stores, utils, metrics );
@@ -345,10 +337,10 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
   });
 });
 
-var port = process.env.PORT || CONFIG.server.bindPort;
+var port = process.env.PORT || config.server.bindPort;
 
-var server = app.listen(port, CONFIG.server.bindIP, function() {
+var server = app.listen(port, config.server.bindIP, function() {
   var addy = server.address();
-  console.log('HTTP Server started on http://' + CONFIG.server.bindIP + ':' + addy.port);
+  console.log('HTTP Server started on http://' + config.server.bindIP + ':' + addy.port);
   console.log('Press Ctrl+C to stop');
 });

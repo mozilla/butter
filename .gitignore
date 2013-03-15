@@ -12,8 +12,8 @@
 *.wav
 *.webm
 *~
-/config/runtime.json
 /dist/
+/local.json
 /node_modules/
 /public/css/butter.ui.css
 /public/css/embed-shell.css
