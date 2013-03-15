@@ -1,4 +1,4 @@
-%define node_version 0.8.22
+%define node_version 0.8.12
 %define node_prefix /opt/node/%{node_version}
 
 Name:		butter
