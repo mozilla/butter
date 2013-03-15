@@ -141,6 +141,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
 
       _media.listen( "trackeventremoved", function( e ){
         var trackEvent = e.data;
+        butter.editor.closeTrackEventEditor( trackEvent );
         trackEvent.view.unlisten( "trackeventmousedown", onTrackEventMouseDown );
         trackEvent.unlisten( "trackeventselected", onTrackEventSelected );
         trackEvent.unlisten( "trackeventdeselected", onTrackEventDeselected );
@@ -223,7 +224,6 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
           }
           trackEvent.update( popcornOptions );
         }
-        butter.editor.editTrackEvent( trackEvent );
       }
     }
 

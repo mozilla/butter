@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitizer" ],
-        function( EventManager, TrackEvent, TrackView, Sanitizer ){
+define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitizer", "util/undoredo" ],
+        function( EventManager, TrackEvent, TrackView, Sanitizer, UndoRedo ){
 
   var __guid = 0,
       NAME_PREFIX = "Layer ",
@@ -217,9 +217,9 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
         }
         trackEvent.popcornOptions[optionName] = Sanitizer.reconstituteHTML(content);
       });
-    },
+    };
 
-    this.addTrackEvent = function( trackEvent ) {
+    var _addTrackEvent = this._addTrackEvent = function( trackEvent ) {
       var oldSelected = false;
 
       if ( !( trackEvent instanceof TrackEvent ) ) {
@@ -236,7 +236,7 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
       }
 
       // Sanitize the track even data prior to building the UI.
-      this.sanitizeTrackEventData(trackEvent);
+      _this.sanitizeTrackEventData( trackEvent );
 
       trackEvent.bind( _this, _popcornWrapper );
 
@@ -271,12 +271,35 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
       return trackEvent;
     }; //addTrackEvent
 
+    this.addTrackEvent = function( trackEvent, node ) {
+      trackEvent = _addTrackEvent( trackEvent );
+      node = node || UndoRedo;
+
+      node.register({
+        execute: function() {
+          if ( !trackEvent.track ) {
+            _addTrackEvent( trackEvent );
+          } else if ( trackEvent.track !== _this ) {
+            trackEvent.track._removeTrackEvent( trackEvent, true );
+            _addTrackEvent( trackEvent );
+          }
+        },
+        undo: function() {
+          if ( trackEvent.track === _this ) {
+            _removeTrackEvent( trackEvent );
+          }
+        }
+      });
+
+      return trackEvent;
+    };
+
     /*
      * Method removeTrackEvent
      *
      * @param {Object} trackEvent: The trackEvent to be removed from this track
      */
-    this.removeTrackEvent = function( trackEvent, preventRemove ) {
+    var _removeTrackEvent = this._removeTrackEvent = function( trackEvent, preventRemove ) {
       var idx = _trackEvents.indexOf( trackEvent );
       if ( idx > -1 ) {
         _trackEvents.splice( idx, 1 );
@@ -289,8 +312,30 @@ define( [ "./eventmanager", "./trackevent", "./views/track-view", "util/sanitize
         _view.removeTrackEvent( trackEvent );
         trackEvent.unbind( preventRemove );
         _this.dispatch( "trackeventremoved", trackEvent );
+
         return trackEvent;
       }
+    };
+
+    this.removeTrackEvent = function( trackEvent, preventRemove, node ) {
+      var oldTrack = trackEvent.track;
+      trackEvent = _removeTrackEvent( trackEvent, preventRemove );
+      node = node || UndoRedo;
+
+      node.register({
+        execute: function() {
+          if ( trackEvent.track && trackEvent.track === _this ) {
+            _removeTrackEvent( trackEvent, preventRemove );
+          }
+        },
+        undo: function() {
+          if ( trackEvent.track && trackEvent.track !== _this ) {
+            trackEvent.track._removeTrackEvent( trackEvent, true );
+          }
+          _addTrackEvent( trackEvent );
+        }
+      });
+      return trackEvent;
     };
 
     this.findOverlappingTrackEvent = function( start, end, ignoreTrackEvent ) {

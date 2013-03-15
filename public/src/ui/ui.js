@@ -6,12 +6,12 @@ define( [ "core/eventmanager", "./toggler",
           "./header", "./unload-dialog", "crashreporter",
           "first-run", "./tray", "editor/ui-kit",
           "core/trackevent", "dialog/dialog",
-          "util/dragndrop" ],
+          "util/dragndrop", "util/undoredo" ],
   function( EventManager, Toggler, Header,
             UnloadDialog, CrashReporter,
             FirstRun, Tray, UIKitDummy,
             TrackEvent, Dialog,
-            DragNDrop ){
+            DragNDrop, UndoRedo ){
 
   var TRANSITION_DURATION = 500,
       BUTTER_CSS_FILE = "{css}/butter.ui.css";
@@ -145,7 +145,7 @@ define( [ "core/eventmanager", "./toggler",
      * @param {TrackEvent} trackEvent: TrackEvent to move
      * @param {Number} amount: Amount by which the event is to move.
      */
-    function moveTrackEventLeft( trackEvent, amount ) {
+    function moveTrackEventLeft( trackEvent, amount, node ) {
       var currentPopcornOptions = trackEvent.popcornOptions,
           currentDuration = currentPopcornOptions.end - currentPopcornOptions.start,
           overlappingTrackEvent,
@@ -173,7 +173,7 @@ define( [ "core/eventmanager", "./toggler",
         popcornOptions.end = popcornOptions.start + currentDuration;
       }
 
-      trackEvent.update( popcornOptions );
+      trackEvent.update( popcornOptions, node );
     }
 
     /**
@@ -184,7 +184,7 @@ define( [ "core/eventmanager", "./toggler",
      * @param {TrackEvent} trackEvent: TrackEvent to move
      * @param {Number} amount: Amount by which the event is to shrink.
      */
-    function shrinkTrackEvent( trackEvent, amount ) {
+    function shrinkTrackEvent( trackEvent, amount, node ) {
       var currentPopcornOptions = trackEvent.popcornOptions,
           popcornOptions;
 
@@ -201,7 +201,7 @@ define( [ "core/eventmanager", "./toggler",
 
       // No need to check for overlapping TrackEvents here, since you can't shrink your TrackEvent to overlap another. That's silly.
 
-      trackEvent.update( popcornOptions );
+      trackEvent.update( popcornOptions, node );
     }
 
     /**
@@ -212,7 +212,7 @@ define( [ "core/eventmanager", "./toggler",
      * @param {TrackEvent} trackEvent: TrackEvent to move
      * @param {Number} amount: Amount by which the event is to move.
      */
-    function moveTrackEventRight( trackEvent, amount ) {
+    function moveTrackEventRight( trackEvent, amount, node ) {
       var currentPopcornOptions = trackEvent.popcornOptions,
           currentMediaDuration = butter.currentMedia.duration,
           currentDuration = currentPopcornOptions.end - currentPopcornOptions.start,
@@ -240,7 +240,7 @@ define( [ "core/eventmanager", "./toggler",
         popcornOptions.end = overlappingTrackEvent.popcornOptions.start;
         popcornOptions.start = popcornOptions.end - currentDuration;
       }
-      trackEvent.update( popcornOptions );
+      trackEvent.update( popcornOptions, node );
     }
 
     /**
@@ -250,7 +250,7 @@ define( [ "core/eventmanager", "./toggler",
      *
      * @param {TrackEvent} trackEvent: TrackEvent to grow is to shrink.
      */
-    function growTrackEvent( trackEvent, amount ) {
+    function growTrackEvent( trackEvent, amount, node ) {
       var currentPopcornOptions = trackEvent.popcornOptions,
           overlappingTrackEvent,
           popcornOptions;
@@ -274,7 +274,7 @@ define( [ "core/eventmanager", "./toggler",
         popcornOptions.end = overlappingTrackEvent.popcornOptions.end;
       }
 
-      trackEvent.update( popcornOptions );
+      trackEvent.update( popcornOptions, node );
     }
 
     Object.defineProperties( this, {
@@ -339,7 +339,8 @@ define( [ "core/eventmanager", "./toggler",
 
       // left key
       37: function( e ) {
-        var amount = e.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL,
+        var node,
+            amount = e.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL,
 
             // Sorted selected events are used here because they should be moved from right to left.
             // Otherwise, overlapping can occur instantly, producing unexpected results.
@@ -349,16 +350,18 @@ define( [ "core/eventmanager", "./toggler",
 
         if( selectedEvents.length ) {
           e.preventDefault();
+          node = new UndoRedo.Node();
           if ( e.ctrlKey || e.metaKey ) {
             for( i = 0, seLength = selectedEvents.length; i < seLength; ++i ) {
-              shrinkTrackEvent( selectedEvents[ i ], amount );
+              shrinkTrackEvent( selectedEvents[ i ], amount, node );
             }
           }
           else {
             for( i = selectedEvents.length - 1; i >= 0; --i ) {
-              moveTrackEventLeft( selectedEvents[ i ], amount );
+              moveTrackEventLeft( selectedEvents[ i ], amount, node );
             }
           }
+          UndoRedo.register( node );
         }
         else {
           butter.currentTime -= amount;
@@ -370,6 +373,7 @@ define( [ "core/eventmanager", "./toggler",
         var track,
             trackEvent,
             nextTrack,
+            node,
 
             //copy this selectedEvents because it will change inside loop
             selectedEvents = butter.selectedEvents.slice();
@@ -378,20 +382,23 @@ define( [ "core/eventmanager", "./toggler",
           e.preventDefault();
         }
 
+        node = new UndoRedo.Node();
+
         for ( var i = 0, seLength = selectedEvents.length; i < seLength; i++ ) {
           trackEvent = selectedEvents[ i ];
           track = trackEvent.track;
           nextTrack = butter.currentMedia.getLastTrack( track );
           if ( nextTrack && !nextTrack.findOverlappingTrackEvent( trackEvent ) ) {
-            track.removeTrackEvent( trackEvent );
-            nextTrack.addTrackEvent( trackEvent );
+            track.removeTrackEvent( trackEvent, true, node );
+            nextTrack.addTrackEvent( trackEvent, node );
           }
         }
       },
 
       // right key
       39: function( e ) {
-        var amount = e.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL,
+        var node,
+            amount = e.shiftKey ? NUDGE_INCREMENT_LARGE : NUDGE_INCREMENT_SMALL,
 
             // Sorted selected events are used here because they should be moved from right to left.
             // Otherwise, overlapping can occur instantly, producing unexpected results.
@@ -401,16 +408,18 @@ define( [ "core/eventmanager", "./toggler",
 
         if( selectedEvents.length ) {
           e.preventDefault();
+          node = new UndoRedo.Node();
           if ( e.ctrlKey || e.metaKey ) {
             for( i = 0, seLength = selectedEvents.length; i < seLength; ++i ) {
-              growTrackEvent( selectedEvents[ i ], amount );
+              growTrackEvent( selectedEvents[ i ], amount, node );
             }
           }
           else {
             for( i = 0, seLength = selectedEvents.length; i < seLength; ++i ) {
-              moveTrackEventRight( selectedEvents[ i ], amount );
+              moveTrackEventRight( selectedEvents[ i ], amount, node );
             }
           }
+          UndoRedo.register( node );
         }
         else {
           butter.currentTime += amount;
@@ -422,6 +431,7 @@ define( [ "core/eventmanager", "./toggler",
         var track,
             trackEvent,
             nextTrack,
+            node,
 
             //copy this selectedEvents because it will change inside loop
             selectedEvents = butter.selectedEvents.slice();
@@ -430,15 +440,18 @@ define( [ "core/eventmanager", "./toggler",
           e.preventDefault();
         }
 
+        node = new UndoRedo.Node();
+
         for ( var i = 0, seLength = selectedEvents.length; i < seLength; i++ ) {
           trackEvent = selectedEvents[ i ];
           track = trackEvent.track;
           nextTrack = butter.currentMedia.getNextTrack( track );
           if ( nextTrack && !nextTrack.findOverlappingTrackEvent( trackEvent ) ) {
-            track.removeTrackEvent( trackEvent );
-            nextTrack.addTrackEvent( trackEvent );
+            track.removeTrackEvent( trackEvent, true, node );
+            nextTrack.addTrackEvent( trackEvent, node );
           }
         }
+        UndoRedo.register( node );
       },
 
       27: function() { // esc key
@@ -480,11 +493,13 @@ define( [ "core/eventmanager", "./toggler",
             data: selectedEvents.length + " track events",
             events: {
               submit: function() {
+                var node = new UndoRedo.Node();
                 for( i = 0; i < l; i++ ) {
                   selectedEvent = selectedEvents[ i ];
                   butter.editor.closeTrackEventEditor( selectedEvent );
-                  selectedEvent.track.removeTrackEvent( selectedEvent );
+                  selectedEvent.track.removeTrackEvent( selectedEvent, false, node );
                 }
+                UndoRedo.register( node );
                 dialog.close();
               },
               cancel: function() {
@@ -527,6 +542,16 @@ define( [ "core/eventmanager", "./toggler",
           butter.pasteTrackEvents();
         }
       }, // v key
+
+      90: function( e ) { // z key
+        if ( e.ctrlKey || e.metaKey ) {
+          if ( e.shiftKey ) {
+            UndoRedo.redo();
+          } else {
+            UndoRedo.undo();
+          }
+        }
+      }
     };
 
     function onKeyDown( e ){
