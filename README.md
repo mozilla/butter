@@ -62,7 +62,7 @@ There are two types of storage Cornfield needs to run:
 
 ### Configuration
 
-The default server configuration can be found in [lib/default-config.json](lib/default-config.json). To override any of these settings you can:
+The default server configuration can be found in [lib/default-config.js](lib/default-config.js). To override any of these settings you can:
 
 1. Use environment variables e.g. (`PORT=1337 node server.js`)
 2. Add a file named `local.json`. `server.js` will recurse up the directory tree looking for it
@@ -70,9 +70,8 @@ The default server configuration can be found in [lib/default-config.json](lib/d
 
 #### Configuration Options
 
-  - `server` settings for the cornfield server
-    - `bindIP` the IP or hostname to use for the server (e.g., localhost).
-    - `bindPort` the Port number to use for the server (e.g., 8888).  If using a port number lower than 1024, the server will have to be run as root.
+  - `PORT` the port to bind the server to
+  - `hostname` the hostname for the server (e.g., `http://localhost:8888`, `https://popcorn.webmaker.org`). **This must match your browser's address bar otherwise Persona login will not work**
   - `logger` settings for server logging
     - `format` the logging format to use.  Possible values include: default, short, tiny, dev.
   - `session` settings for user sessions
@@ -83,8 +82,7 @@ The default server configuration can be found in [lib/default-config.json](lib/d
   - `dirs` settings for various directories, paths, hostnames
     - `wwwRoot` the server's WWW root directory (e.g., `../`)
     - `templates` the location of templates (e.g., `../templates`)
-    - `appHostname` the hostname URL for the application, usually the same as `server.bindIP` and `server.bindPort` (e.g., `http://localhost:8888`)
-    - `embedHostname` *[optional]* the hostname URL where published embed documents are stored, if different from `dirs.appHostname` (e.g., `http://s3.amazonaws.com/your-bucket`)
+    - `embedHostname` *[optional]* the hostname URL where published embed documents are stored, if different from `hostname` (e.g., `http://s3.amazonaws.com/your-bucket`)
   - `templates` list of templates to serve.  The format is as follows:
     `<template-name>`: `{{templateBase}}<path/to/template/config.json>`.  The `{{templateBase}}` string will be replaced by the value in `dirs.templates` (e.g., "basic": "{{templateBase}}basic/config.json")
 
