@@ -18,14 +18,16 @@ var express = require('express'),
     utils,
     stores = {},
     APP_HOSTNAME = config.dirs.appHostname,
-    // If a separate hostname is given for embed, use it, otherwise use app's hostname
-    WWW_ROOT = path.resolve( config.dirs.wwwRoot || path.join( __dirname, ".." ) ),
+    WWW_ROOT = path.resolve( __dirname, config.dirs.wwwRoot ),
     VALID_TEMPLATES = config.templates;
 
 var templateConfigs = {};
 
 function readTemplateConfig( templateName, templatedPath ) {
   var configPath = templatedPath.replace( '{{templateBase}}', config.dirs.templates + '/' );
+  // Resolve paths relative to server.js, not the cwd
+  configPath = path.resolve( __dirname, configPath );
+
   fs.readFile( configPath, 'utf8', function( err, conf ) {
     var configPathBase = configPath.substring( 0, configPath.lastIndexOf( '/' ) );
     conf = JSON.parse( conf );
@@ -92,22 +94,22 @@ require( 'express-persona' )( app, {
 
 require('./routes')( app, User, filter, sanitizer, stores, utils, metrics );
 
-function writeEmbedShell( path, url, data, callback ) {
+function writeEmbedShell( embedPath, url, data, callback ) {
   if( !writeEmbedShell.templateFn ) {
-    writeEmbedShell.templateFn = jade.compile( fs.readFileSync( 'views/embed-shell.jade', 'utf8' ),
+    writeEmbedShell.templateFn = jade.compile( fs.readFileSync( path.resolve( __dirname, 'views/embed-shell.jade' ), 'utf8' ),
                                           { filename: 'embed-shell.jade', pretty: true } );
   }
 
-  stores.publish.write( path, writeEmbedShell.templateFn( data ), callback );
+  stores.publish.write( embedPath, writeEmbedShell.templateFn( data ), callback );
 }
 
-function writeEmbed( path, url, data, callback ) {
+function writeEmbed( embedPath, url, data, callback ) {
   if( !writeEmbed.templateFn ) {
-    writeEmbed.templateFn = jade.compile( fs.readFileSync( 'views/embed.jade', 'utf8' ),
+    writeEmbed.templateFn = jade.compile( fs.readFileSync( path.resolve( __dirname, 'views/embed.jade' ), 'utf8' ),
                                           { filename: 'embed.jade', pretty: true } );
   }
 
-  stores.publish.write( path, writeEmbed.templateFn( data ), callback );
+  stores.publish.write( embedPath, writeEmbed.templateFn( data ), callback );
 }
 
 app.post( '/api/publish/:id',
