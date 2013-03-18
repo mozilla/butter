@@ -579,7 +579,7 @@
                 url,
                 i, l,
                 fallbacks = [],
-                source = [];
+                sources = [];
             if( importData.name ) {
               _name = importData.name;
             }
@@ -591,7 +591,20 @@
               _this.url = "#t=," + _duration;
             }
             if ( importData.clipData ) {
-              _clipData = importData.clipData;
+              var tempClipData = importData.clipData,
+                  source;
+
+              // We have changed how we use the clip data by keying differently.
+              // This is to prevent duplicate clips being added via the old way by keying them
+              // our new way on import.
+              for ( var key in tempClipData ) {
+                if ( tempClipData.hasOwnProperty( key ) ) {
+                  source = tempClipData[ key ];
+                  if ( !_clipData[ source ] ) {
+                    _clipData[ source ] = source;
+                  }
+                }
+              }
             }
             if( importData.tracks ){
               var importTracks = importData.tracks;
@@ -609,10 +622,10 @@
                   if ( !Array.isArray( url ) ) {
                     url = [ url ];
                   }
-                  // If source is a single array and of type null player, don't bother making a sequence.
+                  // If sources is a single array and of type null player, don't bother making a sequence.
                   if ( url.length > 1 || !( /#t=\d*,?\d+?/ ).test( url[ 0 ] ) ) {
                     // grab first source as main source.
-                    source.push( URI.makeUnique( url.shift() ).toString() );
+                    sources.push( URI.makeUnique( url.shift() ).toString() );
                     for ( i = 0; i < url.length; i++ ) {
                       fallbacks.push( URI.makeUnique( url[ i ] ).toString() );
                     }
@@ -623,8 +636,8 @@
                       popcornOptions: {
                         start: 0,
                         end: _duration,
-                        source: source,
-                        title: URI.stripUnique( source[ 0 ] ).path,
+                        source: sources,
+                        title: URI.stripUnique( sources[ 0 ] ).path,
                         fallback: fallbacks,
                         duration: _duration,
                         target: "video-container"
