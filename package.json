@@ -102,6 +102,7 @@
     "sqlite3": "2.1.5"
   },
   "devDependencies": {
+    "awsbox": "0.4.2",
     "supertest": "0.5.1",
     "tap": "0.4.0"
   },
