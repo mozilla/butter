@@ -198,6 +198,8 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
           desiredTrack = e.data.track,
           oldTrack = trackEvent.track;
 
+      trackEvent.view.element.style.top = "0";
+
       createTrackEventFromDrop( trackEvent, popcornOptions, oldTrack, desiredTrack );
     }
 
