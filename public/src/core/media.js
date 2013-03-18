@@ -579,7 +579,7 @@
                 url,
                 i, l,
                 fallbacks = [],
-                source = [];
+                sources = [];
             if( importData.name ) {
               _name = importData.name;
             }
@@ -622,10 +622,10 @@
                   if ( !Array.isArray( url ) ) {
                     url = [ url ];
                   }
-                  // If source is a single array and of type null player, don't bother making a sequence.
+                  // If sources is a single array and of type null player, don't bother making a sequence.
                   if ( url.length > 1 || !( /#t=\d*,?\d+?/ ).test( url[ 0 ] ) ) {
                     // grab first source as main source.
-                    source.push( URI.makeUnique( url.shift() ).toString() );
+                    sources.push( URI.makeUnique( url.shift() ).toString() );
                     for ( i = 0; i < url.length; i++ ) {
                       fallbacks.push( URI.makeUnique( url[ i ] ).toString() );
                     }
@@ -636,8 +636,8 @@
                       popcornOptions: {
                         start: 0,
                         end: _duration,
-                        source: source,
-                        title: URI.stripUnique( source[ 0 ] ).path,
+                        source: sources,
+                        title: URI.stripUnique( sources[ 0 ] ).path,
                         fallback: fallbacks,
                         duration: _duration,
                         target: "video-container"
