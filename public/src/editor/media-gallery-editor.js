@@ -24,12 +24,12 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
 
       _butter,
       _media,
-      _guid = 0,
       _mediaLoadTimeout,
       _cancelSpinner,
-      _this,
       MEDIA_LOAD_TIMEOUT = 10000,
-      TIMEOUT_ERROR = "Your media source is taking too long to load";
+      TIMEOUT_ERROR = "Your media source is taking too long to load",
+      _this,
+      TRANSITION_TIME = 2000;
 
   function toggleAddNewMediaPanel() {
     _parentElement.classList.toggle( "add-media-collapsed" );
@@ -39,6 +39,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     _urlInput.value = "";
 
     clearTimeout( _mediaLoadTimeout );
+    clearTimeout( _cancelSpinner );
     _urlInput.classList.remove( "error" );
     _addMediaPanel.classList.remove( "invalid-field" );
     _errorMessage.classList.add( "hidden" );
@@ -80,48 +81,48 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     }, 300 );
   }
 
-  function onSuccess( data ) {
-    var el = _GALLERYITEM.cloneNode( true ),
-        deleteBtn = el.querySelector( ".mg-delete-btn" ),
+  function addElements( data, el ) {
+    el = el || _GALLERYITEM.cloneNode( true );
+
+    var deleteBtn = el.querySelector( ".mg-delete-btn" ),
         thumbnailBtn = el.querySelector( ".mg-thumbnail" ),
         thumbnailImg,
-        idx = _guid++;
+        source = data.source;
 
     DragNDrop.helper( thumbnailBtn, {
       pluginOptions: {
         source: data.source,
         denied: data.denied,
         end: data.duration,
-        from: data.from,
+        from: data.from || 0,
         title: data.title,
         duration: data.duration,
         hidden: data.hidden
+      },
+      start: function() {
+        for ( var i = 0, l = _butter.targets.length; i < l; ++i ) {
+          _butter.targets[ i ].iframeDiv.style.display = "block";
+        }
+      },
+      stop: function() {
+        _butter.currentMedia.pause();
+        for ( var i = 0, l = _butter.targets.length; i < l; ++i ) {
+          _butter.targets[ i ].iframeDiv.style.display = "none";
+        }
       }
     });
-
-    if ( !_media.clipData[ idx ] ) {
-      _media.clipData[ idx ] = data.source;
-      _butter.dispatch( "mediaclipadded" );
-
-      el.classList.add( "new" );
-
-      setTimeout(function() {
-        el.classList.remove( "new" );
-      }, 2000 );
-    }
 
     thumbnailBtn.setAttribute( "data-popcorn-plugin-type", "sequencer" );
     thumbnailBtn.setAttribute( "data-butter-draggable-type", "plugin" );
     deleteBtn.addEventListener( "click", function() {
 
-      thumbnailBtn.removeEventListener( "click", addEvent, false );
+    thumbnailBtn.removeEventListener( "click", addEvent, false );
       _galleryList.removeChild( el );
       _this.scrollbar.update();
-      delete _media.clipData[ idx ];
+      delete _media.clipData[ source ];
       _butter.dispatch( "mediaclipremoved" );
     }, false );
 
-    clearTimeout( _cancelSpinner );
     _loadingSpinner.classList.add( "hidden" );
 
     el.querySelector( ".mg-title" ).innerHTML = data.title;
@@ -181,12 +182,31 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     resetInput();
   }
 
+  function onSuccess( data ) {
+    var el = _GALLERYITEM.cloneNode( true ),
+        source = data.source;
+
+    if ( !_media.clipData[ source ] ) {
+      _media.clipData[ source ] = source;
+      _butter.dispatch( "mediaclipadded" );
+
+      el.classList.add( "new" );
+
+      setTimeout(function() {
+        el.classList.remove( "new" );
+      }, TRANSITION_TIME );
+
+      addElements( data, el );
+    } else {
+      onDenied( "Your gallery already has that media added to it" );
+    }
+  }
+
   function addMediaToGallery( url, onDenied ) {
-    var data = {},
-        val = _urlInput.value;
+    var data = {};
 
     // Don't trigger with empty inputs
-    if ( !val ) {
+    if ( !url ) {
       return;
     }
 
@@ -268,7 +288,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
 
     for ( var key in clips ) {
       if ( clips.hasOwnProperty( key ) ) {
-        MediaUtils.getMetaData( clips[ key ], onSuccess );
+        MediaUtils.getMetaData( clips[ key ], addElements );
       }
     }
 

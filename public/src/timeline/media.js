@@ -11,7 +11,7 @@ define( [ "core/trackevent", "core/track", "core/eventmanager",
             Status, TrackHandles, SuperScrollbar,
             LangUtils, MEDIA_INSTANCE_LAYOUT ) {
 
-  var DEFAULT_BOUNDS = [ 0, 0.5 ];
+  var DEFAULT_BOUNDS = [ 0, 1 ];
 
   function MediaInstance( butter, media ) {
 
