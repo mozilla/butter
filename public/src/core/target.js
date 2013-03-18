@@ -16,11 +16,16 @@
           _name = options.name || _id,
           _element,
           _pageElement,
-          _this = this;
+          _this = this,
+          _iframeCover;
 
       EventManager.extend( _this );
 
       _element = document.getElementById( options.element );
+
+      _iframeCover = document.createElement( "div" );
+      _iframeCover.classList.add( "butter-iframe-fix" );
+      _element.appendChild( _iframeCover );
 
       if( !_element ){
         _logger.log( "Warning: Target element is null." );
@@ -30,6 +35,7 @@
           drop: function( element, position, popcornOptions ){
             _this.dispatch( "trackeventrequested", {
               element: element,
+              iframeDiv: _iframeCover,
               target: _this,
               position: position,
               popcornOptions: popcornOptions
@@ -75,6 +81,12 @@
           enumerable: true,
           get: function(){
             return _element;
+          }
+        },
+        iframeDiv: {
+          enumerable: true,
+          get: function(){
+            return _iframeCover;
           }
         },
         isDefault: {

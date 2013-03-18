@@ -10,15 +10,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
     var _parentElement = LangUtils.domFragment( EDITOR_LAYOUT, ".plugin-list-editor" ),
         _containerElement = _parentElement.querySelector( ".plugin-container" ),
         _targets = butter.targets,
-        _iframeCovers = [],
-        _iframeCover;
-
-    for ( var i = 0, l = _targets.length; i < l; i++ ) {
-      _iframeCover = document.createElement( "div" );
-      _iframeCover.classList.add( "butter-iframe-fix" );
-      _targets[ i ].element.appendChild( _iframeCover );
-      _iframeCovers.push( _iframeCover );
-    }
+        _iframeCovers = document.querySelectorAll( ".butter-iframe-fix" );
 
     var _pluginArchetype = _containerElement.querySelector( ".butter-plugin-tile" );
     _pluginArchetype.parentNode.removeChild( _pluginArchetype );
