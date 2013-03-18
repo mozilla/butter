@@ -51,11 +51,19 @@
         target.appendChild( container );
       };
       options.displayLoading = function() {
+        var bigPlay = document.getElementById( "controls-big-play-button" );
         _this.on( "play", options._surpressPlayEvent );
+        if ( bigPlay ) {
+          bigPlay.classList.add( "hide-button" );
+        }
         document.querySelector( ".loading-message" ).classList.add( "show-media" );
       };
       options.hideLoading = function() {
+        var bigPlay = document.getElementById( "controls-big-play-button" );
         _this.off( "play", options._surpressPlayEvent );
+        if ( bigPlay ) {
+          bigPlay.classList.remove( "hide-button" );
+        }
         document.querySelector( ".loading-message" ).classList.remove( "show-media" );
       };
 
@@ -199,7 +207,6 @@
           if ( buffered.start( i ) <= options._clip.currentTime() &&
                buffered.end( i ) > options._clip.currentTime() ) {
             // We found a valid range so playing can resume.
-            options.hideLoading();
             if ( options.playWhenReady ) {
               options.playWhenReady = false;
               _this.play();
@@ -214,7 +221,6 @@
           options.playWhenReady = true;
           _this.pause();
         }
-        options.displayLoading();
       };
 
       // Ensures seek time is seekable, and not already seeked.
