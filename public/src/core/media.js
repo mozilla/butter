@@ -582,7 +582,7 @@
                 fallbacks = [],
                 sources = [];
 
-            function importTracks() {
+            function doImportTracks() {
               if ( importData.tracks ) {
                 var importTracks = importData.tracks;
                 if( Array.isArray( importTracks ) ) {
@@ -641,12 +641,12 @@
             if ( importData.duration >= 0 ) {
               _duration = importData.duration;
               _this.url = "#t=," + _duration;
-              importTracks();
+              doImportTracks();
             } else {
               MediaTypes.getMetaData( importData.url[ 0 ], function success( data ) {
                 _duration = data.duration;
                 _this.url = "#t=," + _duration;
-                importTracks();
+                doImportTracks();
               });
             }
             if ( importData.clipData ) {
