@@ -94,7 +94,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
         source: data.source,
         denied: data.denied,
         end: data.duration,
-        from: data.from,
+        from: data.from || 0,
         title: data.title,
         duration: data.duration,
         hidden: data.hidden
@@ -230,6 +230,8 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     } else {
       _addBtn.classList.add( "hidden" );
     }
+    clearTimeout( _cancelSpinner );
+    clearTimeout( _mediaLoadTimeout );
     _addMediaPanel.classList.remove( "invalid-field" );
     _loadingSpinner.classList.add( "hidden" );
     _errorMessage.classList.add( "hidden" );
