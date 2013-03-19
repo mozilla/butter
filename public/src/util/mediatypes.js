@@ -10,7 +10,10 @@ define( [ "util/xhr", "util/uri" ],
   var REGEX_MAP = {
         youtube: /(?:https?:\/\/www\.|https?:\/\/|www\.|\.|^)youtu/,
         vimeo: /https?:\/\/(www\.)?vimeo.com\/(\d+)($|\/)/,
-        soundcloud: /(?:https?:\/\/www\.|https?:\/\/|www\.|\.|^)(soundcloud)/
+        soundcloud: /(?:https?:\/\/www\.|https?:\/\/|www\.|\.|^)(soundcloud)/,
+        // supports #t=<start>,<duration>
+        // where start or duration can be: X, X.X or XX:XX
+        "null": /^\s*#t=(?:\d*(?:(?:\.|\:)?\d+)?),?(\d+(?:(?:\.|\:)\d+)?)\s*$/
       },
       YOUTUBE_EMBED_DISABLED = "Embedding of this YouTube video is disabled",
       SOUNDCLOUD_EMBED_DISABLED = "Embedding of this SoundCloud video is disabled";
@@ -146,6 +149,13 @@ define( [ "util/xhr", "util/uri" ],
             duration: respData.duration,
             title: respData.title
           });
+        });
+      } else if ( type === "null" ) {
+        successCallback({
+          source: baseUrl,
+          type: type,
+          title: baseUrl,
+          duration: REGEX_MAP[ "null" ].exec( baseUrl )[ 1 ]
         });
       } else if ( type === "html5" ) {
         videoElem = document.createElement( "video" );
