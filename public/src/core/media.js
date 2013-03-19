@@ -596,10 +596,7 @@
                   // Insert previous base media as a sequence event as the last track.
                   if ( importData.url && _duration >= 0 ) {
                     var firstSource;
-                    url = importData.url;
-                    if ( !Array.isArray( url ) ) {
-                      url = [ url ];
-                    }
+
                     // If sources is a single array and of type null player, don't bother making a sequence.
                     if ( url.length > 1 || !( /#t=\d*,?\d+?/ ).test( url[ 0 ] ) ) {
                       // grab first source as main source.
@@ -638,12 +635,18 @@
             if( importData.target ){
               _this.target = importData.target;
             }
+
+            url = importData.url;
+            if ( !Array.isArray( url ) ) {
+              url = [ url ];
+            }
+
             if ( importData.duration >= 0 ) {
               _duration = importData.duration;
               _this.url = "#t=," + _duration;
               doImportTracks();
             } else {
-              MediaTypes.getMetaData( importData.url[ 0 ], function success( data ) {
+              MediaTypes.getMetaData( url[ 0 ], function success( data ) {
                 _duration = data.duration;
                 _this.url = "#t=," + _duration;
                 doImportTracks();
