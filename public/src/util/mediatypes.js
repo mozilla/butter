@@ -11,7 +11,9 @@ define( [ "util/xhr", "util/uri" ],
         youtube: /(?:https?:\/\/www\.|https?:\/\/|www\.|\.|^)youtu/,
         vimeo: /https?:\/\/(www\.)?vimeo.com\/(\d+)($|\/)/,
         soundcloud: /(?:https?:\/\/www\.|https?:\/\/|www\.|\.|^)(soundcloud)/,
-        "null": /#t=\d*,?(\d+\.?\d+)/
+        // supports #t=<start>,<duration>
+        // where start or duration can be: X, X.X or XX:XX
+        "null": /^\s*#t=(?:\d*(?:(?:\.|\:)?\d+)?),?(\d+(?:(?:\.|\:)\d+)?)\s*$/
       },
       YOUTUBE_EMBED_DISABLED = "Embedding of this YouTube video is disabled",
       SOUNDCLOUD_EMBED_DISABLED = "Embedding of this SoundCloud video is disabled";
