@@ -163,6 +163,24 @@ define( [ "util/xhr" ], function( xhr ) {
     this.save = saveFunction;
     this.publish = publishFunction;
 
+    /**
+     * metricsFunction POSTs metric data to the cornfield server. If the server
+     * isn't accepting stats, metricsFunction will discover this after trying the
+     * first one, and not send others.
+     */
+    function metricsFunction( metricsList ) {
+      if ( metricsFunction.disabled ) {
+        return;
+      }
+
+      xhr.post( "/api/metrics", metricsList, function( response ){
+        if ( response && response.error === "Disabled" ) {
+          // The server isn't accepting stats, don't bother sending more.
+          metricsFunction.disabled = true;
+        }
+      });
+    }
+    this.metrics = metricsFunction;
   };
 
   Cornfield.__moduleName = "cornfield";

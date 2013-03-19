@@ -99,7 +99,7 @@
     "shelljs": "0.1.2"
   },
   "optionalDependencies": {
-    "node-statsd": "git://github.com/sivy/node-statsd.git#d6997fff",
+    "node-statsd": "0.0.7",
     "sqlite3": "2.1.7"
   },
   "devDependencies": {
