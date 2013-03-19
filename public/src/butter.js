@@ -180,10 +180,11 @@ window.Butter = {
         return _currentMedia.getManifest( name );
       }; //getManifest
 
-      _this.generateSafeTrackEvent = function( type, start, end, track, position ) {
+      _this.generateSafeTrackEvent = function( type, popcornOptions, track, position ) {
         var trackEvent,
             relativePosition,
-            popcornOptions = {};
+            start = popcornOptions.start,
+            end = popcornOptions.end;
 
         if ( start + _defaultTrackeventDuration > _currentMedia.duration ) {
           start = _currentMedia.duration - _defaultTrackeventDuration;
@@ -244,12 +245,12 @@ window.Butter = {
 
       function targetTrackEventRequested( e ) {
         var trackEvent,
-            popcornOptions,
-            start = _currentMedia.currentTime,
-            end;
+            popcornOptions = {},
+            start = _currentMedia.currentTime;
+
+        popcornOptions.start = start;
 
         if ( e.data.popcornOptions ) {
-          popcornOptions = {};
           for ( var prop in e.data.popcornOptions ) {
             if ( e.data.popcornOptions.hasOwnProperty( prop ) ) {
               popcornOptions[ prop ] = e.data.popcornOptions[ prop ];
@@ -259,15 +260,9 @@ window.Butter = {
 
         if ( _currentMedia && _currentMedia.ready ) {
           if ( popcornOptions && popcornOptions.end ) {
-            end = popcornOptions.end + start;
+            popcornOptions.end = popcornOptions.end + start;
           }
-          trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), start, end, e.data.position );
-          if ( popcornOptions ) {
-            if ( popcornOptions.end ) {
-              popcornOptions.end = trackEvent.popcornOptions.end;
-            }
-            trackEvent.update( popcornOptions );
-          }
+          trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), popcornOptions, e.data.position );
           _this.editor.editTrackEvent( trackEvent );
         }
         else {
@@ -380,8 +375,7 @@ window.Butter = {
               // cut off events that overlap the duration
               popcornOptions.end = _currentMedia.duration;
             }
-            trackEvent = _this.generateSafeTrackEvent( _copiedEvents[ i ].type, popcornOptions.start, popcornOptions.end );
-            trackEvent.update( popcornOptions );
+            trackEvent = _this.generateSafeTrackEvent( _copiedEvents[ i ].type, popcornOptions );
             trackEvent.selected = true;
           }
         }

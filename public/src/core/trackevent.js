@@ -102,7 +102,8 @@ define( [ "./logger", "./eventmanager", "./observer",
     this.applyDefaults = function() {
       var newOptions = {},
           manifestOptions = {},
-          popcornOptions = this.popcornOptions;
+          popcornOptions = this.popcornOptions,
+          foundMissingOptions = false;
       if ( !this.manifest ) {
         return;
       }
@@ -110,10 +111,13 @@ define( [ "./logger", "./eventmanager", "./observer",
       for ( var prop in manifestOptions ) {
         if ( manifestOptions.hasOwnProperty( prop ) ) {
           if ( !popcornOptions.hasOwnProperty( prop ) ) {
+            foundMissingOptions = true;
             newOptions[ prop ] = defaultValue( manifestOptions[ prop ] );
           }
         }
       }
+
+      newOptions = foundMissingOptions ? newOptions : null;
       this.update( newOptions );
     };
 
