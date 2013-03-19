@@ -45,7 +45,6 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
     _urlInput.value = "";
 
     clearTimeout( _mediaLoadTimeout );
-    clearTimeout( _cancelSpinner );
     _urlInput.classList.remove( "error" );
     _addMediaPanel.classList.remove( "invalid-field" );
     _errorMessage.classList.add( "hidden" );
@@ -201,7 +200,10 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
     var el = _GALLERYITEM.cloneNode( true ),
         source = data.source;
 
+
     if ( !_media.clipData[ source ] ) {
+      clearTimeout( _cancelSpinner );
+      _recordWebcam.classList.remove( "hidden" );
       _media.clipData[ source ] = source;
       _butter.dispatch( "mediaclipadded" );
 
@@ -334,10 +336,12 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
         },
         "onProcessingComplete": function( event ) {
           closeWidget();
-          _recordWebcam.classList.remove( "hidden" );
           _progress.classList.add( "hidden" );
-          console.log( event.data.videoId );
-          addMediaToGallery( "http://www.youtube.com/watch?v=" + event.data.videoId );
+          // transitionend event is not reliable and not cross browser supported.
+          _cancelSpinner = setTimeout( function() {
+            _loadingSpinner.classList.remove( "hidden" );
+          }, 300 );
+          addMediaToGallery( "http://www.youtube.com/watch?v=" + event.data.videoId, onDenied );
         },
         "onStateChange": function( event ) {
           var state = event.data.state;
