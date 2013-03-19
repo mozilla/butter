@@ -9,6 +9,15 @@
   <script src="../../../../external/popcorn-js/modules/player/popcorn.player.js"></script>
   <script src="../../../../external/popcorn-js/players/youtube/popcorn.youtube.js"></script>
   <script src="popcorn.sequencer.js"></script>
+  <style>
+    .video {
+      height: 100%;
+      position: relative;
+      width: 100%;
+      z-index: 1;
+      background-color: #FFF;
+    }
+  </style>
   <script>
     document.addEventListener( "DOMContentLoaded", function() {
       var p = Popcorn.smart( "#video", "#t=,120", { frameAnimation: true } )
@@ -34,10 +43,10 @@
   </script>
 </head>
 <body>
-  <h1 id="qunit-header">Popcorn Sequencer Plug-in Demo</h1>
+  <h1>Popcorn Sequencer Plug-in Demo</h1>
   <div>
     <div id="video" style="position: relative; height: 200px; width: 500px;">
-      <div style="height: 100%; position: relative; width: 100%; z-index: 1; background: #FFFFFF;"></div>
+      <div class="video"></div>
     </div>
   </div>
 </body>
