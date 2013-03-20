@@ -1,6 +1,6 @@
 {
   "name": "butter",
-  "version": "1.0.20",
+  "version": "1.0.23",
   "author": "The Mozilla Popcorn Team <dev-popcorn@lists.mozilla.org>",
   "description": "The Popcorn authoring tool",
   "contributors": [
@@ -102,6 +102,7 @@
     "sqlite3": "2.1.5"
   },
   "devDependencies": {
+    "awsbox": "0.4.2",
     "supertest": "0.5.1",
     "tap": "0.4.0"
   },
@@ -109,7 +110,8 @@
     "test": "node make check && ./node_modules/.bin/tap test/*.test.js"
   },
   "license": "MIT",
-  "engine": {
-    "node": ">=0.8"
+  "engines": {
+    "node": "0.8.x",
+    "npm":  "1.2.x"
   }
 }

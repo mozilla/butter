@@ -8,9 +8,10 @@
             "core/eventmanager",
             "core/track",
             "core/popcorn-wrapper",
-            "util/uri"
+            "util/uri",
+            "util/mediatypes"
           ],
-          function( Logger, EventManager, Track, PopcornWrapper, URI ) {
+          function( Logger, EventManager, Track, PopcornWrapper, URI, MediaTypes ) {
 
     var MEDIA_ELEMENT_SAFETY_POLL_INTERVAL = 500,
         MEDIA_ELEMENT_SAFETY_POLL_ATTEMPTS = 10;
@@ -580,15 +581,76 @@
                 i, l,
                 fallbacks = [],
                 sources = [];
+
+            function doImportTracks() {
+              if ( importData.tracks ) {
+                var importTracks = importData.tracks;
+                if( Array.isArray( importTracks ) ) {
+                  for ( i = 0, l = importTracks.length; i < l; ++i ) {
+                    newTrack = new Track();
+                    newTrack.json = importTracks[ i ];
+                    _this.addTrack( newTrack );
+                    newTrack.updateTrackEvents();
+                  }
+                  // Backwards comp for old base media.
+                  // Insert previous base media as a sequence event as the last track.
+                  if ( importData.url && _duration >= 0 ) {
+                    var firstSource;
+
+                    // If sources is a single array and of type null player, don't bother making a sequence.
+                    if ( url.length > 1 || MediaTypes.checkUrl( url[ 0 ] ) !== "null" ) {
+                      // grab first source as main source.
+                      sources.push( URI.makeUnique( url.shift() ).toString() );
+                      for ( i = 0; i < url.length; i++ ) {
+                        fallbacks.push( URI.makeUnique( url[ i ] ).toString() );
+                      }
+
+                      firstSource = sources[ 0 ];
+                      newTrack = new Track();
+                      _this.addTrack( newTrack );
+                      newTrack.addTrackEvent({
+                        type: "sequencer",
+                        popcornOptions: {
+                          start: 0,
+                          end: _duration,
+                          source: sources,
+                          title: URI.stripUnique( firstSource ).path,
+                          fallback: fallbacks,
+                          duration: _duration,
+                          target: "video-container"
+                        }
+                      });
+                      _clipData[ firstSource ] = firstSource;
+                    }
+                  }
+                } else if ( console ) {
+                  console.warn( "Ignoring imported track data. Must be in an Array." );
+                }
+              }
+            }
+
             if( importData.name ) {
               _name = importData.name;
             }
             if( importData.target ){
               _this.target = importData.target;
             }
+
+            url = importData.url;
+            if ( !Array.isArray( url ) ) {
+              url = [ url ];
+            }
+
             if ( importData.duration >= 0 ) {
               _duration = importData.duration;
               _this.url = "#t=," + _duration;
+              doImportTracks();
+            } else {
+              MediaTypes.getMetaData( url[ 0 ], function success( data ) {
+                _duration = data.duration;
+                _this.url = "#t=," + _duration;
+                doImportTracks();
+              });
             }
             if ( importData.clipData ) {
               var tempClipData = importData.clipData,
@@ -604,49 +666,6 @@
                     _clipData[ source ] = source;
                   }
                 }
-              }
-            }
-            if( importData.tracks ){
-              var importTracks = importData.tracks;
-              if( Array.isArray( importTracks ) ) {
-                for ( i = 0, l = importTracks.length; i < l; ++i ) {
-                  newTrack = new Track();
-                  newTrack.json = importTracks[ i ];
-                  _this.addTrack( newTrack );
-                  newTrack.updateTrackEvents();
-                }
-                // Backwards comp for old base media.
-                // Insert previous base media as a sequence event as the last track.
-                if ( importData.url && _duration >= 0 ) {
-                  url = importData.url;
-                  if ( !Array.isArray( url ) ) {
-                    url = [ url ];
-                  }
-                  // If sources is a single array and of type null player, don't bother making a sequence.
-                  if ( url.length > 1 || !( /#t=\d*,?\d+?/ ).test( url[ 0 ] ) ) {
-                    // grab first source as main source.
-                    sources.push( URI.makeUnique( url.shift() ).toString() );
-                    for ( i = 0; i < url.length; i++ ) {
-                      fallbacks.push( URI.makeUnique( url[ i ] ).toString() );
-                    }
-                    newTrack = new Track();
-                    _this.addTrack( newTrack );
-                    newTrack.addTrackEvent({
-                      type: "sequencer",
-                      popcornOptions: {
-                        start: 0,
-                        end: _duration,
-                        source: sources,
-                        title: URI.stripUnique( sources[ 0 ] ).path,
-                        fallback: fallbacks,
-                        duration: _duration,
-                        target: "video-container"
-                      }
-                    });
-                  }
-                }
-              } else if ( console ) {
-                console.warn( "Ignoring imported track data. Must be in an Array." );
               }
             }
           },

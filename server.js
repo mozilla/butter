@@ -17,7 +17,7 @@ var express = require('express'),
     metrics,
     utils,
     stores = {},
-    APP_HOSTNAME = config.dirs.appHostname,
+    APP_HOSTNAME = config.hostname,
     WWW_ROOT = path.resolve( __dirname, config.dirs.wwwRoot ),
     VALID_TEMPLATES = config.templates;
 
@@ -89,7 +89,7 @@ app.configure( function() {
 });
 
 require( 'express-persona' )( app, {
-  audience: config.dirs.appHostname
+  audience: APP_HOSTNAME
 });
 
 require('./routes')( app, User, filter, sanitizer, stores, utils, metrics );
@@ -339,10 +339,7 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
   });
 });
 
-var port = process.env.PORT || config.server.bindPort;
-
-var server = app.listen(port, config.server.bindIP, function() {
-  var addy = server.address();
-  console.log('HTTP Server started on http://' + config.server.bindIP + ':' + addy.port);
-  console.log('Press Ctrl+C to stop');
+app.listen( config.PORT, function() {
+  console.log( 'HTTP Server started on ' + APP_HOSTNAME );
+  console.log( 'Press Ctrl+C to stop' );
 });

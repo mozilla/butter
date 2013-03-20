@@ -8,6 +8,7 @@
     position: absolute;
     width: 94px;
     height: 6px;
+    left: 6px;
     z-index: 2;
 
     > .butter-super-scrollbar-zoom-handle {
@@ -15,7 +16,7 @@
       position: absolute;
       height: 16px;
       width: 6px;
-      left: 100%;
+      right: 100%;
       line-height: 100%;
       cursor: pointer;
       background: #EEE;
@@ -38,26 +39,26 @@
     > .tick {
       height: 6px;
       width: 1px;
-      float: left;
+      float: right;
       border-left: 1px solid #CCC;
     }
     > .tick:first-child {
-      margin-left: 1px;
+      margin-right: 1px;
     }
     > .tick:nth-child( 2 ) {
-      margin-left: 2px;
+      margin-right: 2px;
     }
     > .tick:nth-child( 3 ) {
-      margin-left: 4px;
+      margin-right: 4px;
     }
     > .tick:nth-child( 4 ) {
-      margin-left: 8px;
+      margin-right: 8px;
     }
     > .tick:nth-child( 5 ) {
-      margin-left: 16px;
+      margin-right: 16px;
     }
     > .tick:nth-child( 6 ) {
-      margin-left: 32px;
+      margin-right: 32px;
     }
   }
 }

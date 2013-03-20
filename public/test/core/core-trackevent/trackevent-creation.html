@@ -62,15 +62,18 @@
               });
 
           m.listen( "mediaready", function() {
-            var te1 = butter.generateSafeTrackEvent( "generateTrackEventTest", 0 ),
-                te2 = butter.generateSafeTrackEvent( "generateTrackEventTest", defaultTrackeventDuration * 0.5 ),
+            var te1 = butter.generateSafeTrackEvent( "generateTrackEventTest", { start: 0 } ),
+                te2 = butter.generateSafeTrackEvent( "generateTrackEventTest", { start: defaultTrackeventDuration * 0.5 } ),
                 orderedTracks = butter.currentMedia.orderedTracks,
                 te3;
 
             ok( te1.track === orderedTracks[ 1 ], "First Trackevent was bumped down a track after second added and is now on second track" );
             ok( te2.track === orderedTracks[ 0 ], "Second trackevent collided with the first causing the first to be moved" );
 
-            te3 = butter.generateSafeTrackEvent( "generateTrackEventTest", 0, defaultTrackeventDuration, orderedTracks[ 1 ] );
+            te3 = butter.generateSafeTrackEvent( "text",{
+              start: 0,
+              end: defaultTrackeventDuration
+            } , orderedTracks[ 1 ] );
 
             ok( te3.track === orderedTracks[ 1 ], "When given a track, generateSafeTrackEvent forces trackevent on that track" );
             ok( te1.track === orderedTracks[ 2 ], "Second trackevent was forced onto a new track" );

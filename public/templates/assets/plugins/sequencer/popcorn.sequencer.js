@@ -51,11 +51,19 @@
         target.appendChild( container );
       };
       options.displayLoading = function() {
+        var bigPlay = document.getElementById( "controls-big-play-button" );
         _this.on( "play", options._surpressPlayEvent );
+        if ( bigPlay ) {
+          bigPlay.classList.add( "hide-button" );
+        }
         document.querySelector( ".loading-message" ).classList.add( "show-media" );
       };
       options.hideLoading = function() {
+        var bigPlay = document.getElementById( "controls-big-play-button" );
         _this.off( "play", options._surpressPlayEvent );
+        if ( bigPlay ) {
+          bigPlay.classList.remove( "hide-button" );
+        }
         document.querySelector( ".loading-message" ).classList.remove( "show-media" );
       };
 
@@ -98,18 +106,9 @@
 
       // Function to ensure the mixup as to if a clip is an array
       // or string is normalized to an array as often as possible.
-      options.sourceToArray = function( updates ) {
+      options.sourceToArray = function( object, type ) {
         // If our src is not an array, create an array of one.
-        options.source = typeof options.source === "string" ? [ options.source ] : options.source;
-        if ( options.fallback ) {
-          if ( !Array.isArray( options.fallback ) ) {
-            options.fallback = [ options.fallback ];
-          }
-          if ( updates && !Array.isArray( updates.source ) ) {
-            updates.source = [ updates.source ];
-          }
-          options.source = options.source.concat( options.fallback );
-        }
+        object[ type ] = typeof object[ type ] === "string" ? [ object[ type ] ] : object[ type ];
       };
 
       // If loading times out, we want to let the media continue to play.
@@ -199,7 +198,6 @@
           if ( buffered.start( i ) <= options._clip.currentTime() &&
                buffered.end( i ) > options._clip.currentTime() ) {
             // We found a valid range so playing can resume.
-            options.hideLoading();
             if ( options.playWhenReady ) {
               options.playWhenReady = false;
               _this.play();
@@ -214,7 +212,6 @@
           options.playWhenReady = true;
           _this.pause();
         }
-        options.displayLoading();
       };
 
       // Ensures seek time is seekable, and not already seeked.
@@ -239,7 +236,11 @@
 
       options.setupContainer();
       if ( options.source ) {
-        options.sourceToArray();
+        options.sourceToArray( options, "source" );
+        options.sourceToArray( options, "fallback" );
+        if ( options.fallback ) {
+          options.source = options.source.concat( options.fallback );
+        }
         options.addSource();
       }
 
@@ -399,15 +400,22 @@
         }
       }
       if ( updates.fallback ) {
+        options.sourceToArray( updates, "fallback" );
         options.fallback = updates.fallback;
       }
       if ( updates.source ) {
-        options.sourceToArray( updates );
+        options.sourceToArray( updates, "source" );
+        if ( options.fallback ) {
+          updates.source = updates.source.concat( options.fallback );
+        }
         if ( updates.source.toString() !== options.source.toString() ) {
           options.ready = false;
           options.playWhenReady = false;
           if ( options.active ) {
             options.displayLoading();
+          }
+          if ( updates.fallback ) {
+            updates.source = updates.source.concat( updates.fallback );
           }
           options.source = updates.source;
           options.clearEvents();

@@ -42,9 +42,6 @@
   z-index: 9999;
   cursor: pointer;
 }
-#controls-big-play-button.controls-ready {
-  display: block;
-}
 
 #butter-controls.controls-active {
    /* active happens on mouse over and is reverted to default on mouse out */
@@ -61,6 +58,9 @@
   display: block;
 }
 
+#controls-big-play-button.hide-button {
+  display: none;
+}
 
 .controls-left {
   height: 22px;
