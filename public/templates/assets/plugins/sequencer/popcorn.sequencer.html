@@ -9,6 +9,8 @@
   <script src="../../../../external/popcorn-js/modules/player/popcorn.player.js"></script>
   <script src="../../../../external/popcorn-js/players/youtube/popcorn.youtube.js"></script>
   <script src="popcorn.sequencer.js"></script>
+  <script src="../../../../external/require/require.js"></script>
+  <link href="../../../../css/controls.css" rel="stylesheet">
   <style>
     .video {
       height: 100%;
@@ -16,6 +18,18 @@
       width: 100%;
       z-index: 1;
       background-color: #FFF;
+    }
+    .controls {
+      background: none repeat scroll 0 0 white;
+      border: 1px solid #D5D6D5;
+      bottom: 0;
+      height: 41px;
+      left: 0;
+      opacity: 1;
+      position: absolute;
+      right: 0;
+      visibility: visible;
+      z-index: 2;
     }
   </style>
   <script>
@@ -28,6 +42,7 @@
         target: "video",
         width: 50,
         zindex: 2,
+        duration: 90,
         source: "http://www.youtube.com/watch?v=QZB7OFRUrA0"
       })
       .sequencer({
@@ -37,8 +52,22 @@
         left: 50,
         width: 50,
         zindex: 3,
+        duration: 90,
         source: "http://www.youtube.com/watch?v=QZB7OFRUrA0"
       });
+
+      var require = requirejs.config({
+        baseUrl: "../../../../src",
+        paths: {
+          "text": "../external/require/text"
+        }
+      });
+
+      define( "sequencer-example", [ "ui/widget/controls" ], function( Controls ) {
+        p.controls( true );
+        Controls.create( "controls", p );
+      });
+      require(["sequencer-example"]);
     }, false);
   </script>
 </head>
@@ -48,6 +77,7 @@
     <div id="video" style="position: relative; height: 200px; width: 500px;">
       <div class="video"></div>
     </div>
+    <div id="controls" class="controls"><div>
   </div>
 </body>
 </html>
