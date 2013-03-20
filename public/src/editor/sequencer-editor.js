@@ -297,16 +297,12 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           }
 
           if ( left + width > el.offsetWidth ) {
-            //width = el.offsetWidth - left;
             left = el.offsetWidth - width;
           }
 
           if ( width < 0 ) {
             return;
           }
-          //if ( left < 0 || ( left + width ) > el.offsetWidth ) {
-          //  return;
-          //}
 
           updateOptions.from = positionToTime( left );
           updateUI({
