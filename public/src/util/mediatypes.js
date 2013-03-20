@@ -110,7 +110,7 @@ define( [ "util/xhr", "util/uri" ],
         parsedUri = URI.parse( baseUrl );
         splitUriDirectory = parsedUri.directory.split( "/" );
         id = splitUriDirectory[ splitUriDirectory.length - 1 ];
-        xhrURL = "http://api.soundcloud.com/tracks/" + id + ".json?callback=?&client_id=PRaNFlda6Bhf5utPjUsptg";
+        xhrURL = "https://api.soundcloud.com/tracks/" + id + ".json?callback=?&client_id=PRaNFlda6Bhf5utPjUsptg";
         Popcorn.getJSONP( xhrURL, function( respData ) {
           if ( !respData ) {
             return;
@@ -133,7 +133,7 @@ define( [ "util/xhr", "util/uri" ],
         parsedUri = URI.parse( baseUrl );
         splitUriDirectory = parsedUri.directory.split( "/" );
         id = splitUriDirectory[ splitUriDirectory.length - 1 ];
-        xhrURL = "http://vimeo.com/api/v2/video/" + id + ".json?callback=?";
+        xhrURL = "https://vimeo.com/api/v2/video/" + id + ".json?callback=?";
         Popcorn.getJSONP( xhrURL, function( respData ) {
           respData = respData && respData[ 0 ];
           if ( !respData ) {
