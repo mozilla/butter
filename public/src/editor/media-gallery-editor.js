@@ -210,6 +210,17 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       return;
     }
 
+    /* 
+    #3252 Adding media clips without a protocol causes error
+     - force add protocol in front of source url
+     */
+
+    var sourceUrl = /^http/i;        
+      if (!sourceUrl.test(url)) {
+      url = 'http://' + url;
+    }
+
+
     data.source = url;
     data.type = "sequencer";
     _mediaLoadTimeout = setTimeout( function() {
