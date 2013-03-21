@@ -11,7 +11,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
           "ui/toggler", "util/lang", "text!layouts/editor-area.html",
           "./default", "core/logger", "./header",
           // Included here to register themselves.
-          "./media-gallery-editor", "./share-editor", "./sequencer-editor" ],
+          "./media-gallery-editor", "./project-editor", "./sequencer-editor" ],
   function( EventManager, TrackEvent, Editor,
             Toggler, LangUtils, EDITOR_AREA_LAYOUT,
             DefaultEditor, Logger, Header ){
@@ -44,14 +44,6 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
     ButterNamespace.Editor = Editor;
 
     _header = new Header( _editorAreaDOMRoot, _this );
-
-    function setupHeader() {
-      if ( butter.project.isSaved ) {
-        _header.views.saved();
-      } else {
-        _header.views.unSaved();
-      }
-    }
 
     /**
      * Member: openEditor
@@ -208,15 +200,6 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
           editorsLoaded = 0;
 
       if ( butter.config.value( "ui" ).enabled !== false ) {
-
-        // Set up views for share editor
-        butter.listen( "ready", setupHeader );
-        butter.listen( "autologinsucceeded", setupHeader );
-        butter.listen( "authenticated", setupHeader );
-
-        butter.listen( "projectsaved", _header.views.saved );
-        butter.listen( "logout", _header.views.unSaved );
-        butter.listen( "projectchanged", _header.views.unSaved );
 
         // Set up views for plugin list editor
         butter.listen( "mediacontentchanged", _header.views.disablePlugins );

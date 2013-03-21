@@ -10,11 +10,11 @@ var express = require('express'),
     app = express(),
     lessMiddleware = require('less-middleware'),
     config = require( './lib/config' ),
-    User = require( './lib/user' )( config.database ),
-    filter = require( './lib/filter' )( User.isDBOnline ),
     sanitizer = require( './lib/sanitizer' ),
     FileStore = require('./lib/file-store.js'),
     metrics,
+    User,
+    filter,
     utils,
     stores = {},
     APP_HOSTNAME = config.hostname,
@@ -84,8 +84,12 @@ app.configure( function() {
 
   utils = require( './lib/utils' )({
     EMBED_HOSTNAME: config.dirs.embedHostname ? config.dirs.embedHostname : APP_HOSTNAME,
-    EMBED_SUFFIX: '_'
+    EMBED_SUFFIX: '_',
+    APP_HOSTNAME: APP_HOSTNAME
   }, stores );
+
+  User = require( './lib/user' )( config.database, null, utils );
+  filter = require( './lib/filter' )( User.isDBOnline );
 });
 
 require( 'express-persona' )( app, {
@@ -176,8 +180,7 @@ app.post( '/api/publish/:id',
       baseString = '\n  <base href="' + baseHref + '"/>';
 
       // look for script and link tags with data-butter-exclude in particular (e.g. butter's js script)
-      data = data.replace( /\s*<(script|link)[\.\/='":_\-\w\s]*data-butter-exclude[\.\/='":_\-\w\s]*>(<\/script>)?/g, '' );
-
+      data = data.replace( /\s*<(script|link|meta)[\.\/='":,_\-\w\s]*data-butter-exclude[\.\/='":_\-\w\s]*>(<\/script>)?/g, '' );
       // Adding  to cut out the actual head tag
       headStartTagIndex = data.indexOf( '<head>' ) + 6;
       headEndTagIndex = data.indexOf( '</head>' );
@@ -257,10 +260,12 @@ app.post( '/api/publish/:id',
         writeEmbedShell( idBase36, publishUrl,
                          {
                            author: project.author,
+                           description: project.description,
                            projectName: project.name,
                            embedShellSrc: publishUrl,
                            embedSrc: iframeUrl,
-                           baseHref: APP_HOSTNAME
+                           baseHref: APP_HOSTNAME,
+                           thumbnail: project.thumbnail
                          },
                          finished );
       }
@@ -274,6 +279,7 @@ app.post( '/api/publish/:id',
                   {
                     id: id,
                     author: project.author,
+                    description: project.description,
                     title: project.name,
                     mediaSrc: attribURL,
                     embedShellSrc: publishUrl,
