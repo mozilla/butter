@@ -48,7 +48,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         }
       });
 
-      function onDoubleClick() {
+      function onClick() {
         var trackEvent;
 
         if ( butter.currentMedia.ready ) {
@@ -59,7 +59,7 @@ define( [ "util/dragndrop", "util/lang", "editor/editor", "text!layouts/plugin-l
         }
       }
 
-      element.addEventListener( "dblclick", onDoubleClick, false );
+      element.addEventListener( "click", onClick, false );
 
       if ( iconImg ) {
         icon.style.backgroundImage = "url('" + iconImg.src + "')";
