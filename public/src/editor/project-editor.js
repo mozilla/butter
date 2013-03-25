@@ -25,14 +25,11 @@ define([ "editor/editor", "editor/base-editor",
         _dropArea = _rootElement.querySelector( ".image-droparea" ),
         _thumbnailInput = _rootElement.querySelector( ".butter-project-thumbnail" ),
         _projectTabs = _rootElement.querySelectorAll( ".project-tab" ),
-        _settingsTabs = _rootElement.querySelectorAll( ".settings-tab" ),
         _this = this,
         _hasBeenSavedOnce = false,
         _numProjectTabs = _projectTabs.length,
-        _numSettingsTabs = _settingsTabs.length,
         _project,
         _projectTab,
-        _settingTab,
         _idx;
 
     function checkDescription() {
@@ -73,35 +70,9 @@ define([ "editor/editor", "editor/base-editor",
       }
     }
 
-    function onSettingsTabClick( e ) {
-      var target = e.target,
-          currentDataName = target.getAttribute( "data-tab-name" ),
-          dataName;
-
-      for ( var i = 0; i < _numSettingsTabs; i++ ) {
-        dataName = _settingsTabs[ i ].getAttribute( "data-tab-name" );
-
-        if ( dataName === currentDataName ) {
-          _rootElement.querySelector( "." + dataName + "-container" ).classList.remove( "display-off" );
-          target.classList.add( "butter-active" );
-        } else {
-          _rootElement.querySelector( "." + dataName + "-container" ).classList.add( "display-off" );
-          _settingsTabs[ i ].classList.remove( "butter-active" );
-        }
-
-      }
-
-      _this.scrollbar.update();
-    }
-
     for ( _idx = 0; _idx < _numProjectTabs; _idx++ ) {
       _projectTab = _projectTabs[ _idx ];
       _projectTab.addEventListener( "click", onProjectTabClick, false );
-    }
-
-    for ( _idx = 0; _idx < _numSettingsTabs; _idx++ ) {
-      _settingTab = _settingsTabs[ _idx ];
-      _settingTab.addEventListener( "click", onSettingsTabClick, false );
     }
 
     function updateEmbed( url ) {
@@ -157,6 +128,7 @@ define([ "editor/editor", "editor/base-editor",
       _project.thumbnail = uri;
       _project.save(function() {
         butter.editor.openEditor( "project-editor" );
+        _thumbnailInput.value = _project.thumbnail;
       });
     });
 
@@ -187,6 +159,7 @@ define([ "editor/editor", "editor/base-editor",
         _projectURL.value = _project.publishUrl;
         _previewBtn.href = _project.previewUrl;
         _viewSourceBtn.href = "view-source:" + _project.iframeUrl;
+        _thumbnailInput.value = _project.thumbnail;
         updateEmbed( _project.iframeUrl );
 
         _previewBtn.onclick = function() {
