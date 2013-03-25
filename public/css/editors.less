@@ -127,13 +127,21 @@
       }
     }
 
-    h1, .butter-breadcrumbs, .editor-title-card { // Breadcrumbs
-      color: @green;
+    h1,
+    .butter-breadcrumbs,
+    .editor-title-card > .title {
       font-weight: 700;
       font-size: 16px;
-      text-transform: capitalize;
-      height: @_editorTitle;
       line-height: @_editorTitle;
+      color: @green;
+      text-transform: capitalize;
+      margin: 0;
+    }
+
+    h1,
+    .butter-breadcrumbs,
+    .editor-title-card {
+      height: @_editorTitle;
       margin: 0;
       padding: 0 20px;
       background: #FFF;
@@ -160,11 +168,6 @@
         line-height: 14px;
         cursor: pointer;
       }
-
-    }
-
-    .editor-title-card {
-      height: @_editorTitle + 50px;
     }
 
     // Tabs
@@ -423,7 +426,7 @@
     > input, textarea, select {
       float: left;
       margin-left: 5px;
-      width: @_editorInnerWidth - 85;
+      width: 210px;
     }
   }
 

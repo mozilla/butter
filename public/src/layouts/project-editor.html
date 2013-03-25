@@ -1,7 +1,10 @@
 <div class="butter-editor project-editor allow-scrollbar">
-  <div class="editor-title-card">Project
-      <input class="butter-project-url" type="text" readonly="readonly">
-      <a class="butter-btn btn-green butter-preview-link" target="_blank"><span class="icon icon-only icon-share-alt icon-white"></span></a>
+  <div class="editor-title-card">
+      <div class="title">Project link</div>
+      <div class="project-link-container">
+        <input class="butter-project-url" type="text" readonly="readonly">
+        <a class="butter-btn btn-green butter-preview-link" target="_blank"><span class="icon icon-only icon-share-alt icon-white"></span></a>
+      </div>
   </div>
   <ul class="butter-editor-tabs">
     <li><a class="butter-btn project-tab butter-active" href="#" data-tab-name="settings">Settings</a></li>
@@ -18,27 +21,18 @@
       <!-- Settings Container -->
       <div class="settings-container editor-container">
         <!-- Needs an actual class for this style -->
-        <h4 style="margin-top: -5px;">Author</h4>
+        <label>Author</label>
         <input class="butter-project-author" type="text" placeholder="Anonymous">
-        <h4>Description</h4>
+        <label>Description</label>
         <div class="description-wrapper">
           <textarea class="butter-project-description" placeholder="A project about..."></textarea>
           <span class="no-description hidden">Your description will show up when shared on social media</span>
         </div>
-        <h4>Thumbnail</h4>
-        <div class="url-container display-off">
-          <input class="butter-project-thumbnail" type="text">
+        <label>Thumbnail URL</label>
+        <input class="butter-project-thumbnail" type="text">
+        <div class="image-droparea">
+          <div class="droparea-text">Or drag an image here from your desktop</div>
         </div>
-        <div class="upload-container">
-          <div class="image-droparea">
-            <div class="droparea-text">Drag an image here from your desktop.</div>
-          </div>
-        </div>
-        <br>
-        <ul class="butter-editor-tabs">
-          <li><a class="butter-btn settings-tab" href="#" data-tab-name="url">URL</a></li>
-          <li><a class="butter-btn settings-tab butter-active" href="#" data-tab-name="upload">Upload</a></li>
-        </ul>
       </div>
 
       <!-- Share Container -->
@@ -49,16 +43,17 @@
 
       <!-- Embed Container -->
       <div class="embed-container editor-container display-off">
-        <h4>Embed</h4>
-        <p>Copy and paste the embed code below into any webpage.</p>
+        <div class="butter-form-inline form-single">
+          <label>Size</label>
+          <select class="butter-embed-size">
+            <option value="560x358">560x358</option>
+            <option value="640x403">640x403</option>
+            <option value="853x523">853x523</option>
+            <option value="1280x763">1280x763</option>
+          </select>
+        </div>
         <textarea class="butter-project-embed-url" readonly="readonly"></textarea>
-        <label>Size</label>
-        <select class="butter-embed-size">
-          <option value="560x358">560x358</option>
-          <option value="640x403">640x403</option>
-          <option value="853x523">853x523</option>
-          <option value="1280x763">1280x763</option>
-        </select>
+        <p>Copy and paste this embed code into any webpage</p>
       </div>
 
     </div>
