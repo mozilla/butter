@@ -57,6 +57,7 @@ function setupStore( storeConfig ) {
 
 app.configure( function() {
   app.use( express.logger( config.logger ) )
+    .use( express.compress() )
     .use( express.static( WWW_ROOT, JSON.parse( JSON.stringify( config.staticMiddleware ) ) ) )
     .use( express.bodyParser() )
     .use( express.cookieParser() )
