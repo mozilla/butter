@@ -334,17 +334,12 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
      * @param {Function} callback: Called when update is ready to occur
      */
     extendObject.attachSecondsChangeHandler = function( element, trackEvent, propertyName, callback ) {
-      element.addEventListener( "blur", function() {
-        var updateOptions = {};
-        updateOptions[ propertyName ] = TimeUtils.toSeconds( element.value );
-        callback( trackEvent, updateOptions );
-      }, false );
 
-      element.addEventListener( "change", function() {
-        var updateOptions = {};
-        updateOptions[ propertyName ] = TimeUtils.toSeconds( element.value );
-        callback( trackEvent, updateOptions );
-      }, false );
+      extendObject.attachInputChangeHandler( element, trackEvent, propertyName, function( te, options ) {
+        options[ propertyName ] = TimeUtils.toSeconds( options[ propertyName ] );
+        callback( trackEvent, options );
+      });
+
     };
 
     /**
