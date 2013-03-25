@@ -2,55 +2,55 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/editor",
- "util/time", "util/dragndrop", "text!layouts/media-editor.html" ],
-  function( LangUtils, XHR, KeysUtils, MediaUtils, Editor, Time, DragNDrop, EDITOR_LAYOUT ) {
+ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/editor",
+   "util/time", "util/dragndrop", "text!layouts/media-editor.html" ],
+   function( LangUtils, XHR, KeysUtils, MediaUtils, Editor, Time, DragNDrop, EDITOR_LAYOUT ) {
 
-  var _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
-      _addMediaTitle = _parentElement.querySelector( ".add-new-media" ),
-      _addMediaPanel = _parentElement.querySelector( ".add-media-panel" ),
+    var _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
+    _addMediaTitle = _parentElement.querySelector( ".add-new-media" ),
+    _addMediaPanel = _parentElement.querySelector( ".add-media-panel" ),
 
-      _urlInput = _addMediaPanel.querySelector( ".add-media-input" ),
-      _addBtn = _addMediaPanel.querySelector( ".add-media-btn" ),
-      _errorMessage = _parentElement.querySelector( ".media-error-message" ),
-      _oldValue,
-      _loadingSpinner = _parentElement.querySelector( ".media-loading-spinner" ),
+    _urlInput = _addMediaPanel.querySelector( ".add-media-input" ),
+    _addBtn = _addMediaPanel.querySelector( ".add-media-btn" ),
+    _errorMessage = _parentElement.querySelector( ".media-error-message" ),
+    _oldValue,
+    _loadingSpinner = _parentElement.querySelector( ".media-loading-spinner" ),
 
-      _galleryPanel = _parentElement.querySelector( ".media-gallery" ),
-      _galleryList = _galleryPanel.querySelector( ".media-gallery-list" ),
-      _GALLERYITEM = LangUtils.domFragment( EDITOR_LAYOUT, ".media-gallery-item" ),
+    _galleryPanel = _parentElement.querySelector( ".media-gallery" ),
+    _galleryList = _galleryPanel.querySelector( ".media-gallery-list" ),
+    _GALLERYITEM = LangUtils.domFragment( EDITOR_LAYOUT, ".media-gallery-item" ),
 
-      _durationInput = _parentElement.querySelector( ".media-base-duration" ),
+    _durationInput = _parentElement.querySelector( ".media-base-duration" ),
 
-      _butter,
-      _media,
-      _mediaLoadTimeout,
-      _cancelSpinner,
-      MEDIA_LOAD_TIMEOUT = 10000,
-      TIMEOUT_ERROR = "Your media source is taking too long to load",
-      _this,
-      TRANSITION_TIME = 2000;
+    _butter,
+    _media,
+    _mediaLoadTimeout,
+    _cancelSpinner,
+    MEDIA_LOAD_TIMEOUT = 10000,
+    TIMEOUT_ERROR = "Your media source is taking too long to load",
+    _this,
+    TRANSITION_TIME = 2000;
 
-  function toggleAddNewMediaPanel() {
-    _parentElement.classList.toggle( "add-media-collapsed" );
-  }
+    function toggleAddNewMediaPanel() {
+      _parentElement.classList.toggle( "add-media-collapsed" );
+    }
 
-  function resetInput() {
-    _urlInput.value = "";
+    function resetInput() {
+      _urlInput.value = "";
 
-    clearTimeout( _mediaLoadTimeout );
-    clearTimeout( _cancelSpinner );
-    _urlInput.classList.remove( "error" );
-    _addMediaPanel.classList.remove( "invalid-field" );
-    _errorMessage.classList.add( "hidden" );
-    _loadingSpinner.classList.add( "hidden" );
+      clearTimeout( _mediaLoadTimeout );
+      clearTimeout( _cancelSpinner );
+      _urlInput.classList.remove( "error" );
+      _addMediaPanel.classList.remove( "invalid-field" );
+      _errorMessage.classList.add( "hidden" );
+      _loadingSpinner.classList.add( "hidden" );
 
-    _addBtn.classList.add( "hidden" );
-  }
+      _addBtn.classList.add( "hidden" );
+    }
 
-  function setBaseDuration( duration ) {
-    var durationTimeCode = Time.toTimecode( duration ),
-        durationSeconds = Time.toSeconds( duration );
+    function setBaseDuration( duration ) {
+      var durationTimeCode = Time.toTimecode( duration ),
+      durationSeconds = Time.toSeconds( duration );
 
     // Don't accept empty inputs or negative/zero values for duration.
     if ( duration === "" || durationSeconds <= 0 ) {
@@ -87,9 +87,9 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     el = el || _GALLERYITEM.cloneNode( true );
 
     var deleteBtn = el.querySelector( ".mg-delete-btn" ),
-        thumbnailBtn = el.querySelector( ".mg-thumbnail" ),
-        thumbnailImg,
-        source = data.source;
+    thumbnailBtn = el.querySelector( ".mg-thumbnail" ),
+    thumbnailImg,
+    source = data.source;
 
     DragNDrop.helper( thumbnailBtn, {
       pluginOptions: {
@@ -118,7 +118,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     thumbnailBtn.setAttribute( "data-butter-draggable-type", "plugin" );
     deleteBtn.addEventListener( "click", function() {
 
-    thumbnailBtn.removeEventListener( "click", addEvent, false );
+      thumbnailBtn.removeEventListener( "click", addEvent, false );
       _galleryList.removeChild( el );
       _this.scrollbar.update();
       delete _media.clipData[ source ];
@@ -147,8 +147,8 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
 
     function addEvent() {
       var start = _butter.currentTime,
-          end = start + data.duration,
-          trackEvent;
+      end = start + data.duration,
+      trackEvent;
 
       function addTrackEvent() {
         var popcornOptions = {
@@ -186,7 +186,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
 
   function onSuccess( data ) {
     var el = _GALLERYITEM.cloneNode( true ),
-        source = data.source;
+    source = data.source;
 
     if ( !_media.clipData[ source ] ) {
       _media.clipData[ source ] = source;
@@ -213,16 +213,33 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
     }
 
     /* 
-    #3252 Adding media clips without a protocol causes error
-     - force add protocol in front of source url
+     * #3252 Adding media clips without a protocol causes error
+     * 
+     * 
+     * - force add protocol in front of source url;
+     * If error in protocol's name exists 
+     * (eg. typo, like htp:// or ttp://) - trying to fix
+     * 
      */
+    
+    // if :// occurs in url, split url:
+    var splitted_url = url.split("://");
 
-    var sourceUrl = /^http/i;        
-      if (!sourceUrl.test(url)) {
-      url = 'http://' + url;
-    }
-
-
+    // if exists, check if it is secure:
+    var protocol_type = ( splitted_url[0] === "https" ) ? "https://" : "http://";
+    
+    // maybe was the typo in protocol's name, then force to try fix it:
+    url = ( splitted_url.length > 1 ) ? protocol_type  + splitted_url[1] : protocol_type + splitted_url[0];
+    
+    // finally, maybe something went wrong - then exit, don't try to "guess"
+    var pattern = /undefined$/i;
+    if (pattern.test(url)) return;
+        
+    /*
+     * #3252 - end of issue
+     */
+    
+    
     data.source = url;
     data.type = "sequencer";
     _mediaLoadTimeout = setTimeout( function() {
