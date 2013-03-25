@@ -2,50 +2,32 @@
 .butter-editor-area {
   .project-editor {
 
-    .no-click {
-      opacity: 0.5;
+    .butter-project-url {
+      background: rgb( 85, 85, 85 );
+      color: white;
+      position: absolute;
+      top: 45px;
+      left: 20px;
+      width: 250px;
+      height: 30px;
+      font-size: 10pt;
     }
-
-    .editor-title-card {
-      overflow: hidden;
-      display: block;
-    }
-
-    .project-link {
-      display: block;
-      position: relative;
-      top: -10px;
-      .butter-project-url {
-        background: rgb( 85, 85, 85 );
-        color: white;
-        position: relative;
-        width: 250px;
-        height: 30px;
-        font-size: 10pt;
-      }
-      .butter-preview-link {
-        width: 10px;
-        height: 30px;
-        position: relative;
-        border-radius: 4px;
-        .icon {
-          right: 7px;
-          top: 7px;
-          position: absolute;
-        }
-      }
-      &.hidden {
-        margin-top: -100px;
-        float:left;
+    .butter-preview-link {
+      width: 10px;
+      height: 30px;
+      position: absolute;
+      top: 45px;
+      right: 35px;
+      border-radius: 4px;
+      .icon {
+        right: 7px;
+        top: 7px;
+        position: absolute;
       }
     }
 
     .butter-editor-body {
       top: 135px;
-      .transition( top 0.2s ease-in );
-      &.expanded {
-        top: 85px;
-      }
     }
 
     .sub-container {
@@ -61,14 +43,6 @@
 
     .fade-container {
       opacity: 0.3;
-    }
-
-    .butter-project-author {
-      width: 240px;
-    }
-
-    .butter-project-author-update {
-      width: 66px;
     }
 
     .description-wrapper {

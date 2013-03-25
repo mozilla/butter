@@ -9,9 +9,6 @@ define([ "editor/editor", "editor/base-editor",
   Editor.register( "project-editor", LAYOUT_SRC, function( rootElement, butter ) {
     var _rootElement = rootElement,
         _socialMedia = new SocialMedia(),
-        _editorBody = _rootElement.querySelector ( ".butter-editor-body" ),
-        _editorTitleCard = _rootElement.querySelector( ".editor-title-card" ),
-        _projectLinkElem = _rootElement.querySelector( ".project-link" ),
         _projectURL = _rootElement.querySelector( ".butter-project-url" ),
         _authorInput = _rootElement.querySelector( ".butter-project-author" ),
         _descriptionInput = _rootElement.querySelector( ".butter-project-description" ),
@@ -19,8 +16,6 @@ define([ "editor/editor", "editor/base-editor",
         _projectEmbedURL = _rootElement.querySelector( ".butter-project-embed-url" ),
         _embedSize = _rootElement.querySelector( ".butter-embed-size" ),
         _previewBtn = _rootElement.querySelector( ".butter-preview-link" ),
-        _shareBtn = _rootElement.querySelector( ".share-tab-btn" ),
-        _embedBtn = _rootElement.querySelector( ".embed-tab-btn" ),
         _viewSourceBtn = _rootElement.querySelector( ".butter-view-source-btn" ),
         _shareTwitter = _rootElement.querySelector( ".butter-share-twitter" ),
         _shareGoogle = _rootElement.querySelector( ".butter-share-google" ),
@@ -32,32 +27,13 @@ define([ "editor/editor", "editor/base-editor",
         _projectTabs = _rootElement.querySelectorAll( ".project-tab" ),
         _settingsTabs = _rootElement.querySelectorAll( ".settings-tab" ),
         _this = this,
+        _hasBeenSavedOnce = false,
+        _numProjectTabs = _projectTabs.length,
+        _numSettingsTabs = _settingsTabs.length,
         _project,
-        _hasBeenSavedOnce = false;
-
-
-    function toggleTabs() {
-      if ( butter.cornfield.authenticated() && _project.isSaved ) {
-        _viewSourceBtn.classList.remove( "no-click" );
-        _embedBtn.classList.remove( "no-click" );
-        _shareBtn.classList.remove( "no-click" );
-        _viewSourceBtn.href = "view-source:" + _project.iframeUrl;
-        _editorBody.classList.remove( "expanded" );
-        _projectLinkElem.classList.remove( "hidden" );
-        _editorTitleCard.classList.remove( "collapsed" );
-        _this.setErrorState( false );
-      } else {
-        _viewSourceBtn.classList.add( "no-click" );
-        _embedBtn.classList.add( "no-click" );
-        _shareBtn.classList.add( "no-click" );
-        _viewSourceBtn.href = "#";
-        _editorBody.classList.add( "expanded" );
-        _projectLinkElem.classList.add( "hidden" );
-        _editorTitleCard.classList.add( "collapsed" );
-        _this.setErrorState( "Share, Embed and View Source will be enabled once you have logged in and saved your project." );
-      }
-      _this.scrollbar.update();
-    }
+        _projectTab,
+        _settingTab,
+        _idx;
 
     function checkDescription() {
       if ( !_descriptionInput.value ) {
@@ -78,7 +54,7 @@ define([ "editor/editor", "editor/base-editor",
             currentDataName = target.getAttribute( "data-tab-name" ),
             dataName;
 
-        for ( var i = 0; i < numProjectTabs; i++ ) {
+        for ( var i = 0; i < _numProjectTabs; i++ ) {
           dataName = _projectTabs[ i ].getAttribute( "data-tab-name" );
 
           if ( dataName === currentDataName ) {
@@ -102,7 +78,7 @@ define([ "editor/editor", "editor/base-editor",
           currentDataName = target.getAttribute( "data-tab-name" ),
           dataName;
 
-      for ( var i = 0; i < numSettingsTabs; i++ ) {
+      for ( var i = 0; i < _numSettingsTabs; i++ ) {
         dataName = _settingsTabs[ i ].getAttribute( "data-tab-name" );
 
         if ( dataName === currentDataName ) {
@@ -118,20 +94,14 @@ define([ "editor/editor", "editor/base-editor",
       _this.scrollbar.update();
     }
 
-    var projectTab,
-        settingTab,
-        numProjectTabs = _projectTabs.length,
-        numSettingsTabs = _settingsTabs.length,
-        idx;
-
-    for ( idx = 0; idx < numProjectTabs; idx++ ) {
-      projectTab = _projectTabs[ idx ];
-      projectTab.addEventListener( "click", onProjectTabClick, false );
+    for ( _idx = 0; _idx < _numProjectTabs; _idx++ ) {
+      _projectTab = _projectTabs[ _idx ];
+      _projectTab.addEventListener( "click", onProjectTabClick, false );
     }
 
-    for ( idx = 0; idx < numSettingsTabs; idx++ ) {
-      settingTab = _settingsTabs[ idx ];
-      settingTab.addEventListener( "click", onSettingsTabClick, false );
+    for ( _idx = 0; _idx < _numSettingsTabs; _idx++ ) {
+      _settingTab = _settingsTabs[ _idx ];
+      _settingTab.addEventListener( "click", onSettingsTabClick, false );
     }
 
     function updateEmbed( url ) {
@@ -185,7 +155,9 @@ define([ "editor/editor", "editor/base-editor",
 
     window.EditorHelper.droppable( null, _dropArea, function onDrop( uri ) {
       _project.thumbnail = uri;
-      _project.save();
+      _project.save(function() {
+        butter.editor.openEditor( "project-editor" );
+      });
     });
 
     butter.listen( "droppable-unsupported", function unSupported() {
@@ -201,7 +173,6 @@ define([ "editor/editor", "editor/base-editor",
       _previewBtn.href = _project.previewUrl;
       _viewSourceBtn.href = "view-source:" + _project.iframeUrl;
       updateEmbed( _project.iframeUrl );
-      toggleTabs();
       _hasBeenSavedOnce = true;
     });
 
@@ -213,17 +184,16 @@ define([ "editor/editor", "editor/base-editor",
         // on tabs.
         _hasBeenSavedOnce = _project.isSaved;
 
-        if ( butter.cornfield.authenticated() && _project.isSaved ) {
-          _projectURL.value = _project.publishUrl;
-          _previewBtn.href = _project.previewUrl;
-          updateEmbed( _project.iframeUrl );
-        }
+        _projectURL.value = _project.publishUrl;
+        _previewBtn.href = _project.previewUrl;
+        _viewSourceBtn.href = "view-source:" + _project.iframeUrl;
+        updateEmbed( _project.iframeUrl );
 
         _previewBtn.onclick = function() {
-          return butter.cornfield.authenticated() && _project.isSaved;
+          return true;
         };
         _viewSourceBtn.onclick = function() {
-          return butter.cornfield.authenticated() && _project.isSaved;
+          return true;
         };
 
         checkDescription();
@@ -236,7 +206,8 @@ define([ "editor/editor", "editor/base-editor",
           _socialMedia.hotLoad( _shareGoogle, _socialMedia.google, _project.publishUrl );
         }
 
-        toggleTabs();
+        _this.scrollbar.update();
+
       },
       close: function() {
       }
