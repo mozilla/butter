@@ -21,7 +21,7 @@
 @COLOR_SELECTION: #FEF49C;
 @baseDark: #052938;
 @baseLight: #F4F5F5;
-@baseStage: #E7EDF0;  
+@baseStage: #E7EDF0;
 @green: #3FB58E;
 @greyGreen: #c2c6b3;
 @red: #CB3E21;
@@ -37,10 +37,10 @@
   -webkit-user-select: @param;
   -moz-user-select: @param;
   -ms-user-select: @param;
-  user-select: @param; 
+  user-select: @param;
 }
 
-// GRADIENTS 
+// GRADIENTS
 // Usage:
 //  .gradient( "vertical", red, blue );         -> Creates a gradient from top = red to bottom = blue.
 //  .gradient( "horizonal", red, blue );        -> Creates a gradient from left = red to right = blue.
@@ -172,10 +172,10 @@
 
 .clearfix() {
   *zoom: 1;
-  &:before, 
-  &:after { 
+  &:before,
+  &:after {
     content: "";
-    display: table; 
+    display: table;
   }
   &:after { clear: both; }
 }
@@ -188,7 +188,7 @@
     height: 0;
     width: 0;
     position: absolute;
-    pointer-events: none; /* csslint-ignore */
+    pointer-events: none;
   }
   &:after {
     border-left-color: @color;
