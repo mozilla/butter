@@ -222,6 +222,7 @@
      * 
      */
     
+ 
     // if :// occurs in url, split url:
     var splitted_url = url.split("://");
 
