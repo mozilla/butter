@@ -18,7 +18,7 @@
       <!-- Settings Container -->
       <div class="settings-container editor-container">
         <!-- Needs an actual class for this style -->
-        <h4 style="margin-top: -5px;">Author</h4>
+        <h4 class="tab-adjustment">Author</h4>
         <input class="butter-project-author" type="text" placeholder="Anonymous">
         <h4>Description</h4>
         <div class="description-wrapper">
@@ -26,19 +26,10 @@
           <span class="no-description hidden">Your description will show up when shared on social media</span>
         </div>
         <h4>Thumbnail</h4>
-        <div class="url-container display-off">
-          <input class="butter-project-thumbnail" type="text">
+        <input class="butter-project-thumbnail" type="text">
+        <div class="image-droparea">
+          <div class="droparea-text">Drag an image here from your desktop.</div>
         </div>
-        <div class="upload-container">
-          <div class="image-droparea">
-            <div class="droparea-text">Drag an image here from your desktop.</div>
-          </div>
-        </div>
-        <br>
-        <ul class="butter-editor-tabs">
-          <li><a class="butter-btn settings-tab" href="#" data-tab-name="url">URL</a></li>
-          <li><a class="butter-btn settings-tab butter-active" href="#" data-tab-name="upload">Upload</a></li>
-        </ul>
       </div>
 
       <!-- Share Container -->
@@ -49,7 +40,7 @@
 
       <!-- Embed Container -->
       <div class="embed-container editor-container display-off">
-        <h4>Embed</h4>
+        <h4 class="tab-adjustment">Embed</h4>
         <p>Copy and paste the embed code below into any webpage.</p>
         <textarea class="butter-project-embed-url" readonly="readonly"></textarea>
         <label>Size</label>
