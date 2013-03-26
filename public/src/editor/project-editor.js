@@ -26,7 +26,6 @@ define([ "editor/editor", "editor/base-editor",
         _thumbnailInput = _rootElement.querySelector( ".butter-project-thumbnail" ),
         _projectTabs = _rootElement.querySelectorAll( ".project-tab" ),
         _this = this,
-        _hasBeenSavedOnce = false,
         _numProjectTabs = _projectTabs.length,
         _project,
         _projectTab,
@@ -46,28 +45,24 @@ define([ "editor/editor", "editor/base-editor",
     _descriptionInput.value = butter.project.description ? butter.project.description : "";
 
     function onProjectTabClick( e ) {
-      if ( _hasBeenSavedOnce ) {
-        var target = e.target,
-            currentDataName = target.getAttribute( "data-tab-name" ),
-            dataName;
+      var target = e.target,
+          currentDataName = target.getAttribute( "data-tab-name" ),
+          dataName;
 
-        for ( var i = 0; i < _numProjectTabs; i++ ) {
-          dataName = _projectTabs[ i ].getAttribute( "data-tab-name" );
+      for ( var i = 0; i < _numProjectTabs; i++ ) {
+        dataName = _projectTabs[ i ].getAttribute( "data-tab-name" );
 
-          if ( dataName === currentDataName ) {
-            _rootElement.querySelector( "." + dataName + "-container" ).classList.remove( "display-off" );
-            target.classList.add( "butter-active" );
-          } else {
-            _rootElement.querySelector( "." + dataName + "-container" ).classList.add( "display-off" );
-            _projectTabs[ i ].classList.remove( "butter-active" );
-          }
-
+        if ( dataName === currentDataName ) {
+          _rootElement.querySelector( "." + dataName + "-container" ).classList.remove( "display-off" );
+          target.classList.add( "butter-active" );
+        } else {
+          _rootElement.querySelector( "." + dataName + "-container" ).classList.add( "display-off" );
+          _projectTabs[ i ].classList.remove( "butter-active" );
         }
 
-        _this.scrollbar.update();
-      } else {
-        return;
       }
+
+      _this.scrollbar.update();
     }
 
     for ( _idx = 0; _idx < _numProjectTabs; _idx++ ) {
@@ -145,16 +140,11 @@ define([ "editor/editor", "editor/base-editor",
       _previewBtn.href = _project.previewUrl;
       _viewSourceBtn.href = "view-source:" + _project.iframeUrl;
       updateEmbed( _project.iframeUrl );
-      _hasBeenSavedOnce = true;
     });
 
     Editor.BaseEditor.extend( this, butter, rootElement, {
       open: function() {
         _project = butter.project;
-
-        // Using this as a flag to determine if we need to prevent clicks from going through
-        // on tabs.
-        _hasBeenSavedOnce = _project.isSaved;
 
         _projectURL.value = _project.publishUrl;
         _previewBtn.href = _project.previewUrl;

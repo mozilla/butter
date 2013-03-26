@@ -212,6 +212,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
         // Set up views for project editor
         butter.listen( "ready", setupHeader );
         butter.listen( "autologinsucceeded", setupHeader );
+        butter.listen( "authenticated", setupHeader );
 
         butter.listen( "projectsaved", _header.views.saved );
         butter.listen( "logout", _header.views.unSaved );

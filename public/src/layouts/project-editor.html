@@ -20,13 +20,12 @@
 
       <!-- Settings Container -->
       <div class="settings-container editor-container">
-        <!-- Needs an actual class for this style -->
         <label>Author</label>
         <input class="butter-project-author" type="text" placeholder="Anonymous">
         <label>Description</label>
         <div class="description-wrapper">
-          <textarea class="butter-project-description" placeholder="A project about..."></textarea>
-          <span class="no-description hidden">Your description will show up when shared on social media</span>
+          <textarea class="butter-project-description" maxlength="200" placeholder="A project about..."></textarea>
+          <span class="no-description hidden">Your description will show up when shared on social media (200 characters max)</span>
         </div>
         <label>Thumbnail URL</label>
         <input class="butter-project-thumbnail" type="text">
