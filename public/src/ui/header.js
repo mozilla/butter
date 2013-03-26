@@ -58,9 +58,19 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       }
     }
 
-    _projectBtn.addEventListener( "click", function() {
+    function openProjectEditor() {
       butter.editor.openEditor( "project-editor" );
-    });
+    }
+
+    function toggleProjectButton( on ) {
+      if ( on ) {
+        _projectBtn.classList.remove( "butter-disabled" );
+        _projectBtn.addEventListener( "click", openProjectEditor, false );
+      } else {
+        _projectBtn.classList.add( "butter-disabled" );
+        _projectBtn.removeEventListener( "click", openProjectEditor, false );
+      }
+    }
 
     function toggleSaveButton( on ) {
       if ( on ) {
@@ -127,10 +137,12 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       dirty: function() {
         togglePreviewButton( false );
         toggleSaveButton( true );
+        toggleProjectButton( false );
       },
       clean: function() {
         togglePreviewButton( true );
         toggleSaveButton( false );
+        toggleProjectButton( true );
       },
       login: function() {
         var isSaved = butter.project.isSaved;
@@ -140,10 +152,12 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
 
         togglePreviewButton( isSaved );
         toggleSaveButton( !isSaved );
+        toggleProjectButton( isSaved );
       },
       logout: function() {
         togglePreviewButton( false );
         toggleSaveButton( true );
+        toggleProjectButton( false );
         _projectTitle.style.display = "none";
         _saveButton.innerHTML = "Sign in to save";
       },
