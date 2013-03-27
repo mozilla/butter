@@ -2,9 +2,9 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/editor",
+define( [ "util/lang", "util/xhr", "util/keys", "util/uri", "util/mediatypes", "editor/editor",
  "util/time", "util/dragndrop", "text!layouts/media-editor.html" ],
-  function( LangUtils, XHR, KeysUtils, MediaUtils, Editor, Time, DragNDrop, EDITOR_LAYOUT ) {
+  function( LangUtils, XHR, KeysUtils, UriUtil, MediaUtils, Editor, Time, DragNDrop, EDITOR_LAYOUT ) {
 
   var _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
       _addMediaTitle = _parentElement.querySelector( ".add-new-media" ),
@@ -212,35 +212,12 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
       return;
     }
 
-    /* 
-     * #3252 Adding media clips without a protocol causes error
-     * 
-     * 
-     * - force add protocol in front of source url;
-     * If error in protocol's name exists 
-     * (eg. typo, like htp:// or ttp://) - trying to fix
-     * 
-     */
-    
- 
-    // if :// occurs in url, split url:
-    var splitted_url = url.split("://");
-
-    // if exists, check if it is secure:
-    var protocol_type = ( splitted_url[0] === "https" ) ? "https://" : "http://";
-    
-    // maybe was the typo in protocol's name, then force to try fix it:
-    url = ( splitted_url.length > 1 ) ? protocol_type  + splitted_url[1] : protocol_type + splitted_url[0];
-    
-    // finally, maybe something went wrong - then exit, don't try to "guess"
-    var pattern = /undefined$/i;
-    if (pattern.test(url)) return;
-        
-    /*
-     * #3252 - end of issue
-     */
-
-
+    var check_url = UriUtil.parse(url);
+    if (check_url.protocol !== "") {
+        url = ( check_url.protocol === "https" ) ? "https://" + check_url.source : "http://" + check_url.source;
+    } else {
+        url = "http://" + check_url.source;
+    }
 
     data.source = url;
     data.type = "sequencer";
