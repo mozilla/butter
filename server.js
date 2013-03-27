@@ -100,8 +100,8 @@ function writeEmbedShell( embedPath, url, data, callback ) {
     writeEmbedShell.templateFn = jade.compile( fs.readFileSync( path.resolve( __dirname, 'views/embed-shell.jade' ), 'utf8' ),
                                           { filename: 'embed-shell.jade', pretty: true } );
   }
-
-  stores.publish.write( embedPath, writeEmbedShell.templateFn( data ), callback );
+  var sanitized = sanitizer.compressHTMLEntities( writeEmbedShell.templateFn( data ) );
+  stores.publish.write( embedPath, sanitized, callback );
 }
 
 function writeEmbed( embedPath, url, data, callback ) {
@@ -109,8 +109,8 @@ function writeEmbed( embedPath, url, data, callback ) {
     writeEmbed.templateFn = jade.compile( fs.readFileSync( path.resolve( __dirname, 'views/embed.jade' ), 'utf8' ),
                                           { filename: 'embed.jade', pretty: true } );
   }
-
-  stores.publish.write( embedPath, writeEmbed.templateFn( data ), callback );
+  var sanitized = sanitizer.compressHTMLEntities( writeEmbed.templateFn( data ) );
+  stores.publish.write( embedPath, sanitized, callback );
 }
 
 app.post( '/api/publish/:id',

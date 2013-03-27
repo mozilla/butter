@@ -1,0 +1,104 @@
+/*********************************************************
+* WEB FONTS
+*/
+@font-face {
+  font-family: 'Open Sans';
+  src: url('../resources/fonts/opensans-bold-webfont.woff') format('woff'), url('../resources/fonts/opensans-bold-webfont.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url('../resources/fonts/opensans-bolditalic-webfont.woff') format('woff'), url('../resources/fonts/opensans-bolditalic-webfont.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url('../resources/fonts/opensans-regular-webfont.woff') format('woff'), url('../resources/fonts/opensans-regular-webfont.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url('../resources/fonts/opensans-italic-webfont.woff') format('woff'), url('../resources/fonts/opensans-italic-webfont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Meta';
+  src: url('http://www.mozilla.org/img/fonts/MetaWebPro-Bold.eot');
+  src: local('?'), url('http://www.mozilla.org/img/fonts/MetaWebPro-Bold.woff') format('woff');
+  font-weight: bold;
+}
+body {
+  -webkit-font-smoothing: antialiased;
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
+  padding: 0;
+  margin: 0;
+  background: #FFF;
+}
+body.preview {
+  background: #E7EDF0;
+}
+.preview-message {
+  text-align: center;
+  width: 100%;
+  padding: 0.8em;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  background: #3fb58e;
+  color: #FFF;
+  border-bottom: 1px solid #328f70;
+  -webkit-transition: opacity 0.6s linear;
+  -moz-transition: opacity 0.6s linear;
+  -o-transition: opacity 0.6s linear;
+  -ms-transition: opacity 0.6s linear;
+  transition: opacity 0.6s linear;
+  display: none;
+}
+.preview-message a {
+  color: rgba(255, 255, 255, 0.8);
+}
+.preview-message a:hover {
+  color: #FFF;
+}
+.preview .preview-message {
+  display: block;
+}
+iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  overflow: hidden;
+  display: block;
+  margin: 1em auto 0;
+}
+/*********************************************************
+* Media queries
+*/
+@media only screen and (max-width: 640px) {
+  iframe {
+    width: 560px;
+    height: 358px;
+  }
+}
+@media only screen and (min-width: 640px) {
+  iframe {
+    width: 640px;
+    height: 403px;
+  }
+}
+@media only screen and (min-width: 853px) {
+  iframe {
+    width: 853px;
+    height: 522.8125px;
+  }
+}
+@media only screen and (min-width: 1280px) {
+  iframe {
+    width: 1280px;
+    height: 763px;
+  }
+}

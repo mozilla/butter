@@ -1,0 +1,82 @@
+.wikipedia-outer-container {
+  position: absolute;
+  background: #FFF;
+  box-shadow: 0 4px 10px -5px rgba(0, 0, 0, 0.2);
+  border: 1px solid #DDD;
+}
+.wikipedia-outer-container .wikipedia-inner-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+.wikipedia-outer-container .wikipedia-title {
+  height: 2.2em;
+  border-bottom: 2px solid #FFF;
+  line-height: 2.2em;
+  margin-bottom: 2px;
+  box-shadow: 0 4px 10px -5px #eeeeee, inset 0 -1px #e6e6e6, 0 1px #e6e6e6;
+}
+.wikipedia-outer-container .wikipedia-title-text a {
+  display: block;
+  color: #666;
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: 600;
+  border-left: 1px solid #E6E6E6;
+  padding-left: 0.7em;
+  overflow: hidden;
+  margin-right: 0.467em;
+  height: 100%;
+  text-overflow: ellipsis;
+}
+.wikipedia-outer-container .wikipedia-title:before {
+  content: "";
+  display: block;
+  background: url("wikipedia-logo.png") no-repeat;
+  background-size: contain;
+  height: 2.1em;
+  width: 2.1em;
+  float: left;
+  margin-right: 0.2em;
+  margin-top: 0.05em;
+  margin-left: 0.2em;
+}
+.wikipedia-outer-container .wikipedia-main-content {
+  position: absolute;
+  top: 0;
+  bottom: 0.5em;
+  border-bottom: 1px solid #E6E6E6;
+  padding-left: 1.5em;
+  padding-top: 2.2em;
+}
+.wikipedia-outer-container .wikipedia-content {
+  padding-top: 1em;
+  padding-bottom: 1.5em;
+  padding-right: 1em;
+  height: 100%;
+  overflow-y: scroll;
+  color: #000;
+  font-size: 0.8em;
+  line-height: 1.5;
+  font-family: georgia;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.wikipedia-outer-container .wikipedia-to-wiki {
+  /* The arrow link */
+
+  position: absolute;
+  top: 0.3em;
+  right: 0.3em;
+  overflow: hidden;
+  width: 1.4em;
+  height: 1.4em;
+  background: url("wikipedia-arrow.png") no-repeat;
+  background-size: contain;
+  opacity: 0.3;
+}
+.wikipedia-outer-container .wikipedia-to-wiki:hover {
+  opacity: 1;
+}
