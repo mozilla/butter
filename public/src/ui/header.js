@@ -16,7 +16,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
         _clearEvents = _rootElement.querySelector( ".butter-clear-events-btn" ),
         _previewBtn = _rootElement.querySelector( ".butter-preview-btn" ),
-        _shareBtn = _rootElement.querySelector( ".butter-share-btn" ),
+        _projectBtn = _rootElement.querySelector( ".butter-project-btn" ),
         _projectMenu = _rootElement.querySelector( ".butter-project-menu" ),
         _projectMenuControl = _rootElement.querySelector( ".butter-project-menu-control" ),
         _projectMenuList = _projectMenu.querySelector( ".butter-btn-menu" ),
@@ -58,8 +58,18 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       }
     }
 
-    function openShareEditor() {
-      butter.editor.openEditor( "share-properties" );
+    function openProjectEditor() {
+      butter.editor.openEditor( "project-editor" );
+    }
+
+    function toggleProjectButton( on ) {
+      if ( on ) {
+        _projectBtn.classList.remove( "butter-disabled" );
+        _projectBtn.addEventListener( "click", openProjectEditor, false );
+      } else {
+        _projectBtn.classList.add( "butter-disabled" );
+        _projectBtn.removeEventListener( "click", openProjectEditor, false );
+      }
     }
 
     function toggleSaveButton( on ) {
@@ -98,16 +108,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       }
     }
 
-    function toggleShareButton( on ) {
-      if ( on ) {
-        _shareBtn.classList.remove( "butter-disabled" );
-        _shareBtn.addEventListener( "click", openShareEditor, false );
-      } else {
-        _shareBtn.classList.add( "butter-disabled" );
-        _shareBtn.removeEventListener( "click", openShareEditor, false );
-      }
-    }
-
     function projectNameClick() {
       var input = document.createElement( "input" );
 
@@ -137,12 +137,12 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       dirty: function() {
         togglePreviewButton( false );
         toggleSaveButton( true );
-        toggleShareButton( false );
+        toggleProjectButton( false );
       },
       clean: function() {
         togglePreviewButton( true );
         toggleSaveButton( false );
-        toggleShareButton( true );
+        toggleProjectButton( true );
       },
       login: function() {
         var isSaved = butter.project.isSaved;
@@ -152,12 +152,12 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
 
         togglePreviewButton( isSaved );
         toggleSaveButton( !isSaved );
-        toggleShareButton( isSaved );
+        toggleProjectButton( isSaved );
       },
       logout: function() {
         togglePreviewButton( false );
         toggleSaveButton( true );
-        toggleShareButton( false );
+        toggleProjectButton( false );
         _projectTitle.style.display = "none";
         _saveButton.innerHTML = "Sign in to save";
       },
@@ -224,7 +224,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
 
     function prepare() {
       function afterSave() {
-        butter.editor.openEditor( "share-properties" );
+        butter.editor.openEditor( "project-editor" );
         togglePreviewButton( true );
       }
 

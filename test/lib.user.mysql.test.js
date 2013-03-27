@@ -14,8 +14,16 @@ var mockEmail = "test@example.org",
       email: mockEmail,
       name: "Test User",
       author: "Test User",
-      template: "basic"
-    };
+      template: "basic",
+      thumbnail: "http://localhost:8888/resources/icons/fb-logo.png"
+    },
+    constants = {
+      EMBED_HOSTNAME: "http://localhost:8888",
+      EMBED_SUFFIX: "_",
+      APP_HOSTNAME: "http://localhost:8888"
+    },
+    mockStore = require( "./mock.store" ),
+    utils = require( "../lib/utils" )( constants, mockStore );
 
 var configWithPool = {
   database: DB_DATABASE,
@@ -112,7 +120,7 @@ test( "mysql db pooling", function( t ) {
       return;
     }
     t.ok( poolingUser.getSequelizeInstance().connectorManager.pool, "Pool exists" );
-  }));
+  }), utils );
 
   nonPoolingUser = userLibrary( configWithoutPool, waiter.wait( function( err ) {
     if ( err ) {
@@ -120,6 +128,6 @@ test( "mysql db pooling", function( t ) {
       return;
     }
     t.ok( !nonPoolingUser.getSequelizeInstance().connectorManager.pool, "No pool exists" );
-  }));
+  }), utils );
 
 });
