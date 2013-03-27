@@ -105,6 +105,8 @@
       margin: 0;
       list-style: none;
       height: @_editorTabs;
+      .selectable( none );
+
       > li {
         float: left;
         margin-right: 3px;
@@ -125,13 +127,21 @@
       }
     }
 
-    h1, .butter-breadcrumbs { // Breadcrumbs
-      color: @green;
+    h1,
+    .butter-breadcrumbs,
+    .editor-title-card > .title {
       font-weight: 700;
       font-size: 16px;
-      text-transform: capitalize;
-      height: @_editorTitle;
       line-height: @_editorTitle;
+      color: @green;
+      text-transform: capitalize;
+      margin: 0;
+    }
+
+    h1,
+    .butter-breadcrumbs,
+    .editor-title-card {
+      height: @_editorTitle;
       margin: 0;
       padding: 0 20px;
       background: #FFF;
@@ -406,7 +416,7 @@
     > input, textarea, select {
       float: left;
       margin-left: 5px;
-      width: @_editorInnerWidth - 85;
+      width: 210px;
     }
   }
 

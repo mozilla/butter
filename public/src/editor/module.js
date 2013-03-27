@@ -11,7 +11,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
           "ui/toggler", "util/lang", "text!layouts/editor-area.html",
           "./default", "core/logger", "./header",
           // Included here to register themselves.
-          "./media-gallery-editor", "./share-editor", "./sequencer-editor" ],
+          "./media-gallery-editor", "./project-editor", "./sequencer-editor" ],
   function( EventManager, TrackEvent, Editor,
             Toggler, LangUtils, EDITOR_AREA_LAYOUT,
             DefaultEditor, Logger, Header ){
@@ -209,7 +209,7 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
 
       if ( butter.config.value( "ui" ).enabled !== false ) {
 
-        // Set up views for share editor
+        // Set up views for project editor
         butter.listen( "ready", setupHeader );
         butter.listen( "autologinsucceeded", setupHeader );
         butter.listen( "authenticated", setupHeader );
