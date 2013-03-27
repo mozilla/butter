@@ -16,6 +16,13 @@ html(lang='en')
       @-webkit-viewport { width: device-width; }
       @viewport { width: device-width; }
     script(src='/src/embed.js')
+    if !description
+      description = 'This was created with Popcorn Maker - part of the Mozilla Webmaker initiative'
+    meta(property='og:description', content='#{description}')
+
+    meta(property='og:title', content='#{title}')
+    meta(property='og:type', content='video.other')
+    meta(property='og:url', content='#{embedShellSrc}')
   body.embed
     #container.container
       #video-container.video.video-container
@@ -31,8 +38,11 @@ html(lang='en')
               .mozpopcorn Popcorn Maker
               .embed-title #{title}
               .embed-author #{author}
-            .post-roll-description
-              | This was created with Popcorn Maker.
+              .post-roll-description
+                if description
+                  | #{description}
+                else
+                  | This was created with Popcorn Maker.
               br
               a(href='/', target='_blank') Create a project like this!
             ul.embed-nav.post-roll-options

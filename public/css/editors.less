@@ -105,6 +105,8 @@
       margin: 0;
       list-style: none;
       height: @_editorTabs;
+      .selectable( none );
+
       > li {
         float: left;
         margin-right: 3px;
@@ -125,7 +127,7 @@
       }
     }
 
-    h1, .butter-breadcrumbs { // Breadcrumbs
+    h1, .butter-breadcrumbs, .editor-title-card { // Breadcrumbs
       color: @green;
       font-weight: 700;
       font-size: 16px;
@@ -159,6 +161,10 @@
         cursor: pointer;
       }
 
+    }
+
+    .editor-title-card {
+      height: @_editorTitle + 50px;
     }
 
     // Tabs
@@ -221,6 +227,17 @@
     top: @_editorTitle;
     bottom: 0;
     width: 100%;
+  }
+
+  .image-droparea {
+    border: dashed 2px #ABABAB;
+    text-align: center;
+    height: 170px;
+    background: url( "/resources/watermark.png" ) no-repeat center;
+
+    > .droparea-text {
+      margin-top: 3px;
+    }
   }
 
   .butter-editor-body.butter-tabs-spacing {

@@ -47,10 +47,12 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
       projectJSON.name = doc.name;
       projectJSON.projectID = doc.id;
       projectJSON.author = doc.author;
+      projectJSON.description = doc.description;
       projectJSON.template = doc.template;
       projectJSON.publishUrl = utils.generatePublishUrl( doc.id );
       projectJSON.iframeUrl = utils.generateIframeUrl( doc.id );
       projectJSON.remixedFrom = doc.remixedFrom;
+      projectJSON.thumbnail = doc.thumbnail;
       res.json( projectJSON );
     });
   });
@@ -114,16 +116,10 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
     if ( req.body.id ) {
       files = datauri.filterProjectDataURIs( projectData.data, utils.generateDataURIPair );
 
-      User.updateProject( req.session.email, req.body.id, projectData, function( err, doc, imagesToDestroy ) {
+      User.updateProject( req.session.email, req.body.id, projectData, function( err, doc ) {
         if ( err ) {
           res.json( { error: err }, 500 );
           return;
-        }
-
-        if ( imagesToDestroy ) {
-          imagesToDestroy.forEach( function( imageReference ) {
-            stores.images.remove( imageReference.filename );
-          });
         }
 
         if ( files && files.length > 0 ) {
@@ -193,7 +189,9 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
 
       var projectJSON = JSON.parse( project.data, sanitizer.reconstituteHTMLinJSON );
       projectJSON.name = "Remix of " + project.name;
+      projectJSON.description = project.description;
       projectJSON.template = project.template;
+      projectJSON.thumbnail = project.thumbnail;
       projectJSON.remixedFrom = project.id;
 
       res.json( projectJSON );

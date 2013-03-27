@@ -1,0 +1,91 @@
+//This is the css for the editor that is opened when clicking the "Project" Button
+.butter-editor-area {
+  .project-editor {
+
+    .butter-project-url {
+      background: rgb( 85, 85, 85 );
+      color: white;
+      position: absolute;
+      top: 45px;
+      left: 20px;
+      width: 250px;
+      height: 30px;
+      font-size: 10pt;
+    }
+    .butter-preview-link {
+      width: 10px;
+      height: 30px;
+      position: absolute;
+      top: 45px;
+      right: 35px;
+      border-radius: 4px;
+      .icon {
+        right: 7px;
+        top: 7px;
+        position: absolute;
+      }
+    }
+
+    .butter-editor-body {
+      top: 135px;
+    }
+
+    .sub-container {
+      >p {
+        padding-right: 10px;
+        display: inline-block;
+      }
+    }
+
+    .hide-container {
+      display: none;
+    }
+
+    .fade-container {
+      opacity: 0.3;
+    }
+
+    .description-wrapper {
+      overflow: hidden;
+      display: block;
+
+      .no-description {
+        color: @red;
+        float: left;
+        .transition( all 0.4s ease-in );
+        &.hidden {
+          margin-top: -100px;
+        }
+      }
+    }
+
+    .editor-container {
+      padding: 20px;
+      >p {
+        margin: 0 0 10px 5px;
+        font-size: 14px;
+        font-style: italic;
+      }
+
+      .big {
+        font-size: 16.25px;
+      }
+
+      >label {
+        font-size: 13px;
+        display: block;
+        padding: 10px 0;
+      }
+
+      >textarea {
+        min-height: 100px;
+        line-height: 1.25;
+        resize: none;
+      }
+
+      .tab-adjustment {
+        margin-top: -5px;
+      }
+    }
+  }
+}
