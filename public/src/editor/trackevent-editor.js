@@ -56,7 +56,6 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
     // Wedge a check for scrollbars into the open event if it exists
     var _oldOpenEvent = events.open,
         _trackEventUpdateErrorCallback = NULL_FUNCTION,
-        _errorMessageContainer,
         _trackEvent;
 
     events.open = function( parentElement, trackEvent ) {
@@ -65,10 +64,6 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
           basicTab = rootElement.querySelector( ".editor-options" ),
           advancedTab = rootElement.querySelector( ".advanced-options" ),
           wrapper = rootElement.querySelector( ".scrollbar-outer" );
-
-      if ( !_errorMessageContainer && rootElement ) {
-        _errorMessageContainer = rootElement.querySelector( "div.error-message" );
-      }
 
       _trackEvent = trackEvent;
 
@@ -117,43 +112,6 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
     BaseEditor.extend( extendObject, butter, rootElement, events );
 
     extendObject.defaultLayouts = __defaultLayouts.cloneNode( true );
-
-    /**
-     * Member: setErrorState
-     *
-     * Sets the error state of the editor, making an error message visible.
-     *
-     * @param {String} message: Error message to display.
-     */
-    extendObject.setErrorState = function( message ) {
-      if ( message && _errorMessageContainer ) {
-        _errorMessageContainer.innerHTML = message;
-        _errorMessageContainer.parentNode.style.height = _errorMessageContainer.offsetHeight + "px";
-        _errorMessageContainer.parentNode.style.visibility = "visible";
-        _errorMessageContainer.parentNode.classList.add( "open" );
-      }
-      else {
-        _errorMessageContainer.innerHTML = "";
-        _errorMessageContainer.parentNode.style.height = "";
-        _errorMessageContainer.parentNode.style.visibility = "";
-        _errorMessageContainer.parentNode.classList.remove( "open" );
-      }
-    };
-
-    extendObject.setErrorMessageContainer = function( messageContainer ) {
-      _errorMessageContainer = messageContainer;
-    };
-
-    /**
-     * Member: setTrackEventUpdateErrorCallback
-     *
-     * Stores a callback which is called when a trackevent update error occurs.
-     *
-     * @param {Function} errorCallback: Callback which is called upon error.
-     */
-    extendObject.setTrackEventUpdateErrorCallback = function( errorCallback ) {
-      _trackEventUpdateErrorCallback = errorCallback || NULL_FUNCTION;
-    };
 
     /**
      * Member: updateTrackEventSafe
@@ -954,6 +912,17 @@ define([ "util/lang", "util/keys", "util/time", "./base-editor", "ui/widget/tool
           container.appendChild( element );
         }
       }
+    };
+
+    /**
+     * Member: setTrackEventUpdateErrorCallback
+     *
+     * Stores a callback which is called when a trackevent update error occurs.
+     *
+     * @param {Function} errorCallback: Callback which is called upon error.
+     */
+    extendObject.setTrackEventUpdateErrorCallback = function( errorCallback ) {
+      _trackEventUpdateErrorCallback = errorCallback || NULL_FUNCTION;
     };
 
     extendObject.getTrackEvent = function() {

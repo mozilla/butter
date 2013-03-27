@@ -10,7 +10,7 @@ define( [ "core/eventmanager", "core/media", "util/sanitizer" ],
   function Project( butter ) {
 
     var _this = this,
-        _id, _name, _template, _author, _dataObject,
+        _id, _name, _template, _author, _description, _dataObject,
         _publishUrl, _iframeUrl, _remixedFrom,
 
         // Whether or not a save to server is required (project data has changed)
@@ -92,6 +92,19 @@ define( [ "core/eventmanager", "core/media", "util/sanitizer" ],
         set: function( value ) {
           if ( value !== _author ) {
             _author = value;
+            invalidate();
+          }
+        },
+        enumerable: true
+      },
+
+      "description": {
+        get: function() {
+          return _description;
+        },
+        set: function( value ) {
+          if ( value !== _description ) {
+            _description = value;
             invalidate();
           }
         },
@@ -213,6 +226,10 @@ define( [ "core/eventmanager", "core/media", "util/sanitizer" ],
         _author = json.author;
       }
 
+      if ( json.description ) {
+        _description = json.description;
+      }
+
       if ( json.publishUrl ) {
         _publishUrl = json.publishUrl;
       }
@@ -285,6 +302,7 @@ define( [ "core/eventmanager", "core/media", "util/sanitizer" ],
       data.name = _name;
       data.template = _template;
       data.author = _author;
+      data.description = _description;
       data.backupDate = Date.now();
       try {
         __butterStorage.setItem( "butter-backup-project", JSON.stringify( data ) );
@@ -322,6 +340,7 @@ define( [ "core/eventmanager", "core/media", "util/sanitizer" ],
         name: _name,
         template: _template,
         author: _author,
+        description: _description,
         data: _this.data,
         remixedFrom: _remixedFrom
       };
