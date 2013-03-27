@@ -1,0 +1,54 @@
+<div class="butter-editor project-editor allow-scrollbar">
+  <div class="editor-title-card">
+      <div class="title">Project link</div>
+      <div class="project-link-container">
+        <input class="butter-project-url" type="text" readonly="readonly">
+        <a class="butter-btn btn-green butter-preview-link" target="_blank"><span class="icon icon-only icon-share-alt icon-white"></span></a>
+      </div>
+  </div>
+  <ul class="butter-editor-tabs">
+    <li><a class="butter-btn project-tab butter-active" href="#" data-tab-name="settings">Settings</a></li>
+    <li><a class="butter-btn project-tab share-tab-btn" href="#" data-tab-name="share">Share</a></li>
+    <li><a class="butter-btn project-tab embed-tab-btn" href="#" data-tab-name="embed">Embed</a></li>
+    <li><a class="butter-btn butter-view-source-btn" target="_blank" data-tab-name="view-source">View Source</a></li>
+  </ul>
+  <div class="butter-editor-body butter-tabs-spacing scrollbar-container">
+    <div class="scrollbar-outer scrollbar-inner">
+      <div class="error-message-container">
+        <div class="error-message"></div>
+      </div>
+
+      <!-- Settings Container -->
+      <div class="settings-container editor-container">
+        <label>Author</label>
+        <input class="butter-project-author" type="text" placeholder="Anonymous">
+        <label>Description</label>
+        <div class="description-wrapper">
+          <textarea class="butter-project-description" maxlength="200" placeholder="A project about..."></textarea>
+        </div>
+      </div>
+
+      <!-- Share Container -->
+      <div class="share-container editor-container display-off">
+        <span class="butter-share-twitter"></span>
+        <span class="butter-share-google"></span>
+      </div>
+
+      <!-- Embed Container -->
+      <div class="embed-container editor-container display-off">
+        <div class="butter-form-inline form-single">
+          <label>Size</label>
+          <select class="butter-embed-size">
+            <option value="560x358">560x358</option>
+            <option value="640x403">640x403</option>
+            <option value="853x523">853x523</option>
+            <option value="1280x763">1280x763</option>
+          </select>
+        </div>
+        <textarea class="butter-project-embed-url" readonly="readonly"></textarea>
+        <p>Copy and paste this embed code into any webpage</p>
+      </div>
+
+    </div>
+  </div>
+</div>

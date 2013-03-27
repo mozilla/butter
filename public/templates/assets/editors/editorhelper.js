@@ -361,7 +361,6 @@
           };
           image.src = imgSrc;
 
-          // Open the editor
           butter.editor.editTrackEvent( trackEvent );
 
           // Force image to download, esp. Opera. We can't use

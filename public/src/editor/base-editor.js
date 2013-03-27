@@ -27,6 +27,12 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip", "ui/widge
     var _extraStyleTags = [],
         _extraLinkTags = [];
 
+    var _errorMessageContainer;
+
+    if ( !_errorMessageContainer && rootElement ) {
+      _errorMessageContainer = rootElement.querySelector( "div.error-message" );
+    }
+
     /**
      * Member: open
      *
@@ -201,6 +207,32 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip", "ui/widge
      */
     extendObject.wrapTextInputElement = function( element, options ) {
       return TextboxWrapper.applyTo( element, options );
+    };
+
+    /**
+     * Member: setErrorState
+     *
+     * Sets the error state of the editor, making an error message visible.
+     *
+     * @param {String} message: Error message to display.
+     */
+    extendObject.setErrorState = function( message ) {
+      if ( message && _errorMessageContainer ) {
+        _errorMessageContainer.innerHTML = message;
+        _errorMessageContainer.parentNode.style.height = _errorMessageContainer.offsetHeight + "px";
+        _errorMessageContainer.parentNode.style.visibility = "visible";
+        _errorMessageContainer.parentNode.classList.add( "open" );
+      }
+      else {
+        _errorMessageContainer.innerHTML = "";
+        _errorMessageContainer.parentNode.style.height = "";
+        _errorMessageContainer.parentNode.style.visibility = "";
+        _errorMessageContainer.parentNode.classList.remove( "open" );
+      }
+    };
+
+    extendObject.setErrorMessageContainer = function( messageContainer ) {
+      _errorMessageContainer = messageContainer;
     };
 
     window.addEventListener( "resize", function() {
