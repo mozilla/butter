@@ -8,9 +8,17 @@ var test = require( "tap" ).test,
       email: mockEmail,
       name: "Test User",
       author: "Test User",
-      template: "basic"
+      template: "basic",
+      thumbnail: "http://localhost:8888/resources/icons/fb-logo.png"
     },
-    id;
+    id,
+    constants = {
+      EMBED_HOSTNAME: "http://localhost:8888",
+      EMBED_SUFFIX: "_",
+      APP_HOSTNAME: "http://localhost:8888"
+    },
+    mockStore = require( "./mock.store" ),
+    utils = require( "../lib/utils" )( constants, mockStore );
 
 test( "sqlite db setup with incorrect pool params", function( t ) {
   var poolUser = require( "../lib/user" )({
@@ -42,7 +50,7 @@ test( "sqlite db setup", function( t ) {
   }, function( err ) {
     t.ok( !err, "User created with sqlite db" );
     t.end();
-  });
+  }, utils );
 });
 
 test( "createProject valid parameters", function( t ) {
@@ -238,7 +246,8 @@ test( "updateProject valid parameters", function( t ) {
         },
         name: "Test Userd",
         author: "Test Userd",
-        template: "advanced"
+        template: "advanced",
+        thumbnail: "http://localhost:8888/resources/icons/fb-logo.png"
       },
       mockCallback = function( err, project ) {
         t.equal( project.data, JSON.stringify( updateData.data ), "Properly updated Data of Project" );
