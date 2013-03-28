@@ -26,6 +26,10 @@
         "icon": "{{baseDir}}templates/assets/plugins/text/text-icon.png"
       },
       {
+        "type": "sketchfab",
+        "icon": "{{baseDir}}templates/assets/plugins/sketchfab/sketchfab-icon.png"
+      },
+      {
         "type": "popup",
         "icon": "{{baseDir}}templates/assets/plugins/popup/popup-icon.png"
       },
