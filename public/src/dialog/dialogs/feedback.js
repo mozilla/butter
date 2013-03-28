@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "text!dialog/dialogs/feedback.html", "dialog/dialog", "util/xhr2" ],
+define( [ "text!dialog/dialogs/feedback.html", "dialog/dialog", "util/xhr" ],
   function( LAYOUT_SRC, Dialog, xhr ) {
     Dialog.register( "feedback", LAYOUT_SRC, function ( dialog ) {
       var rootElement = dialog.rootElement,

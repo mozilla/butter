@@ -2,7 +2,7 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/xhr2" ], function( xhr ) {
+define( [ "util/xhr" ], function( xhr ) {
 
   // Shortcut to make lint happy. Constructor is capitalized, and reference is non-global.
   var JSSHA = window.jsSHA;

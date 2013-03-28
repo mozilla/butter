@@ -5,7 +5,7 @@
 /**
  * Module: Editor
  */
-define( [ "util/lang", "util/xhr2",
+define( [ "util/lang", "util/xhr",
           "./base-editor", "./trackevent-editor" ],
   function( LangUtils, xhr,
             BaseEditor, TrackEventEditor ) {

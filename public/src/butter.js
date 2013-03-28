@@ -60,7 +60,7 @@ window.Butter = {
             "core/target", "core/media",
             "./modules", "./dependencies", "./dialogs",
             "dialog/dialog", "editor/editor", "ui/ui",
-            "util/xhr2", "util/lang", "util/tutorial",
+            "util/xhr", "util/lang", "util/tutorial",
             "util/warn", "text!default-config.json",
             "ui/widget/tooltip", "crashreporter", "core/project",
             "../external/ua-parser/ua-parser"

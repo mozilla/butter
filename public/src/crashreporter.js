@@ -7,7 +7,7 @@
  *
  * Provides backend and UI for the crash reporter
  */
-define( [ "dialog/dialog", "util/xhr2", "util/uri" ], function( Dialog, xhr, URI ) {
+define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, xhr, URI ) {
 
   var STATE_EVENT_QUEUE_LENGTH = 10;
 
