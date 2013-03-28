@@ -64,6 +64,7 @@ requirejs.config({
     "popcorn.text": [ "popcorn.core" ],
     "popcorn.twitter": [ "popcorn.core" ],
     "popcorn.wikipedia": [ "popcorn.core" ]
+
   }
 });
 
