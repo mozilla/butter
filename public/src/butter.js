@@ -60,7 +60,7 @@ window.Butter = {
             "core/target", "core/media",
             "./modules", "./dependencies", "./dialogs",
             "dialog/dialog", "editor/editor", "ui/ui",
-            "util/xhr", "util/lang", "util/tutorial",
+            "util/xhr2", "util/lang", "util/tutorial",
             "util/warn", "text!default-config.json",
             "ui/widget/tooltip", "crashreporter", "core/project",
             "../external/ua-parser/ua-parser"
@@ -70,7 +70,7 @@ window.Butter = {
             Target, Media,
             Modules, Dependencies, Dialogs,
             Dialog, Editor, UI,
-            XHR, Lang, Tutorial,
+            xhr, Lang, Tutorial,
             Warn, DEFAULT_CONFIG_JSON,
             ToolTip, CrashReporter, Project,
             UAParser
@@ -798,7 +798,7 @@ window.Butter = {
         // if there are scripts to load, load them
         if( toLoad.length > 0 ){
           for( var i = 0; i < toLoad.length; ++i ){
-            XHR.get( toLoad[ i ].url, toLoad[ i ].onLoad );
+            xhr.get( toLoad[ i ].url, toLoad[ i ].onLoad );
           }
         }
         else{
@@ -822,25 +822,8 @@ window.Butter = {
           responseCallback();
           return;
         }
-        savedDataUrl += "?noCache=" + Date.now();
 
-        XHR.getUntilComplete(
-          savedDataUrl,
-          function() {
-            var savedData;
-            try{
-              savedData = JSON.parse( this.responseText );
-            }
-            catch( e ){
-              _this.dispatch( "loaddataerror", "Saved data not formatted properly." );
-            }
-            responseCallback( savedData );
-          },
-          "application/json",
-          {
-            "If-Modified-Since": "Fri, 01 Jan 1960 00:00:00 GMT"
-          },
-          true );
+        xhr.get( savedDataUrl, responseCallback );
       }
 
       /**
@@ -961,31 +944,10 @@ window.Butter = {
       } //readConfig
 
       if( butterOptions.config && typeof( butterOptions.config ) === "string" ){
-        var xhr = new XMLHttpRequest(),
-          userConfig,
-          url = butterOptions.config + "?noCache=" + Date.now();
-
-        xhr.open( "GET", url, false );
-        if( xhr.overrideMimeType ){
-          // Firefox generates a misleading "syntax" error if we don't have this line.
-          xhr.overrideMimeType( "application/json" );
-        }
-        // Deal with caching
-        xhr.setRequestHeader( "If-Modified-Since", "Fri, 01 Jan 1960 00:00:00 GMT" );
-        xhr.send( null );
-
-        if( xhr.status === 200 || xhr.status === 0 ){
-          try{
-            userConfig = Config.parse( xhr.responseText );
-          }
-          catch( e ){
-            throw new Error( "Butter config file not formatted properly." );
-          }
+        xhr.get( butterOptions.config, function( response ) {
+          var userConfig = Config.reincarnate( response );
           readConfig( userConfig );
-        }
-        else{
-          _this.dispatch( "configerror", _this );
-        } //if
+        });
       }
       else {
         readConfig( Config.reincarnate( butterOptions.config ) );
