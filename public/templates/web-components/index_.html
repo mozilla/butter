@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>A Web Components test</title>
+    <base href="http://localhost:8888/templates/basic/">
+    <script type="text/javascript" src="/src/../external/popcorn-js/popcorn.js"></script>
+    <script type="text/javascript" src="/src/../templates/assets/plugins/googlemap/popcorn.googlemap.js"></script>
+    <script type="text/javascript" src="/src/../templates/assets/plugins/image/popcorn.image.js"></script>
+    <script type="text/javascript" src="/src/../templates/assets/plugins/loopPlugin/popcorn.loopPlugin.js"></script>
+    <script type="text/javascript" src="/src/../templates/assets/plugins/pausePlugin/popcorn.pausePlugin.js"></script>
+    <script type="text/javascript" src="/src/../templates/assets/plugins/popup/popcorn.popup.js"></script>
+    <script type="text/javascript" src="/src/../templates/assets/plugins/skip/popcorn.skip.js"></script>
+    <script type="text/javascript" src="/src/../templates/assets/plugins/text/popcorn.text.js"></script>
+    <script type="text/javascript" src="/src/../templates/assets/plugins/twitter/popcorn.twitter.js"></script>
+    <script type="text/javascript" src="/src/../templates/assets/plugins/wikipedia/popcorn.wikipedia.js"></script>
+    <script type="text/javascript" src="/src/../external/popcorn-js/wrappers/html5/popcorn.HTMLMediaElement.js"></script>
+    <script type="text/javascript" src="/src/../external/popcorn-js/modules/player/popcorn.player.js"></script>
+    <script type="text/javascript" src="/src/../external/popcorn-js/wrappers/common/popcorn._MediaElementProto.js"></script>
+    <script type="text/javascript" src="/src/../templates/assets/plugins/sequencer/popcorn.sequencer.js"></script>
+    <script type="text/javascript" src="/src/../external/popcorn-js/wrappers/null/popcorn.HTMLNullVideoElement.js"></script>
+    <script type="text/javascript" src="/src/../external/popcorn-js/wrappers/soundcloud/popcorn.HTMLSoundCloudAudioElement.js"></script>
+    <script type="text/javascript" src="/src/../external/popcorn-js/wrappers/vimeo/popcorn.HTMLVimeoVideoElement.js"></script>
+    <script type="text/javascript" src="/src/../external/popcorn-js/wrappers/youtube/popcorn.HTMLYouTubeVideoElement.js"></script>
+    <script type="text/javascript" src="/src/../external/popcorn-js/players/soundcloud/popcorn.soundcloud.js"></script>
+    <script type="text/javascript" src="/src/../external/popcorn-js/players/vimeo/popcorn.vimeo.js"></script>
+    <script type="text/javascript" src="/src/../external/popcorn-js/players/youtube/popcorn.youtube.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/css/embed.css">
+    <link rel="stylesheet" href="/css/transitions.css">
+    <link rel="stylesheet" href="../assets/plugins/popup/popcorn.popup.css">
+    <link rel="stylesheet" href="../assets/plugins/image/popcorn.image.css">
+    <link rel="stylesheet" href="../assets/plugins/twitter/popcorn.twitter.css">
+    <link rel="stylesheet" href="../assets/plugins/text/popcorn.text.css">
+    <link rel="stylesheet" href="../assets/plugins/wikipedia/popcorn.wikipedia.css">
+    <script src="http://localhost:8888/templates/web-components/platform/WebComponents/web-components.js"></script>
+    <script src="http://localhost:8888/templates/web-components/platform/CustomElements/custom-elements.js"></script>
+    <link rel="component" href="http://localhost:8888/templates/web-components/webmaker-components.html">
+  </head>
+  <body class="embed">
+    <div id="container" class="container">
+      <div id="video-container" class="video video-container">
+        <div id="video" class="video"></div>
+        <webmaker-media href="http://www.youtube.com/watch?v=yy8FDjSGmwQ" height="400px"></webmaker-media>
+
+        <webmaker-text start="0" end="7">Alright, so here's the deal. I love red pandas. This is not particularly
+          a secret, and it's not very hard to see why. They're ridiculously cute,
+          look very fluffy, and seem very playful.</webmaker-text>
+
+        <webmaker-text start="8" end="11">(They're also endangered in the wild)</webmaker-text>
+
+        <webmaker-text start="13" end="18">To be fair, they're ridiculous animals from a zoological point of view.
+          The red panda has a body plan designed for predation, but instead it
+          eats mostly bamboo leaves.</webmaker-text>
+
+        <webmaker-text start="19" end="26">Bamboo is hard to digest, has very little nutritional value (so you need
+          to eat a LOT of it in a day), and covers a wide area for the energy
+          you get out of it. So it's really silly as a food source.</webmaker-text>
+
+        <webmaker-text start="28" end="35"><h2>This is what wikipedia has to say about them:</h2></webmaker-text>
+  <!-- 
+        <webmaker-wiki start="35" end="45" width="100%" height="400px" src="http://en.wikipedia.org/wiki/Red_panda"></webmaker-wiki> -->
+
+        <webmaker-text start="37" end="43"><h2>And this is where you can find some cute ones:</h2></webmaker-text>
+
+        <webmaker-map start="45" end="50" width="100%" height="400px" location="Maruyama Zoo"></webmaker-map>
+
+        <webmaker-text start="52" end="55">This is a demontrator for
+        <a href="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/spec/components/index.html">Web Components</a>
+        and
+        <a href="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/spec/custom/index.html">Custom elements</a>,
+        using the toolkitchen
+        <a href="https://github.com/toolkitchen/WebComponents">web components</a>
+        and
+        <a href="https://github.com/toolkitchen/CustomElements">custom elements</a>
+        polyfills.</webmaker-text>
+      </div>
+    </div>
+  </body>
+</html>
