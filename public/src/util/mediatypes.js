@@ -4,8 +4,8 @@
 
 "use strict";
 
-define( [ "util/xhr", "util/uri" ],
-  function( XHR, URI ) {
+define( [ "util/uri" ],
+  function( URI ) {
 
   var REGEX_MAP = {
         youtube: /(?:https?:\/\/www\.|https?:\/\/|www\.|\.|^)youtu/,
