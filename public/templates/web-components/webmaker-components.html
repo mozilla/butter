@@ -92,58 +92,25 @@
       };
     }());
 
-    // Get a reference to this element's template, for template
-    // replacements when elements are actually built on-page.
-    var template = this.querySelector( "element[name='webmaker-media'] template" );
-
     // Then, specify what should happen when an element gets built,
     // by extending its prototype with a readyCallback function.
     this.register({
       prototype: {
         readyCallback: function() {
-          var element = this;
+          
+          if ( !window.pop ) {
+            window.pop = Popcorn.smart( this.attributes.getNamedItem( "target" ).nodeValue, this.attributes.getNamedItem( "href" ).nodeValue );
+          } else {
+            var trackEvents = window.pop.getTrackEvents(),
+                trackEvent;
 
-          // Get the width and height, if the on-page code specifies them.
-          var w = this.attributes.getNamedItem( "width" );
-          w = w ? w.nodeValue : false;
-          var h = this.attributes.getNamedItem( "height" );
-          h = h ? h.nodeValue : false;
+            window.pop = Popcorn.smart( this.attributes.getNamedItem( "target" ).nodeValue, this.attributes.getNamedItem( "href" ).nodeValue );
 
-          // Perform template replacing; this will likely happen automatically
-          // once the spec is finalised, but for now we do it manually.
-          var ocontent = this.textContent;
-          var ihtml = template.innerHTML;
-          var newContent = ihtml.replace( "<content></content>", ocontent );
-          this.innerHTML = newContent;
-
-          // Make sure our media element has the right styles and id
-          var id = getNextCount();
-          var mediaElement = this.querySelector( ".media-container" );
-          mediaElement.id = "webmakerVideo" + id;
-          if ( w ) {
-            mediaElement.width = w|0;
-            mediaElement.style.width = w;
-          }
-          if ( h ) {
-            mediaElement.height = h|0;
-            mediaElement.style.height = h;
-          }
-
-          // Also make sure our footnote is easy to query, by
-          // assigning it a unique id that is linked to the mediaElement. 
-          var footnote = this.querySelector( "#footnote" );
-          footnote.id = footnote.id + id;
-
-          // And finally, egister this media element with popcorn.
-          var registerMe = (function( containerId, url ) {
-            return function() {
-              var pop = Popcorn.smart( containerId, url );
-              pop.footnoteId = footnote.id;
-              pop.play();
-              window.pop = pop;
+            for ( var i = 0; i < trackEvents.length; i++ ) {
+              trackEvent = trackEvents[ i ];
+              window.pop[ trackEvent._natives.type ]( trackEvent );
             }
-          }( "#video", this.attributes.getNamedItem( "href" ).nodeValue ));
-          Popcorn( registerMe );
+          }
         }
       }
     });
@@ -151,8 +118,9 @@
 </element>
 
 <element name="webmaker-text"
-  attributes="start end transition position alignment linkUrl fontSize fontColor fontDecorations backgroundColor shadowColor fontFamily top left width">
+  attributes="start end transition position alignment linkUrl fontSize fontColor fontDecorations backgroundColor shadowColor fontFamily top left width target">
   <template>
+    <!-- Eventually we can have actual plugin content layouts here and pass this to the plugins themselves -->
     <p><content></content></p>
   </template>
 
@@ -164,43 +132,66 @@
     this.register({
       prototype: {
         readyCallback: function() {
-          var e = this;
-          var text = template.innerHTML.replace( "<content></content>", this.innerHTML );
+          var text = this.innerHTML,
+              defaultDecorations = { bold: false, italics: false },
+              start = this.attributes.getNamedItem( "start" ) ? this.attributes.getNamedItem( "start" ).nodeValue : 0,
+              end = this.attributes.getNamedItem( "end" ) ? this.attributes.getNamedItem( "end" ).nodeValue : 5,
+              fontSize = this.attributes.getNamedItem( "fontSize" ) ? this.attributes.getNamedItem( "fontSize" ).nodeValue : 4,
+              top = this.attributes.getNamedItem( "top" ) ? this.attributes.getNamedItem( "top" ).nodeValue : 0,
+              left = this.attributes.getNamedItem( "left" ) ? this.attributes.getNamedItem( "left" ).nodeValue : 0,
+              zindex = this.attributes.getNamedItem( "zindex" ) ? this.attributes.getNamedItem( "zindex" ).nodeValue : 1000,
+              fontFamily =  this.attributes.getNamedItem( "fontFamily" ) ? this.attributes.getNamedItem( "fontFamily" ).nodeValue: "Vollkorn",
+              fontColor = this.attributes.getNamedItem( "fontColor" ) ? this.attributes.getNamedItem( "fontColor" ).nodeValue : "#000000",
+              position = this.attributes.getNamedItem( "position" ) ? this.attributes.getNamedItem( "position" ).nodeValue : "middle",
+              alignment = this.attributes.getNamedItem( "alignment" ) ? this.attributes.getNamedItem( "alignment" ).nodeValue : "center",
+              shadowColor = this.attributes.getNamedItem( "shadowColor" ) ? this.attributes.getNamedItem( "shadowColor" ).nodeValue : "",
+              backgroundColor = this.attributes.getNamedItem( "backgroundColor" ) ? this.attributes.getNamedItem( "backgroundColor" ).nodeValue : "",
+              width = this.attributes.getNamedItem( "width" ) ? this.attributes.getNamedItem( "width" ).nodeValue : 50,
+              transition = this.attributes.getNamedItem( "transition" ) ? this.attributes.getNamedItem( "transition" ).nodeValue : "popcorn-fade",
+              target = this.attributes.getNamedItem( "target" ) ? this.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
+              linkUrl = this.attributes.getNamedItem( "linkUrl" ) ? this.attributes.getNamedItem( "linkUrl" ).nodeValue : "",
+              fontDecorations = this.attributes.getNamedItem( "fontDecorations" ) ? this.attributes.getNamedItem( "fontDecorations" ).nodeValue : "";
 
-          // If there is a media element, we link ourselves to it.
-          if ( document.querySelectorAll( "webmaker-media" ).length > 0 ) {
-            // we'll need the start and end times for showing this text:
-            var start = this.attributes.getNamedItem( "start" ).nodeValue;
-            var end = this.attributes.getNamedItem( "end" ).nodeValue;
+          if ( fontDecorations ) {
+            var decorations = fontDecorations.split( " " );
 
-            // To make it all work, we register a text pop event:
-            Popcorn(function() {
-              var props = {
-                start: start,
-                end: end,
-                text: text,
-                fontSize: 4,
-                target: "video-container",
-                top: 5,
-                left: 10,
-                zindex: 1000
-              };
-              window.pop.text( props );
+            fontDecorations = {};
 
-              // bind click handling
-              var element = window.pop.getTrackEvent( window.pop.getLastTrackEventId() )._container;
-              e.popcornElement = element;
-              element.webmakerElement = e;
-              WebMaker.makeEditable( element );
+            for ( var i = 0; i < decorations.length; i++ ) {
+              fontDecorations[ decorations[ i ] ] = true;
+            }
+
+          } else {
+            fontDecorations = defaultDecorations;
+          }
+
+          // Ensure there is a popcorn instance.
+          if ( window.pop ) {
+            this.innerHTML = "";
+
+            window.pop.text({
+              start: start,
+              end: end,
+              text: text,
+              fontSize: fontSize,
+              target: target,
+              top: top,
+              left: left,
+              zindex: zindex,
+              fontFamily: fontFamily,
+              fontColor: fontColor,
+              position: position,
+              alignment: alignment,
+              backgroundColor: backgroundColor,
+              background: backgroundColor ? true : false,
+              shadow: shadowColor ? true : false,
+              shadowColor: shadowColor,
+              linkUrl: linkUrl,
+              fontDecorations: fontDecorations
             });
 
-            // Our text is no longer necessary "on-page"
-            this.style.display = "none";
           } else {
-            // If there is no media element, just show this text as a normal
-            // block of text on the page.
-            this.style.display = "block";
-            WebMaker.makeEditable( this );
+            // Code for just using default elements.
           }
         }
       }
@@ -208,7 +199,9 @@
   </script>
 </element>
 
-<element name="webmaker-image" attributes="start end src alt">
+<element name="webmaker-image"
+  attributes="start end src transition left top height width count photosetId tags linkSrc zindex target">
+  <!-- Eventually we can have actual plugin content layouts here and pass this to the plugins themselves -->
   <template>
     <img src="">
   </template>
@@ -221,43 +214,44 @@
     this.register({
       prototype: {
         readyCallback: function() {
-          var e = this;
+          var start = this.attributes.getNamedItem( "start" ) ? this.attributes.getNamedItem( "start" ).nodeValue : 0,
+              end = this.attributes.getNamedItem( "end" ) ? this.attributes.getNamedItem( "end" ).nodeValue : 5,
+              src = this.attributes.getNamedItem( "src" ) ? this.attributes.getNamedItem( "src" ).nodeValue : "",
+              top = this.attributes.getNamedItem( "top" ) ? this.attributes.getNamedItem( "top" ).nodeValue : 0,
+              left = this.attributes.getNamedItem( "left" ) ? this.attributes.getNamedItem( "left" ).nodeValue : 0,
+              zindex = this.attributes.getNamedItem( "zindex" ) ? this.attributes.getNamedItem( "zindex" ).nodeValue : 1000,
+              linkSrc = this.attributes.getNamedItem( "linkSrc" ) ? this.attributes.getNamedItem( "linkSrc" ).nodeValue : "",
+              tags = this.attributes.getNamedItem( "tags" ) ? this.attributes.getNamedItem( "tags" ).nodeValue : "",
+              photosetId = this.attributes.getNamedItem( "photosetId" ) ? this.attributes.getNamedItem( "photosetId" ).nodeValue : "",
+              count = this.attributes.getNamedItem( "count" ) ? this.attributes.getNamedItem( "count" ).nodeValue : 3,
+              height = this.attributes.getNamedItem( "height" ) ? this.attributes.getNamedItem( "height" ).nodeValue : 100,
+              width = this.attributes.getNamedItem( "width" ) ? this.attributes.getNamedItem( "width" ).nodeValue : 100,
+              transition = this.attributes.getNamedItem( "transition" ) ? this.attributes.getNamedItem( "transition" ).nodeValue : "popcorn-fade",
+              target = this.attributes.getNamedItem( "target" ) ? this.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode;
 
-          // Get the image src and alt attributes, and perform
-          // some template replacing so we get our <img> element.
-          var src = this.attributes.getNamedItem( "src" ).nodeValue;
-          var alt = this.attributes.getNamedItem( "alt" ).nodeValue;
-          this.innerHTML = template.innerHTML;
-          var image = this.querySelector( "img" );
-          image.src = src;
-          image.alt = alt;
+          // Ensure there is a popcorn instance.
+          if ( window.pop ) {
+            this.innerHTML = "";
 
-          // If there is a media element, we link ourselves to it.
-          if ( document.querySelectorAll( "webmaker-media" ).length > 0 ) {
-            var start = this.attributes.getNamedItem( "start" ).nodeValue;
-            var end = this.attributes.getNamedItem( "end" ).nodeValue;
-
-            // register an image event
-            Popcorn(function() {
-              var props = {
-                start: start,
-                end: end,
-                src: src,
-                alt: alt,
-                target: "video-container"
-              };
-              window.pop.image(props);
-
-              var element = window.pop.getTrackEvent( window.pop.getLastTrackEventId() )._container;
-              e.popcornElement = element;
-              element.webmakerElement = e;
-              WebMaker.makeEditable( element );
+            window.pop.image({
+              start: start,
+              end: end,
+              src: src,
+              top: top,
+              left: left,
+              height: height,
+              width: width,
+              zindex: zindex,
+              linkSrc: linkSrc,
+              tags: tags,
+              photosetId: photosetId,
+              count: count,
+              transition: transition,
+              target: target
             });
 
-            // Prevent the image from showing up on-page now that it's popped.
-            this.style.display = "none";
           } else {
-            WebMaker.makeEditable( this );
+            // Code for just using default elements.
           }
         }
       }
@@ -265,14 +259,10 @@
   </script>
 </element>
 
-<element name="webmaker-map" attributes="start end location width height">
+<element name="webmaker-wikipedia"
+  attributes="start end transition zindex top left width height target src lang">
+
   <template>
-    <style scoped>
-      iframe {
-        display: block;
-        border: 1px solid black;
-      }
-    </style>
     <content></content>
   </template>
 
@@ -284,106 +274,240 @@
     this.register({
       prototype: {
         readyCallback: function() {
-          var location = this.attributes.getNamedItem( "location" ).nodeValue;
-          // Get the width and height, if the on-page code specifies them.
-          var w = this.attributes.getNamedItem( "width" );
-          w = w ? w.nodeValue : false;
-          var h = this.attributes.getNamedItem( "height" );
-          h = h ? h.nodeValue : false;
+          var start = this.attributes.getNamedItem( "start" ) ? this.attributes.getNamedItem( "start" ).nodeValue : 0,
+              end = this.attributes.getNamedItem( "end" ) ? this.attributes.getNamedItem( "end" ).nodeValue : 5,
+              top = this.attributes.getNamedItem( "top" ) ? this.attributes.getNamedItem( "top" ).nodeValue : 25,
+              left = this.attributes.getNamedItem( "left" ) ? this.attributes.getNamedItem( "left" ).nodeValue : 30,
+              zindex = this.attributes.getNamedItem( "zindex" ) ? this.attributes.getNamedItem( "zindex" ).nodeValue : 1000,
+              height = this.attributes.getNamedItem( "height" ) ? this.attributes.getNamedItem( "height" ).nodeValue : 50,
+              width = this.attributes.getNamedItem( "width" ) ? this.attributes.getNamedItem( "width" ).nodeValue : 40,
+              transition = this.attributes.getNamedItem( "transition" ) ? this.attributes.getNamedItem( "transition" ).nodeValue : "popcorn-fade",
+              target = this.attributes.getNamedItem( "target" ) ? this.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
+              lang = this.attributes.getNamedItem( "lang" ) ? this.attributes.getNamedItem( "lang" ).nodeValue : "en",
+              src = this.attributes.getNamedItem( "src" ) ? this.attributes.getNamedItem( "src" ).nodeValue : "Popcorn.js";
 
-          var iframe = '' +
-            '<iframe class="webmaker-map"' + 
-            ( w ? ' width="' + w + '"' : '' ) +
-            ( h ? ' height="' + h + '"' : '' ) +
-            ' frameborder="1" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.ca/maps?f=q&source=s_q&hl=en&geocode=&q=' +
-            location.replace( / /g, '+' ) + '&t=m&output=embed"></iframe>';
-          var content = template.innerHTML.replace( "<content></content>", iframe );
-          this.innerHTML = content;
-
-          // If there is a media element, we link ourselves to it.
-          if ( document.querySelectorAll( "webmaker-media" ).length > 0 ) {
-            var start = this.attributes.getNamedItem( "start" ).nodeValue;
-            var end = this.attributes.getNamedItem( "end" ).nodeValue;
-
-            // register a google map event
-            Popcorn(function() {
-              window.pop.googlemap({
-                start: start,
-                end: end,
-                location: location,
-                zoom: 20,
-                width: w,
-                height: h,
-                target: "video-container"
-              });
-            })
-
-            // And clear the regular element
+          // Ensure there is a popcorn instance.
+          if ( window.pop ) {
             this.innerHTML = "";
-          }
-        }
-      }
-    });
-  </script>
-</element>
 
-<!-- element name="webmaker-wiki" attributes="start end">
-
-  <template>
-    <style scoped>
-      iframe {
-        display: block;
-        border: 1px solid black;
-      }
-    </style>
-    <content></content>
-  </template>
-
-  <script>
-    // our element template:
-    var template = this.querySelector( "template" );
-
-    // our "what to do when this element is built" code:
-    this.register({
-      prototype: {
-        readyCallback: function() {
-          var url = this.attributes.getNamedItem( "src" ).nodeValue;
-          var w = this.attributes.getNamedItem( "width" );
-          w = w ? w.nodeValue : false;
-          var h = this.attributes.getNamedItem( "height" );
-          h = h ? h.nodeValue : false;
-
-          // Perform templating
-          var iframe = '' +
-            '<iframe class="webmaker-wiki"' + 
-            ( w ? ' width="' + w + '"' : '' ) +
-            ( h ? ' height="' + h + '"' : '' ) +
-            ' frameborder="0" scrolling="yes" marginheight="0" marginwidth="0" src="' + url + '?&printable=yes"></iframe>';
-          var content = template.innerHTML.replace( "<content></content>", iframe );
-          this.innerHTML = content;
-
-          // If there is a media element, we link ourselves to it.
-          if ( document.querySelectorAll( "webmaker-media" ).length > 0 ) {
-            var start = this.attributes.getNamedItem( "start" ).nodeValue;
-            var end = this.attributes.getNamedItem( "end" ).nodeValue;
-
-            // register a text pop event, but with HTML instead of plain text.
-            Popcorn(function() {
-              window.pop.footnote({
-                start: start,
-                end: end,
-                text: content,
-                width: w,
-                height: h,
-                target: window.pop.footnoteId
-              });
+            window.pop.wikipedia({
+              start: start,
+              end: end,
+              top: top,
+              left: left,
+              height: height,
+              width: width,
+              zindex: zindex,
+              transition: transition,
+              target: target,
+              src: src,
+              lang: lang
             });
 
-            // And clear the regular element
-            this.innerHTML = "";
+          } else {
+            // Code for just using default elements.
           }
         }
       }
     });
   </script>
-</element> -->
+</element>
+
+<element name="webmaker-twitter"
+  attributes="start end transition zindex left width target layout numberOfTweets searchType search username">
+
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var start = this.attributes.getNamedItem( "start" ) ? this.attributes.getNamedItem( "start" ).nodeValue : 0,
+              end = this.attributes.getNamedItem( "end" ) ? this.attributes.getNamedItem( "end" ).nodeValue : 5,
+              left = this.attributes.getNamedItem( "left" ) ? this.attributes.getNamedItem( "left" ).nodeValue : 0,
+              zindex = this.attributes.getNamedItem( "zindex" ) ? this.attributes.getNamedItem( "zindex" ).nodeValue : 1000,
+              width = this.attributes.getNamedItem( "width" ) ? this.attributes.getNamedItem( "width" ).nodeValue : 35,
+              transition = this.attributes.getNamedItem( "transition" ) ? this.attributes.getNamedItem( "transition" ).nodeValue : "popcorn-fade",
+              target = this.attributes.getNamedItem( "target" ) ? this.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
+              layout = this.attributes.getNamedItem( "layout" ) ? this.attributes.getNamedItem( "layout" ).nodeValue : "feed",
+              numberOfTweets = this.attributes.getNamedItem( "numberOfTweets" ) ? this.attributes.getNamedItem( "numberOfTweets" ).nodeValue : 10,
+              searchType = this.attributes.getNamedItem( "searchType" ) ? this.attributes.getNamedItem( "searchType" ).nodeValue : "mixed",
+              search = this.attributes.getNamedItem( "search" ) ? this.attributes.getNamedItem( "search" ).nodeValue : "",
+              username = this.attributes.getNamedItem( "username" ) ? this.attributes.getNamedItem( "username" ).nodeValue : "";
+
+          // Ensure there is a popcorn instance.
+          if ( window.pop ) {
+            this.innerHTML = "";
+
+            window.pop.twitter({
+              start: start,
+              end: end,
+              left: left,
+              width: width,
+              zindex: zindex,
+              transition: transition,
+              target: target,
+              layout: layout,
+              numberOfTweets: numberOfTweets,
+              search: search,
+              searchType: searchType,
+              username: username
+            });
+
+          } else {
+            // Code for just using default elements.
+          }
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-pause"
+  attributes="start end target duration">
+
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var start = this.attributes.getNamedItem( "start" ) ? this.attributes.getNamedItem( "start" ).nodeValue : 0,
+              end = this.attributes.getNamedItem( "end" ) ? this.attributes.getNamedItem( "end" ).nodeValue : 5,
+              target = this.attributes.getNamedItem( "target" ) ? this.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
+              duration = this.attributes.getNamedItem( "duration" ) ? this.attributes.getNamedItem( "duration" ).nodeValue : 0;
+
+          // Ensure there is a popcorn instance.
+          if ( window.pop ) {
+            this.innerHTML = "";
+
+            window.pop.pausePlugin({
+              start: start,
+              end: end,
+              duration: duration,
+              target: target
+            });
+
+          } else {
+            // Code for just using default elements.
+          }
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-skip"
+  attributes="start end target">
+
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var start = this.attributes.getNamedItem( "start" ) ? this.attributes.getNamedItem( "start" ).nodeValue : 0,
+              end = this.attributes.getNamedItem( "end" ) ? this.attributes.getNamedItem( "end" ).nodeValue : 5,
+              target = this.attributes.getNamedItem( "target" ) ? this.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode;
+
+          // Ensure there is a popcorn instance.
+          if ( window.pop ) {
+            this.innerHTML = "";
+
+            window.pop.skip({
+              start: start,
+              end: end,
+              target: target
+            });
+
+          } else {
+            // Code for just using default elements.
+          }
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-googlemap"
+  attributes="start end location width height lat lng top left zoom pitch heading fullscreen type transition zindex target">
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var start = this.attributes.getNamedItem( "start" ) ? this.attributes.getNamedItem( "start" ).nodeValue : 0,
+              end = this.attributes.getNamedItem( "end" ) ? this.attributes.getNamedItem( "end" ).nodeValue : 5,
+              top = this.attributes.getNamedItem( "top" ) ? this.attributes.getNamedItem( "top" ).nodeValue : 15,
+              left = this.attributes.getNamedItem( "left" ) ? this.attributes.getNamedItem( "left" ).nodeValue : 15,
+              zindex = this.attributes.getNamedItem( "zindex" ) ? this.attributes.getNamedItem( "zindex" ).nodeValue : 1000,
+              height = this.attributes.getNamedItem( "height" ) ? this.attributes.getNamedItem( "height" ).nodeValue : 70,
+              width = this.attributes.getNamedItem( "width" ) ? this.attributes.getNamedItem( "width" ).nodeValue : 70,
+              transition = this.attributes.getNamedItem( "transition" ) ? this.attributes.getNamedItem( "transition" ).nodeValue : "popcorn-fade",
+              target = this.attributes.getNamedItem( "target" ) ? this.attributes.getNamedItem( "target" ).nodeValue : "video-container",
+              location = this.attributes.getNamedItem( "location" ) ? this.attributes.getNamedItem( "location" ).nodeValue : "",
+              lat = this.attributes.getNamedItem( "lat" ) ? this.attributes.getNamedItem( "lat" ).nodeValue : "",
+              lng = this.attributes.getNamedItem( "lng" ) ? this.attributes.getNamedItem( "lng" ).nodeValue : "",
+              fullscreen = this.attributes.getNamedItem( "fullscreen" ) ? this.attributes.getNamedItem( "fullscreen" ).nodeValue : false,
+              zoom = this.attributes.getNamedItem( "zoom" ) ? this.attributes.getNamedItem( "zoom" ).nodeValue : 10,
+              pitch = this.attributes.getNamedItem( "pitch" ) ? this.attributes.getNamedItem( "pitch" ).nodeValue : 0,
+              heading = this.attributes.getNamedItem( "heading" ) ? this.attributes.getNamedItem( "heading" ).nodeValue : 0,
+              type = this.attributes.getNamedItem( "type" ) ? this.attributes.getNamedItem( "type" ).nodeValue : "ROADMAP";
+
+          // If there is a media element, we link ourselves to it.
+          if ( window.pop ) {
+            this.innerHTML = "";
+
+            window.pop.googlemap({
+              start: start,
+              end: end,
+              top: top,
+              left: left,
+              height: height,
+              width: width,
+              zindex: zindex,
+              transition: transition,
+              target: target,
+              location: location,
+              lat: lat,
+              lng: lng,
+              fullscreen: fullscreen,
+              zoom: zoom,
+              pitch: pitch,
+              heading: heading,
+              type: type
+            });
+
+          } else {
+            // Code for just using default elements.
+          }
+        }
+      }
+    });
+  </script>
+</element>

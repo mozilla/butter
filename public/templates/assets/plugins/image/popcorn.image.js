@@ -78,10 +78,11 @@
   }
 
   function validateDimension( value, fallback ) {
-    if ( typeof value === "number" ) {
-      return value;
+    var value = parseFloat( value );
+    if ( value < 0 || value > 100 ) {
+      return fallback;
     }
-    return fallback;
+    return value;
   }
 
   function createImageDiv( imageUrl, linkUrl, instance ) {

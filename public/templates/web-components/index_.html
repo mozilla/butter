@@ -41,39 +41,26 @@
     <div id="container" class="container">
       <div id="video-container" class="video video-container">
         <div id="video" class="video"></div>
-        <webmaker-media href="http://www.youtube.com/watch?v=yy8FDjSGmwQ" height="400px"></webmaker-media>
+        <webmaker-media target="video" href="http://www.youtube.com/watch?v=yy8FDjSGmwQ"></webmaker-media>
 
-        <webmaker-text start="0" end="7">Alright, so here's the deal. I love red pandas. This is not particularly
-          a secret, and it's not very hard to see why. They're ridiculously cute,
-          look very fluffy, and seem very playful.</webmaker-text>
+        <webmaker-text
+          start="1" end="7" fontSize="6" fontFamily="Vollkorn" fontColor="#F4A354"
+          alignment="center" position="custom" top="5" left="10" zindex="1000" target="video-container"
+          backgroundColor="red" fontDecorations="bold italics">
 
-        <webmaker-text start="8" end="11">(They're also endangered in the wild)</webmaker-text>
+          SAMPLE TEXT YO
+        </webmaker-text>
 
-        <webmaker-text start="13" end="18">To be fair, they're ridiculous animals from a zoological point of view.
-          The red panda has a body plan designed for predation, but instead it
-          eats mostly bamboo leaves.</webmaker-text>
+        <webmaker-image start="8" end="14" tags="mozilla" height="50" width="50" top="25" left="25" target="video-container"></webmaker-image>
 
-        <webmaker-text start="19" end="26">Bamboo is hard to digest, has very little nutritional value (so you need
-          to eat a LOT of it in a day), and covers a wide area for the energy
-          you get out of it. So it's really silly as a food source.</webmaker-text>
+        <webmaker-googlemap start="15" end="21" location="Maruyama Zoo" target="video-container"></webmaker-googlemap>
 
-        <webmaker-text start="28" end="35"><h2>This is what wikipedia has to say about them:</h2></webmaker-text>
-  <!-- 
-        <webmaker-wiki start="35" end="45" width="100%" height="400px" src="http://en.wikipedia.org/wiki/Red_panda"></webmaker-wiki> -->
+        <webmaker-pause start="28" end="29" duration="3"></webmaker-pause>
 
-        <webmaker-text start="37" end="43"><h2>And this is where you can find some cute ones:</h2></webmaker-text>
+        <webmaker-wikipedia start="22" end="30" src="Red Panda" target="video-container"></webmaker-wikipedia>
 
-        <webmaker-map start="45" end="50" width="100%" height="400px" location="Maruyama Zoo"></webmaker-map>
+        <webmaker-twitter start="32" end="55" search="kittens"></webmaker-twitter>
 
-        <webmaker-text start="52" end="55">This is a demontrator for
-        <a href="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/spec/components/index.html">Web Components</a>
-        and
-        <a href="https://dvcs.w3.org/hg/webcomponents/raw-file/tip/spec/custom/index.html">Custom elements</a>,
-        using the toolkitchen
-        <a href="https://github.com/toolkitchen/WebComponents">web components</a>
-        and
-        <a href="https://github.com/toolkitchen/CustomElements">custom elements</a>
-        polyfills.</webmaker-text>
       </div>
     </div>
   </body>
