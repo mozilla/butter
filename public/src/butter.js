@@ -25,8 +25,6 @@ window.Butter = {
     return;
   }
 
-  var WARNING_WAIT_TIME = 500;
-
   var ACCEPTED_UA_LIST = {
     "Chrome": 17,
     "Firefox": 10,
@@ -44,7 +42,13 @@ window.Butter = {
     "Firefox OS",
     // For BB Playbook
     "RIM Tablet OS"
-  ];
+  ],
+
+  UA_WARNING_TEXT = "Your web browser may lack some functionality expected" +
+    " by Popcorn Maker to function properly. Please upgrade your browser or" +
+    " <a href=\"https://webmademovies.lighthouseapp.com/projects/65733-popcorn-maker\">" +
+    "file a bug</a> to find out why your browser isn't fully supported. Click " +
+    "<a href=\"#\" class=\"close-button\">here</a> to remove this warning.";
 
   var require = requirejs.config({
     baseUrl: "/src"
@@ -57,7 +61,7 @@ window.Butter = {
             "./modules", "./dependencies", "./dialogs",
             "dialog/dialog", "editor/editor", "ui/ui",
             "util/xhr", "util/lang", "util/tutorial",
-            "text!default-config.json", "text!layouts/ua-warning.html",
+            "util/warn", "text!default-config.json",
             "ui/widget/tooltip", "crashreporter", "core/project",
             "../external/ua-parser/ua-parser"
           ],
@@ -67,7 +71,7 @@ window.Butter = {
             Modules, Dependencies, Dialogs,
             Dialog, Editor, UI,
             XHR, Lang, Tutorial,
-            DEFAULT_CONFIG_JSON, UA_WARNING_LAYOUT,
+            Warn, DEFAULT_CONFIG_JSON,
             ToolTip, CrashReporter, Project,
             UAParser
           ){
@@ -77,17 +81,6 @@ window.Butter = {
     var Butter = {};
 
     Butter.ToolTip = ToolTip;
-
-    Butter.showUAWarning = function() {
-      var uaWarningDiv = Lang.domFragment( UA_WARNING_LAYOUT, ".butter-ua-warning" );
-      document.body.appendChild( uaWarningDiv );
-      setTimeout(function() {
-        uaWarningDiv.classList.add( "slide-out" );
-      }, WARNING_WAIT_TIME );
-      uaWarningDiv.getElementsByClassName( "close-button" )[ 0 ].onclick = function () {
-        document.body.removeChild( uaWarningDiv );
-      };
-    };
 
     Butter.init = function( butterOptions ) {
 
@@ -109,7 +102,7 @@ window.Butter = {
       }
 
       if ( !acceptedUA ) {
-        Butter.showUAWarning();
+        Warn.showWarning( UA_WARNING_TEXT );
       }
 
       butterOptions = butterOptions || {};
@@ -180,10 +173,11 @@ window.Butter = {
         return _currentMedia.getManifest( name );
       }; //getManifest
 
-      _this.generateSafeTrackEvent = function( type, start, end, track, position ) {
+      _this.generateSafeTrackEvent = function( type, popcornOptions, track, position ) {
         var trackEvent,
             relativePosition,
-            popcornOptions = {};
+            start = popcornOptions.start,
+            end = popcornOptions.end;
 
         if ( start + _defaultTrackeventDuration > _currentMedia.duration ) {
           start = _currentMedia.duration - _defaultTrackeventDuration;
@@ -244,12 +238,12 @@ window.Butter = {
 
       function targetTrackEventRequested( e ) {
         var trackEvent,
-            popcornOptions,
-            start = _currentMedia.currentTime,
-            end;
+            popcornOptions = {},
+            start = _currentMedia.currentTime;
+
+        popcornOptions.start = start;
 
         if ( e.data.popcornOptions ) {
-          popcornOptions = {};
           for ( var prop in e.data.popcornOptions ) {
             if ( e.data.popcornOptions.hasOwnProperty( prop ) ) {
               popcornOptions[ prop ] = e.data.popcornOptions[ prop ];
@@ -259,15 +253,9 @@ window.Butter = {
 
         if ( _currentMedia && _currentMedia.ready ) {
           if ( popcornOptions && popcornOptions.end ) {
-            end = popcornOptions.end + start;
+            popcornOptions.end = popcornOptions.end + start;
           }
-          trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), start, end, e.data.position );
-          if ( popcornOptions ) {
-            if ( popcornOptions.end ) {
-              popcornOptions.end = trackEvent.popcornOptions.end;
-            }
-            trackEvent.update( popcornOptions );
-          }
+          trackEvent = _this.generateSafeTrackEvent( e.data.element.getAttribute( "data-popcorn-plugin-type" ), popcornOptions, e.data.position );
           _this.editor.editTrackEvent( trackEvent );
         }
         else {
@@ -380,8 +368,7 @@ window.Butter = {
               // cut off events that overlap the duration
               popcornOptions.end = _currentMedia.duration;
             }
-            trackEvent = _this.generateSafeTrackEvent( _copiedEvents[ i ].type, popcornOptions.start, popcornOptions.end );
-            trackEvent.update( popcornOptions );
+            trackEvent = _this.generateSafeTrackEvent( _copiedEvents[ i ].type, popcornOptions );
             trackEvent.selected = true;
           }
         }

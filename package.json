@@ -1,6 +1,6 @@
 {
   "name": "butter",
-  "version": "1.0.21",
+  "version": "1.0.24",
   "author": "The Mozilla Popcorn Team <dev-popcorn@lists.mozilla.org>",
   "description": "The Popcorn authoring tool",
   "contributors": [
@@ -99,7 +99,7 @@
   },
   "optionalDependencies": {
     "node-statsd": "git://github.com/sivy/node-statsd.git#d6997fff",
-    "sqlite3": "2.1.5"
+    "sqlite3": "2.1.7"
   },
   "devDependencies": {
     "awsbox": "0.4.2",
@@ -111,7 +111,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": "0.8.x",
-    "npm":  "1.2.x"
+    "node": ">=0.8",
+    "npm":  ">=1.1"
   }
 }

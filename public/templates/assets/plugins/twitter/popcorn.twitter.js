@@ -168,9 +168,9 @@
           tweetUser.classList.add( "popcorn-twitter-tweet-user" );
           tweetText = document.createElement( "div" );
           tweetText.classList.add( "popcorn-twitter-tweet-text" );
-          imageLinkSource = currTweet.profile_image_url || currTweet.user.profile_image_url;
-          twitterHandle = currTweet.from_user || currTweet.user.screen_name;
-          twitterName = currTweet.from_user_name || currTweet.user.name;
+          imageLinkSource = currTweet.profile_image_url || ( currTweet.user ? currTweet.user.profile_image_url : "" );
+          twitterHandle = currTweet.from_user || ( currTweet.user ? currTweet.user.screen_name : "" );
+          twitterName = currTweet.from_user_name || ( currTweet.user ? currTweet.user.name : "" );
 
           imgLink.classList.add( "popcorn-twitter-tweet-image" );
           imgLink.href = img.src = imageLinkSource;

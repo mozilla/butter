@@ -49,25 +49,27 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
   }
 
   function setBaseDuration( duration ) {
-    if ( duration === "" ) {
+    var durationTimeCode = Time.toTimecode( duration ),
+        durationSeconds = Time.toSeconds( duration );
+
+    // Don't accept empty inputs or negative/zero values for duration.
+    if ( duration === "" || durationSeconds <= 0 ) {
       _durationInput.value = Time.toTimecode( _media.duration );
       return;
     }
-    duration = Time.toTimecode( duration );
-    if ( _durationInput.value !== duration ) {
-      _durationInput.value = Time.toTimecode( duration );
+
+    // If the entered value wasn't in time code format.
+    if ( _durationInput.value !== durationTimeCode ) {
+      _durationInput.value = durationTimeCode;
     }
-    if ( duration !== _media.duration ) {
-      duration = Time.toSeconds( duration );
-    }
-    if ( duration === _media.duration ) {
+
+    // If the seconds version of the duration is already our current duration
+    // bail early.
+    if ( durationSeconds === _media.duration ) {
       return;
     }
-    if ( /[0-9]{1,9}/.test( duration ) ) {
-      _media.url = "#t=," + duration;
-    } else {
-      _media.url = duration;
-    }
+
+    _media.url = "#t=," + durationSeconds;
   }
 
   function onDenied( error ) {
@@ -149,9 +151,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
           trackEvent;
 
       function addTrackEvent() {
-        trackEvent = _butter.generateSafeTrackEvent( "sequencer", start, end );
-
-        trackEvent.update({
+        var popcornOptions = {
           source: data.source,
           denied: data.denied,
           start: start,
@@ -160,7 +160,9 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
           title: data.title,
           duration: data.duration,
           hidden: data.hidden || false
-        });
+        };
+
+        trackEvent = _butter.generateSafeTrackEvent( "sequencer", popcornOptions );
       }
 
       if ( end > _media.duration ) {

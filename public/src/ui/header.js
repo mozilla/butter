@@ -108,6 +108,19 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       }
     }
 
+    function toggleProjectNameListeners( state ) {
+      if ( state ) {
+        _projectTitle.addEventListener( "click", projectNameClick, false );
+        _projectTitle.classList.remove( "no-click" );
+        _projectName.addEventListener( "click", projectNameClick, false );
+        _toolTip.hidden = false;
+      } else {
+        _projectTitle.removeEventListener( "click", projectNameClick, false );
+        _projectName.removeEventListener( "click", projectNameClick, false );
+        _toolTip.hidden = true;
+      }
+    }
+
     function projectNameClick() {
       var input = document.createElement( "input" );
 
@@ -117,7 +130,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       input.classList.add( "butter-project-name" );
       input.value = _projectName.textContent !== _projectTitlePlaceHolderText ? _projectName.textContent : "";
       _projectTitle.replaceChild( input, _projectName );
-      _projectTitle.removeEventListener( "click", projectNameClick, false );
+      toggleProjectNameListeners( false );
       input.focus();
       input.addEventListener( "blur", onBlur, false );
       input.addEventListener( "keypress", onKeyPress, false );
@@ -162,18 +175,14 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _saveButton.innerHTML = "Sign in to save";
       },
       mediaReady: function() {
-        toggleSaveButton( !butter.project.isSaved );
-        _toolTip.hidden = false;
         _projectTitle.classList.remove( "butter-disabled" );
-        _projectTitle.addEventListener( "click", projectNameClick, false );
-        _projectName.addEventListener( "click", projectNameClick, false );
+        toggleSaveButton( !butter.project.isSaved );
+        toggleProjectNameListeners( true );
       },
       mediaChanging: function() {
-        toggleSaveButton( false );
-        _toolTip.hidden = true;
         _projectTitle.classList.add( "butter-disabled" );
-        _projectTitle.removeEventListener( "click", projectNameClick, false );
-        _projectName.removeEventListener( "click", projectNameClick, false );
+        toggleSaveButton( false );
+        toggleProjectNameListeners( false );
       }
     };
 
@@ -226,15 +235,18 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       function afterSave() {
         butter.editor.openEditor( "share-properties" );
         togglePreviewButton( true );
+        toggleProjectNameListeners( true );
       }
 
       if ( !butter.project.isSaved ) {
         toggleSaveButton( false );
+        _projectTitle.classList.add( "no-click" );
 
         // If saving fails, restore the "Save" button so the user can try again.
         _userData.save( function() { afterSave(); },
                         function() { toggleSaveButton( true );
-                                     togglePreviewButton( false ); } );
+                                     togglePreviewButton( false );
+                                     toggleProjectNameListeners( true ); } );
       } else {
         afterSave();
       }
@@ -289,6 +301,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _userData.authenticationRequired( prepare );
       } else {
         nameError();
+        toggleProjectNameListeners( true );
       }
 
       _projectTitle.replaceChild( _projectName, node );
@@ -309,7 +322,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       // Disable "Save" button
       _this.views.clean();
       _projectName.textContent = butter.project.name;
-      _projectTitle.addEventListener( "click", projectNameClick, false );
     });
 
     butter.listen( "projectchanged", function() {
