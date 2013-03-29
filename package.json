@@ -91,7 +91,7 @@
     "less-middleware": "0.1.9",
     "less": "1.3.3",
     "nconf": "0.6.7",
-    "newrelic": "0.9.19",
+    "newrelic": "0.9.20",
     "node-uuid": "1.4.0",
     "requirejs": "2.1.5",
     "sequelize": "1.5.0",
