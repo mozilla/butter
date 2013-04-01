@@ -231,21 +231,13 @@ module.exports = function routesCtor( app, User, filter, sanitizer, stores, util
   }
 
   function storeData( req, res, store ) {
-    var s = '';
+    var name = generateUniqueName([
+      { name: 'dt', value: formatDate() },
+      { name: 'deployment', value: deploymentType }
+    ]);
 
-    req.addListener( 'data', function( data ) {
-      s += data;
-    });
-
-    req.addListener( 'end', function() {
-      var name = generateUniqueName([
-        { name: 'dt', value: formatDate() },
-        { name: 'deployment', value: deploymentType }
-      ]);
-      store.write( name, s, function() {
-        res.writeHead( 200, { 'content-type': 'text/plain' } );
-        res.end();
-      });
+    store.write( name, JSON.stringify( req.body ), function() {
+      res.send( 200 );
     });
   }
 

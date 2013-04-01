@@ -7,7 +7,7 @@
  */
 define( [ "util/lang", "util/xhr",
           "./base-editor", "./trackevent-editor" ],
-  function( LangUtils, XHRUtils,
+  function( LangUtils, xhr,
             BaseEditor, TrackEventEditor ) {
 
   var __editors = {};
@@ -20,11 +20,7 @@ define( [ "util/lang", "util/xhr",
         src = src.replace( "{{baseDir}}", baseDir );
       }
 
-      XHRUtils.get( src, function( e ) {
-        if ( e.target.readyState === 4 ){
-          readyCallback( e.target.responseText );
-        }
-      }, "text/plain" );
+      xhr.get( src, readyCallback );
     };
  }
 

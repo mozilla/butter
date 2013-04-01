@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define([ "util/xhr", "loaders/js-loader", "loaders/css-loader", "loaders/load-group" ],
-  function( XHR, JSLoader, CSSLoader, LoadGroup ) {
+define([ "loaders/js-loader", "loaders/css-loader", "loaders/load-group" ],
+  function( JSLoader, CSSLoader, LoadGroup ) {
 
   return function( config ) {
 

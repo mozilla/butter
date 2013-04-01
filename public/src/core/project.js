@@ -317,20 +317,20 @@ define( [ "core/eventmanager", "core/media", "util/sanitizer" ],
         return;
       }
 
-      var projectJSON = JSON.stringify({
+      var projectData = {
         id: _id,
         name: _name,
         template: _template,
         author: _author,
         data: _this.data,
         remixedFrom: _remixedFrom
-      });
+      };
 
       // Save to local storage first in case network is down.
       backupData();
 
       // Save to db, then publish
-      butter.cornfield.save( _id, projectJSON, function( e ) {
+      butter.cornfield.save( _id, projectData, function( e ) {
         if ( e.error === "okay" ) {
           // Since we've now fully saved, blow away autosave backup
           _isDirty = false;
