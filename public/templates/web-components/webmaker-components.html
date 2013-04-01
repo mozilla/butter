@@ -187,7 +187,8 @@
               shadow: shadowColor ? true : false,
               shadowColor: shadowColor,
               linkUrl: linkUrl,
-              fontDecorations: fontDecorations
+              fontDecorations: fontDecorations,
+              transition: transition
             });
 
           } else {
@@ -465,7 +466,7 @@
           var start = this.attributes.getNamedItem( "start" ) ? this.attributes.getNamedItem( "start" ).nodeValue : 0,
               end = this.attributes.getNamedItem( "end" ) ? this.attributes.getNamedItem( "end" ).nodeValue : 5,
               target = this.attributes.getNamedItem( "target" ) ? this.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
-              loop = this.attributes.getNamedItem( "loop" ) ? this.attributes.getNamedItem( "loop" ).nodeValue ? 0;
+              loop = this.attributes.getNamedItem( "loop" ) ? this.attributes.getNamedItem( "loop" ).nodeValue : 0;
 
           // Ensure there is a popcorn instance.
           if ( window.pop ) {
@@ -476,6 +477,151 @@
               end: end,
               target: target,
               loop: loop
+            });
+
+          } else {
+            // Code for just using default elements.
+          }
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-sequencer"
+  attributes="start end target source fallback width height top left from volume hidden mute zindex duration">
+
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var start = this.attributes.getNamedItem( "start" ) ? this.attributes.getNamedItem( "start" ).nodeValue : 0,
+              end = this.attributes.getNamedItem( "end" ) ? this.attributes.getNamedItem( "end" ).nodeValue : 5,
+              target = this.attributes.getNamedItem( "target" ) ? this.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
+              zindex = this.attributes.getNamedItem( "zindex" ) ? this.attributes.getNamedItem( "zindex" ).nodeValue : 1000,
+              source = this.attributes.getNamedItem( "source" ) ? this.attributes.getNamedItem( "source" ).nodeValue : "",
+              fallback = this.attributes.getNamedItem( "fallback" ) ? this.attributes.getNamedItem( "fallback" ).nodeValue : "",
+              width = this.attributes.getNamedItem( "width" ) ? this.attributes.getNamedItem( "width" ).nodeValue : 100,
+              height = this.attributes.getNamedItem( "height" ) ? this.attributes.getNamedItem( "height" ).nodeValue : 100,
+              top = this.attributes.getNamedItem( "top" ) ? this.attributes.getNamedItem( "top" ).nodeValue : 0,
+              left = this.attributes.getNamedItem( "left" ) ? this.attributes.getNamedItem( "left" ).nodeValue : 0,
+              from = this.attributes.getNamedItem( "from" ) ? this.attributes.getNamedItem( "from" ).nodeValue : 0,
+              volume = this.attributes.getNamedItem( "volume" ) ? this.attributes.getNamedItem( "volume" ).nodeValue : 100,
+              hidden = this.attributes.getNamedItem( "hidden" ) ? this.attributes.getNamedItem( "hidden" ).nodeValue : false,
+              mute = this.attributes.getNamedItem( "mute" ) ? this.attributes.getNamedItem( "mute" ).nodeValue : false,
+              duration = this.attributes.getNamedItem( "duration" ) ? this.attributes.getNamedItem( "duration" ).nodeValue : "";
+
+          // Ensure there is a popcorn instance.
+          if ( window.pop ) {
+            this.innerHTML = "";
+
+            window.pop.sequencer({
+              start: start,
+              end: end,
+              target: target,
+              zindex: zindex,
+              source: source,
+              fallback: fallback,
+              width: width,
+              height: height,
+              top: top,
+              left: left,
+              from: from,
+              volume: volume,
+              hidden: hidden,
+              mute: mute,
+              duration: duration
+            });
+
+          } else {
+            // Code for just using default elements.
+          }
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-popup"
+  attributes="start end transition linkUrl fontPercentage fontColor fontDecorations fontFamily top left width target type triangle sound icon flip">
+  <template>
+    <!-- Eventually we can have actual plugin content layouts here and pass this to the plugins themselves -->
+    <p><content></content></p>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var text = this.innerHTML,
+              defaultDecorations = { bold: false, italics: false },
+              start = this.attributes.getNamedItem( "start" ) ? this.attributes.getNamedItem( "start" ).nodeValue : 0,
+              end = this.attributes.getNamedItem( "end" ) ? this.attributes.getNamedItem( "end" ).nodeValue : 5,
+              fontPercentage = this.attributes.getNamedItem( "fontPercentage" ) ? this.attributes.getNamedItem( "fontPercentage" ).nodeValue : 4,
+              top = this.attributes.getNamedItem( "top" ) ? this.attributes.getNamedItem( "top" ).nodeValue : 0,
+              left = this.attributes.getNamedItem( "left" ) ? this.attributes.getNamedItem( "left" ).nodeValue : 0,
+              zindex = this.attributes.getNamedItem( "zindex" ) ? this.attributes.getNamedItem( "zindex" ).nodeValue : 1000,
+              fontFamily =  this.attributes.getNamedItem( "fontFamily" ) ? this.attributes.getNamedItem( "fontFamily" ).nodeValue: "Vollkorn",
+              width = this.attributes.getNamedItem( "width" ) ? this.attributes.getNamedItem( "width" ).nodeValue : 50,
+              transition = this.attributes.getNamedItem( "transition" ) ? this.attributes.getNamedItem( "transition" ).nodeValue : "popcorn-fade",
+              target = this.attributes.getNamedItem( "target" ) ? this.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
+              linkUrl = this.attributes.getNamedItem( "linkUrl" ) ? this.attributes.getNamedItem( "linkUrl" ).nodeValue : "",
+              fontDecorations = this.attributes.getNamedItem( "fontDecorations" ) ? this.attributes.getNamedItem( "fontDecorations" ).nodeValue : "",
+              type = this.attributes.getNamedItem( "type" ) ? this.attributes.getNamedItem( "type" ).nodeValue : "popup",
+              triangle = this.attributes.getNamedItem( "triangle" ) ? this.attributes.getNamedItem( "triangle" ).nodeValue : "bottom left",
+              sound = this.attributes.getNamedItem( "sound" ) ? this.attributes.getNamedItem( "sound" ).nodeValue : false,
+              icon = this.attributes.getNamedItem( "icon" ) ? this.attributes.getNamedItem( "icon" ).nodeValue : "error",
+              flip = this.attributes.getNamedItem( "flip" ) ? this.attributes.getNamedItem( "flip" ).nodeValue : false,
+              fontColor = this.attributes.getNamedItem( "fontColor" ) ? this.attributes.getNamedItem( "fontColor" ).nodeValue : "#000000";
+
+          if ( fontDecorations ) {
+            var decorations = fontDecorations.split( " " );
+
+            fontDecorations = {};
+
+            for ( var i = 0; i < decorations.length; i++ ) {
+              fontDecorations[ decorations[ i ] ] = true;
+            }
+
+          } else {
+            fontDecorations = defaultDecorations;
+          }
+
+          // Ensure there is a popcorn instance.
+          if ( window.pop ) {
+            this.innerHTML = "";
+
+            window.pop.popup({
+              start: start,
+              end: end,
+              text: text,
+              fontPercentage: fontPercentage,
+              target: target,
+              top: top,
+              left: left,
+              zindex: zindex,
+              fontFamily: fontFamily,
+              fontColor: fontColor,
+              linkUrl: linkUrl,
+              fontDecorations: fontDecorations,
+              type: type,
+              triangle: triangle,
+              sound: sound,
+              icon: icon,
+              flip: flip,
+              transition: transition
             });
 
           } else {

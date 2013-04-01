@@ -41,11 +41,12 @@
     <div id="container" class="container">
       <div id="video-container" class="video video-container">
         <div id="video" class="video"></div>
+        <div class="loading-message"></div>
         <webmaker-media target="video" href="http://www.youtube.com/watch?v=yy8FDjSGmwQ"></webmaker-media>
 
         <webmaker-text
           start="1" end="7" fontSize="6" fontFamily="Vollkorn" fontColor="#F4A354"
-          alignment="center" position="custom" top="5" left="10" zindex="1000" target="video-container"
+          alignment="center" position="custom" top="5" left="10" target="video-container"
           backgroundColor="red" fontDecorations="bold italics">
 
           SAMPLE TEXT YO
@@ -60,6 +61,16 @@
         <webmaker-wikipedia start="22" end="30" src="Red Panda" target="video-container"></webmaker-wikipedia>
 
         <webmaker-twitter start="32" end="55" search="kittens"></webmaker-twitter>
+
+        <webmaker-sequencer start="5" end="20" source="http://www.youtube.com/watch?v=2azQUs7LFBQ" target="video-container"
+                            duration="478" from="35"></webmaker-sequencer>
+
+        <webmaker-popup
+          start="1" end="7" fontPercentage="3" fontFamily="Vollkorn" fontColor="#F4A354"
+          top="30" left="10" target="video-container" width="40">
+
+          SAMPLE POPUP
+        </webmaker-popup>
 
       </div>
     </div>
