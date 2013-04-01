@@ -172,6 +172,9 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
         }
 
         function updateTrackEvent( options ) {
+          if ( !_butter.currentMedia.paused ) {
+            _butter.currentMedia.pause();
+          }
           // If the end time is greater than the duration of the video, expand it to fit.
           // We have to set an event listener on "mediaready" to update the trackevent after the base duration has been changed
           if ( options.end && options.end > _butter.duration ) {

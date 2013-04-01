@@ -148,6 +148,7 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
     function addEvent() {
       var start = _butter.currentTime,
           end = start + data.duration,
+          playWhenReady = false,
           trackEvent;
 
       function addTrackEvent() {
@@ -168,9 +169,13 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
       if ( end > _media.duration ) {
         _butter.listen( "mediaready", function onMediaReady() {
           _butter.unlisten( "mediaready", onMediaReady );
+          if ( playWhenReady ) {
+            _media.play();
+          }
           addTrackEvent();
         });
 
+        playWhenReady = !_media.paused;
         setBaseDuration( end );
       } else {
         addTrackEvent();
