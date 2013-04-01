@@ -175,7 +175,7 @@ define( [ "util/lang", "util/xhr", "util/keys", "util/mediatypes", "editor/edito
           addTrackEvent();
         });
 
-        playWhenReady = !_media.paused
+        playWhenReady = !_media.paused;
         setBaseDuration( end );
       } else {
         addTrackEvent();
