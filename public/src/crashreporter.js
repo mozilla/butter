@@ -7,7 +7,7 @@
  *
  * Provides backend and UI for the crash reporter
  */
-define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI ) {
+define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, xhr, URI ) {
 
   var STATE_EVENT_QUEUE_LENGTH = 10;
 
@@ -148,8 +148,7 @@ define( [ "dialog/dialog", "util/xhr", "util/uri" ], function( Dialog, XHR, URI 
           delete crashReport.onSendReport;
           delete crashReport.onNoReport;
           crashReport.comments = comments;
-          XHR.post( "/crash", JSON.stringify( crashReport ),
-                    attemptRecovery, "text/json" );
+          xhr.post( "/crash", crashReport, attemptRecovery );
         }
 
         // Be careful about trusting our objects if we've crashed.

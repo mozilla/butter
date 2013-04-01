@@ -3,133 +3,91 @@
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
 (function() {
+  var __csrfToken;
 
-  function parameterize(data) {
-    var s = [];
-
-    if ( !data ) {
-      return null;
+  var defaultErrorHandler = function( xhr, statusText, errorThrown ) {
+    if ( console && console.error ) {
+      console.error( "Request failed with %s: %s", statusText, errorThrown );
     }
+  };
 
-    for(var key in data){
-      if( data.hasOwnProperty( key ) ){
-        s[s.length] = encodeURIComponent(key) + "=" + encodeURIComponent(data[key]);
-      }
-    }
-
-    return s.join("&").replace("/%20/g", "+");
-  }
-
-  var __csrfToken = "",
-      __onCSRFTokenAcquired;
-
-  define( [], function() {
-
-    function generateCSRFOnReadyStateHandler( callback ) {
-      return function() {
+  var xhrModule = {
+    ajax: function( options ) {
+      var xhr = new XMLHttpRequest();
+      xhr.open( options.method, options.url, true );
+      xhr.onreadystatechange = function() {
         if ( this.readyState !== 4 ) {
           return;
         }
 
-        if ( !__csrfToken ) {
+        // If this is a fire-and-forget request
+        if ( !options.success ) {
+          return;
+        }
+
+        var response = this.responseText;
+
+        if ( this.getResponseHeader( "Content-Type" ).match( "application/json" ) ) {
           try {
-            __csrfToken = JSON.parse( this.response || this.responseText ).csrf;
-            if ( __csrfToken && __onCSRFTokenAcquired ) {
-              __onCSRFTokenAcquired();
-            }
-          } catch (e) {}
+            response = JSON.parse( this.responseText );
+          } catch ( ex ) {
+            return options.error( this, "parsererror", ex );
+          }
         }
-
-        if ( callback ) {
-          callback.apply( this, arguments );
-        }
-
+        options.success( response );
       };
-    }
 
-    var XHR = {
-      "UNSENT": 0,
-      "OPENED": 1,
-      "HEADERS_RECEIVED": 2,
-      "LOADING": 3,
-      "DONE": 4,
-
-      /**
-       * getUntilComplete
-       *
-       * Wraps XHR.get with a cross-browser compatible check for load completeness.
-       *
-       * @param {String} url: Request url.
-       * @param {Function} callback: Callback function which is called after XHR is complete.
-       * @param {String} mimeTypeOverride: Optional. Overrides MIME type specified by the response from the server.
-       * @param {Object} extraRequestHeaders: Optional. Header key/value pairs to add to the request before it is sent to the server.
-       */
-      "getUntilComplete": function( url, callback, mimeTypeOverride, extraRequestHeaders ) {
-        XHR.get( url, function( e ) {
-          if ( this.readyState === XHR.DONE ) {
-            callback.call( this, e );
-          }
-        }, mimeTypeOverride, extraRequestHeaders );
-      },
-
-      /**
-       * get
-       *
-       * Sends a GET request through XHR to the specified URL.
-       *
-       * @param {String} url: Request url.
-       * @param {Function} callback: Callback function which is called when readyState changes.
-       * @param {String} mimeTypeOverride: Optional. Overrides MIME type specified by the response from the server.
-       * @param {Object} extraRequestHeaders: Optional. Header key/value pairs to add to the request before it is sent to the server.
-       */
-      "get": function( url, callback, mimeTypeOverride, extraRequestHeaders ) {
-        var xhr = new XMLHttpRequest();
-        xhr.open( "GET", url, true );
-        xhr.onreadystatechange = generateCSRFOnReadyStateHandler( callback );
-        if ( extraRequestHeaders ) {
-          for ( var requestHeader in extraRequestHeaders ) {
-            if ( extraRequestHeaders.hasOwnProperty( requestHeader ) ) {
-              xhr.setRequestHeader( requestHeader, extraRequestHeaders[ requestHeader ] );
-            }
-          }
-        }
-        if ( xhr.overrideMimeType && mimeTypeOverride ) {
-          xhr.overrideMimeType( mimeTypeOverride );
-        }
-        xhr.send( null );
-      },
-
-      /**
-       * post
-       *
-       * Sends a POST request through XHR to the specified URL.
-       *
-       * @param {String} url: Request url.
-       * @param {Function} callback: Callback function which is called when readyState changes.
-       * @param {String} type: Optional. The Content-Type header value to supply with the request.
-       */
-      "post": function( url, data, callback, type ) {
-        var xhr = new XMLHttpRequest();
-        xhr.open( "POST", url, true );
-        xhr.onreadystatechange = generateCSRFOnReadyStateHandler( callback );
-        if ( __csrfToken ) {
-          xhr.setRequestHeader( "x-csrf-token", __csrfToken );
-        }
-        if ( !type ) {
-          xhr.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded" );
-          xhr.send( parameterize( data ) );
-        } else {
-          xhr.setRequestHeader( "Content-Type", type );
-          xhr.send( data );
-        }
-      },
-
-      setCSRFTokenAcquiredCallback: function( callback ) {
-        __onCSRFTokenAcquired = callback;
+      if ( options.header === Object( options.header ) ) {
+        Object.keys( options.header ).forEach( function( header ) {
+          xhr.setRequestHeader( header, options.header[ header ] );
+        });
       }
-    };
 
-    return XHR;
+      if ( !options.error ) {
+        options.error = defaultErrorHandler;
+      }
 
-  }); //define
+      var data = options.data;
+
+      // If the data being sent is a plain object, convert it to JSON
+      if ( data === Object( data ) ) {
+        data = JSON.stringify( data );
+        xhr.setRequestHeader( "Content-Type", "application/json; charset=utf-8" );
+      }
+
+      xhr.send( data );
+    },
+    get: function( url, success ) {
+      xhrModule.ajax({
+        method: "GET",
+        url: url,
+        success: success
+      });
+    },
+    post: function( url, data, success ) {
+      if ( typeof data === "function" ) {
+        success = data;
+        data = null;
+      }
+
+      xhrModule.ajax({
+        method: "POST",
+        url: url,
+        header: {
+          "x-csrf-token": __csrfToken
+        },
+        data: data,
+        success: success
+      });
+    }
+  };
+
+  // Get the CSRF token from the server so we can send POST requests
+  xhrModule.get( "/api/whoami", function( response ) {
+    __csrfToken = response.csrf;
+  });
+
+  define([], function() {
+    return xhrModule;
+  });
 }());

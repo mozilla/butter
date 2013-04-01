@@ -2,99 +2,51 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/xhr" ],
-  function( XHR ) {
+define( [ "util/xhr" ], function( xhr ) {
 
   // Shortcut to make lint happy. Constructor is capitalized, and reference is non-global.
   var JSSHA = window.jsSHA;
 
   var IMAGE_DATA_URI_PREFIX_REGEX = "data:image/(jpeg|png);base64,";
-
-  function hostname() {
-    return location.protocol + "//" + location.hostname + ( location.port ? ":" + location.port : "" );
-  }
-
   var Cornfield = function( butter ) {
 
     var authenticated = false,
         email = "",
         name = "",
         username = "",
-        server = hostname(),
-        xhrPostQueue = [],
         self = this;
 
-    var sendXHRPost = function() {
-      console.warn( "XHR.post occurred without a CSRF token. Buffering request." );
-      xhrPostQueue.push( arguments );
-    };
+    this.login = function( callback ) {
+      navigator.id.get( function( assertion ) {
+        if ( assertion ) {
+          xhr.post( "/persona/verify", { assertion: assertion }, function( response ) {
+            if ( response.status === "okay" ) {
 
-    XHR.setCSRFTokenAcquiredCallback( function() {
-      var args;
+              // Get email, name, and username after logging in successfully
+              whoami( callback );
+              return;
+            }
 
-      while ( xhrPostQueue.length ) {
-        args = xhrPostQueue.shift();
-        XHR.post.apply( this, args );
-      }
-
-      XHR.setCSRFTokenAcquiredCallback( null );
-
-      sendXHRPost = XHR.post;
-    });
-
-    this.login = function(callback) {
-      navigator.id.get(function(assertion) {
-        if (assertion) {
-          sendXHRPost(server + "/persona/verify",
-            { assertion: assertion },
-            function() {
-              if (this.readyState === 4) {
-                try {
-                  var response = JSON.parse( this.response || this.responseText );
-                  if (response.status === "okay") {
-
-                    // Get email, name, and username after logging in successfully
-                    whoami( function( data ) {
-                      callback( data );
-                    });
-                    return;
-                  }
-
-                  // If there was an error of some sort, callback on that
-                  callback(response);
-                } catch (err) {
-                  callback({ error: "an unknown error occured" });
-                }
-              }
-            });
+            // If there was an error of some sort, callback on that
+            callback( response );
+          });
         } else {
-          callback(undefined);
+          callback();
         }
       });
     };
 
     function whoami( callback ) {
-      XHR.get( server + "/api/whoami", function() {
-        if ( this.readyState === 4 ) {
-          var response;
+      xhr.get( "/api/whoami", function( response ) {
+        if ( response.status === "okay" ) {
+          authenticated = true;
+          email = response.email;
+          username = response.username;
+          name = response.name;
+        }
 
-          try {
-            response = JSON.parse( this.response || this.responseText );
-            if ( response.status === "okay" ) {
-              authenticated = true;
-              email = response.email;
-              username = response.username;
-              name = response.name;
-            }
-          } catch ( err ) {
-            response = {
-              error: "failed to parse data from server: \n" + this.response
-            };
-          }
-
-          if ( callback ) {
-            callback( response );
-          }
+        if ( callback ) {
+          callback( response );
         }
       });
     }
@@ -136,42 +88,23 @@ define( [ "util/xhr" ],
       // received from the server.
       self.publish = publishPlaceholder;
 
-      sendXHRPost(server + "/api/publish/" + id, null, function() {
-        if (this.readyState === 4) {
-          var response;
+      xhr.post( "/api/publish/" + id, function( response ) {
+        // Reset publish function to its original incarnation.
+        self.publish = publishFunction;
 
-          // Reset publish function to its original incarnation.
-          self.publish = publishFunction;
-
-          try {
-            response = JSON.parse( this.response || this.responseText );
-            callback(response);
-          } catch (err) {
-            callback({ error: "an unknown error occured" });
-          }
-        }
+        callback( response );
       });
     }
 
     this.logout = function(callback) {
-      sendXHRPost(server + "/persona/logout", null, function() {
+      xhr.post( "/persona/logout", function( response ) {
+        authenticated = false;
         email = "";
-        if (this.readyState === 4) {
-          var response;
+        username = "";
+        name = "";
 
-          try {
-            response = JSON.parse( this.response || this.responseText );
-            authenticated = false;
-            email = "";
-            username = "";
-            name = "";
-          } catch (err) {
-            response = { error: "an unknown error occured" };
-          }
-
-          if ( callback ) {
-            callback( response );
-          }
+        if ( callback ) {
+          callback( response );
         }
       });
     };
@@ -186,7 +119,7 @@ define( [ "util/xhr" ],
       // received from the server.
       self.save = savePlaceholder;
 
-      var url = server + "/api/project/";
+      var url = "/api/project/";
 
       if ( id ) {
         url += id;
@@ -206,35 +139,25 @@ define( [ "util/xhr" ],
         }
       });
 
-      sendXHRPost( url, data, function() {
-        if (this.readyState === 4) {
+      xhr.post( url, data, function( response ) {
+        // Reset save function to its original incarnation.
+        self.save = saveFunction;
 
-          // Reset save function to its original incarnation.
-          self.save = saveFunction;
-
-          try {
-            var response = JSON.parse( this.response || this.responseText );
-
-            if ( Array.isArray( response.imageURLs ) ) {
-              response.imageURLs.forEach( function( image ) {
-                var hashedTrackEvent = hashedTrackEvents[ image.hash ];
-                if ( hashedTrackEvent ) {
-                  hashedTrackEvent.update({
-                    src: image.url
-                  });
-                }
-                else {
-                  console.warn( "Cornfield responded with invalid image hash:", image.hash );
-                }
+        if ( Array.isArray( response.imageURLs ) ) {
+          response.imageURLs.forEach( function( image ) {
+            var hashedTrackEvent = hashedTrackEvents[ image.hash ];
+            if ( hashedTrackEvent ) {
+              hashedTrackEvent.update({
+                src: image.url
               });
+            } else {
+              console.warn( "Cornfield responded with invalid image hash:", image.hash );
             }
-
-            callback(response);
-          } catch (err) {
-            callback({ error: "an unknown error occured" });
-          }
+          });
         }
-      }, "application/json" );
+
+        callback( response );
+      });
     }
 
     this.save = saveFunction;

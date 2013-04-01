@@ -3,7 +3,7 @@
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
 define( [ "text!dialog/dialogs/feedback.html", "dialog/dialog", "util/xhr" ],
-  function( LAYOUT_SRC, Dialog, XHR ) {
+  function( LAYOUT_SRC, Dialog, xhr ) {
     Dialog.register( "feedback", LAYOUT_SRC, function ( dialog ) {
       var rootElement = dialog.rootElement,
           updateBtn = rootElement.querySelector( ".update" ),
@@ -26,8 +26,7 @@ define( [ "text!dialog/dialogs/feedback.html", "dialog/dialog", "util/xhr" ],
             browser: browserInfo,
             comments: commentsTextArea.value
           };
-          XHR.post( "/feedback", JSON.stringify( commentsReport ),
-                    function(){ /* fire and forget */ }, "text/json" );
+          xhr.post( "/feedback", commentsReport );
           dialog.activity( "default-close" );
         }
       }, false );
