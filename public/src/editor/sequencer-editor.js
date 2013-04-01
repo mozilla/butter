@@ -113,6 +113,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
             startLeft,
             startWidth,
             activeHandle,
+            playWhenReady = false,
             updateOptions = {};
 
         // Converting px <=> time, normalizing
@@ -162,6 +163,10 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
 
         function updateEndAfterExpand() {
           var track = _trackEvent.track;
+          if ( playWhenReady ) {
+            playWhenReady = false;
+            _butter.currentMedia.play();
+          }
           track.removeTrackEvent( _trackEvent );
           track.addTrackEvent( _trackEvent );
           _this.updateTrackEventSafe( _trackEvent, updateOptions );
@@ -175,6 +180,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           // If the end time is greater than the duration of the video, expand it to fit.
           // We have to set an event listener on "mediaready" to update the trackevent after the base duration has been changed
           if ( options.end && options.end > _butter.duration ) {
+            playWhenReady = !_butter.currentMedia.paused;
             _butter.currentMedia.url = "#t=," + options.end;
             _butter.listen( "mediaready", updateEndAfterExpand );
           } else {
