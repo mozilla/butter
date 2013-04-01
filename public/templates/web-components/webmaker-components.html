@@ -447,6 +447,46 @@
   </script>
 </element>
 
+<element name="webmaker-loop"
+  attributes="start end target loop">
+
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var start = this.attributes.getNamedItem( "start" ) ? this.attributes.getNamedItem( "start" ).nodeValue : 0,
+              end = this.attributes.getNamedItem( "end" ) ? this.attributes.getNamedItem( "end" ).nodeValue : 5,
+              target = this.attributes.getNamedItem( "target" ) ? this.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
+              loop = this.attributes.getNamedItem( "loop" ) ? this.attributes.getNamedItem( "loop" ).nodeValue ? 0;
+
+          // Ensure there is a popcorn instance.
+          if ( window.pop ) {
+            this.innerHTML = "";
+
+            window.pop.loopPlugin({
+              start: start,
+              end: end,
+              target: target,
+              loop: loop
+            });
+
+          } else {
+            // Code for just using default elements.
+          }
+        }
+      }
+    });
+  </script>
+</element>
+
 <element name="webmaker-googlemap"
   attributes="start end location width height lat lng top left zoom pitch heading fullscreen type transition zindex target">
   <template>
