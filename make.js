@@ -1,13 +1,13 @@
 /*global cat,cd,cp,echo,env,exec,exit,find,mkdir,mv,pwd,rm,sed,target,test */
 
-var path = require( "path" ),
+var async = require( "async" ),
+    path = require( "path" ),
     normalize = function( p ){ return path.normalize( p ); },
     // Make Windows happy, use `node <path>`
     nodeExec = function( p ){ return 'node "' + p + '"'; },
-    pythonExec = function( p ){ return 'python "' + p + '"'; },
 
     JSLINT = nodeExec( normalize( "./node_modules/jshint/bin/jshint" ) ),
-    HTML5LINT = pythonExec( normalize( "./public/external/html5-lint/html5check.py" ) ),
+    html5lint = require( "html5-lint" ),
     CSSLINT = nodeExec( normalize( "./node_modules/csslint/cli.js" ) ),
     RJS = nodeExec( normalize( "./node_modules/requirejs/bin/r.js" ) ),
     LESS = nodeExec( normalize( "./node_modules/less/bin/lessc" ) ),
@@ -157,57 +157,7 @@ target.all = function() {
   });
 };
 
-function checkHTMLFile( filename, ignoreList ) {
-  var printedHeader = false,
-    printFooter = false;
-
-  echo( "## `" + filename + "`" );
-
-  var out = exec( HTML5LINT + " -h " + filename, { silent: true } ).output;
-
-  if ( out ) {
-    out = out.replace( "There were errors. (Tried in the text/html mode.)\n", "", "m" );
-
-    // Break the set of errors apart, and inspect each for
-    // matches in our ignoreList.  If not something we should
-    // ignore, print each error.
-    out.split( "\n\n" ).forEach( function( error ) {
-      if ( !error.length ) {
-        return;
-      }
-      var i = ignoreList.length,
-        ignore;
-      while ( i-- ) {
-        ignore = ignoreList[ i ];
-        // If the error string matches the ignore string, make sure
-        // there isn"t also a conditional when() function.  If there is
-        // check that too.
-        if ( error.indexOf( ignore.text ) > -1 ) {
-          if ( ignore.when ) {
-            if ( ignore.when( filename ) ) {
-              return;
-            }
-          } else {
-            return;
-          }
-        }
-      }
-      if ( !printedHeader ) {
-        echo( "HTML5 Lint Issues for file: " + filename + "\n" );
-        printedHeader = true;
-        printFooter = true;
-      }
-      echo( error + "\n" );
-    });
-
-    if ( printFooter ) {
-      echo( "\n" );
-      passed = false;
-    }
-  }
-}
-
-function checkHTML() {
+function checkHTML( callback ) {
   // Poor-man's HTML Doc vs. Fragment check
   function isHTMLFragment( filename ) {
     return !( /<html[^>]*\>/m ).test( cat( filename ) );
@@ -221,15 +171,15 @@ function checkHTML() {
       text: "The document is valid HTML5 + ARIA + SVG 1.1 + MathML 2.0 (subject to the utter previewness of this service)."
     },
     {
-      text: "Error: Start tag seen without seeing a doctype first. Expected “<!DOCTYPE html>”.",
+      text: "Start tag seen without seeing a doctype first. Expected “<!DOCTYPE html>”.",
       when: isHTMLFragment
     },
     {
-      text: "Error: Element “head” is missing a required instance of child element “title”.",
+      text: "Element “head” is missing a required instance of child element “title”.",
       when: isHTMLFragment
     },
     {
-      text: "Error: Bad value “X-UA-Compatible” for attribute “http-equiv” on element “meta”."
+      text: "Bad value “X-UA-Compatible” for attribute “http-equiv” on element “meta”."
     },
     {
       text: "Warning: The character encoding of the document was not declared."
@@ -245,12 +195,12 @@ function checkHTML() {
     },
     {
       // Let <style> be in fragments.
-      text: "Error: Element “style” not allowed as child of element “body” in this context. (Suppressing further errors from this subtree.)",
+      text: "Element “style” not allowed as child of element “body” in this context. (Suppressing further errors from this subtree.)",
       when: isHTMLFragment
     },
     {
       // Let <li> be in fragments.
-      text: "Error: Element “li” not allowed as child of element “body” in this context. (Suppressing further errors from this subtree.)",
+      text: "Element “li” not allowed as child of element “body” in this context. (Suppressing further errors from this subtree.)",
       when: isHTMLFragment
     }
   ];
@@ -258,11 +208,30 @@ function checkHTML() {
   echo( "" );
   echo( "# Linting HTML Files" );
 
-  find( "public/" ).filter( function( file ) {
-    return file.match( /\.html$/ ) && !file.match( /^public\/test/ ) && !file.match( /^public\/external/ );
-  }).forEach( function( filename ) {
-    checkHTMLFile( filename, ignoreList );
+  var q = async.queue( function( htmlFile, cb ) {
+    html5lint( cat( htmlFile ), function( err, messages ) {
+      echo( "## " + htmlFile );
+      messages.messages.forEach( function( msg ) {
+        var ignored = ignoreList.some( function( ignore ) {
+          return ignore.text === msg.message && ( !ignore.when || ( ignore.when && ignore.when( htmlFile ) ) );
+        });
+
+        if ( !ignored ) {
+          console.log( "Error: %s in %s:%d:%d", msg.message, htmlFile, msg.lastLine, msg.lastColumn );
+        }
+      });
+
+      cb();
+    });
   });
+
+  q.drain = function() {
+    callback();
+  };
+
+  q.push( find( "public/" ).filter( function( file ) {
+    return file.match( /\.html$/ ) && !file.match( /^public\/test/ ) && !file.match( /^public\/external/ );
+  }));
 }
 
 function lessToCSS( options ){
@@ -310,12 +279,23 @@ function buildCSS(compress) {
 }
 
 target.check = function() {
-  checkJS();
-  buildCSS();
-  checkCSS();
-  checkHTML();
-
-  exit( passed ? 0 : 1 );
+  async.series([
+    function( callback ) {
+      checkJS();
+      callback();
+    },
+    function( callback ) {
+      checkCSS();
+      callback();
+    },
+    function( callback ) {
+      checkHTML( callback );
+    },
+    function( callback ) {
+      exit( passed ? 0 : 1 );
+      callback();
+    }
+  ]);
 };
 
 function stampVersion( version, filename ){

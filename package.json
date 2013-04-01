@@ -82,6 +82,7 @@
     "url": "https://github.com/mozilla/butter.git"
   },
   "dependencies": {
+    "async": "0.2.6",
     "csslint": "0.9.10",
     "express-persona": "0.0.7",
     "express": "3.1.0",
@@ -103,6 +104,7 @@
   },
   "devDependencies": {
     "awsbox": "0.4.2",
+    "html5-lint": "0.2.0",
     "supertest": "0.5.1",
     "tap": "0.4.0"
   },
@@ -112,6 +114,6 @@
   "license": "MIT",
   "engines": {
     "node": ">=0.8",
-    "npm":  ">=1.1"
+    "npm": ">=1.1"
   }
 }
