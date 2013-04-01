@@ -212,7 +212,7 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
       return;
     }
 
-    var checkUrl = URI.parse(url);
+    var checkUrl = URI.parse( url );
     if ( checkUrl.protocol !== "" ) {
         url = ( checkUrl.protocol === "https" ) ? "https://" + checkUrl.source : "http://" + checkUrl.source;
     } else {
