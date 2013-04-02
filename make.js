@@ -8,9 +8,7 @@ var async = require( "async" ),
 
     JSLINT = nodeExec( normalize( "./node_modules/jshint/bin/jshint" ) ),
     html5lint = require( "html5-lint" ),
-    CSSLINT = nodeExec( normalize( "./node_modules/csslint/cli.js" ) ),
     RJS = nodeExec( normalize( "./node_modules/requirejs/bin/r.js" ) ),
-    LESS = nodeExec( normalize( "./node_modules/less/bin/lessc" ) ),
 
     DIST_DIR = "dist",
 
@@ -29,102 +27,126 @@ function gitDescribe( repoRoot ) {
   return version;
 }
 
-// To supress CSS warnings/errors for a particular line, end the line
-// with a comment indicating you want CSS Lint to ignore this line's
-// error(s).  Here are some examples:
-//
-//   -webkit-appearance: button; /* csslint-ignore */
-//   -webkit-appearance: button; /*csslint-ignore*/
-//   -webkit-appearance: button; /* csslint-ignore: This is being done because of iOS ... */
-function checkCSSFile( filename, warnings, errors ) {
-  var fileLines = cat( filename ).split( /\r?\n/ ),
-    ignoreLines = "",
-    // Look for: "blah blah blah /* csslint-ignore */" or
-    //           "blah blah /*csslint-ignore: this is my reason*/"
-    ignoreRegex = /\/\*\s*csslint-ignore[^*]*\*\/$/,
-    // Errors look like: "css/butter.ui.css: line 186, col 3, Error..."
-    lineRegex = /\: line (\d+),/;
+function lessToCSS( lessFile, callback ) {
+  var less = require( "less" );
+  var fileContents = cat( lessFile );
+  var parser = new less.Parser({
+    filename: lessFile,
+    paths: [ path.dirname( lessFile ) ]
+  });
 
-  echo( "## `" + filename + "`" );
-
-  // Build a map of lines to ignore: "|14||27|" means ignore lines 14 and 27
-  for( var i=0; i < fileLines.length; i++ ){
-    if( ignoreRegex.test( fileLines[ i ] ) ) {
-      ignoreLines += "|" + i + "|";
+  parser.parse( fileContents, function( err, tree ) {
+    if ( err ) {
+      callback( err );
+      return;
     }
-  }
 
-  // Run CSSLint across the file, check for errors/warnings and ignore if
-  // they are ones we know about from above.
-  exec(CSSLINT +
-    " --warnings=" + warnings +
-    " --errors=" + errors +
-    " --quiet --format=compact" +
-    " " + filename, { silent: true } ).output.split( /\r?\n/ )
-    .forEach( function( line ) {
-      if( !line ) {
-        return;
-      }
-
-      // Some warnings don't refer to a line, e.g.
-      // "css/butter.ui.css: Warning - Too many floats (10)..."
-      var matches = line.match( lineRegex ),
-        lineNumber = matches ? matches[ 1 ] : null;
-
-      if( !!lineNumber ) {
-        if( ignoreLines.indexOf( "|" + lineNumber + "|" ) === -1 ) {
-          echo( line );
-          passed = false;
-        }
-      } else {
-        echo( line );
-        passed = false;
-      }
+    try {
+      var css = tree.toCSS();
+      callback( null, css );
+    } catch ( ex ) {
+      callback( ex );
+    }
   });
 }
 
-function checkCSS() {
-  // see cli.js --list-rules.
-  var warnings = [
-//    "important",
-//    "adjoining-classes",
-//    "duplicate-background-images",
-//    "qualified-headings",
-//    "fallback-colors",
-//    "empty-rules",
-//    "shorthand",
-//    "overqualified-elements",
-//    "import",
-//    "regex-selectors",
-//    "rules-count",
-//    "font-sizes",
-//    "universal-selector",
-//    "unqualified-attributes",
-    "zero-units"
-  ].join(",");
+function checkCSSFile( cssFile, filename ) {
+  var csslint = require( "csslint" ).CSSLint;
 
-  var errors = [
-    "known-properties",
-    "compatible-vendor-prefixes",
-    "display-property-grouping",
-    "duplicate-properties",
-    "errors",
-    "gradients",
-    "font-faces",
-    //"floats",
-    "vendor-prefix"
-  ].join(",");
+  // 0 = disabled, 1 = warning, 2 = error
+  // run csslint --list-rules to see more
+  var rules = {
+    //"important": 2,
+    //"adjoining-classes": 2,
+    "known-properties": 2,
+    //"box-sizing": 2,
+    //"box-model": 2,
+    //"overqualified-elements": 2,
+    "display-property-grouping": 2,
+    //"bulletproof-font-face": 2,
+    //"compatible-vendor-prefixes": 2,
+    //"regex-selectors": 2,
+    "errors": 2,
+    //"duplicate-background-images": 2,
+    "duplicate-properties": 2,
+    "empty-rules": 2,
+    "selector-max-approaching": 2,
+    "gradients": 2,
+    //"fallback-colors": 2,
+    //"font-sizes": 2,
+    "font-faces": 2,
+    //"floats": 2,
+    //"star-property-hack": 2,
+    //"outline-none": 2,
+    "import": 2,
+    //"ids": 2,
+    "underscore-property-hack": 2,
+    "rules-count": 2,
+    //"qualified-headings": 2,
+    "selector-max": 2,
+    "shorthand": 2,
+    "text-indent": 2,
+    //"unique-headings": 2,
+    //"universal-selector": 2,
+    //"unqualified-attributes": 2,
+    "vendor-prefix": 2,
+    "zero-units": 2
+  };
 
+  var result = csslint.verify( cssFile, rules );
+
+  result.messages.filter( function( msg ) {
+    // If the evidence string contains 'csslint-ignore' then skip it
+    return !msg.evidence.match( /csslint-ignore/ );
+  }).forEach( function( msg ) {
+    passed = false;
+    console.error( "%s: line %d, col %d, Error - %s",
+                   filename, msg.line, msg.col, msg.message );
+  });
+}
+
+function checkCSS( callback ) {
   echo( "" );
-  echo( "# Linting CSS files" );
+  echo( "# Linting CSS and LESS files" );
 
-  find( "public/" ).filter(function( filename ) {
+  var files = [
+    "public/css/butter.ui.less",
+    "public/css/transitions.less",
+    "public/css/embed.less",
+    "public/css/embed-shell.less",
+    "public/templates/assets/css/jquery-ui/jquery.ui.butter.less",
+    "public/templates/assets/plugins/twitter/popcorn.twitter.less",
+    "public/templates/assets/plugins/wikipedia/popcorn.wikipedia.less",
+    "public/templates/basic/style.less"
+  ];
+
+  files = files.concat( find( "public/" ).filter( function( filename ) {
     return filename.match( /\.css$/ ) && !filename.match( /^public\/test/ ) &&
            !filename.match( /^public\/external/ );
-  }).forEach(function( filename ) {
-    checkCSSFile( filename, warnings, errors );
-  });
+  })).sort();
 
+  var q = async.queue( function( lessFile, cb ) {
+    lessToCSS( lessFile, function( err, cssFile ) {
+      echo( "## " + lessFile );
+
+      if ( err ) {
+        passed = false;
+        console.error( "%sError: %s in %s:%d:%d",
+                       err.type, err.message, err.filename, err.line, err.column );
+        cb();
+        return;
+      }
+
+      checkCSSFile( cssFile, lessFile );
+      cb();
+    });
+  }, 1);
+
+  q.drain = function() {
+    callback();
+  };
+
+  q.push( files );
 }
 
 function checkJS() {
@@ -143,7 +165,6 @@ function checkJS() {
 
 var desc = {
   check: "Lint CSS, HTML, and JS",
-  css: "Build LESS files to CSS",
   deploy: "Build Butter suitable for production",
   server: "Run the development server"
 };
@@ -234,49 +255,6 @@ function checkHTML( callback ) {
   }));
 }
 
-function lessToCSS( options ){
-  var BUTTER_CSS_FILE_COMMENT = "/* THIS FILE WAS GENERATED BY A TOOL, DO NOT EDIT */";
-
-  var compress = !!options.compress,
-      lessFile = options.lessFile,
-      cssFile = options.cssFile;
-
-  echo( "## `" + lessFile + "` => `" + cssFile + "`" + ( compress ? " with compression" : "" ));
-
-  var args = compress ? " --yui-compress " : " ",
-  result = exec(LESS + args + lessFile, {silent:true});
-
-  if( result.code === 0 ){
-    var css = BUTTER_CSS_FILE_COMMENT + "\n\n" + result.output;
-    css.to( cssFile );
-  } else {
-    echo( result.output );
-    passed = false;
-  }
-}
-
-function buildCSS(compress) {
-  echo( "" );
-  echo( "# Compiling CSS Files" );
-
-  [
-    "public/css/butter.ui",
-    "public/css/transitions",
-    "public/css/embed",
-    "public/css/embed-shell",
-    "public/templates/assets/css/jquery-ui/jquery.ui.butter",
-    "public/templates/assets/plugins/twitter/popcorn.twitter",
-    "public/templates/assets/plugins/wikipedia/popcorn.wikipedia",
-    "public/templates/basic/style"
-  ].forEach(function( file ) {
-    lessToCSS({
-      lessFile: file + ".less",
-      cssFile: file + ".css",
-      compress: compress
-    });
-  });
-}
-
 target.check = function() {
   async.series([
     function( callback ) {
@@ -284,9 +262,7 @@ target.check = function() {
       callback();
     },
     function( callback ) {
-      buildCSS();
-      checkCSS();
-      callback();
+      checkCSS( callback );
     },
     function( callback ) {
       checkHTML( callback );
@@ -303,10 +279,6 @@ function stampVersion( version, filename ){
   version = version || gitDescribe( "." );
   sed( "-i", /@VERSION@/g, version, filename );
 }
-
-target.css = function() {
-  buildCSS();
-};
 
 function buildJS( version, compress ){
   var doCompress = compress ? "" : "optimize=none";
@@ -353,7 +325,6 @@ target.deploy = function(){
   rm( "-fr" , DIST_DIR );
   mkdir( "-p" , DIST_DIR );
 
-  buildCSS( compress );
   buildJS( version, compress );
 
   // Copy server assets
@@ -367,12 +338,10 @@ target.deploy = function(){
   ], "dist/");
 
   // Selectively copy things from public/
-  // We don't need .less files, since they're built in buildCSS()
   // We don't need js files from external/ and src/ because they're built into
   // butter with requirejs or copied selectively below.
   find( "public/" ).filter(function( path ) {
-    return !path.match( /\.less$/ ) &&
-           !path.match( /^public\/external/ ) &&
+    return !path.match( /^public\/external/ ) &&
            !path.match( /^public\/src/ ) &&
            !path.match( /^public\/test/ );
   }).forEach(function( path ) {

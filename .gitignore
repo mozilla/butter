@@ -16,13 +16,4 @@ nbproject/*
 /dist/
 /local.json
 /node_modules/
-/public/css/butter.ui.css
-/public/css/embed-shell.css
-/public/css/embed.css
-/public/css/transitions.css
-/public/src/ui/webmakernav/webmakernav.css
-/public/templates/assets/css/jquery-ui/jquery.ui.butter.css
-/public/templates/assets/plugins/twitter/popcorn.twitter.css
-/public/templates/assets/plugins/wikipedia/popcorn.wikipedia.css
-/public/templates/basic/style.css
 /user_published/

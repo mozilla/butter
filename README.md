@@ -72,6 +72,7 @@ The default server configuration can be found in [lib/default-config.js](lib/def
 
   - `PORT` the port to bind the server to
   - `hostname` the hostname for the server (e.g., `http://localhost:8888`, `https://popcorn.webmaker.org`). **This must match your browser's address bar otherwise Persona login will not work**
+  - `NODE_ENV` the environment you're running the server in (e.g. `development`, `staging`, `production`)
   - `logger` settings for server logging
     - `format` the logging format to use.  Possible values include: default, short, tiny, dev.
   - `session` settings for user sessions
