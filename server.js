@@ -228,7 +228,18 @@ app.post( '/api/publish/:id',
                 option = currentTrackEvent.popcornOptions[ key ];
 
                 if ( option !== "text" ) {
-                  popcornString += key + '="' + option + '" ';
+
+                  if ( typeof option !== "object" ) {
+                    popcornString += key + '="' + option + '" ';
+                  } else {
+                    popcornString += key + '="';
+                    for ( var item in option ) {
+                      if ( option.hasOwnProperty( item ) && option[ item ] ) {
+                        popcornString += item + ' ';
+                      }
+                    }
+                    popcornString += '" ';
+                  }
                 }
               }
             }
@@ -273,7 +284,7 @@ app.post( '/api/publish/:id',
       var remixUrl = "?savedDataUrl=/api/remix/" + project.id,
           mediaUrl = projectData.media[ 0 ].url,
           attribURL = Array.isArray( mediaUrl ) ? mediaUrl[ 0 ] : mediaUrl;
-console.log(popcornString)
+
       writeEmbed( idBase36 + utils.constants().EMBED_SUFFIX, iframeUrl,
                   {
                     id: id,

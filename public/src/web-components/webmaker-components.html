@@ -7,31 +7,33 @@
    * like to ask for "all currently known elements" that
    * have timeline information, which it can get here.
    */
-  (function(global){
+  (function( global ){
     var components = [];
     global.WebMaker = {
-      addComponent: function addComponent(c) {
+      addComponent: function addComponent( c ) {
         components.push(c);
       },
       getComponentList: function getComponentList() {
         return components;
       },
-      makeEditable: function makeEditable(c) {
+      makeEditable: function makeEditable( c ) {
         // Click to edit via contentEditable
-        c.addEventListener("click", function(evt) {
+        c.addEventListener( "click", function( evt ) {
           c.contentEditable = true;
           c.blur();
           c.focus();
-        }, false);
+        }, false );
 
         // Blur to end edit, and to commit the edits to not
         // just this element, but also its "real" counterpart.
-        c.addEventListener("blur", function(evt) {
+        c.addEventListener( "blur", function( evt ) {
           var e = c;
-          if(e.webmakerElement) { e = e.webmakerElement; }
-          c.removeAttribute("contenteditable");
+          if ( e.webmakerElement ) {
+            e = e.webmakerElement;
+          }
+          c.removeAttribute( "contenteditable" );
           e.innerHTML = c.innerHTML;
-        }, false);
+        }, false );
       }
     };
   }(window));
@@ -48,26 +50,26 @@
    * the queue, processing every addition before letting the
    * real Popcorn take over.
    */
-  (function(global){
+  (function( global ){
     var fnCache = [];
 
     // load popcorn if we don't have it available already
-    if(!global.Popcorn) {
+    if ( !global.Popcorn ) {
       // Stub out Popcorn until it loads
       global.Popcorn = function( fn ) {
         fnCache.push( fn );      
       };
       
       // Add popcorn as a script dependency
-      var popcornScript = document.createElement("script");
+      var popcornScript = document.createElement( "script" );
       popcornScript.onload = function(){
         Popcorn(function(){
           // Clear out the function cache now that Popcorn is ready
-          fnCache.forEach(function(f) { f(); });
+          fnCache.forEach(function( f ) { f(); });
         });
       };
       popcornScript.src = "http://cdn.popcornjs.org/code/dist/popcorn-complete.js";
-      document.head.appendChild(popcornScript);
+      document.head.appendChild( popcornScript );
     }
   }(window));
 </script>
