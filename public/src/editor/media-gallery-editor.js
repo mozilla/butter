@@ -2,12 +2,11 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/editor",
+define( [ "util/lang", "util/uri", "util/keys","util/mediatypes", "UI/ui-widgets", "editor/editor",
  "util/time", "util/dragndrop", "text!layouts/media-editor.html" ],
-  function( LangUtils, URI, KeysUtils, MediaUtils, Editor, Time, DragNDrop, EDITOR_LAYOUT ) {
+  function( LangUtils, URI, KeysUtils, MediaUtils, UI, Editor, Time, DragNDrop, EDITOR_LAYOUT ) {
 
   var _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
-      _addMediaTitle = _parentElement.querySelector( ".add-new-media" ),
       _addMediaPanel = _parentElement.querySelector( ".add-media-panel" ),
 
       _urlInput = _addMediaPanel.querySelector( ".add-media-input" ),
@@ -266,7 +265,6 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
   }
 
   function setup() {
-    _addMediaTitle.addEventListener( "click", toggleAddNewMediaPanel, false );
 
     _urlInput.addEventListener( "focus", onFocus, false );
     _urlInput.addEventListener( "input", onInput, false );
@@ -276,6 +274,10 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
 
     _durationInput.addEventListener( "keydown", onDurationChange, false );
     _durationInput.addEventListener( "blur", onBlur, false );
+
+    UI.tabs({
+      element: _addMediaPanel
+    });
   }
 
   function onDurationChange( e ) {
