@@ -88,6 +88,9 @@
         clearTimeout( options.loadTimeout );
         // If teardown was hit before ready, ensure we teardown.
         if ( options._cancelLoad ) {
+          if ( options.playWhenReady ) {
+            _this.play();
+          }
           options._cancelLoad = false;
           options.tearDown();
         }
