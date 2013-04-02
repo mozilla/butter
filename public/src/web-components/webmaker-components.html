@@ -133,7 +133,7 @@
 </element>
 
 <element name="webmaker-text"
-  attributes="start end transition position alignment linkUrl fontSize fontColor fontDecorations backgroundColor shadowColor fontFamily top left width target">
+  attributes="start end transition position alignment linkUrl fontSize fontColor fontDecorations backgroundColor shadowColor fontFamily top left width target shadow background">
   <template>
     <!-- Eventually we can have actual plugin content layouts here and pass this to the plugins themselves -->
     <p><content></content></p>
@@ -172,7 +172,9 @@
                   transition = self.attributes.getNamedItem( "transition" ) ? self.attributes.getNamedItem( "transition" ).nodeValue : "popcorn-fade",
                   target = self.attributes.getNamedItem( "target" ) ? self.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
                   linkUrl = self.attributes.getNamedItem( "linkUrl" ) ? self.attributes.getNamedItem( "linkUrl" ).nodeValue : "",
-                  fontDecorations = self.attributes.getNamedItem( "fontDecorations" ) ? self.attributes.getNamedItem( "fontDecorations" ).nodeValue : "";
+                  fontDecorations = self.attributes.getNamedItem( "fontDecorations" ) ? self.attributes.getNamedItem( "fontDecorations" ).nodeValue : "",
+                  background = self.attributes.getNamedItem( "background" ) ? self.attributes.getNamedItem( "background" ).nodeValue : false,
+                  shadow = self.attributes.getNamedItem( "shadow" ) ? self.attributes.getNamedItem( "shadow" ).nodeValue : false;
 
               if ( fontDecorations ) {
                 var decorations = fontDecorations.split( " " );
@@ -185,6 +187,18 @@
 
               } else {
                 fontDecorations = defaultDecorations;
+              }
+
+              if ( shadow === "true" ) {
+                shadow = true
+              } else {
+                shadow = false;
+              }
+
+              if ( background === "true" ) {
+                background = true;
+              } else {
+                background = false;
               }
 
               self.innerHTML = "";
@@ -203,8 +217,8 @@
                 position: position,
                 alignment: alignment,
                 backgroundColor: backgroundColor,
-                background: backgroundColor ? true : false,
-                shadow: shadowColor ? true : false,
+                background: background,
+                shadow: shadow,
                 shadowColor: shadowColor,
                 linkUrl: linkUrl,
                 fontDecorations: fontDecorations,
