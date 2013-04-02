@@ -266,84 +266,10 @@ function init() {
       "popcorn"
     ],
     function( URI, Controls, TextboxWrapper ) {
-      // cornfield writes out the Popcorn initialization code as popcornDataFn()
-      window.popcornDataFn();
-      /**
-       * Expose Butter so we can get version info out of the iframe doc's embed.
-       * This "butter" is never meant to live in a page with the full "butter".
-       * We warn then remove if this happens.
-       **/
       var Butter = {
             version: "Butter-Embed-@VERSION@"
           },
-          popcorn = Popcorn.byId( "Butter-Generated" ),
-          config,
-          qs = URI.parse( window.location.href ).queryKey,
-          container = document.querySelectorAll( ".container" )[ 0 ];
-
-      /**
-       * the embed can be configured via the query string:
-       *   autohide   = 1{default}|0    automatically hide the controls once playing begins
-       *   autoplay   = 1|{default}0    automatically play the video on load
-       *   controls   = 1{default}|0    display controls
-       *   start      = {integer 0-end} time to start playing (default=0)
-       *   end        = {integer 0-end} time to end playing (default={end})
-       *   fullscreen = 1{default}|0    whether to allow fullscreen mode (e.g., hide/show button)
-       *   loop       = 1|0{default}    whether to loop when hitting the end
-       *   showinfo   = 1{default}|0    whether to show video title, author, etc. before playing
-       **/
-      config = {
-        autohide: qs.autohide === "1" ? true : false,
-        autoplay: qs.autoplay === "1" ? true : false,
-        controls: qs.controls === "0" ? false : true,
-        start: qs.start|0,
-        end: qs.end|0,
-        fullscreen: qs.fullscreen === "0" ? false : (function( document ) {
-          // Check for prefixed/unprefixed Fullscreen API support
-          if ( "fullScreenElement" in document ) {
-            return true;
-          }
-
-          var pre = "khtml o ms webkit moz".split( " " ),
-              i = pre.length,
-              prefix;
-
-          while ( i-- ) {
-            prefix = pre[ i ];
-            if ( (prefix + "FullscreenElement" ) in document ) {
-              return true;
-            }
-          }
-          return false;
-        }( document )),
-        loop: qs.loop === "1" ? true : false,
-        branding: qs.branding === "0" ? false : true,
-        showinfo: qs.showinfo === "0" ? false : true
-      };
-
-      // Always show controls.  See #2284 and #2298 on supporting
-      // options.controls, options.autohide.
-      popcorn.controls( true );
-      Controls.create( "controls", popcorn, {
-        onShareClick: function() {
-          shareClick( popcorn );
-        },
-        onRemixClick: function() {
-          remixClick( popcorn );
-        },
-        onFullscreenClick: function() {
-          fullscreenClick();
-        }
-      });
-
-      // Setup UI based on config options
-      if ( !config.showinfo ) {
-        var embedInfo = document.getElementById( "embed-info" );
-        embedInfo.parentNode.removeChild( embedInfo );
-      }
-      if ( config.loop ) {
-        popcorn.loop( true );
-      }
+          popcorn, config, qs, container;
 
       // Some config options want the video to be ready before we do anything.
       function onLoad() {
@@ -388,35 +314,117 @@ function init() {
         }
       }
 
-      // Either the video is ready, or we need to wait.
-      if ( popcorn.readyState() >= 1 ) {
-        onLoad();
-      } else {
-        popcorn.media.addEventListener( "canplay", onLoad );
+      function initEmbed() {
+
+        if ( !window.pop ) {
+          setTimeout( initEmbed, 50 );
+        } else {
+          /**
+           * Expose Butter so we can get version info out of the iframe doc's embed.
+           * This "butter" is never meant to live in a page with the full "butter".
+           * We warn then remove if this happens.
+           **/
+          popcorn = Popcorn.byId( "Butter-Generated" );
+          qs = URI.parse( window.location.href ).queryKey;
+          container = document.querySelectorAll( ".container" )[ 0 ];
+
+          /**
+           * the embed can be configured via the query string:
+           *   autohide   = 1{default}|0    automatically hide the controls once playing begins
+           *   autoplay   = 1|{default}0    automatically play the video on load
+           *   controls   = 1{default}|0    display controls
+           *   start      = {integer 0-end} time to start playing (default=0)
+           *   end        = {integer 0-end} time to end playing (default={end})
+           *   fullscreen = 1{default}|0    whether to allow fullscreen mode (e.g., hide/show button)
+           *   loop       = 1|0{default}    whether to loop when hitting the end
+           *   showinfo   = 1{default}|0    whether to show video title, author, etc. before playing
+           **/
+          config = {
+            autohide: qs.autohide === "1" ? true : false,
+            autoplay: qs.autoplay === "1" ? true : false,
+            controls: qs.controls === "0" ? false : true,
+            start: qs.start|0,
+            end: qs.end|0,
+            fullscreen: qs.fullscreen === "0" ? false : (function( document ) {
+              // Check for prefixed/unprefixed Fullscreen API support
+              if ( "fullScreenElement" in document ) {
+                return true;
+              }
+
+              var pre = "khtml o ms webkit moz".split( " " ),
+                  i = pre.length,
+                  prefix;
+
+              while ( i-- ) {
+                prefix = pre[ i ];
+                if ( (prefix + "FullscreenElement" ) in document ) {
+                  return true;
+                }
+              }
+              return false;
+            }( document )),
+            loop: qs.loop === "1" ? true : false,
+            branding: qs.branding === "0" ? false : true,
+            showinfo: qs.showinfo === "0" ? false : true
+          };
+
+          // Always show controls.  See #2284 and #2298 on supporting
+          // options.controls, options.autohide.
+          popcorn.controls( true );
+          Controls.create( "controls", popcorn, {
+            onShareClick: function() {
+              shareClick( popcorn );
+            },
+            onRemixClick: function() {
+              remixClick( popcorn );
+            },
+            onFullscreenClick: function() {
+              fullscreenClick();
+            }
+          });
+
+          // Setup UI based on config options
+          if ( !config.showinfo ) {
+            var embedInfo = document.getElementById( "embed-info" );
+            embedInfo.parentNode.removeChild( embedInfo );
+          }
+          if ( config.loop ) {
+            popcorn.loop( true );
+          }
+
+          // Either the video is ready, or we need to wait.
+          if ( popcorn.readyState() >= 1 ) {
+            onLoad();
+          } else {
+            popcorn.media.addEventListener( "canplay", onLoad );
+          }
+
+          if ( config.branding ) {
+            setupClickHandlers( popcorn, config );
+            setupEventHandlers( popcorn, config );
+
+            // Wrap textboxes so they click-to-highlight and are readonly
+            TextboxWrapper.applyTo( $( "#share-url" ), { readOnly: true } );
+            TextboxWrapper.applyTo( $( "#share-iframe" ), { readOnly: true } );
+
+            // Write out the iframe HTML necessary to embed this
+            $( "#share-iframe" ).value = buildIFrameHTML();
+
+            // Get the page's canonical URL and put in share URL
+            $( "#share-url" ).value = getCanonicalURL();
+          }
+
+          setupAttribution( popcorn );
+
+          if ( window.Butter && console && console.warn ) {
+            console.warn( "Butter Warning: page already contains Butter, removing." );
+            delete window.Butter;
+          }
+          window.Butter = Butter;
+        }
       }
 
-      if ( config.branding ) {
-        setupClickHandlers( popcorn, config );
-        setupEventHandlers( popcorn, config );
-
-        // Wrap textboxes so they click-to-highlight and are readonly
-        TextboxWrapper.applyTo( $( "#share-url" ), { readOnly: true } );
-        TextboxWrapper.applyTo( $( "#share-iframe" ), { readOnly: true } );
-
-        // Write out the iframe HTML necessary to embed this
-        $( "#share-iframe" ).value = buildIFrameHTML();
-
-        // Get the page's canonical URL and put in share URL
-        $( "#share-url" ).value = getCanonicalURL();
-      }
-
-      setupAttribution( popcorn );
-
-      if ( window.Butter && console && console.warn ) {
-        console.warn( "Butter Warning: page already contains Butter, removing." );
-        delete window.Butter;
-      }
-      window.Butter = Butter;
+      initEmbed();
     }
   );
 

@@ -1,3 +1,9 @@
 [submodule "public/external/popcorn-js"]
 	path = public/external/popcorn-js
 	url = git://github.com/mozilla/popcorn-js.git
+[submodule "public/external/WebComponents"]
+	path = public/external/WebComponents
+	url = git://github.com/toolkitchen/WebComponents.git
+[submodule "public/external/CustomElements"]
+	path = public/external/CustomElements
+	url = git://github.com/toolkitchen/CustomElements.git

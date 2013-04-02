@@ -1,0 +1,768 @@
+
+<script>
+  /**
+   * Our "webmaker" object can keep track of all webmaker
+   * elements for the purpose of hooking into them, should
+   * we need to. For instance, a timeline visualizer might
+   * like to ask for "all currently known elements" that
+   * have timeline information, which it can get here.
+   */
+  (function( global ){
+    var components = [];
+    global.WebMaker = {
+      addComponent: function addComponent( c ) {
+        components.push(c);
+      },
+      getComponentList: function getComponentList() {
+        return components;
+      },
+      makeEditable: function makeEditable( c ) {
+        // Click to edit via contentEditable
+        c.addEventListener( "click", function( evt ) {
+          c.contentEditable = true;
+          c.blur();
+          c.focus();
+        }, false );
+
+        // Blur to end edit, and to commit the edits to not
+        // just this element, but also its "real" counterpart.
+        c.addEventListener( "blur", function( evt ) {
+          var e = c;
+          if ( e.webmakerElement ) {
+            e = e.webmakerElement;
+          }
+          c.removeAttribute( "contenteditable" );
+          e.innerHTML = c.innerHTML;
+        }, false );
+      }
+    };
+  }(window));
+</script>
+
+
+<script>
+  /**
+   * If we do not have Popcorn available, we try to load it.
+   * While it's loading, we keep an object around that has the
+   * same event API for addeding "things" to be popped, but 
+   * rather than doing anything with them, it just queues them
+   * until Popcorn's up and running, at which point we clear
+   * the queue, processing every addition before letting the
+   * real Popcorn take over.
+   */
+  (function( global ){
+    var fnCache = [];
+
+    // load popcorn if we don't have it available already
+    if ( !global.Popcorn ) {
+      // Stub out Popcorn until it loads
+      global.Popcorn = function( fn ) {
+        fnCache.push( fn );      
+      };
+      
+      // Add popcorn as a script dependency
+      var popcornScript = document.createElement( "script" );
+      popcornScript.onload = function(){
+        Popcorn(function(){
+          // Clear out the function cache now that Popcorn is ready
+          fnCache.forEach(function( f ) { f(); });
+        });
+      };
+      popcornScript.src = "http://cdn.popcornjs.org/code/dist/popcorn-complete.js";
+      document.head.appendChild( popcornScript );
+    }
+  }(window));
+</script>
+
+<element name="webmaker-media" attributes="href width height target">
+  <template>
+    <div class="webmaker-media">
+      <div class="media-container"></div>
+      <div id="footnote" class="footnote"></div>
+    </div>
+  </template>
+
+  <script>
+    // A helper function we'll use to track distinct media
+    // elements. All code in <element> -> <script> blocks is
+    // execute once, when the element's definition is read 
+    // by the browser.
+    var getNextCount = (function() {
+      var webmakerVideoElementCount = 0;
+      return function() {
+        return webmakerVideoElementCount++;
+      };
+    }());
+
+    // Then, specify what should happen when an element gets built,
+    // by extending its prototype with a readyCallback function.
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var self = this;
+
+          function initMedia() {
+            var Popcorn = window.Popcorn;
+
+            if ( !Popcorn || !Popcorn.player ) {
+              setTimeout( initMedia, 250 );
+            } else {
+              if ( !window.pop ) {
+                window.pop = Popcorn.smart( self.attributes.getNamedItem( "target" ).nodeValue,
+                                            self.attributes.getNamedItem( "href" ).nodeValue, { id: "Butter-Generated" } );
+              } else {
+                var trackEvents = window.pop.getTrackEvents(),
+                    trackEvent;
+
+                window.pop = Popcorn.smart( self.attributes.getNamedItem( "target" ).nodeValue,
+                                            self.attributes.getNamedItem( "href" ).nodeValue, { id: "Butter-Generated" } );
+
+                for ( var i = 0; i < trackEvents.length; i++ ) {
+                  trackEvent = trackEvents[ i ];
+                  window.pop[ trackEvent._natives.type ]( trackEvent );
+                }
+              }
+            }
+          }
+
+          initMedia();
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-text"
+  attributes="start end transition position alignment linkUrl fontSize fontColor fontDecorations backgroundColor shadowColor fontFamily top left width target shadow background">
+  <template>
+    <!-- Eventually we can have actual plugin content layouts here and pass this to the plugins themselves -->
+    <p><content></content></p>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var self = this;
+          
+          function initText() {
+
+            if ( !window.pop ) {
+              setTimeout( initText, 50 );
+            } else {
+              var text = self.innerHTML,
+                  defaultDecorations = { bold: false, italics: false },
+                  start = self.attributes.getNamedItem( "start" ) ? self.attributes.getNamedItem( "start" ).nodeValue : 0,
+                  end = self.attributes.getNamedItem( "end" ) ? self.attributes.getNamedItem( "end" ).nodeValue : 5,
+                  fontSize = self.attributes.getNamedItem( "fontSize" ) ? self.attributes.getNamedItem( "fontSize" ).nodeValue : 4,
+                  top = self.attributes.getNamedItem( "top" ) ? self.attributes.getNamedItem( "top" ).nodeValue : 0,
+                  left = self.attributes.getNamedItem( "left" ) ? self.attributes.getNamedItem( "left" ).nodeValue : 0,
+                  zindex = self.attributes.getNamedItem( "zindex" ) ? self.attributes.getNamedItem( "zindex" ).nodeValue : 1000,
+                  fontFamily =  self.attributes.getNamedItem( "fontFamily" ) ? self.attributes.getNamedItem( "fontFamily" ).nodeValue: "Vollkorn",
+                  fontColor = self.attributes.getNamedItem( "fontColor" ) ? self.attributes.getNamedItem( "fontColor" ).nodeValue : "#000000",
+                  position = self.attributes.getNamedItem( "position" ) ? self.attributes.getNamedItem( "position" ).nodeValue : "middle",
+                  alignment = self.attributes.getNamedItem( "alignment" ) ? self.attributes.getNamedItem( "alignment" ).nodeValue : "center",
+                  shadowColor = self.attributes.getNamedItem( "shadowColor" ) ? self.attributes.getNamedItem( "shadowColor" ).nodeValue : "",
+                  backgroundColor = self.attributes.getNamedItem( "backgroundColor" ) ? self.attributes.getNamedItem( "backgroundColor" ).nodeValue : "",
+                  width = self.attributes.getNamedItem( "width" ) ? self.attributes.getNamedItem( "width" ).nodeValue : 50,
+                  transition = self.attributes.getNamedItem( "transition" ) ? self.attributes.getNamedItem( "transition" ).nodeValue : "popcorn-fade",
+                  target = self.attributes.getNamedItem( "target" ) ? self.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
+                  linkUrl = self.attributes.getNamedItem( "linkUrl" ) ? self.attributes.getNamedItem( "linkUrl" ).nodeValue : "",
+                  fontDecorations = self.attributes.getNamedItem( "fontDecorations" ) ? self.attributes.getNamedItem( "fontDecorations" ).nodeValue : "",
+                  background = self.attributes.getNamedItem( "background" ) ? self.attributes.getNamedItem( "background" ).nodeValue : false,
+                  shadow = self.attributes.getNamedItem( "shadow" ) ? self.attributes.getNamedItem( "shadow" ).nodeValue : false;
+
+              if ( fontDecorations ) {
+                var decorations = fontDecorations.split( " " );
+
+                fontDecorations = {};
+
+                for ( var i = 0; i < decorations.length; i++ ) {
+                  fontDecorations[ decorations[ i ] ] = true;
+                }
+
+              } else {
+                fontDecorations = defaultDecorations;
+              }
+
+              if ( shadow === "true" ) {
+                shadow = true
+              } else {
+                shadow = false;
+              }
+
+              if ( background === "true" ) {
+                background = true;
+              } else {
+                background = false;
+              }
+
+              self.innerHTML = "";
+
+              window.pop.text({
+                start: start,
+                end: end,
+                text: text,
+                fontSize: fontSize,
+                target: target,
+                top: top,
+                left: left,
+                zindex: zindex,
+                fontFamily: fontFamily,
+                fontColor: fontColor,
+                position: position,
+                alignment: alignment,
+                backgroundColor: backgroundColor,
+                background: background,
+                shadow: shadow,
+                shadowColor: shadowColor,
+                linkUrl: linkUrl,
+                fontDecorations: fontDecorations,
+                transition: transition
+              });
+            }
+          }
+
+          initText();
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-image"
+  attributes="start end src transition left top height width count photosetId tags linkSrc zindex target">
+  <!-- Eventually we can have actual plugin content layouts here and pass this to the plugins themselves -->
+  <template>
+    <img src="">
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var self = this;
+
+          function initImage() {
+
+            if ( !window.pop ) {
+              setTimeout( initImage, 50 );
+            } else {
+              var start = self.attributes.getNamedItem( "start" ) ? self.attributes.getNamedItem( "start" ).nodeValue : 0,
+                  end = self.attributes.getNamedItem( "end" ) ? self.attributes.getNamedItem( "end" ).nodeValue : 5,
+                  src = self.attributes.getNamedItem( "src" ) ? self.attributes.getNamedItem( "src" ).nodeValue : "",
+                  top = self.attributes.getNamedItem( "top" ) ? self.attributes.getNamedItem( "top" ).nodeValue : 0,
+                  left = self.attributes.getNamedItem( "left" ) ? self.attributes.getNamedItem( "left" ).nodeValue : 0,
+                  zindex = self.attributes.getNamedItem( "zindex" ) ? self.attributes.getNamedItem( "zindex" ).nodeValue : 1000,
+                  linkSrc = self.attributes.getNamedItem( "linkSrc" ) ? self.attributes.getNamedItem( "linkSrc" ).nodeValue : "",
+                  tags = self.attributes.getNamedItem( "tags" ) ? self.attributes.getNamedItem( "tags" ).nodeValue : "",
+                  photosetId = self.attributes.getNamedItem( "photosetId" ) ? self.attributes.getNamedItem( "photosetId" ).nodeValue : "",
+                  count = self.attributes.getNamedItem( "count" ) ? self.attributes.getNamedItem( "count" ).nodeValue : 3,
+                  height = self.attributes.getNamedItem( "height" ) ? self.attributes.getNamedItem( "height" ).nodeValue : 100,
+                  width = self.attributes.getNamedItem( "width" ) ? self.attributes.getNamedItem( "width" ).nodeValue : 100,
+                  transition = self.attributes.getNamedItem( "transition" ) ? self.attributes.getNamedItem( "transition" ).nodeValue : "popcorn-fade",
+                  target = self.attributes.getNamedItem( "target" ) ? self.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode;
+
+              self.innerHTML = "";
+
+              window.pop.image({
+                start: start,
+                end: end,
+                src: src,
+                top: top,
+                left: left,
+                height: height,
+                width: width,
+                zindex: zindex,
+                linkSrc: linkSrc,
+                tags: tags,
+                photosetId: photosetId,
+                count: count,
+                transition: transition,
+                target: target
+              });
+            }
+          }
+
+          initImage();
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-wikipedia"
+  attributes="start end transition zindex top left width height target src lang">
+
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var self = this;
+
+          function initWiki() {
+            
+            if ( !window.pop ) {
+              setTimeout( initWiki, 50 );
+            } else {
+              var start = self.attributes.getNamedItem( "start" ) ? self.attributes.getNamedItem( "start" ).nodeValue : 0,
+                  end = self.attributes.getNamedItem( "end" ) ? self.attributes.getNamedItem( "end" ).nodeValue : 5,
+                  top = self.attributes.getNamedItem( "top" ) ? self.attributes.getNamedItem( "top" ).nodeValue : 25,
+                  left = self.attributes.getNamedItem( "left" ) ? self.attributes.getNamedItem( "left" ).nodeValue : 30,
+                  zindex = self.attributes.getNamedItem( "zindex" ) ? self.attributes.getNamedItem( "zindex" ).nodeValue : 1000,
+                  height = self.attributes.getNamedItem( "height" ) ? self.attributes.getNamedItem( "height" ).nodeValue : 50,
+                  width = self.attributes.getNamedItem( "width" ) ? self.attributes.getNamedItem( "width" ).nodeValue : 40,
+                  transition = self.attributes.getNamedItem( "transition" ) ? self.attributes.getNamedItem( "transition" ).nodeValue : "popcorn-fade",
+                  target = self.attributes.getNamedItem( "target" ) ? self.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
+                  lang = self.attributes.getNamedItem( "lang" ) ? self.attributes.getNamedItem( "lang" ).nodeValue : "en",
+                  src = self.attributes.getNamedItem( "src" ) ? self.attributes.getNamedItem( "src" ).nodeValue : "Popcorn.js";
+
+              self.innerHTML = "";
+
+              window.pop.wikipedia({
+                start: start,
+                end: end,
+                top: top,
+                left: left,
+                height: height,
+                width: width,
+                zindex: zindex,
+                transition: transition,
+                target: target,
+                src: src,
+                lang: lang
+              });
+            }
+          }
+
+          initWiki();
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-twitter"
+  attributes="start end transition zindex left width target layout numberOfTweets searchType search username">
+
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var self = this;
+
+          function initTwitter() {
+            
+            if ( !window.pop ) {
+              setTimeout( initTwitter, 50 );
+            } else {
+              var start = self.attributes.getNamedItem( "start" ) ? self.attributes.getNamedItem( "start" ).nodeValue : 0,
+                  end = self.attributes.getNamedItem( "end" ) ? self.attributes.getNamedItem( "end" ).nodeValue : 5,
+                  left = self.attributes.getNamedItem( "left" ) ? self.attributes.getNamedItem( "left" ).nodeValue : 0,
+                  zindex = self.attributes.getNamedItem( "zindex" ) ? self.attributes.getNamedItem( "zindex" ).nodeValue : 1000,
+                  width = self.attributes.getNamedItem( "width" ) ? self.attributes.getNamedItem( "width" ).nodeValue : 35,
+                  transition = self.attributes.getNamedItem( "transition" ) ? self.attributes.getNamedItem( "transition" ).nodeValue : "popcorn-fade",
+                  target = self.attributes.getNamedItem( "target" ) ? self.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
+                  layout = self.attributes.getNamedItem( "layout" ) ? self.attributes.getNamedItem( "layout" ).nodeValue : "feed",
+                  numberOfTweets = self.attributes.getNamedItem( "numberOfTweets" ) ? self.attributes.getNamedItem( "numberOfTweets" ).nodeValue : 10,
+                  searchType = self.attributes.getNamedItem( "searchType" ) ? self.attributes.getNamedItem( "searchType" ).nodeValue : "mixed",
+                  search = self.attributes.getNamedItem( "search" ) ? self.attributes.getNamedItem( "search" ).nodeValue : "",
+                  username = self.attributes.getNamedItem( "username" ) ? self.attributes.getNamedItem( "username" ).nodeValue : "";
+
+              self.innerHTML = "";
+
+              window.pop.twitter({
+                start: start,
+                end: end,
+                left: left,
+                width: width,
+                zindex: zindex,
+                transition: transition,
+                target: target,
+                layout: layout,
+                numberOfTweets: numberOfTweets,
+                search: search,
+                searchType: searchType,
+                username: username
+              });
+            }
+          }
+
+          initTwitter();
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-pause"
+  attributes="start end target duration">
+
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var self = this;
+
+          function initPause() {
+            
+            if ( !window.pop ) {
+              setTimeout( initPause, 50 );
+            } else {
+              var start = self.attributes.getNamedItem( "start" ) ? self.attributes.getNamedItem( "start" ).nodeValue : 0,
+                  end = self.attributes.getNamedItem( "end" ) ? self.attributes.getNamedItem( "end" ).nodeValue : 5,
+                  target = self.attributes.getNamedItem( "target" ) ? self.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
+                  duration = self.attributes.getNamedItem( "duration" ) ? self.attributes.getNamedItem( "duration" ).nodeValue : 0;
+
+              self.innerHTML = "";
+
+              window.pop.pausePlugin({
+                start: start,
+                end: end,
+                duration: duration,
+                target: target
+              });
+            }
+          }
+
+          initPause();
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-skip"
+  attributes="start end target">
+
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var self = this;
+
+          function initSkip() {
+
+            if ( !window.pop ) {
+              setTimeout( initSkip, 50 );
+            } else {
+              var start = self.attributes.getNamedItem( "start" ) ? self.attributes.getNamedItem( "start" ).nodeValue : 0,
+                  end = self.attributes.getNamedItem( "end" ) ? self.attributes.getNamedItem( "end" ).nodeValue : 5,
+                  target = self.attributes.getNamedItem( "target" ) ? self.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode;
+
+              window.pop.skip({
+                start: start,
+                end: end,
+                target: target
+              });
+            }
+          }
+
+          initSkip();
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-loop"
+  attributes="start end target loop">
+
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var self = this;
+
+          function initLoop() {
+
+            if ( !window.pop ) {
+              setTimeout( initLoop, 50 );
+            } else {
+              var start = self.attributes.getNamedItem( "start" ) ? self.attributes.getNamedItem( "start" ).nodeValue : 0,
+                  end = self.attributes.getNamedItem( "end" ) ? self.attributes.getNamedItem( "end" ).nodeValue : 5,
+                  target = self.attributes.getNamedItem( "target" ) ? self.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
+                  loop = self.attributes.getNamedItem( "loop" ) ? self.attributes.getNamedItem( "loop" ).nodeValue : 0;
+
+              window.pop.loopPlugin({
+                start: start,
+                end: end,
+                target: target,
+                loop: loop
+              });
+            }
+          }
+
+          initLoop();
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-sequencer"
+  attributes="start end target source fallback width height top left from volume hidden mute zindex duration">
+
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var self = this;
+
+          function initSequencer() {
+
+            if ( !window.pop ) {
+              setTimeout( initSequencer, 50 );
+            } else {
+              var start = self.attributes.getNamedItem( "start" ) ? self.attributes.getNamedItem( "start" ).nodeValue : 0,
+                  end = self.attributes.getNamedItem( "end" ) ? self.attributes.getNamedItem( "end" ).nodeValue : 5,
+                  target = self.attributes.getNamedItem( "target" ) ? self.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
+                  zindex = self.attributes.getNamedItem( "zindex" ) ? self.attributes.getNamedItem( "zindex" ).nodeValue : 1000,
+                  source = self.attributes.getNamedItem( "source" ) ? self.attributes.getNamedItem( "source" ).nodeValue : "",
+                  fallback = self.attributes.getNamedItem( "fallback" ) ? self.attributes.getNamedItem( "fallback" ).nodeValue : "",
+                  width = self.attributes.getNamedItem( "width" ) ? self.attributes.getNamedItem( "width" ).nodeValue : 100,
+                  height = self.attributes.getNamedItem( "height" ) ? self.attributes.getNamedItem( "height" ).nodeValue : 100,
+                  top = self.attributes.getNamedItem( "top" ) ? self.attributes.getNamedItem( "top" ).nodeValue : 0,
+                  left = self.attributes.getNamedItem( "left" ) ? self.attributes.getNamedItem( "left" ).nodeValue : 0,
+                  from = self.attributes.getNamedItem( "from" ) ? self.attributes.getNamedItem( "from" ).nodeValue : 0,
+                  volume = self.attributes.getNamedItem( "volume" ) ? self.attributes.getNamedItem( "volume" ).nodeValue : 100,
+                  hidden = self.attributes.getNamedItem( "hidden" ) ? self.attributes.getNamedItem( "hidden" ).nodeValue : false,
+                  mute = self.attributes.getNamedItem( "mute" ) ? self.attributes.getNamedItem( "mute" ).nodeValue : false,
+                  duration = self.attributes.getNamedItem( "duration" ) ? self.attributes.getNamedItem( "duration" ).nodeValue : "";
+
+              window.pop.sequencer({
+                start: start,
+                end: end,
+                target: target,
+                zindex: zindex,
+                source: source,
+                fallback: fallback,
+                width: width,
+                height: height,
+                top: top,
+                left: left,
+                from: from,
+                volume: volume,
+                hidden: hidden,
+                mute: mute,
+                duration: duration
+              });
+            }
+          }
+
+          initSequencer();
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-popup"
+  attributes="start end transition linkUrl fontPercentage fontColor fontDecorations fontFamily top left width target type triangle sound icon flip">
+  <template>
+    <!-- Eventually we can have actual plugin content layouts here and pass this to the plugins themselves -->
+    <p><content></content></p>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var self = this;
+
+          function initPopup() {
+
+            if ( !window.pop ) {
+              setTimeout( initPopup, 50 );
+            } else {
+              var text = self.innerHTML,
+                  defaultDecorations = { bold: false, italics: false },
+                  start = self.attributes.getNamedItem( "start" ) ? self.attributes.getNamedItem( "start" ).nodeValue : 0,
+                  end = self.attributes.getNamedItem( "end" ) ? self.attributes.getNamedItem( "end" ).nodeValue : 5,
+                  fontPercentage = self.attributes.getNamedItem( "fontPercentage" ) ? self.attributes.getNamedItem( "fontPercentage" ).nodeValue : 4,
+                  top = self.attributes.getNamedItem( "top" ) ? self.attributes.getNamedItem( "top" ).nodeValue : 0,
+                  left = self.attributes.getNamedItem( "left" ) ? self.attributes.getNamedItem( "left" ).nodeValue : 0,
+                  zindex = self.attributes.getNamedItem( "zindex" ) ? self.attributes.getNamedItem( "zindex" ).nodeValue : 1000,
+                  fontFamily =  self.attributes.getNamedItem( "fontFamily" ) ? self.attributes.getNamedItem( "fontFamily" ).nodeValue: "Vollkorn",
+                  width = self.attributes.getNamedItem( "width" ) ? self.attributes.getNamedItem( "width" ).nodeValue : 50,
+                  transition = self.attributes.getNamedItem( "transition" ) ? self.attributes.getNamedItem( "transition" ).nodeValue : "popcorn-fade",
+                  target = self.attributes.getNamedItem( "target" ) ? self.attributes.getNamedItem( "target" ).nodeValue : window.pop.media.parentNode,
+                  linkUrl = self.attributes.getNamedItem( "linkUrl" ) ? self.attributes.getNamedItem( "linkUrl" ).nodeValue : "",
+                  fontDecorations = self.attributes.getNamedItem( "fontDecorations" ) ? self.attributes.getNamedItem( "fontDecorations" ).nodeValue : "",
+                  type = self.attributes.getNamedItem( "type" ) ? self.attributes.getNamedItem( "type" ).nodeValue : "popup",
+                  triangle = self.attributes.getNamedItem( "triangle" ) ? self.attributes.getNamedItem( "triangle" ).nodeValue : "bottom left",
+                  sound = self.attributes.getNamedItem( "sound" ) ? self.attributes.getNamedItem( "sound" ).nodeValue : false,
+                  icon = self.attributes.getNamedItem( "icon" ) ? self.attributes.getNamedItem( "icon" ).nodeValue : "error",
+                  flip = self.attributes.getNamedItem( "flip" ) ? self.attributes.getNamedItem( "flip" ).nodeValue : false,
+                  fontColor = self.attributes.getNamedItem( "fontColor" ) ? self.attributes.getNamedItem( "fontColor" ).nodeValue : "#000000";
+
+              if ( fontDecorations ) {
+                var decorations = fontDecorations.split( " " );
+
+                fontDecorations = {};
+
+                for ( var i = 0; i < decorations.length; i++ ) {
+                  fontDecorations[ decorations[ i ] ] = true;
+                }
+
+              } else {
+                fontDecorations = defaultDecorations;
+              }
+
+              window.pop.popup({
+                start: start,
+                end: end,
+                text: text,
+                fontPercentage: fontPercentage,
+                target: target,
+                top: top,
+                left: left,
+                zindex: zindex,
+                fontFamily: fontFamily,
+                fontColor: fontColor,
+                linkUrl: linkUrl,
+                fontDecorations: fontDecorations,
+                type: type,
+                triangle: triangle,
+                sound: sound,
+                icon: icon,
+                flip: flip,
+                transition: transition
+              });
+            }
+          }
+
+          initPopup();
+        }
+      }
+    });
+  </script>
+</element>
+
+<element name="webmaker-googlemap"
+  attributes="start end location width height lat lng top left zoom pitch heading fullscreen type transition zindex target">
+  <template>
+    <content></content>
+  </template>
+
+  <script>
+    // our element template:
+    var template = this.querySelector( "template" );
+
+    // our "what to do when this element is built" code:
+    this.register({
+      prototype: {
+        readyCallback: function() {
+          var self = this;
+
+          function initGoogleMaps() {
+
+            if ( !window.pop ) {
+              setTimeout( initGoogleMaps, 50 );
+            } else {
+              var start = self.attributes.getNamedItem( "start" ) ? self.attributes.getNamedItem( "start" ).nodeValue : 0,
+                  end = self.attributes.getNamedItem( "end" ) ? self.attributes.getNamedItem( "end" ).nodeValue : 5,
+                  top = self.attributes.getNamedItem( "top" ) ? self.attributes.getNamedItem( "top" ).nodeValue : 15,
+                  left = self.attributes.getNamedItem( "left" ) ? self.attributes.getNamedItem( "left" ).nodeValue : 15,
+                  zindex = self.attributes.getNamedItem( "zindex" ) ? self.attributes.getNamedItem( "zindex" ).nodeValue : 1000,
+                  height = self.attributes.getNamedItem( "height" ) ? self.attributes.getNamedItem( "height" ).nodeValue : 70,
+                  width = self.attributes.getNamedItem( "width" ) ? self.attributes.getNamedItem( "width" ).nodeValue : 70,
+                  transition = self.attributes.getNamedItem( "transition" ) ? self.attributes.getNamedItem( "transition" ).nodeValue : "popcorn-fade",
+                  target = self.attributes.getNamedItem( "target" ) ? self.attributes.getNamedItem( "target" ).nodeValue : "video-container",
+                  location = self.attributes.getNamedItem( "location" ) ? self.attributes.getNamedItem( "location" ).nodeValue : "",
+                  lat = self.attributes.getNamedItem( "lat" ) ? self.attributes.getNamedItem( "lat" ).nodeValue : "",
+                  lng = self.attributes.getNamedItem( "lng" ) ? self.attributes.getNamedItem( "lng" ).nodeValue : "",
+                  fullscreen = self.attributes.getNamedItem( "fullscreen" ) ? self.attributes.getNamedItem( "fullscreen" ).nodeValue : false,
+                  zoom = self.attributes.getNamedItem( "zoom" ) ? self.attributes.getNamedItem( "zoom" ).nodeValue : 10,
+                  pitch = self.attributes.getNamedItem( "pitch" ) ? self.attributes.getNamedItem( "pitch" ).nodeValue : 0,
+                  heading = self.attributes.getNamedItem( "heading" ) ? self.attributes.getNamedItem( "heading" ).nodeValue : 0,
+                  type = self.attributes.getNamedItem( "type" ) ? self.attributes.getNamedItem( "type" ).nodeValue : "ROADMAP";
+
+              window.pop.googlemap({
+                start: start,
+                end: end,
+                top: top,
+                left: left,
+                height: height,
+                width: width,
+                zindex: zindex,
+                transition: transition,
+                target: target,
+                location: location,
+                lat: lat,
+                lng: lng,
+                fullscreen: fullscreen,
+                zoom: zoom,
+                pitch: pitch,
+                heading: heading,
+                type: type
+              });
+            }
+          }
+
+          initGoogleMaps();
+        }
+      }
+    });
+  </script>
+</element>

@@ -157,6 +157,9 @@
         },
         zindex: {
           hidden: true
+        },
+        target: {
+          hidden: true
         }
       }
     },
