@@ -10,8 +10,8 @@ var express = require('express'),
     app = express(),
     lessMiddleware = require('less-middleware'),
     config = require( './lib/config' ),
-    User = require( './lib/user' )( config.database ),
-    filter = require( './lib/filter' )( User.isDBOnline ),
+    Project = require( './lib/project' )( config.database ),
+    filter = require( './lib/filter' )( Project.isDBOnline ),
     sanitizer = require( './lib/sanitizer' ),
     FileStore = require('./lib/file-store.js'),
     metrics,
@@ -93,7 +93,7 @@ require( 'express-persona' )( app, {
   audience: APP_HOSTNAME
 });
 
-require('./routes')( app, User, filter, sanitizer, stores, utils, metrics );
+require('./routes')( app, Project, filter, sanitizer, stores, utils, metrics );
 
 function writeEmbedShell( embedPath, url, data, callback ) {
   if( !writeEmbedShell.templateFn ) {
@@ -125,7 +125,7 @@ app.post( '/api/publish/:id',
     return;
   }
 
-  User.findProject( email, id, function( err, project ) {
+  Project.find( { id: id, email: email }, function( err, project ) {
     if ( err ) {
       res.json( { error: err }, 500);
       return;
@@ -298,7 +298,7 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
     return;
   }
 
-  User.findAllProjects( email, function( err, docs ) {
+  Project.findAll( { email: email }, function( err, docs ) {
     var userProjects = [];
 
     docs.forEach( function( project ) {

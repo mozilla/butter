@@ -1,5 +1,5 @@
 var test = require( "tap" ).test,
-    userLibrary = require( "../lib/user" );
+    projectLibrary = require( "../lib/project" );
 
 var DB_USERNAME = process.env.DB_USERNAME || "root";
 var DB_DATABASE = process.env.DB_DATABASE || "popcorn";
@@ -73,7 +73,7 @@ function Waiter( numItems, onCompleted, onCancelled ) {
 }
 
 test( "mysql db pooling", function( t ) {
-  var poolingUser, nonPoolingUser;
+  var poolingProject, nonPoolingProject;
 
   var waiter = new Waiter( 2,
     function(){
@@ -85,13 +85,13 @@ test( "mysql db pooling", function( t ) {
           t.end();
         });
 
-      poolingUser.createProject( mockEmail, mockData, projectWaiter.wait( function( err ) {
+      poolingProject.create( { email: mockEmail, data: mockData }, projectWaiter.wait( function( err ) {
         t.ok( !err, "Pooling project created" );
         if ( err ) {
           projectWaiter.cancel();
         }
       }));
-      nonPoolingUser.createProject( mockEmail, mockData, projectWaiter.wait( function( err ) {
+      nonPoolingProject.create( { email: mockEmail, data: mockData }, projectWaiter.wait( function( err ) {
         t.ok( !err, "Non-pooling project created" );
         if ( err ) {
           projectWaiter.cancel();
@@ -106,20 +106,20 @@ test( "mysql db pooling", function( t ) {
       t.end();
     });
 
-  poolingUser = userLibrary( configWithPool, waiter.wait( function( err ) {
+  poolingProject = projectLibrary( configWithPool, waiter.wait( function( err ) {
     if ( err ) {
       waiter.cancel();
       return;
     }
-    t.ok( poolingUser.getSequelizeInstance().connectorManager.pool, "Pool exists" );
+    t.ok( poolingProject.getSequelizeInstance().connectorManager.pool, "Pool exists" );
   }));
 
-  nonPoolingUser = userLibrary( configWithoutPool, waiter.wait( function( err ) {
+  nonPoolingProject = projectLibrary( configWithoutPool, waiter.wait( function( err ) {
     if ( err ) {
       waiter.cancel();
       return;
     }
-    t.ok( !nonPoolingUser.getSequelizeInstance().connectorManager.pool, "No pool exists" );
+    t.ok( !nonPoolingProject.getSequelizeInstance().connectorManager.pool, "No pool exists" );
   }));
 
 });

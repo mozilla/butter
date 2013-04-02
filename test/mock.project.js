@@ -24,7 +24,7 @@ module.exports = function() {
     error: false,
     doc: true,
     generateMockData: generateMockData,
-    findProject: function(email, id, callback) {
+    find: function( options, callback) {
       if (this.error) {
         callback("mock error");
         return;
@@ -35,9 +35,28 @@ module.exports = function() {
         return;
       }
 
-      callback(null, generateMockData(id));
+      callback(null, generateMockData(options.id));
     },
-    deleteProject: function(email, id, callback) {
+    findAll: function( options, callback) {
+      if (this.error) {
+        callback("mock error");
+        return;
+      }
+
+      if (!this.doc) {
+        callback("mock error");
+        return;
+      }
+
+      callback(null, [ generateMockData() ]);
+    },
+    findRecentlyCreated: function( options, callback ) {
+      callback();
+    },
+    findRecentlyUpdated: function( options, callback ) {
+      callback();
+    },
+    delete: function( options, callback) {
       if (this.error) {
         callback("mock error");
         return;
@@ -45,25 +64,13 @@ module.exports = function() {
 
       callback();
     },
-    findById: function(id, callback) {
+    create: function( options, callback) {
       if (this.error) {
         callback("mock error");
         return;
       }
 
-      if (!this.doc) {
-        callback();
-        return;
-      }
-
-      callback(null, generateMockData(id));
-    },
-    createProject: function(email, data, callback) {
-      if (this.error) {
-        callback("mock error");
-        return;
-      }
-
+      var data = options.data;
       if (!data.data) {
         callback("not enough parameters to update");
         return;
@@ -74,7 +81,7 @@ module.exports = function() {
 
       callback(null, data);
     },
-    updateProject: function(email, id, data, callback) {
+    update: function( options, callback) {
       if (this.error) {
         callback("mock error");
         return;
@@ -85,14 +92,15 @@ module.exports = function() {
         return;
       }
 
+      var data = options.data;
       data.data = JSON.stringify( data.data );
 
       callback(null, data);
     },
-    linkImageFilesToProject: function( files, projectId, callback ) {
+    linkImageFilesToProject: function( options, callback ) {
       callback();
     },
-    createImageReferencesForProject: function( imageFiles, projectId, callback ) {
+    createImageReferencesForProject: function( options, callback ) {
       callback();
     }
   };
