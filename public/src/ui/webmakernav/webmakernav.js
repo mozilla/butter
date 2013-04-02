@@ -1,8 +1,8 @@
 /* This Source Code Form is subject to the terms of the MIT license
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
-define( [ "util/lang", "text!./webmakernav.html", "text!./webmakernav.css" ],
-  function( Lang,  BASE_LAYOUT, BASE_CSS ) {
+define( [ "util/lang", "text!./webmakernav.html" ],
+  function( Lang,  BASE_LAYOUT ) {
 
   var NULL_FUNCTION = function() {};
 
@@ -35,7 +35,6 @@ define( [ "util/lang", "text!./webmakernav.html", "text!./webmakernav.css" ],
         feedbackCallback,
         onLogin,
         onLogout,
-        appendStyles,
         webmakerTabSetup,
         userMenuSetup;
 
@@ -54,13 +53,6 @@ define( [ "util/lang", "text!./webmakernav.html", "text!./webmakernav.css" ],
     feedbackCallback = options.feedbackCallback;
     onLogin = options.onLogin || NULL_FUNCTION;
     onLogout = options.onLogout || NULL_FUNCTION;
-
-    appendStyles = function() {
-      var styleTag = document.createElement( "style" ),
-          styles = document.createTextNode( BASE_CSS );
-      styleTag.appendChild( styles );
-      document.head.appendChild( styleTag );
-    };
 
     webmakerTabSetup = function( e ) {
       var currentActiveBtn = primary.querySelector( "." + BTN_ACTIVE_CLASS ),
@@ -108,7 +100,6 @@ define( [ "util/lang", "text!./webmakernav.html", "text!./webmakernav.css" ],
       }, false );
     };
 
-    appendStyles();
     container.appendChild( root );
     userMenuSetup();
 
