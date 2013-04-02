@@ -65,6 +65,14 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
         draggable,
         droppable;
 
+    // Bug #2945 - this array can be empty if delete was pressed and held at the
+    // same time that the left mouse button is clicked. We must call__onDraggableMouseUp
+    // manually because Chrome will ignore the next mouseup event.
+    if ( !draggables.length ) {
+      __onDraggableMouseUp();
+      return;
+    }
+
     __scroll = false;
 
     if ( __mouseDown ) {
@@ -141,7 +149,7 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
   function __onDraggableMouseUp() {
     window.removeEventListener( "dragstart", __onWindowDragStart, false );
     window.removeEventListener( "mousemove", __onDraggableDragged, false );
-    window.removeEventListener( "mousemove", __onDraggableMouseUp, false );
+    window.removeEventListener( "mouseup", __onDraggableMouseUp, false );
 
     if ( !__mouseDown ) {
       return;
