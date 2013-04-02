@@ -266,7 +266,54 @@ function init() {
       "popcorn"
     ],
     function( URI, Controls, TextboxWrapper ) {
-      
+      var Butter = {
+            version: "Butter-Embed-@VERSION@"
+          },
+          popcorn, config, qs, container;
+
+      // Some config options want the video to be ready before we do anything.
+      function onLoad() {
+        var start = config.start,
+            end = config.end;
+
+        if ( config.fullscreen ) {
+          // dispatch an event to let the controls know we want to setup a click listener for the fullscreen button
+          popcorn.emit( "butter-fullscreen-allowed", container );
+        }
+
+        popcorn.off( "load", onLoad );
+
+        // update the currentTime to the embed options start value
+        // this is needed for mobile devices as attempting to listen for `canplay` or similar events
+        // that let us know it is safe to update the current time seem to be futile
+        function timeupdate() {
+          popcorn.currentTime( start );
+          popcorn.off( "timeupdate", timeupdate );
+        }
+        // See if we should start playing at a time other than 0.
+        // We combine this logic with autoplay, since you either
+        // seek+play or play or neither.
+        if ( start > 0 && start < popcorn.duration() ) {
+          popcorn.on( "seeked", function onSeeked() {
+            popcorn.off( "seeked", onSeeked );
+            if ( config.autoplay ) {
+              popcorn.play();
+            }
+          });
+          popcorn.on( "timeupdate", timeupdate );
+        } else if ( config.autoplay ) {
+          popcorn.play();
+        }
+
+        // See if we should pause at some time other than duration.
+        if ( end > 0 && end > start && end <= popcorn.duration() ) {
+          popcorn.cue( end, function() {
+            popcorn.pause();
+            popcorn.emit( "ended" );
+          });
+        }
+      }
+
       function initEmbed() {
 
         if ( !window.pop ) {
@@ -277,13 +324,9 @@ function init() {
            * This "butter" is never meant to live in a page with the full "butter".
            * We warn then remove if this happens.
            **/
-          var Butter = {
-                version: "Butter-Embed-@VERSION@"
-              },
-              popcorn = Popcorn.byId( "Butter-Generated" ),
-              config,
-              qs = URI.parse( window.location.href ).queryKey,
-              container = document.querySelectorAll( ".container" )[ 0 ];
+          popcorn = Popcorn.byId( "Butter-Generated" );
+          qs = URI.parse( window.location.href ).queryKey;
+          container = document.querySelectorAll( ".container" )[ 0 ];
 
           /**
            * the embed can be configured via the query string:
@@ -347,49 +390,6 @@ function init() {
           }
           if ( config.loop ) {
             popcorn.loop( true );
-          }
-
-          // Some config options want the video to be ready before we do anything.
-          function onLoad() {
-            var start = config.start,
-                end = config.end;
-
-            if ( config.fullscreen ) {
-              // dispatch an event to let the controls know we want to setup a click listener for the fullscreen button
-              popcorn.emit( "butter-fullscreen-allowed", container );
-            }
-
-            popcorn.off( "load", onLoad );
-
-            // update the currentTime to the embed options start value
-            // this is needed for mobile devices as attempting to listen for `canplay` or similar events
-            // that let us know it is safe to update the current time seem to be futile
-            function timeupdate() {
-              popcorn.currentTime( start );
-              popcorn.off( "timeupdate", timeupdate );
-            }
-            // See if we should start playing at a time other than 0.
-            // We combine this logic with autoplay, since you either
-            // seek+play or play or neither.
-            if ( start > 0 && start < popcorn.duration() ) {
-              popcorn.on( "seeked", function onSeeked() {
-                popcorn.off( "seeked", onSeeked );
-                if ( config.autoplay ) {
-                  popcorn.play();
-                }
-              });
-              popcorn.on( "timeupdate", timeupdate );
-            } else if ( config.autoplay ) {
-              popcorn.play();
-            }
-
-            // See if we should pause at some time other than duration.
-            if ( end > 0 && end > start && end <= popcorn.duration() ) {
-              popcorn.cue( end, function() {
-                popcorn.pause();
-                popcorn.emit( "ended" );
-              });
-            }
           }
 
           // Either the video is ready, or we need to wait.

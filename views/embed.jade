@@ -4,7 +4,6 @@ html(lang='en')
     base(href='#{baseHref}')
     !{templateScripts}
     !{externalAssets}
-    !{popcorn}
     link(rel='stylesheet', href='/css/embed.css')
     link(rel='stylesheet', href="/css/controls.css")
     // This is the embed, the actual content is at the following URL
@@ -15,8 +14,8 @@ html(lang='en')
       @-ms-viewport { width: device-width; }
       @-webkit-viewport { width: device-width; }
       @viewport { width: device-width; }
-    script(src='/src/external/WebComponents/web-components.js')
-    script(src='/src/external/CustomElements/custom-elements.js')
+    script(src='/external/WebComponents/web-components.js')
+    script(src='/external/CustomElements/custom-elements.js')
     link(href='/src/web-components/webmaker-components.html', rel='component')
     script(src='/src/embed.js')
   body.embed
@@ -24,6 +23,7 @@ html(lang='en')
       #video-container.video.video-container
         #video.video
       .loading-message
+      !{popcorn}
     #controls-big-play-button
     #post-roll-container
       #post-roll.embed-overlay

@@ -72,7 +72,7 @@
   }(window));
 </script>
 
-<element name="webmaker-media" attributes="href width height">
+<element name="webmaker-media" attributes="href width height target">
   <template>
     <div class="webmaker-media">
       <div class="media-container"></div>
@@ -100,8 +100,9 @@
           var self = this;
 
           function initMedia() {
+            var Popcorn = window.Popcorn;
 
-            if ( !window.Popcorn || !window.Popcorn.player ) {
+            if ( !Popcorn || !Popcorn.player ) {
               setTimeout( initMedia, 250 );
             } else {
               if ( !window.pop ) {

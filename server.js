@@ -161,6 +161,7 @@ app.post( '/api/publish/:id',
           externalAssetsString = '',
           popcornString = '',
           currentMedia,
+          popcornElements = [],
           currentTrack,
           currentTrackEvent,
           mediaPopcornOptions,
@@ -170,7 +171,7 @@ app.post( '/api/publish/:id',
           templateScripts,
           startString,
           numSources,
-          j, k, len;
+          j, k, len, option;
 
       templateURL = templateFile.substring( templateFile.indexOf( '/templates' ), templateFile.lastIndexOf( '/' ) );
       baseHref = APP_HOSTNAME + templateURL + "/";
@@ -197,11 +198,10 @@ app.post( '/api/publish/:id',
         externalAssetsString += '\n';
       }
 
-      popcornString += '<script>';
-
       for ( i = 0; i < projectData.media.length; ++i ) {
         var mediaUrls,
-            mediaUrlsString = '[ "';
+            mediaUrlsString = '',
+            popcornEvent;
 
         currentMedia = projectData.media[ i ];
         // We expect a string (one url) or an array of url strings.
@@ -213,31 +213,34 @@ app.post( '/api/publish/:id',
 
         numSources = mediaUrls.length;
 
-        for ( k = 0; k < numSources - 1; k++ ) {
-          mediaUrlsString += mediaUrls[ k ] + '" , "';
+        for ( k = 0; k < numSources; k++ ) {
+          popcornString += '\n<webmaker-media href="' + mediaUrls[ k ] + '" target="' + currentMedia.target + '" ></webmaker-media>\n'
         }
-        mediaUrlsString += mediaUrls[ numSources - 1 ] + '" ]';
 
-        // src/embed.js initializes Popcorn by executing the global popcornDataFn()
-        popcornString += '\nvar popcornDataFn = function(){';
-        popcornString += '\nvar popcorn = Popcorn.smart("#' + currentMedia.target + '", ' +
-                         mediaUrlsString + ', ' + JSON.stringify( mediaPopcornOptions ) + ');';
         for ( j = 0; j < currentMedia.tracks.length; ++ j ) {
           currentTrack = currentMedia.tracks[ j ];
           for ( k = 0; k < currentTrack.trackEvents.length; ++k ) {
             currentTrackEvent = currentTrack.trackEvents[ k ];
-            popcornString += '\npopcorn.' + currentTrackEvent.type + '(';
-            popcornString += JSON.stringify( currentTrackEvent.popcornOptions, null, 2 );
-            popcornString += ');';
+            popcornString += '\n<webmaker-' + currentTrackEvent.type + ' ';
+
+            for ( var key in currentTrackEvent.popcornOptions ) {
+              if ( currentTrackEvent.popcornOptions.hasOwnProperty( key ) ) {
+                option = currentTrackEvent.popcornOptions[ key ];
+
+                if ( option !== "text" ) {
+                  popcornString += key + '="' + option + '" ';
+                }
+              }
+            }
+
+            if ( currentTrackEvent.popcornOptions.text ) {
+              popcornString += '>' + currentTrackEvent.popcornOptions.text + '</webmaker-' + currentTrackEvent.type + '>\n';
+            } else {
+              popcornString += '></webmaker-' + currentTrackEvent.type + '>\n';
+            }
           }
         }
-        popcornString += '};\n';
       }
-      popcornString += '</script>\n';
-
-      data = startString + baseString + templateScripts + externalAssetsString +
-             data.substring( headEndTagIndex, bodyEndTagIndex ) +
-             popcornString + data.substring( bodyEndTagIndex );
 
       // Convert 1234567890 => "kf12oi"
       var idBase36 = utils.generateIdString( id ),
@@ -270,7 +273,7 @@ app.post( '/api/publish/:id',
       var remixUrl = "?savedDataUrl=/api/remix/" + project.id,
           mediaUrl = projectData.media[ 0 ].url,
           attribURL = Array.isArray( mediaUrl ) ? mediaUrl[ 0 ] : mediaUrl;
-
+console.log(popcornString)
       writeEmbed( idBase36 + utils.constants().EMBED_SUFFIX, iframeUrl,
                   {
                     id: id,

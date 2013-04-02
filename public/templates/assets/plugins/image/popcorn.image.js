@@ -78,7 +78,7 @@
   }
 
   function validateDimension( value, fallback ) {
-    var value = parseFloat( value );
+    value = parseFloat( value );
     if ( value < 0 || value > 100 ) {
       return fallback;
     }
