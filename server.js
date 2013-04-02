@@ -43,10 +43,6 @@ for ( var templateName in VALID_TEMPLATES ) {
   }
 }
 
-app.configure( 'development', function() {
-  app.use( lessMiddleware( WWW_ROOT ));
-});
-
 function setupStore( storeConfig ) {
   var store = FileStore.create( storeConfig.type, storeConfig.options );
   if ( store.requiresFileSystem ) {
@@ -56,8 +52,21 @@ function setupStore( storeConfig ) {
 }
 
 app.configure( function() {
+  var optimize = config.NODE_ENV !== "development",
+      tmpDir = require( "os" ).tmpDir() + "butter/";
+
   app.use( express.logger( config.logger ) )
     .use( express.compress() )
+    .use( lessMiddleware({
+      once: optimize,
+      debug: !optimize,
+      dest: tmpDir,
+      src: WWW_ROOT,
+      compress: optimize,
+      yuicompress: optimize,
+      optimization: optimize ? 0 : 2
+    }))
+    .use( express.static( tmpDir ) )
     .use( express.static( WWW_ROOT, JSON.parse( JSON.stringify( config.staticMiddleware ) ) ) )
     .use( express.json() )
     .use( express.cookieParser() )
