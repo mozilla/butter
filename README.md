@@ -37,16 +37,10 @@ Environment Setup
 Running Butter in development mode
 ----------------------------------
 
-1. Run `node make server`.
+1. Run `node server`.
 2. Navigate to [http://localhost:8888/](http://localhost:8888/) in your favourite browser.
 
-If you want to change the bind IP or port check the Configuration section below.
-
-Packaging and Distributing Butter
---------------------------------
-
-Running `node make deploy` will compile all the necessary files into the `dist/` folder.
-Run `NODE_ENV=production node server.js` in the `dist/` directory in order to run the server in production mode.
+If you want to change the bind IP or port check the Configuration section below. Run `NODE_ENV=production node server.js` in order to run the server in production mode.
 
 Server Configuration
 --------------------
@@ -77,7 +71,6 @@ The default server configuration can be found in [lib/default-config.js](lib/def
     - `format` the logging format to use.  Possible values include: default, short, tiny, dev.
   - `session` settings for user sessions
     - `secret` the sessions secret (i.e., some long string)
-    - `duration` the session's duration (e.g., 2419200000)
   - `staticMiddleware` settings for cornfield Connect middleware
     - `maxAge` the max age of static assests
   - `dirs` settings for various directories, paths, hostnames
@@ -156,6 +149,6 @@ Getting Involved
 
 * Chat with the Popcorn community on irc.mozilla.org in the [#popcorn](irc://irc.mozilla.org/popcorn) channel. The developers hang out here on a daily basis.
 * We also have a [mailing list](https://mail.mozilla.org/listinfo/community-popcorn) that you can subscribe to.
-* File bugs and feature requests on our [issue tracker](https://webmademovies.lighthouseapp.com/projects/65733-butter/).
+* File bugs and feature requests on our [issue tracker](https://bugzilla.mozilla.org/enter_bug.cgi?format=guided#h=dupes|Webmaker|).
 * The latest code can be found on our [Github repository](https://github.com/mozilla/butter/).
 * If you'd like to contribute code, file a ticket on our issue tracker, and link to it from your Github pull request.
