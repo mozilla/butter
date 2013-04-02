@@ -3,7 +3,7 @@ var test = require("tap").test,
 
 var mockEmail = "test@example.org",
     mockSession = require("./mock.session"),
-    mockUser = require("./mock.user")(),
+    mockProject = require("./mock.project")(),
     mockFilter = require("./mock.filter"),
     mockSanitizer = require("./mock.sanitizer"),
     mockStore = require("./mock.store"),
@@ -21,7 +21,7 @@ app.use(mockSession({
 }))
 .use(express.bodyParser());
 
-require("../routes")(app, mockUser, mockFilter, mockSanitizer, mockStore, utils);
+require("../routes")(app, mockProject, mockFilter, mockSanitizer, mockStore, utils);
 
 app = app.listen(0);
 
@@ -44,8 +44,8 @@ test("whoami API valid", function(t) {
 });
 
 test("project data get with error", function(t) {
-  mockUser.error = true;
-  mockUser.doc = false;
+  mockProject.error = true;
+  mockProject.doc = false;
 
   request(app)
     .get("/api/project/1234")
@@ -59,8 +59,8 @@ test("project data get with error", function(t) {
 });
 
 test("project data get not found", function(t) {
-  mockUser.error = false;
-  mockUser.doc = false;
+  mockProject.error = false;
+  mockProject.doc = false;
 
   request(app)
     .get("/api/project/1234")
@@ -74,8 +74,8 @@ test("project data get not found", function(t) {
 });
 
 test("project data get valid", function(t) {
-  mockUser.error = false;
-  mockUser.doc = true;
+  mockProject.error = false;
+  mockProject.doc = true;
 
   request(app)
     .get("/api/project/1234")
@@ -84,7 +84,7 @@ test("project data get valid", function(t) {
       t.equal(res.type, "application/json", "response type is json");
 
       // This is very obtuse...
-      var mockData = mockUser.generateMockData(1234);
+      var mockData = mockProject.generateMockData(1234);
       mockData.data = JSON.parse(mockData.data);
       mockData.data.name = mockData.name;
       mockData.data.projectID = mockData.id;
@@ -100,7 +100,7 @@ test("project data get valid", function(t) {
 });
 
 test("delete project not found", function(t) {
-  mockUser.error = true;
+  mockProject.error = true;
 
   request(app)
     .post("/api/delete/1234")
@@ -114,7 +114,7 @@ test("delete project not found", function(t) {
 });
 
 test("delete project found", function(t) {
-  mockUser.error = false;
+  mockProject.error = false;
 
   request(app)
     .post("/api/delete/1234")
@@ -134,9 +134,9 @@ test("delete project found", function(t) {
  *******************/
 
 test("create project with error", function(t) {
-  mockUser.error = true;
+  mockProject.error = true;
 
-  var mockData = mockUser.generateMockData(1234);
+  var mockData = mockProject.generateMockData(1234);
   delete mockData.id;
 
   request(app)
@@ -152,9 +152,9 @@ test("create project with error", function(t) {
 });
 
 test("create project with no data", function(t) {
-  mockUser.error = false;
+  mockProject.error = false;
 
-  var mockData = mockUser.generateMockData(1234);
+  var mockData = mockProject.generateMockData(1234);
   delete mockData.id;
   delete mockData.data;
 
@@ -171,9 +171,9 @@ test("create project with no data", function(t) {
 });
 
 test("create project valid", function(t) {
-  mockUser.error = false;
+  mockProject.error = false;
 
-  var mockData = mockUser.generateMockData();
+  var mockData = mockProject.generateMockData();
   mockData.data = JSON.parse(mockData.data);
   delete mockData.id;
 
@@ -191,8 +191,8 @@ test("create project valid", function(t) {
 });
 
 test("create project with data-uris", function(t) {
-  mockUser.error = false;
-  var mockData = mockUser.generateMockData( 0, [{
+  mockProject.error = false;
+  var mockData = mockProject.generateMockData( 0, [{
       tracks: [{
         trackEvents: [{
           type: "test",
@@ -223,10 +223,10 @@ test("create project with data-uris", function(t) {
 });
 
 test("update project with error", function(t) {
-  mockUser.error = true;
-  mockUser.doc = true;
+  mockProject.error = true;
+  mockProject.doc = true;
 
-  var mockData = mockUser.generateMockData(1234);
+  var mockData = mockProject.generateMockData(1234);
   mockData.data = JSON.parse(mockData.data);
   mockData.id = mockData.id;
 
@@ -243,10 +243,10 @@ test("update project with error", function(t) {
 });
 
 test("update project with no matching id", function(t) {
-  mockUser.error = false;
-  mockUser.doc = false;
+  mockProject.error = false;
+  mockProject.doc = false;
 
-  var mockData = mockUser.generateMockData(1234);
+  var mockData = mockProject.generateMockData(1234);
   mockData.data = JSON.parse(mockData.data);
   mockData.id = mockData.id;
 
@@ -263,10 +263,10 @@ test("update project with no matching id", function(t) {
 });
 
 test("update project valid", function(t) {
-  mockUser.error = false;
-  mockUser.doc = true;
+  mockProject.error = false;
+  mockProject.doc = true;
 
-  var mockData = mockUser.generateMockData(1234);
+  var mockData = mockProject.generateMockData(1234);
   mockData.data = JSON.parse(mockData.data);
   mockData.id = mockData.id;
 
@@ -286,8 +286,8 @@ test("update project valid", function(t) {
 
 
 test("remix project with error", function(t) {
-  mockUser.error = true;
-  mockUser.doc = false;
+  mockProject.error = true;
+  mockProject.doc = false;
 
   request(app)
     .get("/api/remix/1234")
@@ -301,8 +301,8 @@ test("remix project with error", function(t) {
 });
 
 test("remix project with no doc", function(t) {
-  mockUser.error = false;
-  mockUser.doc = false;
+  mockProject.error = false;
+  mockProject.doc = false;
 
   request(app)
     .get("/api/remix/1234")
@@ -316,8 +316,8 @@ test("remix project with no doc", function(t) {
 });
 
 test("remix project valid", function(t) {
-  mockUser.error = false;
-  mockUser.doc = true;
+  mockProject.error = false;
+  mockProject.doc = true;
 
   request(app)
     .get("/api/remix/1234")
@@ -326,7 +326,7 @@ test("remix project valid", function(t) {
       t.equal(res.type, "application/json", "response type is json");
 
       // This is very obtuse...
-      var mockData = mockUser.generateMockData(1234);
+      var mockData = mockProject.generateMockData(1234);
       mockData.data = JSON.parse(mockData.data);
       mockData.data.name = "Remix of " + mockData.name;
       mockData.data.template = "basic";

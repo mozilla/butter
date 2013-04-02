@@ -264,7 +264,6 @@ function buildCSS(compress) {
     "public/css/transitions",
     "public/css/embed",
     "public/css/embed-shell",
-    "public/src/ui/webmakernav/webmakernav",
     "public/templates/assets/css/jquery-ui/jquery.ui.butter",
     "public/templates/assets/plugins/twitter/popcorn.twitter",
     "public/templates/assets/plugins/wikipedia/popcorn.wikipedia",
@@ -285,6 +284,7 @@ target.check = function() {
       callback();
     },
     function( callback ) {
+      buildCSS();
       checkCSS();
       callback();
     },

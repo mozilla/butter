@@ -1,5 +1,5 @@
 var test = require( "tap" ).test,
-    user,
+    project,
     mockEmail = "test@example.org",
     mockData = {
       data: {
@@ -13,7 +13,7 @@ var test = require( "tap" ).test,
     id;
 
 test( "sqlite db setup with incorrect pool params", function( t ) {
-  var poolUser = require( "../lib/user" )({
+  var poolProject = require( "../lib/project" )({
     database: "popcorn",
     options: {
       dialect: "sqlite",
@@ -25,14 +25,14 @@ test( "sqlite db setup with incorrect pool params", function( t ) {
       }
     }
   }, function( err ) {
-    t.ok( !poolUser.getSequelizeInstance().connectorManager.pool, "No pool exists" );
+    t.ok( !poolProject.getSequelizeInstance().connectorManager.pool, "No pool exists" );
     t.ok( !err, "User created with sqlite db and ignored pool param" );
     t.end();
   });
 });
 
 test( "sqlite db setup", function( t ) {
-  user = require( "../lib/user" )({
+  project = require( "../lib/project" )({
     database: "popcorn",
     options: {
       dialect: "sqlite",
@@ -45,7 +45,7 @@ test( "sqlite db setup", function( t ) {
   });
 });
 
-test( "createProject valid parameters", function( t ) {
+test( "create valid parameters", function( t ) {
   t.plan( 6 );
 
   var mockCallback = function( err, project ) {
@@ -62,49 +62,36 @@ test( "createProject valid parameters", function( t ) {
     t.end();
   };
 
-  user.createProject( mockEmail, mockData, mockCallback );
+  project.create( { email: mockEmail, data: mockData }, mockCallback );
 });
 
-test( "createProject invalid parameters - Project Data", function( t ) {
+test( "create invalid parameters - Project Data", function( t ) {
   t.plan( 2 );
 
   var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
-        t.equal( err, "not enough parameters to update", "Reported expected error message" );
+        t.equal( err, "Expected email and data on options object", "Reported expected error message" );
 
         t.end();
       };
 
-  user.createProject( mockEmail, null, mockCallback );
+  project.create( { email: mockEmail, data: null }, mockCallback );
 });
 
-test( "createProject invalid parameters - Email", function( t ) {
+test( "create invalid parameters - Email", function( t ) {
   t.plan( 2 );
 
   var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
-        t.equal( err, "not enough parameters to update", "Reported expected error message for creation" );
+        t.equal( err, "Expected email and data on options object", "Reported expected error message for creation" );
 
         t.end();
       };
 
-  user.createProject( null, mockData, mockCallback );
+  project.create( {email: null, data: mockData }, mockCallback );
 });
 
-test( "deleteProject invalid parameters - Project ID", function( t ) {
-  t.plan( 2 );
-
-  var mockCallback = function( err ) {
-        t.ok( err, "Successfully received an error with invalid parameters" );
-        t.equal( err, "not enough parameters to delete", "Reported expected error message for delete" );
-
-        t.end();
-      };
-
-  user.deleteProject( mockEmail, null, mockCallback );
-});
-
-test( "deleteProject invalid parameters - Email", function( t ) {
+test( "delete invalid parameters - Project ID", function( t ) {
   t.plan( 2 );
 
   var mockCallback = function( err ) {
@@ -114,26 +101,39 @@ test( "deleteProject invalid parameters - Email", function( t ) {
         t.end();
       };
 
-  user.deleteProject( null, id, mockCallback );
+  project.delete( { email: mockEmail, id: null }, mockCallback );
 });
 
-test( "deleteProject valid parameters", function( t ) {
+test( "delete invalid parameters - Email", function( t ) {
+  t.plan( 2 );
+
+  var mockCallback = function( err ) {
+        t.ok( err, "Successfully received an error with invalid parameters" );
+        t.equal( err, "not enough parameters to delete", "Reported expected error message for delete" );
+
+        t.end();
+      };
+
+  project.delete( { email: null, id: id }, mockCallback );
+});
+
+test( "delete valid parameters", function( t ) {
   t.plan( 1 );
 
-  var mockCallback = function( err, project ) {
+  var mockCallback = function( err, p ) {
         var deleteCallback = function( err ) {
           t.false( err, "No error was passed back. Project successfully removed." );
 
           t.end();
         };
 
-        user.deleteProject( mockEmail, project.id, deleteCallback );
+        project.delete( { email: mockEmail, id: p.id }, deleteCallback );
       };
 
-  user.createProject( mockEmail, mockData, mockCallback );
+  project.create( { email: mockEmail, data: mockData }, mockCallback );
 });
 
-test( "findAllProjects valid parameters", function( t ) {
+test( "findAll valid parameters", function( t ) {
   t.plan( 2 );
 
   var mockCallback = function( err, docs ) {
@@ -143,23 +143,23 @@ test( "findAllProjects valid parameters", function( t ) {
         t.end();
       };
 
-  user.findAllProjects( mockEmail, mockCallback );
+  project.findAll( { email: mockEmail }, mockCallback );
 });
 
-test( "findAllProjects invalid parameters", function( t ) {
+test( "findAll invalid parameters", function( t ) {
   t.plan( 2 );
 
   var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
-        t.equal( err, "not enough parameters to search", "Reported expected error message for retrieving all projects" );
+        t.equal( err, "Missing email parameter", "Reported expected error message for retrieving all projects" );
 
         t.end();
       };
 
-  user.findAllProjects( null, mockCallback );
+  project.findAll( { email: null }, mockCallback );
 });
 
-test( "findById valid parameters", function( t ) {
+test( "find valid parameters", function( t ) {
   t.plan( 2 );
 
   var mockCallback = function( err, project ) {
@@ -169,23 +169,23 @@ test( "findById valid parameters", function( t ) {
         t.end();
       };
 
-  user.findById( id, mockCallback );
+  project.find( { id: id }, mockCallback );
 });
 
-test( "findById invalid parameters", function( t ) {
+test( "find invalid parameters", function( t ) {
   t.plan( 2 );
 
   var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
-        t.equal( err, "not enough parameters for search", "Reported expected error message for retrieving by ID" );
+        t.equal( err, "Missing Project ID", "Reported expected error message for retrieving by ID" );
 
         t.end();
       };
 
-  user.findById( null, mockCallback );
+  project.find( null, mockCallback );
 });
 
-test( "findProject valid parameters", function( t ) {
+test( "find valid parameters", function( t ) {
   t.plan( 7 );
 
   var mockCallback = function( err, project ) {
@@ -200,36 +200,23 @@ test( "findProject valid parameters", function( t ) {
         t.end();
       };
 
-  user.findProject( mockEmail, id, mockCallback );
+  project.find( { email: mockEmail, id: id }, mockCallback );
 });
 
-test( "findProject invalid parameters - Project ID", function( t ) {
+test( "find invalid parameters - Project ID", function( t ) {
   t.plan( 2 );
 
   var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
-        t.equal( err, "not enough parameters to search", "Reported expected error message for project retrieval" );
+        t.equal( err, "Missing Project ID", "Reported expected error message for project retrieval" );
 
         t.end();
       };
 
-  user.findProject( mockEmail, null, mockCallback );
+  project.find( { email: mockEmail, id: null }, mockCallback );
 });
 
-test( "findProject invalid parameters - Email", function( t ) {
-  t.plan( 2 );
-
-  var mockCallback = function( err ) {
-        t.ok( err, "Successfully received an error with invalid parameters" );
-        t.equal( err, "not enough parameters to search", "Reported expected error message for project retrieval" );
-
-        t.end();
-      };
-
-  user.findProject( null, id, mockCallback );
-});
-
-test( "updateProject valid parameters", function( t ) {
+test( "update valid parameters", function( t ) {
   t.plan( 4 );
 
   var updateData = {
@@ -249,44 +236,47 @@ test( "updateProject valid parameters", function( t ) {
         t.end();
       };
 
-  user.updateProject( mockEmail, id, updateData, mockCallback );
+  project.update( { email: mockEmail, id: id, data: updateData }, mockCallback );
 });
 
-test( "updateProject invalid parameters - Project Data", function( t ) {
+test( "update invalid parameters - Project Data", function( t ) {
   t.plan( 2 );
 
   var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
-        t.equal( err, "not enough parameters to update", "Reported expected error message for project updating" );
+        t.equal( err, "Expected email, id, and data parameters to update",
+                 "Reported expected error message for project updating" );
 
         t.end();
       };
 
-  user.updateProject( mockEmail, id, null, mockCallback );
+  project.update( { email: mockEmail, id: id, data: null }, mockCallback );
 });
 
-test( "updateProject invalid parameters - Project ID", function( t ) {
+test( "update invalid parameters - Project ID", function( t ) {
   t.plan( 2 );
 
   var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
-        t.equal( err, "not enough parameters to update", "Reported expected error message for project updating" );
+        t.equal( err, "Expected email, id, and data parameters to update",
+                 "Reported expected error message for project updating" );
 
         t.end();
       };
 
-  user.updateProject( mockEmail, null, mockData, mockCallback );
+  project.update( { email: mockEmail, id: null, data: mockData }, mockCallback );
 });
 
-test( "updateProject invalid parameters - Email", function( t ) {
+test( "update invalid parameters - Email", function( t ) {
   t.plan( 2 );
 
   var mockCallback = function( err ) {
         t.ok( err, "Successfully received an error with invalid parameters" );
-        t.equal( err, "not enough parameters to update", "Reported expected error message for project updating" );
+        t.equal( err, "Expected email, id, and data parameters to update",
+                 "Reported expected error message for project updating" );
 
         t.end();
       };
 
-  user.updateProject( null, id, mockData, mockCallback );
+  project.update( { email: null, id: id, data: mockData }, mockCallback );
 });
