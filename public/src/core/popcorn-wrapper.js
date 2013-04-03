@@ -103,7 +103,6 @@ define( [
 
         if ( trackEvent.view ) {
           if ( popcornEvent.toString ) {
-            trackEvent.view.setToolTip( popcornEvent.toString() );
             if ( trackEvent.type === "sequencer" ) {
               if ( !trackEvent.popcornOptions.hidden ) {
                 trackEvent.view.element.classList.add( "sequencer-video" );
@@ -113,8 +112,6 @@ define( [
                 trackEvent.view.element.classList.remove( "sequencer-video" );
               }
             }
-          } else {
-            trackEvent.view.setToolTip( JSON.stringify( options ) );
           }
 
           trackEvent.view.update( trackEvent.popcornOptions );
