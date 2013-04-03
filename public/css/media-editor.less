@@ -5,11 +5,13 @@
 .media-editor {
 
   @titleBarHeight: 60px;
-  @addClipHeight: 165px;
+  @addClipHeight: 130px;
   @durationInputHeight: 48px;
+  @ytUploaderHeight: 385px;
 
   .butter-editor-body {
     top: @titleBarHeight;
+    bottom: 0;
   }
 
   .fl-right {
@@ -50,6 +52,28 @@
     }
   }
 
+  .record-webcam {
+    &.hidden, .hidden {
+      display: none;
+    }
+    #youtube-upload {
+      margin-top: 20px;
+    }
+    a.close-btn {
+      position: absolute;
+      top: -2px;
+      right: -8px;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &.hidden {
+        display: none;
+      }
+    }
+  }
+
   &.add-media-collapsed {
     .add-media-panel {
       margin: 0;
@@ -59,22 +83,37 @@
     .media-gallery {
       top: 0;
     }
+    iframe {
+      &.hidden {
+        display: none;
+      }
+    }
   }
 
   .add-media-panel {
-    height: @addClipHeight;
     .transition( all 0.2s ease );
     overflow: hidden;
     opacity: 1;
     margin: 0 20px;
+
+    &.hidden {
+      display: none;
+    }
+  }
+
+  .yt-upload-panel {
+    position: relative;
+    top: 0;
   }
 
   .media-gallery {
-    position: absolute;
-    bottom: @durationInputHeight;
-    top: @addClipHeight + 15px;
     width: 100%;
     margin-top: -1px;
+    left: 0;
+    right: 0;
+    position: absolute;
+    top: @titleBarHeight + @addClipHeight;
+    bottom: @durationInputHeight;
 
     .media-gallery-heading {
       background: #FFF;
@@ -85,10 +124,12 @@
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      position: absolute;
-      top: 0;
       left: 0;
       right: 0;
+    }
+
+    &.shrink-gallery {
+      top: @ytUploaderHeight;
     }
   }
 
@@ -119,11 +160,12 @@
 
   .media-gallery-scroll-container {
     position: absolute;
-    top: 46px;
+    top: 48px;
     left: 0;
     right: 0;
     bottom: 0;
   }
+
   .media-gallery-list {
     list-style: none;
     padding: 0;

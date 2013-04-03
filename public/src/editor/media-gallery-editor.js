@@ -1,14 +1,20 @@
 /* This Source Code Form is subject to the terms of the MIT license
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
+/*global YT */
 
 define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/editor",
- "util/time", "util/dragndrop", "text!layouts/media-editor.html" ],
-  function( LangUtils, URI, KeysUtils, MediaUtils, Editor, Time, DragNDrop, EDITOR_LAYOUT ) {
+ "util/time", "util/dragndrop", "ui/widget/tooltip", "text!layouts/media-editor.html" ],
+  function( LangUtils, URI, KeysUtils, MediaUtils, Editor, Time, DragNDrop, ToolTip, EDITOR_LAYOUT ) {
 
-  var _parentElement =  LangUtils.domFragment( EDITOR_LAYOUT,".media-editor" ),
+  var _parentElement = LangUtils.domFragment( EDITOR_LAYOUT, ".media-editor" ),
       _addMediaTitle = _parentElement.querySelector( ".add-new-media" ),
       _addMediaPanel = _parentElement.querySelector( ".add-media-panel" ),
+
+      _recordWebcam = _parentElement.querySelector( ".record-webcam a" ),
+      _progress = _parentElement.querySelector( ".record-webcam p.youtube-upload-progress" ),
+      _ytUploadError = _parentElement.querySelector( ".record-webcam p.youtube-upload-error" ),
+      _closeBtn = _parentElement.querySelector( ".record-webcam a.close-btn" ),
 
       _urlInput = _addMediaPanel.querySelector( ".add-media-input" ),
       _addBtn = _addMediaPanel.querySelector( ".add-media-btn" ),
@@ -39,13 +45,14 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
     _urlInput.value = "";
 
     clearTimeout( _mediaLoadTimeout );
-    clearTimeout( _cancelSpinner );
     _urlInput.classList.remove( "error" );
     _addMediaPanel.classList.remove( "invalid-field" );
     _errorMessage.classList.add( "hidden" );
     _loadingSpinner.classList.add( "hidden" );
 
     _addBtn.classList.add( "hidden" );
+
+    _recordWebcam.classList.remove( "hidden" );
   }
 
   function setBaseDuration( duration ) {
@@ -193,7 +200,10 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
     var el = _GALLERYITEM.cloneNode( true ),
         source = data.source;
 
+
     if ( !_media.clipData[ source ] ) {
+      clearTimeout( _cancelSpinner );
+      _recordWebcam.classList.remove( "hidden" );
       _media.clipData[ source ] = source;
       _butter.dispatch( "mediaclipadded" );
 
@@ -234,8 +244,10 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
   function onInput() {
     if ( _urlInput.value ) {
       _addBtn.classList.remove( "hidden" );
+      _recordWebcam.classList.add( "hidden" );
     } else {
       _addBtn.classList.add( "hidden" );
+      _recordWebcam.classList.remove( "hidden" );
     }
     clearTimeout( _cancelSpinner );
     clearTimeout( _mediaLoadTimeout );
@@ -284,6 +296,108 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
       setBaseDuration( _durationInput.value );
     }
   }
+
+  var loadYouTubeRecorder = function() {
+
+    var widget,
+        pending = false;
+
+    _ytUploadError.classList.add( "hidden" );
+    _closeBtn.classList.remove( "hidden" );
+
+    function closeWidget() {
+      pending = false;
+      widget.destroy();
+      widget = null;
+      _galleryPanel.classList.remove( "shrink-gallery" );
+      _addMediaPanel.classList.remove( "hidden" );
+      _closeBtn.classList.add( "hidden" );
+      _closeBtn.removeEventListener( "click", clickCloseBtn );
+    }
+
+    function clickCloseBtn() {
+      closeWidget();
+      _recordWebcam.classList.remove( "hidden" );
+      _progress.classList.add( "hidden" );
+    }
+
+    _closeBtn.addEventListener( "click", clickCloseBtn );
+
+    widget = new YT.UploadWidget( "youtube-upload", {
+      width: 295,
+      height: 295,
+      events: {
+        "onApiReady": function() {
+          widget.setVideoKeywords([ "webcam", "video", "popcorn" ]);
+          widget.setVideoPrivacy( "unlisted" );
+        },
+        "onUploadSuccess": function() {
+          _progress.classList.remove( "hidden" );
+        },
+        "onProcessingComplete": function( event ) {
+          closeWidget();
+          _progress.classList.add( "hidden" );
+          // transitionend event is not reliable and not cross browser supported.
+          _cancelSpinner = setTimeout( function() {
+            _loadingSpinner.classList.remove( "hidden" );
+          }, 300 );
+          addMediaToGallery( "http://www.youtube.com/watch?v=" + event.data.videoId, onDenied );
+        },
+        "onStateChange": function( event ) {
+          var state = event.data.state;
+
+          if ( state === YT.UploadWidgetState.ERROR ) {
+            closeWidget();
+            _progress.classList.add( "hidden" );
+            _recordWebcam.classList.remove( "hidden" );
+            _ytUploadError.classList.remove( "hidden" );
+          } else if ( state === YT.UploadWidgetState.PENDING ) {
+            pending = true;
+          } else if ( state === YT.UploadWidgetState.STOPPED ) {
+            if ( !pending ) {
+              closeWidget();
+              _recordWebcam.classList.remove( "hidden" );
+            }
+          }
+        }
+      }
+    });
+  };
+
+  _recordWebcam.addEventListener( "click", function() {
+
+    var tag,
+        protocol,
+        youTubeReadyFn = window.onYouTubeIframeAPIReady;
+
+    _recordWebcam.classList.add( "hidden" );
+    _galleryPanel.classList.add( "shrink-gallery" );
+    _addMediaPanel.classList.add( "hidden" );
+
+    if ( window.YT ) {
+      loadYouTubeRecorder();
+    } else {
+      tag = document.createElement( "script" );
+      protocol = window.location.protocol === "file:" ? "http:" : "";
+
+      tag.src = protocol + "//www.youtube.com/iframe_api";
+      document.head.appendChild( tag );
+
+      window.onYouTubeIframeAPIReady = function() {
+        if ( youTubeReadyFn ) {
+          youTubeReadyFn();
+        }
+        loadYouTubeRecorder();
+      };
+    }
+  }, false );
+
+  ToolTip.create({
+    name: "tooltip-record-media",
+    element: _recordWebcam,
+    top: "35px",
+    message: "Record a video with your webcam and upload it to YouTube"
+  });
 
   Editor.register( "media-editor", null, function( rootElement, butter ) {
     rootElement = _parentElement;
