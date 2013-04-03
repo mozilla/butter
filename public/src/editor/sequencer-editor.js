@@ -384,20 +384,26 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
         }
         updateOptions.source[ 0 ] = updateOptions.source[ 0 ] || _popcornOptions.source[ 0 ];
 
+        // Bail early to prevent the same video being reloaded due to butteruid.
+        if ( URI.stripUnique( updateOptions.source[ 0 ] ).toString() ===
+             URI.stripUnique( _popcornOptions.source[ 0 ] ).toString() ) {
+          return;
+        }
+
         MediaUtils.getMetaData( updateOptions.source[ 0 ], function( data ) {
           _mediaType = data.type;
           updateOptions.duration = data.duration;
           updateOptions.denied = data.denied;
           updateOptions.title = data.title;
-          if ( _mediaType === "html5" ) {
-            updateOptions.source[ 0 ] = URI.makeUnique( updateOptions.source[ 0 ] ).toString();
-          } else if ( _mediaType === "soundcloud" ) {
+          if ( _mediaType === "soundcloud" ) {
             videoToggleContainer.classList.add( "butter-hidden" );
             updateOptions.hidden = true;
           } else {
             videoToggleContainer.classList.remove( "butter-hidden" );
             updateOptions.hidden = false;
           }
+
+          updateOptions.source[ 0 ] = URI.makeUnique( updateOptions.source[ 0 ] ).toString();
           trackEvent.update( updateOptions );
         });
       },
