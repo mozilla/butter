@@ -9,6 +9,12 @@ html(lang='en')
     link(rel='stylesheet', href="/css/controls.css")
     // This is the embed, the actual content is at the following URL
     link(rel='canonical', href='#{embedShellSrc}')
+    if !description
+      description = 'Created with Popcorn Maker - part of the Mozilla Webmaker initiative'
+    meta(property='og:description', content='#{description}')
+    meta(property='og:title', content='#{title}')
+    meta(property='og:type', content='video.other')
+    meta(property='og:url', content='#{embedShellSrc}')
     style
       @-o-viewport { width: device-width; }
       @-moz-viewport { width: device-width; }
@@ -32,7 +38,7 @@ html(lang='en')
               .embed-title #{title}
               .embed-author #{author}
             .post-roll-description
-              | This was created with Popcorn Maker.
+              | #{description}
               br
               a(href='/', target='_blank') Create a project like this!
             ul.embed-nav.post-roll-options

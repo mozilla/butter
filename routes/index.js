@@ -35,6 +35,7 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
       return {
         id: result.id,
         name: result.name,
+        description: result.description,
         author: result.author,
         remixedFrom: result.remixedFrom,
         createdAt: result.createdAt,
@@ -99,6 +100,7 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
       projectJSON.name = doc.name;
       projectJSON.projectID = doc.id;
       projectJSON.author = doc.author;
+      projectJSON.description = doc.description;
       projectJSON.template = doc.template;
       projectJSON.publishUrl = utils.generatePublishUrl( doc.id );
       projectJSON.iframeUrl = utils.generateIframeUrl( doc.id );
