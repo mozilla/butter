@@ -217,6 +217,13 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
       return;
     }
 
+    var checkUrl = URI.parse( url );
+    if ( checkUrl.protocol !== "" ) {
+      url = ( checkUrl.protocol === "https" ) ? "https://" + checkUrl.source : "http://" + checkUrl.source;
+    } else {
+      url = "http://" + checkUrl.source;
+    }
+
     data.source = url;
     data.type = "sequencer";
     _mediaLoadTimeout = setTimeout( function() {
