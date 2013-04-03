@@ -54,10 +54,6 @@ define( [ "core/logger", "core/eventmanager", "util/dragndrop",
       }
     };
 
-    this.setToolTip = function( title ){
-      _element.title = title;
-    };
-
     this.update = function( options ){
       options = options || {};
       _element.style.top = "0px";
