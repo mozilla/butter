@@ -130,9 +130,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
 
         // Updating functions
         function updateUI( options ) {
-          var start,
-              end,
-              from;
+          var start, end, from, value;
 
           options = options || _popcornOptions;
           start = options.start;
@@ -151,14 +149,19 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
             start = _popcornOptions.start;
           }
 
+          value = timeToPosition( from );
+          side = "left";
+
           // Adjust UI to account for very small durations
           if ( timeToPosition( end - start ) < MIN_VISUAL_WIDTH ) {
             clipSection.classList.add( "small" );
+            value = 0;
+            side = activeHandle === "left" ? "right" : "left";
           } else {
             clipSection.classList.remove( "small" );
           }
 
-          clipSection.style.left = timeToPosition( from ) + "px";
+          clipSection.style[ side ] = value + "px";
           inInput.value = Time.toTimecode( from );
 
           clipSection.style.width = timeToPosition( end - start ) + "px";
