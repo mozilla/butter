@@ -185,7 +185,10 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
     thumbnailBtn.addEventListener( "click", addEvent, false );
 
     _galleryList.insertBefore( el, _galleryList.firstChild );
-    _this.scrollbar.update();
+
+    if ( _this.scrollbar ) {
+      _this.scrollbar.update();
+    }
     resetInput();
   }
 
@@ -194,7 +197,7 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
         source = data.source;
 
     if ( !_media.clipData[ source ] ) {
-      _media.clipData[ source ] = source;
+      _media.clipData[ source ] = data;
       _butter.dispatch( "mediaclipadded" );
 
       el.classList.add( "new" );
@@ -293,11 +296,21 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
 
     // We keep track of clips that are in the media gallery for a project once it is saved
     // and every time after it is saved.
-    var clips = _media.clipData;
+    var clips = _media.clipData,
+        clip;
 
     for ( var key in clips ) {
       if ( clips.hasOwnProperty( key ) ) {
-        MediaUtils.getMetaData( clips[ key ], addElements );
+        clip = clips[ key ];
+        if ( typeof clip === "object" ) {
+          addElements( clip );
+        } else if ( typeof clip === "string" ) {
+          // Load projects saved with just the url the old way.
+          // Remove it too, so future saves don't come through here.
+          delete clips[ key ];
+          // Fire an onSuccess so a new, updated clip is added to clipData.
+          MediaUtils.getMetaData( clip, onSuccess );
+        }
       }
     }
 
