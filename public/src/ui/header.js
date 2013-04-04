@@ -1,5 +1,5 @@
-define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/tooltip" ],
-  function( Dialog, Lang, HEADER_TEMPLATE, UserData, WebmakerBar, ToolTip ) {
+define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/textbox", "ui/widget/tooltip" ],
+  function( Dialog, Lang, HEADER_TEMPLATE, UserData, WebmakerBar, TextBoxWrapper, ToolTip ) {
 
   return function( butter, options ){
 
@@ -129,6 +129,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       input.placeholder = _projectTitlePlaceHolderText;
       input.classList.add( "butter-project-name" );
       input.value = _projectName.textContent !== _projectTitlePlaceHolderText ? _projectName.textContent : "";
+      TextBoxWrapper.applyTo( input );
       _projectTitle.replaceChild( input, _projectName );
       toggleProjectNameListeners( false );
       input.focus();
