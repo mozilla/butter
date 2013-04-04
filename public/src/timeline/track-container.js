@@ -45,7 +45,7 @@ define( [ "core/logger", "util/dragndrop", "./ghost-manager" ],
       _vScrollbar.update();
     });
 
-    _container.addEventListener( "mousedown", function() {
+    _container.addEventListener( "click", function() {
       butter.deselectAllTrackEvents();
     }, false );
 

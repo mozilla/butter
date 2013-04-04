@@ -862,6 +862,10 @@ define( [ "core/eventmanager", "util/lang", "util/scroll-group" ],
 
     element.addEventListener( "mousedown", __onDraggableMouseDown, false );
 
+    element.addEventListener( "click", function( e ) {
+      e.stopPropagation();
+    }, false );
+
     _draggable.droppable = null;
 
     _draggable.destroy = function() {
