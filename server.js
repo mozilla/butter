@@ -55,6 +55,8 @@ app.configure( function() {
   var optimize = config.NODE_ENV !== "development",
       tmpDir = path.normalize( require( "os" ).tmpDir() + "/butter/" );
 
+  app.set( "views", __dirname + "/views" );
+
   app.use( express.logger( config.logger ) )
     .use( express.compress() )
     .use( lessMiddleware({
