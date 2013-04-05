@@ -16,7 +16,7 @@ define( [ "util/uri" ],
         "null": /^\s*#t=(?:\d*(?:(?:\.|\:)?\d+)?),?(\d+(?:(?:\.|\:)\d+)?)\s*$/
       },
       YOUTUBE_EMBED_DISABLED = "Embedding of this YouTube video is disabled",
-      SOUNDCLOUD_EMBED_DISABLED = "Embedding of this SoundCloud video is disabled";
+      SOUNDCLOUD_EMBED_DISABLED = "Embedding of this SoundCloud audio source is disabled";
 
   return {
     checkUrl: function( url ) {
