@@ -54,9 +54,9 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
     function( req, res ) {
       Project.findRecentlyCreated( { limit: req.params.limit }, function( err, projects ) {
         if ( err ) {
-          res.json( { error: err }, 500 );
+          res.jsonp( { error: err }, 500 );
         }
-        res.json( { error: 'okay', results: pruneSearchResults( projects ) } );
+        res.jsonp( { error: 'okay', results: pruneSearchResults( projects ) } );
       });
   });
 
@@ -66,9 +66,9 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
     function( req, res ) {
       Project.findRecentlyUpdated( { limit: req.params.limit }, function( err, projects ) {
         if ( err ) {
-          res.json( { error: err }, 500 );
+          res.jsonp( { error: err }, 500 );
         }
-        res.json( { error: 'okay', results: pruneSearchResults( projects ) } );
+        res.jsonp( { error: 'okay', results: pruneSearchResults( projects ) } );
       });
   });
 
@@ -78,9 +78,9 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
     function( req, res ) {
       Project.findRemixes( { id: req.params.id }, function( err, projects ) {
         if ( err ) {
-          res.json( { error: err }, 500 );
+          res.jsonp( { error: err }, 500 );
         }
-        res.json( { error: 'okay', results: pruneSearchResults( projects ) } );
+        res.jsonp( { error: 'okay', results: pruneSearchResults( projects ) } );
       });
   });
 
