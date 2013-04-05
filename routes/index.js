@@ -47,6 +47,7 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
 
   app.get( '/api/projects/recentlyCreated/:limit?',
     filter.isStorageAvailable,
+    filter.crossOriginAccessible,
     function( req, res ) {
       Project.findRecentlyCreated( { limit: req.params.limit }, function( err, projects ) {
         if ( err ) {
@@ -58,6 +59,7 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
 
   app.get( '/api/projects/recentlyUpdated/:limit?',
     filter.isStorageAvailable,
+    filter.crossOriginAccessible,
     function( req, res ) {
       Project.findRecentlyUpdated( { limit: req.params.limit }, function( err, projects ) {
         if ( err ) {
@@ -69,6 +71,7 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
 
   app.get( '/api/project/:id/remixes',
     filter.isStorageAvailable,
+    filter.crossOriginAccessible,
     function( req, res ) {
       Project.findRemixes( { id: req.params.id }, function( err, projects ) {
         if ( err ) {
