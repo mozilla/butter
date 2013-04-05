@@ -73,3 +73,18 @@ test( "isStorageAvailable filter deny", function( t ) {
 
   t.end();
 });
+
+test( "crossOriginAccessible filter allow", function( t ) {
+  t.plan( 3 );
+
+  filter().crossOriginAccessible( null, {
+    "set": function( header, value ) {
+      t.equal( header, "Access-Control-Allow-Origin", "CORS header name is set" );
+      t.equal( value, "*", "CORS header value is set" );
+    }
+  }, function mockNext() {
+    t.ok( true, "next() was called" );
+  });
+
+  t.end();
+});
