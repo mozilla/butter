@@ -1,7 +1,7 @@
 doctype 5
 html
   head
-    title Dashboard
+    title Oops, you've found an error
     style
       body {
         font-family: "Open Sans", "Helvetica Neue", sans-serif;
@@ -16,7 +16,8 @@ html
         width: 650px;
       }
   body
-    h1 Sorry...
+    h1 Oops, you've found an HTTP #{status} #{message} error
     img(src="/struggling-dino.gif")
-    p Please login before attempting to view your dashboard.
-
+    p Maybe go back to the&nbsp;
+      a(href="/") homepage
+      ?
