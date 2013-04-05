@@ -39,7 +39,10 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
         author: result.author,
         remixedFrom: result.remixedFrom,
         createdAt: result.createdAt,
-        updatedAt: result.updatedAt
+        updatedAt: result.updatedAt,
+        // Add URLs for embed, embed shell
+        publishUrl: utils.generatePublishUrl( result.id ),
+        iframeUrl: utils.generateIframeUrl( result.id )
       });
     });
     return pruned;
