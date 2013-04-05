@@ -46,6 +46,10 @@
       options.end();
     }
 
+    // Enforce container size here, instead of relying on the update.
+    container.style.width = width + "%";
+    container.style.height = height + "%";
+
     blurActiveEl();
 
     trackEvent.update({
