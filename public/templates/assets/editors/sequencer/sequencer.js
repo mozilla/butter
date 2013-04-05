@@ -13,8 +13,8 @@ EditorHelper.addPlugin( "sequencer", function( trackEvent ) {
     window.EditorHelper.draggable( trackEvent, _container, _target );
     window.EditorHelper.resizable( trackEvent, _container, _target, {
       handlePositions: "e, se, s, sw, w, n, ne",
-      minWidth: 40,
-      minHeight: 40
+      minWidth: 10,
+      minHeight: 10
     });
   }
 });
