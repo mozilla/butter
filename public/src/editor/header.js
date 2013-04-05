@@ -7,14 +7,14 @@ define([ "ui/widget/tooltip" ], function( Tooltip ) {
   return function( editorAreaDOMRoot, editorModule ) {
     var _mediaButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-media" ),
         _popcornButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-popcorn" ),
-        _shareButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-share" ),
+        _projectButton = editorAreaDOMRoot.querySelector( ".butter-editor-header-share" ),
         _loginToShareTooltip,
         _waitForMediaTooltip;
 
     var _focusMap = {
       "media-editor": _mediaButton,
       "plugin-list": _popcornButton,
-      "share-properties": _shareButton
+      "project-editor": _projectButton
     };
 
     var _currentFocus;
@@ -25,7 +25,7 @@ define([ "ui/widget/tooltip" ], function( Tooltip ) {
     _loginToShareTooltip = Tooltip.create({
       name: "login-to-share",
       message: "Login and Save your project to share",
-      element: _shareButton,
+      element: _projectButton,
       top: "60px"
     });
 
@@ -45,8 +45,8 @@ define([ "ui/widget/tooltip" ], function( Tooltip ) {
       editorModule.openEditor( "plugin-list" );
     }
 
-    function openShareEditor() {
-      editorModule.openEditor( "share-properties" );
+    function openProjectEditor() {
+      editorModule.openEditor( "project-editor" );
     }
 
     _popcornButton.classList.add( "butter-editor-btn-disabled" );
@@ -74,17 +74,17 @@ define([ "ui/widget/tooltip" ], function( Tooltip ) {
     this.views = {
       unSaved: function() {
         _loginToShareTooltip.classList.remove( "tooltip-off" );
-        _shareButton.classList.add( "butter-editor-btn-disabled" );
-        _shareButton.removeEventListener( "click", openShareEditor, false );
-        // If the share editor is open, open the media editor instead.
-        if ( _currentFocus === _shareButton ) {
+        _projectButton.classList.add( "butter-editor-btn-disabled" );
+        _projectButton.removeEventListener( "click", openProjectEditor, false );
+        // If the project editor is open, open the media editor instead.
+        if ( _currentFocus === _projectButton ) {
           editorModule.openEditor( "media-editor" );
         }
       },
       saved: function() {
         _loginToShareTooltip.classList.add( "tooltip-off" );
-        _shareButton.classList.remove( "butter-editor-btn-disabled" );
-        _shareButton.addEventListener( "click", openShareEditor, false );
+        _projectButton.classList.remove( "butter-editor-btn-disabled" );
+        _projectButton.addEventListener( "click", openProjectEditor, false );
       },
       enablePlugins: function() {
         _waitForMediaTooltip.classList.add( "tooltip-off" );
