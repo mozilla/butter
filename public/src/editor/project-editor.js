@@ -14,6 +14,8 @@ define([ "editor/editor", "editor/base-editor",
         _projectURL = _rootElement.querySelector( ".butter-project-url" ),
         _authorInput = _rootElement.querySelector( ".butter-project-author" ),
         _descriptionInput = _rootElement.querySelector( ".butter-project-description" ),
+        _dropArea = _rootElement.querySelector( ".image-droparea" ),
+        _thumbnailInput = _rootElement.querySelector( ".butter-project-thumbnail" ),
         _projectEmbedURL = _rootElement.querySelector( ".butter-project-embed-url" ),
         _embedSize = _rootElement.querySelector( ".butter-embed-size" ),
         _previewBtn = _rootElement.querySelector( ".butter-preview-link" ),
@@ -128,6 +130,7 @@ define([ "editor/editor", "editor/base-editor",
     }
 
     applyInputListeners( _authorInput, "author" );
+    applyInputListeners( _thumbnailInput, "thumbnail" );
 
     applyInputListeners( _descriptionInput, "description" );
     _descriptionInput.addEventListener( "keyup", checkDescription, false );
@@ -136,6 +139,24 @@ define([ "editor/editor", "editor/base-editor",
     TextboxWrapper.applyTo( _projectEmbedURL, { readOnly: true } );
     TextboxWrapper.applyTo( _authorInput );
     TextboxWrapper.applyTo( _descriptionInput );
+    TextboxWrapper.applyTo( _thumbnailInput );
+
+    window.EditorHelper.droppable( null, _dropArea, function onDrop( uri ) {
+      _project.thumbnail = uri;
+      _project.save(function() {
+        butter.editor.openEditor( "project-editor" );
+        checkDescription();
+        _thumbnailInput.value = _project.thumbnail;
+      });
+    });
+
+    butter.listen( "droppable-unsupported", function unSupported() {
+      _this.setErrorState( "Sorry, but your browser doesn't support this feature." );
+    });
+
+    butter.listen( "filetype-unsupported", function invalidType() {
+      _this.setErrorState( "Sorry but that file type isn't supported. Please use JPEG or PNG." );
+    });
 
     butter.listen( "projectsaved", function onProjectSaved() {
       _projectURL.value = _project.publishUrl;
@@ -151,6 +172,7 @@ define([ "editor/editor", "editor/base-editor",
         _projectURL.value = _project.publishUrl;
         _previewBtn.href = _project.previewUrl;
         _viewSourceBtn.href = "view-source:" + _project.iframeUrl;
+        _thumbnailInput.value = _project.thumbnail;
         updateEmbed( _project.iframeUrl );
 
         _previewBtn.onclick = function() {
