@@ -98,7 +98,7 @@ app.configure( function() {
         }
       }
     }))
-    .use( express.static( tmpDir ) )
+    .use( express.static( tmpDir, JSON.parse( JSON.stringify( config.staticMiddleware ) ) ) )
     .use( express.static( WWW_ROOT, JSON.parse( JSON.stringify( config.staticMiddleware ) ) ) )
     .use( express.json() )
     .use( express.cookieParser() )
