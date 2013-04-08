@@ -25,7 +25,6 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip", "ui/widge
     extendObject.rootElement.style.display = "none";
     // Attach the editor's root element to the given parentElement.
     parentElement.appendChild( rootElement );
-console.log( parentElement, rootElement );
     // Used when applyExtraHeadTags is called -- see below
     var _extraStyleTags = [],
         _extraLinkTags = [];
@@ -44,7 +43,6 @@ console.log( parentElement, rootElement );
      * @param {DOMElement} parentElement: The element to which the editor's root will be attached
      */
     extendObject.open = function() {
-console.log( extendObject.rootElement );
       extendObject.rootElement.style.display = "block";
 
       // Update scrollbars, add one automatically if an allow-scrollbar class is added
