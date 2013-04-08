@@ -30,10 +30,6 @@ define( [ "util/lang", "util/uri", "util/keys","util/mediatypes", "UI/ui-widgets
       _this,
       TRANSITION_TIME = 2000;
 
-  function toggleAddNewMediaPanel() {
-    _parentElement.classList.toggle( "add-media-collapsed" );
-  }
-
   function resetInput() {
     _urlInput.value = "";
 
