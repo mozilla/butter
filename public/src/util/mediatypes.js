@@ -155,7 +155,7 @@ define( [ "util/uri" ],
           source: baseUrl,
           type: type,
           title: baseUrl,
-          duration: REGEX_MAP[ "null" ].exec( baseUrl )[ 1 ]
+          duration: +REGEX_MAP[ "null" ].exec( baseUrl )[ 1 ]
         });
       } else if ( type === "HTML5" ) {
         videoElem = document.createElement( "video" );
