@@ -155,7 +155,6 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
           // Adjust UI to account for very small durations
           if ( timeToPosition( end - start ) < MIN_VISUAL_WIDTH ) {
             clipSection.classList.add( "small" );
-            value = 0;
             side = activeHandle === "left" ? "right" : "left";
           } else {
             clipSection.classList.remove( "small" );
