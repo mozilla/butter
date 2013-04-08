@@ -15,14 +15,17 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip", "ui/widge
    * @param {DOMElement} rootElement: The root element to which the editor's content will be attached
    * @param {Object} events: Events such as 'open' and 'close' can be defined on this object to be called at the appropriate times
    */
-  function BaseEditor( extendObject, butter, rootElement, events ) {
+  function BaseEditor( extendObject, butter, rootElement, parentElement, events ) {
 
     EventManager.extend( extendObject );
 
     extendObject.butter = butter;
     extendObject.rootElement = rootElement;
-    extendObject.parentElement = null;
-
+    extendObject.parentElement = parentElement;
+    extendObject.rootElement.style.display = "none";
+    // Attach the editor's root element to the given parentElement.
+    parentElement.appendChild( rootElement );
+console.log( parentElement, rootElement );
     // Used when applyExtraHeadTags is called -- see below
     var _extraStyleTags = [],
         _extraLinkTags = [];
@@ -40,13 +43,9 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip", "ui/widge
      *
      * @param {DOMElement} parentElement: The element to which the editor's root will be attached
      */
-    extendObject.open = function( parentElement ) {
-
-      extendObject.parentElement = parentElement;
-
-      // Attach the editor's root element to the given parentElement.
-      // Do this before calling the open event so that element size and structure are defined.
-      extendObject.parentElement.appendChild( extendObject.rootElement );
+    extendObject.open = function() {
+console.log( extendObject.rootElement );
+      extendObject.rootElement.style.display = "block";
 
       // Update scrollbars, add one automatically if an allow-scrollbar class is added
       // See .addScrollbar for manual settings
@@ -73,8 +72,7 @@ define( [ "core/eventmanager", "util/scrollbars", "ui/widget/tooltip", "ui/widge
      * Closes the editor
      */
     extendObject.close = function() {
-      // Remove the editor's root element from the element to which it was attached
-      extendObject.rootElement.parentNode.removeChild( extendObject.rootElement );
+      extendObject.rootElement.style.display = "none";
 
       // If a close event existed on the events object passed into the constructor, call it
       if ( events.close ) {

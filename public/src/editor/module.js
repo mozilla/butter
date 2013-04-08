@@ -91,10 +91,12 @@ define( [ "core/eventmanager", "core/trackevent", "./editor",
       if ( persist && _createdEditors[ editorName ] ) {
         _currentEditor = _createdEditors[ editorName ];
       } else {
-        _currentEditor = _createdEditors[ editorName ] = Editor.create( editorName, butter );
+        _currentEditor = _createdEditors[ editorName ] = Editor.create( editorName,
+                                                                        butter,
+                                                                        _editorContentArea );
       }
 
-      _currentEditor.open( _editorContentArea, options.openData );
+      _currentEditor.open( options.openData );
       _currentEditor.listen( "back", function() {
         _this.openEditor( DEFAULT_EDITOR_NAME );
       });

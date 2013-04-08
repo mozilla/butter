@@ -32,9 +32,9 @@
                 }
               });
 
-          Butter.Editor.register( "text", layoutSrc, function( rootElement, butter ) {
-            Butter.Editor.TrackEventEditor.extend( this, butter, rootElement, {
-              open: function( parentElement, trackEvent ) {
+          Butter.Editor.register( "text", layoutSrc, function( rootElement, butter, parentElement ) {
+            Butter.Editor.TrackEventEditor.extend( this, butter, rootElement, parentElement, {
+              open: function( trackEvent ) {
                 var contentContainer = rootElement.querySelector( ".content-container" );
 
                 this.createPropertiesFromManifest({

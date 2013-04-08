@@ -8,7 +8,7 @@ define([ "editor/editor", "editor/base-editor",
           "ui/widget/tooltip" ],
   function( Editor, BaseEditor, LAYOUT_SRC, SocialMedia, TextboxWrapper, ToolTip ) {
 
-  Editor.register( "project-editor", LAYOUT_SRC, function( rootElement, butter ) {
+  Editor.register( "project-editor", LAYOUT_SRC, function( rootElement, butter, parentElement ) {
     var _rootElement = rootElement,
         _socialMedia = new SocialMedia(),
         _projectURL = _rootElement.querySelector( ".butter-project-url" ),
@@ -144,7 +144,7 @@ define([ "editor/editor", "editor/base-editor",
       updateEmbed( _project.iframeUrl );
     });
 
-    Editor.BaseEditor.extend( this, butter, rootElement, {
+    Editor.BaseEditor.extend( this, butter, rootElement, parentElement, {
       open: function() {
         _project = butter.project;
 

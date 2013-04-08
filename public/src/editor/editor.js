@@ -122,7 +122,7 @@ define( [ "util/lang", "util/xhr",
      * @param {String} editorName: Name of the editor to create
      * @param {Butter} butter: An instance of Butter
      */
-    create: function( editorName, butter ) {
+    create: function( editorName, butter, parentElement ) {
       var description = __editors[ editorName ],
           completeLayout,
           compiledLayout;
@@ -149,7 +149,7 @@ define( [ "util/lang", "util/xhr",
         }
       }
 
-      return new description.create( compiledLayout, butter, completeLayout );
+      return new description.create( compiledLayout, butter, parentElement, completeLayout );
     },
 
     /**

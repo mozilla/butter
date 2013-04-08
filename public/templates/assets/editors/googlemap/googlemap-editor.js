@@ -5,7 +5,7 @@
 ( function( Butter ) {
 
   Butter.Editor.register( "googlemap", "load!{{baseDir}}templates/assets/editors/googlemap/googlemap-editor.html",
-    function( rootElement, butter ) {
+    function( rootElement, butter, parentElement ) {
 
     var _this = this;
 
@@ -284,8 +284,8 @@
     }
 
     // Extend this object to become a BaseEditor
-    Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
-      open: function( parentElement, trackEvent ) {
+    Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, parentElement, {
+      open: function( trackEvent ) {
         var popcornOptions = trackEvent.popcornOptions;
 
         _popcorn = butter.currentMedia.popcorn.popcorn;

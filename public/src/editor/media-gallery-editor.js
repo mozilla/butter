@@ -288,7 +288,7 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
     }
   }
 
-  Editor.register( "media-editor", null, function( rootElement, butter ) {
+  Editor.register( "media-editor", null, function( rootElement, butter, parentElement ) {
     rootElement = _parentElement;
     _this = this;
     _butter = butter;
@@ -316,7 +316,7 @@ define( [ "util/lang", "util/uri", "util/keys", "util/mediatypes", "editor/edito
 
     setup();
 
-    Editor.BaseEditor.extend( _this, butter, rootElement, {
+    Editor.BaseEditor.extend( _this, butter, rootElement, parentElement, {
       open: function() {
         setBaseDuration( _media.duration );
       },

@@ -14,8 +14,7 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
    * @param {Butter} butter: An instance of Butter
    * @param {TrackEvent} TrackEvent: The TrackEvent to edit
    */
-  function DefaultEditor( rootElement, butter, compiledLayout, events ) {
-
+  function DefaultEditor( rootElement, butter, parentElement, compiledLayout, events ) {
     var _this = this;
 
     events = events || {};
@@ -33,7 +32,7 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
     }
 
     // Extend this object to become a TrackEventEditor
-    events.open = function ( parentElement, trackEvent ) {
+    events.open = function ( trackEvent ) {
       var targetList,
           optionsContainer = _rootElement.querySelector( ".editor-options" ),
           selectElement;
@@ -100,14 +99,14 @@ define( [ "text!./default.html", "editor/editor", "util/lang" ],
       }
     };
 
-    Editor.TrackEventEditor.extend( _this, butter, rootElement, events );
+    Editor.TrackEventEditor.extend( _this, butter, rootElement, parentElement, events );
   }
 
   Editor.register( "default", LAYOUT_SRC, DefaultEditor );
 
   return {
-    extend: function( extendObject, rootElement, butter, compiledLayout, events ){
-      return DefaultEditor.apply( extendObject, [ rootElement, butter, compiledLayout, events ] );
+    extend: function( extendObject, rootElement, butter, parentElement, compiledLayout, events ){
+      return DefaultEditor.apply( extendObject, [ rootElement, butter, parentElement, compiledLayout, events ] );
     },
     EDITOR_SRC: LAYOUT_SRC
   };

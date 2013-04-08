@@ -5,7 +5,7 @@
 (function( Butter ) {
 
   Butter.Editor.register( "text", "load!{{baseDir}}templates/assets/editors/text/text-editor.html",
-    function( rootElement, butter ) {
+    function( rootElement, butter, parentElement ) {
 
     var _this = this;
 
@@ -162,8 +162,8 @@
     }
 
     // Extend this object to become a TrackEventEditor
-    Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, {
-      open: function( parentElement, trackEvent ) {
+    Butter.Editor.TrackEventEditor.extend( _this, butter, rootElement, parentElement, {
+      open: function( trackEvent ) {
         var anchorContainer = trackEvent.popcornTrackEvent._container.querySelector( "a" );
 
         anchorClickPrevention( anchorContainer );
