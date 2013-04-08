@@ -130,7 +130,7 @@ define( [ "util/mediatypes", "editor/editor", "util/time",
 
         // Updating functions
         function updateUI( options ) {
-          var start, end, from, value;
+          var start, end, from, value, side;
 
           options = options || _popcornOptions;
           start = options.start;
