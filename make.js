@@ -1,4 +1,4 @@
-/*global cat,cd,cp,echo,env,exec,exit,find,mkdir,mv,pwd,rm,sed,target,test */
+/*global cat,echo,exec,exit,find,target */
 
 var async = require( "async" ),
     path = require( "path" ),
@@ -8,24 +8,11 @@ var async = require( "async" ),
 
     JSLINT = nodeExec( normalize( "./node_modules/jshint/bin/jshint" ) ),
     html5lint = require( "html5-lint" ),
-    RJS = nodeExec( normalize( "./node_modules/requirejs/bin/r.js" ) ),
-
-    DIST_DIR = "dist",
 
     // Global var for exit code
     passed = true;
 
 require("shelljs/make");
-
-// Get the git repo version info for a given repo root dir
-function gitDescribe( repoRoot ) {
-  var cwd = pwd();
-  cd( repoRoot );
-  var version = exec( "git describe",
-                      { silent: true } ).output.replace( /\r?\n/m, "" );
-  cd( cwd );
-  return version;
-}
 
 function lessToCSS( lessFile, callback ) {
   var less = require( "less" );
@@ -165,7 +152,6 @@ function checkJS() {
 
 var desc = {
   check: "Lint CSS, HTML, and JS",
-  deploy: "Build Butter suitable for production",
   server: "Run the development server"
 };
 
@@ -274,106 +260,8 @@ target.check = function() {
   ]);
 };
 
-function stampVersion( version, filename ){
-  // Stamp embed.version with supplied version, or git info
-  version = version || gitDescribe( "." );
-  sed( "-i", /@VERSION@/g, version, filename );
-}
-
-function buildJS( version, compress ){
-  var doCompress = compress ? "" : "optimize=none";
-  var result = "";
-
-  echo( "" );
-  echo( "# Optimizing JS Files" );
-
-  echo( "## public/src/butter.js" );
-  result = exec(RJS + " -o tools/build-butter.js " + doCompress, {silent: true});
-  if (!!result.code) {
-    echo(result.output);
-  }
-  stampVersion( version, "dist/public/src/butter.js" );
-
-  echo( "## public/src/embed.js" );
-  result = exec(RJS + " -o tools/build-embed.js " + doCompress, {silent: true});
-  if (!!result.code) {
-    echo(result.output);
-  }
-  stampVersion( version, "dist/public/src/embed.js" );
-
-  echo( "## public/src/webmakernav.js" );
-  result = exec(RJS + " -o tools/build-webmakernav.js " + doCompress, {silent: true});
-  if (!!result.code) {
-    echo(result.output);
-  }
-}
-
 target.server = function() {
   echo("### Serving butter");
 
   require( "./server.js" );
-};
-
-target.deploy = function(){
-  echo("### Making deployable versions of butter, embed, popcorn, etc. in dist/ (use UNMINIFIED=1 for unminified)");
-
-  // To get unminified butter.js, use the UNMINIFIED env variable:
-  // $ UNMINIFIED=1 node make deploy
-  var compress = env.UNMINIFIED !== "1",
-      version = env.VERSION;
-
-  rm( "-fr" , DIST_DIR );
-  mkdir( "-p" , DIST_DIR );
-
-  buildJS( version, compress );
-
-  // Copy server assets
-  cp( "-R", [
-    "README.md",
-    "lib",
-    "package.json",
-    "routes",
-    "server.js",
-    "views"
-  ], "dist/");
-
-  // Selectively copy things from public/
-  // We don't need js files from external/ and src/ because they're built into
-  // butter with requirejs or copied selectively below.
-  find( "public/" ).filter(function( path ) {
-    return !path.match( /^public\/external/ ) &&
-           !path.match( /^public\/src/ ) &&
-           !path.match( /^public\/test/ );
-  }).forEach(function( path ) {
-    if ( test( "-d", path ) ) {
-      mkdir( "-p", "dist/" + path );
-    } else if ( test( "-f", path ) ) {
-      cp( path, "dist/" + path );
-    }
-  });
-
-  // Bug #3357 - Add a Popcorn() shim for projects published <v1.0.19
-  mkdir( "-p", "dist/public/external/popcorn-js/" );
-  cp( "tools/oldprojectshim.js", "dist/public/external/popcorn-js/popcorn.js" );
-
-  // We host our own version of the stamen map tile script, copy that over.
-  mkdir( "-p", "dist/public/external/stamen/" );
-  cp( "public/external/stamen/tile.stamen-1.2.0.js", "dist/public/external/stamen" );
-
-  // Copy RPM spec files and stamp with version
-  var rpmVersion = ( version ? version : gitDescribe( "." ) ).replace( /-/g, "_" );
-  cp( "tools/rpmspec/*", DIST_DIR );
-  stampVersion( rpmVersion, "dist/butter.spec" );
-
-  // Add a rev.txt file that's web-accessible
-  gitDescribe( "." ).to("dist/public/rev.txt");
-
-  // Create a tar archive
-  var tarName = "butter-" + rpmVersion + ".tar.bz2";
-  exec( "tar -cjf '" + tarName + "' dist" );
-  mv( tarName, "dist" );
-
-  // It's important to use the production config
-  echo( "" );
-  echo( "Run cornfield with `NODE_ENV=production node server.js`" );
 };

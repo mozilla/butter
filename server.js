@@ -9,6 +9,7 @@ var express = require('express'),
     jade = require('jade'),
     app = express(),
     lessMiddleware = require('less-middleware'),
+    requirejsMiddleware = require( 'requirejs-middleware' ),
     config = require( './lib/config' ),
     Project = require( './lib/project' )( config.database ),
     filter = require( './lib/filter' )( Project.isDBOnline ),
@@ -53,7 +54,7 @@ function setupStore( storeConfig ) {
 
 app.configure( function() {
   var optimize = config.NODE_ENV !== "development",
-      tmpDir = path.normalize( require( "os" ).tmpDir() + "/butter/" );
+      tmpDir = path.normalize( require( "os" ).tmpDir() + "/mozilla.butter/" );
 
   app.set( "views", __dirname + "/views" );
 
@@ -67,6 +68,35 @@ app.configure( function() {
       compress: optimize,
       yuicompress: optimize,
       optimization: optimize ? 0 : 2
+    }))
+    .use( requirejsMiddleware({
+      src: WWW_ROOT,
+      dest: tmpDir,
+      once: optimize,
+      modules: {
+        "/src/butter.js": {
+          include: [ "butter" ],
+          mainConfigFile: WWW_ROOT + "/src/popcorn.js",
+        },
+        "/src/embed.js": {
+          include: [ "embed" ],
+          mainConfigFile: WWW_ROOT + "/src/popcorn.js",
+        },
+        "/src/webmakernav.js": {
+          include: [ "webmakernav" ],
+          mainConfigFile: WWW_ROOT + "/src/webmakernav.js",
+        }
+      },
+      defaults: {
+        baseUrl: WWW_ROOT + "/src/",
+        findNestedDependencies: true,
+        optimize: "none",
+        preserveLicenseComments: false,
+        wrap: {
+          startFile: __dirname + "/tools/wrap.start",
+          endFile: __dirname + "/tools/wrap.end"
+        }
+      }
     }))
     .use( express.static( tmpDir ) )
     .use( express.static( WWW_ROOT, JSON.parse( JSON.stringify( config.staticMiddleware ) ) ) )
