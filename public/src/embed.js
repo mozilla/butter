@@ -266,8 +266,17 @@ function init() {
       "popcorn"
     ],
     function( URI, Controls, TextboxWrapper ) {
-      // cornfield writes out the Popcorn initialization code as popcornDataFn()
-      window.popcornDataFn();
+
+      // Popcorn loads after our custom elements have been parsed so we need to run through
+      // any popcorn calls they tried to make first.
+      var queuedFunctions = window.popcornFunctionQueue;
+
+      for ( var i = 0; i < queuedFunctions.length; i++ ) {
+        queuedFunctions[ i ]();
+      }
+
+      window.queuedFunctions = null;
+
       /**
        * Expose Butter so we can get version info out of the iframe doc's embed.
        * This "butter" is never meant to live in a page with the full "butter".
