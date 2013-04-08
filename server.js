@@ -188,7 +188,7 @@ app.post( '/api/publish/:id',
       baseString = '\n  <base href="' + baseHref + '"/>';
 
       // look for script and link tags with data-butter-exclude in particular (e.g. butter's js script)
-      data = data.replace( /\s*<(script|link)[\.\/='":_\-\w\s]*data-butter-exclude[\.\/='":_\-\w\s]*>(<\/script>)?/g, '' );
+      data = data.replace( /\s*<(script|link|meta)[\.\/='":,_\-\w\s]*data-butter-exclude[\.\/='":_\-\w\s]*>(<\/script>)?/g, '' );
 
       // Adding  to cut out the actual head tag
       headStartTagIndex = data.indexOf( '<head>' ) + 6;
@@ -270,6 +270,7 @@ app.post( '/api/publish/:id',
                          {
                            author: project.author,
                            projectName: project.name,
+                           description: project.description,
                            embedShellSrc: publishUrl,
                            embedSrc: iframeUrl,
                            baseHref: APP_HOSTNAME
@@ -287,6 +288,7 @@ app.post( '/api/publish/:id',
                     id: id,
                     author: project.author,
                     title: project.name,
+                    description: project.description,
                     mediaSrc: attribURL,
                     embedShellSrc: publishUrl,
                     baseHref: baseHref,

@@ -6,7 +6,7 @@ html
     meta(name='viewport', content='width=device-width')
 
     meta(name='author', content='#{author}')
-    meta(name='description', content='This was created with Popcorn Maker - part of the Mozilla Webmaker initiative')
+    meta(name='description', content='Created with Popcorn Maker - part of the Mozilla Webmaker initiative')
 
     meta(property='og:title', content='#{projectName}')
     meta(property='og:type', content='video.other')
@@ -15,13 +15,15 @@ html
     meta(property='og:image:type', content='image/png')
     meta(property='og:image:width', content='200')
     meta(property='og:image:height', content='200')
-    meta(property='og:description', content='This was created with Popcorn Maker - part of the Mozilla Webmaker initiative')
-    meta(property='og:site_name', content='https://webmaker.org')
+    if !description
+      description = 'Created with Popcorn Maker - part of the Mozilla Webmaker initiative'
+    meta(property='og:description', content='#{description}')
+    meta(property='og:site_name', content='Mozilla Webmaker')
 
     title #{projectName} - Popcorn Maker
     link(rel='stylesheet', href='#{baseHref}/css/embed-shell.css')
   body
-    .preview-message This is a preview URL only. When sharing, please use the following URL: 
+    .preview-message This is a preview URL only. When sharing, please use the following URL:
         a(href='#{embedShellSrc}') #{embedShellSrc}
     iframe(id='embed', src='#{embedSrc}', width='1280', height='745', mozallowfullscreen='mozallowfullscreen', webkitallowfullscreen='webkitallowfullscreen', allowfullscreen='allowfullscreen')
     script
