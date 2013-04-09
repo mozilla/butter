@@ -3,127 +3,56 @@
 */
 
 .media-editor {
-
-  @titleBarHeight: 60px;
-  @addClipHeight: 165px;
   @durationInputHeight: 48px;
+  @addMediaHeight: 200px;
 
   .butter-editor-body {
-    top: @titleBarHeight;
+    bottom: @durationInputHeight
   }
 
-  .fl-right {
+  .row,
+  .padded {
+    padding: 10px 20px;
+  }
+
+  .fl-right { // Helpers for media icons
     margin-top: 8px;
     float: right;
   }
 
-  h1.add-new-media {
-    height: @titleBarHeight;
-    line-height: @titleBarHeight;
-    text-transform: none;
-    font-weight: normal;
-    color: #555;
+  .media-gallery-heading {
+    background: #FFF;
+    line-height: 48px;
+    padding: 0 20px;
+    border: 0 solid @baseLightOutline;
+    border-bottom-width: 1px;
+    border-top-width: 1px;
+    font-weight: 700;
     font-size: 14px;
-    &:before {
-      content: "";
-      background: url( "../resources/icons/media.png" ) no-repeat;
-      float: left;
-      height: 26px;
-      width: 22px;
-      position: relative;
-      top: 16px;
-      left: 3px;
-      margin-right: 16px;
-    }
+    color: @green;
   }
 
-  .media-editor-inner-wrapper { // Textarea wrappers
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 5px;
-    &:hover .delete-media-btn {
-      right: 2px;
-    }
+  .add-media-panel {
+    background: #FFF;
+    border-bottom: 1px solid @baseLightOutline;
+    height: @addMediaHeight;
     textarea {
       font-size: 12px;
       font-family: monaco, monospace;
     }
   }
 
-  &.add-media-collapsed {
-    .add-media-panel {
-      margin: 0;
-      height: 0;
-      opacity: 0;
-    }
-    .media-gallery {
-      top: 0;
-    }
-  }
-
-  .add-media-panel {
-    height: @addClipHeight;
-    .transition( all 0.2s ease );
-    overflow: hidden;
-    opacity: 1;
-    margin: 0 20px;
+  .tabs {
+    border-bottom: 1px solid @baseLightOutline;
   }
 
   .media-gallery {
     position: absolute;
-    bottom: @durationInputHeight;
-    top: @addClipHeight + 15px;
-    width: 100%;
-    margin-top: -1px;
-
-    .media-gallery-heading {
-      background: #FFF;
-      padding: 15px 20px;
-      border: 0 solid @baseLightOutline;
-      border-bottom-width: 1px;
-      border-top-width: 1px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-    }
-  }
-
-  .media-gallery-base-media.butter-form-inline.form-single {
-    left: 0;
-    right: 0;
-    margin: 0;
-    padding: 5px 20px;
-    background: @baseLight;
-    border-top: 1px solid @baseLightOutline;
-    > label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      line-height: 22px;
-    }
-    > input {
-      float: right;
-    }
-    &.bottom {
-      bottom: 0;
-      position: absolute;
-    }
-    &.top {
-      top: 0;
-    }
-  }
-
-  .media-gallery-scroll-container {
-    position: absolute;
-    top: 46px;
-    left: 0;
-    right: 0;
+    top: @addMediaHeight + 1;
     bottom: 0;
+    width: 100%;
   }
+
   .media-gallery-list {
     list-style: none;
     padding: 0;
@@ -258,5 +187,27 @@
     margin-right: 10px;
     margin-top: 4px;
   }
+
+  .duration-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 5px 20px;
+    background: @baseLight;
+    border-top: 1px solid @baseLightOutline;
+    > label {
+      float: left;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      line-height: 22px;
+    }
+    > input {
+      width: 200px;
+      float: right;
+    }
+  }
+
 }
 
