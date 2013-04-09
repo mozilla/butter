@@ -527,6 +527,28 @@ define( [ "core/eventmanager", "./toggler",
           butter.pasteTrackEvents();
         }
       }, // v key
+
+      65: function( e ) {
+        if ( e.ctrlKey || e.metaKey ) {
+          e.preventDefault();
+
+          var tracks = butter.currentMedia.tracks,
+              i, k, trackEventLn, track,
+              trackLn = tracks.length;
+
+          for ( i = 0; i < trackLn; i++ ) {
+            track = tracks[ i ];
+
+            if ( track.trackEvents ) {
+              trackEventLn = track.trackEvents.length;
+            }
+
+            for ( k = 0; k < trackEventLn; k++ ) {
+              track.trackEvents[ k ].selected = true;
+            }
+          }
+        }
+      } // a key
     };
 
     function onKeyDown( e ){
