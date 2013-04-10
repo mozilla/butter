@@ -603,7 +603,7 @@
                       // grab first source as main source.
                       sources.push( URI.makeUnique( url.shift() ).toString() );
                       for ( i = 0; i < url.length; i++ ) {
-                        fallbacks.pusgetMetaDatah( URI.makeUnique( url[ i ] ).toString() );
+                        fallbacks.push( URI.makeUnique( url[ i ] ).toString() );
                       }
 
                       firstSource = sources[ 0 ];
