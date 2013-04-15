@@ -107,6 +107,7 @@
     }
     > input {
       float: right;
+      width: 200px;
     }
     &.bottom {
       bottom: 0;
@@ -134,7 +135,7 @@
   .media-gallery-item {
     position: relative;
     padding: 10px 20px;
-    height: 60px;
+    height: 70px;
     border: 0 solid @baseLightOutline;
     border-top-width: 1px;
     background-color: @baseLight;
@@ -212,12 +213,17 @@
     max-height: 3.6em; // 3 lines
   }
   .mg-type {
-    &:after {
-      content: " clip";
-      text-transform: lowercase;
-    }
     color: #999;
-    text-transform: capitalize;
+    margin-top: 3px;
+    > .mg-type-text {
+      margin-left: 20px;
+      line-height: 18px;
+      display: block;
+      width: 180px;
+      &:after {
+        content: " clip";
+      }
+    }
   }
   .mg-error {
     color: @red;
@@ -226,6 +232,7 @@
     &:before {
       content: "Duration: "
     }
+    margin-top: 20px;
   }
   .mg-delete-btn {
     position: absolute;
