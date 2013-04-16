@@ -166,13 +166,11 @@ define( [
       // called when timeout occurs preparing popcorn
       function popcornTimeoutWrapper( e ) {
         _interruptLoad = true;
-        metrics.increment( "timeout.popcorn" );
         _onTimeout( e );
       }
 
       // called when timeout occurs preparing media
       function mediaTimeoutWrapper( e ) {
-        metrics.increment( "timeout.media" );
         _onTimeout( e );
       }
 
