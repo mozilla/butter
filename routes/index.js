@@ -337,7 +337,7 @@ module.exports = function routesCtor( app, Project, filter, sanitizer,
       metricsList = req.body;
 
     if ( metrics.disabled ) {
-      res.json( { error: 'Disabled' }, 500 );
+      res.json( { error: 'Disabled' }, 503 );
       return;
     }
 
