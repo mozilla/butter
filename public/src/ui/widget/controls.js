@@ -54,7 +54,7 @@ define( [ "util/lang", "util/time", "util/uri", "text!layouts/controls.html" ],
     _container.appendChild( _controls );
 
     // If we're not autoPlay, wait for user interaction before we're ready.
-    if ( URI.parse( window.location ).queryKey[ "autoPlay" ] === "false" ) {
+    if ( URI.parse( window.location ).queryKey[ "preload" ] === "none" ) {
       document.addEventListener( "click", onInit, false );
     } else {
       onInit();
