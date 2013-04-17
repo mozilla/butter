@@ -2,16 +2,16 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang", "util/time", "text!layouts/controls.html" ],
-  function( LangUtils, Time, CONTROLS_LAYOUT ) {
+define( [ "util/lang", "util/time", "util/uri", "text!layouts/controls.html" ],
+  function( LangUtils, Time, URI, CONTROLS_LAYOUT ) {
 
-  function Controls( container, p, options ) {
+  function Controls( container, options ) {
 
     var LEFT_MOUSE_BUTTON = 0,
         SPACE_BAR = 32;
 
     var _controls = LangUtils.domFragment( CONTROLS_LAYOUT ).querySelector( "#butter-controls" ),
-        _container = typeof container === "string" ? document.getElementById( container ) : container,
+        _container = typeof container === "string" ? document.getElementById( container ) : container, p,
         // variables
         muteButton, playButton, currentTimeDialog, fullscreenButton,
         durationDialog, timebar, progressBar, bigPlayButton,
@@ -30,10 +30,26 @@ define( [ "util/lang", "util/time", "text!layouts/controls.html" ],
         onShareClick = options.onShareClick || nop,
         onRemixClick = options.onRemixClick || nop,
         onFullscreenClick = options.onFullscreenClick || nop,
-        onLogoClick = options.onLogoClick || nop;
+        onLogoClick = options.onLogoClick || nop,
+        init = options.init || nop;
 
-    p.controls( false );
-    _container.appendChild( _controls );
+    function onInit() {
+
+      document.removeEventListener( "click", onInit, false );
+      function setPopcorn( popcorn ) {
+        p = popcorn;
+      }
+      init( setPopcorn );
+
+      p.controls( false );
+      if ( p.readyState() >= 1 ) {
+
+        ready();
+      } else {
+
+        p.media.addEventListener( "loadedmetadata", ready, false );
+      }
+    }
 
     var ready = function() {
       p.media.removeEventListener( "loadedmetadata", ready, false );
@@ -73,6 +89,7 @@ define( [ "util/lang", "util/time", "text!layouts/controls.html" ],
           p.media.removeEventListener( "play", bigPlayClicked, false );
           bigPlayButton.removeEventListener( "click", bigPlayClicked, false );
           bigPlayButton.classList.remove( "controls-ready" );
+          bigPlayButton.classList.add( "hide-button" );
           p.media.addEventListener( "mouseover", activate, false );
           if ( p.paused() ) {
             p.play();
@@ -407,17 +424,18 @@ define( [ "util/lang", "util/time", "text!layouts/controls.html" ],
       }
     };
 
+    _container.appendChild( _controls );
+
+    // If we're not autoPlay, wait for user interaction before we're ready.
+    if ( URI.parse( window.location ).queryKey[ "preload" ] === "none" ) {
+      document.addEventListener( "click", onInit, false );
+    } else {
+      onInit();
+    }
+
     if ( !_container ) {
 
       return;
-    }
-
-    if ( p.readyState() >= 1 ) {
-
-      ready();
-    } else {
-
-      p.media.addEventListener( "loadedmetadata", ready, false );
     }
 
     return _container;
