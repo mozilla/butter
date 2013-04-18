@@ -5,6 +5,8 @@ var datauri = require('../lib/datauri');
 module.exports = function routesCtor( app, Project, filter, sanitizer,
                                       stores, utils, metrics ) {
 
+  routesCtor.api = require( "./api" );
+
   var uuid = require( "node-uuid" ),
       // Keep track of whether this is production or development
       deploymentType = app.settings.env === "production" ? "production" : "development";
