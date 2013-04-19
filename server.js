@@ -134,7 +134,8 @@ require( 'express-persona' )( app, {
   audience: APP_HOSTNAME
 });
 
-require('./routes')( app, Project, filter, sanitizer, stores, utils, metrics );
+var routes = require('./routes');
+routes( app, Project, filter, sanitizer, stores, utils, metrics );
 
 function writeEmbedShell( embedPath, url, data, callback ) {
   if( !writeEmbedShell.templateFn ) {
@@ -382,6 +383,8 @@ app.get( '/dashboard', filter.isStorageAvailable, function( req, res ) {
     });
   });
 });
+
+app.get( '/healthcheck', routes.api.healthcheck );
 
 app.listen( config.PORT, function() {
   console.log( 'HTTP Server started on ' + APP_HOSTNAME );
