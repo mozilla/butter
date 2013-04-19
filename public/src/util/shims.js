@@ -18,15 +18,6 @@ define([], function(){
     };
   }
 
-  // Shim our access to localStorage incase a browser doesn't support it
-  if ( !window.localStorage ) {
-    window.localStorage = {
-      getItem: function() {},
-      setItem: function() {},
-      removeItem: function() {}
-    };
-  }
-
   /*************************************************************************/
   // Support BrowserID when missing (everyone but Firefox Mobile)
   if ( !navigator.id ) {
