@@ -30,7 +30,6 @@
 /* Big Button */
 
 #controls-big-play-button {
-  display: none;
   width: 57px;
   height: 66px;
   background: url( "../resources/controls/icon_play.png" ) no-repeat;

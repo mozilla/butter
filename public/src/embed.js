@@ -266,8 +266,6 @@ function init() {
       "popcorn"
     ],
     function( URI, Controls, TextboxWrapper ) {
-      // cornfield writes out the Popcorn initialization code as popcornDataFn()
-      window.popcornDataFn();
       /**
        * Expose Butter so we can get version info out of the iframe doc's embed.
        * This "butter" is never meant to live in a page with the full "butter".
@@ -276,7 +274,7 @@ function init() {
       var Butter = {
             version: "Butter-Embed-@VERSION@"
           },
-          popcorn = Popcorn.byId( "Butter-Generated" ),
+          popcorn,
           config,
           qs = URI.parse( window.location.href ).queryKey,
           container = document.querySelectorAll( ".container" )[ 0 ];
@@ -321,10 +319,7 @@ function init() {
         showinfo: qs.showinfo === "0" ? false : true
       };
 
-      // Always show controls.  See #2284 and #2298 on supporting
-      // options.controls, options.autohide.
-      popcorn.controls( true );
-      Controls.create( "controls", popcorn, {
+      Controls.create( "controls", {
         onShareClick: function() {
           shareClick( popcorn );
         },
@@ -333,6 +328,43 @@ function init() {
         },
         onFullscreenClick: function() {
           fullscreenClick();
+        },
+        init: function( setPopcorn ) {
+          // cornfield writes out the Popcorn initialization code as popcornDataFn()
+          window.popcornDataFn();
+          popcorn = Popcorn.byId( "Butter-Generated" );
+          setPopcorn( popcorn );
+          // Always show controls.  See #2284 and #2298 on supporting
+          // options.controls, options.autohide.
+          popcorn.controls( true );
+
+          if ( config.loop ) {
+            popcorn.loop( true );
+          }
+
+          // Either the video is ready, or we need to wait.
+          if ( popcorn.readyState() >= 1 ) {
+            onLoad();
+          } else {
+            popcorn.media.addEventListener( "canplay", onLoad );
+          }
+
+          if ( config.branding ) {
+            setupClickHandlers( popcorn, config );
+            setupEventHandlers( popcorn, config );
+
+            // Wrap textboxes so they click-to-highlight and are readonly
+            TextboxWrapper.applyTo( $( "#share-url" ), { readOnly: true } );
+            TextboxWrapper.applyTo( $( "#share-iframe" ), { readOnly: true } );
+
+            // Write out the iframe HTML necessary to embed this
+            $( "#share-iframe" ).value = buildIFrameHTML();
+
+            // Get the page's canonical URL and put in share URL
+            $( "#share-url" ).value = getCanonicalURL();
+          }
+
+          setupAttribution( popcorn );
         }
       });
 
@@ -340,9 +372,6 @@ function init() {
       if ( !config.showinfo ) {
         var embedInfo = document.getElementById( "embed-info" );
         embedInfo.parentNode.removeChild( embedInfo );
-      }
-      if ( config.loop ) {
-        popcorn.loop( true );
       }
 
       // Some config options want the video to be ready before we do anything.
@@ -387,30 +416,6 @@ function init() {
           });
         }
       }
-
-      // Either the video is ready, or we need to wait.
-      if ( popcorn.readyState() >= 1 ) {
-        onLoad();
-      } else {
-        popcorn.media.addEventListener( "canplay", onLoad );
-      }
-
-      if ( config.branding ) {
-        setupClickHandlers( popcorn, config );
-        setupEventHandlers( popcorn, config );
-
-        // Wrap textboxes so they click-to-highlight and are readonly
-        TextboxWrapper.applyTo( $( "#share-url" ), { readOnly: true } );
-        TextboxWrapper.applyTo( $( "#share-iframe" ), { readOnly: true } );
-
-        // Write out the iframe HTML necessary to embed this
-        $( "#share-iframe" ).value = buildIFrameHTML();
-
-        // Get the page's canonical URL and put in share URL
-        $( "#share-url" ).value = getCanonicalURL();
-      }
-
-      setupAttribution( popcorn );
 
       if ( window.Butter && console && console.warn ) {
         console.warn( "Butter Warning: page already contains Butter, removing." );
