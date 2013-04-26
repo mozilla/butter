@@ -251,7 +251,7 @@
      * @param {DOMElement} dropContainer: The container that listens for the drop events
      */
 
-    global.EditorHelper.droppable = function( trackEvent, dropContainer ) {
+    global.EditorHelper.droppable = function( trackEvent, dropContainer, callback ) {
       dropContainer.addEventListener( "dragover", function( e ) {
         e.preventDefault();
         dropContainer.classList.add( "butter-dragover" );
@@ -355,7 +355,11 @@
               return;
             }
 
-            trackEvent.update( { src: imgURI } );
+            if ( trackEvent ) {
+              trackEvent.update( { src: imgURI } );
+            } else {
+              callback( imgURI );
+            }
 
             if ( window.URL && window.URL.revokeObjectURL ) {
               window.URL.revokeObjectURL( imgSrc );
@@ -365,7 +369,9 @@
           };
           image.src = imgSrc;
 
-          butter.editor.editTrackEvent( trackEvent );
+          if ( trackEvent ) {
+            butter.editor.editTrackEvent( trackEvent );
+          }
 
           // Force image to download, esp. Opera. We can't use
           // "display: none", since that makes it invisible, and
