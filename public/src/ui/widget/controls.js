@@ -2,8 +2,8 @@
  * If a copy of the MIT license was not distributed with this file, you can
  * obtain one at https://raw.github.com/mozilla/butter/master/LICENSE */
 
-define( [ "util/lang", "util/time", "util/uri", "text!layouts/controls.html" ],
-  function( LangUtils, Time, URI, CONTROLS_LAYOUT ) {
+define( [ "util/lang", "util/time", "text!layouts/controls.html" ],
+  function( LangUtils, Time, CONTROLS_LAYOUT ) {
 
   function Controls( container, options ) {
 
@@ -427,7 +427,7 @@ define( [ "util/lang", "util/time", "util/uri", "text!layouts/controls.html" ],
     _container.appendChild( _controls );
 
     // If we're not autoPlay, wait for user interaction before we're ready.
-    if ( URI.parse( window.location ).queryKey[ "preload" ] === "none" ) {
+    if ( !options.preload ) {
       document.addEventListener( "click", onInit, false );
     } else {
       onInit();
