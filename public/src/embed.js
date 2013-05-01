@@ -289,11 +289,13 @@ function init() {
        *   fullscreen = 1{default}|0    whether to allow fullscreen mode (e.g., hide/show button)
        *   loop       = 1|0{default}    whether to loop when hitting the end
        *   showinfo   = 1{default}|0    whether to show video title, author, etc. before playing
+       *   preload    = auto{default}|none    whether to preload the video, or wait for user action
        **/
       config = {
         autohide: qs.autohide === "1" ? true : false,
         autoplay: qs.autoplay === "1" ? true : false,
         controls: qs.controls === "0" ? false : true,
+        preload: qs.preload !== "none",
         start: qs.start|0,
         end: qs.end|0,
         fullscreen: qs.fullscreen === "0" ? false : (function( document ) {
@@ -365,7 +367,8 @@ function init() {
           }
 
           setupAttribution( popcorn );
-        }
+        },
+        preload: config.preload
       });
 
       // Setup UI based on config options
