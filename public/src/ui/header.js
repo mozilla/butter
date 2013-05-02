@@ -327,9 +327,12 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         make.tags("tutorial:" + url).then(function(err, results) {
           var previousButton = _tutorialButtonContainer.querySelector( ".previous-tutorial-button" ),
               nextButton = _tutorialButtonContainer.querySelector( ".next-tutorial-button" ),
-              index = 0,
-              tutorialView = document.createElement("div");
+              tutorialView = document.createElement("div"),
+              iframeCover = document.createElement("div"),
+              iframe = document.createElement("iframe"),
+              closeButton = document.createElement("div"),
               tutorials = [],
+              index = 0,
               container = _tutorialButtonContainer.querySelector( ".tutorial-list" );
 
           if (err) {
@@ -338,22 +341,8 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
 
           if ( results.hits.length ) {
 
-            tutorialView.style.position = "absolute";
-            tutorialView.style.top = "0";
-            tutorialView.style.left = "0";
-            tutorialView.style.width = "500px";
-            tutorialView.style.height = "500px";
-            tutorialView.style.zIndex = "100000011";
-            tutorialView.style.backgroundColor = "white";
-            tutorialView.style.border = "1px solid #aaaaaa";
-
-            var iframeCover = document.createElement("div");
-            iframeCover.style.position= "absolute";
-            iframeCover.style.top = "0";
-            iframeCover.style.left = "0";
-            iframeCover.style.width = "100%";
-            iframeCover.style.height = "100%";
-            iframeCover.style.display = "none";
+            tutorialView.classList.add( "tutorial-view" );
+            iframeCover.classList.add( "tutorial-iframe-cover" );
 
             var onCoverMouseUp = function() {
               iframeCover.style.display = "none";
@@ -368,26 +357,14 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
 
             tutorialView.addEventListener("mousedown", onCoverMouseDown, false);
 
-            var closeButton = document.createElement("div");
-            closeButton.style.position = "absolute";
+            closeButton.classList.add( "tutorial-close-button" );
+            iframe.classList.add( "tutorial-iframe" );
+
             closeButton.innerHTML = "X";
-            closeButton.style.top = "0";
-            closeButton.style.right = "0";
-            closeButton.style.marginRight = "10px";
-            closeButton.style.marginTop = "5px";
-            closeButton.style.top = "0";
-            closeButton.style.color = "black";
             closeButton.userSelect = "none";
-            var iframe = document.createElement("iframe");
-            tutorialView.style.padding = "25px 10px 10px 10px";
-            tutorialView.style.position = "relative";
-            iframe.style.width = "100%";
-            iframe.style.height = "100%";
-            iframe.style.border = "1px solid #aaaaaa";
             tutorialView.appendChild(iframe);
             tutorialView.appendChild(iframeCover);
             tutorialView.appendChild(closeButton);
-            tutorialView.style.display = "none";
             document.body.appendChild( tutorialView );
 
             closeButton.addEventListener("click", function() {
