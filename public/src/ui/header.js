@@ -1,7 +1,11 @@
-define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/textbox", "ui/widget/tooltip" ],
-  function( Dialog, Lang, HEADER_TEMPLATE, UserData, WebmakerBar, TextBoxWrapper, ToolTip ) {
+define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data", "ui/webmakernav/webmakernav", "ui/widget/textbox", "ui/widget/tooltip", "MakeAPI/make-api" ],
+  function( Dialog, Lang, HEADER_TEMPLATE, UserData, WebmakerBar, TextBoxWrapper, ToolTip, Make ) {
 
   return function( butter, options ){
+
+    var make = Make({
+      apiURL: "http://localhost:6001"
+    });
 
     options = options || {};
 
@@ -10,7 +14,7 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     var _this = this,
         _userData = new UserData( butter, options ),
         _rootElement = Lang.domFragment( HEADER_TEMPLATE, ".butter-header" ),
-        _webmakerNavBar = _rootElement.querySelector( "#webmaker-nav" ),
+        _tutorialButtonContainer = _rootElement.querySelector( "#butter-tutorial-container" ),
         _saveButton = _rootElement.querySelector( ".butter-save-btn" ),
         _projectTitle = _rootElement.querySelector( ".butter-project-title" ),
         _projectName = _projectTitle.querySelector( ".butter-project-name" ),
@@ -20,10 +24,10 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         _projectMenu = _rootElement.querySelector( ".butter-project-menu" ),
         _projectMenuControl = _rootElement.querySelector( ".butter-project-menu-control" ),
         _projectMenuList = _projectMenu.querySelector( ".butter-btn-menu" ),
-        _tabzilla = _rootElement.querySelector( "#tabzilla" ),
+        //_tabzilla = _rootElement.querySelector( "#tabzilla" ),
         _noProjectNameToolTip,
         _projectTitlePlaceHolderText = _projectName.innerHTML,
-        _webmakerNav,
+        //_webmakerNav,
         _toolTip;
 
     // create a tooltip for the plrojectName element
@@ -38,9 +42,9 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
 
     ToolTip.apply( _projectTitle );
 
-    _tabzilla.addEventListener( "click", function() {
-      document.body.classList.toggle( "tabzilla-open" );
-    }, false );
+    //_tabzilla.addEventListener( "click", function() {
+    //  document.body.classList.toggle( "tabzilla-open" );
+    //}, false );
 
     function saveProject() {
       if ( !butter.cornfield.authenticated() ) {
@@ -209,21 +213,21 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
       dialog.open();
     }
 
-    _webmakerNav = new WebmakerBar({
+    /*_webmakerNav = new WebmakerBar({
       container: _webmakerNavBar,
       onLogin: _userData.authenticationRequired,
       onLogout: _userData.logout,
       feedbackCallback: feedbackCallback
-    });
+    });*/
 
 
-    function onLogin() {
-      _webmakerNav.views.login( butter.cornfield.username() );
-    }
+    //function onLogin() {
+    //  _webmakerNav.views.login( butter.cornfield.username() );
+    //}
 
-    butter.listen( "autologinsucceeded", onLogin, false );
-    butter.listen( "authenticated", onLogin, false );
-    butter.listen( "logout", _webmakerNav.views.logout, false );
+    //butter.listen( "autologinsucceeded", onLogin, false );
+    //butter.listen( "authenticated", onLogin, false );
+    //butter.listen( "logout", _webmakerNav.views.logout, false );
 
     function destroyToolTip() {
       if ( _noProjectNameToolTip && !_noProjectNameToolTip.destroyed ) {
@@ -331,6 +335,141 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
     });
 
     butter.listen( "ready", function() {
+      var tutorialId,
+          url;
+      if ( butter.project.id >= 0 || butter.project.remixedFrom >= 0) {
+        if ( butter.project.id >= 0 ) {
+          tutorialId = butter.project.id;
+        } else if ( butter.project.remixedFrom >= 0 ) {
+          tutorialId = butter.project.remixedFrom;
+        }
+        // we have now normalized the tutorial id.
+        // build a url from the id in a safe way
+        url = "http://localhost:8888/v/" + tutorialId.toString( 36 ) + ".html";
+        // ask the make api for the project
+        make.tags("tutorial:" + url).then(function(err, results) {
+          if (err) {
+            return;
+          }
+
+          // display the tutorial button and ui.
+          if ( results.hits.length ) {
+            var previousButton = document.createElement("div"),
+                nextButton = document.createElement("div"),
+                index = 0,
+                tutorialView = document.createElement("div");
+                tutorials = [],
+                container = document.createElement("div");
+
+            previousButton.style.backgroundImage = "url(http://localhost:8888/resources/icons/glyphiconshalflings-alt.png)";
+            nextButton.style.backgroundImage = "url(http://localhost:8888/resources/icons/glyphiconshalflings-alt.png)";
+
+            container.style.float = "left";
+            previousButton.style.float = "left";
+            previousButton.style.height = "14px";
+            previousButton.style.width = "14px";
+            previousButton.style.backgroundPosition = "-288px -120px";
+            nextButton.style.float = "left";
+            nextButton.style.height = "14px";
+            nextButton.style.width = "14px";
+            nextButton.style.marginTop = "14px";
+            nextButton.style.marginLeft = "-14px";
+            nextButton.style.backgroundPosition = "-313px -119px";
+
+            tutorialView.style.position = "absolute";
+            tutorialView.style.top = "0";
+            tutorialView.style.left = "0";
+            tutorialView.style.width = "500px";
+            tutorialView.style.height = "500px";
+            tutorialView.style.zIndex = "100000011";
+            tutorialView.style.backgroundColor = "white";
+            tutorialView.style.border = "1px solid #aaaaaa";
+
+            var iframeCover = document.createElement("div");
+            iframeCover.style.position= "absolute";
+            iframeCover.style.top = "0";
+            iframeCover.style.left = "0";
+            iframeCover.style.width = "100%";
+            iframeCover.style.height = "100%";
+            iframeCover.style.display = "none";
+
+            var onCoverMouseUp = function() {
+              iframeCover.style.display = "none";
+              tutorialView.addEventListener("mousedown", onCoverMouseDown, false);
+            };
+
+            var onCoverMouseDown = function() {
+              iframeCover.style.display = "block";
+              tutorialView.removeEventListener("mousedown", onCoverMouseDown, false);
+              document.addEventListener("mouseup", onCoverMouseUp, false);
+            };
+
+            tutorialView.addEventListener("mousedown", onCoverMouseDown, false);
+
+            var closeButton = document.createElement("div");
+            closeButton.style.position = "absolute";
+            closeButton.innerHTML = "X";
+            closeButton.style.top = "0";
+            closeButton.style.right = "0";
+            closeButton.style.marginRight = "10px";
+            closeButton.style.marginTop = "5px";
+            closeButton.style.top = "0";
+            closeButton.style.color = "black";
+            closeButton.userSelect = "none";
+            var iframe = document.createElement("iframe");
+            tutorialView.style.padding = "25px 10px 10px 10px";
+            tutorialView.style.position = "relative";
+            iframe.style.width = "100%";
+            iframe.style.height = "100%";
+            iframe.style.border = "1px solid #aaaaaa";
+            tutorialView.appendChild(iframe);
+            tutorialView.appendChild(iframeCover);
+            tutorialView.appendChild(closeButton);
+            tutorialView.style.display = "none";
+            document.body.appendChild( tutorialView );
+
+            closeButton.addEventListener("click", function() {
+              tutorialView.style.display = "none";
+            }, false);
+
+            $(tutorialView).draggable({cancel: "iframe"});
+            $(tutorialView).resizable();
+
+            for ( var i = 0; i < results.hits.length; i++ ) {
+              var title = document.createElement("div");
+              tutorials.push({
+                element: title,
+                data: results.hits[i]
+              });
+              title.addEventListener("click", function() {
+                iframe.src = tutorials[index].data.url;
+                tutorialView.style.display = "block";
+              }, false);
+              title.style.display = "none";
+              title.innerHTML = "Tutorial: " + results.hits[i].title;
+              container.appendChild(title);
+            }
+            tutorials[0].element.style.display = "block";
+            previousButton.addEventListener("click", function() {
+              if (index > 0) {
+                tutorials[index].element.style.display="none";
+                index--;
+                tutorials[index].element.style.display="block";
+              }
+            }, false);
+            nextButton.addEventListener("click", function() {
+              if (index+1 < tutorials.length) {
+                tutorials[index].element.style.display="none";
+                index++;
+                tutorials[index].element.style.display="block";
+              }
+            }, false);
+            _tutorialButtonContainer.appendChild(container);
+            _tutorialButtonContainer.appendChild(previousButton);
+            _tutorialButtonContainer.appendChild(nextButton);
+          }
+        });
+      }
       if ( butter.project.name ) {
         _projectName.textContent = butter.project.name;
       }
