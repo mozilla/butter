@@ -338,21 +338,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
 
           if ( results.hits.length ) {
 
-            previousButton.style.backgroundImage = "url(/resources/icons/glyphiconshalflings-alt.png)";
-            nextButton.style.backgroundImage = "url(/resources/icons/glyphiconshalflings-alt.png)";
-
-            container.style.float = "left";
-            previousButton.style.float = "left";
-            previousButton.style.height = "14px";
-            previousButton.style.width = "14px";
-            previousButton.style.backgroundPosition = "-288px -120px";
-            nextButton.style.float = "left";
-            nextButton.style.height = "14px";
-            nextButton.style.width = "14px";
-            nextButton.style.marginTop = "14px";
-            nextButton.style.marginLeft = "-14px";
-            nextButton.style.backgroundPosition = "-313px -119px";
-
             tutorialView.style.position = "absolute";
             tutorialView.style.top = "0";
             tutorialView.style.left = "0";
