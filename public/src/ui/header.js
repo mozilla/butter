@@ -321,26 +321,25 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
         } else if ( butter.project.remixedFrom >= 0 ) {
           tutorialId = butter.project.remixedFrom;
         }
-        // we have now normalized the tutorial id.
-        // build a url from the id in a safe way
+
+        // TODO: Figure out what this URL is going to be.
         url = "http://localhost:8888/v/" + tutorialId.toString( 36 ) + ".html";
-        // ask the make api for the project
         make.tags("tutorial:" + url).then(function(err, results) {
+          var previousButton = _tutorialButtonContainer.querySelector( ".previous-tutorial-button" ),
+              nextButton = _tutorialButtonContainer.querySelector( ".next-tutorial-button" ),
+              index = 0,
+              tutorialView = document.createElement("div");
+              tutorials = [],
+              container = _tutorialButtonContainer.querySelector( ".tutorial-list" );
+
           if (err) {
             return;
           }
 
-          // display the tutorial button and ui.
           if ( results.hits.length ) {
-            var previousButton = document.createElement("div"),
-                nextButton = document.createElement("div"),
-                index = 0,
-                tutorialView = document.createElement("div");
-                tutorials = [],
-                container = document.createElement("div");
 
-            previousButton.style.backgroundImage = "url(http://localhost:8888/resources/icons/glyphiconshalflings-alt.png)";
-            nextButton.style.backgroundImage = "url(http://localhost:8888/resources/icons/glyphiconshalflings-alt.png)";
+            previousButton.style.backgroundImage = "url(/resources/icons/glyphiconshalflings-alt.png)";
+            nextButton.style.backgroundImage = "url(/resources/icons/glyphiconshalflings-alt.png)";
 
             container.style.float = "left";
             previousButton.style.float = "left";
@@ -442,9 +441,6 @@ define([ "dialog/dialog", "util/lang", "text!layouts/header.html", "ui/user-data
                 tutorials[index].element.style.display="block";
               }
             }, false);
-            _tutorialButtonContainer.appendChild(container);
-            _tutorialButtonContainer.appendChild(previousButton);
-            _tutorialButtonContainer.appendChild(nextButton);
           }
         });
       }
